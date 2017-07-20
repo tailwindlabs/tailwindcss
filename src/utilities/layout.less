@@ -1,0 +1,16 @@
+.constrain-xs { max-width: 22rem; flex-basis: 22rem; }
+.constrain-sm { max-width: 26rem; flex-basis: 26rem; }
+.constrain-md { max-width: 32rem; flex-basis: 32rem; }
+.constrain-lg { max-width: 40rem; flex-basis: 40rem; }
+.constrain-xl { max-width: 48rem; flex-basis: 48rem; }
+.constrain-xxl { max-width: 52rem; flex-basis: 52rem; }
+
+.responsive({
+    &constrain-xs { .constrain-xs; }
+    &constrain-sm { .constrain-sm; }
+    &constrain-md { .constrain-md; }
+    &constrain-lg { .constrain-lg; }
+    &constrain-xl { .constrain-xl; }
+    &constrain-xxl { .constrain-xxl; }
+});
+

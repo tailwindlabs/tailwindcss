@@ -1,0 +1,13 @@
+{
+  "name": "tailwindcss",
+  "version": "0.1.0",
+  "description": "A utility-first CSS framework for rapid UI development.",
+  "license": "MIT",
+  "author": "Adam Wathan <adam.wathan@gmail.com>",
+  "contributors": [],
+  "scripts": {},
+  "dependencies": {
+    "normalize.css": "^6.0.0",
+    "suitcss-base": "^3.0.0"
+  }
+}

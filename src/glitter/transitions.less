@@ -1,0 +1,122 @@
+.slide-down-enter-active, .slide-down-leave-active {
+  transition: all .5s;
+}
+.slide-down-enter, .slide-down-leave-active {
+  transform: translateY(-1.5em);
+  opacity: 0;
+}
+
+.transition-stretch-in-out {
+  -webkit-font-smoothing: subpixel-antialiased; // Prevent text rendering jank on Safari
+  &.v-enter-active {
+    transition: all .3s cubic-bezier(0.23, 1.85, 0.32, 1);
+    // transition: all .15s; Plain curve
+    // transition: all .25s cubic-bezier(0.68, -0.55, 0.265, 1.55); Cool bouncy curve?
+  }
+  &.v-leave-active {
+    transition: all .15s;
+    // transition: all .15s; Plain curve
+    // transition: all .25s cubic-bezier(0.68, -0.55, 0.265, 1.55); Cool bouncy curve?
+  }
+  &.v-enter, &.v-leave-to {
+    transform: scale(.7);
+    opacity: 0;
+  }
+  &.v-leave, &.v-enter-to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.transition-stretch-in {
+  -webkit-font-smoothing: subpixel-antialiased; // Prevent text rendering jank on Safari
+  &.v-enter-active {
+    transition: all .3s cubic-bezier(0.23, 1.85, 0.32, 1);
+    // transition: all .15s; Plain curve
+    // transition: all .25s cubic-bezier(0.68, -0.55, 0.265, 1.55); Cool bouncy curve?
+  }
+  &.v-enter {
+    transform: scale(.7);
+    opacity: 0;
+  }
+  &.v-enter-to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.transition-fade-in {
+  &.v-enter-active {
+      transition: opacity .3s;
+  }
+
+  &.v-enter-to {
+    opacity: 1;
+  }
+
+  &.v-enter {
+      opacity: 0;
+  }
+}
+
+.transition-fade-out {
+  &.v-leave-active {
+      transition: opacity .3s;
+  }
+
+  &.v-leave-to {
+      opacity: 0;
+  }
+
+  &.v-leave {
+      opacity: 1;
+  }
+}
+
+.transition-fade {
+  .transition-fade-in;
+  .transition-fade-out;
+}
+
+.transition-fade-out-slow {
+  &.v-leave-active {
+      transition: opacity 1s ease-in;
+  }
+
+  &.v-leave-to {
+      opacity: 0;
+  }
+
+  &.v-leave {
+      opacity: 1;
+  }
+}
+
+.transition-to-bottom-left {
+  transform-origin: top right;
+}
+
+.fade-grow-enter, .fade-grow-leave-active {
+    transform: scale(.7);
+    opacity: 0;
+}
+
+.fade-grow-enter-active, .fade-grow-leave {
+    transition: transform .4s cubic-bezier(.075,.82,.165,1), opacity .35s cubic-bezier(.075,.82,.165,1);
+}
+
+.fade-enter, .fade-leave-active {
+    opacity: 0;
+}
+
+.fade-enter-active, .fade-leave {
+    transition: opacity .3s;
+}
+
+.fade-slow-enter, .fade-slow-leave-active {
+    opacity: 0;
+}
+
+.fade-slow-enter-active, .fade-slow-leave {
+    transition: opacity .5s;
+}

@@ -1,0 +1,120 @@
+// Use Bootstrap 4 breakpoints as a starting point
+@screen-xs: 420px; // Not used for grid, just changing font size for tiny fucking iPhones
+@screen-sm: 576px;
+@screen-md: 768px;
+@screen-lg: 992px;
+@screen-xl: 1200px;
+
+@screens:
+  sm 540px 576px,
+  md 720px 768px,
+  lg 960px 992px,
+  xl 1140px 1200px;
+
+// From flexboxgrid.com
+@gutter-width: 2rem;
+@half-gutter-width: @gutter-width * 0.5;
+@gutter-compensation: @half-gutter-width * -1;
+@outer-margin: @half-gutter-width;
+@grid-column-count: 12;
+
+.container-fluid, .container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: @outer-margin;
+  padding-left: @outer-margin;
+}
+
+.row {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-right: @gutter-compensation;
+  margin-left: @gutter-compensation;
+}
+
+.row.reverse {
+  flex-direction: row-reverse;
+}
+
+.col {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  padding-right: @half-gutter-width;
+  padding-left: @half-gutter-width;
+  flex-basis: 100%;
+  max-width: 100%;
+}
+
+.col.reverse {
+  flex-direction: column-reverse;
+}
+
+.generate-grid-columns(@prefix; @i: 1) when (@i <= @grid-column-count) {
+  .@{prefix}col-@{i} {
+    flex-basis: 100% * (@i / @grid-column-count);
+    max-width: 100% * (@i / @grid-column-count);
+  }
+
+  @offset-i: @i - 1;
+  .@{prefix}offset-@{offset-i} {
+    margin-left: 100% * (@offset-i / @grid-column-count);
+  }
+
+  .generate-grid-columns(@prefix; @i + 1);
+}
+
+.generate-responsive-grid(@screen, @min-width, @container-width) {
+  @prefix: ~"@{screen}\:";
+
+  @media (min-width: @min-width) {
+    .container { max-width: @container-width; }
+
+    .@{prefix}col-auto {
+      flex-grow: 1;
+      flex-basis: 0;
+      max-width: 100%;
+    }
+
+    .@{prefix}col-first {
+      order: -1;
+    }
+
+    .@{prefix}col-last {
+      order: 1;
+    }
+
+    .generate-grid-columns(@prefix);
+  }
+}
+
+.generate-responsive-grids(@i: 1) when (@i <= length(@screens)) {
+  @screen: extract(@screens, @i);
+  @name: extract(@screen, 1);
+  @container-width: extract(@screen, 2);
+  @screen-width: extract(@screen, 3);
+
+  .generate-responsive-grid(@name, @screen-width, @container-width);
+  .generate-responsive-grids(@i + 1);
+}
+
+.generate-all-grids() {
+  .col-auto {
+    flex-grow: 1;
+    flex-basis: 0;
+    max-width: 100%;
+  }
+  .col-first {
+    order: -1;
+  }
+  .col-last {
+    order: 1;
+  }
+  .generate-grid-columns(~"");
+  .generate-responsive-grids();
+}
+
+.generate-all-grids();

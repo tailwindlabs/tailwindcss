@@ -1,0 +1,82 @@
+@system-font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+@font-family-base: "proxima-nova", @system-font-stack;
+@font-family-mono: "Roboto Mono", Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+@line-height: 1.5;
+
+@font-size-xs:      (12rem / 16rem); // 12px
+@font-size-sm:      (14rem / 16rem); // 14px
+@font-size-base:    1rem;            // 16px
+@font-size-lg:      (18rem / 16rem); // 18px
+@font-size-xl:      (22rem / 16rem); // 22px
+@font-size-2xl:     (30rem / 16rem); // 30px
+@font-size-3xl:     (40rem / 16rem); // 40px
+
+@font-weight-hairline: 200;
+@font-weight-thin:     300;
+@font-weight-regular:  400;
+@font-weight-medium:   600;
+@font-weight-bold:     700;
+
+.text-xs   { font-size: @font-size-xs; }
+.text-sm   { font-size: @font-size-sm; }
+.text-base { font-size: @font-size-base; }
+.text-lg   { font-size: @font-size-lg; }
+.text-xl   { font-size: @font-size-xl; }
+.text-2xl  { font-size: @font-size-2xl; }
+.text-3xl  { font-size: @font-size-3xl; }
+
+.text-hairline { font-weight: @font-weight-hairline; }
+.text-thin     { font-weight: @font-weight-thin; }
+.text-regular  { font-weight: @font-weight-regular; }
+.text-medium   { font-weight: @font-weight-medium; }
+.text-bold     { font-weight: @font-weight-bold; }
+
+.text-light        { color: @text-light; }
+.text-light-soft   { color: @text-light-soft; }
+.text-light-softer { color: @text-light-softer; }
+.text-light-softest  { color: @text-light-softest; }
+.hover-text-light    { &:hover { .text-light; } }
+
+.text-dark        { color: @text-dark; }
+.text-dark-soft   { color: @text-dark-soft; }
+.text-dark-softer { color: @text-dark-softer; }
+.text-dark-softest  { color: @text-dark-softest; }
+
+.text-brand  { color: @text-brand; }
+.text-danger { color: @text-danger; }
+
+.text-em        { font-style: italic; }
+.text-underline { text-decoration: underline; }
+
+.leading-none { line-height: 1; }
+.leading-tight { line-height: 1.25; }
+.leading-normal { line-height: 1.5; }
+.leading-loose { line-height: 2; }
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.responsive({
+    &text-center { .text-center; }
+    &text-left { .text-left; }
+    &text-right { .text-right; }
+});
+
+.text-uppercase { text-transform: uppercase; }
+
+.text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.text-break { white-space: pre-line; }
+.text-no-wrap { white-space: nowrap; }
+.text-force-wrap { word-wrap: break-word; }
+.text-smooth { -webkit-font-smoothing: antialiased; }
+.text-spaced { letter-spacing: 0.05em; }
+.text-strike { text-decoration: line-through; }
+.text-shadow-solid { text-shadow: 0 2px 0 rgba(0,0,0,0.15); }
+
+.text-mono { font-family: @font-family-mono; }

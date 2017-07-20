@@ -1,0 +1,265 @@
+@button-border-radius: @border-radius-1;
+
+.btn {
+    display: inline-block;
+    padding: 0.5em 1em;
+    font-weight: @font-weight-bold;
+    line-height: 1.25;
+    border-radius: @button-border-radius;
+    text-decoration: none;
+    font-family: @font-family-base;
+
+    &:focus, &:hover {
+        text-decoration: none;
+    }
+
+    &:active, &:focus {
+        .tab-focus;
+    }
+
+    &:disabled, &.is-disabled {
+        cursor: not-allowed;
+        opacity: 0.2;
+    }
+}
+
+.btn-loading {
+    position: relative;
+    color: transparent !important;
+
+    * {
+        color: transparent !important;
+    }
+
+    &:after {
+        position: absolute !important;
+        display: block;
+        height: 1rem;
+        width: 1rem;
+        top: 50%;
+        left: 50%;
+        margin-left: -0.5rem;
+        margin-top: -0.5rem;
+        border: 2px solid @text-dark;
+        border-radius: 0.5rem;
+        border-right-color: transparent;
+        border-top-color: transparent;
+        animation: spin-around 500ms infinite linear;
+        content: "";
+    }
+}
+
+.button-outline-variant(@color) {
+    @inactive-border: lighten(@color, 0%);
+
+    color: @color;
+    background-color: transparent;
+    border: 1px solid @inactive-border;
+    font-weight: @font-weight-regular;
+
+    &:active, &:hover, &.is-active {
+        color: @color;
+        background-color: fade(@color, 10%);
+        border-color: @color;
+    }
+
+    &:focus {
+        color: @color;
+    }
+
+    &:disabled, &.is-disabled {
+        &:active, &:hover {
+            border-color: @inactive-border;
+        }
+    }
+}
+
+.btn-variant(@text; @background) {
+    @border-color: @background;
+
+    color: @text;
+    font-weight: 700;
+    background-color: @background;
+    border: 1px solid @border-color;
+
+    &:focus {
+        color: @text;
+    }
+
+    &:not(.btn-themed) {
+        &:active, &:hover, &.is-active {
+            color: lighten(@text, 5%);
+
+            background-color: darken(@background, 5%);
+            border: 1px solid darken(@border-color, 5%);
+        }
+    }
+
+    &:disabled, &.is-disabled {
+        color: @text;
+        background-color: @background;
+        border-color: @border-color;
+        opacity: 0.5;
+    }
+
+    &.btn-loading {
+        &:after {
+            border-left-color: fade(@text, 70%);
+            border-bottom-color: fade(@text, 70%);
+        }
+        &:disabled {
+            color: @text;
+            background-color: @background;
+            border-color: @border-color;
+            opacity: 0.5;
+        }
+    }
+}
+
+.btn-bordered-variant(@text; @background; @border-color) {
+    color: @text;
+    font-weight: @font-weight-medium;
+    background-color: @background;
+    border: 1px solid @border-color;
+
+    &:focus {
+        color: @text;
+    }
+
+    &:active, &:hover, &.is-active {
+        color: darken(@text, 5%);
+        background-color: darken(@background, 5%);
+        border: 1px solid darken(@border-color, 5%);
+    }
+
+    &:disabled, &.is-disabled {
+        color: @text;
+        background-color: @background;
+        border-color: @border-color;
+        opacity: 0.5;
+    }
+
+    &.btn-loading {
+        &:after {
+            border-left-color: fade(@text, 70%);
+            border-bottom-color: fade(@text, 70%);
+        }
+        &:disabled {
+            color: @text;
+            background-color: @background;
+            border-color: @border-color;
+            opacity: 0.5;
+        }
+    }
+}
+
+.btn-primary {
+    .btn-variant(@btn-primary-text-color; @btn-primary-bg-color);
+}
+
+.btn-secondary {
+    .btn-bordered-variant(@btn-secondary-text-color; @btn-secondary-bg-color; @btn-secondary-border-color);
+}
+
+.btn-blue {
+    .btn-variant(@color-white; @color-blue);
+}
+
+.btn-inv-outline {
+    .button-outline-variant(@btn-inv-outline-text-color);
+}
+
+.btn-twitter {
+    .btn-variant(@color-white; #26a0f0);
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-weight: 500;
+}
+
+.btn-facebook {
+    .btn-variant(@color-white; #334F8D);
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-weight: 500;
+}
+
+.btn-link {
+    font-weight: @font-weight-regular;
+    color: @text-dark;
+    background-color: transparent;
+
+    &:focus, &:hover {
+        color: darken(@text-dark, 15%);
+        text-decoration: underline;
+    }
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.btn-sm {
+    font-size: @font-size-sm;
+}
+
+.btn-lg {
+    font-size: @font-size-lg;
+}
+
+@media (min-width: (@screen-sm)) {
+  .sm:btn-lg {
+      .btn-lg;
+  }
+}
+
+.btn-xs {
+    font-size: @font-size-xs;
+}
+
+.btn-wide {
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
+.btn-pad {
+    padding: 1em 2em;
+}
+
+.btn-themed {
+    color: @btn-themed-text-color;
+    border: 1px solid;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    font-weight: 700;
+
+    &:active, &:hover, &:focus {
+        color: @btn-themed-text-color;
+    }
+
+    &:disabled {
+        color: @btn-themed-text-color;
+        opacity: 0.5;
+    }
+
+    &.btn-loading {
+        &:after {
+            border-left-color: fade(@btn-themed-text-color, 70%);
+            border-bottom-color: fade(@btn-themed-text-color, 70%);
+        }
+        &:disabled {
+            color: @btn-themed-text-color;
+            opacity: 0.5;
+        }
+    }
+}
+
+.btn-float {
+    -webkit-font-smoothing: subpixel-antialiased; // Prevent text rendering jank on Safari
+    transition: transform .4s, box-shadow .4s;
+    &:hover {
+        box-shadow: 0 6px 16px -4px rgba(0,0,0,0.25);
+        transform: translateY(-1 * @spacer-1);
+    }
+}
