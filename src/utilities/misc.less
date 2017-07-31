@@ -4,105 +4,105 @@
 .screen-xl(@ruleset) { @media (min-width: @screen-xl) { @ruleset(); }}
 
 .responsive(@ruleset) {
-    .screen-sm({ .sm\: { @ruleset(); }});
-    .screen-md({ .md\: { @ruleset(); }});
-    .screen-lg({ .lg\: { @ruleset(); }});
-    .screen-xl({ .xl\: { @ruleset(); }});
+  .screen-sm({ .sm\: { @ruleset(); }});
+  .screen-md({ .md\: { @ruleset(); }});
+  .screen-lg({ .lg\: { @ruleset(); }});
+  .screen-xl({ .xl\: { @ruleset(); }});
 }
 
 .generate-responsive-versions(@ruleset; @i: 1) when (@i <= length(@screens)) {
-    @screen: extract(@screens, @i);
-    @name: extract(@screen, 1);
-    @screen-width: extract(@screen, 3);
+  @screen: extract(@screens, @i);
+  @name: extract(@screen, 1);
+  @screen-width: extract(@screen, 3);
 
-    .generate-responsive-version(@ruleset, @name, @screen-width);
-    .generate-responsive-versions(@ruleset, @i + 1);
+  .generate-responsive-version(@ruleset, @name, @screen-width);
+  .generate-responsive-versions(@ruleset, @i + 1);
 }
 
 .generate-responsive-version(@ruleset, @screen, @min-width) {
-    @prefix: ~"@{screen}\:";
+  @prefix: ~"@{screen}\:";
 
-    @media (min-width: @min-width) {
-        .@{prefix} { @ruleset(); };
-    }
+  @media (min-width: @min-width) {
+    .@{prefix} { @ruleset(); };
+  }
 }
 
 .no-focus {
-    &:focus, &:active {
-        outline: none;
-    }
+  &:focus, &:active {
+    outline: none;
+  }
 }
 
 .no-wrap {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 .box-shadow {
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .box-shadow-soft {
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
 
 .box-shadow-z2 {
-    box-shadow: 0 15px 35px hsla(240, 10%, 28%, 0.15), 0 5px 15px rgba(0,0,0,.07);
+  box-shadow: 0 15px 35px hsla(240, 10%, 28%, 0.15), 0 5px 15px rgba(0,0,0,.07);
 }
 
 .responsive({
-    &box-shadow-z2 { .box-shadow-z2; }
+  &box-shadow-z2 { .box-shadow-z2; }
 });
 
 .inset-shadow {
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
 }
 
 .tab-focus {
-    // Default
-    outline: thin dotted;
-    // WebKit
-    outline: 5px auto -webkit-focus-ring-color;
-    outline-offset: -2px;
+  // Default
+  outline: thin dotted;
+  // WebKit
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
 }
 
 .full-height {
-    min-height: 100vh;
+  min-height: 100vh;
 }
 
 .full-width {
-    width: 100%;
+  width: 100%;
 }
 
 .clickable {
-    cursor: pointer;
-    user-select: none;
+  cursor: pointer;
+  user-select: none;
 }
 
 .no-select {
-    user-select: none;
+  user-select: none;
 }
 
 .ease {
-    transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 // Useful for hiding things like radio buttons without making them inaccessible
 // to the keyboard when navigating forms.
 .pseudo-hidden {
-    position: absolute;
-    opacity: 0;
-    z-index: -1;
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
 }
 
 .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0,0,0,0);
-    border: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
 }
 
 // Display
@@ -114,9 +114,9 @@
 .table-cell { display: table-cell; }
 
 .responsive({
-    &block { .block; }
-    &inline-block { .inline-block; }
-    &hidden { .hidden; }
+  &block { .block; }
+  &inline-block { .inline-block; }
+  &hidden { .hidden; }
 });
 
 // Position
@@ -135,25 +135,25 @@
 .mask { overflow: hidden; }
 
 .aspect-2\:1 {
-    padding-bottom: 50%;
+  padding-bottom: 50%;
 }
 
 .aspect-16\:9 {
-    padding-bottom: 56.25%;
+  padding-bottom: 56.25%;
 }
 
 .hover-only {
-    opacity: 0;
-    &:hover {
-        opacity: 1;
-    }
+  opacity: 0;
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .responsive({
-    &hover-only { .hover-only; }
+  &hover-only { .hover-only; }
 });
 
 .bg-cover {
-    background-size: cover;
-    background-position: center;
+  background-size: cover;
+  background-position: center;
 }
