@@ -1,0 +1,11 @@
+.overflow-visible { overflow: visible; }
+.overflow-hidden { overflow: hidden; }
+.overflow-scroll { overflow: scroll; }
+.overflow-auto { overflow: auto; }
+
+.responsive({
+    &overflow-visible { .overflow-visible; }
+    &overflow-hidden { .overflow-hidden; }
+    &overflow-scroll { .overflow-scroll; }
+    &overflow-auto { .overflow-auto; }
+});
