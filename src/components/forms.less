@@ -2,215 +2,214 @@
 @form-control-border: @border-default-color;
 
 .form-group {
-
 }
 
 .form-label {
-    .block;
-    .text-sm;
-    .text-regular;
-    .mb(2);
+  .block;
+  .text-sm;
+  .text-regular;
+  .mb(2);
 }
 
 .form-control-file {
-    display: block;
-    max-width: 100%;
+  display: block;
+  max-width: 100%;
 
-    &::-webkit-file-upload-button {
-        .btn;
-        .btn-xs;
-        .btn-secondary;
-        cursor: pointer;
-    }
+  &::-webkit-file-upload-button {
+    .btn;
+    .btn-xs;
+    .btn-secondary;
+    cursor: pointer;
+  }
 }
 
 .form-control {
-    .py(2);
-    .px(3);
+  .py(2);
+  .px(3);
+  .bg-light;
+  .border;
+  .rounded;
+
+  display: block;
+  width: 100%;
+  line-height: 1.25;
+  font-family: @font-family-base;
+
+  &:focus {
+    .tab-focus;
+  }
+
+  &.has-error {
+    border-color: @form-input-border-error-color;
+  }
+
+  select& {
+    .pr(5);
     .bg-light;
-    .border;
-    .rounded;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAANCAYAAABlyXS1AAAABGdBTUEAALGPC/xhBQAAALJJREFUGBm9UCEOwkAQ3L3Cf2pwpKkhoQkej0GRUE/bpSdwbR3BYXlAwwOQmP4Eh7xlh4BFsuJmZzK7N3dMnxJp4xD05ByvRfIBssMh0i1CoJsqP4Hg0KOybDcmnIn44H2+SpJsrKrHNJ0/MDljpr332xpuIDh08H8XF0XTM/O9rnP5Xm4vEEs8sbSuV6VdVTVISEBw6AzBnJk5L7ZhMIwNl7bp+v4hNFHkpuYbAcEx9LNeG4xMYRDZ28cAAAAASUVORK5CYII=);
+    background-position: right 8px center;
+    background-repeat: no-repeat;
+    appearance: none;
+  }
 
-    display: block;
-    width: 100%;
-    line-height: 1.25;
-    font-family: @font-family-base;
+  [type="date"]& {
+    // Get the date picker to be the same height as a regular form control
+    &::-webkit-datetime-edit-fields-wrapper { padding: 0; }
+    &::-webkit-inner-spin-button { height: 1.25em; }
+  }
 
-    &:focus {
-        .tab-focus;
+  [type="number"]& {
+    // Hide the up/down spinner in Webkit
+    &::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+    // ...and Firefox
+    -moz-appearance: textfield;
+  }
+
+  &::placeholder {
+    color: @form-input-placeholder-color;
+  }
+
+  [type="color"]& {
+    position: relative;
+
+    // Increased padding values simulate height of regular text content
+    padding-top: 1.125rem;
+    padding-bottom: 1.125rem;
+
+    &::-webkit-color-swatch-wrapper {
+      .absolute;
+      .pin;
+      .py(2);
+      .px(3);
     }
-
-    &.has-error {
-        border-color: @form-input-border-error-color;
+    &::-webkit-color-swatch {
+      border: 1px solid rgba(0,0,0,0.2);
     }
-
-    select& {
-        .pr(5);
-        .bg-light;
-        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAANCAYAAABlyXS1AAAABGdBTUEAALGPC/xhBQAAALJJREFUGBm9UCEOwkAQ3L3Cf2pwpKkhoQkej0GRUE/bpSdwbR3BYXlAwwOQmP4Eh7xlh4BFsuJmZzK7N3dMnxJp4xD05ByvRfIBssMh0i1CoJsqP4Hg0KOybDcmnIn44H2+SpJsrKrHNJ0/MDljpr332xpuIDh08H8XF0XTM/O9rnP5Xm4vEEs8sbSuV6VdVTVISEBw6AzBnJk5L7ZhMIwNl7bp+v4hNFHkpuYbAcEx9LNeG4xMYRDZ28cAAAAASUVORK5CYII=);
-        background-position: right 8px center;
-        background-repeat: no-repeat;
-        appearance: none;
-    }
-
-    [type="date"]& {
-        // Get the date picker to be the same height as a regular form control
-        &::-webkit-datetime-edit-fields-wrapper { padding: 0; }
-        &::-webkit-inner-spin-button { height: 1.25em; }
-    }
-
-    [type="number"]& {
-        // Hide the up/down spinner in Webkit
-        &::-webkit-inner-spin-button { -webkit-appearance: none; }
-
-        // ...and Firefox
-        -moz-appearance: textfield;
-    }
-
-    &::placeholder {
-        color: @form-input-placeholder-color;
-    }
-
-    [type="color"]& {
-        position: relative;
-
-        // Increased padding values simulate height of regular text content
-        padding-top: 1.125rem;
-        padding-bottom: 1.125rem;
-
-        &::-webkit-color-swatch-wrapper {
-            .absolute;
-            .pin;
-            .py(2);
-            .px(3);
-        }
-        &::-webkit-color-swatch {
-            border: 1px solid rgba(0,0,0,0.2);
-        }
-    }
+  }
 }
 
 .form-control-borderless {
-    border-color: transparent;
+  border-color: transparent;
 }
 
 .form-control-static {
-    .py(2);
-    display: block;
-    width: 100%;
-    line-height: 1.25;
-    border: 1px solid transparent; // To ensure matches regular control height
+  .py(2);
+  display: block;
+  width: 100%;
+  line-height: 1.25;
+  border: 1px solid transparent; // To ensure matches regular control height
 }
 
 .help-block {
-    .text-sm;
-    .mt(1);
+  .text-sm;
+  .mt(1);
 }
 
 .form-group.has-error {
-    .form-label, .help-block {
-        .text-danger;
-    }
-    .form-control, .input-group {
-        border-color: @form-input-border-error-color;
-    }
-    .form-control-feedback {
-        .text-danger;
-    }
+  .form-label, .help-block {
+    .text-danger;
+  }
+  .form-control, .input-group {
+    border-color: @form-input-border-error-color;
+  }
+  .form-control-feedback {
+    .text-danger;
+  }
 }
 
 .form-control-feedback {
-    margin-top: @spacer-2;
+  margin-top: @spacer-2;
 }
 
 .input-group {
+  display: flex;
+  border: 1px solid @form-control-border;
+  border-radius: @form-control-radius;
+  background: @color-white;
+  overflow: hidden;
+
+  .input-group-addon {
     display: flex;
-    border: 1px solid @form-control-border;
-    border-radius: @form-control-radius;
-    background: @color-white;
-    overflow: hidden;
+    padding-left: @spacer-3;
+    padding-right: @spacer-3;
+    border-right: 1px solid @form-control-border;
+    align-items: center;
+  }
 
-    .input-group-addon {
-        display: flex;
-        padding-left: @spacer-3;
-        padding-right: @spacer-3;
-        border-right: 1px solid @form-control-border;
-        align-items: center;
-    }
-
-    .form-control {
-        flex: 1;
-        border: none;
-        border-radius: 0;
-    }
+  .form-control {
+    flex: 1;
+    border: none;
+    border-radius: 0;
+  }
 }
 
 .stacked-form {
 }
 
 .stacked-form-group {
-    margin-top: -1px;
+  margin-top: -1px;
+  position: relative;
+  .form-control, .input-group {
+    border-radius: 0;
+    box-shadow: none;
     position: relative;
+    &:focus {
+      .z10;
+    }
+  }
+  &:first-of-type {
+    margin-top: 0;
     .form-control, .input-group {
-        border-radius: 0;
-        box-shadow: none;
-        position: relative;
-        &:focus {
-            .z10;
-        }
+      border-top-left-radius: @form-control-radius;
+      border-top-right-radius: @form-control-radius;
     }
-    &:first-of-type {
-        margin-top: 0;
-        .form-control, .input-group {
-            border-top-left-radius: @form-control-radius;
-            border-top-right-radius: @form-control-radius;
-        }
+  }
+  &:last-of-type {
+    .form-control, .input-group {
+      border-bottom-left-radius: @form-control-radius;
+      border-bottom-right-radius: @form-control-radius;
     }
-    &:last-of-type {
-        .form-control, .input-group {
-            border-bottom-left-radius: @form-control-radius;
-            border-bottom-right-radius: @form-control-radius;
-        }
-    }
-    .inset-form-icon {
-        .z20;
-    }
+  }
+  .inset-form-icon {
+    .z20;
+  }
 }
 
 
 .inset-form-group {
-    position: relative;
+  position: relative;
 }
 .inset-form-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 1px; // Make up for border
-    width: 2.75em;
-    color: @text-dark-soft;
-    .z20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 1px; // Make up for border
+  width: 2.75em;
+  color: @text-dark-soft;
+  .z20;
 }
 
 .inset-form-control {
-    position: relative;
-    padding-left: 2.75em;
-    &:focus {
-        .z10;
-    }
+  position: relative;
+  padding-left: 2.75em;
+  &:focus {
+    .z10;
+  }
 }
 
 .form-control-pad {
-    padding: 1em 1em;
+  padding: 1em 1em;
 
-    &.inset-form-control {
-        padding-left: 3em;
-    }
+  &.inset-form-control {
+    padding-left: 3em;
+  }
 }
 
 .inset-form-icon-pad {
-    width: 1.4em;
-    left: ~"calc(1px + 1em)";
+  width: 1.4em;
+  left: ~"calc(1px + 1em)";
 }
