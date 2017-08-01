@@ -1,14 +1,10 @@
-@bg-light-hue: @hue-gray;
-@bg-light: hsl(@bg-light-hue, 0%, 100%);
-@bg-light-soft: hsl(@bg-light-hue, 20%, 98%);
-@bg-light-softer: hsl(@bg-light-hue, 20%, 96%);
+@bg-light: hsl(0, 0%, 100%);
+@bg-light-soft: hsl(0, 0%, 98%);
+@bg-light-softer: hsl(0, 0%, 96%);
 
-@bg-dark-hue: @hue-gray;
-@bg-dark: hsl(@bg-dark-hue, 14%, 33%);
-@bg-dark-soft: hsl(@bg-dark-hue, 14%, 42%);
-@bg-dark-softer: hsl(@bg-dark-hue, 14%, 52%);
-
-@bg-highlight: hsl(215, 99%, 63%);
+@bg-dark: hsl(0, 0%, 33%);
+@bg-dark-soft: hsl(0, 0%, 42%);
+@bg-dark-softer: hsl(0, 0%, 52%);
 
 .bg-light { background-color: @bg-light; }
 .bg-light-soft { background-color: @bg-light-soft; }
@@ -25,9 +21,6 @@
 .bg-overlay-softest { background-color: rgba(0,0,0,0.15); }
 .bg-overlay-soft { background-color: rgba(0,0,0,0.5); }
 .bg-overlay-dark { background-color: rgba(0,0,0,0.75); }
-
-.bg-highlight { background-color: @bg-highlight; }
-.hover-bg-highlight { &:hover { .bg-highlight; } }
 
 .generate-responsive-versions({
   &bg-light { .bg-light; }
