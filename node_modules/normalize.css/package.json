@@ -1,0 +1,37 @@
+{
+  "name": "normalize.css",
+  "version": "6.0.0",
+  "description": "A modern alternative to CSS resets",
+  "main": "normalize.css",
+  "style": "normalize.css",
+  "files": [
+    "LICENSE.md",
+    "normalize.css"
+  ],
+  "devDependencies": {
+    "stylelint": "^7.9.0",
+    "stylelint-config-standard": "^16.0.0"
+  },
+  "scripts": {
+    "test": "stylelint normalize.css"
+  },
+  "repository": "necolas/normalize.css",
+  "contributors": [
+    "Jonathan Neal <jonathantneal@hotmail.com> (http://jonathantneal.com/)",
+    "Nicolas Gallagher <nicolas@nicolasgallagher.com> (http://nicolasgallagher.com/)"
+  ],
+  "license": "MIT",
+  "bugs": "https://github.com/necolas/normalize.css/issues",
+  "homepage": "https://necolas.github.io/normalize.css",
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "font-family-no-duplicate-names": [
+        true,
+        {
+          "ignoreFontFamilyNames": ["monospace"]
+        }
+      ]
+    }
+  }
+}

@@ -1,5 +1,10 @@
-@import (less) "../../../../node_modules/normalize.css/normalize.css";
-@import (less) "../../../../node_modules/suitcss-base/lib/base.css";
+// For local dev
+@import (less, optional) "../../node_modules/normalize.css/normalize.css";
+@import (less, optional) "../../node_modules/suitcss-base/lib/base.css";
+
+// For real projects
+@import (less, optional) "../../../../node_modules/normalize.css/normalize.css";
+@import (less, optional) "../../../../node_modules/suitcss-base/lib/base.css";
 
 @-moz-viewport      { width: device-width; }
 @-ms-viewport       { width: device-width; }
