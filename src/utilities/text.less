@@ -1,9 +1,12 @@
+// Font family
 @system-font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
 @font-family-base: @system-font-stack;
 @font-family-mono: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
 
+// Default line height
 @line-height: 1.5;
 
+// Sizes
 @font-size-xs: (12rem / 16rem);  // 12px
 @font-size-sm: (14rem / 16rem);  // 14px
 @font-size-base: 1rem;           // 16px
@@ -12,11 +15,27 @@
 @font-size-2xl: (30rem / 16rem); // 30px
 @font-size-3xl: (40rem / 16rem); // 40px
 
+// Weights
 @font-weight-hairline: 200;
 @font-weight-thin: 300;
 @font-weight-regular: 400;
 @font-weight-medium: 600;
 @font-weight-bold: 700;
+
+// Colors
+@text-light: @color-white;
+@text-light-soft: fade(@color-white, 60%);
+@text-light-softer: fade(@color-white, 45%);
+@text-light-softest: fade(@color-white, 35%);
+
+@text-dark-hue: @hue-slate;
+@text-dark: hsl(@text-dark-hue, 10%, 25%);
+@text-dark-soft: hsl(@text-dark-hue, 10%, 50%);
+@text-dark-softer: hsl(@text-dark-hue, 10%, 65%);
+@text-dark-softest: hsl(@text-dark-hue, 10%, 75%);
+
+@text-brand: hsl(@hue-brand-primary, 100%, 40%);
+@text-danger: @color-danger;
 
 // Sizes
 .text-xs { font-size: @font-size-xs; }
