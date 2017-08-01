@@ -14,8 +14,9 @@
 
 @border-default-color: @border-dark-soft;
 
-@border-radius-1: .25rem;
-@border-radius-2: .5rem;
+@border-radius-1: .125rem;
+@border-radius-2: .25rem;
+@border-radius-3: .5rem;
 
 @border-width-1: 1px;
 @border-width-2: 2px;
@@ -47,6 +48,11 @@
 .border-l-4 { border-left: @border-width-4 solid @border-default-color; }
 .border-r-4 { border-right: @border-width-4 solid @border-default-color; }
 
+// Styles
+.border-dashed { border-style: dashed; }
+.border-dotted { border-style: dotted; }
+
+// Disablers
 .border-0 { border-style: none; }
 .border-t-0 { border-top-style: none; }
 .border-b-0 { border-bottom-style: none; }
@@ -98,22 +104,28 @@
 .hover-border-invisible { &:hover { .border-invisible; } }
 
 // Radius
-.rounded { border-radius: @border-radius-1; }
-.rounded-t { border-top-left-radius: @border-radius-1; border-top-right-radius: @border-radius-1; }
-.rounded-r { border-top-right-radius: @border-radius-1; border-bottom-right-radius: @border-radius-1; }
-.rounded-b { border-bottom-left-radius: @border-radius-1; border-bottom-right-radius: @border-radius-1; }
-.rounded-l { border-top-left-radius: @border-radius-1; border-bottom-left-radius: @border-radius-1; }
+.rounded-sm { border-radius: @border-radius-1; }
+.rounded-t-sm { border-top-left-radius: @border-radius-1; border-top-right-radius: @border-radius-1; }
+.rounded-r-sm { border-top-right-radius: @border-radius-1; border-bottom-right-radius: @border-radius-1; }
+.rounded-b-sm { border-bottom-left-radius: @border-radius-1; border-bottom-right-radius: @border-radius-1; }
+.rounded-l-sm { border-top-left-radius: @border-radius-1; border-bottom-left-radius: @border-radius-1; }
 
-.rounded-lg { border-radius: @border-radius-2; }
-.rounded-t-lg { border-top-left-radius: @border-radius-2; border-top-right-radius: @border-radius-2; }
-.rounded-r-lg { border-top-right-radius: @border-radius-2; border-bottom-right-radius: @border-radius-2; }
-.rounded-b-lg { border-bottom-left-radius: @border-radius-2; border-bottom-right-radius: @border-radius-2; }
-.rounded-l-lg { border-top-left-radius: @border-radius-2; border-bottom-left-radius: @border-radius-2; }
+.rounded { border-radius: @border-radius-2; }
+.rounded-t { border-top-left-radius: @border-radius-2; border-top-right-radius: @border-radius-2; }
+.rounded-r { border-top-right-radius: @border-radius-2; border-bottom-right-radius: @border-radius-2; }
+.rounded-b { border-bottom-left-radius: @border-radius-2; border-bottom-right-radius: @border-radius-2; }
+.rounded-l { border-top-left-radius: @border-radius-2; border-bottom-left-radius: @border-radius-2; }
+
+.rounded-lg { border-radius: @border-radius-3; }
+.rounded-t-lg { border-top-left-radius: @border-radius-3; border-top-right-radius: @border-radius-3; }
+.rounded-r-lg { border-top-right-radius: @border-radius-3; border-bottom-right-radius: @border-radius-3; }
+.rounded-b-lg { border-bottom-left-radius: @border-radius-3; border-bottom-right-radius: @border-radius-3; }
+.rounded-l-lg { border-top-left-radius: @border-radius-3; border-bottom-left-radius: @border-radius-3; }
 
 .pill { border-radius: 9999px; }
 
 // Responsive
-.generate-responsive-versions({
+.responsive({
   &border { .border; }
   &border-t { .border-t; }
   &border-b { .border-b; }
@@ -134,6 +146,8 @@
   &border-b-4 { .border-b-4; }
   &border-l-4 { .border-l-4; }
   &border-r-4 { .border-r-4; }
+  &border-dashed { .border-dashed; }
+  &border-dotted { .border-dotted; }
   &border-0 { .border-0; }
   &border-t-0 { .border-t-0; }
   &border-b-0 { .border-b-0; }
@@ -169,6 +183,15 @@
   &border-l-light { .border-l-light; }
   &border-l-light-soft { .border-l-light-soft; }
   &border-l-light-softer { .border-l-light-softer; }
+  &border-brand { .border-brand; }
+  &border-danger { .border-danger; }
+  &border-danger-soft { .border-danger-soft; }
+  &border-invisible { .border-invisible; }
+  &rounded-sm { .rounded-sm; }
+  &rounded-t-sm { .rounded-t-sm; }
+  &rounded-r-sm { .rounded-r-sm; }
+  &rounded-b-sm { .rounded-b-sm; }
+  &rounded-l-sm { .rounded-l-sm; }
   &rounded { .rounded; }
   &rounded-t { .rounded-t; }
   &rounded-r { .rounded-r; }
