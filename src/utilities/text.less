@@ -28,14 +28,12 @@
 @text-light-softer: fade(@color-white, 45%);
 @text-light-softest: fade(@color-white, 35%);
 
-@text-dark-hue: @hue-slate;
-@text-dark: hsl(@text-dark-hue, 10%, 25%);
-@text-dark-soft: hsl(@text-dark-hue, 10%, 50%);
-@text-dark-softer: hsl(@text-dark-hue, 10%, 65%);
-@text-dark-softest: hsl(@text-dark-hue, 10%, 75%);
+@text-dark-hue: @hue-gray;
+@text-dark: hsl(@text-dark-hue, 0%, 25%);
+@text-dark-soft: hsl(@text-dark-hue, 0%, 50%);
+@text-dark-softer: hsl(@text-dark-hue, 0%, 65%);
+@text-dark-softest: hsl(@text-dark-hue, 0%, 75%);
 
-@text-brand: hsl(@hue-brand-primary, 100%, 40%);
-@text-danger: @color-danger;
 
 // Sizes
 .text-xs { font-size: @font-size-xs; }
@@ -63,9 +61,6 @@
 .text-dark-soft { color: @text-dark-soft; }
 .text-dark-softer { color: @text-dark-softer; }
 .text-dark-softest { color: @text-dark-softest; }
-
-.text-brand { color: @text-brand; }
-.text-danger { color: @text-danger; }
 
 // Line heights
 .leading-none { line-height: 1; }

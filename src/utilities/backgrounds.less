@@ -1,14 +1,12 @@
-@bg-light-hue: @hue-slate;
+@bg-light-hue: @hue-gray;
 @bg-light: hsl(@bg-light-hue, 0%, 100%);
 @bg-light-soft: hsl(@bg-light-hue, 20%, 98%);
 @bg-light-softer: hsl(@bg-light-hue, 20%, 96%);
 
-@bg-dark-hue: @hue-slate;
+@bg-dark-hue: @hue-gray;
 @bg-dark: hsl(@bg-dark-hue, 14%, 33%);
 @bg-dark-soft: hsl(@bg-dark-hue, 14%, 42%);
 @bg-dark-softer: hsl(@bg-dark-hue, 14%, 52%);
-
-@bg-primary: @color-brand-primary;
 
 @bg-highlight: hsl(215, 99%, 63%);
 
@@ -24,12 +22,6 @@
 .bg-dark-soft { background-color: @bg-dark-soft; }
 .bg-dark-softer { background-color: @bg-dark-softer; }
 
-.bg-primary { background-color: @bg-primary; }
-.bg-primary-soft { background-color: fade(@bg-primary, 35%); }
-.bg-primary-dark { background-color: darken(@bg-primary, 20%); }
-
-.bg-brand-gradient { background-image: linear-gradient(to right, @color-brand-gradient-start, @color-brand-gradient-stop); }
-
 .bg-overlay-softest { background-color: rgba(0,0,0,0.15); }
 .bg-overlay-soft { background-color: rgba(0,0,0,0.5); }
 .bg-overlay-dark { background-color: rgba(0,0,0,0.75); }
@@ -41,9 +33,6 @@
   &bg-light { .bg-light; }
   &bg-light-soft { .bg-light-soft; }
   &bg-light-softer { .bg-light-softer; }
-  &bg-primary { .bg-primary; }
-  &bg-primary-soft { .bg-primary-soft; }
-  &bg-primary-dark { .bg-primary-dark; }
   &bg-overlay-soft { .bg-overlay-soft; }
   &bg-overlay-dark { .bg-overlay-dark; }
 });

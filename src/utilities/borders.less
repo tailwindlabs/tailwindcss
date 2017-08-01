@@ -1,4 +1,4 @@
-@border-dark-hue: @hue-slate;
+@border-dark-hue: @hue-gray;
 @border-dark: hsl(@border-dark-hue, 25%, 82%);
 @border-dark-soft: hsl(@border-dark-hue, 25%, 90%);
 @border-dark-softer: hsl(@border-dark-hue, 25%, 96%);
@@ -6,11 +6,6 @@
 @border-light: @color-white;
 @border-light-soft: fade(@color-white, 60%);
 @border-light-softer: fade(@color-white, 35%);
-
-@border-danger: @color-danger;
-@border-danger-soft: fade(@color-danger, 50%);
-
-@border-brand: @color-brand-primary;
 
 @border-default-color: @border-dark-soft;
 
@@ -94,11 +89,6 @@
 .border-l-light { border-left-color: @border-light; }
 .border-l-light-soft { border-left-color: @border-light-soft; }
 .border-l-light-softer { border-left-color: @border-light-softer; }
-
-.border-brand { border-color: @border-brand; }
-
-.border-danger { border-color: @border-danger; }
-.border-danger-soft { border-color: @border-danger-soft; }
 
 .border-invisible { border-color: transparent; }
 .hover-border-invisible { &:hover { .border-invisible; } }
