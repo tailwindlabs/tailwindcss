@@ -1,22 +1,28 @@
+// Font family
 @system-font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
-@font-family-base: "proxima-nova", @system-font-stack;
-@font-family-mono: "Roboto Mono", Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+@font-family-base: @system-font-stack;
+@font-family-mono: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+
+// Default line height
 @line-height: 1.5;
 
-@font-size-xs:      (12rem / 16rem); // 12px
-@font-size-sm:      (14rem / 16rem); // 14px
-@font-size-base:    1rem;            // 16px
-@font-size-lg:      (18rem / 16rem); // 18px
-@font-size-xl:      (22rem / 16rem); // 22px
-@font-size-2xl:     (30rem / 16rem); // 30px
-@font-size-3xl:     (40rem / 16rem); // 40px
+// Sizes
+@font-size-xs: (12rem / 16rem);  // 12px
+@font-size-sm: (14rem / 16rem);  // 14px
+@font-size-base: 1rem;           // 16px
+@font-size-lg: (18rem / 16rem);  // 18px
+@font-size-xl: (22rem / 16rem);  // 22px
+@font-size-2xl: (30rem / 16rem); // 30px
+@font-size-3xl: (40rem / 16rem); // 40px
 
+// Weights
 @font-weight-hairline: 200;
-@font-weight-thin:     300;
-@font-weight-regular:  400;
-@font-weight-medium:   600;
-@font-weight-bold:     700;
+@font-weight-thin: 300;
+@font-weight-regular: 400;
+@font-weight-medium: 600;
+@font-weight-bold: 700;
 
+// Colors
 @text-light: @color-white;
 @text-light-soft: fade(@color-white, 60%);
 @text-light-softer: fade(@color-white, 45%);
@@ -31,60 +37,59 @@
 @text-brand: hsl(@hue-brand-primary, 100%, 40%);
 @text-danger: @color-danger;
 
-.text-xs   { font-size: @font-size-xs; }
-.text-sm   { font-size: @font-size-sm; }
+// Sizes
+.text-xs { font-size: @font-size-xs; }
+.text-sm { font-size: @font-size-sm; }
 .text-base { font-size: @font-size-base; }
-.text-lg   { font-size: @font-size-lg; }
-.text-xl   { font-size: @font-size-xl; }
-.text-2xl  { font-size: @font-size-2xl; }
-.text-3xl  { font-size: @font-size-3xl; }
+.text-lg { font-size: @font-size-lg; }
+.text-xl { font-size: @font-size-xl; }
+.text-2xl { font-size: @font-size-2xl; }
+.text-3xl { font-size: @font-size-3xl; }
 
+// Weights
 .text-hairline { font-weight: @font-weight-hairline; }
-.text-thin     { font-weight: @font-weight-thin; }
-.text-regular  { font-weight: @font-weight-regular; }
-.text-medium   { font-weight: @font-weight-medium; }
-.text-bold     { font-weight: @font-weight-bold; }
+.text-thin { font-weight: @font-weight-thin; }
+.text-regular { font-weight: @font-weight-regular; }
+.text-medium { font-weight: @font-weight-medium; }
+.text-bold { font-weight: @font-weight-bold; }
 
-.text-light        { color: @text-light; }
-.text-light-soft   { color: @text-light-soft; }
+// Colors
+.text-light { color: @text-light; }
+.text-light-soft { color: @text-light-soft; }
 .text-light-softer { color: @text-light-softer; }
-.text-light-softest  { color: @text-light-softest; }
-.hover-text-light    { &:hover { .text-light; } }
+.text-light-softest { color: @text-light-softest; }
 
-.text-dark        { color: @text-dark; }
-.text-dark-soft   { color: @text-dark-soft; }
+.text-dark { color: @text-dark; }
+.text-dark-soft { color: @text-dark-soft; }
 .text-dark-softer { color: @text-dark-softer; }
-.text-dark-softest  { color: @text-dark-softest; }
+.text-dark-softest { color: @text-dark-softest; }
 
-.text-brand  { color: @text-brand; }
+.text-brand { color: @text-brand; }
 .text-danger { color: @text-danger; }
 
-.text-em        { font-style: italic; }
-.text-underline { text-decoration: underline; }
-
+// Line heights
 .leading-none { line-height: 1; }
 .leading-tight { line-height: 1.25; }
 .leading-normal { line-height: 1.5; }
 .leading-loose { line-height: 2; }
 
+// Horizontal alignment
 .text-center { text-align: center; }
 .text-left { text-align: left; }
 .text-right { text-align: right; }
 
-.responsive({
-  &text-center { .text-center; }
-  &text-left { .text-left; }
-  &text-right { .text-right; }
-});
+// Vertical alignment
+.align-baseline { vertical-align: baseline; }
+.align-top { vertical-align: top; }
+.align-middle { vertical-align: middle; }
+.align-bottom { vertical-align: bottom; }
+.align-text-top { vertical-align: text-top; }
+.align-text-bottom { vertical-align: text-bottom; }
 
+// Styles
+.text-em { font-style: italic; }
 .text-uppercase { text-transform: uppercase; }
-
-.text-ellipsis {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
+.text-underline { text-decoration: underline; }
 .text-break { white-space: pre-line; }
 .text-no-wrap { white-space: nowrap; }
 .text-force-wrap { word-wrap: break-word; }
@@ -92,5 +97,59 @@
 .text-spaced { letter-spacing: 0.05em; }
 .text-strike { text-decoration: line-through; }
 .text-shadow-solid { text-shadow: 0 2px 0 rgba(0,0,0,0.15); }
-
 .text-mono { font-family: @font-family-mono; }
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.responsive({
+  &text-xs { .text-xs; }
+  &text-sm { .text-sm; }
+  &text-base { .text-base; }
+  &text-lg { .text-lg; }
+  &text-xl { .text-xl; }
+  &text-2xl { .text-2xl; }
+  &text-3xl { .text-3xl; }
+  &text-hairline { .text-hairline; }
+  &text-thin { .text-thin; }
+  &text-regular { .text-regular; }
+  &text-medium { .text-medium; }
+  &text-bold { .text-bold; }
+  &text-light { .text-light; }
+  &text-light-soft { .text-light-soft; }
+  &text-light-softer { .text-light-softer; }
+  &text-light-softest { .text-light-softest; }
+  &text-dark { .text-dark; }
+  &text-dark-soft { .text-dark-soft; }
+  &text-dark-softer { .text-dark-softer; }
+  &text-dark-softest { .text-dark-softest; }
+  &text-brand { .text-brand; }
+  &text-danger { .text-danger; }
+  &leading-none { .leading-none; }
+  &leading-tight { .leading-tight; }
+  &leading-normal { .leading-normal; }
+  &leading-loose { .leading-loose; }
+  &text-center { .text-center; }
+  &text-left { .text-left; }
+  &text-right { .text-right; }
+  &align-baseline { .align-baseline; }
+  &align-top { .align-top; }
+  &align-middle { .align-middle; }
+  &align-bottom { .align-bottom; }
+  &align-text-top { .align-text-top; }
+  &align-text-bottom { .align-text-bottom; }
+  &text-em { .text-em; }
+  &text-uppercase { .text-uppercase; }
+  &text-underline { .text-underline; }
+  &text-break { .text-break; }
+  &text-no-wrap { .text-no-wrap; }
+  &text-force-wrap { .text-force-wrap; }
+  &text-smooth { .text-smooth; }
+  &text-spaced { .text-spaced; }
+  &text-strike { .text-strike; }
+  &text-shadow-solid { .text-shadow-solid; }
+  &text-mono { .text-mono; }
+  &text-ellipsis { .text-ellipsis; }
+});
