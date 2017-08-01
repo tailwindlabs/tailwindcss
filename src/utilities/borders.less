@@ -18,6 +18,34 @@
 @border-width-3: 4px;
 @border-width-4: 8px;
 
+.generate-border-color-utility(@name; @variant; @color) when (@variant = none) {
+  .border-@{name} {
+    border-color: @color;
+  }
+}
+
+.generate-border-color-utility(@name; @variant; @color) when not (@variant = none) {
+  .border-@{name}-@{variant} {
+    border-color: @color;
+  }
+}
+
+.generate-border-colors(@color-name; @color-variants; @i: 1) when (@i <= length(@color-variants)) and (length(extract(@color-variants, @i)) = 1) {
+  @variant-name: extract(@color-variants, 1);
+  @variant-color: extract(@color-variants, 2);
+
+  .generate-border-color-utility(@color-name; @variant-name; @variant-color);
+}
+
+.generate-border-colors(@color-name; @color-variants; @i: 1) when (@i <= length(@color-variants)) and (length(extract(@color-variants, @i)) = 2) {
+  @variant: extract(@color-variants, @i);
+  @variant-name: extract(@variant, 1);
+  @variant-color: extract(@variant, 2);
+
+  .generate-border-color-utility(@color-name; @variant-name; @variant-color);
+  .generate-border-colors(@color-name; @color-variants; @i + 1);
+}
+
 // Base
 .border { border: @border-width-1 solid @border-default-color; }
 .border-t { border-top: @border-width-1 solid @border-default-color; }
