@@ -4,6 +4,7 @@
 .flex-col {
   display: flex;
   flex-direction: column;
+
   .flex-reverse {
     flex-direction: column-reverse;
   }
@@ -13,6 +14,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.flex-x-center {
+  display: flex;
+  justify-content: center;
 }
 
 .flex-y-center {
@@ -30,6 +36,11 @@
   align-items: baseline;
 }
 
+.inline-flex-y-center {
+  display: inline-flex;
+  align-items: center;
+}
+
 .flex-right {
   justify-content: flex-end;
 }
@@ -44,9 +55,81 @@
   justify-content: space-around;
 }
 
+.flex-grow { flex-grow: 1; }
 .flex-fill { max-width: 100%; flex: 1; }
 .flex-no-shrink { flex-shrink: 0; }
 .flex-inline { display: inline-flex; }
 
 .flex-reverse { flex-direction: row-reverse; }
 .flex-wrap { flex-wrap: wrap; }
+
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2; }
+.flex-3 { flex: 3; }
+.flex-4 { flex: 4; }
+.flex-5 { flex: 5; }
+.flex-6 { flex: 6; }
+.flex-7 { flex: 7; }
+.flex-8 { flex: 8; }
+.flex-9 { flex: 9; }
+.flex-10 { flex: 10; }
+.flex-11 { flex: 11; }
+.flex-12 { flex: 12; }
+
+.flex-basis-1 { flex-basis: 100% * (1/12); }
+.flex-basis-2 { flex-basis: 100% * (2/12); }
+.flex-basis-3 { flex-basis: 100% * (3/12); }
+.flex-basis-4 { flex-basis: 100% * (4/12); }
+.flex-basis-5 { flex-basis: 100% * (5/12); }
+.flex-basis-6 { flex-basis: 100% * (6/12); }
+.flex-basis-7 { flex-basis: 100% * (7/12); }
+.flex-basis-8 { flex-basis: 100% * (8/12); }
+.flex-basis-9 { flex-basis: 100% * (9/12); }
+.flex-basis-10 { flex-basis: 100% * (10/12); }
+.flex-basis-11 { flex-basis: 100% * (11/12); }
+.flex-basis-12 { flex-basis: 100% * (12/12); }
+
+.responsive({
+    &flex { .flex; }
+    &flex-top { .flex-top; }
+    &flex-col { .flex-col; }
+    &flex-center { .flex-center; }
+    &flex-x-center  { .flex-x-center ; }
+    &flex-y-center { .flex-y-center; }
+    &flex-y-end { .flex-y-end; }
+    &flex-y-baseline { .flex-y-baseline; }
+    &inline-flex-y-center { .inline-flex-y-center; }
+    &flex-right { .flex-right; }
+    &flex-spaced { .flex-spaced; }
+    &flex-around { .flex-around; }
+    &flex-grow { .flex-grow; }
+    &flex-fill { .flex-fill; }
+    &flex-no-shrink { .flex-no-shrink; }
+    &flex-inline { .flex-inline; }
+    &flex-reverse { .flex-reverse; }
+    &flex-wrap { .flex-wrap; }
+    &flex-1 { .flex-1; }
+    &flex-2 { .flex-2; }
+    &flex-3 { .flex-3; }
+    &flex-4 { .flex-4; }
+    &flex-5 { .flex-5; }
+    &flex-6 { .flex-6; }
+    &flex-7 { .flex-7; }
+    &flex-8 { .flex-8; }
+    &flex-9 { .flex-9; }
+    &flex-10 { .flex-10; }
+    &flex-11 { .flex-11; }
+    &flex-12 { .flex-12; }
+    &flex-basis-1 { .flex-basis-1; }
+    &flex-basis-2 { .flex-basis-2; }
+    &flex-basis-3 { .flex-basis-3; }
+    &flex-basis-4 { .flex-basis-4; }
+    &flex-basis-5 { .flex-basis-5; }
+    &flex-basis-6 { .flex-basis-6; }
+    &flex-basis-7 { .flex-basis-7; }
+    &flex-basis-8 { .flex-basis-8; }
+    &flex-basis-9 { .flex-basis-9; }
+    &flex-basis-10 { .flex-basis-10; }
+    &flex-basis-11 { .flex-basis-11; }
+    &flex-basis-12 { .flex-basis-12; }
+});
