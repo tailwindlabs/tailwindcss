@@ -1,0 +1,27 @@
+.generate-bg-color-utility(@name; @variant; @color) when (@variant = default) {
+  .define-selector(~"bg-@{name}"; { background-color: @color; });
+}
+
+.generate-bg-color-utility(@name; @variant; @color) when not (@variant = default) {
+  .define-selector(~"bg-@{name}-@{variant}"; { background-color: @color; });
+}
+
+.generate-bg-color-utilities(@color-name; @color-variants; @i: 1) when (@i <= length(@color-variants)) and (length(extract(@color-variants, @i)) = 1) {
+  @variant-name: extract(@color-variants, 1);
+  @variant-color: extract(@color-variants, 2);
+
+  .generate-bg-color-utility(@color-name; @variant-name; @variant-color);
+}
+
+.generate-bg-color-utilities(@color-name; @color-variants; @i: 1) when (@i <= length(@color-variants)) and (length(extract(@color-variants, @i)) = 2) {
+  @variant: extract(@color-variants, @i);
+  @variant-name: extract(@variant, 1);
+  @variant-color: extract(@variant, 2);
+
+  .generate-bg-color-utility(@color-name; @variant-name; @variant-color);
+  .generate-bg-color-utilities(@color-name; @color-variants; @i + 1);
+}
+
+.define-bg-color(@color-name; @color-variants) {
+    .generate-bg-color-utilities(@color-name; @color-variants);
+}

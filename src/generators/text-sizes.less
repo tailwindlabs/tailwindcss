@@ -1,0 +1,23 @@
+.generate-text-size-utility(@variant; @size) {
+  .define-selector(~"text-@{variant}"; { font-size: @size; });
+}
+
+.generate-text-size-utilities(@size-variants; @i: 1) when (@i <= length(@size-variants)) and (length(extract(@size-variants, @i)) = 1) {
+  @name: extract(@size-variants, 1);
+  @size: extract(@size-variants, 2);
+
+  .generate-text-size-utility(@name; @size);
+}
+
+.generate-text-size-utilities(@size-variants; @i: 1) when (@i <= length(@size-variants)) and (length(extract(@size-variants, @i)) = 2) {
+  @variant: extract(@size-variants, @i);
+  @name: extract(@variant, 1);
+  @size: extract(@variant, 2);
+
+  .generate-text-size-utility(@name; @size);
+  .generate-text-size-utilities(@size-variants; @i + 1);
+}
+
+.define-text-sizes(@size-variants) {
+    .generate-text-size-utilities(@size-variants);
+}

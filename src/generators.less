@@ -1,0 +1,30 @@
+.define-selector(@class, @ruleset) {
+  .@{class} {
+    @ruleset();
+  }
+}
+
+.apply-match(@map; @search; @ruleset) {
+  @current: extract(extract(@map, 1), 1);
+  .apply-match(@map; @search; @current; @ruleset; 1);
+}
+
+.apply-match(@map; @search; @current; @ruleset; @i) when not (@search = @current) and (@i <= length(@spacer-map)) {
+  @current: extract(extract(@map, @i + 1), 1);
+  .apply-match(@map; @search; @current; @ruleset; @i + 1);
+}
+
+.apply-match(@map; @search; @current; @ruleset; @i) when (@search = @current) and (@i <= length(@spacer-map)) {
+  & {
+    @__match: extract(extract(@map, @i), 2);
+    @ruleset();
+  }
+}
+
+@import "generators/backgrounds";
+
+@import "generators/border-colors";
+
+@import "generators/text-colors";
+@import "generators/text-weights";
+@import "generators/text-sizes";
