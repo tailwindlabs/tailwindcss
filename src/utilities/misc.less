@@ -1,30 +1,18 @@
-.screen-sm(@ruleset) { @media (min-width: @screen-sm) { @ruleset(); }}
-.screen-md(@ruleset) { @media (min-width: @screen-md) { @ruleset(); }}
-.screen-lg(@ruleset) { @media (min-width: @screen-lg) { @ruleset(); }}
-.screen-xl(@ruleset) { @media (min-width: @screen-xl) { @ruleset(); }}
-
-.responsive(@ruleset) {
-  .screen-sm({ .sm\: { @ruleset(); }});
-  .screen-md({ .md\: { @ruleset(); }});
-  .screen-lg({ .lg\: { @ruleset(); }});
-  .screen-xl({ .xl\: { @ruleset(); }});
-}
-
-.generate-responsive-versions(@ruleset; @i: 1) when (@i <= length(@screens)) {
-  @screen: extract(@screens, @i);
-  @name: extract(@screen, 1);
-  @screen-width: extract(@screen, 3);
-
-  .generate-responsive-version(@ruleset, @name, @screen-width);
-  .generate-responsive-versions(@ruleset, @i + 1);
-}
-
 .generate-responsive-version(@ruleset, @screen, @min-width) {
   @prefix: ~"@{screen}\:";
 
   @media (min-width: @min-width) {
     .@{prefix} { @ruleset(); };
   }
+}
+
+.responsive(@ruleset; @i: 1) when (@i <= length(@screens)) {
+  @screen: extract(@screens, @i);
+  @name: extract(@screen, 1);
+  @screen-width: extract(@screen, 2);
+
+  .generate-responsive-version(@ruleset, @name, @screen-width);
+  .responsive(@ruleset, @i + 1);
 }
 
 .no-focus {
