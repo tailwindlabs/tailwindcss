@@ -95,7 +95,7 @@
 .generate-responsive-padding-utilities(@i: 1) when (@i <= length(@screens)) {
   @screen: extract(@screens, @i);
   @name: extract(@screen, 1);
-  @screen-width: extract(@screen, 3);
+  @screen-width: extract(@screen, 2);
 
   .generate-screen-padding-utilities(@name, @screen-width);
   .generate-responsive-padding-utilities(@i + 1);
@@ -162,7 +162,7 @@
 .generate-responsive-margin-utilities(@i: 1) when (@i <= length(@screens)) {
   @screen: extract(@screens, @i);
   @name: extract(@screen, 1);
-  @screen-width: extract(@screen, 3);
+  @screen-width: extract(@screen, 2);
 
   .generate-screen-margin-utilities(@name, @screen-width);
 
@@ -235,7 +235,7 @@
 .generate-responsive-pull-utilities(@i: 1) when (@i <= length(@screens)) {
   @screen: extract(@screens, @i);
   @name: extract(@screen, 1);
-  @screen-width: extract(@screen, 3);
+  @screen-width: extract(@screen, 2);
 
   .generate-screen-pull-utilities(@name, @screen-width);
   .generate-responsive-pull-utilities(@i + 1);
