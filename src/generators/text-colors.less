@@ -1,8 +1,8 @@
-.generate-text-color-utility(@name; @variant; @color) when (@variant = 'default') {
+.generate-text-color-utility(@name; @variant; @color) when (@variant = default) {
   .define-selector(~"text-@{name}"; { color: @color; });
 }
 
-.generate-text-color-utility(@name; @variant; @color) when not (@variant = 'default') {
+.generate-text-color-utility(@name; @variant; @color) when not (@variant = default) {
   .define-selector(~"text-@{name}-@{variant}"; { color: @color; });
 }
 

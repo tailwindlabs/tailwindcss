@@ -1,8 +1,8 @@
-.generate-border-color-utility(@name; @variant; @color) when (@variant = 'default') {
+.generate-border-color-utility(@name; @variant; @color) when (@variant = default) {
   .define-selector(~"border-@{name}"; { border-color: @color; });
 }
 
-.generate-border-color-utility(@name; @variant; @color) when not (@variant = 'default') {
+.generate-border-color-utility(@name; @variant; @color) when not (@variant = default) {
   .define-selector(~"border-@{name}-@{variant}"; { border-color: @color; });
 }
 

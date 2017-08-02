@@ -1,8 +1,8 @@
-.generate-bg-color-utility(@name; @variant; @color) when (@variant = 'default') {
+.generate-bg-color-utility(@name; @variant; @color) when (@variant = default) {
   .define-selector(~"bg-@{name}"; { background-color: @color; });
 }
 
-.generate-bg-color-utility(@name; @variant; @color) when not (@variant = 'default') {
+.generate-bg-color-utility(@name; @variant; @color) when not (@variant = default) {
   .define-selector(~"bg-@{name}-@{variant}"; { background-color: @color; });
 }
 
