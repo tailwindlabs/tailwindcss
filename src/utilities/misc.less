@@ -15,6 +15,14 @@
   .responsive(@ruleset, @i + 1);
 }
 
+.screen(@screen, @ruleset) {
+  .apply-match(@screens; @screen; {
+    @media (min-width: @__match) {
+      @ruleset();
+    }
+  });
+}
+
 .no-focus {
   &:focus, &:active {
     outline: none;
