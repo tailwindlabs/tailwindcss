@@ -1,5 +1,5 @@
 .generate-weight-utility(@variant; @weight) {
-  .text-@{variant} { font-weight: @weight; }
+  .define-selector(~"text-@{variant}"; { font-weight: @weight; });
 }
 
 .generate-weight-utilities(@weight-variants; @i: 1) when (@i <= length(@weight-variants)) and (length(extract(@weight-variants, @i)) = 1) {

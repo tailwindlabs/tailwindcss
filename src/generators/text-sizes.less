@@ -1,7 +1,5 @@
 .generate-text-size-utility(@variant; @size) {
-  .text-@{variant} {
-    font-size: @size;
-  }
+  .define-selector(~"text-@{variant}"; { font-size: @size; });
 }
 
 .generate-text-size-utilities(@size-variants; @i: 1) when (@i <= length(@size-variants)) and (length(extract(@size-variants, @i)) = 1) {

@@ -16,48 +16,23 @@
 @spacer-15: 30rem;
 
 @spacer-map:
-  px 1px,
-  0 @spacer-0,
-  1 @spacer-1,
-  2 @spacer-2,
-  3 @spacer-3,
-  4 @spacer-4,
-  5 @spacer-5,
-  6 @spacer-6,
-  7 @spacer-7,
-  8 @spacer-8,
-  9 @spacer-9,
-  10 @spacer-10,
-  11 @spacer-11,
-  12 @spacer-12,
-  13 @spacer-13,
-  14 @spacer-14,
-  15 @spacer-15;
-
-.pt(@spacer) { .apply-match(@spacer-map, @spacer, { padding-top: @__match; }); }
-.pr(@spacer) { .apply-match(@spacer-map, @spacer, { padding-right: @__match; }); }
-.pb(@spacer) { .apply-match(@spacer-map, @spacer, { padding-bottom: @__match; }); }
-.pl(@spacer) { .apply-match(@spacer-map, @spacer, { padding-left: @__match; }); }
-.py(@spacer) {
-  .apply-match(@spacer-map, @spacer, {
-    padding-top: @__match;
-    padding-bottom: @__match;
-  });
-}
-.px(@spacer) {
-  .apply-match(@spacer-map, @spacer, {
-    padding-right: @__match;
-    padding-left: @__match;
-  });
-}
-.p(@spacer) {
-  .apply-match(@spacer-map, @spacer, {
-    padding-top: @__match;
-    padding-right: @__match;
-    padding-bottom: @__match;
-    padding-left: @__match;
-  });
-}
+  'px' 1px,
+  '0' @spacer-0,
+  '1' @spacer-1,
+  '2' @spacer-2,
+  '3' @spacer-3,
+  '4' @spacer-4,
+  '5' @spacer-5,
+  '6' @spacer-6,
+  '7' @spacer-7,
+  '8' @spacer-8,
+  '9' @spacer-9,
+  '10' @spacer-10,
+  '11' @spacer-11,
+  '12' @spacer-12,
+  '13' @spacer-13,
+  '14' @spacer-14,
+  '15' @spacer-15;
 
 .generate-padding-utilities(@i: 1) when (@i <= length(@spacer-map)) {
   @spacer: extract(@spacer-map, @i);
@@ -65,24 +40,24 @@
   @n: extract(@spacer, 1);
   @size: extract(@spacer, 2);
 
-  .pt-@{n} { padding-top: @size; }
-  .pr-@{n} { padding-right: @size; }
-  .pb-@{n} { padding-bottom: @size; }
-  .pl-@{n} { padding-left: @size; }
-  .py-@{n} {
+  .define-selector(~"pt-@{n}", { padding-top: @size; });
+  .define-selector(~"pr-@{n}", { padding-right: @size; });
+  .define-selector(~"pb-@{n}", { padding-bottom: @size; });
+  .define-selector(~"pl-@{n}", { padding-left: @size; });
+  .define-selector(~"py-@{n}", {
     padding-top: @size;
     padding-bottom: @size;
-  }
-  .px-@{n} {
+  });
+  .define-selector(~"px-@{n}", {
     padding-right: @size;
     padding-left: @size;
-  }
-  .p-@{n} {
+  });
+  .define-selector(~"p-@{n}", {
     padding-top: @size;
-    padding-bottom: @size;
     padding-right: @size;
+    padding-bottom: @size;
     padding-left: @size;
-  }
+  });
 
   .generate-padding-utilities(@i + 1);
 }
@@ -94,24 +69,24 @@
   @size: extract(@spacer, 2);
 
   @media (min-width: @screen-width) {
-    .@{prefix}pt-@{n} { padding-top: @size; }
-    .@{prefix}pr-@{n} { padding-right: @size; }
-    .@{prefix}pb-@{n} { padding-bottom: @size; }
-    .@{prefix}pl-@{n} { padding-left: @size; }
-    .@{prefix}py-@{n} {
+    .define-selector(~"@{prefix}pt-@{n}", { padding-top: @size; });
+    .define-selector(~"@{prefix}pr-@{n}", { padding-right: @size; });
+    .define-selector(~"@{prefix}pb-@{n}", { padding-bottom: @size; });
+    .define-selector(~"@{prefix}pl-@{n}", { padding-left: @size; });
+    .define-selector(~"@{prefix}py-@{n}", {
       padding-top: @size;
       padding-bottom: @size;
-    }
-    .@{prefix}px-@{n} {
+    });
+    .define-selector(~"@{prefix}px-@{n}", {
       padding-right: @size;
       padding-left: @size;
-    }
-    .@{prefix}p-@{n} {
+    });
+    .define-selector(~"@{prefix}p-@{n}", {
       padding-top: @size;
-      padding-bottom: @size;
       padding-right: @size;
+      padding-bottom: @size;
       padding-left: @size;
-    }
+    });
   }
 
   .generate-screen-padding-utilities(@screen; @screen-width; (@i + 1));
@@ -126,56 +101,30 @@
   .generate-responsive-padding-utilities(@i + 1);
 }
 
-.mt(@spacer) { .apply-match(@spacer-map, @spacer, { margin-top: @__match; }); }
-
-.mr(@spacer) { .apply-match(@spacer-map, @spacer, { margin-right: @__match; }); }
-.mb(@spacer) { .apply-match(@spacer-map, @spacer, { margin-bottom: @__match; }); }
-.ml(@spacer) { .apply-match(@spacer-map, @spacer, { margin-left: @__match; }); }
-.my(@spacer) {
-  .apply-match(@spacer-map, @spacer, {
-    margin-top: @__match;
-    margin-bottom: @__match;
-  });
-}
-.mx(@spacer) {
-  .apply-match(@spacer-map, @spacer, {
-    margin-right: @__match;
-    margin-left: @__match;
-  });
-}
-.m(@spacer) {
-  .apply-match(@spacer-map, @spacer, {
-    margin-top: @__match;
-    margin-right: @__match;
-    margin-bottom: @__match;
-    margin-left: @__match;
-  });
-}
-
 .generate-margin-utilities(@i: 1) when (@i <= length(@spacer-map)) {
   @spacer: extract(@spacer-map, @i);
 
   @n: extract(@spacer, 1);
   @size: extract(@spacer, 2);
 
-  .mt-@{n} { margin-top: @size; }
-  .mr-@{n} { margin-right: @size; }
-  .mb-@{n} { margin-bottom: @size; }
-  .ml-@{n} { margin-left: @size; }
-  .my-@{n} {
+  .define-selector(~"mt-@{n}", { margin-top: @size; });
+  .define-selector(~"mr-@{n}", { margin-right: @size; });
+  .define-selector(~"mb-@{n}", { margin-bottom: @size; });
+  .define-selector(~"ml-@{n}", { margin-left: @size; });
+  .define-selector(~"my-@{n}", {
     margin-top: @size;
     margin-bottom: @size;
-  }
-  .mx-@{n} {
+  });
+  .define-selector(~"mx-@{n}", {
     margin-right: @size;
     margin-left: @size;
-  }
-  .m-@{n} {
+  });
+  .define-selector(~"m-@{n}", {
     margin-top: @size;
-    margin-bottom: @size;
     margin-right: @size;
+    margin-bottom: @size;
     margin-left: @size;
-  }
+  });
 
   .generate-margin-utilities(@i + 1);
 }
@@ -187,24 +136,24 @@
   @size: extract(@spacer, 2);
 
   @media (min-width: @screen-width) {
-    .@{prefix}mt-@{n} { margin-top: @size; }
-    .@{prefix}mr-@{n} { margin-right: @size; }
-    .@{prefix}mb-@{n} { margin-bottom: @size; }
-    .@{prefix}ml-@{n} { margin-left: @size; }
-    .@{prefix}my-@{n} {
+    .define-selector(~"@{prefix}mt-@{n}", { margin-top: @size; });
+    .define-selector(~"@{prefix}mr-@{n}", { margin-right: @size; });
+    .define-selector(~"@{prefix}mb-@{n}", { margin-bottom: @size; });
+    .define-selector(~"@{prefix}ml-@{n}", { margin-left: @size; });
+    .define-selector(~"@{prefix}my-@{n}", {
       margin-top: @size;
       margin-bottom: @size;
-    }
-    .@{prefix}mx-@{n} {
+    });
+    .define-selector(~"@{prefix}mx-@{n}", {
       margin-right: @size;
       margin-left: @size;
-    }
-    .@{prefix}m-@{n} {
+    });
+    .define-selector(~"@{prefix}m-@{n}", {
       margin-top: @size;
-      margin-bottom: @size;
       margin-right: @size;
+      margin-bottom: @size;
       margin-left: @size;
-    }
+    });
   }
 
   .generate-screen-margin-utilities(@screen; @screen-width; (@i + 1));
@@ -225,56 +174,30 @@
   .generate-responsive-margin-utilities(@i + 1);
 }
 
-.pull-t(@spacer) { .apply-match(@spacer-map, @spacer, { margin-top: ~"-@{__match}"; }); }
-
-.pull-r(@spacer) { .apply-match(@spacer-map, @spacer, { margin-right: ~"-@{__match}"; }); }
-.pull-b(@spacer) { .apply-match(@spacer-map, @spacer, { margin-bottom: ~"-@{__match}"; }); }
-.pull-l(@spacer) { .apply-match(@spacer-map, @spacer, { margin-left: ~"-@{__match}"; }); }
-.pull-y(@spacer) {
-  .apply-match(@spacer-map, @spacer, {
-    margin-top: ~"-@{__match}";
-    margin-bottom: ~"-@{__match}";
-  });
-}
-.pull-x(@spacer) {
-  .apply-match(@spacer-map, @spacer, {
-    margin-right: ~"-@{__match}";
-    margin-left: ~"-@{__match}";
-  });
-}
-.pull(@spacer) {
-  .apply-match(@spacer-map, @spacer, {
-    margin-top: ~"-@{__match}";
-    margin-right: ~"-@{__match}";
-    margin-bottom: ~"-@{__match}";
-    margin-left: ~"-@{__match}";
-  });
-}
-
 .generate-pull-utilities(@i: 1) when (@i <= length(@spacer-map)) {
   @spacer: extract(@spacer-map, @i);
 
   @n: extract(@spacer, 1);
   @size: extract(@spacer, 2);
 
-  .pull-t-@{n} { margin-top: ~"-@{size}"; }
-  .pull-r-@{n} { margin-right: ~"-@{size}"; }
-  .pull-b-@{n} { margin-bottom: ~"-@{size}"; }
-  .pull-l-@{n} { margin-left: ~"-@{size}"; }
-  .pull-y-@{n} {
+  .define-selector(~"pull-t-@{n}", { margin-top: ~"-@{size}"; });
+  .define-selector(~"pull-r-@{n}", { margin-right: ~"-@{size}"; });
+  .define-selector(~"pull-b-@{n}", { margin-bottom: ~"-@{size}"; });
+  .define-selector(~"pull-l-@{n}", { margin-left: ~"-@{size}"; });
+  .define-selector(~"pull-y-@{n}", {
     margin-top: ~"-@{size}";
     margin-bottom: ~"-@{size}";
-  }
-  .pull-x-@{n} {
+  });
+  .define-selector(~"pull-x-@{n}", {
     margin-right: ~"-@{size}";
     margin-left: ~"-@{size}";
-  }
-  .pull-@{n} {
+  });
+  .define-selector(~"pull-@{n}", {
     margin-top: ~"-@{size}";
-    margin-bottom: ~"-@{size}";
     margin-right: ~"-@{size}";
+    margin-bottom: ~"-@{size}";
     margin-left: ~"-@{size}";
-  }
+  });
 
   .generate-pull-utilities(@i + 1);
 }
@@ -286,24 +209,24 @@
   @size: extract(@spacer, 2);
 
   @media (min-width: @screen-width) {
-    .@{prefix}pull-t-@{n} { margin-top: ~"-@{size}";; }
-    .@{prefix}pull-r-@{n} { margin-right: ~"-@{size}";; }
-    .@{prefix}pull-b-@{n} { margin-bottom: ~"-@{size}";; }
-    .@{prefix}pull-l-@{n} { margin-left: ~"-@{size}";; }
-    .@{prefix}pull-y-@{n} {
-      margin-top: ~"-@{size}";;
-      margin-bottom: ~"-@{size}";;
-    }
-    .@{prefix}pull-x-@{n} {
-      margin-right: ~"-@{size}";;
-      margin-left: ~"-@{size}";;
-    }
-    .@{prefix}pull-@{n} {
-      margin-top: ~"-@{size}";;
-      margin-bottom: ~"-@{size}";;
-      margin-right: ~"-@{size}";;
-      margin-left: ~"-@{size}";;
-    }
+    .define-selector(~"@{prefix}pull-t-@{n}", { margin-top: ~"-@{size}"; });
+    .define-selector(~"@{prefix}pull-r-@{n}", { margin-right: ~"-@{size}"; });
+    .define-selector(~"@{prefix}pull-b-@{n}", { margin-bottom: ~"-@{size}"; });
+    .define-selector(~"@{prefix}pull-l-@{n}", { margin-left: ~"-@{size}"; });
+    .define-selector(~"@{prefix}pull-y-@{n}", {
+      margin-top: ~"-@{size}";
+      margin-bottom: ~"-@{size}";
+    });
+    .define-selector(~"@{prefix}pull-x-@{n}", {
+      margin-right: ~"-@{size}";
+      margin-left: ~"-@{size}";
+    });
+    .define-selector(~"@{prefix}pull-@{n}", {
+      margin-top: ~"-@{size}";
+      margin-right: ~"-@{size}";
+      margin-bottom: ~"-@{size}";
+      margin-left: ~"-@{size}";
+    });
   }
 
   .generate-screen-pull-utilities(@screen; @screen-width; (@i + 1));

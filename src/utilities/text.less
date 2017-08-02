@@ -15,6 +15,15 @@
 @font-size-2xl: (30rem / 16rem); // 30px
 @font-size-3xl: (40rem / 16rem); // 40px
 
+@text-size-scale:
+  'xs' @font-size-xs,
+  'sm' @font-size-sm,
+  'base' @font-size-base,
+  'lg' @font-size-lg,
+  'xl' @font-size-xl,
+  '2xl' @font-size-2xl,
+  '3xl' @font-size-3xl;
+
 // Weights
 @font-weight-hairline: 200;
 @font-weight-thin: 300;
@@ -36,37 +45,37 @@
 
 // Sizes
 .define-text-sizes(
-    xs @font-size-xs,
-    sm @font-size-sm,
-    base @font-size-base,
-    lg @font-size-lg,
-    xl @font-size-xl,
-    2xl @font-size-2xl,
-    3xl @font-size-3xl
+  'xs' @font-size-xs,
+  'sm' @font-size-sm,
+  'base' @font-size-base,
+  'lg' @font-size-lg,
+  'xl' @font-size-xl,
+  '2xl' @font-size-2xl,
+  '3xl' @font-size-3xl
 ;);
 
 // Weights
 .define-text-weights(
-    hairline @font-weight-hairline,
-    thin @font-weight-thin,
-    regular @font-weight-regular,
-    medium @font-weight-medium,
-    bold @font-weight-bold
+  'hairline' @font-weight-hairline,
+  'thin' @font-weight-thin,
+  'regular' @font-weight-regular,
+  'medium' @font-weight-medium,
+  'bold' @font-weight-bold
 ;);
 
 // Colors
 .define-text-color(light;
-    default @text-light,
-    soft @text-light-soft,
-    softer @text-light-softer,
-    softest @text-light-softest
+  'default' @text-light,
+  'soft' @text-light-soft,
+  'softer' @text-light-softer,
+  'softest' @text-light-softest
 ;);
 
 .define-text-color(dark;
-    default @text-dark,
-    soft @text-dark-soft,
-    softer @text-dark-softer,
-    softest @text-dark-softest
+  'default' @text-dark,
+  'soft' @text-dark-soft,
+  'softer' @text-dark-softer,
+  'softest' @text-dark-softest
 ;);
 
 // Line heights
@@ -112,8 +121,8 @@
   &text-base { .text-base; }
   &text-lg { .text-lg; }
   &text-xl { .text-xl; }
-  // &text-2xl { .text-2xl; }
-  // &text-3xl { .text-3xl; }
+  &text-2xl { .text-2xl; }
+  &text-3xl { .text-3xl; }
   &text-hairline { .text-hairline; }
   &text-thin { .text-thin; }
   &text-regular { .text-regular; }

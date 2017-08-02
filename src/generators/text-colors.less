@@ -1,9 +1,9 @@
-.generate-text-color-utility(@name; @variant; @color) when (@variant = default) {
-  .text-@{name} { color: @color; }
+.generate-text-color-utility(@name; @variant; @color) when (@variant = 'default') {
+  .define-selector(~"text-@{name}"; { color: @color; });
 }
 
-.generate-text-color-utility(@name; @variant; @color) when not (@variant = default) {
-  .text-@{name}-@{variant} { color: @color; }
+.generate-text-color-utility(@name; @variant; @color) when not (@variant = 'default') {
+  .define-selector(~"text-@{name}-@{variant}"; { color: @color; });
 }
 
 .generate-text-color-utilities(@color-name; @color-variants; @i: 1) when (@i <= length(@color-variants)) and (length(extract(@color-variants, @i)) = 1) {
