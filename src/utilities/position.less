@@ -9,3 +9,16 @@
 .pin-y { .pin-t; .pin-b; }
 .pin-x { .pin-l; .pin-r; }
 .pin { .pin-y; .pin-x; width: 100%; height: 100%; }
+
+.responsive({
+  &fixed { .fixed; }
+  &absolute { .absolute; }
+  &relative { .relative; }
+  &pin-t { .pin-t; }
+  &pin-r { .pin-r; }
+  &pin-b { .pin-b; }
+  &pin-l { .pin-l; }
+  &pin-y { .pin-y; }
+  &pin-x { .pin-x; }
+  &pin { .pin; }
+});
