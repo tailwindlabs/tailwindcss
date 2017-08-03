@@ -1,4 +1,9 @@
-.generate-utility-variant(@utility; @variant; @ruleset) {
+.generate-utility-variant(@utility; @variant; @ruleset) when (extract(@variant, 1) = default) {
+  @__variant-value: @variant;
+  .define-selector(~"@{utility}"; @ruleset);
+}
+
+.generate-utility-variant(@utility; @variant; @ruleset) when not (extract(@variant, 1) = default) {
   @variant-name: extract(@variant, 1);
   @__variant-value: @variant;
   .define-selector(~"@{utility}-@{variant-name}"; @ruleset);
@@ -18,7 +23,12 @@
   .generate-utility-variants(@utility; @variants; @ruleset; @i + 1);
 }
 
-.generate-screen-utility-variant(@utility; @variant; @screen-name; @ruleset) {
+.generate-screen-utility-variant(@utility; @variant; @screen-name; @ruleset) when (extract(@variant, 1) = default) {
+    @__variant-value: @variant;
+    .define-selector(~"@{screen-name}\:@{utility}"; @ruleset);
+}
+
+.generate-screen-utility-variant(@utility; @variant; @screen-name; @ruleset) when not (extract(@variant, 1) = default) {
     @variant-name: extract(@variant, 1);
     @__variant-value: @variant;
     .define-selector(~"@{screen-name}\:@{utility}-@{variant-name}"; @ruleset);

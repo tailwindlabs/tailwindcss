@@ -68,14 +68,14 @@
   'soft' @text-light-soft,
   'softer' @text-light-softer,
   'softest' @text-light-softest
-;);
+; @screens);
 
 .define-text-color(dark;
   default @text-dark,
   'soft' @text-dark-soft,
   'softer' @text-dark-softer,
   'softest' @text-dark-softest
-;);
+; @screens);
 
 // Line heights
 .leading-none { line-height: 1; }
@@ -115,21 +115,6 @@
 }
 
 .responsive({
-  &text-xs { .text-xs; }
-  &text-sm { .text-sm; }
-  &text-base { .text-base; }
-  &text-lg { .text-lg; }
-  &text-xl { .text-xl; }
-  &text-2xl { .text-2xl; }
-  &text-3xl { .text-3xl; }
-  &text-light { .text-light; }
-  &text-light-soft { .text-light-soft; }
-  &text-light-softer { .text-light-softer; }
-  &text-light-softest { .text-light-softest; }
-  &text-dark { .text-dark; }
-  &text-dark-soft { .text-dark-soft; }
-  &text-dark-softer { .text-dark-softer; }
-  &text-dark-softest { .text-dark-softest; }
   &leading-none { .leading-none; }
   &leading-tight { .leading-tight; }
   &leading-normal { .leading-normal; }
