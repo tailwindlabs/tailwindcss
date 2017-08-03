@@ -1,6 +1,6 @@
 .define-text-color(@color-name; @variants) {
   .generate-utility-variants(~"text-@{color-name}"; @variants; {
-    font-size: extract(@__variant-value, 2);
+    color: extract(@__variant-value, 2);
   });
 }
 
@@ -11,7 +11,7 @@
 .define-text-color(@color-name; @variants; @screens) when not (@screens = none) {
   .define-text-color(@color-name; @variants);
   .generate-responsive-utility-variants(~"text-@{color-name}"; @variants; @screens; {
-    font-size: extract(@__variant-value, 2);
+    color: extract(@__variant-value, 2);
   });
 }
 
