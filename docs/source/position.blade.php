@@ -4,7 +4,7 @@
 
 <h1 class="title">Position</h1>
 
-<p class="mt-6 mb-3 text-dark-soft">The position utilities are primarily <code>position</code> display property helpers.</p>
+<p class="mt-6 mb-3 text-dark-soft">The position utilities are primarily <code>position</code> property helpers.</p>
 
 <p class="mt-6 mb-3">Using the utilities in HTML:</p>
 
