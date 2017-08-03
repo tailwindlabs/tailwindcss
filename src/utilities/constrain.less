@@ -8,15 +8,18 @@
 @constrain-4xl: 90rem;
 @constrain-5xl: 100rem;
 
-.constrain-xs { max-width: @constrain-xs; flex-basis: @constrain-xs; }
-.constrain-sm { max-width: @constrain-sm; flex-basis: @constrain-sm; }
-.constrain-md { max-width: @constrain-md; flex-basis: @constrain-md; }
-.constrain-lg { max-width: @constrain-lg; flex-basis: @constrain-lg; }
-.constrain-xl { max-width: @constrain-xl; flex-basis: @constrain-xl; }
-.constrain-2xl { max-width: @constrain-2xl; flex-basis: @constrain-2xl; }
-.constrain-3xl { max-width: @constrain-3xl; flex-basis: @constrain-3xl; }
-.constrain-4xl { max-width: @constrain-4xl; flex-basis: @constrain-4xl; }
-.constrain-5xl { max-width: @constrain-5xl; flex-basis: @constrain-5xl; }
+@constrain-scale:
+  'xs' @constrain-xs,
+  'sm' @constrain-sm,
+  'md' @constrain-md,
+  'lg' @constrain-lg,
+  'xl' @constrain-xl,
+  '2xl' @constrain-2xl,
+  '3xl' @constrain-3xl,
+  '4xl' @constrain-4xl,
+  '5xl' @constrain-5xl;
+
+.define-constrains(@constrain-scale);
 
 .responsive({
   &constrain-xs { .constrain-xs; }
