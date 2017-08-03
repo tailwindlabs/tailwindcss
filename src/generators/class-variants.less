@@ -18,26 +18,24 @@
   .generate-utility-variants(@utility; @variants; @ruleset; @i + 1);
 }
 
-.generate-screen-utility-variant(@utility; @variant; @screen-name; @screen-width; @ruleset) {
-  @media (min-width: @screen-width) {
+.generate-screen-utility-variant(@utility; @variant; @screen-name; @ruleset) {
     @variant-name: extract(@variant, 1);
     @__variant-value: @variant;
     .define-selector(~"@{screen-name}\:@{utility}-@{variant-name}"; @ruleset);
-  }
 }
 
-.generate-screen-utility-variants(@utility; @variants; @screen-name; @screen-width; @ruleset; @i: 1) when (@i <= length(@variants)) and (length(extract(@variants, @i)) = 1) {
+.generate-screen-utility-variants(@utility; @variants; @screen-name; @ruleset; @i: 1) when (@i <= length(@variants)) and (length(extract(@variants, @i)) = 1) {
   & {
-    .generate-screen-utility-variant(@utility; @variants; @screen-name; @screen-width; @ruleset);
+    .generate-screen-utility-variant(@utility; @variants; @screen-name; @ruleset);
   }
 }
 
-.generate-screen-utility-variants(@utility; @variants; @screen-name; @screen-width; @ruleset; @i: 1) when (@i <= length(@variants)) and (length(extract(@variants, @i)) = 2) {
+.generate-screen-utility-variants(@utility; @variants; @screen-name; @ruleset; @i: 1) when (@i <= length(@variants)) and (length(extract(@variants, @i)) = 2) {
   & {
     @variant: extract(@variants, @i);
-    .generate-screen-utility-variant(@utility; @variant; @screen-name; @screen-width; @ruleset);
+    .generate-screen-utility-variant(@utility; @variant; @screen-name; @ruleset);
   }
-  .generate-screen-utility-variants(@utility; @variants; @screen-name; @screen-width; @ruleset; @i + 1);
+  .generate-screen-utility-variants(@utility; @variants; @screen-name; @ruleset; @i + 1);
 }
 
 .generate-responsive-utility-variants(@utility; @variants; @screens; @ruleset; @i: 1) when (@i <= length(@screens)) {
@@ -45,6 +43,8 @@
   @screen-name: extract(@screen, 1);
   @screen-width: extract(@screen, 2);
 
-  .generate-screen-utility-variants(@utility; @variants; @screen-name; @screen-width; @ruleset);
+  @media (min-width: @screen-width) {
+    .generate-screen-utility-variants(@utility; @variants; @screen-name; @ruleset);
+  }
   .generate-responsive-utility-variants(@utility; @variants; @screens; @ruleset; @i + 1);
 }
