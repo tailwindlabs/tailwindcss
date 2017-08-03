@@ -19,16 +19,4 @@
   '4xl' @constrain-4xl,
   '5xl' @constrain-5xl;
 
-.define-constrains(@constrain-scale);
-
-.responsive({
-  &constrain-xs { .constrain-xs; }
-  &constrain-sm { .constrain-sm; }
-  &constrain-md { .constrain-md; }
-  &constrain-lg { .constrain-lg; }
-  &constrain-xl { .constrain-xl; }
-  &constrain-2xl { .constrain-2xl; }
-  &constrain-3xl { .constrain-3xl; }
-  &constrain-4xl { .constrain-4xl; }
-  &constrain-5xl { .constrain-5xl; }
-});
+.define-constrains(@constrain-scale; @screens);

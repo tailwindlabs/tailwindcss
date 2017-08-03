@@ -21,6 +21,49 @@
   .generate-constrain-utilities(@size-variants; @i + 1);
 }
 
+.generate-screen-constrain-utility(@variant; @size; @screen-name; @screen-width) {
+  @media (min-width: @screen-width) {
+    .define-selector(~"@{screen-name}\:constrain-@{variant}"; {
+      max-width: @size;
+      flex-basis: @size;
+    });
+  }
+}
+
+.generate-screen-constrain-utilities(@size-variants; @screen-name; @screen-width; @i: 1) when (@i <= length(@size-variants)) and (length(extract(@size-variants, @i)) = 1) {
+  @name: extract(@size-variants, 1);
+  @size: extract(@size-variants, 2);
+
+  .generate-screen-constrain-utility(@name; @size; @screen-name; @screen-width);
+}
+
+.generate-screen-constrain-utilities(@size-variants; @screen-name; @screen-width; @i: 1) when (@i <= length(@size-variants)) and (length(extract(@size-variants, @i)) = 2) {
+  @variant: extract(@size-variants, @i);
+  @name: extract(@variant, 1);
+  @size: extract(@variant, 2);
+
+  .generate-screen-constrain-utility(@name; @size; @screen-name; @screen-width);
+  .generate-screen-constrain-utilities(@size-variants; @screen-name; @screen-width; @i + 1);
+}
+
+.generate-responsive-constrain-utilities(@size-variants; @screens; @i: 1) when (@i <= length(@screens)) {
+  @screen: extract(@screens, @i);
+  @screen-name: extract(@screen, 1);
+  @screen-width: extract(@screen, 2);
+
+  .generate-screen-constrain-utilities(@size-variants; @screen-name; @screen-width);
+  .generate-responsive-constrain-utilities(@size-variants; @screens; @i + 1);
+}
+
 .define-constrains(@size-variants) {
     .generate-constrain-utilities(@size-variants);
+}
+
+.define-constrains(@size-variants) when (@screens = none) {
+    .generate-constrain-utilities(@size-variants);
+}
+
+.define-constrains(@size-variants; @screens) {
+    .generate-constrain-utilities(@size-variants);
+    .generate-responsive-constrain-utilities(@size-variants; @screens);
 }
