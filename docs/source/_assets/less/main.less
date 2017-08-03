@@ -1,0 +1,39 @@
+@import "../../../../src/reset";
+@import "../../../../src/utilities";
+@import "prism";
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.define-text-color('primary';
+  default #3498DB,
+  'light' lighten(#3498DB, 25%),
+  'dark' #2980B9
+;);
+
+.define-bg-color('primary';
+  default #3498db,
+  'light' #a0cfee,
+  'dark' #2980b9
+;);
+
+.title {
+  .mb-4;
+  .leading-none;
+  .text-dark-softer;
+  .text-thin;
+  .text-2xl;
+  .text-primary;
+}
+
+.subtitle {
+  .mt-8;
+  .mb-6;
+  .leading-none;
+  .text-dark-softer;
+  .text-thin;
+  .text-xl;
+  .text-primary;
+}
