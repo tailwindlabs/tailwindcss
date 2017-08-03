@@ -1,23 +1,16 @@
-.generate-weight-utility(@variant; @weight) {
-  .define-selector(~"text-@{variant}"; { font-weight: @weight; });
+.define-text-weights(@variants) {
+  .generate-utility-variants('text'; @variants; {
+    font-weight: extract(@__variant-value, 2);
+  });
 }
 
-.generate-weight-utilities(@weight-variants; @i: 1) when (@i <= length(@weight-variants)) and (length(extract(@weight-variants, @i)) = 1) {
-  @name: extract(@weight-variants, 1);
-  @weight: extract(@weight-variants, 2);
-
-  .generate-weight-utility(@name; @weight);
+.define-text-weights(@variants; none) {
+  .define-text-weights(@variants);
 }
 
-.generate-weight-utilities(@weight-variants; @i: 1) when (@i <= length(@weight-variants)) and (length(extract(@weight-variants, @i)) = 2) {
-  @variant: extract(@weight-variants, @i);
-  @name: extract(@variant, 1);
-  @weight: extract(@variant, 2);
-
-  .generate-weight-utility(@name; @weight);
-  .generate-weight-utilities(@weight-variants; @i + 1);
-}
-
-.define-text-weights(@weight-variants) {
-    .generate-weight-utilities(@weight-variants);
+.define-text-weights(@variants; @screens) when not (@screens = none) {
+  .define-text-weights(@variants);
+  .generate-responsive-utility-variants('text'; @variants; @screens; {
+    font-weight: extract(@__variant-value, 2);
+  });
 }
