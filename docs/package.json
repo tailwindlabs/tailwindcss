@@ -4,7 +4,6 @@
     "gulp": "^3.8.8",
     "hasbin": "^1.2.3",
     "laravel-elixir": "^6.0.0-15",
-    "yargs": "^4.6.0",
-    "tailwindcss": "git+ssh://git@github.com/adamwathan/tailwindcss.git"
+    "yargs": "^4.6.0"
   }
 }
