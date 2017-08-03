@@ -1,10 +1,22 @@
 @import "../../../../src/reset";
 @import "../../../../src/utilities";
 @import "prism";
+@import "markdown";
+
+*,
+*::before,
+*::after {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 a {
   color: inherit;
   text-decoration: none;
+
+  &:hover {
+    .text-underline;
+  }
 }
 
 .define-text-color('primary';
@@ -18,22 +30,3 @@ a {
   'light' #a0cfee,
   'dark' #2980b9
 ;);
-
-.title {
-  .mb-4;
-  .leading-none;
-  .text-dark-softer;
-  .text-thin;
-  .text-2xl;
-  .text-primary;
-}
-
-.subtitle {
-  .mt-8;
-  .mb-6;
-  .leading-none;
-  .text-dark-softer;
-  .text-thin;
-  .text-xl;
-  .text-primary;
-}
