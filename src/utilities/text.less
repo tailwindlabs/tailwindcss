@@ -15,14 +15,6 @@
 @font-size-2xl: (30rem / 16rem); // 30px
 @font-size-3xl: (40rem / 16rem); // 40px
 
-@text-size-scale:
-  'xs' @font-size-xs,
-  'sm' @font-size-sm,
-  'base' @font-size-base,
-  'lg' @font-size-lg,
-  'xl' @font-size-xl,
-  '2xl' @font-size-2xl,
-  '3xl' @font-size-3xl;
 
 // Weights
 @font-weight-hairline: 200;
@@ -43,24 +35,26 @@
 @text-dark-softest: hsl(0, 0%, 75%);
 
 // Sizes
-.define-text-sizes(
+@text-size-scale:
   'xs' @font-size-xs,
   'sm' @font-size-sm,
   'base' @font-size-base,
   'lg' @font-size-lg,
   'xl' @font-size-xl,
   '2xl' @font-size-2xl,
-  '3xl' @font-size-3xl
-; @screens);
+  '3xl' @font-size-3xl,
+;
+.define-text-sizes(@text-size-scale; @screens);
 
 // Weights
-.define-text-weights(
+@text-weight-scale:
   'hairline' @font-weight-hairline,
   'thin' @font-weight-thin,
   'regular' @font-weight-regular,
   'medium' @font-weight-medium,
-  'bold' @font-weight-bold
-; @screens);
+  'bold' @font-weight-bold,
+;
+.define-text-weights(@text-weight-scale; @screens);
 
 // Colors
 @text-colors:
