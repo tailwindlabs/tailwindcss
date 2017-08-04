@@ -54,18 +54,16 @@
 .border-r-0 { border-right-style: none; }
 
 // Colors
-@border-dark-scale:
-  default @border-dark,
-  'soft' @border-dark-soft,
-  'softer' @border-dark-softer;
+@border-colors:
+  'dark' @border-dark,
+  'dark-soft' @border-dark-soft,
+  'dark-softer' @border-dark-softer,
 
-@border-light-scale:
-  default @border-light,
-  'soft' @border-light-soft,
-  'softer' @border-light-softer;
-
-.define-border-color('dark'; @border-dark-scale; @screens);
-.define-border-color('light'; @border-light-scale; @screens);
+  'light' @border-light,
+  'light-soft' @border-light-soft,
+  'light-softer' @border-light-softer,
+;
+.define-border-colors(@border-colors; @screens);
 
 // Radius
 .rounded-sm { border-radius: @border-radius-1; }
