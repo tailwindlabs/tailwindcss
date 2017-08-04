@@ -17,12 +17,12 @@ title: "Borders"
 
 Construct border size utilities using the <code class="inline">.border-side-width</code> syntax. For example, <code class="inline">.border</code> would add a <code class="inline">1px</code> border to the element, where <code class="inline">.border-b-3</code> would add a <code class="inline">4px</code> bottom border to the element. Note that that the default border style is <code class="inline">solid</code>, and will get the <code class="inline">@border-default-color</code> applied.
 
-<div class="flex flex-top mt-6 text-sm">
-    <div class="pr-7">
+<div class="flex flex-top mt-8 text-sm">
+    <div class="pr-12">
         <div class="mb-3 text-dark-soft text-uppercase">Class</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">border</code></div>
     </div>
-    <div class="pl-7 pr-7 border-l">
+    <div class="pl-12 pr-12 border-l">
         <div class="mb-3 text-dark-soft"><span class="text-uppercase">Side</span> <span class="text-dark-softer text-xs">(optional)</span></div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded bg-light-softer">&nbsp;</code> All</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">t</code> Top</div>
@@ -30,7 +30,7 @@ Construct border size utilities using the <code class="inline">.border-side-widt
         <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">b</code> Bottom</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">l</code> Left</div>
     </div>
-    <div class="pl-7 border-l">
+    <div class="pl-12 border-l">
         <div class="mb-3 text-dark-soft"><span class="text-uppercase">Width</span> <span class="text-dark-softer text-xs">(optional)</span></div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded bg-light-softer">&nbsp;</code> 1px</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">2</code> 2px</div>
