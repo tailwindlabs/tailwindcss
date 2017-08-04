@@ -15,7 +15,9 @@ title: "Borders"
 
 <h2 id="sizes">Sizes</h2>
 
-Construct border size utilities using the <code class="inline">.border-side-width</code> syntax. For example, <code class="inline">.border</code> would add a <code class="inline">1px</code> border to the element, where <code class="inline">.border-b-3</code> would add a <code class="inline">4px</code> bottom border to the element. Note that that the default border style is <code class="inline">solid</code>, and will get the <code class="inline">@border-default-color</code> applied.
+Construct border size utilities using the <code class="inline">.border{-side?}{-width?}</code> syntax. For example, <code class="inline">.border</code> would add a <code class="inline">1px</code> border to all sides of the element, where <code class="inline">.border-b-4</code> would add a <code class="inline">4px</code> border to the bottom of the element.
+
+By default, borders are <code class="inline">solid</code>, and use the <code class="inline">@border-default-color</code>.
 
 <div class="flex flex-top mt-8 text-sm">
     <div class="pr-12">
@@ -34,8 +36,8 @@ Construct border size utilities using the <code class="inline">.border-side-widt
         <div class="mb-3 text-dark-soft"><span class="text-uppercase">Width</span> <span class="text-dark-softer text-xs">(optional)</span></div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded bg-light-softer">&nbsp;</code> 1px</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">2</code> 2px</div>
-        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">3</code> 4px</div>
-        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">4</code> 8px</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">4</code> 4px</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">8</code> 8px</div>
     </div>
 </div>
 
