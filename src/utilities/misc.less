@@ -16,11 +16,10 @@
 }
 
 .screen(@screen, @ruleset) {
-  .apply-match(@screens; @screen; {
-    @media (min-width: @__match) {
-      @ruleset();
-    }
-  });
+  .extract-match(@screens; @screen);
+  @media (min-width: @__match) {
+    @ruleset();
+  }
 }
 
 .no-focus {
