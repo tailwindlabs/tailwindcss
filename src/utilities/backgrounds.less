@@ -1,31 +1,11 @@
-@bg-light: hsl(0, 0%, 100%);
-@bg-light-soft: hsl(0, 0%, 98%);
-@bg-light-softer: hsl(0, 0%, 96%);
+@bg-colors:
+  'light' hsl(0, 0%, 100%),
+  'light-soft' hsl(0, 0%, 98%),
+  'light-softer' hsl(0, 0%, 96%),
 
-@bg-dark: hsl(0, 0%, 33%);
-@bg-dark-soft: hsl(0, 0%, 42%);
-@bg-dark-softer: hsl(0, 0%, 52%);
+  'dark' hsl(0, 0%, 33%),
+  'dark-soft' hsl(0, 0%, 42%),
+  'dark-softer' hsl(0, 0%, 52%),
+;
 
-.bg-light { background-color: @bg-light; }
-.bg-light-soft { background-color: @bg-light-soft; }
-.bg-light-softer { background-color: @bg-light-softer; }
-
-.hover-bg-light { &:hover { .bg-light; } }
-.hover-bg-light-soft { &:hover { .bg-light-soft; } }
-.hover-bg-light-softer { &:hover { .bg-light-softer; } }
-
-.bg-dark { background-color: @bg-dark; }
-.bg-dark-soft { background-color: @bg-dark-soft; }
-.bg-dark-softer { background-color: @bg-dark-softer; }
-
-.bg-overlay-softest { background-color: rgba(0,0,0,0.15); }
-.bg-overlay-soft { background-color: rgba(0,0,0,0.5); }
-.bg-overlay-dark { background-color: rgba(0,0,0,0.75); }
-
-.responsive({
-  &bg-light { .bg-light; }
-  &bg-light-soft { .bg-light-soft; }
-  &bg-light-softer { .bg-light-softer; }
-  &bg-overlay-soft { .bg-overlay-soft; }
-  &bg-overlay-dark { .bg-overlay-dark; }
-});
+.define-bg-colors(@bg-colors; @screens);

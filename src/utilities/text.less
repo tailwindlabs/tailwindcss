@@ -42,7 +42,6 @@
 @text-dark-softer: hsl(0, 0%, 65%);
 @text-dark-softest: hsl(0, 0%, 75%);
 
-
 // Sizes
 .define-text-sizes(
   'xs' @font-size-xs,
@@ -52,7 +51,7 @@
   'xl' @font-size-xl,
   '2xl' @font-size-2xl,
   '3xl' @font-size-3xl
-;);
+; @screens);
 
 // Weights
 .define-text-weights(
@@ -61,7 +60,7 @@
   'regular' @font-weight-regular,
   'medium' @font-weight-medium,
   'bold' @font-weight-bold
-;);
+; @screens);
 
 // Colors
 .define-text-color(light;
@@ -69,14 +68,14 @@
   'soft' @text-light-soft,
   'softer' @text-light-softer,
   'softest' @text-light-softest
-;);
+; @screens);
 
 .define-text-color(dark;
   default @text-dark,
   'soft' @text-dark-soft,
   'softer' @text-dark-softer,
   'softest' @text-dark-softest
-;);
+; @screens);
 
 // Line heights
 .leading-none { line-height: 1; }
@@ -116,26 +115,6 @@
 }
 
 .responsive({
-  &text-xs { .text-xs; }
-  &text-sm { .text-sm; }
-  &text-base { .text-base; }
-  &text-lg { .text-lg; }
-  &text-xl { .text-xl; }
-  &text-2xl { .text-2xl; }
-  &text-3xl { .text-3xl; }
-  &text-hairline { .text-hairline; }
-  &text-thin { .text-thin; }
-  &text-regular { .text-regular; }
-  &text-medium { .text-medium; }
-  &text-bold { .text-bold; }
-  &text-light { .text-light; }
-  &text-light-soft { .text-light-soft; }
-  &text-light-softer { .text-light-softer; }
-  &text-light-softest { .text-light-softest; }
-  &text-dark { .text-dark; }
-  &text-dark-soft { .text-dark-soft; }
-  &text-dark-softer { .text-dark-softer; }
-  &text-dark-softest { .text-dark-softest; }
   &leading-none { .leading-none; }
   &leading-tight { .leading-tight; }
   &leading-normal { .leading-normal; }

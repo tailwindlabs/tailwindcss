@@ -1,27 +1,18 @@
-.generate-bg-color-utility(@name; @variant; @color) when (@variant = default) {
-  .define-selector(~"bg-@{name}"; { background-color: @color; });
+.define-bg-colors(@variants) {
+  .generate-utility-variants('bg'; @variants; {
+    background-color: extract(@__variant-value, 2);
+  });
 }
 
-.generate-bg-color-utility(@name; @variant; @color) when not (@variant = default) {
-  .define-selector(~"bg-@{name}-@{variant}"; { background-color: @color; });
+.define-bg-colors(@variants; none) {
+  .define-bg-colors(@variants);
 }
 
-.generate-bg-color-utilities(@color-name; @color-variants; @i: 1) when (@i <= length(@color-variants)) and (length(extract(@color-variants, @i)) = 1) {
-  @variant-name: extract(@color-variants, 1);
-  @variant-color: extract(@color-variants, 2);
-
-  .generate-bg-color-utility(@color-name; @variant-name; @variant-color);
+.define-bg-colors(@variants; @screens) when not (@screens = none) {
+  .define-bg-colors(@variants);
+  .generate-responsive-utility-variants('bg'; @variants; @screens; {
+    background-color: extract(@__variant-value, 2);
+  });
 }
 
-.generate-bg-color-utilities(@color-name; @color-variants; @i: 1) when (@i <= length(@color-variants)) and (length(extract(@color-variants, @i)) = 2) {
-  @variant: extract(@color-variants, @i);
-  @variant-name: extract(@variant, 1);
-  @variant-color: extract(@variant, 2);
 
-  .generate-bg-color-utility(@color-name; @variant-name; @variant-color);
-  .generate-bg-color-utilities(@color-name; @color-variants; @i + 1);
-}
-
-.define-bg-color(@color-name; @color-variants) {
-    .generate-bg-color-utilities(@color-name; @color-variants);
-}
