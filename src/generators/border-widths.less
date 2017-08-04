@@ -66,7 +66,7 @@
   .define-border-widths(@border-width-scale; @border-color);
 }
 
-.define-border-widths(@border-width-scale; @border-color; @screens) when not (@screens = null) {
+.define-border-widths(@border-width-scale; @border-color; @screens) when not (@screens = none) {
   & {
     .generate-border-width-utilities(@border-width-scale; @border-color);
     .generate-responsive-border-width-utilities(@border-width-scale; @border-color);
