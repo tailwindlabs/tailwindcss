@@ -1,7 +1,12 @@
-.generate-border-width-utilities(@border-width-scale; @border-color; @i: 1) when (@i <= length(@border-width-scale)) {
-  @variant: extract(@border-width-scale, @i);
-  @border-width: extract(@variant, 2);
+.generate-border-width-utility(@variant; 0; @border-color) {
+  .generate-utility-variant('border'; @variant; { border: 0; });
+  .generate-utility-variant('border-t'; @variant; { border-top: 0; });
+  .generate-utility-variant('border-r'; @variant; { border-right: 0; });
+  .generate-utility-variant('border-b'; @variant; { border-bottom: 0; });
+  .generate-utility-variant('border-l'; @variant; { border-left: 0; });
+}
 
+.generate-border-width-utility(@variant; @border-width; @border-color) when not (@border-width = 0) {
   .generate-utility-variant('border'; @variant; {
     border: @border-width solid @border-color;
   });
@@ -17,14 +22,30 @@
   .generate-utility-variant('border-l'; @variant; {
     border-left: @border-width solid @border-color;
   });
+}
 
+.generate-border-width-utilities(@border-width-scale; @border-color; @i: 1) when (@i <= length(@border-width-scale)) {
+  @variant: extract(@border-width-scale, @i);
+  @border-width: extract(@variant, 2);
+
+  .generate-border-width-utility(@variant; @border-width; @border-color);
   .generate-border-width-utilities(@border-width-scale; @border-color; @i + 1);
 }
 
-.generate-screen-border-width-utilities(@border-width-scale; @border-color; @screen-name; @screen-width; @i: 1) when (@i <= length(@border-width-scale)) {
+.generate-screen-border-width-utility(@variant; 0; @border-color; @screen-name; @screen-width) {
   @prefix: ~"@{screen-name}\:";
-  @variant: extract(@border-width-scale, @i);
-  @border-width: extract(@variant, 2);
+
+  @media (min-width: @screen-width) {
+    .generate-utility-variant(~"@{prefix}border"; @variant; { border: 0; });
+    .generate-utility-variant(~"@{prefix}border-t"; @variant; { border-top: 0; });
+    .generate-utility-variant(~"@{prefix}border-r"; @variant; { border-right: 0; });
+    .generate-utility-variant(~"@{prefix}border-b"; @variant; { border-bottom: 0; });
+    .generate-utility-variant(~"@{prefix}border-l"; @variant; { border-left: 0; });
+  }
+}
+
+.generate-screen-border-width-utility(@variant; @border-width; @border-color; @screen-name; @screen-width) when not (@border-width = 0) {
+  @prefix: ~"@{screen-name}\:";
 
   @media (min-width: @screen-width) {
     .generate-utility-variant(~"@{prefix}border"; @variant; {
@@ -43,7 +64,13 @@
       border-left: @border-width solid @border-color;
     });
   }
+}
 
+.generate-screen-border-width-utilities(@border-width-scale; @border-color; @screen-name; @screen-width; @i: 1) when (@i <= length(@border-width-scale)) {
+  @variant: extract(@border-width-scale, @i);
+  @border-width: extract(@variant, 2);
+
+  .generate-screen-border-width-utility(@variant; @border-width; @border-color; @screen-name; @screen-width);
   .generate-screen-border-width-utilities(@border-width-scale; @border-color; @screen-name; @screen-width; (@i + 1));
 }
 

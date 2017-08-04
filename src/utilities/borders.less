@@ -23,6 +23,7 @@
   '2' 2px,
   '4' 4px,
   '8' 8px,
+  '0' 0,
 ;
 .define-border-widths(@border-width-scale; @default-border-color; @screens);
 
@@ -42,13 +43,6 @@
 // Styles
 .border-dashed { border-style: dashed; }
 .border-dotted { border-style: dotted; }
-
-// Disablers
-.border-0 { border-style: none; }
-.border-t-0 { border-top-style: none; }
-.border-b-0 { border-bottom-style: none; }
-.border-l-0 { border-left-style: none; }
-.border-r-0 { border-right-style: none; }
 
 // Radius
 .rounded-sm { border-radius: @border-radius-1; }
@@ -75,11 +69,6 @@
 .responsive({
   &border-dashed { .border-dashed; }
   &border-dotted { .border-dotted; }
-  &border-0 { .border-0; }
-  &border-t-0 { .border-t-0; }
-  &border-b-0 { .border-b-0; }
-  &border-l-0 { .border-l-0; }
-  &border-r-0 { .border-r-0; }
   &rounded-sm { .rounded-sm; }
   &rounded-t-sm { .rounded-t-sm; }
   &rounded-r-sm { .rounded-r-sm; }
