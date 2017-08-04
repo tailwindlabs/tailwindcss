@@ -19,11 +19,23 @@ a {
   }
 }
 
-.define-text-color('primary';
-  default #3498DB,
-  'light' lighten(#3498DB, 25%),
-  'dark' #2980B9
-;);
+
+@text-colors:
+  'light' @text-light,
+  'light-soft' @text-light-soft,
+  'light-softer' @text-light-softer,
+  'light-softest' @text-light-softest,
+
+  'dark' @text-dark,
+  'dark-soft' @text-dark-soft,
+  'dark-softer' @text-dark-softer,
+  'dark-softest' @text-dark-softest,
+
+  'primary' #3498DB,
+  'primary-light' lighten(#3498DB, 25%),
+  'primary-dark' #2980B9,
+;
+
 
 @bg-colors:
   'light' hsl(0, 0%, 100%),

@@ -1,16 +1,16 @@
-.define-text-color(@color-name; @variants) {
-  .generate-utility-variants(~"text-@{color-name}"; @variants; {
+.define-text-colors(@variants) {
+  .generate-utility-variants('text'; @variants; {
     color: extract(@__variant-value, 2);
   });
 }
 
-.define-text-color(@color-name; @variants; none) {
-  .define-text-color(@color-name; @variants);
+.define-text-colors(@variants; none) {
+  .define-text-colors(@variants);
 }
 
-.define-text-color(@color-name; @variants; @screens) when not (@screens = none) {
-  .define-text-color(@color-name; @variants);
-  .generate-responsive-utility-variants(~"text-@{color-name}"; @variants; @screens; {
+.define-text-colors(@variants; @screens) when not (@screens = none) {
+  .define-text-colors(@variants);
+  .generate-responsive-utility-variants('text'; @variants; @screens; {
     color: extract(@__variant-value, 2);
   });
 }

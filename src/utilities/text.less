@@ -63,19 +63,18 @@
 ; @screens);
 
 // Colors
-.define-text-color(light;
-  default @text-light,
-  'soft' @text-light-soft,
-  'softer' @text-light-softer,
-  'softest' @text-light-softest
-; @screens);
+@text-colors:
+  'light' @text-light,
+  'light-soft' @text-light-soft,
+  'light-softer' @text-light-softer,
+  'light-softest' @text-light-softest,
 
-.define-text-color(dark;
-  default @text-dark,
-  'soft' @text-dark-soft,
-  'softer' @text-dark-softer,
-  'softest' @text-dark-softest
-; @screens);
+  'dark' @text-dark,
+  'dark-soft' @text-dark-soft,
+  'dark-softer' @text-dark-softer,
+  'dark-softest' @text-dark-softest,
+;
+.define-text-colors(@text-colors; @screens);
 
 // Line heights
 .leading-none { line-height: 1; }
