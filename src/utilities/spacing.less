@@ -22,14 +22,11 @@
 @margin-scale: @spacing-scale;
 @pull-scale: @spacing-scale;
 
-.generate-padding-utilities(@padding-scale);
-.generate-margin-utilities(@margin-scale);
-.generate-pull-utilities(@pull-scale);
-.mx-auto { margin-left: auto; margin-right: auto; }
+.define-padding-utilities(@padding-scale; @screens);
+.define-margin-utilities(@margin-scale; @screens);
+.define-pull-utilities(@pull-scale; @screens);
 
-.generate-responsive-padding-utilities(@padding-scale);
-.generate-responsive-margin-utilities(@margin-scale);
-.generate-responsive-pull-utilities(@pull-scale);
+.mx-auto { margin-left: auto; margin-right: auto; }
 .responsive({
     &mx-auto { .mx-auto; }
 });

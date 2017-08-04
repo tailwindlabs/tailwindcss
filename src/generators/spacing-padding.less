@@ -1,0 +1,79 @@
+.generate-padding-utilities(@padding-scale; @i: 1) when (@i <= length(@padding-scale)) {
+  @spacer: extract(@padding-scale, @i);
+
+  @n: extract(@spacer, 1);
+  @size: extract(@spacer, 2);
+
+  .define-class(~"pt-@{n}", { padding-top: @size; });
+  .define-class(~"pr-@{n}", { padding-right: @size; });
+  .define-class(~"pb-@{n}", { padding-bottom: @size; });
+  .define-class(~"pl-@{n}", { padding-left: @size; });
+  .define-class(~"py-@{n}", {
+    padding-top: @size;
+    padding-bottom: @size;
+  });
+  .define-class(~"px-@{n}", {
+    padding-right: @size;
+    padding-left: @size;
+  });
+  .define-class(~"p-@{n}", {
+    padding-top: @size;
+    padding-right: @size;
+    padding-bottom: @size;
+    padding-left: @size;
+  });
+
+  .generate-padding-utilities(@padding-scale; @i + 1);
+}
+
+.generate-screen-padding-utilities(@padding-scale; @screen; @screen-width; @i: 1) when (@i <= length(@padding-scale)) {
+  @prefix: ~"@{screen}\:";
+  @spacer: extract(@padding-scale, @i);
+  @n: extract(@spacer, 1);
+  @size: extract(@spacer, 2);
+
+  @media (min-width: @screen-width) {
+    .define-class(~"@{prefix}pt-@{n}", { padding-top: @size; });
+    .define-class(~"@{prefix}pr-@{n}", { padding-right: @size; });
+    .define-class(~"@{prefix}pb-@{n}", { padding-bottom: @size; });
+    .define-class(~"@{prefix}pl-@{n}", { padding-left: @size; });
+    .define-class(~"@{prefix}py-@{n}", {
+      padding-top: @size;
+      padding-bottom: @size;
+    });
+    .define-class(~"@{prefix}px-@{n}", {
+      padding-right: @size;
+      padding-left: @size;
+    });
+    .define-class(~"@{prefix}p-@{n}", {
+      padding-top: @size;
+      padding-right: @size;
+      padding-bottom: @size;
+      padding-left: @size;
+    });
+  }
+
+  .generate-screen-padding-utilities(@padding-scale; @screen; @screen-width; (@i + 1));
+}
+
+.generate-responsive-padding-utilities(@padding-scale; @screens; @i: 1) when (@i <= length(@screens)) {
+  @screen: extract(@screens, @i);
+  @name: extract(@screen, 1);
+  @screen-width: extract(@screen, 2);
+
+  .generate-screen-padding-utilities(@padding-scale; @name; @screen-width);
+  .generate-responsive-padding-utilities(@padding-scale; @screens; @i + 1);
+}
+
+.define-padding-utilities(@padding-scale) {
+  .generate-padding-utilities(@padding-scale);
+}
+
+.define-padding-utilities(@padding-scale; none) {
+  .define-padding-utilities(@padding-scale);
+}
+
+.define-padding-utilities(@padding-scale; @screens) when not (@screens = none) {
+  .define-padding-utilities(@padding-scale);
+  .generate-responsive-padding-utilities(@padding-scale; @screens);
+}
