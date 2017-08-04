@@ -34,8 +34,8 @@ Construct border size utilities using the <code class="inline">.border-side-widt
         <div class="mb-3 text-dark-soft"><span class="text-uppercase">Width</span> <span class="text-dark-softer text-xs">(optional)</span></div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded bg-light-softer">&nbsp;</code> 1px</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">2</code> 2px</div>
-        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">3</code> 4px</div>
-        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">4</code> 8px</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">4</code> 4px</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">8</code> 8px</div>
     </div>
 </div>
 
