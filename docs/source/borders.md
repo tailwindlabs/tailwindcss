@@ -17,7 +17,7 @@ title: "Borders"
 
 Construct border size utilities using the <code class="inline">.border{-side?}{-width?}</code> syntax. For example, <code class="inline">.border</code> would add a <code class="inline">1px</code> border to all sides of the element, where <code class="inline">.border-b-4</code> would add a <code class="inline">4px</code> border to the bottom of the element.
 
-By default, borders are <code class="inline">solid</code>, and use the <code class="inline">@border-default-color</code>.
+By default, borders are <code class="inline">solid</code>, and use the <code class="inline">@default-border-color</code>.
 
 <div class="flex flex-top mt-8 text-sm">
     <div class="pr-12">
@@ -43,7 +43,7 @@ By default, borders are <code class="inline">solid</code>, and use the <code cla
 
 <h2 id="colors">Colors</h2>
 
-By default borders receive the <code class="inline">@border-default-color</code>. However, these can be modified using the border color utilities.
+By default, borders use the <code class="inline">@default-border-color</code>. To override a border color, add one of the border color utilities.
 
 ```html
 <div class="border border-dark"></div>
@@ -83,7 +83,7 @@ The default border colors can also be modified using the following variables.
 @border-light-soft:     hsl(0, 0%, 60%);
 @border-light-softer:   hsl(0, 0%, 35%);
 
-@border-default-color:  @border-dark-soft;
+@default-border-color:  @border-dark-soft;
 ```
 
 <h2 id="styles">Styles</h2>
