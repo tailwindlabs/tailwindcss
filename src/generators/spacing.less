@@ -4,19 +4,19 @@
   @n: extract(@spacer, 1);
   @size: extract(@spacer, 2);
 
-  .define-selector(~"pt-@{n}", { padding-top: @size; });
-  .define-selector(~"pr-@{n}", { padding-right: @size; });
-  .define-selector(~"pb-@{n}", { padding-bottom: @size; });
-  .define-selector(~"pl-@{n}", { padding-left: @size; });
-  .define-selector(~"py-@{n}", {
+  .define-class(~"pt-@{n}", { padding-top: @size; });
+  .define-class(~"pr-@{n}", { padding-right: @size; });
+  .define-class(~"pb-@{n}", { padding-bottom: @size; });
+  .define-class(~"pl-@{n}", { padding-left: @size; });
+  .define-class(~"py-@{n}", {
     padding-top: @size;
     padding-bottom: @size;
   });
-  .define-selector(~"px-@{n}", {
+  .define-class(~"px-@{n}", {
     padding-right: @size;
     padding-left: @size;
   });
-  .define-selector(~"p-@{n}", {
+  .define-class(~"p-@{n}", {
     padding-top: @size;
     padding-right: @size;
     padding-bottom: @size;
@@ -33,19 +33,19 @@
   @size: extract(@spacer, 2);
 
   @media (min-width: @screen-width) {
-    .define-selector(~"@{prefix}pt-@{n}", { padding-top: @size; });
-    .define-selector(~"@{prefix}pr-@{n}", { padding-right: @size; });
-    .define-selector(~"@{prefix}pb-@{n}", { padding-bottom: @size; });
-    .define-selector(~"@{prefix}pl-@{n}", { padding-left: @size; });
-    .define-selector(~"@{prefix}py-@{n}", {
+    .define-class(~"@{prefix}pt-@{n}", { padding-top: @size; });
+    .define-class(~"@{prefix}pr-@{n}", { padding-right: @size; });
+    .define-class(~"@{prefix}pb-@{n}", { padding-bottom: @size; });
+    .define-class(~"@{prefix}pl-@{n}", { padding-left: @size; });
+    .define-class(~"@{prefix}py-@{n}", {
       padding-top: @size;
       padding-bottom: @size;
     });
-    .define-selector(~"@{prefix}px-@{n}", {
+    .define-class(~"@{prefix}px-@{n}", {
       padding-right: @size;
       padding-left: @size;
     });
-    .define-selector(~"@{prefix}p-@{n}", {
+    .define-class(~"@{prefix}p-@{n}", {
       padding-top: @size;
       padding-right: @size;
       padding-bottom: @size;
@@ -71,19 +71,19 @@
   @n: extract(@spacer, 1);
   @size: extract(@spacer, 2);
 
-  .define-selector(~"mt-@{n}", { margin-top: @size; });
-  .define-selector(~"mr-@{n}", { margin-right: @size; });
-  .define-selector(~"mb-@{n}", { margin-bottom: @size; });
-  .define-selector(~"ml-@{n}", { margin-left: @size; });
-  .define-selector(~"my-@{n}", {
+  .define-class(~"mt-@{n}", { margin-top: @size; });
+  .define-class(~"mr-@{n}", { margin-right: @size; });
+  .define-class(~"mb-@{n}", { margin-bottom: @size; });
+  .define-class(~"ml-@{n}", { margin-left: @size; });
+  .define-class(~"my-@{n}", {
     margin-top: @size;
     margin-bottom: @size;
   });
-  .define-selector(~"mx-@{n}", {
+  .define-class(~"mx-@{n}", {
     margin-right: @size;
     margin-left: @size;
   });
-  .define-selector(~"m-@{n}", {
+  .define-class(~"m-@{n}", {
     margin-top: @size;
     margin-right: @size;
     margin-bottom: @size;
@@ -100,19 +100,19 @@
   @size: extract(@spacer, 2);
 
   @media (min-width: @screen-width) {
-    .define-selector(~"@{prefix}mt-@{n}", { margin-top: @size; });
-    .define-selector(~"@{prefix}mr-@{n}", { margin-right: @size; });
-    .define-selector(~"@{prefix}mb-@{n}", { margin-bottom: @size; });
-    .define-selector(~"@{prefix}ml-@{n}", { margin-left: @size; });
-    .define-selector(~"@{prefix}my-@{n}", {
+    .define-class(~"@{prefix}mt-@{n}", { margin-top: @size; });
+    .define-class(~"@{prefix}mr-@{n}", { margin-right: @size; });
+    .define-class(~"@{prefix}mb-@{n}", { margin-bottom: @size; });
+    .define-class(~"@{prefix}ml-@{n}", { margin-left: @size; });
+    .define-class(~"@{prefix}my-@{n}", {
       margin-top: @size;
       margin-bottom: @size;
     });
-    .define-selector(~"@{prefix}mx-@{n}", {
+    .define-class(~"@{prefix}mx-@{n}", {
       margin-right: @size;
       margin-left: @size;
     });
-    .define-selector(~"@{prefix}m-@{n}", {
+    .define-class(~"@{prefix}m-@{n}", {
       margin-top: @size;
       margin-right: @size;
       margin-bottom: @size;
@@ -144,19 +144,19 @@
   @n: extract(@spacer, 1);
   @size: extract(@spacer, 2);
 
-  .define-selector(~"pull-t-@{n}", { margin-top: ~"-@{size}"; });
-  .define-selector(~"pull-r-@{n}", { margin-right: ~"-@{size}"; });
-  .define-selector(~"pull-b-@{n}", { margin-bottom: ~"-@{size}"; });
-  .define-selector(~"pull-l-@{n}", { margin-left: ~"-@{size}"; });
-  .define-selector(~"pull-y-@{n}", {
+  .define-class(~"pull-t-@{n}", { margin-top: ~"-@{size}"; });
+  .define-class(~"pull-r-@{n}", { margin-right: ~"-@{size}"; });
+  .define-class(~"pull-b-@{n}", { margin-bottom: ~"-@{size}"; });
+  .define-class(~"pull-l-@{n}", { margin-left: ~"-@{size}"; });
+  .define-class(~"pull-y-@{n}", {
     margin-top: ~"-@{size}";
     margin-bottom: ~"-@{size}";
   });
-  .define-selector(~"pull-x-@{n}", {
+  .define-class(~"pull-x-@{n}", {
     margin-right: ~"-@{size}";
     margin-left: ~"-@{size}";
   });
-  .define-selector(~"pull-@{n}", {
+  .define-class(~"pull-@{n}", {
     margin-top: ~"-@{size}";
     margin-right: ~"-@{size}";
     margin-bottom: ~"-@{size}";
@@ -173,19 +173,19 @@
   @size: extract(@spacer, 2);
 
   @media (min-width: @screen-width) {
-    .define-selector(~"@{prefix}pull-t-@{n}", { margin-top: ~"-@{size}"; });
-    .define-selector(~"@{prefix}pull-r-@{n}", { margin-right: ~"-@{size}"; });
-    .define-selector(~"@{prefix}pull-b-@{n}", { margin-bottom: ~"-@{size}"; });
-    .define-selector(~"@{prefix}pull-l-@{n}", { margin-left: ~"-@{size}"; });
-    .define-selector(~"@{prefix}pull-y-@{n}", {
+    .define-class(~"@{prefix}pull-t-@{n}", { margin-top: ~"-@{size}"; });
+    .define-class(~"@{prefix}pull-r-@{n}", { margin-right: ~"-@{size}"; });
+    .define-class(~"@{prefix}pull-b-@{n}", { margin-bottom: ~"-@{size}"; });
+    .define-class(~"@{prefix}pull-l-@{n}", { margin-left: ~"-@{size}"; });
+    .define-class(~"@{prefix}pull-y-@{n}", {
       margin-top: ~"-@{size}";
       margin-bottom: ~"-@{size}";
     });
-    .define-selector(~"@{prefix}pull-x-@{n}", {
+    .define-class(~"@{prefix}pull-x-@{n}", {
       margin-right: ~"-@{size}";
       margin-left: ~"-@{size}";
     });
-    .define-selector(~"@{prefix}pull-@{n}", {
+    .define-class(~"@{prefix}pull-@{n}", {
       margin-top: ~"-@{size}";
       margin-right: ~"-@{size}";
       margin-bottom: ~"-@{size}";
