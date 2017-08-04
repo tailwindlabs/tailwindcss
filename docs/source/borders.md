@@ -15,7 +15,9 @@ title: "Borders"
 
 <h2 id="sizes">Sizes</h2>
 
-Construct border size utilities using the <code class="inline">.border-side-width</code> syntax. For example, <code class="inline">.border</code> would add a <code class="inline">1px</code> border to the element, where <code class="inline">.border-b-3</code> would add a <code class="inline">4px</code> bottom border to the element. Note that that the default border style is <code class="inline">solid</code>, and will get the <code class="inline">@border-default-color</code> applied.
+Construct border size utilities using the <code class="inline">.border{-side?}{-width?}</code> syntax. For example, <code class="inline">.border</code> would add a <code class="inline">1px</code> border to all sides of the element, where <code class="inline">.border-b-4</code> would add a <code class="inline">4px</code> border to the bottom of the element.
+
+By default, borders are <code class="inline">solid</code>, and use the <code class="inline">@border-default-color</code>.
 
 <div class="flex flex-top mt-6 text-sm">
     <div class="pr-7">
