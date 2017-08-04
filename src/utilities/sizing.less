@@ -1,0 +1,16 @@
+@sizing-scale:
+  '1' 0.25rem,
+  '2' 0.5rem,
+  '3' 0.75rem,
+  '4' 1rem,
+  '6' 1.5rem,
+  '8' 2rem,
+  '12' 3rem,
+  '16' 4rem,
+;
+
+@width-scale: @sizing-scale;
+@height-scale: @sizing-scale;
+
+.define-width-utilities(@width-scale; @screens);
+.define-height-utilities(@height-scale; @screens);

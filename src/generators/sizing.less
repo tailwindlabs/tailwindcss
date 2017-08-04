@@ -1,0 +1,33 @@
+.define-width-utilities(@variants) {
+  .generate-utility-variants('w'; @variants; {
+    width: extract(@__variant-value, 2);
+  });
+}
+
+.define-width-utilities(@variants; none) {
+  .define-width-utilities(@variants);
+}
+
+.define-width-utilities(@variants; @screens) when not (@screens = none) {
+  .define-width-utilities(@variants);
+  .generate-responsive-utility-variants('w'; @variants; @screens; {
+    width: extract(@__variant-value, 2);
+  });
+}
+
+.define-height-utilities(@variants) {
+  .generate-utility-variants('h'; @variants; {
+    height: extract(@__variant-value, 2);
+  });
+}
+
+.define-height-utilities(@variants; none) {
+  .define-height-utilities(@variants);
+}
+
+.define-height-utilities(@variants; @screens) when not (@screens = none) {
+  .define-height-utilities(@variants);
+  .generate-responsive-utility-variants('h'; @variants; @screens; {
+    height: extract(@__variant-value, 2);
+  });
+}
