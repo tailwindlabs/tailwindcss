@@ -1,20 +1,11 @@
-@bg-light: hsl(0, 0%, 100%);
-@bg-light-soft: hsl(0, 0%, 98%);
-@bg-light-softer: hsl(0, 0%, 96%);
+@bg-colors:
+  'light' hsl(0, 0%, 100%),
+  'light-soft' hsl(0, 0%, 98%),
+  'light-softer' hsl(0, 0%, 96%),
 
-@bg-dark: hsl(0, 0%, 33%);
-@bg-dark-soft: hsl(0, 0%, 42%);
-@bg-dark-softer: hsl(0, 0%, 52%);
+  'dark' hsl(0, 0%, 33%),
+  'dark-soft' hsl(0, 0%, 42%),
+  'dark-softer' hsl(0, 0%, 52%),
+;
 
-@bg-light-scale:
-  default @bg-light,
-  'soft' @bg-light-soft,
-  'softer' @bg-light-softer;
-
-@bg-dark-scale:
-  default @bg-dark,
-  'soft' @bg-dark-soft,
-  'softer' @bg-dark-softer;
-
-.define-bg-color('light'; @bg-light-scale; @screens);
-.define-bg-color('dark'; @bg-dark-scale; @screens);
+.define-bg-colors(@bg-colors; @screens);
