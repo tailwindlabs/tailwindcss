@@ -7,6 +7,7 @@
 @border-light-softer: hsl(0, 0%, 35%);
 
 @border-default-color: @border-dark-soft;
+@default-border-color: @border-dark-soft;
 
 @border-radius-1: .125rem;
 @border-radius-2: .25rem;
@@ -18,40 +19,13 @@
 @border-width-8: 8px;
 
 // Base
-.border { border: @border-width-1 solid @border-default-color; }
-.border-t { border-top: @border-width-1 solid @border-default-color; }
-.border-b { border-bottom: @border-width-1 solid @border-default-color; }
-.border-l { border-left: @border-width-1 solid @border-default-color; }
-.border-r { border-right: @border-width-1 solid @border-default-color; }
-
-.border-2 { border: @border-width-2 solid @border-default-color; }
-.border-t-2 { border-top: @border-width-2 solid @border-default-color; }
-.border-b-2 { border-bottom: @border-width-2 solid @border-default-color; }
-.border-l-2 { border-left: @border-width-2 solid @border-default-color; }
-.border-r-2 { border-right: @border-width-2 solid @border-default-color; }
-
-.border-4 { border: @border-width-4 solid @border-default-color; }
-.border-t-4 { border-top: @border-width-4 solid @border-default-color; }
-.border-b-4 { border-bottom: @border-width-4 solid @border-default-color; }
-.border-l-4 { border-left: @border-width-4 solid @border-default-color; }
-.border-r-4 { border-right: @border-width-4 solid @border-default-color; }
-
-.border-8 { border: @border-width-8 solid @border-default-color; }
-.border-t-8 { border-top: @border-width-8 solid @border-default-color; }
-.border-b-8 { border-bottom: @border-width-8 solid @border-default-color; }
-.border-l-8 { border-left: @border-width-8 solid @border-default-color; }
-.border-r-8 { border-right: @border-width-8 solid @border-default-color; }
-
-// Styles
-.border-dashed { border-style: dashed; }
-.border-dotted { border-style: dotted; }
-
-// Disablers
-.border-0 { border-style: none; }
-.border-t-0 { border-top-style: none; }
-.border-b-0 { border-bottom-style: none; }
-.border-l-0 { border-left-style: none; }
-.border-r-0 { border-right-style: none; }
+@border-width-scale:
+  default 1px,
+  '2' 2px,
+  '4' 4px,
+  '8' 8px,
+;
+.define-border-widths(@border-width-scale; @default-border-color; @screens);
 
 // Colors
 @border-colors:
@@ -63,7 +37,19 @@
   'light-soft' @border-light-soft,
   'light-softer' @border-light-softer,
 ;
+
 .define-border-colors(@border-colors; @screens);
+
+// Styles
+.border-dashed { border-style: dashed; }
+.border-dotted { border-style: dotted; }
+
+// Disablers
+.border-0 { border-style: none; }
+.border-t-0 { border-top-style: none; }
+.border-b-0 { border-bottom-style: none; }
+.border-l-0 { border-left-style: none; }
+.border-r-0 { border-right-style: none; }
 
 // Radius
 .rounded-sm { border-radius: @border-radius-1; }
@@ -88,26 +74,6 @@
 
 // Responsive
 .responsive({
-  &border { .border; }
-  &border-t { .border-t; }
-  &border-b { .border-b; }
-  &border-l { .border-l; }
-  &border-r { .border-r; }
-  &border-2 { .border-2; }
-  &border-t-2 { .border-t-2; }
-  &border-b-2 { .border-b-2; }
-  &border-l-2 { .border-l-2; }
-  &border-r-2 { .border-r-2; }
-  &border-4 { .border-4; }
-  &border-t-4 { .border-t-4; }
-  &border-b-4 { .border-b-4; }
-  &border-l-4 { .border-l-4; }
-  &border-r-4 { .border-r-4; }
-  &border-8 { .border-8; }
-  &border-t-8 { .border-t-8; }
-  &border-b-8 { .border-b-8; }
-  &border-l-8 { .border-l-8; }
-  &border-r-8 { .border-r-8; }
   &border-dashed { .border-dashed; }
   &border-dotted { .border-dotted; }
   &border-0 { .border-0; }

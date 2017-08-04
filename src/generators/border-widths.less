@@ -1,0 +1,74 @@
+.generate-border-width-utilities(@border-width-scale; @border-color; @i: 1) when (@i <= length(@border-width-scale)) {
+  @variant: extract(@border-width-scale, @i);
+  @border-width: extract(@variant, 2);
+
+  .generate-utility-variant('border'; @variant; {
+    border: @border-width solid @border-color;
+  });
+  .generate-utility-variant('border-t'; @variant; {
+    border-top: @border-width solid @border-color;
+  });
+  .generate-utility-variant('border-r'; @variant; {
+    border-right: @border-width solid @border-color;
+  });
+  .generate-utility-variant('border-b'; @variant; {
+    border-bottom: @border-width solid @border-color;
+  });
+  .generate-utility-variant('border-l'; @variant; {
+    border-left: @border-width solid @border-color;
+  });
+
+  .generate-border-width-utilities(@border-width-scale; @border-color; @i + 1);
+}
+
+.generate-screen-border-width-utilities(@border-width-scale; @border-color; @screen-name; @screen-width; @i: 1) when (@i <= length(@border-width-scale)) {
+  @prefix: ~"@{screen-name}\:";
+  @variant: extract(@border-width-scale, @i);
+  @border-width: extract(@variant, 2);
+
+  @media (min-width: @screen-width) {
+    .generate-utility-variant(~"@{prefix}border"; @variant; {
+      border: @border-width solid @border-color;
+    });
+    .generate-utility-variant(~"@{prefix}border-t"; @variant; {
+      border-top: @border-width solid @border-color;
+    });
+    .generate-utility-variant(~"@{prefix}border-r"; @variant; {
+      border-right: @border-width solid @border-color;
+    });
+    .generate-utility-variant(~"@{prefix}border-b"; @variant; {
+      border-bottom: @border-width solid @border-color;
+    });
+    .generate-utility-variant(~"@{prefix}border-l"; @variant; {
+      border-left: @border-width solid @border-color;
+    });
+  }
+
+  .generate-screen-border-width-utilities(@border-width-scale; @border-color; @screen-name; @screen-width; (@i + 1));
+}
+
+.generate-responsive-border-width-utilities(@border-width-scale; @border-color; @i: 1) when (@i <= length(@screens)) {
+  @screen: extract(@screens, @i);
+  @screen-name: extract(@screen, 1);
+  @screen-width: extract(@screen, 2);
+
+  .generate-screen-border-width-utilities(@border-width-scale; @border-color; @screen-name; @screen-width);
+  .generate-responsive-border-width-utilities(@border-width-scale; @border-color; @i + 1);
+}
+
+.define-border-widths(@border-width-scale; @border-color) {
+  & {
+    .generate-border-width-utilities(@border-width-scale; @border-color);
+  }
+}
+
+.define-border-widths(@border-width-scale; @border-color; none) {
+  .define-border-widths(@border-width-scale; @border-color);
+}
+
+.define-border-widths(@border-width-scale; @border-color; @screens) when not (@screens = none) {
+  & {
+    .generate-border-width-utilities(@border-width-scale; @border-color);
+    .generate-responsive-border-width-utilities(@border-width-scale; @border-color);
+  }
+}
