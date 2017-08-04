@@ -1,0 +1,69 @@
+.generate-grid-columns(@grid-column-count; @prefix; @i: 1) when (@i <= @grid-column-count) {
+  .@{prefix}col-@{i} {
+    flex-basis: 100% * (@i / @grid-column-count);
+    max-width: 100% * (@i / @grid-column-count);
+  }
+
+  @offset-i: @i - 1;
+  .@{prefix}offset-@{offset-i} {
+    margin-left: 100% * (@offset-i / @grid-column-count);
+  }
+
+  .generate-grid-columns(@grid-column-count; @prefix; @i + 1);
+}
+
+.generate-responsive-grid(@grid-column-count; @screen; @min-width) {
+  @prefix: ~"@{screen}\:";
+
+  @media (min-width: @min-width) {
+    .@{prefix}col {
+      flex-grow: 1;
+      flex-basis: 0;
+      max-width: 100%;
+      min-width: 0;
+    }
+
+    .@{prefix}col-first {
+      order: -1;
+    }
+
+    .@{prefix}col-last {
+      order: 1;
+    }
+
+    .generate-grid-columns(@grid-column-count; @prefix);
+  }
+}
+
+.generate-responsive-grids(@grid-column-count; @screens; @i: 1) when (@i <= length(@screens)) {
+  @screen: extract(@screens, @i);
+  @name: extract(@screen, 1);
+  @screen-width: extract(@screen, 2);
+
+  .generate-responsive-grid(@grid-column-count; @name; @screen-width);
+  .generate-responsive-grids(@grid-column-count; @screens; @i + 1);
+}
+
+.generate-all-grids(@grid-column-count) {
+  .col-auto {
+    flex-grow: 1;
+    flex-basis: 0;
+    max-width: 100%;
+  }
+  .col-first {
+    order: -1;
+  }
+  .col-last {
+    order: 1;
+  }
+  .generate-grid-columns(@grid-column-count; ~"");
+}
+
+.generate-all-grids(@grid-column-count; none) {
+  .generate-all-grids(@grid-column-count);
+}
+
+.generate-all-grids(@grid-column-count; @screens) when not (@screens = none) {
+  .generate-all-grids(@grid-column-count);
+  .generate-responsive-grids(@grid-column-count; @screens);
+}
