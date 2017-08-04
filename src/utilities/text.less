@@ -71,10 +71,13 @@
 .define-text-colors(@text-colors; @screens);
 
 // Line heights
-.leading-none { line-height: 1; }
-.leading-tight { line-height: 1.25; }
-.leading-normal { line-height: 1.5; }
-.leading-loose { line-height: 2; }
+@leading-scale:
+  'none' 1,
+  'tight' 1.25,
+  'normal' 1.5,
+  'loose' 2,
+;
+.define-leading-utilities(@leading-scale; @screens);
 
 // Horizontal alignment
 .text-center { text-align: center; }
@@ -108,10 +111,6 @@
 }
 
 .responsive({
-  &leading-none { .leading-none; }
-  &leading-tight { .leading-tight; }
-  &leading-normal { .leading-normal; }
-  &leading-loose { .leading-loose; }
   &text-center { .text-center; }
   &text-left { .text-left; }
   &text-right { .text-right; }
