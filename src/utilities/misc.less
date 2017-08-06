@@ -1,27 +1,3 @@
-.generate-responsive-version(@ruleset, @screen, @min-width) {
-  @prefix: ~"@{screen}\:";
-
-  @media (min-width: @min-width) {
-    .@{prefix} { @ruleset(); };
-  }
-}
-
-.responsive(@ruleset; @i: 1) when (@i <= length(@screens)) {
-  @screen: extract(@screens, @i);
-  @name: extract(@screen, 1);
-  @screen-width: extract(@screen, 2);
-
-  .generate-responsive-version(@ruleset, @name, @screen-width);
-  .responsive(@ruleset, @i + 1);
-}
-
-.screen(@screen, @ruleset) {
-  .extract-match(@screens; @screen);
-  @media (min-width: @__match) {
-    @ruleset();
-  }
-}
-
 .no-focus {
   &:focus, &:active {
     outline: none;
