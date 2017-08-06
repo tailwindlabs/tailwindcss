@@ -1,0 +1,16 @@
+.define-tracking-utilities(@variants) {
+  .generate-utility-variants('tracking'; @variants; {
+    line-height: extract(@__variant-value, 2);
+  });
+}
+
+.define-tracking-utilities(@variants; none) {
+  .define-tracking-utilities(@variants);
+}
+
+.define-tracking-utilities(@variants; @screens) when not (@screens = none) {
+  .define-tracking-utilities(@variants);
+  .generate-responsive-utility-variants('tracking'; @variants; @screens; {
+    line-height: extract(@__variant-value, 2);
+  });
+}
