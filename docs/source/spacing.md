@@ -5,7 +5,7 @@ title: "Spacing"
 
 # Spacing
 
-The syntax below is combined to create a system for padding and margins. For example, <code class="inline">.pt-2</code> would add padding to the top of the element to the value of <code class="inline">0.5rem</code> and <code class="inline">.mx-0</code> would make the horizontal margin zero.
+The syntax below is combined to create a system for padding and margins. For example, `.pt-2` would add padding to the top of the element to the value of `0.5rem` and `.mx-0` would make the horizontal margin zero.
 
 <div class="flex flex-top mt-8 text-sm">
     <div class="pr-12">

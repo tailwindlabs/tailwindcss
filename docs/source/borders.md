@@ -15,11 +15,9 @@ title: "Borders"
 
 <h2 id="sizes">Sizes</h2>
 
-Construct border size utilities using the <code class="inline">.border{-side?}{-width?}</code> syntax. For example, <code class="inline">.border</code> would add a <code class="inline">1px</code> border to all sides of the element, where <code class="inline">.border-b-4</code> would add a <code class="inline">4px</code> border to the bottom of the element.
+Construct border size utilities using the `.border{-side?}{-width?}` syntax. For example, `.border` would add a `1px` border to all sides of the element, where `.border-b-4` would add a `4px` border to the bottom of the element. By default, borders are `solid`, and use the `@default-border-color`.
 
-By default, borders are <code class="inline">solid</code>, and use the <code class="inline">@default-border-color</code>.
-
-<div class="flex flex-top mt-8 text-sm">
+<div class="flex flex-top mt-8 text-sm leading-none">
     <div class="pr-12">
         <div class="mb-3 text-dark-soft text-uppercase">Class</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">border</code></div>
@@ -34,6 +32,7 @@ By default, borders are <code class="inline">solid</code>, and use the <code cla
     </div>
     <div class="pl-12 border-l">
         <div class="mb-3 text-dark-soft"><span class="text-uppercase">Width</span> <span class="text-dark-softer text-xs">(optional)</span></div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">0</code> 0px</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded bg-light-softer">&nbsp;</code> 1px</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">2</code> 2px</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">4</code> 4px</div>
@@ -41,9 +40,46 @@ By default, borders are <code class="inline">solid</code>, and use the <code cla
     </div>
 </div>
 
+### Border size examples
+
+```html
+<!-- Add a 1px border to all sides -->
+<div class="border"></div>
+
+<!-- Add a 1px border to the top side -->
+<div class="border-t"></div>
+
+<!-- Add a 2px border to the top side -->
+<div class="border-t-2"></div>
+```
+
+```less
+// Using the border size utilities in Less
+div {
+    .border;
+    .border-t;
+    .border-t-2;
+}
+```
+
+### Customizing border sizes
+
+You can easily customize the border size utilities using the `@border-width-scale` variable. Please note that the entire scale must be redefined. It's not possible to add a new value to the existing scale.
+
+```less
+// The default border width scale
+@border-width-scale:
+  '0' 0,
+  default 1px,
+  '2' 2px,
+  '4' 4px,
+  '8' 8px,
+;
+```
+
 <h2 id="colors">Colors</h2>
 
-By default, borders use the <code class="inline">@default-border-color</code>. To override a border color, add one of the border color utilities.
+By default, borders use the `@default-border-color`. To override a border color, add one of the border color utilities.
 
 ```html
 <div class="border border-dark"></div>
@@ -88,7 +124,7 @@ The default border colors can also be modified using the following variables.
 
 <h2 id="styles">Styles</h2>
 
-By default borders styles are set to <code class="inline">solid</code>. This be modified using the border style utilities.
+By default borders styles are set to `solid`. This be modified using the border style utilities.
 
 ```html
 <div class="border border-dashed"></div>
@@ -104,7 +140,7 @@ div {
 
 <h2 id="radius">Radius</h2>
 
-To apply a <code class="inline">border-radius</code> to an element, using the rounded utilities.
+To apply a `border-radius` to an element, using the rounded utilities.
 
 ```less
 div {

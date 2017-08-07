@@ -5,7 +5,7 @@ title: "Position"
 
 # Position
 
-The position utilities are primarily <code class="inline">position</code> property helpers.
+The position utilities are primarily `position` property helpers.
 
 ```html
 <!-- Using the utilities in HTML: -->
@@ -27,7 +27,7 @@ div {
 
 ## Pinning absolute content
 
-Tailwind also provides pin utilties, useful for "pinning" absolutely positioned elements using the <code class="inline">top</code>, <code class="inline">right</code>, <code class="inline">bottom</code> and <code class="inline">left</code> properties.
+Tailwind also provides pin utilties, useful for "pinning" absolutely positioned elements using the `top`, `right`, `bottom` and `left` properties.
 
 ```html
 <!-- Using the utilities in HTML: -->

@@ -5,7 +5,7 @@ title: "Constrain"
 
 # Constrain
 
-The constrain utilities are simply <code class="inline">max-width</code> helpers designed to constrain content to a desired width.
+The constrain utilities are simply `max-width` helpers designed to constrain content to a desired width.
 
 ```html
 <!-- Using the utilities in HTML: -->

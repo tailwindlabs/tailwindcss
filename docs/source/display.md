@@ -7,7 +7,7 @@ title: "Display"
 
 > If you're looking for flexbox utilities, see the [flexbox](/flexbox) page.
 
-The display utilities simply <code class="inline">display</code> property helpers.
+The display utilities simply `display` property helpers.
 
 ```html
 <!-- Using the utilities in HTML: -->
