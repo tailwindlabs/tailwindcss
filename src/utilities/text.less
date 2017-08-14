@@ -12,13 +12,13 @@
 @line-height: 1.5;
 
 // Sizes
-@font-size-xs: (12rem / 16rem);  // 12px
-@font-size-sm: (14rem / 16rem);  // 14px
-@font-size-base: 1rem;           // 16px
-@font-size-lg: (18rem / 16rem);  // 18px
-@font-size-xl: (22rem / 16rem);  // 22px
-@font-size-2xl: (30rem / 16rem); // 30px
-@font-size-3xl: (40rem / 16rem); // 40px
+@font-size-xs:   (12rem / 16rem); // 12px
+@font-size-sm:   (14rem / 16rem); // 14px
+@font-size-base: (16rem / 16rem); // 16px
+@font-size-lg:   (18rem / 16rem); // 18px
+@font-size-xl:   (22rem / 16rem); // 22px
+@font-size-2xl:  (30rem / 16rem); // 30px
+@font-size-3xl:  (40rem / 16rem); // 40px
 
 @text-size-scale:
   'xs' @font-size-xs,
@@ -46,26 +46,45 @@
 ;
 
 // Colors
-@text-light: hsl(0, 0%, 100%);
-@text-light-soft: hsl(0, 0%, 60%);
-@text-light-softer: hsl(0, 0%, 45%);
-@text-light-softest: hsl(0, 0%, 35%);
+@text-light:         @color-white;
+@text-light-soft:    fade(@color-white, 60%);
+@text-light-softer:  fade(@color-white, 45%);
+@text-light-softest: fade(@color-white, 35%);
 
-@text-dark: hsl(0, 0%, 25%);
-@text-dark-soft: hsl(0, 0%, 50%);
-@text-dark-softer: hsl(0, 0%, 65%);
-@text-dark-softest: hsl(0, 0%, 75%);
+@text-dark:          @color-grey-800;
+@text-dark-soft:     @color-grey-600;
+@text-dark-softer:   @color-grey-500;
+@text-dark-softest:  @color-grey-400;
 
 @text-colors:
-  'light' @text-light,
-  'light-soft' @text-light-soft,
-  'light-softer' @text-light-softer,
+  'light'         @text-light,
+  'light-soft'    @text-light-soft,
+  'light-softer'  @text-light-softer,
   'light-softest' @text-light-softest,
 
-  'dark' @text-dark,
-  'dark-soft' @text-dark-soft,
-  'dark-softer' @text-dark-softer,
-  'dark-softest' @text-dark-softest,
+  'dark'          @text-dark,
+  'dark-soft'     @text-dark-soft,
+  'dark-softer'   @text-dark-softer,
+  'dark-softest'  @text-dark-softest,
+
+  'red'          @color-red,
+  'red-light'    @color-red-light,
+  'orange'       @color-orange,
+  'orange-light' @color-orange-light,
+  'yellow'       @color-yellow,
+  'yellow-light' @color-yellow-light,
+  'green'        @color-green,
+  'green-light'  @color-green-light,
+  'teal'         @color-teal,
+  'teal-light'   @color-teal-light,
+  'blue'         @color-blue,
+  'blue-light'   @color-blue-light,
+  'indigo'       @color-indigo,
+  'indigo-light' @color-indigo-light,
+  'purple'       @color-purple,
+  'purple-light' @color-purple-light,
+  'pink'         @color-pink,
+  'pink-light'   @color-pink-light,
 ;
 
 // Line heights
