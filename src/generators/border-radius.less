@@ -1,0 +1,90 @@
+.generate-rounded-border-utility(@variant; @radius) {
+  .generate-utility-variant('rounded'; @variant; {
+    border-radius: @radius;
+  });
+  .generate-utility-variant('rounded-t'; @variant; {
+    border-top-left-radius: @radius;
+    border-top-right-radius: @radius;
+  });
+  .generate-utility-variant('rounded-r'; @variant; {
+    border-top-right-radius: @radius;
+    border-bottom-right-radius: @radius;
+  });
+  .generate-utility-variant('rounded-b'; @variant; {
+    border-bottom-right-radius: @radius;
+    border-bottom-left-radius: @radius;
+  });
+  .generate-utility-variant('rounded-l'; @variant; {
+    border-bottom-left-radius: @radius;
+    border-top-left-radius: @radius;
+  });
+}
+
+.generate-rounded-border-utilities(@rounded-border-scale; @i: 1) when (@i <= length(@rounded-border-scale)) {
+  @variant: extract(@rounded-border-scale, @i);
+  @radius: extract(@variant, 2);
+
+  .generate-rounded-border-utility(@variant; @radius);
+  .generate-rounded-border-utilities(@rounded-border-scale; @i + 1);
+}
+
+.generate-screen-rounded-border-utility(@variant; @radius; @screen-name) {
+  @prefix: ~"@{screen-name}\:";
+
+  .generate-utility-variant(~"@{prefix}rounded"; @variant; {
+    border-radius: @radius;
+  });
+  .generate-utility-variant(~"@{prefix}rounded-t"; @variant; {
+    border-top-left-radius: @radius;
+    border-top-right-radius: @radius;
+  });
+  .generate-utility-variant(~"@{prefix}rounded-r"; @variant; {
+    border-top-right-radius: @radius;
+    border-bottom-right-radius: @radius;
+  });
+  .generate-utility-variant(~"@{prefix}rounded-b"; @variant; {
+    border-bottom-right-radius: @radius;
+    border-bottom-left-radius: @radius;
+  });
+  .generate-utility-variant(~"@{prefix}rounded-l"; @variant; {
+    border-bottom-left-radius: @radius;
+    border-top-left-radius: @radius;
+  });
+}
+
+.generate-screen-rounded-border-utilities(@rounded-border-scale; @screen-name; @i: 1) when (@i <= length(@rounded-border-scale)) {
+  @variant: extract(@rounded-border-scale, @i);
+  @rounded-border: extract(@variant, 2);
+
+  .generate-screen-rounded-border-utility(@variant; @rounded-border; @screen-name);
+  .generate-screen-rounded-border-utilities(@rounded-border-scale; @screen-name; (@i + 1));
+}
+
+.generate-responsive-rounded-border-utilities(@rounded-border-scale; @i: 1) when (@i <= length(@screens)) {
+  @screen: extract(@screens, @i);
+  @screen-name: extract(@screen, 1);
+  @screen-width: extract(@screen, 2);
+
+  @media (min-width: @screen-width) {
+    .generate-screen-rounded-border-utilities(@rounded-border-scale; @screen-name);
+  }
+
+  .generate-responsive-rounded-border-utilities(@rounded-border-scale; @i + 1);
+}
+
+.define-rounded-borders(@rounded-border-scale) {
+  & {
+    .generate-rounded-border-utilities(@rounded-border-scale);
+  }
+}
+
+.define-rounded-borders(@rounded-border-scale; none) {
+  .define-rounded-borders(@rounded-border-scale);
+}
+
+.define-rounded-borders(@rounded-border-scale; @screens) when not (@screens = none) {
+  & {
+    .generate-rounded-border-utilities(@rounded-border-scale);
+    .generate-responsive-rounded-border-utilities(@rounded-border-scale);
+  }
+}
