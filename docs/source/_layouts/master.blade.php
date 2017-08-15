@@ -45,6 +45,7 @@
                     <li><a class="{{ $page->getUrl() === '/grid' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/grid">Grid</a></li>
                     <li><a class="{{ $page->getUrl() === '/images' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/images">Images</a></li>
                     <li><a class="{{ $page->getUrl() === '/position' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/position">Position</a></li>
+                    <li><a class="{{ $page->getUrl() === '/shadows' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/shadows">Shadows</a></li>
                     <li><a class="{{ $page->getUrl() === '/spacing' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/spacing">Spacing</a></li>
                     <li><a class="{{ $page->getUrl() === '/text' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/text">Text</a></li>
                     <li><a class="{{ $page->getUrl() === '/z-index' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/z-index">Z-Index</a></li>
