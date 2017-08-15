@@ -23,7 +23,7 @@
         <div class="flex flex-fill">
             <nav class="px-8 py-8 bg-light-softer text-light text-sm leading-loose" style="flex: 0 0 12rem;">
                 <div class="mb-8">
-                    <a class="{{ $page->getUrl() === '/examples' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/examples">Examples</a>
+                    <a class="{{ $page->getUrl() === '/examples' ? 'text-blue' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/examples">Examples</a>
                 </div>
                 <div class="mb-1 text-dark-softer text-uppercase text-xs">Introduction</div>
                 <ul>
