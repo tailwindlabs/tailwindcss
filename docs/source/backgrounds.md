@@ -5,6 +5,73 @@ title: "Backgrounds"
 
 # Backgrounds
 
+<table class="text-sm" style="border-collapse: separate; border-spacing: 0; width: 100%;">
+  <tr>
+    <td class="w-24 h-12 bg-light border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-light</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-light-soft border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-light-soft</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-light-softer border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-light-softer</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-dark border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-dark</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-dark-soft border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-dark-soft</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-dark-softer border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-dark-softer</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-red border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-red</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-red-light border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-red-light</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-amber border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-amber</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-amber-light border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-amber-light</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-green border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-green</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-green-light border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-green-light</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-blue border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-blue</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-blue-light border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-blue-light</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-indigo border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-indigo</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-indigo-light border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-indigo-light</code></td>
+  </tr>
+</table>
+
 Using the utilities in HTML:
 
 ```html

@@ -8,24 +8,57 @@
 ;
 
 // Colors
-@border-dark: hsl(0, 0%, 82%);
-@border-dark-soft: hsl(0, 0%, 90%);
-@border-dark-softer: hsl(0, 0%, 96%);
+@border-dark:        @color-grey-600;
+@border-dark-soft:   @color-grey-400;
+@border-dark-softer: @color-grey-300;
 
-@border-light: hsl(0, 0%, 100%);
-@border-light-soft: hsl(0, 0%, 60%);
-@border-light-softer: hsl(0, 0%, 35%);
+@border-light:        @color-white;
+@border-light-soft:   @color-grey-100;
+@border-light-softer: @color-grey-200;
+
+@border-dark-overlay:        hsla(0, 0%, 0%, 20%);
+@border-dark-overlay-soft:   hsla(0, 0%, 0%, 10%);
+@border-dark-overlay-softer: hsla(0, 0%, 0%, 5%);
+
+@border-light-overlay:        hsla(0, 0%, 100%, 100%);
+@border-light-overlay-soft:   hsla(0, 0%, 100%, 60%);
+@border-light-overlay-softer: hsla(0, 0%, 100%, 35%);
 
 @default-border-color: @border-dark-soft;
 
 @border-colors:
-  'dark' @border-dark,
-  'dark-soft' @border-dark-soft,
-  'dark-softer' @border-dark-softer,
+  'dark'         @border-dark,
+  'dark-soft'    @border-dark-soft,
+  'dark-softer'  @border-dark-softer,
 
-  'light' @border-light,
-  'light-soft' @border-light-soft,
+  'light'        @border-light,
+  'light-soft'   @border-light-soft,
   'light-softer' @border-light-softer,
+
+  'dark-overlay'         @border-dark-overlay,
+  'dark-overlay-soft'    @border-dark-overlay-soft,
+  'dark-overlay-softer'  @border-dark-overlay-softer,
+
+  'light-overlay'        @border-light-overlay,
+  'light-overlay-soft'   @border-light-overlay-soft,
+  'light-overlay-softer' @border-light-overlay-softer,
+
+  'red'          @color-red,
+  'red-light'    @color-red-light,
+  'amber'        @color-amber,
+  'amber-light'  @color-amber-light,
+  'green'        @color-green,
+  'green-light'  @color-green-light,
+  'teal'         @color-teal,
+  'teal-light'   @color-teal-light,
+  'blue'         @color-blue,
+  'blue-light'   @color-blue-light,
+  'indigo'       @color-indigo,
+  'indigo-light' @color-indigo-light,
+  'purple'       @color-purple,
+  'purple-light' @color-purple-light,
+  'pink'         @color-pink,
+  'pink-light'   @color-pink-light,
 ;
 
 // Radius
