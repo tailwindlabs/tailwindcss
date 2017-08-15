@@ -26,34 +26,32 @@
   .generate-margin-utilities(@margin-scale; @i + 1);
 }
 
-.generate-screen-margin-utilities(@margin-scale; @screen; @screen-width; @i: 1) when (@i <= length(@margin-scale)) {
+.generate-screen-margin-utilities(@margin-scale; @screen; @i: 1) when (@i <= length(@margin-scale)) {
   @prefix: ~"@{screen}\:";
   @spacer: extract(@margin-scale, @i);
   @n: extract(@spacer, 1);
   @size: extract(@spacer, 2);
 
-  @media (min-width: @screen-width) {
-    .define-class(~"@{prefix}mt-@{n}", { margin-top: @size; });
-    .define-class(~"@{prefix}mr-@{n}", { margin-right: @size; });
-    .define-class(~"@{prefix}mb-@{n}", { margin-bottom: @size; });
-    .define-class(~"@{prefix}ml-@{n}", { margin-left: @size; });
-    .define-class(~"@{prefix}my-@{n}", {
-      margin-top: @size;
-      margin-bottom: @size;
-    });
-    .define-class(~"@{prefix}mx-@{n}", {
-      margin-right: @size;
-      margin-left: @size;
-    });
-    .define-class(~"@{prefix}m-@{n}", {
-      margin-top: @size;
-      margin-right: @size;
-      margin-bottom: @size;
-      margin-left: @size;
-    });
-  }
+  .define-class(~"@{prefix}mt-@{n}", { margin-top: @size; });
+  .define-class(~"@{prefix}mr-@{n}", { margin-right: @size; });
+  .define-class(~"@{prefix}mb-@{n}", { margin-bottom: @size; });
+  .define-class(~"@{prefix}ml-@{n}", { margin-left: @size; });
+  .define-class(~"@{prefix}my-@{n}", {
+    margin-top: @size;
+    margin-bottom: @size;
+  });
+  .define-class(~"@{prefix}mx-@{n}", {
+    margin-right: @size;
+    margin-left: @size;
+  });
+  .define-class(~"@{prefix}m-@{n}", {
+    margin-top: @size;
+    margin-right: @size;
+    margin-bottom: @size;
+    margin-left: @size;
+  });
 
-  .generate-screen-margin-utilities(@margin-scale; @screen; @screen-width; (@i + 1));
+  .generate-screen-margin-utilities(@margin-scale; @screen; (@i + 1));
 }
 
 .generate-responsive-margin-utilities(@margin-scale; @screens; @i: 1) when (@i <= length(@screens)) {
@@ -61,17 +59,17 @@
   @name: extract(@screen, 1);
   @screen-width: extract(@screen, 2);
 
-  .generate-screen-margin-utilities(@margin-scale; @name; @screen-width);
-
   @media (min-width: @screen-width) {
     @prefix: ~"@{name}\:";
     .@{prefix}mx-auto { margin-left: auto; margin-right: auto; }
+    .generate-screen-margin-utilities(@margin-scale; @name);
   }
 
   .generate-responsive-margin-utilities(@margin-scale; @screens; @i + 1);
 }
 
 .define-margin-utilities(@margin-scale) {
+  .mx-auto { margin-left: auto; margin-right: auto; }
   .generate-margin-utilities(@margin-scale);
 }
 
