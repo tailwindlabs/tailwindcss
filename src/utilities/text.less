@@ -1,7 +1,12 @@
 // Font family
-@system-font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
-@font-family-base: @system-font-stack;
+@font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+@font-family-serif: Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif;
 @font-family-mono: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+@font-family-base: @font-family-sans;
+
+.sans { font-family: @font-family-sans; }
+.serif { font-family: @font-family-serif; }
+.mono { font-family: @font-family-mono; }
 
 // Default line height
 @line-height: 1.5;
@@ -108,7 +113,6 @@
 .text-smooth { -webkit-font-smoothing: antialiased; }
 .text-strike { text-decoration: line-through; }
 .text-shadow-solid { text-shadow: 0 2px 0 rgba(0,0,0,0.15); }
-.text-mono { font-family: @font-family-mono; }
 .text-ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -116,6 +120,9 @@
 }
 
 .responsive({
+  &text-sans { .sans; }
+  &text-serif { .serif; }
+  &text-mono { .mono; }
   &text-center { .text-center; }
   &text-left { .text-left; }
   &text-right { .text-right; }
@@ -135,6 +142,5 @@
   &text-smooth { .text-smooth; }
   &text-strike { .text-strike; }
   &text-shadow-solid { .text-shadow-solid; }
-  &text-mono { .text-mono; }
   &text-ellipsis { .text-ellipsis; }
 });

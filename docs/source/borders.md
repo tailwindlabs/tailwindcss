@@ -20,23 +20,23 @@ Construct border size utilities using the `.border{-side?}{-width?}` syntax. For
 <div class="flex flex-top mt-8 text-sm leading-none">
     <div class="pr-12">
         <div class="mb-3 text-dark-soft text-uppercase">Class</div>
-        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">border</code></div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">border</code></div>
     </div>
     <div class="pl-12 pr-12 border-l">
         <div class="mb-3 text-dark-soft"><span class="text-uppercase">Side</span> <span class="text-dark-softer text-xs">(optional)</span></div>
-        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded bg-light-softer">&nbsp;</code> All</div>
-        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">t</code> Top</div>
-        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">r</code> Right</div>
-        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">b</code> Bottom</div>
-        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">l</code> Left</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded bg-light-softer">&nbsp;</code> All</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">t</code> Top</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">r</code> Right</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">b</code> Bottom</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">l</code> Left</div>
     </div>
     <div class="pl-12 border-l">
         <div class="mb-3 text-dark-soft"><span class="text-uppercase">Width</span> <span class="text-dark-softer text-xs">(optional)</span></div>
-        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">0</code> 0px</div>
-        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded bg-light-softer">&nbsp;</code> 1px</div>
-        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">2</code> 2px</div>
-        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">4</code> 4px</div>
-        <div><code class="inline-block my-1 mr-1 px-2 py-1 text-mono border rounded">8</code> 8px</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">0</code> 0px</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded bg-light-softer">&nbsp;</code> 1px</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">2</code> 2px</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">4</code> 4px</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">8</code> 8px</div>
     </div>
 </div>
 
