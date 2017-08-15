@@ -26,7 +26,14 @@
                 <ul>
                     <li><a class="{{ $page->getUrl() === '/' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/">Welcome</a></li>
                     <li><a class="{{ $page->getUrl() === '/installation' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/installation">Installation</a></li>
+                    <li><a class="{{ $page->getUrl() === '/changelog' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/changelog">Changelog</a></li>
+                </ul>
+                <div class="mt-8 mb-1 text-dark-softer text-uppercase text-xs">Concepts</div>
+                <ul>
                     <li><a class="{{ $page->getUrl() === '/principles' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/principles">Principles</a></li>
+                    <li><a class="{{ $page->getUrl() === '/customization' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/customization">Customization</a></li>
+                    <li><a class="{{ $page->getUrl() === '/responsive' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/responsive">Responsive</a></li>
+                    <li><a class="{{ $page->getUrl() === '/colors' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/colors">Colors</a></li>
                 </ul>
                 <div class="mt-8 mb-1 text-dark-softer text-uppercase text-xs">Utilities</div>
                 <ul>
@@ -41,6 +48,11 @@
                     <li><a class="{{ $page->getUrl() === '/spacing' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/spacing">Spacing</a></li>
                     <li><a class="{{ $page->getUrl() === '/text' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/text">Text</a></li>
                     <li><a class="{{ $page->getUrl() === '/z-index' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/z-index">Z-Index</a></li>
+                </ul>
+                <div class="mt-8 mb-1 text-dark-softer text-uppercase text-xs">Components</div>
+                <ul>
+                    <li><a class="{{ $page->getUrl() === '/buttons' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/buttons">Buttons</a></li>
+                    <li><a class="{{ $page->getUrl() === '/forms' ? 'text-primary' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/forms">Forms</a></li>
                 </ul>
             </nav>
             <div class="p-12 constrain-lg markdown">

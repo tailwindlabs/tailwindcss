@@ -1,6 +1,5 @@
 ---
 extends: _layouts.master
-title: "Welcome"
 ---
 
 # Welcome
