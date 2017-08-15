@@ -39,12 +39,20 @@ title: "Backgrounds"
     <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-red-light</code></td>
   </tr>
   <tr>
-    <td class="w-24 h-12 bg-amber border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-amber</code></td>
+    <td class="w-24 h-12 bg-orange border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-orange</code></td>
   </tr>
   <tr>
-    <td class="w-24 h-12 bg-amber-light border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-amber-light</code></td>
+    <td class="w-24 h-12 bg-orange-light border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-orange-light</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-yellow border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-yellow</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-yellow-light border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-yellow-light</code></td>
   </tr>
   <tr>
     <td class="w-24 h-12 bg-green border-b border-dark-overlay-softer"></td>
@@ -53,6 +61,14 @@ title: "Backgrounds"
   <tr>
     <td class="w-24 h-12 bg-green-light border-b border-dark-overlay-softer"></td>
     <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-green-light</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-teal border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-teal</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-teal-light border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-teal-light</code></td>
   </tr>
   <tr>
     <td class="w-24 h-12 bg-blue border-b border-dark-overlay-softer"></td>
@@ -69,6 +85,22 @@ title: "Backgrounds"
   <tr>
     <td class="w-24 h-12 bg-indigo-light border-b border-dark-overlay-softer"></td>
     <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-indigo-light</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-purple border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-purple</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-purple-light border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-purple-light</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-pink border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-pink</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-pink-light border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-pink-light</code></td>
   </tr>
 </table>
 
