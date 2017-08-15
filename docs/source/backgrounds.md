@@ -47,12 +47,18 @@ title: "Backgrounds"
     <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-orange-light</code></td>
   </tr>
   <tr>
-    <td class="w-24 h-12 bg-yellow border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-yellow</code></td>
-  </tr>
-  <tr>
     <td class="w-24 h-12 bg-yellow-light border-b border-dark-overlay-softer"></td>
     <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-yellow-light</code></td>
+    <td class="w-24 h-12 bg-amber border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-amber</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-amber-light border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-amber-light</code></td>
+  </tr>
+  <tr>
+    <td class="w-24 h-12 bg-yellow border-b border-dark-overlay-softer"></td>
+    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-yellow</code></td>
   </tr>
   <tr>
     <td class="w-24 h-12 bg-green border-b border-dark-overlay-softer"></td>
@@ -102,6 +108,7 @@ title: "Backgrounds"
     <td class="w-24 h-12 bg-pink-light border-b border-dark-overlay-softer"></td>
     <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-pink-light</code></td>
   </tr>
+</table>
 </table>
 
 Using the utilities in HTML:
