@@ -34,7 +34,7 @@
     </button>
 </div>
 <div class="mb-4">
-    <button class="text-medium text-light rounded py-2 px-4 bg-dark hover-bg-dark-dark mr-4">
+    <button class="text-medium text-light rounded py-2 px-4 bg-dark @bg-dark-dark mr-4">
         Save
     </button>
     <button class="text-medium text-light rounded py-2 px-4 bg-dark-soft mr-4">
@@ -47,7 +47,7 @@
 
 @foreach($page->colors as $color)
 <div class="mb-4">
-    <button class="text-medium text-light rounded py-2 px-4 bg-{{$color}} hover-bg-{{$color}}-dark mr-4">
+    <button class="text-medium text-light rounded py-2 px-4 bg-{{$color}} @bg-{{$color}}-dark mr-4">
         Save
     </button>
     <button class="text-medium text-light rounded py-2 px-4 bg-{{$color}}-light mr-4">
@@ -60,7 +60,7 @@
 
 @foreach($page->colors as $color)
 <div class="mb-4">
-    <button class="text-medium text-light rounded py-2 px-4 text-{{$color}}-dark hover-text-light border border-{{$color}} hover-bg-{{$color}} mr-4">
+    <button class="text-medium text-light rounded py-2 px-4 text-{{$color}}-dark @text-light border border-{{$color}} @bg-{{$color}} mr-4">
         Save
     </button>
     <button class="text-medium text-light rounded py-2 px-4 text-{{$color}}-light border border-{{$color}}-light mr-4">
