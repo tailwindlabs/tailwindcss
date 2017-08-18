@@ -1,0 +1,17 @@
+.define-text-hover-colors(@variants) {
+  .generate-utility-variants('hover-text'; @variants; {
+    &:hover { color: extract(@__variant-value, 2); }
+  });
+}
+
+.define-text-hover-colors(@variants; none) {
+  .define-text-hover-colors(@variants);
+}
+
+.define-text-hover-colors(@variants; @screens) when not (@screens = none) {
+  .define-text-hover-colors(@variants);
+  .generate-responsive-utility-variants('hover-text'; @variants; @screens; {
+    &:hover { color: extract(@__variant-value, 2); }
+  });
+}
+
