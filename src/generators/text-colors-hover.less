@@ -1,6 +1,6 @@
 .define-text-hover-colors(@variants) {
-  .generate-utility-variants('hover-text'; @variants; {
-    &:hover { color: extract(@__variant-value, 2); }
+  .generate-utility-variants('\@text'; @variants; {
+    &:hover, &:focus { color: extract(@__variant-value, 2); }
   });
 }
 
@@ -10,8 +10,8 @@
 
 .define-text-hover-colors(@variants; @screens) when not (@screens = none) {
   .define-text-hover-colors(@variants);
-  .generate-responsive-utility-variants('hover-text'; @variants; @screens; {
-    &:hover { color: extract(@__variant-value, 2); }
+  .generate-responsive-utility-variants('\@text'; @variants; @screens; {
+    &:hover, &:focus { color: extract(@__variant-value, 2); }
   });
 }
 
