@@ -27,14 +27,6 @@ Some component examples, just to get a vibe for what's possible and for us to do
     </div>
 </div>
 
-<div class="bg-amber-lightest border border-amber-light rounded p-4 mb-4">
-    <div class="text-medium text-amber-dark">
-        Alert message
-    </div>
-    <div class="text-amber-dark">
-        Some additional text to explain what happened.
-    </div>
-</div>
 
 <div class="bg-yellow-lightest border border-yellow-light rounded p-4 mb-4">
     <div class="text-medium text-yellow-dark">
@@ -136,14 +128,6 @@ Some component examples, just to get a vibe for what's possible and for us to do
         Save
     </button>
     <button class="text-medium text-light rounded py-2 px-4 bg-orange-light mr-4">
-        Disabled
-    </button>
-</div>
-<div class="mb-4">
-    <button class="text-medium text-light rounded py-2 px-4 bg-amber hover-bg-amber-dark mr-4">
-        Save
-    </button>
-    <button class="text-medium text-light rounded py-2 px-4 bg-amber-light mr-4">
         Disabled
     </button>
 </div>
