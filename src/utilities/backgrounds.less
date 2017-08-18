@@ -55,3 +55,11 @@
 
 .define-bg-colors(@bg-colors; @screens);
 .define-bg-hover-colors(@bg-colors; @screens);
+
+.bg-cover { background-size: cover; }
+.bg-contain { background-size: contain; }
+
+.responsive({
+  &bg-cover { .bg-cover; }
+  &bg-contain { .bg-contain; }
+});

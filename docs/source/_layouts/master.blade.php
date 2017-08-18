@@ -59,8 +59,8 @@
                     <li><a class="{{ $page->getUrl() === '/forms' ? 'text-blue' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/forms">Forms</a></li>
                 </ul>
             </nav>
-            <div class="p-12 constrain-lg markdown">
-                @yield('content')
+            <div class="p-12 constrain-lg">
+                @yield('body')
             </div>
         </div>
     </body>

@@ -5,9 +5,17 @@
   '4' 1rem,
   '6' 1.5rem,
   '8' 2rem,
+  '10' 2.5rem,
   '12' 3rem,
   '16' 4rem,
   '24' 6rem,
+  '32' 8rem,
+  '40' 10rem,
+  '48' 12rem,
+  '64' 16rem,
+  '96' 24rem,
+  '128' 32rem,
+  'full' 100%,
 ;
 
 @width-scale: @sizing-scale;
@@ -15,3 +23,9 @@
 
 .define-width-utilities(@width-scale; @screens);
 .define-height-utilities(@height-scale; @screens);
+
+.fit { max-width: 100%; }
+
+.responsive({
+  &fit { .fit; }
+});
