@@ -9,7 +9,7 @@
 
 @foreach($page->colors as $color)
 <div class="bg-{{$color}}-lightest border border-{{$color}}-light rounded p-4 mb-4">
-    <div class="text-medium text-{{$color}}-dark">
+    <div class="text-bold text-{{$color}}-dark">
         Alert message
     </div>
     <div class="text-{{$color}}-dark">
