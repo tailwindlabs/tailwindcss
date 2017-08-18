@@ -1,0 +1,16 @@
+.define-shadow-utilities(@variants) {
+  .generate-utility-variants('shadow'; @variants; {
+    box-shadow: extract(@__variant-value, 2);
+  });
+}
+
+.define-shadow-utilities(@variants; none) {
+  .define-shadow-utilities(@variants);
+}
+
+.define-shadow-utilities(@variants; @screens) when not (@screens = none) {
+  .define-shadow-utilities(@variants);
+  .generate-responsive-utility-variants('shadow'; @variants; @screens; {
+    box-shadow: extract(@__variant-value, 2);
+  });
+}

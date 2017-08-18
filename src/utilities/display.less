@@ -1,0 +1,15 @@
+.block { display: block; }
+.inline-block { display: inline-block; }
+.table { display: table; border-collapse: collapse; width: 100%; }
+.table-row { display: table-row; }
+.table-cell { display: table-cell; }
+.hidden { display: none; }
+
+.responsive({
+  &block { .block; }
+  &inline-block { .inline-block; }
+  &table { .table; }
+  &table-row { .table-row; }
+  &table-cell { .table-cell; }
+  &hidden { .hidden; }
+});

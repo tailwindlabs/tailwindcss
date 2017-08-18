@@ -1,0 +1,23 @@
+.generate-responsive-variants(@ruleset, @screen, @min-width) {
+  @prefix: ~"@{screen}\:";
+
+  @media (min-width: @min-width) {
+    .@{prefix} { @ruleset(); };
+  }
+}
+
+.responsive(@ruleset; @i: 1) when (@i <= length(@screens)) and not (@screens = none) {
+  @screen: extract(@screens, @i);
+  @name: extract(@screen, 1);
+  @screen-width: extract(@screen, 2);
+
+  .generate-responsive-variants(@ruleset, @name, @screen-width);
+  .responsive(@ruleset, @i + 1);
+}
+
+.screen(@screen, @ruleset) {
+  .extract-match(@screens; @screen);
+  @media (min-width: @__match) {
+    @ruleset();
+  }
+}

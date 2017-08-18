@@ -1,0 +1,16 @@
+.define-text-weights(@variants) {
+  .generate-utility-variants('text'; @variants; {
+    font-weight: extract(@__variant-value, 2);
+  });
+}
+
+.define-text-weights(@variants; none) {
+  .define-text-weights(@variants);
+}
+
+.define-text-weights(@variants; @screens) when not (@screens = none) {
+  .define-text-weights(@variants);
+  .generate-responsive-utility-variants('text'; @variants; @screens; {
+    font-weight: extract(@__variant-value, 2);
+  });
+}

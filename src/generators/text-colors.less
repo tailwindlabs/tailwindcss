@@ -1,0 +1,17 @@
+.define-text-colors(@variants) {
+  .generate-utility-variants('text'; @variants; {
+    color: extract(@__variant-value, 2);
+  });
+}
+
+.define-text-colors(@variants; none) {
+  .define-text-colors(@variants);
+}
+
+.define-text-colors(@variants; @screens) when not (@screens = none) {
+  .define-text-colors(@variants);
+  .generate-responsive-utility-variants('text'; @variants; @screens; {
+    color: extract(@__variant-value, 2);
+  });
+}
+

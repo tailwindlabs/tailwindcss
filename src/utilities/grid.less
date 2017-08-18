@@ -1,0 +1,16 @@
+@screens:
+  sm 576px,
+  md 768px,
+  lg 992px,
+  xl 1200px;
+
+@grid-column-count: 12;
+
+.row {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.generate-all-grids(@grid-column-count; @screens);

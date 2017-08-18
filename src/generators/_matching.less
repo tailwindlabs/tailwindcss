@@ -1,0 +1,30 @@
+.apply-match(@map; @search; @ruleset) {
+  @current: extract(extract(@map, 1), 1);
+  .apply-match(@map; @search; @current; @ruleset; 1);
+}
+
+.apply-match(@map; @search; @current; @ruleset; @i) when not (@search = @current) and (@i <= length(@map)) {
+  @current: extract(extract(@map, @i + 1), 1);
+  .apply-match(@map; @search; @current; @ruleset; @i + 1);
+}
+
+.apply-match(@map; @search; @current; @ruleset; @i) when (@search = @current) and (@i <= length(@map)) {
+  & {
+    @__match: extract(extract(@map, @i), 2);
+    @ruleset();
+  }
+}
+
+.extract-match(@map; @search) {
+  @current: extract(extract(@map, 1), 1);
+  .extract-match(@map; @search; @current; 1);
+}
+
+.extract-match(@map; @search; @current; @i) when not (@search = @current) and (@i <= length(@map)) {
+  @current: extract(extract(@map, @i + 1), 1);
+  .extract-match(@map; @search; @current; @i + 1);
+}
+
+.extract-match(@map; @search; @current; @i) when (@search = @current) and (@i <= length(@map)) {
+  @__match: extract(extract(@map, @i), 2);
+}

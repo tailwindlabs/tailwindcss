@@ -1,32 +1,3 @@
-.screen-sm(@ruleset) { @media (min-width: @screen-sm) { @ruleset(); }}
-.screen-md(@ruleset) { @media (min-width: @screen-md) { @ruleset(); }}
-.screen-lg(@ruleset) { @media (min-width: @screen-lg) { @ruleset(); }}
-.screen-xl(@ruleset) { @media (min-width: @screen-xl) { @ruleset(); }}
-
-.responsive(@ruleset) {
-  .screen-sm({ .sm\: { @ruleset(); }});
-  .screen-md({ .md\: { @ruleset(); }});
-  .screen-lg({ .lg\: { @ruleset(); }});
-  .screen-xl({ .xl\: { @ruleset(); }});
-}
-
-.generate-responsive-versions(@ruleset; @i: 1) when (@i <= length(@screens)) {
-  @screen: extract(@screens, @i);
-  @name: extract(@screen, 1);
-  @screen-width: extract(@screen, 3);
-
-  .generate-responsive-version(@ruleset, @name, @screen-width);
-  .generate-responsive-versions(@ruleset, @i + 1);
-}
-
-.generate-responsive-version(@ruleset, @screen, @min-width) {
-  @prefix: ~"@{screen}\:";
-
-  @media (min-width: @min-width) {
-    .@{prefix} { @ruleset(); };
-  }
-}
-
 .no-focus {
   &:focus, &:active {
     outline: none;
@@ -104,33 +75,6 @@
   clip: rect(0,0,0,0);
   border: 0;
 }
-
-// Display
-.block { display: block; }
-.inline-block { display: inline-block; }
-.hidden { display: none; }
-.table { display: table; border-collapse: collapse; width: 100%; }
-.table-row { display: table-row; }
-.table-cell { display: table-cell; }
-
-.responsive({
-  &block { .block; }
-  &inline-block { .inline-block; }
-  &hidden { .hidden; }
-});
-
-// Position
-.fixed { position: fixed; }
-.absolute { position: absolute; }
-.relative { position: relative; }
-
-.pin-t { top: 0; }
-.pin-r { right: 0; }
-.pin-b { bottom: 0; }
-.pin-l { left: 0; }
-.pin-y { .pin-t; .pin-b; }
-.pin-x { .pin-l; .pin-r; }
-.pin { .pin-y; .pin-x; width: 100%; height: 100%; }
 
 .mask { overflow: hidden; }
 

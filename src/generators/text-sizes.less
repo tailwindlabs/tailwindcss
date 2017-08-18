@@ -1,0 +1,16 @@
+.define-text-sizes(@variants) {
+  .generate-utility-variants('text'; @variants; {
+    font-size: extract(@__variant-value, 2);
+  });
+}
+
+.define-text-sizes(@variants; none) {
+  .define-text-sizes(@variants);
+}
+
+.define-text-sizes(@variants; @screens) when not (@screens = none) {
+  .define-text-sizes(@variants);
+  .generate-responsive-utility-variants('text'; @variants; @screens; {
+    font-size: extract(@__variant-value, 2);
+  });
+}
