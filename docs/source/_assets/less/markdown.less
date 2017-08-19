@@ -18,12 +18,15 @@
   }
 
   p code, p& code& {
-    .border;
-    .rounded;
+    .inline-block;
+    .bg-light-soft;
+    .rounded-sm;
     .text-sm;
-    .px-1;
+    .p-1;
+    .leading-none;
     .text-no-wrap;
-    color: #DD4A68;
+    .text-pink-dark;
+    vertical-align: middle;
   }
 
   blockquote, blockquote& {
@@ -35,18 +38,17 @@
   h1, h1& {
     .mb-4;
     .leading-none;
-    .text-dark-softer;
-    .text-thin;
-    .text-2xl;
-    .text-blue;
+    .text-dark;
+    .text-bold;
+    .text-3xl;
   }
 
   h2, h2& {
     .mt-16;
     .mb-8;
-    .text-blue;
+    .text-dark;
     .leading-none;
-    .text-thin;
+    .text-bold;
     .text-xl;
   }
 
@@ -60,7 +62,9 @@
   }
 
   p, p& {
+    .text-dark-soft;
     .mt-8;
     .mb-3;
+    line-height: 1.75;
   }
 }
