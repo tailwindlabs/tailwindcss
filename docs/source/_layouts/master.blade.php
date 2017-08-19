@@ -29,7 +29,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 sm:col-3">
-                    <nav class="py-4 text-light text-lg">
+                    <nav class="py-4 text-light text-base">
                         <div>
                             <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Introduction</p>
                             <ul>
