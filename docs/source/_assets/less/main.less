@@ -1,37 +1,11 @@
 @import "../../../../src/reset";
-@import "../../../../src/utilities";
+@import "base";
+
 @import "prism";
 @import "markdown";
+@import "container";
 
-*,
-*::before,
-*::after {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@import "../../../../src/utilities";
+@import "utilities";
 
-a {
-  color: inherit;
-  text-decoration: none;
-
-  &:hover {
-    .text-underline;
-  }
-}
-
-svg {
-  fill: currentColor;
-}
-
-@spacing-scale:
-  'px' 1px,
-  '0' 0,
-  '1' 0.25rem,
-  '2' 0.5rem,
-  '3' 0.75rem,
-  '4' 1rem,
-  '6' 1.5rem,
-  '8' 2rem,
-  '12' 3rem,
-  '16' 4rem,
-;
+@import "variables";
