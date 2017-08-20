@@ -5,6 +5,14 @@ title: "Backgrounds"
 
 # Backgrounds
 
+<div class="subnav">
+    <a class="subnav-link" href="#colors">Colors</a>
+    <a class="subnav-link" href="#responsive">Responsive</a>
+    <a class="subnav-link" href="#customizing">Customizing</a>
+</div>
+
+<h2 id="colors">Colors</h2>
+
 <div class="row pull-x-4 mb-4">
   <div class="col-12 md:col-4 px-4">
     <div class="bg-light px-6 py-4 text-sm">
@@ -16,6 +24,9 @@ title: "Backgrounds"
     <div class="bg-light-softer px-6 py-4 text-sm">
       .bg-light-softer
     </div>
+    <div class="bg-light-softest px-6 py-4 text-sm">
+      .bg-light-softest
+    </div>
   </div>
   <div class="col-12 md:col-4 px-4">
     <div class="text-light bg-dark px-6 py-4 text-sm">
@@ -26,6 +37,9 @@ title: "Backgrounds"
     </div>
     <div class="text-light bg-dark-softer px-6 py-4 text-sm">
       .bg-dark-softer
+    </div>
+    <div class="text-light bg-dark-softest px-6 py-4 text-sm">
+      .bg-dark-softest
     </div>
   </div>
 </div>
@@ -195,7 +209,7 @@ div {
 }
 ```
 
-## Responsive
+<h2 id="responsive">Responsive</h2>
 
 The background utitlies can also be used with <a href="/responsive">responsive</a> prefixes:
 
@@ -216,42 +230,125 @@ div {
 ```
 
 
-## Custom backgrounds
+<h2 id="customizing">Customizing</h2>
 
-How to generate custom background utilities:
+To customize the available background colors, start by creating a copy of the default `@bg-colors` variable in your own Less file:
 
 ```less
-.define-text-color('primary';
-  default #3498db,
-  'light' #a0cfee,
-  'dark'  #2980b9
-;);
+@bg-colors:
+  'light'           @color-white,
+  'light-soft'      @color-grey-200,
+  'light-softer'    @color-grey-300,
+
+  'dark'            @color-grey-900,
+  'dark-soft'       @color-grey-800,
+  'dark-softer'     @color-grey-700,
+
+  'red-dark'        @color-red-dark,
+  'red'             @color-red,
+  'red-light'       @color-red-light,
+  'red-lightest'    @color-red-lightest,
+
+  'orange-dark'     @color-orange-dark,
+  'orange'          @color-orange,
+  'orange-light'    @color-orange-light,
+  'orange-lightest' @color-orange-lightest,
+
+  'yellow-dark'     @color-yellow-dark,
+  'yellow'          @color-yellow,
+  'yellow-light'    @color-yellow-light,
+  'yellow-lightest' @color-yellow-lightest,
+
+  'green-dark'      @color-green-dark,
+  'green'           @color-green,
+  'green-light'     @color-green-light,
+  'green-lightest'  @color-green-lightest,
+
+  'teal-dark'       @color-teal-dark,
+  'teal'            @color-teal,
+  'teal-light'      @color-teal-light,
+  'teal-lightest'   @color-teal-lightest,
+
+  'blue-dark'       @color-blue-dark,
+  'blue'            @color-blue,
+  'blue-light'      @color-blue-light,
+  'blue-lightest'   @color-blue-lightest,
+
+  'indigo-dark'     @color-indigo-dark,
+  'indigo'          @color-indigo,
+  'indigo-light'    @color-indigo-light,
+  'indigo-lightest' @color-indigo-lightest,
+
+  'purple-dark'     @color-purple-dark,
+  'purple'          @color-purple,
+  'purple-light'    @color-purple-light,
+  'purple-lightest' @color-purple-lightest,
+
+  'pink-dark'       @color-pink-dark,
+  'pink'            @color-pink,
+  'pink-light'      @color-pink-light,
+  'pink-lightest'   @color-pink-lightest,
+;
 ```
 
-How to use custom background utilities:
+If you don't need certain background colors, remove them or comment them out to prevent those utilities from being generated:
+
+```less
+@bg-colors:
+  // ...
+
+  // 'yellow-dark'     @color-yellow-dark,
+  // 'yellow'          @color-yellow,
+  // 'yellow-light'    @color-yellow-light,
+  // 'yellow-lightest' @color-yellow-lightest,
+
+  'green-dark'      @color-green-dark,
+  'green'           @color-green,
+  'green-light'     @color-green-light,
+  'green-lightest'  @color-green-lightest,
+
+  // 'teal-dark'       @color-teal-dark,
+  // 'teal'            @color-teal,
+  // 'teal-light'      @color-teal-light,
+  // 'teal-lightest'   @color-teal-lightest,
+
+  'blue-dark'       @color-blue-dark,
+  'blue'            @color-blue,
+  'blue-light'      @color-blue-light,
+  'blue-lightest'   @color-blue-lightest,
+
+  'indigo-dark'     @color-indigo-dark,
+  'indigo'          @color-indigo,
+  'indigo-light'    @color-indigo-light,
+  'indigo-lightest' @color-indigo-lightest,
+
+  // 'purple-dark'     @color-purple-dark,
+  // 'purple'          @color-purple,
+  // 'purple-light'    @color-purple-light,
+  // 'purple-lightest' @color-purple-lightest,
+
+  // 'pink-dark'       @color-pink-dark,
+  // 'pink'            @color-pink,
+  // 'pink-light'      @color-pink-light,
+  // 'pink-lightest'   @color-pink-lightest,
+;
+```
+
+If you'd like to add new background colors, add them to the end of the `@bg-colors` variable like so:
+
+```less
+@bg-colors:
+  // ...
+
+  'brand-primary'     #cf4646,
+  'brand-secondary'   #f6c92e,
+;
+```
+
+New background color utilities (including responsive versions) will be generated for those colors and can be used in your markup like any other background color utility:
 
 ```html
-<!-- Using custom utilities in HTML: -->
-
-<div class="bg-primary"></div>
-<div class="bg-primary-light"></div>
-<div class="bg-primary-dark"></div>
-
-<!-- Responsive example -->
-<div class="bg-primary sm:bg-primary-dark"></div>
-```
-
-```less
-// Using custom utilities in Less:
-
-div {
-  .bg-primary;
-  .bg-primary-light;
-  .bg-primary-dark;
-
-  // Responsive example
-  .screen(lg, {
-    .bg-primary;
-  });
-}
+<div class="bg-brand-primary md:bg-brand-secondary">
+  <!-- ... -->
+</div>
 ```
