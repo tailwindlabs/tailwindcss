@@ -5,105 +5,165 @@ title: "Backgrounds"
 
 # Backgrounds
 
-<table class="text-sm" style="border-collapse: separate; border-spacing: 0; width: 100%;">
-  <tr>
-    <td class="w-24 h-12 bg-light border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-light</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-light-soft border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-light-soft</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-light-softer border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-light-softer</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-dark border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-dark</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-dark-soft border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-dark-soft</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-dark-softer border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-dark-softer</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-red border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-red</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-red-light border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-red-light</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-orange border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-orange</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-orange-light border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-orange-light</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-yellow border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-yellow</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-yellow-light border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-yellow-light</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-green border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-green</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-green-light border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-green-light</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-teal border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-teal</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-teal-light border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-teal-light</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-blue border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-blue</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-blue-light border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-blue-light</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-indigo border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-indigo</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-indigo-light border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-indigo-light</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-purple border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-purple</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-purple-light border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-purple-light</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-pink border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-pink</code></td>
-  </tr>
-  <tr>
-    <td class="w-24 h-12 bg-pink-light border-b border-dark-overlay-softer"></td>
-    <td class="border-b border-dark-overlay-softer py-3 px-6" style="vertical-align: middle;"><code>.bg-pink-light</code></td>
-  </tr>
-</table>
-</table>
+<div class="row pull-x-4 mb-4">
+  <div class="col-12 md:col-4 px-4">
+    <div class="bg-light px-6 py-4 text-sm">
+      .bg-light
+    </div>
+    <div class="bg-light-soft px-6 py-4 text-sm">
+      .bg-light-soft
+    </div>
+    <div class="bg-light-softer px-6 py-4 text-sm">
+      .bg-light-softer
+    </div>
+  </div>
+  <div class="col-12 md:col-4 px-4">
+    <div class="text-light bg-dark px-6 py-4 text-sm">
+      .bg-dark
+    </div>
+    <div class="text-light bg-dark-soft px-6 py-4 text-sm">
+      .bg-dark-soft
+    </div>
+    <div class="text-light bg-dark-softer px-6 py-4 text-sm">
+      .bg-dark-softer
+    </div>
+  </div>
+</div>
+
+<div class="row pull-x-4 mb-4">
+  <div class="col-12 md:col-4 px-4">
+    <div class="text-light bg-red-dark px-6 py-4 text-sm">
+      .bg-red-dark
+    </div>
+    <div class="text-light bg-red px-6 py-4 text-sm">
+      .bg-red
+    </div>
+    <div class="text-light bg-red-light px-6 py-4 text-sm">
+      .bg-red-light
+    </div>
+    <div class="text-red-dark bg-red-lightest px-6 py-4 text-sm">
+      .bg-red-lightest
+    </div>
+  </div>
+  <div class="col-12 md:col-4 px-4">
+    <div class="text-light bg-orange-dark px-6 py-4 text-sm">
+      .bg-orange-dark
+    </div>
+    <div class="text-light bg-orange px-6 py-4 text-sm">
+      .bg-orange
+    </div>
+    <div class="text-light bg-orange-light px-6 py-4 text-sm">
+      .bg-orange-light
+    </div>
+    <div class="text-orange-dark bg-orange-lightest px-6 py-4 text-sm">
+      .bg-orange-lightest
+    </div>
+  </div>
+  <div class="col-12 md:col-4 px-4">
+    <div class="text-light bg-yellow-dark px-6 py-4 text-sm">
+      .bg-yellow-dark
+    </div>
+    <div class="text-light bg-yellow px-6 py-4 text-sm">
+      .bg-yellow
+    </div>
+    <div class="text-light bg-yellow-light px-6 py-4 text-sm">
+      .bg-yellow-light
+    </div>
+    <div class="text-yellow-dark bg-yellow-lightest px-6 py-4 text-sm">
+      .bg-yellow-lightest
+    </div>
+  </div>
+</div>
+
+<div class="row pull-x-4 mb-4">
+  <div class="col-12 md:col-4 px-4">
+    <div class="text-light bg-green-dark px-6 py-4 text-sm">
+      .bg-green-dark
+    </div>
+    <div class="text-light bg-green px-6 py-4 text-sm">
+      .bg-green
+    </div>
+    <div class="text-light bg-green-light px-6 py-4 text-sm">
+      .bg-green-light
+    </div>
+    <div class="text-green-dark bg-green-lightest px-6 py-4 text-sm">
+      .bg-green-lightest
+    </div>
+  </div>
+  <div class="col-12 md:col-4 px-4">
+    <div class="text-light bg-teal-dark px-6 py-4 text-sm">
+      .bg-teal-dark
+    </div>
+    <div class="text-light bg-teal px-6 py-4 text-sm">
+      .bg-teal
+    </div>
+    <div class="text-light bg-teal-light px-6 py-4 text-sm">
+      .bg-teal-light
+    </div>
+    <div class="text-teal-dark bg-teal-lightest px-6 py-4 text-sm">
+      .bg-teal-lightest
+    </div>
+  </div>
+  <div class="col-12 md:col-4 px-4">
+    <div class="text-light bg-blue-dark px-6 py-4 text-sm">
+      .bg-blue-dark
+    </div>
+    <div class="text-light bg-blue px-6 py-4 text-sm">
+      .bg-blue
+    </div>
+    <div class="text-light bg-blue-light px-6 py-4 text-sm">
+      .bg-blue-light
+    </div>
+    <div class="text-blue-dark bg-blue-lightest px-6 py-4 text-sm">
+      .bg-blue-lightest
+    </div>
+  </div>
+</div>
+
+<div class="row pull-x-4 mb-4">
+  <div class="col-12 md:col-4 px-4">
+    <div class="text-light bg-indigo-dark px-6 py-4 text-sm">
+      .bg-indigo-dark
+    </div>
+    <div class="text-light bg-indigo px-6 py-4 text-sm">
+      .bg-indigo
+    </div>
+    <div class="text-light bg-indigo-light px-6 py-4 text-sm">
+      .bg-indigo-light
+    </div>
+    <div class="text-indigo-dark bg-indigo-lightest px-6 py-4 text-sm">
+      .bg-indigo-lightest
+    </div>
+  </div>
+  <div class="col-12 md:col-4 px-4">
+    <div class="text-light bg-purple-dark px-6 py-4 text-sm">
+      .bg-purple-dark
+    </div>
+    <div class="text-light bg-purple px-6 py-4 text-sm">
+      .bg-purple
+    </div>
+    <div class="text-light bg-purple-light px-6 py-4 text-sm">
+      .bg-purple-light
+    </div>
+    <div class="text-purple-dark bg-purple-lightest px-6 py-4 text-sm">
+      .bg-purple-lightest
+    </div>
+  </div>
+  <div class="col-12 md:col-4 px-4">
+    <div class="text-light bg-pink-dark px-6 py-4 text-sm">
+      .bg-pink-dark
+    </div>
+    <div class="text-light bg-pink px-6 py-4 text-sm">
+      .bg-pink
+    </div>
+    <div class="text-light bg-pink-light px-6 py-4 text-sm">
+      .bg-pink-light
+    </div>
+    <div class="text-pink-dark bg-pink-lightest px-6 py-4 text-sm">
+      .bg-pink-lightest
+    </div>
+  </div>
+</div>
 
 Using the utilities in HTML:
 
