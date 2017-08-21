@@ -57,6 +57,7 @@
                                 <li class="mb-2"><a class="{{ $page->getUrl() === '/flexbox' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/flexbox">Flexbox</a></li>
                                 <li class="mb-2"><a class="{{ $page->getUrl() === '/grid' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/grid">Grid</a></li>
                                 <li class="mb-2"><a class="{{ $page->getUrl() === '/images' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/images">Images</a></li>
+                                <li class="mb-2"><a class="{{ $page->getUrl() === '/overflow' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/overflow">Overflow</a></li>
                                 <li class="mb-2"><a class="{{ $page->getUrl() === '/position' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/position">Position</a></li>
                                 <li class="mb-2"><a class="{{ $page->getUrl() === '/shadows' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/shadows">Shadows</a></li>
                                 <li class="mb-2"><a class="{{ $page->getUrl() === '/spacing' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/spacing">Spacing</a></li>
