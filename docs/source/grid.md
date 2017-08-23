@@ -133,28 +133,48 @@ Fixed width columns are still respected even if a smaller screen has auto column
 
 <div class="flex mb-6">
     <div class="flex-fill md:w-1/6 md:flex-none">
-        <div class="flex-center h-16 bg-dark-softer text-light">
-            .flex-fill.md:w-1/6.md:flex-none
+        <div class="flex-center h-24 bg-dark-softer text-light">
+            <div>
+                <div>.flex-fill</div>
+                <div>.md:w-1/6</div>
+                <div>.md:flex-none</div>
+            </div>
         </div>
     </div>
     <div class="flex-fill md:w-1/6 md:flex-none">
-        <div class="flex-center h-16 bg-dark-soft text-light">
-            .flex-fill.md:w-1/6.md:flex-none
+        <div class="flex-center h-24 bg-dark-soft text-light">
+            <div>
+                <div>.flex-fill</div>
+                <div>.md:w-1/6</div>
+                <div>.md:flex-none</div>
+            </div>
         </div>
     </div>
     <div class="flex-fill md:w-1/6 md:flex-none">
-        <div class="flex-center h-16 bg-dark-softer text-light">
-            .flex-fill.md:w-1/6.md:flex-none
+        <div class="flex-center h-24 bg-dark-softer text-light">
+            <div>
+                <div>.flex-fill</div>
+                <div>.md:w-1/6</div>
+                <div>.md:flex-none</div>
+            </div>
         </div>
     </div>
     <div class="flex-fill md:w-1/6 md:flex-none">
-        <div class="flex-center h-16 bg-dark-soft text-light">
-            .flex-fill.md:w-1/6.md:flex-none
+        <div class="flex-center h-24 bg-dark-soft text-light">
+            <div>
+                <div>.flex-fill</div>
+                <div>.md:w-1/6</div>
+                <div>.md:flex-none</div>
+            </div>
         </div>
     </div>
     <div class="flex-fill md:w-1/6 md:flex-none">
-        <div class="flex-center h-16 bg-dark-softer text-light">
-            .flex-fill.md:w-1/6.md:flex-none
+        <div class="flex-center h-24 bg-dark-softer text-light">
+            <div>
+                <div>.flex-fill</div>
+                <div>.md:w-1/6</div>
+                <div>.md:flex-none</div>
+            </div>
         </div>
     </div>
 </div>
@@ -165,12 +185,18 @@ Use margin auto utilities to accomplish offsets:
 <div class="flex mb-6">
     <div class="w-full md:w-1/3 md:ml-auto">
         <div class="flex-center h-16 bg-dark-soft text-light">
-            .md:w-1/3.md:ml-auto
+            <div>
+                <div>.md:w-1/3</div>
+                <div>.md:ml-auto</div>
+            </div>
         </div>
     </div>
     <div class="w-full md:w-1/3 md:mr-auto">
         <div class="flex-center h-16 bg-dark-softer text-light">
-            .md:w-1/6.md:mr-auto
+            <div>
+                <div>.md:w-1/6</div>
+                <div>.md:mr-auto</div>
+            </div>
         </div>
     </div>
 </div>
