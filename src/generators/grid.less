@@ -1,7 +1,7 @@
 .generate-grid-columns(@grid-column-count; @prefix; @i: 1) when (@i <= @grid-column-count) {
   .@{prefix}col-@{i} {
-    flex-basis: 100% * (@i / @grid-column-count);
-    max-width: 100% * (@i / @grid-column-count);
+    flex: none;
+    width: 100% * (@i / @grid-column-count);
   }
 
   @offset-i: @i - 1;

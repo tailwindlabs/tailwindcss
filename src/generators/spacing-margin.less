@@ -61,6 +61,8 @@
 
   @media (min-width: @screen-width) {
     @prefix: ~"@{name}\:";
+    .@{prefix}ml-auto { margin-left: auto; }
+    .@{prefix}mr-auto { margin-right: auto; }
     .@{prefix}mx-auto { margin-left: auto; margin-right: auto; }
     .generate-screen-margin-utilities(@margin-scale; @name);
   }
@@ -69,6 +71,8 @@
 }
 
 .define-margin-utilities(@margin-scale) {
+  .ml-auto { margin-left: auto; }
+  .mr-auto { margin-right: auto; }
   .mx-auto { margin-left: auto; margin-right: auto; }
   .generate-margin-utilities(@margin-scale);
 }
