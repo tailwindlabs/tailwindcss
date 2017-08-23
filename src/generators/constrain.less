@@ -1,7 +1,6 @@
 .define-constrains(@variants) {
   .generate-utility-variants('constrain'; @variants; {
     max-width: extract(@__variant-value, 2);
-    flex-basis: extract(@__variant-value, 2);
   });
 }
 
@@ -13,6 +12,5 @@
   .define-constrains(@variants);
   .generate-responsive-utility-variants('constrain'; @variants; @screens; {
     max-width: extract(@__variant-value, 2);
-    flex-basis: extract(@__variant-value, 2);
   });
 }
