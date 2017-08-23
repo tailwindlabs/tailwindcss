@@ -27,8 +27,8 @@
             </div>
         </header>
         <div class="container">
-            <div class="flex">
-                <div class="w-full sm:w-1/4">
+            <div class="flex flex-wrap">
+                <div class="w-full lg:w-1/4">
                     <nav class="py-4 text-light text-base">
                         <div>
                             <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Introduction</p>
@@ -75,7 +75,7 @@
                         </div>
                     </nav>
                 </div>
-                <div class="w-full sm:w-3/4">
+                <div class="w-full lg:w-3/4">
                     <div class="p-12 rounded-lg bg-light shadow-2">
                         @yield('body')
                     </div>
