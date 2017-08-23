@@ -69,7 +69,7 @@ Columns can be different widths:
 
 Rows can overflow and wrap:
 
-<div class="flex mb-6">
+<div class="flex flex-wrap mb-6">
     <div class="w-full md:w-1/3">
         <div class="flex-center h-16 bg-dark-softer text-light">
             .md:w-1/3
@@ -132,29 +132,29 @@ Column widths can be automatic:
 Fixed width columns are still respected even if a smaller screen has auto column widths:
 
 <div class="flex mb-6">
-    <div class="flex-fill md:w-1/6">
+    <div class="flex-fill md:w-1/6 md:flex-none">
         <div class="flex-center h-16 bg-dark-softer text-light">
-            .flex-fill.md:w-1/6
+            .flex-fill.md:w-1/6.md:flex-none
         </div>
     </div>
-    <div class="flex-fill md:w-1/6">
+    <div class="flex-fill md:w-1/6 md:flex-none">
         <div class="flex-center h-16 bg-dark-soft text-light">
-            .flex-fill.md:w-1/6
+            .flex-fill.md:w-1/6.md:flex-none
         </div>
     </div>
-    <div class="flex-fill md:w-1/6">
+    <div class="flex-fill md:w-1/6 md:flex-none">
         <div class="flex-center h-16 bg-dark-softer text-light">
-            .flex-fill.md:w-1/6
+            .flex-fill.md:w-1/6.md:flex-none
         </div>
     </div>
-    <div class="flex-fill md:w-1/6">
+    <div class="flex-fill md:w-1/6 md:flex-none">
         <div class="flex-center h-16 bg-dark-soft text-light">
-            .flex-fill.md:w-1/6
+            .flex-fill.md:w-1/6.md:flex-none
         </div>
     </div>
-    <div class="flex-fill md:w-1/6">
+    <div class="flex-fill md:w-1/6 md:flex-none">
         <div class="flex-center h-16 bg-dark-softer text-light">
-            .flex-fill.md:w-1/6
+            .flex-fill.md:w-1/6.md:flex-none
         </div>
     </div>
 </div>
