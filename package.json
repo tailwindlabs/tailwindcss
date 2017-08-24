@@ -9,6 +9,7 @@
   ],
   "scripts": {},
   "dependencies": {
+    "lodash": "^4.17.4",
     "normalize.css": "^6.0.0",
     "postcss": "^6.0.9",
     "postcss-cssnext": "^3.0.2",
