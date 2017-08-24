@@ -10,6 +10,8 @@
   "scripts": {},
   "dependencies": {
     "normalize.css": "^6.0.0",
+    "postcss": "^6.0.9",
+    "postcss-cssnext": "^3.0.2",
     "suitcss-base": "^3.0.0"
   }
 }
