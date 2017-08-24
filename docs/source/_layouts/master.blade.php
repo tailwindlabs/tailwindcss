@@ -11,9 +11,9 @@
     <body class="pb-12">
         <div class="bg-gradient-brand h-3"></div>
         <header class="container">
-            <div class="py-6 flex-y-center flex-spaced">
-                <div class="flex-y-center">
-                    <div class="pill h-12 w-12 bg-light p-2 flex-center flex-inline shadow-2 mr-4">
+            <div class="py-6 flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="pill h-12 w-12 bg-light p-2 inline-flex items-center justify-center shadow-2 mr-4">
                         <svg class="fit w-full" viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient x1="0%" y1="0%" y2="100%" id="a"><stop stop-color="#2383AE" offset="0%"></stop><stop stop-color="#6DD7B9" offset="100%"></stop></linearGradient></defs><path d="M15 12c2-8 7-12 15-12 12 0 13.5 9 19.5 10.5 4 1 7.5-.5 10.5-4.5-2 8-7 12-15 12-12 0-13.5-9-19.5-10.5-4-1-7.5.5-10.5 4.5zM0 30c2-8 7-12 15-12 12 0 13.5 9 19.5 10.5 4 1 7.5-.5 10.5-4.5-2 8-7 12-15 12-12 0-13.5-9-19.5-10.5-4-1-7.5.5-10.5 4.5z" fill="url(#a)" fill-rule="evenodd"></path></svg>
                     </div>
                     <svg class="h-4" viewBox="0 0 136 19" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tailwind CSS">
