@@ -22,7 +22,7 @@
                     </svg>
                 </div>
                 <div>
-                    Some other info
+                    <a href="https://github.com/adamwathan/tailwindcss">GitHub</a>
                 </div>
             </div>
         </header>
