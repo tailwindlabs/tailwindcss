@@ -11,9 +11,11 @@
   "private": true,
   "devDependencies": {
     "cross-env": "^3.2.3",
-    "laravel-mix": "0.*"
+    "laravel-mix": "^1.4.2"
   },
   "dependencies": {
+    "less": "^2.7.2",
+    "less-loader": "^4.0.5",
     "lodash": "^4.17.4",
     "postcss-cssnext": "^3.0.2"
   },

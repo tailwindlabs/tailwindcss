@@ -18,3 +18,9 @@ mix.less('source/_assets/less/main.less', 'source/css')
       require('postcss-cssnext')()
     ]
   })
+
+// mix.js('source/js/prism.js', 'source/js')
+//     .postCss('source/_assets/css/main.css', 'source/css', [
+//       require('./../src/tailwind.js')(),
+//       require('postcss-cssnext')()
+//     ])

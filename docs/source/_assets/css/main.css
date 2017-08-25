@@ -1,17 +1,29 @@
-.foo {
-  @apply .px-4;
-  @apply .bg-blue .py-2;
+:root {
+  --danger-theme: {
+    color: white;
+    background-color: red;
+  };
 }
 
 .foo {
-  // @class "oreo bg-blue px-4";
-  background-color: red;
-  @media (--breakpoint-sm) {
-    // @class "py-2";
-    background-color: green;
+  @apply .oreo --danger-theme .px-4;
+}
+
+@responsive {
+  .oreo {
+    background: red;
   }
-  @media (--breakpoint-md) {
-    background-color: orange;
+  .oreo {
+    text-align: center;
+  }
+  .oreo {
+    background: purple;
+  }
+}
+
+.bar {
+  .oreo {
+    background: red;
   }
 }
 

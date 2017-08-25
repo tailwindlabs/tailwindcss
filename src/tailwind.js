@@ -11,7 +11,7 @@ function findMixin(css, mixin, onError) {
   const matches = []
 
   css.walkRules((rule) => {
-    if (_.trimStart(rule.selector, '.') === mixin) {
+    if (rule.selector === mixin) {
       matches.push(rule)
     }
   })
@@ -86,18 +86,28 @@ function generateUtilities(css, options) {
   })
 }
 
-function substituteClassMixins(css) {
+function substituteClassApplyAtRules(css) {
   css.walkRules(function (rule) {
-    rule.walkAtRules('class', atRule => {
-      const mixins = _.trim(atRule.params, ` "'`).split(' ')
-      const decls = _.flatMap(mixins, (mixin) => {
+    rule.walkAtRules('apply', atRule => {
+      const mixins = postcss.list.space(atRule.params)
+
+      const [customProperties, classes] = _.partition(mixins, (mixin) => {
+        return _.startsWith(mixin, '--')
+      })
+
+      const decls = _.flatMap(classes, (mixin) => {
         return findMixin(css, mixin, () => {
-          throw atRule.error(`No .${mixin} class found.`);
+          throw atRule.error(`No ${mixin} class found.`);
         })
       })
 
       rule.insertBefore(atRule, decls)
-      atRule.remove()
+
+      atRule.params = customProperties.join(' ')
+
+      if (_.isEmpty(customProperties)) {
+        atRule.remove()
+      }
     })
   })
 }
@@ -106,8 +116,13 @@ module.exports = postcss.plugin('tailwind', function (options) {
   return function (css) {
     options = options || require('./default-config')
 
+    // const normalize = fs.readFileSync('../node_modules/normalize.css/normalize.css')
+    // const base = fs.readFileSync('../node_modules/suitcss-base/lib/base.css')
+    // css.prepend(postcss.parse(base))
+    // css.prepend(postcss.parse(normalize))
+
     addCustomMediaQueries(css, options)
     generateUtilities(css, options)
-    substituteClassMixins(css)
+    // substituteClassApplyAtRules(css)
   }
 })
