@@ -7,6 +7,10 @@ const backgroundColors = require('./generators/background-colors')
 const shadows = require('./generators/shadows')
 const flex = require('./generators/flex')
 
+function cloneNodes(nodes) {
+  return _.map(nodes, node => node.clone())
+}
+
 function findMixin(css, mixin, onError) {
   const matches = []
 
@@ -55,9 +59,9 @@ function generateUtilities(css, options) {
   css.walkAtRules(atRule => {
     if (atRule.name === 'responsive') {
       const nodes = atRule.nodes
+      rules.push(...cloneNodes(nodes))
       css.insertBefore(atRule, nodes)
       atRule.remove()
-      rules.push(...nodes)
     }
     if (atRule.name === 'tailwind' && atRule.params === 'utilities') {
       const utilities = _.flatten([
@@ -65,11 +69,12 @@ function generateUtilities(css, options) {
         shadows(options),
         flex(),
       ])
+      rules.push(...cloneNodes(utilities))
       css.insertBefore(atRule, utilities)
       atRule.remove()
-      rules.push(...utilities)
     }
   })
+
 
   Object.keys(options.breakpoints).forEach(breakpoint => {
     const mediaQuery = postcss.atRule({
@@ -123,6 +128,6 @@ module.exports = postcss.plugin('tailwind', function (options) {
 
     addCustomMediaQueries(css, options)
     generateUtilities(css, options)
-    // substituteClassApplyAtRules(css)
+    substituteClassApplyAtRules(css)
   }
 })
