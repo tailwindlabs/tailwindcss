@@ -1,6 +1,8 @@
 const _ = require('lodash')
 const postcss = require('postcss')
 const cssnext = require('postcss-cssnext')
+const fs = require('fs')
+
 const backgroundColors = require('./generators/background-colors')
 const shadows = require('./generators/shadows')
 const flex = require('./generators/flex')
@@ -49,34 +51,39 @@ function addCustomMediaQueries(css, { breakpoints }) {
 }
 
 function generateUtilities(css, options) {
-  css.walkAtRules('tailwind', atRule => {
-    if (atRule.params === 'utilities') {
+  const rules = []
 
-      const rules = _.flatten([
+  css.walkAtRules(atRule => {
+    if (atRule.name === 'responsive') {
+      const nodes = atRule.nodes
+      css.insertBefore(atRule, nodes)
+      atRule.remove()
+      rules.push(...nodes)
+    }
+    if (atRule.name === 'tailwind' && atRule.params === 'utilities') {
+      const utilities = _.flatten([
         backgroundColors(options),
         shadows(options),
         flex(),
       ])
-
-      css.insertBefore(atRule, rules)
-
-      Object.keys(options.breakpoints).forEach(breakpoint => {
-        const mediaQuery = postcss.atRule({
-          name: 'media',
-          params: `(--breakpoint-${breakpoint})`,
-        })
-
-        mediaQuery.append(rules.map(rule => {
-          const cloned = rule.clone()
-          cloned.selector = `.${breakpoint}\\:${rule.selector.slice(1)}`
-          return cloned
-        }))
-        css.insertBefore(atRule, mediaQuery)
-      })
-
+      css.insertBefore(atRule, utilities)
       atRule.remove()
-      return false
+      rules.push(...utilities)
     }
+  })
+
+  Object.keys(options.breakpoints).forEach(breakpoint => {
+    const mediaQuery = postcss.atRule({
+      name: 'media',
+      params: `(--breakpoint-${breakpoint})`,
+    })
+
+    mediaQuery.append(rules.map(rule => {
+      const cloned = rule.clone()
+      cloned.selector = `.${breakpoint}\\:${rule.selector.slice(1)}`
+      return cloned
+    }))
+    css.append(mediaQuery)
   })
 }
 
