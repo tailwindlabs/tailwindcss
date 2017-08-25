@@ -1,0 +1,11 @@
+body {
+    background-color: red;
+}
+
+.red { background-color: red }
+
+.hemphill {
+    @apply .red;
+}
+
+@tailwind utilities;

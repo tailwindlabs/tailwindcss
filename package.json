@@ -7,7 +7,9 @@
     "Adam Wathan <adam.wathan@gmail.com>",
     "Jonathan Reinink <jonathan@reinink.ca>"
   ],
-  "scripts": {},
+  "scripts": {
+    "build": "node ./build.js"
+  },
   "dependencies": {
     "lodash": "^4.17.4",
     "normalize.css": "^6.0.0",
