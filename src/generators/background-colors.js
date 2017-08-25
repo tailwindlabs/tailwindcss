@@ -2,9 +2,11 @@ const postcss = require('postcss')
 const _ = require('lodash')
 
 function findColor(colors, color) {
-  return _.mapKeys(colors, (value, key) => {
+  const colorsNormalized = _.mapKeys(colors, (value, key) => {
     return _.camelCase(key)
-  })[_.camelCase(color)]
+  })
+
+  return _.get(colorsNormalized, _.camelCase(color), color)
 }
 
 module.exports = function ({ colors, backgroundColors }) {
