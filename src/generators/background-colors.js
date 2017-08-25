@@ -1,5 +1,5 @@
-const postcss = require('postcss')
 const _ = require('lodash')
+const defineClass = require('../util/define-class')
 
 function findColor(colors, color) {
   const colorsNormalized = _.mapKeys(colors, (value, key) => {
@@ -20,13 +20,8 @@ module.exports = function ({ colors, backgroundColors }) {
   }
 
   return _(backgroundColors).toPairs().map(([className, colorName]) => {
-    const kebabClass = _.kebabCase(className)
-
-    return postcss.rule({
-      selector: `.bg-${kebabClass}`
-    }).append({
-      prop: 'background-color',
-      value: findColor(colors, colorName)
+    return defineClass(`bg-${className}`, {
+        backgroundColor: findColor(colors, colorName),
     })
   }).value()
 }

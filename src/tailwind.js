@@ -2,6 +2,8 @@ const _ = require('lodash')
 const postcss = require('postcss')
 const cssnext = require('postcss-cssnext')
 const backgroundColors = require('./generators/background-colors')
+const shadows = require('./generators/shadows')
+const flex = require('./generators/flex')
 
 function findMixin(css, mixin, onError) {
   let match
@@ -51,10 +53,27 @@ function generateUtilities(css, options) {
     if (atRule.params === 'utilities') {
 
       const rules = _.flatten([
-        backgroundColors(options)
+        backgroundColors(options),
+        shadows(options),
+        flex(),
       ])
 
       css.insertBefore(atRule, rules)
+
+      Object.keys(options.breakpoints).forEach(breakpoint => {
+        const mediaQuery = postcss.atRule({
+          name: 'media',
+          params: `(--breakpoint-${breakpoint})`,
+        })
+
+        mediaQuery.append(rules.map(rule => {
+          const cloned = rule.clone()
+          cloned.selector = `.${breakpoint}\\:${rule.selector.slice(1)}`
+          return cloned
+        }))
+        css.insertBefore(atRule, mediaQuery)
+      })
+
       atRule.remove()
       return false
     }
