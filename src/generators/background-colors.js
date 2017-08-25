@@ -11,7 +11,12 @@ function findColor(colors, color) {
 
 module.exports = function ({ colors, backgroundColors }) {
   if (_.isArray(backgroundColors)) {
-    backgroundColors = _(backgroundColors).map(color => [color, color]).fromPairs()
+    backgroundColors = _(backgroundColors).flatMap(color => {
+      if (_.isString(color)) {
+        return [[color, color]]
+      }
+      return _.toPairs(color)
+    }).fromPairs()
   }
 
   return _(backgroundColors).toPairs().map(([className, colorName]) => {
