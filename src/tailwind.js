@@ -3,7 +3,7 @@ const postcss = require('postcss')
 const cssnext = require('postcss-cssnext')
 const backgroundColors = require('./generators/background-colors')
 
-function findMixin(css, mixin) {
+function findMixin(css, mixin, onError) {
   let match
 
   css.walkRules((rule) => {
@@ -12,6 +12,10 @@ function findMixin(css, mixin) {
       return false
     }
   })
+
+  if (_.isUndefined(match) && _.isFunction(onError)) {
+    onError()
+  }
 
   return match.clone().nodes
 }
@@ -62,7 +66,9 @@ function substituteClassMixins(css) {
     rule.walkAtRules('class', atRule => {
       const mixins = _.trim(atRule.params, ` "'`).split(' ')
       const decls = _.flatMap(mixins, (mixin) => {
-        return findMixin(css, mixin)
+        return findMixin(css, mixin, () => {
+          throw atRule.error(`No .${mixin} class found.`);
+        })
       })
 
       rule.insertBefore(atRule, decls)
