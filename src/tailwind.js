@@ -8,20 +8,19 @@ const shadows = require('./generators/shadows')
 const flex = require('./generators/flex')
 
 function findMixin(css, mixin, onError) {
-  let match
+  const matches = []
 
   css.walkRules((rule) => {
     if (_.trimStart(rule.selector, '.') === mixin) {
-      match = rule
-      return false
+      matches.push(rule)
     }
   })
 
-  if (_.isUndefined(match) && _.isFunction(onError)) {
+  if (_.isEmpty(matches) && _.isFunction(onError)) {
     onError()
   }
 
-  return match.clone().nodes
+  return _.flatten(matches.map(match => match.clone().nodes))
 }
 
 function addCustomMediaQueries(css, { breakpoints }) {
