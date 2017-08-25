@@ -1,20 +1,10 @@
-const _ = require('lodash');
-const postcss = require('postcss');
-const cssnext = require('postcss-cssnext');
-
-function defaultOptions() {
-  return {
-    breakpoints: {
-      sm: '576px',
-      md: '768px',
-      lg: '992px',
-      xl: '1200px',
-    },
-  }
-}
+const _ = require('lodash')
+const postcss = require('postcss')
+const cssnext = require('postcss-cssnext')
+const backgroundColors = require('./generators/background-colors')
 
 function findMixin(css, mixin) {
-  let match;
+  let match
 
   css.walkRules((rule) => {
     if (_.trimStart(rule.selector, '.') === mixin) {
@@ -26,7 +16,7 @@ function findMixin(css, mixin) {
   return match.clone().nodes
 }
 
-function addCustomMediaQueries(css, breakpoints) {
+function addCustomMediaQueries(css, { breakpoints }) {
   function buildMediaQuery(breakpoint) {
     if (_.isString(breakpoint)) {
       breakpoint = { min: breakpoint }
@@ -52,6 +42,21 @@ function addCustomMediaQueries(css, breakpoints) {
   })
 }
 
+function generateUtilities(css, options) {
+  css.walkAtRules('tailwind', atRule => {
+    if (atRule.params === 'utilities') {
+
+      const rules = _.flatten([
+        backgroundColors(options)
+      ])
+
+      css.insertBefore(atRule, rules)
+      atRule.remove()
+      return false
+    }
+  })
+}
+
 function substituteClassMixins(css) {
   css.walkRules(function (rule) {
     rule.walkAtRules('class', atRule => {
@@ -68,15 +73,10 @@ function substituteClassMixins(css) {
 
 module.exports = postcss.plugin('tailwind', function (options) {
   return function (css) {
-    options = options || defaultOptions()
+    options = options || require('./default-config')
 
-    addCustomMediaQueries(css, options.breakpoints)
-
-    // Generate utilities
-    // css.
-
+    addCustomMediaQueries(css, options)
+    generateUtilities(css, options)
     substituteClassMixins(css)
-
-    // return cssnext.process(css)
   }
 })
