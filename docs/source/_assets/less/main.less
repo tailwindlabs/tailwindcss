@@ -1,11 +1,22 @@
-@import "../../../../src/reset";
-@import "base";
+.foo {
+  @class "bg-light px-4";
+  background-color: red;
+  @media (--breakpoint-sm) {
+    @class "py-2";
+    background-color: green;
+  }
+}
 
-@import "prism";
-@import "markdown";
-@import "container";
+.bg-light {
+  background: #fff;
+}
 
-@import "../../../../src/utilities";
-@import "utilities";
+.px-4 {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
 
-@import "variables";
+.py-2 {
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+}

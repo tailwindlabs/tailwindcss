@@ -2,7 +2,18 @@ const _ = require('lodash');
 const postcss = require('postcss');
 const cssnext = require('postcss-cssnext');
 
-const findMixin = function (css, mixin) {
+function defaultOptions() {
+  return {
+    breakpoints: {
+      sm: '576px',
+      md: '768px',
+      lg: '992px',
+      xl: '1200px',
+    },
+  }
+}
+
+function findMixin(css, mixin) {
   let match;
 
   css.walkRules((rule) => {
@@ -15,28 +26,43 @@ const findMixin = function (css, mixin) {
   return match.clone().nodes
 }
 
+function addCustomMediaQueries(css, breakpoints) {
+  Object.keys(breakpoints).forEach(breakpoint => {
+    const variableName = `--breakpoint-${breakpoint}`
+    const mediaQuery = `(min-width: ${breakpoints[breakpoint]})`
+    const rule = postcss.atRule({
+      name: 'custom-media',
+      params: `${variableName} ${mediaQuery}`
+    })
+    css.prepend(rule)
+  })
+}
+
+function substituteClassMixins(css) {
+  css.walkRules(function (rule) {
+    rule.walkAtRules('class', atRule => {
+      const mixins = _.trim(atRule.params, ` "'`).split(' ')
+      const decls = _.flatMap(mixins, (mixin) => {
+        return findMixin(css, mixin)
+      })
+
+      rule.insertBefore(atRule, decls)
+      atRule.remove()
+    })
+  })
+}
+
 module.exports = postcss.plugin('tailwind', function (options) {
   return function (css) {
-    options = options || {}
+    options = options || defaultOptions()
 
-    // Add custom media query declarations to top of node tree
+    addCustomMediaQueries(css, options.breakpoints)
 
     // Generate utilities
     // css.
 
-    // Substitute component mixins
-    css.walkRules(function (rule) {
-      rule.walkAtRules('class', atRule => {
-        const mixins = _.trim(atRule.params, ` "'`).split(' ')
-        const decls = _.flatMap(mixins, (mixin) => {
-          return findMixin(css, mixin)
-        })
+    substituteClassMixins(css)
 
-        atRule.before(decls)
-        atRule.remove()
-      })
-    })
-
-    return cssnext.process(css)
+    // return cssnext.process(css)
   }
 })

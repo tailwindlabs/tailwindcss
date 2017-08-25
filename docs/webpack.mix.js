@@ -12,8 +12,9 @@ const mix = require('laravel-mix');
 */
 
 mix.less('source/_assets/less/main.less', 'source/css')
-  // .options({
-  //   postCss: [
-  //     require('./tailwind')(require('./resources/assets/less/tailwind.js')),
-  //   ]
-  // })
+  .options({
+    postCss: [
+      require('./../src/tailwind.js')(),
+      require('postcss-cssnext')()
+    ]
+  })
