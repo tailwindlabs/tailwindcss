@@ -7,14 +7,10 @@ function buildMediaQuery(breakpoint) {
   }
 
   return _(breakpoint).toPairs().map(([feature, value]) => {
-    feature = _.get(
-    {
+    feature = _.get({
       min: 'min-width',
       max: 'max-width',
-    },
-    feature,
-    feature
-    )
+    }, feature, feature)
 
     return `(${feature}: ${value})`
   }).join(' and ')

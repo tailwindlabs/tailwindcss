@@ -21,7 +21,7 @@ module.exports = function ({ colors, backgroundColors }) {
 
   return _(backgroundColors).toPairs().map(([className, colorName]) => {
     return defineClass(`bg-${className}`, {
-        backgroundColor: findColor(colors, colorName),
+      backgroundColor: findColor(colors, colorName),
     })
   }).value()
 }

@@ -9,9 +9,7 @@ module.exports = function defineClass(className, properties) {
     })
   })
 
-  return postcss
-    .rule({
-      selector: `.${_.kebabCase(className)}`,
-    })
-    .append(decls)
+  return postcss.rule({
+    selector: `.${_.kebabCase(className)}`,
+  }).append(decls)
 }

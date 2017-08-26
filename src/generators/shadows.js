@@ -4,7 +4,7 @@ const defineClass = require('../util/defineClass')
 module.exports = function ({ shadows }) {
   return _(shadows).toPairs().map(([className, shadow]) => {
     return defineClass(`shadow-${className}`, {
-        boxShadow: shadow,
+      boxShadow: shadow,
     })
   }).value()
 }

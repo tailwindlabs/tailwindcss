@@ -1,17 +1,17 @@
 const _ = require('lodash')
 
 module.exports = function findMixin(css, mixin, onError) {
-    const matches = []
+  const matches = []
 
-    css.walkRules(rule => {
-        if (rule.selector === mixin) {
-            matches.push(rule)
-        }
-    })
-
-    if (_.isEmpty(matches) && _.isFunction(onError)) {
-        onError()
+  css.walkRules(rule => {
+    if (rule.selector === mixin) {
+      matches.push(rule)
     }
+  })
 
-    return _.flatten(matches.map(match => match.clone().nodes))
+  if (_.isEmpty(matches) && _.isFunction(onError)) {
+    onError()
+  }
+
+  return _.flatten(matches.map(match => match.clone().nodes))
 }
