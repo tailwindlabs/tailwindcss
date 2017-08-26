@@ -16,199 +16,199 @@ body {
 }
 
 .bg-light {
-    background-color: #ffffff;
+    background-color: ffffff;
 }
 
 .bg-light-soft {
-    background-color: #f7f9fa;
+    background-color: f-7-f-9-fa;
 }
 
 .bg-light-softer {
-    background-color: #f0f2f5;
+    background-color: f-0-f-2-f-5;
 }
 
 .bg-light-softest {
-    background-color: #dfe3e8;
+    background-color: dfe-3-e-8;
 }
 
 .bg-dark {
-    background-color: #212b35;
+    background-color: 212-b-35;
 }
 
 .bg-dark-soft {
-    background-color: #404e5c;
+    background-color: 404-e-5-c;
 }
 
 .bg-dark-softer {
-    background-color: #647382;
+    background-color: 647382;
 }
 
 .bg-dark-softest {
-    background-color: #919eab;
+    background-color: 919-eab;
 }
 
 .bg-red-dark {
-    background-color: #d43633;
+    background-color: d-43633;
 }
 
 .bg-red {
-    background-color: #f25451;
+    background-color: f-25451;
 }
 
 .bg-red-light {
-    background-color: #fa8785;
+    background-color: fa-8785;
 }
 
 .bg-red-lightest {
-    background-color: #fff1f0;
+    background-color: fff-1-f-0;
 }
 
 .bg-orange-dark {
-    background-color: #f29500;
+    background-color: f-29500;
 }
 
 .bg-orange {
-    background-color: #ffb82b;
+    background-color: ffb-82-b;
 }
 
 .bg-orange-light {
-    background-color: #ffd685;
+    background-color: ffd-685;
 }
 
 .bg-orange-lightest {
-    background-color: #fff8eb;
+    background-color: fff-8-eb;
 }
 
 .bg-yellow-dark {
-    background-color: #ffc400;
+    background-color: ffc-400;
 }
 
 .bg-yellow {
-    background-color: #ffe14a;
+    background-color: ffe-14-a;
 }
 
 .bg-yellow-light {
-    background-color: #ffea83;
+    background-color: ffea-83;
 }
 
 .bg-yellow-lightest {
-    background-color: #fffbe5;
+    background-color: fffbe-5;
 }
 
 .bg-green-dark {
-    background-color: #34ae4c;
+    background-color: 34-ae-4-c;
 }
 
 .bg-green {
-    background-color: #57d06f;
+    background-color: 57-d-06-f;
 }
 
 .bg-green-light {
-    background-color: #b1f3be;
+    background-color: b-1-f-3-be;
 }
 
 .bg-green-lightest {
-    background-color: #eefff1;
+    background-color: eefff-1;
 }
 
 .bg-teal-dark {
-    background-color: #249e9a;
+    background-color: 249-e-9-a;
 }
 
 .bg-teal {
-    background-color: #4dc0b5;
+    background-color: 4-dc-0-b-5;
 }
 
 .bg-teal-light {
-    background-color: #9eebe4;
+    background-color: 9-eebe-4;
 }
 
 .bg-teal-lightest {
-    background-color: #eefffd;
+    background-color: eefffd;
 }
 
 .bg-blue-dark {
-    background-color: #3687c8;
+    background-color: 3687-c-8;
 }
 
 .bg-blue {
-    background-color: #4aa2ea;
+    background-color: 4-aa-2-ea;
 }
 
 .bg-blue-light {
-    background-color: #acdaff;
+    background-color: acdaff;
 }
 
 .bg-blue-lightest {
-    background-color: #f1f9ff;
+    background-color: f-1-f-9-ff;
 }
 
 .bg-indigo-dark {
-    background-color: #4957a5;
+    background-color: 4957-a-5;
 }
 
 .bg-indigo {
-    background-color: #6574cd;
+    background-color: 6574-cd;
 }
 
 .bg-indigo-light {
-    background-color: #bcc5fb;
+    background-color: bcc-5-fb;
 }
 
 .bg-indigo-lightest {
-    background-color: #f4f5ff;
+    background-color: f-4-f-5-ff;
 }
 
 .bg-purple-dark {
-    background-color: #714cb4;
+    background-color: 714-cb-4;
 }
 
 .bg-purple {
-    background-color: #976ae6;
+    background-color: 976-ae-6;
 }
 
 .bg-purple-light {
-    background-color: #ceb3ff;
+    background-color: ceb-3-ff;
 }
 
 .bg-purple-lightest {
-    background-color: #f7f3ff;
+    background-color: f-7-f-3-ff;
 }
 
 .bg-pink-dark {
-    background-color: #d84f7d;
+    background-color: d-84-f-7-d;
 }
 
 .bg-pink {
-    background-color: #f66d9b;
+    background-color: f-66-d-9-b;
 }
 
 .bg-pink-light {
-    background-color: #ffa5c3;
+    background-color: ffa-5-c-3;
 }
 
 .bg-pink-lightest {
-    background-color: #fdf2f5;
+    background-color: fdf-2-f-5;
 }
 
 .shadow-1 {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.15);
+    box-shadow: 0-1-px-3-px-rgba-0-0-0-0-08-0-1-px-2-px-rgba-0-0-0-0-15;
 }
 
 .shadow-2 {
-    box-shadow: 0 3px 6px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.13);
+    box-shadow: 0-3-px-6-px-rgba-0-0-0-0-12-0-3-px-6-px-rgba-0-0-0-0-13;
 }
 
 .shadow-3 {
-    box-shadow: 0 10px 20px rgba(0,0,0,0.13), 0 6px 6px rgba(0,0,0,0.13);
+    box-shadow: 0-10-px-20-px-rgba-0-0-0-0-13-0-6-px-6-px-rgba-0-0-0-0-13;
 }
 
 .shadow-4 {
-    box-shadow: 0 14px 28px rgba(0,0,0,0.16), 0 10px 10px rgba(0,0,0,0.11);
+    box-shadow: 0-14-px-28-px-rgba-0-0-0-0-16-0-10-px-10-px-rgba-0-0-0-0-11;
 }
 
 .shadow-5 {
-    box-shadow: 0 19px 38px rgba(0,0,0,0.18), 0 15px 12px rgba(0,0,0,0.11);
+    box-shadow: 0-19-px-38-px-rgba-0-0-0-0-18-0-15-px-12-px-rgba-0-0-0-0-11;
 }
 
 .flex {
@@ -318,199 +318,199 @@ body {
 @media (--breakpoint-sm) {
 
     .sm\:bg-light {
-        background-color: #ffffff;
+        background-color: ffffff;
     }
 
     .sm\:bg-light-soft {
-        background-color: #f7f9fa;
+        background-color: f-7-f-9-fa;
     }
 
     .sm\:bg-light-softer {
-        background-color: #f0f2f5;
+        background-color: f-0-f-2-f-5;
     }
 
     .sm\:bg-light-softest {
-        background-color: #dfe3e8;
+        background-color: dfe-3-e-8;
     }
 
     .sm\:bg-dark {
-        background-color: #212b35;
+        background-color: 212-b-35;
     }
 
     .sm\:bg-dark-soft {
-        background-color: #404e5c;
+        background-color: 404-e-5-c;
     }
 
     .sm\:bg-dark-softer {
-        background-color: #647382;
+        background-color: 647382;
     }
 
     .sm\:bg-dark-softest {
-        background-color: #919eab;
+        background-color: 919-eab;
     }
 
     .sm\:bg-red-dark {
-        background-color: #d43633;
+        background-color: d-43633;
     }
 
     .sm\:bg-red {
-        background-color: #f25451;
+        background-color: f-25451;
     }
 
     .sm\:bg-red-light {
-        background-color: #fa8785;
+        background-color: fa-8785;
     }
 
     .sm\:bg-red-lightest {
-        background-color: #fff1f0;
+        background-color: fff-1-f-0;
     }
 
     .sm\:bg-orange-dark {
-        background-color: #f29500;
+        background-color: f-29500;
     }
 
     .sm\:bg-orange {
-        background-color: #ffb82b;
+        background-color: ffb-82-b;
     }
 
     .sm\:bg-orange-light {
-        background-color: #ffd685;
+        background-color: ffd-685;
     }
 
     .sm\:bg-orange-lightest {
-        background-color: #fff8eb;
+        background-color: fff-8-eb;
     }
 
     .sm\:bg-yellow-dark {
-        background-color: #ffc400;
+        background-color: ffc-400;
     }
 
     .sm\:bg-yellow {
-        background-color: #ffe14a;
+        background-color: ffe-14-a;
     }
 
     .sm\:bg-yellow-light {
-        background-color: #ffea83;
+        background-color: ffea-83;
     }
 
     .sm\:bg-yellow-lightest {
-        background-color: #fffbe5;
+        background-color: fffbe-5;
     }
 
     .sm\:bg-green-dark {
-        background-color: #34ae4c;
+        background-color: 34-ae-4-c;
     }
 
     .sm\:bg-green {
-        background-color: #57d06f;
+        background-color: 57-d-06-f;
     }
 
     .sm\:bg-green-light {
-        background-color: #b1f3be;
+        background-color: b-1-f-3-be;
     }
 
     .sm\:bg-green-lightest {
-        background-color: #eefff1;
+        background-color: eefff-1;
     }
 
     .sm\:bg-teal-dark {
-        background-color: #249e9a;
+        background-color: 249-e-9-a;
     }
 
     .sm\:bg-teal {
-        background-color: #4dc0b5;
+        background-color: 4-dc-0-b-5;
     }
 
     .sm\:bg-teal-light {
-        background-color: #9eebe4;
+        background-color: 9-eebe-4;
     }
 
     .sm\:bg-teal-lightest {
-        background-color: #eefffd;
+        background-color: eefffd;
     }
 
     .sm\:bg-blue-dark {
-        background-color: #3687c8;
+        background-color: 3687-c-8;
     }
 
     .sm\:bg-blue {
-        background-color: #4aa2ea;
+        background-color: 4-aa-2-ea;
     }
 
     .sm\:bg-blue-light {
-        background-color: #acdaff;
+        background-color: acdaff;
     }
 
     .sm\:bg-blue-lightest {
-        background-color: #f1f9ff;
+        background-color: f-1-f-9-ff;
     }
 
     .sm\:bg-indigo-dark {
-        background-color: #4957a5;
+        background-color: 4957-a-5;
     }
 
     .sm\:bg-indigo {
-        background-color: #6574cd;
+        background-color: 6574-cd;
     }
 
     .sm\:bg-indigo-light {
-        background-color: #bcc5fb;
+        background-color: bcc-5-fb;
     }
 
     .sm\:bg-indigo-lightest {
-        background-color: #f4f5ff;
+        background-color: f-4-f-5-ff;
     }
 
     .sm\:bg-purple-dark {
-        background-color: #714cb4;
+        background-color: 714-cb-4;
     }
 
     .sm\:bg-purple {
-        background-color: #976ae6;
+        background-color: 976-ae-6;
     }
 
     .sm\:bg-purple-light {
-        background-color: #ceb3ff;
+        background-color: ceb-3-ff;
     }
 
     .sm\:bg-purple-lightest {
-        background-color: #f7f3ff;
+        background-color: f-7-f-3-ff;
     }
 
     .sm\:bg-pink-dark {
-        background-color: #d84f7d;
+        background-color: d-84-f-7-d;
     }
 
     .sm\:bg-pink {
-        background-color: #f66d9b;
+        background-color: f-66-d-9-b;
     }
 
     .sm\:bg-pink-light {
-        background-color: #ffa5c3;
+        background-color: ffa-5-c-3;
     }
 
     .sm\:bg-pink-lightest {
-        background-color: #fdf2f5;
+        background-color: fdf-2-f-5;
     }
 
     .sm\:shadow-1 {
-        box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.15);
+        box-shadow: 0-1-px-3-px-rgba-0-0-0-0-08-0-1-px-2-px-rgba-0-0-0-0-15;
     }
 
     .sm\:shadow-2 {
-        box-shadow: 0 3px 6px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.13);
+        box-shadow: 0-3-px-6-px-rgba-0-0-0-0-12-0-3-px-6-px-rgba-0-0-0-0-13;
     }
 
     .sm\:shadow-3 {
-        box-shadow: 0 10px 20px rgba(0,0,0,0.13), 0 6px 6px rgba(0,0,0,0.13);
+        box-shadow: 0-10-px-20-px-rgba-0-0-0-0-13-0-6-px-6-px-rgba-0-0-0-0-13;
     }
 
     .sm\:shadow-4 {
-        box-shadow: 0 14px 28px rgba(0,0,0,0.16), 0 10px 10px rgba(0,0,0,0.11);
+        box-shadow: 0-14-px-28-px-rgba-0-0-0-0-16-0-10-px-10-px-rgba-0-0-0-0-11;
     }
 
     .sm\:shadow-5 {
-        box-shadow: 0 19px 38px rgba(0,0,0,0.18), 0 15px 12px rgba(0,0,0,0.11);
+        box-shadow: 0-19-px-38-px-rgba-0-0-0-0-18-0-15-px-12-px-rgba-0-0-0-0-11;
     }
 
     .sm\:flex {
@@ -621,199 +621,199 @@ body {
 @media (--breakpoint-md) {
 
     .md\:bg-light {
-        background-color: #ffffff;
+        background-color: ffffff;
     }
 
     .md\:bg-light-soft {
-        background-color: #f7f9fa;
+        background-color: f-7-f-9-fa;
     }
 
     .md\:bg-light-softer {
-        background-color: #f0f2f5;
+        background-color: f-0-f-2-f-5;
     }
 
     .md\:bg-light-softest {
-        background-color: #dfe3e8;
+        background-color: dfe-3-e-8;
     }
 
     .md\:bg-dark {
-        background-color: #212b35;
+        background-color: 212-b-35;
     }
 
     .md\:bg-dark-soft {
-        background-color: #404e5c;
+        background-color: 404-e-5-c;
     }
 
     .md\:bg-dark-softer {
-        background-color: #647382;
+        background-color: 647382;
     }
 
     .md\:bg-dark-softest {
-        background-color: #919eab;
+        background-color: 919-eab;
     }
 
     .md\:bg-red-dark {
-        background-color: #d43633;
+        background-color: d-43633;
     }
 
     .md\:bg-red {
-        background-color: #f25451;
+        background-color: f-25451;
     }
 
     .md\:bg-red-light {
-        background-color: #fa8785;
+        background-color: fa-8785;
     }
 
     .md\:bg-red-lightest {
-        background-color: #fff1f0;
+        background-color: fff-1-f-0;
     }
 
     .md\:bg-orange-dark {
-        background-color: #f29500;
+        background-color: f-29500;
     }
 
     .md\:bg-orange {
-        background-color: #ffb82b;
+        background-color: ffb-82-b;
     }
 
     .md\:bg-orange-light {
-        background-color: #ffd685;
+        background-color: ffd-685;
     }
 
     .md\:bg-orange-lightest {
-        background-color: #fff8eb;
+        background-color: fff-8-eb;
     }
 
     .md\:bg-yellow-dark {
-        background-color: #ffc400;
+        background-color: ffc-400;
     }
 
     .md\:bg-yellow {
-        background-color: #ffe14a;
+        background-color: ffe-14-a;
     }
 
     .md\:bg-yellow-light {
-        background-color: #ffea83;
+        background-color: ffea-83;
     }
 
     .md\:bg-yellow-lightest {
-        background-color: #fffbe5;
+        background-color: fffbe-5;
     }
 
     .md\:bg-green-dark {
-        background-color: #34ae4c;
+        background-color: 34-ae-4-c;
     }
 
     .md\:bg-green {
-        background-color: #57d06f;
+        background-color: 57-d-06-f;
     }
 
     .md\:bg-green-light {
-        background-color: #b1f3be;
+        background-color: b-1-f-3-be;
     }
 
     .md\:bg-green-lightest {
-        background-color: #eefff1;
+        background-color: eefff-1;
     }
 
     .md\:bg-teal-dark {
-        background-color: #249e9a;
+        background-color: 249-e-9-a;
     }
 
     .md\:bg-teal {
-        background-color: #4dc0b5;
+        background-color: 4-dc-0-b-5;
     }
 
     .md\:bg-teal-light {
-        background-color: #9eebe4;
+        background-color: 9-eebe-4;
     }
 
     .md\:bg-teal-lightest {
-        background-color: #eefffd;
+        background-color: eefffd;
     }
 
     .md\:bg-blue-dark {
-        background-color: #3687c8;
+        background-color: 3687-c-8;
     }
 
     .md\:bg-blue {
-        background-color: #4aa2ea;
+        background-color: 4-aa-2-ea;
     }
 
     .md\:bg-blue-light {
-        background-color: #acdaff;
+        background-color: acdaff;
     }
 
     .md\:bg-blue-lightest {
-        background-color: #f1f9ff;
+        background-color: f-1-f-9-ff;
     }
 
     .md\:bg-indigo-dark {
-        background-color: #4957a5;
+        background-color: 4957-a-5;
     }
 
     .md\:bg-indigo {
-        background-color: #6574cd;
+        background-color: 6574-cd;
     }
 
     .md\:bg-indigo-light {
-        background-color: #bcc5fb;
+        background-color: bcc-5-fb;
     }
 
     .md\:bg-indigo-lightest {
-        background-color: #f4f5ff;
+        background-color: f-4-f-5-ff;
     }
 
     .md\:bg-purple-dark {
-        background-color: #714cb4;
+        background-color: 714-cb-4;
     }
 
     .md\:bg-purple {
-        background-color: #976ae6;
+        background-color: 976-ae-6;
     }
 
     .md\:bg-purple-light {
-        background-color: #ceb3ff;
+        background-color: ceb-3-ff;
     }
 
     .md\:bg-purple-lightest {
-        background-color: #f7f3ff;
+        background-color: f-7-f-3-ff;
     }
 
     .md\:bg-pink-dark {
-        background-color: #d84f7d;
+        background-color: d-84-f-7-d;
     }
 
     .md\:bg-pink {
-        background-color: #f66d9b;
+        background-color: f-66-d-9-b;
     }
 
     .md\:bg-pink-light {
-        background-color: #ffa5c3;
+        background-color: ffa-5-c-3;
     }
 
     .md\:bg-pink-lightest {
-        background-color: #fdf2f5;
+        background-color: fdf-2-f-5;
     }
 
     .md\:shadow-1 {
-        box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.15);
+        box-shadow: 0-1-px-3-px-rgba-0-0-0-0-08-0-1-px-2-px-rgba-0-0-0-0-15;
     }
 
     .md\:shadow-2 {
-        box-shadow: 0 3px 6px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.13);
+        box-shadow: 0-3-px-6-px-rgba-0-0-0-0-12-0-3-px-6-px-rgba-0-0-0-0-13;
     }
 
     .md\:shadow-3 {
-        box-shadow: 0 10px 20px rgba(0,0,0,0.13), 0 6px 6px rgba(0,0,0,0.13);
+        box-shadow: 0-10-px-20-px-rgba-0-0-0-0-13-0-6-px-6-px-rgba-0-0-0-0-13;
     }
 
     .md\:shadow-4 {
-        box-shadow: 0 14px 28px rgba(0,0,0,0.16), 0 10px 10px rgba(0,0,0,0.11);
+        box-shadow: 0-14-px-28-px-rgba-0-0-0-0-16-0-10-px-10-px-rgba-0-0-0-0-11;
     }
 
     .md\:shadow-5 {
-        box-shadow: 0 19px 38px rgba(0,0,0,0.18), 0 15px 12px rgba(0,0,0,0.11);
+        box-shadow: 0-19-px-38-px-rgba-0-0-0-0-18-0-15-px-12-px-rgba-0-0-0-0-11;
     }
 
     .md\:flex {
@@ -924,199 +924,199 @@ body {
 @media (--breakpoint-lg) {
 
     .lg\:bg-light {
-        background-color: #ffffff;
+        background-color: ffffff;
     }
 
     .lg\:bg-light-soft {
-        background-color: #f7f9fa;
+        background-color: f-7-f-9-fa;
     }
 
     .lg\:bg-light-softer {
-        background-color: #f0f2f5;
+        background-color: f-0-f-2-f-5;
     }
 
     .lg\:bg-light-softest {
-        background-color: #dfe3e8;
+        background-color: dfe-3-e-8;
     }
 
     .lg\:bg-dark {
-        background-color: #212b35;
+        background-color: 212-b-35;
     }
 
     .lg\:bg-dark-soft {
-        background-color: #404e5c;
+        background-color: 404-e-5-c;
     }
 
     .lg\:bg-dark-softer {
-        background-color: #647382;
+        background-color: 647382;
     }
 
     .lg\:bg-dark-softest {
-        background-color: #919eab;
+        background-color: 919-eab;
     }
 
     .lg\:bg-red-dark {
-        background-color: #d43633;
+        background-color: d-43633;
     }
 
     .lg\:bg-red {
-        background-color: #f25451;
+        background-color: f-25451;
     }
 
     .lg\:bg-red-light {
-        background-color: #fa8785;
+        background-color: fa-8785;
     }
 
     .lg\:bg-red-lightest {
-        background-color: #fff1f0;
+        background-color: fff-1-f-0;
     }
 
     .lg\:bg-orange-dark {
-        background-color: #f29500;
+        background-color: f-29500;
     }
 
     .lg\:bg-orange {
-        background-color: #ffb82b;
+        background-color: ffb-82-b;
     }
 
     .lg\:bg-orange-light {
-        background-color: #ffd685;
+        background-color: ffd-685;
     }
 
     .lg\:bg-orange-lightest {
-        background-color: #fff8eb;
+        background-color: fff-8-eb;
     }
 
     .lg\:bg-yellow-dark {
-        background-color: #ffc400;
+        background-color: ffc-400;
     }
 
     .lg\:bg-yellow {
-        background-color: #ffe14a;
+        background-color: ffe-14-a;
     }
 
     .lg\:bg-yellow-light {
-        background-color: #ffea83;
+        background-color: ffea-83;
     }
 
     .lg\:bg-yellow-lightest {
-        background-color: #fffbe5;
+        background-color: fffbe-5;
     }
 
     .lg\:bg-green-dark {
-        background-color: #34ae4c;
+        background-color: 34-ae-4-c;
     }
 
     .lg\:bg-green {
-        background-color: #57d06f;
+        background-color: 57-d-06-f;
     }
 
     .lg\:bg-green-light {
-        background-color: #b1f3be;
+        background-color: b-1-f-3-be;
     }
 
     .lg\:bg-green-lightest {
-        background-color: #eefff1;
+        background-color: eefff-1;
     }
 
     .lg\:bg-teal-dark {
-        background-color: #249e9a;
+        background-color: 249-e-9-a;
     }
 
     .lg\:bg-teal {
-        background-color: #4dc0b5;
+        background-color: 4-dc-0-b-5;
     }
 
     .lg\:bg-teal-light {
-        background-color: #9eebe4;
+        background-color: 9-eebe-4;
     }
 
     .lg\:bg-teal-lightest {
-        background-color: #eefffd;
+        background-color: eefffd;
     }
 
     .lg\:bg-blue-dark {
-        background-color: #3687c8;
+        background-color: 3687-c-8;
     }
 
     .lg\:bg-blue {
-        background-color: #4aa2ea;
+        background-color: 4-aa-2-ea;
     }
 
     .lg\:bg-blue-light {
-        background-color: #acdaff;
+        background-color: acdaff;
     }
 
     .lg\:bg-blue-lightest {
-        background-color: #f1f9ff;
+        background-color: f-1-f-9-ff;
     }
 
     .lg\:bg-indigo-dark {
-        background-color: #4957a5;
+        background-color: 4957-a-5;
     }
 
     .lg\:bg-indigo {
-        background-color: #6574cd;
+        background-color: 6574-cd;
     }
 
     .lg\:bg-indigo-light {
-        background-color: #bcc5fb;
+        background-color: bcc-5-fb;
     }
 
     .lg\:bg-indigo-lightest {
-        background-color: #f4f5ff;
+        background-color: f-4-f-5-ff;
     }
 
     .lg\:bg-purple-dark {
-        background-color: #714cb4;
+        background-color: 714-cb-4;
     }
 
     .lg\:bg-purple {
-        background-color: #976ae6;
+        background-color: 976-ae-6;
     }
 
     .lg\:bg-purple-light {
-        background-color: #ceb3ff;
+        background-color: ceb-3-ff;
     }
 
     .lg\:bg-purple-lightest {
-        background-color: #f7f3ff;
+        background-color: f-7-f-3-ff;
     }
 
     .lg\:bg-pink-dark {
-        background-color: #d84f7d;
+        background-color: d-84-f-7-d;
     }
 
     .lg\:bg-pink {
-        background-color: #f66d9b;
+        background-color: f-66-d-9-b;
     }
 
     .lg\:bg-pink-light {
-        background-color: #ffa5c3;
+        background-color: ffa-5-c-3;
     }
 
     .lg\:bg-pink-lightest {
-        background-color: #fdf2f5;
+        background-color: fdf-2-f-5;
     }
 
     .lg\:shadow-1 {
-        box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.15);
+        box-shadow: 0-1-px-3-px-rgba-0-0-0-0-08-0-1-px-2-px-rgba-0-0-0-0-15;
     }
 
     .lg\:shadow-2 {
-        box-shadow: 0 3px 6px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.13);
+        box-shadow: 0-3-px-6-px-rgba-0-0-0-0-12-0-3-px-6-px-rgba-0-0-0-0-13;
     }
 
     .lg\:shadow-3 {
-        box-shadow: 0 10px 20px rgba(0,0,0,0.13), 0 6px 6px rgba(0,0,0,0.13);
+        box-shadow: 0-10-px-20-px-rgba-0-0-0-0-13-0-6-px-6-px-rgba-0-0-0-0-13;
     }
 
     .lg\:shadow-4 {
-        box-shadow: 0 14px 28px rgba(0,0,0,0.16), 0 10px 10px rgba(0,0,0,0.11);
+        box-shadow: 0-14-px-28-px-rgba-0-0-0-0-16-0-10-px-10-px-rgba-0-0-0-0-11;
     }
 
     .lg\:shadow-5 {
-        box-shadow: 0 19px 38px rgba(0,0,0,0.18), 0 15px 12px rgba(0,0,0,0.11);
+        box-shadow: 0-19-px-38-px-rgba-0-0-0-0-18-0-15-px-12-px-rgba-0-0-0-0-11;
     }
 
     .lg\:flex {
@@ -1227,199 +1227,199 @@ body {
 @media (--breakpoint-xl) {
 
     .xl\:bg-light {
-        background-color: #ffffff;
+        background-color: ffffff;
     }
 
     .xl\:bg-light-soft {
-        background-color: #f7f9fa;
+        background-color: f-7-f-9-fa;
     }
 
     .xl\:bg-light-softer {
-        background-color: #f0f2f5;
+        background-color: f-0-f-2-f-5;
     }
 
     .xl\:bg-light-softest {
-        background-color: #dfe3e8;
+        background-color: dfe-3-e-8;
     }
 
     .xl\:bg-dark {
-        background-color: #212b35;
+        background-color: 212-b-35;
     }
 
     .xl\:bg-dark-soft {
-        background-color: #404e5c;
+        background-color: 404-e-5-c;
     }
 
     .xl\:bg-dark-softer {
-        background-color: #647382;
+        background-color: 647382;
     }
 
     .xl\:bg-dark-softest {
-        background-color: #919eab;
+        background-color: 919-eab;
     }
 
     .xl\:bg-red-dark {
-        background-color: #d43633;
+        background-color: d-43633;
     }
 
     .xl\:bg-red {
-        background-color: #f25451;
+        background-color: f-25451;
     }
 
     .xl\:bg-red-light {
-        background-color: #fa8785;
+        background-color: fa-8785;
     }
 
     .xl\:bg-red-lightest {
-        background-color: #fff1f0;
+        background-color: fff-1-f-0;
     }
 
     .xl\:bg-orange-dark {
-        background-color: #f29500;
+        background-color: f-29500;
     }
 
     .xl\:bg-orange {
-        background-color: #ffb82b;
+        background-color: ffb-82-b;
     }
 
     .xl\:bg-orange-light {
-        background-color: #ffd685;
+        background-color: ffd-685;
     }
 
     .xl\:bg-orange-lightest {
-        background-color: #fff8eb;
+        background-color: fff-8-eb;
     }
 
     .xl\:bg-yellow-dark {
-        background-color: #ffc400;
+        background-color: ffc-400;
     }
 
     .xl\:bg-yellow {
-        background-color: #ffe14a;
+        background-color: ffe-14-a;
     }
 
     .xl\:bg-yellow-light {
-        background-color: #ffea83;
+        background-color: ffea-83;
     }
 
     .xl\:bg-yellow-lightest {
-        background-color: #fffbe5;
+        background-color: fffbe-5;
     }
 
     .xl\:bg-green-dark {
-        background-color: #34ae4c;
+        background-color: 34-ae-4-c;
     }
 
     .xl\:bg-green {
-        background-color: #57d06f;
+        background-color: 57-d-06-f;
     }
 
     .xl\:bg-green-light {
-        background-color: #b1f3be;
+        background-color: b-1-f-3-be;
     }
 
     .xl\:bg-green-lightest {
-        background-color: #eefff1;
+        background-color: eefff-1;
     }
 
     .xl\:bg-teal-dark {
-        background-color: #249e9a;
+        background-color: 249-e-9-a;
     }
 
     .xl\:bg-teal {
-        background-color: #4dc0b5;
+        background-color: 4-dc-0-b-5;
     }
 
     .xl\:bg-teal-light {
-        background-color: #9eebe4;
+        background-color: 9-eebe-4;
     }
 
     .xl\:bg-teal-lightest {
-        background-color: #eefffd;
+        background-color: eefffd;
     }
 
     .xl\:bg-blue-dark {
-        background-color: #3687c8;
+        background-color: 3687-c-8;
     }
 
     .xl\:bg-blue {
-        background-color: #4aa2ea;
+        background-color: 4-aa-2-ea;
     }
 
     .xl\:bg-blue-light {
-        background-color: #acdaff;
+        background-color: acdaff;
     }
 
     .xl\:bg-blue-lightest {
-        background-color: #f1f9ff;
+        background-color: f-1-f-9-ff;
     }
 
     .xl\:bg-indigo-dark {
-        background-color: #4957a5;
+        background-color: 4957-a-5;
     }
 
     .xl\:bg-indigo {
-        background-color: #6574cd;
+        background-color: 6574-cd;
     }
 
     .xl\:bg-indigo-light {
-        background-color: #bcc5fb;
+        background-color: bcc-5-fb;
     }
 
     .xl\:bg-indigo-lightest {
-        background-color: #f4f5ff;
+        background-color: f-4-f-5-ff;
     }
 
     .xl\:bg-purple-dark {
-        background-color: #714cb4;
+        background-color: 714-cb-4;
     }
 
     .xl\:bg-purple {
-        background-color: #976ae6;
+        background-color: 976-ae-6;
     }
 
     .xl\:bg-purple-light {
-        background-color: #ceb3ff;
+        background-color: ceb-3-ff;
     }
 
     .xl\:bg-purple-lightest {
-        background-color: #f7f3ff;
+        background-color: f-7-f-3-ff;
     }
 
     .xl\:bg-pink-dark {
-        background-color: #d84f7d;
+        background-color: d-84-f-7-d;
     }
 
     .xl\:bg-pink {
-        background-color: #f66d9b;
+        background-color: f-66-d-9-b;
     }
 
     .xl\:bg-pink-light {
-        background-color: #ffa5c3;
+        background-color: ffa-5-c-3;
     }
 
     .xl\:bg-pink-lightest {
-        background-color: #fdf2f5;
+        background-color: fdf-2-f-5;
     }
 
     .xl\:shadow-1 {
-        box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.15);
+        box-shadow: 0-1-px-3-px-rgba-0-0-0-0-08-0-1-px-2-px-rgba-0-0-0-0-15;
     }
 
     .xl\:shadow-2 {
-        box-shadow: 0 3px 6px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.13);
+        box-shadow: 0-3-px-6-px-rgba-0-0-0-0-12-0-3-px-6-px-rgba-0-0-0-0-13;
     }
 
     .xl\:shadow-3 {
-        box-shadow: 0 10px 20px rgba(0,0,0,0.13), 0 6px 6px rgba(0,0,0,0.13);
+        box-shadow: 0-10-px-20-px-rgba-0-0-0-0-13-0-6-px-6-px-rgba-0-0-0-0-13;
     }
 
     .xl\:shadow-4 {
-        box-shadow: 0 14px 28px rgba(0,0,0,0.16), 0 10px 10px rgba(0,0,0,0.11);
+        box-shadow: 0-14-px-28-px-rgba-0-0-0-0-16-0-10-px-10-px-rgba-0-0-0-0-11;
     }
 
     .xl\:shadow-5 {
-        box-shadow: 0 19px 38px rgba(0,0,0,0.18), 0 15px 12px rgba(0,0,0,0.11);
+        box-shadow: 0-19-px-38-px-rgba-0-0-0-0-18-0-15-px-12-px-rgba-0-0-0-0-11;
     }
 
     .xl\:flex {

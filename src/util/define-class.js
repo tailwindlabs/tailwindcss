@@ -5,7 +5,7 @@ module.exports = function defineClass(className, properties) {
   const decls = _.map(properties, (value, property) => {
     return postcss.decl({
       prop: _.kebabCase(property),
-      value: _.kebabCase(value),
+      value: value,
     })
   })
 

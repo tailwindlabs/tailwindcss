@@ -16,7 +16,7 @@ var inlineFlexHelper = `.inline-flex {
 }`
 
 var backgroundColor = `.bg-1 {
-    background-color: black
+    background-color: #bada55
 }`
 
 /**
@@ -33,11 +33,6 @@ it('generates a rule with a kebab-case selector', () => {
 })
 
 it('generates a rule with a kebab-case property name', () => {
-    let output = defineClass('bg-1', {backgroundColor: 'black'})
+    let output = defineClass('bg-1', {backgroundColor: '#bada55'})
     expect(output.toString()).toEqual(backgroundColor)
-})
-
-it('generates a rule with a kebab-case value', () => {
-    let output = defineClass('inline-flex', {display: 'inlineFlex'})
-    expect(output.toString()).toEqual(inlineFlexHelper)
 })

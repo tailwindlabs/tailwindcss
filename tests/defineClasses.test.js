@@ -8,7 +8,7 @@ var config = {
         display: 'flex',
     },
     inlineFlex: {
-        display: 'inlineFlex',
+        display: 'inline-flex',
     },
 }
 
