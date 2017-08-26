@@ -25,6 +25,7 @@ var inlineFlexHelper = `.inline-flex {
  */
 it('it generates a set of helper classes from a config', () => {
     output = defineClasses(config)
+    expect(output).toBeInstanceOf(Array)
     expect(output[0].toString()).toEqual(flexHelper)
     expect(output[1].toString()).toEqual(inlineFlexHelper)
 })
