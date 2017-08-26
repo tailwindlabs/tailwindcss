@@ -4,6 +4,7 @@ const fs = require('fs')
 
 const addCustomMediaQueries = require('./lib/addCustomMediaQueries')
 const generateUtilities = require('./lib/generateUtilities')
+const substituteResponsiveAtRules = require('./lib/substituteResponsiveAtRules')
 const substituteClassApplyAtRules = require('./lib/substituteClassApplyAtRules')
 
 module.exports = postcss.plugin('tailwind', options => {
@@ -12,6 +13,7 @@ module.exports = postcss.plugin('tailwind', options => {
   return postcss([
     addCustomMediaQueries(options),
     generateUtilities(options),
+    substituteResponsiveAtRules(options),
     substituteClassApplyAtRules(options),
     require('postcss-cssnext')(),
     require('stylefmt'),

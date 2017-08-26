@@ -9,4 +9,20 @@ body {
     @apply .red;
 }
 
+@responsive {
+    .foo {
+        color: red;
+    }
+}
+
 @tailwind utilities;
+
+@responsive {
+    .bar {
+        color: blue;
+    }
+
+    .baz {
+        color: green;
+    }
+}
