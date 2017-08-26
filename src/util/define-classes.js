@@ -1,8 +1,11 @@
+const postcss = require('postcss')
 const _ = require('lodash')
 const defineClass = require('./define-class')
 
 module.exports = function defineClasses(classes) {
-  return _(classes).toPairs().map(([className, properties]) => {
-    return defineClass(className, properties)
-  }).value()
+    let rules = _.map(classes, function(properties, className) {
+        return defineClass(className, properties)
+    })
+
+    return rules
 }

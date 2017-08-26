@@ -8,9 +8,11 @@
     "Jonathan Reinink <jonathan@reinink.ca>"
   ],
   "scripts": {
-    "build": "node ./build.js"
+    "build": "node ./build.js",
+    "test": "jest"
   },
   "dependencies": {
+    "jest": "^20.0.4",
     "lodash": "^4.17.4",
     "normalize.css": "^6.0.0",
     "postcss": "^6.0.9",

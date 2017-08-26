@@ -2,15 +2,16 @@ const _ = require('lodash')
 const postcss = require('postcss')
 
 module.exports = function defineClass(className, properties) {
-  const kebabClass = _.kebabCase(className)
-  const decls = _(properties).toPairs().map(([property, value]) => {
+  const decls = _.map(properties, (value, property) => {
     return postcss.decl({
       prop: _.kebabCase(property),
-      value: value,
+      value: _.kebabCase(value),
     })
-  }).value()
+  })
 
-  return postcss.rule({
-    selector: `.${kebabClass}`
-  }).append(decls)
+  return postcss
+    .rule({
+      selector: `.${_.kebabCase(className)}`,
+    })
+    .append(decls)
 }
