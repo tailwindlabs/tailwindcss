@@ -1,1530 +1,1798 @@
-@custom-media --breakpoint-xl (min-width: 1200px);
-
-@custom-media --breakpoint-lg (min-width: 992px);
-
-@custom-media --breakpoint-md (min-width: 768px);
-
-@custom-media --breakpoint-sm (min-width: 576px);
-
 body {
-    background-color: red;
+  background-color: red;
+  font-size: 16px;
+  font-size: 1rem;
 }
 
-.red { background-color: red }
+.red {
+  background-color: red;
+}
 
-.hemphill { background-color: red;
+.hemphill {
+  background-color: red;
 }
 
 .bg-light {
-    background-color: ffffff;
+  background-color: #ffffff;
 }
 
 .bg-light-soft {
-    background-color: f-7-f-9-fa;
+  background-color: #f7f9fa;
 }
 
 .bg-light-softer {
-    background-color: f-0-f-2-f-5;
+  background-color: #f0f2f5;
 }
 
 .bg-light-softest {
-    background-color: dfe-3-e-8;
+  background-color: #dfe3e8;
 }
 
 .bg-dark {
-    background-color: 212-b-35;
+  background-color: #212b35;
 }
 
 .bg-dark-soft {
-    background-color: 404-e-5-c;
+  background-color: #404e5c;
 }
 
 .bg-dark-softer {
-    background-color: 647382;
+  background-color: #647382;
 }
 
 .bg-dark-softest {
-    background-color: 919-eab;
+  background-color: #919eab;
 }
 
 .bg-red-dark {
-    background-color: d-43633;
+  background-color: #d43633;
 }
 
 .bg-red {
-    background-color: f-25451;
+  background-color: #f25451;
 }
 
 .bg-red-light {
-    background-color: fa-8785;
+  background-color: #fa8785;
 }
 
 .bg-red-lightest {
-    background-color: fff-1-f-0;
+  background-color: #fff1f0;
 }
 
 .bg-orange-dark {
-    background-color: f-29500;
+  background-color: #f29500;
 }
 
 .bg-orange {
-    background-color: ffb-82-b;
+  background-color: #ffb82b;
 }
 
 .bg-orange-light {
-    background-color: ffd-685;
+  background-color: #ffd685;
 }
 
 .bg-orange-lightest {
-    background-color: fff-8-eb;
+  background-color: #fff8eb;
 }
 
 .bg-yellow-dark {
-    background-color: ffc-400;
+  background-color: #ffc400;
 }
 
 .bg-yellow {
-    background-color: ffe-14-a;
+  background-color: #ffe14a;
 }
 
 .bg-yellow-light {
-    background-color: ffea-83;
+  background-color: #ffea83;
 }
 
 .bg-yellow-lightest {
-    background-color: fffbe-5;
+  background-color: #fffbe5;
 }
 
 .bg-green-dark {
-    background-color: 34-ae-4-c;
+  background-color: #34ae4c;
 }
 
 .bg-green {
-    background-color: 57-d-06-f;
+  background-color: #57d06f;
 }
 
 .bg-green-light {
-    background-color: b-1-f-3-be;
+  background-color: #b1f3be;
 }
 
 .bg-green-lightest {
-    background-color: eefff-1;
+  background-color: #eefff1;
 }
 
 .bg-teal-dark {
-    background-color: 249-e-9-a;
+  background-color: #249e9a;
 }
 
 .bg-teal {
-    background-color: 4-dc-0-b-5;
+  background-color: #4dc0b5;
 }
 
 .bg-teal-light {
-    background-color: 9-eebe-4;
+  background-color: #9eebe4;
 }
 
 .bg-teal-lightest {
-    background-color: eefffd;
+  background-color: #eefffd;
 }
 
 .bg-blue-dark {
-    background-color: 3687-c-8;
+  background-color: #3687c8;
 }
 
 .bg-blue {
-    background-color: 4-aa-2-ea;
+  background-color: #4aa2ea;
 }
 
 .bg-blue-light {
-    background-color: acdaff;
+  background-color: #acdaff;
 }
 
 .bg-blue-lightest {
-    background-color: f-1-f-9-ff;
+  background-color: #f1f9ff;
 }
 
 .bg-indigo-dark {
-    background-color: 4957-a-5;
+  background-color: #4957a5;
 }
 
 .bg-indigo {
-    background-color: 6574-cd;
+  background-color: #6574cd;
 }
 
 .bg-indigo-light {
-    background-color: bcc-5-fb;
+  background-color: #bcc5fb;
 }
 
 .bg-indigo-lightest {
-    background-color: f-4-f-5-ff;
+  background-color: #f4f5ff;
 }
 
 .bg-purple-dark {
-    background-color: 714-cb-4;
+  background-color: #714cb4;
 }
 
 .bg-purple {
-    background-color: 976-ae-6;
+  background-color: #976ae6;
 }
 
 .bg-purple-light {
-    background-color: ceb-3-ff;
+  background-color: #ceb3ff;
 }
 
 .bg-purple-lightest {
-    background-color: f-7-f-3-ff;
+  background-color: #f7f3ff;
 }
 
 .bg-pink-dark {
-    background-color: d-84-f-7-d;
+  background-color: #d84f7d;
 }
 
 .bg-pink {
-    background-color: f-66-d-9-b;
+  background-color: #f66d9b;
 }
 
 .bg-pink-light {
-    background-color: ffa-5-c-3;
+  background-color: #ffa5c3;
 }
 
 .bg-pink-lightest {
-    background-color: fdf-2-f-5;
+  background-color: #fdf2f5;
 }
 
 .shadow-1 {
-    box-shadow: 0-1-px-3-px-rgba-0-0-0-0-08-0-1-px-2-px-rgba-0-0-0-0-15;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .15);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .15);
 }
 
 .shadow-2 {
-    box-shadow: 0-3-px-6-px-rgba-0-0-0-0-12-0-3-px-6-px-rgba-0-0-0-0-13;
+  -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, .12), 0 3px 6px rgba(0, 0, 0, .13);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, .12), 0 3px 6px rgba(0, 0, 0, .13);
 }
 
 .shadow-3 {
-    box-shadow: 0-10-px-20-px-rgba-0-0-0-0-13-0-6-px-6-px-rgba-0-0-0-0-13;
+  -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, .13), 0 6px 6px rgba(0, 0, 0, .13);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, .13), 0 6px 6px rgba(0, 0, 0, .13);
 }
 
 .shadow-4 {
-    box-shadow: 0-14-px-28-px-rgba-0-0-0-0-16-0-10-px-10-px-rgba-0-0-0-0-11;
+  -webkit-box-shadow: 0 14px 28px rgba(0, 0, 0, .16), 0 10px 10px rgba(0, 0, 0, .11);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, .16), 0 10px 10px rgba(0, 0, 0, .11);
 }
 
 .shadow-5 {
-    box-shadow: 0-19-px-38-px-rgba-0-0-0-0-18-0-15-px-12-px-rgba-0-0-0-0-11;
+  -webkit-box-shadow: 0 19px 38px rgba(0, 0, 0, .18), 0 15px 12px rgba(0, 0, 0, .11);
+  box-shadow: 0 19px 38px rgba(0, 0, 0, .18), 0 15px 12px rgba(0, 0, 0, .11);
 }
 
 .flex {
-    display: flex;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .inline-flex {
-    display: inline-flex;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 
 .flex-row {
-    flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
 }
 
 .flex-row-reverse {
-    flex-direction: row-reverse;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+  -ms-flex-direction: row-reverse;
+  flex-direction: row-reverse;
 }
 
 .flex-col {
-    flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
 }
 
 .flex-col-reverse {
-    flex-direction: column-reverse;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: reverse;
+  -ms-flex-direction: column-reverse;
+  flex-direction: column-reverse;
 }
 
 .flex-wrap {
-    flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .flex-wrap-reverse {
-    flex-wrap: wrap-reverse;
+  -ms-flex-wrap: wrap-reverse;
+  flex-wrap: wrap-reverse;
 }
 
 .flex-nowrap {
-    flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
 }
 
 .items-start {
-    align-items: flex-start;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
 }
 
 .items-end {
-    align-items: flex-end;
+  -webkit-box-align: end;
+  -ms-flex-align: end;
+  align-items: flex-end;
 }
 
 .items-center {
-    align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 
 .items-baseline {
-    align-items: baseline;
+  -webkit-box-align: baseline;
+  -ms-flex-align: baseline;
+  align-items: baseline;
 }
 
 .items-stretch {
-    align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
 }
 
 .justify-start {
-    justify-content: flex-start;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
 }
 
 .justify-end {
-    justify-content: flex-end;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
 }
 
 .justify-center {
-    justify-content: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
 }
 
 .justify-between {
-    justify-content: space-between;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
 }
 
 .justify-around {
-    justify-content: space-around;
+  -ms-flex-pack: distribute;
+  justify-content: space-around;
 }
 
 .flex-auto {
-    flex: auto;
+  -webkit-box-flex: 1;
+  -ms-flex: auto;
+  flex: auto;
 }
 
 .flex-initial {
-    flex: initial;
+  -webkit-box-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
 }
 
 .flex-none {
-    flex: none;
+  -webkit-box-flex: 0;
+  -ms-flex: none;
+  flex: none;
 }
 
 .flex-grow {
-    flex-grow: 1;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
 }
 
 .flex-shrink {
-    flex-shrink: 1;
+  -ms-flex-negative: 1;
+  flex-shrink: 1;
 }
 
 .flex-no-grow {
-    flex-grow: 0;
+  -webkit-box-flex: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
 }
 
 .flex-no-shrink {
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
+@media (min-width: 576px) {
+  .sm\:bg-light {
+    background-color: #ffffff;
+  }
+
+  .sm\:bg-light-soft {
+    background-color: #f7f9fa;
+  }
+
+  .sm\:bg-light-softer {
+    background-color: #f0f2f5;
+  }
+
+  .sm\:bg-light-softest {
+    background-color: #dfe3e8;
+  }
+
+  .sm\:bg-dark {
+    background-color: #212b35;
+  }
+
+  .sm\:bg-dark-soft {
+    background-color: #404e5c;
+  }
+
+  .sm\:bg-dark-softer {
+    background-color: #647382;
+  }
+
+  .sm\:bg-dark-softest {
+    background-color: #919eab;
+  }
+
+  .sm\:bg-red-dark {
+    background-color: #d43633;
+  }
+
+  .sm\:bg-red {
+    background-color: #f25451;
+  }
+
+  .sm\:bg-red-light {
+    background-color: #fa8785;
+  }
+
+  .sm\:bg-red-lightest {
+    background-color: #fff1f0;
+  }
+
+  .sm\:bg-orange-dark {
+    background-color: #f29500;
+  }
+
+  .sm\:bg-orange {
+    background-color: #ffb82b;
+  }
+
+  .sm\:bg-orange-light {
+    background-color: #ffd685;
+  }
+
+  .sm\:bg-orange-lightest {
+    background-color: #fff8eb;
+  }
+
+  .sm\:bg-yellow-dark {
+    background-color: #ffc400;
+  }
+
+  .sm\:bg-yellow {
+    background-color: #ffe14a;
+  }
+
+  .sm\:bg-yellow-light {
+    background-color: #ffea83;
+  }
+
+  .sm\:bg-yellow-lightest {
+    background-color: #fffbe5;
+  }
+
+  .sm\:bg-green-dark {
+    background-color: #34ae4c;
+  }
+
+  .sm\:bg-green {
+    background-color: #57d06f;
+  }
+
+  .sm\:bg-green-light {
+    background-color: #b1f3be;
+  }
+
+  .sm\:bg-green-lightest {
+    background-color: #eefff1;
+  }
+
+  .sm\:bg-teal-dark {
+    background-color: #249e9a;
+  }
+
+  .sm\:bg-teal {
+    background-color: #4dc0b5;
+  }
+
+  .sm\:bg-teal-light {
+    background-color: #9eebe4;
+  }
+
+  .sm\:bg-teal-lightest {
+    background-color: #eefffd;
+  }
+
+  .sm\:bg-blue-dark {
+    background-color: #3687c8;
+  }
+
+  .sm\:bg-blue {
+    background-color: #4aa2ea;
+  }
+
+  .sm\:bg-blue-light {
+    background-color: #acdaff;
+  }
+
+  .sm\:bg-blue-lightest {
+    background-color: #f1f9ff;
+  }
+
+  .sm\:bg-indigo-dark {
+    background-color: #4957a5;
+  }
+
+  .sm\:bg-indigo {
+    background-color: #6574cd;
+  }
+
+  .sm\:bg-indigo-light {
+    background-color: #bcc5fb;
+  }
+
+  .sm\:bg-indigo-lightest {
+    background-color: #f4f5ff;
+  }
+
+  .sm\:bg-purple-dark {
+    background-color: #714cb4;
+  }
+
+  .sm\:bg-purple {
+    background-color: #976ae6;
+  }
+
+  .sm\:bg-purple-light {
+    background-color: #ceb3ff;
+  }
+
+  .sm\:bg-purple-lightest {
+    background-color: #f7f3ff;
+  }
+
+  .sm\:bg-pink-dark {
+    background-color: #d84f7d;
+  }
+
+  .sm\:bg-pink {
+    background-color: #f66d9b;
+  }
+
+  .sm\:bg-pink-light {
+    background-color: #ffa5c3;
+  }
+
+  .sm\:bg-pink-lightest {
+    background-color: #fdf2f5;
+  }
+
+  .sm\:shadow-1 {
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .15);
+  }
+
+  .sm\:shadow-2 {
+    -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, .12), 0 3px 6px rgba(0, 0, 0, .13);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .12), 0 3px 6px rgba(0, 0, 0, .13);
+  }
+
+  .sm\:shadow-3 {
+    -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, .13), 0 6px 6px rgba(0, 0, 0, .13);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .13), 0 6px 6px rgba(0, 0, 0, .13);
+  }
+
+  .sm\:shadow-4 {
+    -webkit-box-shadow: 0 14px 28px rgba(0, 0, 0, .16), 0 10px 10px rgba(0, 0, 0, .11);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, .16), 0 10px 10px rgba(0, 0, 0, .11);
+  }
+
+  .sm\:shadow-5 {
+    -webkit-box-shadow: 0 19px 38px rgba(0, 0, 0, .18), 0 15px 12px rgba(0, 0, 0, .11);
+    box-shadow: 0 19px 38px rgba(0, 0, 0, .18), 0 15px 12px rgba(0, 0, 0, .11);
+  }
+
+  .sm\:flex {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+
+  .sm\:inline-flex {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+  }
+
+  .sm\:flex-row {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+  }
+
+  .sm\:flex-row-reverse {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+  }
+
+  .sm\:flex-col {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+
+  .sm\:flex-col-reverse {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: column-reverse;
+    flex-direction: column-reverse;
+  }
+
+  .sm\:flex-wrap {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
+
+  .sm\:flex-wrap-reverse {
+    -ms-flex-wrap: wrap-reverse;
+    flex-wrap: wrap-reverse;
+  }
+
+  .sm\:flex-nowrap {
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+  }
+
+  .sm\:items-start {
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+  }
+
+  .sm\:items-end {
+    -webkit-box-align: end;
+    -ms-flex-align: end;
+    align-items: flex-end;
+  }
+
+  .sm\:items-center {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+
+  .sm\:items-baseline {
+    -webkit-box-align: baseline;
+    -ms-flex-align: baseline;
+    align-items: baseline;
+  }
+
+  .sm\:items-stretch {
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+  }
+
+  .sm\:justify-start {
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+  }
+
+  .sm\:justify-end {
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+  }
+
+  .sm\:justify-center {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+  }
+
+  .sm\:justify-between {
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+  }
+
+  .sm\:justify-around {
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+  }
+
+  .sm\:flex-auto {
+    -webkit-box-flex: 1;
+    -ms-flex: auto;
+    flex: auto;
+  }
+
+  .sm\:flex-initial {
+    -webkit-box-flex: initial;
+    -ms-flex: initial;
+    flex: initial;
+  }
+
+  .sm\:flex-none {
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+  }
+
+  .sm\:flex-grow {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+  }
+
+  .sm\:flex-shrink {
+    -ms-flex-negative: 1;
+    flex-shrink: 1;
+  }
+
+  .sm\:flex-no-grow {
+    -webkit-box-flex: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+  }
+
+  .sm\:flex-no-shrink {
+    -ms-flex-negative: 0;
     flex-shrink: 0;
+  }
 }
 
-@media (--breakpoint-sm) {
-
-    .sm\:bg-light {
-        background-color: ffffff;
-    }
-
-    .sm\:bg-light-soft {
-        background-color: f-7-f-9-fa;
-    }
-
-    .sm\:bg-light-softer {
-        background-color: f-0-f-2-f-5;
-    }
-
-    .sm\:bg-light-softest {
-        background-color: dfe-3-e-8;
-    }
-
-    .sm\:bg-dark {
-        background-color: 212-b-35;
-    }
-
-    .sm\:bg-dark-soft {
-        background-color: 404-e-5-c;
-    }
-
-    .sm\:bg-dark-softer {
-        background-color: 647382;
-    }
-
-    .sm\:bg-dark-softest {
-        background-color: 919-eab;
-    }
-
-    .sm\:bg-red-dark {
-        background-color: d-43633;
-    }
-
-    .sm\:bg-red {
-        background-color: f-25451;
-    }
-
-    .sm\:bg-red-light {
-        background-color: fa-8785;
-    }
-
-    .sm\:bg-red-lightest {
-        background-color: fff-1-f-0;
-    }
-
-    .sm\:bg-orange-dark {
-        background-color: f-29500;
-    }
-
-    .sm\:bg-orange {
-        background-color: ffb-82-b;
-    }
-
-    .sm\:bg-orange-light {
-        background-color: ffd-685;
-    }
-
-    .sm\:bg-orange-lightest {
-        background-color: fff-8-eb;
-    }
-
-    .sm\:bg-yellow-dark {
-        background-color: ffc-400;
-    }
-
-    .sm\:bg-yellow {
-        background-color: ffe-14-a;
-    }
-
-    .sm\:bg-yellow-light {
-        background-color: ffea-83;
-    }
-
-    .sm\:bg-yellow-lightest {
-        background-color: fffbe-5;
-    }
-
-    .sm\:bg-green-dark {
-        background-color: 34-ae-4-c;
-    }
-
-    .sm\:bg-green {
-        background-color: 57-d-06-f;
-    }
-
-    .sm\:bg-green-light {
-        background-color: b-1-f-3-be;
-    }
-
-    .sm\:bg-green-lightest {
-        background-color: eefff-1;
-    }
-
-    .sm\:bg-teal-dark {
-        background-color: 249-e-9-a;
-    }
-
-    .sm\:bg-teal {
-        background-color: 4-dc-0-b-5;
-    }
-
-    .sm\:bg-teal-light {
-        background-color: 9-eebe-4;
-    }
-
-    .sm\:bg-teal-lightest {
-        background-color: eefffd;
-    }
-
-    .sm\:bg-blue-dark {
-        background-color: 3687-c-8;
-    }
-
-    .sm\:bg-blue {
-        background-color: 4-aa-2-ea;
-    }
-
-    .sm\:bg-blue-light {
-        background-color: acdaff;
-    }
-
-    .sm\:bg-blue-lightest {
-        background-color: f-1-f-9-ff;
-    }
-
-    .sm\:bg-indigo-dark {
-        background-color: 4957-a-5;
-    }
-
-    .sm\:bg-indigo {
-        background-color: 6574-cd;
-    }
-
-    .sm\:bg-indigo-light {
-        background-color: bcc-5-fb;
-    }
-
-    .sm\:bg-indigo-lightest {
-        background-color: f-4-f-5-ff;
-    }
-
-    .sm\:bg-purple-dark {
-        background-color: 714-cb-4;
-    }
-
-    .sm\:bg-purple {
-        background-color: 976-ae-6;
-    }
-
-    .sm\:bg-purple-light {
-        background-color: ceb-3-ff;
-    }
-
-    .sm\:bg-purple-lightest {
-        background-color: f-7-f-3-ff;
-    }
-
-    .sm\:bg-pink-dark {
-        background-color: d-84-f-7-d;
-    }
-
-    .sm\:bg-pink {
-        background-color: f-66-d-9-b;
-    }
-
-    .sm\:bg-pink-light {
-        background-color: ffa-5-c-3;
-    }
-
-    .sm\:bg-pink-lightest {
-        background-color: fdf-2-f-5;
-    }
-
-    .sm\:shadow-1 {
-        box-shadow: 0-1-px-3-px-rgba-0-0-0-0-08-0-1-px-2-px-rgba-0-0-0-0-15;
-    }
-
-    .sm\:shadow-2 {
-        box-shadow: 0-3-px-6-px-rgba-0-0-0-0-12-0-3-px-6-px-rgba-0-0-0-0-13;
-    }
-
-    .sm\:shadow-3 {
-        box-shadow: 0-10-px-20-px-rgba-0-0-0-0-13-0-6-px-6-px-rgba-0-0-0-0-13;
-    }
-
-    .sm\:shadow-4 {
-        box-shadow: 0-14-px-28-px-rgba-0-0-0-0-16-0-10-px-10-px-rgba-0-0-0-0-11;
-    }
-
-    .sm\:shadow-5 {
-        box-shadow: 0-19-px-38-px-rgba-0-0-0-0-18-0-15-px-12-px-rgba-0-0-0-0-11;
-    }
-
-    .sm\:flex {
-        display: flex;
-    }
-
-    .sm\:inline-flex {
-        display: inline-flex;
-    }
-
-    .sm\:flex-row {
-        flex-direction: row;
-    }
-
-    .sm\:flex-row-reverse {
-        flex-direction: row-reverse;
-    }
-
-    .sm\:flex-col {
-        flex-direction: column;
-    }
-
-    .sm\:flex-col-reverse {
-        flex-direction: column-reverse;
-    }
-
-    .sm\:flex-wrap {
-        flex-wrap: wrap;
-    }
-
-    .sm\:flex-wrap-reverse {
-        flex-wrap: wrap-reverse;
-    }
-
-    .sm\:flex-nowrap {
-        flex-wrap: nowrap;
-    }
-
-    .sm\:items-start {
-        align-items: flex-start;
-    }
-
-    .sm\:items-end {
-        align-items: flex-end;
-    }
-
-    .sm\:items-center {
-        align-items: center;
-    }
-
-    .sm\:items-baseline {
-        align-items: baseline;
-    }
-
-    .sm\:items-stretch {
-        align-items: stretch;
-    }
-
-    .sm\:justify-start {
-        justify-content: flex-start;
-    }
-
-    .sm\:justify-end {
-        justify-content: flex-end;
-    }
-
-    .sm\:justify-center {
-        justify-content: center;
-    }
-
-    .sm\:justify-between {
-        justify-content: space-between;
-    }
-
-    .sm\:justify-around {
-        justify-content: space-around;
-    }
-
-    .sm\:flex-auto {
-        flex: auto;
-    }
-
-    .sm\:flex-initial {
-        flex: initial;
-    }
-
-    .sm\:flex-none {
-        flex: none;
-    }
-
-    .sm\:flex-grow {
-        flex-grow: 1;
-    }
-
-    .sm\:flex-shrink {
-        flex-shrink: 1;
-    }
-
-    .sm\:flex-no-grow {
-        flex-grow: 0;
-    }
-
-    .sm\:flex-no-shrink {
-        flex-shrink: 0;
-    }
+@media (min-width: 768px) {
+  .md\:bg-light {
+    background-color: #ffffff;
+  }
+
+  .md\:bg-light-soft {
+    background-color: #f7f9fa;
+  }
+
+  .md\:bg-light-softer {
+    background-color: #f0f2f5;
+  }
+
+  .md\:bg-light-softest {
+    background-color: #dfe3e8;
+  }
+
+  .md\:bg-dark {
+    background-color: #212b35;
+  }
+
+  .md\:bg-dark-soft {
+    background-color: #404e5c;
+  }
+
+  .md\:bg-dark-softer {
+    background-color: #647382;
+  }
+
+  .md\:bg-dark-softest {
+    background-color: #919eab;
+  }
+
+  .md\:bg-red-dark {
+    background-color: #d43633;
+  }
+
+  .md\:bg-red {
+    background-color: #f25451;
+  }
+
+  .md\:bg-red-light {
+    background-color: #fa8785;
+  }
+
+  .md\:bg-red-lightest {
+    background-color: #fff1f0;
+  }
+
+  .md\:bg-orange-dark {
+    background-color: #f29500;
+  }
+
+  .md\:bg-orange {
+    background-color: #ffb82b;
+  }
+
+  .md\:bg-orange-light {
+    background-color: #ffd685;
+  }
+
+  .md\:bg-orange-lightest {
+    background-color: #fff8eb;
+  }
+
+  .md\:bg-yellow-dark {
+    background-color: #ffc400;
+  }
+
+  .md\:bg-yellow {
+    background-color: #ffe14a;
+  }
+
+  .md\:bg-yellow-light {
+    background-color: #ffea83;
+  }
+
+  .md\:bg-yellow-lightest {
+    background-color: #fffbe5;
+  }
+
+  .md\:bg-green-dark {
+    background-color: #34ae4c;
+  }
+
+  .md\:bg-green {
+    background-color: #57d06f;
+  }
+
+  .md\:bg-green-light {
+    background-color: #b1f3be;
+  }
+
+  .md\:bg-green-lightest {
+    background-color: #eefff1;
+  }
+
+  .md\:bg-teal-dark {
+    background-color: #249e9a;
+  }
+
+  .md\:bg-teal {
+    background-color: #4dc0b5;
+  }
+
+  .md\:bg-teal-light {
+    background-color: #9eebe4;
+  }
+
+  .md\:bg-teal-lightest {
+    background-color: #eefffd;
+  }
+
+  .md\:bg-blue-dark {
+    background-color: #3687c8;
+  }
+
+  .md\:bg-blue {
+    background-color: #4aa2ea;
+  }
+
+  .md\:bg-blue-light {
+    background-color: #acdaff;
+  }
+
+  .md\:bg-blue-lightest {
+    background-color: #f1f9ff;
+  }
+
+  .md\:bg-indigo-dark {
+    background-color: #4957a5;
+  }
+
+  .md\:bg-indigo {
+    background-color: #6574cd;
+  }
+
+  .md\:bg-indigo-light {
+    background-color: #bcc5fb;
+  }
+
+  .md\:bg-indigo-lightest {
+    background-color: #f4f5ff;
+  }
+
+  .md\:bg-purple-dark {
+    background-color: #714cb4;
+  }
+
+  .md\:bg-purple {
+    background-color: #976ae6;
+  }
+
+  .md\:bg-purple-light {
+    background-color: #ceb3ff;
+  }
+
+  .md\:bg-purple-lightest {
+    background-color: #f7f3ff;
+  }
+
+  .md\:bg-pink-dark {
+    background-color: #d84f7d;
+  }
+
+  .md\:bg-pink {
+    background-color: #f66d9b;
+  }
+
+  .md\:bg-pink-light {
+    background-color: #ffa5c3;
+  }
+
+  .md\:bg-pink-lightest {
+    background-color: #fdf2f5;
+  }
+
+  .md\:shadow-1 {
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .15);
+  }
+
+  .md\:shadow-2 {
+    -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, .12), 0 3px 6px rgba(0, 0, 0, .13);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .12), 0 3px 6px rgba(0, 0, 0, .13);
+  }
+
+  .md\:shadow-3 {
+    -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, .13), 0 6px 6px rgba(0, 0, 0, .13);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .13), 0 6px 6px rgba(0, 0, 0, .13);
+  }
+
+  .md\:shadow-4 {
+    -webkit-box-shadow: 0 14px 28px rgba(0, 0, 0, .16), 0 10px 10px rgba(0, 0, 0, .11);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, .16), 0 10px 10px rgba(0, 0, 0, .11);
+  }
+
+  .md\:shadow-5 {
+    -webkit-box-shadow: 0 19px 38px rgba(0, 0, 0, .18), 0 15px 12px rgba(0, 0, 0, .11);
+    box-shadow: 0 19px 38px rgba(0, 0, 0, .18), 0 15px 12px rgba(0, 0, 0, .11);
+  }
+
+  .md\:flex {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+
+  .md\:inline-flex {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+  }
+
+  .md\:flex-row {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+  }
+
+  .md\:flex-row-reverse {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+  }
+
+  .md\:flex-col {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+
+  .md\:flex-col-reverse {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: column-reverse;
+    flex-direction: column-reverse;
+  }
+
+  .md\:flex-wrap {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
+
+  .md\:flex-wrap-reverse {
+    -ms-flex-wrap: wrap-reverse;
+    flex-wrap: wrap-reverse;
+  }
+
+  .md\:flex-nowrap {
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+  }
+
+  .md\:items-start {
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+  }
+
+  .md\:items-end {
+    -webkit-box-align: end;
+    -ms-flex-align: end;
+    align-items: flex-end;
+  }
+
+  .md\:items-center {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+
+  .md\:items-baseline {
+    -webkit-box-align: baseline;
+    -ms-flex-align: baseline;
+    align-items: baseline;
+  }
+
+  .md\:items-stretch {
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+  }
+
+  .md\:justify-start {
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+  }
+
+  .md\:justify-end {
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+  }
+
+  .md\:justify-center {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+  }
+
+  .md\:justify-between {
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+  }
+
+  .md\:justify-around {
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+  }
+
+  .md\:flex-auto {
+    -webkit-box-flex: 1;
+    -ms-flex: auto;
+    flex: auto;
+  }
+
+  .md\:flex-initial {
+    -webkit-box-flex: initial;
+    -ms-flex: initial;
+    flex: initial;
+  }
+
+  .md\:flex-none {
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+  }
+
+  .md\:flex-grow {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+  }
+
+  .md\:flex-shrink {
+    -ms-flex-negative: 1;
+    flex-shrink: 1;
+  }
+
+  .md\:flex-no-grow {
+    -webkit-box-flex: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+  }
+
+  .md\:flex-no-shrink {
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+  }
 }
 
-@media (--breakpoint-md) {
-
-    .md\:bg-light {
-        background-color: ffffff;
-    }
-
-    .md\:bg-light-soft {
-        background-color: f-7-f-9-fa;
-    }
-
-    .md\:bg-light-softer {
-        background-color: f-0-f-2-f-5;
-    }
-
-    .md\:bg-light-softest {
-        background-color: dfe-3-e-8;
-    }
-
-    .md\:bg-dark {
-        background-color: 212-b-35;
-    }
-
-    .md\:bg-dark-soft {
-        background-color: 404-e-5-c;
-    }
-
-    .md\:bg-dark-softer {
-        background-color: 647382;
-    }
-
-    .md\:bg-dark-softest {
-        background-color: 919-eab;
-    }
-
-    .md\:bg-red-dark {
-        background-color: d-43633;
-    }
-
-    .md\:bg-red {
-        background-color: f-25451;
-    }
-
-    .md\:bg-red-light {
-        background-color: fa-8785;
-    }
-
-    .md\:bg-red-lightest {
-        background-color: fff-1-f-0;
-    }
-
-    .md\:bg-orange-dark {
-        background-color: f-29500;
-    }
-
-    .md\:bg-orange {
-        background-color: ffb-82-b;
-    }
-
-    .md\:bg-orange-light {
-        background-color: ffd-685;
-    }
-
-    .md\:bg-orange-lightest {
-        background-color: fff-8-eb;
-    }
-
-    .md\:bg-yellow-dark {
-        background-color: ffc-400;
-    }
-
-    .md\:bg-yellow {
-        background-color: ffe-14-a;
-    }
-
-    .md\:bg-yellow-light {
-        background-color: ffea-83;
-    }
-
-    .md\:bg-yellow-lightest {
-        background-color: fffbe-5;
-    }
-
-    .md\:bg-green-dark {
-        background-color: 34-ae-4-c;
-    }
-
-    .md\:bg-green {
-        background-color: 57-d-06-f;
-    }
-
-    .md\:bg-green-light {
-        background-color: b-1-f-3-be;
-    }
-
-    .md\:bg-green-lightest {
-        background-color: eefff-1;
-    }
-
-    .md\:bg-teal-dark {
-        background-color: 249-e-9-a;
-    }
-
-    .md\:bg-teal {
-        background-color: 4-dc-0-b-5;
-    }
-
-    .md\:bg-teal-light {
-        background-color: 9-eebe-4;
-    }
-
-    .md\:bg-teal-lightest {
-        background-color: eefffd;
-    }
-
-    .md\:bg-blue-dark {
-        background-color: 3687-c-8;
-    }
-
-    .md\:bg-blue {
-        background-color: 4-aa-2-ea;
-    }
-
-    .md\:bg-blue-light {
-        background-color: acdaff;
-    }
-
-    .md\:bg-blue-lightest {
-        background-color: f-1-f-9-ff;
-    }
-
-    .md\:bg-indigo-dark {
-        background-color: 4957-a-5;
-    }
-
-    .md\:bg-indigo {
-        background-color: 6574-cd;
-    }
-
-    .md\:bg-indigo-light {
-        background-color: bcc-5-fb;
-    }
-
-    .md\:bg-indigo-lightest {
-        background-color: f-4-f-5-ff;
-    }
-
-    .md\:bg-purple-dark {
-        background-color: 714-cb-4;
-    }
-
-    .md\:bg-purple {
-        background-color: 976-ae-6;
-    }
-
-    .md\:bg-purple-light {
-        background-color: ceb-3-ff;
-    }
-
-    .md\:bg-purple-lightest {
-        background-color: f-7-f-3-ff;
-    }
-
-    .md\:bg-pink-dark {
-        background-color: d-84-f-7-d;
-    }
-
-    .md\:bg-pink {
-        background-color: f-66-d-9-b;
-    }
-
-    .md\:bg-pink-light {
-        background-color: ffa-5-c-3;
-    }
-
-    .md\:bg-pink-lightest {
-        background-color: fdf-2-f-5;
-    }
-
-    .md\:shadow-1 {
-        box-shadow: 0-1-px-3-px-rgba-0-0-0-0-08-0-1-px-2-px-rgba-0-0-0-0-15;
-    }
-
-    .md\:shadow-2 {
-        box-shadow: 0-3-px-6-px-rgba-0-0-0-0-12-0-3-px-6-px-rgba-0-0-0-0-13;
-    }
-
-    .md\:shadow-3 {
-        box-shadow: 0-10-px-20-px-rgba-0-0-0-0-13-0-6-px-6-px-rgba-0-0-0-0-13;
-    }
-
-    .md\:shadow-4 {
-        box-shadow: 0-14-px-28-px-rgba-0-0-0-0-16-0-10-px-10-px-rgba-0-0-0-0-11;
-    }
-
-    .md\:shadow-5 {
-        box-shadow: 0-19-px-38-px-rgba-0-0-0-0-18-0-15-px-12-px-rgba-0-0-0-0-11;
-    }
-
-    .md\:flex {
-        display: flex;
-    }
-
-    .md\:inline-flex {
-        display: inline-flex;
-    }
-
-    .md\:flex-row {
-        flex-direction: row;
-    }
-
-    .md\:flex-row-reverse {
-        flex-direction: row-reverse;
-    }
-
-    .md\:flex-col {
-        flex-direction: column;
-    }
-
-    .md\:flex-col-reverse {
-        flex-direction: column-reverse;
-    }
-
-    .md\:flex-wrap {
-        flex-wrap: wrap;
-    }
-
-    .md\:flex-wrap-reverse {
-        flex-wrap: wrap-reverse;
-    }
-
-    .md\:flex-nowrap {
-        flex-wrap: nowrap;
-    }
-
-    .md\:items-start {
-        align-items: flex-start;
-    }
-
-    .md\:items-end {
-        align-items: flex-end;
-    }
-
-    .md\:items-center {
-        align-items: center;
-    }
-
-    .md\:items-baseline {
-        align-items: baseline;
-    }
-
-    .md\:items-stretch {
-        align-items: stretch;
-    }
-
-    .md\:justify-start {
-        justify-content: flex-start;
-    }
-
-    .md\:justify-end {
-        justify-content: flex-end;
-    }
-
-    .md\:justify-center {
-        justify-content: center;
-    }
-
-    .md\:justify-between {
-        justify-content: space-between;
-    }
-
-    .md\:justify-around {
-        justify-content: space-around;
-    }
-
-    .md\:flex-auto {
-        flex: auto;
-    }
-
-    .md\:flex-initial {
-        flex: initial;
-    }
-
-    .md\:flex-none {
-        flex: none;
-    }
-
-    .md\:flex-grow {
-        flex-grow: 1;
-    }
-
-    .md\:flex-shrink {
-        flex-shrink: 1;
-    }
-
-    .md\:flex-no-grow {
-        flex-grow: 0;
-    }
-
-    .md\:flex-no-shrink {
-        flex-shrink: 0;
-    }
+@media (min-width: 992px) {
+  .lg\:bg-light {
+    background-color: #ffffff;
+  }
+
+  .lg\:bg-light-soft {
+    background-color: #f7f9fa;
+  }
+
+  .lg\:bg-light-softer {
+    background-color: #f0f2f5;
+  }
+
+  .lg\:bg-light-softest {
+    background-color: #dfe3e8;
+  }
+
+  .lg\:bg-dark {
+    background-color: #212b35;
+  }
+
+  .lg\:bg-dark-soft {
+    background-color: #404e5c;
+  }
+
+  .lg\:bg-dark-softer {
+    background-color: #647382;
+  }
+
+  .lg\:bg-dark-softest {
+    background-color: #919eab;
+  }
+
+  .lg\:bg-red-dark {
+    background-color: #d43633;
+  }
+
+  .lg\:bg-red {
+    background-color: #f25451;
+  }
+
+  .lg\:bg-red-light {
+    background-color: #fa8785;
+  }
+
+  .lg\:bg-red-lightest {
+    background-color: #fff1f0;
+  }
+
+  .lg\:bg-orange-dark {
+    background-color: #f29500;
+  }
+
+  .lg\:bg-orange {
+    background-color: #ffb82b;
+  }
+
+  .lg\:bg-orange-light {
+    background-color: #ffd685;
+  }
+
+  .lg\:bg-orange-lightest {
+    background-color: #fff8eb;
+  }
+
+  .lg\:bg-yellow-dark {
+    background-color: #ffc400;
+  }
+
+  .lg\:bg-yellow {
+    background-color: #ffe14a;
+  }
+
+  .lg\:bg-yellow-light {
+    background-color: #ffea83;
+  }
+
+  .lg\:bg-yellow-lightest {
+    background-color: #fffbe5;
+  }
+
+  .lg\:bg-green-dark {
+    background-color: #34ae4c;
+  }
+
+  .lg\:bg-green {
+    background-color: #57d06f;
+  }
+
+  .lg\:bg-green-light {
+    background-color: #b1f3be;
+  }
+
+  .lg\:bg-green-lightest {
+    background-color: #eefff1;
+  }
+
+  .lg\:bg-teal-dark {
+    background-color: #249e9a;
+  }
+
+  .lg\:bg-teal {
+    background-color: #4dc0b5;
+  }
+
+  .lg\:bg-teal-light {
+    background-color: #9eebe4;
+  }
+
+  .lg\:bg-teal-lightest {
+    background-color: #eefffd;
+  }
+
+  .lg\:bg-blue-dark {
+    background-color: #3687c8;
+  }
+
+  .lg\:bg-blue {
+    background-color: #4aa2ea;
+  }
+
+  .lg\:bg-blue-light {
+    background-color: #acdaff;
+  }
+
+  .lg\:bg-blue-lightest {
+    background-color: #f1f9ff;
+  }
+
+  .lg\:bg-indigo-dark {
+    background-color: #4957a5;
+  }
+
+  .lg\:bg-indigo {
+    background-color: #6574cd;
+  }
+
+  .lg\:bg-indigo-light {
+    background-color: #bcc5fb;
+  }
+
+  .lg\:bg-indigo-lightest {
+    background-color: #f4f5ff;
+  }
+
+  .lg\:bg-purple-dark {
+    background-color: #714cb4;
+  }
+
+  .lg\:bg-purple {
+    background-color: #976ae6;
+  }
+
+  .lg\:bg-purple-light {
+    background-color: #ceb3ff;
+  }
+
+  .lg\:bg-purple-lightest {
+    background-color: #f7f3ff;
+  }
+
+  .lg\:bg-pink-dark {
+    background-color: #d84f7d;
+  }
+
+  .lg\:bg-pink {
+    background-color: #f66d9b;
+  }
+
+  .lg\:bg-pink-light {
+    background-color: #ffa5c3;
+  }
+
+  .lg\:bg-pink-lightest {
+    background-color: #fdf2f5;
+  }
+
+  .lg\:shadow-1 {
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .15);
+  }
+
+  .lg\:shadow-2 {
+    -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, .12), 0 3px 6px rgba(0, 0, 0, .13);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .12), 0 3px 6px rgba(0, 0, 0, .13);
+  }
+
+  .lg\:shadow-3 {
+    -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, .13), 0 6px 6px rgba(0, 0, 0, .13);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .13), 0 6px 6px rgba(0, 0, 0, .13);
+  }
+
+  .lg\:shadow-4 {
+    -webkit-box-shadow: 0 14px 28px rgba(0, 0, 0, .16), 0 10px 10px rgba(0, 0, 0, .11);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, .16), 0 10px 10px rgba(0, 0, 0, .11);
+  }
+
+  .lg\:shadow-5 {
+    -webkit-box-shadow: 0 19px 38px rgba(0, 0, 0, .18), 0 15px 12px rgba(0, 0, 0, .11);
+    box-shadow: 0 19px 38px rgba(0, 0, 0, .18), 0 15px 12px rgba(0, 0, 0, .11);
+  }
+
+  .lg\:flex {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+
+  .lg\:inline-flex {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+  }
+
+  .lg\:flex-row {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+  }
+
+  .lg\:flex-row-reverse {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+  }
+
+  .lg\:flex-col {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+
+  .lg\:flex-col-reverse {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: column-reverse;
+    flex-direction: column-reverse;
+  }
+
+  .lg\:flex-wrap {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
+
+  .lg\:flex-wrap-reverse {
+    -ms-flex-wrap: wrap-reverse;
+    flex-wrap: wrap-reverse;
+  }
+
+  .lg\:flex-nowrap {
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+  }
+
+  .lg\:items-start {
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+  }
+
+  .lg\:items-end {
+    -webkit-box-align: end;
+    -ms-flex-align: end;
+    align-items: flex-end;
+  }
+
+  .lg\:items-center {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+
+  .lg\:items-baseline {
+    -webkit-box-align: baseline;
+    -ms-flex-align: baseline;
+    align-items: baseline;
+  }
+
+  .lg\:items-stretch {
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+  }
+
+  .lg\:justify-start {
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+  }
+
+  .lg\:justify-end {
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+  }
+
+  .lg\:justify-center {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+  }
+
+  .lg\:justify-between {
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+  }
+
+  .lg\:justify-around {
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+  }
+
+  .lg\:flex-auto {
+    -webkit-box-flex: 1;
+    -ms-flex: auto;
+    flex: auto;
+  }
+
+  .lg\:flex-initial {
+    -webkit-box-flex: initial;
+    -ms-flex: initial;
+    flex: initial;
+  }
+
+  .lg\:flex-none {
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+  }
+
+  .lg\:flex-grow {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+  }
+
+  .lg\:flex-shrink {
+    -ms-flex-negative: 1;
+    flex-shrink: 1;
+  }
+
+  .lg\:flex-no-grow {
+    -webkit-box-flex: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+  }
+
+  .lg\:flex-no-shrink {
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+  }
 }
 
-@media (--breakpoint-lg) {
-
-    .lg\:bg-light {
-        background-color: ffffff;
-    }
-
-    .lg\:bg-light-soft {
-        background-color: f-7-f-9-fa;
-    }
-
-    .lg\:bg-light-softer {
-        background-color: f-0-f-2-f-5;
-    }
-
-    .lg\:bg-light-softest {
-        background-color: dfe-3-e-8;
-    }
-
-    .lg\:bg-dark {
-        background-color: 212-b-35;
-    }
-
-    .lg\:bg-dark-soft {
-        background-color: 404-e-5-c;
-    }
-
-    .lg\:bg-dark-softer {
-        background-color: 647382;
-    }
-
-    .lg\:bg-dark-softest {
-        background-color: 919-eab;
-    }
-
-    .lg\:bg-red-dark {
-        background-color: d-43633;
-    }
-
-    .lg\:bg-red {
-        background-color: f-25451;
-    }
-
-    .lg\:bg-red-light {
-        background-color: fa-8785;
-    }
-
-    .lg\:bg-red-lightest {
-        background-color: fff-1-f-0;
-    }
-
-    .lg\:bg-orange-dark {
-        background-color: f-29500;
-    }
-
-    .lg\:bg-orange {
-        background-color: ffb-82-b;
-    }
-
-    .lg\:bg-orange-light {
-        background-color: ffd-685;
-    }
-
-    .lg\:bg-orange-lightest {
-        background-color: fff-8-eb;
-    }
-
-    .lg\:bg-yellow-dark {
-        background-color: ffc-400;
-    }
-
-    .lg\:bg-yellow {
-        background-color: ffe-14-a;
-    }
-
-    .lg\:bg-yellow-light {
-        background-color: ffea-83;
-    }
-
-    .lg\:bg-yellow-lightest {
-        background-color: fffbe-5;
-    }
-
-    .lg\:bg-green-dark {
-        background-color: 34-ae-4-c;
-    }
-
-    .lg\:bg-green {
-        background-color: 57-d-06-f;
-    }
-
-    .lg\:bg-green-light {
-        background-color: b-1-f-3-be;
-    }
-
-    .lg\:bg-green-lightest {
-        background-color: eefff-1;
-    }
-
-    .lg\:bg-teal-dark {
-        background-color: 249-e-9-a;
-    }
-
-    .lg\:bg-teal {
-        background-color: 4-dc-0-b-5;
-    }
-
-    .lg\:bg-teal-light {
-        background-color: 9-eebe-4;
-    }
-
-    .lg\:bg-teal-lightest {
-        background-color: eefffd;
-    }
-
-    .lg\:bg-blue-dark {
-        background-color: 3687-c-8;
-    }
-
-    .lg\:bg-blue {
-        background-color: 4-aa-2-ea;
-    }
-
-    .lg\:bg-blue-light {
-        background-color: acdaff;
-    }
-
-    .lg\:bg-blue-lightest {
-        background-color: f-1-f-9-ff;
-    }
-
-    .lg\:bg-indigo-dark {
-        background-color: 4957-a-5;
-    }
-
-    .lg\:bg-indigo {
-        background-color: 6574-cd;
-    }
-
-    .lg\:bg-indigo-light {
-        background-color: bcc-5-fb;
-    }
-
-    .lg\:bg-indigo-lightest {
-        background-color: f-4-f-5-ff;
-    }
-
-    .lg\:bg-purple-dark {
-        background-color: 714-cb-4;
-    }
-
-    .lg\:bg-purple {
-        background-color: 976-ae-6;
-    }
-
-    .lg\:bg-purple-light {
-        background-color: ceb-3-ff;
-    }
-
-    .lg\:bg-purple-lightest {
-        background-color: f-7-f-3-ff;
-    }
-
-    .lg\:bg-pink-dark {
-        background-color: d-84-f-7-d;
-    }
-
-    .lg\:bg-pink {
-        background-color: f-66-d-9-b;
-    }
-
-    .lg\:bg-pink-light {
-        background-color: ffa-5-c-3;
-    }
-
-    .lg\:bg-pink-lightest {
-        background-color: fdf-2-f-5;
-    }
-
-    .lg\:shadow-1 {
-        box-shadow: 0-1-px-3-px-rgba-0-0-0-0-08-0-1-px-2-px-rgba-0-0-0-0-15;
-    }
-
-    .lg\:shadow-2 {
-        box-shadow: 0-3-px-6-px-rgba-0-0-0-0-12-0-3-px-6-px-rgba-0-0-0-0-13;
-    }
-
-    .lg\:shadow-3 {
-        box-shadow: 0-10-px-20-px-rgba-0-0-0-0-13-0-6-px-6-px-rgba-0-0-0-0-13;
-    }
-
-    .lg\:shadow-4 {
-        box-shadow: 0-14-px-28-px-rgba-0-0-0-0-16-0-10-px-10-px-rgba-0-0-0-0-11;
-    }
-
-    .lg\:shadow-5 {
-        box-shadow: 0-19-px-38-px-rgba-0-0-0-0-18-0-15-px-12-px-rgba-0-0-0-0-11;
-    }
-
-    .lg\:flex {
-        display: flex;
-    }
-
-    .lg\:inline-flex {
-        display: inline-flex;
-    }
-
-    .lg\:flex-row {
-        flex-direction: row;
-    }
-
-    .lg\:flex-row-reverse {
-        flex-direction: row-reverse;
-    }
-
-    .lg\:flex-col {
-        flex-direction: column;
-    }
-
-    .lg\:flex-col-reverse {
-        flex-direction: column-reverse;
-    }
-
-    .lg\:flex-wrap {
-        flex-wrap: wrap;
-    }
-
-    .lg\:flex-wrap-reverse {
-        flex-wrap: wrap-reverse;
-    }
-
-    .lg\:flex-nowrap {
-        flex-wrap: nowrap;
-    }
-
-    .lg\:items-start {
-        align-items: flex-start;
-    }
-
-    .lg\:items-end {
-        align-items: flex-end;
-    }
-
-    .lg\:items-center {
-        align-items: center;
-    }
-
-    .lg\:items-baseline {
-        align-items: baseline;
-    }
-
-    .lg\:items-stretch {
-        align-items: stretch;
-    }
-
-    .lg\:justify-start {
-        justify-content: flex-start;
-    }
-
-    .lg\:justify-end {
-        justify-content: flex-end;
-    }
-
-    .lg\:justify-center {
-        justify-content: center;
-    }
-
-    .lg\:justify-between {
-        justify-content: space-between;
-    }
-
-    .lg\:justify-around {
-        justify-content: space-around;
-    }
-
-    .lg\:flex-auto {
-        flex: auto;
-    }
-
-    .lg\:flex-initial {
-        flex: initial;
-    }
-
-    .lg\:flex-none {
-        flex: none;
-    }
-
-    .lg\:flex-grow {
-        flex-grow: 1;
-    }
-
-    .lg\:flex-shrink {
-        flex-shrink: 1;
-    }
-
-    .lg\:flex-no-grow {
-        flex-grow: 0;
-    }
-
-    .lg\:flex-no-shrink {
-        flex-shrink: 0;
-    }
-}
-
-@media (--breakpoint-xl) {
-
-    .xl\:bg-light {
-        background-color: ffffff;
-    }
-
-    .xl\:bg-light-soft {
-        background-color: f-7-f-9-fa;
-    }
-
-    .xl\:bg-light-softer {
-        background-color: f-0-f-2-f-5;
-    }
-
-    .xl\:bg-light-softest {
-        background-color: dfe-3-e-8;
-    }
-
-    .xl\:bg-dark {
-        background-color: 212-b-35;
-    }
-
-    .xl\:bg-dark-soft {
-        background-color: 404-e-5-c;
-    }
-
-    .xl\:bg-dark-softer {
-        background-color: 647382;
-    }
-
-    .xl\:bg-dark-softest {
-        background-color: 919-eab;
-    }
-
-    .xl\:bg-red-dark {
-        background-color: d-43633;
-    }
-
-    .xl\:bg-red {
-        background-color: f-25451;
-    }
-
-    .xl\:bg-red-light {
-        background-color: fa-8785;
-    }
-
-    .xl\:bg-red-lightest {
-        background-color: fff-1-f-0;
-    }
-
-    .xl\:bg-orange-dark {
-        background-color: f-29500;
-    }
-
-    .xl\:bg-orange {
-        background-color: ffb-82-b;
-    }
-
-    .xl\:bg-orange-light {
-        background-color: ffd-685;
-    }
-
-    .xl\:bg-orange-lightest {
-        background-color: fff-8-eb;
-    }
-
-    .xl\:bg-yellow-dark {
-        background-color: ffc-400;
-    }
-
-    .xl\:bg-yellow {
-        background-color: ffe-14-a;
-    }
-
-    .xl\:bg-yellow-light {
-        background-color: ffea-83;
-    }
-
-    .xl\:bg-yellow-lightest {
-        background-color: fffbe-5;
-    }
-
-    .xl\:bg-green-dark {
-        background-color: 34-ae-4-c;
-    }
-
-    .xl\:bg-green {
-        background-color: 57-d-06-f;
-    }
-
-    .xl\:bg-green-light {
-        background-color: b-1-f-3-be;
-    }
-
-    .xl\:bg-green-lightest {
-        background-color: eefff-1;
-    }
-
-    .xl\:bg-teal-dark {
-        background-color: 249-e-9-a;
-    }
-
-    .xl\:bg-teal {
-        background-color: 4-dc-0-b-5;
-    }
-
-    .xl\:bg-teal-light {
-        background-color: 9-eebe-4;
-    }
-
-    .xl\:bg-teal-lightest {
-        background-color: eefffd;
-    }
-
-    .xl\:bg-blue-dark {
-        background-color: 3687-c-8;
-    }
-
-    .xl\:bg-blue {
-        background-color: 4-aa-2-ea;
-    }
-
-    .xl\:bg-blue-light {
-        background-color: acdaff;
-    }
-
-    .xl\:bg-blue-lightest {
-        background-color: f-1-f-9-ff;
-    }
-
-    .xl\:bg-indigo-dark {
-        background-color: 4957-a-5;
-    }
-
-    .xl\:bg-indigo {
-        background-color: 6574-cd;
-    }
-
-    .xl\:bg-indigo-light {
-        background-color: bcc-5-fb;
-    }
-
-    .xl\:bg-indigo-lightest {
-        background-color: f-4-f-5-ff;
-    }
-
-    .xl\:bg-purple-dark {
-        background-color: 714-cb-4;
-    }
-
-    .xl\:bg-purple {
-        background-color: 976-ae-6;
-    }
-
-    .xl\:bg-purple-light {
-        background-color: ceb-3-ff;
-    }
-
-    .xl\:bg-purple-lightest {
-        background-color: f-7-f-3-ff;
-    }
-
-    .xl\:bg-pink-dark {
-        background-color: d-84-f-7-d;
-    }
-
-    .xl\:bg-pink {
-        background-color: f-66-d-9-b;
-    }
-
-    .xl\:bg-pink-light {
-        background-color: ffa-5-c-3;
-    }
-
-    .xl\:bg-pink-lightest {
-        background-color: fdf-2-f-5;
-    }
-
-    .xl\:shadow-1 {
-        box-shadow: 0-1-px-3-px-rgba-0-0-0-0-08-0-1-px-2-px-rgba-0-0-0-0-15;
-    }
-
-    .xl\:shadow-2 {
-        box-shadow: 0-3-px-6-px-rgba-0-0-0-0-12-0-3-px-6-px-rgba-0-0-0-0-13;
-    }
-
-    .xl\:shadow-3 {
-        box-shadow: 0-10-px-20-px-rgba-0-0-0-0-13-0-6-px-6-px-rgba-0-0-0-0-13;
-    }
-
-    .xl\:shadow-4 {
-        box-shadow: 0-14-px-28-px-rgba-0-0-0-0-16-0-10-px-10-px-rgba-0-0-0-0-11;
-    }
-
-    .xl\:shadow-5 {
-        box-shadow: 0-19-px-38-px-rgba-0-0-0-0-18-0-15-px-12-px-rgba-0-0-0-0-11;
-    }
-
-    .xl\:flex {
-        display: flex;
-    }
-
-    .xl\:inline-flex {
-        display: inline-flex;
-    }
-
-    .xl\:flex-row {
-        flex-direction: row;
-    }
-
-    .xl\:flex-row-reverse {
-        flex-direction: row-reverse;
-    }
-
-    .xl\:flex-col {
-        flex-direction: column;
-    }
-
-    .xl\:flex-col-reverse {
-        flex-direction: column-reverse;
-    }
-
-    .xl\:flex-wrap {
-        flex-wrap: wrap;
-    }
-
-    .xl\:flex-wrap-reverse {
-        flex-wrap: wrap-reverse;
-    }
-
-    .xl\:flex-nowrap {
-        flex-wrap: nowrap;
-    }
-
-    .xl\:items-start {
-        align-items: flex-start;
-    }
-
-    .xl\:items-end {
-        align-items: flex-end;
-    }
-
-    .xl\:items-center {
-        align-items: center;
-    }
-
-    .xl\:items-baseline {
-        align-items: baseline;
-    }
-
-    .xl\:items-stretch {
-        align-items: stretch;
-    }
-
-    .xl\:justify-start {
-        justify-content: flex-start;
-    }
-
-    .xl\:justify-end {
-        justify-content: flex-end;
-    }
-
-    .xl\:justify-center {
-        justify-content: center;
-    }
-
-    .xl\:justify-between {
-        justify-content: space-between;
-    }
-
-    .xl\:justify-around {
-        justify-content: space-around;
-    }
-
-    .xl\:flex-auto {
-        flex: auto;
-    }
-
-    .xl\:flex-initial {
-        flex: initial;
-    }
-
-    .xl\:flex-none {
-        flex: none;
-    }
-
-    .xl\:flex-grow {
-        flex-grow: 1;
-    }
-
-    .xl\:flex-shrink {
-        flex-shrink: 1;
-    }
-
-    .xl\:flex-no-grow {
-        flex-grow: 0;
-    }
-
-    .xl\:flex-no-shrink {
-        flex-shrink: 0;
-    }
+@media (min-width: 1200px) {
+  .xl\:bg-light {
+    background-color: #ffffff;
+  }
+
+  .xl\:bg-light-soft {
+    background-color: #f7f9fa;
+  }
+
+  .xl\:bg-light-softer {
+    background-color: #f0f2f5;
+  }
+
+  .xl\:bg-light-softest {
+    background-color: #dfe3e8;
+  }
+
+  .xl\:bg-dark {
+    background-color: #212b35;
+  }
+
+  .xl\:bg-dark-soft {
+    background-color: #404e5c;
+  }
+
+  .xl\:bg-dark-softer {
+    background-color: #647382;
+  }
+
+  .xl\:bg-dark-softest {
+    background-color: #919eab;
+  }
+
+  .xl\:bg-red-dark {
+    background-color: #d43633;
+  }
+
+  .xl\:bg-red {
+    background-color: #f25451;
+  }
+
+  .xl\:bg-red-light {
+    background-color: #fa8785;
+  }
+
+  .xl\:bg-red-lightest {
+    background-color: #fff1f0;
+  }
+
+  .xl\:bg-orange-dark {
+    background-color: #f29500;
+  }
+
+  .xl\:bg-orange {
+    background-color: #ffb82b;
+  }
+
+  .xl\:bg-orange-light {
+    background-color: #ffd685;
+  }
+
+  .xl\:bg-orange-lightest {
+    background-color: #fff8eb;
+  }
+
+  .xl\:bg-yellow-dark {
+    background-color: #ffc400;
+  }
+
+  .xl\:bg-yellow {
+    background-color: #ffe14a;
+  }
+
+  .xl\:bg-yellow-light {
+    background-color: #ffea83;
+  }
+
+  .xl\:bg-yellow-lightest {
+    background-color: #fffbe5;
+  }
+
+  .xl\:bg-green-dark {
+    background-color: #34ae4c;
+  }
+
+  .xl\:bg-green {
+    background-color: #57d06f;
+  }
+
+  .xl\:bg-green-light {
+    background-color: #b1f3be;
+  }
+
+  .xl\:bg-green-lightest {
+    background-color: #eefff1;
+  }
+
+  .xl\:bg-teal-dark {
+    background-color: #249e9a;
+  }
+
+  .xl\:bg-teal {
+    background-color: #4dc0b5;
+  }
+
+  .xl\:bg-teal-light {
+    background-color: #9eebe4;
+  }
+
+  .xl\:bg-teal-lightest {
+    background-color: #eefffd;
+  }
+
+  .xl\:bg-blue-dark {
+    background-color: #3687c8;
+  }
+
+  .xl\:bg-blue {
+    background-color: #4aa2ea;
+  }
+
+  .xl\:bg-blue-light {
+    background-color: #acdaff;
+  }
+
+  .xl\:bg-blue-lightest {
+    background-color: #f1f9ff;
+  }
+
+  .xl\:bg-indigo-dark {
+    background-color: #4957a5;
+  }
+
+  .xl\:bg-indigo {
+    background-color: #6574cd;
+  }
+
+  .xl\:bg-indigo-light {
+    background-color: #bcc5fb;
+  }
+
+  .xl\:bg-indigo-lightest {
+    background-color: #f4f5ff;
+  }
+
+  .xl\:bg-purple-dark {
+    background-color: #714cb4;
+  }
+
+  .xl\:bg-purple {
+    background-color: #976ae6;
+  }
+
+  .xl\:bg-purple-light {
+    background-color: #ceb3ff;
+  }
+
+  .xl\:bg-purple-lightest {
+    background-color: #f7f3ff;
+  }
+
+  .xl\:bg-pink-dark {
+    background-color: #d84f7d;
+  }
+
+  .xl\:bg-pink {
+    background-color: #f66d9b;
+  }
+
+  .xl\:bg-pink-light {
+    background-color: #ffa5c3;
+  }
+
+  .xl\:bg-pink-lightest {
+    background-color: #fdf2f5;
+  }
+
+  .xl\:shadow-1 {
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .15);
+  }
+
+  .xl\:shadow-2 {
+    -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, .12), 0 3px 6px rgba(0, 0, 0, .13);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .12), 0 3px 6px rgba(0, 0, 0, .13);
+  }
+
+  .xl\:shadow-3 {
+    -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, .13), 0 6px 6px rgba(0, 0, 0, .13);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .13), 0 6px 6px rgba(0, 0, 0, .13);
+  }
+
+  .xl\:shadow-4 {
+    -webkit-box-shadow: 0 14px 28px rgba(0, 0, 0, .16), 0 10px 10px rgba(0, 0, 0, .11);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, .16), 0 10px 10px rgba(0, 0, 0, .11);
+  }
+
+  .xl\:shadow-5 {
+    -webkit-box-shadow: 0 19px 38px rgba(0, 0, 0, .18), 0 15px 12px rgba(0, 0, 0, .11);
+    box-shadow: 0 19px 38px rgba(0, 0, 0, .18), 0 15px 12px rgba(0, 0, 0, .11);
+  }
+
+  .xl\:flex {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+
+  .xl\:inline-flex {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+  }
+
+  .xl\:flex-row {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+  }
+
+  .xl\:flex-row-reverse {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+  }
+
+  .xl\:flex-col {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+
+  .xl\:flex-col-reverse {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: column-reverse;
+    flex-direction: column-reverse;
+  }
+
+  .xl\:flex-wrap {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
+
+  .xl\:flex-wrap-reverse {
+    -ms-flex-wrap: wrap-reverse;
+    flex-wrap: wrap-reverse;
+  }
+
+  .xl\:flex-nowrap {
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+  }
+
+  .xl\:items-start {
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+  }
+
+  .xl\:items-end {
+    -webkit-box-align: end;
+    -ms-flex-align: end;
+    align-items: flex-end;
+  }
+
+  .xl\:items-center {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+
+  .xl\:items-baseline {
+    -webkit-box-align: baseline;
+    -ms-flex-align: baseline;
+    align-items: baseline;
+  }
+
+  .xl\:items-stretch {
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+  }
+
+  .xl\:justify-start {
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+  }
+
+  .xl\:justify-end {
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+  }
+
+  .xl\:justify-center {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+  }
+
+  .xl\:justify-between {
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+  }
+
+  .xl\:justify-around {
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+  }
+
+  .xl\:flex-auto {
+    -webkit-box-flex: 1;
+    -ms-flex: auto;
+    flex: auto;
+  }
+
+  .xl\:flex-initial {
+    -webkit-box-flex: initial;
+    -ms-flex: initial;
+    flex: initial;
+  }
+
+  .xl\:flex-none {
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+  }
+
+  .xl\:flex-grow {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+  }
+
+  .xl\:flex-shrink {
+    -ms-flex-negative: 1;
+    flex-shrink: 1;
+  }
+
+  .xl\:flex-no-grow {
+    -webkit-box-flex: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+  }
+
+  .xl\:flex-no-shrink {
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+  }
 }
 
 /*# sourceMappingURL=tailwind.css.map */
