@@ -1,6 +1,6 @@
 const postcss = require('postcss')
 const _ = require('lodash')
-const defineClasses = require('../util/define-classes')
+const defineClasses = require('../util/defineClasses')
 
 module.exports = function () {
   return defineClasses({

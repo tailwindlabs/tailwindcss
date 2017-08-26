@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const defineClass = require('../util/define-class')
+const defineClass = require('../util/defineClass')
 
 function findColor(colors, color) {
   const colorsNormalized = _.mapKeys(colors, (value, key) => {

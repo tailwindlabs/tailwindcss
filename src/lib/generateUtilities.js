@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const postcss = require('postcss')
-const backgroundColors = require('../generators/background-colors')
+const backgroundColors = require('../generators/backgroundColors')
 const shadows = require('../generators/shadows')
 const flex = require('../generators/flex')
 const cloneNodes = require('../util/cloneNodes')

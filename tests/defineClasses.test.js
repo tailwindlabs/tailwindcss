@@ -1,7 +1,7 @@
 var postcss = require('postcss')
 var fs = require('fs')
 var _ = require('lodash')
-var defineClasses = require('../src/util/define-classes')
+var defineClasses = require('../src/util/defineClasses')
 
 var config = {
     flex: {

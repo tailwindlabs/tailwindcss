@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const defineClass = require('../util/define-class')
+const defineClass = require('../util/defineClass')
 
 module.exports = function ({ shadows }) {
   return _(shadows).toPairs().map(([className, shadow]) => {
