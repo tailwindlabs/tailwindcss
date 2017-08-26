@@ -3,11 +3,9 @@ import defineClass from '../util/defineClass'
 import normalizeColorList from '../util/normalizeColorList'
 
 export default function ({ colors, backgroundColors }) {
-  backgroundColors = normalizeColorList(backgroundColors, colors)
-
-  return _(backgroundColors).toPairs().map(([className, color]) => {
+  return _.map(normalizeColorList(backgroundColors, colors), (color, className) => {
     return defineClass(`bg-${className}`, {
       backgroundColor: color,
     })
-  }).value()
+  })
 }
