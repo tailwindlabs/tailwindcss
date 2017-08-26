@@ -1,10 +1,11 @@
 import _ from 'lodash'
+import responsive from '../util/responsive'
 import backgroundColors from '../generators/backgroundColors'
 import backgroundSize from '../generators/backgroundSize'
 import borderWidths from '../generators/borderWidths'
+import borderColors from '../generators/borderColors'
 import shadows from '../generators/shadows'
 import flex from '../generators/flex'
-import responsive from '../util/responsive'
 
 export default function(options) {
   return function(css) {
@@ -14,6 +15,7 @@ export default function(options) {
           backgroundColors(options),
           backgroundSize(options),
           borderWidths(options),
+          borderColors(options),
           shadows(options),
           flex(options),
         ])

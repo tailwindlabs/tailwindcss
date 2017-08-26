@@ -1,25 +1,13 @@
 import _ from 'lodash'
 import defineClass from '../util/defineClass'
-import findColor from '../util/findColor'
+import normalizeColorList from '../util/normalizeColorList'
 
-export default function({colors, backgroundColors}) {
-  if (_.isArray(backgroundColors)) {
-    backgroundColors = _(backgroundColors)
-      .flatMap(color => {
-        if (_.isString(color)) {
-          return [[color, color]]
-        }
-        return _.toPairs(color)
-      })
-      .fromPairs()
-  }
+export default function ({ colors, backgroundColors }) {
+  backgroundColors = normalizeColorList(backgroundColors, colors)
 
-  return _(backgroundColors)
-    .toPairs()
-    .map(([className, colorName]) => {
-      return defineClass(`bg-${className}`, {
-        backgroundColor: findColor(colors, colorName),
-      })
+  return _(backgroundColors).toPairs().map(([className, color]) => {
+    return defineClass(`bg-${className}`, {
+      backgroundColor: color,
     })
-    .value()
+  }).value()
 }
