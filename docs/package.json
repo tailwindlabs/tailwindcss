@@ -17,7 +17,8 @@
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
     "lodash": "^4.17.4",
-    "postcss-cssnext": "^3.0.2"
+    "postcss-cssnext": "^3.0.2",
+    "stylefmt": "^6.0.0"
   },
   "browserslist": [
     "> 1%"

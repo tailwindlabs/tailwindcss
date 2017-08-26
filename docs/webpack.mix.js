@@ -15,7 +15,6 @@ mix.less('source/_assets/less/main.less', 'source/css')
   .options({
     postCss: [
       require('./../src/tailwind.js')(),
-      require('postcss-cssnext')()
     ]
   })
 
