@@ -1,5 +1,5 @@
-const _ = require('lodash')
+import _ from 'lodash'
 
-module.exports = function cloneNodes(nodes) {
+export default function cloneNodes(nodes) {
   return _.map(nodes, node => node.clone())
 }

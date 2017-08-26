@@ -1,10 +1,10 @@
-const postcss = require('postcss')
-const _ = require('lodash')
-const findMixin = require('../util/findMixin')
+import postcss from 'postcss'
+import _ from 'lodash'
+import findMixin from '../util/findMixin'
 
-module.exports = function (options) {
-  return function (css) {
-    css.walkRules(rule => {
+export default postcss.plugin('tailwind-apply', function(css) {
+  return function(css) {
+    css.walkRules(function(rule) {
       rule.walkAtRules('apply', atRule => {
         const mixins = postcss.list.space(atRule.params)
 
@@ -28,4 +28,4 @@ module.exports = function (options) {
       })
     })
   }
-}
+})

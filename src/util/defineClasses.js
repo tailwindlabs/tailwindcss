@@ -1,9 +1,9 @@
-const postcss = require('postcss')
-const _ = require('lodash')
-const defineClass = require('./defineClass')
+import postcss from 'postcss'
+import _ from 'lodash'
+import defineClass from './defineClass'
 
-module.exports = function defineClasses(classes) {
-  return _.map(classes, function(properties, className) {
+export default function defineClasses(classes) {
+  return _.map(classes, (properties, className) => {
     return defineClass(className, properties)
   })
 }

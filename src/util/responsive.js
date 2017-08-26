@@ -1,10 +1,10 @@
-const postcss = require('postcss')
-const cloneNodes = require('./cloneNodes')
+import postcss from 'postcss'
+import cloneNodes from './cloneNodes'
 
-module.exports = function responsive(rules) {
-  const atRule = postcss.atRule({
-    name: 'responsive',
-  })
-  atRule.append(cloneNodes(rules))
-  return atRule
+export default function responsive(rules) {
+  return postcss
+    .atRule({
+      name: 'responsive',
+    })
+    .append(cloneNodes(rules))
 }

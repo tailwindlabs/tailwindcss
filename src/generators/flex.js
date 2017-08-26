@@ -1,8 +1,8 @@
-const postcss = require('postcss')
-const _ = require('lodash')
-const defineClasses = require('../util/defineClasses')
+import postcss from 'postcss'
+import _ from 'lodash'
+import defineClasses from '../util/defineClasses'
 
-module.exports = function () {
+export default function() {
   return defineClasses({
     flex: {
       display: 'flex',

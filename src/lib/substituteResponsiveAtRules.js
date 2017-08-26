@@ -1,9 +1,9 @@
-const _ = require('lodash')
-const postcss = require('postcss')
-const cloneNodes = require('../util/cloneNodes')
+import _ from 'lodash'
+import postcss from 'postcss'
+import cloneNodes from '../util/cloneNodes'
 
-module.exports = function (options) {
-  return function (css) {
+export default function(options) {
+  return function(css) {
     const rules = []
 
     css.walkAtRules('responsive', atRule => {
@@ -19,11 +19,13 @@ module.exports = function (options) {
         params: `(--breakpoint-${breakpoint})`,
       })
 
-      mediaQuery.append(rules.map(rule => {
-        const cloned = rule.clone()
-        cloned.selector = `.${breakpoint}\\:${rule.selector.slice(1)}`
-        return cloned
-      }))
+      mediaQuery.append(
+        rules.map(rule => {
+          const cloned = rule.clone()
+          cloned.selector = `.${breakpoint}\\:${rule.selector.slice(1)}`
+          return cloned
+        })
+      )
       css.append(mediaQuery)
     })
   }

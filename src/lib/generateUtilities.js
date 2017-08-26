@@ -1,16 +1,21 @@
-const _ = require('lodash')
-const responsive = require('../util/responsive')
+import _ from 'lodash'
+import backgroundColors from '../generators/backgroundColors'
+import backgroundSize from '../generators/backgroundSize'
+import borderWidths from '../generators/borderWidths'
+import shadows from '../generators/shadows'
+import flex from '../generators/flex'
+import responsive from '../util/responsive'
 
-module.exports = function (options) {
-  return function (css) {
+export default function(options) {
+  return function(css) {
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'utilities') {
         const utilities = _.flatten([
-          require('../generators/backgroundColors')(options),
-          require('../generators/backgroundSize')(options),
-          require('../generators/borderWidths')(options),
-          require('../generators/shadows')(options),
-          require('../generators/flex')(options),
+          backgroundColors(options),
+          backgroundSize(options),
+          borderWidths(options),
+          shadows(options),
+          flex(options),
         ])
         css.insertBefore(atRule, responsive(utilities))
         atRule.remove()

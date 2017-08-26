@@ -1,6 +1,6 @@
-const _ = require('lodash')
+import _ from 'lodash'
 
-module.exports = function findMixin(css, mixin, onError) {
+export default function findMixin(css, mixin, onError) {
   const matches = []
 
   css.walkRules(rule => {

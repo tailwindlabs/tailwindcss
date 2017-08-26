@@ -1,6 +1,6 @@
-const defineClasses = require('../util/defineClasses')
+import defineClasses from '../util/defineClasses'
 
-module.exports = function () {
+export default function() {
   return defineClasses({
     bgCover: {
       backgroundSize: 'cover',

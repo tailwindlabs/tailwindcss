@@ -1,7 +1,7 @@
-const _ = require('lodash')
-const postcss = require('postcss')
+import _ from 'lodash'
+import postcss from 'postcss'
 
-module.exports = function defineClass(className, properties) {
+export default function(className, properties) {
   const decls = _.map(properties, (value, property) => {
     return postcss.decl({
       prop: _.kebabCase(property),

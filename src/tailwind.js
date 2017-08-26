@@ -1,14 +1,15 @@
-const _ = require('lodash')
-const postcss = require('postcss')
-const fs = require('fs')
+import fs from 'fs'
+import _ from 'lodash'
+import postcss from 'postcss'
+import cssnext from 'postcss-cssnext'
 
-const addCustomMediaQueries = require('./lib/addCustomMediaQueries')
-const generateUtilities = require('./lib/generateUtilities')
-const substituteResponsiveAtRules = require('./lib/substituteResponsiveAtRules')
-const substituteClassApplyAtRules = require('./lib/substituteClassApplyAtRules')
+import addCustomMediaQueries from './lib/addCustomMediaQueries'
+import generateUtilities from './lib/generateUtilities'
+import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
+import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
 
-module.exports = postcss.plugin('tailwind', options => {
-  options = options || require('./default-config')
+export default postcss.plugin('tailwind', options => {
+  options = options || require('./defaultConfig')
 
   return postcss([
     addCustomMediaQueries(options),

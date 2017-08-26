@@ -1,10 +1,13 @@
-const _ = require('lodash')
-const defineClass = require('../util/defineClass')
+import _ from 'lodash'
+import defineClass from '../util/defineClass'
 
-module.exports = function ({ shadows }) {
-  return _(shadows).toPairs().map(([className, shadow]) => {
-    return defineClass(`shadow-${className}`, {
-      boxShadow: shadow,
+export default function({shadows}) {
+  return _(shadows)
+    .toPairs()
+    .map(([className, shadow]) => {
+      return defineClass(`shadow-${className}`, {
+        boxShadow: shadow,
+      })
     })
-  }).value()
+    .value()
 }

@@ -1,24 +1,24 @@
-const _ = require('lodash')
-const defineClass = require('../util/defineClass')
-const defineClasses = require('../util/defineClasses')
-const findColor = require('../util/findColor')
+import _ from 'lodash'
+import defineClass from '../util/defineClass'
+import defineClasses from '../util/defineClasses'
+import findColor from '../util/findColor'
 
 function defaultBorder(width, color) {
   return defineClasses({
     border: {
-      border: `${width} solid ${color}`
+      border: `${width} solid ${color}`,
     },
     borderT: {
-      borderTop: `${width} solid ${color}`
+      borderTop: `${width} solid ${color}`,
     },
     borderR: {
-      borderRight: `${width} solid ${color}`
+      borderRight: `${width} solid ${color}`,
     },
     borderB: {
-      borderBottom: `${width} solid ${color}`
+      borderBottom: `${width} solid ${color}`,
     },
     borderL: {
-      borderLeft: `${width} solid ${color}`
+      borderLeft: `${width} solid ${color}`,
     },
   })
 }
@@ -26,24 +26,24 @@ function defaultBorder(width, color) {
 function sizedBorder(size, width, color) {
   return defineClasses({
     [`border-${size}`]: {
-      border: `${width} solid ${color}`
+      border: `${width} solid ${color}`,
     },
     [`border-t-${size}`]: {
-      borderTop: `${width} solid ${color}`
+      borderTop: `${width} solid ${color}`,
     },
     [`border-r-${size}`]: {
-      borderRight: `${width} solid ${color}`
+      borderRight: `${width} solid ${color}`,
     },
     [`border-b-${size}`]: {
-      borderBottom: `${width} solid ${color}`
+      borderBottom: `${width} solid ${color}`,
     },
     [`border-l-${size}`]: {
-      borderLeft: `${width} solid ${color}`
+      borderLeft: `${width} solid ${color}`,
     },
   })
 }
 
-module.exports = function ({ colors, borders }) {
+module.exports = function({colors, borders}) {
   const color = findColor(colors, borders.defaults.color)
 
   return _.flatten([
