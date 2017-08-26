@@ -13,6 +13,7 @@
     "babelify": "babel src --out-dir lib",
     "prepare": "npm run babelify",
     "build": "babel-node src/build.js",
+    "watch": "nodemon -e js,css --watch src --exec 'babel-node src/build.js'",
     "test": "jest"
   },
   "devDependencies": {
@@ -29,6 +30,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.4",
+    "nodemon": "^1.11.0",
     "normalize.css": "^6.0.0",
     "postcss": "^6.0.9",
     "postcss-cssnext": "^3.0.2",
