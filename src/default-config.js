@@ -101,6 +101,18 @@ module.exports = {
     'pink-light',
     'pink-lightest',
   ],
+  borders: {
+    defaults: {
+      width: '1px',
+      color: 'grey-500',
+    },
+    widths: {
+      0: '0',
+      2: '2px',
+      4: '4px',
+      8: '8px',
+    },
+  },
   shadows: {
     1: '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.15)',
     2: '0 3px 6px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.13)',

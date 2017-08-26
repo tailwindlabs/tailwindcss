@@ -1,13 +1,6 @@
 const _ = require('lodash')
 const defineClass = require('../util/defineClass')
-
-function findColor(colors, color) {
-  const colorsNormalized = _.mapKeys(colors, (value, key) => {
-    return _.camelCase(key)
-  })
-
-  return _.get(colorsNormalized, _.camelCase(color), color)
-}
+const findColor = require('../util/findColor')
 
 module.exports = function ({ colors, backgroundColors }) {
   if (_.isArray(backgroundColors)) {

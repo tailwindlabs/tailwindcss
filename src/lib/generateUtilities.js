@@ -8,6 +8,7 @@ module.exports = function (options) {
         const utilities = _.flatten([
           require('../generators/backgroundColors')(options),
           require('../generators/backgroundSize')(options),
+          require('../generators/borderWidths')(options),
           require('../generators/shadows')(options),
           require('../generators/flex')(options),
         ])
