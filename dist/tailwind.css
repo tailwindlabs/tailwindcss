@@ -595,6 +595,34 @@ body {
   border-top-left-radius: 9999px;
 }
 
+.block {
+  display: block;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.inline {
+  display: inline;
+}
+
+.table {
+  display: table;
+}
+
+.table-row {
+  display: table-row;
+}
+
+.table-cell {
+  display: table-cell;
+}
+
+.hidden {
+  display: none;
+}
+
 .fixed {
   position: fixed;
 }
@@ -1447,6 +1475,34 @@ body {
   .sm\:rounded-l-pill {
     border-bottom-left-radius: 9999px;
     border-top-left-radius: 9999px;
+  }
+
+  .sm\:block {
+    display: block;
+  }
+
+  .sm\:inline-block {
+    display: inline-block;
+  }
+
+  .sm\:inline {
+    display: inline;
+  }
+
+  .sm\:table {
+    display: table;
+  }
+
+  .sm\:table-row {
+    display: table-row;
+  }
+
+  .sm\:table-cell {
+    display: table-cell;
+  }
+
+  .sm\:hidden {
+    display: none;
   }
 
   .sm\:fixed {
@@ -2304,6 +2360,34 @@ body {
     border-top-left-radius: 9999px;
   }
 
+  .md\:block {
+    display: block;
+  }
+
+  .md\:inline-block {
+    display: inline-block;
+  }
+
+  .md\:inline {
+    display: inline;
+  }
+
+  .md\:table {
+    display: table;
+  }
+
+  .md\:table-row {
+    display: table-row;
+  }
+
+  .md\:table-cell {
+    display: table-cell;
+  }
+
+  .md\:hidden {
+    display: none;
+  }
+
   .md\:fixed {
     position: fixed;
   }
@@ -3159,6 +3243,34 @@ body {
     border-top-left-radius: 9999px;
   }
 
+  .lg\:block {
+    display: block;
+  }
+
+  .lg\:inline-block {
+    display: inline-block;
+  }
+
+  .lg\:inline {
+    display: inline;
+  }
+
+  .lg\:table {
+    display: table;
+  }
+
+  .lg\:table-row {
+    display: table-row;
+  }
+
+  .lg\:table-cell {
+    display: table-cell;
+  }
+
+  .lg\:hidden {
+    display: none;
+  }
+
   .lg\:fixed {
     position: fixed;
   }
@@ -4012,6 +4124,34 @@ body {
   .xl\:rounded-l-pill {
     border-bottom-left-radius: 9999px;
     border-top-left-radius: 9999px;
+  }
+
+  .xl\:block {
+    display: block;
+  }
+
+  .xl\:inline-block {
+    display: inline-block;
+  }
+
+  .xl\:inline {
+    display: inline;
+  }
+
+  .xl\:table {
+    display: table;
+  }
+
+  .xl\:table-row {
+    display: table-row;
+  }
+
+  .xl\:table-cell {
+    display: table-cell;
+  }
+
+  .xl\:hidden {
+    display: none;
   }
 
   .xl\:fixed {

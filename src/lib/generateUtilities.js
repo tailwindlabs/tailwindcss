@@ -6,6 +6,7 @@ import borderWidths from '../generators/borderWidths'
 import borderColors from '../generators/borderColors'
 import borderStyles from '../generators/borderStyles'
 import rounded from '../generators/rounded'
+import display from '../generators/display'
 import position from '../generators/position'
 import overflow from '../generators/overflow'
 import constrain from '../generators/constrain'
@@ -23,6 +24,7 @@ export default function(options) {
           borderColors(options),
           borderStyles(options),
           rounded(options),
+          display(options),
           position(options),
           overflow(options),
           constrain(options),
