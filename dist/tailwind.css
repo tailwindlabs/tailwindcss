@@ -299,6 +299,30 @@ body {
   text-align: justify;
 }
 
+.align-baseline {
+  vertical-align: baseline;
+}
+
+.align-top {
+  vertical-align: top;
+}
+
+.align-middle {
+  vertical-align: middle;
+}
+
+.align-bottom {
+  vertical-align: bottom;
+}
+
+.align-text-top {
+  vertical-align: text-top;
+}
+
+.align-text-bottom {
+  vertical-align: text-bottom;
+}
+
 .bg-light {
   background-color: #ffffff;
 }
@@ -1463,6 +1487,30 @@ body {
 
   .sm\:text-justify {
     text-align: justify;
+  }
+
+  .sm\:align-baseline {
+    vertical-align: baseline;
+  }
+
+  .sm\:align-top {
+    vertical-align: top;
+  }
+
+  .sm\:align-middle {
+    vertical-align: middle;
+  }
+
+  .sm\:align-bottom {
+    vertical-align: bottom;
+  }
+
+  .sm\:align-text-top {
+    vertical-align: text-top;
+  }
+
+  .sm\:align-text-bottom {
+    vertical-align: text-bottom;
   }
 
   .sm\:bg-light {
@@ -2632,6 +2680,30 @@ body {
     text-align: justify;
   }
 
+  .md\:align-baseline {
+    vertical-align: baseline;
+  }
+
+  .md\:align-top {
+    vertical-align: top;
+  }
+
+  .md\:align-middle {
+    vertical-align: middle;
+  }
+
+  .md\:align-bottom {
+    vertical-align: bottom;
+  }
+
+  .md\:align-text-top {
+    vertical-align: text-top;
+  }
+
+  .md\:align-text-bottom {
+    vertical-align: text-bottom;
+  }
+
   .md\:bg-light {
     background-color: #ffffff;
   }
@@ -3799,6 +3871,30 @@ body {
     text-align: justify;
   }
 
+  .lg\:align-baseline {
+    vertical-align: baseline;
+  }
+
+  .lg\:align-top {
+    vertical-align: top;
+  }
+
+  .lg\:align-middle {
+    vertical-align: middle;
+  }
+
+  .lg\:align-bottom {
+    vertical-align: bottom;
+  }
+
+  .lg\:align-text-top {
+    vertical-align: text-top;
+  }
+
+  .lg\:align-text-bottom {
+    vertical-align: text-bottom;
+  }
+
   .lg\:bg-light {
     background-color: #ffffff;
   }
@@ -4964,6 +5060,30 @@ body {
 
   .xl\:text-justify {
     text-align: justify;
+  }
+
+  .xl\:align-baseline {
+    vertical-align: baseline;
+  }
+
+  .xl\:align-top {
+    vertical-align: top;
+  }
+
+  .xl\:align-middle {
+    vertical-align: middle;
+  }
+
+  .xl\:align-bottom {
+    vertical-align: bottom;
+  }
+
+  .xl\:align-text-top {
+    vertical-align: text-top;
+  }
+
+  .xl\:align-text-bottom {
+    vertical-align: text-bottom;
   }
 
   .xl\:bg-light {
