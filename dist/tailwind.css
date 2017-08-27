@@ -538,6 +538,36 @@ body {
   height: 100%;
 }
 
+.overflow-auto {
+  overflow: auto;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.mask {
+  overflow: hidden;
+}
+
+.overflow-visible {
+  overflow: visible;
+}
+
+.overflow-scroll {
+  overflow: scroll;
+}
+
+.overflow-scroll-x {
+  overflow-x: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.overflow-scroll-y {
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
 .constrain-xs {
   max-width: 20rem;
 }
@@ -1256,6 +1286,36 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
+  }
+
+  .sm\:overflow-auto {
+    overflow: auto;
+  }
+
+  .sm\:overflow-hidden {
+    overflow: hidden;
+  }
+
+  .sm\:mask {
+    overflow: hidden;
+  }
+
+  .sm\:overflow-visible {
+    overflow: visible;
+  }
+
+  .sm\:overflow-scroll {
+    overflow: scroll;
+  }
+
+  .sm\:overflow-scroll-x {
+    overflow-x: auto;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+
+  .sm\:overflow-scroll-y {
+    overflow-y: auto;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
   .sm\:constrain-xs {
@@ -1979,6 +2039,36 @@ body {
     height: 100%;
   }
 
+  .md\:overflow-auto {
+    overflow: auto;
+  }
+
+  .md\:overflow-hidden {
+    overflow: hidden;
+  }
+
+  .md\:mask {
+    overflow: hidden;
+  }
+
+  .md\:overflow-visible {
+    overflow: visible;
+  }
+
+  .md\:overflow-scroll {
+    overflow: scroll;
+  }
+
+  .md\:overflow-scroll-x {
+    overflow-x: auto;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+
+  .md\:overflow-scroll-y {
+    overflow-y: auto;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+
   .md\:constrain-xs {
     max-width: 20rem;
   }
@@ -2700,6 +2790,36 @@ body {
     height: 100%;
   }
 
+  .lg\:overflow-auto {
+    overflow: auto;
+  }
+
+  .lg\:overflow-hidden {
+    overflow: hidden;
+  }
+
+  .lg\:mask {
+    overflow: hidden;
+  }
+
+  .lg\:overflow-visible {
+    overflow: visible;
+  }
+
+  .lg\:overflow-scroll {
+    overflow: scroll;
+  }
+
+  .lg\:overflow-scroll-x {
+    overflow-x: auto;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+
+  .lg\:overflow-scroll-y {
+    overflow-y: auto;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+
   .lg\:constrain-xs {
     max-width: 20rem;
   }
@@ -3419,6 +3539,36 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
+  }
+
+  .xl\:overflow-auto {
+    overflow: auto;
+  }
+
+  .xl\:overflow-hidden {
+    overflow: hidden;
+  }
+
+  .xl\:mask {
+    overflow: hidden;
+  }
+
+  .xl\:overflow-visible {
+    overflow: visible;
+  }
+
+  .xl\:overflow-scroll {
+    overflow: scroll;
+  }
+
+  .xl\:overflow-scroll-x {
+    overflow-x: auto;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+
+  .xl\:overflow-scroll-y {
+    overflow-y: auto;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
   .xl\:constrain-xs {

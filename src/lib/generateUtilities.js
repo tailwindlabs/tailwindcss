@@ -5,6 +5,7 @@ import backgroundSize from '../generators/backgroundSize'
 import borderWidths from '../generators/borderWidths'
 import borderColors from '../generators/borderColors'
 import position from '../generators/position'
+import overflow from '../generators/overflow'
 import constrain from '../generators/constrain'
 import shadows from '../generators/shadows'
 import flex from '../generators/flex'
@@ -19,6 +20,7 @@ export default function(options) {
           borderWidths(options),
           borderColors(options),
           position(options),
+          overflow(options),
           constrain(options),
           shadows(options),
           flex(options),
