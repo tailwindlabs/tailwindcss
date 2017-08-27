@@ -1,5 +1,3 @@
-import postcss from 'postcss'
-import _ from 'lodash'
 import defineClasses from '../util/defineClasses'
 
 export default function() {
