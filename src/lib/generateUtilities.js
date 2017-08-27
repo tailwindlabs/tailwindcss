@@ -2,6 +2,7 @@ import _ from 'lodash'
 import responsive from '../util/responsive'
 import textSizes from '../generators/textSizes'
 import textWeights from '../generators/textWeights'
+import textFonts from '../generators/textFonts'
 import backgroundColors from '../generators/backgroundColors'
 import backgroundSize from '../generators/backgroundSize'
 import borderWidths from '../generators/borderWidths'
@@ -22,6 +23,7 @@ export default function(options) {
         const utilities = _.flatten([
           textSizes(options),
           textWeights(options),
+          textFonts(options),
           backgroundColors(options),
           backgroundSize(options),
           borderWidths(options),

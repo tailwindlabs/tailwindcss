@@ -54,6 +54,11 @@ export default {
     'pink-lightest': '#fdf2f5',
   },
   text: {
+    fonts: {
+      'sans': 'system-ui',
+      'serif': 'Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif',
+      'mono': 'Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace',
+    },
     sizes: {
       'xs': '.75rem', // 12px
       'sm': '.875rem', // 14px
