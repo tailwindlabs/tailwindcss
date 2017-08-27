@@ -4,6 +4,7 @@ import backgroundColors from '../generators/backgroundColors'
 import backgroundSize from '../generators/backgroundSize'
 import borderWidths from '../generators/borderWidths'
 import borderColors from '../generators/borderColors'
+import borderStyles from '../generators/borderStyles'
 import rounded from '../generators/rounded'
 import position from '../generators/position'
 import overflow from '../generators/overflow'
@@ -20,6 +21,7 @@ export default function(options) {
           backgroundSize(options),
           borderWidths(options),
           borderColors(options),
+          borderStyles(options),
           rounded(options),
           position(options),
           overflow(options),
