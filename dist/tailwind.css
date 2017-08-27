@@ -47,6 +47,26 @@ body {
   font-size: 2.875rem;
 }
 
+.text-hairline {
+  font-weight: 200;
+}
+
+.text-thin {
+  font-weight: 300;
+}
+
+.text-regular {
+  font-weight: 400;
+}
+
+.text-medium {
+  font-weight: 600;
+}
+
+.text-bold {
+  font-weight: 700;
+}
+
 .bg-light {
   background-color: #ffffff;
 }
@@ -959,6 +979,26 @@ body {
 
   .sm\:text-4xl {
     font-size: 2.875rem;
+  }
+
+  .sm\:text-hairline {
+    font-weight: 200;
+  }
+
+  .sm\:text-thin {
+    font-weight: 300;
+  }
+
+  .sm\:text-regular {
+    font-weight: 400;
+  }
+
+  .sm\:text-medium {
+    font-weight: 600;
+  }
+
+  .sm\:text-bold {
+    font-weight: 700;
   }
 
   .sm\:bg-light {
@@ -1876,6 +1916,26 @@ body {
     font-size: 2.875rem;
   }
 
+  .md\:text-hairline {
+    font-weight: 200;
+  }
+
+  .md\:text-thin {
+    font-weight: 300;
+  }
+
+  .md\:text-regular {
+    font-weight: 400;
+  }
+
+  .md\:text-medium {
+    font-weight: 600;
+  }
+
+  .md\:text-bold {
+    font-weight: 700;
+  }
+
   .md\:bg-light {
     background-color: #ffffff;
   }
@@ -2791,6 +2851,26 @@ body {
     font-size: 2.875rem;
   }
 
+  .lg\:text-hairline {
+    font-weight: 200;
+  }
+
+  .lg\:text-thin {
+    font-weight: 300;
+  }
+
+  .lg\:text-regular {
+    font-weight: 400;
+  }
+
+  .lg\:text-medium {
+    font-weight: 600;
+  }
+
+  .lg\:text-bold {
+    font-weight: 700;
+  }
+
   .lg\:bg-light {
     background-color: #ffffff;
   }
@@ -3704,6 +3784,26 @@ body {
 
   .xl\:text-4xl {
     font-size: 2.875rem;
+  }
+
+  .xl\:text-hairline {
+    font-weight: 200;
+  }
+
+  .xl\:text-thin {
+    font-weight: 300;
+  }
+
+  .xl\:text-regular {
+    font-weight: 400;
+  }
+
+  .xl\:text-medium {
+    font-weight: 600;
+  }
+
+  .xl\:text-bold {
+    font-weight: 700;
   }
 
   .xl\:bg-light {

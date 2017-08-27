@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import responsive from '../util/responsive'
 import textSizes from '../generators/textSizes'
+import textWeights from '../generators/textWeights'
 import backgroundColors from '../generators/backgroundColors'
 import backgroundSize from '../generators/backgroundSize'
 import borderWidths from '../generators/borderWidths'
@@ -20,6 +21,7 @@ export default function(options) {
       if (atRule.params === 'utilities') {
         const utilities = _.flatten([
           textSizes(options),
+          textWeights(options),
           backgroundColors(options),
           backgroundSize(options),
           borderWidths(options),

@@ -11,21 +11,6 @@
 // Default line height
 @line-height: 1.5;
 
-// Weights
-@font-weight-hairline: 200;
-@font-weight-thin: 300;
-@font-weight-regular: 400;
-@font-weight-medium: 600;
-@font-weight-bold: 700;
-
-@text-weight-scale:
-  'hairline' @font-weight-hairline,
-  'thin'     @font-weight-thin,
-  'regular'  @font-weight-regular,
-  'medium'   @font-weight-medium,
-  'bold'     @font-weight-bold,
-;
-
 // Colors
 @text-light:         @color-white;
 @text-light-soft:    fade(@color-white, 60%);
@@ -109,7 +94,6 @@
   'wide' 0.1em,
 ;
 
-.define-text-weights(@text-weight-scale; @screens);
 .define-text-colors(@text-colors; @screens);
 .define-text-hover-colors(@text-colors; @screens);
 .define-leading-utilities(@leading-scale; @screens);

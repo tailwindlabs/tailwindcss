@@ -63,6 +63,13 @@ export default {
       '2xl': '1.75rem', // 28px
       '3xl': '2.375rem', // 38px
       '4xl': '2.875rem', // 46px
+    },
+    weights: {
+      'hairline': 200,
+      'thin': 300,
+      'regular': 400,
+      'medium': 600,
+      'bold': 700,
     }
   },
   backgroundColors: [
