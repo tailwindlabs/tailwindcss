@@ -7,6 +7,7 @@ import textColors from '../generators/textColors'
 import textLeading from '../generators/textLeading'
 import textTracking from '../generators/textTracking'
 import textAlign from '../generators/textAlign'
+import textWrap from '../generators/textWrap'
 import textStyle from '../generators/textStyle'
 import verticalAlign from '../generators/verticalAlign'
 import backgroundColors from '../generators/backgroundColors'
@@ -34,6 +35,7 @@ export default function(options) {
           textLeading(options),
           textTracking(options),
           textAlign(options),
+          textWrap(options),
           textStyle(options),
           verticalAlign(options),
           backgroundColors(options),

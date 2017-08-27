@@ -299,6 +299,36 @@ body {
   text-align: justify;
 }
 
+.wrap-normal {
+  white-space: normal;
+}
+
+.wrap-none {
+  white-space: nowrap;
+}
+
+.wrap-pre {
+  white-space: pre;
+}
+
+.wrap-pre-line {
+  white-space: pre-line;
+}
+
+.wrap-pre-wrap {
+  white-space: pre-wrap;
+}
+
+.wrap-force {
+  word-wrap: break-word;
+}
+
+.wrap-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .text-em {
   font-style: italic;
 }
@@ -1517,6 +1547,36 @@ body {
 
   .sm\:text-justify {
     text-align: justify;
+  }
+
+  .sm\:wrap-normal {
+    white-space: normal;
+  }
+
+  .sm\:wrap-none {
+    white-space: nowrap;
+  }
+
+  .sm\:wrap-pre {
+    white-space: pre;
+  }
+
+  .sm\:wrap-pre-line {
+    white-space: pre-line;
+  }
+
+  .sm\:wrap-pre-wrap {
+    white-space: pre-wrap;
+  }
+
+  .sm\:wrap-force {
+    word-wrap: break-word;
+  }
+
+  .sm\:wrap-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .sm\:text-em {
@@ -2740,6 +2800,36 @@ body {
     text-align: justify;
   }
 
+  .md\:wrap-normal {
+    white-space: normal;
+  }
+
+  .md\:wrap-none {
+    white-space: nowrap;
+  }
+
+  .md\:wrap-pre {
+    white-space: pre;
+  }
+
+  .md\:wrap-pre-line {
+    white-space: pre-line;
+  }
+
+  .md\:wrap-pre-wrap {
+    white-space: pre-wrap;
+  }
+
+  .md\:wrap-force {
+    word-wrap: break-word;
+  }
+
+  .md\:wrap-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .md\:text-em {
     font-style: italic;
   }
@@ -3961,6 +4051,36 @@ body {
     text-align: justify;
   }
 
+  .lg\:wrap-normal {
+    white-space: normal;
+  }
+
+  .lg\:wrap-none {
+    white-space: nowrap;
+  }
+
+  .lg\:wrap-pre {
+    white-space: pre;
+  }
+
+  .lg\:wrap-pre-line {
+    white-space: pre-line;
+  }
+
+  .lg\:wrap-pre-wrap {
+    white-space: pre-wrap;
+  }
+
+  .lg\:wrap-force {
+    word-wrap: break-word;
+  }
+
+  .lg\:wrap-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .lg\:text-em {
     font-style: italic;
   }
@@ -5180,6 +5300,36 @@ body {
 
   .xl\:text-justify {
     text-align: justify;
+  }
+
+  .xl\:wrap-normal {
+    white-space: normal;
+  }
+
+  .xl\:wrap-none {
+    white-space: nowrap;
+  }
+
+  .xl\:wrap-pre {
+    white-space: pre;
+  }
+
+  .xl\:wrap-pre-line {
+    white-space: pre-line;
+  }
+
+  .xl\:wrap-pre-wrap {
+    white-space: pre-wrap;
+  }
+
+  .xl\:wrap-force {
+    word-wrap: break-word;
+  }
+
+  .xl\:wrap-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .xl\:text-em {

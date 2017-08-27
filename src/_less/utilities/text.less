@@ -3,18 +3,6 @@
 
 .define-text-hover-colors(@text-colors; @screens);
 
-// Styles
-.text-break { white-space: pre-line; }
-.text-no-wrap { white-space: nowrap; }
-.text-force-wrap { word-wrap: break-word; }
-.text-smooth { -webkit-font-smoothing: antialiased; }
-.text-shadow-solid { text-shadow: 0 2px 0 rgba(0,0,0,0.15); }
-.text-ellipsis {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .responsive({
   &sans { .sans; }
   &serif { .serif; }
