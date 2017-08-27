@@ -112,6 +112,14 @@ export default {
       '4': '4px',
       '8': '8px',
     },
+    rounded: {
+      default: '.25rem',
+      modifiers: {
+        sm: '.125rem',
+        lg: '.5rem',
+        pill: '9999px',
+      }
+    },
     colors: [
       {
         'light': 'white',
