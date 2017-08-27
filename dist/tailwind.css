@@ -79,6 +79,182 @@ body {
   font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
 }
 
+.text-light {
+  color: #ffffff;
+}
+
+.text-light-soft {
+  color: rgba(255, 255, 255, .6);
+}
+
+.text-light-softer {
+  color: rgba(255, 255, 255, .45);
+}
+
+.text-light-softest {
+  color: rgba(255, 255, 255, .35);
+}
+
+.text-dark {
+  color: #212b35;
+}
+
+.text-dark-soft {
+  color: #647382;
+}
+
+.text-dark-softer {
+  color: #919eab;
+}
+
+.text-dark-softest {
+  color: #c5ced6;
+}
+
+.text-red-dark {
+  color: #d43633;
+}
+
+.text-red {
+  color: #f25451;
+}
+
+.text-red-light {
+  color: #fa8785;
+}
+
+.text-red-lightest {
+  color: #fff1f0;
+}
+
+.text-orange-dark {
+  color: #f29500;
+}
+
+.text-orange {
+  color: #ffb82b;
+}
+
+.text-orange-light {
+  color: #ffd685;
+}
+
+.text-orange-lightest {
+  color: #fff8eb;
+}
+
+.text-yellow-dark {
+  color: #ffc400;
+}
+
+.text-yellow {
+  color: #ffe14a;
+}
+
+.text-yellow-light {
+  color: #ffea83;
+}
+
+.text-yellow-lightest {
+  color: #fffbe5;
+}
+
+.text-green-dark {
+  color: #34ae4c;
+}
+
+.text-green {
+  color: #57d06f;
+}
+
+.text-green-light {
+  color: #b1f3be;
+}
+
+.text-green-lightest {
+  color: #eefff1;
+}
+
+.text-teal-dark {
+  color: #249e9a;
+}
+
+.text-teal {
+  color: #4dc0b5;
+}
+
+.text-teal-light {
+  color: #9eebe4;
+}
+
+.text-teal-lightest {
+  color: #eefffd;
+}
+
+.text-blue-dark {
+  color: #3687c8;
+}
+
+.text-blue {
+  color: #4aa2ea;
+}
+
+.text-blue-light {
+  color: #acdaff;
+}
+
+.text-blue-lightest {
+  color: #f1f9ff;
+}
+
+.text-indigo-dark {
+  color: #4957a5;
+}
+
+.text-indigo {
+  color: #6574cd;
+}
+
+.text-indigo-light {
+  color: #bcc5fb;
+}
+
+.text-indigo-lightest {
+  color: #f4f5ff;
+}
+
+.text-purple-dark {
+  color: #714cb4;
+}
+
+.text-purple {
+  color: #976ae6;
+}
+
+.text-purple-light {
+  color: #ceb3ff;
+}
+
+.text-purple-lightest {
+  color: #f7f3ff;
+}
+
+.text-pink-dark {
+  color: #d84f7d;
+}
+
+.text-pink {
+  color: #f66d9b;
+}
+
+.text-pink-light {
+  color: #ffa5c3;
+}
+
+.text-pink-lightest {
+  color: #fdf2f5;
+}
+
 .bg-light {
   background-color: #ffffff;
 }
@@ -1023,6 +1199,182 @@ body {
 
   .sm\:mono {
     font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+  }
+
+  .sm\:text-light {
+    color: #ffffff;
+  }
+
+  .sm\:text-light-soft {
+    color: rgba(255, 255, 255, .6);
+  }
+
+  .sm\:text-light-softer {
+    color: rgba(255, 255, 255, .45);
+  }
+
+  .sm\:text-light-softest {
+    color: rgba(255, 255, 255, .35);
+  }
+
+  .sm\:text-dark {
+    color: #212b35;
+  }
+
+  .sm\:text-dark-soft {
+    color: #647382;
+  }
+
+  .sm\:text-dark-softer {
+    color: #919eab;
+  }
+
+  .sm\:text-dark-softest {
+    color: #c5ced6;
+  }
+
+  .sm\:text-red-dark {
+    color: #d43633;
+  }
+
+  .sm\:text-red {
+    color: #f25451;
+  }
+
+  .sm\:text-red-light {
+    color: #fa8785;
+  }
+
+  .sm\:text-red-lightest {
+    color: #fff1f0;
+  }
+
+  .sm\:text-orange-dark {
+    color: #f29500;
+  }
+
+  .sm\:text-orange {
+    color: #ffb82b;
+  }
+
+  .sm\:text-orange-light {
+    color: #ffd685;
+  }
+
+  .sm\:text-orange-lightest {
+    color: #fff8eb;
+  }
+
+  .sm\:text-yellow-dark {
+    color: #ffc400;
+  }
+
+  .sm\:text-yellow {
+    color: #ffe14a;
+  }
+
+  .sm\:text-yellow-light {
+    color: #ffea83;
+  }
+
+  .sm\:text-yellow-lightest {
+    color: #fffbe5;
+  }
+
+  .sm\:text-green-dark {
+    color: #34ae4c;
+  }
+
+  .sm\:text-green {
+    color: #57d06f;
+  }
+
+  .sm\:text-green-light {
+    color: #b1f3be;
+  }
+
+  .sm\:text-green-lightest {
+    color: #eefff1;
+  }
+
+  .sm\:text-teal-dark {
+    color: #249e9a;
+  }
+
+  .sm\:text-teal {
+    color: #4dc0b5;
+  }
+
+  .sm\:text-teal-light {
+    color: #9eebe4;
+  }
+
+  .sm\:text-teal-lightest {
+    color: #eefffd;
+  }
+
+  .sm\:text-blue-dark {
+    color: #3687c8;
+  }
+
+  .sm\:text-blue {
+    color: #4aa2ea;
+  }
+
+  .sm\:text-blue-light {
+    color: #acdaff;
+  }
+
+  .sm\:text-blue-lightest {
+    color: #f1f9ff;
+  }
+
+  .sm\:text-indigo-dark {
+    color: #4957a5;
+  }
+
+  .sm\:text-indigo {
+    color: #6574cd;
+  }
+
+  .sm\:text-indigo-light {
+    color: #bcc5fb;
+  }
+
+  .sm\:text-indigo-lightest {
+    color: #f4f5ff;
+  }
+
+  .sm\:text-purple-dark {
+    color: #714cb4;
+  }
+
+  .sm\:text-purple {
+    color: #976ae6;
+  }
+
+  .sm\:text-purple-light {
+    color: #ceb3ff;
+  }
+
+  .sm\:text-purple-lightest {
+    color: #f7f3ff;
+  }
+
+  .sm\:text-pink-dark {
+    color: #d84f7d;
+  }
+
+  .sm\:text-pink {
+    color: #f66d9b;
+  }
+
+  .sm\:text-pink-light {
+    color: #ffa5c3;
+  }
+
+  .sm\:text-pink-lightest {
+    color: #fdf2f5;
   }
 
   .sm\:bg-light {
@@ -1972,6 +2324,182 @@ body {
     font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
   }
 
+  .md\:text-light {
+    color: #ffffff;
+  }
+
+  .md\:text-light-soft {
+    color: rgba(255, 255, 255, .6);
+  }
+
+  .md\:text-light-softer {
+    color: rgba(255, 255, 255, .45);
+  }
+
+  .md\:text-light-softest {
+    color: rgba(255, 255, 255, .35);
+  }
+
+  .md\:text-dark {
+    color: #212b35;
+  }
+
+  .md\:text-dark-soft {
+    color: #647382;
+  }
+
+  .md\:text-dark-softer {
+    color: #919eab;
+  }
+
+  .md\:text-dark-softest {
+    color: #c5ced6;
+  }
+
+  .md\:text-red-dark {
+    color: #d43633;
+  }
+
+  .md\:text-red {
+    color: #f25451;
+  }
+
+  .md\:text-red-light {
+    color: #fa8785;
+  }
+
+  .md\:text-red-lightest {
+    color: #fff1f0;
+  }
+
+  .md\:text-orange-dark {
+    color: #f29500;
+  }
+
+  .md\:text-orange {
+    color: #ffb82b;
+  }
+
+  .md\:text-orange-light {
+    color: #ffd685;
+  }
+
+  .md\:text-orange-lightest {
+    color: #fff8eb;
+  }
+
+  .md\:text-yellow-dark {
+    color: #ffc400;
+  }
+
+  .md\:text-yellow {
+    color: #ffe14a;
+  }
+
+  .md\:text-yellow-light {
+    color: #ffea83;
+  }
+
+  .md\:text-yellow-lightest {
+    color: #fffbe5;
+  }
+
+  .md\:text-green-dark {
+    color: #34ae4c;
+  }
+
+  .md\:text-green {
+    color: #57d06f;
+  }
+
+  .md\:text-green-light {
+    color: #b1f3be;
+  }
+
+  .md\:text-green-lightest {
+    color: #eefff1;
+  }
+
+  .md\:text-teal-dark {
+    color: #249e9a;
+  }
+
+  .md\:text-teal {
+    color: #4dc0b5;
+  }
+
+  .md\:text-teal-light {
+    color: #9eebe4;
+  }
+
+  .md\:text-teal-lightest {
+    color: #eefffd;
+  }
+
+  .md\:text-blue-dark {
+    color: #3687c8;
+  }
+
+  .md\:text-blue {
+    color: #4aa2ea;
+  }
+
+  .md\:text-blue-light {
+    color: #acdaff;
+  }
+
+  .md\:text-blue-lightest {
+    color: #f1f9ff;
+  }
+
+  .md\:text-indigo-dark {
+    color: #4957a5;
+  }
+
+  .md\:text-indigo {
+    color: #6574cd;
+  }
+
+  .md\:text-indigo-light {
+    color: #bcc5fb;
+  }
+
+  .md\:text-indigo-lightest {
+    color: #f4f5ff;
+  }
+
+  .md\:text-purple-dark {
+    color: #714cb4;
+  }
+
+  .md\:text-purple {
+    color: #976ae6;
+  }
+
+  .md\:text-purple-light {
+    color: #ceb3ff;
+  }
+
+  .md\:text-purple-lightest {
+    color: #f7f3ff;
+  }
+
+  .md\:text-pink-dark {
+    color: #d84f7d;
+  }
+
+  .md\:text-pink {
+    color: #f66d9b;
+  }
+
+  .md\:text-pink-light {
+    color: #ffa5c3;
+  }
+
+  .md\:text-pink-lightest {
+    color: #fdf2f5;
+  }
+
   .md\:bg-light {
     background-color: #ffffff;
   }
@@ -2919,6 +3447,182 @@ body {
     font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
   }
 
+  .lg\:text-light {
+    color: #ffffff;
+  }
+
+  .lg\:text-light-soft {
+    color: rgba(255, 255, 255, .6);
+  }
+
+  .lg\:text-light-softer {
+    color: rgba(255, 255, 255, .45);
+  }
+
+  .lg\:text-light-softest {
+    color: rgba(255, 255, 255, .35);
+  }
+
+  .lg\:text-dark {
+    color: #212b35;
+  }
+
+  .lg\:text-dark-soft {
+    color: #647382;
+  }
+
+  .lg\:text-dark-softer {
+    color: #919eab;
+  }
+
+  .lg\:text-dark-softest {
+    color: #c5ced6;
+  }
+
+  .lg\:text-red-dark {
+    color: #d43633;
+  }
+
+  .lg\:text-red {
+    color: #f25451;
+  }
+
+  .lg\:text-red-light {
+    color: #fa8785;
+  }
+
+  .lg\:text-red-lightest {
+    color: #fff1f0;
+  }
+
+  .lg\:text-orange-dark {
+    color: #f29500;
+  }
+
+  .lg\:text-orange {
+    color: #ffb82b;
+  }
+
+  .lg\:text-orange-light {
+    color: #ffd685;
+  }
+
+  .lg\:text-orange-lightest {
+    color: #fff8eb;
+  }
+
+  .lg\:text-yellow-dark {
+    color: #ffc400;
+  }
+
+  .lg\:text-yellow {
+    color: #ffe14a;
+  }
+
+  .lg\:text-yellow-light {
+    color: #ffea83;
+  }
+
+  .lg\:text-yellow-lightest {
+    color: #fffbe5;
+  }
+
+  .lg\:text-green-dark {
+    color: #34ae4c;
+  }
+
+  .lg\:text-green {
+    color: #57d06f;
+  }
+
+  .lg\:text-green-light {
+    color: #b1f3be;
+  }
+
+  .lg\:text-green-lightest {
+    color: #eefff1;
+  }
+
+  .lg\:text-teal-dark {
+    color: #249e9a;
+  }
+
+  .lg\:text-teal {
+    color: #4dc0b5;
+  }
+
+  .lg\:text-teal-light {
+    color: #9eebe4;
+  }
+
+  .lg\:text-teal-lightest {
+    color: #eefffd;
+  }
+
+  .lg\:text-blue-dark {
+    color: #3687c8;
+  }
+
+  .lg\:text-blue {
+    color: #4aa2ea;
+  }
+
+  .lg\:text-blue-light {
+    color: #acdaff;
+  }
+
+  .lg\:text-blue-lightest {
+    color: #f1f9ff;
+  }
+
+  .lg\:text-indigo-dark {
+    color: #4957a5;
+  }
+
+  .lg\:text-indigo {
+    color: #6574cd;
+  }
+
+  .lg\:text-indigo-light {
+    color: #bcc5fb;
+  }
+
+  .lg\:text-indigo-lightest {
+    color: #f4f5ff;
+  }
+
+  .lg\:text-purple-dark {
+    color: #714cb4;
+  }
+
+  .lg\:text-purple {
+    color: #976ae6;
+  }
+
+  .lg\:text-purple-light {
+    color: #ceb3ff;
+  }
+
+  .lg\:text-purple-lightest {
+    color: #f7f3ff;
+  }
+
+  .lg\:text-pink-dark {
+    color: #d84f7d;
+  }
+
+  .lg\:text-pink {
+    color: #f66d9b;
+  }
+
+  .lg\:text-pink-light {
+    color: #ffa5c3;
+  }
+
+  .lg\:text-pink-lightest {
+    color: #fdf2f5;
+  }
+
   .lg\:bg-light {
     background-color: #ffffff;
   }
@@ -3864,6 +4568,182 @@ body {
 
   .xl\:mono {
     font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+  }
+
+  .xl\:text-light {
+    color: #ffffff;
+  }
+
+  .xl\:text-light-soft {
+    color: rgba(255, 255, 255, .6);
+  }
+
+  .xl\:text-light-softer {
+    color: rgba(255, 255, 255, .45);
+  }
+
+  .xl\:text-light-softest {
+    color: rgba(255, 255, 255, .35);
+  }
+
+  .xl\:text-dark {
+    color: #212b35;
+  }
+
+  .xl\:text-dark-soft {
+    color: #647382;
+  }
+
+  .xl\:text-dark-softer {
+    color: #919eab;
+  }
+
+  .xl\:text-dark-softest {
+    color: #c5ced6;
+  }
+
+  .xl\:text-red-dark {
+    color: #d43633;
+  }
+
+  .xl\:text-red {
+    color: #f25451;
+  }
+
+  .xl\:text-red-light {
+    color: #fa8785;
+  }
+
+  .xl\:text-red-lightest {
+    color: #fff1f0;
+  }
+
+  .xl\:text-orange-dark {
+    color: #f29500;
+  }
+
+  .xl\:text-orange {
+    color: #ffb82b;
+  }
+
+  .xl\:text-orange-light {
+    color: #ffd685;
+  }
+
+  .xl\:text-orange-lightest {
+    color: #fff8eb;
+  }
+
+  .xl\:text-yellow-dark {
+    color: #ffc400;
+  }
+
+  .xl\:text-yellow {
+    color: #ffe14a;
+  }
+
+  .xl\:text-yellow-light {
+    color: #ffea83;
+  }
+
+  .xl\:text-yellow-lightest {
+    color: #fffbe5;
+  }
+
+  .xl\:text-green-dark {
+    color: #34ae4c;
+  }
+
+  .xl\:text-green {
+    color: #57d06f;
+  }
+
+  .xl\:text-green-light {
+    color: #b1f3be;
+  }
+
+  .xl\:text-green-lightest {
+    color: #eefff1;
+  }
+
+  .xl\:text-teal-dark {
+    color: #249e9a;
+  }
+
+  .xl\:text-teal {
+    color: #4dc0b5;
+  }
+
+  .xl\:text-teal-light {
+    color: #9eebe4;
+  }
+
+  .xl\:text-teal-lightest {
+    color: #eefffd;
+  }
+
+  .xl\:text-blue-dark {
+    color: #3687c8;
+  }
+
+  .xl\:text-blue {
+    color: #4aa2ea;
+  }
+
+  .xl\:text-blue-light {
+    color: #acdaff;
+  }
+
+  .xl\:text-blue-lightest {
+    color: #f1f9ff;
+  }
+
+  .xl\:text-indigo-dark {
+    color: #4957a5;
+  }
+
+  .xl\:text-indigo {
+    color: #6574cd;
+  }
+
+  .xl\:text-indigo-light {
+    color: #bcc5fb;
+  }
+
+  .xl\:text-indigo-lightest {
+    color: #f4f5ff;
+  }
+
+  .xl\:text-purple-dark {
+    color: #714cb4;
+  }
+
+  .xl\:text-purple {
+    color: #976ae6;
+  }
+
+  .xl\:text-purple-light {
+    color: #ceb3ff;
+  }
+
+  .xl\:text-purple-lightest {
+    color: #f7f3ff;
+  }
+
+  .xl\:text-pink-dark {
+    color: #d84f7d;
+  }
+
+  .xl\:text-pink {
+    color: #f66d9b;
+  }
+
+  .xl\:text-pink-light {
+    color: #ffa5c3;
+  }
+
+  .xl\:text-pink-lightest {
+    color: #fdf2f5;
   }
 
   .xl\:bg-light {

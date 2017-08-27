@@ -1,74 +1,6 @@
 // Default line height
 @line-height: 1.5;
 
-// Colors
-@text-light:         @color-white;
-@text-light-soft:    fade(@color-white, 60%);
-@text-light-softer:  fade(@color-white, 45%);
-@text-light-softest: fade(@color-white, 35%);
-
-@text-dark:          @color-grey-900;
-@text-dark-soft:     @color-grey-700;
-@text-dark-softer:   @color-grey-600;
-@text-dark-softest:  @color-grey-500;
-
-@text-colors:
-  'light'         @text-light,
-  'light-soft'    @text-light-soft,
-  'light-softer'  @text-light-softer,
-  'light-softest' @text-light-softest,
-
-  'dark'          @text-dark,
-  'dark-soft'     @text-dark-soft,
-  'dark-softer'   @text-dark-softer,
-  'dark-softest'  @text-dark-softest,
-
-  'red-dark'       @color-red-dark,
-  'red'            @color-red,
-  'red-light'      @color-red-light,
-  'red-lightest'    @color-red-lightest,
-
-  'orange-dark'    @color-orange-dark,
-  'orange'         @color-orange,
-  'orange-light'   @color-orange-light,
-  'orange-lightest' @color-orange-lightest,
-
-  'yellow-dark'    @color-yellow-dark,
-  'yellow'         @color-yellow,
-  'yellow-light'   @color-yellow-light,
-  'yellow-lightest' @color-yellow-lightest,
-
-  'green-dark'     @color-green-dark,
-  'green'          @color-green,
-  'green-light'    @color-green-light,
-  'green-lightest'  @color-green-lightest,
-
-  'teal-dark'      @color-teal-dark,
-  'teal'           @color-teal,
-  'teal-light'     @color-teal-light,
-  'teal-lightest'   @color-teal-lightest,
-
-  'blue-dark'      @color-blue-dark,
-  'blue'           @color-blue,
-  'blue-light'     @color-blue-light,
-  'blue-lightest'   @color-blue-lightest,
-
-  'indigo-dark'    @color-indigo-dark,
-  'indigo'         @color-indigo,
-  'indigo-light'   @color-indigo-light,
-  'indigo-lightest' @color-indigo-lightest,
-
-  'purple-dark'    @color-purple-dark,
-  'purple'         @color-purple,
-  'purple-light'   @color-purple-light,
-  'purple-lightest' @color-purple-lightest,
-
-  'pink-dark'      @color-pink-dark,
-  'pink'           @color-pink,
-  'pink-light'     @color-pink-light,
-  'pink-lightest'   @color-pink-lightest,
-;
-
 // Line heights
 @leading-scale:
   'none' 1,
@@ -84,7 +16,6 @@
   'wide' 0.1em,
 ;
 
-.define-text-colors(@text-colors; @screens);
 .define-text-hover-colors(@text-colors; @screens);
 .define-leading-utilities(@leading-scale; @screens);
 .define-tracking-utilities(@tracking-scale; @screens);
