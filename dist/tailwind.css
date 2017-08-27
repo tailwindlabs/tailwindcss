@@ -15,6 +15,38 @@ body {
   color: red;
 }
 
+.text-xs {
+  font-size: .75rem;
+}
+
+.text-sm {
+  font-size: .875rem;
+}
+
+.text-base {
+  font-size: 1rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}
+
+.text-2xl {
+  font-size: 1.75rem;
+}
+
+.text-3xl {
+  font-size: 2.375rem;
+}
+
+.text-4xl {
+  font-size: 2.875rem;
+}
+
 .bg-light {
   background-color: #ffffff;
 }
@@ -895,6 +927,38 @@ body {
 @media (min-width: 576px) {
   .sm\:foo {
     color: red;
+  }
+
+  .sm\:text-xs {
+    font-size: .75rem;
+  }
+
+  .sm\:text-sm {
+    font-size: .875rem;
+  }
+
+  .sm\:text-base {
+    font-size: 1rem;
+  }
+
+  .sm\:text-lg {
+    font-size: 1.125rem;
+  }
+
+  .sm\:text-xl {
+    font-size: 1.25rem;
+  }
+
+  .sm\:text-2xl {
+    font-size: 1.75rem;
+  }
+
+  .sm\:text-3xl {
+    font-size: 2.375rem;
+  }
+
+  .sm\:text-4xl {
+    font-size: 2.875rem;
   }
 
   .sm\:bg-light {
@@ -1780,6 +1844,38 @@ body {
     color: red;
   }
 
+  .md\:text-xs {
+    font-size: .75rem;
+  }
+
+  .md\:text-sm {
+    font-size: .875rem;
+  }
+
+  .md\:text-base {
+    font-size: 1rem;
+  }
+
+  .md\:text-lg {
+    font-size: 1.125rem;
+  }
+
+  .md\:text-xl {
+    font-size: 1.25rem;
+  }
+
+  .md\:text-2xl {
+    font-size: 1.75rem;
+  }
+
+  .md\:text-3xl {
+    font-size: 2.375rem;
+  }
+
+  .md\:text-4xl {
+    font-size: 2.875rem;
+  }
+
   .md\:bg-light {
     background-color: #ffffff;
   }
@@ -2663,6 +2759,38 @@ body {
     color: red;
   }
 
+  .lg\:text-xs {
+    font-size: .75rem;
+  }
+
+  .lg\:text-sm {
+    font-size: .875rem;
+  }
+
+  .lg\:text-base {
+    font-size: 1rem;
+  }
+
+  .lg\:text-lg {
+    font-size: 1.125rem;
+  }
+
+  .lg\:text-xl {
+    font-size: 1.25rem;
+  }
+
+  .lg\:text-2xl {
+    font-size: 1.75rem;
+  }
+
+  .lg\:text-3xl {
+    font-size: 2.375rem;
+  }
+
+  .lg\:text-4xl {
+    font-size: 2.875rem;
+  }
+
   .lg\:bg-light {
     background-color: #ffffff;
   }
@@ -3544,6 +3672,38 @@ body {
 @media (min-width: 1200px) {
   .xl\:foo {
     color: red;
+  }
+
+  .xl\:text-xs {
+    font-size: .75rem;
+  }
+
+  .xl\:text-sm {
+    font-size: .875rem;
+  }
+
+  .xl\:text-base {
+    font-size: 1rem;
+  }
+
+  .xl\:text-lg {
+    font-size: 1.125rem;
+  }
+
+  .xl\:text-xl {
+    font-size: 1.25rem;
+  }
+
+  .xl\:text-2xl {
+    font-size: 1.75rem;
+  }
+
+  .xl\:text-3xl {
+    font-size: 2.375rem;
+  }
+
+  .xl\:text-4xl {
+    font-size: 2.875rem;
   }
 
   .xl\:bg-light {

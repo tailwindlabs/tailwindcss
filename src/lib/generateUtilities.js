@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import responsive from '../util/responsive'
+import textSizes from '../generators/textSizes'
 import backgroundColors from '../generators/backgroundColors'
 import backgroundSize from '../generators/backgroundSize'
 import borderWidths from '../generators/borderWidths'
@@ -18,6 +19,7 @@ export default function(options) {
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'utilities') {
         const utilities = _.flatten([
+          textSizes(options),
           backgroundColors(options),
           backgroundSize(options),
           borderWidths(options),
