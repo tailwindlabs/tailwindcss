@@ -3,10 +3,10 @@ import defineClasses from '../util/defineClasses'
 export default function() {
   return defineClasses({
     'bg-cover': {
-      backgroundSize: 'cover',
+      'background-size': 'cover',
     },
     'bg-contain': {
-      backgroundSize: 'contain',
+      'background-size': 'contain',
     },
   })
 }

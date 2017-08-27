@@ -7,7 +7,7 @@ export default function ({ colors, borders }) {
 
   return _.map(borderColors, (color, className) => {
     return defineClass(`border-${className}`, {
-      borderColor: color,
+      'border-color': color,
     })
   })
 }

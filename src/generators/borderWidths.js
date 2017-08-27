@@ -6,19 +6,19 @@ import findColor from '../util/findColor'
 function defaultBorder(width, color) {
   return defineClasses({
     'border': {
-      border: `${width} solid ${color}`,
+      'border': `${width} solid ${color}`,
     },
     'border-t': {
-      borderTop: `${width} solid ${color}`,
+      'border-top': `${width} solid ${color}`,
     },
     'border-r': {
-      borderRight: `${width} solid ${color}`,
+      'border-right': `${width} solid ${color}`,
     },
     'border-b': {
-      borderBottom: `${width} solid ${color}`,
+      'border-bottom': `${width} solid ${color}`,
     },
     'border-l': {
-      borderLeft: `${width} solid ${color}`,
+      'border-left': `${width} solid ${color}`,
     },
   })
 }
@@ -26,19 +26,19 @@ function defaultBorder(width, color) {
 function sizedBorder(size, width, color) {
   return defineClasses({
     [`border-${size}`]: {
-      border: `${width} solid ${color}`,
+      'border': `${width} solid ${color}`,
     },
     [`border-t-${size}`]: {
-      borderTop: `${width} solid ${color}`,
+      'border-top': `${width} solid ${color}`,
     },
     [`border-r-${size}`]: {
-      borderRight: `${width} solid ${color}`,
+      'border-right': `${width} solid ${color}`,
     },
     [`border-b-${size}`]: {
-      borderBottom: `${width} solid ${color}`,
+      'border-bottom': `${width} solid ${color}`,
     },
     [`border-l-${size}`]: {
-      borderLeft: `${width} solid ${color}`,
+      'border-left': `${width} solid ${color}`,
     },
   })
 }

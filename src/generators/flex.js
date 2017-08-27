@@ -5,82 +5,82 @@ import defineClasses from '../util/defineClasses'
 export default function() {
   return defineClasses({
     'flex': {
-      display: 'flex',
+      'display': 'flex',
     },
     'inline-flex': {
-      display: 'inline-flex',
+      'display': 'inline-flex',
     },
     'flex-row': {
-      flexDirection: 'row',
+      'flex-direction': 'row',
     },
     'flex-row-reverse': {
-      flexDirection: 'row-reverse',
+      'flex-direction': 'row-reverse',
     },
     'flex-col': {
-      flexDirection: 'column',
+      'flex-direction': 'column',
     },
     'flex-col-reverse': {
-      flexDirection: 'column-reverse',
+      'flex-direction': 'column-reverse',
     },
     'flex-wrap': {
-      flexWrap: 'wrap',
+      'flex-wrap': 'wrap',
     },
     'flex-wrap-reverse': {
-      flexWrap: 'wrap-reverse',
+      'flex-wrap': 'wrap-reverse',
     },
     'flex-nowrap': {
-      flexWrap: 'nowrap',
+      'flex-wrap': 'nowrap',
     },
     'items-start': {
-      alignItems: 'flex-start',
+      'align-items': 'flex-start',
     },
     'items-end': {
-      alignItems: 'flex-end',
+      'align-items': 'flex-end',
     },
     'items-center': {
-      alignItems: 'center',
+      'align-items': 'center',
     },
     'items-baseline': {
-      alignItems: 'baseline',
+      'align-items': 'baseline',
     },
     'items-stretch': {
-      alignItems: 'stretch',
+      'align-items': 'stretch',
     },
     'justify-start': {
-      justifyContent: 'flex-start',
+      'justify-content': 'flex-start',
     },
     'justify-end': {
-      justifyContent: 'flex-end',
+      'justify-content': 'flex-end',
     },
     'justify-center': {
-      justifyContent: 'center',
+      'justify-content': 'center',
     },
     'justify-between': {
-      justifyContent: 'space-between',
+      'justify-content': 'space-between',
     },
     'justify-around': {
-      justifyContent: 'space-around',
+      'justify-content': 'space-around',
     },
     'flex-auto': {
-      flex: 'auto',
+      'flex': 'auto',
     },
     'flex-initial': {
-      flex: 'initial',
+      'flex': 'initial',
     },
     'flex-none': {
-      flex: 'none',
+      'flex': 'none',
     },
     'flex-grow': {
-      flexGrow: '1',
+      'flex-grow': '1',
     },
     'flex-shrink': {
-      flexShrink: '1',
+      'flex-shrink': '1',
     },
     'flex-no-grow': {
-      flexGrow: '0',
+      'flex-grow': '0',
     },
     'flex-no-shrink': {
-      flexShrink: '0',
+      'flex-shrink': '0',
     },
   })
 }

@@ -17,7 +17,7 @@ it('does not modify the case of selector names', () => {
   expect(c(output.toString())).toEqual(`.inlineBlock { display: inline-block }`)
 })
 
-it('converts property names to kebab-case', () => {
-  let output = defineClass('bg-1', {backgroundColor: '#bada55'})
-  expect(c(output.toString())).toEqual(`.bg-1 { background-color: #bada55 }`)
+it('does not modify the case of property names', () => {
+  let output = defineClass('smooth', {'-webkit-font-smoothing': 'antialiased'})
+  expect(c(output.toString())).toEqual(`.smooth { -webkit-font-smoothing: antialiased }`)
 })
