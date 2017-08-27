@@ -21,3 +21,8 @@ it('does not modify the case of property names', () => {
   let output = defineClass('smooth', {'-webkit-font-smoothing': 'antialiased'})
   expect(c(output.toString())).toEqual(`.smooth { -webkit-font-smoothing: antialiased }`)
 })
+
+it('escapes non-standard characters in selectors', () => {
+  let output = defineClass('w-1/4', {'width': '25%'})
+  expect(c(output.toString())).toEqual(`.w-1\\/4 { width: 25% }`)
+})
