@@ -159,7 +159,7 @@ div {
   .rounded-r-lg;
   .rounded-b-lg;
   .rounded-l-lg;
-  .pill;
+  .rounded-pill;
 }
 ```
 
