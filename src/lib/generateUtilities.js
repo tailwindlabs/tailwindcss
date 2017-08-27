@@ -5,6 +5,7 @@ import textWeights from '../generators/textWeights'
 import textFonts from '../generators/textFonts'
 import textColors from '../generators/textColors'
 import textLeading from '../generators/textLeading'
+import textTracking from '../generators/textTracking'
 import backgroundColors from '../generators/backgroundColors'
 import backgroundSize from '../generators/backgroundSize'
 import borderWidths from '../generators/borderWidths'
@@ -28,6 +29,7 @@ export default function(options) {
           textFonts(options),
           textColors(options),
           textLeading(options),
+          textTracking(options),
           backgroundColors(options),
           backgroundSize(options),
           borderWidths(options),

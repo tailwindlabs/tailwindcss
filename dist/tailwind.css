@@ -271,6 +271,18 @@ body {
   line-height: 2;
 }
 
+.tracking-tight {
+  letter-spacing: -0.05em;
+}
+
+.tracking-normal {
+  letter-spacing: 0;
+}
+
+.tracking-wide {
+  letter-spacing: 0.1em;
+}
+
 .bg-light {
   background-color: #ffffff;
 }
@@ -1407,6 +1419,18 @@ body {
 
   .sm\:leading-loose {
     line-height: 2;
+  }
+
+  .sm\:tracking-tight {
+    letter-spacing: -0.05em;
+  }
+
+  .sm\:tracking-normal {
+    letter-spacing: 0;
+  }
+
+  .sm\:tracking-wide {
+    letter-spacing: 0.1em;
   }
 
   .sm\:bg-light {
@@ -2548,6 +2572,18 @@ body {
     line-height: 2;
   }
 
+  .md\:tracking-tight {
+    letter-spacing: -0.05em;
+  }
+
+  .md\:tracking-normal {
+    letter-spacing: 0;
+  }
+
+  .md\:tracking-wide {
+    letter-spacing: 0.1em;
+  }
+
   .md\:bg-light {
     background-color: #ffffff;
   }
@@ -3687,6 +3723,18 @@ body {
     line-height: 2;
   }
 
+  .lg\:tracking-tight {
+    letter-spacing: -0.05em;
+  }
+
+  .lg\:tracking-normal {
+    letter-spacing: 0;
+  }
+
+  .lg\:tracking-wide {
+    letter-spacing: 0.1em;
+  }
+
   .lg\:bg-light {
     background-color: #ffffff;
   }
@@ -4824,6 +4872,18 @@ body {
 
   .xl\:leading-loose {
     line-height: 2;
+  }
+
+  .xl\:tracking-tight {
+    letter-spacing: -0.05em;
+  }
+
+  .xl\:tracking-normal {
+    letter-spacing: 0;
+  }
+
+  .xl\:tracking-wide {
+    letter-spacing: 0.1em;
   }
 
   .xl\:bg-light {
