@@ -1,8 +1,8 @@
-const _ = require('lodash')
-const defineClass = require('../util/defineClass')
-const findColor = require('../util/findColor')
+import _ from 'lodash'
+import defineClass from './defineClass'
+import findColor from './findColor'
 
-module.exports = function (colors, colorPool) {
+export default function (colors, colorPool) {
   if (_.isArray(colors)) {
     colors = _(colors).flatMap(color => {
       if (_.isString(color)) {

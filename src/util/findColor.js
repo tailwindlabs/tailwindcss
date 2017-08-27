@@ -1,5 +1,5 @@
-const _ = require('lodash')
+import _ from 'lodash'
 
-module.exports = function findColor(colors, color) {
+export default function findColor(colors, color) {
   return _.get(colors, color, color)
 }
