@@ -19,6 +19,7 @@ import rounded from '../generators/rounded'
 import display from '../generators/display'
 import position from '../generators/position'
 import overflow from '../generators/overflow'
+import sizing from '../generators/sizing'
 import constrain from '../generators/constrain'
 import shadows from '../generators/shadows'
 import flex from '../generators/flex'
@@ -47,6 +48,7 @@ export default function(options) {
           display(options),
           position(options),
           overflow(options),
+          sizing(options),
           constrain(options),
           shadows(options),
           flex(options),
