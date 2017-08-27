@@ -165,6 +165,17 @@ export default {
       'pink-lightest',
     ]
   },
+  constrain: {
+    'xs': '20rem',
+    'sm': '30rem',
+    'md': '40rem',
+    'lg': '50rem',
+    'xl': '60rem',
+    '2xl': '70rem',
+    '3xl': '80rem',
+    '4xl': '90rem',
+    '5xl': '100rem',
+  },
   shadows: {
     '1': '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.15)',
     '2': '0 3px 6px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.13)',

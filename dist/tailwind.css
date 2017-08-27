@@ -491,6 +491,42 @@ body {
   border-color: #fdf2f5;
 }
 
+.constrain-xs {
+  max-width: 20rem;
+}
+
+.constrain-sm {
+  max-width: 30rem;
+}
+
+.constrain-md {
+  max-width: 40rem;
+}
+
+.constrain-lg {
+  max-width: 50rem;
+}
+
+.constrain-xl {
+  max-width: 60rem;
+}
+
+.constrain-2xl {
+  max-width: 70rem;
+}
+
+.constrain-3xl {
+  max-width: 80rem;
+}
+
+.constrain-4xl {
+  max-width: 90rem;
+}
+
+.constrain-5xl {
+  max-width: 100rem;
+}
+
 .shadow-1 {
   box-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .15);
 }
@@ -1126,6 +1162,42 @@ body {
 
   .sm\:border-pink-lightest {
     border-color: #fdf2f5;
+  }
+
+  .sm\:constrain-xs {
+    max-width: 20rem;
+  }
+
+  .sm\:constrain-sm {
+    max-width: 30rem;
+  }
+
+  .sm\:constrain-md {
+    max-width: 40rem;
+  }
+
+  .sm\:constrain-lg {
+    max-width: 50rem;
+  }
+
+  .sm\:constrain-xl {
+    max-width: 60rem;
+  }
+
+  .sm\:constrain-2xl {
+    max-width: 70rem;
+  }
+
+  .sm\:constrain-3xl {
+    max-width: 80rem;
+  }
+
+  .sm\:constrain-4xl {
+    max-width: 90rem;
+  }
+
+  .sm\:constrain-5xl {
+    max-width: 100rem;
   }
 
   .sm\:shadow-1 {
@@ -1766,6 +1838,42 @@ body {
     border-color: #fdf2f5;
   }
 
+  .md\:constrain-xs {
+    max-width: 20rem;
+  }
+
+  .md\:constrain-sm {
+    max-width: 30rem;
+  }
+
+  .md\:constrain-md {
+    max-width: 40rem;
+  }
+
+  .md\:constrain-lg {
+    max-width: 50rem;
+  }
+
+  .md\:constrain-xl {
+    max-width: 60rem;
+  }
+
+  .md\:constrain-2xl {
+    max-width: 70rem;
+  }
+
+  .md\:constrain-3xl {
+    max-width: 80rem;
+  }
+
+  .md\:constrain-4xl {
+    max-width: 90rem;
+  }
+
+  .md\:constrain-5xl {
+    max-width: 100rem;
+  }
+
   .md\:shadow-1 {
     box-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .15);
   }
@@ -2404,6 +2512,42 @@ body {
     border-color: #fdf2f5;
   }
 
+  .lg\:constrain-xs {
+    max-width: 20rem;
+  }
+
+  .lg\:constrain-sm {
+    max-width: 30rem;
+  }
+
+  .lg\:constrain-md {
+    max-width: 40rem;
+  }
+
+  .lg\:constrain-lg {
+    max-width: 50rem;
+  }
+
+  .lg\:constrain-xl {
+    max-width: 60rem;
+  }
+
+  .lg\:constrain-2xl {
+    max-width: 70rem;
+  }
+
+  .lg\:constrain-3xl {
+    max-width: 80rem;
+  }
+
+  .lg\:constrain-4xl {
+    max-width: 90rem;
+  }
+
+  .lg\:constrain-5xl {
+    max-width: 100rem;
+  }
+
   .lg\:shadow-1 {
     box-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .15);
   }
@@ -3040,6 +3184,42 @@ body {
 
   .xl\:border-pink-lightest {
     border-color: #fdf2f5;
+  }
+
+  .xl\:constrain-xs {
+    max-width: 20rem;
+  }
+
+  .xl\:constrain-sm {
+    max-width: 30rem;
+  }
+
+  .xl\:constrain-md {
+    max-width: 40rem;
+  }
+
+  .xl\:constrain-lg {
+    max-width: 50rem;
+  }
+
+  .xl\:constrain-xl {
+    max-width: 60rem;
+  }
+
+  .xl\:constrain-2xl {
+    max-width: 70rem;
+  }
+
+  .xl\:constrain-3xl {
+    max-width: 80rem;
+  }
+
+  .xl\:constrain-4xl {
+    max-width: 90rem;
+  }
+
+  .xl\:constrain-5xl {
+    max-width: 100rem;
   }
 
   .xl\:shadow-1 {
