@@ -15,7 +15,7 @@ title: "Spacing"
 
 The syntax below is combined to create a system for padding and margins. For example, `.pt-2` would add padding to the top of the element to the value of `0.5rem` and `.mx-0` would make the horizontal margin zero.
 
-<div class="flex flex-top mt-8 text-sm">
+<div class="flex items-start mt-8 text-sm">
     <div class="pr-12">
         <div class="mb-3 text-dark-soft text-uppercase">Class</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">p</code> Padding</div>

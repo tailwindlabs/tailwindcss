@@ -17,7 +17,7 @@ title: "Borders"
 
 Construct border size utilities using the `.border{-side?}{-width?}` syntax. For example, `.border` would add a `1px` border to all sides of the element, where `.border-b-4` would add a `4px` border to the bottom of the element. By default, borders are `solid`, and use the `@default-border-color`.
 
-<div class="flex flex-top mt-8 text-sm leading-none">
+<div class="flex items-start mt-8 text-sm leading-none">
     <div class="pr-12">
         <div class="mb-3 text-dark-soft text-uppercase">Class</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">border</code></div>
