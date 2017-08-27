@@ -491,6 +491,53 @@ body {
   border-color: #fdf2f5;
 }
 
+.fixed {
+  position: fixed;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.pin-t {
+  top: 0;
+}
+
+.pin-r {
+  right: 0;
+}
+
+.pin-b {
+  bottom: 0;
+}
+
+.pin-l {
+  left: 0;
+}
+
+.pin-y {
+  top: 0;
+  bottom: 0;
+}
+
+.pin-x {
+  right: 0;
+  left: 0;
+}
+
+.pin {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .constrain-xs {
   max-width: 20rem;
 }
@@ -1162,6 +1209,53 @@ body {
 
   .sm\:border-pink-lightest {
     border-color: #fdf2f5;
+  }
+
+  .sm\:fixed {
+    position: fixed;
+  }
+
+  .sm\:absolute {
+    position: absolute;
+  }
+
+  .sm\:relative {
+    position: relative;
+  }
+
+  .sm\:pin-t {
+    top: 0;
+  }
+
+  .sm\:pin-r {
+    right: 0;
+  }
+
+  .sm\:pin-b {
+    bottom: 0;
+  }
+
+  .sm\:pin-l {
+    left: 0;
+  }
+
+  .sm\:pin-y {
+    top: 0;
+    bottom: 0;
+  }
+
+  .sm\:pin-x {
+    right: 0;
+    left: 0;
+  }
+
+  .sm\:pin {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 
   .sm\:constrain-xs {
@@ -1838,6 +1932,53 @@ body {
     border-color: #fdf2f5;
   }
 
+  .md\:fixed {
+    position: fixed;
+  }
+
+  .md\:absolute {
+    position: absolute;
+  }
+
+  .md\:relative {
+    position: relative;
+  }
+
+  .md\:pin-t {
+    top: 0;
+  }
+
+  .md\:pin-r {
+    right: 0;
+  }
+
+  .md\:pin-b {
+    bottom: 0;
+  }
+
+  .md\:pin-l {
+    left: 0;
+  }
+
+  .md\:pin-y {
+    top: 0;
+    bottom: 0;
+  }
+
+  .md\:pin-x {
+    right: 0;
+    left: 0;
+  }
+
+  .md\:pin {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
   .md\:constrain-xs {
     max-width: 20rem;
   }
@@ -2512,6 +2653,53 @@ body {
     border-color: #fdf2f5;
   }
 
+  .lg\:fixed {
+    position: fixed;
+  }
+
+  .lg\:absolute {
+    position: absolute;
+  }
+
+  .lg\:relative {
+    position: relative;
+  }
+
+  .lg\:pin-t {
+    top: 0;
+  }
+
+  .lg\:pin-r {
+    right: 0;
+  }
+
+  .lg\:pin-b {
+    bottom: 0;
+  }
+
+  .lg\:pin-l {
+    left: 0;
+  }
+
+  .lg\:pin-y {
+    top: 0;
+    bottom: 0;
+  }
+
+  .lg\:pin-x {
+    right: 0;
+    left: 0;
+  }
+
+  .lg\:pin {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
   .lg\:constrain-xs {
     max-width: 20rem;
   }
@@ -3184,6 +3372,53 @@ body {
 
   .xl\:border-pink-lightest {
     border-color: #fdf2f5;
+  }
+
+  .xl\:fixed {
+    position: fixed;
+  }
+
+  .xl\:absolute {
+    position: absolute;
+  }
+
+  .xl\:relative {
+    position: relative;
+  }
+
+  .xl\:pin-t {
+    top: 0;
+  }
+
+  .xl\:pin-r {
+    right: 0;
+  }
+
+  .xl\:pin-b {
+    bottom: 0;
+  }
+
+  .xl\:pin-l {
+    left: 0;
+  }
+
+  .xl\:pin-y {
+    top: 0;
+    bottom: 0;
+  }
+
+  .xl\:pin-x {
+    right: 0;
+    left: 0;
+  }
+
+  .xl\:pin {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 
   .xl\:constrain-xs {
