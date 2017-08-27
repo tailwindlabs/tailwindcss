@@ -299,6 +299,36 @@ body {
   text-align: justify;
 }
 
+.text-em {
+  font-style: italic;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-lowercase {
+  text-transform: lowercase;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.text-underline {
+  text-decoration: underline;
+}
+
+.text-strike {
+  text-decoration: line-through;
+}
+
+.text-normal {
+  text-decoration: none;
+  text-transform: none;
+  font-style: normal;
+}
+
 .align-baseline {
   vertical-align: baseline;
 }
@@ -1487,6 +1517,36 @@ body {
 
   .sm\:text-justify {
     text-align: justify;
+  }
+
+  .sm\:text-em {
+    font-style: italic;
+  }
+
+  .sm\:text-uppercase {
+    text-transform: uppercase;
+  }
+
+  .sm\:text-lowercase {
+    text-transform: lowercase;
+  }
+
+  .sm\:text-capitalize {
+    text-transform: capitalize;
+  }
+
+  .sm\:text-underline {
+    text-decoration: underline;
+  }
+
+  .sm\:text-strike {
+    text-decoration: line-through;
+  }
+
+  .sm\:text-normal {
+    text-decoration: none;
+    text-transform: none;
+    font-style: normal;
   }
 
   .sm\:align-baseline {
@@ -2680,6 +2740,36 @@ body {
     text-align: justify;
   }
 
+  .md\:text-em {
+    font-style: italic;
+  }
+
+  .md\:text-uppercase {
+    text-transform: uppercase;
+  }
+
+  .md\:text-lowercase {
+    text-transform: lowercase;
+  }
+
+  .md\:text-capitalize {
+    text-transform: capitalize;
+  }
+
+  .md\:text-underline {
+    text-decoration: underline;
+  }
+
+  .md\:text-strike {
+    text-decoration: line-through;
+  }
+
+  .md\:text-normal {
+    text-decoration: none;
+    text-transform: none;
+    font-style: normal;
+  }
+
   .md\:align-baseline {
     vertical-align: baseline;
   }
@@ -3871,6 +3961,36 @@ body {
     text-align: justify;
   }
 
+  .lg\:text-em {
+    font-style: italic;
+  }
+
+  .lg\:text-uppercase {
+    text-transform: uppercase;
+  }
+
+  .lg\:text-lowercase {
+    text-transform: lowercase;
+  }
+
+  .lg\:text-capitalize {
+    text-transform: capitalize;
+  }
+
+  .lg\:text-underline {
+    text-decoration: underline;
+  }
+
+  .lg\:text-strike {
+    text-decoration: line-through;
+  }
+
+  .lg\:text-normal {
+    text-decoration: none;
+    text-transform: none;
+    font-style: normal;
+  }
+
   .lg\:align-baseline {
     vertical-align: baseline;
   }
@@ -5060,6 +5180,36 @@ body {
 
   .xl\:text-justify {
     text-align: justify;
+  }
+
+  .xl\:text-em {
+    font-style: italic;
+  }
+
+  .xl\:text-uppercase {
+    text-transform: uppercase;
+  }
+
+  .xl\:text-lowercase {
+    text-transform: lowercase;
+  }
+
+  .xl\:text-capitalize {
+    text-transform: capitalize;
+  }
+
+  .xl\:text-underline {
+    text-decoration: underline;
+  }
+
+  .xl\:text-strike {
+    text-decoration: line-through;
+  }
+
+  .xl\:text-normal {
+    text-decoration: none;
+    text-transform: none;
+    font-style: normal;
   }
 
   .xl\:align-baseline {
