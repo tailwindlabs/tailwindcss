@@ -1,47 +1,11 @@
-.foo {
-  @apply .px-4;
-  @apply .py-2;
-  @apply .bg-blue;
-  @apply .sans-alt;
-}
+@import "base";
 
-.foo {
-  background-color: red;
-  @media (--breakpoint-sm) {
-    // @class "py-2";
-    background-color: green;
-  }
-  @media (--breakpoint-md) {
-    background-color: orange;
-  }
-}
-
-@responsive {
-  .bar {
-    color: orange;
-  }
-}
+@import "prism";
+@import "markdown";
+@import "container";
 
 @tailwind utilities;
 
-@responsive {
-  .px-4 {
-    padding-right: 1rem;
-    padding-left: 1rem;
-  }
+@import "utilities";
 
-  .py-2 {
-    padding-top: .5rem;
-    padding-bottom: .5rem;
-  }
-}
-
-@responsive {
-  .sans-alt {
-    font-family: 'Brandon Text';
-  }
-}
-
-.this-should-be-the-very-end {
-  color: red;
-}
+@import "variables";

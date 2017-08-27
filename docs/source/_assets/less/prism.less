@@ -52,14 +52,14 @@ code[class*="language-"]::selection, code[class*="language-"] ::selection {
 pre[class*="language-"] {
     padding: 0.75em 1em;
     overflow: auto;
-    .my-4;
+    @apply .my-4;
 }
 
 :not(pre) > code[class*="language-"],
 pre[class*="language-"] {
     // background: #f5f2f0;
-    .border;
-    .rounded;
+    @apply .border;
+    @apply .rounded;
 }
 
 /* Inline code */
