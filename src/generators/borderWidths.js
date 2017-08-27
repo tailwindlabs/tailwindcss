@@ -5,19 +5,19 @@ import findColor from '../util/findColor'
 
 function defaultBorder(width, color) {
   return defineClasses({
-    border: {
+    'border': {
       border: `${width} solid ${color}`,
     },
-    borderT: {
+    'border-t': {
       borderTop: `${width} solid ${color}`,
     },
-    borderR: {
+    'border-r': {
       borderRight: `${width} solid ${color}`,
     },
-    borderB: {
+    'border-b': {
       borderBottom: `${width} solid ${color}`,
     },
-    borderL: {
+    'border-l': {
       borderLeft: `${width} solid ${color}`,
     },
   })

@@ -1,31 +1,22 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import _ from 'lodash'
+import c from '../src/util/collapseWhitespace'
 import defineClasses from '../src/util/defineClasses'
-
-let config = {
-  flex: {
-    display: 'flex',
-  },
-  inlineFlex: {
-    display: 'inline-flex',
-  },
-}
-
-let flexHelper = `.flex {
-    display: flex
-}`
-
-let inlineFlexHelper = `.inline-flex {
-    display: inline-flex
-}`
 
 /**
  * Tests
  */
 it('it generates a set of helper classes from a config', () => {
-  let output = defineClasses(config)
+  let output = defineClasses({
+    'flex': {
+      display: 'flex',
+    },
+    'inline-flex': {
+      display: 'inline-flex',
+    },
+  })
   expect(output).toBeInstanceOf(Array)
-  expect(output[0].toString()).toEqual(flexHelper)
-  expect(output[1].toString()).toEqual(inlineFlexHelper)
+  expect(c(output[0].toString())).toEqual(`.flex { display: flex }`)
+  expect(c(output[1].toString())).toEqual(`.inline-flex { display: inline-flex }`)
 })

@@ -10,6 +10,6 @@ export default function(className, properties) {
   })
 
   return postcss.rule({
-    selector: `.${_.kebabCase(className)}`,
+    selector: `.${className}`,
   }).append(decls)
 }

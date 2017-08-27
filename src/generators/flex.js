@@ -4,82 +4,82 @@ import defineClasses from '../util/defineClasses'
 
 export default function() {
   return defineClasses({
-    flex: {
+    'flex': {
       display: 'flex',
     },
-    inlineFlex: {
+    'inline-flex': {
       display: 'inline-flex',
     },
-    flexRow: {
+    'flex-row': {
       flexDirection: 'row',
     },
-    flexRowReverse: {
+    'flex-row-reverse': {
       flexDirection: 'row-reverse',
     },
-    flexCol: {
+    'flex-col': {
       flexDirection: 'column',
     },
-    flexColReverse: {
+    'flex-col-reverse': {
       flexDirection: 'column-reverse',
     },
-    flexWrap: {
+    'flex-wrap': {
       flexWrap: 'wrap',
     },
-    flexWrapReverse: {
+    'flex-wrap-reverse': {
       flexWrap: 'wrap-reverse',
     },
-    flexNowrap: {
+    'flex-nowrap': {
       flexWrap: 'nowrap',
     },
-    itemsStart: {
+    'items-start': {
       alignItems: 'flex-start',
     },
-    itemsEnd: {
+    'items-end': {
       alignItems: 'flex-end',
     },
-    itemsCenter: {
+    'items-center': {
       alignItems: 'center',
     },
-    itemsBaseline: {
+    'items-baseline': {
       alignItems: 'baseline',
     },
-    itemsStretch: {
+    'items-stretch': {
       alignItems: 'stretch',
     },
-    justifyStart: {
+    'justify-start': {
       justifyContent: 'flex-start',
     },
-    justifyEnd: {
+    'justify-end': {
       justifyContent: 'flex-end',
     },
-    justifyCenter: {
+    'justify-center': {
       justifyContent: 'center',
     },
-    justifyBetween: {
+    'justify-between': {
       justifyContent: 'space-between',
     },
-    justifyAround: {
+    'justify-around': {
       justifyContent: 'space-around',
     },
-    flexAuto: {
+    'flex-auto': {
       flex: 'auto',
     },
-    flexInitial: {
+    'flex-initial': {
       flex: 'initial',
     },
-    flexNone: {
+    'flex-none': {
       flex: 'none',
     },
-    flexGrow: {
+    'flex-grow': {
       flexGrow: '1',
     },
-    flexShrink: {
+    'flex-shrink': {
       flexShrink: '1',
     },
-    flexNoGrow: {
+    'flex-no-grow': {
       flexGrow: '0',
     },
-    flexNoShrink: {
+    'flex-no-shrink': {
       flexShrink: '0',
     },
   })
