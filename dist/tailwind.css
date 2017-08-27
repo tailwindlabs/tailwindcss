@@ -283,6 +283,22 @@ body {
   letter-spacing: 0.1em;
 }
 
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
 .bg-light {
   background-color: #ffffff;
 }
@@ -1431,6 +1447,22 @@ body {
 
   .sm\:tracking-wide {
     letter-spacing: 0.1em;
+  }
+
+  .sm\:text-left {
+    text-align: left;
+  }
+
+  .sm\:text-center {
+    text-align: center;
+  }
+
+  .sm\:text-right {
+    text-align: right;
+  }
+
+  .sm\:text-justify {
+    text-align: justify;
   }
 
   .sm\:bg-light {
@@ -2584,6 +2616,22 @@ body {
     letter-spacing: 0.1em;
   }
 
+  .md\:text-left {
+    text-align: left;
+  }
+
+  .md\:text-center {
+    text-align: center;
+  }
+
+  .md\:text-right {
+    text-align: right;
+  }
+
+  .md\:text-justify {
+    text-align: justify;
+  }
+
   .md\:bg-light {
     background-color: #ffffff;
   }
@@ -3735,6 +3783,22 @@ body {
     letter-spacing: 0.1em;
   }
 
+  .lg\:text-left {
+    text-align: left;
+  }
+
+  .lg\:text-center {
+    text-align: center;
+  }
+
+  .lg\:text-right {
+    text-align: right;
+  }
+
+  .lg\:text-justify {
+    text-align: justify;
+  }
+
   .lg\:bg-light {
     background-color: #ffffff;
   }
@@ -4884,6 +4948,22 @@ body {
 
   .xl\:tracking-wide {
     letter-spacing: 0.1em;
+  }
+
+  .xl\:text-left {
+    text-align: left;
+  }
+
+  .xl\:text-center {
+    text-align: center;
+  }
+
+  .xl\:text-right {
+    text-align: right;
+  }
+
+  .xl\:text-justify {
+    text-align: justify;
   }
 
   .xl\:bg-light {

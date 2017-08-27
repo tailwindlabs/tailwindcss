@@ -6,6 +6,7 @@ import textFonts from '../generators/textFonts'
 import textColors from '../generators/textColors'
 import textLeading from '../generators/textLeading'
 import textTracking from '../generators/textTracking'
+import textAlign from '../generators/textAlign'
 import backgroundColors from '../generators/backgroundColors'
 import backgroundSize from '../generators/backgroundSize'
 import borderWidths from '../generators/borderWidths'
@@ -30,6 +31,7 @@ export default function(options) {
           textColors(options),
           textLeading(options),
           textTracking(options),
+          textAlign(options),
           backgroundColors(options),
           backgroundSize(options),
           borderWidths(options),
