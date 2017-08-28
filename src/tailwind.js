@@ -8,6 +8,7 @@ import defaultConfig from './defaultConfig'
 
 import addCustomMediaQueries from './lib/addCustomMediaQueries'
 import generateUtilities from './lib/generateUtilities'
+import substituteHoverableAtRules from './lib/substituteHoverableAtRules'
 import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
 
@@ -17,6 +18,7 @@ export default postcss.plugin('tailwind', options => {
   return postcss([
     addCustomMediaQueries(options),
     generateUtilities(options),
+    substituteHoverableAtRules(options),
     substituteResponsiveAtRules(options),
     substituteClassApplyAtRules(options),
     cssnext(),
