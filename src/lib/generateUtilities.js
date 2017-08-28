@@ -24,6 +24,7 @@ import spacing from '../generators/spacing'
 import constrain from '../generators/constrain'
 import shadows from '../generators/shadows'
 import flex from '../generators/flex'
+import zIndex from '../generators/zIndex'
 
 export default function(options) {
   return function(css) {
@@ -54,6 +55,7 @@ export default function(options) {
           constrain(options),
           shadows(options),
           flex(options),
+          zIndex(options),
         ])
         css.insertBefore(atRule, responsive(utilities))
         atRule.remove()
