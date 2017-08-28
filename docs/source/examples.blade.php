@@ -81,9 +81,9 @@
             </p>
         </div>
         <div class="px-6 py-4">
-            <span class="inline-block bg-light-softer pill px-3 py-1 text-sm text-medium text-dark-soft mr-2">#photography</span>
-            <span class="inline-block bg-light-softer pill px-3 py-1 text-sm text-medium text-dark-soft mr-2">#travel</span>
-            <span class="inline-block bg-light-softer pill px-3 py-1 text-sm text-medium text-dark-soft">#winter</span>
+            <span class="inline-block bg-light-softer rounded-pill px-3 py-1 text-sm text-medium text-dark-soft mr-2">#photography</span>
+            <span class="inline-block bg-light-softer rounded-pill px-3 py-1 text-sm text-medium text-dark-soft mr-2">#travel</span>
+            <span class="inline-block bg-light-softer rounded-pill px-3 py-1 text-sm text-medium text-dark-soft">#winter</span>
         </div>
     </div>
 </div>
@@ -105,7 +105,7 @@
                 </p>
             </div>
             <div class="flex items-center">
-                <img class="w-10 h-10 pill mr-4" src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg" alt="">
+                <img class="w-10 h-10 rounded-pill mr-4" src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg" alt="">
                 <div class="text-sm">
                     <p class="text-dark leading-none">Jonathan Reinink</p>
                     <p class="text-dark-softer">Aug 18</p>

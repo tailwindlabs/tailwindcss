@@ -1,0 +1,28 @@
+body {
+    background-color: red;
+    font-size: 1rem;
+}
+
+.red { background-color: red }
+
+.hemphill {
+    @apply .red;
+}
+
+@responsive {
+    .foo {
+        color: red;
+    }
+}
+
+@tailwind utilities;
+
+@responsive {
+    .bar {
+        color: blue;
+    }
+
+    .baz {
+        color: green;
+    }
+}

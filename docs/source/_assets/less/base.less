@@ -1,5 +1,25 @@
+@import (less) "../../../node_modules/normalize.css/normalize.css";
+@import (less) "../../../node_modules/suitcss-base/lib/base.css";
+
+@-moz-viewport      { width: device-width; }
+@-ms-viewport       { width: device-width; }
+@-o-viewport        { width: device-width; }
+@-webkit-viewport   { width: device-width; }
+@viewport           { width: device-width; }
+
 html {
-  .bg-brand-soft;
+  @apply .bg-brand-soft;
+
+  font-size: 12px;
+
+  // Changes the default tap highlight to be completely transparent in iOS.
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+
+  // -webkit-font-smoothing: antialiased;
+
+  @media (min-width: 420px) {
+    font-size: 16px;
+  }
 }
 
 *,
@@ -9,12 +29,40 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  @apply .sans;
+  @apply .text-base;
+  @apply .text-regular;
+  @apply .text-dark;
+  line-height: 1.5;
+}
+
+textarea {
+  resize: vertical;
+}
+
+button, [role=button] {
+  cursor: pointer;
+}
+
+small {
+  @apply .text-sm;
+}
+
+pre, code {
+  @apply .mono;
+}
+
+img {
+  vertical-align: middle;
+}
+
 a {
   color: inherit;
   text-decoration: none;
 
   &:hover {
-    .text-underline;
+    @apply .text-underline;
   }
 }
 

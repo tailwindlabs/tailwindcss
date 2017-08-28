@@ -1,2 +1,4 @@
 /node_modules
+/lib
 yarn.lock
+*.sublime-workspace

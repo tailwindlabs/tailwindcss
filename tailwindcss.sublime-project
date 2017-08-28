@@ -1,0 +1,11 @@
+{
+	"folders":
+	[
+		{
+      "folder_exclude_patterns": [
+        "tailwindcss/lib"
+      ],
+			"path": "."
+		}
+	]
+}

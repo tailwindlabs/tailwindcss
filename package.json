@@ -3,13 +3,77 @@
   "version": "0.1.0",
   "description": "A utility-first CSS framework for rapid UI development.",
   "license": "MIT",
+  "bin": {
+    "tailwind": "lib/index.js"
+  },
   "contributors": [
     "Adam Wathan <adam.wathan@gmail.com>",
-    "Jonathan Reinink <jonathan@reinink.ca>"
+    "Jonathan Reinink <jonathan@reinink.ca>",
+    "David Hemphill <davidlee.hemphill@gmail.com>"
   ],
-  "scripts": {},
+  "scripts": {
+    "prebabelify": "rimraf lib",
+    "babelify": "babel src --out-dir lib",
+    "prepare": "npm run babelify",
+    "build": "babel-node src/build.js",
+    "watch": "nodemon -e js,css --watch src --exec 'babel-node src/build.js'",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.6.5",
+    "babel-core": "^6.7.2",
+    "babel-jest": "^20.0.3",
+    "babel-loader": "^6.2.4",
+    "babel-preset-env": "^1.0.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "jest": "^20.0.4",
+    "rimraf": "^2.6.1",
+    "stylefmt": "^6.0.0"
+  },
   "dependencies": {
+    "commander": "^2.11.0",
+    "lodash": "^4.17.4",
+    "nodemon": "^1.11.0",
     "normalize.css": "^6.0.0",
+    "postcss": "^6.0.9",
+    "postcss-cssnext": "^3.0.2",
+    "postcss-prettify": "^0.3.4",
     "suitcss-base": "^3.0.0"
+  },
+  "browserslist": [
+    "> 1%"
+  ],
+  "babel": {
+    "presets": [
+      "babel-preset-react",
+      [
+        "babel-preset-env",
+        {
+          "targets": {
+            "node": "7.0"
+          }
+        }
+      ],
+      "babel-preset-stage-3"
+    ],
+    "env": {
+      "browsers": {
+        "presets": [
+          "babel-preset-react",
+          [
+            "babel-preset-env",
+            {
+              "targets": {
+                "browsers": [
+                  "last 5 versions"
+                ]
+              }
+            }
+          ],
+          "babel-preset-stage-3"
+        ]
+      }
+    }
   }
 }

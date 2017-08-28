@@ -1,0 +1,60 @@
+.no-focus {
+  &:focus, &:active {
+    outline: none;
+  }
+}
+
+.tab-focus {
+  // Default
+  outline: thin dotted;
+  // WebKit
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+.clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.no-select {
+  user-select: none;
+}
+
+.ease {
+  transition: all 0.2s ease;
+}
+
+// Useful for hiding things like radio buttons without making them inaccessible
+// to the keyboard when navigating forms.
+.pseudo-hidden {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+
+.aspect-2\:1 {
+  padding-bottom: 50%;
+}
+
+.aspect-16\:9 {
+  padding-bottom: 56.25%;
+}
+
+.hover-only {
+  opacity: 0;
+  &:hover {
+    opacity: 1;
+  }
+}
