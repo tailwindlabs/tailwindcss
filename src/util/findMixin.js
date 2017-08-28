@@ -4,7 +4,7 @@ export default function findMixin(css, mixin, onError) {
   const matches = []
 
   css.walkRules(rule => {
-    if (rule.selector === mixin) {
+    if (rule.selectors.includes(mixin)) {
       matches.push(rule)
     }
   })
