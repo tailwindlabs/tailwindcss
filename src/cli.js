@@ -6,7 +6,7 @@ import path from 'path'
 import postcss from 'postcss'
 import defaultConfig from './defaultConfig'
 import program from 'commander'
-import tailwind from './tailwind'
+import tailwind from '..'
 
 let splitFileName = filename => {
   return filename.split('.')
