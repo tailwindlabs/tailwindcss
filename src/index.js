@@ -18,13 +18,14 @@ program
   .parse(process.argv)
 
 let inputFile = program.args[0]
-let outputFile =
-  program.args[1] || `${splitFileName(program.args[0])[0]}-output.css`
 
 if (!inputFile) {
   console.error('No input file given!')
   process.exit(1)
 }
+
+let outputFile =
+  program.args[1] || `${splitFileName(program.args[0])[0]}-output.css`
 
 fs.readFile(path.join(program.config), (err, config) => {
   if (err) {
