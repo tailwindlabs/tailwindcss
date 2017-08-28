@@ -57,7 +57,7 @@ export default function(options) {
           flex(options),
           zIndex(options),
         ])
-        css.insertBefore(atRule, responsive(utilities))
+        atRule.before(responsive(utilities))
         atRule.remove()
       }
     })

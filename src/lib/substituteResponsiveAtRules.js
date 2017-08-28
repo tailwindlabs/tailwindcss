@@ -9,7 +9,7 @@ export default function(options) {
     css.walkAtRules('responsive', atRule => {
       const nodes = atRule.nodes
       rules.push(...cloneNodes(nodes))
-      css.insertBefore(atRule, nodes)
+      atRule.before(nodes)
       atRule.remove()
     })
 

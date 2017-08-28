@@ -16,10 +16,7 @@ export default function(options) {
         ]
       })
 
-      const nodes = atRule.nodes
-      const rules =  cloneNodes(nodes)
-
-      atRule.parent.insertBefore(atRule, nodes)
+      atRule.before(cloneNodes(atRule.nodes))
 
       atRule.remove()
     })

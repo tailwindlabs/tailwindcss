@@ -18,7 +18,7 @@ export default postcss.plugin('tailwind-apply', function(css) {
           })
         })
 
-        rule.insertBefore(atRule, decls)
+        atRule.before(decls)
 
         atRule.params = customProperties.join(' ')
 
