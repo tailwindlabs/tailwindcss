@@ -2,3 +2,4 @@
 /lib
 yarn.lock
 *.sublime-workspace
+/example
