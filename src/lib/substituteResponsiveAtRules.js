@@ -22,7 +22,7 @@ export default function(options) {
       mediaQuery.append(
         rules.map(rule => {
           const cloned = rule.clone()
-          cloned.selector = `.${breakpoint}\\:${rule.selector.slice(1)}`
+          cloned.selectors = _.map(rule.selectors, selector => `.${breakpoint}\\:${selector.slice(1)}`)
           return cloned
         })
       )
