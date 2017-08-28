@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "A utility-first CSS framework for rapid UI development.",
   "license": "MIT",
+  "bin": {
+    "tailwind": "lib/index.js"
+  },
   "contributors": [
     "Adam Wathan <adam.wathan@gmail.com>",
     "Jonathan Reinink <jonathan@reinink.ca>",
@@ -29,6 +32,7 @@
     "stylefmt": "^6.0.0"
   },
   "dependencies": {
+    "commander": "^2.11.0",
     "lodash": "^4.17.4",
     "nodemon": "^1.11.0",
     "normalize.css": "^6.0.0",
