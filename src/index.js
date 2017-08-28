@@ -12,7 +12,7 @@ import substituteHoverableAtRules from './lib/substituteHoverableAtRules'
 import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
 
-export default postcss.plugin('tailwind', options => {
+const plugin = postcss.plugin('tailwind', options => {
   options = options || defaultConfig
 
   return postcss([
@@ -25,3 +25,5 @@ export default postcss.plugin('tailwind', options => {
     stylefmt,
   ])
 })
+
+module.exports = plugin

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "A utility-first CSS framework for rapid UI development.",
   "license": "MIT",
+  "main": "lib/index.js",
   "bin": {
     "tailwind": "lib/cli.js"
   },
