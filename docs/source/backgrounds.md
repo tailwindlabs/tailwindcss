@@ -14,8 +14,8 @@ title: "Backgrounds"
 <h2 id="colors">Colors</h2>
 
 
-<div class="row pull-x-4 mb-4">
-  <div class="col-12 md:col-4 px-4">
+<div class="flex flex-wrap pull-x-4 mb-4">
+  <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
       <div class="bg-light px-6 py-4 text-sm">
         .bg-light
@@ -31,7 +31,7 @@ title: "Backgrounds"
       </div>
     </div>
   </div>
-  <div class="col-12 md:col-4 px-4">
+  <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-light bg-dark px-6 py-4 text-sm">
         .bg-dark
@@ -49,8 +49,8 @@ title: "Backgrounds"
   </div>
 </div>
 
-<div class="row pull-x-4 mb-4">
-  <div class="col-12 md:col-4 px-4">
+<div class="flex flex-wrap pull-x-4 mb-4">
+  <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-light bg-red-dark px-6 py-4 text-sm">
         .bg-red-dark
@@ -66,7 +66,7 @@ title: "Backgrounds"
       </div>
     </div>
   </div>
-  <div class="col-12 md:col-4 px-4">
+  <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-light bg-orange-dark px-6 py-4 text-sm">
         .bg-orange-dark
@@ -82,7 +82,7 @@ title: "Backgrounds"
       </div>
     </div>
   </div>
-  <div class="col-12 md:col-4 px-4">
+  <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-light bg-yellow-dark px-6 py-4 text-sm">
         .bg-yellow-dark
@@ -100,8 +100,8 @@ title: "Backgrounds"
   </div>
 </div>
 
-<div class="row pull-x-4 mb-4">
-  <div class="col-12 md:col-4 px-4">
+<div class="flex flex-wrap pull-x-4 mb-4">
+  <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-light bg-green-dark px-6 py-4 text-sm">
         .bg-green-dark
@@ -117,7 +117,7 @@ title: "Backgrounds"
       </div>
     </div>
   </div>
-  <div class="col-12 md:col-4 px-4">
+  <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-light bg-teal-dark px-6 py-4 text-sm">
         .bg-teal-dark
@@ -133,7 +133,7 @@ title: "Backgrounds"
       </div>
     </div>
   </div>
-  <div class="col-12 md:col-4 px-4">
+  <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-light bg-blue-dark px-6 py-4 text-sm">
         .bg-blue-dark
@@ -151,8 +151,8 @@ title: "Backgrounds"
   </div>
 </div>
 
-<div class="row pull-x-4 mb-4">
-  <div class="col-12 md:col-4 px-4">
+<div class="flex flex-wrap pull-x-4 mb-4">
+  <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-light bg-indigo-dark px-6 py-4 text-sm">
         .bg-indigo-dark
@@ -168,7 +168,7 @@ title: "Backgrounds"
       </div>
     </div>
   </div>
-  <div class="col-12 md:col-4 px-4">
+  <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-light bg-purple-dark px-6 py-4 text-sm">
         .bg-purple-dark
@@ -184,7 +184,7 @@ title: "Backgrounds"
       </div>
     </div>
   </div>
-  <div class="col-12 md:col-4 px-4">
+  <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-light bg-pink-dark px-6 py-4 text-sm">
         .bg-pink-dark
