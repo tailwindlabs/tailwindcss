@@ -27,8 +27,8 @@ let buildTailwind = config => {
   console.log('Finished building Tailwind!')
 }
 
-let getConfig = (customConfig, merge) => {
-  if (merge) {
+let getConfig = (customConfig, replace) => {
+  if (replace) {
     return customConfig
   } else {
     return _.merge(defaultConfig, customConfig)
