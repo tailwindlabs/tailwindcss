@@ -1,6 +1,6 @@
 import fs from 'fs'
 import postcss from 'postcss'
-import tailwind from './tailwind'
+import tailwind from '..'
 import defaultConfig from './defaultConfig'
 
 console.info('Building Tailwind!')
