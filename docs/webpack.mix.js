@@ -1,5 +1,5 @@
 const mix = require('laravel-mix');
-const tailwind = require('./../lib/tailwind.js').default;
+const tailwind = require('./../lib/index.js');
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +15,7 @@ const tailwind = require('./../lib/tailwind.js').default;
 mix.less('source/_assets/less/main.less', 'source/css')
   .options({
     postCss: [
-      tailwind(require('./tailwind-config')),
+      tailwind(require('./tailwind.json')),
     ]
   })
 
