@@ -25,6 +25,7 @@ import constrain from '../generators/constrain'
 import shadows from '../generators/shadows'
 import flex from '../generators/flex'
 import zIndex from '../generators/zIndex'
+import opacity from '../generators/opacity'
 
 export default function(options) {
   return function(css) {
@@ -56,6 +57,7 @@ export default function(options) {
           shadows(options),
           flex(options),
           zIndex(options),
+          opacity(options),
         ])
         atRule.before(responsive(utilities))
         atRule.remove()

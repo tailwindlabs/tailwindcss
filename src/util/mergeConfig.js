@@ -36,7 +36,8 @@ const configTemplate = {
   },
   constrain: null,
   shadows: null,
-  zIndex: null
+  zIndex: null,
+  opacity: null,
 }
 
 function replaceDefaults(template, defaults, replacements) {
