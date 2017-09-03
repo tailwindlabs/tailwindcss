@@ -29,7 +29,7 @@ function normalizeConfig(config) {
       colors: normalizeColorList(_.get(config, 'backgrounds.colors', {})),
     },
     borders: {
-      defauts: _.get(config, 'borders.defaults', {}),
+      defaults: _.get(config, 'borders.defaults', {}),
       widths: _.toPairs(_.get(config, 'borders.widths', {})),
       rounded: {
         default: _.get(config, 'borders.rounded.default'),
@@ -71,7 +71,7 @@ function fixPairs(config) {
       colors: normalizeColorList(_.get(config, 'backgrounds.colors', {})),
     },
     borders: {
-      defauts: _.get(config, 'borders.defaults', {}),
+      defaults: _.get(config, 'borders.defaults', {}),
       widths: _.fromPairs(_.get(config, 'borders.widths', {})),
       rounded: {
         default: _.get(config, 'borders.rounded.default'),
