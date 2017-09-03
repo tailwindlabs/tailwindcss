@@ -1,0 +1,10 @@
+{
+  "extend": {
+    "spacing": {
+      "common": {
+        "12": "3rem",
+        "16": "4rem"
+      }
+    }
+  }
+}
