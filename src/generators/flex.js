@@ -59,6 +59,9 @@ export default function() {
     'justify-around': {
       'justify-content': 'space-around',
     },
+    'flex-1': {
+      'flex': '1'
+    },
     'flex-auto': {
       'flex': 'auto',
     },
