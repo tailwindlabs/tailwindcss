@@ -3,11 +3,13 @@ import postcss from 'postcss'
 
 function buildMediaQuery(breakpoints) {
   if (_.isString(breakpoints)) {
-    breakpoints = {min: breakpoints}
+    breakpoints = { min: breakpoints }
   }
+
   if (!_.isArray(breakpoints)) {
     breakpoints = [breakpoints]
   }
+
   return _(breakpoints).map((breakpoint) => {
     return _(breakpoint).map((value, feature) => {
         feature = _.get(
