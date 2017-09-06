@@ -1,21 +1,26 @@
 import _ from 'lodash'
 import postcss from 'postcss'
 
-function buildMediaQuery(breakpoint) {
-  if (_.isString(breakpoint)) {
-    breakpoint = {min: breakpoint}
+function buildMediaQuery(breakpoints) {
+  if (_.isString(breakpoints)) {
+    breakpoints = {min: breakpoints}
   }
-  return _(breakpoint).map((value, feature) => {
-      feature = _.get(
-        {
-          min: 'min-width',
-          max: 'max-width',
-        },
-        feature,
-        feature
-      )
-      return `(${feature}: ${value})`
-    }).join(' and ')
+  if (!_.isArray(breakpoints)) {
+    breakpoints = [breakpoints]
+  }
+  return _(breakpoints).map((breakpoint) => {
+    return _(breakpoint).map((value, feature) => {
+        feature = _.get(
+          {
+            min: 'min-width',
+            max: 'max-width',
+          },
+          feature,
+          feature
+        )
+        return `(${feature}: ${value})`
+      }).join(' and ')
+  }).join(', ')
 }
 
 export default function(options) {
