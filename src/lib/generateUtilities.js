@@ -1,31 +1,34 @@
 import _ from 'lodash'
-import responsive from '../util/responsive'
-import textSizes from '../generators/textSizes'
-import textWeights from '../generators/textWeights'
-import textFonts from '../generators/textFonts'
-import textColors from '../generators/textColors'
-import textLeading from '../generators/textLeading'
-import textTracking from '../generators/textTracking'
-import textAlign from '../generators/textAlign'
-import textWrap from '../generators/textWrap'
-import textStyle from '../generators/textStyle'
-import verticalAlign from '../generators/verticalAlign'
 import backgroundColors from '../generators/backgroundColors'
 import backgroundSize from '../generators/backgroundSize'
-import borderWidths from '../generators/borderWidths'
 import borderColors from '../generators/borderColors'
 import borderStyles from '../generators/borderStyles'
-import rounded from '../generators/rounded'
+import borderWidths from '../generators/borderWidths'
+import constrain from '../generators/constrain'
+import cursor from '../generators/cursor'
 import display from '../generators/display'
-import position from '../generators/position'
+import flex from '../generators/flex'
+import opacity from '../generators/opacity'
 import overflow from '../generators/overflow'
+import position from '../generators/position'
+import resize from '../generators/resize'
+import responsive from '../util/responsive'
+import rounded from '../generators/rounded'
+import shadows from '../generators/shadows'
 import sizing from '../generators/sizing'
 import spacing from '../generators/spacing'
-import constrain from '../generators/constrain'
-import shadows from '../generators/shadows'
-import flex from '../generators/flex'
+import textAlign from '../generators/textAlign'
+import textColors from '../generators/textColors'
+import textFonts from '../generators/textFonts'
+import textLeading from '../generators/textLeading'
+import textSizes from '../generators/textSizes'
+import textStyle from '../generators/textStyle'
+import textTracking from '../generators/textTracking'
+import textWeights from '../generators/textWeights'
+import textWrap from '../generators/textWrap'
+import userSelect from '../generators/userSelect'
+import verticalAlign from '../generators/verticalAlign'
 import zIndex from '../generators/zIndex'
-import opacity from '../generators/opacity'
 
 export default function(options) {
   return function(css) {
@@ -58,6 +61,9 @@ export default function(options) {
           flex(options),
           zIndex(options),
           opacity(options),
+          userSelect(options),
+          resize(options),
+          cursor(options),
         ])
         atRule.before(responsive(utilities))
         atRule.remove()

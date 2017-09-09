@@ -1,5 +1,5 @@
 /node_modules
 /lib
-yarn.lock
 *.sublime-workspace
 /example
+yarn-error.log
