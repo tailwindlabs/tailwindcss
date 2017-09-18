@@ -310,7 +310,7 @@ export default {
     },
     padding: {},
     margin: {},
-    pull: {},
+    negativeMargin: {},
   },
   constrain: {
     'xs': '20rem',
