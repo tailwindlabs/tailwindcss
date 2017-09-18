@@ -32,42 +32,40 @@ import zIndex from '../generators/zIndex'
 
 export default function(options) {
   return function(css) {
-    css.walkAtRules('tailwind', atRule => {
-      if (atRule.params === 'utilities') {
-        const utilities = _.flatten([
-          textSizes(options),
-          textWeights(options),
-          textFonts(options),
-          textColors(options),
-          textLeading(options),
-          textTracking(options),
-          textAlign(options),
-          textWrap(options),
-          textStyle(options),
-          verticalAlign(options),
-          backgroundColors(options),
-          backgroundSize(options),
-          borderWidths(options),
-          borderColors(options),
-          borderStyles(options),
-          rounded(options),
-          display(options),
-          position(options),
-          overflow(options),
-          sizing(options),
-          spacing(options),
-          constrain(options),
-          shadows(options),
-          flex(options),
-          zIndex(options),
-          opacity(options),
-          userSelect(options),
-          resize(options),
-          cursor(options),
-        ])
-        atRule.before(responsive(utilities))
-        atRule.remove()
-      }
+    css.walkAtRules('tailwind-utilities', atRule => {
+      const utilities = _.flatten([
+        textSizes(options),
+        textWeights(options),
+        textFonts(options),
+        textColors(options),
+        textLeading(options),
+        textTracking(options),
+        textAlign(options),
+        textWrap(options),
+        textStyle(options),
+        verticalAlign(options),
+        backgroundColors(options),
+        backgroundSize(options),
+        borderWidths(options),
+        borderColors(options),
+        borderStyles(options),
+        rounded(options),
+        display(options),
+        position(options),
+        overflow(options),
+        sizing(options),
+        spacing(options),
+        constrain(options),
+        shadows(options),
+        flex(options),
+        zIndex(options),
+        opacity(options),
+        userSelect(options),
+        resize(options),
+        cursor(options),
+      ])
+      atRule.before(responsive(utilities))
+      atRule.remove()
     })
   }
 }
