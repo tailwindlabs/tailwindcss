@@ -144,29 +144,39 @@ Column widths can be automatic:
 <div class="bg-light-softer text-medium text-sm mb-6">
     <div class="text-dark-soft p-4 leading-none">.flex.flex-wrap</div>
     <div class="flex flex-wrap">
-        <div class="w-1/4 md:flex-fill">
+        <div class="w-1/4 md:flex-1 md:w-auto">
             <div class="text-center py-4 bg-dark-softer text-light">
-                .w-1/4.md:flex-fill
+                <div>.w-1/4</div>
+                <div>.md:flex-1</div>
+                <div>.md:w-auto</div>
             </div>
         </div>
-        <div class="w-1/4 md:flex-fill">
+        <div class="w-1/4 md:flex-1 md:w-auto">
             <div class="text-center py-4 bg-dark-soft text-light">
-                .w-1/4.md:flex-fill
+                <div>.w-1/4</div>
+                <div>.md:flex-1</div>
+                <div>.md:w-auto</div>
             </div>
         </div>
-        <div class="w-1/4 md:flex-fill">
+        <div class="w-1/4 md:flex-1 md:w-auto">
             <div class="text-center py-4 bg-dark-softer text-light">
-                .w-1/4.md:flex-fill
+                <div>.w-1/4</div>
+                <div>.md:flex-1</div>
+                <div>.md:w-auto</div>
             </div>
         </div>
-        <div class="w-1/4 md:flex-fill">
+        <div class="w-1/4 md:flex-1 md:w-auto">
             <div class="text-center py-4 bg-dark-soft text-light">
-                .w-1/4.md:flex-fill
+                <div>.w-1/4</div>
+                <div>.md:flex-1</div>
+                <div>.md:w-auto</div>
             </div>
         </div>
-        <div class="w-1/4 md:flex-fill">
+        <div class="w-1/4 md:flex-1 md:w-auto">
             <div class="text-center py-4 bg-dark-softer text-light">
-                .w-1/4.md:flex-fill
+                <div>.w-1/4</div>
+                <div>.md:flex-1</div>
+                <div>.md:w-auto</div>
             </div>
         </div>
     </div>
