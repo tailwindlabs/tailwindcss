@@ -60,9 +60,10 @@ export default {
       'mono': 'Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace',
     },
     sizes: {
+      'base': '1rem', // 16px
       'xs': '.75rem', // 12px
       'sm': '.875rem', // 14px
-      'base': '1rem', // 16px
+      'md': '1rem', // 16px
       'lg': '1.125rem', // 18px
       'xl': '1.25rem', // 20px
       '2xl': '1.75rem', // 28px
