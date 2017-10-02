@@ -2,6 +2,7 @@ import _ from 'lodash'
 import backgroundColors from '../generators/backgroundColors'
 import backgroundSize from '../generators/backgroundSize'
 import borderColors from '../generators/borderColors'
+import borderStylesReset from '../generators/borderStylesReset'
 import borderStyles from '../generators/borderStyles'
 import borderWidths from '../generators/borderWidths'
 import constrain from '../generators/constrain'
@@ -47,6 +48,7 @@ export default function(options) {
           verticalAlign(options),
           backgroundColors(options),
           backgroundSize(options),
+          borderStylesReset(options),
           borderWidths(options),
           borderColors(options),
           borderStyles(options),
