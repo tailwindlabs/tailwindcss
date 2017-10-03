@@ -29,6 +29,7 @@ import textWeights from '../generators/textWeights'
 import textWrap from '../generators/textWrap'
 import userSelect from '../generators/userSelect'
 import verticalAlign from '../generators/verticalAlign'
+import visibility from '../generators/visibility'
 import zIndex from '../generators/zIndex'
 
 export default function(options) {
@@ -61,6 +62,7 @@ export default function(options) {
           constrain(options),
           shadows(options),
           flex(options),
+          visibility(options),
           zIndex(options),
           opacity(options),
           userSelect(options),
