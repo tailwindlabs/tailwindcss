@@ -260,8 +260,9 @@ export default {
     ]
   },
   sizing: {
-    common: {
+    width: {
       'auto': 'auto',
+      'px': '1px',
       '1': '0.25rem',
       '2': '0.5rem',
       '3': '0.75rem',
@@ -273,14 +274,8 @@ export default {
       '16': '4rem',
       '24': '6rem',
       '32': '8rem',
-      '40': '10rem',
       '48': '12rem',
       '64': '16rem',
-      '96': '24rem',
-      '128': '32rem',
-      'full': '100%',
-    },
-    width: {
       '1/2': '50%',
       '1/3': 'calc(100% / 3)',
       '2/3': 'calc(100% / 3 * 2)',
@@ -292,14 +287,56 @@ export default {
       '4/5': '80%',
       '1/6': 'calc(100% / 6)',
       '5/6': 'calc(100% / 6 * 5)',
+      'full': '100%',
       'screen': '100vw'
     },
     height: {
+      'auto': 'auto',
+      'px': '1px',
+      '1': '0.25rem',
+      '2': '0.5rem',
+      '3': '0.75rem',
+      '4': '1rem',
+      '6': '1.5rem',
+      '8': '2rem',
+      '10': '2.5rem',
+      '12': '3rem',
+      '16': '4rem',
+      '24': '6rem',
+      '32': '8rem',
+      '48': '12rem',
+      '64': '16rem',
+      'full': '100%',
       'screen': '100vh'
-    }
+    },
+    minHeight: {
+      '0': '0',
+      'full': '100%',
+      'screen': '100vh'
+    },
+    maxHeight: {
+      'full': '100%',
+      'screen': '100vh'
+    },
+    minWidth: {
+      '0': '0',
+      'full': '100%',
+    },
+    maxWidth: {
+      'xs': '20rem',
+      'sm': '30rem',
+      'md': '40rem',
+      'lg': '50rem',
+      'xl': '60rem',
+      '2xl': '70rem',
+      '3xl': '80rem',
+      '4xl': '90rem',
+      '5xl': '100rem',
+      'full': '100%',
+    },
   },
   spacing: {
-    common: {
+    padding: {
       'px': '1px',
       '0': '0',
       '1': '0.25rem',
@@ -309,20 +346,26 @@ export default {
       '6': '1.5rem',
       '8': '2rem',
     },
-    padding: {},
-    margin: {},
-    negativeMargin: {},
-  },
-  constrain: {
-    'xs': '20rem',
-    'sm': '30rem',
-    'md': '40rem',
-    'lg': '50rem',
-    'xl': '60rem',
-    '2xl': '70rem',
-    '3xl': '80rem',
-    '4xl': '90rem',
-    '5xl': '100rem',
+    margin: {
+      'px': '1px',
+      '0': '0',
+      '1': '0.25rem',
+      '2': '0.5rem',
+      '3': '0.75rem',
+      '4': '1rem',
+      '6': '1.5rem',
+      '8': '2rem',
+    },
+    negativeMargin: {
+      'px': '1px',
+      '0': '0',
+      '1': '0.25rem',
+      '2': '0.5rem',
+      '3': '0.75rem',
+      '4': '1rem',
+      '6': '1.5rem',
+      '8': '2rem',
+    },
   },
   shadows: {
     '1': '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.15)',
