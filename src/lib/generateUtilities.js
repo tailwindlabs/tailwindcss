@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import backgroundColors from '../generators/backgroundColors'
+import backgroundPositions from '../generators/backgroundPositions'
 import backgroundSize from '../generators/backgroundSize'
 import borderColors from '../generators/borderColors'
 import borderStylesReset from '../generators/borderStylesReset'
@@ -47,6 +48,7 @@ export default function(options) {
           textStyle(options),
           verticalAlign(options),
           backgroundColors(options),
+          backgroundPositions(options),
           backgroundSize(options),
           borderStylesReset(options),
           borderWidths(options),
