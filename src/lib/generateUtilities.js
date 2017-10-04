@@ -11,6 +11,7 @@ import constrain from '../generators/constrain'
 import cursor from '../generators/cursor'
 import display from '../generators/display'
 import flex from '../generators/flex'
+import floats from '../generators/floats'
 import opacity from '../generators/opacity'
 import overflow from '../generators/overflow'
 import position from '../generators/position'
@@ -66,6 +67,7 @@ export default function(options) {
           constrain(options),
           shadows(options),
           flex(options),
+          floats(options),
           visibility(options),
           zIndex(options),
           opacity(options),
