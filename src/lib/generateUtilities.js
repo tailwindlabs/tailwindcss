@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import appearance from '../generators/appearance'
 import backgroundColors from '../generators/backgroundColors'
 import backgroundPositions from '../generators/backgroundPositions'
 import backgroundSize from '../generators/backgroundSize'
@@ -37,6 +38,7 @@ export default function(options) {
     css.walkAtRules('tailwind-utilities', atRule => {
       if (atRule.params === 'all') {
         const utilities = _.flatten([
+          appearance(options),
           textSizes(options),
           textWeights(options),
           textFonts(options),
