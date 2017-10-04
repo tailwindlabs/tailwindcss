@@ -1,5 +1,7 @@
 import _ from 'lodash'
+import appearance from '../generators/appearance'
 import backgroundColors from '../generators/backgroundColors'
+import backgroundPositions from '../generators/backgroundPositions'
 import backgroundSize from '../generators/backgroundSize'
 import borderColors from '../generators/borderColors'
 import borderStylesReset from '../generators/borderStylesReset'
@@ -30,6 +32,7 @@ import textWeights from '../generators/textWeights'
 import textWrap from '../generators/textWrap'
 import userSelect from '../generators/userSelect'
 import verticalAlign from '../generators/verticalAlign'
+import visibility from '../generators/visibility'
 import zIndex from '../generators/zIndex'
 
 export default function(options) {
@@ -37,6 +40,7 @@ export default function(options) {
     css.walkAtRules('tailwind-utilities', atRule => {
       if (atRule.params === 'all') {
         const utilities = _.flatten([
+          appearance(options),
           textSizes(options),
           textWeights(options),
           textFonts(options),
@@ -48,6 +52,7 @@ export default function(options) {
           textStyle(options),
           verticalAlign(options),
           backgroundColors(options),
+          backgroundPositions(options),
           backgroundSize(options),
           borderStylesReset(options),
           borderWidths(options),
@@ -63,6 +68,7 @@ export default function(options) {
           shadows(options),
           flex(options),
           floats(options),
+          visibility(options),
           zIndex(options),
           opacity(options),
           userSelect(options),
