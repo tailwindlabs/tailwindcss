@@ -1,3 +1,7 @@
+.text-base {
+  font-size: 1rem;
+}
+
 .text-xs {
   font-size: .75rem;
 }
@@ -6,7 +10,7 @@
   font-size: .875rem;
 }
 
-.text-base {
+.text-md {
   font-size: 1rem;
 }
 
@@ -1395,6 +1399,10 @@
   width: 100%;
 }
 
+.w-px {
+  width: 1px;
+}
+
 .w-1\/2 {
   width: 50%;
 }
@@ -1513,6 +1521,10 @@
 
 .h-full {
   height: 100%;
+}
+
+.h-px {
+  height: 1px;
 }
 
 .h-screen {
@@ -2520,6 +2532,10 @@
 }
 
 @media (min-width: 576px) {
+  .sm\:text-base {
+    font-size: 1rem;
+  }
+
   .sm\:text-xs {
     font-size: .75rem;
   }
@@ -2528,7 +2544,7 @@
     font-size: .875rem;
   }
 
-  .sm\:text-base {
+  .sm\:text-md {
     font-size: 1rem;
   }
 
@@ -3917,6 +3933,10 @@
     width: 100%;
   }
 
+  .sm\:w-px {
+    width: 1px;
+  }
+
   .sm\:w-1\/2 {
     width: 50%;
   }
@@ -4035,6 +4055,10 @@
 
   .sm\:h-full {
     height: 100%;
+  }
+
+  .sm\:h-px {
+    height: 1px;
   }
 
   .sm\:h-screen {
@@ -5043,6 +5067,10 @@
 }
 
 @media (min-width: 768px) {
+  .md\:text-base {
+    font-size: 1rem;
+  }
+
   .md\:text-xs {
     font-size: .75rem;
   }
@@ -5051,7 +5079,7 @@
     font-size: .875rem;
   }
 
-  .md\:text-base {
+  .md\:text-md {
     font-size: 1rem;
   }
 
@@ -6440,6 +6468,10 @@
     width: 100%;
   }
 
+  .md\:w-px {
+    width: 1px;
+  }
+
   .md\:w-1\/2 {
     width: 50%;
   }
@@ -6558,6 +6590,10 @@
 
   .md\:h-full {
     height: 100%;
+  }
+
+  .md\:h-px {
+    height: 1px;
   }
 
   .md\:h-screen {
@@ -7566,6 +7602,10 @@
 }
 
 @media (min-width: 992px) {
+  .lg\:text-base {
+    font-size: 1rem;
+  }
+
   .lg\:text-xs {
     font-size: .75rem;
   }
@@ -7574,7 +7614,7 @@
     font-size: .875rem;
   }
 
-  .lg\:text-base {
+  .lg\:text-md {
     font-size: 1rem;
   }
 
@@ -8963,6 +9003,10 @@
     width: 100%;
   }
 
+  .lg\:w-px {
+    width: 1px;
+  }
+
   .lg\:w-1\/2 {
     width: 50%;
   }
@@ -9081,6 +9125,10 @@
 
   .lg\:h-full {
     height: 100%;
+  }
+
+  .lg\:h-px {
+    height: 1px;
   }
 
   .lg\:h-screen {
@@ -10089,6 +10137,10 @@
 }
 
 @media (min-width: 1200px) {
+  .xl\:text-base {
+    font-size: 1rem;
+  }
+
   .xl\:text-xs {
     font-size: .75rem;
   }
@@ -10097,7 +10149,7 @@
     font-size: .875rem;
   }
 
-  .xl\:text-base {
+  .xl\:text-md {
     font-size: 1rem;
   }
 
@@ -11486,6 +11538,10 @@
     width: 100%;
   }
 
+  .xl\:w-px {
+    width: 1px;
+  }
+
   .xl\:w-1\/2 {
     width: 50%;
   }
@@ -11604,6 +11660,10 @@
 
   .xl\:h-full {
     height: 100%;
+  }
+
+  .xl\:h-px {
+    height: 1px;
   }
 
   .xl\:h-screen {

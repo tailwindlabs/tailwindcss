@@ -9,7 +9,7 @@ const configTemplate = {
     weights: null,
     leading: null,
     tracking: null,
-    colors: null
+    colors: null,
   },
   backgrounds: {
     colors: null,
@@ -19,22 +19,23 @@ const configTemplate = {
     widths: null,
     rounded: {
       default: null,
-      modifiers: null
+      modifiers: null,
     },
-    colors: null
+    colors: null,
   },
   sizing: {
-    common: null,
     width: null,
-    height: null
+    height: null,
+    minHeight: null,
+    maxHeight: null,
+    minWidth: null,
+    maxWidth: null,
   },
   spacing: {
-    common: null,
     padding: null,
     margin: null,
-    pull: null
+    negativeMargin: null,
   },
-  constrain: null,
   shadows: null,
   zIndex: null,
   opacity: null,
