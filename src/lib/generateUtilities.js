@@ -7,7 +7,6 @@ import borderColors from '../generators/borderColors'
 import borderStylesReset from '../generators/borderStylesReset'
 import borderStyles from '../generators/borderStyles'
 import borderWidths from '../generators/borderWidths'
-import constrain from '../generators/constrain'
 import cursor from '../generators/cursor'
 import display from '../generators/display'
 import flex from '../generators/flex'
@@ -64,7 +63,6 @@ export default function(options) {
           overflow(options),
           sizing(options),
           spacing(options),
-          constrain(options),
           shadows(options),
           flex(options),
           floats(options),
