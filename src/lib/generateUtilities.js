@@ -7,6 +7,7 @@ import borderColors from '../generators/borderColors'
 import borderStylesReset from '../generators/borderStylesReset'
 import borderStyles from '../generators/borderStyles'
 import borderWidths from '../generators/borderWidths'
+import container from '../generators/container'
 import cursor from '../generators/cursor'
 import display from '../generators/display'
 import flex from '../generators/flex'
@@ -73,6 +74,8 @@ export default function(options) {
           resize(options),
           cursor(options),
         ])
+
+        atRule.before(container(options))
         atRule.before(responsive(utilities))
         atRule.remove()
       }
