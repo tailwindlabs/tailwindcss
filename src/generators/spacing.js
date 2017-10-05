@@ -86,7 +86,7 @@ function defineNegativeMargin(negativeMargin) {
         'margin-top': `${size}`,
         'margin-bottom': `${size}`,
       },
-      [`-m${modifier}`]: {
+      [`-m-${modifier}`]: {
         'margin': `${size}`,
       },
     })
