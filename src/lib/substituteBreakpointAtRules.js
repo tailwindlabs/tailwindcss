@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import postcss from 'postcss'
 import cloneNodes from '../util/cloneNodes'
+import buildMediaQuery from '../util/buildMediaQuery'
 
 export default function(options) {
   return function(css) {
@@ -14,7 +15,7 @@ export default function(options) {
       }
 
       atRule.name = 'media'
-      atRule.params = `(--breakpoint-${atRule.params})`
+      atRule.params = buildMediaQuery(breakpoint)
     })
   }
 }

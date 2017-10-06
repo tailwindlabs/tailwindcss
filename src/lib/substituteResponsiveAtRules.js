@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import postcss from 'postcss'
 import cloneNodes from '../util/cloneNodes'
+import buildMediaQuery from '../util/buildMediaQuery'
 
 export default function(options) {
   return function(css) {
@@ -16,7 +17,7 @@ export default function(options) {
     Object.keys(options.breakpoints).forEach(breakpoint => {
       const mediaQuery = postcss.atRule({
         name: 'media',
-        params: `(--breakpoint-${breakpoint})`,
+        params: buildMediaQuery(options.breakpoints[breakpoint]),
       })
 
       mediaQuery.append(

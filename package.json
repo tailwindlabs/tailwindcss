@@ -38,7 +38,6 @@
     "nodemon": "^1.11.0",
     "normalize.css": "^6.0.0",
     "postcss": "^6.0.9",
-    "postcss-cssnext": "^3.0.2",
     "postcss-prettify": "^0.3.4",
     "stylefmt": "^6.0.0",
     "suitcss-base": "^3.0.0"

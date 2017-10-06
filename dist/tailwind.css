@@ -27,8 +27,6 @@
 }
 
 .appearance-none {
-  -webkit-appearance: none;
-  -moz-appearance: none;
   appearance: none;
 }
 
@@ -89,7 +87,7 @@
 }
 
 .sans {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
 }
 
 .serif {
@@ -2412,36 +2410,26 @@
 }
 
 .flex {
-  display: -webkit-box;
   display: flex;
 }
 
 .inline-flex {
-  display: -webkit-inline-box;
   display: inline-flex;
 }
 
 .flex-row {
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
   flex-direction: row;
 }
 
 .flex-row-reverse {
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: reverse;
   flex-direction: row-reverse;
 }
 
 .flex-col {
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
   flex-direction: column;
 }
 
 .flex-col-reverse {
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: reverse;
   flex-direction: column-reverse;
 }
 
@@ -2458,47 +2446,38 @@
 }
 
 .items-start {
-  -webkit-box-align: start;
   align-items: flex-start;
 }
 
 .items-end {
-  -webkit-box-align: end;
   align-items: flex-end;
 }
 
 .items-center {
-  -webkit-box-align: center;
   align-items: center;
 }
 
 .items-baseline {
-  -webkit-box-align: baseline;
   align-items: baseline;
 }
 
 .items-stretch {
-  -webkit-box-align: stretch;
   align-items: stretch;
 }
 
 .justify-start {
-  -webkit-box-pack: start;
   justify-content: flex-start;
 }
 
 .justify-end {
-  -webkit-box-pack: end;
   justify-content: flex-end;
 }
 
 .justify-center {
-  -webkit-box-pack: center;
   justify-content: center;
 }
 
 .justify-between {
-  -webkit-box-pack: justify;
   justify-content: space-between;
 }
 
@@ -2507,27 +2486,22 @@
 }
 
 .flex-1 {
-  -webkit-box-flex: 1;
   flex: 1;
 }
 
 .flex-auto {
-  -webkit-box-flex: 1;
   flex: auto;
 }
 
 .flex-initial {
-  -webkit-box-flex: initial;
   flex: initial;
 }
 
 .flex-none {
-  -webkit-box-flex: 0;
   flex: none;
 }
 
 .flex-grow {
-  -webkit-box-flex: 1;
   flex-grow: 1;
 }
 
@@ -2536,7 +2510,6 @@
 }
 
 .flex-no-grow {
-  -webkit-box-flex: 0;
   flex-grow: 0;
 }
 
@@ -2619,16 +2592,10 @@
 }
 
 .select-none {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
 .select-text {
-  -webkit-user-select: text;
-  -moz-user-select: text;
-  -ms-user-select: text;
   user-select: text;
 }
 
@@ -2650,8 +2617,6 @@
 
 @media (min-width: 576px) {
   .sm\:appearance-none {
-    -webkit-appearance: none;
-    -moz-appearance: none;
     appearance: none;
   }
 
@@ -2712,7 +2677,7 @@
   }
 
   .sm\:sans {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
   }
 
   .sm\:serif {
@@ -5035,36 +5000,26 @@
   }
 
   .sm\:flex {
-    display: -webkit-box;
     display: flex;
   }
 
   .sm\:inline-flex {
-    display: -webkit-inline-box;
     display: inline-flex;
   }
 
   .sm\:flex-row {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
     flex-direction: row;
   }
 
   .sm\:flex-row-reverse {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: reverse;
     flex-direction: row-reverse;
   }
 
   .sm\:flex-col {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
     flex-direction: column;
   }
 
   .sm\:flex-col-reverse {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: reverse;
     flex-direction: column-reverse;
   }
 
@@ -5081,47 +5036,38 @@
   }
 
   .sm\:items-start {
-    -webkit-box-align: start;
     align-items: flex-start;
   }
 
   .sm\:items-end {
-    -webkit-box-align: end;
     align-items: flex-end;
   }
 
   .sm\:items-center {
-    -webkit-box-align: center;
     align-items: center;
   }
 
   .sm\:items-baseline {
-    -webkit-box-align: baseline;
     align-items: baseline;
   }
 
   .sm\:items-stretch {
-    -webkit-box-align: stretch;
     align-items: stretch;
   }
 
   .sm\:justify-start {
-    -webkit-box-pack: start;
     justify-content: flex-start;
   }
 
   .sm\:justify-end {
-    -webkit-box-pack: end;
     justify-content: flex-end;
   }
 
   .sm\:justify-center {
-    -webkit-box-pack: center;
     justify-content: center;
   }
 
   .sm\:justify-between {
-    -webkit-box-pack: justify;
     justify-content: space-between;
   }
 
@@ -5130,27 +5076,22 @@
   }
 
   .sm\:flex-1 {
-    -webkit-box-flex: 1;
     flex: 1;
   }
 
   .sm\:flex-auto {
-    -webkit-box-flex: 1;
     flex: auto;
   }
 
   .sm\:flex-initial {
-    -webkit-box-flex: initial;
     flex: initial;
   }
 
   .sm\:flex-none {
-    -webkit-box-flex: 0;
     flex: none;
   }
 
   .sm\:flex-grow {
-    -webkit-box-flex: 1;
     flex-grow: 1;
   }
 
@@ -5159,7 +5100,6 @@
   }
 
   .sm\:flex-no-grow {
-    -webkit-box-flex: 0;
     flex-grow: 0;
   }
 
@@ -5242,16 +5182,10 @@
   }
 
   .sm\:select-none {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
   }
 
   .sm\:select-text {
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
     user-select: text;
   }
 
@@ -5274,8 +5208,6 @@
 
 @media (min-width: 768px) {
   .md\:appearance-none {
-    -webkit-appearance: none;
-    -moz-appearance: none;
     appearance: none;
   }
 
@@ -5336,7 +5268,7 @@
   }
 
   .md\:sans {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
   }
 
   .md\:serif {
@@ -7659,36 +7591,26 @@
   }
 
   .md\:flex {
-    display: -webkit-box;
     display: flex;
   }
 
   .md\:inline-flex {
-    display: -webkit-inline-box;
     display: inline-flex;
   }
 
   .md\:flex-row {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
     flex-direction: row;
   }
 
   .md\:flex-row-reverse {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: reverse;
     flex-direction: row-reverse;
   }
 
   .md\:flex-col {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
     flex-direction: column;
   }
 
   .md\:flex-col-reverse {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: reverse;
     flex-direction: column-reverse;
   }
 
@@ -7705,47 +7627,38 @@
   }
 
   .md\:items-start {
-    -webkit-box-align: start;
     align-items: flex-start;
   }
 
   .md\:items-end {
-    -webkit-box-align: end;
     align-items: flex-end;
   }
 
   .md\:items-center {
-    -webkit-box-align: center;
     align-items: center;
   }
 
   .md\:items-baseline {
-    -webkit-box-align: baseline;
     align-items: baseline;
   }
 
   .md\:items-stretch {
-    -webkit-box-align: stretch;
     align-items: stretch;
   }
 
   .md\:justify-start {
-    -webkit-box-pack: start;
     justify-content: flex-start;
   }
 
   .md\:justify-end {
-    -webkit-box-pack: end;
     justify-content: flex-end;
   }
 
   .md\:justify-center {
-    -webkit-box-pack: center;
     justify-content: center;
   }
 
   .md\:justify-between {
-    -webkit-box-pack: justify;
     justify-content: space-between;
   }
 
@@ -7754,27 +7667,22 @@
   }
 
   .md\:flex-1 {
-    -webkit-box-flex: 1;
     flex: 1;
   }
 
   .md\:flex-auto {
-    -webkit-box-flex: 1;
     flex: auto;
   }
 
   .md\:flex-initial {
-    -webkit-box-flex: initial;
     flex: initial;
   }
 
   .md\:flex-none {
-    -webkit-box-flex: 0;
     flex: none;
   }
 
   .md\:flex-grow {
-    -webkit-box-flex: 1;
     flex-grow: 1;
   }
 
@@ -7783,7 +7691,6 @@
   }
 
   .md\:flex-no-grow {
-    -webkit-box-flex: 0;
     flex-grow: 0;
   }
 
@@ -7866,16 +7773,10 @@
   }
 
   .md\:select-none {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
   }
 
   .md\:select-text {
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
     user-select: text;
   }
 
@@ -7898,8 +7799,6 @@
 
 @media (min-width: 992px) {
   .lg\:appearance-none {
-    -webkit-appearance: none;
-    -moz-appearance: none;
     appearance: none;
   }
 
@@ -7960,7 +7859,7 @@
   }
 
   .lg\:sans {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
   }
 
   .lg\:serif {
@@ -10283,36 +10182,26 @@
   }
 
   .lg\:flex {
-    display: -webkit-box;
     display: flex;
   }
 
   .lg\:inline-flex {
-    display: -webkit-inline-box;
     display: inline-flex;
   }
 
   .lg\:flex-row {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
     flex-direction: row;
   }
 
   .lg\:flex-row-reverse {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: reverse;
     flex-direction: row-reverse;
   }
 
   .lg\:flex-col {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
     flex-direction: column;
   }
 
   .lg\:flex-col-reverse {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: reverse;
     flex-direction: column-reverse;
   }
 
@@ -10329,47 +10218,38 @@
   }
 
   .lg\:items-start {
-    -webkit-box-align: start;
     align-items: flex-start;
   }
 
   .lg\:items-end {
-    -webkit-box-align: end;
     align-items: flex-end;
   }
 
   .lg\:items-center {
-    -webkit-box-align: center;
     align-items: center;
   }
 
   .lg\:items-baseline {
-    -webkit-box-align: baseline;
     align-items: baseline;
   }
 
   .lg\:items-stretch {
-    -webkit-box-align: stretch;
     align-items: stretch;
   }
 
   .lg\:justify-start {
-    -webkit-box-pack: start;
     justify-content: flex-start;
   }
 
   .lg\:justify-end {
-    -webkit-box-pack: end;
     justify-content: flex-end;
   }
 
   .lg\:justify-center {
-    -webkit-box-pack: center;
     justify-content: center;
   }
 
   .lg\:justify-between {
-    -webkit-box-pack: justify;
     justify-content: space-between;
   }
 
@@ -10378,27 +10258,22 @@
   }
 
   .lg\:flex-1 {
-    -webkit-box-flex: 1;
     flex: 1;
   }
 
   .lg\:flex-auto {
-    -webkit-box-flex: 1;
     flex: auto;
   }
 
   .lg\:flex-initial {
-    -webkit-box-flex: initial;
     flex: initial;
   }
 
   .lg\:flex-none {
-    -webkit-box-flex: 0;
     flex: none;
   }
 
   .lg\:flex-grow {
-    -webkit-box-flex: 1;
     flex-grow: 1;
   }
 
@@ -10407,7 +10282,6 @@
   }
 
   .lg\:flex-no-grow {
-    -webkit-box-flex: 0;
     flex-grow: 0;
   }
 
@@ -10490,16 +10364,10 @@
   }
 
   .lg\:select-none {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
   }
 
   .lg\:select-text {
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
     user-select: text;
   }
 
@@ -10522,8 +10390,6 @@
 
 @media (min-width: 1200px) {
   .xl\:appearance-none {
-    -webkit-appearance: none;
-    -moz-appearance: none;
     appearance: none;
   }
 
@@ -10584,7 +10450,7 @@
   }
 
   .xl\:sans {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
   }
 
   .xl\:serif {
@@ -12907,36 +12773,26 @@
   }
 
   .xl\:flex {
-    display: -webkit-box;
     display: flex;
   }
 
   .xl\:inline-flex {
-    display: -webkit-inline-box;
     display: inline-flex;
   }
 
   .xl\:flex-row {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
     flex-direction: row;
   }
 
   .xl\:flex-row-reverse {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: reverse;
     flex-direction: row-reverse;
   }
 
   .xl\:flex-col {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
     flex-direction: column;
   }
 
   .xl\:flex-col-reverse {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: reverse;
     flex-direction: column-reverse;
   }
 
@@ -12953,47 +12809,38 @@
   }
 
   .xl\:items-start {
-    -webkit-box-align: start;
     align-items: flex-start;
   }
 
   .xl\:items-end {
-    -webkit-box-align: end;
     align-items: flex-end;
   }
 
   .xl\:items-center {
-    -webkit-box-align: center;
     align-items: center;
   }
 
   .xl\:items-baseline {
-    -webkit-box-align: baseline;
     align-items: baseline;
   }
 
   .xl\:items-stretch {
-    -webkit-box-align: stretch;
     align-items: stretch;
   }
 
   .xl\:justify-start {
-    -webkit-box-pack: start;
     justify-content: flex-start;
   }
 
   .xl\:justify-end {
-    -webkit-box-pack: end;
     justify-content: flex-end;
   }
 
   .xl\:justify-center {
-    -webkit-box-pack: center;
     justify-content: center;
   }
 
   .xl\:justify-between {
-    -webkit-box-pack: justify;
     justify-content: space-between;
   }
 
@@ -13002,27 +12849,22 @@
   }
 
   .xl\:flex-1 {
-    -webkit-box-flex: 1;
     flex: 1;
   }
 
   .xl\:flex-auto {
-    -webkit-box-flex: 1;
     flex: auto;
   }
 
   .xl\:flex-initial {
-    -webkit-box-flex: initial;
     flex: initial;
   }
 
   .xl\:flex-none {
-    -webkit-box-flex: 0;
     flex: none;
   }
 
   .xl\:flex-grow {
-    -webkit-box-flex: 1;
     flex-grow: 1;
   }
 
@@ -13031,7 +12873,6 @@
   }
 
   .xl\:flex-no-grow {
-    -webkit-box-flex: 0;
     flex-grow: 0;
   }
 
@@ -13114,16 +12955,10 @@
   }
 
   .xl\:select-none {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
   }
 
   .xl\:select-text {
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
     user-select: text;
   }
 
