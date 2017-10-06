@@ -1,9 +1,6 @@
 import _ from 'lodash'
 import postcss from 'postcss'
-
-function escapeSelector(selector) {
-    return selector.replace(/([^A-Za-z0-9\-])/g, "\\$1")
-}
+import escapeClassName from './escapeClassName'
 
 export default function(className, properties) {
   const decls = _.map(properties, (value, property) => {
@@ -14,6 +11,6 @@ export default function(className, properties) {
   })
 
   return postcss.rule({
-    selector: `.${escapeSelector(className)}`,
+    selector: `.${escapeClassName(className)}`,
   }).append(decls)
 }
