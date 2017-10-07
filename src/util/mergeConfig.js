@@ -1,4 +1,6 @@
 import _ from 'lodash'
+import normalizeColorList from './normalizeColorList'
+import findColor from './findColor'
 
 const configTemplate = {
   breakpoints: null,
@@ -63,7 +65,19 @@ function appendConfig(base, appends) {
   })
 }
 
+function normalizeConfigColors(config, colorPalette) {
+  const cloned = _.cloneDeep(config)
+
+  cloned.text.colors = normalizeColorList(cloned.text.colors, colorPalette)
+  cloned.borders.defaults.color = findColor(colorPalette, cloned.borders.defaults.color)
+  cloned.borders.colors = normalizeColorList(cloned.borders.colors, colorPalette)
+  cloned.backgrounds.colors = normalizeColorList(cloned.backgrounds.colors, colorPalette)
+
+  return cloned
+}
+
 export default function mergeConfig(base, other) {
   const replaced = replaceDefaults(configTemplate, base, other)
-  return appendConfig(replaced, _.get(other, 'extend', {}))
+  const config = appendConfig(replaced, _.get(other, 'extend', {}))
+  return normalizeConfigColors(config, config.colors)
 }

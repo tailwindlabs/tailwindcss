@@ -39,6 +39,7 @@
     "normalize.css": "^6.0.0",
     "postcss": "^6.0.9",
     "postcss-import": "^11.0.0",
+    "postcss-functions": "^3.0.0",
     "stylefmt": "^6.0.0",
     "suitcss-base": "^3.0.0"
   },

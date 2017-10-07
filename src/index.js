@@ -6,8 +6,9 @@ import stylefmt from 'stylefmt'
 import defaultConfig from './defaultConfig'
 import mergeConfig from './util/mergeConfig'
 
-import generateUtilities from './lib/generateUtilities'
 import substituteResetAtRule from './lib/substituteResetAtRule'
+import evaluateTailwindFunctions from './lib/evaluateTailwindFunctions'
+import generateUtilities from './lib/generateUtilities'
 import substituteHoverableAtRules from './lib/substituteHoverableAtRules'
 import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
 import substituteBreakpointAtRules from './lib/substituteBreakpointAtRules'
@@ -18,6 +19,7 @@ const plugin = postcss.plugin('tailwind', (options = {}) => {
 
   return postcss([
     substituteResetAtRule(config),
+    evaluateTailwindFunctions(config),
     generateUtilities(config),
     substituteHoverableAtRules(config),
     substituteResponsiveAtRules(config),
