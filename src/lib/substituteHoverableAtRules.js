@@ -11,8 +11,8 @@ export default function(options) {
         // or weird compound selectors like .bg-blue>p>h1
         rule.selectors =  [
           rule.selector,
-          `.\\@${rule.selector.slice(1)}:hover`,
-          `.\\@${rule.selector.slice(1)}:focus`
+          `.hover\\:${rule.selector.slice(1)}:hover`,
+          `.hover\\:${rule.selector.slice(1)}:focus`
         ]
       })
 
