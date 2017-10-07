@@ -13,20 +13,22 @@ import substituteBreakpointAtRules from './lib/substituteBreakpointAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
 
 const plugin = postcss.plugin('tailwind', (options = {}) => {
-  if (_.isFunction(options)) {
-    options = options()
+  return (root, result) => {
+    if (_.isFunction(options)) {
+      options = options()
+    }
+
+    const config = mergeConfig(defaultConfig, options)
+
+    return postcss([
+      generateUtilities(config),
+      substituteHoverableAtRules(config),
+      substituteResponsiveAtRules(config),
+      substituteBreakpointAtRules(config),
+      substituteClassApplyAtRules(config),
+      stylefmt,
+    ]).process(result)
   }
-
-  const config = mergeConfig(defaultConfig, options)
-
-  return postcss([
-    generateUtilities(config),
-    substituteHoverableAtRules(config),
-    substituteResponsiveAtRules(config),
-    substituteBreakpointAtRules(config),
-    substituteClassApplyAtRules(config),
-    stylefmt,
-  ])
 })
 
 module.exports = plugin
