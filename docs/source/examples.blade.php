@@ -34,7 +34,7 @@
     </button>
 </div>
 <div class="mb-4">
-    <button class="text-medium text-light rounded py-2 px-4 bg-dark @bg-dark-dark mr-4">
+    <button class="text-medium text-light rounded py-2 px-4 bg-dark mr-4">
         Save
     </button>
     <button class="text-medium text-light rounded py-2 px-4 bg-dark-soft mr-4">
@@ -47,7 +47,7 @@
 
 @foreach($page->colors as $color)
 <div class="mb-4">
-    <button class="text-medium text-light rounded py-2 px-4 bg-{{$color}} @bg-{{$color}}-dark mr-4">
+    <button class="text-medium text-light rounded py-2 px-4 bg-{{$color}} hover:bg-{{$color}}-dark mr-4">
         Save
     </button>
     <button class="text-medium text-light rounded py-2 px-4 bg-{{$color}}-light mr-4">
@@ -60,7 +60,7 @@
 
 @foreach($page->colors as $color)
 <div class="mb-4">
-    <button class="text-medium text-light rounded py-2 px-4 text-{{$color}}-dark @text-light border border-{{$color}} @bg-{{$color}} mr-4">
+    <button class="text-medium text-light rounded py-2 px-4 text-{{$color}}-dark hover:text-light border border-{{$color}} hover:bg-{{$color}} mr-4">
         Save
     </button>
     <button class="text-medium text-light rounded py-2 px-4 text-{{$color}}-light border border-{{$color}}-light mr-4">
@@ -71,7 +71,7 @@
 
 <h2 class="markdown">Cards</h2>
 
-<div class="constrain-sm mb-8">
+<div class="max-w-sm mb-8">
     <div class="rounded overflow-hidden shadow-3">
         <img class="fit w-full" src="/img/card-top.jpg" alt="">
         <div class="px-6 py-4">
@@ -88,7 +88,7 @@
     </div>
 </div>
 
-<div class="constrain-md">
+<div class="max-w-md">
     <div class="flex">
         <div class="rounded-l w-128 text-center overflow-hidden">
             <img class="h-64" src="/img/card-left.jpg" alt="">

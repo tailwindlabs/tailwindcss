@@ -5,13 +5,20 @@ title: "Display"
 
 # Display
 
-> If you're looking for flexbox utilities, see the [flexbox](/flexbox) page.
+<div class="subnav">
+    <a class="subnav-link" href="#usage">Usage</a>
+    <a class="subnav-link" href="#responsive">Responsive</a>
+    <a class="subnav-link" href="#customizing">Customizing</a>
+</div>
+
+> If you're looking for Flexbox utilities, see the [Flexbox](/flexbox) page.
 
 The display utilities simply `display` property helpers.
 
 ```html
 <!-- Using the utilities in HTML: -->
 
+<div class="inline"></div>
 <div class="block"></div>
 <div class="inline-block"></div>
 <div class="hidden"></div>
@@ -21,19 +28,6 @@ The display utilities simply `display` property helpers.
         <div class="table-cell"></div>
     </div>
 </div>
-```
-
-```less
-// Using the utilities in Less:
-
-div {
-  .block;
-  .inline-block;
-  .table;
-  .table-row;
-  .table-cell;
-  .hidden;
-}
 ```
 
 ## Responsive

@@ -1,9 +1,15 @@
 ---
 extends: _layouts.markdown
-title: "Position"
+title: "Positioning"
 ---
 
-# Position
+# Positioning
+
+<div class="subnav">
+    <a class="subnav-link" href="#usage">Usage</a>
+    <a class="subnav-link" href="#responsive">Responsive</a>
+    <a class="subnav-link" href="#customizing">Customizing</a>
+</div>
 
 The position utilities are primarily `position` property helpers.
 
