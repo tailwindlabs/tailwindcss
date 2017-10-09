@@ -15,12 +15,6 @@ const tailwind = require('./../lib/index.js');
 mix.less('source/_assets/less/main.less', 'source/css')
   .options({
     postCss: [
-      tailwind(require('./tailwind.json')),
+      tailwind(require('./tailwind.js')),
     ]
   })
-
-// mix.js('source/js/prism.js', 'source/js')
-//     .postCss('source/_assets/css/main.css', 'source/css', [
-//       require('./../src/tailwind.js')(),
-//       require('postcss-cssnext')()
-//     ])
