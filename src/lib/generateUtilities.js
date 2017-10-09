@@ -14,6 +14,7 @@ import flex from '../generators/flex'
 import floats from '../generators/floats'
 import opacity from '../generators/opacity'
 import overflow from '../generators/overflow'
+import pointerEvents from '../generators/pointerEvents'
 import position from '../generators/position'
 import resize from '../generators/resize'
 import responsive from '../util/responsive'
@@ -71,6 +72,7 @@ export default function(options) {
           zIndex(options),
           opacity(options),
           userSelect(options),
+          pointerEvents(options),
           resize(options),
           cursor(options),
         ])

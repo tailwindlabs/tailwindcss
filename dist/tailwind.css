@@ -545,6 +545,33 @@ fieldset {
   padding: 0.35em 0.625em 0.75em;
 }
 
+textarea {
+  resize: vertical;
+}
+
+img {
+  max-width: 100%;
+}
+
+svg {
+  fill: currentColor;
+}
+
+input {
+  font-family: inherit;
+}
+
+input::placeholder {
+  color: inherit;
+  opacity: .7;
+}
+
+button,
+[role=button] {
+  font-family: inherit;
+  cursor: pointer;
+}
+
 .container {
   width: 100%;
 }
@@ -3146,6 +3173,14 @@ fieldset {
   user-select: text;
 }
 
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.pointer-events-auto {
+  pointer-events: auto;
+}
+
 .resize-none {
   resize: none;
 }
@@ -5734,6 +5769,14 @@ fieldset {
 
   .sm\:select-text {
     user-select: text;
+  }
+
+  .sm\:pointer-events-none {
+    pointer-events: none;
+  }
+
+  .sm\:pointer-events-auto {
+    pointer-events: auto;
   }
 
   .sm\:resize-none {
@@ -8327,6 +8370,14 @@ fieldset {
     user-select: text;
   }
 
+  .md\:pointer-events-none {
+    pointer-events: none;
+  }
+
+  .md\:pointer-events-auto {
+    pointer-events: auto;
+  }
+
   .md\:resize-none {
     resize: none;
   }
@@ -10918,6 +10969,14 @@ fieldset {
     user-select: text;
   }
 
+  .lg\:pointer-events-none {
+    pointer-events: none;
+  }
+
+  .lg\:pointer-events-auto {
+    pointer-events: auto;
+  }
+
   .lg\:resize-none {
     resize: none;
   }
@@ -13507,6 +13566,14 @@ fieldset {
 
   .xl\:select-text {
     user-select: text;
+  }
+
+  .xl\:pointer-events-none {
+    pointer-events: none;
+  }
+
+  .xl\:pointer-events-auto {
+    pointer-events: auto;
   }
 
   .xl\:resize-none {
