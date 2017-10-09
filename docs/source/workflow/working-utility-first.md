@@ -1,6 +1,6 @@
 ---
 extends: _layouts.markdown
-title: "Extracting Components"
+title: "Working Utility-First"
 ---
 
-# Extracting Components
+# Working Utility-First
