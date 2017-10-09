@@ -2,6 +2,8 @@ import defineClasses from '../util/defineClasses'
 
 export default function() {
   return defineClasses({
-    'clickable': { 'cursor': 'pointer' },
+    'cursor-auto': { 'cursor': 'auto' },
+    'cursor-pointer': { 'cursor': 'pointer' },
+    'cursor-not-allowed': { 'cursor': 'not-allowed' },
   })
 }
