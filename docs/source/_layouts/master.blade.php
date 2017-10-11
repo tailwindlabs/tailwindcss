@@ -52,13 +52,13 @@
                                     </a>
                                 </li>
                                 <li class="mb-2">
-                                    <a class="{{ $page->active('/extracting-components') ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/workflow/extracting-components">
-                                        Extracting Components
+                                    <a class="{{ $page->active('/adding-new-utilities') ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/workflow/adding-new-utilities">
+                                        Adding New Utilities
                                     </a>
                                 </li>
                                 <li class="mb-2">
-                                    <a class="{{ $page->active('/adding-new-utilities') ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/workflow/adding-new-utilities">
-                                        Adding New Utilities
+                                    <a class="{{ $page->active('/extracting-components') ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/workflow/extracting-components">
+                                        Extracting Components
                                     </a>
                                 </li>
                             </ul>
