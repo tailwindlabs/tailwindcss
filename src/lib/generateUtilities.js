@@ -38,8 +38,8 @@ import zIndex from '../generators/zIndex'
 
 export default function(options) {
   return function(css) {
-    css.walkAtRules('tailwind-utilities', atRule => {
-      if (atRule.params === 'all') {
+    css.walkAtRules('tailwind', atRule => {
+      if (atRule.params === 'utilities') {
         const utilities = _.flatten([
           appearance(options),
           textSizes(options),

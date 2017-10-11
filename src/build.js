@@ -5,10 +5,10 @@ import defaultConfig from './defaultConfig'
 
 console.info('Building Tailwind!')
 
-fs.readFile('./src/tailwind.css', (err, css) => {
+fs.readFile('./css/tailwind.css', (err, css) => {
   postcss([tailwind(defaultConfig)])
     .process(css, {
-      from: './tailwind.css',
+      from: './css/tailwind.css',
       to: './dist/tailwind.css',
       map: {inline: false},
     })

@@ -69,6 +69,7 @@
                         <div class="mt-8">
                             <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Styles</p>
                             <ul class="mb-8">
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/base" class="{{ $page->active('/styles/base') ? 'text-dark text-medium' : 'text-dark-soft' }}">Base</a></li>
                                 <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/alignment" class="{{ $page->active('/styles/alignment') ? 'text-dark text-medium' : 'text-dark-soft' }}">Alignment</a></li>
                                 <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/appearance" class="{{ $page->active('/appearance') ? 'text-dark text-medium' : 'text-dark-soft' }}">Appearance</a></li>
                                 <li class="mb-2">
@@ -79,7 +80,6 @@
                                         <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/backgrounds/size" class="{{ $page->active('/backgrounds/size') ? 'text-dark text-medium' : 'text-dark-soft' }}">Size</a></li>
                                     </ul>
                                 </li>
-                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/base" class="{{ $page->active('/base') ? 'text-dark text-medium' : 'text-dark-soft' }}">Base</a></li>
                                 <li class="mb-2">
                                     <a href="{{ $page->baseUrl }}/styles/borders/base" class="block mb-2 {{ $page->active('/borders/') ? 'text-dark text-medium' : 'text-dark-soft' }}">Borders</a>
                                     <ul class="pl-4 {{ $page->active('/borders/') ? 'block' : 'hidden' }}">
@@ -130,7 +130,7 @@
                                 </li>
                                 <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/svg" class="{{ $page->active('/svg') ? 'text-dark text-medium' : 'text-dark-soft' }}">SVG</a></li>
                                 <li class="mb-2">
-                                    <a href="{{ $page->baseUrl }}/styles/text/fonts" class="block mb-2 {{ $page->active('/text/') ? 'text-dark text-medium' : 'text-dark-soft' }}">Text</a>
+                                    <a href="{{ $page->baseUrl }}/styles/text/fonts" class="block mb-2 {{ $page->active('/text/') ? 'text-dark text-medium' : 'text-dark-soft' }}">Typography</a>
                                     <ul class="pl-4 {{ $page->active('/text/') ? 'block' : 'hidden' }}">
                                         <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/text/fonts" class="{{ $page->active('/text/fonts') ? 'text-dark text-medium' : 'text-dark-soft' }}">Fonts</a></li>
                                         <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/text/color" class="{{ $page->active('/text/color') ? 'text-dark text-medium' : 'text-dark-soft' }}">Color</a></li>
@@ -138,7 +138,6 @@
                                         <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/text/weight" class="{{ $page->active('/text/weight') ? 'text-dark text-medium' : 'text-dark-soft' }}">Weight</a></li>
                                         <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/text/line-height" class="{{ $page->active('/text/line-height') ? 'text-dark text-medium' : 'text-dark-soft' }}">Line Height</a></li>
                                         <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/text/letter-spacing" class="{{ $page->active('/text/letter-spacing') ? 'text-dark text-medium' : 'text-dark-soft' }}">Letter Spacing</a></li>
-                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/text/alignment" class="{{ $page->active('/text/alignment') ? 'text-dark text-medium' : 'text-dark-soft' }}">Alignment</a></li>
                                         <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/text/wrapping" class="{{ $page->active('/text/wrapping') ? 'text-dark text-medium' : 'text-dark-soft' }}">Wrapping</a></li>
                                         <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/text/style" class="{{ $page->active('/text/style') ? 'text-dark text-medium' : 'text-dark-soft' }}">Style &amp; Decoration</a></li>
                                     </ul>
