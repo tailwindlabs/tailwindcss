@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import defineClass from '../util/defineClass'
 import defineClasses from '../util/defineClasses'
-import findColor from '../util/findColor'
 
 function defaultBorder(width, color) {
   return defineClasses({
@@ -44,7 +43,7 @@ function sizedBorder(size, width, color) {
 }
 
 module.exports = function({colors, borders}) {
-  const color = findColor(colors, borders.defaults.color)
+  const color = borders.defaults.color
 
   return _.flatten([
     defaultBorder(borders.defaults.width, color),
