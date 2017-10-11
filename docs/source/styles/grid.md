@@ -5,6 +5,19 @@ title: "Grid"
 
 # Grid
 
+<div class="subnav">
+    <a class="subnav-link" href="#usage">Usage</a>
+    <a class="subnav-link" href="#responsive">Responsive</a>
+    <a class="subnav-link" href="#customizing">Customizing</a>
+</div>
+
+Documentation around things like:
+
+- Using percentage width helpers and a flex container to create columns
+- Using flex wrap if you want columns to wrap
+- Using negative margin and padding helpers to add gutters
+- Using the container class if you really give a shit
+
 Basic grid example:
 
 <div class="bg-light-softer text-medium text-sm mb-6">

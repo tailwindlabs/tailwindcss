@@ -1,75 +1,11 @@
-@extends('_layouts.master')
+---
+extends: _layouts.markdown
+title: "Cards"
+---
 
-@section('body')
-<h1 class="markdown">Examples</h1>
+# Cards
 
-<p class="markdown">Some component examples, just to get a vibe for what's possible and for us to double check our default utilities are producing good looking stuff!</p>
-
-<h2 class="markdown">Alerts</h2>
-
-@foreach($page->colors as $color)
-<div class="bg-{{$color}}-lightest border border-{{$color}}-light rounded p-4 mb-4">
-    <div class="text-bold text-{{$color}}-dark">
-        Alert message
-    </div>
-    <div class="text-{{$color}}-dark">
-        Some additional text to explain what happened.
-    </div>
-</div>
-@endforeach
-
-<h2 class="markdown">Buttons</h2>
-
-<h3 class="markdown">Solid</h3>
-
-<div class="mb-4">
-    <button class="text-medium text-dark rounded py-2 px-4 bg-light mr-4">
-        Save
-    </button>
-    <button class="text-medium text-dark rounded py-2 px-4 bg-light-soft mr-4">
-        Save
-    </button>
-    <button class="text-medium text-dark rounded py-2 px-4 bg-light-softer mr-4">
-        Save
-    </button>
-</div>
-<div class="mb-4">
-    <button class="text-medium text-light rounded py-2 px-4 bg-dark mr-4">
-        Save
-    </button>
-    <button class="text-medium text-light rounded py-2 px-4 bg-dark-soft mr-4">
-        Save
-    </button>
-    <button class="text-medium text-light rounded py-2 px-4 bg-dark-softer mr-4">
-        Save
-    </button>
-</div>
-
-@foreach($page->colors as $color)
-<div class="mb-4">
-    <button class="text-medium text-light rounded py-2 px-4 bg-{{$color}} hover:bg-{{$color}}-dark mr-4">
-        Save
-    </button>
-    <button class="text-medium text-light rounded py-2 px-4 bg-{{$color}}-light mr-4">
-        Disabled
-    </button>
-</div>
-@endforeach
-
-<h3 class="markdown">Outline</h3>
-
-@foreach($page->colors as $color)
-<div class="mb-4">
-    <button class="text-medium text-light rounded py-2 px-4 text-{{$color}}-dark hover:text-light border border-{{$color}} hover:bg-{{$color}} mr-4">
-        Save
-    </button>
-    <button class="text-medium text-light rounded py-2 px-4 text-{{$color}}-light border border-{{$color}}-light mr-4">
-        Disabled
-    </button>
-</div>
-@endforeach
-
-<h2 class="markdown">Cards</h2>
+We don't ship alert components because every app has it's own visual style, but they are easy af to make.
 
 <div class="max-w-sm mb-8">
     <div class="rounded overflow-hidden shadow-3">
@@ -114,4 +50,3 @@
         </div>
     </div>
 </div>
-@endsection

@@ -5,8 +5,6 @@ title: "Installation"
 
 # Installation
 
-Install Tailwind using NPM:
-
-```bash
+```sh
 npm install tailwindcss
 ```

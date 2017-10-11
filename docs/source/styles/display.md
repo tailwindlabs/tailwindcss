@@ -11,7 +11,7 @@ title: "Display"
     <a class="subnav-link" href="#customizing">Customizing</a>
 </div>
 
-> If you're looking for Flexbox utilities, see the [Flexbox](/flexbox) page.
+> If you're looking for Flexbox utilities, see the [Flexbox](/styles/flexbox) page.
 
 The display utilities simply `display` property helpers.
 
