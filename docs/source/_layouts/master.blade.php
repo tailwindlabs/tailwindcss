@@ -22,7 +22,7 @@
                     </svg>
                 </div>
                 <div>
-                    <a href="https://github.com/adamwathan/tailwindcss">GitHub</a>
+                    <a class="text-medium text-dark-softer" href="https://github.com/adamwathan/tailwindcss">GitHub</a>
                 </div>
             </div>
         </header>
@@ -30,20 +30,22 @@
             <div class="flex flex-wrap">
                 <div class="w-full lg:w-1/4">
                     <nav class="py-4 text-light text-base">
-                        <div>
-                            <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Getting Started</p>
+                        <div class="mt-8">
+                            <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Introduction</p>
                             <ul>
-                                <li class="mb-2"><a class="text-dark-soft" href="{{ $page->baseUrl }}/installation">Installation</a></li>
+                                <li class="mb-2"><a class="text-dark-soft" href="{{ $page->baseUrl }}/installation">What is Tailwind?</a></li>
                             </ul>
                         </div>
                         <div class="mt-8">
-                            <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Workflow</p>
+                            <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Getting Started</p>
                             <ul>
+                                <li class="mb-2"><a class="text-dark-soft" href="{{ $page->baseUrl }}/installation">Installation</a></li>
                                 <li class="mb-2">
-                                    <a class="{{ $page->active('/working-utility-first') ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/workflow/working-utility-first">
-                                        Working Utility-First
+                                    <a class="{{ $page->active('/configuration') ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/workflow/configuration">
+                                        Configuration
                                     </a>
                                 </li>
+
                                 <li class="mb-2">
                                     <a class="{{ $page->active('/responsive-design') ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/workflow/responsive-design">
                                         Responsive Design
@@ -57,11 +59,6 @@
                                 <li class="mb-2">
                                     <a class="{{ $page->active('/adding-new-utilities') ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/workflow/adding-new-utilities">
                                         Adding New Utilities
-                                    </a>
-                                </li>
-                                <li class="mb-2">
-                                    <a class="{{ $page->active('/customizing-tailwind') ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/workflow/customizing-tailwind">
-                                        Customizing Tailwind
                                     </a>
                                 </li>
                             </ul>
