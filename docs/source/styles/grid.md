@@ -125,8 +125,8 @@ Rows can overflow and wrap:
 Columns can have gutters:
 
 <div class="bg-light-softer text-medium text-sm mb-6">
-    <div class="text-dark-soft p-4 leading-none">.flex.flex-wrap.pull-x-4</div>
-    <div class="flex flex-wrap pull-x-4">
+    <div class="text-dark-soft p-4 leading-none">.flex.flex-wrap.-mx-4</div>
+    <div class="flex flex-wrap -mx-4">
         <div class="w-full md:w-1/3 px-4">
             <div class="text-center py-4 bg-dark-softer text-light">
                 <div>.w-full</div>
