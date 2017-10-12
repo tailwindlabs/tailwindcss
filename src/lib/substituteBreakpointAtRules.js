@@ -15,7 +15,7 @@ export default function(options) {
       }
 
       atRule.name = 'media'
-      atRule.params = buildMediaQuery(breakpoint)
+      atRule.params = buildMediaQuery(options.breakpoints[breakpoint])
     })
   }
 }
