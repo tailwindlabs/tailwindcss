@@ -4324,10 +4324,6 @@ normalize-url@^1.4.0:
     query-string "^4.1.0"
     sort-keys "^1.0.0"
 
-normalize.css@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/normalize.css/-/normalize.css-6.0.0.tgz#22188c2707c911fb3ad3c1aac0677ff68661bea8"
-
 normalize.css@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/normalize.css/-/normalize.css-7.0.0.tgz#abfb1dd82470674e0322b53ceb1aaf412938e4bf"
@@ -6273,12 +6269,6 @@ sugarss@^0.2.0:
   resolved "https://registry.yarnpkg.com/sugarss/-/sugarss-0.2.0.tgz#ac34237563327c6ff897b64742bf6aec190ad39e"
   dependencies:
     postcss "^5.2.4"
-
-suitcss-base@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/suitcss-base/-/suitcss-base-3.0.0.tgz#83dd53629c37adbdeac11ef6439a7f2ed955f05e"
-  dependencies:
-    normalize.css "^6.0.0"
 
 sum-up@^1.0.1:
   version "1.0.3"
