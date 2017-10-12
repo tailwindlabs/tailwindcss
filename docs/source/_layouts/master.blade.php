@@ -30,13 +30,13 @@
             <div class="flex flex-wrap">
                 <div class="w-full lg:w-1/4">
                     <nav class="py-4 text-light text-base">
-                        <div class="mt-8">
+                        <div class="mb-8">
                             <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Introduction</p>
                             <ul>
                                 <li class="mb-2"><a class="text-dark-soft" href="{{ $page->baseUrl }}/installation">What is Tailwind?</a></li>
                             </ul>
                         </div>
-                        <div class="mt-8">
+                        <div class="mb-8">
                             <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Getting Started</p>
                             <ul>
                                 <li class="mb-2"><a class="text-dark-soft" href="{{ $page->baseUrl }}/installation">Installation</a></li>
@@ -143,7 +143,7 @@
                                 <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/z-index" class="{{ $page->active('/z-index') ? 'text-dark text-medium' : 'text-dark-soft' }}">Z-Index</a></li>
                             </ul>
                         </div>
-                        <div class="mt-8">
+                        <div class="mb-8">
                             <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Examples</p>
                             <ul>
                                 <li class="mb-2"><a class="{{ $page->getUrl() === '/examples/alerts' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/examples/alerts">Alerts</a></li>
