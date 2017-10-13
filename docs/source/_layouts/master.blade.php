@@ -68,7 +68,6 @@
                             <ul class="mb-8">
                                 <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/base" class="{{ $page->active('/styles/base') ? 'text-dark text-medium' : 'text-dark-soft' }}">Base</a></li>
                                 <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/alignment" class="{{ $page->active('/styles/alignment') ? 'text-dark text-medium' : 'text-dark-soft' }}">Alignment</a></li>
-                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/appearance" class="{{ $page->active('/appearance') ? 'text-dark text-medium' : 'text-dark-soft' }}">Appearance</a></li>
                                 <li class="mb-2">
                                     <a href="{{ $page->baseUrl }}/styles/backgrounds/color" class="block mb-2 {{ $page->active('/backgrounds/') ? 'text-dark text-medium' : 'text-dark-soft' }}">Backgrounds</a>
                                     <ul class="pl-4 {{ $page->active('/backgrounds/') ? 'block' : 'hidden' }}">

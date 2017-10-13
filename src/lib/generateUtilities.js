@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import appearance from '../generators/appearance'
 import backgroundColors from '../generators/backgroundColors'
 import backgroundPositions from '../generators/backgroundPositions'
 import backgroundSize from '../generators/backgroundSize'
@@ -12,6 +11,7 @@ import cursor from '../generators/cursor'
 import display from '../generators/display'
 import flex from '../generators/flex'
 import floats from '../generators/floats'
+import forms from '../generators/forms'
 import lists from '../generators/lists'
 import opacity from '../generators/opacity'
 import overflow from '../generators/overflow'
@@ -42,7 +42,7 @@ export default function(options) {
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'utilities') {
         const utilities = _.flatten([
-          appearance(options),
+          forms(options),
           textSizes(options),
           textWeights(options),
           textFonts(options),

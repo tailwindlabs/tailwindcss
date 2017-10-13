@@ -13,6 +13,6 @@ title: "Forms"
 
 Include documentation around:
 
-- `appearance-none` helper
+- `input-reset` helper
 - Creating input groups/custom selects and using `pointer-events-none`
 - The placeholder text styling in our base styles
