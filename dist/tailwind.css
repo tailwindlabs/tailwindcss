@@ -514,13 +514,6 @@ iframe {
   border: 0;
 }
 
-ol,
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
 /**
  * Suppress the focus outline on elements that cannot be accessed via keyboard.
  * This prevents an unwanted focus outline from appearing around elements that
@@ -3199,6 +3192,12 @@ button,
   cursor: not-allowed;
 }
 
+.list-reset {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 @media (min-width: 576px) {
   .sm\:appearance-none {
     appearance: none;
@@ -5807,6 +5806,12 @@ button,
 
   .sm\:cursor-not-allowed {
     cursor: not-allowed;
+  }
+
+  .sm\:list-reset {
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 }
 
@@ -8419,6 +8424,12 @@ button,
   .md\:cursor-not-allowed {
     cursor: not-allowed;
   }
+
+  .md\:list-reset {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 @media (min-width: 992px) {
@@ -11030,6 +11041,12 @@ button,
   .lg\:cursor-not-allowed {
     cursor: not-allowed;
   }
+
+  .lg\:list-reset {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -13640,6 +13657,12 @@ button,
 
   .xl\:cursor-not-allowed {
     cursor: not-allowed;
+  }
+
+  .xl\:list-reset {
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 }
 

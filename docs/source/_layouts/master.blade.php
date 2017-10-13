@@ -102,6 +102,7 @@
                                         <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/interactivity/user-select" class="{{ $page->active('/user-select') ? 'text-dark text-medium' : 'text-dark-soft' }}">User Select</a></li>
                                     </ul>
                                 </li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/lists" class="{{ $page->active('/lists') ? 'text-dark text-medium' : 'text-dark-soft' }}">Lists</a></li>
                                 <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/opacity" class="{{ $page->active('/opacity') ? 'text-dark text-medium' : 'text-dark-soft' }}">Opacity</a></li>
                                 <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/overflow" class="{{ $page->active('/overflow') ? 'text-dark text-medium' : 'text-dark-soft' }}">Overflow</a></li>
                                 <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/positioning" class="{{ $page->active('/positioning') ? 'text-dark text-medium' : 'text-dark-soft' }}">Positioning</a></li>

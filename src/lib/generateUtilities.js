@@ -12,6 +12,7 @@ import cursor from '../generators/cursor'
 import display from '../generators/display'
 import flex from '../generators/flex'
 import floats from '../generators/floats'
+import lists from '../generators/lists'
 import opacity from '../generators/opacity'
 import overflow from '../generators/overflow'
 import pointerEvents from '../generators/pointerEvents'
@@ -75,6 +76,7 @@ export default function(options) {
           pointerEvents(options),
           resize(options),
           cursor(options),
+          lists(options),
         ])
 
         atRule.before(container(options))
