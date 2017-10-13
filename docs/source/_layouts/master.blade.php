@@ -33,7 +33,7 @@
                         <div class="mb-8">
                             <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Introduction</p>
                             <ul>
-                                <li class="mb-2"><a class="text-dark-soft" href="{{ $page->baseUrl }}/installation">What is Tailwind?</a></li>
+                                <li class="mb-2"><a class="text-dark-soft" href="{{ $page->baseUrl }}/what-is-tailwind">What is Tailwind?</a></li>
                             </ul>
                         </div>
                         <div class="mb-8">
