@@ -1,4 +1,4 @@
-const colors = {
+var colors = {
   'black': '#000000',
   'grey-900': '#212b35',
   'grey-800': '#404e5c',
@@ -47,8 +47,8 @@ const colors = {
   'pink-lightest': '#fdf2f5',
 }
 
-export default {
-  colors,
+module.exports = {
+  colors: colors,
   screens: {
     sm: '576px',
     md: '768px',
