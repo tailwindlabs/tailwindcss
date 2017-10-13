@@ -24,13 +24,14 @@ A utility-first CSS framework for rapid UI development.
 
     ```js
     const mix = require('laravel-mix');
+    const tailwind = require('tailwindcss');
 
-    mix..less('resources/assets/less/app.less', 'public/css')
-        .options({
-            postCss: [
-                require('tailwindcss')(require('./tailwind.js'))
-            ]
-        })
+    mix.less('resources/assets/less/app.less', 'public/css')
+      .options({
+        postCss: [
+          tailwind(require('./path/to/your/tailwind/config.js'))
+        ]
+      });
     ```
 
 4. Create a CSS (or Less, Sass, Stylus, whatever) file as your main stylesheet, structured like this:
