@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
 const configTemplate = {
-  breakpoints: null,
+  screens: null,
   colors: null,
   text: {
     fonts: null,

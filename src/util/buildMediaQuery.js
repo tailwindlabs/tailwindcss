@@ -1,25 +1,29 @@
 import _ from 'lodash'
 
-export default function buildMediaQuery(breakpoints) {
-  if (_.isString(breakpoints)) {
-    breakpoints = { min: breakpoints }
+export default function buildMediaQuery(screens) {
+  if (_.isString(screens)) {
+    screens = { min: screens }
   }
 
-  if (!_.isArray(breakpoints)) {
-    breakpoints = [breakpoints]
+  if (!_.isArray(screens)) {
+    screens = [screens]
   }
 
-  return _(breakpoints).map((breakpoint) => {
-    return _(breakpoint).map((value, feature) => {
-        feature = _.get(
-          {
-            min: 'min-width',
-            max: 'max-width',
-          },
-          feature,
-          feature
-        )
-        return `(${feature}: ${value})`
-      }).join(' and ')
+  return _(screens).map((screen) => {
+    if (_.has(screen, 'raw')) {
+      return screen.raw
+    }
+
+    return _(screen).map((value, feature) => {
+      feature = _.get(
+        {
+          min: 'min-width',
+          max: 'max-width',
+        },
+        feature,
+        feature
+      )
+      return `(${feature}: ${value})`
+    }).join(' and ')
   }).join(', ')
 }

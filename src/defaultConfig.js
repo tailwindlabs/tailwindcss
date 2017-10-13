@@ -49,7 +49,7 @@ const colors = {
 
 export default {
   colors,
-  breakpoints: {
+  screens: {
     sm: '576px',
     md: '768px',
     lg: '992px',

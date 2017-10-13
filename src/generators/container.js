@@ -20,8 +20,8 @@ function extractMinWidths(breakpoints) {
   })
 }
 
-export default function ({ breakpoints }) {
-  const minWidths = extractMinWidths(breakpoints)
+export default function ({ screens }) {
+  const minWidths = extractMinWidths(screens)
 
   const atRules = _.map(minWidths, (minWidth) => {
     const atRule = postcss.atRule({

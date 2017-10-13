@@ -11,7 +11,7 @@ import evaluateTailwindFunctions from './lib/evaluateTailwindFunctions'
 import generateUtilities from './lib/generateUtilities'
 import substituteHoverableAtRules from './lib/substituteHoverableAtRules'
 import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
-import substituteBreakpointAtRules from './lib/substituteBreakpointAtRules'
+import substituteScreenAtRules from './lib/substituteScreenAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
 
 const plugin = postcss.plugin('tailwind', (options = {}) => {
@@ -23,7 +23,7 @@ const plugin = postcss.plugin('tailwind', (options = {}) => {
     generateUtilities(config),
     substituteHoverableAtRules(config),
     substituteResponsiveAtRules(config),
-    substituteBreakpointAtRules(config),
+    substituteScreenAtRules(config),
     substituteClassApplyAtRules(config),
     stylefmt,
   ])

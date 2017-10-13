@@ -14,16 +14,16 @@ export default function(options) {
       atRule.remove()
     })
 
-    Object.keys(options.breakpoints).forEach(breakpoint => {
+    Object.keys(options.screens).forEach(screen => {
       const mediaQuery = postcss.atRule({
         name: 'media',
-        params: buildMediaQuery(options.breakpoints[breakpoint]),
+        params: buildMediaQuery(options.screens[screen]),
       })
 
       mediaQuery.append(
         rules.map(rule => {
           const cloned = rule.clone()
-          cloned.selectors = _.map(rule.selectors, selector => `.${breakpoint}\\:${selector.slice(1)}`)
+          cloned.selectors = _.map(rule.selectors, selector => `.${screen}\\:${selector.slice(1)}`)
           return cloned
         })
       )
