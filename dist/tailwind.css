@@ -2973,6 +2973,10 @@ button,
   box-shadow: 0 19px 38px rgba(0, 0, 0, .18), 0 15px 12px rgba(0, 0, 0, .11);
 }
 
+.shadow-inner {
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
 .flex {
   display: flex;
 }
@@ -5577,6 +5581,10 @@ button,
 
   .sm\:shadow-5 {
     box-shadow: 0 19px 38px rgba(0, 0, 0, .18), 0 15px 12px rgba(0, 0, 0, .11);
+  }
+
+  .sm\:shadow-inner {
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
   }
 
   .sm\:flex {
@@ -8186,6 +8194,10 @@ button,
     box-shadow: 0 19px 38px rgba(0, 0, 0, .18), 0 15px 12px rgba(0, 0, 0, .11);
   }
 
+  .md\:shadow-inner {
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
   .md\:flex {
     display: flex;
   }
@@ -10793,6 +10805,10 @@ button,
     box-shadow: 0 19px 38px rgba(0, 0, 0, .18), 0 15px 12px rgba(0, 0, 0, .11);
   }
 
+  .lg\:shadow-inner {
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
   .lg\:flex {
     display: flex;
   }
@@ -13398,6 +13414,10 @@ button,
 
   .xl\:shadow-5 {
     box-shadow: 0 19px 38px rgba(0, 0, 0, .18), 0 15px 12px rgba(0, 0, 0, .11);
+  }
+
+  .xl\:shadow-inner {
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
   }
 
   .xl\:flex {
