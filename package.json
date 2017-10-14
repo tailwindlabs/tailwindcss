@@ -36,12 +36,11 @@
     "commander": "^2.11.0",
     "lodash": "^4.17.4",
     "nodemon": "^1.11.0",
-    "normalize.css": "^6.0.0",
+    "normalize.css": "^7.0.0",
     "postcss": "^6.0.9",
-    "postcss-cssnext": "^3.0.2",
-    "postcss-prettify": "^0.3.4",
-    "stylefmt": "^6.0.0",
-    "suitcss-base": "^3.0.0"
+    "postcss-import": "^11.0.0",
+    "postcss-functions": "^3.0.0",
+    "stylefmt": "^6.0.0"
   },
   "browserslist": [
     "> 1%"

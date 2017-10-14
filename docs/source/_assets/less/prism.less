@@ -1,4 +1,4 @@
-/* http://prismjs.com/download.html?themes=prism&languages=markup+css+clike+javascript+less */
+/* http://prismjs.com/download.html?themes=prism&languages=markup+css+clike+javascript */
 /**
  * prism.js default theme for JavaScript, CSS and HTML
  * Based on dabblet (http://dabblet.com)
@@ -10,6 +10,7 @@ pre[class*="language-"] {
     color: black;
     background: none;
     text-shadow: 0 1px white;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
     text-align: left;
     white-space: pre;
     word-spacing: normal;
@@ -25,8 +26,6 @@ pre[class*="language-"] {
     -moz-hyphens: none;
     -ms-hyphens: none;
     hyphens: none;
-
-    font-size: (13rem / 16rem);
 }
 
 pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
@@ -50,17 +49,14 @@ code[class*="language-"]::selection, code[class*="language-"] ::selection {
 
 /* Code blocks */
 pre[class*="language-"] {
-    padding: 0.75em 1em;
+    padding: 1em;
+    margin: .5em 0;
     overflow: auto;
-    @apply .my-4;
 }
 
 :not(pre) > code[class*="language-"],
 pre[class*="language-"] {
-    // background: #f5f2f0;
-    @apply .border;
-    @apply .border-dark-softer;
-    @apply .rounded;
+    background: #f5f2f0;
 }
 
 /* Inline code */

@@ -1,11 +1,4 @@
-@import (less) "../../../node_modules/normalize.css/normalize.css";
-@import (less) "../../../node_modules/suitcss-base/lib/base.css";
-
-@-moz-viewport      { width: device-width; }
-@-ms-viewport       { width: device-width; }
-@-o-viewport        { width: device-width; }
-@-webkit-viewport   { width: device-width; }
-@viewport           { width: device-width; }
+@tailwind reset;
 
 html {
   @apply .bg-brand-soft;
@@ -35,18 +28,6 @@ body {
   @apply .text-regular;
   @apply .text-dark;
   line-height: 1.5;
-}
-
-textarea {
-  resize: vertical;
-}
-
-button, [role=button] {
-  cursor: pointer;
-}
-
-small {
-  @apply .text-sm;
 }
 
 pre, code {

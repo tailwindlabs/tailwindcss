@@ -13,11 +13,11 @@
     }
   }
 
-  a, a& {
+  > a, a& {
     @apply .text-blue;
   }
 
-  p code, p& code& {
+  > p code, p& code& {
     @apply .inline-block;
     @apply .bg-light-soft;
     @apply .rounded-sm;
@@ -26,16 +26,21 @@
     @apply .leading-none;
     @apply .wrap-none;
     @apply .text-pink-dark;
+    @apply .mono;
     vertical-align: middle;
   }
 
-  blockquote, blockquote& {
+  > pre, pre& {
+    @apply .mono;
+  }
+
+  > blockquote, blockquote& {
     @apply .text-em;
     @apply .text-dark-soft;
     @apply .text-sm;
   }
 
-  h1, h1& {
+  > h1, h1& {
     @apply .mb-4;
     @apply .leading-none;
     @apply .text-dark;
@@ -43,7 +48,7 @@
     @apply .text-3xl;
   }
 
-  h2, h2& {
+  > h2, h2& {
     @apply .mt-16;
     @apply .mb-8;
     @apply .text-dark;
@@ -52,7 +57,7 @@
     @apply .text-xl;
   }
 
-  h3, h3& {
+  > h3, h3& {
     @apply .mt-16;
     @apply .mb-8;
     @apply .text-dark;
@@ -61,28 +66,34 @@
     @apply .text-lg;
   }
 
-  p, p& {
+  > p, p&, > blockquote > p {
     @apply .text-dark-soft;
     @apply .mt-8;
     @apply .mb-3;
     line-height: 1.75;
   }
 
-  ul, ol {
+  > ul, > ol {
     @apply .text-dark-soft;
     margin: 0 0 2em;
   }
 
-  ul {
+  > ul {
     list-style: disc inside;
   }
 
-  ol {
+  > ol {
     list-style: decimal inside;
   }
 
-  li {
+  > li {
     @apply .my-2;
     @apply .text-dark-soft;
+  }
+
+  > :not(pre) > code[class*="language-"], > pre[class*="language-"] {
+    @apply .bg-light-soft;
+    @apply .text-sm;
+    @apply .leading-loose;
   }
 }

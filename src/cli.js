@@ -8,75 +8,56 @@ import defaultConfig from './defaultConfig'
 import program from 'commander'
 import tailwind from '..'
 
-let splitFileName = filename => {
-  return filename.split('.')
+function loadConfig(configPath) {
+  if (configPath === undefined) {
+    return undefined
+  }
+
+  if (! fs.existsSync(path.resolve(configPath))) {
+    console.error(`Config file [${configPath}] does not exist.`)
+    process.exit(1)
+  }
+
+  return require(path.resolve(configPath))
 }
 
-let buildTailwind = config => {
+function writeStrategy(program) {
+  if (program.output === undefined) {
+    return (output) => {
+      process.stdout.write(output)
+    }
+  }
+  return (output) => {
+    fs.writeFileSync(program.output, output)
+  }
+}
+
+function buildTailwind(inputFile, config, write) {
   console.log('Building Tailwind!')
 
-  fs.readFile(inputFile, (err, css) => {
-    postcss([tailwind(config)])
-      .process(css)
-      .then(result => {
-        fs.writeFileSync(outputFile, result.css)
-      })
-      .catch(error => console.log(error))
-  })
+  const input = fs.readFileSync(inputFile, 'utf8')
 
-  console.log('Finished building Tailwind!')
-}
-
-let getConfig = (customConfig, replace) => {
-  if (replace) {
-    return customConfig
-  } else {
-    return _.merge(defaultConfig, customConfig)
-  }
+  postcss([tailwind(config)])
+    .process(input)
+    .then(result => {
+      write(result.css)
+      console.log('Finished building Tailwind!')
+    })
+    .catch(error => console.log(error))
 }
 
 program
   .version('0.1.0')
   .usage('[options] <file ...>')
-  .option('-c, --config [path]', 'set config path')
-  .option(
-    '-r, --replace',
-    'replace the built-in configuration with the provided config file'
-  )
+  .option('-c, --config [path]', 'Path to config file')
+  .option('-o, --output [path]', 'Output file')
   .parse(process.argv)
 
 let inputFile = program.args[0]
 
-if (!inputFile) {
+if (! inputFile) {
   console.error('No input file given!')
   process.exit(1)
 }
 
-let outputFile =
-  program.args[1] || `${splitFileName(program.args[0])[0]}-output.css`
-
-if (program.config !== undefined) {
-  fs.exists(program.config, exists => {
-    if (!exists) {
-      console.error(`Config file [${program.config}] does not exist.`)
-      process.exit(1)
-    }
-
-    fs.readFile(program.config, (err, config) => {
-      if (err) {
-        console.error(
-          `There was a problem reading config file [${program.config}].`
-        )
-        process.exit(1)
-      }
-
-      const customConfig = JSON.parse(config.toString())
-
-      let finalConfig = getConfig(customConfig, program.replace)
-
-      buildTailwind(finalConfig)
-    })
-  })
-} else {
-  buildTailwind(defaultConfig)
-}
+buildTailwind(inputFile, loadConfig(program.config), writeStrategy(program))

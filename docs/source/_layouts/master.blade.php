@@ -22,7 +22,7 @@
                     </svg>
                 </div>
                 <div>
-                    <a href="https://github.com/adamwathan/tailwindcss">GitHub</a>
+                    <a class="text-medium text-dark-softer" href="https://github.com/adamwathan/tailwindcss">GitHub</a>
                 </div>
             </div>
         </header>
@@ -30,47 +30,124 @@
             <div class="flex flex-wrap">
                 <div class="w-full lg:w-1/4">
                     <nav class="py-4 text-light text-base">
-                        <div>
+                        <div class="mb-8">
                             <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Introduction</p>
                             <ul>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/">Welcome</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/installation' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/installation">Installation</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/changelog' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/changelog">Changelog</a></li>
+                                <li class="mb-2"><a class="text-dark-soft" href="{{ $page->baseUrl }}/what-is-tailwind">What is Tailwind?</a></li>
+                            </ul>
+                        </div>
+                        <div class="mb-8">
+                            <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Getting Started</p>
+                            <ul>
+                                <li class="mb-2"><a class="text-dark-soft" href="{{ $page->baseUrl }}/installation">Installation</a></li>
+                                <li class="mb-2">
+                                    <a class="{{ $page->active('/configuration') ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/workflow/configuration">
+                                        Configuration
+                                    </a>
+                                </li>
+
+                                <li class="mb-2">
+                                    <a class="{{ $page->active('/responsive-design') ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/workflow/responsive-design">
+                                        Responsive Design
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a class="{{ $page->active('/adding-new-utilities') ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/workflow/adding-new-utilities">
+                                        Adding New Utilities
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a class="{{ $page->active('/extracting-components') ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/workflow/extracting-components">
+                                        Extracting Components
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                         <div class="mt-8">
-                            <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Concepts</p>
-                            <ul>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/principles' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/principles">Principles</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/customization' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/customization">Customization</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/responsive' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/responsive">Responsive</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/colors' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/colors">Colors</a></li>
+                            <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Styles</p>
+                            <ul class="mb-8">
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/base" class="{{ $page->active('/styles/base') ? 'text-dark text-medium' : 'text-dark-soft' }}">Base</a></li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/alignment" class="{{ $page->active('/styles/alignment') ? 'text-dark text-medium' : 'text-dark-soft' }}">Alignment</a></li>
+                                <li class="mb-2">
+                                    <a href="{{ $page->baseUrl }}/styles/backgrounds/color" class="block mb-2 {{ $page->active('/backgrounds/') ? 'text-dark text-medium' : 'text-dark-soft' }}">Backgrounds</a>
+                                    <ul class="pl-4 {{ $page->active('/backgrounds/') ? 'block' : 'hidden' }}">
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/backgrounds/color" class="{{ $page->active('/backgrounds/color') ? 'text-dark text-medium' : 'text-dark-soft' }}">Color</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/backgrounds/position" class="{{ $page->active('/backgrounds/position') ? 'text-dark text-medium' : 'text-dark-soft' }}">Position</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/backgrounds/size" class="{{ $page->active('/backgrounds/size') ? 'text-dark text-medium' : 'text-dark-soft' }}">Size</a></li>
+                                    </ul>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="{{ $page->baseUrl }}/styles/borders/base" class="block mb-2 {{ $page->active('/borders/') ? 'text-dark text-medium' : 'text-dark-soft' }}">Borders</a>
+                                    <ul class="pl-4 {{ $page->active('/borders/') ? 'block' : 'hidden' }}">
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/borders/base" class="{{ $page->active('/borders/base') ? 'text-dark text-medium' : 'text-dark-soft' }}">Base</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/borders/color" class="{{ $page->active('/borders/color') ? 'text-dark text-medium' : 'text-dark-soft' }}">Color</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/borders/style" class="{{ $page->active('/borders/style') ? 'text-dark text-medium' : 'text-dark-soft' }}">Style</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/borders/radius" class="{{ $page->active('/borders/radius') ? 'text-dark text-medium' : 'text-dark-soft' }}">Radius</a></li>
+                                    </ul>
+                                </li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/buttons" class="{{ $page->active('/buttons') ? 'text-dark text-medium' : 'text-dark-soft' }}">Buttons</a></li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/container" class="{{ $page->active('/container') ? 'text-dark text-medium' : 'text-dark-soft' }}">Container</a></li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/display" class="{{ $page->active('/display') ? 'text-dark text-medium' : 'text-dark-soft' }}">Display</a></li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/flexbox" class="{{ $page->active('/flexbox') ? 'text-dark text-medium' : 'text-dark-soft' }}">Flexbox</a></li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/floats" class="{{ $page->active('/floats') ? 'text-dark text-medium' : 'text-dark-soft' }}">Floats</a></li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/forms" class="{{ $page->active('/forms') ? 'text-dark text-medium' : 'text-dark-soft' }}">Forms</a></li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/grid" class="{{ $page->active('/grid') ? 'text-dark text-medium' : 'text-dark-soft' }}">Grid</a></li>
+                                <li class="mb-2">
+                                    <a href="{{ $page->baseUrl }}/styles/interactivity/cursor" class="block mb-2 {{ $page->active('/interactivity/') ? 'text-dark text-medium' : 'text-dark-soft' }}">Interactivity</a>
+                                    <ul class="pl-4 {{ $page->active('/interactivity/') ? 'block' : 'hidden' }}">
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/interactivity/cursor" class="{{ $page->active('/cursor') ? 'text-dark text-medium' : 'text-dark-soft' }}">Cursor</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/interactivity/resize" class="{{ $page->active('/resize') ? 'text-dark text-medium' : 'text-dark-soft' }}">Resize</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/interactivity/pointer-events" class="{{ $page->active('/pointer-events') ? 'text-dark text-medium' : 'text-dark-soft' }}">Pointer Events</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/interactivity/user-select" class="{{ $page->active('/user-select') ? 'text-dark text-medium' : 'text-dark-soft' }}">User Select</a></li>
+                                    </ul>
+                                </li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/lists" class="{{ $page->active('/lists') ? 'text-dark text-medium' : 'text-dark-soft' }}">Lists</a></li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/opacity" class="{{ $page->active('/opacity') ? 'text-dark text-medium' : 'text-dark-soft' }}">Opacity</a></li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/overflow" class="{{ $page->active('/overflow') ? 'text-dark text-medium' : 'text-dark-soft' }}">Overflow</a></li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/positioning" class="{{ $page->active('/positioning') ? 'text-dark text-medium' : 'text-dark-soft' }}">Positioning</a></li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/shadows" class="{{ $page->active('/shadows') ? 'text-dark text-medium' : 'text-dark-soft' }}">Shadows</a></li>
+                                <li class="mb-2">
+                                    <a href="{{ $page->baseUrl }}/styles/sizing/width" class="block mb-2 {{ $page->active('/sizing/') ? 'text-dark text-medium' : 'text-dark-soft' }}">Sizing</a>
+                                    <ul class="pl-4 {{ $page->active('/sizing/') ? 'block' : 'hidden' }}">
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/sizing/width" class="{{ $page->active('/sizing/width') ? 'text-dark text-medium' : 'text-dark-soft' }}">Width</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/sizing/min-width" class="{{ $page->active('/sizing/min-width') ? 'text-dark text-medium' : 'text-dark-soft' }}">Min-Width</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/sizing/max-width" class="{{ $page->active('/sizing/max-width') ? 'text-dark text-medium' : 'text-dark-soft' }}">Max-Width</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/sizing/height" class="{{ $page->active('/sizing/height') ? 'text-dark text-medium' : 'text-dark-soft' }}">Height</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/sizing/min-height" class="{{ $page->active('/sizing/min-height') ? 'text-dark text-medium' : 'text-dark-soft' }}">Min-Height</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/sizing/max-height" class="{{ $page->active('/sizing/max-height') ? 'text-dark text-medium' : 'text-dark-soft' }}">Max-Height</a></li>
+                                    </ul>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="{{ $page->baseUrl }}/styles/spacing/padding" class="block mb-2 {{ $page->active('/spacing/') ? 'text-dark text-medium' : 'text-dark-soft' }}">Spacing</a>
+                                    <ul class="pl-4 {{ $page->active('/spacing/') ? 'block' : 'hidden' }}">
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/spacing/padding" class="{{ $page->active('/spacing/padding') ? 'text-dark text-medium' : 'text-dark-soft' }}">Padding</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/spacing/margin" class="{{ $page->active('/spacing/margin') ? 'text-dark text-medium' : 'text-dark-soft' }}">Margin</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/spacing/negative-margin" class="{{ $page->active('/spacing/negative-margin') ? 'text-dark text-medium' : 'text-dark-soft' }}">Negative Margin</a></li>
+                                    </ul>
+                                </li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/svg" class="{{ $page->active('/svg') ? 'text-dark text-medium' : 'text-dark-soft' }}">SVG</a></li>
+                                <li class="mb-2">
+                                    <a href="{{ $page->baseUrl }}/styles/text/fonts" class="block mb-2 {{ $page->active('/text/') ? 'text-dark text-medium' : 'text-dark-soft' }}">Typography</a>
+                                    <ul class="pl-4 {{ $page->active('/text/') ? 'block' : 'hidden' }}">
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/text/fonts" class="{{ $page->active('/text/fonts') ? 'text-dark text-medium' : 'text-dark-soft' }}">Fonts</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/text/color" class="{{ $page->active('/text/color') ? 'text-dark text-medium' : 'text-dark-soft' }}">Color</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/text/sizing" class="{{ $page->active('/text/sizing') ? 'text-dark text-medium' : 'text-dark-soft' }}">Sizing</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/text/weight" class="{{ $page->active('/text/weight') ? 'text-dark text-medium' : 'text-dark-soft' }}">Weight</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/text/line-height" class="{{ $page->active('/text/line-height') ? 'text-dark text-medium' : 'text-dark-soft' }}">Line Height</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/text/letter-spacing" class="{{ $page->active('/text/letter-spacing') ? 'text-dark text-medium' : 'text-dark-soft' }}">Letter Spacing</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/text/wrapping" class="{{ $page->active('/text/wrapping') ? 'text-dark text-medium' : 'text-dark-soft' }}">Wrapping</a></li>
+                                        <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/text/style" class="{{ $page->active('/text/style') ? 'text-dark text-medium' : 'text-dark-soft' }}">Style &amp; Decoration</a></li>
+                                    </ul>
+                                </li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/visibility" class="{{ $page->active('/visibility') ? 'text-dark text-medium' : 'text-dark-soft' }}">Visibility</a></li>
+                                <li class="mb-2"><a href="{{ $page->baseUrl }}/styles/z-index" class="{{ $page->active('/z-index') ? 'text-dark text-medium' : 'text-dark-soft' }}">Z-Index</a></li>
                             </ul>
                         </div>
-                        <div class="mt-8">
-                            <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Utilities</p>
+                        <div class="mb-8">
+                            <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Examples</p>
                             <ul>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/backgrounds' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/backgrounds">Backgrounds</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/borders' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/borders">Borders</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/constrain' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/constrain">Constrain</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/display' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/display">Display</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/flexbox' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/flexbox">Flexbox</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/grid' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/grid">Grid</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/images' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/images">Images</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/overflow' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/overflow">Overflow</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/position' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/position">Position</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/shadows' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/shadows">Shadows</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/spacing' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/spacing">Spacing</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/text' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/text">Text</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/z-index' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/z-index">Z-Index</a></li>
-                            </ul>
-                        </div>
-                        <div class="mt-8">
-                            <p class="mb-4 text-dark-softer text-uppercase tracking-wide text-medium text-sm">Components</p>
-                            <ul>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/buttons' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/buttons">Buttons</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/forms' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/forms">Forms</a></li>
-                                <li class="mb-2"><a class="{{ $page->getUrl() === '/examples' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/examples">Examples</a></li>
+                                <li class="mb-2"><a class="{{ $page->getUrl() === '/examples/alerts' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/examples/alerts">Alerts</a></li>
+                                <li class="mb-2"><a class="{{ $page->getUrl() === '/examples/cards' ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/examples/cards">Cards</a></li>
                             </ul>
                         </div>
                     </nav>

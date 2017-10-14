@@ -9,6 +9,22 @@ function defineWidths(widths) {
   })
 }
 
+function defineMinWidths(widths) {
+  return _.map(widths, (size, modifer) => {
+    return defineClass(`min-w-${modifer}`, {
+      'min-width': `${size}`,
+    })
+  })
+}
+
+function defineMaxWidths(widths) {
+  return _.map(widths, (size, modifer) => {
+    return defineClass(`max-w-${modifer}`, {
+      'max-width': `${size}`,
+    })
+  })
+}
+
 function defineHeights(heights) {
   return _.map(heights, (size, modifer) => {
     return defineClass(`h-${modifer}`, {
@@ -17,11 +33,29 @@ function defineHeights(heights) {
   })
 }
 
+function defineMinHeights(heights) {
+  return _.map(heights, (size, modifer) => {
+    return defineClass(`min-h-${modifer}`, {
+      'min-height': `${size}`,
+    })
+  })
+}
+
+function defineMaxHeights(heights) {
+  return _.map(heights, (size, modifer) => {
+    return defineClass(`max-h-${modifer}`, {
+      'max-height': `${size}`,
+    })
+  })
+}
+
 export default function ({ sizing }) {
-  const widths = _.merge({}, sizing.common, sizing.width)
-  const heights = _.merge({}, sizing.common, sizing.height)
   return _.flatten([
-    defineWidths(widths),
-    defineHeights(heights),
+    defineWidths(sizing.width),
+    defineMinWidths(sizing.minWidth),
+    defineMaxWidths(sizing.maxWidth),
+    defineHeights(sizing.height),
+    defineMinHeights(sizing.minHeight),
+    defineMaxHeights(sizing.maxHeight),
   ])
 }

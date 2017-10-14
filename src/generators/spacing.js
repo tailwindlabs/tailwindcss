@@ -61,32 +61,32 @@ function defineMargin(margin) {
   })
 }
 
-function definePull(pull) {
-  return _.flatMap(pull, (size, modifier) => {
+function defineNegativeMargin(negativeMargin) {
+  return _.flatMap(negativeMargin, (size, modifier) => {
     size = `${size}` === '0' ? `${size}` : `-${size}`
 
     return defineClasses({
-      [`pull-t-${modifier}`]: {
+      [`-mt-${modifier}`]: {
         'margin-top': `${size}`,
       },
-      [`pull-r-${modifier}`]: {
+      [`-mr-${modifier}`]: {
         'margin-right': `${size}`,
       },
-      [`pull-b-${modifier}`]: {
+      [`-mb-${modifier}`]: {
         'margin-bottom': `${size}`,
       },
-      [`pull-l-${modifier}`]: {
+      [`-ml-${modifier}`]: {
         'margin-left': `${size}`,
       },
-      [`pull-x-${modifier}`]: {
+      [`-mx-${modifier}`]: {
         'margin-left': `${size}`,
         'margin-right': `${size}`,
       },
-      [`pull-y-${modifier}`]: {
+      [`-my-${modifier}`]: {
         'margin-top': `${size}`,
         'margin-bottom': `${size}`,
       },
-      [`pull-${modifier}`]: {
+      [`-m-${modifier}`]: {
         'margin': `${size}`,
       },
     })
@@ -94,13 +94,9 @@ function definePull(pull) {
 }
 
 export default function ({ spacing }) {
-  const padding = _.merge({}, spacing.common, spacing.padding)
-  const margin = _.merge({}, spacing.common, spacing.margin)
-  const pull = _.merge({}, spacing.common, spacing.pull)
-
   return _.flatten([
-    definePadding(padding),
-    defineMargin(margin),
+    definePadding(spacing.padding),
+    defineMargin(spacing.margin),
     defineClasses({
       'mr-auto': {
         'margin-right': 'auto',
@@ -113,6 +109,6 @@ export default function ({ spacing }) {
         'margin-right': 'auto',
       },
     }),
-    definePull(pull),
+    defineNegativeMargin(spacing.negativeMargin),
   ])
 }
