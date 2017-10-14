@@ -2833,6 +2833,30 @@ button,
   justify-content: space-around;
 }
 
+.align-center {
+  align-content: center;
+}
+
+.align-start {
+  align-content: flex-start;
+}
+
+.align-end {
+  align-content: flex-end;
+}
+
+.align-between {
+  align-content: space-between;
+}
+
+.align-around {
+  align-content: space-around;
+}
+
+.align-stretch {
+  align-content: stretch;
+}
+
 .flex-1 {
   flex: 1;
 }
@@ -5234,6 +5258,30 @@ button,
 
   .sm\:justify-around {
     justify-content: space-around;
+  }
+
+  .sm\:align-center {
+    align-content: center;
+  }
+
+  .sm\:align-start {
+    align-content: flex-start;
+  }
+
+  .sm\:align-end {
+    align-content: flex-end;
+  }
+
+  .sm\:align-between {
+    align-content: space-between;
+  }
+
+  .sm\:align-around {
+    align-content: space-around;
+  }
+
+  .sm\:align-stretch {
+    align-content: stretch;
   }
 
   .sm\:flex-1 {
@@ -7640,6 +7688,30 @@ button,
     justify-content: space-around;
   }
 
+  .md\:align-center {
+    align-content: center;
+  }
+
+  .md\:align-start {
+    align-content: flex-start;
+  }
+
+  .md\:align-end {
+    align-content: flex-end;
+  }
+
+  .md\:align-between {
+    align-content: space-between;
+  }
+
+  .md\:align-around {
+    align-content: space-around;
+  }
+
+  .md\:align-stretch {
+    align-content: stretch;
+  }
+
   .md\:flex-1 {
     flex: 1;
   }
@@ -10044,6 +10116,30 @@ button,
     justify-content: space-around;
   }
 
+  .lg\:align-center {
+    align-content: center;
+  }
+
+  .lg\:align-start {
+    align-content: flex-start;
+  }
+
+  .lg\:align-end {
+    align-content: flex-end;
+  }
+
+  .lg\:align-between {
+    align-content: space-between;
+  }
+
+  .lg\:align-around {
+    align-content: space-around;
+  }
+
+  .lg\:align-stretch {
+    align-content: stretch;
+  }
+
   .lg\:flex-1 {
     flex: 1;
   }
@@ -12446,6 +12542,30 @@ button,
 
   .xl\:justify-around {
     justify-content: space-around;
+  }
+
+  .xl\:align-center {
+    align-content: center;
+  }
+
+  .xl\:align-start {
+    align-content: flex-start;
+  }
+
+  .xl\:align-end {
+    align-content: flex-end;
+  }
+
+  .xl\:align-between {
+    align-content: space-between;
+  }
+
+  .xl\:align-around {
+    align-content: space-around;
+  }
+
+  .xl\:align-stretch {
+    align-content: stretch;
   }
 
   .xl\:flex-1 {
