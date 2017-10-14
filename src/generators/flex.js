@@ -59,22 +59,22 @@ export default function() {
     'justify-around': {
       'justify-content': 'space-around',
     },
-    'align-center': {
+    'content-center': {
       'align-content': 'center',
     },
-    'align-start': {
+    'content-start': {
       'align-content': 'flex-start',
     },
-    'align-end': {
+    'content-end': {
       'align-content': 'flex-end',
     },
-    'align-between': {
+    'content-between': {
       'align-content': 'space-between',
     },
-    'align-around': {
+    'content-around': {
       'align-content': 'space-around',
     },
-    'align-stretch': {
+    'content-stretch': {
       'align-content': 'stretch',
     },
     'flex-1': {
