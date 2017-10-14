@@ -1,5 +1,4 @@
-var postcss = require('postcss')
-
+import postcss from 'postcss'
 import plugin from '../src/lib/substituteClassApplyAtRules'
 
 function run(input, opts) {
