@@ -1628,6 +1628,10 @@ button,
   border-style: dotted;
 }
 
+.border-none {
+  border-style: none;
+}
+
 .rounded {
   border-radius: .25rem;
 }
@@ -4106,6 +4110,10 @@ button,
 
   .sm\:border-dotted {
     border-style: dotted;
+  }
+
+  .sm\:border-none {
+    border-style: none;
   }
 
   .sm\:rounded {
@@ -6589,6 +6597,10 @@ button,
     border-style: dotted;
   }
 
+  .md\:border-none {
+    border-style: none;
+  }
+
   .md\:rounded {
     border-radius: .25rem;
   }
@@ -9070,6 +9082,10 @@ button,
     border-style: dotted;
   }
 
+  .lg\:border-none {
+    border-style: none;
+  }
+
   .lg\:rounded {
     border-radius: .25rem;
   }
@@ -11549,6 +11565,10 @@ button,
 
   .xl\:border-dotted {
     border-style: dotted;
+  }
+
+  .xl\:border-none {
+    border-style: none;
   }
 
   .xl\:rounded {

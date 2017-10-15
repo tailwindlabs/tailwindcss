@@ -8,5 +8,8 @@ export default function() {
     'border-dotted': {
       'border-style': 'dotted',
     },
+    'border-none': {
+      'border-style': 'none',
+    },
   })
 }
