@@ -91,7 +91,7 @@ input { font-family: inherit; }
 
 input::placeholder {
     color: inherit;
-    opacity: .7;
+    opacity: .5;
 }
 
 button, [role=button] {
