@@ -45,7 +45,11 @@
                                         Configuration
                                     </a>
                                 </li>
-
+                                <li class="mb-2">
+                                    <a class="{{ $page->active('/color-palette') ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/workflow/color-palette">
+                                        Color Palette
+                                    </a>
+                                </li>
                                 <li class="mb-2">
                                     <a class="{{ $page->active('/responsive-design') ? 'text-dark text-medium' : 'text-dark-soft' }}" href="{{ $page->baseUrl }}/workflow/responsive-design">
                                         Responsive Design
