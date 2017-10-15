@@ -1380,6 +1380,11 @@ button,
   border-left: 8px solid #c5ced6;
 }
 
+.border-transparent,
+.hover\:border-transparent:hover {
+  border-color: transparent;
+}
+
 .border-light-overlay,
 .hover\:border-light-overlay:hover {
   border-color: hsla(0, 0%, 0%, .2);
@@ -3862,6 +3867,11 @@ button,
 
   .sm\:border-l-8 {
     border-left: 8px solid #c5ced6;
+  }
+
+  .sm\:border-transparent,
+  .sm\:hover\:border-transparent:hover {
+    border-color: transparent;
   }
 
   .sm\:border-light-overlay,
@@ -6349,6 +6359,11 @@ button,
     border-left: 8px solid #c5ced6;
   }
 
+  .md\:border-transparent,
+  .md\:hover\:border-transparent:hover {
+    border-color: transparent;
+  }
+
   .md\:border-light-overlay,
   .md\:hover\:border-light-overlay:hover {
     border-color: hsla(0, 0%, 0%, .2);
@@ -8834,6 +8849,11 @@ button,
     border-left: 8px solid #c5ced6;
   }
 
+  .lg\:border-transparent,
+  .lg\:hover\:border-transparent:hover {
+    border-color: transparent;
+  }
+
   .lg\:border-light-overlay,
   .lg\:hover\:border-light-overlay:hover {
     border-color: hsla(0, 0%, 0%, .2);
@@ -11317,6 +11337,11 @@ button,
 
   .xl\:border-l-8 {
     border-left: 8px solid #c5ced6;
+  }
+
+  .xl\:border-transparent,
+  .xl\:hover\:border-transparent:hover {
+    border-color: transparent;
   }
 
   .xl\:border-light-overlay,

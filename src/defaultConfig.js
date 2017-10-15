@@ -205,6 +205,7 @@ module.exports = {
       }
     },
     colors: {
+      'transparent': 'transparent',
       'light-overlay': 'hsla(0,0%,0%,.2)',
       'light-overlay-soft': 'hsla(0,0%,0%,.1)',
       'light-overlay-softer': 'hsla(0,0%,0%,.05)',
