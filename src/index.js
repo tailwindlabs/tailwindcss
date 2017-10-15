@@ -1,4 +1,6 @@
 import fs from 'fs'
+import path from 'path'
+
 import _ from 'lodash'
 import postcss from 'postcss'
 import stylefmt from 'stylefmt'
@@ -15,6 +17,10 @@ import substituteScreenAtRules from './lib/substituteScreenAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
 
 const plugin = postcss.plugin('tailwind', (options = {}) => {
+  if (_.isString(options)) {
+    options = require(path.resolve(options))
+  }
+
   const config = mergeConfig(defaultConfig, options)
 
   return postcss([
