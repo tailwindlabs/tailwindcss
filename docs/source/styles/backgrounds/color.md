@@ -61,8 +61,8 @@ title: "Backgrounds"
       <div class="text-light bg-red-light px-6 py-4 text-sm">
         .bg-red-light
       </div>
-      <div class="text-red bg-red-lightest px-6 py-4 text-sm">
-        .bg-red-lightest
+      <div class="text-red bg-red-lighter px-6 py-4 text-sm">
+        .bg-red-lighter
       </div>
     </div>
   </div>
@@ -77,8 +77,8 @@ title: "Backgrounds"
       <div class="text-orange bg-orange-light px-6 py-4 text-sm">
         .bg-orange-light
       </div>
-      <div class="text-orange bg-orange-lightest px-6 py-4 text-sm">
-        .bg-orange-lightest
+      <div class="text-orange bg-orange-lighter px-6 py-4 text-sm">
+        .bg-orange-lighter
       </div>
     </div>
   </div>
@@ -93,8 +93,8 @@ title: "Backgrounds"
       <div class="text-yellow bg-yellow-light px-6 py-4 text-sm">
         .bg-yellow-light
       </div>
-      <div class="text-yellow bg-yellow-lightest px-6 py-4 text-sm">
-        .bg-yellow-lightest
+      <div class="text-yellow bg-yellow-lighter px-6 py-4 text-sm">
+        .bg-yellow-lighter
       </div>
     </div>
   </div>
@@ -112,8 +112,8 @@ title: "Backgrounds"
       <div class="text-green bg-green-light px-6 py-4 text-sm">
         .bg-green-light
       </div>
-      <div class="text-green bg-green-lightest px-6 py-4 text-sm">
-        .bg-green-lightest
+      <div class="text-green bg-green-lighter px-6 py-4 text-sm">
+        .bg-green-lighter
       </div>
     </div>
   </div>
@@ -128,8 +128,8 @@ title: "Backgrounds"
       <div class="text-teal bg-teal-light px-6 py-4 text-sm">
         .bg-teal-light
       </div>
-      <div class="text-teal bg-teal-lightest px-6 py-4 text-sm">
-        .bg-teal-lightest
+      <div class="text-teal bg-teal-lighter px-6 py-4 text-sm">
+        .bg-teal-lighter
       </div>
     </div>
   </div>
@@ -144,8 +144,8 @@ title: "Backgrounds"
       <div class="text-blue bg-blue-light px-6 py-4 text-sm">
         .bg-blue-light
       </div>
-      <div class="text-blue bg-blue-lightest px-6 py-4 text-sm">
-        .bg-blue-lightest
+      <div class="text-blue bg-blue-lighter px-6 py-4 text-sm">
+        .bg-blue-lighter
       </div>
     </div>
   </div>
@@ -163,8 +163,8 @@ title: "Backgrounds"
       <div class="text-indigo bg-indigo-light px-6 py-4 text-sm">
         .bg-indigo-light
       </div>
-      <div class="text-indigo bg-indigo-lightest px-6 py-4 text-sm">
-        .bg-indigo-lightest
+      <div class="text-indigo bg-indigo-lighter px-6 py-4 text-sm">
+        .bg-indigo-lighter
       </div>
     </div>
   </div>
@@ -179,8 +179,8 @@ title: "Backgrounds"
       <div class="text-purple bg-purple-light px-6 py-4 text-sm">
         .bg-purple-light
       </div>
-      <div class="text-purple bg-purple-lightest px-6 py-4 text-sm">
-        .bg-purple-lightest
+      <div class="text-purple bg-purple-lighter px-6 py-4 text-sm">
+        .bg-purple-lighter
       </div>
     </div>
   </div>
@@ -195,8 +195,8 @@ title: "Backgrounds"
       <div class="text-pink bg-pink-light px-6 py-4 text-sm">
         .bg-pink-light
       </div>
-      <div class="text-pink bg-pink-lightest px-6 py-4 text-sm">
-        .bg-pink-lightest
+      <div class="text-pink bg-pink-lighter px-6 py-4 text-sm">
+        .bg-pink-lighter
       </div>
     </div>
   </div>
