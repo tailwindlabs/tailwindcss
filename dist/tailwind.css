@@ -2813,6 +2813,26 @@ button,
   align-items: stretch;
 }
 
+.self-start {
+  align-self: flex-start;
+}
+
+.self-end {
+  align-self: flex-end;
+}
+
+.self-center {
+  align-self: center;
+}
+
+.self-baseline {
+  align-self: baseline;
+}
+
+.self-stretch {
+  align-self: stretch;
+}
+
 .justify-start {
   justify-content: flex-start;
 }
@@ -5238,6 +5258,26 @@ button,
 
   .sm\:items-stretch {
     align-items: stretch;
+  }
+
+  .sm\:self-start {
+    align-self: flex-start;
+  }
+
+  .sm\:self-end {
+    align-self: flex-end;
+  }
+
+  .sm\:self-center {
+    align-self: center;
+  }
+
+  .sm\:self-baseline {
+    align-self: baseline;
+  }
+
+  .sm\:self-stretch {
+    align-self: stretch;
   }
 
   .sm\:justify-start {
@@ -7668,6 +7708,26 @@ button,
     align-items: stretch;
   }
 
+  .md\:self-start {
+    align-self: flex-start;
+  }
+
+  .md\:self-end {
+    align-self: flex-end;
+  }
+
+  .md\:self-center {
+    align-self: center;
+  }
+
+  .md\:self-baseline {
+    align-self: baseline;
+  }
+
+  .md\:self-stretch {
+    align-self: stretch;
+  }
+
   .md\:justify-start {
     justify-content: flex-start;
   }
@@ -10096,6 +10156,26 @@ button,
     align-items: stretch;
   }
 
+  .lg\:self-start {
+    align-self: flex-start;
+  }
+
+  .lg\:self-end {
+    align-self: flex-end;
+  }
+
+  .lg\:self-center {
+    align-self: center;
+  }
+
+  .lg\:self-baseline {
+    align-self: baseline;
+  }
+
+  .lg\:self-stretch {
+    align-self: stretch;
+  }
+
   .lg\:justify-start {
     justify-content: flex-start;
   }
@@ -12522,6 +12602,26 @@ button,
 
   .xl\:items-stretch {
     align-items: stretch;
+  }
+
+  .xl\:self-start {
+    align-self: flex-start;
+  }
+
+  .xl\:self-end {
+    align-self: flex-end;
+  }
+
+  .xl\:self-center {
+    align-self: center;
+  }
+
+  .xl\:self-baseline {
+    align-self: baseline;
+  }
+
+  .xl\:self-stretch {
+    align-self: stretch;
   }
 
   .xl\:justify-start {

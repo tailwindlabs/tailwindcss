@@ -44,6 +44,21 @@ export default function() {
     'items-stretch': {
       'align-items': 'stretch',
     },
+    'self-start': {
+      'align-self': 'flex-start',
+    },
+    'self-end': {
+      'align-self': 'flex-end',
+    },
+    'self-center': {
+      'align-self': 'center',
+    },
+    'self-baseline': {
+      'align-self': 'baseline',
+    },
+    'self-stretch': {
+      'align-self': 'stretch',
+    },
     'justify-start': {
       'justify-content': 'flex-start',
     },
