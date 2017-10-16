@@ -59,6 +59,24 @@ export default function() {
     'justify-around': {
       'justify-content': 'space-around',
     },
+    'content-center': {
+      'align-content': 'center',
+    },
+    'content-start': {
+      'align-content': 'flex-start',
+    },
+    'content-end': {
+      'align-content': 'flex-end',
+    },
+    'content-between': {
+      'align-content': 'space-between',
+    },
+    'content-around': {
+      'align-content': 'space-around',
+    },
+    'content-stretch': {
+      'align-content': 'stretch',
+    },
     'flex-1': {
       'flex': '1'
     },
