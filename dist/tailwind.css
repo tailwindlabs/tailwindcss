@@ -2843,6 +2843,10 @@ button,
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
+.shadow-none {
+  box-shadow: none;
+}
+
 .flex {
   display: flex;
 }
@@ -5330,6 +5334,10 @@ button,
 
   .sm\:shadow-inner {
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .sm\:shadow-none {
+    box-shadow: none;
   }
 
   .sm\:flex {
@@ -7822,6 +7830,10 @@ button,
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
   }
 
+  .md\:shadow-none {
+    box-shadow: none;
+  }
+
   .md\:flex {
     display: flex;
   }
@@ -10312,6 +10324,10 @@ button,
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
   }
 
+  .lg\:shadow-none {
+    box-shadow: none;
+  }
+
   .lg\:flex {
     display: flex;
   }
@@ -12800,6 +12816,10 @@ button,
 
   .xl\:shadow-inner {
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .xl\:shadow-none {
+    box-shadow: none;
   }
 
   .xl\:flex {

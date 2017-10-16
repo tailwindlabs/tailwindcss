@@ -371,6 +371,7 @@ module.exports = {
     '4': '0 14px 28px rgba(0,0,0,.16), 0 10px 10px rgba(0,0,0,.11)',
     '5': '0 19px 38px rgba(0,0,0,.18), 0 15px 12px rgba(0,0,0,.11)',
     'inner': 'inset 0 1px 2px rgba(0, 0, 0, 0.05)',
+    'none': 'none',
   },
   zIndex: {
     '0': 0,
