@@ -17,13 +17,13 @@ The syntax below is combined to create a system for padding and margins. For exa
 
 <div class="flex items-start mt-8 text-sm">
     <div class="pr-12">
-        <div class="mb-3 text-dark-soft text-uppercase">Class</div>
+        <div class="mb-3 text-slate text-uppercase">Class</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">p</code> Padding</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">m</code> Margin</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">pull</code> Negative Margin</div>
     </div>
     <div class="pl-12 pr-12 border-l">
-        <div class="mb-3 text-dark-soft"><span class="text-uppercase">Position</span> <span class="text-dark-softer text-xs">(optional)</span></div>
+        <div class="mb-3 text-slate"><span class="text-uppercase">Position</span> <span class="text-slate-light text-xs">(optional)</span></div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">t</code> Top</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">r</code> Right</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">b</code> Bottom</div>
@@ -32,7 +32,7 @@ The syntax below is combined to create a system for padding and margins. For exa
         <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">y</code> Vertical</div>
     </div>
     <div class="pl-12 border-l">
-        <div class="mb-3 text-dark-soft text-uppercase">Space</div>
+        <div class="mb-3 text-slate text-uppercase">Space</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">0</code> 0</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">1</code> 0.25rem</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 mono border rounded">2</code> 0.5rem</div>

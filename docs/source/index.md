@@ -17,16 +17,16 @@ Welcome to Tailwind CSS! Tailwind is a utility-first CSS framework designed for 
 
 ## Quick example
 
-<div class="inline-block p-2 pb-4 bg-light border rounded box-shadow text-center">
+<div class="inline-block p-2 pb-4 bg-white border rounded box-shadow text-center">
     <img class="img-16r" src="img/adam.jpg">
-    <div class="text-dark mt-2">Adam Wathan</div>
-    <div class="text-dark-soft text-sm">Web Developer</div>
+    <div class="text-slate-darker mt-2">Adam Wathan</div>
+    <div class="text-slate text-sm">Web Developer</div>
 </div>
 
 ```html
-<div class="inline-block p-2 pb-4 bg-light border rounded box-shadow text-center">
+<div class="inline-block p-2 pb-4 bg-white border rounded box-shadow text-center">
     <img class="img-16r" src="img/adam.jpg">
-    <div class="text-dark mt-2">Adam Wathan</div>
-    <div class="text-dark-soft text-sm">Web Developer</div>
+    <div class="text-slate-darker mt-2">Adam Wathan</div>
+    <div class="text-slate text-sm">Web Developer</div>
 </div>
 ```

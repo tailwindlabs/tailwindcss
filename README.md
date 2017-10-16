@@ -94,7 +94,7 @@ To use existing utility classes as mixins in your custom component classes, use 
   @apply .bg-blue;
   @apply .px-4;
   @apply .py-2;
-  @apply .text-light;
+  @apply .text-white;
 }
 .btn-primary:hover {
   @apply .bg-blue-dark;

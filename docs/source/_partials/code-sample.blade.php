@@ -1,5 +1,5 @@
-<div class="border border-dark-softer rounded mask mb-4">
-  <div class="p-6 border-b border-dark-softer">
+<div class="border border-smoke rounded mask mb-4">
+  <div class="p-6 border-b border-smoke">
     {{ $slot }}
   </div>
   <div>
