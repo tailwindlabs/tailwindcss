@@ -40,7 +40,7 @@ Here's a bunch of examples:
   <div class="bg-red text-light text-bold rounded-t px-4 py-2">
     Danger
   </div>
-  <div class="border border-red-light rounded-b bg-red-lighter px-4 py-3 text-red">
+  <div class="border border-t-0 border-red-light rounded-b bg-red-lighter px-4 py-3 text-red">
     <p>Something not ideal might be happening.</p>
   </div>
 </div>
