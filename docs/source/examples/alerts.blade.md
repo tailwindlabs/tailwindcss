@@ -5,11 +5,11 @@ title: "Alerts"
 
 # Alerts
 
-We don't ship alert components because every app has it's own visual style, and they are so easy to build out of utilities.
+We don't ship alert components because every app has it's own visual style and they are so easy to build out of utilities.
 
 Here's a bunch of examples:
 
-### Bootstrap-style
+### Traditional
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="bg-red-lightest border border-red-light text-red px-4 py-3 rounded relative">
@@ -22,7 +22,7 @@ Here's a bunch of examples:
 
 ---
 
-### HelpScout-style
+### Left Accent Border
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="bg-orange-lightest border-l-4 border-orange text-orange-dark p-4">
@@ -33,7 +33,7 @@ Here's a bunch of examples:
 
 ---
 
-### HelpScout-style
+### Titled
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div>
@@ -48,7 +48,7 @@ Here's a bunch of examples:
 
 ---
 
-### Heroku-style
+### Solid
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="bg-blue text-light text-sm text-bold px-4 py-3">
@@ -58,7 +58,7 @@ Here's a bunch of examples:
 
 ---
 
-### Shopify-style
+### Top Accent Border
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="bg-teal-lightest border-t-4 border-teal rounded-b text-dark px-4 py-3 shadow-2">
@@ -74,7 +74,7 @@ Here's a bunch of examples:
 
 ---
 
-### Banner-style
+### Banner
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="bg-blue-lightest border-t border-b border-blue text-blue px-4 py-3">
