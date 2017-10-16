@@ -35,12 +35,11 @@ it('merges keys found in the "extend" section', () => {
       }
     },
     spacing: {
-      common: {
+      padding: {
         '0': '0',
         '1': '0.25rem',
         '2': '0.5rem',
-      },
-      padding: {}
+      }
     }
   }
   const userConfig = {
@@ -73,12 +72,10 @@ it('merges keys found in the "extend" section', () => {
       }
     },
     spacing: {
-      common: {
+      padding: {
         '0': '0',
         '1': '0.25rem',
         '2': '0.5rem',
-      },
-      padding: {
         '10': '2.5rem',
       }
     }
