@@ -23,21 +23,23 @@ function defaultBorder(width, color) {
 }
 
 function sizedBorder(size, width, color) {
+  const style = width == 0 ? '0' : `${width} solid ${color}`
+
   return defineClasses({
     [`border-${size}`]: {
-      'border': `${width} solid ${color}`,
+      'border': `${style}`,
     },
     [`border-t-${size}`]: {
-      'border-top': `${width} solid ${color}`,
+      'border-top': `${style}`,
     },
     [`border-r-${size}`]: {
-      'border-right': `${width} solid ${color}`,
+      'border-right': `${style}`,
     },
     [`border-b-${size}`]: {
-      'border-bottom': `${width} solid ${color}`,
+      'border-bottom': `${style}`,
     },
     [`border-l-${size}`]: {
-      'border-left': `${width} solid ${color}`,
+      'border-left': `${style}`,
     },
   })
 }

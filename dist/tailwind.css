@@ -1221,23 +1221,23 @@ button,
 }
 
 .border-0 {
-  border: 0 solid #c5ced6;
+  border: 0;
 }
 
 .border-t-0 {
-  border-top: 0 solid #c5ced6;
+  border-top: 0;
 }
 
 .border-r-0 {
-  border-right: 0 solid #c5ced6;
+  border-right: 0;
 }
 
 .border-b-0 {
-  border-bottom: 0 solid #c5ced6;
+  border-bottom: 0;
 }
 
 .border-l-0 {
-  border-left: 0 solid #c5ced6;
+  border-left: 0;
 }
 
 .border-2 {
@@ -3678,23 +3678,23 @@ button,
   }
 
   .sm\:border-0 {
-    border: 0 solid #c5ced6;
+    border: 0;
   }
 
   .sm\:border-t-0 {
-    border-top: 0 solid #c5ced6;
+    border-top: 0;
   }
 
   .sm\:border-r-0 {
-    border-right: 0 solid #c5ced6;
+    border-right: 0;
   }
 
   .sm\:border-b-0 {
-    border-bottom: 0 solid #c5ced6;
+    border-bottom: 0;
   }
 
   .sm\:border-l-0 {
-    border-left: 0 solid #c5ced6;
+    border-left: 0;
   }
 
   .sm\:border-2 {
@@ -6136,23 +6136,23 @@ button,
   }
 
   .md\:border-0 {
-    border: 0 solid #c5ced6;
+    border: 0;
   }
 
   .md\:border-t-0 {
-    border-top: 0 solid #c5ced6;
+    border-top: 0;
   }
 
   .md\:border-r-0 {
-    border-right: 0 solid #c5ced6;
+    border-right: 0;
   }
 
   .md\:border-b-0 {
-    border-bottom: 0 solid #c5ced6;
+    border-bottom: 0;
   }
 
   .md\:border-l-0 {
-    border-left: 0 solid #c5ced6;
+    border-left: 0;
   }
 
   .md\:border-2 {
@@ -8594,23 +8594,23 @@ button,
   }
 
   .lg\:border-0 {
-    border: 0 solid #c5ced6;
+    border: 0;
   }
 
   .lg\:border-t-0 {
-    border-top: 0 solid #c5ced6;
+    border-top: 0;
   }
 
   .lg\:border-r-0 {
-    border-right: 0 solid #c5ced6;
+    border-right: 0;
   }
 
   .lg\:border-b-0 {
-    border-bottom: 0 solid #c5ced6;
+    border-bottom: 0;
   }
 
   .lg\:border-l-0 {
-    border-left: 0 solid #c5ced6;
+    border-left: 0;
   }
 
   .lg\:border-2 {
@@ -11052,23 +11052,23 @@ button,
   }
 
   .xl\:border-0 {
-    border: 0 solid #c5ced6;
+    border: 0;
   }
 
   .xl\:border-t-0 {
-    border-top: 0 solid #c5ced6;
+    border-top: 0;
   }
 
   .xl\:border-r-0 {
-    border-right: 0 solid #c5ced6;
+    border-right: 0;
   }
 
   .xl\:border-b-0 {
-    border-bottom: 0 solid #c5ced6;
+    border-bottom: 0;
   }
 
   .xl\:border-l-0 {
-    border-left: 0 solid #c5ced6;
+    border-left: 0;
   }
 
   .xl\:border-2 {
