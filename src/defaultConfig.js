@@ -28,7 +28,7 @@ var colors = {
   'teal-dark': '#249e9a',
   'teal': '#4dc0b5',
   'teal-light': '#9eebe4',
-  'teal-lightest': '#eefffd',
+  'teal-lightest': '#e8fdfa',
   'blue-dark': '#3687c8',
   'blue': '#4aa2ea',
   'blue-light': '#acdaff',
