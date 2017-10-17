@@ -15,26 +15,23 @@ title: "Shadows"
 
 Box shadows can be applied using the shadow utilities. By default these are a linear scale, where the lower values represent smaller (shallow) shadows, and higher values represent bigger (deeper) shadows.
 
-<div class="flex text-sm my-6">
-    <div class="mr-3 p-4 shadow-inner">.shadow-inner</div>
-    <div class="mr-3 p-4 shadow-1">.shadow-1</div>
-    <div class="mr-3 p-4 shadow-2">.shadow-2</div>
-    <div class="mr-3 p-4 shadow-3">.shadow-3</div>
-    <div class="mr-3 p-4 shadow-4">.shadow-4</div>
-    <div class="mr-3 p-4 shadow-5">.shadow-5</div>
+@component('_partials.code-sample', ['lang' => 'html'])
+<div class="flex justify-around text-sm my-6">
+    <div class="mr-3 p-4 bg-smoke-lighter shadow-inner">.shadow-inner</div>
+    <div class="mr-3 p-4 shadow">.shadow</div>
+    <div class="mr-3 p-4 shadow-md">.shadow-md</div>
+    <div class="mr-3 p-4 shadow-lg">.shadow-lg</div>
 </div>
 
-<div>    
-</div>
-
-```html
+@slot('code')
 <div class="shadow-inner"></div>
-<div class="shadow-1"></div>
+<div class="shadow"></div>
 <div class="shadow-2"></div>
 <div class="shadow-3"></div>
 <div class="shadow-4"></div>
 <div class="shadow-5"></div>
-```
+@endslot
+@endcomponent
 
 ## Responsive
 
