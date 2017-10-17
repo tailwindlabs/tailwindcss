@@ -26,10 +26,8 @@ Box shadows can be applied using the shadow utilities. By default these are a li
 @slot('code')
 <div class="shadow-inner"></div>
 <div class="shadow"></div>
-<div class="shadow-2"></div>
-<div class="shadow-3"></div>
-<div class="shadow-4"></div>
-<div class="shadow-5"></div>
+<div class="shadow-md"></div>
+<div class="shadow-lg"></div>
 @endslot
 @endcomponent
 

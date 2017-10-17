@@ -8,7 +8,7 @@ title: "Cards"
 We don't ship alert components because every app has it's own visual style, but they are easy af to make.
 
 <div class="max-w-sm mb-8">
-    <div class="rounded overflow-hidden shadow-3">
+    <div class="rounded overflow-hidden shadow-lg">
         <img class="fit w-full" src="/img/card-top.jpg" alt="">
         <div class="px-6 py-4">
             <h2 class="text-xl mb-2">The Coldest Sunset</h2>
