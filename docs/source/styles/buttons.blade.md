@@ -5,59 +5,127 @@ title: "Buttons"
 
 # Buttons
 
-<div class="subnav">
-    <a class="subnav-link" href="#usage">Usage</a>
-    <a class="subnav-link" href="#responsive">Responsive</a>
-    <a class="subnav-link" href="#customizing">Customizing</a>
+We don't ship any default button components because every app has it's own visual style and Tailwind tries to be as unopinionated as possible about how your project should look.
+
+That said, buttons are easy to build by combining utility classes.
+
+Here's a bunch of examples:
+
+### Simple
+
+@component('_partials.code-sample', ['lang' => 'html'])
+<button class="bg-blue hover:bg-blue-dark text-white text-bold py-2 px-4 rounded">
+    Button
+</button>
+
+@slot('code')
+<!-- Using utilities: -->
+<button class="bg-blue hover:bg-blue-dark text-white text-bold py-2 px-4 rounded">
+    Button
+</button>
+
+<!-- Extracting component classes: -->
+<button class="btn btn-blue">
+    Button
+</button>
+
+<style>
+  .btn {
+    @apply&nbsp;.text-bold .py-2 .px-4 .rounded;
+  }
+  .btn-blue {
+    @apply&nbsp;.bg-blue .text-white;
+  }
+  .btn-blue:hover {
+    @apply&nbsp;.bg-blue-dark;
+  }
+</style>
+@endslot
+@endcomponent
+
+---
+
+### Pill
+
+@component('_partials.code-sample', ['lang' => 'html'])
+<button class="bg-blue hover:bg-blue-dark text-white text-bold py-2 px-4 rounded-pill">
+    Button
+</button>
+@endcomponent
+
+---
+
+### Outline
+
+@component('_partials.code-sample', ['lang' => 'html'])
+<button class="bg-transparent hover:bg-blue text-blue-dark text-medium hover:text-white py-2 px-4 border border-blue hover:border-transparent rounded">
+    Button
+</button>
+@endcomponent
+
+---
+
+### Bordered
+
+@component('_partials.code-sample', ['lang' => 'html'])
+<button class="bg-blue hover:bg-blue-dark text-white text-bold py-2 px-4 border border-blue-darker rounded">
+    Button
+</button>
+@endcomponent
+
+---
+
+### Disabled
+
+@component('_partials.code-sample', ['lang' => 'html'])
+<button class="bg-blue text-white text-bold py-2 px-4 rounded opacity-50 cursor-not-allowed">
+    Button
+</button>
+@endcomponent
+
+---
+
+### 3D
+
+@component('_partials.code-sample', ['lang' => 'html'])
+<button class="bg-blue hover:bg-blue-dark text-white text-bold py-2 px-4 border-b-4 border-blue-dark hover:border-blue-darker rounded">
+    Button
+</button>
+@endcomponent
+
+---
+
+### Elevated
+
+@component('_partials.code-sample', ['lang' => 'html'])
+<button class="bg-white hover:bg-smoke-lighter text-slate-dark text-medium py-2 px-4 border border-slate-lighter rounded shadow-1">
+    Button
+</button>
+@endcomponent
+
+---
+
+### Button Groups
+
+@component('_partials.code-sample', ['lang' => 'html'])
+<div class="inline-flex">
+    <button class="bg-smoke hover:bg-smoke-dark text-slate-dark text-bold py-2 px-4 rounded-l">
+        Prev
+    </button>
+    <button class="bg-smoke hover:bg-smoke-dark text-slate-dark text-bold py-2 px-4 rounded-r">
+        Next
+    </button>
 </div>
+@endcomponent
 
-Document how to create buttons of various styles, like solid rounded buttons, outline buttons, pill buttons, etc.
+---
 
-### Solid
+### w/Icon
 
-<div class="mb-4">
-    <button class="text-medium text-slate-darker rounded py-2 px-4 bg-white mr-4">
-        Save
-    </button>
-    <button class="text-medium text-slate-darker rounded py-2 px-4 bg-smoke-lighter mr-4">
-        Save
-    </button>
-    <button class="text-medium text-slate-darker rounded py-2 px-4 bg-smoke-light mr-4">
-        Save
-    </button>
-</div>
-<div class="mb-4">
-    <button class="text-medium text-white rounded py-2 px-4 bg-slate-darker mr-4">
-        Save
-    </button>
-    <button class="text-medium text-white rounded py-2 px-4 bg-slate-dark mr-4">
-        Save
-    </button>
-    <button class="text-medium text-white rounded py-2 px-4 bg-slate mr-4">
-        Save
-    </button>
-</div>
+@component('_partials.code-sample', ['lang' => 'html'])
+<button class="bg-smoke hover:bg-smoke-dark text-slate-dark text-bold py-2 px-4 rounded inline-flex items-center">
+    <svg class="h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
+    <span>Download</span>
+</button>
+@endcomponent
 
-@foreach($page->colors as $color)
-<div class="mb-4">
-    <button class="text-medium text-white rounded py-2 px-4 bg-{{$color}} hover:bg-{{$color}}-dark mr-4">
-        Save
-    </button>
-    <button class="text-medium text-white rounded py-2 px-4 bg-{{$color}}-light mr-4">
-        Disabled
-    </button>
-</div>
-@endforeach
-
-<h3 class="markdown">Outline</h3>
-
-@foreach($page->colors as $color)
-<div class="mb-4">
-    <button class="text-medium text-white rounded py-2 px-4 text-{{$color}}-dark hover:text-white border border-{{$color}} hover:bg-{{$color}} mr-4">
-        Save
-    </button>
-    <button class="text-medium text-white rounded py-2 px-4 text-{{$color}}-light border border-{{$color}}-light mr-4">
-        Disabled
-    </button>
-</div>
-@endforeach
