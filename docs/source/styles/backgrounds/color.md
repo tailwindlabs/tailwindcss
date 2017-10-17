@@ -14,7 +14,7 @@ title: "Backgrounds"
 <h2 id="colors">Colors</h2>
 
 
-<div class="flex flex-wrap pull-x-4 mb-4">
+<div class="flex flex-wrap -mx-4 mb-4">
   <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-slate-darker px-6 py-4 text-sm">
@@ -55,7 +55,7 @@ title: "Backgrounds"
   </div>
 </div>
 
-<div class="flex flex-wrap pull-x-4 mb-4">
+<div class="flex flex-wrap -mx-4 mb-4">
   <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-red-darker px-6 py-4 text-sm">
@@ -115,7 +115,7 @@ title: "Backgrounds"
   </div>
 </div>
 
-<div class="flex flex-wrap pull-x-4 mb-4">
+<div class="flex flex-wrap -mx-4 mb-4">
   <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-green-darker px-6 py-4 text-sm">
@@ -175,7 +175,7 @@ title: "Backgrounds"
   </div>
 </div>
 
-<div class="flex flex-wrap pull-x-4 mb-4">
+<div class="flex flex-wrap -mx-4 mb-4">
   <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-indigo-darker px-6 py-4 text-sm">
