@@ -15,14 +15,10 @@ const configTemplate = {
     colors: null,
   },
   borders: {
-    defaults: null,
     widths: null,
-    rounded: {
-      default: null,
-      modifiers: null,
-    },
     colors: null,
   },
+  radiuses: null,
   sizing: {
     width: null,
     height: null,

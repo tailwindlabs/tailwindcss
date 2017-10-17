@@ -45,10 +45,10 @@ function sizedBorder(size, width, color) {
 }
 
 module.exports = function({colors, borders}) {
-  const color = borders.defaults.color
+  const color = borders.colors.default
 
   return _.flatten([
-    defaultBorder(borders.defaults.width, color),
-    ..._.map(borders.widths, (width, size) => sizedBorder(size, width, color)),
+    defaultBorder(borders.widths.default, color),
+    ..._.map(_.omit(borders.widths, 'default'), (width, size) => sizedBorder(size, width, color)),
   ])
 }

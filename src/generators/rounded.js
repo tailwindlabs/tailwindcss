@@ -49,9 +49,9 @@ function roundedVariant(modifier, radius) {
   })
 }
 
-module.exports = function({borders}) {
+module.exports = function({ radiuses }) {
   return _.flatten([
-    defaultRounded(borders.rounded.default),
-    ..._.map(borders.rounded.modifiers, (radius, modifier) => roundedVariant(modifier, radius)),
+    defaultRounded(radiuses.default),
+    ..._.map(_.omit(radiuses, 'default'), (radius, modifier) => roundedVariant(modifier, radius)),
   ])
 }

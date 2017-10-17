@@ -120,30 +120,26 @@ module.exports = {
   backgrounds: {
     colors: {
       ...colors
-    }
+    },
   },
   borders: {
-    defaults: {
-      width: '1px',
-      color: colors['slate-lighter'],
-    },
     widths: {
+      default: '1px',
       '0': '0',
       '2': '2px',
       '4': '4px',
       '8': '8px',
     },
-    rounded: {
-      default: '.25rem',
-      modifiers: {
-        sm: '.125rem',
-        lg: '.5rem',
-        pill: '9999px',
-      }
-    },
     colors: {
+      default: colors['slate-lighter'],
       ...colors
-    }
+    },
+  },
+  radiuses: {
+    default: '.25rem',
+    sm: '.125rem',
+    lg: '.5rem',
+    pill: '9999px',
   },
   sizing: {
     width: {
@@ -254,11 +250,9 @@ module.exports = {
     },
   },
   shadows: {
-    '1': '0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.15)',
-    '2': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
-    '3': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
-    '4': '0 14px 28px rgba(0,0,0,.16), 0 10px 10px rgba(0,0,0,.11)',
-    '5': '0 19px 38px rgba(0,0,0,.18), 0 15px 12px rgba(0,0,0,.11)',
+    default: '0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.15)',
+    'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
+    'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
     'inner': 'inset 0 1px 2px rgba(0, 0, 0, 0.05)',
     'none': 'none',
   },
