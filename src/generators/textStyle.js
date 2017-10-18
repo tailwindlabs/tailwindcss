@@ -2,20 +2,18 @@ import defineClasses from '../util/defineClasses'
 
 export default function() {
   return defineClasses({
-    'text-em': { 'font-style': 'italic' },
-    'text-uppercase': { 'text-transform': 'uppercase' },
-    'text-lowercase': { 'text-transform': 'lowercase' },
-    'text-capitalize': { 'text-transform': 'capitalize' },
-    'text-underline': { 'text-decoration': 'underline' },
-    'text-strike': { 'text-decoration': 'line-through' },
-    'text-smooth': {
+    'italic': { 'font-style': 'italic' },
+    'normal': { 'font-style': 'normal' },
+    'uppercase': { 'text-transform': 'uppercase' },
+    'lowercase': { 'text-transform': 'lowercase' },
+    'capitalize': { 'text-transform': 'capitalize' },
+    'transform-none': { 'text-transform': 'none' },
+    'underline': { 'text-decoration': 'underline' },
+    'line-through': { 'text-decoration': 'line-through' },
+    'decoration-none': { 'text-decoration': 'none' },
+    'antialiased': {
       '-webkit-font-smoothing': 'antialiased',
-      '-moz-osx-font-smoothing': 'grayscale',
-    },
-    'text-normal': {
-      'text-decoration': 'none',
-      'text-transform': 'none',
-      'font-style': 'normal',
+      '-moz-osx-font-smoothing': 'grayscale'
     },
   })
 }

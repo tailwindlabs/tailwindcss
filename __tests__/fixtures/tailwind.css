@@ -1019,39 +1019,45 @@ button,
   white-space: nowrap;
 }
 
-.text-em {
+.italic {
   font-style: italic;
 }
 
-.text-uppercase {
+.normal {
+  font-style: normal;
+}
+
+.uppercase {
   text-transform: uppercase;
 }
 
-.text-lowercase {
+.lowercase {
   text-transform: lowercase;
 }
 
-.text-capitalize {
+.capitalize {
   text-transform: capitalize;
 }
 
-.text-underline {
+.transform-none {
+  text-transform: none;
+}
+
+.underline {
   text-decoration: underline;
 }
 
-.text-strike {
+.line-through {
   text-decoration: line-through;
 }
 
-.text-smooth {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.decoration-none {
+  text-decoration: none;
 }
 
-.text-normal {
-  text-decoration: none;
-  text-transform: none;
-  font-style: normal;
+.antialiased {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .align-baseline {
@@ -3733,39 +3739,45 @@ button,
     white-space: nowrap;
   }
 
-  .sm\:text-em {
+  .sm\:italic {
     font-style: italic;
   }
 
-  .sm\:text-uppercase {
+  .sm\:normal {
+    font-style: normal;
+  }
+
+  .sm\:uppercase {
     text-transform: uppercase;
   }
 
-  .sm\:text-lowercase {
+  .sm\:lowercase {
     text-transform: lowercase;
   }
 
-  .sm\:text-capitalize {
+  .sm\:capitalize {
     text-transform: capitalize;
   }
 
-  .sm\:text-underline {
+  .sm\:transform-none {
+    text-transform: none;
+  }
+
+  .sm\:underline {
     text-decoration: underline;
   }
 
-  .sm\:text-strike {
+  .sm\:line-through {
     text-decoration: line-through;
   }
 
-  .sm\:text-smooth {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  .sm\:decoration-none {
+    text-decoration: none;
   }
 
-  .sm\:text-normal {
-    text-decoration: none;
-    text-transform: none;
-    font-style: normal;
+  .sm\:antialiased {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   .sm\:align-baseline {
@@ -6448,39 +6460,45 @@ button,
     white-space: nowrap;
   }
 
-  .md\:text-em {
+  .md\:italic {
     font-style: italic;
   }
 
-  .md\:text-uppercase {
+  .md\:normal {
+    font-style: normal;
+  }
+
+  .md\:uppercase {
     text-transform: uppercase;
   }
 
-  .md\:text-lowercase {
+  .md\:lowercase {
     text-transform: lowercase;
   }
 
-  .md\:text-capitalize {
+  .md\:capitalize {
     text-transform: capitalize;
   }
 
-  .md\:text-underline {
+  .md\:transform-none {
+    text-transform: none;
+  }
+
+  .md\:underline {
     text-decoration: underline;
   }
 
-  .md\:text-strike {
+  .md\:line-through {
     text-decoration: line-through;
   }
 
-  .md\:text-smooth {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  .md\:decoration-none {
+    text-decoration: none;
   }
 
-  .md\:text-normal {
-    text-decoration: none;
-    text-transform: none;
-    font-style: normal;
+  .md\:antialiased {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   .md\:align-baseline {
@@ -9163,39 +9181,45 @@ button,
     white-space: nowrap;
   }
 
-  .lg\:text-em {
+  .lg\:italic {
     font-style: italic;
   }
 
-  .lg\:text-uppercase {
+  .lg\:normal {
+    font-style: normal;
+  }
+
+  .lg\:uppercase {
     text-transform: uppercase;
   }
 
-  .lg\:text-lowercase {
+  .lg\:lowercase {
     text-transform: lowercase;
   }
 
-  .lg\:text-capitalize {
+  .lg\:capitalize {
     text-transform: capitalize;
   }
 
-  .lg\:text-underline {
+  .lg\:transform-none {
+    text-transform: none;
+  }
+
+  .lg\:underline {
     text-decoration: underline;
   }
 
-  .lg\:text-strike {
+  .lg\:line-through {
     text-decoration: line-through;
   }
 
-  .lg\:text-smooth {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  .lg\:decoration-none {
+    text-decoration: none;
   }
 
-  .lg\:text-normal {
-    text-decoration: none;
-    text-transform: none;
-    font-style: normal;
+  .lg\:antialiased {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   .lg\:align-baseline {
@@ -11878,39 +11902,45 @@ button,
     white-space: nowrap;
   }
 
-  .xl\:text-em {
+  .xl\:italic {
     font-style: italic;
   }
 
-  .xl\:text-uppercase {
+  .xl\:normal {
+    font-style: normal;
+  }
+
+  .xl\:uppercase {
     text-transform: uppercase;
   }
 
-  .xl\:text-lowercase {
+  .xl\:lowercase {
     text-transform: lowercase;
   }
 
-  .xl\:text-capitalize {
+  .xl\:capitalize {
     text-transform: capitalize;
   }
 
-  .xl\:text-underline {
+  .xl\:transform-none {
+    text-transform: none;
+  }
+
+  .xl\:underline {
     text-decoration: underline;
   }
 
-  .xl\:text-strike {
+  .xl\:line-through {
     text-decoration: line-through;
   }
 
-  .xl\:text-smooth {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  .xl\:decoration-none {
+    text-decoration: none;
   }
 
-  .xl\:text-normal {
-    text-decoration: none;
-    text-transform: none;
-    font-style: normal;
+  .xl\:antialiased {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   .xl\:align-baseline {
