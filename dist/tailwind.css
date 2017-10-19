@@ -623,35 +623,51 @@ button,
   font-size: 2.875rem;
 }
 
-.text-hairline {
+.font-hairline {
+  font-weight: 100;
+}
+
+.font-thin {
   font-weight: 200;
 }
 
-.text-thin {
+.font-light {
   font-weight: 300;
 }
 
-.text-regular {
+.font-normal {
   font-weight: 400;
 }
 
-.text-medium {
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
   font-weight: 600;
 }
 
-.text-bold {
+.font-bold {
   font-weight: 700;
 }
 
-.sans {
+.font-extrabold {
+  font-weight: 800;
+}
+
+.font-black {
+  font-weight: 900;
+}
+
+.font-sans {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
 }
 
-.serif {
+.font-serif {
   font-family: Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif;
 }
 
-.mono {
+.font-mono {
   font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
 }
 
@@ -1019,39 +1035,50 @@ button,
   white-space: nowrap;
 }
 
-.text-em {
+.italic {
   font-style: italic;
 }
 
-.text-uppercase {
+.not-italic {
+  font-style: normal;
+}
+
+.uppercase {
   text-transform: uppercase;
 }
 
-.text-lowercase {
+.lowercase {
   text-transform: lowercase;
 }
 
-.text-capitalize {
+.capitalize {
   text-transform: capitalize;
 }
 
-.text-underline {
+.normal-case {
+  text-transform: none;
+}
+
+.underline {
   text-decoration: underline;
 }
 
-.text-strike {
+.line-through {
   text-decoration: line-through;
 }
 
-.text-smooth {
+.no-underline {
+  text-decoration: none;
+}
+
+.antialiased {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.text-normal {
-  text-decoration: none;
-  text-transform: none;
-  font-style: normal;
+.subpixel-antialiased {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
 }
 
 .align-baseline {
@@ -3337,35 +3364,51 @@ button,
     font-size: 2.875rem;
   }
 
-  .sm\:text-hairline {
+  .sm\:font-hairline {
+    font-weight: 100;
+  }
+
+  .sm\:font-thin {
     font-weight: 200;
   }
 
-  .sm\:text-thin {
+  .sm\:font-light {
     font-weight: 300;
   }
 
-  .sm\:text-regular {
+  .sm\:font-normal {
     font-weight: 400;
   }
 
-  .sm\:text-medium {
+  .sm\:font-medium {
+    font-weight: 500;
+  }
+
+  .sm\:font-semibold {
     font-weight: 600;
   }
 
-  .sm\:text-bold {
+  .sm\:font-bold {
     font-weight: 700;
   }
 
-  .sm\:sans {
+  .sm\:font-extrabold {
+    font-weight: 800;
+  }
+
+  .sm\:font-black {
+    font-weight: 900;
+  }
+
+  .sm\:font-sans {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
   }
 
-  .sm\:serif {
+  .sm\:font-serif {
     font-family: Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif;
   }
 
-  .sm\:mono {
+  .sm\:font-mono {
     font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
   }
 
@@ -3733,39 +3776,50 @@ button,
     white-space: nowrap;
   }
 
-  .sm\:text-em {
+  .sm\:italic {
     font-style: italic;
   }
 
-  .sm\:text-uppercase {
+  .sm\:not-italic {
+    font-style: normal;
+  }
+
+  .sm\:uppercase {
     text-transform: uppercase;
   }
 
-  .sm\:text-lowercase {
+  .sm\:lowercase {
     text-transform: lowercase;
   }
 
-  .sm\:text-capitalize {
+  .sm\:capitalize {
     text-transform: capitalize;
   }
 
-  .sm\:text-underline {
+  .sm\:normal-case {
+    text-transform: none;
+  }
+
+  .sm\:underline {
     text-decoration: underline;
   }
 
-  .sm\:text-strike {
+  .sm\:line-through {
     text-decoration: line-through;
   }
 
-  .sm\:text-smooth {
+  .sm\:no-underline {
+    text-decoration: none;
+  }
+
+  .sm\:antialiased {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  .sm\:text-normal {
-    text-decoration: none;
-    text-transform: none;
-    font-style: normal;
+  .sm\:subpixel-antialiased {
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
   }
 
   .sm\:align-baseline {
@@ -6052,35 +6106,51 @@ button,
     font-size: 2.875rem;
   }
 
-  .md\:text-hairline {
+  .md\:font-hairline {
+    font-weight: 100;
+  }
+
+  .md\:font-thin {
     font-weight: 200;
   }
 
-  .md\:text-thin {
+  .md\:font-light {
     font-weight: 300;
   }
 
-  .md\:text-regular {
+  .md\:font-normal {
     font-weight: 400;
   }
 
-  .md\:text-medium {
+  .md\:font-medium {
+    font-weight: 500;
+  }
+
+  .md\:font-semibold {
     font-weight: 600;
   }
 
-  .md\:text-bold {
+  .md\:font-bold {
     font-weight: 700;
   }
 
-  .md\:sans {
+  .md\:font-extrabold {
+    font-weight: 800;
+  }
+
+  .md\:font-black {
+    font-weight: 900;
+  }
+
+  .md\:font-sans {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
   }
 
-  .md\:serif {
+  .md\:font-serif {
     font-family: Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif;
   }
 
-  .md\:mono {
+  .md\:font-mono {
     font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
   }
 
@@ -6448,39 +6518,50 @@ button,
     white-space: nowrap;
   }
 
-  .md\:text-em {
+  .md\:italic {
     font-style: italic;
   }
 
-  .md\:text-uppercase {
+  .md\:not-italic {
+    font-style: normal;
+  }
+
+  .md\:uppercase {
     text-transform: uppercase;
   }
 
-  .md\:text-lowercase {
+  .md\:lowercase {
     text-transform: lowercase;
   }
 
-  .md\:text-capitalize {
+  .md\:capitalize {
     text-transform: capitalize;
   }
 
-  .md\:text-underline {
+  .md\:normal-case {
+    text-transform: none;
+  }
+
+  .md\:underline {
     text-decoration: underline;
   }
 
-  .md\:text-strike {
+  .md\:line-through {
     text-decoration: line-through;
   }
 
-  .md\:text-smooth {
+  .md\:no-underline {
+    text-decoration: none;
+  }
+
+  .md\:antialiased {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  .md\:text-normal {
-    text-decoration: none;
-    text-transform: none;
-    font-style: normal;
+  .md\:subpixel-antialiased {
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
   }
 
   .md\:align-baseline {
@@ -8767,35 +8848,51 @@ button,
     font-size: 2.875rem;
   }
 
-  .lg\:text-hairline {
+  .lg\:font-hairline {
+    font-weight: 100;
+  }
+
+  .lg\:font-thin {
     font-weight: 200;
   }
 
-  .lg\:text-thin {
+  .lg\:font-light {
     font-weight: 300;
   }
 
-  .lg\:text-regular {
+  .lg\:font-normal {
     font-weight: 400;
   }
 
-  .lg\:text-medium {
+  .lg\:font-medium {
+    font-weight: 500;
+  }
+
+  .lg\:font-semibold {
     font-weight: 600;
   }
 
-  .lg\:text-bold {
+  .lg\:font-bold {
     font-weight: 700;
   }
 
-  .lg\:sans {
+  .lg\:font-extrabold {
+    font-weight: 800;
+  }
+
+  .lg\:font-black {
+    font-weight: 900;
+  }
+
+  .lg\:font-sans {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
   }
 
-  .lg\:serif {
+  .lg\:font-serif {
     font-family: Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif;
   }
 
-  .lg\:mono {
+  .lg\:font-mono {
     font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
   }
 
@@ -9163,39 +9260,50 @@ button,
     white-space: nowrap;
   }
 
-  .lg\:text-em {
+  .lg\:italic {
     font-style: italic;
   }
 
-  .lg\:text-uppercase {
+  .lg\:not-italic {
+    font-style: normal;
+  }
+
+  .lg\:uppercase {
     text-transform: uppercase;
   }
 
-  .lg\:text-lowercase {
+  .lg\:lowercase {
     text-transform: lowercase;
   }
 
-  .lg\:text-capitalize {
+  .lg\:capitalize {
     text-transform: capitalize;
   }
 
-  .lg\:text-underline {
+  .lg\:normal-case {
+    text-transform: none;
+  }
+
+  .lg\:underline {
     text-decoration: underline;
   }
 
-  .lg\:text-strike {
+  .lg\:line-through {
     text-decoration: line-through;
   }
 
-  .lg\:text-smooth {
+  .lg\:no-underline {
+    text-decoration: none;
+  }
+
+  .lg\:antialiased {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  .lg\:text-normal {
-    text-decoration: none;
-    text-transform: none;
-    font-style: normal;
+  .lg\:subpixel-antialiased {
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
   }
 
   .lg\:align-baseline {
@@ -11482,35 +11590,51 @@ button,
     font-size: 2.875rem;
   }
 
-  .xl\:text-hairline {
+  .xl\:font-hairline {
+    font-weight: 100;
+  }
+
+  .xl\:font-thin {
     font-weight: 200;
   }
 
-  .xl\:text-thin {
+  .xl\:font-light {
     font-weight: 300;
   }
 
-  .xl\:text-regular {
+  .xl\:font-normal {
     font-weight: 400;
   }
 
-  .xl\:text-medium {
+  .xl\:font-medium {
+    font-weight: 500;
+  }
+
+  .xl\:font-semibold {
     font-weight: 600;
   }
 
-  .xl\:text-bold {
+  .xl\:font-bold {
     font-weight: 700;
   }
 
-  .xl\:sans {
+  .xl\:font-extrabold {
+    font-weight: 800;
+  }
+
+  .xl\:font-black {
+    font-weight: 900;
+  }
+
+  .xl\:font-sans {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
   }
 
-  .xl\:serif {
+  .xl\:font-serif {
     font-family: Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif;
   }
 
-  .xl\:mono {
+  .xl\:font-mono {
     font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
   }
 
@@ -11878,39 +12002,50 @@ button,
     white-space: nowrap;
   }
 
-  .xl\:text-em {
+  .xl\:italic {
     font-style: italic;
   }
 
-  .xl\:text-uppercase {
+  .xl\:not-italic {
+    font-style: normal;
+  }
+
+  .xl\:uppercase {
     text-transform: uppercase;
   }
 
-  .xl\:text-lowercase {
+  .xl\:lowercase {
     text-transform: lowercase;
   }
 
-  .xl\:text-capitalize {
+  .xl\:capitalize {
     text-transform: capitalize;
   }
 
-  .xl\:text-underline {
+  .xl\:normal-case {
+    text-transform: none;
+  }
+
+  .xl\:underline {
     text-decoration: underline;
   }
 
-  .xl\:text-strike {
+  .xl\:line-through {
     text-decoration: line-through;
   }
 
-  .xl\:text-smooth {
+  .xl\:no-underline {
+    text-decoration: none;
+  }
+
+  .xl\:antialiased {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  .xl\:text-normal {
-    text-decoration: none;
-    text-transform: none;
-    font-style: normal;
+  .xl\:subpixel-antialiased {
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
   }
 
   .xl\:align-baseline {
