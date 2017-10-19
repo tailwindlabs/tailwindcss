@@ -29,6 +29,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
+    "clean-css": "^4.1.9",
     "jest": "^20.0.4",
     "rimraf": "^2.6.1"
   },
@@ -38,8 +39,8 @@
     "nodemon": "^1.11.0",
     "normalize.css": "^7.0.0",
     "postcss": "^6.0.9",
-    "postcss-import": "^11.0.0",
     "postcss-functions": "^3.0.0",
+    "postcss-import": "^11.0.0",
     "stylefmt": "^6.0.0"
   },
   "browserslist": [
