@@ -1005,23 +1005,23 @@ button,
   text-align: justify;
 }
 
-.white-space-normal {
+.whitespace-normal {
   white-space: normal;
 }
 
-.white-space-nowrap {
+.whitespace-no-wrap {
   white-space: nowrap;
 }
 
-.white-space-pre {
+.whitespace-pre {
   white-space: pre;
 }
 
-.white-space-pre-line {
+.whitespace-pre-line {
   white-space: pre-line;
 }
 
-.white-space-pre-wrap {
+.whitespace-pre-wrap {
   white-space: pre-wrap;
 }
 
@@ -3750,23 +3750,23 @@ button,
     text-align: justify;
   }
 
-  .sm\:white-space-normal {
+  .sm\:whitespace-normal {
     white-space: normal;
   }
 
-  .sm\:white-space-nowrap {
+  .sm\:whitespace-no-wrap {
     white-space: nowrap;
   }
 
-  .sm\:white-space-pre {
+  .sm\:whitespace-pre {
     white-space: pre;
   }
 
-  .sm\:white-space-pre-line {
+  .sm\:whitespace-pre-line {
     white-space: pre-line;
   }
 
-  .sm\:white-space-pre-wrap {
+  .sm\:whitespace-pre-wrap {
     white-space: pre-wrap;
   }
 
@@ -6496,23 +6496,23 @@ button,
     text-align: justify;
   }
 
-  .md\:white-space-normal {
+  .md\:whitespace-normal {
     white-space: normal;
   }
 
-  .md\:white-space-nowrap {
+  .md\:whitespace-no-wrap {
     white-space: nowrap;
   }
 
-  .md\:white-space-pre {
+  .md\:whitespace-pre {
     white-space: pre;
   }
 
-  .md\:white-space-pre-line {
+  .md\:whitespace-pre-line {
     white-space: pre-line;
   }
 
-  .md\:white-space-pre-wrap {
+  .md\:whitespace-pre-wrap {
     white-space: pre-wrap;
   }
 
@@ -9242,23 +9242,23 @@ button,
     text-align: justify;
   }
 
-  .lg\:white-space-normal {
+  .lg\:whitespace-normal {
     white-space: normal;
   }
 
-  .lg\:white-space-nowrap {
+  .lg\:whitespace-no-wrap {
     white-space: nowrap;
   }
 
-  .lg\:white-space-pre {
+  .lg\:whitespace-pre {
     white-space: pre;
   }
 
-  .lg\:white-space-pre-line {
+  .lg\:whitespace-pre-line {
     white-space: pre-line;
   }
 
-  .lg\:white-space-pre-wrap {
+  .lg\:whitespace-pre-wrap {
     white-space: pre-wrap;
   }
 
@@ -11988,23 +11988,23 @@ button,
     text-align: justify;
   }
 
-  .xl\:white-space-normal {
+  .xl\:whitespace-normal {
     white-space: normal;
   }
 
-  .xl\:white-space-nowrap {
+  .xl\:whitespace-no-wrap {
     white-space: nowrap;
   }
 
-  .xl\:white-space-pre {
+  .xl\:whitespace-pre {
     white-space: pre;
   }
 
-  .xl\:white-space-pre-line {
+  .xl\:whitespace-pre-line {
     white-space: pre-line;
   }
 
-  .xl\:white-space-pre-wrap {
+  .xl\:whitespace-pre-wrap {
     white-space: pre-wrap;
   }
 
