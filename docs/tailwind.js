@@ -80,9 +80,9 @@ module.exports = {
   },
   text: {
     fonts: {
-      'sans': '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
+      'sans': '"Lato", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
       'serif': 'Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif',
-      'mono': 'Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace',
+      'mono': '"Roboto Mono", Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace',
     },
     sizes: {
       'base': '1rem', // 16px
@@ -174,6 +174,15 @@ module.exports = {
       '4/5': '80%',
       '1/6': '16.66667%',
       '5/6': '83.33333%',
+      'xs': '20rem',
+      'sm': '30rem',
+      'md': '40rem',
+      'lg': '50rem',
+      'xl': '60rem',
+      '2xl': '70rem',
+      '3xl': '80rem',
+      '4xl': '90rem',
+      '5xl': '100rem',
       'full': '100%',
       'screen': '100vw'
     },
@@ -232,6 +241,7 @@ module.exports = {
       '4': '1rem',
       '6': '1.5rem',
       '8': '2rem',
+      '10': '2.5rem',
       '12': '3rem',
       '16': '4rem'
     },
@@ -244,6 +254,7 @@ module.exports = {
       '4': '1rem',
       '6': '1.5rem',
       '8': '2rem',
+      '10': '2.5rem',
       '12': '3rem',
       '16': '4rem'
     },
@@ -256,6 +267,7 @@ module.exports = {
       '4': '1rem',
       '6': '1.5rem',
       '8': '2rem',
+      '10': '2.5rem',
       '12': '3rem',
       '16': '4rem'
     },
