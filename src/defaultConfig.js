@@ -96,11 +96,15 @@ module.exports = {
       '4xl': '2.875rem', // 46px
     },
     weights: {
-      'hairline': 200,
-      'thin': 300,
-      'regular': 400,
-      'medium': 600,
+      'hairline': 100,
+      'thin': 200,
+      'light': 300,
+      'normal': 400,
+      'medium': 500,
+      'semibold': 600,
       'bold': 700,
+      'extrabold': 800,
+      'black': 900,
     },
     leading: {
       'none': 1,
