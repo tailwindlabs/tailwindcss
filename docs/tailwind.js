@@ -12,8 +12,8 @@ var colors = {
   'smoke-darker': '#919eab',
   'smoke-dark': '#c5ced6',
   'smoke': '#dfe3e8',
-  'smoke-light': '#f0f2f5',
-  'smoke-lighter': '#f7f9fa',
+  'smoke-light': 'hsl(200, 33%, 96%)',
+  'smoke-lighter': 'hsl(200, 25%, 98%)',
 
   'red-darker': '#960f0d',
   'red-dark': '#d43633',
@@ -46,7 +46,7 @@ var colors = {
   'teal-lighter': '#e8fdfa',
 
   'blue-darker': '#154267',
-  'blue-dark': '#3687c8',
+  'blue-dark': '#317af6',
   'blue': '#4aa2ea',
   'blue-light': '#acdaff',
   'blue-lighter': '#f1f9ff',
