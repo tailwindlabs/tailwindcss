@@ -70,8 +70,12 @@ program.command('build')
     buildTailwind(inputFile, loadConfig(program.config), writeStrategy(program))
   })
 
-program.parse(process.argv)
+const subCmd = _.head(program.args);
+const cmds = _.map(program.commands, '_name');
 
-if (! process.argv.slice(2).length) {
+if (!_.includes(cmds, subCmd)) {
   program.help();
+  process.exit()
 }
+
+program.parse(process.argv)
