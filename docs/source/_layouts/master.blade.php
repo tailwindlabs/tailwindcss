@@ -6,14 +6,15 @@
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>{{ $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS' }}</title>
         <style>
-          {{-- @import url("https://use.typekit.net/iqy1okj.css"); --}}
+          @import url("https://use.typekit.net/iqy1okj.css");
         </style>
+        {{-- <link rel="stylesheet" href="https://use.typekit.net/iqy1okj.css"> --}}
         <link rel="stylesheet" href="/css/main.css">
         <script type="text/javascript" src="/js/prism.js" defer=""></script>
     </head>
     <body>
         <div class="h-screen flex">
-            <div class="bg-white w-xs flex-none overflow-scroll-y p-8 border-r-2 border-smoke">
+            <div class="bg-white w-full max-w-xs flex-none overflow-scroll-y p-8 border-r-2 border-smoke">
                 <div class="flex items-center mb-8">
                     <svg class="h-8 w-8 mr-4" viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient x1="0%" y1="0%" y2="100%" id="a"><stop stop-color="#2383AE" offset="0%"></stop><stop stop-color="#6DD7B9" offset="100%"></stop></linearGradient></defs><path d="M15 12c2-8 7-12 15-12 12 0 13.5 9 19.5 10.5 4 1 7.5-.5 10.5-4.5-2 8-7 12-15 12-12 0-13.5-9-19.5-10.5-4-1-7.5.5-10.5 4.5zM0 30c2-8 7-12 15-12 12 0 13.5 9 19.5 10.5 4 1 7.5-.5 10.5-4.5-2 8-7 12-15 12-12 0-13.5-9-19.5-10.5-4-1-7.5.5-10.5 4.5z" fill="url(#a)" fill-rule="evenodd"></path></svg>
                     <span class='text-xl font-bold'>Tailwind CSS</span>
@@ -32,13 +33,13 @@
                 </div>
                 <nav class="py-4 text-base">
                     <div class="mb-8">
-                        <p class="mb-4 text-slate-light uppercase tracking-wide font-semibold text-sm">Introduction</p>
+                        <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Introduction</p>
                         <ul>
                             <li class="mb-3"><a class="text-slate" href="{{ $page->baseUrl }}/what-is-tailwind">What is Tailwind?</a></li>
                         </ul>
                     </div>
                     <div class="mb-8">
-                        <p class="mb-4 text-slate-light uppercase tracking-wide font-semibold text-sm">Getting Started</p>
+                        <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Getting Started</p>
                         <ul>
                             <li class="mb-3"><a class="text-slate" href="{{ $page->baseUrl }}/installation">Installation</a></li>
                             <li class="mb-3">
@@ -69,7 +70,7 @@
                         </ul>
                     </div>
                     <div class="mt-8">
-                        <p class="mb-4 text-slate-light uppercase tracking-wide font-semibold text-sm">Styles</p>
+                        <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Styles</p>
                         <ul class="mb-8">
                             <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/base" class="{{ $page->active('/styles/base') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Base</a></li>
                             <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/alignment" class="{{ $page->active('/styles/alignment') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Alignment</a></li>
@@ -149,7 +150,7 @@
                         </ul>
                     </div>
                     <div class="mb-8">
-                        <p class="mb-4 text-slate-light uppercase tracking-wide font-semibold text-sm">Examples</p>
+                        <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Examples</p>
                         <ul>
                             <li class="mb-3"><a class="{{ $page->getUrl() === '/examples/alerts' ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/examples/alerts">Alerts</a></li>
                             <li class="mb-3"><a class="{{ $page->getUrl() === '/examples/cards' ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/examples/cards">Cards</a></li>
@@ -158,7 +159,7 @@
                 </nav>
             </div>
             <div class="bg-smoke-light flex-grow overflow-scroll-y">
-                <div class="px-6 py-8 w-xl mx-auto">
+                <div class="px-6 py-8 w-full max-w-xl mx-auto">
                     @yield('body')
                 </div>
             </div>
