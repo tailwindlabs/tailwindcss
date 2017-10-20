@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import fs from 'fs'
+import fs from 'fs-extra'
 import _ from 'lodash'
 import path from 'path'
 import postcss from 'postcss'
@@ -28,7 +28,7 @@ function writeStrategy(program) {
     }
   }
   return (output) => {
-    fs.writeFileSync(program.output, output)
+    fs.outputFileSync(program.output, output)
   }
 }
 
@@ -48,11 +48,18 @@ function buildTailwind(inputFile, config, write) {
 
 program.version('0.1.0').usage('<command> [<args>]')
 
-program.command('init')
-  .usage('[options]')
-  .action(function () {
+program.command('init [filename]')
+  .usage('[options] [filename]')
+  .action(function (filename = 'tailwind.js') {
+    const destination = path.resolve(filename)
+
+    if (fs.existsSync(destination)) {
+      console.log(`Destination ${destination} already exists, aborting.`)
+      process.exit(1)
+    }
+
     const output = fs.readFileSync(path.resolve(__dirname + '/../defaultConfig.js'), 'utf8')
-    fs.writeFileSync(path.resolve('./tailwind.js'), output)
+    fs.outputFileSync(destination, output)
     process.exit()
   })
 
