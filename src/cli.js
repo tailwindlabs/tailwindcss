@@ -4,7 +4,7 @@ import fs from 'fs'
 import _ from 'lodash'
 import path from 'path'
 import postcss from 'postcss'
-import defaultConfig from './defaultConfig'
+import defaultConfig from '../defaultConfig'
 import program from 'commander'
 import tailwind from '..'
 
@@ -51,7 +51,7 @@ program.version('0.1.0')
 program.command('init')
   .usage('[options] <file ...>')
   .action(function () {
-    const output = fs.readFileSync(path.resolve(__dirname + '/defaultConfig.js'), 'utf8')
+    const output = fs.readFileSync(path.resolve(__dirname + '/../defaultConfig.js'), 'utf8')
     fs.writeFileSync(path.resolve('./tailwind.js'), output)
   })
 

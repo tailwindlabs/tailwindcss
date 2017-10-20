@@ -5,7 +5,7 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import stylefmt from 'stylefmt'
 
-import defaultConfig from './defaultConfig'
+import defaultConfig from '../defaultConfig'
 import mergeConfig from './util/mergeConfig'
 
 import substituteResetAtRule from './lib/substituteResetAtRule'
