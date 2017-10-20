@@ -37,7 +37,7 @@ function buildTailwind(inputFile, config, write) {
 
   const input = fs.readFileSync(inputFile, 'utf8')
 
-  postcss([tailwind(config)])
+  return postcss([tailwind(config)])
     .process(input)
     .then(result => {
       write(result.css)
@@ -46,13 +46,14 @@ function buildTailwind(inputFile, config, write) {
     .catch(error => console.log(error))
 }
 
-program.version('0.1.0')
+program.version('0.1.0').usage('<command> [<args>]')
 
 program.command('init')
-  .usage('[options] <file ...>')
+  .usage('[options]')
   .action(function () {
     const output = fs.readFileSync(path.resolve(__dirname + '/../defaultConfig.js'), 'utf8')
     fs.writeFileSync(path.resolve('./tailwind.js'), output)
+    process.exit()
   })
 
 program.command('build')
@@ -68,14 +69,20 @@ program.command('build')
     }
 
     buildTailwind(inputFile, loadConfig(program.config), writeStrategy(program))
+      .then(function () {
+        process.exit()
+      })
   })
+
+program.command('*')
+  .action(function () {
+    program.help()
+  })
+
 
 program.parse(process.argv)
 
-const subCmd = _.get(_.head(program.args), '_name');
-const cmds = _.map(program.commands, '_name');
-
-if (!_.includes(cmds, subCmd)) {
-  program.help();
+if (program.args.length === 0 ) {
+  program.help()
   process.exit()
 }
