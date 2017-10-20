@@ -17,9 +17,9 @@ We don't ship alert components because every app has it's own visual style, but 
             </p>
         </div>
         <div class="px-6 py-4">
-            <span class="inline-block bg-smoke-light rounded-pill px-3 py-1 text-sm text-medium text-slate mr-2">#photography</span>
-            <span class="inline-block bg-smoke-light rounded-pill px-3 py-1 text-sm text-medium text-slate mr-2">#travel</span>
-            <span class="inline-block bg-smoke-light rounded-pill px-3 py-1 text-sm text-medium text-slate">#winter</span>
+            <span class="inline-block bg-smoke-light rounded-pill px-3 py-1 text-sm font-semibold text-slate mr-2">#photography</span>
+            <span class="inline-block bg-smoke-light rounded-pill px-3 py-1 text-sm font-semibold text-slate mr-2">#travel</span>
+            <span class="inline-block bg-smoke-light rounded-pill px-3 py-1 text-sm font-semibold text-slate">#winter</span>
         </div>
     </div>
 </div>

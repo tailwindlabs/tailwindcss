@@ -1005,31 +1005,35 @@ button,
   text-align: justify;
 }
 
-.wrap-normal {
+.whitespace-normal {
   white-space: normal;
 }
 
-.wrap-none {
+.whitespace-no-wrap {
   white-space: nowrap;
 }
 
-.wrap-pre {
+.whitespace-pre {
   white-space: pre;
 }
 
-.wrap-pre-line {
+.whitespace-pre-line {
   white-space: pre-line;
 }
 
-.wrap-pre-wrap {
+.whitespace-pre-wrap {
   white-space: pre-wrap;
 }
 
-.wrap-force {
+.break-words {
   word-wrap: break-word;
 }
 
-.wrap-truncate {
+.break-normal {
+  word-wrap: normal;
+}
+
+.truncate {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -3746,31 +3750,35 @@ button,
     text-align: justify;
   }
 
-  .sm\:wrap-normal {
+  .sm\:whitespace-normal {
     white-space: normal;
   }
 
-  .sm\:wrap-none {
+  .sm\:whitespace-no-wrap {
     white-space: nowrap;
   }
 
-  .sm\:wrap-pre {
+  .sm\:whitespace-pre {
     white-space: pre;
   }
 
-  .sm\:wrap-pre-line {
+  .sm\:whitespace-pre-line {
     white-space: pre-line;
   }
 
-  .sm\:wrap-pre-wrap {
+  .sm\:whitespace-pre-wrap {
     white-space: pre-wrap;
   }
 
-  .sm\:wrap-force {
+  .sm\:break-words {
     word-wrap: break-word;
   }
 
-  .sm\:wrap-truncate {
+  .sm\:break-normal {
+    word-wrap: normal;
+  }
+
+  .sm\:truncate {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -6488,31 +6496,35 @@ button,
     text-align: justify;
   }
 
-  .md\:wrap-normal {
+  .md\:whitespace-normal {
     white-space: normal;
   }
 
-  .md\:wrap-none {
+  .md\:whitespace-no-wrap {
     white-space: nowrap;
   }
 
-  .md\:wrap-pre {
+  .md\:whitespace-pre {
     white-space: pre;
   }
 
-  .md\:wrap-pre-line {
+  .md\:whitespace-pre-line {
     white-space: pre-line;
   }
 
-  .md\:wrap-pre-wrap {
+  .md\:whitespace-pre-wrap {
     white-space: pre-wrap;
   }
 
-  .md\:wrap-force {
+  .md\:break-words {
     word-wrap: break-word;
   }
 
-  .md\:wrap-truncate {
+  .md\:break-normal {
+    word-wrap: normal;
+  }
+
+  .md\:truncate {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -9230,31 +9242,35 @@ button,
     text-align: justify;
   }
 
-  .lg\:wrap-normal {
+  .lg\:whitespace-normal {
     white-space: normal;
   }
 
-  .lg\:wrap-none {
+  .lg\:whitespace-no-wrap {
     white-space: nowrap;
   }
 
-  .lg\:wrap-pre {
+  .lg\:whitespace-pre {
     white-space: pre;
   }
 
-  .lg\:wrap-pre-line {
+  .lg\:whitespace-pre-line {
     white-space: pre-line;
   }
 
-  .lg\:wrap-pre-wrap {
+  .lg\:whitespace-pre-wrap {
     white-space: pre-wrap;
   }
 
-  .lg\:wrap-force {
+  .lg\:break-words {
     word-wrap: break-word;
   }
 
-  .lg\:wrap-truncate {
+  .lg\:break-normal {
+    word-wrap: normal;
+  }
+
+  .lg\:truncate {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -11972,31 +11988,35 @@ button,
     text-align: justify;
   }
 
-  .xl\:wrap-normal {
+  .xl\:whitespace-normal {
     white-space: normal;
   }
 
-  .xl\:wrap-none {
+  .xl\:whitespace-no-wrap {
     white-space: nowrap;
   }
 
-  .xl\:wrap-pre {
+  .xl\:whitespace-pre {
     white-space: pre;
   }
 
-  .xl\:wrap-pre-line {
+  .xl\:whitespace-pre-line {
     white-space: pre-line;
   }
 
-  .xl\:wrap-pre-wrap {
+  .xl\:whitespace-pre-wrap {
     white-space: pre-wrap;
   }
 
-  .xl\:wrap-force {
+  .xl\:break-words {
     word-wrap: break-word;
   }
 
-  .xl\:wrap-truncate {
+  .xl\:break-normal {
+    word-wrap: normal;
+  }
+
+  .xl\:truncate {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
