@@ -117,14 +117,10 @@ module.exports = {
       'normal': '0',
       'wide': '0.1em',
     },
-    colors: {
-      ...colors
-    },
+    colors: colors,
   },
   backgrounds: {
-    colors: {
-      ...colors
-    },
+    colors: colors,
   },
   borders: {
     widths: {
@@ -134,10 +130,7 @@ module.exports = {
       '4': '4px',
       '8': '8px',
     },
-    colors: {
-      default: colors['slate-lighter'],
-      ...colors
-    },
+    colors: Object.assign({ default: colors['slate-lighter'] }, colors)
   },
   radiuses: {
     default: '.25rem',
