@@ -587,10 +587,6 @@ button,
   appearance: none;
 }
 
-.text-base {
-  font-size: 1rem;
-}
-
 .text-xs {
   font-size: .75rem;
 }
@@ -599,7 +595,7 @@ button,
   font-size: .875rem;
 }
 
-.text-md {
+.text-base {
   font-size: 1rem;
 }
 
@@ -668,7 +664,7 @@ button,
 }
 
 .font-mono {
-  font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+  font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 .text-black,
@@ -3332,10 +3328,6 @@ button,
     appearance: none;
   }
 
-  .sm\:text-base {
-    font-size: 1rem;
-  }
-
   .sm\:text-xs {
     font-size: .75rem;
   }
@@ -3344,7 +3336,7 @@ button,
     font-size: .875rem;
   }
 
-  .sm\:text-md {
+  .sm\:text-base {
     font-size: 1rem;
   }
 
@@ -3413,7 +3405,7 @@ button,
   }
 
   .sm\:font-mono {
-    font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+    font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   }
 
   .sm\:text-black,
@@ -6078,10 +6070,6 @@ button,
     appearance: none;
   }
 
-  .md\:text-base {
-    font-size: 1rem;
-  }
-
   .md\:text-xs {
     font-size: .75rem;
   }
@@ -6090,7 +6078,7 @@ button,
     font-size: .875rem;
   }
 
-  .md\:text-md {
+  .md\:text-base {
     font-size: 1rem;
   }
 
@@ -6159,7 +6147,7 @@ button,
   }
 
   .md\:font-mono {
-    font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+    font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   }
 
   .md\:text-black,
@@ -8824,10 +8812,6 @@ button,
     appearance: none;
   }
 
-  .lg\:text-base {
-    font-size: 1rem;
-  }
-
   .lg\:text-xs {
     font-size: .75rem;
   }
@@ -8836,7 +8820,7 @@ button,
     font-size: .875rem;
   }
 
-  .lg\:text-md {
+  .lg\:text-base {
     font-size: 1rem;
   }
 
@@ -8905,7 +8889,7 @@ button,
   }
 
   .lg\:font-mono {
-    font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+    font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   }
 
   .lg\:text-black,
@@ -11570,10 +11554,6 @@ button,
     appearance: none;
   }
 
-  .xl\:text-base {
-    font-size: 1rem;
-  }
-
   .xl\:text-xs {
     font-size: .75rem;
   }
@@ -11582,7 +11562,7 @@ button,
     font-size: .875rem;
   }
 
-  .xl\:text-md {
+  .xl\:text-base {
     font-size: 1rem;
   }
 
@@ -11651,7 +11631,7 @@ button,
   }
 
   .xl\:font-mono {
-    font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+    font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   }
 
   .xl\:text-black,
