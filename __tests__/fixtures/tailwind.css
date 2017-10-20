@@ -1039,7 +1039,7 @@ button,
   font-style: italic;
 }
 
-.not-italic {
+.roman {
   font-style: normal;
 }
 
@@ -3780,7 +3780,7 @@ button,
     font-style: italic;
   }
 
-  .sm\:not-italic {
+  .sm\:roman {
     font-style: normal;
   }
 
@@ -6522,7 +6522,7 @@ button,
     font-style: italic;
   }
 
-  .md\:not-italic {
+  .md\:roman {
     font-style: normal;
   }
 
@@ -9264,7 +9264,7 @@ button,
     font-style: italic;
   }
 
-  .lg\:not-italic {
+  .lg\:roman {
     font-style: normal;
   }
 
@@ -12006,7 +12006,7 @@ button,
     font-style: italic;
   }
 
-  .xl\:not-italic {
+  .xl\:roman {
     font-style: normal;
   }
 
