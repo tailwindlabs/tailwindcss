@@ -46,18 +46,32 @@ function buildTailwind(inputFile, config, write) {
     .catch(error => console.log(error))
 }
 
-program
-  .version('0.1.0')
+program.version('0.1.0')
+
+program.command('init')
+  .usage('[options] <file ...>')
+  .action(function () {
+    const output = fs.readFileSync(path.resolve(__dirname + '/defaultConfig.js'), 'utf8')
+    fs.writeFileSync(path.resolve('./tailwind.js'), output)
+  })
+
+program.command('build')
   .usage('[options] <file ...>')
   .option('-c, --config [path]', 'Path to config file')
   .option('-o, --output [path]', 'Output file')
-  .parse(process.argv)
+  .action(function () {
+    let inputFile = program.args[0]
 
-let inputFile = program.args[0]
+    if (! inputFile) {
+      console.error('No input file given!')
+      process.exit(1)
+    }
 
-if (! inputFile) {
-  console.error('No input file given!')
-  process.exit(1)
+    buildTailwind(inputFile, loadConfig(program.config), writeStrategy(program))
+  })
+
+program.parse(process.argv)
+
+if (! process.argv.slice(2).length) {
+  program.help();
 }
-
-buildTailwind(inputFile, loadConfig(program.config), writeStrategy(program))
