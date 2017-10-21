@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-brand-soft antialiased">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="/css/main.css">
         <script type="text/javascript" src="/js/prism.js" defer=""></script>
     </head>
-    <body>
+    <body class="font-sans font-normal text-slate-darker leading-normal">
         <div class="h-screen flex">
             <div class="bg-white w-full max-w-xs flex-none overflow-scroll-y p-8 border-r-2 border-smoke">
                 <div class="flex items-center mb-8">

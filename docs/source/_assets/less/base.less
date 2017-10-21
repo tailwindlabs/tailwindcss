@@ -1,54 +1,16 @@
 @tailwind reset;
 
 html {
-  @apply .bg-brand-soft;
-
   font-size: 12px;
-
-  // Changes the default tap highlight to be completely transparent in iOS.
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-
-  // -webkit-font-smoothing: antialiased;
 
   @media (min-width: 420px) {
     font-size: 16px;
   }
 }
 
-*,
-*::before,
-*::after {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  @apply .font-sans;
-  @apply .text-base;
-  @apply .font-normal;
-  @apply .text-slate-darker;
-  line-height: 1.5;
-}
-
-pre, code {
-  @apply .font-mono;
-}
-
-img {
-  vertical-align: middle;
-}
-
 a {
   color: inherit;
   text-decoration: none;
-
-  &:hover {
-    @apply .underline;
-  }
-}
-
-svg {
-  fill: currentColor;
 }
 
 ol, ul {
