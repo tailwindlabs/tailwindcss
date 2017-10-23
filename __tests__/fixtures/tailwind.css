@@ -540,7 +540,11 @@ svg {
   fill: currentColor;
 }
 
-input {
+button,
+input,
+optgroup,
+select,
+textarea {
   font-family: inherit;
 }
 

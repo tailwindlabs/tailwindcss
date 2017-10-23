@@ -1,5 +1,5 @@
-<div class="border border-smoke rounded mask mb-4">
-  <div class="p-6 border-b border-smoke {{ $class ?? '' }}">
+<div class="rounded mask shadow mb-4">
+  <div class="bg-white border-b-2 border-smoke p-6 {{ $class ?? '' }}">
     {{ $slot }}
   </div>
   <div>
