@@ -2,6 +2,7 @@
   .subnav, .subnav& {
     @apply .flex;
     @apply .mt-6;
+    @apply .mb-6;
     @apply .pb-2;
     @apply .border-b;
 
@@ -31,14 +32,15 @@
     @apply .p-1;
     @apply .leading-none;
     @apply .whitespace-no-wrap;
-    @apply .text-pink;
+    @apply .text-purple;
     @apply .font-mono;
-    vertical-align: middle;
+    @apply .align-baseline;
+    font-weight: 400;
   }
 
   > pre, pre& {
     @apply .font-mono;
-    @apply .font-normal;
+    font-weight: 400;
   }
 
   > blockquote, blockquote& {
@@ -66,11 +68,11 @@
 
   > h3, h3& {
     @apply .mt-12;
-    @apply .mb-8;
+    @apply .mb-4;
     @apply .text-slate-darker;
     @apply .leading-none;
     @apply .font-semibold;
-    @apply .text-lg;
+    @apply .text-base;
   }
 
   > p, p&, > blockquote > p {
