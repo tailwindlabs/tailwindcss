@@ -13,7 +13,9 @@ title: "Flexbox"
 
 Tailwind provides a comprehensive set of Flexbox utilities out of the box to make it easy for you to implement complex layouts without having to write any new CSS.
 
-## Flex Containers
+## Display
+
+### Flex
 
 Use `.flex` to create a block-level flex container:
 
@@ -25,6 +27,8 @@ Use `.flex` to create a block-level flex container:
 </div>
 @endcomponent
 
+### Inline flex
+
 Use `.inline-flex` to create an inline flex container:
 
 @component('_partials.code-sample')
@@ -35,7 +39,11 @@ Use `.inline-flex` to create an inline flex container:
 </div>
 @endcomponent
 
-### Flex Direction
+---
+
+## Flex Direction
+
+### Row
 
 Use `.flex-row` to position flex items horizontally in the same direction as text *(this is also the default behavior)*:
 
@@ -47,6 +55,7 @@ Use `.flex-row` to position flex items horizontally in the same direction as tex
 </div>
 @endcomponent
 
+### Row reversed
 
 Use `.flex-row-reverse` to position flex items horizontally in the opposite direction:
 
@@ -58,6 +67,7 @@ Use `.flex-row-reverse` to position flex items horizontally in the opposite dire
 </div>
 @endcomponent
 
+### Column
 
 Use `.flex-col` to position flex items vertically:
 
@@ -69,6 +79,7 @@ Use `.flex-col` to position flex items vertically:
 </div>
 @endcomponent
 
+### Column reversed
 
 Use `.flex-col-reverse` to position flex items vertically in the opposite direction:
 
@@ -80,7 +91,11 @@ Use `.flex-col-reverse` to position flex items vertically in the opposite direct
 </div>
 @endcomponent
 
-### Flex Wrap
+---
+
+## Flex Wrapping
+
+### No wrapping
 
 Use `.flex-nowrap` to prevent flex items from wrapping *(this is also the default behavior)*:
 
@@ -98,6 +113,8 @@ Use `.flex-nowrap` to prevent flex items from wrapping *(this is also the defaul
 </div>
 @endcomponent
 
+### Wrap normally
+
 Use `.flex-wrap` to allow flex items to wrap:
 
 @component('_partials.code-sample')
@@ -113,6 +130,8 @@ Use `.flex-wrap` to allow flex items to wrap:
     </div>
 </div>
 @endcomponent
+
+### Wrap reversed
 
 Use `.flex-wrap-reverse` to wrap flex items in the reverse direction:
 
@@ -130,7 +149,11 @@ Use `.flex-wrap-reverse` to wrap flex items in the reverse direction:
 </div>
 @endcomponent
 
-### Justify Content
+---
+
+## Justify Content
+
+### Start
 
 Use `.justify-start` to justify items against the start of the flex container's main axis *(this is also the default behavior)*:
 
@@ -142,6 +165,8 @@ Use `.justify-start` to justify items against the start of the flex container's 
 </div>
 @endcomponent
 
+### End
+
 Use `.justify-end` to justify items against the end of the flex container's main axis:
 
 @component('_partials.code-sample')
@@ -151,6 +176,8 @@ Use `.justify-end` to justify items against the end of the flex container's main
     <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
+
+### Center
 
 Use `.justify-center` to justify items along the center of the flex container's main axis:
 
@@ -162,6 +189,8 @@ Use `.justify-center` to justify items along the center of the flex container's 
 </div>
 @endcomponent
 
+### Space between
+
 Use `.justify-between` to justify items along the flex container's main axis such that there is an equal amount of space between each item:
 
 @component('_partials.code-sample')
@@ -171,6 +200,8 @@ Use `.justify-between` to justify items along the flex container's main axis suc
     <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
+
+### Space around
 
 Use `.justify-around` to justify items along the flex container's main axis such that there is an equal amount of space around each item:
 
@@ -182,7 +213,11 @@ Use `.justify-around` to justify items along the flex container's main axis such
 </div>
 @endcomponent
 
-### Align Items
+---
+
+## Align Items
+
+### Stretch
 
 Use `.items-stretch` to stretch items to fill the flex container's cross axis *(this is also the default behavior)*:
 
@@ -194,6 +229,8 @@ Use `.items-stretch` to stretch items to fill the flex container's cross axis *(
 </div>
 @endcomponent
 
+### Start
+
 Use `.items-start` to align items to the start of the flex container's cross axis:
 
 @component('_partials.code-sample')
@@ -203,6 +240,8 @@ Use `.items-start` to align items to the start of the flex container's cross axi
     <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
+
+### End
 
 Use `.items-end` to align items to the end of the flex container's cross axis:
 
@@ -214,6 +253,8 @@ Use `.items-end` to align items to the end of the flex container's cross axis:
 </div>
 @endcomponent
 
+### Center
+
 Use `.items-center` to align items along the center of the flex container's cross axis:
 
 @component('_partials.code-sample')
@@ -223,6 +264,8 @@ Use `.items-center` to align items along the center of the flex container's cros
     <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
+
+### Baseline
 
 Use `.items-baseline` to align items along the flex container's cross axis such that all of their baselines align:
 
@@ -234,7 +277,11 @@ Use `.items-baseline` to align items along the flex container's cross axis such 
 </div>
 @endcomponent
 
-### Align Content
+---
+
+## Align Content
+
+### Start
 
 Use `.content-start` to pack lines in a flex container against the start of the main axis *(this is also the default behavior)*:
 
@@ -258,6 +305,8 @@ Use `.content-start` to pack lines in a flex container against the start of the 
 </div>
 @endcomponent
 
+### Center
+
 Use `.content-center` to pack lines in a flex container in the center of the main axis:
 
 @component('_partials.code-sample')
@@ -279,6 +328,8 @@ Use `.content-center` to pack lines in a flex container in the center of the mai
     </div>
 </div>
 @endcomponent
+
+### End
 
 Use `.content-end` to pack lines in a flex container against the end of the main axis:
 
@@ -302,6 +353,8 @@ Use `.content-end` to pack lines in a flex container against the end of the main
 </div>
 @endcomponent
 
+### Space between
+
 Use `.content-between` to distribute lines in a flex container such that there is an equal amount of space between each line:
 
 @component('_partials.code-sample')
@@ -323,6 +376,8 @@ Use `.content-between` to distribute lines in a flex container such that there i
     </div>
 </div>
 @endcomponent
+
+### Space around
 
 Use `.content-around` to distribute lines in a flex container such that there is an equal amount of space around each line:
 
@@ -346,7 +401,11 @@ Use `.content-around` to distribute lines in a flex container such that there is
 </div>
 @endcomponent
 
-## Flex Items
+---
+
+## Flex
+
+### 1
 
 Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring it's initial size:
 
@@ -391,6 +450,8 @@ Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring it's i
 @endslot
 @endcomponent
 
+### Auto
+
 Use `.flex-auto` to allow a flex item to grow and shrink, taking into account it's initial size:
 
 @component('_partials.code-sample')
@@ -433,6 +494,26 @@ Use `.flex-auto` to allow a flex item to grow and shrink, taking into account it
 </div>
 @endslot
 @endcomponent
+
+### None
+
+Use `.flex-none` to prevent a flex item from growing or shrinking:
+
+@component('_partials.code-sample')
+<div class="flex bg-smoke-light">
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+        Item that can grow or shrink if needed
+    </div>
+    <div class="flex-none text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+        Item that cannot grow or shrink
+    </div>
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+        Item that can grow or shrink if needed
+    </div>
+</div>
+@endcomponent
+
+### Initial
 
 Use `.flex-initial` to allow a flex item to shrink but not grow, taking into account it's initial size *(this is also the default behavior)*:
 
@@ -484,6 +565,12 @@ Use `.flex-initial` to allow a flex item to shrink but not grow, taking into acc
 @endslot
 @endcomponent
 
+---
+
+## Flex Grow
+
+### Grow
+
 Use `.flex-grow` to allow a flex item to grow to fill any available space:
 
 @component('_partials.code-sample')
@@ -500,21 +587,7 @@ Use `.flex-grow` to allow a flex item to grow to fill any available space:
 </div>
 @endcomponent
 
-Use `.flex-shrink` to allow a flex item to shrink if needed:
-
-@component('_partials.code-sample')
-<div class="flex bg-smoke-light">
-    <div class="flex-none text-slate text-center bg-smoke px-4 py-2 m-2">
-        Longer content that cannot flex
-    </div>
-    <div class="flex-shrink text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
-        Item that will shrink even if it causes the content to wrap
-    </div>
-    <div class="flex-none text-slate text-center bg-smoke px-4 py-2 m-2">
-        Longer content that cannot flex
-    </div>
-</div>
-@endcomponent
+### Don't grow
 
 Use `.flex-no-grow` to prevent a flex item from growing:
 
@@ -532,6 +605,30 @@ Use `.flex-no-grow` to prevent a flex item from growing:
 </div>
 @endcomponent
 
+---
+
+## Flex shrink
+
+### Shrink
+
+Use `.flex-shrink` to allow a flex item to shrink if needed:
+
+@component('_partials.code-sample')
+<div class="flex bg-smoke-light">
+    <div class="flex-none text-slate text-center bg-smoke px-4 py-2 m-2">
+        Longer content that cannot flex
+    </div>
+    <div class="flex-shrink text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+        Item that will shrink even if it causes the content to wrap
+    </div>
+    <div class="flex-none text-slate text-center bg-smoke px-4 py-2 m-2">
+        Longer content that cannot flex
+    </div>
+</div>
+@endcomponent
+
+### Don't shrink
+
 Use `.flex-no-shrink` to prevent a flex item from shrinking:
 
 @component('_partials.code-sample')
@@ -548,23 +645,11 @@ Use `.flex-no-shrink` to prevent a flex item from shrinking:
 </div>
 @endcomponent
 
-Use `.flex-none` to prevent a flex item from growing or shrinking:
+---
 
-@component('_partials.code-sample')
-<div class="flex bg-smoke-light">
-    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
-        Item that can shrink if needed
-    </div>
-    <div class="flex-none text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
-        Item that cannot grow or shrink
-    </div>
-    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
-        Item that can shrink if needed
-    </div>
-</div>
-@endcomponent
+## Align Self
 
-### Align Self
+### Start
 
 Use `.self-start` to align an item to the start of the flex container's cross axis, despite the container's `align-items` value:
 
@@ -576,6 +661,8 @@ Use `.self-start` to align an item to the start of the flex container's cross ax
 </div>
 @endcomponent
 
+### End
+
 Use `.self-end` to align an item to the end of the flex container's cross axis, despite the container's `align-items` value:
 
 @component('_partials.code-sample')
@@ -586,6 +673,8 @@ Use `.self-end` to align an item to the end of the flex container's cross axis, 
 </div>
 @endcomponent
 
+### Center
+
 Use `.self-center` to align an item along the center of the flex container's cross axis, despite the container's `align-items` value:
 
 @component('_partials.code-sample')
@@ -595,6 +684,8 @@ Use `.self-center` to align an item along the center of the flex container's cro
     <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
+
+### Stretch
 
 Use `.self-stretch` to stretch an item to fill the flex container's cross axis, despite the container's `align-items` value:
 
