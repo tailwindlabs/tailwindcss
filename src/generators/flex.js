@@ -26,7 +26,7 @@ export default function() {
     'flex-wrap-reverse': {
       'flex-wrap': 'wrap-reverse',
     },
-    'flex-nowrap': {
+    'flex-no-wrap': {
       'flex-wrap': 'nowrap',
     },
     'items-start': {

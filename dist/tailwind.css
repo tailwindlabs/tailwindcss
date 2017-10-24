@@ -540,7 +540,11 @@ svg {
   fill: currentColor;
 }
 
-input {
+button,
+input,
+optgroup,
+select,
+textarea {
   font-family: inherit;
 }
 
@@ -619,39 +623,48 @@ button,
   font-size: 2.875rem;
 }
 
-.font-hairline {
+.font-hairline,
+.hover\:font-hairline:hover {
   font-weight: 100;
 }
 
-.font-thin {
+.font-thin,
+.hover\:font-thin:hover {
   font-weight: 200;
 }
 
-.font-light {
+.font-light,
+.hover\:font-light:hover {
   font-weight: 300;
 }
 
-.font-normal {
+.font-normal,
+.hover\:font-normal:hover {
   font-weight: 400;
 }
 
-.font-medium {
+.font-medium,
+.hover\:font-medium:hover {
   font-weight: 500;
 }
 
-.font-semibold {
+.font-semibold,
+.hover\:font-semibold:hover {
   font-weight: 600;
 }
 
-.font-bold {
+.font-bold,
+.hover\:font-bold:hover {
   font-weight: 700;
 }
 
-.font-extrabold {
+.font-extrabold,
+.hover\:font-extrabold:hover {
   font-weight: 800;
 }
 
-.font-black {
+.font-black,
+.hover\:font-black:hover {
   font-weight: 900;
 }
 
@@ -3083,7 +3096,7 @@ button,
   flex-wrap: wrap-reverse;
 }
 
-.flex-nowrap {
+.flex-no-wrap {
   flex-wrap: nowrap;
 }
 
@@ -3360,39 +3373,48 @@ button,
     font-size: 2.875rem;
   }
 
-  .sm\:font-hairline {
+  .sm\:font-hairline,
+  .sm\:hover\:font-hairline:hover {
     font-weight: 100;
   }
 
-  .sm\:font-thin {
+  .sm\:font-thin,
+  .sm\:hover\:font-thin:hover {
     font-weight: 200;
   }
 
-  .sm\:font-light {
+  .sm\:font-light,
+  .sm\:hover\:font-light:hover {
     font-weight: 300;
   }
 
-  .sm\:font-normal {
+  .sm\:font-normal,
+  .sm\:hover\:font-normal:hover {
     font-weight: 400;
   }
 
-  .sm\:font-medium {
+  .sm\:font-medium,
+  .sm\:hover\:font-medium:hover {
     font-weight: 500;
   }
 
-  .sm\:font-semibold {
+  .sm\:font-semibold,
+  .sm\:hover\:font-semibold:hover {
     font-weight: 600;
   }
 
-  .sm\:font-bold {
+  .sm\:font-bold,
+  .sm\:hover\:font-bold:hover {
     font-weight: 700;
   }
 
-  .sm\:font-extrabold {
+  .sm\:font-extrabold,
+  .sm\:hover\:font-extrabold:hover {
     font-weight: 800;
   }
 
-  .sm\:font-black {
+  .sm\:font-black,
+  .sm\:hover\:font-black:hover {
     font-weight: 900;
   }
 
@@ -5824,7 +5846,7 @@ button,
     flex-wrap: wrap-reverse;
   }
 
-  .sm\:flex-nowrap {
+  .sm\:flex-no-wrap {
     flex-wrap: nowrap;
   }
 
@@ -6102,39 +6124,48 @@ button,
     font-size: 2.875rem;
   }
 
-  .md\:font-hairline {
+  .md\:font-hairline,
+  .md\:hover\:font-hairline:hover {
     font-weight: 100;
   }
 
-  .md\:font-thin {
+  .md\:font-thin,
+  .md\:hover\:font-thin:hover {
     font-weight: 200;
   }
 
-  .md\:font-light {
+  .md\:font-light,
+  .md\:hover\:font-light:hover {
     font-weight: 300;
   }
 
-  .md\:font-normal {
+  .md\:font-normal,
+  .md\:hover\:font-normal:hover {
     font-weight: 400;
   }
 
-  .md\:font-medium {
+  .md\:font-medium,
+  .md\:hover\:font-medium:hover {
     font-weight: 500;
   }
 
-  .md\:font-semibold {
+  .md\:font-semibold,
+  .md\:hover\:font-semibold:hover {
     font-weight: 600;
   }
 
-  .md\:font-bold {
+  .md\:font-bold,
+  .md\:hover\:font-bold:hover {
     font-weight: 700;
   }
 
-  .md\:font-extrabold {
+  .md\:font-extrabold,
+  .md\:hover\:font-extrabold:hover {
     font-weight: 800;
   }
 
-  .md\:font-black {
+  .md\:font-black,
+  .md\:hover\:font-black:hover {
     font-weight: 900;
   }
 
@@ -8566,7 +8597,7 @@ button,
     flex-wrap: wrap-reverse;
   }
 
-  .md\:flex-nowrap {
+  .md\:flex-no-wrap {
     flex-wrap: nowrap;
   }
 
@@ -8844,39 +8875,48 @@ button,
     font-size: 2.875rem;
   }
 
-  .lg\:font-hairline {
+  .lg\:font-hairline,
+  .lg\:hover\:font-hairline:hover {
     font-weight: 100;
   }
 
-  .lg\:font-thin {
+  .lg\:font-thin,
+  .lg\:hover\:font-thin:hover {
     font-weight: 200;
   }
 
-  .lg\:font-light {
+  .lg\:font-light,
+  .lg\:hover\:font-light:hover {
     font-weight: 300;
   }
 
-  .lg\:font-normal {
+  .lg\:font-normal,
+  .lg\:hover\:font-normal:hover {
     font-weight: 400;
   }
 
-  .lg\:font-medium {
+  .lg\:font-medium,
+  .lg\:hover\:font-medium:hover {
     font-weight: 500;
   }
 
-  .lg\:font-semibold {
+  .lg\:font-semibold,
+  .lg\:hover\:font-semibold:hover {
     font-weight: 600;
   }
 
-  .lg\:font-bold {
+  .lg\:font-bold,
+  .lg\:hover\:font-bold:hover {
     font-weight: 700;
   }
 
-  .lg\:font-extrabold {
+  .lg\:font-extrabold,
+  .lg\:hover\:font-extrabold:hover {
     font-weight: 800;
   }
 
-  .lg\:font-black {
+  .lg\:font-black,
+  .lg\:hover\:font-black:hover {
     font-weight: 900;
   }
 
@@ -11308,7 +11348,7 @@ button,
     flex-wrap: wrap-reverse;
   }
 
-  .lg\:flex-nowrap {
+  .lg\:flex-no-wrap {
     flex-wrap: nowrap;
   }
 
@@ -11586,39 +11626,48 @@ button,
     font-size: 2.875rem;
   }
 
-  .xl\:font-hairline {
+  .xl\:font-hairline,
+  .xl\:hover\:font-hairline:hover {
     font-weight: 100;
   }
 
-  .xl\:font-thin {
+  .xl\:font-thin,
+  .xl\:hover\:font-thin:hover {
     font-weight: 200;
   }
 
-  .xl\:font-light {
+  .xl\:font-light,
+  .xl\:hover\:font-light:hover {
     font-weight: 300;
   }
 
-  .xl\:font-normal {
+  .xl\:font-normal,
+  .xl\:hover\:font-normal:hover {
     font-weight: 400;
   }
 
-  .xl\:font-medium {
+  .xl\:font-medium,
+  .xl\:hover\:font-medium:hover {
     font-weight: 500;
   }
 
-  .xl\:font-semibold {
+  .xl\:font-semibold,
+  .xl\:hover\:font-semibold:hover {
     font-weight: 600;
   }
 
-  .xl\:font-bold {
+  .xl\:font-bold,
+  .xl\:hover\:font-bold:hover {
     font-weight: 700;
   }
 
-  .xl\:font-extrabold {
+  .xl\:font-extrabold,
+  .xl\:hover\:font-extrabold:hover {
     font-weight: 800;
   }
 
-  .xl\:font-black {
+  .xl\:font-black,
+  .xl\:hover\:font-black:hover {
     font-weight: 900;
   }
 
@@ -14050,7 +14099,7 @@ button,
     flex-wrap: wrap-reverse;
   }
 
-  .xl\:flex-nowrap {
+  .xl\:flex-no-wrap {
     flex-wrap: nowrap;
   }
 

@@ -3096,7 +3096,7 @@ button,
   flex-wrap: wrap-reverse;
 }
 
-.flex-nowrap {
+.flex-no-wrap {
   flex-wrap: nowrap;
 }
 
@@ -5846,7 +5846,7 @@ button,
     flex-wrap: wrap-reverse;
   }
 
-  .sm\:flex-nowrap {
+  .sm\:flex-no-wrap {
     flex-wrap: nowrap;
   }
 
@@ -8597,7 +8597,7 @@ button,
     flex-wrap: wrap-reverse;
   }
 
-  .md\:flex-nowrap {
+  .md\:flex-no-wrap {
     flex-wrap: nowrap;
   }
 
@@ -11348,7 +11348,7 @@ button,
     flex-wrap: wrap-reverse;
   }
 
-  .lg\:flex-nowrap {
+  .lg\:flex-no-wrap {
     flex-wrap: nowrap;
   }
 
@@ -14099,7 +14099,7 @@ button,
     flex-wrap: wrap-reverse;
   }
 
-  .xl\:flex-nowrap {
+  .xl\:flex-no-wrap {
     flex-wrap: nowrap;
   }
 
