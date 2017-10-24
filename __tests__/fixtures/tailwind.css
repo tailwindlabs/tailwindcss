@@ -3120,6 +3120,10 @@ button,
   align-items: stretch;
 }
 
+.self-auto {
+  align-self: auto;
+}
+
 .self-start {
   align-self: flex-start;
 }
@@ -5868,6 +5872,10 @@ button,
 
   .sm\:items-stretch {
     align-items: stretch;
+  }
+
+  .sm\:self-auto {
+    align-self: auto;
   }
 
   .sm\:self-start {
@@ -8621,6 +8629,10 @@ button,
     align-items: stretch;
   }
 
+  .md\:self-auto {
+    align-self: auto;
+  }
+
   .md\:self-start {
     align-self: flex-start;
   }
@@ -11372,6 +11384,10 @@ button,
     align-items: stretch;
   }
 
+  .lg\:self-auto {
+    align-self: auto;
+  }
+
   .lg\:self-start {
     align-self: flex-start;
   }
@@ -14121,6 +14137,10 @@ button,
 
   .xl\:items-stretch {
     align-items: stretch;
+  }
+
+  .xl\:self-auto {
+    align-self: auto;
   }
 
   .xl\:self-start {
