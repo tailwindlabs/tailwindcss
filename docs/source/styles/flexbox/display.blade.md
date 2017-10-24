@@ -1,11 +1,11 @@
 ---
 extends: _layouts.markdown
-title: "Flex Containers"
+title: "Display – Flexbox"
 ---
 
 <div class="font-semibold text-slate-light text-base uppercase tracking-wide mb-2">Flexbox</div>
 
-# Flex Containers
+# Display
 
 <div class="subnav">
     <a class="subnav-link" href="#usage">Usage</a>

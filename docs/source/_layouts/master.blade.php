@@ -95,9 +95,9 @@
                             <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/container" class="{{ $page->active('/container/') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Container</a></li>
                             <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/display" class="{{ $page->active('/display/') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Display</a></li>
                             <li class="mb-3">
-                                <a href="{{ $page->baseUrl }}/styles/flexbox/containers" class="block mb-2 {{ $page->active('/flexbox/') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Flexbox</a>
+                                <a href="{{ $page->baseUrl }}/styles/flexbox/display" class="block mb-2 {{ $page->active('/flexbox/') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Flexbox</a>
                                 <ul class="pl-4 {{ $page->active('/flexbox/') ? 'block' : 'hidden' }}">
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/containers" class="{{ $page->active('/flexbox/containers') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Containers</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/display" class="{{ $page->active('/flexbox/display') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Display</a></li>
                                     <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/direction" class="{{ $page->active('/direction') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Direction</a></li>
                                     <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/wrapping" class="{{ $page->active('/wrapping') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Wrapping</a></li>
                                     <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/justify-content" class="{{ $page->active('/justify-content') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Justify Content</a></li>

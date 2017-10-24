@@ -15,9 +15,7 @@ title: "Flexbox"
 
 Tailwind provides a comprehensive set of Flexbox utilities out of the box to make it easy for you to implement complex layouts without having to write any new CSS.
 
-## Flex
-
-### 1
+## Flex 1
 
 Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring it's initial size:
 
@@ -62,7 +60,7 @@ Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring it's i
 @endslot
 @endcomponent
 
-### Auto
+## Auto
 
 Use `.flex-auto` to allow a flex item to grow and shrink, taking into account it's initial size:
 
@@ -107,7 +105,7 @@ Use `.flex-auto` to allow a flex item to grow and shrink, taking into account it
 @endslot
 @endcomponent
 
-### None
+## None
 
 Use `.flex-none` to prevent a flex item from growing or shrinking:
 
@@ -125,7 +123,7 @@ Use `.flex-none` to prevent a flex item from growing or shrinking:
 </div>
 @endcomponent
 
-### Initial
+## Initial
 
 Use `.flex-initial` to allow a flex item to shrink but not grow, taking into account it's initial size *(this is also the default behavior)*:
 
@@ -177,11 +175,7 @@ Use `.flex-initial` to allow a flex item to shrink but not grow, taking into acc
 @endslot
 @endcomponent
 
----
-
-## Flex Grow
-
-### Grow
+## Grow
 
 Use `.flex-grow` to allow a flex item to grow to fill any available space:
 
@@ -199,7 +193,7 @@ Use `.flex-grow` to allow a flex item to grow to fill any available space:
 </div>
 @endcomponent
 
-### Don't grow
+## Don't grow
 
 Use `.flex-no-grow` to prevent a flex item from growing:
 
@@ -217,11 +211,7 @@ Use `.flex-no-grow` to prevent a flex item from growing:
 </div>
 @endcomponent
 
----
-
-## Flex shrink
-
-### Shrink
+## Shrink
 
 Use `.flex-shrink` to allow a flex item to shrink if needed:
 
@@ -239,7 +229,7 @@ Use `.flex-shrink` to allow a flex item to shrink if needed:
 </div>
 @endcomponent
 
-### Don't shrink
+## Don't shrink
 
 Use `.flex-no-shrink` to prevent a flex item from shrinking:
 
