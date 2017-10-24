@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="bg-smoke-light">
+<html lang="en" class="bg-white">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
