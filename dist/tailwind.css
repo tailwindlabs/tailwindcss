@@ -995,7 +995,7 @@ button,
 }
 
 .tracking-wide {
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
 }
 
 .text-left {
@@ -3120,6 +3120,10 @@ button,
   align-items: stretch;
 }
 
+.self-auto {
+  align-self: auto;
+}
+
 .self-start {
   align-self: flex-start;
 }
@@ -3130,10 +3134,6 @@ button,
 
 .self-center {
   align-self: center;
-}
-
-.self-baseline {
-  align-self: baseline;
 }
 
 .self-stretch {
@@ -3178,10 +3178,6 @@ button,
 
 .content-around {
   align-content: space-around;
-}
-
-.content-stretch {
-  align-content: stretch;
 }
 
 .flex-1 {
@@ -3745,7 +3741,7 @@ button,
   }
 
   .sm\:tracking-wide {
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
   }
 
   .sm\:text-left {
@@ -5870,6 +5866,10 @@ button,
     align-items: stretch;
   }
 
+  .sm\:self-auto {
+    align-self: auto;
+  }
+
   .sm\:self-start {
     align-self: flex-start;
   }
@@ -5880,10 +5880,6 @@ button,
 
   .sm\:self-center {
     align-self: center;
-  }
-
-  .sm\:self-baseline {
-    align-self: baseline;
   }
 
   .sm\:self-stretch {
@@ -5928,10 +5924,6 @@ button,
 
   .sm\:content-around {
     align-content: space-around;
-  }
-
-  .sm\:content-stretch {
-    align-content: stretch;
   }
 
   .sm\:flex-1 {
@@ -6496,7 +6488,7 @@ button,
   }
 
   .md\:tracking-wide {
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
   }
 
   .md\:text-left {
@@ -8621,6 +8613,10 @@ button,
     align-items: stretch;
   }
 
+  .md\:self-auto {
+    align-self: auto;
+  }
+
   .md\:self-start {
     align-self: flex-start;
   }
@@ -8631,10 +8627,6 @@ button,
 
   .md\:self-center {
     align-self: center;
-  }
-
-  .md\:self-baseline {
-    align-self: baseline;
   }
 
   .md\:self-stretch {
@@ -8679,10 +8671,6 @@ button,
 
   .md\:content-around {
     align-content: space-around;
-  }
-
-  .md\:content-stretch {
-    align-content: stretch;
   }
 
   .md\:flex-1 {
@@ -9247,7 +9235,7 @@ button,
   }
 
   .lg\:tracking-wide {
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
   }
 
   .lg\:text-left {
@@ -11372,6 +11360,10 @@ button,
     align-items: stretch;
   }
 
+  .lg\:self-auto {
+    align-self: auto;
+  }
+
   .lg\:self-start {
     align-self: flex-start;
   }
@@ -11382,10 +11374,6 @@ button,
 
   .lg\:self-center {
     align-self: center;
-  }
-
-  .lg\:self-baseline {
-    align-self: baseline;
   }
 
   .lg\:self-stretch {
@@ -11430,10 +11418,6 @@ button,
 
   .lg\:content-around {
     align-content: space-around;
-  }
-
-  .lg\:content-stretch {
-    align-content: stretch;
   }
 
   .lg\:flex-1 {
@@ -11998,7 +11982,7 @@ button,
   }
 
   .xl\:tracking-wide {
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
   }
 
   .xl\:text-left {
@@ -14123,6 +14107,10 @@ button,
     align-items: stretch;
   }
 
+  .xl\:self-auto {
+    align-self: auto;
+  }
+
   .xl\:self-start {
     align-self: flex-start;
   }
@@ -14133,10 +14121,6 @@ button,
 
   .xl\:self-center {
     align-self: center;
-  }
-
-  .xl\:self-baseline {
-    align-self: baseline;
   }
 
   .xl\:self-stretch {
@@ -14181,10 +14165,6 @@ button,
 
   .xl\:content-around {
     align-content: space-around;
-  }
-
-  .xl\:content-stretch {
-    align-content: stretch;
   }
 
   .xl\:flex-1 {

@@ -995,7 +995,7 @@ button,
 }
 
 .tracking-wide {
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
 }
 
 .text-left {
@@ -3741,7 +3741,7 @@ button,
   }
 
   .sm\:tracking-wide {
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
   }
 
   .sm\:text-left {
@@ -6488,7 +6488,7 @@ button,
   }
 
   .md\:tracking-wide {
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
   }
 
   .md\:text-left {
@@ -9235,7 +9235,7 @@ button,
   }
 
   .lg\:tracking-wide {
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
   }
 
   .lg\:text-left {
@@ -11982,7 +11982,7 @@ button,
   }
 
   .xl\:tracking-wide {
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
   }
 
   .xl\:text-left {
