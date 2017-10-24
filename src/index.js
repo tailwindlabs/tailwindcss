@@ -37,4 +37,6 @@ const plugin = postcss.plugin('tailwind', (options = {}) => {
   ])
 })
 
+plugin.defaultConfig = _.cloneDeep(defaultConfig)
+
 module.exports = plugin
