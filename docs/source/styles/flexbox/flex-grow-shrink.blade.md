@@ -3,6 +3,8 @@ extends: _layouts.markdown
 title: "Flexbox"
 ---
 
+<div class="font-semibold text-slate-light text-base uppercase tracking-wide mb-2">Flexbox</div>
+
 # Flex, Grow, & Shrink
 
 <div class="subnav">

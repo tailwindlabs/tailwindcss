@@ -80,7 +80,7 @@ module.exports = {
   },
   text: {
     fonts: {
-      'sans': 'Proxima Nova, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
+      'sans': 'Proxima Nova, proxima-nova, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
       'serif': 'Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif',
       'mono': 'Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
     },

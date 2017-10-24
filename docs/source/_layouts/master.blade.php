@@ -43,27 +43,27 @@
                         <ul>
                             <li class="mb-3"><a class="text-slate" href="{{ $page->baseUrl }}/installation">Installation</a></li>
                             <li class="mb-3">
-                                <a class="{{ $page->active('/configuration') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/workflow/configuration">
+                                <a class="{{ $page->active('/configuration') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/workflow/configuration">
                                     Configuration
                                 </a>
                             </li>
                             <li class="mb-3">
-                                <a class="{{ $page->active('/color-palette') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/workflow/color-palette">
+                                <a class="{{ $page->active('/color-palette') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/workflow/color-palette">
                                     Color Palette
                                 </a>
                             </li>
                             <li class="mb-3">
-                                <a class="{{ $page->active('/responsive-design') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/workflow/responsive-design">
+                                <a class="{{ $page->active('/responsive-design') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/workflow/responsive-design">
                                     Responsive Design
                                 </a>
                             </li>
                             <li class="mb-3">
-                                <a class="{{ $page->active('/adding-new-utilities') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/workflow/adding-new-utilities">
+                                <a class="{{ $page->active('/adding-new-utilities') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/workflow/adding-new-utilities">
                                     Adding New Utilities
                                 </a>
                             </li>
                             <li class="mb-3">
-                                <a class="{{ $page->active('/extracting-components') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/workflow/extracting-components">
+                                <a class="{{ $page->active('/extracting-components') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/workflow/extracting-components">
                                     Extracting Components
                                 </a>
                             </li>
@@ -72,100 +72,100 @@
                     <div class="mt-8">
                         <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Styles</p>
                         <ul class="mb-8">
-                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/base" class="{{ $page->active('/styles/base') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Base</a></li>
-                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/alignment" class="{{ $page->active('/styles/alignment') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Alignment</a></li>
+                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/base" class="{{ $page->active('/styles/base') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Base</a></li>
+                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/alignment" class="{{ $page->active('/styles/alignment') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Alignment</a></li>
                             <li class="mb-3">
-                                <a href="{{ $page->baseUrl }}/styles/backgrounds/color" class="block mb-2 {{ $page->active('/backgrounds/') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Backgrounds</a>
+                                <a href="{{ $page->baseUrl }}/styles/backgrounds/color" class="block mb-2 {{ $page->active('/backgrounds/') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Backgrounds</a>
                                 <ul class="pl-4 {{ $page->active('/backgrounds/') ? 'block' : 'hidden' }}">
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/backgrounds/color" class="{{ $page->active('/backgrounds/color') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Color</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/backgrounds/position" class="{{ $page->active('/backgrounds/position') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Position</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/backgrounds/size" class="{{ $page->active('/backgrounds/size') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Size</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/backgrounds/color" class="{{ $page->active('/backgrounds/color') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Color</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/backgrounds/position" class="{{ $page->active('/backgrounds/position') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Position</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/backgrounds/size" class="{{ $page->active('/backgrounds/size') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Size</a></li>
                                 </ul>
                             </li>
                             <li class="mb-3">
-                                <a href="{{ $page->baseUrl }}/styles/borders/base" class="block mb-2 {{ $page->active('/borders/') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Borders</a>
+                                <a href="{{ $page->baseUrl }}/styles/borders/base" class="block mb-2 {{ $page->active('/borders/') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Borders</a>
                                 <ul class="pl-4 {{ $page->active('/borders/') ? 'block' : 'hidden' }}">
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/borders/base" class="{{ $page->active('/borders/base') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Base</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/borders/color" class="{{ $page->active('/borders/color') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Color</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/borders/style" class="{{ $page->active('/borders/style') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Style</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/borders/radius" class="{{ $page->active('/borders/radius') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Radius</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/borders/base" class="{{ $page->active('/borders/base') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Base</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/borders/color" class="{{ $page->active('/borders/color') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Color</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/borders/style" class="{{ $page->active('/borders/style') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Style</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/borders/radius" class="{{ $page->active('/borders/radius') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Radius</a></li>
                                 </ul>
                             </li>
-                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/buttons" class="{{ $page->active('/buttons/') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Buttons</a></li>
-                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/container" class="{{ $page->active('/container/') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Container</a></li>
-                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/display" class="{{ $page->active('/display/') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Display</a></li>
+                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/buttons" class="{{ $page->active('/buttons/') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Buttons</a></li>
+                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/container" class="{{ $page->active('/container/') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Container</a></li>
+                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/display" class="{{ $page->active('/display/') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Display</a></li>
                             <li class="mb-3">
-                                <a href="{{ $page->baseUrl }}/styles/flexbox/containers" class="block mb-2 {{ $page->active('/flexbox/') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Flexbox</a>
+                                <a href="{{ $page->baseUrl }}/styles/flexbox/containers" class="block mb-2 {{ $page->active('/flexbox/') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Flexbox</a>
                                 <ul class="pl-4 {{ $page->active('/flexbox/') ? 'block' : 'hidden' }}">
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/containers" class="{{ $page->active('/flexbox/containers') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Containers</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/direction" class="{{ $page->active('/direction') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Direction</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/wrapping" class="{{ $page->active('/wrapping') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Wrapping</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/justify-content" class="{{ $page->active('/justify-content') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Justify Content</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/align-items" class="{{ $page->active('/align-items') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Align Items</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/align-content" class="{{ $page->active('/align-content') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Align Content</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/align-self" class="{{ $page->active('/align-self') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Align Self</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/flex-grow-shrink" class="{{ $page->active('/flex-grow-shrink') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Flex, Grow, &amp; Shrink</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/containers" class="{{ $page->active('/flexbox/containers') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Containers</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/direction" class="{{ $page->active('/direction') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Direction</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/wrapping" class="{{ $page->active('/wrapping') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Wrapping</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/justify-content" class="{{ $page->active('/justify-content') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Justify Content</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/align-items" class="{{ $page->active('/align-items') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Align Items</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/align-content" class="{{ $page->active('/align-content') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Align Content</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/align-self" class="{{ $page->active('/align-self') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Align Self</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/flexbox/flex-grow-shrink" class="{{ $page->active('/flex-grow-shrink') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Flex, Grow, &amp; Shrink</a></li>
                                 </ul>
                             </li>
-                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/floats" class="{{ $page->active('/floats') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Floats</a></li>
-                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/forms" class="{{ $page->active('/forms') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Forms</a></li>
-                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/grid" class="{{ $page->active('/grid') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Grid</a></li>
+                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/floats" class="{{ $page->active('/floats') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Floats</a></li>
+                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/forms" class="{{ $page->active('/forms') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Forms</a></li>
+                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/grid" class="{{ $page->active('/grid') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Grid</a></li>
                             <li class="mb-3">
-                                <a href="{{ $page->baseUrl }}/styles/interactivity/cursor" class="block mb-2 {{ $page->active('/interactivity/') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Interactivity</a>
+                                <a href="{{ $page->baseUrl }}/styles/interactivity/cursor" class="block mb-2 {{ $page->active('/interactivity/') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Interactivity</a>
                                 <ul class="pl-4 {{ $page->active('/interactivity/') ? 'block' : 'hidden' }}">
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/interactivity/cursor" class="{{ $page->active('/cursor') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Cursor</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/interactivity/resize" class="{{ $page->active('/resize') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Resize</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/interactivity/pointer-events" class="{{ $page->active('/pointer-events') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Pointer Events</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/interactivity/user-select" class="{{ $page->active('/user-select') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">User Select</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/interactivity/cursor" class="{{ $page->active('/cursor') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Cursor</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/interactivity/resize" class="{{ $page->active('/resize') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Resize</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/interactivity/pointer-events" class="{{ $page->active('/pointer-events') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Pointer Events</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/interactivity/user-select" class="{{ $page->active('/user-select') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">User Select</a></li>
                                 </ul>
                             </li>
-                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/lists" class="{{ $page->active('/lists') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Lists</a></li>
-                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/opacity" class="{{ $page->active('/opacity') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Opacity</a></li>
-                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/overflow" class="{{ $page->active('/overflow') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Overflow</a></li>
-                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/positioning" class="{{ $page->active('/positioning') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Positioning</a></li>
-                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/shadows" class="{{ $page->active('/shadows') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Shadows</a></li>
+                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/lists" class="{{ $page->active('/lists') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Lists</a></li>
+                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/opacity" class="{{ $page->active('/opacity') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Opacity</a></li>
+                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/overflow" class="{{ $page->active('/overflow') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Overflow</a></li>
+                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/positioning" class="{{ $page->active('/positioning') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Positioning</a></li>
+                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/shadows" class="{{ $page->active('/shadows') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Shadows</a></li>
                             <li class="mb-3">
-                                <a href="{{ $page->baseUrl }}/styles/sizing/width" class="block mb-2 {{ $page->active('/sizing/') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Sizing</a>
+                                <a href="{{ $page->baseUrl }}/styles/sizing/width" class="block mb-2 {{ $page->active('/sizing/') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Sizing</a>
                                 <ul class="pl-4 {{ $page->active('/sizing/') ? 'block' : 'hidden' }}">
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/sizing/width" class="{{ $page->active('/sizing/width') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Width</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/sizing/min-width" class="{{ $page->active('/sizing/min-width') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Min-Width</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/sizing/max-width" class="{{ $page->active('/sizing/max-width') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Max-Width</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/sizing/height" class="{{ $page->active('/sizing/height') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Height</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/sizing/min-height" class="{{ $page->active('/sizing/min-height') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Min-Height</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/sizing/max-height" class="{{ $page->active('/sizing/max-height') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Max-Height</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/sizing/width" class="{{ $page->active('/sizing/width') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Width</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/sizing/min-width" class="{{ $page->active('/sizing/min-width') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Min-Width</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/sizing/max-width" class="{{ $page->active('/sizing/max-width') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Max-Width</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/sizing/height" class="{{ $page->active('/sizing/height') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Height</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/sizing/min-height" class="{{ $page->active('/sizing/min-height') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Min-Height</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/sizing/max-height" class="{{ $page->active('/sizing/max-height') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Max-Height</a></li>
                                 </ul>
                             </li>
                             <li class="mb-3">
-                                <a href="{{ $page->baseUrl }}/styles/spacing/padding" class="block mb-2 {{ $page->active('/spacing/') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Spacing</a>
+                                <a href="{{ $page->baseUrl }}/styles/spacing/padding" class="block mb-2 {{ $page->active('/spacing/') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Spacing</a>
                                 <ul class="pl-4 {{ $page->active('/spacing/') ? 'block' : 'hidden' }}">
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/spacing/padding" class="{{ $page->active('/spacing/padding') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Padding</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/spacing/margin" class="{{ $page->active('/spacing/margin') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Margin</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/spacing/negative-margin" class="{{ $page->active('/spacing/negative-margin') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Negative Margin</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/spacing/padding" class="{{ $page->active('/spacing/padding') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Padding</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/spacing/margin" class="{{ $page->active('/spacing/margin') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Margin</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/spacing/negative-margin" class="{{ $page->active('/spacing/negative-margin') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Negative Margin</a></li>
                                 </ul>
                             </li>
-                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/svg" class="{{ $page->active('/svg') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">SVG</a></li>
+                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/svg" class="{{ $page->active('/svg') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">SVG</a></li>
                             <li class="mb-3">
-                                <a href="{{ $page->baseUrl }}/styles/text/fonts" class="block mb-2 {{ $page->active('/text/') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Typography</a>
+                                <a href="{{ $page->baseUrl }}/styles/text/fonts" class="block mb-2 {{ $page->active('/text/') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Typography</a>
                                 <ul class="pl-4 {{ $page->active('/text/') ? 'block' : 'hidden' }}">
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/fonts" class="{{ $page->active('/text/fonts') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Fonts</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/color" class="{{ $page->active('/text/color') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Color</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/sizing" class="{{ $page->active('/text/sizing') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Sizing</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/weight" class="{{ $page->active('/text/weight') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Weight</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/line-height" class="{{ $page->active('/text/line-height') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Line Height</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/letter-spacing" class="{{ $page->active('/text/letter-spacing') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Letter Spacing</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/wrapping" class="{{ $page->active('/text/wrapping') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Wrapping</a></li>
-                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/style" class="{{ $page->active('/text/style') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Style &amp; Decoration</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/fonts" class="{{ $page->active('/text/fonts') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Fonts</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/color" class="{{ $page->active('/text/color') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Color</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/sizing" class="{{ $page->active('/text/sizing') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Sizing</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/weight" class="{{ $page->active('/text/weight') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Weight</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/line-height" class="{{ $page->active('/text/line-height') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Line Height</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/letter-spacing" class="{{ $page->active('/text/letter-spacing') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Letter Spacing</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/wrapping" class="{{ $page->active('/text/wrapping') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Wrapping</a></li>
+                                    <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/style" class="{{ $page->active('/text/style') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Style &amp; Decoration</a></li>
                                 </ul>
                             </li>
-                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/visibility" class="{{ $page->active('/visibility') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Visibility</a></li>
-                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/z-index" class="{{ $page->active('/z-index') ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}">Z-Index</a></li>
+                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/visibility" class="{{ $page->active('/visibility') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Visibility</a></li>
+                            <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/z-index" class="{{ $page->active('/z-index') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Z-Index</a></li>
                         </ul>
                     </div>
                     <div class="mb-8">
                         <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Examples</p>
                         <ul>
-                            <li class="mb-3"><a class="{{ $page->getUrl() === '/examples/alerts' ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/examples/alerts">Alerts</a></li>
-                            <li class="mb-3"><a class="{{ $page->getUrl() === '/examples/cards' ? 'text-slate-darker font-semibold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/examples/cards">Cards</a></li>
+                            <li class="mb-3"><a class="{{ $page->getUrl() === '/examples/alerts' ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/examples/alerts">Alerts</a></li>
+                            <li class="mb-3"><a class="{{ $page->getUrl() === '/examples/cards' ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/examples/cards">Cards</a></li>
                         </ul>
                     </div>
                 </nav>

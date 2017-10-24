@@ -3,6 +3,8 @@ extends: _layouts.markdown
 title: "Flexbox"
 ---
 
+<div class="font-semibold text-slate-light text-base uppercase tracking-wide mb-2">Flexbox</div>
+
 # Flex Wrapping
 
 <div class="subnav">
@@ -13,7 +15,7 @@ title: "Flexbox"
 
 Tailwind provides a comprehensive set of Flexbox utilities out of the box to make it easy for you to implement complex layouts without having to write any new CSS.
 
-### No wrapping
+## No wrapping
 
 Use `.flex-nowrap` to prevent flex items from wrapping *(this is also the default behavior)*:
 
@@ -31,7 +33,7 @@ Use `.flex-nowrap` to prevent flex items from wrapping *(this is also the defaul
 </div>
 @endcomponent
 
-### Wrap normally
+## Wrap normally
 
 Use `.flex-wrap` to allow flex items to wrap:
 
@@ -49,7 +51,7 @@ Use `.flex-wrap` to allow flex items to wrap:
 </div>
 @endcomponent
 
-### Wrap reversed
+## Wrap reversed
 
 Use `.flex-wrap-reverse` to wrap flex items in the reverse direction:
 

@@ -3,6 +3,8 @@ extends: _layouts.markdown
 title: "Flex Containers"
 ---
 
+<div class="font-semibold text-slate-light text-base uppercase tracking-wide mb-2">Flexbox</div>
+
 # Flex Containers
 
 <div class="subnav">
@@ -13,7 +15,7 @@ title: "Flex Containers"
 
 Tailwind provides a comprehensive set of Flexbox utilities out of the box to make it easy for you to implement complex layouts without having to write any new CSS.
 
-### Flex
+## Flex
 
 Use `.flex` to create a block-level flex container:
 
@@ -25,7 +27,7 @@ Use `.flex` to create a block-level flex container:
 </div>
 @endcomponent
 
-### Inline flex
+## Inline flex
 
 Use `.inline-flex` to create an inline flex container:
 

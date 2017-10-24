@@ -3,6 +3,8 @@ extends: _layouts.markdown
 title: "Flexbox"
 ---
 
+<div class="font-semibold text-slate-light text-base uppercase tracking-wide mb-2">Flexbox</div>
+
 # Align Self
 
 <div class="subnav">
@@ -13,7 +15,7 @@ title: "Flexbox"
 
 Tailwind provides a comprehensive set of Flexbox utilities out of the box to make it easy for you to implement complex layouts without having to write any new CSS.
 
-### Start
+## Start
 
 Use `.self-start` to align an item to the start of the flex container's cross axis, despite the container's `align-items` value:
 
@@ -25,7 +27,7 @@ Use `.self-start` to align an item to the start of the flex container's cross ax
 </div>
 @endcomponent
 
-### End
+## End
 
 Use `.self-end` to align an item to the end of the flex container's cross axis, despite the container's `align-items` value:
 
@@ -37,7 +39,7 @@ Use `.self-end` to align an item to the end of the flex container's cross axis, 
 </div>
 @endcomponent
 
-### Center
+## Center
 
 Use `.self-center` to align an item along the center of the flex container's cross axis, despite the container's `align-items` value:
 
@@ -49,7 +51,7 @@ Use `.self-center` to align an item along the center of the flex container's cro
 </div>
 @endcomponent
 
-### Stretch
+## Stretch
 
 Use `.self-stretch` to stretch an item to fill the flex container's cross axis, despite the container's `align-items` value:
 

@@ -3,6 +3,8 @@ extends: _layouts.markdown
 title: "Flexbox"
 ---
 
+<div class="font-semibold text-slate-light text-base uppercase tracking-wide mb-2">Flexbox</div>
+
 # Align Content
 
 <div class="subnav">
@@ -13,7 +15,7 @@ title: "Flexbox"
 
 Tailwind provides a comprehensive set of Flexbox utilities out of the box to make it easy for you to implement complex layouts without having to write any new CSS.
 
-### Start
+## Start
 
 Use `.content-start` to pack lines in a flex container against the start of the main axis *(this is also the default behavior)*:
 
@@ -37,7 +39,7 @@ Use `.content-start` to pack lines in a flex container against the start of the 
 </div>
 @endcomponent
 
-### Center
+## Center
 
 Use `.content-center` to pack lines in a flex container in the center of the main axis:
 
@@ -61,7 +63,7 @@ Use `.content-center` to pack lines in a flex container in the center of the mai
 </div>
 @endcomponent
 
-### End
+## End
 
 Use `.content-end` to pack lines in a flex container against the end of the main axis:
 
@@ -85,7 +87,7 @@ Use `.content-end` to pack lines in a flex container against the end of the main
 </div>
 @endcomponent
 
-### Space between
+## Space between
 
 Use `.content-between` to distribute lines in a flex container such that there is an equal amount of space between each line:
 
@@ -109,7 +111,7 @@ Use `.content-between` to distribute lines in a flex container such that there i
 </div>
 @endcomponent
 
-### Space around
+## Space around
 
 Use `.content-around` to distribute lines in a flex container such that there is an equal amount of space around each line:
 
