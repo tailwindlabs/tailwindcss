@@ -15,9 +15,9 @@ title: "Flexbox"
 
 Tailwind provides a comprehensive set of Flexbox utilities out of the box to make it easy for you to implement complex layouts without having to write any new CSS.
 
-## Row
+<h2>Row <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span></h2>
 
-Use `.flex-row` to position flex items horizontally in the same direction as text *(this is also the default behavior)*:
+Use `.flex-row` to position flex items horizontally in the same direction as text:
 
 @component('_partials.code-sample')
 <div class="flex flex-row bg-smoke-light">

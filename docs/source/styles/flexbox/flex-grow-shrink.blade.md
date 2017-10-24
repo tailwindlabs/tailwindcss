@@ -15,6 +15,58 @@ title: "Flexbox"
 
 Tailwind provides a comprehensive set of Flexbox utilities out of the box to make it easy for you to implement complex layouts without having to write any new CSS.
 
+<h2>Initial <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span></h2>
+
+Use `.flex-initial` to allow a flex item to shrink but not grow, taking into account it's initial size:
+
+@component('_partials.code-sample')
+<p class="text-sm text-slate-light mb-1">Items don't grow when there's extra space</p>
+<div class="flex bg-smoke-light mb-6">
+    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+        Short
+    </div>
+    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+        Medium length
+    </div>
+</div>
+
+<p class="text-sm text-slate-light mb-1">Items shrink if possible when needed</p>
+<div class="flex bg-smoke-light">
+    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+        Short
+    </div>
+    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+        Medium length
+    </div>
+    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui ad labore ipsam, aut rem quo repellat esse tempore id, quidem
+    </div>
+</div>
+
+@slot('code')
+<div class="flex bg-smoke-light">
+    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+        Short
+    </div>
+    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+        Medium length
+    </div>
+</div>
+
+<div class="flex bg-smoke-light">
+    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+        Short
+    </div>
+    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+        Medium length
+    </div>
+    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui ad labore ipsam, aut rem quo repellat esse tempore id, quidem
+    </div>
+</div>
+@endslot
+@endcomponent
+
 ## Flex 1
 
 Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring it's initial size:
@@ -121,58 +173,6 @@ Use `.flex-none` to prevent a flex item from growing or shrinking:
         Item that can grow or shrink if needed
     </div>
 </div>
-@endcomponent
-
-## Initial
-
-Use `.flex-initial` to allow a flex item to shrink but not grow, taking into account it's initial size *(this is also the default behavior)*:
-
-@component('_partials.code-sample')
-<p class="text-sm text-slate-light mb-1">Items don't grow when there's extra space</p>
-<div class="flex bg-smoke-light mb-6">
-    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
-        Short
-    </div>
-    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
-        Medium length
-    </div>
-</div>
-
-<p class="text-sm text-slate-light mb-1">Items shrink if possible when needed</p>
-<div class="flex bg-smoke-light">
-    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
-        Short
-    </div>
-    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
-        Medium length
-    </div>
-    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui ad labore ipsam, aut rem quo repellat esse tempore id, quidem
-    </div>
-</div>
-
-@slot('code')
-<div class="flex bg-smoke-light">
-    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
-        Short
-    </div>
-    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
-        Medium length
-    </div>
-</div>
-
-<div class="flex bg-smoke-light">
-    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
-        Short
-    </div>
-    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
-        Medium length
-    </div>
-    <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui ad labore ipsam, aut rem quo repellat esse tempore id, quidem
-    </div>
-</div>
-@endslot
 @endcomponent
 
 ## Grow

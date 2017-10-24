@@ -15,9 +15,9 @@ title: "Flexbox"
 
 Tailwind provides a comprehensive set of Flexbox utilities out of the box to make it easy for you to implement complex layouts without having to write any new CSS.
 
-## Start
+<h2>Start <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span></h2>
 
-Use `.content-start` to pack lines in a flex container against the start of the main axis *(this is also the default behavior)*:
+Use `.content-start` to pack lines in a flex container against the start of the main axis:
 
 @component('_partials.code-sample')
 <div class="flex content-start flex-wrap bg-smoke-light h-48">
