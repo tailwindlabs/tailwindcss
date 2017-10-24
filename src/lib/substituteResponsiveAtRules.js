@@ -3,7 +3,7 @@ import postcss from 'postcss'
 import cloneNodes from '../util/cloneNodes'
 import buildMediaQuery from '../util/buildMediaQuery'
 
-export default function(options) {
+export default function({ screens }) {
   return function(css) {
     const rules = []
 
@@ -14,10 +14,10 @@ export default function(options) {
       atRule.remove()
     })
 
-    Object.keys(options.screens).forEach(screen => {
+    _.keys(screens).forEach(screen => {
       const mediaQuery = postcss.atRule({
         name: 'media',
-        params: buildMediaQuery(options.screens[screen]),
+        params: buildMediaQuery(screens[screen]),
       })
 
       mediaQuery.append(
