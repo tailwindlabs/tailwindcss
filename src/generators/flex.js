@@ -44,6 +44,9 @@ export default function() {
     'items-stretch': {
       'align-items': 'stretch',
     },
+    'self-auto': {
+      'align-self': 'auto',
+    },
     'self-start': {
       'align-self': 'flex-start',
     },
