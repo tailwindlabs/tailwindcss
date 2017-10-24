@@ -3136,10 +3136,6 @@ button,
   align-self: center;
 }
 
-.self-baseline {
-  align-self: baseline;
-}
-
 .self-stretch {
   align-self: stretch;
 }
@@ -5888,10 +5884,6 @@ button,
 
   .sm\:self-center {
     align-self: center;
-  }
-
-  .sm\:self-baseline {
-    align-self: baseline;
   }
 
   .sm\:self-stretch {
@@ -8645,10 +8637,6 @@ button,
     align-self: center;
   }
 
-  .md\:self-baseline {
-    align-self: baseline;
-  }
-
   .md\:self-stretch {
     align-self: stretch;
   }
@@ -11400,10 +11388,6 @@ button,
     align-self: center;
   }
 
-  .lg\:self-baseline {
-    align-self: baseline;
-  }
-
   .lg\:self-stretch {
     align-self: stretch;
   }
@@ -14153,10 +14137,6 @@ button,
 
   .xl\:self-center {
     align-self: center;
-  }
-
-  .xl\:self-baseline {
-    align-self: baseline;
   }
 
   .xl\:self-stretch {
