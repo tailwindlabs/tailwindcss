@@ -6,7 +6,6 @@ import postcss from 'postcss'
 import stylefmt from 'stylefmt'
 
 import defaultConfig from '../defaultConfig'
-import mergeConfig from './util/mergeConfig'
 
 import substituteResetAtRule from './lib/substituteResetAtRule'
 import evaluateTailwindFunctions from './lib/evaluateTailwindFunctions'
@@ -17,12 +16,10 @@ import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
 import substituteScreenAtRules from './lib/substituteScreenAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
 
-const plugin = postcss.plugin('tailwind', (options = {}) => {
-  if (_.isString(options)) {
-    options = require(path.resolve(options))
+const plugin = postcss.plugin('tailwind', (config = defaultConfig) => {
+  if (_.isString(config)) {
+    config = require(path.resolve(config))
   }
-
-  const config = mergeConfig(defaultConfig, options)
 
   return postcss([
     substituteResetAtRule(config),
