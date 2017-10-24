@@ -89,9 +89,6 @@ export default function() {
     'content-around': {
       'align-content': 'space-around',
     },
-    'content-stretch': {
-      'align-content': 'stretch',
-    },
     'flex-1': {
       'flex': '1'
     },

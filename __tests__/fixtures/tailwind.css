@@ -3180,10 +3180,6 @@ button,
   align-content: space-around;
 }
 
-.content-stretch {
-  align-content: stretch;
-}
-
 .flex-1 {
   flex: 1;
 }
@@ -5928,10 +5924,6 @@ button,
 
   .sm\:content-around {
     align-content: space-around;
-  }
-
-  .sm\:content-stretch {
-    align-content: stretch;
   }
 
   .sm\:flex-1 {
@@ -8681,10 +8673,6 @@ button,
     align-content: space-around;
   }
 
-  .md\:content-stretch {
-    align-content: stretch;
-  }
-
   .md\:flex-1 {
     flex: 1;
   }
@@ -11432,10 +11420,6 @@ button,
     align-content: space-around;
   }
 
-  .lg\:content-stretch {
-    align-content: stretch;
-  }
-
   .lg\:flex-1 {
     flex: 1;
   }
@@ -14181,10 +14165,6 @@ button,
 
   .xl\:content-around {
     align-content: space-around;
-  }
-
-  .xl\:content-stretch {
-    align-content: stretch;
   }
 
   .xl\:flex-1 {
