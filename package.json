@@ -17,7 +17,7 @@
     "prebabelify": "rimraf lib",
     "babelify": "babel src --out-dir lib",
     "prepare": "npm run babelify",
-    "build": "babel-node src/build.js",
+    "build": "npm run babelify && babel-node src/build.js",
     "watch": "nodemon -e js,css --watch src --exec 'babel-node src/build.js'",
     "test": "jest"
   },
