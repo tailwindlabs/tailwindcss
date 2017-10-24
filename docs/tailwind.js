@@ -241,7 +241,8 @@ module.exports = {
       '8': '2rem',
       '10': '2.5rem',
       '12': '3rem',
-      '16': '4rem'
+      '16': '4rem',
+      '80': '20rem',
     },
     negativeMargin: {
       'px': '1px',
