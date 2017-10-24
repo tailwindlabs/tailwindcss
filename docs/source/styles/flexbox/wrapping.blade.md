@@ -17,10 +17,10 @@ Tailwind provides a comprehensive set of Flexbox utilities out of the box to mak
 
 ## No wrapping
 
-Use `.flex-nowrap` to prevent flex items from wrapping *(this is also the default behavior)*:
+Use `.flex-no-wrap` to prevent flex items from wrapping *(this is also the default behavior)*:
 
 @component('_partials.code-sample')
-<div class="flex flex-nowrap bg-smoke-light">
+<div class="flex flex-no-wrap bg-smoke-light">
     <div class="w-2/5 p-2">
         <div class="text-slate text-center bg-smoke p-2">1</div>
     </div>
