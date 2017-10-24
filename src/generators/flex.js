@@ -56,9 +56,6 @@ export default function() {
     'self-center': {
       'align-self': 'center',
     },
-    'self-baseline': {
-      'align-self': 'baseline',
-    },
     'self-stretch': {
       'align-self': 'stretch',
     },
