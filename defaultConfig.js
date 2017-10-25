@@ -606,4 +606,20 @@ module.exports = {
     '100': '1',
   },
 
+
+  /*
+  |--------------------------------------------------------------------------
+  | Packages
+  |--------------------------------------------------------------------------
+  |
+  | Here is where you can define the configuration for any Tailwind packages
+  | you're using. These can be utility packs, component bundles, or even
+  | complete themes. You'll want to reference the package documentation
+  | for a list of settings available for it.
+  |
+  */
+
+  packages: {
+  },
+
 }
