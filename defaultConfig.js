@@ -119,7 +119,6 @@ var colors = {
 
 module.exports = {
 
-
   /*
   |--------------------------------------------------------------------------
   | Colors
@@ -161,186 +160,175 @@ module.exports = {
   },
 
 
-  text: {
+  /*
+  |--------------------------------------------------------------------------
+  | Fonts
+  |--------------------------------------------------------------------------
+  |
+  | Here is where you define your project's font stack, or font families.
+  | Keep in mind that Tailwind doesn't actually load any fonts for you.
+  | If you're using custom fonts you'll need to import them prior to
+  | defining them here.
+  |
+  | By default we provide a native font stack that works remarkably well on
+  | any device or OS you're using, since it just uses the default fonts
+  | provided by the platform.
+  |
+  */
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Fonts
-    |--------------------------------------------------------------------------
-    |
-    | Here is where you define your project's font stack, or font families.
-    | Keep in mind that Tailwind doesn't actually load any fonts for you.
-    | If you're using custom fonts you'll need to import them prior to
-    | defining them here.
-    |
-    | By default we provide a native font stack that works remarkably well on
-    | any device or OS you're using, since it just uses the default fonts
-    | provided by the platform.
-    |
-    */
-
-    fonts: {
-      'sans': '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
-      'serif': 'Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif',
-      'mono': 'Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-    },
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Text sizes
-    |--------------------------------------------------------------------------
-    |
-    | Here is where you define your text sizes. These will be available as
-    | .text-{size} utilities. Name these in whatever way makes the most
-    | sense to you. We use size names by default, but you're welcome to
-    | use a numeric scale or even something else entirely.
-    |
-    | By default Tailwind uses the "rem" unit type for most measurements.
-    | This allows you to set a root font size which all other sizes are
-    | then based on. That said, you are free to use whatever unit
-    | types you prefer, be it rems, ems, pixels or other.
-    |
-    */
-
-    sizes: {
-      'xs': '.75rem',     // 12px
-      'sm': '.875rem',    // 14px
-      'base': '1rem',     // 16px
-      'lg': '1.125rem',   // 18px
-      'xl': '1.25rem',    // 20px
-      '2xl': '1.75rem',   // 28px
-      '3xl': '2.375rem',  // 38px
-      '4xl': '2.875rem',  // 46px
-    },
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Font weights
-    |--------------------------------------------------------------------------
-    |
-    | Here is where you define your font weights. These will be available as
-    | .font-{weight} utilities. We've provided a list of common font weight
-    | names with their respective numeric scale values to get you started.
-    | It's unlikely that your project will require all of these, so we
-    | recommend removing those you don't.
-    |
-    */
-
-    weights: {
-      'hairline': 100,
-      'thin': 200,
-      'light': 300,
-      'normal': 400,
-      'medium': 500,
-      'semibold': 600,
-      'bold': 700,
-      'extrabold': 800,
-      'black': 900,
-    },
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Text leading (line height)
-    |--------------------------------------------------------------------------
-    |
-    | Here is where you define your line height values, or as we call them
-    | in Tailwind, leadings. These will be available as .leading-{size}
-    | utilities.
-    |
-    */
-
-    leading: {
-      'none': 1,
-      'tight': 1.25,
-      'normal': 1.5,
-      'loose': 2,
-    },
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Text tracking (spacing)
-    |--------------------------------------------------------------------------
-    |
-    | Here is where you define your text spacing values, or as we call them
-    | in Tailwind, tracking. These will be available as .tracking-{size}
-    | utilities.
-    |
-    */
-
-    tracking: {
-      'tight': '-0.05em',
-      'normal': '0',
-      'wide': '0.05em',
-    },
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Text colors
-    |--------------------------------------------------------------------------
-    |
-    | Add...
-    |
-    */
-
-    colors: colors,
-
+  fonts: {
+    'sans': '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
+    'serif': 'Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif',
+    'mono': 'Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
   },
 
-  backgrounds: {
 
+  /*
+  |--------------------------------------------------------------------------
+  | Text sizes
+  |--------------------------------------------------------------------------
+  |
+  | Here is where you define your text sizes. These will be available as
+  | .text-{size} utilities. Name these in whatever way makes the most
+  | sense to you. We use size names by default, but you're welcome to
+  | use a numeric scale or even something else entirely.
+  |
+  | By default Tailwind uses the "rem" unit type for most measurements.
+  | This allows you to set a root font size which all other sizes are
+  | then based on. That said, you are free to use whatever units you
+  | prefer, be it rems, ems, pixels or other.
+  |
+  */
 
-    /*
-    |--------------------------------------------------------------------------
-    | Background colors
-    |--------------------------------------------------------------------------
-    |
-    | Add...
-    |
-    */
-
-    colors: colors,
-
+  textSizes: {
+    'xs': '.75rem',     // 12px
+    'sm': '.875rem',    // 14px
+    'base': '1rem',     // 16px
+    'lg': '1.125rem',   // 18px
+    'xl': '1.25rem',    // 20px
+    '2xl': '1.75rem',   // 28px
+    '3xl': '2.375rem',  // 38px
+    '4xl': '2.875rem',  // 46px
   },
 
-  borders: {
 
+  /*
+  |--------------------------------------------------------------------------
+  | Font weights                   https://tailwindcss.com/docs/font-weights
+  |--------------------------------------------------------------------------
+  |
+  | Here is where you define your font weights. These will be available as
+  | .font-{weight} utilities. We've provided a list of common font weight
+  | names with their respective numeric scale values to get you started.
+  | It's unlikely that your project will require all of these, so we
+  | recommend removing those you don't need.
+  |
+  */
 
-    /*
-    |--------------------------------------------------------------------------
-    | Border widths
-    |--------------------------------------------------------------------------
-    |
-    | Add...
-    |
-    */
-
-    widths: {
-      default: '1px',
-      '0': '0',
-      '2': '2px',
-      '4': '4px',
-      '8': '8px',
-    },
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Border colors
-    |--------------------------------------------------------------------------
-    |
-    | Add...
-    |
-    */
-
-    colors: Object.assign({ default: colors['slate-lighter'] }, colors)
-
+  fontWeights: {
+    'hairline': 100,
+    'thin': 200,
+    'light': 300,
+    'normal': 400,
+    'medium': 500,
+    'semibold': 600,
+    'bold': 700,
+    'extrabold': 800,
+    'black': 900,
   },
+
+
+  /*
+  |--------------------------------------------------------------------------
+  | Leading (line height)          https://tailwindcss.com/docs/text-leading
+  |--------------------------------------------------------------------------
+  |
+  | Here is where you define your line height values, or as we call them
+  | in Tailwind, leadings.
+  |
+  | Class name: .leading-{size}
+  |
+  */
+
+  leading: {
+    'none': 1,
+    'tight': 1.25,
+    'normal': 1.5,
+    'loose': 2,
+  },
+
+
+  /*
+  |--------------------------------------------------------------------------
+  | Tracking (letter spacing)     https://tailwindcss.com/docs/text-tracking
+  |--------------------------------------------------------------------------
+  |
+  | Here is where you define your letter spacing values, or as we call them
+  | in Tailwind, tracking.
+  |
+  | Class name: .tracking-{size}
+  |
+  */
+
+  tracking: {
+    'tight': '-0.05em',
+    'normal': '0',
+    'wide': '0.05em',
+  },
+
+
+  /*
+  |--------------------------------------------------------------------------
+  | Text colors
+  |--------------------------------------------------------------------------
+  |
+  | Add...
+  |
+  */
+
+  textColors: colors,
+
+
+  /*
+  |--------------------------------------------------------------------------
+  | Background colors
+  |--------------------------------------------------------------------------
+  |
+  | Add...
+  |
+  */
+
+  backgroundColors: colors,
+
+
+  /*
+  |--------------------------------------------------------------------------
+  | Border widths
+  |--------------------------------------------------------------------------
+  |
+  | Add...
+  |
+  */
+
+  borderWidths: {
+    default: '1px',
+    '0': '0',
+    '2': '2px',
+    '4': '4px',
+    '8': '8px',
+  },
+
+
+  /*
+  |--------------------------------------------------------------------------
+  | Border colors
+  |--------------------------------------------------------------------------
+  |
+  | Add...
+  |
+  */
+
+  borderColors: Object.assign({ default: colors['slate-lighter'] }, colors)
 
 
   /*
@@ -352,7 +340,7 @@ module.exports = {
   |
   */
 
-  radiuses: {
+  borderRadius: {
     default: '.25rem',
     sm: '.125rem',
     lg: '.5rem',
@@ -360,215 +348,206 @@ module.exports = {
   },
 
 
-  sizing: {
+  /*
+  |--------------------------------------------------------------------------
+  | Width
+  |--------------------------------------------------------------------------
+  |
+  | Add...
+  |
+  */
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Width
-    |--------------------------------------------------------------------------
-    |
-    | Add...
-    |
-    */
-
-    width: {
-      'auto': 'auto',
-      'px': '1px',
-      '1': '0.25rem',
-      '2': '0.5rem',
-      '3': '0.75rem',
-      '4': '1rem',
-      '6': '1.5rem',
-      '8': '2rem',
-      '10': '2.5rem',
-      '12': '3rem',
-      '16': '4rem',
-      '24': '6rem',
-      '32': '8rem',
-      '48': '12rem',
-      '64': '16rem',
-      '1/2': '50%',
-      '1/3': '33.33333%',
-      '2/3': '66.66667%',
-      '1/4': '25%',
-      '3/4': '75%',
-      '1/5': '20%',
-      '2/5': '40%',
-      '3/5': '60%',
-      '4/5': '80%',
-      '1/6': '16.66667%',
-      '5/6': '83.33333%',
-      'full': '100%',
-      'screen': '100vw'
-    },
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Height
-    |--------------------------------------------------------------------------
-    |
-    | Add...
-    |
-    */
-
-    height: {
-      'auto': 'auto',
-      'px': '1px',
-      '1': '0.25rem',
-      '2': '0.5rem',
-      '3': '0.75rem',
-      '4': '1rem',
-      '6': '1.5rem',
-      '8': '2rem',
-      '10': '2.5rem',
-      '12': '3rem',
-      '16': '4rem',
-      '24': '6rem',
-      '32': '8rem',
-      '48': '12rem',
-      '64': '16rem',
-      'full': '100%',
-      'screen': '100vh'
-    },
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Minimum width
-    |--------------------------------------------------------------------------
-    |
-    | Add...
-    |
-    */
-
-    minWidth: {
-      '0': '0',
-      'full': '100%',
-    },
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Minimum height
-    |--------------------------------------------------------------------------
-    |
-    | Add...
-    |
-    */
-
-    minHeight: {
-      '0': '0',
-      'full': '100%',
-      'screen': '100vh'
-    },
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Maximum width
-    |--------------------------------------------------------------------------
-    |
-    | Add...
-    |
-    */
-
-    maxWidth: {
-      'xs': '20rem',
-      'sm': '30rem',
-      'md': '40rem',
-      'lg': '50rem',
-      'xl': '60rem',
-      '2xl': '70rem',
-      '3xl': '80rem',
-      '4xl': '90rem',
-      '5xl': '100rem',
-      'full': '100%',
-    },
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Maximum height
-    |--------------------------------------------------------------------------
-    |
-    | Add...
-    |
-    */
-
-    maxHeight: {
-      'full': '100%',
-      'screen': '100vh'
-    },
-
+  width: {
+    'auto': 'auto',
+    'px': '1px',
+    '1': '0.25rem',
+    '2': '0.5rem',
+    '3': '0.75rem',
+    '4': '1rem',
+    '6': '1.5rem',
+    '8': '2rem',
+    '10': '2.5rem',
+    '12': '3rem',
+    '16': '4rem',
+    '24': '6rem',
+    '32': '8rem',
+    '48': '12rem',
+    '64': '16rem',
+    '1/2': '50%',
+    '1/3': '33.33333%',
+    '2/3': '66.66667%',
+    '1/4': '25%',
+    '3/4': '75%',
+    '1/5': '20%',
+    '2/5': '40%',
+    '3/5': '60%',
+    '4/5': '80%',
+    '1/6': '16.66667%',
+    '5/6': '83.33333%',
+    'full': '100%',
+    'screen': '100vw'
   },
 
-  spacing: {
+
+  /*
+  |--------------------------------------------------------------------------
+  | Height
+  |--------------------------------------------------------------------------
+  |
+  | Add...
+  |
+  */
+
+  height: {
+    'auto': 'auto',
+    'px': '1px',
+    '1': '0.25rem',
+    '2': '0.5rem',
+    '3': '0.75rem',
+    '4': '1rem',
+    '6': '1.5rem',
+    '8': '2rem',
+    '10': '2.5rem',
+    '12': '3rem',
+    '16': '4rem',
+    '24': '6rem',
+    '32': '8rem',
+    '48': '12rem',
+    '64': '16rem',
+    'full': '100%',
+    'screen': '100vh'
+  },
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Padding
-    |--------------------------------------------------------------------------
-    |
-    | Add...
-    |
-    */
+  /*
+  |--------------------------------------------------------------------------
+  | Minimum width
+  |--------------------------------------------------------------------------
+  |
+  | Add...
+  |
+  */
 
-    padding: {
-      'px': '1px',
-      '0': '0',
-      '1': '0.25rem',
-      '2': '0.5rem',
-      '3': '0.75rem',
-      '4': '1rem',
-      '6': '1.5rem',
-      '8': '2rem',
-    },
+  minWidth: {
+    '0': '0',
+    'full': '100%',
+  },
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Margin
-    |--------------------------------------------------------------------------
-    |
-    | Add...
-    |
-    */
+  /*
+  |--------------------------------------------------------------------------
+  | Minimum height
+  |--------------------------------------------------------------------------
+  |
+  | Add...
+  |
+  */
 
-    margin: {
-      'px': '1px',
-      '0': '0',
-      '1': '0.25rem',
-      '2': '0.5rem',
-      '3': '0.75rem',
-      '4': '1rem',
-      '6': '1.5rem',
-      '8': '2rem',
-    },
+  minHeight: {
+    '0': '0',
+    'full': '100%',
+    'screen': '100vh'
+  },
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Negative margin
-    |--------------------------------------------------------------------------
-    |
-    | Add...
-    |
-    */
+  /*
+  |--------------------------------------------------------------------------
+  | Maximum width
+  |--------------------------------------------------------------------------
+  |
+  | Add...
+  |
+  */
 
-    negativeMargin: {
-      'px': '1px',
-      '0': '0',
-      '1': '0.25rem',
-      '2': '0.5rem',
-      '3': '0.75rem',
-      '4': '1rem',
-      '6': '1.5rem',
-      '8': '2rem',
-    },
+  maxWidth: {
+    'xs': '20rem',
+    'sm': '30rem',
+    'md': '40rem',
+    'lg': '50rem',
+    'xl': '60rem',
+    '2xl': '70rem',
+    '3xl': '80rem',
+    '4xl': '90rem',
+    '5xl': '100rem',
+    'full': '100%',
+  },
 
+
+  /*
+  |--------------------------------------------------------------------------
+  | Maximum height
+  |--------------------------------------------------------------------------
+  |
+  | Add...
+  |
+  */
+
+  maxHeight: {
+    'full': '100%',
+    'screen': '100vh'
+  },
+
+
+  /*
+  |--------------------------------------------------------------------------
+  | Padding
+  |--------------------------------------------------------------------------
+  |
+  | Add...
+  |
+  */
+
+  padding: {
+    'px': '1px',
+    '0': '0',
+    '1': '0.25rem',
+    '2': '0.5rem',
+    '3': '0.75rem',
+    '4': '1rem',
+    '6': '1.5rem',
+    '8': '2rem',
+  },
+
+
+  /*
+  |--------------------------------------------------------------------------
+  | Margin
+  |--------------------------------------------------------------------------
+  |
+  | Add...
+  |
+  */
+
+  margin: {
+    'px': '1px',
+    '0': '0',
+    '1': '0.25rem',
+    '2': '0.5rem',
+    '3': '0.75rem',
+    '4': '1rem',
+    '6': '1.5rem',
+    '8': '2rem',
+  },
+
+
+  /*
+  |--------------------------------------------------------------------------
+  | Negative margin
+  |--------------------------------------------------------------------------
+  |
+  | Add...
+  |
+  */
+
+  negativeMargin: {
+    'px': '1px',
+    '0': '0',
+    '1': '0.25rem',
+    '2': '0.5rem',
+    '3': '0.75rem',
+    '4': '1rem',
+    '6': '1.5rem',
+    '8': '2rem',
   },
 
 
@@ -625,6 +604,6 @@ module.exports = {
     '50': '.5',
     '75': '.75',
     '100': '1',
-  }
+  },
 
 }
