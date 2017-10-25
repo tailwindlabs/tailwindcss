@@ -126,8 +126,8 @@ module.exports = {
   |--------------------------------------------------------------------------
   |
   | The color palette defined above is also assigned to the "colors" key of
-  | your Tailwind config. This makes it easy to access them your CSS using
-  | Tailwind's config helper. For example:
+  | your Tailwind config. This makes it easy to access them in your CSS
+  | using Tailwind's config helper. For example:
   |
   | .error { color: config('colors.red') }
   |
@@ -144,7 +144,8 @@ module.exports = {
   | Screens in Tailwind are essentially CSS media queries. They define the
   | responsive breakpoints for your project. By default Tailwind takes a
   | "mobile first" approach, where each screen size represents a minimum
-  | viewport width.
+  | viewport width. Feel free to have as few or as many screens as you
+  | want, naming them in whatever way you'd prefer for your project.
   |
   | Tailwind also allows for more complex screen definitions, which can be
   | useful in certain situations. Be sure to read the full responsive
@@ -182,7 +183,7 @@ module.exports = {
     fonts: {
       'sans': '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
       'serif': 'Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif',
-      'mono': '"SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+      'mono': 'Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
     },
 
 
