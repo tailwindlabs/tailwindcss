@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import defineClass from '../util/defineClass'
 
-export default function ({ text }) {
-  return _.map(text.leading, (value, modifier) => {
+export default function ({ leading }) {
+  return _.map(leading, (value, modifier) => {
     return defineClass(`leading-${modifier}`, {
       'line-height': `${value}`,
     })

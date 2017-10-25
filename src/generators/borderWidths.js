@@ -44,11 +44,11 @@ function sizedBorder(size, width, color) {
   })
 }
 
-module.exports = function({colors, borders}) {
-  const color = borders.colors.default
+module.exports = function({ borderWidths, borderColors }) {
+  const color = borderColors.default
 
   return _.flatten([
-    defaultBorder(borders.widths.default, color),
-    ..._.map(_.omit(borders.widths, 'default'), (width, size) => sizedBorder(size, width, color)),
+    defaultBorder(borderWidths.default, color),
+    ..._.map(_.omit(borderWidths, 'default'), (width, size) => sizedBorder(size, width, color)),
   ])
 }

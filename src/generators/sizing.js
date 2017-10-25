@@ -49,13 +49,13 @@ function defineMaxHeights(heights) {
   })
 }
 
-export default function ({ sizing }) {
+export default function (config) {
   return _.flatten([
-    defineWidths(sizing.width),
-    defineMinWidths(sizing.minWidth),
-    defineMaxWidths(sizing.maxWidth),
-    defineHeights(sizing.height),
-    defineMinHeights(sizing.minHeight),
-    defineMaxHeights(sizing.maxHeight),
+    defineWidths(config.width),
+    defineMinWidths(config.minWidth),
+    defineMaxWidths(config.maxWidth),
+    defineHeights(config.height),
+    defineMinHeights(config.minHeight),
+    defineMaxHeights(config.maxHeight),
   ])
 }
