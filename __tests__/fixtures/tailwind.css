@@ -2053,12 +2053,12 @@ button,
   overflow: scroll;
 }
 
-.overflow-scroll-x {
+.overflow-x-scroll {
   overflow-x: auto;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
-.overflow-scroll-y {
+.overflow-y-scroll {
   overflow-y: auto;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
@@ -4799,12 +4799,12 @@ button,
     overflow: scroll;
   }
 
-  .sm\:overflow-scroll-x {
+  .sm\:overflow-x-scroll {
     overflow-x: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
-  .sm\:overflow-scroll-y {
+  .sm\:overflow-y-scroll {
     overflow-y: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
@@ -7546,12 +7546,12 @@ button,
     overflow: scroll;
   }
 
-  .md\:overflow-scroll-x {
+  .md\:overflow-x-scroll {
     overflow-x: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
-  .md\:overflow-scroll-y {
+  .md\:overflow-y-scroll {
     overflow-y: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
@@ -10293,12 +10293,12 @@ button,
     overflow: scroll;
   }
 
-  .lg\:overflow-scroll-x {
+  .lg\:overflow-x-scroll {
     overflow-x: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
-  .lg\:overflow-scroll-y {
+  .lg\:overflow-y-scroll {
     overflow-y: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
@@ -13040,12 +13040,12 @@ button,
     overflow: scroll;
   }
 
-  .xl\:overflow-scroll-x {
+  .xl\:overflow-x-scroll {
     overflow-x: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
-  .xl\:overflow-scroll-y {
+  .xl\:overflow-y-scroll {
     overflow-y: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
