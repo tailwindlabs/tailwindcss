@@ -321,7 +321,7 @@ module.exports = {
   |
   | Add...
   |
-  | Class name: .border-{width}
+  | Class name: .border{-side?}{-width?}
   |
   */
 
@@ -532,7 +532,7 @@ module.exports = {
   |
   | Add...
   |
-  | Class name: .p-{size}
+  | Class name: .p{-side?}-{size}
   |
   */
 
@@ -555,7 +555,7 @@ module.exports = {
   |
   | Add...
   |
-  | Class name: .m-{size}
+  | Class name: .m{-side?}-{size}
   |
   */
 
@@ -578,7 +578,7 @@ module.exports = {
   |
   | Add...
   |
-  | Class name: .-m-{size}
+  | Class name: .-m{-side?}-{size}
   |
   */
 
