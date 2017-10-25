@@ -265,7 +265,9 @@ module.exports = {
     | Text tracking (spacing)
     |--------------------------------------------------------------------------
     |
-    | Add...
+    | Here is where you define your text spacing values, or as we call them
+    | in Tailwind, tracking. These will be available as .tracking-{size}
+    | utilities.
     |
     */
 
