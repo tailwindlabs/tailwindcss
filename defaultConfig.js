@@ -20,8 +20,8 @@ View the full documentation at https://tailwindcss.com.
 |
 | This variable contains the default Tailwind config. You don't have to
 | use it, but it can sometimes be helpful to have available. For
-| example, you may choose to merge your custom values with some
-| of the Tailwind defaults.
+| example, you may choose to merge your custom configuration
+| values with some of the Tailwind defaults.
 |
 */
 
@@ -246,7 +246,9 @@ module.exports = {
     | Text leading (line height)
     |--------------------------------------------------------------------------
     |
-    | Add...
+    | Here is where you define your line height values, or as we call them
+    | in Tailwind, leadings. These will be available as .leading-{size}
+    | utilities.
     |
     */
 
