@@ -348,7 +348,9 @@ module.exports = {
   | Border widths                    https://tailwindcss.com/docs/border-widths
   |-----------------------------------------------------------------------------
   |
-  | Add...
+  | Here is where you define your border widths. Take note that border widths
+  | require a special "default" value set as well. This is the width that
+  | will be used when you do not specify a border color.
   |
   | Class name: .border{-side?}{-width?}
   |
@@ -388,9 +390,11 @@ module.exports = {
   | Border radius                    https://tailwindcss.com/docs/border-radius
   |-----------------------------------------------------------------------------
   |
-  | Add...
+  | Here is where you define your border radius values. Take note that a
+  | default radius is required. This is the value used when you use the
+  | non-suffixed version of this utility (.rounded).
   |
-  | Class name: .rounded-{size}
+  | Class name: .rounded-{radius?}
   |
   */
 
@@ -407,7 +411,15 @@ module.exports = {
   | Width                                    https://tailwindcss.com/docs/width
   |-----------------------------------------------------------------------------
   |
-  | Add...
+  | Here is where you define your width utility sizes. These can be percentage
+  | based, pixels, rems, or any other units. By default we provide a sensible
+  | rem based numeric scale, a percentage based fraction scale, plus some
+  | other common use-cases like "full" and "screen". You can, of course,
+  | modify these values as needed.
+  |
+  | It's also worth mentioning that Tailwind automatically escapes invalid
+  | CSS class name characters, which allows you to have awesome classes
+  | like .w-2/3.
   |
   | Class name: .w-{size}
   |
@@ -450,7 +462,10 @@ module.exports = {
   | Height                                  https://tailwindcss.com/docs/height
   |-----------------------------------------------------------------------------
   |
-  | Add...
+  | Here is where you define your height utility sizes. These can be percentage
+  | based, pixels, rems, or any other units. By default we provide a sensible
+  | rem based numeric scale plus some other common use-cases like "full" and
+  | "screen". You can, of course, modify these values as needed.
   |
   | Class name: .h-{size}
   |
@@ -482,7 +497,10 @@ module.exports = {
   | Minimum width                        https://tailwindcss.com/docs/min-width
   |-----------------------------------------------------------------------------
   |
-  | Add...
+  | Here is where you define your minimum width utility sizes. These can be
+  | percentage based, pixels, rems, or any other units. We provide a couple
+  | common use-cases by default. You can, of course, modify these values
+  | as needed.
   |
   | Class name: .min-w-{size}
   |
@@ -499,7 +517,10 @@ module.exports = {
   | Minimum height                      https://tailwindcss.com/docs/min-height
   |-----------------------------------------------------------------------------
   |
-  | Add...
+  | Here is where you define your minimum height utility sizes. These can be
+  | percentage based, pixels, rems, or any other units. We provide a few
+  | common use-cases by default. You can, of course, modify these values
+  | as needed.
   |
   | Class name: .min-h-{size}
   |
@@ -517,7 +538,11 @@ module.exports = {
   | Maximum width                        https://tailwindcss.com/docs/max-width
   |-----------------------------------------------------------------------------
   |
-  | Add...
+  | Here is where you define your maximum width utility sizes. These can
+  | be percentage based, pixels, rems, or any other units. By default
+  | we provide a sensible rem based scale and a "full width" size,
+  | which is basically a reset utility. You can, of course,
+  | modify these values as needed.
   |
   | Class name: .max-w-{size}
   |
@@ -542,7 +567,10 @@ module.exports = {
   | Maximum height                      https://tailwindcss.com/docs/max-height
   |-----------------------------------------------------------------------------
   |
-  | Add...
+  | Here is where you define your maximum height utility sizes. These can
+  | be percentage based, pixels, rems, or any other units. We provide a
+  | couple common use-cases by default. You can, of course, modify
+  | these values as needed.
   |
   | Class name: .max-h-{size}
   |
