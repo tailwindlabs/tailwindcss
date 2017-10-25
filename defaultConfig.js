@@ -587,7 +587,11 @@ module.exports = {
   | Padding                                https://tailwindcss.com/docs/padding
   |-----------------------------------------------------------------------------
   |
-  | Add...
+  | Here is where you define your padding utility sizes. These can be
+  | percentage based, pixels, rems, or any other units. By default we
+  | provide a sensible rem based numeric scale plus a couple other
+  | common use-cases like "1px". You can, of course, modify these
+  | values as needed.
   |
   | Class name: .p{-side?}-{size}
   |
@@ -610,7 +614,11 @@ module.exports = {
   | Margin                                  https://tailwindcss.com/docs/margin
   |-----------------------------------------------------------------------------
   |
-  | Add...
+  | Here is where you define your margin utility sizes. These can be
+  | percentage based, pixels, rems, or any other units. By default we
+  | provide a sensible rem based numeric scale plus a couple other
+  | common use-cases like "1px". You can, of course, modify these
+  | values as needed.
   |
   | Class name: .m{-side?}-{size}
   |
@@ -633,7 +641,11 @@ module.exports = {
   | Negative margin                https://tailwindcss.com/docs/negative-margin
   |-----------------------------------------------------------------------------
   |
-  | Add...
+  | Here is where you define your negative margin utility sizes. These can
+  | be percentage based, pixels, rems, or any other units. By default we
+  | provide matching values to the padding scale since these utilities
+  | generally get used together. You can, of course, modify these
+  | values as needed.
   |
   | Class name: .-m{-side?}-{size}
   |
