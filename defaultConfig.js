@@ -92,8 +92,8 @@ module.exports = {
       'xl': '1.25rem',    // 20px
       '2xl': '1.5rem',    // 24px
       '3xl': '1.875rem',  // 30px
-      '4xl': '2.25rem',  // 36px
-      '5xl': '3rem',  // 48px
+      '4xl': '2.25rem',   // 36px
+      '5xl': '3rem',      // 48px
     },
     weights: {
       'hairline': 100,
