@@ -152,10 +152,10 @@ module.exports = {
   */
 
   screens: {
-    sm: '576px',
-    md: '768px',
-    lg: '992px',
-    xl: '1200px',
+    'sm': '576px',
+    'md': '768px',
+    'lg': '992px',
+    'xl': '1200px',
   },
 
 
@@ -367,9 +367,9 @@ module.exports = {
 
   borderRadius: {
     default: '.25rem',
-    sm: '.125rem',
-    lg: '.5rem',
-    pill: '9999px',
+    'sm': '.125rem',
+    'lg': '.5rem',
+    'pill': '9999px',
   },
 
 
@@ -521,7 +521,7 @@ module.exports = {
 
   maxHeight: {
     'full': '100%',
-    'screen': '100vh'
+    'screen': '100vh',
   },
 
 
@@ -607,8 +607,8 @@ module.exports = {
 
   shadows: {
     default: '0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.15)',
-    'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
-    'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
+    'md': ['0 3px 6px rgba(0,0,0,.12)', '0 3px 6px rgba(0,0,0,.13)'],
+    'lg': ['0 10px 20px rgba(0,0,0,.13)', '0 6px 6px rgba(0,0,0,.13)'],
     'inner': 'inset 0 1px 2px rgba(0, 0, 0, 0.05)',
     'none': 'none',
   },
