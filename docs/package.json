@@ -11,6 +11,7 @@
   },
   "private": true,
   "devDependencies": {
+    "anchor-js": "^4.1.0",
     "cross-env": "^3.2.3",
     "escape-html": "^1.0.3",
     "laravel-mix": "^1.5.1",

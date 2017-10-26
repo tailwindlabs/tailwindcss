@@ -86,6 +86,10 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
+anchor-js@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/anchor-js/-/anchor-js-4.1.0.tgz#0a8d904cf5e46b2a9601fe062b95fbf022242f53"
+
 ansi-html@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/ansi-html/-/ansi-html-0.0.7.tgz#813584021962a9e9e6fd039f940d12f56ca7859e"
