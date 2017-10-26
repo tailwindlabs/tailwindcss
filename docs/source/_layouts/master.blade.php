@@ -15,6 +15,69 @@
         {{-- <link rel="stylesheet" href="https://use.typekit.net/iqy1okj.css"> --}}
         <link rel="stylesheet" href="/css/main.css">
         <script type="text/javascript" src="/js/prism.js" defer=""></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            $.when($.ready).then(function() {
+              $('.nav').on('click', 'a', function (event) {
+
+                if (event.metaKey) {
+                    return
+                }
+
+                // Prevent following link
+                event.preventDefault()
+
+                // Get desired link
+                var href = $(this).attr('href')
+
+                // Make Ajax request to get the page content
+                $.ajax({
+                  method: 'GET',
+                  url: href,
+                  cache: false,
+                  dataType: 'html',
+                }).done(function(html) {
+
+                  // Parse the HTML response
+                  var title = $(html).filter('title').text()
+                  var nav = $(html).find('.nav').html()
+                  var content = $(html).find('.content').html()
+
+                  // Update the page
+                  $('title').text(title)
+                  $('.nav').html(nav)
+                  $('.content').html(content)
+
+                  // Rerun PrismJS
+                  Prism.highlightAll();
+
+                  // Scroll to the top of the page
+                  $(document).scrollTop(0)
+
+                  // Add page load to brower history
+                  window.history.pushState({
+                    "title": title,
+                    "nav": $(html).find('.nav').html(),
+                    "content": $(html).find('.content').html()
+                  }, '', href)
+                })
+              })
+
+              // Load page history (for back/forward nav)
+              window.onpopstate = function(e) {
+                  if(e.state){
+
+                    // Update the page
+                    $('title').text(e.state.title)
+                    $('.nav').html(e.state.nav)
+                    $('.content').html(e.state.content)
+
+                    // Rerun PrismJS
+                    Prism.highlightAll();
+                  }
+              };
+            });
+        </script>
     </head>
     <body class="font-sans font-normal text-slate-darker leading-normal">
         <div id="app" class="min-h-screen">
@@ -34,7 +97,7 @@
                             <svg class="pointer-events-none text-slate h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></svg>
                         </div>
                     </div>
-                    <nav class="text-base">
+                    <nav class="nav text-base">
                         <div class="mb-8">
                             <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Introduction</p>
                             <ul>
@@ -175,7 +238,7 @@
                 </div>
             </div>
             <div class="ml-80">
-                <div class="px-6 py-8 w-full max-w-lg mx-auto">
+                <div class="content px-6 py-8 w-full max-w-lg mx-auto">
                     @yield('body')
                 </div>
             </div>
