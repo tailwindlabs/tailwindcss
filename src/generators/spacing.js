@@ -93,10 +93,10 @@ function defineNegativeMargin(negativeMargin) {
   })
 }
 
-export default function ({ spacing }) {
+export default function ({ padding, margin, negativeMargin }) {
   return _.flatten([
-    definePadding(spacing.padding),
-    defineMargin(spacing.margin),
+    definePadding(padding),
+    defineMargin(margin),
     defineClasses({
       'mr-auto': {
         'margin-right': 'auto',
@@ -109,6 +109,6 @@ export default function ({ spacing }) {
         'margin-right': 'auto',
       },
     }),
-    defineNegativeMargin(spacing.negativeMargin),
+    defineNegativeMargin(negativeMargin),
   ])
 }
