@@ -88,7 +88,7 @@ Here's a bunch of examples:
 ### 3D
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 border-b-4 border-blue-dark hover:border-blue-darker rounded">
+<button class="bg-blue hover:bg-blue-light text-white font-bold py-2 px-4 border-b-4 border-blue-dark hover:border-blue rounded">
     Button
 </button>
 @endcomponent
