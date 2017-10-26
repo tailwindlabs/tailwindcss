@@ -24,7 +24,7 @@ View the full documentation at https://tailwindcss.com.
 |
 */
 
-var defaultConfig = require('tailwindcss').defaultConfig
+var defaultConfig = require('tailwindcss').defaultConfig()
 
 
 /*

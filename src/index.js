@@ -5,8 +5,6 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import stylefmt from 'stylefmt'
 
-import defaultConfig from '../defaultConfig'
-
 import substituteResetAtRule from './lib/substituteResetAtRule'
 import evaluateTailwindFunctions from './lib/evaluateTailwindFunctions'
 import generateUtilities from './lib/generateUtilities'
@@ -16,7 +14,11 @@ import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
 import substituteScreenAtRules from './lib/substituteScreenAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
 
-const plugin = postcss.plugin('tailwind', (config = defaultConfig) => {
+const plugin = postcss.plugin('tailwind', (config) => {
+  if (_.isUndefined(config)) {
+    config = require('../defaultConfig')
+  }
+
   if (_.isString(config)) {
     config = require(path.resolve(config))
   }
@@ -34,6 +36,8 @@ const plugin = postcss.plugin('tailwind', (config = defaultConfig) => {
   ])
 })
 
-plugin.defaultConfig = _.cloneDeep(defaultConfig)
+plugin.defaultConfig = function () {
+  _.cloneDeep(require('../defaultConfig'))
+}
 
 module.exports = plugin
