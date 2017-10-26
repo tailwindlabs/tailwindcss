@@ -176,7 +176,7 @@
                 </div>
             </div>
             <div class="ml-80">
-                <div id="content" class="px-6 py-8 w-full max-w-lg mx-auto">
+                <div id="content" class="px-6 py-8 w-full max-w-xl mx-auto">
                     <div id="app">
                         @yield('body')
                     </div>

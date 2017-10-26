@@ -9,9 +9,51 @@ title: "Color Palette"
 - Document how to customize your color palette, using regular JS features in your config file to avoid duplication, merging colors, etc.
 - Talk about naming, how it's easy to use color-based names or hierarchy-based names, whatever floats your boat
 
-<div class="flex flex-wrap -mx-4 mb-4">
+
+<div class="flex flex-wrap -mx-4 mb-8">
   <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
+      <div class="text-white bg-grey px-6 py-6 text-sm font-bold relative shadow z-10">
+        Grey
+      </div>
+      <div class="text-black bg-white px-6 py-3 text-sm font-semibold">
+        White
+        </div>
+      <div class="text-grey-darkest bg-grey-lightest px-6 py-3 text-sm font-semibold">
+        Lightest
+      </div>
+      <div class="text-grey-darkest bg-grey-lighter px-6 py-3 text-sm font-semibold">
+        Lighter
+      </div>
+      <div class="text-grey-darkest bg-grey-light px-6 py-3 text-sm font-semibold">
+        Light
+      </div>
+      <div class="text-white bg-grey px-6 py-3 text-sm font-semibold">
+        Grey
+      </div>
+      <div class="text-white bg-grey-dark px-6 py-3 text-sm font-semibold">
+        Dark
+      </div>
+      <div class="text-white bg-grey-darker px-6 py-3 text-sm font-semibold">
+        Darker
+      </div>
+      <div class="text-white bg-grey-darkest px-6 py-3 text-sm font-semibold">
+        Darkest
+      </div>
+      <div class="text-white bg-black px-6 py-3 text-sm font-semibold">
+        Black
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="flex flex-wrap -mx-4 mb-8">
+  <div class="w-full md:w-1/3 px-4">
+    <div class="rounded overflow-hidden">
+      <div class="text-white bg-red px-6 py-6 text-sm font-bold relative shadow z-10">
+        Red
+      </div>
       <div class="text-red-darkest bg-red-lightest px-6 py-3 text-sm font-semibold">
         Lightest
       </div>
@@ -37,6 +79,9 @@ title: "Color Palette"
   </div>
   <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
+      <div class="text-white bg-orange px-6 py-6 text-sm font-bold relative shadow z-10">
+        Orange
+      </div>
       <div class="text-orange-darkest bg-orange-lightest px-6 py-3 text-sm font-semibold">
         Lightest
       </div>
@@ -46,7 +91,7 @@ title: "Color Palette"
       <div class="text-orange-darkest bg-orange-light px-6 py-3 text-sm font-semibold">
         Light
       </div>
-      <div class="text-orange-darkest bg-orange px-6 py-3 text-sm font-semibold">
+      <div class="text-white bg-orange px-6 py-3 text-sm font-semibold">
         Orange
       </div>
       <div class="text-white bg-orange-dark px-6 py-3 text-sm font-semibold">
@@ -62,6 +107,9 @@ title: "Color Palette"
   </div>
   <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
+      <div class="text-yellow-darkest bg-yellow px-6 py-6 text-sm font-bold relative shadow z-10">
+        Yellow
+      </div>
       <div class="text-yellow-darkest bg-yellow-lightest px-6 py-3 text-sm font-semibold">
         Lightest
       </div>
@@ -87,9 +135,12 @@ title: "Color Palette"
   </div>
 </div>
 
-<div class="flex flex-wrap -mx-4 mb-4">
+<div class="flex flex-wrap -mx-4 mb-8">
   <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
+      <div class="text-white bg-green px-6 py-6 text-sm font-bold relative shadow z-10">
+        Green
+      </div>
       <div class="text-green-darkest bg-green-lightest px-6 py-3 text-sm font-semibold">
         Lightest
       </div>
@@ -115,6 +166,9 @@ title: "Color Palette"
   </div>
   <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
+      <div class="text-white bg-teal px-6 py-6 text-sm font-bold relative shadow z-10">
+        Teal
+      </div>
       <div class="text-teal-darkest bg-teal-lightest px-6 py-3 text-sm font-semibold">
         Lightest
       </div>
@@ -140,13 +194,16 @@ title: "Color Palette"
   </div>
   <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
+      <div class="text-white bg-blue px-6 py-6 text-sm font-bold relative shadow z-10">
+        Blue
+      </div>
       <div class="text-blue-darkest bg-blue-lightest px-6 py-3 text-sm font-semibold">
         Lightest
       </div>
       <div class="text-blue-darkest bg-blue-lighter px-6 py-3 text-sm font-semibold">
         Lighter
       </div>
-      <div class="text-blue-darkest bg-blue-light px-6 py-3 text-sm font-semibold">
+      <div class="text-white bg-blue-light px-6 py-3 text-sm font-semibold">
         Light
       </div>
       <div class="text-white bg-blue px-6 py-3 text-sm font-semibold">
@@ -165,16 +222,19 @@ title: "Color Palette"
   </div>
 </div>
 
-<div class="flex flex-wrap -mx-4 mb-4">
+<div class="flex flex-wrap -mx-4 mb-8">
   <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
+      <div class="text-white bg-indigo px-6 py-6 text-sm font-bold relative shadow z-10">
+        Indigo
+      </div>
       <div class="text-indigo-darkest bg-indigo-lightest px-6 py-3 text-sm font-semibold">
         Lightest
       </div>
       <div class="text-indigo-darkest bg-indigo-lighter px-6 py-3 text-sm font-semibold">
         Lighter
       </div>
-      <div class="text-indigo-darkest bg-indigo-light px-6 py-3 text-sm font-semibold">
+      <div class="text-white bg-indigo-light px-6 py-3 text-sm font-semibold">
         Light
       </div>
       <div class="text-white bg-indigo px-6 py-3 text-sm font-semibold">
@@ -193,13 +253,16 @@ title: "Color Palette"
   </div>
   <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
+      <div class="text-white bg-purple px-6 py-6 text-sm font-bold relative shadow z-10">
+        Purple
+      </div>
       <div class="text-purple-darkest bg-purple-lightest px-6 py-3 text-sm font-semibold">
         Lightest
       </div>
       <div class="text-purple-darkest bg-purple-lighter px-6 py-3 text-sm font-semibold">
         Lighter
       </div>
-      <div class="text-purple-darkest bg-purple-light px-6 py-3 text-sm font-semibold">
+      <div class="text-white bg-purple-light px-6 py-3 text-sm font-semibold">
         Light
       </div>
       <div class="text-white bg-purple px-6 py-3 text-sm font-semibold">
@@ -218,13 +281,16 @@ title: "Color Palette"
   </div>
   <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
+      <div class="text-white bg-pink px-6 py-6 text-sm font-bold relative shadow z-10">
+        Pink
+      </div>
       <div class="text-pink-darkest bg-pink-lightest px-6 py-3 text-sm font-semibold">
         Lightest
       </div>
       <div class="text-pink-darkest bg-pink-lighter px-6 py-3 text-sm font-semibold">
         Lighter
       </div>
-      <div class="text-pink-darkest bg-pink-light px-6 py-3 text-sm font-semibold">
+      <div class="text-white bg-pink-light px-6 py-3 text-sm font-semibold">
         Light
       </div>
       <div class="text-white bg-pink px-6 py-3 text-sm font-semibold">
