@@ -1,12 +1,12 @@
 {
   "scripts": {
-    "dev": "npm run compile-css-js && jigsaw build",
+    "dev": "npm run compile-css-js && ./vendor/bin/jigsaw build",
     "compile-css-js": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch-js": "chokidar 'source/_assets/js/**/*' --initial=true -c 'npm run compile-css-js'",
     "watch-css": "chokidar 'tailwind.js' 'source/_assets/less/**/*' --initial=true -c 'npm run compile-css-js'",
-    "watch-templates": "chokidar 'source/**/*' --initial=true -c 'jigsaw build'",
+    "watch-templates": "chokidar 'source/**/*' --initial=true -c './vendor/bin/jigsaw build'",
     "watch": "concurrently \"npm run watch-css\" \"npm run watch-js\" \"npm run watch-templates\"",
-    "prod": "npm run production && jigsaw build production",
+    "prod": "npm run production && ./vendor/bin/jigsaw build production",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "private": true,
