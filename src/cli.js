@@ -59,7 +59,7 @@ program.command('init [filename]')
     }
 
     const output = fs.readFileSync(path.resolve(__dirname + '/../defaultConfig.js'), 'utf8')
-    fs.outputFileSync(destination, output)
+    fs.outputFileSync(destination, output.replace('// var defaultConfig', 'var defaultConfig'))
     process.exit()
   })
 

@@ -1,4 +1,4 @@
-var config = require('tailwindcss').defaultConfig()
+var config = require('../defaultConfig')
 
 config.colors = {
   'black': '#000000',
