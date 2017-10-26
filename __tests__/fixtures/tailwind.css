@@ -612,15 +612,19 @@ button,
 }
 
 .text-2xl {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
 }
 
 .text-3xl {
-  font-size: 2.375rem;
+  font-size: 1.875rem;
 }
 
 .text-4xl {
-  font-size: 2.875rem;
+  font-size: 2.25rem;
+}
+
+.text-5xl {
+  font-size: 3rem;
 }
 
 .font-hairline,
@@ -2053,12 +2057,12 @@ button,
   overflow: scroll;
 }
 
-.overflow-scroll-x {
+.overflow-x-scroll {
   overflow-x: auto;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
-.overflow-scroll-y {
+.overflow-y-scroll {
   overflow-y: auto;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
@@ -3358,15 +3362,19 @@ button,
   }
 
   .sm\:text-2xl {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
 
   .sm\:text-3xl {
-    font-size: 2.375rem;
+    font-size: 1.875rem;
   }
 
   .sm\:text-4xl {
-    font-size: 2.875rem;
+    font-size: 2.25rem;
+  }
+
+  .sm\:text-5xl {
+    font-size: 3rem;
   }
 
   .sm\:font-hairline,
@@ -4799,12 +4807,12 @@ button,
     overflow: scroll;
   }
 
-  .sm\:overflow-scroll-x {
+  .sm\:overflow-x-scroll {
     overflow-x: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
-  .sm\:overflow-scroll-y {
+  .sm\:overflow-y-scroll {
     overflow-y: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
@@ -6105,15 +6113,19 @@ button,
   }
 
   .md\:text-2xl {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
 
   .md\:text-3xl {
-    font-size: 2.375rem;
+    font-size: 1.875rem;
   }
 
   .md\:text-4xl {
-    font-size: 2.875rem;
+    font-size: 2.25rem;
+  }
+
+  .md\:text-5xl {
+    font-size: 3rem;
   }
 
   .md\:font-hairline,
@@ -7546,12 +7558,12 @@ button,
     overflow: scroll;
   }
 
-  .md\:overflow-scroll-x {
+  .md\:overflow-x-scroll {
     overflow-x: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
-  .md\:overflow-scroll-y {
+  .md\:overflow-y-scroll {
     overflow-y: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
@@ -8852,15 +8864,19 @@ button,
   }
 
   .lg\:text-2xl {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
 
   .lg\:text-3xl {
-    font-size: 2.375rem;
+    font-size: 1.875rem;
   }
 
   .lg\:text-4xl {
-    font-size: 2.875rem;
+    font-size: 2.25rem;
+  }
+
+  .lg\:text-5xl {
+    font-size: 3rem;
   }
 
   .lg\:font-hairline,
@@ -10293,12 +10309,12 @@ button,
     overflow: scroll;
   }
 
-  .lg\:overflow-scroll-x {
+  .lg\:overflow-x-scroll {
     overflow-x: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
-  .lg\:overflow-scroll-y {
+  .lg\:overflow-y-scroll {
     overflow-y: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
@@ -11599,15 +11615,19 @@ button,
   }
 
   .xl\:text-2xl {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
 
   .xl\:text-3xl {
-    font-size: 2.375rem;
+    font-size: 1.875rem;
   }
 
   .xl\:text-4xl {
-    font-size: 2.875rem;
+    font-size: 2.25rem;
+  }
+
+  .xl\:text-5xl {
+    font-size: 3rem;
   }
 
   .xl\:font-hairline,
@@ -13040,12 +13060,12 @@ button,
     overflow: scroll;
   }
 
-  .xl\:overflow-scroll-x {
+  .xl\:overflow-x-scroll {
     overflow-x: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
-  .xl\:overflow-scroll-y {
+  .xl\:overflow-y-scroll {
     overflow-y: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }

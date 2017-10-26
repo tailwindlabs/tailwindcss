@@ -7,7 +7,7 @@ export default function() {
     'mask': { overflow: 'hidden' },
     'overflow-visible': { overflow: 'visible' },
     'overflow-scroll': { overflow: 'scroll' },
-    'overflow-scroll-x': { 'overflow-x': 'auto', '-ms-overflow-style': '-ms-autohiding-scrollbar' },
-    'overflow-scroll-y': { 'overflow-y': 'auto', '-ms-overflow-style': '-ms-autohiding-scrollbar' },
+    'overflow-x-scroll': { 'overflow-x': 'auto', '-ms-overflow-style': '-ms-autohiding-scrollbar' },
+    'overflow-y-scroll': { 'overflow-y': 'auto', '-ms-overflow-style': '-ms-autohiding-scrollbar' },
   })
 }
