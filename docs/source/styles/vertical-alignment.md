@@ -1,9 +1,9 @@
 ---
 extends: _layouts.markdown
-title: "Alignment"
+title: "Vertical Alignment"
 ---
 
-# Alignment
+# Vertical Alignment
 
 <div class="subnav">
     <a class="subnav-link" href="#usage">Usage</a>

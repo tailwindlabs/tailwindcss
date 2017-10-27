@@ -77,7 +77,6 @@
                             <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Styles</p>
                             <ul class="mb-8">
                                 <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/base" class="{{ $page->active('/styles/base') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Base</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/alignment" class="{{ $page->active('/styles/alignment') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Alignment</a></li>
                                 <li class="mb-3">
                                     <a href="{{ $page->baseUrl }}/styles/backgrounds/color" class="block mb-2 {{ $page->active('/styles/backgrounds/') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Backgrounds</a>
                                     <ul class="pl-4 {{ $page->active('/styles/backgrounds/') ? 'block' : 'hidden' }}">
@@ -161,6 +160,7 @@
                                         <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/text/style" class="{{ $page->active('/text/style') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Style &amp; Decoration</a></li>
                                     </ul>
                                 </li>
+                                <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/vertical-alignment" class="{{ $page->active('/styles/vertical-alignment') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Vertical Alignment</a></li>
                                 <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/visibility" class="{{ $page->active('/styles/visibility') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Visibility</a></li>
                                 <li class="mb-3"><a href="{{ $page->baseUrl }}/styles/z-index" class="{{ $page->active('/styles/z-index') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Z-Index</a></li>
                             </ul>
