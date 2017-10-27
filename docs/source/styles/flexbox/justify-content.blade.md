@@ -6,15 +6,15 @@ category: "Flexbox"
 
 # Justify Content
 
-<div class="subnav">
-    <a class="subnav-link" href="#usage">Usage</a>
-    <a class="subnav-link" href="#responsive">Responsive</a>
-    <a class="subnav-link" href="#customizing">Customizing</a>
+<div class="text-xl text-slate-light">
+    Utilities for controlling flex items are positioned along a container's main axis.
 </div>
 
-Tailwind provides a comprehensive set of Flexbox utilities out of the box to make it easy for you to implement complex layouts without having to write any new CSS.
+<div class="subnav">
+    <a class="subnav-link" href="#responsive">Responsive</a>
+</div>
 
-<h2>Start <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span></h2>
+### Start <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
 
 Use `.justify-start` to justify items against the start of the flex container's main axis:
 
@@ -26,7 +26,7 @@ Use `.justify-start` to justify items against the start of the flex container's 
 </div>
 @endcomponent
 
-## Center
+### Center
 
 Use `.justify-center` to justify items along the center of the flex container's main axis:
 
@@ -38,7 +38,7 @@ Use `.justify-center` to justify items along the center of the flex container's 
 </div>
 @endcomponent
 
-## End
+### End
 
 Use `.justify-end` to justify items against the end of the flex container's main axis:
 
@@ -51,7 +51,7 @@ Use `.justify-end` to justify items against the end of the flex container's main
 @endcomponent
 
 
-## Space between
+### Space between
 
 Use `.justify-between` to justify items along the flex container's main axis such that there is an equal amount of space between each item:
 
@@ -63,7 +63,7 @@ Use `.justify-between` to justify items along the flex container's main axis suc
 </div>
 @endcomponent
 
-## Space around
+### Space around
 
 Use `.justify-around` to justify items along the flex container's main axis such that there is an equal amount of space around each item:
 
@@ -73,4 +73,53 @@ Use `.justify-around` to justify items along the flex container's main axis such
     <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
     <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
+@endcomponent
+
+## Responsive
+
+To justify flex items at a specific breakpoint, add a `{breakpoint}:` prefix to any existing utility class. For example, use `md:justify-between` to apply the `justify-between` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](#) documentation.
+
+@component('_partials.responsive-code-sample')
+@slot('none')
+<div class="flex justify-start bg-smoke-light">
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+</div>
+@endslot
+@slot('sm')
+<div class="flex justify-center bg-smoke-light">
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+</div>
+@endslot
+@slot('md')
+<div class="flex justify-end bg-smoke-light">
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+</div>
+@endslot
+@slot('lg')
+<div class="flex justify-between bg-smoke-light">
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+</div>
+@endslot
+@slot('xl')
+<div class="flex justify-around bg-smoke-light">
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+</div>
+@endslot
+@slot('code')
+<div class="none:justify-start sm:justify-center md:justify-end lg:justify-between xl:justify-around ...">
+    <!-- ... -->
+</div>
+@endslot
 @endcomponent
