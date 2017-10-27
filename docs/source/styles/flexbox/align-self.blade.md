@@ -6,15 +6,15 @@ category: "Flexbox"
 
 # Align Self
 
-<div class="subnav">
-    <a class="subnav-link" href="#usage">Usage</a>
-    <a class="subnav-link" href="#responsive">Responsive</a>
-    <a class="subnav-link" href="#customizing">Customizing</a>
+<div class="text-xl text-slate-light">
+    Utilities for controlling how an individual flex item is positioned along its container's cross axis.
 </div>
 
-Tailwind provides a comprehensive set of Flexbox utilities out of the box to make it easy for you to implement complex layouts without having to write any new CSS.
+<div class="subnav">
+    <a class="subnav-link" href="#responsive">Responsive</a>
+</div>
 
-<h2>Auto <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span></h2>
+### Auto <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
 
 Use `.self-auto` to align an item based on the flex container's `align-items` value:
 
@@ -26,7 +26,7 @@ Use `.self-auto` to align an item based on the flex container's `align-items` va
 </div>
 @endcomponent
 
-## Start
+### Start
 
 Use `.self-start` to align an item to the start of the flex container's cross axis, despite the container's `align-items` value:
 
@@ -38,7 +38,7 @@ Use `.self-start` to align an item to the start of the flex container's cross ax
 </div>
 @endcomponent
 
-## Center
+### Center
 
 Use `.self-center` to align an item along the center of the flex container's cross axis, despite the container's `align-items` value:
 
@@ -50,7 +50,7 @@ Use `.self-center` to align an item along the center of the flex container's cro
 </div>
 @endcomponent
 
-## End
+### End
 
 Use `.self-end` to align an item to the end of the flex container's cross axis, despite the container's `align-items` value:
 
@@ -62,7 +62,7 @@ Use `.self-end` to align an item to the end of the flex container's cross axis, 
 </div>
 @endcomponent
 
-## Stretch
+### Stretch
 
 Use `.self-stretch` to stretch an item to fill the flex container's cross axis, despite the container's `align-items` value:
 
@@ -72,4 +72,55 @@ Use `.self-stretch` to stretch an item to fill the flex container's cross axis, 
     <div class="self-stretch flex-1 text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">2</div>
     <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
+@endcomponent
+
+## Responsive
+
+To control the alignment of a flex item at a specific breakpoint, add a `{breakpoint}:` prefix to any existing utility class. For example, use `md:self-end` to apply the `self-end` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](#) documentation.
+
+@component('_partials.responsive-code-sample')
+@slot('none')
+<div class="flex items-stretch bg-smoke-light h-24">
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+    <div class="self-auto flex-1 text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">2</div>
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+</div>
+@endslot
+@slot('sm')
+<div class="flex items-stretch bg-smoke-light h-24">
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+    <div class="self-start flex-1 text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">2</div>
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+</div>
+@endslot
+@slot('md')
+<div class="flex items-stretch bg-smoke-light h-24">
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+    <div class="self-end flex-1 text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">2</div>
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+</div>
+@endslot
+@slot('lg')
+<div class="flex items-stretch bg-smoke-light h-24">
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+    <div class="self-center flex-1 text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">2</div>
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+</div>
+@endslot
+@slot('xl')
+<div class="flex items-stretch bg-smoke-light h-24">
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+    <div class="self-stretch flex-1 text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">2</div>
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+</div>
+@endslot
+@slot('code')
+<div class="items-stretch ...">
+    <!-- ... -->
+    <div class="none:self-auto sm:self-start md:self-end lg:self-center xl:self-stretch ...">2</div>
+    <!-- ... -->
+</div>
+@endslot
 @endcomponent

@@ -239,7 +239,7 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @slot('code')
-<div class="none:content-start sm:content-end md:content-center lg:content-between xl:content-around">
+<div class="none:content-start sm:content-end md:content-center lg:content-between xl:content-around ...">
     <!-- ... -->
 </div>
 @endslot
