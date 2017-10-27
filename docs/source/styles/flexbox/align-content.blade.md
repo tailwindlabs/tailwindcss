@@ -1,6 +1,6 @@
 ---
 extends: _layouts.markdown
-title: "Flexbox"
+title: "Align Content - Flexbox"
 category: "Flexbox"
 ---
 
