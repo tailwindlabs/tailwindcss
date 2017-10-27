@@ -1,4 +1,4 @@
-<div>
+<div class="mt-8">
     <responsive-code-sample code="{{ e($code) }}">
         <div slot="none">{{ $none }}</div>
         <div slot="sm">{{ $sm }}</div>

@@ -92,17 +92,16 @@ pre[class*="language-"] {
 .token.symbol,
 .token.deleted {
     @apply .text-blue-dark;
-    // color: #905;
 }
 
 // .token.selector,
 // .token.attr-name,
-// .token.string,
 // .token.char,
 // .token.builtin,
-// .token.inserted {
-//     color: #690;
-// }
+// .token.inserted,
+.token.string {
+    @apply .text-purple;
+}
 
 .token.operator,
 .token.entity,

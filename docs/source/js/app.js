@@ -11683,6 +11683,21 @@ exports.default = {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
 /* 11 */
@@ -11778,16 +11793,15 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "flex items-end justify-end pb-2" }, [
+    _c("div", { staticClass: "flex items-end justify-center mb-2 bg-white" }, [
       _c(
-        "svg",
+        "span",
         {
-          staticClass: "h-7 inline-block cursor-pointer mr-4",
+          staticClass: "inline-block text-center cursor-pointer mr-8",
           class:
             _vm.activeScreen === "none"
               ? "text-slate-dark"
               : "text-slate-light",
-          attrs: { viewBox: "0 0 10 28", xmlns: "http://www.w3.org/2000/svg" },
           on: {
             click: function($event) {
               _vm.activeScreen = "none"
@@ -11795,23 +11809,36 @@ var render = function() {
           }
         },
         [
-          _c("path", {
-            attrs: {
-              d:
-                "M1.5 12h7a1.5 1.5 0 0 1 1.5 1.5v13A1.5 1.5 0 0 1 8.5 28h-7A1.5 1.5 0 0 1 0 26.5v-13A1.5 1.5 0 0 1 1.5 12zM1 15v10h8V15H1zm4 12.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM4 13v1h2v-1H4z",
-              "fill-rule": "evenodd"
-            }
-          })
+          _c(
+            "svg",
+            {
+              staticClass: "block mx-auto mb-1 h-6",
+              attrs: {
+                viewBox: "0 0 10 28",
+                xmlns: "http://www.w3.org/2000/svg"
+              }
+            },
+            [
+              _c("path", {
+                attrs: {
+                  d:
+                    "M1.5 12h7a1.5 1.5 0 0 1 1.5 1.5v13A1.5 1.5 0 0 1 8.5 28h-7A1.5 1.5 0 0 1 0 26.5v-13A1.5 1.5 0 0 1 1.5 12zM1 15v10h8V15H1zm4 12.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM4 13v1h2v-1H4z",
+                  "fill-rule": "evenodd"
+                }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c("p", { staticClass: "text-xs" }, [_vm._v("all")])
         ]
       ),
       _vm._v(" "),
       _c(
-        "svg",
+        "span",
         {
-          staticClass: "h-7 inline-block cursor-pointer mr-4",
+          staticClass: "inline-block text-center cursor-pointer mr-8",
           class:
             _vm.activeScreen === "sm" ? "text-slate-dark" : "text-slate-light",
-          attrs: { viewBox: "0 0 14 28", xmlns: "http://www.w3.org/2000/svg" },
           on: {
             click: function($event) {
               _vm.activeScreen = "sm"
@@ -11819,23 +11846,36 @@ var render = function() {
           }
         },
         [
-          _c("path", {
-            attrs: {
-              d:
-                "M1.5 6h11A1.5 1.5 0 0 1 14 7.5v19a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 0 26.5v-19A1.5 1.5 0 0 1 1.5 6zM1 9v16h12V9H1zm6 18.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM7 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z",
-              "fill-rule": "evenodd"
-            }
-          })
+          _c(
+            "svg",
+            {
+              staticClass: "block mx-auto mb-1 h-6",
+              attrs: {
+                viewBox: "0 0 14 28",
+                xmlns: "http://www.w3.org/2000/svg"
+              }
+            },
+            [
+              _c("path", {
+                attrs: {
+                  d:
+                    "M1.5 6h11A1.5 1.5 0 0 1 14 7.5v19a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 0 26.5v-19A1.5 1.5 0 0 1 1.5 6zM1 9v16h12V9H1zm6 18.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM7 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z",
+                  "fill-rule": "evenodd"
+                }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c("p", { staticClass: "text-xs" }, [_vm._v("sm")])
         ]
       ),
       _vm._v(" "),
       _c(
-        "svg",
+        "span",
         {
-          staticClass: "h-7 inline-block cursor-pointer mr-4",
+          staticClass: "inline-block text-center cursor-pointer mr-8",
           class:
             _vm.activeScreen === "md" ? "text-slate-dark" : "text-slate-light",
-          attrs: { viewBox: "0 0 26 28", xmlns: "http://www.w3.org/2000/svg" },
           on: {
             click: function($event) {
               _vm.activeScreen = "md"
@@ -11843,23 +11883,36 @@ var render = function() {
           }
         },
         [
-          _c("path", {
-            attrs: {
-              d:
-                "M26 26.5a1.5 1.5 0 0 1-1.5 1.5h-23A1.5 1.5 0 0 1 0 26.5v-14A1.5 1.5 0 0 1 1.5 11h23a1.5 1.5 0 0 1 1.5 1.5v14zm-3 .5V12H3v15h20zm1.5-6.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-23-.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z",
-              "fill-rule": "evenodd"
-            }
-          })
+          _c(
+            "svg",
+            {
+              staticClass: "block mx-auto mb-1 h-6",
+              attrs: {
+                viewBox: "0 0 26 28",
+                xmlns: "http://www.w3.org/2000/svg"
+              }
+            },
+            [
+              _c("path", {
+                attrs: {
+                  d:
+                    "M26 26.5a1.5 1.5 0 0 1-1.5 1.5h-23A1.5 1.5 0 0 1 0 26.5v-14A1.5 1.5 0 0 1 1.5 11h23a1.5 1.5 0 0 1 1.5 1.5v14zm-3 .5V12H3v15h20zm1.5-6.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-23-.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z",
+                  "fill-rule": "evenodd"
+                }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c("p", { staticClass: "text-xs" }, [_vm._v("md")])
         ]
       ),
       _vm._v(" "),
       _c(
-        "svg",
+        "span",
         {
-          staticClass: "h-7 inline-block cursor-pointer mr-4",
+          staticClass: "inline-block text-center cursor-pointer mr-8",
           class:
             _vm.activeScreen === "lg" ? "text-slate-dark" : "text-slate-light",
-          attrs: { viewBox: "0 0 38 28", xmlns: "http://www.w3.org/2000/svg" },
           on: {
             click: function($event) {
               _vm.activeScreen = "lg"
@@ -11867,23 +11920,36 @@ var render = function() {
           }
         },
         [
-          _c("path", {
-            attrs: {
-              d:
-                "M34 26h4v1c-1.333.667-2.667 1-4 1H4c-1.333 0-2.667-.333-4-1v-1h4V7.5A1.5 1.5 0 0 1 5.5 6h27A1.5 1.5 0 0 1 34 7.5V26zM6 8v18h26V8H6z",
-              "fill-rule": "evenodd"
-            }
-          })
+          _c(
+            "svg",
+            {
+              staticClass: "block mx-auto mb-1 h-6",
+              attrs: {
+                viewBox: "0 0 38 28",
+                xmlns: "http://www.w3.org/2000/svg"
+              }
+            },
+            [
+              _c("path", {
+                attrs: {
+                  d:
+                    "M34 26h4v1c-1.333.667-2.667 1-4 1H4c-1.333 0-2.667-.333-4-1v-1h4V7.5A1.5 1.5 0 0 1 5.5 6h27A1.5 1.5 0 0 1 34 7.5V26zM6 8v18h26V8H6z",
+                  "fill-rule": "evenodd"
+                }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c("p", { staticClass: "text-xs" }, [_vm._v("lg")])
         ]
       ),
       _vm._v(" "),
       _c(
-        "svg",
+        "span",
         {
-          staticClass: "h-7 inline-block cursor-pointer",
+          staticClass: "inline-block text-center cursor-pointer",
           class:
             _vm.activeScreen === "xl" ? "text-slate-dark" : "text-slate-light",
-          attrs: { viewBox: "0 0 36 28", xmlns: "http://www.w3.org/2000/svg" },
           on: {
             click: function($event) {
               _vm.activeScreen = "xl"
@@ -11891,12 +11957,26 @@ var render = function() {
           }
         },
         [
-          _c("path", {
-            attrs: {
-              d:
-                "M20.857 24l.857 3H24v1H12v-1h2.286l.857-3H1.5A1.5 1.5 0 0 1 0 22.5v-21A1.5 1.5 0 0 1 1.5 0h33A1.5 1.5 0 0 1 36 1.5v21a1.5 1.5 0 0 1-1.5 1.5H20.857zM2 2v18h32V2H2z"
-            }
-          })
+          _c(
+            "svg",
+            {
+              staticClass: "block mx-auto mb-1 h-6",
+              attrs: {
+                viewBox: "0 0 36 28",
+                xmlns: "http://www.w3.org/2000/svg"
+              }
+            },
+            [
+              _c("path", {
+                attrs: {
+                  d:
+                    "M20.857 24l.857 3H24v1H12v-1h2.286l.857-3H1.5A1.5 1.5 0 0 1 0 22.5v-21A1.5 1.5 0 0 1 1.5 0h33A1.5 1.5 0 0 1 36 1.5v21a1.5 1.5 0 0 1-1.5 1.5H20.857zM2 2v18h32V2H2z"
+                }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c("p", { staticClass: "text-xs" }, [_vm._v("xl")])
         ]
       )
     ]),

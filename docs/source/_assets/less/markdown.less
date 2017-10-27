@@ -21,8 +21,11 @@
     @apply .border-b .border-smoke;
   }
 
-  > a, a& {
+  > a, > p a, a& {
     @apply .text-blue;
+    &:hover {
+      @apply .underline;
+    }
   }
 
   > p code, p& code& {
@@ -64,7 +67,7 @@
     @apply .text-slate-darker;
     @apply .leading-none;
     @apply .font-semibold;
-    @apply .text-xl;
+    @apply .text-2xl;
   }
 
   > h3, h3& {
@@ -73,7 +76,7 @@
     @apply .text-slate-darker;
     @apply .leading-none;
     @apply .font-semibold;
-    @apply .text-base;
+    @apply .text-xl;
   }
 
   > p, p&, > blockquote > p {
@@ -104,6 +107,6 @@
   > :not(pre) > code[class*="language-"], > pre[class*="language-"], pre[class*="language-"]& {
     @apply .bg-smoke-lighter;
     @apply .text-sm;
-    @apply .leading-loose;
+    @apply .leading-normal;
   }
 }
