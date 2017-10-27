@@ -6,15 +6,16 @@ category: "Flexbox"
 
 # Flex, Grow, & Shrink
 
-<div class="subnav">
-    <a class="subnav-link" href="#usage">Usage</a>
-    <a class="subnav-link" href="#responsive">Responsive</a>
-    <a class="subnav-link" href="#customizing">Customizing</a>
+
+<div class="text-xl text-slate-light">
+    Utilities for controlling how flex items grow and shrink.
 </div>
 
-Tailwind provides a comprehensive set of Flexbox utilities out of the box to make it easy for you to implement complex layouts without having to write any new CSS.
+<div class="subnav">
+    <a class="subnav-link" href="#responsive">Responsive</a>
+</div>
 
-<h2>Initial <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span></h2>
+### Initial <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
 
 Use `.flex-initial` to allow a flex item to shrink but not grow, taking into account it's initial size:
 
@@ -66,7 +67,7 @@ Use `.flex-initial` to allow a flex item to shrink but not grow, taking into acc
 @endslot
 @endcomponent
 
-## Flex 1
+### Flex 1
 
 Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring it's initial size:
 
@@ -111,7 +112,7 @@ Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring it's i
 @endslot
 @endcomponent
 
-## Auto
+### Auto
 
 Use `.flex-auto` to allow a flex item to grow and shrink, taking into account it's initial size:
 
@@ -156,7 +157,7 @@ Use `.flex-auto` to allow a flex item to grow and shrink, taking into account it
 @endslot
 @endcomponent
 
-## None
+### None
 
 Use `.flex-none` to prevent a flex item from growing or shrinking:
 
@@ -174,7 +175,7 @@ Use `.flex-none` to prevent a flex item from growing or shrinking:
 </div>
 @endcomponent
 
-## Grow
+### Grow
 
 Use `.flex-grow` to allow a flex item to grow to fill any available space:
 
@@ -192,7 +193,7 @@ Use `.flex-grow` to allow a flex item to grow to fill any available space:
 </div>
 @endcomponent
 
-## Don't grow
+### Don't grow
 
 Use `.flex-no-grow` to prevent a flex item from growing:
 
@@ -210,7 +211,7 @@ Use `.flex-no-grow` to prevent a flex item from growing:
 </div>
 @endcomponent
 
-## Shrink
+### Shrink
 
 Use `.flex-shrink` to allow a flex item to shrink if needed:
 
@@ -228,7 +229,7 @@ Use `.flex-shrink` to allow a flex item to shrink if needed:
 </div>
 @endcomponent
 
-## Don't shrink
+### Don't shrink
 
 Use `.flex-no-shrink` to prevent a flex item from shrinking:
 
@@ -244,4 +245,87 @@ Use `.flex-no-shrink` to prevent a flex item from shrinking:
         Item that can shrink if needed
     </div>
 </div>
+@endcomponent
+
+## Responsive
+
+To control how a flex item grows or shrinks at a specific breakpoint, add a `{breakpoint}:` prefix to any existing utility class. For example, use `md:flex-no-shrink` to apply the `flex-no-shrink` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](#) documentation.
+
+@component('_partials.responsive-code-sample')
+@slot('none')
+<div class="flex bg-smoke-light">
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+        Item that can grow or shrink if needed
+    </div>
+    <div class="flex-none text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+        Responsive flex item
+    </div>
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+        Item that can grow or shrink if needed
+    </div>
+</div>
+@endslot
+@slot('sm')
+<div class="flex bg-smoke-light">
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+        Item that can grow or shrink if needed
+    </div>
+    <div class="flex-grow text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+        Responsive flex item
+    </div>
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+        Item that can grow or shrink if needed
+    </div>
+</div>
+@endslot
+@slot('md')
+<div class="flex bg-smoke-light">
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+        Item that can grow or shrink if needed
+    </div>
+    <div class="flex-shrink text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+        Responsive flex item
+    </div>
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+        Item that can grow or shrink if needed
+    </div>
+</div>
+@endslot
+@slot('lg')
+<div class="flex bg-smoke-light">
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+        Item that can grow or shrink if needed
+    </div>
+    <div class="flex-1 text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+        Responsive flex item
+    </div>
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+        Item that can grow or shrink if needed
+    </div>
+</div>
+@endslot
+@slot('xl')
+<div class="flex bg-smoke-light">
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+        Item that can grow or shrink if needed
+    </div>
+    <div class="flex-initial text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+        Responsive flex item
+    </div>
+    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+        Item that can grow or shrink if needed
+    </div>
+</div>
+@endslot
+@slot('code')
+<div class="flex ...">
+    <!-- ... -->
+    <div class="none:flex-none sm:flex-grow md:flex-shrink lg:flex-1 xl:flex-auto ...">
+        Item that cannot grow or shrink
+    </div>
+    <!-- ... -->
+</div>
+@endslot
 @endcomponent
