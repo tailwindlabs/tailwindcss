@@ -108,16 +108,19 @@ Use `.fixed` to position an element relative to the browser window.
 Offsets are calculated relative to the viewport and the element *will* act as a position reference for absolutely positioned children.
 
 @component('_partials.code-sample')
-<div class="rounded overflow-hidden shadow-md max-w-md mx-auto mt-4 mb-4">
-  <div class="border-t border-l border-r border-smoke bg-smoke-light flex px-4 py-2">
-    <div class="mr-4">
-      <span class="inline-block rounded-pill bg-smoke-dark h-3 w-3 mr-2"></span>
-      <span class="inline-block rounded-pill bg-smoke-dark h-3 w-3 mr-2"></span>
+<div class="rounded-b overflow-hidden max-w-md mx-auto mt-4 mb-4">
+  <div class="rounded-t border-t border-l border-r border-smoke bg-smoke-light flex px-4 py-3">
+    <div class="mr-6">
+      <span class="inline-block rounded-pill bg-smoke-dark h-3 w-3 mr-1"></span>
+      <span class="inline-block rounded-pill bg-smoke-dark h-3 w-3 mr-1"></span>
       <span class="inline-block rounded-pill bg-smoke-dark h-3 w-3"></span>
     </div>
-    <div class="flex-1 bg-white border border-smoke rounded"></div>
+    <div class="flex-1 bg-white border border-smoke rounded mr-4"></div>
   </div>
   <div class="relative bg-smoke h-64">
+
+    <!-- Hey fellow nerd! Yes, we're using position absolute instead of position fixed in the demo; it's the best way we could come up with to demonstrate how position fixed works without totally jacking up the layout of the entire documentation site. Forgive us! 😄 -->
+
     <div class="absolute pin-l pin-r pin-t bg-slate-dark text-smoke z-10 px-4 py-3">
       Fixed child
       <div class="absolute pin-t pin-b pin-r px-4 py-3 bg-smoke-dark text-slate-dark">
@@ -176,6 +179,9 @@ For more information about Tailwind's responsive design features, check out the 
 @endslot
 
 @slot('md')
+@endslot
+
+@slot('lg')
 @endslot
 
 @slot('xl')
