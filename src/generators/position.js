@@ -2,6 +2,7 @@ import defineClasses from '../util/defineClasses'
 
 export default function() {
   return defineClasses({
+    'static': { position: 'static' },
     'fixed': { position: 'fixed' },
     'absolute': { position: 'absolute' },
     'relative': { position: 'relative' },

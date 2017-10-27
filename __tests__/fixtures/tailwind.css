@@ -2365,6 +2365,10 @@ button,
   display: none;
 }
 
+.static {
+  position: static;
+}
+
 .fixed {
   position: fixed;
 }
@@ -5488,6 +5492,10 @@ button,
 
   .sm\:hidden {
     display: none;
+  }
+
+  .sm\:static {
+    position: static;
   }
 
   .sm\:fixed {
@@ -8616,6 +8624,10 @@ button,
     display: none;
   }
 
+  .md\:static {
+    position: static;
+  }
+
   .md\:fixed {
     position: fixed;
   }
@@ -11742,6 +11754,10 @@ button,
     display: none;
   }
 
+  .lg\:static {
+    position: static;
+  }
+
   .lg\:fixed {
     position: fixed;
   }
@@ -14866,6 +14882,10 @@ button,
 
   .xl\:hidden {
     display: none;
+  }
+
+  .xl\:static {
+    position: static;
   }
 
   .xl\:fixed {
