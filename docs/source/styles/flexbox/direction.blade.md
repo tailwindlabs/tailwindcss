@@ -6,6 +6,10 @@ category: "Flexbox"
 
 # Flex Direction
 
+<div class="text-xl text-slate-light">
+    Utilities for controlling the direction of flex items.
+</div>
+
 <div class="subnav">
     <a class="subnav-link" href="#usage" name="usage">Usage</a>
     <a class="subnav-link" href="#responsive">Responsive</a>
@@ -59,9 +63,7 @@ Use `.flex-col-reverse` to position flex items vertically in the opposite direct
 </div>
 @endcomponent
 
-
 ## Responsive
-
 
 To apply a flex direction utility only at a specific breakpoint, add a `{breakpoint}:` prefix to the existing class name. For example, adding the class `md:flex-row` to an element would apply the `flex-row` utility at medium screen sizes and above.
 

@@ -6,15 +6,16 @@ category: "Flexbox"
 
 # Align Content
 
-<div class="subnav">
-    <a class="subnav-link" href="#usage">Usage</a>
-    <a class="subnav-link" href="#responsive">Responsive</a>
-    <a class="subnav-link" href="#customizing">Customizing</a>
+<div class="text-xl text-slate-light">
+    Utilities for controlling how lines are positioned in multi-line flex containers.
 </div>
 
-Tailwind provides a comprehensive set of Flexbox utilities out of the box to make it easy for you to implement complex layouts without having to write any new CSS.
+<div class="subnav">
+    <a class="subnav-link" href="#usage" name="usage">Usage</a>
+    <a class="subnav-link" href="#responsive">Responsive</a>
+</div>
 
-<h2>Start <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span></h2>
+### Start <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
 
 Use `.content-start` to pack lines in a flex container against the start of the main axis:
 
@@ -38,7 +39,7 @@ Use `.content-start` to pack lines in a flex container against the start of the 
 </div>
 @endcomponent
 
-## Center
+### Center
 
 Use `.content-center` to pack lines in a flex container in the center of the main axis:
 
@@ -62,7 +63,7 @@ Use `.content-center` to pack lines in a flex container in the center of the mai
 </div>
 @endcomponent
 
-## End
+### End
 
 Use `.content-end` to pack lines in a flex container against the end of the main axis:
 
@@ -86,7 +87,7 @@ Use `.content-end` to pack lines in a flex container against the end of the main
 </div>
 @endcomponent
 
-## Space between
+### Space between
 
 Use `.content-between` to distribute lines in a flex container such that there is an equal amount of space between each line:
 
@@ -110,7 +111,7 @@ Use `.content-between` to distribute lines in a flex container such that there i
 </div>
 @endcomponent
 
-## Space around
+### Space around
 
 Use `.content-around` to distribute lines in a flex container such that there is an equal amount of space around each line:
 
@@ -132,4 +133,114 @@ Use `.content-around` to distribute lines in a flex container such that there is
         <div class="text-slate text-center bg-smoke p-2">5</div>
     </div>
 </div>
+@endcomponent
+
+
+## Responsive
+
+To apply an align content utility only at a specific breakpoint, add a `{breakpoint}:` prefix to the existing class name. For example, adding the class `md:content-around` to an element would apply the `content-around` utility at medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](#) documentation.
+
+@component('_partials.responsive-code-sample')
+@slot('none')
+<div class="flex content-start flex-wrap bg-smoke-light h-48">
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">1</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">2</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">3</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">4</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">5</div>
+    </div>
+</div>
+@endslot
+@slot('sm')
+<div class="flex content-end flex-wrap bg-smoke-light h-48">
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">1</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">2</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">3</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">4</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">5</div>
+    </div>
+</div>
+@endslot
+@slot('md')
+<div class="flex content-center flex-wrap bg-smoke-light h-48">
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">1</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">2</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">3</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">4</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">5</div>
+    </div>
+</div>
+@endslot
+@slot('lg')
+<div class="flex content-between flex-wrap bg-smoke-light h-48">
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">1</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">2</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">3</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">4</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">5</div>
+    </div>
+</div>
+@endslot
+@slot('xl')
+<div class="flex content-around flex-wrap bg-smoke-light h-48">
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">1</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">2</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">3</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">4</div>
+    </div>
+    <div class="w-1/3 p-2">
+        <div class="text-slate text-center bg-smoke p-2">5</div>
+    </div>
+</div>
+@endslot
+@slot('code')
+<div class="none:content-start sm:content-end md:content-center lg:content-between xl:content-around">
+    <!-- ... -->
+</div>
+@endslot
 @endcomponent
