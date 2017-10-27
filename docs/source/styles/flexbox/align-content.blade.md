@@ -1,9 +1,8 @@
 ---
 extends: _layouts.markdown
 title: "Flexbox"
+category: "Flexbox"
 ---
-
-<div class="font-semibold text-slate-light text-base uppercase tracking-wide mb-2">Flexbox</div>
 
 # Align Content
 
