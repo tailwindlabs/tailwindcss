@@ -31,7 +31,7 @@ Control the opacity of an element in Tailwind using the `.opacity` utilities.
 
 ## Responsive
 
-To apply an opacity utility only at a specific breakpoint, add a `{breakpoint}:` prefix to the existing class name. For example, adding the class `md:opacity-50` to an element would apply the `opacity-50` utility at medium screen sizes and above.
+To control the opacity of an element at a specific breakpoint, add a `{breakpoint}:` prefix to any existing opacity utility. For example, use `md:opacity-50` to apply the `opacity-50` utility at only medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/workflow/responsive-design) documentation.
 
@@ -83,6 +83,7 @@ By default Tailwind provides a sensible numeric opacity scale. You can, of cours
     '75': '.75',
     '100': '1',
   }
+}
 @endslot
 @slot('customized')
 {
