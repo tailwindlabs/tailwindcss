@@ -5,6 +5,10 @@ title: "Opacity"
 
 # Opacity
 
+<div class="text-xl text-slate-light">
+    Utilities for controlling the opacity of an element.
+</div>
+
 <div class="subnav">
     <a class="subnav-link" href="#responsive">Responsive</a>
     <a class="subnav-link" href="#customizing">Customizing</a>
@@ -14,12 +18,12 @@ Control the opacity of an element in Tailwind using the `.opacity` utilities.
 
 @component('_partials.code-sample')
 <div class="flex -mx-2">
-@foreach ($page->config['opacity'] as $name => $value)
+@foreach ($page->config['opacity']->reverse() as $name => $value)
     <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 mx-2 opacity-{{ $name }}">.opacity-{{ $name }}</div>
 @endforeach
 </div>
 @slot('code')
-@foreach ($page->config['opacity'] as $name => $value)
+@foreach ($page->config['opacity']->reverse() as $name => $value)
 <div class="opacity-{{ $name }}">.opacity-{{ $name }}</div>
 @endforeach
 @endslot
