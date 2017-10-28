@@ -5,16 +5,86 @@ title: "Opacity"
 
 # Opacity
 
-<div class="text-xl text-slate-light">
+<div class="text-xl text-slate-light mb-4">
     Utilities for controlling the opacity of an element.
 </div>
 
-<div class="subnav">
-    <a class="subnav-link" href="#responsive">Responsive</a>
-    <a class="subnav-link" href="#customizing">Customizing</a>
+<div class="">
+    <table class="w-full text-left">
+        <tbody class="align-baseline">
+            <tr>
+                <td class="py-2 border-t border-smoke font-mono text-sm text-purple-dark">.opacity-100</td>
+                <td class="py-2 border-t border-smoke font-mono text-sm text-blue-dark">opacity: 1;</td>
+                <td class="py-2 border-t border-smoke">Set the opacity of an element to 100%.</td>
+            </tr>
+            <tr>
+                <td class="py-2 border-t border-smoke font-mono text-sm text-purple-dark">.opacity-75</td>
+                <td class="py-2 border-t border-smoke font-mono text-sm text-blue-dark">opacity: .75;</td>
+                <td class="py-2 border-t border-smoke">Set the opacity of an element to 75%.</td>
+            </tr>
+            <tr>
+                <td class="py-2 border-t border-smoke font-mono text-sm text-purple-dark">.opacity-50</td>
+                <td class="py-2 border-t border-smoke font-mono text-sm text-blue-dark">opacity: .5;</td>
+                <td class="py-2 border-t border-smoke">Set the opacity of an element to 50%.</td>
+            </tr>
+            <tr>
+                <td class="py-2 border-t border-smoke font-mono text-sm text-purple-dark">.opacity-25</td>
+                <td class="py-2 border-t border-smoke font-mono text-sm text-blue-dark">opacity: .25;</td>
+                <td class="py-2 border-t border-smoke">Set the opacity of an element to 25%.</td>
+            </tr>
+            <tr>
+                <td class="py-2 border-t border-smoke font-mono text-sm text-purple-dark">.opacity-0</td>
+                <td class="py-2 border-t border-smoke font-mono text-sm text-blue-dark">opacity: 0;</td>
+                <td class="py-2 border-t border-smoke">Set the opacity of an element to 0%.</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
-Control the opacity of an element in Tailwind using the `.opacity` utilities.
+
+
+
+<!-- <div class="bg-smoke-lighter px-4 py-2 border-2 border-smoke rounded">
+    <table class="font-mono text-sm text-grey-darkest">
+        <tr>
+            <td class="text-purple-dark pr-4">.opacity-100</td>
+            <td class="pr-2">{</td>
+            <td class="text-blue-dark pr-2">opacity:</td>
+            <td class="text-blue-dark text-right">1;</td>
+            <td class="pl-2">}</td>
+        </tr>
+        <tr>
+            <td class="text-purple-dark pr-4">.opacity-75</td>
+            <td>{</td>
+            <td class="text-blue-dark pr-2">opacity:</td>
+            <td class="text-blue-dark text-right">.75;</td>
+            <td class="pl-2">}</td>
+        </tr>
+        <tr>
+            <td class="text-purple-dark pr-4">.opacity-50</td>
+            <td>{</td>
+            <td class="text-blue-dark pr-2">opacity:</td>
+            <td class="text-blue-dark text-right">.5;</td>
+            <td class="pl-2">}</td>
+        </tr>
+        <tr>
+            <td class="text-purple-dark pr-4">.opacity-25</td>
+            <td>{</td>
+            <td class="text-blue-dark pr-2">opacity:</td>
+            <td class="text-blue-dark text-right">.25;</td>
+            <td class="pl-2">}</td>
+        </tr>
+        <tr>
+            <td class="text-purple-dark pr-4">.opacity-0</td>
+            <td>{</td>
+            <td class="text-blue-dark pr-2">opacity:</td>
+            <td class="text-blue-dark text-right">0;</td>
+            <td class="pl-2">}</td>
+        </tr>
+    </table>
+</div>
+ -->
+## Example
 
 @component('_partials.code-sample')
 <div class="flex -mx-2">
