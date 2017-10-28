@@ -92,7 +92,7 @@ Offsets are calculated relative to the nearest parent that has a position other 
   <p class="mb-2 text-slate">Relative parent</p>
   <div class="static bg-smoke-dark p-4 text-slate">
     <p class="mb-2">Static parent</p>
-    <div class="absolute pin-b pin-l bg-slate-dark p-4 text-smoke inline-block">
+    <div class="absolute pin-t pin-r bg-slate-dark p-4 text-smoke inline-block">
       <p>Absolute child</p>
     </div>
     <div class="bg-smoke p-4  text-slate inline-block">
@@ -106,7 +106,7 @@ Offsets are calculated relative to the nearest parent that has a position other 
   Relative parent
   <div class="static bg-smoke-darker">
     Static parent
-    <div class="absolute pin-b pin-l bg-slate-dark">
+    <div class="absolute pin-t pin-r bg-slate-dark">
       Absolute child
     </div>
     <div class="bg-smoke inline-block">
