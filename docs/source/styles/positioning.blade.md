@@ -72,14 +72,30 @@ Use `.absolute` to position an element *outside* of the normal flow of the docum
 Offsets are calculated relative to the nearest parent that has a position other than `static`, and the element *will* act as a position reference for other absolutely positioned children.
 
 @component('_partials.code-sample')
-<div class="relative bg-smoke px-4 pt-2 pb-4">
-  <p class="mb-2">Relative parent</p>
-  <div class="static bg-smoke-darker p-4 text-slate-darker">
+
+<p class="text-sm text-slate-light mb-1">With static positioning</p>
+<div class="relative bg-smoke px-4 pt-2 pb-4 mb-6">
+  <p class="mb-2 text-slate">Relative parent</p>
+  <div class="static bg-smoke-dark p-4 text-slate">
     <p class="mb-2">Static parent</p>
-    <div class="absolute pin-b pin-l bg-slate-dark p-4 text-smoke">
+    <div class="static pin-b pin-l bg-slate-dark p-4 text-smoke inline-block">
+      <p>Static child</p>
+    </div>
+    <div class="bg-smoke p-4 text-slate inline-block">
+      <p>Static sibling</p>
+    </div>
+  </div>
+</div>
+
+<p class="text-sm text-slate-light mb-1">With absolute positioning</p>
+<div class="relative bg-smoke px-4 pt-2 pb-4">
+  <p class="mb-2 text-slate">Relative parent</p>
+  <div class="static bg-smoke-dark p-4 text-slate">
+    <p class="mb-2">Static parent</p>
+    <div class="absolute pin-b pin-l bg-slate-dark p-4 text-smoke inline-block">
       <p>Absolute child</p>
     </div>
-    <div class="bg-smoke pt-4 px-8 pb-8 text-slate-darker inline-block">
+    <div class="bg-smoke p-4  text-slate inline-block">
       <p>Static sibling</p>
     </div>
   </div>
@@ -190,34 +206,61 @@ Combined with Tailwind's [padding utilities](#), you'll probably find that these
 
 @component('_partials.code-sample')
 <div class="flex justify-around mb-8">
-  <div class="relative h-24 w-24 bg-smoke">
-    <div class="absolute pin-x pin-t h-8 bg-slate"></div>
+  <div>
+    <p class="text-center text-sm text-slate-light mb-1">.pin-x.pin-t</p>
+    <div class="relative h-24 w-24 bg-smoke">
+      <div class="absolute pin-x pin-t h-8 bg-slate"></div>
+    </div>
   </div>
-  <div class="relative h-24 w-24 bg-smoke">
-    <div class="absolute pin-y pin-r w-8 bg-slate"></div>
+  <div>
+    <p class="text-center text-sm text-slate-light mb-1">.pin-y.pin-r</p>
+    <div class="relative h-24 w-24 bg-smoke">
+      <div class="absolute pin-y pin-r w-8 bg-slate"></div>
+    </div>
   </div>
-  <div class="relative h-24 w-24 bg-smoke">
-    <div class="absolute pin-x pin-b h-8 bg-slate"></div>
+  <div>
+    <p class="text-center text-sm text-slate-light mb-1">.pin-x.pin-b</p>
+    <div class="relative h-24 w-24 bg-smoke">
+      <div class="absolute pin-x pin-b h-8 bg-slate"></div>
+    </div>
   </div>
-  <div class="relative h-24 w-24 bg-smoke">
-    <div class="absolute pin-y pin-l w-8 bg-slate"></div>
+  <div>
+    <p class="text-center text-sm text-slate-light mb-1">.pin-y.pin-l</p>
+    <div class="relative h-24 w-24 bg-smoke">
+      <div class="absolute pin-y pin-l w-8 bg-slate"></div>
+    </div>
   </div>
-  <div class="relative h-24 w-24 bg-smoke">
-    <div class="absolute pin bg-slate"></div>
+  <div>
+    <p class="text-center text-sm text-slate-light mb-1">.pin</p>
+    <div class="relative h-24 w-24 bg-smoke">
+      <div class="absolute pin bg-slate"></div>
+    </div>
   </div>
 </div>
 <div class="flex justify-around">
-  <div class="relative h-24 w-24 bg-smoke">
-    <div class="absolute pin-l pin-t h-8 w-8 bg-slate"></div>
+  <div>
+    <p class="text-center text-sm text-slate-light mb-1">.pin-l.pin-t</p>
+    <div class="relative h-24 w-24 bg-smoke">
+      <div class="absolute pin-l pin-t h-8 w-8 bg-slate"></div>
+    </div>
   </div>
-  <div class="relative h-24 w-24 bg-smoke">
-    <div class="absolute pin-t pin-r h-8 w-8 bg-slate"></div>
+  <div>
+    <p class="text-center text-sm text-slate-light mb-1">.pin-t.pin-r</p>
+    <div class="relative h-24 w-24 bg-smoke">
+      <div class="absolute pin-t pin-r h-8 w-8 bg-slate"></div>
+    </div>
   </div>
-  <div class="relative h-24 w-24 bg-smoke">
-    <div class="absolute pin-r pin-b h-8 w-8 bg-slate"></div>
+  <div>
+    <p class="text-center text-sm text-slate-light mb-1">.pin-r.pin-b</p>
+    <div class="relative h-24 w-24 bg-smoke">
+      <div class="absolute pin-r pin-b h-8 w-8 bg-slate"></div>
+    </div>
   </div>
-  <div class="relative h-24 w-24 bg-smoke">
-    <div class="absolute pin-b pin-l h-8 w-8 bg-slate"></div>
+  <div>
+    <p class="text-center text-sm text-slate-light mb-1">.pin-b.pin-l</p>
+    <div class="relative h-24 w-24 bg-smoke">
+      <div class="absolute pin-b pin-l h-8 w-8 bg-slate"></div>
+    </div>
   </div>
   <div class="relative h-24 w-24 opacity-0"></div>
 </div>
@@ -272,26 +315,44 @@ Combined with Tailwind's [padding utilities](#), you'll probably find that these
 
 ## Responsive
 
-To apply an overflow utility only at a specific breakpoint, add a `{breakpoint}:` prefix to the existing class name. For example, adding the class `md:overflow-scroll` to an element would apply the `overflow-scroll` utility at medium screen sizes and above.
+To position an element only at a specific breakpoint, add a `{breakpoint}:` prefix to any existing positioning utility. For example, adding the class `md:absolute` to an element would apply the `absolute` utility at medium screen sizes and above, and adding `lg:pin-y` would apply `pin-y` at large screens and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/workflow/responsive-design) documentation.
 
 @component('_partials.responsive-code-sample')
 @slot('none')
+<div class="relative h-32 bg-smoke p-4">
+  <div class="relative bg-slate-dark p-4 text-smoke-dark">Responsive element</div>
+</div>
 @endslot
 
 @slot('sm')
+<div class="relative h-32 bg-smoke p-4">
+  <div class="absolute pin-b pin-l bg-slate-dark p-4 text-smoke-dark">Responsive element</div>
+</div>
 @endslot
 
 @slot('md')
+<div class="relative h-32 bg-smoke p-4">
+  <div class="absolute pin-t pin-x bg-slate-dark p-4 text-smoke-dark">Responsive element</div>
+</div>
 @endslot
 
 @slot('lg')
+<div class="relative h-32 bg-smoke p-4">
+  <div class="absolute pin-r pin-y bg-slate-dark p-4 text-smoke-dark">Responsive element</div>
+</div>
 @endslot
 
 @slot('xl')
+<div class="relative h-32 bg-smoke p-4">
+  <div class="absolute pin-b pin-x bg-slate-dark p-4 text-smoke-dark">Responsive element</div>
+</div>
 @endslot
 
 @slot('code')
+<div class="relative h-32 bg-smoke p-4">
+  <div class="none:relative sm:absolute sm:pin-b sm:pin-l md:pin-t md:pin-x lg:pin-r lg:pin-y xl:pin-b xl:pin-x"></div>
+</div>
 @endslot
 @endcomponent
