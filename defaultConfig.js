@@ -724,7 +724,7 @@ module.exports = {
   | provide a sensible numeric scale. You can, of course, modify these
   | values as needed.
   |
-  | Class name: .z-{name}
+  | Class name: .z-{index}
   |
   */
 
