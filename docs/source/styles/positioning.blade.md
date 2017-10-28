@@ -150,13 +150,14 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 </div>
 
 @slot('code')
-<div class="bg-smoke">
+<div class="bg-smoke pt-16">
   <div class="fixed bg-smoke-darker">
     Fixed child
     <div class="absolute pin-t pin-r bg-slate-dark">
       Absolute child
     </div>
   </div>
+
   Scroll me!
 
   Lorem ipsum...
@@ -164,6 +165,110 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 @endslot
 @endcomponent
 
+### Pinning edges
+
+Use the `.pin{-edge?}` utilities to anchor absolutely positioned elements against any of the edges of the nearest positioned parent.
+
+Combined with Tailwind's [padding utilities](#), you'll probably find that these are all you need to precisely control absolutely positioned elements.
+
+<div class="flex items-start mt-8 text-sm leading-none mb-8">
+    <div class="pr-12">
+        <div class="mb-3 text-slate uppercase">Class</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">pin</code></div>
+    </div>
+    <div class="pl-12 pr-12 border-l">
+        <div class="mb-3 text-slate"><span class="uppercase">Edge</span> <span class="text-slate-light text-xs">(optional)</span></div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded bg-smoke-light">&nbsp;</code> All <em class="text-xs text-slate-light">(default)</em></div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">t</code> Top</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">r</code> Right</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">b</code> Bottom</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">l</code> Left</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">y</code> Top and Bottom</div>
+        <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">x</code> Left and Right</div>
+    </div>
+</div>
+
+@component('_partials.code-sample')
+<div class="flex justify-around mb-8">
+  <div class="relative h-24 w-24 bg-smoke">
+    <div class="absolute pin-x pin-t h-8 bg-slate"></div>
+  </div>
+  <div class="relative h-24 w-24 bg-smoke">
+    <div class="absolute pin-y pin-r w-8 bg-slate"></div>
+  </div>
+  <div class="relative h-24 w-24 bg-smoke">
+    <div class="absolute pin-x pin-b h-8 bg-slate"></div>
+  </div>
+  <div class="relative h-24 w-24 bg-smoke">
+    <div class="absolute pin-y pin-l w-8 bg-slate"></div>
+  </div>
+  <div class="relative h-24 w-24 bg-smoke">
+    <div class="absolute pin bg-slate"></div>
+  </div>
+</div>
+<div class="flex justify-around">
+  <div class="relative h-24 w-24 bg-smoke">
+    <div class="absolute pin-l pin-t h-8 w-8 bg-slate"></div>
+  </div>
+  <div class="relative h-24 w-24 bg-smoke">
+    <div class="absolute pin-t pin-r h-8 w-8 bg-slate"></div>
+  </div>
+  <div class="relative h-24 w-24 bg-smoke">
+    <div class="absolute pin-r pin-b h-8 w-8 bg-slate"></div>
+  </div>
+  <div class="relative h-24 w-24 bg-smoke">
+    <div class="absolute pin-b pin-l h-8 w-8 bg-slate"></div>
+  </div>
+  <div class="relative h-24 w-24 opacity-0"></div>
+</div>
+
+@slot('code')
+<!-- Span top edge -->
+<div class="relative h-24 w-24 bg-smoke">
+  <div class="absolute pin-x pin-t h-8 bg-slate"></div>
+</div>
+
+<!-- Span right edge -->
+<div class="relative h-24 w-24 bg-smoke">
+  <div class="absolute pin-y pin-r w-8 bg-slate"></div>
+</div>
+
+<!-- Span bottom edge -->
+<div class="relative h-24 w-24 bg-smoke">
+  <div class="absolute pin-x pin-b h-8 bg-slate"></div>
+</div>
+
+<!-- Span left edge -->
+<div class="relative h-24 w-24 bg-smoke">
+  <div class="absolute pin-y pin-l bg-slate"></div>
+</div>
+
+<!-- Fill entire parent -->
+<div class="relative h-24 w-24 bg-smoke">
+  <div class="absolute pin bg-slate"></div>
+</div>
+
+<!-- Pin to top left corner -->
+<div class="relative h-24 w-24 bg-smoke">
+  <div class="absolute pin-l pin-t h-8 w-8 bg-slate"></div>
+</div>
+
+<!-- Pin to top right corner -->
+<div class="relative h-24 w-24 bg-smoke">
+  <div class="absolute pin-t pin-r h-8 w-8 bg-slate"></div>
+</div>
+
+<!-- Pin to bottom right corner -->
+<div class="relative h-24 w-24 bg-smoke">
+  <div class="absolute pin-b pin-r h-8 w-8 bg-slate"></div>
+</div>
+
+<!-- Pin to bottom left corner -->
+<div class="relative h-24 w-24 bg-smoke">
+  <div class="absolute pin-b pin-l h-8 w-8 bg-slate"></div>
+</div>
+@endslot
+@endcomponent
 
 ## Responsive
 
