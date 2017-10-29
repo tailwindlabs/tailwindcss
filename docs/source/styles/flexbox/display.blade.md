@@ -6,13 +6,47 @@ category: "Flexbox"
 
 # Display
 
-<div class="text-xl text-slate-light">
+<div class="text-xl text-slate-light mb-4">
     Utilities for creating flex containers.
 </div>
 
-<div class="subnav">
-    <a class="subnav-link" href="#responsive">Responsive</a>
+@include('_partials.feature-badges', [
+    'responsive' => true,
+    'customizable' => false,
+    'hover' => false,
+    'focus' => false
+])
+
+<div class="border-t border-grey-lighter">
+    <table class="w-full text-left" style="border-collapse: collapse;">
+      <colgroup>
+        <col class="w-1/4">
+        <col class="w-1/4">
+        <col class="w-1/2">
+      </colgroup>
+        <thead>
+          <tr>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
+          </tr>
+        </thead>
+        <tbody class="align-baseline">
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">display: flex;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Create a block-level flex container.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.inline-flex</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">display: inline-flex;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Create an inline flex container.</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
+
+## Examples
 
 ### Flex
 
