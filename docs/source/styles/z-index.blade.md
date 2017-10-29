@@ -5,13 +5,74 @@ title: "Z-Index"
 
 # Z-Index
 
-<div class="text-xl text-slate-light">
+<div class="text-xl text-slate-light mb-4">
     Utilities for controlling the stack order of an element.
 </div>
 
-<div class="subnav">
-    <a class="subnav-link" href="#responsive">Responsive</a>
-    <a class="subnav-link" href="#customizing">Customizing</a>
+@include('_partials.feature-badges', [
+    'responsive' => true,
+    'customizable' => true,
+    'hover' => false,
+    'focus' => false
+])
+
+<div class="border-t border-grey-lighter">
+    <table class="w-full text-left" style="border-collapse: collapse;">
+      <colgroup>
+        <col class="w-1/4">
+        <col class="w-1/4">
+        <col class="w-1/2">
+      </colgroup>
+        <thead>
+          <tr>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
+          </tr>
+        </thead>
+        <tbody class="align-baseline">
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.z-{index}</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">z-index: {index};</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the z-index of the element to the given value.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.z-0</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">z-index: 0;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the z-index of the element to the given value.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.z-10</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">z-index: 10;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the z-index of the element to the given value.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.z-20</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">z-index: 20;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the z-index of the element to the given value.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.z-30</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">z-index: 30;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the z-index of the element to the given value.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.z-40</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">z-index: 40;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the z-index of the element to the given value.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.z-50</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">z-index: 50;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the z-index of the element to the given value.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.z-auto</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">z-index: auto;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Don't create a new stacking context.</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 Control the stack order (or three-dimensional positioning) of an element in Tailwind, regardless of order it has been displayed, using the `.z-{index}` utilities.
