@@ -6,12 +6,59 @@ category: "Flexbox"
 
 # Justify Content
 
-<div class="text-xl text-slate-light">
+<div class="text-xl text-slate-light mb-4">
     Utilities for controlling flex items are positioned along a container's main axis.
 </div>
 
-<div class="subnav">
-    <a class="subnav-link" href="#responsive">Responsive</a>
+@include('_partials.feature-badges', [
+    'responsive' => true,
+    'customizable' => false,
+    'hover' => false,
+    'focus' => false
+])
+
+<div class="border-t border-grey-lighter">
+    <table class="w-full text-left" style="border-collapse: collapse;">
+      <colgroup>
+        <col class="w-1/5">
+        <col class="w-1/3">
+        <col>
+      </colgroup>
+        <thead>
+          <tr>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
+          </tr>
+        </thead>
+        <tbody class="align-baseline">
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.justify-start</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">justify-content: flex-start;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Justify items against the start of the container.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.justify-center</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">justify-content: center;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Justify items in the center of the container.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.justify-end</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">justify-content: flex-end;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Justify items against the end of the container.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.justify-between</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">justify-content: space-between;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Justify items by adding an equal amount of space between each one.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.justify-around</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">justify-content: space-around;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Justify items by adding an equal amount of space around each one.</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 ### Start <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
