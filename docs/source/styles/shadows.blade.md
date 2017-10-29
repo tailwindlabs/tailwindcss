@@ -5,13 +5,59 @@ title: "Shadows"
 
 # Shadows
 
-<div class="text-xl text-slate-light">
+<div class="text-xl text-slate-light mb-4">
     Utilities for controlling the box shadow of an element.
 </div>
 
-<div class="subnav">
-    <a class="subnav-link" href="#responsive">Responsive</a>
-    <a class="subnav-link" href="#customizing">Customizing</a>
+@include('_partials.feature-badges', [
+    'responsive' => true,
+    'customizable' => true,
+    'hover' => false,
+    'focus' => false
+])
+
+<div class="border-t border-grey-lighter">
+    <table class="w-full text-left" style="border-collapse: collapse;">
+      <colgroup>
+        <col class="w-1/5">
+        <col class="w-2/5">
+        <col class="w-2/5">
+      </colgroup>
+        <thead>
+          <tr>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
+          </tr>
+        </thead>
+        <tbody class="align-baseline">
+            <tr>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.shadow</td>
+                <td class="w-2/5 p-2 border-t border-smoke font-mono text-xs text-blue-dark">box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.15);</td>
+                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Apply a small box shadow to an element.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.shadow-md</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: 0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13);</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a medium box shadow to an element.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.shadow-lg</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: 0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13);</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large box shadow to an element.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.shadow-inner</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05)</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a small inner box shadow to an element.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.shadow-none</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: none;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Remove a box shadow from an element.</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 Box shadows can be applied using the `.shadow-{size}` utilities. By default these are a size scale, where the smaller sizes represent more shallow shadows, and larger sizes represent deeper shadows. If you use the `.shadow` utility without a suffix, you'll get the default shadow.
