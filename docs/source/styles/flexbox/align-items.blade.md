@@ -6,13 +6,54 @@ category: "Flexbox"
 
 # Align Items
 
-<div class="text-xl text-slate-light">
+<div class="text-xl text-slate-light mb-4">
     Utilities for controlling how flex items are positioned along a container's cross axis.
 </div>
 
-<div class="subnav">
-    <a class="subnav-link" href="#usage">Usage</a>
-    <a class="subnav-link" href="#responsive">Responsive</a>
+@include('_partials.feature-badges', [
+    'responsive' => true,
+    'customizable' => false,
+    'hover' => false,
+    'focus' => false
+])
+
+<div class="border-t border-grey-lighter">
+    <table class="w-full text-left" style="border-collapse: collapse;">
+      <colgroup>
+        <col class="w-1/5">
+        <col class="w-1/3">
+        <col>
+      </colgroup>
+        <thead>
+          <tr>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
+          </tr>
+        </thead>
+        <tbody class="align-baseline">
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.items-start</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-items: flex-start;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Align items against the start of the cross axis.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.items-center</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-items: center;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Align items along the center of the cross axis.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.items-end</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-items: flex-end;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Align items against the end of the cross axis.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.items-baseline</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-items: space-between;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Align the baselines of each item.</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 ### Stretch <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
