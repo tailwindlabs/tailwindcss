@@ -6,13 +6,54 @@ category: "Flexbox"
 
 # Flex Direction
 
-<div class="text-xl text-slate-light">
+<div class="text-xl text-slate-light mb-4">
     Utilities for controlling the direction of flex items.
 </div>
 
-<div class="subnav">
-    <a class="subnav-link" href="#usage" name="usage">Usage</a>
-    <a class="subnav-link" href="#responsive">Responsive</a>
+@include('_partials.feature-badges', [
+    'responsive' => true,
+    'customizable' => false,
+    'hover' => false,
+    'focus' => false
+])
+
+<div class="border-t border-grey-lighter">
+    <table class="w-full text-left" style="border-collapse: collapse;">
+      <colgroup>
+        <col class="w-1/5">
+        <col class="w-2/5">
+        <col class="w-2/5">
+      </colgroup>
+        <thead>
+          <tr>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
+          </tr>
+        </thead>
+        <tbody class="align-baseline">
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-row</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-direction: row;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position flex items in the normal horizontal direction.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-row-reverse</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-direction: row-reverse;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position flex items in the reverse horizontal direction.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-col</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-direction: column;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position flex items vertically.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-col-reverse</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-direction: column-reverse;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position flex items vertically in the reverse direction.</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 ### Row <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
