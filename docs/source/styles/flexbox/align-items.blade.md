@@ -33,6 +33,11 @@ category: "Flexbox"
         </thead>
         <tbody class="align-baseline">
             <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.items-stretch</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-items: flex-stretch;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Stretch items to fill the cross axis.</td>
+            </tr>
+            <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.items-start</td>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-items: flex-start;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Align items against the start of the cross axis.</td>
