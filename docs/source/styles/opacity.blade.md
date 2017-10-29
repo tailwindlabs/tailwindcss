@@ -9,33 +9,70 @@ title: "Opacity"
     Utilities for controlling the opacity of an element.
 </div>
 
-<div class="">
-    <table class="w-full text-left">
+<div class="flex mb-6">
+    <span class="inline-flex items-center rounded-pill border border-grey-light bg-grey-lightest text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none mr-2">
+        <span class="inline-flex rounded-pill bg-green-light text-white mr-1">
+            <svg class="h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5.8 9.4c-.33-.442-.958-.53-1.4-.2-.442.33-.53.958-.2 1.4l3 4c.38.508 1.134.537 1.553.06l7-8c.363-.417.32-1.05-.094-1.413-.417-.363-1.05-.32-1.413.094L8.06 12.414 5.8 9.4z"/></svg>
+        </span>
+        <span>Responsive</span>
+    </span>
+
+    <span class="inline-flex items-center rounded-pill border border-grey-light bg-grey-lightest text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none mr-2">
+        <span class="inline-flex rounded-pill bg-green-light text-white mr-1">
+            <svg class="h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5.8 9.4c-.33-.442-.958-.53-1.4-.2-.442.33-.53.958-.2 1.4l3 4c.38.508 1.134.537 1.553.06l7-8c.363-.417.32-1.05-.094-1.413-.417-.363-1.05-.32-1.413.094L8.06 12.414 5.8 9.4z"/></svg>
+        </span>
+        <span>Customizable</span>
+    </span>
+
+    <span class="inline-flex items-center rounded-pill border border-grey-light bg-grey-lightest text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none opacity-50 mr-2">
+        <span class="inline-flex rounded-pill bg-grey text-white mr-1">
+            <svg class="h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 8.586L6.707 5.293c-.39-.39-1.024-.39-1.414 0-.39.39-.39 1.024 0 1.414L8.586 10l-3.293 3.293c-.39.39-.39 1.024 0 1.414.39.39 1.024.39 1.414 0L10 11.414l3.293 3.293c.39.39 1.024.39 1.414 0 .39-.39.39-1.024 0-1.414L11.414 10l3.293-3.293c.39-.39.39-1.024 0-1.414-.39-.39-1.024-.39-1.414 0L10 8.586z"/></svg>
+        </span>
+        <span>Hover</span>
+    </span>
+
+    <span class="inline-flex items-center rounded-pill border border-grey-light bg-grey-lightest text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none opacity-50">
+        <span class="inline-flex rounded-pill bg-grey text-white mr-1">
+            <svg class="h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 8.586L6.707 5.293c-.39-.39-1.024-.39-1.414 0-.39.39-.39 1.024 0 1.414L8.586 10l-3.293 3.293c-.39.39-.39 1.024 0 1.414.39.39 1.024.39 1.414 0L10 11.414l3.293 3.293c.39.39 1.024.39 1.414 0 .39-.39.39-1.024 0-1.414L11.414 10l3.293-3.293c.39-.39.39-1.024 0-1.414-.39-.39-1.024-.39-1.414 0L10 8.586z"/></svg>
+        </span>
+        <span>Focus</span>
+    </span>
+</div>
+
+<div class="border-t border-grey-lighter">
+    <table class="w-full text-left" style="border-collapse: collapse;">
+        <thead>
+          <tr>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
+          </tr>
+        </thead>
         <tbody class="align-baseline">
             <tr>
-                <td class="py-2 border-t border-smoke font-mono text-sm text-purple-dark">.opacity-100</td>
-                <td class="py-2 border-t border-smoke font-mono text-sm text-blue-dark">opacity: 1;</td>
-                <td class="py-2 border-t border-smoke">Set the opacity of an element to 100%.</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.opacity-100</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">opacity: 1;</td>
+                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the opacity of an element to 100%.</td>
             </tr>
             <tr>
-                <td class="py-2 border-t border-smoke font-mono text-sm text-purple-dark">.opacity-75</td>
-                <td class="py-2 border-t border-smoke font-mono text-sm text-blue-dark">opacity: .75;</td>
-                <td class="py-2 border-t border-smoke">Set the opacity of an element to 75%.</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.opacity-75</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">opacity: .75;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the opacity of an element to 75%.</td>
             </tr>
             <tr>
-                <td class="py-2 border-t border-smoke font-mono text-sm text-purple-dark">.opacity-50</td>
-                <td class="py-2 border-t border-smoke font-mono text-sm text-blue-dark">opacity: .5;</td>
-                <td class="py-2 border-t border-smoke">Set the opacity of an element to 50%.</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.opacity-50</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">opacity: .5;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the opacity of an element to 50%.</td>
             </tr>
             <tr>
-                <td class="py-2 border-t border-smoke font-mono text-sm text-purple-dark">.opacity-25</td>
-                <td class="py-2 border-t border-smoke font-mono text-sm text-blue-dark">opacity: .25;</td>
-                <td class="py-2 border-t border-smoke">Set the opacity of an element to 25%.</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.opacity-25</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">opacity: .25;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the opacity of an element to 25%.</td>
             </tr>
             <tr>
-                <td class="py-2 border-t border-smoke font-mono text-sm text-purple-dark">.opacity-0</td>
-                <td class="py-2 border-t border-smoke font-mono text-sm text-blue-dark">opacity: 0;</td>
-                <td class="py-2 border-t border-smoke">Set the opacity of an element to 0%.</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.opacity-0</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">opacity: 0;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the opacity of an element to 0%.</td>
             </tr>
         </tbody>
     </table>
