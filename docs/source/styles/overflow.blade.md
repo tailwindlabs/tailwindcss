@@ -5,15 +5,65 @@ title: "Overflow"
 
 # Overflow
 
-
-<div class="text-xl text-slate-light">
+<div class="text-xl text-slate-light mb-4">
     Utilities for controlling how an element handles content that is too large for the container.
 </div>
 
-<div class="subnav">
-    <a class="subnav-link" href="#responsive">Responsive</a>
-</div>
+@include('_partials.feature-badges', [
+    'responsive' => true,
+    'customizable' => false,
+    'hover' => false,
+    'focus' => false
+])
 
+<div class="border-t border-grey-lighter">
+    <table class="w-full text-left" style="border-collapse: collapse;">
+        <thead>
+          <tr>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
+          </tr>
+        </thead>
+        <tbody class="align-baseline">
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-visible</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow: 'visible';</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Prevent content within an element from being clipped.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-auto</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow: 'auto';</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Add scrollbars to an element if needed.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-hidden</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow: 'hidden';</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Clip any content that overflows the element.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.mask</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow: 'hidden';</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Clip any content that overflows the element. Alias of <code>.overflow-hidden</code>.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-x-scroll</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow-x: 'auto'</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow horizontal scrolling if needed.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-y-scroll</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow-y: 'auto'</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow horizontal scrolling if needed.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-scroll</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow: 'scroll';</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Add scrollbars to an element.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 ### Visible <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
 
