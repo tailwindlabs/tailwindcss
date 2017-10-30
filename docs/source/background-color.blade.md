@@ -248,20 +248,3 @@ Using the utilities in HTML:
 <div class="bg-slate"></div>
 <div class="bg-slate-light"></div>
 ```
-
-Using the utilities in Less:
-
-```less
-div {
-  .bg-white;
-  .bg-smoke-lighter;
-  .bg-smoke-light;
-  .bg-smoke;
-
-  .bg-slate-darker;
-  .bg-slate-dark;
-  .bg-slate;
-  .bg-slate-light;
-}
-```
-

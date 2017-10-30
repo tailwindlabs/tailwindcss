@@ -47,43 +47,9 @@ The syntax below is combined to create a system for padding and margins. For exa
 
 You can customize the margin and padding utilities using the `@sizing-scale` variable. Please note that the entire scale must be redefined. It's not possible to add a new value to the existing scale.
 
-```less
-// The default sizing scale
-@sizing-scale:
-  '1' 0.25rem,
-  '2' 0.5rem,
-  '3' 0.75rem,
-  '4' 1rem,
-  '6' 1.5rem,
-  '8' 2rem,
-  '12' 3rem,
-  '16' 4rem,
-;
-```
 
-By default the `@sizing-scale` is automatically applied to the margin, negative margin (pull) and padding scales. However, it's possible to customize each scale individually using the `@margin-scale`, `@pull-scale` and `@padding-scale` variables.
-
-```less
-// Override the margin scale
-@margin-scale:
-  '1' 0.25rem,
-  '2' 0.5rem,
-  // ...
-;
-
-// Override the pull scale
-@pull-scale:
-  '1' 0.25rem,
-  '2' 0.5rem,
-  // ...
-;
-
-// Override the padding scale
-@padding-scale:
-  '1' 0.25rem,
-  '2' 0.5rem,
-  // ...
-;
+```css
+// Scale customization here
 ```
 
 <h2 id="responsive">Responsive spacing utilities</h2>
@@ -96,11 +62,6 @@ The spacing utilities can also be used with <a href="/responsive">responsive</a>
 <div class="pull-1 sm:pull-2 md:pull-3 lg:pull-4"></div>
 ```
 
-```less
-div {
-  .screen(lg, {
-    .mt-6;
-  });
-}
+```css
+// Responsive example here
 ```
-
