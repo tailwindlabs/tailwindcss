@@ -1,57 +1,32 @@
 import _ from 'lodash'
+import defineClass from '../util/defineClass'
 import defineClasses from '../util/defineClasses'
 
-function defaultRounded(radius) {
+function sideVariants() {
   return defineClasses({
-    'rounded': {
-      'border-radius': `${radius}`,
-    },
     'rounded-t': {
-      'border-top-left-radius': `${radius}`,
-      'border-top-right-radius': `${radius}`,
+      'border-bottom-right-radius': '0',
+      'border-bottom-left-radius': '0',
     },
     'rounded-r': {
-      'border-top-right-radius': `${radius}`,
-      'border-bottom-right-radius': `${radius}`,
+      'border-bottom-left-radius': '0',
+      'border-top-left-radius': '0',
     },
     'rounded-b': {
-      'border-bottom-right-radius': `${radius}`,
-      'border-bottom-left-radius': `${radius}`,
+      'border-top-left-radius': '0',
+      'border-top-right-radius': '0',
     },
     'rounded-l': {
-      'border-bottom-left-radius': `${radius}`,
-      'border-top-left-radius': `${radius}`,
-    },
-  })
-}
-
-function roundedVariant(modifier, radius) {
-  return defineClasses({
-    [`rounded-${modifier}`]: {
-      'border-radius': `${radius}`,
-    },
-    [`rounded-t-${modifier}`]: {
-      'border-top-left-radius': `${radius}`,
-      'border-top-right-radius': `${radius}`,
-    },
-    [`rounded-r-${modifier}`]: {
-      'border-top-right-radius': `${radius}`,
-      'border-bottom-right-radius': `${radius}`,
-    },
-    [`rounded-b-${modifier}`]: {
-      'border-bottom-right-radius': `${radius}`,
-      'border-bottom-left-radius': `${radius}`,
-    },
-    [`rounded-l-${modifier}`]: {
-      'border-bottom-left-radius': `${radius}`,
-      'border-top-left-radius': `${radius}`,
+      'border-top-right-radius': '0',
+      'border-bottom-right-radius': '0',
     },
   })
 }
 
 module.exports = function({ borderRadius }) {
-  return _.flatten([
-    defaultRounded(borderRadius.default),
-    ..._.map(_.omit(borderRadius, 'default'), (radius, modifier) => roundedVariant(modifier, radius)),
-  ])
+  return _(borderRadius).map((radius, modifier) => {
+    return defineClass(modifier === 'default' ? 'rounded' : `rounded-${modifier}`, {
+      'border-radius': radius,
+    })
+  }).concat(sideVariants()).value()
 }
