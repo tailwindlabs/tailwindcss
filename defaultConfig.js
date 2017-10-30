@@ -427,7 +427,8 @@ module.exports = {
     default: '.25rem',
     'sm': '.125rem',
     'lg': '.5rem',
-    'pill': '9999px',
+    'full': '9999px',
+    'none': '0',
   },
 
 
