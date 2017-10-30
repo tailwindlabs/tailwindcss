@@ -46,9 +46,7 @@ category: "Flexbox"
     </table>
 </div>
 
-## Examples
-
-### Flex
+## Flex
 
 Use `.flex` to create a block-level flex container:
 
@@ -60,7 +58,7 @@ Use `.flex` to create a block-level flex container:
 </div>
 @endcomponent
 
-### Inline flex
+## Inline flex
 
 Use `.inline-flex` to create an inline flex container:
 
