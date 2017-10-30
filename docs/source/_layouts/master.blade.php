@@ -77,6 +77,11 @@
                                         Extracting Components
                                     </a>
                                 </li>
+                                <li class="mb-3">
+                                    <a class="{{ $page->active('/functions-and-directives') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/functions-and-directives">
+                                        Functions &amp; Directives
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                         <div class="mt-8">
