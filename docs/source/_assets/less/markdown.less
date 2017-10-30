@@ -113,7 +113,7 @@
     @apply .text-slate-dark;
   }
 
-  > :not(pre) > code[class*="language-"], > pre[class*="language-"], pre[class*="language-"]& {
+  > :not(pre):not(h1):not(h2):not(h3):not(h4) > code, > pre, pre& {
     @apply .bg-smoke-lighter;
     @apply .text-sm;
     @apply .leading-normal;
