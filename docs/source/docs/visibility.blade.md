@@ -52,7 +52,10 @@ title: "Visibility"
 Use `.visible` to make an element visible. This will typically be used as a reset when using the `.invisible` utility.
 
 @component('_partials.code-sample', ['class' => 'flex justify-center'])
-<div class="visible bg-smoke w-24 h-24 rounded-pill"></div>
+<div class="visible bg-smoke w-24 h-24 rounded-full
+- 'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
+- 'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
+"></div>
 @endcomponent
 
 ### Invisible
@@ -60,7 +63,10 @@ Use `.visible` to make an element visible. This will typically be used as a rese
 Use `.invisible` to hide an element, but still maintain it's space.
 
 @component('_partials.code-sample', ['class' => 'flex justify-center'])
-<div class="invisible bg-smoke w-24 h-24 rounded-pill"></div>
+<div class="invisible bg-smoke w-24 h-24 rounded-full
+- 'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
+- 'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
+"></div>
 @endcomponent
 
 
@@ -73,27 +79,42 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex justify-center">
-    <div class="visible bg-smoke w-24 h-24 rounded-pill"></div>
+    <div class="visible bg-smoke w-24 h-24 rounded-full
+- 'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
+- 'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
+"></div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex justify-center">
-    <div class="invisible bg-smoke w-24 h-24 rounded-pill"></div>
+    <div class="invisible bg-smoke w-24 h-24 rounded-full
+- 'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
+- 'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
+"></div>
 </div>
 @endslot
 @slot('md')
 <div class="flex justify-center">
-    <div class="visible bg-smoke w-24 h-24 rounded-pill"></div>
+    <div class="visible bg-smoke w-24 h-24 rounded-full
+- 'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
+- 'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
+"></div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex justify-center">
-    <div class="invisible bg-smoke w-24 h-24 rounded-pill"></div>
+    <div class="invisible bg-smoke w-24 h-24 rounded-full
+- 'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
+- 'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
+"></div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex justify-center">
-    <div class="visible bg-smoke w-24 h-24 rounded-pill"></div>
+    <div class="visible bg-smoke w-24 h-24 rounded-full
+- 'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
+- 'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
+"></div>
 </div>
 @endslot
 @slot('code')
