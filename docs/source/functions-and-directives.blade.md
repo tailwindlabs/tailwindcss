@@ -5,11 +5,11 @@ title: "Functions &amp; Directives"
 
 # Functions & Directives
 
-Tailwind exposes a few CSS functions and directives that can be used in your actual CSS files.
+Tailwind exposes a few custom CSS functions and directives that can be used in your actual CSS files.
 
-## `@tailwind`
+## `@@tailwind`
 
-Use the `@tailwind` directive to insert the Tailwind reset styles and utilities into your CSS file. Here is a full example of how you might do this:
+Use the `@@tailwind` directive to insert Tailwind's `reset` and `utilities` styles into your CSS. Here is a full example of how you might do this:
 
 ```less
 /**
@@ -19,36 +19,21 @@ Use the `@tailwind` directive to insert the Tailwind reset styles and utilities 
  * You can see the styles here:
  * https://github.com/nothingworksinc/tailwindcss/blob/master/css/preflight.css
  */
-@tailwind  reset;
-
-/**
- * Here you would import any custom component classes; stuff that you'd
- * want loaded *before* the utilities so that the utilities can still
- * override them.
- */
-@import  "my-components/foo";
-@import  "my-components/bar";
+@@tailwind reset;
 
 /**
  * This injects all of Tailwind's utility classes, generated based on your
  * config file.
  */
-@tailwind  utilities;
-
-/**
- * Here you would add any custom utilities you need that don't come out of the box with Tailwind.
- */
-.bg-hero-image {
-    background-image: url('/some/image/file.png');
-}
+@@tailwind utilities;
 ```
 
-## `@responsive`
+## `@@responsive`
 
-You can generate responsive versions of your own utilities by wrapping their definitions in the `@responsive` directive:
+You can generate responsive versions of your own classes by wrapping their definitions in the `@responsive` directive:
 
 ```less
-@responsive {
+@@responsive {
   .bg-gradient-brand {
     background-image: linear-gradient(blue, green);
   }
@@ -61,51 +46,67 @@ This will generate these classes (assuming you haven't changed the default break
 .bg-gradient-brand {
   background-image: linear-gradient(blue, green);
 }
-@media (min-width: 576px) {
+
+// ...
+
+@@media (min-width: 576px) {
   .sm\:bg-gradient-brand {
     background-image: linear-gradient(blue, green);
   }
+  // ...
 }
-@media (min-width: 768px) {
+
+@@media (min-width: 768px) {
   .md\:bg-gradient-brand {
     background-image: linear-gradient(blue, green);
   }
+  // ...
 }
-@media (min-width: 992px) {
+
+@@media (min-width: 992px) {
   .lg\:bg-gradient-brand {
     background-image: linear-gradient(blue, green);
   }
+  // ...
 }
-@media (min-width: 1200px) {
+
+@@media (min-width: 1200px) {
   .xl\:bg-gradient-brand {
     background-image: linear-gradient(blue, green);
   }
+  // ...
 }
 ```
 
-## `@screen`
+The responsive versions will be added to Tailwind's existing media queries at the end of your stylesheet to make sure classes with a responsive prefix always defeat non-responsive classes that are targeting the same CSS property.
 
-Say you have a `sm` breakpoint at `576px`, and you need to write some custom CSS that references this breakpoint.
+## `@@screen`
 
-Instead of duplicating the values like this:
+The `@@screen` directive allows you to create media queries that reference your breakpoints by name instead of duplicating their values in your own CSS.
+
+For example, say you have a `sm` breakpoint at `576px` and you need to write some custom CSS that references this breakpoint.
+
+Instead of writing a raw media query that duplicates that value like this:
 
 ```less
-@media (min-width: 576px) {
+{{ '@media (min-width: 576px) {' }}
   /* ... */
 }
 ```
 
-...you can use the `@screen` directive and pass the breakpoint name:
+...you can use the `@@screen` directive and reference the breakpoint by name:
 
 ```less
-@screen sm {
+@@screen sm {
   /* ... */
 }
 ```
 
 ## `config()`
 
-With all your variables defined in your JavaScript-based Tailwind config file, you may be wondering how you access those values in your custom CSS. This can be done using the `config()` helper function. Here is an example:
+While it's recommended to use the `@@apply` directive to compose custom CSS out of existing utility classes whenever possible, some times you need direct access to your Tailwind config values.
+
+Use the `config()` function to access your Tailwind config values using dot notation:
 
 ```less
 .error {
