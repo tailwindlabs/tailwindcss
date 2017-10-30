@@ -28,6 +28,44 @@ Use the `@@tailwind` directive to insert Tailwind's `reset` and `utilities` styl
 @@tailwind utilities;
 ```
 
+## `@@apply`
+
+Use `@@apply` to mixin the contents of existing classes into your custom CSS.
+
+This is extremely useful when you find a common utility pattern in your HTML that you'd like to extract to a new component.
+
+```less
+.btn {
+  @@apply .font-bold .py-2 .px-4 .rounded;
+}
+.btn-blue {
+  @@apply .bg-blue .text-white;
+}
+.btn-blue:hover {
+  @@apply .bg-blue-dark;
+}
+```
+
+Note that `@@apply` **will not work** for mixing in hover or responsive variants of another utility. Instead, mixin the plain version of that utility into the `:hover` pseudo-selector or a new media query:
+
+```less
+// Won't work:
+.btn {
+  @@apply .md:inline-block;
+  @@apply .hover:bg-blue;
+}
+
+// Do this instead:
+.btn {
+  &:hover {
+    @@apply .bg-blue;
+  }
+  @@screen md {
+    @@apply .inline-block;
+  }
+}
+```
+
 ## `@@responsive`
 
 You can generate responsive versions of your own classes by wrapping their definitions in the `@responsive` directive:
@@ -78,7 +116,7 @@ This will generate these classes (assuming you haven't changed the default break
 }
 ```
 
-The responsive versions will be added to Tailwind's existing media queries at the end of your stylesheet to make sure classes with a responsive prefix always defeat non-responsive classes that are targeting the same CSS property.
+The responsive versions will be added to Tailwind's existing media queries **at the end of your stylesheet.** This makes sure that classes with a responsive prefix always defeat non-responsive classes that are targeting the same CSS property.
 
 ## `@@screen`
 
