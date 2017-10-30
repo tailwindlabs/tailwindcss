@@ -173,5 +173,5 @@ By default Tailwind provides six numeric `z-index` utilities and an `auto` utili
 + '50': 50,
 + '75': 75,
 + '100': 100,
-'auto': 'auto',
-@endcomponent
+  'auto': 'auto',
+@endslot
