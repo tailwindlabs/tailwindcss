@@ -127,9 +127,26 @@ Use `.rounded-none` to remove an existing border radius from an element.
 This is most commonly used to remove a border radius that was applied at a smaller breakpoint.
 
 @component('_partials.code-sample', ['class' => 'flex justify-around text-sm py-8'])
-<div class="p-4 shadow-none bg-grey-light">.shadow-none</div>
+<div class="p-4 rounded-none bg-grey-light">.rounded-none</div>
 @slot('code')
-<div class="shadow-none"></div>
+<div class="rounded-none"></div>
+@endslot
+@endcomponent
+
+## Rounding sides separately
+
+Use the `.rounded-t`, `.rounded-r`, `.rounded-b`, or `.rounded-l` utilities to only round one side of an element.
+
+@component('_partials.code-sample', ['class' => 'flex justify-around text-sm'])
+<div class="bg-grey-light mr-3 p-4 rounded-lg rounded-t">.rounded-t</div>
+<div class="bg-grey-light mr-3 p-4 rounded-lg rounded-r">.rounded-r</div>
+<div class="bg-grey-light mr-3 p-4 rounded-lg rounded-b">.rounded-b</div>
+<div class="bg-grey-light p-4 rounded-lg rounded-l">.rounded-l</div>
+@slot('code')
+<div class="rounded-t"></div>
+<div class="rounded-r"></div>
+<div class="rounded-b"></div>
+<div class="rounded-t"></div>
 @endslot
 @endcomponent
 
