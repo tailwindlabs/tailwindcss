@@ -1,5 +1,5 @@
 const anchorJS = require('anchor-js')
-const Prism = require('prismjs')
+const Prism = require('./prism')
 
 window.anchors = new anchorJS()
 window.Vue = require('vue')
