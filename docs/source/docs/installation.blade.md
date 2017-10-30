@@ -30,7 +30,7 @@ Tailwind is configured almost entirely in plain JavaScript. To do this you'll ne
 
 Alternatively, you can simply copy the default config file [from here](https://github.com/nothingworksinc/tailwindcss/blob/master/defaultConfig.js).
 
-## 3. Add Tailwind to your CSS
+## 3. Use Tailwind in your CSS
 
 Use the `@@tailwind` directive to inject Tailwind's `reset` and `utilities` styles into your CSS.
 
