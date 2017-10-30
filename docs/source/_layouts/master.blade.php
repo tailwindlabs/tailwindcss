@@ -92,9 +92,9 @@
                                     </ul>
                                 </li>
                                 <li class="mb-3">
-                                    <a href="{{ $page->baseUrl }}/border-size" class="block mb-2 {{ $page->active('/border-') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Borders</a>
+                                    <a href="{{ $page->baseUrl }}/border-width" class="block mb-2 {{ $page->active('/border-') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Borders</a>
                                     <ul class="pl-4 {{ $page->active('/border-') ? 'block' : 'hidden' }}">
-                                        <li class="mb-3"><a href="{{ $page->baseUrl }}/border-size" class="{{ $page->active('/border-size') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Size</a></li>
+                                        <li class="mb-3"><a href="{{ $page->baseUrl }}/border-width" class="{{ $page->active('/border-width') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Width</a></li>
                                         <li class="mb-3"><a href="{{ $page->baseUrl }}/border-color" class="{{ $page->active('/border-color') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Color</a></li>
                                         <li class="mb-3"><a href="{{ $page->baseUrl }}/border-style" class="{{ $page->active('/border-style') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Style</a></li>
                                         <li class="mb-3"><a href="{{ $page->baseUrl }}/border-radius" class="{{ $page->active('/border-radius') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Radius</a></li>
