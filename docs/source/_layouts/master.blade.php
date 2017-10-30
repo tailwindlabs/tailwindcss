@@ -87,7 +87,6 @@
                         <div class="mt-8">
                             <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Styles</p>
                             <ul class="mb-8">
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/base" class="{{ $page->active('/docs/base') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Base</a></li>
                                 <li class="mb-3">
                                     <a href="{{ $page->baseUrl }}/docs/background-color" class="block mb-2 {{ $page->active('/docs/background-') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Backgrounds</a>
                                     <ul class="pl-4 {{ $page->active('/docs/background-') ? 'block' : 'hidden' }}">
