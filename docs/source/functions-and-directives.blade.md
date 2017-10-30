@@ -7,7 +7,7 @@ title: "Functions &amp; Directives"
 
 Tailwind exposes a few CSS functions and directives that can be used in your actual CSS files.
 
-## @tailwind
+## `@tailwind`
 
 Use the `@tailwind` directive to insert the Tailwind reset styles and utilities into your CSS file. Here is a full example of how you might do this:
 
@@ -43,7 +43,7 @@ Use the `@tailwind` directive to insert the Tailwind reset styles and utilities 
 }
 ```
 
-## @responsive
+## `@responsive`
 
 You can generate responsive versions of your own utilities by wrapping their definitions in the `@responsive` directive:
 
@@ -83,7 +83,7 @@ This will generate these classes (assuming you haven't changed the default break
 }
 ```
 
-## @screen
+## `@screen`
 
 Say you have a `sm` breakpoint at `576px`, and you need to write some custom CSS that references this breakpoint.
 
@@ -103,7 +103,7 @@ Instead of duplicating the values like this:
 }
 ```
 
-## config()
+## `config()`
 
 With all your variables defined in your JavaScript-based Tailwind config file, you may be wondering how you access those values in your custom CSS. This can be done using the `config()` helper function. Here is an example:
 
