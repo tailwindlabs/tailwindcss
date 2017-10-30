@@ -1,9 +1,9 @@
 ---
 extends: _layouts.markdown
-title: "Text Wrapping"
+title: "Tracking"
 ---
 
-# Text Wrapping
+# Tracking
 
 <div class="subnav">
     <a class="subnav-link" href="#usage">Usage</a>

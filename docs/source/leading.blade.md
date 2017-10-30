@@ -1,9 +1,9 @@
 ---
 extends: _layouts.markdown
-title: "Line Height"
+title: "Leading"
 ---
 
-# Line Height
+# Leading
 
 <div class="subnav">
     <a class="subnav-link" href="#usage">Usage</a>
