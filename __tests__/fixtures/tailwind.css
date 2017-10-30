@@ -555,7 +555,6 @@ input::placeholder {
 
 button,
 [role=button] {
-  font-family: inherit;
   cursor: pointer;
 }
 
