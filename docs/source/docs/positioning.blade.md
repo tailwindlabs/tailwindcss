@@ -212,9 +212,9 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 <div class="rounded-b overflow-hidden max-w-md mx-auto mt-4 mb-4">
   <div class="rounded-t border-t border-l border-r border-smoke bg-smoke-light flex px-4 py-3">
     <div class="mr-6">
-      <span class="inline-block rounded-pill bg-smoke-dark h-3 w-3 mr-1"></span>
-      <span class="inline-block rounded-pill bg-smoke-dark h-3 w-3 mr-1"></span>
-      <span class="inline-block rounded-pill bg-smoke-dark h-3 w-3"></span>
+      <span class="inline-block rounded-full bg-smoke-dark h-3 w-3 mr-1"></span>
+      <span class="inline-block rounded-full bg-smoke-dark h-3 w-3 mr-1"></span>
+      <span class="inline-block rounded-full bg-smoke-dark h-3 w-3"></span>
     </div>
     <div class="flex-1 bg-white border border-smoke rounded mr-4"></div>
   </div>
