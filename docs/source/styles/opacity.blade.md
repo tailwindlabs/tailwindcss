@@ -55,49 +55,6 @@ title: "Opacity"
     </table>
 </div>
 
-
-
-
-<!-- <div class="bg-smoke-lighter px-4 py-2 border-2 border-smoke rounded">
-    <table class="font-mono text-sm text-grey-darkest">
-        <tr>
-            <td class="text-purple-dark pr-4">.opacity-100</td>
-            <td class="pr-2">{</td>
-            <td class="text-blue-dark pr-2">opacity:</td>
-            <td class="text-blue-dark text-right">1;</td>
-            <td class="pl-2">}</td>
-        </tr>
-        <tr>
-            <td class="text-purple-dark pr-4">.opacity-75</td>
-            <td>{</td>
-            <td class="text-blue-dark pr-2">opacity:</td>
-            <td class="text-blue-dark text-right">.75;</td>
-            <td class="pl-2">}</td>
-        </tr>
-        <tr>
-            <td class="text-purple-dark pr-4">.opacity-50</td>
-            <td>{</td>
-            <td class="text-blue-dark pr-2">opacity:</td>
-            <td class="text-blue-dark text-right">.5;</td>
-            <td class="pl-2">}</td>
-        </tr>
-        <tr>
-            <td class="text-purple-dark pr-4">.opacity-25</td>
-            <td>{</td>
-            <td class="text-blue-dark pr-2">opacity:</td>
-            <td class="text-blue-dark text-right">.25;</td>
-            <td class="pl-2">}</td>
-        </tr>
-        <tr>
-            <td class="text-purple-dark pr-4">.opacity-0</td>
-            <td>{</td>
-            <td class="text-blue-dark pr-2">opacity:</td>
-            <td class="text-blue-dark text-right">0;</td>
-            <td class="pl-2">}</td>
-        </tr>
-    </table>
-</div>
- -->
 ## Example
 
 @component('_partials.code-sample')
