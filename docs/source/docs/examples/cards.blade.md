@@ -17,18 +17,9 @@ We don't ship alert components because every app has it's own visual style, but 
             </p>
         </div>
         <div class="px-6 py-4">
-            <span class="inline-block bg-smoke-light rounded-full
-- 'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
-- 'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
- px-3 py-1 text-sm font-semibold text-slate mr-2">#photography</span>
-            <span class="inline-block bg-smoke-light rounded-full
-- 'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
-- 'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
- px-3 py-1 text-sm font-semibold text-slate mr-2">#travel</span>
-            <span class="inline-block bg-smoke-light rounded-full
-- 'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
-- 'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
- px-3 py-1 text-sm font-semibold text-slate">#winter</span>
+            <span class="inline-block bg-smoke-light rounded-pill px-3 py-1 text-sm font-semibold text-slate mr-2">#photography</span>
+            <span class="inline-block bg-smoke-light rounded-pill px-3 py-1 text-sm font-semibold text-slate mr-2">#travel</span>
+            <span class="inline-block bg-smoke-light rounded-pill px-3 py-1 text-sm font-semibold text-slate">#winter</span>
         </div>
     </div>
 </div>
@@ -50,10 +41,7 @@ We don't ship alert components because every app has it's own visual style, but 
                 </p>
             </div>
             <div class="flex items-center">
-                <img class="w-10 h-10 rounded-full
-- 'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
-- 'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
- mr-4" src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg" alt="">
+                <img class="w-10 h-10 rounded-pill mr-4" src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg" alt="">
                 <div class="text-sm">
                     <p class="text-slate-darker leading-none">Jonathan Reinink</p>
                     <p class="text-slate-light">Aug 18</p>

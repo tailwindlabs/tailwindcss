@@ -48,10 +48,7 @@ Here's a bunch of examples:
 ### Pill
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded-full
-- 'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
-- 'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
-">
+<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded-pill">
     Button
 </button>
 @endcomponent
