@@ -116,32 +116,17 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-By default Tailwind provides three drop shadows and one inner shadow. You can, of course, modify these values as needed. This is done in the `shadows` section of your Tailwind config. As you can see from the defaults we provide, it's possible to apply multiple shadows per utility using comma separation.
+By default Tailwind provides three drop shadow utilities, one inner shadow utility, and a utility for removing existing shadows. You change, add, or remove these by editing the `shadows` section of your Tailwind config.
 
-Take note that a `default` shadow is required. This is the value used for the non-suffixed version of this utility (`.shadow`).
+If a `default` shadow is provided, it will be used for the non-suffixed `.shadow` utility. Any other keys will be used as suffixes, for example the key `'2'` will create a corresponding `.shadow-2` utility.
 
-@component('_partials.customized-config')
-@slot('default')
-{
-  // ...
-  shadows: {
-    default: '0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.15)',
-    'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
-    'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
-    'inner': 'inset 0 1px 2px rgba(0, 0, 0, 0.05)',
-    'none': 'none',
-  },
-}
-@endslot
-@slot('customized')
-{
-  // ...
-  shadows: {
-    default: '0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.15)',
-    'big': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
-    'huge': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
-    'none': 'none',
-  },
-}
-@endslot
+@component('_partials.customized-config', ['key' => 'shadows'])
+- default: '0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.15)',
+- 'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
+- 'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
+- 'inner': 'inset 0 1px 2px rgba(0, 0, 0, 0.05)',
++ '1': '0 2px 4px rgba(0,0,0,0.05)',
++ '2': '0 4px 8px rgba(0,0,0,0.1)',
++ '3': '0 8px 16px rgba(0,0,0,0.15)',
+  'none': 'none',
 @endcomponent
