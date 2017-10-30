@@ -3,14 +3,15 @@ const tailwind = require('./../lib/index.js')
 const config = require('./tailwind.js')
 const fs = require('fs')
 
-mix.setPublicPath('source/');
 
 fs.writeFileSync('./tailwind.json', JSON.stringify(config))
+
+mix.setPublicPath('source/')
 
 mix
   .js('source/_assets/js/nav.js', 'source/js')
   .js('source/_assets/js/app.js', 'source/js')
-  .less('source/_assets/less/main.less', 'source/css')
+  .less('source/_assets/less/main.less', 'css')
   .options({
     postCss: [
       tailwind('tailwind.js'),

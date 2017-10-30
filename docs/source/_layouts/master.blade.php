@@ -191,11 +191,6 @@
                         @yield('body')
                     </div>
                     <script src="{{ mix('/js/app.js') }}"></script>
-                    <script src="/js/prism.js"></script>
-                    <script>
-                        anchors.options = { placement: 'left', class: 'text-slate-light' };
-                        anchors.add();
-                    </script>
                 </div>
             </div>
         </div>

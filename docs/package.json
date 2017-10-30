@@ -15,6 +15,7 @@
     "cross-env": "^3.2.3",
     "escape-html": "^1.0.3",
     "laravel-mix": "^1.5.1",
+    "prismjs": "^1.8.3",
     "vue": "^2.5.2"
   },
   "dependencies": {
