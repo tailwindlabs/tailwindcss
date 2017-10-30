@@ -19,9 +19,9 @@
           @import url("https://use.typekit.net/iqy1okj.css");
         </style>
         {{-- <link rel="stylesheet" href="https://use.typekit.net/iqy1okj.css"> --}}
-        <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="{{ mix('/css/main.css') }}">
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-        <script src="/js/nav.js"></script>
+        <script src="{{ mix('/js/nav.js') }}"></script>
 
     </head>
     <body class="font-sans font-normal text-slate-darker leading-normal">
@@ -190,7 +190,7 @@
                     <div id="app">
                         @yield('body')
                     </div>
-                    <script src="/js/app.js"></script>
+                    <script src="{{ mix('/js/app.js') }}"></script>
                     <script src="/js/prism.js"></script>
                     <script>
                         anchors.options = { placement: 'left', class: 'text-slate-light' };
