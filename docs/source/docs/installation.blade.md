@@ -99,7 +99,7 @@ module.exports = {
 }
 ```
 
-### Gulp
+#### Gulp
 
 Add `tailwindcss` to the list of plugins you pass to [gulp-postcss](https://github.com/postcss/gulp-postcss), passing the path to your config file:
 
