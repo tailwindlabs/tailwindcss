@@ -1,9 +1,9 @@
 ---
 extends: _layouts.markdown
-title: "Whitespace"
+title: "Letter Spacing"
 ---
 
-# Whitespace
+# Letter Spacing
 
 <div class="subnav">
     <a class="subnav-link" href="#usage">Usage</a>

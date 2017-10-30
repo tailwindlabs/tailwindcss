@@ -1,9 +1,9 @@
 ---
 extends: _layouts.markdown
-title: "Leading"
+title: "Whitespace &amp; Wrapping"
 ---
 
-# Leading
+# Whitespace & Wrapping
 
 <div class="subnav">
     <a class="subnav-link" href="#usage">Usage</a>

@@ -159,16 +159,16 @@
                                 </li>
                                 <li class="mb-3"><a href="{{ $page->baseUrl }}/svg" class="{{ $page->active('/svg') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">SVG</a></li>
                                 <li class="mb-3">
-                                    <a href="{{ $page->baseUrl }}/fonts" class="block mb-2 {{ $page->active(['/fonts', '/text-color', '/text-sizing', '/font-weight', '/leading', '/tracking', '/whitespace', '/text-style']) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Typography</a>
-                                    <ul class="pl-4 {{ $page->active(['/fonts', '/text-color', '/text-sizing', '/font-weight', '/leading', '/tracking', '/whitespace', '/text-style']) ? 'block' : 'hidden' }}">
+                                    <a href="{{ $page->baseUrl }}/fonts" class="block mb-2 {{ $page->active(['/fonts', '/text-color', '/text-sizing', '/font-weight', '/line-height', '/letter-spacing', '/whitespace-and-wrapping', '/text-style']) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Typography</a>
+                                    <ul class="pl-4 {{ $page->active(['/fonts', '/text-color', '/text-sizing', '/font-weight', '/line-height', '/letter-spacing', '/whitespace-and-wrapping', '/text-style']) ? 'block' : 'hidden' }}">
                                         <li class="mb-3"><a href="{{ $page->baseUrl }}/fonts" class="{{ $page->active('/fonts') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Fonts</a></li>
                                         <li class="mb-3"><a href="{{ $page->baseUrl }}/text-color" class="{{ $page->active('/text-color') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Color</a></li>
                                         <li class="mb-3"><a href="{{ $page->baseUrl }}/text-sizing" class="{{ $page->active('/text-sizing') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Sizing</a></li>
                                         <li class="mb-3"><a href="{{ $page->baseUrl }}/font-weight" class="{{ $page->active('/font-weight') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Weight</a></li>
-                                        <li class="mb-3"><a href="{{ $page->baseUrl }}/leading" class="{{ $page->active('/leading') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Leading</a></li>
-                                        <li class="mb-3"><a href="{{ $page->baseUrl }}/tracking" class="{{ $page->active('/tracking') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Tracking</a></li>
-                                        <li class="mb-3"><a href="{{ $page->baseUrl }}/whitespace" class="{{ $page->active('/whitespace') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Whitespace</a></li>
+                                        <li class="mb-3"><a href="{{ $page->baseUrl }}/line-height" class="{{ $page->active('/line-height') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Line Height</a></li>
+                                        <li class="mb-3"><a href="{{ $page->baseUrl }}/letter-spacing" class="{{ $page->active('/letter-spacing') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Letter Spacing</a></li>
                                         <li class="mb-3"><a href="{{ $page->baseUrl }}/text-style" class="{{ $page->active('/text-style') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Style &amp; Decoration</a></li>
+                                        <li class="mb-3"><a href="{{ $page->baseUrl }}/whitespace-and-wrapping" class="{{ $page->active('/whitespace-and-wrapping') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Whitespace &amp; Wrapping</a></li>
                                     </ul>
                                 </li>
                                 <li class="mb-3"><a href="{{ $page->baseUrl }}/vertical-alignment" class="{{ $page->active('/vertical-alignment') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Vertical Alignment</a></li>
