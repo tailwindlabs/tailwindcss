@@ -111,37 +111,21 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-By default Tailwind provides a sensible numeric opacity scale. You can, of course, modify these values as needed. This is done in the `opacity` section of your Tailwind config.
+By default Tailwind provides five opacity utilities based on a simple numeric scale. You change, add, or remove these by editing the `opacity` section of your Tailwind config.
 
-@component('_partials.customized-config')
-@slot('default')
-{
-  // ...
-  opacity: {
-    '0': '0',
-    '25': '.25',
-    '50': '.5',
-    '75': '.75',
-    '100': '1',
-  }
-}
-@endslot
-@slot('customized')
-{
-  // ...
-  opacity: {
-    'none': '0',
-    '10': '.1',
-    '20': '.2',
-    '30': '.3',
-    '40': '.4',
-    '50': '.5',
-    '60': '.6',
-    '70': '.7',
-    '80': '.8',
-    '90': '.9',
-    '100': '1',
-  },
-}
-@endslot
+@component('_partials.customized-config', ['key' => 'opacity'])
+  '0': '0',
+- '25': '.25',
+- '50': '.5',
+- '75': '.75',
++ '10': '.1',
++ '20': '.2',
++ '30': '.3',
++ '40': '.4',
++ '50': '.5',
++ '60': '.6',
++ '70': '.7',
++ '80': '.8',
++ '90': '.9',
+  '100': '1',
 @endcomponent

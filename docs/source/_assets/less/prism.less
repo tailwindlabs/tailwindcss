@@ -72,7 +72,7 @@ pre[class*="language-"] {
 .token.prolog,
 .token.doctype,
 .token.cdata {
-    @apply .text-slate-lighter;
+    @apply .text-grey;
 }
 
 .token.punctuation {
@@ -89,8 +89,19 @@ pre[class*="language-"] {
 .token.boolean,
 .token.number,
 .token.constant,
-.token.symbol,
+.token.symbol {
+    @apply .text-blue-dark;
+}
+
+code.language-diff, pre.language-diff {
+    @apply .text-grey-darker;
+}
+
 .token.deleted {
+    @apply .text-grey;
+}
+
+.token.inserted {
     @apply .text-blue-dark;
 }
 

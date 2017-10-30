@@ -160,40 +160,18 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-By default Tailwind provides a sensible numeric z-index scale. You can, of course, modify these values as needed. This is done in the `zIndex` section of your Tailwind config.
+By default Tailwind provides six numeric `z-index` utilities and an `auto` utility. You change, add, or remove these by editing the `zIndex` section of your Tailwind config.
 
-@component('_partials.customized-config')
-@slot('default')
-{
-  // ...
-  zIndex: {
-    '0': 0,
-    '10': 10,
-    '20': 20,
-    '30': 30,
-    '40': 40,
-    '50': 50,
-    'auto': 'auto',
-  },
-}
-@endslot
-@slot('customized')
-{
-  // ...
-  zIndex: {
-    '0': 0,
-    '10': 10,
-    '20': 20,
-    '30': 30,
-    '40': 40,
-    '50': 50,
-    '60': 60,
-    '70': 70,
-    '80': 80,
-    '90': 90,
-    '100': 100,
-    'auto': 'auto',
-  },
-}
-@endslot
+@component('_partials.customized-config', ['key' => 'zIndex'])
+  '0': 0,
+- '10': 10,
+- '20': 20,
+- '30': 30,
+- '40': 40,
+- '50': 50,
++ '25': 25,
++ '50': 50,
++ '75': 75,
++ '100': 100,
+'auto': 'auto',
 @endcomponent
