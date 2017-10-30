@@ -96,14 +96,14 @@
                                     </ul>
                                 </li>
                                 <li class="mb-3">
-                                    <a href="{{ $page->baseUrl }}/docs/border-width" class="block mb-2 {{ $page->active('/docs/border-') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Borders</a>
+                                    <a href="{{ $page->baseUrl }}/docs/border-width" class="block mb-2 {{ $page->active(['/docs/border-width', '/docs/border-color', '/docs/border-style']) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Borders</a>
                                     <ul class="pl-4 {{ $page->active('/docs/border-') ? 'block' : 'hidden' }}">
                                         <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/border-width" class="{{ $page->active('/docs/border-width') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Width</a></li>
                                         <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/border-color" class="{{ $page->active('/docs/border-color') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Color</a></li>
                                         <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/border-style" class="{{ $page->active('/docs/border-style') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Style</a></li>
-                                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/border-radius" class="{{ $page->active('/docs/border-radius') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Radius</a></li>
                                     </ul>
                                 </li>
+                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/border-radius" class="{{ $page->active('/docs/border-radius') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Border Radius</a></li>
                                 <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/container" class="{{ $page->active('/docs/container') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Container</a></li>
                                 <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/display" class="{{ $page->active('/docs/display') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Display</a></li>
                                 <li class="mb-3">
