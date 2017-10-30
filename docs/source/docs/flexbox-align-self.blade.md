@@ -125,7 +125,7 @@ Use `.self-stretch` to stretch an item to fill the flex container's cross axis, 
 
 To control the alignment of a flex item at a specific breakpoint, add a `{breakpoint}:` prefix to any existing utility class. For example, use `md:self-end` to apply the `self-end` utility at only medium screen sizes and above.
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](#) documentation.
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 @component('_partials.responsive-code-sample')
 @slot('none')

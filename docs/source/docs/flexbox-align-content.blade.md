@@ -186,7 +186,7 @@ Use `.content-around` to distribute lines in a flex container such that there is
 
 To control the alignment of flex content at a specific breakpoint, add a `{breakpoint}:` prefix to any existing utility class. For example, use `md:content-around` to apply the `content-around` utility at only medium screen sizes and above.
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](#) documentation.
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 @component('_partials.responsive-code-sample')
 @slot('none')

@@ -251,7 +251,7 @@ Use `.flex-no-shrink` to prevent a flex item from shrinking:
 
 To control how a flex item grows or shrinks at a specific breakpoint, add a `{breakpoint}:` prefix to any existing utility class. For example, use `md:flex-no-shrink` to apply the `flex-no-shrink` utility at only medium screen sizes and above.
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](#) documentation.
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 @component('_partials.responsive-code-sample')
 @slot('none')

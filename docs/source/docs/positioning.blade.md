@@ -270,7 +270,7 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 
 Use the `.pin{-edge?}` utilities to anchor absolutely positioned elements against any of the edges of the nearest positioned parent.
 
-Combined with Tailwind's [padding utilities](#), you'll probably find that these are all you need to precisely control absolutely positioned elements.
+Combined with Tailwind's [padding utilities](/docs/padding), you'll probably find that these are all you need to precisely control absolutely positioned elements.
 
 <div class="flex items-start mt-8 text-sm leading-none mb-8">
     <div class="pr-12">

@@ -65,4 +65,4 @@ title: "Display"
     </table>
 </div>
 
-If you're looking for Flexbox utilities, please see the [Flexbox](/styles/flexbox) page.
+If you're looking for Flexbox utilities, please see the [Flexbox](/docs/flexbox-display) page.

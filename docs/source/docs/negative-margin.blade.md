@@ -1,9 +1,9 @@
 ---
 extends: _layouts.markdown
-title: "Margin"
+title: "Negative Margin"
 ---
 
-# Margin
+# Negative Margin
 
 <div class="subnav">
     <a class="subnav-link" href="#usage">Usage</a>
@@ -88,7 +88,7 @@ By default the `@sizing-scale` is automatically applied to the margin, negative 
 
 <h2 id="responsive">Responsive spacing utilities</h2>
 
-The spacing utilities can also be used with <a href="/responsive">responsive</a> prefixes:
+The spacing utilities can also be used with [responsive](/docs/responsive-design) prefixes:
 
 ```html
 <div class="p-1 sm:p-2 md:p-3 lg:p-4"></div>
@@ -103,3 +103,4 @@ div {
   });
 }
 ```
+
