@@ -1,16 +1,17 @@
 ---
 extends: _layouts.markdown
-title: "Color Palette"
+title: "Colors"
 ---
 
-# Color Palette
+# Colors
 
-- Explain default color palette
-- Document how to customize your color palette, using regular JS features in your config file to avoid duplication, merging colors, etc.
-- Talk about naming, how it's easy to use color-based names or hierarchy-based names, whatever floats your boat
+Developing an organized, consistent and beautiful color palette is critical to the design success of a project. Tailwind provides a fantastic color system that makes this very easy to accomplish.
 
+## Default color palette
 
-<div class="flex flex-wrap -mx-4 mb-8">
+To get you started, we've provided a generous palette of great looking colors that are perfect for prototyping, or even as a starting point for your color palette. That said, don't hesitate to [customize](#customizing) them for your project.
+
+<div class="flex flex-wrap -mx-4 my-8">
   <div class="w-full md:w-1/3 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-grey px-6 py-4 text-sm font-semibold relative shadow z-10">
@@ -420,3 +421,50 @@ title: "Color Palette"
     </div>
   </div>
 </div>
+
+## Customizing
+
+Tailwind makes it a breeze to modify to default color palette for you project. Remember, you own these colors and nothing will break if you change everything about them.
+
+By default Tailwind defines the entire color palette in a `colors` object at the top of your Tailwind config file. These colors are then assigned to `textColors`, `backgroundColors` and `borderColors`. This approach works well since it provides a consistent naming system across all the utilities. However, you're welcome to modify them independently of one-another as well.
+
+```js
+var colors = {
+  'transparent': 'transparent',
+
+  'slate-darker': '#212b35',
+  'slate-dark': '#404e5c',
+  'slate': '#647382',
+  'slate-light': '#919eab',
+  'slate-lighter': '#c5ced6',
+
+  // ...
+}
+
+module.exports = {
+  colors: colors,
+  textColors: colors,
+  backgroundColors: colors,
+  borderColors: Object.assign({ default: colors['slate-lighter'] }, colors),
+
+  // ...
+}
+```
+
+You'll notice above that the color palette is also assigned to the `colors` key of your Tailwind config. This makes it easy to access them in your custom CSS using the `config()` function. For example:
+
+```css
+.error { color: config('colors.slate-darker') }
+```
+
+<!-- Document how to customize your color palette, using regular JS features in your config file to avoid duplication, merging colors, etc. -->
+
+## Naming
+
+<!-- Talk about naming, how it's easy to use color-based names or hierarchy-based names, whatever floats your boat -->
+
+In the default color palette we've used literal color names, like `red`, `green` and `blue`. Another common approach to naming colors is choosing functional names based on how the colors are used, such as `primary`, `secondary`, and `brand`.
+
+You can also choose different approaches how handle your color variants. In the default color palette we've again used literal variants, like `light`, `dark`, and `darker`. Another common approach here is to use a numeric scale, like `100`, `200` and `300`.
+
+You should feel free to choose whatever color naming approach makes the most sense to your team.

@@ -58,8 +58,8 @@
                                     </a>
                                 </li>
                                 <li class="mb-3">
-                                    <a class="{{ $page->active('/color-palette') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/color-palette">
-                                        Color Palette
+                                    <a class="{{ $page->active('/colors') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/colors">
+                                        Colors
                                     </a>
                                 </li>
                                 <li class="mb-3">
