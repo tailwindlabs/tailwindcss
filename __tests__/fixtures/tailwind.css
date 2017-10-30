@@ -3714,6 +3714,11 @@ button,
   padding: 0;
 }
 
+.example {
+  font-weight: 700;
+  color: #e3342f;
+}
+
 @media (min-width: 576px) {
   .sm\:input-reset {
     appearance: none;
@@ -6841,6 +6846,11 @@ button,
     list-style: none;
     margin: 0;
     padding: 0;
+  }
+
+  .sm\:example {
+    font-weight: 700;
+    color: #e3342f;
   }
 }
 
@@ -9972,6 +9982,11 @@ button,
     margin: 0;
     padding: 0;
   }
+
+  .md\:example {
+    font-weight: 700;
+    color: #e3342f;
+  }
 }
 
 @media (min-width: 992px) {
@@ -13102,6 +13117,11 @@ button,
     margin: 0;
     padding: 0;
   }
+
+  .lg\:example {
+    font-weight: 700;
+    color: #e3342f;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -16231,5 +16251,10 @@ button,
     list-style: none;
     margin: 0;
     padding: 0;
+  }
+
+  .xl\:example {
+    font-weight: 700;
+    color: #e3342f;
   }
 }

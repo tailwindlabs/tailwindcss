@@ -4,7 +4,7 @@ import functions from 'postcss-functions'
 export default function(options) {
   return functions({
     functions: {
-      tailwind: function (path) {
+      config: function (path) {
         return _.get(options, _.trim(path, `'"`))
       }
     }
