@@ -6,12 +6,12 @@ const fs = require('fs')
 
 fs.writeFileSync('./tailwind.json', JSON.stringify(config))
 
-mix.setPublicPath('source/')
+mix.setPublicPath('source')
 
 mix
   .js('source/_assets/js/nav.js', 'source/js')
   .js('source/_assets/js/app.js', 'source/js')
-  .less('source/_assets/less/main.less', 'css')
+  .less('source/_assets/less/main.less', 'source/css')
   .options({
     postCss: [
       tailwind('tailwind.js'),
