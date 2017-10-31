@@ -54,7 +54,7 @@ You can customize the margin and padding utilities using the `@sizing-scale` var
 
 <h2 id="responsive">Responsive spacing utilities</h2>
 
-The spacing utilities can also be used with <a href="/responsive">responsive</a> prefixes:
+The spacing utilities can also be used with [responsive](/docs/responsive-design) prefixes:
 
 ```html
 <div class="p-1 sm:p-2 md:p-3 lg:p-4"></div>

@@ -79,6 +79,22 @@
     @apply .text-lg;
   }
 
+  > h4, h4& {
+    @apply .mt-8;
+    @apply .mb-0;
+    @apply .text-slate-darker;
+    @apply .leading-none;
+    @apply .font-semibold;
+    @apply .text-base;
+  }
+
+  > h1 > code,
+  > h2 > code,
+  > h3 > code,
+  > h4 > code {
+    @apply .font-mono;
+  }
+
   > p, p&, > blockquote > p {
     @apply .text-slate-dark;
     @apply .mt-4;
@@ -104,7 +120,7 @@
     @apply .text-slate-dark;
   }
 
-  > :not(pre) > code[class*="language-"], > pre[class*="language-"], pre[class*="language-"]& {
+  > :not(pre):not(h1):not(h2):not(h3):not(h4) > code, > pre, pre& {
     @apply .bg-smoke-lighter;
     @apply .text-sm;
     @apply .leading-normal;

@@ -1,9 +1,9 @@
 ---
 extends: _layouts.markdown
-title: "Negative Margin"
+title: "Margin"
 ---
 
-# Negative Margin
+# Margin
 
 <div class="subnav">
     <a class="subnav-link" href="#usage">Usage</a>
@@ -45,13 +45,15 @@ The syntax below is combined to create a system for padding and margins. For exa
 
 <h2 id="customizing">Customizing the spacing scale</h2>
 
+You can customize the margin and padding utilities using the `@sizing-scale` variable. Please note that the entire scale must be redefined. It's not possible to add a new value to the existing scale.
+
 ```css
 // Scale customization here
 ```
 
 <h2 id="responsive">Responsive spacing utilities</h2>
 
-The spacing utilities can also be used with <a href="/responsive">responsive</a> prefixes:
+The spacing utilities can also be used with [responsive](/docs/responsive-design) prefixes:
 
 ```html
 <div class="p-1 sm:p-2 md:p-3 lg:p-4"></div>

@@ -79,27 +79,27 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="text-center">
-    <div class="px-4 py-2 bg-smoke opacity-100 w-24 h-24 rounded-pill inline-block"></div>
+    <div class="px-4 py-2 bg-smoke opacity-100 w-24 h-24 rounded-full inline-block"></div>
 </div>
 @endslot
 @slot('sm')
 <div class="text-center">
-    <div class="px-4 py-2 bg-smoke opacity-75 w-24 h-24 rounded-pill inline-block"></div>
+    <div class="px-4 py-2 bg-smoke opacity-75 w-24 h-24 rounded-full inline-block"></div>
 </div>
 @endslot
 @slot('md')
 <div class="text-center">
-    <div class="px-4 py-2 bg-smoke opacity-50 w-24 h-24 rounded-pill inline-block"></div>
+    <div class="px-4 py-2 bg-smoke opacity-50 w-24 h-24 rounded-full inline-block"></div>
 </div>
 @endslot
 @slot('lg')
 <div class="text-center">
-    <div class="px-4 py-2 bg-smoke opacity-25 w-24 h-24 rounded-pill inline-block"></div>
+    <div class="px-4 py-2 bg-smoke opacity-25 w-24 h-24 rounded-full inline-block"></div>
 </div>
 @endslot
 @slot('xl')
 <div class="text-center">
-    <div class="px-4 py-2 bg-smoke opacity-0 w-24 h-24 rounded-pill inline-block"></div>
+    <div class="px-4 py-2 bg-smoke opacity-0 w-24 h-24 rounded-full inline-block"></div>
 </div>
 @endslot
 @slot('code')

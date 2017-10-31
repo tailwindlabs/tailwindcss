@@ -1,4 +1,5 @@
 const anchorJS = require('anchor-js')
+const Prism = require('./prism')
 
 window.anchors = new anchorJS()
 window.Vue = require('vue')
@@ -8,3 +9,7 @@ Vue.component('responsive-code-sample', require('./components/ResponsiveCodeSamp
 const app = new Vue({
     el: '#app'
 })
+
+Prism.highlightAll()
+anchors.options = { placement: 'left', class: 'text-slate-light' };
+anchors.add();

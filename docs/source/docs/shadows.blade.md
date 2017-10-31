@@ -60,18 +60,44 @@ title: "Shadows"
     </table>
 </div>
 
-Box shadows can be applied using the `.shadow-{size}` utilities. By default these are a size scale, where the smaller sizes represent more shallow shadows, and larger sizes represent deeper shadows. If you use the `.shadow` utility without a suffix, you'll get the default shadow.
+## Outer shadow
+
+Use the `.shadow`, `.shadow-md`, or `.shadow-lg` utilities to apply different sized outer box shadows to an element.
 
 @component('_partials.code-sample', ['class' => 'flex justify-around text-sm py-8'])
-<div class="mr-3 p-4 bg-smoke-lighter shadow-inner">.shadow-inner</div>
 <div class="mr-3 p-4 shadow">.shadow</div>
 <div class="mr-3 p-4 shadow-md">.shadow-md</div>
-<div class="mr-3 p-4 shadow-lg">.shadow-lg</div>
+<div class="p-4 shadow-lg">.shadow-lg</div>
 @slot('code')
-<div class="shadow-inner"></div>
 <div class="shadow"></div>
 <div class="shadow-md"></div>
 <div class="shadow-lg"></div>
+@endslot
+@endcomponent
+
+## Inner shadow
+
+Use the `.shadow-inner` utility to apply a subtle inset box shadow to an element.
+
+This can be useful for things like form controls or wells.
+
+@component('_partials.code-sample', ['class' => 'flex justify-around text-sm py-8'])
+<div class="p-4 bg-smoke-lighter shadow-inner">.shadow-inner</div>
+@slot('code')
+<div class="shadow-inner"></div>
+@endslot
+@endcomponent
+
+## No shadow
+
+Use `.shadow-none` to remove an existing box shadow from an element.
+
+This is most commonly used to remove a shadow that was applied at a smaller breakpoint.
+
+@component('_partials.code-sample', ['class' => 'flex justify-around text-sm py-8'])
+<div class="p-4 shadow-none bg-grey-light">.shadow-none</div>
+@slot('code')
+<div class="shadow-none"></div>
 @endslot
 @endcomponent
 
@@ -84,27 +110,27 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex justify-center">
-    <div class="shadow px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-pill"></div>
+    <div class="shadow px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex justify-center">
-    <div class="shadow-md px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-pill"></div>
+    <div class="shadow-md px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
 </div>
 @endslot
 @slot('md')
 <div class="flex justify-center">
-    <div class="shadow-lg px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-pill"></div>
+    <div class="shadow-lg px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex justify-center">
-    <div class="shadow-inner px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-pill"></div>
+    <div class="shadow-inner px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex justify-center">
-    <div class="shadow-none px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-pill"></div>
+    <div class="shadow-none px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
 </div>
 @endslot
 @slot('code')
@@ -116,7 +142,7 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-By default Tailwind provides three drop shadow utilities, one inner shadow utility, and a utility for removing existing shadows. You change, add, or remove these by editing the `shadows` section of your Tailwind config.
+By default Tailwind provides three drop shadow utilities, one inner shadow utility, and a utility for removing existing shadows. You can change, add, or remove these by editing the `shadows` section of your Tailwind config.
 
 If a `default` shadow is provided, it will be used for the non-suffixed `.shadow` utility. Any other keys will be used as suffixes, for example the key `'2'` will create a corresponding `.shadow-2` utility.
 
