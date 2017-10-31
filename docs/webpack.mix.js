@@ -1,6 +1,6 @@
 const mix = require('laravel-mix')
 const tailwind = require('./../lib/index.js')
-const config = require('./tailwind.js')
+const config = require('./../defaultConfig.js')
 const fs = require('fs')
 
 
