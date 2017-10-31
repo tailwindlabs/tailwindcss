@@ -73,6 +73,7 @@ config.padding = {
   '10': '2.5rem',
   '12': '3rem',
   '16': '4rem',
+  '20': '5rem',
   '80': '20rem',
   ...config.padding,
 }

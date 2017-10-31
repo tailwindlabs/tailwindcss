@@ -3,7 +3,7 @@
 @section('body')
 
 <div class="min-h-screen">
-    <div id="sidebar" class="z-50 fixed pin-y pin-l overflow-y-scroll bg-smoke-light w-4/5 md:w-full md:max-w-xs flex-none border-r-2 border-smoke md:flex flex-col">
+    <div id="sidebar" class="hidden z-50 fixed pin-y pin-l overflow-y-scroll bg-smoke-light w-4/5 md:w-full md:max-w-xs flex-none border-r-2 border-smoke md:flex flex-col">
         <div class="border-b border-smoke flex-none p-8">
             <div class="hidden md:block text-center mb-8">
                 <a href="/" class="inline-block">
@@ -180,7 +180,7 @@
                   </div>
             </div>
         </div>
-        <div id="content" class="px-6 py-16 md:py-8 w-full max-w-xl mx-auto">
+        <div id="content" class="px-6 pb-8 pt-20 md:pt-8 w-full max-w-xl mx-auto">
             <div id="app">
                 <div class="markdown">
                     @if ($page->category)
@@ -191,9 +191,6 @@
             </div>
             <script src="/js/app.js"></script>
             <script>
-                anchors.options = { placement: 'left', class: 'text-slate-light' };
-                anchors.add();
-
                 var closeSidebar = function () {
                     $('#sidebar').addClass("hidden");
                     $('.js-close-sidebar').addClass("hidden");
@@ -206,12 +203,6 @@
                 $('.js-open-sidebar').on('click', function () {
                     $('#sidebar').removeClass("hidden");
                     $('.js-close-sidebar').removeClass("hidden");
-                });
-
-                $(document).ready(function () {
-                  if ($(window).width() <= 767) {
-                    closeSidebar();
-                  }
                 });
             </script>
         </div>
