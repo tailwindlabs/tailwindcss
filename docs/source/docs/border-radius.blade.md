@@ -159,31 +159,31 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex justify-center">
-    <div class="shadow px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-pill"></div>
+    <div class="bg-grey w-24 h-24 rounded"></div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex justify-center">
-    <div class="shadow-md px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-pill"></div>
+    <div class="bg-grey w-24 h-24 rounded rounded-t"></div>
 </div>
 @endslot
 @slot('md')
 <div class="flex justify-center">
-    <div class="shadow-lg px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-pill"></div>
+    <div class="bg-grey w-24 h-24 rounded-lg rounded-b"></div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex justify-center">
-    <div class="shadow-inner px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-pill"></div>
+    <div class="bg-grey w-24 h-24 rounded-none"></div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex justify-center">
-    <div class="shadow-none px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-pill"></div>
+    <div class="bg-grey w-24 h-24 rounded rounded-r"></div>
 </div>
 @endslot
 @slot('code')
-<div class="none:shadow sm:shadow-md md:shadow-lg lg:shadow-inner xl:shadow-none ...">
+<div class="none:rounded sm:rounded-t md:rounded-lg md:rounded-b lg:rounded-none xl:rounded xl:rounded-b ...">
     <!-- ... -->
 </div>
 @endslot
