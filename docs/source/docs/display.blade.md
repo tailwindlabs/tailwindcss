@@ -16,6 +16,8 @@ title: "Display"
     'focus' => false
 ])
 
+@include('_partials.work-in-progress')
+
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">
         <thead>

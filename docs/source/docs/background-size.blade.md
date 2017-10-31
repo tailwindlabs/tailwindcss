@@ -6,7 +6,7 @@ title: "Background Size"
 # Background Size
 
 <div class="text-xl text-slate-light mb-4">
-    Utilities for setting the background size of an element's background image
+    Utilities for controlling the background size of an element's background image.
 </div>
 
 @include('_partials.feature-badges', [
@@ -15,6 +15,8 @@ title: "Background Size"
     'hover' => false,
     'focus' => false
 ])
+
+@include('_partials.work-in-progress')
 
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">

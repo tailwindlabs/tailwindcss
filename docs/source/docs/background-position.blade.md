@@ -6,7 +6,7 @@ title: "Background Position"
 # Background Position
 
 <div class="text-xl text-slate-light mb-4">
-    Utilities for setting the initial position of a background image
+    Utilities for controlling the position of an element's background image.
 </div>
 
 @include('_partials.feature-badges', [
@@ -15,6 +15,8 @@ title: "Background Position"
     'hover' => false,
     'focus' => false
 ])
+
+@include('_partials.work-in-progress')
 
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">
