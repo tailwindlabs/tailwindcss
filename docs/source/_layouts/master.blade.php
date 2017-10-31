@@ -22,15 +22,14 @@
         <link rel="stylesheet" href="{{ mix('/css/main.css') }}">
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script src="{{ mix('/js/nav.js') }}"></script>
-
     </head>
-    <body class="font-sans font-normal text-slate-darker leading-normal">
+    <body data-sidebar-visible="true" class="font-sans font-normal text-slate-darker leading-normal">
         <div class="min-h-screen">
-            <div class="fixed pin-y pin-l bg-smoke-light w-full max-w-xs flex-none border-r-2 border-smoke flex flex-col">
+            <div id="sidebar" class="z-50 fixed pin-y pin-l overflow-y-scroll bg-smoke-light w-4/5 md:w-full md:max-w-xs flex-none border-r-2 border-smoke md:flex flex-col">
                 <div class="border-b border-smoke flex-none p-8">
-                    <div class="text-center mb-8">
+                    <div class="hidden md:block text-center mb-8">
                         <a href="/" class="inline-block">
-                            <svg class="h-8" viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient x1="0%" y1="0%" y2="100%" id="a"><stop stop-color="#2383AE" offset="0%"></stop><stop stop-color="#6DD7B9" offset="100%"></stop></linearGradient></defs><path d="M15 12c2-8 7-12 15-12 12 0 13.5 9 19.5 10.5 4 1 7.5-.5 10.5-4.5-2 8-7 12-15 12-12 0-13.5-9-19.5-10.5-4-1-7.5.5-10.5 4.5zM0 30c2-8 7-12 15-12 12 0 13.5 9 19.5 10.5 4 1 7.5-.5 10.5-4.5-2 8-7 12-15 12-12 0-13.5-9-19.5-10.5-4-1-7.5.5-10.5 4.5z" fill="url(#a)" fill-rule="evenodd"></path></svg>
+                            <svg class="h-8" viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg"><path d="M15 12c2-8 7-12 15-12 12 0 13.5 9 19.5 10.5 4 1 7.5-.5 10.5-4.5-2 8-7 12-15 12-12 0-13.5-9-19.5-10.5-4-1-7.5.5-10.5 4.5zM0 30c2-8 7-12 15-12 12 0 13.5 9 19.5 10.5 4 1 7.5-.5 10.5-4.5-2 8-7 12-15 12-12 0-13.5-9-19.5-10.5-4-1-7.5.5-10.5 4.5z" fill="url(#logoGradient)" fill-rule="evenodd"></path></svg>
                         </a>
                     </div>
                     <div class="relative">
@@ -185,14 +184,64 @@
                     </nav>
                 </div>
             </div>
-            <div class="ml-80">
-                <div id="content" class="px-6 py-8 w-full max-w-xl mx-auto">
+            <div class="md:ml-80">
+                <div class="fixed w-full">
+                    <div class="pin-t bg-white md:hidden relative border-b border-dark h-12 flex items-center">
+                          <div class="js-open-sidebar absolute pin-l pin-y px-4 flex items-center">
+                              <svg class="h-4" fill="#777" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+                          </div>
+                          <div class="mx-auto inline-flex items-center">
+                              <svg class="h-4" viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M15 12c2-8 7-12 15-12 12 0 13.5 9 19.5 10.5 4 1 7.5-.5 10.5-4.5-2 8-7 12-15 12-12 0-13.5-9-19.5-10.5-4-1-7.5.5-10.5 4.5zM0 30c2-8 7-12 15-12 12 0 13.5 9 19.5 10.5 4 1 7.5-.5 10.5-4.5-2 8-7 12-15 12-12 0-13.5-9-19.5-10.5-4-1-7.5.5-10.5 4.5z" fill="url(#logoGradient)" fill-rule="evenodd"></path>
+                              </svg>
+                          </div>
+                          <div class="js-close-sidebar">
+                            <div class="flex items-center absolute pin-r pin-y px-4">
+                              <svg class="h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"/></svg>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+                <div id="content" class="px-6 py-16 md:py-8 w-full max-w-xl mx-auto">
                     <div id="app">
                         @yield('body')
                     </div>
-                    <script src="{{ mix('/js/app.js') }}"></script>
+                    <script src="/js/app.js"></script>
+                    <script>
+                        anchors.options = { placement: 'left', class: 'text-slate-light' };
+                        anchors.add();
+
+                        var closeSidebar = function () {
+                            $('#sidebar').addClass("hidden");
+                            $('.js-close-sidebar').addClass("hidden");
+                        }
+
+                        $('.js-close-sidebar').on('click', function () {
+                          closeSidebar();
+                        });
+
+                        $('.js-open-sidebar').on('click', function () {
+                            $('#sidebar').removeClass("hidden");
+                            $('.js-close-sidebar').removeClass("hidden");
+                        });
+
+                        $(document).ready(function () {
+                          if ($(window).width() <= 767) {
+                            closeSidebar();
+                          }
+                        });
+                    </script>
                 </div>
             </div>
         </div>
+
+        <svg>
+          <defs>
+            <linearGradient x1="0%" y1="0%" y2="100%" id="logoGradient">
+              <stop stop-color="#2383AE" offset="0%"></stop>
+              <stop stop-color="#6DD7B9" offset="100%"></stop>
+            </linearGradient>
+          </defs>
+        </svg>
     </body>
 </html>
