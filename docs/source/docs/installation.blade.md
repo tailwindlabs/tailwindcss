@@ -28,7 +28,7 @@ Tailwind is configured almost entirely in plain JavaScript. To do this you'll ne
 <div class="text-purple-dark">./node_modules/.bin/tailwind <span class="text-blue-dark">init</span> <span class="text-smoke-darker">[filename]</span></div>
 </div>
 
-Alternatively, you can simply copy the default config file [from here](https://github.com/nothingworksinc/tailwindcss/blob/master/defaultConfig.js).
+Alternatively, you can simply copy the default config file [from here](https://github.com/tailwindcss/tailwindcss/blob/master/defaultConfig.js).
 
 ## 3. Use Tailwind in your CSS
 
@@ -42,7 +42,7 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
  * Normalize.css and some additional base styles.
  *
  * You can see the styles here:
- * https://github.com/nothingworksinc/tailwindcss/blob/master/css/preflight.css
+ * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
  */
 @@tailwind reset;
 

@@ -17,7 +17,7 @@ Use the `@@tailwind` directive to insert Tailwind's `reset` and `utilities` styl
  * Normalize.css and some additional base styles.
  *
  * You can see the styles here:
- * https://github.com/nothingworksinc/tailwindcss/blob/master/css/preflight.css
+ * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
  */
 @@tailwind reset;
 
