@@ -18,7 +18,7 @@
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script src="{{ mix('/js/nav.js') }}"></script>
     </head>
-    <body class="font-sans font-normal text-slate-darker leading-normal min-h-screen">
+    <body data-sidebar-visible="true" class="font-sans font-normal text-slate-darker leading-normal">
         @yield('body')
     </body>
 </html>
