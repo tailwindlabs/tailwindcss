@@ -3,6 +3,12 @@ var config = require('../defaultConfig')
 config.colors = {
   ...config.colors,
 
+  'slate-darker': '#212b35',
+  'slate-dark': '#404e5c',
+  'slate': '#647382',
+  'slate-light': '#919eab',
+  'slate-lighter': '#c5ced6',
+
   'smoke-darker': '#919eab',
   'smoke-dark': '#c5ced6',
   'smoke': '#dfe3e8',

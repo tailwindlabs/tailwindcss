@@ -46,18 +46,6 @@ View the full documentation at https://tailwindcss.com.
 var colors = {
   'transparent': 'transparent',
 
-  'slate-darker': '#212b35',
-  'slate-dark': '#404e5c',
-  'slate': '#647382',
-  'slate-light': '#919eab',
-  'slate-lighter': '#c5ced6',
-
-  'smoke-darker': '#919eab',
-  'smoke-dark': '#c5ced6',
-  'smoke': '#dfe3e8',
-  'smoke-light': '#f0f2f5',
-  'smoke-lighter': '#f7f9fa',
-
   'black': '#222b2f',
   'grey-darkest': '#364349',
   'grey-darker': '#596a73',
