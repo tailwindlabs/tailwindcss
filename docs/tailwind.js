@@ -2,19 +2,15 @@ var config = require('../defaultConfig')
 
 config.colors = {
   ...config.colors,
-  'transparent': 'transparent',
-
-  'slate-darker': '#212b35',
-  'slate-dark': '#404e5c',
-  'slate': '#647382',
-  'slate-light': '#919eab',
-  'slate-lighter': '#c5ced6',
 
   'smoke-darker': '#919eab',
   'smoke-dark': '#c5ced6',
   'smoke': '#dfe3e8',
   'smoke-light': 'hsl(200, 33%, 96%)',
   'smoke-lighter': 'hsl(200, 25%, 98%)',
+
+  'tailwind-teal': '#44A8B3',
+  'tailwind-teal-dark': '#2F8696',
 }
 
 config.fonts = {
@@ -45,12 +41,18 @@ config.textColors = config.colors
 
 config.backgroundColors = config.colors
 
+config.borderWidths = {
+  '6': '6px',
+  ...config.borderWidths,
+}
+
 config.borderColors = {
-    default: config.colors['slate-lighter'],
-    ...config.colors,
-  },
+  default: config.colors['slate-lighter'],
+  ...config.colors,
+}
 
 config.width = {
+  '5': '1.25rem',
   '128': '32rem',
   ...config.width,
 }

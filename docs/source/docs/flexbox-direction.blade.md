@@ -1,5 +1,5 @@
 ---
-extends: _layouts.markdown
+extends: _layouts.documentation
 title: "Direction - Flexbox"
 category: "Flexbox"
 ---
