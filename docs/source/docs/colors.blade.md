@@ -170,7 +170,7 @@ To get you started, we've provided a generous palette of great looking colors th
         <span>Dark</span>
         <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['yellow-dark']) }}</span>
       </div>
-      <div class="text-yellow-darkest bg-yellow-darker px-6 py-3 text-sm font-semibold flex justify-between">
+      <div class="text-white bg-yellow-darker px-6 py-3 text-sm font-semibold flex justify-between">
         <span>Darker</span>
         <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['yellow-darker']) }}</span>
       </div>
