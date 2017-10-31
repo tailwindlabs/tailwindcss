@@ -6,7 +6,7 @@ title: "What is Tailwind?"
 # What is Tailwind?
 
 <div class="mt-8 text-2xl text-grey-dark mb-8">
-    <p>
+    <p class="leading-tight">
         Tailwind is a utility-first CSS framework for rapidly building custom user interfaces.
     </p>
 </div>
