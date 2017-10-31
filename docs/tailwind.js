@@ -14,7 +14,7 @@ config.colors = {
 }
 
 config.fonts = {
-  'sans': 'Proxima Nova, proxima-nova, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
+  'sans': 'Aktiv Grotesk, aktiv-grotesk, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
   'serif': 'Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif',
   'mono': 'Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
 }
@@ -32,9 +32,16 @@ config.textSizes = {
 }
 
 config.fontWeights = {
+  'light': 300,
   'normal': 400,
   'semibold': 500,
   'bold': 700,
+}
+
+config.tracking = {
+  'tight': '-0.02em',
+  'normal': '0',
+  'wide': '0.05em',
 }
 
 config.textColors = config.colors
