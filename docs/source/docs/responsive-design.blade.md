@@ -5,7 +5,7 @@ title: "Responsive Design"
 
 # Responsive Design
 
-Tailwind allows you to build responsive designs in the same way you build the rest of your design&mdash;using utility classes. Every utility in Tailwind is also available in screen-size specific variations. For example, the `.font-bold` utility can be used on small screen sizes using the `.sm:font-bold` class, on medium screen sizes using the `.md:font-bold` class, on large screen sizes using the `.lg:font-bold` class and on extra large screen sizes using the `.xl:font-bold` class.
+Tailwind allows you to build responsive designs in the same way you build the rest of your design &mdash; using utility classes. Every utility in Tailwind is also available in screen-size specific variations. For example, the `.font-bold` utility can be used on small screen sizes using the `.sm:font-bold` class, on medium screen sizes using the `.md:font-bold` class, on large screen sizes using the `.lg:font-bold` class and on extra large screen sizes using the `.xl:font-bold` class.
 
 This is done using predefined screen sizes (media query breakpoints), each of which are given a unique name like `sm`, `md`, `lg` and `xl`. By default Tailwind takes a "mobile first" approach, where each screen size represents a minimum viewport width. Any classes you apply at smaller screen sizes are also applied to larger sizes, unless of course you override them, which is the whole point! This approach, while simple, is actually very powerful and can be used to build complex, beautiful, responsive designs.
 
@@ -46,18 +46,61 @@ This is done using predefined screen sizes (media query breakpoints), each of wh
 
 ## Customizing screens
 
-You define your project's screen sizes in your Tailwind config under the `screens` key. Screens in Tailwind are essentially CSS media queries. If you provide a single value for a screen, Tailwind will treat this as the minimum screen size value for that screen breakpoint. Here are the default screen sizes:
+You define your project's screen sizes in your Tailwind config under the `screens` key. Screens in Tailwind are essentially CSS media queries. If you provide a single value for a screen, Tailwind will treat this as the minimum screen size value for that screen breakpoint.
+
+Here are the default screen sizes:
 
 ```js
 screens: {
   'sm': '576px',
+  // => @media (min-width: 576px) { ... }
+
   'md': '768px',
+  // => @media (min-width: 768px) { ... }
+
   'lg': '992px',
+  // => @media (min-width: 992px) { ... }
+
   'xl': '1200px',
+  // => @media (min-width: 1200px) { ... }
 },
 ```
 
 Feel free to have as few or as many screens as you want, naming them in whatever way you'd prefer for your project.
+
+For example, you could use device names instead of sizes:
+
+```js
+screens: {
+  'tablet': '576px',
+  // => @media (min-width: 576px) { ... }
+
+  'laptop': '992px',
+  // => @media (min-width: 992px) { ... }
+
+  'desktop': '1200px',
+  // => @media (min-width: 1200px) { ... }
+},
+```
+
+These screen names will be reflected in your utilities, so your `.bg-red` utilities would now look like this:
+
+```css
+.bg-red { background-color: config('colors.red'); }
+
+@media (min-width: 576px) {
+  .tablet\:bg-red { background-color: config('colors.red'); }
+}
+
+@media (min-width: 992px) {
+  .laptop\:bg-red { background-color: config('colors.red'); }
+}
+
+@media (min-width: 1200px) {
+  .desktop\:bg-red { background-color: config('colors.red'); }
+}
+```
+
 
 ## Advanced screens
 
