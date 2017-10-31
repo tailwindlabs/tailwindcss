@@ -25,7 +25,7 @@ Here's a bunch of examples:
 ### Left Accent Border
 
 @component('_partials.code-sample', ['lang' => 'html'])
-<div class="bg-orange-lightest border-l-4 border-orange text-orange-darker p-4">
+<div class="bg-orange-lightest border-l-4 border-orange text-orange-dark p-4">
   <p class="font-bold">Be Warned</p>
   <p>Something not ideal might be happening.</p>
 </div>
