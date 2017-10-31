@@ -9,6 +9,13 @@ title: "Background Position"
     Utilities for setting the initial position of a background image
 </div>
 
+@include('_partials.feature-badges', [
+    'responsive' => true,
+    'customizable' => false,
+    'hover' => false,
+    'focus' => false
+])
+
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">
       <colgroup>

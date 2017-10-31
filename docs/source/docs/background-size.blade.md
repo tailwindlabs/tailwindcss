@@ -9,6 +9,13 @@ title: "Background Size"
     Utilities for setting the background size of an element's background image
 </div>
 
+@include('_partials.feature-badges', [
+    'responsive' => true,
+    'customizable' => false,
+    'hover' => false,
+    'focus' => false
+])
+
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">
       <colgroup>
