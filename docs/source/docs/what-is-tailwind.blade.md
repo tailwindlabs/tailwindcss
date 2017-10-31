@@ -41,7 +41,7 @@ Here's an example of a contact card component built with Tailwind without writin
                 <p class="text-sm leading-tight text-grey-dark">Developer at NothingWorks Inc.</p>
             </div>
             <div>
-                <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>                    
+                <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>
             </div>
         </div>
     </div>
@@ -58,7 +58,7 @@ Here's an example of a contact card component built with Tailwind without writin
                 <p class="text-sm leading-tight text-grey-dark">Developer at NothingWorks Inc.</p>
             </div>
             <div>
-                <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>                    
+                <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>
             </div>
         </div>
     </div>
@@ -160,7 +160,7 @@ This includes colors, border sizes, font weights, spacing utilities, breakpoints
 
 Tailwind is written in [PostCSS](http://postcss.org/) and configured in JavaScript, which means you have the full power of a real programming language at your finger tips.
 
-Tailwind is more than CSS framework, *it's an engine for creating design systems.*
+Tailwind is more than a CSS framework, *it's an engine for creating design systems.*
 
 ```js
 const colorPalette = {
