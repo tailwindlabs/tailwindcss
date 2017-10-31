@@ -5,7 +5,7 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import stylefmt from 'stylefmt'
 
-import substituteResetAtRule from './lib/substituteResetAtRule'
+import substitutePreflightAtRule from './lib/substitutePreflightAtRule'
 import evaluateTailwindFunctions from './lib/evaluateTailwindFunctions'
 import generateUtilities from './lib/generateUtilities'
 import substituteHoverableAtRules from './lib/substituteHoverableAtRules'
@@ -24,7 +24,7 @@ const plugin = postcss.plugin('tailwind', (config) => {
   }
 
   return postcss([
-    substituteResetAtRule(config),
+    substitutePreflightAtRule(config),
     evaluateTailwindFunctions(config),
     generateUtilities(config),
     substituteHoverableAtRules(config),

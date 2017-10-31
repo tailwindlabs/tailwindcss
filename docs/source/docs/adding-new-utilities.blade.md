@@ -14,7 +14,7 @@ Deciding on the best way to extend a framework can be paralyzing, so here's some
 A bare-bones Tailwind setup is a single CSS file that looks like this:
 
 ```less
-@@tailwind reset;
+@@tailwind preflight;
 
 @@tailwind utilities;
 ```
@@ -47,7 +47,7 @@ For this reason, **we recommend defining any custom utility classes at the end o
 
 
 ```less
-@@tailwind reset;
+@@tailwind preflight;
 
 @@tailwind utilities;
 
@@ -61,7 +61,7 @@ This way your custom utilities can override Tailwind utilities if needed, althou
 If you're using a preprocessor like Less, Sass, or Stylus, consider keeping your utilities in a separate file and importing them:
 
 ```less
-@@tailwind reset;
+@@tailwind preflight;
 
 @@tailwind utilities;
 
@@ -73,7 +73,7 @@ If you're using a preprocessor like Less, Sass, or Stylus, consider keeping your
 If you'd like to create responsive versions of your own utilities based on the breakpoints defined in your Tailwind config file, wrap your utilities in the `@responsive { ... }` directive:
 
 ```less
-@@tailwind reset;
+@@tailwind preflight;
 
 @@tailwind utilities;
 

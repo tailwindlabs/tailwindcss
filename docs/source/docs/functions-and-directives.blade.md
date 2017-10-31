@@ -19,7 +19,7 @@ Use the `@@tailwind` directive to insert Tailwind's `reset` and `utilities` styl
  * You can see the styles here:
  * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
  */
-@@tailwind reset;
+@@tailwind preflight;
 
 /**
  * This injects all of Tailwind's utility classes, generated based on your

@@ -44,7 +44,7 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
  * You can see the styles here:
  * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
  */
-@@tailwind reset;
+@@tailwind preflight;
 
 /**
  * Here you would import any custom component classes; stuff that you'd

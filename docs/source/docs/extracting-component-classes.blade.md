@@ -174,7 +174,7 @@ Since Tailwind's utility classes don't rely on `!important` to defeat other styl
 Here's an example:
 
 ```less
-@@tailwind reset;
+@@tailwind preflight;
 
 @import "components/buttons";
 

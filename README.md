@@ -30,7 +30,7 @@ A utility-first CSS framework for rapid UI development.
      * You can see the styles here:
      * https://github.com/nothingworksinc/tailwindcss/blob/master/css/preflight.css
      */
-    @tailwind reset;
+    @tailwind preflight;
 
     /**
      * Here you would import any custom component classes; stuff that you'd
