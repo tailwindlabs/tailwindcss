@@ -180,7 +180,7 @@
                   </div>
             </div>
         </div>
-        <div id="content" class="px-6 pb-8 pt-20 md:pt-8 w-full max-w-lg mx-auto">
+        <div id="content" class="px-6 pb-8 pt-20 md:pt-16 w-full max-w-lg mx-auto">
             <div id="app">
                 <div class="markdown">
                     @if ($page->category)

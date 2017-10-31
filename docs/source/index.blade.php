@@ -9,15 +9,15 @@
         </div>
         <h2 class="mt-12 font-light text-4xl text-center">A Utility-First CSS Framework<br class="hidden sm:inline-block"> for Rapid UI Development</h2>
         <div class="mt-12 flex justify-center leading-none">
-            <a class="rounded-full font-semibold block px-12 py-3 border-2 border-tailwind-teal hover:border-orange hover:bg-orange text-white bg-tailwind-teal " href="/docs/installation">Get Started</a>
-            <a class="rounded-full font-semibold block px-12 py-3 border-2 border-tailwind-teal hover:border-orange hover:text-orange text-tailwind-teal ml-4" href="https://github.com/tailwindcss/tailwindcss">GitHub</a>
+            <a class="rounded-full font-semibold block px-12 py-3 border-2 border-tailwind-teal bg-tailwind-teal text-white hover:border-tailwind-teal-light hover:bg-tailwind-teal-light hover:bg-tailwind-teal-light" href="/docs/installation">Get Started</a>
+            <a class="rounded-full font-semibold block px-12 py-3 ml-4 border-2 border-tailwind-teal text-tailwind-teal hover:text-white hover:border-tailwind-teal-light hover:bg-tailwind-teal-light hover:bg-tailwind-teal-light" href="https://github.com/tailwindcss/tailwindcss">GitHub</a>
         </div>
     </div>
 </div>
 
 <div class="px-6">
     <div class="my-12 text-center uppercase">
-        <span class="inline-block bg-soft px-4 text-medium text-grey-darker tracking-wide">A project by</span>
+        <span class="inline-block bg-soft px-4 text-grey-darker tracking-wide font-bold">A project by</span>
     </div>
     <div class="flex justify-center">
         <div class="pb-4 flex justify-center flex-wrap max-w-md xl:max-w-full border-b-2 border-grey-light">

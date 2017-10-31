@@ -9,8 +9,9 @@ config.colors = {
   'smoke-light': 'hsl(200, 33%, 96%)',
   'smoke-lighter': 'hsl(200, 25%, 98%)',
 
-  'tailwind-teal': '#44A8B3',
-  'tailwind-teal-dark': '#2F8696',
+  'tailwind-teal-light': '#5ebcca',
+  'tailwind-teal': '#44a8b3',
+  'tailwind-teal-dark': '#2f8696',
 }
 
 config.fonts = {
