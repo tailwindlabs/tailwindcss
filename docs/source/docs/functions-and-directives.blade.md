@@ -7,9 +7,9 @@ title: "Functions &amp; Directives"
 
 Tailwind exposes a few custom CSS functions and directives that can be used in your actual CSS files.
 
-## `@@tailwind`
+### `@@tailwind`
 
-Use the `@@tailwind` directive to insert Tailwind's `reset` and `utilities` styles into your CSS. Here is a full example of how you might do this:
+Use the `@@tailwind` directive to insert Tailwind's `reset` and `utilities` styles into your CSS. Here's a full example of how you might do this:
 
 ```less
 /**
@@ -28,7 +28,7 @@ Use the `@@tailwind` directive to insert Tailwind's `reset` and `utilities` styl
 @@tailwind utilities;
 ```
 
-## `@@apply`
+### `@@apply`
 
 Use `@@apply` to mixin the contents of existing classes into your custom CSS.
 
@@ -66,7 +66,7 @@ Note that `@@apply` **will not work** for mixing in hover or responsive variants
 }
 ```
 
-## `@@responsive`
+### `@@responsive`
 
 You can generate responsive versions of your own classes by wrapping their definitions in the `@responsive` directive:
 
@@ -78,7 +78,7 @@ You can generate responsive versions of your own classes by wrapping their defin
 }
 ```
 
-This will generate these classes (assuming you haven't changed the default breakpoints):
+Using the default breakpoints, this would generate these classes:
 
 ```less
 .bg-gradient-brand {
@@ -118,7 +118,7 @@ This will generate these classes (assuming you haven't changed the default break
 
 The responsive versions will be added to Tailwind's existing media queries **at the end of your stylesheet.** This makes sure that classes with a responsive prefix always defeat non-responsive classes that are targeting the same CSS property.
 
-## `@@screen`
+### `@@screen`
 
 The `@@screen` directive allows you to create media queries that reference your breakpoints by name instead of duplicating their values in your own CSS.
 
@@ -140,14 +140,23 @@ Instead of writing a raw media query that duplicates that value like this:
 }
 ```
 
-## `config()`
+### `config()`
 
 While it's recommended to use the `@@apply` directive to compose custom CSS out of existing utility classes whenever possible, some times you need direct access to your Tailwind config values.
 
 Use the `config()` function to access your Tailwind config values using dot notation:
 
 ```less
+// Source
 .error {
   font-size: config('textSizes.xs');
-  color: config('colors.slate-darker');
+  color: config('colors.red-darker');
 }
+
+// Output
+.error {
+  font-size: .75rem;
+  color: #a61611;
+}
+```
+
