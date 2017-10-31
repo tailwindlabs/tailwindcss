@@ -18,7 +18,9 @@ title: "Border Width"
 
 @include('_partials.work-in-progress')
 
-Add borders to any element using the `.border{-side?}{-width?}` syntax. For example, `.border` would add a `1px` border to all sides of the element, where `.border-b-4` would add a `4px` border to the bottom of the element.
+Add borders to any element using the `.border{-side?}{-width?}` syntax.
+
+For example, `.border` would add a `1px` border to all sides of the element, where `.border-b-4` would add a `4px` border to the bottom of the element.
 
 <div class="flex items-start mt-8 text-sm leading-none">
     <div class="pr-12">
