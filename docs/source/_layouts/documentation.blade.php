@@ -155,8 +155,8 @@
                     <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Examples</p>
                     <ul>
                         <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/examples/buttons" class="{{ $page->active('/docs/examples/buttons') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Buttons</a></li>
-                        <li class="mb-3"><a class="{{ $page->active('/examples/alerts') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/examples/alerts">Alerts</a></li>
-                        <li class="mb-3"><a class="{{ $page->active('/examples/cards') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/examples/cards">Cards</a></li>
+                        <li class="mb-3"><a class="{{ $page->active('/docs/examples/alerts') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/examples/alerts">Alerts</a></li>
+                        <li class="mb-3"><a class="{{ $page->active('/docs/examples/cards') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/examples/cards">Cards</a></li>
                     </ul>
                 </div>
             </nav>
