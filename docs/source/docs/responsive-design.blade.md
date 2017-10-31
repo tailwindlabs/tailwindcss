@@ -75,10 +75,12 @@ screens: {
 You can also provide multiple ranges per screen. This is useful in situations where you have a sidebar navigation and want to maintain consistent content breakpoints, regardless of the navigation being visible or not. Here's an example:
 
 ```js
-// Sidebar is shown at 768px
 screens: {
   'sm': '500px',
   'md': [
+    // Sidebar appears at 768px, so revert to `sm:` styles between 768px
+    // and 868px, which is when the main content area is wide enough to
+    // apply `md:` styles again.
     {'min': '668px', 'max': '767px'},
     {'min': '868px'}
   ],
