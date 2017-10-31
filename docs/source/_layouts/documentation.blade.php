@@ -163,7 +163,7 @@
         </div>
     </div>
     <div class="md:ml-80">
-        <div class="fixed w-full">
+        <div class="fixed w-full z-20">
             <div class="pin-t bg-white md:hidden relative border-b border-dark h-12 flex items-center">
                   <div class="js-open-sidebar absolute pin-l pin-y px-4 flex items-center">
                       <svg class="h-4" fill="#777" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
