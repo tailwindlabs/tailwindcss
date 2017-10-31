@@ -25,6 +25,9 @@ $.when($.ready).then(function() {
       var nav = $(html).find('#nav').html()
       var content = $(html).find('#content').html()
 
+      $('#sidebar').addClass("hidden");
+      $('.js-close-sidebar').addClass("hidden");
+
       // Update the page
       $('title').text(title)
       $('#nav').html(nav)
