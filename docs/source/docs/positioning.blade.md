@@ -28,22 +28,22 @@ title: "Positioning"
         <tbody class="align-baseline">
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.static</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">position: 'static';</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">position: static;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position an element according to the normal flow of the document.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.fixed</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">position: 'fixed';</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">position: fixed;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position an element relative to the browser window.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.absolute</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">position: 'absolute';</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">position: absolute;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position an element outside of the normal flow of the document, causing neighboring elements to act as if the element doesn't exist.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.relative</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">position: 'relative';</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">position: relative;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position an element according to the normal flow of the document.</td>
             </tr>
             <tr>
