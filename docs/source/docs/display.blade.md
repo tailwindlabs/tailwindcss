@@ -6,7 +6,7 @@ title: "Display"
 # Display
 
 <div class="text-xl text-slate-light mb-4">
-    Utilities for controlling the box type of an element.
+    Utilities for controlling the display box type of an element.
 </div>
 
 @include('_partials.feature-badges', [
