@@ -77,13 +77,13 @@ You can also provide multiple ranges per screen. This is useful in situations wh
 ```js
 // Sidebar is shown at 768px
 screens: {
-  'sm': '576px',
+  'sm': '500px',
   'md': [
     {'min': '668px', 'max': '767px'},
-    {'min': '768px'}
+    {'min': '868px'}
   ],
-  'lg': '992px',
-  'xl': '1200px',
+  'lg': '1100px',
+  'xl': '1400px',
 },
 ```
 
