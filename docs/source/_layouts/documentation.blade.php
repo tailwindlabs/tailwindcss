@@ -209,7 +209,7 @@
     </div>
 </div>
 
-<svg>
+<svg style="height: 0; width: 0; position: absolute; visibility: hidden;">
   <defs>
     <linearGradient x1="0%" y1="0%" y2="100%" id="logoGradient">
       <stop stop-color="#2383AE" offset="0%"></stop>
@@ -217,5 +217,4 @@
     </linearGradient>
   </defs>
 </svg>
-
 @endsection
