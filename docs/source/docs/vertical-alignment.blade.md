@@ -20,11 +20,11 @@ title: "Vertical Alignment"
 
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">
-      <colgroup>
-        <col class="w-1/5">
-        <col class="w-1/3">
-        <col>
-      </colgroup>
+        <colgroup>
+            <col class="w-1/5">
+            <col class="w-1/3">
+            <col>
+        </colgroup>
         <thead>
           <tr>
               <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
@@ -34,9 +34,9 @@ title: "Vertical Alignment"
         </thead>
         <tbody class="align-baseline">
             <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.align-baseline</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">vertical-align: baseline;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Align the baseline of an element with the baseline of its parent</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.align-baseline</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">vertical-align: baseline;</td>
+                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Align the baseline of an element with the baseline of its parent.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.align-top</td>

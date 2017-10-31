@@ -33,32 +33,32 @@ title: "Border Radius"
         <tbody class="align-baseline">
             <tr>
                 <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.rounded</td>
-                <td class="w-2/5 p-2 border-t border-smoke font-mono text-xs text-blue-dark">border-radius: .25rem;</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">border-radius: .25rem;</td>
                 <td class="p-2 border-t border-smoke text-sm text-grey-darker">Apply a medium border radius to all corners of an element.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-sm</td>
-                <td class="w-2/5 p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: .125rem;</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: .125rem;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a small border radius to all corners of an element.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-lg</td>
-                <td class="w-2/5 p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: .5rem;</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: .5rem;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large border radius to all corners of an element.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-full</td>
-                <td class="w-2/5 p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: 9999px;</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: 9999px;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Fully round all corners of an element.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-none</td>
-                <td class="w-2/5 p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: 0;</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: 0;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Remove any border radius from all sides of an element.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-t</td>
-                <td class="w-2/5 p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
                     border-bottom-left-radius: 0;<br>
                     border-bottom-right-radius: 0;
                 </td>
@@ -66,7 +66,7 @@ title: "Border Radius"
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-r</td>
-                <td class="w-2/5 p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
                     border-top-left-radius: 0;<br>
                     border-bottom-left-radius: 0;
                 </td>
@@ -74,7 +74,7 @@ title: "Border Radius"
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-b</td>
-                <td class="w-2/5 p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
                     border-top-right-radius: 0;<br>
                     border-top-left-radius: 0;
                 </td>
@@ -82,7 +82,7 @@ title: "Border Radius"
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-l</td>
-                <td class="w-2/5 p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
                     border-top-right-radius: 0;<br>
                     border-bottom-right-radius: 0;
                 </td>

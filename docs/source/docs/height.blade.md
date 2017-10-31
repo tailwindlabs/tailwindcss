@@ -20,11 +20,11 @@ title: "Height"
 
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">
-      <colgroup>
-        <col class="w-1/5">
-        <col class="w-1/3">
-        <col>
-      </colgroup>
+        <colgroup>
+            <col class="w-1/5">
+            <col class="w-1/3">
+            <col>
+        </colgroup>
         <thead>
           <tr>
               <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
@@ -34,9 +34,9 @@ title: "Height"
         </thead>
         <tbody class="align-baseline">
             <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.h-1</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">height: 0.25rem;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the element's height to <code>0.25rem</code>.</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.h-1</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">height: 0.25rem;</td>
+                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the element's height to <code>0.25rem</code>.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.h-2</td>
@@ -115,7 +115,7 @@ title: "Height"
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.h-screen</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">height: 100vh</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">height: 100vh;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the element's height to <code>100vh</code>.</td>
             </tr>
         </tbody>

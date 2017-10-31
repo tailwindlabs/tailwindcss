@@ -39,14 +39,14 @@ title: "Font Families"
                 <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the font family to the sans font stack.</td>
             </tr>
             <tr>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark whitespace-no-wrap">.font-serif</td>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">font-family: Constantia, Lucida Bright, Lucidabright, Lucida Serif, Lucida, DejaVu Serif, Bitstream Vera Serif, Liberation Serif, Georgia, serif;</td>
-                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the font family to the serif font stack.</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.font-serif</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">font-family: Constantia, Lucida Bright, Lucidabright, Lucida Serif, Lucida, DejaVu Serif, Bitstream Vera Serif, Liberation Serif, Georgia, serif;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the font family to the serif font stack.</td>
             </tr>
             <tr>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark whitespace-no-wrap">.font-mono</td>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">font-family: Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;</td>
-                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the font family to the mono font stack.</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.font-mono</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">font-family: Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the font family to the mono font stack.</td>
             </tr>
         </tbody>
     </table>

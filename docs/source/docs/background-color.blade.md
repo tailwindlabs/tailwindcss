@@ -30,9 +30,9 @@ title: "Backgrounds"
         <tbody class="align-baseline">
             @foreach ($page->config['colors'] as $name => $value)
                 <tr>
-                    <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.bg-{{ $name }}</td>
-                    <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">color: {{ $value }};</td>
-                    <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the background color of an element to {{ implode(' ', array_reverse(explode('-', $name))) }}.</td>
+                    <td class="p-2 border-t {{ $loop->first ? 'border-smoke' : 'border-smoke-light' }} font-mono text-xs text-purple-dark">.bg-{{ $name }}</td>
+                    <td class="p-2 border-t {{ $loop->first ? 'border-smoke' : 'border-smoke-light' }} font-mono text-xs text-blue-dark">color: {{ $value }};</td>
+                    <td class="p-2 border-t {{ $loop->first ? 'border-smoke' : 'border-smoke-light' }} text-sm text-grey-darker">Set the background color of an element to {{ implode(' ', array_reverse(explode('-', $name))) }}.</td>
                 </tr>
             @endforeach
         </tbody>

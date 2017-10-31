@@ -19,11 +19,6 @@ category: "Flexbox"
 
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">
-      <colgroup>
-        <col class="w-1/5">
-        <col class="w-2/5">
-        <col class="w-2/5">
-      </colgroup>
         <thead>
           <tr>
               <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
@@ -33,9 +28,9 @@ category: "Flexbox"
         </thead>
         <tbody class="align-baseline">
             <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-no-wrap</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-wrap: nowrap;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Don't allow flex items to wrap.</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.flex-no-wrap</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">flex-wrap: nowrap;</td>
+                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Don't allow flex items to wrap.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-wrap</td>

@@ -19,9 +19,9 @@ title: "Z-Index"
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">
         <colgroup>
-            <col class="w-1/4">
-            <col class="w-1/4">
-            <col class="w-1/2">
+            <col class="w-1/5">
+            <col class="w-1/3">
+            <col>
         </colgroup>
         <thead>
             <tr>
@@ -32,9 +32,9 @@ title: "Z-Index"
         </thead>
         <tbody class="align-baseline">
             <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.z-0</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">z-index: 0;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the z-index of the element to 0.</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.z-0</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">z-index: 0;</td>
+                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the z-index of the element to 0.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.z-10</td>

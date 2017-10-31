@@ -29,9 +29,9 @@ title: "Floats"
         </thead>
         <tbody class="align-baseline">
             <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.float-right</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">float: right;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Moves the element to the right side of its container.</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark whitespace-no-wrap">.float-right</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark whitespace-no-wrap">float: right;</td>
+                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Moves the element to the right side of its container.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.float-left</td>

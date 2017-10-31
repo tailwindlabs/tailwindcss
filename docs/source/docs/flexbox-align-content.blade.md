@@ -33,9 +33,9 @@ category: "Flexbox"
         </thead>
         <tbody class="align-baseline">
             <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.content-start</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-content: flex-start;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Pack lines against the start of the cross axis.</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.content-start</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">align-content: flex-start;</td>
+                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Pack lines against the start of the cross axis.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.content-center</td>

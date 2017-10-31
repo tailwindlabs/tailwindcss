@@ -29,9 +29,9 @@ title: "Display"
         </thead>
         <tbody class="align-baseline">
             <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.block</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">display: block;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the box type of the element to <code>block</code>.</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark whitespace-no-wrap">.block</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark whitespace-no-wrap">display: block;</td>
+                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the box type of the element to <code>block</code>.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.inline-block</td>

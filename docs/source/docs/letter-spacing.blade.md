@@ -34,14 +34,14 @@ title: "Letter Spacing"
                 <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the letter spacing of an element to <code>-0.05em</code>.</td>
             </tr>
             <tr>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark whitespace-no-wrap">.tracking-normal</td>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">letter-spacing: 0;</td>
-                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the letter spacing of an element to <code>0</code>.</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.tracking-normal</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">letter-spacing: 0;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the letter spacing of an element to <code>0</code>.</td>
             </tr>
             <tr>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark whitespace-no-wrap">.tracking-wide</td>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">letter-spacing: 0.05em;</td>
-                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the letter spacing of an element to <code>0.05em</code>.</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.tracking-wide</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">letter-spacing: 0.05em;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the letter spacing of an element to <code>0.05em</code>.</td>
             </tr>
         </tbody>
     </table>
