@@ -50,8 +50,8 @@
                             </a>
                         </li>
                         <li class="mb-3">
-                            <a class="{{ $page->active('/docs/extracting-components') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/extracting-components">
-                                Extracting Components
+                            <a class="{{ $page->active('/docs/extracting-component-classes') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/extracting-component-classes">
+                                Extracting Component Classes
                             </a>
                         </li>
                         <li class="mb-3">
