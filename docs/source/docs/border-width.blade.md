@@ -18,8 +18,6 @@ title: "Border Width"
 
 @include('_partials.work-in-progress')
 
-## Usage
-
 Add borders to any element using the `.border{-side?}{-width?}` syntax. For example, `.border` would add a `1px` border to all sides of the element, where `.border-b-4` would add a `4px` border to the bottom of the element.
 
 <div class="flex items-start mt-8 text-sm leading-none">
@@ -44,23 +42,3 @@ Add borders to any element using the `.border{-side?}{-width?}` syntax. For exam
         <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">8</code> 8px</div>
     </div>
 </div>
-
-### Examples
-
-```html
-<!-- Add a 1px border to all sides -->
-<div class="border"></div>
-
-<!-- Add a 1px border to the top side -->
-<div class="border-t"></div>
-
-<!-- Add a 2px border to all sides -->
-<div class="border-2"></div>
-
-<!-- Add a 2px border to the top side -->
-<div class="border-t-2"></div>
-```
-
-## Responsive
-
-## Customizing
