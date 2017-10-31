@@ -191,17 +191,18 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-By default Tailwind provides three drop shadow utilities, one inner shadow utility, and a utility for removing existing shadows. You change, add, or remove these by editing the `shadows` section of your Tailwind config.
+By default Tailwind provides five border radius size utilities. You can change, add, or remove these by editing the `borderRadius` section of your Tailwind config.
 
-If a `default` shadow is provided, it will be used for the non-suffixed `.shadow` utility. Any other keys will be used as suffixes, for example the key `'2'` will create a corresponding `.shadow-2` utility.
+If a `default` border radius is provided, it will be used for the non-suffixed `.rounded` utility. Any other keys will be used as suffixes, for example the key `'2'` will create a corresponding `.rounded-2` utility.
 
-@component('_partials.customized-config', ['key' => 'shadows'])
-- default: '0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.15)',
-- 'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
-- 'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
-- 'inner': 'inset 0 1px 2px rgba(0, 0, 0, 0.05)',
-+ '1': '0 2px 4px rgba(0,0,0,0.05)',
-+ '2': '0 4px 8px rgba(0,0,0,0.1)',
-+ '3': '0 8px 16px rgba(0,0,0,0.15)',
-  'none': 'none',
+Note that only the different border radius *sizes* can be customized; the utilities for controlling which side to round (like `.rounded-t`) aren't customizable.
+
+@component('_partials.customized-config', ['key' => 'borderRadius'])
+- default: '.25rem',
++ default: '4px',
+- 'sm': '.125rem',
+- 'lg': '.5rem',
+- 'full': '9999px',
++ 'large': '12px',
+  'none': '0',
 @endcomponent
