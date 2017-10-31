@@ -16,6 +16,8 @@ title: "Vertical Alignment"
     'focus' => false
 ])
 
+@include('_partials.work-in-progress')
+
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">
       <colgroup>
@@ -64,35 +66,3 @@ title: "Vertical Alignment"
         </tbody>
     </table>
 </div>
-
-### Tables
-
-@component('_partials.code-sample')
-  <table class="w-full">
-    <tbody>
-      <tr>
-        <td class="py-8 text-grey-darker align-baseline">Baseline text<td>
-        <td class="py-6 text-grey-darker align-top">Top-aligned text<td>
-        <td class="py-4 text-grey-darker align-middle">Middle-aligned text<td>
-        <td class="py-2 text-grey-darker align-bottom">Bottom-aligned text<td>
-      </tr>
-    </tbody>
-  </table>
-@endcomponent
-
-
-### Inline-block Elements
-
-@component('_partials.code-sample')
-<div>
-  <button class="align-middle text-blue-dark font-semibold py-2 px-4 border border-blue rounded mr-3">
-      Button
-  </button>
-  <button class="align-middle bg-blue-dark text-white text-sm font-semibold py-1 px-3 border border-blue-dark rounded-full mr-3">
-      Button
-  </button>
-  <button class="align-middle text-blue-dark font-semibold py-3 px-6 border border-blue rounded">
-      Button
-  </button>
-</div>
-@endcomponent
