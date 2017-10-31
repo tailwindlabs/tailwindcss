@@ -9,7 +9,7 @@
         </div>
         <h2 class="mt-12 font-light text-4xl text-center">A Utility-First CSS Framework<br class="hidden sm:inline-block"> for Rapid UI Development</h2>
         <div class="mt-12 flex justify-center leading-none">
-            <a class="rounded-full font-semibold block px-12 py-3 border-2 border-tailwind-teal bg-tailwind-teal text-white hover:border-tailwind-teal-light hover:bg-tailwind-teal-light hover:bg-tailwind-teal-light" href="/docs/installation">Get Started</a>
+            <a class="rounded-full font-semibold block px-12 py-3 border-2 border-tailwind-teal bg-tailwind-teal text-white hover:border-tailwind-teal-light hover:bg-tailwind-teal-light hover:bg-tailwind-teal-light" href="/docs/what-is-tailwind">Get Started</a>
             <a class="rounded-full font-semibold block px-12 py-3 ml-4 border-2 border-tailwind-teal text-tailwind-teal hover:text-white hover:border-tailwind-teal-light hover:bg-tailwind-teal-light hover:bg-tailwind-teal-light" href="https://github.com/tailwindcss/tailwindcss">GitHub</a>
         </div>
     </div>
