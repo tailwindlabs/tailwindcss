@@ -33,22 +33,22 @@ title: "Shadows"
         <tbody class="align-baseline">
             <tr>
                 <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.shadow</td>
-                <td class="w-2/5 p-2 border-t border-smoke font-mono text-xs text-blue-dark">box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.15);</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">box-shadow: <span class="whitespace-no-wrap">0 2px 4px 0 rgba(0,0,0,0.10)</span>;</td>
                 <td class="p-2 border-t border-smoke text-sm text-grey-darker">Apply a small box shadow to an element.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.shadow-md</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: 0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13);</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: <span class="whitespace-no-wrap">0 4px 8px 0 rgba(0,0,0,0.12),</span> <span class="whitespace-no-wrap">0 2px 4px 0 rgba(0,0,0,0.08);</span></td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a medium box shadow to an element.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.shadow-lg</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: 0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13);</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: <span class="whitespace-no-wrap">0 15px 30px 0 rgba(0,0,0,0.11),</span> <span class="whitespace-no-wrap">0 5px 15px 0 rgba(0,0,0,0.08);</span></td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large box shadow to an element.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.shadow-inner</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05)</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: <span class="whitespace-no-wrap">inset 0 2px 4px 0 rgba(0,0,0,0.06);</span></td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a small inner box shadow to an element.</td>
             </tr>
             <tr>
@@ -147,10 +147,10 @@ By default Tailwind provides three drop shadow utilities, one inner shadow utili
 If a `default` shadow is provided, it will be used for the non-suffixed `.shadow` utility. Any other keys will be used as suffixes, for example the key `'2'` will create a corresponding `.shadow-2` utility.
 
 @component('_partials.customized-config', ['key' => 'shadows'])
-- default: '0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.15)',
-- 'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
-- 'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
-- 'inner': 'inset 0 1px 2px rgba(0, 0, 0, 0.05)',
+- default: '0 2px 4px 0 rgba(0,0,0,0.10)',
+- 'md': '0 4px 8px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.08)',
+- 'lg': '0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08)',
+- 'inner': 'inset 0 2px 4px 0 rgba(0,0,0,0.06)',
 + '1': '0 2px 4px rgba(0,0,0,0.05)',
 + '2': '0 4px 8px rgba(0,0,0,0.1)',
 + '3': '0 8px 16px rgba(0,0,0,0.15)',

@@ -708,10 +708,10 @@ module.exports = {
   */
 
   shadows: {
-    default: '0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.15)',
-    'md': '0 3px 6px rgba(0,0,0,.12), 0 3px 6px rgba(0,0,0,.13)',
-    'lg': '0 10px 20px rgba(0,0,0,.13), 0 6px 6px rgba(0,0,0,.13)',
-    'inner': 'inset 0 1px 2px rgba(0, 0, 0, 0.05)',
+    default: '0 2px 4px 0 rgba(0,0,0,0.10)',
+    'md': '0 4px 8px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.08)',
+    'lg': '0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08)',
+    'inner': 'inset 0 2px 4px 0 rgba(0,0,0,0.06)',
     'none': 'none',
   },
 
