@@ -18,7 +18,9 @@ title: "Padding"
 
 @include('_partials.work-in-progress')
 
-The syntax below is combined to create a system for padding and margins. For example, `.pt-2` would add padding to the top of the element to the value of `0.5rem`, `.mx-0` would make the horizontal margin zero, and `.-mb-6` would add negative margin to the bottom of an element.
+Control an element's padding and margin using the `.p{side?}-{size}`, `.m{side?}-{size}`, and `.-m{side?}-{size}` utilities.
+
+For example, `.pt-2` would add `.5rem` of padding to the top of the element, `.mx-0` would make the horizontal margin zero, and `.-mb-6` would add a `1.5rem`negative margin to the bottom of an element.
 
 <div class="flex items-start mt-8 text-sm">
     <div class="pr-12">
