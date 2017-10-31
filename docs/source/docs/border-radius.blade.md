@@ -47,7 +47,7 @@ title: "Border Radius"
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large border radius to all corners of an element.</td>
             </tr>
             <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-pill</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-full</td>
                 <td class="w-2/5 p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: 9999px;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Fully round all corners of an element.</td>
             </tr>
