@@ -124,14 +124,7 @@
                                 <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/max-height" class="{{ $page->active('/docs/max-height') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Max-Height</a></li>
                             </ul>
                         </li>
-                        <li class="mb-3">
-                            <a href="{{ $page->baseUrl }}/docs/padding" class="block mb-2 {{ $page->active(['/docs/padding', '/docs/margin', '/docs/negative-margin']) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Spacing</a>
-                            <ul class="pl-4 {{ $page->active(['/docs/padding', '/docs/margin', '/docs/negative-margin']) ? 'block' : 'hidden' }}">
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/padding" class="{{ $page->active('/docs/padding') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Padding</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/margin" class="{{ $page->active('/docs/margin') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Margin</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/negative-margin" class="{{ $page->active('/docs/negative-margin') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Negative Margin</a></li>
-                            </ul>
-                        </li>
+                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/spacing" class="{{ $page->active('/docs/spacing') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Spacing</a></li>
                         <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/svg" class="{{ $page->active('/docs/svg') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">SVG</a></li>
                         <li class="mb-3">
                             <a href="{{ $page->baseUrl }}/docs/fonts" class="block mb-2 {{ $page->active(['/docs/fonts', '/docs/text-color', '/docs/text-sizing', '/docs/font-weight', '/docs/line-height', '/docs/letter-spacing', '/docs/whitespace-and-wrapping', '/docs/text-style']) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Typography</a>
