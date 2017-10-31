@@ -44,7 +44,7 @@ This is done using predefined screen sizes (media query breakpoints), each of wh
 @endslot
 @endcomponent
 
-## Customing screens
+## Customizing screens
 
 You define your project's screen sizes in your Tailwind config under the `screens` key. Screens in Tailwind are essentially CSS media queries. If you provide a single value for a screen, Tailwind will treat this as the minimum screen size value for that screen breakpoint. Here are the default screen sizes:
 
