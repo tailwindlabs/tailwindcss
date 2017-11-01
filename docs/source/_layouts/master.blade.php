@@ -20,5 +20,13 @@
     </head>
     <body data-sidebar-visible="true" class="font-sans font-normal text-slate-darker leading-normal">
         @yield('body')
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109068504-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'UA-109068504-1');
+        </script>
     </body>
 </html>
