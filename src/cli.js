@@ -21,14 +21,14 @@ function loadConfig(configPath) {
   return require(path.resolve(configPath))
 }
 
-function writeStrategy(program) {
-  if (program.output === undefined) {
+function writeStrategy(options) {
+  if (options.output === undefined) {
     return (output) => {
       process.stdout.write(output)
     }
   }
   return (output) => {
-    fs.outputFileSync(program.output, output)
+    fs.outputFileSync(options.output, output)
   }
 }
 
@@ -67,7 +67,7 @@ program.command('build')
   .usage('[options] <file ...>')
   .option('-c, --config [path]', 'Path to config file')
   .option('-o, --output [path]', 'Output file')
-  .action(function () {
+  .action(function (file, options) {
     let inputFile = program.args[0]
 
     if (! inputFile) {
@@ -75,7 +75,7 @@ program.command('build')
       process.exit(1)
     }
 
-    buildTailwind(inputFile, loadConfig(program.config), writeStrategy(program))
+    buildTailwind(inputFile, loadConfig(program.config), writeStrategy(options))
       .then(function () {
         process.exit()
       })
