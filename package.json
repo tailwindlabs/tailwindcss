@@ -53,7 +53,7 @@
         "env",
         {
           "targets": {
-            "node": "current"
+            "node": "6.9.0"
           }
         }
       ],
@@ -61,5 +61,8 @@
       "stage-3",
       "react"
     ]
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }
