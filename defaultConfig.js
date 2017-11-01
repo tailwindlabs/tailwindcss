@@ -611,7 +611,7 @@ module.exports = {
   | common use-cases like "1px". You can, of course, modify these
   | values as needed.
   |
-  | Class name: .p{-side?}-{size}
+  | Class name: .p{side?}-{size}
   |
   */
 
@@ -638,7 +638,7 @@ module.exports = {
   | common use-cases like "1px". You can, of course, modify these
   | values as needed.
   |
-  | Class name: .m{-side?}-{size}
+  | Class name: .m{side?}-{size}
   |
   */
 
@@ -665,7 +665,7 @@ module.exports = {
   | generally get used together. You can, of course, modify these
   | values as needed.
   |
-  | Class name: .-m{-side?}-{size}
+  | Class name: .-m{side?}-{size}
   |
   */
 
