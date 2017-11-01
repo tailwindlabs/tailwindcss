@@ -63,8 +63,16 @@ title: "Display"
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">display: none;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the box type of the element to <code>none</code>.</td>
             </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.flex</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">display: flex;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the box type of the element to <code>flex</code>.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.inline-flex</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">display: inline-flex;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the box type of the element to <code>inline-flex</code>.</td>
+            </tr>
         </tbody>
     </table>
 </div>
-
-If you're looking for Flexbox utilities, please see the [Flexbox](/docs/flexbox-display) page.
