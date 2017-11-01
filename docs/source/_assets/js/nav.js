@@ -3,7 +3,7 @@ $.when($.ready).then(function() {
 
     // Allow opening links in new tabs
     if (event.metaKey) {
-        return
+      return
     }
 
     // Prevent following link
@@ -25,8 +25,8 @@ $.when($.ready).then(function() {
       var nav = $(html).find('#nav').html()
       var content = $(html).find('#content').html()
 
-      $('#sidebar').addClass("hidden");
-      $('.js-close-sidebar').addClass("hidden");
+      $('#sidebar').addClass('hidden')
+      $('#sidebar-close').addClass('hidden')
 
       // Update the page
       $('title').text(title)
@@ -38,21 +38,33 @@ $.when($.ready).then(function() {
 
       // Add page load to brower history
       window.history.pushState({
-        "title": title,
-        "nav": $(html).find('#nav').html(),
-        "content": $(html).find('#content').html()
+        'title': title,
+        'nav': $(html).find('#nav').html(),
+        'content': $(html).find('#content').html()
       }, '', href)
     })
   })
 
   // Load page history (for back/forward nav)
   window.onpopstate = function(e) {
-      if(e.state){
+    if(e.state){
 
-        // Update the page
-        $('title').text(e.state.title)
-        $('#nav').html(e.state.nav)
-        $('#content').html(e.state.content)
-      }
+      // Update the page
+      $('title').text(e.state.title)
+      $('#nav').html(e.state.nav)
+      $('#content').html(e.state.content)
+    }
   }
+
+  // Close sidebar (mobile)
+  $('#sidebar-close').on('click', function () {
+    $('#sidebar').addClass('hidden')
+    $('#sidebar-close').addClass('hidden')
+  })
+
+  // Show sidebar (mobile)
+  $('#sidebar-open').on('click', function () {
+      $('#sidebar').removeClass('hidden')
+      $('#sidebar-close').removeClass('hidden')
+  })
 })

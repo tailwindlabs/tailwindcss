@@ -159,15 +159,15 @@
     <div class="md:ml-80">
         <div class="fixed w-full z-20">
             <div class="pin-t bg-white md:hidden relative border-b border-grey-light h-12 flex items-center">
-                  <div class="js-open-sidebar absolute pin-l pin-y px-4 flex items-center">
+                  <div id="sidebar-open" class="absolute pin-l pin-y px-4 flex items-center">
                       <svg class="h-4 cursor-pointer text-grey" role="button" fill="#777" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
                   </div>
-                  <div class="mx-auto inline-flex items-center">
+                  <a href="/" class="mx-auto inline-flex items-center">
                       <svg class="h-4" viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg">
                           <path d="M15 12c2-8 7-12 15-12 12 0 13.5 9 19.5 10.5 4 1 7.5-.5 10.5-4.5-2 8-7 12-15 12-12 0-13.5-9-19.5-10.5-4-1-7.5.5-10.5 4.5zM0 30c2-8 7-12 15-12 12 0 13.5 9 19.5 10.5 4 1 7.5-.5 10.5-4.5-2 8-7 12-15 12-12 0-13.5-9-19.5-10.5-4-1-7.5.5-10.5 4.5z" fill="url(#logoGradient)" fill-rule="evenodd"></path>
                       </svg>
-                  </div>
-                  <div class="hidden js-close-sidebar">
+                  </a>
+                  <div id="sidebar-close" class="hidden">
                     <div class="flex items-center absolute pin-r pin-y px-4">
                       <svg class="h-4 cursor-pointer text-grey" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"/></svg>
                     </div>
@@ -184,21 +184,6 @@
                 </div>
             </div>
             <script src="/js/app.js"></script>
-            <script>
-                var closeSidebar = function () {
-                    $('#sidebar').addClass("hidden");
-                    $('.js-close-sidebar').addClass("hidden");
-                }
-
-                $('.js-close-sidebar').on('click', function () {
-                  closeSidebar();
-                });
-
-                $('.js-open-sidebar').on('click', function () {
-                    $('#sidebar').removeClass("hidden");
-                    $('.js-close-sidebar').removeClass("hidden");
-                });
-            </script>
         </div>
     </div>
 </div>
