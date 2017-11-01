@@ -41,7 +41,7 @@ title: "Min-Width"
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.min-w-full</td>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">min-width: 100%;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the element's minimum width to <code>0.5rem</code>.</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the element's minimum width to <code>100%</code>.</td>
             </tr>
         </tbody>
     </table>
