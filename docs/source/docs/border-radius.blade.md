@@ -143,10 +143,10 @@ Use the `.rounded-t`, `.rounded-r`, `.rounded-b`, or `.rounded-l` utilities to o
 <div class="bg-grey-light mr-3 p-4 rounded-lg rounded-b">.rounded-b</div>
 <div class="bg-grey-light p-4 rounded-lg rounded-l">.rounded-l</div>
 @slot('code')
-<div class="rounded-t"></div>
-<div class="rounded-r"></div>
-<div class="rounded-b"></div>
-<div class="rounded-l"></div>
+<div class="rounded-lg rounded-t"></div>
+<div class="rounded-lg rounded-r"></div>
+<div class="rounded-lg rounded-b"></div>
+<div class="rounded-lg rounded-l"></div>
 @endslot
 @endcomponent
 
