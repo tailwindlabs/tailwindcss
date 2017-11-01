@@ -1,10 +1,12 @@
 {
   "name": "tailwindcss",
   "version": "0.1.0",
-  "description": "A utility-first CSS framework for rapid UI development.",
+  "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "main": "lib/index.js",
-  "repository": "https://github.com/adamwathan/tailwindcss.git",
+  "repository": "https://github.com/tailwindcss/tailwindcss.git",
+  "bugs": "https://github.com/tailwindcss/tailwindcss/issues",
+  "homepage": "https://tailwindcss.com",
   "bin": {
     "tailwind": "lib/cli.js"
   },
