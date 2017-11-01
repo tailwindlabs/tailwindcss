@@ -162,7 +162,7 @@ module.exports = {
   | useful in certain situations. Be sure to see the full responsive
   | documentation for a complete list of options.
   |
-  | Class name: .{breakpoint}:{utility}
+  | Class name: .{screen}:{utility}
   |
   */
 
