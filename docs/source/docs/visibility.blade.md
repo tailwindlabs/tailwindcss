@@ -39,7 +39,7 @@ title: "Visibility"
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.invisible</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">visibility: invisible;</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">visibility: hidden;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Hide an element without affecting the layout of the document.</td>
             </tr>
         </tbody>
