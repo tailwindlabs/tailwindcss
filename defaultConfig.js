@@ -149,7 +149,7 @@ module.exports = {
 
   /*
   |-----------------------------------------------------------------------------
-  | Screens                     https://tailwindcss.com//docs/responsive-design
+  | Screens                      https://tailwindcss.com/docs/responsive-design
   |-----------------------------------------------------------------------------
   |
   | Screens in Tailwind are essentially CSS media queries. They define the
