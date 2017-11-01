@@ -38,3 +38,20 @@ title: "Backgrounds"
         </tbody>
     </table>
 </div>
+
+
+## Hover
+
+In addition to the standard responsive variations, background colors also come in `hover:` variations that apply the given background color on hover.
+
+@component('_partials.code-sample')
+<div class="bg-blue hover:bg-purple text-center text-white font-semibold mx-auto px-4 py-2">
+  Hover over this element
+</div>
+@endcomponent
+
+Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.
+
+```html
+<button class="bg-blue hover:bg-purple md:bg-orange md:hover:bg-red">Button</button>
+```
