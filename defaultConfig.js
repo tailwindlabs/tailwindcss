@@ -152,7 +152,7 @@ module.exports = {
   | Screens                      https://tailwindcss.com/docs/responsive-design
   |-----------------------------------------------------------------------------
   |
-  | Screens in Tailwind are essentially CSS media queries. They define the
+  | Screens in Tailwind are translated to CSS media queries. They define the
   | responsive breakpoints for your project. By default Tailwind takes a
   | "mobile first" approach, where each screen size represents a minimum
   | viewport width. Feel free to have as few or as many screens as you
