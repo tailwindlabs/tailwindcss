@@ -74,6 +74,9 @@ export default function() {
     'justify-around': {
       'justify-content': 'space-around',
     },
+    'justify-evenly': {
+      'justify-content': 'space-evenly',
+    },
     'content-center': {
       'align-content': 'center',
     },
