@@ -33,37 +33,37 @@ title: "Overflow"
         <tbody class="align-baseline">
             <tr>
                 <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.overflow-visible</td>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">overflow: 'visible';</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">overflow: visible;</td>
                 <td class="p-2 border-t border-smoke text-sm text-grey-darker">Prevent content within an element from being clipped.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.overflow-auto</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow: 'auto';</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow: auto;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Add scrollbars to an element if needed.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.overflow-hidden</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow: 'hidden';</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow: hidden;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Clip any content that overflows the element.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.mask</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow: 'hidden';</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow: hidden;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Clip any content that overflows the element. Alias of <code>.overflow-hidden</code>.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.overflow-x-scroll</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow-x: 'auto'</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow-x: auto;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow horizontal scrolling if needed.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.overflow-y-scroll</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow-y: 'auto'</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow-y: auto;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow horizontal scrolling if needed.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.overflow-scroll</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow: 'scroll';</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow: scroll;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Add scrollbars to an element.</td>
             </tr>
         </tbody>
