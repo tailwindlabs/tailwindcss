@@ -14,7 +14,7 @@
         <meta name="twitter:site" content="@tailwindcss">
         <meta name="twitter:title" content="Tailwind CSS">
         <meta name="twitter:description" content="A utility-first CSS framework for rapidly building custom user interfaces.">
-        <meta name="twitter:image" content="https://tailwindcss.com/img/twitter-card.png">
+        <meta name="twitter:image" content="https://tailwindcss.com/img/launch-card-optimized.png">
         <meta name="twitter:creator" content="@tailwindcss">
 
         <meta name="theme-color" content="#ffffff">
