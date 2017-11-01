@@ -29,17 +29,17 @@ title: "Flex, Grow, & Shrink - Flexbox"
             <tr>
                 <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.flex-initial</td>
                 <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">flex: initial;</td>
-                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Allow a flex item to shrink but not grow, taking into account it's initial size.</td>
+                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Allow a flex item to shrink but not grow, taking into account its initial size.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-1</td>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex: 1;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow a flex item to grow and shrink as needed, ignoring it's initial size.</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow a flex item to grow and shrink as needed, ignoring its initial size.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-auto</td>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex: auto;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow a flex item to grow and shrink, taking into account it's initial size.</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow a flex item to grow and shrink, taking into account its initial size.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-none</td>
@@ -72,7 +72,7 @@ title: "Flex, Grow, & Shrink - Flexbox"
 
 ### Initial <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
 
-Use `.flex-initial` to allow a flex item to shrink but not grow, taking into account it's initial size:
+Use `.flex-initial` to allow a flex item to shrink but not grow, taking into account its initial size:
 
 @component('_partials.code-sample')
 <p class="text-sm text-slate-light mb-1">Items don't grow when there's extra space</p>
@@ -124,7 +124,7 @@ Use `.flex-initial` to allow a flex item to shrink but not grow, taking into acc
 
 ### Flex 1
 
-Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring it's initial size:
+Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring its initial size:
 
 @component('_partials.code-sample')
 <p class="text-sm text-slate-light mb-1">Default behavior</p>
@@ -169,7 +169,7 @@ Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring it's i
 
 ### Auto
 
-Use `.flex-auto` to allow a flex item to grow and shrink, taking into account it's initial size:
+Use `.flex-auto` to allow a flex item to grow and shrink, taking into account its initial size:
 
 @component('_partials.code-sample')
 <p class="text-sm text-slate-light mb-1">Default behavior</p>
@@ -294,7 +294,7 @@ Use `.flex-no-shrink` to prevent a flex item from shrinking:
         Item that can shrink if needed
     </div>
     <div class="flex-no-shrink text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
-        Item that cannot shrink below it's initial size
+        Item that cannot shrink below its initial size
     </div>
     <div class="flex-shrink text-slate text-center bg-smoke px-4 py-2 m-2">
         Item that can shrink if needed
