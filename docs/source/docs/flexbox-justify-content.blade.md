@@ -56,6 +56,11 @@ title: "Justify Content - Flexbox"
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">justify-content: space-around;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Justify items by adding an equal amount of space around each one.</td>
             </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.justify-evenly</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">justify-content: space-evenly;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Justify items by adding an equal amount of space evenly between each one and container.</td>
+            </tr>
         </tbody>
     </table>
 </div>
@@ -115,6 +120,18 @@ Use `.justify-around` to justify items along the flex container's main axis such
 
 @component('_partials.code-sample')
 <div class="flex justify-around bg-smoke-light">
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+</div>
+@endcomponent
+
+### Space evenly
+
+Use `.justify-evenly` to justify items along the flex container's main axis such that there is an equal amount of space between each item and container:
+
+@component('_partials.code-sample')
+<div class="flex justify-evenly bg-smoke-light">
     <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
     <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
     <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
