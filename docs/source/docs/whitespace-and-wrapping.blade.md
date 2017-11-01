@@ -61,12 +61,12 @@ title: "Whitespace & Wrapping"
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.break-words</td>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">word-wrap: break-word;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow unbreakable words to be broken within an element.</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Add line breaks mid-word if needed.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.break-normal</td>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">word-wrap: normal;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Break words only at allowed break points within an element.</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Only add line breaks at normal word break points.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.truncate</td>
@@ -75,7 +75,7 @@ title: "Whitespace & Wrapping"
                     text-overflow: ellipsis;<br>
                     white-space: nowrap;<br>
                 </td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Cause overflowing text within an element get to truncated with an ellipsis (<code>…</code>) if required.</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Truncate overflowing text with an ellipsis (<code>…</code>) if needed.</td>
             </tr>
         </tbody>
     </table>
