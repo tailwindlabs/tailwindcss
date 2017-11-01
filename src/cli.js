@@ -75,7 +75,7 @@ program.command('build')
       process.exit(1)
     }
 
-    buildTailwind(inputFile, loadConfig(program.config), writeStrategy(options))
+    buildTailwind(inputFile, loadConfig(options.config), writeStrategy(options))
       .then(function () {
         process.exit()
       })
