@@ -19,7 +19,7 @@ On the flip side, it also has no opinion about how your site should look and doe
 
 If you're looking for a framework that comes with a menu of predesigned widgets to build your site with, Tailwind might not be the right framework for you.
 
-But if you a want a huge head start implementing a custom design with its own identity, Tailwind might be just what you're looking for.
+But if you want a huge head start implementing a custom design with its own identity, Tailwind might be just what you're looking for.
 
 ### Utility-first
 
