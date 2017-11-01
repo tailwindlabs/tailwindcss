@@ -23,7 +23,7 @@ We recommend creating a `tailwind.js` file in your project's root, but really it
 
 Alternatively, you can simply copy the default config below.
 
-Please see the [installation](/installation#4-process-your-css-with-tailwind) page for more information on how to setup Tailwind in your build process.
+Please see the [installation](/docs/installation#4-process-your-css-with-tailwind) page for more information on how to setup Tailwind in your build process.
 
 ## The default Tailwind config file
 
