@@ -1,11 +1,11 @@
 <div class="flex mb-6">
     @if ($responsive)
-    <span class="inline-flex items-center rounded-full border border-grey-light bg-grey-lightest text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none mr-2">
+    <a href="#responsive" class="inline-flex items-center rounded-full border border-grey-light bg-grey-lightest text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none mr-2">
         <span class="inline-flex rounded-full bg-green-light text-white mr-1">
             <svg class="h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5.8 9.4c-.33-.442-.958-.53-1.4-.2-.442.33-.53.958-.2 1.4l3 4c.38.508 1.134.537 1.553.06l7-8c.363-.417.32-1.05-.094-1.413-.417-.363-1.05-.32-1.413.094L8.06 12.414 5.8 9.4z"/></svg>
         </span>
         <span>Responsive</span>
-    </span>
+    </a>
     @else
     <span class="inline-flex items-center rounded-full border border-grey-light bg-grey-lightest text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none opacity-50 mr-2">
         <span class="inline-flex rounded-full bg-grey text-white mr-1">
@@ -16,12 +16,12 @@
     @endif
 
     @if ($customizable)
-    <span class="inline-flex items-center rounded-full border border-grey-light bg-grey-lightest text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none mr-2">
+    <a href="#customizing" class="inline-flex items-center rounded-full border border-grey-light bg-grey-lightest text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none mr-2">
         <span class="inline-flex rounded-full bg-green-light text-white mr-1">
             <svg class="h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5.8 9.4c-.33-.442-.958-.53-1.4-.2-.442.33-.53.958-.2 1.4l3 4c.38.508 1.134.537 1.553.06l7-8c.363-.417.32-1.05-.094-1.413-.417-.363-1.05-.32-1.413.094L8.06 12.414 5.8 9.4z"/></svg>
         </span>
         <span>Customizable</span>
-    </span>
+    </a>
     @else
     <span class="inline-flex items-center rounded-full border border-grey-light bg-grey-lightest text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none opacity-50 mr-2">
         <span class="inline-flex rounded-full bg-grey text-white mr-1">
@@ -32,12 +32,12 @@
     @endif
 
     @if ($hover)
-    <span class="inline-flex items-center rounded-full border border-grey-light bg-grey-lightest text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none mr-2">
+    <a href="#hover" class="inline-flex items-center rounded-full border border-grey-light bg-grey-lightest text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none mr-2">
         <span class="inline-flex rounded-full bg-green-light text-white mr-1">
             <svg class="h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5.8 9.4c-.33-.442-.958-.53-1.4-.2-.442.33-.53.958-.2 1.4l3 4c.38.508 1.134.537 1.553.06l7-8c.363-.417.32-1.05-.094-1.413-.417-.363-1.05-.32-1.413.094L8.06 12.414 5.8 9.4z"/></svg>
         </span>
         <span>Hover</span>
-    </span>
+    </a>
     @else
     <span class="inline-flex items-center rounded-full border border-grey-light bg-grey-lightest text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none opacity-50 mr-2">
         <span class="inline-flex rounded-full bg-grey text-white mr-1">
