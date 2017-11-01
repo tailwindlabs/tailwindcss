@@ -1,4 +1,4 @@
-<div class="mt-8">
+<div class="mt-8 v-cloak-hidden">
     <responsive-code-sample code="{{ e($code) }}">
         <div slot="none">{{ $none }}</div>
         <div slot="sm">{{ $sm }}</div>
