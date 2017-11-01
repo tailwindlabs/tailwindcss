@@ -5,7 +5,11 @@ title: "SVG"
 
 # SVG
 
-<div class="mt-8">
+<div class="text-xl text-slate-light mb-4">
+    Useful utilities for styling SVG elements.
+</div>
+
+<div class="mb-8">
     @include('_partials.work-in-progress')
 </div>
 
