@@ -68,7 +68,7 @@ Here's an example of a contact card component built with Tailwind without writin
 
 While you can do a *lot* with just utility classes, sometimes a component class is the right decision.
 
-Tailwind provides tools for [extracting component classes](/docs/extracting-component-classes) from repeated utility patterns, making it easy to update multiple instances of a component from one place:
+Tailwind provides tools for [extracting component classes](/docs/extracting-components) from repeated utility patterns, making it easy to update multiple instances of a component from one place:
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded">
