@@ -102,7 +102,7 @@ Tailwind provides tools for [extracting component classes](/docs/extracting-comp
 
 Every Tailwind utility also comes in responsive flavors, making it extremely easy to build responsive interfaces without ever leaving your HTML.
 
-Tailwind uses an intuitive `{breakpoint}:` prefix that makes it easy to notice responsive classes in your markup while keeping the original class name recognizable and in tact.
+Tailwind uses an intuitive `{screen}:` prefix that makes it easy to notice responsive classes in your markup while keeping the original class name recognizable and in tact.
 
 @component('_partials.responsive-code-sample')
 @slot('none')

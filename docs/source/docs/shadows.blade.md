@@ -103,7 +103,7 @@ This is most commonly used to remove a shadow that was applied at a smaller brea
 
 ## Responsive
 
-To control the shadow of an element at a specific breakpoint, add a `{breakpoint}:` prefix to any existing shadow utility. For example, use `md:shadow-lg` to apply the `shadow-lg` utility at only medium screen sizes and above.
+To control the shadow of an element at a specific breakpoint, add a `{screen}:` prefix to any existing shadow utility. For example, use `md:shadow-lg` to apply the `shadow-lg` utility at only medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/workflow/responsive-design) documentation.
 
