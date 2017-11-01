@@ -3,10 +3,10 @@ extends: _layouts.documentation
 title: "Style & Decoration"
 ---
 
-# Style & Decoration
+# Text Style & Decoration
 
 <div class="text-xl text-slate-light mb-4">
-    Utilities for controlling the text style of an element.
+    Utilities for controlling the style of text.
 </div>
 
 @include('_partials.feature-badges', [
