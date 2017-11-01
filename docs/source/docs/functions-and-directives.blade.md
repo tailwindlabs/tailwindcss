@@ -9,7 +9,7 @@ Tailwind exposes a few custom CSS functions and directives that can be used in y
 
 ### `@@tailwind`
 
-Use the `@@tailwind` directive to insert Tailwind's `reset` and `utilities` styles into your CSS. Here's a full example of how you might do this:
+Use the `@@tailwind` directive to insert Tailwind's `preflight` and `utilities` styles into your CSS. Here's a full example of how you might do this:
 
 ```less
 /**
