@@ -1126,48 +1126,59 @@ button,
   white-space: nowrap;
 }
 
-.italic {
+.italic,
+.hover\:italic:hover {
   font-style: italic;
 }
 
-.roman {
+.roman,
+.hover\:roman:hover {
   font-style: normal;
 }
 
-.uppercase {
+.uppercase,
+.hover\:uppercase:hover {
   text-transform: uppercase;
 }
 
-.lowercase {
+.lowercase,
+.hover\:lowercase:hover {
   text-transform: lowercase;
 }
 
-.capitalize {
+.capitalize,
+.hover\:capitalize:hover {
   text-transform: capitalize;
 }
 
-.normal-case {
+.normal-case,
+.hover\:normal-case:hover {
   text-transform: none;
 }
 
-.underline {
+.underline,
+.hover\:underline:hover {
   text-decoration: underline;
 }
 
-.line-through {
+.line-through,
+.hover\:line-through:hover {
   text-decoration: line-through;
 }
 
-.no-underline {
+.no-underline,
+.hover\:no-underline:hover {
   text-decoration: none;
 }
 
-.antialiased {
+.antialiased,
+.hover\:antialiased:hover {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.subpixel-antialiased {
+.subpixel-antialiased,
+.hover\:subpixel-antialiased:hover {
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
 }
@@ -4054,48 +4065,59 @@ button,
     white-space: nowrap;
   }
 
-  .sm\:italic {
+  .sm\:italic,
+  .sm\:hover\:italic:hover {
     font-style: italic;
   }
 
-  .sm\:roman {
+  .sm\:roman,
+  .sm\:hover\:roman:hover {
     font-style: normal;
   }
 
-  .sm\:uppercase {
+  .sm\:uppercase,
+  .sm\:hover\:uppercase:hover {
     text-transform: uppercase;
   }
 
-  .sm\:lowercase {
+  .sm\:lowercase,
+  .sm\:hover\:lowercase:hover {
     text-transform: lowercase;
   }
 
-  .sm\:capitalize {
+  .sm\:capitalize,
+  .sm\:hover\:capitalize:hover {
     text-transform: capitalize;
   }
 
-  .sm\:normal-case {
+  .sm\:normal-case,
+  .sm\:hover\:normal-case:hover {
     text-transform: none;
   }
 
-  .sm\:underline {
+  .sm\:underline,
+  .sm\:hover\:underline:hover {
     text-decoration: underline;
   }
 
-  .sm\:line-through {
+  .sm\:line-through,
+  .sm\:hover\:line-through:hover {
     text-decoration: line-through;
   }
 
-  .sm\:no-underline {
+  .sm\:no-underline,
+  .sm\:hover\:no-underline:hover {
     text-decoration: none;
   }
 
-  .sm\:antialiased {
+  .sm\:antialiased,
+  .sm\:hover\:antialiased:hover {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  .sm\:subpixel-antialiased {
+  .sm\:subpixel-antialiased,
+  .sm\:hover\:subpixel-antialiased:hover {
     -webkit-font-smoothing: auto;
     -moz-osx-font-smoothing: auto;
   }
@@ -6983,48 +7005,59 @@ button,
     white-space: nowrap;
   }
 
-  .md\:italic {
+  .md\:italic,
+  .md\:hover\:italic:hover {
     font-style: italic;
   }
 
-  .md\:roman {
+  .md\:roman,
+  .md\:hover\:roman:hover {
     font-style: normal;
   }
 
-  .md\:uppercase {
+  .md\:uppercase,
+  .md\:hover\:uppercase:hover {
     text-transform: uppercase;
   }
 
-  .md\:lowercase {
+  .md\:lowercase,
+  .md\:hover\:lowercase:hover {
     text-transform: lowercase;
   }
 
-  .md\:capitalize {
+  .md\:capitalize,
+  .md\:hover\:capitalize:hover {
     text-transform: capitalize;
   }
 
-  .md\:normal-case {
+  .md\:normal-case,
+  .md\:hover\:normal-case:hover {
     text-transform: none;
   }
 
-  .md\:underline {
+  .md\:underline,
+  .md\:hover\:underline:hover {
     text-decoration: underline;
   }
 
-  .md\:line-through {
+  .md\:line-through,
+  .md\:hover\:line-through:hover {
     text-decoration: line-through;
   }
 
-  .md\:no-underline {
+  .md\:no-underline,
+  .md\:hover\:no-underline:hover {
     text-decoration: none;
   }
 
-  .md\:antialiased {
+  .md\:antialiased,
+  .md\:hover\:antialiased:hover {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  .md\:subpixel-antialiased {
+  .md\:subpixel-antialiased,
+  .md\:hover\:subpixel-antialiased:hover {
     -webkit-font-smoothing: auto;
     -moz-osx-font-smoothing: auto;
   }
@@ -9912,48 +9945,59 @@ button,
     white-space: nowrap;
   }
 
-  .lg\:italic {
+  .lg\:italic,
+  .lg\:hover\:italic:hover {
     font-style: italic;
   }
 
-  .lg\:roman {
+  .lg\:roman,
+  .lg\:hover\:roman:hover {
     font-style: normal;
   }
 
-  .lg\:uppercase {
+  .lg\:uppercase,
+  .lg\:hover\:uppercase:hover {
     text-transform: uppercase;
   }
 
-  .lg\:lowercase {
+  .lg\:lowercase,
+  .lg\:hover\:lowercase:hover {
     text-transform: lowercase;
   }
 
-  .lg\:capitalize {
+  .lg\:capitalize,
+  .lg\:hover\:capitalize:hover {
     text-transform: capitalize;
   }
 
-  .lg\:normal-case {
+  .lg\:normal-case,
+  .lg\:hover\:normal-case:hover {
     text-transform: none;
   }
 
-  .lg\:underline {
+  .lg\:underline,
+  .lg\:hover\:underline:hover {
     text-decoration: underline;
   }
 
-  .lg\:line-through {
+  .lg\:line-through,
+  .lg\:hover\:line-through:hover {
     text-decoration: line-through;
   }
 
-  .lg\:no-underline {
+  .lg\:no-underline,
+  .lg\:hover\:no-underline:hover {
     text-decoration: none;
   }
 
-  .lg\:antialiased {
+  .lg\:antialiased,
+  .lg\:hover\:antialiased:hover {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  .lg\:subpixel-antialiased {
+  .lg\:subpixel-antialiased,
+  .lg\:hover\:subpixel-antialiased:hover {
     -webkit-font-smoothing: auto;
     -moz-osx-font-smoothing: auto;
   }
@@ -12841,48 +12885,59 @@ button,
     white-space: nowrap;
   }
 
-  .xl\:italic {
+  .xl\:italic,
+  .xl\:hover\:italic:hover {
     font-style: italic;
   }
 
-  .xl\:roman {
+  .xl\:roman,
+  .xl\:hover\:roman:hover {
     font-style: normal;
   }
 
-  .xl\:uppercase {
+  .xl\:uppercase,
+  .xl\:hover\:uppercase:hover {
     text-transform: uppercase;
   }
 
-  .xl\:lowercase {
+  .xl\:lowercase,
+  .xl\:hover\:lowercase:hover {
     text-transform: lowercase;
   }
 
-  .xl\:capitalize {
+  .xl\:capitalize,
+  .xl\:hover\:capitalize:hover {
     text-transform: capitalize;
   }
 
-  .xl\:normal-case {
+  .xl\:normal-case,
+  .xl\:hover\:normal-case:hover {
     text-transform: none;
   }
 
-  .xl\:underline {
+  .xl\:underline,
+  .xl\:hover\:underline:hover {
     text-decoration: underline;
   }
 
-  .xl\:line-through {
+  .xl\:line-through,
+  .xl\:hover\:line-through:hover {
     text-decoration: line-through;
   }
 
-  .xl\:no-underline {
+  .xl\:no-underline,
+  .xl\:hover\:no-underline:hover {
     text-decoration: none;
   }
 
-  .xl\:antialiased {
+  .xl\:antialiased,
+  .xl\:hover\:antialiased:hover {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  .xl\:subpixel-antialiased {
+  .xl\:subpixel-antialiased,
+  .xl\:hover\:subpixel-antialiased:hover {
     -webkit-font-smoothing: auto;
     -moz-osx-font-smoothing: auto;
   }
