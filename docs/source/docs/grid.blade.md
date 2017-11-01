@@ -201,37 +201,37 @@ Fixed width columns are still respected even if a smaller screen has auto column
 <div class="bg-smoke-light font-semibold text-sm mb-6">
     <div class="text-slate p-4 leading-none">.flex.flex-wrap</div>
     <div class="flex flex-wrap">
-        <div class="flex-fill md:w-1/6 md:flex-none">
+        <div class="flex-grow md:w-1/6 md:flex-none">
             <div class="text-center py-4 bg-slate text-white">
-                <div>.flex-fill</div>
+                <div>.flex-grow</div>
                 <div>.md:w-1/6</div>
                 <div>.md:flex-none</div>
             </div>
         </div>
-        <div class="flex-fill md:w-1/6 md:flex-none">
+        <div class="flex-grow md:w-1/6 md:flex-none">
             <div class="text-center py-4 bg-slate-dark text-white">
-                <div>.flex-fill</div>
+                <div>.flex-grow</div>
                 <div>.md:w-1/6</div>
                 <div>.md:flex-none</div>
             </div>
         </div>
-        <div class="flex-fill md:w-1/6 md:flex-none">
+        <div class="flex-grow md:w-1/6 md:flex-none">
             <div class="text-center py-4 bg-slate text-white">
-                <div>.flex-fill</div>
+                <div>.flex-grow</div>
                 <div>.md:w-1/6</div>
                 <div>.md:flex-none</div>
             </div>
         </div>
-        <div class="flex-fill md:w-1/6 md:flex-none">
+        <div class="flex-grow md:w-1/6 md:flex-none">
             <div class="text-center py-4 bg-slate-dark text-white">
-                <div>.flex-fill</div>
+                <div>.flex-grow</div>
                 <div>.md:w-1/6</div>
                 <div>.md:flex-none</div>
             </div>
         </div>
-        <div class="flex-fill md:w-1/6 md:flex-none">
+        <div class="flex-grow md:w-1/6 md:flex-none">
             <div class="text-center py-4 bg-slate text-white">
-                <div>.flex-fill</div>
+                <div>.flex-grow</div>
                 <div>.md:w-1/6</div>
                 <div>.md:flex-none</div>
             </div>
