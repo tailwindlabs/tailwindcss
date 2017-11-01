@@ -10,9 +10,8 @@
                     <svg class="h-8" viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg"><path d="M15 12c2-8 7-12 15-12 12 0 13.5 9 19.5 10.5 4 1 7.5-.5 10.5-4.5-2 8-7 12-15 12-12 0-13.5-9-19.5-10.5-4-1-7.5.5-10.5 4.5zM0 30c2-8 7-12 15-12 12 0 13.5 9 19.5 10.5 4 1 7.5-.5 10.5-4.5-2 8-7 12-15 12-12 0-13.5-9-19.5-10.5-4-1-7.5.5-10.5 4.5z" fill="url(#logoGradient)" fill-rule="evenodd"></path></svg>
                 </a>
             </div>
-            <div class="relative">
-                <div class="absolute h-full ml-10 pin-l text-slate-lighter text-sm leading-none flex items-center">Search coming soon</div>
-                <input class="rounded bg-white border border-smoke py-2 pr-4 pl-10 block w-full" type="text" {{-- placeholder="Search" --}} disabled>
+            <div class="relative opacity-75">
+                <input class="rounded bg-white border border-smoke py-2 pr-4 pl-10 block w-full cursor-not-allowed" type="text" placeholder="Search coming soon!" disabled>
                 <div class="pointer-events-none absolute pin-y pin-l pl-3 flex items-center">
                     <svg class="pointer-events-none text-slate h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></svg>
                 </div>
