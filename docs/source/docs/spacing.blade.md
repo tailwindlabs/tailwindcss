@@ -1,6 +1,6 @@
 ---
 extends: _layouts.documentation
-title: "Padding"
+title: "Spacing"
 ---
 
 # Spacing
@@ -30,7 +30,7 @@ For example, `.pt-2` would add `.5rem` of padding to the top of the element, `.m
         <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">-m</code> Negative Margin</div>
     </div>
     <div class="pl-12 pr-12 border-l">
-        <div class="mb-3 text-slate"><span class="uppercase">Position</span> <span class="text-slate-light text-xs">(optional)</span></div>
+        <div class="mb-3 text-slate"><span class="uppercase">Side</span> <span class="text-slate-light text-xs">(optional)</span></div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">t</code> Top</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">r</code> Right</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">b</code> Bottom</div>
