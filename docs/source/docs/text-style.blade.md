@@ -12,7 +12,7 @@ title: "Style & Decoration"
 @include('_partials.feature-badges', [
     'responsive' => true,
     'customizable' => true,
-    'hover' => false,
+    'hover' => true,
     'focus' => false
 ])
 
