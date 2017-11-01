@@ -688,8 +688,8 @@ module.exports = {
   | the defaults we provide, it's possible to apply multiple shadows
   | per utility using comma separation.
   |
-  | Take note that a default shadow is required. This is the value used
-  | for the non-suffixed version of this utility (.shadow).
+  | If a `default` shadow is provided, it will be made available as the non-
+  | suffixed `.shadow` utility.
   |
   | Class name: .shadow-{size?}
   |
