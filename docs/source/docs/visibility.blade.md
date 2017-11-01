@@ -57,7 +57,7 @@ Use `.visible` to make an element visible. This will typically be used as a rese
 
 ### Invisible
 
-Use `.invisible` to hide an element, but still maintain it's space.
+Use `.invisible` to hide an element, but still maintain its space.
 
 @component('_partials.code-sample', ['class' => 'flex justify-center'])
 <div class="invisible bg-smoke w-24 h-24 rounded-full"></div>

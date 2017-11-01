@@ -84,7 +84,7 @@ If you'd like to create responsive versions of your own utilities based on the b
 }
 ```
 
-Tailwind will intelligently group the responsive versions into it's existing media queries which are output at the very end of the stylesheet. This ensures that any responsive utilities will always take precedence over unprefixed utilities.
+Tailwind will intelligently group the responsive versions into its existing media queries which are output at the very end of the stylesheet. This ensures that any responsive utilities will always take precedence over unprefixed utilities.
 
 The above code would generate CSS that looks something like this:
 

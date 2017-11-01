@@ -407,7 +407,7 @@ Use `.content-around` to distribute lines in a flex container such that there is
 
 ### 1
 
-Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring it's initial size:
+Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring its initial size:
 
 @component('_partials.code-sample')
 <p class="text-sm text-slate-light mb-1">Default behavior</p>
@@ -452,7 +452,7 @@ Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring it's i
 
 ### Auto
 
-Use `.flex-auto` to allow a flex item to grow and shrink, taking into account it's initial size:
+Use `.flex-auto` to allow a flex item to grow and shrink, taking into account its initial size:
 
 @component('_partials.code-sample')
 <p class="text-sm text-slate-light mb-1">Default behavior</p>
@@ -515,7 +515,7 @@ Use `.flex-none` to prevent a flex item from growing or shrinking:
 
 ### Initial
 
-Use `.flex-initial` to allow a flex item to shrink but not grow, taking into account it's initial size *(this is also the default behavior)*:
+Use `.flex-initial` to allow a flex item to shrink but not grow, taking into account its initial size *(this is also the default behavior)*:
 
 @component('_partials.code-sample')
 <p class="text-sm text-slate-light mb-1">Items don't grow when there's extra space</p>
@@ -637,7 +637,7 @@ Use `.flex-no-shrink` to prevent a flex item from shrinking:
         Item that can shrink if needed
     </div>
     <div class="flex-no-shrink text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
-        Item that cannot shrink below it's initial size
+        Item that cannot shrink below its initial size
     </div>
     <div class="flex-shrink text-slate text-center bg-smoke px-4 py-2 m-2">
         Item that can shrink if needed
