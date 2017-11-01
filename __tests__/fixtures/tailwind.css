@@ -1614,23 +1614,23 @@ button,
 }
 
 .border {
-  border: 1px solid undefined;
+  border: 1px solid #dae4e9;
 }
 
 .border-t {
-  border-top: 1px solid undefined;
+  border-top: 1px solid #dae4e9;
 }
 
 .border-r {
-  border-right: 1px solid undefined;
+  border-right: 1px solid #dae4e9;
 }
 
 .border-b {
-  border-bottom: 1px solid undefined;
+  border-bottom: 1px solid #dae4e9;
 }
 
 .border-l {
-  border-left: 1px solid undefined;
+  border-left: 1px solid #dae4e9;
 }
 
 .border-0 {
@@ -1654,63 +1654,63 @@ button,
 }
 
 .border-2 {
-  border: 2px solid undefined;
+  border: 2px solid #dae4e9;
 }
 
 .border-t-2 {
-  border-top: 2px solid undefined;
+  border-top: 2px solid #dae4e9;
 }
 
 .border-r-2 {
-  border-right: 2px solid undefined;
+  border-right: 2px solid #dae4e9;
 }
 
 .border-b-2 {
-  border-bottom: 2px solid undefined;
+  border-bottom: 2px solid #dae4e9;
 }
 
 .border-l-2 {
-  border-left: 2px solid undefined;
+  border-left: 2px solid #dae4e9;
 }
 
 .border-4 {
-  border: 4px solid undefined;
+  border: 4px solid #dae4e9;
 }
 
 .border-t-4 {
-  border-top: 4px solid undefined;
+  border-top: 4px solid #dae4e9;
 }
 
 .border-r-4 {
-  border-right: 4px solid undefined;
+  border-right: 4px solid #dae4e9;
 }
 
 .border-b-4 {
-  border-bottom: 4px solid undefined;
+  border-bottom: 4px solid #dae4e9;
 }
 
 .border-l-4 {
-  border-left: 4px solid undefined;
+  border-left: 4px solid #dae4e9;
 }
 
 .border-8 {
-  border: 8px solid undefined;
+  border: 8px solid #dae4e9;
 }
 
 .border-t-8 {
-  border-top: 8px solid undefined;
+  border-top: 8px solid #dae4e9;
 }
 
 .border-r-8 {
-  border-right: 8px solid undefined;
+  border-right: 8px solid #dae4e9;
 }
 
 .border-b-8 {
-  border-bottom: 8px solid undefined;
+  border-bottom: 8px solid #dae4e9;
 }
 
 .border-l-8 {
-  border-left: 8px solid undefined;
+  border-left: 8px solid #dae4e9;
 }
 
 .border-transparent,
@@ -4542,23 +4542,23 @@ button,
   }
 
   .sm\:border {
-    border: 1px solid undefined;
+    border: 1px solid #dae4e9;
   }
 
   .sm\:border-t {
-    border-top: 1px solid undefined;
+    border-top: 1px solid #dae4e9;
   }
 
   .sm\:border-r {
-    border-right: 1px solid undefined;
+    border-right: 1px solid #dae4e9;
   }
 
   .sm\:border-b {
-    border-bottom: 1px solid undefined;
+    border-bottom: 1px solid #dae4e9;
   }
 
   .sm\:border-l {
-    border-left: 1px solid undefined;
+    border-left: 1px solid #dae4e9;
   }
 
   .sm\:border-0 {
@@ -4582,63 +4582,63 @@ button,
   }
 
   .sm\:border-2 {
-    border: 2px solid undefined;
+    border: 2px solid #dae4e9;
   }
 
   .sm\:border-t-2 {
-    border-top: 2px solid undefined;
+    border-top: 2px solid #dae4e9;
   }
 
   .sm\:border-r-2 {
-    border-right: 2px solid undefined;
+    border-right: 2px solid #dae4e9;
   }
 
   .sm\:border-b-2 {
-    border-bottom: 2px solid undefined;
+    border-bottom: 2px solid #dae4e9;
   }
 
   .sm\:border-l-2 {
-    border-left: 2px solid undefined;
+    border-left: 2px solid #dae4e9;
   }
 
   .sm\:border-4 {
-    border: 4px solid undefined;
+    border: 4px solid #dae4e9;
   }
 
   .sm\:border-t-4 {
-    border-top: 4px solid undefined;
+    border-top: 4px solid #dae4e9;
   }
 
   .sm\:border-r-4 {
-    border-right: 4px solid undefined;
+    border-right: 4px solid #dae4e9;
   }
 
   .sm\:border-b-4 {
-    border-bottom: 4px solid undefined;
+    border-bottom: 4px solid #dae4e9;
   }
 
   .sm\:border-l-4 {
-    border-left: 4px solid undefined;
+    border-left: 4px solid #dae4e9;
   }
 
   .sm\:border-8 {
-    border: 8px solid undefined;
+    border: 8px solid #dae4e9;
   }
 
   .sm\:border-t-8 {
-    border-top: 8px solid undefined;
+    border-top: 8px solid #dae4e9;
   }
 
   .sm\:border-r-8 {
-    border-right: 8px solid undefined;
+    border-right: 8px solid #dae4e9;
   }
 
   .sm\:border-b-8 {
-    border-bottom: 8px solid undefined;
+    border-bottom: 8px solid #dae4e9;
   }
 
   .sm\:border-l-8 {
-    border-left: 8px solid undefined;
+    border-left: 8px solid #dae4e9;
   }
 
   .sm\:border-transparent,
@@ -7471,23 +7471,23 @@ button,
   }
 
   .md\:border {
-    border: 1px solid undefined;
+    border: 1px solid #dae4e9;
   }
 
   .md\:border-t {
-    border-top: 1px solid undefined;
+    border-top: 1px solid #dae4e9;
   }
 
   .md\:border-r {
-    border-right: 1px solid undefined;
+    border-right: 1px solid #dae4e9;
   }
 
   .md\:border-b {
-    border-bottom: 1px solid undefined;
+    border-bottom: 1px solid #dae4e9;
   }
 
   .md\:border-l {
-    border-left: 1px solid undefined;
+    border-left: 1px solid #dae4e9;
   }
 
   .md\:border-0 {
@@ -7511,63 +7511,63 @@ button,
   }
 
   .md\:border-2 {
-    border: 2px solid undefined;
+    border: 2px solid #dae4e9;
   }
 
   .md\:border-t-2 {
-    border-top: 2px solid undefined;
+    border-top: 2px solid #dae4e9;
   }
 
   .md\:border-r-2 {
-    border-right: 2px solid undefined;
+    border-right: 2px solid #dae4e9;
   }
 
   .md\:border-b-2 {
-    border-bottom: 2px solid undefined;
+    border-bottom: 2px solid #dae4e9;
   }
 
   .md\:border-l-2 {
-    border-left: 2px solid undefined;
+    border-left: 2px solid #dae4e9;
   }
 
   .md\:border-4 {
-    border: 4px solid undefined;
+    border: 4px solid #dae4e9;
   }
 
   .md\:border-t-4 {
-    border-top: 4px solid undefined;
+    border-top: 4px solid #dae4e9;
   }
 
   .md\:border-r-4 {
-    border-right: 4px solid undefined;
+    border-right: 4px solid #dae4e9;
   }
 
   .md\:border-b-4 {
-    border-bottom: 4px solid undefined;
+    border-bottom: 4px solid #dae4e9;
   }
 
   .md\:border-l-4 {
-    border-left: 4px solid undefined;
+    border-left: 4px solid #dae4e9;
   }
 
   .md\:border-8 {
-    border: 8px solid undefined;
+    border: 8px solid #dae4e9;
   }
 
   .md\:border-t-8 {
-    border-top: 8px solid undefined;
+    border-top: 8px solid #dae4e9;
   }
 
   .md\:border-r-8 {
-    border-right: 8px solid undefined;
+    border-right: 8px solid #dae4e9;
   }
 
   .md\:border-b-8 {
-    border-bottom: 8px solid undefined;
+    border-bottom: 8px solid #dae4e9;
   }
 
   .md\:border-l-8 {
-    border-left: 8px solid undefined;
+    border-left: 8px solid #dae4e9;
   }
 
   .md\:border-transparent,
@@ -10400,23 +10400,23 @@ button,
   }
 
   .lg\:border {
-    border: 1px solid undefined;
+    border: 1px solid #dae4e9;
   }
 
   .lg\:border-t {
-    border-top: 1px solid undefined;
+    border-top: 1px solid #dae4e9;
   }
 
   .lg\:border-r {
-    border-right: 1px solid undefined;
+    border-right: 1px solid #dae4e9;
   }
 
   .lg\:border-b {
-    border-bottom: 1px solid undefined;
+    border-bottom: 1px solid #dae4e9;
   }
 
   .lg\:border-l {
-    border-left: 1px solid undefined;
+    border-left: 1px solid #dae4e9;
   }
 
   .lg\:border-0 {
@@ -10440,63 +10440,63 @@ button,
   }
 
   .lg\:border-2 {
-    border: 2px solid undefined;
+    border: 2px solid #dae4e9;
   }
 
   .lg\:border-t-2 {
-    border-top: 2px solid undefined;
+    border-top: 2px solid #dae4e9;
   }
 
   .lg\:border-r-2 {
-    border-right: 2px solid undefined;
+    border-right: 2px solid #dae4e9;
   }
 
   .lg\:border-b-2 {
-    border-bottom: 2px solid undefined;
+    border-bottom: 2px solid #dae4e9;
   }
 
   .lg\:border-l-2 {
-    border-left: 2px solid undefined;
+    border-left: 2px solid #dae4e9;
   }
 
   .lg\:border-4 {
-    border: 4px solid undefined;
+    border: 4px solid #dae4e9;
   }
 
   .lg\:border-t-4 {
-    border-top: 4px solid undefined;
+    border-top: 4px solid #dae4e9;
   }
 
   .lg\:border-r-4 {
-    border-right: 4px solid undefined;
+    border-right: 4px solid #dae4e9;
   }
 
   .lg\:border-b-4 {
-    border-bottom: 4px solid undefined;
+    border-bottom: 4px solid #dae4e9;
   }
 
   .lg\:border-l-4 {
-    border-left: 4px solid undefined;
+    border-left: 4px solid #dae4e9;
   }
 
   .lg\:border-8 {
-    border: 8px solid undefined;
+    border: 8px solid #dae4e9;
   }
 
   .lg\:border-t-8 {
-    border-top: 8px solid undefined;
+    border-top: 8px solid #dae4e9;
   }
 
   .lg\:border-r-8 {
-    border-right: 8px solid undefined;
+    border-right: 8px solid #dae4e9;
   }
 
   .lg\:border-b-8 {
-    border-bottom: 8px solid undefined;
+    border-bottom: 8px solid #dae4e9;
   }
 
   .lg\:border-l-8 {
-    border-left: 8px solid undefined;
+    border-left: 8px solid #dae4e9;
   }
 
   .lg\:border-transparent,
@@ -13329,23 +13329,23 @@ button,
   }
 
   .xl\:border {
-    border: 1px solid undefined;
+    border: 1px solid #dae4e9;
   }
 
   .xl\:border-t {
-    border-top: 1px solid undefined;
+    border-top: 1px solid #dae4e9;
   }
 
   .xl\:border-r {
-    border-right: 1px solid undefined;
+    border-right: 1px solid #dae4e9;
   }
 
   .xl\:border-b {
-    border-bottom: 1px solid undefined;
+    border-bottom: 1px solid #dae4e9;
   }
 
   .xl\:border-l {
-    border-left: 1px solid undefined;
+    border-left: 1px solid #dae4e9;
   }
 
   .xl\:border-0 {
@@ -13369,63 +13369,63 @@ button,
   }
 
   .xl\:border-2 {
-    border: 2px solid undefined;
+    border: 2px solid #dae4e9;
   }
 
   .xl\:border-t-2 {
-    border-top: 2px solid undefined;
+    border-top: 2px solid #dae4e9;
   }
 
   .xl\:border-r-2 {
-    border-right: 2px solid undefined;
+    border-right: 2px solid #dae4e9;
   }
 
   .xl\:border-b-2 {
-    border-bottom: 2px solid undefined;
+    border-bottom: 2px solid #dae4e9;
   }
 
   .xl\:border-l-2 {
-    border-left: 2px solid undefined;
+    border-left: 2px solid #dae4e9;
   }
 
   .xl\:border-4 {
-    border: 4px solid undefined;
+    border: 4px solid #dae4e9;
   }
 
   .xl\:border-t-4 {
-    border-top: 4px solid undefined;
+    border-top: 4px solid #dae4e9;
   }
 
   .xl\:border-r-4 {
-    border-right: 4px solid undefined;
+    border-right: 4px solid #dae4e9;
   }
 
   .xl\:border-b-4 {
-    border-bottom: 4px solid undefined;
+    border-bottom: 4px solid #dae4e9;
   }
 
   .xl\:border-l-4 {
-    border-left: 4px solid undefined;
+    border-left: 4px solid #dae4e9;
   }
 
   .xl\:border-8 {
-    border: 8px solid undefined;
+    border: 8px solid #dae4e9;
   }
 
   .xl\:border-t-8 {
-    border-top: 8px solid undefined;
+    border-top: 8px solid #dae4e9;
   }
 
   .xl\:border-r-8 {
-    border-right: 8px solid undefined;
+    border-right: 8px solid #dae4e9;
   }
 
   .xl\:border-b-8 {
-    border-bottom: 8px solid undefined;
+    border-bottom: 8px solid #dae4e9;
   }
 
   .xl\:border-l-8 {
-    border-left: 8px solid undefined;
+    border-left: 8px solid #dae4e9;
   }
 
   .xl\:border-transparent,

@@ -425,11 +425,11 @@ By default Tailwind defines the entire color palette in a `colors` object at the
 var colors = {
   'transparent': 'transparent',
 
-  'slate-darker': '#212b35',
-  'slate-dark': '#404e5c',
-  'slate': '#647382',
-  'slate-light': '#919eab',
-  'slate-lighter': '#c5ced6',
+  'black': '#222b2f',
+  'grey-darkest': '#364349',
+  'grey-darker': '#596a73',
+  'grey-dark': '#70818a',
+  'grey': '#9babb4',
 
   // ...
 }
@@ -438,7 +438,7 @@ module.exports = {
   colors: colors,
   textColors: colors,
   backgroundColors: colors,
-  borderColors: Object.assign({ default: colors['slate-lighter'] }, colors),
+  borderColors: Object.assign({ default: colors['grey-light'] }, colors),
 
   // ...
 }
@@ -447,7 +447,7 @@ module.exports = {
 You'll notice above that the color palette is also assigned to the `colors` key of your Tailwind config. This makes it easy to access them in your custom CSS using the `config()` function. For example:
 
 ```css
-.error { color: config('colors.slate-darker') }
+.error { color: config('colors.grey-darker') }
 ```
 
 <!-- Document how to customize your color palette, using regular JS features in your config file to avoid duplication, merging colors, etc. -->
