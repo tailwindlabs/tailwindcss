@@ -146,7 +146,7 @@ Use the `.rounded-t`, `.rounded-r`, `.rounded-b`, or `.rounded-l` utilities to o
 <div class="rounded-t"></div>
 <div class="rounded-r"></div>
 <div class="rounded-b"></div>
-<div class="rounded-t"></div>
+<div class="rounded-l"></div>
 @endslot
 @endcomponent
 
