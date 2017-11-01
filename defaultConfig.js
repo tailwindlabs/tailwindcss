@@ -403,11 +403,11 @@ module.exports = {
   | Border radius                    https://tailwindcss.com/docs/border-radius
   |-----------------------------------------------------------------------------
   |
-  | Here is where you define your border radius values. Take note that
-  | a default radius is required. This is the value used for the
-  | non-suffixed version of this utility (.rounded).
+  | Here is where you define your border radius values. If a `default` radius
+  | is provided, it will be made available as the non-suffixed `.rounded`
+  | utility.
   |
-  | Class name: .rounded-{radius?}
+  | Class name: .rounded{-radius?}
   |
   */
 
