@@ -142,7 +142,7 @@ Instead of writing a raw media query that duplicates that value like this:
 
 ### `config()`
 
-While it's recommended to use the `@@apply` directive to compose custom CSS out of existing utility classes whenever possible, some times you need direct access to your Tailwind config values.
+While it's recommended to use the `@@apply` directive to compose custom CSS out of existing utility classes whenever possible, sometimes you need direct access to your Tailwind config values.
 
 Use the `config()` function to access your Tailwind config values using dot notation:
 
