@@ -4,7 +4,6 @@ export default function() {
   return defineClasses({
     'overflow-auto': { overflow: 'auto' },
     'overflow-hidden': { overflow: 'hidden' },
-    'mask': { overflow: 'hidden' },
     'overflow-visible': { overflow: 'visible' },
     'overflow-scroll': { overflow: 'scroll' },
     'overflow-x-scroll': { 'overflow-x': 'auto', '-ms-overflow-style': '-ms-autohiding-scrollbar' },

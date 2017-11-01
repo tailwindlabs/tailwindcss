@@ -2228,10 +2228,6 @@ button,
   overflow: hidden;
 }
 
-.mask {
-  overflow: hidden;
-}
-
 .overflow-visible {
   overflow: visible;
 }
@@ -5164,10 +5160,6 @@ button,
   }
 
   .sm\:overflow-hidden {
-    overflow: hidden;
-  }
-
-  .sm\:mask {
     overflow: hidden;
   }
 
@@ -8107,10 +8099,6 @@ button,
     overflow: hidden;
   }
 
-  .md\:mask {
-    overflow: hidden;
-  }
-
   .md\:overflow-visible {
     overflow: visible;
   }
@@ -11047,10 +11035,6 @@ button,
     overflow: hidden;
   }
 
-  .lg\:mask {
-    overflow: hidden;
-  }
-
   .lg\:overflow-visible {
     overflow: visible;
   }
@@ -13984,10 +13968,6 @@ button,
   }
 
   .xl\:overflow-hidden {
-    overflow: hidden;
-  }
-
-  .xl\:mask {
     overflow: hidden;
   }
 

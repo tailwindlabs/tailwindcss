@@ -47,11 +47,6 @@ title: "Overflow"
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Clip any content that overflows the element.</td>
             </tr>
             <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.mask</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow: hidden;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Clip any content that overflows the element. Alias of <code>.overflow-hidden</code>.</td>
-            </tr>
-            <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.overflow-x-scroll</td>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow-x: auto;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow horizontal scrolling if needed.</td>
