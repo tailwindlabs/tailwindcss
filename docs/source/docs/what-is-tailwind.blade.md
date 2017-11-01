@@ -17,7 +17,7 @@ It doesn't have a default theme and there's no built-in UI components.
 
 On the flip side, it also has no opinion about how your site should look and doesn't impose design decisions that you have to fight to undo.
 
-If you're looking for a framework that comes with a menu of predesigned widgets to build your site from, Tailwind might not be the right framework for you.
+If you're looking for a framework that comes with a menu of predesigned widgets to build your site with, Tailwind might not be the right framework for you.
 
 But if you a want a huge head start implementing a custom design with its own identity, Tailwind might be just what you're looking for.
 
@@ -52,14 +52,12 @@ Here's an example of a contact card component built with Tailwind without writin
         <div class="mr-4">
             <img class="h-24 rounded-full" src="https://avatars2.githubusercontent.com/u/4323180?s=400&u=4962a4441fae9fba5f0f86456c6c506a21ffca4f&v=4" alt="">
         </div>
-        <div class="flex-grow">
+        <div>
             <div class="mb-4">
-                <p class="text-xl leading-tight">Adam Wathan</p>
+                <p class="text-xl leading-tight text-black">Adam Wathan</p>
                 <p class="text-sm leading-tight text-grey-dark">Developer at NothingWorks Inc.</p>
             </div>
-            <div>
-                <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>
-            </div>
+            <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>
         </div>
     </div>
 </div>
