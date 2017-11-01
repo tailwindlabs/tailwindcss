@@ -50,9 +50,10 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
  * Here you would import any custom component classes; stuff that you'd
  * want loaded *before* the utilities so that the utilities can still
  * override them.
+ * 
+ * @@import "my-components/foo";
+ * @@import "my-components/bar";
  */
-// @@import "my-components/foo";
-// @@import "my-components/bar";
 
 /**
  * This injects all of Tailwind's utility classes, generated based on your
@@ -61,11 +62,12 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
 @@tailwind utilities;
 
 /**
- * Here you would add any custom utilities you need that don't come out of the box with Tailwind.
+ * Here you would add any custom utilities you need that don't come out of the
+ * box with Tailwind.
+ *
+ * @@import "my-utilities/background-images";
+ * @@import "my-utilities/skew-transforms";
  */
-// .bg-hero-image {
-//     background-image: url('/some/image/file.png');
-// }
 ```
 
 ## 4. Process your CSS with Tailwind
