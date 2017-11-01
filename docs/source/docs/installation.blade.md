@@ -32,7 +32,7 @@ Alternatively, you can simply copy the default config file [from here](https://g
 
 ## 3. Use Tailwind in your CSS
 
-Use the `@@tailwind` directive to inject Tailwind's `reset` and `utilities` styles into your CSS.
+Use the `@@tailwind` directive to inject Tailwind's `preflight` and `utilities` styles into your CSS.
 
 To avoid specificity issues, we highly recommend structuring your main stylesheet like this:
 
