@@ -400,7 +400,7 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
 
 ## Responsive
 
-To position an element only at a specific breakpoint, add a `{breakpoint}:` prefix to any existing positioning utility. For example, adding the class `md:absolute` to an element would apply the `absolute` utility at medium screen sizes and above, and adding `lg:pin-y` would apply `pin-y` at large screens and above.
+To position an element only at a specific breakpoint, add a `{screen}:` prefix to any existing positioning utility. For example, adding the class `md:absolute` to an element would apply the `absolute` utility at medium screen sizes and above, and adding `lg:pin-y` would apply `pin-y` at large screens and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/workflow/responsive-design) documentation.
 

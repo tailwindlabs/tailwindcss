@@ -72,7 +72,7 @@ title: "Opacity"
 
 ## Responsive
 
-To control the opacity of an element at a specific breakpoint, add a `{breakpoint}:` prefix to any existing opacity utility. For example, use `md:opacity-50` to apply the `opacity-50` utility at only medium screen sizes and above.
+To control the opacity of an element at a specific breakpoint, add a `{screen}:` prefix to any existing opacity utility. For example, use `md:opacity-50` to apply the `opacity-50` utility at only medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/workflow/responsive-design) documentation.
 

@@ -66,7 +66,7 @@ Use `.inline-flex` to create an inline flex container:
 
 ## Responsive
 
-To control the display property of an element at a specific breakpoint, add a `{breakpoint}:` prefix to any existing display utility class. For example, use `md:inline-flex` to apply the `inline-flex` utility at only medium screen sizes and above.
+To control the display property of an element at a specific breakpoint, add a `{screen}:` prefix to any existing display utility class. For example, use `md:inline-flex` to apply the `inline-flex` utility at only medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 

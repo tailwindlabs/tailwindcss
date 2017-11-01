@@ -123,7 +123,7 @@ Use `.items-baseline` to align items along the flex container's cross axis such 
 
 ## Responsive
 
-To control the alignment of flex items at a specific breakpoint, add a `{breakpoint}:` prefix to any existing utility class. For example, use `md:items-center` to apply the `items-center` utility at only medium screen sizes and above.
+To control the alignment of flex items at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:items-center` to apply the `items-center` utility at only medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
