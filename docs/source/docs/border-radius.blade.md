@@ -94,7 +94,7 @@ title: "Border Radius"
 
 ## Rounded corners
 
-Use the `.rounded`, `.shadow-sm`, or `.rounded-lg` utilities to apply different border radius sizes to an element.
+Use the `.rounded`, `.rounded-sm`, or `.rounded-lg` utilities to apply different border radius sizes to an element.
 
 @component('_partials.code-sample', ['class' => 'flex justify-around text-sm'])
 <div class="bg-grey-light mr-3 p-4 rounded-sm">.rounded-sm</div>
