@@ -76,18 +76,18 @@ Control the stack order (or three-dimensional positioning) of an element in Tail
 
 @component('_partials.code-sample')
 <div class="relative h-32 text-center">
-    <div class="z-40 absolute w-24 h-24 ml-0 mt-0 bg-slate-lighter flex justify-center items-center">z-40</div>
-    <div class="z-30 absolute w-24 h-24 ml-2 mt-2 bg-slate-light flex justify-center items-center">z-30</div>
-    <div class="z-20 absolute w-24 h-24 ml-4 mt-4 bg-slate flex justify-center items-center">z-20</div>
-    <div class="z-10 absolute w-24 h-24 ml-6 mt-6 bg-slate-dark flex justify-center items-center">z-10</div>
-    <div class="z-0 absolute w-24 h-24 ml-8 mt-8 bg-slate-darker flex justify-center items-center">z-0</div>
+    <div class="z-40 absolute w-24 h-24 ml-0 mt-0 bg-grey-light flex justify-center items-center">z-40</div>
+    <div class="z-30 absolute w-24 h-24 ml-2 mt-2 bg-grey flex justify-center items-center">z-30</div>
+    <div class="z-20 absolute w-24 h-24 ml-4 mt-4 bg-grey-dark flex justify-center items-center">z-20</div>
+    <div class="z-10 absolute w-24 h-24 ml-6 mt-6 bg-grey-darker flex justify-center items-center">z-10</div>
+    <div class="z-0 absolute w-24 h-24 ml-8 mt-8 bg-grey-darkest flex justify-center items-center">z-0</div>
 </div>
 @slot('code')
-<div class="z-40 ml-0 mt-0 bg-slate-lighter">z-40</div>
-<div class="z-30 ml-2 mt-2 bg-slate-light">z-30</div>
-<div class="z-20 ml-4 mt-4 bg-slate">z-20</div>
-<div class="z-10 ml-6 mt-6 bg-slate-dark">z-10</div>
-<div class="z-0 ml-8 mt-8 bg-slate-darker">z-0</div>
+<div class="z-40 ml-0 mt-0 bg-grey-light">z-40</div>
+<div class="z-30 ml-2 mt-2 bg-grey">z-30</div>
+<div class="z-20 ml-4 mt-4 bg-grey-dark">z-20</div>
+<div class="z-10 ml-6 mt-6 bg-grey-darker">z-10</div>
+<div class="z-0 ml-8 mt-8 bg-grey-darkest">z-0</div>
 @endslot
 @endcomponent
 
@@ -101,60 +101,60 @@ For more information about Tailwind's responsive design features, check out the 
 @slot('none')
 <div class="relative w-full h-32 text-center">
     <div class="z-0 absolute w-full h-12 mt-12 bg-yellow-light flex justify-center items-center">yellow</div>
-    <div class="z-40 absolute w-24 h-24 ml-4 mt-0 bg-slate-lighter flex justify-center items-center">z-40</div>
-    <div class="z-30 absolute w-24 h-24 ml-6 mt-2 bg-slate-light flex justify-center items-center">z-30</div>
-    <div class="z-20 absolute w-24 h-24 ml-8 mt-4 bg-slate flex justify-center items-center">z-20</div>
-    <div class="z-10 absolute w-24 h-24 ml-10 mt-6 bg-slate-dark flex justify-center items-center">z-10</div>
-    <div class="z-0 absolute w-24 h-24 ml-12 mt-8 bg-slate-darker flex justify-center items-center">z-0</div>
+    <div class="z-40 absolute w-24 h-24 ml-4 mt-0 bg-grey-light flex justify-center items-center">z-40</div>
+    <div class="z-30 absolute w-24 h-24 ml-6 mt-2 bg-grey flex justify-center items-center">z-30</div>
+    <div class="z-20 absolute w-24 h-24 ml-8 mt-4 bg-grey-dark flex justify-center items-center">z-20</div>
+    <div class="z-10 absolute w-24 h-24 ml-10 mt-6 bg-grey-darker flex justify-center items-center">z-10</div>
+    <div class="z-0 absolute w-24 h-24 ml-12 mt-8 bg-grey-darkest flex justify-center items-center">z-0</div>
 </div>
 @endslot
 @slot('sm')
 <div class="relative h-32 text-center">
     <div class="z-10 absolute w-full h-12 mt-12 bg-yellow-light flex justify-center items-center">yellow</div>
-    <div class="z-40 absolute w-24 h-24 ml-4 mt-0 bg-slate-lighter flex justify-center items-center">z-40</div>
-    <div class="z-30 absolute w-24 h-24 ml-6 mt-2 bg-slate-light flex justify-center items-center">z-30</div>
-    <div class="z-20 absolute w-24 h-24 ml-8 mt-4 bg-slate flex justify-center items-center">z-20</div>
-    <div class="z-10 absolute w-24 h-24 ml-10 mt-6 bg-slate-dark flex justify-center items-center">z-10</div>
-    <div class="z-0 absolute w-24 h-24 ml-12 mt-8 bg-slate-darker flex justify-center items-center">z-0</div>
+    <div class="z-40 absolute w-24 h-24 ml-4 mt-0 bg-grey-light flex justify-center items-center">z-40</div>
+    <div class="z-30 absolute w-24 h-24 ml-6 mt-2 bg-grey flex justify-center items-center">z-30</div>
+    <div class="z-20 absolute w-24 h-24 ml-8 mt-4 bg-grey-dark flex justify-center items-center">z-20</div>
+    <div class="z-10 absolute w-24 h-24 ml-10 mt-6 bg-grey-darker flex justify-center items-center">z-10</div>
+    <div class="z-0 absolute w-24 h-24 ml-12 mt-8 bg-grey-darkest flex justify-center items-center">z-0</div>
 </div>
 @endslot
 @slot('md')
 <div class="relative h-32 text-center">
     <div class="z-20 absolute w-full h-12 mt-12 bg-yellow-light flex justify-center items-center">yellow</div>
-    <div class="z-40 absolute w-24 h-24 ml-4 mt-0 bg-slate-lighter flex justify-center items-center">z-40</div>
-    <div class="z-30 absolute w-24 h-24 ml-6 mt-2 bg-slate-light flex justify-center items-center">z-30</div>
-    <div class="z-20 absolute w-24 h-24 ml-8 mt-4 bg-slate flex justify-center items-center">z-20</div>
-    <div class="z-10 absolute w-24 h-24 ml-10 mt-6 bg-slate-dark flex justify-center items-center">z-10</div>
-    <div class="z-0 absolute w-24 h-24 ml-12 mt-8 bg-slate-darker flex justify-center items-center">z-0</div>
+    <div class="z-40 absolute w-24 h-24 ml-4 mt-0 bg-grey-light flex justify-center items-center">z-40</div>
+    <div class="z-30 absolute w-24 h-24 ml-6 mt-2 bg-grey flex justify-center items-center">z-30</div>
+    <div class="z-20 absolute w-24 h-24 ml-8 mt-4 bg-grey-dark flex justify-center items-center">z-20</div>
+    <div class="z-10 absolute w-24 h-24 ml-10 mt-6 bg-grey-darker flex justify-center items-center">z-10</div>
+    <div class="z-0 absolute w-24 h-24 ml-12 mt-8 bg-grey-darkest flex justify-center items-center">z-0</div>
 </div>
 @endslot
 @slot('lg')
 <div class="relative h-32 text-center">
     <div class="z-30 absolute w-full h-12 mt-12 bg-yellow-light flex justify-center items-center">yellow</div>
-    <div class="z-40 absolute w-24 h-24 ml-4 mt-0 bg-slate-lighter flex justify-center items-center">z-40</div>
-    <div class="z-30 absolute w-24 h-24 ml-6 mt-2 bg-slate-light flex justify-center items-center">z-30</div>
-    <div class="z-20 absolute w-24 h-24 ml-8 mt-4 bg-slate flex justify-center items-center">z-20</div>
-    <div class="z-10 absolute w-24 h-24 ml-10 mt-6 bg-slate-dark flex justify-center items-center">z-10</div>
-    <div class="z-0 absolute w-24 h-24 ml-12 mt-8 bg-slate-darker flex justify-center items-center">z-0</div>
+    <div class="z-40 absolute w-24 h-24 ml-4 mt-0 bg-grey-light flex justify-center items-center">z-40</div>
+    <div class="z-30 absolute w-24 h-24 ml-6 mt-2 bg-grey flex justify-center items-center">z-30</div>
+    <div class="z-20 absolute w-24 h-24 ml-8 mt-4 bg-grey-dark flex justify-center items-center">z-20</div>
+    <div class="z-10 absolute w-24 h-24 ml-10 mt-6 bg-grey-darker flex justify-center items-center">z-10</div>
+    <div class="z-0 absolute w-24 h-24 ml-12 mt-8 bg-grey-darkest flex justify-center items-center">z-0</div>
 </div>
 @endslot
 @slot('xl')
 <div class="relative h-32 text-center">
     <div class="z-40 absolute w-full h-12 mt-12 bg-yellow-light flex justify-center items-center">yellow</div>
-    <div class="z-40 absolute w-24 h-24 ml-4 mt-0 bg-slate-lighter flex justify-center items-center">z-40</div>
-    <div class="z-30 absolute w-24 h-24 ml-6 mt-2 bg-slate-light flex justify-center items-center">z-30</div>
-    <div class="z-20 absolute w-24 h-24 ml-8 mt-4 bg-slate flex justify-center items-center">z-20</div>
-    <div class="z-10 absolute w-24 h-24 ml-10 mt-6 bg-slate-dark flex justify-center items-center">z-10</div>
-    <div class="z-0 absolute w-24 h-24 ml-12 mt-8 bg-slate-darker flex justify-center items-center">z-0</div>
+    <div class="z-40 absolute w-24 h-24 ml-4 mt-0 bg-grey-light flex justify-center items-center">z-40</div>
+    <div class="z-30 absolute w-24 h-24 ml-6 mt-2 bg-grey flex justify-center items-center">z-30</div>
+    <div class="z-20 absolute w-24 h-24 ml-8 mt-4 bg-grey-dark flex justify-center items-center">z-20</div>
+    <div class="z-10 absolute w-24 h-24 ml-10 mt-6 bg-grey-darker flex justify-center items-center">z-10</div>
+    <div class="z-0 absolute w-24 h-24 ml-12 mt-8 bg-grey-darkest flex justify-center items-center">z-0</div>
 </div>
 @endslot
 @slot('code')
 <div class="none:z-0 sm:z-10 md:z-20 lg:z-30 xl:z-40 bg-yellow-light">yellow</div>
-<div class="z-40 ml-4 mt-0 bg-slate-lighter">z-40</div>
-<div class="z-30 ml-6 mt-2 bg-slate-light">z-30</div>
-<div class="z-20 ml-8 mt-4 bg-slate">z-20</div>
-<div class="z-10 ml-10 mt-6 bg-slate-dark">z-10</div>
-<div class="z-0 ml-12 mt-8 bg-slate-darker">z-0</div>
+<div class="z-40 ml-4 mt-0 bg-grey-light">z-40</div>
+<div class="z-30 ml-6 mt-2 bg-grey">z-30</div>
+<div class="z-20 ml-8 mt-4 bg-grey-dark">z-20</div>
+<div class="z-10 ml-10 mt-6 bg-grey-darker">z-10</div>
+<div class="z-0 ml-12 mt-8 bg-grey-darkest">z-0</div>
 @endslot
 @endcomponent
 
