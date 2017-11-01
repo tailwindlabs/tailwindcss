@@ -87,7 +87,7 @@ title: "Style & Decoration"
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the font smoothing of an element to antialiased.</td>
             </tr>
             <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.subpixel-antialiased</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.subpixel-antialiased</td>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
                     -webkit-font-smoothing: auto;<br>
                     -moz-osx-font-smoothing: auto;
@@ -97,3 +97,17 @@ title: "Style & Decoration"
         </tbody>
     </table>
 </div>
+
+## Hover
+
+In addition to the standard responsive variations, text style utilties also come in `hover:` variations that apply the given text style on hover.
+
+@component('_partials.code-sample', ['class' => 'text-center'])
+<a href="#" class="no-underline hover:underline text-blue text-lg">Link</a>
+@endcomponent
+
+Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.
+
+```html
+<a href="#" class="... md:no-underline md:hover:underline ...">Link</a>
+```

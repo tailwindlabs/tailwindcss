@@ -39,7 +39,6 @@ title: "Backgrounds"
     </table>
 </div>
 
-
 ## Hover
 
 In addition to the standard responsive variations, background colors also come in `hover:` variations that apply the given background color on hover.
@@ -53,5 +52,5 @@ In addition to the standard responsive variations, background colors also come i
 Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.
 
 ```html
-<button class="bg-blue hover:bg-purple md:bg-orange md:hover:bg-red">Button</button>
+<button class="... md:bg-orange md:hover:bg-red ...">Button</button>
 ```

@@ -3,10 +3,10 @@ extends: _layouts.documentation
 title: "Border Width"
 ---
 
-# Border Width & Position
+# Border Width
 
 <div class="text-xl text-slate-light mb-4">
-    Utilities for controlling the width and position of an element's borders.
+    Utilities for controlling the width an element's borders.
 </div>
 
 @include('_partials.feature-badges', [
