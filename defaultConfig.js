@@ -162,6 +162,8 @@ module.exports = {
   | useful in certain situations. Be sure to see the full responsive
   | documentation for a complete list of options.
   |
+  | Class name: .{screen}:{utility}
+  |
   */
 
   screens: {
