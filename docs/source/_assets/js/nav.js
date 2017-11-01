@@ -38,10 +38,15 @@ $.when($.ready).then(function() {
 
       // Add page load to brower history
       window.history.pushState({
+        'href': href,
         'title': title,
         'nav': $(html).find('#nav').html(),
         'content': $(html).find('#content').html()
       }, '', href)
+
+      // Track on Google Analytics
+      ga('set', 'page', href)
+      ga('send', 'pageview')
     })
   })
 
@@ -53,6 +58,10 @@ $.when($.ready).then(function() {
       $('title').text(e.state.title)
       $('#nav').html(e.state.nav)
       $('#content').html(e.state.content)
+
+      // Track on Google Analytics
+      ga('set', 'page', e.state.href)
+      ga('send', 'pageview')
     }
   }
 
