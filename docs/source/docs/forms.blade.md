@@ -5,18 +5,41 @@ title: "Forms"
 
 # Forms
 
-<div class="mt-8">
-  <div class="bg-blue-lightest border-l-4 border-blue-light rounded-b text-blue-darkest px-4 py-3">
-    <div class="flex">
-      <div class="py-1">
-        <svg class="h-6 w-6 text-blue-light mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10zm0-2c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm-.5-5h1c.276 0 .5.224.5.5v1c0 .276-.224.5-.5.5h-1c-.276 0-.5-.224-.5-.5v-1c0-.276.224-.5.5-.5zm0-8h1c.276 0 .5.224.5.5V8l-.5 3-1 .5L9 8V5.5c0-.276.224-.5.5-.5z"/></svg>
-      </div>
-      <div>
-        <p class="font-semibold">Work in progress!</p>
-        <p class="text-sm">More detailed documentation is coming soon.</p>
-      </div>
-    </div>
-  </div>
+<div class="text-xl text-slate-light mb-4">
+    Utilities for styling form controls.
+</div>
+
+@include('_partials.feature-badges', [
+    'responsive' => true,
+    'customizable' => false,
+    'hover' => false,
+    'focus' => false
+])
+
+@include('_partials.work-in-progress')
+
+<div class="border-t border-grey-lighter">
+    <table class="w-full text-left" style="border-collapse: collapse;">
+        <colgroup>
+            <col class="w-1/5">
+            <col class="w-1/3">
+            <col>
+        </colgroup>
+        <thead>
+          <tr>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
+              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
+          </tr>
+        </thead>
+        <tbody class="align-baseline">
+            <tr>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.appearance-none</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">appearance: none;</td>
+                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Remove any special styling applied to an element by the browser.</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 ### Custom Select
@@ -25,7 +48,7 @@ Form controls are great candidates for component classes, but just for fun, here
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <div class="inline-block relative w-64">
-    <select class="block input-reset w-full bg-white border border-smoke-dark hover:border-slate-light px-4 py-2 pr-8 rounded shadow">
+    <select class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow">
         <option>Really long option that will likely overlap the chevron</option>
         <option>Option 2</option>
         <option>Option 3</option>

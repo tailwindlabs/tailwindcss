@@ -586,7 +586,7 @@ button,
   }
 }
 
-.input-reset {
+.appearance-none {
   appearance: none;
 }
 
@@ -3525,7 +3525,7 @@ button,
 }
 
 @media (min-width: 576px) {
-  .sm\:input-reset {
+  .sm\:appearance-none {
     appearance: none;
   }
 
@@ -6465,7 +6465,7 @@ button,
 }
 
 @media (min-width: 768px) {
-  .md\:input-reset {
+  .md\:appearance-none {
     appearance: none;
   }
 
@@ -9405,7 +9405,7 @@ button,
 }
 
 @media (min-width: 992px) {
-  .lg\:input-reset {
+  .lg\:appearance-none {
     appearance: none;
   }
 
@@ -12345,7 +12345,7 @@ button,
 }
 
 @media (min-width: 1200px) {
-  .xl\:input-reset {
+  .xl\:appearance-none {
     appearance: none;
   }
 
