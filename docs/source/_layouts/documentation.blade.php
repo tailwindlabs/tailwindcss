@@ -176,9 +176,6 @@
         <div id="content" class="px-6 pb-8 pt-20 md:pt-16 w-full max-w-lg mx-auto">
             <div id="app">
                 <div class="markdown">
-                    @if ($page->category)
-                        <div class="font-semibold text-slate-light text-base uppercase tracking-wide mb-2">{{ $page->category }}</div>
-                    @endif
                     @yield('content')
                 </div>
             </div>

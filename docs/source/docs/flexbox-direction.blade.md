@@ -1,7 +1,6 @@
 ---
 extends: _layouts.documentation
-title: "Direction - Flexbox"
-category: "Flexbox"
+title: "Flex Direction - Flexbox"
 ---
 
 # Flex Direction

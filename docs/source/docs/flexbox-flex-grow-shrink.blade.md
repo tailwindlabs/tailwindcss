@@ -1,7 +1,6 @@
 ---
 extends: _layouts.documentation
 title: "Flex, Grow, & Shrink - Flexbox"
-category: "Flexbox"
 ---
 
 # Flex, Grow, & Shrink

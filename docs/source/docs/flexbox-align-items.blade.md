@@ -1,7 +1,6 @@
 ---
 extends: _layouts.documentation
 title: "Align Items - Flexbox"
-category: "Flexbox"
 ---
 
 # Align Items

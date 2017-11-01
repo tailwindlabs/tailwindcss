@@ -1,7 +1,6 @@
 ---
 extends: _layouts.documentation
 title: "Justify Content - Flexbox"
-category: "Flexbox"
 ---
 
 # Justify Content

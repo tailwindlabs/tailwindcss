@@ -1,10 +1,9 @@
 ---
 extends: _layouts.documentation
-title: "Display – Flexbox"
-category: "Flexbox"
+title: "Flex Display – Flexbox"
 ---
 
-# Display
+# Flex Display
 
 <div class="text-xl text-slate-light mb-4">
     Utilities for creating flex containers.

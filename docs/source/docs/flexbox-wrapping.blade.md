@@ -1,7 +1,6 @@
 ---
 extends: _layouts.documentation
-title: "Wrapping - Flexbox"
-category: "Flexbox"
+title: "Flex Wrapping - Flexbox"
 ---
 
 # Flex Wrapping
