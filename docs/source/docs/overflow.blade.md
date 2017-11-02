@@ -17,7 +17,7 @@ title: "Overflow"
 ])
 
 <div class="border-t border-grey-lighter">
-    <table class="w-full text-left" style="border-collapse: collapse;">
+    <table class="w-full text-left overflow-x-scroll block" style="border-collapse: collapse;">
         <thead>
           <tr>
               <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
@@ -58,12 +58,12 @@ title: "Overflow"
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.scrolling-touch</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">-webkit-overflow-scrolling: touch;</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">-webkit-overflow-scrolling: touch;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Use momentum-based scrolling on touch devices.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.scrolling-auto</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">-webkit-overflow-scrolling: auto;</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">-webkit-overflow-scrolling: auto;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Use "regular" scrolling on touch devices.</td>
             </tr>
         </tbody>
@@ -168,11 +168,29 @@ Use `.overflow-scroll` to add scrollbars to an element. Unlike `.overflow-auto`,
 
 ### Momentum-based scrolling on touch devices
 
-Use `.scrolling-touch` to use momentum-based scrolling on touch devices. This causes content to continue scrolling for a while after finishing the scroll gesture and removing your finger from the touchscreen. The speed and duration of the continued scrolling is proportional to how vigorous the scroll gesture was.
+Use `.scrolling-touch` to use momentum-based scrolling (where supported) on touch devices.
 
-### Regular scrolling on touch devices
+@component('_partials.code-sample')
+<div class="scrolling-touch overflow-auto h-32 bg-smoke text-slate p-2">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eleifend rutrum auctor. Phasellus convallis sagittis augue ut ornare. Vestibulum et gravida lectus, sed ultrices sapien. Nullam aliquet elit dui, vitae hendrerit lectus volutpat eget. In porttitor tincidunt egestas. Pellentesque laoreet ligula at est vulputate facilisis. Etiam tristique justo ut odio placerat ornare. Cras bibendum, orci at ornare tincidunt, lacus nunc gravida enim, sit amet euismod nunc lectus in lectus. Ut dictum nulla et arcu aliquet ornare. Aliquam et dapibus lectus. Aenean mattis elit mi, sed ultricies augue consectetur id. Sed id magna malesuada, luctus urna a, bibendum tortor. Cras cursus cursus ex. Nulla fringilla elit vitae imperdiet scelerisque. Donec ac sem eu diam convallis mollis a sed leo. Proin congue augue turpis, eget rutrum dolor ultricies non. Nulla blandit venenatis dapibus. Sed tincidunt mollis elit, quis suscipit nibh eleifend quis. Donec ex lorem, auctor eu rutrum in, blandit id dolor. Nulla molestie arcu turpis. In id felis vulputate, tempor massa eget, malesuada mauris. Quisque fringilla consequat metus, luctus scelerisque leo fringilla vel.
+</div>
+@slot('code')
+<div class="scrolling-touch overflow-auto h-32 ...">Lorem ipsum dolor sit amet...</div>
+@endslot
+@endcomponent
 
-Use `.scrolling-auto` to use "regular" scrolling on touch devices. This causes scrolling to immediately cease when you remove your finger from the touchscreen.
+Use `.scrolling-auto` to use normal non-momentum-based scrolling on touch devices.
+
+This is mostly useful for undoing `.scrolling-touch` at larger screen sizes.
+
+@component('_partials.code-sample')
+<div class="scrolling-auto overflow-auto h-32 bg-smoke text-slate p-2">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eleifend rutrum auctor. Phasellus convallis sagittis augue ut ornare. Vestibulum et gravida lectus, sed ultrices sapien. Nullam aliquet elit dui, vitae hendrerit lectus volutpat eget. In porttitor tincidunt egestas. Pellentesque laoreet ligula at est vulputate facilisis. Etiam tristique justo ut odio placerat ornare. Cras bibendum, orci at ornare tincidunt, lacus nunc gravida enim, sit amet euismod nunc lectus in lectus. Ut dictum nulla et arcu aliquet ornare. Aliquam et dapibus lectus. Aenean mattis elit mi, sed ultricies augue consectetur id. Sed id magna malesuada, luctus urna a, bibendum tortor. Cras cursus cursus ex. Nulla fringilla elit vitae imperdiet scelerisque. Donec ac sem eu diam convallis mollis a sed leo. Proin congue augue turpis, eget rutrum dolor ultricies non. Nulla blandit venenatis dapibus. Sed tincidunt mollis elit, quis suscipit nibh eleifend quis. Donec ex lorem, auctor eu rutrum in, blandit id dolor. Nulla molestie arcu turpis. In id felis vulputate, tempor massa eget, malesuada mauris. Quisque fringilla consequat metus, luctus scelerisque leo fringilla vel.
+</div>
+@slot('code')
+<div class="scrolling-auto overflow-auto h-32 ...">Lorem ipsum dolor sit amet...</div>
+@endslot
+@endcomponent
 
 ## Responsive
 
