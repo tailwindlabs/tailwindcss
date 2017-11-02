@@ -46,10 +46,10 @@ title: "Navigation"
         <a class="bg-white inline-block border-l border-t border-r rounded rounded-t py-2 px-4 text-blue-dark font-semibold" href="#">Active</a>
     </li>
     <li class="mr-1">
-        <a class="bg-white inline-block py-2 px-4 text-blue hover:text-blue-dark font-semibold" href="#">Tab</a>
+        <a class="bg-white inline-block py-2 px-4 text-blue hover:text-blue-darker font-semibold" href="#">Tab</a>
     </li>
     <li class="mr-1">
-        <a class="bg-white inline-block py-2 px-4 text-blue hover:text-blue-dark font-semibold" href="#">Tab</a>
+        <a class="bg-white inline-block py-2 px-4 text-blue hover:text-blue-darker font-semibold" href="#">Tab</a>
     </li>
     <li class="mr-1">
         <a class="bg-white inline-block py-2 px-4 text-grey-light font-semibold" href="#">Tab</a>
