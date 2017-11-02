@@ -176,7 +176,27 @@ Here's an example:
 ```less
 @@tailwind preflight;
 
-@import "components/buttons";
+.btn {
+  @@apply .font-bold .py-2 .px-4 .rounded;
+}
+.btn-blue {
+  @@apply .bg-blue .text-white;
+}
+.btn-blue:hover {
+  @@apply .bg-blue-dark;
+}
+
+@@tailwind utilities;
+```
+
+If you're using a preprocessor like Less or Sass, consider keeping your components in separate files and importing them:
+
+```less
+@@tailwind preflight;
+
+@@import "components/buttons";
+@@import "components/forms";
+/* Etc. */
 
 @@tailwind utilities;
 ```

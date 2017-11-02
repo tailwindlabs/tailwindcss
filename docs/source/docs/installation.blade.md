@@ -47,12 +47,19 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
 @@tailwind preflight;
 
 /**
- * Here you would import any custom component classes; stuff that you'd
- * want loaded *before* the utilities so that the utilities can still
+ * Here you would add any of your custom component classes; stuff that you'd
+ * want loaded *before* the utilities so that the utilities could still
  * override them.
+ *
+ * Example:
  * 
- * @@import "my-components/foo";
- * @@import "my-components/bar";
+ * .btn { ... }
+ * .form-input { ... }
+ *
+ * Or if using a preprocessor:
+ * 
+ * @@import "components/buttons";
+ * @@import "components/forms";
  */
 
 /**
@@ -65,8 +72,15 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
  * Here you would add any custom utilities you need that don't come out of the
  * box with Tailwind.
  *
- * @@import "my-utilities/background-images";
- * @@import "my-utilities/skew-transforms";
+ * Example :
+ *
+ * .bg-pattern-graph-paper { ... }
+ * .skew-45 { ... }
+ *
+ * Or if using a preprocessor..
+ * 
+ * @@import "utilities/backgrond-patterns";
+ * @@import "utilities/skew-transforms";
  */
 ```
 

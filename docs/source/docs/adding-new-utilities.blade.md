@@ -65,7 +65,7 @@ If you're using a preprocessor like Less, Sass, or Stylus, consider keeping your
 
 @@tailwind utilities;
 
-@import "custom-utilities";
+@@import "custom-utilities";
 ```
 
 ## Making custom utilities responsive
