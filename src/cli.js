@@ -81,7 +81,9 @@ program.command('build')
       })
   })
 
-program.command('*')
+program.command('*', null, {
+    noHelp: true
+  })
   .action(function () {
     program.help()
   })
