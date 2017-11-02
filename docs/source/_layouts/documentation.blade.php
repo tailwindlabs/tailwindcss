@@ -5,10 +5,13 @@
 <div class="min-h-screen">
     <div id="sidebar" class="hidden z-50 fixed pin-y pin-l overflow-y-scroll scrolling-touch bg-smoke-light w-4/5 md:w-full md:max-w-xs flex-none border-r-2 border-smoke md:flex flex-col">
         <div class="border-b border-smoke flex-none px-8 py-6">
-            <div class="hidden md:flex md:justify-center mb-4">
-                <a href="/" class="flex justify-center">
-                    <svg class="w-16 h-16 mx-auto block" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 11.1C15.3 3.9 19.8.3 27 .3c10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 27.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z" transform="translate(5 16)" fill="url(#logoGradient)" fill-rule="evenodd"/></svg>
-                </a>
+            <div class="mb-4">
+                <div class="hidden md:flex md:justify-center">
+                    <a href="/" class="flex justify-center">
+                        <svg class="w-16 h-16 mx-auto block" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 11.1C15.3 3.9 19.8.3 27 .3c10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 27.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z" transform="translate(5 16)" fill="url(#logoGradient)" fill-rule="evenodd"/></svg>
+                    </a>
+                </div>
+                <div class="text-center text-sm text-grey font-semibold">v{{ $page->version }}</div>
             </div>
             <div class="relative opacity-75">
                 <input class="rounded bg-white border border-smoke py-2 pr-4 pl-10 block w-full cursor-not-allowed" type="text" placeholder="Search coming soon!" disabled>
