@@ -140,8 +140,8 @@ title: "Width"
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.w-2/5</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">width: 49%;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the element's width to <code>49%</code>.</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">width: 40%;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the element's width to <code>40%</code>.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.w-3/5</td>
