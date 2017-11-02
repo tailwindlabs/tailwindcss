@@ -3,7 +3,7 @@
 @section('body')
 
 <div class="min-h-screen">
-    <div id="sidebar" class="hidden z-50 fixed pin-y pin-l overflow-y-scroll bg-smoke-light w-4/5 md:w-full md:max-w-xs flex-none border-r-2 border-smoke md:flex flex-col">
+    <div id="sidebar" class="hidden z-50 fixed pin-y pin-l overflow-y-scroll scrolling-touch bg-smoke-light w-4/5 md:w-full md:max-w-xs flex-none border-r-2 border-smoke md:flex flex-col">
         <div class="border-b border-smoke flex-none px-8 py-6">
             <div class="hidden md:flex md:justify-center mb-4">
                 <a href="/" class="flex justify-center">

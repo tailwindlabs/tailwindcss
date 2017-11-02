@@ -2246,6 +2246,14 @@ button,
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
+.scrolling-touch {
+  -webkit-overflow-scrolling: touch;
+}
+
+.scrolling-auto {
+  -webkit-overflow-scrolling: auto;
+}
+
 .w-1 {
   width: 0.25rem;
 }
@@ -5179,6 +5187,14 @@ button,
   .sm\:overflow-y-scroll {
     overflow-y: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+
+  .sm\:scrolling-touch {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .sm\:scrolling-auto {
+    -webkit-overflow-scrolling: auto;
   }
 
   .sm\:w-1 {
@@ -8117,6 +8133,14 @@ button,
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
+  .md\:scrolling-touch {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .md\:scrolling-auto {
+    -webkit-overflow-scrolling: auto;
+  }
+
   .md\:w-1 {
     width: 0.25rem;
   }
@@ -11053,6 +11077,14 @@ button,
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
+  .lg\:scrolling-touch {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .lg\:scrolling-auto {
+    -webkit-overflow-scrolling: auto;
+  }
+
   .lg\:w-1 {
     width: 0.25rem;
   }
@@ -13987,6 +14019,14 @@ button,
   .xl\:overflow-y-scroll {
     overflow-y: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+
+  .xl\:scrolling-touch {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .xl\:scrolling-auto {
+    -webkit-overflow-scrolling: auto;
   }
 
   .xl\:w-1 {
