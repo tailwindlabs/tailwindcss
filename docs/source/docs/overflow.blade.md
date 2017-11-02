@@ -196,7 +196,7 @@ This is mostly useful for undoing `.scrolling-touch` at larger screen sizes.
 
 To apply an overflow utility only at a specific breakpoint, add a `{screen}:` prefix to the existing class name. For example, adding the class `md:overflow-scroll` to an element would apply the `overflow-scroll` utility at medium screen sizes and above.
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/workflow/responsive-design) documentation.
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 @component('_partials.responsive-code-sample')
 @slot('none')

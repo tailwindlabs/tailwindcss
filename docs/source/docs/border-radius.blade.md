@@ -154,7 +154,7 @@ Combine one of the `.rounded{-size}` utilities with `.rounded-t`, `.rounded-r`, 
 
 To control the border radius of an element at a specific breakpoint, add a `{screen}:` prefix to any existing border radius utility. For example, use `md:rounded-lg` to apply the `rounded-lg` utility at only medium screen sizes and above.
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/workflow/responsive-design) documentation.
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 @component('_partials.responsive-code-sample')
 @slot('none')

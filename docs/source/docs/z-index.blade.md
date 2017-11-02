@@ -95,7 +95,7 @@ Control the stack order (or three-dimensional positioning) of an element in Tail
 
 To control the z-index of an element at a specific breakpoint, add a `{screen}:` prefix to any existing z-index utility. For example, use `md:z-50` to apply the `z-50` utility at only medium screen sizes and above.
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/workflow/responsive-design) documentation.
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 @component('_partials.responsive-code-sample')
 @slot('none')
