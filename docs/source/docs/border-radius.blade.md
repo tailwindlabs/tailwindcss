@@ -135,7 +135,7 @@ This is most commonly used to remove a border radius that was applied at a small
 
 ## Rounding sides separately
 
-Use the `.rounded-t`, `.rounded-r`, `.rounded-b`, or `.rounded-l` utilities to only round one side of an element.
+Combine one of the `.rounded{-size}` utilities with `.rounded-t`, `.rounded-r`, `.rounded-b`, or `.rounded-l` to only round one side of an element.
 
 @component('_partials.code-sample', ['class' => 'flex justify-around text-sm'])
 <div class="bg-grey-light mr-3 p-4 rounded-lg rounded-t">.rounded-t</div>
