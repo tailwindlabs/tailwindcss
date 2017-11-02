@@ -10,12 +10,7 @@
         <link rel="manifest" href="/manifest.json">
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#00b4b6">
 
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:site" content="@tailwindcss">
-        <meta name="twitter:title" content="Tailwind CSS">
-        <meta name="twitter:description" content="A utility-first CSS framework for rapidly building custom user interfaces.">
-        <meta name="twitter:image" content="https://tailwindcss.com/img/launch-card-optimized.png">
-        <meta name="twitter:creator" content="@tailwindcss">
+        @yield('meta')
 
         <meta name="theme-color" content="#ffffff">
         <title>{{ $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS - A Utility-First CSS Framework for Rapid UI Development' }}</title>
