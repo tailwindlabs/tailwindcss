@@ -103,10 +103,10 @@ title: "Buttons"
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <div class="inline-flex">
-    <button class="bg-smoke hover:bg-smoke-dark text-slate-dark font-bold py-2 px-4 rounded-l">
+    <button class="bg-smoke hover:bg-smoke-dark text-slate-dark font-bold py-2 px-4 rounded rounded-l">
         Prev
     </button>
-    <button class="bg-smoke hover:bg-smoke-dark text-slate-dark font-bold py-2 px-4 rounded-r">
+    <button class="bg-smoke hover:bg-smoke-dark text-slate-dark font-bold py-2 px-4 rounded rounded-r">
         Next
     </button>
 </div>
