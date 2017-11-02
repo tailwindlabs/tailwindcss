@@ -18,11 +18,6 @@ title: "Overflow"
 
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">
-        <colgroup>
-            <col class="w-1/5">
-            <col class="w-1/4">
-            <col>
-        </colgroup>
         <thead>
           <tr>
               <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
@@ -32,34 +27,44 @@ title: "Overflow"
         </thead>
         <tbody class="align-baseline">
             <tr>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.overflow-visible</td>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">overflow: visible;</td>
-                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Prevent content within an element from being clipped.</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-visible</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark whitespace-no-wrap">overflow: visible;</td>
+                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Don't clip content that overflows the element.</td>
             </tr>
             <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.overflow-auto</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow: auto;</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-auto</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow: auto;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Add scrollbars to an element if needed.</td>
             </tr>
             <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.overflow-hidden</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow: hidden;</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-hidden</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow: hidden;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Clip any content that overflows the element.</td>
             </tr>
             <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.overflow-x-scroll</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow-x: auto;</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-x-scroll</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow-x: auto;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow horizontal scrolling if needed.</td>
             </tr>
             <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.overflow-y-scroll</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow-y: auto;</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-y-scroll</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow-y: auto;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow horizontal scrolling if needed.</td>
             </tr>
             <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.overflow-scroll</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">overflow: scroll;</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-scroll</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow: scroll;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Add scrollbars to an element.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.scrolling-touch</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">-webkit-overflow-scrolling: touch;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Use momentum-based scrolling on touch devices.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.scrolling-auto</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">-webkit-overflow-scrolling: auto;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Use "regular" scrolling on touch devices.</td>
             </tr>
         </tbody>
     </table>
@@ -161,6 +166,13 @@ Use `.overflow-scroll` to add scrollbars to an element. Unlike `.overflow-auto`,
 @endslot
 @endcomponent
 
+### Momentum-based scrolling on touch devices
+
+Use `.scrolling-touch` to use momentum-based scrolling on touch devices. This causes content to continue scrolling for a while after finishing the scroll gesture and removing your finger from the touchscreen. The speed and duration of the continued scrolling is proportional to how vigorous the scroll gesture was.
+
+### Regular scrolling on touch devices
+
+Use `.scrolling-auto` to use "regular" scrolling on touch devices. This causes scrolling to immediately cease when you remove your finger from the touchscreen.
 
 ## Responsive
 
