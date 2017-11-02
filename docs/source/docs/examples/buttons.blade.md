@@ -13,7 +13,7 @@ title: "Buttons"
       </div>
       <div>
         <p class="font-semibold">Work in progress!</p>
-        <p class="text-sm">More detailed documentation is coming soon, but in the mean time here's a bunch of quick examples.</p>
+        <p class="text-sm">More detailed documentation is coming soon, but in the meantime here's a bunch of quick examples.</p>
       </div>
     </div>
   </div>

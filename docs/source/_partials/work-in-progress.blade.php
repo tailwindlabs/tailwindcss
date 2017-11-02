@@ -5,7 +5,7 @@
     </div>
     <div>
       <p class="font-semibold">Work in progress!</p>
-      <p class="text-sm">More detailed documentation is coming soon, but in the mean time here's a quick class reference.</p>
+      <p class="text-sm">More detailed documentation is coming soon, but in the meantime here's a quick class reference.</p>
     </div>
   </div>
 </div>
