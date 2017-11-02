@@ -46,7 +46,9 @@ function buildTailwind(inputFile, config, write) {
     .catch(error => console.log(error))
 }
 
-program.version('0.1.0').usage('<command> [<args>]')
+const packageJson = require(path.resolve(__dirname + '/../package.json'))
+
+program.version(packageJson.version).usage('<command> [<args>]')
 
 program.command('init [filename]')
   .usage('[options] [filename]')
