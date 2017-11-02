@@ -1,0 +1,10 @@
+@tailwind preflight;
+
+@tailwind utilities;
+
+@responsive {
+    .example {
+        @apply .font-bold;
+        color: config('colors.red');
+    }
+}
