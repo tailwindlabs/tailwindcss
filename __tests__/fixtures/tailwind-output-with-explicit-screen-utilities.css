@@ -1,21 +1,31 @@
+.example {
+  color: red;
+}
+
+@media (min-width: 576px) {
+  .sm\:example {
+    color: red;
+  }
+}
+
 @media (min-width: 768px) {
-    .example {
-        color: red;
-    }
+  .md\:example {
+    color: red;
+  }
 }
 
 @media (min-width: 992px) {
-    .example {
-        color: red;
-    }
+  .lg\:example {
+    color: red;
+  }
 }
 
 @media (min-width: 1200px) {
-    .example {
-        color: red;
-    }
+  .xl\:example {
+    color: red;
+  }
 }
 
 .john {
-    content: "wick";
+  content: "wick";
 }
