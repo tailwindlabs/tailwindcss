@@ -2,8 +2,10 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import cloneNodes from '../util/cloneNodes'
 
-export default function(options) {
-  return function(css) {
+export default function(config) {
+  return function (css) {
+    const options = config()
+
     css.walkAtRules('focusable', atRule => {
 
       atRule.walkRules(rule => {

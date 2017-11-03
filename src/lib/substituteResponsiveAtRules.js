@@ -3,8 +3,10 @@ import postcss from 'postcss'
 import cloneNodes from '../util/cloneNodes'
 import buildMediaQuery from '../util/buildMediaQuery'
 
-export default function({ screens }) {
-  return function(css) {
+
+export default function(config) {
+  return function (css) {
+    const screens = config().screens
     const rules = []
 
     css.walkAtRules('responsive', atRule => {

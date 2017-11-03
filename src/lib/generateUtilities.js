@@ -37,8 +37,10 @@ import verticalAlign from '../generators/verticalAlign'
 import visibility from '../generators/visibility'
 import zIndex from '../generators/zIndex'
 
-export default function(options) {
+export default function(config) {
   return function(css) {
+    const options = config()
+
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'utilities') {
         const utilities = _.flatten([

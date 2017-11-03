@@ -1,5 +1,4 @@
 /node_modules
 /lib
-*.sublime-workspace
 /example
 yarn-error.log

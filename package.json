@@ -18,12 +18,12 @@
   "scripts": {
     "prebabelify": "rimraf lib",
     "babelify": "babel src --out-dir lib",
-    "prepare": "npm run babelify",
-    "build": "npm run babelify && babel-node src/build.js",
+    "prepare": "npm run babelify && babel-node src/build.js",
     "watch": "nodemon -e js,css --watch src --exec 'babel-node src/build.js'",
     "test": "jest"
   },
   "devDependencies": {
+    "autoprefixer": "^7.1.6",
     "babel-cli": "^6.6.5",
     "babel-core": "^6.7.2",
     "babel-jest": "^20.0.3",

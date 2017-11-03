@@ -9,8 +9,9 @@ function normalizeClassNames(classNames) {
   })
 }
 
-export default postcss.plugin('tailwind-apply', function(css) {
-  return function(css) {
+export default function(config) {
+  return function (css) {
+    const options = config()
     css.walkRules(function(rule) {
       rule.walkAtRules('apply', atRule => {
         const mixins = normalizeClassNames(postcss.list.space(atRule.params))
@@ -42,4 +43,4 @@ export default postcss.plugin('tailwind-apply', function(css) {
       })
     })
   }
-})
+}

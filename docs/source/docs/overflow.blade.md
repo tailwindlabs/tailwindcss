@@ -87,7 +87,7 @@ Use `.overflow-visible` to prevent content within an element from being clipped.
 
 ### Auto
 
-Use `.overflow-auto` to add scrollbars to an element in the event that its content overflows the bounds of that element. Unlike `.overflow-scroll`, which always show scrollbars, this utility will only shown them if scrolling is necessary.
+Use `.overflow-auto` to add scrollbars to an element in the event that its content overflows the bounds of that element. Unlike `.overflow-scroll`, which always show scrollbars, this utility will only show them if scrolling is necessary.
 
 @component('_partials.code-sample')
 <div class="overflow-scroll h-32 bg-smoke text-slate p-2">

@@ -162,3 +162,17 @@ mix.less('source/_assets/less/main.less', 'source/css')
     ]
   })
 ```
+
+**Note for Sass users:** Due to [an unresolved issue](https://github.com/bholloway/resolve-url-loader/issues/28) with one of Mix's dependencies, to use Sass with Tailwind you'll need to disable `processCssUrls`:
+
+```js
+var tailwindcss = require('tailwindcss');
+
+mix.sass('resources/assets/sass/app.scss', 'public/css')
+   .options({
+      processCssUrls: false,
+      postCss: [ tailwindcss('path/to/config.js') ],
+   });
+```
+
+For more information on what this feature does and the implications of disabling it, [see the Laravel Mix documentation](https://github.com/JeffreyWay/laravel-mix/blob/master/docs/css-preprocessors.md#css-url-rewriting).

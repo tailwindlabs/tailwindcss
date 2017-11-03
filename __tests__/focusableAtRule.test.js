@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import plugin from '../src/lib/substituteFocusableAtRules'
 
-function run(input, opts = {}) {
+function run(input, opts = () => {}) {
   return postcss([plugin(opts)]).process(input)
 }
 
@@ -18,7 +18,7 @@ test("it adds a focusable variant to each nested class definition", () => {
       .chocolate, .focus\\:chocolate:focus { color: brown; }
   `
 
-  return run(input, {}).then(result => {
+  return run(input).then(result => {
     expect(result.css).toEqual(output)
     expect(result.warnings().length).toBe(0)
   })
