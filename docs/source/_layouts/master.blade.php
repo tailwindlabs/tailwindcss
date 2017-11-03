@@ -23,6 +23,7 @@
     </head>
     <body data-sidebar-visible="true" class="font-sans font-normal text-slate-darker leading-normal">
         @yield('body')
+        @if ($page->production)
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109068504-1"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -31,5 +32,6 @@
 
           gtag('config', 'UA-109068504-1');
         </script>
+        @endif
     </body>
 </html>
