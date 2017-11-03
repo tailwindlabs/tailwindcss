@@ -1,6 +1,5 @@
 var config = require('../lib/index').defaultConfig()
 
-
 config.colors = {
   ...config.colors,
 
