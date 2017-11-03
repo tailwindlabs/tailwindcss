@@ -17,3 +17,11 @@ it('generates the right CSS', () => {
       expect(result.css).toBe(expected)
     })
 })
+
+it('Does not add something if not used at all', () => {
+  return postcss([tailwind()])
+    .process('')
+    .then(result => {
+      expect(result.css).toBe('')
+    })
+})
