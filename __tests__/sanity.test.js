@@ -18,7 +18,7 @@ it('generates the right CSS', () => {
     })
 })
 
-it('Does not add something if not used at all', () => {
+it('Do not change css if tailwind is not used at all', () => {
   return postcss([tailwind()])
     .process('')
     .then(result => {
