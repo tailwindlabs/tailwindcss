@@ -3,8 +3,9 @@ import postcss from 'postcss'
 import cloneNodes from '../util/cloneNodes'
 import buildMediaQuery from '../util/buildMediaQuery'
 
-export default function(options) {
+export default function(config) {
   return function(css) {
+    const options = config()
     const rules = []
 
     css.walkAtRules('screen', atRule => {
