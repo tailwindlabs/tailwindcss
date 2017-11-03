@@ -30,8 +30,7 @@ export default function(config) {
         })
       )
 
-      if(mediaQuery.nodes.length) {
-        // do not add media query without any rules or comments
+      if (mediaQuery.nodes.length) {
         css.append(mediaQuery)
       }
     })
