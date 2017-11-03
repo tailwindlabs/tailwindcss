@@ -29,7 +29,10 @@ export default function(config) {
           return cloned
         })
       )
-      css.append(mediaQuery)
+
+      if (mediaQuery.nodes.length) {
+        css.append(mediaQuery)
+      }
     })
   }
 }
