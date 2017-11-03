@@ -24,7 +24,7 @@ it('generates the right CSS with implicit screen utilities', () => {
   return postcss([tailwind()])
     .process(input)
     .then(result => {
-      const expected = fs.readFileSync(path.resolve(`${__dirname}/fixtures/tailwind-output.css`), 'utf8')
+      const expected = fs.readFileSync(path.resolve(`${__dirname}/fixtures/tailwind-output-with-explicit-screen-utilities.css`), 'utf8')
 
       expect(result.css).toBe(expected)
     })
