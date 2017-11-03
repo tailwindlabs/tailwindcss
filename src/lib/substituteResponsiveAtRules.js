@@ -7,11 +7,12 @@ import buildMediaQuery from '../util/buildMediaQuery'
 export default function(config) {
   return function (css) {
     const screens = config().screens
-    const rules = []
+    const responsiveRules = []
+    let finalRules = []
 
     css.walkAtRules('responsive', atRule => {
       const nodes = atRule.nodes
-      rules.push(...cloneNodes(nodes))
+      responsiveRules.push(...cloneNodes(nodes))
       atRule.before(nodes)
       atRule.remove()
     })
@@ -23,24 +24,27 @@ export default function(config) {
       })
 
       mediaQuery.append(
-        rules.map(rule => {
+        responsiveRules.map(rule => {
           const cloned = rule.clone()
           cloned.selectors = _.map(rule.selectors, selector => `.${screen}\\:${selector.slice(1)}`)
           return cloned
         })
       )
 
-      let includesScreenUtilitiesExplicitly = false
-      css.walkAtRules('tailwind', atRule => {
-        if (atRule.params === 'screen-utilities') {
-          includesScreenUtilitiesExplicitly = true
-          atRule.replaceWith(mediaQuery)
-        }
-      })
 
-      if(! includesScreenUtilitiesExplicitly) {
-        css.append(mediaQuery)
+      finalRules.push(mediaQuery)
+    })
+
+    let includesScreenUtilitiesExplicitly = false
+    css.walkAtRules('tailwind', atRule => {
+      if (atRule.params === 'screen-utilities') {
+        includesScreenUtilitiesExplicitly = true
+        atRule.replaceWith(finalRules)
       }
     })
+
+    if(! includesScreenUtilitiesExplicitly) {
+      css.append(finalRules)
+    }
   }
 }
