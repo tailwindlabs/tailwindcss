@@ -102,14 +102,14 @@ title: "Forms"
 <form class="w-full max-w-md">
     <div class="-mx-3 md:flex mb-6">
         <div class="md:w-1/2 px-3 mb-6 md:mb-0">
-            <label class="block uppercase leading-loose text-grey-darker text-xs font-bold mb-2" for="grid-first-name">
+            <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-first-name">
                 First Name
             </label>
             <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3" id="grid-first-name" type="text" placeholder="Jane">
             <p class="text-red text-xs italic">Please fill out this field.</p>
         </div>
         <div class="md:w-1/2 px-3">
-            <label class="block uppercase leading-loose text-grey-darker text-xs font-bold mb-2" for="grid-last-name">
+            <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-last-name">
                 Last Name
             </label>
             <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4" id="grid-last-name" type="text" placeholder="Doe">
@@ -117,7 +117,7 @@ title: "Forms"
     </div>
     <div class="-mx-3 md:flex mb-6">
         <div class="md:w-full px-3">
-            <label class="block uppercase leading-loose text-grey-darker text-xs font-bold mb-2" for="grid-password">
+            <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-password">
                 Password
             </label>
             <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3" id="grid-password" type="password" placeholder="******************">
@@ -126,13 +126,13 @@ title: "Forms"
     </div>
     <div class="-mx-3 md:flex mb-2">
         <div class="md:w-1/2 px-3 mb-6 md:mb-0">
-            <label class="block uppercase leading-loose text-grey-darker text-xs font-bold mb-2" for="grid-city">
+            <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-city">
                 City
             </label>
             <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4" id="grid-city" type="text" placeholder="Albuquerque">
         </div>
         <div class="md:w-1/2 px-3">
-            <label class="block uppercase leading-loose text-grey-darker text-xs font-bold mb-2" for="grid-select">
+            <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-select">
                 State
             </label>
             <div class="relative">
@@ -147,7 +147,7 @@ title: "Forms"
             </div>
         </div>
         <div class="md:w-1/2 px-3">
-            <label class="block uppercase leading-loose text-grey-darker text-xs font-bold mb-2" for="grid-zip">
+            <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-zip">
                 Zip
             </label>
             <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4" id="grid-zip" type="text" placeholder="90210">
