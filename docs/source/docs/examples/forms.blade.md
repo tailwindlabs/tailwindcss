@@ -25,16 +25,17 @@ title: "Forms"
 <div class="w-full max-w-xs">
     <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div class="mb-4">
-            <label class="block text-grey-darker font-bold mb-2" for="username">
+            <label class="block text-grey-darker text-sm font-bold mb-2" for="username">
                 Username
             </label>
             <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-dark" id="username" type="text" placeholder="Username">
         </div>
         <div class="mb-6">
-            <label class="block text-grey-darker font-bold mb-2" for="username">
+            <label class="block text-grey-darker text-sm font-bold mb-2" for="password">
                 Password
             </label>
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-dark" id="password" type="password" placeholder="******************">
+            <input class="shadow appearance-none border border-red rounded w-full py-2 px-3 text-grey-dark mb-3" id="password" type="password" placeholder="******************">
+            <p class="text-red text-xs italic">Please choose a password.</p>
         </div>
         <div class="flex items-center justify-between">
             <button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded" type="button">
@@ -101,32 +102,34 @@ title: "Forms"
 <form class="w-full max-w-md">
     <div class="-mx-3 md:flex mb-6">
         <div class="md:w-1/2 px-3 mb-6 md:mb-0">
-            <label class="block uppercase leading-loose text-slate text-xs font-bold mb-2" for="grid-full-name">
+            <label class="block uppercase leading-loose text-slate text-xs font-bold mb-2" for="grid-first-name">
                 First Name
             </label>
-            <input class="appearance-none block w-full bg-grey-lighter text-slate border border-grey-lighter rounded py-3 px-4" id="grid-full-name" type="text" placeholder="Jane">
+            <input class="appearance-none block w-full bg-grey-lighter text-slate border border-red rounded py-3 px-4 mb-3" id="grid-first-name" type="text" placeholder="Jane">
+            <p class="text-red text-xs italic">Please fill out this field.</p>
         </div>
         <div class="md:w-1/2 px-3">
-            <label class="block uppercase leading-loose text-slate text-xs font-bold mb-2" for="grid-full-name">
+            <label class="block uppercase leading-loose text-slate text-xs font-bold mb-2" for="grid-last-name">
                 Last Name
             </label>
-            <input class="appearance-none block w-full bg-grey-lighter text-slate border border-grey-lighter rounded py-3 px-4" id="grid-full-name" type="text" placeholder="Doe">
+            <input class="appearance-none block w-full bg-grey-lighter text-slate border border-grey-lighter rounded py-3 px-4" id="grid-last-name" type="text" placeholder="Doe">
         </div>
     </div>
     <div class="-mx-3 md:flex mb-6">
         <div class="md:w-full px-3">
-            <label class="block uppercase leading-loose text-slate text-xs font-bold mb-2" for="grid-username">
+            <label class="block uppercase leading-loose text-slate text-xs font-bold mb-2" for="grid-password">
                 Password
             </label>
-            <input class="appearance-none block w-full bg-grey-lighter text-slate border border-grey-lighter rounded py-3 px-4" id="grid-username" type="password" placeholder="******************">
+            <input class="appearance-none block w-full bg-grey-lighter text-slate border border-grey-lighter rounded py-3 px-4 mb-3" id="grid-password" type="password" placeholder="******************">
+            <p class="text-grey-dark text-xs italic">Make it as long and as crazy as you'd like</p>
         </div>
     </div>
     <div class="-mx-3 md:flex mb-2">
         <div class="md:w-1/2 px-3 mb-6 md:mb-0">
-            <label class="block uppercase leading-loose text-slate text-xs font-bold mb-2" for="grid-full-name">
+            <label class="block uppercase leading-loose text-slate text-xs font-bold mb-2" for="grid-city">
                 City
             </label>
-            <input class="appearance-none block w-full bg-grey-lighter text-slate border border-grey-lighter rounded py-3 px-4" id="grid-full-name" type="text" placeholder="Albuquerque">
+            <input class="appearance-none block w-full bg-grey-lighter text-slate border border-grey-lighter rounded py-3 px-4" id="grid-city" type="text" placeholder="Albuquerque">
         </div>
         <div class="md:w-1/2 px-3">
             <label class="block uppercase leading-loose text-slate text-xs font-bold mb-2" for="grid-select">
@@ -139,10 +142,10 @@ title: "Forms"
             </select>
         </div>
         <div class="md:w-1/2 px-3">
-            <label class="block uppercase leading-loose text-slate text-xs font-bold mb-2" for="grid-full-name">
+            <label class="block uppercase leading-loose text-slate text-xs font-bold mb-2" for="grid-zip">
                 Zip
             </label>
-            <input class="appearance-none block w-full bg-grey-lighter text-slate border border-grey-lighter rounded py-3 px-4" id="grid-full-name" type="text" placeholder="Jane Doe">
+            <input class="appearance-none block w-full bg-grey-lighter text-slate border border-grey-lighter rounded py-3 px-4" id="grid-zip" type="text" placeholder="90210">
         </div>
     </div>
 </form>
@@ -154,7 +157,7 @@ title: "Forms"
 @component('_partials.code-sample', ['class' => 'flex justify-center p-8'])
 <form class="w-full max-w-sm">
     <div class="flex items-center border-b border-b-2 border-teal py-2">
-        <input class="appearance-none bg-transparent border-none w-full text-grey-dark mr-3 py-1 px-2" id="inline-full-name" type="text" placeholder="Jane Doe">
+        <input class="appearance-none bg-transparent border-none w-full text-grey-dark mr-3 py-1 px-2" id="underline-full-name" type="text" placeholder="Jane Doe">
         <button class="bg-teal hover:bg-teal-dark border-teal hover:border-teal-dark text-sm border-4 text-white py-1 px-2 rounded" type="button">
             Sign&nbsp;Up
         </button>
