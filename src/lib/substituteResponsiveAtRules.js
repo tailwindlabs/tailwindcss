@@ -29,7 +29,18 @@ export default function(config) {
           return cloned
         })
       )
-      css.append(mediaQuery)
+
+      let includesScreenUtilitiesExplicitly = false
+      css.walkAtRules('tailwind', atRule => {
+        if (atRule.params === 'screen-utilities') {
+          includesScreenUtilitiesExplicitly = true
+          atRule.replaceWith(mediaQuery)
+        }
+      })
+
+      if(! includesScreenUtilitiesExplicitly) {
+        css.append(mediaQuery)
+      }
     })
   }
 }
