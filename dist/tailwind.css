@@ -2211,6 +2211,22 @@ button,
   left: 0;
 }
 
+.pin-x-auto {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pin-y-auto {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.pin-xy-auto {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .pin {
   top: 0;
   right: 0;
@@ -5147,6 +5163,22 @@ button,
   .sm\:pin-x {
     right: 0;
     left: 0;
+  }
+
+  .sm\:pin-x-auto {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .sm\:pin-y-auto {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .sm\:pin-xy-auto {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
 
   .sm\:pin {
@@ -8088,6 +8120,22 @@ button,
     left: 0;
   }
 
+  .md\:pin-x-auto {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .md\:pin-y-auto {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .md\:pin-xy-auto {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
   .md\:pin {
     top: 0;
     right: 0;
@@ -11027,6 +11075,22 @@ button,
     left: 0;
   }
 
+  .lg\:pin-x-auto {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .lg\:pin-y-auto {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .lg\:pin-xy-auto {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
   .lg\:pin {
     top: 0;
     right: 0;
@@ -13964,6 +14028,22 @@ button,
   .xl\:pin-x {
     right: 0;
     left: 0;
+  }
+
+  .xl\:pin-x-auto {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .xl\:pin-y-auto {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .xl\:pin-xy-auto {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
 
   .xl\:pin {

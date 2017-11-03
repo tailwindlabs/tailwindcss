@@ -22,7 +22,7 @@ title: "Positioning"
           <tr>
               <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
               <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-              <th class="w-3/5 text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
+              <th class="w-2/5 text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
           </tr>
         </thead>
         <tbody class="align-baseline">
@@ -81,6 +81,31 @@ title: "Positioning"
                     left: 0;
                 </td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Anchor absolutely positioned element to the left and right edges of the nearest positioned parent.</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.pin-x-auto</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
+                    left: 50%;<br>
+                    transform: translateX(-50%);<br>
+                </td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Anchor absolutely positioned element to the center of the x axis of the nearest positioned parent</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.pin-y-auto</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
+                    top: 50%;<br>
+                    transform: translateY(-50%);<br>
+                </td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Anchor absolutely positioned element to the center of the y axis of the nearest positioned parent</td>
+            </tr>
+            <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.pin-xy-auto</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
+                    top: 50%;<br>
+                    left: 50%;<br>
+                    transform: translate(-50%, -50%);<br>
+                </td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Anchor absolutely positioned element to the center of the x axis and y axis of the nearest positioned parent</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.pin</td>
@@ -322,6 +347,38 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
     </div>
   </div>
 </div>
+<div class="flex justify-around mb-8 flex-wrap">
+  <div class="mb-2">
+    <p class="text-center text-sm text-slate-light mb-1">.pin-x-auto</p>
+    <div class="relative h-24 w-24 bg-smoke">
+      <div class="absolute pin-x-auto h-8 w-8 bg-slate"></div>
+    </div>
+  </div>
+  <div class="mb-2">
+    <p class="text-center text-sm text-slate-light mb-1">.pin-y-auto.pin-r</p>
+    <div class="relative h-24 w-24 bg-smoke">
+      <div class="absolute pin-y-auto pin-r h-8 w-8 bg-slate"></div>
+    </div>
+  </div>
+  <div class="mb-2">
+    <p class="text-center text-sm text-slate-light mb-1">.pin-x-auto.pin-b</p>
+    <div class="relative h-24 w-24 bg-smoke">
+      <div class="absolute pin-x-auto pin-b h-8 w-8 bg-slate"></div>
+    </div>
+  </div>
+  <div class="mb-2">
+    <p class="text-center text-sm text-slate-light mb-1">.pin-y-auto</p>
+    <div class="relative h-24 w-24 bg-smoke">
+      <div class="absolute pin-y-auto h-8 w-8 bg-slate"></div>
+    </div>
+  </div>
+  <div>
+    <p class="text-center text-sm text-slate-light mb-1">.pin-xy-auto</p>
+    <div class="relative h-24 w-24 bg-smoke">
+      <div class="absolute pin-xy-auto h-8 w-8 bg-slate"></div>
+    </div>
+  </div>
+</div>
 <div class="flex justify-around">
   <div>
     <p class="text-center text-sm text-slate-light mb-1">.pin-l.pin-t</p>
@@ -374,6 +431,31 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
 <!-- Fill entire parent -->
 <div class="relative h-24 w-24 bg-smoke">
   <div class="absolute pin bg-slate"></div>
+</div>
+
+<!-- Pin centered on the x axis -->
+<div class="relative h-24 w-24 bg-smoke">
+  <div class="absolute pin-x-auto h-8 w-8 bg-slate"></div>
+</div>
+
+<!-- Pin centered on the y axis and right edge -->
+<div class="relative h-24 w-24 bg-smoke">
+  <div class="absolute pin-y-auto pin-r h-8 w-8 bg-slate"></div>
+</div>
+
+<!-- Pin centered on the x axis and bottom edge -->
+<div class="relative h-24 w-24 bg-smoke">
+  <div class="absolute pin-x-auto pin-b h-8 w-8 bg-slate"></div>
+</div>
+
+<!-- Pin centered on the y axis-->
+<div class="relative h-24 w-24 bg-smoke">
+  <div class="absolute pin-y-auto h-8 w-8 bg-slate"></div>
+</div>
+
+<!-- Pin centered on the x axis and the y axis -->
+<div class="relative h-24 w-24 bg-smoke">
+  <div class="absolute pin-xy-auto h-8 w-8 bg-slate"></div>
 </div>
 
 <!-- Pin to top left corner -->
