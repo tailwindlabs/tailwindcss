@@ -174,3 +174,5 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
       postCss: [ tailwindcss('path/to/config.js') ],
    });
 ```
+
+For more information on what this feature does and the implications of disabling it, [see the Laravel Mix documentation](https://github.com/JeffreyWay/laravel-mix/blob/master/docs/css-preprocessors.md#css-url-rewriting).
