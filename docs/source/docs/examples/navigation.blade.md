@@ -19,7 +19,7 @@ title: "Navigation"
   </div>
 </div>
 
-## Simple Navigation Example
+## Simple
 
 @component('_partials.code-sample')
 <ul class="flex">
@@ -33,7 +33,7 @@ title: "Navigation"
         <a class="text-blue hover:text-blue-darker" href="#">Link</a>
     </li>
     <li class="mr-6">
-        <a class="text-grey-light" href="#">Disabled</a>
+        <a class="text-grey-light cursor-not-allowed" href="#">Disabled</a>
     </li>
 </ul>
 @endcomponent
@@ -68,12 +68,12 @@ title: "Navigation"
         <a class="inline-block border border-white rounded hover:border-grey-lighter text-blue hover:bg-grey-lighter py-1 px-3" href="#">Pill</a>
     </li>
     <li class="mr-3">
-        <a class="inline-block py-1 px-3 text-grey-light" href="#">Disabled Pill</a>
+        <a class="inline-block py-1 px-3 text-grey-light cursor-not-allowed" href="#">Disabled Pill</a>
     </li>
 </ul>
 @endcomponent
 
-## Flex-Filled Navigation
+## Stretched
 
 @component('_partials.code-sample')
 <ul class="flex">
@@ -84,12 +84,12 @@ title: "Navigation"
         <a class="text-center block border border-white rounded hover:border-grey-lighter text-blue hover:bg-grey-lighter py-2 px-4" href="#">Nav Item</a>
     </li>
     <li class="text-center flex-1">
-        <a class="block py-2 px-4 text-grey-light" href="#">Disabled Item</a>
+        <a class="block py-2 px-4 text-grey-light cursor-not-allowed" href="#">Disabled Item</a>
     </li>
 </ul>
 @endcomponent
 
-## Justified Navigation
+## Justified
 
 @component('_partials.code-sample')
 <ul class="flex justify-between">
@@ -100,7 +100,7 @@ title: "Navigation"
         <a class="inline-block border border-white rounded hover:border-grey-lighter text-blue hover:bg-grey-lighter py-2 px-4" href="#">Pill</a>
     </li>
     <li class="mr-3">
-        <a class="inline-block py-2 px-4 text-grey-light" href="#">Disabled Pill</a>
+        <a class="inline-block py-2 px-4 text-grey-light cursor-not-allowed" href="#">Disabled Pill</a>
     </li>
 </ul>
 @endcomponent
