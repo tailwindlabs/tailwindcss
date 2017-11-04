@@ -4,13 +4,13 @@ import findMixin from '../util/findMixin'
 import escapeClassName from '../util/escapeClassName'
 
 function normalizeClassNames(classNames) {
-  return classNames.map((className) => {
+  return classNames.map(className => {
     return `.${escapeClassName(_.trimStart(className, '.'))}`
   })
 }
 
 export default function(config) {
-  return function (css) {
+  return function(css) {
     const options = config()
     css.walkRules(function(rule) {
       rule.walkAtRules('apply', atRule => {

@@ -15,10 +15,10 @@ import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
 import substituteScreenAtRules from './lib/substituteScreenAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
 
-const plugin = postcss.plugin('tailwind', (config) => {
+const plugin = postcss.plugin('tailwind', config => {
   const plugins = []
 
-  if (! _.isUndefined(config)) {
+  if (!_.isUndefined(config)) {
     plugins.push(registerConfigAsDependency(path.resolve(config)))
   }
 
@@ -31,20 +31,23 @@ const plugin = postcss.plugin('tailwind', (config) => {
     return require(path.resolve(config))
   }
 
-  return postcss(...plugins, ...[
-    substitutePreflightAtRule(lazyConfig),
-    evaluateTailwindFunctions(lazyConfig),
-    generateUtilities(lazyConfig),
-    substituteHoverableAtRules(lazyConfig),
-    substituteFocusableAtRules(lazyConfig),
-    substituteResponsiveAtRules(lazyConfig),
-    substituteScreenAtRules(lazyConfig),
-    substituteClassApplyAtRules(lazyConfig),
-    stylefmt,
-  ])
+  return postcss(
+    ...plugins,
+    ...[
+      substitutePreflightAtRule(lazyConfig),
+      evaluateTailwindFunctions(lazyConfig),
+      generateUtilities(lazyConfig),
+      substituteHoverableAtRules(lazyConfig),
+      substituteFocusableAtRules(lazyConfig),
+      substituteResponsiveAtRules(lazyConfig),
+      substituteScreenAtRules(lazyConfig),
+      substituteClassApplyAtRules(lazyConfig),
+      stylefmt
+    ]
+  )
 })
 
-plugin.defaultConfig = function () {
+plugin.defaultConfig = function() {
   return _.cloneDeep(require('../defaultConfig'))
 }
 

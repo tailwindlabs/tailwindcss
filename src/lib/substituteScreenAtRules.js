@@ -11,7 +11,7 @@ export default function(config) {
     css.walkAtRules('screen', atRule => {
       const screen = atRule.params
 
-      if (! _.has(options.screens, screen)) {
+      if (!_.has(options.screens, screen)) {
         throw atRule.error(`No \`${screen}\` screen found.`)
       }
 

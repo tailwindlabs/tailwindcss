@@ -13,7 +13,7 @@ function loadConfig(configPath) {
     return undefined
   }
 
-  if (! fs.existsSync(path.resolve(configPath))) {
+  if (!fs.existsSync(path.resolve(configPath))) {
     console.error(`Config file [${configPath}] does not exist.`)
     process.exit(1)
   }
@@ -23,11 +23,11 @@ function loadConfig(configPath) {
 
 function writeStrategy(options) {
   if (options.output === undefined) {
-    return (output) => {
+    return output => {
       process.stdout.write(output)
     }
   }
-  return (output) => {
+  return output => {
     fs.outputFileSync(options.output, output)
   }
 }
@@ -50,11 +50,12 @@ const packageJson = require(path.resolve(__dirname + '/../package.json'))
 
 program.version(packageJson.version).usage('<command> [<args>]')
 
-program.command('init [filename]')
+program
+  .command('init [filename]')
   .usage('[options] [filename]')
-  .action(function (filename = 'tailwind.js') {
+  .action(function(filename = 'tailwind.js') {
     let destination = path.resolve(filename)
-    
+
     if (! path.extname(filename).includes('.js')) {
       destination += '.js'
     }
@@ -64,40 +65,50 @@ program.command('init [filename]')
       process.exit(1)
     }
 
-    const output = fs.readFileSync(path.resolve(__dirname + '/../defaultConfig.js'), 'utf8')
-    fs.outputFileSync(destination, output.replace('// var defaultConfig', 'var defaultConfig'))
+    const output = fs.readFileSync(
+      path.resolve(__dirname + '/../defaultConfig.js'),
+      'utf8'
+    )
+    fs.outputFileSync(
+      destination,
+      output.replace('// var defaultConfig', 'var defaultConfig')
+    )
     process.exit()
   })
 
-program.command('build')
+program
+  .command('build')
   .usage('[options] <file ...>')
   .option('-c, --config [path]', 'Path to config file')
   .option('-o, --output [path]', 'Output file')
-  .action(function (file, options) {
+  .action(function(file, options) {
     let inputFile = program.args[0]
 
-    if (! inputFile) {
+    if (!inputFile) {
       console.error('No input file given!')
       process.exit(1)
     }
 
-    buildTailwind(inputFile, loadConfig(options.config), writeStrategy(options))
-      .then(function () {
-        process.exit()
-      })
+    buildTailwind(
+      inputFile,
+      loadConfig(options.config),
+      writeStrategy(options)
+    ).then(function() {
+      process.exit()
+    })
   })
 
-program.command('*', null, {
+program
+  .command('*', null, {
     noHelp: true
   })
-  .action(function () {
+  .action(function() {
     program.help()
   })
 
-
 program.parse(process.argv)
 
-if (program.args.length === 0 ) {
+if (program.args.length === 0) {
   program.help()
   process.exit()
 }
