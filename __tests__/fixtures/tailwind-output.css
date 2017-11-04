@@ -3509,6 +3509,10 @@ button,
   cursor: auto;
 }
 
+.cursor-default {
+  cursor: default;
+}
+
 .cursor-pointer {
   cursor: pointer;
 }
@@ -6450,6 +6454,10 @@ button,
 
   .sm\:cursor-auto {
     cursor: auto;
+  }
+
+  .sm\:cursor-default {
+    cursor: default;
   }
 
   .sm\:cursor-pointer {
@@ -9396,6 +9404,10 @@ button,
     cursor: auto;
   }
 
+  .md\:cursor-default {
+    cursor: default;
+  }
+
   .md\:cursor-pointer {
     cursor: pointer;
   }
@@ -12340,6 +12352,10 @@ button,
     cursor: auto;
   }
 
+  .lg\:cursor-default {
+    cursor: default;
+  }
+
   .lg\:cursor-pointer {
     cursor: pointer;
   }
@@ -15282,6 +15298,10 @@ button,
 
   .xl\:cursor-auto {
     cursor: auto;
+  }
+
+  .xl\:cursor-default {
+    cursor: default;
   }
 
   .xl\:cursor-pointer {
