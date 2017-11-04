@@ -68,17 +68,6 @@ Note that `@@apply` **will not work** for mixing in hover or responsive variants
     @@apply .inline-block;
   }
 }
-
-// Or if you're using Less or Sass:
-.btn {
-  @@apply .block .bg-red;
-  &:hover {
-    @@apply .bg-blue;
-  }
-  @@screen md {
-    @@apply .inline-block;
-  }
-}
 ```
 
 ### `@@responsive`
