@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import defineClasses from '../util/defineClasses'
 import hoverable from '../util/hoverable'
 

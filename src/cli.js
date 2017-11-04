@@ -1,12 +1,12 @@
 #!/usr/bin/env node
+/* eslint-disable no-process-exit */
 
-import fs from 'fs-extra'
-import _ from 'lodash'
 import path from 'path'
-import postcss from 'postcss'
-import defaultConfig from '../defaultConfig'
-import program from 'commander'
+import fs from 'fs-extra'
 import tailwind from '..'
+import postcss from 'postcss'
+import process from 'process'
+import program from 'commander'
 
 function loadConfig(configPath) {
   if (configPath === undefined) {
@@ -46,14 +46,14 @@ function buildTailwind(inputFile, config, write) {
     .catch(error => console.log(error))
 }
 
-const packageJson = require(path.resolve(__dirname + '/../package.json'))
+const packageJson = require(path.resolve(__dirname, '/../package.json'))
 
 program.version(packageJson.version).usage('<command> [<args>]')
 
 program
   .command('init [filename]')
   .usage('[options] [filename]')
-  .action(function(filename = 'tailwind.js') {
+  .action((filename = 'tailwind.js') => {
     let destination = path.resolve(filename)
 
     if (! path.extname(filename).includes('.js')) {
@@ -66,7 +66,7 @@ program
     }
 
     const output = fs.readFileSync(
-      path.resolve(__dirname + '/../defaultConfig.js'),
+      path.resolve(__dirname, '/../defaultConfig.js'),
       'utf8'
     )
     fs.outputFileSync(
@@ -81,7 +81,7 @@ program
   .usage('[options] <file ...>')
   .option('-c, --config [path]', 'Path to config file')
   .option('-o, --output [path]', 'Output file')
-  .action(function(file, options) {
+  .action((file, options) => {
     let inputFile = program.args[0]
 
     if (!inputFile) {
@@ -93,7 +93,7 @@ program
       inputFile,
       loadConfig(options.config),
       writeStrategy(options)
-    ).then(function() {
+    ).then(() => {
       process.exit()
     })
   })
@@ -102,7 +102,7 @@ program
   .command('*', null, {
     noHelp: true
   })
-  .action(function() {
+  .action(() => {
     program.help()
   })
 

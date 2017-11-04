@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import defineClass from '../util/defineClass'
 import defineClasses from '../util/defineClasses'
 
 function defaultBorder(width, color) {
@@ -23,7 +22,7 @@ function defaultBorder(width, color) {
 }
 
 function sizedBorder(size, width, color) {
-  const style = width == 0 ? '0' : `${width} solid ${color}`
+  const style = width == 0 ? '0' : `${width} solid ${color}` // eslint-disable-line eqeqeq
 
   return defineClasses({
     [`border-${size}`]: {

@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import _ from 'lodash'
 import postcss from 'postcss'
 import defineClass from '../util/defineClass'

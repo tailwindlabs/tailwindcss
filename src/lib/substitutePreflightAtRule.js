@@ -1,10 +1,8 @@
 import fs from 'fs'
 import postcss from 'postcss'
 
-export default function(config) {
+export default function() {
   return function(css) {
-    const options = config()
-
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'preflight') {
         atRule.before(

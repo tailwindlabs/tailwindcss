@@ -1,9 +1,12 @@
 {
+  "env": {
+    "jest": true
+  },
   "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module"
   },
-  "extends": ["prettier"],
+  "extends": ["eslint-config-postcss", "prettier"],
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": [

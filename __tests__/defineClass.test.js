@@ -1,6 +1,3 @@
-import postcss from 'postcss'
-import fs from 'fs'
-import _ from 'lodash'
 import c from '../src/util/collapseWhitespace'
 import defineClass from '../src/util/defineClass'
 

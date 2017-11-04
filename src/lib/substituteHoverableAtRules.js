@@ -1,11 +1,7 @@
-import _ from 'lodash'
-import postcss from 'postcss'
 import cloneNodes from '../util/cloneNodes'
 
-export default function(config) {
+export default function() {
   return function(css) {
-    const options = config()
-
     css.walkAtRules('hoverable', atRule => {
       atRule.walkRules(rule => {
         // Might be wise to error if the rule has multiple selectors,

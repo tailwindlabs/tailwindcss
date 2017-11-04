@@ -20,7 +20,8 @@
     "babelify": "babel src --out-dir lib",
     "prepare": "npm run babelify && babel-node src/build.js",
     "watch": "nodemon -e js,css --watch src --exec 'babel-node src/build.js'",
-    "test": "jest and eslint ."
+    "style": "eslint .",
+    "test": "jest && eslint ."
   },
   "devDependencies": {
     "autoprefixer": "^7.1.6",
@@ -33,6 +34,7 @@
     "babel-preset-stage-3": "^6.24.1",
     "clean-css": "^4.1.9",
     "eslint": "^4.10.0",
+    "eslint-config-postcss": "^2.0.2",
     "eslint-config-prettier": "^2.7.0",
     "eslint-plugin-prettier": "^2.3.1",
     "jest": "^20.0.4",
