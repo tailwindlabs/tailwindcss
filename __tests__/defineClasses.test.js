@@ -7,11 +7,11 @@ import defineClasses from '../src/util/defineClasses'
 it('it generates a set of helper classes from a config', () => {
   let output = defineClasses({
     flex: {
-      display: 'flex'
+      display: 'flex',
     },
     'inline-flex': {
-      display: 'inline-flex'
-    }
+      display: 'inline-flex',
+    },
   })
   expect(output).toBeInstanceOf(Array)
   expect(c(output[0].toString())).toEqual(`.flex { display: flex }`)

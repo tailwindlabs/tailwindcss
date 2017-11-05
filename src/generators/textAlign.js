@@ -5,6 +5,6 @@ export default function() {
     'text-left': { 'text-align': 'left' },
     'text-center': { 'text-align': 'center' },
     'text-right': { 'text-align': 'right' },
-    'text-justify': { 'text-align': 'justify' }
+    'text-justify': { 'text-align': 'justify' },
   })
 }

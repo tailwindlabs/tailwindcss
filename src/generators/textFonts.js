@@ -8,7 +8,7 @@ export default function({ fonts }) {
     }
 
     return defineClass(`font-${font}`, {
-      'font-family': `${families}`
+      'font-family': `${families}`,
     })
   })
 }

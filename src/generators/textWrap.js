@@ -14,7 +14,7 @@ export default function() {
     truncate: {
       overflow: 'hidden',
       'text-overflow': 'ellipsis',
-      'white-space': 'nowrap'
-    }
+      'white-space': 'nowrap',
+    },
   })
 }

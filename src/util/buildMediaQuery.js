@@ -20,7 +20,7 @@ export default function buildMediaQuery(screens) {
           feature = _.get(
             {
               min: 'min-width',
-              max: 'max-width'
+              max: 'max-width',
             },
             feature,
             feature

@@ -6,7 +6,7 @@ export default function({ textColors }) {
   return hoverable(
     _.map(textColors, (color, modifier) => {
       return defineClass(`text-${modifier}`, {
-        color
+        color,
       })
     })
   )

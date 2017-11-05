@@ -6,7 +6,7 @@ export default function({ fontWeights }) {
   return hoverable(
     _.map(fontWeights, (weight, modifier) => {
       return defineClass(`font-${modifier}`, {
-        'font-weight': `${weight}`
+        'font-weight': `${weight}`,
       })
     })
   )

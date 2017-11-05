@@ -14,7 +14,7 @@ function buildDistFile(filename) {
         .process(css, {
           from: `./css/${filename}.css`,
           to: `./dist/${filename}.css`,
-          map: { inline: false }
+          map: { inline: false },
         })
         .then(result => {
           fs.writeFileSync(`./dist/${filename}.css`, result.css)
@@ -41,7 +41,7 @@ console.info('Building Tailwind!')
 Promise.all([
   buildDistFile('preflight'),
   buildDistFile('utilities'),
-  buildDistFile('tailwind')
+  buildDistFile('tailwind'),
 ]).then(() => {
   console.log('Finished Building Tailwind!')
 })

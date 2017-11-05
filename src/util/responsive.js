@@ -4,7 +4,7 @@ import cloneNodes from './cloneNodes'
 export default function responsive(rules) {
   return postcss
     .atRule({
-      name: 'responsive'
+      name: 'responsive',
     })
     .append(cloneNodes(rules))
 }

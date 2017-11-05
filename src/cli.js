@@ -56,7 +56,7 @@ program
   .action((filename = 'tailwind.js') => {
     let destination = path.resolve(filename)
 
-    if (! path.extname(filename).includes('.js')) {
+    if (!path.extname(filename).includes('.js')) {
       destination += '.js'
     }
 
@@ -100,7 +100,7 @@ program
 
 program
   .command('*', null, {
-    noHelp: true
+    noHelp: true,
   })
   .action(() => {
     program.help()

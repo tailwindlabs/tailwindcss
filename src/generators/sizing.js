@@ -4,7 +4,7 @@ import defineClass from '../util/defineClass'
 function defineWidths(widths) {
   return _.map(widths, (size, modifer) => {
     return defineClass(`w-${modifer}`, {
-      width: `${size}`
+      width: `${size}`,
     })
   })
 }
@@ -12,7 +12,7 @@ function defineWidths(widths) {
 function defineMinWidths(widths) {
   return _.map(widths, (size, modifer) => {
     return defineClass(`min-w-${modifer}`, {
-      'min-width': `${size}`
+      'min-width': `${size}`,
     })
   })
 }
@@ -20,7 +20,7 @@ function defineMinWidths(widths) {
 function defineMaxWidths(widths) {
   return _.map(widths, (size, modifer) => {
     return defineClass(`max-w-${modifer}`, {
-      'max-width': `${size}`
+      'max-width': `${size}`,
     })
   })
 }
@@ -28,7 +28,7 @@ function defineMaxWidths(widths) {
 function defineHeights(heights) {
   return _.map(heights, (size, modifer) => {
     return defineClass(`h-${modifer}`, {
-      height: `${size}`
+      height: `${size}`,
     })
   })
 }
@@ -36,7 +36,7 @@ function defineHeights(heights) {
 function defineMinHeights(heights) {
   return _.map(heights, (size, modifer) => {
     return defineClass(`min-h-${modifer}`, {
-      'min-height': `${size}`
+      'min-height': `${size}`,
     })
   })
 }
@@ -44,7 +44,7 @@ function defineMinHeights(heights) {
 function defineMaxHeights(heights) {
   return _.map(heights, (size, modifer) => {
     return defineClass(`max-h-${modifer}`, {
-      'max-height': `${size}`
+      'max-height': `${size}`,
     })
   })
 }
@@ -56,6 +56,6 @@ export default function(config) {
     defineMaxWidths(config.maxWidth),
     defineHeights(config.height),
     defineMinHeights(config.minHeight),
-    defineMaxHeights(config.maxHeight)
+    defineMaxHeights(config.maxHeight),
   ])
 }

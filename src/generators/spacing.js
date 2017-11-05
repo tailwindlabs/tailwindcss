@@ -5,28 +5,28 @@ function definePadding(padding) {
   return _.flatMap(padding, (size, modifier) => {
     return defineClasses({
       [`pt-${modifier}`]: {
-        'padding-top': `${size}`
+        'padding-top': `${size}`,
       },
       [`pr-${modifier}`]: {
-        'padding-right': `${size}`
+        'padding-right': `${size}`,
       },
       [`pb-${modifier}`]: {
-        'padding-bottom': `${size}`
+        'padding-bottom': `${size}`,
       },
       [`pl-${modifier}`]: {
-        'padding-left': `${size}`
+        'padding-left': `${size}`,
       },
       [`px-${modifier}`]: {
         'padding-left': `${size}`,
-        'padding-right': `${size}`
+        'padding-right': `${size}`,
       },
       [`py-${modifier}`]: {
         'padding-top': `${size}`,
-        'padding-bottom': `${size}`
+        'padding-bottom': `${size}`,
       },
       [`p-${modifier}`]: {
-        padding: `${size}`
-      }
+        padding: `${size}`,
+      },
     })
   })
 }
@@ -35,28 +35,28 @@ function defineMargin(margin) {
   return _.flatMap(margin, (size, modifier) => {
     return defineClasses({
       [`mt-${modifier}`]: {
-        'margin-top': `${size}`
+        'margin-top': `${size}`,
       },
       [`mr-${modifier}`]: {
-        'margin-right': `${size}`
+        'margin-right': `${size}`,
       },
       [`mb-${modifier}`]: {
-        'margin-bottom': `${size}`
+        'margin-bottom': `${size}`,
       },
       [`ml-${modifier}`]: {
-        'margin-left': `${size}`
+        'margin-left': `${size}`,
       },
       [`mx-${modifier}`]: {
         'margin-left': `${size}`,
-        'margin-right': `${size}`
+        'margin-right': `${size}`,
       },
       [`my-${modifier}`]: {
         'margin-top': `${size}`,
-        'margin-bottom': `${size}`
+        'margin-bottom': `${size}`,
       },
       [`m-${modifier}`]: {
-        margin: `${size}`
-      }
+        margin: `${size}`,
+      },
     })
   })
 }
@@ -67,28 +67,28 @@ function defineNegativeMargin(negativeMargin) {
 
     return defineClasses({
       [`-mt-${modifier}`]: {
-        'margin-top': `${size}`
+        'margin-top': `${size}`,
       },
       [`-mr-${modifier}`]: {
-        'margin-right': `${size}`
+        'margin-right': `${size}`,
       },
       [`-mb-${modifier}`]: {
-        'margin-bottom': `${size}`
+        'margin-bottom': `${size}`,
       },
       [`-ml-${modifier}`]: {
-        'margin-left': `${size}`
+        'margin-left': `${size}`,
       },
       [`-mx-${modifier}`]: {
         'margin-left': `${size}`,
-        'margin-right': `${size}`
+        'margin-right': `${size}`,
       },
       [`-my-${modifier}`]: {
         'margin-top': `${size}`,
-        'margin-bottom': `${size}`
+        'margin-bottom': `${size}`,
       },
       [`-m-${modifier}`]: {
-        margin: `${size}`
-      }
+        margin: `${size}`,
+      },
     })
   })
 }
@@ -102,13 +102,13 @@ export default function({ padding, margin, negativeMargin }) {
         'margin-top': 'auto',
       },
       'mr-auto': {
-        'margin-right': 'auto'
+        'margin-right': 'auto',
       },
       'mb-auto': {
         'margin-bottom': 'auto',
       },
       'ml-auto': {
-        'margin-left': 'auto'
+        'margin-left': 'auto',
       },
       'mx-auto': {
         'margin-left': 'auto',
@@ -122,6 +122,6 @@ export default function({ padding, margin, negativeMargin }) {
         'margin': 'auto',
       },
     }),
-    defineNegativeMargin(negativeMargin)
+    defineNegativeMargin(negativeMargin),
   ])
 }

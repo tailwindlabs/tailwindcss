@@ -8,7 +8,7 @@ export default function() {
         // or weird compound selectors like .bg-blue>p>h1
         rule.selectors = [
           rule.selector,
-          `.focus\\:${rule.selector.slice(1)}:focus`
+          `.focus\\:${rule.selector.slice(1)}:focus`,
         ]
       })
 

@@ -6,7 +6,7 @@ export default function({ shadows }) {
     return defineClass(
       modifier === 'default' ? 'shadow' : `shadow-${modifier}`,
       {
-        'box-shadow': shadow
+        'box-shadow': shadow,
       }
     )
   })

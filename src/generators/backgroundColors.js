@@ -6,7 +6,7 @@ export default function({ backgroundColors }) {
   return hoverable(
     _.map(backgroundColors, (color, className) => {
       return defineClass(`bg-${className}`, {
-        'background-color': color
+        'background-color': color,
       })
     })
   )

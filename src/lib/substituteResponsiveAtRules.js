@@ -18,7 +18,7 @@ export default function(config) {
     _.keys(screens).forEach(screen => {
       const mediaQuery = postcss.atRule({
         name: 'media',
-        params: buildMediaQuery(screens[screen])
+        params: buildMediaQuery(screens[screen]),
       })
 
       mediaQuery.append(

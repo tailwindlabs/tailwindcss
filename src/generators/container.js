@@ -30,11 +30,11 @@ export default function({ screens }) {
   const atRules = _.map(minWidths, minWidth => {
     const atRule = postcss.atRule({
       name: 'media',
-      params: `(min-width: ${minWidth})`
+      params: `(min-width: ${minWidth})`,
     })
     atRule.append(
       defineClass('container', {
-        'max-width': minWidth
+        'max-width': minWidth,
       })
     )
     return atRule
@@ -42,8 +42,8 @@ export default function({ screens }) {
 
   return [
     defineClass('container', {
-      width: '100%'
+      width: '100%',
     }),
-    ...atRules
+    ...atRules,
   ]
 }

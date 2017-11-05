@@ -8,7 +8,7 @@ export default function(config) {
     functions: {
       config: (path, defaultValue) => {
         return _.get(options, _.trim(path, `'"`), defaultValue)
-      }
-    }
+      },
+    },
   })
 }

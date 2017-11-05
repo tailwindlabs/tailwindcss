@@ -41,7 +41,7 @@ const plugin = postcss.plugin('tailwind', config => {
       substituteResponsiveAtRules(lazyConfig),
       substituteScreenAtRules(lazyConfig),
       substituteClassApplyAtRules(lazyConfig),
-      stylefmt
+      stylefmt,
     ]
   )
 })

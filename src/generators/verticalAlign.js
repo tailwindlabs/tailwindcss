@@ -7,6 +7,6 @@ export default function() {
     'align-middle': { 'vertical-align': 'middle' },
     'align-bottom': { 'vertical-align': 'bottom' },
     'align-text-top': { 'vertical-align': 'text-top' },
-    'align-text-bottom': { 'vertical-align': 'text-bottom' }
+    'align-text-bottom': { 'vertical-align': 'text-bottom' },
   })
 }

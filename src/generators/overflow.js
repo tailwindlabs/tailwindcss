@@ -8,13 +8,13 @@ export default function() {
     'overflow-scroll': { overflow: 'scroll' },
     'overflow-x-scroll': {
       'overflow-x': 'auto',
-      '-ms-overflow-style': '-ms-autohiding-scrollbar'
+      '-ms-overflow-style': '-ms-autohiding-scrollbar',
     },
     'overflow-y-scroll': {
       'overflow-y': 'auto',
-      '-ms-overflow-style': '-ms-autohiding-scrollbar'
+      '-ms-overflow-style': '-ms-autohiding-scrollbar',
     },
     'scrolling-touch': { '-webkit-overflow-scrolling': 'touch' },
-    'scrolling-auto': { '-webkit-overflow-scrolling': 'auto' }
+    'scrolling-auto': { '-webkit-overflow-scrolling': 'auto' },
   })
 }

@@ -10,6 +10,6 @@ export default function() {
     'bg-right': { 'background-position': 'right' },
     'bg-right-bottom': { 'background-position': 'right bottom' },
     'bg-right-top': { 'background-position': 'right top' },
-    'bg-top': { 'background-position': 'top' }
+    'bg-top': { 'background-position': 'top' },
   })
 }

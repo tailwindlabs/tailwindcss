@@ -7,7 +7,7 @@ export default function() {
     defineClasses({
       'float-right': { float: 'right' },
       'float-left': { float: 'left' },
-      'float-none': { float: 'none' }
+      'float-none': { float: 'none' },
     }),
     postcss.parse(`
       .clearfix:after {

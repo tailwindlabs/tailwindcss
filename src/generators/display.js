@@ -3,25 +3,25 @@ import defineClasses from '../util/defineClasses'
 export default function() {
   return defineClasses({
     block: {
-      display: 'block'
+      display: 'block',
     },
     'inline-block': {
-      display: 'inline-block'
+      display: 'inline-block',
     },
     inline: {
-      display: 'inline'
+      display: 'inline',
     },
     table: {
-      display: 'table'
+      display: 'table',
     },
     'table-row': {
-      display: 'table-row'
+      display: 'table-row',
     },
     'table-cell': {
-      display: 'table-cell'
+      display: 'table-cell',
     },
     hidden: {
-      display: 'none'
-    }
+      display: 'none',
+    },
   })
 }

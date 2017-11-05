@@ -12,8 +12,8 @@ export default function(configFile) {
       {
         type: 'dependency',
         file: configFile,
-        parent: css.source.input.file
-      }
+        parent: css.source.input.file,
+      },
     ]
   }
 }
