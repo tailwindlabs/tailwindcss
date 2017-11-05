@@ -48,8 +48,6 @@ module.exports = function({ borderWidths, borderColors }) {
 
   return _.flatten([
     defaultBorder(borderWidths.default, color),
-    ..._.map(_.omit(borderWidths, 'default'), (width, size) =>
-      sizedBorder(size, width, color)
-    ),
+    ..._.map(_.omit(borderWidths, 'default'), (width, size) => sizedBorder(size, width, color)),
   ])
 }

@@ -65,14 +65,8 @@ program
       process.exit(1)
     }
 
-    const output = fs.readFileSync(
-      path.resolve(__dirname, '/../defaultConfig.js'),
-      'utf8'
-    )
-    fs.outputFileSync(
-      destination,
-      output.replace('// var defaultConfig', 'var defaultConfig')
-    )
+    const output = fs.readFileSync(path.resolve(__dirname, '/../defaultConfig.js'), 'utf8')
+    fs.outputFileSync(destination, output.replace('// var defaultConfig', 'var defaultConfig'))
     process.exit()
   })
 
@@ -89,11 +83,7 @@ program
       process.exit(1)
     }
 
-    buildTailwind(
-      inputFile,
-      loadConfig(options.config),
-      writeStrategy(options)
-    ).then(() => {
+    buildTailwind(inputFile, loadConfig(options.config), writeStrategy(options)).then(() => {
       process.exit()
     })
   })

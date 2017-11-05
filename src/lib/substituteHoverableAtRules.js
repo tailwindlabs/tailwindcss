@@ -6,10 +6,7 @@ export default function() {
       atRule.walkRules(rule => {
         // Might be wise to error if the rule has multiple selectors,
         // or weird compound selectors like .bg-blue>p>h1
-        rule.selectors = [
-          rule.selector,
-          `.hover\\:${rule.selector.slice(1)}:hover`,
-        ]
+        rule.selectors = [rule.selector, `.hover\\:${rule.selector.slice(1)}:hover`]
       })
 
       atRule.before(cloneNodes(atRule.nodes))

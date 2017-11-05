@@ -7,10 +7,7 @@ import tailwind from '../src/index'
  * Tests
  */
 it('generates the right CSS', () => {
-  const input = fs.readFileSync(
-    path.resolve(`${__dirname}/fixtures/tailwind-input.css`),
-    'utf8'
-  )
+  const input = fs.readFileSync(path.resolve(`${__dirname}/fixtures/tailwind-input.css`), 'utf8')
 
   return postcss([tailwind()])
     .process(input)

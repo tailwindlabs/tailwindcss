@@ -15,7 +15,5 @@ it('it generates a set of helper classes from a config', () => {
   })
   expect(output).toBeInstanceOf(Array)
   expect(c(output[0].toString())).toEqual(`.flex { display: flex }`)
-  expect(c(output[1].toString())).toEqual(
-    `.inline-flex { display: inline-flex }`
-  )
+  expect(c(output[1].toString())).toEqual(`.inline-flex { display: inline-flex }`)
 })

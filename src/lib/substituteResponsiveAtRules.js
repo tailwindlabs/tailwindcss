@@ -24,10 +24,7 @@ export default function(config) {
       mediaQuery.append(
         rules.map(rule => {
           const cloned = rule.clone()
-          cloned.selectors = _.map(
-            rule.selectors,
-            selector => `.${screen}\\:${selector.slice(1)}`
-          )
+          cloned.selectors = _.map(rule.selectors, selector => `.${screen}\\:${selector.slice(1)}`)
           return cloned
         })
       )
