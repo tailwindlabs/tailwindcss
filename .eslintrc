@@ -17,7 +17,7 @@
         "printWidth": 80,
         "tabWidth": 2,
         "useTabs": false,
-        "trailingComma": "none",
+        "trailingComma": "es5",
         "bracketSpacing": true,
         "parser": "flow"
       }
