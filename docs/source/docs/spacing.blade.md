@@ -49,6 +49,6 @@ For example, `.pt-2` would add `.5rem` of padding to the top of the element, `.m
         <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">6</code> 1.5rem</div>
         <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">8</code> 2rem</div>
         <div><code class="inline-block my-1 mr-1 px-1 py-1 font-mono border rounded">px</code> 1px</div>
-        <div><code class="inline-block my-1 mr-1 px-1 py-1 font-mono border rounded">auto</code> auto <span class="text-slate-light text-xs">(horizontal margins only)</span></div>
+        <div><code class="inline-block my-1 mr-1 px-1 py-1 font-mono border rounded">auto</code> auto <span class="text-slate-light text-xs">(margins only)</span></div>
     </div>
 </div>
