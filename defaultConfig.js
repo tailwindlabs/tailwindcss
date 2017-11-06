@@ -755,6 +755,27 @@ module.exports = {
 
   /*
   |-----------------------------------------------------------------------------
+  | Rotations                             https://tailwindcss.com/docs/rotations
+  |-----------------------------------------------------------------------------
+  |
+  | Here is where you define your rotation utility values. By default we
+  | provide a sensible degree scale. You can, of course, modify these
+  | values as needed.
+  |
+  | Class name: .rotate-{side}-{degree?}
+  |
+  */
+
+  rotations: {
+    '0': '0deg',
+    '45': '45deg',
+    '90': '90deg',
+    '180': '180deg',
+  },
+
+
+  /*
+  |-----------------------------------------------------------------------------
   | Packages
   |-----------------------------------------------------------------------------
   |

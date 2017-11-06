@@ -32,6 +32,7 @@ import textStyle from '../generators/textStyle'
 import textTracking from '../generators/textTracking'
 import textWeights from '../generators/textWeights'
 import textWrap from '../generators/textWrap'
+import transform from '../generators/transform'
 import userSelect from '../generators/userSelect'
 import verticalAlign from '../generators/verticalAlign'
 import visibility from '../generators/visibility'
@@ -79,6 +80,7 @@ export default function(config) {
           pointerEvents(options),
           resize(options),
           cursor(options),
+          transform(options),
         ])
 
         atRule.before(container(options))
