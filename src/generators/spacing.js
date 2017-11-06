@@ -98,8 +98,14 @@ export default function ({ padding, margin, negativeMargin }) {
     definePadding(padding),
     defineMargin(margin),
     defineClasses({
+      'mt-auto': {
+        'margin-top': 'auto',
+      },
       'mr-auto': {
         'margin-right': 'auto',
+      },
+      'mb-auto': {
+        'margin-bottom': 'auto',
       },
       'ml-auto': {
         'margin-left': 'auto',
@@ -107,6 +113,13 @@ export default function ({ padding, margin, negativeMargin }) {
       'mx-auto': {
         'margin-left': 'auto',
         'margin-right': 'auto',
+      },
+      'my-auto': {
+        'margin-top': 'auto',
+        'margin-bottom': 'auto',
+      },
+      'm-auto': {
+        'margin': 'auto',
       },
     }),
     defineNegativeMargin(negativeMargin),
