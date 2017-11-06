@@ -18,12 +18,23 @@
           @import url("https://use.typekit.net/iqy1okj.css");
         </style>
         <link rel="stylesheet" href="{{ mix('/css/main.css') }}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script src="{{ mix('/js/nav.js') }}"></script>
     </head>
     <body data-sidebar-visible="true" class="font-sans font-normal text-slate-darker leading-normal">
         @yield('body')
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109068504-1"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+        <script type="text/javascript">
+            docsearch({
+              // appId: 'FMDGKF8GP7',
+              apiKey: '3df93446658cd9c4e314d4c02a052188',
+              indexName: 'tailwindcss',
+              inputSelector: '#searchbox',
+              debug: true // Set debug to true if you want to inspect the dropdown
+            });
+        </script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
