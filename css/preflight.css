@@ -533,7 +533,7 @@ iframe {
 *::after {
   border-width: 0;
   border-style: solid;
-  border-color: config('borderColors.default', black);
+  border-color: config('borderColors.default', currentColor);
 }
 
 textarea { resize: vertical; }
