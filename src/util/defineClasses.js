@@ -1,4 +1,3 @@
-import postcss from 'postcss'
 import _ from 'lodash'
 import defineClass from './defineClass'
 

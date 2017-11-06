@@ -1,0 +1,26 @@
+{
+  "env": {
+    "jest": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "extends": ["eslint-config-postcss", "prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "semi": false,
+        "singleQuote": true,
+        "printWidth": 100,
+        "tabWidth": 2,
+        "useTabs": false,
+        "trailingComma": "es5",
+        "bracketSpacing": true,
+        "parser": "flow"
+      }
+    ]
+  }
+}

@@ -5,7 +5,7 @@ function run(input, opts = () => {}) {
   return postcss([plugin(opts)]).process(input)
 }
 
-test("it adds a focusable variant to each nested class definition", () => {
+test('it adds a focusable variant to each nested class definition', () => {
   const input = `
     @focusable {
       .banana { color: yellow; }

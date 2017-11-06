@@ -12,7 +12,10 @@ it('generates the right CSS', () => {
   return postcss([tailwind()])
     .process(input)
     .then(result => {
-      const expected = fs.readFileSync(path.resolve(`${__dirname}/fixtures/tailwind-output.css`), 'utf8')
+      const expected = fs.readFileSync(
+        path.resolve(`${__dirname}/fixtures/tailwind-output.css`),
+        'utf8'
+      )
 
       expect(result.css).toBe(expected)
     })

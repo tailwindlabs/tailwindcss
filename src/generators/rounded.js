@@ -24,9 +24,12 @@ function sideVariants() {
 }
 
 module.exports = function({ borderRadius }) {
-  return _(borderRadius).map((radius, modifier) => {
-    return defineClass(modifier === 'default' ? 'rounded' : `rounded-${modifier}`, {
-      'border-radius': radius,
+  return _(borderRadius)
+    .map((radius, modifier) => {
+      return defineClass(modifier === 'default' ? 'rounded' : `rounded-${modifier}`, {
+        'border-radius': radius,
+      })
     })
-  }).concat(sideVariants()).value()
+    .concat(sideVariants())
+    .value()
 }

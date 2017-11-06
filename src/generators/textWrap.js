@@ -11,8 +11,8 @@ export default function() {
     'break-words': { 'word-wrap': 'break-word' },
     'break-normal': { 'word-wrap': 'normal' },
 
-    'truncate': {
-      'overflow': 'hidden',
+    truncate: {
+      overflow: 'hidden',
       'text-overflow': 'ellipsis',
       'white-space': 'nowrap',
     },

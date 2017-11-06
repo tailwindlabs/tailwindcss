@@ -8,10 +8,9 @@ function buildDistFile(filename) {
     console.log(`Processing ./css/${filename}.css...`)
 
     fs.readFile(`./css/${filename}.css`, (err, css) => {
-      return postcss([
-          tailwind(),
-          require('autoprefixer'),
-        ])
+      if (err) throw err
+
+      return postcss([tailwind(), require('autoprefixer')])
         .process(css, {
           from: `./css/${filename}.css`,
           to: `./dist/${filename}.css`,
@@ -46,4 +45,3 @@ Promise.all([
 ]).then(() => {
   console.log('Finished Building Tailwind!')
 })
-

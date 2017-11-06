@@ -1,6 +1,3 @@
-import postcss from 'postcss'
-import fs from 'fs'
-import _ from 'lodash'
 import c from '../src/util/collapseWhitespace'
 import defineClasses from '../src/util/defineClasses'
 
@@ -9,7 +6,7 @@ import defineClasses from '../src/util/defineClasses'
  */
 it('it generates a set of helper classes from a config', () => {
   let output = defineClasses({
-    'flex': {
+    flex: {
       display: 'flex',
     },
     'inline-flex': {
