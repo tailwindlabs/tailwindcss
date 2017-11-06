@@ -116,6 +116,8 @@ module.exports = {
 }
 ```
 
+For a complete example, check out our [webpack-starter](https://github.com/tailwindcss/webpack-starter) template.
+
 #### Gulp
 
 Add `tailwindcss` to the list of plugins you pass to [gulp-postcss](https://github.com/postcss/gulp-postcss), passing the path to your config file:
