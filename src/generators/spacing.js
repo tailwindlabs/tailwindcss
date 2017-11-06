@@ -119,7 +119,7 @@ export default function({ padding, margin, negativeMargin }) {
         'margin-bottom': 'auto',
       },
       'm-auto': {
-        'margin': 'auto',
+        margin: 'auto',
       },
     }),
     defineNegativeMargin(negativeMargin),

@@ -5,7 +5,7 @@ function run(input, opts = {}) {
   return postcss([plugin(() => opts)]).process(input)
 }
 
-test("it looks up values in the config using dot notation", () => {
+test('it looks up values in the config using dot notation', () => {
   const input = `
     .banana { color: config('colors.yellow'); }
   `
@@ -17,14 +17,14 @@ test("it looks up values in the config using dot notation", () => {
   return run(input, {
     colors: {
       yellow: '#f7cc50',
-    }
+    },
   }).then(result => {
     expect(result.css).toEqual(output)
     expect(result.warnings().length).toBe(0)
   })
 })
 
-test("quotes are optional around the lookup path", () => {
+test('quotes are optional around the lookup path', () => {
   const input = `
     .banana { color: config(colors.yellow); }
   `
@@ -36,14 +36,14 @@ test("quotes are optional around the lookup path", () => {
   return run(input, {
     colors: {
       yellow: '#f7cc50',
-    }
+    },
   }).then(result => {
     expect(result.css).toEqual(output)
     expect(result.warnings().length).toBe(0)
   })
 })
 
-test("a default value can be provided", () => {
+test('a default value can be provided', () => {
   const input = `
     .cookieMonster { color: config('colors.blue', #0000ff); }
   `
@@ -55,14 +55,14 @@ test("a default value can be provided", () => {
   return run(input, {
     colors: {
       yellow: '#f7cc50',
-    }
+    },
   }).then(result => {
     expect(result.css).toEqual(output)
     expect(result.warnings().length).toBe(0)
   })
 })
 
-test("quotes are preserved around default values", () => {
+test('quotes are preserved around default values', () => {
   const input = `
     .heading { font-family: config('fonts.sans', "Helvetica Neue"); }
   `
@@ -73,8 +73,8 @@ test("quotes are preserved around default values", () => {
 
   return run(input, {
     fonts: {
-      serif: "Constantia",
-    }
+      serif: 'Constantia',
+    },
   }).then(result => {
     expect(result.css).toEqual(output)
     expect(result.warnings().length).toBe(0)
