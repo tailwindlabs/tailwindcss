@@ -1,53 +1,28 @@
 import _ from 'lodash'
 import defineClasses from '../util/defineClasses'
 
-function defaultBorder(width, color) {
+function sizedBorder(width, modifier) {
+  modifier = modifier === 'default' ? '' : `-${modifier}`
+
   return defineClasses({
-    border: {
-      border: `${width} solid ${color}`,
+    [`border${modifier}`]: {
+      'border-width': `${width}`,
     },
-    'border-t': {
-      'border-top': `${width} solid ${color}`,
+    [`border-t${modifier}`]: {
+      'border-top-width': `${width}`,
     },
-    'border-r': {
-      'border-right': `${width} solid ${color}`,
+    [`border-r${modifier}`]: {
+      'border-right-width': `${width}`,
     },
-    'border-b': {
-      'border-bottom': `${width} solid ${color}`,
+    [`border-b${modifier}`]: {
+      'border-bottom-width': `${width}`,
     },
-    'border-l': {
-      'border-left': `${width} solid ${color}`,
+    [`border-l${modifier}`]: {
+      'border-left-width': `${width}`,
     },
   })
 }
 
-function sizedBorder(size, width, color) {
-  const style = width == 0 ? '0' : `${width} solid ${color}` // eslint-disable-line eqeqeq
-
-  return defineClasses({
-    [`border-${size}`]: {
-      border: `${style}`,
-    },
-    [`border-t-${size}`]: {
-      'border-top': `${style}`,
-    },
-    [`border-r-${size}`]: {
-      'border-right': `${style}`,
-    },
-    [`border-b-${size}`]: {
-      'border-bottom': `${style}`,
-    },
-    [`border-l-${size}`]: {
-      'border-left': `${style}`,
-    },
-  })
-}
-
-module.exports = function({ borderWidths, borderColors }) {
-  const color = borderColors.default
-
-  return _.flatten([
-    defaultBorder(borderWidths.default, color),
-    ..._.map(_.omit(borderWidths, 'default'), (width, size) => sizedBorder(size, width, color)),
-  ])
+module.exports = function({ borderWidths }) {
+  return _.flatMap(borderWidths, sizedBorder)
 }

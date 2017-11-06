@@ -528,6 +528,14 @@ iframe {
  * Tailwind custom reset styles
  */
 
+*,
+*::before,
+*::after {
+  border-width: 0;
+  border-style: solid;
+  border-color: config('borderColors.default', black);
+}
+
 textarea { resize: vertical; }
 
 img { max-width: 100%; }
