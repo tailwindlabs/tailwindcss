@@ -49,7 +49,7 @@ title: "Overflow"
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-y-scroll</td>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow-y: auto;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow horizontal scrolling if needed.</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow vertical scrolling if needed.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-scroll</td>
