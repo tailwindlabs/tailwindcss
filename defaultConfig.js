@@ -56,6 +56,16 @@ var colors = {
   'grey-lightest': '#fafcfc',
   'white': '#ffffff',
 
+  'black-10': 'rgba(0, 0, 0, 0.1)',
+  'black-20': 'rgba(0, 0, 0, 0.2)',
+  'black-30': 'rgba(0, 0, 0, 0.3)',
+  'black-40': 'rgba(0, 0, 0, 0.4)',
+  'black-50': 'rgba(0, 0, 0, 0.5)',
+  'black-60': 'rgba(0, 0, 0, 0.6)',
+  'black-70': 'rgba(0, 0, 0, 0.7)',
+  'black-80': 'rgba(0, 0, 0, 0.8)',
+  'black-90': 'rgba(0, 0, 0, 0.9)',
+
   'red-darkest': '#420806',
   'red-darker': '#6a1b19',
   'red-dark': '#cc1f1a',
