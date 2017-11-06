@@ -548,7 +548,8 @@ textarea {
   font-family: inherit;
 }
 
-input::placeholder {
+input::placeholder,
+textarea::placeholder {
   color: inherit;
   opacity: .5;
 }
