@@ -44,8 +44,8 @@ export default function(config) {
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'utilities') {
         const utilities = _.flatten([
-          forms(options),
           lists(options),
+          forms(options),
           textSizes(options),
           textWeights(options),
           textFonts(options),

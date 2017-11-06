@@ -586,6 +586,12 @@ button,
   }
 }
 
+.list-reset {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 .appearance-none {
   appearance: none;
 }
@@ -3534,18 +3540,18 @@ button,
   cursor: not-allowed;
 }
 
-.list-reset {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
 .example {
   font-weight: 700;
   color: #e3342f;
 }
 
 @media (min-width: 576px) {
+  .sm\:list-reset {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   .sm\:appearance-none {
     appearance: none;
   }
@@ -6494,12 +6500,6 @@ button,
     cursor: not-allowed;
   }
 
-  .sm\:list-reset {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
   .sm\:example {
     font-weight: 700;
     color: #e3342f;
@@ -6507,6 +6507,12 @@ button,
 }
 
 @media (min-width: 768px) {
+  .md\:list-reset {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   .md\:appearance-none {
     appearance: none;
   }
@@ -9455,12 +9461,6 @@ button,
     cursor: not-allowed;
   }
 
-  .md\:list-reset {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
   .md\:example {
     font-weight: 700;
     color: #e3342f;
@@ -9468,6 +9468,12 @@ button,
 }
 
 @media (min-width: 992px) {
+  .lg\:list-reset {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   .lg\:appearance-none {
     appearance: none;
   }
@@ -12416,12 +12422,6 @@ button,
     cursor: not-allowed;
   }
 
-  .lg\:list-reset {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
   .lg\:example {
     font-weight: 700;
     color: #e3342f;
@@ -12429,6 +12429,12 @@ button,
 }
 
 @media (min-width: 1200px) {
+  .xl\:list-reset {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   .xl\:appearance-none {
     appearance: none;
   }
@@ -15375,12 +15381,6 @@ button,
 
   .xl\:cursor-not-allowed {
     cursor: not-allowed;
-  }
-
-  .xl\:list-reset {
-    list-style: none;
-    margin: 0;
-    padding: 0;
   }
 
   .xl\:example {
