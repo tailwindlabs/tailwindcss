@@ -796,6 +796,51 @@ button,
   color: rgba(0, 0, 0, 0.9);
 }
 
+.text-white-10,
+.hover\:text-white-10:hover {
+  color: rgba(255, 255, 255, 0.1);
+}
+
+.text-white-20,
+.hover\:text-white-20:hover {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.text-white-30,
+.hover\:text-white-30:hover {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.text-white-40,
+.hover\:text-white-40:hover {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.text-white-50,
+.hover\:text-white-50:hover {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.text-white-60,
+.hover\:text-white-60:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.text-white-70,
+.hover\:text-white-70:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.text-white-80,
+.hover\:text-white-80:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.text-white-90,
+.hover\:text-white-90:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
 .text-red-darkest,
 .hover\:text-red-darkest:hover {
   color: #420806;
@@ -1365,6 +1410,51 @@ button,
   background-color: rgba(0, 0, 0, 0.9);
 }
 
+.bg-white-10,
+.hover\:bg-white-10:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.bg-white-20,
+.hover\:bg-white-20:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.bg-white-30,
+.hover\:bg-white-30:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.bg-white-40,
+.hover\:bg-white-40:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.bg-white-50,
+.hover\:bg-white-50:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.bg-white-60,
+.hover\:bg-white-60:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.bg-white-70,
+.hover\:bg-white-70:hover {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.bg-white-80,
+.hover\:bg-white-80:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.bg-white-90,
+.hover\:bg-white-90:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
 .bg-red-darkest,
 .hover\:bg-red-darkest:hover {
   background-color: #420806;
@@ -1925,6 +2015,51 @@ button,
 .border-black-90,
 .hover\:border-black-90:hover {
   border-color: rgba(0, 0, 0, 0.9);
+}
+
+.border-white-10,
+.hover\:border-white-10:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.border-white-20,
+.hover\:border-white-20:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.border-white-30,
+.hover\:border-white-30:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.border-white-40,
+.hover\:border-white-40:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.border-white-50,
+.hover\:border-white-50:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.border-white-60,
+.hover\:border-white-60:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.border-white-70,
+.hover\:border-white-70:hover {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.border-white-80,
+.hover\:border-white-80:hover {
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.border-white-90,
+.hover\:border-white-90:hover {
+  border-color: rgba(255, 255, 255, 0.9);
 }
 
 .border-red-darkest,
@@ -3902,6 +4037,51 @@ button,
     color: rgba(0, 0, 0, 0.9);
   }
 
+  .sm\:text-white-10,
+  .sm\:hover\:text-white-10:hover {
+    color: rgba(255, 255, 255, 0.1);
+  }
+
+  .sm\:text-white-20,
+  .sm\:hover\:text-white-20:hover {
+    color: rgba(255, 255, 255, 0.2);
+  }
+
+  .sm\:text-white-30,
+  .sm\:hover\:text-white-30:hover {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .sm\:text-white-40,
+  .sm\:hover\:text-white-40:hover {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .sm\:text-white-50,
+  .sm\:hover\:text-white-50:hover {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .sm\:text-white-60,
+  .sm\:hover\:text-white-60:hover {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .sm\:text-white-70,
+  .sm\:hover\:text-white-70:hover {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .sm\:text-white-80,
+  .sm\:hover\:text-white-80:hover {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .sm\:text-white-90,
+  .sm\:hover\:text-white-90:hover {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
   .sm\:text-red-darkest,
   .sm\:hover\:text-red-darkest:hover {
     color: #420806;
@@ -4471,6 +4651,51 @@ button,
     background-color: rgba(0, 0, 0, 0.9);
   }
 
+  .sm\:bg-white-10,
+  .sm\:hover\:bg-white-10:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .sm\:bg-white-20,
+  .sm\:hover\:bg-white-20:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .sm\:bg-white-30,
+  .sm\:hover\:bg-white-30:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .sm\:bg-white-40,
+  .sm\:hover\:bg-white-40:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .sm\:bg-white-50,
+  .sm\:hover\:bg-white-50:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .sm\:bg-white-60,
+  .sm\:hover\:bg-white-60:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .sm\:bg-white-70,
+  .sm\:hover\:bg-white-70:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+
+  .sm\:bg-white-80,
+  .sm\:hover\:bg-white-80:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .sm\:bg-white-90,
+  .sm\:hover\:bg-white-90:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
   .sm\:bg-red-darkest,
   .sm\:hover\:bg-red-darkest:hover {
     background-color: #420806;
@@ -5031,6 +5256,51 @@ button,
   .sm\:border-black-90,
   .sm\:hover\:border-black-90:hover {
     border-color: rgba(0, 0, 0, 0.9);
+  }
+
+  .sm\:border-white-10,
+  .sm\:hover\:border-white-10:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .sm\:border-white-20,
+  .sm\:hover\:border-white-20:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .sm\:border-white-30,
+  .sm\:hover\:border-white-30:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .sm\:border-white-40,
+  .sm\:hover\:border-white-40:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .sm\:border-white-50,
+  .sm\:hover\:border-white-50:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .sm\:border-white-60,
+  .sm\:hover\:border-white-60:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .sm\:border-white-70,
+  .sm\:hover\:border-white-70:hover {
+    border-color: rgba(255, 255, 255, 0.7);
+  }
+
+  .sm\:border-white-80,
+  .sm\:hover\:border-white-80:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .sm\:border-white-90,
+  .sm\:hover\:border-white-90:hover {
+    border-color: rgba(255, 255, 255, 0.9);
   }
 
   .sm\:border-red-darkest,
@@ -7009,6 +7279,51 @@ button,
     color: rgba(0, 0, 0, 0.9);
   }
 
+  .md\:text-white-10,
+  .md\:hover\:text-white-10:hover {
+    color: rgba(255, 255, 255, 0.1);
+  }
+
+  .md\:text-white-20,
+  .md\:hover\:text-white-20:hover {
+    color: rgba(255, 255, 255, 0.2);
+  }
+
+  .md\:text-white-30,
+  .md\:hover\:text-white-30:hover {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .md\:text-white-40,
+  .md\:hover\:text-white-40:hover {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .md\:text-white-50,
+  .md\:hover\:text-white-50:hover {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .md\:text-white-60,
+  .md\:hover\:text-white-60:hover {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .md\:text-white-70,
+  .md\:hover\:text-white-70:hover {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .md\:text-white-80,
+  .md\:hover\:text-white-80:hover {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .md\:text-white-90,
+  .md\:hover\:text-white-90:hover {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
   .md\:text-red-darkest,
   .md\:hover\:text-red-darkest:hover {
     color: #420806;
@@ -7578,6 +7893,51 @@ button,
     background-color: rgba(0, 0, 0, 0.9);
   }
 
+  .md\:bg-white-10,
+  .md\:hover\:bg-white-10:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .md\:bg-white-20,
+  .md\:hover\:bg-white-20:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .md\:bg-white-30,
+  .md\:hover\:bg-white-30:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .md\:bg-white-40,
+  .md\:hover\:bg-white-40:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .md\:bg-white-50,
+  .md\:hover\:bg-white-50:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .md\:bg-white-60,
+  .md\:hover\:bg-white-60:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .md\:bg-white-70,
+  .md\:hover\:bg-white-70:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+
+  .md\:bg-white-80,
+  .md\:hover\:bg-white-80:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .md\:bg-white-90,
+  .md\:hover\:bg-white-90:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
   .md\:bg-red-darkest,
   .md\:hover\:bg-red-darkest:hover {
     background-color: #420806;
@@ -8138,6 +8498,51 @@ button,
   .md\:border-black-90,
   .md\:hover\:border-black-90:hover {
     border-color: rgba(0, 0, 0, 0.9);
+  }
+
+  .md\:border-white-10,
+  .md\:hover\:border-white-10:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .md\:border-white-20,
+  .md\:hover\:border-white-20:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .md\:border-white-30,
+  .md\:hover\:border-white-30:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .md\:border-white-40,
+  .md\:hover\:border-white-40:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .md\:border-white-50,
+  .md\:hover\:border-white-50:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .md\:border-white-60,
+  .md\:hover\:border-white-60:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .md\:border-white-70,
+  .md\:hover\:border-white-70:hover {
+    border-color: rgba(255, 255, 255, 0.7);
+  }
+
+  .md\:border-white-80,
+  .md\:hover\:border-white-80:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .md\:border-white-90,
+  .md\:hover\:border-white-90:hover {
+    border-color: rgba(255, 255, 255, 0.9);
   }
 
   .md\:border-red-darkest,
@@ -10116,6 +10521,51 @@ button,
     color: rgba(0, 0, 0, 0.9);
   }
 
+  .lg\:text-white-10,
+  .lg\:hover\:text-white-10:hover {
+    color: rgba(255, 255, 255, 0.1);
+  }
+
+  .lg\:text-white-20,
+  .lg\:hover\:text-white-20:hover {
+    color: rgba(255, 255, 255, 0.2);
+  }
+
+  .lg\:text-white-30,
+  .lg\:hover\:text-white-30:hover {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .lg\:text-white-40,
+  .lg\:hover\:text-white-40:hover {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .lg\:text-white-50,
+  .lg\:hover\:text-white-50:hover {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .lg\:text-white-60,
+  .lg\:hover\:text-white-60:hover {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .lg\:text-white-70,
+  .lg\:hover\:text-white-70:hover {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .lg\:text-white-80,
+  .lg\:hover\:text-white-80:hover {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .lg\:text-white-90,
+  .lg\:hover\:text-white-90:hover {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
   .lg\:text-red-darkest,
   .lg\:hover\:text-red-darkest:hover {
     color: #420806;
@@ -10685,6 +11135,51 @@ button,
     background-color: rgba(0, 0, 0, 0.9);
   }
 
+  .lg\:bg-white-10,
+  .lg\:hover\:bg-white-10:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .lg\:bg-white-20,
+  .lg\:hover\:bg-white-20:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .lg\:bg-white-30,
+  .lg\:hover\:bg-white-30:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .lg\:bg-white-40,
+  .lg\:hover\:bg-white-40:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .lg\:bg-white-50,
+  .lg\:hover\:bg-white-50:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .lg\:bg-white-60,
+  .lg\:hover\:bg-white-60:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .lg\:bg-white-70,
+  .lg\:hover\:bg-white-70:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+
+  .lg\:bg-white-80,
+  .lg\:hover\:bg-white-80:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .lg\:bg-white-90,
+  .lg\:hover\:bg-white-90:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
   .lg\:bg-red-darkest,
   .lg\:hover\:bg-red-darkest:hover {
     background-color: #420806;
@@ -11245,6 +11740,51 @@ button,
   .lg\:border-black-90,
   .lg\:hover\:border-black-90:hover {
     border-color: rgba(0, 0, 0, 0.9);
+  }
+
+  .lg\:border-white-10,
+  .lg\:hover\:border-white-10:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .lg\:border-white-20,
+  .lg\:hover\:border-white-20:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .lg\:border-white-30,
+  .lg\:hover\:border-white-30:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .lg\:border-white-40,
+  .lg\:hover\:border-white-40:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .lg\:border-white-50,
+  .lg\:hover\:border-white-50:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .lg\:border-white-60,
+  .lg\:hover\:border-white-60:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .lg\:border-white-70,
+  .lg\:hover\:border-white-70:hover {
+    border-color: rgba(255, 255, 255, 0.7);
+  }
+
+  .lg\:border-white-80,
+  .lg\:hover\:border-white-80:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .lg\:border-white-90,
+  .lg\:hover\:border-white-90:hover {
+    border-color: rgba(255, 255, 255, 0.9);
   }
 
   .lg\:border-red-darkest,
@@ -13223,6 +13763,51 @@ button,
     color: rgba(0, 0, 0, 0.9);
   }
 
+  .xl\:text-white-10,
+  .xl\:hover\:text-white-10:hover {
+    color: rgba(255, 255, 255, 0.1);
+  }
+
+  .xl\:text-white-20,
+  .xl\:hover\:text-white-20:hover {
+    color: rgba(255, 255, 255, 0.2);
+  }
+
+  .xl\:text-white-30,
+  .xl\:hover\:text-white-30:hover {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .xl\:text-white-40,
+  .xl\:hover\:text-white-40:hover {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .xl\:text-white-50,
+  .xl\:hover\:text-white-50:hover {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .xl\:text-white-60,
+  .xl\:hover\:text-white-60:hover {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .xl\:text-white-70,
+  .xl\:hover\:text-white-70:hover {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .xl\:text-white-80,
+  .xl\:hover\:text-white-80:hover {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .xl\:text-white-90,
+  .xl\:hover\:text-white-90:hover {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
   .xl\:text-red-darkest,
   .xl\:hover\:text-red-darkest:hover {
     color: #420806;
@@ -13792,6 +14377,51 @@ button,
     background-color: rgba(0, 0, 0, 0.9);
   }
 
+  .xl\:bg-white-10,
+  .xl\:hover\:bg-white-10:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .xl\:bg-white-20,
+  .xl\:hover\:bg-white-20:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .xl\:bg-white-30,
+  .xl\:hover\:bg-white-30:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .xl\:bg-white-40,
+  .xl\:hover\:bg-white-40:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .xl\:bg-white-50,
+  .xl\:hover\:bg-white-50:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .xl\:bg-white-60,
+  .xl\:hover\:bg-white-60:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .xl\:bg-white-70,
+  .xl\:hover\:bg-white-70:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+
+  .xl\:bg-white-80,
+  .xl\:hover\:bg-white-80:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .xl\:bg-white-90,
+  .xl\:hover\:bg-white-90:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
   .xl\:bg-red-darkest,
   .xl\:hover\:bg-red-darkest:hover {
     background-color: #420806;
@@ -14352,6 +14982,51 @@ button,
   .xl\:border-black-90,
   .xl\:hover\:border-black-90:hover {
     border-color: rgba(0, 0, 0, 0.9);
+  }
+
+  .xl\:border-white-10,
+  .xl\:hover\:border-white-10:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .xl\:border-white-20,
+  .xl\:hover\:border-white-20:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .xl\:border-white-30,
+  .xl\:hover\:border-white-30:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .xl\:border-white-40,
+  .xl\:hover\:border-white-40:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .xl\:border-white-50,
+  .xl\:hover\:border-white-50:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .xl\:border-white-60,
+  .xl\:hover\:border-white-60:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .xl\:border-white-70,
+  .xl\:hover\:border-white-70:hover {
+    border-color: rgba(255, 255, 255, 0.7);
+  }
+
+  .xl\:border-white-80,
+  .xl\:hover\:border-white-80:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .xl\:border-white-90,
+  .xl\:hover\:border-white-90:hover {
+    border-color: rgba(255, 255, 255, 0.9);
   }
 
   .xl\:border-red-darkest,
