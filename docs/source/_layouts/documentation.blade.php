@@ -5,7 +5,7 @@
 
 @section('body')
 <div class="min-h-screen">
-    <div class="border-b border-smoke flex-none px-8 py-6 w-14/5 md:w-full md:max-w-xs fixed border-smoke bg-smoke-light border-r-2 z-50">
+    <div class="hidden border-b border-smoke flex-none px-8 py-6 w-4/5 md:w-full md:max-w-xs flex-none border-r-2 border-smoke md:flex flex-col fixed border-smoke bg-smoke-light border-r-2 z-50">
         <div class="mb-4">
             <div class="hidden md:flex md:justify-center">
                 <a href="/" class="flex justify-center">
@@ -23,6 +23,7 @@
             </div>
         </div>
     </div>
+
     <div id="sidebar" class="hidden z-40 fixed pin-y pin-l overflow-y-scroll scrolling-touch bg-smoke-light w-4/5 md:w-full md:max-w-xs flex-none border-r-2 border-smoke md:flex flex-col">
         <div class="p-8 flex-1 overflow-y-scroll">
             <nav id="nav" class="text-base overflow-y-scroll">
@@ -176,6 +177,12 @@
                     <div class="flex items-center absolute pin-r pin-y px-4">
                       <svg class="w-4 h-4 cursor-pointer text-grey" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"/></svg>
                     </div>
+                  </div>
+                  <div id="search-mobile" class="absolute pin-r pin-y px-4 flex items-center relative">
+                      <input type="text" id="searchbox-mobile" class="rounded bg-white border border-smoke py-2 pr-4 pl-10 block w-full opacity-75 ds-input">
+                      <div class="pointer-events-none absolute pin-y pin-l pl-8 flex items-center opacity-75">
+                        <svg class="pointer-events-none text-slate w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></svg>
+                      </div>
                   </div>
             </div>
         </div>

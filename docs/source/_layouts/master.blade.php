@@ -28,11 +28,17 @@
         <script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
         <script type="text/javascript">
             docsearch({
-              // appId: 'FMDGKF8GP7',
               apiKey: '3df93446658cd9c4e314d4c02a052188',
               indexName: 'tailwindcss',
-              inputSelector: '#searchbox',
-              debug: true // Set debug to true if you want to inspect the dropdown
+              inputSelector: '#searchbox'
+            });
+
+            // For mobile ( will be fixed soon, see : https://github.com/algolia/docsearch/issues/230 )
+            docsearch({
+              apiKey: '3df93446658cd9c4e314d4c02a052188',
+              indexName: 'tailwindcss',
+              inputSelector: '#searchbox-mobile',
+              debug: true
             });
         </script>
         <script>
