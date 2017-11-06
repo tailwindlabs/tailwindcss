@@ -45,6 +45,7 @@ export default function(config) {
       if (atRule.params === 'utilities') {
         const utilities = _.flatten([
           forms(options),
+          lists(options),
           textSizes(options),
           textWeights(options),
           textFonts(options),
@@ -78,7 +79,6 @@ export default function(config) {
           pointerEvents(options),
           resize(options),
           cursor(options),
-          lists(options),
         ])
 
         atRule.before(container(options))
