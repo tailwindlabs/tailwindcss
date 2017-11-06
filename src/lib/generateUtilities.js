@@ -3,7 +3,6 @@ import backgroundColors from '../generators/backgroundColors'
 import backgroundPositions from '../generators/backgroundPositions'
 import backgroundSize from '../generators/backgroundSize'
 import borderColors from '../generators/borderColors'
-import borderStylesReset from '../generators/borderStylesReset'
 import borderStyles from '../generators/borderStyles'
 import borderWidths from '../generators/borderWidths'
 import container from '../generators/container'
@@ -59,7 +58,6 @@ export default function(config) {
           backgroundColors(options),
           backgroundPositions(options),
           backgroundSize(options),
-          borderStylesReset(options),
           borderWidths(options),
           borderColors(options),
           borderStyles(options),
