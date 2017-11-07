@@ -17,9 +17,26 @@ function defineRotations(rotations) {
   })
 }
 
-export default function({ rotations }) {
+function defineScales(scales) {
+  return _.flatMap(scales, (size, modifier) => {
+    return defineClasses({
+      [`scale-${modifier}`]: {
+        transform: `scale(${size}, ${size})`,
+      },
+      [`scale-x-${modifier}`]: {
+        transform: `scaleX(${size})`,
+      },
+      [`scale-y-${modifier}`]: {
+        transform: `scaleY(${size})`,
+      },
+    })
+  })
+}
+
+export default function({ rotations, scales }) {
   return _.flatten([
     defineRotations(rotations),
+    defineScales(scales),
     defineClasses({
       'rotate-x': {
         transform: 'rotateY(180deg)',
