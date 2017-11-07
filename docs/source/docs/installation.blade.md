@@ -116,6 +116,8 @@ module.exports = {
 }
 ```
 
+For a complete example, check out our [webpack-starter](https://github.com/tailwindcss/webpack-starter) template.
+
 #### Gulp
 
 Add `tailwindcss` to the list of plugins you pass to [gulp-postcss](https://github.com/postcss/gulp-postcss), passing the path to your config file:
@@ -155,12 +157,12 @@ If you're using a preprocessor, use the `options` method to add `tailwindcss` as
 ```js
 var tailwindcss = require('tailwindcss');
 
-mix.less('source/_assets/less/main.less', 'source/css')
+mix.less('resources/assets/less/app.less', 'public/css')
   .options({
     postCss: [
       tailwindcss('./path/to/your/tailwind-config.js'),
     ]
-  })
+  });
 ```
 
 **Note for Sass users:** Due to [an unresolved issue](https://github.com/bholloway/resolve-url-loader/issues/28) with one of Mix's dependencies, to use Sass with Tailwind you'll need to disable `processCssUrls`:
@@ -169,10 +171,10 @@ mix.less('source/_assets/less/main.less', 'source/css')
 var tailwindcss = require('tailwindcss');
 
 mix.sass('resources/assets/sass/app.scss', 'public/css')
-   .options({
-      processCssUrls: false,
-      postCss: [ tailwindcss('path/to/config.js') ],
-   });
+  .options({
+    processCssUrls: false,
+      postCss: [ tailwindcss('./path/to/your/tailwind-config.js') ],
+  });
 ```
 
 For more information on what this feature does and the implications of disabling it, [see the Laravel Mix documentation](https://github.com/JeffreyWay/laravel-mix/blob/master/docs/css-preprocessors.md#css-url-rewriting).
