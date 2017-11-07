@@ -132,11 +132,11 @@ title: "Forms"
             <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4" id="grid-city" type="text" placeholder="Albuquerque">
         </div>
         <div class="md:w-1/2 px-3">
-            <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-select">
+            <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-state">
                 State
             </label>
             <div class="relative">
-                <select class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
+                <select class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded" id="grid-state">
                     <option>New Mexico</option>
                     <option>Missouri</option>
                     <option>Texas</option>
@@ -162,7 +162,7 @@ title: "Forms"
 @component('_partials.code-sample', ['class' => 'flex justify-center p-8'])
 <form class="w-full max-w-sm">
     <div class="flex items-center border-b border-b-2 border-teal py-2">
-        <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2" id="underline-full-name" type="text" placeholder="Jane Doe">
+        <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2" type="text" placeholder="Jane Doe" aria-label="Full name">
         <button class="flex-no-shrink bg-teal hover:bg-teal-dark border-teal hover:border-teal-dark text-sm border-4 text-white py-1 px-2 rounded" type="button">
             Sign Up
         </button>
