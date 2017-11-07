@@ -6,12 +6,10 @@ export default function(configFile) {
   }
 
   return function(css, opts) {
-    opts.messages = [
-      {
-        type: 'dependency',
-        file: configFile,
-        parent: css.source.input.file,
-      },
-    ]
+    opts.messages.push({
+      type: 'dependency',
+      file: configFile,
+      parent: css.source.input.file,
+    })
   }
 }
