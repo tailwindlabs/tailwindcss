@@ -23,7 +23,7 @@ title: "Cards"
 
 @component('_partials.code-sample', ['class' => 'p-10 flex justify-center'])
 <div class="max-w-sm rounded overflow-hidden shadow-lg">
-    <img class="w-full" src="{{ $page->baseUrl }}/img/card-top.jpg">
+    <img class="w-full" src="{{ $page->baseUrl }}/img/card-top.jpg" alt="Sunset in the mountains">
     <div class="px-6 py-4">
         <div class="font-bold text-xl mb-2">The Coldest Sunset</div>
         <p class="text-grey-darker text-base">
@@ -43,7 +43,7 @@ title: "Cards"
 @component('_partials.code-sample', ['class' => 'p-10 flex justify-center'])
 <div class="max-w-md flex">
     <div class="rounded rounded-l w-128 text-center overflow-hidden">
-        <img class="block h-64" src="{{ $page->baseUrl }}/img/card-left.jpg">
+        <img class="block h-64" src="{{ $page->baseUrl }}/img/card-left.jpg" alt="Woman holding a mug">
     </div>
     <div class="border-t border-r border-b border-grey-light rounded rounded-r p-4 flex flex-col justify-between">
         <div>
@@ -55,7 +55,7 @@ title: "Cards"
             <p class="text-grey-darker text-base">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.</p>
         </div>
         <div class="flex items-center">
-            <img class="w-10 h-10 rounded-full mr-4" src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg">
+            <img class="w-10 h-10 rounded-full mr-4" src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg" alt="Avatar of Jonathan Reinink">
             <div class="text-sm">
                 <p class="text-black leading-none">Jonathan Reinink</p>
                 <p class="text-grey-dark">Aug 18</p>
