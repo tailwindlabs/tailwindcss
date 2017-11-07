@@ -13,7 +13,7 @@ title: "Installation"
 
 Before getting started please note, **many of the features that make Tailwind CSS great are not available using the CDN builds.** To take full advantage of Tailwind's features, [install Tailwind via npm](#npm).
 
-For pulling in Tailwind for quick demos or just giving the framework a spin, grab the latest default configuration build via CDN:
+To pull in Tailwind for quick demos or just giving the framework a spin, grab the latest default configuration build via CDN:
 
 ```html
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
