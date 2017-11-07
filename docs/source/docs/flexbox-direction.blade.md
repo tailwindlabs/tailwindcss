@@ -1,8 +1,13 @@
 ---
 extends: _layouts.documentation
-title: "Flex Direction"
-description: "Utilities for controlling the direction of flex items."
+title: "Flex Direction - Flexbox"
 ---
+
+# Flex Direction
+
+<div class="text-xl text-slate-light mb-4">
+    Utilities for controlling the direction of flex items.
+</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

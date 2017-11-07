@@ -1,8 +1,9 @@
 ---
 extends: _layouts.documentation
 title: "Adding New Utilities"
-description: null
 ---
+
+# Adding New Utilities
 
 Although Tailwind provides a pretty comprehensive set of utility classes out of the box, you're inevitably going to run into situations where you need to add a few of your own.
 

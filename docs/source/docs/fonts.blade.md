@@ -1,8 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "Font Families"
-description: "Utilities for controlling the font family of an element."
 ---
+
+# Font Families
+
+<div class="text-xl text-slate-light mb-4">
+    Utilities for controlling the font family of an element.
+</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

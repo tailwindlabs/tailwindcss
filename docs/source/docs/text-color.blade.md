@@ -1,8 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "Text Color"
-description: "Utilities for controlling the text color of an element."
 ---
+
+# Text Color
+
+<div class="text-xl text-slate-light mb-4">
+    Utilities for controlling the text color of an element.
+</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

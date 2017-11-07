@@ -1,8 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "Opacity"
-description: "Utilities for controlling the opacity of an element."
 ---
+
+# Opacity
+
+<div class="text-xl text-slate-light mb-4">
+    Utilities for controlling the opacity of an element.
+</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

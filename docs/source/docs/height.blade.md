@@ -1,8 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "Height"
-description: "Utilities for setting the height of an element"
 ---
+
+# Height
+
+<div class="text-xl text-slate-light mb-4">
+    Utilities for setting the height of an element
+</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

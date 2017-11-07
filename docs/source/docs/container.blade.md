@@ -1,8 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "Container"
-description: "A component for fixing an element's width to the current breakpoint."
 ---
+
+# Container
+
+<div class="text-xl text-slate-light mb-4">
+    A component for fixing an element's width to the current breakpoint.
+</div>
 
 @include('_partials.work-in-progress')
 

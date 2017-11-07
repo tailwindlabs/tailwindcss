@@ -1,8 +1,13 @@
 ---
 extends: _layouts.documentation
-title: "Flex Display"
-description: "Utilities for creating flex containers."
+title: "Flex Display – Flexbox"
 ---
+
+# Flex Display
+
+<div class="text-xl text-slate-light mb-4">
+    Utilities for creating flex containers.
+</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

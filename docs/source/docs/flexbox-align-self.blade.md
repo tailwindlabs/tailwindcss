@@ -1,8 +1,13 @@
 ---
 extends: _layouts.documentation
-title: "Align Self"
-description: "Utilities for controlling how an individual flex item is positioned along its container's cross axis."
+title: "Align Items - Flexbox"
 ---
+
+# Align Self
+
+<div class="text-xl text-slate-light mb-4">
+    Utilities for controlling how an individual flex item is positioned along its container's cross axis.
+</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

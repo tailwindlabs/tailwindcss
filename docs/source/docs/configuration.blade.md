@@ -1,8 +1,9 @@
 ---
 extends: _layouts.documentation
 title: "Configuration"
-description: null
 ---
+
+# Configuration
 
 Tailwind's defining feature is its ability to be customized. We understand that no two projects are the same, so why should the CSS framework you use be? Tailwind provides developers with a helpful set of front-end conventions, while still leaving room for adjustments where appropriate. This is all done using the Tailwind config file.
 

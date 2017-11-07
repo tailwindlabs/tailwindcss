@@ -1,8 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "Z-Index"
-description: "Utilities for controlling the stack order of an element."
 ---
+
+# Z-Index
+
+<div class="text-xl text-slate-light mb-4">
+    Utilities for controlling the stack order of an element.
+</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,
