@@ -755,6 +755,51 @@ module.exports = {
 
   /*
   |-----------------------------------------------------------------------------
+  | Rotations                             https://tailwindcss.com/docs/rotations
+  |-----------------------------------------------------------------------------
+  |
+  | Here is where you define your rotation utility values. By default we
+  | provide a sensible degree scale. You can, of course, modify these
+  | values as needed.
+  |
+  | Class name: .rotate-{side}-{degree?}
+  |
+  */
+
+  rotations: {
+    '0': '0deg',
+    '45': '45deg',
+    '90': '90deg',
+    '180': '180deg',
+  },
+
+
+  /*
+  |-----------------------------------------------------------------------------
+  | Scales                                   https://tailwindcss.com/docs/scales
+  |-----------------------------------------------------------------------------
+  |
+  | Here is where you define your scaling utility values. By default we
+  | provide a sensible decimal scale. You can, of course, modify these
+  | values as needed.
+  |
+  | Class name: .scale-{side?}-{decimal}
+  |
+  */
+
+  scales: {
+    '0': '0',
+    '1/4': '0.25',
+    '1/3': '0.33',
+    '1/2': '0.5',
+    '2/3': '0.66',
+    '3/4': '0.75',
+    '1': '1',
+  },
+
+
+  /*
+  |-----------------------------------------------------------------------------
   | Packages
   |-----------------------------------------------------------------------------
   |

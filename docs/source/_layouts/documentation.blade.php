@@ -147,6 +147,8 @@
                                 <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/whitespace-and-wrapping" class="hover:underline {{ $page->active('/docs/whitespace-and-wrapping') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Whitespace &amp; Wrapping</a></li>
                             </ul>
                         </li>
+                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/rotations" class="hover:underline {{ $page->active('/docs/rotations') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Rotations</a></li>
+                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/scaling" class="hover:underline {{ $page->active('/docs/scaling') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Scaling</a></li>
                         <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/vertical-alignment" class="hover:underline {{ $page->active('/docs/vertical-alignment') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Vertical Alignment</a></li>
                         <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/visibility" class="hover:underline {{ $page->active('/docs/visibility') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Visibility</a></li>
                         <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/z-index" class="hover:underline {{ $page->active('/docs/z-index') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Z-Index</a></li>
