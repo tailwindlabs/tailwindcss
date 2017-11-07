@@ -50,3 +50,12 @@ test('it fails if the class does not exist', () => {
     expect(error.reason).toEqual('No .a class found.')
   })
 })
+
+test('it ignores !important', () => {
+  const output = '.a { color: red !important; } .b { color: red; }'
+
+  return run('.a { color: red !important; } .b { @apply .a; }').then(result => {
+    expect(result.css).toEqual(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
