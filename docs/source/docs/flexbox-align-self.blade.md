@@ -1,6 +1,6 @@
 ---
 extends: _layouts.documentation
-title: "Align Items"
+title: "Align Self"
 description: "Utilities for controlling how an individual flex item is positioned along its container's cross axis."
 ---
 
