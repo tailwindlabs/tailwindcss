@@ -1,17 +1,10 @@
 ---
 extends: _layouts.documentation
 title: "SVG"
+description: "Utilities for styling SVG elements."
 ---
 
-# SVG
-
-<div class="text-xl text-slate-light mb-4">
-    Useful utilities for styling SVG elements.
-</div>
-
-<div class="mb-8">
-    @include('_partials.work-in-progress')
-</div>
+@include('_partials.work-in-progress')
 
 Tailwind doesn't provide SVG-specific utilites. Instead, use the generic sizing utilites to control an SVG's width and height, and the text color utilities to control an SVG's fill color.
 

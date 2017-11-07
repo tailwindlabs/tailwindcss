@@ -1,13 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Resize"
+description: "Utilities for controlling the how a textarea can be resized."
 ---
-
-# Resize
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling the how a textarea can be resized.
-</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

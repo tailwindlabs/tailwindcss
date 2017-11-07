@@ -1,13 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Installation"
+description: "Quick start guide for installing and configuring Tailwind CSS."
 ---
-
-# Installation
-
-<div class="text-xl text-slate-light mb-4">
-    Quick start guide for installing and configuring Tailwind CSS.
-</div>
 
 ## CDN
 
@@ -28,7 +23,6 @@ Or if you'd like to pull in the base styles separate from the utility classes:
 
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/utilities.min.css" rel="stylesheet">
 ```
-
 
 ## NPM
 

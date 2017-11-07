@@ -1,13 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Background Position"
+description: "Utilities for controlling the position of an element's background image."
 ---
-
-# Background Position
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling the position of an element's background image.
-</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,
