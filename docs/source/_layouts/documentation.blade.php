@@ -20,7 +20,7 @@
                     </a>
                 </div>
                 <p class="text-center">
-                    <a href="https://github.com/tailwindcss/tailwindcss" class="text-sm hover:text-grey-dark text-grey font-semibold">v{{ $page->version }}</a>
+                    <a href="https://github.com/tailwindcss/tailwindcss/releases" class="text-sm hover:text-grey-dark text-grey font-semibold">v{{ $page->version }}</a>
                 </p>
             </div>
             <div class="relative opacity-75">
