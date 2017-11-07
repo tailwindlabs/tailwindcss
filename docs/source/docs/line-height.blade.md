@@ -1,13 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Line Height"
+description: "Utilities for controlling the leading (line height) of an element."
 ---
-
-# Line Height
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling the leading (line height) of an element.
-</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

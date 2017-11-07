@@ -1,13 +1,8 @@
 ---
 extends: _layouts.documentation
-title: "Flex Wrapping - Flexbox"
+title: "Flex Wrapping"
+description: "Utilities for controlling how flex items wrap."
 ---
-
-# Flex Wrapping
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling how flex items wrap.
-</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

@@ -1,13 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Positioning"
+descriptioj: "Utilities for controlling how an element is positioned in the DOM."
 ---
-
-# Positioning
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling how an element is positioned in the DOM.
-</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

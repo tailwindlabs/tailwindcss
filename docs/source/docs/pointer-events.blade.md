@@ -1,13 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Pointer Events"
+description: "Utilities for controlling whether an element responds to pointer events."
 ---
-
-# Pointer Events
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling whether an element responds to pointer events.
-</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

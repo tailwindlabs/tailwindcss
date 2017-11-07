@@ -1,14 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Visibility"
+description: "Utilities for controlling the visible of an element."
 ---
-
-# Visibility
-
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling the visible of an element.
-</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,
