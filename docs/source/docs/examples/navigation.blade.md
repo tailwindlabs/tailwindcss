@@ -22,7 +22,7 @@ title: "Navigation"
 ## Simple
 
 @component('_partials.code-sample')
-<ul class="flex">
+<ul class="list-reset flex">
     <li class="mr-6">
         <a class="text-blue hover:text-blue-darker" href="#">Active</a>
     </li>
@@ -73,7 +73,7 @@ title: "Navigation"
 ## Tabs
 
 @component('_partials.code-sample')
-<ul class="flex border-b">
+<ul class="list-reset flex border-b">
     <li class="-mb-px mr-1">
         <a class="bg-white inline-block border-l border-t border-r rounded rounded-t py-2 px-4 text-blue-dark font-semibold" href="#">Active</a>
     </li>
@@ -92,7 +92,7 @@ title: "Navigation"
 ## Pills
 
 @component('_partials.code-sample')
-<ul class="flex">
+<ul class="list-reset flex">
     <li class="mr-3">
         <a class="inline-block border border-blue rounded py-1 px-3 bg-blue text-white" href="#">Active Pill</a>
     </li>
@@ -108,7 +108,7 @@ title: "Navigation"
 ## Stretched
 
 @component('_partials.code-sample')
-<ul class="flex">
+<ul class="list-reset flex">
     <li class="flex-1 mr-2">
         <a class="text-center block border border-blue rounded py-2 px-4 bg-blue hover:bg-blue-dark text-white" href="#">Active Item</a>
     </li>
@@ -124,7 +124,7 @@ title: "Navigation"
 ## Justified
 
 @component('_partials.code-sample')
-<ul class="flex justify-between">
+<ul class="list-reset flex justify-between">
     <li class="mr-3">
         <a class="inline-block border border-blue rounded py-2 px-4 bg-blue hover:bg-blue-dark text-white" href="#">Active Pill</a>
     </li>
