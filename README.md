@@ -7,3 +7,7 @@ A utility-first CSS framework for rapidly building custom user interfaces.
 ## Documentation
 
 For full documentation, visit: https://tailwindcss.com/
+
+## Contributing
+
+If you are interested in contributing to Tailwind, please take a moment to read our [contributing docs](https://github.com/tailwindcss/tailwindcss/blob/master/.github/CONTRIBUTING.md) **before submitting a pull request**.
