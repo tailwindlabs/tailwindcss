@@ -1,13 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Vertical Alignment"
+description: "Utilities for controlling the vertical alignment of an inline or table-cell box."
 ---
-
-# Vertical Alignment
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling the vertical alignment of an inline or table-cell box.
-</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

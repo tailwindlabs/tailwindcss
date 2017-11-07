@@ -1,13 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Width"
+description: "Utilities for setting the width of an element"
 ---
-
-# Width
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for setting the width of an element
-</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

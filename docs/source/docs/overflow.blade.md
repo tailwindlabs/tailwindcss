@@ -1,13 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Overflow"
+description: "Utilities for controlling how an element handles content that is too large for the container."
 ---
-
-# Overflow
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling how an element handles content that is too large for the container.
-</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

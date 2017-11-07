@@ -1,9 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Flexbox"
+description: null
 ---
-
-# Flexbox
 
 <div class="subnav">
     <a class="subnav-link" href="#usage">Usage</a>

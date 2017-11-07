@@ -1,13 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Background Size"
+description: "Utilities for controlling the background size of an element's background image."
 ---
-
-# Background Size
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling the background size of an element's background image.
-</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,
