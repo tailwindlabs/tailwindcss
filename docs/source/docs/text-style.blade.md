@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Style & Decoration"
 description: "Utilities for controlling the style of text."
+features:
+  responsive: true
+  customizable: true
+  hover: true
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => true,
-    'hover' => true,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

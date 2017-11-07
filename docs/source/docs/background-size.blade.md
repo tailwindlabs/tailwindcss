@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Background Size"
 description: "Utilities for controlling the background size of an element's background image."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => false,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

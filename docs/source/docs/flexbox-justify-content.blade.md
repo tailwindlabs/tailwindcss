@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Justify Content"
 description: "Utilities for controlling flex items are positioned along a container's main axis."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => false,
-    'hover' => false,
-    'focus' => false
-])
 
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">

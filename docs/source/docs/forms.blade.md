@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Forms"
 description: "Utilities for styling form controls."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => false,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

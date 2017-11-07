@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Overflow"
 description: "Utilities for controlling how an element handles content that is too large for the container."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => false,
-    'hover' => false,
-    'focus' => false
-])
 
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left overflow-x-scroll block" style="border-collapse: collapse;">

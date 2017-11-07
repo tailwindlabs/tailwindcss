@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Text Alignment"
 description: "Utilities for controlling the alignment of text."
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => true,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

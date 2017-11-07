@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Whitespace & Wrapping"
 description: "Utilities for controlling the whitespace and wrapping of an element."
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => true,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

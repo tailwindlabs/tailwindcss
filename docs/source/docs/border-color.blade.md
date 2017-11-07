@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Border Color"
 description: "Utilities for controlling the color of an element's borders."
+features:
+  responsive: true
+  customizable: true
+  hover: true
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => true,
-    'hover' => true,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

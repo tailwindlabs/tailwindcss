@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Max-Height"
 description: "Utilities for setting the maximum height of an element"
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => true,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

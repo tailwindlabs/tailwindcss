@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Text Color"
 description: "Utilities for controlling the text color of an element."
+features:
+  responsive: true
+  customizable: true
+  hover: true
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => true,
-    'hover' => true,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 
