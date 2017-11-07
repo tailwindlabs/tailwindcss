@@ -1,6 +1,12 @@
 @extends('_layouts.master')
 
 @section('meta')
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@tailwindcss">
+<meta name="twitter:title" content="{{ $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS - A Utility-First CSS Framework for Rapid UI Development' }}">
+<meta name="twitter:description" content="Documentation for the Tailwind CSS framework.">
+<meta name="twitter:image" content="https://tailwindcss.com/img/tailwind-square.png">
+<meta name="twitter:creator" content="@tailwindcss">
 @endsection
 
 @section('body')
