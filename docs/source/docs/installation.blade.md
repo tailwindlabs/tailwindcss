@@ -79,7 +79,7 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
  *
  * Or if using a preprocessor..
  * 
- * @@import "utilities/backgrond-patterns";
+ * @@import "utilities/background-patterns";
  * @@import "utilities/skew-transforms";
  */
 ```
