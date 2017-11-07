@@ -1,13 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Text Alignment"
+description: "Utilities for controlling the alignment of text."
 ---
-
-# Text Alignment
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling the alignment of text.
-</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

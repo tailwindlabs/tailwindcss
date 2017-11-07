@@ -1,9 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Responsive Design"
+description: null
 ---
-
-# Responsive Design
 
 Tailwind allows you to build responsive designs in the same way you build the rest of your design &mdash; using utility classes. Every utility in Tailwind is also available in screen-size specific variations. For example, the `.font-bold` utility can be used on small screen sizes using the `.sm:font-bold` class, on medium screen sizes using the `.md:font-bold` class, on large screen sizes using the `.lg:font-bold` class and on extra large screen sizes using the `.xl:font-bold` class.
 

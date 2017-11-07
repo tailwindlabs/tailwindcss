@@ -1,13 +1,8 @@
 ---
 extends: _layouts.documentation
-title: "Align Content - Flexbox"
+title: "Align Content"
+description: "Utilities for controlling how lines are positioned in multi-line flex containers."
 ---
-
-# Align Content
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling how lines are positioned in multi-line flex containers.
-</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

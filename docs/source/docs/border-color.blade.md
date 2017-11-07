@@ -1,13 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Border Color"
+description: "Utilities for controlling the color of an element's borders."
 ---
-
-# Border Color
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling the color of an element's borders.
-</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,
