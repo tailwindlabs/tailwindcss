@@ -190,6 +190,14 @@
         <div id="content" class="px-6 pb-8 pt-20 md:pt-16 w-full max-w-lg mx-auto">
             <div id="app" v-cloak>
                 <div class="markdown">
+                    <h1>{{ $page->title }}</h1>
+
+                    @if($page->description)
+                    <div class="text-xl text-slate-light mb-4">
+                        {{ $page->description }}
+                    </div>
+                    @endif
+
                     @yield('content')
                 </div>
             </div>
