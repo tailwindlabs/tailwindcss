@@ -6,6 +6,7 @@ export default function() {
     fixed: { position: 'fixed' },
     absolute: { position: 'absolute' },
     relative: { position: 'relative' },
+    sticky: { position: 'sticky' },
     'pin-t': { top: 0 },
     'pin-r': { right: 0 },
     'pin-b': { bottom: 0 },

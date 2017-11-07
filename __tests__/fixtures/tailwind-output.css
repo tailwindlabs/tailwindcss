@@ -2192,6 +2192,10 @@ button,
   position: relative;
 }
 
+.sticky {
+  position: sticky;
+}
+
 .pin-t {
   top: 0;
 }
@@ -5150,6 +5154,10 @@ button,
 
   .sm\:relative {
     position: relative;
+  }
+
+  .sm\:sticky {
+    position: sticky;
   }
 
   .sm\:pin-t {
@@ -8113,6 +8121,10 @@ button,
     position: relative;
   }
 
+  .md\:sticky {
+    position: sticky;
+  }
+
   .md\:pin-t {
     top: 0;
   }
@@ -11074,6 +11086,10 @@ button,
     position: relative;
   }
 
+  .lg\:sticky {
+    position: sticky;
+  }
+
   .lg\:pin-t {
     top: 0;
   }
@@ -14033,6 +14049,10 @@ button,
 
   .xl\:relative {
     position: relative;
+  }
+
+  .xl\:sticky {
+    position: sticky;
   }
 
   .xl\:pin-t {

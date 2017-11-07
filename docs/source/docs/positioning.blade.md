@@ -47,6 +47,11 @@ title: "Positioning"
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position an element according to the normal flow of the document.</td>
             </tr>
             <tr>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.sticky</td>
+                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">position: sticky;</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position an element relative to the browser window when it's about to leave the viewport.</td>
+            </tr>
+            <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.pin-t</td>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">top: 0;</td>
                 <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Anchor absolutely positioned element to the top edge of the nearest positioned parent.</td>
