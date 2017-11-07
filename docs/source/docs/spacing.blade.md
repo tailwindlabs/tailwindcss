@@ -1,8 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "Spacing"
-description: "Utilities for controlling an element's padding and margin."
 ---
+
+# Spacing
+
+<div class="text-xl text-slate-light mb-4">
+    Utilities for controlling an element's padding and margin.
+</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

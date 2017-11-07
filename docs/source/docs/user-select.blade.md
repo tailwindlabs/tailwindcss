@@ -1,8 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "User Select"
-description: "Utilities for controlling whether the user can select text in an element."
 ---
+
+# User Select
+
+<div class="text-xl text-slate-light mb-4">
+    Utilities for controlling whether the user can select text in an element.
+</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

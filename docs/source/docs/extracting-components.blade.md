@@ -1,8 +1,9 @@
 ---
 extends: _layouts.documentation
 title: "Extracting Components"
-description: null
 ---
+
+# Extracting Components
 
 Tailwind encourages a "utility-first" workflow, where new designs are initially implemented using only utility classes to avoid premature abstraction.
 

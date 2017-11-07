@@ -1,8 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "Max-Height"
-description: "Utilities for setting the maximum height of an element"
 ---
+
+# Max-Height
+
+<div class="text-xl text-slate-light mb-4">
+    Utilities for setting the maximum height of an element
+</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

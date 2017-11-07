@@ -1,8 +1,13 @@
 ---
 extends: _layouts.documentation
-title: "Flex, Grow, & Shrink"
-description: "Utilities for controlling how flex items grow and shrink."
+title: "Flex, Grow, & Shrink - Flexbox"
 ---
+
+# Flex, Grow, & Shrink
+
+<div class="text-xl text-slate-light mb-4">
+    Utilities for controlling how flex items grow and shrink.
+</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

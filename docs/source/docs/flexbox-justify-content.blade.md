@@ -1,8 +1,13 @@
 ---
 extends: _layouts.documentation
-title: "Justify Content"
-description: "Utilities for controlling flex items are positioned along a container's main axis."
+title: "Justify Content - Flexbox"
 ---
+
+# Justify Content
+
+<div class="text-xl text-slate-light mb-4">
+    Utilities for controlling flex items are positioned along a container's main axis.
+</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

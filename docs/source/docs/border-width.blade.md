@@ -1,8 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "Border Width"
-description: "Utilities for controlling the width an element's borders."
 ---
+
+# Border Width
+
+<div class="text-xl text-slate-light mb-4">
+    Utilities for controlling the width an element's borders.
+</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,

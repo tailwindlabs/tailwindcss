@@ -1,8 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "Style & Decoration"
-description: "Utilities for controlling the style of text."
 ---
+
+# Text Style & Decoration
+
+<div class="text-xl text-slate-light mb-4">
+    Utilities for controlling the style of text.
+</div>
 
 @include('_partials.feature-badges', [
     'responsive' => true,
