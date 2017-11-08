@@ -198,6 +198,10 @@
                     </div>
                     @endif
 
+                    @if($page->features)
+                        @include('_partials.feature-badges', $page->features->toArray())
+                    @endif
+
                     @yield('content')
                 </div>
             </div>

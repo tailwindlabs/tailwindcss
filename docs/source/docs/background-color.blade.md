@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Background Color"
 description: "Utilities for controlling an element's background color."
+features:
+  responsive: true
+  customizable: true
+  hover: true
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => true,
-    'hover' => true,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

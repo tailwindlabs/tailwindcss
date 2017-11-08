@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "User Select"
 description: "Utilities for controlling whether the user can select text in an element."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => false,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

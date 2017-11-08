@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Align Content"
 description: "Utilities for controlling how lines are positioned in multi-line flex containers."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => false,
-    'hover' => false,
-    'focus' => false
-])
 
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">

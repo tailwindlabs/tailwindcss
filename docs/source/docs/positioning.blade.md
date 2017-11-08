@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Positioning"
 descriptioj: "Utilities for controlling how an element is positioned in the DOM."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => false,
-    'hover' => false,
-    'focus' => false
-])
 
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">

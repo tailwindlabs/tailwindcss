@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Vertical Alignment"
 description: "Utilities for controlling the vertical alignment of an inline or table-cell box."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => false,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

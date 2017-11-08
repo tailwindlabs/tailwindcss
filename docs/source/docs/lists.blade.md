@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Lists"
 description: "Utilities for controlling list styles."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => false,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

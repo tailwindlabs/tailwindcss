@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Line Height"
 description: "Utilities for controlling the leading (line height) of an element."
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => true,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

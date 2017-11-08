@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Display"
 description: "Utilities for controlling the display box type of an element."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => false,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

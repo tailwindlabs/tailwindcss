@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Border Width"
 description: "Utilities for controlling the width an element's borders."
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => true,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

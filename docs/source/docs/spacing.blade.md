@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Spacing"
 description: "Utilities for controlling an element's padding and margin."
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => true,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

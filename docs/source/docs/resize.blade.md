@@ -2,14 +2,12 @@
 extends: _layouts.documentation
 title: "Resize"
 description: "Utilities for controlling the how a textarea can be resized."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
 ---
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => false,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 
