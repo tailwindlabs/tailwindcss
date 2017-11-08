@@ -37,7 +37,7 @@ export default function(config) {
 
     let includesScreenUtilitiesExplicitly = false
     css.walkAtRules('tailwind', atRule => {
-      if (atRule.params === 'screen-utilities') {
+      if (atRule.params === 'screens') {
         includesScreenUtilitiesExplicitly = true
         atRule.replaceWith(finalRules)
       }

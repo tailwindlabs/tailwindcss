@@ -4,7 +4,7 @@
     }
 }
 
-@tailwind screen-utilities;
+@tailwind screens;
 
 .john {
     content: "wick";
