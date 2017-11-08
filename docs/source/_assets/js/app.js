@@ -13,3 +13,9 @@ const app = new Vue({
 Prism.highlightAll()
 anchors.options = { placement: 'left', class: 'text-slate-light' };
 anchors.add();
+
+document.onkeyup = function (e) {
+    if (e.which == 191) {
+        document.getElementById('docsearch').focus();
+    }
+};
