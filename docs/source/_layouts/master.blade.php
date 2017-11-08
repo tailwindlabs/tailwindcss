@@ -18,6 +18,7 @@
           @import url("https://use.typekit.net/iqy1okj.css");
         </style>
         <link rel="stylesheet" href="{{ mix('/css/main.css') }}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script src="{{ mix('/js/nav.js') }}"></script>
     </head>
@@ -25,6 +26,22 @@
         @yield('body')
         @if ($page->production)
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109068504-1"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+        <script type="text/javascript">
+            docsearch({
+              apiKey: '3df93446658cd9c4e314d4c02a052188',
+              indexName: 'tailwindcss',
+              inputSelector: '#searchbox'
+            });
+
+            // For mobile ( will be fixed soon, see : https://github.com/algolia/docsearch/issues/230 )
+            docsearch({
+              apiKey: '3df93446658cd9c4e314d4c02a052188',
+              indexName: 'tailwindcss',
+              inputSelector: '#searchbox-mobile',
+              debug: true
+            });
+        </script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
