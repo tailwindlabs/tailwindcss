@@ -30,12 +30,18 @@ it('does not add any CSS if no Tailwind features are used', () => {
 })
 
 it('generates the right CSS with implicit screen utilities', () => {
-  const input = fs.readFileSync(path.resolve(`${__dirname}/fixtures/tailwind-input-with-explicit-screen-utilities.css`), 'utf8')
+  const input = fs.readFileSync(
+    path.resolve(`${__dirname}/fixtures/tailwind-input-with-explicit-screen-utilities.css`),
+    'utf8'
+  )
 
   return postcss([tailwind()])
     .process(input)
     .then(result => {
-      const expected = fs.readFileSync(path.resolve(`${__dirname}/fixtures/tailwind-output-with-explicit-screen-utilities.css`), 'utf8')
+      const expected = fs.readFileSync(
+        path.resolve(`${__dirname}/fixtures/tailwind-output-with-explicit-screen-utilities.css`),
+        'utf8'
+      )
 
       expect(result.css).toBe(expected)
     })

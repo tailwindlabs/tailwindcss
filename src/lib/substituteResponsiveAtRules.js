@@ -29,12 +29,14 @@ export default function(config) {
           return cloned
         })
       )
-      finalRules.push(mediaQuery)
 
-      if (mediaQuery.nodes.length) {
-        css.append(mediaQuery)
-      }
+      finalRules.push(mediaQuery)
     })
+
+    const hasScreenRules = finalRules.some(i => i.nodes.length !== 0)
+    if (!hasScreenRules) {
+      return
+    }
 
     let includesScreenUtilitiesExplicitly = false
     css.walkAtRules('tailwind', atRule => {
@@ -44,7 +46,7 @@ export default function(config) {
       }
     })
 
-    if(! includesScreenUtilitiesExplicitly) {
+    if (!includesScreenUtilitiesExplicitly) {
       css.append(finalRules)
     }
   }
