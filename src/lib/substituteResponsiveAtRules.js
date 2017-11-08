@@ -38,16 +38,19 @@ export default function(config) {
       return
     }
 
-    let includesScreenUtilitiesExplicitly = false
+    const includesScreensExplicitly = css.some(
+      rule => rule.type === 'atrule' && rule.params === 'screens'
+    )
+
+    if (!includesScreensExplicitly) {
+      css.append(finalRules)
+      return
+    }
+
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'screens') {
-        includesScreenUtilitiesExplicitly = true
         atRule.replaceWith(finalRules)
       }
     })
-
-    if (!includesScreenUtilitiesExplicitly) {
-      css.append(finalRules)
-    }
   }
 }
