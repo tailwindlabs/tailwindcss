@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "main": "lib/index.js",
@@ -50,7 +50,9 @@
     "postcss-functions": "^3.0.0",
     "stylefmt": "^6.0.0"
   },
-  "browserslist": ["> 1%"],
+  "browserslist": [
+    "> 1%"
+  ],
   "babel": {
     "presets": [
       [
