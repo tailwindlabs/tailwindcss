@@ -11,7 +11,7 @@
 
 @section('body')
 <div class="min-h-screen">
-    <div id="sidebar" class="hidden z-50 fixed pin-y pin-l overflow-y-scroll scrolling-touch bg-smoke-light w-4/5 md:w-full md:max-w-xs flex-none border-r-2 border-smoke md:flex flex-col">
+    <div id="sidebar" class="hidden z-50 fixed pin-y pin-l overflow-y-scroll md:overflow-visible scrolling-touch md:scrolling-auto bg-smoke-light w-4/5 md:w-full md:max-w-xs flex-none border-r-2 border-smoke md:flex flex-col">
         <div class="border-b border-smoke flex-none px-8 py-6">
             <div class="mb-4">
                 <div class="hidden md:flex md:justify-center">
@@ -23,8 +23,8 @@
                     <a href="https://github.com/tailwindcss/tailwindcss/releases" class="text-sm hover:text-grey-dark text-grey font-semibold">v{{ $page->version }}</a>
                 </p>
             </div>
-            <div class="relative opacity-75">
-                <input class="rounded bg-white border border-smoke py-2 pr-4 pl-10 block w-full cursor-not-allowed" type="text" placeholder="Search coming soon!" disabled>
+            <div class="relative">
+                <input id="docsearch" class="rounded bg-white border border-smoke py-2 pr-4 pl-10 block w-full" type="text" placeholder="Search the docs">
                 <div class="pointer-events-none absolute pin-y pin-l pl-3 flex items-center">
                     <svg class="pointer-events-none text-slate w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></svg>
                 </div>

@@ -15,7 +15,7 @@
         <meta name="theme-color" content="#ffffff">
         <title>{{ $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS - A Utility-First CSS Framework for Rapid UI Development' }}</title>
         <style>
-          @import url("https://use.typekit.net/iqy1okj.css");
+            @import url("https://use.typekit.net/iqy1okj.css");
         </style>
         <link rel="stylesheet" href="{{ mix('/css/main.css') }}">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
@@ -25,30 +25,22 @@
     <body data-sidebar-visible="true" class="font-sans font-normal text-slate-darker leading-normal">
         @yield('body')
         @if ($page->production)
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109068504-1"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
-        <script type="text/javascript">
-            docsearch({
-              apiKey: '3df93446658cd9c4e314d4c02a052188',
-              indexName: 'tailwindcss',
-              inputSelector: '#searchbox'
-            });
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+            <script type="text/javascript">
+                docsearch({
+                    apiKey: '3df93446658cd9c4e314d4c02a052188',
+                    indexName: 'tailwindcss',
+                    inputSelector: '#docsearch',
+                });
+            </script>
+            <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109068504-1"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
 
-            // For mobile ( will be fixed soon, see : https://github.com/algolia/docsearch/issues/230 )
-            docsearch({
-              apiKey: '3df93446658cd9c4e314d4c02a052188',
-              indexName: 'tailwindcss',
-              inputSelector: '#searchbox-mobile',
-              debug: true
-            });
-        </script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-
-          gtag('config', 'UA-109068504-1');
-        </script>
+                gtag('config', 'UA-109068504-1');
+            </script>
         @endif
     </body>
 </html>
