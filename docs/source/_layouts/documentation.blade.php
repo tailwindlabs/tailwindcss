@@ -199,7 +199,7 @@
                     @endif
 
                     @if($page->features)
-                        @include('_partials.feature-badges', $page->features->toArray())
+                        @include('_partials.feature-badges', $page->features->all())
                     @endif
 
                     @yield('content')
