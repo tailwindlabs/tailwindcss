@@ -4,7 +4,7 @@ import defineClass from '../util/defineClass'
 function defineWidths(widths) {
   return _.map(widths, (size, modifer) => {
     return defineClass(`w-${modifer}`, {
-      'width': `${size}`,
+      width: `${size}`,
     })
   })
 }
@@ -28,7 +28,7 @@ function defineMaxWidths(widths) {
 function defineHeights(heights) {
   return _.map(heights, (size, modifer) => {
     return defineClass(`h-${modifer}`, {
-      'height': `${size}`,
+      height: `${size}`,
     })
   })
 }
@@ -49,7 +49,7 @@ function defineMaxHeights(heights) {
   })
 }
 
-export default function (config) {
+export default function(config) {
   return _.flatten([
     defineWidths(config.width),
     defineMinWidths(config.minWidth),

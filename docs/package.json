@@ -1,13 +1,11 @@
 {
   "scripts": {
-    "dev": "npm run compile-css-js && ./vendor/bin/jigsaw build",
-    "compile-css-js": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "watch-js": "chokidar 'source/_assets/js/**/*' --initial=true -c 'npm run compile-css-js'",
-    "watch-css": "chokidar 'tailwind.js' 'source/_assets/less/**/*' --initial=true -c 'npm run compile-css-js'",
-    "watch-templates": "chokidar 'source/**/*' --initial=true -c './vendor/bin/jigsaw build'",
-    "watch": "concurrently \"npm run watch-css\" \"npm run watch-js\" \"npm run watch-templates\"",
-    "prod": "npm run production && ./vendor/bin/jigsaw build production",
-    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+    "local": "cross-env NODE_ENV=development webpack --progress --hide-modules --env=local --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "staging": "cross-env NODE_ENV=development webpack --progress --hide-modules --env=staging --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production": "cross-env NODE_ENV=development webpack --progress --hide-modules --env=production --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "dev": "npm run local",
+    "prod": "npm run production",
+    "watch": "npm run local -- --watch"
   },
   "private": true,
   "devDependencies": {
@@ -15,18 +13,18 @@
     "cross-env": "^3.2.3",
     "escape-html": "^1.0.3",
     "laravel-mix": "^1.5.1",
-    "prismjs": "^1.8.3",
-    "vue": "^2.5.2"
-  },
-  "dependencies": {
-    "chokidar-cli": "^1.2.0",
-    "concurrently": "^3.5.0",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
     "lodash": "^4.17.4",
+    "node-cmd": "^3.0.0",
     "normalize.css": "^7.0.0",
+    "on-build-webpack": "^0.1.0",
     "postcss-cssnext": "^3.0.2",
-    "stylefmt": "^6.0.0"
+    "prismjs": "^1.8.3",
+    "stylefmt": "^6.0.0",
+    "vue": "^2.5.2",
+    "webpack-watch": "^0.2.0",
+    "yargs": "^10.0.3"
   },
   "browserslist": [
     "> 1%"

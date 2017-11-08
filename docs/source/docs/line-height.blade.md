@@ -1,20 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "Line Height"
+description: "Utilities for controlling the leading (line height) of an element."
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
 ---
-
-# Line Height
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling the leading (line height) of an element.
-</div>
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => true,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

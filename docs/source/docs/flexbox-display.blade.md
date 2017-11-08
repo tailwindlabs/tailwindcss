@@ -1,20 +1,13 @@
 ---
 extends: _layouts.documentation
-title: "Flex Display – Flexbox"
+title: "Flex Display"
+description: "Utilities for creating flex containers."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
 ---
-
-# Flex Display
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for creating flex containers.
-</div>
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => false,
-    'hover' => false,
-    'focus' => false
-])
 
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">

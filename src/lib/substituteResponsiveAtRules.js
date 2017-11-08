@@ -3,9 +3,8 @@ import postcss from 'postcss'
 import cloneNodes from '../util/cloneNodes'
 import buildMediaQuery from '../util/buildMediaQuery'
 
-
 export default function(config) {
-  return function (css) {
+  return function(css) {
     const screens = config().screens
     const responsiveRules = []
     let finalRules = []
@@ -30,9 +29,11 @@ export default function(config) {
           return cloned
         })
       )
-
-
       finalRules.push(mediaQuery)
+
+      if (mediaQuery.nodes.length) {
+        css.append(mediaQuery)
+      }
     })
 
     let includesScreenUtilitiesExplicitly = false

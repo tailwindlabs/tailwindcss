@@ -2,11 +2,11 @@ import defineClasses from '../util/defineClasses'
 
 export default function() {
   return defineClasses({
-    'flex': {
-      'display': 'flex',
+    flex: {
+      display: 'flex',
     },
     'inline-flex': {
-      'display': 'inline-flex',
+      display: 'inline-flex',
     },
     'flex-row': {
       'flex-direction': 'row',
@@ -90,16 +90,16 @@ export default function() {
       'align-content': 'space-around',
     },
     'flex-1': {
-      'flex': '1',
+      flex: '1',
     },
     'flex-auto': {
-      'flex': 'auto',
+      flex: 'auto',
     },
     'flex-initial': {
-      'flex': 'initial',
+      flex: 'initial',
     },
     'flex-none': {
-      'flex': 'none',
+      flex: 'none',
     },
     'flex-grow': {
       'flex-grow': '1',

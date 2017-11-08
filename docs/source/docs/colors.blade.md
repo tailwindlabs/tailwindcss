@@ -1,9 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Colors"
+description: null
 ---
-
-# Colors
 
 Developing an organized, consistent and beautiful color palette is critical to the design success of a project. Tailwind provides a fantastic color system that makes this very easy to accomplish.
 

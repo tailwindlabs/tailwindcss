@@ -1,20 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "Text Sizing"
+description: "Utilities for controlling the text size of an element."
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
 ---
-
-# Text Sizing
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling the text size of an element.
-</div>
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => true,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

@@ -1,20 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "Shadows"
+description: "Utilities for controlling the box shadow of an element."
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
 ---
-
-# Shadows
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling the box shadow of an element.
-</div>
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => true,
-    'hover' => false,
-    'focus' => false
-])
 
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">

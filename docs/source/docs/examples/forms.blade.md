@@ -1,23 +1,10 @@
 ---
 extends: _layouts.documentation
 title: "Forms"
+description: null
 ---
 
-# Forms
-
-<div class="mt-8">
-  <div class="bg-blue-lightest border-l-4 border-blue-light rounded-b text-blue-darkest px-4 py-3">
-    <div class="flex">
-      <div class="py-1">
-        <svg class="h-6 w-6 text-blue-light mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10zm0-2c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm-.5-5h1c.276 0 .5.224.5.5v1c0 .276-.224.5-.5.5h-1c-.276 0-.5-.224-.5-.5v-1c0-.276.224-.5.5-.5zm0-8h1c.276 0 .5.224.5.5V8l-.5 3-1 .5L9 8V5.5c0-.276.224-.5.5-.5z"/></svg>
-      </div>
-      <div>
-        <p class="font-semibold">Work in progress!</p>
-        <p class="text-sm">More detailed examples are coming soon.</p>
-      </div>
-    </div>
-  </div>
-</div>
+@include('_partials.work-in-progress-example')
 
 ## Login Form
 
@@ -132,11 +119,11 @@ title: "Forms"
             <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4" id="grid-city" type="text" placeholder="Albuquerque">
         </div>
         <div class="md:w-1/2 px-3">
-            <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-select">
+            <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-state">
                 State
             </label>
             <div class="relative">
-                <select class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded">
+                <select class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded" id="grid-state">
                     <option>New Mexico</option>
                     <option>Missouri</option>
                     <option>Texas</option>
@@ -162,7 +149,7 @@ title: "Forms"
 @component('_partials.code-sample', ['class' => 'flex justify-center p-8'])
 <form class="w-full max-w-sm">
     <div class="flex items-center border-b border-b-2 border-teal py-2">
-        <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2" id="underline-full-name" type="text" placeholder="Jane Doe">
+        <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2" type="text" placeholder="Jane Doe" aria-label="Full name">
         <button class="flex-no-shrink bg-teal hover:bg-teal-dark border-teal hover:border-teal-dark text-sm border-4 text-white py-1 px-2 rounded" type="button">
             Sign Up
         </button>

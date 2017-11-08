@@ -13,3 +13,10 @@ const app = new Vue({
 Prism.highlightAll()
 anchors.options = { placement: 'left', class: 'text-slate-light' };
 anchors.add();
+
+// Add shortcut to search input when pressing the "/" key
+document.onkeyup = function (e) {
+    if (e.which == 191) {
+        document.getElementById('docsearch').focus();
+    }
+};

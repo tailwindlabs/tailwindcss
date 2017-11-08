@@ -1,20 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "Overflow"
+description: "Utilities for controlling how an element handles content that is too large for the container."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
 ---
-
-# Overflow
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling how an element handles content that is too large for the container.
-</div>
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => false,
-    'hover' => false,
-    'focus' => false
-])
 
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left overflow-x-scroll block" style="border-collapse: collapse;">
@@ -49,7 +42,7 @@ title: "Overflow"
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-y-scroll</td>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow-y: auto;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow horizontal scrolling if needed.</td>
+                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow vertical scrolling if needed.</td>
             </tr>
             <tr>
                 <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-scroll</td>

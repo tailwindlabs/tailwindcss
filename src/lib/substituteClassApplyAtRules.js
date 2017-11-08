@@ -1,18 +1,17 @@
-import postcss from 'postcss'
 import _ from 'lodash'
+import postcss from 'postcss'
 import findMixin from '../util/findMixin'
 import escapeClassName from '../util/escapeClassName'
 
 function normalizeClassNames(classNames) {
-  return classNames.map((className) => {
+  return classNames.map(className => {
     return `.${escapeClassName(_.trimStart(className, '.'))}`
   })
 }
 
-export default function(config) {
-  return function (css) {
-    const options = config()
-    css.walkRules(function(rule) {
+export default function() {
+  return function(css) {
+    css.walkRules(rule => {
       rule.walkAtRules('apply', atRule => {
         const mixins = normalizeClassNames(postcss.list.space(atRule.params))
 

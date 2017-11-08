@@ -1,11 +1,17 @@
 @extends('_layouts.master')
 
 @section('meta')
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@tailwindcss">
+<meta name="twitter:title" content="{{ $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS - A Utility-First CSS Framework for Rapid UI Development' }}">
+<meta name="twitter:description" content="{{ $page->description ? $page->description : 'Documentation for the Tailwind CSS framework.' }}">
+<meta name="twitter:image" content="https://tailwindcss.com/img/tailwind-square.png">
+<meta name="twitter:creator" content="@tailwindcss">
 @endsection
 
 @section('body')
 <div class="min-h-screen">
-    <div id="sidebar" class="hidden z-50 fixed pin-y pin-l overflow-y-scroll scrolling-touch bg-smoke-light w-4/5 md:w-full md:max-w-xs flex-none border-r-2 border-smoke md:flex flex-col">
+    <div id="sidebar" class="hidden z-50 fixed pin-y pin-l overflow-y-scroll md:overflow-visible scrolling-touch md:scrolling-auto bg-smoke-light w-4/5 md:w-full md:max-w-xs flex-none border-r-2 border-smoke md:flex flex-col">
         <div class="border-b border-smoke flex-none px-8 py-6">
             <div class="mb-4">
                 <div class="hidden md:flex md:justify-center">
@@ -14,11 +20,11 @@
                     </a>
                 </div>
                 <p class="text-center">
-                    <a href="https://github.com/tailwindcss/tailwindcss" class="text-sm hover:text-grey-dark text-grey font-semibold">v{{ $page->version }}</a>
+                    <a href="https://github.com/tailwindcss/tailwindcss/releases" class="text-sm hover:text-grey-dark text-grey font-semibold">v{{ $page->version }}</a>
                 </p>
             </div>
-            <div class="relative opacity-75">
-                <input class="rounded bg-white border border-smoke py-2 pr-4 pl-10 block w-full cursor-not-allowed" type="text" placeholder="Search coming soon!" disabled>
+            <div class="relative">
+                <input id="docsearch" class="rounded bg-white border border-smoke py-2 pr-4 pl-10 block w-full" type="text" placeholder="Search the docs">
                 <div class="pointer-events-none absolute pin-y pin-l pl-3 flex items-center">
                     <svg class="pointer-events-none text-slate w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></svg>
                 </div>
@@ -159,6 +165,7 @@
                         <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/examples/buttons') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/examples/buttons">Buttons</a></li>
                         <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/examples/cards') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/examples/cards">Cards</a></li>
                         <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/examples/forms') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/examples/forms">Forms</a></li>
+                        <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/examples/navigation') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/examples/navigation">Navigation</a></li>
                     </ul>
                 </div>
             </nav>
@@ -183,6 +190,18 @@
         <div id="content" class="px-6 pb-8 pt-20 md:pt-16 w-full max-w-lg mx-auto">
             <div id="app" v-cloak>
                 <div class="markdown">
+                    <h1>{{ $page->title }}</h1>
+
+                    @if($page->description)
+                    <div class="text-xl text-slate-light mb-4">
+                        {{ $page->description }}
+                    </div>
+                    @endif
+
+                    @if($page->features)
+                        @include('_partials.feature-badges', $page->features->all())
+                    @endif
+
                     @yield('content')
                 </div>
             </div>

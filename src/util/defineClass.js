@@ -10,7 +10,9 @@ export default function(className, properties) {
     })
   })
 
-  return postcss.rule({
-    selector: `.${escapeClassName(className)}`,
-  }).append(decls)
+  return postcss
+    .rule({
+      selector: `.${escapeClassName(className)}`,
+    })
+    .append(decls)
 }

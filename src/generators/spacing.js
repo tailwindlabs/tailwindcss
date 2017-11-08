@@ -25,7 +25,7 @@ function definePadding(padding) {
         'padding-bottom': `${size}`,
       },
       [`p-${modifier}`]: {
-        'padding': `${size}`,
+        padding: `${size}`,
       },
     })
   })
@@ -55,7 +55,7 @@ function defineMargin(margin) {
         'margin-bottom': `${size}`,
       },
       [`m-${modifier}`]: {
-        'margin': `${size}`,
+        margin: `${size}`,
       },
     })
   })
@@ -87,19 +87,25 @@ function defineNegativeMargin(negativeMargin) {
         'margin-bottom': `${size}`,
       },
       [`-m-${modifier}`]: {
-        'margin': `${size}`,
+        margin: `${size}`,
       },
     })
   })
 }
 
-export default function ({ padding, margin, negativeMargin }) {
+export default function({ padding, margin, negativeMargin }) {
   return _.flatten([
     definePadding(padding),
     defineMargin(margin),
     defineClasses({
+      'mt-auto': {
+        'margin-top': 'auto',
+      },
       'mr-auto': {
         'margin-right': 'auto',
+      },
+      'mb-auto': {
+        'margin-bottom': 'auto',
       },
       'ml-auto': {
         'margin-left': 'auto',
@@ -107,6 +113,13 @@ export default function ({ padding, margin, negativeMargin }) {
       'mx-auto': {
         'margin-left': 'auto',
         'margin-right': 'auto',
+      },
+      'my-auto': {
+        'margin-top': 'auto',
+        'margin-bottom': 'auto',
+      },
+      'm-auto': {
+        margin: 'auto',
       },
     }),
     defineNegativeMargin(negativeMargin),

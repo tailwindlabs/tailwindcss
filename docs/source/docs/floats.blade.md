@@ -1,20 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "Floats"
+description: "Utilities for controlling the wrapping of content around an element."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
 ---
-
-# Floats
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling the wrapping of content around an element.
-</div>
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => false,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

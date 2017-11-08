@@ -1,20 +1,13 @@
 ---
 extends: _layouts.documentation
-title: "Flex, Grow, & Shrink - Flexbox"
+title: "Flex, Grow, & Shrink"
+description: "Utilities for controlling how flex items grow and shrink."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
 ---
-
-# Flex, Grow, & Shrink
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling how flex items grow and shrink.
-</div>
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => false,
-    'hover' => false,
-    'focus' => false
-])
 
 <div class="border-t border-grey-lighter">
     <table class="w-full text-left" style="border-collapse: collapse;">

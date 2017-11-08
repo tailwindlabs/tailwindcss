@@ -1,8 +1,6 @@
 var config = require('../lib/index').defaultConfig()
 
-config.colors = {
-  ...config.colors,
-
+config.colors = Object.assign(config.colors, {
   'slate-darker': '#212b35',
   'slate-dark': '#404e5c',
   'slate': '#647382',
@@ -18,10 +16,10 @@ config.colors = {
   'tailwind-teal-light': '#5ebcca',
   'tailwind-teal': '#44a8b3',
   'tailwind-teal-dark': '#2f8696',
-}
+})
 
 config.fonts = {
-  'sans': 'Aktiv Grotesk, aktiv-grotesk, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
+  'sans': 'aktiv-grotesk, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
   'serif': 'Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif',
   'mono': 'Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
 }
@@ -55,35 +53,30 @@ config.textColors = config.colors
 
 config.backgroundColors = config.colors
 
-config.borderWidths = {
+config.borderWidths = Object.assign(config.borderWidths, {
   '6': '6px',
-  ...config.borderWidths,
-}
+})
 
-config.borderColors = {
+config.borderColors = Object.assign(config.colors, {
   default: config.colors['slate-lighter'],
-  ...config.colors,
-}
+})
 
-config.width = {
+config.width = Object.assign(config.width, {
   '5': '1.25rem',
   '128': '32rem',
-  ...config.width,
-}
+})
 
-config.height = {
+config.height = Object.assign(config.height, {
   '7': '1.75rem',
-  ...config.width,
-}
+})
 
-config.padding = {
+config.padding = Object.assign(config.padding, {
   '10': '2.5rem',
   '12': '3rem',
   '16': '4rem',
   '20': '5rem',
   '80': '20rem',
-  ...config.padding,
-}
+})
 
 config.margin = config.padding
 

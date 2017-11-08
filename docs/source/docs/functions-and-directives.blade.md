@@ -1,9 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Functions &amp; Directives"
+description: null
 ---
-
-# Functions & Directives
 
 Tailwind exposes a few custom CSS functions and directives that can be used in your actual CSS files.
 
@@ -46,21 +45,25 @@ This is extremely useful when you find a common utility pattern in your HTML tha
 }
 ```
 
-Note that `@@apply` **will not work** for mixing in hover or responsive variants of another utility. Instead, mixin the plain version of that utility into the `:hover` pseudo-selector or a new media query:
+Note that `@@apply` **will not work** for mixing in hover or responsive variants of another utility. Instead, mix in the plain version of that utility into the `:hover` pseudo-selector or a new media query:
 
 ```less
 // Won't work:
 .btn {
+  @@apply .block .bg-red;
   @@apply .md:inline-block;
   @@apply .hover:bg-blue;
 }
 
 // Do this instead:
 .btn {
-  &:hover {
-    @@apply .bg-blue;
-  }
-  @@screen md {
+  @@apply .block .bg-red;
+}
+.btn:hover {
+  @@apply .bg-blue;
+}
+@@screen md {
+  .btn {
     @@apply .inline-block;
   }
 }

@@ -9,21 +9,25 @@ export default function buildMediaQuery(screens) {
     screens = [screens]
   }
 
-  return _(screens).map((screen) => {
-    if (_.has(screen, 'raw')) {
-      return screen.raw
-    }
+  return _(screens)
+    .map(screen => {
+      if (_.has(screen, 'raw')) {
+        return screen.raw
+      }
 
-    return _(screen).map((value, feature) => {
-      feature = _.get(
-        {
-          min: 'min-width',
-          max: 'max-width',
-        },
-        feature,
-        feature
-      )
-      return `(${feature}: ${value})`
-    }).join(' and ')
-  }).join(', ')
+      return _(screen)
+        .map((value, feature) => {
+          feature = _.get(
+            {
+              min: 'min-width',
+              max: 'max-width',
+            },
+            feature,
+            feature
+          )
+          return `(${feature}: ${value})`
+        })
+        .join(' and ')
+    })
+    .join(', ')
 }

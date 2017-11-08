@@ -1,20 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "Min-Width"
+description: "Utilities for setting the minimum width of an element"
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
 ---
-
-# Min-Width
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for setting the minimum width of an element
-</div>
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => true,
-    'hover' => false,
-    'focus' => false
-])
 
 @include('_partials.work-in-progress')
 

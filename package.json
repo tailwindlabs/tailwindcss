@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "main": "lib/index.js",
@@ -20,9 +20,11 @@
     "babelify": "babel src --out-dir lib",
     "prepare": "npm run babelify && babel-node src/build.js",
     "watch": "nodemon -e js,css --watch src --exec 'babel-node src/build.js'",
-    "test": "jest"
+    "style": "eslint .",
+    "test": "jest && eslint ."
   },
   "devDependencies": {
+    "autoprefixer": "^7.1.6",
     "babel-cli": "^6.6.5",
     "babel-core": "^6.7.2",
     "babel-jest": "^20.0.3",
@@ -31,7 +33,12 @@
     "babel-preset-stage-2": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
     "clean-css": "^4.1.9",
+    "eslint": "^4.10.0",
+    "eslint-config-postcss": "^2.0.2",
+    "eslint-config-prettier": "^2.7.0",
+    "eslint-plugin-prettier": "^2.3.1",
     "jest": "^20.0.4",
+    "prettier": "^1.7.4",
     "rimraf": "^2.6.1"
   },
   "dependencies": {

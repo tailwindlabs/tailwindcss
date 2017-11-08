@@ -1,11 +1,10 @@
 import _ from 'lodash'
-import defineClass from '../util/defineClass'
 import defineClasses from '../util/defineClasses'
 
 function defaultBorder(width, color) {
   return defineClasses({
-    'border': {
-      'border': `${width} solid ${color}`,
+    border: {
+      border: `${width} solid ${color}`,
     },
     'border-t': {
       'border-top': `${width} solid ${color}`,
@@ -23,11 +22,11 @@ function defaultBorder(width, color) {
 }
 
 function sizedBorder(size, width, color) {
-  const style = width == 0 ? '0' : `${width} solid ${color}`
+  const style = width == 0 ? '0' : `${width} solid ${color}` // eslint-disable-line eqeqeq
 
   return defineClasses({
     [`border-${size}`]: {
-      'border': `${style}`,
+      border: `${style}`,
     },
     [`border-t-${size}`]: {
       'border-top': `${style}`,

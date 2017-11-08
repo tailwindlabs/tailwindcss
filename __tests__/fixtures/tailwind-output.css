@@ -548,7 +548,8 @@ textarea {
   font-family: inherit;
 }
 
-input::placeholder {
+input::placeholder,
+textarea::placeholder {
   color: inherit;
   opacity: .5;
 }
@@ -584,6 +585,12 @@ button,
   .container {
     max-width: 1200px;
   }
+}
+
+.list-reset {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .appearance-none {
@@ -672,7 +679,7 @@ button,
 }
 
 .font-sans {
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 .font-serif {
@@ -2982,8 +2989,16 @@ button,
   margin: 1px;
 }
 
+.mt-auto {
+  margin-top: auto;
+}
+
 .mr-auto {
   margin-right: auto;
+}
+
+.mb-auto {
+  margin-bottom: auto;
 }
 
 .ml-auto {
@@ -2993,6 +3008,15 @@ button,
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
+}
+
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.m-auto {
+  margin: auto;
 }
 
 .-mt-0 {
@@ -3517,18 +3541,18 @@ button,
   cursor: not-allowed;
 }
 
-.list-reset {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
 .example {
   font-weight: 700;
   color: #e3342f;
 }
 
 @media (min-width: 576px) {
+  .sm\:list-reset {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   .sm\:appearance-none {
     appearance: none;
   }
@@ -3615,7 +3639,7 @@ button,
   }
 
   .sm\:font-sans {
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   }
 
   .sm\:font-serif {
@@ -5925,8 +5949,16 @@ button,
     margin: 1px;
   }
 
+  .sm\:mt-auto {
+    margin-top: auto;
+  }
+
   .sm\:mr-auto {
     margin-right: auto;
+  }
+
+  .sm\:mb-auto {
+    margin-bottom: auto;
   }
 
   .sm\:ml-auto {
@@ -5936,6 +5968,15 @@ button,
   .sm\:mx-auto {
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .sm\:my-auto {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  .sm\:m-auto {
+    margin: auto;
   }
 
   .sm\:-mt-0 {
@@ -6460,12 +6501,6 @@ button,
     cursor: not-allowed;
   }
 
-  .sm\:list-reset {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
   .sm\:example {
     font-weight: 700;
     color: #e3342f;
@@ -6473,6 +6508,12 @@ button,
 }
 
 @media (min-width: 768px) {
+  .md\:list-reset {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   .md\:appearance-none {
     appearance: none;
   }
@@ -6559,7 +6600,7 @@ button,
   }
 
   .md\:font-sans {
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   }
 
   .md\:font-serif {
@@ -8869,8 +8910,16 @@ button,
     margin: 1px;
   }
 
+  .md\:mt-auto {
+    margin-top: auto;
+  }
+
   .md\:mr-auto {
     margin-right: auto;
+  }
+
+  .md\:mb-auto {
+    margin-bottom: auto;
   }
 
   .md\:ml-auto {
@@ -8880,6 +8929,15 @@ button,
   .md\:mx-auto {
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .md\:my-auto {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  .md\:m-auto {
+    margin: auto;
   }
 
   .md\:-mt-0 {
@@ -9404,12 +9462,6 @@ button,
     cursor: not-allowed;
   }
 
-  .md\:list-reset {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
   .md\:example {
     font-weight: 700;
     color: #e3342f;
@@ -9417,6 +9469,12 @@ button,
 }
 
 @media (min-width: 992px) {
+  .lg\:list-reset {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   .lg\:appearance-none {
     appearance: none;
   }
@@ -9503,7 +9561,7 @@ button,
   }
 
   .lg\:font-sans {
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   }
 
   .lg\:font-serif {
@@ -11813,8 +11871,16 @@ button,
     margin: 1px;
   }
 
+  .lg\:mt-auto {
+    margin-top: auto;
+  }
+
   .lg\:mr-auto {
     margin-right: auto;
+  }
+
+  .lg\:mb-auto {
+    margin-bottom: auto;
   }
 
   .lg\:ml-auto {
@@ -11824,6 +11890,15 @@ button,
   .lg\:mx-auto {
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .lg\:my-auto {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  .lg\:m-auto {
+    margin: auto;
   }
 
   .lg\:-mt-0 {
@@ -12348,12 +12423,6 @@ button,
     cursor: not-allowed;
   }
 
-  .lg\:list-reset {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
   .lg\:example {
     font-weight: 700;
     color: #e3342f;
@@ -12361,6 +12430,12 @@ button,
 }
 
 @media (min-width: 1200px) {
+  .xl\:list-reset {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   .xl\:appearance-none {
     appearance: none;
   }
@@ -12447,7 +12522,7 @@ button,
   }
 
   .xl\:font-sans {
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   }
 
   .xl\:font-serif {
@@ -14757,8 +14832,16 @@ button,
     margin: 1px;
   }
 
+  .xl\:mt-auto {
+    margin-top: auto;
+  }
+
   .xl\:mr-auto {
     margin-right: auto;
+  }
+
+  .xl\:mb-auto {
+    margin-bottom: auto;
   }
 
   .xl\:ml-auto {
@@ -14768,6 +14851,15 @@ button,
   .xl\:mx-auto {
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .xl\:my-auto {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  .xl\:m-auto {
+    margin: auto;
   }
 
   .xl\:-mt-0 {
@@ -15290,12 +15382,6 @@ button,
 
   .xl\:cursor-not-allowed {
     cursor: not-allowed;
-  }
-
-  .xl\:list-reset {
-    list-style: none;
-    margin: 0;
-    padding: 0;
   }
 
   .xl\:example {
