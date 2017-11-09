@@ -32,142 +32,31 @@
         </div>
         <div class="p-8 flex-1 overflow-y-scroll">
             <nav id="nav" class="text-base overflow-y-scroll">
+                @foreach ($page->navigation as $sectionName => $sectionItems)
                 <div class="mb-8">
-                    <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Introduction</p>
+                    <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">{{ $sectionName }}</p>
                     <ul>
-                        <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/what-is-tailwind') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/what-is-tailwind">What is Tailwind?</a></li>
+                        @foreach ($sectionItems as $name => $slugOrChildren)
+                            @if (is_string($slugOrChildren))
+                                <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/' . $slugOrChildren) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren }}">{{ $name }}</a></li>
+                            @else
+                                <li class="mb-3">
+                                    <a href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren->first() }}" class="hover:underline block mb-2 {{ $page->anyChildrenActive($slugOrChildren) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">{{ $name }}</a>
+                                    <ul class="pl-4 {{ $page->anyChildrenActive($slugOrChildren) ? 'block' : 'hidden' }}">
+                                    @foreach ($slugOrChildren as $title => $link)
+                                    <li class="mb-3">
+                                        <a class="hover:underline {{ $page->active('/docs/' . $link) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/{{ $link }}">
+                                            {{ $title }}
+                                        </a>
+                                    </li>
+                                    @endforeach
+                                    </ul>
+                                </li>
+                            @endif
+                        @endforeach
                     </ul>
                 </div>
-                <div class="mb-8">
-                    <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Getting Started</p>
-                    <ul>
-                        <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/installation') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/installation">Installation</a></li>
-                        <li class="mb-3">
-                            <a class="hover:underline {{ $page->active('/docs/configuration') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/configuration">
-                                Configuration
-                            </a>
-                        </li>
-                        <li class="mb-3">
-                            <a class="hover:underline {{ $page->active('/docs/colors') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/colors">
-                                Colors
-                            </a>
-                        </li>
-                        <li class="mb-3">
-                            <a class="hover:underline {{ $page->active('/docs/responsive-design') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/responsive-design">
-                                Responsive Design
-                            </a>
-                        </li>
-                        <li class="mb-3">
-                            <a class="hover:underline {{ $page->active('/docs/adding-new-utilities') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/adding-new-utilities">
-                                Adding New Utilities
-                            </a>
-                        </li>
-                        <li class="mb-3">
-                            <a class="hover:underline {{ $page->active('/docs/extracting-components') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/extracting-components">
-                                Extracting Components
-                            </a>
-                        </li>
-                        <li class="mb-3">
-                            <a class="hover:underline {{ $page->active('/docs/functions-and-directives') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/functions-and-directives">
-                                Functions &amp; Directives
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="mt-8">
-                    <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Styles</p>
-                    <ul class="mb-8">
-                        <li class="mb-3">
-                            <a href="{{ $page->baseUrl }}/docs/background-color" class="hover:underline block mb-2 {{ $page->active('/docs/background-') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Backgrounds</a>
-                            <ul class="pl-4 {{ $page->active('/docs/background-') ? 'block' : 'hidden' }}">
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/background-color" class="hover:underline {{ $page->active('/docs/background-color') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Color</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/background-position" class="hover:underline {{ $page->active('/docs/background-position') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Position</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/background-size" class="hover:underline {{ $page->active('/docs/background-size') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Size</a></li>
-                            </ul>
-                        </li>
-                        <li class="mb-3">
-                            <a href="{{ $page->baseUrl }}/docs/border-width" class="hover:underline block mb-2 {{ $page->active(['/docs/border-width', '/docs/border-color', '/docs/border-style']) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Borders</a>
-                            <ul class="pl-4 {{ $page->active(['/docs/border-width', '/docs/border-color', '/docs/border-style']) ? 'block' : 'hidden' }}">
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/border-width" class="hover:underline {{ $page->active('/docs/border-width') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Width</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/border-color" class="hover:underline {{ $page->active('/docs/border-color') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Color</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/border-style" class="hover:underline {{ $page->active('/docs/border-style') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Style</a></li>
-                            </ul>
-                        </li>
-                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/border-radius" class="hover:underline {{ $page->active('/docs/border-radius') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Border Radius</a></li>
-                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/container" class="hover:underline {{ $page->active('/docs/container') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Container</a></li>
-                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/display" class="hover:underline {{ $page->active('/docs/display') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Display</a></li>
-                        <li class="mb-3">
-                            <a href="{{ $page->baseUrl }}/docs/flexbox-display" class="hover:underline block mb-2 {{ $page->active('/docs/flexbox-') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Flexbox</a>
-                            <ul class="pl-4 {{ $page->active('/docs/flexbox-') ? 'block' : 'hidden' }}">
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/flexbox-display" class="hover:underline {{ $page->active('/docs/flexbox-display') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Display</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/flexbox-direction" class="hover:underline {{ $page->active('/docs/flexbox-direction') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Direction</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/flexbox-wrapping" class="hover:underline {{ $page->active('/docs/flexbox-wrapping') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Wrapping</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/flexbox-justify-content" class="hover:underline {{ $page->active('/docs/flexbox-justify-content') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Justify Content</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/flexbox-align-items" class="hover:underline {{ $page->active('/docs/flexbox-align-items') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Align Items</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/flexbox-align-content" class="hover:underline {{ $page->active('/docs/flexbox-align-content') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Align Content</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/flexbox-align-self" class="hover:underline {{ $page->active('/docs/flexbox-align-self') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Align Self</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/flexbox-flex-grow-shrink" class="hover:underline {{ $page->active('/docs/flexbox-flex-grow-shrink') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Flex, Grow, &amp; Shrink</a></li>
-                            </ul>
-                        </li>
-                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/floats" class="hover:underline {{ $page->active('/docs/floats') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Floats</a></li>
-                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/forms" class="hover:underline {{ $page->active('/docs/forms') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Forms</a></li>
-                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/grid" class="hover:underline {{ $page->active('/docs/grid') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Grid</a></li>
-                        <li class="mb-3">
-                            <a href="{{ $page->baseUrl }}/docs/cursor" class="hover:underline block mb-2 {{ $page->active(['/docs/cursor', '/docs/resize', '/docs/pointer-events', '/docs/user-select']) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Interactivity</a>
-                            <ul class="pl-4 {{ $page->active(['/docs/cursor', '/docs/resize', '/docs/pointer-events', '/docs/user-select']) ? 'block' : 'hidden' }}">
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/cursor" class="hover:underline {{ $page->active('/docs/cursor') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Cursor</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/resize" class="hover:underline {{ $page->active('/docs/resize') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Resize</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/pointer-events" class="hover:underline {{ $page->active('/docs/pointer-events') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Pointer Events</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/user-select" class="hover:underline {{ $page->active('/docs/user-select') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">User Select</a></li>
-                            </ul>
-                        </li>
-                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/lists" class="hover:underline {{ $page->active('/docs/lists') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Lists</a></li>
-                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/opacity" class="hover:underline {{ $page->active('/docs/opacity') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Opacity</a></li>
-                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/overflow" class="hover:underline {{ $page->active('/docs/overflow') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Overflow</a></li>
-                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/positioning" class="hover:underline {{ $page->active('/docs/positioning') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Positioning</a></li>
-                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/shadows" class="hover:underline {{ $page->active('/docs/shadows') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Shadows</a></li>
-                        <li class="mb-3">
-                            <a href="{{ $page->baseUrl }}/docs/width" class="hover:underline block mb-2 {{ $page->active(['/docs/width', '/docs/min-width', '/docs/max-width', '/docs/height', '/docs/min-height', '/docs/max-height']) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Sizing</a>
-                            <ul class="pl-4 {{ $page->active(['/docs/width', '/docs/min-width', '/docs/max-width', '/docs/height', '/docs/min-height', '/docs/max-height']) ? 'block' : 'hidden' }}">
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/width" class="hover:underline {{ $page->active('/docs/width') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Width</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/min-width" class="hover:underline {{ $page->active('/docs/min-width') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Min-Width</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/max-width" class="hover:underline {{ $page->active('/docs/max-width') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Max-Width</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/height" class="hover:underline {{ $page->active('/docs/height') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Height</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/min-height" class="hover:underline {{ $page->active('/docs/min-height') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Min-Height</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/max-height" class="hover:underline {{ $page->active('/docs/max-height') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Max-Height</a></li>
-                            </ul>
-                        </li>
-                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/spacing" class="hover:underline {{ $page->active('/docs/spacing') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Spacing</a></li>
-                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/svg" class="hover:underline {{ $page->active('/docs/svg') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">SVG</a></li>
-                        <li class="mb-3">
-                            <a href="{{ $page->baseUrl }}/docs/fonts" class="hover:underline block mb-2 {{ $page->active(['/docs/fonts', '/docs/text-color', '/docs/text-sizing', '/docs/font-weight', '/docs/text-alignment',  '/docs/line-height', '/docs/letter-spacing', '/docs/whitespace-and-wrapping', '/docs/text-style']) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Typography</a>
-                            <ul class="pl-4 {{ $page->active(['/docs/fonts', '/docs/text-color', '/docs/text-sizing', '/docs/font-weight', '/docs/text-alignment',  '/docs/line-height', '/docs/letter-spacing', '/docs/whitespace-and-wrapping', '/docs/text-style']) ? 'block' : 'hidden' }}">
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/fonts" class="hover:underline {{ $page->active('/docs/fonts') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Fonts</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/text-color" class="hover:underline {{ $page->active('/docs/text-color') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Color</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/text-sizing" class="hover:underline {{ $page->active('/docs/text-sizing') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Sizing</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/font-weight" class="hover:underline {{ $page->active('/docs/font-weight') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Weight</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/text-alignment" class="hover:underline {{ $page->active('/docs/text-alignment') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Alignment</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/line-height" class="hover:underline {{ $page->active('/docs/line-height') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Line Height</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/letter-spacing" class="hover:underline {{ $page->active('/docs/letter-spacing') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Letter Spacing</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/text-style" class="hover:underline {{ $page->active('/docs/text-style') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Style &amp; Decoration</a></li>
-                                <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/whitespace-and-wrapping" class="hover:underline {{ $page->active('/docs/whitespace-and-wrapping') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Whitespace &amp; Wrapping</a></li>
-                            </ul>
-                        </li>
-                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/vertical-alignment" class="hover:underline {{ $page->active('/docs/vertical-alignment') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Vertical Alignment</a></li>
-                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/visibility" class="hover:underline {{ $page->active('/docs/visibility') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Visibility</a></li>
-                        <li class="mb-3"><a href="{{ $page->baseUrl }}/docs/z-index" class="hover:underline {{ $page->active('/docs/z-index') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Z-Index</a></li>
-                    </ul>
-                </div>
-                <div class="mb-8">
-                    <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Examples</p>
-                    <ul>
-                        <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/examples/alerts') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/examples/alerts">Alerts</a></li>
-                        <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/examples/buttons') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/examples/buttons">Buttons</a></li>
-                        <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/examples/cards') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/examples/cards">Cards</a></li>
-                        <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/examples/forms') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/examples/forms">Forms</a></li>
-                        <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/examples/navigation') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/examples/navigation">Navigation</a></li>
-                    </ul>
-                </div>
+                @endforeach
             </nav>
         </div>
     </div>
