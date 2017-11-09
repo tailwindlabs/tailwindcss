@@ -17,7 +17,7 @@ Tailwind is actually built on PostCSS and therefore is configured entirely in Ja
 We recommend creating a `tailwind.js` file in your project's root, but really it can go wherever you want. We've provided a CLI utility to do this easily:
 
 <div class="bg-smoke-lighter font-mono text-sm p-4">
-<div class="text-purple-dark">./node_modules/.bin/tailwind <span class="text-blue-dark">init</span> <span class="text-smoke-darker">[filename]</span></div>
+  <div class="text-purple-dark">./node_modules/.bin/tailwind <span class="text-blue-dark">init</span> <span class="text-smoke-darker">[filename]</span></div>
 </div>
 
 Alternatively, you can simply copy the default config below.

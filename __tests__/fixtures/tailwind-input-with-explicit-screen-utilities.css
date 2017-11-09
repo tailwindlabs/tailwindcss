@@ -1,0 +1,11 @@
+@responsive {
+    .example {
+        color: red;
+    }
+}
+
+@tailwind screens;
+
+.john {
+    content: "wick";
+}
