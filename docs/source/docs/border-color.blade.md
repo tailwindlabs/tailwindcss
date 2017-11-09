@@ -12,7 +12,7 @@ features:
 @include('_partials.work-in-progress')
 
 <div class="border-t border-grey-lighter">
-  <table class="w-full text-left" style="border-collapse: collapse;">
+  <table class="w-full text-left table-collapse">
     <thead>
       <tr>
         <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>

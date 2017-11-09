@@ -10,7 +10,7 @@ features:
 ---
 
 <div class="border-t border-grey-lighter">
-  <table class="w-full text-left overflow-x-scroll block" style="border-collapse: collapse;">
+  <table class="w-full text-left table-collapse">
     <thead>
       <tr>
         <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
