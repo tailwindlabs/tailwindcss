@@ -7,16 +7,16 @@ window.Vue = require('vue')
 Vue.component('responsive-code-sample', require('./components/ResponsiveCodeSample.vue'))
 
 const app = new Vue({
-    el: '#app'
+  el: '#app'
 })
 
 Prism.highlightAll()
-anchors.options = { placement: 'left', class: 'text-slate-light' };
-anchors.add();
+anchors.options = { placement: 'left', class: 'text-slate-light' }
+anchors.add()
 
 // Add shortcut to search input when pressing the "/" key
 document.onkeyup = function (e) {
-    if (e.which == 191) {
-        document.getElementById('docsearch').focus();
-    }
-};
+  if (e.which == 191) {
+    document.getElementById('docsearch').focus()
+  }
+}

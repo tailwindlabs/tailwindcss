@@ -53,7 +53,6 @@ $.when($.ready).then(function() {
   // Load page history (for back/forward nav)
   window.onpopstate = function(e) {
     if(e.state){
-
       // Update the page
       $('title').text(e.state.title)
       $('#nav').html(e.state.nav)
