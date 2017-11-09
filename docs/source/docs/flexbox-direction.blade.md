@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Flex Direction"
-description: "Utilities for controlling the direction of flex items."
+description: "Utilities for controlling the direction of flexbox items."
 features:
   responsive: true
   customizable: false

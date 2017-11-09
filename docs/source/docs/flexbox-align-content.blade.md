@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Align Content"
-description: "Utilities for controlling how lines are positioned in multi-line flex containers."
+description: "Utilities for controlling how lines are positioned in multi-line flexbox containers."
 features:
   responsive: true
   customizable: false

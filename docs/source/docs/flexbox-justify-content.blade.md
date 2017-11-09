@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Justify Content"
-description: "Utilities for controlling flex items are positioned along a container's main axis."
+description: "Utilities for controlling flexbox items are positioned along a container's main axis."
 features:
   responsive: true
   customizable: false
