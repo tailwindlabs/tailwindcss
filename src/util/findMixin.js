@@ -1,10 +1,18 @@
 import _ from 'lodash'
 
+function ruleIsValidMixin(rule) {
+  if (rule.parent.type === 'root') {
+    return true
+  }
+
+  return rule.parent.type === 'atrule' && ['silent'].includes(rule.parent.name)
+}
+
 export default function findMixin(css, mixin, onError) {
   const matches = []
 
   css.walkRules(rule => {
-    if (rule.selectors.includes(mixin) && rule.parent.type === 'root') {
+    if (rule.selectors.includes(mixin) && ruleIsValidMixin(rule)) {
       matches.push(rule)
     }
   })
