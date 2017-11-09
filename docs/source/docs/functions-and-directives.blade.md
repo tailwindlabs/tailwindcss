@@ -162,4 +162,3 @@ Use the `config()` function to access your Tailwind config values using dot nota
   color: #a61611;
 }
 ```
-

@@ -33,10 +33,10 @@ For most projects (and to take advantage of Tailwind's customization features), 
 Tailwind is [available on npm](https://www.npmjs.com/package/tailwindcss) and can be installed using npm or Yarn.
 
 <div class="rounded bg-smoke-lighter border-2 border-grey-light font-mono text-sm p-4">
-    <div class="text-smoke-darker"># Using npm</div>
-    <div class="text-purple-dark">npm install <span class="text-blue-dark">tailwindcss</span> <span class="text-grey-darker">--save-dev</span></div>
-    <div class="text-smoke-darker mt-6"># Using Yarn</div>
-    <div class="text-purple-dark">yarn add <span class="text-blue-dark">tailwindcss</span> <span class="text-grey-darker">--dev</span></div>
+  <div class="text-smoke-darker"># Using npm</div>
+  <div class="text-purple-dark">npm install <span class="text-blue-dark">tailwindcss</span> <span class="text-grey-darker">--save-dev</span></div>
+  <div class="text-smoke-darker mt-6"># Using Yarn</div>
+  <div class="text-purple-dark">yarn add <span class="text-blue-dark">tailwindcss</span> <span class="text-grey-darker">--dev</span></div>
 </div>
 
 ### 2. Create a Tailwind config file
@@ -110,7 +110,7 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
 For simple projects or just giving Tailwind a spin, you can use the Tailwind CLI tool to process your CSS:
 
 <div class="bg-smoke-lighter font-mono text-sm p-4">
-<div class="text-purple-dark">./node_modules/.bin/tailwind build <span class="text-blue-dark">styles.css</span> <span class="text-smoke-darker">[-c ./config.js] [-o ./output.css]</span></div>
+  <div class="text-purple-dark">./node_modules/.bin/tailwind build <span class="text-blue-dark">styles.css</span> <span class="text-smoke-darker">[-c ./config.js] [-o ./output.css]</span></div>
 </div>
 
 #### Using Tailwind with PostCSS
@@ -143,19 +143,19 @@ Add `tailwindcss` to the list of plugins you pass to [gulp-postcss](https://gith
 
 ```js
 gulp.task('css', function () {
-    var postcss = require('gulp-postcss');
-    var tailwindcss = require('tailwindcss');
+  var postcss = require('gulp-postcss');
+  var tailwindcss = require('tailwindcss');
 
-    return gulp.src('src/styles.css')
-        // ...
-        .pipe(postcss([
-          // ...
-          tailwindcss('./path/to/your/tailwind-config.js'),
-          require('autoprefixer'),
-          // ...
-        ]))
-        // ...
-        .pipe(gulp.dest('build/'));
+  return gulp.src('src/styles.css')
+    // ...
+    .pipe(postcss([
+      // ...
+      tailwindcss('./path/to/your/tailwind-config.js'),
+      require('autoprefixer'),
+      // ...
+    ]))
+    // ...
+    .pipe(gulp.dest('build/'));
 });
 ```
 

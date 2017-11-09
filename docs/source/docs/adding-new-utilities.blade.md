@@ -44,7 +44,6 @@ For example, given the following CSS:
 
 For this reason, **we recommend defining any custom utility classes at the end of your stylesheet,** *after* you inject Tailwind's utility classes:
 
-
 ```less
 @@tailwind preflight;
 
@@ -140,5 +139,3 @@ html { ... }
   }
 }
 ```
-
-

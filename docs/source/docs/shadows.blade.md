@@ -10,47 +10,47 @@ features:
 ---
 
 <div class="border-t border-grey-lighter">
-    <table class="w-full text-left" style="border-collapse: collapse;">
-        <colgroup>
-            <col class="w-1/5">
-            <col class="w-1/4">
-            <col>
-        </colgroup>
-        <thead>
-          <tr>
-              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-          </tr>
-        </thead>
-        <tbody class="align-baseline">
-            <tr>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.shadow</td>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">box-shadow: <span class="whitespace-no-wrap">0 2px 4px 0 rgba(0,0,0,0.10)</span>;</td>
-                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Apply a small box shadow to an element.</td>
-            </tr>
-            <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.shadow-md</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: <span class="whitespace-no-wrap">0 4px 8px 0 rgba(0,0,0,0.12),</span> <span class="whitespace-no-wrap">0 2px 4px 0 rgba(0,0,0,0.08);</span></td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a medium box shadow to an element.</td>
-            </tr>
-            <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.shadow-lg</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: <span class="whitespace-no-wrap">0 15px 30px 0 rgba(0,0,0,0.11),</span> <span class="whitespace-no-wrap">0 5px 15px 0 rgba(0,0,0,0.08);</span></td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large box shadow to an element.</td>
-            </tr>
-            <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.shadow-inner</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: <span class="whitespace-no-wrap">inset 0 2px 4px 0 rgba(0,0,0,0.06);</span></td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a small inner box shadow to an element.</td>
-            </tr>
-            <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.shadow-none</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: none;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Remove a box shadow from an element.</td>
-            </tr>
-        </tbody>
-    </table>
+  <table class="w-full text-left" style="border-collapse: collapse;">
+    <colgroup>
+      <col class="w-1/5">
+      <col class="w-1/4">
+      <col>
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
+        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
+        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
+      </tr>
+    </thead>
+    <tbody class="align-baseline">
+      <tr>
+        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.shadow</td>
+        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">box-shadow: <span class="whitespace-no-wrap">0 2px 4px 0 rgba(0,0,0,0.10)</span>;</td>
+        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Apply a small box shadow to an element.</td>
+      </tr>
+      <tr>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.shadow-md</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: <span class="whitespace-no-wrap">0 4px 8px 0 rgba(0,0,0,0.12),</span> <span class="whitespace-no-wrap">0 2px 4px 0 rgba(0,0,0,0.08);</span></td>
+        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a medium box shadow to an element.</td>
+      </tr>
+      <tr>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.shadow-lg</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: <span class="whitespace-no-wrap">0 15px 30px 0 rgba(0,0,0,0.11),</span> <span class="whitespace-no-wrap">0 5px 15px 0 rgba(0,0,0,0.08);</span></td>
+        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large box shadow to an element.</td>
+      </tr>
+      <tr>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.shadow-inner</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: <span class="whitespace-no-wrap">inset 0 2px 4px 0 rgba(0,0,0,0.06);</span></td>
+        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a small inner box shadow to an element.</td>
+      </tr>
+      <tr>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.shadow-none</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">box-shadow: none;</td>
+        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Remove a box shadow from an element.</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 ## Outer shadow
@@ -103,32 +103,32 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex justify-center">
-    <div class="shadow px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
+  <div class="shadow px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex justify-center">
-    <div class="shadow-md px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
+  <div class="shadow-md px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
 </div>
 @endslot
 @slot('md')
 <div class="flex justify-center">
-    <div class="shadow-lg px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
+  <div class="shadow-lg px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex justify-center">
-    <div class="shadow-inner px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
+  <div class="shadow-inner px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex justify-center">
-    <div class="shadow-none px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
+  <div class="shadow-none px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
 </div>
 @endslot
 @slot('code')
 <div class="none:shadow sm:shadow-md md:shadow-lg lg:shadow-inner xl:shadow-none ...">
-    <!-- ... -->
+  <!-- ... -->
 </div>
 @endslot
 @endcomponent

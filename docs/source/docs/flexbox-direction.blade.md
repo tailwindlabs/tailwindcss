@@ -10,37 +10,37 @@ features:
 ---
 
 <div class="border-t border-grey-lighter">
-    <table class="w-full text-left" style="border-collapse: collapse;">
-        <thead>
-          <tr>
-              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-              <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-          </tr>
-        </thead>
-        <tbody class="align-baseline">
-            <tr>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.flex-row</td>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">flex-direction: row;</td>
-                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Position flex items in the normal horizontal direction.</td>
-            </tr>
-            <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-row-reverse</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-direction: row-reverse;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position flex items in the reverse horizontal direction.</td>
-            </tr>
-            <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-col</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-direction: column;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position flex items vertically.</td>
-            </tr>
-            <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-col-reverse</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-direction: column-reverse;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position flex items vertically in the reverse direction.</td>
-            </tr>
-        </tbody>
-    </table>
+  <table class="w-full text-left" style="border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
+        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
+        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
+      </tr>
+    </thead>
+    <tbody class="align-baseline">
+      <tr>
+        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.flex-row</td>
+        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">flex-direction: row;</td>
+        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Position flex items in the normal horizontal direction.</td>
+      </tr>
+      <tr>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-row-reverse</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-direction: row-reverse;</td>
+        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position flex items in the reverse horizontal direction.</td>
+      </tr>
+      <tr>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-col</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-direction: column;</td>
+        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position flex items vertically.</td>
+      </tr>
+      <tr>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-col-reverse</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-direction: column-reverse;</td>
+        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position flex items vertically in the reverse direction.</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 ### Row <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
@@ -49,9 +49,9 @@ Use `.flex-row` to position flex items horizontally in the same direction as tex
 
 @component('_partials.code-sample')
 <div class="flex flex-row bg-smoke-light">
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -61,9 +61,9 @@ Use `.flex-row-reverse` to position flex items horizontally in the opposite dire
 
 @component('_partials.code-sample')
 <div class="flex flex-row-reverse bg-smoke-light">
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -73,9 +73,9 @@ Use `.flex-col` to position flex items vertically:
 
 @component('_partials.code-sample')
 <div class="flex flex-col bg-smoke-light">
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -85,9 +85,9 @@ Use `.flex-col-reverse` to position flex items vertically in the opposite direct
 
 @component('_partials.code-sample')
 <div class="flex flex-col-reverse bg-smoke-light">
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -100,42 +100,42 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex flex-row bg-smoke-light">
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex flex-col bg-smoke-light">
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('md')
 <div class="flex flex-row-reverse bg-smoke-light">
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex flex-col-reverse bg-smoke-light">
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex flex-row bg-smoke-light">
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('code')
 <div class="none:flex-row sm:flex-col md:flex-row-reverse lg:flex-col-reverse xl:flex-row ...">
-    <!-- ... -->
+  <!-- ... -->
 </div>
 @endslot
 @endcomponent
