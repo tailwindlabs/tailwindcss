@@ -32,144 +32,31 @@
         </div>
         <div class="p-8 flex-1 overflow-y-scroll">
             <nav id="nav" class="text-base overflow-y-scroll">
+                @foreach ($page->navigation as $sectionName => $sectionItems)
                 <div class="mb-8">
-                    <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Introduction</p>
+                    <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">{{ $sectionName }}</p>
                     <ul>
-                        <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/what-is-tailwind') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/what-is-tailwind">What is Tailwind?</a></li>
+                        @foreach ($sectionItems as $name => $slugOrChildren)
+                            @if (is_string($slugOrChildren))
+                                <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/' . $slugOrChildren) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren }}">{{ $name }}</a></li>
+                            @else
+                                <li class="mb-3">
+                                    <a href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren->first() }}" class="hover:underline block mb-2 {{ $page->anyChildrenActive($slugOrChildren) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">{{ $name }}</a>
+                                    <ul class="pl-4 {{ $page->anyChildrenActive($slugOrChildren) ? 'block' : 'hidden' }}">
+                                    @foreach ($slugOrChildren as $title => $link)
+                                    <li class="mb-3">
+                                        <a class="hover:underline {{ $page->active('/docs/' . $link) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/{{ $link }}">
+                                            {{ $title }}
+                                        </a>
+                                    </li>
+                                    @endforeach
+                                    </ul>
+                                </li>
+                            @endif
+                        @endforeach
                     </ul>
                 </div>
-                <div class="mb-8">
-                    <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Getting Started</p>
-                    <ul>
-                    @include('_partials.nav-links', ['links' => [
-                        'installation' => 'Installation',
-                        'configuration' => 'Configuration',
-                        'colors' => 'Colors',
-                        'responsive-design' => 'Responsive Design',
-                        'adding-new-utilities' => 'Adding New Utilities',
-                        'extracting-components' => 'Extracting Components',
-                        'functions-and-directives' => 'Functions &amp; Directives'
-                    ]])
-                    </ul>
-                </div>
-                <div class="mt-8">
-                    <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Styles</p>
-                    <ul class="mb-8">
-                        <li class="mb-3">
-                            <a href="{{ $page->baseUrl }}/docs/background-color" class="hover:underline block mb-2 {{ $page->active('/docs/background-') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Backgrounds</a>
-                            <ul class="pl-4 {{ $page->active('/docs/background-') ? 'block' : 'hidden' }}">
-                            @include('_partials.nav-links', ['links' => [
-                                'background-color' => 'Color',
-                                'background-position' => 'Position',
-                                'background-size' => 'Size',
-                            ]])
-                            </ul>
-                        </li>
-                        <li class="mb-3">
-                            <a href="{{ $page->baseUrl }}/docs/border-width" class="hover:underline block mb-2 {{ $page->active(['/docs/border-width', '/docs/border-color', '/docs/border-style']) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Borders</a>
-                            <ul class="pl-4 {{ $page->active(['/docs/border-width', '/docs/border-color', '/docs/border-style']) ? 'block' : 'hidden' }}">
-                            @include('_partials.nav-links', ['links' => [
-                                'border-width' => 'Width',
-                                'border-color' => 'Color',
-                                'border-style' => 'Style',
-                            ]])
-                            </ul>
-                        </li>
-                        @include('_partials.nav-links', ['links' => [
-                            'border-radius' => 'Border Radius',
-                            'container' => 'Container',
-                            'display' => 'Display',
-                        ]])
-                        <li class="mb-3">
-                            <a href="{{ $page->baseUrl }}/docs/flexbox-display" class="hover:underline block mb-2 {{ $page->active('/docs/flexbox-') ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Flexbox</a>
-                            <ul class="pl-4 {{ $page->active('/docs/flexbox-') ? 'block' : 'hidden' }}">
-                            @include('_partials.nav-links', ['links' => [
-                                'flexbox-display' => 'Display',
-                                'flexbox-direction' => 'Direction',
-                                'flexbox-wrapping' => 'Wrapping',
-                                'flexbox-justify-content' => 'Justify Content',
-                                'flexbox-align-items' => 'Align Items',
-                                'flexbox-align-content' => 'Align Content',
-                                'flexbox-align-self' => 'Align Self',
-                                'flexbox-flex-grow-shrink' => 'Flex, Grow, &amp; Shrink',
-                            ]])
-                            </ul>
-                        </li>
-                        @include('_partials.nav-links', ['links' => [
-                            'floats' => 'Floats',
-                            'forms' => 'Forms',
-                            'grid' => 'Grid',
-                        ]])
-                        <li class="mb-3">
-                            <a href="{{ $page->baseUrl }}/docs/cursor" class="hover:underline block mb-2 {{ $page->active(['/docs/cursor', '/docs/resize', '/docs/pointer-events', '/docs/user-select']) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Interactivity</a>
-                            <ul class="pl-4 {{ $page->active(['/docs/cursor', '/docs/resize', '/docs/pointer-events', '/docs/user-select']) ? 'block' : 'hidden' }}">
-                            @include('_partials.nav-links', ['links' => [
-                                'cursor' => 'Cursor',
-                                'resize' => 'Resize',
-                                'pointer-events' => 'Pointer Events',
-                                'user-select' => 'User Select',
-                            ]])
-                            </ul>
-                        </li>
-                        @include('_partials.nav-links', ['links' => [
-                            'lists' => 'Lists',
-                            'opacity' => 'Opacity',
-                            'overflow' => 'Overflow',
-                            'positioning' => 'Positioning',
-                            'shadows' => 'Shadows',
-                        ]])
-                        <li class="mb-3">
-                            <a href="{{ $page->baseUrl }}/docs/width" class="hover:underline block mb-2 {{ $page->active(['/docs/width', '/docs/min-width', '/docs/max-width', '/docs/height', '/docs/min-height', '/docs/max-height']) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Sizing</a>
-                            <ul class="pl-4 {{ $page->active(['/docs/width', '/docs/min-width', '/docs/max-width', '/docs/height', '/docs/min-height', '/docs/max-height']) ? 'block' : 'hidden' }}">
-                            @include('_partials.nav-links', ['links' => [
-                                'width' => 'Width',
-                                'min-width' => 'Min-Width',
-                                'max-width' => 'Max-Width',
-                                'height' => 'Height',
-                                'min-height' => 'Min-Height',
-                                'max-height' => 'Max-Height',
-                            ]])
-                            </ul>
-                        </li>
-                        @include('_partials.nav-links', ['links' => [
-                            'spacing' => 'Spacing',
-                            'svg' => 'SVG',
-                        ]])
-                        <li class="mb-3">
-                            <a href="{{ $page->baseUrl }}/docs/fonts" class="hover:underline block mb-2 {{ $page->active(['/docs/fonts', '/docs/text-color', '/docs/text-sizing', '/docs/font-weight', '/docs/text-alignment',  '/docs/line-height', '/docs/letter-spacing', '/docs/whitespace-and-wrapping', '/docs/text-style']) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">Typography</a>
-                            <ul class="pl-4 {{ $page->active(['/docs/fonts', '/docs/text-color', '/docs/text-sizing', '/docs/font-weight', '/docs/text-alignment',  '/docs/line-height', '/docs/letter-spacing', '/docs/whitespace-and-wrapping', '/docs/text-style']) ? 'block' : 'hidden' }}">
-                            @include('_partials.nav-links', ['links' => [
-                                'fonts' => 'Fonts',
-                                'text-color' => 'Color',
-                                'text-sizing' => 'Sizing',
-                                'font-weight' => 'Weight',
-                                'text-alignment' => 'Alignment',
-                                'line-height' => 'Line Height',
-                                'letter-spacing' => 'Letter Spacing',
-                                'text-style' => 'Style &amp; Decoration',
-                                'whitespace-and-wrapping' => 'Whitespace &amp; Wrapping',
-                            ]])
-                            </ul>
-                        </li>
-                        @include('_partials.nav-links', ['links' => [
-                            'vertical-alignment' => 'Vertical Alignment',
-                            'visibility' => 'Visibility',
-                            'z-index' => 'Z-Index',
-                        ]])
-                    </ul>
-                </div>
-                <div class="mb-8">
-                    <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">Examples</p>
-                    <ul>
-                    @include('_partials.nav-links', ['links' => [
-                        'examples/alerts' => 'Alerts',
-                        'examples/buttons' => 'Buttons',
-                        'examples/cards' => 'Cards',
-                        'examples/forms' => 'Forms',
-                        'examples/navigation' => 'Navigation',
-                    ]])
-                    </ul>
-                </div>
+                @endforeach
             </nav>
         </div>
     </div>
