@@ -28,7 +28,7 @@ features:
         <tbody class="align-baseline">
             <tr>
                 <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark whitespace-no-wrap">.font-sans</td>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue;</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;</td>
                 <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the font family to the sans font stack.</td>
             </tr>
             <tr>
