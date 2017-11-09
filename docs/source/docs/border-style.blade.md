@@ -29,6 +29,11 @@ title: "Border Style"
         </thead>
         <tbody class="align-baseline">
             <tr>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.border-solid</td>
+                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">border-style: solid;</td>
+                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Sets the border style on an element to solid.</td>
+            </tr>
+            <tr>
                 <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.border-dashed</td>
                 <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">border-style: dashed;</td>
                 <td class="p-2 border-t border-smoke text-sm text-grey-darker">Sets the border style on an element to dashed.</td>
