@@ -47,7 +47,9 @@ it('throws an error if @silent is used anywhere but the root of the tree', () =>
   `)
 
   expect.assertions(1)
-  return postcss([tailwind()]).process(input).catch(e => {
-    expect(e).toMatchObject({ name: 'CssSyntaxError' })
-  })
+  return postcss([tailwind()])
+    .process(input)
+    .catch(e => {
+      expect(e).toMatchObject({ name: 'CssSyntaxError' })
+    })
 })
