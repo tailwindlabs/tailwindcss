@@ -2096,6 +2096,10 @@ button,
   border-color: #ffebef;
 }
 
+.border-solid {
+  border-style: solid;
+}
+
 .border-dashed {
   border-style: dashed;
 }
@@ -5058,6 +5062,10 @@ button,
   .sm\:border-pink-lightest,
   .sm\:hover\:border-pink-lightest:hover {
     border-color: #ffebef;
+  }
+
+  .sm\:border-solid {
+    border-style: solid;
   }
 
   .sm\:border-dashed {
@@ -8025,6 +8033,10 @@ button,
     border-color: #ffebef;
   }
 
+  .md\:border-solid {
+    border-style: solid;
+  }
+
   .md\:border-dashed {
     border-style: dashed;
   }
@@ -10990,6 +11002,10 @@ button,
     border-color: #ffebef;
   }
 
+  .lg\:border-solid {
+    border-style: solid;
+  }
+
   .lg\:border-dashed {
     border-style: dashed;
   }
@@ -13953,6 +13969,10 @@ button,
   .xl\:border-pink-lightest,
   .xl\:hover\:border-pink-lightest:hover {
     border-color: #ffebef;
+  }
+
+  .xl\:border-solid {
+    border-style: solid;
   }
 
   .xl\:border-dashed {
