@@ -2096,6 +2096,30 @@ button,
   border-color: #ffebef;
 }
 
+.border-double {
+  border-style: double;
+}
+
+.border-groove {
+  border-style: groove;
+}
+
+.border-ridge {
+  border-style: ridge;
+}
+
+.border-inset {
+  border-style: inset;
+}
+
+.border-outset {
+  border-style: outset;
+}
+
+.border-solid {
+  border-style: solid;
+}
+
 .border-dashed {
   border-style: dashed;
 }
@@ -5058,6 +5082,30 @@ button,
   .sm\:border-pink-lightest,
   .sm\:hover\:border-pink-lightest:hover {
     border-color: #ffebef;
+  }
+
+  .sm\:border-double {
+    border-style: double;
+  }
+
+  .sm\:border-groove {
+    border-style: groove;
+  }
+
+  .sm\:border-ridge {
+    border-style: ridge;
+  }
+
+  .sm\:border-inset {
+    border-style: inset;
+  }
+
+  .sm\:border-outset {
+    border-style: outset;
+  }
+
+  .sm\:border-solid {
+    border-style: solid;
   }
 
   .sm\:border-dashed {
@@ -8025,6 +8073,30 @@ button,
     border-color: #ffebef;
   }
 
+  .md\:border-double {
+    border-style: double;
+  }
+
+  .md\:border-groove {
+    border-style: groove;
+  }
+
+  .md\:border-ridge {
+    border-style: ridge;
+  }
+
+  .md\:border-inset {
+    border-style: inset;
+  }
+
+  .md\:border-outset {
+    border-style: outset;
+  }
+
+  .md\:border-solid {
+    border-style: solid;
+  }
+
   .md\:border-dashed {
     border-style: dashed;
   }
@@ -10990,6 +11062,30 @@ button,
     border-color: #ffebef;
   }
 
+  .lg\:border-double {
+    border-style: double;
+  }
+
+  .lg\:border-groove {
+    border-style: groove;
+  }
+
+  .lg\:border-ridge {
+    border-style: ridge;
+  }
+
+  .lg\:border-inset {
+    border-style: inset;
+  }
+
+  .lg\:border-outset {
+    border-style: outset;
+  }
+
+  .lg\:border-solid {
+    border-style: solid;
+  }
+
   .lg\:border-dashed {
     border-style: dashed;
   }
@@ -13953,6 +14049,30 @@ button,
   .xl\:border-pink-lightest,
   .xl\:hover\:border-pink-lightest:hover {
     border-color: #ffebef;
+  }
+
+  .xl\:border-double {
+    border-style: double;
+  }
+
+  .xl\:border-groove {
+    border-style: groove;
+  }
+
+  .xl\:border-ridge {
+    border-style: ridge;
+  }
+
+  .xl\:border-inset {
+    border-style: inset;
+  }
+
+  .xl\:border-outset {
+    border-style: outset;
+  }
+
+  .xl\:border-solid {
+    border-style: solid;
   }
 
   .xl\:border-dashed {
