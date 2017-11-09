@@ -22,31 +22,6 @@ features:
     </thead>
     <tbody class="align-baseline">
       <tr>
-          <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.double-solid</td>
-          <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">border-style: double;</td>
-          <td class="p-2 border-t border-smoke text-sm text-grey-darker">Sets the border style on an element to double.</td>
-      </tr>
-      <tr>
-          <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.groove-solid</td>
-          <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">border-style: groove;</td>
-          <td class="p-2 border-t border-smoke text-sm text-grey-darker">Sets the border style on an element to groove.</td>
-      </tr>
-      <tr>
-          <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.ridge-solid</td>
-          <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">border-style: ridge;</td>
-          <td class="p-2 border-t border-smoke text-sm text-grey-darker">Sets the border style on an element to ridge.</td>
-      </tr>
-      <tr>
-          <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.inset-solid</td>
-          <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">border-style: inset;</td>
-          <td class="p-2 border-t border-smoke text-sm text-grey-darker">Sets the border style on an element to inset.</td>
-      </tr>
-      <tr>
-          <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.outset-solid</td>
-          <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">border-style: outset;</td>
-          <td class="p-2 border-t border-smoke text-sm text-grey-darker">Sets the border style on an element to outset.</td>
-      </tr>
-      <tr>
           <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.border-solid</td>
           <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">border-style: solid;</td>
           <td class="p-2 border-t border-smoke text-sm text-grey-darker">Sets the border style on an element to solid.</td>
