@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Flex Display"
-description: "Utilities for creating flex containers."
+description: "Utilities for creating flexbox containers."
 features:
   responsive: true
   customizable: false

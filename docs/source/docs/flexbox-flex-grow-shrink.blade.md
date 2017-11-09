@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Flex, Grow, &amp; Shrink"
-description: "Utilities for controlling how flex items grow and shrink."
+description: "Utilities for controlling how flexbox items grow and shrink."
 features:
   responsive: true
   customizable: false

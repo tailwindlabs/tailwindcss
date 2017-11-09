@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Align Items"
-description: "Utilities for controlling how flex items are positioned along a container's cross axis."
+description: "Utilities for controlling how flexbox items are positioned along a container's cross axis."
 features:
   responsive: true
   customizable: false
