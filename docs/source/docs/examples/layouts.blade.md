@@ -13,7 +13,7 @@ description: null
 <html>
     <head>
         <title>Your page!</title>
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+        <!--<link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">-->
     </head>
     <body class="pb-12">
         <header class="container mx-auto px-4 py-6 border-b border-grey">
