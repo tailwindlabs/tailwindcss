@@ -85,6 +85,10 @@ export default function(config) {
           ]),
         })
 
+        if (_.get(config, 'options.important', false)) {
+          utilities.walkDecls(decl => (decl.important = true))
+        }
+
         const tailwindClasses = postcss.root({
           nodes: [...container(config), responsive(utilities)],
         })
