@@ -1,9 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Colors"
+description: null
 ---
-
-# Colors
 
 Developing an organized, consistent and beautiful color palette is critical to the design success of a project. Tailwind provides a fantastic color system that makes this very easy to accomplish.
 
@@ -24,7 +23,7 @@ To get you started, we've provided a generous palette of great looking colors th
       <div class="text-black bg-white px-6 py-3 text-sm font-semibold flex justify-between">
         <span>White</span>
         <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['white']) }}</span>
-        </div>
+      </div>
       <div class="text-grey-darkest bg-grey-lightest px-6 py-3 text-sm font-semibold flex justify-between">
         <span>Lightest</span>
         <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey-lightest']) }}</span>
@@ -450,11 +449,7 @@ You'll notice above that the color palette is also assigned to the `colors` key 
 .error { color: config('colors.grey-darker') }
 ```
 
-<!-- Document how to customize your color palette, using regular JS features in your config file to avoid duplication, merging colors, etc. -->
-
 ## Naming
-
-<!-- Talk about naming, how it's easy to use color-based names or hierarchy-based names, whatever floats your boat -->
 
 In the default color palette we've used literal color names, like `red`, `green` and `blue`. Another common approach to naming colors is choosing functional names based on how the colors are used, such as `primary`, `secondary`, and `brand`.
 

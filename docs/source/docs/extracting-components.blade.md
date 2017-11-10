@@ -1,9 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Extracting Components"
+description: null
 ---
-
-# Extracting Components
 
 Tailwind encourages a "utility-first" workflow, where new designs are initially implemented using only utility classes to avoid premature abstraction.
 
@@ -26,7 +25,6 @@ For example, using a utility-first approach, implementing a button style early i
 If this is the only button in your project, creating a custom component class for it would be premature abstraction; you'd be writing new CSS for no measurable benefit.
 
 If on the other hand you were reusing this button style in several places, keeping that long list of utility classes in sync across every button instance could become a real maintenance burden.
-
 
 ## Extracting utility patterns with `@apply`
 
@@ -58,7 +56,6 @@ Here's what a `.btn-blue` class might look like using `@apply` to compose it fro
 @endcomponent
 
 Note that `hover:`, `focus:`, and `{screen}:` utility variants can't be mixed in directly. Instead, apply the plain version of the utility you need to the appropriate pseudo-selector or in a new media query.
-
 
 ## Keeping things composable
 
@@ -166,7 +163,6 @@ It also allows you to add new one-off button styles without being forced to crea
 @endslot
 @endcomponent
 
-
 ## CSS Structure
 
 Since Tailwind's utility classes don't rely on `!important` to defeat other styles, it's important that you add your component classes *before* any utility classes in your CSS.
@@ -200,4 +196,3 @@ If you're using a preprocessor like Less or Sass, consider keeping your componen
 
 @@tailwind utilities;
 ```
-

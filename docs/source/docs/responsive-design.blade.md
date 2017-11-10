@@ -1,9 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Responsive Design"
+description: null
 ---
-
-# Responsive Design
 
 Tailwind allows you to build responsive designs in the same way you build the rest of your design &mdash; using utility classes. Every utility in Tailwind is also available in screen-size specific variations. For example, the `.font-bold` utility can be used on small screen sizes using the `.sm:font-bold` class, on medium screen sizes using the `.md:font-bold` class, on large screen sizes using the `.lg:font-bold` class and on extra large screen sizes using the `.xl:font-bold` class.
 
@@ -14,32 +13,32 @@ This is done using predefined screen sizes (media query breakpoints), each of wh
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex justify-center">
-    <div class="bg-purple text-white w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
+  <div class="bg-purple text-white w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex justify-center">
-    <div class="bg-green text-white w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
+  <div class="bg-green text-white w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
 </div>
 @endslot
 @slot('md')
 <div class="flex justify-center">
-    <div class="bg-blue text-yellow w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
+  <div class="bg-blue text-yellow w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex justify-center">
-    <div class="bg-red text-yellow w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
+  <div class="bg-red text-yellow w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex justify-center">
-    <div class="bg-orange text-yellow w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
+  <div class="bg-orange text-yellow w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
 </div>
 @endslot
 @slot('code')
 <div class="none:bg-purple none:text-white sm:bg-green md:bg-blue md:text-yellow lg:bg-red xl:bg-orange ...">
-    ...
+  ...
 </div>
 @endslot
 @endcomponent
@@ -100,7 +99,6 @@ These screen names will be reflected in your utilities, so your `.bg-red` utilit
   .desktop\:bg-red { background-color: config('colors.red'); }
 }
 ```
-
 
 ## Advanced screens
 

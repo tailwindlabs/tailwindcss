@@ -1,95 +1,88 @@
 ---
 extends: _layouts.documentation
 title: "Border Radius"
+description: "Utilities for controlling the border radius of an element."
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
 ---
 
-# Border Radius
-
-<div class="text-xl text-slate-light mb-4">
-    Utilities for controlling the border radius of an element.
-</div>
-
-@include('_partials.feature-badges', [
-    'responsive' => true,
-    'customizable' => true,
-    'hover' => false,
-    'focus' => false
-])
-
 <div class="border-t border-grey-lighter">
-    <table class="w-full text-left" style="border-collapse: collapse; table-layout: fixed;">
-        <colgroup>
-            <col class="w-1/6">
-            <col class="w-1/3">
-            <col class="w-1/2">
-        </colgroup>
-        <thead>
-            <tr>
-                <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-                <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-                <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-            </tr>
-        </thead>
-        <tbody class="align-baseline">
-            <tr>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.rounded</td>
-                <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">border-radius: .25rem;</td>
-                <td class="p-2 border-t border-smoke text-sm text-grey-darker">Apply a medium border radius to all corners of an element.</td>
-            </tr>
-            <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-sm</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: .125rem;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a small border radius to all corners of an element.</td>
-            </tr>
-            <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-lg</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: .5rem;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large border radius to all corners of an element.</td>
-            </tr>
-            <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-full</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: 9999px;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Fully round all corners of an element.</td>
-            </tr>
-            <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-none</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: 0;</td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Remove any border radius from all sides of an element.</td>
-            </tr>
-            <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-t</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
-                    border-bottom-left-radius: 0;<br>
-                    border-bottom-right-radius: 0;
-                </td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Only round the top corners of an element.</td>
-            </tr>
-            <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-r</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
-                    border-top-left-radius: 0;<br>
-                    border-bottom-left-radius: 0;
-                </td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Only round the right side corners of an element.</td>
-            </tr>
-            <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-b</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
-                    border-top-right-radius: 0;<br>
-                    border-top-left-radius: 0;
-                </td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Only round the bottom corners of an element.</td>
-            </tr>
-            <tr>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-l</td>
-                <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
-                    border-top-right-radius: 0;<br>
-                    border-bottom-right-radius: 0;
-                </td>
-                <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Only round the left side corners of an element.</td>
-            </tr>
-        </tbody>
-    </table>
+  <table class="w-full text-left table-collapse">
+    <colgroup>
+      <col class="w-1/6">
+      <col class="w-1/3">
+      <col class="w-1/2">
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
+        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
+        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
+      </tr>
+    </thead>
+    <tbody class="align-baseline">
+      <tr>
+        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.rounded</td>
+        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">border-radius: .25rem;</td>
+        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Apply a medium border radius to all corners of an element.</td>
+      </tr>
+      <tr>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-sm</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: .125rem;</td>
+        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a small border radius to all corners of an element.</td>
+      </tr>
+      <tr>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-lg</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: .5rem;</td>
+        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large border radius to all corners of an element.</td>
+      </tr>
+      <tr>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-full</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: 9999px;</td>
+        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Fully round all corners of an element.</td>
+      </tr>
+      <tr>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-none</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">border-radius: 0;</td>
+        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Remove any border radius from all sides of an element.</td>
+      </tr>
+      <tr>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-t</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
+          border-bottom-left-radius: 0;<br>
+          border-bottom-right-radius: 0;
+        </td>
+        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Only round the top corners of an element.</td>
+      </tr>
+      <tr>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-r</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
+          border-top-left-radius: 0;<br>
+          border-bottom-left-radius: 0;
+        </td>
+        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Only round the right side corners of an element.</td>
+      </tr>
+      <tr>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-b</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
+          border-top-right-radius: 0;<br>
+          border-top-left-radius: 0;
+        </td>
+        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Only round the bottom corners of an element.</td>
+      </tr>
+      <tr>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.rounded-l</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
+          border-top-right-radius: 0;<br>
+          border-bottom-right-radius: 0;
+        </td>
+        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Only round the left side corners of an element.</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 ## Rounded corners
@@ -159,32 +152,32 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex justify-center">
-    <div class="bg-grey w-12 h-12 rounded"></div>
+  <div class="bg-grey w-12 h-12 rounded"></div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex justify-center">
-    <div class="bg-grey w-12 h-12 rounded rounded-t"></div>
+  <div class="bg-grey w-12 h-12 rounded rounded-t"></div>
 </div>
 @endslot
 @slot('md')
 <div class="flex justify-center">
-    <div class="bg-grey w-12 h-12 rounded-lg rounded-b"></div>
+  <div class="bg-grey w-12 h-12 rounded-lg rounded-b"></div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex justify-center">
-    <div class="bg-grey w-12 h-12 rounded-none"></div>
+  <div class="bg-grey w-12 h-12 rounded-none"></div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex justify-center">
-    <div class="bg-grey w-12 h-12 rounded rounded-r"></div>
+  <div class="bg-grey w-12 h-12 rounded rounded-r"></div>
 </div>
 @endslot
 @slot('code')
 <div class="none:rounded sm:rounded-t md:rounded-lg md:rounded-b lg:rounded-none xl:rounded xl:rounded-r ...">
-    <!-- ... -->
+  <!-- ... -->
 </div>
 @endslot
 @endcomponent

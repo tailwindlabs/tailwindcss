@@ -1,9 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Configuration"
+description: null
 ---
-
-# Configuration
 
 Tailwind's defining feature is its ability to be customized. We understand that no two projects are the same, so why should the CSS framework you use be? Tailwind provides developers with a helpful set of front-end conventions, while still leaving room for adjustments where appropriate. This is all done using the Tailwind config file.
 
@@ -18,7 +17,7 @@ Tailwind is actually built on PostCSS and therefore is configured entirely in Ja
 We recommend creating a `tailwind.js` file in your project's root, but really it can go wherever you want. We've provided a CLI utility to do this easily:
 
 <div class="bg-smoke-lighter font-mono text-sm p-4">
-<div class="text-purple-dark">./node_modules/.bin/tailwind <span class="text-blue-dark">init</span> <span class="text-smoke-darker">[filename]</span></div>
+  <div class="text-purple-dark">./node_modules/.bin/tailwind <span class="text-blue-dark">init</span> <span class="text-smoke-darker">[filename]</span></div>
 </div>
 
 Alternatively, you can simply copy the default config below.

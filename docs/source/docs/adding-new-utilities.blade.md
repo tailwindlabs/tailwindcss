@@ -1,9 +1,8 @@
 ---
 extends: _layouts.documentation
 title: "Adding New Utilities"
+description: null
 ---
-
-# Adding New Utilities
 
 Although Tailwind provides a pretty comprehensive set of utility classes out of the box, you're inevitably going to run into situations where you need to add a few of your own.
 
@@ -44,7 +43,6 @@ For example, given the following CSS:
 ...the `div` would be green, because `.bg-green` is defined *after* `.bg-red` in the CSS file.
 
 For this reason, **we recommend defining any custom utility classes at the end of your stylesheet,** *after* you inject Tailwind's utility classes:
-
 
 ```less
 @@tailwind preflight;
@@ -141,5 +139,3 @@ html { ... }
   }
 }
 ```
-
-

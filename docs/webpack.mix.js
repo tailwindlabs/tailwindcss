@@ -13,7 +13,11 @@ const env = argv.e || argv.env || 'local'
 const plugins = [
     new OnBuild(() => {
         command.get('./vendor/bin/jigsaw build ' + env, (error, stdout, stderr) => {
-            console.log(error ? stderr : stdout)
+            if (error) {
+                console.log(stderr)
+                process.exit(1)
+            }
+            console.log(stdout)
         })
     }),
     new Watch({

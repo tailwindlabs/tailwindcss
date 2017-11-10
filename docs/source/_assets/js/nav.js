@@ -36,7 +36,7 @@ $.when($.ready).then(function() {
       // Scroll to the top of the page
       $(document).scrollTop(0)
 
-      // Add page load to brower history
+      // Add page load to browser history
       window.history.pushState({
         'href': href,
         'title': title,
@@ -53,7 +53,6 @@ $.when($.ready).then(function() {
   // Load page history (for back/forward nav)
   window.onpopstate = function(e) {
     if(e.state){
-
       // Update the page
       $('title').text(e.state.title)
       $('#nav').html(e.state.nav)

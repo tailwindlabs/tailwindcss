@@ -1,14 +1,13 @@
 ---
 extends: _layouts.documentation
 title: "What is Tailwind?"
+description: null
 ---
 
-# What is Tailwind?
-
 <div class="mt-8 text-2xl text-grey-dark mb-8">
-    <p class="leading-tight">
-        Tailwind is a utility-first CSS framework for rapidly building custom user interfaces.
-    </p>
+  <p class="leading-tight">
+    Tailwind is a utility-first CSS framework for rapidly building custom user interfaces.
+  </p>
 </div>
 
 Tailwind is different from frameworks like Bootstrap, Foundation, or Bulma in that **it's not a UI kit.**
@@ -31,33 +30,33 @@ Here's an example of a contact card component built with Tailwind without writin
 
 @component('_partials.code-sample', ['class' => 'bg-grey-lighter py-8'])
 <div class="bg-white mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
-    <div class="sm:flex sm:items-center px-6 py-4">
-        <img class="block h-16 sm:h-24 rounded-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="https://avatars2.githubusercontent.com/u/4323180?s=400&u=4962a4441fae9fba5f0f86456c6c506a21ffca4f&v=4" alt="">
-        <div class="text-center sm:text-left sm:flex-grow">
-            <div class="mb-4">
-                <p class="text-xl leading-tight">Adam Wathan</p>
-                <p class="text-sm leading-tight text-grey-dark">Developer at NothingWorks Inc.</p>
-            </div>
-            <div>
-                <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>
-            </div>
-        </div>
+  <div class="sm:flex sm:items-center px-6 py-4">
+    <img class="block h-16 sm:h-24 rounded-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="https://avatars2.githubusercontent.com/u/4323180?s=400&u=4962a4441fae9fba5f0f86456c6c506a21ffca4f&v=4" alt="">
+    <div class="text-center sm:text-left sm:flex-grow">
+      <div class="mb-4">
+        <p class="text-xl leading-tight">Adam Wathan</p>
+        <p class="text-sm leading-tight text-grey-dark">Developer at NothingWorks Inc.</p>
+      </div>
+      <div>
+        <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>
+      </div>
     </div>
+  </div>
 </div>
 @slot('code')
 <div class="bg-white mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
-    <div class="sm:flex sm:items-center px-6 py-4">
-        <img class="block h-16 sm:h-24 rounded-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="https://avatars2.githubusercontent.com/u/4323180?s=400&u=4962a4441fae9fba5f0f86456c6c506a21ffca4f&v=4" alt="">
-        <div class="text-center sm:text-left sm:flex-grow">
-            <div class="mb-4">
-                <p class="text-xl leading-tight">Adam Wathan</p>
-                <p class="text-sm leading-tight text-grey-dark">Developer at NothingWorks Inc.</p>
-            </div>
-            <div>
-                <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>
-            </div>
-        </div>
+  <div class="sm:flex sm:items-center px-6 py-4">
+    <img class="block h-16 sm:h-24 rounded-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="https://avatars2.githubusercontent.com/u/4323180?s=400&u=4962a4441fae9fba5f0f86456c6c506a21ffca4f&v=4" alt="">
+    <div class="text-center sm:text-left sm:flex-grow">
+      <div class="mb-4">
+        <p class="text-xl leading-tight">Adam Wathan</p>
+        <p class="text-sm leading-tight text-grey-dark">Developer at NothingWorks Inc.</p>
+      </div>
+      <div>
+        <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>
+      </div>
     </div>
+  </div>
 </div>
 @endslot
 @endcomponent
@@ -70,18 +69,18 @@ Tailwind provides tools for [extracting component classes](/docs/extracting-comp
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded">
-    Button
+  Button
 </button>
 
 @slot('code')
 <!-- Using utilities: -->
 <button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded">
-    Button
+  Button
 </button>
 
 <!-- Extracting component classes: -->
 <button class="btn btn-blue">
-    Button
+  Button
 </button>
 
 <style>
@@ -107,46 +106,45 @@ Tailwind uses an intuitive `{screen}:` prefix that makes it easy to notice respo
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex justify-start bg-smoke-light">
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex justify-center bg-smoke-light">
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('md')
 <div class="flex justify-end bg-smoke-light">
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex justify-between bg-smoke-light">
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex justify-around bg-smoke-light">
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-    <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
+  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('code')
 <div class="none:justify-start sm:justify-center md:justify-end lg:justify-between xl:justify-around ...">
-    <!-- ... -->
+  <!-- ... -->
 </div>
 @endslot
 @endcomponent
-
 
 ### Designed to be customized
 
@@ -164,7 +162,6 @@ const colorPalette = {
   'grey-lighter': '#f3f7f9',
   // ...
 }
-
 
 module.exports = {
   // ...

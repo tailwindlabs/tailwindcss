@@ -1,0 +1,16 @@
+language: php
+php:
+  - '7.1'
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+    - $HOME/.cache/yarn
+
+script:
+  - yarn
+  - yarn run test
+  - cd $TRAVIS_BUILD_DIR/docs && composer self-update
+  - cd $TRAVIS_BUILD_DIR/docs && composer install --prefer-dist --no-interaction
+  - cd $TRAVIS_BUILD_DIR/docs && yarn
+  - cd $TRAVIS_BUILD_DIR/docs && yarn run dev

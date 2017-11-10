@@ -8,19 +8,6 @@ import postcss from 'postcss'
 import process from 'process'
 import program from 'commander'
 
-function loadConfig(configPath) {
-  if (configPath === undefined) {
-    return undefined
-  }
-
-  if (!fs.existsSync(path.resolve(configPath))) {
-    console.error(`Config file [${configPath}] does not exist.`)
-    process.exit(1)
-  }
-
-  return require(path.resolve(configPath))
-}
-
 function writeStrategy(options) {
   if (options.output === undefined) {
     return output => {
@@ -46,7 +33,7 @@ function buildTailwind(inputFile, config, write) {
     .catch(error => console.log(error))
 }
 
-const packageJson = require(path.resolve(__dirname, '/../package.json'))
+const packageJson = require(path.resolve(__dirname, '../package.json'))
 
 program.version(packageJson.version).usage('<command> [<args>]')
 
@@ -65,8 +52,9 @@ program
       process.exit(1)
     }
 
-    const output = fs.readFileSync(path.resolve(__dirname, '/../defaultConfig.js'), 'utf8')
+    const output = fs.readFileSync(path.resolve(__dirname, '../defaultConfig.js'), 'utf8')
     fs.outputFileSync(destination, output.replace('// var defaultConfig', 'var defaultConfig'))
+    console.log(`Generated Tailwind config: ${destination}`)
     process.exit()
   })
 
@@ -83,7 +71,7 @@ program
       process.exit(1)
     }
 
-    buildTailwind(inputFile, loadConfig(options.config), writeStrategy(options)).then(() => {
+    buildTailwind(inputFile, options.config, writeStrategy(options)).then(() => {
       process.exit()
     })
   })
