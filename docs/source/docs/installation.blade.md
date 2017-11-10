@@ -110,7 +110,7 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
 For simple projects or just giving Tailwind a spin, you can use the Tailwind CLI tool to process your CSS:
 
 <div class="bg-smoke-lighter font-mono text-sm p-4">
-  <div class="text-purple-dark">./node_modules/.bin/tailwind build <span class="text-blue-dark">styles.css</span> <span class="text-smoke-darker">[-c ./config.js] [-o ./output.css]</span></div>
+  <div class="text-purple-dark">./node_modules/.bin/tailwind build <span class="text-blue-dark">styles.css</span> <span class="text-smoke-darker">[-c ./tailwind.js] [-o ./output.css]</span></div>
 </div>
 
 #### Using Tailwind with PostCSS
