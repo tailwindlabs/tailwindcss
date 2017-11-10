@@ -1,4 +1,8 @@
 import _ from 'lodash'
+import postcss from 'postcss'
+
+import applyClassPrefix from '../util/applyClassPrefix'
+
 import backgroundColors from '../generators/backgroundColors'
 import backgroundPositions from '../generators/backgroundPositions'
 import backgroundSize from '../generators/backgroundSize'
@@ -38,49 +42,56 @@ import zIndex from '../generators/zIndex'
 
 export default function(config) {
   return function(css) {
-    const options = config()
+    config = config()
 
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'utilities') {
-        const utilities = _.flatten([
-          lists(options),
-          forms(options),
-          textSizes(options),
-          textWeights(options),
-          textFonts(options),
-          textColors(options),
-          textLeading(options),
-          textTracking(options),
-          textAlign(options),
-          textWrap(options),
-          textStyle(options),
-          verticalAlign(options),
-          backgroundColors(options),
-          backgroundPositions(options),
-          backgroundSize(options),
-          borderWidths(options),
-          borderColors(options),
-          borderStyles(options),
-          rounded(options),
-          display(options),
-          position(options),
-          overflow(options),
-          sizing(options),
-          spacing(options),
-          shadows(options),
-          flex(options),
-          floats(options),
-          visibility(options),
-          zIndex(options),
-          opacity(options),
-          userSelect(options),
-          pointerEvents(options),
-          resize(options),
-          cursor(options),
-        ])
+        const utilities = postcss.root({
+          nodes: _.flatten([
+            lists(config),
+            forms(config),
+            textSizes(config),
+            textWeights(config),
+            textFonts(config),
+            textColors(config),
+            textLeading(config),
+            textTracking(config),
+            textAlign(config),
+            textWrap(config),
+            textStyle(config),
+            verticalAlign(config),
+            backgroundColors(config),
+            backgroundPositions(config),
+            backgroundSize(config),
+            borderWidths(config),
+            borderColors(config),
+            borderStyles(config),
+            rounded(config),
+            display(config),
+            position(config),
+            overflow(config),
+            sizing(config),
+            spacing(config),
+            shadows(config),
+            flex(config),
+            floats(config),
+            visibility(config),
+            zIndex(config),
+            opacity(config),
+            userSelect(config),
+            pointerEvents(config),
+            resize(config),
+            cursor(config),
+          ]),
+        })
 
-        atRule.before(container(options))
-        atRule.before(responsive(utilities))
+        const tailwindClasses = postcss.root({
+          nodes: [...container(config), responsive(utilities)],
+        })
+
+        applyClassPrefix(tailwindClasses, _.get(config, 'options.prefix', ''))
+
+        atRule.before(tailwindClasses)
         atRule.remove()
       }
     })
