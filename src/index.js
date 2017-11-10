@@ -8,6 +8,7 @@ import registerConfigAsDependency from './lib/registerConfigAsDependency'
 import substitutePreflightAtRule from './lib/substitutePreflightAtRule'
 import evaluateTailwindFunctions from './lib/evaluateTailwindFunctions'
 import generateUtilities from './lib/generateUtilities'
+import substitutePrefixAtRules from './lib/substitutePrefixAtRules'
 import substituteHoverableAtRules from './lib/substituteHoverableAtRules'
 import substituteFocusableAtRules from './lib/substituteFocusableAtRules'
 import substituteImportantAtRules from './lib/substituteImportantAtRules'
@@ -37,6 +38,7 @@ const plugin = postcss.plugin('tailwind', config => {
       substitutePreflightAtRule(lazyConfig),
       evaluateTailwindFunctions(lazyConfig),
       generateUtilities(lazyConfig),
+      substitutePrefixAtRules(lazyConfig),
       substituteHoverableAtRules(lazyConfig),
       substituteFocusableAtRules(lazyConfig),
       substituteImportantAtRules(lazyConfig),
