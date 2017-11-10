@@ -82,5 +82,6 @@ return [
         'Cards' => 'examples/cards',
         'Forms' => 'examples/forms',
         'Navigation' => 'examples/navigation',
+        'Layouts' => 'examples/layouts',
     ],
 ];
