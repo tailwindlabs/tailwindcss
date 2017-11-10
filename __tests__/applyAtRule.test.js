@@ -14,34 +14,23 @@ test("it copies a class's declarations into itself", () => {
   })
 })
 
-test("it doesn't copy a media query definition into itself", () => {
-  const output = `.a {
-            color: red;
-        }
+test('applying classes that are ever used in a media query is not supported', () => {
+  const input = `
+    .a {
+      color: red;
+    }
 
-        @media (min-width: 300px) {
-            .a { color: blue; }
-        }
+    @media (min-width: 300px) {
+      .a { color: blue; }
+    }
 
-        .b {
-            color: red;
-        }`
-
-  return run(
-    `.a {
-            color: red;
-        }
-
-        @media (min-width: 300px) {
-            .a { color: blue; }
-        }
-
-        .b {
-            @apply .a;
-        }`
-  ).then(result => {
-    expect(result.css).toEqual(output)
-    expect(result.warnings().length).toBe(0)
+    .b {
+      @apply .a;
+    }
+  `
+  expect.assertions(1)
+  return run(input).catch(e => {
+    expect(e).toMatchObject({ name: 'CssSyntaxError' })
   })
 })
 
