@@ -46,7 +46,7 @@ features:
       </tr>
       <tr>
         <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.items-baseline</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-items: space-between;</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-items: baseline;</td>
         <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Align the baselines of each item.</td>
       </tr>
     </tbody>

@@ -28,12 +28,12 @@ features:
     <tbody class="align-baseline">
       <tr>
         <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.bg-cover</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">background-position: cover;</td>
+        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">background-size: cover;</td>
         <td class="p-2 border-t border-smoke text-sm text-grey-darker">Scale the image until it fills the background layer.</td>
       </tr>
       <tr>
         <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.bg-contain</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">background-position: contain;</td>
+        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">background-size: contain;</td>
         <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Scale the image to the outer edges without cropping or stretching.</td>
       </tr>
     </tbody>
