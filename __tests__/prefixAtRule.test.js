@@ -5,7 +5,7 @@ function run(input, opts = () => {}) {
   return postcss([plugin(opts)]).process(input)
 }
 
-test("it prefixes classes with the provided prefix", () => {
+test('it prefixes classes with the provided prefix', () => {
   const input = `
     .foo { color: red; }
     @prefix 'tw-' {

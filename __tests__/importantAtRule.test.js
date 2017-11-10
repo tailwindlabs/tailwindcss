@@ -5,7 +5,7 @@ function run(input, opts = () => {}) {
   return postcss([plugin(opts)]).process(input)
 }
 
-test("it makes every property of every nested rule !important", () => {
+test('it makes every property of every nested rule !important', () => {
   const input = `
     .foo { color: blue; }
     @important {
