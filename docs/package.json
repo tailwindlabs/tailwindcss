@@ -1,11 +1,10 @@
 {
   "scripts": {
-    "local": "cross-env NODE_ENV=development webpack --progress --hide-modules --env=local --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "staging": "cross-env NODE_ENV=development webpack --progress --hide-modules --env=staging --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "production": "cross-env NODE_ENV=development webpack --progress --hide-modules --env=production --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "dev": "npm run local",
+    "development": "cross-env NODE_ENV=development webpack --progress --hide-modules --env=local --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production": "cross-env NODE_ENV=production webpack --progress --hide-modules --env=production --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "dev": "npm run development",
     "prod": "npm run production",
-    "watch": "npm run local -- --watch"
+    "watch": "npm run development -- --watch"
   },
   "private": true,
   "devDependencies": {
