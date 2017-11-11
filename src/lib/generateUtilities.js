@@ -1,8 +1,6 @@
 import _ from 'lodash'
 import postcss from 'postcss'
-
 import applyClassPrefix from '../util/applyClassPrefix'
-
 import backgroundColors from '../generators/backgroundColors'
 import backgroundPositions from '../generators/backgroundPositions'
 import backgroundSize from '../generators/backgroundSize'
