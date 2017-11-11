@@ -8,7 +8,7 @@ Tailwind exposes a few custom CSS functions and directives that can be used in y
 
 ### `@@tailwind`
 
-Use the `@@tailwind` directive to insert Tailwind's `preflight`, `utilities` and `screen` styles into your CSS. Here's a full example of how you might do this:
+Use the `@@tailwind` directive to insert Tailwind's `preflight`, `utilities` and `screens` styles into your CSS. Here's a full example of how you might do this:
 
 ```less
 /**
@@ -27,9 +27,11 @@ Use the `@@tailwind` directive to insert Tailwind's `preflight`, `utilities` and
 @@tailwind utilities;
 
 /**
- * (Optional)
- * This injects the utility classes and styles wrapped by the @@responsive directive.
- * These will be appended at the end of the stylesheet if the `@@tailwind screens` directive is not used.
+ * Use this directive to control where Tailwind injects the responsive
+ * variations of each utility.
+ * 
+ * If omitted, Tailwind will append these classes to the very end of 
+ * your stylesheet by default.
  */
  @@tailwind screens;
 ```
