@@ -42,58 +42,58 @@ import zIndex from '../generators/zIndex'
 
 export default function(config) {
   return function(css) {
-    config = config()
+    let unwrappedConfig = config()
 
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'utilities') {
         const utilities = postcss.root({
           nodes: _.flatten([
-            lists(config),
-            forms(config),
-            textSizes(config),
-            textWeights(config),
-            textFonts(config),
-            textColors(config),
-            textLeading(config),
-            textTracking(config),
-            textAlign(config),
-            textWrap(config),
-            textStyle(config),
-            verticalAlign(config),
-            backgroundColors(config),
-            backgroundPositions(config),
-            backgroundSize(config),
-            borderWidths(config),
-            borderColors(config),
-            borderStyles(config),
-            rounded(config),
-            display(config),
-            position(config),
-            overflow(config),
-            sizing(config),
-            spacing(config),
-            shadows(config),
-            flex(config),
-            floats(config),
-            visibility(config),
-            zIndex(config),
-            opacity(config),
-            userSelect(config),
-            pointerEvents(config),
-            resize(config),
-            cursor(config),
+            lists(unwrappedConfig),
+            forms(unwrappedConfig),
+            textSizes(unwrappedConfig),
+            textWeights(unwrappedConfig),
+            textFonts(unwrappedConfig),
+            textColors(unwrappedConfig),
+            textLeading(unwrappedConfig),
+            textTracking(unwrappedConfig),
+            textAlign(unwrappedConfig),
+            textWrap(unwrappedConfig),
+            textStyle(unwrappedConfig),
+            verticalAlign(unwrappedConfig),
+            backgroundColors(unwrappedConfig),
+            backgroundPositions(unwrappedConfig),
+            backgroundSize(unwrappedConfig),
+            borderWidths(unwrappedConfig),
+            borderColors(unwrappedConfig),
+            borderStyles(unwrappedConfig),
+            rounded(unwrappedConfig),
+            display(unwrappedConfig),
+            position(unwrappedConfig),
+            overflow(unwrappedConfig),
+            sizing(unwrappedConfig),
+            spacing(unwrappedConfig),
+            shadows(unwrappedConfig),
+            flex(unwrappedConfig),
+            floats(unwrappedConfig),
+            visibility(unwrappedConfig),
+            zIndex(unwrappedConfig),
+            opacity(unwrappedConfig),
+            userSelect(unwrappedConfig),
+            pointerEvents(unwrappedConfig),
+            resize(unwrappedConfig),
+            cursor(unwrappedConfig),
           ]),
         })
 
-        if (_.get(config, 'options.important', false)) {
+        if (_.get(unwrappedConfig, 'options.important', false)) {
           utilities.walkDecls(decl => (decl.important = true))
         }
 
         const tailwindClasses = postcss.root({
-          nodes: [...container(config), responsive(utilities)],
+          nodes: [...container(unwrappedConfig), responsive(utilities)],
         })
 
-        applyClassPrefix(tailwindClasses, _.get(config, 'options.prefix', ''))
+        applyClassPrefix(tailwindClasses, _.get(unwrappedConfig, 'options.prefix', ''))
 
         atRule.before(tailwindClasses)
         atRule.remove()
