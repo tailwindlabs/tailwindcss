@@ -202,7 +202,7 @@ features:
       <tr>
         <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.radius-none</td>
         <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-radius: 0;</td>
-       Remove any border radius from all corners of an element. <td class="p-2 border-t border-smoke-light text-sm text-grey-darker"></td>
+        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Remove any border radius from all corners of an element.</td>
       </tr>
       <tr>
         <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.radius-t-none</td>
