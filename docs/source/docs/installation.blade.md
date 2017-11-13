@@ -63,7 +63,7 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
  * You can see the styles here:
  * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
  *
- * Note: If using `postcss-import`, place this line in it's own file:
+ * If using `postcss-import`, you should import this line from it's own file:
  * 
  * @@import "./tailwind-preflight.css";
  *
@@ -91,7 +91,7 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
  * This injects all of Tailwind's utility classes, generated based on your
  * config file.
  *
- * Note: If using `postcss-import`, place this line in it's own file:
+ * If using `postcss-import`, you should import this line from it's own file:
  * 
  * @@import "./tailwind-utilities.css";
  *
