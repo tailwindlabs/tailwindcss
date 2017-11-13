@@ -15,8 +15,7 @@ function findMixin(css, mixin, onError) {
     if (rule.selectors.includes(mixin)) {
       if (rule.parent.type !== 'root') {
         onError(
-          `\`@apply\` cannot be used with ${mixin} because ${mixin} is nested inside of an at-rule (@${rule
-            .parent.name}).`
+          `\`@apply\` cannot be used with ${mixin} because ${mixin} is nested inside of an at-rule (@${rule.parent.name}).`
         )
       }
 
@@ -25,7 +24,7 @@ function findMixin(css, mixin, onError) {
   })
 
   if (_.isEmpty(matches) && _.isFunction(onError)) {
-    onError(`No ${mixin} class found.`)
+    onError(`\`@apply\` cannot be used with ${mixin} because ${mixin} either does not exist, or it's actual definition includes a pseudo-class like :hover, :active, etc.`)
   }
 
   return _.flatten(matches.map(match => match.clone().nodes))
