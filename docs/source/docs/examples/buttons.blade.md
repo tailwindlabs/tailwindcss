@@ -9,13 +9,13 @@ description: null
 ### Simple
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded">
+<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 radius-md">
   Button
 </button>
 
 @slot('code')
 <!-- Using utilities: -->
-<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded">
+<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 radius-md">
   Button
 </button>
 
@@ -26,7 +26,7 @@ description: null
 
 <style>
   .btn {
-    @apply&nbsp;.font-bold .py-2 .px-4 .rounded;
+    @apply&nbsp;.font-bold .py-2 .px-4 .radius-md;
   }
   .btn-blue {
     @apply&nbsp;.bg-blue .text-white;
@@ -41,7 +41,7 @@ description: null
 ### Pill
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded-full">
+<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 radius-full">
   Button
 </button>
 @endcomponent
@@ -49,7 +49,7 @@ description: null
 ### Outline
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-transparent hover:bg-blue text-blue-dark font-semibold hover:text-white py-2 px-4 border border-blue hover:border-transparent rounded">
+<button class="bg-transparent hover:bg-blue text-blue-dark font-semibold hover:text-white py-2 px-4 border border-blue hover:border-transparent radius-md">
   Button
 </button>
 @endcomponent
@@ -57,7 +57,7 @@ description: null
 ### Bordered
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 border border-blue-darker rounded">
+<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 border border-blue-darker radius-md">
   Button
 </button>
 @endcomponent
@@ -65,7 +65,7 @@ description: null
 ### Disabled
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-blue text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed">
+<button class="bg-blue text-white font-bold py-2 px-4 radius-md opacity-50 cursor-not-allowed">
   Button
 </button>
 @endcomponent
@@ -73,7 +73,7 @@ description: null
 ### 3D
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-blue hover:bg-blue-light text-white font-bold py-2 px-4 border-b-4 border-blue-dark hover:border-blue rounded">
+<button class="bg-blue hover:bg-blue-light text-white font-bold py-2 px-4 border-b-4 border-blue-dark hover:border-blue radius-md">
   Button
 </button>
 @endcomponent
@@ -81,28 +81,28 @@ description: null
 ### Elevated
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-white hover:bg-smoke-lighter text-slate-dark font-semibold py-2 px-4 border border-slate-lighter rounded shadow">
+<button class="bg-white hover:bg-smoke-lighter text-slate-dark font-semibold py-2 px-4 border border-slate-lighter radius-md shadow">
   Button
 </button>
 @endcomponent
 
-### Button Groups
+### Groups
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <div class="inline-flex">
-  <button class="bg-smoke hover:bg-smoke-dark text-slate-dark font-bold py-2 px-4 rounded rounded-l">
+  <button class="bg-smoke hover:bg-smoke-dark text-slate-dark font-bold py-2 px-4 radius-l-md">
     Prev
   </button>
-  <button class="bg-smoke hover:bg-smoke-dark text-slate-dark font-bold py-2 px-4 rounded rounded-r">
+  <button class="bg-smoke hover:bg-smoke-dark text-slate-dark font-bold py-2 px-4 radius-r-md">
     Next
   </button>
 </div>
 @endcomponent
 
-### w/Icon
+### Icons
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-smoke hover:bg-smoke-dark text-slate-dark font-bold py-2 px-4 rounded inline-flex items-center">
+<button class="bg-smoke hover:bg-smoke-dark text-slate-dark font-bold py-2 px-4 radius-md inline-flex items-center">
   <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
   <span>Download</span>
 </button>

@@ -29,8 +29,8 @@ Use the `@@tailwind` directive to insert Tailwind's `preflight`, `utilities` and
 /**
  * Use this directive to control where Tailwind injects the responsive
  * variations of each utility.
- * 
- * If omitted, Tailwind will append these classes to the very end of 
+ *
+ * If omitted, Tailwind will append these classes to the very end of
  * your stylesheet by default.
  */
  @@tailwind screens;
@@ -44,7 +44,7 @@ This is extremely useful when you find a common utility pattern in your HTML tha
 
 ```less
 .btn {
-  @@apply .font-bold .py-2 .px-4 .rounded;
+  @@apply .font-bold .py-2 .px-4 .radius-md;
 }
 .btn-blue {
   @@apply .bg-blue .text-white;

@@ -34,7 +34,7 @@ description: null
     <span class="font-semibold text-xl tracking-tight">Tailwind CSS</span>
   </div>
   <div class="block lg:hidden">
-    <button class="flex items-center px-3 py-2 border rounded text-teal-lighter border-teal-light hover:text-white hover:border-white">
+    <button class="flex items-center px-3 py-2 border radius-md text-teal-lighter border-teal-light hover:text-white hover:border-white">
       <svg class="h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
     </button>
   </div>
@@ -51,7 +51,7 @@ description: null
       </a>
     </div>
     <div>
-      <a href="#" class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal hover:bg-white mt-4 lg:mt-0">Download</a>
+      <a href="#" class="inline-block text-sm px-4 py-2 leading-none border radius-md text-white border-white hover:border-transparent hover:text-teal hover:bg-white mt-4 lg:mt-0">Download</a>
     </div>
   </div>
 </nav>
@@ -62,7 +62,7 @@ description: null
 @component('_partials.code-sample')
 <ul class="list-reset flex border-b">
   <li class="-mb-px mr-1">
-    <a class="bg-white inline-block border-l border-t border-r rounded rounded-t py-2 px-4 text-blue-dark font-semibold" href="#">Active</a>
+    <a class="bg-white inline-block border-l border-t border-r radius-t-md py-2 px-4 text-blue-dark font-semibold" href="#">Active</a>
   </li>
   <li class="mr-1">
     <a class="bg-white inline-block py-2 px-4 text-blue hover:text-blue-darker font-semibold" href="#">Tab</a>
@@ -81,10 +81,10 @@ description: null
 @component('_partials.code-sample')
 <ul class="list-reset flex">
   <li class="mr-3">
-    <a class="inline-block border border-blue rounded py-1 px-3 bg-blue text-white" href="#">Active Pill</a>
+    <a class="inline-block border border-blue radius-md py-1 px-3 bg-blue text-white" href="#">Active Pill</a>
   </li>
   <li class="mr-3">
-    <a class="inline-block border border-white rounded hover:border-grey-lighter text-blue hover:bg-grey-lighter py-1 px-3" href="#">Pill</a>
+    <a class="inline-block border border-white radius-md hover:border-grey-lighter text-blue hover:bg-grey-lighter py-1 px-3" href="#">Pill</a>
   </li>
   <li class="mr-3">
     <a class="inline-block py-1 px-3 text-grey-light cursor-not-allowed" href="#">Disabled Pill</a>
@@ -97,10 +97,10 @@ description: null
 @component('_partials.code-sample')
 <ul class="list-reset flex">
   <li class="flex-1 mr-2">
-    <a class="text-center block border border-blue rounded py-2 px-4 bg-blue hover:bg-blue-dark text-white" href="#">Active Item</a>
+    <a class="text-center block border border-blue radius-md py-2 px-4 bg-blue hover:bg-blue-dark text-white" href="#">Active Item</a>
   </li>
   <li class="flex-1 mr-2">
-    <a class="text-center block border border-white rounded hover:border-grey-lighter text-blue hover:bg-grey-lighter py-2 px-4" href="#">Nav Item</a>
+    <a class="text-center block border border-white radius-md hover:border-grey-lighter text-blue hover:bg-grey-lighter py-2 px-4" href="#">Nav Item</a>
   </li>
   <li class="text-center flex-1">
     <a class="block py-2 px-4 text-grey-light cursor-not-allowed" href="#">Disabled Item</a>
@@ -113,10 +113,10 @@ description: null
 @component('_partials.code-sample')
 <ul class="list-reset flex justify-between">
   <li class="mr-3">
-    <a class="inline-block border border-blue rounded py-2 px-4 bg-blue hover:bg-blue-dark text-white" href="#">Active Pill</a>
+    <a class="inline-block border border-blue radius-md py-2 px-4 bg-blue hover:bg-blue-dark text-white" href="#">Active Pill</a>
   </li>
   <li class="mr-3">
-    <a class="inline-block border border-white rounded hover:border-grey-lighter text-blue hover:bg-grey-lighter py-2 px-4" href="#">Pill</a>
+    <a class="inline-block border border-white radius-md hover:border-grey-lighter text-blue hover:bg-grey-lighter py-2 px-4" href="#">Pill</a>
   </li>
   <li class="mr-3">
     <a class="inline-block py-2 px-4 text-grey-light cursor-not-allowed" href="#">Disabled Pill</a>

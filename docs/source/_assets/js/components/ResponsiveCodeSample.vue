@@ -22,7 +22,7 @@
         <p class="text-xs">xl</p>
       </span>
     </div>
-    <div class="rounded overflow-hidden border-2 border-smoke mb-8">
+    <div class="radius-md overflow-hidden border-2 border-smoke mb-8">
       <div class="p-4 bg-smoke-lighter border-b-2 border-smoke">
         <div class="whitespace-pre font-mono text-slate-lighter text-sm overflow-x-scroll" v-html="highlightedCode"></div>
       </div>

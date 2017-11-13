@@ -37,7 +37,7 @@ features:
 In addition to the standard responsive variations, border colors also come in `hover:` variations that apply the given border color on hover.
 
 @component('_partials.code-sample', ['class' => 'text-center'])
-<button class="border-2 border-blue hover:border-red bg-transparent text-blue-dark hover:text-red-dark py-2 px-4 font-semibold rounded">
+<button class="border-2 border-blue hover:border-red bg-transparent text-blue-dark hover:text-red-dark py-2 px-4 font-semibold radius-md">
   Button
 </button>
 @endcomponent

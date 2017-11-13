@@ -103,27 +103,27 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex justify-center">
-  <div class="shadow px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
+  <div class="shadow px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 radius-full"></div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex justify-center">
-  <div class="shadow-md px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
+  <div class="shadow-md px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 radius-full"></div>
 </div>
 @endslot
 @slot('md')
 <div class="flex justify-center">
-  <div class="shadow-lg px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
+  <div class="shadow-lg px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 radius-full"></div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex justify-center">
-  <div class="shadow-inner px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
+  <div class="shadow-inner px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 radius-full"></div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex justify-center">
-  <div class="shadow-none px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
+  <div class="shadow-none px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 radius-full"></div>
 </div>
 @endslot
 @slot('code')

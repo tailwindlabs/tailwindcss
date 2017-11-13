@@ -41,7 +41,7 @@ Form controls are great candidates for component classes, but just for fun, here
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <div class="inline-block relative w-64">
-  <select class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow">
+  <select class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 radius-md shadow">
     <option>Really long option that will likely overlap the chevron</option>
     <option>Option 2</option>
     <option>Option 3</option>
