@@ -22,6 +22,9 @@ function sizedBorder(radius, modifier) {
       'border-top-left-radius': `${radius}`,
       'border-bottom-left-radius': `${radius}`,
     },
+    [`radius-tl-${modifier}`]: {
+      'border-top-left-radius': `${radius}`,
+    },
     [`radius-tr-${modifier}`]: {
       'border-top-right-radius': `${radius}`,
     },
@@ -30,9 +33,6 @@ function sizedBorder(radius, modifier) {
     },
     [`radius-bl-${modifier}`]: {
       'border-bottom-left-radius': `${radius}`,
-    },
-    [`radius-tl-${modifier}`]: {
-      'border-top-left-radius': `${radius}`,
     },
   })
 }
