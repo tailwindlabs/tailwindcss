@@ -410,16 +410,16 @@ module.exports = {
   | is provided, it will be made available as the non-suffixed `.rounded`
   | utility.
   |
-  | Class name: .rounded{-radius?}
+  | Class name: .radius-{size}
   |
   */
 
   borderRadius: {
-    default: '.25rem',
+    'none': '0',
     'sm': '.125rem',
+    'md': '.25rem',
     'lg': '.5rem',
     'full': '9999px',
-    'none': '0',
   },
 
 
