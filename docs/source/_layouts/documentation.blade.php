@@ -7,6 +7,11 @@
 <meta name="twitter:description" content="{{ $page->description ? $page->description : 'Documentation for the Tailwind CSS framework.' }}">
 <meta name="twitter:image" content="https://tailwindcss.com/img/tailwind-square.png">
 <meta name="twitter:creator" content="@tailwindcss">
+<meta property="og:url" content="https://tailwindcss.com/" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="{{ $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS - A Utility-First CSS Framework for Rapid UI Development' }}" />
+<meta property="og:description" content="{{ $page->description ? $page->description : 'Documentation for the Tailwind CSS framework.' }}" />
+<meta property="og:image" content="https://tailwindcss.com/img/twitter-card.png" />
 @endsection
 
 @section('body')
