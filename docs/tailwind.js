@@ -1,4 +1,4 @@
-var config = require('../lib/index').defaultConfig()
+var config = require('../defaultConfig')()
 
 config.colors = Object.assign(config.colors, {
   'slate-darker': '#212b35',

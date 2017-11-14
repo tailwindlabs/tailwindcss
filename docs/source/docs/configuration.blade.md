@@ -29,5 +29,5 @@ Please see the [installation](/docs/installation#4-process-your-css-with-tailwin
 As you can see below, the default config file is heavily documented. Read through it to get a better understanding of how each section can be customized for your project.
 
 ```js
-{!! file_get_contents(dirname(dirname(__DIR__)).'/defaultConfig.js') !!}
+{!! str_replace('// var defaultConfig', 'var defaultConfig', file_get_contents(dirname(dirname(__DIR__)).'/defaultConfig.stub.js')) !!}
 ```
