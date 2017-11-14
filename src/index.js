@@ -23,7 +23,7 @@ const plugin = postcss.plugin('tailwind', config => {
 
   const lazyConfig = () => {
     if (_.isUndefined(config)) {
-      return require('../defaultConfig')
+      return require('../defaultConfig')()
     }
 
     delete require.cache[require.resolve(path.resolve(config))]
@@ -45,9 +45,5 @@ const plugin = postcss.plugin('tailwind', config => {
     ]
   )
 })
-
-plugin.defaultConfig = function() {
-  return _.cloneDeep(require('../defaultConfig'))
-}
 
 module.exports = plugin
