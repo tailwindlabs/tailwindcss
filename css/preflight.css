@@ -490,7 +490,6 @@ pre {
 
 button {
   background: transparent;
-  border: 0;
   padding: 0;
 }
 
@@ -505,13 +504,8 @@ button:focus {
 }
 
 fieldset {
-  border: 0;
   margin: 0;
   padding: 0;
-}
-
-iframe {
-  border: 0;
 }
 
 /**
@@ -534,6 +528,7 @@ iframe {
   border-width: 0;
   border-style: solid;
   border-color: config('borderColors.default', currentColor);
+  border-radius: 0;
 }
 
 textarea { resize: vertical; }
