@@ -28,6 +28,121 @@ Please see the [installation](/docs/installation#4-process-your-css-with-tailwin
 
 As you can see below, the default config file is heavily documented. Read through it to get a better understanding of how each section can be customized for your project.
 
+<pre class="h-128 overflow-y-scroll language-javascript"><code>{!! str_replace('// var defaultConfig', 'var defaultConfig', file_get_contents(dirname(dirname(__DIR__)).'/defaultConfig.stub.js')) !!}</code></pre>
+
+## Options
+
+In addition to defining your project's design system, the configuration file can also be used for setting a variety of global options.
+
+These options are available under the top-level `options` key, located at the bottom of the configuration file by default.
+
+### Prefix
+
+The `prefix` option allows you to add a custom prefix to all of Tailwind's generated utility classes.
+
+This can be really useful when layering Tailwind on top of existing CSS where there might be naming conflicts.
+
+For example, you could add a `tw-` prefix by setting the `prefix` option like so:
+
 ```js
-{!! str_replace('// var defaultConfig', 'var defaultConfig', file_get_contents(dirname(dirname(__DIR__)).'/defaultConfig.stub.js')) !!}
+{
+  // ...
+  options: {
+    prefix: 'tw-',
+    // ...
+  }
+}
+```
+
+It's important to understand that this prefix is added to the beginning of each *utility* name, not to the entire class name.
+
+That means that classes with responsive or state prefixes like `sm:` or `hover:` will still have the responsive or state prefix *first*, with your custom prefix appearing after the colon:
+
+```html
+<div class="tw-text-lg md:tw-text-xl tw-bg-red hover:tw-bg-blue">
+  <!-- -->
+</div>
+```
+
+Prefixes are only added to standard Tailwind utilities; **no prefix will be added to your own custom utilities.**
+
+That means if you add your own responsive utility like this:
+
+```css
+@responsive {
+  .bg-brand-gradient { ... }
+}
+```
+
+...the generated responsive classes will not have your configured prefix:
+
+```css
+.bg-brand-gradient { ... }
+@media (min-width: 576px) {
+  .sm\:bg-brand-gradient { ... }
+}
+@media (min-width: 768px) {
+  .md\:bg-brand-gradient { ... }
+}
+@media (min-width: 992) {
+  .lg\:bg-brand-gradient { ... }
+}
+@media (min-width: 1200px) {
+  .xl\:bg-brand-gradient { ... }
+}
+```
+
+If you'd like to prefix your own utilities as well, just add the prefix to the class definition:
+
+```css
+@responsive {
+  .tw-bg-brand-gradient { ... }
+}
+```
+
+### Important
+
+The `important` option lets you control whether or not Tailwind's utilities should be marked with `!important`.
+
+This can be really useful when using Tailwind with existing CSS that has high specificity selectors.
+
+To generate utilities as `!important`, set the `important` key in your configuration options to `true`:
+
+```js
+{
+  // ...
+  options: {
+    important: true,
+    // ...
+  }
+}
+```
+
+Now all of Tailwind's utility classes will be generated as `!important`:
+
+```css
+.leading-none {
+  line-height: 1 !important;
+}
+.leading-tight {
+  line-height: 1.25 !important;
+}
+.leading-normal {
+  line-height: 1.5 !important;
+}
+.leading-loose {
+  line-height: 2 !important;
+}
+```
+
+Note that any of your own custom utilities **will not** be marked as `!important` just by enabling this option.
+
+If you'd like to make your own utilities `!important`, just add `!important` to the end of each declaration yourself:
+
+```css
+@responsive {
+  .bg-brand-gradient {
+    background-image: linear-gradient(#3490dc, #6574cd) !important;
+  }
+}
 ```
