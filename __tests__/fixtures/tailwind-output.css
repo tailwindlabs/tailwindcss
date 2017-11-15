@@ -528,6 +528,18 @@ fieldset {
   border-width: 0;
   border-style: solid;
   border-color: #dae4e9;
+}
+
+/**
+ * Temporary reset for a change introduced in Chrome 62 but now reverted.
+ *
+ * We can remove this when the reversion is in a normal Chrome release.
+ */
+input[type="button" i],
+input[type="submit" i],
+input[type="reset" i],
+input[type="file" i]::-webkit-file-upload-button,
+button {
   border-radius: 0;
 }
 
