@@ -29,9 +29,9 @@ description: null
 
 @component('_partials.code-sample', ['class' => 'p-10 flex justify-center'])
 <div class="max-w-md w-full lg:flex">
-  <div class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded rounded-t lg:rounded lg:rounded-l text-center overflow-hidden" style="background-image: url('{{ $page->baseUrl }}/img/card-left.jpg')" title="Woman holding a mug">
+  <div class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" style="background-image: url('{{ $page->baseUrl }}/img/card-left.jpg')" title="Woman holding a mug">
   </div>
-  <div class="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded rounded-b lg:rounded lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+  <div class="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
     <div class="mb-8">
       <p class="text-sm text-grey-dark flex items-center">
         <svg class="text-grey w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

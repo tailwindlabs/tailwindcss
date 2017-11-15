@@ -78,8 +78,14 @@ config.padding = Object.assign(config.padding, {
   '80': '20rem',
 })
 
-config.margin = config.padding
+config.margin = Object.assign(config.margin, {
+  '10': '2.5rem',
+  '12': '3rem',
+  '16': '4rem',
+  '20': '5rem',
+  '80': '20rem',
+})
 
-config.negativeMargin = config.padding
+config.negativeMargin = config.margin
 
 module.exports = config

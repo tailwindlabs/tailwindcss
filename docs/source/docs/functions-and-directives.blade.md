@@ -29,8 +29,8 @@ Use the `@@tailwind` directive to insert Tailwind's `preflight`, `utilities` and
 /**
  * Use this directive to control where Tailwind injects the responsive
  * variations of each utility.
- * 
- * If omitted, Tailwind will append these classes to the very end of 
+ *
+ * If omitted, Tailwind will append these classes to the very end of
  * your stylesheet by default.
  */
  @@tailwind screens;

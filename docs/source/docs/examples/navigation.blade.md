@@ -62,7 +62,7 @@ description: null
 @component('_partials.code-sample')
 <ul class="list-reset flex border-b">
   <li class="-mb-px mr-1">
-    <a class="bg-white inline-block border-l border-t border-r rounded rounded-t py-2 px-4 text-blue-dark font-semibold" href="#">Active</a>
+    <a class="bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-dark font-semibold" href="#">Active</a>
   </li>
   <li class="mr-1">
     <a class="bg-white inline-block py-2 px-4 text-blue hover:text-blue-darker font-semibold" href="#">Tab</a>
