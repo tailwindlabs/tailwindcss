@@ -7,6 +7,11 @@
 <meta name="twitter:description" content="A utility-first CSS framework for rapidly building custom user interfaces.">
 <meta name="twitter:image" content="https://tailwindcss.com/img/launch-card-optimized.png">
 <meta name="twitter:creator" content="@tailwindcss">
+<meta property="og:url" content="https://tailwindcss.com/" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Tailwind CSS" />
+<meta property="og:description" content="A utility-first CSS framework for rapidly building custom user interfaces." />
+<meta property="og:image" content="https://tailwindcss.com/img/twitter-card.png" />
 @endsection
 
 @section('body')
