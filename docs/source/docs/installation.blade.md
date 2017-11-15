@@ -32,7 +32,7 @@ For most projects (and to take advantage of Tailwind's customization features), 
 
 Tailwind is [available on npm](https://www.npmjs.com/package/tailwindcss) and can be installed using npm or Yarn.
 
-<div class="radius-md bg-smoke-lighter border-2 border-grey-light font-mono text-sm p-4">
+<div class="rounded bg-smoke-lighter border-2 border-grey-light font-mono text-sm p-4">
   <div class="text-smoke-darker"># Using npm</div>
   <div class="text-purple-dark">npm install <span class="text-blue-dark">tailwindcss</span> <span class="text-grey-darker">--save-dev</span></div>
   <div class="text-smoke-darker mt-6"># Using Yarn</div>
@@ -45,7 +45,7 @@ Tailwind is configured almost entirely in plain JavaScript. To do this you'll ne
 
 We've provided a CLI utility to do this easily:
 
-<div class="radius-md bg-smoke-lighter border-2 border-grey-light font-mono text-sm p-4">
+<div class="rounded bg-smoke-lighter border-2 border-grey-light font-mono text-sm p-4">
   <div class="text-purple-dark">./node_modules/.bin/tailwind <span class="text-blue-dark">init</span> <span class="text-smoke-darker">[filename]</span></div>
 </div>
 

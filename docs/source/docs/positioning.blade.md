@@ -202,14 +202,14 @@ Use `.fixed` to position an element relative to the browser window.
 Offsets are calculated relative to the viewport and the element *will* act as a position reference for absolutely positioned children.
 
 @component('_partials.code-sample')
-<div class="radius-b-md overflow-hidden max-w-md mx-auto mt-4 mb-4">
-  <div class="radius-t-md border-t border-l border-r border-smoke bg-smoke-light flex px-4 py-3">
+<div class="rounded-b overflow-hidden max-w-md mx-auto mt-4 mb-4">
+  <div class="rounded-t border-t border-l border-r border-smoke bg-smoke-light flex px-4 py-3">
     <div class="mr-6">
-      <span class="inline-block radius-full bg-smoke-dark h-3 w-3 mr-1"></span>
-      <span class="inline-block radius-full bg-smoke-dark h-3 w-3 mr-1"></span>
-      <span class="inline-block radius-full bg-smoke-dark h-3 w-3"></span>
+      <span class="inline-block rounded-full bg-smoke-dark h-3 w-3 mr-1"></span>
+      <span class="inline-block rounded-full bg-smoke-dark h-3 w-3 mr-1"></span>
+      <span class="inline-block rounded-full bg-smoke-dark h-3 w-3"></span>
     </div>
-    <div class="flex-1 bg-white border border-smoke radius-md mr-4"></div>
+    <div class="flex-1 bg-white border border-smoke rounded mr-4"></div>
   </div>
   <div class="relative bg-smoke h-64">
 
@@ -260,17 +260,17 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
 <div class="flex items-start mt-8 text-sm leading-none mb-8">
   <div class="pr-12">
     <div class="mb-3 text-slate uppercase">Class</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border radius-md">pin</code></div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">pin</code></div>
   </div>
   <div class="pl-12 pr-12 border-l">
     <div class="mb-3 text-slate"><span class="uppercase">Edge</span> <span class="text-slate-light text-xs">(optional)</span></div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border radius-md bg-smoke-light">&nbsp;</code> All <em class="text-xs text-slate-light">(default)</em></div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border radius-md">t</code> Top</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border radius-md">r</code> Right</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border radius-md">b</code> Bottom</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border radius-md">l</code> Left</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border radius-md">y</code> Top and Bottom</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border radius-md">x</code> Left and Right</div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded bg-smoke-light">&nbsp;</code> All <em class="text-xs text-slate-light">(default)</em></div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">t</code> Top</div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">r</code> Right</div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">b</code> Bottom</div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">l</code> Left</div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">y</code> Top and Bottom</div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">x</code> Left and Right</div>
   </div>
 </div>
 

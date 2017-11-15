@@ -23,8 +23,8 @@
       </div>
       <h2 class="mt-12 font-light text-3xl sm:text-4xl text-center">A Utility-First CSS Framework<br class="hidden sm:inline-block"> for Rapid UI Development</h2>
       <div class="mt-12 sm:flex sm:justify-center">
-        <a class="mt-6 sm:mt-0 mx-auto sm:mx-2 max-w-xs radius-full text-center leading-none font-semibold block px-12 py-3 border-2 border-tailwind-teal bg-tailwind-teal text-white hover:border-tailwind-teal-light hover:bg-tailwind-teal-light hover:bg-tailwind-teal-light" href="/docs/what-is-tailwind">Get Started</a>
-        <a class="mt-6 sm:mt-0 mx-auto sm:mx-2 max-w-xs radius-full text-center leading-none font-semibold block px-12 py-3 border-2 border-tailwind-teal text-tailwind-teal hover:text-white hover:border-tailwind-teal-light hover:bg-tailwind-teal-light hover:bg-tailwind-teal-light" href="https://github.com/tailwindcss/tailwindcss">GitHub</a>
+        <a class="mt-6 sm:mt-0 mx-auto sm:mx-2 max-w-xs rounded-full text-center leading-none font-semibold block px-12 py-3 border-2 border-tailwind-teal bg-tailwind-teal text-white hover:border-tailwind-teal-light hover:bg-tailwind-teal-light hover:bg-tailwind-teal-light" href="/docs/what-is-tailwind">Get Started</a>
+        <a class="mt-6 sm:mt-0 mx-auto sm:mx-2 max-w-xs rounded-full text-center leading-none font-semibold block px-12 py-3 border-2 border-tailwind-teal text-tailwind-teal hover:text-white hover:border-tailwind-teal-light hover:bg-tailwind-teal-light hover:bg-tailwind-teal-light" href="https://github.com/tailwindcss/tailwindcss">GitHub</a>
       </div>
     </div>
   </div>
@@ -38,7 +38,7 @@
     <div class="pb-4 flex justify-center flex-wrap max-w-md xl:max-w-full border-b-2 border-grey-light">
       <div class="mb-8 w-64 md:flex-x-center">
         <div class="flex items-center">
-          <img class="h-16 w-16 radius-full" src="https://pbs.twimg.com/profile_images/887661330832003072/Zp6rA_e2_400x400.jpg" alt="">
+          <img class="h-16 w-16 rounded-full" src="https://pbs.twimg.com/profile_images/887661330832003072/Zp6rA_e2_400x400.jpg" alt="">
           <div class="pl-4">
             <a href="https://twitter.com/adamwathan" class="block hover:underline text-dark text-lg text-medium">Adam Wathan</a>
             <a href="https://twitter.com/adamwathan" class="block hover:underline text-tailwind-teal-dark text-sm">@adamwathan</a>
@@ -47,7 +47,7 @@
       </div>
       <div class="mb-8 w-64 md:flex-x-center">
         <div class="flex items-center">
-          <img class="h-16 w-16 radius-full" src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg" alt="">
+          <img class="h-16 w-16 rounded-full" src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg" alt="">
           <div class="pl-4">
             <a href="https://twitter.com/reinink" class="block hover:underline text-dark text-lg text-medium">Jonathan Reinink</a>
             <a href="https://twitter.com/reinink" class="block hover:underline text-tailwind-teal-dark text-sm">@reinink</a>
@@ -56,7 +56,7 @@
       </div>
       <div class="mb-8 w-64 md:flex-x-center">
         <div class="flex items-center">
-          <img class="h-16 w-16 radius-full" src="https://pbs.twimg.com/profile_images/892478120829239296/U1KUwGJO_400x400.jpg">
+          <img class="h-16 w-16 rounded-full" src="https://pbs.twimg.com/profile_images/892478120829239296/U1KUwGJO_400x400.jpg">
           <div class="pl-4">
             <a href="https://twitter.com/davidhemphill" class="block hover:underline text-dark text-lg text-medium">David Hemphill</a>
             <a href="https://twitter.com/davidhemphill" class="block hover:underline text-tailwind-teal-dark text-sm">@davidhemphill</a>
@@ -65,7 +65,7 @@
       </div>
       <div class="mb-8 w-64 md:flex-x-center">
         <div class="flex items-center">
-          <img class="h-16 w-16 radius-full" src="https://pbs.twimg.com/profile_images/875010472105222144/Pkt9zqPY_400x400.jpg" alt="">
+          <img class="h-16 w-16 rounded-full" src="https://pbs.twimg.com/profile_images/875010472105222144/Pkt9zqPY_400x400.jpg" alt="">
           <div class="pl-4">
             <a href="https://twitter.com/steveschoger" class="block hover:underline text-dark text-lg text-medium">Steve Schoger</a>
             <a href="https://twitter.com/steveschoger" class="block hover:underline text-tailwind-teal-dark text-sm">@steveschoger</a>

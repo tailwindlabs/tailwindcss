@@ -13,27 +13,27 @@ This is done using predefined screen sizes (media query breakpoints), each of wh
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex justify-center">
-  <div class="bg-purple text-white w-24 h-24 radius-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
+  <div class="bg-purple text-white w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex justify-center">
-  <div class="bg-green text-white w-24 h-24 radius-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
+  <div class="bg-green text-white w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
 </div>
 @endslot
 @slot('md')
 <div class="flex justify-center">
-  <div class="bg-blue text-yellow w-24 h-24 radius-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
+  <div class="bg-blue text-yellow w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex justify-center">
-  <div class="bg-red text-yellow w-24 h-24 radius-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
+  <div class="bg-red text-yellow w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex justify-center">
-  <div class="bg-orange text-yellow w-24 h-24 radius-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
+  <div class="bg-orange text-yellow w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
 </div>
 @endslot
 @slot('code')

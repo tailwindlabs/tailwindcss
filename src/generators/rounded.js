@@ -2,36 +2,38 @@ import _ from 'lodash'
 import defineClasses from '../util/defineClasses'
 
 function sizedBorder(radius, modifier) {
+  modifier = modifier === 'default' ? '' : `-${modifier}`
+
   return defineClasses({
-    [`radius-${modifier}`]: {
+    [`rounded${modifier}`]: {
       'border-radius': `${radius}`,
     },
-    [`radius-t-${modifier}`]: {
+    [`rounded-t${modifier}`]: {
       'border-top-left-radius': `${radius}`,
       'border-top-right-radius': `${radius}`,
     },
-    [`radius-r-${modifier}`]: {
+    [`rounded-r${modifier}`]: {
       'border-top-right-radius': `${radius}`,
       'border-bottom-right-radius': `${radius}`,
     },
-    [`radius-b-${modifier}`]: {
+    [`rounded-b${modifier}`]: {
       'border-bottom-right-radius': `${radius}`,
       'border-bottom-left-radius': `${radius}`,
     },
-    [`radius-l-${modifier}`]: {
+    [`rounded-l${modifier}`]: {
       'border-top-left-radius': `${radius}`,
       'border-bottom-left-radius': `${radius}`,
     },
-    [`radius-tl-${modifier}`]: {
+    [`rounded-tl${modifier}`]: {
       'border-top-left-radius': `${radius}`,
     },
-    [`radius-tr-${modifier}`]: {
+    [`rounded-tr${modifier}`]: {
       'border-top-right-radius': `${radius}`,
     },
-    [`radius-br-${modifier}`]: {
+    [`rounded-br${modifier}`]: {
       'border-bottom-right-radius': `${radius}`,
     },
-    [`radius-bl-${modifier}`]: {
+    [`rounded-bl${modifier}`]: {
       'border-bottom-left-radius': `${radius}`,
     },
   })

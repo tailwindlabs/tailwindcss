@@ -44,7 +44,7 @@ This is extremely useful when you find a common utility pattern in your HTML tha
 
 ```less
 .btn {
-  @@apply .font-bold .py-2 .px-4 .radius-md;
+  @@apply .font-bold .py-2 .px-4 .rounded;
 }
 .btn-blue {
   @@apply .bg-blue .text-white;

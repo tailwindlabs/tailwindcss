@@ -12,7 +12,7 @@ To get you started, we've provided a generous palette of great looking colors th
 
 <div class="flex flex-wrap -mx-4">
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="radius-md overflow-hidden">
+    <div class="rounded overflow-hidden">
       <div class="text-white bg-grey px-6 py-4 text-sm font-semibold relative shadow z-10">
         <div class="tracking-wide uppercase mb-6">Grey</div>
         <div class="flex justify-between">
@@ -62,7 +62,7 @@ To get you started, we've provided a generous palette of great looking colors th
 
 <div class="flex flex-wrap -mx-4">
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="radius-md overflow-hidden">
+    <div class="rounded overflow-hidden">
       <div class="text-white bg-red px-6 py-4 text-sm font-semibold relative shadow z-10">
         <div class="tracking-wide uppercase mb-6">Red</div>
         <div class="flex justify-between">
@@ -101,7 +101,7 @@ To get you started, we've provided a generous palette of great looking colors th
     </div>
   </div>
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="radius-md overflow-hidden">
+    <div class="rounded overflow-hidden">
       <div class="text-white bg-orange px-6 py-4 text-sm font-semibold relative shadow z-10">
         <div class="tracking-wide uppercase mb-6">Orange</div>
         <div class="flex justify-between">
@@ -140,7 +140,7 @@ To get you started, we've provided a generous palette of great looking colors th
     </div>
   </div>
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="radius-md overflow-hidden">
+    <div class="rounded overflow-hidden">
       <div class="text-yellow-darkest bg-yellow px-6 py-4 text-sm font-semibold relative shadow z-10">
         <div class="tracking-wide uppercase mb-6">Yellow</div>
         <div class="flex justify-between">
@@ -179,7 +179,7 @@ To get you started, we've provided a generous palette of great looking colors th
     </div>
   </div>
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="radius-md overflow-hidden">
+    <div class="rounded overflow-hidden">
       <div class="text-white bg-green px-6 py-4 text-sm font-semibold relative shadow z-10">
         <div class="tracking-wide uppercase mb-6">Green</div>
         <div class="flex justify-between">
@@ -218,7 +218,7 @@ To get you started, we've provided a generous palette of great looking colors th
     </div>
   </div>
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="radius-md overflow-hidden">
+    <div class="rounded overflow-hidden">
       <div class="text-white bg-teal px-6 py-4 text-sm font-semibold relative shadow z-10">
         <div class="tracking-wide uppercase mb-6">Teal</div>
         <div class="flex justify-between">
@@ -257,7 +257,7 @@ To get you started, we've provided a generous palette of great looking colors th
     </div>
   </div>
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="radius-md overflow-hidden">
+    <div class="rounded overflow-hidden">
       <div class="text-white bg-blue px-6 py-4 text-sm font-semibold relative shadow z-10">
         <div class="tracking-wide uppercase mb-6">Blue</div>
         <div class="flex justify-between">
@@ -296,7 +296,7 @@ To get you started, we've provided a generous palette of great looking colors th
     </div>
   </div>
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="radius-md overflow-hidden">
+    <div class="rounded overflow-hidden">
       <div class="text-white bg-indigo px-6 py-4 text-sm font-semibold relative shadow z-10">
         <div class="tracking-wide uppercase mb-6">Indigo</div>
         <div class="flex justify-between">
@@ -335,7 +335,7 @@ To get you started, we've provided a generous palette of great looking colors th
     </div>
   </div>
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="radius-md overflow-hidden">
+    <div class="rounded overflow-hidden">
       <div class="text-white bg-purple px-6 py-4 text-sm font-semibold relative shadow z-10">
         <div class="tracking-wide uppercase mb-6">Purple</div>
         <div class="flex justify-between">
@@ -374,7 +374,7 @@ To get you started, we've provided a generous palette of great looking colors th
     </div>
   </div>
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="radius-md overflow-hidden">
+    <div class="rounded overflow-hidden">
       <div class="text-white bg-pink px-6 py-4 text-sm font-semibold relative shadow z-10">
         <div class="tracking-wide uppercase mb-6">Pink</div>
         <div class="flex justify-between">

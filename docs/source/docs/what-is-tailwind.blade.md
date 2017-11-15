@@ -29,31 +29,31 @@ Instead, Tailwind provides highly composable, low-level *utility classes* that m
 Here's an example of a contact card component built with Tailwind without writing a single line of CSS:
 
 @component('_partials.code-sample', ['class' => 'bg-grey-lighter py-8'])
-<div class="bg-white mx-auto max-w-sm shadow-lg radius-lg overflow-hidden">
+<div class="bg-white mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
   <div class="sm:flex sm:items-center px-6 py-4">
-    <img class="block h-16 sm:h-24 radius-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="https://avatars2.githubusercontent.com/u/4323180?s=400&u=4962a4441fae9fba5f0f86456c6c506a21ffca4f&v=4" alt="">
+    <img class="block h-16 sm:h-24 rounded-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="https://avatars2.githubusercontent.com/u/4323180?s=400&u=4962a4441fae9fba5f0f86456c6c506a21ffca4f&v=4" alt="">
     <div class="text-center sm:text-left sm:flex-grow">
       <div class="mb-4">
         <p class="text-xl leading-tight">Adam Wathan</p>
         <p class="text-sm leading-tight text-grey-dark">Developer at NothingWorks Inc.</p>
       </div>
       <div>
-        <button class="text-xs font-semibold radius-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>
+        <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>
       </div>
     </div>
   </div>
 </div>
 @slot('code')
-<div class="bg-white mx-auto max-w-sm shadow-lg radius-lg overflow-hidden">
+<div class="bg-white mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
   <div class="sm:flex sm:items-center px-6 py-4">
-    <img class="block h-16 sm:h-24 radius-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="https://avatars2.githubusercontent.com/u/4323180?s=400&u=4962a4441fae9fba5f0f86456c6c506a21ffca4f&v=4" alt="">
+    <img class="block h-16 sm:h-24 rounded-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="https://avatars2.githubusercontent.com/u/4323180?s=400&u=4962a4441fae9fba5f0f86456c6c506a21ffca4f&v=4" alt="">
     <div class="text-center sm:text-left sm:flex-grow">
       <div class="mb-4">
         <p class="text-xl leading-tight">Adam Wathan</p>
         <p class="text-sm leading-tight text-grey-dark">Developer at NothingWorks Inc.</p>
       </div>
       <div>
-        <button class="text-xs font-semibold radius-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>
+        <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>
       </div>
     </div>
   </div>
@@ -68,13 +68,13 @@ While you can do a *lot* with just utility classes, sometimes a component class 
 Tailwind provides tools for [extracting component classes](/docs/extracting-components) from repeated utility patterns, making it easy to update multiple instances of a component from one place:
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 radius-md">
+<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded">
   Button
 </button>
 
 @slot('code')
 <!-- Using utilities: -->
-<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 radius-md">
+<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded">
   Button
 </button>
 
@@ -85,7 +85,7 @@ Tailwind provides tools for [extracting component classes](/docs/extracting-comp
 
 <style>
   .btn {
-    @apply&nbsp;.font-bold .py-2 .px-4 .radius-md;
+    @apply&nbsp;.font-bold .py-2 .px-4 .rounded;
   }
   .btn-blue {
     @apply&nbsp;.bg-blue .text-white;
