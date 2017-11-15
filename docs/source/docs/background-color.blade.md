@@ -22,7 +22,7 @@ features:
       $code,
       $description,
     ];
-  })->all()
+  })->values()->all()
 ])
 
 ## Hover

@@ -1,4 +1,7 @@
-<div class="border-t border-grey-lighter">
+<div>
+  <class-table :rows="{{ json_encode($rows) }}"></class-table>
+</div>
+{{-- <div class="border-t border-grey-lighter">
   <table class="w-full text-left table-collapse">
     <thead>
       <tr>
@@ -18,3 +21,4 @@
     </tbody>
   </table>
 </div>
+ --}}
