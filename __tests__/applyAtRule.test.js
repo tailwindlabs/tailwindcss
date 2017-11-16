@@ -37,5 +37,21 @@ test('applying classes that are ever used in a media query is not supported', ()
 test('it fails if the class does not exist', () => {
   run('.b { @apply .a; }').catch(error => {
     expect(error.reason).toEqual('No .a class found.')
+test('it does not match classes that include pseudo-selectors', () => {
+  const input = `
+    .a:hover {
+      color: red;
+    }
+
+    .b {
+      @apply .a;
+    }
+  `
+  expect.assertions(1)
+  return run(input).catch(e => {
+    expect(e).toMatchObject({ name: 'CssSyntaxError' })
+  })
+})
+
   })
 })
