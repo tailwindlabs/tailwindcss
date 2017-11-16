@@ -14,6 +14,10 @@
 <meta property="og:image" content="https://tailwindcss.com/img/twitter-card.png" />
 @endsection
 
+@push('headScripts')
+<script src="{{ mix('/js/nav.js') }}"></script>
+@endpush
+
 @section('body')
 <div class="min-h-screen">
   <div id="sidebar" class="hidden z-50 fixed pin-y pin-l overflow-y-scroll md:overflow-visible scrolling-touch md:scrolling-auto bg-smoke-light w-4/5 md:w-full md:max-w-xs flex-none border-r-2 border-smoke md:flex flex-col">

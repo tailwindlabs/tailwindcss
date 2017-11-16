@@ -1,4 +1,11 @@
 $.when($.ready).then(function() {
+  window.history.replaceState({
+    'href': window.location.href,
+    'title': $(document).filter('title').text(),
+    'nav': $(document).find('#nav').html(),
+    'content': $(document).find('#content').html()
+  }, '', window.location.href)
+
   $('#nav').on('click', 'a', function (event) {
 
     // Allow opening links in new tabs
