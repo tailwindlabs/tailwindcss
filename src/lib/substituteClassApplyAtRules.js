@@ -14,9 +14,8 @@ function findMixin(css, mixin, onError) {
   css.walkRules(rule => {
     if (rule.selectors.includes(mixin)) {
       if (rule.parent.type !== 'root') {
-        onError(
-          `\`@apply\` cannot be used with ${mixin} because ${mixin} is nested inside of an at-rule (@${rule.parent.name}).`
-        )
+        // prettier-ignore
+        onError(`\`@apply\` cannot be used with ${mixin} because ${mixin} is nested inside of an at-rule (@${rule.parent.name}).`)
       }
 
       matches.push(rule)
@@ -24,10 +23,12 @@ function findMixin(css, mixin, onError) {
   })
 
   if (_.isEmpty(matches)) {
+    // prettier-ignore
     onError(`\`@apply\` cannot be used with ${mixin} because ${mixin} either does not exist, or it's actual definition includes a pseudo-class like :hover, :active, etc.`)
   }
 
   if (matches.length > 1) {
+    // prettier-ignore
     onError(`\`@apply\` cannot be used with ${mixin} because ${mixin} is included in multiple rulesets.`)
   }
 
