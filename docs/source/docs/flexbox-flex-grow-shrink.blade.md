@@ -371,7 +371,7 @@ For more information about Tailwind's responsive design features, check out the 
 <div class="flex ...">
   <!-- ... -->
   <div class="none:flex-none sm:flex-grow md:flex-shrink lg:flex-1 xl:flex-auto ...">
-    Item that cannot grow or shrink
+    Responsive flex item
   </div>
   <!-- ... -->
 </div>

@@ -62,6 +62,12 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
  *
  * You can see the styles here:
  * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
+ *
+ * If using `postcss-import`, you should import this line from it's own file:
+ * 
+ * @@import "./tailwind-preflight.css";
+ *
+ * See: https://github.com/tailwindcss/tailwindcss/issues/53#issuecomment-341413622
  */
 @@tailwind preflight;
 
@@ -75,7 +81,7 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
  * .btn { ... }
  * .form-input { ... }
  *
- * Or if using a preprocessor:
+ * Or if using a preprocessor or `postcss-import`:
  *
  * @@import "components/buttons";
  * @@import "components/forms";
@@ -84,6 +90,12 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
 /**
  * This injects all of Tailwind's utility classes, generated based on your
  * config file.
+ *
+ * If using `postcss-import`, you should import this line from it's own file:
+ * 
+ * @@import "./tailwind-utilities.css";
+ *
+ * See: https://github.com/tailwindcss/tailwindcss/issues/53#issuecomment-341413622
  */
 @@tailwind utilities;
 
@@ -96,7 +108,7 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
  * .bg-pattern-graph-paper { ... }
  * .skew-45 { ... }
  *
- * Or if using a preprocessor..
+ * Or if using a preprocessor or `postcss-import`:
  *
  * @@import "utilities/background-patterns";
  * @@import "utilities/skew-transforms";
