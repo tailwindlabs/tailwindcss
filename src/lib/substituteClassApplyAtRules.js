@@ -27,6 +27,10 @@ function findMixin(css, mixin, onError) {
     onError(`\`@apply\` cannot be used with ${mixin} because ${mixin} either does not exist, or it's actual definition includes a pseudo-class like :hover, :active, etc.`)
   }
 
+  if (matches.length > 1) {
+    onError(`\`@apply\` cannot be used with ${mixin} because ${mixin} is included in multiple rulesets.`)
+  }
+
   return _.flatten(matches.map(match => match.clone().nodes))
 }
 
