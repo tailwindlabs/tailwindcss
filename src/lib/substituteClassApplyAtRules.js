@@ -23,7 +23,7 @@ function findMixin(css, mixin, onError) {
     }
   })
 
-  if (_.isEmpty(matches) && _.isFunction(onError)) {
+  if (_.isEmpty(matches)) {
     onError(`\`@apply\` cannot be used with ${mixin} because ${mixin} either does not exist, or it's actual definition includes a pseudo-class like :hover, :active, etc.`)
   }
 
