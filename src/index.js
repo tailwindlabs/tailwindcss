@@ -46,7 +46,8 @@ const plugin = postcss.plugin('tailwind', config => {
   )
 })
 
-plugin.defaultConfig = function () {
+plugin.defaultConfig = function() {
+  // prettier-ignore
   throw new Error("`require('tailwindcss').defaultConfig()` is no longer a function, access it instead as `require('tailwindcss/defaultConfig')()`.")
 }
 
