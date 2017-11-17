@@ -1,4 +1,11 @@
 $.when($.ready).then(function() {
+  window.history.replaceState({
+    'href': window.location.href,
+    'title': $(document).filter('title').text(),
+    'nav': $(document).find('#nav').html(),
+    'content': $(document).find('#content').html()
+  }, '', window.location.href)
+
   $('#nav').on('click', 'a', function (event) {
 
     // Allow opening links in new tabs
@@ -45,8 +52,10 @@ $.when($.ready).then(function() {
       }, '', href)
 
       // Track on Google Analytics
-      ga('set', 'page', href)
-      ga('send', 'pageview')
+      if (typeof(ga) === 'function') {
+        ga('set', 'page', href)
+        ga('send', 'pageview')
+      }
     })
   })
 
@@ -59,8 +68,10 @@ $.when($.ready).then(function() {
       $('#content').html(e.state.content)
 
       // Track on Google Analytics
-      ga('set', 'page', e.state.href)
-      ga('send', 'pageview')
+      if (typeof(ga) === 'function') {
+        ga('set', 'page', e.state.href)
+        ga('send', 'pageview')
+      }
     }
   }
 
