@@ -13,6 +13,7 @@ import substituteFocusableAtRules from './lib/substituteFocusableAtRules'
 import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
 import substituteScreenAtRules from './lib/substituteScreenAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
+import substituteSilentAtRules from './lib/substituteSilentAtRules'
 
 const plugin = postcss.plugin('tailwind', config => {
   const plugins = []
@@ -41,6 +42,7 @@ const plugin = postcss.plugin('tailwind', config => {
       substituteResponsiveAtRules(lazyConfig),
       substituteScreenAtRules(lazyConfig),
       substituteClassApplyAtRules(lazyConfig),
+      substituteSilentAtRules(lazyConfig),
       stylefmt,
     ]
   )

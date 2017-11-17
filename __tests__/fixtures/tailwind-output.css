@@ -3547,6 +3547,7 @@ button,
 
 .example {
   font-weight: 700;
+  background-color: blue;
   color: #e3342f;
 }
 
@@ -6511,6 +6512,7 @@ button,
 
   .sm\:example {
     font-weight: 700;
+    background-color: blue;
     color: #e3342f;
   }
 }
@@ -9476,6 +9478,7 @@ button,
 
   .md\:example {
     font-weight: 700;
+    background-color: blue;
     color: #e3342f;
   }
 }
@@ -12441,6 +12444,7 @@ button,
 
   .lg\:example {
     font-weight: 700;
+    background-color: blue;
     color: #e3342f;
   }
 }
@@ -15406,6 +15410,7 @@ button,
 
   .xl\:example {
     font-weight: 700;
+    background-color: blue;
     color: #e3342f;
   }
 }

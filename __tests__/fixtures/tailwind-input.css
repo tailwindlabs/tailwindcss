@@ -5,6 +5,13 @@
 @responsive {
     .example {
         @apply .font-bold;
+        @apply .delete-me;
         color: config('colors.red');
+    }
+}
+
+@silent {
+    .delete-me {
+        background-color: blue;
     }
 }
