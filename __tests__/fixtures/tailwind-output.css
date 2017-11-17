@@ -1158,6 +1158,16 @@ button,
   text-transform: capitalize;
 }
 
+.all-small-caps,
+.hover\:all-small-caps:hover {
+  font-variant: all-small-caps;
+}
+
+.small-caps,
+.hover\:small-caps:hover {
+  font-variant: small-caps;
+}
+
 .normal-case,
 .hover\:normal-case:hover {
   text-transform: none;
@@ -4120,6 +4130,16 @@ button,
   .sm\:capitalize,
   .sm\:hover\:capitalize:hover {
     text-transform: capitalize;
+  }
+
+  .sm\:all-small-caps,
+  .sm\:hover\:all-small-caps:hover {
+    font-variant: all-small-caps;
+  }
+
+  .sm\:small-caps,
+  .sm\:hover\:small-caps:hover {
+    font-variant: small-caps;
   }
 
   .sm\:normal-case,
@@ -7087,6 +7107,16 @@ button,
     text-transform: capitalize;
   }
 
+  .md\:all-small-caps,
+  .md\:hover\:all-small-caps:hover {
+    font-variant: all-small-caps;
+  }
+
+  .md\:small-caps,
+  .md\:hover\:small-caps:hover {
+    font-variant: small-caps;
+  }
+
   .md\:normal-case,
   .md\:hover\:normal-case:hover {
     text-transform: none;
@@ -10052,6 +10082,16 @@ button,
     text-transform: capitalize;
   }
 
+  .lg\:all-small-caps,
+  .lg\:hover\:all-small-caps:hover {
+    font-variant: all-small-caps;
+  }
+
+  .lg\:small-caps,
+  .lg\:hover\:small-caps:hover {
+    font-variant: small-caps;
+  }
+
   .lg\:normal-case,
   .lg\:hover\:normal-case:hover {
     text-transform: none;
@@ -13015,6 +13055,16 @@ button,
   .xl\:capitalize,
   .xl\:hover\:capitalize:hover {
     text-transform: capitalize;
+  }
+
+  .xl\:all-small-caps,
+  .xl\:hover\:all-small-caps:hover {
+    font-variant: all-small-caps;
+  }
+
+  .xl\:small-caps,
+  .xl\:hover\:small-caps:hover {
+    font-variant: small-caps;
   }
 
   .xl\:normal-case,

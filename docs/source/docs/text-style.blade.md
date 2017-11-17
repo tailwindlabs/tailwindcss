@@ -51,6 +51,16 @@ features:
         <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">text-transform: capitalize;</td>
         <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Capitalizes the text within an element.</td>
       </tr>
+			<tr>
+				<td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.small-caps</td>
+				<td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">font-variant: small-caps;</td>
+				<td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Uses small capital glyphs for the text within an element.</td>
+			</tr>
+			<tr>
+				<td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.small-caps-all</td>
+				<td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">font-variant: small-caps-all;</td>
+				<td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Uses small capital glyphs for uppercase and lowercase letters within an element.</td>
+			</tr>
       <tr>
         <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.normal-case</td>
         <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">text-transform: none;</td>

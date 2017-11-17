@@ -10,6 +10,8 @@ export default function() {
       uppercase: { 'text-transform': 'uppercase' },
       lowercase: { 'text-transform': 'lowercase' },
       capitalize: { 'text-transform': 'capitalize' },
+      'all-small-caps': { 'font-variant': 'all-small-caps' },
+      'small-caps': { 'font-variant': 'small-caps' },
       'normal-case': { 'text-transform': 'none' },
 
       underline: { 'text-decoration': 'underline' },
