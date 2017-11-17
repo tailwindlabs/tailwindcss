@@ -356,7 +356,7 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @slot('code')
-<div class="none:rounded sm:rounded-t md:rounded-b-lg lg:rounded-none xlrounded-r ...">
+<div class="none:rounded sm:rounded-t md:rounded-b-lg lg:rounded-none xl:rounded-r ...">
   <!-- ... -->
 </div>
 @endslot
