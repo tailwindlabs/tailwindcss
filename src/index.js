@@ -46,4 +46,8 @@ const plugin = postcss.plugin('tailwind', config => {
   )
 })
 
+plugin.defaultConfig = function () {
+  throw new Error("`require('tailwindcss').defaultConfig()` is no longer a function, access it instead as `require('tailwindcss/defaultConfig')()`.")
+}
+
 module.exports = plugin
