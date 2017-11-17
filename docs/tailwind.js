@@ -71,6 +71,10 @@ config.height = Object.assign(config.height, {
   '128': '32rem',
 })
 
+config.maxHeight = Object.assign(config.maxHeight, {
+  'sm': '30rem',
+})
+
 config.padding = Object.assign(config.padding, {
   '10': '2.5rem',
   '12': '3rem',
