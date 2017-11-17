@@ -759,17 +759,17 @@ module.exports = {
 
   /*
   |-----------------------------------------------------------------------------
-  | Packages
+  | Options                  https://tailwindcss.com/docs/configuration#options
   |-----------------------------------------------------------------------------
   |
-  | Here is where you can define the configuration for any Tailwind packages
-  | you're using. These can be utility packs, component bundles, or even
-  | complete themes. You'll want to reference each package's
-  | documentation for a list of settings available for it.
+  | Here is where you can set your Tailwind configuration options. For more
+  | details about these options, visit the configuration options documentation.
   |
   */
 
-  packages: {
+  options: {
+    prefix: '',
+    important: false,
   },
 
 }

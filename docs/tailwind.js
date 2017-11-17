@@ -68,6 +68,7 @@ config.width = Object.assign(config.width, {
 
 config.height = Object.assign(config.height, {
   '7': '1.75rem',
+  '128': '32rem',
 })
 
 config.padding = Object.assign(config.padding, {
