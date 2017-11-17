@@ -1,12 +1,38 @@
 import _ from 'lodash'
 import postcss from 'postcss'
-import findMixin from '../util/findMixin'
 import escapeClassName from '../util/escapeClassName'
 
 function normalizeClassNames(classNames) {
   return classNames.map(className => {
     return `.${escapeClassName(_.trimStart(className, '.'))}`
   })
+}
+
+function findMixin(css, mixin, onError) {
+  const matches = []
+
+  css.walkRules(rule => {
+    if (rule.selectors.includes(mixin)) {
+      if (rule.parent.type !== 'root') {
+        // prettier-ignore
+        onError(`\`@apply\` cannot be used with ${mixin} because ${mixin} is nested inside of an at-rule (@${rule.parent.name}).`)
+      }
+
+      matches.push(rule)
+    }
+  })
+
+  if (_.isEmpty(matches)) {
+    // prettier-ignore
+    onError(`\`@apply\` cannot be used with ${mixin} because ${mixin} either does not exist, or it's actual definition includes a pseudo-class like :hover, :active, etc.`)
+  }
+
+  if (matches.length > 1) {
+    // prettier-ignore
+    onError(`\`@apply\` cannot be used with ${mixin} because ${mixin} is included in multiple rulesets.`)
+  }
+
+  return _.flatten(matches.map(match => match.clone().nodes))
 }
 
 export default function() {
@@ -27,8 +53,8 @@ export default function() {
         })
 
         const decls = _.flatMap(classes, mixin => {
-          return findMixin(css, mixin, () => {
-            throw atRule.error(`No ${mixin} class found.`)
+          return findMixin(css, mixin, message => {
+            throw atRule.error(message)
           })
         })
 
