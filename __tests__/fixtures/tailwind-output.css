@@ -535,11 +535,10 @@ fieldset {
  *
  * We can remove this when the reversion is in a normal Chrome release.
  */
-input[type="button" i],
-input[type="submit" i],
-input[type="reset" i],
-input[type="file" i]::-webkit-file-upload-button,
-button {
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
   border-radius: 0;
 }
 
