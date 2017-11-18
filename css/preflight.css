@@ -530,6 +530,18 @@ fieldset {
   border-color: config('borderColors.default', currentColor);
 }
 
+/**
+ * Temporary reset for a change introduced in Chrome 62 but now reverted.
+ *
+ * We can remove this when the reversion is in a normal Chrome release.
+ */
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  border-radius: 0;
+}
+
 textarea { resize: vertical; }
 
 img { max-width: 100%; }
