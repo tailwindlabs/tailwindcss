@@ -11,66 +11,52 @@ features:
 
 @include('_partials.work-in-progress')
 
-<div class="border-t border-grey-lighter">
-  <table class="w-full text-left table-collapse">
-    <colgroup>
-      <col class="w-1/5">
-      <col class="w-1/3">
-      <col>
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-      </tr>
-    </thead>
-    <tbody class="align-baseline">
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark whitespace-no-wrap">.text-xs</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">font-size: .75rem;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the text size to <code>.75rem</code> (<code>12px</code>).</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.text-sm</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">font-size: .875rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the text size to <code>.875rem</code> (<code>14px</code>).</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.text-base</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">font-size: 1rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the text size to <code>1rem</code> (<code>16px</code>).</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.text-lg</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">font-size: 1.125rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the text size to <code>1.125rem</code> (<code>18px</code>).</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.text-xl</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">font-size: 1.25rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the text size to <code>1.25rem</code> (<code>20px</code>).</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.text-2xl</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">font-size: 1.5rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the text size to <code>1.5rem</code> (<code>24px</code>).</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.text-3xl</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">font-size: 1.875rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the text size to <code>1.875rem</code> (<code>30px</code>).</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.text-4xl</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">font-size: 2.25rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the text size to <code>2.25rem</code> (<code>36px</code>).</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.text-5xl</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">font-size: 3rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the text size to <code>3rem</code> (<code>48px</code>).</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+@include('_partials.class-table', [
+  'rows' => [
+    [
+      '.text-xs',
+      'font-size: .75rem;',
+      'Set the text size to <code>.75rem</code> (<code>12px</code>).',
+    ],
+    [
+      '.text-sm',
+      'font-size: .875rem;',
+      'Set the text size to <code>.875rem</code> (<code>14px</code>).',
+    ],
+    [
+      '.text-base',
+      'font-size: 1rem;',
+      'Set the text size to <code>1rem</code> (<code>16px</code>).',
+    ],
+    [
+      '.text-lg',
+      'font-size: 1.125rem;',
+      'Set the text size to <code>1.125rem</code> (<code>18px</code>).',
+    ],
+    [
+      '.text-xl',
+      'font-size: 1.25rem;',
+      'Set the text size to <code>1.25rem</code> (<code>20px</code>).',
+    ],
+    [
+      '.text-2xl',
+      'font-size: 1.5rem;',
+      'Set the text size to <code>1.5rem</code> (<code>24px</code>).',
+    ],
+    [
+      '.text-3xl',
+      'font-size: 1.875rem;',
+      'Set the text size to <code>1.875rem</code> (<code>30px</code>).',
+    ],
+    [
+      '.text-4xl',
+      'font-size: 2.25rem;',
+      'Set the text size to <code>2.25rem</code> (<code>36px</code>).',
+    ],
+    [
+      '.text-5xl',
+      'font-size: 3rem;',
+      'Set the text size to <code>3rem</code> (<code>48px</code>).',
+    ],
+  ]
+])

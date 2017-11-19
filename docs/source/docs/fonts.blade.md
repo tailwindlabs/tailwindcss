@@ -11,36 +11,22 @@ features:
 
 @include('_partials.work-in-progress')
 
-<div class="border-t border-grey-lighter">
-  <table class="w-full text-left table-collapse">
-    <colgroup>
-      <col class="w-1/5">
-      <col class="w-2/5">
-      <col class="w-2/5">
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-      </tr>
-    </thead>
-    <tbody class="align-baseline">
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark whitespace-no-wrap">.font-sans</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the font family to the sans font stack.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.font-serif</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">font-family: Constantia, Lucida Bright, Lucidabright, Lucida Serif, Lucida, DejaVu Serif, Bitstream Vera Serif, Liberation Serif, Georgia, serif;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the font family to the serif font stack.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.font-mono</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">font-family: Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the font family to the mono font stack.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+@include('_partials.class-table', [
+  'rows' => [
+    [
+      '.font-sans',
+      "font-family:\n  -apple-system,\n  BlinkMacSystemFont,\n  Segoe UI,\n  Roboto,\n  Oxygen,\n  Ubuntu,\n  Cantarell,\n  Fira Sans,\n  Droid Sans,\n  Helvetica Neue,\n  sans-serif;",
+      'Set the font family to the sans font stack.',
+    ],
+    [
+      '.font-serif',
+      "font-family:\n  Constantia,\n  Lucida Bright,\n  Lucidabright,\n  Lucida Serif,\n  Lucida,\n  DejaVu Serif,\n  Bitstream Vera Serif,\n  Liberation Serif,\n  Georgia,\n  serif;",
+      'Set the font family to the serif font stack.',
+    ],
+    [
+      '.font-mono',
+      "font-family:\n  Menlo,\n  Monaco,\n  Consolas,\n  Liberation Mono,\n  Courier New,\n  monospace;",
+      'Set the font family to the mono font stack.',
+    ],
+  ]
+])

@@ -11,41 +11,27 @@ features:
 
 @include('_partials.work-in-progress')
 
-<div class="border-t border-grey-lighter">
-  <table class="w-full text-left table-collapse">
-    <colgroup>
-      <col class="w-1/5">
-      <col class="w-1/3">
-      <col>
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-      </tr>
-    </thead>
-    <tbody class="align-baseline">
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark whitespace-no-wrap">.text-left</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">text-align: left;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Align text to the left.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark whitespace-no-wrap">.text-center</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">text-align: center;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Align text to the center.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark whitespace-no-wrap">.text-right</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">text-align: right;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Align text to the right.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark whitespace-no-wrap">.text-justify</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">text-align: justify;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Justify text.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+@include('_partials.class-table', [
+  'rows' => [
+    [
+      '.text-left',
+      'text-align: left;',
+      'Align text to the left.',
+    ],
+    [
+      '.text-center',
+      'text-align: center;',
+      'Align text to the center.',
+    ],
+    [
+      '.text-right',
+      'text-align: right;',
+      'Align text to the right.',
+    ],
+    [
+      '.text-justify',
+      'text-align: justify;',
+      'Justify text.',
+    ],
+  ]
+])
