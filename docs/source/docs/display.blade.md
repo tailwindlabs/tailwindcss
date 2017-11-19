@@ -11,61 +11,52 @@ features:
 
 @include('_partials.work-in-progress')
 
-<div class="border-t border-grey-lighter">
-  <table class="w-full text-left table-collapse">
-    <thead>
-      <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-      </tr>
-    </thead>
-    <tbody class="align-baseline">
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark whitespace-no-wrap">.block</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark whitespace-no-wrap">display: block;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the box type of the element to <code>block</code>.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.inline-block</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">display: inline-block;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the box type of the element to <code>inline-block</code>.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.inline</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">display: inline;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the box type of the element to <code>inline</code>.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.table</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">display: table;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the box type of the element to <code>table</code>.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.table-row</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">display: table-row;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the box type of the element to <code>table-row</code>.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.table-cell</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">display: table-cell;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the box type of the element to <code>table-cell</code>.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.hidden</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">display: none;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the box type of the element to <code>none</code>.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.flex</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">display: flex;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the box type of the element to <code>flex</code>.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.inline-flex</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">display: inline-flex;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the box type of the element to <code>inline-flex</code>.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+@include('_partials.class-table', [
+  'rows' => [
+    [
+      '.block',
+      'display: block;',
+      "Set the box type of the element to <code>block</code>.",
+    ],
+    [
+      '.inline-block',
+      'display: inline-block;',
+      "Set the box type of the element to <code>inline-block</code>.",
+    ],
+    [
+      '.inline',
+      'display: inline;',
+      "Set the box type of the element to <code>inline</code>.",
+    ],
+    [
+      '.table',
+      'display: table;',
+      "Set the box type of the element to <code>table</code>.",
+    ],
+    [
+      '.table-row',
+      'display: table-row;',
+      "Set the box type of the element to <code>table-row</code>.",
+    ],
+    [
+      '.table-cell',
+      'display: table-cell;',
+      "Set the box type of the element to <code>table-cell</code>.",
+    ],
+    [
+      '.hidden',
+      'display: none;',
+      "Set the box type of the element to <code>none</code>.",
+    ],
+    [
+      '.flex',
+      'display: flex;',
+      "Set the box type of the element to <code>flex</code>.",
+    ],
+    [
+      '.inline-flex',
+      'display: inline-flex;',
+      "Set the box type of the element to <code>inline-flex</code>.",
+    ],
+  ]
+])
