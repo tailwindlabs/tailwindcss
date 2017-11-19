@@ -9,59 +9,45 @@ features:
   focus: false
 ---
 
-<div class="border-t border-grey-lighter">
-  <table class="w-full text-left table-collapse">
-    <colgroup>
-      <col class="w-1/5">
-      <col class="w-1/3">
-      <col>
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-      </tr>
-    </thead>
-    <tbody class="align-baseline">
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.z-0</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">z-index: 0;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the z-index of the element to 0.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.z-10</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">z-index: 10;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the z-index of the element to 10.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.z-20</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">z-index: 20;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the z-index of the element to 20.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.z-30</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">z-index: 30;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the z-index of the element to 30.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.z-40</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">z-index: 40;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the z-index of the element to 40.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.z-50</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">z-index: 50;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the z-index of the element to 50.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.z-auto</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">z-index: auto;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Don't create a new stacking context.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+@include('_partials.class-table', [
+  'rows' => [
+    [
+      '.z-0',
+      'z-index: 0;',
+      "Set the z-index of the element to 0.",
+    ],
+    [
+      '.z-10',
+      'z-index: 10;',
+      "Set the z-index of the element to 10.",
+    ],
+    [
+      '.z-20',
+      'z-index: 20;',
+      "Set the z-index of the element to 20.",
+    ],
+    [
+      '.z-30',
+      'z-index: 30;',
+      "Set the z-index of the element to 30.",
+    ],
+    [
+      '.z-40',
+      'z-index: 40;',
+      "Set the z-index of the element to 40.",
+    ],
+    [
+      '.z-50',
+      'z-index: 50;',
+      "Set the z-index of the element to 50.",
+    ],
+    [
+      '.z-auto',
+      'z-index: auto;',
+      "Don't create a new stacking context.",
+    ],
+  ]
+])
 
 ## Usage
 
