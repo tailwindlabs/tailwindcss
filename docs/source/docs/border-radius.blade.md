@@ -9,244 +9,235 @@ features:
   focus: false
 ---
 
-<div class="border-t border-grey-lighter">
-  <table class="w-full text-left table-collapse">
-    <thead>
-      <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-      </tr>
-    </thead>
-    <tbody class="align-baseline">
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-sm</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-radius: .125rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a small border radius to all corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-t-sm</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-left-radius: .125rem;<br>border-top-right-radius: .125rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a small border radius to the top corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-r-sm</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-right-radius: .125rem;<br>border-bottom-right-radius: .125rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a small border radius to the right corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-b-sm</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-bottom-right-radius: .125rem;<br>border-bottom-left-radius: .125rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a small border radius to the bottom corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-l-sm</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-left-radius: .125rem;<br>border-bottom-left-radius: .125rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a small border radius to the left corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-tl-sm</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-left-radius: .125rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a small border radius to the top left corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-tr-sm</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-right-radius: .125rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a small border radius to the top right corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-br-sm</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-bottom-right-radius: .125rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a small border radius to the bottom right corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-bl-sm</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-bottom-left-radius: .125rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a small border radius to the bottom left corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-radius: .25rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a medium border radius to all corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-t</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-left-radius: .25rem;<br>border-top-right-radius: .25rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a medium border radius to the top corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-r</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-right-radius: .25rem;<br>border-bottom-right-radius: .25rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a medium border radius to the right corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-b</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-bottom-right-radius: .25rem;<br>border-bottom-left-radius: .25rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a medium border radius to the bottom corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-l</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-left-radius: .25rem;<br>border-bottom-left-radius: .25rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a medium border radius to the left corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-tl</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-left-radius: .25rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a medium border radius to the top left corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-tr</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-right-radius: .25rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a medium border radius to the top right corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-br</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-bottom-right-radius: .25rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a medium border radius to the bottom right corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-bl</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-bottom-left-radius: .25rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a medium border radius to the bottom left corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-lg</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-radius: .5rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large border radius to all corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-t-lg</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-left-radius: .5rem;<br>border-top-right-radius: .5rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large border radius to the top corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-r-lg</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-right-radius: .5rem;<br>border-bottom-right-radius: .5rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large border radius to the right corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-b-lg</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-bottom-right-radius: .5rem;<br>border-bottom-left-radius: .5rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large border radius to the bottom corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-l-lg</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-left-radius: .5rem;<br>border-bottom-left-radius: .5rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large border radius to the left corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-tl-lg</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-left-radius: .5rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large border radius to the top left corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-tr-lg</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-right-radius: .5rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large border radius to the top right corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-br-lg</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-bottom-right-radius: .5rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large border radius to the bottom right corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-bl-lg</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-bottom-left-radius: .5rem;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Apply a large border radius to the bottom left corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-full</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-radius: 9999px;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Fully round all corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-t-full</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-left-radius: 9999px;<br>border-top-right-radius: 9999px;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Fully round the top corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-r-full</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-right-radius: 9999px;<br>border-bottom-right-radius: 9999px;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Fully round the right corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-b-full</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-bottom-right-radius: 9999px;<br>border-bottom-left-radius: 9999px;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Fully round the bottom corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-l-full</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-left-radius: 9999px;<br>border-bottom-left-radius: 9999px;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Fully round the left corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-tl-full</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-left-radius: 9999px;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Fully round the top left corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-tr-full</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-right-radius: 9999px;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Fully round the top right corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-br-full</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-bottom-right-radius: 9999px;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Fully round the bottom right corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-bl-full</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-bottom-left-radius: 9999px;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Fully round the bottom left corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-none</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-radius: 0;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Remove any border radius from all corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-t-none</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-left-radius: 0;<br>border-top-right-radius: 0;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Remove any border radius from the top corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-r-none</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-right-radius: 0;<br>border-bottom-right-radius: 0;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Remove any border radius from the right corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-b-none</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-bottom-right-radius: 0;<br>border-bottom-left-radius: 0;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Remove any border radius from the bottom corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-l-none</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-left-radius: 0;<br>border-bottom-left-radius: 0;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Remove any border radius from the left corners of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-tl-none</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-left-radius: 0;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Remove any border radius from the top left corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-tr-none</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-top-right-radius: 0;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Remove any border radius from the top right corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-br-none</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-bottom-right-radius: 0;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Remove any border radius from the bottom right corner of an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.rounded-bl-none</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">border-bottom-left-radius: 0;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Remove any border radius from the bottom left corner of an element.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+@include('_partials.class-table', [
+  'rows' => [
+    [
+      '.rounded-none',
+      'border-radius: 0;',
+      "Remove any border radius from all corners of an element.",
+    ],
+    [
+      '.rounded-sm',
+      'border-radius: .125rem;',
+      "Apply a small border radius to all corners of an element.",
+    ],
+    [
+      '.rounded',
+      'border-radius: .25rem;',
+      "Apply a medium border radius to all corners of an element.",
+    ],
+    [
+      '.rounded-lg',
+      'border-radius: .5rem;',
+      "Apply a large border radius to all corners of an element.",
+    ],
+    [
+      '.rounded-full',
+      'border-radius: 9999px;',
+      "Fully round all corners of an element.",
+    ],
+    [
+      '.rounded-t-none',
+      "border-top-left-radius: 0;\nborder-top-right-radius: 0;",
+      "Remove any border radius from the top corners of an element.",
+    ],
+    [
+      '.rounded-r-none',
+      "border-top-right-radius: 0;\nborder-bottom-right-radius: 0;",
+      "Remove any border radius from the right corners of an element.",
+    ],
+    [
+      '.rounded-b-none',
+      "border-bottom-right-radius: 0;\nborder-bottom-left-radius: 0;",
+      "Remove any border radius from the bottom corners of an element.",
+    ],
+    [
+      '.rounded-l-none',
+      "border-top-left-radius: 0;\nborder-bottom-left-radius: 0;",
+      "Remove any border radius from the left corners of an element.",
+    ],
+    [
+      '.rounded-t-sm',
+      "border-top-left-radius: .125rem;\nborder-top-right-radius: .125rem;",
+      "Apply a small border radius to the top corners of an element.",
+    ],
+    [
+      '.rounded-r-sm',
+      "border-top-right-radius: .125rem;\nborder-bottom-right-radius: .125rem;",
+      "Apply a small border radius to the right corners of an element.",
+    ],
+    [
+      '.rounded-b-sm',
+      "border-bottom-right-radius: .125rem;\nborder-bottom-left-radius: .125rem;",
+      "Apply a small border radius to the bottom corners of an element.",
+    ],
+    [
+      '.rounded-l-sm',
+      "border-top-left-radius: .125rem;\nborder-bottom-left-radius: .125rem;",
+      "Apply a small border radius to the left corners of an element.",
+    ],
+    [
+      '.rounded-t',
+      "border-top-left-radius: .25rem;\nborder-top-right-radius: .25rem;",
+      "Apply a medium border radius to the top corners of an element.",
+    ],
+    [
+      '.rounded-r',
+      "border-top-right-radius: .25rem;\nborder-bottom-right-radius: .25rem;",
+      "Apply a medium border radius to the right corners of an element.",
+    ],
+    [
+      '.rounded-b',
+      "border-bottom-right-radius: .25rem;\nborder-bottom-left-radius: .25rem;",
+      "Apply a medium border radius to the bottom corners of an element.",
+    ],
+    [
+      '.rounded-l',
+      "border-top-left-radius: .25rem;\nborder-bottom-left-radius: .25rem;",
+      "Apply a medium border radius to the left corners of an element.",
+    ],
+    [
+      '.rounded-t-lg',
+      "border-top-left-radius: .5rem;\nborder-top-right-radius: .5rem;",
+      "Apply a large border radius to the top corners of an element.",
+    ],
+    [
+      '.rounded-r-lg',
+      "border-top-right-radius: .5rem;\nborder-bottom-right-radius: .5rem;",
+      "Apply a large border radius to the right corners of an element.",
+    ],
+    [
+      '.rounded-b-lg',
+      "border-bottom-right-radius: .5rem;\nborder-bottom-left-radius: .5rem;",
+      "Apply a large border radius to the bottom corners of an element.",
+    ],
+    [
+      '.rounded-l-lg',
+      "border-top-left-radius: .5rem;\nborder-bottom-left-radius: .5rem;",
+      "Apply a large border radius to the left corners of an element.",
+    ],
+    [
+      '.rounded-t-full',
+      "border-top-left-radius: 9999px;\nborder-top-right-radius: 9999px;",
+      "Fully round the top corners of an element.",
+    ],
+    [
+      '.rounded-r-full',
+      "border-top-right-radius: 9999px;\nborder-bottom-right-radius: 9999px;",
+      "Fully round the right corners of an element.",
+    ],
+    [
+      '.rounded-b-full',
+      "border-bottom-right-radius: 9999px;\nborder-bottom-left-radius: 9999px;",
+      "Fully round the bottom corners of an element.",
+    ],
+    [
+      '.rounded-l-full',
+      "border-top-left-radius: 9999px;\nborder-bottom-left-radius: 9999px;",
+      "Fully round the left corners of an element.",
+    ],
+    [
+      '.rounded-tl-none',
+      'border-top-left-radius: 0;',
+      "Remove any border radius from the top left corner of an element.",
+    ],
+    [
+      '.rounded-tr-none',
+      'border-top-right-radius: 0;',
+      "Remove any border radius from the top right corner of an element.",
+    ],
+    [
+      '.rounded-br-none',
+      'border-bottom-right-radius: 0;',
+      "Remove any border radius from the bottom right corner of an element.",
+    ],
+    [
+      '.rounded-bl-none',
+      'border-bottom-left-radius: 0;',
+      "Remove any border radius from the bottom left corner of an element.",
+    ],
+    [
+      '.rounded-tl-sm',
+      'border-top-left-radius: .125rem;',
+      "Apply a small border radius to the top left corner of an element.",
+    ],
+    [
+      '.rounded-tr-sm',
+      'border-top-right-radius: .125rem;',
+      "Apply a small border radius to the top right corner of an element.",
+    ],
+    [
+      '.rounded-br-sm',
+      'border-bottom-right-radius: .125rem;',
+      "Apply a small border radius to the bottom right corner of an element.",
+    ],
+    [
+      '.rounded-bl-sm',
+      'border-bottom-left-radius: .125rem;',
+      "Apply a small border radius to the bottom left corner of an element.",
+    ],
+    [
+      '.rounded-tl',
+      'border-top-left-radius: .25rem;',
+      "Apply a medium border radius to the top left corner of an element.",
+    ],
+    [
+      '.rounded-tr',
+      'border-top-right-radius: .25rem;',
+      "Apply a medium border radius to the top right corner of an element.",
+    ],
+    [
+      '.rounded-br',
+      'border-bottom-right-radius: .25rem;',
+      "Apply a medium border radius to the bottom right corner of an element.",
+    ],
+    [
+      '.rounded-bl',
+      'border-bottom-left-radius: .25rem;',
+      "Apply a medium border radius to the bottom left corner of an element.",
+    ],
+    [
+      '.rounded-tl-lg',
+      'border-top-left-radius: .5rem;',
+      "Apply a large border radius to the top left corner of an element.",
+    ],
+    [
+      '.rounded-tr-lg',
+      'border-top-right-radius: .5rem;',
+      "Apply a large border radius to the top right corner of an element.",
+    ],
+    [
+      '.rounded-br-lg',
+      'border-bottom-right-radius: .5rem;',
+      "Apply a large border radius to the bottom right corner of an element.",
+    ],
+    [
+      '.rounded-bl-lg',
+      'border-bottom-left-radius: .5rem;',
+      "Apply a large border radius to the bottom left corner of an element.",
+    ],
+    [
+      '.rounded-tl-full',
+      'border-top-left-radius: 9999px;',
+      "Fully round the top left corner of an element.",
+    ],
+    [
+      '.rounded-tr-full',
+      'border-top-right-radius: 9999px;',
+      "Fully round the top right corner of an element.",
+    ],
+    [
+      '.rounded-br-full',
+      'border-bottom-right-radius: 9999px;',
+      "Fully round the bottom right corner of an element.",
+    ],
+    [
+      '.rounded-bl-full',
+      'border-bottom-left-radius: 9999px;',
+      "Fully round the bottom left corner of an element.",
+    ],
+  ]
+])
 
 ## Rounded corners
 
