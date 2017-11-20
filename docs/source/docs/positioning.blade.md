@@ -9,87 +9,65 @@ features:
   focus: false
 ---
 
-<div class="border-t border-grey-lighter">
-  <table class="w-full text-left table-collapse">
-    <thead>
-      <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-        <th class="w-3/5 text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-      </tr>
-    </thead>
-    <tbody class="align-baseline">
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.static</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">position: static;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Position an element according to the normal flow of the document.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.fixed</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">position: fixed;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position an element relative to the browser window.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.absolute</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">position: absolute;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position an element outside of the normal flow of the document, causing neighboring elements to act as if the element doesn't exist.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.relative</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">position: relative;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Position an element according to the normal flow of the document.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.pin-t</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">top: 0;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Anchor absolutely positioned element to the top edge of the nearest positioned parent.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.pin-r</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">right: 0;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Anchor absolutely positioned element to the right edge of the nearest positioned parent.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.pin-b</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">bottom: 0;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Anchor absolutely positioned element to the bottom edge of the nearest positioned parent.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.pin-l</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">left: 0;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Anchor absolutely positioned element to the left edge of the nearest positioned parent.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.pin-y</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
-          top: 0;<br>
-          bottom: 0;
-        </td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Anchor absolutely positioned element to the top and bottom edges of the nearest positioned parent.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.pin-x</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
-          right: 0;<br>
-          left: 0;
-        </td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Anchor absolutely positioned element to the left and right edges of the nearest positioned parent.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.pin</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">
-          top: 0;<br>
-          right: 0;<br>
-          bottom: 0;<br>
-          left: 0;<br>
-          width: 100%;<br>
-          height: 100%;
-        </td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Anchor absolutely positioned element to all the edges of the nearest positioned parent.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+@include('_partials.class-table', [
+  'rows' => [
+    [
+      '.static',
+      "position: static;",
+      "Position an element according to the normal flow of the document.",
+    ],
+    [
+      '.fixed',
+      "position: fixed;",
+      "Position an element relative to the browser window.",
+    ],
+    [
+      '.absolute',
+      "position: absolute;",
+      "Position an element outside of the normal flow of the document, causing neighboring elements to act as if the element doesn't exist.",
+    ],
+    [
+      '.relative',
+      "position: relative;",
+      "Position an element according to the normal flow of the document.",
+    ],
+    [
+      '.pin-t',
+      "top: 0;",
+      "Anchor absolutely positioned element to the top edge of the nearest positioned parent.",
+    ],
+    [
+      '.pin-r',
+      "right: 0;",
+      "Anchor absolutely positioned element to the right edge of the nearest positioned parent.",
+    ],
+    [
+      '.pin-b',
+      "bottom: 0;",
+      "Anchor absolutely positioned element to the bottom edge of the nearest positioned parent.",
+    ],
+    [
+      '.pin-l',
+      "left: 0;",
+      "Anchor absolutely positioned element to the left edge of the nearest positioned parent.",
+    ],
+    [
+      '.pin-y',
+      "top: 0;\nbottom: 0;",
+      "Anchor absolutely positioned element to the top and bottom edges of the nearest positioned parent.",
+    ],
+    [
+      '.pin-x',
+      "right: 0;\nleft: 0;",
+      "Anchor absolutely positioned element to the left and right edges of the nearest positioned parent.",
+    ],
+    [
+      '.pin',
+      "top: 0;\nright: 0;\nbottom: 0;\nleft: 0;\nwidth: 100%;\nheight: 100%;",
+      "Anchor absolutely positioned element to all the edges of the nearest positioned parent.",
+    ],
+  ]
+])
 
 ### Static <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
 

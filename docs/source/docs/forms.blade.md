@@ -11,29 +11,15 @@ features:
 
 @include('_partials.work-in-progress')
 
-<div class="border-t border-grey-lighter">
-  <table class="w-full text-left table-collapse">
-    <colgroup>
-      <col class="w-1/5">
-      <col class="w-1/3">
-      <col>
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-      </tr>
-    </thead>
-    <tbody class="align-baseline">
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.appearance-none</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">appearance: none;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Remove any special styling applied to an element by the browser.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+@include('_partials.class-table', [
+  'rows' => [
+    [
+      '.appearance-none',
+      'appearance: none;',
+      "Remove any special styling applied to an element by the browser.",
+    ],
+  ]
+])
 
 ### Custom Select
 

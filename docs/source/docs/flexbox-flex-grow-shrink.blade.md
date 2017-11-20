@@ -9,59 +9,50 @@ features:
   focus: false
 ---
 
-<div class="border-t border-grey-lighter">
-  <table class="w-full text-left table-collapse">
-    <thead>
-      <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-      </tr>
-    </thead>
-    <tbody class="align-baseline">
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.flex-initial</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">flex: initial;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Allow a flex item to shrink but not grow, taking into account its initial size.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-1</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex: 1;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow a flex item to grow and shrink as needed, ignoring its initial size.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-auto</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex: auto;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow a flex item to grow and shrink, taking into account its initial size.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-none</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex: none;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Prevent a flex item from growing or shrinking.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-grow</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-grow: 1;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow a flex item to grow to fill any available space.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-shrink</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-shrink: 1;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow a flex item to shrink if needed.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-no-grow</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-grow: 0;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Prevent a flex item from growing.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-no-shrink</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-shrink: 0;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Prevent a flex item from shrinking.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+@include('_partials.class-table', [
+  'rows' => [
+    [
+      '.flex-initial',
+      'flex: initial;',
+      "Allow a flex item to shrink but not grow, taking into account its initial size.",
+    ],
+    [
+      '.flex-1',
+      'flex: 1;',
+      "Allow a flex item to grow and shrink as needed, ignoring its initial size.",
+    ],
+    [
+      '.flex-auto',
+      'flex: auto;',
+      "Allow a flex item to grow and shrink, taking into account its initial size.",
+    ],
+    [
+      '.flex-none',
+      'flex: none;',
+      "Prevent a flex item from growing or shrinking.",
+    ],
+    [
+      '.flex-grow',
+      'flex-grow: 1;',
+      "Allow a flex item to grow to fill any available space.",
+    ],
+    [
+      '.flex-shrink',
+      'flex-shrink: 1;',
+      "Allow a flex item to shrink if needed.",
+    ],
+    [
+      '.flex-no-grow',
+      'flex-grow: 0;',
+      "Prevent a flex item from growing.",
+    ],
+    [
+      '.flex-no-shrink',
+      'flex-shrink: 0;',
+      "Prevent a flex item from shrinking.",
+    ],
+  ]
+])
 
 ### Initial <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
 

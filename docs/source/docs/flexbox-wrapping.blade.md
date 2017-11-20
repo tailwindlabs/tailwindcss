@@ -9,34 +9,25 @@ features:
   focus: false
 ---
 
-<div class="border-t border-grey-lighter">
-  <table class="w-full text-left table-collapse">
-    <thead>
-      <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-      </tr>
-    </thead>
-    <tbody class="align-baseline">
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.flex-no-wrap</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">flex-wrap: nowrap;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Don't allow flex items to wrap.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-wrap</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-wrap: wrap;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow flex items to wrap in the normal direction.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.flex-wrap-reverse</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">flex-wrap: wrap-reverse;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow flex items to wrap in the reverse direction.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+@include('_partials.class-table', [
+  'rows' => [
+    [
+      '.flex-no-wrap',
+      'flex-wrap: nowrap;',
+      "Don't allow flex items to wrap.",
+    ],
+    [
+      '.flex-wrap',
+      'flex-wrap: wrap;',
+      "Allow flex items to wrap in the normal direction.",
+    ],
+    [
+      '.flex-wrap-reverse',
+      'flex-wrap: wrap-reverse;',
+      "Allow flex items to wrap in the reverse direction.",
+    ],
+  ]
+])
 
 ### Don't wrap <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
 

@@ -9,59 +9,50 @@ features:
   focus: false
 ---
 
-<div class="border-t border-grey-lighter">
-  <table class="w-full text-left table-collapse">
-    <thead>
-      <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-      </tr>
-    </thead>
-    <tbody class="align-baseline">
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-visible</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark whitespace-no-wrap">overflow: visible;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Don't clip content that overflows the element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-auto</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow: auto;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Add scrollbars to an element if needed.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-hidden</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow: hidden;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Clip any content that overflows the element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-x-scroll</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow-x: auto;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow horizontal scrolling if needed.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-y-scroll</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow-y: auto;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Allow vertical scrolling if needed.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.overflow-scroll</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark whitespace-no-wrap">overflow: scroll;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Add scrollbars to an element.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.scrolling-touch</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">-webkit-overflow-scrolling: touch;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Use momentum-based scrolling on touch devices.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark whitespace-no-wrap">.scrolling-auto</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">-webkit-overflow-scrolling: auto;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Use "regular" scrolling on touch devices.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+@include('_partials.class-table', [
+  'rows' => [
+    [
+      '.overflow-visible',
+      'overflow: visible;',
+      "Don't clip content that overflows the element.",
+    ],
+    [
+      '.overflow-auto',
+      'overflow: auto;',
+      "Add scrollbars to an element if needed.",
+    ],
+    [
+      '.overflow-hidden',
+      'overflow: hidden;',
+      "Clip any content that overflows the element.",
+    ],
+    [
+      '.overflow-x-scroll',
+      'overflow-x: auto;',
+      "Allow horizontal scrolling if needed.",
+    ],
+    [
+      '.overflow-y-scroll',
+      'overflow-y: auto;',
+      "Allow vertical scrolling if needed.",
+    ],
+    [
+      '.overflow-scroll',
+      'overflow: scroll;',
+      "Add scrollbars to an element.",
+    ],
+    [
+      '.scrolling-touch',
+      '-webkit-overflow-scrolling: touch;',
+      "Use momentum-based scrolling on touch devices.",
+    ],
+    [
+      '.scrolling-auto',
+      '-webkit-overflow-scrolling: auto;',
+      "Use \"regular\" scrolling on touch devices.",
+    ],
+  ]
+])
 
 ### Visible <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
 

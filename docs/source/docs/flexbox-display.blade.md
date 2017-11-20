@@ -9,29 +9,20 @@ features:
   focus: false
 ---
 
-<div class="border-t border-grey-lighter">
-  <table class="w-full text-left table-collapse">
-    <thead>
-      <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-      </tr>
-    </thead>
-    <tbody class="align-baseline">
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.flex</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">display: flex;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Create a block-level flex container.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.inline-flex</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">display: inline-flex;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Create an inline flex container.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+@include('_partials.class-table', [
+  'rows' => [
+    [
+      '.flex',
+      'display: flex;',
+      "Create a block-level flex container.",
+    ],
+    [
+      '.inline-flex',
+      'display: inline-flex;',
+      "Create an inline flex container.",
+    ],
+  ]
+])
 
 ## Flex
 

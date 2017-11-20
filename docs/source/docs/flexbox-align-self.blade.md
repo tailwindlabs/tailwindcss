@@ -9,44 +9,35 @@ features:
   focus: false
 ---
 
-<div class="border-t border-grey-lighter">
-  <table class="w-full text-left table-collapse">
-    <thead>
-      <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-      </tr>
-    </thead>
-    <tbody class="align-baseline">
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.self-auto</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">align-self: auto;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Align item based on the container's <code>align-items</code> property.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.self-start</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-self: flex-start;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Align item against the start of the cross axis.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.self-center</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-self: center;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Align item along the center of the cross axis.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.self-end</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-self: flex-end;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Align item against the end of the cross axis.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.self-stretch</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-self: stretch;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Stretch item to fill the cross axis.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+@include('_partials.class-table', [
+  'rows' => [
+    [
+      '.self-auto',
+      'align-self: auto;',
+      "Align item based on the container's <code>align-items</code> property.",
+    ],
+    [
+      '.self-start',
+      'align-self: flex-start;',
+      "Align item against the start of the cross axis.",
+    ],
+    [
+      '.self-center',
+      'align-self: center;',
+      "Align item along the center of the cross axis.",
+    ],
+    [
+      '.self-end',
+      'align-self: flex-end;',
+      "Align item against the end of the cross axis.",
+    ],
+    [
+      '.self-stretch',
+      'align-self: stretch;',
+      "Stretch item to fill the cross axis.",
+    ],
+  ]
+])
 
 ### Auto <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
 

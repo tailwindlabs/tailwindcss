@@ -9,44 +9,35 @@ features:
   focus: false
 ---
 
-<div class="border-t border-grey-lighter">
-  <table class="w-full text-left table-collapse">
-    <thead>
-      <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-      </tr>
-    </thead>
-    <tbody class="align-baseline">
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.opacity-100</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">opacity: 1;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Set the opacity of an element to 100%.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.opacity-75</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">opacity: .75;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the opacity of an element to 75%.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.opacity-50</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">opacity: .5;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the opacity of an element to 50%.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.opacity-25</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">opacity: .25;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the opacity of an element to 25%.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.opacity-0</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">opacity: 0;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Set the opacity of an element to 0%.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+@include('_partials.class-table', [
+  'rows' => [
+    [
+      '.opacity-100',
+      'opacity: 1;',
+      "Set the opacity of an element to 100%.",
+    ],
+    [
+      '.opacity-75',
+      'opacity: .75;',
+      "Set the opacity of an element to 75%.",
+    ],
+    [
+      '.opacity-50',
+      'opacity: .5;',
+      "Set the opacity of an element to 50%.",
+    ],
+    [
+      '.opacity-25',
+      'opacity: .25;',
+      "Set the opacity of an element to 25%.",
+    ],
+    [
+      '.opacity-0',
+      'opacity: 0;',
+      "Set the opacity of an element to 0%.",
+    ],
+  ]
+])
 
 ## Example
 

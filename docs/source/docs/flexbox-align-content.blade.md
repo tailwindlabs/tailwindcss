@@ -9,49 +9,35 @@ features:
   focus: false
 ---
 
-<div class="border-t border-grey-lighter">
-  <table class="w-full text-left table-collapse">
-    <colgroup>
-      <col class="w-1/5">
-      <col class="w-1/3">
-      <col>
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
-      </tr>
-    </thead>
-    <tbody class="align-baseline">
-      <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark">.content-start</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">align-content: flex-start;</td>
-        <td class="p-2 border-t border-smoke text-sm text-grey-darker">Pack lines against the start of the cross axis.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.content-center</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-content: center;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Pack lines in the center of the cross axis.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.content-end</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-content: flex-end;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Pack lines against the end of the cross axis.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.content-between</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-content: space-between;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Distribute lines along the cross axis by adding an equal amount of space between each line.</td>
-      </tr>
-      <tr>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-purple-dark">.content-around</td>
-        <td class="p-2 border-t border-smoke-light font-mono text-xs text-blue-dark">align-content: space-around;</td>
-        <td class="p-2 border-t border-smoke-light text-sm text-grey-darker">Distribute lines along the cross axis by adding an equal amount of space around each line.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+@include('_partials.class-table', [
+  'rows' => [
+    [
+      '.content-start',
+      'align-content: flex-start;',
+      "Pack lines against the start of the cross axis.",
+    ],
+    [
+      '.content-center',
+      'align-content: center;',
+      "Pack lines in the center of the cross axis.",
+    ],
+    [
+      '.content-end',
+      'align-content: flex-end;',
+      "Pack lines against the end of the cross axis.",
+    ],
+    [
+      '.content-between',
+      'align-content: space-between;',
+      "Distribute lines along the cross axis by adding an equal amount of space between each line.",
+    ],
+    [
+      '.content-around',
+      'align-content: space-around;',
+      "Distribute lines along the cross axis by adding an equal amount of space around each line.",
+    ],
+  ]
+])
 
 ### Start <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
 
