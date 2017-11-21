@@ -204,7 +204,7 @@ var tailwindcss = require('tailwindcss');
 mix.sass('resources/assets/sass/app.scss', 'public/css')
   .options({
     processCssUrls: false,
-      postCss: [ tailwindcss('./path/to/your/tailwind-config.js') ],
+    postCss: [ tailwindcss('./path/to/your/tailwind-config.js') ],
   });
 ```
 
