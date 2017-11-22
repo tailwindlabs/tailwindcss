@@ -14,12 +14,14 @@ test('it adds a focusable variant to each nested class definition', () => {
   `
 
   const output = `
-      .banana, .focus\\:banana:focus { color: yellow; }
-      .chocolate, .focus\\:chocolate:focus { color: brown; }
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+      .focus\\:banana:focus { color: yellow; }
+      .focus\\:chocolate:focus { color: brown; }
   `
 
   return run(input).then(result => {
-    expect(result.css).toEqual(output)
+    expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })

@@ -68,6 +68,9 @@
       "react"
     ]
   },
+  "jest": {
+    "setupTestFrameworkScriptFile": "<rootDir>/jest/customMatchers.js"
+  },
   "engines": {
     "node": ">=6.9.0"
   }
