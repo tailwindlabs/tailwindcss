@@ -95,6 +95,10 @@ function modules() {
 }
 
 function withVariants(module, variants) {
+  if (variants === false) {
+    return []
+  }
+
   return _.reduce(
     variants,
     (result, variant) => {
