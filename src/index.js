@@ -14,6 +14,14 @@ import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
 import substituteScreenAtRules from './lib/substituteScreenAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
 
+function mergeConfigWithDefaults(config) {
+  const defaultConfig = require('../defaultConfig')()
+  _.defaults(config, defaultConfig)
+  config.options = _.defaults(config.options, defaultConfig.options)
+  config.options.modules = _.defaults(config.options.modules, defaultConfig.options.modules)
+  return config
+}
+
 const plugin = postcss.plugin('tailwind', config => {
   const plugins = []
 
@@ -27,7 +35,7 @@ const plugin = postcss.plugin('tailwind', config => {
     }
 
     delete require.cache[require.resolve(path.resolve(config))]
-    return require(path.resolve(config))
+    return mergeConfigWithDefaults(require(path.resolve(config)))
   }
 
   return postcss(
