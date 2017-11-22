@@ -2,6 +2,7 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import applyClassPrefix from '../util/applyClassPrefix'
 import responsive from '../util/responsive'
+import hoverable from '../util/hoverable'
 
 import lists from '../generators/lists'
 import appearance from '../generators/appearance'
@@ -56,47 +57,47 @@ export default function(config) {
           nodes: _.flatten([
             // The `lists` module needs to be first to allow overriding the margin and
             // padding values that it sets with other utilities.
-            lists(unwrappedConfig),
-            appearance(unwrappedConfig),
-            backgroundColors(unwrappedConfig),
-            backgroundPosition(unwrappedConfig),
-            backgroundSize(unwrappedConfig),
-            borderColors(unwrappedConfig),
-            borderRadius(unwrappedConfig),
-            borderStyle(unwrappedConfig),
-            borderWidths(unwrappedConfig),
-            cursor(unwrappedConfig),
-            display(unwrappedConfig),
-            flexbox(unwrappedConfig),
-            float(unwrappedConfig),
-            fonts(unwrappedConfig),
-            fontWeights(unwrappedConfig),
-            height(unwrappedConfig),
-            leading(unwrappedConfig),
-            margin(unwrappedConfig),
-            maxHeight(unwrappedConfig),
-            maxWidth(unwrappedConfig),
-            minHeight(unwrappedConfig),
-            minWidth(unwrappedConfig),
-            negativeMargin(unwrappedConfig),
-            opacity(unwrappedConfig),
-            overflow(unwrappedConfig),
-            padding(unwrappedConfig),
-            pointerEvents(unwrappedConfig),
-            position(unwrappedConfig),
-            resize(unwrappedConfig),
-            shadows(unwrappedConfig),
-            textAlign(unwrappedConfig),
-            textColors(unwrappedConfig),
-            textSizes(unwrappedConfig),
-            textStyle(unwrappedConfig),
-            tracking(unwrappedConfig),
-            userSelect(unwrappedConfig),
-            verticalAlign(unwrappedConfig),
-            visibility(unwrappedConfig),
-            whitespace(unwrappedConfig),
-            width(unwrappedConfig),
-            zIndex(unwrappedConfig),
+            responsive(lists(unwrappedConfig)),
+            responsive(appearance(unwrappedConfig)),
+            responsive(hoverable(backgroundColors(unwrappedConfig))),
+            responsive(backgroundPosition(unwrappedConfig)),
+            responsive(backgroundSize(unwrappedConfig)),
+            responsive(hoverable(borderColors(unwrappedConfig))),
+            responsive(borderRadius(unwrappedConfig)),
+            responsive(borderStyle(unwrappedConfig)),
+            responsive(borderWidths(unwrappedConfig)),
+            responsive(cursor(unwrappedConfig)),
+            responsive(display(unwrappedConfig)),
+            responsive(flexbox(unwrappedConfig)),
+            responsive(float(unwrappedConfig)),
+            responsive(fonts(unwrappedConfig)),
+            responsive(hoverable(fontWeights(unwrappedConfig))),
+            responsive(height(unwrappedConfig)),
+            responsive(leading(unwrappedConfig)),
+            responsive(margin(unwrappedConfig)),
+            responsive(maxHeight(unwrappedConfig)),
+            responsive(maxWidth(unwrappedConfig)),
+            responsive(minHeight(unwrappedConfig)),
+            responsive(minWidth(unwrappedConfig)),
+            responsive(negativeMargin(unwrappedConfig)),
+            responsive(opacity(unwrappedConfig)),
+            responsive(overflow(unwrappedConfig)),
+            responsive(padding(unwrappedConfig)),
+            responsive(pointerEvents(unwrappedConfig)),
+            responsive(position(unwrappedConfig)),
+            responsive(resize(unwrappedConfig)),
+            responsive(shadows(unwrappedConfig)),
+            responsive(textAlign(unwrappedConfig)),
+            responsive(hoverable(textColors(unwrappedConfig))),
+            responsive(textSizes(unwrappedConfig)),
+            responsive(hoverable(textStyle(unwrappedConfig))),
+            responsive(tracking(unwrappedConfig)),
+            responsive(userSelect(unwrappedConfig)),
+            responsive(verticalAlign(unwrappedConfig)),
+            responsive(visibility(unwrappedConfig)),
+            responsive(whitespace(unwrappedConfig)),
+            responsive(width(unwrappedConfig)),
+            responsive(zIndex(unwrappedConfig)),
           ]),
         })
 
@@ -105,7 +106,7 @@ export default function(config) {
         }
 
         const tailwindClasses = postcss.root({
-          nodes: [...container(unwrappedConfig), responsive(utilities)],
+          nodes: [...container(unwrappedConfig), ...utilities.nodes],
         })
 
         applyClassPrefix(tailwindClasses, _.get(unwrappedConfig, 'options.prefix', ''))

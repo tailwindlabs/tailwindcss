@@ -7,5 +7,5 @@ export default function responsive(rules) {
     .atRule({
       name: 'responsive',
     })
-    .append(cloneNodes(_.isArray(rules) ? rules : rules.nodes))
+    .append(cloneNodes(_.isArray(rules) ? rules : [rules]))
 }
