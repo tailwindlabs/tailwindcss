@@ -14,12 +14,14 @@ test('it adds a hoverable variant to each nested class definition', () => {
   `
 
   const output = `
-      .banana, .hover\\:banana:hover { color: yellow; }
-      .chocolate, .hover\\:chocolate:hover { color: brown; }
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+      .hover\\:banana:hover { color: yellow; }
+      .hover\\:chocolate:hover { color: brown; }
   `
 
   return run(input).then(result => {
-    expect(result.css).toEqual(output)
+    expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
