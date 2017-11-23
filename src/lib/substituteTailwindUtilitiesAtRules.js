@@ -14,7 +14,11 @@ export default function(config) {
         return
       }
 
-      const utilities = generateModules(utilityModules, unwrappedConfig.options.modules, unwrappedConfig)
+      const utilities = generateModules(
+        utilityModules,
+        unwrappedConfig.options.modules,
+        unwrappedConfig
+      )
 
       if (_.get(unwrappedConfig, 'options.important', false)) {
         utilities.walkDecls(decl => (decl.important = true))

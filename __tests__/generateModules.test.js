@@ -11,9 +11,9 @@ function textAlign() {
 
 function display() {
   return defineClasses({
-    'block': { 'display': 'block' },
-    'inline': { 'display': 'inline' },
-    'inline-block': { 'display': 'inline-block' },
+    block: { display: 'block' },
+    inline: { display: 'inline' },
+    'inline-block': { display: 'inline-block' },
   })
 }
 
@@ -26,9 +26,7 @@ function borderStyle() {
 }
 
 test('an empty variants list generates a @variants at-rule with no parameters', () => {
-  const result = generateModules([
-    { name: 'textAlign', generator: textAlign },
-  ], {
+  const result = generateModules([{ name: 'textAlign', generator: textAlign }], {
     textAlign: [],
   })
 
@@ -43,9 +41,7 @@ test('an empty variants list generates a @variants at-rule with no parameters', 
 })
 
 test('a `false` variants list generates no output', () => {
-  const result = generateModules([
-    { name: 'textAlign', generator: textAlign },
-  ], {
+  const result = generateModules([{ name: 'textAlign', generator: textAlign }], {
     textAlign: false,
   })
 
@@ -53,9 +49,7 @@ test('a `false` variants list generates no output', () => {
 })
 
 test('specified variants are included in the @variants at-rule', () => {
-  const result = generateModules([
-    { name: 'textAlign', generator: textAlign },
-  ], {
+  const result = generateModules([{ name: 'textAlign', generator: textAlign }], {
     textAlign: ['responsive', 'hover'],
   })
 
@@ -71,25 +65,28 @@ test('specified variants are included in the @variants at-rule', () => {
 
 test('options must provide variants for every module', () => {
   expect(() => {
-    generateModules([
-      { name: 'textAlign', generator: textAlign },
-      { name: 'display', generator: display },
-    ], {
-      textAlign: [],
-    })
+    generateModules(
+      [{ name: 'textAlign', generator: textAlign }, { name: 'display', generator: display }],
+      {
+        textAlign: [],
+      }
+    )
   }).toThrow()
 })
 
 test('variants can be different for each module', () => {
-  const result = generateModules([
-    { name: 'textAlign', generator: textAlign },
-    { name: 'display', generator: display },
-    { name: 'borderStyle', generator: borderStyle },
-  ], {
-    textAlign: [],
-    display: false,
-    borderStyle: ['responsive', 'hover', 'focus']
-  })
+  const result = generateModules(
+    [
+      { name: 'textAlign', generator: textAlign },
+      { name: 'display', generator: display },
+      { name: 'borderStyle', generator: borderStyle },
+    ],
+    {
+      textAlign: [],
+      display: false,
+      borderStyle: ['responsive', 'hover', 'focus'],
+    }
+  )
 
   const expected = `
     @variants {
@@ -108,18 +105,24 @@ test('variants can be different for each module', () => {
 })
 
 test('generators can reference the generatorOptions object', () => {
-  const result = generateModules([{
-    name: 'parameterized',
-    generator: (generatorParams) => {
-      return defineClasses({
-        'foo': { 'color': generatorParams.color },
-      })
+  const result = generateModules(
+    [
+      {
+        name: 'parameterized',
+        generator: generatorParams => {
+          return defineClasses({
+            foo: { color: generatorParams.color },
+          })
+        },
+      },
+    ],
+    {
+      parameterized: [],
+    },
+    {
+      color: 'blue',
     }
-  }], {
-    parameterized: [],
-  }, {
-    color: 'blue'
-  })
+  )
 
   const expected = `
     @variants {
