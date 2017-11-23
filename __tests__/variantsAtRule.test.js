@@ -69,3 +69,28 @@ test('it can generate hover and focus variants', () => {
     expect(result.warnings().length).toBe(0)
   })
 })
+
+test('it wraps the output in a responsive at-rule if responsive is included as a variant', () => {
+  const input = `
+    @variants responsive, hover, focus {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    @responsive {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+      .focus\\:banana:focus { color: yellow; }
+      .focus\\:chocolate:focus { color: brown; }
+      .hover\\:banana:hover { color: yellow; }
+      .hover\\:chocolate:hover { color: brown; }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})

@@ -27,6 +27,12 @@ export default function() {
     css.walkAtRules('variants', atRule => {
       const variants = postcss.list.comma(atRule.params)
 
+      if (variants.includes('responsive')) {
+        const responsiveParent = postcss.atRule({ name: 'responsive' })
+        atRule.before(responsiveParent)
+        responsiveParent.append(atRule)
+      }
+
       atRule.before(atRule.clone().nodes)
 
       _.forEach(['focus', 'hover'], variant => {
