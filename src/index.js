@@ -5,7 +5,7 @@ import postcss from 'postcss'
 import stylefmt from 'stylefmt'
 
 import registerConfigAsDependency from './lib/registerConfigAsDependency'
-import substitutePreflightAtRule from './lib/substitutePreflightAtRule'
+import substituteTailwindPreflightAtRule from './lib/substituteTailwindPreflightAtRule'
 import evaluateTailwindFunctions from './lib/evaluateTailwindFunctions'
 import substituteTailwindUtilitiesAtRules from './lib/substituteTailwindUtilitiesAtRules'
 import substituteHoverableAtRules from './lib/substituteHoverableAtRules'
@@ -42,7 +42,7 @@ const plugin = postcss.plugin('tailwind', config => {
   return postcss(
     ...plugins,
     ...[
-      substitutePreflightAtRule(lazyConfig),
+      substituteTailwindPreflightAtRule(lazyConfig),
       evaluateTailwindFunctions(lazyConfig),
       substituteTailwindUtilitiesAtRules(lazyConfig),
       substituteHoverableAtRules(lazyConfig),
