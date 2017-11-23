@@ -1,8 +1,7 @@
 import _ from 'lodash'
 import postcss from 'postcss'
 import applyClassPrefix from '../util/applyClassPrefix'
-import responsive from '../util/responsive'
-import hoverable from '../util/hoverable'
+import wrapWithVariants from '../util/wrapWithVariants'
 
 import container from '../generators/container'
 
@@ -94,23 +93,6 @@ function modules() {
   ]
 }
 
-function withVariants(module, variants) {
-  if (variants === false) {
-    return []
-  }
-
-  return _.reduce(
-    variants,
-    (result, variant) => {
-      return {
-        responsive,
-        hover: hoverable,
-      }[variant](result)
-    },
-    module
-  )
-}
-
 export default function(config) {
   return function(css) {
     const unwrappedConfig = config()
@@ -119,7 +101,7 @@ export default function(config) {
       if (atRule.params === 'utilities') {
         const utilities = postcss.root({
           nodes: _.flatMap(modules(), module =>
-            withVariants(
+            wrapWithVariants(
               module.generator(unwrappedConfig),
               unwrappedConfig.options.modules[module.name]
             )
