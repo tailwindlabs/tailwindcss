@@ -3413,6 +3413,13 @@ button,
   position: relative;
 }
 
+.pin-none {
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
+}
+
 .pin-t {
   top: 0;
 }
@@ -3444,8 +3451,6 @@ button,
   right: 0;
   bottom: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
 }
 
 .resize-none {
@@ -7252,6 +7257,13 @@ button,
     position: relative;
   }
 
+  .sm\:pin-none {
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+  }
+
   .sm\:pin-t {
     top: 0;
   }
@@ -7283,8 +7295,6 @@ button,
     right: 0;
     bottom: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
   }
 
   .sm\:resize-none {
@@ -11092,6 +11102,13 @@ button,
     position: relative;
   }
 
+  .md\:pin-none {
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+  }
+
   .md\:pin-t {
     top: 0;
   }
@@ -11123,8 +11140,6 @@ button,
     right: 0;
     bottom: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
   }
 
   .md\:resize-none {
@@ -14932,6 +14947,13 @@ button,
     position: relative;
   }
 
+  .lg\:pin-none {
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+  }
+
   .lg\:pin-t {
     top: 0;
   }
@@ -14963,8 +14985,6 @@ button,
     right: 0;
     bottom: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
   }
 
   .lg\:resize-none {
@@ -18772,6 +18792,13 @@ button,
     position: relative;
   }
 
+  .xl\:pin-none {
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+  }
+
   .xl\:pin-t {
     top: 0;
   }
@@ -18803,8 +18830,6 @@ button,
     right: 0;
     bottom: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
   }
 
   .xl\:resize-none {

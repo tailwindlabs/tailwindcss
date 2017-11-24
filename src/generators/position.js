@@ -6,6 +6,12 @@ export default function() {
     fixed: { position: 'fixed' },
     absolute: { position: 'absolute' },
     relative: { position: 'relative' },
+    'pin-none': {
+      top: 'auto',
+      right: 'auto',
+      bottom: 'auto',
+      left: 'auto',
+    },
     'pin-t': { top: 0 },
     'pin-r': { right: 0 },
     'pin-b': { bottom: 0 },
@@ -17,8 +23,6 @@ export default function() {
       right: 0,
       bottom: 0,
       left: 0,
-      width: '100%',
-      height: '100%',
     },
   })
 }
