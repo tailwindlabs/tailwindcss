@@ -6,6 +6,7 @@ import buildMediaQuery from '../util/buildMediaQuery'
 export default function(config) {
   return function(css) {
     const screens = config().screens
+    const separator = config().options.separator
     const responsiveRules = []
     let finalRules = []
 
@@ -25,7 +26,10 @@ export default function(config) {
       mediaQuery.append(
         responsiveRules.map(rule => {
           const cloned = rule.clone()
-          cloned.selectors = _.map(rule.selectors, selector => `.${screen}\\:${selector.slice(1)}`)
+          cloned.selectors = _.map(
+            rule.selectors,
+            selector => `.${screen}${separator}${selector.slice(1)}`
+          )
           return cloned
         })
       )
