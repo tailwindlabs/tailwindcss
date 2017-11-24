@@ -1,6 +1,6 @@
 import lists from './generators/lists'
 import appearance from './generators/appearance'
-import backgroundAttachment from './generators/backgroundAttachment`
+import backgroundAttachment from './generators/backgroundAttachment'
 import backgroundColors from './generators/backgroundColors'
 import backgroundPosition from './generators/backgroundPosition'
 import backgroundSize from './generators/backgroundSize'
