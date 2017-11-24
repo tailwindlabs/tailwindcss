@@ -3420,19 +3420,10 @@ button,
   left: auto;
 }
 
-.pin-t {
+.pin {
   top: 0;
-}
-
-.pin-r {
   right: 0;
-}
-
-.pin-b {
   bottom: 0;
-}
-
-.pin-l {
   left: 0;
 }
 
@@ -3446,10 +3437,19 @@ button,
   left: 0;
 }
 
-.pin {
+.pin-t {
   top: 0;
+}
+
+.pin-r {
   right: 0;
+}
+
+.pin-b {
   bottom: 0;
+}
+
+.pin-l {
   left: 0;
 }
 
@@ -7264,19 +7264,10 @@ button,
     left: auto;
   }
 
-  .sm\:pin-t {
+  .sm\:pin {
     top: 0;
-  }
-
-  .sm\:pin-r {
     right: 0;
-  }
-
-  .sm\:pin-b {
     bottom: 0;
-  }
-
-  .sm\:pin-l {
     left: 0;
   }
 
@@ -7290,10 +7281,19 @@ button,
     left: 0;
   }
 
-  .sm\:pin {
+  .sm\:pin-t {
     top: 0;
+  }
+
+  .sm\:pin-r {
     right: 0;
+  }
+
+  .sm\:pin-b {
     bottom: 0;
+  }
+
+  .sm\:pin-l {
     left: 0;
   }
 
@@ -11109,19 +11109,10 @@ button,
     left: auto;
   }
 
-  .md\:pin-t {
+  .md\:pin {
     top: 0;
-  }
-
-  .md\:pin-r {
     right: 0;
-  }
-
-  .md\:pin-b {
     bottom: 0;
-  }
-
-  .md\:pin-l {
     left: 0;
   }
 
@@ -11135,10 +11126,19 @@ button,
     left: 0;
   }
 
-  .md\:pin {
+  .md\:pin-t {
     top: 0;
+  }
+
+  .md\:pin-r {
     right: 0;
+  }
+
+  .md\:pin-b {
     bottom: 0;
+  }
+
+  .md\:pin-l {
     left: 0;
   }
 
@@ -14954,19 +14954,10 @@ button,
     left: auto;
   }
 
-  .lg\:pin-t {
+  .lg\:pin {
     top: 0;
-  }
-
-  .lg\:pin-r {
     right: 0;
-  }
-
-  .lg\:pin-b {
     bottom: 0;
-  }
-
-  .lg\:pin-l {
     left: 0;
   }
 
@@ -14980,10 +14971,19 @@ button,
     left: 0;
   }
 
-  .lg\:pin {
+  .lg\:pin-t {
     top: 0;
+  }
+
+  .lg\:pin-r {
     right: 0;
+  }
+
+  .lg\:pin-b {
     bottom: 0;
+  }
+
+  .lg\:pin-l {
     left: 0;
   }
 
@@ -18799,19 +18799,10 @@ button,
     left: auto;
   }
 
-  .xl\:pin-t {
+  .xl\:pin {
     top: 0;
-  }
-
-  .xl\:pin-r {
     right: 0;
-  }
-
-  .xl\:pin-b {
     bottom: 0;
-  }
-
-  .xl\:pin-l {
     left: 0;
   }
 
@@ -18825,10 +18816,19 @@ button,
     left: 0;
   }
 
-  .xl\:pin {
+  .xl\:pin-t {
     top: 0;
+  }
+
+  .xl\:pin-r {
     right: 0;
+  }
+
+  .xl\:pin-b {
     bottom: 0;
+  }
+
+  .xl\:pin-l {
     left: 0;
   }
 
