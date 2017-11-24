@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import postcss from 'postcss'
 import applyClassPrefix from '../util/applyClassPrefix'
 import generateModules from '../util/generateModules'
@@ -16,7 +15,7 @@ export default function(config) {
 
       const utilities = generateModules(utilityModules, unwrappedConfig.modules, unwrappedConfig)
 
-      if (_.get(unwrappedConfig, 'options.important', false)) {
+      if (unwrappedConfig.options.important) {
         utilities.walkDecls(decl => (decl.important = true))
       }
 
@@ -24,7 +23,7 @@ export default function(config) {
         nodes: [...container(unwrappedConfig), ...utilities.nodes],
       })
 
-      applyClassPrefix(tailwindClasses, _.get(unwrappedConfig, 'options.prefix', ''))
+      applyClassPrefix(tailwindClasses, unwrappedConfig.options.prefix)
 
       atRule.before(tailwindClasses)
       atRule.remove()
