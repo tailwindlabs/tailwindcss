@@ -1,7 +1,10 @@
 import postcss from 'postcss'
 import plugin from '../src/lib/substituteHoverableAtRules'
+import config from '../defaultConfig.stub.js'
 
-function run(input, opts = () => {}) {
+const separator = config.options.separator
+
+function run(input, opts = () => config) {
   return postcss([plugin(opts)]).process(input)
 }
 
@@ -16,8 +19,8 @@ test('it adds a hoverable variant to each nested class definition', () => {
   const output = `
       .banana { color: yellow; }
       .chocolate { color: brown; }
-      .hover\\:banana:hover { color: yellow; }
-      .hover\\:chocolate:hover { color: brown; }
+      .hover${separator}banana:hover { color: yellow; }
+      .hover${separator}chocolate:hover { color: brown; }
   `
 
   return run(input).then(result => {
