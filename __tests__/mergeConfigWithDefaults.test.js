@@ -2,66 +2,66 @@ import mergeConfigWithDefaults from '../src/util/mergeConfigWithDefaults'
 
 test('missing top level keys are pulled from the default config', () => {
   const userConfig = {
-    colors:  { red: '#ff0000' },
-    modules:  {},
-    options:  {},
+    colors: { red: '#ff0000' },
+    modules: {},
+    options: {},
   }
 
   const defaultConfig = {
-    colors:  { green: '#00ff00' },
+    colors: { green: '#00ff00' },
     screens: {
-      sm: '576px'
+      sm: '576px',
     },
-    modules:  {},
-    options:  {},
+    modules: {},
+    options: {},
   }
 
   const result = mergeConfigWithDefaults(userConfig, defaultConfig)
 
   expect(result).toEqual({
-    colors:  { red: '#ff0000' },
+    colors: { red: '#ff0000' },
     screens: {
-      sm: '576px'
+      sm: '576px',
     },
-    modules:  {},
-    options:  {},
+    modules: {},
+    options: {},
   })
 })
 
 test('user modules are merged with default modules', () => {
   const userConfig = {
-    modules:  { flexbox: false },
-    options:  {},
+    modules: { flexbox: false },
+    options: {},
   }
 
   const defaultConfig = {
-    modules:  {
+    modules: {
       flexbox: ['responsive'],
       textAlign: ['responsive'],
     },
-    options:  {},
+    options: {},
   }
 
   const result = mergeConfigWithDefaults(userConfig, defaultConfig)
 
   expect(result).toEqual({
-    modules:  {
+    modules: {
       flexbox: false,
       textAlign: ['responsive'],
     },
-    options:  {},
+    options: {},
   })
 })
 
 test('user options are merged with default options', () => {
   const userConfig = {
-    modules:  {},
-    options:  { prefix: 'tw-' },
+    modules: {},
+    options: { prefix: 'tw-' },
   }
 
   const defaultConfig = {
-    modules:  {},
-    options:  {
+    modules: {},
+    options: {
       prefix: '-',
       important: false,
     },
@@ -70,8 +70,8 @@ test('user options are merged with default options', () => {
   const result = mergeConfigWithDefaults(userConfig, defaultConfig)
 
   expect(result).toEqual({
-    modules:  {},
-    options:  {
+    modules: {},
+    options: {
       prefix: 'tw-',
       important: false,
     },

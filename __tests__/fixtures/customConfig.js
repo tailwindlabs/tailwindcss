@@ -1,5 +1,5 @@
 module.exports = {
-    screens: {
-        mobile: '400px',
-    }
+  screens: {
+    mobile: '400px',
+  },
 }
