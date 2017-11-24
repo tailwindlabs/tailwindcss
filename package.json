@@ -69,7 +69,8 @@
     ]
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "<rootDir>/jest/customMatchers.js"
+    "setupTestFrameworkScriptFile": "<rootDir>/jest/customMatchers.js",
+    "testPathIgnorePatterns": ["<rootDir>/__tests__/fixtures/"]
   },
   "engines": {
     "node": ">=6.9.0"
