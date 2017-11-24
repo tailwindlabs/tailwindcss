@@ -3413,6 +3413,30 @@ button,
   position: relative;
 }
 
+.pin-none {
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
+}
+
+.pin {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.pin-y {
+  top: 0;
+  bottom: 0;
+}
+
+.pin-x {
+  right: 0;
+  left: 0;
+}
+
 .pin-t {
   top: 0;
 }
@@ -3427,25 +3451,6 @@ button,
 
 .pin-l {
   left: 0;
-}
-
-.pin-y {
-  top: 0;
-  bottom: 0;
-}
-
-.pin-x {
-  right: 0;
-  left: 0;
-}
-
-.pin {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
 }
 
 .resize-none {
@@ -7252,6 +7257,30 @@ button,
     position: relative;
   }
 
+  .sm\:pin-none {
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+  }
+
+  .sm\:pin {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .sm\:pin-y {
+    top: 0;
+    bottom: 0;
+  }
+
+  .sm\:pin-x {
+    right: 0;
+    left: 0;
+  }
+
   .sm\:pin-t {
     top: 0;
   }
@@ -7266,25 +7295,6 @@ button,
 
   .sm\:pin-l {
     left: 0;
-  }
-
-  .sm\:pin-y {
-    top: 0;
-    bottom: 0;
-  }
-
-  .sm\:pin-x {
-    right: 0;
-    left: 0;
-  }
-
-  .sm\:pin {
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
   }
 
   .sm\:resize-none {
@@ -11092,6 +11102,30 @@ button,
     position: relative;
   }
 
+  .md\:pin-none {
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+  }
+
+  .md\:pin {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .md\:pin-y {
+    top: 0;
+    bottom: 0;
+  }
+
+  .md\:pin-x {
+    right: 0;
+    left: 0;
+  }
+
   .md\:pin-t {
     top: 0;
   }
@@ -11106,25 +11140,6 @@ button,
 
   .md\:pin-l {
     left: 0;
-  }
-
-  .md\:pin-y {
-    top: 0;
-    bottom: 0;
-  }
-
-  .md\:pin-x {
-    right: 0;
-    left: 0;
-  }
-
-  .md\:pin {
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
   }
 
   .md\:resize-none {
@@ -14932,6 +14947,30 @@ button,
     position: relative;
   }
 
+  .lg\:pin-none {
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+  }
+
+  .lg\:pin {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .lg\:pin-y {
+    top: 0;
+    bottom: 0;
+  }
+
+  .lg\:pin-x {
+    right: 0;
+    left: 0;
+  }
+
   .lg\:pin-t {
     top: 0;
   }
@@ -14946,25 +14985,6 @@ button,
 
   .lg\:pin-l {
     left: 0;
-  }
-
-  .lg\:pin-y {
-    top: 0;
-    bottom: 0;
-  }
-
-  .lg\:pin-x {
-    right: 0;
-    left: 0;
-  }
-
-  .lg\:pin {
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
   }
 
   .lg\:resize-none {
@@ -18772,6 +18792,30 @@ button,
     position: relative;
   }
 
+  .xl\:pin-none {
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+  }
+
+  .xl\:pin {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .xl\:pin-y {
+    top: 0;
+    bottom: 0;
+  }
+
+  .xl\:pin-x {
+    right: 0;
+    left: 0;
+  }
+
   .xl\:pin-t {
     top: 0;
   }
@@ -18786,25 +18830,6 @@ button,
 
   .xl\:pin-l {
     left: 0;
-  }
-
-  .xl\:pin-y {
-    top: 0;
-    bottom: 0;
-  }
-
-  .xl\:pin-x {
-    right: 0;
-    left: 0;
-  }
-
-  .xl\:pin {
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
   }
 
   .xl\:resize-none {
