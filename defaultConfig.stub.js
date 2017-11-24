@@ -759,7 +759,7 @@ module.exports = {
 
   /*
   |-----------------------------------------------------------------------------
-  | Modules
+  | Modules                  https://tailwindcss.com/docs/configuration#modules
   |-----------------------------------------------------------------------------
   |
   | Here is where you control which modules are generated and what variants are
