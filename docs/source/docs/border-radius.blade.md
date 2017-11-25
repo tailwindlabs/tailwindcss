@@ -24,7 +24,7 @@ features:
     [
       '.rounded',
       'border-radius: .25rem;',
-      "Apply a medium border radius to all corners of an element.",
+      "Apply the default border radius to all corners of an element.",
     ],
     [
       '.rounded-lg',
@@ -79,22 +79,22 @@ features:
     [
       '.rounded-t',
       "border-top-left-radius: .25rem;\nborder-top-right-radius: .25rem;",
-      "Apply a medium border radius to the top corners of an element.",
+      "Apply the default border radius to the top corners of an element.",
     ],
     [
       '.rounded-r',
       "border-top-right-radius: .25rem;\nborder-bottom-right-radius: .25rem;",
-      "Apply a medium border radius to the right corners of an element.",
+      "Apply the default border radius to the right corners of an element.",
     ],
     [
       '.rounded-b',
       "border-bottom-right-radius: .25rem;\nborder-bottom-left-radius: .25rem;",
-      "Apply a medium border radius to the bottom corners of an element.",
+      "Apply the default border radius to the bottom corners of an element.",
     ],
     [
       '.rounded-l',
       "border-top-left-radius: .25rem;\nborder-bottom-left-radius: .25rem;",
-      "Apply a medium border radius to the left corners of an element.",
+      "Apply the default border radius to the left corners of an element.",
     ],
     [
       '.rounded-t-lg',
@@ -179,22 +179,22 @@ features:
     [
       '.rounded-tl',
       'border-top-left-radius: .25rem;',
-      "Apply a medium border radius to the top left corner of an element.",
+      "Apply the default border radius to the top left corner of an element.",
     ],
     [
       '.rounded-tr',
       'border-top-right-radius: .25rem;',
-      "Apply a medium border radius to the top right corner of an element.",
+      "Apply the default border radius to the top right corner of an element.",
     ],
     [
       '.rounded-br',
       'border-bottom-right-radius: .25rem;',
-      "Apply a medium border radius to the bottom right corner of an element.",
+      "Apply the default border radius to the bottom right corner of an element.",
     ],
     [
       '.rounded-bl',
       'border-bottom-left-radius: .25rem;',
-      "Apply a medium border radius to the bottom left corner of an element.",
+      "Apply the default border radius to the bottom left corner of an element.",
     ],
     [
       '.rounded-tl-lg',
