@@ -16,12 +16,12 @@ features:
     [
       '.max-h-full',
       'max-height: 100%;',
-      "Set the element's maximum height to <code>100%</code>.",
+      "Set the element's maximum height to 100%.",
     ],
     [
       '.max-h-screen',
       'max-height: 100vh;',
-      "Set the element's maximum height to <code>100vh</code>.",
+      "Set the element's maximum height to 100vh.",
     ],
   ]
 ])

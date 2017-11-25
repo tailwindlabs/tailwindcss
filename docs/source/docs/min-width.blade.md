@@ -16,12 +16,12 @@ features:
     [
       '.min-w-0',
       'min-width: 0;',
-      "Set the element's minimum width to <code>0</code>.",
+      "Set the element's minimum width to 0.",
     ],
     [
       '.min-w-full',
       'min-width: 100%;',
-      "Set the element's minimum width to <code>100%</code>.",
+      "Set the element's minimum width to 100%.",
     ],
   ]
 ])
