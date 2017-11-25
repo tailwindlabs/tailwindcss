@@ -12,6 +12,7 @@ features:
 @include('_partials.work-in-progress')
 
 @include('_partials.class-table', [
+  'scroll' => false,
   'rows' => [
     [
       '.max-w-xs',

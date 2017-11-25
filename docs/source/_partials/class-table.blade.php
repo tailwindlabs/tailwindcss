@@ -1,5 +1,5 @@
 <div class="border-t border-b border-grey-light">
-  <div class="{{ count($rows) > 10 ? 'max-h-sm' : '' }} overflow-y-scroll">
+  <div class="{{ (count($rows) <= 10 || (isset($scroll) && $scroll === false)) ? '' : 'max-h-sm' }} overflow-y-scroll">
     <table class="w-full text-left table-collapse">
       <thead>
         <tr>
