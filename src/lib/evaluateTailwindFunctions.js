@@ -5,8 +5,7 @@ export default function(config) {
   return functions({
     functions: {
       config: (path, defaultValue) => {
-        const options = config()
-        return _.get(options, _.trim(path, `'"`), defaultValue)
+        return _.get(config(), _.trim(path, `'"`), defaultValue)
       },
     },
   })
