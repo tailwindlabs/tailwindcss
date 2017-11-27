@@ -508,6 +508,11 @@ fieldset {
   padding: 0;
 }
 
+ol,
+ul {
+  margin: 0;
+}
+
 /**
  * Suppress the focus outline on elements that cannot be accessed via keyboard.
  * This prevents an unwanted focus outline from appearing around elements that
