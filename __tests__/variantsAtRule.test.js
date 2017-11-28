@@ -50,6 +50,27 @@ test('it can generate focus variants', () => {
   })
 })
 
+test('it can generate parent-hover variants', () => {
+  const input = `
+    @variants parent-hover {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+      .parent:hover .parent-hover${separator}banana { color: yellow; }
+      .parent:hover .parent-hover${separator}chocolate { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate hover and focus variants', () => {
   const input = `
     @variants hover, focus {
