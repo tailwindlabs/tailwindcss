@@ -53,6 +53,33 @@ test('user modules are merged with default modules', () => {
   })
 })
 
+test('setting modules to "all" creates all variants for all modules', () => {
+  const userConfig = {
+    modules: 'all',
+    options: {},
+  }
+
+  const defaultConfig = {
+    modules: {
+      flexbox: ['responsive'],
+      textAlign: ['hover'],
+      textColors: ['focus'],
+    },
+    options: {},
+  }
+
+  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+
+  expect(result).toEqual({
+    modules: {
+      flexbox: ['responsive', 'hover', 'focus', 'parent-hover'],
+      textAlign: ['responsive', 'hover', 'focus', 'parent-hover'],
+      textColors: ['responsive', 'hover', 'focus', 'parent-hover'],
+    },
+    options: {},
+  })
+})
+
 test('user options are merged with default options', () => {
   const userConfig = {
     modules: {},
