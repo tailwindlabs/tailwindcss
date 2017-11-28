@@ -9,7 +9,7 @@ const variantGenerators = {
       rule.selector = `.hover${config.options.separator}${rule.selector.slice(1)}:hover`
     })
 
-    return cloned.nodes
+    container.before(cloned.nodes)
   },
   focus: (container, config) => {
     const cloned = container.clone()
@@ -18,7 +18,7 @@ const variantGenerators = {
       rule.selector = `.focus${config.options.separator}${rule.selector.slice(1)}:focus`
     })
 
-    return cloned.nodes
+    container.before(cloned.nodes)
   },
 }
 
@@ -39,7 +39,7 @@ export default function(config) {
 
       _.forEach(['focus', 'hover'], variant => {
         if (variants.includes(variant)) {
-          atRule.before(variantGenerators[variant](atRule, unwrappedConfig))
+          variantGenerators[variant](atRule, unwrappedConfig)
         }
       })
 
