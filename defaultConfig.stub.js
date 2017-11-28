@@ -803,7 +803,7 @@ module.exports = {
     resize: ['responsive'],
     shadows: ['responsive'],
     textAlign: ['responsive'],
-    textColors: ['responsive', 'hover'],
+    textColors: ['responsive', 'hover', 'parent-hover'],
     textSizes: ['responsive'],
     textStyle: ['responsive', 'hover'],
     tracking: ['responsive'],
