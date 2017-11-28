@@ -556,7 +556,8 @@ img {
 }
 
 svg {
-  fill: currentColor;
+  fill: none;
+  stroke: none;
 }
 
 button,
