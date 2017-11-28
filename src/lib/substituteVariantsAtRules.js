@@ -23,9 +23,9 @@ const variantGenerators = {
 }
 
 export default function(config) {
-  const separator = config().options.separator
-
   return function(css) {
+    const separator = config().options.separator
+
     css.walkAtRules('variants', atRule => {
       const variants = postcss.list.comma(atRule.params)
 
