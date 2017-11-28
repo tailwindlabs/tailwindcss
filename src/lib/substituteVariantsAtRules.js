@@ -24,6 +24,7 @@ const variantGenerators = {
     const cloned = container.clone()
 
     cloned.walkRules(rule => {
+      // prettier-ignore
       rule.selector = `.parent:hover .parent-hover${config.options.separator}${rule.selector.slice(1)}`
     })
 
