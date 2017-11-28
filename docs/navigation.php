@@ -18,6 +18,7 @@ return [
             'Color' => 'background-color',
             'Position' => 'background-position',
             'Size' => 'background-size',
+            'Attachment' => 'background-attachment',
         ],
         'Borders' => [
             'Width' => 'border-width',

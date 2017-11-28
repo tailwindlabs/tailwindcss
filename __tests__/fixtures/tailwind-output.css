@@ -615,6 +615,18 @@ button,
   appearance: none;
 }
 
+.bg-fixed {
+  background-attachment: fixed;
+}
+
+.bg-local {
+  background-attachment: local;
+}
+
+.bg-scroll {
+  background-attachment: scroll;
+}
+
 .bg-transparent {
   background-color: transparent;
 }
@@ -4456,6 +4468,18 @@ button,
 
   .sm\:appearance-none {
     appearance: none;
+  }
+
+  .sm\:bg-fixed {
+    background-attachment: fixed;
+  }
+
+  .sm\:bg-local {
+    background-attachment: local;
+  }
+
+  .sm\:bg-scroll {
+    background-attachment: scroll;
   }
 
   .sm\:bg-transparent {
@@ -8302,6 +8326,18 @@ button,
     appearance: none;
   }
 
+  .md\:bg-fixed {
+    background-attachment: fixed;
+  }
+
+  .md\:bg-local {
+    background-attachment: local;
+  }
+
+  .md\:bg-scroll {
+    background-attachment: scroll;
+  }
+
   .md\:bg-transparent {
     background-color: transparent;
   }
@@ -12146,6 +12182,18 @@ button,
     appearance: none;
   }
 
+  .lg\:bg-fixed {
+    background-attachment: fixed;
+  }
+
+  .lg\:bg-local {
+    background-attachment: local;
+  }
+
+  .lg\:bg-scroll {
+    background-attachment: scroll;
+  }
+
   .lg\:bg-transparent {
     background-color: transparent;
   }
@@ -15988,6 +16036,18 @@ button,
 
   .xl\:appearance-none {
     appearance: none;
+  }
+
+  .xl\:bg-fixed {
+    background-attachment: fixed;
+  }
+
+  .xl\:bg-local {
+    background-attachment: local;
+  }
+
+  .xl\:bg-scroll {
+    background-attachment: scroll;
   }
 
   .xl\:bg-transparent {
