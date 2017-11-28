@@ -3517,6 +3517,14 @@ button,
   box-shadow: none;
 }
 
+.fill-current {
+  fill: currentColor;
+}
+
+.stroke-current {
+  stroke: currentColor;
+}
+
 .text-left {
   text-align: left;
 }
