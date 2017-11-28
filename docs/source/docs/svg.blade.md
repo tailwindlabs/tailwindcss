@@ -71,21 +71,67 @@ Tailwind doesn't provide SVG-specific sizing utilities, but sizing SVGs is a per
 
 ## Customizing
 
-By default Tailwind provides five opacity utilities based on a simple numeric scale. You change, add, or remove these by editing the `opacity` section of your Tailwind config.
+### Fill colors
 
-@component('_partials.customized-config', ['key' => 'opacity'])
-  '0': '0',
-- '25': '.25',
-- '50': '.5',
-- '75': '.75',
-+ '10': '.1',
-+ '20': '.2',
-+ '30': '.3',
-+ '40': '.4',
-+ '50': '.5',
-+ '60': '.6',
-+ '70': '.7',
-+ '80': '.8',
-+ '90': '.9',
-  '100': '1',
+Control which fill utilities Tailwind generates by customizing the `svgFill` key in your Tailwind config file:
+
+@component('_partials.customized-config', ['key' => 'svgFill'])
+- 'current': 'currentColor',
++ 'red': colors['red'],
++ 'blue': colors['blue'],
++ 'green': colors['green'],
 @endcomponent
+
+### Stroke colors
+
+Control which stroke utilities Tailwind generates by customizing the `svgStroke` key in your Tailwind config file:
+
+@component('_partials.customized-config', ['key' => 'svgStroke'])
+- 'current': 'currentColor',
++ 'red': colors['red'],
++ 'blue': colors['blue'],
++ 'green': colors['green'],
+@endcomponent
+
+### Variants
+
+By default, no responsive, hover, focus, or parent-hover variants are generated for fill and stroke utilities:
+
+```js
+{
+    // ...
+    modules: {
+        // ...
+        svgFill: [],
+        svgStroke: [],
+    }
+}
+```
+
+You can control which variants are generated for both fill and stroke utilities by modifying the the `svgFill` and `svgStroke` properties in the `modules` section of your Tailwind config file:
+
+```js
+{
+    // ...
+    modules: {
+        // ...
+        svgFill: ['responsive', 'hover'],
+        svgStroke: ['focus'],
+    }
+}
+```
+
+### Disabling
+
+You can disable the `svgFill` and `svgStroke` modules entirely by setting their respective properties to `false` in the `modules` section of your config file:
+
+```js
+{
+    // ...
+    modules: {
+        // ...
+        svgFill: false,
+        svgStroke: false,
+    }
+}
+```
