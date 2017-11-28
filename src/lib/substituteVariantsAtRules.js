@@ -24,7 +24,7 @@ const variantGenerators = {
     const cloned = container.clone()
 
     cloned.walkRules(rule => {
-      rule.selectors = [...rule.selectors, `.parent:hover .parent-hover${config.options.separator}${rule.selector.slice(1)}`]
+      rule.selector = `.parent:hover .parent-hover${config.options.separator}${rule.selector.slice(1)}`
     })
 
     container.before(cloned.nodes)
