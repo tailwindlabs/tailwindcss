@@ -17,6 +17,7 @@ return [
         'Backgrounds' => [
             'Color' => 'background-color',
             'Position' => 'background-position',
+            'Repeat' => 'background-repeat',
             'Size' => 'background-size',
             'Attachment' => 'background-attachment',
         ],

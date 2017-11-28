@@ -1247,6 +1247,22 @@ button,
   background-position: top;
 }
 
+.bg-repeat {
+  background-repeat: repeat;
+}
+
+.bg-no-repeat {
+  background-repeat: no-repeat;
+}
+
+.bg-repeat-x {
+  background-repeat: repeat-x;
+}
+
+.bg-repeat-y {
+  background-repeat: repeat-y;
+}
+
 .bg-cover {
   background-size: cover;
 }
@@ -5100,6 +5116,22 @@ button,
 
   .sm\:bg-top {
     background-position: top;
+  }
+
+  .sm\:bg-repeat {
+    background-repeat: repeat;
+  }
+
+  .sm\:bg-no-repeat {
+    background-repeat: no-repeat;
+  }
+
+  .sm\:bg-repeat-x {
+    background-repeat: repeat-x;
+  }
+
+  .sm\:bg-repeat-y {
+    background-repeat: repeat-y;
   }
 
   .sm\:bg-cover {
@@ -8958,6 +8990,22 @@ button,
     background-position: top;
   }
 
+  .md\:bg-repeat {
+    background-repeat: repeat;
+  }
+
+  .md\:bg-no-repeat {
+    background-repeat: no-repeat;
+  }
+
+  .md\:bg-repeat-x {
+    background-repeat: repeat-x;
+  }
+
+  .md\:bg-repeat-y {
+    background-repeat: repeat-y;
+  }
+
   .md\:bg-cover {
     background-size: cover;
   }
@@ -12814,6 +12862,22 @@ button,
     background-position: top;
   }
 
+  .lg\:bg-repeat {
+    background-repeat: repeat;
+  }
+
+  .lg\:bg-no-repeat {
+    background-repeat: no-repeat;
+  }
+
+  .lg\:bg-repeat-x {
+    background-repeat: repeat-x;
+  }
+
+  .lg\:bg-repeat-y {
+    background-repeat: repeat-y;
+  }
+
   .lg\:bg-cover {
     background-size: cover;
   }
@@ -16668,6 +16732,22 @@ button,
 
   .xl\:bg-top {
     background-position: top;
+  }
+
+  .xl\:bg-repeat {
+    background-repeat: repeat;
+  }
+
+  .xl\:bg-no-repeat {
+    background-repeat: no-repeat;
+  }
+
+  .xl\:bg-repeat-x {
+    background-repeat: repeat-x;
+  }
+
+  .xl\:bg-repeat-y {
+    background-repeat: repeat-y;
   }
 
   .xl\:bg-cover {
