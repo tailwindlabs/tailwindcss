@@ -508,6 +508,11 @@ fieldset {
   padding: 0;
 }
 
+ol,
+ul {
+  margin: 0;
+}
+
 /**
  * Suppress the focus outline on elements that cannot be accessed via keyboard.
  * This prevents an unwanted focus outline from appearing around elements that
@@ -603,7 +608,6 @@ button,
 
 .list-reset {
   list-style: none;
-  margin: 0;
   padding: 0;
 }
 
@@ -4447,7 +4451,6 @@ button,
 @media (min-width: 576px) {
   .sm\:list-reset {
     list-style: none;
-    margin: 0;
     padding: 0;
   }
 
@@ -8292,7 +8295,6 @@ button,
 @media (min-width: 768px) {
   .md\:list-reset {
     list-style: none;
-    margin: 0;
     padding: 0;
   }
 
@@ -12137,7 +12139,6 @@ button,
 @media (min-width: 992px) {
   .lg\:list-reset {
     list-style: none;
-    margin: 0;
     padding: 0;
   }
 
@@ -15982,7 +15983,6 @@ button,
 @media (min-width: 1200px) {
   .xl\:list-reset {
     list-style: none;
-    margin: 0;
     padding: 0;
   }
 

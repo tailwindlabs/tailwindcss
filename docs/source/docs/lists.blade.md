@@ -15,7 +15,7 @@ features:
   'rows' => [
     [
       '.list-reset',
-      "list-style: none;\nmargin: 0;\npadding: 0;",
+      "list-style: none;\npadding: 0;",
       "Disable default browser styling for lists and list items.",
     ],
   ]
