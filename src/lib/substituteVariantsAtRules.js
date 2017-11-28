@@ -2,20 +2,20 @@ import _ from 'lodash'
 import postcss from 'postcss'
 
 const variantGenerators = {
-  hover: (separator, container) => {
+  hover: (container, config) => {
     const cloned = container.clone()
 
     cloned.walkRules(rule => {
-      rule.selector = `.hover${separator}${rule.selector.slice(1)}:hover`
+      rule.selector = `.hover${config.options.separator}${rule.selector.slice(1)}:hover`
     })
 
     return cloned.nodes
   },
-  focus: (separator, container) => {
+  focus: (container, config) => {
     const cloned = container.clone()
 
     cloned.walkRules(rule => {
-      rule.selector = `.focus${separator}${rule.selector.slice(1)}:focus`
+      rule.selector = `.focus${config.options.separator}${rule.selector.slice(1)}:focus`
     })
 
     return cloned.nodes
@@ -24,7 +24,7 @@ const variantGenerators = {
 
 export default function(config) {
   return function(css) {
-    const separator = config().options.separator
+    const unwrappedConfig = config()
 
     css.walkAtRules('variants', atRule => {
       const variants = postcss.list.comma(atRule.params)
@@ -39,7 +39,7 @@ export default function(config) {
 
       _.forEach(['focus', 'hover'], variant => {
         if (variants.includes(variant)) {
-          atRule.before(variantGenerators[variant](separator, atRule))
+          atRule.before(variantGenerators[variant](atRule, unwrappedConfig))
         }
       })
 
