@@ -17,22 +17,22 @@ features:
     [
       '.resize-none',
       'resize: none;',
-      "Make a element not resizable.",
+      "Make an element not resizable.",
     ],
     [
       '.resize',
       'resize: both;',
-      "Make a element resizable in both axes.",
+      "Make an element resizable in both axes.",
     ],
     [
       '.resize-y',
       'resize: vertical;',
-      "Make a element resizable vertically.",
+      "Make an element resizable vertically.",
     ],
     [
       '.resize-x',
       'resize: horizontal;',
-      "Make a element resizable horizontally.",
+      "Make an element resizable horizontally.",
     ],
   ]
 ])
