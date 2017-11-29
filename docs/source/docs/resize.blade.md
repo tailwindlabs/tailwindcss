@@ -22,7 +22,7 @@ features:
     [
       '.resize',
       'resize: both;',
-      "Make an element resizable in both axes.",
+      "Make an element resizable along both axes.",
     ],
     [
       '.resize-y',
