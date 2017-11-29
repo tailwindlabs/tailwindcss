@@ -2,14 +2,7 @@
 extends: _layouts.documentation
 title: "SVG"
 description: "Utilities for styling SVG elements."
-features:
-  responsive: false
-  customizable: true
-  hover: false
-  focus: false
 ---
-
-@include('_partials.work-in-progress')
 
 @include('_partials.class-table', [
   'rows' => [
@@ -68,6 +61,7 @@ Tailwind doesn't provide SVG-specific sizing utilities, but sizing SVGs is a per
 </svg>
 @endcomponent
 
+---
 
 ## Customizing
 
@@ -93,22 +87,13 @@ Control which stroke utilities Tailwind generates by customizing the `svgStroke`
 + 'green': colors['green'],
 @endcomponent
 
-### Variants
+### Responsive, Hover, and Focus Variants
 
-By default, no responsive, hover, focus, or parent-hover variants are generated for fill and stroke utilities:
+By default, no responsive, hover, focus, or parent-hover variants are generated for fill and stroke utilities.
 
-```js
-{
-    // ...
-    modules: {
-        // ...
-        svgFill: [],
-        svgStroke: [],
-    }
-}
-```
+You can control which variants are generated for both fill and stroke utilities by modifying the `svgFill` and `svgStroke` properties in the `modules` section of your Tailwind config file.
 
-You can control which variants are generated for both fill and stroke utilities by modifying the the `svgFill` and `svgStroke` properties in the `modules` section of your Tailwind config file:
+For example, this config will generate responsive and hover variants of the fill utilities and focus variants of the stroke utilities:
 
 ```js
 {
@@ -123,7 +108,7 @@ You can control which variants are generated for both fill and stroke utilities 
 
 ### Disabling
 
-You can disable the `svgFill` and `svgStroke` modules entirely by setting their respective properties to `false` in the `modules` section of your config file:
+If you aren't using the fill or stroke utilities in your project, you can disable them entirely by setting the `svgFill` and `svgStroke` properties to `false` in the `modules` section of your config file:
 
 ```js
 {
