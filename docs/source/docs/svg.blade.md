@@ -3,7 +3,7 @@ extends: _layouts.documentation
 title: "SVG"
 description: "Utilities for styling SVG elements."
 features:
-  responsive: true
+  responsive: false
   customizable: true
   hover: false
   focus: false
