@@ -30,6 +30,8 @@ import pointerEvents from './generators/pointerEvents'
 import position from './generators/position'
 import resize from './generators/resize'
 import shadows from './generators/shadows'
+import svgFill from './generators/svgFill'
+import svgStroke from './generators/svgStroke'
 import textAlign from './generators/textAlign'
 import textColors from './generators/textColors'
 import textSizes from './generators/textSizes'
@@ -75,6 +77,8 @@ export default [
   { name: 'position', generator: position },
   { name: 'resize', generator: resize },
   { name: 'shadows', generator: shadows },
+  { name: 'svgFill', generator: svgFill },
+  { name: 'svgStroke', generator: svgStroke },
   { name: 'textAlign', generator: textAlign },
   { name: 'textColors', generator: textColors },
   { name: 'textSizes', generator: textSizes },

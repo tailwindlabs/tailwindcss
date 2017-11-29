@@ -556,7 +556,8 @@ img {
 }
 
 svg {
-  fill: currentColor;
+  fill: none;
+  stroke: none;
 }
 
 button,
@@ -3515,6 +3516,14 @@ button,
 
 .shadow-none {
   box-shadow: none;
+}
+
+.fill-current {
+  fill: currentColor;
+}
+
+.stroke-current {
+  stroke: currentColor;
 }
 
 .text-left {
