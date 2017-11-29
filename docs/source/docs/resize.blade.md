@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Resize"
-description: "Utilities for controlling the how an element can be resized."
+description: "Utilities for controlling how an element can be resized."
 features:
   responsive: true
   customizable: false
