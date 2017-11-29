@@ -12,21 +12,22 @@ features:
 @include('_partials.work-in-progress')
 
 @include('_partials.class-table', [
+  'scroll' => false,
   'rows' => [
     [
       '.min-h-0',
       'min-height: 0;',
-      "Set the element's minimum height to <code>0</code>.",
+      "Set the element's minimum height to 0.",
     ],
     [
       '.min-h-full',
       'min-height: 100%;',
-      "Set the element's minimum height to <code>100%</code>.",
+      "Set the element's minimum height to 100%.",
     ],
     [
       '.min-h-screen',
       'min-height: 100vh;',
-      "Set the element's minimum height to <code>100vh</code>.",
+      "Set the element's minimum height to 100vh.",
     ],
   ]
 ])

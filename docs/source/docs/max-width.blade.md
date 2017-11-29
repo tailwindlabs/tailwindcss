@@ -12,56 +12,57 @@ features:
 @include('_partials.work-in-progress')
 
 @include('_partials.class-table', [
+  'scroll' => false,
   'rows' => [
     [
       '.max-w-xs',
       'max-width: 20rem;',
-      "Set the element's maximum width to <code>20rem</code>.",
+      "Set the element's maximum width to 20rem.",
     ],
     [
       '.max-w-sm',
       'max-width: 30rem;',
-      "Set the element's maximum width to <code>30rem</code>.",
+      "Set the element's maximum width to 30rem.",
     ],
     [
       '.max-w-md',
       'max-width: 40rem;',
-      "Set the element's maximum width to <code>40rem</code>.",
+      "Set the element's maximum width to 40rem.",
     ],
     [
       '.max-w-lg',
       'max-width: 50rem;',
-      "Set the element's maximum width to <code>50rem</code>.",
+      "Set the element's maximum width to 50rem.",
     ],
     [
       '.max-w-xl',
       'max-width: 60rem;',
-      "Set the element's maximum width to <code>60rem</code>.",
+      "Set the element's maximum width to 60rem.",
     ],
     [
       '.max-w-2xl',
       'max-width: 70rem;',
-      "Set the element's maximum width to <code>70rem</code>.",
+      "Set the element's maximum width to 70rem.",
     ],
     [
       '.max-w-3xl',
       'max-width: 80rem;',
-      "Set the element's maximum width to <code>80rem</code>.",
+      "Set the element's maximum width to 80rem.",
     ],
     [
       '.max-w-4xl',
       'max-width: 90rem;',
-      "Set the element's maximum width to <code>90rem</code>.",
+      "Set the element's maximum width to 90rem.",
     ],
     [
       '.max-w-5xl',
       'max-width: 100rem;',
-      "Set the element's maximum width to <code>100rem</code>.",
+      "Set the element's maximum width to 100rem.",
     ],
     [
       '.max-w-full',
       'max-width: 100%;',
-      "Set the element's maximum width to <code>100%</code>.",
+      "Set the element's maximum width to 100%.",
     ],
   ]
 ])

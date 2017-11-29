@@ -93,4 +93,8 @@ config.margin = Object.assign(config.margin, {
 
 config.negativeMargin = config.margin
 
+config.shadows = Object.assign({
+  'md-light': '0 0 12px 8px rgb(255,255,255)'
+}, config.shadows)
+
 module.exports = config
