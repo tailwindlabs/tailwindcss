@@ -3460,6 +3460,10 @@ button,
   resize: horizontal;
 }
 
+.resize {
+  resize: both;
+}
+
 .shadow {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.10);
 }
@@ -7297,6 +7301,10 @@ button,
 
   .sm\:resize-x {
     resize: horizontal;
+  }
+
+  .sm\:resize {
+    resize: both;
   }
 
   .sm\:shadow {
@@ -11139,6 +11147,10 @@ button,
     resize: horizontal;
   }
 
+  .md\:resize {
+    resize: both;
+  }
+
   .md\:shadow {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.10);
   }
@@ -14979,6 +14991,10 @@ button,
     resize: horizontal;
   }
 
+  .lg\:resize {
+    resize: both;
+  }
+
   .lg\:shadow {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.10);
   }
@@ -18817,6 +18833,10 @@ button,
 
   .xl\:resize-x {
     resize: horizontal;
+  }
+
+  .xl\:resize {
+    resize: both;
   }
 
   .xl\:shadow {

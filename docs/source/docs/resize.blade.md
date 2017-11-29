@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Resize"
-description: "Utilities for controlling the how a textarea can be resized."
+description: "Utilities for controlling the how an element can be resized."
 features:
   responsive: true
   customizable: false
@@ -17,17 +17,22 @@ features:
     [
       '.resize-none',
       'resize: none;',
-      "Make a textarea not resizable.",
+      "Make a element not resizable.",
+    ],
+    [
+      '.resize',
+      'resize: both;',
+      "Make a element resizable in both axes.",
     ],
     [
       '.resize-y',
       'resize: vertical;',
-      "Make a textarea resizable vertically.",
+      "Make a element resizable vertically.",
     ],
     [
       '.resize-x',
       'resize: horizontal;',
-      "Make a textarea resizable horizontally.",
+      "Make a element resizable horizontally.",
     ],
   ]
 ])
