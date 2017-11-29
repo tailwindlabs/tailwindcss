@@ -24,7 +24,7 @@ function findMixin(css, mixin, onError) {
 
   if (_.isEmpty(matches)) {
     // prettier-ignore
-    onError(`\`@apply\` cannot be used with ${mixin} because ${mixin} either does not exist, or it's actual definition includes a pseudo-class like :hover, :active, etc.`)
+    onError(`\`@apply\` cannot be used with \`${mixin}\` because \`${mixin}\` either cannot be found, or it's actual definition includes a pseudo-selector like :hover, :active, etc. If you're sure that \`${mixin}\` exists, make sure that any \`@import\` statements are being properly processed *before* Tailwind CSS sees your CSS, as \`@apply\` can only be used for classes in the same CSS tree.`)
   }
 
   if (matches.length > 1) {
