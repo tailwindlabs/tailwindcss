@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 function mergeModules(userModules, defaultModules) {
   if (userModules === 'all') {
-    return _.mapValues(defaultModules, () => ['responsive', 'hover', 'focus', 'parent-hover'])
+    return _.mapValues(defaultModules, () => ['responsive', 'hover', 'focus', 'group-hover'])
   }
 
   return _.defaults(userModules, defaultModules)

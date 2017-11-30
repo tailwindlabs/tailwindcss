@@ -48,9 +48,9 @@ test('it can generate focus variants', () => {
   })
 })
 
-test('it can generate parent-hover variants', () => {
+test('it can generate group-hover variants', () => {
   const input = `
-    @variants parent-hover {
+    @variants group-hover {
       .banana { color: yellow; }
       .chocolate { color: brown; }
     }
@@ -59,8 +59,8 @@ test('it can generate parent-hover variants', () => {
   const output = `
       .banana { color: yellow; }
       .chocolate { color: brown; }
-      .parent:hover .parent-hover\\:banana { color: yellow; }
-      .parent:hover .parent-hover\\:chocolate { color: brown; }
+      .group:hover .group-hover\\:banana { color: yellow; }
+      .group:hover .group-hover\\:chocolate { color: brown; }
   `
 
   return run(input).then(result => {
