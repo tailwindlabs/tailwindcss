@@ -1,42 +1,214 @@
 ---
 extends: _layouts.documentation
 title: "Configuration"
-description: null
+description: "A guide to configuring and customizing your Tailwind installation."
 ---
 
-Tailwind's defining feature is its ability to be customized. We understand that no two projects are the same, so why should the CSS framework you use be? Tailwind provides developers with a helpful set of front-end conventions, while still leaving room for adjustments where appropriate. This is all done using the Tailwind config file.
+At the heart of every Tailwind project is a JavaScript configuration file that serves as the home for your project's design system.
 
-## Introducing the Tailwind config
+It's where you define your color palette, font stacks, type scale, border sizes, breakpoints, opacity scale, you name it. Your config file is like an executable style guide for your project.
 
-The Tailwind config file is where you customize Tailwind specifically for your project. It will include your color palette, fonts, text weights, spacing and sizing definitions, borders, shadows, and much more. Think of the Tailwind config as a living definition of your design system.
+We provide a sensible default configuration with a very generous set of values to get you started, but you own this file; you're encouraged to change it as much as you need to fit the goals of your design.
 
-Tailwind is actually built on PostCSS and therefore is configured entirely in JavaScript. This can feel a little strange at first, especially if you're more familiar with setting variables in a preprocessor like Sass or Less. In practice though, defining your CSS configuration in a real programming language like JavaScript has a lot of benefits. You can create variables to share parts of your configuration. You have the full power of JavaScript to dynamically create or manipulate values. Eventually you may even be able to automatically generate custom documentation for your project from this config file.
+It's important to understand that unlike other CSS frameworks you might have used, **none of the settings in this file are coupled to each other**. Nothing bad will happen even if you completely delete all of the values for a given module.
 
-## Creating your Tailwind config file
+## Generating your configuration file
 
-We recommend creating a `tailwind.js` file in your project's root, but really it can go wherever you want. We've provided a CLI utility to do this easily:
+Generate a Tailwind config file for your project using the Tailwind CLI utility included when you install the `tailwindcss` npm package:
 
 <div class="bg-smoke-lighter font-mono text-sm p-4">
   <div class="text-purple-dark">./node_modules/.bin/tailwind <span class="text-blue-dark">init</span> <span class="text-smoke-darker">[filename]</span></div>
 </div>
 
-Alternatively, you can simply copy the default config below.
+By default, `tailwind init` will generate a `tailwind.js` config file at the root of your project, but feel free to name this file differently or store it in a different location if you prefer.
 
-Please see the [installation](/docs/installation#4-process-your-css-with-tailwind) page for more information on how to setup Tailwind in your build process.
+### Default configuration
 
-## The default Tailwind config file
-
-As you can see below, the default config file is heavily documented. Read through it to get a better understanding of how each section can be customized for your project.
+Your generated configuration file contains all of Tailwind's default configuration values, ready for you to customize.
 
 <pre class="h-128 overflow-y-scroll language-javascript"><code>{!! str_replace('// var defaultConfig', 'var defaultConfig', file_get_contents(dirname(dirname(__DIR__)).'/defaultConfig.stub.js')) !!}</code></pre>
 
-## Options
+## Configuration Sections
 
-In addition to defining your project's design system, the configuration file can also be used for setting a variety of global options.
+### Colors
 
-These options are available under the top-level `options` key, located at the bottom of the configuration file by default.
+The `colors` property doesn't actually affect your generated CSS on its own, but it's the perfect place to centralize your color palette so you can refer to it in your own CSS using Tailwind's [`config()`](/docs/functions-and-directives#config) function.
 
-### Prefix
+```js
+// ...
+
+var colors = {
+  'transparent': 'transparent',
+  // ...
+  'pink-lightest': '#ffebef',
+}
+
+// ...
+
+module.exports = {
+  // ...
+  colors: colors,
+  // ...
+}
+```
+
+By default, the `colors` property simply references a `colors` variable defined earlier in the file. Using a separate variable for your color palette like this makes it easy to re-use those colors when defining the color palette for individual utilities, like background colors, text colors, or border colors.
+
+Learn more about defining colors in Tailwind in the [Colors](/docs/colors) documentation.
+
+### Screens
+
+The `screens` property is where you define your project's breakpoints, and will be used to generate responsive versions of Tailwind's utility classes.
+
+```js
+// ...
+
+module.exports = {
+  // ...
+  screens: {
+    'sm': '576px',
+    'md': '768px',
+    'lg': '992px',
+    'xl': '1200px',
+  },
+  // ...
+}
+```
+
+We provide a familiar set of breakpoints that you might recognize from [Bootstrap](http://getbootstrap.com/docs/4.0/layout/overview/#responsive-breakpoints) to get you started, but you're free to change these as needed to suit your project.
+
+Learn more about customizing screens in the [Responsive Design](/docs/responsive-design#customizing-screens) documentation.
+
+### Styles
+
+The next set of properties define all of the values you'd like to use for utilities that are dynamically generated.
+
+This includes things like:
+
+- Background colors
+- Border widths
+- Font families
+- Font weights
+- Text sizes
+- Padding, margin, and negative margin scales
+- Width and height scales
+
+...and many others.
+
+For example, here's the section used to customize which border radius utilities will be generated:
+
+```js
+// ...
+
+module.exports = {
+  // ...
+
+  /*
+  |-----------------------------------------------------------------------------
+  | Border radius                    https://tailwindcss.com/docs/border-radius
+  |-----------------------------------------------------------------------------
+  |
+  | Here is where you define your border radius values. If a `default` radius
+  | is provided, it will be made available as the non-suffixed `.rounded`
+  | utility.
+  |
+  | If your scale includes a `0` value to reset already rounded corners, it's
+  | a good idea to put it first so other values are able to override it.
+  |
+  | Class name: .rounded{-side?}{-size?}
+  |
+  */
+
+  borderRadius: {
+    'none': '0',
+    'sm': '.125rem',
+    default: '.25rem',
+    'lg': '.5rem',
+    'full': '9999px',
+  },
+
+  // ...
+}
+```
+
+Read through the generated config file or visit the "customizing" documentation for each module to learn more.
+
+### Modules
+
+The `modules` property is where you control which modules are generated, and what state variants to generate for each module.
+
+```js
+// ...
+
+module.exports = {
+  // ...
+
+  modules: {
+    appearance: ['responsive'],
+    backgroundAttachment: ['responsive'],
+    backgroundColors: ['responsive', 'hover'],
+    backgroundPosition: ['responsive'],
+    backgroundRepeat: ['responsive'],
+    // ...
+  },
+
+  // ...
+}
+```
+
+Each property is a module name pointing to an array of state variants to generate for that module.
+
+The available state variants are:
+
+- `responsive`, for generating breakpoint-specific versions of those utilities
+- `hover`, for generating versions of those utilities that only take effect on hover
+- `focus`, for generating versions of those utilities that only take effect on focus
+- `parent-hover`, for generating versions of those utilities that only take effect when a marked parent element is hovered
+
+To include a module but not generate any state variants, use an empty array:
+
+```js
+// ...
+
+module.exports = {
+  // ...
+
+  modules: {
+
+    // Include the `appearance` utilities, but not responsive,
+    // focus, hover, etc. versions.
+    appearance: [],
+    // ...
+  },
+
+  // ...
+}
+```
+
+To completely disable a module, set it to `false`:
+
+```js
+// ...
+
+module.exports = {
+  // ...
+
+  modules: {
+
+    // Don't include this module at all.
+    appearance: false,
+    // ...
+  },
+
+  // ...
+}
+```
+
+If a module is missing from your configuration file, the default configuration for that module will be used.
+
+### Options
+
+#### Prefix
 
 The `prefix` option allows you to add a custom prefix to all of Tailwind's generated utility classes.
 
@@ -100,7 +272,7 @@ If you'd like to prefix your own utilities as well, just add the prefix to the c
 }
 ```
 
-### Important
+#### Important
 
 The `important` option lets you control whether or not Tailwind's utilities should be marked with `!important`.
 
@@ -144,5 +316,25 @@ If you'd like to make your own utilities `!important`, just add `!important` to 
   .bg-brand-gradient {
     background-image: linear-gradient(#3490dc, #6574cd) !important;
   }
+}
+```
+
+#### Separator
+
+The `separator` option lets you customize what character or string should be used to separate state variant prefixes (screen sizes, `hover`, `focus`, etc.) from utility names (`text-center`, `items-end`, etc.).
+
+We use a colon by default (`:`), but it can be useful to change this if you're using a templating language like [Pug](https://pugjs.org) that doesn't support special characters in classnames.
+
+```js
+// ...
+
+module.exports = {
+  // ...
+
+  options: {
+    // ...
+    separator: '_',
+  },
+
 }
 ```
