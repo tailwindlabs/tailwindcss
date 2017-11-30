@@ -1,12 +1,13 @@
 import _ from 'lodash'
 import postcss from 'postcss'
+import buildClassVariant from '../util/buildClassVariant'
 
 const variantGenerators = {
   hover: (container, config) => {
     const cloned = container.clone()
 
     cloned.walkRules(rule => {
-      rule.selector = `.hover${config.options.separator}${rule.selector.slice(1)}:hover`
+      rule.selector = `${buildClassVariant(rule.selector, 'hover', config.options.separator)}:hover`
     })
 
     container.before(cloned.nodes)
@@ -15,7 +16,7 @@ const variantGenerators = {
     const cloned = container.clone()
 
     cloned.walkRules(rule => {
-      rule.selector = `.focus${config.options.separator}${rule.selector.slice(1)}:focus`
+      rule.selector = `${buildClassVariant(rule.selector, 'focus', config.options.separator)}:focus`
     })
 
     container.before(cloned.nodes)
@@ -25,7 +26,7 @@ const variantGenerators = {
 
     cloned.walkRules(rule => {
       // prettier-ignore
-      rule.selector = `.parent:hover .parent-hover${config.options.separator}${rule.selector.slice(1)}`
+      rule.selector = `.parent:hover ${buildClassVariant(rule.selector, 'parent-hover', config.options.separator)}`
     })
 
     container.before(cloned.nodes)

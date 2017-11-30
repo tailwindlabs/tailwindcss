@@ -2,8 +2,6 @@ import postcss from 'postcss'
 import plugin from '../src/lib/substituteVariantsAtRules'
 import config from '../defaultConfig.stub.js'
 
-const separator = config.options.separator
-
 function run(input, opts = () => config) {
   return postcss([plugin(opts)]).process(input)
 }
@@ -19,8 +17,8 @@ test('it can generate hover variants', () => {
   const output = `
       .banana { color: yellow; }
       .chocolate { color: brown; }
-      .hover${separator}banana:hover { color: yellow; }
-      .hover${separator}chocolate:hover { color: brown; }
+      .hover\\:banana:hover { color: yellow; }
+      .hover\\:chocolate:hover { color: brown; }
   `
 
   return run(input).then(result => {
@@ -40,8 +38,8 @@ test('it can generate focus variants', () => {
   const output = `
       .banana { color: yellow; }
       .chocolate { color: brown; }
-      .focus${separator}banana:focus { color: yellow; }
-      .focus${separator}chocolate:focus { color: brown; }
+      .focus\\:banana:focus { color: yellow; }
+      .focus\\:chocolate:focus { color: brown; }
   `
 
   return run(input).then(result => {
@@ -61,8 +59,8 @@ test('it can generate parent-hover variants', () => {
   const output = `
       .banana { color: yellow; }
       .chocolate { color: brown; }
-      .parent:hover .parent-hover${separator}banana { color: yellow; }
-      .parent:hover .parent-hover${separator}chocolate { color: brown; }
+      .parent:hover .parent-hover\\:banana { color: yellow; }
+      .parent:hover .parent-hover\\:chocolate { color: brown; }
   `
 
   return run(input).then(result => {
@@ -82,10 +80,10 @@ test('it can generate hover and focus variants', () => {
   const output = `
       .banana { color: yellow; }
       .chocolate { color: brown; }
-      .focus${separator}banana:focus { color: yellow; }
-      .focus${separator}chocolate:focus { color: brown; }
-      .hover${separator}banana:hover { color: yellow; }
-      .hover${separator}chocolate:hover { color: brown; }
+      .focus\\:banana:focus { color: yellow; }
+      .focus\\:chocolate:focus { color: brown; }
+      .hover\\:banana:hover { color: yellow; }
+      .hover\\:chocolate:hover { color: brown; }
   `
 
   return run(input).then(result => {
@@ -106,10 +104,10 @@ test('it wraps the output in a responsive at-rule if responsive is included as a
     @responsive {
       .banana { color: yellow; }
       .chocolate { color: brown; }
-      .focus${separator}banana:focus { color: yellow; }
-      .focus${separator}chocolate:focus { color: brown; }
-      .hover${separator}banana:hover { color: yellow; }
-      .hover${separator}chocolate:hover { color: brown; }
+      .focus\\:banana:focus { color: yellow; }
+      .focus\\:chocolate:focus { color: brown; }
+      .hover\\:banana:hover { color: yellow; }
+      .hover\\:chocolate:hover { color: brown; }
     }
   `
 
