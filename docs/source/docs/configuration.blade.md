@@ -204,7 +204,7 @@ module.exports = {
 }
 ```
 
-If a module is missing in your configuration file, the default configuration for that module will be used.
+If a module is missing from your configuration file, the default configuration for that module will be used.
 
 ### Options
 
