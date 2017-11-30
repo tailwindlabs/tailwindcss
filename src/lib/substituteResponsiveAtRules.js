@@ -27,9 +27,8 @@ export default function(config) {
       mediaQuery.append(
         responsiveRules.map(rule => {
           const cloned = rule.clone()
-          cloned.selectors = _.map(
-            rule.selectors,
-            selector => buildClassVariant(selector, screen, separator)
+          cloned.selectors = _.map(rule.selectors, selector =>
+            buildClassVariant(selector, screen, separator)
           )
           return cloned
         })
