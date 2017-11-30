@@ -2,6 +2,7 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import cloneNodes from '../util/cloneNodes'
 import buildMediaQuery from '../util/buildMediaQuery'
+import buildClassVariant from '../util/buildClassVariant'
 
 export default function(config) {
   return function(css) {
@@ -28,7 +29,7 @@ export default function(config) {
           const cloned = rule.clone()
           cloned.selectors = _.map(
             rule.selectors,
-            selector => `.${screen}${separator}${selector.slice(1)}`
+            selector => buildClassVariant(selector, screen, separator)
           )
           return cloned
         })

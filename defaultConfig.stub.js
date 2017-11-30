@@ -870,7 +870,7 @@ module.exports = {
 
   options: {
     prefix: '',
-    separator: '\\:',
+    separator: ':',
     important: false,
   },
 
