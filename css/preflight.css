@@ -551,11 +551,6 @@ textarea { resize: vertical; }
 
 img { max-width: 100%; }
 
-svg {
-  fill: none;
-  stroke: none;
-}
-
 button, input, optgroup, select, textarea { font-family: inherit; }
 
 input::placeholder, textarea::placeholder {

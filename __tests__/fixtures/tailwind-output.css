@@ -555,11 +555,6 @@ img {
   max-width: 100%;
 }
 
-svg {
-  fill: none;
-  stroke: none;
-}
-
 button,
 input,
 optgroup,
