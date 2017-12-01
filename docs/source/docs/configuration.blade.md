@@ -323,7 +323,7 @@ If you'd like to make your own utilities `!important`, just add `!important` to 
 
 The `separator` option lets you customize what character or string should be used to separate state variant prefixes (screen sizes, `hover`, `focus`, etc.) from utility names (`text-center`, `items-end`, etc.).
 
-We use a colon by default (`:`), but it can be useful to change this if you're using a templating language like [Pug](https://pugjs.org) that doesn't support special characters in classnames.
+We use a colon by default (`:`), but it can be useful to change this if you're using a templating language like [Pug](https://pugjs.org) that doesn't support special characters in class names.
 
 ```js
 // ...
