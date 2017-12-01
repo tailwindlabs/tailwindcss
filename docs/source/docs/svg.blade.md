@@ -89,7 +89,7 @@ Control which stroke utilities Tailwind generates by customizing the `svgStroke`
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no responsive, hover, focus, or parent-hover variants are generated for fill and stroke utilities.
+By default, no responsive, hover, focus, or group-hover variants are generated for fill and stroke utilities.
 
 You can control which variants are generated for both fill and stroke utilities by modifying the `svgFill` and `svgStroke` properties in the `modules` section of your Tailwind config file.
 

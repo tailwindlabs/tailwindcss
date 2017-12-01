@@ -163,7 +163,7 @@ The available state variants are:
 - `responsive`, for generating breakpoint-specific versions of those utilities
 - `hover`, for generating versions of those utilities that only take effect on hover
 - `focus`, for generating versions of those utilities that only take effect on focus
-- `parent-hover`, for generating versions of those utilities that only take effect when a marked parent element is hovered
+- `group-hover`, for generating versions of those utilities that only take effect when a marked parent element is hovered
 
 To include a module but not generate any state variants, use an empty array:
 
