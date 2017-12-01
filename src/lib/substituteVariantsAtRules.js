@@ -21,12 +21,12 @@ const variantGenerators = {
 
     container.before(cloned.nodes)
   },
-  'parent-hover': (container, config) => {
+  'group-hover': (container, config) => {
     const cloned = container.clone()
 
     cloned.walkRules(rule => {
       // prettier-ignore
-      rule.selector = `.parent:hover ${buildClassVariant(rule.selector, 'parent-hover', config.options.separator)}`
+      rule.selector = `.group:hover ${buildClassVariant(rule.selector, 'group-hover', config.options.separator)}`
     })
 
     container.before(cloned.nodes)
@@ -48,7 +48,7 @@ export default function(config) {
 
       atRule.before(atRule.clone().nodes)
 
-      _.forEach(['focus', 'hover', 'parent-hover'], variant => {
+      _.forEach(['focus', 'hover', 'group-hover'], variant => {
         if (variants.includes(variant)) {
           variantGenerators[variant](atRule, unwrappedConfig)
         }
