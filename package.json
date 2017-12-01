@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "main": "lib/index.js",
@@ -70,7 +70,9 @@
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/jest/customMatchers.js",
-    "testPathIgnorePatterns": ["<rootDir>/__tests__/fixtures/"]
+    "testPathIgnorePatterns": [
+      "<rootDir>/__tests__/fixtures/"
+    ]
   },
   "engines": {
     "node": ">=6.9.0"
