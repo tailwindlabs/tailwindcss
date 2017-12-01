@@ -41,7 +41,6 @@ return [
         ],
         'Floats' => 'floats',
         'Forms' => 'forms',
-        'Grid' => 'grid',
         'Interactivity' => [
             'Cursor' => 'cursor',
             'Resize' => 'resize',
@@ -83,6 +82,7 @@ return [
         'Buttons' => 'examples/buttons',
         'Cards' => 'examples/cards',
         'Forms' => 'examples/forms',
+        'Grids' => 'examples/grids',
         'Navigation' => 'examples/navigation',
     ],
 ];
