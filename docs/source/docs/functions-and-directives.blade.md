@@ -78,6 +78,51 @@ Note that `@@apply` **will not work** for mixing in hover or responsive variants
 }
 ```
 
+### `@variants`
+
+You can generate `responsive`, `hover`, `focus`, and `group-hover` versions of your own utilities by wrapping their definitions in the `@variants` directive
+
+```less
+@@variants hover, focus {
+  .banana {
+    color: yellow;
+  }
+  .chocolate {
+    color: brown;
+  }
+}
+```
+
+This will generate the following CSS:
+
+```less
+.banana {
+  color: yellow;
+}
+.chocolate {
+  color: brown;
+}
+.focus\:banana:focus {
+  color: yellow;
+}
+.focus\:chocolate:focus {
+  color: brown;
+}
+.hover\:banana:hover {
+  color: yellow;
+}
+.hover\:chocolate:hover {
+  color: brown;
+}
+```
+
+The `@variants` at-rule supports all of the values that are supported in the `modules` section of your config file:
+
+- `responsive`
+- `hover`
+- `focus`
+- `group-hover`
+
 ### `@@responsive`
 
 You can generate responsive versions of your own classes by wrapping their definitions in the `@responsive` directive:
