@@ -135,3 +135,35 @@ If a `default` shadow is provided, it will be used for the non-suffixed `.shadow
 + '3': '0 8px 16px rgba(0,0,0,0.15)',
   'none': 'none',
 @endcomponent
+
+### Responsive, Hover, and Focus Variants
+
+By default, no hover, focus, or group-hover variants are generated for shadow utilities.
+
+You can control which variants are generated for the shadow utilities by modifying the `shadows` property in the `modules` section of your Tailwind config file.
+
+For example, this config will _also_ generate hover and focus variants:
+
+```js
+{
+    // ...
+    modules: { 
+        // ...
+        shadows: ['responsive', 'hover', 'focus'],
+    }
+}
+```
+
+### Disabling
+
+If you aren't using the shadow utilities in your project, you can disable them entirely by setting the `shadows` property to `false` in the `modules` section of your config file:
+
+```js
+{
+    // ...
+    modules: {
+        // ...
+        shadows: false,
+    }
+}
+```
