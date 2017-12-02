@@ -41,7 +41,7 @@ features:
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no hover, focus, or group-hover variants are generated for border style utilities.
+By default, only responsive variants are generated for border style utilities.
 
 You can control which variants are generated for the border style utilities by modifying the `borderStyle` property in the `modules` section of your Tailwind config file.
 

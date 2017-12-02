@@ -157,7 +157,7 @@ By default Tailwind provides six numeric `z-index` utilities and an `auto` utili
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no hover, focus, or group-hover variants are generated for z-index utilities.
+By default, only responsive variants are generated for z-index utilities.
 
 You can control which variants are generated for the z-index utilities by modifying the `zIndex` property in the `modules` section of your Tailwind config file.
 

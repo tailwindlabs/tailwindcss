@@ -40,7 +40,7 @@ features:
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no hover, focus, or group-hover variants are generated for background repeat utilities.
+By default, only responsive variants are generated for background repeat utilities.
 
 You can control which variants are generated for the background repeat utilities by modifying the `backgroundRepeat` property in the `modules` section of your Tailwind config file.
 

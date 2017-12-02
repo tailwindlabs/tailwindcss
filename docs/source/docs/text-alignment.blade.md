@@ -40,7 +40,7 @@ features:
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no hover, focus, or group-hover variants are generated for text align utilities.
+By default, only responsive variants are generated for text align utilities.
 
 You can control which variants are generated for the text align utilities by modifying the `textAlign` property in the `modules` section of your Tailwind config file.
 

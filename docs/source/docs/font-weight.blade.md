@@ -65,7 +65,7 @@ features:
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no focus, or group-hover variants are generated for font weight utilities.
+By default, only responsive and hover variants are generated for font weight utilities.
 
 You can control which variants are generated for the font weight utilities by modifying the `fontWeights` property in the `modules` section of your Tailwind config file.
 

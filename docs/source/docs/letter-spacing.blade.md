@@ -35,7 +35,7 @@ features:
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no hover, focus, or group-hover variants are generated for tracking utilities.
+By default, only responsive variants are generated for tracking utilities.
 
 You can control which variants are generated for the tracking utilities by modifying the `tracking` property in the `modules` section of your Tailwind config file.
 

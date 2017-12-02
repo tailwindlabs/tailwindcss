@@ -116,7 +116,7 @@ By default Tailwind provides five opacity utilities based on a simple numeric sc
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no hover, focus, or group-hover variants are generated for opacity utilities.
+By default, only responsive variants are generated for opacity utilities.
 
 You can control which variants are generated for the opacity utilities by modifying the `opacity` property in the `modules` section of your Tailwind config file.
 

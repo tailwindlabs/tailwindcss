@@ -369,7 +369,7 @@ By default Tailwind provides five border radius size utilities. You can change, 
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no hover, focus, or group-hover variants are generated for border radius utilities.
+By default, only responsive variants are generated for border radius utilities.
 
 You can control which variants are generated for the border radius utilities by modifying the `borderRadius` property in the `modules` section of your Tailwind config file.
 

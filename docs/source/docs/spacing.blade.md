@@ -50,7 +50,7 @@ For example, `.pt-2` would add `.5rem` of padding to the top of the element, `.m
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no hover, focus, or group-hover variants are generated for margin, negative margin and padding utilities.
+By default, only responsive variants are generated for margin, negative margin and padding utilities.
 
 You can control which variants are generated for the list utilities by modifying the `margin`, `negativeMargin` and `padding` property in the `modules` section of your Tailwind config file.
 

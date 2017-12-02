@@ -25,7 +25,7 @@ features:
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no hover, focus, or group-hover variants are generated for list utilities.
+By default, only responsive variants are generated for list utilities.
 
 You can control which variants are generated for the list utilities by modifying the `lists` property in the `modules` section of your Tailwind config file.
 

@@ -45,7 +45,7 @@ Hover utilities can also be combined with responsive utilities by adding the res
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no focus, or group-hover variants are generated for text color utilities.
+By default, only responsive and hover variants are generated for text color utilities.
 
 You can control which variants are generated for the text color utilities by modifying the `textColors` property in the `modules` section of your Tailwind config file.
 

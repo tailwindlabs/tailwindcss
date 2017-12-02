@@ -45,7 +45,7 @@ Hover utilities can also be combined with responsive utilities by adding the res
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no focus, or group-hover variants are generated for border color utilities.
+By default, only responsive and hover variants are generated for border color utilities.
 
 You can control which variants are generated for the border color utilities by modifying the `borderColors` property in the `modules` section of your Tailwind config file.
 

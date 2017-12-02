@@ -50,7 +50,7 @@ features:
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no hover, focus, or group-hover variants are generated for vertical alignment utilities.
+By default, only responsive variants are generated for vertical alignment utilities.
 
 You can control which variants are generated for the vertical alignment utilities by modifying the `verticalAlign` property in the `modules` section of your Tailwind config file.
 

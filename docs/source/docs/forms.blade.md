@@ -42,7 +42,7 @@ Form controls are great candidates for component classes, but just for fun, here
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no hover, focus, or group-hover variants are generated for form control appearance utilities.
+By default, only responsive variants are generated for form control appearance utilities.
 
 You can control which variants are generated for form control appearance utilities by modifying the `appearance` property in the `modules` section of your Tailwind config file.
 

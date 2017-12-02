@@ -30,7 +30,7 @@ features:
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no hover, focus, or group-hover variants are generated for pointer event utilities.
+By default, only responsive variants are generated for pointer event utilities.
 
 You can control which variants are generated for the pointer event utilities by modifying the `pointerEvents` property in the `modules` section of your Tailwind config file.
 

@@ -106,7 +106,7 @@ features:
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no hover, focus, or group-hover variants are generated for height utilities.
+By default, only responsive variants are generated for height utilities.
 
 You can control which variants are generated for the height utilities by modifying the `height` property in the `modules` section of your Tailwind config file.
 

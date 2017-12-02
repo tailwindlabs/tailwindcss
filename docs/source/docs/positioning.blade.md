@@ -409,7 +409,7 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no hover, focus, or group-hover variants are generated for positioning utilities.
+By default, only responsive variants are generated for positioning utilities.
 
 You can control which variants are generated for the positioning utilities by modifying the `position` property in the `modules` section of your Tailwind config file.
 

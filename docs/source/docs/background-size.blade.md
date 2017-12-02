@@ -30,7 +30,7 @@ features:
 
 ### Responsive, Hover, and Focus Variants
 
-By default, no hover, focus, or group-hover variants are generated for background size utilities.
+By default, only responsive variants are generated for background size utilities.
 
 You can control which variants are generated for the background size utilities by modifying the `backgroundSize` property in the `modules` section of your Tailwind config file.
 
