@@ -31,3 +31,37 @@ features:
     ],
   ]
 ])
+
+## Customizing
+
+### Responsive, Hover, and Focus Variants
+
+By default, no hover, focus, or group-hover variants are generated for min height utilities.
+
+You can control which variants are generated for the min height utilities by modifying the `minHeight` property in the `modules` section of your Tailwind config file.
+
+For example, this config will _also_ generate hover and focus variants:
+
+```js
+{
+    // ...
+    modules: { 
+        // ...
+        minHeight: ['responsive', 'hover', 'focus'],
+    }
+}
+```
+
+### Disabling
+
+If you aren't using the min height utilities in your project, you can disable them entirely by setting the `minHeight` property to `false` in the `modules` section of your config file:
+
+```js
+{
+    // ...
+    modules: {
+        // ...
+        minHeight: false,
+    }
+}
+```
