@@ -223,12 +223,12 @@ Use `flex-1` instead of an explicit width on your columns to have them size auto
 
 ### Column Order
 
-Use `flex-reverse` to reverse column order. Useful for two-column responsive layouts where the column on right should appear first on smaller screens.
+Use `flex-row-reverse` to reverse column order. Useful for two-column responsive layouts where the column on right should appear first on smaller screens.
 
 @component('_partials.code-sample', ['lang' => 'html'])
-<div class="flex md:flex-reverse flex-wrap">
-  <div class="w-full md:w-3/4 bg-grey h-12"></div>
-  <div class="w-full md:w-1/4 bg-grey-light h-12"></div>
+<div class="flex md:flex-row-reverse flex-wrap">
+  <div class="w-full md:w-3/4 bg-grey p-4 text-center text-grey-lighter">1</div>
+  <div class="w-full md:w-1/4 bg-grey-light p-4 text-center text-grey-darker">2</div>
 </div>
 @endcomponent
 
