@@ -30,3 +30,37 @@ features:
     ],
   ]
 ])
+
+## Customizing
+
+### Responsive, Hover, and Focus Variants
+
+By default, no hover, focus, or group-hover variants are generated for background attachment utilities.
+
+You can control which variants are generated for the background attachment utilities by modifying the `backgroundAttachment` property in the `modules` section of your Tailwind config file.
+
+For example, this config will _also_ generate hover and focus variants:
+
+```js
+{
+    // ...
+    modules: { 
+        // ...
+        backgroundAttachment: ['responsive', 'hover', 'focus'],
+    }
+}
+```
+
+### Disabling
+
+If you aren't using the background attachment utilities in your project, you can disable them entirely by setting the `backgroundAttachment` property to `false` in the `modules` section of your config file:
+
+```js
+{
+    // ...
+    modules: {
+        // ...
+        backgroundAttachment: false,
+    }
+}
+```
