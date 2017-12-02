@@ -366,3 +366,35 @@ By default Tailwind provides five border radius size utilities. You can change, 
 - 'full': '9999px',
 + 'large': '12px',
 @endcomponent
+
+### Responsive, Hover, and Focus Variants
+
+By default, no hover, focus, or group-hover variants are generated for border radius utilities.
+
+You can control which variants are generated for the border radius utilities by modifying the `borderRadius` property in the `modules` section of your Tailwind config file.
+
+For example, this config will _also_ generate hover and focus variants:
+
+```js
+{
+    // ...
+    modules: { 
+        // ...
+        borderRadius: ['responsive', 'hover', 'focus'],
+    }
+}
+```
+
+### Disabling
+
+If you aren't using the border radius utilities in your project, you can disable them entirely by setting the `borderRadius` property to `false` in the `modules` section of your config file:
+
+```js
+{
+    // ...
+    modules: {
+        // ...
+        borderRadius: false,
+    }
+}
+```
