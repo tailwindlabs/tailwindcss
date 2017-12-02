@@ -1,6 +1,7 @@
 import lists from './generators/lists'
 import appearance from './generators/appearance'
 import backgroundColors from './generators/backgroundColors'
+import backgroundOrigin from './generators/backgroundOrigin'
 import backgroundPosition from './generators/backgroundPosition'
 import backgroundSize from './generators/backgroundSize'
 import borderColors from './generators/borderColors'
@@ -44,6 +45,7 @@ export default [
   { name: 'lists', generator: lists },
   { name: 'appearance', generator: appearance },
   { name: 'backgroundColors', generator: backgroundColors },
+  { name: 'backgroundOrigin', generator: backgroundOrigin },
   { name: 'backgroundPosition', generator: backgroundPosition },
   { name: 'backgroundSize', generator: backgroundSize },
   { name: 'borderColors', generator: borderColors },
