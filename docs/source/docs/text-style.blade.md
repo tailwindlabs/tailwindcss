@@ -84,3 +84,37 @@ Hover utilities can also be combined with responsive utilities by adding the res
 ```html
 <a href="#" class="... md:no-underline md:hover:underline ...">Link</a>
 ```
+
+## Customizing
+
+### Responsive, Hover, and Focus Variants
+
+By default, no focus, or group-hover variants are generated for text style utilities.
+
+You can control which variants are generated for the text style utilities by modifying the `textStyle` property in the `modules` section of your Tailwind config file.
+
+For example, this config will _also_ generate focus variants:
+
+```js
+{
+    // ...
+    modules: { 
+        // ...
+        textStyle: ['responsive', 'hover', 'focus'],
+    }
+}
+```
+
+### Disabling
+
+If you aren't using the text style utilities in your project, you can disable them entirely by setting the `textStyle` property to `false` in the `modules` section of your config file:
+
+```js
+{
+    // ...
+    modules: {
+        // ...
+        textStyle: false,
+    }
+}
+```
