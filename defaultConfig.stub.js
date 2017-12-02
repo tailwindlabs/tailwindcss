@@ -773,6 +773,7 @@ module.exports = {
     modules: {
       appearance: ['responsive'],
       backgroundColors: ['responsive', 'hover'],
+      backgroundOrigin: ['responsive'],
       backgroundPosition: ['responsive'],
       backgroundSize: ['responsive'],
       borderColors: ['responsive', 'hover'],
