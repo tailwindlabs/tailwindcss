@@ -30,3 +30,37 @@ features:
     ],
   ]
 ])
+
+## Customizing
+
+### Responsive, Hover, and Focus Variants
+
+By default, no hover, focus, or group-hover variants are generated for cursor utilities.
+
+You can control which variants are generated for the cursor utilities by modifying the `cursor` property in the `modules` section of your Tailwind config file.
+
+For example, this config will _also_ generate hover and focus variants:
+
+```js
+{
+    // ...
+    modules: { 
+        // ...
+        cursor: ['responsive', 'hover', 'focus'],
+    }
+}
+```
+
+### Disabling
+
+If you aren't using the cursor utilities in your project, you can disable them entirely by setting the `cursor` property to `false` in the `modules` section of your config file:
+
+```js
+{
+    // ...
+    modules: {
+        // ...
+        cursor: false,
+    }
+}
+```
