@@ -154,3 +154,35 @@ By default Tailwind provides six numeric `z-index` utilities and an `auto` utili
 + '100': 100,
   'auto': 'auto',
 @endcomponent
+
+### Responsive, Hover, and Focus Variants
+
+By default, no hover, focus, or group-hover variants are generated for z-index utilities.
+
+You can control which variants are generated for the z-index utilities by modifying the `zIndex` property in the `modules` section of your Tailwind config file.
+
+For example, this config will _also_ generate hover and focus variants:
+
+```js
+{
+    // ...
+    modules: { 
+        // ...
+        zIndex: ['responsive', 'hover', 'focus'],
+    }
+}
+```
+
+### Disabling
+
+If you aren't using the z-index utilities in your project, you can disable them entirely by setting the `zIndex` property to `false` in the `modules` section of your config file:
+
+```js
+{
+    // ...
+    modules: {
+        // ...
+        zIndex: false,
+    }
+}
+```
