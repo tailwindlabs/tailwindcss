@@ -45,3 +45,41 @@ For example, `.pt-2` would add `.5rem` of padding to the top of the element, `.m
     <div><code class="inline-block my-1 mr-1 px-1 py-1 font-mono border rounded">auto</code> auto <span class="text-slate-light text-xs">(margins only)</span></div>
   </div>
 </div>
+
+## Customizing
+
+### Responsive, Hover, and Focus Variants
+
+By default, no hover, focus, or group-hover variants are generated for margin, negative margin and padding utilities.
+
+You can control which variants are generated for the list utilities by modifying the `margin`, `negativeMargin` and `padding` property in the `modules` section of your Tailwind config file.
+
+For example, this config will _also_ generate hover and focus variants of the margin utilities, hover variants of the negative margin utilities, and focus variants of the padding utilities:
+
+```js
+{
+    // ...
+    modules: { 
+        // ...
+        margin: ['responsive', 'hover', 'focus'],
+        negativeMargin: ['responsive', 'hover'],
+        padding: ['responsive', 'focus'],
+    }
+}
+```
+
+### Disabling
+
+If you aren't using the margin, the negative margin, or padding utilities in your project, you can disable them entirely by setting the `margin`, `negativeMargin` and `padding` property to `false` in the `modules` section of your config file:
+
+```js
+{
+    // ...
+    modules: {
+        // ...
+        margin: false,
+        negativeMargin: false,
+        padding: false,
+    }
+}
+```
