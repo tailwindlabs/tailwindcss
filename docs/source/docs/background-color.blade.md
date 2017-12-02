@@ -40,3 +40,37 @@ Hover utilities can also be combined with responsive utilities by adding the res
 ```html
 <button class="... md:bg-orange md:hover:bg-red ...">Button</button>
 ```
+
+## Customizing
+
+### Responsive, Hover, and Focus Variants
+
+By default, no focus, or group-hover variants are generated for background color utilities.
+
+You can control which variants are generated for the background color utilities by modifying the `backgroundColors` property in the `modules` section of your Tailwind config file.
+
+For example, this config will _also_ generate focus variants:
+
+```js
+{
+    // ...
+    modules: { 
+        // ...
+        backgroundColors: ['responsive', 'hover', 'focus'],
+    }
+}
+```
+
+### Disabling
+
+If you aren't using the background color utilities in your project, you can disable them entirely by setting the `backgroundColors` property to `false` in the `modules` section of your config file:
+
+```js
+{
+    // ...
+    modules: {
+        // ...
+        backgroundColors: false,
+    }
+}
+```
