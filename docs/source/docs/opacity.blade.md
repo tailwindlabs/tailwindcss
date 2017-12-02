@@ -113,3 +113,35 @@ By default Tailwind provides five opacity utilities based on a simple numeric sc
 + '90': '.9',
   '100': '1',
 @endcomponent
+
+### Responsive, Hover, and Focus Variants
+
+By default, no hover, focus, or group-hover variants are generated for opacity utilities.
+
+You can control which variants are generated for the opacity utilities by modifying the `opacity` property in the `modules` section of your Tailwind config file.
+
+For example, this config will _also_ generate hover and focus variants:
+
+```js
+{
+    // ...
+    modules: { 
+        // ...
+        opacity: ['responsive', 'hover', 'focus'],
+    }
+}
+```
+
+### Disabling
+
+If you aren't using the opacity utilities in your project, you can disable them entirely by setting the `opacity` property to `false` in the `modules` section of your config file:
+
+```js
+{
+    // ...
+    modules: {
+        // ...
+        opacity: false,
+    }
+}
+```
