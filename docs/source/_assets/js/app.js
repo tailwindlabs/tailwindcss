@@ -17,5 +17,6 @@ anchors.add()
 
 // Add shortcut to search input when pressing the "/" key
 Mousetrap.bind('/', function (e) {
+  e.preventDefault()
   document.getElementById('docsearch').focus()
-}, 'keyup')
+})
