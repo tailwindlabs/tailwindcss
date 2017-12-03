@@ -26,3 +26,15 @@ features:
     ],
   ]
 ])
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'min-width',
+        'property' => 'minWidth',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

@@ -30,3 +30,15 @@ features:
     ],
   ]
 ])
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'tracking',
+        'property' => 'tracking',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

@@ -60,3 +60,15 @@ features:
     ],
   ]
 ])
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'text sizing',
+        'property' => 'textSizes',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

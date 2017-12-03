@@ -37,3 +37,15 @@ For example, `.border` would add a `1px` border to all sides of the element, whe
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">8</code> 8px</div>
   </div>
 </div>
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'border width',
+        'property' => 'borderWidths',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

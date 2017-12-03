@@ -40,3 +40,16 @@ Hover utilities can also be combined with responsive utilities by adding the res
 ```html
 <button class="... md:text-blue md:hover:text-red ...">Button</button>
 ```
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'text color',
+        'property' => 'textColors',
+    ],
+    'variants' => [
+        'responsive',
+        'hover',
+    ],
+])

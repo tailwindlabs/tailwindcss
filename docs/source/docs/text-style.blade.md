@@ -84,3 +84,16 @@ Hover utilities can also be combined with responsive utilities by adding the res
 ```html
 <a href="#" class="... md:no-underline md:hover:underline ...">Link</a>
 ```
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'text style',
+        'property' => 'textStyle',
+    ],
+    'variants' => [
+        'responsive',
+        'hover',
+    ],
+])

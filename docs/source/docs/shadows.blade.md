@@ -135,3 +135,13 @@ If a `default` shadow is provided, it will be used for the non-suffixed `.shadow
 + '3': '0 8px 16px rgba(0,0,0,0.15)',
   'none': 'none',
 @endcomponent
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'shadow',
+        'property' => 'shadows',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

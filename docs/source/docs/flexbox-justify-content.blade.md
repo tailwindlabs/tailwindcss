@@ -147,3 +147,16 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @endcomponent
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'flexbox',
+        'property' => 'flexbox',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+    'extraMessage' => 'Note that modifying the <code>flexbox</code> property will affect what variants are generated for <em>all</em> flexbox modules, not just the justify-content utilities.'
+])

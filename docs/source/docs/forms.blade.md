@@ -37,3 +37,15 @@ Form controls are great candidates for component classes, but just for fun, here
   </div>
 </div>
 @endcomponent
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'form control appearance',
+        'property' => 'appearance',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

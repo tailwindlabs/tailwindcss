@@ -113,3 +113,13 @@ By default Tailwind provides five opacity utilities based on a simple numeric sc
 + '90': '.9',
   '100': '1',
 @endcomponent
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'opacity',
+        'property' => 'opacity',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

@@ -10,6 +10,9 @@
       if (starts_with($line, '-')) {
         return '<div class="text-grey"><span class="text-grey">-</span>&nbsp;&nbsp;&nbsp;' . e(trim(substr($line, 1))) . '</div>';
       }
+      if (starts_with($line, '//')) {
+        return '<div class="text-grey-light">&nbsp;&nbsp;&nbsp;&nbsp;' . e(trim($line)) . '</div>';
+      }
       return '<div class="text-grey-darker">&nbsp;&nbsp;&nbsp;&nbsp;' . e(trim($line)) . '</div>';
     })->implode("\n") !!}</div>
     <div class="whitespace-pre text-grey-dark">  }</div>

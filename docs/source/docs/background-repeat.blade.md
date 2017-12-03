@@ -35,3 +35,15 @@ features:
     ],
   ]
 ])
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'background repeat',
+        'property' => 'backgroundRepeat',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

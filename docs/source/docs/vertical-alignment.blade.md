@@ -45,3 +45,15 @@ features:
     ],
   ]
 ])
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'vertical alignment',
+        'property' => 'verticalAlign',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

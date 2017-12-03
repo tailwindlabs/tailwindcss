@@ -219,3 +219,15 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @endcomponent
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'overflow',
+        'property' => 'overflow',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

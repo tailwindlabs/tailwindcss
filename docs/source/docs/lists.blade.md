@@ -20,3 +20,15 @@ features:
     ],
   ]
 ])
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'list',
+        'property' => 'lists',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

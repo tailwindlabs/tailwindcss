@@ -366,3 +366,13 @@ By default Tailwind provides five border radius size utilities. You can change, 
 - 'full': '9999px',
 + 'large': '12px',
 @endcomponent
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'border radius',
+        'property' => 'borderRadius',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

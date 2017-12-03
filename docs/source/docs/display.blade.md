@@ -60,3 +60,15 @@ features:
     ],
   ]
 ])
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'display',
+        'property' => 'display',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

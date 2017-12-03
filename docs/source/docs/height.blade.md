@@ -101,3 +101,15 @@ features:
     ],
   ]
 ])
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'height',
+        'property' => 'height',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

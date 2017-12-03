@@ -154,3 +154,13 @@ By default Tailwind provides six numeric `z-index` utilities and an `auto` utili
 + '100': 100,
   'auto': 'auto',
 @endcomponent
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'z-index',
+        'property' => 'zIndex',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

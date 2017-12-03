@@ -25,3 +25,15 @@ features:
     ],
   ]
 ])
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'pointer event',
+        'property' => 'pointerEvents',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

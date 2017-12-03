@@ -50,8 +50,20 @@ features:
     ],
     [
       '.truncate',
-      "overflow: hidden;\ntext-overflow: ellipsis;\nwhite-space",
+      "overflow: hidden;\ntext-overflow: ellipsis;\nwhite-space: nowrap",
       'Truncate overflowing text with an ellipsis (<code>…</code>) if needed.',
     ],
   ]
+])
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'whitespace & wrapping',
+        'property' => 'whitespace',
+    ],
+    'variants' => [
+        'responsive',
+    ],
 ])

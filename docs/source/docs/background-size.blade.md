@@ -25,3 +25,15 @@ features:
     ],
   ]
 ])
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'background size',
+        'property' => 'backgroundSize',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])
