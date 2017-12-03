@@ -38,34 +38,12 @@ features:
 
 ## Customizing
 
-### Responsive, Hover, and Focus Variants
-
-By default, only responsive variants are generated for background repeat utilities.
-
-You can control which variants are generated for the background repeat utilities by modifying the `backgroundRepeat` property in the `modules` section of your Tailwind config file.
-
-For example, this config will _also_ generate hover and focus variants:
-
-```js
-{
-    // ...
-    modules: { 
-        // ...
-        backgroundRepeat: ['responsive', 'hover', 'focus'],
-    }
-}
-```
-
-### Disabling
-
-If you aren't using the background repeat utilities in your project, you can disable them entirely by setting the `backgroundRepeat` property to `false` in the `modules` section of your config file:
-
-```js
-{
-    // ...
-    modules: {
-        // ...
-        backgroundRepeat: false,
-    }
-}
-```
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'background repeat',
+        'property' => 'backgroundRepeat',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

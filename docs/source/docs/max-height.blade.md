@@ -29,34 +29,12 @@ features:
 
 ## Customizing
 
-### Responsive, Hover, and Focus Variants
-
-By default, only responsive variants are generated for max height utilities.
-
-You can control which variants are generated for the max height utilities by modifying the `maxHeight` property in the `modules` section of your Tailwind config file.
-
-For example, this config will _also_ generate hover and focus variants:
-
-```js
-{
-    // ...
-    modules: { 
-        // ...
-        maxHeight: ['responsive', 'hover', 'focus'],
-    }
-}
-```
-
-### Disabling
-
-If you aren't using the max height utilities in your project, you can disable them entirely by setting the `maxHeight` property to `false` in the `modules` section of your config file:
-
-```js
-{
-    // ...
-    modules: {
-        // ...
-        maxHeight: false,
-    }
-}
-```
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'max-height',
+        'property' => 'maxHeight',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

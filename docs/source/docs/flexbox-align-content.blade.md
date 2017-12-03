@@ -270,36 +270,13 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-### Responsive, Hover, and Focus Variants
-
-By default, only responsive variants are generated for flexbox utilities.
-
-You can control which variants are generated for the flexbox utilities by modifying the `flexbox` property in the `modules` section of your Tailwind config file.
-
-For example, this config will _also_ generate hover and focus variants:
-
-```js
-{
-    // ...
-    modules: { 
-        // ...
-        flexbox: ['responsive', 'hover', 'focus'],
-    }
-}
-```
-
-Note that modifying the `flexbox` property will affect what variants are generated for _all_ flexbox modules, not just the align-content utilities.
-
-### Disabling
-
-If you aren't using the flexbox utilities in your project, you can disable them entirely by setting the `flexbox` property to `false` in the `modules` section of your config file:
-
-```js
-{
-    // ...
-    modules: {
-        // ...
-        flexbox: false,
-    }
-}
-```
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'flexbox',
+        'property' => 'flexbox',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+    'extraMessage' => 'Note that modifying the <code>flexbox</code> property will affect what variants are generated for <em>all</em> flexbox modules, not just the align-content utilities.'
+])

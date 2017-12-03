@@ -63,34 +63,12 @@ features:
 
 ## Customizing
 
-### Responsive, Hover, and Focus Variants
-
-By default, only responsive and hover variants are generated for font weight utilities.
-
-You can control which variants are generated for the font weight utilities by modifying the `fontWeights` property in the `modules` section of your Tailwind config file.
-
-For example, this config will _also_ generate focus variants:
-
-```js
-{
-    // ...
-    modules: { 
-        // ...
-        fontWeights: ['responsive', 'hover', 'focus'],
-    }
-}
-```
-
-### Disabling
-
-If you aren't using the font weight utilities in your project, you can disable them entirely by setting the `fontWeights` property to `false` in the `modules` section of your config file:
-
-```js
-{
-    // ...
-    modules: {
-        // ...
-        fontWeights: false,
-    }
-}
-```
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'font weight',
+        'property' => 'fontWeights',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

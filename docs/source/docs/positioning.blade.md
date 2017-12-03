@@ -407,34 +407,12 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-### Responsive, Hover, and Focus Variants
-
-By default, only responsive variants are generated for positioning utilities.
-
-You can control which variants are generated for the positioning utilities by modifying the `position` property in the `modules` section of your Tailwind config file.
-
-For example, this config will _also_ generate hover and focus variants:
-
-```js
-{
-    // ...
-    modules: { 
-        // ...
-        position: ['responsive', 'hover', 'focus'],
-    }
-}
-```
-
-### Disabling
-
-If you aren't using the positioning utilities in your project, you can disable them entirely by setting the `position` property to `false` in the `modules` section of your config file:
-
-```js
-{
-    // ...
-    modules: {
-        // ...
-        position: false,
-    }
-}
-```
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'positioning',
+        'property' => 'position',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

@@ -43,34 +43,13 @@ Hover utilities can also be combined with responsive utilities by adding the res
 
 ## Customizing
 
-### Responsive, Hover, and Focus Variants
-
-By default, only responsive and hover variants are generated for border color utilities.
-
-You can control which variants are generated for the border color utilities by modifying the `borderColors` property in the `modules` section of your Tailwind config file.
-
-For example, this config will _also_ generate focus variants:
-
-```js
-{
-    // ...
-    modules: { 
-        // ...
-        borderColors: ['responsive', 'hover', 'focus'],
-    }
-}
-```
-
-### Disabling
-
-If you aren't using the border color utilities in your project, you can disable them entirely by setting the `borderColors` property to `false` in the `modules` section of your config file:
-
-```js
-{
-    // ...
-    modules: {
-        // ...
-        borderColors: false,
-    }
-}
-```
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'border color',
+        'property' => 'borderColors',
+    ],
+    'variants' => [
+        'responsive',
+        'hover',
+    ],
+])

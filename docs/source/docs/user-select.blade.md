@@ -28,34 +28,12 @@ features:
 
 ## Customizing
 
-### Responsive, Hover, and Focus Variants
-
-By default, only responsive variants are generated for user select utilities.
-
-You can control which variants are generated for the user select utilities by modifying the `userSelect` property in the `modules` section of your Tailwind config file.
-
-For example, this config will _also_ generate hover and focus variants:
-
-```js
-{
-    // ...
-    modules: { 
-        // ...
-        userSelect: ['responsive', 'hover', 'focus'],
-    }
-}
-```
-
-### Disabling
-
-If you aren't using the user select utilities in your project, you can disable them entirely by setting the `userSelect` property to `false` in the `modules` section of your config file:
-
-```js
-{
-    // ...
-    modules: {
-        // ...
-        userSelect: false,
-    }
-}
-```
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'user-select',
+        'property' => 'userSelect',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

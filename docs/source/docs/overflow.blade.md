@@ -222,34 +222,12 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-### Responsive, Hover, and Focus Variants
-
-By default, only responsive variants are generated for overflow utilities.
-
-You can control which variants are generated for the overflow utilities by modifying the `overflow` property in the `modules` section of your Tailwind config file.
-
-For example, this config will _also_ generate hover and focus variants:
-
-```js
-{
-    // ...
-    modules: { 
-        // ...
-        overflow: ['responsive', 'hover', 'focus'],
-    }
-}
-```
-
-### Disabling
-
-If you aren't using the overflow utilities in your project, you can disable them entirely by setting the `overflow` property to `false` in the `modules` section of your config file:
-
-```js
-{
-    // ...
-    modules: {
-        // ...
-        overflow: false,
-    }
-}
-```
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'overflow',
+        'property' => 'overflow',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

@@ -48,34 +48,12 @@ features:
 
 ## Customizing
 
-### Responsive, Hover, and Focus Variants
-
-By default, only responsive variants are generated for vertical alignment utilities.
-
-You can control which variants are generated for the vertical alignment utilities by modifying the `verticalAlign` property in the `modules` section of your Tailwind config file.
-
-For example, this config will _also_ generate hover and focus variants:
-
-```js
-{
-    // ...
-    modules: { 
-        // ...
-        verticalAlign: ['responsive', 'hover', 'focus'],
-    }
-}
-```
-
-### Disabling
-
-If you aren't using the vertical alignment utilities in your project, you can disable them entirely by setting the `verticalAlign` property to `false` in the `modules` section of your config file:
-
-```js
-{
-    // ...
-    modules: {
-        // ...
-        verticalAlign: false,
-    }
-}
-```
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'vertical alignment',
+        'property' => 'verticalAlign',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])
