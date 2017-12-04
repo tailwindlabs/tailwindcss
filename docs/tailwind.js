@@ -1,36 +1,15 @@
 var config = require('../defaultConfig')()
 
 config.colors = Object.assign(config.colors, {
-  'new-white': 'hsl(0, 0%, 100%)',
-  'new-grey-lightest': 'hsl(200, 25%, 98%)',
-  'new-grey-lighter': 'hsl(200, 33%, 96%)',
-  'new-grey-light': 'hsl(200, 25%, 88%)',
-  'new-grey': 'hsl(200, 14%, 66%)',
-  'new-grey-dark': 'hsl(200, 10%, 49%)',
-  'new-grey-darker': 'hsl(200, 13%, 40%)',
-  'new-grey-darkest': 'hsl(200, 15%, 25%)',
-  'new-black': 'hsl(200, 16%, 16%)',
-
-  'new-white': 'hsl(0, 0%, 100%)',
-  'new-grey-lightest': 'hsl(200, 12%, 98%)',
-  'new-grey-lighter': 'hsl(200, 12%, 96%)',
-  'new-grey-light': 'hsl(200, 12%, 88%)',
-  'new-grey': 'hsl(200, 12%, 66%)',
-  'new-grey-dark': 'hsl(200, 12%, 49%)',
-  'new-grey-darker': 'hsl(200, 13%, 40%)',
-  'new-grey-darkest': 'hsl(200, 15%, 25%)',
-  'new-black': 'hsl(200, 16%, 16%)',
-
   'new-white': 'hsl(208, 0%, 100%)',
   'new-grey-lightest': 'hsl(208, 35%, 98%)',
-  'new-grey-lighter': 'hsl(208, 30%, 96%)',
+  'new-grey-lighter': 'hsl(208, 33%, 96%)',
   'new-grey-light': 'hsl(208, 20%, 88%)',
-  'new-grey': 'hsl(208, 16%, 73%)',
-  'new-grey-dark': 'hsl(208, 11%, 55%)',
-  'new-grey-darker': 'hsl(208, 12%, 41%)',
-  'new-grey-darkest': 'hsl(208, 15%, 26%)',
+  'new-grey': 'hsl(208, 16%, 76%)',
+  'new-grey-dark': 'hsl(208, 12%, 58%)',
+  'new-grey-darker': 'hsl(208, 12%, 43%)',
+  'new-grey-darkest': 'hsl(208, 15%, 28%)',
   'new-black': 'hsl(208, 16%, 16%)',
-
 
   'slate-darker': '#212b35',
   'slate-dark': '#404e5c',
@@ -43,6 +22,24 @@ config.colors = Object.assign(config.colors, {
   'smoke': '#dfe3e8',
   'smoke-light': 'hsl(200, 33%, 96%)',
   'smoke-lighter': 'hsl(200, 25%, 98%)',
+
+  'tailwind-teal-light': '#5ebcca',
+  'tailwind-teal': '#44a8b3',
+  'tailwind-teal-dark': '#2f8696',
+})
+
+config.colors = Object.assign(config.colors, {
+  // 'slate-darker': config.colors['new-black'],
+  // 'slate-dark': config.colors['new-grey-darkest'],
+  // 'slate': config.colors['new-grey-darker'],
+  // 'slate-light': config.colors['new-grey-dark'],
+  // 'slate-lighter': config.colors['new-grey'],
+
+  // 'smoke-darker': config.colors['new-grey-dark'],
+  // 'smoke-dark': config.colors['new-grey'],
+  // 'smoke': config.colors['new-grey-light'],
+  // 'smoke-light': config.colors['new-grey-lighter'],
+  // 'smoke-lighter': config.colors['new-grey-lightest'],
 
   'tailwind-teal-light': '#5ebcca',
   'tailwind-teal': '#44a8b3',

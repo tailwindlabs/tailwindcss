@@ -10,8 +10,8 @@ Developing an organized, consistent and beautiful color palette is critical to t
 
 To get you started, we've provided a generous palette of great looking colors that are perfect for prototyping, or even as a starting point for your color palette. That said, don't hesitate to [customize](#customizing) them for your project.
 
-<div class="flex flex-wrap">
-  <div class="w-full md:w-1/2 lg:w-1/3 mb-8">
+<div class="flex flex-wrap -mx-4">
+  <div class="w-full md:w-1/2 lg:w-1/3 mb-8 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-grey px-6 py-4 text-sm font-semibold relative shadow z-10">
         <div class="tracking-wide uppercase mb-6">Grey</div>
@@ -59,7 +59,7 @@ To get you started, we've provided a generous palette of great looking colors th
     </div>
   </div>
 
-  <div class="w-full md:w-1/2 lg:w-1/3 mb-8">
+  <div class="w-full md:w-1/2 lg:w-1/3 mb-8 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-new-grey px-6 py-4 text-sm font-semibold relative shadow z-10">
         <div class="tracking-wide uppercase mb-6">Grey</div>
@@ -107,7 +107,7 @@ To get you started, we've provided a generous palette of great looking colors th
     </div>
   </div>
 
-  <div class="w-full md:w-1/2 lg:w-1/3 mb-8">
+  <div class="w-full md:w-1/2 lg:w-1/3 mb-8 px-4">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-grey px-6 py-4 text-sm font-semibold relative shadow z-10">
         <div class="tracking-wide uppercase mb-6">Grey</div>
