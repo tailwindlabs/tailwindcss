@@ -1,6 +1,37 @@
 var config = require('../defaultConfig')()
 
 config.colors = Object.assign(config.colors, {
+  'new-white': 'hsl(0, 0%, 100%)',
+  'new-grey-lightest': 'hsl(200, 25%, 98%)',
+  'new-grey-lighter': 'hsl(200, 33%, 96%)',
+  'new-grey-light': 'hsl(200, 25%, 88%)',
+  'new-grey': 'hsl(200, 14%, 66%)',
+  'new-grey-dark': 'hsl(200, 10%, 49%)',
+  'new-grey-darker': 'hsl(200, 13%, 40%)',
+  'new-grey-darkest': 'hsl(200, 15%, 25%)',
+  'new-black': 'hsl(200, 16%, 16%)',
+
+  'new-white': 'hsl(0, 0%, 100%)',
+  'new-grey-lightest': 'hsl(200, 12%, 98%)',
+  'new-grey-lighter': 'hsl(200, 12%, 96%)',
+  'new-grey-light': 'hsl(200, 12%, 88%)',
+  'new-grey': 'hsl(200, 12%, 66%)',
+  'new-grey-dark': 'hsl(200, 12%, 49%)',
+  'new-grey-darker': 'hsl(200, 13%, 40%)',
+  'new-grey-darkest': 'hsl(200, 15%, 25%)',
+  'new-black': 'hsl(200, 16%, 16%)',
+
+  'new-white': 'hsl(200, 0%, 100%)',
+  'new-grey-lightest': 'hsl(200, 35%, 98%)',
+  'new-grey-lighter': 'hsl(200, 30%, 96%)',
+  'new-grey-light': 'hsl(200, 20%, 88%)',
+  'new-grey': 'hsl(200, 16%, 73%)',
+  'new-grey-dark': 'hsl(200, 11%, 55%)',
+  'new-grey-darker': 'hsl(200, 12%, 41%)',
+  'new-grey-darkest': 'hsl(200, 15%, 26%)',
+  'new-black': 'hsl(200, 16%, 16%)',
+
+
   'slate-darker': '#212b35',
   'slate-dark': '#404e5c',
   'slate': '#647382',
