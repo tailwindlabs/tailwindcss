@@ -12,6 +12,7 @@ return [
         'Adding New Utilities' => 'adding-new-utilities',
         'Extracting Components' => 'extracting-components',
         'Functions &amp; Directives' => 'functions-and-directives',
+        'Controlling File Size' => 'controlling-file-size',
     ],
     'Styles' => [
         'Backgrounds' => [
