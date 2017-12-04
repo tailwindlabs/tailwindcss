@@ -53,7 +53,7 @@ program
     }
 
     const output = fs.readFileSync(path.resolve(__dirname, '../defaultConfig.stub.js'), 'utf8')
-    fs.outputFileSync(destination, output.replace('// var defaultConfig', 'var defaultConfig'))
+    fs.outputFileSync(destination, output.replace('// let defaultConfig', 'let defaultConfig'))
     console.log(`Generated Tailwind config: ${destination}`)
     process.exit()
   })
