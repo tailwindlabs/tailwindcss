@@ -161,16 +161,20 @@ Add `flex-wrap` to your column container to allow columns to wrap when they run 
 
 Add a negative horizontal margin like `-mx-2` to your column container and an equal horizontal padding like `px-2` to each column to add gutters.
 
+To prevent horizontal scrolling in full width layouts, add `overflow-hidden` to another parent container, or compensate for the negative margin with matching horizontal padding.
+
 @component('_partials.code-sample', ['lang' => 'html'])
-<div class="flex -mx-2">
-  <div class="w-1/3 px-2">
-    <div class="bg-grey-light h-12"></div>
-  </div>
-  <div class="w-1/3 px-2">
-    <div class="bg-grey h-12"></div>
-  </div>
-  <div class="w-1/3 px-2">
-    <div class="bg-grey-light h-12"></div>
+<div class="px-2">
+  <div class="flex -mx-2">
+    <div class="w-1/3 px-2">
+      <div class="bg-grey-light h-12"></div>
+    </div>
+    <div class="w-1/3 px-2">
+      <div class="bg-grey h-12"></div>
+    </div>
+    <div class="w-1/3 px-2">
+      <div class="bg-grey-light h-12"></div>
+    </div>
   </div>
 </div>
 @endcomponent
