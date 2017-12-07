@@ -10,147 +10,138 @@ Developing an organized, consistent and beautiful color palette is critical to t
 
 To get you started, we've provided a generous palette of great looking colors that are perfect for prototyping, or even as a starting point for your color palette. That said, don't hesitate to [customize](#customizing) them for your project.
 
-<div class="flex flex-wrap -mx-4">
-  <div class="w-full md:w-1/2 lg:w-1/3 mb-8 px-4">
+<div class="flex flex-wrap">
+  <div class="w-full md:w-1/2 lg:w-1/3 mb-8">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-grey px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="tracking-wide uppercase mb-6">Grey</div>
-        <div class="flex justify-between">
-          <span>Base</span>
-          <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey']) }}</span>
-        </div>
-      </div>
-      <div class="text-black bg-white px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>White</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['white']) }}</span>
-      </div>
-      <div class="text-grey-darkest bg-grey-lightest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lightest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey-lightest']) }}</span>
-      </div>
-      <div class="text-grey-darkest bg-grey-lighter px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lighter</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey-lighter']) }}</span>
-      </div>
-      <div class="text-grey-darkest bg-grey-light px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Light</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey-light']) }}</span>
-      </div>
-      <div class="text-white bg-grey px-6 py-3 text-sm font-semibold flex justify-between flex justify-between">
-        <span>Base</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey']) }}</span>
-      </div>
-      <div class="text-white bg-grey-dark px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Dark</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey-dark']) }}</span>
-      </div>
-      <div class="text-white bg-grey-darker px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darker</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey-darker']) }}</span>
-      </div>
-      <div class="text-white bg-grey-darkest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darkest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey-darkest']) }}</span>
-      </div>
-      <div class="text-white bg-black px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Black</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['black']) }}</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="w-full md:w-1/2 lg:w-1/3 mb-8 px-4">
-    <div class="rounded overflow-hidden">
-      <div class="text-white bg-new-grey px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="tracking-wide uppercase mb-6">Grey</div>
-        <div class="flex justify-between">
-          <span class="-opacity-0">Base</span>
-          <span class="font-normal opacity-75 lowercase truncate">{{ strtoupper($page->config['colors']['new-grey']) }}</span>
-        </div>
-      </div>
-      <div class="text-black bg-new-white px-6 py-3 text-sm font-semibold flex justify-between">
-        <span class="-opacity-0">White</span>
-        <span class="font-normal opacity-75 lowercase truncate">{{ strtoupper($page->config['colors']['new-white']) }}</span>
-      </div>
-      <div class="text-grey-darkest bg-new-grey-lightest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span class="-opacity-0">Lightest</span>
-        <span class="font-normal opacity-75 lowercase truncate">{{ strtoupper($page->config['colors']['new-grey-lightest']) }}</span>
-      </div>
-      <div class="text-grey-darkest bg-new-grey-lighter px-6 py-3 text-sm font-semibold flex justify-between">
-        <span class="-opacity-0">Lighter</span>
-        <span class="font-normal opacity-75 lowercase truncate">{{ strtoupper($page->config['colors']['new-grey-lighter']) }}</span>
-      </div>
-      <div class="text-grey-darkest bg-new-grey-light px-6 py-3 text-sm font-semibold flex justify-between">
-        <span class="-opacity-0">Light</span>
-        <span class="font-normal opacity-75 lowercase truncate">{{ strtoupper($page->config['colors']['new-grey-light']) }}</span>
-      </div>
-      <div class="text-white bg-new-grey px-6 py-3 text-sm font-semibold flex justify-between flex justify-between">
-        <span class="-opacity-0">Base</span>
-        <span class="font-normal opacity-75 lowercase truncate">{{ strtoupper($page->config['colors']['new-grey']) }}</span>
-      </div>
-      <div class="text-white bg-new-grey-dark px-6 py-3 text-sm font-semibold flex justify-between">
-        <span class="-opacity-0">Dark</span>
-        <span class="font-normal opacity-75 lowercase truncate">{{ strtoupper($page->config['colors']['new-grey-dark']) }}</span>
-      </div>
-      <div class="text-white bg-new-grey-darker px-6 py-3 text-sm font-semibold flex justify-between">
-        <span class="-opacity-0">Darker</span>
-        <span class="font-normal opacity-75 lowercase truncate">{{ strtoupper($page->config['colors']['new-grey-darker']) }}</span>
-      </div>
-      <div class="text-white bg-new-grey-darkest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span class="-opacity-0">Darkest</span>
-        <span class="font-normal opacity-75 lowercase truncate">{{ strtoupper($page->config['colors']['new-grey-darkest']) }}</span>
-      </div>
-      <div class="text-white bg-new-black px-6 py-3 text-sm font-semibold flex justify-between">
-        <span class="-opacity-0">Black</span>
-        <span class="font-normal opacity-75 lowercase truncate">{{ strtoupper($page->config['colors']['new-black']) }}</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="w-full md:w-1/2 lg:w-1/3 mb-8 px-4">
-    <div class="rounded overflow-hidden">
-      <div class="text-white bg-grey px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="tracking-wide uppercase mb-6">Grey</div>
+        <div class="tracking-wide uppercase mb-6">Current Greys</div>
         <div class="flex justify-between">
           <span class="opacity-0">Base</span>
           <span class="font-normal opacity-0">{{ strtoupper($page->config['colors']['grey']) }}</span>
         </div>
       </div>
       <div class="text-black bg-white px-6 py-3 text-sm font-semibold flex justify-between">
-        <span class="opacity-0">White</span>
+        <span>White</span>
         <span class="font-normal opacity-0">{{ strtoupper($page->config['colors']['white']) }}</span>
       </div>
-      <div class="text-grey-darkest bg-smoke-lighter px-6 py-3 text-sm font-semibold flex justify-between">
-        <span class="opacity-0">Lightest</span>
+      <div class="text-grey-darkest bg-grey-lightest px-6 py-3 text-sm font-semibold flex justify-between">
+        <span>Lightest</span>
         <span class="font-normal opacity-0">{{ strtoupper($page->config['colors']['grey-lightest']) }}</span>
       </div>
-      <div class="text-grey-darkest bg-smoke-light px-6 py-3 text-sm font-semibold flex justify-between">
-        <span class="opacity-0">Lighter</span>
+      <div class="text-grey-darkest bg-grey-lighter px-6 py-3 text-sm font-semibold flex justify-between">
+        <span>Lighter</span>
         <span class="font-normal opacity-0">{{ strtoupper($page->config['colors']['grey-lighter']) }}</span>
       </div>
-      <div class="text-grey-darkest bg-smoke px-6 py-3 text-sm font-semibold flex justify-between">
-        <span class="opacity-0">Light</span>
+      <div class="text-grey-darkest bg-grey-light px-6 py-3 text-sm font-semibold flex justify-between">
+        <span>Light</span>
         <span class="font-normal opacity-0">{{ strtoupper($page->config['colors']['grey-light']) }}</span>
       </div>
-      <div class="text-white bg-smoke-dark px-6 py-3 text-sm font-semibold flex justify-between flex justify-between">
-        <span class="opacity-0">Base</span>
+      <div class="text-white bg-grey px-6 py-3 text-sm font-semibold flex justify-between flex justify-between">
+        <span>Base</span>
         <span class="font-normal opacity-0">{{ strtoupper($page->config['colors']['grey']) }}</span>
       </div>
-      <div class="text-white bg-smoke-darker px-6 py-3 text-sm font-semibold flex justify-between">
-        <span class="opacity-0">Dark</span>
+      <div class="text-white bg-grey-dark px-6 py-3 text-sm font-semibold flex justify-between">
+        <span>Dark</span>
         <span class="font-normal opacity-0">{{ strtoupper($page->config['colors']['grey-dark']) }}</span>
       </div>
-      <div class="text-white bg-slate px-6 py-3 text-sm font-semibold flex justify-between">
-        <span class="opacity-0">Darker</span>
+      <div class="text-white bg-grey-darker px-6 py-3 text-sm font-semibold flex justify-between">
+        <span>Darker</span>
         <span class="font-normal opacity-0">{{ strtoupper($page->config['colors']['grey-darker']) }}</span>
       </div>
-      <div class="text-white bg-slate-dark px-6 py-3 text-sm font-semibold flex justify-between">
-        <span class="opacity-0">Darkest</span>
+      <div class="text-white bg-grey-darkest px-6 py-3 text-sm font-semibold flex justify-between">
+        <span>Darkest</span>
         <span class="font-normal opacity-0">{{ strtoupper($page->config['colors']['grey-darkest']) }}</span>
       </div>
-      <div class="text-white bg-slate-darker px-6 py-3 text-sm font-semibold flex justify-between">
-        <span class="opacity-0">Black</span>
+      <div class="text-white bg-black px-6 py-3 text-sm font-semibold flex justify-between">
+        <span>Black</span>
         <span class="font-normal opacity-0">{{ strtoupper($page->config['colors']['black']) }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full md:w-1/2 lg:w-1/3 mb-8">
+    <div class="rounded overflow-hidden">
+      <div class="text-white bg-new-grey px-6 py-4 text-sm font-semibold relative shadow z-10">
+        <div class="tracking-wide uppercase mb-6">Proposed Greys</div>
+        <div class="flex justify-between">
+          <span class="opacity-0">Base</span>
+          <span class="font-normal opacity-0 lowercase truncate">{{ strtoupper($page->config['colors']['new-grey']) }}</span>
+        </div>
+      </div>
+      <div class="text-black bg-new-white px-6 py-3 text-sm font-semibold flex justify-between">
+        <span class="-opacity-0">White</span>
+        <span class="font-normal opacity-0 lowercase truncate">{{ strtoupper($page->config['colors']['new-white']) }}</span>
+      </div>
+      <div class="text-grey-darkest bg-new-grey-lightest px-6 py-3 text-sm font-semibold flex justify-between">
+        <span class="-opacity-0">Lightest</span>
+        <span class="font-normal opacity-0 lowercase truncate">{{ strtoupper($page->config['colors']['new-grey-lightest']) }}</span>
+      </div>
+      <div class="text-grey-darkest bg-new-grey-lighter px-6 py-3 text-sm font-semibold flex justify-between">
+        <span class="-opacity-0">Lighter</span>
+        <span class="font-normal opacity-0 lowercase truncate">{{ strtoupper($page->config['colors']['new-grey-lighter']) }}</span>
+      </div>
+      <div class="text-grey-darkest bg-new-grey-light px-6 py-3 text-sm font-semibold flex justify-between">
+        <span class="-opacity-0">Light</span>
+        <span class="font-normal opacity-0 lowercase truncate">{{ strtoupper($page->config['colors']['new-grey-light']) }}</span>
+      </div>
+      <div class="text-white bg-new-grey px-6 py-3 text-sm font-semibold flex justify-between flex justify-between">
+        <span class="-opacity-0">Base</span>
+        <span class="font-normal opacity-0 lowercase truncate">{{ strtoupper($page->config['colors']['new-grey']) }}</span>
+      </div>
+      <div class="text-white bg-new-grey-dark px-6 py-3 text-sm font-semibold flex justify-between">
+        <span class="-opacity-0">Dark</span>
+        <span class="font-normal opacity-0 lowercase truncate">{{ strtoupper($page->config['colors']['new-grey-dark']) }}</span>
+      </div>
+      <div class="text-white bg-new-grey-darker px-6 py-3 text-sm font-semibold flex justify-between">
+        <span class="-opacity-0">Darker</span>
+        <span class="font-normal opacity-0 lowercase truncate">{{ strtoupper($page->config['colors']['new-grey-darker']) }}</span>
+      </div>
+      <div class="text-white bg-new-grey-darkest px-6 py-3 text-sm font-semibold flex justify-between">
+        <span class="-opacity-0">Darkest</span>
+        <span class="font-normal opacity-0 lowercase truncate">{{ strtoupper($page->config['colors']['new-grey-darkest']) }}</span>
+      </div>
+      <div class="text-white bg-new-black px-6 py-3 text-sm font-semibold flex justify-between">
+        <span class="-opacity-0">Black</span>
+        <span class="font-normal opacity-0 lowercase truncate">{{ strtoupper($page->config['colors']['new-black']) }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full md:w-1/2 lg:w-1/3 mb-8">
+    <div class="rounded overflow-hidden">
+      <div class="text-white bg-grey px-6 py-4 text-sm font-semibold relative shadow z-10">
+        <div class="tracking-wide uppercase mb-6">Legacy Greys</div>
+        <div class="flex justify-between">
+          <span class="opacity-0">Base</span>
+          <span class="font-normal opacity-0">{{ strtoupper($page->config['colors']['grey']) }}</span>
+        </div>
+      </div>
+      <div class="text-black bg-white px-6 py-3 text-sm font-semibold flex justify-between">
+        <span class="">White</span>
+      </div>
+      <div class="text-grey-darkest bg-smoke-lighter px-6 py-3 text-sm font-semibold flex justify-between">
+        <span class="">Smoke Lighter</span>
+      </div>
+      <div class="text-grey-darkest bg-smoke-light px-6 py-3 text-sm font-semibold flex justify-between">
+        <span class="">Smoke Light</span>
+      </div>
+      <div class="text-grey-darkest bg-smoke px-6 py-3 text-sm font-semibold flex justify-between">
+        <span class="">Smoke</span>
+      </div>
+      <div class="text-white bg-smoke-dark px-6 py-3 text-sm font-semibold flex justify-between flex justify-between">
+        <span class="">Smoke Dark / Slate Lighter</span>
+      </div>
+      <div class="text-white bg-smoke-darker px-6 py-3 text-sm font-semibold flex justify-between">
+        <span class="">Smoke Darker / Slate Light</span>
+      </div>
+      <div class="text-white bg-slate px-6 py-3 text-sm font-semibold flex justify-between">
+        <span class="">Slate</span>
+      </div>
+      <div class="text-white bg-slate-dark px-6 py-3 text-sm font-semibold flex justify-between">
+        <span class="">Slate Dark</span>
+      </div>
+      <div class="text-white bg-slate-darker px-6 py-3 text-sm font-semibold flex justify-between">
+        <span class="">Slate Darker</span>
       </div>
     </div>
   </div>

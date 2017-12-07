@@ -41,6 +41,16 @@ config.colors = Object.assign(config.colors, {
   // 'smoke-light': config.colors['new-grey-lighter'],
   // 'smoke-lighter': config.colors['new-grey-lightest'],
 
+  // 'white': config.colors['new-white'],
+  // 'grey-lightest': config.colors['new-grey-lightest'],
+  // 'grey-lighter': config.colors['new-grey-lighter'],
+  // 'grey-light': config.colors['new-grey-light'],
+  // 'grey': config.colors['new-grey'],
+  // 'grey-dark': config.colors['new-grey-dark'],
+  // 'grey-darker': config.colors['new-grey-darker'],
+  // 'grey-darkest': config.colors['new-grey-darkest'],
+  // 'black': config.colors['new-black'],
+
   'tailwind-teal-light': '#5ebcca',
   'tailwind-teal': '#44a8b3',
   'tailwind-teal-dark': '#2f8696',
