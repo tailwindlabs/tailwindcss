@@ -58,6 +58,10 @@ export default function() {
           })
         })
 
+        decls.forEach((decl) => {
+          decl.important = false
+        })
+
         atRule.before(decls)
 
         atRule.params = customProperties.join(' ')

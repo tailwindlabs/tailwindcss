@@ -14,6 +14,15 @@ test("it copies a class's declarations into itself", () => {
   })
 })
 
+test("it removes important from applied classes", () => {
+  const output = '.a { color: red !important; } .b { color: red; }'
+
+  return run('.a { color: red !important; } .b { @apply .a; }').then(result => {
+    expect(result.css).toEqual(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it fails if the class does not exist', () => {
   return run('.b { @apply .a; }').catch(e => {
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
