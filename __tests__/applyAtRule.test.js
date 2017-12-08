@@ -14,7 +14,7 @@ test("it copies a class's declarations into itself", () => {
   })
 })
 
-test("it removes important from applied classes", () => {
+test('it removes important from applied classes', () => {
   const output = '.a { color: red !important; } .b { color: red; }'
 
   return run('.a { color: red !important; } .b { @apply .a; }').then(result => {

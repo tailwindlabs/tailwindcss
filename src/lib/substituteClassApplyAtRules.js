@@ -58,7 +58,7 @@ export default function() {
           })
         })
 
-        decls.forEach((decl) => {
+        decls.forEach(decl => {
           decl.important = false
         })
 
