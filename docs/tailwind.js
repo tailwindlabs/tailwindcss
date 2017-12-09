@@ -1,31 +1,9 @@
 var config = require('../defaultConfig')()
 
 config.colors = Object.assign(config.colors, {
-  'new-white': 'hsl(208, 0%, 100%)',
-  'new-grey-lightest': 'hsl(208, 35%, 98%)',
-  'new-grey-lighter': 'hsl(208, 33%, 96%)',
-  'new-grey-light': 'hsl(208, 20%, 88%)',
-  'new-grey': 'hsl(208, 16%, 76%)',
-  'new-grey-dark': 'hsl(208, 12%, 58%)',
-  'new-grey-darker': 'hsl(208, 12%, 43%)',
-  'new-grey-darkest': 'hsl(208, 15%, 28%)',
-  'new-black': 'hsl(208, 16%, 16%)',
-
   'tailwind-teal-light': '#5ebcca',
   'tailwind-teal': '#44a8b3',
   'tailwind-teal-dark': '#2f8696',
-})
-
-config.colors = Object.assign(config.colors, {
-  'white': config.colors['new-white'],
-  'grey-lightest': config.colors['new-grey-lightest'],
-  'grey-lighter': config.colors['new-grey-lighter'],
-  'grey-light': config.colors['new-grey-light'],
-  'grey': config.colors['new-grey'],
-  'grey-dark': config.colors['new-grey-dark'],
-  'grey-darker': config.colors['new-grey-darker'],
-  'grey-darkest': config.colors['new-grey-darkest'],
-  'black': config.colors['new-black'],
 })
 
 config.fonts = {
