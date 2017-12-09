@@ -12,7 +12,7 @@ const app = new Vue({
 })
 
 Prism.highlightAll()
-anchors.options = { placement: 'left', class: 'text-slate-light' }
+anchors.options = { placement: 'left', class: 'text-grey-dark' }
 anchors.add()
 
 // Add shortcut to search input when pressing the "/" key

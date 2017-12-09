@@ -61,7 +61,7 @@ Use the `.shadow-inner` utility to apply a subtle inset box shadow to an element
 This can be useful for things like form controls or wells.
 
 @component('_partials.code-sample', ['class' => 'flex justify-around text-sm py-8'])
-<div class="p-4 bg-smoke-lighter shadow-inner">.shadow-inner</div>
+<div class="p-4 bg-grey-lightest shadow-inner">.shadow-inner</div>
 @slot('code')
 <div class="shadow-inner"></div>
 @endslot
@@ -89,27 +89,27 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex justify-center">
-  <div class="shadow px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
+  <div class="shadow px-4 py-2 bg-grey-lightest opacity-100 w-24 h-24 rounded-full"></div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex justify-center">
-  <div class="shadow-md px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
+  <div class="shadow-md px-4 py-2 bg-grey-lightest opacity-100 w-24 h-24 rounded-full"></div>
 </div>
 @endslot
 @slot('md')
 <div class="flex justify-center">
-  <div class="shadow-lg px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
+  <div class="shadow-lg px-4 py-2 bg-grey-lightest opacity-100 w-24 h-24 rounded-full"></div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex justify-center">
-  <div class="shadow-inner px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
+  <div class="shadow-inner px-4 py-2 bg-grey-lightest opacity-100 w-24 h-24 rounded-full"></div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex justify-center">
-  <div class="shadow-none px-4 py-2 bg-smoke-lighter opacity-100 w-24 h-24 rounded-full"></div>
+  <div class="shadow-none px-4 py-2 bg-grey-lightest opacity-100 w-24 h-24 rounded-full"></div>
 </div>
 @endslot
 @slot('code')

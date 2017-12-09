@@ -32,10 +32,10 @@ For most projects (and to take advantage of Tailwind's customization features), 
 
 Tailwind is [available on npm](https://www.npmjs.com/package/tailwindcss) and can be installed using npm or Yarn.
 
-<div class="rounded bg-smoke-lighter border-2 border-grey-light font-mono text-sm p-4">
-  <div class="text-smoke-darker"># Using npm</div>
+<div class="rounded bg-grey-lightest border-2 border-grey-light font-mono text-sm p-4">
+  <div class="text-grey-dark"># Using npm</div>
   <div class="text-purple-dark">npm install <span class="text-blue-dark">tailwindcss</span> <span class="text-grey-darker">--save-dev</span></div>
-  <div class="text-smoke-darker mt-6"># Using Yarn</div>
+  <div class="text-grey-dark mt-6"># Using Yarn</div>
   <div class="text-purple-dark">yarn add <span class="text-blue-dark">tailwindcss</span> <span class="text-grey-darker">--dev</span></div>
 </div>
 
@@ -45,8 +45,8 @@ Tailwind is configured almost entirely in plain JavaScript. To do this you'll ne
 
 We've provided a CLI utility to do this easily:
 
-<div class="rounded bg-smoke-lighter border-2 border-grey-light font-mono text-sm p-4">
-  <div class="text-purple-dark">./node_modules/.bin/tailwind <span class="text-blue-dark">init</span> <span class="text-smoke-darker">[filename]</span></div>
+<div class="rounded bg-grey-lightest border-2 border-grey-light font-mono text-sm p-4">
+  <div class="text-purple-dark">./node_modules/.bin/tailwind <span class="text-blue-dark">init</span> <span class="text-grey-dark">[filename]</span></div>
 </div>
 
 ### 3. Use Tailwind in your CSS
@@ -64,7 +64,7 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
  * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
  *
  * If using `postcss-import`, you should import this line from it's own file:
- * 
+ *
  * @@import "./tailwind-preflight.css";
  *
  * See: https://github.com/tailwindcss/tailwindcss/issues/53#issuecomment-341413622
@@ -92,7 +92,7 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
  * config file.
  *
  * If using `postcss-import`, you should import this line from it's own file:
- * 
+ *
  * @@import "./tailwind-utilities.css";
  *
  * See: https://github.com/tailwindcss/tailwindcss/issues/53#issuecomment-341413622
@@ -121,8 +121,8 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
 
 For simple projects or just giving Tailwind a spin, you can use the Tailwind CLI tool to process your CSS:
 
-<div class="bg-smoke-lighter font-mono text-sm p-4">
-  <div class="text-purple-dark">./node_modules/.bin/tailwind build <span class="text-blue-dark">styles.css</span> <span class="text-smoke-darker">[-c ./tailwind.js] [-o ./output.css]</span></div>
+<div class="bg-grey-lightest font-mono text-sm p-4">
+  <div class="text-purple-dark">./node_modules/.bin/tailwind build <span class="text-blue-dark">styles.css</span> <span class="text-grey-dark">[-c ./tailwind.js] [-o ./output.css]</span></div>
 </div>
 
 #### Using Tailwind with PostCSS

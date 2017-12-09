@@ -11,49 +11,21 @@ config.colors = Object.assign(config.colors, {
   'new-grey-darkest': 'hsl(208, 15%, 28%)',
   'new-black': 'hsl(208, 16%, 16%)',
 
-  'slate-darker': '#212b35',
-  'slate-dark': '#404e5c',
-  'slate': '#647382',
-  'slate-light': '#919eab',
-  'slate-lighter': '#c5ced6',
-
-  'smoke-darker': '#919eab',
-  'smoke-dark': '#c5ced6',
-  'smoke': '#dfe3e8',
-  'smoke-light': 'hsl(200, 33%, 96%)',
-  'smoke-lighter': 'hsl(200, 25%, 98%)',
-
   'tailwind-teal-light': '#5ebcca',
   'tailwind-teal': '#44a8b3',
   'tailwind-teal-dark': '#2f8696',
 })
 
 config.colors = Object.assign(config.colors, {
-  // 'slate-darker': config.colors['new-black'],
-  // 'slate-dark': config.colors['new-grey-darkest'],
-  // 'slate': config.colors['new-grey-darker'],
-  // 'slate-light': config.colors['new-grey-dark'],
-  // 'slate-lighter': config.colors['new-grey'],
-
-  // 'smoke-darker': config.colors['new-grey-dark'],
-  // 'smoke-dark': config.colors['new-grey'],
-  // 'smoke': config.colors['new-grey-light'],
-  // 'smoke-light': config.colors['new-grey-lighter'],
-  // 'smoke-lighter': config.colors['new-grey-lightest'],
-
-  // 'white': config.colors['new-white'],
-  // 'grey-lightest': config.colors['new-grey-lightest'],
-  // 'grey-lighter': config.colors['new-grey-lighter'],
-  // 'grey-light': config.colors['new-grey-light'],
-  // 'grey': config.colors['new-grey'],
-  // 'grey-dark': config.colors['new-grey-dark'],
-  // 'grey-darker': config.colors['new-grey-darker'],
-  // 'grey-darkest': config.colors['new-grey-darkest'],
-  // 'black': config.colors['new-black'],
-
-  'tailwind-teal-light': '#5ebcca',
-  'tailwind-teal': '#44a8b3',
-  'tailwind-teal-dark': '#2f8696',
+  'white': config.colors['new-white'],
+  'grey-lightest': config.colors['new-grey-lightest'],
+  'grey-lighter': config.colors['new-grey-lighter'],
+  'grey-light': config.colors['new-grey-light'],
+  'grey': config.colors['new-grey'],
+  'grey-dark': config.colors['new-grey-dark'],
+  'grey-darker': config.colors['new-grey-darker'],
+  'grey-darkest': config.colors['new-grey-darkest'],
+  'black': config.colors['new-black'],
 })
 
 config.fonts = {

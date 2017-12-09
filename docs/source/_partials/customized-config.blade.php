@@ -1,5 +1,5 @@
-<div class="border-2 border-smoke rounded mb-8">
-  <div class="bg-smoke-lighter p-4 font-mono text-sm">
+<div class="border-2 border-grey-light rounded mb-8">
+  <div class="bg-grey-lightest p-4 font-mono text-sm">
     <div class="whitespace-pre text-grey-dark">{</div>
     <div class="whitespace-pre text-grey-light">  // ...</div>
     <div class="whitespace-pre text-grey-dark"><span class="text-purple-dark">  {{ $key }}</span>: {</div>

@@ -34,15 +34,15 @@ features:
   ]
 ])
 
-### Row <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
+### Row <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
 
 Use `.flex-row` to position flex items horizontally in the same direction as text:
 
 @component('_partials.code-sample')
-<div class="flex flex-row bg-smoke-light">
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex flex-row bg-grey-lighter">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -51,10 +51,10 @@ Use `.flex-row` to position flex items horizontally in the same direction as tex
 Use `.flex-row-reverse` to position flex items horizontally in the opposite direction:
 
 @component('_partials.code-sample')
-<div class="flex flex-row-reverse bg-smoke-light">
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex flex-row-reverse bg-grey-lighter">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -63,10 +63,10 @@ Use `.flex-row-reverse` to position flex items horizontally in the opposite dire
 Use `.flex-col` to position flex items vertically:
 
 @component('_partials.code-sample')
-<div class="flex flex-col bg-smoke-light">
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex flex-col bg-grey-lighter">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -75,10 +75,10 @@ Use `.flex-col` to position flex items vertically:
 Use `.flex-col-reverse` to position flex items vertically in the opposite direction:
 
 @component('_partials.code-sample')
-<div class="flex flex-col-reverse bg-smoke-light">
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex flex-col-reverse bg-grey-lighter">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -90,38 +90,38 @@ For more information about Tailwind's responsive design features, check out the 
 
 @component('_partials.responsive-code-sample')
 @slot('none')
-<div class="flex flex-row bg-smoke-light">
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex flex-row bg-grey-lighter">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('sm')
-<div class="flex flex-col bg-smoke-light">
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex flex-col bg-grey-lighter">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('md')
-<div class="flex flex-row-reverse bg-smoke-light">
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex flex-row-reverse bg-grey-lighter">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('lg')
-<div class="flex flex-col-reverse bg-smoke-light">
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex flex-col-reverse bg-grey-lighter">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('xl')
-<div class="flex flex-row bg-smoke-light">
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex flex-row bg-grey-lighter">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('code')

@@ -54,52 +54,52 @@ features:
   ]
 ])
 
-### Initial <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
+### Initial <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
 
 Use `.flex-initial` to allow a flex item to shrink but not grow, taking into account its initial size:
 
 @component('_partials.code-sample')
-<p class="text-sm text-slate-light mb-1">Items don't grow when there's extra space</p>
-<div class="flex bg-smoke-light mb-6">
-  <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+<p class="text-sm text-grey-dark mb-1">Items don't grow when there's extra space</p>
+<div class="flex bg-grey-lighter mb-6">
+  <div class="flex-initial text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
-  <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-initial text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Medium length
   </div>
 </div>
 
-<p class="text-sm text-slate-light mb-1">Items shrink if possible when needed</p>
-<div class="flex bg-smoke-light">
-  <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+<p class="text-sm text-grey-dark mb-1">Items shrink if possible when needed</p>
+<div class="flex bg-grey-lighter">
+  <div class="flex-initial text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
-  <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-initial text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Medium length
   </div>
-  <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-initial text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui ad labore ipsam, aut rem quo repellat esse tempore id, quidem
   </div>
 </div>
 
 @slot('code')
-<div class="flex bg-smoke-light">
-  <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+<div class="flex bg-grey-lighter">
+  <div class="flex-initial text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
-  <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-initial text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Medium length
   </div>
 </div>
 
-<div class="flex bg-smoke-light">
-  <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+<div class="flex bg-grey-lighter">
+  <div class="flex-initial text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
-  <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-initial text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Medium length
   </div>
-  <div class="flex-initial text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-initial text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui ad labore ipsam, aut rem quo repellat esse tempore id, quidem
   </div>
 </div>
@@ -111,40 +111,40 @@ Use `.flex-initial` to allow a flex item to shrink but not grow, taking into acc
 Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring its initial size:
 
 @component('_partials.code-sample')
-<p class="text-sm text-slate-light mb-1">Default behavior</p>
-<div class="flex bg-smoke-light mb-6">
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">
+<p class="text-sm text-grey-dark mb-1">Default behavior</p>
+<div class="flex bg-grey-lighter mb-6">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Medium length
   </div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Significantly larger amount of content
   </div>
 </div>
-<p class="text-sm text-slate-light mb-1">With <code>.flex-1</code></p>
-<div class="flex bg-smoke-light">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+<p class="text-sm text-grey-dark mb-1">With <code>.flex-1</code></p>
+<div class="flex bg-grey-lighter">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Medium length
   </div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Significantly larger amount of content
   </div>
 </div>
 
 @slot('code')
-<div class="flex bg-smoke-light">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+<div class="flex bg-grey-lighter">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Medium length
   </div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Significantly larger amount of content
   </div>
 </div>
@@ -156,40 +156,40 @@ Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring its in
 Use `.flex-auto` to allow a flex item to grow and shrink, taking into account its initial size:
 
 @component('_partials.code-sample')
-<p class="text-sm text-slate-light mb-1">Default behavior</p>
-<div class="flex bg-smoke-light mb-6">
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">
+<p class="text-sm text-grey-dark mb-1">Default behavior</p>
+<div class="flex bg-grey-lighter mb-6">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Medium length
   </div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Significantly larger amount of content
   </div>
 </div>
-<p class="text-sm text-slate-light mb-1">With <code>.flex-auto</code></p>
-<div class="flex bg-smoke-light">
-  <div class="flex-auto text-slate text-center bg-smoke px-4 py-2 m-2">
+<p class="text-sm text-grey-dark mb-1">With <code>.flex-auto</code></p>
+<div class="flex bg-grey-lighter">
+  <div class="flex-auto text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
-  <div class="flex-auto text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-auto text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Medium length
   </div>
-  <div class="flex-auto text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-auto text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Significantly larger amount of content
   </div>
 </div>
 
 @slot('code')
-<div class="flex bg-smoke-light">
-  <div class="flex-auto text-slate text-center bg-smoke px-4 py-2 m-2">
+<div class="flex bg-grey-lighter">
+  <div class="flex-auto text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
-  <div class="flex-auto text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-auto text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Medium length
   </div>
-  <div class="flex-auto text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-auto text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Significantly larger amount of content
   </div>
 </div>
@@ -201,14 +201,14 @@ Use `.flex-auto` to allow a flex item to grow and shrink, taking into account it
 Use `.flex-none` to prevent a flex item from growing or shrinking:
 
 @component('_partials.code-sample')
-<div class="flex bg-smoke-light">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+<div class="flex bg-grey-lighter">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
-  <div class="flex-none text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+  <div class="flex-none text-grey-darkest text-center bg-grey px-4 py-2 m-2">
     Item that cannot grow or shrink
   </div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
 </div>
@@ -219,14 +219,14 @@ Use `.flex-none` to prevent a flex item from growing or shrinking:
 Use `.flex-grow` to allow a flex item to grow to fill any available space:
 
 @component('_partials.code-sample')
-<div class="flex bg-smoke-light">
-  <div class="flex-none text-slate text-center bg-smoke px-4 py-2 m-2">
+<div class="flex bg-grey-lighter">
+  <div class="flex-none text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Content that cannot flex
   </div>
-  <div class="flex-grow text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+  <div class="flex-grow text-grey-darkest text-center bg-grey px-4 py-2 m-2">
     Item that will grow
   </div>
-  <div class="flex-none text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-none text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Content that cannot flex
   </div>
 </div>
@@ -237,14 +237,14 @@ Use `.flex-grow` to allow a flex item to grow to fill any available space:
 Use `.flex-no-grow` to prevent a flex item from growing:
 
 @component('_partials.code-sample')
-<div class="flex bg-smoke-light">
-  <div class="flex-grow text-slate text-center bg-smoke px-4 py-2 m-2">
+<div class="flex bg-grey-lighter">
+  <div class="flex-grow text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Will grow
   </div>
-  <div class="flex-no-grow text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+  <div class="flex-no-grow text-grey-darkest text-center bg-grey px-4 py-2 m-2">
     Will not grow
   </div>
-  <div class="flex-grow text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-grow text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Will grow
   </div>
 </div>
@@ -255,14 +255,14 @@ Use `.flex-no-grow` to prevent a flex item from growing:
 Use `.flex-shrink` to allow a flex item to shrink if needed:
 
 @component('_partials.code-sample')
-<div class="flex bg-smoke-light">
-  <div class="flex-none text-slate text-center bg-smoke px-4 py-2 m-2">
+<div class="flex bg-grey-lighter">
+  <div class="flex-none text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Longer content that cannot flex
   </div>
-  <div class="flex-shrink text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+  <div class="flex-shrink text-grey-darkest text-center bg-grey px-4 py-2 m-2">
     Item that will shrink even if it causes the content to wrap
   </div>
-  <div class="flex-none text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-none text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Longer content that cannot flex
   </div>
 </div>
@@ -273,14 +273,14 @@ Use `.flex-shrink` to allow a flex item to shrink if needed:
 Use `.flex-no-shrink` to prevent a flex item from shrinking:
 
 @component('_partials.code-sample')
-<div class="flex bg-smoke-light">
-  <div class="flex-shrink text-slate text-center bg-smoke px-4 py-2 m-2">
+<div class="flex bg-grey-lighter">
+  <div class="flex-shrink text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can shrink if needed
   </div>
-  <div class="flex-no-shrink text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+  <div class="flex-no-shrink text-grey-darkest text-center bg-grey px-4 py-2 m-2">
     Item that cannot shrink below its initial size
   </div>
-  <div class="flex-shrink text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-shrink text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can shrink if needed
   </div>
 </div>
@@ -294,66 +294,66 @@ For more information about Tailwind's responsive design features, check out the 
 
 @component('_partials.responsive-code-sample')
 @slot('none')
-<div class="flex bg-smoke-light">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+<div class="flex bg-grey-lighter">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
-  <div class="flex-none text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+  <div class="flex-none text-grey-darkest text-center bg-grey px-4 py-2 m-2">
     Responsive flex item
   </div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
 </div>
 @endslot
 @slot('sm')
-<div class="flex bg-smoke-light">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+<div class="flex bg-grey-lighter">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
-  <div class="flex-grow text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+  <div class="flex-grow text-grey-darkest text-center bg-grey px-4 py-2 m-2">
     Responsive flex item
   </div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
 </div>
 @endslot
 @slot('md')
-<div class="flex bg-smoke-light">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+<div class="flex bg-grey-lighter">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
-  <div class="flex-shrink text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+  <div class="flex-shrink text-grey-darkest text-center bg-grey px-4 py-2 m-2">
     Responsive flex item
   </div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
 </div>
 @endslot
 @slot('lg')
-<div class="flex bg-smoke-light">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+<div class="flex bg-grey-lighter">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
-  <div class="flex-1 text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+  <div class="flex-1 text-grey-darkest text-center bg-grey px-4 py-2 m-2">
     Responsive flex item
   </div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
 </div>
 @endslot
 @slot('xl')
-<div class="flex bg-smoke-light">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+<div class="flex bg-grey-lighter">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
-  <div class="flex-initial text-slate-dark text-center bg-smoke-dark px-4 py-2 m-2">
+  <div class="flex-initial text-grey-darkest text-center bg-grey px-4 py-2 m-2">
     Responsive flex item
   </div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
 </div>
