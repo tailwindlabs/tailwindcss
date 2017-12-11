@@ -45,9 +45,9 @@ features:
 
 ### Note
 
-Some fonts, such as fonts with an integer in their name, are required to be wrapped in quotes. 
+Some font names are required to be wrapped in quotes, such as fonts with an integer in their name. 
 
-For example:
+For example, in the fonts section of your config file:
 ```js
 // ...
 
