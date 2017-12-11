@@ -40,5 +40,36 @@ features:
     ],
     'variants' => [
         'responsive',
-    ],
+    ]
 ])
+
+### Note
+
+Some fonts, such as fonts with an integer in their name, are required to be wrapped in quotes. 
+
+For example:
+```js
+// ...
+
+module.exports = {
+  // ...
+    fonts: {
+      sans: [
+        'Exo 2',   // Replace this...
+        '"Exo 2"', // With this...
+        '-apple-system',
+        'BlinkMacSystemFont',
+        'Segoe UI',
+        'Roboto',
+        'Oxygen',
+        'Ubuntu',
+        'Cantarell',
+        'Fira Sans',
+        'Droid Sans',
+        'Helvetica Neue',
+        'sans-serif'
+      ],
+    // ...
+  }
+}
+```
