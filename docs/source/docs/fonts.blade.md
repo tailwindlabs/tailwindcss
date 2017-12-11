@@ -40,7 +40,7 @@ features:
     ],
     'variants' => [
         'responsive',
-    ]
+    ],
 ])
 
 ### Note
