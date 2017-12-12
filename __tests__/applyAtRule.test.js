@@ -23,6 +23,32 @@ test('it removes important from applied classes', () => {
   })
 })
 
+test('cssnext custom property sets are preserved', () => {
+  const input = `
+    .a {
+      color: red;
+    }
+    .b {
+      @apply .a --custom-property-set;
+    }
+  `
+
+  const expected = `
+    .a {
+      color: red;
+    }
+    .b {
+      color: red;
+      @apply --custom-property-set;
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it fails if the class does not exist', () => {
   return run('.b { @apply .a; }').catch(e => {
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
