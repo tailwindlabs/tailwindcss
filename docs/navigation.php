@@ -9,6 +9,7 @@ return [
         'Configuration' => 'configuration',
         'Colors' => 'colors',
         'Responsive Design' => 'responsive-design',
+        'State Variants' => 'state-variants',
         'Adding New Utilities' => 'adding-new-utilities',
         'Extracting Components' => 'extracting-components',
         'Functions &amp; Directives' => 'functions-and-directives',
