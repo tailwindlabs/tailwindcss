@@ -25,7 +25,7 @@ export default function(config) {
 
       applyClassPrefix(tailwindClasses, unwrappedConfig.options.prefix)
 
-      tailwindClasses.walk(node => node.source = atRule.source)
+      tailwindClasses.walk(node => (node.source = atRule.source))
 
       atRule.before(tailwindClasses)
       atRule.remove()
