@@ -39,7 +39,7 @@ export default function() {
   return function(css) {
     css.walkRules(rule => {
       rule.walkAtRules('apply', atRule => {
-        const mixins = normalizeClassNames(postcss.list.space(atRule.params))
+        const mixins = postcss.list.space(atRule.params)
 
         /*
          * Don't wreck CSSNext-style @apply rules:
@@ -52,7 +52,7 @@ export default function() {
           return _.startsWith(mixin, '--')
         })
 
-        const decls = _.flatMap(classes, mixin => {
+        const decls = _.flatMap(normalizeClassNames(classes), mixin => {
           return findMixin(css, mixin, message => {
             throw atRule.error(message)
           })
