@@ -1,12 +1,12 @@
 ---
 extends: _layouts.documentation
 title: "Forms"
-description: null
+description: Examples of building forms with Tailwind CSS.
 ---
 
-@include('_partials.work-in-progress-example')
+Tailwind doesn't include purpose-built form control classes out of the box, but form controls are easy to style using existing utilities.
 
-## Login Form
+### Login Form
 
 @component('_partials.code-sample', ['class' => 'px-3 py-10 bg-grey-lighter flex justify-center'])
 <div class="w-full max-w-xs">
@@ -39,7 +39,7 @@ description: null
 </div>
 @endcomponent
 
-## Inline Form
+### Inline Form
 
 @component('_partials.code-sample', ['class' => 'flex justify-center p-8'])
 <form class="w-full max-w-xs">
@@ -83,7 +83,7 @@ description: null
 </form>
 @endcomponent
 
-## Form Grid
+### Form Grid
 
 @component('_partials.code-sample', ['class' => 'flex justify-center p-8'])
 <form class="w-full max-w-md">
@@ -143,7 +143,7 @@ description: null
 </form>
 @endcomponent
 
-## Underline Form
+### Underline Form
 
 @component('_partials.code-sample', ['class' => 'flex justify-center p-8'])
 <form class="w-full max-w-sm">

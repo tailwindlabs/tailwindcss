@@ -1,12 +1,12 @@
 ---
 extends: _layouts.documentation
 title: "Navigation"
-description: null
+description: Examples of building navigation components with Tailwind CSS.
 ---
 
-@include('_partials.work-in-progress-example')
+Tailwind doesn't include pre-designed navigation components out of the box, but they're easy to build using existing utilities.
 
-## Simple
+### Simple
 
 @component('_partials.code-sample')
 <ul class="list-reset flex">
@@ -25,7 +25,7 @@ description: null
 </ul>
 @endcomponent
 
-## Responsive Header
+### Responsive Header
 
 @component('_partials.code-sample')
 <nav class="flex items-center justify-between flex-wrap bg-teal p-6">
@@ -57,7 +57,7 @@ description: null
 </nav>
 @endcomponent
 
-## Tabs
+### Tabs
 
 @component('_partials.code-sample')
 <ul class="list-reset flex border-b">
@@ -76,7 +76,7 @@ description: null
 </ul>
 @endcomponent
 
-## Pills
+### Pills
 
 @component('_partials.code-sample')
 <ul class="list-reset flex">
@@ -92,7 +92,7 @@ description: null
 </ul>
 @endcomponent
 
-## Stretched
+### Stretched
 
 @component('_partials.code-sample')
 <ul class="list-reset flex">
@@ -108,7 +108,7 @@ description: null
 </ul>
 @endcomponent
 
-## Justified
+### Justified
 
 @component('_partials.code-sample')
 <ul class="list-reset flex justify-between">

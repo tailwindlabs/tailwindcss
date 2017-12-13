@@ -1,10 +1,10 @@
 ---
 extends: _layouts.documentation
 title: "Buttons"
-description: null
+description: Examples of building buttons with Tailwind CSS.
 ---
 
-@include('_partials.work-in-progress-example')
+Tailwind doesn't include pre-designed button styles out of the box, but they're easy to build using existing utilities.
 
 ### Simple
 

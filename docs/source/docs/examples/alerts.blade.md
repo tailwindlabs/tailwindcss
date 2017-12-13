@@ -1,10 +1,10 @@
 ---
 extends: _layouts.documentation
 title: "Alerts"
-description: null
+description: Examples of building alert components with Tailwind CSS.
 ---
 
-@include('_partials.work-in-progress-example')
+Tailwind doesn't include pre-designed alert components out of the box, but they're easy to build using existing utilities.
 
 ### Traditional
 
