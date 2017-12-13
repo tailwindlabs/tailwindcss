@@ -165,6 +165,8 @@ The available state variants are:
 - `focus`, for generating versions of those utilities that only take effect on focus
 - `group-hover`, for generating versions of those utilities that only take effect when a marked parent element is hovered
 
+Learn more about state variants in the ["State Variants" documentation](/docs/state-variants).
+
 To include a module but not generate any state variants, use an empty array:
 
 ```js
