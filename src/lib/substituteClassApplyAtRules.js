@@ -2,10 +2,8 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import escapeClassName from '../util/escapeClassName'
 
-function normalizeClassNames(classNames) {
-  return classNames.map(className => {
-    return `.${escapeClassName(_.trimStart(className, '.'))}`
-  })
+function normalizeClassName(className) {
+  return `.${escapeClassName(_.trimStart(className, '.'))}`
 }
 
 function findMixin(css, mixin, onError) {
@@ -52,14 +50,17 @@ export default function() {
           return _.startsWith(mixin, '--')
         })
 
-        const decls = _.flatMap(normalizeClassNames(classes), mixin => {
-          return findMixin(css, mixin, message => {
-            throw atRule.error(message)
+        const decls = _(classes)
+          .reject(mixin => mixin === '!important')
+          .flatMap(mixin => {
+            return findMixin(css, normalizeClassName(mixin), message => {
+              throw atRule.error(message)
+            })
           })
-        })
+          .value()
 
-        decls.forEach(decl => {
-          decl.important = false
+        _.tap(_.last(mixins) === '!important', important => {
+          decls.forEach(decl => (decl.important = important))
         })
 
         atRule.before(decls)

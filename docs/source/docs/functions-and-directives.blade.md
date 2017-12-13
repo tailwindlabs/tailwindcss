@@ -54,7 +54,69 @@ This is extremely useful when you find a common utility pattern in your HTML tha
 }
 ```
 
-Note that `@@apply` **will not work** for mixing in hover or responsive variants of another utility. Instead, mix in the plain version of that utility into the `:hover` pseudo-selector or a new media query:
+Rules can listed on a single line or with multiple calls to `@@apply`:
+
+```less
+.btn {
+  @@apply .font-bold;
+  @@apply .py-2;
+  @@apply .px-4;
+  @@apply .rounded;
+}
+```
+
+You can mix `@@apply` declarations with normal CSS declarations too of course:
+
+```less
+.btn:hover {
+  @@apply .bg-blue-dark;
+  transform: translateY(-1px);
+}
+```
+
+Any rules mixed in with `@@apply` will have `!important` **removed** by default to avoid specificity issues:
+
+```less
+// Input
+.foo {
+  @@apply .bar;
+}
+
+.bar {
+  color: blue !important;
+}
+
+// Output
+.foo {
+  color: blue;
+}
+
+.bar {
+  color: blue !important;
+}
+```
+
+If you'd like to `@@apply` an existing class and make it `!important`, simply add `!important` to the end of the declaration:
+
+
+```less
+// Input
+.btn {
+  @@apply .font-bold .py-2 .px-4 .rounded !important;
+}
+
+// Output
+.btn {
+  font-weight: 700 !important;
+  padding-top: .5rem !important;
+  padding-bottom: .5rem !important;
+  padding-right: 1rem !important;
+  padding-left: 1rem !important;
+  border-radius: .25rem !important;
+}
+```
+
+Note that `@@apply` **will not work** for mixing in hover, focus, or responsive variants of another utility. Instead, mix in the plain version of that utility into the appropriate pseudo-selector or a new media query:
 
 ```less
 // Won't work:

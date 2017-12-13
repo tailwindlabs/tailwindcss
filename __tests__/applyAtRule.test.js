@@ -14,11 +14,36 @@ test("it copies a class's declarations into itself", () => {
   })
 })
 
-test('it removes important from applied classes', () => {
-  const output = '.a { color: red !important; } .b { color: red; }'
+test('it removes important from applied classes by default', () => {
+  const input = `
+    .a { color: red !important; }
+    .b { @apply .a; }
+  `
 
-  return run('.a { color: red !important; } .b { @apply .a; }').then(result => {
-    expect(result.css).toEqual(output)
+  const expected = `
+    .a { color: red !important; }
+    .b { color: red; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('applied rules can be made !important', () => {
+  const input = `
+    .a { color: red; }
+    .b { @apply .a !important; }
+  `
+
+  const expected = `
+    .a { color: red; }
+    .b { color: red !important; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toEqual(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
