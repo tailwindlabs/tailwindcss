@@ -42,7 +42,7 @@ Form controls are great candidates for component classes, but just for fun, here
 
 @include('_partials.variants-and-disabling', [
     'utility' => [
-        'name' => 'form control appearance',
+        'name' => 'appearance',
         'property' => 'appearance',
     ],
     'variants' => [
