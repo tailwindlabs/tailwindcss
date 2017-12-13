@@ -12,7 +12,7 @@ description: null
 
 Tailwind is different from frameworks like Bootstrap, Foundation, or Bulma in that **it's not a UI kit.**
 
-It doesn't have a default theme and there's no built-in UI components.
+It doesn't have a default theme, and there are no built-in UI components.
 
 On the flip side, it also has no opinion about how your site should look and doesn't impose design decisions that you have to fight to undo.
 
@@ -101,7 +101,7 @@ Tailwind provides tools for [extracting component classes](/docs/extracting-comp
 
 Every Tailwind utility also comes in responsive flavors, making it extremely easy to build responsive interfaces without ever leaving your HTML.
 
-Tailwind uses an intuitive `{screen}:` prefix that makes it easy to notice responsive classes in your markup while keeping the original class name recognizable and in tact.
+Tailwind uses an intuitive `{screen}:` prefix that makes it easy to notice responsive classes in your markup while keeping the original class name recognizable and intact.
 
 @component('_partials.responsive-code-sample')
 @slot('none')
@@ -152,7 +152,7 @@ If it makes sense to be customizable, Tailwind lets you customize it.
 
 This includes colors, border sizes, font weights, spacing utilities, breakpoints, shadows, and tons more.
 
-Tailwind is written in [PostCSS](http://postcss.org/) and configured in JavaScript, which means you have the full power of a real programming language at your finger tips.
+Tailwind is written in [PostCSS](http://postcss.org/) and configured in JavaScript, which means you have the full power of a real programming language at your fingertips.
 
 Tailwind is more than a CSS framework, *it's an engine for creating design systems.*
 
