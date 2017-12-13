@@ -23,7 +23,8 @@
     "stylefmt": "^6.0.0",
     "vue": "^2.5.2",
     "webpack-watch": "^0.2.0",
-    "yargs": "^10.0.3"
+    "yargs": "^10.0.3",
+    "clipboard": "^1.7.1"
   },
   "browserslist": [
     "> 1%"

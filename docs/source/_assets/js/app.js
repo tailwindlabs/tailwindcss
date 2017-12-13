@@ -1,5 +1,8 @@
 const anchorJS = require('anchor-js')
 const Prism = require('./prism')
+const PrismToolbar = require('./prism-plugins/prism-toolbar')
+const clipboard = require('./clipboard')
+const PrismClipboard = require('./prism-plugins/prism-clipboard')
 const Mousetrap = require('mousetrap')
 
 window.anchors = new anchorJS()
