@@ -63,7 +63,7 @@ features:
     ],
     [
       '.pin',
-      "top: 0;\nright: 0;\nbottom: 0;\nleft: 0;\nwidth: 100%;\nheight: 100%;",
+      "top: 0;\nright: 0;\nbottom: 0;\nleft: 0;",
       "Anchor absolutely positioned element to all the edges of the nearest positioned parent.",
     ],
   ]
