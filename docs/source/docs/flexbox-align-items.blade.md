@@ -39,15 +39,15 @@ features:
   ]
 ])
 
-### Stretch <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
+### Stretch <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
 
 Use `.items-stretch` to stretch items to fill the flex container's cross axis:
 
 @component('_partials.code-sample')
-<div class="flex items-stretch bg-smoke-light h-24">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex items-stretch bg-grey-lighter h-24">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -56,10 +56,10 @@ Use `.items-stretch` to stretch items to fill the flex container's cross axis:
 Use `.items-start` to align items to the start of the flex container's cross axis:
 
 @component('_partials.code-sample')
-<div class="flex items-start bg-smoke-light h-24">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex items-start bg-grey-lighter h-24">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -68,10 +68,10 @@ Use `.items-start` to align items to the start of the flex container's cross axi
 Use `.items-center` to align items along the center of the flex container's cross axis:
 
 @component('_partials.code-sample')
-<div class="flex items-center bg-smoke-light h-24">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex items-center bg-grey-lighter h-24">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -80,10 +80,10 @@ Use `.items-center` to align items along the center of the flex container's cros
 Use `.items-end` to align items to the end of the flex container's cross axis:
 
 @component('_partials.code-sample')
-<div class="flex items-end bg-smoke-light h-24">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex items-end bg-grey-lighter h-24">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -92,10 +92,10 @@ Use `.items-end` to align items to the end of the flex container's cross axis:
 Use `.items-baseline` to align items along the flex container's cross axis such that all of their baselines align:
 
 @component('_partials.code-sample')
-<div class="flex items-baseline bg-smoke-light h-24">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-base">1</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-2xl">2</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-lg">3</div>
+<div class="flex items-baseline bg-grey-lighter h-24">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-base">1</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-2xl">2</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-lg">3</div>
 </div>
 @endcomponent
 
@@ -107,38 +107,38 @@ For more information about Tailwind's responsive design features, check out the 
 
 @component('_partials.responsive-code-sample')
 @slot('none')
-<div class="flex items-stretch bg-smoke-light h-24">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-base">1</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-2xl">2</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-lg">3</div>
+<div class="flex items-stretch bg-grey-lighter h-24">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-base">1</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-2xl">2</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-lg">3</div>
 </div>
 @endslot
 @slot('sm')
-<div class="flex items-start bg-smoke-light h-24">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-base">1</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-2xl">2</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-lg">3</div>
+<div class="flex items-start bg-grey-lighter h-24">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-base">1</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-2xl">2</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-lg">3</div>
 </div>
 @endslot
 @slot('md')
-<div class="flex items-center bg-smoke-light h-24">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-base">1</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-2xl">2</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-lg">3</div>
+<div class="flex items-center bg-grey-lighter h-24">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-base">1</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-2xl">2</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-lg">3</div>
 </div>
 @endslot
 @slot('lg')
-<div class="flex items-end bg-smoke-light h-24">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-base">1</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-2xl">2</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-lg">3</div>
+<div class="flex items-end bg-grey-lighter h-24">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-base">1</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-2xl">2</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-lg">3</div>
 </div>
 @endslot
 @slot('xl')
-<div class="flex items-baseline bg-smoke-light h-24">
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-base">1</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-2xl">2</div>
-  <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 m-2 text-lg">3</div>
+<div class="flex items-baseline bg-grey-lighter h-24">
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-base">1</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-2xl">2</div>
+  <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2 text-lg">3</div>
 </div>
 @endslot
 @slot('code')

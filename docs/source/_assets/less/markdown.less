@@ -5,12 +5,12 @@
     @apply .mb-6;
     @apply .pb-2;
     @apply .border-b-2;
-    @apply .border-smoke;
+    @apply .border-grey-light;
 
     .subnav-link, .subnav-link& {
       @apply .mr-6;
       @apply .leading-none;
-      @apply .text-slate-dark;
+      @apply .text-grey-darkest;
       @apply .text-sm;
     }
   }
@@ -18,7 +18,7 @@
   > hr {
     @apply .my-12;
     @apply .border-t-0 .border-r-0 .border-l-0;
-    @apply .border-b .border-smoke;
+    @apply .border-b .border-grey-light;
   }
 
   > a, > p a, a& {
@@ -30,7 +30,7 @@
 
   > p code, > ul li code, p& code& {
     @apply .inline-block;
-    @apply .bg-smoke-lighter;
+    @apply .bg-grey-lightest;
     @apply .rounded-sm;
     @apply .text-sm;
     @apply .p-1;
@@ -45,21 +45,21 @@
   > pre, pre& {
     @apply .font-mono;
     @apply .border-2;
-    @apply .border-smoke;
+    @apply .border-grey-light;
     @apply .rounded;
     font-weight: 400;
   }
 
   > blockquote, blockquote& {
     @apply .italic;
-    @apply .text-slate-dark;
+    @apply .text-grey-darkest;
     @apply .text-sm;
   }
 
   > h1, h1& {
     @apply .mb-1;
     @apply .leading-none;
-    @apply .text-slate-darker;
+    @apply .text-black;
     @apply .font-semibold;
     @apply .text-4xl;
   }
@@ -67,7 +67,7 @@
   > h2, h2& {
     @apply .mt-12;
     @apply .mb-4;
-    @apply .text-slate-darker;
+    @apply .text-black;
     @apply .leading-none;
     @apply .font-semibold;
     @apply .text-2xl;
@@ -76,7 +76,7 @@
   > h3, h3& {
     @apply .mt-12;
     @apply .mb-4;
-    @apply .text-slate-darker;
+    @apply .text-black;
     @apply .leading-none;
     @apply .font-semibold;
     @apply .text-xl;
@@ -85,7 +85,7 @@
   > h4, h4& {
     @apply .mt-8;
     @apply .mb-0;
-    @apply .text-slate-darker;
+    @apply .text-black;
     @apply .leading-none;
     @apply .font-semibold;
     @apply .text-base;
@@ -103,14 +103,14 @@
   }
 
   > p, p&, > blockquote > p {
-    @apply .text-slate-dark;
+    @apply .text-grey-darkest;
     @apply .mt-4;
     @apply .mb-4;
     line-height: 1.75;
   }
 
   > ul, > ol {
-    @apply .text-slate-dark;
+    @apply .text-grey-darkest;
     @apply .m-0;
     @apply .mb-4;
   }
@@ -125,11 +125,11 @@
 
   > li {
     @apply .my-2;
-    @apply .text-slate-dark;
+    @apply .text-grey-darkest;
   }
 
   > :not(pre):not(h1):not(h2):not(h3):not(h4) > code, > pre, pre& {
-    @apply .bg-smoke-lighter;
+    @apply .bg-grey-lightest;
     @apply .text-sm;
     @apply .leading-normal;
   }

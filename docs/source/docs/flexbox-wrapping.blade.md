@@ -29,20 +29,20 @@ features:
   ]
 ])
 
-### Don't wrap <span class="ml-2 font-semibold text-slate-light text-sm uppercase tracking-wide">Default</span>
+### Don't wrap <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
 
 Use `.flex-no-wrap` to prevent flex items from wrapping, causing inflexible items to overflow the container if necessary:
 
 @component('_partials.code-sample')
-<div class="flex flex-no-wrap bg-smoke-light">
+<div class="flex flex-no-wrap bg-grey-lighter">
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">1</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">2</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">2</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">3</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">3</div>
   </div>
 </div>
 @endcomponent
@@ -52,15 +52,15 @@ Use `.flex-no-wrap` to prevent flex items from wrapping, causing inflexible item
 Use `.flex-wrap` to allow flex items to wrap:
 
 @component('_partials.code-sample')
-<div class="flex flex-wrap bg-smoke-light">
+<div class="flex flex-wrap bg-grey-lighter">
   <div class="w-2/5 p-2">
-    <div class="text-slate text-center bg-smoke p-2">1</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
   <div class="w-2/5 p-2">
-    <div class="text-slate text-center bg-smoke p-2">2</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">2</div>
   </div>
   <div class="w-2/5 p-2">
-    <div class="text-slate text-center bg-smoke p-2">3</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">3</div>
   </div>
 </div>
 @endcomponent
@@ -70,15 +70,15 @@ Use `.flex-wrap` to allow flex items to wrap:
 Use `.flex-wrap-reverse` to wrap flex items in the reverse direction:
 
 @component('_partials.code-sample')
-<div class="flex flex-wrap-reverse bg-smoke-light">
+<div class="flex flex-wrap-reverse bg-grey-lighter">
   <div class="w-2/5 p-2">
-    <div class="text-slate text-center bg-smoke p-2">1</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
   <div class="w-2/5 p-2">
-    <div class="text-slate text-center bg-smoke p-2">2</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">2</div>
   </div>
   <div class="w-2/5 p-2">
-    <div class="text-slate text-center bg-smoke p-2">3</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">3</div>
   </div>
 </div>
 @endcomponent
@@ -91,67 +91,67 @@ For more information about Tailwind's responsive design features, check out the 
 
 @component('_partials.responsive-code-sample')
 @slot('none')
-<div class="flex flex-no-wrap bg-smoke-light">
+<div class="flex flex-no-wrap bg-grey-lighter">
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">1</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">2</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">2</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">3</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">3</div>
   </div>
 </div>
 @endslot
 @slot('sm')
-<div class="flex flex-wrap bg-smoke-light">
+<div class="flex flex-wrap bg-grey-lighter">
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">1</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">2</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">2</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">3</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">3</div>
   </div>
 </div>
 @endslot
 @slot('md')
-<div class="flex flex-wrap-reverse bg-smoke-light">
+<div class="flex flex-wrap-reverse bg-grey-lighter">
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">1</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">2</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">2</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">3</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">3</div>
   </div>
 </div>
 @endslot
 @slot('lg')
-<div class="flex flex-no-wrap bg-smoke-light">
+<div class="flex flex-no-wrap bg-grey-lighter">
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">1</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">2</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">2</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">3</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">3</div>
   </div>
 </div>
 @endslot
 @slot('xl')
-<div class="flex flex-wrap bg-smoke-light">
+<div class="flex flex-wrap bg-grey-lighter">
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">1</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">2</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">2</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-slate text-center bg-smoke p-2">3</div>
+    <div class="text-grey-darker text-center bg-grey-light p-2">3</div>
   </div>
 </div>
 @endslot

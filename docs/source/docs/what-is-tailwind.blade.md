@@ -105,38 +105,38 @@ Tailwind uses an intuitive `{screen}:` prefix that makes it easy to notice respo
 
 @component('_partials.responsive-code-sample')
 @slot('none')
-<div class="flex justify-start bg-smoke-light">
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex justify-start bg-grey-lighter">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('sm')
-<div class="flex justify-center bg-smoke-light">
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex justify-center bg-grey-lighter">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('md')
-<div class="flex justify-end bg-smoke-light">
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex justify-end bg-grey-lighter">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('lg')
-<div class="flex justify-between bg-smoke-light">
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex justify-between bg-grey-lighter">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('xl')
-<div class="flex justify-around bg-smoke-light">
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">1</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">2</div>
-  <div class="text-slate text-center bg-smoke px-4 py-2 m-2">3</div>
+<div class="flex justify-around bg-grey-lighter">
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('code')

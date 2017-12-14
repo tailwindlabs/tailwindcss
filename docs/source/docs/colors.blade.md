@@ -13,8 +13,8 @@ To get you started, we've provided a generous palette of great looking colors th
 <div class="flex flex-wrap -mx-4">
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
     <div class="rounded overflow-hidden">
-      <div class="text-white bg-grey px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="tracking-wide uppercase mb-6">Grey</div>
+      <div class="text-black bg-grey px-6 py-4 text-sm font-semibold relative shadow z-10">
+        <div class="uppercase mb-6">Grey</div>
         <div class="flex justify-between">
           <span>Base</span>
           <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey']) }}</span>
@@ -24,19 +24,19 @@ To get you started, we've provided a generous palette of great looking colors th
         <span>White</span>
         <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['white']) }}</span>
       </div>
-      <div class="text-grey-darkest bg-grey-lightest px-6 py-3 text-sm font-semibold flex justify-between">
+      <div class="text-black bg-grey-lightest px-6 py-3 text-sm font-semibold flex justify-between">
         <span>Lightest</span>
         <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey-lightest']) }}</span>
       </div>
-      <div class="text-grey-darkest bg-grey-lighter px-6 py-3 text-sm font-semibold flex justify-between">
+      <div class="text-black bg-grey-lighter px-6 py-3 text-sm font-semibold flex justify-between">
         <span>Lighter</span>
         <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey-lighter']) }}</span>
       </div>
-      <div class="text-grey-darkest bg-grey-light px-6 py-3 text-sm font-semibold flex justify-between">
+      <div class="text-black bg-grey-light px-6 py-3 text-sm font-semibold flex justify-between">
         <span>Light</span>
         <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey-light']) }}</span>
       </div>
-      <div class="text-white bg-grey px-6 py-3 text-sm font-semibold flex justify-between flex justify-between">
+      <div class="text-black bg-grey px-6 py-3 text-sm font-semibold flex justify-between flex justify-between">
         <span>Base</span>
         <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey']) }}</span>
       </div>
@@ -64,7 +64,7 @@ To get you started, we've provided a generous palette of great looking colors th
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-red px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="tracking-wide uppercase mb-6">Red</div>
+        <div class="uppercase mb-6">Red</div>
         <div class="flex justify-between">
           <span>Base</span>
           <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['red']) }}</span>
@@ -103,7 +103,7 @@ To get you started, we've provided a generous palette of great looking colors th
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-orange px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="tracking-wide uppercase mb-6">Orange</div>
+        <div class="uppercase mb-6">Orange</div>
         <div class="flex justify-between">
           <span>Base</span>
           <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['orange']) }}</span>
@@ -142,7 +142,7 @@ To get you started, we've provided a generous palette of great looking colors th
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
     <div class="rounded overflow-hidden">
       <div class="text-yellow-darkest bg-yellow px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="tracking-wide uppercase mb-6">Yellow</div>
+        <div class="uppercase mb-6">Yellow</div>
         <div class="flex justify-between">
           <span>Base</span>
           <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['yellow']) }}</span>
@@ -181,7 +181,7 @@ To get you started, we've provided a generous palette of great looking colors th
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-green px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="tracking-wide uppercase mb-6">Green</div>
+        <div class="uppercase mb-6">Green</div>
         <div class="flex justify-between">
           <span>Base</span>
           <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['green']) }}</span>
@@ -220,7 +220,7 @@ To get you started, we've provided a generous palette of great looking colors th
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-teal px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="tracking-wide uppercase mb-6">Teal</div>
+        <div class="uppercase mb-6">Teal</div>
         <div class="flex justify-between">
           <span>Base</span>
           <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['teal']) }}</span>
@@ -259,7 +259,7 @@ To get you started, we've provided a generous palette of great looking colors th
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-blue px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="tracking-wide uppercase mb-6">Blue</div>
+        <div class="uppercase mb-6">Blue</div>
         <div class="flex justify-between">
           <span>Base</span>
           <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['blue']) }}</span>
@@ -298,7 +298,7 @@ To get you started, we've provided a generous palette of great looking colors th
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-indigo px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="tracking-wide uppercase mb-6">Indigo</div>
+        <div class="uppercase mb-6">Indigo</div>
         <div class="flex justify-between">
           <span>Base</span>
           <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['indigo']) }}</span>
@@ -337,7 +337,7 @@ To get you started, we've provided a generous palette of great looking colors th
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-purple px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="tracking-wide uppercase mb-6">Purple</div>
+        <div class="uppercase mb-6">Purple</div>
         <div class="flex justify-between">
           <span>Base</span>
           <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['purple']) }}</span>
@@ -376,7 +376,7 @@ To get you started, we've provided a generous palette of great looking colors th
   <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
     <div class="rounded overflow-hidden">
       <div class="text-white bg-pink px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="tracking-wide uppercase mb-6">Pink</div>
+        <div class="uppercase mb-6">Pink</div>
         <div class="flex justify-between">
           <span>Base</span>
           <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['pink']) }}</span>

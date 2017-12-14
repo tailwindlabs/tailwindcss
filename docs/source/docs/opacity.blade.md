@@ -44,7 +44,7 @@ features:
 @component('_partials.code-sample')
 <div class="flex -mx-2">
   @foreach ($page->config['opacity']->reverse() as $name => $value)
-    <div class="flex-1 text-slate text-center bg-smoke px-4 py-2 mx-2 opacity-{{ $name }}">.opacity-{{ $name }}</div>
+    <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 mx-2 opacity-{{ $name }}">.opacity-{{ $name }}</div>
   @endforeach
 </div>
 @slot('code')
@@ -63,27 +63,27 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="text-center">
-  <div class="px-4 py-2 bg-smoke opacity-100 w-24 h-24 rounded-full inline-block"></div>
+  <div class="px-4 py-2 bg-grey-light opacity-100 w-24 h-24 rounded-full inline-block"></div>
 </div>
 @endslot
 @slot('sm')
 <div class="text-center">
-  <div class="px-4 py-2 bg-smoke opacity-75 w-24 h-24 rounded-full inline-block"></div>
+  <div class="px-4 py-2 bg-grey-light opacity-75 w-24 h-24 rounded-full inline-block"></div>
 </div>
 @endslot
 @slot('md')
 <div class="text-center">
-  <div class="px-4 py-2 bg-smoke opacity-50 w-24 h-24 rounded-full inline-block"></div>
+  <div class="px-4 py-2 bg-grey-light opacity-50 w-24 h-24 rounded-full inline-block"></div>
 </div>
 @endslot
 @slot('lg')
 <div class="text-center">
-  <div class="px-4 py-2 bg-smoke opacity-25 w-24 h-24 rounded-full inline-block"></div>
+  <div class="px-4 py-2 bg-grey-light opacity-25 w-24 h-24 rounded-full inline-block"></div>
 </div>
 @endslot
 @slot('xl')
 <div class="text-center">
-  <div class="px-4 py-2 bg-smoke opacity-0 w-24 h-24 rounded-full inline-block"></div>
+  <div class="px-4 py-2 bg-grey-light opacity-0 w-24 h-24 rounded-full inline-block"></div>
 </div>
 @endslot
 @slot('code')

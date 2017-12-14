@@ -20,8 +20,8 @@
 
 @section('body')
 <div class="min-h-screen">
-  <div id="sidebar" class="hidden z-50 fixed pin-y pin-l overflow-y-scroll md:overflow-visible scrolling-touch md:scrolling-auto bg-smoke-light w-4/5 md:w-full md:max-w-xs flex-none border-r-2 border-smoke md:flex flex-col">
-    <div class="border-b border-smoke flex-none px-8 py-6">
+  <div id="sidebar" class="hidden z-50 fixed pin-y pin-l overflow-y-scroll md:overflow-visible scrolling-touch md:scrolling-auto bg-grey-lighter w-4/5 md:w-full md:max-w-xs flex-none border-r-2 border-grey-light md:flex flex-col">
+    <div class="border-b border-grey-light flex-none px-8 py-6">
       <div class="mb-4">
         <div class="hidden md:flex md:justify-center">
           <a href="/" class="flex justify-center">
@@ -33,9 +33,9 @@
         </p>
       </div>
       <div class="relative">
-        <input id="docsearch" class="placeholder-grey-dark rounded bg-white border border-smoke py-2 pr-4 pl-10 block w-full appearance-none" type="text" placeholder="Search the docs">
+        <input id="docsearch" class="placeholder-grey-dark rounded bg-white border border-grey-light py-2 pr-4 pl-10 block w-full appearance-none" type="text" placeholder="Search the docs">
         <div class="pointer-events-none absolute pin-y pin-l pl-3 flex items-center">
-          <svg class="fill-current pointer-events-none text-slate w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></svg>
+          <svg class="fill-current pointer-events-none text-grey-darker w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></svg>
         </div>
       </div>
     </div>
@@ -43,18 +43,18 @@
       <nav id="nav" class="text-base overflow-y-scroll">
         @foreach ($page->navigation as $sectionName => $sectionItems)
         <div class="mb-8">
-          <p class="mb-4 text-slate-light uppercase tracking-wide font-bold text-xs">{{ $sectionName }}</p>
+          <p class="mb-4 text-grey-dark uppercase tracking-wide font-bold text-xs">{{ $sectionName }}</p>
           <ul>
             @foreach ($sectionItems as $name => $slugOrChildren)
               @if (is_string($slugOrChildren))
-                <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/' . $slugOrChildren) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren }}">{{ $name }}</a></li>
+                <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/' . $slugOrChildren) ? 'text-black font-bold' : 'text-grey-darkest' }}" href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren }}">{{ $name }}</a></li>
               @else
                 <li class="mb-3">
-                  <a href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren->first() }}" class="hover:underline block mb-2 {{ $page->anyChildrenActive($slugOrChildren) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}">{{ $name }}</a>
+                  <a href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren->first() }}" class="hover:underline block mb-2 {{ $page->anyChildrenActive($slugOrChildren) ? 'text-black font-bold' : 'text-grey-darkest' }}">{{ $name }}</a>
                   <ul class="pl-4 {{ $page->anyChildrenActive($slugOrChildren) ? 'block' : 'hidden' }}">
                   @foreach ($slugOrChildren as $title => $link)
                     <li class="mb-3">
-                      <a class="hover:underline {{ $page->active('/docs/' . $link) ? 'text-slate-darker font-bold' : 'text-slate-dark' }}" href="{{ $page->baseUrl }}/docs/{{ $link }}">
+                      <a class="hover:underline {{ $page->active('/docs/' . $link) ? 'text-black font-bold' : 'text-grey-darkest' }}" href="{{ $page->baseUrl }}/docs/{{ $link }}">
                         {{ $title }}
                       </a>
                     </li>
@@ -68,7 +68,7 @@
         @endforeach
       </nav>
     </div>
-    <div class="border-t border-smoke px-8 py-4">
+    <div class="border-t border-grey-light px-8 py-4">
       <div class="flex justify-center text-grey">
         <a class="block flex items-center hover:text-grey-darker mr-16" href="https://github.com/tailwindcss/tailwindcss">
           <svg class="fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>GitHub</title><path d="M10 0a10 10 0 0 0-3.16 19.49c.5.1.68-.22.68-.48l-.01-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.1.39-1.99 1.03-2.69a3.6 3.6 0 0 1 .1-2.64s.84-.27 2.75 1.02a9.58 9.58 0 0 1 5 0c1.91-1.3 2.75-1.02 2.75-1.02.55 1.37.2 2.4.1 2.64.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85l-.01 2.75c0 .26.18.58.69.48A10 10 0 0 0 10 0"/></svg>
@@ -100,7 +100,7 @@
         <div class="markdown">
           <h1>{{ $page->title }}</h1>
           @if ($page->description)
-            <div class="text-xl text-slate-light mb-4">
+            <div class="text-xl text-grey-dark mb-4">
               {{ $page->description }}
             </div>
           @endif

@@ -17,14 +17,14 @@ For example, `.pt-2` would add `.5rem` of padding to the top of the element, `.m
 
 <div class="flex items-start mt-8 text-sm">
   <div class="pr-12">
-    <div class="mb-3 text-slate uppercase">Class</div>
+    <div class="mb-3 text-grey-darker uppercase">Class</div>
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">p</code> Padding</div>
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">m</code> Margin</div>
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">-m</code> Negative Margin</div>
   </div>
   <div class="pl-12 pr-12 border-l">
-    <div class="mb-3 text-slate"><span class="uppercase">Side</span> <span class="text-slate-light text-xs">(optional)</span></div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded bg-smoke-light">&nbsp;</code> All <em class="text-xs text-slate-light">(default)</em></div>
+    <div class="mb-3 text-grey-darker"><span class="uppercase">Side</span> <span class="text-grey-dark text-xs">(optional)</span></div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded bg-grey-lighter">&nbsp;</code> All <em class="text-xs text-grey-dark">(default)</em></div>
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">t</code> Top</div>
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">r</code> Right</div>
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">b</code> Bottom</div>
@@ -33,7 +33,7 @@ For example, `.pt-2` would add `.5rem` of padding to the top of the element, `.m
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">y</code> Vertical</div>
   </div>
   <div class="pl-12 border-l">
-    <div class="mb-3 text-slate uppercase">Space</div>
+    <div class="mb-3 text-grey-darker uppercase">Space</div>
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">0</code> 0</div>
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">1</code> 0.25rem</div>
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">2</code> 0.5rem</div>
@@ -42,7 +42,7 @@ For example, `.pt-2` would add `.5rem` of padding to the top of the element, `.m
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">6</code> 1.5rem</div>
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">8</code> 2rem</div>
     <div><code class="inline-block my-1 mr-1 px-1 py-1 font-mono border rounded">px</code> 1px</div>
-    <div><code class="inline-block my-1 mr-1 px-1 py-1 font-mono border rounded">auto</code> auto <span class="text-slate-light text-xs">(margins only)</span></div>
+    <div><code class="inline-block my-1 mr-1 px-1 py-1 font-mono border rounded">auto</code> auto <span class="text-grey-dark text-xs">(margins only)</span></div>
   </div>
 </div>
 
@@ -59,7 +59,7 @@ For example, this config will _also_ generate hover and focus variants of the ma
 ```js
 {
     // ...
-    modules: { 
+    modules: {
         // ...
         margin: ['responsive', 'hover', 'focus'],
         negativeMargin: ['responsive', 'hover'],

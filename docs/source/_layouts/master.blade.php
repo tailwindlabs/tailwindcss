@@ -18,7 +18,7 @@
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   @stack('headScripts')
 </head>
-<body data-sidebar-visible="true" class="font-sans font-normal text-slate-darker leading-normal">
+<body data-sidebar-visible="true" class="font-sans font-normal text-black leading-normal">
 
 @yield('body')
 

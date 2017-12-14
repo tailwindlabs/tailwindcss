@@ -1,18 +1,6 @@
 var config = require('../defaultConfig')()
 
 config.colors = Object.assign(config.colors, {
-  'slate-darker': '#212b35',
-  'slate-dark': '#404e5c',
-  'slate': '#647382',
-  'slate-light': '#919eab',
-  'slate-lighter': '#c5ced6',
-
-  'smoke-darker': '#919eab',
-  'smoke-dark': '#c5ced6',
-  'smoke': '#dfe3e8',
-  'smoke-light': 'hsl(200, 33%, 96%)',
-  'smoke-lighter': 'hsl(200, 25%, 98%)',
-
   'tailwind-teal-light': '#5ebcca',
   'tailwind-teal': '#44a8b3',
   'tailwind-teal-dark': '#2f8696',

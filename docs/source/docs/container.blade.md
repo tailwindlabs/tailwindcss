@@ -22,25 +22,25 @@ description: "A component for fixing an element's width to the current breakpoin
     </thead>
     <tbody class="align-baseline">
       <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-purple-dark" rowspan="5">.container</td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-grey-dark"><span class="italic">None</span></td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">width: 100%;</td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-purple-dark" rowspan="5">.container</td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-grey-dark"><span class="italic">None</span></td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">width: 100%;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-grey-darker">sm <span class="text-grey-dark italic">(576px)</span></td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">max-width: 576px;</td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-grey-darker">sm <span class="text-grey-dark italic">(576px)</span></td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">max-width: 576px;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-grey-darker">md <span class="text-grey-dark italic">(768px)</span></td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">max-width: 768px;</td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-grey-darker">md <span class="text-grey-dark italic">(768px)</span></td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">max-width: 768px;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-grey-darker">lg <span class="text-grey-dark italic">(992px)</span></td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">max-width: 992px;</td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-grey-darker">lg <span class="text-grey-dark italic">(992px)</span></td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">max-width: 992px;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-grey-darker">xl <span class="text-grey-dark italic">(1200px)</span></td>
-        <td class="p-2 border-t border-smoke font-mono text-xs text-blue-dark">max-width: 1200px;</td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-grey-darker">xl <span class="text-grey-dark italic">(1200px)</span></td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">max-width: 1200px;</td>
       </tr>
     </tbody>
   </table>
