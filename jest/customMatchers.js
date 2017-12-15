@@ -11,11 +11,11 @@ expect.extend({
         message: () => `expected ${received} not to match CSS ${argument}`,
         pass: true,
       }
-    } else {
-      return {
-        message: () => `expected ${received} to match CSS ${argument}`,
-        pass: false,
-      }
+    }
+
+    return {
+      message: () => `expected ${received} to match CSS ${argument}`,
+      pass: false,
     }
   },
 })
