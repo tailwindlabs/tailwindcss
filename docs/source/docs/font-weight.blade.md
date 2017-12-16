@@ -5,7 +5,7 @@ description: "Utilities for controlling the font weight of an element."
 features:
   responsive: true
   customizable: true
-  hover: false
+  hover: true
   focus: false
 ---
 
@@ -61,6 +61,22 @@ features:
   ]
 ])
 
+## Hover
+
+In addition to the standard responsive variations, font weight utilities also come in `hover:` variations that apply the given font weight on hover.
+
+@component('_partials.code-sample')
+<div class="text-center text-blue-dark">
+  <a href="#" class="font-normal hover:font-bold">Hover over this link</a>
+</div>
+@endcomponent
+
+Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.
+
+```html
+<a href="#" class="... md:font-normal md:hover:font-bold ...">Link</a>
+```
+
 ## Customizing
 
 @include('_partials.variants-and-disabling', [
@@ -70,5 +86,6 @@ features:
     ],
     'variants' => [
         'responsive',
+        'hover',
     ],
 ])
