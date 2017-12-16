@@ -46,7 +46,7 @@ config.borderWidths = Object.assign(config.borderWidths, {
 })
 
 config.borderColors = Object.assign(config.colors, {
-  default: config.colors['slate-lighter'],
+  default: config.colors['grey-light'],
 })
 
 config.width = Object.assign(config.width, {
