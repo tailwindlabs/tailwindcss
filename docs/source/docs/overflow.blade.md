@@ -111,15 +111,15 @@ Use `.overflow-x-scroll` to allow horizontal scrolling if needed.
 
 ### Scroll vertically
 
-Use `.overflow-y-scroll` to allow horizontal scrolling if needed.
+Use `.overflow-y-scroll` to allow vertical scrolling if needed.
 
 @component('_partials.code-sample')
-<div class="overflow-scroll h-32 bg-grey-light text-grey-darker p-2">
+<div class="overflow-y-scroll h-32 bg-grey-light text-grey-darker p-2">
   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eleifend rutrum auctor. Phasellus convallis sagittis augue ut ornare. Vestibulum et gravida lectus, sed ultrices sapien. Nullam aliquet elit dui, vitae hendrerit lectus volutpat eget. In porttitor tincidunt egestas. Pellentesque laoreet ligula at est vulputate facilisis. Etiam tristique justo ut odio placerat ornare. Cras bibendum, orci at ornare tincidunt, lacus nunc gravida enim, sit amet euismod nunc lectus in lectus. Ut dictum nulla et arcu aliquet ornare. Aliquam et dapibus lectus. Aenean mattis elit mi, sed ultricies augue consectetur id. Sed id magna malesuada, luctus urna a, bibendum tortor. Cras cursus cursus ex. Nulla fringilla elit vitae imperdiet scelerisque. Donec ac sem eu diam convallis mollis a sed leo. Proin congue augue turpis, eget rutrum dolor ultricies non. Nulla blandit venenatis dapibus. Sed tincidunt mollis elit, quis suscipit nibh eleifend quis. Donec ex lorem, auctor eu rutrum in, blandit id dolor. Nulla molestie arcu turpis. In id felis vulputate, tempor massa eget, malesuada mauris. Quisque fringilla consequat metus, luctus scelerisque leo fringilla vel.
 </div>
 
 @slot('code')
-<div class="overflow-scroll h-32 ...">Lorem ipsum dolor sit amet...</div>
+<div class="overflow-y-scroll h-32 ...">Lorem ipsum dolor sit amet...</div>
 @endslot
 @endcomponent
 
