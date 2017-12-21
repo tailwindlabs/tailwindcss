@@ -24,7 +24,7 @@ function extractMinWidths(breakpoints) {
   })
 }
 
-export default function({ screens }) {
+export default function({ screens, naming: { container: ns } }) {
   const minWidths = extractMinWidths(screens)
 
   const atRules = _.map(minWidths, minWidth => {
@@ -33,7 +33,7 @@ export default function({ screens }) {
       params: `(min-width: ${minWidth})`,
     })
     atRule.append(
-      defineClass('container', {
+      defineClass(ns.base, {
         'max-width': minWidth,
       })
     )
@@ -41,7 +41,7 @@ export default function({ screens }) {
   })
 
   return [
-    defineClass('container', {
+    defineClass(ns.base, {
       width: '100%',
     }),
     ...atRules,

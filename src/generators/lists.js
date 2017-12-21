@@ -1,8 +1,8 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { lists: ns } }) {
   return defineClasses({
-    'list-reset': {
+    [ns.listReset]: {
       'list-style': 'none',
       padding: '0',
     },

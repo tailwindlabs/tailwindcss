@@ -1,24 +1,24 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { textStyle: ns } }) {
   return defineClasses({
-    italic: { 'font-style': 'italic' },
-    roman: { 'font-style': 'normal' },
+    [ns.italic]: { 'font-style': 'italic' },
+    [ns.roman]: { 'font-style': 'normal' },
 
-    uppercase: { 'text-transform': 'uppercase' },
-    lowercase: { 'text-transform': 'lowercase' },
-    capitalize: { 'text-transform': 'capitalize' },
-    'normal-case': { 'text-transform': 'none' },
+    [ns.uppercase]: { 'text-transform': 'uppercase' },
+    [ns.lowercase]: { 'text-transform': 'lowercase' },
+    [ns.capitalize]: { 'text-transform': 'capitalize' },
+    [ns.normalCase]: { 'text-transform': 'none' },
 
-    underline: { 'text-decoration': 'underline' },
-    'line-through': { 'text-decoration': 'line-through' },
-    'no-underline': { 'text-decoration': 'none' },
+    [ns.underline]: { 'text-decoration': 'underline' },
+    [ns.lineThrough]: { 'text-decoration': 'line-through' },
+    [ns.noUnderline]: { 'text-decoration': 'none' },
 
-    antialiased: {
+    [ns.antialiased]: {
       '-webkit-font-smoothing': 'antialiased',
       '-moz-osx-font-smoothing': 'grayscale',
     },
-    'subpixel-antialiased': {
+    [ns.subpixelAntialiased]: {
       '-webkit-font-smoothing': 'auto',
       '-moz-osx-font-smoothing': 'auto',
     },

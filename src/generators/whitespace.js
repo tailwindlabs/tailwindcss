@@ -1,17 +1,17 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { textWrap: ns } }) {
   return defineClasses({
-    'whitespace-normal': { 'white-space': 'normal' },
-    'whitespace-no-wrap': { 'white-space': 'nowrap' },
-    'whitespace-pre': { 'white-space': 'pre' },
-    'whitespace-pre-line': { 'white-space': 'pre-line' },
-    'whitespace-pre-wrap': { 'white-space': 'pre-wrap' },
+    [ns.whitespaceNormal]: { 'white-space': 'normal' },
+    [ns.whitespaceNoWrap]: { 'white-space': 'nowrap' },
+    [ns.whitespacePre]: { 'white-space': 'pre' },
+    [ns.whitespacePreLine]: { 'white-space': 'pre-line' },
+    [ns.whitespacePreWrap]: { 'white-space': 'pre-wrap' },
 
-    'break-words': { 'word-wrap': 'break-word' },
-    'break-normal': { 'word-wrap': 'normal' },
+    [ns.breakWords]: { 'word-wrap': 'break-word' },
+    [ns.breakNormal]: { 'word-wrap': 'normal' },
 
-    truncate: {
+    [ns.truncate]: {
       overflow: 'hidden',
       'text-overflow': 'ellipsis',
       'white-space': 'nowrap',

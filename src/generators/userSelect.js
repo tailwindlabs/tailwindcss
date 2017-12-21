@@ -1,8 +1,8 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { userSelect: ns } }) {
   return defineClasses({
-    'select-none': { 'user-select': 'none' },
-    'select-text': { 'user-select': 'text' },
+    [ns.selectNone]: { 'user-select': 'none' },
+    [ns.selectText]: { 'user-select': 'text' },
   })
 }

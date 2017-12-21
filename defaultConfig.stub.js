@@ -874,4 +874,321 @@ module.exports = {
     separator: ':',
   },
 
+  naming: {
+    backgroundColors: {
+      base: 'bg',
+      modifierPrefix: '-'
+    },
+    backgroundPositions: {
+      base: 'bg-',
+      sides: {
+        top: 'top',
+        right: 'right',
+        rightTop: 'right-top',
+        rightBottom: 'right-bottom',
+        bottom: 'bottom',
+        left: 'left',
+        leftTop: 'left-top',
+        leftBottom: 'left-bottom',
+        left: 'left',
+        center: 'center'
+      }
+    },
+    backgroundAttachment: {
+      fixed: 'bg-fixed',
+      local: 'bg-local',
+      scroll: 'bg-scroll'
+    },
+    backgroundRepeat: {
+      repeat: 'bg-repeat',
+      noRepeat: 'bg-no-repeat',
+      repeatX: 'bg-repeat-x',
+      repeatY: 'bg-repeat-y'
+    },
+    backgroundSize: {
+      contain: 'bg-contain',
+      cover: 'bg-cover',
+    },
+    borderColors: {
+      base: 'border',
+      modifierPrefix: '-'
+    },
+    borderStyle: {
+      solid: 'border-solid',
+      dashed: 'border-dashed',
+      dotted: 'border-dotted',
+      none: 'border-none'
+    },
+    borderWidths: {
+      base: 'border',
+      withSides: 'border-',
+      modifierPrefix: '-',
+      sides: {
+        top: 't',
+        right: 'r',
+        bottom: 'b',
+        left: 'l'
+      }
+    },
+    container: {
+      base: 'container'
+    },
+    cursor: {
+      auto: 'cursor-auto',
+      default: 'cursor-default',
+      pointer: 'cursor-pointer',
+      notAllowed: 'cursor-not-allowed',
+    },
+    display: {
+      block: 'block',
+      inlineBlock: 'inline-block',
+      inline: 'inline',
+      table: 'table',
+      tableRow: 'table-row',
+      tableCell: 'table-cell',
+      hidden: 'hidden'
+    },
+    flex: {
+      flex: 'flex',
+      inlineFlex: 'inline-flex',
+      flexRow: 'flex-row',
+      flexRowReverse: 'flex-row-reverse',
+      flexCol: 'flex-col',
+      flexColReverse: 'flex-col-reverse',
+      flexWrap: 'flex-wrap',
+      flexWrapReverse: 'flex-wrap-reverse',
+      flexNoWrap: 'flex-no-wrap',
+      itemsStart: 'items-start',
+      itemsEnd: 'items-end',
+      itemsCenter: 'items-center',
+      itemsBaseline: 'items-baseline',
+      itemsStretch: 'items-stretch',
+      selfAuto: 'self-auto',
+      selfStart: 'self-start',
+      selfEnd: 'self-end',
+      selfCenter: 'self-center',
+      selfStretch: 'self-stretch',
+      justifyStart: 'justify-start',
+      justifyEnd: 'justify-end',
+      justifyCenter: 'justify-center',
+      justifyBetween: 'justify-between',
+      justifyAround: 'justify-around',
+      contentCenter: 'content-center',
+      contentStart: 'content-start',
+      contentEnd: 'content-end',
+      contentBetween: 'content-between',
+      contentAround: 'content-around',
+      flex1: 'flex-1',
+      flexAuto: 'flex-auto',
+      flexInitial: 'flex-initial',
+      flexNone: 'flex-none',
+      flexGrow: 'flex-grow',
+      flexShrink: 'flex-shrink',
+      flexNoGrow: 'flex-no-grow',
+      flexNoShrink: 'flex-no-shrink'
+    },
+    floats: {
+      floatRight: 'float-right',
+      floatLeft: 'float-left',
+      floatNone: 'float-none',
+      clearfix: 'clearfix'
+    },
+    forms: {
+      appearanceNone: 'appearance-none'
+    },
+    lists: {
+      listReset: 'list-reset'
+    },
+    opacity: {
+      base: 'opacity',
+      modifierPrefix: '-'
+    },
+    overflow: {
+      base: 'overflow-',
+      auto: 'auto',
+      hidden: 'hidden',
+      visible: 'visible',
+      scroll: 'scroll',
+      xScroll: 'x-scroll',
+      yScroll: 'y-scroll',
+      scrollingTouch: 'scrolling-touch',
+      scrollingAuto: 'scrolling-auto',
+    },
+    pointerEvents: {
+      pointerAuto: 'pointer-events-auto',
+      pointerNone: 'pointer-events-none',
+    },
+    position: {
+      static: 'static',
+      fixed: 'fixed',
+      absolute: 'absolute',
+      relative: 'relative',
+      pin: 'pin',
+      pinNone: 'pin-none',
+      pinT: 'pin-t',
+      pinR: 'pin-r',
+      pinB: 'pin-b',
+      pinL: 'pin-l',
+      pinX: 'pin-x',
+      pinY: 'pin-y'
+    },
+    resize: {
+      resize: 'resize',
+      resizeNone: 'resize-none',
+      resizeX: 'resize-x',
+      resizeY: 'resize-y'
+    },
+    svgFill: {
+      base: 'fill',
+      modifierPrefix: '-'
+    },
+    svgStroke: {
+      base: 'stroke',
+      modifierPrefix: '-'
+    },
+    rounded: {
+      base: 'rounded',
+      withSides: 'rounded-',
+      modifierPrefix: '-',
+      sidesSeparator: '',
+      sides: {
+        top: 't',
+        right: 'r',
+        bottom: 'b',
+        left: 'l'
+      }
+    },
+    shadow: {
+      base: 'shadow',
+      modifierPrefix: '-'
+    },
+    height: {
+      base: 'h',
+      modifierPrefix: '-'
+    },
+    maxHeight: {
+      base: 'max-h',
+      modifierPrefix: '-'
+    },
+    minHeight: {
+      base: 'min-h',
+      modifierPrefix: '-'
+    },
+    width: {
+      base: 'w',
+      modifierPrefix: '-'
+    },
+    maxWidth: {
+      base: 'max-w',
+      modifierPrefix: '-'
+    },
+    minWidth: {
+      base: 'min-w',
+      modifierPrefix: '-'
+    },
+    margin: {
+      base: 'm',
+      modifierPrefix: '-',
+      y: 'y',
+      x: 'x',
+      t: 't',
+      r: 'r',
+      b: 'b',
+      l: 'l'
+    },
+    negativeMargin: {
+      base: '-m',
+      modifierPrefix: '-',
+      y: 'y',
+      x: 'x',
+      t: 't',
+      r: 'r',
+      b: 'b',
+      l: 'l'
+    },
+    padding: {
+      base: 'p',
+      modifierPrefix: '-',
+      y: 'y',
+      x: 'x',
+      t: 't',
+      r: 'r',
+      b: 'b',
+      l: 'l'
+    },
+    textAlign: {
+      left: 'text-left',
+      center: 'text-center',
+      right: 'text-right',
+      justify: 'text-justify'
+    },
+    textColors: {
+      base: 'text',
+      modifierPrefix: '-'
+    },
+    fonts: {
+      base: 'font',
+      modifierPrefix: '-'
+    },
+    leading: {
+      base: 'leading',
+      modifierPrefix: '-'
+    },
+    textSizes: {
+      base: 'text',
+      modifierPrefix: '-'
+    },
+    textStyle: {
+      italic: 'italic',
+      roman: 'roman',
+      uppercase: 'uppercase',
+      lowercase: 'lowercase',
+      capitalize: 'capitalize',
+      normalCase: 'normal-case',
+      underline: 'underline',
+      lineThrough: 'line-through',
+      noUnderline: 'no-underline',
+      antialiased: 'antialiased',
+      subpixelAntialiased: 'subpixel-antialiased'
+    },
+    textTracking: {
+      base: 'tracking',
+      modifierPrefix: '-'
+    },
+    fontWeights: {
+      base: 'font',
+      modifierPrefix: '-'
+    },
+    textWrap: {
+      whitespaceNormal: 'whitespace-normal',
+      whitespaceNoWrap: 'whitespace-no-wrap',
+      whitespacePre: 'whitespace-pre',
+      whitespacePreLine: 'whitespace-pre-line',
+      whitespacePreWrap: 'whitespace-pre-wrap',
+      breakWords: 'break-words',
+      breakNormal: 'break-normal',
+      truncate: 'truncate'
+    },
+    userSelect: {
+      selectNone: 'select-none',
+      selectText: 'select-text'
+    },
+    verticalAlign: {
+      alignBaseline: 'align-baseline',
+      alignTop: 'align-top',
+      alignMiddle: 'align-middle',
+      alignBottom: 'align-bottom',
+      alignTextTop: 'align-text-top',
+      alignTextBottom: 'align-text-bottom'
+    },
+    visibility: {
+      visible: 'visible',
+      invisible: 'invisible'
+    },
+    zIndex: {
+      base: 'z',
+      modifierPrefix: '-'
+    }
+  }
+
 }

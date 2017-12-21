@@ -1,11 +1,11 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { backgroundSize: ns } }) {
   return defineClasses({
-    'bg-cover': {
+    [ns.cover]: {
       'background-size': 'cover',
     },
-    'bg-contain': {
+    [ns.contain]: {
       'background-size': 'contain',
     },
   })

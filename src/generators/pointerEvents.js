@@ -1,8 +1,8 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { pointerEvents: ns } }) {
   return defineClasses({
-    'pointer-events-none': { 'pointer-events': 'none' },
-    'pointer-events-auto': { 'pointer-events': 'auto' },
+    [ns.pointerNone]: { 'pointer-events': 'none' },
+    [ns.pointerAuto]: { 'pointer-events': 'auto' },
   })
 }

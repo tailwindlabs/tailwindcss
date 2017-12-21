@@ -1,10 +1,10 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { backgroundRepeat: ns } }) {
   return defineClasses({
-    'bg-repeat': { 'background-repeat': 'repeat' },
-    'bg-no-repeat': { 'background-repeat': 'no-repeat' },
-    'bg-repeat-x': { 'background-repeat': 'repeat-x' },
-    'bg-repeat-y': { 'background-repeat': 'repeat-y' },
+    [ns.repeat]: { 'background-repeat': 'repeat' },
+    [ns.noRepeat]: { 'background-repeat': 'no-repeat' },
+    [ns.repeatX]: { 'background-repeat': 'repeat-x' },
+    [ns.repeatY]: { 'background-repeat': 'repeat-y' },
   })
 }
