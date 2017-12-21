@@ -1,28 +1,28 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { position: ns } }) {
   return defineClasses({
-    static: { position: 'static' },
-    fixed: { position: 'fixed' },
-    absolute: { position: 'absolute' },
-    relative: { position: 'relative' },
-    'pin-none': {
+    [ns.static]: { position: 'static' },
+    [ns.fixed]: { position: 'fixed' },
+    [ns.absolute]: { position: 'absolute' },
+    [ns.relative]: { position: 'relative' },
+    [ns.pinNone]: {
       top: 'auto',
       right: 'auto',
       bottom: 'auto',
       left: 'auto',
     },
-    pin: {
+    [ns.pin]: {
       top: 0,
       right: 0,
       bottom: 0,
       left: 0,
     },
-    'pin-y': { top: 0, bottom: 0 },
-    'pin-x': { right: 0, left: 0 },
-    'pin-t': { top: 0 },
-    'pin-r': { right: 0 },
-    'pin-b': { bottom: 0 },
-    'pin-l': { left: 0 },
+    [ns.pinY]: { top: 0, bottom: 0 },
+    [ns.pinX]: { right: 0, left: 0 },
+    [ns.pinT]: { top: 0 },
+    [ns.pinR]: { right: 0 },
+    [ns.pinB]: { bottom: 0 },
+    [ns.pinL]: { left: 0 },
   })
 }

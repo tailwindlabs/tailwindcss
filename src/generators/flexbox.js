@@ -1,116 +1,116 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { flex: ns } }) {
   return defineClasses({
-    flex: {
+    [ns.flex]: {
       display: 'flex',
     },
-    'inline-flex': {
+    [ns.inlineFlex]: {
       display: 'inline-flex',
     },
-    'flex-row': {
+    [ns.flexRow]: {
       'flex-direction': 'row',
     },
-    'flex-row-reverse': {
+    [ns.flexRowReverse]: {
       'flex-direction': 'row-reverse',
     },
-    'flex-col': {
+    [ns.flexCol]: {
       'flex-direction': 'column',
     },
-    'flex-col-reverse': {
+    [ns.flexColReverse]: {
       'flex-direction': 'column-reverse',
     },
-    'flex-wrap': {
+    [ns.flexWrap]: {
       'flex-wrap': 'wrap',
     },
-    'flex-wrap-reverse': {
+    [ns.flexWrapReverse]: {
       'flex-wrap': 'wrap-reverse',
     },
-    'flex-no-wrap': {
+    [ns.flexNoWrap]: {
       'flex-wrap': 'nowrap',
     },
-    'items-start': {
+    [ns.itemsStart]: {
       'align-items': 'flex-start',
     },
-    'items-end': {
+    [ns.itemsEnd]: {
       'align-items': 'flex-end',
     },
-    'items-center': {
+    [ns.itemsCenter]: {
       'align-items': 'center',
     },
-    'items-baseline': {
+    [ns.itemsBaseline]: {
       'align-items': 'baseline',
     },
-    'items-stretch': {
+    [ns.itemsStretch]: {
       'align-items': 'stretch',
     },
-    'self-auto': {
+    [ns.selfAuto]: {
       'align-self': 'auto',
     },
-    'self-start': {
+    [ns.selfStart]: {
       'align-self': 'flex-start',
     },
-    'self-end': {
+    [ns.selfEnd]: {
       'align-self': 'flex-end',
     },
-    'self-center': {
+    [ns.selfCenter]: {
       'align-self': 'center',
     },
-    'self-stretch': {
+    [ns.selfStretch]: {
       'align-self': 'stretch',
     },
-    'justify-start': {
+    [ns.justifyStart]: {
       'justify-content': 'flex-start',
     },
-    'justify-end': {
+    [ns.justifyEnd]: {
       'justify-content': 'flex-end',
     },
-    'justify-center': {
+    [ns.justifyCenter]: {
       'justify-content': 'center',
     },
-    'justify-between': {
+    [ns.justifyBetween]: {
       'justify-content': 'space-between',
     },
-    'justify-around': {
+    [ns.justifyAround]: {
       'justify-content': 'space-around',
     },
-    'content-center': {
+    [ns.contentCenter]: {
       'align-content': 'center',
     },
-    'content-start': {
+    [ns.contentStart]: {
       'align-content': 'flex-start',
     },
-    'content-end': {
+    [ns.contentEnd]: {
       'align-content': 'flex-end',
     },
-    'content-between': {
+    [ns.contentBetween]: {
       'align-content': 'space-between',
     },
-    'content-around': {
+    [ns.contentAround]: {
       'align-content': 'space-around',
     },
-    'flex-1': {
+    [ns.flex1]: {
       flex: '1',
     },
-    'flex-auto': {
+    [ns.flexAuto]: {
       flex: 'auto',
     },
-    'flex-initial': {
+    [ns.flexInitial]: {
       flex: 'initial',
     },
-    'flex-none': {
+    [ns.flexNone]: {
       flex: 'none',
     },
-    'flex-grow': {
+    [ns.flexGrow]: {
       'flex-grow': '1',
     },
-    'flex-shrink': {
+    [ns.flexShrink]: {
       'flex-shrink': '1',
     },
-    'flex-no-grow': {
+    [ns.flexNoGrow]: {
       'flex-grow': '0',
     },
-    'flex-no-shrink': {
+    [ns.flexNoShrink]: {
       'flex-shrink': '0',
     },
   })

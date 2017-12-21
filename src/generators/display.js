@@ -1,26 +1,26 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { display: ns } }) {
   return defineClasses({
-    block: {
+    [ns.block]: {
       display: 'block',
     },
-    'inline-block': {
+    [ns.inlineBlock]: {
       display: 'inline-block',
     },
-    inline: {
+    [ns.inline]: {
       display: 'inline',
     },
-    table: {
+    [ns.table]: {
       display: 'table',
     },
-    'table-row': {
+    [ns.tableRow]: {
       display: 'table-row',
     },
-    'table-cell': {
+    [ns.tableCell]: {
       display: 'table-cell',
     },
-    hidden: {
+    [ns.hidden]: {
       display: 'none',
     },
   })

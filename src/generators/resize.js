@@ -1,10 +1,10 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { resize: ns } }) {
   return defineClasses({
-    'resize-none': { resize: 'none' },
-    'resize-y': { resize: 'vertical' },
-    'resize-x': { resize: 'horizontal' },
-    resize: { resize: 'both' },
+    [ns.resizeNone]: { resize: 'none' },
+    [ns.resizeY]: { resize: 'vertical' },
+    [ns.resizeX]: { resize: 'horizontal' },
+    [ns.resize]: { resize: 'both' },
   })
 }

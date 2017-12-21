@@ -1,10 +1,10 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { textAlign: ns } }) {
   return defineClasses({
-    'text-left': { 'text-align': 'left' },
-    'text-center': { 'text-align': 'center' },
-    'text-right': { 'text-align': 'right' },
-    'text-justify': { 'text-align': 'justify' },
+    [ns.left]: { 'text-align': 'left' },
+    [ns.center]: { 'text-align': 'center' },
+    [ns.right]: { 'text-align': 'right' },
+    [ns.justify]: { 'text-align': 'justify' },
   })
 }

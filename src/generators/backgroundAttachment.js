@@ -1,9 +1,9 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { backgroundAttachment: ns } }) {
   return defineClasses({
-    'bg-fixed': { 'background-attachment': 'fixed' },
-    'bg-local': { 'background-attachment': 'local' },
-    'bg-scroll': { 'background-attachment': 'scroll' },
+    [ns.fixed]: { 'background-attachment': 'fixed' },
+    [ns.local]: { 'background-attachment': 'local' },
+    [ns.scroll]: { 'background-attachment': 'scroll' },
   })
 }

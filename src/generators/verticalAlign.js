@@ -1,12 +1,12 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { verticalAlign: ns } }) {
   return defineClasses({
-    'align-baseline': { 'vertical-align': 'baseline' },
-    'align-top': { 'vertical-align': 'top' },
-    'align-middle': { 'vertical-align': 'middle' },
-    'align-bottom': { 'vertical-align': 'bottom' },
-    'align-text-top': { 'vertical-align': 'text-top' },
-    'align-text-bottom': { 'vertical-align': 'text-bottom' },
+    [ns.alignBaseline]: { 'vertical-align': 'baseline' },
+    [ns.alignTop]: { 'vertical-align': 'top' },
+    [ns.alignMiddle]: { 'vertical-align': 'middle' },
+    [ns.alignBottom]: { 'vertical-align': 'bottom' },
+    [ns.alignTextTop]: { 'vertical-align': 'text-top' },
+    [ns.alignTextBottom]: { 'vertical-align': 'text-bottom' },
   })
 }

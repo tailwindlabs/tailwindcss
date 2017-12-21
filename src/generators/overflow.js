@@ -1,20 +1,20 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { overflow: ns } }) {
   return defineClasses({
-    'overflow-auto': { overflow: 'auto' },
-    'overflow-hidden': { overflow: 'hidden' },
-    'overflow-visible': { overflow: 'visible' },
-    'overflow-scroll': { overflow: 'scroll' },
-    'overflow-x-scroll': {
+    [`${ns.base}${ns.auto}`]: { overflow: 'auto' },
+    [`${ns.base}${ns.hidden}`]: { overflow: 'hidden' },
+    [`${ns.base}${ns.visible}`]: { overflow: 'visible' },
+    [`${ns.base}${ns.scroll}`]: { overflow: 'scroll' },
+    [`${ns.base}${ns.xScroll}`]: {
       'overflow-x': 'auto',
       '-ms-overflow-style': '-ms-autohiding-scrollbar',
     },
-    'overflow-y-scroll': {
+    [`${ns.base}${ns.yScroll}`]: {
       'overflow-y': 'auto',
       '-ms-overflow-style': '-ms-autohiding-scrollbar',
     },
-    'scrolling-touch': { '-webkit-overflow-scrolling': 'touch' },
-    'scrolling-auto': { '-webkit-overflow-scrolling': 'auto' },
+    [`${ns.scrollingTouch}`]: { '-webkit-overflow-scrolling': 'touch' },
+    [`${ns.scrollingAuto}`]: { '-webkit-overflow-scrolling': 'auto' },
   })
 }

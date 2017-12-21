@@ -1,10 +1,10 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { cursor: ns } }) {
   return defineClasses({
-    'cursor-auto': { cursor: 'auto' },
-    'cursor-default': { cursor: 'default' },
-    'cursor-pointer': { cursor: 'pointer' },
-    'cursor-not-allowed': { cursor: 'not-allowed' },
+    [ns.auto]: { cursor: 'auto' },
+    [ns.default]: { cursor: 'default' },
+    [ns.pointer]: { cursor: 'pointer' },
+    [ns.notAllowed]: { cursor: 'not-allowed' },
   })
 }

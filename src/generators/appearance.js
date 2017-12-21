@@ -1,7 +1,7 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { forms: ns } }) {
   return defineClasses({
-    'appearance-none': { appearance: 'none' },
+    [ns.appearanceNone]: { appearance: 'none' },
   })
 }

@@ -1,45 +1,45 @@
 import _ from 'lodash'
 import defineClasses from '../util/defineClasses'
 
-function defineBorderRadiusUtilities(borderRadiuses) {
+function defineBorderRadiusUtilities(borderRadiuses, ns) {
   const generators = [
     (radius, modifier) =>
       defineClasses({
-        [`rounded${modifier}`]: {
+        [`${ns.base}${modifier}`]: {
           'border-radius': `${radius}`,
         },
       }),
     (radius, modifier) =>
       defineClasses({
-        [`rounded-t${modifier}`]: {
+        [`${ns.withSides}${ns.sides.top}${modifier}`]: {
           'border-top-left-radius': `${radius}`,
           'border-top-right-radius': `${radius}`,
         },
-        [`rounded-r${modifier}`]: {
+        [`${ns.withSides}${ns.sides.right}${modifier}`]: {
           'border-top-right-radius': `${radius}`,
           'border-bottom-right-radius': `${radius}`,
         },
-        [`rounded-b${modifier}`]: {
+        [`${ns.withSides}${ns.sides.bottom}${modifier}`]: {
           'border-bottom-right-radius': `${radius}`,
           'border-bottom-left-radius': `${radius}`,
         },
-        [`rounded-l${modifier}`]: {
+        [`${ns.withSides}${ns.sides.left}${modifier}`]: {
           'border-top-left-radius': `${radius}`,
           'border-bottom-left-radius': `${radius}`,
         },
       }),
     (radius, modifier) =>
       defineClasses({
-        [`rounded-tl${modifier}`]: {
+        [`${ns.withSides}${ns.sides.top}${ns.sidesSeparator}${ns.sides.left}${modifier}`]: {
           'border-top-left-radius': `${radius}`,
         },
-        [`rounded-tr${modifier}`]: {
+        [`${ns.withSides}${ns.sides.top}${ns.sidesSeparator}${ns.sides.right}${modifier}`]: {
           'border-top-right-radius': `${radius}`,
         },
-        [`rounded-br${modifier}`]: {
+        [`${ns.withSides}${ns.sides.bottom}${ns.sidesSeparator}${ns.sides.right}${modifier}`]: {
           'border-bottom-right-radius': `${radius}`,
         },
-        [`rounded-bl${modifier}`]: {
+        [`${ns.withSides}${ns.sides.bottom}${ns.sidesSeparator}${ns.sides.left}${modifier}`]: {
           'border-bottom-left-radius': `${radius}`,
         },
       }),
@@ -47,11 +47,11 @@ function defineBorderRadiusUtilities(borderRadiuses) {
 
   return _.flatMap(generators, generator => {
     return _.flatMap(borderRadiuses, (radius, modifier) => {
-      return generator(radius, modifier === 'default' ? '' : `-${modifier}`)
+      return generator(radius, modifier === 'default' ? '' : `${ns.modifierPrefix}${modifier}`)
     })
   })
 }
 
-module.exports = function({ borderRadius }) {
-  return defineBorderRadiusUtilities(borderRadius)
+module.exports = function({ borderRadius, naming: { rounded: ns } }) {
+  return defineBorderRadiusUtilities(borderRadius, ns)
 }

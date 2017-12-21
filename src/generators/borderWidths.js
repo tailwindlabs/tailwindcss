@@ -1,26 +1,26 @@
 import _ from 'lodash'
 import defineClasses from '../util/defineClasses'
 
-function defineBorderWidthUtilities(borderWidths) {
+function defineBorderWidthUtilities(borderWidths, ns) {
   const generators = [
     (width, modifier) =>
       defineClasses({
-        [`border${modifier}`]: {
+        [`${ns.base}${modifier}`]: {
           'border-width': `${width}`,
         },
       }),
     (width, modifier) =>
       defineClasses({
-        [`border-t${modifier}`]: {
+        [`${ns.withSides}${ns.sides.top}${modifier}`]: {
           'border-top-width': `${width}`,
         },
-        [`border-r${modifier}`]: {
+        [`${ns.withSides}${ns.sides.right}${modifier}`]: {
           'border-right-width': `${width}`,
         },
-        [`border-b${modifier}`]: {
+        [`${ns.withSides}${ns.sides.bottom}${modifier}`]: {
           'border-bottom-width': `${width}`,
         },
-        [`border-l${modifier}`]: {
+        [`${ns.withSides}${ns.sides.left}${modifier}`]: {
           'border-left-width': `${width}`,
         },
       }),
@@ -28,11 +28,11 @@ function defineBorderWidthUtilities(borderWidths) {
 
   return _.flatMap(generators, generator => {
     return _.flatMap(borderWidths, (width, modifier) => {
-      return generator(width, modifier === 'default' ? '' : `-${modifier}`)
+      return generator(width, modifier === 'default' ? '' : `${ns.modifierPrefix}${modifier}`)
     })
   })
 }
 
-module.exports = function({ borderWidths }) {
-  return defineBorderWidthUtilities(borderWidths)
+module.exports = function({ borderWidths, naming: { borderWidths: ns } }) {
+  return defineBorderWidthUtilities(borderWidths, ns)
 }

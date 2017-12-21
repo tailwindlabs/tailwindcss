@@ -1,8 +1,8 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { visibility: ns } }) {
   return defineClasses({
-    visible: { visibility: 'visible' },
-    invisible: { visibility: 'hidden' },
+    [ns.visible]: { visibility: 'visible' },
+    [ns.invisible]: { visibility: 'hidden' },
   })
 }

@@ -1,17 +1,17 @@
 import defineClasses from '../util/defineClasses'
 
-export default function() {
+export default function({ naming: { borderStyle: ns } }) {
   return defineClasses({
-    'border-solid': {
+    [ns.solid]: {
       'border-style': 'solid',
     },
-    'border-dashed': {
+    [ns.dashed]: {
       'border-style': 'dashed',
     },
-    'border-dotted': {
+    [ns.dotted]: {
       'border-style': 'dotted',
     },
-    'border-none': {
+    [ns.none]: {
       'border-style': 'none',
     },
   })
