@@ -28,6 +28,11 @@ features:
       'cursor: not-allowed;',
       "Set the mouse cursor to indicate that the action will not be executed.",
     ],
+    [
+      '.cursor-wait',
+      'cursor: wait;',
+      "Set the mouse cursor to indicate that an action is being executed.",
+    ],
   ]
 ])
 
