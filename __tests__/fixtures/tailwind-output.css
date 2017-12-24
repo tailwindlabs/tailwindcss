@@ -2183,6 +2183,10 @@ button,
   cursor: not-allowed;
 }
 
+.cursor-wait {
+  cursor: wait;
+}
+
 .block {
   display: block;
 }
@@ -6066,6 +6070,10 @@ button,
     cursor: not-allowed;
   }
 
+  .sm\:cursor-wait {
+    cursor: wait;
+  }
+
   .sm\:block {
     display: block;
   }
@@ -9940,6 +9948,10 @@ button,
 
   .md\:cursor-not-allowed {
     cursor: not-allowed;
+  }
+
+  .md\:cursor-wait {
+    cursor: wait;
   }
 
   .md\:block {
@@ -13818,6 +13830,10 @@ button,
     cursor: not-allowed;
   }
 
+  .lg\:cursor-wait {
+    cursor: wait;
+  }
+
   .lg\:block {
     display: block;
   }
@@ -17692,6 +17708,10 @@ button,
 
   .xl\:cursor-not-allowed {
     cursor: not-allowed;
+  }
+
+  .xl\:cursor-wait {
+    cursor: wait;
   }
 
   .xl\:block {
