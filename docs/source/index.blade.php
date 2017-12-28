@@ -43,7 +43,7 @@
     <div class="pb-4 flex justify-center flex-wrap max-w-md xl:max-w-full border-b-2 border-grey-light">
       <div class="mb-8 w-64 md:flex-x-center">
         <div class="flex items-center">
-          <img class="h-16 w-16 rounded-full" src="https://pbs.twimg.com/profile_images/887661330832003072/Zp6rA_e2_400x400.jpg" alt="">
+          <img class="h-16 w-16 rounded-full" src="https://twitter.com/adamwathan/profile_image?size=original" alt="">
           <div class="pl-4">
             <a href="https://twitter.com/adamwathan" class="block hover:underline text-dark text-lg text-medium">Adam Wathan</a>
             <a href="https://twitter.com/adamwathan" class="block hover:underline text-tailwind-teal-dark text-sm">@adamwathan</a>
@@ -52,7 +52,7 @@
       </div>
       <div class="mb-8 w-64 md:flex-x-center">
         <div class="flex items-center">
-          <img class="h-16 w-16 rounded-full" src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg" alt="">
+          <img class="h-16 w-16 rounded-full" src="https://twitter.com/reinink/profile_image?size=original" alt="">
           <div class="pl-4">
             <a href="https://twitter.com/reinink" class="block hover:underline text-dark text-lg text-medium">Jonathan Reinink</a>
             <a href="https://twitter.com/reinink" class="block hover:underline text-tailwind-teal-dark text-sm">@reinink</a>
@@ -61,7 +61,7 @@
       </div>
       <div class="mb-8 w-64 md:flex-x-center">
         <div class="flex items-center">
-          <img class="h-16 w-16 rounded-full" src="https://pbs.twimg.com/profile_images/929910740156215296/yDEC9GW9_400x400.jpg">
+          <img class="h-16 w-16 rounded-full" src="https://twitter.com/davidhemphill/profile_image?size=original">
           <div class="pl-4">
             <a href="https://twitter.com/davidhemphill" class="block hover:underline text-dark text-lg text-medium">David Hemphill</a>
             <a href="https://twitter.com/davidhemphill" class="block hover:underline text-tailwind-teal-dark text-sm">@davidhemphill</a>
@@ -70,7 +70,7 @@
       </div>
       <div class="mb-8 w-64 md:flex-x-center">
         <div class="flex items-center">
-          <img class="h-16 w-16 rounded-full" src="https://pbs.twimg.com/profile_images/875010472105222144/Pkt9zqPY_400x400.jpg" alt="">
+          <img class="h-16 w-16 rounded-full" src="https://twitter.com/steveschoger/profile_image?size=original" alt="">
           <div class="pl-4">
             <a href="https://twitter.com/steveschoger" class="block hover:underline text-dark text-lg text-medium">Steve Schoger</a>
             <a href="https://twitter.com/steveschoger" class="block hover:underline text-tailwind-teal-dark text-sm">@steveschoger</a>
