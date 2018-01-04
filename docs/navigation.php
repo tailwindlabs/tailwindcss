@@ -50,6 +50,9 @@ return [
             'User Select' => 'user-select',
         ],
         'Lists' => 'lists',
+        'Object' => [
+            'Fit' => 'object-fit',
+        ],
         'Opacity' => 'opacity',
         'Overflow' => 'overflow',
         'Positioning' => 'positioning',

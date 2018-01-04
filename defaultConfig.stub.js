@@ -835,6 +835,7 @@ module.exports = {
     minHeight: ['responsive'],
     minWidth: ['responsive'],
     negativeMargin: ['responsive'],
+    objectFit: false,
     opacity: ['responsive'],
     overflow: ['responsive'],
     padding: ['responsive'],
