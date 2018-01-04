@@ -52,6 +52,7 @@ return [
         'Lists' => 'lists',
         'Object' => [
             'Fit' => 'object-fit',
+            'Position' => 'object-position',
         ],
         'Opacity' => 'opacity',
         'Overflow' => 'overflow',
