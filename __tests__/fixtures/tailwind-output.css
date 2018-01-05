@@ -3481,6 +3481,10 @@ button,
   left: 0;
 }
 
+.pin-t-100 {
+  top: 100%;
+}
+
 .resize-none {
   resize: none;
 }
@@ -7363,6 +7367,10 @@ button,
   .sm\:pin-l {
     left: 0;
   }
+  
+  .sm\:pin-t-100 {
+    top: 100%;
+  }
 
   .sm\:resize-none {
     resize: none;
@@ -11238,6 +11246,10 @@ button,
 
   .md\:pin-l {
     left: 0;
+  }
+
+  .md\:pin-t-100 {
+    top: 100%;
   }
 
   .md\:resize-none {
@@ -15116,6 +15128,10 @@ button,
     left: 0;
   }
 
+  .lg\:pin-t-100 {
+    top: 100%;
+  }
+
   .lg\:resize-none {
     resize: none;
   }
@@ -18990,6 +19006,10 @@ button,
 
   .xl\:pin-l {
     left: 0;
+  }
+ 
+  .xl\:pin-t-100 {
+    top: 100%;
   }
 
   .xl\:resize-none {
