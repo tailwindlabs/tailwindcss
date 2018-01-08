@@ -24,5 +24,6 @@ export default function() {
     'pin-r': { right: 0 },
     'pin-b': { bottom: 0 },
     'pin-l': { left: 0 },
+    'pin-t-100': { top: '100%' },
   })
 }
