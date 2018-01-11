@@ -15,7 +15,7 @@ features:
   'rows' => [
     [
       '.font-sans',
-      "font-family:\n  -apple-system,\n  BlinkMacSystemFont,\n  Segoe UI,\n  Roboto,\n  Oxygen,\n  Ubuntu,\n  Cantarell,\n  Fira Sans,\n  Droid Sans,\n  Helvetica Neue,\n  sans-serif;",
+      "font-family:\n  system-ui,\n  BlinkMacSystemFont,\n  -apple-system,\n  Segoe UI,\n  Roboto,\n  Oxygen,\n  Ubuntu,\n  Cantarell,\n  Fira Sans,\n  Droid Sans,\n  Helvetica Neue,\n  sans-serif;",
       'Set the font family to the sans font stack.',
     ],
     [
