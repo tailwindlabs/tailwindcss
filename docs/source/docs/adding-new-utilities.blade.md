@@ -30,7 +30,7 @@ For example, given the following CSS:
 }
 
 .bg-green {
-  background-color: #0000ff;
+  background-color: #00ff00;
 }
 ```
 
