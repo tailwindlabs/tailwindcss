@@ -23,9 +23,9 @@ it('generates the right CSS', () => {
 
 it('does not add any CSS if no Tailwind features are used', () => {
   return postcss([tailwind()])
-    .process('')
+    .process('.foo { color: blue; }')
     .then(result => {
-      expect(result.css).toBe('')
+      expect(result.css).toMatchCss('.foo { color: blue; }')
     })
 })
 
