@@ -47,9 +47,9 @@
     "fs-extra": "^4.0.2",
     "lodash": "^4.17.4",
     "nodemon": "^1.11.0",
+    "perfectionist": "^2.4.0",
     "postcss": "^6.0.9",
-    "postcss-functions": "^3.0.0",
-    "stylefmt": "^6.0.0"
+    "postcss-functions": "^3.0.0"
   },
   "browserslist": [
     "> 1%"
