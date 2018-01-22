@@ -1,15 +1,10 @@
-import defineClasses from '../util/defineClasses'
+import _ from 'lodash'
+import defineClass from '../util/defineClass'
 
-export default function() {
-  return defineClasses({
-    'bg-auto': {
-      'background-size': 'auto',
-    },
-    'bg-cover': {
-      'background-size': 'cover',
-    },
-    'bg-contain': {
-      'background-size': 'contain',
-    },
+export default function({ backgroundSizes }) {
+  return _.map(backgroundSizes, (size, className) => {
+    return defineClass(`bg-${className}`, {
+      'background-size': size,
+    })
   })
 }

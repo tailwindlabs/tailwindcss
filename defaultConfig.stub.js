@@ -362,6 +362,28 @@ module.exports = {
 
   /*
   |-----------------------------------------------------------------------------
+  | Background sizes              https://tailwindcss.com/docs/background-color
+  |-----------------------------------------------------------------------------
+  |
+  | Here is where you define your background sizes. These can take one or two
+  | values depending on your needs. The first value will set the image's width
+  | while the second will set its height. Using just one will be the same as
+  | setting the image's height to auto. For multiple backgrounds, use comma
+  | separated values to define the size of each one of them.
+  |
+  | Class name: .bg-{size}
+  |
+  */
+
+  backgroundSize: {
+    'auto': 'auto',
+    'cover': 'cover',
+    'contain': 'contain',
+  },
+
+
+  /*
+  |-----------------------------------------------------------------------------
   | Border widths                     https://tailwindcss.com/docs/border-width
   |-----------------------------------------------------------------------------
   |
