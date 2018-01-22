@@ -1265,6 +1265,10 @@ button,
   background-repeat: repeat-y;
 }
 
+.bg-auto {
+  background-size: auto;
+}
+
 .bg-cover {
   background-size: cover;
 }
@@ -5148,6 +5152,10 @@ button,
     background-repeat: repeat-y;
   }
 
+  .sm\:bg-auto {
+    background-size: auto;
+  }
+
   .sm\:bg-cover {
     background-size: cover;
   }
@@ -9022,6 +9030,10 @@ button,
 
   .md\:bg-repeat-y {
     background-repeat: repeat-y;
+  }
+
+  .md\:bg-auto {
+    background-size: auto;
   }
 
   .md\:bg-cover {
@@ -12900,6 +12912,10 @@ button,
     background-repeat: repeat-y;
   }
 
+  .lg\:bg-auto {
+    background-size: auto;
+  }
+
   .lg\:bg-cover {
     background-size: cover;
   }
@@ -16774,6 +16790,10 @@ button,
 
   .xl\:bg-repeat-y {
     background-repeat: repeat-y;
+  }
+
+  .xl\:bg-auto {
+    background-size: auto;
   }
 
   .xl\:bg-cover {
