@@ -42,13 +42,13 @@ const plugin = postcss.plugin('tailwind', config => {
       substituteScreenAtRules(lazyConfig),
       substituteClassApplyAtRules(lazyConfig),
       perfectionist({
-        cascade: false,
-        colorShorthand: false,
+        cascade: true,
+        colorShorthand: true,
         indentSize: 2,
         maxSelectorLength: 1,
         maxValueLength: false,
-        trimLeadingZero: false,
-        trimTrailingZeros: false,
+        trimLeadingZero: true,
+        trimTrailingZeros: true,
       }),
     ]
   )
