@@ -14,6 +14,11 @@ features:
 @include('_partials.class-table', [
   'rows' => [
     [
+      '.bg-auto',
+      'background-size: auto;',
+      "Don't scale the image and show at its real size.",
+    ],
+    [
       '.bg-cover',
       'background-size: cover;',
       "Scale the image until it fills the background layer.",
