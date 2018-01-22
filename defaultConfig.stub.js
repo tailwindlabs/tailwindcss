@@ -375,7 +375,7 @@ module.exports = {
   |
   */
 
-  backgroundSize: {
+  backgroundSizes: {
     'auto': 'auto',
     'cover': 'cover',
     'contain': 'contain',
@@ -838,7 +838,7 @@ module.exports = {
     backgroundColors: ['responsive', 'hover'],
     backgroundPosition: ['responsive'],
     backgroundRepeat: ['responsive'],
-    backgroundSize: ['responsive'],
+    backgroundSizes: ['responsive'],
     borderColors: ['responsive', 'hover'],
     borderRadius: ['responsive'],
     borderStyle: ['responsive'],

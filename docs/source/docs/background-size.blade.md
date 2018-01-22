@@ -36,7 +36,7 @@ features:
 @include('_partials.variants-and-disabling', [
     'utility' => [
         'name' => 'background size',
-        'property' => 'backgroundSize',
+        'property' => 'backgroundSizes',
     ],
     'variants' => [
         'responsive',
