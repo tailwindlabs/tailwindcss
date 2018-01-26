@@ -66,6 +66,11 @@ features:
       "top: 0;\nright: 0;\nbottom: 0;\nleft: 0;",
       "Anchor absolutely positioned element to all the edges of the nearest positioned parent.",
     ],
+    [
+      '.pin-none',
+      "top: auto;\nright: auto;\nbottom: auto;\nleft: auto;",
+      "Reset absolutely positioned element to all the edges from a given breakpoint onwards.",
+    ],
   ]
 ])
 
