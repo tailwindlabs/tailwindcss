@@ -1,9 +1,8 @@
 export default function(css, prefix) {
-  const prefixIsFunc = typeof prefix === 'function'
+  const getPrefix = typeof prefix === 'function' ? prefix : () => prefix
+
   css.walkRules(rule => {
-    rule.selectors = rule.selectors.map(
-      selector => `.${prefixIsFunc ? prefix(selector) : prefix}${selector.slice(1)}`
-    )
+    rule.selectors = rule.selectors.map(selector => `.${getPrefix(selector)}${selector.slice(1)}`)
   })
   return css
 }
