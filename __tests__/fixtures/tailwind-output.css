@@ -7067,7 +7067,7 @@ button,
     overflow-y: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
-  
+ 
   .sm\:overflow-x-scroll {
     overflow-x: scroll;
     -ms-overflow-style: -ms-scrollbar;
@@ -10953,7 +10953,7 @@ button,
     overflow-y: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
-  
+ 
   .md\:overflow-x-scroll {
     overflow-x: scroll;
     -ms-overflow-style: -ms-scrollbar;
@@ -14839,7 +14839,7 @@ button,
     overflow-y: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
-  
+ 
   .lg\:overflow-x-scroll {
     overflow-x: scroll;
     -ms-overflow-style: -ms-scrollbar;
@@ -18725,7 +18725,7 @@ button,
     overflow-y: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
-  
+ 
   .xl\:overflow-x-scroll {
     overflow-x: scroll;
     -ms-overflow-style: -ms-scrollbar;
