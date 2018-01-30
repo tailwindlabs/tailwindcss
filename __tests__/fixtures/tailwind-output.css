@@ -7073,7 +7073,7 @@ button,
     -ms-overflow-style: -ms-scrollbar;
   }
 
-  .sm\.overflow-y-scroll {
+  .sm\:overflow-y-scroll {
     overflow-y: scroll;
     -ms-overflow-style: -ms-scrollbar;
   }
@@ -10959,7 +10959,7 @@ button,
     -ms-overflow-style: -ms-scrollbar;
   }
 
-  .md\.overflow-y-scroll {
+  .md\:overflow-y-scroll {
     overflow-y: scroll;
     -ms-overflow-style: -ms-scrollbar;
   }  
@@ -14845,7 +14845,7 @@ button,
     -ms-overflow-style: -ms-scrollbar;
   }
 
-  .lg\.overflow-y-scroll {
+  .lg\:overflow-y-scroll {
     overflow-y: scroll;
     -ms-overflow-style: -ms-scrollbar;
   }
@@ -18731,7 +18731,7 @@ button,
     -ms-overflow-style: -ms-scrollbar;
   }
 
-  .xl\.overflow-y-scroll {
+  .xl\:overflow-y-scroll {
     overflow-y: scroll;
     -ms-overflow-style: -ms-scrollbar;
   }  
