@@ -532,12 +532,42 @@ ul {
  * Tailwind custom reset styles
  */
 
+/**
+ * Allow adding a border to an element by just adding a border-width.
+ *
+ * By default, the way the browser specifies that an element should have no
+ * border is by setting it's border-style to `none` in the user-agent
+ * stylesheet.
+ *
+ * In order to easily add borders to elements by just setting the `border-width`
+ * property, we change the default border-style for all elements to `solid`, and
+ * use border-width to hide them instead. This way our `border` utilities only
+ * need to set the `border-width` property instead of the entire `border`
+ * shorthand, making our border utilities much more straightforward to compose.
+ *
+ * https://github.com/tailwindcss/tailwindcss/pull/116
+ */
+
 *,
 *::before,
 *::after {
   border-width: 0;
   border-style: solid;
   border-color: #dae1e7;
+}
+
+/**
+ * Undo the `border-style: none` reset that Normalize applies to images so that
+ * our `border-{width}` utilities have the expected effect.
+ *
+ * The Normalize reset is unnecessary for us since we default the border-width
+ * to 0 on all elements.
+ *
+ * https://github.com/tailwindcss/tailwindcss/issues/362
+ */
+
+img {
+  border-style: solid;
 }
 
 /**
