@@ -9,8 +9,6 @@ features:
   focus: false
 ---
 
-@include('_partials.work-in-progress')
-
 @include('_partials.class-table', [
   'rows' => [
     [
@@ -31,9 +29,39 @@ features:
   ]
 ])
 
+### Sans-serif
+
+Use `.font-sans` to apply a web safe sans-serif font family:
+
+@component('_partials.code-sample')
+<p class="font-sans text-lg text-grey-darkest text-center">
+  I'm a sans-serif paragraph.
+</p>
+@endcomponent
+
+### Serif
+
+Use `.font-serif` to apply a web safe serif font family:
+
+@component('_partials.code-sample')
+<p class="font-serif text-lg text-grey-darkest text-center">
+  I'm a serif paragraph.
+</p>
+@endcomponent
+
+### Monospaced
+
+Use `.font-mono` to apply a web safe monospaced font family:
+
+@component('_partials.code-sample')
+<p class="font-mono text-lg text-grey-darkest text-center">
+  I'm a monospaced paragraph.
+</p>
+@endcomponent
+
 ## Customizing
 
-By default Tailwind provides three font family utilities: a cross-browser sans-serif stack, a cross-browser serif stack, and a cross-browser monospace stack. You can change, add, or remove these by editing the `fonts` section of your Tailwind config.
+By default Tailwind provides three font family utilities: a cross-browser sans-serif stack, a cross-browser serif stack, and a cross-browser monospaced stack. You can change, add, or remove these by editing the `fonts` section of your Tailwind config.
 
 @component('_partials.customized-config', ['key' => 'fonts'])
 - 'sans': ['system-ui', 'BlinkMacSystemFont', ...],
