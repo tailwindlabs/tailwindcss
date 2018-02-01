@@ -33,6 +33,44 @@ features:
 
 ## Customizing
 
+By default Tailwind provides three font family utilities: a cross-browser sans-serif stack, a cross-browser serif stack, and a cross-browser monospace stack. You can change, add, or remove these by editing the `fonts` section of your Tailwind config.
+
+@component('_partials.customized-config', ['key' => 'fonts'])
+- 'sans': ['system-ui', 'BlinkMacSystemFont', ...],
+- 'serif': ['Constantia', 'Lucida Bright', ...],
+- 'mono': ['Menlo', 'Monaco', ...],
++ 'display': ['Oswald', ...],
++ 'body': ['Open Sans', ...],
+@endcomponent
+
+Font families can be specified as an array or as a simple comma-delimited string:
+
+```js
+{
+  // Array format:
+  'sans': ['Helvetica', 'Arial', 'sans-serif'],
+
+  // Comma-delimited format:
+  'sans': 'Helvetica, Arial, sans-serif',
+}
+```
+
+Note that **Tailwind does not automatically escape font names** for you. If you're using a font that contains an invalid identifier, wrap it in quotes or escape the invalid characters.
+
+```js
+{
+  // Won't work:
+  'sans': ['Exo 2', ...],
+
+  // Add quotes:
+  'sans': ['"Exo 2"', ...],
+
+  // ...or escape the space:
+  'sans': ['Exo\\ 2', ...],
+}
+
+```
+
 @include('_partials.variants-and-disabling', [
     'utility' => [
         'name' => 'font',
@@ -42,34 +80,3 @@ features:
         'responsive',
     ],
 ])
-
-### Note
-
-Some font names are required to be wrapped in quotes, such as fonts with an integer in their name. 
-
-For example, in the fonts section of your config file:
-```js
-// ...
-
-module.exports = {
-  // ...
-    fonts: {
-      sans: [
-        'Exo 2',   // Replace this...
-        '"Exo 2"', // With this...
-        '-apple-system',
-        'BlinkMacSystemFont',
-        'Segoe UI',
-        'Roboto',
-        'Oxygen',
-        'Ubuntu',
-        'Cantarell',
-        'Fira Sans',
-        'Droid Sans',
-        'Helvetica Neue',
-        'sans-serif'
-      ],
-    // ...
-  }
-}
-```
