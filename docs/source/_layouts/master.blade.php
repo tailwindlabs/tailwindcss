@@ -12,13 +12,13 @@
   <title>{{ $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS - A Utility-First CSS Framework for Rapid UI Development' }}</title>
   <meta name="theme-color" content="#ffffff">
   @yield('meta')
-  <link rel="stylesheet" href="https://use.typekit.net/iqy1okj.css">
+  <link rel="stylesheet" href="https://use.typekit.net/yud6cwb.css">
   <link rel="stylesheet" href="{{ mix('/css/main.css') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css">
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   @stack('headScripts')
 </head>
-<body data-sidebar-visible="true" class="font-aktiv font-normal text-black leading-normal">
+<body data-sidebar-visible="true" class="font-proxima font-normal text-black leading-normal">
 
 @yield('body')
 

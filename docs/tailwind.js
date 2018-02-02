@@ -1,5 +1,12 @@
 var config = require('../defaultConfig')()
 
+config.screens = {
+  'sm': '576px',
+  'md': '768px',
+  'lg': '992px',
+  'xl': '1280px',
+}
+
 config.colors = Object.assign(config.colors, {
   'tailwind-teal-light': '#5ebcca',
   'tailwind-teal': '#44a8b3',
@@ -7,7 +14,8 @@ config.colors = Object.assign(config.colors, {
 })
 
 config.fonts = Object.assign(config.fonts, {
-  'aktiv': 'aktiv-grotesk, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
+  'lato': 'lato, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
+  'proxima': 'Proxima Nova, proxima-nova, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
 })
 
 config.textSizes = {
@@ -20,19 +28,6 @@ config.textSizes = {
   '3xl': '1.875rem',  // 30px
   '4xl': '2.25rem',   // 36px
   '5xl': '3rem',      // 48px
-}
-
-config.fontWeights = {
-  'light': 300,
-  'normal': 400,
-  'semibold': 500,
-  'bold': 700,
-}
-
-config.tracking = {
-  'tight': '-0.02em',
-  'normal': '0',
-  'wide': '0.05em',
 }
 
 config.textColors = config.colors
