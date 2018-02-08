@@ -75,6 +75,11 @@ return [
             'Style &amp; Decoration' => 'text-style',
             'Whitespace &amp; Wrapping' => 'whitespace-and-wrapping',
         ],
+        'Transitions' => [
+            'Duration' => 'transition-duration',
+            'Properties' => 'transition-property',
+            'Timing' => 'transition-timing',
+        ],
         'Vertical Alignment' => 'vertical-alignment',
         'Visibility' => 'visibility',
         'Z-Index' => 'z-index',

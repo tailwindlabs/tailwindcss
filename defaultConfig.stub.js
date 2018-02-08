@@ -797,10 +797,11 @@ module.exports = {
 
   /*
   |-----------------------------------------------------------------------------
-  | Transition duration                 https://tailwindcss.com/docs/transitions
+  | Transition duration         https://tailwindcss.com/docs/transition-duration
   |-----------------------------------------------------------------------------
   |
-  | TODO
+  | Here is where you define your CSS transition timings. By default we provide
+  | a handful of basic speeds.
   |
   | Class name: .transition-{name}
   |
@@ -816,10 +817,11 @@ module.exports = {
 
   /*
   |-----------------------------------------------------------------------------
-  | Transition property                 https://tailwindcss.com/docs/transitions
+  | Transition property         https://tailwindcss.com/docs/transition-property
   |-----------------------------------------------------------------------------
   |
-  | TODO
+  | Here is where you define the CSS properties that you would like to be able
+  | to transition. Sane defaults are provided as a starting point.
   |
   | Class name: .transition-{name}
   |
@@ -837,10 +839,11 @@ module.exports = {
 
   /*
   |-----------------------------------------------------------------------------
-  | Transition timing function          https://tailwindcss.com/docs/transitions
+  | Transition timing function    https://tailwindcss.com/docs/transition-timing
   |-----------------------------------------------------------------------------
   |
-  | TODO
+  | Here is where you define the timing functions you would like to use in your
+  | CSS transitions.
   |
   | Class name: .transition-{name}
   |
