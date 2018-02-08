@@ -1,10 +1,10 @@
 @php
-    $whichVariants = "only $variants[0]";
+    $whichVariants = count($variants) ? "only $variants[0]" : 'no';
     for ($i = 1; $i < count($variants); $i++) {
         $whichVariants .= (($i == count($variants) - 1) ? ' and ' : ', ') . $variants[$i];
     }
 
-    $currentVariants = '\'' . collect($variants)->implode('\', \'') . '\'';
+    $currentVariants = count($variants) ? '\'' . collect($variants)->implode('\', \'') . '\'' : '';
 
     $extraVariants = collect([
         'responsive',

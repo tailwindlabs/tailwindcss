@@ -11,6 +11,41 @@ features:
 
 @include('_partials.work-in-progress')
 
+@include('_partials.class-table', [
+  'rows' => [
+    [
+      '.transition',
+      'transition-property: all;',
+      "Transition all properties.",
+    ],
+    [
+      '.transition-none',
+      'transition-property: none;',
+      "Transition no properties.",
+    ],
+    [
+      '.transition-bg',
+      'transition-property: background;',
+      "Transition the element's background.",
+    ],
+    [
+      '.transition-opacity',
+      'transition-property: opacity;',
+      "Transition the element's opacity.",
+    ],
+    [
+      '.transition-color',
+      'transition-property: color;',
+      "Transition the element's color.",
+    ],
+    [
+      '.transition-shadow',
+      'transition-property: box-shadow;',
+      "Transition the element's box shadow.",
+    ],
+  ]
+])
+
 ## Customizing
 
 @include('_partials.variants-and-disabling', [
