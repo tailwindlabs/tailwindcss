@@ -795,6 +795,66 @@ module.exports = {
     'current': 'currentColor',
   },
 
+  /*
+  |-----------------------------------------------------------------------------
+  | Transition duration                 https://tailwindcss.com/docs/transitions
+  |-----------------------------------------------------------------------------
+  |
+  | TODO
+  |
+  | Class name: .transition-{name}
+  |
+  */
+
+  transitionDuration: {
+    default: '.25s',
+    'slower': '.75s',
+    'slow': '.5s',
+    'fast': '.15s',
+    'faster': '.075s',
+  },
+
+  /*
+  |-----------------------------------------------------------------------------
+  | Transition property                 https://tailwindcss.com/docs/transitions
+  |-----------------------------------------------------------------------------
+  |
+  | TODO
+  |
+  | Class name: .transition-{name}
+  |
+  */
+
+  transitionProperty: {
+    default: 'all',
+    'all': 'all',
+    'none': 'none',
+    'bg': 'background',
+    'opacity': 'opacity',
+    'color': 'color',
+    'shadow': 'box-shadow',
+  },
+
+  /*
+  |-----------------------------------------------------------------------------
+  | Transition timing function          https://tailwindcss.com/docs/transitions
+  |-----------------------------------------------------------------------------
+  |
+  | TODO
+  |
+  | Class name: .transition-{name}
+  |
+  */
+
+  transitionTimingFunction: {
+    default: 'ease-in-out',
+    'linear': 'linear',
+    'ease': 'ease',
+    'in': 'ease-in',
+    'out': 'ease-out',
+    'in-out': 'ease-in-out',
+  },
+
 
   /*
   |-----------------------------------------------------------------------------
@@ -850,6 +910,9 @@ module.exports = {
     textSizes: ['responsive'],
     textStyle: ['responsive', 'hover'],
     tracking: ['responsive'],
+    transitionDuration: [],
+    transitionProperty: [],
+    transitionTimingFunction: [],
     userSelect: ['responsive'],
     verticalAlign: ['responsive'],
     visibility: ['responsive'],

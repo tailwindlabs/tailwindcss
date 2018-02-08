@@ -37,6 +37,9 @@ import textColors from './generators/textColors'
 import textSizes from './generators/textSizes'
 import textStyle from './generators/textStyle'
 import tracking from './generators/tracking'
+import transitionDuration from './generators/transitionDuration'
+import transitionProperty from './generators/transitionProperty'
+import transitionTimingFunction from './generators/transitionTimingFunction'
 import userSelect from './generators/userSelect'
 import verticalAlign from './generators/verticalAlign'
 import visibility from './generators/visibility'
@@ -84,6 +87,9 @@ export default [
   { name: 'textSizes', generator: textSizes },
   { name: 'textStyle', generator: textStyle },
   { name: 'tracking', generator: tracking },
+  { name: 'transitionDuration', generator: transitionDuration },
+  { name: 'transitionProperty', generator: transitionProperty },
+  { name: 'transitionTimingFunction', generator: transitionTimingFunction },
   { name: 'userSelect', generator: userSelect },
   { name: 'verticalAlign', generator: verticalAlign },
   { name: 'visibility', generator: visibility },

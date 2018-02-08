@@ -4301,6 +4301,78 @@ button,
   letter-spacing: .05em;
 }
 
+.transition {
+  transition-duration: .25s;
+}
+
+.transition-slower {
+  transition-duration: .75s;
+}
+
+.transition-slow {
+  transition-duration: .5s;
+}
+
+.transition-fast {
+  transition-duration: .15s;
+}
+
+.transition-faster {
+  transition-duration: .075s;
+}
+
+.transition {
+  transition-property: all;
+}
+
+.transition-all {
+  transition-property: all;
+}
+
+.transition-none {
+  transition-property: none;
+}
+
+.transition-bg {
+  transition-property: background;
+}
+
+.transition-opacity {
+  transition-property: opacity;
+}
+
+.transition-color {
+  transition-property: color;
+}
+
+.transition-shadow {
+  transition-property: box-shadow;
+}
+
+.transition {
+  transition-timing-function: ease-in-out;
+}
+
+.transition-linear {
+  transition-timing-function: linear;
+}
+
+.transition-ease {
+  transition-timing-function: ease;
+}
+
+.transition-in {
+  transition-timing-function: ease-in;
+}
+
+.transition-out {
+  transition-timing-function: ease-out;
+}
+
+.transition-in-out {
+  transition-timing-function: ease-in-out;
+}
+
 .select-none {
   user-select: none;
 }
