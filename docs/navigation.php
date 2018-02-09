@@ -16,19 +16,16 @@ return [
         'Controlling File Size' => 'controlling-file-size',
     ],
     'Styles' => [
-        'Backgrounds' => [
-            'Color' => 'background-color',
-            'Position' => 'background-position',
-            'Repeat' => 'background-repeat',
-            'Size' => 'background-size',
-            'Attachment' => 'background-attachment',
-        ],
-        'Borders' => [
-            'Width' => 'border-width',
-            'Color' => 'border-color',
-            'Style' => 'border-style',
-        ],
+        'Appearance' => 'forms',
+        'Background Attachment' => 'background-attachment',
+        'Background Color' => 'background-color',
+        'Background Position' => 'background-position',
+        'Background Repeat' => 'background-repeat',
+        'Background Size' => 'background-size',
+        'Border Color' => 'border-color',
         'Border Radius' => 'border-radius',
+        'Border Style' => 'border-style',
+        'Border Width' => 'border-width',
         'Container' => 'container',
         'Display' => 'display',
         'Flexbox' => [
@@ -42,7 +39,6 @@ return [
             'Flex, Grow, &amp; Shrink' => 'flexbox-flex-grow-shrink',
         ],
         'Floats' => 'floats',
-        'Forms' => 'forms',
         'Interactivity' => [
             'Cursor' => 'cursor',
             'Resize' => 'resize',
