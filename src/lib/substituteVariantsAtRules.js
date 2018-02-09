@@ -16,7 +16,11 @@ const variantGenerators = {
     const cloned = container.clone()
 
     cloned.walkRules(rule => {
-      rule.selector = `${buildClassVariant(rule.selector, 'active', config.options.separator)}:active`
+      rule.selector = `${buildClassVariant(
+        rule.selector,
+        'active',
+        config.options.separator
+      )}:active`
     })
 
     container.before(cloned.nodes)
