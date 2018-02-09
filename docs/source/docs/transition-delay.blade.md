@@ -32,23 +32,23 @@ features:
   'rows' => [
     [
       '.trans-delay',
-      'transition-delay: 0.25s;',
-      "Delay the transition for 0.25 seconds.",
+      'transition-delay: 100ms;',
+      "Delay the transition for 100 ms.",
     ],
     [
       '.trans-delay-long',
-      'transition-delay: 0.5s;',
-      "Delay the transition for 0.5 seconds.",
+      'transition-delay: 200ms;',
+      "Delay the transition for 200 ms.",
     ],
     [
       '.trans-delay-longer',
-      'transition-delay: 0.75s;',
-      "Delay the transition for 0.75 seconds.",
+      'transition-delay: 300ms;',
+      "Delay the transition for 300 ms.",
     ],
     [
       '.trans-delay-longest',
-      'transition-delay: 1s;',
-      "Delay the transition for a second.",
+      'transition-delay: 400ms;',
+      "Delay the transition for 400 ms.",
     ],
     [
       '.trans-delay-none',
