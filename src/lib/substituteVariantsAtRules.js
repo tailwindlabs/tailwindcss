@@ -12,6 +12,15 @@ const variantGenerators = {
 
     container.before(cloned.nodes)
   },
+  active: (container, config) => {
+    const cloned = container.clone()
+
+    cloned.walkRules(rule => {
+      rule.selector = `${buildClassVariant(rule.selector, 'active', config.options.separator)}:active`
+    })
+
+    container.before(cloned.nodes)
+  },
   focus: (container, config) => {
     const cloned = container.clone()
 
@@ -48,7 +57,7 @@ export default function(config) {
 
       atRule.before(atRule.clone().nodes)
 
-      _.forEach(['focus', 'hover', 'group-hover'], variant => {
+      _.forEach(['hover', 'active', 'focus', 'group-hover'], variant => {
         if (variants.includes(variant)) {
           variantGenerators[variant](atRule, unwrappedConfig)
         }
