@@ -40,6 +40,7 @@ import tracking from './generators/tracking'
 import transitionDuration from './generators/transitionDuration'
 import transitionProperty from './generators/transitionProperty'
 import transitionTimingFunction from './generators/transitionTimingFunction'
+import transitionDelay from './generators/transitionDelay'
 import userSelect from './generators/userSelect'
 import verticalAlign from './generators/verticalAlign'
 import visibility from './generators/visibility'
@@ -90,6 +91,7 @@ export default [
   { name: 'transitionDuration', generator: transitionDuration },
   { name: 'transitionProperty', generator: transitionProperty },
   { name: 'transitionTimingFunction', generator: transitionTimingFunction },
+  { name: 'transitionDelay', generator: transitionDelay },
   { name: 'userSelect', generator: userSelect },
   { name: 'verticalAlign', generator: verticalAlign },
   { name: 'visibility', generator: visibility },

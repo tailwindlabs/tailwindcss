@@ -79,6 +79,7 @@ return [
             'Duration' => 'transition-duration',
             'Properties' => 'transition-property',
             'Timing' => 'transition-timing',
+            'Delay' => 'transition-delay',
         ],
         'Vertical Alignment' => 'vertical-alignment',
         'Visibility' => 'visibility',

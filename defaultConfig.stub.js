@@ -803,7 +803,7 @@ module.exports = {
   | Here is where you define your CSS transition timings. By default we provide
   | a handful of basic speeds.
   |
-  | Class name: .transition-{name}
+  | Class name: .trans-{name}
   |
   */
 
@@ -823,7 +823,7 @@ module.exports = {
   | Here is where you define the CSS properties that you would like to be able
   | to transition. Sane defaults are provided as a starting point.
   |
-  | Class name: .transition-{name}
+  | Class name: .trans-{name}
   |
   */
 
@@ -845,7 +845,7 @@ module.exports = {
   | Here is where you define the timing functions you would like to use in your
   | CSS transitions.
   |
-  | Class name: .transition-{name}
+  | Class name: .trans-{name}
   |
   */
 
@@ -858,6 +858,24 @@ module.exports = {
     'ease-in-out': 'ease-in-out',
   },
 
+  /*
+  |-----------------------------------------------------------------------------
+  | Transition delay               https://tailwindcss.com/docs/transition-delay
+  |-----------------------------------------------------------------------------
+  |
+  | Here is where you define your transition delay lengths.
+  |
+  | Class name: .trans-delay-{name}
+  |
+  */
+
+  transitionDelay: {
+    default: '.25s',
+    'long': '.5s',
+    'longer': '.75s',
+    'longest': '1s',
+    'none': 'unset',
+  },
 
   /*
   |-----------------------------------------------------------------------------
@@ -916,6 +934,7 @@ module.exports = {
     transitionDuration: [],
     transitionProperty: [],
     transitionTimingFunction: [],
+    transitionDelay: [],
     userSelect: ['responsive'],
     verticalAlign: ['responsive'],
     visibility: ['responsive'],

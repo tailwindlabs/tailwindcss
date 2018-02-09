@@ -4373,6 +4373,26 @@ button,
   transition-timing-function: ease-in-out;
 }
 
+.trans-delay {
+  transition-delay: .25s;
+}
+
+.trans-delay-long {
+  transition-delay: .5s;
+}
+
+.trans-delay-longer {
+  transition-delay: .75s;
+}
+
+.trans-delay-longest {
+  transition-delay: 1s;
+}
+
+.trans-delay-none {
+  transition-delay: unset;
+}
+
 .select-none {
   user-select: none;
 }
