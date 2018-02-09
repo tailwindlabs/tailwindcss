@@ -9,6 +9,7 @@
     $extraVariants = collect([
         'responsive',
         'hover',
+        'active',
         'focus',
         'group-hover',
     ])->diff($variants)
@@ -16,7 +17,7 @@
     ->implode(' and ');
 @endphp
 
-<h3>Responsive, Hover, and Focus Variants</h3>
+<h3>Responsive, Hover, Active and Focus Variants</h3>
 
 <p>By default, {{ $whichVariants }} variants are generated for {{ $utility['name'] }} utilities.</p>
 
@@ -27,7 +28,7 @@
 @component('_partials.customized-config', ['key' => 'modules'])
   // ...
 - {{ $utility['property'] }}: [{{$currentVariants}}],
-+ {{ $utility['property'] }}: ['responsive', 'hover', 'focus'],
++ {{ $utility['property'] }}: ['responsive', 'hover', 'active', 'focus'],
 @endcomponent
 
 @isset($extraMessage)

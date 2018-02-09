@@ -6,6 +6,7 @@ features:
   responsive: true
   customizable: true
   hover: true
+  active: false
   focus: false
 ---
 

@@ -162,6 +162,7 @@ The available state variants are:
 
 - `responsive`, for generating breakpoint-specific versions of those utilities
 - `hover`, for generating versions of those utilities that only take effect on hover
+- `active`, for generating versions of those utilities that only take effect on active
 - `focus`, for generating versions of those utilities that only take effect on focus
 - `group-hover`, for generating versions of those utilities that only take effect when a marked parent element is hovered
 
