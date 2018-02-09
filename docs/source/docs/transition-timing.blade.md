@@ -29,17 +29,17 @@ features:
       "Use the 'ease' timing function for transitions.",
     ],
     [
-      '.trans-in',
+      '.trans-ease-in',
       'transition-timing-function: ease-in;',
       "Use the 'ease-in' timing function for transitions.",
     ],
     [
-      '.trans-out',
+      '.trans-ease-out',
       'transition-timing-function: ease-out;',
       "Use the 'ease-out' timing function for transitions.",
     ],
     [
-      '.trans-in-out',
+      '.trans-ease-in-out',
       'transition-timing-function: ease-in-out;',
       "Use the 'ease-in-out' timing function for transitions.",
     ],

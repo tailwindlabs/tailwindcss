@@ -4361,15 +4361,15 @@ button,
   transition-timing-function: ease;
 }
 
-.trans-in {
+.trans-ease-in {
   transition-timing-function: ease-in;
 }
 
-.trans-out {
+.trans-ease-out {
   transition-timing-function: ease-out;
 }
 
-.trans-in-out {
+.trans-ease-in-out {
   transition-timing-function: ease-in-out;
 }
 

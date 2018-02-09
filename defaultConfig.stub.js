@@ -853,9 +853,9 @@ module.exports = {
     default: 'ease-in-out',
     'linear': 'linear',
     'ease': 'ease',
-    'in': 'ease-in',
-    'out': 'ease-out',
-    'in-out': 'ease-in-out',
+    'ease-in': 'ease-in',
+    'ease-out': 'ease-out',
+    'ease-in-out': 'ease-in-out',
   },
 
 
