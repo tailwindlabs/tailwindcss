@@ -4374,19 +4374,19 @@ button,
 }
 
 .trans-delay {
-  transition-delay: .25s;
+  transition-delay: 100ms;
 }
 
 .trans-delay-long {
-  transition-delay: .5s;
+  transition-delay: 200ms;
 }
 
 .trans-delay-longer {
-  transition-delay: .75s;
+  transition-delay: 300ms;
 }
 
 .trans-delay-longest {
-  transition-delay: 1s;
+  transition-delay: 400ms;
 }
 
 .trans-delay-none {
