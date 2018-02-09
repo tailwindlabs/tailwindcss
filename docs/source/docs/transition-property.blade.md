@@ -14,32 +14,32 @@ features:
 @include('_partials.class-table', [
   'rows' => [
     [
-      '.transition',
+      '.trans',
       'transition-property: all;',
       "Transition all properties.",
     ],
     [
-      '.transition-none',
+      '.trans-none',
       'transition-property: none;',
       "Transition no properties.",
     ],
     [
-      '.transition-bg',
+      '.trans-bg',
       'transition-property: background;',
       "Transition the element's background.",
     ],
     [
-      '.transition-opacity',
+      '.trans-opacity',
       'transition-property: opacity;',
       "Transition the element's opacity.",
     ],
     [
-      '.transition-color',
+      '.trans-color',
       'transition-property: color;',
       "Transition the element's color.",
     ],
     [
-      '.transition-shadow',
+      '.trans-shadow',
       'transition-property: box-shadow;',
       "Transition the element's box shadow.",
     ],

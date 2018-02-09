@@ -14,27 +14,27 @@ features:
 @include('_partials.class-table', [
   'rows' => [
     [
-      '.transition',
+      '.trans',
       'transition-duration: .25s;',
       "Set the transition duration to 0.25 seconds.",
     ],
     [
-      '.transition-slow',
+      '.trans-slow',
       'transition-duration: .5s;',
       "Set the transition duration to 0.5 seconds.",
     ],
     [
-      '.transition-slower',
+      '.trans-slower',
       'transition-duration: .75s;',
       "Set the transition duration to 0.75 seconds.",
     ],
     [
-      '.transition-fast',
+      '.trans-fast',
       'transition-duration: .15s;',
       "Set the transition duration to 0.15 seconds.",
     ],
     [
-      '.transition-faster',
+      '.trans-faster',
       'transition-duration: .075s;',
       "Set the transition duration to 0.075 seconds.",
     ],

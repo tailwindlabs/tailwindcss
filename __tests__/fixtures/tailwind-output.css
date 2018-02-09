@@ -4301,75 +4301,75 @@ button,
   letter-spacing: .05em;
 }
 
-.transition {
+.trans {
   transition-duration: .25s;
 }
 
-.transition-slower {
+.trans-slower {
   transition-duration: .75s;
 }
 
-.transition-slow {
+.trans-slow {
   transition-duration: .5s;
 }
 
-.transition-fast {
+.trans-fast {
   transition-duration: .15s;
 }
 
-.transition-faster {
+.trans-faster {
   transition-duration: .075s;
 }
 
-.transition {
+.trans {
   transition-property: all;
 }
 
-.transition-all {
+.trans-all {
   transition-property: all;
 }
 
-.transition-none {
+.trans-none {
   transition-property: none;
 }
 
-.transition-bg {
+.trans-bg {
   transition-property: background;
 }
 
-.transition-opacity {
+.trans-opacity {
   transition-property: opacity;
 }
 
-.transition-color {
+.trans-color {
   transition-property: color;
 }
 
-.transition-shadow {
+.trans-shadow {
   transition-property: box-shadow;
 }
 
-.transition {
+.trans {
   transition-timing-function: ease-in-out;
 }
 
-.transition-linear {
+.trans-linear {
   transition-timing-function: linear;
 }
 
-.transition-ease {
+.trans-ease {
   transition-timing-function: ease;
 }
 
-.transition-in {
+.trans-in {
   transition-timing-function: ease-in;
 }
 
-.transition-out {
+.trans-out {
   transition-timing-function: ease-out;
 }
 
-.transition-in-out {
+.trans-in-out {
   transition-timing-function: ease-in-out;
 }
 

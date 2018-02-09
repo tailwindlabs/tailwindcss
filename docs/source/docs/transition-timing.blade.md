@@ -14,32 +14,32 @@ features:
 @include('_partials.class-table', [
   'rows' => [
     [
-      '.transition',
+      '.trans',
       'transition-timing-function: ease-in-out;',
       "Use the 'ease-in-out' timing function for transitions.",
     ],
     [
-      '.transition-linear',
+      '.trans-linear',
       'transition-timing-function: linear;',
       "Use the 'linear' timing function for transitions.",
     ],
     [
-      '.transition-ease',
+      '.trans-ease',
       'transition-timing-function: ease;',
       "Use the 'ease' timing function for transitions.",
     ],
     [
-      '.transition-in',
+      '.trans-in',
       'transition-timing-function: ease-in;',
       "Use the 'ease-in' timing function for transitions.",
     ],
     [
-      '.transition-out',
+      '.trans-out',
       'transition-timing-function: ease-out;',
       "Use the 'ease-out' timing function for transitions.",
     ],
     [
-      '.transition-in-out',
+      '.trans-in-out',
       'transition-timing-function: ease-in-out;',
       "Use the 'ease-in-out' timing function for transitions.",
     ],
