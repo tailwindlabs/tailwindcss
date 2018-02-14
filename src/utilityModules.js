@@ -23,6 +23,8 @@ import maxWidth from './generators/maxWidth'
 import minHeight from './generators/minHeight'
 import minWidth from './generators/minWidth'
 import negativeMargin from './generators/negativeMargin'
+import objectFit from './generators/objectFit'
+import objectPosition from './generators/objectPosition'
 import opacity from './generators/opacity'
 import overflow from './generators/overflow'
 import padding from './generators/padding'
@@ -70,6 +72,8 @@ export default [
   { name: 'minHeight', generator: minHeight },
   { name: 'minWidth', generator: minWidth },
   { name: 'negativeMargin', generator: negativeMargin },
+  { name: 'objectFit', generator: objectFit },
+  { name: 'objectPosition', generator: objectPosition },
   { name: 'opacity', generator: opacity },
   { name: 'overflow', generator: overflow },
   { name: 'padding', generator: padding },
