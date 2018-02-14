@@ -6,6 +6,7 @@ window.anchors = new anchorJS()
 window.Vue = require('vue')
 
 Vue.component('responsive-code-sample', require('./components/ResponsiveCodeSample.vue'))
+Vue.component('code-sample-editor', require('./components/CodeSampleEditor.vue'))
 
 const app = new Vue({
   el: '#app'
