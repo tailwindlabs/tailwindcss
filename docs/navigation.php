@@ -86,5 +86,6 @@ return [
         'Forms' => 'examples/forms',
         'Grids' => 'examples/grids',
         'Navigation' => 'examples/navigation',
+        'Layouts' => 'examples/layouts',
     ],
 ];
