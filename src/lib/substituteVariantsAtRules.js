@@ -61,7 +61,7 @@ export default function(config) {
 
       atRule.before(atRule.clone().nodes)
 
-      _.forEach(['focus', 'active', 'hover', 'group-hover'], variant => {
+      _.forEach(['hover', 'active', 'focus', 'group-hover'], variant => {
         if (variants.includes(variant)) {
           variantGenerators[variant](atRule, unwrappedConfig)
         }
