@@ -9,8 +9,8 @@
     $extraVariants = collect([
         'responsive',
         'hover',
-        'active',
         'focus',
+        'active',
         'group-hover',
     ])->diff($variants)
     ->take(3 - count($variants))
@@ -28,7 +28,7 @@
 @component('_partials.customized-config', ['key' => 'modules'])
   // ...
 - {{ $utility['property'] }}: [{{$currentVariants}}],
-+ {{ $utility['property'] }}: ['responsive', 'hover', 'active', 'focus'],
++ {{ $utility['property'] }}: ['responsive', 'hover', 'focus'],
 @endcomponent
 
 @isset($extraMessage)

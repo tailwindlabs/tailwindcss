@@ -1,10 +1,10 @@
 ---
 extends: _layouts.documentation
 title: "State Variants"
-description: "Using utilities to style elements on hover, active, focus, and more."
+description: "Using utilities to style elements on hover, focus, and more."
 ---
 
-Similar to our [responsive prefixes](/docs/responsive-design), Tailwind makes it easy to style elements on hover, active, focus, and more using *state* prefixes.
+Similar to our [responsive prefixes](/docs/responsive-design), Tailwind makes it easy to style elements on hover, focus, and more using *state* prefixes.
 
 ## Hover
 
