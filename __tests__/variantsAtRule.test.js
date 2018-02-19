@@ -101,12 +101,12 @@ test('it can generate hover, active and focus variants', () => {
   const output = `
       .banana { color: yellow; }
       .chocolate { color: brown; }
+      .focus\\:banana:focus { color: yellow; }
+      .focus\\:chocolate:focus { color: brown; }
       .hover\\:banana:hover { color: yellow; }
       .hover\\:chocolate:hover { color: brown; }
       .active\\:banana:active { color: yellow; }
       .active\\:chocolate:active { color: brown; }
-      .focus\\:banana:focus { color: yellow; }
-      .focus\\:chocolate:focus { color: brown; }
   `
 
   return run(input).then(result => {
@@ -127,10 +127,10 @@ test('it wraps the output in a responsive at-rule if responsive is included as a
     @responsive {
       .banana { color: yellow; }
       .chocolate { color: brown; }
-      .hover\\:banana:hover { color: yellow; }
-      .hover\\:chocolate:hover { color: brown; }
       .focus\\:banana:focus { color: yellow; }
       .focus\\:chocolate:focus { color: brown; }
+      .hover\\:banana:hover { color: yellow; }
+      .hover\\:chocolate:hover { color: brown; }
     }
   `
 
