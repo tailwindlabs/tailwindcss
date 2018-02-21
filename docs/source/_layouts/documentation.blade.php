@@ -64,18 +64,18 @@
           <nav id="nav" class="text-base">
             @foreach ($page->navigation as $sectionName => $sectionItems)
             <div class="mb-8">
-              <p class="mb-4 text-grey uppercase tracking-wide font-bold text-xs">{{ $sectionName }}</p>
+              <p class="mb-2 text-grey uppercase tracking-wide font-bold text-sm">{{ $sectionName }}</p>
               <ul>
                 @foreach ($sectionItems as $name => $slugOrChildren)
                   @if (is_string($slugOrChildren))
-                    <li class="mb-3"><a class="hover:underline {{ $page->active('/docs/' . $slugOrChildren) ? 'text-teal-dark font-semibold' : 'text-grey-darker' }}" href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren }}">{{ $name }}</a></li>
+                    <li class="mb-2"><a class="hover:underline {{ $page->active('/docs/' . $slugOrChildren) ? 'text-teal-dark font-semibold' : 'text-grey-darkest' }}" href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren }}">{{ $name }}</a></li>
                   @else
-                    <li class="mb-3">
-                      <a href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren->first() }}" class="hover:underline block mb-2 {{ $page->anyChildrenActive($slugOrChildren) ? 'text-teal-dark font-semibold' : 'text-grey-darker' }}">{{ $name }}</a>
+                    <li class="mb-2">
+                      <a href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren->first() }}" class="hover:underline block mb-2 {{ $page->anyChildrenActive($slugOrChildren) ? 'text-teal-dark font-semibold' : 'text-grey-darkest' }}">{{ $name }}</a>
                       <ul class="pl-4 {{ $page->anyChildrenActive($slugOrChildren) ? 'block' : 'hidden' }}">
                       @foreach ($slugOrChildren as $title => $link)
-                        <li class="mb-3">
-                          <a class="hover:underline {{ $page->active('/docs/' . $link) ? 'text-teal-dark font-semibold' : 'text-grey-darker' }}" href="{{ $page->baseUrl }}/docs/{{ $link }}">
+                        <li class="mb-2">
+                          <a class="hover:underline {{ $page->active('/docs/' . $link) ? 'text-teal-dark font-semibold' : 'text-grey-darkest' }}" href="{{ $page->baseUrl }}/docs/{{ $link }}">
                             {{ $title }}
                           </a>
                         </li>
@@ -91,7 +91,7 @@
         </div>
       </div>
     </div>
-    <div class="w-full lg:w-3/4 xl:w-3/5 px-6">
+    <div class="w-full lg:w-3/4 xl:w-3/5 pl-20 pr-12">
       <div class="fixed w-full z-20">
         <div class="pin-t bg-white md:hidden relative border-b border-grey-light h-12 flex items-center">
           <div id="sidebar-open" class="absolute pin-l pin-y px-4 flex items-center">
@@ -125,9 +125,9 @@
         <script src="/js/app.js"></script>
       </div>
     </div>
-    <div class="hidden xl:block xl:w-1/5 xl:px-6">
-      <div style="position: sticky; top: 0;" class="pt-16">
-        <ul class="list-reset mt-16 mb-20">
+    <div class="hidden xl:text-sm xl:block xl:w-1/5 xl:px-6">
+      <div class="sticky pin-t pt-16">
+        <ul class="list-reset mt-16 mb-24">
           <li class="mb-3"><a href="#" class="text-grey-dark hover:text-grey-darkest">Rounded corners</a></li>
           <li class="mb-3"><a href="#" class="text-grey-dark hover:text-grey-darkest">Pills and circles</a></li>
           <li class="mb-3"><a href="#" class="text-grey-dark hover:text-grey-darkest">No rounding</a></li>
@@ -136,7 +136,7 @@
           <li class="mb-3"><a href="#" class="text-grey-dark hover:text-grey-darkest">Responsive design</a></li>
           <li class="mb-3"><a href="#" class="text-grey-dark hover:text-grey-darkest">Customizing</a></li>
         </ul>
-        <div class="pr-8">
+        <div class="pr-16">
           <div class="mb-2">
             <img src="https://user-images.githubusercontent.com/4323180/35755405-1b1f5c60-0835-11e8-9146-db406c806cf4.png">
           </div>
