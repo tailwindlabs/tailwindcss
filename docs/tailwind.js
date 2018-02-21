@@ -61,6 +61,9 @@ config.padding = Object.assign(config.padding, {
   '12': '3rem',
   '16': '4rem',
   '20': '5rem',
+  '24': '6rem',
+  '28': '7rem',
+  '32': '8rem',
   '80': '20rem',
 })
 
@@ -69,6 +72,9 @@ config.margin = Object.assign(config.margin, {
   '12': '3rem',
   '16': '4rem',
   '20': '5rem',
+  '24': '6rem',
+  '28': '7rem',
+  '32': '8rem',
   '80': '20rem',
 })
 
@@ -77,5 +83,8 @@ config.negativeMargin = config.margin
 config.shadows = Object.assign({
   'md-light': '0 0 12px 8px rgb(255,255,255)'
 }, config.shadows)
+
+config.modules.borderColors = ['responsive', 'hover', 'focus']
+config.modules.borderWidths = ['responsive', 'hover', 'focus']
 
 module.exports = config

@@ -24,6 +24,12 @@ ul {
 
 @tailwind utilities;
 
+@responsive {
+  .sticky {
+    position: sticky;
+  }
+}
+
 .focus\:bg-grey-dark:focus {
   @apply .bg-grey-dark;
 }
@@ -46,6 +52,18 @@ ul {
 
 .placeholder-grey-dark::placeholder {
   @apply .text-grey-dark;
+}
+
+.placeholder-grey-darker::placeholder {
+  @apply .text-grey-darker;
+}
+
+.placeholder-grey-darkest::placeholder {
+  @apply .text-grey-darkest;
+}
+
+.focus\:outline-0:focus {
+  outline: 0;
 }
 
 [v-cloak] .v-cloak-hidden {
