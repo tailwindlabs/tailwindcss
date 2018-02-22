@@ -49,11 +49,13 @@ config.width = Object.assign(config.width, {
 
 config.height = Object.assign(config.height, {
   '7': '1.75rem',
+  '20': '5rem',
   '128': '32rem',
 })
 
 config.maxHeight = Object.assign(config.maxHeight, {
   'sm': '30rem',
+  '(screen-16)': 'calc(100vh - 4rem)',
 })
 
 config.padding = Object.assign(config.padding, {
