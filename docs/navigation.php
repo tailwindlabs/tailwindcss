@@ -79,7 +79,7 @@ return [
     ],
     'Miscellaneous' => [
         'Appearance' => 'forms',
-        'Box Shadows' => 'shadows',
+        'Box Shadow' => 'shadows',
         'Opacity' => 'opacity',
         'SVG Fill &amp; Stroke' => 'svg',
     ],

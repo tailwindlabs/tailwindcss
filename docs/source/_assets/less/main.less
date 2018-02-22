@@ -24,15 +24,21 @@ ul {
 
 @tailwind utilities;
 
+// Fucking hack because our order sucks
+.hidden {
+  display: none;
+}
+
 @responsive {
   .sticky {
     position: sticky;
   }
+
+  .top-16 {
+    top: 4rem;
+  }
 }
 
-.top-16 {
-  top: 4rem;
-}
 
 .focus\:bg-grey-dark:focus {
   @apply .bg-grey-dark;

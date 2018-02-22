@@ -79,10 +79,12 @@ $.when($.ready).then(function() {
   $('#sidebar-close').on('click', function () {
     $('#sidebar').addClass('hidden')
     $('#sidebar-close').addClass('hidden')
+    $('#sidebar-open').removeClass('hidden')
   })
 
   // Show sidebar (mobile)
   $('#sidebar-open').on('click', function () {
+      $('#sidebar-open').addClass('hidden')
       $('#sidebar').removeClass('hidden')
       $('#sidebar-close').removeClass('hidden')
   })

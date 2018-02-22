@@ -47,6 +47,10 @@ config.width = Object.assign(config.width, {
   '128': '32rem',
 })
 
+config.maxWidth = Object.assign(config.maxWidth, {
+  'screen-xl': config.screens.xl,
+})
+
 config.height = Object.assign(config.height, {
   '7': '1.75rem',
   '20': '5rem',
@@ -86,6 +90,7 @@ config.shadows = Object.assign({
   'md-light': '0 0 12px 8px rgb(255,255,255)'
 }, config.shadows)
 
+config.modules.backgroundColors = ['responsive', 'hover', 'focus']
 config.modules.borderColors = ['responsive', 'hover', 'focus']
 config.modules.borderWidths = ['responsive', 'hover', 'focus']
 
