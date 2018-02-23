@@ -13,17 +13,17 @@ features:
   'rows' => [
     [
       '.font-sans',
-      "font-family:\n  system-ui,\n  BlinkMacSystemFont,\n  -apple-system,\n  Segoe UI,\n  Roboto,\n  Oxygen,\n  Ubuntu,\n  Cantarell,\n  Fira Sans,\n  Droid Sans,\n  Helvetica Neue,\n  sans-serif;",
+      "font-family: system-ui, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;",
       'Set the font family to the sans font stack.',
     ],
     [
       '.font-serif',
-      "font-family:\n  Constantia,\n  Lucida Bright,\n  Lucidabright,\n  Lucida Serif,\n  Lucida,\n  DejaVu Serif,\n  Bitstream Vera Serif,\n  Liberation Serif,\n  Georgia,\n  serif;",
+      "font-family: Constantia, Lucida Bright, Lucidabright, Lucida Serif, Lucida, DejaVu Serif, Bitstream Vera Serif, Liberation Serif, Georgia, serif;",
       'Set the font family to the serif font stack.',
     ],
     [
       '.font-mono',
-      "font-family:\n  Menlo,\n  Monaco,\n  Consolas,\n  Liberation Mono,\n  Courier New,\n  monospace;",
+      "font-family: Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;",
       'Set the font family to the mono font stack.',
     ],
   ]

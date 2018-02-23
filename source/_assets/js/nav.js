@@ -34,6 +34,7 @@ $.when($.ready).then(function() {
 
       $('#sidebar').addClass('hidden')
       $('#sidebar-close').addClass('hidden')
+      $('#sidebar-open').removeClass('hidden')
 
       // Update the page
       $('title').text(title)

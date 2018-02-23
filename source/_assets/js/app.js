@@ -21,12 +21,12 @@ Mousetrap.bind('/', function (e) {
   document.getElementById('docsearch').focus()
 })
 
-// ;(function () {
-//   var s = document.createElement('script')
-//   s.setAttribute('async', '')
-//   s.src = '//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=tailwindcsscom'
-//   s.id = '_carbonads_js'
-//   var adElement = document.getElementById('ad')
-//   adElement.innerHTML = ''
-//   adElement.appendChild(s)
-// })()
+;(function () {
+  var s = document.createElement('script')
+  s.setAttribute('async', '')
+  s.src = '//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=tailwindcsscom'
+  s.id = '_carbonads_js'
+  var adElement = document.getElementById('ad')
+  adElement.innerHTML = ''
+  adElement.appendChild(s)
+})()

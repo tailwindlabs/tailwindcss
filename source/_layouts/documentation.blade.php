@@ -21,7 +21,7 @@
 @section('body')
 
 {{-- Top nav --}}
-<div class="flex bg-white border-b border-grey-lighter fixed pin-t pin-x z-50 h-16 items-center">
+<div class="flex bg-white border-b border-grey-lighter fixed pin-t pin-x z-100 h-16 items-center">
   <div class="w-full max-w-screen-xl relative mx-auto px-6">
     <div class="flex items-center -mx-6">
 
@@ -86,7 +86,7 @@
   <div class="lg:flex -mx-6">
 
     {{-- Side nav --}}
-    <div id="sidebar" class="hidden w-full pt-16 border-b -mb-16 lg:-mb-0 lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5">
+    <div id="sidebar" class="hidden absolute z-90 top-16 bg-white w-full border-b -mb-16 lg:-mb-0 lg:static lg:bg-transparent lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5">
       <div class="px-6 pt-6 overflow-y-scroll lg:block lg:sticky lg:top-16 lg:py-12 lg:pl-6 lg:pr-8 lg:h-(screen-16) lg:max-h-(screen-16)">
 
         <nav id="nav" class="text-base lg:text-sm">

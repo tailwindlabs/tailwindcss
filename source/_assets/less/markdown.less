@@ -20,7 +20,7 @@
   }
 
   // Ridiculous scroll offset trash
-  > h2::before {
+  > h2::before, > h3::before {
     display: block;
     height: 6rem;
     margin-top: -6rem;
@@ -84,6 +84,10 @@
     @apply .leading-none;
     @apply .font-semibold;
     @apply .text-2xl;
+  }
+
+  > h2 + h3 {
+    @apply .mt-6;
   }
 
   > h3, h3& {

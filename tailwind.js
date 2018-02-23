@@ -92,6 +92,11 @@ config.shadows = Object.assign({
   'md-light': '0 0 12px 8px rgb(255,255,255)'
 }, config.shadows)
 
+config.zIndex = Object.assign(config.zIndex, {
+  '90': '90',
+  '100': '100',
+})
+
 config.modules.backgroundColors = ['responsive', 'hover', 'focus']
 config.modules.borderColors = ['responsive', 'hover', 'focus']
 config.modules.borderWidths = ['responsive', 'hover', 'focus']
