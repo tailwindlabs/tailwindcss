@@ -3,20 +3,6 @@
   $scroll = (count($rows) > 10 && ($scroll !== false));
 @endphp
 
-{{-- <div class="border-b">
-  <class-table :rows="{{ json_encode($rows) }}"></class-table>
-</div> --}}
-
-{{-- <div>
-    <v-component :initial-data="{ classes: {{ json_encode($rows) }} }">
-        <div slot-scope="props">
-            <div v-for="klass in props.data.classes">
-                <span>@{{ klass[0] }}</span>
-            </div>
-        </div>
-    </v-component>
-</div> --}}
-
 <div class="border-t border-b border-grey-light overflow-hidden relative">
   <div class="{{ $scroll ? 'max-h-sm pb-10' : '' }} overflow-y-scroll">
     <table class="w-full text-left table-collapse">

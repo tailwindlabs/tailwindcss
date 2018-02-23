@@ -145,15 +145,7 @@
               <div class="hidden xl:text-sm xl:block xl:w-1/4 xl:px-6">
                 {{-- <div class="px-6 pt-6 overflow-y-scroll lg:block lg:sticky lg:top-16 lg:py-12 lg:pl-6 lg:pr-8 lg:max-h-(screen-16)"> --}}
                 <div class="flex flex-col justify-between overflow-y-scroll sticky top-16 max-h-(screen-16) pt-12 pb-4 -mt-12">
-                  <ul class="list-reset mb-24">
-                    <li class="mb-3"><a href="#" class="text-grey-dark hover:text-grey-darkest">Rounded corners</a></li>
-                    <li class="mb-3"><a href="#" class="text-grey-dark hover:text-grey-darkest">Pills and circles</a></li>
-                    <li class="mb-3"><a href="#" class="text-grey-dark hover:text-grey-darkest">No rounding</a></li>
-                    <li class="mb-3"><a href="#" class="text-grey-dark hover:text-grey-darkest">Rounding sides separately</a></li>
-                    <li class="mb-3"><a href="#" class="text-grey-dark hover:text-grey-darkest">Rounding corners separately</a></li>
-                    <li class="mb-3"><a href="#" class="text-grey-dark hover:text-grey-darkest">Responsive design</a></li>
-                    <li class="mb-3"><a href="#" class="text-grey-dark hover:text-grey-darkest">Customizing</a></li>
-                  </ul>
+                  <table-of-contents class="mb-24"></table-of-contents>
                   <div class="pr-16">
                     <div class="mb-2">
                       <img src="https://user-images.githubusercontent.com/4323180/35755405-1b1f5c60-0835-11e8-9146-db406c806cf4.png">
