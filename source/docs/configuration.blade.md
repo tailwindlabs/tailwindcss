@@ -26,7 +26,7 @@ By default, `tailwind init` will generate a `tailwind.js` config file at the roo
 
 Your generated configuration file contains all of Tailwind's default configuration values, ready for you to customize.
 
-<pre class="h-128 overflow-y-scroll language-javascript"><code>{!! str_replace('// var defaultConfig', 'var defaultConfig', file_get_contents(dirname(dirname(__DIR__)).'/defaultConfig.stub.js')) !!}</code></pre>
+<pre class="h-128 overflow-y-scroll language-javascript"><code>{!! str_replace('// var defaultConfig', 'var defaultConfig', file_get_contents(dirname(__DIR__).'/node_modules/tailwindcss/defaultConfig.stub.js')) !!}</code></pre>
 
 ## Configuration Sections
 
