@@ -19,3 +19,11 @@ Mousetrap.bind('/', function (e) {
   e.preventDefault()
   document.getElementById('docsearch').focus()
 })
+
+;(function () {
+  var s = document.createElement('script')
+  s.setAttribute('async', '')
+  s.src = '//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=tailwindcsscom'
+  s.id = '_carbonads_js'
+  document.getElementById('ad').appendChild(s)
+})()

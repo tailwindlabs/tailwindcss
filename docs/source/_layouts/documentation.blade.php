@@ -146,13 +146,15 @@
                 {{-- <div class="px-6 pt-6 overflow-y-scroll lg:block lg:sticky lg:top-16 lg:py-12 lg:pl-6 lg:pr-8 lg:max-h-(screen-16)"> --}}
                 <div class="flex flex-col justify-between overflow-y-scroll sticky top-16 max-h-(screen-16) pt-12 pb-4 -mt-12">
                   <table-of-contents class="mb-24"></table-of-contents>
+                  <div id="ad"></div>
+                  {{--
                   <div class="pr-16">
                     <div class="mb-2">
                       <img src="https://user-images.githubusercontent.com/4323180/35755405-1b1f5c60-0835-11e8-9146-db406c806cf4.png">
                     </div>
                     <p class="text-sm text-grey-darker leading-tight mb-2">It's teamwork, but simpler, more pleasant and more productive.</p>
                     <p class="text-xs text-grey">ads via Carbon</p>
-                  </div>
+                  </div> --}}
                 </div>
               </div>
               {{-- /Table of contents --}}
