@@ -1,4 +1,8 @@
 .markdown {
+  > *:first-child {
+    @apply .mt-0;
+  }
+
   .subnav, .subnav& {
     @apply .flex;
     @apply .mt-6;
@@ -13,6 +17,15 @@
       @apply .text-grey-darkest;
       @apply .text-sm;
     }
+  }
+
+  // Ridiculous scroll offset trash
+  > h2::before {
+    display: block;
+    height: 6rem;
+    margin-top: -6rem;
+    visibility: hidden;
+    content: "";
   }
 
   > hr {
@@ -108,10 +121,6 @@
     @apply .leading-normal;
     @apply .mt-4;
     @apply .mb-4;
-
-    &:first-child {
-      @apply .mt-0;
-    }
   }
 
   > ul, > ol {

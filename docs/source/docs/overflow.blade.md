@@ -54,7 +54,7 @@ features:
   ]
 ])
 
-### Visible <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Visible <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
 
 Use `.overflow-visible` to prevent content within an element from being clipped. Note that any content that overflows the bounds of the element will then be visible.
 
@@ -69,7 +69,7 @@ Use `.overflow-visible` to prevent content within an element from being clipped.
 @endslot
 @endcomponent
 
-### Auto
+## Auto
 
 Use `.overflow-auto` to add scrollbars to an element in the event that its content overflows the bounds of that element. Unlike `.overflow-scroll`, which always show scrollbars, this utility will only show them if scrolling is necessary.
 
@@ -82,7 +82,7 @@ Use `.overflow-auto` to add scrollbars to an element in the event that its conte
 @endslot
 @endcomponent
 
-### Hidden
+## Hidden
 
 Use `.overflow-hidden` to clip any content within an element that overflows the bounds of that element.
 
@@ -95,7 +95,7 @@ Use `.overflow-hidden` to clip any content within an element that overflows the 
 @endslot
 @endcomponent
 
-### Scroll horizontally
+## Scroll horizontally
 
 Use `.overflow-x-scroll` to allow horizontal scrolling if needed.
 
@@ -109,7 +109,7 @@ Use `.overflow-x-scroll` to allow horizontal scrolling if needed.
 @endslot
 @endcomponent
 
-### Scroll vertically
+## Scroll vertically
 
 Use `.overflow-y-scroll` to allow vertical scrolling if needed.
 
@@ -123,7 +123,7 @@ Use `.overflow-y-scroll` to allow vertical scrolling if needed.
 @endslot
 @endcomponent
 
-### Scroll in all directions
+## Scroll in all directions
 
 Use `.overflow-scroll` to add scrollbars to an element. Unlike `.overflow-auto`, which only shows scrollbars if they are necessary, this utility always shows them. Note that some operating systems, like MacOS, hide unnecessary scrollbars regardless of this setting.
 
@@ -149,7 +149,7 @@ Use `.overflow-scroll` to add scrollbars to an element. Unlike `.overflow-auto`,
 @endslot
 @endcomponent
 
-### Momentum-based scrolling on touch devices
+## Momentum-based scrolling on touch devices
 
 Use `.scrolling-touch` to use momentum-based scrolling (where supported) on touch devices.
 

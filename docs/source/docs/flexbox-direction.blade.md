@@ -34,7 +34,7 @@ features:
   ]
 ])
 
-### Row <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Row <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
 
 Use `.flex-row` to position flex items horizontally in the same direction as text:
 
@@ -46,7 +46,7 @@ Use `.flex-row` to position flex items horizontally in the same direction as tex
 </div>
 @endcomponent
 
-### Row reversed
+## Row reversed
 
 Use `.flex-row-reverse` to position flex items horizontally in the opposite direction:
 
@@ -58,7 +58,7 @@ Use `.flex-row-reverse` to position flex items horizontally in the opposite dire
 </div>
 @endcomponent
 
-### Column
+## Column
 
 Use `.flex-col` to position flex items vertically:
 
@@ -70,7 +70,7 @@ Use `.flex-col` to position flex items vertically:
 </div>
 @endcomponent
 
-### Column reversed
+## Column reversed
 
 Use `.flex-col-reverse` to position flex items vertically in the opposite direction:
 

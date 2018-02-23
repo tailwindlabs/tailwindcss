@@ -39,7 +39,7 @@ features:
   ]
 ])
 
-### Start <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Start <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
 
 Use `.justify-start` to justify items against the start of the flex container's main axis:
 
@@ -51,7 +51,7 @@ Use `.justify-start` to justify items against the start of the flex container's 
 </div>
 @endcomponent
 
-### Center
+## Center
 
 Use `.justify-center` to justify items along the center of the flex container's main axis:
 
@@ -63,7 +63,7 @@ Use `.justify-center` to justify items along the center of the flex container's 
 </div>
 @endcomponent
 
-### End
+## End
 
 Use `.justify-end` to justify items against the end of the flex container's main axis:
 
@@ -75,7 +75,7 @@ Use `.justify-end` to justify items against the end of the flex container's main
 </div>
 @endcomponent
 
-### Space between
+## Space between
 
 Use `.justify-between` to justify items along the flex container's main axis such that there is an equal amount of space between each item:
 
@@ -87,7 +87,7 @@ Use `.justify-between` to justify items along the flex container's main axis suc
 </div>
 @endcomponent
 
-### Space around
+## Space around
 
 Use `.justify-around` to justify items along the flex container's main axis such that there is an equal amount of space around each item:
 

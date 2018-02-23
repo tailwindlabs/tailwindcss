@@ -6,7 +6,7 @@ description: Examples of building forms with Tailwind CSS.
 
 Tailwind doesn't include purpose-built form control classes out of the box, but form controls are easy to style using existing utilities.
 
-### Login Form
+## Login Form
 
 @component('_partials.code-sample', ['class' => 'px-3 py-10 bg-grey-lighter flex justify-center'])
 <div class="w-full max-w-xs">
@@ -39,7 +39,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
 </div>
 @endcomponent
 
-### Inline Form
+## Inline Form
 
 @component('_partials.code-sample', ['class' => 'flex justify-center p-8'])
 <form class="w-full max-w-xs">
@@ -83,7 +83,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
 </form>
 @endcomponent
 
-### Form Grid
+## Form Grid
 
 @component('_partials.code-sample', ['class' => 'flex justify-center p-8'])
 <form class="w-full max-w-md">
@@ -143,7 +143,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
 </form>
 @endcomponent
 
-### Underline Form
+## Underline Form
 
 @component('_partials.code-sample', ['class' => 'flex justify-center p-8'])
 <form class="w-full max-w-sm">
@@ -159,7 +159,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
 </form>
 @endcomponent
 
-### Custom Select
+## Custom Select
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <div class="inline-block relative w-64">

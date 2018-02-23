@@ -6,7 +6,7 @@ description: Examples of building card components with Tailwind CSS.
 
 Tailwind doesn't include pre-designed card components out of the box, but they're easy to build using existing utilities.
 
-### Stacked
+## Stacked
 
 @component('_partials.code-sample', ['class' => 'p-10 flex justify-center'])
 <div class="max-w-sm rounded overflow-hidden shadow-lg">
@@ -25,7 +25,7 @@ Tailwind doesn't include pre-designed card components out of the box, but they'r
 </div>
 @endcomponent
 
-### Horizontal
+## Horizontal
 
 @component('_partials.code-sample', ['class' => 'p-10 flex justify-center'])
 <div class="max-w-md w-full lg:flex">

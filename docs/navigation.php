@@ -81,7 +81,7 @@ return [
         'Appearance' => 'appearance',
         'Box Shadow' => 'shadows',
         'Opacity' => 'opacity',
-        'SVG Fill &amp; Stroke' => 'svg',
+        'SVG' => 'svg',
     ],
     'Component Examples' => [
         'Alerts' => 'examples/alerts',

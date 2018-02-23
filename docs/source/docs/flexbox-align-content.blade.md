@@ -39,7 +39,7 @@ features:
   ]
 ])
 
-### Start <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Start <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
 
 Use `.content-start` to pack lines in a flex container against the start of the cross axis:
 
@@ -63,7 +63,7 @@ Use `.content-start` to pack lines in a flex container against the start of the 
 </div>
 @endcomponent
 
-### Center
+## Center
 
 Use `.content-center` to pack lines in a flex container in the center of the cross axis:
 
@@ -87,7 +87,7 @@ Use `.content-center` to pack lines in a flex container in the center of the cro
 </div>
 @endcomponent
 
-### End
+## End
 
 Use `.content-end` to pack lines in a flex container against the end of the cross axis:
 
@@ -111,7 +111,7 @@ Use `.content-end` to pack lines in a flex container against the end of the cros
 </div>
 @endcomponent
 
-### Space between
+## Space between
 
 Use `.content-between` to distribute lines in a flex container such that there is an equal amount of space between each line:
 
@@ -135,7 +135,7 @@ Use `.content-between` to distribute lines in a flex container such that there i
 </div>
 @endcomponent
 
-### Space around
+## Space around
 
 Use `.content-around` to distribute lines in a flex container such that there is an equal amount of space around each line:
 

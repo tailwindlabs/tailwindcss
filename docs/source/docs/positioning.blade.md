@@ -74,7 +74,7 @@ features:
   ]
 ])
 
-### Static <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Static <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
 
 Use `.static` to position an element according to the normal flow of the document.
 
@@ -100,7 +100,7 @@ Any offsets will be ignored and the element will not act as a position reference
 @endslot
 @endcomponent
 
-### Relative
+## Relative
 
 Use `.relative` to position an element according to the normal flow of the document.
 
@@ -126,7 +126,7 @@ Offsets are calculated relative to the element's normal position and the element
 @endslot
 @endcomponent
 
-### Absolute
+## Absolute
 
 Use `.absolute` to position an element *outside* of the normal flow of the document, causing neighboring elements to act as if the element doesn't exist.
 
@@ -178,7 +178,7 @@ Offsets are calculated relative to the nearest parent that has a position other 
 @endslot
 @endcomponent
 
-### Fixed
+## Fixed
 
 Use `.fixed` to position an element relative to the browser window.
 
@@ -234,7 +234,7 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 @endslot
 @endcomponent
 
-### Pinning edges
+## Pinning edges
 
 Use the `.pin{-edge?}` utilities to anchor absolutely positioned elements against any of the edges of the nearest positioned parent.
 

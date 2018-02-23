@@ -24,7 +24,7 @@ features:
   ]
 ])
 
-### Visible <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Visible <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
 
 Use `.visible` to make an element visible. This will typically be used as a reset when using the `.invisible` utility.
 
@@ -32,7 +32,7 @@ Use `.visible` to make an element visible. This will typically be used as a rese
 <div class="visible bg-grey-light w-24 h-24 rounded-full"></div>
 @endcomponent
 
-### Invisible
+## Invisible
 
 Use `.invisible` to hide an element, but still maintain its space.
 

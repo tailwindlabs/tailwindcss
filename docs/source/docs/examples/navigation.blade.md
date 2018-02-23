@@ -6,7 +6,7 @@ description: Examples of building navigation components with Tailwind CSS.
 
 Tailwind doesn't include pre-designed navigation components out of the box, but they're easy to build using existing utilities.
 
-### Simple
+## Simple
 
 @component('_partials.code-sample')
 <ul class="list-reset flex">
@@ -25,7 +25,7 @@ Tailwind doesn't include pre-designed navigation components out of the box, but 
 </ul>
 @endcomponent
 
-### Responsive Header
+## Responsive Header
 
 @component('_partials.code-sample')
 <div class="mb-6 lg:hidden">
@@ -123,7 +123,7 @@ Tailwind doesn't include pre-designed navigation components out of the box, but 
 @endslot
 @endcomponent
 
-### Tabs
+## Tabs
 
 @component('_partials.code-sample')
 <ul class="list-reset flex border-b">
@@ -142,7 +142,7 @@ Tailwind doesn't include pre-designed navigation components out of the box, but 
 </ul>
 @endcomponent
 
-### Pills
+## Pills
 
 @component('_partials.code-sample')
 <ul class="list-reset flex">
@@ -158,7 +158,7 @@ Tailwind doesn't include pre-designed navigation components out of the box, but 
 </ul>
 @endcomponent
 
-### Stretched
+## Stretched
 
 @component('_partials.code-sample')
 <ul class="list-reset flex">
@@ -174,7 +174,7 @@ Tailwind doesn't include pre-designed navigation components out of the box, but 
 </ul>
 @endcomponent
 
-### Justified
+## Justified
 
 @component('_partials.code-sample')
 <ul class="list-reset flex justify-between">

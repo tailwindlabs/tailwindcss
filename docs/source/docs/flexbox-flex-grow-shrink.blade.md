@@ -54,7 +54,7 @@ features:
   ]
 ])
 
-### Initial <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Initial <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
 
 Use `.flex-initial` to allow a flex item to shrink but not grow, taking into account its initial size:
 
@@ -106,7 +106,7 @@ Use `.flex-initial` to allow a flex item to shrink but not grow, taking into acc
 @endslot
 @endcomponent
 
-### Flex 1
+## Flex 1
 
 Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring its initial size:
 
@@ -151,7 +151,7 @@ Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring its in
 @endslot
 @endcomponent
 
-### Auto
+## Auto
 
 Use `.flex-auto` to allow a flex item to grow and shrink, taking into account its initial size:
 
@@ -196,7 +196,7 @@ Use `.flex-auto` to allow a flex item to grow and shrink, taking into account it
 @endslot
 @endcomponent
 
-### None
+## None
 
 Use `.flex-none` to prevent a flex item from growing or shrinking:
 
@@ -214,7 +214,7 @@ Use `.flex-none` to prevent a flex item from growing or shrinking:
 </div>
 @endcomponent
 
-### Grow
+## Grow
 
 Use `.flex-grow` to allow a flex item to grow to fill any available space:
 
@@ -232,7 +232,7 @@ Use `.flex-grow` to allow a flex item to grow to fill any available space:
 </div>
 @endcomponent
 
-### Don't grow
+## Don't grow
 
 Use `.flex-no-grow` to prevent a flex item from growing:
 
@@ -250,7 +250,7 @@ Use `.flex-no-grow` to prevent a flex item from growing:
 </div>
 @endcomponent
 
-### Shrink
+## Shrink
 
 Use `.flex-shrink` to allow a flex item to shrink if needed:
 
@@ -268,7 +268,7 @@ Use `.flex-shrink` to allow a flex item to shrink if needed:
 </div>
 @endcomponent
 
-### Don't shrink
+## Don't shrink
 
 Use `.flex-no-shrink` to prevent a flex item from shrinking:
 

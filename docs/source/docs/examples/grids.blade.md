@@ -6,7 +6,7 @@ description: Examples of building grid layouts with Tailwind CSS.
 
 Tailwind doesn't include purpose-built grid classes out of the box, but grid layouts are simple to build using the existing [Flexbox](/docs/flexbox-display) and [width](/docs/width) utilities.
 
-### Basic Grids
+## Basic Grids
 
 Use the existing [Flexbox](/docs/flexbox-display) and [percentage width](/docs/width) utilities to construct basic grids.
 
@@ -57,7 +57,7 @@ Use the existing [Flexbox](/docs/flexbox-display) and [percentage width](/docs/w
 </div>
 @endcomponent
 
-### Responsive Grids
+## Responsive Grids
 
 Use the responsive variants of the width utilities to build responsive grid layouts.
 
@@ -124,7 +124,7 @@ Use the responsive variants of the width utilities to build responsive grid layo
 @endslot
 @endcomponent
 
-### Mixed Column Sizes
+## Mixed Column Sizes
 
 Mix different percentage width utilities to build mixed size grids.
 
@@ -143,7 +143,7 @@ Mix different percentage width utilities to build mixed size grids.
 </div>
 @endcomponent
 
-### Wrapping Columns
+## Wrapping Columns
 
 Add `flex-wrap` to your column container to allow columns to wrap when they run out of room.
 
@@ -157,7 +157,7 @@ Add `flex-wrap` to your column container to allow columns to wrap when they run 
 </div>
 @endcomponent
 
-### Column Spacing
+## Column Spacing
 
 Add a negative horizontal margin like `-mx-2` to your column container and an equal horizontal padding like `px-2` to each column to add gutters.
 
@@ -179,7 +179,7 @@ To prevent horizontal scrolling in full width layouts, add `overflow-hidden` to 
 </div>
 @endcomponent
 
-### Automatic Column Widths
+## Automatic Column Widths
 
 Use `flex-1` instead of an explicit width on your columns to have them size automatically to fill the row.
 
@@ -225,7 +225,7 @@ Use `flex-1` instead of an explicit width on your columns to have them size auto
 </div>
 @endcomponent
 
-### Column Order
+## Column Order
 
 Use `flex-row-reverse` to reverse column order. Useful for two-column responsive layouts where the column on right should appear first on smaller screens.
 
@@ -236,7 +236,7 @@ Use `flex-row-reverse` to reverse column order. Useful for two-column responsive
 </div>
 @endcomponent
 
-### Simple Offsets
+## Simple Offsets
 
 Use auto margin utilities like `ml-auto` and `mr-auto` to offset columns in a row.
 

@@ -29,7 +29,7 @@ features:
   ]
 ])
 
-### Don't wrap <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Don't wrap <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
 
 Use `.flex-no-wrap` to prevent flex items from wrapping, causing inflexible items to overflow the container if necessary:
 
@@ -47,7 +47,7 @@ Use `.flex-no-wrap` to prevent flex items from wrapping, causing inflexible item
 </div>
 @endcomponent
 
-### Wrap normally
+## Wrap normally
 
 Use `.flex-wrap` to allow flex items to wrap:
 
@@ -65,7 +65,7 @@ Use `.flex-wrap` to allow flex items to wrap:
 </div>
 @endcomponent
 
-### Wrap reversed
+## Wrap reversed
 
 Use `.flex-wrap-reverse` to wrap flex items in the reverse direction:
 

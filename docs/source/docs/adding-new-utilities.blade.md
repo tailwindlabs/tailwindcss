@@ -66,7 +66,7 @@ If you're using a preprocessor like Less, Sass, or Stylus, consider keeping your
 @@import "custom-utilities";
 ```
 
-## Making custom utilities responsive
+## Responsive Variants
 
 If you'd like to create responsive versions of your own utilities based on the breakpoints defined in your Tailwind config file, wrap your utilities in the `@responsive { ... }` directive:
 

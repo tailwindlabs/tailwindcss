@@ -56,9 +56,7 @@ Use the `.shadow`, `.shadow-md`, or `.shadow-lg` utilities to apply different si
 
 ## Inner shadow
 
-Use the `.shadow-inner` utility to apply a subtle inset box shadow to an element.
-
-This can be useful for things like form controls or wells.
+Use the `.shadow-inner` utility to apply a subtle inset box shadow to an element. This can be useful for things like form controls or wells.
 
 @component('_partials.code-sample', ['class' => 'flex justify-around text-sm py-8'])
 <div class="p-4 bg-grey-lightest shadow-inner">.shadow-inner</div>
@@ -69,9 +67,7 @@ This can be useful for things like form controls or wells.
 
 ## No shadow
 
-Use `.shadow-none` to remove an existing box shadow from an element.
-
-This is most commonly used to remove a shadow that was applied at a smaller breakpoint.
+Use `.shadow-none` to remove an existing box shadow from an element. This is most commonly used to remove a shadow that was applied at a smaller breakpoint.
 
 @component('_partials.code-sample', ['class' => 'flex justify-around text-sm py-8'])
 <div class="p-4 shadow-none bg-grey-light">.shadow-none</div>

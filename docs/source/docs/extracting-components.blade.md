@@ -26,7 +26,7 @@ If this is the only button in your project, creating a custom component class fo
 
 If on the other hand you were reusing this button style in several places, keeping that long list of utility classes in sync across every button instance could become a real maintenance burden.
 
-## Extracting utility patterns with `@apply`
+## Extracting utility patterns with @@apply
 
 When you start to notice repeating patterns of utilities in your markup, it might be worth extracting a component class.
 
@@ -163,7 +163,7 @@ It also allows you to add new one-off button styles without being forced to crea
 @endslot
 @endcomponent
 
-## CSS Structure
+## CSS structure
 
 Since Tailwind's utility classes don't rely on `!important` to defeat other styles, it's important that you add your component classes *before* any utility classes in your CSS.
 

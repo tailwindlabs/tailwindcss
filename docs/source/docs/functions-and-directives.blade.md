@@ -6,7 +6,7 @@ description: null
 
 Tailwind exposes a few custom CSS functions and directives that can be used in your actual CSS files.
 
-### `@@tailwind`
+## @@tailwind
 
 Use the `@@tailwind` directive to insert Tailwind's `preflight`, `utilities` and `screens` styles into your CSS. Here's a full example of how you might do this:
 
@@ -36,7 +36,7 @@ Use the `@@tailwind` directive to insert Tailwind's `preflight`, `utilities` and
  @@tailwind screens;
 ```
 
-### `@@apply`
+## @@apply
 
 Use `@@apply` to mixin the contents of existing classes into your custom CSS.
 
@@ -140,7 +140,7 @@ Note that `@@apply` **will not work** for mixing in hover, focus, or responsive 
 }
 ```
 
-### `@variants`
+## @variants
 
 You can generate `responsive`, `hover`, `focus`, and `group-hover` versions of your own utilities by wrapping their definitions in the `@variants` directive
 
@@ -185,7 +185,7 @@ The `@variants` at-rule supports all of the values that are supported in the `mo
 - `focus`
 - `group-hover`
 
-### `@@responsive`
+## @@responsive
 
 You can generate responsive versions of your own classes by wrapping their definitions in the `@responsive` directive:
 
@@ -237,7 +237,7 @@ Using the default breakpoints, this would generate these classes:
 
 The responsive versions will be added to Tailwind's existing media queries **at the end of your stylesheet.** This makes sure that classes with a responsive prefix always defeat non-responsive classes that are targeting the same CSS property.
 
-### `@@screen`
+## @@screen
 
 The `@@screen` directive allows you to create media queries that reference your breakpoints by name instead of duplicating their values in your own CSS.
 
@@ -259,7 +259,7 @@ Instead of writing a raw media query that duplicates that value like this:
 }
 ```
 
-### `config()`
+## config()
 
 While it's recommended to use the `@@apply` directive to compose custom CSS out of existing utility classes whenever possible, sometimes you need direct access to your Tailwind config values.
 

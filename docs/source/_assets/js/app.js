@@ -8,6 +8,7 @@ Vue.component('v-component', require('./components/MetaComponent.vue'))
 Vue.component('class-table', require('./components/ClassTable.vue'))
 Vue.component('table-of-contents', require('./components/TableOfContents.vue'))
 
+
 const app = new Vue({
   el: '#app'
 })
@@ -25,5 +26,7 @@ Mousetrap.bind('/', function (e) {
   s.setAttribute('async', '')
   s.src = '//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=tailwindcsscom'
   s.id = '_carbonads_js'
-  document.getElementById('ad').appendChild(s)
+  var adElement = document.getElementById('ad')
+  adElement.innerHTML = ''
+  adElement.appendChild(s)
 })()

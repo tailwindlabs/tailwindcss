@@ -6,7 +6,7 @@ description: Examples of building buttons with Tailwind CSS.
 
 Tailwind doesn't include pre-designed button styles out of the box, but they're easy to build using existing utilities.
 
-### Simple
+## Simple
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded">
@@ -38,7 +38,7 @@ Tailwind doesn't include pre-designed button styles out of the box, but they're 
 @endslot
 @endcomponent
 
-### Pill
+## Pill
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded-full">
@@ -46,7 +46,7 @@ Tailwind doesn't include pre-designed button styles out of the box, but they're 
 </button>
 @endcomponent
 
-### Outline
+## Outline
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <button class="bg-transparent hover:bg-blue text-blue-dark font-semibold hover:text-white py-2 px-4 border border-blue hover:border-transparent rounded">
@@ -54,7 +54,7 @@ Tailwind doesn't include pre-designed button styles out of the box, but they're 
 </button>
 @endcomponent
 
-### Bordered
+## Bordered
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 border border-blue-darker rounded">
@@ -62,7 +62,7 @@ Tailwind doesn't include pre-designed button styles out of the box, but they're 
 </button>
 @endcomponent
 
-### Disabled
+## Disabled
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <button class="bg-blue text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed">
@@ -70,7 +70,7 @@ Tailwind doesn't include pre-designed button styles out of the box, but they're 
 </button>
 @endcomponent
 
-### 3D
+## 3D
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <button class="bg-blue hover:bg-blue-light text-white font-bold py-2 px-4 border-b-4 border-blue-dark hover:border-blue rounded">
@@ -78,7 +78,7 @@ Tailwind doesn't include pre-designed button styles out of the box, but they're 
 </button>
 @endcomponent
 
-### Elevated
+## Elevated
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <button class="bg-white hover:bg-grey-lightest text-grey-darkest font-semibold py-2 px-4 border border-grey-light rounded shadow">
@@ -86,7 +86,7 @@ Tailwind doesn't include pre-designed button styles out of the box, but they're 
 </button>
 @endcomponent
 
-### Groups
+## Groups
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <div class="inline-flex">
@@ -99,7 +99,7 @@ Tailwind doesn't include pre-designed button styles out of the box, but they're 
 </div>
 @endcomponent
 
-### Icons
+## Icons
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <button class="bg-grey-light hover:bg-grey text-grey-darkest font-bold py-2 px-4 rounded inline-flex items-center">

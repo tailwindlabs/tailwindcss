@@ -6,7 +6,7 @@ description: Examples of building alert components with Tailwind CSS.
 
 Tailwind doesn't include pre-designed alert components out of the box, but they're easy to build using existing utilities.
 
-### Traditional
+## Traditional
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="bg-red-lightest border border-red-light text-red-dark px-4 py-3 rounded relative" role="alert">
@@ -18,7 +18,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
 </div>
 @endcomponent
 
-### Modern with Badge
+## Modern with Badge
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'px-0 py-0'])
 <div class="bg-indigo-darkest text-center py-4 lg:px-4">
@@ -30,7 +30,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
 </div>
 @endcomponent
 
-### Left Accent Border
+## Left Accent Border
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="bg-orange-lightest border-l-4 border-orange text-orange-dark p-4" role="alert">
@@ -39,7 +39,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
 </div>
 @endcomponent
 
-### Titled
+## Titled
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div role="alert">
@@ -52,7 +52,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
 </div>
 @endcomponent
 
-### Solid
+## Solid
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="flex items-center bg-blue text-white text-sm font-bold px-4 py-3" role="alert">
@@ -61,7 +61,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
 </div>
 @endcomponent
 
-### Top Accent Border
+## Top Accent Border
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="bg-teal-lightest border-t-4 border-teal rounded-b text-teal-darkest px-4 py-3 shadow-md" role="alert">
@@ -75,7 +75,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
 </div>
 @endcomponent
 
-### Banner
+## Banner
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="bg-blue-lightest border-t border-b border-blue text-blue-dark px-4 py-3" role="alert">

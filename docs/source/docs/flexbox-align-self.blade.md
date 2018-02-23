@@ -39,7 +39,7 @@ features:
   ]
 ])
 
-### Auto <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Auto <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
 
 Use `.self-auto` to align an item based on the value of the flex container's `align-items` property:
 
@@ -51,7 +51,7 @@ Use `.self-auto` to align an item based on the value of the flex container's `al
 </div>
 @endcomponent
 
-### Start
+## Start
 
 Use `.self-start` to align an item to the start of the flex container's cross axis, despite the container's `align-items` value:
 
@@ -63,7 +63,7 @@ Use `.self-start` to align an item to the start of the flex container's cross ax
 </div>
 @endcomponent
 
-### Center
+## Center
 
 Use `.self-center` to align an item along the center of the flex container's cross axis, despite the container's `align-items` value:
 
@@ -75,7 +75,7 @@ Use `.self-center` to align an item along the center of the flex container's cro
 </div>
 @endcomponent
 
-### End
+## End
 
 Use `.self-end` to align an item to the end of the flex container's cross axis, despite the container's `align-items` value:
 
@@ -87,7 +87,7 @@ Use `.self-end` to align an item to the end of the flex container's cross axis, 
 </div>
 @endcomponent
 
-### Stretch
+## Stretch
 
 Use `.self-stretch` to stretch an item to fill the flex container's cross axis, despite the container's `align-items` value:
 

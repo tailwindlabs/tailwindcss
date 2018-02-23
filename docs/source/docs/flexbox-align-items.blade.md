@@ -39,7 +39,7 @@ features:
   ]
 ])
 
-### Stretch <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Stretch <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
 
 Use `.items-stretch` to stretch items to fill the flex container's cross axis:
 
@@ -51,7 +51,7 @@ Use `.items-stretch` to stretch items to fill the flex container's cross axis:
 </div>
 @endcomponent
 
-### Start
+## Start
 
 Use `.items-start` to align items to the start of the flex container's cross axis:
 
@@ -63,7 +63,7 @@ Use `.items-start` to align items to the start of the flex container's cross axi
 </div>
 @endcomponent
 
-### Center
+## Center
 
 Use `.items-center` to align items along the center of the flex container's cross axis:
 
@@ -75,7 +75,7 @@ Use `.items-center` to align items along the center of the flex container's cros
 </div>
 @endcomponent
 
-### End
+## End
 
 Use `.items-end` to align items to the end of the flex container's cross axis:
 
@@ -87,7 +87,7 @@ Use `.items-end` to align items to the end of the flex container's cross axis:
 </div>
 @endcomponent
 
-### Baseline
+## Baseline
 
 Use `.items-baseline` to align items along the flex container's cross axis such that all of their baselines align:
 
