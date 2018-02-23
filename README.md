@@ -1,31 +1,35 @@
-<p align="center">
-    <a href="https://tailwindcss.com/" target="_blank"><img width="200" src="https://tailwindcss.com/img/tailwind.svg"></a><br>
-    A utility-first CSS framework for rapidly building custom user interfaces.
-</p>
+# Tailwind CSS Documentation
 
-<p align="center">
-    <a href="https://travis-ci.org/tailwindcss/tailwindcss"><img src="https://img.shields.io/travis/tailwindcss/tailwindcss/master.svg" alt="Build Status"></a>
-    <a href="https://www.npmjs.com/package/tailwindcss"><img src="https://img.shields.io/npm/dt/tailwindcss.svg" alt="Total Downloads"></a>
-    <a href="https://github.com/tailwindcss/tailwindcss/releases"><img src="https://img.shields.io/npm/v/tailwindcss.svg" alt="Latest Release"></a>
-    <a href="https://github.com/tailwindcss/tailwindcss/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/tailwindcss.svg" alt="License"></a>
-</p>
+## Developing
 
-------
+Tailwind uses the [Jigsaw](http://jigsaw.tighten.co/) static site generator for its documentation. Here is how you can generate the documentation locally:
 
-## Documentation
+1. Go to your Tailwind folder
 
-For full documentation, visit [tailwindcss.com](https://tailwindcss.com/).
+    ```sh
+    cd docs
+    ```
 
-## Community
+2. Install JS dependencies
 
-For help, discussion about best practices, or any other conversation that would benefit from being searchable:
+    ```sh
+    npm install
+    ```
 
-[Discuss Tailwind CSS on GitHub](https://github.com/tailwindcss/discuss/issues?q=is%3Aissue+sort%3Aupdated-desc)
+3. Install PHP dependencies for docs (requires Composer: https://getcomposer.org)
 
-For casual chit-chat with others using the framework:
+    ```sh
+    composer install
+    ```
 
-[Join the Tailwind CSS Slack Community](https://join.slack.com/t/tailwindcss/shared_invite/enQtMjc2NTA1NTg0NTEyLTY4ZTg1YWFjM2NjMTRkMmNkMTA4MGNiZTFmNDYyYTJhNjNkY2QxODQwODE4MWRiZDFlNzdmOGI0MmQ1M2EzZmQ)
+4. Run the build to generate the static site
 
-## Contributing
+    ```sh
+    npm run dev
+    ```
 
-If you're interested in contributing to Tailwind CSS, please read our [contributing docs](https://github.com/tailwindcss/tailwindcss/blob/master/.github/CONTRIBUTING.md) **before submitting a pull request**.
+5. View the static site at `/build_local`, or you can run the Jigsaw server:
+
+    ```sh
+    ./vendor/bin/jigsaw serve
+    ```

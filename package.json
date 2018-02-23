@@ -1,81 +1,35 @@
 {
-  "name": "tailwindcss",
-  "version": "0.4.1",
-  "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
-  "license": "MIT",
-  "main": "lib/index.js",
-  "repository": "https://github.com/tailwindcss/tailwindcss.git",
-  "bugs": "https://github.com/tailwindcss/tailwindcss/issues",
-  "homepage": "https://tailwindcss.com",
-  "bin": {
-    "tailwind": "lib/cli.js"
-  },
-  "contributors": [
-    "Adam Wathan <adam.wathan@gmail.com>",
-    "Jonathan Reinink <jonathan@reinink.ca>",
-    "David Hemphill <davidlee.hemphill@gmail.com>"
-  ],
   "scripts": {
-    "prebabelify": "rimraf lib",
-    "babelify": "babel src --out-dir lib",
-    "prepare": "npm run babelify && babel-node src/build.js",
-    "watch": "nodemon -e js,css --watch src --exec 'babel-node src/build.js'",
-    "style": "eslint .",
-    "test": "jest && eslint ."
+    "development": "cross-env NODE_ENV=development webpack --progress --hide-modules --env=local --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production": "cross-env NODE_ENV=production webpack --progress --hide-modules --env=production --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "dev": "npm run development",
+    "prod": "npm run production",
+    "watch": "npm run development -- --watch"
   },
+  "private": true,
   "devDependencies": {
-    "autoprefixer": "^7.1.6",
-    "babel-cli": "^6.6.5",
-    "babel-core": "^6.7.2",
-    "babel-jest": "^20.0.3",
-    "babel-preset-env": "^1.0.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "babel-preset-stage-3": "^6.24.1",
-    "clean-css": "^4.1.9",
-    "eslint": "^4.10.0",
-    "eslint-config-postcss": "^2.0.2",
-    "eslint-config-prettier": "^2.7.0",
-    "eslint-plugin-prettier": "^2.3.1",
-    "jest": "^20.0.4",
-    "mousetrap": "^1.6.1",
-    "prettier": "^1.7.4",
-    "rimraf": "^2.6.1"
-  },
-  "dependencies": {
-    "commander": "^2.11.0",
-    "fs-extra": "^4.0.2",
+    "anchor-js": "^4.1.0",
+    "cross-env": "^3.2.3",
+    "escape-html": "^1.0.3",
+    "laravel-mix": "^1.5.1",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.5",
     "lodash": "^4.17.4",
-    "nodemon": "^1.11.0",
-    "perfectionist": "^2.4.0",
-    "postcss": "^6.0.9",
-    "postcss-functions": "^3.0.0"
+    "node-cmd": "^3.0.0",
+    "normalize.css": "^7.0.0",
+    "on-build-webpack": "^0.1.0",
+    "postcss-cssnext": "^3.0.2",
+    "prismjs": "^1.8.3",
+    "stylefmt": "^6.0.0",
+    "tailwindcss": "^0.4.1",
+    "vue": "^2.5.2",
+    "webpack-watch": "^0.2.0",
+    "yargs": "^10.0.3"
   },
   "browserslist": [
     "> 1%"
   ],
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": "6.9.0"
-          }
-        }
-      ],
-      "stage-2",
-      "stage-3",
-      "react"
-    ]
-  },
-  "jest": {
-    "setupTestFrameworkScriptFile": "<rootDir>/jest/customMatchers.js",
-    "testPathIgnorePatterns": [
-      "<rootDir>/__tests__/fixtures/"
-    ]
-  },
-  "engines": {
-    "node": ">=6.9.0"
+  "dependencies": {
+    "mousetrap": "^1.6.1"
   }
 }
