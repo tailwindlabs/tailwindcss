@@ -6,6 +6,8 @@ window.anchors = new anchorJS()
 window.Vue = require('vue')
 
 Vue.component('responsive-code-sample', require('./components/ResponsiveCodeSample.vue'))
+Vue.component('v-component', require('./components/MetaComponent.vue'))
+Vue.component('class-table', require('./components/ClassTable.vue'))
 
 const app = new Vue({
   el: '#app'

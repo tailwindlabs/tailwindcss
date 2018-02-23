@@ -78,7 +78,7 @@ return [
         'User Select' => 'user-select',
     ],
     'Miscellaneous' => [
-        'Appearance' => 'forms',
+        'Appearance' => 'appearance',
         'Box Shadow' => 'shadows',
         'Opacity' => 'opacity',
         'SVG Fill &amp; Stroke' => 'svg',

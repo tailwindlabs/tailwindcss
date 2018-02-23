@@ -55,6 +55,7 @@ config.height = Object.assign(config.height, {
   '7': '1.75rem',
   '20': '5rem',
   '128': '32rem',
+  '(screen-16)': 'calc(100vh - 4rem)',
 })
 
 config.maxHeight = Object.assign(config.maxHeight, {

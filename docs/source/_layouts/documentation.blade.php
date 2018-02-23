@@ -39,7 +39,7 @@
         {{-- Search section --}}
         <div class="w-full lg:px-6 lg:w-3/4 xl:px-12">
           <div class="relative">
-            <input data-docsearch class="focus:outline-0 border border-transparent focus:bg-white focus:border-grey-light placeholder-grey-darkest rounded bg-grey-lighter py-2 pr-4 pl-10 block w-full appearance-none leading-normal" type="text" placeholder="Search the docs">
+            <input id="docsearch" class="transition focus:outline-0 border border-transparent focus:bg-white focus:border-grey-light placeholder-grey-darkest rounded bg-grey-lighter py-2 pr-4 pl-10 block w-full appearance-none leading-normal" type="text" placeholder="Search the docs">
             <div class="pointer-events-none absolute pin-y pin-l pl-3 flex items-center">
               <svg class="fill-current pointer-events-none text-grey-dark w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></svg>
             </div>
@@ -84,7 +84,7 @@
 
     {{-- Side nav --}}
     <div id="sidebar" class="hidden w-full pt-16 border-b -mb-16 lg:-mb-0 lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5">
-      <div class="px-6 pt-6 overflow-y-scroll lg:block lg:sticky lg:top-16 lg:py-12 lg:pl-6 lg:pr-8 lg:max-h-(screen-16)">
+      <div class="px-6 pt-6 overflow-y-scroll lg:block lg:sticky lg:top-16 lg:py-12 lg:pl-6 lg:pr-8 lg:h-(screen-16) lg:max-h-(screen-16)">
 
         <nav id="nav" class="text-base lg:text-sm">
           @foreach ($page->navigation as $sectionName => $sectionItems)
@@ -143,7 +143,8 @@
 
               {{-- Table of contents --}}
               <div class="hidden xl:text-sm xl:block xl:w-1/4 xl:px-6">
-                <div class="sticky top-16 max-h-(screen-16) py-12 -mt-12">
+                {{-- <div class="px-6 pt-6 overflow-y-scroll lg:block lg:sticky lg:top-16 lg:py-12 lg:pl-6 lg:pr-8 lg:max-h-(screen-16)"> --}}
+                <div class="flex flex-col justify-between overflow-y-scroll sticky top-16 max-h-(screen-16) pt-12 pb-4 -mt-12">
                   <ul class="list-reset mb-24">
                     <li class="mb-3"><a href="#" class="text-grey-dark hover:text-grey-darkest">Rounded corners</a></li>
                     <li class="mb-3"><a href="#" class="text-grey-dark hover:text-grey-darkest">Pills and circles</a></li>
@@ -202,7 +203,7 @@
     docsearch({
       apiKey: '3df93446658cd9c4e314d4c02a052188',
       indexName: 'tailwindcss',
-      inputSelector: '[data-docsearch]',
+      inputSelector: '#docsearch',
     });
   </script>
 {{-- @endif --}}

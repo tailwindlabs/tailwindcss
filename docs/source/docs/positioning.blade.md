@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Positioning"
-descriptioj: "Utilities for controlling how an element is positioned in the DOM."
+description: "Utilities for controlling how an element is positioned in the DOM."
 features:
   responsive: true
   customizable: false

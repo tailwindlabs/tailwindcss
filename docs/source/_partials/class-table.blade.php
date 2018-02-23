@@ -3,6 +3,20 @@
   $scroll = (count($rows) > 10 && ($scroll !== false));
 @endphp
 
+{{-- <div class="border-b">
+  <class-table :rows="{{ json_encode($rows) }}"></class-table>
+</div> --}}
+
+{{-- <div>
+    <v-component :initial-data="{ classes: {{ json_encode($rows) }} }">
+        <div slot-scope="props">
+            <div v-for="klass in props.data.classes">
+                <span>@{{ klass[0] }}</span>
+            </div>
+        </div>
+    </v-component>
+</div> --}}
+
 <div class="border-t border-b border-grey-light overflow-hidden relative">
   <div class="{{ $scroll ? 'max-h-sm pb-10' : '' }} overflow-y-scroll">
     <table class="w-full text-left table-collapse">
@@ -10,7 +24,6 @@
         <tr>
           <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
           <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-          <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th>
         </tr>
       </thead>
       <tbody class="align-baseline">
@@ -18,7 +31,6 @@
         <tr>
           <td class="p-2 border-t {{ $loop->first ? 'border-grey-light' : 'border-grey-lighter' }} font-mono text-xs text-purple-dark whitespace-no-wrap">{!! $row[0] !!}</td>
           <td class="p-2 border-t {{ $loop->first ? 'border-grey-light' : 'border-grey-lighter' }} font-mono text-xs text-blue-dark whitespace-pre">{!! $row[1] !!}</td>
-          <td class="p-2 border-t {{ $loop->first ? 'border-grey-light' : 'border-grey-lighter' }} text-sm text-grey-darker whitespace-no-wrap lg:whitespace-normal">{!! $row[2] !!}</td>
         </tr>
         @endforeach
       </tbody>
