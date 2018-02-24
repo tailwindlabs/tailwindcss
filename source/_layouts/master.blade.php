@@ -12,7 +12,6 @@
   <title>{{ $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS - A Utility-First CSS Framework for Rapid UI Development' }}</title>
   <meta name="theme-color" content="#ffffff">
   @yield('meta')
-  <link rel="stylesheet" href="https://use.typekit.net/yud6cwb.css">
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i,700,700i" rel="stylesheet">
   <link rel="stylesheet" href="{{ mix('/css/main.css') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css">
