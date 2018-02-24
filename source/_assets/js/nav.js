@@ -1,7 +1,7 @@
 $.when($.ready).then(function() {
   window.history.replaceState({
     'href': window.location.href,
-    'title': $(document).filter('title').text(),
+    'title': $('head').filter('title').text(),
     'nav': $(document).find('#nav').html(),
     'content': $(document).find('#content').html()
   }, '', window.location.href)
@@ -37,7 +37,7 @@ $.when($.ready).then(function() {
       $('#sidebar-open').removeClass('hidden')
 
       // Update the page
-      $('title').text(title)
+      $('head title').text(title)
       $('#nav').html(nav)
       $('#content').html(content)
 
