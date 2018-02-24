@@ -1,6 +1,0 @@
-multipass: true
-plugins:
-  - removeTitle: true
-  - removeDimensions: true
-  - removeAttrs:
-    - attrs: 'fill'
