@@ -416,7 +416,7 @@ To get you started, we've provided a generous palette of great looking colors th
 
 ## Customizing
 
-Tailwind makes it a breeze to modify the default color palette for you project. Remember, you own these colors and nothing will break if you change everything about them.
+Tailwind makes it a breeze to modify the default color palette for your project. Remember, you own these colors and nothing will break if you change everything about them.
 
 By default Tailwind defines the entire color palette in a `colors` object at the top of your Tailwind config file. These colors are then assigned to `textColors`, `backgroundColors` and `borderColors`. This approach works well since it provides a consistent naming system across all the utilities. However, you're welcome to modify them independently of one-another as well.
 
