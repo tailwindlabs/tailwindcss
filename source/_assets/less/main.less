@@ -40,8 +40,17 @@ ul {
   }
 }
 
+@supports (position: sticky) {
+  @media (min-width: config('screens.lg')) {
+    .sticky\?lg\:h-\(screen-16\) {
+      height: ~"calc(100vh - 4rem)";
+    }
+  }
+}
+
+
 .transition {
-    transition: all .1s ease-in;
+  transition: all .1s ease-in;
 }
 
 .focus\:bg-grey-dark:focus {
