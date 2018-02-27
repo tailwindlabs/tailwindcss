@@ -859,6 +859,9 @@ module.exports = {
   },
 
 
+  plugins: [],
+
+
   /*
   |-----------------------------------------------------------------------------
   | Advanced Options         https://tailwindcss.com/docs/configuration#options
