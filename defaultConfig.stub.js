@@ -870,11 +870,11 @@ module.exports = {
   */
 
   transitionDelay: {
-    default: '100ms',
-    'long': '200ms',
-    'longer': '300ms',
-    'longest': '400ms',
-    'none': 'unset',
+    default: '.1s',
+    'long': '.2s',
+    'longer': '.3s',
+    'longest': '.4s',
+    'none': '0s',
   },
 
   /*
