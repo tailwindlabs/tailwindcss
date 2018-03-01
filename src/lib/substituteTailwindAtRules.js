@@ -27,6 +27,7 @@ function processPlugins(config) {
     plugin({
       config,
       rule: defineRule,
+      e: escapeClassName,
       addUtilities: (utilities, variants) => {
         pluginUtilities.push(wrapWithVariants(utilities, variants))
       },
