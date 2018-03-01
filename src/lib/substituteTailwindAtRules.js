@@ -25,6 +25,7 @@ function processPlugins(config) {
 
   config.plugins.forEach(plugin => {
     plugin({
+      config,
       rule: defineRule,
       addUtilities: (utilities, variants) => {
         pluginUtilities.push(wrapWithVariants(utilities, variants))
