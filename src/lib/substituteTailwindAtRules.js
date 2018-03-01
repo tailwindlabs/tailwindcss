@@ -54,11 +54,11 @@ export default function(config) {
 
       if (atRule.params === 'components') {
         const tailwindComponentTree = postcss.root({
-          nodes: [...container(unwrappedConfig)],
+          nodes: container(unwrappedConfig),
         })
 
         const pluginComponentTree = postcss.root({
-          nodes: [...pluginComponents],
+          nodes: pluginComponents,
         })
 
         applyClassPrefix(tailwindComponentTree, unwrappedConfig.options.prefix)
@@ -79,11 +79,11 @@ export default function(config) {
         }
 
         const tailwindUtilityTree = postcss.root({
-          nodes: [...utilities.nodes],
+          nodes: utilities.nodes,
         })
 
         const pluginUtilityTree = postcss.root({
-          nodes: [...pluginUtilities],
+          nodes: pluginUtilities,
         })
 
         applyClassPrefix(tailwindUtilityTree, unwrappedConfig.options.prefix)
