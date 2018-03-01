@@ -80,6 +80,22 @@ test('it fails if the class does not exist', () => {
   })
 })
 
+test('applying classes that are defined in a media query is not supported', () => {
+  const input = `
+    @media (min-width: 300px) {
+      .a { color: blue; }
+    }
+
+    .b {
+      @apply .a;
+    }
+  `
+  expect.assertions(1)
+  return run(input).catch(e => {
+    expect(e).toMatchObject({ name: 'CssSyntaxError' })
+  })
+})
+
 test('applying classes that are ever used in a media query is not supported', () => {
   const input = `
     .a {

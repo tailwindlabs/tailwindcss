@@ -2,23 +2,25 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import escapeClassName from '../util/escapeClassName'
 
+function buildClassTable(css) {
+  const classTable = {}
+
+  css.walkRules(rule => {
+    if (!_.has(classTable, rule.selector)) {
+      classTable[rule.selector] = []
+    }
+    classTable[rule.selector].push(rule)
+  })
+
+  return classTable
+}
+
 function normalizeClassName(className) {
   return `.${escapeClassName(_.trimStart(className, '.'))}`
 }
 
-function findMixin(css, mixin, onError) {
-  const matches = []
-
-  css.walkRules(rule => {
-    if (rule.selectors.includes(mixin)) {
-      if (rule.parent.type !== 'root') {
-        // prettier-ignore
-        onError(`\`@apply\` cannot be used with ${mixin} because ${mixin} is nested inside of an at-rule (@${rule.parent.name}).`)
-      }
-
-      matches.push(rule)
-    }
-  })
+function findMixin(classTable, mixin, onError) {
+  const matches = _.get(classTable, mixin, [])
 
   if (_.isEmpty(matches)) {
     // prettier-ignore
@@ -30,11 +32,20 @@ function findMixin(css, mixin, onError) {
     onError(`\`@apply\` cannot be used with ${mixin} because ${mixin} is included in multiple rulesets.`)
   }
 
-  return _.flatten(matches.map(match => match.clone().nodes))
+  const [match] = matches
+
+  if (match.parent.type !== 'root') {
+    // prettier-ignore
+    onError(`\`@apply\` cannot be used with ${mixin} because ${mixin} is nested inside of an at-rule (@${match.parent.name}).`)
+  }
+
+  return match.clone().nodes
 }
 
 export default function() {
   return function(css) {
+    const classLookup = buildClassTable(css)
+
     css.walkRules(rule => {
       rule.walkAtRules('apply', atRule => {
         const mixins = postcss.list.space(atRule.params)
@@ -53,7 +64,7 @@ export default function() {
         const decls = _(classes)
           .reject(mixin => mixin === '!important')
           .flatMap(mixin => {
-            return findMixin(css, normalizeClassName(mixin), message => {
+            return findMixin(classLookup, normalizeClassName(mixin), message => {
               throw atRule.error(message)
             })
           })
