@@ -8,7 +8,7 @@ import escapeClassName from '../util/escapeClassName'
 import generateModules from '../util/generateModules'
 import wrapWithVariants from '../util/wrapWithVariants'
 
-function defineSelector(selector, properties) {
+function defineRule(selector, properties) {
   const decls = _.map(properties, (value, property) => {
     return postcss.decl({
       prop: `${property}`,
@@ -19,24 +19,30 @@ function defineSelector(selector, properties) {
   return postcss.rule({ selector }).append(decls)
 }
 
+function processPlugins(config) {
+  const pluginComponents = []
+  const pluginUtilities = []
+
+  config.plugins.forEach(plugin => {
+    plugin({
+      rule: defineRule,
+      addUtilities: (utilities, variants) => {
+        pluginUtilities.push(wrapWithVariants(utilities, variants))
+      },
+      addComponents: components => {
+        pluginComponents.push(...components)
+      },
+    })
+  })
+
+  return [pluginComponents, pluginUtilities]
+}
+
 export default function(config) {
   return function(css) {
     const unwrappedConfig = config()
 
-    const pluginComponents = []
-    const pluginUtilities = []
-
-    unwrappedConfig.plugins.forEach(plugin => {
-      plugin({
-        selector: defineSelector,
-        addUtilities: (utilities, variants) => {
-          pluginUtilities.push(wrapWithVariants(utilities, variants))
-        },
-        addComponents: components => {
-          pluginComponents.push(...components)
-        },
-      })
-    })
+    const [pluginComponents, pluginUtilities] = processPlugins(unwrappedConfig)
 
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'preflight') {
