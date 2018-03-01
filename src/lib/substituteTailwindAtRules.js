@@ -1,10 +1,11 @@
 import _ from 'lodash'
-import applyClassPrefix from '../util/applyClassPrefix'
-import container from '../generators/container'
 import fs from 'fs'
-import generateModules from '../util/generateModules'
 import postcss from 'postcss'
+import container from '../generators/container'
 import utilityModules from '../utilityModules'
+import applyClassPrefix from '../util/applyClassPrefix'
+import escapeClassName from '../util/escapeClassName'
+import generateModules from '../util/generateModules'
 import wrapWithVariants from '../util/wrapWithVariants'
 
 function defineSelector(selector, properties) {
