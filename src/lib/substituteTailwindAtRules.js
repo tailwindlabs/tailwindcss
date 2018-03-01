@@ -19,6 +19,17 @@ function defineRule(selector, properties) {
   return postcss.rule({ selector }).append(decls)
 }
 
+function defineAtRule(atRule, rules) {
+  const [name, ...params] = atRule.split(' ')
+
+  return postcss
+    .atRule({
+      name: name.startsWith('@') ? name.slice(1) : name,
+      params: params.join(' '),
+    })
+    .append(rules)
+}
+
 function processPlugins(config) {
   const pluginComponents = []
   const pluginUtilities = []
@@ -27,6 +38,7 @@ function processPlugins(config) {
     plugin({
       config,
       rule: defineRule,
+      atRule: defineAtRule,
       e: escapeClassName,
       addUtilities: (utilities, variants) => {
         pluginUtilities.push(wrapWithVariants(utilities, variants))
