@@ -21,20 +21,12 @@ export default function(config) {
       }
 
       if (atRule.params === 'components') {
-        const tailwindComponentTree = postcss.root({
-          nodes: container(unwrappedConfig),
-        })
-
         const pluginComponentTree = postcss.root({
           nodes: pluginComponents,
         })
 
-        prefixTree(tailwindComponentTree, unwrappedConfig.options.prefix)
-
-        tailwindComponentTree.walk(node => (node.source = atRule.source))
         pluginComponentTree.walk(node => (node.source = atRule.source))
 
-        atRule.before(tailwindComponentTree)
         atRule.before(pluginComponentTree)
         atRule.remove()
       }
@@ -47,7 +39,7 @@ export default function(config) {
         }
 
         const tailwindUtilityTree = postcss.root({
-          nodes: utilities.nodes,
+          nodes: [...container(unwrappedConfig), ...utilities.nodes],
         })
 
         const pluginUtilityTree = postcss.root({
