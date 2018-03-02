@@ -256,11 +256,11 @@ test('plugins can provide fallbacks to keys missing from the config', () => {
       '8': '8px',
     },
     plugins: [
-      function({ rule, atRule, addComponents, config }) {
+      function({ rule, addComponents, config }) {
         addComponents([
           rule('.btn', {
-            'border-radius': config('borderRadius.default', '.25rem')
-          })
+            'border-radius': config('borderRadius.default', '.25rem'),
+          }),
         ])
       },
     ],
@@ -274,10 +274,10 @@ test('plugins can provide fallbacks to keys missing from the config', () => {
   `)
 })
 
-test('the "@" sign is optional in at-rules', () => {
+test("the '@' sign is optional in at-rules", () => {
   const [components, utilities] = processPlugins({
     plugins: [
-      function ({ rule, atRule, addComponents }) {
+      function({ rule, atRule, addComponents }) {
         addComponents([
           rule('.card', {
             padding: '.5rem',
@@ -291,9 +291,9 @@ test('the "@" sign is optional in at-rules', () => {
             rule('.card', {
               padding: '1.5rem',
             }),
-          ])
+          ]),
         ])
-      }
+      },
     ],
   })
 
@@ -316,15 +316,15 @@ test('the "@" sign is optional in at-rules', () => {
 })
 
 test('variants are optional when adding utilities', () => {
-  const [components, utilities] = processPlugins({
+  const [, utilities] = processPlugins({
     plugins: [
-      function ({ rule, addUtilities }) {
+      function({ rule, addUtilities }) {
         addUtilities([
           rule('.border-collapse', {
-            'border-collapse': 'collapse'
-          })
+            'border-collapse': 'collapse',
+          }),
         ])
-      }
+      },
     ],
   })
 
@@ -340,33 +340,33 @@ test('variants are optional when adding utilities', () => {
 test('plugins can add multiple sets of utilities and components', () => {
   const [components, utilities] = processPlugins({
     plugins: [
-      function ({ rule, atRule, addUtilities, addComponents }) {
+      function({ rule, addUtilities, addComponents }) {
         addComponents([
           rule('.card', {
             padding: '1rem',
             'border-radius': '.25rem',
-          })
+          }),
         ])
 
         addUtilities([
           rule('.skew-12deg', {
-            transform: 'skewY(-12deg)'
-          })
+            transform: 'skewY(-12deg)',
+          }),
         ])
 
         addComponents([
           rule('.btn', {
             padding: '1rem .5rem',
             display: 'inline-block',
-          })
+          }),
         ])
 
         addUtilities([
           rule('.border-collapse', {
-            'border-collapse': 'collapse'
-          })
+            'border-collapse': 'collapse',
+          }),
         ])
-      }
+      },
     ],
   })
 
