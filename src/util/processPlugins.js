@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import postcss from 'postcss'
 import escapeClassName from '../util/escapeClassName'
+import prefixSelector from '../util/prefixSelector'
 import wrapWithVariants from '../util/wrapWithVariants'
 
 function defineRule(selector, properties) {
@@ -40,6 +41,9 @@ export default function(config) {
       },
       addComponents: components => {
         pluginComponents.push(...components)
+      },
+      prefix: selector => {
+        return prefixSelector(config.options.prefix, selector)
       },
     })
   })

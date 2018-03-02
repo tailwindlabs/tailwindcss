@@ -2,7 +2,7 @@ import fs from 'fs'
 import postcss from 'postcss'
 import container from '../generators/container'
 import utilityModules from '../utilityModules'
-import applyClassPrefix from '../util/applyClassPrefix'
+import prefixTree from '../util/prefixTree'
 import generateModules from '../util/generateModules'
 import processPlugins from '../util/processPlugins'
 
@@ -29,7 +29,7 @@ export default function(config) {
           nodes: pluginComponents,
         })
 
-        applyClassPrefix(tailwindComponentTree, unwrappedConfig.options.prefix)
+        prefixTree(tailwindComponentTree, unwrappedConfig.options.prefix)
 
         tailwindComponentTree.walk(node => (node.source = atRule.source))
         pluginComponentTree.walk(node => (node.source = atRule.source))
@@ -54,7 +54,7 @@ export default function(config) {
           nodes: pluginUtilities,
         })
 
-        applyClassPrefix(tailwindUtilityTree, unwrappedConfig.options.prefix)
+        prefixTree(tailwindUtilityTree, unwrappedConfig.options.prefix)
 
         tailwindUtilityTree.walk(node => (node.source = atRule.source))
         pluginUtilityTree.walk(node => (node.source = atRule.source))
