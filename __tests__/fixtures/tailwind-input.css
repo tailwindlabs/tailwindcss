@@ -1,7 +1,5 @@
 @tailwind preflight;
 
-@tailwind components;
-
 @tailwind utilities;
 
 @responsive {
