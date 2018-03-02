@@ -10,19 +10,18 @@ test('plugins can create utilities', () => {
   const [components, utilities] = processPlugins({
     plugins: [
       function({ rule, addUtilities }) {
-        addUtilities(
-          [
-            rule('.object-fill', {
-              'object-fit': 'fill',
-            }),
-            rule('.object-contain', {
-              'object-fit': 'contain',
-            }),
-            rule('.object-cover', {
-              'object-fit': 'cover',
-            }),
+        addUtilities([
+          rule('.object-fill', {
+            'object-fit': 'fill',
+          }),
+          rule('.object-contain', {
+            'object-fit': 'contain',
+          }),
+          rule('.object-cover', {
+            'object-fit': 'cover',
+          }),
         ])
-      }
+      },
     ],
   })
 
@@ -57,8 +56,10 @@ test('plugins can create utilities with variants', () => {
             rule('.object-cover', {
               'object-fit': 'cover',
             }),
-        ], ['responsive', 'hover', 'group-hover', 'focus'])
-      }
+          ],
+          ['responsive', 'hover', 'group-hover', 'focus']
+        )
+      },
     ],
   })
 
@@ -93,7 +94,7 @@ test('plugins can create components', () => {
             'background-color': 'darkblue',
           }),
         ])
-      }
+      },
     ],
   })
 
@@ -135,7 +136,7 @@ test('plugins can create components with media queries', () => {
             }),
           ]),
         ])
-      }
+      },
     ],
   })
 
@@ -418,7 +419,7 @@ test("plugins can apply the user's chosen prefix", () => {
   `)
 })
 
-test("utilities are escaped and automatically respect prefix and important options when created via `utility`", () => {
+test('utilities are escaped and automatically respect prefix and important options when created via `utility`', () => {
   const [, utilities] = processPlugins({
     plugins: [
       function({ utility, addUtilities }) {
