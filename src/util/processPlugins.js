@@ -31,7 +31,7 @@ export default function(config) {
 
   config.plugins.forEach(plugin => {
     plugin({
-      config,
+      config: (path, defaultValue) => _.get(config, path, defaultValue),
       rule: defineRule,
       atRule: defineAtRule,
       e: escapeClassName,
