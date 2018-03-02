@@ -3,6 +3,8 @@ import postcss from 'postcss'
 import escapeClassName from '../util/escapeClassName'
 import wrapWithVariants from '../util/wrapWithVariants'
 
+const defaultConfig = require('../../defaultConfig')();
+
 function defineRule(selector, properties) {
   const decls = _.map(properties, (value, property) => {
     return postcss.decl({
@@ -29,9 +31,22 @@ export default function(config) {
   const pluginComponents = []
   const pluginUtilities = []
 
+  const tryConfig = (defaultValue, ...paths) => {
+    for (let source of [config, defaultConfig]) {
+      for (let path of paths) {
+        if (_.has(source, path)) {
+          return _.get(source, path)
+        }
+      }
+    }
+
+    return defaultValue
+  }
+
   config.plugins.forEach(plugin => {
     plugin({
-      config,
+      customUserConfig: config,
+      config: tryConfig,
       rule: defineRule,
       atRule: defineAtRule,
       e: escapeClassName,
