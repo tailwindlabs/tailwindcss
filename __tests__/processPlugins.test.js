@@ -7,28 +7,31 @@ function css(nodes) {
 }
 
 function objectFitPlugin(variants = []) {
-  return function ({ rule, addUtilities }) {
-    addUtilities([
-      rule('.object-fill', {
-        'object-fit': 'fill',
-      }),
-      rule('.object-contain', {
-        'object-fit': 'contain',
-      }),
-      rule('.object-cover', {
-        'object-fit': 'cover',
-      }),
-    ], variants)
+  return function({ rule, addUtilities }) {
+    addUtilities(
+      [
+        rule('.object-fill', {
+          'object-fit': 'fill',
+        }),
+        rule('.object-contain', {
+          'object-fit': 'contain',
+        }),
+        rule('.object-cover', {
+          'object-fit': 'cover',
+        }),
+      ],
+      variants
+    )
   }
 }
 
 function buttonPlugin() {
-  return function ({ rule, atRule, addComponents }) {
+  return function({ rule, addComponents }) {
     addComponents([
       rule('.btn-blue', {
         'background-color': 'blue',
-        'color': 'white',
-        'padding': '.5rem 1rem',
+        color: 'white',
+        padding: '.5rem 1rem',
         'border-radius': '.25rem',
       }),
       rule('.btn-blue:hover', {
@@ -39,10 +42,10 @@ function buttonPlugin() {
 }
 
 function containerPlugin() {
-  return function ({ rule, atRule, addComponents }) {
+  return function({ rule, atRule, addComponents }) {
     addComponents([
       rule('.container', {
-        'width': '100%',
+        width: '100%',
       }),
       atRule('@media (min-width: 100px)', [
         rule('.container', {
@@ -58,16 +61,14 @@ function containerPlugin() {
         rule('.container', {
           'max-width': '300px',
         }),
-      ])
+      ]),
     ])
   }
 }
 
 test('plugins can create utilities', () => {
   const config = {
-    plugins: [
-      objectFitPlugin()
-    ]
+    plugins: [objectFitPlugin()],
   }
 
   const [components, utilities] = processPlugins(config)
@@ -90,9 +91,7 @@ test('plugins can create utilities', () => {
 
 test('plugins can create utilities with variants', () => {
   const config = {
-    plugins: [
-      objectFitPlugin(['responsive', 'hover', 'group-hover', 'focus'])
-    ]
+    plugins: [objectFitPlugin(['responsive', 'hover', 'group-hover', 'focus'])],
   }
 
   const [components, utilities] = processPlugins(config)
@@ -115,9 +114,7 @@ test('plugins can create utilities with variants', () => {
 
 test('plugins can create components', () => {
   const config = {
-    plugins: [
-      buttonPlugin()
-    ]
+    plugins: [buttonPlugin()],
   }
 
   const [components, utilities] = processPlugins(config)
@@ -138,9 +135,7 @@ test('plugins can create components', () => {
 
 test('plugins can create components with media queries', () => {
   const config = {
-    plugins: [
-      containerPlugin()
-    ]
+    plugins: [containerPlugin()],
   }
 
   const [components, utilities] = processPlugins(config)
@@ -171,14 +166,17 @@ test('plugins can create components with media queries', () => {
 test('plugins can create rules with escaped selectors', () => {
   const config = {
     plugins: [
-      function ({ e, rule, addUtilities }) {
-        addUtilities([
-          rule(`.${e('top-1/4')}`, {
-            top: '25%',
-          })
-        ], [])
-      }
-    ]
+      function({ e, rule, addUtilities }) {
+        addUtilities(
+          [
+            rule(`.${e('top-1/4')}`, {
+              top: '25%',
+            }),
+          ],
+          []
+        )
+      },
+    ],
   }
 
   const [components, utilities] = processPlugins(config)
@@ -194,34 +192,32 @@ test('plugins can create rules with escaped selectors', () => {
 })
 
 test('plugins can access the current config', () => {
-  const config = {
+  const [components, utilities] = processPlugins({
     screens: {
-      'sm': '576px',
-      'md': '768px',
-      'lg': '992px',
-      'xl': '1200px',
+      sm: '576px',
+      md: '768px',
+      lg: '992px',
+      xl: '1200px',
     },
     plugins: [
-      function ({ rule, atRule, addComponents, config }) {
+      function({ rule, atRule, addComponents, config }) {
         const containerClasses = [
           rule('.container', {
-            'width': '100%',
-          })
+            width: '100%',
+          }),
         ]
 
-        _.forEach(config.screens, (breakpoint) => {
+        _.forEach(config.screens, breakpoint => {
           const mediaQuery = atRule(`@media (min-width: ${breakpoint})`, [
-            rule('.container', { 'max-width': breakpoint })
+            rule('.container', { 'max-width': breakpoint }),
           ])
           containerClasses.push(mediaQuery)
         })
 
         addComponents(containerClasses)
-      }
-    ]
-  }
-
-  const [components, utilities] = processPlugins(config)
+      },
+    ],
+  })
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`

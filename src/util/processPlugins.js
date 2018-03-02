@@ -25,7 +25,7 @@ function defineAtRule(atRule, rules) {
     .append(rules)
 }
 
-export default function (config) {
+export default function(config) {
   const pluginComponents = []
   const pluginUtilities = []
 

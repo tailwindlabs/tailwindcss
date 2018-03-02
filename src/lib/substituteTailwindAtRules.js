@@ -1,13 +1,10 @@
-import _ from 'lodash'
 import fs from 'fs'
 import postcss from 'postcss'
 import container from '../generators/container'
 import utilityModules from '../utilityModules'
 import applyClassPrefix from '../util/applyClassPrefix'
-import escapeClassName from '../util/escapeClassName'
 import generateModules from '../util/generateModules'
 import processPlugins from '../util/processPlugins'
-import wrapWithVariants from '../util/wrapWithVariants'
 
 export default function(config) {
   return function(css) {
