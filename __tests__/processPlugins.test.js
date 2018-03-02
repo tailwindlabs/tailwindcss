@@ -207,7 +207,7 @@ test('plugins can access the current config', () => {
           }),
         ]
 
-        _.forEach(config.screens, breakpoint => {
+        _.forEach(config('screens'), breakpoint => {
           const mediaQuery = atRule(`@media (min-width: ${breakpoint})`, [
             rule('.container', { 'max-width': breakpoint }),
           ])
@@ -243,6 +243,33 @@ test('plugins can access the current config', () => {
       .container {
         max-width: 1200px
       }
+    }
+  `)
+})
+
+test('plugins can provide fallbacks to keys missing from the config', () => {
+  const [components, utilities] = processPlugins({
+    borderRadius: {
+      '1': '1px',
+      '2': '2px',
+      '4': '4px',
+      '8': '8px',
+    },
+    plugins: [
+      function({ rule, atRule, addComponents, config }) {
+        addComponents([
+          rule('.btn', {
+            'border-radius': config('borderRadius.default', '.25rem')
+          })
+        ])
+      },
+    ],
+  })
+
+  expect(utilities.length).toBe(0)
+  expect(css(components)).toMatchCss(`
+    .btn {
+      border-radius: .25rem
     }
   `)
 })
