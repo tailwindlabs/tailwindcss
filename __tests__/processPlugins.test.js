@@ -200,14 +200,14 @@ test('plugins can access the current config', () => {
       xl: '1200px',
     },
     plugins: [
-      function({ rule, atRule, addComponents, config }) {
+      function({ rule, atRule, addComponents, customUserConfig }) {
         const containerClasses = [
           rule('.container', {
             width: '100%',
           }),
         ]
 
-        _.forEach(config.screens, breakpoint => {
+        _.forEach(customUserConfig.screens, breakpoint => {
           const mediaQuery = atRule(`@media (min-width: ${breakpoint})`, [
             rule('.container', { 'max-width': breakpoint }),
           ])
@@ -243,6 +243,103 @@ test('plugins can access the current config', () => {
       .container {
         max-width: 1200px
       }
+    }
+  `)
+})
+
+test('plugins can pull values from current config with config()', () => {
+  const [components, utilities] = processPlugins({
+    colors: {
+      'purple': 'rebeccapurple',
+    },
+    plugins: [
+      function({ rule, addComponents, config }) {
+        const color = config('#9900cc', 'colors.purple')
+        addComponents([
+          rule('.prince-shadow', {
+            'box-shadow': `0 2px 4px 0 ${color}`,
+          }),
+        ])
+      },
+    ],
+  })
+
+  expect(utilities.length).toBe(0)
+  expect(css(components)).toMatchCss(`
+    .prince-shadow {
+      box-shadow: 0 2px 4px 0 rebeccapurple
+    }
+  `)
+})
+
+test('plugins can pull values from default config with config()', () => {
+  const [components, utilities] = processPlugins({
+    colors: {},
+    plugins: [
+      function({ rule, addComponents, config }) {
+        const color = config('#9900cc', 'colors.purple')
+        addComponents([
+          rule('.prince-shadow', {
+            'box-shadow': `0 2px 4px 0 ${color}`,
+          }),
+        ])
+      },
+    ],
+  })
+
+  expect(utilities.length).toBe(0)
+  expect(css(components)).toMatchCss(`
+    .prince-shadow {
+      box-shadow: 0 2px 4px 0 #9561e2
+    }
+  `)
+})
+
+test('plugins can fall back on default value with config()', () => {
+  const [components, utilities] = processPlugins({
+    colors: {},
+    plugins: [
+      function({ rule, addComponents, config }) {
+        const color = config('#9900cc', 'hey_this_changed_in_v4.purple')
+        addComponents([
+          rule('.prince-shadow', {
+            'box-shadow': `0 2px 4px 0 ${color}`,
+          }),
+        ])
+      },
+    ],
+  })
+
+  expect(utilities.length).toBe(0)
+  expect(css(components)).toMatchCss(`
+    .prince-shadow {
+      box-shadow: 0 2px 4px 0 #9900cc
+    }
+  `)
+})
+
+test('config() helper tries all paths provided until finding a match', () => {
+  const [components, utilities] = processPlugins({
+    colors: {},
+    specialColors: {
+      rebeccaPurple: 'rebeccapurple'
+    },
+    plugins: [
+      function({ rule, addComponents, config }) {
+        const color = config('#9900cc', 'colors.purple', 'specialColors.rebeccaPurple')
+        addComponents([
+          rule('.prince-shadow', {
+            'box-shadow': `0 2px 4px 0 ${color}`,
+          }),
+        ])
+      },
+    ],
+  })
+
+  expect(utilities.length).toBe(0)
+  expect(css(components)).toMatchCss(`
+    .prince-shadow {
+      box-shadow: 0 2px 4px 0 rebeccapurple
     }
   `)
 })
