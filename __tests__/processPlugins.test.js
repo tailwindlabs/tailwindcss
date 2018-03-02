@@ -336,3 +336,60 @@ test('variants are optional when adding utilities', () => {
     }
   `)
 })
+
+test('plugins can add multiple sets of utilities and components', () => {
+  const [components, utilities] = processPlugins({
+    plugins: [
+      function ({ rule, atRule, addUtilities, addComponents }) {
+        addComponents([
+          rule('.card', {
+            padding: '1rem',
+            'border-radius': '.25rem',
+          })
+        ])
+
+        addUtilities([
+          rule('.skew-12deg', {
+            transform: 'skewY(-12deg)'
+          })
+        ])
+
+        addComponents([
+          rule('.btn', {
+            padding: '1rem .5rem',
+            display: 'inline-block',
+          })
+        ])
+
+        addUtilities([
+          rule('.border-collapse', {
+            'border-collapse': 'collapse'
+          })
+        ])
+      }
+    ],
+  })
+
+  expect(css(utilities)).toMatchCss(`
+    @variants {
+      .skew-12deg {
+        transform: skewY(-12deg)
+      }
+    }
+    @variants {
+      .border-collapse {
+        border-collapse: collapse
+      }
+    }
+  `)
+  expect(css(components)).toMatchCss(`
+    .card {
+      padding: 1rem;
+      border-radius: .25rem
+    }
+    .btn {
+      padding: 1rem .5rem;
+      display: inline-block
+    }
+  `)
+})
