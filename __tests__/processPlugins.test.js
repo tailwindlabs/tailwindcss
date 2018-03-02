@@ -314,3 +314,25 @@ test('the "@" sign is optional in at-rules', () => {
     }
   `)
 })
+
+test('variants are optional when adding utilities', () => {
+  const [components, utilities] = processPlugins({
+    plugins: [
+      function ({ rule, addUtilities }) {
+        addUtilities([
+          rule('.border-collapse', {
+            'border-collapse': 'collapse'
+          })
+        ])
+      }
+    ],
+  })
+
+  expect(css(utilities)).toMatchCss(`
+    @variants {
+      .border-collapse {
+        border-collapse: collapse
+      }
+    }
+  `)
+})
