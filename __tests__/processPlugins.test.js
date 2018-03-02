@@ -393,3 +393,28 @@ test('plugins can add multiple sets of utilities and components', () => {
     }
   `)
 })
+
+test("plugins can apply the user's chosen prefix", () => {
+  const [, utilities] = processPlugins({
+    plugins: [
+      function({ rule, addUtilities, prefix }) {
+        addUtilities([
+          rule(prefix('.skew-12deg'), {
+            transform: 'skewY(-12deg)',
+          }),
+        ])
+      },
+    ],
+    options: {
+      prefix: 'tw-',
+    },
+  })
+
+  expect(css(utilities)).toMatchCss(`
+    @variants {
+      .tw-skew-12deg {
+        transform: skewY(-12deg)
+      }
+    }
+  `)
+})

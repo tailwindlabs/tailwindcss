@@ -1,5 +1,5 @@
 import postcss from 'postcss'
-import applyClassPrefix from '../src/util/applyClassPrefix'
+import prefixTree from '../src/util/prefixTree'
 
 test('it prefixes classes with the provided prefix', () => {
   const input = postcss.parse(`
@@ -12,7 +12,7 @@ test('it prefixes classes with the provided prefix', () => {
     .tw-apple, .tw-pear { color: green; }
   `
 
-  const result = applyClassPrefix(input, 'tw-').toResult()
+  const result = prefixTree(input, 'tw-').toResult()
   expect(result.css).toEqual(expected)
   expect(result.warnings().length).toBe(0)
 })
@@ -36,7 +36,7 @@ test('it handles a function as the prefix', () => {
     return ''
   }
 
-  const result = applyClassPrefix(input, prefixFunc).toResult()
+  const result = prefixTree(input, prefixFunc).toResult()
   expect(result.css).toEqual(expected)
   expect(result.warnings().length).toBe(0)
 })
