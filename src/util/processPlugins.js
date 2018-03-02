@@ -15,6 +15,20 @@ function defineRule(selector, properties) {
   return postcss.rule({ selector }).append(decls)
 }
 
+function defineUtility(selector, properties, options) {
+  if (selector.startsWith('.')) {
+    return defineUtility(selector.slice(1), properties, options)
+  }
+
+  const rule = defineRule(prefixSelector(options.prefix, `.${escapeClassName(selector)}`), properties)
+
+  if (options.important) {
+    rule.walkDecls(decl => (decl.important = true))
+  }
+
+  return rule
+}
+
 function defineAtRule(atRule, rules) {
   const [name, ...params] = atRule.split(' ')
 
@@ -34,6 +48,7 @@ export default function(config) {
     plugin({
       config: (path, defaultValue) => _.get(config, path, defaultValue),
       rule: defineRule,
+      utility: (selector, properties) => defineUtility(selector, properties, config.options),
       atRule: defineAtRule,
       e: escapeClassName,
       addUtilities: (utilities, variants = []) => {
