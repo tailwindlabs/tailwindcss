@@ -20,7 +20,10 @@ function defineUtility(selector, properties, options) {
     return defineUtility(selector.slice(1), properties, options)
   }
 
-  const rule = defineRule(prefixSelector(options.prefix, `.${escapeClassName(selector)}`), properties)
+  const rule = defineRule(
+    prefixSelector(options.prefix, `.${escapeClassName(selector)}`),
+    properties
+  )
 
   if (options.important) {
     rule.walkDecls(decl => (decl.important = true))
