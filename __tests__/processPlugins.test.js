@@ -6,72 +6,25 @@ function css(nodes) {
   return postcss.root({ nodes }).toString()
 }
 
-function objectFitPlugin(variants = []) {
-  return function({ rule, addUtilities }) {
-    addUtilities(
-      [
-        rule('.object-fill', {
-          'object-fit': 'fill',
-        }),
-        rule('.object-contain', {
-          'object-fit': 'contain',
-        }),
-        rule('.object-cover', {
-          'object-fit': 'cover',
-        }),
-      ],
-      variants
-    )
-  }
-}
-
-function buttonPlugin() {
-  return function({ rule, addComponents }) {
-    addComponents([
-      rule('.btn-blue', {
-        'background-color': 'blue',
-        color: 'white',
-        padding: '.5rem 1rem',
-        'border-radius': '.25rem',
-      }),
-      rule('.btn-blue:hover', {
-        'background-color': 'darkblue',
-      }),
-    ])
-  }
-}
-
-function containerPlugin() {
-  return function({ rule, atRule, addComponents }) {
-    addComponents([
-      rule('.container', {
-        width: '100%',
-      }),
-      atRule('@media (min-width: 100px)', [
-        rule('.container', {
-          'max-width': '100px',
-        }),
-      ]),
-      atRule('@media (min-width: 200px)', [
-        rule('.container', {
-          'max-width': '200px',
-        }),
-      ]),
-      atRule('@media (min-width: 300px)', [
-        rule('.container', {
-          'max-width': '300px',
-        }),
-      ]),
-    ])
-  }
-}
-
 test('plugins can create utilities', () => {
-  const config = {
-    plugins: [objectFitPlugin()],
-  }
-
-  const [components, utilities] = processPlugins(config)
+  const [components, utilities] = processPlugins({
+    plugins: [
+      function({ rule, addUtilities }) {
+        addUtilities(
+          [
+            rule('.object-fill', {
+              'object-fit': 'fill',
+            }),
+            rule('.object-contain', {
+              'object-fit': 'contain',
+            }),
+            rule('.object-cover', {
+              'object-fit': 'cover',
+            }),
+        ])
+      }
+    ],
+  })
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
@@ -90,11 +43,24 @@ test('plugins can create utilities', () => {
 })
 
 test('plugins can create utilities with variants', () => {
-  const config = {
-    plugins: [objectFitPlugin(['responsive', 'hover', 'group-hover', 'focus'])],
-  }
-
-  const [components, utilities] = processPlugins(config)
+  const [components, utilities] = processPlugins({
+    plugins: [
+      function({ rule, addUtilities }) {
+        addUtilities(
+          [
+            rule('.object-fill', {
+              'object-fit': 'fill',
+            }),
+            rule('.object-contain', {
+              'object-fit': 'contain',
+            }),
+            rule('.object-cover', {
+              'object-fit': 'cover',
+            }),
+        ], ['responsive', 'hover', 'group-hover', 'focus'])
+      }
+    ],
+  })
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
@@ -113,11 +79,23 @@ test('plugins can create utilities with variants', () => {
 })
 
 test('plugins can create components', () => {
-  const config = {
-    plugins: [buttonPlugin()],
-  }
-
-  const [components, utilities] = processPlugins(config)
+  const [components, utilities] = processPlugins({
+    plugins: [
+      function({ rule, addComponents }) {
+        addComponents([
+          rule('.btn-blue', {
+            'background-color': 'blue',
+            color: 'white',
+            padding: '.5rem 1rem',
+            'border-radius': '.25rem',
+          }),
+          rule('.btn-blue:hover', {
+            'background-color': 'darkblue',
+          }),
+        ])
+      }
+    ],
+  })
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
@@ -134,11 +112,32 @@ test('plugins can create components', () => {
 })
 
 test('plugins can create components with media queries', () => {
-  const config = {
-    plugins: [containerPlugin()],
-  }
-
-  const [components, utilities] = processPlugins(config)
+  const [components, utilities] = processPlugins({
+    plugins: [
+      function({ rule, atRule, addComponents }) {
+        addComponents([
+          rule('.container', {
+            width: '100%',
+          }),
+          atRule('@media (min-width: 100px)', [
+            rule('.container', {
+              'max-width': '100px',
+            }),
+          ]),
+          atRule('@media (min-width: 200px)', [
+            rule('.container', {
+              'max-width': '200px',
+            }),
+          ]),
+          atRule('@media (min-width: 300px)', [
+            rule('.container', {
+              'max-width': '300px',
+            }),
+          ]),
+        ])
+      }
+    ],
+  })
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
