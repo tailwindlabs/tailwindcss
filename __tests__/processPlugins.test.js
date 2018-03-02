@@ -317,3 +317,29 @@ test('plugins can fall back on default value with config()', () => {
     }
   `)
 })
+
+test('config() helper tries all paths provided until finding a match', () => {
+  const [components, utilities] = processPlugins({
+    colors: {},
+    specialColors: {
+      rebeccaPurple: 'rebeccapurple'
+    },
+    plugins: [
+      function({ rule, addComponents, config }) {
+        const color = config('#9900cc', 'colors.purple', 'specialColors.rebeccaPurple')
+        addComponents([
+          rule('.prince-shadow', {
+            'box-shadow': `0 2px 4px 0 ${color}`,
+          }),
+        ])
+      },
+    ],
+  })
+
+  expect(utilities.length).toBe(0)
+  expect(css(components)).toMatchCss(`
+    .prince-shadow {
+      box-shadow: 0 2px 4px 0 rebeccapurple
+    }
+  `)
+})
