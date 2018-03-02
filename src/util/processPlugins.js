@@ -35,7 +35,7 @@ export default function(config) {
       rule: defineRule,
       atRule: defineAtRule,
       e: escapeClassName,
-      addUtilities: (utilities, variants) => {
+      addUtilities: (utilities, variants = []) => {
         pluginUtilities.push(wrapWithVariants(utilities, variants))
       },
       addComponents: components => {
