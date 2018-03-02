@@ -418,3 +418,55 @@ test("plugins can apply the user's chosen prefix", () => {
     }
   `)
 })
+
+test("utilities are escaped and automatically respect prefix and important options when created via `utility`", () => {
+  const [, utilities] = processPlugins({
+    plugins: [
+      function({ utility, addUtilities }) {
+        addUtilities([
+          utility('.rotate-1/4', {
+            transform: 'rotate(90deg)',
+          }),
+        ])
+      },
+    ],
+    options: {
+      prefix: 'tw-',
+      important: true,
+    },
+  })
+
+  expect(css(utilities)).toMatchCss(`
+    @variants {
+      .tw-rotate-1\\/4 {
+        transform: rotate(90deg) !important
+      }
+    }
+  `)
+})
+
+test("leading '.' is optional when creating utilities via `utility`", () => {
+  const [, utilities] = processPlugins({
+    plugins: [
+      function({ utility, addUtilities }) {
+        addUtilities([
+          utility('rotate-1/4', {
+            transform: 'rotate(90deg)',
+          }),
+        ])
+      },
+    ],
+    options: {
+      prefix: 'tw-',
+      important: true,
+    },
+  })
+
+  expect(css(utilities)).toMatchCss(`
+    @variants {
+      .tw-rotate-1\\/4 {
+        transform: rotate(90deg) !important
+      }
+    }
+  `)
+})
