@@ -273,3 +273,44 @@ test('plugins can provide fallbacks to keys missing from the config', () => {
     }
   `)
 })
+
+test('the "@" sign is optional in at-rules', () => {
+  const [components, utilities] = processPlugins({
+    plugins: [
+      function ({ rule, atRule, addComponents }) {
+        addComponents([
+          rule('.card', {
+            padding: '.5rem',
+          }),
+          atRule('media (min-width: 500px)', [
+            rule('.card', {
+              padding: '1rem',
+            }),
+          ]),
+          atRule('@media (min-width: 800px)', [
+            rule('.card', {
+              padding: '1.5rem',
+            }),
+          ])
+        ])
+      }
+    ],
+  })
+
+  expect(utilities.length).toBe(0)
+  expect(css(components)).toMatchCss(`
+    .card {
+      padding: .5rem
+    }
+    @media (min-width: 500px) {
+      .card {
+        padding: 1rem
+      }
+    }
+    @media (min-width: 800px) {
+      .card {
+        padding: 1.5rem
+      }
+    }
+  `)
+})
