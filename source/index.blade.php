@@ -61,7 +61,7 @@
       </div>
       <div class="mb-8 w-64 md:flex-x-center">
         <div class="flex items-center">
-          <img class="h-16 w-16 rounded-full" src="https://pbs.twimg.com/profile_images/947852442363879424/GW0Jq5lf.jpg">
+          <img class="h-16 w-16 rounded-full" src="https://secure.gravatar.com/avatar/2821f93cef33ccd01b1262ac41f87d9c?size=512">
           <div class="pl-4">
             <a href="https://twitter.com/davidhemphill" class="block hover:underline text-dark text-lg text-medium">David Hemphill</a>
             <a href="https://twitter.com/davidhemphill" class="block hover:underline text-tailwind-teal-dark text-sm">@davidhemphill</a>
