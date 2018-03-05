@@ -471,7 +471,7 @@ test("leading '.' is optional when creating utilities via `utility`", () => {
   `)
 })
 
-test("plugins can choose to make declarations !important", () => {
+test('plugins can choose to make declarations !important', () => {
   const [, utilities] = processPlugins({
     plugins: [
       function({ rule, addUtilities, config }) {
