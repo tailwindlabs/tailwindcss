@@ -470,3 +470,28 @@ test("leading '.' is optional when creating utilities via `utility`", () => {
     }
   `)
 })
+
+test("plugins can choose to make declarations !important", () => {
+  const [, utilities] = processPlugins({
+    plugins: [
+      function({ rule, addUtilities, config }) {
+        addUtilities([
+          rule('.skew-12deg', {
+            transform: `skewY(-12deg)${config('options.important') ? ' !important' : ''}`,
+          }),
+        ])
+      },
+    ],
+    options: {
+      important: true,
+    },
+  })
+
+  expect(css(utilities)).toMatchCss(`
+    @variants {
+      .skew-12deg {
+        transform: skewY(-12deg) !important
+      }
+    }
+  `)
+})
