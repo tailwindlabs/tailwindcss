@@ -859,6 +859,19 @@ module.exports = {
   },
 
 
+  /*
+  |-----------------------------------------------------------------------------
+  | Plugins                                https://tailwindcss.com/docs/plugins
+  |-----------------------------------------------------------------------------
+  |
+  | Here is where you can register any additional plugins you'd like to use in
+  | your project.
+  |
+  | Be sure to view the complete plugin documentation to learn more about how
+  | the plugin system works.
+  |
+  */
+
   plugins: [],
 
 
