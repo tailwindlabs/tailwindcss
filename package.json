@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "commander": "^2.11.0",
+    "cxs": "^6.2.0",
     "fs-extra": "^4.0.2",
     "lodash": "^4.17.4",
     "nodemon": "^1.11.0",
