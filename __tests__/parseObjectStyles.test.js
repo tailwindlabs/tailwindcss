@@ -1,6 +1,4 @@
-import _ from 'lodash'
 import parseObjectStyles from '../src/util/parseObjectStyles'
-import cxs from 'cxs'
 import postcss from 'postcss'
 
 function css(nodes) {
@@ -16,7 +14,7 @@ test('it parses simple single class definitions', () => {
     },
   })
 
-  expect(result).toMatchCss(`
+  expect(css(result)).toMatchCss(`
     .foobar {
       background-color: red;
       color: white;
@@ -38,7 +36,7 @@ test('it parses multiple class definitions', () => {
     },
   })
 
-  expect(result).toMatchCss(`
+  expect(css(result)).toMatchCss(`
     .foo {
       background-color: red;
       color: white;
@@ -66,17 +64,35 @@ test('it parses nested pseudo-selectors', () => {
     },
   })
 
-  expect(result).toMatchCss(`
+  expect(css(result)).toMatchCss(`
     .foo {
       background-color: red;
       color: white;
-      padding: 1rem
+      padding: 1rem;
     }
     .foo:hover {
-      background-color: orange
+      background-color: orange;
     }
     .foo:focus {
-      background-color: blue
+      background-color: blue;
+    }
+  `)
+})
+
+test('it parses top-level media queries', () => {
+  const result = parseObjectStyles({
+    '@media (min-width: 200px)': {
+      '.foo': {
+        backgroundColor: 'orange',
+      },
+    },
+  })
+
+  expect(css(result)).toMatchCss(`
+    @media (min-width: 200px) {
+      .foo {
+        background-color: orange
+      }
     }
   `)
 })
@@ -93,44 +109,168 @@ test('it parses nested media queries', () => {
     },
   })
 
-  expect(result).toMatchCss(`
+  expect(css(result)).toMatchCss(`
     .foo {
       background-color: red;
       color: white;
-      padding: 1rem
+      padding: 1rem;
     }
     @media (min-width: 200px) {
       .foo {
-        background-color: orange
+        background-color: orange;
       }
     }
   `)
 })
 
-// test('it parses pseudo-selectors in nested media queries', () => {
-//   const result = parseObjectStyles({
-//     '.foo': {
-//       backgroundColor: 'red',
-//       color: 'white',
-//       padding: '1rem',
-//       ':hover': {
-//         '@media (min-width: 200px)': {
-//           backgroundColor: 'orange',
-//         }
-//       },
-//     },
-//   })
+test('it parses pseudo-selectors in nested media queries', () => {
+  const result = parseObjectStyles({
+    '.foo': {
+      backgroundColor: 'red',
+      color: 'white',
+      padding: '1rem',
+      ':hover': {
+        '@media (min-width: 200px)': {
+          backgroundColor: 'orange',
+        },
+      },
+    },
+  })
 
-//   expect(result).toMatchCss(`
-//     .foo {
-//       background-color: red;
-//       color: white;
-//       padding: 1rem
-//     }
-//     @media (min-width: 200px) {
-//       .foo:hover {
-//         background-color: orange
-//       }
-//     }
-//   `)
-// })
+  expect(css(result)).toMatchCss(`
+    .foo {
+      background-color: red;
+      color: white;
+      padding: 1rem;
+    }
+    @media (min-width: 200px) {
+      .foo:hover {
+        background-color: orange;
+      }
+    }
+  `)
+})
+
+test('it parses descendant selectors', () => {
+  const result = parseObjectStyles({
+    '.foo': {
+      backgroundColor: 'red',
+      color: 'white',
+      padding: '1rem',
+      '.bar': {
+        backgroundColor: 'orange',
+      },
+    },
+  })
+
+  expect(css(result)).toMatchCss(`
+    .foo {
+      background-color: red;
+      color: white;
+      padding: 1rem;
+    }
+    .foo .bar {
+      background-color: orange;
+    }
+  `)
+})
+
+test('it parses nested multi-class selectors', () => {
+  const result = parseObjectStyles({
+    '.foo': {
+      backgroundColor: 'red',
+      color: 'white',
+      padding: '1rem',
+      '&.bar': {
+        backgroundColor: 'orange',
+      },
+    },
+  })
+
+  expect(css(result)).toMatchCss(`
+    .foo {
+      background-color: red;
+      color: white;
+      padding: 1rem;
+    }
+    .foo.bar {
+      background-color: orange;
+    }
+  `)
+})
+
+test('it parses nested multi-class selectors in media queries', () => {
+  const result = parseObjectStyles({
+    '.foo': {
+      backgroundColor: 'red',
+      color: 'white',
+      padding: '1rem',
+      '@media (min-width: 200px)': {
+        '&.bar': {
+          backgroundColor: 'orange',
+        },
+      },
+    },
+  })
+
+  expect(css(result)).toMatchCss(`
+    .foo {
+      background-color: red;
+      color: white;
+      padding: 1rem;
+    }
+    @media (min-width: 200px) {
+      .foo.bar {
+        background-color: orange;
+      }
+    }
+  `)
+})
+
+test('it strips empty selectors when nesting', () => {
+  const result = parseObjectStyles({
+    '.foo': {
+      '.bar': {
+        backgroundColor: 'orange',
+      },
+    },
+  })
+
+  expect(css(result)).toMatchCss(`
+    .foo .bar {
+      background-color: orange
+    }
+  `)
+})
+
+test('it can parse an array of styles', () => {
+  const result = parseObjectStyles([
+    {
+      '.foo': {
+        backgroundColor: 'orange',
+      },
+    },
+    {
+      '.bar': {
+        backgroundColor: 'red',
+      },
+    },
+    {
+      '.foo': {
+        backgroundColor: 'blue',
+      },
+    },
+  ])
+
+  expect(css(result)).toMatchCss(`
+    .foo {
+      background-color: orange
+    }
+    .bar {
+      background-color: red
+    }
+    .foo {
+      background-color: blue
+    }
+  `)
+})
