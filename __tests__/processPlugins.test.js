@@ -398,6 +398,59 @@ test('plugins can create components with media queries with object syntax', () =
   `)
 })
 
+test('media queries can be defined multiple times using objects-in-array syntax', () => {
+  const [components, utilities] = processPluginsWithValidConfig({
+    plugins: [
+      function({ addComponents }) {
+        addComponents([
+          {
+            '.container': {
+              width: '100%',
+            },
+            '@media (min-width: 100px)': {
+              '.container': {
+                maxWidth: '100px',
+              },
+            },
+          },
+          {
+            '.btn': {
+              padding: '1rem .5rem',
+              display: 'block',
+            },
+            '@media (min-width: 100px)': {
+              '.btn': {
+                display: 'inline-block',
+              },
+            },
+          },
+        ])
+      },
+    ],
+  })
+
+  expect(utilities.length).toBe(0)
+  expect(css(components)).toMatchCss(`
+    .container {
+      width: 100%
+    }
+    @media (min-width: 100px) {
+      .container {
+        max-width: 100px
+      }
+    }
+    .btn {
+      padding: 1rem .5rem;
+      display: block
+    }
+    @media (min-width: 100px) {
+      .btn {
+        display: inline-block
+      }
+    }
+  `)
+})
+
 test('plugins can create rules with escaped selectors', () => {
   const config = {
     plugins: [
