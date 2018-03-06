@@ -1,6 +1,8 @@
 import _ from 'lodash'
 import postcss from 'postcss'
+import Node from 'postcss/lib/node'
 import escapeClassName from '../util/escapeClassName'
+import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
 import wrapWithVariants from '../util/wrapWithVariants'
 
@@ -32,15 +34,12 @@ function defineUtility(selector, properties, options) {
   return rule
 }
 
-function defineAtRule(atRule, rules) {
-  const [name, ...params] = atRule.split(' ')
+function parseStyles(styles) {
+  if (!Array.isArray(styles)) {
+    return parseStyles([styles])
+  }
 
-  return postcss
-    .atRule({
-      name: name.startsWith('@') ? name.slice(1) : name,
-      params: params.join(' '),
-    })
-    .append(rules)
+  return _.flatMap(styles, (style) => style instanceof Node ? style : parseObjectStyles(style))
 }
 
 export default function(config) {
@@ -50,18 +49,33 @@ export default function(config) {
   config.plugins.forEach(plugin => {
     plugin({
       config: (path, defaultValue) => _.get(config, path, defaultValue),
-      rule: defineRule,
-      utility: (selector, properties) => defineUtility(selector, properties, config.options),
-      atRule: defineAtRule,
       e: escapeClassName,
-      addUtilities: (utilities, variants = []) => {
-        pluginUtilities.push(wrapWithVariants(utilities, variants))
-      },
-      addComponents: components => {
-        pluginComponents.push(...components)
-      },
       prefix: selector => {
         return prefixSelector(config.options.prefix, selector)
+      },
+      addUtilities: (utilities, options) => {
+        const defaultOptions = { variants: [], respectPrefix: true, respectImportant: true }
+
+        options = Array.isArray(options)
+          ? Object.assign({}, defaultOptions, { variants: options })
+          : _.defaults(options, defaultOptions)
+
+        const styles = postcss.root({ nodes: parseStyles(utilities) })
+
+        styles.walkRules(rule => {
+          if (options.respectPrefix) {
+            rule.selector = prefixSelector(config.options.prefix, rule.selector)
+          }
+
+          if (options.respectImportant && _.get(config, 'options.important')) {
+            rule.walkDecls(decl => decl.important = true)
+          }
+        })
+
+        pluginUtilities.push(wrapWithVariants(styles.nodes, options.variants))
+      },
+      addComponents: components => {
+        pluginComponents.push(...parseStyles(components))
       },
     })
   })
