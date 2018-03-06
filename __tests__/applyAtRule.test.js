@@ -2,7 +2,7 @@ import postcss from 'postcss'
 import plugin from '../src/lib/substituteClassApplyAtRules'
 
 function run(input, opts = () => {}) {
-  return postcss([plugin(opts)]).process(input)
+  return postcss([plugin(opts)]).process(input, { from: undefined })
 }
 
 test("it copies a class's declarations into itself", () => {

@@ -6,12 +6,13 @@ test('it uses the values from the custom config file', () => {
   return postcss([tailwind(path.resolve(`${__dirname}/fixtures/customConfig.js`))])
     .process(
       `
-      @responsive {
-        .foo {
-          color: blue;
+        @responsive {
+          .foo {
+            color: blue;
+          }
         }
-      }
-    `
+      `,
+      { from: undefined }
     )
     .then(result => {
       const expected = `

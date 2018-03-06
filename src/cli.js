@@ -25,7 +25,7 @@ function buildTailwind(inputFile, config, write) {
   const input = fs.readFileSync(inputFile, 'utf8')
 
   return postcss([tailwind(config)])
-    .process(input)
+    .process(input, { from: inputFile })
     .then(result => {
       write(result.css)
       console.log('Finished building Tailwind!')
