@@ -29,6 +29,7 @@ test('it handles a function as the prefix', () => {
   `
 
   const prefixFunc = selector => {
+    return selector === '.foo' ? 'tw-' : ''
     if (selector === '.foo') {
       return 'tw-'
     }
@@ -37,6 +38,20 @@ test('it handles a function as the prefix', () => {
   }
 
   const result = prefixTree(input, prefixFunc).toResult()
+  expect(result.css).toEqual(expected)
+  expect(result.warnings().length).toBe(0)
+})
+
+test('it prefixes all classes in a selector', () => {
+  const input = postcss.parse(`
+    .btn-blue .w-1\\/4 > h1.text-xl + a .bar { color: red; }
+  `)
+
+  const expected = `
+    .tw-btn-blue .tw-w-1\\/4 > h1.tw-text-xl + a .tw-bar { color: red; }
+  `
+
+  const result = prefixTree(input, 'tw-').toResult()
   expect(result.css).toEqual(expected)
   expect(result.warnings().length).toBe(0)
 })

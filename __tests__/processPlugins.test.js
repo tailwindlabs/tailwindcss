@@ -755,3 +755,26 @@ test('variants can still be specified when ignoring prefix and important options
     }
   `)
 })
+
+test('prefix will prefix all classes in a selector', () => {
+  const [components] = processPluginsWithValidConfig({
+    plugins: [
+      function({ addComponents, prefix }) {
+        addComponents({
+          [prefix('.btn-blue .w-1\\/4 > h1.text-xl + a .bar')]: {
+            backgroundColor: 'blue',
+          },
+        })
+      },
+    ],
+    options: {
+      prefix: 'tw-',
+    },
+  })
+
+  expect(css(components)).toMatchCss(`
+    .tw-btn-blue .tw-w-1\\/4 > h1.tw-text-xl + a .tw-bar {
+      background-color: blue
+    }
+  `)
+})
