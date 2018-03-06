@@ -50,7 +50,8 @@
     "postcss": "^6.0.9",
     "postcss-functions": "^3.0.0",
     "postcss-js": "^1.0.1",
-    "postcss-nested": "^3.0.0"
+    "postcss-nested": "^3.0.0",
+    "postcss-selector-parser": "^3.1.1"
   },
   "browserslist": [
     "> 1%"
