@@ -616,7 +616,7 @@ test('plugins respect prefix and important options by default when adding utilit
   `)
 })
 
-test("component declarations are not affected by the 'prefix' option", () => {
+test("component declarations respect the 'prefix' option by default", () => {
   const [components] = processPluginsWithValidConfig({
     plugins: [
       function({ addComponents }) {
@@ -625,6 +625,32 @@ test("component declarations are not affected by the 'prefix' option", () => {
             backgroundColor: 'blue',
           },
         })
+      },
+    ],
+    options: {
+      prefix: 'tw-',
+    },
+  })
+
+  expect(css(components)).toMatchCss(`
+    .tw-btn-blue {
+      background-color: blue
+    }
+  `)
+})
+
+test("component declarations can optionally ignore 'prefix' option", () => {
+  const [components] = processPluginsWithValidConfig({
+    plugins: [
+      function({ addComponents }) {
+        addComponents(
+          {
+            '.btn-blue': {
+              backgroundColor: 'blue',
+            },
+          },
+          { respectPrefix: false }
+        )
       },
     ],
     options: {
@@ -672,7 +698,8 @@ test("plugins can apply the user's chosen prefix to components manually", () => 
               backgroundColor: 'blue',
             },
           },
-        })
+          { respectPrefix: false }
+        )
       },
     ],
     options: {
@@ -792,7 +819,8 @@ test('prefix will prefix all classes in a selector', () => {
               backgroundColor: 'blue',
             },
           },
-        })
+          { respectPrefix: false }
+        )
       },
     ],
     options: {
