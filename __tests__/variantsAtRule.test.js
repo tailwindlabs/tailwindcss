@@ -3,7 +3,7 @@ import plugin from '../src/lib/substituteVariantsAtRules'
 import config from '../defaultConfig.stub.js'
 
 function run(input, opts = () => config) {
-  return postcss([plugin(opts)]).process(input)
+  return postcss([plugin(opts)]).process(input, { from: undefined })
 }
 
 test('it can generate hover variants', () => {

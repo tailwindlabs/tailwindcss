@@ -2,7 +2,7 @@ import postcss from 'postcss'
 import plugin from '../src/lib/evaluateTailwindFunctions'
 
 function run(input, opts = {}) {
-  return postcss([plugin(() => opts)]).process(input)
+  return postcss([plugin(() => opts)]).process(input, { from: undefined })
 }
 
 test('it looks up values in the config using dot notation', () => {

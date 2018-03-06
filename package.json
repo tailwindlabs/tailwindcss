@@ -38,19 +38,19 @@
     "eslint-config-prettier": "^2.7.0",
     "eslint-plugin-prettier": "^2.3.1",
     "jest": "^20.0.4",
-    "mousetrap": "^1.6.1",
     "prettier": "^1.7.4",
     "rimraf": "^2.6.1"
   },
   "dependencies": {
     "commander": "^2.11.0",
-    "cxs": "^6.2.0",
     "fs-extra": "^4.0.2",
     "lodash": "^4.17.4",
     "nodemon": "^1.11.0",
     "perfectionist": "^2.4.0",
     "postcss": "^6.0.9",
-    "postcss-functions": "^3.0.0"
+    "postcss-functions": "^3.0.0",
+    "postcss-js": "^1.0.1",
+    "postcss-nested": "^3.0.0"
   },
   "browserslist": [
     "> 1%"
