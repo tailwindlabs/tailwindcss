@@ -46,8 +46,18 @@ export default function(config) {
 
         pluginUtilities.push(wrapWithVariants(styles.nodes, options.variants))
       },
-      addComponents: components => {
-        pluginComponents.push(...parseStyles(components))
+      addComponents: (components, options) => {
+        options = Object.assign({ respectPrefix: true }, options)
+
+        const styles = postcss.root({ nodes: parseStyles(components) })
+
+        styles.walkRules(rule => {
+          if (options.respectPrefix) {
+            rule.selector = prefixSelector(config.options.prefix, rule.selector)
+          }
+        })
+
+        pluginComponents.push(...styles.nodes)
       },
     })
   })
