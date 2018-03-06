@@ -666,9 +666,11 @@ test("plugins can apply the user's chosen prefix to components manually", () => 
   const [components] = processPluginsWithValidConfig({
     plugins: [
       function({ addComponents, prefix }) {
-        addComponents({
-          [prefix('.btn-blue')]: {
-            backgroundColor: 'blue',
+        addComponents(
+          {
+            [prefix('.btn-blue')]: {
+              backgroundColor: 'blue',
+            },
           },
         })
       },
@@ -784,9 +786,11 @@ test('prefix will prefix all classes in a selector', () => {
   const [components] = processPluginsWithValidConfig({
     plugins: [
       function({ addComponents, prefix }) {
-        addComponents({
-          [prefix('.btn-blue .w-1\\/4 > h1.text-xl + a .bar')]: {
-            backgroundColor: 'blue',
+        addComponents(
+          {
+            [prefix('.btn-blue .w-1\\/4 > h1.text-xl + a .bar')]: {
+              backgroundColor: 'blue',
+            },
           },
         })
       },
