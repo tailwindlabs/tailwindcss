@@ -7,13 +7,15 @@ function css(nodes) {
 }
 
 function processPluginsWithValidConfig(config) {
-  return processPlugins(_.defaultsDeep(config, {
-    options: {
-      prefix: '',
-      important: false,
-      separator: ':'
-    }
-  }))
+  return processPlugins(
+    _.defaultsDeep(config, {
+      options: {
+        prefix: '',
+        important: false,
+        separator: ':',
+      },
+    })
+  )
 }
 
 test('plugins can create utilities with object syntax', () => {
@@ -143,8 +145,8 @@ test('plugins can create utilities with mixed object styles and PostCSS nodes', 
         addUtilities([
           {
             '.object-fill': {
-              objectFit: 'fill'
-            }
+              objectFit: 'fill',
+            },
           },
           postcss.rule({ selector: '.object-contain' }).append([
             postcss.decl({
@@ -182,7 +184,7 @@ test('plugins can create utilities with mixed object styles and PostCSS nodes', 
 test('plugins can create utilities with variants', () => {
   const [components, utilities] = processPluginsWithValidConfig({
     plugins: [
-      function({ rule, addUtilities }) {
+      function({ addUtilities }) {
         addUtilities(
           {
             '.object-fill': {
@@ -283,6 +285,19 @@ test('plugins can create components with raw PostCSS nodes', () => {
       },
     ],
   })
+
+  expect(utilities.length).toBe(0)
+  expect(css(components)).toMatchCss(`
+    .btn-blue {
+      background-color: blue;
+      color: white;
+      padding: .5rem 1rem;
+      border-radius: .25rem
+    }
+    .btn-blue:hover {
+      background-color: darkblue
+    }
+  `)
 })
 
 test('plugins can create components with mixed object styles and raw PostCSS nodes', () => {
@@ -310,8 +325,8 @@ test('plugins can create components with mixed object styles and raw PostCSS nod
           ]),
           {
             '.btn-blue:hover': {
-              backgroundColor: 'darkblue'
-            }
+              backgroundColor: 'darkblue',
+            },
           },
         ])
       },
@@ -422,7 +437,7 @@ test('plugins can access the current config', () => {
           {
             '.container': {
               width: '100%',
-            }
+            },
           },
         ]
 
@@ -430,7 +445,7 @@ test('plugins can access the current config', () => {
           containerClasses.push({
             [`@media (min-width: ${breakpoint})`]: {
               '.container': { maxWidth: breakpoint },
-            }
+            },
           })
         })
 
@@ -499,7 +514,7 @@ test('plugins can provide fallbacks to keys missing from the config', () => {
 test('variants are optional when adding utilities', () => {
   const [, utilities] = processPluginsWithValidConfig({
     plugins: [
-      function({ rule, addUtilities }) {
+      function({ addUtilities }) {
         addUtilities({
           '.border-collapse': {
             'border-collapse': 'collapse',
@@ -578,7 +593,7 @@ test('plugins can add multiple sets of utilities and components', () => {
 test('plugins respect prefix and important options by default when adding utilities', () => {
   const [, utilities] = processPluginsWithValidConfig({
     plugins: [
-      function({ utility, addUtilities }) {
+      function({ addUtilities }) {
         addUtilities({
           '.rotate-90': {
             transform: 'rotate(90deg)',
@@ -673,14 +688,17 @@ test("plugins can apply the user's chosen prefix to components manually", () => 
 test('prefix can optionally be ignored for utilities', () => {
   const [, utilities] = processPluginsWithValidConfig({
     plugins: [
-      function({ utility, addUtilities }) {
-        addUtilities({
-          '.rotate-90': {
-            transform: 'rotate(90deg)',
+      function({ addUtilities }) {
+        addUtilities(
+          {
+            '.rotate-90': {
+              transform: 'rotate(90deg)',
+            },
           },
-        }, {
-          respectPrefix: false
-        })
+          {
+            respectPrefix: false,
+          }
+        )
       },
     ],
     options: {
@@ -701,14 +719,17 @@ test('prefix can optionally be ignored for utilities', () => {
 test('important can optionally be ignored for utilities', () => {
   const [, utilities] = processPluginsWithValidConfig({
     plugins: [
-      function({ utility, addUtilities }) {
-        addUtilities({
-          '.rotate-90': {
-            transform: 'rotate(90deg)',
+      function({ addUtilities }) {
+        addUtilities(
+          {
+            '.rotate-90': {
+              transform: 'rotate(90deg)',
+            },
           },
-        }, {
-          respectImportant: false
-        })
+          {
+            respectImportant: false,
+          }
+        )
       },
     ],
     options: {
@@ -729,16 +750,19 @@ test('important can optionally be ignored for utilities', () => {
 test('variants can still be specified when ignoring prefix and important options', () => {
   const [, utilities] = processPluginsWithValidConfig({
     plugins: [
-      function({ utility, addUtilities }) {
-        addUtilities({
-          '.rotate-90': {
-            transform: 'rotate(90deg)',
+      function({ addUtilities }) {
+        addUtilities(
+          {
+            '.rotate-90': {
+              transform: 'rotate(90deg)',
+            },
           },
-        }, {
-          variants: ['responsive', 'hover', 'focus'],
-          respectImportant: false,
-          respectPrefix: false,
-        })
+          {
+            variants: ['responsive', 'hover', 'focus'],
+            respectImportant: false,
+            respectPrefix: false,
+          }
+        )
       },
     ],
     options: {

@@ -30,11 +30,6 @@ test('it handles a function as the prefix', () => {
 
   const prefixFunc = selector => {
     return selector === '.foo' ? 'tw-' : ''
-    if (selector === '.foo') {
-      return 'tw-'
-    }
-
-    return ''
   }
 
   const result = prefixTree(input, prefixFunc).toResult()

@@ -6,40 +6,12 @@ import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
 import wrapWithVariants from '../util/wrapWithVariants'
 
-function defineRule(selector, properties) {
-  const decls = _.map(properties, (value, property) => {
-    return postcss.decl({
-      prop: `${property}`,
-      value: `${value}`,
-    })
-  })
-
-  return postcss.rule({ selector }).append(decls)
-}
-
-function defineUtility(selector, properties, options) {
-  if (selector.startsWith('.')) {
-    return defineUtility(selector.slice(1), properties, options)
-  }
-
-  const rule = defineRule(
-    prefixSelector(options.prefix, `.${escapeClassName(selector)}`),
-    properties
-  )
-
-  if (options.important) {
-    rule.walkDecls(decl => (decl.important = true))
-  }
-
-  return rule
-}
-
 function parseStyles(styles) {
   if (!Array.isArray(styles)) {
     return parseStyles([styles])
   }
 
-  return _.flatMap(styles, (style) => style instanceof Node ? style : parseObjectStyles(style))
+  return _.flatMap(styles, style => (style instanceof Node ? style : parseObjectStyles(style)))
 }
 
 export default function(config) {
@@ -68,7 +40,7 @@ export default function(config) {
           }
 
           if (options.respectImportant && _.get(config, 'options.important')) {
-            rule.walkDecls(decl => decl.important = true)
+            rule.walkDecls(decl => (decl.important = true))
           }
         })
 
