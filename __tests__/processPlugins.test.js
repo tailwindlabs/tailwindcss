@@ -474,7 +474,7 @@ test('plugins can create nested rules', () => {
             },
             'h1 &': {
               color: 'purple',
-            }
+            },
           },
         })
       },
