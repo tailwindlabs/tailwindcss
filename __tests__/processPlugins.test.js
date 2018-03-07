@@ -451,6 +451,61 @@ test('media queries can be defined multiple times using objects-in-array syntax'
   `)
 })
 
+test('plugins can create nested rules', () => {
+  const [components, utilities] = processPluginsWithValidConfig({
+    plugins: [
+      function({ addComponents }) {
+        addComponents({
+          '.btn-blue': {
+            backgroundColor: 'blue',
+            color: 'white',
+            padding: '.5rem 1rem',
+            borderRadius: '.25rem',
+            '&:hover': {
+              backgroundColor: 'darkblue',
+            },
+            '@media (min-width: 500px)': {
+              '&:hover': {
+                backgroundColor: 'orange',
+              },
+            },
+            '> a': {
+              color: 'red',
+            },
+            'h1 &': {
+              color: 'purple',
+            }
+          },
+        })
+      },
+    ],
+  })
+
+  expect(utilities.length).toBe(0)
+  expect(css(components)).toMatchCss(`
+    .btn-blue {
+      background-color: blue;
+      color: white;
+      padding: .5rem 1rem;
+      border-radius: .25rem;
+    }
+    .btn-blue:hover {
+      background-color: darkblue;
+    }
+    @media (min-width: 500px) {
+      .btn-blue:hover {
+        background-color: orange;
+      }
+    }
+    .btn-blue > a {
+      color: red;
+    }
+    h1 .btn-blue {
+      color: purple;
+    }
+  `)
+})
+
 test('plugins can create rules with escaped selectors', () => {
   const config = {
     plugins: [
