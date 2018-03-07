@@ -228,6 +228,24 @@ For example, you could add a `tw-` prefix by setting the `prefix` option like so
 }
 ```
 
++You can also pass a function to the `prefix` option if you need more fine-grained control:
+
+```js
+{
+  // ...
+  options: {
+    prefix: function (selector) {
+      if (selector === '.container') {
+        return 'tw-'
+      }
+
+      return ''
+    },
+    // ...
+  }
+}
+```
+
 It's important to understand that this prefix is added to the beginning of each *utility* name, not to the entire class name.
 
 That means that classes with responsive or state prefixes like `sm:` or `hover:` will still have the responsive or state prefix *first*, with your custom prefix appearing after the colon:
