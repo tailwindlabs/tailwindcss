@@ -19,6 +19,11 @@ features:
       "Set the mouse cursor to the default browser behavior.",
     ],
     [
+      '.cursor-default',
+      'cursor: default;',
+      "Set the mouse cursor to the platform default. Typically an arrow.",
+    ],
+    [
       '.cursor-pointer',
       'cursor: pointer;',
       "Set the mouse cursor to a pointer and indicate a link.",
