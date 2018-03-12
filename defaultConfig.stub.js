@@ -872,7 +872,9 @@ module.exports = {
   |
   */
 
-  plugins: [],
+  plugins: [
+    require('./plugins/container')(),
+  ],
 
 
   /*

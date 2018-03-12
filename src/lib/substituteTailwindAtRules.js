@@ -1,6 +1,5 @@
 import fs from 'fs'
 import postcss from 'postcss'
-import container from '../generators/container'
 import utilityModules from '../utilityModules'
 import prefixTree from '../util/prefixTree'
 import generateModules from '../util/generateModules'
@@ -22,7 +21,7 @@ export default function(config) {
 
       if (atRule.params === 'components') {
         const pluginComponentTree = postcss.root({
-          nodes: [...container(unwrappedConfig), ...pluginComponents],
+          nodes: pluginComponents,
         })
 
         pluginComponentTree.walk(node => (node.source = atRule.source))
