@@ -69,9 +69,9 @@ test('it can generate group-hover variants', () => {
   })
 })
 
-test('it can generate hover and focus variants', () => {
+test('it can generate all variants', () => {
   const input = `
-    @variants hover, focus {
+    @variants hover, focus, group-hover {
       .banana { color: yellow; }
       .chocolate { color: brown; }
     }
@@ -80,10 +80,12 @@ test('it can generate hover and focus variants', () => {
   const output = `
       .banana { color: yellow; }
       .chocolate { color: brown; }
-      .focus\\:banana:focus { color: yellow; }
-      .focus\\:chocolate:focus { color: brown; }
+      .group:hover .group-hover\\:banana { color: yellow; }
+      .group:hover .group-hover\\:chocolate { color: brown; }
       .hover\\:banana:hover { color: yellow; }
       .hover\\:chocolate:hover { color: brown; }
+      .focus\\:banana:focus { color: yellow; }
+      .focus\\:chocolate:focus { color: brown; }
   `
 
   return run(input).then(result => {
@@ -104,10 +106,10 @@ test('it wraps the output in a responsive at-rule if responsive is included as a
     @responsive {
       .banana { color: yellow; }
       .chocolate { color: brown; }
-      .focus\\:banana:focus { color: yellow; }
-      .focus\\:chocolate:focus { color: brown; }
       .hover\\:banana:hover { color: yellow; }
       .hover\\:chocolate:hover { color: brown; }
+      .focus\\:banana:focus { color: yellow; }
+      .focus\\:chocolate:focus { color: brown; }
     }
   `
 
