@@ -22,7 +22,7 @@ export default function(config) {
 
       if (atRule.params === 'components') {
         const pluginComponentTree = postcss.root({
-          nodes: pluginComponents,
+          nodes: [...container(unwrappedConfig), ...pluginComponents],
         })
 
         pluginComponentTree.walk(node => (node.source = atRule.source))
@@ -39,7 +39,7 @@ export default function(config) {
         }
 
         const tailwindUtilityTree = postcss.root({
-          nodes: [...container(unwrappedConfig), ...utilities.nodes],
+          nodes: utilities.nodes,
         })
 
         const pluginUtilityTree = postcss.root({
