@@ -15,11 +15,11 @@ export default function() {
       '-ms-overflow-style': '-ms-autohiding-scrollbar',
     },
     'overflow-x-scroll': {
-       'overflow-x': 'scroll' ,
+      'overflow-x': 'scroll',
       '-ms-overflow-style': '-ms-scrollbar',
     },
     'overflow-y-scroll': {
-       'overflow-y': 'scroll' ,
+      'overflow-y': 'scroll',
       '-ms-overflow-style': '-ms-scrollbar',
     },
     'scrolling-touch': { '-webkit-overflow-scrolling': 'touch' },
