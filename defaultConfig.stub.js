@@ -818,6 +818,27 @@ module.exports = {
 
   /*
   |-----------------------------------------------------------------------------
+  | Cursor                                  https://tailwindcss.com/docs/cursor
+  |-----------------------------------------------------------------------------
+  |
+  | Here is where you define your cursor utility values. By default we provide
+  | a sensible set of values that are commonly needed in most applications, but
+  | feel free to add any you need that are not included.
+  |
+  | Class name: .cursor-{name}
+  |
+  */
+
+  cursor: {
+    'auto': 'auto',
+    'default': 'default',
+    'pointer': 'pointer',
+    'not-allowed': 'not-allowed',
+  },
+
+
+  /*
+  |-----------------------------------------------------------------------------
   | Modules                  https://tailwindcss.com/docs/configuration#modules
   |-----------------------------------------------------------------------------
   |
