@@ -3477,6 +3477,10 @@ button,
   position: relative;
 }
 
+.sticky {
+  position: sticky;
+}
+
 .pin-none {
   top: auto;
   right: auto;
@@ -7360,6 +7364,10 @@ button,
     position: relative;
   }
 
+  .sm\:sticky {
+    position: sticky;
+  }
+
   .sm\:pin-none {
     top: auto;
     right: auto;
@@ -11234,6 +11242,10 @@ button,
 
   .md\:relative {
     position: relative;
+  }
+
+  .md\:sticky {
+    position: sticky;
   }
 
   .md\:pin-none {
@@ -15112,6 +15124,10 @@ button,
     position: relative;
   }
 
+  .lg\:sticky {
+    position: sticky;
+  }
+
   .lg\:pin-none {
     top: auto;
     right: auto;
@@ -18986,6 +19002,10 @@ button,
 
   .xl\:relative {
     position: relative;
+  }
+
+  .xl\:sticky {
+    position: sticky;
   }
 
   .xl\:pin-none {
