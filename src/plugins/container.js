@@ -1,7 +1,5 @@
 /* eslint-disable no-shadow */
 import _ from 'lodash'
-import postcss from 'postcss'
-import defineClass from '../util/defineClass'
 
 function extractMinWidths(breakpoints) {
   return _.flatMap(breakpoints, breakpoints => {
@@ -31,22 +29,21 @@ module.exports = function(options) {
     const minWidths = extractMinWidths(screens)
 
     const atRules = _.map(minWidths, minWidth => {
-      const atRule = postcss.atRule({
-        name: 'media',
-        params: `(min-width: ${minWidth})`,
-      })
-      atRule.append(
-        defineClass('container', {
-          'max-width': minWidth,
-        })
-      )
-      return atRule
+      return {
+        [`@media (min-width: ${minWidth})`]: {
+          '.container': {
+            'max-width': minWidth,
+          },
+        },
+      }
     })
 
     addComponents([
-      defineClass('container', {
-        width: '100%',
-      }),
+      {
+        '.container': {
+          width: '100%',
+        },
+      },
       ...atRules,
     ])
   }
