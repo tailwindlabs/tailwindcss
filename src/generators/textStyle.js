@@ -3,7 +3,7 @@ import defineClasses from '../util/defineClasses'
 export default function() {
   return defineClasses({
     italic: { 'font-style': 'italic' },
-    roman: { 'font-style': 'normal' },
+    'not-italic': { 'font-style': 'normal' },
 
     uppercase: { 'text-transform': 'uppercase' },
     lowercase: { 'text-transform': 'lowercase' },
