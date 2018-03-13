@@ -40,6 +40,7 @@ console.info('Building Tailwind!')
 
 Promise.all([
   buildDistFile('preflight'),
+  buildDistFile('components'),
   buildDistFile('utilities'),
   buildDistFile('tailwind'),
 ]).then(() => {
