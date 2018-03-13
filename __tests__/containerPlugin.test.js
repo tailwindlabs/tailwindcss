@@ -74,10 +74,7 @@ test('screens can be an array', () => {
   const [components] = processPluginsWithValidConfig({
     plugins: [
       container({
-        screens: [
-          '400px',
-          '500px',
-        ],
+        screens: ['400px', '500px'],
       }),
     ],
   })
