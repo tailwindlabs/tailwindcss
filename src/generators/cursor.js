@@ -5,6 +5,7 @@ export default function() {
     'cursor-auto': { cursor: 'auto' },
     'cursor-default': { cursor: 'default' },
     'cursor-pointer': { cursor: 'pointer' },
+    'cursor-move': { cursor: 'move' },
     'cursor-not-allowed': { cursor: 'not-allowed' },
     'cursor-wait': { cursor: 'wait' },
   })
