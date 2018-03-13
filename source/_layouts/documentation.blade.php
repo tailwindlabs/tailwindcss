@@ -145,7 +145,6 @@
 
               {{-- Table of contents --}}
               <div class="hidden xl:text-sm xl:block xl:w-1/4 xl:px-6">
-                {{-- <div class="px-6 pt-6 overflow-y-scroll lg:block lg:sticky lg:top-16 lg:py-12 lg:pl-6 lg:pr-8 lg:max-h-(screen-16)"> --}}
                 <div class="flex flex-col justify-between overflow-y-scroll sticky top-16 max-h-(screen-16) pt-12 pb-4 -mt-12">
                   <table-of-contents class="mb-8"></table-of-contents>
                   <div id="ad"></div>
