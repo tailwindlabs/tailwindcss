@@ -6,5 +6,6 @@ export default function() {
     'cursor-default': { cursor: 'default' },
     'cursor-pointer': { cursor: 'pointer' },
     'cursor-not-allowed': { cursor: 'not-allowed' },
+    'cursor-wait': { cursor: 'wait' },
   })
 }
