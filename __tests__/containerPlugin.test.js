@@ -70,6 +70,29 @@ test('screens can be specified explicitly', () => {
   `)
 })
 
+test('screens can be an array', () => {
+  const [components] = processPluginsWithValidConfig({
+    plugins: [
+      container({
+        screens: [
+          '400px',
+          '500px',
+        ],
+      }),
+    ],
+  })
+
+  expect(css(components)).toMatchCss(`
+    .container { width: 100% }
+    @media (min-width: 400px) {
+      .container { max-width: 400px }
+    }
+    @media (min-width: 500px) {
+      .container { max-width: 500px }
+    }
+  `)
+})
+
 test('the container can be centered by default', () => {
   const [components] = processPluginsWithValidConfig({
     plugins: [
