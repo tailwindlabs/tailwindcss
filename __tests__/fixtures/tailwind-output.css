@@ -4223,7 +4223,7 @@ button,
   font-style: italic;
 }
 
-.not-italic {
+.roman {
   font-style: normal;
 }
 
@@ -4269,7 +4269,7 @@ button,
   font-style: italic;
 }
 
-.hover\:not-italic:hover {
+.hover\:roman:hover {
   font-style: normal;
 }
 
@@ -8120,7 +8120,7 @@ button,
     font-style: italic;
   }
 
-  .sm\:not-italic {
+  .sm\:roman {
     font-style: normal;
   }
 
@@ -8166,7 +8166,7 @@ button,
     font-style: italic;
   }
 
-  .sm\:hover\:not-italic:hover {
+  .sm\:hover\:roman:hover {
     font-style: normal;
   }
 
@@ -12018,7 +12018,7 @@ button,
     font-style: italic;
   }
 
-  .md\:not-italic {
+  .md\:roman {
     font-style: normal;
   }
 
@@ -12064,7 +12064,7 @@ button,
     font-style: italic;
   }
 
-  .md\:hover\:not-italic:hover {
+  .md\:hover\:roman:hover {
     font-style: normal;
   }
 
@@ -15916,7 +15916,7 @@ button,
     font-style: italic;
   }
 
-  .lg\:not-italic {
+  .lg\:roman {
     font-style: normal;
   }
 
@@ -15962,7 +15962,7 @@ button,
     font-style: italic;
   }
 
-  .lg\:hover\:not-italic:hover {
+  .lg\:hover\:roman:hover {
     font-style: normal;
   }
 
@@ -19814,7 +19814,7 @@ button,
     font-style: italic;
   }
 
-  .xl\:not-italic {
+  .xl\:roman {
     font-style: normal;
   }
 
@@ -19860,7 +19860,7 @@ button,
     font-style: italic;
   }
 
-  .xl\:hover\:not-italic:hover {
+  .xl\:hover\:roman:hover {
     font-style: normal;
   }
 
