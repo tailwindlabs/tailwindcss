@@ -4,8 +4,7 @@ title: "Container"
 description: "A component for fixing an element's width to the current breakpoint."
 ---
 
-@include('_partials.work-in-progress')
-
+<h2 style="visibility: hidden; font-size: 0; margin: 0;">Class reference</h2>
 <div class="border-t border-grey-lighter">
   <table class="w-full text-left table-collapse">
     <colgroup>
@@ -46,9 +45,9 @@ description: "A component for fixing an element's width to the current breakpoin
   </table>
 </div>
 
-Tailwind's `.container` class sets the `max-width` of an element to match the `min-width` of the current breakpoint.
+Tailwind's `.container` class sets the `max-width` of an element to match the `min-width` of the current breakpoint. This is useful if you'd prefer to design for a fixed set of sizes instead of trying to accommodate a fully fluid viewport.
 
-Note that unlike containers you might have used in other frameworks, **Tailwind's container does not center itself automatically and does not contain any built-in horizontal padding.**
+Note that unlike containers you might have used in other frameworks, **Tailwind's container does not center itself automatically and does not have any built-in horizontal padding.**
 
 To center a container, use the `.mx-auto` utility:
 
@@ -65,3 +64,49 @@ To add horizontal padding, use the `.px-{size}` utilities:
   <!-- ... -->
 </div>
 ```
+
+If you'd like to center your containers by default or include default horizontal padding, see the [customization options](#customizing) below.
+
+## Customizing
+
+### Centering by default
+
+To center containers by default, set the `center` option to `true` in the plugins section of your config file:
+
+```js
+// ...
+
+module.exports = {
+  // ...
+
+  plugins: [
+    require('tailwindcss/plugins/container')({
+      center: true,
+    })
+  ],
+}
+```
+
+### Horizontal padding
+
+To add horizontal padding by default, specify the amount of padding you'd like using the `padding` option in the plugins section of your config file:
+
+```js
+// ...
+
+module.exports = {
+  // ...
+
+  plugins: [
+    require('tailwindcss/plugins/container')({
+      padding: '2rem',
+    })
+  ],
+}
+```
+
+### Disabling
+
+Unlike most of Tailwind's other styles, the container component is included as a built-in plugin rather than a traditional utility module. To disable it, remove the plugin from the `plugins` section of your config file:
+
+<div class="bg-grey-lightest p-4 font-mono text-xs"><div class="whitespace-pre text-grey-dark">{</div> <div class="whitespace-pre text-grey-light">  // ...</div> <div class="whitespace-pre text-grey-dark"><span class="text-purple-dark">  plugins</span>: [</div> <div><div class="text-grey"><span class="text-grey">-</span>&nbsp;&nbsp;&nbsp;require('tailwindcss/plugins/container')(),</div></div> <div class="whitespace-pre text-grey-dark">  ]</div> <div class="whitespace-pre text-grey-dark">}</div></div>
