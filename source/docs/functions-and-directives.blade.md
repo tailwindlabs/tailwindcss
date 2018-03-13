@@ -142,7 +142,7 @@ Note that `@@apply` **will not work** for mixing in hover, focus, or responsive 
 
 ## @variants
 
-You can generate `responsive`, `hover`, `focus`, and `group-hover` versions of your own utilities by wrapping their definitions in the `@variants` directive
+You can generate `responsive`, `hover`, `focus`, `active`, and `group-hover` versions of your own utilities by wrapping their definitions in the `@variants` directive
 
 ```less
 @@variants hover, focus {
@@ -183,6 +183,7 @@ The `@variants` at-rule supports all of the values that are supported in the `mo
 - `responsive`
 - `hover`
 - `focus`
+- `active`
 - `group-hover`
 
 ## @@responsive
