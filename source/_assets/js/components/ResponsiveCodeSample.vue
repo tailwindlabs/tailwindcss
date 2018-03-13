@@ -24,7 +24,7 @@
     </div>
     <div class="rounded overflow-hidden border border-grey-light mb-8">
       <div class="p-4 bg-grey-lightest border-b border-grey-light">
-        <div class="whitespace-pre font-mono text-grey text-xs overflow-x-scroll" v-html="highlightedCode"></div>
+        <div class="whitespace-pre font-mono text-grey text-xs overflow-x-auto" v-html="highlightedCode"></div>
       </div>
       <div class="bg-white p-4">
         <slot v-if="activeScreen === 'none'" name="none"></slot>

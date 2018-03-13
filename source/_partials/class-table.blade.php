@@ -7,7 +7,7 @@
 <h2 style="visibility: hidden; font-size: 0; margin: 0;">Class reference</h2>
 {{-- <h2>Class reference</h2> --}}
 <div class="border-t border-b border-grey-light overflow-hidden relative">
-  <div class="{{ $scroll ? 'max-h-sm pb-10' : '' }} overflow-y-scroll">
+  <div class="{{ $scroll ? 'max-h-sm pb-10' : '' }} overflow-y-auto">
     <table class="w-full text-left table-collapse">
       <thead>
         <tr>
