@@ -27,6 +27,27 @@ test('it can generate hover variants', () => {
   })
 })
 
+test('it can generate active variants', () => {
+  const input = `
+    @variants active {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+      .active\\:banana:active { color: yellow; }
+      .active\\:chocolate:active { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate focus variants', () => {
   const input = `
     @variants focus {
@@ -69,9 +90,9 @@ test('it can generate group-hover variants', () => {
   })
 })
 
-test('it can generate all variants', () => {
+test('it can generate hover, active and focus variants', () => {
   const input = `
-    @variants hover, focus, group-hover {
+    @variants hover, active, group-hover, focus {
       .banana { color: yellow; }
       .chocolate { color: brown; }
     }
@@ -86,6 +107,8 @@ test('it can generate all variants', () => {
       .hover\\:chocolate:hover { color: brown; }
       .focus\\:banana:focus { color: yellow; }
       .focus\\:chocolate:focus { color: brown; }
+      .active\\:banana:active { color: yellow; }
+      .active\\:chocolate:active { color: brown; }
   `
 
   return run(input).then(result => {

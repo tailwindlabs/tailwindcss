@@ -2,35 +2,35 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import buildClassVariant from '../util/buildClassVariant'
 
+function buildPseudoClassVariant(selector, pseudoClass, separator) {
+  return `${buildClassVariant(selector, pseudoClass, separator)}:${pseudoClass}`
+}
+
+function generatePseudoClassVariant(pseudoClass) {
+  return (container, config) => {
+    const cloned = container.clone()
+
+    cloned.walkRules(rule => {
+      rule.selector = buildPseudoClassVariant(rule.selector, pseudoClass, config.options.separator)
+    })
+
+    container.before(cloned.nodes)
+  }
+}
+
 const variantGenerators = {
-  hover: (container, config) => {
+  'group-hover': (container, { options: { separator } }) => {
     const cloned = container.clone()
 
     cloned.walkRules(rule => {
-      rule.selector = `${buildClassVariant(rule.selector, 'hover', config.options.separator)}:hover`
+      rule.selector = `.group:hover ${buildClassVariant(rule.selector, 'group-hover', separator)}`
     })
 
     container.before(cloned.nodes)
   },
-  focus: (container, config) => {
-    const cloned = container.clone()
-
-    cloned.walkRules(rule => {
-      rule.selector = `${buildClassVariant(rule.selector, 'focus', config.options.separator)}:focus`
-    })
-
-    container.before(cloned.nodes)
-  },
-  'group-hover': (container, config) => {
-    const cloned = container.clone()
-
-    cloned.walkRules(rule => {
-      // prettier-ignore
-      rule.selector = `.group:hover ${buildClassVariant(rule.selector, 'group-hover', config.options.separator)}`
-    })
-
-    container.before(cloned.nodes)
-  },
+  hover: generatePseudoClassVariant('hover'),
+  focus: generatePseudoClassVariant('focus'),
+  active: generatePseudoClassVariant('active'),
 }
 
 export default function(config) {
@@ -48,7 +48,7 @@ export default function(config) {
 
       atRule.before(atRule.clone().nodes)
 
-      _.forEach(['group-hover', 'hover', 'focus'], variant => {
+      _.forEach(['group-hover', 'hover', 'focus', 'active'], variant => {
         if (variants.includes(variant)) {
           variantGenerators[variant](atRule, unwrappedConfig)
         }
