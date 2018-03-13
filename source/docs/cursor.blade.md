@@ -16,7 +16,12 @@ features:
     [
       '.cursor-auto',
       'cursor: auto;',
-      "Set the mouse cursor to the default browser behavior.",
+      "Set the mouse cursor based on the context.",
+    ],
+    [
+      '.cursor-default',
+      'cursor: default;',
+      "Set the mouse cursor to the default arrow cursor.",
     ],
     [
       '.cursor-pointer',
