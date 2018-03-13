@@ -824,8 +824,12 @@ module.exports = {
   | Here is where you control which modules are generated and what variants are
   | generated for each of those modules.
   |
-  | Currently supported variants: 'responsive', 'hover', 'active', focus', 
-  | 'group-hover'
+  | Currently supported variants:
+  |   - responsive
+  |   - hover
+  |   - focus
+  |   - active
+  |   - group-hover
   |
   | To disable a module completely, use `false` instead of an array.
   |
