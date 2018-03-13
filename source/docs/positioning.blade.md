@@ -32,6 +32,11 @@ features:
       "Position an element according to the normal flow of the document.",
     ],
     [
+      '.sticky',
+      "position: sticky;",
+      "Position an element relatively until its containing block crosses a specified threshold, then position it relative to the viewport.",
+    ],
+    [
       '.pin-t',
       "top: 0;",
       "Anchor absolutely positioned element to the top edge of the nearest positioned parent.",
