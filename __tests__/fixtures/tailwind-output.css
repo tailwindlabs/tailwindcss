@@ -2219,12 +2219,16 @@ button,
   cursor: pointer;
 }
 
-.cursor-not-allowed {
-  cursor: not-allowed;
-}
-
 .cursor-wait {
   cursor: wait;
+}
+
+.cursor-move {
+  cursor: move;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed;
 }
 
 .block {
@@ -6124,12 +6128,16 @@ button,
     cursor: pointer;
   }
 
-  .sm\:cursor-not-allowed {
-    cursor: not-allowed;
-  }
-
   .sm\:cursor-wait {
     cursor: wait;
+  }
+
+  .sm\:cursor-move {
+    cursor: move;
+  }
+
+  .sm\:cursor-not-allowed {
+    cursor: not-allowed;
   }
 
   .sm\:block {
@@ -10022,12 +10030,16 @@ button,
     cursor: pointer;
   }
 
-  .md\:cursor-not-allowed {
-    cursor: not-allowed;
-  }
-
   .md\:cursor-wait {
     cursor: wait;
+  }
+
+  .md\:cursor-move {
+    cursor: move;
+  }
+
+  .md\:cursor-not-allowed {
+    cursor: not-allowed;
   }
 
   .md\:block {
@@ -13920,12 +13932,16 @@ button,
     cursor: pointer;
   }
 
-  .lg\:cursor-not-allowed {
-    cursor: not-allowed;
-  }
-
   .lg\:cursor-wait {
     cursor: wait;
+  }
+
+  .lg\:cursor-move {
+    cursor: move;
+  }
+
+  .lg\:cursor-not-allowed {
+    cursor: not-allowed;
   }
 
   .lg\:block {
@@ -17818,12 +17834,16 @@ button,
     cursor: pointer;
   }
 
-  .xl\:cursor-not-allowed {
-    cursor: not-allowed;
-  }
-
   .xl\:cursor-wait {
     cursor: wait;
+  }
+
+  .xl\:cursor-move {
+    cursor: move;
+  }
+
+  .xl\:cursor-not-allowed {
+    cursor: not-allowed;
   }
 
   .xl\:block {
