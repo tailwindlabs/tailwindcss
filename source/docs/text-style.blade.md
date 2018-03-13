@@ -19,9 +19,9 @@ features:
       'Italicizes the text within an element.',
     ],
     [
-      '.roman',
+      '.not-italic',
       'font-style: normal;',
-      'Sets the text to roman (disables italics) within an element.',
+      'Remove italics within an element.',
     ],
     [
       '.uppercase',
