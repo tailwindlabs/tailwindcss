@@ -3209,22 +3209,18 @@ button,
 
 .overflow-x-auto {
   overflow-x: auto;
-  -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
 .overflow-y-auto {
   overflow-y: auto;
-  -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
 .overflow-x-scroll {
   overflow-x: scroll;
-  -ms-overflow-style: -ms-scrollbar;
 }
 
 .overflow-y-scroll {
   overflow-y: scroll;
-  -ms-overflow-style: -ms-scrollbar;
 }
 
 .scrolling-touch {
@@ -7118,22 +7114,18 @@ button,
 
   .sm\:overflow-x-auto {
     overflow-x: auto;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
   .sm\:overflow-y-auto {
     overflow-y: auto;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
   .sm\:overflow-x-scroll {
     overflow-x: scroll;
-    -ms-overflow-style: -ms-scrollbar;
   }
 
   .sm\:overflow-y-scroll {
     overflow-y: scroll;
-    -ms-overflow-style: -ms-scrollbar;
   }
 
   .sm\:scrolling-touch {
@@ -11020,22 +11012,18 @@ button,
 
   .md\:overflow-x-auto {
     overflow-x: auto;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
   .md\:overflow-y-auto {
     overflow-y: auto;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
   .md\:overflow-x-scroll {
     overflow-x: scroll;
-    -ms-overflow-style: -ms-scrollbar;
   }
 
   .md\:overflow-y-scroll {
     overflow-y: scroll;
-    -ms-overflow-style: -ms-scrollbar;
   }
 
   .md\:scrolling-touch {
@@ -14922,22 +14910,18 @@ button,
 
   .lg\:overflow-x-auto {
     overflow-x: auto;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
   .lg\:overflow-y-auto {
     overflow-y: auto;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
   .lg\:overflow-x-scroll {
     overflow-x: scroll;
-    -ms-overflow-style: -ms-scrollbar;
   }
 
   .lg\:overflow-y-scroll {
     overflow-y: scroll;
-    -ms-overflow-style: -ms-scrollbar;
   }
 
   .lg\:scrolling-touch {
@@ -18824,22 +18808,18 @@ button,
 
   .xl\:overflow-x-auto {
     overflow-x: auto;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
   .xl\:overflow-y-auto {
     overflow-y: auto;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
   }
 
   .xl\:overflow-x-scroll {
     overflow-x: scroll;
-    -ms-overflow-style: -ms-scrollbar;
   }
 
   .xl\:overflow-y-scroll {
     overflow-y: scroll;
-    -ms-overflow-style: -ms-scrollbar;
   }
 
   .xl\:scrolling-touch {
