@@ -19,7 +19,7 @@ features:
       'Italicizes the text within an element.',
     ],
     [
-      '.not-italic',
+      '.roman',
       'font-style: normal;',
       'Remove italics within an element.',
     ],
