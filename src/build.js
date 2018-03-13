@@ -5,14 +5,14 @@ import CleanCSS from 'clean-css'
 
 function buildDistFile(filename) {
   return new Promise((resolve, reject) => {
-    console.log(`Processing ./css/${filename}.css...`)
+    console.log(`Processing ./${filename}.css...`)
 
-    fs.readFile(`./css/${filename}.css`, (err, css) => {
+    fs.readFile(`./${filename}.css`, (err, css) => {
       if (err) throw err
 
       return postcss([tailwind(), require('autoprefixer')])
         .process(css, {
-          from: `./css/${filename}.css`,
+          from: `./${filename}.css`,
           to: `./dist/${filename}.css`,
           map: { inline: false },
         })
