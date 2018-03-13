@@ -40,9 +40,13 @@ module.exports = function(options) {
 
     addComponents([
       {
-        '.container': {
-          width: '100%',
-        },
+        '.container': Object.assign(
+          { width: '100%' },
+          _.get(options, 'center', false) ? { marginRight: 'auto', marginLeft: 'auto' } : {},
+          _.has(options, 'padding')
+            ? { paddingRight: options.padding, paddingLeft: options.padding }
+            : {}
+        ),
       },
       ...atRules,
     ])
