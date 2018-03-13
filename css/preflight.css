@@ -577,7 +577,7 @@ button,
 
 textarea { resize: vertical; }
 
-img { max-width: 100%; }
+img { max-width: 100%; height: auto; }
 
 button, input, optgroup, select, textarea { font-family: inherit; }
 
