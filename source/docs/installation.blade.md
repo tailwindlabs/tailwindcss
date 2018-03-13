@@ -72,6 +72,17 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
 @@tailwind preflight;
 
 /**
+ * This injects any component classes registered by plugins.
+ *
+ * If using `postcss-import`, you should import this line from it's own file:
+ *
+ * @@import "./tailwind-components.css";
+ *
+ * See: https://github.com/tailwindcss/tailwindcss/issues/53#issuecomment-341413622
+ */
+@@tailwind components;
+
+/**
  * Here you would add any of your custom component classes; stuff that you'd
  * want loaded *before* the utilities so that the utilities could still
  * override them.

@@ -172,6 +172,8 @@ Here's an example:
 ```less
 @@tailwind preflight;
 
+@@tailwind components;
+
 .btn {
   @@apply .font-bold .py-2 .px-4 .rounded;
 }
@@ -189,6 +191,8 @@ If you're using a preprocessor like Less or Sass, consider keeping your componen
 
 ```less
 @@tailwind preflight;
+
+@@tailwind components;
 
 @@import "components/buttons";
 @@import "components/forms";

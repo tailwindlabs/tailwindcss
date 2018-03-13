@@ -21,8 +21,13 @@ Use the `@@tailwind` directive to insert Tailwind's `preflight`, `utilities` and
 @@tailwind preflight;
 
 /**
+ * This injects any component classes registered by plugins.
+ */
+@@tailwind components;
+
+/**
  * This injects all of Tailwind's utility classes, generated based on your
- * config file.
+ * config file. It also injects any utility classes registered by plugins.
  */
 @@tailwind utilities;
 

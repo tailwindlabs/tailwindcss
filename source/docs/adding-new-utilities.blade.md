@@ -15,6 +15,8 @@ A bare-bones Tailwind setup is a single CSS file that looks like this:
 ```less
 @@tailwind preflight;
 
+@@tailwind components;
+
 @@tailwind utilities;
 ```
 
@@ -47,6 +49,8 @@ For this reason, **we recommend defining any custom utility classes at the end o
 ```less
 @@tailwind preflight;
 
+@@tailwind components;
+
 @@tailwind utilities;
 
 .bg-cover-image {
@@ -61,6 +65,8 @@ If you're using a preprocessor like Less, Sass, or Stylus, consider keeping your
 ```less
 @@tailwind preflight;
 
+@@tailwind components;
+
 @@tailwind utilities;
 
 @@import "custom-utilities";
@@ -72,6 +78,8 @@ If you'd like to create responsive versions of your own utilities based on the b
 
 ```less
 @@tailwind preflight;
+
+@@tailwind components;
 
 @@tailwind utilities;
 
