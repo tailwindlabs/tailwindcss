@@ -21,7 +21,17 @@ features:
     [
       '.cursor-pointer',
       'cursor: pointer;',
-      "Set the mouse cursor to a pointer and indicate a link.",
+      "Set the mouse cursor to a pointer to indicate a link.",
+    ],
+    [
+      '.cursor-wait',
+      'cursor: wait;',
+      "Set the mouse cursor to indicate that the application is busy.",
+    ],
+    [
+      '.cursor-move',
+      'cursor: move;',
+      "Set the mouse cursor to indicate that the element can be moved.",
     ],
     [
       '.cursor-not-allowed',
