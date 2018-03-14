@@ -214,3 +214,22 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
 ```
 
 For more information on what this feature does and the implications of disabling it, [see the Laravel Mix documentation](https://github.com/JeffreyWay/laravel-mix/blob/master/docs/css-preprocessors.md#css-url-rewriting).
+
+#### Brunch
+
+Add `tailwindcss` to the list of processors you pass to [postcss-brunch](https://github.com/brunch/postcss-brunch), passing the path to your config file:
+
+```js
+exports.config = {
+  // ..
+  plugins: {
+    // ...
+    postcss: {
+      processors: [
+        require('tailwindcss')('./tailwind.js')
+      ]
+    }
+    // ...
+  }
+};
+```
