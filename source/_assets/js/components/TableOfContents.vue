@@ -1,12 +1,13 @@
 <template>
   <ul class="list-reset" v-if="links.length > 0">
-    <li class="mb-2" v-for="link in links">
+    <li class="mb-2" :class="link.isChild ? 'ml-2' : ''" v-for="link in links">
       <a :href="link.href" class="text-grey-dark hover:text-grey-darkest">{{ link.text }}</a>
     </li>
   </ul>
 </template>
 
 <script>
+import _ from 'lodash'
 const anchorJS = require('anchor-js')
 const anchors = new anchorJS()
 
@@ -36,8 +37,9 @@ export default {
   mounted() {
     anchors.options = { placement: 'left', class: 'text-grey-dark' }
     anchors.add()
-    this.links = anchors.elements.filter((el) => el.tagName === 'H2').map((el) => {
+    this.links = anchors.elements.filter((el) => _.includes(['H2', 'H3'], el.tagName)).map((el) => {
       return {
+        isChild: el.tagName === 'H3',
         text: getHeadingText(el),
         href: el.querySelector('.anchorjs-link').getAttribute('href'),
         el: el,
