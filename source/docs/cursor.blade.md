@@ -24,11 +24,6 @@ features:
       "Set the mouse cursor to the default arrow cursor.",
     ],
     [
-      '.cursor-default',
-      'cursor: default;',
-      "Set the mouse cursor to the platform default. Typically an arrow.",
-    ],
-    [
       '.cursor-pointer',
       'cursor: pointer;',
       "Set the mouse cursor to a pointer to indicate a link.",
