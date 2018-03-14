@@ -13,7 +13,7 @@ features:
   'rows' => [
     [
       '.items-stretch',
-      'align-items: flex-stretch;',
+      'align-items: stretch;',
       "Stretch items to fill the cross axis.",
     ],
     [
