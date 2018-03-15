@@ -532,4 +532,4 @@ addComponents([
 
 ## Example plugins
 
-To check out a few example plugins, [visit the `tailwindcss/plugin-examples` repository on GitHub](https://github.com/tailwindcss/plugin-examples).
+To check out a few example plugins, [visit the plugin examples repository on GitHub](https://github.com/tailwindcss/plugin-examples).
