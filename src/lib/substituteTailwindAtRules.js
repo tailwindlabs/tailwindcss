@@ -13,9 +13,13 @@ export default function(config) {
 
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'preflight') {
-        atRule.before(
-          postcss.parse(fs.readFileSync(`${__dirname}/../../css/preflight.css`, 'utf8'))
+        const preflightTree = postcss.parse(
+          fs.readFileSync(`${__dirname}/../../css/preflight.css`, 'utf8')
         )
+
+        preflightTree.walk(node => (node.source = atRule.source))
+
+        atRule.before(preflightTree)
         atRule.remove()
       }
 
