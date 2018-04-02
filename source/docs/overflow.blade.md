@@ -42,6 +42,16 @@ features:
       "Allow vertical scrolling if needed.",
     ],
     [
+      '.overflow-x-hidden',
+      'overflow-x: hidden;',
+      "Clip any content that overflows horizontally the element.",
+    ],
+    [
+      '.overflow-y-hidden',
+      'overflow-y: hidden;',
+      "Clip any content that overflows vertically the element.",
+    ],
+    [
       '.overflow-x-scroll',
       'overflow-x: scroll;',
       "Add horizontal scrollbars to an element.",
