@@ -52,6 +52,16 @@ features:
       "Clip any content that overflows the element vertically.",
     ],
     [
+      '.overflow-x-visible',
+      'overflow-x: visible;',
+      "Don't clip content that overflows the element horizontally.",
+    ],
+    [
+      '.overflow-y-visible',
+      'overflow-y: visible;',
+      "Don't clip content that overflows the element vertically.",
+    ],
+    [
       '.overflow-x-scroll',
       'overflow-x: scroll;',
       "Add horizontal scrollbars to an element.",
