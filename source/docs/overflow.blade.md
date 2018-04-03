@@ -44,12 +44,12 @@ features:
     [
       '.overflow-x-hidden',
       'overflow-x: hidden;',
-      "Clip any content that overflows horizontally the element.",
+      "Clip any content that overflows the element horizontally.",
     ],
     [
       '.overflow-y-hidden',
       'overflow-y: hidden;',
-      "Clip any content that overflows vertically the element.",
+      "Clip any content that overflows the element vertically.",
     ],
     [
       '.overflow-x-scroll',
