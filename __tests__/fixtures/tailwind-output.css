@@ -3539,6 +3539,22 @@ button,
   left: 0;
 }
 
+.pin-t-full {
+  top: 100%;
+}
+
+.pin-r-full {
+  right: 100%;
+}
+
+.pin-b-full {
+  bottom: 100%;
+}
+
+.pin-l-full {
+  left: 100%;
+}
+
 .resize-none {
   resize: none;
 }
@@ -7444,6 +7460,22 @@ button,
     left: 0;
   }
 
+  .sm\:pin-t-full {
+    top: 100%;
+  }
+
+  .sm\:pin-r-full {
+    right: 100%;
+  }
+
+  .sm\:pin-b-full {
+    bottom: 100%;
+  }
+
+  .sm\:pin-l-full {
+    left: 100%;
+  }
+
   .sm\:resize-none {
     resize: none;
   }
@@ -11340,6 +11372,22 @@ button,
 
   .md\:pin-l {
     left: 0;
+  }
+
+  .md\:pin-t-full {
+    top: 100%;
+  }
+
+  .md\:pin-r-full {
+    right: 100%;
+  }
+
+  .md\:pin-b-full {
+    bottom: 100%;
+  }
+
+  .md\:pin-l-full {
+    left: 100%;
   }
 
   .md\:resize-none {
@@ -15240,6 +15288,22 @@ button,
     left: 0;
   }
 
+  .lg\:pin-t-full {
+    top: 100%;
+  }
+
+  .lg\:pin-r-full {
+    right: 100%;
+  }
+
+  .lg\:pin-b-full {
+    bottom: 100%;
+  }
+
+  .lg\:pin-l-full {
+    left: 100%;
+  }
+
   .lg\:resize-none {
     resize: none;
   }
@@ -19136,6 +19200,22 @@ button,
 
   .xl\:pin-l {
     left: 0;
+  }
+
+  .xl\:pin-t-full {
+    top: 100%;
+  }
+
+  .xl\:pin-r-full {
+    right: 100%;
+  }
+
+  .xl\:pin-b-full {
+    bottom: 100%;
+  }
+
+  .xl\:pin-l-full {
+    left: 100%;
   }
 
   .xl\:resize-none {

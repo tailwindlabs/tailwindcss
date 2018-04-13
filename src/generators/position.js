@@ -25,5 +25,9 @@ export default function() {
     'pin-r': { right: 0 },
     'pin-b': { bottom: 0 },
     'pin-l': { left: 0 },
+    'pin-t-full': { top: '100%' },
+    'pin-r-full': { right: '100%' },
+    'pin-b-full': { bottom: '100%' },
+    'pin-l-full': { left: '100%' },
   })
 }
