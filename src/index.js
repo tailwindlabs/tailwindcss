@@ -26,7 +26,7 @@ const plugin = postcss.plugin('tailwind', config => {
       return require('../defaultConfig')()
     }
 
-    if (_.isObject(config)) {
+    if (!_.isObject(config)) {
       delete require.cache[require.resolve(path.resolve(config))]
     }
 
