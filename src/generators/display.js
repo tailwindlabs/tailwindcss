@@ -23,5 +23,11 @@ export default function() {
     hidden: {
       display: 'none',
     },
+    initial: {
+      display: 'initial',
+    },
+    inherit: {
+      display: 'inherit',
+    },
   })
 }
