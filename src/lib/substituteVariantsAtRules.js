@@ -30,6 +30,7 @@ const variantGenerators = {
   },
   hover: generatePseudoClassVariant('hover'),
   focus: generatePseudoClassVariant('focus'),
+  'focus-within': generatePseudoClassVariant('focus-within'),
   active: generatePseudoClassVariant('active'),
 }
 
@@ -48,7 +49,7 @@ export default function(config) {
 
       atRule.before(atRule.clone().nodes)
 
-      _.forEach(['group-hover', 'hover', 'focus', 'active'], variant => {
+      _.forEach(['group-hover', 'hover', 'focus', 'focus-within', 'active'], variant => {
         if (variants.includes(variant)) {
           variantGenerators[variant](atRule, unwrappedConfig)
         }

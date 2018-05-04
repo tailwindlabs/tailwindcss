@@ -69,6 +69,27 @@ test('it can generate focus variants', () => {
   })
 })
 
+test('it can generate focus-within variants', () => {
+  const input = `
+    @variants focus-within {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+      .focus-within\\:banana:focus-within { color: yellow; }
+      .focus-within\\:chocolate:focus-within { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate group-hover variants', () => {
   const input = `
     @variants group-hover {
