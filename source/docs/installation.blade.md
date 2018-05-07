@@ -233,3 +233,30 @@ exports.config = {
   }
 };
 ```
+
+#### Ember.js
+
+> :boom: [An Ember add-on exists which directly adds support for tailwind](https://github.com/embermap/ember-cli-tailwind), but as of this time it is a work in progress.
+
+Add `tailwindcss` to the list of plugins you pass to [ember-cli-postcss](https://github.com/jeffjewiss/ember-cli-postcss), passing the path to your config file:
+
+```
+// ember-cli-build.js 
+'use strict';
+
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const tailwindcss = require('tailwindcss');
+
+module.exports = function(defaults) {
+  let app = new EmberApp(defaults, {
+    postcssOptions: {
+      compile: {
+        plugins: [
+          tailwindcss('./config/tailwind.js')
+        ]
+      }
+    }
+  });
+  return app.toTree();
+};
+```
