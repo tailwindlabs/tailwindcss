@@ -17,7 +17,7 @@ import mergeConfigWithDefaults from './util/mergeConfigWithDefaults'
 const plugin = postcss.plugin('tailwind', config => {
   const plugins = []
 
-  if (!_.isUndefined(config)) {
+  if (!_.isUndefined(config) && !_.isObject(config)) {
     plugins.push(registerConfigAsDependency(path.resolve(config)))
   }
 
@@ -26,8 +26,14 @@ const plugin = postcss.plugin('tailwind', config => {
       return require('../defaultConfig')()
     }
 
-    delete require.cache[require.resolve(path.resolve(config))]
-    return mergeConfigWithDefaults(require(path.resolve(config)), require('../defaultConfig')())
+    if (!_.isObject(config)) {
+      delete require.cache[require.resolve(path.resolve(config))]
+    }
+
+    return mergeConfigWithDefaults(
+      _.isObject(config) ? config : require(path.resolve(config)),
+      require('../defaultConfig')()
+    )
   }
 
   return postcss(
