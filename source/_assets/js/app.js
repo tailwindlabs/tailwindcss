@@ -24,7 +24,7 @@ Mousetrap.bind('/', function (e) {
 ;(function () {
   var s = document.createElement('script')
   s.setAttribute('async', '')
-  s.src = '//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=tailwindcsscom'
+  s.src = '//cdn.carbonads.com/carbon.js?serve=CK7DTK3E&placement=tailwindcsscom'
   s.id = '_carbonads_js'
   var adElement = document.getElementById('ad')
   adElement.innerHTML = ''
