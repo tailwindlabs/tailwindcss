@@ -920,6 +920,7 @@ module.exports = {
     prefix: '',
     important: false,
     separator: ':',
+    variantsAsSuffix: false,
   },
 
 }

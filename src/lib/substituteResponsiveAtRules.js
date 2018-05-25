@@ -6,8 +6,10 @@ import buildClassVariant from '../util/buildClassVariant'
 
 export default function(config) {
   return function(css) {
-    const screens = config().screens
-    const separator = config().options.separator
+    const config_ = config()
+    const screens = config_.screens
+    const separator = config_.options.separator
+    const variantsAsSuffix = config_.options.variantsAsSuffix
     const responsiveRules = []
     let finalRules = []
 
@@ -28,7 +30,7 @@ export default function(config) {
         responsiveRules.map(rule => {
           const cloned = rule.clone()
           cloned.selectors = _.map(rule.selectors, selector =>
-            buildClassVariant(selector, screen, separator)
+            buildClassVariant(selector, screen, variantsAsSuffix, separator)
           )
           return cloned
         })
