@@ -150,6 +150,32 @@ test('horizontal padding can be included by default', () => {
   `)
 })
 
+test('custom class names can be specified', () => {
+  const [components] = processPluginsWithValidConfig({
+    plugins: [
+      container({
+        className: 'my-container',
+      }),
+    ],
+  })
+
+  expect(css(components)).toMatchCss(`
+    .my-container { width: 100% }
+    @media (min-width: 576px) {
+      .my-container { max-width: 576px }
+    }
+    @media (min-width: 768px) {
+      .my-container { max-width: 768px }
+    }
+    @media (min-width: 992px) {
+      .my-container { max-width: 992px }
+    }
+    @media (min-width: 1200px) {
+      .my-container { max-width: 1200px }
+    }
+  `)
+})
+
 test('setting all options at once', () => {
   const [components] = processPluginsWithValidConfig({
     plugins: [
@@ -158,6 +184,7 @@ test('setting all options at once', () => {
           sm: '400px',
           lg: '500px',
         },
+        className: 'my-container',
         center: true,
         padding: '2rem',
       }),
@@ -165,7 +192,7 @@ test('setting all options at once', () => {
   })
 
   expect(css(components)).toMatchCss(`
-    .container {
+    .my-container {
       width: 100%;
       margin-right: auto;
       margin-left: auto;
@@ -173,10 +200,10 @@ test('setting all options at once', () => {
       padding-left: 2rem
     }
     @media (min-width: 400px) {
-      .container { max-width: 400px }
+      .my-container { max-width: 400px }
     }
     @media (min-width: 500px) {
-      .container { max-width: 500px }
+      .my-container { max-width: 500px }
     }
   `)
 })

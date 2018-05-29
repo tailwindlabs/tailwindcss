@@ -26,12 +26,14 @@ module.exports = function(options) {
   return function({ addComponents, config }) {
     const screens = _.get(options, 'screens', config('screens'))
 
+    const className = _.get(options, 'className', 'container')
+
     const minWidths = extractMinWidths(screens)
 
     const atRules = _.map(minWidths, minWidth => {
       return {
         [`@media (min-width: ${minWidth})`]: {
-          '.container': {
+          [`.${className}`]: {
             'max-width': minWidth,
           },
         },
@@ -40,7 +42,7 @@ module.exports = function(options) {
 
     addComponents([
       {
-        '.container': Object.assign(
+        [`.${className}`]: Object.assign(
           { width: '100%' },
           _.get(options, 'center', false) ? { marginRight: 'auto', marginLeft: 'auto' } : {},
           _.has(options, 'padding')
