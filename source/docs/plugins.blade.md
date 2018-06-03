@@ -57,7 +57,7 @@ function({ addUtilities }) {
 
 ### Prefix and important preferences
 
-By default, plugin utilities automatically respect the user's [`prefix`](http://tailwind-docs.test/docs/configuration#prefix) and [`important`](http://tailwind-docs.test/docs/configuration#important) preferences.
+By default, plugin utilities automatically respect the user's [`prefix`](https://tailwindcss.com/docs/configuration/#prefix) and [`important`](https://tailwindcss.com/docs/configuration/#important) preferences.
 
 That means that given this Tailwind configuration:
 
