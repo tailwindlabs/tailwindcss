@@ -583,7 +583,6 @@ button, input, optgroup, select, textarea { font-family: inherit; }
 
 input::placeholder, textarea::placeholder {
     color: inherit;
-    opacity: .5;
 }
 
 button, [role=button] {
