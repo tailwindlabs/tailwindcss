@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "commander": "^2.11.0",
+    "css.escape": "^1.5.1",
     "fs-extra": "^4.0.2",
     "lodash": "^4.17.5",
     "perfectionist": "^2.4.0",
