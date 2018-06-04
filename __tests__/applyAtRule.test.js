@@ -14,6 +14,23 @@ test("it copies a class's declarations into itself", () => {
   })
 })
 
+test('selectors with invalid characters do not need to be manually escaped', () => {
+  const input = `
+    .a\\:1\\/2 { color: red; }
+    .b { @apply .a:1/2; }
+  `
+
+  const expected = `
+    .a\\:1\\/2 { color: red; }
+    .b { color: red; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it removes important from applied classes by default', () => {
   const input = `
     .a { color: red !important; }
