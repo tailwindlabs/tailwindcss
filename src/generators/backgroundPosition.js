@@ -4,6 +4,8 @@ export default function() {
   return defineClasses({
     'bg-bottom': { 'background-position': 'bottom' },
     'bg-center': { 'background-position': 'center' },
+    'bg-center-bottom': { 'background-position': 'center bottom' },
+    'bg-center-top': { 'background-position': 'center top' },
     'bg-left': { 'background-position': 'left' },
     'bg-left-bottom': { 'background-position': 'left bottom' },
     'bg-left-top': { 'background-position': 'left top' },
