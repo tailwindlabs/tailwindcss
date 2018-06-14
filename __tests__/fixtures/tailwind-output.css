@@ -3575,6 +3575,10 @@ button,
   box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
 }
 
+.shadow-outline {
+  box-shadow: 2px solid rgba(52, 144, 220, .5);
+}
+
 .shadow-none {
   box-shadow: none;
 }
@@ -7480,6 +7484,10 @@ button,
     box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
   }
 
+  .sm\:shadow-outline {
+    box-shadow: 2px solid rgba(52, 144, 220, .5);
+  }
+
   .sm\:shadow-none {
     box-shadow: none;
   }
@@ -11376,6 +11384,10 @@ button,
 
   .md\:shadow-inner {
     box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
+  }
+
+  .md\:shadow-outline {
+    box-shadow: 2px solid rgba(52, 144, 220, .5);
   }
 
   .md\:shadow-none {
@@ -15276,6 +15288,10 @@ button,
     box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
   }
 
+  .lg\:shadow-outline {
+    box-shadow: 2px solid rgba(52, 144, 220, .5);
+  }
+
   .lg\:shadow-none {
     box-shadow: none;
   }
@@ -19172,6 +19188,10 @@ button,
 
   .xl\:shadow-inner {
     box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
+  }
+
+  .xl\:shadow-outline {
+    box-shadow: 2px solid rgba(52, 144, 220, .5);
   }
 
   .xl\:shadow-none {
