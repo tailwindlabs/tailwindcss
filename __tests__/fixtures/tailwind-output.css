@@ -1311,6 +1311,14 @@ table {
   background-size: contain;
 }
 
+.border-collapse {
+  border-collapse: collapse;
+}
+
+.border-separate {
+  border-collapse: separate;
+}
+
 .border-transparent {
   border-color: transparent;
 }
