@@ -3191,6 +3191,22 @@ button,
   opacity: 1;
 }
 
+.outline {
+  outline: 2px solid rgba(52, 144, 220, .5);
+}
+
+.outline-none {
+  outline: none;
+}
+
+.hover\:outline:hover {
+  outline: 2px solid rgba(52, 144, 220, .5);
+}
+
+.hover\:outline-none:hover {
+  outline: none;
+}
+
 .overflow-auto {
   overflow: auto;
 }
@@ -7096,6 +7112,22 @@ button,
     opacity: 1;
   }
 
+  .sm\:outline {
+    outline: 2px solid rgba(52, 144, 220, .5);
+  }
+
+  .sm\:outline-none {
+    outline: none;
+  }
+
+  .sm\:hover\:outline:hover {
+    outline: 2px solid rgba(52, 144, 220, .5);
+  }
+
+  .sm\:hover\:outline-none:hover {
+    outline: none;
+  }
+
   .sm\:overflow-auto {
     overflow: auto;
   }
@@ -10992,6 +11024,22 @@ button,
 
   .md\:opacity-100 {
     opacity: 1;
+  }
+
+  .md\:outline {
+    outline: 2px solid rgba(52, 144, 220, .5);
+  }
+
+  .md\:outline-none {
+    outline: none;
+  }
+
+  .md\:hover\:outline:hover {
+    outline: 2px solid rgba(52, 144, 220, .5);
+  }
+
+  .md\:hover\:outline-none:hover {
+    outline: none;
   }
 
   .md\:overflow-auto {
@@ -14892,6 +14940,22 @@ button,
     opacity: 1;
   }
 
+  .lg\:outline {
+    outline: 2px solid rgba(52, 144, 220, .5);
+  }
+
+  .lg\:outline-none {
+    outline: none;
+  }
+
+  .lg\:hover\:outline:hover {
+    outline: 2px solid rgba(52, 144, 220, .5);
+  }
+
+  .lg\:hover\:outline-none:hover {
+    outline: none;
+  }
+
   .lg\:overflow-auto {
     overflow: auto;
   }
@@ -18788,6 +18852,22 @@ button,
 
   .xl\:opacity-100 {
     opacity: 1;
+  }
+
+  .xl\:outline {
+    outline: 2px solid rgba(52, 144, 220, .5);
+  }
+
+  .xl\:outline-none {
+    outline: none;
+  }
+
+  .xl\:hover\:outline:hover {
+    outline: 2px solid rgba(52, 144, 220, .5);
+  }
+
+  .xl\:hover\:outline-none:hover {
+    outline: none;
   }
 
   .xl\:overflow-auto {
