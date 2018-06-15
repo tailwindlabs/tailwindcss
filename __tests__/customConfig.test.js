@@ -20,7 +20,7 @@ test('it uses the values from the custom config file', () => {
           color: blue;
         }
         @media (min-width: 400px) {
-          .mobile\\:foo {
+          .foo\\@mobile {
             color: blue;
           }
         }
