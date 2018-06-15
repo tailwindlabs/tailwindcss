@@ -3215,6 +3215,22 @@ button,
   overflow-y: auto;
 }
 
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
+
+.overflow-y-hidden {
+  overflow-y: hidden;
+}
+
+.overflow-x-visible {
+  overflow-x: visible;
+}
+
+.overflow-y-visible {
+  overflow-y: visible;
+}
+
 .overflow-x-scroll {
   overflow-x: scroll;
 }
@@ -7120,6 +7136,22 @@ button,
     overflow-y: auto;
   }
 
+  .sm\:overflow-x-hidden {
+    overflow-x: hidden;
+  }
+
+  .sm\:overflow-y-hidden {
+    overflow-y: hidden;
+  }
+
+  .sm\:overflow-x-visible {
+    overflow-x: visible;
+  }
+
+  .sm\:overflow-y-visible {
+    overflow-y: visible;
+  }
+
   .sm\:overflow-x-scroll {
     overflow-x: scroll;
   }
@@ -11016,6 +11048,22 @@ button,
 
   .md\:overflow-y-auto {
     overflow-y: auto;
+  }
+
+  .md\:overflow-x-hidden {
+    overflow-x: hidden;
+  }
+
+  .md\:overflow-y-hidden {
+    overflow-y: hidden;
+  }
+
+  .md\:overflow-x-visible {
+    overflow-x: visible;
+  }
+
+  .md\:overflow-y-visible {
+    overflow-y: visible;
   }
 
   .md\:overflow-x-scroll {
@@ -14916,6 +14964,22 @@ button,
     overflow-y: auto;
   }
 
+  .lg\:overflow-x-hidden {
+    overflow-x: hidden;
+  }
+
+  .lg\:overflow-y-hidden {
+    overflow-y: hidden;
+  }
+
+  .lg\:overflow-x-visible {
+    overflow-x: visible;
+  }
+
+  .lg\:overflow-y-visible {
+    overflow-y: visible;
+  }
+
   .lg\:overflow-x-scroll {
     overflow-x: scroll;
   }
@@ -18812,6 +18876,22 @@ button,
 
   .xl\:overflow-y-auto {
     overflow-y: auto;
+  }
+
+  .xl\:overflow-x-hidden {
+    overflow-x: hidden;
+  }
+
+  .xl\:overflow-y-hidden {
+    overflow-y: hidden;
+  }
+
+  .xl\:overflow-x-visible {
+    overflow-x: visible;
+  }
+
+  .xl\:overflow-y-visible {
+    overflow-y: visible;
   }
 
   .xl\:overflow-x-scroll {
