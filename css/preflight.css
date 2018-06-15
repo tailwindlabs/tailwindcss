@@ -582,12 +582,12 @@ img { max-width: 100%; }
 button, input, optgroup, select, textarea { font-family: inherit; }
 
 input::placeholder, textarea::placeholder {
-    color: inherit;
-    opacity: .5;
+  color: inherit;
+  opacity: .5;
 }
 
 button, [role=button] {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 table {
