@@ -3192,7 +3192,7 @@ button,
 }
 
 .no-outline {
-  outline: none;
+  outline: 0;
 }
 
 .overflow-auto {
