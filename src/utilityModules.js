@@ -25,6 +25,7 @@ import minHeight from './generators/minHeight'
 import minWidth from './generators/minWidth'
 import negativeMargin from './generators/negativeMargin'
 import opacity from './generators/opacity'
+import outline from './generators/outline'
 import overflow from './generators/overflow'
 import padding from './generators/padding'
 import pointerEvents from './generators/pointerEvents'
@@ -73,6 +74,7 @@ export default [
   { name: 'minWidth', generator: minWidth },
   { name: 'negativeMargin', generator: negativeMargin },
   { name: 'opacity', generator: opacity },
+  { name: 'outline', generator: outline },
   { name: 'overflow', generator: overflow },
   { name: 'padding', generator: padding },
   { name: 'pointerEvents', generator: pointerEvents },

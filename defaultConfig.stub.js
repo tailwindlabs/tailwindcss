@@ -780,6 +780,28 @@ module.exports = {
 
   /*
   |-----------------------------------------------------------------------------
+  | Outline                                https://tailwindcss.com/docs/outline
+  |-----------------------------------------------------------------------------
+  |
+  | Here is where you define your outline utilities. By default we provide
+  | a reset and an example blue outline. You can, of course, modify these
+  | values as needed.
+  |
+  | If a `default` outline is provided, it will be made available as the
+  | non-suffixed `.outline` utility.
+  |
+  | Class name: .outline{-name?}
+  |
+  */
+
+  outline: {
+    default: `2px solid rgba(52,144,220,0.5)`,
+    'none': 'none',
+  },
+
+
+  /*
+  |-----------------------------------------------------------------------------
   | SVG fill                                   https://tailwindcss.com/docs/svg
   |-----------------------------------------------------------------------------
   |
@@ -863,6 +885,7 @@ module.exports = {
     minWidth: ['responsive'],
     negativeMargin: ['responsive'],
     opacity: ['responsive'],
+    outline: ['responsive', 'hover'],
     overflow: ['responsive'],
     padding: ['responsive'],
     pointerEvents: ['responsive'],
