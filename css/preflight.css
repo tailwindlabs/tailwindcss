@@ -589,3 +589,7 @@ input::placeholder, textarea::placeholder {
 button, [role=button] {
     cursor: pointer;
 }
+
+table {
+  border-collapse: collapse;
+}

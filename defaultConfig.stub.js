@@ -842,6 +842,7 @@ module.exports = {
     backgroundPosition: ['responsive'],
     backgroundRepeat: ['responsive'],
     backgroundSize: ['responsive'],
+    borderCollapse: [],
     borderColors: ['responsive', 'hover'],
     borderRadius: ['responsive'],
     borderStyle: ['responsive'],
