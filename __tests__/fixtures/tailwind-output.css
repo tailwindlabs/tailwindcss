@@ -3191,7 +3191,7 @@ button,
   opacity: 1;
 }
 
-.no-outline {
+.outline-none {
   outline: 0;
 }
 

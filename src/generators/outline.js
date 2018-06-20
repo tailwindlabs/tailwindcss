@@ -2,6 +2,6 @@ import defineClasses from '../util/defineClasses'
 
 export default function() {
   return defineClasses({
-    'no-outline': { outline: '0' },
+    'outline-none': { outline: '0' },
   })
 }
