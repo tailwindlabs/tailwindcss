@@ -5,8 +5,8 @@
 @tailwind utilities;
 
 @responsive {
-    .example {
-        @apply .font-bold;
-        color: config('colors.red');
-    }
+  .example {
+    @apply .font-bold;
+    color: config('colors.red');
+  }
 }
