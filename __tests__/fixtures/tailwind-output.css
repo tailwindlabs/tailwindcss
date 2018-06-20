@@ -519,16 +519,6 @@ ul {
 }
 
 /**
- * Suppress the focus outline on elements that cannot be accessed via keyboard.
- * This prevents an unwanted focus outline from appearing around elements that
- * might still respond to pointer events.
- */
-
-[tabindex="-1"]:focus {
-  outline: none !important;
-}
-
-/**
  * Tailwind custom reset styles
  */
 
@@ -3204,6 +3194,14 @@ table {
   opacity: 1;
 }
 
+.outline-none {
+  outline: 0;
+}
+
+.focus\:outline-none:focus {
+  outline: 0;
+}
+
 .overflow-auto {
   overflow: auto;
 }
@@ -3600,7 +3598,35 @@ table {
   box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
 }
 
+.shadow-outline {
+  box-shadow: 2px solid rgba(52, 144, 220, .5);
+}
+
 .shadow-none {
+  box-shadow: none;
+}
+
+.focus\:shadow:focus {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+}
+
+.focus\:shadow-md:focus {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .12), 0 2px 4px 0 rgba(0, 0, 0, .08);
+}
+
+.focus\:shadow-lg:focus {
+  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, .11), 0 5px 15px 0 rgba(0, 0, 0, .08);
+}
+
+.focus\:shadow-inner:focus {
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
+}
+
+.focus\:shadow-outline:focus {
+  box-shadow: 2px solid rgba(52, 144, 220, .5);
+}
+
+.focus\:shadow-none:focus {
   box-shadow: none;
 }
 
@@ -7521,7 +7547,35 @@ table {
     box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
   }
 
+  .sm\:shadow-outline {
+    box-shadow: 2px solid rgba(52, 144, 220, .5);
+  }
+
   .sm\:shadow-none {
+    box-shadow: none;
+  }
+
+  .sm\:focus\:shadow:focus {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+  }
+
+  .sm\:focus\:shadow-md:focus {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .12), 0 2px 4px 0 rgba(0, 0, 0, .08);
+  }
+
+  .sm\:focus\:shadow-lg:focus {
+    box-shadow: 0 15px 30px 0 rgba(0, 0, 0, .11), 0 5px 15px 0 rgba(0, 0, 0, .08);
+  }
+
+  .sm\:focus\:shadow-inner:focus {
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
+  }
+
+  .sm\:focus\:shadow-outline:focus {
+    box-shadow: 2px solid rgba(52, 144, 220, .5);
+  }
+
+  .sm\:focus\:shadow-none:focus {
     box-shadow: none;
   }
 
@@ -11435,7 +11489,35 @@ table {
     box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
   }
 
+  .md\:shadow-outline {
+    box-shadow: 2px solid rgba(52, 144, 220, .5);
+  }
+
   .md\:shadow-none {
+    box-shadow: none;
+  }
+
+  .md\:focus\:shadow:focus {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+  }
+
+  .md\:focus\:shadow-md:focus {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .12), 0 2px 4px 0 rgba(0, 0, 0, .08);
+  }
+
+  .md\:focus\:shadow-lg:focus {
+    box-shadow: 0 15px 30px 0 rgba(0, 0, 0, .11), 0 5px 15px 0 rgba(0, 0, 0, .08);
+  }
+
+  .md\:focus\:shadow-inner:focus {
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
+  }
+
+  .md\:focus\:shadow-outline:focus {
+    box-shadow: 2px solid rgba(52, 144, 220, .5);
+  }
+
+  .md\:focus\:shadow-none:focus {
     box-shadow: none;
   }
 
@@ -15349,7 +15431,35 @@ table {
     box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
   }
 
+  .lg\:shadow-outline {
+    box-shadow: 2px solid rgba(52, 144, 220, .5);
+  }
+
   .lg\:shadow-none {
+    box-shadow: none;
+  }
+
+  .lg\:focus\:shadow:focus {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+  }
+
+  .lg\:focus\:shadow-md:focus {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .12), 0 2px 4px 0 rgba(0, 0, 0, .08);
+  }
+
+  .lg\:focus\:shadow-lg:focus {
+    box-shadow: 0 15px 30px 0 rgba(0, 0, 0, .11), 0 5px 15px 0 rgba(0, 0, 0, .08);
+  }
+
+  .lg\:focus\:shadow-inner:focus {
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
+  }
+
+  .lg\:focus\:shadow-outline:focus {
+    box-shadow: 2px solid rgba(52, 144, 220, .5);
+  }
+
+  .lg\:focus\:shadow-none:focus {
     box-shadow: none;
   }
 
@@ -19263,7 +19373,35 @@ table {
     box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
   }
 
+  .xl\:shadow-outline {
+    box-shadow: 2px solid rgba(52, 144, 220, .5);
+  }
+
   .xl\:shadow-none {
+    box-shadow: none;
+  }
+
+  .xl\:focus\:shadow:focus {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+  }
+
+  .xl\:focus\:shadow-md:focus {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .12), 0 2px 4px 0 rgba(0, 0, 0, .08);
+  }
+
+  .xl\:focus\:shadow-lg:focus {
+    box-shadow: 0 15px 30px 0 rgba(0, 0, 0, .11), 0 5px 15px 0 rgba(0, 0, 0, .08);
+  }
+
+  .xl\:focus\:shadow-inner:focus {
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
+  }
+
+  .xl\:focus\:shadow-outline:focus {
+    box-shadow: 2px solid rgba(52, 144, 220, .5);
+  }
+
+  .xl\:focus\:shadow-none:focus {
     box-shadow: none;
   }
 
