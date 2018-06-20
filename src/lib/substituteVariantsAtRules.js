@@ -1,9 +1,9 @@
 import _ from 'lodash'
 import postcss from 'postcss'
-import buildClassVariant from '../util/buildClassVariant'
+import buildSelectorVariant from '../util/buildSelectorVariant'
 
 function buildPseudoClassVariant(selector, pseudoClass, separator) {
-  return `${buildClassVariant(selector, pseudoClass, separator)}:${pseudoClass}`
+  return `${buildSelectorVariant(selector, pseudoClass, separator)}:${pseudoClass}`
 }
 
 function generatePseudoClassVariant(pseudoClass) {
@@ -23,7 +23,11 @@ const variantGenerators = {
     const cloned = container.clone()
 
     cloned.walkRules(rule => {
-      rule.selector = `.group:hover ${buildClassVariant(rule.selector, 'group-hover', separator)}`
+      rule.selector = `.group:hover ${buildSelectorVariant(
+        rule.selector,
+        'group-hover',
+        separator
+      )}`
     })
 
     container.before(cloned.nodes)
