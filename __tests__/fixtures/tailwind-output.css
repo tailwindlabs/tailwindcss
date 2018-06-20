@@ -3195,6 +3195,10 @@ button,
   outline: 0;
 }
 
+.focus\:outline-none:focus {
+  outline: 0;
+}
+
 .overflow-auto {
   overflow: auto;
 }
