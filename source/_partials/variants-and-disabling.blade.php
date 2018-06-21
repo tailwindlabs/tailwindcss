@@ -1,5 +1,5 @@
 @php
-    if (is_array($variants) && count($variants) > 1) {
+    if (is_array($variants) && count($variants) > 0) {
         $whichVariants = "only $variants[0]";
         for ($i = 1; $i < count($variants); $i++) {
             $whichVariants .= (($i == count($variants) - 1) ? ' and ' : ', ') . $variants[$i];
@@ -31,7 +31,7 @@
 
 <p>You can control which variants are generated for the {{ $utility['name'] }} utilities by modifying the <code>{{ $utility['property'] }}</code> property in the <code>modules</code> section of your Tailwind config file.</p>
 
-<p>For example, this config will {{ is_array($variants) && count($variants) > 1 ? 'also ' : '' }}generate {{ $extraVariants }} variants:</p>
+<p>For example, this config will {{ is_array($variants) && count($variants) > 0 ? 'also ' : '' }}generate {{ $extraVariants }} variants:</p>
 
 @component('_partials.customized-config', ['key' => 'modules'])
   // ...
@@ -50,7 +50,7 @@
 
 @component('_partials.customized-config', ['key' => 'modules'])
   // ...
-- {{ $utility['property'] }}: [{{$currentVariants}}],
+- {{ $utility['property'] }}: {{$currentVariants}},
 + {{ $utility['property'] }}: false,
 @endcomponent
 
