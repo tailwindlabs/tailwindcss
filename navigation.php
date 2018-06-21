@@ -47,6 +47,7 @@ return [
     ],
     'Borders' => [
         'Border Color' => 'border-color',
+        'Border Collapse' => 'border-collapse',
         'Border Style' => 'border-style',
         'Border Width' => 'border-width',
         'Border Radius' => 'border-radius',
