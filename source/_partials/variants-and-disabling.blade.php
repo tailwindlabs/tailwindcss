@@ -1,5 +1,5 @@
 @php
-    if ($variants && count($variants) > 1) {
+    if (is_array($variants) && count($variants) > 1) {
         $whichVariants = "only $variants[0]";
         for ($i = 1; $i < count($variants); $i++) {
             $whichVariants .= (($i == count($variants) - 1) ? ' and ' : ', ') . $variants[$i];
@@ -19,7 +19,7 @@
     } else {
         $whichVariants = 'no responsive, hover, focus, active, or group-hover';
 
-        $currentVariants = $variants ? '[]' : 'false';
+        $currentVariants = is_array($variants) ? '[]' : 'false';
 
         $extraVariants = 'responsive, hover and focus';
     }
@@ -31,7 +31,7 @@
 
 <p>You can control which variants are generated for the {{ $utility['name'] }} utilities by modifying the <code>{{ $utility['property'] }}</code> property in the <code>modules</code> section of your Tailwind config file.</p>
 
-<p>For example, this config will {{ $variants && count($variants) > 1 ? 'also ' : '' }}generate {{ $extraVariants }} variants:</p>
+<p>For example, this config will {{ is_array($variants) && count($variants) > 1 ? 'also ' : '' }}generate {{ $extraVariants }} variants:</p>
 
 @component('_partials.customized-config', ['key' => 'modules'])
   // ...
