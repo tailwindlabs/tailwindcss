@@ -85,7 +85,7 @@ Control which stroke utilities Tailwind generates by customizing the `svgStroke`
 + 'green': colors['green'],
 @endcomponent
 
-### Responsive, Hover, and Focus Variants
+### Responsive and State Variants
 
 By default, no responsive, hover, focus, or group-hover variants are generated for fill and stroke utilities.
 
