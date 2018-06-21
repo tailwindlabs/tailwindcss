@@ -47,7 +47,6 @@ return [
     ],
     'Borders' => [
         'Border Color' => 'border-color',
-        'Border Collapse' => 'border-collapse',
         'Border Style' => 'border-style',
         'Border Width' => 'border-width',
         'Border Radius' => 'border-radius',
@@ -72,6 +71,9 @@ return [
         'Height' => 'height',
         'Min-Height' => 'min-height',
         'Max-Height' => 'max-height',
+    ],
+    'Tables' => [
+        'Border Collapse' => 'border-collapse',
     ],
     'Interactivity' => [
         'Cursor' => 'cursor',
