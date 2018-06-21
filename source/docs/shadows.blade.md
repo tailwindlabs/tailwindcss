@@ -139,5 +139,7 @@ If a `default` shadow is provided, it will be used for the non-suffixed `.shadow
     ],
     'variants' => [
         'responsive',
+        'hover',
+        'focus',
     ],
 ])
