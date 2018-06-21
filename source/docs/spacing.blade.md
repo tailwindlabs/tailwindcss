@@ -39,8 +39,15 @@ For example, `.pt-2` would add `.5rem` of padding to the top of the element, `.m
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">2</code> 0.5rem</div>
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">3</code> 0.75rem</div>
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">4</code> 1rem</div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">5</code> 1.25rem</div>
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">6</code> 1.5rem</div>
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">8</code> 2rem</div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">10</code> 2.5rem</div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">12</code> 3rem</div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">16</code> 4rem</div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">20</code> 4rem</div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">24</code> 6rem</div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">32</code> 8rem</div>
     <div><code class="inline-block my-1 mr-1 px-1 py-1 font-mono border rounded">px</code> 1px</div>
     <div><code class="inline-block my-1 mr-1 px-1 py-1 font-mono border rounded">auto</code> auto <span class="text-grey-dark text-xs">(margins only)</span></div>
   </div>
