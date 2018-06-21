@@ -48,7 +48,7 @@ For example, `.pt-2` would add `.5rem` of padding to the top of the element, `.m
 
 ## Customizing
 
-### Responsive, Hover, and Focus Variants
+### Responsive and State Variants
 
 By default, only responsive variants are generated for margin, negative margin and padding utilities.
 
