@@ -51,5 +51,6 @@ Hover utilities can also be combined with responsive utilities by adding the res
     'variants' => [
         'responsive',
         'hover',
+        'focus'
     ],
 ])
