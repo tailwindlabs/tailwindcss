@@ -84,6 +84,7 @@ return [
     'Miscellaneous' => [
         'Appearance' => 'appearance',
         'Box Shadow' => 'shadows',
+        'Object Fit' => 'object-fit',
         'Opacity' => 'opacity',
         'Outline' => 'outline',
         'SVG' => 'svg',
