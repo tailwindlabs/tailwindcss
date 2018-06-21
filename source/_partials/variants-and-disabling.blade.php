@@ -43,7 +43,7 @@
 <p>{!! $extraMessage !!}</p>
 @endisset
 
-@if($variants && is_array($variants))
+@if(is_array($variants))
 <h3>Disabling</h3>
 
 <p>If you don't plan to use the {{ $utility['name'] }} utilities in your project, you can disable them entirely by setting the <code>{{ $utility['property'] }}</code> property to <code>false</code> in the <code>modules</code> section of your config file:</p>
