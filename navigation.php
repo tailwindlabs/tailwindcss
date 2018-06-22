@@ -72,6 +72,9 @@ return [
         'Min-Height' => 'min-height',
         'Max-Height' => 'max-height',
     ],
+    'Tables' => [
+        'Border Collapse' => 'border-collapse',
+    ],
     'Interactivity' => [
         'Cursor' => 'cursor',
         'Pointer Events' => 'pointer-events',
