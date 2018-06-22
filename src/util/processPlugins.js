@@ -2,6 +2,7 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import Node from 'postcss/lib/node'
 import escapeClassName from '../util/escapeClassName'
+import generateVariantFunction from '../util/generateVariantFunction'
 import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
 import wrapWithVariants from '../util/wrapWithVariants'
@@ -12,21 +13,6 @@ function parseStyles(styles) {
   }
 
   return _.flatMap(styles, style => (style instanceof Node ? style : parseObjectStyles(style)))
-}
-
-function generateVariantFunction(generator) {
-  return (container, config) => {
-    const cloned = container.clone()
-
-    cloned.walkRules(rule => {
-      rule.selector = generator({
-        className: rule.selector.slice(1),
-        separator: escapeClassName(config.options.separator),
-      })
-    })
-
-    container.before(cloned.nodes)
-  }
 }
 
 export default function(config) {

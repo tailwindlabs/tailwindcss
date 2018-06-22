@@ -1,22 +1,13 @@
 import _ from 'lodash'
 import postcss from 'postcss'
 import buildSelectorVariant from '../util/buildSelectorVariant'
+import generateVariantFunction from '../util/generateVariantFunction'
 import processPlugins from '../util/processPlugins'
 
-function buildPseudoClassVariant(selector, pseudoClass, separator) {
-  return `${buildSelectorVariant(selector, pseudoClass, separator)}:${pseudoClass}`
-}
-
 function generatePseudoClassVariant(pseudoClass) {
-  return (container, config) => {
-    const cloned = container.clone()
-
-    cloned.walkRules(rule => {
-      rule.selector = buildPseudoClassVariant(rule.selector, pseudoClass, config.options.separator)
-    })
-
-    container.before(cloned.nodes)
-  }
+  return generateVariantFunction(({ className, separator }) => {
+    return `.${pseudoClass}${separator}${className}:${pseudoClass}`
+  })
 }
 
 const defaultVariantGenerators = {
