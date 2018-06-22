@@ -13,22 +13,27 @@ features:
   'rows' => [
     [
       '.shadow',
-      "box-shadow:\n  0 2px 4px 0 rgba(0,0,0,0.10);",
+      "box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);",
       "Apply a small box shadow to an element.",
     ],
     [
       '.shadow-md',
-      "box-shadow:\n  0 4px 8px 0 rgba(0,0,0,0.12),\n  0 2px 4px 0 rgba(0,0,0,0.08);",
+      "box-shadow: 0 4px 8px 0 rgba(0,0,0,0.12),\n            0 2px 4px 0 rgba(0,0,0,0.08);",
       "Apply a medium box shadow to an element.",
     ],
     [
       '.shadow-lg',
-      "box-shadow:\n  0 15px 30px 0 rgba(0,0,0,0.11),\n  0 5px 15px 0 rgba(0,0,0,0.08);",
+      "box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11),\n            0 5px 15px 0 rgba(0,0,0,0.08);",
       "Apply a large box shadow to an element.",
     ],
     [
       '.shadow-inner',
-      "box-shadow:\n  inset 0 2px 4px 0 rgba(0,0,0,0.06);",
+      "box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.06);",
+      "Apply a small inner box shadow to an element.",
+    ],
+    [
+      '.shadow-outline',
+      "box-shadow: 2px solid rgba(52,144,220,0.5);",
       "Apply a small inner box shadow to an element.",
     ],
     [
@@ -62,6 +67,24 @@ Use the `.shadow-inner` utility to apply a subtle inset box shadow to an element
 <div class="p-4 bg-grey-lightest shadow-inner">.shadow-inner</div>
 @slot('code')
 <div class="shadow-inner"></div>
+@endslot
+@endcomponent
+
+## Outline shadow
+
+Use the `.shadow-outline` utility to apply a focus-ring-style shadow to an element. This can be useful when combined with `.focus:outline-none` to create a better looking focus style that follows an element's border radius.
+
+@component('_partials.code-sample', ['class' => 'flex justify-center text-sm py-8'])
+<button class="focus:outline-none focus:shadow-outline bg-grey-light hover:bg-grey text-grey-darkest font-bold py-2 px-4 rounded w-24 mr-6">
+  Unfocused
+</button>
+<button class="focus:outline-none shadow-outline bg-grey-light hover:bg-grey text-grey-darkest font-bold py-2 px-4 rounded w-24">
+  Focused
+</button>
+@slot('code')
+<button class="focus:outline-none focus:shadow-outline ...">
+  Button
+</button>
 @endslot
 @endcomponent
 

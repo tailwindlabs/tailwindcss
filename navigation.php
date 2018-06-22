@@ -85,6 +85,7 @@ return [
         'Appearance' => 'appearance',
         'Box Shadow' => 'shadows',
         'Opacity' => 'opacity',
+        'Outline' => 'outline',
         'SVG' => 'svg',
     ],
     'Component Examples' => [
