@@ -567,7 +567,15 @@ button,
 
 textarea { resize: vertical; }
 
-img { max-width: 100%; height: auto; }
+/**
+ * Make images fluid.
+ */
+img { max-width: 100%; }
+
+/**
+ * If image width or height attributes are set, we will respect them.
+ */
+img[width], img[height] { max-width: none; }
 
 button, input, optgroup, select, textarea { font-family: inherit; }
 

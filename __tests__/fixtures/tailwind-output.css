@@ -577,9 +577,21 @@ textarea {
   resize: vertical;
 }
 
+/**
+ * Make images fluid.
+ */
+
 img {
   max-width: 100%;
-  height: auto;
+}
+
+/**
+ * If image width or height attributes are set, we will respect them.
+ */
+
+img[width],
+img[height] {
+  max-width: none;
 }
 
 button,
