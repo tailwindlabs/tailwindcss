@@ -1865,6 +1865,10 @@ css-what@2.1:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/css-what/-/css-what-2.1.0.tgz#9467d032c38cfaefb9f2d79501253062f87fa1bd"
 
+css.escape@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/css.escape/-/css.escape-1.5.1.tgz#42e27d4fa04ae32f931a4b4d4191fa9cddee97cb"
+
 css@^2.0.0:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/css/-/css-2.2.1.tgz#73a4c81de85db664d4ee674f7d47085e3b2d55dc"
@@ -7415,13 +7419,14 @@ table@^4.0.1:
     slice-ansi "1.0.0"
     string-width "^2.1.1"
 
-tailwindcss@0.5.3:
-  version "0.5.3"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-0.5.3.tgz#5444f85ab5e68a37c2bf13bc4ac097a7ee05321d"
+tailwindcss@0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-0.6.1.tgz#6fa250df581a044b3240a5b40e7beb281d56b41e"
   dependencies:
     commander "^2.11.0"
+    css.escape "^1.5.1"
     fs-extra "^4.0.2"
-    lodash "^4.17.4"
+    lodash "^4.17.5"
     perfectionist "^2.4.0"
     postcss "^6.0.9"
     postcss-functions "^3.0.0"
