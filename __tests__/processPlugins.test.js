@@ -19,7 +19,7 @@ function processPluginsWithValidConfig(config) {
 }
 
 test('plugins can create utilities with object syntax', () => {
-  const [components, utilities] = processPluginsWithValidConfig({
+  const { components, utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addUtilities }) {
         addUtilities({
@@ -54,7 +54,7 @@ test('plugins can create utilities with object syntax', () => {
 })
 
 test('plugins can create utilities with arrays of objects', () => {
-  const [components, utilities] = processPluginsWithValidConfig({
+  const { components, utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addUtilities }) {
         addUtilities([
@@ -95,7 +95,7 @@ test('plugins can create utilities with arrays of objects', () => {
 })
 
 test('plugins can create utilities with raw PostCSS nodes', () => {
-  const [components, utilities] = processPluginsWithValidConfig({
+  const { components, utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addUtilities }) {
         addUtilities([
@@ -139,7 +139,7 @@ test('plugins can create utilities with raw PostCSS nodes', () => {
 })
 
 test('plugins can create utilities with mixed object styles and PostCSS nodes', () => {
-  const [components, utilities] = processPluginsWithValidConfig({
+  const { components, utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addUtilities }) {
         addUtilities([
@@ -182,7 +182,7 @@ test('plugins can create utilities with mixed object styles and PostCSS nodes', 
 })
 
 test('plugins can create utilities with variants', () => {
-  const [components, utilities] = processPluginsWithValidConfig({
+  const { components, utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addUtilities }) {
         addUtilities(
@@ -220,7 +220,7 @@ test('plugins can create utilities with variants', () => {
 })
 
 test('plugins can create components with object syntax', () => {
-  const [components, utilities] = processPluginsWithValidConfig({
+  const { components, utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addComponents }) {
         addComponents({
@@ -253,7 +253,7 @@ test('plugins can create components with object syntax', () => {
 })
 
 test('plugins can create components with raw PostCSS nodes', () => {
-  const [components, utilities] = processPluginsWithValidConfig({
+  const { components, utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addComponents }) {
         addComponents([
@@ -301,7 +301,7 @@ test('plugins can create components with raw PostCSS nodes', () => {
 })
 
 test('plugins can create components with mixed object styles and raw PostCSS nodes', () => {
-  const [components, utilities] = processPluginsWithValidConfig({
+  const { components, utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addComponents }) {
         addComponents([
@@ -348,7 +348,7 @@ test('plugins can create components with mixed object styles and raw PostCSS nod
 })
 
 test('plugins can create components with media queries with object syntax', () => {
-  const [components, utilities] = processPluginsWithValidConfig({
+  const { components, utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addComponents }) {
         addComponents({
@@ -399,7 +399,7 @@ test('plugins can create components with media queries with object syntax', () =
 })
 
 test('media queries can be defined multiple times using objects-in-array syntax', () => {
-  const [components, utilities] = processPluginsWithValidConfig({
+  const { components, utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addComponents }) {
         addComponents([
@@ -452,7 +452,7 @@ test('media queries can be defined multiple times using objects-in-array syntax'
 })
 
 test('plugins can create nested rules', () => {
-  const [components, utilities] = processPluginsWithValidConfig({
+  const { components, utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addComponents }) {
         addComponents({
@@ -519,7 +519,7 @@ test('plugins can create rules with escaped selectors', () => {
     ],
   }
 
-  const [components, utilities] = processPluginsWithValidConfig(config)
+  const { components, utilities } = processPluginsWithValidConfig(config)
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
@@ -532,7 +532,7 @@ test('plugins can create rules with escaped selectors', () => {
 })
 
 test('plugins can access the current config', () => {
-  const [components, utilities] = processPluginsWithValidConfig({
+  const { components, utilities } = processPluginsWithValidConfig({
     screens: {
       sm: '576px',
       md: '768px',
@@ -593,7 +593,7 @@ test('plugins can access the current config', () => {
 })
 
 test('plugins can provide fallbacks to keys missing from the config', () => {
-  const [components, utilities] = processPluginsWithValidConfig({
+  const { components, utilities } = processPluginsWithValidConfig({
     borderRadius: {
       '1': '1px',
       '2': '2px',
@@ -620,7 +620,7 @@ test('plugins can provide fallbacks to keys missing from the config', () => {
 })
 
 test('variants are optional when adding utilities', () => {
-  const [, utilities] = processPluginsWithValidConfig({
+  const { utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addUtilities }) {
         addUtilities({
@@ -642,7 +642,7 @@ test('variants are optional when adding utilities', () => {
 })
 
 test('plugins can add multiple sets of utilities and components', () => {
-  const [components, utilities] = processPluginsWithValidConfig({
+  const { components, utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addUtilities, addComponents }) {
         addComponents({
@@ -699,7 +699,7 @@ test('plugins can add multiple sets of utilities and components', () => {
 })
 
 test('plugins respect prefix and important options by default when adding utilities', () => {
-  const [, utilities] = processPluginsWithValidConfig({
+  const { utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addUtilities }) {
         addUtilities({
@@ -725,7 +725,7 @@ test('plugins respect prefix and important options by default when adding utilit
 })
 
 test("component declarations respect the 'prefix' option by default", () => {
-  const [components] = processPluginsWithValidConfig({
+  const { components } = processPluginsWithValidConfig({
     plugins: [
       function({ addComponents }) {
         addComponents({
@@ -748,7 +748,7 @@ test("component declarations respect the 'prefix' option by default", () => {
 })
 
 test("component declarations can optionally ignore 'prefix' option", () => {
-  const [components] = processPluginsWithValidConfig({
+  const { components } = processPluginsWithValidConfig({
     plugins: [
       function({ addComponents }) {
         addComponents(
@@ -774,7 +774,7 @@ test("component declarations can optionally ignore 'prefix' option", () => {
 })
 
 test("component declarations are not affected by the 'important' option", () => {
-  const [components] = processPluginsWithValidConfig({
+  const { components } = processPluginsWithValidConfig({
     plugins: [
       function({ addComponents }) {
         addComponents({
@@ -797,7 +797,7 @@ test("component declarations are not affected by the 'important' option", () => 
 })
 
 test("plugins can apply the user's chosen prefix to components manually", () => {
-  const [components] = processPluginsWithValidConfig({
+  const { components } = processPluginsWithValidConfig({
     plugins: [
       function({ addComponents, prefix }) {
         addComponents(
@@ -823,7 +823,7 @@ test("plugins can apply the user's chosen prefix to components manually", () => 
 })
 
 test('prefix can optionally be ignored for utilities', () => {
-  const [, utilities] = processPluginsWithValidConfig({
+  const { utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addUtilities }) {
         addUtilities(
@@ -854,7 +854,7 @@ test('prefix can optionally be ignored for utilities', () => {
 })
 
 test('important can optionally be ignored for utilities', () => {
-  const [, utilities] = processPluginsWithValidConfig({
+  const { utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addUtilities }) {
         addUtilities(
@@ -885,7 +885,7 @@ test('important can optionally be ignored for utilities', () => {
 })
 
 test('variants can still be specified when ignoring prefix and important options', () => {
-  const [, utilities] = processPluginsWithValidConfig({
+  const { utilities } = processPluginsWithValidConfig({
     plugins: [
       function({ addUtilities }) {
         addUtilities(
@@ -909,7 +909,7 @@ test('variants can still be specified when ignoring prefix and important options
   })
 
   expect(css(utilities)).toMatchCss(`
-    @variants responsive, hover, focus{
+    @variants responsive, hover, focus {
       .rotate-90 {
         transform: rotate(90deg)
       }
@@ -918,7 +918,7 @@ test('variants can still be specified when ignoring prefix and important options
 })
 
 test('prefix will prefix all classes in a selector', () => {
-  const [components] = processPluginsWithValidConfig({
+  const { components } = processPluginsWithValidConfig({
     plugins: [
       function({ addComponents, prefix }) {
         addComponents(

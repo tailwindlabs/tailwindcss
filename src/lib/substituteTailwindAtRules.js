@@ -9,7 +9,9 @@ export default function(config) {
   return function(css) {
     const unwrappedConfig = config()
 
-    const [pluginComponents, pluginUtilities] = processPlugins(unwrappedConfig)
+    const { components: pluginComponents, utilities: pluginUtilities } = processPlugins(
+      unwrappedConfig
+    )
 
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'preflight') {

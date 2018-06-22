@@ -17,6 +17,7 @@ function parseStyles(styles) {
 export default function(config) {
   const pluginComponents = []
   const pluginUtilities = []
+  const pluginVariantGenerators = {}
 
   config.plugins.forEach(plugin => {
     plugin({
@@ -62,5 +63,9 @@ export default function(config) {
     })
   })
 
-  return [pluginComponents, pluginUtilities]
+  return {
+    components: pluginComponents,
+    utilities: pluginUtilities,
+    variantGenerators: pluginVariantGenerators,
+  }
 }
