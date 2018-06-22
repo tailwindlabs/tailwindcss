@@ -42,7 +42,7 @@ export default function(config) {
     const unwrappedConfig = config()
 
     css.walkAtRules('variants', atRule => {
-      const variants = postcss.list.comma(atRule.params)
+      const variants = postcss.list.comma(atRule.params).filter(variant => variant !== '')
 
       if (variants.includes('responsive')) {
         const responsiveParent = postcss.atRule({ name: 'responsive' })
@@ -52,10 +52,8 @@ export default function(config) {
 
       atRule.before(atRule.clone().nodes)
 
-      _.forEach(['group-hover', 'hover', 'focus', 'active'], variant => {
-        if (variants.includes(variant)) {
-          variantGenerators[variant](atRule, unwrappedConfig)
-        }
+      _.forEach(_.without(variants, 'responsive'), variant => {
+        variantGenerators[variant](atRule, unwrappedConfig)
       })
 
       atRule.remove()
