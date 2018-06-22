@@ -20,7 +20,7 @@ If you're looking for a framework that comes with a menu of predesigned widgets 
 
 But if you want a huge head start implementing a custom design with its own identity, Tailwind might be just what you're looking for.
 
-### Utility-first
+## Utility-first
 
 Creating a framework for building custom UIs means you can't provide abstractions at the usual level of buttons, forms, cards, navbars, etc.
 
@@ -61,7 +61,7 @@ Here's an example of a contact card component built with Tailwind without writin
 @endslot
 @endcomponent
 
-### Component-friendly
+## Component-friendly
 
 While you can do a *lot* with just utility classes, sometimes a component class is the right decision.
 
@@ -97,7 +97,7 @@ Tailwind provides tools for [extracting component classes](/docs/extracting-comp
 @endslot
 @endcomponent
 
-### Responsive to the core
+## Responsive to the core
 
 Every Tailwind utility also comes in responsive flavors, making it extremely easy to build responsive interfaces without ever leaving your HTML.
 
@@ -146,7 +146,7 @@ Tailwind uses an intuitive `{screen}:` prefix that makes it easy to notice respo
 @endslot
 @endcomponent
 
-### Designed to be customized
+## Designed to be customized
 
 If it makes sense to be customizable, Tailwind lets you customize it.
 
