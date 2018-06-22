@@ -34,6 +34,7 @@ import resize from './generators/resize'
 import shadows from './generators/shadows'
 import svgFill from './generators/svgFill'
 import svgStroke from './generators/svgStroke'
+import tableLayout from './generators/tableLayout'
 import textAlign from './generators/textAlign'
 import textColors from './generators/textColors'
 import textSizes from './generators/textSizes'
@@ -83,6 +84,7 @@ export default [
   { name: 'shadows', generator: shadows },
   { name: 'svgFill', generator: svgFill },
   { name: 'svgStroke', generator: svgStroke },
+  { name: 'tableLayout', generator: tableLayout },
   { name: 'textAlign', generator: textAlign },
   { name: 'textColors', generator: textColors },
   { name: 'textSizes', generator: textSizes },
