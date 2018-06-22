@@ -35,6 +35,7 @@ $.when($.ready).then(function() {
       $('#sidebar').addClass('hidden')
       $('#sidebar-close').addClass('hidden')
       $('#sidebar-open').removeClass('hidden')
+      $('#content-wrapper').removeClass('overflow-hidden max-h-screen fixed')
 
       // Update the page
       $('head title').text(title)
@@ -81,6 +82,7 @@ $.when($.ready).then(function() {
     $('#sidebar').addClass('hidden')
     $('#sidebar-close').addClass('hidden')
     $('#sidebar-open').removeClass('hidden')
+    $('#content-wrapper').removeClass('overflow-hidden max-h-screen fixed')
   })
 
   // Show sidebar (mobile)
@@ -88,5 +90,6 @@ $.when($.ready).then(function() {
       $('#sidebar-open').addClass('hidden')
       $('#sidebar').removeClass('hidden')
       $('#sidebar-close').removeClass('hidden')
+      $('#content-wrapper').addClass('overflow-hidden max-h-screen fixed')
   })
 })
