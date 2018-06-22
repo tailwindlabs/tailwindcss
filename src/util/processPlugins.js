@@ -14,6 +14,21 @@ function parseStyles(styles) {
   return _.flatMap(styles, style => (style instanceof Node ? style : parseObjectStyles(style)))
 }
 
+function generateVariantFunction(generator) {
+  return (container, config) => {
+    const cloned = container.clone()
+
+    cloned.walkRules(rule => {
+      rule.selector = generator({
+        className: rule.selector.slice(1),
+        separator: escapeClassName(config.options.separator),
+      })
+    })
+
+    container.before(cloned.nodes)
+  }
+}
+
 export default function(config) {
   const pluginComponents = []
   const pluginUtilities = []
@@ -59,6 +74,9 @@ export default function(config) {
         })
 
         pluginComponents.push(...styles.nodes)
+      },
+      addVariant: (name, generator) => {
+        pluginVariantGenerators[name] = generateVariantFunction(generator)
       },
     })
   })

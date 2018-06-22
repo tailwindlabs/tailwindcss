@@ -166,3 +166,34 @@ test('variants are generated in the order specified', () => {
     expect(result.warnings().length).toBe(0)
   })
 })
+
+test('plugin variants work', () => {
+  const input = `
+    @variants first-child {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+      .first-child\\:banana:first-child { color: yellow; }
+      .first-child\\:chocolate:first-child { color: brown; }
+  `
+
+  return run(input, () => ({
+    ...config,
+    plugins: [
+      ...config.plugins,
+      function({ addVariant }) {
+        addVariant('first-child', ({ className, separator }) => {
+          return `.first-child${separator}${className}:first-child`
+        })
+      },
+    ],
+  })).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})

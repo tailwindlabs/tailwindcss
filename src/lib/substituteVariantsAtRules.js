@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import postcss from 'postcss'
 import buildSelectorVariant from '../util/buildSelectorVariant'
+import processPlugins from '../util/processPlugins'
 
 function buildPseudoClassVariant(selector, pseudoClass, separator) {
   return `${buildSelectorVariant(selector, pseudoClass, separator)}:${pseudoClass}`
@@ -18,7 +19,7 @@ function generatePseudoClassVariant(pseudoClass) {
   }
 }
 
-const variantGenerators = {
+const defaultVariantGenerators = {
   'group-hover': (container, { options: { separator } }) => {
     const cloned = container.clone()
 
@@ -40,6 +41,10 @@ const variantGenerators = {
 export default function(config) {
   return function(css) {
     const unwrappedConfig = config()
+    const variantGenerators = {
+      ...defaultVariantGenerators,
+      ...processPlugins(unwrappedConfig).variantGenerators,
+    }
 
     css.walkAtRules('variants', atRule => {
       const variants = postcss.list.comma(atRule.params).filter(variant => variant !== '')
