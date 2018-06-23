@@ -2,7 +2,7 @@ import postcss from 'postcss'
 import plugin from '../src/lib/substituteVariantsAtRules'
 import config from '../defaultConfig.stub.js'
 
-function run(input, opts = () => config) {
+function run(input, opts = config) {
   return postcss([plugin(opts)]).process(input, { from: undefined })
 }
 
@@ -182,7 +182,7 @@ test('plugin variants work', () => {
       .first-child\\:chocolate:first-child { color: brown; }
   `
 
-  return run(input, () => ({
+  return run(input, {
     ...config,
     plugins: [
       ...config.plugins,
@@ -192,7 +192,7 @@ test('plugin variants work', () => {
         })
       },
     ],
-  })).then(result => {
+  }).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })

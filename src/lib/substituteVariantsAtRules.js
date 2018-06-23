@@ -31,10 +31,9 @@ const defaultVariantGenerators = {
 
 export default function(config) {
   return function(css) {
-    const unwrappedConfig = config()
     const variantGenerators = {
       ...defaultVariantGenerators,
-      ...processPlugins(unwrappedConfig).variantGenerators,
+      ...processPlugins(config).variantGenerators,
     }
 
     css.walkAtRules('variants', atRule => {
@@ -49,7 +48,7 @@ export default function(config) {
       atRule.before(atRule.clone().nodes)
 
       _.forEach(_.without(variants, 'responsive'), variant => {
-        variantGenerators[variant](atRule, unwrappedConfig)
+        variantGenerators[variant](atRule, config)
       })
 
       atRule.remove()

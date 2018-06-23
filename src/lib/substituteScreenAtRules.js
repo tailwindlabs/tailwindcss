@@ -3,17 +3,15 @@ import buildMediaQuery from '../util/buildMediaQuery'
 
 export default function(config) {
   return function(css) {
-    const options = config()
-
     css.walkAtRules('screen', atRule => {
       const screen = atRule.params
 
-      if (!_.has(options.screens, screen)) {
+      if (!_.has(config.screens, screen)) {
         throw atRule.error(`No \`${screen}\` screen found.`)
       }
 
       atRule.name = 'media'
-      atRule.params = buildMediaQuery(options.screens[screen])
+      atRule.params = buildMediaQuery(config.screens[screen])
     })
   }
 }
