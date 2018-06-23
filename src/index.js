@@ -8,7 +8,6 @@ import registerConfigAsDependency from './lib/registerConfigAsDependency'
 import processTailwindFeatures from './processTailwindFeatures'
 import mergeConfigWithDefaults from './util/mergeConfigWithDefaults'
 
-
 const plugin = postcss.plugin('tailwind', config => {
   const plugins = []
 

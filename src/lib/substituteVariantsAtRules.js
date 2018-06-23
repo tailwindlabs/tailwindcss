@@ -2,7 +2,6 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import buildSelectorVariant from '../util/buildSelectorVariant'
 import generateVariantFunction from '../util/generateVariantFunction'
-import processPlugins from '../util/processPlugins'
 
 function generatePseudoClassVariant(pseudoClass) {
   return generateVariantFunction(({ className, separator }) => {
@@ -29,11 +28,11 @@ const defaultVariantGenerators = {
   active: generatePseudoClassVariant('active'),
 }
 
-export default function(config) {
+export default function(config, { variantGenerators: pluginVariantGenerators }) {
   return function(css) {
     const variantGenerators = {
       ...defaultVariantGenerators,
-      ...processPlugins(config).variantGenerators,
+      ...pluginVariantGenerators,
     }
 
     css.walkAtRules('variants', atRule => {

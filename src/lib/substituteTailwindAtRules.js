@@ -3,14 +3,9 @@ import postcss from 'postcss'
 import utilityModules from '../utilityModules'
 import prefixTree from '../util/prefixTree'
 import generateModules from '../util/generateModules'
-import processPlugins from '../util/processPlugins'
 
-export default function(config) {
+export default function(config, { components: pluginComponents, utilities: pluginUtilities }) {
   return function(css) {
-    const { components: pluginComponents, utilities: pluginUtilities } = processPlugins(
-      config
-    )
-
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'preflight') {
         const preflightTree = postcss.parse(

@@ -1,9 +1,10 @@
 import postcss from 'postcss'
 import plugin from '../src/lib/substituteVariantsAtRules'
 import config from '../defaultConfig.stub.js'
+import processPlugins from '../src/util/processPlugins'
 
 function run(input, opts = config) {
-  return postcss([plugin(opts)]).process(input, { from: undefined })
+  return postcss([plugin(opts, processPlugins(opts))]).process(input, { from: undefined })
 }
 
 test('it can generate hover variants', () => {
