@@ -290,7 +290,7 @@ function({ e, addUtilities }) {
 
   const rotateUtilities = _.map(angles, (value, key) => {
     return {
-      [`.rotate-${e(key)}`]: {
+      [`.${e(`rotate-${key}`)}`]: {
         transform: `rotate(${value})`
       }
     }
