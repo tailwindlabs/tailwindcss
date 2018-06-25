@@ -4916,6 +4916,14 @@ table {
   stroke: currentColor;
 }
 
+.table-auto {
+  table-layout: auto;
+}
+
+.table-fixed {
+  table-layout: fixed;
+}
+
 .text-left {
   text-align: left;
 }
@@ -10475,6 +10483,14 @@ table {
 
   .sm\:focus\:shadow-none:focus {
     box-shadow: none;
+  }
+
+  .sm\:table-auto {
+    table-layout: auto;
+  }
+
+  .sm\:table-fixed {
+    table-layout: fixed;
   }
 
   .sm\:text-left {
@@ -16039,6 +16055,14 @@ table {
     box-shadow: none;
   }
 
+  .md\:table-auto {
+    table-layout: auto;
+  }
+
+  .md\:table-fixed {
+    table-layout: fixed;
+  }
+
   .md\:text-left {
     text-align: left;
   }
@@ -21601,6 +21625,14 @@ table {
     box-shadow: none;
   }
 
+  .lg\:table-auto {
+    table-layout: auto;
+  }
+
+  .lg\:table-fixed {
+    table-layout: fixed;
+  }
+
   .lg\:text-left {
     text-align: left;
   }
@@ -27161,6 +27193,14 @@ table {
 
   .xl\:focus\:shadow-none:focus {
     box-shadow: none;
+  }
+
+  .xl\:table-auto {
+    table-layout: auto;
+  }
+
+  .xl\:table-fixed {
+    table-layout: fixed;
   }
 
   .xl\:text-left {
