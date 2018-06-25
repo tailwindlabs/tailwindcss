@@ -275,9 +275,9 @@ function({ addComponents }) {
 
 ## Escaping class names
 
-Use the `e` function to escape strings that you want to use as part of a class name but contain invalid characters.
+If your plugin generates classes that contain user-provided strings, you can use the `e` function to escape those class names to make sure non-standard characters are handled properly automatically.
 
-For example, this plugin generates a set of `.rotate-{angle}` utilities and uses the `e` function to escape values like `1/4`:
+For example, this plugin generates a set of `.rotate-{angle}` utilities where `{angle}` is a user provided string. The `e` function is used to escape the concatenated class name to make sure classes like `.rotate-1/4` work as expected:
 
 ```js
 
@@ -315,6 +315,18 @@ This plugin would generate the following CSS:
 ```
 
 Be careful to only escape content you actually want to escape; don't pass the leading `.` in a class name or the `:` at the beginning pseudo-classes like `:hover` or `:focus` or those characters will be escaped.
+
+Additionally, because CSS has rules about the characters a class name can *start* with (a class can't start with a number, but it can contain one), it's a good idea to escape your complete class name (not just the user-provided portion) or you may end up with unnecessary escape sequences:
+
+```js
+// Will unnecessarily escape `1`
+`.rotate-${e('1/4')}`
+// => '.rotate-\31 \/4'
+
+// Won't escape `1` because it's not the first character
+`.${e('rotate-1/4')}`
+// => '.rotate-1\/4'
+```
 
 ## Manually prefixing selectors
 
