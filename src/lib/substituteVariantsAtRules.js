@@ -1,28 +1,21 @@
 import _ from 'lodash'
 import postcss from 'postcss'
-import buildSelectorVariant from '../util/buildSelectorVariant'
 import generateVariantFunction from '../util/generateVariantFunction'
 
 function generatePseudoClassVariant(pseudoClass) {
-  return generateVariantFunction(({ className, separator }) => {
-    return `.${pseudoClass}${separator}${className}:${pseudoClass}`
+  return generateVariantFunction(({ modifySelectors, separator }) => {
+    return modifySelectors(({ className }) => {
+      return `.${pseudoClass}${separator}${className}:${pseudoClass}`
+    })
   })
 }
 
 const defaultVariantGenerators = {
-  'group-hover': (container, { options: { separator } }) => {
-    const cloned = container.clone()
-
-    cloned.walkRules(rule => {
-      rule.selector = `.group:hover ${buildSelectorVariant(
-        rule.selector,
-        'group-hover',
-        separator
-      )}`
+  'group-hover': generateVariantFunction(({ modifySelectors, separator }) => {
+    return modifySelectors(({ className }) => {
+      return `.group:hover .group-hover${separator}${className}`
     })
-
-    container.before(cloned.nodes)
-  },
+  }),
   hover: generatePseudoClassVariant('hover'),
   focus: generatePseudoClassVariant('focus'),
   active: generatePseudoClassVariant('active'),

@@ -1,16 +1,28 @@
+import _ from 'lodash'
+import postcss from 'postcss'
 import escapeClassName from './escapeClassName'
 
 export default function generateVariantFunction(generator) {
   return (container, config) => {
-    const cloned = container.clone()
+    const cloned = postcss.root({ nodes: container.clone().nodes })
 
-    cloned.walkRules(rule => {
-      rule.selector = generator({
-        className: rule.selector.slice(1),
-        separator: escapeClassName(config.options.separator),
-      })
-    })
-
-    container.before(cloned.nodes)
+    container.before(
+      _.defaultTo(
+        generator({
+          container: cloned,
+          separator: escapeClassName(config.options.separator),
+          modifySelectors: modifierFunction => {
+            cloned.walkRules(rule => {
+              rule.selector = modifierFunction({
+                className: rule.selector.slice(1),
+                selector: rule.selector,
+              })
+            })
+            return cloned
+          },
+        }),
+        cloned
+      ).nodes
+    )
   }
 }

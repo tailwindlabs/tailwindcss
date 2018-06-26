@@ -168,7 +168,43 @@ test('variants are generated in the order specified', () => {
   })
 })
 
-test('plugin variants work', () => {
+test('plugin variants can modify rules using the raw PostCSS API', () => {
+  const input = `
+    @variants important {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+      .\\!banana { color: yellow !important; }
+      .\\!chocolate { color: brown !important; }
+  `
+
+  return run(input, {
+    ...config,
+    plugins: [
+      ...config.plugins,
+      function({ addVariant }) {
+        addVariant('important', ({ container }) => {
+          container.walkRules(rule => {
+            rule.selector = `.\\!${rule.selector.slice(1)}`
+            rule.walkDecls(decl => {
+              decl.important = true
+            })
+          })
+        })
+      },
+    ],
+  }).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('plugin variants can modify selectors with a simplified API', () => {
   const input = `
     @variants first-child {
       .banana { color: yellow; }
@@ -188,8 +224,48 @@ test('plugin variants work', () => {
     plugins: [
       ...config.plugins,
       function({ addVariant }) {
-        addVariant('first-child', ({ className, separator }) => {
-          return `.first-child${separator}${className}:first-child`
+        addVariant('first-child', ({ modifySelectors, separator }) => {
+          modifySelectors(({ className }) => {
+            return `.first-child${separator}${className}:first-child`
+          })
+        })
+      },
+    ],
+  }).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('plugin variants can wrap rules in another at-rule using the raw PostCSS API', () => {
+  const input = `
+    @variants supports-grid {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+      @supports (display: grid) {
+        .supports-grid\\:banana { color: yellow; }
+        .supports-grid\\:chocolate { color: brown; }
+      }
+  `
+
+  return run(input, {
+    ...config,
+    plugins: [
+      ...config.plugins,
+      function({ addVariant }) {
+        addVariant('supports-grid', ({ container, separator }) => {
+          const supportsRule = postcss.atRule({ name: 'supports', params: '(display: grid)' })
+          supportsRule.nodes = container.nodes
+          container.nodes = [supportsRule]
+          supportsRule.walkRules(rule => {
+            rule.selector = `.supports-grid${separator}${rule.selector.slice(1)}`
+          })
         })
       },
     ],
