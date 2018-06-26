@@ -31,11 +31,13 @@ test('it uses the values from the custom config file', () => {
 })
 
 test('custom config can be passed as an object', () => {
-  return postcss([tailwind({
-    screens: {
-      mobile: '400px',
-    },
-  })])
+  return postcss([
+    tailwind({
+      screens: {
+        mobile: '400px',
+      },
+    }),
+  ])
     .process(
       `
         @responsive {
