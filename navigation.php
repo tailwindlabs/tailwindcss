@@ -74,6 +74,7 @@ return [
     ],
     'Tables' => [
         'Border Collapse' => 'border-collapse',
+        'Table Layout' => 'table-layout',
     ],
     'Interactivity' => [
         'Cursor' => 'cursor',
