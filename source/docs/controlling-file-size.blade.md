@@ -50,7 +50,7 @@ For example, maybe you need 25 background colors but only 15 text colors. Instea
 
 module.exports = {
   // ...
-  
+
   textColors: {
     'black': colors['black'],
     'grey-darker': colors['grey-darker'],
@@ -72,7 +72,7 @@ Since your config file is just JavaScript, you could even use a function like [`
 
 module.exports = {
   // ...
-  
+
   textColors: _.pick(colors, [
     'black',
     'grey-darker',
@@ -161,11 +161,11 @@ let PurgecssPlugin = require("purgecss-webpack-plugin");
 
 // Custom PurgeCSS extractor for Tailwind that allows special characters in
 // class names.
-// 
+//
 // https://github.com/FullHuman/purgecss#extractor
 class TailwindExtractor {
   static extract(content) {
-    return content.match(/[A-z0-9-:\/]+/g) || [];
+    return content.match(/[A-Za-z0-9-_:\/]+/g) || [];
   }
 }
 
