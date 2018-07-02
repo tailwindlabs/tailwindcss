@@ -11,14 +11,17 @@ test('it can generate hover variants', () => {
     @variants hover {
       .banana { color: yellow; }
       .chocolate { color: brown; }
+      .cookie::before { color: beige; }
     }
   `
 
   const output = `
       .banana { color: yellow; }
       .chocolate { color: brown; }
+      .cookie::before { color: beige; }
       .hover\\:banana:hover { color: yellow; }
       .hover\\:chocolate:hover { color: brown; }
+      .hover\\:cookie:hover::before { color: beige; }
   `
 
   return run(input).then(result => {
