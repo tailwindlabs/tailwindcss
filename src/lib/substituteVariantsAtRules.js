@@ -3,7 +3,15 @@ import postcss from 'postcss'
 import buildSelectorVariant from '../util/buildSelectorVariant'
 
 function buildPseudoClassVariant(selector, pseudoClass, separator) {
-  return `${buildSelectorVariant(selector, pseudoClass, separator)}:${pseudoClass}`
+  const baseSelector = `${buildSelectorVariant(selector, pseudoClass, separator)}`
+
+  if (baseSelector.indexOf('::') === -1) {
+    return `${buildSelectorVariant(selector, pseudoClass, separator)}:${pseudoClass}`
+  }
+
+  const [prefix, suffix] = baseSelector.split('::')
+
+  return `${prefix}:${pseudoClass}::${suffix}`
 }
 
 function generatePseudoClassVariant(pseudoClass) {
