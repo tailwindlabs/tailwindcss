@@ -46,10 +46,10 @@ Here's what a `.btn-blue` class might look like using `@apply` to compose it fro
 
 <style>
 .btn-blue {
-  @@apply .bg-blue .text-white .font-bold .py-2 .px-4 .rounded;
+  @@apply bg-blue text-white font-bold py-2 px-4 rounded;
 }
 .btn-blue:hover {
-  @@apply .bg-blue-dark;
+  @@apply bg-blue-dark;
 }
 </style>
 @endslot
@@ -85,17 +85,17 @@ It might be tempting to implement component classes for these buttons like this:
 
 ```less
 .btn-blue {
-  @@apply .bg-blue .text-white .font-bold .py-2 .px-4 .rounded;
+  @@apply bg-blue text-white font-bold py-2 px-4 rounded;
 }
 .btn-blue:hover {
-  @@apply .bg-blue-dark;
+  @@apply bg-blue-dark;
 }
 
 .btn-grey {
-  @@apply .bg-grey-light .text-grey-darkest .font-bold .py-2 .px-4 .rounded;
+  @@apply bg-grey-light text-grey-darkest font-bold py-2 px-4 rounded;
 }
 .btn-grey:hover {
-  @@apply .bg-grey;
+  @@apply bg-grey;
 }
 ```
 
@@ -107,21 +107,21 @@ A better approach is to extract the parts that are the same into a separate clas
 
 ```less
 .btn {
-  @@apply .font-bold .py-2 .px-4 .rounded;
+  @@apply font-bold py-2 px-4 rounded;
 }
 
 .btn-blue {
-  @@apply .bg-blue .text-white;
+  @@apply bg-blue text-white;
 }
 .btn-blue:hover {
-  @@apply .bg-blue-dark;
+  @@apply bg-blue-dark;
 }
 
 .btn-grey {
-  @@apply .bg-grey-light .text-grey-darkest;
+  @@apply bg-grey-light text-grey-darkest;
 }
 .btn-grey:hover {
-  @@apply .bg-grey;
+  @@apply bg-grey;
 }
 ```
 
@@ -175,13 +175,13 @@ Here's an example:
 @@tailwind components;
 
 .btn {
-  @@apply .font-bold .py-2 .px-4 .rounded;
+  @@apply font-bold py-2 px-4 rounded;
 }
 .btn-blue {
-  @@apply .bg-blue .text-white;
+  @@apply bg-blue text-white;
 }
 .btn-blue:hover {
-  @@apply .bg-blue-dark;
+  @@apply bg-blue-dark;
 }
 
 @@tailwind utilities;

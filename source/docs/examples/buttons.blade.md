@@ -26,13 +26,13 @@ Tailwind doesn't include pre-designed button styles out of the box, but they're 
 
 <style>
   .btn {
-    @apply&nbsp;.font-bold .py-2 .px-4 .rounded;
+    @@apply font-bold py-2 px-4 rounded;
   }
   .btn-blue {
-    @apply&nbsp;.bg-blue .text-white;
+    @@apply bg-blue text-white;
   }
   .btn-blue:hover {
-    @apply&nbsp;.bg-blue-dark;
+    @@apply bg-blue-dark;
   }
 </style>
 @endslot

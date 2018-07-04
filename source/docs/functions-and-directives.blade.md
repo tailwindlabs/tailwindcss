@@ -49,13 +49,13 @@ This is extremely useful when you find a common utility pattern in your HTML tha
 
 ```less
 .btn {
-  @@apply .font-bold .py-2 .px-4 .rounded;
+  @@apply font-bold py-2 px-4 rounded;
 }
 .btn-blue {
-  @@apply .bg-blue .text-white;
+  @@apply bg-blue text-white;
 }
 .btn-blue:hover {
-  @@apply .bg-blue-dark;
+  @@apply bg-blue-dark;
 }
 ```
 
@@ -63,10 +63,10 @@ Rules can listed on a single line or with multiple calls to `@@apply`:
 
 ```less
 .btn {
-  @@apply .font-bold;
-  @@apply .py-2;
-  @@apply .px-4;
-  @@apply .rounded;
+  @@apply font-bold;
+  @@apply py-2;
+  @@apply px-4;
+  @@apply rounded;
 }
 ```
 
@@ -74,7 +74,7 @@ You can mix `@@apply` declarations with normal CSS declarations too of course:
 
 ```less
 .btn:hover {
-  @@apply .bg-blue-dark;
+  @@apply bg-blue-dark;
   transform: translateY(-1px);
 }
 ```
@@ -84,7 +84,7 @@ Any rules mixed in with `@@apply` will have `!important` **removed** by default 
 ```less
 // Input
 .foo {
-  @@apply .bar;
+  @@apply bar;
 }
 
 .bar {
@@ -107,7 +107,7 @@ If you'd like to `@@apply` an existing class and make it `!important`, simply ad
 ```less
 // Input
 .btn {
-  @@apply .font-bold .py-2 .px-4 .rounded !important;
+  @@apply font-bold py-2 px-4 rounded !important;
 }
 
 // Output
@@ -126,21 +126,21 @@ Note that `@@apply` **will not work** for mixing in hover, focus, or responsive 
 ```less
 // Won't work:
 .btn {
-  @@apply .block .bg-red;
-  @@apply .md:inline-block;
-  @@apply .hover:bg-blue;
+  @@apply block bg-red;
+  @@apply md:inline-block;
+  @@apply hover:bg-blue;
 }
 
 // Do this instead:
 .btn {
-  @@apply .block .bg-red;
+  @@apply block bg-red;
 }
 .btn:hover {
-  @@apply .bg-blue;
+  @@apply bg-blue;
 }
 @@screen md {
   .btn {
-    @@apply .inline-block;
+    @@apply inline-block;
   }
 }
 ```
