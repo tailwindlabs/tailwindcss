@@ -15,40 +15,57 @@ function buildClassTable(css) {
   return classTable
 }
 
+function buildShadowTable(generatedUtilities) {
+  const utilities = postcss.root()
+
+  generatedUtilities.walkAtRules('variants', atRule => {
+    utilities.append(atRule.clone().nodes)
+  })
+
+  return buildClassTable(utilities)
+}
+
 function normalizeClassName(className) {
   return `.${escapeClassName(_.trimStart(className, '.'))}`
 }
 
-function findMixin(classTable, mixin, onError) {
-  const matches = _.get(classTable, mixin, [])
+function findClass(classToApply, classTable, shadowLookup, onError) {
+  const matches = _.get(classTable, classToApply, [])
 
   if (_.isEmpty(matches)) {
-    // prettier-ignore
-    onError(`\`@apply\` cannot be used with \`${mixin}\` because \`${mixin}\` either cannot be found, or it's actual definition includes a pseudo-selector like :hover, :active, etc. If you're sure that \`${mixin}\` exists, make sure that any \`@import\` statements are being properly processed *before* Tailwind CSS sees your CSS, as \`@apply\` can only be used for classes in the same CSS tree.`)
+    if (_.isEmpty(shadowLookup)) {
+      // prettier-ignore
+      throw onError(`\`@apply\` cannot be used with \`${classToApply}\` because \`${classToApply}\` either cannot be found, or it's actual definition includes a pseudo-selector like :hover, :active, etc. If you're sure that \`${classToApply}\` exists, make sure that any \`@import\` statements are being properly processed *before* Tailwind CSS sees your CSS, as \`@apply\` can only be used for classes in the same CSS tree.`)
+    }
+
+    return findClass(classToApply, shadowLookup, {}, onError)
   }
 
   if (matches.length > 1) {
     // prettier-ignore
-    onError(`\`@apply\` cannot be used with ${mixin} because ${mixin} is included in multiple rulesets.`)
+    throw onError(`\`@apply\` cannot be used with ${classToApply} because ${classToApply} is included in multiple rulesets.`)
   }
 
   const [match] = matches
 
   if (match.parent.type !== 'root') {
     // prettier-ignore
-    onError(`\`@apply\` cannot be used with ${mixin} because ${mixin} is nested inside of an at-rule (@${match.parent.name}).`)
+    throw onError(`\`@apply\` cannot be used with ${classToApply} because ${classToApply} is nested inside of an at-rule (@${match.parent.name}).`)
   }
 
   return match.clone().nodes
 }
 
-export default function() {
+export default function(config, generatedUtilities) {
   return function(css) {
     const classLookup = buildClassTable(css)
+    const shadowLookup = _.get(config, 'experiments.shadowLookup', false)
+      ? buildShadowTable(generatedUtilities)
+      : {}
 
     css.walkRules(rule => {
       rule.walkAtRules('apply', atRule => {
-        const mixins = postcss.list.space(atRule.params)
+        const classesAndProperties = postcss.list.space(atRule.params)
 
         /*
          * Don't wreck CSSNext-style @apply rules:
@@ -57,20 +74,20 @@ export default function() {
          * These are deprecated in CSSNext but still playing it safe for now.
          * We might consider renaming this at-rule.
          */
-        const [customProperties, classes] = _.partition(mixins, mixin => {
-          return _.startsWith(mixin, '--')
+        const [customProperties, classes] = _.partition(classesAndProperties, classOrProperty => {
+          return _.startsWith(classOrProperty, '--')
         })
 
         const decls = _(classes)
-          .reject(mixin => mixin === '!important')
-          .flatMap(mixin => {
-            return findMixin(classLookup, normalizeClassName(mixin), message => {
-              throw atRule.error(message)
+          .reject(cssClass => cssClass === '!important')
+          .flatMap(cssClass => {
+            return findClass(normalizeClassName(cssClass), classLookup, shadowLookup, message => {
+              return atRule.error(message)
             })
           })
           .value()
 
-        _.tap(_.last(mixins) === '!important', important => {
+        _.tap(_.last(classesAndProperties) === '!important', important => {
           decls.forEach(decl => (decl.important = important))
         })
 

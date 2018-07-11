@@ -1,8 +1,12 @@
 import postcss from 'postcss'
 import plugin from '../src/lib/substituteClassApplyAtRules'
+import generateUtilities from '../src/util/generateUtilities'
+import defaultConfig from '../defaultConfig.stub.js'
 
-function run(input, opts = {}) {
-  return postcss([plugin(opts)]).process(input, { from: undefined })
+const defaultUtilities = generateUtilities(defaultConfig, [])
+
+function run(input, config = defaultConfig, utilities = defaultUtilities) {
+  return postcss([plugin(config, utilities)]).process(input, { from: undefined })
 }
 
 test("it copies a class's declarations into itself", () => {
@@ -166,5 +170,25 @@ test('it does not match classes that have multiple rules', () => {
   expect.assertions(1)
   return run(input).catch(e => {
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
+  })
+})
+
+test('you can apply utility classes that do not actually exist as long as they would exist if utilities were being generated', () => {
+  const input = `
+    .foo { @apply .mt-4; }
+  `
+
+  const expected = `
+    .foo { margin-top: 1rem; }
+  `
+
+  const config = {
+    ...defaultConfig,
+    experiments: { shadowLookup: true },
+  }
+
+  return run(input, config).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
   })
 })

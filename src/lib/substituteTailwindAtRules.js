@@ -1,10 +1,7 @@
 import fs from 'fs'
 import postcss from 'postcss'
-import utilityModules from '../utilityModules'
-import prefixTree from '../util/prefixTree'
-import generateModules from '../util/generateModules'
 
-export default function(config, { components: pluginComponents, utilities: pluginUtilities }) {
+export default function(config, { components: pluginComponents }, generatedUtilities) {
   return function(css) {
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'preflight') {
@@ -30,27 +27,8 @@ export default function(config, { components: pluginComponents, utilities: plugi
       }
 
       if (atRule.params === 'utilities') {
-        const utilities = generateModules(utilityModules, config.modules, config)
-
-        if (config.options.important) {
-          utilities.walkDecls(decl => (decl.important = true))
-        }
-
-        const tailwindUtilityTree = postcss.root({
-          nodes: utilities.nodes,
-        })
-
-        const pluginUtilityTree = postcss.root({
-          nodes: pluginUtilities,
-        })
-
-        prefixTree(tailwindUtilityTree, config.options.prefix)
-
-        tailwindUtilityTree.walk(node => (node.source = atRule.source))
-        pluginUtilityTree.walk(node => (node.source = atRule.source))
-
-        atRule.before(tailwindUtilityTree)
-        atRule.before(pluginUtilityTree)
+        generatedUtilities.walk(node => (node.source = atRule.source))
+        atRule.before(generatedUtilities)
         atRule.remove()
       }
     })
