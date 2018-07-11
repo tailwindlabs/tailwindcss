@@ -39,9 +39,17 @@ export default function(config, { variantGenerators: pluginVariantGenerators }) 
 
       atRule.before(atRule.clone().nodes)
 
-      _.forEach(_.without(variants, 'responsive'), variant => {
-        variantGenerators[variant](atRule, config)
-      })
+      if (_.get(config, 'experiments.pluginVariants', false)) {
+        _.forEach(_.without(variants, 'responsive'), variant => {
+          variantGenerators[variant](atRule, config)
+        })
+      } else {
+        _.forEach(['group-hover', 'hover', 'focus', 'active'], variant => {
+          if (variants.includes(variant)) {
+            variantGenerators[variant](atRule, config)
+          }
+        })
+      }
 
       atRule.remove()
     })
