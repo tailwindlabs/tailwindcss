@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import plugin from '../src/lib/substituteClassApplyAtRules'
 
-function run(input, opts = () => {}) {
+function run(input, opts = {}) {
   return postcss([plugin(opts)]).process(input, { from: undefined })
 }
 

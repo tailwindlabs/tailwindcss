@@ -5,13 +5,7 @@ import postcss from 'postcss'
 import perfectionist from 'perfectionist'
 
 import registerConfigAsDependency from './lib/registerConfigAsDependency'
-import substituteTailwindAtRules from './lib/substituteTailwindAtRules'
-import evaluateTailwindFunctions from './lib/evaluateTailwindFunctions'
-import substituteVariantsAtRules from './lib/substituteVariantsAtRules'
-import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
-import substituteScreenAtRules from './lib/substituteScreenAtRules'
-import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
-
+import processTailwindFeatures from './processTailwindFeatures'
 import mergeConfigWithDefaults from './util/mergeConfigWithDefaults'
 
 const plugin = postcss.plugin('tailwind', config => {
@@ -36,26 +30,19 @@ const plugin = postcss.plugin('tailwind', config => {
     )
   }
 
-  return postcss(
+  return postcss([
     ...plugins,
-    ...[
-      substituteTailwindAtRules(lazyConfig),
-      evaluateTailwindFunctions(lazyConfig),
-      substituteVariantsAtRules(lazyConfig),
-      substituteResponsiveAtRules(lazyConfig),
-      substituteScreenAtRules(lazyConfig),
-      substituteClassApplyAtRules(lazyConfig),
-      perfectionist({
-        cascade: true,
-        colorShorthand: true,
-        indentSize: 2,
-        maxSelectorLength: 1,
-        maxValueLength: false,
-        trimLeadingZero: true,
-        trimTrailingZeros: true,
-      }),
-    ]
-  )
+    processTailwindFeatures(lazyConfig),
+    perfectionist({
+      cascade: true,
+      colorShorthand: true,
+      indentSize: 2,
+      maxSelectorLength: 1,
+      maxValueLength: false,
+      trimLeadingZero: true,
+      trimTrailingZeros: true,
+    }),
+  ])
 })
 
 plugin.defaultConfig = function() {

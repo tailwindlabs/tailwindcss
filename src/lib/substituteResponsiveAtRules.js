@@ -6,8 +6,8 @@ import buildSelectorVariant from '../util/buildSelectorVariant'
 
 export default function(config) {
   return function(css) {
-    const screens = config().screens
-    const separator = config().options.separator
+    const screens = config.screens
+    const separator = config.options.separator
     const responsiveRules = []
     let finalRules = []
 
