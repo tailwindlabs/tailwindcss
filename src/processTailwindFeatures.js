@@ -6,18 +6,21 @@ import substituteVariantsAtRules from './lib/substituteVariantsAtRules'
 import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
 import substituteScreenAtRules from './lib/substituteScreenAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
+
+import generateUtilities from './util/generateUtilities'
 import processPlugins from './util/processPlugins'
 
 export default function(lazyConfig) {
   const config = lazyConfig()
-  const plugins = processPlugins(config)
+  const processedPlugins = processPlugins(config)
+  const utilities = generateUtilities(config, processedPlugins.utilities)
 
   return postcss([
-    substituteTailwindAtRules(config, plugins),
+    substituteTailwindAtRules(config, processedPlugins, utilities.clone()),
     evaluateTailwindFunctions(config),
-    substituteVariantsAtRules(config, plugins),
+    substituteVariantsAtRules(config, processedPlugins),
     substituteResponsiveAtRules(config),
     substituteScreenAtRules(config),
-    substituteClassApplyAtRules(config, plugins),
+    substituteClassApplyAtRules(config, utilities.clone()),
   ])
 }

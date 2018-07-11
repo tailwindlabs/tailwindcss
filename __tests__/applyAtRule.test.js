@@ -1,9 +1,12 @@
 import postcss from 'postcss'
 import plugin from '../src/lib/substituteClassApplyAtRules'
-import defaultConfig from '../defaultCOnfig.stub.js'
+import generateUtilities from '../src/util/generateUtilities'
+import defaultConfig from '../defaultConfig.stub.js'
 
-function run(input, opts = defaultConfig) {
-  return postcss([plugin(opts)]).process(input, { from: undefined })
+const defaultUtilities = generateUtilities(defaultConfig, [])
+
+function run(input, config = defaultConfig, utilities = defaultUtilities) {
+  return postcss([plugin(config, utilities)]).process(input, { from: undefined })
 }
 
 test("it copies a class's declarations into itself", () => {
@@ -199,7 +202,7 @@ test('you can apply utility classes that do not actually exist as long as they w
     .foo { margin-top: 1rem; }
   `
 
-  return run(input, defaultConfig).then(result => {
+  return run(input).then(result => {
     expect(result.css).toEqual(expected)
     expect(result.warnings().length).toBe(0)
   })
