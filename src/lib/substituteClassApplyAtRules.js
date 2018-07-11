@@ -59,7 +59,9 @@ function findClass(classToApply, classTable, shadowLookup, onError) {
 export default function(config, generatedUtilities) {
   return function(css) {
     const classLookup = buildClassTable(css)
-    const shadowLookup = buildShadowTable(generatedUtilities)
+    const shadowLookup = _.get(config, 'experiments.shadowLookup', false)
+      ? buildShadowTable(generatedUtilities)
+      : {}
 
     css.walkRules(rule => {
       rule.walkAtRules('apply', atRule => {
