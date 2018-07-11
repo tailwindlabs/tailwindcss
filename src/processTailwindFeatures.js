@@ -18,6 +18,6 @@ export default function(lazyConfig) {
     substituteVariantsAtRules(config, plugins),
     substituteResponsiveAtRules(config),
     substituteScreenAtRules(config),
-    substituteClassApplyAtRules(config),
+    substituteClassApplyAtRules(config, plugins),
   ])
 }
