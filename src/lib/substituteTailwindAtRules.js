@@ -27,13 +27,13 @@ export default function(config, { components: pluginComponents }, generatedUtili
       }
 
       if (atRule.params === 'utilities') {
-        // This needs to be cloned here or utilities end up being empty
-        // in real projects. No idea why, struggling to reproduce in a
-        // test. Hot fixing to publish a patch.
-        const clonedUtilities = generatedUtilities.clone()
+        const utilityTree = postcss.root({
+          nodes: generatedUtilities,
+        })
 
-        clonedUtilities.walk(node => (node.source = atRule.source))
-        atRule.before(clonedUtilities)
+        utilityTree.walk(node => (node.source = atRule.source))
+
+        atRule.before(utilityTree)
         atRule.remove()
       }
     })

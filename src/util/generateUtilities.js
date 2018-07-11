@@ -17,8 +17,8 @@ export default function(config, pluginUtilities) {
 
   prefixTree(tailwindUtilityTree, config.options.prefix)
 
-  return _.tap(postcss.root(), root => {
-    root.append(tailwindUtilityTree.nodes)
-    root.append(pluginUtilities)
-  })
+  return [
+    ...tailwindUtilityTree.nodes,
+    ...pluginUtilities,
+  ]
 }

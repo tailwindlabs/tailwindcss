@@ -18,7 +18,7 @@ function buildClassTable(css) {
 function buildShadowTable(generatedUtilities) {
   const utilities = postcss.root()
 
-  generatedUtilities.walkAtRules('variants', atRule => {
+  postcss.root({ nodes: generatedUtilities }).walkAtRules('variants', atRule => {
     utilities.append(atRule.clone().nodes)
   })
 

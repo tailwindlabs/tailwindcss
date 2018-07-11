@@ -16,11 +16,11 @@ export default function(lazyConfig) {
   const utilities = generateUtilities(config, processedPlugins.utilities)
 
   return postcss([
-    substituteTailwindAtRules(config, processedPlugins, utilities.clone()),
+    substituteTailwindAtRules(config, processedPlugins, utilities),
     evaluateTailwindFunctions(config),
     substituteVariantsAtRules(config, processedPlugins),
     substituteResponsiveAtRules(config),
     substituteScreenAtRules(config),
-    substituteClassApplyAtRules(config, utilities.clone()),
+    substituteClassApplyAtRules(config, utilities),
   ])
 }
