@@ -173,26 +173,6 @@ test('it does not match classes that have multiple rules', () => {
   })
 })
 
-test('it does not match classes that have multiple rules', () => {
-  const input = `
-    .a {
-      color: red;
-    }
-
-    .b {
-      @apply .a;
-    }
-
-    .a {
-      color: blue;
-    }
-  `
-  expect.assertions(1)
-  return run(input).catch(e => {
-    expect(e).toMatchObject({ name: 'CssSyntaxError' })
-  })
-})
-
 test('you can apply utility classes that do not actually exist as long as they would exist if utilities were being generated', () => {
   const input = `
     .foo { @apply .mt-4; }
