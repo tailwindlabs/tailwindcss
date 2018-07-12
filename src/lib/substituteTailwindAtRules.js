@@ -1,5 +1,12 @@
 import fs from 'fs'
+import _ from 'lodash'
 import postcss from 'postcss'
+
+function updateSource(nodes, source) {
+  return _.tap(Array.isArray(nodes) ? postcss.root({ nodes }) : nodes, tree => {
+    tree.walk(node => (node.source = source))
+  })
+}
 
 export default function(config, { components: pluginComponents }, generatedUtilities) {
   return function(css) {
@@ -9,31 +16,17 @@ export default function(config, { components: pluginComponents }, generatedUtili
           fs.readFileSync(`${__dirname}/../../css/preflight.css`, 'utf8')
         )
 
-        preflightTree.walk(node => (node.source = atRule.source))
-
-        atRule.before(preflightTree)
+        atRule.before(updateSource(preflightTree, atRule.source))
         atRule.remove()
       }
 
       if (atRule.params === 'components') {
-        const pluginComponentTree = postcss.root({
-          nodes: pluginComponents,
-        })
-
-        pluginComponentTree.walk(node => (node.source = atRule.source))
-
-        atRule.before(pluginComponentTree)
+        atRule.before(updateSource(pluginComponents, atRule.source))
         atRule.remove()
       }
 
       if (atRule.params === 'utilities') {
-        const utilityTree = postcss.root({
-          nodes: generatedUtilities,
-        })
-
-        utilityTree.walk(node => (node.source = atRule.source))
-
-        atRule.before(utilityTree)
+        atRule.before(updateSource(generatedUtilities, atRule.source))
         atRule.remove()
       }
     })
