@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import postcss from 'postcss'
 import utilityModules from '../utilityModules'
 import prefixTree from '../util/prefixTree'
@@ -17,8 +16,5 @@ export default function(config, pluginUtilities) {
 
   prefixTree(tailwindUtilityTree, config.options.prefix)
 
-  return [
-    ...tailwindUtilityTree.nodes,
-    ...pluginUtilities,
-  ]
+  return [...tailwindUtilityTree.nodes, ...pluginUtilities]
 }
