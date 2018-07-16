@@ -11,16 +11,18 @@ import generateUtilities from './util/generateUtilities'
 import processPlugins from './util/processPlugins'
 
 export default function(lazyConfig) {
-  const config = lazyConfig()
-  const processedPlugins = processPlugins(config)
-  const utilities = generateUtilities(config, processedPlugins.utilities)
+  return function(css) {
+    const config = lazyConfig()
+    const processedPlugins = processPlugins(config)
+    const utilities = generateUtilities(config, processedPlugins.utilities)
 
-  return postcss([
-    substituteTailwindAtRules(config, processedPlugins, utilities),
-    evaluateTailwindFunctions(config),
-    substituteVariantsAtRules(config, processedPlugins),
-    substituteResponsiveAtRules(config),
-    substituteScreenAtRules(config),
-    substituteClassApplyAtRules(config, utilities),
-  ])
+    return postcss([
+      substituteTailwindAtRules(config, processedPlugins, utilities),
+      evaluateTailwindFunctions(config),
+      substituteVariantsAtRules(config, processedPlugins),
+      substituteResponsiveAtRules(config),
+      substituteScreenAtRules(config),
+      substituteClassApplyAtRules(config, utilities),
+    ]).process(css, { from: css.source.input.file })
+  }
 }
