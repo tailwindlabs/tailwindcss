@@ -15,7 +15,7 @@ const plugin = postcss.plugin('tailwind', config => {
     plugins.push(registerConfigAsDependency(path.resolve(config)))
   }
 
-  const lazyConfig = () => {
+  const getConfig = () => {
     if (_.isUndefined(config)) {
       return require('../defaultConfig')()
     }
@@ -32,7 +32,7 @@ const plugin = postcss.plugin('tailwind', config => {
 
   return postcss([
     ...plugins,
-    processTailwindFeatures(lazyConfig),
+    processTailwindFeatures(getConfig),
     perfectionist({
       cascade: true,
       colorShorthand: true,
