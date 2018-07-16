@@ -11,9 +11,9 @@ import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
 import generateUtilities from './util/generateUtilities'
 import processPlugins from './util/processPlugins'
 
-export default function(lazyConfig) {
+export default function(getConfig) {
   return function(css) {
-    const config = lazyConfig()
+    const config = getConfig()
     const processedPlugins = processPlugins(config)
     const utilities = generateUtilities(config, processedPlugins.utilities)
 
