@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import postcss from 'postcss'
 
 import substituteTailwindAtRules from './lib/substituteTailwindAtRules'
@@ -23,6 +24,6 @@ export default function(lazyConfig) {
       substituteResponsiveAtRules(config),
       substituteScreenAtRules(config),
       substituteClassApplyAtRules(config, utilities),
-    ]).process(css, { from: css.source.input.file })
+    ]).process(css, { from: _.get(css, 'source.input.file') })
   }
 }
