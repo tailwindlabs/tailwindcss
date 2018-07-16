@@ -7419,9 +7419,9 @@ table@^4.0.1:
     slice-ansi "1.0.0"
     string-width "^2.1.1"
 
-tailwindcss@0.6.3:
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-0.6.3.tgz#973d33342f3d1d1f9c9d20aa42b9fa9ca57f2ed0"
+tailwindcss@0.6.4:
+  version "0.6.4"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-0.6.4.tgz#b0aa8a10c34d3fed7a5f32482ef92d5d416353ee"
   dependencies:
     commander "^2.11.0"
     css.escape "^1.5.1"
