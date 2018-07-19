@@ -74,7 +74,7 @@ Add the `active:` prefix to only apply a utility when an element is active.
 
 @slot('code')
 <button class="bg-blue active:bg-blue-dark text-white...">
-  Hover me
+  Click me
 </button>
 @endslot
 @endcomponent
