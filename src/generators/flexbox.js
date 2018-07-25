@@ -107,11 +107,17 @@ export default function() {
     'flex-shrink': {
       'flex-shrink': '1',
     },
+    'flex-basis-auto': {
+      'flex-basis': 'auto',
+    },
     'flex-no-grow': {
       'flex-grow': '0',
     },
     'flex-no-shrink': {
       'flex-shrink': '0',
+    },
+    'flex-no-basis': {
+      'flex-basis': '0',
     },
   })
 }
