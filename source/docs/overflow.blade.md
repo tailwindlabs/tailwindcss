@@ -163,7 +163,7 @@ Use `.overflow-y-scroll` to allow vertical scrolling and always show scrollbars 
 
 ## Scroll in all directions
 
-Use `.overflow-scroll` to add scrollbars to an element. Unlike `.overflow-auto`, which only shows scrollbars if they are necessary, this utility always shows them. Note that some operating systems, like MacOS, hide unnecessary scrollbars regardless of this setting.
+Use `.overflow-scroll` to add scrollbars to an element. Unlike `.overflow-auto`, which only shows scrollbars if they are necessary, this utility always shows them. Note that some operating systems (like macOS) hide unnecessary scrollbars regardless of this setting.
 
 @component('_partials.code-sample')
 <p class="text-sm text-grey-dark mb-1">Scroll horizontally when content can't wrap</p>
