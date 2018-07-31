@@ -34,13 +34,22 @@ features:
 Control the letter spacing of an element using the `.tracking-{size}` utilities.
 
 @component('_partials.code-sample')
-<p class="tracking-tight text-lg text-grey-darkest mb-2">This text has tight letter spacing.</p>
-<p class="tracking-normal text-lg text-grey-darkest mb-2">This text has normal letter spacing.</p>
-<p class="tracking-wide text-lg text-grey-darkest">This text has wide letter spacing.</p>
+<div class="mb-6">
+  <p class="text-sm text-grey-dark">.tracking-tight</p>
+  <p class="tracking-tight text-lg text-grey-darkest mb-2">The quick brown fox jumped over the lazy dog.</p>
+</div>
+<div class="mb-6">
+  <p class="text-sm text-grey-dark">.tracking-normal</p>
+  <p class="tracking-normal text-lg text-grey-darkest mb-2">The quick brown fox jumped over the lazy dog.</p>
+</div>
+<div>
+  <p class="text-sm text-grey-dark">.tracking-wide</p>
+  <p class="tracking-wide text-lg text-grey-darkest mb-2">The quick brown fox jumped over the lazy dog.</p>
+</div>
 @slot('code')
-<p class="tracking-tight ...">This text has tight letter spacing.</p>
-<p class="tracking-normal ...">This text has normal letter spacing.</p>
-<p class="tracking-wide ...">This text has wide letter spacing.</p>
+<p class="tracking-tight ...">The quick brown fox ...</p>
+<p class="tracking-normal ...">The quick brown fox ...</p>
+<p class="tracking-wide ...">The quick brown fox ...</p>
 @endslot
 @endcomponent
 
