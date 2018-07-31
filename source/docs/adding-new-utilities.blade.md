@@ -6,7 +6,7 @@ description: null
 
 Although Tailwind provides a pretty comprehensive set of utility classes out of the box, you're inevitably going to run into situations where you need to add a few of your own.
 
-Deciding on the best way to extend a framework can be paralyzing, so here's some best practices and tools to help you add your own utilities "the Tailwind way."
+Deciding on the best way to extend a framework can be paralyzing, so here are some best practices and tools to help you add your own utilities "the Tailwind way."
 
 ## CSS Structure
 
