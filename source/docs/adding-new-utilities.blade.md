@@ -60,7 +60,7 @@ For this reason, **we recommend defining any custom utility classes at the end o
 
 This way your custom utilities can override Tailwind utilities if needed, although you should strive to avoid applying two utility classes to an element that target the same CSS property if at all possible.
 
-If you're using a preprocessor like Less, Sass, or Stylus, consider keeping your utilities in a separate file and importing them:
+If you're using `postcss-import` or a preprocessor like Less, Sass, or Stylus, consider keeping your utilities in a separate file and importing them:
 
 ```less
 @@tailwind preflight;
