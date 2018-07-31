@@ -11,7 +11,7 @@ Similar to our [responsive prefixes](/docs/responsive-design), Tailwind makes it
 Add the `hover:` prefix to only apply a utility on hover.
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button type="button" class="bg-transparent hover:bg-blue text-blue-dark font-semibold hover:text-white py-2 px-4 border border-blue hover:border-transparent rounded">
+<button type="button" class="bg-transparent hover:bg-blue text-blue-dark font-semibold hover:text-white py-2 px-4 border border-blue hover:border-transparent rounded focus:outline-none focus:shadow-outline">
   Hover me
 </button>
 
@@ -42,11 +42,11 @@ Add the `focus:` prefix to only apply a utility on focus.
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="max-w-xs w-full mx-auto">
-  <input class="bg-white focus:bg-grey-dark text-black focus:text-white appearance-none inline-block w-full text-black border rounded py-3 px-4" placeholder="Focus me">
+  <input class="bg-grey-lighter focus:bg-white border-transparent focus:border-blue-light text-black appearance-none inline-block w-full text-black border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
 </div>
 
 @slot('code')
-<input class="bg-white focus:bg-grey-dark text-black focus:text-white ..." placeholder="Focus me">
+<input class="bg-grey-lighter focus:bg-white border-transparent focus:border-blue-light ..." placeholder="Focus me">
 @endslot
 @endcomponent
 
@@ -68,7 +68,7 @@ Add the `focus:` prefix to only apply a utility on focus.
 Add the `active:` prefix to only apply a utility when an element is active.
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button type="button" class="bg-blue active:bg-blue-dark text-white font-semibold hover:text-white py-2 px-4 rounded">
+<button type="button" class="bg-blue active:bg-blue-dark text-white font-semibold hover:text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
   Click me
 </button>
 
