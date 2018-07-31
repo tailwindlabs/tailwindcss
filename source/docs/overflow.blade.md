@@ -129,7 +129,7 @@ Use `.overflow-y-auto` to allow vertical scrolling if needed.
 </div>
 
 @slot('code')
-<div class="overflow-y-scroll h-32 ...">Lorem ipsum dolor sit amet...</div>
+<div class="overflow-y-auto h-32 ...">Lorem ipsum dolor sit amet...</div>
 @endslot
 @endcomponent
 
