@@ -36,15 +36,15 @@ Control the letter spacing of an element using the `.tracking-{size}` utilities.
 @component('_partials.code-sample')
 <div class="mb-6">
   <p class="text-sm text-grey-dark">.tracking-tight</p>
-  <p class="tracking-tight text-lg text-grey-darkest mb-2">The quick brown fox jumped over the lazy dog.</p>
+  <p class="tracking-tight text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
   <p class="text-sm text-grey-dark">.tracking-normal</p>
-  <p class="tracking-normal text-lg text-grey-darkest mb-2">The quick brown fox jumped over the lazy dog.</p>
+  <p class="tracking-normal text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div>
   <p class="text-sm text-grey-dark">.tracking-wide</p>
-  <p class="tracking-wide text-lg text-grey-darkest mb-2">The quick brown fox jumped over the lazy dog.</p>
+  <p class="tracking-wide text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
 </div>
 @slot('code')
 <p class="tracking-tight ...">The quick brown fox ...</p>
