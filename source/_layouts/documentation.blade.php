@@ -120,7 +120,7 @@
     {{-- /Side nav --}}
 
     {{-- Right content/TOC pane --}}
-    <div id="content-wrapper" class="min-h-screen w-full lg:static lg:max-h-full lg:overflow-auto lg:w-3/4 xl:w-4/5 ">
+    <div id="content-wrapper" class="min-h-screen w-full lg:static lg:max-h-full lg:overflow-visible lg:w-3/4 xl:w-4/5 ">
 
       {{-- "Turbolinks" --}}
       <div id="content">
