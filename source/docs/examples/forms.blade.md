@@ -15,17 +15,17 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
       <label class="block text-grey-darker text-sm font-bold mb-2" for="username">
         Username
       </label>
-      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight" id="username" type="text" placeholder="Username">
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username">
     </div>
     <div class="mb-6">
       <label class="block text-grey-darker text-sm font-bold mb-2" for="password">
         Password
       </label>
-      <input class="shadow appearance-none border border-red rounded w-full py-2 px-3 text-grey-darker mb-3 leading-tight" id="password" type="password" placeholder="******************">
+      <input class="shadow appearance-none border border-red rounded w-full py-2 px-3 text-grey-darker mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************">
       <p class="text-red text-xs italic">Please choose a password.</p>
     </div>
     <div class="flex items-center justify-between">
-      <button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded" type="button">
+      <button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
         Sign In
       </button>
       <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="#">
@@ -50,7 +50,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
       </label>
     </div>
     <div class="md:w-2/3">
-      <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter hover:border-purple rounded w-full py-2 px-4 text-grey-darker leading-tight" id="inline-full-name" type="text" value="Jane Doe">
+      <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter rounded w-full py-2 px-4 text-grey-darker leading-tight focus:outline-none focus:bg-white focus:border-purple" id="inline-full-name" type="text" value="Jane Doe">
     </div>
   </div>
   <div class="md:flex md:items-center mb-6">
@@ -60,7 +60,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
       </label>
     </div>
     <div class="md:w-2/3">
-      <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter hover:border-purple rounded w-full py-2 px-4 text-grey-darker leading-tight" id="inline-username" type="password" placeholder="******************">
+      <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter rounded w-full py-2 px-4 text-grey-darker leading-tight focus:outline-none focus:bg-white focus:border-purple" id="inline-username" type="password" placeholder="******************">
     </div>
   </div>
   <div class="md:flex md:items-center mb-6">
@@ -75,7 +75,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
   <div class="md:flex md:items-center">
     <div class="md:w-1/3"></div>
     <div class="md:w-2/3">
-      <button class="shadow bg-purple hover:bg-purple-light text-white font-bold py-2 px-4 rounded" type="button">
+      <button class="shadow bg-purple hover:bg-purple-light focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">
         Sign Up
       </button>
     </div>
@@ -92,14 +92,14 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
       <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-first-name">
         First Name
       </label>
-      <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3 leading-tight" id="grid-first-name" type="text" placeholder="Jane">
+      <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Jane">
       <p class="text-red text-xs italic">Please fill out this field.</p>
     </div>
     <div class="w-full md:w-1/2 px-3">
       <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-last-name">
         Last Name
       </label>
-      <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight" id="grid-last-name" type="text" placeholder="Doe">
+      <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-last-name" type="text" placeholder="Doe">
     </div>
   </div>
   <div class="flex flex-wrap -mx-3 mb-6">
@@ -107,7 +107,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
       <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-password">
         Password
       </label>
-      <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3 leading-tight" id="grid-password" type="password" placeholder="******************">
+      <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-password" type="password" placeholder="******************">
       <p class="text-grey-dark text-xs italic">Make it as long and as crazy as you'd like</p>
     </div>
   </div>
@@ -116,14 +116,14 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
       <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-city">
         City
       </label>
-      <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight" id="grid-city" type="text" placeholder="Albuquerque">
+      <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-city" type="text" placeholder="Albuquerque">
     </div>
     <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
       <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-state">
         State
       </label>
       <div class="relative">
-        <select class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded leading-tight" id="grid-state">
+        <select class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-state">
           <option>New Mexico</option>
           <option>Missouri</option>
           <option>Texas</option>
@@ -137,7 +137,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
       <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-zip">
         Zip
       </label>
-      <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight" id="grid-zip" type="text" placeholder="90210">
+      <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-zip" type="text" placeholder="90210">
     </div>
   </div>
 </form>
@@ -148,7 +148,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
 @component('_partials.code-sample', ['class' => 'flex justify-center p-8'])
 <form class="w-full max-w-sm">
   <div class="flex items-center border-b border-b-2 border-teal py-2">
-    <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight" type="text" placeholder="Jane Doe" aria-label="Full name">
+    <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Jane Doe" aria-label="Full name">
     <button class="flex-no-shrink bg-teal hover:bg-teal-dark border-teal hover:border-teal-dark text-sm border-4 text-white py-1 px-2 rounded" type="button">
       Sign Up
     </button>
@@ -163,7 +163,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <div class="inline-block relative w-64">
-  <select class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow leading-tight">
+  <select class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
     <option>Really long option that will likely overlap the chevron</option>
     <option>Option 2</option>
     <option>Option 3</option>
