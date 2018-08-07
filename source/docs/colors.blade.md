@@ -14,6 +14,10 @@ To get you started, we've provided a generous palette of great looking colors th
   @include('_partials.color-palette', [
     'colorName' => 'Grey',
     'colors' => [
+      'White' => [
+        'name' => 'white',
+        'fg' => 'black'
+      ],
       'Lightest' => [
         'name' => 'grey-lightest',
         'fg' => 'black'
@@ -40,6 +44,10 @@ To get you started, we've provided a generous palette of great looking colors th
       ],
       'Darkest' => [
         'name' => 'grey-darkest',
+        'fg' => 'white'
+      ],
+      'Black' => [
+        'name' => 'black',
         'fg' => 'white'
       ],
     ]
@@ -172,7 +180,7 @@ To get you started, we've provided a generous palette of great looking colors th
       ],
       'Base' => [
         'name' => 'green',
-        'fg' => 'green-darkest'
+        'fg' => 'white'
       ],
       'Dark' => [
         'name' => 'green-dark',
@@ -208,7 +216,7 @@ To get you started, we've provided a generous palette of great looking colors th
       ],
       'Base' => [
         'name' => 'teal',
-        'fg' => 'teal-darkest'
+        'fg' => 'white'
       ],
       'Dark' => [
         'name' => 'teal-dark',
