@@ -26,7 +26,7 @@ Creating a framework for building custom UIs means you can't provide abstraction
 
 Instead, Tailwind provides highly composable, low-level *utility classes* that make it easy to build complex user interfaces **without encouraging any two sites to look the same.**
 
-Here's an example of a contact card component built with Tailwind without writing a single line of CSS:
+Here's an example of a responsive contact card component built with Tailwind without writing a single line of CSS:
 
 @component('_partials.code-sample', ['class' => 'bg-grey-lighter py-8'])
 <div class="bg-white mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
