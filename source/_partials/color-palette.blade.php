@@ -1,4 +1,4 @@
-<div class="relative my-8 overflow-hidden rounded shadow-md">
+<div class="relative my-8 overflow-hidden rounded shadow-md1">
   <div class="relative shadow bg-{{ $colors['Base']['name'] }} text-{{ $colors['Base']['fg'] }} px-3 py-4 md:py-1 text-sm font-semibold flex justify-between">
     <div class="uppercase">{{ $colorName }}</div>
     <div class="flex justify-between">
