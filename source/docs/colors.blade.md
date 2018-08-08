@@ -10,408 +10,372 @@ Developing an organized, consistent and beautiful color palette is critical to t
 
 To get you started, we've provided a generous palette of great looking colors that are perfect for prototyping, or even as a starting point for your color palette. That said, don't hesitate to [customize](#customizing) them for your project.
 
-<div class="flex flex-wrap -mx-4">
-  <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="rounded overflow-hidden">
-      <div class="text-black bg-grey px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="uppercase mb-6">Grey</div>
-        <div class="flex justify-between">
-          <span>Base</span>
-          <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey']) }}</span>
-        </div>
-      </div>
-      <div class="text-black bg-white px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>White</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['white']) }}</span>
-      </div>
-      <div class="text-black bg-grey-lightest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lightest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey-lightest']) }}</span>
-      </div>
-      <div class="text-black bg-grey-lighter px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lighter</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey-lighter']) }}</span>
-      </div>
-      <div class="text-black bg-grey-light px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Light</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey-light']) }}</span>
-      </div>
-      <div class="text-black bg-grey px-6 py-3 text-sm font-semibold flex justify-between flex justify-between">
-        <span>Base</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey']) }}</span>
-      </div>
-      <div class="text-white bg-grey-dark px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Dark</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey-dark']) }}</span>
-      </div>
-      <div class="text-white bg-grey-darker px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darker</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey-darker']) }}</span>
-      </div>
-      <div class="text-white bg-grey-darkest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darkest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['grey-darkest']) }}</span>
-      </div>
-      <div class="text-white bg-black px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Black</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['black']) }}</span>
-      </div>
-    </div>
-  </div>
+<div>
+  @include('_partials.color-palette', [
+    'colorName' => 'Grey',
+    'colors' => [
+      'White' => [
+        'name' => 'white',
+        'fg' => 'black'
+      ],
+      'Lightest' => [
+        'name' => 'grey-lightest',
+        'fg' => 'black'
+      ],
+      'Lighter' => [
+        'name' => 'grey-lighter',
+        'fg' => 'black'
+      ],
+      'Light' => [
+        'name' => 'grey-light',
+        'fg' => 'black'
+      ],
+      'Base' => [
+        'name' => 'grey',
+        'fg' => 'black'
+      ],
+      'Dark' => [
+        'name' => 'grey-dark',
+        'fg' => 'white'
+      ],
+      'Darker' => [
+        'name' => 'grey-darker',
+        'fg' => 'white'
+      ],
+      'Darkest' => [
+        'name' => 'grey-darkest',
+        'fg' => 'white'
+      ],
+      'Black' => [
+        'name' => 'black',
+        'fg' => 'white'
+      ],
+    ]
+  ])
 </div>
 
-<div class="flex flex-wrap -mx-4">
-  <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="rounded overflow-hidden">
-      <div class="text-white bg-red px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="uppercase mb-6">Red</div>
-        <div class="flex justify-between">
-          <span>Base</span>
-          <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['red']) }}</span>
-        </div>
-      </div>
-      <div class="text-red-darkest bg-red-lightest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lightest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['red-lightest']) }}</span>
-      </div>
-      <div class="text-red-darkest bg-red-lighter px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lighter</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['red-lighter']) }}</span>
-      </div>
-      <div class="text-white bg-red-light px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Light</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['red-light']) }}</span>
-      </div>
-      <div class="text-white bg-red px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Base</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['red']) }}</span>
-      </div>
-      <div class="text-white bg-red-dark px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Dark</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['red-dark']) }}</span>
-      </div>
-      <div class="text-white bg-red-darker px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darker</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['red-darker']) }}</span>
-      </div>
-      <div class="text-white bg-red-darkest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darkest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['red-darkest']) }}</span>
-      </div>
-    </div>
-  </div>
-  <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="rounded overflow-hidden">
-      <div class="text-white bg-orange px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="uppercase mb-6">Orange</div>
-        <div class="flex justify-between">
-          <span>Base</span>
-          <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['orange']) }}</span>
-        </div>
-      </div>
-      <div class="text-orange-darkest bg-orange-lightest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lightest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['orange-lightest']) }}</span>
-      </div>
-      <div class="text-orange-darkest bg-orange-lighter px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lighter</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['orange-lighter']) }}</span>
-      </div>
-      <div class="text-orange-darkest bg-orange-light px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Light</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['orange-light']) }}</span>
-      </div>
-      <div class="text-white bg-orange px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Base</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['orange']) }}</span>
-      </div>
-      <div class="text-white bg-orange-dark px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Dark</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['orange-dark']) }}</span>
-      </div>
-      <div class="text-white bg-orange-darker px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darker</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['orange-darker']) }}</span>
-      </div>
-      <div class="text-white bg-orange-darkest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darkest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['orange-darkest']) }}</span>
-      </div>
-    </div>
-  </div>
-  <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="rounded overflow-hidden">
-      <div class="text-yellow-darkest bg-yellow px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="uppercase mb-6">Yellow</div>
-        <div class="flex justify-between">
-          <span>Base</span>
-          <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['yellow']) }}</span>
-        </div>
-      </div>
-      <div class="text-yellow-darkest bg-yellow-lightest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lightest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['yellow-lightest']) }}</span>
-      </div>
-      <div class="text-yellow-darkest bg-yellow-lighter px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lighter</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['yellow-lighter']) }}</span>
-      </div>
-      <div class="text-yellow-darkest bg-yellow-light px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Light</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['yellow-light']) }}</span>
-      </div>
-      <div class="text-yellow-darkest bg-yellow px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Base</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['yellow']) }}</span>
-      </div>
-      <div class="text-yellow-darkest bg-yellow-dark px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Dark</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['yellow-dark']) }}</span>
-      </div>
-      <div class="text-white bg-yellow-darker px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darker</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['yellow-darker']) }}</span>
-      </div>
-      <div class="text-white bg-yellow-darkest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darkest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['yellow-darkest']) }}</span>
-      </div>
-    </div>
-  </div>
-  <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="rounded overflow-hidden">
-      <div class="text-white bg-green px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="uppercase mb-6">Green</div>
-        <div class="flex justify-between">
-          <span>Base</span>
-          <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['green']) }}</span>
-        </div>
-      </div>
-      <div class="text-green-darkest bg-green-lightest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lightest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['green-lightest']) }}</span>
-      </div>
-      <div class="text-green-darkest bg-green-lighter px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lighter</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['green-lighter']) }}</span>
-      </div>
-      <div class="text-green-darkest bg-green-light px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Light</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['green-light']) }}</span>
-      </div>
-      <div class="text-white bg-green px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Base</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['green']) }}</span>
-      </div>
-      <div class="text-white bg-green-dark px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Dark</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['green-dark']) }}</span>
-      </div>
-      <div class="text-white bg-green-darker px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darker</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['green-darker']) }}</span>
-      </div>
-      <div class="text-white bg-green-darkest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darkest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['green-darkest']) }}</span>
-      </div>
-    </div>
-  </div>
-  <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="rounded overflow-hidden">
-      <div class="text-white bg-teal px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="uppercase mb-6">Teal</div>
-        <div class="flex justify-between">
-          <span>Base</span>
-          <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['teal']) }}</span>
-        </div>
-      </div>
-      <div class="text-teal-darkest bg-teal-lightest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lightest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['teal-lightest']) }}</span>
-      </div>
-      <div class="text-teal-darkest bg-teal-lighter px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lighter</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['teal-lighter']) }}</span>
-      </div>
-      <div class="text-teal-darkest bg-teal-light px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Light</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['teal-light']) }}</span>
-      </div>
-      <div class="text-white bg-teal px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Base</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['teal']) }}</span>
-      </div>
-      <div class="text-white bg-teal-dark px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Dark</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['teal-dark']) }}</span>
-      </div>
-      <div class="text-white bg-teal-darker px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darker</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['teal-darker']) }}</span>
-      </div>
-      <div class="text-white bg-teal-darkest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darkest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['teal-darkest']) }}</span>
-      </div>
-    </div>
-  </div>
-  <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="rounded overflow-hidden">
-      <div class="text-white bg-blue px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="uppercase mb-6">Blue</div>
-        <div class="flex justify-between">
-          <span>Base</span>
-          <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['blue']) }}</span>
-        </div>
-      </div>
-      <div class="text-blue-darkest bg-blue-lightest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lightest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['blue-lightest']) }}</span>
-      </div>
-      <div class="text-blue-darkest bg-blue-lighter px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lighter</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['blue-lighter']) }}</span>
-      </div>
-      <div class="text-white bg-blue-light px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Light</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['blue-light']) }}</span>
-      </div>
-      <div class="text-white bg-blue px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Base</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['blue']) }}</span>
-      </div>
-      <div class="text-white bg-blue-dark px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Dark</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['blue-dark']) }}</span>
-      </div>
-      <div class="text-white bg-blue-darker px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darker</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['blue-darker']) }}</span>
-      </div>
-      <div class="text-white bg-blue-darkest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darkest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['blue-darkest']) }}</span>
-      </div>
-    </div>
-  </div>
-  <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="rounded overflow-hidden">
-      <div class="text-white bg-indigo px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="uppercase mb-6">Indigo</div>
-        <div class="flex justify-between">
-          <span>Base</span>
-          <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['indigo']) }}</span>
-        </div>
-      </div>
-      <div class="text-indigo-darkest bg-indigo-lightest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lightest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['indigo-lightest']) }}</span>
-      </div>
-      <div class="text-indigo-darkest bg-indigo-lighter px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lighter</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['indigo-lighter']) }}</span>
-      </div>
-      <div class="text-white bg-indigo-light px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Light</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['indigo-light']) }}</span>
-      </div>
-      <div class="text-white bg-indigo px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Base</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['indigo']) }}</span>
-      </div>
-      <div class="text-white bg-indigo-dark px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Dark</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['indigo-dark']) }}</span>
-      </div>
-      <div class="text-white bg-indigo-darker px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darker</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['indigo-darker']) }}</span>
-      </div>
-      <div class="text-white bg-indigo-darkest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darkest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['indigo-darkest']) }}</span>
-      </div>
-    </div>
-  </div>
-  <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="rounded overflow-hidden">
-      <div class="text-white bg-purple px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="uppercase mb-6">Purple</div>
-        <div class="flex justify-between">
-          <span>Base</span>
-          <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['purple']) }}</span>
-        </div>
-      </div>
-      <div class="text-purple-darkest bg-purple-lightest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lightest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['purple-lightest']) }}</span>
-      </div>
-      <div class="text-purple-darkest bg-purple-lighter px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lighter</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['purple-lighter']) }}</span>
-      </div>
-      <div class="text-white bg-purple-light px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Light</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['purple-light']) }}</span>
-      </div>
-      <div class="text-white bg-purple px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Base</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['purple']) }}</span>
-      </div>
-      <div class="text-white bg-purple-dark px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Dark</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['purple-dark']) }}</span>
-      </div>
-      <div class="text-white bg-purple-darker px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darker</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['purple-darker']) }}</span>
-      </div>
-      <div class="text-white bg-purple-darkest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darkest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['purple-darkest']) }}</span>
-      </div>
-    </div>
-  </div>
-  <div class="w-full md:w-1/2 lg:w-1/3 px-4 mb-8">
-    <div class="rounded overflow-hidden">
-      <div class="text-white bg-pink px-6 py-4 text-sm font-semibold relative shadow z-10">
-        <div class="uppercase mb-6">Pink</div>
-        <div class="flex justify-between">
-          <span>Base</span>
-          <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['pink']) }}</span>
-        </div>
-      </div>
-      <div class="text-pink-darkest bg-pink-lightest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lightest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['pink-lightest']) }}</span>
-      </div>
-      <div class="text-pink-darkest bg-pink-lighter px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Lighter</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['pink-lighter']) }}</span>
-      </div>
-      <div class="text-white bg-pink-light px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Light</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['pink-light']) }}</span>
-      </div>
-      <div class="text-white bg-pink px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Base</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['pink']) }}</span>
-      </div>
-      <div class="text-white bg-pink-dark px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Dark</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['pink-dark']) }}</span>
-      </div>
-      <div class="text-white bg-pink-darker px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darker</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['pink-darker']) }}</span>
-      </div>
-      <div class="text-white bg-pink-darkest px-6 py-3 text-sm font-semibold flex justify-between">
-        <span>Darkest</span>
-        <span class="font-normal opacity-75">{{ strtoupper($page->config['colors']['pink-darkest']) }}</span>
-      </div>
-    </div>
-  </div>
+<div>
+  @include('_partials.color-palette', [
+    'colorName' => 'Red',
+    'colors' => [
+      'Lightest' => [
+        'name' => 'red-lightest',
+        'fg' => 'red-darkest'
+      ],
+      'Lighter' => [
+        'name' => 'red-lighter',
+        'fg' => 'red-darkest'
+      ],
+      'Light' => [
+        'name' => 'red-light',
+        'fg' => 'white'
+      ],
+      'Base' => [
+        'name' => 'red',
+        'fg' => 'white'
+      ],
+      'Dark' => [
+        'name' => 'red-dark',
+        'fg' => 'white'
+      ],
+      'Darker' => [
+        'name' => 'red-darker',
+        'fg' => 'white'
+      ],
+      'Darkest' => [
+        'name' => 'red-darkest',
+        'fg' => 'white'
+      ],
+    ]
+  ])
+</div>
+
+<div>
+  @include('_partials.color-palette', [
+    'colorName' => 'Orange',
+    'colors' => [
+      'Lightest' => [
+        'name' => 'orange-lightest',
+        'fg' => 'orange-darkest'
+      ],
+      'Lighter' => [
+        'name' => 'orange-lighter',
+        'fg' => 'orange-darkest'
+      ],
+      'Light' => [
+        'name' => 'orange-light',
+        'fg' => 'orange-darkest'
+      ],
+      'Base' => [
+        'name' => 'orange',
+        'fg' => 'orange-darkest'
+      ],
+      'Dark' => [
+        'name' => 'orange-dark',
+        'fg' => 'white'
+      ],
+      'Darker' => [
+        'name' => 'orange-darker',
+        'fg' => 'white'
+      ],
+      'Darkest' => [
+        'name' => 'orange-darkest',
+        'fg' => 'white'
+      ],
+    ]
+  ])
+</div>
+
+<div>
+  @include('_partials.color-palette', [
+    'colorName' => 'Yellow',
+    'colors' => [
+      'Lightest' => [
+        'name' => 'yellow-lightest',
+        'fg' => 'yellow-darkest'
+      ],
+      'Lighter' => [
+        'name' => 'yellow-lighter',
+        'fg' => 'yellow-darkest'
+      ],
+      'Light' => [
+        'name' => 'yellow-light',
+        'fg' => 'yellow-darkest'
+      ],
+      'Base' => [
+        'name' => 'yellow',
+        'fg' => 'yellow-darkest'
+      ],
+      'Dark' => [
+        'name' => 'yellow-dark',
+        'fg' => 'yellow-darkest'
+      ],
+      'Darker' => [
+        'name' => 'yellow-darker',
+        'fg' => 'white'
+      ],
+      'Darkest' => [
+        'name' => 'yellow-darkest',
+        'fg' => 'white'
+      ],
+    ]
+  ])
+</div>
+
+<div>
+  @include('_partials.color-palette', [
+    'colorName' => 'Green',
+    'colors' => [
+      'Lightest' => [
+        'name' => 'green-lightest',
+        'fg' => 'green-darkest'
+      ],
+      'Lighter' => [
+        'name' => 'green-lighter',
+        'fg' => 'green-darkest'
+      ],
+      'Light' => [
+        'name' => 'green-light',
+        'fg' => 'green-darkest'
+      ],
+      'Base' => [
+        'name' => 'green',
+        'fg' => 'white'
+      ],
+      'Dark' => [
+        'name' => 'green-dark',
+        'fg' => 'white'
+      ],
+      'Darker' => [
+        'name' => 'green-darker',
+        'fg' => 'white'
+      ],
+      'Darkest' => [
+        'name' => 'green-darkest',
+        'fg' => 'white'
+      ],
+    ]
+  ])
+</div>
+
+<div>
+  @include('_partials.color-palette', [
+    'colorName' => 'Teal',
+    'colors' => [
+      'Lightest' => [
+        'name' => 'teal-lightest',
+        'fg' => 'teal-darkest'
+      ],
+      'Lighter' => [
+        'name' => 'teal-lighter',
+        'fg' => 'teal-darkest'
+      ],
+      'Light' => [
+        'name' => 'teal-light',
+        'fg' => 'teal-darkest'
+      ],
+      'Base' => [
+        'name' => 'teal',
+        'fg' => 'white'
+      ],
+      'Dark' => [
+        'name' => 'teal-dark',
+        'fg' => 'white'
+      ],
+      'Darker' => [
+        'name' => 'teal-darker',
+        'fg' => 'white'
+      ],
+      'Darkest' => [
+        'name' => 'teal-darkest',
+        'fg' => 'white'
+      ],
+    ]
+  ])
+</div>
+
+<div>
+  @include('_partials.color-palette', [
+    'colorName' => 'Blue',
+    'colors' => [
+      'Lightest' => [
+        'name' => 'blue-lightest',
+        'fg' => 'blue-darkest'
+      ],
+      'Lighter' => [
+        'name' => 'blue-lighter',
+        'fg' => 'blue-darkest'
+      ],
+      'Light' => [
+        'name' => 'blue-light',
+        'fg' => 'blue-darkest'
+      ],
+      'Base' => [
+        'name' => 'blue',
+        'fg' => 'white'
+      ],
+      'Dark' => [
+        'name' => 'blue-dark',
+        'fg' => 'white'
+      ],
+      'Darker' => [
+        'name' => 'blue-darker',
+        'fg' => 'white'
+      ],
+      'Darkest' => [
+        'name' => 'blue-darkest',
+        'fg' => 'white'
+      ],
+    ]
+  ])
+</div>
+
+<div>
+  @include('_partials.color-palette', [
+    'colorName' => 'Indigo',
+    'colors' => [
+      'Lightest' => [
+        'name' => 'indigo-lightest',
+        'fg' => 'indigo-darkest'
+      ],
+      'Lighter' => [
+        'name' => 'indigo-lighter',
+        'fg' => 'indigo-darkest'
+      ],
+      'Light' => [
+        'name' => 'indigo-light',
+        'fg' => 'white'
+      ],
+      'Base' => [
+        'name' => 'indigo',
+        'fg' => 'white'
+      ],
+      'Dark' => [
+        'name' => 'indigo-dark',
+        'fg' => 'white'
+      ],
+      'Darker' => [
+        'name' => 'indigo-darker',
+        'fg' => 'white'
+      ],
+      'Darkest' => [
+        'name' => 'indigo-darkest',
+        'fg' => 'white'
+      ],
+    ]
+  ])
+</div>
+
+<div>
+  @include('_partials.color-palette', [
+    'colorName' => 'Purple',
+    'colors' => [
+      'Lightest' => [
+        'name' => 'purple-lightest',
+        'fg' => 'purple-darkest'
+      ],
+      'Lighter' => [
+        'name' => 'purple-lighter',
+        'fg' => 'purple-darkest'
+      ],
+      'Light' => [
+        'name' => 'purple-light',
+        'fg' => 'white'
+      ],
+      'Base' => [
+        'name' => 'purple',
+        'fg' => 'white'
+      ],
+      'Dark' => [
+        'name' => 'purple-dark',
+        'fg' => 'white'
+      ],
+      'Darker' => [
+        'name' => 'purple-darker',
+        'fg' => 'white'
+      ],
+      'Darkest' => [
+        'name' => 'purple-darkest',
+        'fg' => 'white'
+      ],
+    ]
+  ])
+</div>
+
+<div>
+  @include('_partials.color-palette', [
+    'colorName' => 'Pink',
+    'colors' => [
+      'Lightest' => [
+        'name' => 'pink-lightest',
+        'fg' => 'pink-darkest'
+      ],
+      'Lighter' => [
+        'name' => 'pink-lighter',
+        'fg' => 'pink-darkest'
+      ],
+      'Light' => [
+        'name' => 'pink-light',
+        'fg' => 'white'
+      ],
+      'Base' => [
+        'name' => 'pink',
+        'fg' => 'white'
+      ],
+      'Dark' => [
+        'name' => 'pink-dark',
+        'fg' => 'white'
+      ],
+      'Darker' => [
+        'name' => 'pink-darker',
+        'fg' => 'white'
+      ],
+      'Darkest' => [
+        'name' => 'pink-darkest',
+        'fg' => 'white'
+      ],
+    ]
+  ])
 </div>
 
 ## Customizing
