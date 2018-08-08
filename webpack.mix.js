@@ -15,6 +15,7 @@ const plugins = [
         command.get('./vendor/bin/jigsaw build ' + env, (error, stdout, stderr) => {
             if (error) {
                 console.log(stderr)
+                process.exit(1)
             }
             console.log(stdout)
         })
