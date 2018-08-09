@@ -23,6 +23,19 @@ features:
   })->values()->all()
 ])
 
+## Usage
+
+Control the background color of an element using the `.bg-{color}` utilities.
+
+@component('_partials.code-sample', ['class' => 'text-center'])
+<button type="button" class="bg-blue text-white font-semibold px-4 py-2 rounded">
+  Button
+</button>
+@slot('code')
+<button class="bg-blue ...">Button</button>
+@endslot
+@endcomponent
+
 ## Responsive
 
 To control the background color of an element at a specific breakpoint, add a `{screen}:` prefix to any existing background color utility. For example, use `md:bg-green` to apply the `bg-green` utility at only medium screen sizes and above.
@@ -88,7 +101,7 @@ To control the background color of an element on focus, add the `focus:` prefix 
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="max-w-xs w-full mx-auto">
-  <input class="border border-grey-lighter bg-grey-lighter focus:bg-white focus:shadow-outline text-black appearance-none inline-block w-full text-black border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
+  <input class="border border-grey-light bg-grey-lighter focus:bg-white text-black appearance-none inline-block w-full border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
 </div>
 
 @slot('code')
