@@ -120,6 +120,21 @@ Focus utilities can also be combined with responsive utilities by adding the res
 
 ## Customizing
 
+### Text Colors
+
+By default Tailwind makes the entire [default color palette](/docs/colors#default-color-palette) available as text colors.
+
+You can [customize your color palette](/docs/colors#customizing) by editing the `colors` variable in your Tailwind config file, or customize just your text colors using the `textColors` section of your Tailwind config.
+
+@component('_partials.customized-config', ['key' => 'textColors'])
+- textColors: colors,
++ textColors: {
++   'primary': '#3490dc',
++   'secondary': '#ffed4a',
++   'danger': '#e3342f',
++ },
+@endcomponent
+
 @include('_partials.variants-and-disabling', [
     'utility' => [
         'name' => 'text color',
