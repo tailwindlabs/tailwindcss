@@ -356,6 +356,8 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
+### Border Radiuses
+
 By default Tailwind provides five border radius size utilities. You can change, add, or remove these by editing the `borderRadius` section of your Tailwind config.
 
 @component('_partials.customized-config', ['key' => 'borderRadius'])

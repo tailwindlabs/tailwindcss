@@ -61,6 +61,8 @@ Use `.font-mono` to apply a web safe monospaced font family:
 
 ## Customizing
 
+### Font Families
+
 By default Tailwind provides three font family utilities: a cross-browser sans-serif stack, a cross-browser serif stack, and a cross-browser monospaced stack. You can change, add, or remove these by editing the `fonts` section of your Tailwind config.
 
 @component('_partials.customized-config', ['key' => 'fonts'])
