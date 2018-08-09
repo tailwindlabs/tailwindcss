@@ -38,7 +38,7 @@ Control the border color of an element using the `.border-{color}` utilities.
 
 ## Responsive
 
-To control the background color of an element at a specific breakpoint, add a `{screen}:` prefix to any existing background color utility. For example, use `md:bg-green` to apply the `bg-green` utility at only medium screen sizes and above.
+To control the border color of an element at a specific breakpoint, add a `{screen}:` prefix to any existing border color utility. For example, use `md:border-green` to apply the `border-green` utility at only medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 

@@ -5,7 +5,7 @@
 
 <h2 style="visibility: hidden; font-size: 0; margin: 0;">Class reference</h2>
 <div class="border-t border-b border-grey-light overflow-hidden relative">
-  <div class="{{ $scroll ? 'max-h-sm pb-10' : '' }} overflow-y-auto">
+  <div class="{{ $scroll ? 'lg:max-h-sm' : '' }} overflow-y-auto scrollbar-w-2 scrollbar-track-grey-lighter scrollbar-thumb-rounded scrollbar-thumb-grey scrolling-touch">
     <table class="w-full text-left table-collapse">
       <thead>
         <tr>
@@ -23,9 +23,4 @@
       </tbody>
     </table>
   </div>
-  @if ($scroll)
-  <div class="bg-white opacity-50 text-center absolute pin-b pin-x py-2 flex justify-center shadow-md-light">
-      <svg class="h-6 w-6 fill-current text-grey-dark" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-  </div>
-  @endif
 </div>

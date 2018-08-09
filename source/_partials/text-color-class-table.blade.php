@@ -23,8 +23,8 @@
         <tr>
           <td class="p-2 {{ $loop->first ? '' : 'border-t border-grey-lighter' }} font-mono text-xs text-purple-dark whitespace-no-wrap">{!! $row[0] !!}</td>
           <td class="hidden sm:table-cell p-2 {{ $loop->first ? '' : 'border-t border-grey-lighter' }} font-mono text-xs text-blue-dark whitespace-pre">{!! $row[1] !!}</td>
-          <td class="relative w-16 p-2 {{ $loop->first ? '' : 'border-t border-grey-lighter' }} font-mono text-xs text-blue-dark whitespace-pre">
-            <div class="absolute pin m-2 border {{ substr($row[0], 1) }}"></div>
+          <td class="relative w-16 {{ $loop->first ? '' : 'border-t border-grey-lighter' }} text-base whitespace-no-wrap {{ substr($row[0], 1) }}">
+            Aa
           </td>
         </tr>
         @endforeach

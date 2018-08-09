@@ -23,7 +23,6 @@ features:
   })->values()->all()
 ])
 
-
 ## Responsive
 
 To control the background color of an element at a specific breakpoint, add a `{screen}:` prefix to any existing background color utility. For example, use `md:bg-green` to apply the `bg-green` utility at only medium screen sizes and above.

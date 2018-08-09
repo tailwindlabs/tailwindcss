@@ -25,6 +25,22 @@ ul:not(.default) {
 
 @tailwind utilities;
 
+.scrollbar-w-2::-webkit-scrollbar {
+  @apply w-2;
+}
+
+.scrollbar-track-grey-lighter::-webkit-scrollbar-track {
+  @apply bg-grey-lighter;
+}
+
+.scrollbar-thumb-grey::-webkit-scrollbar-thumb {
+  @apply bg-grey;
+}
+
+.scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
+  @apply rounded;
+}
+
 // Fucking hack because our order sucks
 .hidden {
   display: none;
