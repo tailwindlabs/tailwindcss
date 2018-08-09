@@ -26,7 +26,7 @@
       <div class="p-4 bg-grey-lightest border-b border-grey-light">
         <div class="whitespace-pre font-mono text-grey text-xs overflow-x-auto" v-html="highlightedCode"></div>
       </div>
-      <div class="bg-white p-4">
+      <div class="bg-white p-4" :class="slotClass">
         <slot v-if="activeScreen === 'none'" name="none"></slot>
         <slot v-if="activeScreen === 'sm'" name="sm"></slot>
         <slot v-if="activeScreen === 'md'" name="md"></slot>
@@ -41,7 +41,7 @@
 import escape from 'escape-html'
 
 export default {
-  props: ['code'],
+  props: ['code', 'slotClass'],
   data() {
     return {
       activeScreen: 'none',
