@@ -36,7 +36,7 @@
 @component('_partials.customized-config', ['key' => 'modules'])
   // ...
 - {{ $utility['property'] }}: {{$currentVariants}},
-+ {{ $utility['property'] }}: ['responsive', 'hover', 'focus'],
++ {{ $utility['property'] }}: ['responsive', 'hover', 'focus', 'active', 'group-hover'],
 @endcomponent
 
 @isset($extraMessage)
