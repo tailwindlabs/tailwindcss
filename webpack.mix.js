@@ -6,13 +6,14 @@ const Watch = require('webpack-watch')
 const tailwind = require('tailwindcss')
 const config = require('tailwindcss/defaultConfig')
 const fs = require('fs')
+const path = require('path')
 
 fs.writeFileSync('./tailwind.json', JSON.stringify(config()))
 
 const env = argv.e || argv.env || 'local'
 const plugins = [
     new OnBuild(() => {
-        command.get('./vendor/bin/jigsaw build ' + env, (error, stdout, stderr) => {
+        command.get(`${path.normalize('./vendor/bin/jigsaw build')} ${env}`, (error, stdout, stderr) => {
             if (error) {
                 console.log(stderr)
                 process.exit(1)
