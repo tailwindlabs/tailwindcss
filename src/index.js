@@ -41,6 +41,7 @@ const plugin = postcss.plugin('tailwind', config => {
       maxValueLength: false,
       trimLeadingZero: true,
       trimTrailingZeros: true,
+      zeroLengthNoUnit: false,
     }),
   ])
 })
