@@ -215,6 +215,43 @@ mix.sass('resources/assets/sass/app.scss', 'public/css')
 
 For more information on what this feature does and the implications of disabling it, [see the Laravel Mix documentation](https://github.com/JeffreyWay/laravel-mix/blob/master/docs/css-preprocessors.md#css-url-rewriting).
 
+#### Webpack Encore
+
+Create a `postcss.config.js` file, add `tailwindcss` as a plugin and pass the path to your config file:
+
+```js
+module.exports = {
+  plugins: [
+    require('tailwindcss')('./path/to/your/tailwind-config.js'),
+  ]
+}
+```
+
+Within `webpack.config.js`, create a style entry and enable the PostCSS loader.
+
+```js
+var Encore = require('@symfony/webpack-encore');
+
+Encore
+    .setOutputPath('public/build/')
+    .setPublicPath('/build')
+    .addStyleEntry('app', './assets/css/app.css')
+    .enablePostCssLoader()
+;
+
+module.exports = Encore.getWebpackConfig();
+```
+
+You can also pass options into the PostCSS loader by passing a callback, as per the [Encore PostCSS docs](https://symfony.com/doc/current/frontend/encore/postcss.html):
+
+```js
+.enablePostCssLoader(function(options) {
+    options.config = {
+        path: 'config/postcss.config.js'
+    };
+})
+```
+
 #### Brunch
 
 Add `tailwindcss` to the list of processors you pass to [postcss-brunch](https://github.com/brunch/postcss-brunch), passing the path to your config file:
