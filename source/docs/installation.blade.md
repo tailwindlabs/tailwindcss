@@ -142,6 +142,7 @@ Add `tailwindcss` as a plugin in your  `postcss.config.js` file, passing the pat
 
 ```js
 var tailwindcss = require('tailwindcss');
+
 module.exports = {
   plugins: [
     // ...
