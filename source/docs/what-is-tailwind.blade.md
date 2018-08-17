@@ -85,13 +85,13 @@ Tailwind provides tools for [extracting component classes](/docs/extracting-comp
 
 <style>
   .btn {
-    @apply&nbsp;.font-bold .py-2 .px-4 .rounded;
+    @apply&nbsp;font-bold py-2 px-4 rounded;
   }
   .btn-blue {
-    @apply&nbsp;.bg-blue .text-white;
+    @apply&nbsp;bg-blue text-white;
   }
   .btn-blue:hover {
-    @apply&nbsp;.bg-blue-dark;
+    @apply&nbsp;bg-blue-dark;
   }
 </style>
 @endslot
