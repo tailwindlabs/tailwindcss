@@ -473,14 +473,6 @@ img {
   height: auto;
 }
 
-button,
-input,
-optgroup,
-select,
-textarea {
-  font-family: inherit;
-}
-
 input::placeholder,
 textarea::placeholder {
   color: inherit;

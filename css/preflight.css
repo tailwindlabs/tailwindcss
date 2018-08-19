@@ -463,8 +463,6 @@ textarea { resize: vertical; }
 
 img { max-width: 100%; height: auto; }
 
-button, input, optgroup, select, textarea { font-family: inherit; }
-
 input::placeholder, textarea::placeholder {
   color: inherit;
   opacity: .5;
