@@ -459,16 +459,22 @@ button,
   border-radius: 0;
 }
 
-textarea { resize: vertical; }
-
-img { max-width: 100%; height: auto; }
-
-input::placeholder, textarea::placeholder {
-  color: inherit;
-  opacity: .5;
+textarea {
+  resize: vertical;
 }
 
-button, [role=button] {
+img {
+  max-width: 100%; height: auto;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: inherit;
+  opacity: 0.5;
+}
+
+button,
+[role=button] {
   cursor: pointer;
 }
 
