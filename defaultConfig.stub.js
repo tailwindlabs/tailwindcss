@@ -857,6 +857,21 @@ module.exports = {
     '4': '4',
   },
 
+    /*
+  |-----------------------------------------------------------------------------
+  | Column Rule Colors
+  |-----------------------------------------------------------------------------
+  |
+  | Here is where you define your column rule colors. By default these use
+  | the color palette we defined above, however you're welcome to set
+  | these independently if that makes sense for your project.
+  |
+  | Class name: .column-{color}
+  |
+  */
+
+  columnRuleColors: colors,
+
 
   /*
   |-----------------------------------------------------------------------------
@@ -891,6 +906,7 @@ module.exports = {
     borderWidths: ['responsive'],
     columnCount: ['responsive'],
     columnFill: ['responsive'],
+    columnRuleColors: ['responsive'],
     columnRuleStyle: ['responsive'],
     columnSpan: ['responsive'],
     cursor: ['responsive'],
