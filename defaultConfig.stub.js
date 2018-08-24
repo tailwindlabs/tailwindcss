@@ -872,6 +872,27 @@ module.exports = {
 
   columnRuleColors: colors,
 
+  /*
+  |-----------------------------------------------------------------------------
+  | Column Rule Width
+  |-----------------------------------------------------------------------------
+  |
+  | Here is where you define your column rule widths. Take note that column
+  | rule widths require a special "default" value set as well. This is the
+  | width that will be used when you do not specify a column rule width.
+  |
+  | Class name: .column-rule{-width?}
+  |
+  */
+
+  columnRuleWidths: {
+    default: '1px',
+    '0': '0',
+    '2': '2px',
+    '4': '4px',
+    '8': '8px',
+  },
+
 
   /*
   |-----------------------------------------------------------------------------
@@ -908,6 +929,7 @@ module.exports = {
     columnFill: ['responsive'],
     columnRuleColors: ['responsive'],
     columnRuleStyle: ['responsive'],
+    columnRuleWidths: ['responsive'],
     columnSpan: ['responsive'],
     cursor: ['responsive'],
     display: ['responsive'],

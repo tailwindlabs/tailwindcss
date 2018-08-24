@@ -14,6 +14,7 @@ import columnCount from './generators/columnCount'
 import columnFill from './generators/columnFill'
 import columnRuleColors from './generators/columnRuleColors'
 import columnRuleStyle from './generators/columnRuleStyle'
+import columnRuleWidths from './generators/columnRuleWidths'
 import columnSpan from './generators/columnSpan'
 import cursor from './generators/cursor'
 import display from './generators/display'
@@ -69,6 +70,7 @@ export default [
   { name: 'columnFill', generator: columnFill },
   { name: 'columnRuleColors', generator: columnRuleColors },
   { name: 'columnRuleStyle', generator: columnRuleStyle },
+  { name: 'columnRuleWidths', generator: columnRuleWidths },
   { name: 'columnSpan', generator: columnSpan },
   { name: 'cursor', generator: cursor },
   { name: 'display', generator: display },
