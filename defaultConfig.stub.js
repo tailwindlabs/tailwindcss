@@ -890,6 +890,7 @@ module.exports = {
     borderStyle: ['responsive'],
     borderWidths: ['responsive'],
     columnCount: ['responsive'],
+    columnFill: ['responsive'],
     columnRuleStyle: ['responsive'],
     columnSpan: ['responsive'],
     cursor: ['responsive'],
