@@ -891,6 +891,7 @@ module.exports = {
     borderWidths: ['responsive'],
     columnCount: ['responsive'],
     columnRuleStyle: ['responsive'],
+    columnSpan: ['responsive'],
     cursor: ['responsive'],
     display: ['responsive'],
     flexbox: ['responsive'],

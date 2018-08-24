@@ -12,6 +12,7 @@ import borderStyle from './generators/borderStyle'
 import borderWidths from './generators/borderWidths'
 import columnCount from './generators/columnCount'
 import columnRuleStyle from './generators/columnRuleStyle'
+import columnSpan from './generators/columnSpan'
 import cursor from './generators/cursor'
 import display from './generators/display'
 import flexbox from './generators/flexbox'
@@ -64,6 +65,7 @@ export default [
   { name: 'borderWidths', generator: borderWidths },
   { name: 'columnCount', generator: columnCount },
   { name: 'columnRuleStyle', generator: columnRuleStyle },
+  { name: 'columnSpan', generator: columnSpan },
   { name: 'cursor', generator: cursor },
   { name: 'display', generator: display },
   { name: 'flexbox', generator: flexbox },
