@@ -857,6 +857,36 @@ module.exports = {
     '4': '4',
   },
 
+
+  /*
+  |-----------------------------------------------------------------------------
+  | Column Widths
+  |-----------------------------------------------------------------------------
+  |
+  | Here is where you define your column width utility sizes. These can be
+  | percentage based, pixels, rems, or any other units. By default
+  | we provide a sensible percentage based fraction scale.  You
+  | can, of course, modify these values as needed.
+  |
+  |
+  | It's also worth mentioning that Tailwind automatically escapes
+  | invalid CSS class name characters, which allows you to have
+  | awesome classes like .column-w-2/3.
+  |
+  | Class name: .column-w-{size}
+  |
+  */
+
+  columnWidth: {
+    'auto': 'auto',
+    '1/2': '50%',
+    '1/3': '33.33333%',
+    '1/4': '25%',
+    '1/5': '20%',
+    '1/6': '16.66667%',
+  },
+  
+
     /*
   |-----------------------------------------------------------------------------
   | Column Rule Colors
@@ -927,6 +957,7 @@ module.exports = {
     borderWidths: ['responsive'],
     columnCount: ['responsive'],
     columnFill: ['responsive'],
+    columnWidth: ['responsive'],
     columnRuleColors: ['responsive'],
     columnRuleStyle: ['responsive'],
     columnRuleWidths: ['responsive'],
