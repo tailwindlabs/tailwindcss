@@ -839,6 +839,24 @@ module.exports = {
     'current': 'currentColor',
   },
 
+  /*
+  |-----------------------------------------------------------------------------
+  | Column Count
+  |-----------------------------------------------------------------------------
+  |
+  | Here is where you define your column count values
+  |
+  | Class name: .column-{count}
+  |
+  */
+
+  columnCount  : {
+    '0': 'initial',
+    '2': '2',
+    '3': '3',
+    '4': '4',
+  },
+
 
   /*
   |-----------------------------------------------------------------------------
@@ -871,6 +889,7 @@ module.exports = {
     borderRadius: ['responsive'],
     borderStyle: ['responsive'],
     borderWidths: ['responsive'],
+    columnCount: ['responsive'],
     columnRuleStyle: ['responsive'],
     cursor: ['responsive'],
     display: ['responsive'],
