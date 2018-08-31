@@ -1,14 +1,10 @@
 import _ from 'lodash'
 import defineClass from '../util/defineClass'
 
-function defineWidths(widths) {
+export default function({ widths }) {
   return _.map(widths, (size, modifer) => {
     return defineClass(`column-w-${modifer}`, {
       'column-width': `${size}`,
     })
   })
-}
-
-export default function(config) {
-  return _.flatten([defineWidths(config.columnWidth)])
 }
