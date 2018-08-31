@@ -847,7 +847,7 @@ module.exports = {
   |
   | Here is where you define your column count values
   |
-  | Class name: .column-{count}
+  | Class name: .col-{count}
   |
   */
 
@@ -874,7 +874,7 @@ module.exports = {
   | invalid CSS class name characters, which allows you to have
   | awesome classes like .column-w-2/3.
   |
-  | Class name: .column-w-{size}
+  | Class name: .col-w-{size}
   |
   */
 
@@ -897,7 +897,7 @@ module.exports = {
   | the color palette we defined above, however you're welcome to set
   | these independently if that makes sense for your project.
   |
-  | Class name: .column-{color}
+  | Class name: .col-{color}
   |
   */
 
@@ -913,7 +913,7 @@ module.exports = {
   | rule widths require a special "default" value set as well. This is the
   | width that will be used when you do not specify a column rule width.
   |
-  | Class name: .column-rule{-width?}
+  | Class name: .col-rule{-width?}
   |
   */
 

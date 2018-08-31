@@ -2794,6 +2794,370 @@ table {
   border-left-width: 1px;
 }
 
+.col-0 {
+  column-count: initial;
+}
+
+.col-2 {
+  column-count: 2;
+}
+
+.col-3 {
+  column-count: 3;
+}
+
+.col-4 {
+  column-count: 4;
+}
+
+.col-auto {
+  column-fill: auto;
+}
+
+.col-balance {
+  column-fill: balance;
+}
+
+.col-balance-all {
+  column-fill: balance-all;
+}
+
+.col-transparent {
+  column-rule-color: transparent;
+}
+
+.col-black {
+  column-rule-color: #22292f;
+}
+
+.col-grey-darkest {
+  column-rule-color: #3d4852;
+}
+
+.col-grey-darker {
+  column-rule-color: #606f7b;
+}
+
+.col-grey-dark {
+  column-rule-color: #8795a1;
+}
+
+.col-grey {
+  column-rule-color: #b8c2cc;
+}
+
+.col-grey-light {
+  column-rule-color: #dae1e7;
+}
+
+.col-grey-lighter {
+  column-rule-color: #f1f5f8;
+}
+
+.col-grey-lightest {
+  column-rule-color: #f8fafc;
+}
+
+.col-white {
+  column-rule-color: #fff;
+}
+
+.col-red-darkest {
+  column-rule-color: #3b0d0c;
+}
+
+.col-red-darker {
+  column-rule-color: #621b18;
+}
+
+.col-red-dark {
+  column-rule-color: #cc1f1a;
+}
+
+.col-red {
+  column-rule-color: #e3342f;
+}
+
+.col-red-light {
+  column-rule-color: #ef5753;
+}
+
+.col-red-lighter {
+  column-rule-color: #f9acaa;
+}
+
+.col-red-lightest {
+  column-rule-color: #fcebea;
+}
+
+.col-orange-darkest {
+  column-rule-color: #462a16;
+}
+
+.col-orange-darker {
+  column-rule-color: #613b1f;
+}
+
+.col-orange-dark {
+  column-rule-color: #de751f;
+}
+
+.col-orange {
+  column-rule-color: #f6993f;
+}
+
+.col-orange-light {
+  column-rule-color: #faad63;
+}
+
+.col-orange-lighter {
+  column-rule-color: #fcd9b6;
+}
+
+.col-orange-lightest {
+  column-rule-color: #fff5eb;
+}
+
+.col-yellow-darkest {
+  column-rule-color: #453411;
+}
+
+.col-yellow-darker {
+  column-rule-color: #684f1d;
+}
+
+.col-yellow-dark {
+  column-rule-color: #f2d024;
+}
+
+.col-yellow {
+  column-rule-color: #ffed4a;
+}
+
+.col-yellow-light {
+  column-rule-color: #fff382;
+}
+
+.col-yellow-lighter {
+  column-rule-color: #fff9c2;
+}
+
+.col-yellow-lightest {
+  column-rule-color: #fcfbeb;
+}
+
+.col-green-darkest {
+  column-rule-color: #0f2f21;
+}
+
+.col-green-darker {
+  column-rule-color: #1a4731;
+}
+
+.col-green-dark {
+  column-rule-color: #1f9d55;
+}
+
+.col-green {
+  column-rule-color: #38c172;
+}
+
+.col-green-light {
+  column-rule-color: #51d88a;
+}
+
+.col-green-lighter {
+  column-rule-color: #a2f5bf;
+}
+
+.col-green-lightest {
+  column-rule-color: #e3fcec;
+}
+
+.col-teal-darkest {
+  column-rule-color: #0d3331;
+}
+
+.col-teal-darker {
+  column-rule-color: #20504f;
+}
+
+.col-teal-dark {
+  column-rule-color: #38a89d;
+}
+
+.col-teal {
+  column-rule-color: #4dc0b5;
+}
+
+.col-teal-light {
+  column-rule-color: #64d5ca;
+}
+
+.col-teal-lighter {
+  column-rule-color: #a0f0ed;
+}
+
+.col-teal-lightest {
+  column-rule-color: #e8fffe;
+}
+
+.col-blue-darkest {
+  column-rule-color: #12283a;
+}
+
+.col-blue-darker {
+  column-rule-color: #1c3d5a;
+}
+
+.col-blue-dark {
+  column-rule-color: #2779bd;
+}
+
+.col-blue {
+  column-rule-color: #3490dc;
+}
+
+.col-blue-light {
+  column-rule-color: #6cb2eb;
+}
+
+.col-blue-lighter {
+  column-rule-color: #bcdefa;
+}
+
+.col-blue-lightest {
+  column-rule-color: #eff8ff;
+}
+
+.col-indigo-darkest {
+  column-rule-color: #191e38;
+}
+
+.col-indigo-darker {
+  column-rule-color: #2f365f;
+}
+
+.col-indigo-dark {
+  column-rule-color: #5661b3;
+}
+
+.col-indigo {
+  column-rule-color: #6574cd;
+}
+
+.col-indigo-light {
+  column-rule-color: #7886d7;
+}
+
+.col-indigo-lighter {
+  column-rule-color: #b2b7ff;
+}
+
+.col-indigo-lightest {
+  column-rule-color: #e6e8ff;
+}
+
+.col-purple-darkest {
+  column-rule-color: #21183c;
+}
+
+.col-purple-darker {
+  column-rule-color: #382b5f;
+}
+
+.col-purple-dark {
+  column-rule-color: #794acf;
+}
+
+.col-purple {
+  column-rule-color: #9561e2;
+}
+
+.col-purple-light {
+  column-rule-color: #a779e9;
+}
+
+.col-purple-lighter {
+  column-rule-color: #d6bbfc;
+}
+
+.col-purple-lightest {
+  column-rule-color: #f3ebff;
+}
+
+.col-pink-darkest {
+  column-rule-color: #451225;
+}
+
+.col-pink-darker {
+  column-rule-color: #6f213f;
+}
+
+.col-pink-dark {
+  column-rule-color: #eb5286;
+}
+
+.col-pink {
+  column-rule-color: #f66d9b;
+}
+
+.col-pink-light {
+  column-rule-color: #fa7ea8;
+}
+
+.col-pink-lighter {
+  column-rule-color: #ffbbca;
+}
+
+.col-pink-lightest {
+  column-rule-color: #ffebef;
+}
+
+.col-solid {
+  column-rule-style: solid;
+}
+
+.col-dashed {
+  column-rule-style: dashed;
+}
+
+.col-dotted {
+  column-rule-style: dotted;
+}
+
+.col-none {
+  column-rule-style: none;
+}
+
+.col-rule-0 {
+  column-rule-width: 0;
+}
+
+.col-rule-2 {
+  column-rule-width: 2px;
+}
+
+.col-rule-4 {
+  column-rule-width: 4px;
+}
+
+.col-rule-8 {
+  column-rule-width: 8px;
+}
+
+.col-rule {
+  column-rule-width: 1px;
+}
+
+.col-span-all {
+  column-span: all;
+}
+
+.col-span-none {
+  column-span: none;
+}
+
 .cursor-auto {
   cursor: auto;
 }
@@ -8379,6 +8743,370 @@ table {
     border-left-width: 1px;
   }
 
+  .sm\:col-0 {
+    column-count: initial;
+  }
+
+  .sm\:col-2 {
+    column-count: 2;
+  }
+
+  .sm\:col-3 {
+    column-count: 3;
+  }
+
+  .sm\:col-4 {
+    column-count: 4;
+  }
+
+  .sm\:col-auto {
+    column-fill: auto;
+  }
+
+  .sm\:col-balance {
+    column-fill: balance;
+  }
+
+  .sm\:col-balance-all {
+    column-fill: balance-all;
+  }
+
+  .sm\:col-transparent {
+    column-rule-color: transparent;
+  }
+
+  .sm\:col-black {
+    column-rule-color: #22292f;
+  }
+
+  .sm\:col-grey-darkest {
+    column-rule-color: #3d4852;
+  }
+
+  .sm\:col-grey-darker {
+    column-rule-color: #606f7b;
+  }
+
+  .sm\:col-grey-dark {
+    column-rule-color: #8795a1;
+  }
+
+  .sm\:col-grey {
+    column-rule-color: #b8c2cc;
+  }
+
+  .sm\:col-grey-light {
+    column-rule-color: #dae1e7;
+  }
+
+  .sm\:col-grey-lighter {
+    column-rule-color: #f1f5f8;
+  }
+
+  .sm\:col-grey-lightest {
+    column-rule-color: #f8fafc;
+  }
+
+  .sm\:col-white {
+    column-rule-color: #fff;
+  }
+
+  .sm\:col-red-darkest {
+    column-rule-color: #3b0d0c;
+  }
+
+  .sm\:col-red-darker {
+    column-rule-color: #621b18;
+  }
+
+  .sm\:col-red-dark {
+    column-rule-color: #cc1f1a;
+  }
+
+  .sm\:col-red {
+    column-rule-color: #e3342f;
+  }
+
+  .sm\:col-red-light {
+    column-rule-color: #ef5753;
+  }
+
+  .sm\:col-red-lighter {
+    column-rule-color: #f9acaa;
+  }
+
+  .sm\:col-red-lightest {
+    column-rule-color: #fcebea;
+  }
+
+  .sm\:col-orange-darkest {
+    column-rule-color: #462a16;
+  }
+
+  .sm\:col-orange-darker {
+    column-rule-color: #613b1f;
+  }
+
+  .sm\:col-orange-dark {
+    column-rule-color: #de751f;
+  }
+
+  .sm\:col-orange {
+    column-rule-color: #f6993f;
+  }
+
+  .sm\:col-orange-light {
+    column-rule-color: #faad63;
+  }
+
+  .sm\:col-orange-lighter {
+    column-rule-color: #fcd9b6;
+  }
+
+  .sm\:col-orange-lightest {
+    column-rule-color: #fff5eb;
+  }
+
+  .sm\:col-yellow-darkest {
+    column-rule-color: #453411;
+  }
+
+  .sm\:col-yellow-darker {
+    column-rule-color: #684f1d;
+  }
+
+  .sm\:col-yellow-dark {
+    column-rule-color: #f2d024;
+  }
+
+  .sm\:col-yellow {
+    column-rule-color: #ffed4a;
+  }
+
+  .sm\:col-yellow-light {
+    column-rule-color: #fff382;
+  }
+
+  .sm\:col-yellow-lighter {
+    column-rule-color: #fff9c2;
+  }
+
+  .sm\:col-yellow-lightest {
+    column-rule-color: #fcfbeb;
+  }
+
+  .sm\:col-green-darkest {
+    column-rule-color: #0f2f21;
+  }
+
+  .sm\:col-green-darker {
+    column-rule-color: #1a4731;
+  }
+
+  .sm\:col-green-dark {
+    column-rule-color: #1f9d55;
+  }
+
+  .sm\:col-green {
+    column-rule-color: #38c172;
+  }
+
+  .sm\:col-green-light {
+    column-rule-color: #51d88a;
+  }
+
+  .sm\:col-green-lighter {
+    column-rule-color: #a2f5bf;
+  }
+
+  .sm\:col-green-lightest {
+    column-rule-color: #e3fcec;
+  }
+
+  .sm\:col-teal-darkest {
+    column-rule-color: #0d3331;
+  }
+
+  .sm\:col-teal-darker {
+    column-rule-color: #20504f;
+  }
+
+  .sm\:col-teal-dark {
+    column-rule-color: #38a89d;
+  }
+
+  .sm\:col-teal {
+    column-rule-color: #4dc0b5;
+  }
+
+  .sm\:col-teal-light {
+    column-rule-color: #64d5ca;
+  }
+
+  .sm\:col-teal-lighter {
+    column-rule-color: #a0f0ed;
+  }
+
+  .sm\:col-teal-lightest {
+    column-rule-color: #e8fffe;
+  }
+
+  .sm\:col-blue-darkest {
+    column-rule-color: #12283a;
+  }
+
+  .sm\:col-blue-darker {
+    column-rule-color: #1c3d5a;
+  }
+
+  .sm\:col-blue-dark {
+    column-rule-color: #2779bd;
+  }
+
+  .sm\:col-blue {
+    column-rule-color: #3490dc;
+  }
+
+  .sm\:col-blue-light {
+    column-rule-color: #6cb2eb;
+  }
+
+  .sm\:col-blue-lighter {
+    column-rule-color: #bcdefa;
+  }
+
+  .sm\:col-blue-lightest {
+    column-rule-color: #eff8ff;
+  }
+
+  .sm\:col-indigo-darkest {
+    column-rule-color: #191e38;
+  }
+
+  .sm\:col-indigo-darker {
+    column-rule-color: #2f365f;
+  }
+
+  .sm\:col-indigo-dark {
+    column-rule-color: #5661b3;
+  }
+
+  .sm\:col-indigo {
+    column-rule-color: #6574cd;
+  }
+
+  .sm\:col-indigo-light {
+    column-rule-color: #7886d7;
+  }
+
+  .sm\:col-indigo-lighter {
+    column-rule-color: #b2b7ff;
+  }
+
+  .sm\:col-indigo-lightest {
+    column-rule-color: #e6e8ff;
+  }
+
+  .sm\:col-purple-darkest {
+    column-rule-color: #21183c;
+  }
+
+  .sm\:col-purple-darker {
+    column-rule-color: #382b5f;
+  }
+
+  .sm\:col-purple-dark {
+    column-rule-color: #794acf;
+  }
+
+  .sm\:col-purple {
+    column-rule-color: #9561e2;
+  }
+
+  .sm\:col-purple-light {
+    column-rule-color: #a779e9;
+  }
+
+  .sm\:col-purple-lighter {
+    column-rule-color: #d6bbfc;
+  }
+
+  .sm\:col-purple-lightest {
+    column-rule-color: #f3ebff;
+  }
+
+  .sm\:col-pink-darkest {
+    column-rule-color: #451225;
+  }
+
+  .sm\:col-pink-darker {
+    column-rule-color: #6f213f;
+  }
+
+  .sm\:col-pink-dark {
+    column-rule-color: #eb5286;
+  }
+
+  .sm\:col-pink {
+    column-rule-color: #f66d9b;
+  }
+
+  .sm\:col-pink-light {
+    column-rule-color: #fa7ea8;
+  }
+
+  .sm\:col-pink-lighter {
+    column-rule-color: #ffbbca;
+  }
+
+  .sm\:col-pink-lightest {
+    column-rule-color: #ffebef;
+  }
+
+  .sm\:col-solid {
+    column-rule-style: solid;
+  }
+
+  .sm\:col-dashed {
+    column-rule-style: dashed;
+  }
+
+  .sm\:col-dotted {
+    column-rule-style: dotted;
+  }
+
+  .sm\:col-none {
+    column-rule-style: none;
+  }
+
+  .sm\:col-rule-0 {
+    column-rule-width: 0;
+  }
+
+  .sm\:col-rule-2 {
+    column-rule-width: 2px;
+  }
+
+  .sm\:col-rule-4 {
+    column-rule-width: 4px;
+  }
+
+  .sm\:col-rule-8 {
+    column-rule-width: 8px;
+  }
+
+  .sm\:col-rule {
+    column-rule-width: 1px;
+  }
+
+  .sm\:col-span-all {
+    column-span: all;
+  }
+
+  .sm\:col-span-none {
+    column-span: none;
+  }
+
   .sm\:cursor-auto {
     cursor: auto;
   }
@@ -13947,6 +14675,370 @@ table {
 
   .md\:border-l {
     border-left-width: 1px;
+  }
+
+  .md\:col-0 {
+    column-count: initial;
+  }
+
+  .md\:col-2 {
+    column-count: 2;
+  }
+
+  .md\:col-3 {
+    column-count: 3;
+  }
+
+  .md\:col-4 {
+    column-count: 4;
+  }
+
+  .md\:col-auto {
+    column-fill: auto;
+  }
+
+  .md\:col-balance {
+    column-fill: balance;
+  }
+
+  .md\:col-balance-all {
+    column-fill: balance-all;
+  }
+
+  .md\:col-transparent {
+    column-rule-color: transparent;
+  }
+
+  .md\:col-black {
+    column-rule-color: #22292f;
+  }
+
+  .md\:col-grey-darkest {
+    column-rule-color: #3d4852;
+  }
+
+  .md\:col-grey-darker {
+    column-rule-color: #606f7b;
+  }
+
+  .md\:col-grey-dark {
+    column-rule-color: #8795a1;
+  }
+
+  .md\:col-grey {
+    column-rule-color: #b8c2cc;
+  }
+
+  .md\:col-grey-light {
+    column-rule-color: #dae1e7;
+  }
+
+  .md\:col-grey-lighter {
+    column-rule-color: #f1f5f8;
+  }
+
+  .md\:col-grey-lightest {
+    column-rule-color: #f8fafc;
+  }
+
+  .md\:col-white {
+    column-rule-color: #fff;
+  }
+
+  .md\:col-red-darkest {
+    column-rule-color: #3b0d0c;
+  }
+
+  .md\:col-red-darker {
+    column-rule-color: #621b18;
+  }
+
+  .md\:col-red-dark {
+    column-rule-color: #cc1f1a;
+  }
+
+  .md\:col-red {
+    column-rule-color: #e3342f;
+  }
+
+  .md\:col-red-light {
+    column-rule-color: #ef5753;
+  }
+
+  .md\:col-red-lighter {
+    column-rule-color: #f9acaa;
+  }
+
+  .md\:col-red-lightest {
+    column-rule-color: #fcebea;
+  }
+
+  .md\:col-orange-darkest {
+    column-rule-color: #462a16;
+  }
+
+  .md\:col-orange-darker {
+    column-rule-color: #613b1f;
+  }
+
+  .md\:col-orange-dark {
+    column-rule-color: #de751f;
+  }
+
+  .md\:col-orange {
+    column-rule-color: #f6993f;
+  }
+
+  .md\:col-orange-light {
+    column-rule-color: #faad63;
+  }
+
+  .md\:col-orange-lighter {
+    column-rule-color: #fcd9b6;
+  }
+
+  .md\:col-orange-lightest {
+    column-rule-color: #fff5eb;
+  }
+
+  .md\:col-yellow-darkest {
+    column-rule-color: #453411;
+  }
+
+  .md\:col-yellow-darker {
+    column-rule-color: #684f1d;
+  }
+
+  .md\:col-yellow-dark {
+    column-rule-color: #f2d024;
+  }
+
+  .md\:col-yellow {
+    column-rule-color: #ffed4a;
+  }
+
+  .md\:col-yellow-light {
+    column-rule-color: #fff382;
+  }
+
+  .md\:col-yellow-lighter {
+    column-rule-color: #fff9c2;
+  }
+
+  .md\:col-yellow-lightest {
+    column-rule-color: #fcfbeb;
+  }
+
+  .md\:col-green-darkest {
+    column-rule-color: #0f2f21;
+  }
+
+  .md\:col-green-darker {
+    column-rule-color: #1a4731;
+  }
+
+  .md\:col-green-dark {
+    column-rule-color: #1f9d55;
+  }
+
+  .md\:col-green {
+    column-rule-color: #38c172;
+  }
+
+  .md\:col-green-light {
+    column-rule-color: #51d88a;
+  }
+
+  .md\:col-green-lighter {
+    column-rule-color: #a2f5bf;
+  }
+
+  .md\:col-green-lightest {
+    column-rule-color: #e3fcec;
+  }
+
+  .md\:col-teal-darkest {
+    column-rule-color: #0d3331;
+  }
+
+  .md\:col-teal-darker {
+    column-rule-color: #20504f;
+  }
+
+  .md\:col-teal-dark {
+    column-rule-color: #38a89d;
+  }
+
+  .md\:col-teal {
+    column-rule-color: #4dc0b5;
+  }
+
+  .md\:col-teal-light {
+    column-rule-color: #64d5ca;
+  }
+
+  .md\:col-teal-lighter {
+    column-rule-color: #a0f0ed;
+  }
+
+  .md\:col-teal-lightest {
+    column-rule-color: #e8fffe;
+  }
+
+  .md\:col-blue-darkest {
+    column-rule-color: #12283a;
+  }
+
+  .md\:col-blue-darker {
+    column-rule-color: #1c3d5a;
+  }
+
+  .md\:col-blue-dark {
+    column-rule-color: #2779bd;
+  }
+
+  .md\:col-blue {
+    column-rule-color: #3490dc;
+  }
+
+  .md\:col-blue-light {
+    column-rule-color: #6cb2eb;
+  }
+
+  .md\:col-blue-lighter {
+    column-rule-color: #bcdefa;
+  }
+
+  .md\:col-blue-lightest {
+    column-rule-color: #eff8ff;
+  }
+
+  .md\:col-indigo-darkest {
+    column-rule-color: #191e38;
+  }
+
+  .md\:col-indigo-darker {
+    column-rule-color: #2f365f;
+  }
+
+  .md\:col-indigo-dark {
+    column-rule-color: #5661b3;
+  }
+
+  .md\:col-indigo {
+    column-rule-color: #6574cd;
+  }
+
+  .md\:col-indigo-light {
+    column-rule-color: #7886d7;
+  }
+
+  .md\:col-indigo-lighter {
+    column-rule-color: #b2b7ff;
+  }
+
+  .md\:col-indigo-lightest {
+    column-rule-color: #e6e8ff;
+  }
+
+  .md\:col-purple-darkest {
+    column-rule-color: #21183c;
+  }
+
+  .md\:col-purple-darker {
+    column-rule-color: #382b5f;
+  }
+
+  .md\:col-purple-dark {
+    column-rule-color: #794acf;
+  }
+
+  .md\:col-purple {
+    column-rule-color: #9561e2;
+  }
+
+  .md\:col-purple-light {
+    column-rule-color: #a779e9;
+  }
+
+  .md\:col-purple-lighter {
+    column-rule-color: #d6bbfc;
+  }
+
+  .md\:col-purple-lightest {
+    column-rule-color: #f3ebff;
+  }
+
+  .md\:col-pink-darkest {
+    column-rule-color: #451225;
+  }
+
+  .md\:col-pink-darker {
+    column-rule-color: #6f213f;
+  }
+
+  .md\:col-pink-dark {
+    column-rule-color: #eb5286;
+  }
+
+  .md\:col-pink {
+    column-rule-color: #f66d9b;
+  }
+
+  .md\:col-pink-light {
+    column-rule-color: #fa7ea8;
+  }
+
+  .md\:col-pink-lighter {
+    column-rule-color: #ffbbca;
+  }
+
+  .md\:col-pink-lightest {
+    column-rule-color: #ffebef;
+  }
+
+  .md\:col-solid {
+    column-rule-style: solid;
+  }
+
+  .md\:col-dashed {
+    column-rule-style: dashed;
+  }
+
+  .md\:col-dotted {
+    column-rule-style: dotted;
+  }
+
+  .md\:col-none {
+    column-rule-style: none;
+  }
+
+  .md\:col-rule-0 {
+    column-rule-width: 0;
+  }
+
+  .md\:col-rule-2 {
+    column-rule-width: 2px;
+  }
+
+  .md\:col-rule-4 {
+    column-rule-width: 4px;
+  }
+
+  .md\:col-rule-8 {
+    column-rule-width: 8px;
+  }
+
+  .md\:col-rule {
+    column-rule-width: 1px;
+  }
+
+  .md\:col-span-all {
+    column-span: all;
+  }
+
+  .md\:col-span-none {
+    column-span: none;
   }
 
   .md\:cursor-auto {
@@ -19519,6 +20611,370 @@ table {
     border-left-width: 1px;
   }
 
+  .lg\:col-0 {
+    column-count: initial;
+  }
+
+  .lg\:col-2 {
+    column-count: 2;
+  }
+
+  .lg\:col-3 {
+    column-count: 3;
+  }
+
+  .lg\:col-4 {
+    column-count: 4;
+  }
+
+  .lg\:col-auto {
+    column-fill: auto;
+  }
+
+  .lg\:col-balance {
+    column-fill: balance;
+  }
+
+  .lg\:col-balance-all {
+    column-fill: balance-all;
+  }
+
+  .lg\:col-transparent {
+    column-rule-color: transparent;
+  }
+
+  .lg\:col-black {
+    column-rule-color: #22292f;
+  }
+
+  .lg\:col-grey-darkest {
+    column-rule-color: #3d4852;
+  }
+
+  .lg\:col-grey-darker {
+    column-rule-color: #606f7b;
+  }
+
+  .lg\:col-grey-dark {
+    column-rule-color: #8795a1;
+  }
+
+  .lg\:col-grey {
+    column-rule-color: #b8c2cc;
+  }
+
+  .lg\:col-grey-light {
+    column-rule-color: #dae1e7;
+  }
+
+  .lg\:col-grey-lighter {
+    column-rule-color: #f1f5f8;
+  }
+
+  .lg\:col-grey-lightest {
+    column-rule-color: #f8fafc;
+  }
+
+  .lg\:col-white {
+    column-rule-color: #fff;
+  }
+
+  .lg\:col-red-darkest {
+    column-rule-color: #3b0d0c;
+  }
+
+  .lg\:col-red-darker {
+    column-rule-color: #621b18;
+  }
+
+  .lg\:col-red-dark {
+    column-rule-color: #cc1f1a;
+  }
+
+  .lg\:col-red {
+    column-rule-color: #e3342f;
+  }
+
+  .lg\:col-red-light {
+    column-rule-color: #ef5753;
+  }
+
+  .lg\:col-red-lighter {
+    column-rule-color: #f9acaa;
+  }
+
+  .lg\:col-red-lightest {
+    column-rule-color: #fcebea;
+  }
+
+  .lg\:col-orange-darkest {
+    column-rule-color: #462a16;
+  }
+
+  .lg\:col-orange-darker {
+    column-rule-color: #613b1f;
+  }
+
+  .lg\:col-orange-dark {
+    column-rule-color: #de751f;
+  }
+
+  .lg\:col-orange {
+    column-rule-color: #f6993f;
+  }
+
+  .lg\:col-orange-light {
+    column-rule-color: #faad63;
+  }
+
+  .lg\:col-orange-lighter {
+    column-rule-color: #fcd9b6;
+  }
+
+  .lg\:col-orange-lightest {
+    column-rule-color: #fff5eb;
+  }
+
+  .lg\:col-yellow-darkest {
+    column-rule-color: #453411;
+  }
+
+  .lg\:col-yellow-darker {
+    column-rule-color: #684f1d;
+  }
+
+  .lg\:col-yellow-dark {
+    column-rule-color: #f2d024;
+  }
+
+  .lg\:col-yellow {
+    column-rule-color: #ffed4a;
+  }
+
+  .lg\:col-yellow-light {
+    column-rule-color: #fff382;
+  }
+
+  .lg\:col-yellow-lighter {
+    column-rule-color: #fff9c2;
+  }
+
+  .lg\:col-yellow-lightest {
+    column-rule-color: #fcfbeb;
+  }
+
+  .lg\:col-green-darkest {
+    column-rule-color: #0f2f21;
+  }
+
+  .lg\:col-green-darker {
+    column-rule-color: #1a4731;
+  }
+
+  .lg\:col-green-dark {
+    column-rule-color: #1f9d55;
+  }
+
+  .lg\:col-green {
+    column-rule-color: #38c172;
+  }
+
+  .lg\:col-green-light {
+    column-rule-color: #51d88a;
+  }
+
+  .lg\:col-green-lighter {
+    column-rule-color: #a2f5bf;
+  }
+
+  .lg\:col-green-lightest {
+    column-rule-color: #e3fcec;
+  }
+
+  .lg\:col-teal-darkest {
+    column-rule-color: #0d3331;
+  }
+
+  .lg\:col-teal-darker {
+    column-rule-color: #20504f;
+  }
+
+  .lg\:col-teal-dark {
+    column-rule-color: #38a89d;
+  }
+
+  .lg\:col-teal {
+    column-rule-color: #4dc0b5;
+  }
+
+  .lg\:col-teal-light {
+    column-rule-color: #64d5ca;
+  }
+
+  .lg\:col-teal-lighter {
+    column-rule-color: #a0f0ed;
+  }
+
+  .lg\:col-teal-lightest {
+    column-rule-color: #e8fffe;
+  }
+
+  .lg\:col-blue-darkest {
+    column-rule-color: #12283a;
+  }
+
+  .lg\:col-blue-darker {
+    column-rule-color: #1c3d5a;
+  }
+
+  .lg\:col-blue-dark {
+    column-rule-color: #2779bd;
+  }
+
+  .lg\:col-blue {
+    column-rule-color: #3490dc;
+  }
+
+  .lg\:col-blue-light {
+    column-rule-color: #6cb2eb;
+  }
+
+  .lg\:col-blue-lighter {
+    column-rule-color: #bcdefa;
+  }
+
+  .lg\:col-blue-lightest {
+    column-rule-color: #eff8ff;
+  }
+
+  .lg\:col-indigo-darkest {
+    column-rule-color: #191e38;
+  }
+
+  .lg\:col-indigo-darker {
+    column-rule-color: #2f365f;
+  }
+
+  .lg\:col-indigo-dark {
+    column-rule-color: #5661b3;
+  }
+
+  .lg\:col-indigo {
+    column-rule-color: #6574cd;
+  }
+
+  .lg\:col-indigo-light {
+    column-rule-color: #7886d7;
+  }
+
+  .lg\:col-indigo-lighter {
+    column-rule-color: #b2b7ff;
+  }
+
+  .lg\:col-indigo-lightest {
+    column-rule-color: #e6e8ff;
+  }
+
+  .lg\:col-purple-darkest {
+    column-rule-color: #21183c;
+  }
+
+  .lg\:col-purple-darker {
+    column-rule-color: #382b5f;
+  }
+
+  .lg\:col-purple-dark {
+    column-rule-color: #794acf;
+  }
+
+  .lg\:col-purple {
+    column-rule-color: #9561e2;
+  }
+
+  .lg\:col-purple-light {
+    column-rule-color: #a779e9;
+  }
+
+  .lg\:col-purple-lighter {
+    column-rule-color: #d6bbfc;
+  }
+
+  .lg\:col-purple-lightest {
+    column-rule-color: #f3ebff;
+  }
+
+  .lg\:col-pink-darkest {
+    column-rule-color: #451225;
+  }
+
+  .lg\:col-pink-darker {
+    column-rule-color: #6f213f;
+  }
+
+  .lg\:col-pink-dark {
+    column-rule-color: #eb5286;
+  }
+
+  .lg\:col-pink {
+    column-rule-color: #f66d9b;
+  }
+
+  .lg\:col-pink-light {
+    column-rule-color: #fa7ea8;
+  }
+
+  .lg\:col-pink-lighter {
+    column-rule-color: #ffbbca;
+  }
+
+  .lg\:col-pink-lightest {
+    column-rule-color: #ffebef;
+  }
+
+  .lg\:col-solid {
+    column-rule-style: solid;
+  }
+
+  .lg\:col-dashed {
+    column-rule-style: dashed;
+  }
+
+  .lg\:col-dotted {
+    column-rule-style: dotted;
+  }
+
+  .lg\:col-none {
+    column-rule-style: none;
+  }
+
+  .lg\:col-rule-0 {
+    column-rule-width: 0;
+  }
+
+  .lg\:col-rule-2 {
+    column-rule-width: 2px;
+  }
+
+  .lg\:col-rule-4 {
+    column-rule-width: 4px;
+  }
+
+  .lg\:col-rule-8 {
+    column-rule-width: 8px;
+  }
+
+  .lg\:col-rule {
+    column-rule-width: 1px;
+  }
+
+  .lg\:col-span-all {
+    column-span: all;
+  }
+
+  .lg\:col-span-none {
+    column-span: none;
+  }
+
   .lg\:cursor-auto {
     cursor: auto;
   }
@@ -25087,6 +26543,370 @@ table {
 
   .xl\:border-l {
     border-left-width: 1px;
+  }
+
+  .xl\:col-0 {
+    column-count: initial;
+  }
+
+  .xl\:col-2 {
+    column-count: 2;
+  }
+
+  .xl\:col-3 {
+    column-count: 3;
+  }
+
+  .xl\:col-4 {
+    column-count: 4;
+  }
+
+  .xl\:col-auto {
+    column-fill: auto;
+  }
+
+  .xl\:col-balance {
+    column-fill: balance;
+  }
+
+  .xl\:col-balance-all {
+    column-fill: balance-all;
+  }
+
+  .xl\:col-transparent {
+    column-rule-color: transparent;
+  }
+
+  .xl\:col-black {
+    column-rule-color: #22292f;
+  }
+
+  .xl\:col-grey-darkest {
+    column-rule-color: #3d4852;
+  }
+
+  .xl\:col-grey-darker {
+    column-rule-color: #606f7b;
+  }
+
+  .xl\:col-grey-dark {
+    column-rule-color: #8795a1;
+  }
+
+  .xl\:col-grey {
+    column-rule-color: #b8c2cc;
+  }
+
+  .xl\:col-grey-light {
+    column-rule-color: #dae1e7;
+  }
+
+  .xl\:col-grey-lighter {
+    column-rule-color: #f1f5f8;
+  }
+
+  .xl\:col-grey-lightest {
+    column-rule-color: #f8fafc;
+  }
+
+  .xl\:col-white {
+    column-rule-color: #fff;
+  }
+
+  .xl\:col-red-darkest {
+    column-rule-color: #3b0d0c;
+  }
+
+  .xl\:col-red-darker {
+    column-rule-color: #621b18;
+  }
+
+  .xl\:col-red-dark {
+    column-rule-color: #cc1f1a;
+  }
+
+  .xl\:col-red {
+    column-rule-color: #e3342f;
+  }
+
+  .xl\:col-red-light {
+    column-rule-color: #ef5753;
+  }
+
+  .xl\:col-red-lighter {
+    column-rule-color: #f9acaa;
+  }
+
+  .xl\:col-red-lightest {
+    column-rule-color: #fcebea;
+  }
+
+  .xl\:col-orange-darkest {
+    column-rule-color: #462a16;
+  }
+
+  .xl\:col-orange-darker {
+    column-rule-color: #613b1f;
+  }
+
+  .xl\:col-orange-dark {
+    column-rule-color: #de751f;
+  }
+
+  .xl\:col-orange {
+    column-rule-color: #f6993f;
+  }
+
+  .xl\:col-orange-light {
+    column-rule-color: #faad63;
+  }
+
+  .xl\:col-orange-lighter {
+    column-rule-color: #fcd9b6;
+  }
+
+  .xl\:col-orange-lightest {
+    column-rule-color: #fff5eb;
+  }
+
+  .xl\:col-yellow-darkest {
+    column-rule-color: #453411;
+  }
+
+  .xl\:col-yellow-darker {
+    column-rule-color: #684f1d;
+  }
+
+  .xl\:col-yellow-dark {
+    column-rule-color: #f2d024;
+  }
+
+  .xl\:col-yellow {
+    column-rule-color: #ffed4a;
+  }
+
+  .xl\:col-yellow-light {
+    column-rule-color: #fff382;
+  }
+
+  .xl\:col-yellow-lighter {
+    column-rule-color: #fff9c2;
+  }
+
+  .xl\:col-yellow-lightest {
+    column-rule-color: #fcfbeb;
+  }
+
+  .xl\:col-green-darkest {
+    column-rule-color: #0f2f21;
+  }
+
+  .xl\:col-green-darker {
+    column-rule-color: #1a4731;
+  }
+
+  .xl\:col-green-dark {
+    column-rule-color: #1f9d55;
+  }
+
+  .xl\:col-green {
+    column-rule-color: #38c172;
+  }
+
+  .xl\:col-green-light {
+    column-rule-color: #51d88a;
+  }
+
+  .xl\:col-green-lighter {
+    column-rule-color: #a2f5bf;
+  }
+
+  .xl\:col-green-lightest {
+    column-rule-color: #e3fcec;
+  }
+
+  .xl\:col-teal-darkest {
+    column-rule-color: #0d3331;
+  }
+
+  .xl\:col-teal-darker {
+    column-rule-color: #20504f;
+  }
+
+  .xl\:col-teal-dark {
+    column-rule-color: #38a89d;
+  }
+
+  .xl\:col-teal {
+    column-rule-color: #4dc0b5;
+  }
+
+  .xl\:col-teal-light {
+    column-rule-color: #64d5ca;
+  }
+
+  .xl\:col-teal-lighter {
+    column-rule-color: #a0f0ed;
+  }
+
+  .xl\:col-teal-lightest {
+    column-rule-color: #e8fffe;
+  }
+
+  .xl\:col-blue-darkest {
+    column-rule-color: #12283a;
+  }
+
+  .xl\:col-blue-darker {
+    column-rule-color: #1c3d5a;
+  }
+
+  .xl\:col-blue-dark {
+    column-rule-color: #2779bd;
+  }
+
+  .xl\:col-blue {
+    column-rule-color: #3490dc;
+  }
+
+  .xl\:col-blue-light {
+    column-rule-color: #6cb2eb;
+  }
+
+  .xl\:col-blue-lighter {
+    column-rule-color: #bcdefa;
+  }
+
+  .xl\:col-blue-lightest {
+    column-rule-color: #eff8ff;
+  }
+
+  .xl\:col-indigo-darkest {
+    column-rule-color: #191e38;
+  }
+
+  .xl\:col-indigo-darker {
+    column-rule-color: #2f365f;
+  }
+
+  .xl\:col-indigo-dark {
+    column-rule-color: #5661b3;
+  }
+
+  .xl\:col-indigo {
+    column-rule-color: #6574cd;
+  }
+
+  .xl\:col-indigo-light {
+    column-rule-color: #7886d7;
+  }
+
+  .xl\:col-indigo-lighter {
+    column-rule-color: #b2b7ff;
+  }
+
+  .xl\:col-indigo-lightest {
+    column-rule-color: #e6e8ff;
+  }
+
+  .xl\:col-purple-darkest {
+    column-rule-color: #21183c;
+  }
+
+  .xl\:col-purple-darker {
+    column-rule-color: #382b5f;
+  }
+
+  .xl\:col-purple-dark {
+    column-rule-color: #794acf;
+  }
+
+  .xl\:col-purple {
+    column-rule-color: #9561e2;
+  }
+
+  .xl\:col-purple-light {
+    column-rule-color: #a779e9;
+  }
+
+  .xl\:col-purple-lighter {
+    column-rule-color: #d6bbfc;
+  }
+
+  .xl\:col-purple-lightest {
+    column-rule-color: #f3ebff;
+  }
+
+  .xl\:col-pink-darkest {
+    column-rule-color: #451225;
+  }
+
+  .xl\:col-pink-darker {
+    column-rule-color: #6f213f;
+  }
+
+  .xl\:col-pink-dark {
+    column-rule-color: #eb5286;
+  }
+
+  .xl\:col-pink {
+    column-rule-color: #f66d9b;
+  }
+
+  .xl\:col-pink-light {
+    column-rule-color: #fa7ea8;
+  }
+
+  .xl\:col-pink-lighter {
+    column-rule-color: #ffbbca;
+  }
+
+  .xl\:col-pink-lightest {
+    column-rule-color: #ffebef;
+  }
+
+  .xl\:col-solid {
+    column-rule-style: solid;
+  }
+
+  .xl\:col-dashed {
+    column-rule-style: dashed;
+  }
+
+  .xl\:col-dotted {
+    column-rule-style: dotted;
+  }
+
+  .xl\:col-none {
+    column-rule-style: none;
+  }
+
+  .xl\:col-rule-0 {
+    column-rule-width: 0;
+  }
+
+  .xl\:col-rule-2 {
+    column-rule-width: 2px;
+  }
+
+  .xl\:col-rule-4 {
+    column-rule-width: 4px;
+  }
+
+  .xl\:col-rule-8 {
+    column-rule-width: 8px;
+  }
+
+  .xl\:col-rule {
+    column-rule-width: 1px;
+  }
+
+  .xl\:col-span-all {
+    column-span: all;
+  }
+
+  .xl\:col-span-none {
+    column-span: none;
   }
 
   .xl\:cursor-auto {

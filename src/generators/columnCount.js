@@ -3,7 +3,7 @@ import defineClass from '../util/defineClass'
 
 export default function({ columnCount }) {
   return _.map(columnCount, (value, modifier) => {
-    return defineClass(`column-${modifier}`, {
+    return defineClass(`col-${modifier}`, {
       'column-count': `${value}`,
     })
   })

@@ -3,7 +3,7 @@ import defineClass from '../util/defineClass'
 
 export default function({ columnRuleColors }) {
   return _.map(columnRuleColors, (color, className) => {
-    return defineClass(`column-${className}`, {
+    return defineClass(`col-${className}`, {
       'column-rule-color': color,
     })
   })

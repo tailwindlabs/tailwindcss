@@ -2,16 +2,16 @@ import defineClasses from '../util/defineClasses'
 
 export default function() {
   return defineClasses({
-    'column-solid': {
+    'col-solid': {
       'column-rule-style': 'solid',
     },
-    'column-dashed': {
+    'col-dashed': {
       'column-rule-style': 'dashed',
     },
-    'column-dotted': {
+    'col-dotted': {
       'column-rule-style': 'dotted',
     },
-    'column-none': {
+    'col-none': {
       'column-rule-style': 'none',
     },
   })

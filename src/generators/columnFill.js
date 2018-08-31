@@ -2,13 +2,13 @@ import defineClasses from '../util/defineClasses'
 
 export default function() {
   return defineClasses({
-    'column-auto': {
+    'col-auto': {
       'column-fill': 'auto',
     },
-    'column-balance': {
+    'col-balance': {
       'column-fill': 'balance',
     },
-    'column-balance-all': {
+    'col-balance-all': {
       'column-fill': 'balance-all',
     },
   })

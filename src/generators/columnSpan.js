@@ -2,10 +2,10 @@ import defineClasses from '../util/defineClasses'
 
 export default function() {
   return defineClasses({
-    'column-span-all': {
+    'col-span-all': {
       'column-span': 'all',
     },
-    'column-span-none': {
+    'col-span-none': {
       'column-span': 'none',
     },
   })
