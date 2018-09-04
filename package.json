@@ -43,7 +43,6 @@
     "rimraf": "^2.6.1"
   },
   "dependencies": {
-    "bytes": "^3.0.0",
     "commander": "^2.11.0",
     "css.escape": "^1.5.1",
     "fs-extra": "^4.0.2",
@@ -55,7 +54,6 @@
     "postcss-js": "^1.0.1",
     "postcss-nested": "^3.0.0",
     "postcss-selector-parser": "^3.1.1",
-    "pretty-hrtime": "^1.0.3",
     "purgecss": "^1.1.0"
   },
   "browserslist": [
