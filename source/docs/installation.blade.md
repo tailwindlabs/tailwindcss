@@ -184,7 +184,7 @@ If you're writing your project in plain CSS, use Mix's `postCss` method to proce
 ```js
 var tailwindcss = require('tailwindcss');
 
-mix.postCss('resources/assets/css/main.css', 'public/css', [
+mix.postCss('resources/css/main.css', 'public/css', [
   tailwindcss('./path/to/your/tailwind-config.js'),
 ]);
 ```
@@ -194,7 +194,7 @@ If you're using a preprocessor, use the `options` method to add `tailwindcss` as
 ```js
 var tailwindcss = require('tailwindcss');
 
-mix.less('resources/assets/less/app.less', 'public/css')
+mix.less('resources/less/app.less', 'public/css')
   .options({
     postCss: [
       tailwindcss('./path/to/your/tailwind-config.js'),
@@ -207,7 +207,7 @@ mix.less('resources/assets/less/app.less', 'public/css')
 ```js
 var tailwindcss = require('tailwindcss');
 
-mix.sass('resources/assets/sass/app.scss', 'public/css')
+mix.sass('resources/sass/app.scss', 'public/css')
   .options({
     processCssUrls: false,
     postCss: [ tailwindcss('./path/to/your/tailwind-config.js') ],
