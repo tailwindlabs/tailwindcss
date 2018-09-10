@@ -90,7 +90,7 @@ export default function() {
       'align-content': 'space-around',
     },
     'flex-1': {
-      flex: '1',
+      flex: '1 1 0%',
     },
     'flex-auto': {
       flex: 'auto',
