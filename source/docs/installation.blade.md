@@ -46,7 +46,7 @@ Tailwind is configured almost entirely in plain JavaScript. To do this you'll ne
 We've provided a CLI utility to do this easily:
 
 <div class="rounded bg-grey-lightest border border-grey-light font-mono text-xs p-4">
-  <div class="text-purple-dark">./node_modules/.bin/tailwind <span class="text-blue-dark">init</span> <span class="text-grey-dark">[filename]</span></div>
+  <div class="text-purple-dark">npx tailwind <span class="text-blue-dark">init</span> <span class="text-grey-dark">[filename]</span></div>
 </div>
 
 ### 3. Use Tailwind in your CSS
