@@ -2963,15 +2963,15 @@ table {
 }
 
 .flex-1 {
-  flex: 1;
+  flex: 1 1 0%;
 }
 
 .flex-auto {
-  flex: auto;
+  flex: 1 1 auto;
 }
 
 .flex-initial {
-  flex: initial;
+  flex: 0 1 auto;
 }
 
 .flex-none {
@@ -8548,15 +8548,15 @@ table {
   }
 
   .sm\:flex-1 {
-    flex: 1;
+    flex: 1 1 0%;
   }
 
   .sm\:flex-auto {
-    flex: auto;
+    flex: 1 1 auto;
   }
 
   .sm\:flex-initial {
-    flex: initial;
+    flex: 0 1 auto;
   }
 
   .sm\:flex-none {
@@ -14118,15 +14118,15 @@ table {
   }
 
   .md\:flex-1 {
-    flex: 1;
+    flex: 1 1 0%;
   }
 
   .md\:flex-auto {
-    flex: auto;
+    flex: 1 1 auto;
   }
 
   .md\:flex-initial {
-    flex: initial;
+    flex: 0 1 auto;
   }
 
   .md\:flex-none {
@@ -19688,15 +19688,15 @@ table {
   }
 
   .lg\:flex-1 {
-    flex: 1;
+    flex: 1 1 0%;
   }
 
   .lg\:flex-auto {
-    flex: auto;
+    flex: 1 1 auto;
   }
 
   .lg\:flex-initial {
-    flex: initial;
+    flex: 0 1 auto;
   }
 
   .lg\:flex-none {
@@ -25258,15 +25258,15 @@ table {
   }
 
   .xl\:flex-1 {
-    flex: 1;
+    flex: 1 1 0%;
   }
 
   .xl\:flex-auto {
-    flex: auto;
+    flex: 1 1 auto;
   }
 
   .xl\:flex-initial {
-    flex: initial;
+    flex: 0 1 auto;
   }
 
   .xl\:flex-none {
