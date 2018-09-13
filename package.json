@@ -1,9 +1,10 @@
 {
   "name": "tailwindcss",
-  "version": "0.5.2",
+  "version": "0.6.5",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "main": "lib/index.js",
+  "style": "dist/tailwind.css",
   "repository": "https://github.com/tailwindcss/tailwindcss.git",
   "bugs": "https://github.com/tailwindcss/tailwindcss/issues",
   "homepage": "https://tailwindcss.com",
@@ -43,8 +44,9 @@
   },
   "dependencies": {
     "commander": "^2.11.0",
+    "css.escape": "^1.5.1",
     "fs-extra": "^4.0.2",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.5",
     "perfectionist": "^2.4.0",
     "postcss": "^6.0.9",
     "postcss-functions": "^3.0.0",

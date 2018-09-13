@@ -26,7 +26,7 @@ function processPluginsWithValidConfig(config) {
 }
 
 test('options are not required', () => {
-  const [components] = processPluginsWithValidConfig({
+  const { components } = processPluginsWithValidConfig({
     plugins: [container()],
   })
 
@@ -48,7 +48,7 @@ test('options are not required', () => {
 })
 
 test('screens can be specified explicitly', () => {
-  const [components] = processPluginsWithValidConfig({
+  const { components } = processPluginsWithValidConfig({
     plugins: [
       container({
         screens: {
@@ -71,7 +71,7 @@ test('screens can be specified explicitly', () => {
 })
 
 test('screens can be an array', () => {
-  const [components] = processPluginsWithValidConfig({
+  const { components } = processPluginsWithValidConfig({
     plugins: [
       container({
         screens: ['400px', '500px'],
@@ -91,7 +91,7 @@ test('screens can be an array', () => {
 })
 
 test('the container can be centered by default', () => {
-  const [components] = processPluginsWithValidConfig({
+  const { components } = processPluginsWithValidConfig({
     plugins: [
       container({
         center: true,
@@ -121,7 +121,7 @@ test('the container can be centered by default', () => {
 })
 
 test('horizontal padding can be included by default', () => {
-  const [components] = processPluginsWithValidConfig({
+  const { components } = processPluginsWithValidConfig({
     plugins: [
       container({
         padding: '2rem',
@@ -151,7 +151,7 @@ test('horizontal padding can be included by default', () => {
 })
 
 test('setting all options at once', () => {
-  const [components] = processPluginsWithValidConfig({
+  const { components } = processPluginsWithValidConfig({
     plugins: [
       container({
         screens: {

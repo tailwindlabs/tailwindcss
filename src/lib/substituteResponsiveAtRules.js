@@ -2,12 +2,12 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import cloneNodes from '../util/cloneNodes'
 import buildMediaQuery from '../util/buildMediaQuery'
-import buildClassVariant from '../util/buildClassVariant'
+import buildSelectorVariant from '../util/buildSelectorVariant'
 
 export default function(config) {
   return function(css) {
-    const screens = config().screens
-    const separator = config().options.separator
+    const screens = config.screens
+    const separator = config.options.separator
     const responsiveRules = []
     let finalRules = []
 
@@ -28,7 +28,9 @@ export default function(config) {
         responsiveRules.map(rule => {
           const cloned = rule.clone()
           cloned.selectors = _.map(rule.selectors, selector =>
-            buildClassVariant(selector, screen, separator)
+            buildSelectorVariant(selector, screen, separator, message => {
+              throw rule.error(message)
+            })
           )
           return cloned
         })

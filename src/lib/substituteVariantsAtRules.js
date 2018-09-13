@@ -1,45 +1,36 @@
 import _ from 'lodash'
 import postcss from 'postcss'
-import buildClassVariant from '../util/buildClassVariant'
-
-function buildPseudoClassVariant(selector, pseudoClass, separator) {
-  return `${buildClassVariant(selector, pseudoClass, separator)}:${pseudoClass}`
-}
+import generateVariantFunction from '../util/generateVariantFunction'
 
 function generatePseudoClassVariant(pseudoClass) {
-  return (container, config) => {
-    const cloned = container.clone()
-
-    cloned.walkRules(rule => {
-      rule.selector = buildPseudoClassVariant(rule.selector, pseudoClass, config.options.separator)
+  return generateVariantFunction(({ modifySelectors, separator }) => {
+    return modifySelectors(({ className }) => {
+      return `.${pseudoClass}${separator}${className}:${pseudoClass}`
     })
-
-    container.before(cloned.nodes)
-  }
+  })
 }
 
-const variantGenerators = {
-  'group-hover': (container, { options: { separator } }) => {
-    const cloned = container.clone()
-
-    cloned.walkRules(rule => {
-      rule.selector = `.group:hover ${buildClassVariant(rule.selector, 'group-hover', separator)}`
+const defaultVariantGenerators = {
+  'group-hover': generateVariantFunction(({ modifySelectors, separator }) => {
+    return modifySelectors(({ className }) => {
+      return `.group:hover .group-hover${separator}${className}`
     })
-
-    container.before(cloned.nodes)
-  },
+  }),
   hover: generatePseudoClassVariant('hover'),
-  focus: generatePseudoClassVariant('focus'),
   'focus-within': generatePseudoClassVariant('focus-within'),
+  focus: generatePseudoClassVariant('focus'),
   active: generatePseudoClassVariant('active'),
 }
 
-export default function(config) {
+export default function(config, { variantGenerators: pluginVariantGenerators }) {
   return function(css) {
-    const unwrappedConfig = config()
+    const variantGenerators = {
+      ...defaultVariantGenerators,
+      ...pluginVariantGenerators,
+    }
 
     css.walkAtRules('variants', atRule => {
-      const variants = postcss.list.comma(atRule.params)
+      const variants = postcss.list.comma(atRule.params).filter(variant => variant !== '')
 
       if (variants.includes('responsive')) {
         const responsiveParent = postcss.atRule({ name: 'responsive' })
@@ -49,11 +40,17 @@ export default function(config) {
 
       atRule.before(atRule.clone().nodes)
 
-      _.forEach(['group-hover', 'hover', 'focus', 'focus-within', 'active'], variant => {
-        if (variants.includes(variant)) {
-          variantGenerators[variant](atRule, unwrappedConfig)
-        }
-      })
+      if (_.get(config, 'experiments.pluginVariants', false)) {
+        _.forEach(_.without(variants, 'responsive'), variant => {
+          variantGenerators[variant](atRule, config)
+        })
+      } else {
+        _.forEach(['group-hover', 'hover', 'focus-within', 'focus', 'active'], variant => {
+          if (variants.includes(variant)) {
+            variantGenerators[variant](atRule, config)
+          }
+        })
+      }
 
       atRule.remove()
     })

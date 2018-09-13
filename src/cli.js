@@ -20,7 +20,7 @@ function writeStrategy(options) {
 }
 
 function buildTailwind(inputFile, config, write) {
-  console.log('Building Tailwind!')
+  console.warn('Building Tailwind!')
 
   const input = fs.readFileSync(inputFile, 'utf8')
 
@@ -28,9 +28,9 @@ function buildTailwind(inputFile, config, write) {
     .process(input, { from: inputFile })
     .then(result => {
       write(result.css)
-      console.log('Finished building Tailwind!')
+      console.warn('Finished building Tailwind!')
     })
-    .catch(error => console.log(error))
+    .catch(error => console.error(error))
 }
 
 const packageJson = require(path.resolve(__dirname, '../package.json'))
@@ -48,7 +48,7 @@ program
     }
 
     if (fs.existsSync(destination)) {
-      console.log(`Destination ${destination} already exists, aborting.`)
+      console.error(`Destination ${destination} already exists, aborting.`)
       process.exit(1)
     }
 
@@ -58,7 +58,7 @@ program
       destination,
       output.replace("require('./plugins/container')", "require('tailwindcss/plugins/container')")
     )
-    console.log(`Generated Tailwind config: ${destination}`)
+    console.warn(`Generated Tailwind config: ${destination}`)
     process.exit()
   })
 

@@ -5,6 +5,7 @@ import backgroundColors from './generators/backgroundColors'
 import backgroundPosition from './generators/backgroundPosition'
 import backgroundRepeat from './generators/backgroundRepeat'
 import backgroundSize from './generators/backgroundSize'
+import borderCollapse from './generators/borderCollapse'
 import borderColors from './generators/borderColors'
 import borderRadius from './generators/borderRadius'
 import borderStyle from './generators/borderStyle'
@@ -24,6 +25,7 @@ import minHeight from './generators/minHeight'
 import minWidth from './generators/minWidth'
 import negativeMargin from './generators/negativeMargin'
 import opacity from './generators/opacity'
+import outline from './generators/outline'
 import overflow from './generators/overflow'
 import padding from './generators/padding'
 import pointerEvents from './generators/pointerEvents'
@@ -32,6 +34,7 @@ import resize from './generators/resize'
 import shadows from './generators/shadows'
 import svgFill from './generators/svgFill'
 import svgStroke from './generators/svgStroke'
+import tableLayout from './generators/tableLayout'
 import textAlign from './generators/textAlign'
 import textColors from './generators/textColors'
 import textSizes from './generators/textSizes'
@@ -52,6 +55,7 @@ export default [
   { name: 'backgroundPosition', generator: backgroundPosition },
   { name: 'backgroundRepeat', generator: backgroundRepeat },
   { name: 'backgroundSize', generator: backgroundSize },
+  { name: 'borderCollapse', generator: borderCollapse },
   { name: 'borderColors', generator: borderColors },
   { name: 'borderRadius', generator: borderRadius },
   { name: 'borderStyle', generator: borderStyle },
@@ -71,6 +75,7 @@ export default [
   { name: 'minWidth', generator: minWidth },
   { name: 'negativeMargin', generator: negativeMargin },
   { name: 'opacity', generator: opacity },
+  { name: 'outline', generator: outline },
   { name: 'overflow', generator: overflow },
   { name: 'padding', generator: padding },
   { name: 'pointerEvents', generator: pointerEvents },
@@ -79,6 +84,7 @@ export default [
   { name: 'shadows', generator: shadows },
   { name: 'svgFill', generator: svgFill },
   { name: 'svgStroke', generator: svgStroke },
+  { name: 'tableLayout', generator: tableLayout },
   { name: 'textAlign', generator: textAlign },
   { name: 'textColors', generator: textColors },
   { name: 'textSizes', generator: textSizes },

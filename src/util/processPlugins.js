@@ -2,6 +2,7 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import Node from 'postcss/lib/node'
 import escapeClassName from '../util/escapeClassName'
+import generateVariantFunction from '../util/generateVariantFunction'
 import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
 import wrapWithVariants from '../util/wrapWithVariants'
@@ -17,6 +18,7 @@ function parseStyles(styles) {
 export default function(config) {
   const pluginComponents = []
   const pluginUtilities = []
+  const pluginVariantGenerators = {}
 
   config.plugins.forEach(plugin => {
     plugin({
@@ -59,8 +61,15 @@ export default function(config) {
 
         pluginComponents.push(...styles.nodes)
       },
+      addVariant: (name, generator) => {
+        pluginVariantGenerators[name] = generateVariantFunction(generator)
+      },
     })
   })
 
-  return [pluginComponents, pluginUtilities]
+  return {
+    components: pluginComponents,
+    utilities: pluginUtilities,
+    variantGenerators: pluginVariantGenerators,
+  }
 }
