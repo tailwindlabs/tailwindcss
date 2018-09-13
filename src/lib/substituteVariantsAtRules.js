@@ -17,6 +17,7 @@ const defaultVariantGenerators = {
     })
   }),
   hover: generatePseudoClassVariant('hover'),
+  'focus-within': generatePseudoClassVariant('focus-within'),
   focus: generatePseudoClassVariant('focus'),
   active: generatePseudoClassVariant('active'),
 }
@@ -44,7 +45,7 @@ export default function(config, { variantGenerators: pluginVariantGenerators }) 
           variantGenerators[variant](atRule, config)
         })
       } else {
-        _.forEach(['group-hover', 'hover', 'focus', 'active'], variant => {
+        _.forEach(['group-hover', 'hover', 'focus-within', 'focus', 'active'], variant => {
           if (variants.includes(variant)) {
             variantGenerators[variant](atRule, config)
           }
