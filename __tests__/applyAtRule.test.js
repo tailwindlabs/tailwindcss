@@ -192,3 +192,26 @@ test('you can apply utility classes that do not actually exist as long as they w
     expect(result.warnings().length).toBe(0)
   })
 })
+
+test('you can apply utility classes without using the given prefix', () => {
+  const input = `
+    .foo { @apply .mt-4; }
+  `
+
+  const expected = `
+    .prefix-foo { margin-top: 1rem; }
+  `
+
+  const config = {
+    ...defaultConfig,
+    options: {
+      ...defaultConfig.options,
+      prefix: 'prefix',
+    },
+  }
+
+  return run(input, config).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
