@@ -206,7 +206,7 @@ test('you can apply utility classes without using the given prefix', () => {
     ...defaultConfig,
     options: {
       ...defaultConfig.options,
-      prefix: 'prefix',
+      prefix: 'prefix-',
     },
   }
 
