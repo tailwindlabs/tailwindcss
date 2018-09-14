@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import postcss from 'postcss'
 import escapeClassName from '../util/escapeClassName'
+import prefixSelector from '../util/prefixSelector'
 
 function buildClassTable(css) {
   const classTable = {}
@@ -35,7 +36,7 @@ function findClass(classToApply, classTable, shadowLookup, prefix, onError) {
   if (_.isEmpty(matches)) {
     if (_.isEmpty(shadowLookup)) {
       if (prefix) {
-        classToApply = '.' + prefix + classToApply.substr(1)
+        classToApply = prefixSelector(prefix, classToApply)
         matches = _.get(classTable, classToApply, [])
         if (_.isEmpty(matches)) {
           if (_.isEmpty(shadowLookup)) {
