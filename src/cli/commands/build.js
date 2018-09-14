@@ -34,39 +34,47 @@ export const optionMap = {
  *
  * @param {string[]} cliParams
  * @param {object} cliOptions
+ * @return {Promise}
  */
 export function run(cliParams, cliOptions) {
-  const time = process.hrtime()
-  const inputFile = cliParams[1]
-  const configFile = cliOptions.config && cliOptions.config[0]
-  const outputFile = (cliOptions.output && cliOptions.output[0]) || constants.defaultOutputFile
+  return new Promise((resolve, reject) => {
+    const time = process.hrtime()
+    const inputFile = cliParams[1]
+    const configFile = cliOptions.config && cliOptions.config[0]
+    const outputFile = (cliOptions.output && cliOptions.output[0]) || constants.defaultOutputFile
 
-  if (!inputFile) {
-    error('CSS file is required.')
-    commands.help.forCommand(this)
-    die()
-  }
+    if (!inputFile) {
+      error('CSS file is required.')
+      commands.help.forCommand(this)
+      die()
+    }
 
-  !exists(inputFile) && die(chalk.bold.magenta(inputFile), 'does not exist.')
-  configFile && !exists(configFile) && die(chalk.bold.magenta(configFile), 'does not exist.')
+    !exists(inputFile) && die(chalk.bold.magenta(inputFile), 'does not exist.')
+    configFile && !exists(configFile) && die(chalk.bold.magenta(configFile), 'does not exist.')
 
-  log()
-  log(emoji.go, 'Building', chalk.bold.cyan(inputFile))
+    log()
+    log(emoji.go, 'Building', chalk.bold.cyan(inputFile))
 
-  const css = readFile(inputFile)
-  const plugins = [tailwind(configFile), autoprefixer]
+    const css = readFile(inputFile)
 
-  const result = postcss(plugins).process(css, {
-    from: inputFile,
-    to: outputFile,
+    const postcssPromise = postcss([tailwind(configFile), autoprefixer]).process(css, {
+      from: inputFile,
+      to: outputFile,
+    })
+
+    postcssPromise
+      .then(result => {
+        writeFile(outputFile, result.css)
+
+        const prettyTime = prettyHrtime(process.hrtime(time))
+
+        log()
+        log(emoji.yes, 'Finished in', chalk.bold.magenta(prettyTime))
+        log(emoji.pack, 'Size:', chalk.bold.magenta(bytes(result.css.length)))
+        log(emoji.disk, 'Saved to', chalk.bold.cyan(outputFile))
+
+        resolve()
+      })
+      .catch(reject)
   })
-
-  writeFile(outputFile, result.css)
-
-  const prettyTime = prettyHrtime(process.hrtime(time))
-
-  log()
-  log(emoji.yes, 'Finished in', chalk.bold.magenta(prettyTime))
-  log(emoji.pack, 'Size:', chalk.bold.magenta(bytes(result.css.length)))
-  log(emoji.disk, 'Saved to', chalk.bold.cyan(outputFile))
 }

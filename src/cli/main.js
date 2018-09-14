@@ -18,5 +18,5 @@ export default function run(args) {
 
   const options = parseCliOptions(args, commands[commandName].optionMap)
 
-  commands[commandName].run(params, options)
+  return commands[commandName].run(params, options)
 }

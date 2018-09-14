@@ -63,11 +63,16 @@ export function invalidCommand(commandName) {
  * Runs the command.
  *
  * @param {string[]} cliParams
+ * @return {Promise}
  */
 export function run(cliParams) {
-  const command = cliParams[1]
+  return new Promise(resolve => {
+    const command = cliParams[1]
 
-  !command && forApp()
-  command && commands[command] && forCommand(commands[command])
-  command && !commands[command] && invalidCommand(command)
+    !command && forApp()
+    command && commands[command] && forCommand(commands[command])
+    command && !commands[command] && invalidCommand(command)
+
+    resolve()
+  })
 }

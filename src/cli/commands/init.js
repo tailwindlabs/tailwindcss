@@ -12,18 +12,26 @@ export const description =
  * Runs the command.
  *
  * @param {string[]} cliParams
+ * @return {Promise}
  */
 export function run(cliParams) {
-  const file = cliParams[1] || constants.defaultConfigFile
+  return new Promise(resolve => {
+    const file = cliParams[1] || constants.defaultConfigFile
 
-  exists(file) && die(chalk.bold.magenta(file), 'already exists.')
+    exists(file) && die(chalk.bold.magenta(file), 'already exists.')
 
-  let stub = readFile(constants.configStubFile)
-  stub = stub.replace('// let defaultConfig', 'let defaultConfig')
-  stub = stub.replace("require('./plugins/container')", "require('tailwindcss/plugins/container')")
+    let stub = readFile(constants.configStubFile)
+    stub = stub.replace('// let defaultConfig', 'let defaultConfig')
+    stub = stub.replace(
+      "require('./plugins/container')",
+      "require('tailwindcss/plugins/container')"
+    )
 
-  writeFile(file, stub)
+    writeFile(file, stub)
 
-  log()
-  log(emoji.yes, 'Created Tailwind config file:', chalk.bold.magenta(file))
+    log()
+    log(emoji.yes, 'Created Tailwind config file:', chalk.bold.magenta(file))
+
+    resolve()
+  })
 }
