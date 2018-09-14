@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import postcss from 'postcss'
 
 import substituteTailwindAtRules from './lib/substituteTailwindAtRules'
@@ -12,18 +11,16 @@ import generateUtilities from './util/generateUtilities'
 import processPlugins from './util/processPlugins'
 
 export default function(getConfig) {
-  return function(css) {
-    const config = getConfig()
-    const processedPlugins = processPlugins(config)
-    const utilities = generateUtilities(config, processedPlugins.utilities)
+  const config = getConfig()
+  const processedPlugins = processPlugins(config)
+  const utilities = generateUtilities(config, processedPlugins.utilities)
 
-    return postcss([
-      substituteTailwindAtRules(config, processedPlugins, utilities),
-      evaluateTailwindFunctions(config),
-      substituteVariantsAtRules(config, processedPlugins),
-      substituteResponsiveAtRules(config),
-      substituteScreenAtRules(config),
-      substituteClassApplyAtRules(config, utilities),
-    ]).process(css, { from: _.get(css, 'source.input.file') })
-  }
+  return postcss([
+    substituteTailwindAtRules(config, processedPlugins, utilities),
+    evaluateTailwindFunctions(config),
+    substituteVariantsAtRules(config, processedPlugins),
+    substituteResponsiveAtRules(config),
+    substituteScreenAtRules(config),
+    substituteClassApplyAtRules(config, utilities),
+  ])
 }
