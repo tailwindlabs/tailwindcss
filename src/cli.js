@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import main from './cli/main'
 import { log, die } from './cli/utils'
 
