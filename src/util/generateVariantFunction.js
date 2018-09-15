@@ -16,7 +16,7 @@ export default function generateVariantFunction(generator) {
               rule.selectors = rule.selectors.map(selector =>
                 modifierFunction({
                   className: selector.slice(1),
-                  selector
+                  selector,
                 })
               )
             })
