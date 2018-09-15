@@ -13,10 +13,12 @@ export default function generateVariantFunction(generator) {
           separator: escapeClassName(config.options.separator),
           modifySelectors: modifierFunction => {
             cloned.walkRules(rule => {
-              rule.selector = modifierFunction({
-                className: rule.selector.slice(1),
-                selector: rule.selector,
-              })
+              rule.selectors = rule.selectors.map(selector =>
+                modifierFunction({
+                  className: selector.slice(1),
+                  selector
+                })
+              )
             })
             return cloned
           },
