@@ -139,6 +139,31 @@ test('it can generate hover, active and focus variants', () => {
   })
 })
 
+test('it can generate hover, active and focus variants for multiple classes in one rule', () => {
+  const input = `
+    @variants hover, focus, active {
+      .banana, .lemon { color: yellow; }
+      .chocolate, .coconut { color: brown; }
+    }
+  `
+
+  const output = `
+      .banana, .lemon { color: yellow; }
+      .chocolate, .coconut { color: brown; }
+      .hover\\:banana:hover, .hover\\:lemon:hover { color: yellow; }
+      .hover\\:chocolate:hover, .hover\\:coconut:hover { color: brown; }
+      .focus\\:banana:focus, .focus\\:lemon:focus { color: yellow; }
+      .focus\\:chocolate:focus, .focus\\:coconut:focus { color: brown; }
+      .active\\:banana:active, .active\\:lemon:active { color: yellow; }
+      .active\\:chocolate:active, .active\\:coconut:active { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it wraps the output in a responsive at-rule if responsive is included as a variant', () => {
   const input = `
     @variants responsive, hover, focus {
