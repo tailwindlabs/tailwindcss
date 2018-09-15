@@ -217,28 +217,28 @@ test('you can apply utility classes without using the given prefix', () => {
   })
 })
 
-// test('you can apply utility classes without using the given prefix when using a function for the prefix', () => {
-//   const input = `
-//     .foo { @apply .tw-mt-4 .mb-4; }
-//   `
+test('you can apply utility classes without using the given prefix when using a function for the prefix', () => {
+  const input = `
+    .foo { @apply .tw-mt-4 .mb-4; }
+  `
 
-//   const expected = `
-//     .foo { margin-top: 1rem; margin-bottom: 1rem; }
-//   `
+  const expected = `
+    .foo { margin-top: 1rem; margin-bottom: 1rem; }
+  `
 
-//   const config = {
-//     ...defaultConfig,
-//     options: {
-//       ...defaultConfig.options,
-//       prefix: selector => {
-//         return 'tw-'
-//       },
-//     },
-//     experiments: { shadowLookup: true },
-//   }
+  const config = {
+    ...defaultConfig,
+    options: {
+      ...defaultConfig.options,
+      prefix: () => {
+        return 'tw-'
+      },
+    },
+    experiments: { shadowLookup: true },
+  }
 
-//   return run(input, config, generateUtilities(config, [])).then(result => {
-//     expect(result.css).toEqual(expected)
-//     expect(result.warnings().length).toBe(0)
-//   })
-// })
+  return run(input, config, generateUtilities(config, [])).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
