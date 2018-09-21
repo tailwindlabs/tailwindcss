@@ -182,12 +182,7 @@ test('you can apply utility classes that do not actually exist as long as they w
     .foo { margin-top: 1rem; }
   `
 
-  const config = {
-    ...defaultConfig,
-    experiments: { shadowLookup: true },
-  }
-
-  return run(input, config).then(result => {
+  return run(input).then(result => {
     expect(result.css).toEqual(expected)
     expect(result.warnings().length).toBe(0)
   })
