@@ -3,32 +3,33 @@ import { ensureFileSync, existsSync, outputFileSync, readFileSync } from 'fs-ext
 import { findKey, mapValues, trimStart } from 'lodash'
 
 import emoji from './emoji'
+import packageJson from '../../package.json'
 
 /**
  * Gets CLI parameters.
  *
- * @param {string[]} args CLI arguments
+ * @param {string[]} cliArgs
  * @return {string[]}
  */
-export function parseCliParams(args) {
-  const firstOptionIndex = args.findIndex(arg => arg.startsWith('-'))
+export function parseCliParams(cliArgs) {
+  const firstOptionIndex = cliArgs.findIndex(cliArg => cliArg.startsWith('-'))
 
-  return firstOptionIndex > -1 ? args.slice(0, firstOptionIndex) : args
+  return firstOptionIndex > -1 ? cliArgs.slice(0, firstOptionIndex) : cliArgs
 }
 
 /**
  * Gets mapped CLI options.
  *
- * @param {string[]} args CLI arguments
+ * @param {string[]} cliArgs
  * @param {object} [optionMap]
  * @return {object}
  */
-export function parseCliOptions(args, optionMap = {}) {
+export function parseCliOptions(cliArgs, optionMap = {}) {
   let options = {}
   let currentOption = []
 
-  args.forEach(arg => {
-    const option = arg.startsWith('-') && trimStart(arg, '-').toLowerCase()
+  cliArgs.forEach(cliArg => {
+    const option = cliArg.startsWith('-') && trimStart(cliArg, '-').toLowerCase()
     const resolvedOption = findKey(optionMap, aliases => aliases.includes(option))
 
     if (resolvedOption) {
@@ -36,7 +37,7 @@ export function parseCliOptions(args, optionMap = {}) {
     } else if (option) {
       currentOption = []
     } else {
-      currentOption.push(arg)
+      currentOption.push(cliArg)
     }
   })
 
@@ -46,16 +47,31 @@ export function parseCliOptions(args, optionMap = {}) {
 /**
  * Prints messages to console.
  *
- * @param {...string} msgs
+ * @param {...string} [msgs]
  */
 export function log(...msgs) {
   console.log('  ', ...msgs)
 }
 
 /**
+ * Prints application header to console.
+ */
+export function header() {
+  log()
+  log(chalk.bold(packageJson.name), chalk.bold.cyan(packageJson.version))
+}
+
+/**
+ * Prints application footer to console.
+ */
+export function footer() {
+  log()
+}
+
+/**
  * Prints error messages to console.
  *
- * @param {...string} msgs
+ * @param {...string} [msgs]
  */
 export function error(...msgs) {
   log()
@@ -69,7 +85,7 @@ export function error(...msgs) {
  */
 export function die(...msgs) {
   msgs.length && error(...msgs)
-  log()
+  footer()
   process.exit(1) // eslint-disable-line
 }
 

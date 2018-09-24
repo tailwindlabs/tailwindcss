@@ -1,9 +1,9 @@
 import chalk from 'chalk'
-import { forEach, map } from 'lodash'
+import { forEach, map, padEnd } from 'lodash'
 
 import commands from '.'
 import constants from '../constants'
-import { error, die, log } from '../utils'
+import { die, error, footer, header, log } from '../utils'
 
 export const usage = 'help [command]'
 export const description = 'More information about the command.'
@@ -20,7 +20,7 @@ export function forApp() {
   log()
   log('Commands:')
   forEach(commands, command => {
-    log('  ', chalk.bold(command.usage.padEnd(pad)), command.description)
+    log('  ', chalk.bold(padEnd(command.usage, pad)), command.description)
   })
 }
 
@@ -43,7 +43,7 @@ export function forCommand(command) {
     log()
     log('Options:')
     forEach(command.options, option => {
-      log('  ', chalk.bold(option.usage.padEnd(pad)), option.description)
+      log('  ', chalk.bold(padEnd(option.usage, pad)), option.description)
     })
   }
 }
@@ -67,12 +67,16 @@ export function invalidCommand(commandName) {
  */
 export function run(cliParams) {
   return new Promise(resolve => {
-    const command = cliParams[1]
+    header()
 
-    !command && forApp()
-    command && commands[command] && forCommand(commands[command])
-    command && !commands[command] && invalidCommand(command)
+    const commandName = cliParams[0]
+    const command = commands[commandName]
 
+    !commandName && forApp()
+    commandName && command && forCommand(command)
+    commandName && !command && invalidCommand(commandName)
+
+    footer()
     resolve()
   })
 }

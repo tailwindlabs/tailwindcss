@@ -1,22 +1,20 @@
-import chalk from 'chalk'
-
 import commands from './commands'
-import packageJson from '../../package.json'
-import { log, parseCliOptions, parseCliParams } from './utils'
+import { parseCliOptions, parseCliParams } from './utils'
 
 /**
  * CLI application entrypoint.
+ *
+ * @param {string[]} cliArgs
+ * @return {Promise}
  */
-export default function run(args) {
-  log()
-  log(chalk.bold(packageJson.name), chalk.bold.cyan(packageJson.version))
+export default function run(cliArgs) {
+  return new Promise((resolve, reject) => {
+    const params = parseCliParams(cliArgs)
+    const command = commands[params[0]]
+    const options = command ? parseCliOptions(cliArgs, command.optionMap) : {}
 
-  const params = parseCliParams(args)
-  const commandName = params[0] || 'help'
+    const promise = command ? command.run(params.slice(1), options) : commands.help.run(params)
 
-  !commands[commandName] && commands.help.invalidCommand(commandName)
-
-  const options = parseCliOptions(args, commands[commandName].optionMap)
-
-  return commands[commandName].run(params, options)
+    promise.then(resolve).catch(reject)
+  })
 }

@@ -1,15 +1,16 @@
 import path from 'path'
 
-import cli from '../src/cli/main.js'
-import constants from '../src/cli/constants.js'
-import * as utils from '../src/cli/utils.js'
+import cli from '../src/cli/main'
+import constants from '../src/cli/constants'
+import * as utils from '../src/cli/utils'
 
 describe('cli', () => {
   const inputCssPath = path.resolve(__dirname, 'fixtures/tailwind-input.css')
   const customConfigPath = path.resolve(__dirname, 'fixtures/custom-config.js')
 
   beforeEach(() => {
-    utils.log = jest.fn()
+    console.log = jest.fn()
+    process.stdout.write = jest.fn()
     utils.writeFile = jest.fn()
   })
 
@@ -32,21 +33,19 @@ describe('cli', () => {
   describe('build', () => {
     it('compiles CSS file', () => {
       cli(['build', inputCssPath]).then(() => {
-        expect(utils.writeFile.mock.calls[0][0]).toEqual(constants.defaultOutputFile)
-        expect(utils.writeFile.mock.calls[0][1]).toContain('.example')
+        expect(process.stdout.write.mock.calls[0][0]).toContain('.example')
       })
     })
 
     it('compiles CSS file using custom configuration', () => {
       cli(['build', inputCssPath, '--config', customConfigPath]).then(() => {
-        expect(utils.writeFile.mock.calls[0][0]).toEqual(constants.defaultOutputFile)
-        expect(utils.writeFile.mock.calls[0][1]).toContain('400px')
+        expect(process.stdout.write.mock.calls[0][0]).toContain('400px')
       })
     })
 
-    it('creates compiled CSS file in a custom location', () => {
-      cli(['build', inputCssPath, '--output', 'custom.css']).then(() => {
-        expect(utils.writeFile.mock.calls[0][0]).toEqual('custom.css')
+    it('creates compiled CSS file', () => {
+      cli(['build', inputCssPath, '--output', 'output.css']).then(() => {
+        expect(utils.writeFile.mock.calls[0][0]).toEqual('output.css')
         expect(utils.writeFile.mock.calls[0][1]).toContain('.example')
       })
     })
