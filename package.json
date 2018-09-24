@@ -24,7 +24,6 @@
     "test": "jest && eslint . && nsp check"
   },
   "devDependencies": {
-    "autoprefixer": "^7.1.6",
     "babel-cli": "^6.6.5",
     "babel-core": "^6.7.2",
     "babel-jest": "^20.0.3",
@@ -43,16 +42,20 @@
     "rimraf": "^2.6.1"
   },
   "dependencies": {
-    "commander": "^2.11.0",
+    "autoprefixer": "^7.1.6",
+    "bytes": "^3.0.0",
+    "chalk": "^2.4.1",
     "css.escape": "^1.5.1",
     "fs-extra": "^4.0.2",
     "lodash": "^4.17.5",
+    "node-emoji": "^1.8.1",
     "perfectionist": "^2.4.0",
     "postcss": "^6.0.9",
     "postcss-functions": "^3.0.0",
     "postcss-js": "^1.0.1",
     "postcss-nested": "^3.0.0",
-    "postcss-selector-parser": "^3.1.1"
+    "postcss-selector-parser": "^3.1.1",
+    "pretty-hrtime": "^1.0.3"
   },
   "browserslist": [
     "> 1%"

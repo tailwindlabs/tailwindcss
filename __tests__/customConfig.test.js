@@ -3,7 +3,7 @@ import postcss from 'postcss'
 import tailwind from '../src/index'
 
 test('it uses the values from the custom config file', () => {
-  return postcss([tailwind(path.resolve(`${__dirname}/fixtures/customConfig.js`))])
+  return postcss([tailwind(path.resolve(`${__dirname}/fixtures/custom-config.js`))])
     .process(
       `
         @responsive {
