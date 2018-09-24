@@ -2,25 +2,27 @@ import chalk from 'chalk'
 import { forEach, map, padEnd } from 'lodash'
 
 import commands from '.'
-import constants from '../constants'
-import { die, error, footer, header, log } from '../utils'
+import * as constants from '../constants'
+import * as utils from '../utils'
 
 export const usage = 'help [command]'
 export const description = 'More information about the command.'
+
+const PADDING_SIZE = 3
 
 /**
  * Prints general help.
  */
 export function forApp() {
-  const pad = Math.max(...map(commands, 'usage.length')) + 3
+  const pad = Math.max(...map(commands, 'usage.length')) + PADDING_SIZE
 
-  log()
-  log('Usage:')
-  log('  ', chalk.bold(constants.cli + ' <command> [options]'))
-  log()
-  log('Commands:')
+  utils.log()
+  utils.log('Usage:')
+  utils.log('  ', chalk.bold(constants.cli + ' <command> [options]'))
+  utils.log()
+  utils.log('Commands:')
   forEach(commands, command => {
-    log('  ', chalk.bold(padEnd(command.usage, pad)), command.description)
+    utils.log('  ', chalk.bold(padEnd(command.usage, pad)), command.description)
   })
 }
 
@@ -30,20 +32,20 @@ export function forApp() {
  * @param {object} command
  */
 export function forCommand(command) {
-  log()
-  log('Usage:')
-  log('  ', chalk.bold(constants.cli, command.usage))
-  log()
-  log('Description:')
-  log('  ', chalk.bold(command.description))
+  utils.log()
+  utils.log('Usage:')
+  utils.log('  ', chalk.bold(constants.cli, command.usage))
+  utils.log()
+  utils.log('Description:')
+  utils.log('  ', chalk.bold(command.description))
 
   if (command.options) {
-    const pad = Math.max(...map(command.options, 'usage.length')) + 3
+    const pad = Math.max(...map(command.options, 'usage.length')) + PADDING_SIZE
 
-    log()
-    log('Options:')
+    utils.log()
+    utils.log('Options:')
     forEach(command.options, option => {
-      log('  ', chalk.bold(padEnd(option.usage, pad)), option.description)
+      utils.log('  ', chalk.bold(padEnd(option.usage, pad)), option.description)
     })
   }
 }
@@ -54,9 +56,9 @@ export function forCommand(command) {
  * @param {string} commandName
  */
 export function invalidCommand(commandName) {
-  error('Invalid command:', chalk.bold.magenta(commandName))
+  utils.error('Invalid command:', chalk.bold.magenta(commandName))
   forApp()
-  die()
+  utils.die()
 }
 
 /**
@@ -67,7 +69,7 @@ export function invalidCommand(commandName) {
  */
 export function run(cliParams) {
   return new Promise(resolve => {
-    header()
+    utils.header()
 
     const commandName = cliParams[0]
     const command = commands[commandName]
@@ -76,7 +78,8 @@ export function run(cliParams) {
     commandName && command && forCommand(command)
     commandName && !command && invalidCommand(commandName)
 
-    footer()
+    utils.footer()
+
     resolve()
   })
 }

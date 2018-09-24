@@ -2,7 +2,7 @@ import chalk from 'chalk'
 import { ensureFileSync, existsSync, outputFileSync, readFileSync } from 'fs-extra'
 import { findKey, mapValues, trimStart } from 'lodash'
 
-import emoji from './emoji'
+import * as emoji from './emoji'
 import packageJson from '../../package.json'
 
 /**

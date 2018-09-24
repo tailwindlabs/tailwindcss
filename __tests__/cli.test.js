@@ -1,7 +1,7 @@
 import path from 'path'
 
 import cli from '../src/cli/main'
-import constants from '../src/cli/constants'
+import * as constants from '../src/cli/constants'
 import * as utils from '../src/cli/utils'
 
 describe('cli', () => {

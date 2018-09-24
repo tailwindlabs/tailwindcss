@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
 import main from './cli/main'
-import { die } from './cli/utils'
+import * as utils from './cli/utils'
 
-main(process.argv.slice(2)).catch(error => die(error.stack))
+main(process.argv.slice(2)).catch(error => utils.die(error.stack))

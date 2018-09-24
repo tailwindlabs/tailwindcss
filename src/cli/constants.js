@@ -1,7 +1,5 @@
 import path from 'path'
 
-export default {
-  cli: 'tailwind',
-  defaultConfigFile: 'tailwind.js',
-  configStubFile: path.resolve(__dirname, '../../defaultConfig.stub.js'),
-}
+export const cli = 'tailwind'
+export const defaultConfigFile = 'tailwind.js'
+export const configStubFile = path.resolve(__dirname, '../../defaultConfig.stub.js')

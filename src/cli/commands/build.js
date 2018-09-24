@@ -4,10 +4,11 @@ import chalk from 'chalk'
 import postcss from 'postcss'
 import prettyHrtime from 'pretty-hrtime'
 
-import commands from '.'
-import emoji from '../emoji'
 import tailwind from '../..'
-import { die, error, exists, footer, header, log, readFile, writeFile } from '../utils'
+
+import commands from '.'
+import * as emoji from '../emoji'
+import * as utils from '../utils'
 
 export const usage = 'build <file> [options]'
 export const description = 'Compiles Tailwind CSS file.'
@@ -34,9 +35,9 @@ export const optionMap = {
  * @param {...string} [msgs]
  */
 function stop(...msgs) {
-  header()
-  error(...msgs)
-  die()
+  utils.header()
+  utils.error(...msgs)
+  utils.die()
 }
 
 /**
@@ -45,10 +46,10 @@ function stop(...msgs) {
  * @param {...string} [msgs]
  */
 function stopWithHelp(...msgs) {
-  header()
-  error(...msgs)
+  utils.header()
+  utils.error(...msgs)
   commands.help.forCommand(commands.build)
-  die()
+  utils.die()
 }
 
 /**
@@ -60,7 +61,7 @@ function stopWithHelp(...msgs) {
  * @return {Promise}
  */
 function build(inputFile, configFile, outputFile) {
-  const css = readFile(inputFile)
+  const css = utils.readFile(inputFile)
 
   return new Promise((resolve, reject) => {
     postcss([tailwind(configFile), autoprefixer])
@@ -95,20 +96,20 @@ function buildToStdout(inputFile, configFile, outputFile) {
  * @return {Promise}
  */
 function buildToFile(inputFile, configFile, outputFile, startTime) {
-  header()
-  log()
-  log(emoji.go, 'Building...', chalk.bold.cyan(inputFile))
+  utils.header()
+  utils.log()
+  utils.log(emoji.go, 'Building...', chalk.bold.cyan(inputFile))
 
   return build(inputFile, configFile, outputFile).then(result => {
-    writeFile(outputFile, result.css)
+    utils.writeFile(outputFile, result.css)
 
     const prettyTime = prettyHrtime(process.hrtime(startTime))
 
-    log()
-    log(emoji.yes, 'Finished in', chalk.bold.magenta(prettyTime))
-    log(emoji.pack, 'Size:', chalk.bold.magenta(bytes(result.css.length)))
-    log(emoji.disk, 'Saved to', chalk.bold.cyan(outputFile))
-    footer()
+    utils.log()
+    utils.log(emoji.yes, 'Finished in', chalk.bold.magenta(prettyTime))
+    utils.log(emoji.pack, 'Size:', chalk.bold.magenta(bytes(result.css.length)))
+    utils.log(emoji.disk, 'Saved to', chalk.bold.cyan(outputFile))
+    utils.footer()
   })
 }
 
@@ -127,13 +128,16 @@ export function run(cliParams, cliOptions) {
     const outputFile = cliOptions.output && cliOptions.output[0]
 
     !inputFile && stopWithHelp('CSS file is required.')
-    !exists(inputFile) && stop(chalk.bold.magenta(inputFile), 'does not exist.')
-    configFile && !exists(configFile) && stop(chalk.bold.magenta(configFile), 'does not exist.')
+    !utils.exists(inputFile) && stop(chalk.bold.magenta(inputFile), 'does not exist.')
 
-    const promise = outputFile
+    configFile &&
+      !utils.exists(configFile) &&
+      stop(chalk.bold.magenta(configFile), 'does not exist.')
+
+    const buildPromise = outputFile
       ? buildToFile(inputFile, configFile, outputFile, startTime)
       : buildToStdout(inputFile, configFile, outputFile)
 
-    promise.then(resolve).catch(reject)
+    buildPromise.then(resolve).catch(reject)
   })
 }

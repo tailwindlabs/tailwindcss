@@ -1,8 +1,8 @@
 import chalk from 'chalk'
 
-import constants from '../constants'
-import emoji from '../emoji'
-import { die, exists, footer, header, log, readFile, writeFile } from '../utils'
+import * as constants from '../constants'
+import * as emoji from '../emoji'
+import * as utils from '../utils'
 
 export const usage = 'init [file]'
 export const description =
@@ -16,22 +16,24 @@ export const description =
  */
 export function run(cliParams) {
   return new Promise(resolve => {
-    header()
+    utils.header()
 
     const file = cliParams[0] || constants.defaultConfigFile
 
-    exists(file) && die(chalk.bold.magenta(file), 'already exists.')
+    utils.exists(file) && utils.die(chalk.bold.magenta(file), 'already exists.')
 
-    const stub = readFile(constants.configStubFile)
+    const stub = utils
+      .readFile(constants.configStubFile)
       .replace('// let defaultConfig', 'let defaultConfig')
       .replace("require('./plugins/container')", "require('tailwindcss/plugins/container')")
 
-    writeFile(file, stub)
+    utils.writeFile(file, stub)
 
-    log()
-    log(emoji.yes, 'Created Tailwind config file:', chalk.bold.magenta(file))
+    utils.log()
+    utils.log(emoji.yes, 'Created Tailwind config file:', chalk.bold.magenta(file))
 
-    footer()
+    utils.footer()
+
     resolve()
   })
 }
