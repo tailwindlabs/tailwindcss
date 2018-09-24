@@ -253,6 +253,17 @@ You can also pass options into the PostCSS loader by passing a callback, as per 
 })
 ```
 
+**Note for Sass users:** Due to [an unresolved issue](https://github.com/bholloway/resolve-url-loader/issues/28) with one of Encore's dependencies, to use Sass with Tailwind you'll need to disable `resolveUrlLoader`:
+
+```js
+Encore
+    .enableSassLoader(function (options) {}, {
+        resolveUrlLoader: false
+    })
+    ;
+```
+
+
 #### Brunch
 
 Add `tailwindcss` to the list of processors you pass to [postcss-brunch](https://github.com/brunch/postcss-brunch), passing the path to your config file:
