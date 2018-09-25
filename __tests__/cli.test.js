@@ -28,6 +28,13 @@ describe('cli', () => {
         expect(utils.writeFile.mock.calls[0][1]).toContain('defaultConfig')
       })
     })
+
+    it('creates a Tailwind config file without comments', () => {
+      cli(['init', '--no-comments']).then(() => {
+        expect(utils.writeFile.mock.calls[0][1]).not.toContain('/**')
+        expect(utils.writeFile.mock.calls[0][1]).toContain('//')
+      })
+    })
   })
 
   describe('build', () => {
