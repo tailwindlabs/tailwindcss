@@ -1,5 +1,4 @@
 import chalk from 'chalk'
-import stripComments from 'strip-comments'
 
 import * as constants from '../constants'
 import * as emoji from '../emoji'
@@ -18,20 +17,6 @@ export const options = [
 
 export const optionMap = {
   noComments: ['no-comments'],
-}
-
-/**
- * Strips block comments from input string. Consolidates multiple line breaks.
- *
- * @param {string} input
- * @return {string}
- */
-function stripBlockComments(input) {
-  return stripComments
-    .block(input, { keepProtected: true })
-    .replace(/\n\s*\n\s*\n/g, '\n\n') // Strip unnecessary line breaks
-    .trim()
-    .concat('\n')
 }
 
 /**
@@ -55,7 +40,7 @@ export function run(cliParams, cliOptions) {
       .replace('// let defaultConfig', 'let defaultConfig')
       .replace("require('./plugins/container')", "require('tailwindcss/plugins/container')")
 
-    noComments && (stub = stripBlockComments(stub))
+    noComments && (stub = utils.stripBlockComments(stub))
 
     utils.writeFile(file, stub)
 
