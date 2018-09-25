@@ -28,7 +28,7 @@ export const optionMap = {
  */
 function stripBlockComments(input) {
   return stripComments
-    .block(input)
+    .block(input, { keepProtected: true })
     .replace(/\n\s*\n\s*\n/g, '\n\n') // Strip unnecessary line breaks
     .trim()
     .concat('\n')
