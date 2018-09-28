@@ -24,7 +24,7 @@ For help, discussion about best practices, or any other conversation that would 
 
 For casual chit-chat with others using the framework:
 
-[Join the Tailwind CSS Slack Community](https://join.slack.com/t/tailwindcss/shared_invite/enQtMjc2NTA1NTg0NTEyLTY4ZTg1YWFjM2NjMTRkMmNkMTA4MGNiZTFmNDYyYTJhNjNkY2QxODQwODE4MWRiZDFlNzdmOGI0MmQ1M2EzZmQ)
+[Join the Tailwind CSS Slack Community](https://join.slack.com/t/tailwindcss/shared_invite/enQtNDQ1MDYyNDA0NzA3LTAzOGEzYTRmMjE2OWUwMGViMGM2NGM5OWVmN2UzZjlmNzQ0ZTA2NGUwODYyOWMzNzM0M2MzMmE1NGYyNjk5NTI)
 
 ## Contributing
 
