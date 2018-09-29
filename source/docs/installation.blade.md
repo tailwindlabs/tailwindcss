@@ -146,7 +146,7 @@ var tailwindcss = require('tailwindcss');
 module.exports = {
   plugins: [
     // ...
-    tailwindcss('./path/to/your/tailwind-config.js'),
+    tailwindcss('./path/to/your/tailwind.js'),
     require('autoprefixer'),
     // ...
   ]
@@ -168,7 +168,7 @@ gulp.task('css', function () {
     // ...
     .pipe(postcss([
       // ...
-      tailwindcss('./path/to/your/tailwind-config.js'),
+      tailwindcss('./path/to/your/tailwind.js'),
       require('autoprefixer'),
       // ...
     ]))
@@ -185,7 +185,7 @@ If you're writing your project in plain CSS, use Mix's `postCss` method to proce
 var tailwindcss = require('tailwindcss');
 
 mix.postCss('resources/css/main.css', 'public/css', [
-  tailwindcss('./path/to/your/tailwind-config.js'),
+  tailwindcss('./path/to/your/tailwind.js'),
 ]);
 ```
 
@@ -197,7 +197,7 @@ var tailwindcss = require('tailwindcss');
 mix.less('resources/less/app.less', 'public/css')
   .options({
     postCss: [
-      tailwindcss('./path/to/your/tailwind-config.js'),
+      tailwindcss('./path/to/your/tailwind.js'),
     ]
   });
 ```
@@ -210,7 +210,7 @@ var tailwindcss = require('tailwindcss');
 mix.sass('resources/sass/app.scss', 'public/css')
   .options({
     processCssUrls: false,
-    postCss: [ tailwindcss('./path/to/your/tailwind-config.js') ],
+    postCss: [ tailwindcss('./path/to/your/tailwind.js') ],
   });
 ```
 
@@ -223,7 +223,7 @@ Create a `postcss.config.js` file, add `tailwindcss` as a plugin and pass the pa
 ```js
 module.exports = {
   plugins: [
-    require('tailwindcss')('./path/to/your/tailwind-config.js'),
+    require('tailwindcss')('./path/to/your/tailwind.js'),
   ]
 }
 ```
