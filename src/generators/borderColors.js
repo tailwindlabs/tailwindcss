@@ -27,7 +27,7 @@ function defineBorderColorUtilities(borderColors) {
   ]
 
   return _.flatMap(generators, generator => {
-    return _.flatMap(borderColors, generator)
+    return _.flatMap(_.omit(borderColors, 'default'), generator)
   })
 }
 
