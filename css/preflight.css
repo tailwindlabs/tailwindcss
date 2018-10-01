@@ -482,3 +482,13 @@ button,
 table {
   border-collapse: collapse;
 }
+
+/**
+ * Resolves issue with putting border-style solid on the wildcard selector
+ *
+ * https://github.com/tailwindcss/tailwindcss/issues/564
+ */
+
+* {
+  border-style: inherit;
+}
