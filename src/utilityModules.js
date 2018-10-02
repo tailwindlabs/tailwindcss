@@ -32,6 +32,7 @@ import pointerEvents from './generators/pointerEvents'
 import position from './generators/position'
 import resize from './generators/resize'
 import shadows from './generators/shadows'
+import snap from './generators/snap'
 import svgFill from './generators/svgFill'
 import svgStroke from './generators/svgStroke'
 import tableLayout from './generators/tableLayout'
@@ -82,6 +83,7 @@ export default [
   { name: 'position', generator: position },
   { name: 'resize', generator: resize },
   { name: 'shadows', generator: shadows },
+  { name: 'snap', generator: snap },
   { name: 'svgFill', generator: svgFill },
   { name: 'svgStroke', generator: svgStroke },
   { name: 'tableLayout', generator: tableLayout },
