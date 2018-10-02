@@ -4800,7 +4800,7 @@ table {
 }
 
 .snap-xy {
-  scoll-snap-type: both mandatory;
+  scroll-snap-type: both mandatory;
 }
 
 .snap-start {
@@ -10401,7 +10401,7 @@ table {
   }
 
   .sm\:snap-xy {
-    scoll-snap-type: both mandatory;
+    scroll-snap-type: both mandatory;
   }
 
   .sm\:snap-start {
@@ -15995,7 +15995,7 @@ table {
   }
 
   .md\:snap-xy {
-    scoll-snap-type: both mandatory;
+    scroll-snap-type: both mandatory;
   }
 
   .md\:snap-start {
@@ -21589,7 +21589,7 @@ table {
   }
 
   .lg\:snap-xy {
-    scoll-snap-type: both mandatory;
+    scroll-snap-type: both mandatory;
   }
 
   .lg\:snap-start {
@@ -27183,7 +27183,7 @@ table {
   }
 
   .xl\:snap-xy {
-    scoll-snap-type: both mandatory;
+    scroll-snap-type: both mandatory;
   }
 
   .xl\:snap-start {
