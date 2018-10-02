@@ -4791,6 +4791,30 @@ table {
   box-shadow: none;
 }
 
+.snap-x {
+  scroll-snap-type: x mandatory;
+}
+
+.snap-y {
+  scroll-snap-type: y mandatory;
+}
+
+.snap-xy {
+  scroll-snap-type: both mandatory;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+
+.snap-end {
+  scroll-snap-align: end;
+}
+
+.snap-center {
+  scroll-snap-align: center;
+}
+
 .fill-current {
   fill: currentColor;
 }
@@ -10368,6 +10392,30 @@ table {
     box-shadow: none;
   }
 
+  .sm\:snap-x {
+    scroll-snap-type: x mandatory;
+  }
+
+  .sm\:snap-y {
+    scroll-snap-type: y mandatory;
+  }
+
+  .sm\:snap-xy {
+    scroll-snap-type: both mandatory;
+  }
+
+  .sm\:snap-start {
+    scroll-snap-align: start;
+  }
+
+  .sm\:snap-end {
+    scroll-snap-align: end;
+  }
+
+  .sm\:snap-center {
+    scroll-snap-align: center;
+  }
+
   .sm\:table-auto {
     table-layout: auto;
   }
@@ -15936,6 +15984,30 @@ table {
 
   .md\:focus\:shadow-none:focus {
     box-shadow: none;
+  }
+
+  .md\:snap-x {
+    scroll-snap-type: x mandatory;
+  }
+
+  .md\:snap-y {
+    scroll-snap-type: y mandatory;
+  }
+
+  .md\:snap-xy {
+    scroll-snap-type: both mandatory;
+  }
+
+  .md\:snap-start {
+    scroll-snap-align: start;
+  }
+
+  .md\:snap-end {
+    scroll-snap-align: end;
+  }
+
+  .md\:snap-center {
+    scroll-snap-align: center;
   }
 
   .md\:table-auto {
@@ -21508,6 +21580,30 @@ table {
     box-shadow: none;
   }
 
+  .lg\:snap-x {
+    scroll-snap-type: x mandatory;
+  }
+
+  .lg\:snap-y {
+    scroll-snap-type: y mandatory;
+  }
+
+  .lg\:snap-xy {
+    scroll-snap-type: both mandatory;
+  }
+
+  .lg\:snap-start {
+    scroll-snap-align: start;
+  }
+
+  .lg\:snap-end {
+    scroll-snap-align: end;
+  }
+
+  .lg\:snap-center {
+    scroll-snap-align: center;
+  }
+
   .lg\:table-auto {
     table-layout: auto;
   }
@@ -27076,6 +27172,30 @@ table {
 
   .xl\:focus\:shadow-none:focus {
     box-shadow: none;
+  }
+
+  .xl\:snap-x {
+    scroll-snap-type: x mandatory;
+  }
+
+  .xl\:snap-y {
+    scroll-snap-type: y mandatory;
+  }
+
+  .xl\:snap-xy {
+    scroll-snap-type: both mandatory;
+  }
+
+  .xl\:snap-start {
+    scroll-snap-align: start;
+  }
+
+  .xl\:snap-end {
+    scroll-snap-align: end;
+  }
+
+  .xl\:snap-center {
+    scroll-snap-align: center;
   }
 
   .xl\:table-auto {

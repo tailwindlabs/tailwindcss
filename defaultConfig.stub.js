@@ -895,6 +895,7 @@ module.exports = {
     position: ['responsive'],
     resize: ['responsive'],
     shadows: ['responsive', 'hover', 'focus'],
+    snap: ['responsive'],
     svgFill: [],
     svgStroke: [],
     tableLayout: ['responsive'],
