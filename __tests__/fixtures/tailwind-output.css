@@ -4791,6 +4791,30 @@ table {
   box-shadow: none;
 }
 
+.snap-x {
+  scroll-snap-type: x mandatory;
+}
+
+.snap-y {
+  scroll-snap-type: y mandatory;
+}
+
+.snap-xy {
+  scoll-snap-type: both mandatory;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+
+.snap-end {
+  scroll-snap-align: end;
+}
+
+.snap-center {
+  scroll-snap-align: center;
+}
+
 .fill-current {
   fill: currentColor;
 }
