@@ -5946,11 +5946,15 @@ table {
 }
 
 .break-words {
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .break-normal {
-  word-wrap: normal;
+  overflow-wrap: normal;
+}
+
+.break-all {
+  word-break: break-all;
 }
 
 .truncate {
@@ -11515,11 +11519,15 @@ table {
   }
 
   .sm\:break-words {
-    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .sm\:break-normal {
-    word-wrap: normal;
+    overflow-wrap: normal;
+  }
+
+  .sm\:break-all {
+    word-break: break-all;
   }
 
   .sm\:truncate {
@@ -17085,11 +17093,15 @@ table {
   }
 
   .md\:break-words {
-    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .md\:break-normal {
-    word-wrap: normal;
+    overflow-wrap: normal;
+  }
+
+  .md\:break-all {
+    word-break: break-all;
   }
 
   .md\:truncate {
@@ -22655,11 +22667,15 @@ table {
   }
 
   .lg\:break-words {
-    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .lg\:break-normal {
-    word-wrap: normal;
+    overflow-wrap: normal;
+  }
+
+  .lg\:break-all {
+    word-break: break-all;
   }
 
   .lg\:truncate {
@@ -28225,11 +28241,15 @@ table {
   }
 
   .xl\:break-words {
-    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .xl\:break-normal {
-    word-wrap: normal;
+    overflow-wrap: normal;
+  }
+
+  .xl\:break-all {
+    word-break: break-all;
   }
 
   .xl\:truncate {
