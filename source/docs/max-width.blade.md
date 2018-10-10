@@ -69,6 +69,26 @@ features:
 
 ## Customizing
 
+### Max-Width Scale
+
+By default Tailwind provides ten `max-width` utilities. You change, add, or remove these by editing the `maxWidth` section of your Tailwind config.
+
+@component('_partials.customized-config', ['key' => 'maxWidth'])
+  'xs': '20rem',
+  'sm': '30rem',
+  'md': '40rem',
+  'lg': '50rem',
+  'xl': '60rem',
+- '2xl': '70rem',
+- '3xl': '80rem',
+- '4xl': '90rem',
+- '5xl': '100rem',
++ '1/4': '25%',
++ '1/2': '50%',
++ '3/4': '75%',
+  'full': '100%',
+@endcomponent
+
 @include('_partials.variants-and-disabling', [
     'utility' => [
         'name' => 'max-width',
