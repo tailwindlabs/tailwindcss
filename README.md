@@ -1,6 +1,7 @@
 <p align="center">
     <a href="https://tailwindcss.com/" target="_blank"><img width="200" src="https://tailwindcss.com/img/tailwind.svg"></a><br>
-    A utility-first CSS framework for rapidly building custom user interfaces.
+    A utility-first CSS framework for rapidly building custom user interfaces.<br>
+  For full documentation, visit <a href="https://tailwindcss.com/" target="_blank">tailwindcss.com</a>.
 </p>
 
 <p align="center">
@@ -11,10 +12,15 @@
 </p>
 
 ------
+## Installation
 
-## Documentation
+<ul>
+  <li>Clone the repo: <code>git clone https://github.com/tailwindcss/tailwindcss.git</code></li>
+  <li>Install via <a href="https://www.npmjs.com/" target="_blank">npm</a>: <code>npm install tailwindcss --save-dev</code></li>
+  <li>Install via <a href="https://yarnpkg.com/" target="_blank">yarn</a>: <code>yarn add tailwindcss --dev</code></li>
+</ul>
 
-For full documentation, visit [tailwindcss.com](https://tailwindcss.com/).
+For Tailwind config and cli configuration visit [the doc page](https://tailwindcss.com/docs/installation).
 
 ## Community
 
