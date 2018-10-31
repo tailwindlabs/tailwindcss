@@ -189,36 +189,7 @@ test('it wraps the output in a responsive at-rule if responsive is included as a
   })
 })
 
-test('variants are generated in a fixed order regardless of the order specified by default', () => {
-  const input = `
-    @variants focus, active, hover, group-hover {
-      .banana { color: yellow; }
-      .chocolate { color: brown; }
-    }
-  `
-
-  const output = `
-      .banana { color: yellow; }
-      .chocolate { color: brown; }
-      .group:hover .group-hover\\:banana { color: yellow; }
-      .group:hover .group-hover\\:chocolate { color: brown; }
-      .hover\\:banana:hover { color: yellow; }
-      .hover\\:chocolate:hover { color: brown; }
-      .focus\\:banana:focus { color: yellow; }
-      .focus\\:chocolate:focus { color: brown; }
-      .active\\:banana:active { color: yellow; }
-      .active\\:chocolate:active { color: brown; }
-  `
-
-  return run(input, {
-    ...config,
-  }).then(result => {
-    expect(result.css).toMatchCss(output)
-    expect(result.warnings().length).toBe(0)
-  })
-})
-
-test('if plugin variants are enabled, variants are generated in the order specified', () => {
+test('variants are generated in the order specified', () => {
   const input = `
     @variants focus, active, hover {
       .banana { color: yellow; }
@@ -239,14 +210,13 @@ test('if plugin variants are enabled, variants are generated in the order specif
 
   return run(input, {
     ...config,
-    experiments: { pluginVariants: true },
   }).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
 
-test('if plugin variants are enabled, plugin variants can modify rules using the raw PostCSS API', () => {
+test('plugin variants can modify rules using the raw PostCSS API', () => {
   const input = `
     @variants important {
       .banana { color: yellow; }
@@ -263,7 +233,6 @@ test('if plugin variants are enabled, plugin variants can modify rules using the
 
   return run(input, {
     ...config,
-    experiments: { pluginVariants: true },
     plugins: [
       ...config.plugins,
       function({ addVariant }) {
@@ -283,7 +252,7 @@ test('if plugin variants are enabled, plugin variants can modify rules using the
   })
 })
 
-test('if plugin variants are enabled, plugin variants can modify selectors with a simplified API', () => {
+test('plugin variants can modify selectors with a simplified API', () => {
   const input = `
     @variants first-child {
       .banana { color: yellow; }
@@ -300,7 +269,6 @@ test('if plugin variants are enabled, plugin variants can modify selectors with 
 
   return run(input, {
     ...config,
-    experiments: { pluginVariants: true },
     plugins: [
       ...config.plugins,
       function({ addVariant }) {
@@ -317,7 +285,7 @@ test('if plugin variants are enabled, plugin variants can modify selectors with 
   })
 })
 
-test('if plugin variants are enabled, plugin variants can wrap rules in another at-rule using the raw PostCSS API', () => {
+test('plugin variants can wrap rules in another at-rule using the raw PostCSS API', () => {
   const input = `
     @variants supports-grid {
       .banana { color: yellow; }
@@ -336,7 +304,6 @@ test('if plugin variants are enabled, plugin variants can wrap rules in another 
 
   return run(input, {
     ...config,
-    experiments: { pluginVariants: true },
     plugins: [
       ...config.plugins,
       function({ addVariant }) {
