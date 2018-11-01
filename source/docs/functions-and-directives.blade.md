@@ -150,7 +150,7 @@ Note that `@@apply` **will not work** for mixing in hover, focus, or responsive 
 You can generate `responsive`, `hover`, `focus`, `active`, and `group-hover` versions of your own utilities by wrapping their definitions in the `@variants` directive
 
 ```less
-@@variants hover, focus {
+@@variants focus, hover {
   .banana {
     color: yellow;
   }
@@ -183,6 +183,30 @@ This will generate the following CSS:
 }
 ```
 
+It's important to note that **variants are generated in the order you specify them**.
+
+So if you want focus utilities to take priority over hover utilities for example, make sure focus comes *before* hover in the list:
+
+```less
+// Input
+@@variants hover, focus {
+  .banana {
+    color: yellow;
+  }
+}
+
+// Output
+.banana {
+  color: yellow;
+}
+.hover\:banana:hover {
+  color: yellow;
+}
+.focus\:banana:focus {
+  color: yellow;
+}
+```
+
 The `@variants` at-rule supports all of the values that are supported in the `modules` section of your config file:
 
 - `responsive`
@@ -190,6 +214,9 @@ The `@variants` at-rule supports all of the values that are supported in the `mo
 - `focus`
 - `active`
 - `group-hover`
+- `focus-within`
+
+...as well as any [custom variants](/docs/plugins#adding-variants) added through plugins.
 
 ## @@responsive
 

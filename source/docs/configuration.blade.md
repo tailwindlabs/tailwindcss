@@ -163,8 +163,13 @@ The available state variants are:
 - `responsive`, for generating breakpoint-specific versions of those utilities
 - `hover`, for generating versions of those utilities that only take effect on hover
 - `focus`, for generating versions of those utilities that only take effect on focus
+- `active`, for generating versions of those utilities that only take effect when an element is active
 - `group-hover`, for generating versions of those utilities that only take effect when a marked parent element is hovered
 - `focus-within`, for generating versions of those utilities that only take effect when a child element has focus
+
+...as well as any [custom variants](/docs/plugins#adding-variants) added through plugins.
+
+It's important to note that (`responsive` excluded) **variants are generated in the order you specify them**, so variants at the end of the list will take precedence over variants at the beginning of the list.
 
 Learn more about state variants in the ["State Variants" documentation](/docs/state-variants).
 
