@@ -164,6 +164,7 @@ The available state variants are:
 - `hover`, for generating versions of those utilities that only take effect on hover
 - `focus`, for generating versions of those utilities that only take effect on focus
 - `group-hover`, for generating versions of those utilities that only take effect when a marked parent element is hovered
+- `focus-within`, for generating versions of those utilities that only take effect when a child element has focus
 
 Learn more about state variants in the ["State Variants" documentation](/docs/state-variants).
 
