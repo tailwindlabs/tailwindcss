@@ -145,6 +145,18 @@ Note that `@@apply` **will not work** for mixing in hover, focus, or responsive 
 }
 ```
 
+If you've [configured a prefix](/docs/configuration#prefix) for your utilities, you can optionally omit the prefix when using `@@apply` if you prefer a terser syntax:
+
+```less
+// Both of these will work
+.btn {
+  @@apply tw-font-bold tw-py-2 tw-px-4 tw-rounded;
+}
+.btn {
+  @@apply font-bold py-2 px-4 rounded;
+}
+```
+
 ## @variants
 
 You can generate `responsive`, `hover`, `focus`, `active`, and `group-hover` versions of your own utilities by wrapping their definitions in the `@variants` directive

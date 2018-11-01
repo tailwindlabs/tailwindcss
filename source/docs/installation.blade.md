@@ -49,6 +49,8 @@ We've provided a CLI utility to do this easily:
   <div class="text-purple-dark">./node_modules/.bin/tailwind <span class="text-blue-dark">init</span> <span class="text-grey-dark">[filename]</span></div>
 </div>
 
+If you're an experienced Tailwind user who doesn't need the comments in the config file, use the `--no-comments` flag when generating your config file to strip them out.
+
 ### 3. Use Tailwind in your CSS
 
 Use the `@@tailwind` directive to inject Tailwind's `preflight` and `utilities` styles into your CSS.
