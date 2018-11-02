@@ -72,9 +72,9 @@ test('setting modules to "all" creates all variants for all modules', () => {
 
   expect(result).toEqual({
     modules: {
-      flexbox: ['responsive', 'hover', 'focus', 'group-hover'],
-      textAlign: ['responsive', 'hover', 'focus', 'group-hover'],
-      textColors: ['responsive', 'hover', 'focus', 'group-hover'],
+      flexbox: ['responsive', 'group-hover', 'hover', 'focus-within', 'focus', 'active'],
+      textAlign: ['responsive', 'group-hover', 'hover', 'focus-within', 'focus', 'active'],
+      textColors: ['responsive', 'group-hover', 'hover', 'focus-within', 'focus', 'active'],
     },
     options: {},
   })
