@@ -1,6 +1,10 @@
 import _ from 'lodash'
 
 function mergeModules(userModules, defaultModules) {
+  if (_.isArray(userModules)) {
+    return _.mapValues(defaultModules, () => userModules)
+  }
+
   if (userModules === 'all') {
     return _.mapValues(defaultModules, () => [
       'responsive',

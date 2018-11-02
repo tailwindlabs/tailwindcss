@@ -80,6 +80,33 @@ test('setting modules to "all" creates all variants for all modules', () => {
   })
 })
 
+test('setting modules to an array of variants applies those variants to all modules', () => {
+  const userConfig = {
+    modules: ['responsive', 'focus', 'hover', 'custom-variant'],
+    options: {},
+  }
+
+  const defaultConfig = {
+    modules: {
+      flexbox: ['responsive'],
+      textAlign: ['hover'],
+      textColors: ['focus'],
+    },
+    options: {},
+  }
+
+  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+
+  expect(result).toEqual({
+    modules: {
+      flexbox: ['responsive', 'focus', 'hover', 'custom-variant'],
+      textAlign: ['responsive', 'focus', 'hover', 'custom-variant'],
+      textColors: ['responsive', 'focus', 'hover', 'custom-variant'],
+    },
+    options: {},
+  })
+})
+
 test('user options are merged with default options', () => {
   const userConfig = {
     modules: {},
