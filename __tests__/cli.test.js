@@ -56,5 +56,17 @@ describe('cli', () => {
         expect(utils.writeFile.mock.calls[0][1]).toContain('.example')
       })
     })
+
+    it('compiles CSS file with autoprefixer', () => {
+      cli(['build', inputCssPath]).then(() => {
+        expect(process.stdout.write.mock.calls[0][0]).toContain('-ms-input-placeholder')
+      })
+    })
+
+    it('compiles CSS file without autoprefixer', () => {
+      cli(['build', inputCssPath, '--no-autoprefixer']).then(() => {
+        expect(process.stdout.write.mock.calls[0][0]).not.toContain('-ms-input-placeholder')
+      })
+    })
   })
 })
