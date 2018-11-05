@@ -63,6 +63,7 @@ function stopWithHelp(...msgs) {
  * @param {string} inputFile
  * @param {string} configFile
  * @param {string} outputFile
+ * @param {boolean} autoprefix
  * @return {Promise}
  */
 function build(inputFile, configFile, outputFile, autoprefix) {
@@ -85,6 +86,7 @@ function build(inputFile, configFile, outputFile, autoprefix) {
  * @param {string} inputFile
  * @param {string} configFile
  * @param {string} outputFile
+ * @param {boolean} autoprefix
  * @return {Promise}
  */
 function buildToStdout(inputFile, configFile, outputFile, autoprefix) {
@@ -99,6 +101,7 @@ function buildToStdout(inputFile, configFile, outputFile, autoprefix) {
  * @param {string} inputFile
  * @param {string} configFile
  * @param {string} outputFile
+ * @param {boolean} autoprefix
  * @param {int[]} startTime
  * @return {Promise}
  */
