@@ -129,8 +129,10 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
 For simple projects or just giving Tailwind a spin, you can use the Tailwind CLI tool to process your CSS:
 
 <div class="bg-grey-lightest border rounded font-mono text-sm p-4">
-  <div class="text-purple-dark">./node_modules/.bin/tailwind build <span class="text-blue-dark">styles.css</span> <span class="text-grey-dark">[-c ./tailwind.js] [-o ./output.css]</span></div>
+  <div class="text-purple-dark">./node_modules/.bin/tailwind build <span class="text-blue-dark">styles.css</span> <span class="text-grey-dark">[-c ./tailwind.js] [-o ./output.css] [--no-autoprefixer]</span></div>
 </div>
+
+Use the `./node_modules/.bin/tailwind help build` command to learn more about the various CLI options.
 
 #### Using Tailwind with PostCSS
 
