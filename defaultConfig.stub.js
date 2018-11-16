@@ -189,6 +189,7 @@ module.exports = {
   | provided by the platform.
   |
   | Class name: .font-{name}
+  | CSS property: font-family
   |
   */
 
@@ -246,6 +247,7 @@ module.exports = {
   | prefer, be it rems, ems, pixels or other.
   |
   | Class name: .text-{size}
+  | CSS property: font-size
   |
   */
 
@@ -273,6 +275,7 @@ module.exports = {
   | all of these, so we recommend removing those you don't need.
   |
   | Class name: .font-{weight}
+  | CSS property: font-weight
   |
   */
 
@@ -298,6 +301,7 @@ module.exports = {
   | them in Tailwind, leadings.
   |
   | Class name: .leading-{size}
+  | CSS property: line-height
   |
   */
 
@@ -318,6 +322,7 @@ module.exports = {
   | them in Tailwind, tracking.
   |
   | Class name: .tracking-{size}
+  | CSS property: letter-spacing
   |
   */
 
@@ -338,6 +343,7 @@ module.exports = {
   | independently if that makes sense for your project.
   |
   | Class name: .text-{color}
+  | CSS property: color
   |
   */
 
@@ -354,6 +360,7 @@ module.exports = {
   | these independently if that makes sense for your project.
   |
   | Class name: .bg-{color}
+  | CSS property: background-color
   |
   */
 
@@ -370,6 +377,7 @@ module.exports = {
   | that are specific to your project here as well.
   |
   | Class name: .bg-{size}
+  | CSS property: background-size
   |
   */
 
@@ -390,6 +398,7 @@ module.exports = {
   | width that will be used when you do not specify a border width.
   |
   | Class name: .border{-side?}{-width?}
+  | CSS property: border-width
   |
   */
 
@@ -416,6 +425,7 @@ module.exports = {
   | specify a border color.
   |
   | Class name: .border-{color}
+  | CSS property: border-color
   |
   */
 
@@ -435,6 +445,7 @@ module.exports = {
   | a good idea to put it first so other values are able to override it.
   |
   | Class name: .rounded{-side?}{-size?}
+  | CSS property: border-radius
   |
   */
 
@@ -464,6 +475,7 @@ module.exports = {
   | awesome classes like .w-2/3.
   |
   | Class name: .w-{size}
+  | CSS property: width
   |
   */
 
@@ -512,6 +524,7 @@ module.exports = {
   | needed.
   |
   | Class name: .h-{size}
+  | CSS property: height
   |
   */
 
@@ -548,6 +561,7 @@ module.exports = {
   | these values as needed.
   |
   | Class name: .min-w-{size}
+  | CSS property: min-width
   |
   */
 
@@ -568,6 +582,7 @@ module.exports = {
   | values as needed.
   |
   | Class name: .min-h-{size}
+  | CSS property: min-height
   |
   */
 
@@ -590,6 +605,7 @@ module.exports = {
   | modify these values as needed.
   |
   | Class name: .max-w-{size}
+  | CSS property: max-width
   |
   */
 
@@ -618,6 +634,7 @@ module.exports = {
   | these values as needed.
   |
   | Class name: .max-h-{size}
+  | CSS property: max-height
   |
   */
 
@@ -639,6 +656,7 @@ module.exports = {
   | values as needed.
   |
   | Class name: .p{side?}-{size}
+  | CSS property: padding
   |
   */
 
@@ -673,6 +691,7 @@ module.exports = {
   | values as needed.
   |
   | Class name: .m{side?}-{size}
+  | CSS property: margin
   |
   */
 
@@ -708,6 +727,7 @@ module.exports = {
   | values as needed.
   |
   | Class name: .-m{side?}-{size}
+  | CSS property: margin
   |
   */
 
@@ -743,6 +763,7 @@ module.exports = {
   | suffixed `.shadow` utility.
   |
   | Class name: .shadow-{size?}
+  | CSS property: box-shadow
   |
   */
 
@@ -766,6 +787,7 @@ module.exports = {
   | values as needed.
   |
   | Class name: .z-{index}
+  | CSS property: z-index
   |
   */
 
@@ -790,6 +812,7 @@ module.exports = {
   | values as needed.
   |
   | Class name: .opacity-{name}
+  | CSS property: opacity
   |
   */
 
@@ -813,6 +836,7 @@ module.exports = {
   | generated CSS file size down.
   |
   | Class name: .fill-{name}
+  | CSS property: fill
   |
   */
 
@@ -832,6 +856,7 @@ module.exports = {
   | keep the generated CSS file size down.
   |
   | Class name: .stroke-{name}
+  | CSS property: stroke
   |
   */
 
