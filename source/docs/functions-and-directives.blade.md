@@ -43,7 +43,7 @@ Use the `@@tailwind` directive to insert Tailwind's `preflight`, `utilities` and
 
 ## @@apply
 
-Use `@@apply` to mixin the contents of existing classes into your custom CSS.
+Use `@@apply` to mix-in the contents of existing classes into your custom CSS.
 
 This is extremely useful when you find a common utility pattern in your HTML that you'd like to extract to a new component.
 
@@ -59,7 +59,7 @@ This is extremely useful when you find a common utility pattern in your HTML tha
 }
 ```
 
-Rules can listed on a single line or with multiple calls to `@@apply`:
+Rules can be listed on a single line or with multiple calls to `@@apply`:
 
 ```less
 .btn {
