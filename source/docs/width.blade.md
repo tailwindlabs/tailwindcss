@@ -163,7 +163,7 @@ features:
 
 By default Tailwind provides 15 fixed `width` utilities, 12 percentage-based utilities, an `auto` utility, and a utility for setting the width of an element to match the viewport width. You change, add, or remove these by editing the `width` section of your Tailwind config.
 
-@component('_partials.customized-config', ['key' => 'maxWidth'])
+@component('_partials.customized-config', ['key' => 'width'])
   'auto': 'auto',
   'px': '1px',
 + '2px': '2px',
