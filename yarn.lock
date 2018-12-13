@@ -8996,10 +8996,10 @@ table@^4.0.1:
     slice-ansi "1.0.0"
     string-width "^2.1.1"
 
-tailwindcss@0.7.1:
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-0.7.1.tgz#f1bbf474cab6d9aa672ee4e37b07a89453f6df62"
-  integrity sha512-lqAjbfE2ynNMWJqPrstplZC16/oZvG+nkw90egPVgp8WV434EgHdsjFYwHmWP3C0/Wr1669QHcb/PnM+Lpv4tw==
+tailwindcss@0.7.3:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-0.7.3.tgz#7b58605dd7857507c4dbc6edaccab4c14d30c054"
+  integrity sha512-YbIa8lrngcObqaJEjza8/jwmx3F6L0TQ3vWTf6KD/EHWjRTVlcExDhtWbTwEUnX0fxuK5UvfSl2gfW0mP3Skzg==
   dependencies:
     autoprefixer "^9.3.1"
     bytes "^3.0.0"
