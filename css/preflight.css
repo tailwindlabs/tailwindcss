@@ -378,15 +378,17 @@ html {
 blockquote,
 dl,
 dd,
+figure,
 h1,
 h2,
 h3,
 h4,
 h5,
 h6,
-figure,
+ol,
 p,
-pre {
+pre,
+ul {
   margin: 0;
 }
 
@@ -410,10 +412,6 @@ fieldset {
   padding: 0;
 }
 
-ol,
-ul {
-  margin: 0;
-}
 
 /**
  * Tailwind custom reset styles
