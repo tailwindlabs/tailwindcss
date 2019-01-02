@@ -369,7 +369,7 @@ module.exports = {
 
   /*
   |-----------------------------------------------------------------------------
-  | Background positions      https://tailwindcss.com/docs/background-positions
+  | Background positions       https://tailwindcss.com/docs/background-position
   |-----------------------------------------------------------------------------
   |
   | Here is where you define your background positions. We provide some 
