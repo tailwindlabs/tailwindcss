@@ -36,7 +36,6 @@ import resize from './generators/resize'
 import shadows from './generators/shadows'
 import svgFill from './generators/svgFill'
 import svgStroke from './generators/svgStroke'
-import tableLayout from './generators/tableLayout'
 
 export default [
   { name: 'lists', generator: lists },
@@ -77,5 +76,4 @@ export default [
   { name: 'shadows', generator: shadows },
   { name: 'svgFill', generator: svgFill },
   { name: 'svgStroke', generator: svgStroke },
-  { name: 'tableLayout', generator: tableLayout },
 ]

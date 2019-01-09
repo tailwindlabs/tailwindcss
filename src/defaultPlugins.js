@@ -1,3 +1,4 @@
+import tableLayout from './plugins/tableLayout'
 import textAlign from './plugins/textAlign'
 import textColors from './plugins/textColors'
 import textSizes from './plugins/textSizes'
@@ -11,6 +12,7 @@ import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
 export default [
+  tableLayout(),
   textAlign(),
   textColors(),
   textSizes(),
