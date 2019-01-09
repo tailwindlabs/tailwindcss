@@ -1,3 +1,4 @@
+import negativeMargin from './plugins/negativeMargin'
 import objectFit from './plugins/objectFit'
 import objectPosition from './plugins/objectPosition'
 import opacity from './plugins/opacity'
@@ -25,6 +26,7 @@ import zIndex from './plugins/zIndex'
 
 export default function (config) {
   return [
+    config.modules.negativeMargin === false ? () => {} : negativeMargin(),
     config.modules.objectFit === false ? () => {} : objectFit(),
     config.modules.objectPosition === false ? () => {} : objectPosition(),
     config.modules.opacity === false ? () => {} : opacity(),
