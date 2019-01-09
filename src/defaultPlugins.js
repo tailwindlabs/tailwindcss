@@ -1,3 +1,4 @@
+import textColors from './plugins/textColors'
 import textSizes from './plugins/textSizes'
 import textStyle from './plugins/textStyle'
 import tracking from './plugins/tracking'
@@ -9,6 +10,7 @@ import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
 export default [
+  textColors(),
   textSizes(),
   textStyle(),
   tracking(),
