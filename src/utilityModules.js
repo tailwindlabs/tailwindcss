@@ -34,7 +34,6 @@ import pointerEvents from './generators/pointerEvents'
 import position from './generators/position'
 import resize from './generators/resize'
 import shadows from './generators/shadows'
-import svgFill from './generators/svgFill'
 
 export default [
   { name: 'lists', generator: lists },
@@ -73,5 +72,4 @@ export default [
   { name: 'position', generator: position },
   { name: 'resize', generator: resize },
   { name: 'shadows', generator: shadows },
-  { name: 'svgFill', generator: svgFill },
 ]
