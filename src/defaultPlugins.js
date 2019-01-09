@@ -1,3 +1,4 @@
+import resize from './plugins/resize'
 import shadows from './plugins/shadows'
 import svgFill from './plugins/svgFill'
 import svgStroke from './plugins/svgStroke'
@@ -15,6 +16,7 @@ import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
 export default [
+  resize(),
   shadows(),
   svgFill(),
   svgStroke(),

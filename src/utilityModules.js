@@ -32,7 +32,6 @@ import overflow from './generators/overflow'
 import padding from './generators/padding'
 import pointerEvents from './generators/pointerEvents'
 import position from './generators/position'
-import resize from './generators/resize'
 
 export default [
   { name: 'lists', generator: lists },
@@ -69,5 +68,4 @@ export default [
   { name: 'padding', generator: padding },
   { name: 'pointerEvents', generator: pointerEvents },
   { name: 'position', generator: position },
-  { name: 'resize', generator: resize },
 ]
