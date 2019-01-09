@@ -1,3 +1,4 @@
+import outline from './plugins/outline'
 import overflow from './plugins/overflow'
 import padding from './plugins/padding'
 import pointerEvents from './plugins/pointerEvents'
@@ -20,6 +21,7 @@ import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
 export default [
+  outline(),
   overflow(),
   padding(),
   pointerEvents(),
