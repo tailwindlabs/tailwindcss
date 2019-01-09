@@ -1,3 +1,4 @@
+import textAlign from './plugins/textAlign'
 import textColors from './plugins/textColors'
 import textSizes from './plugins/textSizes'
 import textStyle from './plugins/textStyle'
@@ -10,6 +11,7 @@ import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
 export default [
+  textAlign(),
   textColors(),
   textSizes(),
   textStyle(),

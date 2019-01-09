@@ -37,7 +37,6 @@ import shadows from './generators/shadows'
 import svgFill from './generators/svgFill'
 import svgStroke from './generators/svgStroke'
 import tableLayout from './generators/tableLayout'
-import textAlign from './generators/textAlign'
 
 export default [
   { name: 'lists', generator: lists },
@@ -79,5 +78,4 @@ export default [
   { name: 'svgFill', generator: svgFill },
   { name: 'svgStroke', generator: svgStroke },
   { name: 'tableLayout', generator: tableLayout },
-  { name: 'textAlign', generator: textAlign },
 ]
