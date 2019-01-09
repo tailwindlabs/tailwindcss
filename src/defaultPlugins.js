@@ -1,3 +1,4 @@
+import objectFit from './plugins/objectFit'
 import objectPosition from './plugins/objectPosition'
 import opacity from './plugins/opacity'
 import outline from './plugins/outline'
@@ -24,6 +25,7 @@ import zIndex from './plugins/zIndex'
 
 export default function (config) {
   return [
+    config.modules.objectFit === false ? () => {} : objectFit(),
     config.modules.objectPosition === false ? () => {} : objectPosition(),
     config.modules.opacity === false ? () => {} : opacity(),
     config.modules.outline === false ? () => {} : outline(),
