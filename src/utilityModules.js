@@ -41,8 +41,6 @@ import textAlign from './generators/textAlign'
 import textColors from './generators/textColors'
 import textSizes from './generators/textSizes'
 import textStyle from './generators/textStyle'
-import tracking from './generators/tracking'
-import userSelect from './generators/userSelect'
 
 export default [
   { name: 'lists', generator: lists },
@@ -88,6 +86,4 @@ export default [
   { name: 'textColors', generator: textColors },
   { name: 'textSizes', generator: textSizes },
   { name: 'textStyle', generator: textStyle },
-  { name: 'tracking', generator: tracking },
-  { name: 'userSelect', generator: userSelect },
 ]
