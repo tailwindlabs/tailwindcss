@@ -29,7 +29,6 @@ import objectPosition from './generators/objectPosition'
 import opacity from './generators/opacity'
 import outline from './generators/outline'
 import overflow from './generators/overflow'
-import padding from './generators/padding'
 
 export default [
   { name: 'lists', generator: lists },
@@ -63,5 +62,4 @@ export default [
   { name: 'opacity', generator: opacity },
   { name: 'outline', generator: outline },
   { name: 'overflow', generator: overflow },
-  { name: 'padding', generator: padding },
 ]

@@ -1,3 +1,4 @@
+import padding from './plugins/padding'
 import pointerEvents from './plugins/pointerEvents'
 import position from './plugins/position'
 import resize from './plugins/resize'
@@ -18,6 +19,7 @@ import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
 export default [
+  padding(),
   pointerEvents(),
   position(),
   resize(),
