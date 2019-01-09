@@ -45,9 +45,6 @@ import tracking from './generators/tracking'
 import userSelect from './generators/userSelect'
 import verticalAlign from './generators/verticalAlign'
 import visibility from './generators/visibility'
-import whitespace from './generators/whitespace'
-import width from './generators/width'
-import zIndex from './generators/zIndex'
 
 export default [
   { name: 'lists', generator: lists },
@@ -97,7 +94,4 @@ export default [
   { name: 'userSelect', generator: userSelect },
   { name: 'verticalAlign', generator: verticalAlign },
   { name: 'visibility', generator: visibility },
-  { name: 'whitespace', generator: whitespace },
-  { name: 'width', generator: width },
-  // { name: 'zIndex', generator: zIndex },
 ]
