@@ -1,3 +1,4 @@
+import position from './plugins/position'
 import resize from './plugins/resize'
 import shadows from './plugins/shadows'
 import svgFill from './plugins/svgFill'
@@ -16,6 +17,7 @@ import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
 export default [
+  position(),
   resize(),
   shadows(),
   svgFill(),
