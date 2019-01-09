@@ -1,3 +1,4 @@
+import pointerEvents from './plugins/pointerEvents'
 import position from './plugins/position'
 import resize from './plugins/resize'
 import shadows from './plugins/shadows'
@@ -17,6 +18,7 @@ import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
 export default [
+  pointerEvents(),
   position(),
   resize(),
   shadows(),

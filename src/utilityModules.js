@@ -30,7 +30,6 @@ import opacity from './generators/opacity'
 import outline from './generators/outline'
 import overflow from './generators/overflow'
 import padding from './generators/padding'
-import pointerEvents from './generators/pointerEvents'
 
 export default [
   { name: 'lists', generator: lists },
@@ -65,5 +64,4 @@ export default [
   { name: 'outline', generator: outline },
   { name: 'overflow', generator: overflow },
   { name: 'padding', generator: padding },
-  { name: 'pointerEvents', generator: pointerEvents },
 ]
