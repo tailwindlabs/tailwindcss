@@ -44,7 +44,6 @@ import textStyle from './generators/textStyle'
 import tracking from './generators/tracking'
 import userSelect from './generators/userSelect'
 import verticalAlign from './generators/verticalAlign'
-import visibility from './generators/visibility'
 
 export default [
   { name: 'lists', generator: lists },
@@ -93,5 +92,4 @@ export default [
   { name: 'tracking', generator: tracking },
   { name: 'userSelect', generator: userSelect },
   { name: 'verticalAlign', generator: verticalAlign },
-  { name: 'visibility', generator: visibility },
 ]
