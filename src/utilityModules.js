@@ -43,7 +43,6 @@ import textSizes from './generators/textSizes'
 import textStyle from './generators/textStyle'
 import tracking from './generators/tracking'
 import userSelect from './generators/userSelect'
-import verticalAlign from './generators/verticalAlign'
 
 export default [
   { name: 'lists', generator: lists },
@@ -91,5 +90,4 @@ export default [
   { name: 'textStyle', generator: textStyle },
   { name: 'tracking', generator: tracking },
   { name: 'userSelect', generator: userSelect },
-  { name: 'verticalAlign', generator: verticalAlign },
 ]
