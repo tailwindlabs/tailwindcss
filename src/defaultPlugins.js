@@ -1,3 +1,4 @@
+import opacity from './plugins/opacity'
 import outline from './plugins/outline'
 import overflow from './plugins/overflow'
 import padding from './plugins/padding'
@@ -21,6 +22,7 @@ import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
 export default [
+  opacity(),
   outline(),
   overflow(),
   padding(),
