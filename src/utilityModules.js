@@ -39,8 +39,6 @@ import svgStroke from './generators/svgStroke'
 import tableLayout from './generators/tableLayout'
 import textAlign from './generators/textAlign'
 import textColors from './generators/textColors'
-import textSizes from './generators/textSizes'
-import textStyle from './generators/textStyle'
 
 export default [
   { name: 'lists', generator: lists },
@@ -84,6 +82,4 @@ export default [
   { name: 'tableLayout', generator: tableLayout },
   { name: 'textAlign', generator: textAlign },
   { name: 'textColors', generator: textColors },
-  { name: 'textSizes', generator: textSizes },
-  { name: 'textStyle', generator: textStyle },
 ]

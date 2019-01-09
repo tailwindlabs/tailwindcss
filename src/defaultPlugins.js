@@ -1,3 +1,5 @@
+import textSizes from './plugins/textSizes'
+import textStyle from './plugins/textStyle'
 import tracking from './plugins/tracking'
 import userSelect from './plugins/userSelect'
 import verticalAlign from './plugins/verticalAlign'
@@ -7,6 +9,8 @@ import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
 export default [
+  textSizes(),
+  textStyle(),
   tracking(),
   userSelect(),
   verticalAlign(),
