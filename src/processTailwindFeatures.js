@@ -14,7 +14,7 @@ import processPlugins from './util/processPlugins'
 export default function(getConfig) {
   return function(css) {
     const config = getConfig()
-    const processedPlugins = processPlugins(config)
+    const processedPlugins = processPlugins(config.plugins, config)
     const utilities = generateUtilities(config, processedPlugins.utilities)
 
     return postcss([
