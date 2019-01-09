@@ -1,3 +1,4 @@
+import overflow from './plugins/overflow'
 import padding from './plugins/padding'
 import pointerEvents from './plugins/pointerEvents'
 import position from './plugins/position'
@@ -19,6 +20,7 @@ import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
 export default [
+  overflow(),
   padding(),
   pointerEvents(),
   position(),

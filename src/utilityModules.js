@@ -28,7 +28,6 @@ import objectFit from './generators/objectFit'
 import objectPosition from './generators/objectPosition'
 import opacity from './generators/opacity'
 import outline from './generators/outline'
-import overflow from './generators/overflow'
 
 export default [
   { name: 'lists', generator: lists },
@@ -61,5 +60,4 @@ export default [
   { name: 'objectPosition', generator: objectPosition },
   { name: 'opacity', generator: opacity },
   { name: 'outline', generator: outline },
-  { name: 'overflow', generator: overflow },
 ]
