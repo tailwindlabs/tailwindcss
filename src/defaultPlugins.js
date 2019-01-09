@@ -1,3 +1,4 @@
+import shadows from './plugins/shadows'
 import svgFill from './plugins/svgFill'
 import svgStroke from './plugins/svgStroke'
 import tableLayout from './plugins/tableLayout'
@@ -14,6 +15,7 @@ import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
 export default [
+  shadows(),
   svgFill(),
   svgStroke(),
   tableLayout(),
