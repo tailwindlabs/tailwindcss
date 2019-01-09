@@ -1,3 +1,4 @@
+import svgStroke from './plugins/svgStroke'
 import tableLayout from './plugins/tableLayout'
 import textAlign from './plugins/textAlign'
 import textColors from './plugins/textColors'
@@ -12,6 +13,7 @@ import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
 export default [
+  svgStroke(),
   tableLayout(),
   textAlign(),
   textColors(),
