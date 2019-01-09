@@ -17,7 +17,7 @@ export default function(getConfig) {
   return function(css) {
     const config = getConfig()
     const processedPlugins = processPlugins([
-      ...defaultPlugins,
+      ...defaultPlugins(config),
       ...config.plugins
     ], config)
     const utilities = generateUtilities(config, processedPlugins.utilities)

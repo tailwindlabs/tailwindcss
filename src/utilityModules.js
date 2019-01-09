@@ -25,7 +25,6 @@ import minHeight from './generators/minHeight'
 import minWidth from './generators/minWidth'
 import negativeMargin from './generators/negativeMargin'
 import objectFit from './generators/objectFit'
-import objectPosition from './generators/objectPosition'
 
 export default [
   { name: 'lists', generator: lists },
@@ -55,5 +54,4 @@ export default [
   { name: 'minWidth', generator: minWidth },
   { name: 'negativeMargin', generator: negativeMargin },
   { name: 'objectFit', generator: objectFit },
-  { name: 'objectPosition', generator: objectPosition },
 ]
