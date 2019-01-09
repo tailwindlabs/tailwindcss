@@ -8,13 +8,18 @@ import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
 import substituteScreenAtRules from './lib/substituteScreenAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
 
-import generateUtilities from './util/generateUtilities'
+import generateUtilities from './legacy/generateUtilities'
 import processPlugins from './util/processPlugins'
+
+import defaultPlugins from './defaultPlugins'
 
 export default function(getConfig) {
   return function(css) {
     const config = getConfig()
-    const processedPlugins = processPlugins(config.plugins, config)
+    const processedPlugins = processPlugins([
+      ...defaultPlugins.map(plugin => plugin()),
+      ...config.plugins
+    ], config)
     const utilities = generateUtilities(config, processedPlugins.utilities)
 
     return postcss([

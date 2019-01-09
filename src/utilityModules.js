@@ -99,5 +99,5 @@ export default [
   { name: 'visibility', generator: visibility },
   { name: 'whitespace', generator: whitespace },
   { name: 'width', generator: width },
-  { name: 'zIndex', generator: zIndex },
+  // { name: 'zIndex', generator: zIndex },
 ]

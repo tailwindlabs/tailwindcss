@@ -1,6 +1,6 @@
 import postcss from 'postcss'
 import plugin from '../src/lib/substituteClassApplyAtRules'
-import generateUtilities from '../src/util/generateUtilities'
+import generateUtilities from '../src/legacy/generateUtilities'
 import defaultConfig from '../defaultConfig.stub.js'
 
 const defaultUtilities = generateUtilities(defaultConfig, [])
