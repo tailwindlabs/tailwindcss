@@ -6,7 +6,6 @@ import backgroundPosition from './generators/backgroundPosition'
 import backgroundRepeat from './generators/backgroundRepeat'
 import backgroundSize from './generators/backgroundSize'
 import borderCollapse from './generators/borderCollapse'
-import borderColors from './generators/borderColors'
 
 export default [
   { name: 'lists', generator: lists },
@@ -17,5 +16,4 @@ export default [
   { name: 'backgroundRepeat', generator: backgroundRepeat },
   { name: 'backgroundSize', generator: backgroundSize },
   { name: 'borderCollapse', generator: borderCollapse },
-  { name: 'borderColors', generator: borderColors },
 ]
