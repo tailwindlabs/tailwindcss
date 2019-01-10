@@ -8,7 +8,6 @@ import backgroundSize from './generators/backgroundSize'
 import borderCollapse from './generators/borderCollapse'
 import borderColors from './generators/borderColors'
 import borderRadius from './generators/borderRadius'
-import borderStyle from './generators/borderStyle'
 
 export default [
   { name: 'lists', generator: lists },
@@ -21,5 +20,4 @@ export default [
   { name: 'borderCollapse', generator: borderCollapse },
   { name: 'borderColors', generator: borderColors },
   { name: 'borderRadius', generator: borderRadius },
-  { name: 'borderStyle', generator: borderStyle },
 ]
