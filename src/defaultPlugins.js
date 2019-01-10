@@ -1,3 +1,4 @@
+import borderRadius from './plugins/borderRadius'
 import borderStyle from './plugins/borderStyle'
 import borderWidths from './plugins/borderWidths'
 import cursor from './plugins/cursor'
@@ -41,6 +42,7 @@ import zIndex from './plugins/zIndex'
 
 export default function (config) {
   return [
+    config.modules.borderRadius === false ? () => {} : borderRadius(),
     config.modules.borderStyle === false ? () => {} : borderStyle(),
     config.modules.borderWidths === false ? () => {} : borderWidths(),
     config.modules.cursor === false ? () => {} : cursor(),
