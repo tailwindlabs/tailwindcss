@@ -14,7 +14,6 @@ import cursor from './generators/cursor'
 import display from './generators/display'
 import flexbox from './generators/flexbox'
 import float from './generators/float'
-import fonts from './generators/fonts'
 
 export default [
   { name: 'lists', generator: lists },
@@ -33,5 +32,4 @@ export default [
   { name: 'display', generator: display },
   { name: 'flexbox', generator: flexbox },
   { name: 'float', generator: float },
-  { name: 'fonts', generator: fonts },
 ]

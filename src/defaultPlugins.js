@@ -1,3 +1,4 @@
+import fonts from './plugins/fonts'
 import fontWeights from './plugins/fontWeights'
 import height from './plugins/height'
 import leading from './plugins/leading'
@@ -34,6 +35,7 @@ import zIndex from './plugins/zIndex'
 
 export default function (config) {
   return [
+    config.modules.fonts === false ? () => {} : fonts(),
     config.modules.fontWeights === false ? () => {} : fontWeights(),
     config.modules.height === false ? () => {} : height(),
     config.modules.leading === false ? () => {} : leading(),
