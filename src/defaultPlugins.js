@@ -1,3 +1,4 @@
+import borderCollapse from './plugins/borderCollapse'
 import borderColors from './plugins/borderColors'
 import borderRadius from './plugins/borderRadius'
 import borderStyle from './plugins/borderStyle'
@@ -43,6 +44,7 @@ import zIndex from './plugins/zIndex'
 
 export default function (config) {
   return [
+    config.modules.borderCollapse === false ? () => {} : borderCollapse(),
     config.modules.borderColors === false ? () => {} : borderColors(),
     config.modules.borderRadius === false ? () => {} : borderRadius(),
     config.modules.borderStyle === false ? () => {} : borderStyle(),
