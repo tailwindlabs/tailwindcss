@@ -15,7 +15,6 @@ import display from './generators/display'
 import flexbox from './generators/flexbox'
 import float from './generators/float'
 import fonts from './generators/fonts'
-import fontWeights from './generators/fontWeights'
 
 export default [
   { name: 'lists', generator: lists },
@@ -35,5 +34,4 @@ export default [
   { name: 'flexbox', generator: flexbox },
   { name: 'float', generator: float },
   { name: 'fonts', generator: fonts },
-  { name: 'fontWeights', generator: fontWeights },
 ]
