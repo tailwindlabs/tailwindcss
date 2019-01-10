@@ -11,7 +11,6 @@ import borderRadius from './generators/borderRadius'
 import borderStyle from './generators/borderStyle'
 import borderWidths from './generators/borderWidths'
 import cursor from './generators/cursor'
-import display from './generators/display'
 
 export default [
   { name: 'lists', generator: lists },
@@ -27,5 +26,4 @@ export default [
   { name: 'borderStyle', generator: borderStyle },
   { name: 'borderWidths', generator: borderWidths },
   { name: 'cursor', generator: cursor },
-  { name: 'display', generator: display },
 ]

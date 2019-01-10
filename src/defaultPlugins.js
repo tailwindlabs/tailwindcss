@@ -1,3 +1,4 @@
+import display from './plugins/display'
 import flexbox from './plugins/flexbox'
 import float from './plugins/float'
 import fonts from './plugins/fonts'
@@ -37,6 +38,7 @@ import zIndex from './plugins/zIndex'
 
 export default function (config) {
   return [
+    config.modules.display === false ? () => {} : display(),
     config.modules.flexbox === false ? () => {} : flexbox(),
     config.modules.float === false ? () => {} : float(),
     config.modules.fonts === false ? () => {} : fonts(),
