@@ -16,7 +16,6 @@ import flexbox from './generators/flexbox'
 import float from './generators/float'
 import fonts from './generators/fonts'
 import fontWeights from './generators/fontWeights'
-import height from './generators/height'
 
 export default [
   { name: 'lists', generator: lists },
@@ -37,5 +36,4 @@ export default [
   { name: 'float', generator: float },
   { name: 'fonts', generator: fonts },
   { name: 'fontWeights', generator: fontWeights },
-  { name: 'height', generator: height },
 ]
