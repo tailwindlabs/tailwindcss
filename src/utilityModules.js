@@ -9,7 +9,6 @@ import borderCollapse from './generators/borderCollapse'
 import borderColors from './generators/borderColors'
 import borderRadius from './generators/borderRadius'
 import borderStyle from './generators/borderStyle'
-import borderWidths from './generators/borderWidths'
 
 export default [
   { name: 'lists', generator: lists },
@@ -23,5 +22,4 @@ export default [
   { name: 'borderColors', generator: borderColors },
   { name: 'borderRadius', generator: borderRadius },
   { name: 'borderStyle', generator: borderStyle },
-  { name: 'borderWidths', generator: borderWidths },
 ]

@@ -1,3 +1,4 @@
+import borderWidths from './plugins/borderWidths'
 import cursor from './plugins/cursor'
 import display from './plugins/display'
 import flexbox from './plugins/flexbox'
@@ -39,6 +40,7 @@ import zIndex from './plugins/zIndex'
 
 export default function (config) {
   return [
+    config.modules.borderWidths === false ? () => {} : borderWidths(),
     config.modules.cursor === false ? () => {} : cursor(),
     config.modules.display === false ? () => {} : display(),
     config.modules.flexbox === false ? () => {} : flexbox(),
