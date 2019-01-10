@@ -18,7 +18,6 @@ import fonts from './generators/fonts'
 import fontWeights from './generators/fontWeights'
 import height from './generators/height'
 import leading from './generators/leading'
-import margin from './generators/margin'
 
 export default [
   { name: 'lists', generator: lists },
@@ -41,5 +40,4 @@ export default [
   { name: 'fontWeights', generator: fontWeights },
   { name: 'height', generator: height },
   { name: 'leading', generator: leading },
-  { name: 'margin', generator: margin },
 ]
