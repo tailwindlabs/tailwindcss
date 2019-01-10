@@ -1,3 +1,4 @@
+import lists from './plugins/lists'
 import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
 import backgroundColors from './plugins/backgroundColors'
@@ -50,6 +51,7 @@ import zIndex from './plugins/zIndex'
 
 export default function (config) {
   return [
+    config.modules.lists === false ? () => {} : lists(),
     config.modules.appearance === false ? () => {} : appearance(),
     config.modules.backgroundAttachment === false ? () => {} : backgroundAttachment(),
     config.modules.backgroundColors === false ? () => {} : backgroundColors(),
