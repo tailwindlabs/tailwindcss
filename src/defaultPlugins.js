@@ -1,3 +1,4 @@
+import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
 import backgroundColors from './plugins/backgroundColors'
 import backgroundPosition from './plugins/backgroundPosition'
@@ -49,6 +50,7 @@ import zIndex from './plugins/zIndex'
 
 export default function (config) {
   return [
+    config.modules.appearance === false ? () => {} : appearance(),
     config.modules.backgroundAttachment === false ? () => {} : backgroundAttachment(),
     config.modules.backgroundColors === false ? () => {} : backgroundColors(),
     config.modules.backgroundPosition === false ? () => {} : backgroundPosition(),
