@@ -13,7 +13,6 @@ import borderWidths from './generators/borderWidths'
 import cursor from './generators/cursor'
 import display from './generators/display'
 import flexbox from './generators/flexbox'
-import float from './generators/float'
 
 export default [
   { name: 'lists', generator: lists },
@@ -31,5 +30,4 @@ export default [
   { name: 'cursor', generator: cursor },
   { name: 'display', generator: display },
   { name: 'flexbox', generator: flexbox },
-  { name: 'float', generator: float },
 ]
