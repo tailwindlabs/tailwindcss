@@ -1,3 +1,4 @@
+import backgroundColors from './plugins/backgroundColors'
 import backgroundPosition from './plugins/backgroundPosition'
 import backgroundRepeat from './plugins/backgroundRepeat'
 import backgroundSize from './plugins/backgroundSize'
@@ -47,6 +48,7 @@ import zIndex from './plugins/zIndex'
 
 export default function (config) {
   return [
+    config.modules.backgroundColors === false ? () => {} : backgroundColors(),
     config.modules.backgroundPosition === false ? () => {} : backgroundPosition(),
     config.modules.backgroundRepeat === false ? () => {} : backgroundRepeat(),
     config.modules.backgroundSize === false ? () => {} : backgroundSize(),
