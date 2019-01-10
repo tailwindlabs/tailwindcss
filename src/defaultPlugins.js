@@ -1,3 +1,4 @@
+import flexbox from './plugins/flexbox'
 import float from './plugins/float'
 import fonts from './plugins/fonts'
 import fontWeights from './plugins/fontWeights'
@@ -36,6 +37,7 @@ import zIndex from './plugins/zIndex'
 
 export default function (config) {
   return [
+    config.modules.flexbox === false ? () => {} : flexbox(),
     config.modules.float === false ? () => {} : float(),
     config.modules.fonts === false ? () => {} : fonts(),
     config.modules.fontWeights === false ? () => {} : fontWeights(),
