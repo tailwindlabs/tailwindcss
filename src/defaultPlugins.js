@@ -1,3 +1,4 @@
+import maxWidth from './plugins/maxWidth'
 import minHeight from './plugins/minHeight'
 import minWidth from './plugins/minWidth'
 import negativeMargin from './plugins/negativeMargin'
@@ -28,6 +29,7 @@ import zIndex from './plugins/zIndex'
 
 export default function (config) {
   return [
+    config.modules.maxWidth === false ? () => {} : maxWidth(),
     config.modules.minHeight === false ? () => {} : minHeight(),
     config.modules.minWidth === false ? () => {} : minWidth(),
     config.modules.negativeMargin === false ? () => {} : negativeMargin(),
