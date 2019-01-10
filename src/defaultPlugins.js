@@ -1,3 +1,4 @@
+import cursor from './plugins/cursor'
 import display from './plugins/display'
 import flexbox from './plugins/flexbox'
 import float from './plugins/float'
@@ -38,6 +39,7 @@ import zIndex from './plugins/zIndex'
 
 export default function (config) {
   return [
+    config.modules.cursor === false ? () => {} : cursor(),
     config.modules.display === false ? () => {} : display(),
     config.modules.flexbox === false ? () => {} : flexbox(),
     config.modules.float === false ? () => {} : float(),
