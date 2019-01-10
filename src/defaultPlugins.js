@@ -1,3 +1,4 @@
+import backgroundRepeat from './plugins/backgroundRepeat'
 import backgroundSize from './plugins/backgroundSize'
 import borderCollapse from './plugins/borderCollapse'
 import borderColors from './plugins/borderColors'
@@ -45,6 +46,7 @@ import zIndex from './plugins/zIndex'
 
 export default function (config) {
   return [
+    config.modules.backgroundRepeat === false ? () => {} : backgroundRepeat(),
     config.modules.backgroundSize === false ? () => {} : backgroundSize(),
     config.modules.borderCollapse === false ? () => {} : borderCollapse(),
     config.modules.borderColors === false ? () => {} : borderColors(),
