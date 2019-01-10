@@ -17,7 +17,6 @@ import float from './generators/float'
 import fonts from './generators/fonts'
 import fontWeights from './generators/fontWeights'
 import height from './generators/height'
-import leading from './generators/leading'
 
 export default [
   { name: 'lists', generator: lists },
@@ -39,5 +38,4 @@ export default [
   { name: 'fonts', generator: fonts },
   { name: 'fontWeights', generator: fontWeights },
   { name: 'height', generator: height },
-  { name: 'leading', generator: leading },
 ]

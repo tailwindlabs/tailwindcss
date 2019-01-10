@@ -1,3 +1,4 @@
+import leading from './plugins/leading'
 import margin from './plugins/margin'
 import maxHeight from './plugins/maxHeight'
 import maxWidth from './plugins/maxWidth'
@@ -31,6 +32,7 @@ import zIndex from './plugins/zIndex'
 
 export default function (config) {
   return [
+    config.modules.leading === false ? () => {} : leading(),
     config.modules.margin === false ? () => {} : margin(),
     config.modules.maxHeight === false ? () => {} : maxHeight(),
     config.modules.maxWidth === false ? () => {} : maxWidth(),
