@@ -1,3 +1,4 @@
+import minHeight from './plugins/minHeight'
 import minWidth from './plugins/minWidth'
 import negativeMargin from './plugins/negativeMargin'
 import objectFit from './plugins/objectFit'
@@ -27,6 +28,7 @@ import zIndex from './plugins/zIndex'
 
 export default function (config) {
   return [
+    config.modules.minHeight === false ? () => {} : minHeight(),
     config.modules.minWidth === false ? () => {} : minWidth(),
     config.modules.negativeMargin === false ? () => {} : negativeMargin(),
     config.modules.objectFit === false ? () => {} : objectFit(),

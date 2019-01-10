@@ -21,7 +21,6 @@ import leading from './generators/leading'
 import margin from './generators/margin'
 import maxHeight from './generators/maxHeight'
 import maxWidth from './generators/maxWidth'
-import minHeight from './generators/minHeight'
 
 export default [
   { name: 'lists', generator: lists },
@@ -47,5 +46,4 @@ export default [
   { name: 'margin', generator: margin },
   { name: 'maxHeight', generator: maxHeight },
   { name: 'maxWidth', generator: maxWidth },
-  { name: 'minHeight', generator: minHeight },
 ]
