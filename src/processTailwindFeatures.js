@@ -29,6 +29,22 @@ export default function(getConfig) {
       substituteResponsiveAtRules(config),
       substituteScreenAtRules(config),
       substituteClassApplyAtRules(config, utilities),
+      function (root, result) {
+        root.rawCache = {
+          colon: ': ',
+          indent: '  ',
+          beforeDecl: '\n',
+          beforeRule: '\n',
+          beforeOpen: ' ',
+          beforeClose: '\n',
+          beforeComment: '\n',
+          after: '\n',
+          emptyBody: '',
+          commentLeft: ' ',
+          commentRight: ' ',
+          semicolon: false
+        }
+      },
     ]).process(css, { from: _.get(css, 'source.input.file') })
   }
 }
