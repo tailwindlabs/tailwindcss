@@ -8,28 +8,22 @@ import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
 import substituteScreenAtRules from './lib/substituteScreenAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
 
-import generateUtilities from './legacy/generateUtilities'
 import processPlugins from './util/processPlugins'
-
 import defaultPlugins from './defaultPlugins'
 
 export default function(getConfig) {
   return function(css) {
     const config = getConfig()
-    const processedPlugins = processPlugins([
-      ...defaultPlugins(config),
-      ...config.plugins
-    ], config)
-    const utilities = generateUtilities(config, processedPlugins.utilities)
+    const processedPlugins = processPlugins([...defaultPlugins(config), ...config.plugins], config)
 
     return postcss([
-      substituteTailwindAtRules(config, processedPlugins, utilities),
+      substituteTailwindAtRules(config, processedPlugins, processedPlugins.utilities),
       evaluateTailwindFunctions(config),
       substituteVariantsAtRules(config, processedPlugins),
       substituteResponsiveAtRules(config),
       substituteScreenAtRules(config),
-      substituteClassApplyAtRules(config, utilities),
-      function (root, result) {
+      substituteClassApplyAtRules(config, processedPlugins.utilities),
+      function(root) {
         root.rawCache = {
           colon: ': ',
           indent: '  ',
@@ -42,7 +36,7 @@ export default function(getConfig) {
           emptyBody: '',
           commentLeft: ' ',
           commentRight: ' ',
-          semicolon: false
+          semicolon: false,
         }
       },
     ]).process(css, { from: _.get(css, 'source.input.file') })

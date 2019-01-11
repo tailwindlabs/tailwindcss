@@ -49,7 +49,8 @@ import whitespace from './plugins/whitespace'
 import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
-export default function (config) {
+// eslint-disable-next-line complexity
+export default function(config) {
   return [
     config.modules.lists === false ? () => {} : lists(),
     config.modules.appearance === false ? () => {} : appearance(),

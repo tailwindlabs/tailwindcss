@@ -1,39 +1,39 @@
-import _ from "lodash"
-import postcss from "postcss"
-import processPlugins from "../src/util/processPlugins"
+import _ from 'lodash'
+import postcss from 'postcss'
+import processPlugins from '../src/util/processPlugins'
 
 function css(nodes) {
   return postcss.root({ nodes }).toString()
 }
 
-function config(overrides) {
+function makeConfig(overrides) {
   return _.defaultsDeep(overrides, {
     options: {
-      prefix: "",
+      prefix: '',
       important: false,
-      separator: ":"
-    }
+      separator: ':',
+    },
   })
 }
 
-test("plugins can create utilities with object syntax", () => {
+test('plugins can create utilities with object syntax', () => {
   const { components, utilities } = processPlugins(
     [
       function({ addUtilities }) {
         addUtilities({
-          ".object-fill": {
-            "object-fit": "fill"
+          '.object-fill': {
+            'object-fit': 'fill',
           },
-          ".object-contain": {
-            "object-fit": "contain"
+          '.object-contain': {
+            'object-fit': 'contain',
           },
-          ".object-cover": {
-            "object-fit": "cover"
-          }
+          '.object-cover': {
+            'object-fit': 'cover',
+          },
         })
-      }
+      },
     ],
-    config()
+    makeConfig()
   )
 
   expect(components.length).toBe(0)
@@ -52,30 +52,30 @@ test("plugins can create utilities with object syntax", () => {
     `)
 })
 
-test("plugins can create utilities with arrays of objects", () => {
+test('plugins can create utilities with arrays of objects', () => {
   const { components, utilities } = processPlugins(
     [
       function({ addUtilities }) {
         addUtilities([
           {
-            ".object-fill": {
-              "object-fit": "fill"
-            }
+            '.object-fill': {
+              'object-fit': 'fill',
+            },
           },
           {
-            ".object-contain": {
-              "object-fit": "contain"
-            }
+            '.object-contain': {
+              'object-fit': 'contain',
+            },
           },
           {
-            ".object-cover": {
-              "object-fit": "cover"
-            }
-          }
+            '.object-cover': {
+              'object-fit': 'cover',
+            },
+          },
         ])
-      }
+      },
     ],
-    config()
+    makeConfig()
   )
 
   expect(components.length).toBe(0)
@@ -94,33 +94,33 @@ test("plugins can create utilities with arrays of objects", () => {
     `)
 })
 
-test("plugins can create utilities with raw PostCSS nodes", () => {
+test('plugins can create utilities with raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
       function({ addUtilities }) {
         addUtilities([
-          postcss.rule({ selector: ".object-fill" }).append([
+          postcss.rule({ selector: '.object-fill' }).append([
             postcss.decl({
-              prop: "object-fit",
-              value: "fill"
-            })
+              prop: 'object-fit',
+              value: 'fill',
+            }),
           ]),
-          postcss.rule({ selector: ".object-contain" }).append([
+          postcss.rule({ selector: '.object-contain' }).append([
             postcss.decl({
-              prop: "object-fit",
-              value: "contain"
-            })
+              prop: 'object-fit',
+              value: 'contain',
+            }),
           ]),
-          postcss.rule({ selector: ".object-cover" }).append([
+          postcss.rule({ selector: '.object-cover' }).append([
             postcss.decl({
-              prop: "object-fit",
-              value: "cover"
-            })
-          ])
+              prop: 'object-fit',
+              value: 'cover',
+            }),
+          ]),
         ])
-      }
+      },
     ],
-    config()
+    makeConfig()
   )
 
   expect(components.length).toBe(0)
@@ -139,32 +139,32 @@ test("plugins can create utilities with raw PostCSS nodes", () => {
     `)
 })
 
-test("plugins can create utilities with mixed object styles and PostCSS nodes", () => {
+test('plugins can create utilities with mixed object styles and PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
       function({ addUtilities }) {
         addUtilities([
           {
-            ".object-fill": {
-              objectFit: "fill"
-            }
+            '.object-fill': {
+              objectFit: 'fill',
+            },
           },
-          postcss.rule({ selector: ".object-contain" }).append([
+          postcss.rule({ selector: '.object-contain' }).append([
             postcss.decl({
-              prop: "object-fit",
-              value: "contain"
-            })
+              prop: 'object-fit',
+              value: 'contain',
+            }),
           ]),
-          postcss.rule({ selector: ".object-cover" }).append([
+          postcss.rule({ selector: '.object-cover' }).append([
             postcss.decl({
-              prop: "object-fit",
-              value: "cover"
-            })
-          ])
+              prop: 'object-fit',
+              value: 'cover',
+            }),
+          ]),
         ])
-      }
+      },
     ],
-    config()
+    makeConfig()
   )
 
   expect(components.length).toBe(0)
@@ -183,27 +183,27 @@ test("plugins can create utilities with mixed object styles and PostCSS nodes", 
     `)
 })
 
-test("plugins can create utilities with variants", () => {
+test('plugins can create utilities with variants', () => {
   const { components, utilities } = processPlugins(
     [
       function({ addUtilities }) {
         addUtilities(
           {
-            ".object-fill": {
-              "object-fit": "fill"
+            '.object-fill': {
+              'object-fit': 'fill',
             },
-            ".object-contain": {
-              "object-fit": "contain"
+            '.object-contain': {
+              'object-fit': 'contain',
             },
-            ".object-cover": {
-              "object-fit": "cover"
-            }
+            '.object-cover': {
+              'object-fit': 'cover',
+            },
           },
-          ["responsive", "hover", "group-hover", "focus"]
+          ['responsive', 'hover', 'group-hover', 'focus']
         )
-      }
+      },
     ],
-    config()
+    makeConfig()
   )
 
   expect(components.length).toBe(0)
@@ -222,24 +222,24 @@ test("plugins can create utilities with variants", () => {
     `)
 })
 
-test("plugins can create components with object syntax", () => {
+test('plugins can create components with object syntax', () => {
   const { components, utilities } = processPlugins(
     [
       function({ addComponents }) {
         addComponents({
-          ".btn-blue": {
-            backgroundColor: "blue",
-            color: "white",
-            padding: ".5rem 1rem",
-            borderRadius: ".25rem"
+          '.btn-blue': {
+            backgroundColor: 'blue',
+            color: 'white',
+            padding: '.5rem 1rem',
+            borderRadius: '.25rem',
           },
-          ".btn-blue:hover": {
-            backgroundColor: "darkblue"
-          }
+          '.btn-blue:hover': {
+            backgroundColor: 'darkblue',
+          },
         })
-      }
+      },
     ],
-    config()
+    makeConfig()
   )
 
   expect(utilities.length).toBe(0)
@@ -256,39 +256,39 @@ test("plugins can create components with object syntax", () => {
     `)
 })
 
-test("plugins can create components with raw PostCSS nodes", () => {
+test('plugins can create components with raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
       function({ addComponents }) {
         addComponents([
-          postcss.rule({ selector: ".btn-blue" }).append([
+          postcss.rule({ selector: '.btn-blue' }).append([
             postcss.decl({
-              prop: "background-color",
-              value: "blue"
+              prop: 'background-color',
+              value: 'blue',
             }),
             postcss.decl({
-              prop: "color",
-              value: "white"
+              prop: 'color',
+              value: 'white',
             }),
             postcss.decl({
-              prop: "padding",
-              value: ".5rem 1rem"
+              prop: 'padding',
+              value: '.5rem 1rem',
             }),
             postcss.decl({
-              prop: "border-radius",
-              value: ".25rem"
-            })
+              prop: 'border-radius',
+              value: '.25rem',
+            }),
           ]),
-          postcss.rule({ selector: ".btn-blue:hover" }).append([
+          postcss.rule({ selector: '.btn-blue:hover' }).append([
             postcss.decl({
-              prop: "background-color",
-              value: "darkblue"
-            })
-          ])
+              prop: 'background-color',
+              value: 'darkblue',
+            }),
+          ]),
         ])
-      }
+      },
     ],
-    config()
+    makeConfig()
   )
 
   expect(utilities.length).toBe(0)
@@ -305,38 +305,38 @@ test("plugins can create components with raw PostCSS nodes", () => {
     `)
 })
 
-test("plugins can create components with mixed object styles and raw PostCSS nodes", () => {
+test('plugins can create components with mixed object styles and raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
       function({ addComponents }) {
         addComponents([
-          postcss.rule({ selector: ".btn-blue" }).append([
+          postcss.rule({ selector: '.btn-blue' }).append([
             postcss.decl({
-              prop: "background-color",
-              value: "blue"
+              prop: 'background-color',
+              value: 'blue',
             }),
             postcss.decl({
-              prop: "color",
-              value: "white"
+              prop: 'color',
+              value: 'white',
             }),
             postcss.decl({
-              prop: "padding",
-              value: ".5rem 1rem"
+              prop: 'padding',
+              value: '.5rem 1rem',
             }),
             postcss.decl({
-              prop: "border-radius",
-              value: ".25rem"
-            })
+              prop: 'border-radius',
+              value: '.25rem',
+            }),
           ]),
           {
-            ".btn-blue:hover": {
-              backgroundColor: "darkblue"
-            }
-          }
+            '.btn-blue:hover': {
+              backgroundColor: 'darkblue',
+            },
+          },
         ])
-      }
+      },
     ],
-    config()
+    makeConfig()
   )
 
   expect(utilities.length).toBe(0)
@@ -353,33 +353,33 @@ test("plugins can create components with mixed object styles and raw PostCSS nod
     `)
 })
 
-test("plugins can create components with media queries with object syntax", () => {
+test('plugins can create components with media queries with object syntax', () => {
   const { components, utilities } = processPlugins(
     [
       function({ addComponents }) {
         addComponents({
-          ".container": {
-            width: "100%"
+          '.container': {
+            width: '100%',
           },
-          "@media (min-width: 100px)": {
-            ".container": {
-              maxWidth: "100px"
-            }
+          '@media (min-width: 100px)': {
+            '.container': {
+              maxWidth: '100px',
+            },
           },
-          "@media (min-width: 200px)": {
-            ".container": {
-              maxWidth: "200px"
-            }
+          '@media (min-width: 200px)': {
+            '.container': {
+              maxWidth: '200px',
+            },
           },
-          "@media (min-width: 300px)": {
-            ".container": {
-              maxWidth: "300px"
-            }
-          }
+          '@media (min-width: 300px)': {
+            '.container': {
+              maxWidth: '300px',
+            },
+          },
         })
-      }
+      },
     ],
-    config()
+    makeConfig()
   )
 
   expect(utilities.length).toBe(0)
@@ -405,36 +405,36 @@ test("plugins can create components with media queries with object syntax", () =
     `)
 })
 
-test("media queries can be defined multiple times using objects-in-array syntax", () => {
+test('media queries can be defined multiple times using objects-in-array syntax', () => {
   const { components, utilities } = processPlugins(
     [
       function({ addComponents }) {
         addComponents([
           {
-            ".container": {
-              width: "100%"
+            '.container': {
+              width: '100%',
             },
-            "@media (min-width: 100px)": {
-              ".container": {
-                maxWidth: "100px"
-              }
-            }
+            '@media (min-width: 100px)': {
+              '.container': {
+                maxWidth: '100px',
+              },
+            },
           },
           {
-            ".btn": {
-              padding: "1rem .5rem",
-              display: "block"
+            '.btn': {
+              padding: '1rem .5rem',
+              display: 'block',
             },
-            "@media (min-width: 100px)": {
-              ".btn": {
-                display: "inline-block"
-              }
-            }
-          }
+            '@media (min-width: 100px)': {
+              '.btn': {
+                display: 'inline-block',
+              },
+            },
+          },
         ])
-      }
+      },
     ],
-    config()
+    makeConfig()
   )
 
   expect(utilities.length).toBe(0)
@@ -459,35 +459,35 @@ test("media queries can be defined multiple times using objects-in-array syntax"
     `)
 })
 
-test("plugins can create nested rules", () => {
+test('plugins can create nested rules', () => {
   const { components, utilities } = processPlugins(
     [
       function({ addComponents }) {
         addComponents({
-          ".btn-blue": {
-            backgroundColor: "blue",
-            color: "white",
-            padding: ".5rem 1rem",
-            borderRadius: ".25rem",
-            "&:hover": {
-              backgroundColor: "darkblue"
+          '.btn-blue': {
+            backgroundColor: 'blue',
+            color: 'white',
+            padding: '.5rem 1rem',
+            borderRadius: '.25rem',
+            '&:hover': {
+              backgroundColor: 'darkblue',
             },
-            "@media (min-width: 500px)": {
-              "&:hover": {
-                backgroundColor: "orange"
-              }
+            '@media (min-width: 500px)': {
+              '&:hover': {
+                backgroundColor: 'orange',
+              },
             },
-            "> a": {
-              color: "red"
+            '> a': {
+              color: 'red',
             },
-            "h1 &": {
-              color: "purple"
-            }
-          }
+            'h1 &': {
+              color: 'purple',
+            },
+          },
         })
-      }
+      },
     ],
-    config()
+    makeConfig()
   )
 
   expect(utilities.length).toBe(0)
@@ -515,18 +515,18 @@ test("plugins can create nested rules", () => {
     `)
 })
 
-test("plugins can create rules with escaped selectors", () => {
+test('plugins can create rules with escaped selectors', () => {
   const { components, utilities } = processPlugins(
     [
       function({ e, addUtilities }) {
         addUtilities({
-          [`.${e("top-1/4")}`]: {
-            top: "25%"
-          }
+          [`.${e('top-1/4')}`]: {
+            top: '25%',
+          },
         })
-      }
+      },
     ],
-    config()
+    makeConfig()
   )
 
   expect(components.length).toBe(0)
@@ -539,35 +539,35 @@ test("plugins can create rules with escaped selectors", () => {
     `)
 })
 
-test("plugins can access the current config", () => {
+test('plugins can access the current config', () => {
   const { components, utilities } = processPlugins(
     [
       function({ addComponents, config }) {
         const containerClasses = [
           {
-            ".container": {
-              width: "100%"
-            }
-          }
+            '.container': {
+              width: '100%',
+            },
+          },
         ]
 
-        _.forEach(config("screens"), breakpoint => {
+        _.forEach(config('screens'), breakpoint => {
           containerClasses.push({
             [`@media (min-width: ${breakpoint})`]: {
-              ".container": { maxWidth: breakpoint }
-            }
+              '.container': { maxWidth: breakpoint },
+            },
           })
         })
         addComponents(containerClasses)
-      }
+      },
     ],
-    config({
+    makeConfig({
       screens: {
-        sm: "576px",
-        md: "768px",
-        lg: "992px",
-        xl: "1200px"
-      }
+        sm: '576px',
+        md: '768px',
+        lg: '992px',
+        xl: '1200px',
+      },
     })
   )
 
@@ -599,24 +599,24 @@ test("plugins can access the current config", () => {
     `)
 })
 
-test("plugins can provide fallbacks to keys missing from the config", () => {
+test('plugins can provide fallbacks to keys missing from the config', () => {
   const { components, utilities } = processPlugins(
     [
       function({ addComponents, config }) {
         addComponents({
-          ".btn": {
-            borderRadius: config("borderRadius.default", ".25rem")
-          }
+          '.btn': {
+            borderRadius: config('borderRadius.default', '.25rem'),
+          },
         })
-      }
+      },
     ],
-    config({
+    makeConfig({
       borderRadius: {
-        "1": "1px",
-        "2": "2px",
-        "4": "4px",
-        "8": "8px"
-      }
+        '1': '1px',
+        '2': '2px',
+        '4': '4px',
+        '8': '8px',
+      },
     })
   )
 
@@ -628,18 +628,18 @@ test("plugins can provide fallbacks to keys missing from the config", () => {
     `)
 })
 
-test("variants are optional when adding utilities", () => {
+test('variants are optional when adding utilities', () => {
   const { utilities } = processPlugins(
     [
       function({ addUtilities }) {
         addUtilities({
-          ".border-collapse": {
-            "border-collapse": "collapse"
-          }
+          '.border-collapse': {
+            'border-collapse': 'collapse',
+          },
         })
-      }
+      },
     ],
-    config()
+    makeConfig()
   )
 
   expect(css(utilities)).toMatchCss(`
@@ -650,38 +650,38 @@ test("variants are optional when adding utilities", () => {
     }`)
 })
 
-test("plugins can add multiple sets of utilities and components", () => {
+test('plugins can add multiple sets of utilities and components', () => {
   const { components, utilities } = processPlugins(
     [
       function({ addUtilities, addComponents }) {
         addComponents({
-          ".card": {
-            padding: "1rem",
-            borderRadius: ".25rem"
-          }
+          '.card': {
+            padding: '1rem',
+            borderRadius: '.25rem',
+          },
         })
 
         addUtilities({
-          ".skew-12deg": {
-            transform: "skewY(-12deg)"
-          }
+          '.skew-12deg': {
+            transform: 'skewY(-12deg)',
+          },
         })
 
         addComponents({
-          ".btn": {
-            padding: "1rem .5rem",
-            display: "inline-block"
-          }
+          '.btn': {
+            padding: '1rem .5rem',
+            display: 'inline-block',
+          },
         })
 
         addUtilities({
-          ".border-collapse": {
-            borderCollapse: "collapse"
-          }
+          '.border-collapse': {
+            borderCollapse: 'collapse',
+          },
         })
-      }
+      },
     ],
-    config()
+    makeConfig()
   )
 
   expect(css(utilities)).toMatchCss(`
@@ -708,22 +708,22 @@ test("plugins can add multiple sets of utilities and components", () => {
     `)
 })
 
-test("plugins respect prefix and important options by default when adding utilities", () => {
+test('plugins respect prefix and important options by default when adding utilities', () => {
   const { utilities } = processPlugins(
     [
       function({ addUtilities }) {
         addUtilities({
-          ".rotate-90": {
-            transform: "rotate(90deg)"
-          }
+          '.rotate-90': {
+            transform: 'rotate(90deg)',
+          },
         })
-      }
+      },
     ],
-    config({
+    makeConfig({
       options: {
-        prefix: "tw-",
-        important: true
-      }
+        prefix: 'tw-',
+        important: true,
+      },
     })
   )
 
@@ -741,16 +741,16 @@ test("component declarations respect the 'prefix' option by default", () => {
     [
       function({ addComponents }) {
         addComponents({
-          ".btn-blue": {
-            backgroundColor: "blue"
-          }
+          '.btn-blue': {
+            backgroundColor: 'blue',
+          },
         })
-      }
+      },
     ],
-    config({
+    makeConfig({
       options: {
-        prefix: "tw-"
-      }
+        prefix: 'tw-',
+      },
     })
   )
 
@@ -767,18 +767,18 @@ test("component declarations can optionally ignore 'prefix' option", () => {
       function({ addComponents }) {
         addComponents(
           {
-            ".btn-blue": {
-              backgroundColor: "blue"
-            }
+            '.btn-blue': {
+              backgroundColor: 'blue',
+            },
           },
           { respectPrefix: false }
         )
-      }
+      },
     ],
-    config({
+    makeConfig({
       options: {
-        prefix: "tw-"
-      }
+        prefix: 'tw-',
+      },
     })
   )
 
@@ -794,16 +794,16 @@ test("component declarations are not affected by the 'important' option", () => 
     [
       function({ addComponents }) {
         addComponents({
-          ".btn-blue": {
-            backgroundColor: "blue"
-          }
+          '.btn-blue': {
+            backgroundColor: 'blue',
+          },
         })
-      }
+      },
     ],
-    config({
+    makeConfig({
       options: {
-        important: true
-      }
+        important: true,
+      },
     })
   )
 
@@ -820,18 +820,18 @@ test("plugins can apply the user's chosen prefix to components manually", () => 
       function({ addComponents, prefix }) {
         addComponents(
           {
-            [prefix(".btn-blue")]: {
-              backgroundColor: "blue"
-            }
+            [prefix('.btn-blue')]: {
+              backgroundColor: 'blue',
+            },
           },
           { respectPrefix: false }
         )
-      }
+      },
     ],
-    config({
+    makeConfig({
       options: {
-        prefix: "tw-"
-      }
+        prefix: 'tw-',
+      },
     })
   )
 
@@ -842,27 +842,27 @@ test("plugins can apply the user's chosen prefix to components manually", () => 
     `)
 })
 
-test("prefix can optionally be ignored for utilities", () => {
+test('prefix can optionally be ignored for utilities', () => {
   const { utilities } = processPlugins(
     [
       function({ addUtilities }) {
         addUtilities(
           {
-            ".rotate-90": {
-              transform: "rotate(90deg)"
-            }
+            '.rotate-90': {
+              transform: 'rotate(90deg)',
+            },
           },
           {
-            respectPrefix: false
+            respectPrefix: false,
           }
         )
-      }
+      },
     ],
-    config({
+    makeConfig({
       options: {
-        prefix: "tw-",
-        important: true
-      }
+        prefix: 'tw-',
+        important: true,
+      },
     })
   )
 
@@ -875,27 +875,27 @@ test("prefix can optionally be ignored for utilities", () => {
     `)
 })
 
-test("important can optionally be ignored for utilities", () => {
+test('important can optionally be ignored for utilities', () => {
   const { utilities } = processPlugins(
     [
       function({ addUtilities }) {
         addUtilities(
           {
-            ".rotate-90": {
-              transform: "rotate(90deg)"
-            }
+            '.rotate-90': {
+              transform: 'rotate(90deg)',
+            },
           },
           {
-            respectImportant: false
+            respectImportant: false,
           }
         )
-      }
+      },
     ],
-    config({
+    makeConfig({
       options: {
-        prefix: "tw-",
-        important: true
-      }
+        prefix: 'tw-',
+        important: true,
+      },
     })
   )
 
@@ -908,29 +908,29 @@ test("important can optionally be ignored for utilities", () => {
     `)
 })
 
-test("variants can still be specified when ignoring prefix and important options", () => {
+test('variants can still be specified when ignoring prefix and important options', () => {
   const { utilities } = processPlugins(
     [
       function({ addUtilities }) {
         addUtilities(
           {
-            ".rotate-90": {
-              transform: "rotate(90deg)"
-            }
+            '.rotate-90': {
+              transform: 'rotate(90deg)',
+            },
           },
           {
-            variants: ["responsive", "hover", "focus"],
+            variants: ['responsive', 'hover', 'focus'],
             respectImportant: false,
-            respectPrefix: false
+            respectPrefix: false,
           }
         )
-      }
+      },
     ],
-    config({
+    makeConfig({
       options: {
-        prefix: "tw-",
-        important: true
-      }
+        prefix: 'tw-',
+        important: true,
+      },
     })
   )
 
@@ -943,24 +943,24 @@ test("variants can still be specified when ignoring prefix and important options
     `)
 })
 
-test("prefix will prefix all classes in a selector", () => {
+test('prefix will prefix all classes in a selector', () => {
   const { components } = processPlugins(
     [
       function({ addComponents, prefix }) {
         addComponents(
           {
-            [prefix(".btn-blue .w-1\\/4 > h1.text-xl + a .bar")]: {
-              backgroundColor: "blue"
-            }
+            [prefix('.btn-blue .w-1\\/4 > h1.text-xl + a .bar')]: {
+              backgroundColor: 'blue',
+            },
           },
           { respectPrefix: false }
         )
-      }
+      },
     ],
-    config({
+    makeConfig({
       options: {
-        prefix: "tw-"
-      }
+        prefix: 'tw-',
+      },
     })
   )
 

@@ -16,29 +16,11 @@ function config(overrides) {
       xl: '1200px',
     },
     options: {
-      prefix: "",
+      prefix: '',
       important: false,
-      separator: ":"
-    }
+      separator: ':',
+    },
   })
-}
-
-function processPluginsWithValidConfig(config) {
-  return processPlugins(
-    _.defaultsDeep(config, {
-      screens: {
-        sm: '576px',
-        md: '768px',
-        lg: '992px',
-        xl: '1200px',
-      },
-      options: {
-        prefix: '',
-        important: false,
-        separator: ':',
-      },
-    })
-  )
 }
 
 test.only('options are not required', () => {
@@ -62,14 +44,17 @@ test.only('options are not required', () => {
 })
 
 test.only('screens can be specified explicitly', () => {
-  const { components } = processPlugins([
-    container({
-      screens: {
-        sm: '400px',
-        lg: '500px',
-      },
-    }),
-  ], config())
+  const { components } = processPlugins(
+    [
+      container({
+        screens: {
+          sm: '400px',
+          lg: '500px',
+        },
+      }),
+    ],
+    config()
+  )
 
   expect(css(components)).toMatchCss(`
     .container { width: 100% }
@@ -83,11 +68,14 @@ test.only('screens can be specified explicitly', () => {
 })
 
 test.only('screens can be an array', () => {
-  const { components } = processPlugins([
-    container({
-      screens: ['400px', '500px'],
-    }),
-  ], config())
+  const { components } = processPlugins(
+    [
+      container({
+        screens: ['400px', '500px'],
+      }),
+    ],
+    config()
+  )
 
   expect(css(components)).toMatchCss(`
     .container { width: 100% }
@@ -101,11 +89,14 @@ test.only('screens can be an array', () => {
 })
 
 test.only('the container can be centered by default', () => {
-  const { components } = processPlugins([
-    container({
-      center: true,
-    }),
-  ], config())
+  const { components } = processPlugins(
+    [
+      container({
+        center: true,
+      }),
+    ],
+    config()
+  )
 
   expect(css(components)).toMatchCss(`
     .container {
@@ -129,11 +120,14 @@ test.only('the container can be centered by default', () => {
 })
 
 test.only('horizontal padding can be included by default', () => {
-  const { components } = processPlugins([
-    container({
-      padding: '2rem',
-    }),
-  ], config())
+  const { components } = processPlugins(
+    [
+      container({
+        padding: '2rem',
+      }),
+    ],
+    config()
+  )
 
   expect(css(components)).toMatchCss(`
     .container {
@@ -157,16 +151,19 @@ test.only('horizontal padding can be included by default', () => {
 })
 
 test.only('setting all options at once', () => {
-  const { components } = processPlugins([
-    container({
-      screens: {
-        sm: '400px',
-        lg: '500px',
-      },
-      center: true,
-      padding: '2rem',
-    }),
-  ], config())
+  const { components } = processPlugins(
+    [
+      container({
+        screens: {
+          sm: '400px',
+          lg: '500px',
+        },
+        center: true,
+        padding: '2rem',
+      }),
+    ],
+    config()
+  )
 
   expect(css(components)).toMatchCss(`
     .container {

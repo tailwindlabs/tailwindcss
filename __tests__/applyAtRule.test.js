@@ -1,12 +1,15 @@
 import postcss from 'postcss'
-import plugin from '../src/lib/substituteClassApplyAtRules'
-import generateUtilities from '../src/legacy/generateUtilities'
+import substituteClassApplyAtRules from '../src/lib/substituteClassApplyAtRules'
+import processPlugins from '../src/util/processPlugins'
+import defaultPlugins from '../src/defaultPlugins'
 import defaultConfig from '../defaultConfig.stub.js'
 
-const defaultUtilities = generateUtilities(defaultConfig, [])
+const { utilities: defaultUtilities } = processPlugins(defaultPlugins(defaultConfig), defaultConfig)
 
 function run(input, config = defaultConfig, utilities = defaultUtilities) {
-  return postcss([plugin(config, utilities)]).process(input, { from: undefined })
+  return postcss([substituteClassApplyAtRules(config, utilities)]).process(input, {
+    from: undefined,
+  })
 }
 
 test("it copies a class's declarations into itself", () => {
@@ -206,10 +209,12 @@ test('you can apply utility classes without using the given prefix', () => {
     experiments: { shadowLookup: true },
   }
 
-  return run(input, config, generateUtilities(config, [])).then(result => {
-    expect(result.css).toEqual(expected)
-    expect(result.warnings().length).toBe(0)
-  })
+  return run(input, config, processPlugins(defaultPlugins(defaultConfig), config).utilities).then(
+    result => {
+      expect(result.css).toEqual(expected)
+      expect(result.warnings().length).toBe(0)
+    }
+  )
 })
 
 test('you can apply utility classes without using the given prefix when using a function for the prefix', () => {
@@ -232,8 +237,10 @@ test('you can apply utility classes without using the given prefix when using a 
     experiments: { shadowLookup: true },
   }
 
-  return run(input, config, generateUtilities(config, [])).then(result => {
-    expect(result.css).toEqual(expected)
-    expect(result.warnings().length).toBe(0)
-  })
+  return run(input, config, processPlugins(defaultPlugins(defaultConfig), config).utilities).then(
+    result => {
+      expect(result.css).toEqual(expected)
+      expect(result.warnings().length).toBe(0)
+    }
+  )
 })

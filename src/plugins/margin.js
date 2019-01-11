@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
-export default function () {
-  return function ({ addUtilities, config, e }) {
+export default function() {
+  return function({ addUtilities, config, e }) {
     const generators = [
       (size, modifier) => ({
         [`.${e(`m-${modifier}`)}`]: { margin: `${size}` },
