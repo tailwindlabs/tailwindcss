@@ -86,6 +86,46 @@ test('it can generate responsive variants with a custom separator', () => {
   })
 })
 
+test('it can generate responsive variants when classes have non-standard characters', () => {
+  const input = `
+    @responsive {
+      .hover\\:banana { color: yellow; }
+      .chocolate-2\\.5 { color: brown; }
+    }
+  `
+
+  const output = `
+      .hover\\:banana { color: yellow; }
+      .chocolate-2\\.5 { color: brown; }
+      @media (min-width: 500px) {
+        .sm\\:hover\\:banana { color: yellow; }
+        .sm\\:chocolate-2\\.5 { color: brown; }
+      }
+      @media (min-width: 750px) {
+        .md\\:hover\\:banana { color: yellow; }
+        .md\\:chocolate-2\\.5 { color: brown; }
+      }
+      @media (min-width: 1000px) {
+        .lg\\:hover\\:banana { color: yellow; }
+        .lg\\:chocolate-2\\.5 { color: brown; }
+      }
+  `
+
+  return run(input, {
+    screens: {
+      sm: '500px',
+      md: '750px',
+      lg: '1000px',
+    },
+    options: {
+      separator: ':',
+    },
+  }).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('responsive variants are grouped', () => {
   const input = `
     @responsive {
