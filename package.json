@@ -41,7 +41,7 @@
     "rimraf": "^2.6.1"
   },
   "dependencies": {
-    "autoprefixer": "^9.3.1",
+    "autoprefixer": "^9.4.5",
     "bytes": "^3.0.0",
     "chalk": "^2.4.1",
     "css.escape": "^1.5.1",
@@ -49,11 +49,11 @@
     "lodash": "^4.17.5",
     "node-emoji": "^1.8.1",
     "perfectionist": "^2.4.0",
-    "postcss": "^6.0.9",
+    "postcss": "^7.0.11",
     "postcss-functions": "^3.0.0",
-    "postcss-js": "^1.0.1",
-    "postcss-nested": "^3.0.0",
-    "postcss-selector-parser": "^3.1.1",
+    "postcss-js": "^2.0.0",
+    "postcss-nested": "^4.1.1",
+    "postcss-selector-parser": "^5.0.0",
     "pretty-hrtime": "^1.0.3",
     "strip-comments": "^1.0.2"
   },

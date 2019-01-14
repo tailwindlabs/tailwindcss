@@ -1,6 +1,7 @@
 import escapeClassName from './escapeClassName'
 import parser from 'postcss-selector-parser'
 import tap from 'lodash/tap'
+import get from 'lodash/get'
 
 export default function buildSelectorVariant(selector, variantName, separator, onError = () => {}) {
   return parser(selectors => {
@@ -10,7 +11,12 @@ export default function buildSelectorVariant(selector, variantName, separator, o
         return
       }
 
-      classSelector.value = `${variantName}${escapeClassName(separator)}${classSelector.value}`
+      const baseClass = get(classSelector, 'raws.value', classSelector.value)
+
+      classSelector.setPropertyAndEscape(
+        'value',
+        `${variantName}${escapeClassName(separator)}${baseClass}`
+      )
     })
   }).processSync(selector)
 }
