@@ -761,6 +761,44 @@ test("component declarations respect the 'prefix' option by default", () => {
     `)
 })
 
+test('all selectors in a rule are prefixed', () => {
+  const { utilities, components } = processPlugins(
+    [
+      function({ addUtilities, addComponents }) {
+        addUtilities({
+          '.rotate-90, .rotate-1\\/4': {
+            transform: 'rotate(90deg)',
+          },
+        })
+        addComponents({
+          '.btn-blue, .btn-red': {
+            padding: '10px',
+          },
+        })
+      },
+    ],
+    makeConfig({
+      options: {
+        prefix: 'tw-',
+      },
+    })
+  )
+
+  expect(css(utilities)).toMatchCss(`
+    @variants {
+      .tw-rotate-90, .tw-rotate-1\\/4 {
+        transform: rotate(90deg)
+      }
+    }
+    `)
+
+  expect(css(components)).toMatchCss(`
+    .tw-btn-blue, .tw-btn-red {
+      padding: 10px
+    }
+    `)
+})
+
 test("component declarations can optionally ignore 'prefix' option", () => {
   const { components } = processPlugins(
     [
