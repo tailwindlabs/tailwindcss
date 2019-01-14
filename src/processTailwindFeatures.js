@@ -17,7 +17,7 @@ export default function(getConfig) {
     const processedPlugins = processPlugins([...defaultPlugins(config), ...config.plugins], config)
 
     return postcss([
-      substituteTailwindAtRules(config, processedPlugins, processedPlugins.utilities),
+      substituteTailwindAtRules(config, processedPlugins),
       evaluateTailwindFunctions(config),
       substituteVariantsAtRules(config, processedPlugins),
       substituteResponsiveAtRules(config),
