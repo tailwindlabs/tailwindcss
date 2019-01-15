@@ -6,21 +6,19 @@ function css(nodes) {
   return postcss.root({ nodes }).toString()
 }
 
-function processPluginsWithValidConfig(config) {
-  return processPlugins(
-    _.defaultsDeep(config, {
-      options: {
-        prefix: '',
-        important: false,
-        separator: ':',
-      },
-    })
-  )
+function makeConfig(overrides) {
+  return _.defaultsDeep(overrides, {
+    options: {
+      prefix: '',
+      important: false,
+      separator: ':',
+    },
+  })
 }
 
 test('plugins can create utilities with object syntax', () => {
-  const { components, utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { components, utilities } = processPlugins(
+    [
       function({ addUtilities }) {
         addUtilities({
           '.object-fill': {
@@ -35,7 +33,8 @@ test('plugins can create utilities with object syntax', () => {
         })
       },
     ],
-  })
+    makeConfig()
+  )
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
@@ -50,12 +49,12 @@ test('plugins can create utilities with object syntax', () => {
         object-fit: cover
       }
     }
-  `)
+    `)
 })
 
 test('plugins can create utilities with arrays of objects', () => {
-  const { components, utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { components, utilities } = processPlugins(
+    [
       function({ addUtilities }) {
         addUtilities([
           {
@@ -76,7 +75,8 @@ test('plugins can create utilities with arrays of objects', () => {
         ])
       },
     ],
-  })
+    makeConfig()
+  )
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
@@ -91,12 +91,12 @@ test('plugins can create utilities with arrays of objects', () => {
         object-fit: cover
       }
     }
-  `)
+    `)
 })
 
 test('plugins can create utilities with raw PostCSS nodes', () => {
-  const { components, utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { components, utilities } = processPlugins(
+    [
       function({ addUtilities }) {
         addUtilities([
           postcss.rule({ selector: '.object-fill' }).append([
@@ -120,7 +120,8 @@ test('plugins can create utilities with raw PostCSS nodes', () => {
         ])
       },
     ],
-  })
+    makeConfig()
+  )
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
@@ -135,12 +136,12 @@ test('plugins can create utilities with raw PostCSS nodes', () => {
         object-fit: cover
       }
     }
-  `)
+    `)
 })
 
 test('plugins can create utilities with mixed object styles and PostCSS nodes', () => {
-  const { components, utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { components, utilities } = processPlugins(
+    [
       function({ addUtilities }) {
         addUtilities([
           {
@@ -163,7 +164,8 @@ test('plugins can create utilities with mixed object styles and PostCSS nodes', 
         ])
       },
     ],
-  })
+    makeConfig()
+  )
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
@@ -178,12 +180,12 @@ test('plugins can create utilities with mixed object styles and PostCSS nodes', 
         object-fit: cover
       }
     }
-  `)
+    `)
 })
 
 test('plugins can create utilities with variants', () => {
-  const { components, utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { components, utilities } = processPlugins(
+    [
       function({ addUtilities }) {
         addUtilities(
           {
@@ -201,7 +203,8 @@ test('plugins can create utilities with variants', () => {
         )
       },
     ],
-  })
+    makeConfig()
+  )
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
@@ -216,12 +219,12 @@ test('plugins can create utilities with variants', () => {
         object-fit: cover
       }
     }
-  `)
+    `)
 })
 
 test('plugins can create components with object syntax', () => {
-  const { components, utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { components, utilities } = processPlugins(
+    [
       function({ addComponents }) {
         addComponents({
           '.btn-blue': {
@@ -236,7 +239,8 @@ test('plugins can create components with object syntax', () => {
         })
       },
     ],
-  })
+    makeConfig()
+  )
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
@@ -249,12 +253,12 @@ test('plugins can create components with object syntax', () => {
     .btn-blue:hover {
       background-color: darkblue
     }
-  `)
+    `)
 })
 
 test('plugins can create components with raw PostCSS nodes', () => {
-  const { components, utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { components, utilities } = processPlugins(
+    [
       function({ addComponents }) {
         addComponents([
           postcss.rule({ selector: '.btn-blue' }).append([
@@ -284,7 +288,8 @@ test('plugins can create components with raw PostCSS nodes', () => {
         ])
       },
     ],
-  })
+    makeConfig()
+  )
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
@@ -297,12 +302,12 @@ test('plugins can create components with raw PostCSS nodes', () => {
     .btn-blue:hover {
       background-color: darkblue
     }
-  `)
+    `)
 })
 
 test('plugins can create components with mixed object styles and raw PostCSS nodes', () => {
-  const { components, utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { components, utilities } = processPlugins(
+    [
       function({ addComponents }) {
         addComponents([
           postcss.rule({ selector: '.btn-blue' }).append([
@@ -331,7 +336,8 @@ test('plugins can create components with mixed object styles and raw PostCSS nod
         ])
       },
     ],
-  })
+    makeConfig()
+  )
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
@@ -344,12 +350,12 @@ test('plugins can create components with mixed object styles and raw PostCSS nod
     .btn-blue:hover {
       background-color: darkblue
     }
-  `)
+    `)
 })
 
 test('plugins can create components with media queries with object syntax', () => {
-  const { components, utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { components, utilities } = processPlugins(
+    [
       function({ addComponents }) {
         addComponents({
           '.container': {
@@ -373,7 +379,8 @@ test('plugins can create components with media queries with object syntax', () =
         })
       },
     ],
-  })
+    makeConfig()
+  )
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
@@ -395,12 +402,12 @@ test('plugins can create components with media queries with object syntax', () =
         max-width: 300px
       }
     }
-  `)
+    `)
 })
 
 test('media queries can be defined multiple times using objects-in-array syntax', () => {
-  const { components, utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { components, utilities } = processPlugins(
+    [
       function({ addComponents }) {
         addComponents([
           {
@@ -427,7 +434,8 @@ test('media queries can be defined multiple times using objects-in-array syntax'
         ])
       },
     ],
-  })
+    makeConfig()
+  )
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
@@ -448,12 +456,12 @@ test('media queries can be defined multiple times using objects-in-array syntax'
         display: inline-block
       }
     }
-  `)
+    `)
 })
 
 test('plugins can create nested rules', () => {
-  const { components, utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { components, utilities } = processPlugins(
+    [
       function({ addComponents }) {
         addComponents({
           '.btn-blue': {
@@ -479,7 +487,8 @@ test('plugins can create nested rules', () => {
         })
       },
     ],
-  })
+    makeConfig()
+  )
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
@@ -503,12 +512,12 @@ test('plugins can create nested rules', () => {
     h1 .btn-blue {
       color: purple;
     }
-  `)
+    `)
 })
 
 test('plugins can create rules with escaped selectors', () => {
-  const config = {
-    plugins: [
+  const { components, utilities } = processPlugins(
+    [
       function({ e, addUtilities }) {
         addUtilities({
           [`.${e('top-1/4')}`]: {
@@ -517,9 +526,8 @@ test('plugins can create rules with escaped selectors', () => {
         })
       },
     ],
-  }
-
-  const { components, utilities } = processPluginsWithValidConfig(config)
+    makeConfig()
+  )
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
@@ -528,18 +536,12 @@ test('plugins can create rules with escaped selectors', () => {
         top: 25%
       }
     }
-  `)
+    `)
 })
 
 test('plugins can access the current config', () => {
-  const { components, utilities } = processPluginsWithValidConfig({
-    screens: {
-      sm: '576px',
-      md: '768px',
-      lg: '992px',
-      xl: '1200px',
-    },
-    plugins: [
+  const { components, utilities } = processPlugins(
+    [
       function({ addComponents, config }) {
         const containerClasses = [
           {
@@ -556,13 +558,18 @@ test('plugins can access the current config', () => {
             },
           })
         })
-
-        // console.log(containerClasses)
-
         addComponents(containerClasses)
       },
     ],
-  })
+    makeConfig({
+      screens: {
+        sm: '576px',
+        md: '768px',
+        lg: '992px',
+        xl: '1200px',
+      },
+    })
+  )
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
@@ -589,18 +596,12 @@ test('plugins can access the current config', () => {
         max-width: 1200px
       }
     }
-  `)
+    `)
 })
 
 test('plugins can provide fallbacks to keys missing from the config', () => {
-  const { components, utilities } = processPluginsWithValidConfig({
-    borderRadius: {
-      '1': '1px',
-      '2': '2px',
-      '4': '4px',
-      '8': '8px',
-    },
-    plugins: [
+  const { components, utilities } = processPlugins(
+    [
       function({ addComponents, config }) {
         addComponents({
           '.btn': {
@@ -609,19 +610,27 @@ test('plugins can provide fallbacks to keys missing from the config', () => {
         })
       },
     ],
-  })
+    makeConfig({
+      borderRadius: {
+        '1': '1px',
+        '2': '2px',
+        '4': '4px',
+        '8': '8px',
+      },
+    })
+  )
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
     .btn {
       border-radius: .25rem
     }
-  `)
+    `)
 })
 
 test('variants are optional when adding utilities', () => {
-  const { utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { utilities } = processPlugins(
+    [
       function({ addUtilities }) {
         addUtilities({
           '.border-collapse': {
@@ -630,20 +639,20 @@ test('variants are optional when adding utilities', () => {
         })
       },
     ],
-  })
+    makeConfig()
+  )
 
   expect(css(utilities)).toMatchCss(`
     @variants {
       .border-collapse {
         border-collapse: collapse
       }
-    }
-  `)
+    }`)
 })
 
 test('plugins can add multiple sets of utilities and components', () => {
-  const { components, utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { components, utilities } = processPlugins(
+    [
       function({ addUtilities, addComponents }) {
         addComponents({
           '.card': {
@@ -672,7 +681,8 @@ test('plugins can add multiple sets of utilities and components', () => {
         })
       },
     ],
-  })
+    makeConfig()
+  )
 
   expect(css(utilities)).toMatchCss(`
     @variants {
@@ -685,7 +695,7 @@ test('plugins can add multiple sets of utilities and components', () => {
         border-collapse: collapse
       }
     }
-  `)
+    `)
   expect(css(components)).toMatchCss(`
     .card {
       padding: 1rem;
@@ -695,12 +705,12 @@ test('plugins can add multiple sets of utilities and components', () => {
       padding: 1rem .5rem;
       display: inline-block
     }
-  `)
+    `)
 })
 
 test('plugins respect prefix and important options by default when adding utilities', () => {
-  const { utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { utilities } = processPlugins(
+    [
       function({ addUtilities }) {
         addUtilities({
           '.rotate-90': {
@@ -709,11 +719,13 @@ test('plugins respect prefix and important options by default when adding utilit
         })
       },
     ],
-    options: {
-      prefix: 'tw-',
-      important: true,
-    },
-  })
+    makeConfig({
+      options: {
+        prefix: 'tw-',
+        important: true,
+      },
+    })
+  )
 
   expect(css(utilities)).toMatchCss(`
     @variants {
@@ -721,12 +733,12 @@ test('plugins respect prefix and important options by default when adding utilit
         transform: rotate(90deg) !important
       }
     }
-  `)
+    `)
 })
 
 test("component declarations respect the 'prefix' option by default", () => {
-  const { components } = processPluginsWithValidConfig({
-    plugins: [
+  const { components } = processPlugins(
+    [
       function({ addComponents }) {
         addComponents({
           '.btn-blue': {
@@ -735,21 +747,61 @@ test("component declarations respect the 'prefix' option by default", () => {
         })
       },
     ],
-    options: {
-      prefix: 'tw-',
-    },
-  })
+    makeConfig({
+      options: {
+        prefix: 'tw-',
+      },
+    })
+  )
 
   expect(css(components)).toMatchCss(`
     .tw-btn-blue {
       background-color: blue
     }
-  `)
+    `)
+})
+
+test('all selectors in a rule are prefixed', () => {
+  const { utilities, components } = processPlugins(
+    [
+      function({ addUtilities, addComponents }) {
+        addUtilities({
+          '.rotate-90, .rotate-1\\/4': {
+            transform: 'rotate(90deg)',
+          },
+        })
+        addComponents({
+          '.btn-blue, .btn-red': {
+            padding: '10px',
+          },
+        })
+      },
+    ],
+    makeConfig({
+      options: {
+        prefix: 'tw-',
+      },
+    })
+  )
+
+  expect(css(utilities)).toMatchCss(`
+    @variants {
+      .tw-rotate-90, .tw-rotate-1\\/4 {
+        transform: rotate(90deg)
+      }
+    }
+    `)
+
+  expect(css(components)).toMatchCss(`
+    .tw-btn-blue, .tw-btn-red {
+      padding: 10px
+    }
+    `)
 })
 
 test("component declarations can optionally ignore 'prefix' option", () => {
-  const { components } = processPluginsWithValidConfig({
-    plugins: [
+  const { components } = processPlugins(
+    [
       function({ addComponents }) {
         addComponents(
           {
@@ -761,21 +813,23 @@ test("component declarations can optionally ignore 'prefix' option", () => {
         )
       },
     ],
-    options: {
-      prefix: 'tw-',
-    },
-  })
+    makeConfig({
+      options: {
+        prefix: 'tw-',
+      },
+    })
+  )
 
   expect(css(components)).toMatchCss(`
     .btn-blue {
       background-color: blue
     }
-  `)
+    `)
 })
 
 test("component declarations are not affected by the 'important' option", () => {
-  const { components } = processPluginsWithValidConfig({
-    plugins: [
+  const { components } = processPlugins(
+    [
       function({ addComponents }) {
         addComponents({
           '.btn-blue': {
@@ -784,21 +838,23 @@ test("component declarations are not affected by the 'important' option", () => 
         })
       },
     ],
-    options: {
-      important: true,
-    },
-  })
+    makeConfig({
+      options: {
+        important: true,
+      },
+    })
+  )
 
   expect(css(components)).toMatchCss(`
     .btn-blue {
       background-color: blue
     }
-  `)
+    `)
 })
 
 test("plugins can apply the user's chosen prefix to components manually", () => {
-  const { components } = processPluginsWithValidConfig({
-    plugins: [
+  const { components } = processPlugins(
+    [
       function({ addComponents, prefix }) {
         addComponents(
           {
@@ -810,21 +866,23 @@ test("plugins can apply the user's chosen prefix to components manually", () => 
         )
       },
     ],
-    options: {
-      prefix: 'tw-',
-    },
-  })
+    makeConfig({
+      options: {
+        prefix: 'tw-',
+      },
+    })
+  )
 
   expect(css(components)).toMatchCss(`
     .tw-btn-blue {
       background-color: blue
     }
-  `)
+    `)
 })
 
 test('prefix can optionally be ignored for utilities', () => {
-  const { utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { utilities } = processPlugins(
+    [
       function({ addUtilities }) {
         addUtilities(
           {
@@ -838,11 +896,13 @@ test('prefix can optionally be ignored for utilities', () => {
         )
       },
     ],
-    options: {
-      prefix: 'tw-',
-      important: true,
-    },
-  })
+    makeConfig({
+      options: {
+        prefix: 'tw-',
+        important: true,
+      },
+    })
+  )
 
   expect(css(utilities)).toMatchCss(`
     @variants {
@@ -850,12 +910,12 @@ test('prefix can optionally be ignored for utilities', () => {
         transform: rotate(90deg) !important
       }
     }
-  `)
+    `)
 })
 
 test('important can optionally be ignored for utilities', () => {
-  const { utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { utilities } = processPlugins(
+    [
       function({ addUtilities }) {
         addUtilities(
           {
@@ -869,11 +929,13 @@ test('important can optionally be ignored for utilities', () => {
         )
       },
     ],
-    options: {
-      prefix: 'tw-',
-      important: true,
-    },
-  })
+    makeConfig({
+      options: {
+        prefix: 'tw-',
+        important: true,
+      },
+    })
+  )
 
   expect(css(utilities)).toMatchCss(`
     @variants {
@@ -881,12 +943,12 @@ test('important can optionally be ignored for utilities', () => {
         transform: rotate(90deg)
       }
     }
-  `)
+    `)
 })
 
 test('variants can still be specified when ignoring prefix and important options', () => {
-  const { utilities } = processPluginsWithValidConfig({
-    plugins: [
+  const { utilities } = processPlugins(
+    [
       function({ addUtilities }) {
         addUtilities(
           {
@@ -902,11 +964,13 @@ test('variants can still be specified when ignoring prefix and important options
         )
       },
     ],
-    options: {
-      prefix: 'tw-',
-      important: true,
-    },
-  })
+    makeConfig({
+      options: {
+        prefix: 'tw-',
+        important: true,
+      },
+    })
+  )
 
   expect(css(utilities)).toMatchCss(`
     @variants responsive, hover, focus {
@@ -914,12 +978,12 @@ test('variants can still be specified when ignoring prefix and important options
         transform: rotate(90deg)
       }
     }
-  `)
+    `)
 })
 
 test('prefix will prefix all classes in a selector', () => {
-  const { components } = processPluginsWithValidConfig({
-    plugins: [
+  const { components } = processPlugins(
+    [
       function({ addComponents, prefix }) {
         addComponents(
           {
@@ -931,14 +995,16 @@ test('prefix will prefix all classes in a selector', () => {
         )
       },
     ],
-    options: {
-      prefix: 'tw-',
-    },
-  })
+    makeConfig({
+      options: {
+        prefix: 'tw-',
+      },
+    })
+  )
 
   expect(css(components)).toMatchCss(`
     .tw-btn-blue .tw-w-1\\/4 > h1.tw-text-xl + a .tw-bar {
       background-color: blue
     }
-  `)
+    `)
 })

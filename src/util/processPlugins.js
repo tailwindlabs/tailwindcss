@@ -15,12 +15,12 @@ function parseStyles(styles) {
   return _.flatMap(styles, style => (style instanceof Node ? style : parseObjectStyles(style)))
 }
 
-export default function(config) {
+export default function(plugins, config) {
   const pluginComponents = []
   const pluginUtilities = []
   const pluginVariantGenerators = {}
 
-  config.plugins.forEach(plugin => {
+  plugins.forEach(plugin => {
     plugin({
       config: (path, defaultValue) => _.get(config, path, defaultValue),
       e: escapeClassName,

@@ -8,7 +8,7 @@ function updateSource(nodes, source) {
   })
 }
 
-export default function(config, { components: pluginComponents }, generatedUtilities) {
+export default function(config, { components: pluginComponents, utilities: pluginUtilities }) {
   return function(css) {
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'preflight') {
@@ -26,7 +26,7 @@ export default function(config, { components: pluginComponents }, generatedUtili
       }
 
       if (atRule.params === 'utilities') {
-        atRule.before(updateSource(generatedUtilities, atRule.source))
+        atRule.before(updateSource(pluginUtilities, atRule.source))
         atRule.remove()
       }
     })
