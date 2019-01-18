@@ -1,5 +1,5 @@
-export default function() {
-  return function({ addUtilities, config }) {
+export default function({ variants }) {
+  return function({ addUtilities }) {
     addUtilities(
       {
         '.cursor-auto': { cursor: 'auto' },
@@ -9,7 +9,7 @@ export default function() {
         '.cursor-move': { cursor: 'move' },
         '.cursor-not-allowed': { cursor: 'not-allowed' },
       },
-      config('modules.cursor')
+      variants
     )
   }
 }

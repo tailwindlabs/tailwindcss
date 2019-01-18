@@ -4,7 +4,7 @@ import cli from '../src/cli/main'
 import * as constants from '../src/cli/constants'
 import * as utils from '../src/cli/utils'
 
-describe('cli', () => {
+describe.skip('cli', () => {
   const inputCssPath = path.resolve(__dirname, 'fixtures/tailwind-input.css')
   const customConfigPath = path.resolve(__dirname, 'fixtures/custom-config.js')
 

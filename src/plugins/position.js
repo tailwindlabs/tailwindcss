@@ -1,5 +1,5 @@
-export default function() {
-  return function({ addUtilities, config }) {
+export default function({ variants }) {
+  return function({ addUtilities }) {
     addUtilities(
       {
         '.static': { position: 'static' },
@@ -26,7 +26,7 @@ export default function() {
         '.pin-b': { bottom: 0 },
         '.pin-l': { left: 0 },
       },
-      config('modules.position')
+      variants
     )
   }
 }

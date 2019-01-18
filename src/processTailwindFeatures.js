@@ -9,12 +9,11 @@ import substituteScreenAtRules from './lib/substituteScreenAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
 
 import processPlugins from './util/processPlugins'
-import defaultPlugins from './defaultPlugins'
 
 export default function(getConfig) {
   return function(css) {
     const config = getConfig()
-    const processedPlugins = processPlugins([...defaultPlugins(config), ...config.plugins], config)
+    const processedPlugins = processPlugins(config.plugins, config)
 
     return postcss([
       substituteTailwindAtRules(config, processedPlugins),

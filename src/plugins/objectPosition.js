@@ -1,5 +1,5 @@
-export default function() {
-  return function({ addUtilities, config }) {
+export default function({ variants }) {
+  return function({ addUtilities }) {
     addUtilities(
       {
         '.object-bottom': { 'object-position': 'bottom' },
@@ -12,7 +12,7 @@ export default function() {
         '.object-right-top': { 'object-position': 'right top' },
         '.object-top': { 'object-position': 'top' },
       },
-      config('modules.objectPosition')
+      variants
     )
   }
 }

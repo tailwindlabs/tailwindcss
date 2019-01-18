@@ -1,10 +1,10 @@
 import postcss from 'postcss'
 import substituteClassApplyAtRules from '../src/lib/substituteClassApplyAtRules'
 import processPlugins from '../src/util/processPlugins'
-import defaultPlugins from '../src/defaultPlugins'
-import defaultConfig from '../defaultConfig.stub.js'
+import defaultPlugins from '../defaultPlugins'
+import defaultConfig from '../legacyConfig.stub.js'
 
-const { utilities: defaultUtilities } = processPlugins(defaultPlugins(defaultConfig), defaultConfig)
+const { utilities: defaultUtilities } = processPlugins(defaultPlugins(), defaultConfig)
 
 function run(input, config = defaultConfig, utilities = defaultUtilities) {
   return postcss([substituteClassApplyAtRules(config, utilities)]).process(input, {
@@ -205,12 +205,10 @@ test('you can apply utility classes without using the given prefix', () => {
     prefix: 'tw-',
   }
 
-  return run(input, config, processPlugins(defaultPlugins(defaultConfig), config).utilities).then(
-    result => {
-      expect(result.css).toEqual(expected)
-      expect(result.warnings().length).toBe(0)
-    }
-  )
+  return run(input, config, processPlugins(defaultPlugins(), config).utilities).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
+  })
 })
 
 test('you can apply utility classes without using the given prefix when using a function for the prefix', () => {
@@ -229,10 +227,8 @@ test('you can apply utility classes without using the given prefix when using a 
     },
   }
 
-  return run(input, config, processPlugins(defaultPlugins(defaultConfig), config).utilities).then(
-    result => {
-      expect(result.css).toEqual(expected)
-      expect(result.warnings().length).toBe(0)
-    }
-  )
+  return run(input, config, processPlugins(defaultPlugins(), config).utilities).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
+  })
 })

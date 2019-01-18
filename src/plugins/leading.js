@@ -1,9 +1,9 @@
 import _ from 'lodash'
 
-export default function() {
-  return function({ addUtilities, config, e }) {
+export default function({ values, variants }) {
+  return function({ addUtilities, e }) {
     const utilities = _.fromPairs(
-      _.map(config('leading'), (value, modifier) => {
+      _.map(values, (value, modifier) => {
         return [
           `.${e(`leading-${modifier}`)}`,
           {
@@ -13,6 +13,6 @@ export default function() {
       })
     )
 
-    addUtilities(utilities, config('modules.leading'))
+    addUtilities(utilities, variants)
   }
 }
