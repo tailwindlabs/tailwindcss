@@ -15,8 +15,8 @@ function config(overrides) {
       lg: '992px',
       xl: '1200px',
     },
+    prefix: '',
     options: {
-      prefix: '',
       important: false,
       separator: ':',
     },

@@ -84,12 +84,7 @@ export default function(config, generatedUtilities) {
               [
                 () => findClass(classToApply, classLookup, onError),
                 () => findClass(classToApply, shadowLookup, onError),
-                () =>
-                  findClass(
-                    prefixSelector(config.options.prefix, classToApply),
-                    shadowLookup,
-                    onError
-                  ),
+                () => findClass(prefixSelector(config.prefix, classToApply), shadowLookup, onError),
                 () => {
                   // prettier-ignore
                   throw onError(`\`@apply\` cannot be used with \`${classToApply}\` because \`${classToApply}\` either cannot be found, or its actual definition includes a pseudo-selector like :hover, :active, etc. If you're sure that \`${classToApply}\` exists, make sure that any \`@import\` statements are being properly processed *before* Tailwind CSS sees your CSS, as \`@apply\` can only be used for classes in the same CSS tree.`)
