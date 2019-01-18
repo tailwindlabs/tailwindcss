@@ -206,7 +206,6 @@ test('you can apply utility classes without using the given prefix', () => {
       ...defaultConfig.options,
       prefix: 'tw-',
     },
-    experiments: { shadowLookup: true },
   }
 
   return run(input, config, processPlugins(defaultPlugins(defaultConfig), config).utilities).then(
@@ -234,7 +233,6 @@ test('you can apply utility classes without using the given prefix when using a 
         return 'tw-'
       },
     },
-    experiments: { shadowLookup: true },
   }
 
   return run(input, config, processPlugins(defaultPlugins(defaultConfig), config).utilities).then(
