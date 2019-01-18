@@ -37,9 +37,7 @@ test('it can generate responsive variants', () => {
       md: '750px',
       lg: '1000px',
     },
-    options: {
-      separator: ':',
-    },
+    separator: ':',
   }).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
@@ -77,9 +75,7 @@ test('it can generate responsive variants with a custom separator', () => {
       md: '750px',
       lg: '1000px',
     },
-    options: {
-      separator: '__',
-    },
+    separator: '__',
   }).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
@@ -117,9 +113,7 @@ test('it can generate responsive variants when classes have non-standard charact
       md: '750px',
       lg: '1000px',
     },
-    options: {
-      separator: ':',
-    },
+    separator: ':',
   }).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
@@ -163,9 +157,7 @@ test('responsive variants are grouped', () => {
       md: '750px',
       lg: '1000px',
     },
-    options: {
-      separator: ':',
-    },
+    separator: ':',
   }).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
@@ -198,9 +190,7 @@ test('screen prefix is only applied to the last class in a selector', () => {
       md: '750px',
       lg: '1000px',
     },
-    options: {
-      separator: ':',
-    },
+    separator: ':',
   }).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
@@ -233,9 +223,7 @@ test('responsive variants are generated for all selectors in a rule', () => {
       md: '750px',
       lg: '1000px',
     },
-    options: {
-      separator: ':',
-    },
+    separator: ':',
   }).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
@@ -255,9 +243,7 @@ test('selectors with no classes cannot be made responsive', () => {
       md: '750px',
       lg: '1000px',
     },
-    options: {
-      separator: ':',
-    },
+    separator: ':',
   }).catch(e => {
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
   })
@@ -276,9 +262,7 @@ test('all selectors in a rule must contain classes', () => {
       md: '750px',
       lg: '1000px',
     },
-    options: {
-      separator: ':',
-    },
+    separator: ':',
   }).catch(e => {
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
   })

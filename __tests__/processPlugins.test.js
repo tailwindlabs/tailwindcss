@@ -10,9 +10,7 @@ function makeConfig(overrides) {
   return _.defaultsDeep(overrides, {
     prefix: '',
     important: false,
-    options: {
-      separator: ':',
-    },
+    separator: ':',
   })
 }
 
