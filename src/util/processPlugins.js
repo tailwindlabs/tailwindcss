@@ -43,7 +43,7 @@ export default function(plugins, config) {
             rule.selector = applyConfiguredPrefix(rule.selector)
           }
 
-          if (options.respectImportant && _.get(config, 'options.important')) {
+          if (options.respectImportant && _.get(config, 'important')) {
             rule.walkDecls(decl => (decl.important = true))
           }
         })

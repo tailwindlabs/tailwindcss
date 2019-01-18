@@ -9,8 +9,8 @@ function css(nodes) {
 function makeConfig(overrides) {
   return _.defaultsDeep(overrides, {
     prefix: '',
+    important: false,
     options: {
-      important: false,
       separator: ':',
     },
   })
@@ -721,9 +721,7 @@ test('plugins respect prefix and important options by default when adding utilit
     ],
     makeConfig({
       prefix: 'tw-',
-      options: {
-        important: true,
-      },
+      important: true,
     })
   )
 
@@ -833,9 +831,7 @@ test("component declarations are not affected by the 'important' option", () => 
       },
     ],
     makeConfig({
-      options: {
-        important: true,
-      },
+      important: true,
     })
   )
 
@@ -890,9 +886,7 @@ test('prefix can optionally be ignored for utilities', () => {
     ],
     makeConfig({
       prefix: 'tw-',
-      options: {
-        important: true,
-      },
+      important: true,
     })
   )
 
@@ -923,9 +917,7 @@ test('important can optionally be ignored for utilities', () => {
     ],
     makeConfig({
       prefix: 'tw-',
-      options: {
-        important: true,
-      },
+      important: true,
     })
   )
 
@@ -958,9 +950,7 @@ test('variants can still be specified when ignoring prefix and important options
     ],
     makeConfig({
       prefix: 'tw-',
-      options: {
-        important: true,
-      },
+      important: true,
     })
   )
 
