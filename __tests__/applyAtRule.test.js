@@ -203,9 +203,6 @@ test('you can apply utility classes without using the given prefix', () => {
   const config = {
     ...defaultConfig,
     prefix: 'tw-',
-    options: {
-      ...defaultConfig.options,
-    },
   }
 
   return run(input, config, processPlugins(defaultPlugins(defaultConfig), config).utilities).then(
@@ -229,9 +226,6 @@ test('you can apply utility classes without using the given prefix when using a 
     ...defaultConfig,
     prefix: () => {
       return 'tw-'
-    },
-    options: {
-      ...defaultConfig.options,
     },
   }
 

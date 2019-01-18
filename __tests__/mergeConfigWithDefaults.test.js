@@ -1,10 +1,35 @@
 import mergeConfigWithDefaults from '../src/util/mergeConfigWithDefaults'
 
+test('user top-level keys override default top-level keys except modules', () => {
+  const userConfig = {
+    modules: {},
+    prefix: 'tw-',
+    important: true,
+  }
+
+  const defaultConfig = {
+    modules: {
+      flexbox: ['responsive'],
+    },
+    prefix: '-',
+    important: false,
+  }
+
+  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+
+  expect(result).toEqual({
+    modules: {
+      flexbox: ['responsive'],
+    },
+    prefix: 'tw-',
+    important: true,
+  })
+})
+
 test('missing top level keys are pulled from the default config', () => {
   const userConfig = {
     colors: { red: '#ff0000' },
     modules: {},
-    options: {},
   }
 
   const defaultConfig = {
@@ -13,7 +38,6 @@ test('missing top level keys are pulled from the default config', () => {
       sm: '576px',
     },
     modules: {},
-    options: {},
   }
 
   const result = mergeConfigWithDefaults(userConfig, defaultConfig)
@@ -24,14 +48,12 @@ test('missing top level keys are pulled from the default config', () => {
       sm: '576px',
     },
     modules: {},
-    options: {},
   })
 })
 
 test('user modules are merged with default modules', () => {
   const userConfig = {
     modules: { flexbox: false },
-    options: {},
   }
 
   const defaultConfig = {
@@ -39,7 +61,6 @@ test('user modules are merged with default modules', () => {
       flexbox: ['responsive'],
       textAlign: ['responsive'],
     },
-    options: {},
   }
 
   const result = mergeConfigWithDefaults(userConfig, defaultConfig)
@@ -49,14 +70,12 @@ test('user modules are merged with default modules', () => {
       flexbox: false,
       textAlign: ['responsive'],
     },
-    options: {},
   })
 })
 
 test('setting modules to "all" creates all variants for all modules', () => {
   const userConfig = {
     modules: 'all',
-    options: {},
   }
 
   const defaultConfig = {
@@ -65,7 +84,6 @@ test('setting modules to "all" creates all variants for all modules', () => {
       textAlign: ['hover'],
       textColors: ['focus'],
     },
-    options: {},
   }
 
   const result = mergeConfigWithDefaults(userConfig, defaultConfig)
@@ -76,14 +94,12 @@ test('setting modules to "all" creates all variants for all modules', () => {
       textAlign: ['responsive', 'group-hover', 'hover', 'focus-within', 'focus', 'active'],
       textColors: ['responsive', 'group-hover', 'hover', 'focus-within', 'focus', 'active'],
     },
-    options: {},
   })
 })
 
 test('setting modules to an array of variants applies those variants to all modules', () => {
   const userConfig = {
     modules: ['responsive', 'focus', 'hover', 'custom-variant'],
-    options: {},
   }
 
   const defaultConfig = {
@@ -92,7 +108,6 @@ test('setting modules to an array of variants applies those variants to all modu
       textAlign: ['hover'],
       textColors: ['focus'],
     },
-    options: {},
   }
 
   const result = mergeConfigWithDefaults(userConfig, defaultConfig)
@@ -102,32 +117,6 @@ test('setting modules to an array of variants applies those variants to all modu
       flexbox: ['responsive', 'focus', 'hover', 'custom-variant'],
       textAlign: ['responsive', 'focus', 'hover', 'custom-variant'],
       textColors: ['responsive', 'focus', 'hover', 'custom-variant'],
-    },
-    options: {},
-  })
-})
-
-test('user options are merged with default options', () => {
-  const userConfig = {
-    modules: {},
-    options: { prefix: 'tw-' },
-  }
-
-  const defaultConfig = {
-    modules: {},
-    options: {
-      prefix: '-',
-      important: false,
-    },
-  }
-
-  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
-
-  expect(result).toEqual({
-    modules: {},
-    options: {
-      prefix: 'tw-',
-      important: false,
     },
   })
 })

@@ -974,7 +974,5 @@ module.exports = {
   prefix: '',
   important: false,
   separator: ':',
-  options: {
-  },
 
 }

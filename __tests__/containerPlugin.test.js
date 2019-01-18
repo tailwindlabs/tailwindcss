@@ -16,10 +16,6 @@ function config(overrides) {
       xl: '1200px',
     },
     prefix: '',
-    options: {
-      important: false,
-      separator: ':',
-    },
   })
 }
 
