@@ -1,8 +1,15 @@
+import _ from 'lodash'
 import postcss from 'postcss'
+import config from '../defaultConfig.stub.js'
 import plugin from '../src/lib/evaluateTailwindFunctions'
+import processPlugins from '../src/util/processPlugins'
 
-function run(input, opts = {}) {
-  return postcss([plugin(opts)]).process(input, { from: undefined })
+function run(input, opts = config) {
+  return postcss([
+    plugin(opts, processPlugins(_.get(opts, 'plugins', []), opts).configValues),
+  ]).process(input, {
+    from: undefined,
+  })
 }
 
 test('it looks up values in the config using dot notation', () => {
@@ -77,6 +84,51 @@ test('quotes are preserved around default values', () => {
     },
   }).then(result => {
     expect(result.css).toEqual(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('plugins can register values that should be available to the config function', () => {
+  const input = `
+    .banana { color: config('banana.sandwich'); }
+  `
+
+  const output = `
+    .banana { color: blue; }
+  `
+
+  return run(input, {
+    plugins: [
+      function({ addConfig }) {
+        addConfig('banana', {
+          sandwich: 'blue',
+        })
+      },
+    ],
+  }).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('plugin config values do not override first-class config values', () => {
+  const input = `
+    .banana { color: config('separator'); }
+  `
+
+  const output = `
+    .banana { color: _; }
+  `
+
+  return run(input, {
+    separator: '_',
+    plugins: [
+      function({ addConfig }) {
+        addConfig('separator', '+')
+      },
+    ],
+  }).then(result => {
+    expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
