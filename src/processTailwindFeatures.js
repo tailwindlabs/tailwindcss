@@ -18,7 +18,7 @@ export default function(getConfig) {
 
     return postcss([
       substituteTailwindAtRules(config, processedPlugins),
-      evaluateTailwindFunctions(config),
+      evaluateTailwindFunctions(config, processedPlugins.configValues),
       substituteVariantsAtRules(config, processedPlugins),
       substituteResponsiveAtRules(config),
       substituteScreenAtRules(config),
