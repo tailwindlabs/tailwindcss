@@ -1,12 +1,11 @@
 import _ from 'lodash'
 import functions from 'postcss-functions'
 
-export default function(config, pluginConfigValues) {
+export default function(config) {
   return functions({
     functions: {
       config: (path, defaultValue) => {
-        const trimmedPath = _.trim(path, `'"`)
-        return _.get(config, trimmedPath, _.get(pluginConfigValues, trimmedPath, defaultValue))
+        return _.get(config, _.trim(path, `'"`), defaultValue)
       },
     },
   })
