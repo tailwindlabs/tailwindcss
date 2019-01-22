@@ -19,7 +19,6 @@ export default function(plugins, config) {
   const pluginComponents = []
   const pluginUtilities = []
   const pluginVariantGenerators = {}
-  const pluginConfigValues = {}
 
   plugins.forEach(plugin => {
     plugin({
@@ -65,9 +64,6 @@ export default function(plugins, config) {
       addVariant: (name, generator) => {
         pluginVariantGenerators[name] = generateVariantFunction(generator)
       },
-      addConfig: (namespace, value) => {
-        pluginConfigValues[namespace] = value
-      },
     })
   })
 
@@ -75,6 +71,5 @@ export default function(plugins, config) {
     components: pluginComponents,
     utilities: pluginUtilities,
     variantGenerators: pluginVariantGenerators,
-    configValues: pluginConfigValues,
   }
 }
