@@ -131,7 +131,7 @@
           {{-- Main content area --}}
           <div class="pt-24 pb-8 lg:pt-28 w-full">
             <div class="markdown mb-6 px-6 max-w-lg mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:px-12 xl:w-3/4">
-              @if(isset($page->title))
+              @if ($page->title)
                 <h1>{{ $page->title }}</h1>
               @endif
 
