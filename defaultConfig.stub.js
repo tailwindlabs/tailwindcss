@@ -836,6 +836,7 @@ module.exports = {
     'lg': '992px',
     'xl': '1200px',
   },
+  styles: styles,
   plugins: [
     require('./plugins/container')({
       // center: true,
