@@ -46,7 +46,10 @@ Tailwind is configured almost entirely in plain JavaScript. To do this you'll ne
 We've provided a CLI utility to do this easily:
 
 <div class="rounded bg-grey-lightest border border-grey-light font-mono text-xs p-4">
+  <div class="text-grey-dark"># Using npm</div>
   <div class="text-purple-dark">npx tailwind <span class="text-blue-dark">init</span> <span class="text-grey-dark">[filename]</span></div>
+  <div class="text-grey-dark mt-6"># Using Yarn</div>
+  <div class="text-purple-dark">yarn tailwind <span class="text-blue-dark">init</span> <span class="text-grey-dark">[filename]</span></div>
 </div>
 
 If you're an experienced Tailwind user who doesn't need the comments in the config file, use the `--no-comments` flag when generating your config file to strip them out.
