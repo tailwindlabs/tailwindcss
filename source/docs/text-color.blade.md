@@ -92,7 +92,7 @@ To control the text color of an element on hover, add the `hover:` prefix to any
 @endslot
 @endcomponent
 
-Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
+Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.
 
 ```html
 <button class="... md:text-blue md:hover:text-blue-dark ...">Button</button>
@@ -127,12 +127,10 @@ By default Tailwind makes the entire [default color palette](/docs/colors#defaul
 You can [customize your color palette](/docs/colors#customizing) by editing the `colors` variable in your Tailwind config file, or customize just your text colors using the `textColors` section of your Tailwind config.
 
 @component('_partials.customized-config', ['key' => 'textColors'])
-- textColors: colors,
-+ textColors: {
-+   'primary': '#3490dc',
-+   'secondary': '#ffed4a',
-+   'danger': '#e3342f',
-+ },
+- ...colors,
++ 'primary': '#3490dc',
++ 'secondary': '#ffed4a',
++ 'danger': '#e3342f',
 @endcomponent
 
 @include('_partials.variants-and-disabling', [

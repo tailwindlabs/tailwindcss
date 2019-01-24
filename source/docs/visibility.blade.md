@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Visibility"
-description: "Utilities for controlling the visible of an element."
+description: "Utilities for controlling the visibility of an element."
 features:
   responsive: true
   customizable: false

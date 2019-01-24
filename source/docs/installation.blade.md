@@ -46,8 +46,10 @@ Tailwind is configured almost entirely in plain JavaScript. To do this you'll ne
 We've provided a CLI utility to do this easily:
 
 <div class="rounded bg-grey-lightest border border-grey-light font-mono text-xs p-4">
-  <div class="text-purple-dark">./node_modules/.bin/tailwind <span class="text-blue-dark">init</span> <span class="text-grey-dark">[filename]</span></div>
+  <div class="text-purple-dark">npx tailwind <span class="text-blue-dark">init</span> <span class="text-grey-dark">[filename]</span></div>
 </div>
+
+If you're an experienced Tailwind user who doesn't need the comments in the config file, use the `--no-comments` flag when generating your config file to strip them out.
 
 ### 3. Use Tailwind in your CSS
 
@@ -127,8 +129,10 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
 For simple projects or just giving Tailwind a spin, you can use the Tailwind CLI tool to process your CSS:
 
 <div class="bg-grey-lightest border rounded font-mono text-sm p-4">
-  <div class="text-purple-dark">./node_modules/.bin/tailwind build <span class="text-blue-dark">styles.css</span> <span class="text-grey-dark">[-c ./tailwind.js] [-o ./output.css]</span></div>
+  <div class="text-purple-dark">./node_modules/.bin/tailwind build <span class="text-blue-dark">styles.css</span> <span class="text-grey-dark">[-c ./tailwind.js] [-o ./output.css] [--no-autoprefixer]</span></div>
 </div>
+
+Use the `./node_modules/.bin/tailwind help build` command to learn more about the various CLI options.
 
 #### Using Tailwind with PostCSS
 
@@ -146,7 +150,7 @@ var tailwindcss = require('tailwindcss');
 module.exports = {
   plugins: [
     // ...
-    tailwindcss('./path/to/your/tailwind-config.js'),
+    tailwindcss('./path/to/your/tailwind.js'),
     require('autoprefixer'),
     // ...
   ]
@@ -168,7 +172,7 @@ gulp.task('css', function () {
     // ...
     .pipe(postcss([
       // ...
-      tailwindcss('./path/to/your/tailwind-config.js'),
+      tailwindcss('./path/to/your/tailwind.js'),
       require('autoprefixer'),
       // ...
     ]))
@@ -185,7 +189,7 @@ If you're writing your project in plain CSS, use Mix's `postCss` method to proce
 var tailwindcss = require('tailwindcss');
 
 mix.postCss('resources/css/main.css', 'public/css', [
-  tailwindcss('./path/to/your/tailwind-config.js'),
+  tailwindcss('./path/to/your/tailwind.js'),
 ]);
 ```
 
@@ -197,7 +201,7 @@ var tailwindcss = require('tailwindcss');
 mix.less('resources/less/app.less', 'public/css')
   .options({
     postCss: [
-      tailwindcss('./path/to/your/tailwind-config.js'),
+      tailwindcss('./path/to/your/tailwind.js'),
     ]
   });
 ```
@@ -210,7 +214,7 @@ var tailwindcss = require('tailwindcss');
 mix.sass('resources/sass/app.scss', 'public/css')
   .options({
     processCssUrls: false,
-    postCss: [ tailwindcss('./path/to/your/tailwind-config.js') ],
+    postCss: [ tailwindcss('./path/to/your/tailwind.js') ],
   });
 ```
 
@@ -223,7 +227,7 @@ Create a `postcss.config.js` file, add `tailwindcss` as a plugin and pass the pa
 ```js
 module.exports = {
   plugins: [
-    require('tailwindcss')('./path/to/your/tailwind-config.js'),
+    require('tailwindcss')('./path/to/your/tailwind.js'),
   ]
 }
 ```
@@ -236,7 +240,7 @@ var Encore = require('@symfony/webpack-encore');
 Encore
     .setOutputPath('public/build/')
     .setPublicPath('/build')
-    .addStyleEntry('app', './assets/css/app.css')
+    .addStyleEntry('app', './css/app.css')
     .enablePostCssLoader()
 ;
 
@@ -252,6 +256,17 @@ You can also pass options into the PostCSS loader by passing a callback, as per 
     };
 })
 ```
+
+**Note for Sass users:** Due to [an unresolved issue](https://github.com/bholloway/resolve-url-loader/issues/28) with one of Encore's dependencies, to use Sass with Tailwind you'll need to disable `resolveUrlLoader`:
+
+```js
+Encore
+    .enableSassLoader(function (options) {}, {
+        resolveUrlLoader: false
+    })
+    ;
+```
+
 
 #### Brunch
 

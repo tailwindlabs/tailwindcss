@@ -28,6 +28,7 @@ Plugin functions receive a single object argument that can be [destructured](htt
 
 - `addUtilities()`, for registering new utility styles
 - `addComponents()`, for registering new component styles
+- `addVariant()`, for registering custom variants
 - `e()`, for escaping strings meant to be used in class names
 - `prefix()`, for manually applying the user's configured prefix to parts of a selector
 - `config()`, for looking up values in the user's Tailwind configuration
@@ -271,7 +272,6 @@ function({ addComponents }) {
   })
 }
 ```
-
 
 ## Escaping class names
 
@@ -540,6 +540,118 @@ addComponents([
     }
   },
 ])
+```
+
+## Adding variants
+
+The `addVariant` function allows you to register your own custom [variants](/docs/state-variants) that can be used just like the built-in hover, focus, active, etc. variants.
+
+To add a new variant, call the `addVariant` function, passing in the name of your custom variant, and a callback that modifies the affected CSS rules as needed.
+
+```js
+function({ addVariant }) {
+  addVariant('disabled', ({ modifySelectors, separator }) => {
+    modifySelectors(({ className }) => {
+      return `.disabled${separator}${className}:disabled`
+    })
+  })
+}
+```
+
+The callback receives an object that can be destructured into the following parts:
+
+- `modifySelectors`, a helper function to simplify adding basic variants
+- `separator`, the user's configured [separator string](/docs/configuration#separator)
+- `container`, a [PostCSS Container](http://api.postcss.org/Container.html) containing all of the rules the variant is being applied to, for creating complex variants
+
+### Basic variants
+
+If you want to add a simple variant that only needs to change the selector, use the `modifySelectors` helper.
+
+The `modifySelectors` helper accepts a function that receives an object that can be destructured into the following parts:
+
+- `selector`, the complete unmodified selector for the current rule
+- `className`, the class name of the current rule *with the leading dot removed*
+
+The function you pass to `modifySelectors` should simply return the modified selector.
+
+For example, a `first-child` variant plugin could be written like this:
+
+```js
+function({ addVariant }) {
+  addVariant('first-child', ({ modifySelectors, separator }) => {
+    modifySelectors(({ className }) => {
+      return `.first-child${separator}${className}:first-child`
+    })
+  })
+}
+```
+
+### Complex variants
+
+If you need to do anything beyond simply modifying selectors (like changing the actual rule declarations, or wrapping the rules in another at-rule), you'll need to use the `container` instance.
+
+Using the `container` instance, you can traverse all of the rules within a given module or `@variants` block and manipulate them however you like using the standard PostCSS API.
+
+For example, this plugin creates an `important` version of each affected utility by prepending the class with an exclamation mark and modifying each declaration to be `important`:
+
+```js
+function({ addVariant }) {
+  addVariant('important', ({ container }) => {
+    container.walkRules(rule => {
+      rule.selector = `.\\!${rule.selector.slice(1)}`
+      rule.walkDecls(decl => {
+        decl.important = true
+      })
+    })
+  })
+}
+```
+
+This plugin takes all of the rules inside the container, wraps them in a `@supports (display: grid)` at-rule, and prefixes each rule with `supports-grid`:
+
+```js
+const postcss = require('postcss')
+
+function({ addVariant }) {
+  addVariant('supports-grid', ({ container, separator }) => {
+    const supportsRule = postcss.atRule({ name: 'supports', params: '(display: grid)' })
+    supportsRule.nodes = container.nodes
+    container.nodes = [supportsRule]
+    supportsRule.walkRules(rule => {
+      rule.selector = `.supports-grid${separator}${rule.selector.slice(1)}`
+    })
+  })
+}
+```
+
+To learn more about working with PostCSS directly, check out the [PostCSS API documentation](http://api.postcss.org/Container.html).
+
+### Using custom variants
+
+Using custom variants is no different than using Tailwind's built-in variants.
+
+To use custom variants with Tailwind's modules, add them to the `modules` section of your config file:
+
+```js
+modules.exports = {
+  // ...
+  modules: {
+    // ...
+    borderWidths: ['responsive', 'hover', 'focus', 'first-child', 'disabled'],
+    // ...
+  }
+}
+```
+
+To use custom variants with custom utilities in your own CSS, use the [variants at-rule](/docs/functions-and-directives#variants):
+
+```less
+@variants hover, first-child {
+  .bg-cover-image {
+    background-image: url('/path/to/image.jpg');
+  }
+}
 ```
 
 ## Example plugins
