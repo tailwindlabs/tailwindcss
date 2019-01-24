@@ -37,7 +37,6 @@ export function run(cliParams, cliOptions) {
 
     let stub = utils
       .readFile(constants.configStubFile)
-      .replace('// let defaultConfig', 'let defaultConfig')
       .replace("require('./plugins/container')", "require('tailwindcss/plugins/container')")
 
     noComments && (stub = utils.stripBlockComments(stub))
