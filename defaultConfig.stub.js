@@ -750,27 +750,20 @@ const styles = {
   svgStroke: {
     current: 'currentColor',
   },
+}
 
-  /*
-  |-----------------------------------------------------------------------------
-  | Modules                  https://tailwindcss.com/docs/configuration#modules
-  |-----------------------------------------------------------------------------
-  |
-  | Here is where you control which modules are generated and what variants are
-  | generated for each of those modules.
-  |
-  | Currently supported variants:
-  |   - responsive
-  |   - hover
-  |   - focus
-  |   - focus-within
-  |   - active
-  |   - group-hover
-  |
-  | To disable a module completely, use `false` instead of an array.
-  |
-  */
-
+module.exports = {
+  prefix: '',
+  important: false,
+  separator: ':',
+  colors: colors,
+  screens: {
+    'sm': '576px',
+    'md': '768px',
+    'lg': '992px',
+    'xl': '1200px',
+  },
+  styles: styles,
   modules: {
     appearance: ['responsive'],
     backgroundAttachment: ['responsive'],
@@ -823,20 +816,6 @@ const styles = {
     width: ['responsive'],
     zIndex: ['responsive'],
   },
-}
-
-module.exports = {
-  prefix: '',
-  important: false,
-  separator: ':',
-  colors: colors,
-  screens: {
-    'sm': '576px',
-    'md': '768px',
-    'lg': '992px',
-    'xl': '1200px',
-  },
-  styles: styles,
   plugins: [
     require('./plugins/container')({
       // center: true,

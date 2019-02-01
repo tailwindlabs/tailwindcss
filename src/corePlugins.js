@@ -49,12 +49,12 @@ import whitespace from './plugins/whitespace'
 import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
-function loadPlugins({ styles }, plugins) {
+function loadPlugins({ styles, modules }, plugins) {
   return Object.keys(plugins)
-    .filter(plugin => styles.modules[plugin] !== false)
+    .filter(plugin => modules[plugin] !== false)
     .map(plugin => plugins[plugin]({
       values: styles[plugin],
-      variants: styles.modules[plugin],
+      variants: modules[plugin],
     }))
 }
 
