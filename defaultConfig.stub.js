@@ -764,7 +764,7 @@ module.exports = {
     'xl': '1200px',
   },
   styles: styles,
-  modules: {
+  variants: {
     appearance: ['responsive'],
     backgroundAttachment: ['responsive'],
     backgroundColors: ['responsive', 'hover', 'focus'],
