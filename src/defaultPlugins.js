@@ -49,14 +49,17 @@ import whitespace from './plugins/whitespace'
 import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
-function loadPlugins(modules, plugins) {
+function loadPlugins({ styles }, plugins) {
   return Object.keys(plugins)
-    .filter(plugin => modules[plugin] !== false)
-    .map(plugin => plugins[plugin]())
+    .filter(plugin => styles.modules[plugin] !== false)
+    .map(plugin => plugins[plugin]({
+      values: styles[plugin],
+      variants: styles.modules[plugin],
+    }))
 }
 
 export default function(config) {
-  return loadPlugins(config.modules, {
+  return loadPlugins(config, {
     lists,
     appearance,
     backgroundAttachment,
