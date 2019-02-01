@@ -49,9 +49,9 @@ import whitespace from './plugins/whitespace'
 import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
-function loadPlugins({ styles, variants }, plugins) {
+function loadPlugins({ styles, variants, corePlugins }, plugins) {
   return Object.keys(plugins)
-    .filter(plugin => variants[plugin] !== false)
+    .filter(plugin => corePlugins[plugin] !== false)
     .map(plugin => plugins[plugin]({
       values: styles[plugin],
       variants: variants[plugin],
