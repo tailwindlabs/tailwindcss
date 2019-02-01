@@ -10,8 +10,8 @@ test('it generates border color utilities', () => {
     e: escapeClassName,
     addUtilities(utilities, variants) {
       addedUtilities.push({
-        utilities: utilities,
-        variants: variants,
+        utilities,
+        variants,
       })
     },
   }
@@ -26,14 +26,14 @@ test('it generates border color utilities', () => {
   })(pluginApi)
 
   expect(addedUtilities).toEqual([
-  {
-    utilities: {
-      '.border-red': { 'border-color': '#e3342f' },
-      '.border-green': { 'border-color': '#38c172' },
-      '.border-blue': { 'border-color': '#3490dc' },
+    {
+      utilities: {
+        '.border-red': { 'border-color': '#e3342f' },
+        '.border-green': { 'border-color': '#38c172' },
+        '.border-blue': { 'border-color': '#3490dc' },
+      },
+      variants: ['responsive', 'hover', 'focus'],
     },
-    variants: ['responsive', 'hover', 'focus'],
-  },
   ])
 })
 
@@ -45,8 +45,8 @@ test('it ignores the default border color', () => {
     e: escapeClassName,
     addUtilities(utilities, variants) {
       addedUtilities.push({
-        utilities: utilities,
-        variants: variants,
+        utilities,
+        variants,
       })
     },
   }
