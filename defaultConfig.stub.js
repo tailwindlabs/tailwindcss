@@ -96,6 +96,12 @@ module.exports = {
     'xl': '1200px',
   },
   theme: {
+    screens: {
+      'sm': '576px',
+      'md': '768px',
+      'lg': '992px',
+      'xl': '1200px',
+    },
     fonts: {
       sans: [
         'system-ui',

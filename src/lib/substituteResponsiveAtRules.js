@@ -6,7 +6,7 @@ import buildSelectorVariant from '../util/buildSelectorVariant'
 
 export default function(config) {
   return function(css) {
-    const { screens, separator } = config
+    const { theme: { screens }, separator } = config
     const responsiveRules = []
     const finalRules = []
 
