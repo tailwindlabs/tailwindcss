@@ -7,7 +7,7 @@ function run(input, opts = {}) {
 
 test('it looks up values in the config using dot notation', () => {
   const input = `
-    .banana { color: config('colors.yellow'); }
+    .banana { color: config('theme.colors.yellow'); }
   `
 
   const output = `
@@ -15,8 +15,10 @@ test('it looks up values in the config using dot notation', () => {
   `
 
   return run(input, {
-    colors: {
-      yellow: '#f7cc50',
+    theme: {
+      colors: {
+        yellow: '#f7cc50',
+      },
     },
   }).then(result => {
     expect(result.css).toEqual(output)
@@ -26,7 +28,7 @@ test('it looks up values in the config using dot notation', () => {
 
 test('quotes are optional around the lookup path', () => {
   const input = `
-    .banana { color: config(colors.yellow); }
+    .banana { color: config(theme.colors.yellow); }
   `
 
   const output = `
@@ -34,8 +36,10 @@ test('quotes are optional around the lookup path', () => {
   `
 
   return run(input, {
-    colors: {
-      yellow: '#f7cc50',
+    theme: {
+      colors: {
+        yellow: '#f7cc50',
+      },
     },
   }).then(result => {
     expect(result.css).toEqual(output)
@@ -45,7 +49,7 @@ test('quotes are optional around the lookup path', () => {
 
 test('a default value can be provided', () => {
   const input = `
-    .cookieMonster { color: config('colors.blue', #0000ff); }
+    .cookieMonster { color: config('theme.colors.blue', #0000ff); }
   `
 
   const output = `
@@ -53,8 +57,10 @@ test('a default value can be provided', () => {
   `
 
   return run(input, {
-    colors: {
-      yellow: '#f7cc50',
+    theme: {
+      colors: {
+        yellow: '#f7cc50',
+      },
     },
   }).then(result => {
     expect(result.css).toEqual(output)
@@ -64,7 +70,7 @@ test('a default value can be provided', () => {
 
 test('quotes are preserved around default values', () => {
   const input = `
-    .heading { font-family: config('fonts.sans', "Helvetica Neue"); }
+    .heading { font-family: config('theme.fonts.sans', "Helvetica Neue"); }
   `
 
   const output = `
@@ -72,8 +78,10 @@ test('quotes are preserved around default values', () => {
   `
 
   return run(input, {
-    fonts: {
-      serif: 'Constantia',
+    theme: {
+      fonts: {
+        serif: 'Constantia',
+      },
     },
   }).then(result => {
     expect(result.css).toEqual(output)

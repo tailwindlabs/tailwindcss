@@ -88,14 +88,8 @@ module.exports = {
   prefix: '',
   important: false,
   separator: ':',
-  colors: colors,
-  screens: {
-    'sm': '576px',
-    'md': '768px',
-    'lg': '992px',
-    'xl': '1200px',
-  },
   theme: {
+    colors: colors,
     screens: {
       'sm': '576px',
       'md': '768px',
