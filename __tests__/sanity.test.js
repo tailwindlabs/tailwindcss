@@ -24,7 +24,7 @@ it('generates the right CSS when "important" is enabled', () => {
   const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
   const input = fs.readFileSync(inputPath, 'utf8')
 
-  return postcss([tailwind({ ...config, options: { ...config.options, important: true }})])
+  return postcss([tailwind({ ...config, options: { ...config.options, important: true } })])
     .process(input, { from: inputPath })
     .then(result => {
       const expected = fs.readFileSync(
