@@ -52,10 +52,12 @@ import zIndex from './plugins/zIndex'
 function loadPlugins({ theme, variants, corePlugins }, plugins) {
   return Object.keys(plugins)
     .filter(plugin => corePlugins[plugin] !== false)
-    .map(plugin => plugins[plugin]({
-      values: theme[plugin],
-      variants: variants[plugin],
-    }))
+    .map(plugin =>
+      plugins[plugin]({
+        values: theme[plugin],
+        variants: variants[plugin],
+      })
+    )
 }
 
 export default function(config) {

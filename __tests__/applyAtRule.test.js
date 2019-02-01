@@ -205,12 +205,10 @@ test('you can apply utility classes without using the given prefix', () => {
     prefix: 'tw-',
   }
 
-  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(
-    result => {
-      expect(result.css).toEqual(expected)
-      expect(result.warnings().length).toBe(0)
-    }
-  )
+  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
+  })
 })
 
 test('you can apply utility classes without using the given prefix when using a function for the prefix', () => {
@@ -229,10 +227,8 @@ test('you can apply utility classes without using the given prefix when using a 
     },
   }
 
-  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(
-    result => {
-      expect(result.css).toEqual(expected)
-      expect(result.warnings().length).toBe(0)
-    }
-  )
+  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
+  })
 })
