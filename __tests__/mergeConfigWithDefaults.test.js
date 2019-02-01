@@ -18,7 +18,7 @@ test('prefix key overrides default prefix', () => {
       appearance: ['responsive'],
       borderCollapse: [],
       borderColors: ['responsive', 'hover', 'focus'],
-    }
+    },
   }
 
   const result = mergeConfigWithDefaults(userConfig, defaultConfig)
@@ -36,7 +36,7 @@ test('prefix key overrides default prefix', () => {
       appearance: ['responsive'],
       borderCollapse: [],
       borderColors: ['responsive', 'hover', 'focus'],
-    }
+    },
   })
 })
 
@@ -58,7 +58,7 @@ test('important key overrides default important', () => {
       appearance: ['responsive'],
       borderCollapse: [],
       borderColors: ['responsive', 'hover', 'focus'],
-    }
+    },
   }
 
   const result = mergeConfigWithDefaults(userConfig, defaultConfig)
@@ -76,7 +76,7 @@ test('important key overrides default important', () => {
       appearance: ['responsive'],
       borderCollapse: [],
       borderColors: ['responsive', 'hover', 'focus'],
-    }
+    },
   })
 })
 
@@ -98,7 +98,7 @@ test('separator key overrides default separator', () => {
       appearance: ['responsive'],
       borderCollapse: [],
       borderColors: ['responsive', 'hover', 'focus'],
-    }
+    },
   }
 
   const result = mergeConfigWithDefaults(userConfig, defaultConfig)
@@ -116,7 +116,7 @@ test('separator key overrides default separator', () => {
       appearance: ['responsive'],
       borderCollapse: [],
       borderColors: ['responsive', 'hover', 'focus'],
-    }
+    },
   })
 })
 
@@ -137,24 +137,13 @@ test('theme key is merged instead of replaced', () => {
       colors: {
         'grey-darker': '#606f7b',
         'grey-dark': '#8795a1',
-        'grey': '#b8c2cc',
+        grey: '#b8c2cc',
         'grey-light': '#dae1e7',
         'grey-lighter': '#f1f5f8',
       },
       fonts: {
-        sans: [
-          'system-ui',
-          'BlinkMacSystemFont',
-          '-apple-system',
-          'Roboto',
-          'sans-serif',
-        ],
-        serif: [
-          'Constantia',
-          'Lucida Bright',
-          'Georgia',
-          'serif',
-        ],
+        sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
+        serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
       },
       screens: {
         sm: '500px',
@@ -166,7 +155,7 @@ test('theme key is merged instead of replaced', () => {
       appearance: ['responsive'],
       borderCollapse: [],
       borderColors: ['responsive', 'hover', 'focus'],
-    }
+    },
   }
 
   const result = mergeConfigWithDefaults(userConfig, defaultConfig)
@@ -179,24 +168,13 @@ test('theme key is merged instead of replaced', () => {
       colors: {
         'grey-darker': '#606f7b',
         'grey-dark': '#8795a1',
-        'grey': '#b8c2cc',
+        grey: '#b8c2cc',
         'grey-light': '#dae1e7',
         'grey-lighter': '#f1f5f8',
       },
       fonts: {
-        sans: [
-          'system-ui',
-          'BlinkMacSystemFont',
-          '-apple-system',
-          'Roboto',
-          'sans-serif',
-        ],
-        serif: [
-          'Constantia',
-          'Lucida Bright',
-          'Georgia',
-          'serif',
-        ],
+        sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
+        serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
       },
       screens: {
         mobile: '400px',
@@ -206,7 +184,7 @@ test('theme key is merged instead of replaced', () => {
       appearance: ['responsive'],
       borderCollapse: [],
       borderColors: ['responsive', 'hover', 'focus'],
-    }
+    },
   })
 })
 
@@ -215,7 +193,7 @@ test('variants key is merged instead of replaced', () => {
     variants: {
       backgroundAttachment: [],
       borderColors: ['responsive', 'hover', 'focus', 'active'],
-    }
+    },
   }
 
   const defaultConfig = {
@@ -226,24 +204,13 @@ test('variants key is merged instead of replaced', () => {
       colors: {
         'grey-darker': '#606f7b',
         'grey-dark': '#8795a1',
-        'grey': '#b8c2cc',
+        grey: '#b8c2cc',
         'grey-light': '#dae1e7',
         'grey-lighter': '#f1f5f8',
       },
       fonts: {
-        sans: [
-          'system-ui',
-          'BlinkMacSystemFont',
-          '-apple-system',
-          'Roboto',
-          'sans-serif',
-        ],
-        serif: [
-          'Constantia',
-          'Lucida Bright',
-          'Georgia',
-          'serif',
-        ],
+        sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
+        serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
       },
       screens: {
         sm: '500px',
@@ -257,7 +224,7 @@ test('variants key is merged instead of replaced', () => {
       borderCollapse: [],
       borderColors: ['responsive', 'hover', 'focus'],
       borderRadius: ['responsive'],
-    }
+    },
   }
 
   const result = mergeConfigWithDefaults(userConfig, defaultConfig)
@@ -270,24 +237,13 @@ test('variants key is merged instead of replaced', () => {
       colors: {
         'grey-darker': '#606f7b',
         'grey-dark': '#8795a1',
-        'grey': '#b8c2cc',
+        grey: '#b8c2cc',
         'grey-light': '#dae1e7',
         'grey-lighter': '#f1f5f8',
       },
       fonts: {
-        sans: [
-          'system-ui',
-          'BlinkMacSystemFont',
-          '-apple-system',
-          'Roboto',
-          'sans-serif',
-        ],
-        serif: [
-          'Constantia',
-          'Lucida Bright',
-          'Georgia',
-          'serif',
-        ],
+        sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
+        serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
       },
       screens: {
         sm: '500px',
@@ -301,7 +257,7 @@ test('variants key is merged instead of replaced', () => {
       borderCollapse: [],
       borderColors: ['responsive', 'hover', 'focus', 'active'],
       borderRadius: ['responsive'],
-    }
+    },
   })
 })
 
