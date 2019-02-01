@@ -7,43 +7,66 @@ test('it generates border color utilities', () => {
 
   const pluginApi = {
     e: escapeClassName,
-    addUtilities(utilities) {
-      addedUtilities.push(utilities)
+    addUtilities(utilities, variants) {
+      addedUtilities.push({
+        utilities: utilities,
+        variants: variants,
+      })
     },
   }
 
   plugin({
     variants: ['responsive', 'hover', 'focus'],
     values: {
-      'grey-dark': '#8795a1',
-      grey: '#b8c2cc',
-      'grey-light': '#dae1e7',
-      'red-dark': '#cc1f1a',
       red: '#e3342f',
-      'red-light': '#ef5753',
-      'green-dark': '#1f9d55',
       green: '#38c172',
-      'green-light': '#51d88a',
-      'blue-dark': '#2779bd',
       blue: '#3490dc',
-      'blue-light': '#6cb2eb',
+    },
+  })(pluginApi)
+
+  expect(addedUtilities).toEqual([
+  {
+    utilities: {
+      '.border-red': { 'border-color': '#e3342f' },
+      '.border-green': { 'border-color': '#38c172' },
+      '.border-blue': { 'border-color': '#3490dc' },
+    },
+    variants: ['responsive', 'hover', 'focus'],
+  },
+  ])
+})
+
+test('it ignores the default border color', () => {
+  const addedUtilities = []
+
+  const pluginApi = {
+    e: escapeClassName,
+    addUtilities(utilities, variants) {
+      addedUtilities.push({
+        utilities: utilities,
+        variants: variants,
+      })
+    },
+  }
+
+  plugin({
+    variants: ['responsive', 'hover', 'focus'],
+    values: {
+      red: '#e3342f',
+      green: '#38c172',
+      blue: '#3490dc',
+      default: '#dae1e7',
     },
   })(pluginApi)
 
   expect(addedUtilities).toEqual([
     {
-      '.border-grey-dark': { 'border-color': '#8795a1' },
-      '.border-grey': { 'border-color': '#b8c2cc' },
-      '.border-grey-light': { 'border-color': '#dae1e7' },
-      '.border-red-dark': { 'border-color': '#cc1f1a' },
-      '.border-red': { 'border-color': '#e3342f' },
-      '.border-red-light': { 'border-color': '#ef5753' },
-      '.border-green-dark': { 'border-color': '#1f9d55' },
-      '.border-green': { 'border-color': '#38c172' },
-      '.border-green-light': { 'border-color': '#51d88a' },
-      '.border-blue-dark': { 'border-color': '#2779bd' },
-      '.border-blue': { 'border-color': '#3490dc' },
-      '.border-blue-light': { 'border-color': '#6cb2eb' },
+      utilities: {
+        '.border-red': { 'border-color': '#e3342f' },
+        '.border-green': { 'border-color': '#38c172' },
+        '.border-blue': { 'border-color': '#3490dc' },
+      },
+      variants: ['responsive', 'hover', 'focus'],
     },
   ])
 })
