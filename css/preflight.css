@@ -439,7 +439,7 @@ ul {
 *::after {
   border-width: 0;
   border-style: solid;
-  border-color: config('styles.borderColors.default', currentColor);
+  border-color: config('theme.borderColors.default', currentColor);
 }
 
 /**

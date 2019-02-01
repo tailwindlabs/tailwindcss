@@ -763,7 +763,7 @@ module.exports = {
     'lg': '992px',
     'xl': '1200px',
   },
-  styles: styles,
+  theme: styles,
   variants: {
     appearance: ['responsive'],
     backgroundAttachment: ['responsive'],
