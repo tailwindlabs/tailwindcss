@@ -7,6 +7,7 @@ export default function() {
         '.cursor-pointer': { cursor: 'pointer' },
         '.cursor-wait': { cursor: 'wait' },
         '.cursor-move': { cursor: 'move' },
+        '.cursor-help': { cursor: 'help' },
         '.cursor-not-allowed': { cursor: 'not-allowed' },
       },
       config('modules.cursor')
