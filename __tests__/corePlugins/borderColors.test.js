@@ -6,7 +6,7 @@ test('it generates border color utilities', () => {
   const addedUtilities = []
 
   const pluginApi = {
-    config: (path, defaultValue) => null,
+    config: () => null,
     e: escapeClassName,
     addUtilities(utilities, variants) {
       addedUtilities.push({
@@ -41,7 +41,7 @@ test('it ignores the default border color', () => {
   const addedUtilities = []
 
   const pluginApi = {
-    config: (path, defaultValue) => null,
+    config: () => null,
     e: escapeClassName,
     addUtilities(utilities, variants) {
       addedUtilities.push({

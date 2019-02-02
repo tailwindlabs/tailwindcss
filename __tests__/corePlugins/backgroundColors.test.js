@@ -6,7 +6,7 @@ test('it generates background color utilities', () => {
   const addedUtilities = []
 
   const pluginApi = {
-    config: (path, defaultValue) => null,
+    config: () => null,
     e: escapeClassName,
     addUtilities(utilities, variants) {
       addedUtilities.push({
