@@ -300,3 +300,166 @@ test('missing top level keys are pulled from the default config', () => {
     },
   })
 })
+
+test('user colors replace background, text, and border colors', () => {
+  const userConfig = {
+    theme: {
+      colors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+      },
+      backgroundColors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+      },
+      textColors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+      },
+      borderColors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+      },
+    },
+    variants: {
+      backgroundColors: ['responsive'],
+      textColors: ['responsive'],
+      borderColors: ['responsive'],
+    },
+  }
+
+  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+      backgroundColors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+      textColors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+      borderColors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+    },
+    variants: {
+      backgroundColors: ['responsive'],
+      textColors: ['responsive'],
+      borderColors: ['responsive'],
+    },
+  })
+})
+
+test('user background, text, and border colors replace user colors', () => {
+  const userConfig = {
+    theme: {
+      colors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+      backgroundColors: {
+        cyan: 'cyan',
+      },
+      textColors: {
+        magenta: 'magenta',
+      },
+      borderColors: {
+        yellow: 'yellow',
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+      },
+      backgroundColors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+      },
+      textColors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+      },
+      borderColors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+      },
+    },
+    variants: {
+      backgroundColors: ['responsive'],
+      textColors: ['responsive'],
+      borderColors: ['responsive'],
+    },
+  }
+
+  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+      backgroundColors: {
+        cyan: 'cyan',
+      },
+      textColors: {
+        magenta: 'magenta',
+      },
+      borderColors: {
+        yellow: 'yellow',
+      },
+    },
+    variants: {
+      backgroundColors: ['responsive'],
+      textColors: ['responsive'],
+      borderColors: ['responsive'],
+    },
+  })
+})
