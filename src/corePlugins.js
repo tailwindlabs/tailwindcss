@@ -53,14 +53,15 @@ import _ from 'lodash'
 import configurePlugins from './util/configurePlugins'
 
 function loadPlugins({ theme, variants, corePlugins }, plugins) {
-  const defaultCorePluginConfig = _.fromPairs(Object.keys(plugins)
-    .map(plugin => [
+  const defaultCorePluginConfig = _.fromPairs(
+    Object.keys(plugins).map(plugin => [
       plugin,
       {
         values: theme[plugin],
         variants: variants[plugin],
-      }
-    ]))
+      },
+    ])
+  )
 
   return configurePlugins(plugins, corePlugins, defaultCorePluginConfig)
 }

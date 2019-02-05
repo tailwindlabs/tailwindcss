@@ -100,15 +100,19 @@ test('plugins are configured with their default configuration if no custom confi
     },
   }
 
-  const configuredPlugins = configurePlugins(plugins, {
-    fontSize: {
-      variants: ['responsive', 'hover'],
-      values: { '12': '12px', '14': '14px', '16': '16px' },
+  const configuredPlugins = configurePlugins(
+    plugins,
+    {
+      fontSize: {
+        variants: ['responsive', 'hover'],
+        values: { '12': '12px', '14': '14px', '16': '16px' },
+      },
+      backgroundPosition: {},
     },
-    backgroundPosition: {},
-  }, {
-    display: { variants: ['responsive'] },
-  })
+    {
+      display: { variants: ['responsive'] },
+    }
+  )
 
   expect(configuredPlugins).toEqual([
     {
@@ -145,19 +149,23 @@ test('custom plugin configuration overrides default plugin configuration', () =>
     },
   }
 
-  const configuredPlugins = configurePlugins(plugins, {
-    fontSize: {
-      variants: ['responsive', 'hover'],
-      values: { '12': '12px', '14': '14px', '16': '16px' },
+  const configuredPlugins = configurePlugins(
+    plugins,
+    {
+      fontSize: {
+        variants: ['responsive', 'hover'],
+        values: { '12': '12px', '14': '14px', '16': '16px' },
+      },
+      display: { variants: ['responsive'] },
+      backgroundPosition: {},
     },
-    display: { variants: ['responsive'] },
-    backgroundPosition: {},
-  }, {
-    fontSize: {
-      variants: ['focus', 'active'],
-      values: { 'sm': '.75rem', 'md': '1rem', 'lg': '1.5rem' },
-    },
-  })
+    {
+      fontSize: {
+        variants: ['focus', 'active'],
+        values: { sm: '.75rem', md: '1rem', lg: '1.5rem' },
+      },
+    }
+  )
 
   expect(configuredPlugins).toEqual([
     {
