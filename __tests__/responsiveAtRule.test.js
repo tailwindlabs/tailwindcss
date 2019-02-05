@@ -32,14 +32,14 @@ test('it can generate responsive variants', () => {
   `
 
   return run(input, {
-    screens: {
-      sm: '500px',
-      md: '750px',
-      lg: '1000px',
+    theme: {
+      screens: {
+        sm: '500px',
+        md: '750px',
+        lg: '1000px',
+      },
     },
-    options: {
-      separator: ':',
-    },
+    separator: ':',
   }).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
@@ -72,14 +72,14 @@ test('it can generate responsive variants with a custom separator', () => {
   `
 
   return run(input, {
-    screens: {
-      sm: '500px',
-      md: '750px',
-      lg: '1000px',
+    theme: {
+      screens: {
+        sm: '500px',
+        md: '750px',
+        lg: '1000px',
+      },
     },
-    options: {
-      separator: '__',
-    },
+    separator: '__',
   }).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
@@ -112,14 +112,14 @@ test('it can generate responsive variants when classes have non-standard charact
   `
 
   return run(input, {
-    screens: {
-      sm: '500px',
-      md: '750px',
-      lg: '1000px',
+    theme: {
+      screens: {
+        sm: '500px',
+        md: '750px',
+        lg: '1000px',
+      },
     },
-    options: {
-      separator: ':',
-    },
+    separator: ':',
   }).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
@@ -158,14 +158,14 @@ test('responsive variants are grouped', () => {
   `
 
   return run(input, {
-    screens: {
-      sm: '500px',
-      md: '750px',
-      lg: '1000px',
+    theme: {
+      screens: {
+        sm: '500px',
+        md: '750px',
+        lg: '1000px',
+      },
     },
-    options: {
-      separator: ':',
-    },
+    separator: ':',
   }).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
@@ -193,14 +193,14 @@ test('screen prefix is only applied to the last class in a selector', () => {
   `
 
   return run(input, {
-    screens: {
-      sm: '500px',
-      md: '750px',
-      lg: '1000px',
+    theme: {
+      screens: {
+        sm: '500px',
+        md: '750px',
+        lg: '1000px',
+      },
     },
-    options: {
-      separator: ':',
-    },
+    separator: ':',
   }).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
@@ -228,14 +228,14 @@ test('responsive variants are generated for all selectors in a rule', () => {
   `
 
   return run(input, {
-    screens: {
-      sm: '500px',
-      md: '750px',
-      lg: '1000px',
+    theme: {
+      screens: {
+        sm: '500px',
+        md: '750px',
+        lg: '1000px',
+      },
     },
-    options: {
-      separator: ':',
-    },
+    separator: ':',
   }).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
@@ -250,14 +250,14 @@ test('selectors with no classes cannot be made responsive', () => {
   `
   expect.assertions(1)
   return run(input, {
-    screens: {
-      sm: '500px',
-      md: '750px',
-      lg: '1000px',
+    theme: {
+      screens: {
+        sm: '500px',
+        md: '750px',
+        lg: '1000px',
+      },
     },
-    options: {
-      separator: ':',
-    },
+    separator: ':',
   }).catch(e => {
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
   })
@@ -271,14 +271,14 @@ test('all selectors in a rule must contain classes', () => {
   `
   expect.assertions(1)
   return run(input, {
-    screens: {
-      sm: '500px',
-      md: '750px',
-      lg: '1000px',
+    theme: {
+      screens: {
+        sm: '500px',
+        md: '750px',
+        lg: '1000px',
+      },
     },
-    options: {
-      separator: ':',
-    },
+    separator: ':',
   }).catch(e => {
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
   })

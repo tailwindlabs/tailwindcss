@@ -20,13 +20,15 @@ export default function(plugins, config) {
   const pluginUtilities = []
   const pluginVariantGenerators = {}
 
+  const applyConfiguredPrefix = selector => {
+    return prefixSelector(config.prefix, selector)
+  }
+
   plugins.forEach(plugin => {
     plugin({
       config: (path, defaultValue) => _.get(config, path, defaultValue),
       e: escapeClassName,
-      prefix: selector => {
-        return prefixSelector(config.options.prefix, selector)
-      },
+      prefix: applyConfiguredPrefix,
       addUtilities: (utilities, options) => {
         const defaultOptions = { variants: [], respectPrefix: true, respectImportant: true }
 
@@ -38,10 +40,10 @@ export default function(plugins, config) {
 
         styles.walkRules(rule => {
           if (options.respectPrefix) {
-            rule.selector = prefixSelector(config.options.prefix, rule.selector)
+            rule.selector = applyConfiguredPrefix(rule.selector)
           }
 
-          if (options.respectImportant && _.get(config, 'options.important')) {
+          if (options.respectImportant && _.get(config, 'important')) {
             rule.walkDecls(decl => (decl.important = true))
           }
         })
@@ -55,7 +57,7 @@ export default function(plugins, config) {
 
         styles.walkRules(rule => {
           if (options.respectPrefix) {
-            rule.selector = prefixSelector(config.options.prefix, rule.selector)
+            rule.selector = applyConfiguredPrefix(rule.selector)
           }
         })
 

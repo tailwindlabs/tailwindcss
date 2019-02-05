@@ -18,14 +18,12 @@ describe('cli', () => {
     it('creates a Tailwind config file', () => {
       return cli(['init']).then(() => {
         expect(utils.writeFile.mock.calls[0][0]).toEqual(constants.defaultConfigFile)
-        expect(utils.writeFile.mock.calls[0][1]).toContain('defaultConfig')
       })
     })
 
     it('creates a Tailwind config file in a custom location', () => {
       return cli(['init', 'custom.js']).then(() => {
         expect(utils.writeFile.mock.calls[0][0]).toEqual('custom.js')
-        expect(utils.writeFile.mock.calls[0][1]).toContain('defaultConfig')
       })
     })
 

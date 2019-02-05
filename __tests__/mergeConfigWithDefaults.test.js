@@ -1,133 +1,302 @@
 import mergeConfigWithDefaults from '../src/util/mergeConfigWithDefaults'
 
+test('prefix key overrides default prefix', () => {
+  const userConfig = {
+    prefix: 'tw-',
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+
+  expect(result).toEqual({
+    prefix: 'tw-',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  })
+})
+
+test('important key overrides default important', () => {
+  const userConfig = {
+    important: true,
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+
+  expect(result).toEqual({
+    prefix: '',
+    important: true,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  })
+})
+
+test('separator key overrides default separator', () => {
+  const userConfig = {
+    separator: '__',
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+
+  expect(result).toEqual({
+    prefix: '',
+    important: false,
+    separator: '__',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  })
+})
+
+test('theme key is merged instead of replaced', () => {
+  const userConfig = {
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        'grey-darker': '#606f7b',
+        'grey-dark': '#8795a1',
+        grey: '#b8c2cc',
+        'grey-light': '#dae1e7',
+        'grey-lighter': '#f1f5f8',
+      },
+      fonts: {
+        sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
+        serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
+      },
+      screens: {
+        sm: '500px',
+        md: '750px',
+        lg: '1000px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        'grey-darker': '#606f7b',
+        'grey-dark': '#8795a1',
+        grey: '#b8c2cc',
+        'grey-light': '#dae1e7',
+        'grey-lighter': '#f1f5f8',
+      },
+      fonts: {
+        sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
+        serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
+      },
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  })
+})
+
+test('variants key is merged instead of replaced', () => {
+  const userConfig = {
+    variants: {
+      backgroundAttachment: [],
+      borderColors: ['responsive', 'hover', 'focus', 'active'],
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        'grey-darker': '#606f7b',
+        'grey-dark': '#8795a1',
+        grey: '#b8c2cc',
+        'grey-light': '#dae1e7',
+        'grey-lighter': '#f1f5f8',
+      },
+      fonts: {
+        sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
+        serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
+      },
+      screens: {
+        sm: '500px',
+        md: '750px',
+        lg: '1000px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      backgroundAttachment: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+      borderRadius: ['responsive'],
+    },
+  }
+
+  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        'grey-darker': '#606f7b',
+        'grey-dark': '#8795a1',
+        grey: '#b8c2cc',
+        'grey-light': '#dae1e7',
+        'grey-lighter': '#f1f5f8',
+      },
+      fonts: {
+        sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
+        serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
+      },
+      screens: {
+        sm: '500px',
+        md: '750px',
+        lg: '1000px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      backgroundAttachment: [],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus', 'active'],
+      borderRadius: ['responsive'],
+    },
+  })
+})
+
 test('missing top level keys are pulled from the default config', () => {
-  const userConfig = {
-    colors: { red: '#ff0000' },
-    modules: {},
-    options: {},
-  }
+  const userConfig = {}
 
   const defaultConfig = {
-    colors: { green: '#00ff00' },
-    screens: {
-      sm: '576px',
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: { green: '#00ff00' },
+      screens: {
+        mobile: '400px',
+      },
     },
-    modules: {},
-    options: {},
-  }
-
-  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
-
-  expect(result).toEqual({
-    colors: { red: '#ff0000' },
-    screens: {
-      sm: '576px',
-    },
-    modules: {},
-    options: {},
-  })
-})
-
-test('user modules are merged with default modules', () => {
-  const userConfig = {
-    modules: { flexbox: false },
-    options: {},
-  }
-
-  const defaultConfig = {
-    modules: {
-      flexbox: ['responsive'],
-      textAlign: ['responsive'],
-    },
-    options: {},
-  }
-
-  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
-
-  expect(result).toEqual({
-    modules: {
-      flexbox: false,
-      textAlign: ['responsive'],
-    },
-    options: {},
-  })
-})
-
-test('setting modules to "all" creates all variants for all modules', () => {
-  const userConfig = {
-    modules: 'all',
-    options: {},
-  }
-
-  const defaultConfig = {
-    modules: {
-      flexbox: ['responsive'],
-      textAlign: ['hover'],
-      textColors: ['focus'],
-    },
-    options: {},
-  }
-
-  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
-
-  expect(result).toEqual({
-    modules: {
-      flexbox: ['responsive', 'group-hover', 'hover', 'focus-within', 'focus', 'active'],
-      textAlign: ['responsive', 'group-hover', 'hover', 'focus-within', 'focus', 'active'],
-      textColors: ['responsive', 'group-hover', 'hover', 'focus-within', 'focus', 'active'],
-    },
-    options: {},
-  })
-})
-
-test('setting modules to an array of variants applies those variants to all modules', () => {
-  const userConfig = {
-    modules: ['responsive', 'focus', 'hover', 'custom-variant'],
-    options: {},
-  }
-
-  const defaultConfig = {
-    modules: {
-      flexbox: ['responsive'],
-      textAlign: ['hover'],
-      textColors: ['focus'],
-    },
-    options: {},
-  }
-
-  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
-
-  expect(result).toEqual({
-    modules: {
-      flexbox: ['responsive', 'focus', 'hover', 'custom-variant'],
-      textAlign: ['responsive', 'focus', 'hover', 'custom-variant'],
-      textColors: ['responsive', 'focus', 'hover', 'custom-variant'],
-    },
-    options: {},
-  })
-})
-
-test('user options are merged with default options', () => {
-  const userConfig = {
-    modules: {},
-    options: { prefix: 'tw-' },
-  }
-
-  const defaultConfig = {
-    modules: {},
-    options: {
-      prefix: '-',
-      important: false,
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
     },
   }
 
   const result = mergeConfigWithDefaults(userConfig, defaultConfig)
 
   expect(result).toEqual({
-    modules: {},
-    options: {
-      prefix: 'tw-',
-      important: false,
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: { green: '#00ff00' },
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
     },
   })
 })

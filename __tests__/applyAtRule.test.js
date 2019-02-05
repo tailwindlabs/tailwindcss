@@ -1,10 +1,10 @@
 import postcss from 'postcss'
 import substituteClassApplyAtRules from '../src/lib/substituteClassApplyAtRules'
 import processPlugins from '../src/util/processPlugins'
-import defaultPlugins from '../src/defaultPlugins'
+import corePlugins from '../src/corePlugins'
 import defaultConfig from '../defaultConfig.stub.js'
 
-const { utilities: defaultUtilities } = processPlugins(defaultPlugins(defaultConfig), defaultConfig)
+const { utilities: defaultUtilities } = processPlugins(corePlugins(defaultConfig), defaultConfig)
 
 function run(input, config = defaultConfig, utilities = defaultUtilities) {
   return postcss([substituteClassApplyAtRules(config, utilities)]).process(input, {
@@ -202,18 +202,13 @@ test('you can apply utility classes without using the given prefix', () => {
 
   const config = {
     ...defaultConfig,
-    options: {
-      ...defaultConfig.options,
-      prefix: 'tw-',
-    },
+    prefix: 'tw-',
   }
 
-  return run(input, config, processPlugins(defaultPlugins(defaultConfig), config).utilities).then(
-    result => {
-      expect(result.css).toEqual(expected)
-      expect(result.warnings().length).toBe(0)
-    }
-  )
+  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
+  })
 })
 
 test('you can apply utility classes without using the given prefix when using a function for the prefix', () => {
@@ -227,18 +222,13 @@ test('you can apply utility classes without using the given prefix when using a 
 
   const config = {
     ...defaultConfig,
-    options: {
-      ...defaultConfig.options,
-      prefix: () => {
-        return 'tw-'
-      },
+    prefix: () => {
+      return 'tw-'
     },
   }
 
-  return run(input, config, processPlugins(defaultPlugins(defaultConfig), config).utilities).then(
-    result => {
-      expect(result.css).toEqual(expected)
-      expect(result.warnings().length).toBe(0)
-    }
-  )
+  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
+  })
 })

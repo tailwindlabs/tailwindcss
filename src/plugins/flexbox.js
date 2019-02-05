@@ -1,5 +1,5 @@
-export default function() {
-  return function({ addUtilities, config }) {
+export default function({ variants }) {
+  return function({ addUtilities }) {
     addUtilities(
       {
         '.flex': {
@@ -114,7 +114,7 @@ export default function() {
           'flex-shrink': '0',
         },
       },
-      config('modules.flexbox')
+      variants
     )
   }
 }

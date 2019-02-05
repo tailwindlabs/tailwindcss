@@ -8,11 +8,9 @@ function css(nodes) {
 
 function makeConfig(overrides) {
   return _.defaultsDeep(overrides, {
-    options: {
-      prefix: '',
-      important: false,
-      separator: ':',
-    },
+    prefix: '',
+    important: false,
+    separator: ':',
   })
 }
 
@@ -720,10 +718,8 @@ test('plugins respect prefix and important options by default when adding utilit
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-        important: true,
-      },
+      prefix: 'tw-',
+      important: true,
     })
   )
 
@@ -748,9 +744,7 @@ test("component declarations respect the 'prefix' option by default", () => {
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-      },
+      prefix: 'tw-',
     })
   )
 
@@ -778,9 +772,7 @@ test('all selectors in a rule are prefixed', () => {
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-      },
+      prefix: 'tw-',
     })
   )
 
@@ -814,9 +806,7 @@ test("component declarations can optionally ignore 'prefix' option", () => {
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-      },
+      prefix: 'tw-',
     })
   )
 
@@ -839,9 +829,7 @@ test("component declarations are not affected by the 'important' option", () => 
       },
     ],
     makeConfig({
-      options: {
-        important: true,
-      },
+      important: true,
     })
   )
 
@@ -867,9 +855,7 @@ test("plugins can apply the user's chosen prefix to components manually", () => 
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-      },
+      prefix: 'tw-',
     })
   )
 
@@ -897,10 +883,8 @@ test('prefix can optionally be ignored for utilities', () => {
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-        important: true,
-      },
+      prefix: 'tw-',
+      important: true,
     })
   )
 
@@ -930,10 +914,8 @@ test('important can optionally be ignored for utilities', () => {
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-        important: true,
-      },
+      prefix: 'tw-',
+      important: true,
     })
   )
 
@@ -965,10 +947,8 @@ test('variants can still be specified when ignoring prefix and important options
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-        important: true,
-      },
+      prefix: 'tw-',
+      important: true,
     })
   )
 
@@ -996,9 +976,7 @@ test('prefix will prefix all classes in a selector', () => {
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-      },
+      prefix: 'tw-',
     })
   )
 

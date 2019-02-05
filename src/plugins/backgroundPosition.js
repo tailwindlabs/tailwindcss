@@ -1,5 +1,5 @@
-export default function() {
-  return function({ addUtilities, config }) {
+export default function({ variants }) {
+  return function({ addUtilities }) {
     addUtilities(
       {
         '.bg-bottom': { 'background-position': 'bottom' },
@@ -12,7 +12,7 @@ export default function() {
         '.bg-right-top': { 'background-position': 'right top' },
         '.bg-top': { 'background-position': 'top' },
       },
-      config('modules.backgroundPosition')
+      variants
     )
   }
 }

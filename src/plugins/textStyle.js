@@ -1,5 +1,5 @@
-export default function() {
-  return function({ addUtilities, config }) {
+export default function({ variants }) {
+  return function({ addUtilities }) {
     addUtilities(
       {
         '.italic': { 'font-style': 'italic' },
@@ -23,7 +23,7 @@ export default function() {
           '-moz-osx-font-smoothing': 'auto',
         },
       },
-      config('modules.textStyle')
+      variants
     )
   }
 }

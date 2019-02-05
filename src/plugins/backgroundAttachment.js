@@ -1,12 +1,12 @@
-export default function() {
-  return function({ addUtilities, config }) {
+export default function({ variants }) {
+  return function({ addUtilities }) {
     addUtilities(
       {
         '.bg-fixed': { 'background-attachment': 'fixed' },
         '.bg-local': { 'background-attachment': 'local' },
         '.bg-scroll': { 'background-attachment': 'scroll' },
       },
-      config('modules.backgroundAttachment')
+      variants
     )
   }
 }

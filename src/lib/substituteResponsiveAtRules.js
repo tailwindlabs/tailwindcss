@@ -6,10 +6,12 @@ import buildSelectorVariant from '../util/buildSelectorVariant'
 
 export default function(config) {
   return function(css) {
-    const screens = config.screens
-    const separator = config.options.separator
+    const {
+      theme: { screens },
+      separator,
+    } = config
     const responsiveRules = []
-    let finalRules = []
+    const finalRules = []
 
     css.walkAtRules('responsive', atRule => {
       const nodes = atRule.nodes

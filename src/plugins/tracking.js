@@ -1,9 +1,9 @@
 import _ from 'lodash'
 
-export default function() {
-  return function({ addUtilities, config }) {
+export default function({ values, variants }) {
+  return function({ addUtilities }) {
     const utilities = _.fromPairs(
-      _.map(config('tracking'), (value, modifier) => {
+      _.map(values, (value, modifier) => {
         return [
           `.tracking-${modifier}`,
           {
@@ -13,6 +13,6 @@ export default function() {
       })
     )
 
-    addUtilities(utilities, config('modules.tracking'))
+    addUtilities(utilities, variants)
   }
 }

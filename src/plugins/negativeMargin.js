@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
-export default function() {
-  return function({ addUtilities, config, e }) {
+export default function({ values, variants }) {
+  return function({ addUtilities, e }) {
     const generators = [
       (size, modifier) => ({
         [`.${e(`-m-${modifier}`)}`]: { margin: `${size}` },
@@ -19,11 +19,11 @@ export default function() {
     ]
 
     const utilities = _.flatMap(generators, generator => {
-      return _.flatMap(config('negativeMargin'), (size, modifier) => {
+      return _.flatMap(values, (size, modifier) => {
         return generator(`${size}` === '0' ? `${size}` : `-${size}`, modifier)
       })
     })
 
-    addUtilities(utilities, config('modules.negativeMargin'))
+    addUtilities(utilities, variants)
   }
 }

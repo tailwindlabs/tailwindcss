@@ -24,7 +24,7 @@ function extractMinWidths(breakpoints) {
 
 module.exports = function(options) {
   return function({ addComponents, config }) {
-    const screens = _.get(options, 'screens', config('screens'))
+    const screens = _.get(options, 'screens', config('theme.screens'))
 
     const minWidths = extractMinWidths(screens)
 

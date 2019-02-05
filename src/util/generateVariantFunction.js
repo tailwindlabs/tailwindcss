@@ -10,7 +10,7 @@ export default function generateVariantFunction(generator) {
       _.defaultTo(
         generator({
           container: cloned,
-          separator: escapeClassName(config.options.separator),
+          separator: escapeClassName(config.separator),
           modifySelectors: modifierFunction => {
             cloned.walkRules(rule => {
               rule.selectors = rule.selectors.map(selector =>
