@@ -1,12 +1,12 @@
 import autoprefixer from 'autoprefixer'
 import bytes from 'bytes'
 import chalk from 'chalk'
-import postcss from 'postcss'
 import prettyHrtime from 'pretty-hrtime'
 
 import tailwind from '../..'
 
 import commands from '.'
+import compile from '../compile'
 import * as emoji from '../emoji'
 import * as utils from '../utils'
 
@@ -58,67 +58,36 @@ function stopWithHelp(...msgs) {
 }
 
 /**
- * Compiles CSS file.
- *
- * @param {string} inputFile
- * @param {string} configFile
- * @param {string} outputFile
- * @param {boolean} autoprefix
- * @return {Promise}
- */
-function build(inputFile, configFile, outputFile, autoprefix) {
-  const css = utils.readFile(inputFile)
-
-  return new Promise((resolve, reject) => {
-    postcss([tailwind(configFile)].concat(autoprefix ? [autoprefixer] : []))
-      .process(css, {
-        from: inputFile,
-        to: outputFile,
-      })
-      .then(resolve)
-      .catch(reject)
-  })
-}
-
-/**
  * Compiles CSS file and writes it to stdout.
  *
- * @param {string} inputFile
- * @param {string} configFile
- * @param {string} outputFile
- * @param {boolean} autoprefix
+ * @param {CompileOptions} compileOptions
  * @return {Promise}
  */
-function buildToStdout(inputFile, configFile, outputFile, autoprefix) {
-  return build(inputFile, configFile, outputFile, autoprefix).then(result =>
-    process.stdout.write(result.css)
-  )
+function buildToStdout(compileOptions) {
+  return compile(compileOptions).then(result => process.stdout.write(result.css))
 }
 
 /**
  * Compiles CSS file and writes it to a file.
  *
- * @param {string} inputFile
- * @param {string} configFile
- * @param {string} outputFile
- * @param {boolean} autoprefix
+ * @param {CompileOptions} compileOptions
  * @param {int[]} startTime
  * @return {Promise}
  */
-function buildToFile(inputFile, configFile, outputFile, autoprefix, startTime) {
+function buildToFile(compileOptions, startTime) {
   utils.header()
   utils.log()
-  utils.log(emoji.go, 'Building...', chalk.bold.cyan(inputFile))
+  utils.log(emoji.go, 'Building...', chalk.bold.cyan(compileOptions.inputFile))
 
-  return build(inputFile, configFile, outputFile, autoprefix).then(result => {
-    utils.writeFile(outputFile, result.css)
+  return compile(compileOptions).then(result => {
+    utils.writeFile(compileOptions.outputFile, result.css)
 
     const prettyTime = prettyHrtime(process.hrtime(startTime))
 
     utils.log()
     utils.log(emoji.yes, 'Finished in', chalk.bold.magenta(prettyTime))
     utils.log(emoji.pack, 'Size:', chalk.bold.magenta(bytes(result.css.length)))
-    utils.log(emoji.disk, 'Saved to', chalk.bold.cyan(outputFile))
+    utils.log(emoji.disk, 'Saved to', chalk.bold.cyan(compileOptions.outputFile))
     utils.footer()
   })
 }
@@ -145,9 +114,15 @@ export function run(cliParams, cliOptions) {
       !utils.exists(configFile) &&
       stop(chalk.bold.magenta(configFile), 'does not exist.')
 
+    const compileOptions = {
+      inputFile,
+      outputFile,
+      plugins: [tailwind(configFile)].concat(autoprefix ? [autoprefixer] : []),
+    }
+
     const buildPromise = outputFile
-      ? buildToFile(inputFile, configFile, outputFile, autoprefix, startTime)
-      : buildToStdout(inputFile, configFile, outputFile, autoprefix)
+      ? buildToFile(compileOptions, startTime)
+      : buildToStdout(compileOptions)
 
     buildPromise.then(resolve).catch(reject)
   })

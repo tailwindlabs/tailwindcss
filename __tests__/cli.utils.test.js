@@ -1,4 +1,5 @@
 import path from 'path'
+
 import * as utils from '../src/cli/utils'
 
 describe('cli utils', () => {
