@@ -49,15 +49,21 @@ import whitespace from './plugins/whitespace'
 import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
+import _ from 'lodash'
+import configurePlugins from './util/configurePlugins'
+
 function loadPlugins({ theme, variants, corePlugins }, plugins) {
-  return Object.keys(plugins)
-    .filter(plugin => corePlugins[plugin] !== false)
-    .map(plugin =>
-      plugins[plugin]({
+  const defaultCorePluginConfig = _.fromPairs(
+    Object.keys(plugins).map(plugin => [
+      plugin,
+      {
         values: theme[plugin],
         variants: variants[plugin],
-      })
-    )
+      },
+    ])
+  )
+
+  return configurePlugins(plugins, corePlugins, defaultCorePluginConfig)
 }
 
 export default function(config) {
