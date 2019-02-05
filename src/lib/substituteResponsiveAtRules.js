@@ -25,7 +25,8 @@ export default function(config) {
       })
 
       mediaQuery.append(
-        responsiveRules.map(rule => {
+        // Filter out nested `atRules`; we'll process those separately
+        responsiveRules.filter(rule => rule.type !== 'atrule').map(rule => {
           const cloned = rule.clone()
           cloned.selectors = _.map(rule.selectors, selector =>
             buildSelectorVariant(selector, screen, separator, message => {
@@ -33,6 +34,22 @@ export default function(config) {
             })
           )
           return cloned
+        })
+      )
+
+      mediaQuery.append(
+        // Process nested `atRules`.
+        responsiveRules.filter(rule => rule.type === 'atrule').map(atRule => {
+          const clonedAtRule = atRule.clone()
+          clonedAtRule.nodes.forEach(rule => {
+            rule.selectors = _.map(rule.selectors, selector => {
+              const selectorVariant = buildSelectorVariant(selector, screen, separator, message => {
+                throw rule.error(message)
+              })
+              return selectorVariant
+            })
+          })
+          return clonedAtRule
         })
       )
 
