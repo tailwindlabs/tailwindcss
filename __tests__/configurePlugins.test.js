@@ -77,3 +77,48 @@ test('setting a plugin to an object configures that plugin', () => {
     { plugin: 'backgroundPosition', options: {} },
   ])
 })
+
+test('plugins are configured with their default configuration if no custom config is provided', () => {
+  const plugins = {
+    fontSize: options => {
+      return {
+        plugin: 'fontSize',
+        options,
+      }
+    },
+    display: options => {
+      return {
+        plugin: 'display',
+        options,
+      }
+    },
+    backgroundPosition: options => {
+      return {
+        plugin: 'backgroundPosition',
+        options,
+      }
+    },
+  }
+
+  const configuredPlugins = configurePlugins(plugins, {
+    fontSize: {
+      variants: ['responsive', 'hover'],
+      values: { '12': '12px', '14': '14px', '16': '16px' },
+    },
+    backgroundPosition: {},
+  }, {
+    display: { variants: ['responsive'] },
+  })
+
+  expect(configuredPlugins).toEqual([
+    {
+      plugin: 'fontSize',
+      options: {
+        variants: ['responsive', 'hover'],
+        values: { '12': '12px', '14': '14px', '16': '16px' },
+      },
+    },
+    { plugin: 'display', options: { variants: ['responsive'] } },
+    { plugin: 'backgroundPosition', options: {} },
+  ])
+})
