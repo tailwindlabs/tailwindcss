@@ -2,19 +2,19 @@ import configurePlugins from '../src/util/configurePlugins'
 
 test('setting a plugin to false removes it', () => {
   const plugins = {
-    fontSize: (options) => {
+    fontSize: options => {
       return {
         plugin: 'fontSize',
         options,
       }
     },
-    display: (options) => {
+    display: options => {
       return {
         plugin: 'display',
         options,
       }
     },
-    backgroundPosition: (options) => {
+    backgroundPosition: options => {
       return {
         plugin: 'backgroundPosition',
         options,
@@ -36,19 +36,19 @@ test('setting a plugin to false removes it', () => {
 
 test('setting a plugin to an object configures that plugin', () => {
   const plugins = {
-    fontSize: (options) => {
+    fontSize: options => {
       return {
         plugin: 'fontSize',
         options,
       }
     },
-    display: (options) => {
+    display: options => {
       return {
         plugin: 'display',
         options,
       }
     },
-    backgroundPosition: (options) => {
+    backgroundPosition: options => {
       return {
         plugin: 'backgroundPosition',
         options,
@@ -57,13 +57,22 @@ test('setting a plugin to an object configures that plugin', () => {
   }
 
   const configuredPlugins = configurePlugins(plugins, {
-    fontSize: { variants: ['responsive', 'hover'], values: { '12': '12px', '14': '14px', '16': '16px', } },
+    fontSize: {
+      variants: ['responsive', 'hover'],
+      values: { '12': '12px', '14': '14px', '16': '16px' },
+    },
     display: { variants: ['responsive'] },
     backgroundPosition: {},
   })
 
   expect(configuredPlugins).toEqual([
-    { plugin: 'fontSize', options: { variants: ['responsive', 'hover'], values: { '12': '12px', '14': '14px', '16': '16px', } } },
+    {
+      plugin: 'fontSize',
+      options: {
+        variants: ['responsive', 'hover'],
+        values: { '12': '12px', '14': '14px', '16': '16px' },
+      },
+    },
     { plugin: 'display', options: { variants: ['responsive'] } },
     { plugin: 'backgroundPosition', options: {} },
   ])
