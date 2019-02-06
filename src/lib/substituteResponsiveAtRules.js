@@ -24,15 +24,17 @@ export default function(config) {
         params: buildMediaQuery(screens[screen]),
       })
 
-      mediaQuery.append(_.tap(responsiveRules.clone(), clonedRoot => {
-        clonedRoot.walkRules(rule => {
-          rule.selectors = _.map(rule.selectors, selector =>
-            buildSelectorVariant(selector, screen, separator, message => {
-              throw rule.error(message)
-            })
-          )
+      mediaQuery.append(
+        _.tap(responsiveRules.clone(), clonedRoot => {
+          clonedRoot.walkRules(rule => {
+            rule.selectors = _.map(rule.selectors, selector =>
+              buildSelectorVariant(selector, screen, separator, message => {
+                throw rule.error(message)
+              })
+            )
+          })
         })
-      }))
+      )
 
       finalRules.push(mediaQuery)
     })
