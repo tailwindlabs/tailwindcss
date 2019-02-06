@@ -300,3 +300,133 @@ test('missing top level keys are pulled from the default config', () => {
     },
   })
 })
+
+test('functions in the default theme section are lazily evaluated', () => {
+  const userConfig = {
+    theme: {
+      colors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+      },
+      backgroundColors: ({ colors }) => colors,
+      textColors: ({ colors }) => colors,
+    },
+    variants: {
+      backgroundColors: ['responsive', 'hover', 'focus'],
+      textColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+      backgroundColors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+      textColors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+    },
+    variants: {
+      backgroundColors: ['responsive', 'hover', 'focus'],
+      textColors: ['responsive', 'hover', 'focus'],
+    },
+  })
+})
+
+test('functions in the user theme section are lazily evaluated', () => {
+  const userConfig = {
+    theme: {
+      colors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+      backgroundColors: ({ colors }) => ({
+        ...colors,
+        customBackground: '#bada55',
+      }),
+      textColors: ({ colors }) => ({
+        ...colors,
+        customText: '#facade',
+      }),
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+      },
+      backgroundColors: ({ colors }) => colors,
+      textColors: ({ colors }) => colors,
+    },
+    variants: {
+      backgroundColors: ['responsive', 'hover', 'focus'],
+      textColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+      backgroundColors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+        customBackground: '#bada55',
+      },
+      textColors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+        customText: '#facade',
+      },
+    },
+    variants: {
+      backgroundColors: ['responsive', 'hover', 'focus'],
+      textColors: ['responsive', 'hover', 'focus'],
+    },
+  })
+})
