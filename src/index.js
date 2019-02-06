@@ -6,7 +6,7 @@ import perfectionist from 'perfectionist'
 
 import registerConfigAsDependency from './lib/registerConfigAsDependency'
 import processTailwindFeatures from './processTailwindFeatures'
-import mergeConfigWithDefaults from './util/mergeConfigWithDefaults'
+import resolveConfig from './util/resolveConfig'
 
 const plugin = postcss.plugin('tailwind', config => {
   const plugins = []
@@ -17,17 +17,17 @@ const plugin = postcss.plugin('tailwind', config => {
 
   const getConfig = () => {
     if (_.isUndefined(config)) {
-      return require('../defaultConfig')()
+      return resolveConfig([require('../defaultConfig')()])
     }
 
     if (!_.isObject(config)) {
       delete require.cache[require.resolve(path.resolve(config))]
     }
 
-    return mergeConfigWithDefaults(
+    return resolveConfig([
       _.isObject(config) ? config : require(path.resolve(config)),
-      require('../defaultConfig')()
-    )
+      require('../defaultConfig')(),
+    ])
   }
 
   return postcss([
