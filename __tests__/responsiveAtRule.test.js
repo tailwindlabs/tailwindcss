@@ -6,114 +6,6 @@ function run(input, opts = config) {
   return postcss([plugin(opts)]).process(input, { from: undefined })
 }
 
-test('it can generate responsive variants for nested at rules', () => {
-  const input = `
-    @responsive {
-      .banana { color: yellow; }
-      .chocolate { color: brown; }
-
-      @supports(display: grid) {
-        .grid\\:banana { color: blue; }
-        .grid\\:chocolate { color: green; }
-      }
-    }
-  `
-
-  const output = `
-    .banana {
-      color: yellow;
-    }
-
-    .chocolate {
-      color: brown;
-    }
-
-    @supports(display: grid) {
-      .grid\\:banana {
-        color: blue;
-      }
-
-      .grid\\:chocolate {
-        color: green;
-      }
-    }
-
-    @media (min-width: 500px) {
-      .sm\\:banana {
-        color: yellow;
-      }
-
-      .sm\\:chocolate {
-        color: brown;
-      }
-
-      @supports(display: grid) {
-        .sm\\:grid\\:banana {
-          color: blue;
-        }
-
-        .sm\\:grid\\:chocolate {
-          color: green;
-        }
-      }
-    }
-
-    @media (min-width: 750px) {
-      .md\\:banana {
-        color: yellow;
-      }
-
-      .md\\:chocolate {
-        color: brown;
-      }
-
-      @supports(display: grid) {
-        .md\\:grid\\:banana {
-          color: blue;
-        }
-
-        .md\\:grid\\:chocolate {
-          color: green;
-        }
-      }
-    }
-
-    @media (min-width: 1000px) {
-      .lg\\:banana {
-        color: yellow;
-      }
-
-      .lg\\:chocolate {
-        color: brown;
-      }
-
-      @supports(display: grid) {
-        .lg\\:grid\\:banana {
-          color: blue;
-        }
-
-        .lg\\:grid\\:chocolate {
-          color: green;
-        }
-      }
-    }
-  `
-
-  return run(input, {
-    screens: {
-      sm: '500px',
-      md: '750px',
-      lg: '1000px',
-    },
-    options: {
-      separator: ':',
-    },
-  }).then(result => {
-    expect(result.css).toMatchCss(output)
-    expect(result.warnings().length).toBe(0)
-  })
-})
-
 test('it can generate responsive variants', () => {
   const input = `
     @responsive {
@@ -269,6 +161,136 @@ test('responsive variants are grouped', () => {
     screens: {
       sm: '500px',
       md: '750px',
+      lg: '1000px',
+    },
+    options: {
+      separator: ':',
+    },
+  }).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate responsive variants for nested at-rules', () => {
+  const input = `
+    @responsive {
+      .banana { color: yellow; }
+
+      @supports(display: grid) {
+        .grid\\:banana { color: blue; }
+      }
+    }
+  `
+
+  const output = `
+    .banana {
+      color: yellow;
+    }
+
+    @supports(display: grid) {
+      .grid\\:banana {
+        color: blue;
+      }
+    }
+
+    @media (min-width: 500px) {
+      .sm\\:banana {
+        color: yellow;
+      }
+
+      @supports(display: grid) {
+        .sm\\:grid\\:banana {
+          color: blue;
+        }
+      }
+    }
+
+    @media (min-width: 1000px) {
+      .lg\\:banana {
+        color: yellow;
+      }
+
+      @supports(display: grid) {
+        .lg\\:grid\\:banana {
+          color: blue;
+        }
+      }
+    }
+  `
+
+  return run(input, {
+    screens: {
+      sm: '500px',
+      lg: '1000px',
+    },
+    options: {
+      separator: ':',
+    },
+  }).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate responsive variants for deeply nested at-rules', () => {
+  const input = `
+    @responsive {
+      .banana { color: yellow; }
+
+      @supports(display: grid) {
+        @supports(display: flex) {
+          .flex-grid\\:banana { color: blue; }
+        }
+      }
+    }
+  `
+
+  const output = `
+    .banana {
+      color: yellow;
+    }
+
+    @supports(display: grid) {
+      @supports(display: flex) {
+        .flex-grid\\:banana {
+          color: blue;
+        }
+      }
+    }
+
+    @media (min-width: 500px) {
+      .sm\\:banana {
+        color: yellow;
+      }
+
+      @supports(display: grid) {
+        @supports(display: flex) {
+          .sm\\:flex-grid\\:banana {
+            color: blue;
+          }
+        }
+      }
+    }
+
+    @media (min-width: 1000px) {
+      .lg\\:banana {
+        color: yellow;
+      }
+
+      @supports(display: grid) {
+        @supports(display: flex) {
+          .lg\\:flex-grid\\:banana {
+            color: blue;
+          }
+        }
+      }
+    }
+  `
+
+  return run(input, {
+    screens: {
+      sm: '500px',
       lg: '1000px',
     },
     options: {
