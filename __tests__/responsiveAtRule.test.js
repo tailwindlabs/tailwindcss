@@ -233,7 +233,7 @@ test('it can generate responsive variants for nested at-rules', () => {
   })
 })
 
-test.only('it can generate responsive variants for deeply nested at-rules', () => {
+test('it can generate responsive variants for deeply nested at-rules', () => {
   const input = `
     @responsive {
       .banana { color: yellow; }
