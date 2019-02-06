@@ -1,4 +1,4 @@
-import mergeConfigWithDefaults from '../src/util/mergeConfigWithDefaults'
+import resolveConfig from '../src/util/resolveConfig'
 
 test('prefix key overrides default prefix', () => {
   const userConfig = {
@@ -21,7 +21,7 @@ test('prefix key overrides default prefix', () => {
     },
   }
 
-  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+  const result = resolveConfig([userConfig, defaultConfig])
 
   expect(result).toEqual({
     prefix: 'tw-',
@@ -61,7 +61,7 @@ test('important key overrides default important', () => {
     },
   }
 
-  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+  const result = resolveConfig([userConfig, defaultConfig])
 
   expect(result).toEqual({
     prefix: '',
@@ -101,7 +101,7 @@ test('separator key overrides default separator', () => {
     },
   }
 
-  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+  const result = resolveConfig([userConfig, defaultConfig])
 
   expect(result).toEqual({
     prefix: '',
@@ -158,7 +158,7 @@ test('theme key is merged instead of replaced', () => {
     },
   }
 
-  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+  const result = resolveConfig([userConfig, defaultConfig])
 
   expect(result).toEqual({
     prefix: '-',
@@ -227,7 +227,7 @@ test('variants key is merged instead of replaced', () => {
     },
   }
 
-  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+  const result = resolveConfig([userConfig, defaultConfig])
 
   expect(result).toEqual({
     prefix: '-',
@@ -281,7 +281,7 @@ test('missing top level keys are pulled from the default config', () => {
     },
   }
 
-  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+  const result = resolveConfig([userConfig, defaultConfig])
 
   expect(result).toEqual({
     prefix: '-',
@@ -331,7 +331,7 @@ test('functions in the default theme section are lazily evaluated', () => {
     },
   }
 
-  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+  const result = resolveConfig([userConfig, defaultConfig])
 
   expect(result).toEqual({
     prefix: '-',
@@ -399,7 +399,7 @@ test('functions in the user theme section are lazily evaluated', () => {
     },
   }
 
-  const result = mergeConfigWithDefaults(userConfig, defaultConfig)
+  const result = resolveConfig([userConfig, defaultConfig])
 
   expect(result).toEqual({
     prefix: '-',

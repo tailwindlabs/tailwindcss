@@ -155,8 +155,8 @@ module.exports = function() {
       normal: '0',
       wide: '0.05em',
     },
-    textColors: colors,
-    backgroundColors: colors,
+    textColors: theme => theme.colors,
+    backgroundColors: theme => theme.colors,
     backgroundSize: {
       auto: 'auto',
       cover: 'cover',
@@ -169,7 +169,9 @@ module.exports = function() {
       '4': '4px',
       '8': '8px',
     },
-    borderColors: global.Object.assign({ default: colors['grey-light'] }, colors),
+    borderColors: theme => {
+      return global.Object.assign({ default: colors['grey-light'] }, theme.colors)
+    },
     borderRadius: {
       none: '0',
       sm: '.125rem',
