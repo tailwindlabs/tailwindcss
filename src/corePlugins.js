@@ -1,3 +1,4 @@
+import preflight from './plugins/preflight'
 import lists from './plugins/lists'
 import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
@@ -52,7 +53,7 @@ import zIndex from './plugins/zIndex'
 import _ from 'lodash'
 import configurePlugins from './util/configurePlugins'
 
-function loadPlugins({ theme, variants, corePlugins }, plugins) {
+function loadUtilityPlugins({ theme, variants, corePlugins: userCorePluginConfig }, plugins) {
   const defaultCorePluginConfig = _.fromPairs(
     Object.keys(plugins).map(plugin => [
       plugin,
@@ -63,60 +64,63 @@ function loadPlugins({ theme, variants, corePlugins }, plugins) {
     ])
   )
 
-  return configurePlugins(plugins, corePlugins, defaultCorePluginConfig)
+  return configurePlugins(plugins, userCorePluginConfig, defaultCorePluginConfig)
 }
 
 export default function(config) {
-  return loadPlugins(config, {
-    lists,
-    appearance,
-    backgroundAttachment,
-    backgroundColors,
-    backgroundPosition,
-    backgroundRepeat,
-    backgroundSize,
-    borderCollapse,
-    borderColors,
-    borderRadius,
-    borderStyle,
-    borderWidths,
-    cursor,
-    display,
-    flexbox,
-    float,
-    fonts,
-    fontWeights,
-    height,
-    leading,
-    margin,
-    maxHeight,
-    maxWidth,
-    minHeight,
-    minWidth,
-    negativeMargin,
-    objectFit,
-    objectPosition,
-    opacity,
-    outline,
-    overflow,
-    padding,
-    pointerEvents,
-    position,
-    resize,
-    shadows,
-    svgFill,
-    svgStroke,
-    tableLayout,
-    textAlign,
-    textColors,
-    textSizes,
-    textStyle,
-    tracking,
-    userSelect,
-    verticalAlign,
-    visibility,
-    whitespace,
-    width,
-    zIndex,
-  })
+  return [
+    preflight(),
+    ...loadUtilityPlugins(config, {
+      lists,
+      appearance,
+      backgroundAttachment,
+      backgroundColors,
+      backgroundPosition,
+      backgroundRepeat,
+      backgroundSize,
+      borderCollapse,
+      borderColors,
+      borderRadius,
+      borderStyle,
+      borderWidths,
+      cursor,
+      display,
+      flexbox,
+      float,
+      fonts,
+      fontWeights,
+      height,
+      leading,
+      margin,
+      maxHeight,
+      maxWidth,
+      minHeight,
+      minWidth,
+      negativeMargin,
+      objectFit,
+      objectPosition,
+      opacity,
+      outline,
+      overflow,
+      padding,
+      pointerEvents,
+      position,
+      resize,
+      shadows,
+      svgFill,
+      svgStroke,
+      tableLayout,
+      textAlign,
+      textColors,
+      textSizes,
+      textStyle,
+      tracking,
+      userSelect,
+      verticalAlign,
+      visibility,
+      whitespace,
+      width,
+      zIndex,
+    }),
+  ]
 }
