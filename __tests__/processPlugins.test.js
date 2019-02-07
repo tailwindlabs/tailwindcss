@@ -281,6 +281,39 @@ test('plugins can add base styles with object syntax', () => {
     `)
 })
 
+test('plugins can add base styles with raw PostCSS nodes', () => {
+  const { base } = processPlugins(
+    [
+      function({ addBase }) {
+        addBase([
+          postcss.rule({ selector: 'img' }).append([
+            postcss.decl({
+              prop: 'max-width',
+              value: '100%',
+            }),
+          ]),
+          postcss.rule({ selector: 'button' }).append([
+            postcss.decl({
+              prop: 'font-family',
+              value: 'inherit',
+            }),
+          ]),
+        ])
+      },
+    ],
+    makeConfig()
+  )
+
+  expect(css(base)).toMatchCss(`
+    img {
+      max-width: 100%
+    }
+    button {
+      font-family: inherit
+    }
+    `)
+})
+
 test('plugins can create components with raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
