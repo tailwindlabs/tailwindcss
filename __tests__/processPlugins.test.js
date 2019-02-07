@@ -254,6 +254,33 @@ test('plugins can create components with object syntax', () => {
     `)
 })
 
+test('plugins can add base styles with object syntax', () => {
+  const { base } = processPlugins(
+    [
+      function({ addBase }) {
+        addBase({
+          'img': {
+            maxWidth: '100%',
+          },
+          'button': {
+            fontFamily: 'inherit',
+          },
+        })
+      },
+    ],
+    makeConfig()
+  )
+
+  expect(css(base)).toMatchCss(`
+    img {
+      max-width: 100%
+    }
+    button {
+      font-family: inherit
+    }
+    `)
+})
+
 test('plugins can create components with raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
