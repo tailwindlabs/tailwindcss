@@ -16,6 +16,7 @@ function parseStyles(styles) {
 }
 
 export default function(plugins, config) {
+  const pluginBaseStyles = []
   const pluginComponents = []
   const pluginUtilities = []
   const pluginVariantGenerators = {}
@@ -63,6 +64,9 @@ export default function(plugins, config) {
 
         pluginComponents.push(...styles.nodes)
       },
+      addBase: (baseStyles) => {
+        pluginBaseStyles.push(...parseStyles(baseStyles))
+      },
       addVariant: (name, generator) => {
         pluginVariantGenerators[name] = generateVariantFunction(generator)
       },
@@ -70,6 +74,7 @@ export default function(plugins, config) {
   })
 
   return {
+    base: pluginBaseStyles,
     components: pluginComponents,
     utilities: pluginUtilities,
     variantGenerators: pluginVariantGenerators,
