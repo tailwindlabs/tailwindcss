@@ -259,10 +259,10 @@ test('plugins can add base styles with object syntax', () => {
     [
       function({ addBase }) {
         addBase({
-          'img': {
+          img: {
             maxWidth: '100%',
           },
-          'button': {
+          button: {
             fontFamily: 'inherit',
           },
         })

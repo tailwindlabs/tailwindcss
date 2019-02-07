@@ -64,7 +64,7 @@ export default function(plugins, config) {
 
         pluginComponents.push(...styles.nodes)
       },
-      addBase: (baseStyles) => {
+      addBase: baseStyles => {
         pluginBaseStyles.push(...parseStyles(baseStyles))
       },
       addVariant: (name, generator) => {
