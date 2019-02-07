@@ -13,6 +13,6 @@ export default function() {
       })
     )
 
-    addUtilities(utilities, config('modules.opacity'))
+    addUtilities(utilities, config('modules.backgroundSize'))
   }
 }
