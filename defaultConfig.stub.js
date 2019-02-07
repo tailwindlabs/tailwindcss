@@ -369,6 +369,33 @@ module.exports = {
 
   /*
   |-----------------------------------------------------------------------------
+  | Background positions       https://tailwindcss.com/docs/background-position
+  |-----------------------------------------------------------------------------
+  |
+  | Here is where you define your background positions. We provide some 
+  | common values that are useful in most projects, but feel free to add 
+  | other positions that are specific to your project here as well.
+  |
+  | Class name: .bg-{position}
+  | CSS property: background-position
+  |
+  */
+
+  backgroundPosition: {
+    'bottom': 'bottom',
+    'center': 'center',
+    'left': 'left',
+    'left-bottom': 'left bottom',
+    'left-top': 'left top',
+    'right': 'right',
+    'right-bottom': 'right bottom',
+    'right-top': 'right top',
+    'top': 'top',
+  },
+
+
+  /*
+  |-----------------------------------------------------------------------------
   | Background sizes               https://tailwindcss.com/docs/background-size
   |-----------------------------------------------------------------------------
   |
