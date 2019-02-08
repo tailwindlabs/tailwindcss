@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "prebabelify": "rimraf lib",
-    "babelify": "babel src --out-dir lib",
+    "babelify": "babel src --out-dir lib --copy-files",
     "prepare": "npm run babelify && babel-node src/build.js",
     "style": "eslint .",
     "test": "jest && eslint ."

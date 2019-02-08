@@ -1,3 +1,4 @@
+import preflight from './plugins/preflight'
 import lists from './plugins/lists'
 import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
@@ -68,6 +69,7 @@ function loadPlugins({ theme, variants, corePlugins }, plugins) {
 
 export default function(config) {
   return loadPlugins(config, {
+    preflight,
     lists,
     appearance,
     backgroundAttachment,
