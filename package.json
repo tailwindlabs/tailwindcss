@@ -46,7 +46,7 @@
     "chalk": "^2.4.1",
     "css.escape": "^1.5.1",
     "fs-extra": "^4.0.2",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.11",
     "node-emoji": "^1.8.1",
     "perfectionist": "^2.4.0",
     "postcss": "^7.0.11",
