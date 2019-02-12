@@ -15,7 +15,7 @@ import cursor from './plugins/cursor'
 import display from './plugins/display'
 import flexbox from './plugins/flexbox'
 import float from './plugins/float'
-import fonts from './plugins/fonts'
+import fontFamily from './plugins/fontFamily'
 import fontWeights from './plugins/fontWeights'
 import height from './plugins/height'
 import leading from './plugins/leading'
@@ -86,7 +86,7 @@ export default function(config) {
     display,
     flexbox,
     float,
-    fonts,
+    fontFamily,
     fontWeights,
     height,
     leading,

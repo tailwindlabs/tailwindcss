@@ -91,7 +91,7 @@ module.exports = function() {
       lg: '992px',
       xl: '1200px',
     },
-    fonts: {
+    fontFamily: {
       sans: [
         'system-ui',
         'BlinkMacSystemFont',
