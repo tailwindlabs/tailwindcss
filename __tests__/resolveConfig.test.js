@@ -442,7 +442,7 @@ test('theme values in the extend section extend the existing theme', () => {
         backgroundColors: {
           customBackground: '#bada55',
         },
-      }
+      },
     },
   }
 
@@ -520,7 +520,7 @@ test('theme values in the extend section extend the user theme', () => {
         height: {
           customHeight: '500vh',
         },
-      }
+      },
     },
   }
 
@@ -536,7 +536,7 @@ test('theme values in the extend section extend the user theme', () => {
       },
       height: {
         '0': 0,
-        'full': '100%',
+        full: '100%',
       },
       width: {
         '0': 0,
@@ -604,7 +604,7 @@ test('theme values in the extend section can extend values that are depended on 
         backgroundColors: {
           customBackground: '#bada55',
         },
-      }
+      },
     },
   }
 
