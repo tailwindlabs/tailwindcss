@@ -2,7 +2,6 @@ import mergeWith from 'lodash/mergeWith'
 import isFunction from 'lodash/isFunction'
 import defaults from 'lodash/defaults'
 import map from 'lodash/map'
-import get from 'lodash/get'
 
 function resolveFunctionKeys(object) {
   return Object.keys(object).reduce((resolved, key) => {
@@ -18,15 +17,15 @@ function without(object, key) {
 }
 
 function mergeExtensions(theme) {
-  return mergeWith({}, without(theme, 'extend'), theme.extend, (_, value, key) => {
+  return mergeWith({}, without(theme, 'extend'), theme.extend, (_, extensions, key) => {
     return isFunction(theme[key])
       ? mergedTheme => ({
           ...theme[key](mergedTheme),
-          ...get(theme.extend, key, {})
+          ...extensions
         })
       : {
           ...theme[key],
-          ...get(theme.extend, key, {}),
+          ...extensions,
         }
   })
 }
