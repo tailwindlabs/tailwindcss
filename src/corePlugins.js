@@ -2,7 +2,7 @@ import preflight from './plugins/preflight'
 import lists from './plugins/lists'
 import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
-import backgroundColors from './plugins/backgroundColors'
+import backgroundColor from './plugins/backgroundColor'
 import backgroundPosition from './plugins/backgroundPosition'
 import backgroundRepeat from './plugins/backgroundRepeat'
 import backgroundSize from './plugins/backgroundSize'
@@ -73,7 +73,7 @@ export default function(config) {
     lists,
     appearance,
     backgroundAttachment,
-    backgroundColors,
+    backgroundColor,
     backgroundPosition,
     backgroundRepeat,
     backgroundSize,

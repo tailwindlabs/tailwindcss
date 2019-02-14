@@ -154,7 +154,7 @@ module.exports = function() {
       wide: '0.05em',
     },
     textColors: theme => theme.colors,
-    backgroundColors: theme => theme.colors,
+    backgroundColor: theme => theme.colors,
     backgroundPosition: {
       bottom: 'bottom',
       center: 'center',
