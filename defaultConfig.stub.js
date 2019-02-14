@@ -42,7 +42,7 @@ module.exports = {
     position: ['responsive'],
     resize: ['responsive'],
     boxShadow: ['responsive', 'hover', 'focus'],
-    svgFill: [],
+    fill: [],
     svgStroke: [],
     tableLayout: ['responsive'],
     textAlign: ['responsive'],

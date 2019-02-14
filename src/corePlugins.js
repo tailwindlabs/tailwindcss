@@ -35,7 +35,7 @@ import pointerEvents from './plugins/pointerEvents'
 import position from './plugins/position'
 import resize from './plugins/resize'
 import shadows from './plugins/shadows'
-import svgFill from './plugins/svgFill'
+import fill from './plugins/fill'
 import svgStroke from './plugins/svgStroke'
 import tableLayout from './plugins/tableLayout'
 import textAlign from './plugins/textAlign'
@@ -106,7 +106,7 @@ export default function(config) {
     position,
     resize,
     shadows,
-    svgFill,
+    fill,
     svgStroke,
     tableLayout,
     textAlign,
