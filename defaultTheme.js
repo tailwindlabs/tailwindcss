@@ -142,7 +142,7 @@ module.exports = function() {
       extrabold: 800,
       black: 900,
     },
-    leading: {
+    lineHeight: {
       none: 1,
       tight: 1.25,
       normal: 1.5,

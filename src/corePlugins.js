@@ -18,7 +18,7 @@ import float from './plugins/float'
 import fontFamily from './plugins/fontFamily'
 import fontWeight from './plugins/fontWeight'
 import height from './plugins/height'
-import leading from './plugins/leading'
+import lineHeight from './plugins/lineHeight'
 import margin from './plugins/margin'
 import maxHeight from './plugins/maxHeight'
 import maxWidth from './plugins/maxWidth'
@@ -89,7 +89,7 @@ export default function(config) {
     fontFamily,
     fontWeight,
     height,
-    leading,
+    lineHeight,
     margin,
     maxHeight,
     maxWidth,
