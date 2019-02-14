@@ -430,3 +430,274 @@ test('functions in the user theme section are lazily evaluated', () => {
     },
   })
 })
+
+test('theme values in the extend section extend the existing theme', () => {
+  const userConfig = {
+    theme: {
+      extend: {
+        opacity: {
+          '25': '25',
+          '75': '.75',
+        },
+        backgroundColors: {
+          customBackground: '#bada55',
+        },
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+      },
+      opacity: {
+        '0': '0',
+        '50': '.5',
+        '100': '1',
+      },
+      backgroundColors: ({ colors }) => colors,
+    },
+    variants: {
+      backgroundColors: ['responsive', 'hover', 'focus'],
+      opacity: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+      },
+      opacity: {
+        '0': '0',
+        '50': '.5',
+        '100': '1',
+        '25': '25',
+        '75': '.75',
+      },
+      backgroundColors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+        customBackground: '#bada55',
+      },
+    },
+    variants: {
+      backgroundColors: ['responsive', 'hover', 'focus'],
+      opacity: ['responsive', 'hover', 'focus'],
+    },
+  })
+})
+
+test('theme values in the extend section extend the user theme', () => {
+  const userConfig = {
+    theme: {
+      opacity: {
+        '0': '0',
+        '20': '.2',
+        '40': '.4',
+      },
+      height: theme => theme.width,
+      extend: {
+        opacity: {
+          '60': '.6',
+          '80': '.8',
+          '100': '1',
+        },
+        height: {
+          customHeight: '500vh',
+        },
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      opacity: {
+        '0': '0',
+        '50': '.5',
+        '100': '1',
+      },
+      height: {
+        '0': 0,
+        full: '100%',
+      },
+      width: {
+        '0': 0,
+        '1': '.25rem',
+        '2': '.5rem',
+        '3': '.75rem',
+        '4': '1rem',
+      },
+    },
+    variants: {
+      opacity: ['responsive', 'hover', 'focus'],
+      height: ['responsive'],
+      width: ['responsive'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      opacity: {
+        '0': '0',
+        '20': '.2',
+        '40': '.4',
+        '60': '.6',
+        '80': '.8',
+        '100': '1',
+      },
+      height: {
+        '0': 0,
+        '1': '.25rem',
+        '2': '.5rem',
+        '3': '.75rem',
+        '4': '1rem',
+        customHeight: '500vh',
+      },
+      width: {
+        '0': 0,
+        '1': '.25rem',
+        '2': '.5rem',
+        '3': '.75rem',
+        '4': '1rem',
+      },
+    },
+    variants: {
+      opacity: ['responsive', 'hover', 'focus'],
+      height: ['responsive'],
+      width: ['responsive'],
+    },
+  })
+})
+
+test('theme values in the extend section can extend values that are depended on lazily', () => {
+  const userConfig = {
+    theme: {
+      extend: {
+        colors: {
+          red: 'red',
+          green: 'green',
+          blue: 'blue',
+        },
+        backgroundColors: {
+          customBackground: '#bada55',
+        },
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+      },
+      backgroundColors: ({ colors }) => colors,
+    },
+    variants: {
+      backgroundColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+      backgroundColors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+        customBackground: '#bada55',
+      },
+    },
+    variants: {
+      backgroundColors: ['responsive', 'hover', 'focus'],
+    },
+  })
+})
+
+test('theme values in the extend section are not deeply merged', () => {
+  const userConfig = {
+    theme: {
+      extend: {
+        fonts: {
+          sans: ['Comic Sans'],
+        },
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      fonts: {
+        sans: ['system-ui', 'Helvetica Neue', 'sans-serif'],
+        serif: ['Constantia', 'Georgia', 'serif'],
+        mono: ['Menlo', 'Courier New', 'monospace'],
+      },
+    },
+    variants: {
+      fonts: ['responsive'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      fonts: {
+        sans: ['Comic Sans'],
+        serif: ['Constantia', 'Georgia', 'serif'],
+        mono: ['Menlo', 'Courier New', 'monospace'],
+      },
+    },
+    variants: {
+      fonts: ['responsive'],
+    },
+  })
+})
