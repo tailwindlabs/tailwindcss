@@ -16,7 +16,7 @@ import display from './plugins/display'
 import flexbox from './plugins/flexbox'
 import float from './plugins/float'
 import fontFamily from './plugins/fontFamily'
-import fontWeights from './plugins/fontWeights'
+import fontWeight from './plugins/fontWeight'
 import height from './plugins/height'
 import leading from './plugins/leading'
 import margin from './plugins/margin'
@@ -87,7 +87,7 @@ export default function(config) {
     flexbox,
     float,
     fontFamily,
-    fontWeights,
+    fontWeight,
     height,
     leading,
     margin,

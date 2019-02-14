@@ -131,7 +131,7 @@ module.exports = function() {
       '4xl': '2.25rem', // 36px
       '5xl': '3rem', // 48px
     },
-    fontWeights: {
+    fontWeight: {
       hairline: 100,
       thin: 200,
       light: 300,

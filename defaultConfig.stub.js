@@ -22,7 +22,7 @@ module.exports = {
     flexbox: ['responsive'],
     float: ['responsive'],
     fontFamily: ['responsive'],
-    fontWeights: ['responsive', 'hover', 'focus'],
+    fontWeight: ['responsive', 'hover', 'focus'],
     height: ['responsive'],
     leading: ['responsive'],
     lists: ['responsive'],
