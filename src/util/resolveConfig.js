@@ -12,13 +12,8 @@ function resolveFunctionKeys(object) {
   }, {})
 }
 
-function without(object, key) {
-  /* eslint-disable no-unused-vars */
-  return (({ [key]: _, ...rest }) => rest)(object)
-}
-
-function mergeExtensions(theme) {
-  return mergeWith({}, without(theme, 'extend'), theme.extend, (_, extensions, key) => {
+function mergeExtensions({ extend, ...theme }) {
+  return mergeWith({}, theme, extend, (_, extensions, key) => {
     return isFunction(theme[key])
       ? mergedTheme => ({
           ...theme[key](mergedTheme),
