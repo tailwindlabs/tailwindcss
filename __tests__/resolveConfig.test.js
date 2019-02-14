@@ -655,3 +655,73 @@ test('theme values in the extend section can extend values that are depended on 
     },
   })
 })
+
+test('theme values in the extend section are not deeply merged', () => {
+  const userConfig = {
+    theme: {
+      extend: {
+        fonts: {
+          sans: [
+            'Comic Sans',
+          ],
+        }
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      fonts: {
+        sans: [
+          'system-ui',
+          'Helvetica Neue',
+          'sans-serif',
+        ],
+        serif: [
+          'Constantia',
+          'Georgia',
+          'serif',
+        ],
+        mono: [
+          'Menlo',
+          'Courier New',
+          'monospace',
+        ],
+      },
+    },
+    variants: {
+      fonts: ['responsive'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      fonts: {
+        sans: [
+          'Comic Sans',
+        ],
+        serif: [
+          'Constantia',
+          'Georgia',
+          'serif',
+        ],
+        mono: [
+          'Menlo',
+          'Courier New',
+          'monospace',
+        ],
+      },
+    },
+    variants: {
+      fonts: ['responsive'],
+    },
+  })
+})
