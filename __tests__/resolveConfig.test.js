@@ -661,10 +661,8 @@ test('theme values in the extend section are not deeply merged', () => {
     theme: {
       extend: {
         fonts: {
-          sans: [
-            'Comic Sans',
-          ],
-        }
+          sans: ['Comic Sans'],
+        },
       },
     },
   }
@@ -675,21 +673,9 @@ test('theme values in the extend section are not deeply merged', () => {
     separator: ':',
     theme: {
       fonts: {
-        sans: [
-          'system-ui',
-          'Helvetica Neue',
-          'sans-serif',
-        ],
-        serif: [
-          'Constantia',
-          'Georgia',
-          'serif',
-        ],
-        mono: [
-          'Menlo',
-          'Courier New',
-          'monospace',
-        ],
+        sans: ['system-ui', 'Helvetica Neue', 'sans-serif'],
+        serif: ['Constantia', 'Georgia', 'serif'],
+        mono: ['Menlo', 'Courier New', 'monospace'],
       },
     },
     variants: {
@@ -705,19 +691,9 @@ test('theme values in the extend section are not deeply merged', () => {
     separator: ':',
     theme: {
       fonts: {
-        sans: [
-          'Comic Sans',
-        ],
-        serif: [
-          'Constantia',
-          'Georgia',
-          'serif',
-        ],
-        mono: [
-          'Menlo',
-          'Courier New',
-          'monospace',
-        ],
+        sans: ['Comic Sans'],
+        serif: ['Constantia', 'Georgia', 'serif'],
+        mono: ['Menlo', 'Courier New', 'monospace'],
       },
     },
     variants: {
