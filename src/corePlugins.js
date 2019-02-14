@@ -34,7 +34,7 @@ import padding from './plugins/padding'
 import pointerEvents from './plugins/pointerEvents'
 import position from './plugins/position'
 import resize from './plugins/resize'
-import shadows from './plugins/shadows'
+import boxShadow from './plugins/boxShadow'
 import fill from './plugins/fill'
 import svgStroke from './plugins/svgStroke'
 import tableLayout from './plugins/tableLayout'
@@ -105,7 +105,7 @@ export default function(config) {
     pointerEvents,
     position,
     resize,
-    shadows,
+    boxShadow,
     fill,
     svgStroke,
     tableLayout,
