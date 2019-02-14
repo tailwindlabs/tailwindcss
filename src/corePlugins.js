@@ -7,7 +7,7 @@ import backgroundPosition from './plugins/backgroundPosition'
 import backgroundRepeat from './plugins/backgroundRepeat'
 import backgroundSize from './plugins/backgroundSize'
 import borderCollapse from './plugins/borderCollapse'
-import borderColors from './plugins/borderColors'
+import borderColor from './plugins/borderColor'
 import borderRadius from './plugins/borderRadius'
 import borderStyle from './plugins/borderStyle'
 import borderWidths from './plugins/borderWidths'
@@ -78,7 +78,7 @@ export default function(config) {
     backgroundRepeat,
     backgroundSize,
     borderCollapse,
-    borderColors,
+    borderColor,
     borderRadius,
     borderStyle,
     borderWidths,

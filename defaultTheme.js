@@ -178,7 +178,7 @@ module.exports = function() {
       '4': '4px',
       '8': '8px',
     },
-    borderColors: theme => {
+    borderColor: theme => {
       return global.Object.assign({ default: theme.colors['grey-light'] }, theme.colors)
     },
     borderRadius: {
