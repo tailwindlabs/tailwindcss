@@ -171,7 +171,7 @@ module.exports = function() {
       cover: 'cover',
       contain: 'contain',
     },
-    borderWidths: {
+    borderWidth: {
       default: '1px',
       '0': '0',
       '2': '2px',

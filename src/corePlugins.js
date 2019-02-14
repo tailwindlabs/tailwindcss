@@ -10,7 +10,7 @@ import borderCollapse from './plugins/borderCollapse'
 import borderColor from './plugins/borderColor'
 import borderRadius from './plugins/borderRadius'
 import borderStyle from './plugins/borderStyle'
-import borderWidths from './plugins/borderWidths'
+import borderWidth from './plugins/borderWidth'
 import cursor from './plugins/cursor'
 import display from './plugins/display'
 import flexbox from './plugins/flexbox'
@@ -81,7 +81,7 @@ export default function(config) {
     borderColor,
     borderRadius,
     borderStyle,
-    borderWidths,
+    borderWidth,
     cursor,
     display,
     flexbox,
