@@ -36,7 +36,7 @@ import position from './plugins/position'
 import resize from './plugins/resize'
 import boxShadow from './plugins/boxShadow'
 import fill from './plugins/fill'
-import svgStroke from './plugins/svgStroke'
+import stroke from './plugins/stroke'
 import tableLayout from './plugins/tableLayout'
 import textAlign from './plugins/textAlign'
 import textColors from './plugins/textColors'
@@ -107,7 +107,7 @@ export default function(config) {
     resize,
     boxShadow,
     fill,
-    svgStroke,
+    stroke,
     tableLayout,
     textAlign,
     textColors,

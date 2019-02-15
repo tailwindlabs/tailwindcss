@@ -343,7 +343,7 @@ module.exports = function() {
     fill: {
       current: 'currentColor',
     },
-    svgStroke: {
+    stroke: {
       current: 'currentColor',
     },
   }

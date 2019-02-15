@@ -43,7 +43,7 @@ module.exports = {
     resize: ['responsive'],
     boxShadow: ['responsive', 'hover', 'focus'],
     fill: [],
-    svgStroke: [],
+    stroke: [],
     tableLayout: ['responsive'],
     textAlign: ['responsive'],
     textColors: ['responsive', 'hover', 'focus'],
