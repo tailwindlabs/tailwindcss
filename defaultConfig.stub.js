@@ -46,7 +46,7 @@ module.exports = {
     stroke: [],
     tableLayout: ['responsive'],
     textAlign: ['responsive'],
-    textColors: ['responsive', 'hover', 'focus'],
+    textColor: ['responsive', 'hover', 'focus'],
     fontSize: ['responsive'],
     textStyle: ['responsive', 'hover', 'focus'],
     letterSpacing: ['responsive'],

@@ -153,7 +153,7 @@ module.exports = function() {
       normal: '0',
       wide: '0.05em',
     },
-    textColors: theme => theme.colors,
+    textColor: theme => theme.colors,
     backgroundColor: theme => theme.colors,
     backgroundPosition: {
       bottom: 'bottom',

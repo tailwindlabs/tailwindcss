@@ -39,7 +39,7 @@ import fill from './plugins/fill'
 import stroke from './plugins/stroke'
 import tableLayout from './plugins/tableLayout'
 import textAlign from './plugins/textAlign'
-import textColors from './plugins/textColors'
+import textColor from './plugins/textColor'
 import fontSize from './plugins/fontSize'
 import textStyle from './plugins/textStyle'
 import letterSpacing from './plugins/letterSpacing'
@@ -110,7 +110,7 @@ export default function(config) {
     stroke,
     tableLayout,
     textAlign,
-    textColors,
+    textColor,
     fontSize,
     textStyle,
     letterSpacing,
