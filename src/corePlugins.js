@@ -1,5 +1,5 @@
 import preflight from './plugins/preflight'
-import lists from './plugins/lists'
+import listStyle from './plugins/listStyle'
 import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
 import backgroundColor from './plugins/backgroundColor'
@@ -70,7 +70,7 @@ function loadPlugins({ theme, variants, corePlugins }, plugins) {
 export default function(config) {
   return loadPlugins(config, {
     preflight,
-    lists,
+    listStyle,
     appearance,
     backgroundAttachment,
     backgroundColor,
