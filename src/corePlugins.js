@@ -40,7 +40,7 @@ import stroke from './plugins/stroke'
 import tableLayout from './plugins/tableLayout'
 import textAlign from './plugins/textAlign'
 import textColors from './plugins/textColors'
-import textSizes from './plugins/textSizes'
+import fontSize from './plugins/fontSize'
 import textStyle from './plugins/textStyle'
 import tracking from './plugins/tracking'
 import userSelect from './plugins/userSelect'
@@ -111,7 +111,7 @@ export default function(config) {
     tableLayout,
     textAlign,
     textColors,
-    textSizes,
+    fontSize,
     textStyle,
     tracking,
     userSelect,
