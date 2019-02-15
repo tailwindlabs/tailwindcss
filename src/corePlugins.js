@@ -42,7 +42,7 @@ import textAlign from './plugins/textAlign'
 import textColors from './plugins/textColors'
 import fontSize from './plugins/fontSize'
 import textStyle from './plugins/textStyle'
-import tracking from './plugins/tracking'
+import letterSpacing from './plugins/letterSpacing'
 import userSelect from './plugins/userSelect'
 import verticalAlign from './plugins/verticalAlign'
 import visibility from './plugins/visibility'
@@ -113,7 +113,7 @@ export default function(config) {
     textColors,
     fontSize,
     textStyle,
-    tracking,
+    letterSpacing,
     userSelect,
     verticalAlign,
     visibility,

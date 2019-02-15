@@ -49,7 +49,7 @@ module.exports = {
     textColors: ['responsive', 'hover', 'focus'],
     fontSize: ['responsive'],
     textStyle: ['responsive', 'hover', 'focus'],
-    tracking: ['responsive'],
+    letterSpacing: ['responsive'],
     userSelect: ['responsive'],
     verticalAlign: ['responsive'],
     visibility: ['responsive'],
