@@ -5733,6 +5733,22 @@ table {
   font-style: normal;
 }
 
+.hover\:italic:hover {
+  font-style: italic;
+}
+
+.hover\:roman:hover {
+  font-style: normal;
+}
+
+.focus\:italic:focus {
+  font-style: italic;
+}
+
+.focus\:roman:focus {
+  font-style: normal;
+}
+
 .uppercase {
   text-transform: uppercase;
 }
@@ -5747,36 +5763,6 @@ table {
 
 .normal-case {
   text-transform: none;
-}
-
-.underline {
-  text-decoration: underline;
-}
-
-.line-through {
-  text-decoration: line-through;
-}
-
-.no-underline {
-  text-decoration: none;
-}
-
-.antialiased {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.subpixel-antialiased {
-  -webkit-font-smoothing: auto;
-  -moz-osx-font-smoothing: auto;
-}
-
-.hover\:italic:hover {
-  font-style: italic;
-}
-
-.hover\:roman:hover {
-  font-style: normal;
 }
 
 .hover\:uppercase:hover {
@@ -5795,36 +5781,6 @@ table {
   text-transform: none;
 }
 
-.hover\:underline:hover {
-  text-decoration: underline;
-}
-
-.hover\:line-through:hover {
-  text-decoration: line-through;
-}
-
-.hover\:no-underline:hover {
-  text-decoration: none;
-}
-
-.hover\:antialiased:hover {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.hover\:subpixel-antialiased:hover {
-  -webkit-font-smoothing: auto;
-  -moz-osx-font-smoothing: auto;
-}
-
-.focus\:italic:focus {
-  font-style: italic;
-}
-
-.focus\:roman:focus {
-  font-style: normal;
-}
-
 .focus\:uppercase:focus {
   text-transform: uppercase;
 }
@@ -5841,6 +5797,30 @@ table {
   text-transform: none;
 }
 
+.underline {
+  text-decoration: underline;
+}
+
+.line-through {
+  text-decoration: line-through;
+}
+
+.no-underline {
+  text-decoration: none;
+}
+
+.hover\:underline:hover {
+  text-decoration: underline;
+}
+
+.hover\:line-through:hover {
+  text-decoration: line-through;
+}
+
+.hover\:no-underline:hover {
+  text-decoration: none;
+}
+
 .focus\:underline:focus {
   text-decoration: underline;
 }
@@ -5851,6 +5831,26 @@ table {
 
 .focus\:no-underline:focus {
   text-decoration: none;
+}
+
+.antialiased {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.subpixel-antialiased {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+
+.hover\:antialiased:hover {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.hover\:subpixel-antialiased:hover {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
 }
 
 .focus\:antialiased:focus {
@@ -11302,6 +11302,22 @@ table {
     font-style: normal;
   }
 
+  .sm\:hover\:italic:hover {
+    font-style: italic;
+  }
+
+  .sm\:hover\:roman:hover {
+    font-style: normal;
+  }
+
+  .sm\:focus\:italic:focus {
+    font-style: italic;
+  }
+
+  .sm\:focus\:roman:focus {
+    font-style: normal;
+  }
+
   .sm\:uppercase {
     text-transform: uppercase;
   }
@@ -11316,36 +11332,6 @@ table {
 
   .sm\:normal-case {
     text-transform: none;
-  }
-
-  .sm\:underline {
-    text-decoration: underline;
-  }
-
-  .sm\:line-through {
-    text-decoration: line-through;
-  }
-
-  .sm\:no-underline {
-    text-decoration: none;
-  }
-
-  .sm\:antialiased {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .sm\:subpixel-antialiased {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .sm\:hover\:italic:hover {
-    font-style: italic;
-  }
-
-  .sm\:hover\:roman:hover {
-    font-style: normal;
   }
 
   .sm\:hover\:uppercase:hover {
@@ -11364,36 +11350,6 @@ table {
     text-transform: none;
   }
 
-  .sm\:hover\:underline:hover {
-    text-decoration: underline;
-  }
-
-  .sm\:hover\:line-through:hover {
-    text-decoration: line-through;
-  }
-
-  .sm\:hover\:no-underline:hover {
-    text-decoration: none;
-  }
-
-  .sm\:hover\:antialiased:hover {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .sm\:hover\:subpixel-antialiased:hover {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .sm\:focus\:italic:focus {
-    font-style: italic;
-  }
-
-  .sm\:focus\:roman:focus {
-    font-style: normal;
-  }
-
   .sm\:focus\:uppercase:focus {
     text-transform: uppercase;
   }
@@ -11410,6 +11366,30 @@ table {
     text-transform: none;
   }
 
+  .sm\:underline {
+    text-decoration: underline;
+  }
+
+  .sm\:line-through {
+    text-decoration: line-through;
+  }
+
+  .sm\:no-underline {
+    text-decoration: none;
+  }
+
+  .sm\:hover\:underline:hover {
+    text-decoration: underline;
+  }
+
+  .sm\:hover\:line-through:hover {
+    text-decoration: line-through;
+  }
+
+  .sm\:hover\:no-underline:hover {
+    text-decoration: none;
+  }
+
   .sm\:focus\:underline:focus {
     text-decoration: underline;
   }
@@ -11420,6 +11400,26 @@ table {
 
   .sm\:focus\:no-underline:focus {
     text-decoration: none;
+  }
+
+  .sm\:antialiased {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .sm\:subpixel-antialiased {
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
+  }
+
+  .sm\:hover\:antialiased:hover {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .sm\:hover\:subpixel-antialiased:hover {
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
   }
 
   .sm\:focus\:antialiased:focus {
@@ -16872,6 +16872,22 @@ table {
     font-style: normal;
   }
 
+  .md\:hover\:italic:hover {
+    font-style: italic;
+  }
+
+  .md\:hover\:roman:hover {
+    font-style: normal;
+  }
+
+  .md\:focus\:italic:focus {
+    font-style: italic;
+  }
+
+  .md\:focus\:roman:focus {
+    font-style: normal;
+  }
+
   .md\:uppercase {
     text-transform: uppercase;
   }
@@ -16886,36 +16902,6 @@ table {
 
   .md\:normal-case {
     text-transform: none;
-  }
-
-  .md\:underline {
-    text-decoration: underline;
-  }
-
-  .md\:line-through {
-    text-decoration: line-through;
-  }
-
-  .md\:no-underline {
-    text-decoration: none;
-  }
-
-  .md\:antialiased {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .md\:subpixel-antialiased {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .md\:hover\:italic:hover {
-    font-style: italic;
-  }
-
-  .md\:hover\:roman:hover {
-    font-style: normal;
   }
 
   .md\:hover\:uppercase:hover {
@@ -16934,36 +16920,6 @@ table {
     text-transform: none;
   }
 
-  .md\:hover\:underline:hover {
-    text-decoration: underline;
-  }
-
-  .md\:hover\:line-through:hover {
-    text-decoration: line-through;
-  }
-
-  .md\:hover\:no-underline:hover {
-    text-decoration: none;
-  }
-
-  .md\:hover\:antialiased:hover {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .md\:hover\:subpixel-antialiased:hover {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .md\:focus\:italic:focus {
-    font-style: italic;
-  }
-
-  .md\:focus\:roman:focus {
-    font-style: normal;
-  }
-
   .md\:focus\:uppercase:focus {
     text-transform: uppercase;
   }
@@ -16980,6 +16936,30 @@ table {
     text-transform: none;
   }
 
+  .md\:underline {
+    text-decoration: underline;
+  }
+
+  .md\:line-through {
+    text-decoration: line-through;
+  }
+
+  .md\:no-underline {
+    text-decoration: none;
+  }
+
+  .md\:hover\:underline:hover {
+    text-decoration: underline;
+  }
+
+  .md\:hover\:line-through:hover {
+    text-decoration: line-through;
+  }
+
+  .md\:hover\:no-underline:hover {
+    text-decoration: none;
+  }
+
   .md\:focus\:underline:focus {
     text-decoration: underline;
   }
@@ -16990,6 +16970,26 @@ table {
 
   .md\:focus\:no-underline:focus {
     text-decoration: none;
+  }
+
+  .md\:antialiased {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .md\:subpixel-antialiased {
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
+  }
+
+  .md\:hover\:antialiased:hover {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .md\:hover\:subpixel-antialiased:hover {
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
   }
 
   .md\:focus\:antialiased:focus {
@@ -22442,6 +22442,22 @@ table {
     font-style: normal;
   }
 
+  .lg\:hover\:italic:hover {
+    font-style: italic;
+  }
+
+  .lg\:hover\:roman:hover {
+    font-style: normal;
+  }
+
+  .lg\:focus\:italic:focus {
+    font-style: italic;
+  }
+
+  .lg\:focus\:roman:focus {
+    font-style: normal;
+  }
+
   .lg\:uppercase {
     text-transform: uppercase;
   }
@@ -22456,36 +22472,6 @@ table {
 
   .lg\:normal-case {
     text-transform: none;
-  }
-
-  .lg\:underline {
-    text-decoration: underline;
-  }
-
-  .lg\:line-through {
-    text-decoration: line-through;
-  }
-
-  .lg\:no-underline {
-    text-decoration: none;
-  }
-
-  .lg\:antialiased {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .lg\:subpixel-antialiased {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .lg\:hover\:italic:hover {
-    font-style: italic;
-  }
-
-  .lg\:hover\:roman:hover {
-    font-style: normal;
   }
 
   .lg\:hover\:uppercase:hover {
@@ -22504,36 +22490,6 @@ table {
     text-transform: none;
   }
 
-  .lg\:hover\:underline:hover {
-    text-decoration: underline;
-  }
-
-  .lg\:hover\:line-through:hover {
-    text-decoration: line-through;
-  }
-
-  .lg\:hover\:no-underline:hover {
-    text-decoration: none;
-  }
-
-  .lg\:hover\:antialiased:hover {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .lg\:hover\:subpixel-antialiased:hover {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .lg\:focus\:italic:focus {
-    font-style: italic;
-  }
-
-  .lg\:focus\:roman:focus {
-    font-style: normal;
-  }
-
   .lg\:focus\:uppercase:focus {
     text-transform: uppercase;
   }
@@ -22550,6 +22506,30 @@ table {
     text-transform: none;
   }
 
+  .lg\:underline {
+    text-decoration: underline;
+  }
+
+  .lg\:line-through {
+    text-decoration: line-through;
+  }
+
+  .lg\:no-underline {
+    text-decoration: none;
+  }
+
+  .lg\:hover\:underline:hover {
+    text-decoration: underline;
+  }
+
+  .lg\:hover\:line-through:hover {
+    text-decoration: line-through;
+  }
+
+  .lg\:hover\:no-underline:hover {
+    text-decoration: none;
+  }
+
   .lg\:focus\:underline:focus {
     text-decoration: underline;
   }
@@ -22560,6 +22540,26 @@ table {
 
   .lg\:focus\:no-underline:focus {
     text-decoration: none;
+  }
+
+  .lg\:antialiased {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .lg\:subpixel-antialiased {
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
+  }
+
+  .lg\:hover\:antialiased:hover {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .lg\:hover\:subpixel-antialiased:hover {
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
   }
 
   .lg\:focus\:antialiased:focus {
@@ -28012,6 +28012,22 @@ table {
     font-style: normal;
   }
 
+  .xl\:hover\:italic:hover {
+    font-style: italic;
+  }
+
+  .xl\:hover\:roman:hover {
+    font-style: normal;
+  }
+
+  .xl\:focus\:italic:focus {
+    font-style: italic;
+  }
+
+  .xl\:focus\:roman:focus {
+    font-style: normal;
+  }
+
   .xl\:uppercase {
     text-transform: uppercase;
   }
@@ -28026,36 +28042,6 @@ table {
 
   .xl\:normal-case {
     text-transform: none;
-  }
-
-  .xl\:underline {
-    text-decoration: underline;
-  }
-
-  .xl\:line-through {
-    text-decoration: line-through;
-  }
-
-  .xl\:no-underline {
-    text-decoration: none;
-  }
-
-  .xl\:antialiased {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .xl\:subpixel-antialiased {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .xl\:hover\:italic:hover {
-    font-style: italic;
-  }
-
-  .xl\:hover\:roman:hover {
-    font-style: normal;
   }
 
   .xl\:hover\:uppercase:hover {
@@ -28074,36 +28060,6 @@ table {
     text-transform: none;
   }
 
-  .xl\:hover\:underline:hover {
-    text-decoration: underline;
-  }
-
-  .xl\:hover\:line-through:hover {
-    text-decoration: line-through;
-  }
-
-  .xl\:hover\:no-underline:hover {
-    text-decoration: none;
-  }
-
-  .xl\:hover\:antialiased:hover {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .xl\:hover\:subpixel-antialiased:hover {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .xl\:focus\:italic:focus {
-    font-style: italic;
-  }
-
-  .xl\:focus\:roman:focus {
-    font-style: normal;
-  }
-
   .xl\:focus\:uppercase:focus {
     text-transform: uppercase;
   }
@@ -28120,6 +28076,30 @@ table {
     text-transform: none;
   }
 
+  .xl\:underline {
+    text-decoration: underline;
+  }
+
+  .xl\:line-through {
+    text-decoration: line-through;
+  }
+
+  .xl\:no-underline {
+    text-decoration: none;
+  }
+
+  .xl\:hover\:underline:hover {
+    text-decoration: underline;
+  }
+
+  .xl\:hover\:line-through:hover {
+    text-decoration: line-through;
+  }
+
+  .xl\:hover\:no-underline:hover {
+    text-decoration: none;
+  }
+
   .xl\:focus\:underline:focus {
     text-decoration: underline;
   }
@@ -28130,6 +28110,26 @@ table {
 
   .xl\:focus\:no-underline:focus {
     text-decoration: none;
+  }
+
+  .xl\:antialiased {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .xl\:subpixel-antialiased {
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
+  }
+
+  .xl\:hover\:antialiased:hover {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .xl\:hover\:subpixel-antialiased:hover {
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
   }
 
   .xl\:focus\:antialiased:focus {

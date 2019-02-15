@@ -5733,6 +5733,22 @@ table {
   font-style: normal !important;
 }
 
+.hover\:italic:hover {
+  font-style: italic !important;
+}
+
+.hover\:roman:hover {
+  font-style: normal !important;
+}
+
+.focus\:italic:focus {
+  font-style: italic !important;
+}
+
+.focus\:roman:focus {
+  font-style: normal !important;
+}
+
 .uppercase {
   text-transform: uppercase !important;
 }
@@ -5747,36 +5763,6 @@ table {
 
 .normal-case {
   text-transform: none !important;
-}
-
-.underline {
-  text-decoration: underline !important;
-}
-
-.line-through {
-  text-decoration: line-through !important;
-}
-
-.no-underline {
-  text-decoration: none !important;
-}
-
-.antialiased {
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-}
-
-.subpixel-antialiased {
-  -webkit-font-smoothing: auto !important;
-  -moz-osx-font-smoothing: auto !important;
-}
-
-.hover\:italic:hover {
-  font-style: italic !important;
-}
-
-.hover\:roman:hover {
-  font-style: normal !important;
 }
 
 .hover\:uppercase:hover {
@@ -5795,36 +5781,6 @@ table {
   text-transform: none !important;
 }
 
-.hover\:underline:hover {
-  text-decoration: underline !important;
-}
-
-.hover\:line-through:hover {
-  text-decoration: line-through !important;
-}
-
-.hover\:no-underline:hover {
-  text-decoration: none !important;
-}
-
-.hover\:antialiased:hover {
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-}
-
-.hover\:subpixel-antialiased:hover {
-  -webkit-font-smoothing: auto !important;
-  -moz-osx-font-smoothing: auto !important;
-}
-
-.focus\:italic:focus {
-  font-style: italic !important;
-}
-
-.focus\:roman:focus {
-  font-style: normal !important;
-}
-
 .focus\:uppercase:focus {
   text-transform: uppercase !important;
 }
@@ -5841,6 +5797,30 @@ table {
   text-transform: none !important;
 }
 
+.underline {
+  text-decoration: underline !important;
+}
+
+.line-through {
+  text-decoration: line-through !important;
+}
+
+.no-underline {
+  text-decoration: none !important;
+}
+
+.hover\:underline:hover {
+  text-decoration: underline !important;
+}
+
+.hover\:line-through:hover {
+  text-decoration: line-through !important;
+}
+
+.hover\:no-underline:hover {
+  text-decoration: none !important;
+}
+
 .focus\:underline:focus {
   text-decoration: underline !important;
 }
@@ -5851,6 +5831,26 @@ table {
 
 .focus\:no-underline:focus {
   text-decoration: none !important;
+}
+
+.antialiased {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+.subpixel-antialiased {
+  -webkit-font-smoothing: auto !important;
+  -moz-osx-font-smoothing: auto !important;
+}
+
+.hover\:antialiased:hover {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+.hover\:subpixel-antialiased:hover {
+  -webkit-font-smoothing: auto !important;
+  -moz-osx-font-smoothing: auto !important;
 }
 
 .focus\:antialiased:focus {
@@ -11302,6 +11302,22 @@ table {
     font-style: normal !important;
   }
 
+  .sm\:hover\:italic:hover {
+    font-style: italic !important;
+  }
+
+  .sm\:hover\:roman:hover {
+    font-style: normal !important;
+  }
+
+  .sm\:focus\:italic:focus {
+    font-style: italic !important;
+  }
+
+  .sm\:focus\:roman:focus {
+    font-style: normal !important;
+  }
+
   .sm\:uppercase {
     text-transform: uppercase !important;
   }
@@ -11316,36 +11332,6 @@ table {
 
   .sm\:normal-case {
     text-transform: none !important;
-  }
-
-  .sm\:underline {
-    text-decoration: underline !important;
-  }
-
-  .sm\:line-through {
-    text-decoration: line-through !important;
-  }
-
-  .sm\:no-underline {
-    text-decoration: none !important;
-  }
-
-  .sm\:antialiased {
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-  }
-
-  .sm\:subpixel-antialiased {
-    -webkit-font-smoothing: auto !important;
-    -moz-osx-font-smoothing: auto !important;
-  }
-
-  .sm\:hover\:italic:hover {
-    font-style: italic !important;
-  }
-
-  .sm\:hover\:roman:hover {
-    font-style: normal !important;
   }
 
   .sm\:hover\:uppercase:hover {
@@ -11364,36 +11350,6 @@ table {
     text-transform: none !important;
   }
 
-  .sm\:hover\:underline:hover {
-    text-decoration: underline !important;
-  }
-
-  .sm\:hover\:line-through:hover {
-    text-decoration: line-through !important;
-  }
-
-  .sm\:hover\:no-underline:hover {
-    text-decoration: none !important;
-  }
-
-  .sm\:hover\:antialiased:hover {
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-  }
-
-  .sm\:hover\:subpixel-antialiased:hover {
-    -webkit-font-smoothing: auto !important;
-    -moz-osx-font-smoothing: auto !important;
-  }
-
-  .sm\:focus\:italic:focus {
-    font-style: italic !important;
-  }
-
-  .sm\:focus\:roman:focus {
-    font-style: normal !important;
-  }
-
   .sm\:focus\:uppercase:focus {
     text-transform: uppercase !important;
   }
@@ -11410,6 +11366,30 @@ table {
     text-transform: none !important;
   }
 
+  .sm\:underline {
+    text-decoration: underline !important;
+  }
+
+  .sm\:line-through {
+    text-decoration: line-through !important;
+  }
+
+  .sm\:no-underline {
+    text-decoration: none !important;
+  }
+
+  .sm\:hover\:underline:hover {
+    text-decoration: underline !important;
+  }
+
+  .sm\:hover\:line-through:hover {
+    text-decoration: line-through !important;
+  }
+
+  .sm\:hover\:no-underline:hover {
+    text-decoration: none !important;
+  }
+
   .sm\:focus\:underline:focus {
     text-decoration: underline !important;
   }
@@ -11420,6 +11400,26 @@ table {
 
   .sm\:focus\:no-underline:focus {
     text-decoration: none !important;
+  }
+
+  .sm\:antialiased {
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+
+  .sm\:subpixel-antialiased {
+    -webkit-font-smoothing: auto !important;
+    -moz-osx-font-smoothing: auto !important;
+  }
+
+  .sm\:hover\:antialiased:hover {
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+
+  .sm\:hover\:subpixel-antialiased:hover {
+    -webkit-font-smoothing: auto !important;
+    -moz-osx-font-smoothing: auto !important;
   }
 
   .sm\:focus\:antialiased:focus {
@@ -16872,6 +16872,22 @@ table {
     font-style: normal !important;
   }
 
+  .md\:hover\:italic:hover {
+    font-style: italic !important;
+  }
+
+  .md\:hover\:roman:hover {
+    font-style: normal !important;
+  }
+
+  .md\:focus\:italic:focus {
+    font-style: italic !important;
+  }
+
+  .md\:focus\:roman:focus {
+    font-style: normal !important;
+  }
+
   .md\:uppercase {
     text-transform: uppercase !important;
   }
@@ -16886,36 +16902,6 @@ table {
 
   .md\:normal-case {
     text-transform: none !important;
-  }
-
-  .md\:underline {
-    text-decoration: underline !important;
-  }
-
-  .md\:line-through {
-    text-decoration: line-through !important;
-  }
-
-  .md\:no-underline {
-    text-decoration: none !important;
-  }
-
-  .md\:antialiased {
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-  }
-
-  .md\:subpixel-antialiased {
-    -webkit-font-smoothing: auto !important;
-    -moz-osx-font-smoothing: auto !important;
-  }
-
-  .md\:hover\:italic:hover {
-    font-style: italic !important;
-  }
-
-  .md\:hover\:roman:hover {
-    font-style: normal !important;
   }
 
   .md\:hover\:uppercase:hover {
@@ -16934,36 +16920,6 @@ table {
     text-transform: none !important;
   }
 
-  .md\:hover\:underline:hover {
-    text-decoration: underline !important;
-  }
-
-  .md\:hover\:line-through:hover {
-    text-decoration: line-through !important;
-  }
-
-  .md\:hover\:no-underline:hover {
-    text-decoration: none !important;
-  }
-
-  .md\:hover\:antialiased:hover {
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-  }
-
-  .md\:hover\:subpixel-antialiased:hover {
-    -webkit-font-smoothing: auto !important;
-    -moz-osx-font-smoothing: auto !important;
-  }
-
-  .md\:focus\:italic:focus {
-    font-style: italic !important;
-  }
-
-  .md\:focus\:roman:focus {
-    font-style: normal !important;
-  }
-
   .md\:focus\:uppercase:focus {
     text-transform: uppercase !important;
   }
@@ -16980,6 +16936,30 @@ table {
     text-transform: none !important;
   }
 
+  .md\:underline {
+    text-decoration: underline !important;
+  }
+
+  .md\:line-through {
+    text-decoration: line-through !important;
+  }
+
+  .md\:no-underline {
+    text-decoration: none !important;
+  }
+
+  .md\:hover\:underline:hover {
+    text-decoration: underline !important;
+  }
+
+  .md\:hover\:line-through:hover {
+    text-decoration: line-through !important;
+  }
+
+  .md\:hover\:no-underline:hover {
+    text-decoration: none !important;
+  }
+
   .md\:focus\:underline:focus {
     text-decoration: underline !important;
   }
@@ -16990,6 +16970,26 @@ table {
 
   .md\:focus\:no-underline:focus {
     text-decoration: none !important;
+  }
+
+  .md\:antialiased {
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+
+  .md\:subpixel-antialiased {
+    -webkit-font-smoothing: auto !important;
+    -moz-osx-font-smoothing: auto !important;
+  }
+
+  .md\:hover\:antialiased:hover {
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+
+  .md\:hover\:subpixel-antialiased:hover {
+    -webkit-font-smoothing: auto !important;
+    -moz-osx-font-smoothing: auto !important;
   }
 
   .md\:focus\:antialiased:focus {
@@ -22442,6 +22442,22 @@ table {
     font-style: normal !important;
   }
 
+  .lg\:hover\:italic:hover {
+    font-style: italic !important;
+  }
+
+  .lg\:hover\:roman:hover {
+    font-style: normal !important;
+  }
+
+  .lg\:focus\:italic:focus {
+    font-style: italic !important;
+  }
+
+  .lg\:focus\:roman:focus {
+    font-style: normal !important;
+  }
+
   .lg\:uppercase {
     text-transform: uppercase !important;
   }
@@ -22456,36 +22472,6 @@ table {
 
   .lg\:normal-case {
     text-transform: none !important;
-  }
-
-  .lg\:underline {
-    text-decoration: underline !important;
-  }
-
-  .lg\:line-through {
-    text-decoration: line-through !important;
-  }
-
-  .lg\:no-underline {
-    text-decoration: none !important;
-  }
-
-  .lg\:antialiased {
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-  }
-
-  .lg\:subpixel-antialiased {
-    -webkit-font-smoothing: auto !important;
-    -moz-osx-font-smoothing: auto !important;
-  }
-
-  .lg\:hover\:italic:hover {
-    font-style: italic !important;
-  }
-
-  .lg\:hover\:roman:hover {
-    font-style: normal !important;
   }
 
   .lg\:hover\:uppercase:hover {
@@ -22504,36 +22490,6 @@ table {
     text-transform: none !important;
   }
 
-  .lg\:hover\:underline:hover {
-    text-decoration: underline !important;
-  }
-
-  .lg\:hover\:line-through:hover {
-    text-decoration: line-through !important;
-  }
-
-  .lg\:hover\:no-underline:hover {
-    text-decoration: none !important;
-  }
-
-  .lg\:hover\:antialiased:hover {
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-  }
-
-  .lg\:hover\:subpixel-antialiased:hover {
-    -webkit-font-smoothing: auto !important;
-    -moz-osx-font-smoothing: auto !important;
-  }
-
-  .lg\:focus\:italic:focus {
-    font-style: italic !important;
-  }
-
-  .lg\:focus\:roman:focus {
-    font-style: normal !important;
-  }
-
   .lg\:focus\:uppercase:focus {
     text-transform: uppercase !important;
   }
@@ -22550,6 +22506,30 @@ table {
     text-transform: none !important;
   }
 
+  .lg\:underline {
+    text-decoration: underline !important;
+  }
+
+  .lg\:line-through {
+    text-decoration: line-through !important;
+  }
+
+  .lg\:no-underline {
+    text-decoration: none !important;
+  }
+
+  .lg\:hover\:underline:hover {
+    text-decoration: underline !important;
+  }
+
+  .lg\:hover\:line-through:hover {
+    text-decoration: line-through !important;
+  }
+
+  .lg\:hover\:no-underline:hover {
+    text-decoration: none !important;
+  }
+
   .lg\:focus\:underline:focus {
     text-decoration: underline !important;
   }
@@ -22560,6 +22540,26 @@ table {
 
   .lg\:focus\:no-underline:focus {
     text-decoration: none !important;
+  }
+
+  .lg\:antialiased {
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+
+  .lg\:subpixel-antialiased {
+    -webkit-font-smoothing: auto !important;
+    -moz-osx-font-smoothing: auto !important;
+  }
+
+  .lg\:hover\:antialiased:hover {
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+
+  .lg\:hover\:subpixel-antialiased:hover {
+    -webkit-font-smoothing: auto !important;
+    -moz-osx-font-smoothing: auto !important;
   }
 
   .lg\:focus\:antialiased:focus {
@@ -28012,6 +28012,22 @@ table {
     font-style: normal !important;
   }
 
+  .xl\:hover\:italic:hover {
+    font-style: italic !important;
+  }
+
+  .xl\:hover\:roman:hover {
+    font-style: normal !important;
+  }
+
+  .xl\:focus\:italic:focus {
+    font-style: italic !important;
+  }
+
+  .xl\:focus\:roman:focus {
+    font-style: normal !important;
+  }
+
   .xl\:uppercase {
     text-transform: uppercase !important;
   }
@@ -28026,36 +28042,6 @@ table {
 
   .xl\:normal-case {
     text-transform: none !important;
-  }
-
-  .xl\:underline {
-    text-decoration: underline !important;
-  }
-
-  .xl\:line-through {
-    text-decoration: line-through !important;
-  }
-
-  .xl\:no-underline {
-    text-decoration: none !important;
-  }
-
-  .xl\:antialiased {
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-  }
-
-  .xl\:subpixel-antialiased {
-    -webkit-font-smoothing: auto !important;
-    -moz-osx-font-smoothing: auto !important;
-  }
-
-  .xl\:hover\:italic:hover {
-    font-style: italic !important;
-  }
-
-  .xl\:hover\:roman:hover {
-    font-style: normal !important;
   }
 
   .xl\:hover\:uppercase:hover {
@@ -28074,36 +28060,6 @@ table {
     text-transform: none !important;
   }
 
-  .xl\:hover\:underline:hover {
-    text-decoration: underline !important;
-  }
-
-  .xl\:hover\:line-through:hover {
-    text-decoration: line-through !important;
-  }
-
-  .xl\:hover\:no-underline:hover {
-    text-decoration: none !important;
-  }
-
-  .xl\:hover\:antialiased:hover {
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-  }
-
-  .xl\:hover\:subpixel-antialiased:hover {
-    -webkit-font-smoothing: auto !important;
-    -moz-osx-font-smoothing: auto !important;
-  }
-
-  .xl\:focus\:italic:focus {
-    font-style: italic !important;
-  }
-
-  .xl\:focus\:roman:focus {
-    font-style: normal !important;
-  }
-
   .xl\:focus\:uppercase:focus {
     text-transform: uppercase !important;
   }
@@ -28120,6 +28076,30 @@ table {
     text-transform: none !important;
   }
 
+  .xl\:underline {
+    text-decoration: underline !important;
+  }
+
+  .xl\:line-through {
+    text-decoration: line-through !important;
+  }
+
+  .xl\:no-underline {
+    text-decoration: none !important;
+  }
+
+  .xl\:hover\:underline:hover {
+    text-decoration: underline !important;
+  }
+
+  .xl\:hover\:line-through:hover {
+    text-decoration: line-through !important;
+  }
+
+  .xl\:hover\:no-underline:hover {
+    text-decoration: none !important;
+  }
+
   .xl\:focus\:underline:focus {
     text-decoration: underline !important;
   }
@@ -28130,6 +28110,26 @@ table {
 
   .xl\:focus\:no-underline:focus {
     text-decoration: none !important;
+  }
+
+  .xl\:antialiased {
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+
+  .xl\:subpixel-antialiased {
+    -webkit-font-smoothing: auto !important;
+    -moz-osx-font-smoothing: auto !important;
+  }
+
+  .xl\:hover\:antialiased:hover {
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+
+  .xl\:hover\:subpixel-antialiased:hover {
+    -webkit-font-smoothing: auto !important;
+    -moz-osx-font-smoothing: auto !important;
   }
 
   .xl\:focus\:antialiased:focus {

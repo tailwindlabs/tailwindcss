@@ -41,7 +41,10 @@ import tableLayout from './plugins/tableLayout'
 import textAlign from './plugins/textAlign'
 import textColor from './plugins/textColor'
 import fontSize from './plugins/fontSize'
-import textStyle from './plugins/textStyle'
+import fontStyle from './plugins/fontStyle'
+import textTransform from './plugins/textTransform'
+import textDecoration from './plugins/textDecoration'
+import fontSmoothing from './plugins/fontSmoothing'
 import letterSpacing from './plugins/letterSpacing'
 import userSelect from './plugins/userSelect'
 import verticalAlign from './plugins/verticalAlign'
@@ -112,7 +115,10 @@ export default function(config) {
     textAlign,
     textColor,
     fontSize,
-    textStyle,
+    fontStyle,
+    textTransform,
+    textDecoration,
+    fontSmoothing,
     letterSpacing,
     userSelect,
     verticalAlign,
