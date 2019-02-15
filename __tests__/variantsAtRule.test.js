@@ -218,6 +218,33 @@ test('variants are generated in the order specified', () => {
   })
 })
 
+test('the default variant can be generated in a specified position', () => {
+  const input = `
+    @variants focus, active, default, hover {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+      .focus\\:banana:focus { color: yellow; }
+      .focus\\:chocolate:focus { color: brown; }
+      .active\\:banana:active { color: yellow; }
+      .active\\:chocolate:active { color: brown; }
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+      .hover\\:banana:hover { color: yellow; }
+      .hover\\:chocolate:hover { color: brown; }
+  `
+
+  return run(input, {
+    ...config,
+  }).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('plugin variants can modify rules using the raw PostCSS API', () => {
   const input = `
     @variants important {
