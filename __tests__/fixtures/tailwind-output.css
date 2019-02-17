@@ -3005,6 +3005,10 @@ table {
   font-weight: 900;
 }
 
+.h-0 {
+  height: 0;
+}
+
 .h-1 {
   height: .25rem;
 }
@@ -3043,6 +3047,10 @@ table {
 
 .h-16 {
   height: 4rem;
+}
+
+.h-20 {
+  height: 5rem;
 }
 
 .h-24 {
@@ -5949,6 +5957,10 @@ table {
   white-space: nowrap;
 }
 
+.w-0 {
+  width: 0;
+}
+
 .w-1 {
   width: .25rem;
 }
@@ -5987,6 +5999,10 @@ table {
 
 .w-16 {
   width: 4rem;
+}
+
+.w-20 {
+  width: 5rem;
 }
 
 .w-24 {
@@ -8590,6 +8606,10 @@ table {
     font-weight: 900;
   }
 
+  .sm\:h-0 {
+    height: 0;
+  }
+
   .sm\:h-1 {
     height: .25rem;
   }
@@ -8628,6 +8648,10 @@ table {
 
   .sm\:h-16 {
     height: 4rem;
+  }
+
+  .sm\:h-20 {
+    height: 5rem;
   }
 
   .sm\:h-24 {
@@ -11518,6 +11542,10 @@ table {
     white-space: nowrap;
   }
 
+  .sm\:w-0 {
+    width: 0;
+  }
+
   .sm\:w-1 {
     width: .25rem;
   }
@@ -11556,6 +11584,10 @@ table {
 
   .sm\:w-16 {
     width: 4rem;
+  }
+
+  .sm\:w-20 {
+    width: 5rem;
   }
 
   .sm\:w-24 {
@@ -14160,6 +14192,10 @@ table {
     font-weight: 900;
   }
 
+  .md\:h-0 {
+    height: 0;
+  }
+
   .md\:h-1 {
     height: .25rem;
   }
@@ -14198,6 +14234,10 @@ table {
 
   .md\:h-16 {
     height: 4rem;
+  }
+
+  .md\:h-20 {
+    height: 5rem;
   }
 
   .md\:h-24 {
@@ -17088,6 +17128,10 @@ table {
     white-space: nowrap;
   }
 
+  .md\:w-0 {
+    width: 0;
+  }
+
   .md\:w-1 {
     width: .25rem;
   }
@@ -17126,6 +17170,10 @@ table {
 
   .md\:w-16 {
     width: 4rem;
+  }
+
+  .md\:w-20 {
+    width: 5rem;
   }
 
   .md\:w-24 {
@@ -19730,6 +19778,10 @@ table {
     font-weight: 900;
   }
 
+  .lg\:h-0 {
+    height: 0;
+  }
+
   .lg\:h-1 {
     height: .25rem;
   }
@@ -19768,6 +19820,10 @@ table {
 
   .lg\:h-16 {
     height: 4rem;
+  }
+
+  .lg\:h-20 {
+    height: 5rem;
   }
 
   .lg\:h-24 {
@@ -22658,6 +22714,10 @@ table {
     white-space: nowrap;
   }
 
+  .lg\:w-0 {
+    width: 0;
+  }
+
   .lg\:w-1 {
     width: .25rem;
   }
@@ -22696,6 +22756,10 @@ table {
 
   .lg\:w-16 {
     width: 4rem;
+  }
+
+  .lg\:w-20 {
+    width: 5rem;
   }
 
   .lg\:w-24 {
@@ -25300,6 +25364,10 @@ table {
     font-weight: 900;
   }
 
+  .xl\:h-0 {
+    height: 0;
+  }
+
   .xl\:h-1 {
     height: .25rem;
   }
@@ -25338,6 +25406,10 @@ table {
 
   .xl\:h-16 {
     height: 4rem;
+  }
+
+  .xl\:h-20 {
+    height: 5rem;
   }
 
   .xl\:h-24 {
@@ -28228,6 +28300,10 @@ table {
     white-space: nowrap;
   }
 
+  .xl\:w-0 {
+    width: 0;
+  }
+
   .xl\:w-1 {
     width: .25rem;
   }
@@ -28266,6 +28342,10 @@ table {
 
   .xl\:w-16 {
     width: 4rem;
+  }
+
+  .xl\:w-20 {
+    width: 5rem;
   }
 
   .xl\:w-24 {
