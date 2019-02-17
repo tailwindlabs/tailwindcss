@@ -1,10 +1,14 @@
 import postcss from 'postcss'
 import substituteClassApplyAtRules from '../src/lib/substituteClassApplyAtRules'
 import processPlugins from '../src/util/processPlugins'
+import resolveConfig from '../src/util/resolveConfig'
 import corePlugins from '../src/corePlugins'
 import defaultConfig from '../defaultConfig.stub.js'
 
-const { utilities: defaultUtilities } = processPlugins(corePlugins(defaultConfig), defaultConfig)
+const { utilities: defaultUtilities } = processPlugins(
+  corePlugins(resolveConfig([defaultConfig])),
+  defaultConfig
+)
 
 function run(input, config = defaultConfig, utilities = defaultUtilities) {
   return postcss([substituteClassApplyAtRules(config, utilities)]).process(input, {
@@ -200,10 +204,12 @@ test('you can apply utility classes without using the given prefix', () => {
     .foo { margin-top: 1rem; margin-bottom: 1rem; }
   `
 
-  const config = {
-    ...defaultConfig,
-    prefix: 'tw-',
-  }
+  const config = resolveConfig([
+    {
+      ...defaultConfig,
+      prefix: 'tw-',
+    },
+  ])
 
   return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
     expect(result.css).toEqual(expected)
@@ -220,12 +226,14 @@ test('you can apply utility classes without using the given prefix when using a 
     .foo { margin-top: 1rem; margin-bottom: 1rem; }
   `
 
-  const config = {
-    ...defaultConfig,
-    prefix: () => {
-      return 'tw-'
+  const config = resolveConfig([
+    {
+      ...defaultConfig,
+      prefix: () => {
+        return 'tw-'
+      },
     },
-  }
+  ])
 
   return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
     expect(result.css).toEqual(expected)
