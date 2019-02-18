@@ -5871,15 +5871,15 @@ table {
   -moz-osx-font-smoothing: auto;
 }
 
-.tracking-tight {
+.letters-tight {
   letter-spacing: -0.05em;
 }
 
-.tracking-normal {
+.letters-normal {
   letter-spacing: 0;
 }
 
-.tracking-wide {
+.letters-wide {
   letter-spacing: .05em;
 }
 
@@ -11456,15 +11456,15 @@ table {
     -moz-osx-font-smoothing: auto;
   }
 
-  .sm\:tracking-tight {
+  .sm\:letters-tight {
     letter-spacing: -0.05em;
   }
 
-  .sm\:tracking-normal {
+  .sm\:letters-normal {
     letter-spacing: 0;
   }
 
-  .sm\:tracking-wide {
+  .sm\:letters-wide {
     letter-spacing: .05em;
   }
 
@@ -17042,15 +17042,15 @@ table {
     -moz-osx-font-smoothing: auto;
   }
 
-  .md\:tracking-tight {
+  .md\:letters-tight {
     letter-spacing: -0.05em;
   }
 
-  .md\:tracking-normal {
+  .md\:letters-normal {
     letter-spacing: 0;
   }
 
-  .md\:tracking-wide {
+  .md\:letters-wide {
     letter-spacing: .05em;
   }
 
@@ -22628,15 +22628,15 @@ table {
     -moz-osx-font-smoothing: auto;
   }
 
-  .lg\:tracking-tight {
+  .lg\:letters-tight {
     letter-spacing: -0.05em;
   }
 
-  .lg\:tracking-normal {
+  .lg\:letters-normal {
     letter-spacing: 0;
   }
 
-  .lg\:tracking-wide {
+  .lg\:letters-wide {
     letter-spacing: .05em;
   }
 
@@ -28214,15 +28214,15 @@ table {
     -moz-osx-font-smoothing: auto;
   }
 
-  .xl\:tracking-tight {
+  .xl\:letters-tight {
     letter-spacing: -0.05em;
   }
 
-  .xl\:tracking-normal {
+  .xl\:letters-normal {
     letter-spacing: 0;
   }
 
-  .xl\:tracking-wide {
+  .xl\:letters-wide {
     letter-spacing: .05em;
   }
 

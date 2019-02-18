@@ -45,7 +45,7 @@ import fontStyle from './plugins/fontStyle'
 import textTransform from './plugins/textTransform'
 import textDecoration from './plugins/textDecoration'
 import fontSmoothing from './plugins/fontSmoothing'
-import tracking from './plugins/tracking'
+import letterSpacing from './plugins/letterSpacing'
 import userSelect from './plugins/userSelect'
 import verticalAlign from './plugins/verticalAlign'
 import visibility from './plugins/visibility'
@@ -119,7 +119,7 @@ export default function(config) {
     textTransform,
     textDecoration,
     fontSmoothing,
-    tracking,
+    letterSpacing,
     userSelect,
     verticalAlign,
     visibility,

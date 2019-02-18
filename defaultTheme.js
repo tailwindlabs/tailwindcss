@@ -165,7 +165,7 @@ module.exports = function() {
       normal: 1.5,
       loose: 2,
     },
-    tracking: {
+    letterSpacing: {
       tight: '-0.05em',
       normal: '0',
       wide: '0.05em',

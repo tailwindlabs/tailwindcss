@@ -5,7 +5,7 @@ export default function({ values, variants }) {
     const utilities = _.fromPairs(
       _.map(values, (value, modifier) => {
         return [
-          `.tracking-${modifier}`,
+          `.letters-${modifier}`,
           {
             'letter-spacing': value,
           },
