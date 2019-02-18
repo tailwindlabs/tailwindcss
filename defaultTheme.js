@@ -199,10 +199,10 @@ module.exports = function() {
       return global.Object.assign({ default: theme.colors['grey-light'] }, theme.colors)
     },
     borderRadius: {
-      none: '0',
-      sm: '.125rem',
-      default: '.25rem',
-      lg: '.5rem',
+      '0': '0',
+      '1': '.125rem',
+      '2': '.25rem',
+      '4': '.5rem',
       full: '9999px',
     },
     width: theme => ({

@@ -4,31 +4,31 @@ export default function({ values, variants }) {
   return function({ addUtilities, e }) {
     const generators = [
       (value, modifier) => ({
-        [`.${e(`rounded${modifier}`)}`]: { borderRadius: `${value}` },
+        [`.${e(`radius${modifier}`)}`]: { borderRadius: `${value}` },
       }),
       (value, modifier) => ({
-        [`.${e(`rounded-t${modifier}`)}`]: {
+        [`.${e(`radius-t${modifier}`)}`]: {
           borderTopLeftRadius: `${value}`,
           borderTopRightRadius: `${value}`,
         },
-        [`.${e(`rounded-r${modifier}`)}`]: {
+        [`.${e(`radius-r${modifier}`)}`]: {
           borderTopRightRadius: `${value}`,
           borderBottomRightRadius: `${value}`,
         },
-        [`.${e(`rounded-b${modifier}`)}`]: {
+        [`.${e(`radius-b${modifier}`)}`]: {
           borderBottomRightRadius: `${value}`,
           borderBottomLeftRadius: `${value}`,
         },
-        [`.${e(`rounded-l${modifier}`)}`]: {
+        [`.${e(`radius-l${modifier}`)}`]: {
           borderTopLeftRadius: `${value}`,
           borderBottomLeftRadius: `${value}`,
         },
       }),
       (value, modifier) => ({
-        [`.${e(`rounded-tl${modifier}`)}`]: { borderTopLeftRadius: `${value}` },
-        [`.${e(`rounded-tr${modifier}`)}`]: { borderTopRightRadius: `${value}` },
-        [`.${e(`rounded-br${modifier}`)}`]: { borderBottomRightRadius: `${value}` },
-        [`.${e(`rounded-bl${modifier}`)}`]: { borderBottomLeftRadius: `${value}` },
+        [`.${e(`radius-tl${modifier}`)}`]: { borderTopLeftRadius: `${value}` },
+        [`.${e(`radius-tr${modifier}`)}`]: { borderTopRightRadius: `${value}` },
+        [`.${e(`radius-br${modifier}`)}`]: { borderBottomRightRadius: `${value}` },
+        [`.${e(`radius-bl${modifier}`)}`]: { borderBottomLeftRadius: `${value}` },
       }),
     ]
 
