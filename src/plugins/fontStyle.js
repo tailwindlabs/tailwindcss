@@ -3,7 +3,7 @@ export default function({ variants }) {
     addUtilities(
       {
         '.italic': { 'font-style': 'italic' },
-        '.roman': { 'font-style': 'normal' },
+        '.not-italic': { 'font-style': 'normal' },
       },
       variants
     )
