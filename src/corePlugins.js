@@ -1,22 +1,22 @@
 import preflight from './plugins/preflight'
-import lists from './plugins/lists'
+import listStyle from './plugins/listStyle'
 import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
-import backgroundColors from './plugins/backgroundColors'
+import backgroundColor from './plugins/backgroundColor'
 import backgroundPosition from './plugins/backgroundPosition'
 import backgroundRepeat from './plugins/backgroundRepeat'
 import backgroundSize from './plugins/backgroundSize'
 import borderCollapse from './plugins/borderCollapse'
-import borderColors from './plugins/borderColors'
+import borderColor from './plugins/borderColor'
 import borderRadius from './plugins/borderRadius'
 import borderStyle from './plugins/borderStyle'
-import borderWidths from './plugins/borderWidths'
+import borderWidth from './plugins/borderWidth'
 import cursor from './plugins/cursor'
 import display from './plugins/display'
 import flexbox from './plugins/flexbox'
 import float from './plugins/float'
-import fonts from './plugins/fonts'
-import fontWeights from './plugins/fontWeights'
+import fontFamily from './plugins/fontFamily'
+import fontWeight from './plugins/fontWeight'
 import height from './plugins/height'
 import leading from './plugins/leading'
 import margin from './plugins/margin'
@@ -34,14 +34,17 @@ import padding from './plugins/padding'
 import pointerEvents from './plugins/pointerEvents'
 import position from './plugins/position'
 import resize from './plugins/resize'
-import shadows from './plugins/shadows'
-import svgFill from './plugins/svgFill'
-import svgStroke from './plugins/svgStroke'
+import boxShadow from './plugins/boxShadow'
+import fill from './plugins/fill'
+import stroke from './plugins/stroke'
 import tableLayout from './plugins/tableLayout'
 import textAlign from './plugins/textAlign'
-import textColors from './plugins/textColors'
-import textSizes from './plugins/textSizes'
-import textStyle from './plugins/textStyle'
+import textColor from './plugins/textColor'
+import fontSize from './plugins/fontSize'
+import fontStyle from './plugins/fontStyle'
+import textTransform from './plugins/textTransform'
+import textDecoration from './plugins/textDecoration'
+import fontSmoothing from './plugins/fontSmoothing'
 import tracking from './plugins/tracking'
 import userSelect from './plugins/userSelect'
 import verticalAlign from './plugins/verticalAlign'
@@ -70,24 +73,24 @@ function loadPlugins({ theme, variants, corePlugins }, plugins) {
 export default function(config) {
   return loadPlugins(config, {
     preflight,
-    lists,
+    listStyle,
     appearance,
     backgroundAttachment,
-    backgroundColors,
+    backgroundColor,
     backgroundPosition,
     backgroundRepeat,
     backgroundSize,
     borderCollapse,
-    borderColors,
+    borderColor,
     borderRadius,
     borderStyle,
-    borderWidths,
+    borderWidth,
     cursor,
     display,
     flexbox,
     float,
-    fonts,
-    fontWeights,
+    fontFamily,
+    fontWeight,
     height,
     leading,
     margin,
@@ -105,14 +108,17 @@ export default function(config) {
     pointerEvents,
     position,
     resize,
-    shadows,
-    svgFill,
-    svgStroke,
+    boxShadow,
+    fill,
+    stroke,
     tableLayout,
     textAlign,
-    textColors,
-    textSizes,
-    textStyle,
+    textColor,
+    fontSize,
+    fontStyle,
+    textTransform,
+    textDecoration,
+    fontSmoothing,
     tracking,
     userSelect,
     verticalAlign,

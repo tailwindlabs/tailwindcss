@@ -108,7 +108,7 @@ module.exports = function() {
       lg: '992px',
       xl: '1200px',
     },
-    fonts: {
+    fontFamily: {
       sans: [
         'system-ui',
         'BlinkMacSystemFont',
@@ -137,7 +137,7 @@ module.exports = function() {
       ],
       mono: ['Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
     },
-    textSizes: {
+    fontSize: {
       xs: '.75rem', // 12px
       sm: '.875rem', // 14px
       base: '1rem', // 16px
@@ -148,7 +148,7 @@ module.exports = function() {
       '4xl': '2.25rem', // 36px
       '5xl': '3rem', // 48px
     },
-    fontWeights: {
+    fontWeight: {
       hairline: 100,
       thin: 200,
       light: 300,
@@ -170,8 +170,8 @@ module.exports = function() {
       normal: '0',
       wide: '0.05em',
     },
-    textColors: theme => theme.colors,
-    backgroundColors: theme => theme.colors,
+    textColor: theme => theme.colors,
+    backgroundColor: theme => theme.colors,
     backgroundPosition: {
       bottom: 'bottom',
       center: 'center',
@@ -188,14 +188,14 @@ module.exports = function() {
       cover: 'cover',
       contain: 'contain',
     },
-    borderWidths: {
+    borderWidth: {
       default: '1px',
       '0': '0',
       '2': '2px',
       '4': '4px',
       '8': '8px',
     },
-    borderColors: theme => {
+    borderColor: theme => {
       return global.Object.assign({ default: theme.colors['grey-light'] }, theme.colors)
     },
     borderRadius: {
@@ -260,7 +260,7 @@ module.exports = function() {
     padding: theme => theme.spacing,
     margin: theme => ({ auto: 'auto', ...theme.spacing }),
     negativeMargin: theme => theme.spacing,
-    shadows: {
+    boxShadow: {
       default: '0 2px 4px 0 rgba(0,0,0,0.10)',
       md: '0 4px 8px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.08)',
       lg: '0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08)',
@@ -284,10 +284,10 @@ module.exports = function() {
       '75': '.75',
       '100': '1',
     },
-    svgFill: {
+    fill: {
       current: 'currentColor',
     },
-    svgStroke: {
+    stroke: {
       current: 'currentColor',
     },
   }
