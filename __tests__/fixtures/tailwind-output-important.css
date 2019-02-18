@@ -3085,20 +3085,20 @@ table {
   height: 100vh !important;
 }
 
-.leading-none {
+.lh-1 {
   line-height: 1 !important;
 }
 
-.leading-tight {
+.lh-2 {
+  line-height: 2 !important;
+}
+
+.lh-1\.25 {
   line-height: 1.25 !important;
 }
 
-.leading-normal {
+.lh-1\.5 {
   line-height: 1.5 !important;
-}
-
-.leading-loose {
-  line-height: 2 !important;
 }
 
 .m-0 {
@@ -8686,20 +8686,20 @@ table {
     height: 100vh !important;
   }
 
-  .sm\:leading-none {
+  .sm\:lh-1 {
     line-height: 1 !important;
   }
 
-  .sm\:leading-tight {
+  .sm\:lh-2 {
+    line-height: 2 !important;
+  }
+
+  .sm\:lh-1\.25 {
     line-height: 1.25 !important;
   }
 
-  .sm\:leading-normal {
+  .sm\:lh-1\.5 {
     line-height: 1.5 !important;
-  }
-
-  .sm\:leading-loose {
-    line-height: 2 !important;
   }
 
   .sm\:m-0 {
@@ -14272,20 +14272,20 @@ table {
     height: 100vh !important;
   }
 
-  .md\:leading-none {
+  .md\:lh-1 {
     line-height: 1 !important;
   }
 
-  .md\:leading-tight {
+  .md\:lh-2 {
+    line-height: 2 !important;
+  }
+
+  .md\:lh-1\.25 {
     line-height: 1.25 !important;
   }
 
-  .md\:leading-normal {
+  .md\:lh-1\.5 {
     line-height: 1.5 !important;
-  }
-
-  .md\:leading-loose {
-    line-height: 2 !important;
   }
 
   .md\:m-0 {
@@ -19858,20 +19858,20 @@ table {
     height: 100vh !important;
   }
 
-  .lg\:leading-none {
+  .lg\:lh-1 {
     line-height: 1 !important;
   }
 
-  .lg\:leading-tight {
+  .lg\:lh-2 {
+    line-height: 2 !important;
+  }
+
+  .lg\:lh-1\.25 {
     line-height: 1.25 !important;
   }
 
-  .lg\:leading-normal {
+  .lg\:lh-1\.5 {
     line-height: 1.5 !important;
-  }
-
-  .lg\:leading-loose {
-    line-height: 2 !important;
   }
 
   .lg\:m-0 {
@@ -25444,20 +25444,20 @@ table {
     height: 100vh !important;
   }
 
-  .xl\:leading-none {
+  .xl\:lh-1 {
     line-height: 1 !important;
   }
 
-  .xl\:leading-tight {
+  .xl\:lh-2 {
+    line-height: 2 !important;
+  }
+
+  .xl\:lh-1\.25 {
     line-height: 1.25 !important;
   }
 
-  .xl\:leading-normal {
+  .xl\:lh-1\.5 {
     line-height: 1.5 !important;
-  }
-
-  .xl\:leading-loose {
-    line-height: 2 !important;
   }
 
   .xl\:m-0 {

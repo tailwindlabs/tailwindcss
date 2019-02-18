@@ -3085,20 +3085,20 @@ table {
   height: 100vh;
 }
 
-.leading-none {
+.lh-1 {
   line-height: 1;
 }
 
-.leading-tight {
+.lh-2 {
+  line-height: 2;
+}
+
+.lh-1\.25 {
   line-height: 1.25;
 }
 
-.leading-normal {
+.lh-1\.5 {
   line-height: 1.5;
-}
-
-.leading-loose {
-  line-height: 2;
 }
 
 .m-0 {
@@ -8686,20 +8686,20 @@ table {
     height: 100vh;
   }
 
-  .sm\:leading-none {
+  .sm\:lh-1 {
     line-height: 1;
   }
 
-  .sm\:leading-tight {
+  .sm\:lh-2 {
+    line-height: 2;
+  }
+
+  .sm\:lh-1\.25 {
     line-height: 1.25;
   }
 
-  .sm\:leading-normal {
+  .sm\:lh-1\.5 {
     line-height: 1.5;
-  }
-
-  .sm\:leading-loose {
-    line-height: 2;
   }
 
   .sm\:m-0 {
@@ -14272,20 +14272,20 @@ table {
     height: 100vh;
   }
 
-  .md\:leading-none {
+  .md\:lh-1 {
     line-height: 1;
   }
 
-  .md\:leading-tight {
+  .md\:lh-2 {
+    line-height: 2;
+  }
+
+  .md\:lh-1\.25 {
     line-height: 1.25;
   }
 
-  .md\:leading-normal {
+  .md\:lh-1\.5 {
     line-height: 1.5;
-  }
-
-  .md\:leading-loose {
-    line-height: 2;
   }
 
   .md\:m-0 {
@@ -19858,20 +19858,20 @@ table {
     height: 100vh;
   }
 
-  .lg\:leading-none {
+  .lg\:lh-1 {
     line-height: 1;
   }
 
-  .lg\:leading-tight {
+  .lg\:lh-2 {
+    line-height: 2;
+  }
+
+  .lg\:lh-1\.25 {
     line-height: 1.25;
   }
 
-  .lg\:leading-normal {
+  .lg\:lh-1\.5 {
     line-height: 1.5;
-  }
-
-  .lg\:leading-loose {
-    line-height: 2;
   }
 
   .lg\:m-0 {
@@ -25444,20 +25444,20 @@ table {
     height: 100vh;
   }
 
-  .xl\:leading-none {
+  .xl\:lh-1 {
     line-height: 1;
   }
 
-  .xl\:leading-tight {
+  .xl\:lh-2 {
+    line-height: 2;
+  }
+
+  .xl\:lh-1\.25 {
     line-height: 1.25;
   }
 
-  .xl\:leading-normal {
+  .xl\:lh-1\.5 {
     line-height: 1.5;
-  }
-
-  .xl\:leading-loose {
-    line-height: 2;
   }
 
   .xl\:m-0 {

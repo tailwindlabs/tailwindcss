@@ -159,11 +159,11 @@ module.exports = function() {
       extrabold: 800,
       black: 900,
     },
-    leading: {
-      none: 1,
-      tight: 1.25,
-      normal: 1.5,
-      loose: 2,
+    lineHeight: {
+      '1': 1,
+      '1.25': 1.25,
+      '1.5': 1.5,
+      '2': 2,
     },
     tracking: {
       tight: '-0.05em',
