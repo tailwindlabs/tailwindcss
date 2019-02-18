@@ -10,7 +10,12 @@ function generatePseudoClassVariant(pseudoClass) {
   })
 }
 
+function ensureIncludesDefault(variants) {
+  return variants.includes('default') ? variants : ['default', ...variants]
+}
+
 const defaultVariantGenerators = {
+  default: generateVariantFunction(() => {}),
   'group-hover': generateVariantFunction(({ modifySelectors, separator }) => {
     return modifySelectors(({ className }) => {
       return `.group:hover .group-hover${separator}${className}`
@@ -38,9 +43,7 @@ export default function(config, { variantGenerators: pluginVariantGenerators }) 
         responsiveParent.append(atRule)
       }
 
-      atRule.before(atRule.clone().nodes)
-
-      _.forEach(_.without(variants, 'responsive'), variant => {
+      _.forEach(_.without(ensureIncludesDefault(variants), 'responsive'), variant => {
         variantGenerators[variant](atRule, config)
       })
 
