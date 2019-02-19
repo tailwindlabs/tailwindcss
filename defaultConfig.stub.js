@@ -52,7 +52,7 @@ module.exports = {
     textTransform: ['responsive', 'hover', 'focus'],
     textDecoration: ['responsive', 'hover', 'focus'],
     fontSmoothing: ['responsive', 'hover', 'focus'],
-    tracking: ['responsive'],
+    letterSpacing: ['responsive'],
     userSelect: ['responsive'],
     verticalAlign: ['responsive'],
     visibility: ['responsive'],
