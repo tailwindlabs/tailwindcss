@@ -24,7 +24,7 @@ module.exports = {
     fontFamily: ['responsive'],
     fontWeight: ['responsive', 'hover', 'focus'],
     height: ['responsive'],
-    leading: ['responsive'],
+    lineHeight: ['responsive'],
     listStyle: ['responsive'],
     margin: ['responsive'],
     maxHeight: ['responsive'],
