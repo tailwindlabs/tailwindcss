@@ -18,7 +18,7 @@ import float from './plugins/float'
 import fontFamily from './plugins/fontFamily'
 import fontWeight from './plugins/fontWeight'
 import height from './plugins/height'
-import leading from './plugins/leading'
+import lineHeight from './plugins/lineHeight'
 import margin from './plugins/margin'
 import maxHeight from './plugins/maxHeight'
 import maxWidth from './plugins/maxWidth'
@@ -45,7 +45,7 @@ import fontStyle from './plugins/fontStyle'
 import textTransform from './plugins/textTransform'
 import textDecoration from './plugins/textDecoration'
 import fontSmoothing from './plugins/fontSmoothing'
-import tracking from './plugins/tracking'
+import letterSpacing from './plugins/letterSpacing'
 import userSelect from './plugins/userSelect'
 import verticalAlign from './plugins/verticalAlign'
 import visibility from './plugins/visibility'
@@ -92,7 +92,7 @@ export default function(config) {
     fontFamily,
     fontWeight,
     height,
-    leading,
+    lineHeight,
     margin,
     maxHeight,
     maxWidth,
@@ -119,7 +119,7 @@ export default function(config) {
     textTransform,
     textDecoration,
     fontSmoothing,
-    tracking,
+    letterSpacing,
     userSelect,
     verticalAlign,
     visibility,
