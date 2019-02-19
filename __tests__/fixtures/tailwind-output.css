@@ -4099,6 +4099,62 @@ table {
   margin-left: -1px;
 }
 
+.object-contain {
+  object-fit: contain;
+}
+
+.object-cover {
+  object-fit: cover;
+}
+
+.object-fill {
+  object-fit: fill;
+}
+
+.object-none {
+  object-fit: none;
+}
+
+.object-scale-down {
+  object-fit: scale-down;
+}
+
+.object-bottom {
+  object-position: bottom;
+}
+
+.object-center {
+  object-position: center;
+}
+
+.object-left {
+  object-position: left;
+}
+
+.object-left-bottom {
+  object-position: left bottom;
+}
+
+.object-left-top {
+  object-position: left top;
+}
+
+.object-right {
+  object-position: right;
+}
+
+.object-right-bottom {
+  object-position: right bottom;
+}
+
+.object-right-top {
+  object-position: right top;
+}
+
+.object-top {
+  object-position: top;
+}
+
 .opacity-0 {
   opacity: 0;
 }
@@ -9700,6 +9756,62 @@ table {
     margin-left: -1px;
   }
 
+  .sm\:object-contain {
+    object-fit: contain;
+  }
+
+  .sm\:object-cover {
+    object-fit: cover;
+  }
+
+  .sm\:object-fill {
+    object-fit: fill;
+  }
+
+  .sm\:object-none {
+    object-fit: none;
+  }
+
+  .sm\:object-scale-down {
+    object-fit: scale-down;
+  }
+
+  .sm\:object-bottom {
+    object-position: bottom;
+  }
+
+  .sm\:object-center {
+    object-position: center;
+  }
+
+  .sm\:object-left {
+    object-position: left;
+  }
+
+  .sm\:object-left-bottom {
+    object-position: left bottom;
+  }
+
+  .sm\:object-left-top {
+    object-position: left top;
+  }
+
+  .sm\:object-right {
+    object-position: right;
+  }
+
+  .sm\:object-right-bottom {
+    object-position: right bottom;
+  }
+
+  .sm\:object-right-top {
+    object-position: right top;
+  }
+
+  .sm\:object-top {
+    object-position: top;
+  }
+
   .sm\:opacity-0 {
     opacity: 0;
   }
@@ -15284,6 +15396,62 @@ table {
 
   .md\:-ml-px {
     margin-left: -1px;
+  }
+
+  .md\:object-contain {
+    object-fit: contain;
+  }
+
+  .md\:object-cover {
+    object-fit: cover;
+  }
+
+  .md\:object-fill {
+    object-fit: fill;
+  }
+
+  .md\:object-none {
+    object-fit: none;
+  }
+
+  .md\:object-scale-down {
+    object-fit: scale-down;
+  }
+
+  .md\:object-bottom {
+    object-position: bottom;
+  }
+
+  .md\:object-center {
+    object-position: center;
+  }
+
+  .md\:object-left {
+    object-position: left;
+  }
+
+  .md\:object-left-bottom {
+    object-position: left bottom;
+  }
+
+  .md\:object-left-top {
+    object-position: left top;
+  }
+
+  .md\:object-right {
+    object-position: right;
+  }
+
+  .md\:object-right-bottom {
+    object-position: right bottom;
+  }
+
+  .md\:object-right-top {
+    object-position: right top;
+  }
+
+  .md\:object-top {
+    object-position: top;
   }
 
   .md\:opacity-0 {
@@ -20872,6 +21040,62 @@ table {
     margin-left: -1px;
   }
 
+  .lg\:object-contain {
+    object-fit: contain;
+  }
+
+  .lg\:object-cover {
+    object-fit: cover;
+  }
+
+  .lg\:object-fill {
+    object-fit: fill;
+  }
+
+  .lg\:object-none {
+    object-fit: none;
+  }
+
+  .lg\:object-scale-down {
+    object-fit: scale-down;
+  }
+
+  .lg\:object-bottom {
+    object-position: bottom;
+  }
+
+  .lg\:object-center {
+    object-position: center;
+  }
+
+  .lg\:object-left {
+    object-position: left;
+  }
+
+  .lg\:object-left-bottom {
+    object-position: left bottom;
+  }
+
+  .lg\:object-left-top {
+    object-position: left top;
+  }
+
+  .lg\:object-right {
+    object-position: right;
+  }
+
+  .lg\:object-right-bottom {
+    object-position: right bottom;
+  }
+
+  .lg\:object-right-top {
+    object-position: right top;
+  }
+
+  .lg\:object-top {
+    object-position: top;
+  }
+
   .lg\:opacity-0 {
     opacity: 0;
   }
@@ -26456,6 +26680,62 @@ table {
 
   .xl\:-ml-px {
     margin-left: -1px;
+  }
+
+  .xl\:object-contain {
+    object-fit: contain;
+  }
+
+  .xl\:object-cover {
+    object-fit: cover;
+  }
+
+  .xl\:object-fill {
+    object-fit: fill;
+  }
+
+  .xl\:object-none {
+    object-fit: none;
+  }
+
+  .xl\:object-scale-down {
+    object-fit: scale-down;
+  }
+
+  .xl\:object-bottom {
+    object-position: bottom;
+  }
+
+  .xl\:object-center {
+    object-position: center;
+  }
+
+  .xl\:object-left {
+    object-position: left;
+  }
+
+  .xl\:object-left-bottom {
+    object-position: left bottom;
+  }
+
+  .xl\:object-left-top {
+    object-position: left top;
+  }
+
+  .xl\:object-right {
+    object-position: right;
+  }
+
+  .xl\:object-right-bottom {
+    object-position: right bottom;
+  }
+
+  .xl\:object-right-top {
+    object-position: right top;
+  }
+
+  .xl\:object-top {
+    object-position: top;
   }
 
   .xl\:opacity-0 {

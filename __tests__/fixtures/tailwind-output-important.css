@@ -4099,6 +4099,62 @@ table {
   margin-left: -1px !important;
 }
 
+.object-contain {
+  object-fit: contain !important;
+}
+
+.object-cover {
+  object-fit: cover !important;
+}
+
+.object-fill {
+  object-fit: fill !important;
+}
+
+.object-none {
+  object-fit: none !important;
+}
+
+.object-scale-down {
+  object-fit: scale-down !important;
+}
+
+.object-bottom {
+  object-position: bottom !important;
+}
+
+.object-center {
+  object-position: center !important;
+}
+
+.object-left {
+  object-position: left !important;
+}
+
+.object-left-bottom {
+  object-position: left bottom !important;
+}
+
+.object-left-top {
+  object-position: left top !important;
+}
+
+.object-right {
+  object-position: right !important;
+}
+
+.object-right-bottom {
+  object-position: right bottom !important;
+}
+
+.object-right-top {
+  object-position: right top !important;
+}
+
+.object-top {
+  object-position: top !important;
+}
+
 .opacity-0 {
   opacity: 0 !important;
 }
@@ -9700,6 +9756,62 @@ table {
     margin-left: -1px !important;
   }
 
+  .sm\:object-contain {
+    object-fit: contain !important;
+  }
+
+  .sm\:object-cover {
+    object-fit: cover !important;
+  }
+
+  .sm\:object-fill {
+    object-fit: fill !important;
+  }
+
+  .sm\:object-none {
+    object-fit: none !important;
+  }
+
+  .sm\:object-scale-down {
+    object-fit: scale-down !important;
+  }
+
+  .sm\:object-bottom {
+    object-position: bottom !important;
+  }
+
+  .sm\:object-center {
+    object-position: center !important;
+  }
+
+  .sm\:object-left {
+    object-position: left !important;
+  }
+
+  .sm\:object-left-bottom {
+    object-position: left bottom !important;
+  }
+
+  .sm\:object-left-top {
+    object-position: left top !important;
+  }
+
+  .sm\:object-right {
+    object-position: right !important;
+  }
+
+  .sm\:object-right-bottom {
+    object-position: right bottom !important;
+  }
+
+  .sm\:object-right-top {
+    object-position: right top !important;
+  }
+
+  .sm\:object-top {
+    object-position: top !important;
+  }
+
   .sm\:opacity-0 {
     opacity: 0 !important;
   }
@@ -15284,6 +15396,62 @@ table {
 
   .md\:-ml-px {
     margin-left: -1px !important;
+  }
+
+  .md\:object-contain {
+    object-fit: contain !important;
+  }
+
+  .md\:object-cover {
+    object-fit: cover !important;
+  }
+
+  .md\:object-fill {
+    object-fit: fill !important;
+  }
+
+  .md\:object-none {
+    object-fit: none !important;
+  }
+
+  .md\:object-scale-down {
+    object-fit: scale-down !important;
+  }
+
+  .md\:object-bottom {
+    object-position: bottom !important;
+  }
+
+  .md\:object-center {
+    object-position: center !important;
+  }
+
+  .md\:object-left {
+    object-position: left !important;
+  }
+
+  .md\:object-left-bottom {
+    object-position: left bottom !important;
+  }
+
+  .md\:object-left-top {
+    object-position: left top !important;
+  }
+
+  .md\:object-right {
+    object-position: right !important;
+  }
+
+  .md\:object-right-bottom {
+    object-position: right bottom !important;
+  }
+
+  .md\:object-right-top {
+    object-position: right top !important;
+  }
+
+  .md\:object-top {
+    object-position: top !important;
   }
 
   .md\:opacity-0 {
@@ -20872,6 +21040,62 @@ table {
     margin-left: -1px !important;
   }
 
+  .lg\:object-contain {
+    object-fit: contain !important;
+  }
+
+  .lg\:object-cover {
+    object-fit: cover !important;
+  }
+
+  .lg\:object-fill {
+    object-fit: fill !important;
+  }
+
+  .lg\:object-none {
+    object-fit: none !important;
+  }
+
+  .lg\:object-scale-down {
+    object-fit: scale-down !important;
+  }
+
+  .lg\:object-bottom {
+    object-position: bottom !important;
+  }
+
+  .lg\:object-center {
+    object-position: center !important;
+  }
+
+  .lg\:object-left {
+    object-position: left !important;
+  }
+
+  .lg\:object-left-bottom {
+    object-position: left bottom !important;
+  }
+
+  .lg\:object-left-top {
+    object-position: left top !important;
+  }
+
+  .lg\:object-right {
+    object-position: right !important;
+  }
+
+  .lg\:object-right-bottom {
+    object-position: right bottom !important;
+  }
+
+  .lg\:object-right-top {
+    object-position: right top !important;
+  }
+
+  .lg\:object-top {
+    object-position: top !important;
+  }
+
   .lg\:opacity-0 {
     opacity: 0 !important;
   }
@@ -26456,6 +26680,62 @@ table {
 
   .xl\:-ml-px {
     margin-left: -1px !important;
+  }
+
+  .xl\:object-contain {
+    object-fit: contain !important;
+  }
+
+  .xl\:object-cover {
+    object-fit: cover !important;
+  }
+
+  .xl\:object-fill {
+    object-fit: fill !important;
+  }
+
+  .xl\:object-none {
+    object-fit: none !important;
+  }
+
+  .xl\:object-scale-down {
+    object-fit: scale-down !important;
+  }
+
+  .xl\:object-bottom {
+    object-position: bottom !important;
+  }
+
+  .xl\:object-center {
+    object-position: center !important;
+  }
+
+  .xl\:object-left {
+    object-position: left !important;
+  }
+
+  .xl\:object-left-bottom {
+    object-position: left bottom !important;
+  }
+
+  .xl\:object-left-top {
+    object-position: left top !important;
+  }
+
+  .xl\:object-right {
+    object-position: right !important;
+  }
+
+  .xl\:object-right-bottom {
+    object-position: right bottom !important;
+  }
+
+  .xl\:object-right-top {
+    object-position: right top !important;
+  }
+
+  .xl\:object-top {
+    object-position: top !important;
   }
 
   .xl\:opacity-0 {
