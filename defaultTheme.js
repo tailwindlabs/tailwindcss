@@ -102,6 +102,18 @@ module.exports = function() {
       '24': '6rem',
       '32': '8rem',
     },
+    positions: {
+      bottom: 'bottom',
+      center: 'center',
+      left: 'left',
+      'left-bottom': 'left bottom',
+      'left-top': 'left top',
+      right: 'right',
+      'right-bottom': 'right bottom',
+      'right-top': 'right top',
+      top: 'top',
+    },
+
     screens: {
       sm: '576px',
       md: '768px',
@@ -172,17 +184,7 @@ module.exports = function() {
     },
     textColor: theme => theme.colors,
     backgroundColor: theme => theme.colors,
-    backgroundPosition: {
-      bottom: 'bottom',
-      center: 'center',
-      left: 'left',
-      'left-bottom': 'left bottom',
-      'left-top': 'left top',
-      right: 'right',
-      'right-bottom': 'right bottom',
-      'right-top': 'right top',
-      top: 'top',
-    },
+    backgroundPosition: theme => theme.positions,
     backgroundSize: {
       auto: 'auto',
       cover: 'cover',
@@ -260,6 +262,7 @@ module.exports = function() {
     padding: theme => theme.spacing,
     margin: theme => ({ auto: 'auto', ...theme.spacing }),
     negativeMargin: theme => theme.spacing,
+    objectPosition: theme => theme.positions,
     boxShadow: {
       default: '0 2px 4px 0 rgba(0,0,0,0.10)',
       md: '0 4px 8px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.08)',
