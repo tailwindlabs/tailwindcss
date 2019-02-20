@@ -35,7 +35,11 @@
     "eslint": "^4.10.0",
     "eslint-config-postcss": "^2.0.2",
     "eslint-config-prettier": "^2.7.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-prettier": "^2.3.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
     "jest": "^23.6.0",
     "prettier": "^1.7.4",
     "rimraf": "^2.6.1"
