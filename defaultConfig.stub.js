@@ -32,8 +32,8 @@ module.exports = {
     minHeight: ['responsive'],
     minWidth: ['responsive'],
     negativeMargin: ['responsive'],
-    objectFit: [],
-    objectPosition: [],
+    objectFit: ['responsive'],
+    objectPosition: ['responsive'],
     opacity: ['responsive'],
     outline: ['focus'],
     overflow: ['responsive'],
@@ -61,8 +61,6 @@ module.exports = {
     zIndex: ['responsive'],
   },
   corePlugins: {
-    objectFit: false,
-    objectPosition: false,
   },
   plugins: [
     require('./plugins/container')({
