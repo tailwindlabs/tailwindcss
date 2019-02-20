@@ -5927,8 +5927,12 @@ table {
   -moz-osx-font-smoothing: auto;
 }
 
+.tracking-tighter {
+  letter-spacing: -.05em;
+}
+
 .tracking-tight {
-  letter-spacing: -0.05em;
+  letter-spacing: -.025em;
 }
 
 .tracking-normal {
@@ -5936,7 +5940,15 @@ table {
 }
 
 .tracking-wide {
+  letter-spacing: .025em;
+}
+
+.tracking-wider {
   letter-spacing: .05em;
+}
+
+.tracking-widest {
+  letter-spacing: .1em;
 }
 
 .select-none {
@@ -11568,8 +11580,12 @@ table {
     -moz-osx-font-smoothing: auto;
   }
 
+  .sm\:tracking-tighter {
+    letter-spacing: -.05em;
+  }
+
   .sm\:tracking-tight {
-    letter-spacing: -0.05em;
+    letter-spacing: -.025em;
   }
 
   .sm\:tracking-normal {
@@ -11577,7 +11593,15 @@ table {
   }
 
   .sm\:tracking-wide {
+    letter-spacing: .025em;
+  }
+
+  .sm\:tracking-wider {
     letter-spacing: .05em;
+  }
+
+  .sm\:tracking-widest {
+    letter-spacing: .1em;
   }
 
   .sm\:select-none {
@@ -17210,8 +17234,12 @@ table {
     -moz-osx-font-smoothing: auto;
   }
 
+  .md\:tracking-tighter {
+    letter-spacing: -.05em;
+  }
+
   .md\:tracking-tight {
-    letter-spacing: -0.05em;
+    letter-spacing: -.025em;
   }
 
   .md\:tracking-normal {
@@ -17219,7 +17247,15 @@ table {
   }
 
   .md\:tracking-wide {
+    letter-spacing: .025em;
+  }
+
+  .md\:tracking-wider {
     letter-spacing: .05em;
+  }
+
+  .md\:tracking-widest {
+    letter-spacing: .1em;
   }
 
   .md\:select-none {
@@ -22852,8 +22888,12 @@ table {
     -moz-osx-font-smoothing: auto;
   }
 
+  .lg\:tracking-tighter {
+    letter-spacing: -.05em;
+  }
+
   .lg\:tracking-tight {
-    letter-spacing: -0.05em;
+    letter-spacing: -.025em;
   }
 
   .lg\:tracking-normal {
@@ -22861,7 +22901,15 @@ table {
   }
 
   .lg\:tracking-wide {
+    letter-spacing: .025em;
+  }
+
+  .lg\:tracking-wider {
     letter-spacing: .05em;
+  }
+
+  .lg\:tracking-widest {
+    letter-spacing: .1em;
   }
 
   .lg\:select-none {
@@ -28494,8 +28542,12 @@ table {
     -moz-osx-font-smoothing: auto;
   }
 
+  .xl\:tracking-tighter {
+    letter-spacing: -.05em;
+  }
+
   .xl\:tracking-tight {
-    letter-spacing: -0.05em;
+    letter-spacing: -.025em;
   }
 
   .xl\:tracking-normal {
@@ -28503,7 +28555,15 @@ table {
   }
 
   .xl\:tracking-wide {
+    letter-spacing: .025em;
+  }
+
+  .xl\:tracking-wider {
     letter-spacing: .05em;
+  }
+
+  .xl\:tracking-widest {
+    letter-spacing: .1em;
   }
 
   .xl\:select-none {
