@@ -260,6 +260,17 @@ module.exports = function() {
     padding: theme => theme.spacing,
     margin: theme => ({ auto: 'auto', ...theme.spacing }),
     negativeMargin: theme => theme.spacing,
+    objectPosition: {
+      bottom: 'bottom',
+      center: 'center',
+      left: 'left',
+      'left-bottom': 'left bottom',
+      'left-top': 'left top',
+      right: 'right',
+      'right-bottom': 'right bottom',
+      'right-top': 'right top',
+      top: 'top',
+    },
     boxShadow: {
       default: '0 2px 4px 0 rgba(0,0,0,0.10)',
       md: '0 4px 8px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.08)',
