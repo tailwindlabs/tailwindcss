@@ -5935,8 +5935,12 @@ table {
   -moz-osx-font-smoothing: auto !important;
 }
 
+.tracking-tighter {
+  letter-spacing: -.05em !important;
+}
+
 .tracking-tight {
-  letter-spacing: -0.05em !important;
+  letter-spacing: -.025em !important;
 }
 
 .tracking-normal {
@@ -5944,7 +5948,15 @@ table {
 }
 
 .tracking-wide {
+  letter-spacing: .025em !important;
+}
+
+.tracking-wider {
   letter-spacing: .05em !important;
+}
+
+.tracking-widest {
+  letter-spacing: .1em !important;
 }
 
 .select-none {
@@ -11584,8 +11596,12 @@ table {
     -moz-osx-font-smoothing: auto !important;
   }
 
+  .sm\:tracking-tighter {
+    letter-spacing: -.05em !important;
+  }
+
   .sm\:tracking-tight {
-    letter-spacing: -0.05em !important;
+    letter-spacing: -.025em !important;
   }
 
   .sm\:tracking-normal {
@@ -11593,7 +11609,15 @@ table {
   }
 
   .sm\:tracking-wide {
+    letter-spacing: .025em !important;
+  }
+
+  .sm\:tracking-wider {
     letter-spacing: .05em !important;
+  }
+
+  .sm\:tracking-widest {
+    letter-spacing: .1em !important;
   }
 
   .sm\:select-none {
@@ -17234,8 +17258,12 @@ table {
     -moz-osx-font-smoothing: auto !important;
   }
 
+  .md\:tracking-tighter {
+    letter-spacing: -.05em !important;
+  }
+
   .md\:tracking-tight {
-    letter-spacing: -0.05em !important;
+    letter-spacing: -.025em !important;
   }
 
   .md\:tracking-normal {
@@ -17243,7 +17271,15 @@ table {
   }
 
   .md\:tracking-wide {
+    letter-spacing: .025em !important;
+  }
+
+  .md\:tracking-wider {
     letter-spacing: .05em !important;
+  }
+
+  .md\:tracking-widest {
+    letter-spacing: .1em !important;
   }
 
   .md\:select-none {
@@ -22884,8 +22920,12 @@ table {
     -moz-osx-font-smoothing: auto !important;
   }
 
+  .lg\:tracking-tighter {
+    letter-spacing: -.05em !important;
+  }
+
   .lg\:tracking-tight {
-    letter-spacing: -0.05em !important;
+    letter-spacing: -.025em !important;
   }
 
   .lg\:tracking-normal {
@@ -22893,7 +22933,15 @@ table {
   }
 
   .lg\:tracking-wide {
+    letter-spacing: .025em !important;
+  }
+
+  .lg\:tracking-wider {
     letter-spacing: .05em !important;
+  }
+
+  .lg\:tracking-widest {
+    letter-spacing: .1em !important;
   }
 
   .lg\:select-none {
@@ -28534,8 +28582,12 @@ table {
     -moz-osx-font-smoothing: auto !important;
   }
 
+  .xl\:tracking-tighter {
+    letter-spacing: -.05em !important;
+  }
+
   .xl\:tracking-tight {
-    letter-spacing: -0.05em !important;
+    letter-spacing: -.025em !important;
   }
 
   .xl\:tracking-normal {
@@ -28543,7 +28595,15 @@ table {
   }
 
   .xl\:tracking-wide {
+    letter-spacing: .025em !important;
+  }
+
+  .xl\:tracking-wider {
     letter-spacing: .05em !important;
+  }
+
+  .xl\:tracking-widest {
+    letter-spacing: .1em !important;
   }
 
   .xl\:select-none {
