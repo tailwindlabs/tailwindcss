@@ -3093,8 +3093,16 @@ table {
   line-height: 1.25;
 }
 
+.leading-snug {
+  line-height: 1.375;
+}
+
 .leading-normal {
   line-height: 1.5;
+}
+
+.leading-relaxed {
+  line-height: 1.625;
 }
 
 .leading-loose {
@@ -8750,8 +8758,16 @@ table {
     line-height: 1.25;
   }
 
+  .sm\:leading-snug {
+    line-height: 1.375;
+  }
+
   .sm\:leading-normal {
     line-height: 1.5;
+  }
+
+  .sm\:leading-relaxed {
+    line-height: 1.625;
   }
 
   .sm\:leading-loose {
@@ -14392,8 +14408,16 @@ table {
     line-height: 1.25;
   }
 
+  .md\:leading-snug {
+    line-height: 1.375;
+  }
+
   .md\:leading-normal {
     line-height: 1.5;
+  }
+
+  .md\:leading-relaxed {
+    line-height: 1.625;
   }
 
   .md\:leading-loose {
@@ -20034,8 +20058,16 @@ table {
     line-height: 1.25;
   }
 
+  .lg\:leading-snug {
+    line-height: 1.375;
+  }
+
   .lg\:leading-normal {
     line-height: 1.5;
+  }
+
+  .lg\:leading-relaxed {
+    line-height: 1.625;
   }
 
   .lg\:leading-loose {
@@ -25676,8 +25708,16 @@ table {
     line-height: 1.25;
   }
 
+  .xl\:leading-snug {
+    line-height: 1.375;
+  }
+
   .xl\:leading-normal {
     line-height: 1.5;
+  }
+
+  .xl\:leading-relaxed {
+    line-height: 1.625;
   }
 
   .xl\:leading-loose {
