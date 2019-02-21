@@ -2675,20 +2675,140 @@ table {
   cursor: default;
 }
 
+.cursor-none {
+  cursor: none;
+}
+
+.cursor-context-menu {
+  cursor: context-menu;
+}
+
+.cursor-help {
+  cursor: help;
+}
+
 .cursor-pointer {
   cursor: pointer;
+}
+
+.cursor-progress {
+  cursor: progress;
 }
 
 .cursor-wait {
   cursor: wait;
 }
 
+.cursor-cell {
+  cursor: cell;
+}
+
+.cursor-crosshair {
+  cursor: crosshair;
+}
+
+.cursor-text {
+  cursor: text;
+}
+
+.cursor-vertical-text {
+  cursor: vertical-text;
+}
+
+.cursor-alias {
+  cursor: alias;
+}
+
+.cursor-copy {
+  cursor: copy;
+}
+
 .cursor-move {
   cursor: move;
 }
 
+.cursor-no-drop {
+  cursor: no-drop;
+}
+
 .cursor-not-allowed {
   cursor: not-allowed;
+}
+
+.cursor-all-scroll {
+  cursor: all-scroll;
+}
+
+.cursor-col-resize {
+  cursor: col-resize;
+}
+
+.cursor-row-resize {
+  cursor: row-resize;
+}
+
+.cursor-n-resize {
+  cursor: n-resize;
+}
+
+.cursor-e-resize {
+  cursor: e-resize;
+}
+
+.cursor-s-resize {
+  cursor: s-resize;
+}
+
+.cursor-w-resize {
+  cursor: w-resize;
+}
+
+.cursor-ne-resize {
+  cursor: ne-resize;
+}
+
+.cursor-nw-resize {
+  cursor: nw-resize;
+}
+
+.cursor-se-resize {
+  cursor: se-resize;
+}
+
+.cursor-sw-resize {
+  cursor: sw-resize;
+}
+
+.cursor-ew-resize {
+  cursor: ew-resize;
+}
+
+.cursor-ns-resize {
+  cursor: ns-resize;
+}
+
+.cursor-nesw-resize {
+  cursor: nesw-resize;
+}
+
+.cursor-nwse-resize {
+  cursor: nwse-resize;
+}
+
+.cursor-zoom-in {
+  cursor: zoom-in;
+}
+
+.cursor-zoom-out {
+  cursor: zoom-out;
+}
+
+.cursor-grab {
+  cursor: grab;
+}
+
+.cursor-grabbing {
+  cursor: grabbing;
 }
 
 .block {
@@ -8332,20 +8452,140 @@ table {
     cursor: default;
   }
 
+  .sm\:cursor-none {
+    cursor: none;
+  }
+
+  .sm\:cursor-context-menu {
+    cursor: context-menu;
+  }
+
+  .sm\:cursor-help {
+    cursor: help;
+  }
+
   .sm\:cursor-pointer {
     cursor: pointer;
+  }
+
+  .sm\:cursor-progress {
+    cursor: progress;
   }
 
   .sm\:cursor-wait {
     cursor: wait;
   }
 
+  .sm\:cursor-cell {
+    cursor: cell;
+  }
+
+  .sm\:cursor-crosshair {
+    cursor: crosshair;
+  }
+
+  .sm\:cursor-text {
+    cursor: text;
+  }
+
+  .sm\:cursor-vertical-text {
+    cursor: vertical-text;
+  }
+
+  .sm\:cursor-alias {
+    cursor: alias;
+  }
+
+  .sm\:cursor-copy {
+    cursor: copy;
+  }
+
   .sm\:cursor-move {
     cursor: move;
   }
 
+  .sm\:cursor-no-drop {
+    cursor: no-drop;
+  }
+
   .sm\:cursor-not-allowed {
     cursor: not-allowed;
+  }
+
+  .sm\:cursor-all-scroll {
+    cursor: all-scroll;
+  }
+
+  .sm\:cursor-col-resize {
+    cursor: col-resize;
+  }
+
+  .sm\:cursor-row-resize {
+    cursor: row-resize;
+  }
+
+  .sm\:cursor-n-resize {
+    cursor: n-resize;
+  }
+
+  .sm\:cursor-e-resize {
+    cursor: e-resize;
+  }
+
+  .sm\:cursor-s-resize {
+    cursor: s-resize;
+  }
+
+  .sm\:cursor-w-resize {
+    cursor: w-resize;
+  }
+
+  .sm\:cursor-ne-resize {
+    cursor: ne-resize;
+  }
+
+  .sm\:cursor-nw-resize {
+    cursor: nw-resize;
+  }
+
+  .sm\:cursor-se-resize {
+    cursor: se-resize;
+  }
+
+  .sm\:cursor-sw-resize {
+    cursor: sw-resize;
+  }
+
+  .sm\:cursor-ew-resize {
+    cursor: ew-resize;
+  }
+
+  .sm\:cursor-ns-resize {
+    cursor: ns-resize;
+  }
+
+  .sm\:cursor-nesw-resize {
+    cursor: nesw-resize;
+  }
+
+  .sm\:cursor-nwse-resize {
+    cursor: nwse-resize;
+  }
+
+  .sm\:cursor-zoom-in {
+    cursor: zoom-in;
+  }
+
+  .sm\:cursor-zoom-out {
+    cursor: zoom-out;
+  }
+
+  .sm\:cursor-grab {
+    cursor: grab;
+  }
+
+  .sm\:cursor-grabbing {
+    cursor: grabbing;
   }
 
   .sm\:block {
@@ -13974,20 +14214,140 @@ table {
     cursor: default;
   }
 
+  .md\:cursor-none {
+    cursor: none;
+  }
+
+  .md\:cursor-context-menu {
+    cursor: context-menu;
+  }
+
+  .md\:cursor-help {
+    cursor: help;
+  }
+
   .md\:cursor-pointer {
     cursor: pointer;
+  }
+
+  .md\:cursor-progress {
+    cursor: progress;
   }
 
   .md\:cursor-wait {
     cursor: wait;
   }
 
+  .md\:cursor-cell {
+    cursor: cell;
+  }
+
+  .md\:cursor-crosshair {
+    cursor: crosshair;
+  }
+
+  .md\:cursor-text {
+    cursor: text;
+  }
+
+  .md\:cursor-vertical-text {
+    cursor: vertical-text;
+  }
+
+  .md\:cursor-alias {
+    cursor: alias;
+  }
+
+  .md\:cursor-copy {
+    cursor: copy;
+  }
+
   .md\:cursor-move {
     cursor: move;
   }
 
+  .md\:cursor-no-drop {
+    cursor: no-drop;
+  }
+
   .md\:cursor-not-allowed {
     cursor: not-allowed;
+  }
+
+  .md\:cursor-all-scroll {
+    cursor: all-scroll;
+  }
+
+  .md\:cursor-col-resize {
+    cursor: col-resize;
+  }
+
+  .md\:cursor-row-resize {
+    cursor: row-resize;
+  }
+
+  .md\:cursor-n-resize {
+    cursor: n-resize;
+  }
+
+  .md\:cursor-e-resize {
+    cursor: e-resize;
+  }
+
+  .md\:cursor-s-resize {
+    cursor: s-resize;
+  }
+
+  .md\:cursor-w-resize {
+    cursor: w-resize;
+  }
+
+  .md\:cursor-ne-resize {
+    cursor: ne-resize;
+  }
+
+  .md\:cursor-nw-resize {
+    cursor: nw-resize;
+  }
+
+  .md\:cursor-se-resize {
+    cursor: se-resize;
+  }
+
+  .md\:cursor-sw-resize {
+    cursor: sw-resize;
+  }
+
+  .md\:cursor-ew-resize {
+    cursor: ew-resize;
+  }
+
+  .md\:cursor-ns-resize {
+    cursor: ns-resize;
+  }
+
+  .md\:cursor-nesw-resize {
+    cursor: nesw-resize;
+  }
+
+  .md\:cursor-nwse-resize {
+    cursor: nwse-resize;
+  }
+
+  .md\:cursor-zoom-in {
+    cursor: zoom-in;
+  }
+
+  .md\:cursor-zoom-out {
+    cursor: zoom-out;
+  }
+
+  .md\:cursor-grab {
+    cursor: grab;
+  }
+
+  .md\:cursor-grabbing {
+    cursor: grabbing;
   }
 
   .md\:block {
@@ -19616,20 +19976,140 @@ table {
     cursor: default;
   }
 
+  .lg\:cursor-none {
+    cursor: none;
+  }
+
+  .lg\:cursor-context-menu {
+    cursor: context-menu;
+  }
+
+  .lg\:cursor-help {
+    cursor: help;
+  }
+
   .lg\:cursor-pointer {
     cursor: pointer;
+  }
+
+  .lg\:cursor-progress {
+    cursor: progress;
   }
 
   .lg\:cursor-wait {
     cursor: wait;
   }
 
+  .lg\:cursor-cell {
+    cursor: cell;
+  }
+
+  .lg\:cursor-crosshair {
+    cursor: crosshair;
+  }
+
+  .lg\:cursor-text {
+    cursor: text;
+  }
+
+  .lg\:cursor-vertical-text {
+    cursor: vertical-text;
+  }
+
+  .lg\:cursor-alias {
+    cursor: alias;
+  }
+
+  .lg\:cursor-copy {
+    cursor: copy;
+  }
+
   .lg\:cursor-move {
     cursor: move;
   }
 
+  .lg\:cursor-no-drop {
+    cursor: no-drop;
+  }
+
   .lg\:cursor-not-allowed {
     cursor: not-allowed;
+  }
+
+  .lg\:cursor-all-scroll {
+    cursor: all-scroll;
+  }
+
+  .lg\:cursor-col-resize {
+    cursor: col-resize;
+  }
+
+  .lg\:cursor-row-resize {
+    cursor: row-resize;
+  }
+
+  .lg\:cursor-n-resize {
+    cursor: n-resize;
+  }
+
+  .lg\:cursor-e-resize {
+    cursor: e-resize;
+  }
+
+  .lg\:cursor-s-resize {
+    cursor: s-resize;
+  }
+
+  .lg\:cursor-w-resize {
+    cursor: w-resize;
+  }
+
+  .lg\:cursor-ne-resize {
+    cursor: ne-resize;
+  }
+
+  .lg\:cursor-nw-resize {
+    cursor: nw-resize;
+  }
+
+  .lg\:cursor-se-resize {
+    cursor: se-resize;
+  }
+
+  .lg\:cursor-sw-resize {
+    cursor: sw-resize;
+  }
+
+  .lg\:cursor-ew-resize {
+    cursor: ew-resize;
+  }
+
+  .lg\:cursor-ns-resize {
+    cursor: ns-resize;
+  }
+
+  .lg\:cursor-nesw-resize {
+    cursor: nesw-resize;
+  }
+
+  .lg\:cursor-nwse-resize {
+    cursor: nwse-resize;
+  }
+
+  .lg\:cursor-zoom-in {
+    cursor: zoom-in;
+  }
+
+  .lg\:cursor-zoom-out {
+    cursor: zoom-out;
+  }
+
+  .lg\:cursor-grab {
+    cursor: grab;
+  }
+
+  .lg\:cursor-grabbing {
+    cursor: grabbing;
   }
 
   .lg\:block {
@@ -25258,20 +25738,140 @@ table {
     cursor: default;
   }
 
+  .xl\:cursor-none {
+    cursor: none;
+  }
+
+  .xl\:cursor-context-menu {
+    cursor: context-menu;
+  }
+
+  .xl\:cursor-help {
+    cursor: help;
+  }
+
   .xl\:cursor-pointer {
     cursor: pointer;
+  }
+
+  .xl\:cursor-progress {
+    cursor: progress;
   }
 
   .xl\:cursor-wait {
     cursor: wait;
   }
 
+  .xl\:cursor-cell {
+    cursor: cell;
+  }
+
+  .xl\:cursor-crosshair {
+    cursor: crosshair;
+  }
+
+  .xl\:cursor-text {
+    cursor: text;
+  }
+
+  .xl\:cursor-vertical-text {
+    cursor: vertical-text;
+  }
+
+  .xl\:cursor-alias {
+    cursor: alias;
+  }
+
+  .xl\:cursor-copy {
+    cursor: copy;
+  }
+
   .xl\:cursor-move {
     cursor: move;
   }
 
+  .xl\:cursor-no-drop {
+    cursor: no-drop;
+  }
+
   .xl\:cursor-not-allowed {
     cursor: not-allowed;
+  }
+
+  .xl\:cursor-all-scroll {
+    cursor: all-scroll;
+  }
+
+  .xl\:cursor-col-resize {
+    cursor: col-resize;
+  }
+
+  .xl\:cursor-row-resize {
+    cursor: row-resize;
+  }
+
+  .xl\:cursor-n-resize {
+    cursor: n-resize;
+  }
+
+  .xl\:cursor-e-resize {
+    cursor: e-resize;
+  }
+
+  .xl\:cursor-s-resize {
+    cursor: s-resize;
+  }
+
+  .xl\:cursor-w-resize {
+    cursor: w-resize;
+  }
+
+  .xl\:cursor-ne-resize {
+    cursor: ne-resize;
+  }
+
+  .xl\:cursor-nw-resize {
+    cursor: nw-resize;
+  }
+
+  .xl\:cursor-se-resize {
+    cursor: se-resize;
+  }
+
+  .xl\:cursor-sw-resize {
+    cursor: sw-resize;
+  }
+
+  .xl\:cursor-ew-resize {
+    cursor: ew-resize;
+  }
+
+  .xl\:cursor-ns-resize {
+    cursor: ns-resize;
+  }
+
+  .xl\:cursor-nesw-resize {
+    cursor: nesw-resize;
+  }
+
+  .xl\:cursor-nwse-resize {
+    cursor: nwse-resize;
+  }
+
+  .xl\:cursor-zoom-in {
+    cursor: zoom-in;
+  }
+
+  .xl\:cursor-zoom-out {
+    cursor: zoom-out;
+  }
+
+  .xl\:cursor-grab {
+    cursor: grab;
+  }
+
+  .xl\:cursor-grabbing {
+    cursor: grabbing;
   }
 
   .xl\:block {
