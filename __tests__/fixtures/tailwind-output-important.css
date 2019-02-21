@@ -3093,8 +3093,16 @@ table {
   line-height: 1.25 !important;
 }
 
+.leading-snug {
+  line-height: 1.375 !important;
+}
+
 .leading-normal {
   line-height: 1.5 !important;
+}
+
+.leading-relaxed {
+  line-height: 1.625 !important;
 }
 
 .leading-loose {
@@ -8750,8 +8758,16 @@ table {
     line-height: 1.25 !important;
   }
 
+  .sm\:leading-snug {
+    line-height: 1.375 !important;
+  }
+
   .sm\:leading-normal {
     line-height: 1.5 !important;
+  }
+
+  .sm\:leading-relaxed {
+    line-height: 1.625 !important;
   }
 
   .sm\:leading-loose {
@@ -14392,8 +14408,16 @@ table {
     line-height: 1.25 !important;
   }
 
+  .md\:leading-snug {
+    line-height: 1.375 !important;
+  }
+
   .md\:leading-normal {
     line-height: 1.5 !important;
+  }
+
+  .md\:leading-relaxed {
+    line-height: 1.625 !important;
   }
 
   .md\:leading-loose {
@@ -20034,8 +20058,16 @@ table {
     line-height: 1.25 !important;
   }
 
+  .lg\:leading-snug {
+    line-height: 1.375 !important;
+  }
+
   .lg\:leading-normal {
     line-height: 1.5 !important;
+  }
+
+  .lg\:leading-relaxed {
+    line-height: 1.625 !important;
   }
 
   .lg\:leading-loose {
@@ -25676,8 +25708,16 @@ table {
     line-height: 1.25 !important;
   }
 
+  .xl\:leading-snug {
+    line-height: 1.375 !important;
+  }
+
   .xl\:leading-normal {
     line-height: 1.5 !important;
+  }
+
+  .xl\:leading-relaxed {
+    line-height: 1.625 !important;
   }
 
   .xl\:leading-loose {
