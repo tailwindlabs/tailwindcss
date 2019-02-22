@@ -210,6 +210,14 @@ module.exports = function() {
       lg: '.5rem',
       full: '9999px',
     },
+    cursor: {
+      'auto': 'auto',
+      'default': 'default',
+      'pointer': 'pointer',
+      'wait': 'wait',
+      'move': 'move',
+      'not-allowed': 'not-allowed',
+    },
     width: theme => ({
       auto: 'auto',
       ...theme.spacing,
