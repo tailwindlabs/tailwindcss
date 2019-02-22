@@ -211,11 +211,11 @@ module.exports = function() {
       full: '9999px',
     },
     cursor: {
-      'auto': 'auto',
-      'default': 'default',
-      'pointer': 'pointer',
-      'wait': 'wait',
-      'move': 'move',
+      auto: 'auto',
+      default: 'default',
+      pointer: 'pointer',
+      wait: 'wait',
+      move: 'move',
       'not-allowed': 'not-allowed',
     },
     width: theme => ({

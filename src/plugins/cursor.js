@@ -7,7 +7,7 @@ export default function({ values, variants }) {
         return [
           `.${e(`cursor-${modifier}`)}`,
           {
-            'cursor': value,
+            cursor: value,
           },
         ]
       })
