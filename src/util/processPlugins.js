@@ -27,6 +27,7 @@ export default function(plugins, config) {
 
   plugins.forEach(plugin => {
     plugin({
+      postcss,
       config: (path, defaultValue) => _.get(config, path, defaultValue),
       e: escapeClassName,
       prefix: applyConfiguredPrefix,
