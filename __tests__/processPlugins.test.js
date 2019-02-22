@@ -284,7 +284,7 @@ test('plugins can add base styles with object syntax', () => {
 test('plugins can add base styles with raw PostCSS nodes', () => {
   const { base } = processPlugins(
     [
-      function({ addBase }) {
+      function({ addBase, postcss }) {
         addBase([
           postcss.rule({ selector: 'img' }).append([
             postcss.decl({
