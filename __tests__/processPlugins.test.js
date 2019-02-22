@@ -1,9 +1,9 @@
 import _ from 'lodash'
-import postcss from 'postcss'
+import _postcss from 'postcss'
 import processPlugins from '../src/util/processPlugins'
 
 function css(nodes) {
-  return postcss.root({ nodes }).toString()
+  return _postcss.root({ nodes }).toString()
 }
 
 function makeConfig(overrides) {
@@ -97,7 +97,7 @@ test('plugins can create utilities with arrays of objects', () => {
 test('plugins can create utilities with raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      function({ addUtilities, postcss }) {
         addUtilities([
           postcss.rule({ selector: '.object-fill' }).append([
             postcss.decl({
@@ -142,7 +142,7 @@ test('plugins can create utilities with raw PostCSS nodes', () => {
 test('plugins can create utilities with mixed object styles and PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      function({ addUtilities, postcss }) {
         addUtilities([
           {
             '.object-fill': {
@@ -259,7 +259,7 @@ test('plugins can create components with object syntax', () => {
 test('plugins can create components with raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents }) {
+      function({ addComponents, postcss }) {
         addComponents([
           postcss.rule({ selector: '.btn-blue' }).append([
             postcss.decl({
@@ -308,7 +308,7 @@ test('plugins can create components with raw PostCSS nodes', () => {
 test('plugins can create components with mixed object styles and raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents }) {
+      function({ addComponents, postcss }) {
         addComponents([
           postcss.rule({ selector: '.btn-blue' }).append([
             postcss.decl({
