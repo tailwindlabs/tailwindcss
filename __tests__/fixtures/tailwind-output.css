@@ -6019,12 +6019,20 @@ table {
   white-space: pre-wrap;
 }
 
-.break-words {
-  word-wrap: break-word;
+.wrap-break {
+  overflow-wrap: break-word;
+}
+
+.wrap-normal {
+  overflow-wrap: normal;
 }
 
 .break-normal {
-  word-wrap: normal;
+  word-break: normal;
+}
+
+.break-all {
+  word-break: break-all;
 }
 
 .truncate {
@@ -11680,12 +11688,20 @@ table {
     white-space: pre-wrap;
   }
 
-  .sm\:break-words {
-    word-wrap: break-word;
+  .sm\:wrap-break {
+    overflow-wrap: break-word;
+  }
+
+  .sm\:wrap-normal {
+    overflow-wrap: normal;
   }
 
   .sm\:break-normal {
-    word-wrap: normal;
+    word-break: normal;
+  }
+
+  .sm\:break-all {
+    word-break: break-all;
   }
 
   .sm\:truncate {
@@ -17342,12 +17358,20 @@ table {
     white-space: pre-wrap;
   }
 
-  .md\:break-words {
-    word-wrap: break-word;
+  .md\:wrap-break {
+    overflow-wrap: break-word;
+  }
+
+  .md\:wrap-normal {
+    overflow-wrap: normal;
   }
 
   .md\:break-normal {
-    word-wrap: normal;
+    word-break: normal;
+  }
+
+  .md\:break-all {
+    word-break: break-all;
   }
 
   .md\:truncate {
@@ -23004,12 +23028,20 @@ table {
     white-space: pre-wrap;
   }
 
-  .lg\:break-words {
-    word-wrap: break-word;
+  .lg\:wrap-break {
+    overflow-wrap: break-word;
+  }
+
+  .lg\:wrap-normal {
+    overflow-wrap: normal;
   }
 
   .lg\:break-normal {
-    word-wrap: normal;
+    word-break: normal;
+  }
+
+  .lg\:break-all {
+    word-break: break-all;
   }
 
   .lg\:truncate {
@@ -28666,12 +28698,20 @@ table {
     white-space: pre-wrap;
   }
 
-  .xl\:break-words {
-    word-wrap: break-word;
+  .xl\:wrap-break {
+    overflow-wrap: break-word;
+  }
+
+  .xl\:wrap-normal {
+    overflow-wrap: normal;
   }
 
   .xl\:break-normal {
-    word-wrap: normal;
+    word-break: normal;
+  }
+
+  .xl\:break-all {
+    word-break: break-all;
   }
 
   .xl\:truncate {

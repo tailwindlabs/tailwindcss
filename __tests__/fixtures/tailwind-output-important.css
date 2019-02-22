@@ -6019,12 +6019,20 @@ table {
   white-space: pre-wrap !important;
 }
 
-.break-words {
-  word-wrap: break-word !important;
+.wrap-break {
+  overflow-wrap: break-word !important;
+}
+
+.wrap-normal {
+  overflow-wrap: normal !important;
 }
 
 .break-normal {
-  word-wrap: normal !important;
+  word-break: normal !important;
+}
+
+.break-all {
+  word-break: break-all !important;
 }
 
 .truncate {
@@ -11680,12 +11688,20 @@ table {
     white-space: pre-wrap !important;
   }
 
-  .sm\:break-words {
-    word-wrap: break-word !important;
+  .sm\:wrap-break {
+    overflow-wrap: break-word !important;
+  }
+
+  .sm\:wrap-normal {
+    overflow-wrap: normal !important;
   }
 
   .sm\:break-normal {
-    word-wrap: normal !important;
+    word-break: normal !important;
+  }
+
+  .sm\:break-all {
+    word-break: break-all !important;
   }
 
   .sm\:truncate {
@@ -17342,12 +17358,20 @@ table {
     white-space: pre-wrap !important;
   }
 
-  .md\:break-words {
-    word-wrap: break-word !important;
+  .md\:wrap-break {
+    overflow-wrap: break-word !important;
+  }
+
+  .md\:wrap-normal {
+    overflow-wrap: normal !important;
   }
 
   .md\:break-normal {
-    word-wrap: normal !important;
+    word-break: normal !important;
+  }
+
+  .md\:break-all {
+    word-break: break-all !important;
   }
 
   .md\:truncate {
@@ -23004,12 +23028,20 @@ table {
     white-space: pre-wrap !important;
   }
 
-  .lg\:break-words {
-    word-wrap: break-word !important;
+  .lg\:wrap-break {
+    overflow-wrap: break-word !important;
+  }
+
+  .lg\:wrap-normal {
+    overflow-wrap: normal !important;
   }
 
   .lg\:break-normal {
-    word-wrap: normal !important;
+    word-break: normal !important;
+  }
+
+  .lg\:break-all {
+    word-break: break-all !important;
   }
 
   .lg\:truncate {
@@ -28666,12 +28698,20 @@ table {
     white-space: pre-wrap !important;
   }
 
-  .xl\:break-words {
-    word-wrap: break-word !important;
+  .xl\:wrap-break {
+    overflow-wrap: break-word !important;
+  }
+
+  .xl\:wrap-normal {
+    overflow-wrap: normal !important;
   }
 
   .xl\:break-normal {
-    word-wrap: normal !important;
+    word-break: normal !important;
+  }
+
+  .xl\:break-all {
+    word-break: break-all !important;
   }
 
   .xl\:truncate {

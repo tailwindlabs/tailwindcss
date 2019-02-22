@@ -8,8 +8,11 @@ export default function({ variants }) {
         '.whitespace-pre-line': { 'white-space': 'pre-line' },
         '.whitespace-pre-wrap': { 'white-space': 'pre-wrap' },
 
-        '.break-words': { 'word-wrap': 'break-word' },
-        '.break-normal': { 'word-wrap': 'normal' },
+        '.wrap-break': { 'overflow-wrap': 'break-word' },
+        '.wrap-normal': { 'overflow-wrap': 'normal' },
+
+        '.break-normal': { 'word-break': 'normal' },
+        '.break-all': { 'word-break': 'break-all' },
 
         '.truncate': {
           overflow: 'hidden',
