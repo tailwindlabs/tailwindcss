@@ -1,15 +1,18 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
-    addUtilities(
-      {
-        '.cursor-auto': { cursor: 'auto' },
-        '.cursor-default': { cursor: 'default' },
-        '.cursor-pointer': { cursor: 'pointer' },
-        '.cursor-wait': { cursor: 'wait' },
-        '.cursor-move': { cursor: 'move' },
-        '.cursor-not-allowed': { cursor: 'not-allowed' },
-      },
-      variants
+import _ from 'lodash'
+
+export default function({ values, variants }) {
+  return function({ addUtilities, e }) {
+    const utilities = _.fromPairs(
+      _.map(values, (value, modifier) => {
+        return [
+          `.${e(`cursor-${modifier}`)}`,
+          {
+            cursor: value,
+          },
+        ]
+      })
     )
+
+    addUtilities(utilities, variants)
   }
 }
