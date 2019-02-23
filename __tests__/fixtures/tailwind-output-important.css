@@ -482,9 +482,9 @@ table {
   width: 100%;
 }
 
-@media (min-width: 576px) {
+@media (min-width: 568px) {
   .container {
-    max-width: 576px;
+    max-width: 568px;
   }
 }
 
@@ -494,15 +494,15 @@ table {
   }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .container {
-    max-width: 992px;
+    max-width: 1024px;
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1280px) {
   .container {
-    max-width: 1200px;
+    max-width: 1280px;
   }
 }
 
@@ -6198,7 +6198,7 @@ table {
   color: #e3342f;
 }
 
-@media (min-width: 576px) {
+@media (min-width: 568px) {
   .sm\:list-reset {
     list-style: none !important;
     padding: 0 !important;
@@ -17538,7 +17538,7 @@ table {
   }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .lg\:list-reset {
     list-style: none !important;
     padding: 0 !important;
@@ -23208,7 +23208,7 @@ table {
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1280px) {
   .xl\:list-reset {
     list-style: none !important;
     padding: 0 !important;
