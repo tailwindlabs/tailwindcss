@@ -20,6 +20,7 @@ import alignSelf from './plugins/alignSelf'
 import justifyContent from './plugins/justifyContent'
 import alignContent from './plugins/alignContent'
 import flex from './plugins/flex'
+import flexGrow from './plugins/flexGrow'
 import flexbox from './plugins/flexbox'
 import float from './plugins/float'
 import fontFamily from './plugins/fontFamily'
@@ -101,6 +102,7 @@ export default function(config) {
     justifyContent,
     alignContent,
     flex,
+    flexGrow,
     flexbox,
     float,
     fontFamily,

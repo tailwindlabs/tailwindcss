@@ -2851,16 +2851,16 @@ table {
   flex: none;
 }
 
+.flex-grow-0 {
+  flex-grow: 0;
+}
+
 .flex-grow {
   flex-grow: 1;
 }
 
 .flex-shrink {
   flex-shrink: 1;
-}
-
-.flex-grow-0 {
-  flex-grow: 0;
 }
 
 .flex-shrink-0 {
@@ -8536,16 +8536,16 @@ table {
     flex: none;
   }
 
+  .sm\:flex-grow-0 {
+    flex-grow: 0;
+  }
+
   .sm\:flex-grow {
     flex-grow: 1;
   }
 
   .sm\:flex-shrink {
     flex-shrink: 1;
-  }
-
-  .sm\:flex-grow-0 {
-    flex-grow: 0;
   }
 
   .sm\:flex-shrink-0 {
@@ -14206,16 +14206,16 @@ table {
     flex: none;
   }
 
+  .md\:flex-grow-0 {
+    flex-grow: 0;
+  }
+
   .md\:flex-grow {
     flex-grow: 1;
   }
 
   .md\:flex-shrink {
     flex-shrink: 1;
-  }
-
-  .md\:flex-grow-0 {
-    flex-grow: 0;
   }
 
   .md\:flex-shrink-0 {
@@ -19876,16 +19876,16 @@ table {
     flex: none;
   }
 
+  .lg\:flex-grow-0 {
+    flex-grow: 0;
+  }
+
   .lg\:flex-grow {
     flex-grow: 1;
   }
 
   .lg\:flex-shrink {
     flex-shrink: 1;
-  }
-
-  .lg\:flex-grow-0 {
-    flex-grow: 0;
   }
 
   .lg\:flex-shrink-0 {
@@ -25546,16 +25546,16 @@ table {
     flex: none;
   }
 
+  .xl\:flex-grow-0 {
+    flex-grow: 0;
+  }
+
   .xl\:flex-grow {
     flex-grow: 1;
   }
 
   .xl\:flex-shrink {
     flex-shrink: 1;
-  }
-
-  .xl\:flex-grow-0 {
-    flex-grow: 0;
   }
 
   .xl\:flex-shrink-0 {

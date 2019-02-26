@@ -2851,16 +2851,16 @@ table {
   flex: none !important;
 }
 
+.flex-grow-0 {
+  flex-grow: 0 !important;
+}
+
 .flex-grow {
   flex-grow: 1 !important;
 }
 
 .flex-shrink {
   flex-shrink: 1 !important;
-}
-
-.flex-grow-0 {
-  flex-grow: 0 !important;
 }
 
 .flex-shrink-0 {
@@ -8536,16 +8536,16 @@ table {
     flex: none !important;
   }
 
+  .sm\:flex-grow-0 {
+    flex-grow: 0 !important;
+  }
+
   .sm\:flex-grow {
     flex-grow: 1 !important;
   }
 
   .sm\:flex-shrink {
     flex-shrink: 1 !important;
-  }
-
-  .sm\:flex-grow-0 {
-    flex-grow: 0 !important;
   }
 
   .sm\:flex-shrink-0 {
@@ -14206,16 +14206,16 @@ table {
     flex: none !important;
   }
 
+  .md\:flex-grow-0 {
+    flex-grow: 0 !important;
+  }
+
   .md\:flex-grow {
     flex-grow: 1 !important;
   }
 
   .md\:flex-shrink {
     flex-shrink: 1 !important;
-  }
-
-  .md\:flex-grow-0 {
-    flex-grow: 0 !important;
   }
 
   .md\:flex-shrink-0 {
@@ -19876,16 +19876,16 @@ table {
     flex: none !important;
   }
 
+  .lg\:flex-grow-0 {
+    flex-grow: 0 !important;
+  }
+
   .lg\:flex-grow {
     flex-grow: 1 !important;
   }
 
   .lg\:flex-shrink {
     flex-shrink: 1 !important;
-  }
-
-  .lg\:flex-grow-0 {
-    flex-grow: 0 !important;
   }
 
   .lg\:flex-shrink-0 {
@@ -25546,16 +25546,16 @@ table {
     flex: none !important;
   }
 
+  .xl\:flex-grow-0 {
+    flex-grow: 0 !important;
+  }
+
   .xl\:flex-grow {
     flex-grow: 1 !important;
   }
 
   .xl\:flex-shrink {
     flex-shrink: 1 !important;
-  }
-
-  .xl\:flex-grow-0 {
-    flex-grow: 0 !important;
   }
 
   .xl\:flex-shrink-0 {
