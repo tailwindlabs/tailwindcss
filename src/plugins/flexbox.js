@@ -2,21 +2,6 @@ export default function({ variants }) {
   return function({ addUtilities }) {
     addUtilities(
       {
-        '.self-auto': {
-          'align-self': 'auto',
-        },
-        '.self-start': {
-          'align-self': 'flex-start',
-        },
-        '.self-end': {
-          'align-self': 'flex-end',
-        },
-        '.self-center': {
-          'align-self': 'center',
-        },
-        '.self-stretch': {
-          'align-self': 'stretch',
-        },
         '.justify-start': {
           'justify-content': 'flex-start',
         },

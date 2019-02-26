@@ -16,6 +16,7 @@ import display from './plugins/display'
 import flexDirection from './plugins/flexDirection'
 import flexWrap from './plugins/flexWrap'
 import alignItems from './plugins/alignItems'
+import alignSelf from './plugins/alignSelf'
 import flexbox from './plugins/flexbox'
 import float from './plugins/float'
 import fontFamily from './plugins/fontFamily'
@@ -93,6 +94,7 @@ export default function(config) {
     flexDirection,
     flexWrap,
     alignItems,
+    alignSelf,
     flexbox,
     float,
     fontFamily,
