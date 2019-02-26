@@ -107,10 +107,10 @@ export default function({ variants }) {
         '.flex-shrink': {
           'flex-shrink': '1',
         },
-        '.flex-no-grow': {
+        '.flex-grow-0': {
           'flex-grow': '0',
         },
-        '.flex-no-shrink': {
+        '.flex-shrink-0': {
           'flex-shrink': '0',
         },
       },

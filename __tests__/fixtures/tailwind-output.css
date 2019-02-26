@@ -2859,11 +2859,11 @@ table {
   flex-shrink: 1;
 }
 
-.flex-no-grow {
+.flex-grow-0 {
   flex-grow: 0;
 }
 
-.flex-no-shrink {
+.flex-shrink-0 {
   flex-shrink: 0;
 }
 
@@ -8544,11 +8544,11 @@ table {
     flex-shrink: 1;
   }
 
-  .sm\:flex-no-grow {
+  .sm\:flex-grow-0 {
     flex-grow: 0;
   }
 
-  .sm\:flex-no-shrink {
+  .sm\:flex-shrink-0 {
     flex-shrink: 0;
   }
 
@@ -14214,11 +14214,11 @@ table {
     flex-shrink: 1;
   }
 
-  .md\:flex-no-grow {
+  .md\:flex-grow-0 {
     flex-grow: 0;
   }
 
-  .md\:flex-no-shrink {
+  .md\:flex-shrink-0 {
     flex-shrink: 0;
   }
 
@@ -19884,11 +19884,11 @@ table {
     flex-shrink: 1;
   }
 
-  .lg\:flex-no-grow {
+  .lg\:flex-grow-0 {
     flex-grow: 0;
   }
 
-  .lg\:flex-no-shrink {
+  .lg\:flex-shrink-0 {
     flex-shrink: 0;
   }
 
@@ -25554,11 +25554,11 @@ table {
     flex-shrink: 1;
   }
 
-  .xl\:flex-no-grow {
+  .xl\:flex-grow-0 {
     flex-grow: 0;
   }
 
-  .xl\:flex-no-shrink {
+  .xl\:flex-shrink-0 {
     flex-shrink: 0;
   }
 
