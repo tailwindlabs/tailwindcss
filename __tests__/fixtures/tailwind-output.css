@@ -2859,12 +2859,12 @@ table {
   flex-grow: 1;
 }
 
-.flex-shrink {
-  flex-shrink: 1;
-}
-
 .flex-shrink-0 {
   flex-shrink: 0;
+}
+
+.flex-shrink {
+  flex-shrink: 1;
 }
 
 .float-right {
@@ -8544,12 +8544,12 @@ table {
     flex-grow: 1;
   }
 
-  .sm\:flex-shrink {
-    flex-shrink: 1;
-  }
-
   .sm\:flex-shrink-0 {
     flex-shrink: 0;
+  }
+
+  .sm\:flex-shrink {
+    flex-shrink: 1;
   }
 
   .sm\:float-right {
@@ -14214,12 +14214,12 @@ table {
     flex-grow: 1;
   }
 
-  .md\:flex-shrink {
-    flex-shrink: 1;
-  }
-
   .md\:flex-shrink-0 {
     flex-shrink: 0;
+  }
+
+  .md\:flex-shrink {
+    flex-shrink: 1;
   }
 
   .md\:float-right {
@@ -19884,12 +19884,12 @@ table {
     flex-grow: 1;
   }
 
-  .lg\:flex-shrink {
-    flex-shrink: 1;
-  }
-
   .lg\:flex-shrink-0 {
     flex-shrink: 0;
+  }
+
+  .lg\:flex-shrink {
+    flex-shrink: 1;
   }
 
   .lg\:float-right {
@@ -25554,12 +25554,12 @@ table {
     flex-grow: 1;
   }
 
-  .xl\:flex-shrink {
-    flex-shrink: 1;
-  }
-
   .xl\:flex-shrink-0 {
     flex-shrink: 0;
+  }
+
+  .xl\:flex-shrink {
+    flex-shrink: 1;
   }
 
   .xl\:float-right {

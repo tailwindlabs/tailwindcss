@@ -21,7 +21,7 @@ import justifyContent from './plugins/justifyContent'
 import alignContent from './plugins/alignContent'
 import flex from './plugins/flex'
 import flexGrow from './plugins/flexGrow'
-import flexbox from './plugins/flexbox'
+import flexShrink from './plugins/flexShrink'
 import float from './plugins/float'
 import fontFamily from './plugins/fontFamily'
 import fontWeight from './plugins/fontWeight'
@@ -103,7 +103,7 @@ export default function(config) {
     alignContent,
     flex,
     flexGrow,
-    flexbox,
+    flexShrink,
     float,
     fontFamily,
     fontWeight,

@@ -2859,12 +2859,12 @@ table {
   flex-grow: 1 !important;
 }
 
-.flex-shrink {
-  flex-shrink: 1 !important;
-}
-
 .flex-shrink-0 {
   flex-shrink: 0 !important;
+}
+
+.flex-shrink {
+  flex-shrink: 1 !important;
 }
 
 .float-right {
@@ -8544,12 +8544,12 @@ table {
     flex-grow: 1 !important;
   }
 
-  .sm\:flex-shrink {
-    flex-shrink: 1 !important;
-  }
-
   .sm\:flex-shrink-0 {
     flex-shrink: 0 !important;
+  }
+
+  .sm\:flex-shrink {
+    flex-shrink: 1 !important;
   }
 
   .sm\:float-right {
@@ -14214,12 +14214,12 @@ table {
     flex-grow: 1 !important;
   }
 
-  .md\:flex-shrink {
-    flex-shrink: 1 !important;
-  }
-
   .md\:flex-shrink-0 {
     flex-shrink: 0 !important;
+  }
+
+  .md\:flex-shrink {
+    flex-shrink: 1 !important;
   }
 
   .md\:float-right {
@@ -19884,12 +19884,12 @@ table {
     flex-grow: 1 !important;
   }
 
-  .lg\:flex-shrink {
-    flex-shrink: 1 !important;
-  }
-
   .lg\:flex-shrink-0 {
     flex-shrink: 0 !important;
+  }
+
+  .lg\:flex-shrink {
+    flex-shrink: 1 !important;
   }
 
   .lg\:float-right {
@@ -25554,12 +25554,12 @@ table {
     flex-grow: 1 !important;
   }
 
-  .xl\:flex-shrink {
-    flex-shrink: 1 !important;
-  }
-
   .xl\:flex-shrink-0 {
     flex-shrink: 0 !important;
+  }
+
+  .xl\:flex-shrink {
+    flex-shrink: 1 !important;
   }
 
   .xl\:float-right {

@@ -27,7 +27,7 @@ module.exports = {
     alignContent: ['responsive'],
     flex: ['responsive'],
     flexGrow: ['responsive'],
-    flexbox: ['responsive'],
+    flexShrink: ['responsive'],
     float: ['responsive'],
     fontFamily: ['responsive'],
     fontWeight: ['responsive', 'hover', 'focus'],
