@@ -18,6 +18,7 @@ import flexWrap from './plugins/flexWrap'
 import alignItems from './plugins/alignItems'
 import alignSelf from './plugins/alignSelf'
 import justifyContent from './plugins/justifyContent'
+import alignContent from './plugins/alignContent'
 import flexbox from './plugins/flexbox'
 import float from './plugins/float'
 import fontFamily from './plugins/fontFamily'
@@ -97,6 +98,7 @@ export default function(config) {
     alignItems,
     alignSelf,
     justifyContent,
+    alignContent,
     flexbox,
     float,
     fontFamily,
