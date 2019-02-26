@@ -25,6 +25,7 @@ module.exports = {
     alignSelf: ['responsive'],
     justifyContent: ['responsive'],
     alignContent: ['responsive'],
+    flex: ['responsive'],
     flexbox: ['responsive'],
     float: ['responsive'],
     fontFamily: ['responsive'],
