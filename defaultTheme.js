@@ -314,5 +314,13 @@ module.exports = function() {
     stroke: {
       current: 'currentColor',
     },
+    flexGrow: {
+      '0': 0,
+      default: 1,
+    },
+    flexShrink: {
+      '0': 0,
+      default: 1,
+    },
   }
 }
