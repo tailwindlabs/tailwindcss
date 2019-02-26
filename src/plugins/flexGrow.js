@@ -1,14 +1,19 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+import _ from 'lodash'
+
+export default function({ values, variants }) {
+  return function({ addUtilities, e }) {
     addUtilities(
-      {
-        '.flex-grow-0': {
-          'flex-grow': '0',
-        },
-        '.flex-grow': {
-          'flex-grow': '1',
-        },
-      },
+      _.fromPairs(
+        _.map(values, (value, modifier) => {
+          const className = modifier === 'default' ? 'flex-grow' : `flex-grow-${modifier}`
+          return [
+            `.${e(className)}`,
+            {
+              'flex-grow': value,
+            },
+          ]
+        })
+      ),
       variants
     )
   }

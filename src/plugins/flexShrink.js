@@ -1,14 +1,19 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+import _ from 'lodash'
+
+export default function({ values, variants }) {
+  return function({ addUtilities, e }) {
     addUtilities(
-      {
-        '.flex-shrink-0': {
-          'flex-shrink': '0',
-        },
-        '.flex-shrink': {
-          'flex-shrink': '1',
-        },
-      },
+      _.fromPairs(
+        _.map(values, (value, modifier) => {
+          const className = modifier === 'default' ? 'flex-shrink' : `flex-shrink-${modifier}`
+          return [
+            `.${e(className)}`,
+            {
+              'flex-shrink': value,
+            },
+          ]
+        })
+      ),
       variants
     )
   }
