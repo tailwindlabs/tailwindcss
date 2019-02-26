@@ -20,6 +20,8 @@ return [
         'Container' => 'container',
         'Display' => 'display',
         'Floats' => 'floats',
+        'Object Fit' => 'object-fit',
+        'Object Position' => 'object-position',
         'Overflow' => 'overflow',
         'Position' => 'positioning',
         'Visibility' => 'visibility',
@@ -76,20 +78,20 @@ return [
         'Border Collapse' => 'border-collapse',
         'Table Layout' => 'table-layout',
     ],
+    'Effects' => [
+        'Box Shadow' => 'shadows',
+        'Opacity' => 'opacity',
+    ],
     'Interactivity' => [
+        'Appearance' => 'appearance',
         'Cursor' => 'cursor',
+        'Outline' => 'outline',
         'Pointer Events' => 'pointer-events',
         'Resize' => 'resize',
         'User Select' => 'user-select',
     ],
-    'Miscellaneous' => [
-        'Appearance' => 'appearance',
-        'Box Shadow' => 'shadows',
-        'Object Fit' => 'object-fit',
-        'Object Position' => 'object-position',
-        'Opacity' => 'opacity',
-        'Outline' => 'outline',
-        'SVG' => 'svg',
+    'SVG' => [
+        'Fill &amp; Stroke' => 'svg',
     ],
     'Component Examples' => [
         'Alerts' => 'examples/alerts',
