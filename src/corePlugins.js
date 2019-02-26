@@ -15,6 +15,7 @@ import cursor from './plugins/cursor'
 import display from './plugins/display'
 import flexDirection from './plugins/flexDirection'
 import flexWrap from './plugins/flexWrap'
+import alignItems from './plugins/alignItems'
 import flexbox from './plugins/flexbox'
 import float from './plugins/float'
 import fontFamily from './plugins/fontFamily'
@@ -91,6 +92,7 @@ export default function(config) {
     display,
     flexDirection,
     flexWrap,
+    alignItems,
     flexbox,
     float,
     fontFamily,
