@@ -2703,6 +2703,14 @@ table {
   display: inline !important;
 }
 
+.flex {
+  display: flex !important;
+}
+
+.inline-flex {
+  display: inline-flex !important;
+}
+
 .table {
   display: table !important;
 }
@@ -2717,14 +2725,6 @@ table {
 
 .hidden {
   display: none !important;
-}
-
-.flex {
-  display: flex !important;
-}
-
-.inline-flex {
-  display: inline-flex !important;
 }
 
 .flex-row {
@@ -2851,20 +2851,20 @@ table {
   flex: none !important;
 }
 
-.flex-grow {
-  flex-grow: 1 !important;
-}
-
-.flex-shrink {
-  flex-shrink: 1 !important;
-}
-
 .flex-grow-0 {
   flex-grow: 0 !important;
 }
 
+.flex-grow {
+  flex-grow: 1 !important;
+}
+
 .flex-shrink-0 {
   flex-shrink: 0 !important;
+}
+
+.flex-shrink {
+  flex-shrink: 1 !important;
 }
 
 .float-right {
@@ -8388,6 +8388,14 @@ table {
     display: inline !important;
   }
 
+  .sm\:flex {
+    display: flex !important;
+  }
+
+  .sm\:inline-flex {
+    display: inline-flex !important;
+  }
+
   .sm\:table {
     display: table !important;
   }
@@ -8402,14 +8410,6 @@ table {
 
   .sm\:hidden {
     display: none !important;
-  }
-
-  .sm\:flex {
-    display: flex !important;
-  }
-
-  .sm\:inline-flex {
-    display: inline-flex !important;
   }
 
   .sm\:flex-row {
@@ -8536,20 +8536,20 @@ table {
     flex: none !important;
   }
 
-  .sm\:flex-grow {
-    flex-grow: 1 !important;
-  }
-
-  .sm\:flex-shrink {
-    flex-shrink: 1 !important;
-  }
-
   .sm\:flex-grow-0 {
     flex-grow: 0 !important;
   }
 
+  .sm\:flex-grow {
+    flex-grow: 1 !important;
+  }
+
   .sm\:flex-shrink-0 {
     flex-shrink: 0 !important;
+  }
+
+  .sm\:flex-shrink {
+    flex-shrink: 1 !important;
   }
 
   .sm\:float-right {
@@ -14058,6 +14058,14 @@ table {
     display: inline !important;
   }
 
+  .md\:flex {
+    display: flex !important;
+  }
+
+  .md\:inline-flex {
+    display: inline-flex !important;
+  }
+
   .md\:table {
     display: table !important;
   }
@@ -14072,14 +14080,6 @@ table {
 
   .md\:hidden {
     display: none !important;
-  }
-
-  .md\:flex {
-    display: flex !important;
-  }
-
-  .md\:inline-flex {
-    display: inline-flex !important;
   }
 
   .md\:flex-row {
@@ -14206,20 +14206,20 @@ table {
     flex: none !important;
   }
 
-  .md\:flex-grow {
-    flex-grow: 1 !important;
-  }
-
-  .md\:flex-shrink {
-    flex-shrink: 1 !important;
-  }
-
   .md\:flex-grow-0 {
     flex-grow: 0 !important;
   }
 
+  .md\:flex-grow {
+    flex-grow: 1 !important;
+  }
+
   .md\:flex-shrink-0 {
     flex-shrink: 0 !important;
+  }
+
+  .md\:flex-shrink {
+    flex-shrink: 1 !important;
   }
 
   .md\:float-right {
@@ -19728,6 +19728,14 @@ table {
     display: inline !important;
   }
 
+  .lg\:flex {
+    display: flex !important;
+  }
+
+  .lg\:inline-flex {
+    display: inline-flex !important;
+  }
+
   .lg\:table {
     display: table !important;
   }
@@ -19742,14 +19750,6 @@ table {
 
   .lg\:hidden {
     display: none !important;
-  }
-
-  .lg\:flex {
-    display: flex !important;
-  }
-
-  .lg\:inline-flex {
-    display: inline-flex !important;
   }
 
   .lg\:flex-row {
@@ -19876,20 +19876,20 @@ table {
     flex: none !important;
   }
 
-  .lg\:flex-grow {
-    flex-grow: 1 !important;
-  }
-
-  .lg\:flex-shrink {
-    flex-shrink: 1 !important;
-  }
-
   .lg\:flex-grow-0 {
     flex-grow: 0 !important;
   }
 
+  .lg\:flex-grow {
+    flex-grow: 1 !important;
+  }
+
   .lg\:flex-shrink-0 {
     flex-shrink: 0 !important;
+  }
+
+  .lg\:flex-shrink {
+    flex-shrink: 1 !important;
   }
 
   .lg\:float-right {
@@ -25398,6 +25398,14 @@ table {
     display: inline !important;
   }
 
+  .xl\:flex {
+    display: flex !important;
+  }
+
+  .xl\:inline-flex {
+    display: inline-flex !important;
+  }
+
   .xl\:table {
     display: table !important;
   }
@@ -25412,14 +25420,6 @@ table {
 
   .xl\:hidden {
     display: none !important;
-  }
-
-  .xl\:flex {
-    display: flex !important;
-  }
-
-  .xl\:inline-flex {
-    display: inline-flex !important;
   }
 
   .xl\:flex-row {
@@ -25546,20 +25546,20 @@ table {
     flex: none !important;
   }
 
-  .xl\:flex-grow {
-    flex-grow: 1 !important;
-  }
-
-  .xl\:flex-shrink {
-    flex-shrink: 1 !important;
-  }
-
   .xl\:flex-grow-0 {
     flex-grow: 0 !important;
   }
 
+  .xl\:flex-grow {
+    flex-grow: 1 !important;
+  }
+
   .xl\:flex-shrink-0 {
     flex-shrink: 0 !important;
+  }
+
+  .xl\:flex-shrink {
+    flex-shrink: 1 !important;
   }
 
   .xl\:float-right {
