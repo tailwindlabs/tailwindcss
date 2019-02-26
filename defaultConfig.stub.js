@@ -20,6 +20,7 @@ module.exports = {
     cursor: ['responsive'],
     display: ['responsive'],
     flexDirection: ['responsive'],
+    flexWrap: ['responsive'],
     flexbox: ['responsive'],
     float: ['responsive'],
     fontFamily: ['responsive'],
