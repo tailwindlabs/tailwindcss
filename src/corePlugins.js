@@ -13,6 +13,7 @@ import borderStyle from './plugins/borderStyle'
 import borderWidth from './plugins/borderWidth'
 import cursor from './plugins/cursor'
 import display from './plugins/display'
+import flexDirection from './plugins/flexDirection'
 import flexbox from './plugins/flexbox'
 import float from './plugins/float'
 import fontFamily from './plugins/fontFamily'
@@ -87,6 +88,7 @@ export default function(config) {
     borderWidth,
     cursor,
     display,
+    flexDirection,
     flexbox,
     float,
     fontFamily,

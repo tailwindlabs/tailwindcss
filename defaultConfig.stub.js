@@ -19,6 +19,7 @@ module.exports = {
     borderWidth: ['responsive'],
     cursor: ['responsive'],
     display: ['responsive'],
+    flexDirection: ['responsive'],
     flexbox: ['responsive'],
     float: ['responsive'],
     fontFamily: ['responsive'],
