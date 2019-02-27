@@ -44,7 +44,7 @@
     "autoprefixer": "^9.4.5",
     "bytes": "^3.0.0",
     "chalk": "^2.4.1",
-    "css.escape": "^1.5.1",
+    "cssesc": "^3.0.0",
     "fs-extra": "^4.0.2",
     "lodash": "^4.17.11",
     "node-emoji": "^1.8.1",

@@ -1,5 +1,5 @@
-import escape from 'css.escape'
+import cssesc from 'cssesc'
 
 export default function escapeClassName(className) {
-  return escape(className)
+  return cssesc(className, { isIdentifier: true })
 }
