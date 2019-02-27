@@ -322,5 +322,10 @@ module.exports = function() {
       '0': 0,
       default: 1,
     },
+    order: {
+      first: -1,
+      last: 1,
+      none: 0
+    },
   }
 }
