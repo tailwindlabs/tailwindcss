@@ -105,6 +105,7 @@ export default function(config) {
     flex,
     flexGrow,
     flexShrink,
+    order,
     float,
     fontFamily,
     fontWeight,
