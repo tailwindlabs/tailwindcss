@@ -5,12 +5,14 @@ import resolveConfig from '../src/util/resolveConfig'
 import corePlugins from '../src/corePlugins'
 import defaultConfig from '../defaultConfig.stub.js'
 
+const resolvedDefaultConfig = resolveConfig([defaultConfig])
+
 const { utilities: defaultUtilities } = processPlugins(
-  corePlugins(resolveConfig([defaultConfig])),
-  defaultConfig
+  corePlugins(resolvedDefaultConfig),
+  resolvedDefaultConfig
 )
 
-function run(input, config = defaultConfig, utilities = defaultUtilities) {
+function run(input, config = resolvedDefaultConfig, utilities = defaultUtilities) {
   return postcss([substituteClassApplyAtRules(config, utilities)]).process(input, {
     from: undefined,
   })
