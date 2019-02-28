@@ -1,5 +1,5 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, config }) {
     addUtilities(
       {
         '.block': {
@@ -30,7 +30,7 @@ export default function({ variants }) {
           display: 'none',
         },
       },
-      variants
+      config('variants.display')
     )
   }
 }
