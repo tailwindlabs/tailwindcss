@@ -1,11 +1,11 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, config }) {
     addUtilities(
       {
         '.visible': { visibility: 'visible' },
         '.invisible': { visibility: 'hidden' },
       },
-      variants
+      config('variants.visibility')
     )
   }
 }
