@@ -1,9 +1,9 @@
 import _ from 'lodash'
 
-export default function({ values, variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, config }) {
     const utilities = _.fromPairs(
-      _.map(values, (value, modifier) => {
+      _.map(config('theme.zIndex'), (value, modifier) => {
         return [
           `.z-${modifier}`,
           {
@@ -13,6 +13,6 @@ export default function({ values, variants }) {
       })
     )
 
-    addUtilities(utilities, variants)
+    addUtilities(utilities, config('variants.zIndex'))
   }
 }
