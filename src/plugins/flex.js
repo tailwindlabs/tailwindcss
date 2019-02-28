@@ -1,5 +1,5 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, config }) {
     addUtilities(
       {
         '.flex-1': {
@@ -15,7 +15,7 @@ export default function({ variants }) {
           flex: 'none',
         },
       },
-      variants
+      config('variants.flex')
     )
   }
 }

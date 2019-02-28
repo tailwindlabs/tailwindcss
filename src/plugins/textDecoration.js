@@ -1,12 +1,12 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, config }) {
     addUtilities(
       {
         '.underline': { 'text-decoration': 'underline' },
         '.line-through': { 'text-decoration': 'line-through' },
         '.no-underline': { 'text-decoration': 'none' },
       },
-      variants
+      config('variants.textDecoration')
     )
   }
 }

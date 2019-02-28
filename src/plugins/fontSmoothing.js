@@ -1,5 +1,5 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, config }) {
     addUtilities(
       {
         '.antialiased': {
@@ -11,7 +11,7 @@ export default function({ variants }) {
           '-moz-osx-font-smoothing': 'auto',
         },
       },
-      variants
+      config('variants.fontSmoothing')
     )
   }
 }

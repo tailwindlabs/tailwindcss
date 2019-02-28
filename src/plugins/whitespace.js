@@ -1,5 +1,5 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, config }) {
     addUtilities(
       {
         '.whitespace-normal': { 'white-space': 'normal' },
@@ -20,7 +20,7 @@ export default function({ variants }) {
           'white-space': 'nowrap',
         },
       },
-      variants
+      config('variants.whitespace')
     )
   }
 }

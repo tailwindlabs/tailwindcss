@@ -1,9 +1,9 @@
 import _ from 'lodash'
 
-export default function({ values, variants }) {
-  return function({ addUtilities, e }) {
+export default function() {
+  return function({ addUtilities, e, config }) {
     const utilities = _.fromPairs(
-      _.map(values, (value, modifier) => {
+      _.map(config('theme.boxShadow'), (value, modifier) => {
         const className = modifier === 'default' ? 'shadow' : `shadow-${modifier}`
         return [
           `.${e(className)}`,
@@ -14,6 +14,6 @@ export default function({ values, variants }) {
       })
     )
 
-    addUtilities(utilities, variants)
+    addUtilities(utilities, config('variants.boxShadow'))
   }
 }

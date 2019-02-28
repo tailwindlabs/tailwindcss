@@ -1,5 +1,5 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, config }) {
     addUtilities(
       {
         '.items-start': {
@@ -18,7 +18,7 @@ export default function({ variants }) {
           'align-items': 'stretch',
         },
       },
-      variants
+      config('variants.alignItems')
     )
   }
 }

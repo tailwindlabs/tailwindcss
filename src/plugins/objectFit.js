@@ -1,5 +1,5 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, config }) {
     addUtilities(
       {
         '.object-contain': { 'object-fit': 'contain' },
@@ -8,7 +8,7 @@ export default function({ variants }) {
         '.object-none': { 'object-fit': 'none' },
         '.object-scale-down': { 'object-fit': 'scale-down' },
       },
-      variants
+      config('variants.objectFit')
     )
   }
 }

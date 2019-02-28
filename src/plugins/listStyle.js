@@ -1,5 +1,5 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, config }) {
     addUtilities(
       {
         '.list-reset': {
@@ -7,7 +7,7 @@ export default function({ variants }) {
           padding: '0',
         },
       },
-      variants
+      config('variants.listStyle')
     )
   }
 }

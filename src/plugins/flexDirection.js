@@ -1,5 +1,5 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, config }) {
     addUtilities(
       {
         '.flex-row': {
@@ -15,7 +15,7 @@ export default function({ variants }) {
           'flex-direction': 'column-reverse',
         },
       },
-      variants
+      config('variants.flexDirection')
     )
   }
 }
