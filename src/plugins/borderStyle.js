@@ -15,7 +15,7 @@ export default function() {
           'border-style': 'none',
         },
       },
-      config('borderStyle.variants')
+      config('variants.borderStyle')
     )
   }
 }
