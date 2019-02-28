@@ -300,10 +300,43 @@ test('plugin variants can modify selectors with a simplified API', () => {
     ...config,
     plugins: [
       ...config.plugins,
-      function({ addVariant }) {
+      function({ addVariant, e }) {
         addVariant('first-child', ({ modifySelectors, separator }) => {
           modifySelectors(({ className }) => {
-            return `.first-child${separator}${className}:first-child`
+            return `.${e(`first-child${separator}${className}`)}:first-child`
+          })
+        })
+      },
+    ],
+  }).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('plugin variants that use modify selectors need to manually escape the class name they are modifying', () => {
+  const input = `
+    @variants first-child {
+      .banana-1\\/2 { color: yellow; }
+      .chocolate-1\\.5 { color: brown; }
+    }
+  `
+
+  const output = `
+      .banana-1\\/2 { color: yellow; }
+      .chocolate-1\\.5 { color: brown; }
+      .first-child\\:banana-1\\/2:first-child { color: yellow; }
+      .first-child\\:chocolate-1\\.5:first-child { color: brown; }
+  `
+
+  return run(input, {
+    ...config,
+    plugins: [
+      ...config.plugins,
+      function({ addVariant, e }) {
+        addVariant('first-child', ({ modifySelectors, separator }) => {
+          modifySelectors(({ className }) => {
+            return `.${e(`first-child${separator}${className}`)}:first-child`
           })
         })
       },
@@ -335,13 +368,13 @@ test('plugin variants can wrap rules in another at-rule using the raw PostCSS AP
     ...config,
     plugins: [
       ...config.plugins,
-      function({ addVariant }) {
+      function({ addVariant, e }) {
         addVariant('supports-grid', ({ container, separator }) => {
           const supportsRule = postcss.atRule({ name: 'supports', params: '(display: grid)' })
           supportsRule.nodes = container.nodes
           container.nodes = [supportsRule]
           supportsRule.walkRules(rule => {
-            rule.selector = `.supports-grid${separator}${rule.selector.slice(1)}`
+            rule.selector = `.${e(`supports-grid${separator}${rule.selector.slice(1)}`)}`
           })
         })
       },
