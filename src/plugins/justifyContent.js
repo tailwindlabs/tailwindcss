@@ -1,5 +1,5 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, config }) {
     addUtilities(
       {
         '.justify-start': {
@@ -18,7 +18,7 @@ export default function({ variants }) {
           'justify-content': 'space-around',
         },
       },
-      variants
+      config('variants.justifyContent')
     )
   }
 }
