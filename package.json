@@ -44,7 +44,6 @@
     "autoprefixer": "^9.4.5",
     "bytes": "^3.0.0",
     "chalk": "^2.4.1",
-    "css.escape": "^1.5.1",
     "fs-extra": "^4.0.2",
     "lodash": "^4.17.11",
     "node-emoji": "^1.8.1",
@@ -54,7 +53,7 @@
     "postcss-functions": "^3.0.0",
     "postcss-js": "^2.0.0",
     "postcss-nested": "^4.1.1",
-    "postcss-selector-parser": "^5.0.0",
+    "postcss-selector-parser": "^6.0.0",
     "pretty-hrtime": "^1.0.3",
     "strip-comments": "^1.0.2"
   },
