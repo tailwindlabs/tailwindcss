@@ -1,10 +1,10 @@
 import _ from 'lodash'
 
-export default function({ values, variants }) {
-  return function({ addUtilities, e }) {
+export default function() {
+  return function({ addUtilities, e, config }) {
     addUtilities(
       _.fromPairs(
-        _.map(values, (value, modifier) => {
+        _.map(config('theme.flexShrink'), (value, modifier) => {
           const className = modifier === 'default' ? 'flex-shrink' : `flex-shrink-${modifier}`
           return [
             `.${e(className)}`,
@@ -14,7 +14,7 @@ export default function({ values, variants }) {
           ]
         })
       ),
-      variants
+      config('variants.flexShrink')
     )
   }
 }
