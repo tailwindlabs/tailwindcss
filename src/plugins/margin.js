@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
-export default function({ values, variants }) {
-  return function({ addUtilities, e }) {
+export default function() {
+  return function({ addUtilities, e, config }) {
     const generators = [
       (size, modifier) => ({
         [`.${e(`m-${modifier}`)}`]: { margin: `${size}` },
@@ -19,9 +19,9 @@ export default function({ values, variants }) {
     ]
 
     const utilities = _.flatMap(generators, generator => {
-      return _.flatMap(values, generator)
+      return _.flatMap(config('theme.margin'), generator)
     })
 
-    addUtilities(utilities, variants)
+    addUtilities(utilities, config('variants.margin'))
   }
 }
