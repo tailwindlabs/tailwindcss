@@ -1,5 +1,5 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, config }) {
     addUtilities(
       {
         '.text-left': { 'text-align': 'left' },
@@ -7,7 +7,7 @@ export default function({ variants }) {
         '.text-right': { 'text-align': 'right' },
         '.text-justify': { 'text-align': 'justify' },
       },
-      variants
+      config('variants.textAlign')
     )
   }
 }
