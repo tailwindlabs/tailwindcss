@@ -1,5 +1,5 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, config }) {
     addUtilities(
       {
         '.bg-repeat': { 'background-repeat': 'repeat' },
@@ -7,7 +7,7 @@ export default function({ variants }) {
         '.bg-repeat-x': { 'background-repeat': 'repeat-x' },
         '.bg-repeat-y': { 'background-repeat': 'repeat-y' },
       },
-      variants
+      config('variants.backgroundRepeat')
     )
   }
 }
