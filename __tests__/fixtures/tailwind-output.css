@@ -6197,22 +6197,6 @@ table {
   font-style: normal;
 }
 
-.hover\:italic:hover {
-  font-style: italic;
-}
-
-.hover\:not-italic:hover {
-  font-style: normal;
-}
-
-.focus\:italic:focus {
-  font-style: italic;
-}
-
-.focus\:not-italic:focus {
-  font-style: normal;
-}
-
 .uppercase {
   text-transform: uppercase;
 }
@@ -6226,38 +6210,6 @@ table {
 }
 
 .normal-case {
-  text-transform: none;
-}
-
-.hover\:uppercase:hover {
-  text-transform: uppercase;
-}
-
-.hover\:lowercase:hover {
-  text-transform: lowercase;
-}
-
-.hover\:capitalize:hover {
-  text-transform: capitalize;
-}
-
-.hover\:normal-case:hover {
-  text-transform: none;
-}
-
-.focus\:uppercase:focus {
-  text-transform: uppercase;
-}
-
-.focus\:lowercase:focus {
-  text-transform: lowercase;
-}
-
-.focus\:capitalize:focus {
-  text-transform: capitalize;
-}
-
-.focus\:normal-case:focus {
   text-transform: none;
 }
 
@@ -6303,26 +6255,6 @@ table {
 }
 
 .subpixel-antialiased {
-  -webkit-font-smoothing: auto;
-  -moz-osx-font-smoothing: auto;
-}
-
-.hover\:antialiased:hover {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.hover\:subpixel-antialiased:hover {
-  -webkit-font-smoothing: auto;
-  -moz-osx-font-smoothing: auto;
-}
-
-.focus\:antialiased:focus {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.focus\:subpixel-antialiased:focus {
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
 }
@@ -12266,22 +12198,6 @@ table {
     font-style: normal;
   }
 
-  .sm\:hover\:italic:hover {
-    font-style: italic;
-  }
-
-  .sm\:hover\:not-italic:hover {
-    font-style: normal;
-  }
-
-  .sm\:focus\:italic:focus {
-    font-style: italic;
-  }
-
-  .sm\:focus\:not-italic:focus {
-    font-style: normal;
-  }
-
   .sm\:uppercase {
     text-transform: uppercase;
   }
@@ -12295,38 +12211,6 @@ table {
   }
 
   .sm\:normal-case {
-    text-transform: none;
-  }
-
-  .sm\:hover\:uppercase:hover {
-    text-transform: uppercase;
-  }
-
-  .sm\:hover\:lowercase:hover {
-    text-transform: lowercase;
-  }
-
-  .sm\:hover\:capitalize:hover {
-    text-transform: capitalize;
-  }
-
-  .sm\:hover\:normal-case:hover {
-    text-transform: none;
-  }
-
-  .sm\:focus\:uppercase:focus {
-    text-transform: uppercase;
-  }
-
-  .sm\:focus\:lowercase:focus {
-    text-transform: lowercase;
-  }
-
-  .sm\:focus\:capitalize:focus {
-    text-transform: capitalize;
-  }
-
-  .sm\:focus\:normal-case:focus {
     text-transform: none;
   }
 
@@ -12372,26 +12256,6 @@ table {
   }
 
   .sm\:subpixel-antialiased {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .sm\:hover\:antialiased:hover {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .sm\:hover\:subpixel-antialiased:hover {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .sm\:focus\:antialiased:focus {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .sm\:focus\:subpixel-antialiased:focus {
     -webkit-font-smoothing: auto;
     -moz-osx-font-smoothing: auto;
   }
@@ -18336,22 +18200,6 @@ table {
     font-style: normal;
   }
 
-  .md\:hover\:italic:hover {
-    font-style: italic;
-  }
-
-  .md\:hover\:not-italic:hover {
-    font-style: normal;
-  }
-
-  .md\:focus\:italic:focus {
-    font-style: italic;
-  }
-
-  .md\:focus\:not-italic:focus {
-    font-style: normal;
-  }
-
   .md\:uppercase {
     text-transform: uppercase;
   }
@@ -18365,38 +18213,6 @@ table {
   }
 
   .md\:normal-case {
-    text-transform: none;
-  }
-
-  .md\:hover\:uppercase:hover {
-    text-transform: uppercase;
-  }
-
-  .md\:hover\:lowercase:hover {
-    text-transform: lowercase;
-  }
-
-  .md\:hover\:capitalize:hover {
-    text-transform: capitalize;
-  }
-
-  .md\:hover\:normal-case:hover {
-    text-transform: none;
-  }
-
-  .md\:focus\:uppercase:focus {
-    text-transform: uppercase;
-  }
-
-  .md\:focus\:lowercase:focus {
-    text-transform: lowercase;
-  }
-
-  .md\:focus\:capitalize:focus {
-    text-transform: capitalize;
-  }
-
-  .md\:focus\:normal-case:focus {
     text-transform: none;
   }
 
@@ -18442,26 +18258,6 @@ table {
   }
 
   .md\:subpixel-antialiased {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .md\:hover\:antialiased:hover {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .md\:hover\:subpixel-antialiased:hover {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .md\:focus\:antialiased:focus {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .md\:focus\:subpixel-antialiased:focus {
     -webkit-font-smoothing: auto;
     -moz-osx-font-smoothing: auto;
   }
@@ -24406,22 +24202,6 @@ table {
     font-style: normal;
   }
 
-  .lg\:hover\:italic:hover {
-    font-style: italic;
-  }
-
-  .lg\:hover\:not-italic:hover {
-    font-style: normal;
-  }
-
-  .lg\:focus\:italic:focus {
-    font-style: italic;
-  }
-
-  .lg\:focus\:not-italic:focus {
-    font-style: normal;
-  }
-
   .lg\:uppercase {
     text-transform: uppercase;
   }
@@ -24435,38 +24215,6 @@ table {
   }
 
   .lg\:normal-case {
-    text-transform: none;
-  }
-
-  .lg\:hover\:uppercase:hover {
-    text-transform: uppercase;
-  }
-
-  .lg\:hover\:lowercase:hover {
-    text-transform: lowercase;
-  }
-
-  .lg\:hover\:capitalize:hover {
-    text-transform: capitalize;
-  }
-
-  .lg\:hover\:normal-case:hover {
-    text-transform: none;
-  }
-
-  .lg\:focus\:uppercase:focus {
-    text-transform: uppercase;
-  }
-
-  .lg\:focus\:lowercase:focus {
-    text-transform: lowercase;
-  }
-
-  .lg\:focus\:capitalize:focus {
-    text-transform: capitalize;
-  }
-
-  .lg\:focus\:normal-case:focus {
     text-transform: none;
   }
 
@@ -24512,26 +24260,6 @@ table {
   }
 
   .lg\:subpixel-antialiased {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .lg\:hover\:antialiased:hover {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .lg\:hover\:subpixel-antialiased:hover {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .lg\:focus\:antialiased:focus {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .lg\:focus\:subpixel-antialiased:focus {
     -webkit-font-smoothing: auto;
     -moz-osx-font-smoothing: auto;
   }
@@ -30476,22 +30204,6 @@ table {
     font-style: normal;
   }
 
-  .xl\:hover\:italic:hover {
-    font-style: italic;
-  }
-
-  .xl\:hover\:not-italic:hover {
-    font-style: normal;
-  }
-
-  .xl\:focus\:italic:focus {
-    font-style: italic;
-  }
-
-  .xl\:focus\:not-italic:focus {
-    font-style: normal;
-  }
-
   .xl\:uppercase {
     text-transform: uppercase;
   }
@@ -30505,38 +30217,6 @@ table {
   }
 
   .xl\:normal-case {
-    text-transform: none;
-  }
-
-  .xl\:hover\:uppercase:hover {
-    text-transform: uppercase;
-  }
-
-  .xl\:hover\:lowercase:hover {
-    text-transform: lowercase;
-  }
-
-  .xl\:hover\:capitalize:hover {
-    text-transform: capitalize;
-  }
-
-  .xl\:hover\:normal-case:hover {
-    text-transform: none;
-  }
-
-  .xl\:focus\:uppercase:focus {
-    text-transform: uppercase;
-  }
-
-  .xl\:focus\:lowercase:focus {
-    text-transform: lowercase;
-  }
-
-  .xl\:focus\:capitalize:focus {
-    text-transform: capitalize;
-  }
-
-  .xl\:focus\:normal-case:focus {
     text-transform: none;
   }
 
@@ -30582,26 +30262,6 @@ table {
   }
 
   .xl\:subpixel-antialiased {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .xl\:hover\:antialiased:hover {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .xl\:hover\:subpixel-antialiased:hover {
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .xl\:focus\:antialiased:focus {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .xl\:focus\:subpixel-antialiased:focus {
     -webkit-font-smoothing: auto;
     -moz-osx-font-smoothing: auto;
   }
