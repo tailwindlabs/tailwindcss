@@ -3065,6 +3065,10 @@ table {
   height: 12rem;
 }
 
+.h-56 {
+  height: 14rem;
+}
+
 .h-64 {
   height: 16rem;
 }
@@ -6125,6 +6129,10 @@ table {
   width: 12rem;
 }
 
+.w-56 {
+  width: 14rem;
+}
+
 .w-64 {
   width: 16rem;
 }
@@ -8772,6 +8780,10 @@ table {
 
   .sm\:h-48 {
     height: 12rem;
+  }
+
+  .sm\:h-56 {
+    height: 14rem;
   }
 
   .sm\:h-64 {
@@ -11818,6 +11830,10 @@ table {
     width: 12rem;
   }
 
+  .sm\:w-56 {
+    width: 14rem;
+  }
+
   .sm\:w-64 {
     width: 16rem;
   }
@@ -14466,6 +14482,10 @@ table {
 
   .md\:h-48 {
     height: 12rem;
+  }
+
+  .md\:h-56 {
+    height: 14rem;
   }
 
   .md\:h-64 {
@@ -17512,6 +17532,10 @@ table {
     width: 12rem;
   }
 
+  .md\:w-56 {
+    width: 14rem;
+  }
+
   .md\:w-64 {
     width: 16rem;
   }
@@ -20160,6 +20184,10 @@ table {
 
   .lg\:h-48 {
     height: 12rem;
+  }
+
+  .lg\:h-56 {
+    height: 14rem;
   }
 
   .lg\:h-64 {
@@ -23206,6 +23234,10 @@ table {
     width: 12rem;
   }
 
+  .lg\:w-56 {
+    width: 14rem;
+  }
+
   .lg\:w-64 {
     width: 16rem;
   }
@@ -25854,6 +25886,10 @@ table {
 
   .xl\:h-48 {
     height: 12rem;
+  }
+
+  .xl\:h-56 {
+    height: 14rem;
   }
 
   .xl\:h-64 {
@@ -28898,6 +28934,10 @@ table {
 
   .xl\:w-48 {
     width: 12rem;
+  }
+
+  .xl\:w-56 {
+    width: 14rem;
   }
 
   .xl\:w-64 {
