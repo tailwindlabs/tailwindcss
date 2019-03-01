@@ -101,6 +101,10 @@ module.exports = function() {
       '20': '5rem',
       '24': '6rem',
       '32': '8rem',
+      '40': '10rem',
+      '48': '12rem',
+      '56': '14rem',
+      '64': '16rem',
     },
     screens: {
       sm: '568px',
@@ -221,9 +225,6 @@ module.exports = function() {
     width: theme => ({
       auto: 'auto',
       ...theme.spacing,
-      '48': '12rem',
-      '56': '14rem',
-      '64': '16rem',
       '1/2': '50%',
       '1/3': '33.33333%',
       '2/3': '66.66667%',
@@ -241,9 +242,6 @@ module.exports = function() {
     height: theme => ({
       auto: 'auto',
       ...theme.spacing,
-      '48': '12rem',
-      '56': '14rem',
-      '64': '16rem',
       full: '100%',
       screen: '100vh',
     }),
