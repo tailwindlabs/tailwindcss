@@ -484,8 +484,8 @@ h3,
 h4,
 h5,
 h6 {
-  font-size: 100%;
-  font-weight: normal;
+  font-size: inherit;
+  font-weight: inherit;
 }
 
 .container {
