@@ -3765,14 +3765,6 @@ table {
   max-width: 72rem;
 }
 
-.max-w-7xl {
-  max-width: 80rem;
-}
-
-.max-w-8xl {
-  max-width: 90rem;
-}
-
 .max-w-full {
   max-width: 100%;
 }
@@ -9862,14 +9854,6 @@ table {
     max-width: 72rem;
   }
 
-  .sm\:max-w-7xl {
-    max-width: 80rem;
-  }
-
-  .sm\:max-w-8xl {
-    max-width: 90rem;
-  }
-
   .sm\:max-w-full {
     max-width: 100%;
   }
@@ -15942,14 +15926,6 @@ table {
 
   .md\:max-w-6xl {
     max-width: 72rem;
-  }
-
-  .md\:max-w-7xl {
-    max-width: 80rem;
-  }
-
-  .md\:max-w-8xl {
-    max-width: 90rem;
   }
 
   .md\:max-w-full {
@@ -22026,14 +22002,6 @@ table {
     max-width: 72rem;
   }
 
-  .lg\:max-w-7xl {
-    max-width: 80rem;
-  }
-
-  .lg\:max-w-8xl {
-    max-width: 90rem;
-  }
-
   .lg\:max-w-full {
     max-width: 100%;
   }
@@ -28106,14 +28074,6 @@ table {
 
   .xl\:max-w-6xl {
     max-width: 72rem;
-  }
-
-  .xl\:max-w-7xl {
-    max-width: 80rem;
-  }
-
-  .xl\:max-w-8xl {
-    max-width: 90rem;
   }
 
   .xl\:max-w-full {
