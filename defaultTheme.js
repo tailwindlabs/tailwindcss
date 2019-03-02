@@ -264,9 +264,9 @@ module.exports = function() {
       '3xl': '48rem',
       '4xl': '56rem',
       '5xl': '64rem',
-      '7xl': '72rem',
-      '8xl': '80rem',
-      '9xl': '90rem',
+      '6xl': '72rem',
+      '7xl': '80rem',
+      '8xl': '90rem',
       full: '100%',
     },
     maxHeight: {
