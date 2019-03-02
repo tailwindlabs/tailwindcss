@@ -6207,22 +6207,6 @@ h6 {
   font-style: normal !important;
 }
 
-.hover\:italic:hover {
-  font-style: italic !important;
-}
-
-.hover\:not-italic:hover {
-  font-style: normal !important;
-}
-
-.focus\:italic:focus {
-  font-style: italic !important;
-}
-
-.focus\:not-italic:focus {
-  font-style: normal !important;
-}
-
 .uppercase {
   text-transform: uppercase !important;
 }
@@ -6236,38 +6220,6 @@ h6 {
 }
 
 .normal-case {
-  text-transform: none !important;
-}
-
-.hover\:uppercase:hover {
-  text-transform: uppercase !important;
-}
-
-.hover\:lowercase:hover {
-  text-transform: lowercase !important;
-}
-
-.hover\:capitalize:hover {
-  text-transform: capitalize !important;
-}
-
-.hover\:normal-case:hover {
-  text-transform: none !important;
-}
-
-.focus\:uppercase:focus {
-  text-transform: uppercase !important;
-}
-
-.focus\:lowercase:focus {
-  text-transform: lowercase !important;
-}
-
-.focus\:capitalize:focus {
-  text-transform: capitalize !important;
-}
-
-.focus\:normal-case:focus {
   text-transform: none !important;
 }
 
@@ -6313,26 +6265,6 @@ h6 {
 }
 
 .subpixel-antialiased {
-  -webkit-font-smoothing: auto !important;
-  -moz-osx-font-smoothing: auto !important;
-}
-
-.hover\:antialiased:hover {
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-}
-
-.hover\:subpixel-antialiased:hover {
-  -webkit-font-smoothing: auto !important;
-  -moz-osx-font-smoothing: auto !important;
-}
-
-.focus\:antialiased:focus {
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-}
-
-.focus\:subpixel-antialiased:focus {
   -webkit-font-smoothing: auto !important;
   -moz-osx-font-smoothing: auto !important;
 }
@@ -12276,22 +12208,6 @@ h6 {
     font-style: normal !important;
   }
 
-  .sm\:hover\:italic:hover {
-    font-style: italic !important;
-  }
-
-  .sm\:hover\:not-italic:hover {
-    font-style: normal !important;
-  }
-
-  .sm\:focus\:italic:focus {
-    font-style: italic !important;
-  }
-
-  .sm\:focus\:not-italic:focus {
-    font-style: normal !important;
-  }
-
   .sm\:uppercase {
     text-transform: uppercase !important;
   }
@@ -12305,38 +12221,6 @@ h6 {
   }
 
   .sm\:normal-case {
-    text-transform: none !important;
-  }
-
-  .sm\:hover\:uppercase:hover {
-    text-transform: uppercase !important;
-  }
-
-  .sm\:hover\:lowercase:hover {
-    text-transform: lowercase !important;
-  }
-
-  .sm\:hover\:capitalize:hover {
-    text-transform: capitalize !important;
-  }
-
-  .sm\:hover\:normal-case:hover {
-    text-transform: none !important;
-  }
-
-  .sm\:focus\:uppercase:focus {
-    text-transform: uppercase !important;
-  }
-
-  .sm\:focus\:lowercase:focus {
-    text-transform: lowercase !important;
-  }
-
-  .sm\:focus\:capitalize:focus {
-    text-transform: capitalize !important;
-  }
-
-  .sm\:focus\:normal-case:focus {
     text-transform: none !important;
   }
 
@@ -12382,26 +12266,6 @@ h6 {
   }
 
   .sm\:subpixel-antialiased {
-    -webkit-font-smoothing: auto !important;
-    -moz-osx-font-smoothing: auto !important;
-  }
-
-  .sm\:hover\:antialiased:hover {
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-  }
-
-  .sm\:hover\:subpixel-antialiased:hover {
-    -webkit-font-smoothing: auto !important;
-    -moz-osx-font-smoothing: auto !important;
-  }
-
-  .sm\:focus\:antialiased:focus {
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-  }
-
-  .sm\:focus\:subpixel-antialiased:focus {
     -webkit-font-smoothing: auto !important;
     -moz-osx-font-smoothing: auto !important;
   }
@@ -18346,22 +18210,6 @@ h6 {
     font-style: normal !important;
   }
 
-  .md\:hover\:italic:hover {
-    font-style: italic !important;
-  }
-
-  .md\:hover\:not-italic:hover {
-    font-style: normal !important;
-  }
-
-  .md\:focus\:italic:focus {
-    font-style: italic !important;
-  }
-
-  .md\:focus\:not-italic:focus {
-    font-style: normal !important;
-  }
-
   .md\:uppercase {
     text-transform: uppercase !important;
   }
@@ -18375,38 +18223,6 @@ h6 {
   }
 
   .md\:normal-case {
-    text-transform: none !important;
-  }
-
-  .md\:hover\:uppercase:hover {
-    text-transform: uppercase !important;
-  }
-
-  .md\:hover\:lowercase:hover {
-    text-transform: lowercase !important;
-  }
-
-  .md\:hover\:capitalize:hover {
-    text-transform: capitalize !important;
-  }
-
-  .md\:hover\:normal-case:hover {
-    text-transform: none !important;
-  }
-
-  .md\:focus\:uppercase:focus {
-    text-transform: uppercase !important;
-  }
-
-  .md\:focus\:lowercase:focus {
-    text-transform: lowercase !important;
-  }
-
-  .md\:focus\:capitalize:focus {
-    text-transform: capitalize !important;
-  }
-
-  .md\:focus\:normal-case:focus {
     text-transform: none !important;
   }
 
@@ -18452,26 +18268,6 @@ h6 {
   }
 
   .md\:subpixel-antialiased {
-    -webkit-font-smoothing: auto !important;
-    -moz-osx-font-smoothing: auto !important;
-  }
-
-  .md\:hover\:antialiased:hover {
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-  }
-
-  .md\:hover\:subpixel-antialiased:hover {
-    -webkit-font-smoothing: auto !important;
-    -moz-osx-font-smoothing: auto !important;
-  }
-
-  .md\:focus\:antialiased:focus {
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-  }
-
-  .md\:focus\:subpixel-antialiased:focus {
     -webkit-font-smoothing: auto !important;
     -moz-osx-font-smoothing: auto !important;
   }
@@ -24416,22 +24212,6 @@ h6 {
     font-style: normal !important;
   }
 
-  .lg\:hover\:italic:hover {
-    font-style: italic !important;
-  }
-
-  .lg\:hover\:not-italic:hover {
-    font-style: normal !important;
-  }
-
-  .lg\:focus\:italic:focus {
-    font-style: italic !important;
-  }
-
-  .lg\:focus\:not-italic:focus {
-    font-style: normal !important;
-  }
-
   .lg\:uppercase {
     text-transform: uppercase !important;
   }
@@ -24445,38 +24225,6 @@ h6 {
   }
 
   .lg\:normal-case {
-    text-transform: none !important;
-  }
-
-  .lg\:hover\:uppercase:hover {
-    text-transform: uppercase !important;
-  }
-
-  .lg\:hover\:lowercase:hover {
-    text-transform: lowercase !important;
-  }
-
-  .lg\:hover\:capitalize:hover {
-    text-transform: capitalize !important;
-  }
-
-  .lg\:hover\:normal-case:hover {
-    text-transform: none !important;
-  }
-
-  .lg\:focus\:uppercase:focus {
-    text-transform: uppercase !important;
-  }
-
-  .lg\:focus\:lowercase:focus {
-    text-transform: lowercase !important;
-  }
-
-  .lg\:focus\:capitalize:focus {
-    text-transform: capitalize !important;
-  }
-
-  .lg\:focus\:normal-case:focus {
     text-transform: none !important;
   }
 
@@ -24522,26 +24270,6 @@ h6 {
   }
 
   .lg\:subpixel-antialiased {
-    -webkit-font-smoothing: auto !important;
-    -moz-osx-font-smoothing: auto !important;
-  }
-
-  .lg\:hover\:antialiased:hover {
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-  }
-
-  .lg\:hover\:subpixel-antialiased:hover {
-    -webkit-font-smoothing: auto !important;
-    -moz-osx-font-smoothing: auto !important;
-  }
-
-  .lg\:focus\:antialiased:focus {
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-  }
-
-  .lg\:focus\:subpixel-antialiased:focus {
     -webkit-font-smoothing: auto !important;
     -moz-osx-font-smoothing: auto !important;
   }
@@ -30486,22 +30214,6 @@ h6 {
     font-style: normal !important;
   }
 
-  .xl\:hover\:italic:hover {
-    font-style: italic !important;
-  }
-
-  .xl\:hover\:not-italic:hover {
-    font-style: normal !important;
-  }
-
-  .xl\:focus\:italic:focus {
-    font-style: italic !important;
-  }
-
-  .xl\:focus\:not-italic:focus {
-    font-style: normal !important;
-  }
-
   .xl\:uppercase {
     text-transform: uppercase !important;
   }
@@ -30515,38 +30227,6 @@ h6 {
   }
 
   .xl\:normal-case {
-    text-transform: none !important;
-  }
-
-  .xl\:hover\:uppercase:hover {
-    text-transform: uppercase !important;
-  }
-
-  .xl\:hover\:lowercase:hover {
-    text-transform: lowercase !important;
-  }
-
-  .xl\:hover\:capitalize:hover {
-    text-transform: capitalize !important;
-  }
-
-  .xl\:hover\:normal-case:hover {
-    text-transform: none !important;
-  }
-
-  .xl\:focus\:uppercase:focus {
-    text-transform: uppercase !important;
-  }
-
-  .xl\:focus\:lowercase:focus {
-    text-transform: lowercase !important;
-  }
-
-  .xl\:focus\:capitalize:focus {
-    text-transform: capitalize !important;
-  }
-
-  .xl\:focus\:normal-case:focus {
     text-transform: none !important;
   }
 
@@ -30592,26 +30272,6 @@ h6 {
   }
 
   .xl\:subpixel-antialiased {
-    -webkit-font-smoothing: auto !important;
-    -moz-osx-font-smoothing: auto !important;
-  }
-
-  .xl\:hover\:antialiased:hover {
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-  }
-
-  .xl\:hover\:subpixel-antialiased:hover {
-    -webkit-font-smoothing: auto !important;
-    -moz-osx-font-smoothing: auto !important;
-  }
-
-  .xl\:focus\:antialiased:focus {
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-  }
-
-  .xl\:focus\:subpixel-antialiased:focus {
     -webkit-font-smoothing: auto !important;
     -moz-osx-font-smoothing: auto !important;
   }
