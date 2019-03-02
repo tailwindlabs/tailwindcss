@@ -482,9 +482,9 @@ table {
   width: 100%;
 }
 
-@media (min-width: 568px) {
+@media (min-width: 576px) {
   .container {
-    max-width: 568px;
+    max-width: 576px;
   }
 }
 
@@ -6598,7 +6598,7 @@ table {
   color: #e3342f;
 }
 
-@media (min-width: 568px) {
+@media (min-width: 576px) {
   .sm\:list-reset {
     list-style: none !important;
     padding: 0 !important;
