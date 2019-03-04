@@ -1,13 +1,13 @@
 import _ from 'lodash'
 import escapeClassName from '../../src/util/escapeClassName'
-import plugin from '../../src/plugins/textColor'
+import plugin from '../../src/plugins/borderColor'
 
 test('colors can be a nested object', () => {
   const addedUtilities = []
 
   const config = {
     theme: {
-      textColor: {
+      borderColor: {
         purple: 'purple',
         red: {
           1: 'rgb(33,0,0)',
@@ -27,7 +27,7 @@ test('colors can be a nested object', () => {
       },
     },
     variants: {
-      textColor: ['responsive'],
+      borderColor: ['responsive'],
     },
   }
 
@@ -47,16 +47,16 @@ test('colors can be a nested object', () => {
   expect(addedUtilities).toEqual([
     {
       utilities: {
-        '.text-purple': { color: 'purple' },
-        '.text-red-1': { color: 'rgb(33,0,0)' },
-        '.text-red-2': { color: 'rgb(67,0,0)' },
-        '.text-red-3': { color: 'rgb(100,0,0)' },
-        '.text-green-1': { color: 'rgb(0,33,0)' },
-        '.text-green-2': { color: 'rgb(0,67,0)' },
-        '.text-green-3': { color: 'rgb(0,100,0)' },
-        '.text-blue-1': { color: 'rgb(0,0,33)' },
-        '.text-blue-2': { color: 'rgb(0,0,67)' },
-        '.text-blue-3': { color: 'rgb(0,0,100)' },
+        '.border-purple': { 'border-color': 'purple' },
+        '.border-red-1': { 'border-color': 'rgb(33,0,0)' },
+        '.border-red-2': { 'border-color': 'rgb(67,0,0)' },
+        '.border-red-3': { 'border-color': 'rgb(100,0,0)' },
+        '.border-green-1': { 'border-color': 'rgb(0,33,0)' },
+        '.border-green-2': { 'border-color': 'rgb(0,67,0)' },
+        '.border-green-3': { 'border-color': 'rgb(0,100,0)' },
+        '.border-blue-1': { 'border-color': 'rgb(0,0,33)' },
+        '.border-blue-2': { 'border-color': 'rgb(0,0,67)' },
+        '.border-blue-3': { 'border-color': 'rgb(0,0,100)' },
       },
       variants: ['responsive'],
     },
