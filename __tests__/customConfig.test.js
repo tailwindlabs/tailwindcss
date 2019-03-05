@@ -1,16 +1,17 @@
 import fs from 'fs'
 import path from 'path'
+import rimraf from 'rimraf'
 import postcss from 'postcss'
 import tailwind from '../src/index'
 
 function inTempDirectory(callback) {
   return new Promise(resolve => {
+    rimraf.sync('./__tmp')
     fs.mkdirSync(path.resolve('./__tmp'))
     process.chdir(path.resolve('./__tmp'))
     callback().then(() => {
       process.chdir(path.resolve('../'))
-      fs.rmdirSync(path.resolve('./__tmp'))
-      resolve()
+      rimraf('./__tmp', resolve)
     })
   })
 }
@@ -113,7 +114,6 @@ test('tailwind.config.js is picked up by default', () => {
             }
           }
         `)
-        fs.unlinkSync(path.resolve('./tailwind.config.js'))
       })
   })
 })

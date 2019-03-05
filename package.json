@@ -38,7 +38,7 @@
     "eslint-plugin-prettier": "^2.3.1",
     "jest": "^23.6.0",
     "prettier": "^1.7.4",
-    "rimraf": "^2.6.1"
+    "rimraf": "^2.6.3"
   },
   "dependencies": {
     "autoprefixer": "^9.4.5",
