@@ -9,6 +9,12 @@ test('colors can be a nested object', () => {
     theme: {
       textColor: {
         purple: 'purple',
+        white: {
+          25: 'rgba(255,255,255,.25)',
+          50: 'rgba(255,255,255,.5)',
+          75: 'rgba(255,255,255,.75)',
+          default: '#fff',
+        },
         red: {
           1: 'rgb(33,0,0)',
           2: 'rgb(67,0,0)',
@@ -48,6 +54,10 @@ test('colors can be a nested object', () => {
     {
       utilities: {
         '.text-purple': { color: 'purple' },
+        '.text-white-25': { color: 'rgba(255,255,255,.25)' },
+        '.text-white-50': { color: 'rgba(255,255,255,.5)' },
+        '.text-white-75': { color: 'rgba(255,255,255,.75)' },
+        '.text-white': { color: '#fff' },
         '.text-red-1': { color: 'rgb(33,0,0)' },
         '.text-red-2': { color: 'rgb(67,0,0)' },
         '.text-red-3': { color: 'rgb(100,0,0)' },
