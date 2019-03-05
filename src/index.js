@@ -1,4 +1,5 @@
 import path from 'path'
+import fs from 'fs'
 
 import _ from 'lodash'
 import postcss from 'postcss'
@@ -8,31 +9,50 @@ import registerConfigAsDependency from './lib/registerConfigAsDependency'
 import processTailwindFeatures from './processTailwindFeatures'
 import resolveConfig from './util/resolveConfig'
 
-const plugin = postcss.plugin('tailwind', config => {
-  const plugins = []
-
-  if (!_.isUndefined(config) && !_.isObject(config)) {
-    plugins.push(registerConfigAsDependency(path.resolve(config)))
+function resolveConfigPath(filePath) {
+  if (_.isObject(filePath)) {
+    return undefined
   }
 
-  const getConfig = () => {
-    if (_.isUndefined(config)) {
-      return resolveConfig([require('../defaultConfig')()])
-    }
+  if (!_.isUndefined(filePath)) {
+    return path.resolve(filePath)
+  }
 
-    if (!_.isObject(config)) {
-      delete require.cache[require.resolve(path.resolve(config))]
-    }
+  try {
+    const defaultConfigPath = path.resolve('./tailwind.config.js')
+    fs.accessSync(defaultConfigPath)
+    return defaultConfigPath
+  } catch (err) {
+    return undefined
+  }
+}
 
-    return resolveConfig([
-      _.isObject(config) ? config : require(path.resolve(config)),
-      require('../defaultConfig')(),
-    ])
+const getConfigFunction = config => () => {
+  if (_.isUndefined(config) && !_.isObject(config)) {
+    return resolveConfig([require('../defaultConfig')()])
+  }
+
+  if (!_.isObject(config)) {
+    delete require.cache[require.resolve(config)]
+  }
+
+  return resolveConfig([
+    _.isObject(config) ? config : require(config),
+    require('../defaultConfig')(),
+  ])
+}
+
+const plugin = postcss.plugin('tailwind', config => {
+  const plugins = []
+  const resolvedConfigPath = resolveConfigPath(config)
+
+  if (!_.isUndefined(resolvedConfigPath)) {
+    plugins.push(registerConfigAsDependency(resolvedConfigPath))
   }
 
   return postcss([
     ...plugins,
-    processTailwindFeatures(getConfig),
+    processTailwindFeatures(getConfigFunction(resolvedConfigPath || config)),
     perfectionist({
       cascade: true,
       colorShorthand: true,
