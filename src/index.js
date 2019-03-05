@@ -52,7 +52,7 @@ const plugin = postcss.plugin('tailwind', config => {
 
   return postcss([
     ...plugins,
-    processTailwindFeatures(getConfigFunction(resolvedConfigPath ? resolvedConfigPath : config)),
+    processTailwindFeatures(getConfigFunction(resolvedConfigPath || config)),
     perfectionist({
       cascade: true,
       colorShorthand: true,
