@@ -5,9 +5,9 @@ function run(input, opts = {}) {
   return postcss([plugin(opts)]).process(input, { from: undefined })
 }
 
-test('it looks up values in the config using dot notation', () => {
+test('it looks up values in the theme using dot notation', () => {
   const input = `
-    .banana { color: config('theme.colors.yellow'); }
+    .banana { color: theme('colors.yellow'); }
   `
 
   const output = `
@@ -28,7 +28,7 @@ test('it looks up values in the config using dot notation', () => {
 
 test('quotes are optional around the lookup path', () => {
   const input = `
-    .banana { color: config(theme.colors.yellow); }
+    .banana { color: theme(colors.yellow); }
   `
 
   const output = `
@@ -49,7 +49,7 @@ test('quotes are optional around the lookup path', () => {
 
 test('a default value can be provided', () => {
   const input = `
-    .cookieMonster { color: config('theme.colors.blue', #0000ff); }
+    .cookieMonster { color: theme('colors.blue', #0000ff); }
   `
 
   const output = `
@@ -70,7 +70,7 @@ test('a default value can be provided', () => {
 
 test('quotes are preserved around default values', () => {
   const input = `
-    .heading { font-family: config('theme.fonts.sans', "Helvetica Neue"); }
+    .heading { font-family: theme('fonts.sans', "Helvetica Neue"); }
   `
 
   const output = `
