@@ -9,6 +9,12 @@ test('colors can be a nested object', () => {
     theme: {
       borderColor: {
         purple: 'purple',
+        white: {
+          25: 'rgba(255,255,255,.25)',
+          50: 'rgba(255,255,255,.5)',
+          75: 'rgba(255,255,255,.75)',
+          default: '#fff',
+        },
         red: {
           1: 'rgb(33,0,0)',
           2: 'rgb(67,0,0)',
@@ -48,6 +54,10 @@ test('colors can be a nested object', () => {
     {
       utilities: {
         '.border-purple': { 'border-color': 'purple' },
+        '.border-white-25': { 'border-color': 'rgba(255,255,255,.25)' },
+        '.border-white-50': { 'border-color': 'rgba(255,255,255,.5)' },
+        '.border-white-75': { 'border-color': 'rgba(255,255,255,.75)' },
+        '.border-white': { 'border-color': '#fff' },
         '.border-red-1': { 'border-color': 'rgb(33,0,0)' },
         '.border-red-2': { 'border-color': 'rgb(67,0,0)' },
         '.border-red-3': { 'border-color': 'rgb(100,0,0)' },
