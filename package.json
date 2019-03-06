@@ -26,7 +26,7 @@
   "devDependencies": {
     "babel-cli": "^6.6.5",
     "babel-core": "^6.7.2",
-    "babel-jest": "^20.0.3",
+    "babel-jest": "^23.6.0",
     "babel-preset-env": "^1.0.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
