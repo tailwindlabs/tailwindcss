@@ -44,7 +44,7 @@
     "autoprefixer": "^9.4.5",
     "bytes": "^3.0.0",
     "chalk": "^2.4.1",
-    "fs-extra": "^4.0.2",
+    "fs-extra": "^7.0.1",
     "lodash": "^4.17.11",
     "node-emoji": "^1.8.1",
     "normalize.css": "^8.0.1",
