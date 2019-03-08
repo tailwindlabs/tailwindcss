@@ -25,6 +25,7 @@ const defaultVariantGenerators = {
   'focus-within': generatePseudoClassVariant('focus-within'),
   focus: generatePseudoClassVariant('focus'),
   active: generatePseudoClassVariant('active'),
+  disabled: generatePseudoClassVariant('disabled'),
 }
 
 export default function(config, { variantGenerators: pluginVariantGenerators }) {
