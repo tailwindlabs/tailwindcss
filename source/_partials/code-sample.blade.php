@@ -1,4 +1,4 @@
-<div class="rounded overflow-hidden border border-grey-light mb-8 bg-white">
+<div class="relative rounded overflow-hidden border border-grey-light mb-8 bg-white">
   <div class="border-b border-grey-light p-4 {{ $class ?? '' }}">
     {{ $slot }}
   </div>
