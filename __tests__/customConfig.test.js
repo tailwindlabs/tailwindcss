@@ -8,7 +8,14 @@ function inTempDirectory(callback) {
   return new Promise(resolve => {
     rimraf.sync('./__tmp')
     fs.mkdirSync(path.resolve('./__tmp'))
+
     process.chdir(path.resolve('./__tmp'))
+
+    // The last test in this file is failing right now because
+    // after changing the cwd, process.cwd() doesn't match
+    // path.resolve('.').
+    expect(process.cwd()).toEqual(path.resolve('.'))
+
     callback().then(() => {
       process.chdir(path.resolve('../'))
       rimraf('./__tmp', resolve)
