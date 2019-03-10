@@ -105,7 +105,7 @@ module.exports = function() {
         800: '#8d2450',
         900: '#741c46',
       },
-      grey: {
+      gray: {
         100: '#f8fcfe',
         200: '#f1f5fb',
         300: '#e2e9f0',
@@ -235,7 +235,7 @@ module.exports = function() {
       '8': '8px',
     },
     borderColor: theme => {
-      return global.Object.assign({ default: theme.colors.grey[700] }, theme.colors)
+      return global.Object.assign({ default: theme.colors.gray[700] }, theme.colors)
     },
     borderRadius: {
       none: '0',
