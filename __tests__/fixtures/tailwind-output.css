@@ -486,6 +486,7 @@ h5,
 h6 {
   font-size: inherit;
   font-weight: inherit;
+  line-height: inherit;
 }
 
 .container {
