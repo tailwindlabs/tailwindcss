@@ -133,3 +133,18 @@ h6 {
   font-size: inherit;
   font-weight: inherit;
 }
+
+/**
+ * Inherit color, font-weight, and line-height from the parent
+ * so that form elements don't inadvertently have any styles
+ * that deviate from your design system.
+ */
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
