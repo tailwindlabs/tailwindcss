@@ -28,7 +28,7 @@
     "@babel/core": "^7.0.0",
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
-    "babel-jest": "^23.4.2",
+    "babel-jest": "^24.3.1",
     "clean-css": "^4.1.9",
     "eslint": "^5.15.1",
     "eslint-config-postcss": "^2.0.2",
