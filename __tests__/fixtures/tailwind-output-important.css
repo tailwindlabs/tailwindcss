@@ -506,6 +506,16 @@ textarea {
   color: inherit;
 }
 
+/**
+ * Use the configured 'bold' weight for `strong` elements
+ * by default, falling back to 'bolder' (as per normalize.css)
+ * if there is no configured 'bold' weight.
+ */
+
+strong {
+  font-weight: 700;
+}
+
 .container {
   width: 100%;
 }
