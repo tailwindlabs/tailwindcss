@@ -489,9 +489,9 @@ h6 {
 }
 
 /**
- * Reset form elements to inherit their styles from the parent
- * so that form elements don't inadvertently have any styles
- * that deviate from your design system. These styles
+ * Reset form element properties that are easy to forget to
+ * style explicitly so you don't inadvertently introduce
+ * styles that deviate from your design system. These styles
  * supplement a partial reset that is already applied by
  * normalize.css.
  */
@@ -502,16 +502,9 @@ optgroup,
 select,
 textarea {
   padding: 0;
-  border-radius: 0;
-  background-color: transparent;
-  color: inherit;
-  font-weight: inherit;
   line-height: inherit;
-  font-style: inherit;
-  font-variant: inherit;
-  text-align: inherit;
-  text-transform: inherit;
-  letter-spacing: inherit;
+  color: inherit;
+  background-color: transparent;
 }
 
 .container {
