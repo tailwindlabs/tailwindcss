@@ -1,6 +1,6 @@
 /node_modules
 /lib
 /example
-index.htm
+index.html
 package-lock.json
 yarn-error.log
