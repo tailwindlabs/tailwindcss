@@ -569,18 +569,6 @@ samp {
   }
 }
 
-.list-none {
-  list-style-type: none !important;
-}
-
-.list-disc {
-  list-style-type: disc !important;
-}
-
-.list-decimal {
-  list-style-type: decimal !important;
-}
-
 .appearance-none {
   appearance: none !important;
 }
@@ -3185,6 +3173,26 @@ samp {
 
 .leading-loose {
   line-height: 2 !important;
+}
+
+.list-inside {
+  list-style-position: inside !important;
+}
+
+.list-outside {
+  list-style-position: outside !important;
+}
+
+.list-none {
+  list-style-type: none !important;
+}
+
+.list-disc {
+  list-style-type: disc !important;
+}
+
+.list-decimal {
+  list-style-type: decimal !important;
 }
 
 .m-0 {
@@ -6609,18 +6617,6 @@ samp {
 }
 
 @media (min-width: 640px) {
-  .sm\:list-none {
-    list-style-type: none !important;
-  }
-
-  .sm\:list-disc {
-    list-style-type: disc !important;
-  }
-
-  .sm\:list-decimal {
-    list-style-type: decimal !important;
-  }
-
   .sm\:appearance-none {
     appearance: none !important;
   }
@@ -9217,6 +9213,26 @@ samp {
 
   .sm\:leading-loose {
     line-height: 2 !important;
+  }
+
+  .sm\:list-inside {
+    list-style-position: inside !important;
+  }
+
+  .sm\:list-outside {
+    list-style-position: outside !important;
+  }
+
+  .sm\:list-none {
+    list-style-type: none !important;
+  }
+
+  .sm\:list-disc {
+    list-style-type: disc !important;
+  }
+
+  .sm\:list-decimal {
+    list-style-type: decimal !important;
   }
 
   .sm\:m-0 {
@@ -12626,18 +12642,6 @@ samp {
 }
 
 @media (min-width: 768px) {
-  .md\:list-none {
-    list-style-type: none !important;
-  }
-
-  .md\:list-disc {
-    list-style-type: disc !important;
-  }
-
-  .md\:list-decimal {
-    list-style-type: decimal !important;
-  }
-
   .md\:appearance-none {
     appearance: none !important;
   }
@@ -15234,6 +15238,26 @@ samp {
 
   .md\:leading-loose {
     line-height: 2 !important;
+  }
+
+  .md\:list-inside {
+    list-style-position: inside !important;
+  }
+
+  .md\:list-outside {
+    list-style-position: outside !important;
+  }
+
+  .md\:list-none {
+    list-style-type: none !important;
+  }
+
+  .md\:list-disc {
+    list-style-type: disc !important;
+  }
+
+  .md\:list-decimal {
+    list-style-type: decimal !important;
   }
 
   .md\:m-0 {
@@ -18643,18 +18667,6 @@ samp {
 }
 
 @media (min-width: 1024px) {
-  .lg\:list-none {
-    list-style-type: none !important;
-  }
-
-  .lg\:list-disc {
-    list-style-type: disc !important;
-  }
-
-  .lg\:list-decimal {
-    list-style-type: decimal !important;
-  }
-
   .lg\:appearance-none {
     appearance: none !important;
   }
@@ -21251,6 +21263,26 @@ samp {
 
   .lg\:leading-loose {
     line-height: 2 !important;
+  }
+
+  .lg\:list-inside {
+    list-style-position: inside !important;
+  }
+
+  .lg\:list-outside {
+    list-style-position: outside !important;
+  }
+
+  .lg\:list-none {
+    list-style-type: none !important;
+  }
+
+  .lg\:list-disc {
+    list-style-type: disc !important;
+  }
+
+  .lg\:list-decimal {
+    list-style-type: decimal !important;
   }
 
   .lg\:m-0 {
@@ -24660,18 +24692,6 @@ samp {
 }
 
 @media (min-width: 1280px) {
-  .xl\:list-none {
-    list-style-type: none !important;
-  }
-
-  .xl\:list-disc {
-    list-style-type: disc !important;
-  }
-
-  .xl\:list-decimal {
-    list-style-type: decimal !important;
-  }
-
   .xl\:appearance-none {
     appearance: none !important;
   }
@@ -27268,6 +27288,26 @@ samp {
 
   .xl\:leading-loose {
     line-height: 2 !important;
+  }
+
+  .xl\:list-inside {
+    list-style-position: inside !important;
+  }
+
+  .xl\:list-outside {
+    list-style-position: outside !important;
+  }
+
+  .xl\:list-none {
+    list-style-type: none !important;
+  }
+
+  .xl\:list-disc {
+    list-style-type: disc !important;
+  }
+
+  .xl\:list-decimal {
+    list-style-type: decimal !important;
   }
 
   .xl\:m-0 {

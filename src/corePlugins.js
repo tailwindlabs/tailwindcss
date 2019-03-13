@@ -1,5 +1,4 @@
 import preflight from './plugins/preflight'
-import listStyleType from './plugins/listStyleType'
 import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
 import backgroundColor from './plugins/backgroundColor'
@@ -27,6 +26,8 @@ import fontFamily from './plugins/fontFamily'
 import fontWeight from './plugins/fontWeight'
 import height from './plugins/height'
 import lineHeight from './plugins/lineHeight'
+import listStylePosition from './plugins/listStylePosition'
+import listStyleType from './plugins/listStyleType'
 import margin from './plugins/margin'
 import maxHeight from './plugins/maxHeight'
 import maxWidth from './plugins/maxWidth'
@@ -66,7 +67,6 @@ import configurePlugins from './util/configurePlugins'
 export default function({ corePlugins: corePluginConfig }) {
   return configurePlugins(corePluginConfig, {
     preflight,
-    listStyleType,
     appearance,
     backgroundAttachment,
     backgroundColor,
@@ -94,6 +94,8 @@ export default function({ corePlugins: corePluginConfig }) {
     fontWeight,
     height,
     lineHeight,
+    listStylePosition,
+    listStyleType,
     margin,
     maxHeight,
     maxWidth,
