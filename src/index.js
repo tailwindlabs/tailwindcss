@@ -5,6 +5,7 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import perfectionist from 'perfectionist'
 
+import defaultConfig from '../defaultConfig'
 import registerConfigAsDependency from './lib/registerConfigAsDependency'
 import processTailwindFeatures from './processTailwindFeatures'
 import resolveConfig from './util/resolveConfig'
@@ -28,18 +29,15 @@ function resolveConfigPath(filePath) {
 }
 
 const getConfigFunction = config => () => {
-  if (_.isUndefined(config) && !_.isObject(config)) {
-    return resolveConfig([require('../defaultConfig')()])
+  if (_.isUndefined(config)) {
+    return defaultConfig
   }
 
   if (!_.isObject(config)) {
     delete require.cache[require.resolve(config)]
   }
 
-  return resolveConfig([
-    _.isObject(config) ? config : require(config),
-    require('../defaultConfig')(),
-  ])
+  return resolveConfig([_.isObject(config) ? config : require(config), defaultConfig])
 }
 
 const plugin = postcss.plugin('tailwind', config => {

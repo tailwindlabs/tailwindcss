@@ -3,16 +3,11 @@ import substituteClassApplyAtRules from '../src/lib/substituteClassApplyAtRules'
 import processPlugins from '../src/util/processPlugins'
 import resolveConfig from '../src/util/resolveConfig'
 import corePlugins from '../src/corePlugins'
-import defaultConfig from '../defaultConfig.stub.js'
+import defaultConfig from '../defaultConfig'
 
-const resolvedDefaultConfig = resolveConfig([defaultConfig])
+const { utilities: defaultUtilities } = processPlugins(corePlugins(defaultConfig), defaultConfig)
 
-const { utilities: defaultUtilities } = processPlugins(
-  corePlugins(resolvedDefaultConfig),
-  resolvedDefaultConfig
-)
-
-function run(input, config = resolvedDefaultConfig, utilities = defaultUtilities) {
+function run(input, config = defaultConfig, utilities = defaultUtilities) {
   return postcss([substituteClassApplyAtRules(config, utilities)]).process(input, {
     from: undefined,
   })

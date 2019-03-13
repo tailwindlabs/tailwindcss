@@ -2108,6 +2108,13 @@ invert-kv@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-2.0.0.tgz#7393f5afa59ec9ff5f67a27620d11c226e3eec02"
 
+invoke-deep@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/invoke-deep/-/invoke-deep-1.0.1.tgz#86bc4328b065d9b31be7e3e43b2200084ec503de"
+  integrity sha512-802qeO3PgVEcfdHyBu1bmwOJsTurOlSQqM35h6Ou+2/iGA2FwGk7/XlqHA5tZ0gUuN6ADsq/tsN/uvtsDoNMig==
+  dependencies:
+    lodash.isplainobject "^4.0.6"
+
 is-accessor-descriptor@^0.1.6:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/is-accessor-descriptor/-/is-accessor-descriptor-0.1.6.tgz#a9e12cb3ae8d876727eeef3843f8a0897b5c98d6"
@@ -2857,6 +2864,11 @@ locate-path@^3.0.0:
   dependencies:
     p-locate "^3.0.0"
     path-exists "^3.0.0"
+
+lodash.isplainobject@^4.0.6:
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz#7c526a52d89b45c45cc690b88163be0497f550cb"
+  integrity sha1-fFJqUtibRcRcxpC4gWO+BJf1UMs=
 
 lodash.sortby@^4.7.0:
   version "4.7.0"
