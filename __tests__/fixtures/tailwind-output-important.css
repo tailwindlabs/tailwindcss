@@ -569,9 +569,8 @@ samp {
   }
 }
 
-.list-reset {
-  list-style: none !important;
-  padding: 0 !important;
+.list-none {
+  list-style-type: none !important;
 }
 
 .appearance-none {
@@ -6602,9 +6601,8 @@ samp {
 }
 
 @media (min-width: 640px) {
-  .sm\:list-reset {
-    list-style: none !important;
-    padding: 0 !important;
+  .sm\:list-none {
+    list-style-type: none !important;
   }
 
   .sm\:appearance-none {
@@ -12612,9 +12610,8 @@ samp {
 }
 
 @media (min-width: 768px) {
-  .md\:list-reset {
-    list-style: none !important;
-    padding: 0 !important;
+  .md\:list-none {
+    list-style-type: none !important;
   }
 
   .md\:appearance-none {
@@ -18622,9 +18619,8 @@ samp {
 }
 
 @media (min-width: 1024px) {
-  .lg\:list-reset {
-    list-style: none !important;
-    padding: 0 !important;
+  .lg\:list-none {
+    list-style-type: none !important;
   }
 
   .lg\:appearance-none {
@@ -24632,9 +24628,8 @@ samp {
 }
 
 @media (min-width: 1280px) {
-  .xl\:list-reset {
-    list-style: none !important;
-    padding: 0 !important;
+  .xl\:list-none {
+    list-style-type: none !important;
   }
 
   .xl\:appearance-none {

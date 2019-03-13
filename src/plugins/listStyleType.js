@@ -2,12 +2,11 @@ export default function() {
   return function({ addUtilities, config }) {
     addUtilities(
       {
-        '.list-reset': {
-          'list-style': 'none',
-          padding: '0',
+        '.list-none': {
+          'list-style-type': 'none',
         },
       },
-      config('variants.listStyle')
+      config('variants.listStyleType')
     )
   }
 }

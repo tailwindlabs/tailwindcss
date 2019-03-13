@@ -1,5 +1,5 @@
 import preflight from './plugins/preflight'
-import listStyle from './plugins/listStyle'
+import listStyleType from './plugins/listStyleType'
 import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
 import backgroundColor from './plugins/backgroundColor'
@@ -66,7 +66,7 @@ import configurePlugins from './util/configurePlugins'
 export default function({ corePlugins: corePluginConfig }) {
   return configurePlugins(corePluginConfig, {
     preflight,
-    listStyle,
+    listStyleType,
     appearance,
     backgroundAttachment,
     backgroundColor,
