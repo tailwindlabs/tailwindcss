@@ -88,3 +88,24 @@ test('quotes are preserved around default values', () => {
     expect(result.warnings().length).toBe(0)
   })
 })
+
+test('an unquoted list is valid as a default value', () => {
+  const input = `
+    .heading { font-family: theme('fonts.sans', Helvetica, Arial, sans-serif); }
+  `
+
+  const output = `
+    .heading { font-family: Helvetica, Arial, sans-serif; }
+  `
+
+  return run(input, {
+    theme: {
+      fonts: {
+        serif: 'Constantia',
+      },
+    },
+  }).then(result => {
+    expect(result.css).toEqual(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
