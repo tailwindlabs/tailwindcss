@@ -107,7 +107,7 @@ module.exports = function() {
       '64': '16rem',
     },
     screens: {
-      sm: '568px',
+      sm: '640px',
       md: '768px',
       lg: '1024px',
       xl: '1280px',

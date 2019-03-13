@@ -545,9 +545,9 @@ samp {
   width: 100%;
 }
 
-@media (min-width: 568px) {
+@media (min-width: 640px) {
   .container {
-    max-width: 568px;
+    max-width: 640px;
   }
 }
 
@@ -6601,7 +6601,7 @@ samp {
   color: #e3342f;
 }
 
-@media (min-width: 568px) {
+@media (min-width: 640px) {
   .sm\:list-reset {
     list-style: none !important;
     padding: 0 !important;

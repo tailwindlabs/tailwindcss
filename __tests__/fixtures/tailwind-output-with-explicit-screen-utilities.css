@@ -2,7 +2,7 @@
   color: red;
 }
 
-@media (min-width: 568px) {
+@media (min-width: 640px) {
   .sm\:example {
     color: red;
   }
