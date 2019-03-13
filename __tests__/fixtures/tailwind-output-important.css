@@ -422,6 +422,14 @@ ul {
  */
 
 /**
+ * Use the system font stack as a sane default.
+ */
+
+html {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/**
  * Allow adding a border to an element by just adding a border-width.
  *
  * By default, the way the browser specifies that an element should have no
