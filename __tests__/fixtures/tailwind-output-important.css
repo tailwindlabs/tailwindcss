@@ -2939,7 +2939,7 @@ strong {
 }
 
 .font-serif {
-  font-family: Constantia, Lucida Bright, Lucidabright, Lucida Serif, Lucida, DejaVu Serif, Bitstream Vera Serif, Liberation Serif, Georgia, serif !important;
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif !important;
 }
 
 .font-mono {
@@ -8960,7 +8960,7 @@ strong {
   }
 
   .sm\:font-serif {
-    font-family: Constantia, Lucida Bright, Lucidabright, Lucida Serif, Lucida, DejaVu Serif, Bitstream Vera Serif, Liberation Serif, Georgia, serif !important;
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif !important;
   }
 
   .sm\:font-mono {
@@ -14966,7 +14966,7 @@ strong {
   }
 
   .md\:font-serif {
-    font-family: Constantia, Lucida Bright, Lucidabright, Lucida Serif, Lucida, DejaVu Serif, Bitstream Vera Serif, Liberation Serif, Georgia, serif !important;
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif !important;
   }
 
   .md\:font-mono {
@@ -20972,7 +20972,7 @@ strong {
   }
 
   .lg\:font-serif {
-    font-family: Constantia, Lucida Bright, Lucidabright, Lucida Serif, Lucida, DejaVu Serif, Bitstream Vera Serif, Liberation Serif, Georgia, serif !important;
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif !important;
   }
 
   .lg\:font-mono {
@@ -26978,7 +26978,7 @@ strong {
   }
 
   .xl\:font-serif {
-    font-family: Constantia, Lucida Bright, Lucidabright, Lucida Serif, Lucida, DejaVu Serif, Bitstream Vera Serif, Liberation Serif, Georgia, serif !important;
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif !important;
   }
 
   .xl\:font-mono {
