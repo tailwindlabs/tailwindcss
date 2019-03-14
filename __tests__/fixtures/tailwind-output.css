@@ -14096,9 +14096,6 @@ samp {
 @media (min-width: 768px) {
   .md\:appearance-none {
     appearance: none;
-
-  .md\:appearance-none {
-    appearance: none;
   }
 
   .md\:bg-fixed {
