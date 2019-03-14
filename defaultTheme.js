@@ -366,5 +366,9 @@ module.exports = function() {
       disc: 'disc',
       decimal: 'decimal',
     },
+    inset: {
+      '0': 0,
+      auto: 'auto',
+    },
   }
 }

@@ -49,6 +49,7 @@ module.exports = {
     padding: ['responsive'],
     pointerEvents: ['responsive'],
     position: ['responsive'],
+    inset: ['responsive'],
     resize: ['responsive'],
     boxShadow: ['responsive', 'hover', 'focus'],
     fill: [],

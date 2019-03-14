@@ -5667,44 +5667,70 @@ samp {
   position: sticky;
 }
 
-.pin-none {
+.inset-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.inset-auto {
   top: auto;
   right: auto;
   bottom: auto;
   left: auto;
 }
 
-.pin {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-.pin-y {
+.inset-y-0 {
   top: 0;
   bottom: 0;
 }
 
-.pin-x {
+.inset-x-0 {
   right: 0;
   left: 0;
 }
 
-.pin-t {
+.inset-y-auto {
+  top: auto;
+  bottom: auto;
+}
+
+.inset-x-auto {
+  right: auto;
+  left: auto;
+}
+
+.top-0 {
   top: 0;
 }
 
-.pin-r {
+.right-0 {
   right: 0;
 }
 
-.pin-b {
+.bottom-0 {
   bottom: 0;
 }
 
-.pin-l {
+.left-0 {
   left: 0;
+}
+
+.top-auto {
+  top: auto;
+}
+
+.right-auto {
+  right: auto;
+}
+
+.bottom-auto {
+  bottom: auto;
+}
+
+.left-auto {
+  left: auto;
 }
 
 .resize-none {
@@ -12416,44 +12442,70 @@ samp {
     position: sticky;
   }
 
-  .sm\:pin-none {
+  .sm\:inset-0 {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .sm\:inset-auto {
     top: auto;
     right: auto;
     bottom: auto;
     left: auto;
   }
 
-  .sm\:pin {
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-
-  .sm\:pin-y {
+  .sm\:inset-y-0 {
     top: 0;
     bottom: 0;
   }
 
-  .sm\:pin-x {
+  .sm\:inset-x-0 {
     right: 0;
     left: 0;
   }
 
-  .sm\:pin-t {
+  .sm\:inset-y-auto {
+    top: auto;
+    bottom: auto;
+  }
+
+  .sm\:inset-x-auto {
+    right: auto;
+    left: auto;
+  }
+
+  .sm\:top-0 {
     top: 0;
   }
 
-  .sm\:pin-r {
+  .sm\:right-0 {
     right: 0;
   }
 
-  .sm\:pin-b {
+  .sm\:bottom-0 {
     bottom: 0;
   }
 
-  .sm\:pin-l {
+  .sm\:left-0 {
     left: 0;
+  }
+
+  .sm\:top-auto {
+    top: auto;
+  }
+
+  .sm\:right-auto {
+    right: auto;
+  }
+
+  .sm\:bottom-auto {
+    bottom: auto;
+  }
+
+  .sm\:left-auto {
+    left: auto;
   }
 
   .sm\:resize-none {
@@ -19158,44 +19210,70 @@ samp {
     position: sticky;
   }
 
-  .md\:pin-none {
+  .md\:inset-0 {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .md\:inset-auto {
     top: auto;
     right: auto;
     bottom: auto;
     left: auto;
   }
 
-  .md\:pin {
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-
-  .md\:pin-y {
+  .md\:inset-y-0 {
     top: 0;
     bottom: 0;
   }
 
-  .md\:pin-x {
+  .md\:inset-x-0 {
     right: 0;
     left: 0;
   }
 
-  .md\:pin-t {
+  .md\:inset-y-auto {
+    top: auto;
+    bottom: auto;
+  }
+
+  .md\:inset-x-auto {
+    right: auto;
+    left: auto;
+  }
+
+  .md\:top-0 {
     top: 0;
   }
 
-  .md\:pin-r {
+  .md\:right-0 {
     right: 0;
   }
 
-  .md\:pin-b {
+  .md\:bottom-0 {
     bottom: 0;
   }
 
-  .md\:pin-l {
+  .md\:left-0 {
     left: 0;
+  }
+
+  .md\:top-auto {
+    top: auto;
+  }
+
+  .md\:right-auto {
+    right: auto;
+  }
+
+  .md\:bottom-auto {
+    bottom: auto;
+  }
+
+  .md\:left-auto {
+    left: auto;
   }
 
   .md\:resize-none {
@@ -25900,44 +25978,70 @@ samp {
     position: sticky;
   }
 
-  .lg\:pin-none {
+  .lg\:inset-0 {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .lg\:inset-auto {
     top: auto;
     right: auto;
     bottom: auto;
     left: auto;
   }
 
-  .lg\:pin {
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-
-  .lg\:pin-y {
+  .lg\:inset-y-0 {
     top: 0;
     bottom: 0;
   }
 
-  .lg\:pin-x {
+  .lg\:inset-x-0 {
     right: 0;
     left: 0;
   }
 
-  .lg\:pin-t {
+  .lg\:inset-y-auto {
+    top: auto;
+    bottom: auto;
+  }
+
+  .lg\:inset-x-auto {
+    right: auto;
+    left: auto;
+  }
+
+  .lg\:top-0 {
     top: 0;
   }
 
-  .lg\:pin-r {
+  .lg\:right-0 {
     right: 0;
   }
 
-  .lg\:pin-b {
+  .lg\:bottom-0 {
     bottom: 0;
   }
 
-  .lg\:pin-l {
+  .lg\:left-0 {
     left: 0;
+  }
+
+  .lg\:top-auto {
+    top: auto;
+  }
+
+  .lg\:right-auto {
+    right: auto;
+  }
+
+  .lg\:bottom-auto {
+    bottom: auto;
+  }
+
+  .lg\:left-auto {
+    left: auto;
   }
 
   .lg\:resize-none {
@@ -32642,44 +32746,70 @@ samp {
     position: sticky;
   }
 
-  .xl\:pin-none {
+  .xl\:inset-0 {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .xl\:inset-auto {
     top: auto;
     right: auto;
     bottom: auto;
     left: auto;
   }
 
-  .xl\:pin {
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-
-  .xl\:pin-y {
+  .xl\:inset-y-0 {
     top: 0;
     bottom: 0;
   }
 
-  .xl\:pin-x {
+  .xl\:inset-x-0 {
     right: 0;
     left: 0;
   }
 
-  .xl\:pin-t {
+  .xl\:inset-y-auto {
+    top: auto;
+    bottom: auto;
+  }
+
+  .xl\:inset-x-auto {
+    right: auto;
+    left: auto;
+  }
+
+  .xl\:top-0 {
     top: 0;
   }
 
-  .xl\:pin-r {
+  .xl\:right-0 {
     right: 0;
   }
 
-  .xl\:pin-b {
+  .xl\:bottom-0 {
     bottom: 0;
   }
 
-  .xl\:pin-l {
+  .xl\:left-0 {
     left: 0;
+  }
+
+  .xl\:top-auto {
+    top: auto;
+  }
+
+  .xl\:right-auto {
+    right: auto;
+  }
+
+  .xl\:bottom-auto {
+    bottom: auto;
+  }
+
+  .xl\:left-auto {
+    left: auto;
   }
 
   .xl\:resize-none {
