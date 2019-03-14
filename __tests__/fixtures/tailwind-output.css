@@ -5667,18 +5667,18 @@ samp {
   position: sticky;
 }
 
-.inset-auto {
-  top: auto;
-  right: auto;
-  bottom: auto;
-  left: auto;
-}
-
 .inset-0 {
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+}
+
+.inset-auto {
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
 }
 
 .inset-y-0 {
@@ -5689,6 +5689,16 @@ samp {
 .inset-x-0 {
   right: 0;
   left: 0;
+}
+
+.inset-y-auto {
+  top: auto;
+  bottom: auto;
+}
+
+.inset-x-auto {
+  right: auto;
+  left: auto;
 }
 
 .top-0 {
@@ -5705,6 +5715,22 @@ samp {
 
 .left-0 {
   left: 0;
+}
+
+.top-auto {
+  top: auto;
+}
+
+.right-auto {
+  right: auto;
+}
+
+.bottom-auto {
+  bottom: auto;
+}
+
+.left-auto {
+  left: auto;
 }
 
 .resize-none {
@@ -12416,18 +12442,18 @@ samp {
     position: sticky;
   }
 
-  .sm\:inset-auto {
-    top: auto;
-    right: auto;
-    bottom: auto;
-    left: auto;
-  }
-
   .sm\:inset-0 {
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
+  }
+
+  .sm\:inset-auto {
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
   }
 
   .sm\:inset-y-0 {
@@ -12438,6 +12464,16 @@ samp {
   .sm\:inset-x-0 {
     right: 0;
     left: 0;
+  }
+
+  .sm\:inset-y-auto {
+    top: auto;
+    bottom: auto;
+  }
+
+  .sm\:inset-x-auto {
+    right: auto;
+    left: auto;
   }
 
   .sm\:top-0 {
@@ -12454,6 +12490,22 @@ samp {
 
   .sm\:left-0 {
     left: 0;
+  }
+
+  .sm\:top-auto {
+    top: auto;
+  }
+
+  .sm\:right-auto {
+    right: auto;
+  }
+
+  .sm\:bottom-auto {
+    bottom: auto;
+  }
+
+  .sm\:left-auto {
+    left: auto;
   }
 
   .sm\:resize-none {
@@ -19158,18 +19210,18 @@ samp {
     position: sticky;
   }
 
-  .md\:inset-auto {
-    top: auto;
-    right: auto;
-    bottom: auto;
-    left: auto;
-  }
-
   .md\:inset-0 {
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
+  }
+
+  .md\:inset-auto {
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
   }
 
   .md\:inset-y-0 {
@@ -19180,6 +19232,16 @@ samp {
   .md\:inset-x-0 {
     right: 0;
     left: 0;
+  }
+
+  .md\:inset-y-auto {
+    top: auto;
+    bottom: auto;
+  }
+
+  .md\:inset-x-auto {
+    right: auto;
+    left: auto;
   }
 
   .md\:top-0 {
@@ -19196,6 +19258,22 @@ samp {
 
   .md\:left-0 {
     left: 0;
+  }
+
+  .md\:top-auto {
+    top: auto;
+  }
+
+  .md\:right-auto {
+    right: auto;
+  }
+
+  .md\:bottom-auto {
+    bottom: auto;
+  }
+
+  .md\:left-auto {
+    left: auto;
   }
 
   .md\:resize-none {
@@ -25900,18 +25978,18 @@ samp {
     position: sticky;
   }
 
-  .lg\:inset-auto {
-    top: auto;
-    right: auto;
-    bottom: auto;
-    left: auto;
-  }
-
   .lg\:inset-0 {
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
+  }
+
+  .lg\:inset-auto {
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
   }
 
   .lg\:inset-y-0 {
@@ -25922,6 +26000,16 @@ samp {
   .lg\:inset-x-0 {
     right: 0;
     left: 0;
+  }
+
+  .lg\:inset-y-auto {
+    top: auto;
+    bottom: auto;
+  }
+
+  .lg\:inset-x-auto {
+    right: auto;
+    left: auto;
   }
 
   .lg\:top-0 {
@@ -25938,6 +26026,22 @@ samp {
 
   .lg\:left-0 {
     left: 0;
+  }
+
+  .lg\:top-auto {
+    top: auto;
+  }
+
+  .lg\:right-auto {
+    right: auto;
+  }
+
+  .lg\:bottom-auto {
+    bottom: auto;
+  }
+
+  .lg\:left-auto {
+    left: auto;
   }
 
   .lg\:resize-none {
@@ -32642,18 +32746,18 @@ samp {
     position: sticky;
   }
 
-  .xl\:inset-auto {
-    top: auto;
-    right: auto;
-    bottom: auto;
-    left: auto;
-  }
-
   .xl\:inset-0 {
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
+  }
+
+  .xl\:inset-auto {
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
   }
 
   .xl\:inset-y-0 {
@@ -32664,6 +32768,16 @@ samp {
   .xl\:inset-x-0 {
     right: 0;
     left: 0;
+  }
+
+  .xl\:inset-y-auto {
+    top: auto;
+    bottom: auto;
+  }
+
+  .xl\:inset-x-auto {
+    right: auto;
+    left: auto;
   }
 
   .xl\:top-0 {
@@ -32680,6 +32794,22 @@ samp {
 
   .xl\:left-0 {
     left: 0;
+  }
+
+  .xl\:top-auto {
+    top: auto;
+  }
+
+  .xl\:right-auto {
+    right: auto;
+  }
+
+  .xl\:bottom-auto {
+    bottom: auto;
+  }
+
+  .xl\:left-auto {
+    left: auto;
   }
 
   .xl\:resize-none {
