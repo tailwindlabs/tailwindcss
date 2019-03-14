@@ -41,59 +41,16 @@ test.only('options are not required', () => {
   `)
 })
 
-test.only('screens can be specified explicitly', () => {
-  const { components } = processPlugins(
-    [
-      container({
-        screens: {
-          sm: '400px',
-          lg: '500px',
-        },
-      }),
-    ],
-    config()
-  )
-
-  expect(css(components)).toMatchCss(`
-    .container { width: 100% }
-    @media (min-width: 400px) {
-      .container { max-width: 400px }
-    }
-    @media (min-width: 500px) {
-      .container { max-width: 500px }
-    }
-  `)
-})
-
-test.only('screens can be an array', () => {
-  const { components } = processPlugins(
-    [
-      container({
-        screens: ['400px', '500px'],
-      }),
-    ],
-    config()
-  )
-
-  expect(css(components)).toMatchCss(`
-    .container { width: 100% }
-    @media (min-width: 400px) {
-      .container { max-width: 400px }
-    }
-    @media (min-width: 500px) {
-      .container { max-width: 500px }
-    }
-  `)
-})
-
 test.only('the container can be centered by default', () => {
   const { components } = processPlugins(
-    [
-      container({
-        center: true,
-      }),
-    ],
-    config()
+    [container()],
+    config({
+      theme: {
+        container: {
+          center: true,
+        },
+      },
+    })
   )
 
   expect(css(components)).toMatchCss(`
@@ -119,12 +76,14 @@ test.only('the container can be centered by default', () => {
 
 test.only('horizontal padding can be included by default', () => {
   const { components } = processPlugins(
-    [
-      container({
-        padding: '2rem',
-      }),
-    ],
-    config()
+    [container()],
+    config({
+      theme: {
+        container: {
+          padding: '2rem',
+        },
+      },
+    })
   )
 
   expect(css(components)).toMatchCss(`
@@ -150,17 +109,15 @@ test.only('horizontal padding can be included by default', () => {
 
 test.only('setting all options at once', () => {
   const { components } = processPlugins(
-    [
-      container({
-        screens: {
-          sm: '400px',
-          lg: '500px',
+    [container()],
+    config({
+      theme: {
+        container: {
+          center: true,
+          padding: '2rem',
         },
-        center: true,
-        padding: '2rem',
-      }),
-    ],
-    config()
+      },
+    })
   )
 
   expect(css(components)).toMatchCss(`
@@ -171,11 +128,17 @@ test.only('setting all options at once', () => {
       padding-right: 2rem;
       padding-left: 2rem
     }
-    @media (min-width: 400px) {
-      .container { max-width: 400px }
+    @media (min-width: 576px) {
+      .container { max-width: 576px }
     }
-    @media (min-width: 500px) {
-      .container { max-width: 500px }
+    @media (min-width: 768px) {
+      .container { max-width: 768px }
+    }
+    @media (min-width: 992px) {
+      .container { max-width: 992px }
+    }
+    @media (min-width: 1200px) {
+      .container { max-width: 1200px }
     }
   `)
 })
