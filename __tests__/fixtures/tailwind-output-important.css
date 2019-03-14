@@ -5667,43 +5667,43 @@ samp {
   position: sticky !important;
 }
 
-.pin-none {
+.inset-auto {
   top: auto !important;
   right: auto !important;
   bottom: auto !important;
   left: auto !important;
 }
 
-.pin {
+.inset-0 {
   top: 0 !important;
   right: 0 !important;
   bottom: 0 !important;
   left: 0 !important;
 }
 
-.pin-y {
+.inset-y-0 {
   top: 0 !important;
   bottom: 0 !important;
 }
 
-.pin-x {
+.inset-x-0 {
   right: 0 !important;
   left: 0 !important;
 }
 
-.pin-t {
+.top-0 {
   top: 0 !important;
 }
 
-.pin-r {
+.right-0 {
   right: 0 !important;
 }
 
-.pin-b {
+.bottom-0 {
   bottom: 0 !important;
 }
 
-.pin-l {
+.left-0 {
   left: 0 !important;
 }
 
@@ -12416,43 +12416,43 @@ samp {
     position: sticky !important;
   }
 
-  .sm\:pin-none {
+  .sm\:inset-auto {
     top: auto !important;
     right: auto !important;
     bottom: auto !important;
     left: auto !important;
   }
 
-  .sm\:pin {
+  .sm\:inset-0 {
     top: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
     left: 0 !important;
   }
 
-  .sm\:pin-y {
+  .sm\:inset-y-0 {
     top: 0 !important;
     bottom: 0 !important;
   }
 
-  .sm\:pin-x {
+  .sm\:inset-x-0 {
     right: 0 !important;
     left: 0 !important;
   }
 
-  .sm\:pin-t {
+  .sm\:top-0 {
     top: 0 !important;
   }
 
-  .sm\:pin-r {
+  .sm\:right-0 {
     right: 0 !important;
   }
 
-  .sm\:pin-b {
+  .sm\:bottom-0 {
     bottom: 0 !important;
   }
 
-  .sm\:pin-l {
+  .sm\:left-0 {
     left: 0 !important;
   }
 
@@ -19158,43 +19158,43 @@ samp {
     position: sticky !important;
   }
 
-  .md\:pin-none {
+  .md\:inset-auto {
     top: auto !important;
     right: auto !important;
     bottom: auto !important;
     left: auto !important;
   }
 
-  .md\:pin {
+  .md\:inset-0 {
     top: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
     left: 0 !important;
   }
 
-  .md\:pin-y {
+  .md\:inset-y-0 {
     top: 0 !important;
     bottom: 0 !important;
   }
 
-  .md\:pin-x {
+  .md\:inset-x-0 {
     right: 0 !important;
     left: 0 !important;
   }
 
-  .md\:pin-t {
+  .md\:top-0 {
     top: 0 !important;
   }
 
-  .md\:pin-r {
+  .md\:right-0 {
     right: 0 !important;
   }
 
-  .md\:pin-b {
+  .md\:bottom-0 {
     bottom: 0 !important;
   }
 
-  .md\:pin-l {
+  .md\:left-0 {
     left: 0 !important;
   }
 
@@ -25900,43 +25900,43 @@ samp {
     position: sticky !important;
   }
 
-  .lg\:pin-none {
+  .lg\:inset-auto {
     top: auto !important;
     right: auto !important;
     bottom: auto !important;
     left: auto !important;
   }
 
-  .lg\:pin {
+  .lg\:inset-0 {
     top: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
     left: 0 !important;
   }
 
-  .lg\:pin-y {
+  .lg\:inset-y-0 {
     top: 0 !important;
     bottom: 0 !important;
   }
 
-  .lg\:pin-x {
+  .lg\:inset-x-0 {
     right: 0 !important;
     left: 0 !important;
   }
 
-  .lg\:pin-t {
+  .lg\:top-0 {
     top: 0 !important;
   }
 
-  .lg\:pin-r {
+  .lg\:right-0 {
     right: 0 !important;
   }
 
-  .lg\:pin-b {
+  .lg\:bottom-0 {
     bottom: 0 !important;
   }
 
-  .lg\:pin-l {
+  .lg\:left-0 {
     left: 0 !important;
   }
 
@@ -32642,43 +32642,43 @@ samp {
     position: sticky !important;
   }
 
-  .xl\:pin-none {
+  .xl\:inset-auto {
     top: auto !important;
     right: auto !important;
     bottom: auto !important;
     left: auto !important;
   }
 
-  .xl\:pin {
+  .xl\:inset-0 {
     top: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
     left: 0 !important;
   }
 
-  .xl\:pin-y {
+  .xl\:inset-y-0 {
     top: 0 !important;
     bottom: 0 !important;
   }
 
-  .xl\:pin-x {
+  .xl\:inset-x-0 {
     right: 0 !important;
     left: 0 !important;
   }
 
-  .xl\:pin-t {
+  .xl\:top-0 {
     top: 0 !important;
   }
 
-  .xl\:pin-r {
+  .xl\:right-0 {
     right: 0 !important;
   }
 
-  .xl\:pin-b {
+  .xl\:bottom-0 {
     bottom: 0 !important;
   }
 
-  .xl\:pin-l {
+  .xl\:left-0 {
     left: 0 !important;
   }
 
