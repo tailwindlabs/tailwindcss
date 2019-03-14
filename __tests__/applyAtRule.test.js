@@ -3,7 +3,7 @@ import substituteClassApplyAtRules from '../src/lib/substituteClassApplyAtRules'
 import processPlugins from '../src/util/processPlugins'
 import resolveConfig from '../src/util/resolveConfig'
 import corePlugins from '../src/corePlugins'
-import defaultConfig from '../defaultConfig.stub.js'
+import defaultConfig from '../stubs/defaultConfig.stub.js'
 
 const resolvedDefaultConfig = resolveConfig([defaultConfig])
 

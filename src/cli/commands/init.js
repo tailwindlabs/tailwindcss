@@ -10,12 +10,17 @@ export const description =
 
 export const options = [
   {
+    usage: '--full',
+    description: 'Generate complete configuration file.',
+  },
+  {
     usage: '--no-comments',
     description: 'Omit comments from the config file.',
   },
 ]
 
 export const optionMap = {
+  full: ['full'],
   noComments: ['no-comments'],
 }
 
@@ -30,14 +35,16 @@ export function run(cliParams, cliOptions) {
   return new Promise(resolve => {
     utils.header()
 
+    const full = cliOptions.full
     const noComments = cliOptions.noComments
     const file = cliParams[0] || constants.defaultConfigFile
 
     utils.exists(file) && utils.die(chalk.bold.magenta(file), 'already exists.')
 
+    const stubFile = full ? constants.defaultConfigStubFile : constants.simpleConfigStubFile
     let stub = utils
-      .readFile(constants.configStubFile)
-      .replace("require('./plugins/container')", "require('tailwindcss/plugins/container')")
+      .readFile(stubFile)
+      .replace("require('../plugins/container')", "require('tailwindcss/plugins/container')")
 
     noComments && (stub = utils.stripBlockComments(stub))
 

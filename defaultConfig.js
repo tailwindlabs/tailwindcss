@@ -1,3 +1,4 @@
-module.exports = function() {
-  return require('lodash').cloneDeep(require('./defaultConfig.stub.js'))
-}
+const cloneDeep = require('lodash/cloneDeep')
+const defaultConfig = require('./stubs/defaultConfig.stub.js')
+
+module.exports = cloneDeep(defaultConfig)

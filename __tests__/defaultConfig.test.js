@@ -1,5 +1,11 @@
 import config from '../defaultConfig.js'
+import configStub from '../stubs/defaultConfig.stub.js'
 
 test('the default config matches the stub', () => {
-  expect(config()).toEqual(require('../defaultConfig.stub.js'))
+  expect(config).toEqual(configStub)
+})
+
+test('modifying the default config does not affect the stub', () => {
+  config.theme = {}
+  expect(config).not.toEqual(configStub)
 })

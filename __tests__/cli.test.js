@@ -7,6 +7,8 @@ import * as utils from '../src/cli/utils'
 describe('cli', () => {
   const inputCssPath = path.resolve(__dirname, 'fixtures/tailwind-input.css')
   const customConfigPath = path.resolve(__dirname, 'fixtures/custom-config.js')
+  const defaultConfigFixture = utils.readFile(constants.defaultConfigStubFile)
+  const simpleConfigFixture = utils.readFile(constants.simpleConfigStubFile)
 
   beforeEach(() => {
     console.log = jest.fn()
@@ -31,6 +33,18 @@ describe('cli', () => {
       return cli(['init', '--no-comments']).then(() => {
         expect(utils.writeFile.mock.calls[0][1]).not.toContain('/**')
         expect(utils.writeFile.mock.calls[0][1]).toContain('//')
+      })
+    })
+
+    it('creates a simple Tailwind config file', () => {
+      return cli(['init']).then(() => {
+        expect(utils.writeFile.mock.calls[0][1]).toEqual(simpleConfigFixture)
+      })
+    })
+
+    it('creates a full Tailwind config file', () => {
+      return cli(['init', '--full']).then(() => {
+        expect(utils.writeFile.mock.calls[0][1]).toEqual(defaultConfigFixture)
       })
     })
   })
