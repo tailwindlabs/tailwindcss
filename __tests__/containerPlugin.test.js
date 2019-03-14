@@ -41,6 +41,29 @@ test.only('options are not required', () => {
   `)
 })
 
+test.only('screens can be passed explicitly', () => {
+  const { components } = processPlugins(
+    [container()],
+    config({
+      theme: {
+        container: {
+          screens: ['400px', '500px'],
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    .container { width: 100% }
+    @media (min-width: 400px) {
+      .container { max-width: 400px }
+    }
+    @media (min-width: 500px) {
+      .container { max-width: 500px }
+    }
+  `)
+})
+
 test.only('the container can be centered by default', () => {
   const { components } = processPlugins(
     [container()],
@@ -113,6 +136,7 @@ test.only('setting all options at once', () => {
     config({
       theme: {
         container: {
+          screens: ['400px', '500px'],
           center: true,
           padding: '2rem',
         },
@@ -128,17 +152,11 @@ test.only('setting all options at once', () => {
       padding-right: 2rem;
       padding-left: 2rem
     }
-    @media (min-width: 576px) {
-      .container { max-width: 576px }
+    @media (min-width: 400px) {
+      .container { max-width: 400px }
     }
-    @media (min-width: 768px) {
-      .container { max-width: 768px }
-    }
-    @media (min-width: 992px) {
-      .container { max-width: 992px }
-    }
-    @media (min-width: 1200px) {
-      .container { max-width: 1200px }
+    @media (min-width: 500px) {
+      .container { max-width: 500px }
     }
   `)
 })

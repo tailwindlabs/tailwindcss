@@ -24,7 +24,7 @@ function extractMinWidths(breakpoints) {
 
 module.exports = function() {
   return function({ addComponents, config }) {
-    const minWidths = extractMinWidths(config('theme.screens'))
+    const minWidths = extractMinWidths(config('theme.container.screens', config('theme.screens')))
 
     const atRules = _.map(minWidths, minWidth => {
       return {
