@@ -44,7 +44,9 @@ describe('cli', () => {
 
     it('creates a full Tailwind config file', () => {
       return cli(['init', '--full']).then(() => {
-        expect(utils.writeFile.mock.calls[0][1]).toEqual(defaultConfigFixture)
+        expect(utils.writeFile.mock.calls[0][1]).toEqual(
+          utils.replaceAll(defaultConfigFixture, constants.replacements)
+        )
       })
     })
   })

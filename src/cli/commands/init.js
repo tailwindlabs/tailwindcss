@@ -42,10 +42,9 @@ export function run(cliParams, cliOptions) {
     utils.exists(file) && utils.die(chalk.bold.magenta(file), 'already exists.')
 
     const stubFile = full ? constants.defaultConfigStubFile : constants.simpleConfigStubFile
-    let stub = utils
-      .readFile(stubFile)
-      .replace("require('../plugins/container')", "require('tailwindcss/plugins/container')")
+    let stub = utils.readFile(stubFile)
 
+    stub = utils.replaceAll(stub, constants.replacements)
     noComments && (stub = utils.stripBlockComments(stub))
 
     utils.writeFile(file, stub)

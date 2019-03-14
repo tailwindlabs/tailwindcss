@@ -136,3 +136,17 @@ export function stripBlockComments(input) {
     .trim()
     .concat('\n')
 }
+
+/**
+ * Performs string replacement for multiple patterns.
+ *
+ * @param {string} input
+ * @param {array} replacements
+ * @return {string}
+ */
+export function replaceAll(input, replacements) {
+  return replacements.reduce(
+    (str, [pattern, replacement]) => str.split(pattern).join(replacement),
+    input
+  )
+}
