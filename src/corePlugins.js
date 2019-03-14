@@ -1,4 +1,5 @@
 import preflight from './plugins/preflight'
+import container from './plugins/container'
 import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
 import backgroundColor from './plugins/backgroundColor'
@@ -68,6 +69,7 @@ import configurePlugins from './util/configurePlugins'
 export default function({ corePlugins: corePluginConfig }) {
   return configurePlugins(corePluginConfig, {
     preflight,
+    container,
     appearance,
     backgroundAttachment,
     backgroundColor,

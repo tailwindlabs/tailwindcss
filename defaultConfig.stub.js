@@ -70,12 +70,6 @@ module.exports = {
     width: ['responsive'],
     zIndex: ['responsive'],
   },
-  corePlugins: {
-  },
-  plugins: [
-    require('./plugins/container')({
-      // center: true,
-      // padding: '1rem',
-    }),
-  ],
+  corePlugins: {},
+  plugins: [],
 }
