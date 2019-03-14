@@ -42,6 +42,7 @@ import overflow from './plugins/overflow'
 import padding from './plugins/padding'
 import pointerEvents from './plugins/pointerEvents'
 import position from './plugins/position'
+import inset from './plugins/inset'
 import resize from './plugins/resize'
 import boxShadow from './plugins/boxShadow'
 import fill from './plugins/fill'
@@ -110,6 +111,7 @@ export default function({ corePlugins: corePluginConfig }) {
     padding,
     pointerEvents,
     position,
+    inset,
     resize,
     boxShadow,
     fill,
