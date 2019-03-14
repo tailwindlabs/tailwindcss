@@ -329,5 +329,10 @@ module.exports = function() {
       '0': 0,
       default: 1,
     },
+    listStyleType: {
+      none: 'none',
+      disc: 'disc',
+      decimal: 'decimal',
+    },
   }
 }
