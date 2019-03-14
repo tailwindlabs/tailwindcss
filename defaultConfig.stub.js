@@ -33,8 +33,7 @@ module.exports = {
     fontWeight: ['responsive', 'hover', 'focus'],
     height: ['responsive'],
     lineHeight: ['responsive'],
-    listStylePosition: ['responsive'],
-    listStyleType: ['responsive'],
+    listStyle: ['responsive'],
     margin: ['responsive'],
     maxHeight: ['responsive'],
     maxWidth: ['responsive'],
@@ -49,7 +48,6 @@ module.exports = {
     padding: ['responsive'],
     pointerEvents: ['responsive'],
     position: ['responsive'],
-    inset: ['responsive'],
     resize: ['responsive'],
     boxShadow: ['responsive', 'hover', 'focus'],
     fill: [],
@@ -70,6 +68,12 @@ module.exports = {
     width: ['responsive'],
     zIndex: ['responsive'],
   },
-  corePlugins: {},
-  plugins: [],
+  corePlugins: {
+  },
+  plugins: [
+    require('./plugins/container')({
+      // center: true,
+      // padding: '1rem',
+    }),
+  ],
 }

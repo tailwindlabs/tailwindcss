@@ -109,4 +109,30 @@ describe('cli utils', () => {
       expect(result).toEqual(expect.stringContaining('__comment_docblock_important__'))
     })
   })
+
+  describe('replaceAll', () => {
+    it('replaces strings', () => {
+      const result = utils.replaceAll('test', [['test', 'pass']])
+
+      expect(result).toEqual('pass')
+    })
+
+    it('replaces regex patterns', () => {
+      const result = utils.replaceAll('TEST', [[/test/i, 'pass']])
+
+      expect(result).toEqual('pass')
+    })
+
+    it('replaces all matches', () => {
+      const result = utils.replaceAll('test test', [['test', 'pass']])
+
+      expect(result).toEqual('pass pass')
+    })
+
+    it('replaces all multiple patterns', () => {
+      const result = utils.replaceAll('hello world', [['hello', 'greetings'], ['world', 'earth']])
+
+      expect(result).toEqual('greetings earth')
+    })
+  })
 })
