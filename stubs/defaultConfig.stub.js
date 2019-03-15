@@ -436,6 +436,7 @@ module.exports = {
     verticalAlign: ['responsive'],
     visibility: ['responsive'],
     whitespace: ['responsive'],
+    wordBreak: ['responsive'],
     width: ['responsive'],
     zIndex: ['responsive'],
   },
