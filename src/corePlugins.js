@@ -61,6 +61,7 @@ import userSelect from './plugins/userSelect'
 import verticalAlign from './plugins/verticalAlign'
 import visibility from './plugins/visibility'
 import whitespace from './plugins/whitespace'
+import wordBreak from './plugins/wordBreak'
 import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 
@@ -131,6 +132,7 @@ export default function({ corePlugins: corePluginConfig }) {
     verticalAlign,
     visibility,
     whitespace,
+    wordBreak,
     width,
     zIndex,
   })
