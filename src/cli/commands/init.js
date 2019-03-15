@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 
-import * as constants from '../constants'
+import * as constants from '../../constants'
 import * as emoji from '../emoji'
 import * as utils from '../utils'
 
@@ -10,13 +10,13 @@ export const description =
 
 export const options = [
   {
-    usage: '--no-comments',
-    description: 'Omit comments from the config file.',
+    usage: '--full',
+    description: 'Generate complete configuration file.',
   },
 ]
 
 export const optionMap = {
-  noComments: ['no-comments'],
+  full: ['full'],
 }
 
 /**
@@ -30,16 +30,13 @@ export function run(cliParams, cliOptions) {
   return new Promise(resolve => {
     utils.header()
 
-    const noComments = cliOptions.noComments
+    const full = cliOptions.full
     const file = cliParams[0] || constants.defaultConfigFile
 
     utils.exists(file) && utils.die(chalk.bold.magenta(file), 'already exists.')
 
-    let stub = utils
-      .readFile(constants.configStubFile)
-      .replace("require('./plugins/container')", "require('tailwindcss/plugins/container')")
-
-    noComments && (stub = utils.stripBlockComments(stub))
+    const stubFile = full ? constants.defaultConfigStubFile : constants.simpleConfigStubFile
+    const stub = utils.readFile(stubFile)
 
     utils.writeFile(file, stub)
 
