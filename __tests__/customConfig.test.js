@@ -3,6 +3,7 @@ import path from 'path'
 import rimraf from 'rimraf'
 import postcss from 'postcss'
 import tailwind from '../src/index'
+import { defaultConfigFile } from '../src/constants'
 
 function inTempDirectory(callback) {
   return new Promise(resolve => {
@@ -82,7 +83,7 @@ test('custom config can be passed as an object', () => {
 test('tailwind.config.js is picked up by default', () => {
   return inTempDirectory(() => {
     fs.writeFileSync(
-      path.resolve('./tailwind.config.js'),
+      path.resolve(defaultConfigFile),
       `module.exports = {
         theme: {
           screens: {

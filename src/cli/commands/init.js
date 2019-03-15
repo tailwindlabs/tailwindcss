@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 
-import * as constants from '../constants'
+import * as constants from '../../constants'
 import * as emoji from '../emoji'
 import * as utils from '../utils'
 
