@@ -1,7 +1,6 @@
 import chalk from 'chalk'
 import { ensureFileSync, existsSync, outputFileSync, readFileSync } from 'fs-extra'
 import { findKey, mapValues, trimStart } from 'lodash'
-import stripComments from 'strip-comments'
 
 import * as emoji from './emoji'
 import packageJson from '../../package.json'
@@ -121,18 +120,4 @@ export function writeFile(path, content) {
   ensureFileSync(path)
 
   return outputFileSync(path, content)
-}
-
-/**
- * Strips block comments from input string. Consolidates multiple line breaks.
- *
- * @param {string} input
- * @return {string}
- */
-export function stripBlockComments(input) {
-  return stripComments
-    .block(input, { keepProtected: true })
-    .replace(/\n\s*\n\s*\n/g, '\n\n') // Strip unnecessary line breaks
-    .trim()
-    .concat('\n')
 }

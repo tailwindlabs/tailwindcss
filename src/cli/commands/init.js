@@ -13,15 +13,10 @@ export const options = [
     usage: '--full',
     description: 'Generate complete configuration file.',
   },
-  {
-    usage: '--no-comments',
-    description: 'Omit comments from the config file.',
-  },
 ]
 
 export const optionMap = {
   full: ['full'],
-  noComments: ['no-comments'],
 }
 
 /**
@@ -36,15 +31,12 @@ export function run(cliParams, cliOptions) {
     utils.header()
 
     const full = cliOptions.full
-    const noComments = cliOptions.noComments
     const file = cliParams[0] || constants.defaultConfigFile
 
     utils.exists(file) && utils.die(chalk.bold.magenta(file), 'already exists.')
 
     const stubFile = full ? constants.defaultConfigStubFile : constants.simpleConfigStubFile
-    let stub = utils.readFile(stubFile)
-
-    noComments && (stub = utils.stripBlockComments(stub))
+    const stub = utils.readFile(stubFile)
 
     utils.writeFile(file, stub)
 
