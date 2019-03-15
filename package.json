@@ -71,9 +71,6 @@
     ]
   },
   "jest": {
-    "moduleNameMapper": {
-      "lib/plugins/container": "<rootDir>/src/plugins/container"
-    },
     "setupFilesAfterEnv": [
       "<rootDir>/jest/customMatchers.js"
     ],

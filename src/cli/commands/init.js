@@ -44,7 +44,6 @@ export function run(cliParams, cliOptions) {
     const stubFile = full ? constants.defaultConfigStubFile : constants.simpleConfigStubFile
     let stub = utils.readFile(stubFile)
 
-    stub = utils.replaceAll(stub, constants.replacements)
     noComments && (stub = utils.stripBlockComments(stub))
 
     utils.writeFile(file, stub)
