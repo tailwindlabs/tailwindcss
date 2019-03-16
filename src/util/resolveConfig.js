@@ -2,12 +2,15 @@ import mergeWith from 'lodash/mergeWith'
 import isFunction from 'lodash/isFunction'
 import defaults from 'lodash/defaults'
 import map from 'lodash/map'
+import get from 'lodash/get'
 
 function resolveFunctionKeys(object) {
+  const getKey = (key, defaultValue) => get(object, key, defaultValue)
+
   return Object.keys(object).reduce((resolved, key) => {
     return {
       ...resolved,
-      [key]: isFunction(object[key]) ? object[key](object) : object[key],
+      [key]: isFunction(object[key]) ? object[key](getKey) : object[key],
     }
   }, {})
 }
