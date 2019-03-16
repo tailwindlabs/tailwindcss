@@ -322,8 +322,8 @@ test('functions in the default theme section are lazily evaluated', () => {
         magenta: 'magenta',
         yellow: 'yellow',
       },
-      backgroundColors: ({ colors }) => colors,
-      textColors: ({ colors }) => colors,
+      backgroundColors: theme => theme('colors'),
+      textColors: theme => theme('colors'),
     },
     variants: {
       backgroundColors: ['responsive', 'hover', 'focus'],
@@ -369,12 +369,12 @@ test('functions in the user theme section are lazily evaluated', () => {
         green: 'green',
         blue: 'blue',
       },
-      backgroundColors: ({ colors }) => ({
-        ...colors,
+      backgroundColors: theme => ({
+        ...theme('colors'),
         customBackground: '#bada55',
       }),
-      textColors: ({ colors }) => ({
-        ...colors,
+      textColors: theme => ({
+        ...theme('colors'),
         customText: '#facade',
       }),
     },
@@ -461,7 +461,7 @@ test('theme values in the extend section extend the existing theme', () => {
         '50': '.5',
         '100': '1',
       },
-      backgroundColors: ({ colors }) => colors,
+      backgroundColors: theme => theme('colors'),
     },
     variants: {
       backgroundColors: ['responsive', 'hover', 'focus'],
@@ -510,7 +510,7 @@ test('theme values in the extend section extend the user theme', () => {
         '20': '.2',
         '40': '.4',
       },
-      height: theme => theme.width,
+      height: theme => theme('width'),
       extend: {
         opacity: {
           '60': '.6',
@@ -618,7 +618,7 @@ test('theme values in the extend section can extend values that are depended on 
         magenta: 'magenta',
         yellow: 'yellow',
       },
-      backgroundColors: ({ colors }) => colors,
+      backgroundColors: theme => theme('colors'),
     },
     variants: {
       backgroundColors: ['responsive', 'hover', 'focus'],
@@ -698,6 +698,62 @@ test('theme values in the extend section are not deeply merged', () => {
     },
     variants: {
       fonts: ['responsive'],
+    },
+  })
+})
+
+test('the theme function can use a default value if the key is missing', () => {
+  const userConfig = {
+    theme: {
+      colors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+      },
+      borderColor: theme => ({
+        default: theme('colors.gray', 'currentColor'),
+        ...theme('colors'),
+      }),
+    },
+    variants: {
+      borderColor: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+      borderColor: {
+        default: 'currentColor',
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+    },
+    variants: {
+      borderColor: ['responsive', 'hover', 'focus'],
     },
   })
 })
