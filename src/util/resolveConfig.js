@@ -17,15 +17,17 @@ function resolveFunctionKeys(object) {
 
 function mergeExtensions({ extend, ...theme }) {
   return mergeWith({}, theme, extend, (_, extensions, key) => {
-    return isFunction(theme[key])
-      ? mergedTheme => ({
-          ...theme[key](mergedTheme),
-          ...extensions,
-        })
-      : {
-          ...theme[key],
-          ...extensions,
-        }
+    if (isFunction(theme[key]) || (extend && isFunction(extend[key]))) {
+      return mergedTheme => ({
+        ...(isFunction(theme[key]) ? theme[key](mergedTheme) : theme[key]),
+        ...(extend && isFunction(extend[key]) ? extend[key](mergedTheme) : extensions),
+      })
+    } else {
+      return {
+        ...theme[key],
+        ...extensions,
+      }
+    }
   })
 }
 
