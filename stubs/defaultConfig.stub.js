@@ -167,7 +167,7 @@ module.exports = {
         'Cambria',
         '"Times New Roman"',
         'Times',
-        'serif'
+        'serif',
       ],
       mono: [
         'SFMono-Regular',
