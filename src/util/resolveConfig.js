@@ -4,19 +4,13 @@ import defaults from 'lodash/defaults'
 import map from 'lodash/map'
 import get from 'lodash/get'
 
-function resolveConfig(configs) {
-  return defaults(
-    {
-      theme: resolveFunctionKeys(mergeExtensions(defaults(...map(configs, 'theme')))),
-      variants: defaults(...map(configs, 'variants')),
-    },
-    ...configs
-  )
+function value(valueToResolve, ...args) {
+  return isFunction(valueToResolve) ? valueToResolve(...args) : valueToResolve
 }
 
 function mergeExtensions({ extend, ...theme }) {
-  return mergeWith(theme, extend, (themeValue, extensions, key) => {
-    if (!isFunction(themeValue) && !(isFunction(extensions))) {
+  return mergeWith(theme, extend, (themeValue, extensions) => {
+    if (!isFunction(themeValue) && !isFunction(extensions)) {
       return {
         ...themeValue,
         ...extensions,
@@ -41,8 +35,12 @@ function resolveFunctionKeys(object) {
   }, {})
 }
 
-function value(valueToResolve, ...args) {
-  return isFunction(valueToResolve) ? valueToResolve(...args) : valueToResolve
+export default function resolveConfig(configs) {
+  return defaults(
+    {
+      theme: resolveFunctionKeys(mergeExtensions(defaults(...map(configs, 'theme')))),
+      variants: defaults(...map(configs, 'variants')),
+    },
+    ...configs
+  )
 }
-
-export default resolveConfig
