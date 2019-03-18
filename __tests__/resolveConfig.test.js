@@ -767,8 +767,12 @@ test('theme values in the extend section are lazily evaluated', () => {
         blue: 'blue',
       },
       extend: {
+        colors: {
+          orange: 'orange',
+        },
         borderColor: theme => ({
-          default: theme('colors.red'),
+          foo: theme('colors.orange'),
+          bar: theme('colors.red'),
         }),
       },
     },
@@ -802,12 +806,16 @@ test('theme values in the extend section are lazily evaluated', () => {
     separator: ':',
     theme: {
       colors: {
+        orange: 'orange',
         red: 'red',
         green: 'green',
         blue: 'blue',
       },
       borderColor: {
-        default: 'red',
+        default: 'currentColor',
+        foo: 'orange',
+        bar: 'red',
+        orange: 'orange',
         red: 'red',
         green: 'green',
         blue: 'blue',

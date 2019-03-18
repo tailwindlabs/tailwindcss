@@ -4,34 +4,7 @@ import defaults from 'lodash/defaults'
 import map from 'lodash/map'
 import get from 'lodash/get'
 
-function resolveFunctionKeys(object) {
-  const getKey = (key, defaultValue) => get(object, key, defaultValue)
-
-  return Object.keys(object).reduce((resolved, key) => {
-    return {
-      ...resolved,
-      [key]: isFunction(object[key]) ? object[key](getKey) : object[key],
-    }
-  }, {})
-}
-
-function mergeExtensions({ extend, ...theme }) {
-  return mergeWith({}, theme, extend, (_, extensions, key) => {
-    if (isFunction(theme[key]) || (extend && isFunction(extend[key]))) {
-      return mergedTheme => ({
-        ...(isFunction(theme[key]) ? theme[key](mergedTheme) : theme[key]),
-        ...(extend && isFunction(extend[key]) ? extend[key](mergedTheme) : extensions),
-      })
-    } else {
-      return {
-        ...theme[key],
-        ...extensions,
-      }
-    }
-  })
-}
-
-export default function(configs) {
+function resolveConfig(configs) {
   return defaults(
     {
       theme: resolveFunctionKeys(mergeExtensions(defaults(...map(configs, 'theme')))),
@@ -40,3 +13,36 @@ export default function(configs) {
     ...configs
   )
 }
+
+function mergeExtensions({ extend, ...theme }) {
+  return mergeWith(theme, extend, (themeValue, extensions, key) => {
+    if (!isFunction(themeValue) && !(isFunction(extensions))) {
+      return {
+        ...themeValue,
+        ...extensions,
+      }
+    }
+
+    return resolveThemePath => ({
+      ...value(themeValue, resolveThemePath),
+      ...value(extensions, resolveThemePath),
+    })
+  })
+}
+
+function resolveFunctionKeys(object) {
+  const resolveObjectPath = (key, defaultValue) => get(object, key, defaultValue)
+
+  return Object.keys(object).reduce((resolved, key) => {
+    return {
+      ...resolved,
+      [key]: isFunction(object[key]) ? object[key](resolveObjectPath) : object[key],
+    }
+  }, {})
+}
+
+function value(valueToResolve, ...args) {
+  return isFunction(valueToResolve) ? valueToResolve(...args) : valueToResolve
+}
+
+export default resolveConfig
