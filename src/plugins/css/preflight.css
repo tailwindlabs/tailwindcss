@@ -176,16 +176,6 @@ textarea {
 }
 
 /**
- * Use the configured 'bold' weight for `strong` elements
- * by default, falling back to 'bolder' (as per normalize.css)
- * if there is no configured 'bold' weight.
- */
-
-strong {
-  font-weight: theme('fontWeight.bold', bolder);
-}
-
-/**
  * Use the configured 'mono' font family for elements that
  * are expected to be rendered with a monospace font, falling
  * back to the system monospace stack if there is no configured
