@@ -33,38 +33,38 @@ features:
 Control the background color of an element using the `.bg-{color}` utilities.
 
 @component('_partials.code-sample', ['class' => 'text-center'])
-<button type="button" class="bg-blue text-white font-semibold px-4 py-2 rounded">
+<button type="button" class="bg-blue-500 text-white font-semibold px-4 py-2 rounded">
   Button
 </button>
 @slot('code')
-<button class="bg-blue ...">Button</button>
+<button class="bg-blue-500 ...">Button</button>
 @endslot
 @endcomponent
 
 ## Responsive
 
-To control the background color of an element at a specific breakpoint, add a `{screen}:` prefix to any existing background color utility. For example, use `md:bg-green` to apply the `bg-green` utility at only medium screen sizes and above.
+To control the background color of an element at a specific breakpoint, add a `{screen}:` prefix to any existing background color utility. For example, use `md:bg-green-500` to apply the `bg-green-500` utility at only medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 @component('_partials.responsive-code-sample', ['class' => 'text-center'])
 @slot('none')
-<button type="button" class="bg-blue text-white font-semibold px-4 py-2 rounded">
+<button type="button" class="bg-blue-500 text-white font-semibold px-4 py-2 rounded">
   Button
 </button>
 @endslot
 @slot('sm')
-<button type="button" class="bg-green text-white font-semibold px-4 py-2 rounded">
+<button type="button" class="bg-green-500 text-white font-semibold px-4 py-2 rounded">
   Button
 </button>
 @endslot
 @slot('md')
-<button type="button" class="bg-indigo text-white font-semibold px-4 py-2 rounded">
+<button type="button" class="bg-indigo-500 text-white font-semibold px-4 py-2 rounded">
   Button
 </button>
 @endslot
 @slot('lg')
-<button type="button" class="bg-red text-white font-semibold px-4 py-2 rounded">
+<button type="button" class="bg-red-500 text-white font-semibold px-4 py-2 rounded">
   Button
 </button>
 @endslot
@@ -74,21 +74,21 @@ For more information about Tailwind's responsive design features, check out the 
 </button>
 @endslot
 @slot('code')
-<button class="none:bg-blue sm:bg-green md:bg-indigo lg:bg-red xl:bg-black ...">Button</button>
+<button class="none:bg-blue-500 sm:bg-green-500 md:bg-indigo-500 lg:bg-red-500 xl:bg-black ...">Button</button>
 @endslot
 @endcomponent
 
 ## Hover
 
-To control the background color of an element on hover, add the `hover:` prefix to any existing background color utility. For example, use `hover:bg-blue` to apply the `bg-blue` utility on hover.
+To control the background color of an element on hover, add the `hover:` prefix to any existing background color utility. For example, use `hover:bg-blue-500` to apply the `bg-blue-500` utility on hover.
 
 @component('_partials.code-sample', ['class' => 'text-center'])
-<button type="button" class="bg-blue hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded">
+<button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded">
   Hover me
 </button>
 
 @slot('code')
-<button class="bg-blue hover:bg-blue-700 ...">
+<button class="bg-blue-500 hover:bg-blue-700 ...">
   Hover me
 </button>
 @endslot
@@ -97,12 +97,12 @@ To control the background color of an element on hover, add the `hover:` prefix 
 Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
 
 ```html
-<button class="... md:bg-blue md:hover:bg-blue-700 ...">Button</button>
+<button class="... md:bg-blue-500 md:hover:bg-blue-700 ...">Button</button>
 ```
 
 ## Focus
 
-To control the background color of an element on focus, add the `focus:` prefix to any existing background color utility. For example, use `focus:bg-blue` to apply the `bg-blue` utility on focus.
+To control the background color of an element on focus, add the `focus:` prefix to any existing background color utility. For example, use `focus:bg-blue-500` to apply the `bg-blue-500` utility on focus.
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="max-w-xs w-full mx-auto">

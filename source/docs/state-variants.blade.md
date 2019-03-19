@@ -11,13 +11,13 @@ Similar to our [responsive prefixes](/docs/responsive-design), Tailwind makes it
 Add the `hover:` prefix to only apply a utility on hover.
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button type="button" class="bg-transparent hover:bg-blue text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue hover:border-transparent rounded focus:outline-none focus:shadow-outline">
+<button type="button" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded focus:outline-none focus:shadow-outline">
   Hover me
 </button>
 
 
 @slot('code')
-<button class="bg-transparent hover:bg-blue text-blue-700 hover:text-white...">
+<button class="bg-transparent hover:bg-blue-500 text-blue-700 hover:text-white...">
   Hover me
 </button>
 @endslot
@@ -68,12 +68,12 @@ Add the `focus:` prefix to only apply a utility on focus.
 Add the `active:` prefix to only apply a utility when an element is active.
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button type="button" class="bg-blue active:bg-blue-700 text-white font-semibold hover:text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+<button type="button" class="bg-blue-500 active:bg-blue-700 text-white font-semibold hover:text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
   Click me
 </button>
 
 @slot('code')
-<button class="bg-blue active:bg-blue-700 text-white...">
+<button class="bg-blue-500 active:bg-blue-700 text-white...">
   Click me
 </button>
 @endslot
@@ -97,14 +97,14 @@ Add the `active:` prefix to only apply a utility when an element is active.
 If you need to style a child element when hovering over a specific parent element, add the `.group` class to the parent element and add the `group-hover:` prefix to the utility on the child element.
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'bg-gray-200 p-8'])
-<div class="group hover:bg-blue p-4 cursor-pointer bg-white rounded max-w-xs w-full shadow-lg select-none overflow-hidden mx-auto">
+<div class="group hover:bg-blue-500 p-4 cursor-pointer bg-white rounded max-w-xs w-full shadow-lg select-none overflow-hidden mx-auto">
   <p class="font-semibold text-lg mb-1 text-gray-900 group-hover:text-white">New Project</p>
   <p class="text-gray-700 group-hover:text-white mb-2">Create a new project from a variety of starting templates.</p>
 </div>
 
 
 @slot('code')
-<div class="group bg-white hover:bg-blue ...">
+<div class="group bg-white hover:bg-blue-500 ...">
   <p class="text-gray-900 group-hover:text-white ...">New Project</p>
   <p class="text-gray-700 group-hover:text-white ...">Create a new project from a variety of starting templates.</p>
 </div>
@@ -141,9 +141,9 @@ Add the `focus-within:` prefix to only apply a utility when a child element has 
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'bg-white p-8'])
 <form class="w-full max-w-sm mx-auto">
-  <div class="flex items-center border-b-2 border-grey-light focus-within:border-teal py-2">
+  <div class="flex items-center border-b-2 border-grey-light focus-within:border-teal-500 py-2">
     <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Jane Doe" aria-label="Full name">
-    <button class="focus:shadow-outline focus:outline-none flex-shrink-0 bg-teal hover:bg-teal-700 border-teal hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="button">
+    <button class="focus:shadow-outline focus:outline-none flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="button">
       Sign Up
     </button>
   </div>
@@ -151,7 +151,7 @@ Add the `focus-within:` prefix to only apply a utility when a child element has 
 
 
 @slot('code')
-<form class="border-b-2 border-grey-light focus-within:border-teal ...">
+<form class="border-b-2 border-grey-light focus-within:border-teal-500 ...">
   <input class="..." placeholder="Jane Doe" ...>
   <button class="...">
     Sign Up
@@ -179,7 +179,7 @@ State variants are also responsive, meaning you can change an element's hover st
 To apply a state variant responsively, **add the responsive prefix first, before the state prefix.**
 
 ```html
-<button class="... md:bg-orange md:hover:bg-red ...">Button</button>
+<button class="... md:bg-orange-500 md:hover:bg-red-500 ...">Button</button>
 ```
 
 ## Custom Utilities

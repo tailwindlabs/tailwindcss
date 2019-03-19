@@ -151,7 +151,7 @@ Use the `.no-underline` utility to remove underline or line-through styling.
 
 @component('_partials.code-sample')
 <div class="text-center">
-  <a href="#" class="no-underline text-blue text-lg">Link with no underline</a>
+  <a href="#" class="no-underline text-blue-500 text-lg">Link with no underline</a>
 </div>
 @slot('code')
 <a href="#" class="no-underline ...">Link with no underline</a>
@@ -210,7 +210,7 @@ For more information about Tailwind's responsive design features, check out the 
 To control the style and decoration of an element on hover, add the `hover:` prefix to any existing style and decoration utility. For example, use `hover:underline` to apply the `underline` utility on hover.
 
 @component('_partials.code-sample', ['class' => 'text-center'])
-<a href="#hover" class="no-underline hover:underline text-blue text-lg">Link</a>
+<a href="#hover" class="no-underline hover:underline text-blue-500 text-lg">Link</a>
 @endcomponent
 
 Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.

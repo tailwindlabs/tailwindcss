@@ -11,12 +11,12 @@ While we strongly believe you can get a lot further with just utilities than you
 For example, using a utility-first approach, implementing a button style early in a project might look something like this:
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
   Button
 </button>
 
 @slot('code')
-<button class="bg-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
   Button
 </button>
 @endslot
@@ -35,7 +35,7 @@ To make this as easy as possible, Tailwind provides the `@apply` directive for a
 Here's what a `.btn-blue` class might look like using `@apply` to compose it from existing utilities:
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
   Button
 </button>
 
@@ -46,7 +46,7 @@ Here's what a `.btn-blue` class might look like using `@apply` to compose it fro
 
 <style>
 .btn-blue {
-  @@apply bg-blue text-white font-bold py-2 px-4 rounded;
+  @@apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
 }
 .btn-blue:hover {
   @@apply bg-blue-700;
@@ -62,7 +62,7 @@ Note that `hover:`, `focus:`, and `{screen}:` utility variants can't be mixed in
 Say you have these two buttons:
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4">
+<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4">
   Button
 </button>
 
@@ -71,7 +71,7 @@ Say you have these two buttons:
 </button>
 
 @slot('code')
-<button class="bg-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
   Button
 </button>
 
@@ -85,7 +85,7 @@ It might be tempting to implement component classes for these buttons like this:
 
 ```less
 .btn-blue {
-  @@apply bg-blue text-white font-bold py-2 px-4 rounded;
+  @@apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
 }
 .btn-blue:hover {
   @@apply bg-blue-700;
@@ -111,7 +111,7 @@ A better approach is to extract the parts that are the same into a separate clas
 }
 
 .btn-blue {
-  @@apply bg-blue text-white;
+  @@apply bg-blue-500 text-white;
 }
 .btn-blue:hover {
   @@apply bg-blue-700;
@@ -128,7 +128,7 @@ A better approach is to extract the parts that are the same into a separate clas
 Now you'd apply two classes any time you needed to style a button:
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4">
+<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4">
   Button
 </button>
 
@@ -152,12 +152,12 @@ This makes it easy to change the shared styles in one place by just editing the 
 It also allows you to add new one-off button styles without being forced to create a new component class or duplicated the shared styles:
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-green hover:bg-green-400 text-white font-bold py-2 px-4 rounded">
+<button class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">
   Button
 </button>
 
 @slot('code')
-<button class="btn bg-green hover:bg-green-400 text-white">
+<button class="btn bg-green-500 hover:bg-green-400 text-white">
   Button
 </button>
 @endslot
@@ -178,7 +178,7 @@ Here's an example:
   @@apply font-bold py-2 px-4 rounded;
 }
 .btn-blue {
-  @@apply bg-blue text-white;
+  @@apply bg-blue-500 text-white;
 }
 .btn-blue:hover {
   @@apply bg-blue-700;

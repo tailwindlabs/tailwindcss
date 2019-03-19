@@ -17,7 +17,7 @@
       </tbody>
     </table>
     <p class="text-center py-4" v-show="!showAll && rows.length > 10">
-      <span role="button" @click="showAll = true" class="text-sm text-blue hover:underline">Show all {{rows.length}}</span>
+      <span role="button" @click="showAll = true" class="text-sm text-blue-500 hover:underline">Show all {{rows.length}}</span>
     </p>
   </div>
 </template>

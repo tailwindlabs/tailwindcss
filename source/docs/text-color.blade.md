@@ -86,7 +86,7 @@ For more information about Tailwind's responsive design features, check out the 
 To control the text color of an element on hover, add the `hover:` prefix to any existing text color utility. For example, use `hover:text-blue-600` to apply the `text-blue-600` utility on hover.
 
 @component('_partials.code-sample', ['class' => 'text-center'])
-<button class="border-2 border-blue hover:border-red bg-transparent text-blue-600 hover:text-red-600 py-2 px-4 font-semibold rounded">
+<button class="border-2 border-blue-500 hover:border-red-500 bg-transparent text-blue-600 hover:text-red-600 py-2 px-4 font-semibold rounded">
   Button
 </button>
 
@@ -100,7 +100,7 @@ To control the text color of an element on hover, add the `hover:` prefix to any
 Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.
 
 ```html
-<button class="... md:text-blue md:hover:text-blue-600 ...">Button</button>
+<button class="... md:text-blue-500 md:hover:text-blue-600 ...">Button</button>
 ```
 
 ## Focus
@@ -109,7 +109,7 @@ To control the text color of an element on focus, add the `focus:` prefix to any
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="max-w-xs w-full mx-auto">
-  <input class="border border-grey-light focus:border-red bg-white text-gray-900 appearance-none inline-block w-full focus:text-red-600 border rounded py-3 px-4 focus:outline-none" placeholder="Focus me" value="Focus me">
+  <input class="border border-grey-light focus:border-red-500 bg-white text-gray-900 appearance-none inline-block w-full focus:text-red-600 border rounded py-3 px-4 focus:outline-none" placeholder="Focus me" value="Focus me">
 </div>
 
 @slot('code')

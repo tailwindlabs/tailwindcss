@@ -34,37 +34,37 @@ Control the border color of an element using the `.border-{color}` utilities.
 
 @component('_partials.code-sample', ['class' => 'text-center'])
 <div class="max-w-xs w-full mx-auto">
-  <input class="border border-red focus:border-blue bg-white text-gray-900 appearance-none block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Your email">
+  <input class="border border-red-500 focus:border-blue-500 bg-white text-gray-900 appearance-none block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Your email">
 </div>
 @slot('code')
-<input class="border border-red ...">
+<input class="border border-red-500 ...">
 @endslot
 @endcomponent
 
 ## Responsive
 
-To control the border color of an element at a specific breakpoint, add a `{screen}:` prefix to any existing border color utility. For example, use `md:border-green` to apply the `border-green` utility at only medium screen sizes and above.
+To control the border color of an element at a specific breakpoint, add a `{screen}:` prefix to any existing border color utility. For example, use `md:border-green-500` to apply the `border-green-500` utility at only medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 @component('_partials.responsive-code-sample', ['class' => 'text-center'])
 @slot('none')
-<button class="border-2 border-blue bg-transparent text-blue-700 py-2 px-4 font-semibold rounded">
+<button class="border-2 border-blue-500 bg-transparent text-blue-700 py-2 px-4 font-semibold rounded">
   Button
 </button>
 @endslot
 @slot('sm')
-<button class="border-2 border-green bg-transparent text-green-700 py-2 px-4 font-semibold rounded">
+<button class="border-2 border-green-500 bg-transparent text-green-700 py-2 px-4 font-semibold rounded">
   Button
 </button>
 @endslot
 @slot('md')
-<button class="border-2 border-indigo bg-transparent text-indigo-700 py-2 px-4 font-semibold rounded">
+<button class="border-2 border-indigo-500 bg-transparent text-indigo-700 py-2 px-4 font-semibold rounded">
   Button
 </button>
 @endslot
 @slot('lg')
-<button class="border-2 border-red bg-transparent text-red-700 py-2 px-4 font-semibold rounded">
+<button class="border-2 border-red-500 bg-transparent text-red-700 py-2 px-4 font-semibold rounded">
   Button
 </button>
 @endslot
@@ -74,7 +74,7 @@ For more information about Tailwind's responsive design features, check out the 
 </button>
 @endslot
 @slot('code')
-<button class="none:border-blue sm:border-green md:border-indigo lg:border-red xl:border-black ...">
+<button class="none:border-blue-500 sm:border-green-500 md:border-indigo-500 lg:border-red-500 xl:border-black ...">
   Button
 </button>
 @endslot
@@ -82,15 +82,15 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Hover
 
-To control the border color of an element on hover, add the `hover:` prefix to any existing border color utility. For example, use `hover:border-blue` to apply the `border-blue` utility on hover.
+To control the border color of an element on hover, add the `hover:` prefix to any existing border color utility. For example, use `hover:border-blue-500` to apply the `border-blue-500` utility on hover.
 
 @component('_partials.code-sample', ['class' => 'text-center'])
-<button class="border-2 border-blue hover:border-red bg-transparent text-blue-700 hover:text-red-700 py-2 px-4 font-semibold rounded">
+<button class="border-2 border-blue-500 hover:border-red-500 bg-transparent text-blue-700 hover:text-red-700 py-2 px-4 font-semibold rounded">
   Button
 </button>
 
 @slot('code')
-<button class="border-2 border-blue hover:border-red ...">
+<button class="border-2 border-blue-500 hover:border-red-500 ...">
   Button
 </button>
 @endslot
@@ -99,20 +99,20 @@ To control the border color of an element on hover, add the `hover:` prefix to a
 Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
 
 ```html
-<button class="... md:border-blue md:hover:border-blue-700 ...">Button</button>
+<button class="... md:border-blue-500 md:hover:border-blue-700 ...">Button</button>
 ```
 
 ## Focus
 
-To control the border color of an element on focus, add the `focus:` prefix to any existing border color utility. For example, use `focus:border-blue` to apply the `border-blue` utility on focus.
+To control the border color of an element on focus, add the `focus:` prefix to any existing border color utility. For example, use `focus:border-blue-500` to apply the `border-blue-500` utility on focus.
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="max-w-xs w-full mx-auto">
-  <input class="border border-grey-light focus:border-blue bg-white text-gray-900 appearance-none inline-block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
+  <input class="border border-grey-light focus:border-blue-500 bg-white text-gray-900 appearance-none inline-block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
 </div>
 
 @slot('code')
-<input class="border-grey-light focus:border-blue ...">
+<input class="border-grey-light focus:border-blue-500 ...">
 @endslot
 @endcomponent
 

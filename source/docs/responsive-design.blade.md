@@ -13,31 +13,31 @@ This is done using predefined screen sizes (media query breakpoints), each of wh
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex justify-center">
-  <div class="bg-purple text-white w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
+  <div class="bg-purple-500 text-white w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex justify-center">
-  <div class="bg-green text-white w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
+  <div class="bg-green-500 text-white w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
 </div>
 @endslot
 @slot('md')
 <div class="flex justify-center">
-  <div class="bg-blue text-yellow w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
+  <div class="bg-blue-500 text-yellow-500 w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex justify-center">
-  <div class="bg-red text-yellow w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
+  <div class="bg-red-500 text-yellow-500 w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex justify-center">
-  <div class="bg-orange text-yellow w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
+  <div class="bg-orange-500 text-yellow-500 w-24 h-24 rounded-full text-xs font-semibold flex items-center justify-center">Tailwind</div>
 </div>
 @endslot
 @slot('code')
-<div class="none:bg-purple none:text-white sm:bg-green md:bg-blue md:text-yellow lg:bg-red xl:bg-orange ...">
+<div class="none:bg-purple-500 none:text-white sm:bg-green-500 md:bg-blue-500 md:text-yellow-500 lg:bg-red-500 xl:bg-orange-500 ...">
   ...
 </div>
 @endslot
@@ -82,21 +82,21 @@ screens: {
 },
 ```
 
-These screen names will be reflected in your utilities, so your `.bg-red` utilities would now look like this:
+These screen names will be reflected in your utilities, so your `.bg-red-500` utilities would now look like this:
 
 ```css
-.bg-red { background-color: theme('colors.red'); }
+.bg-red-500 { background-color: theme('colors.red'); }
 
 @media (min-width: 640px) {
-  .tablet\:bg-red { background-color: theme('colors.red'); }
+  .tablet\:bg-red-500 { background-color: theme('colors.red'); }
 }
 
 @media (min-width: 1024px) {
-  .laptop\:bg-red { background-color: theme('colors.red'); }
+  .laptop\:bg-red-500 { background-color: theme('colors.red'); }
 }
 
 @media (min-width: 1280px) {
-  .desktop\:bg-red { background-color: theme('colors.red'); }
+  .desktop\:bg-red-500 { background-color: theme('colors.red'); }
 }
 ```
 

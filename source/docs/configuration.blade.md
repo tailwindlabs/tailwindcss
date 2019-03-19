@@ -257,7 +257,7 @@ It's important to understand that this prefix is added to the beginning of each 
 That means that classes with responsive or state prefixes like `sm:` or `hover:` will still have the responsive or state prefix *first*, with your custom prefix appearing after the colon:
 
 ```html
-<div class="tw-text-lg md:tw-text-xl tw-bg-red hover:tw-bg-blue">
+<div class="tw-text-lg md:tw-text-xl tw-bg-red-500 hover:tw-bg-blue-500">
   <!-- -->
 </div>
 ```

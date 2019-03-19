@@ -52,7 +52,7 @@ This is extremely useful when you find a common utility pattern in your HTML tha
   @@apply font-bold py-2 px-4 rounded;
 }
 .btn-blue {
-  @@apply bg-blue text-white;
+  @@apply bg-blue-500 text-white;
 }
 .btn-blue:hover {
   @@apply bg-blue-700;
@@ -126,17 +126,17 @@ Note that `@@apply` **will not work** for mixing in hover, focus, or responsive 
 ```less
 // Won't work:
 .btn {
-  @@apply block bg-red;
+  @@apply block bg-red-500;
   @@apply md:inline-block;
-  @@apply hover:bg-blue;
+  @@apply hover:bg-blue-500;
 }
 
 // Do this instead:
 .btn {
-  @@apply block bg-red;
+  @@apply block bg-red-500;
 }
 .btn:hover {
-  @@apply bg-blue;
+  @@apply bg-blue-500;
 }
 @@screen md {
   .btn {

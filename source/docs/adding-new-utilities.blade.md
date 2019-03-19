@@ -27,11 +27,11 @@ If two rules have the same [specificity](https://developer.mozilla.org/en-US/doc
 For example, given the following CSS:
 
 ```less
-.bg-red {
+.bg-red-500 {
   background: #ff0000;
 }
 
-.bg-green {
+.bg-green-500 {
   background-color: #00ff00;
 }
 ```
@@ -39,10 +39,10 @@ For example, given the following CSS:
 ...and the following HTML:
 
 ```html
-<div class="bg-green bg-red"></div>
+<div class="bg-green-500 bg-red-500"></div>
 ```
 
-...the `div` would be green, because `.bg-green` is defined *after* `.bg-red` in the CSS file.
+...the `div` would be green, because `.bg-green-500` is defined *after* `.bg-red-500` in the CSS file.
 
 For this reason, **we recommend defining any custom utility classes at the end of your stylesheet,** *after* you inject Tailwind's utility classes:
 
@@ -100,7 +100,7 @@ html { ... }
 /* ... */
 
 /* Tailwind utilities rendered here... */
-.bg-red { ... }
+.bg-red-500 { ... }
 /* ... */
 
 .bg-cover-image {
@@ -109,7 +109,7 @@ html { ... }
 
 @media (min-width: 640px) {
   /* Tailwind utilities rendered here... */
-  .sm\:bg-red { ... }
+  .sm\:bg-red-500 { ... }
   /* ... */
 
   .sm\:bg-cover-image {
@@ -119,7 +119,7 @@ html { ... }
 
 @media (min-width: 768px) {
   /* Tailwind utilities rendered here... */
-  .md\:bg-red { ... }
+  .md\:bg-red-500 { ... }
   /* ... */
 
   .md\:bg-cover-image {
@@ -129,7 +129,7 @@ html { ... }
 
 @media (min-width: 1024px) {
   /* Tailwind utilities rendered here... */
-  .lg\:bg-red { ... }
+  .lg\:bg-red-500 { ... }
   /* ... */
 
   .lg\:bg-cover-image {
@@ -139,7 +139,7 @@ html { ... }
 
 @media (min-width: 1280px) {
   /* Tailwind utilities rendered here... */
-  .xl\:bg-red { ... }
+  .xl\:bg-red-500 { ... }
   /* ... */
 
   .xl\:bg-cover-image {
