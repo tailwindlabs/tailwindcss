@@ -1,5 +1,5 @@
 <template>
-  <div class="border-t border-grey-lighter">
+  <div class="border-t border-gray-200">
     <table class="w-full text-left table-collapse">
       <thead>
         <tr>

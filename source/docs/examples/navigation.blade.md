@@ -150,7 +150,7 @@ Tailwind doesn't include pre-designed navigation components out of the box, but 
     <a class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white" href="#">Active Pill</a>
   </li>
   <li class="mr-3">
-    <a class="inline-block border border-white rounded hover:border-grey-lighter text-blue-500 hover:bg-gray-200 py-1 px-3" href="#">Pill</a>
+    <a class="inline-block border border-white rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 px-3" href="#">Pill</a>
   </li>
   <li class="mr-3">
     <a class="inline-block py-1 px-3 text-gray-400 cursor-not-allowed" href="#">Disabled Pill</a>
@@ -166,7 +166,7 @@ Tailwind doesn't include pre-designed navigation components out of the box, but 
     <a class="text-center block border border-blue-500 rounded py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white" href="#">Active Item</a>
   </li>
   <li class="flex-1 mr-2">
-    <a class="text-center block border border-white rounded hover:border-grey-lighter text-blue-500 hover:bg-gray-200 py-2 px-4" href="#">Nav Item</a>
+    <a class="text-center block border border-white rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-2 px-4" href="#">Nav Item</a>
   </li>
   <li class="text-center flex-1">
     <a class="block py-2 px-4 text-gray-400 cursor-not-allowed" href="#">Disabled Item</a>
@@ -182,7 +182,7 @@ Tailwind doesn't include pre-designed navigation components out of the box, but 
     <a class="inline-block border border-blue-500 rounded py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white" href="#">Active Pill</a>
   </li>
   <li class="mr-3">
-    <a class="inline-block border border-white rounded hover:border-grey-lighter text-blue-500 hover:bg-gray-200 py-2 px-4" href="#">Pill</a>
+    <a class="inline-block border border-white rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-2 px-4" href="#">Pill</a>
   </li>
   <li class="mr-3">
     <a class="inline-block py-2 px-4 text-gray-400 cursor-not-allowed" href="#">Disabled Pill</a>

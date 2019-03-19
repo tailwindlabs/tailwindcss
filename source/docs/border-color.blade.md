@@ -119,7 +119,7 @@ To control the border color of an element on focus, add the `focus:` prefix to a
 Focus utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
 
 ```html
-<input class="... md:border-grey-lighter md:focus:border-white ...">
+<input class="... md:border-gray-200 md:focus:border-white ...">
 ```
 
 ## Customizing
