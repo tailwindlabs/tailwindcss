@@ -87,7 +87,7 @@ Tailwind makes it a breeze to modify the default color palette for your project.
 
 By default Tailwind defines the entire color palette in a `colors` object at the top of your Tailwind config file. These colors are then assigned to `textColors`, `backgroundColors` and `borderColors`. This approach works well since it provides a consistent naming system across all the utilities. However, you're welcome to modify them independently of one-another as well.
 
-```js 
+```js
 var colors = {
   'transparent': 'transparent',
 
