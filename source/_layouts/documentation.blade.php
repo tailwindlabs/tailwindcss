@@ -130,7 +130,7 @@
 
           {{-- Main content area --}}
           <div class="pt-24 pb-8 lg:pt-28 w-full">
-            <div class="markdown mb-6 px-6 max-w-lg mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:px-12 xl:w-3/4">
+            <div class="markdown mb-6 px-6 max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:px-12 xl:w-3/4">
               @if ($page->title)
                 <h1>{{ $page->title }}</h1>
               @endif
@@ -142,7 +142,7 @@
               @endif
             </div>
             <div class="flex">
-              <div class="markdown px-6 xl:px-12 w-full max-w-lg mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
+              <div class="markdown px-6 xl:px-12 w-full max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
                 @yield('content')
               </div>
 
