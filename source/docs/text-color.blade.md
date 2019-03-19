@@ -10,16 +10,21 @@ features:
 ---
 
 @include('_partials.text-color-class-table', [
-  'rows' => $page->config['theme']['colors']->map(function ($value, $name) {
-    $class = ".text-{$name}";
-    $code = "color: {$value};";
-    $color = implode(' ', array_reverse(explode('-', $name)));
-    $description = "Set the text color of an element to {$color}.";
-    return [
-      $class,
-      $code,
-      $description,
-    ];
+  'rows' => $page->config['theme']['colors']->flatMap(function ($colors, $name) {
+    if (is_string($colors)) {
+      return [
+        [".text-{$name}", "color: {$colors}"]
+      ];
+    }
+
+    return collect($colors)->map(function ($value, $key) use ($name) {
+      $class = ".text-{$name}-{$key}";
+      $code = "color: {$value};";
+      return [
+        $class,
+        $code,
+      ];
+    });
   })->values()->all()
 ])
 
