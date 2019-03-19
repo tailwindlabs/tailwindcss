@@ -48,13 +48,12 @@ a {
 }
 
 @supports (position: sticky) {
-  @media (min-width: config('screens.lg')) {
+  @media (min-width: theme('screens.lg')) {
     .sticky\?lg\:h-\(screen-16\) {
       height: ~"calc(100vh - 4rem)";
     }
   }
 }
-
 
 .transition {
   transition: all .1s ease-in;
