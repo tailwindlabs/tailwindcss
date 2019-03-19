@@ -164,7 +164,7 @@ Tailwind is more than a CSS framework, *it's an engine for creating design syste
 ```js
 const colorPalette = {
   // ...
-  'grey-lighter': '#f3f7f9',
+  'gray-lighter': '#f3f7f9',
   // ...
 }
 
@@ -172,7 +172,7 @@ module.exports = {
   // ...
   backgroundColors: colorPalette,
   borderColors: {
-    default: colorPalette['grey-lighter'],
+    default: colorPalette['gray-lighter'],
     ...colorPalette,
   },
   // ...

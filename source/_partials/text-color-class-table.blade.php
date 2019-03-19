@@ -5,7 +5,7 @@
 
 <h2 style="visibility: hidden; font-size: 0; margin: 0;">Class reference</h2>
 <div class="border-t border-b border-gray-400 overflow-hidden relative">
-  <div class="{{ $scroll ? 'lg:max-h-xs' : '' }} overflow-y-auto scrollbar-w-2 scrollbar-track-grey-lighter scrollbar-thumb-rounded scrollbar-thumb-grey scrolling-touch">
+  <div class="{{ $scroll ? 'lg:max-h-xs' : '' }} overflow-y-auto scrollbar-w-2 scrollbar-track-gray-lighter scrollbar-thumb-rounded scrollbar-thumb-gray scrolling-touch">
     <table class="relative w-full text-left table-collapse">
       <thead>
         <tr>

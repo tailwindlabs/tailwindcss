@@ -91,10 +91,10 @@ It might be tempting to implement component classes for these buttons like this:
   @@apply bg-blue-700;
 }
 
-.btn-grey {
+.btn-gray {
   @@apply bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded;
 }
-.btn-grey:hover {
+.btn-gray:hover {
   @@apply bg-gray-500;
 }
 ```
@@ -117,10 +117,10 @@ A better approach is to extract the parts that are the same into a separate clas
   @@apply bg-blue-700;
 }
 
-.btn-grey {
+.btn-gray {
   @@apply bg-gray-400 text-gray-800;
 }
-.btn-grey:hover {
+.btn-gray:hover {
   @@apply bg-gray-500;
 }
 ```
@@ -141,7 +141,7 @@ Now you'd apply two classes any time you needed to style a button:
   Button
 </button>
 
-<button class="btn btn-grey">
+<button class="btn btn-gray">
   Button
 </button>
 @endslot

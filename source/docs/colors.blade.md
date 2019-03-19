@@ -92,10 +92,10 @@ var colors = {
   'transparent': 'transparent',
 
   'black': '#222b2f',
-  'grey-darkest': '#364349',
-  'grey-darker': '#596a73',
-  'grey-dark': '#70818a',
-  'grey': '#9babb4',
+  'gray-darkest': '#364349',
+  'gray-darker': '#596a73',
+  'gray-dark': '#70818a',
+  'gray': '#9babb4',
 
   // ...
 }
@@ -104,7 +104,7 @@ module.exports = {
   colors: colors,
   textColors: colors,
   backgroundColors: colors,
-  borderColors: Object.assign({ default: colors['grey-light'] }, colors),
+  borderColors: Object.assign({ default: colors['gray-light'] }, colors),
 
   // ...
 }
@@ -113,7 +113,7 @@ module.exports = {
 You'll notice above that the color palette is also assigned to the `colors` key of your Tailwind config. This makes it easy to access them in your custom CSS using the `theme()` function. For example:
 
 ```css
-.error { color: theme('colors.grey-darker') }
+.error { color: theme('colors.gray-darker') }
 ```
 
 ## Naming

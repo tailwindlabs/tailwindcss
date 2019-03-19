@@ -53,8 +53,8 @@ module.exports = {
 
   textColors: {
     'black': colors['black'],
-    'grey-darker': colors['grey-darker'],
-    'grey-dark': colors['grey-dark'],
+    'gray-darker': colors['gray-darker'],
+    'gray-dark': colors['gray-dark'],
     'red-dark': colors['red-dark'],
     'red': colors['red'],
     'blue-dark': colors['blue-dark'],
@@ -75,8 +75,8 @@ module.exports = {
 
   textColors: _.pick(colors, [
     'black',
-    'grey-darker',
-    'grey-dark',
+    'gray-darker',
+    'gray-dark',
     'red-dark',
     'red',
     'blue-dark',
