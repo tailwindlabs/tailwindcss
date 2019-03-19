@@ -16,7 +16,7 @@ It's important to understand that unlike other CSS frameworks you might have use
 
 Generate a Tailwind config file for your project using the Tailwind CLI utility included when you install the `tailwindcss` npm package:
 
-<div class="bg-grey-lightest font-mono text-sm p-4">
+<div class="bg-gray-100 font-mono text-sm p-4">
   <div class="text-purple-dark">./node_modules/.bin/tailwind <span class="text-blue-dark">init</span> <span class="text-grey-dark">[filename]</span></div>
 </div>
 

@@ -3,9 +3,9 @@
     <table class="w-full text-left table-collapse">
       <thead>
         <tr>
-          <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-          <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
-          <!-- <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Description</th> -->
+          <th class="text-sm font-semibold text-grey-darker p-2 bg-gray-100">Class</th>
+          <th class="text-sm font-semibold text-grey-darker p-2 bg-gray-100">Properties</th>
+          <!-- <th class="text-sm font-semibold text-grey-darker p-2 bg-gray-100">Description</th> -->
         </tr>
       </thead>
       <tbody class="align-baseline">

@@ -1,5 +1,5 @@
 <div class="border border-grey-light rounded mb-8 overflow-hidden">
-  <div class="bg-grey-lightest p-4 font-mono text-xs">
+  <div class="bg-gray-100 p-4 font-mono text-xs">
     <div class="whitespace-pre text-grey-dark">{</div>
     <div class="whitespace-pre text-grey-light">  // ...</div>
     <div class="whitespace-pre text-grey-dark"><span class="text-purple-dark">  {{ $key }}</span>: {</div>

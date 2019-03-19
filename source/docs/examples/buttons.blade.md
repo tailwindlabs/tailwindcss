@@ -81,7 +81,7 @@ Tailwind doesn't include pre-designed button styles out of the box, but they're 
 ## Elevated
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-white hover:bg-grey-lightest text-grey-darkest font-semibold py-2 px-4 border border-grey-light rounded shadow">
+<button class="bg-white hover:bg-gray-100 text-grey-darkest font-semibold py-2 px-4 border border-grey-light rounded shadow">
   Button
 </button>
 @endcomponent

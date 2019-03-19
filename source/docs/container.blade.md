@@ -14,9 +14,9 @@ description: "A component for fixing an element's width to the current breakpoin
     </colgroup>
     <thead>
       <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Breakpoint</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
+        <th class="text-sm font-semibold text-grey-darker p-2 bg-gray-100">Class</th>
+        <th class="text-sm font-semibold text-grey-darker p-2 bg-gray-100">Breakpoint</th>
+        <th class="text-sm font-semibold text-grey-darker p-2 bg-gray-100">Properties</th>
       </tr>
     </thead>
     <tbody class="align-baseline">
@@ -109,4 +109,4 @@ module.exports = {
 
 Unlike most of Tailwind's other styles, the container component is included as a built-in plugin rather than a traditional utility module. To disable it, remove the plugin from the `plugins` section of your config file:
 
-<div class="bg-grey-lightest p-4 font-mono text-xs"><div class="whitespace-pre text-grey-dark">{</div> <div class="whitespace-pre text-grey-light">  // ...</div> <div class="whitespace-pre text-grey-dark"><span class="text-purple-dark">  plugins</span>: [</div> <div><div class="text-grey"><span class="text-grey">-</span>&nbsp;&nbsp;&nbsp;require('tailwindcss/plugins/container')(),</div></div> <div class="whitespace-pre text-grey-dark">  ]</div> <div class="whitespace-pre text-grey-dark">}</div></div>
+<div class="bg-gray-100 p-4 font-mono text-xs"><div class="whitespace-pre text-grey-dark">{</div> <div class="whitespace-pre text-grey-light">  // ...</div> <div class="whitespace-pre text-grey-dark"><span class="text-purple-dark">  plugins</span>: [</div> <div><div class="text-grey"><span class="text-grey">-</span>&nbsp;&nbsp;&nbsp;require('tailwindcss/plugins/container')(),</div></div> <div class="whitespace-pre text-grey-dark">  ]</div> <div class="whitespace-pre text-grey-dark">}</div></div>
