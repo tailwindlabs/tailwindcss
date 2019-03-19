@@ -10,7 +10,16 @@ features:
 ---
 
 @include('_partials.border-color-class-table', [
-  'rows' => $page->config['theme']['colors']->map(function ($value, $name) {
+  'rows' => $page->config['theme']['colors']->mapWithKeys(function ($value, $name) {
+    if (is_string($value)) {
+      return [$name => $value];
+    }
+    $result = [];
+    foreach ($value->reverse() as $variant => $color) {
+      $result["{$name}-{$variant}"] = $color;
+    }
+    return $result;
+  })->map(function ($value, $name) {
     $class = ".border-{$name}";
     $code = "border-color: {$value};";
     $color = implode(' ', array_reverse(explode('-', $name)));
