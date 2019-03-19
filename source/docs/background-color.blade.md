@@ -10,16 +10,21 @@ features:
 ---
 
 @include('_partials.background-color-class-table', [
-  'rows' => $page->config['theme']['colors']->map(function ($value, $name) {
-    $class = ".bg-{$name}";
-    $code = "background-color: {$value};";
-    $color = implode(' ', array_reverse(explode('-', $name)));
-    $description = "Set the background color of an element to {$color}.";
-    return [
-      $class,
-      $code,
-      $description,
-    ];
+  'rows' => $page->config['theme']['colors']->flatMap(function ($colors, $name) {
+    if (is_string($colors)) {
+      return [
+        [".bg-{$name}", "color: {$colors}"]
+      ];
+    }
+
+    return collect($colors)->map(function ($value, $key) use ($name) {
+      $class = ".bg-{$name}-{$key}";
+      $code = "background-color: {$value};";
+      return [
+        $class,
+        $code,
+      ];
+    });
   })->values()->all()
 ])
 
