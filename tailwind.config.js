@@ -25,9 +25,6 @@ module.exports = {
         '128': '32rem',
         '(screen-16)': 'calc(100vh - 4rem)',
       },
-      fontFamily: {
-        'source-sans': 'Source Sans Pro, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
-      },
       borderWidth: {
         '6': '6px',
       },
