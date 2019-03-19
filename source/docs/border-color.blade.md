@@ -29,7 +29,7 @@ Control the border color of an element using the `.border-{color}` utilities.
 
 @component('_partials.code-sample', ['class' => 'text-center'])
 <div class="max-w-xs w-full mx-auto">
-  <input class="border border-red focus:border-blue bg-white text-black appearance-none block w-full text-black border rounded py-3 px-4 focus:outline-none" placeholder="Your email">
+  <input class="border border-red focus:border-blue bg-white text-gray-900 appearance-none block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Your email">
 </div>
 @slot('code')
 <input class="border border-red ...">
@@ -64,7 +64,7 @@ For more information about Tailwind's responsive design features, check out the 
 </button>
 @endslot
 @slot('xl')
-<button class="border-2 border-black bg-transparent text-black py-2 px-4 font-semibold rounded">
+<button class="border-2 border-black bg-transparent text-gray-900 py-2 px-4 font-semibold rounded">
   Button
 </button>
 @endslot
@@ -103,7 +103,7 @@ To control the border color of an element on focus, add the `focus:` prefix to a
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="max-w-xs w-full mx-auto">
-  <input class="border border-grey-light focus:border-blue bg-white text-black appearance-none inline-block w-full text-black border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
+  <input class="border border-grey-light focus:border-blue bg-white text-gray-900 appearance-none inline-block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
 </div>
 
 @slot('code')

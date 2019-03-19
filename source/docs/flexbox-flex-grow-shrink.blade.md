@@ -42,12 +42,12 @@ features:
       "Allow a flex item to shrink if needed.",
     ],
     [
-      '.flex-no-grow',
+      '.flex-grow-0',
       'flex-grow: 0;',
       "Prevent a flex item from growing.",
     ],
     [
-      '.flex-no-shrink',
+      '.flex-shrink-0',
       'flex-shrink: 0;',
       "Prevent a flex item from shrinking.",
     ],
@@ -234,14 +234,14 @@ Use `.flex-grow` to allow a flex item to grow to fill any available space:
 
 ## Don't grow
 
-Use `.flex-no-grow` to prevent a flex item from growing:
+Use `.flex-grow-0` to prevent a flex item from growing:
 
 @component('_partials.code-sample')
 <div class="flex bg-grey-lighter">
   <div class="flex-grow text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Will grow
   </div>
-  <div class="flex-no-grow text-grey-darkest text-center bg-grey px-4 py-2 m-2">
+  <div class="flex-grow-0 text-grey-darkest text-center bg-grey px-4 py-2 m-2">
     Will not grow
   </div>
   <div class="flex-grow text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
@@ -270,14 +270,14 @@ Use `.flex-shrink` to allow a flex item to shrink if needed:
 
 ## Don't shrink
 
-Use `.flex-no-shrink` to prevent a flex item from shrinking:
+Use `.flex-shrink-0` to prevent a flex item from shrinking:
 
 @component('_partials.code-sample')
 <div class="flex bg-grey-lighter">
   <div class="flex-shrink text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can shrink if needed
   </div>
-  <div class="flex-no-shrink text-grey-darkest text-center bg-grey px-4 py-2 m-2">
+  <div class="flex-shrink-0 text-grey-darkest text-center bg-grey px-4 py-2 m-2">
     Item that cannot shrink below its initial size
   </div>
   <div class="flex-shrink text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
@@ -288,7 +288,7 @@ Use `.flex-no-shrink` to prevent a flex item from shrinking:
 
 ## Responsive
 
-To control how a flex item grows or shrinks at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:flex-no-shrink` to apply the `flex-no-shrink` utility at only medium screen sizes and above.
+To control how a flex item grows or shrinks at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:flex-shrink-0` to apply the `flex-shrink-0` utility at only medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 

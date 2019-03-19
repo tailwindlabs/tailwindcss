@@ -42,7 +42,7 @@ Add the `focus:` prefix to only apply a utility on focus.
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="max-w-xs w-full mx-auto">
-  <input class="bg-grey-lighter focus:bg-white border-transparent focus:border-blue-light text-black appearance-none inline-block w-full text-black border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
+  <input class="bg-grey-lighter focus:bg-white border-transparent focus:border-blue-light text-gray-900 appearance-none inline-block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
 </div>
 
 @slot('code')
@@ -98,14 +98,14 @@ If you need to style a child element when hovering over a specific parent elemen
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'bg-grey-lighter p-8'])
 <div class="group hover:bg-blue p-4 cursor-pointer bg-white rounded max-w-xs w-full shadow-lg select-none overflow-hidden mx-auto">
-  <p class="font-semibold text-lg mb-1 text-black group-hover:text-white">New Project</p>
+  <p class="font-semibold text-lg mb-1 text-gray-900 group-hover:text-white">New Project</p>
   <p class="text-grey-darker group-hover:text-white mb-2">Create a new project from a variety of starting templates.</p>
 </div>
 
 
 @slot('code')
 <div class="group bg-white hover:bg-blue ...">
-  <p class="text-black group-hover:text-white ...">New Project</p>
+  <p class="text-gray-900 group-hover:text-white ...">New Project</p>
   <p class="text-grey-darker group-hover:text-white ...">Create a new project from a variety of starting templates.</p>
 </div>
 @endslot
@@ -143,7 +143,7 @@ Add the `focus-within:` prefix to only apply a utility when a child element has 
 <form class="w-full max-w-sm mx-auto">
   <div class="flex items-center border-b-2 border-grey-light focus-within:border-teal py-2">
     <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Jane Doe" aria-label="Full name">
-    <button class="focus:shadow-outline focus:outline-none flex-no-shrink bg-teal hover:bg-teal-dark border-teal hover:border-teal-dark text-sm border-4 text-white py-1 px-2 rounded" type="button">
+    <button class="focus:shadow-outline focus:outline-none flex-shrink-0 bg-teal hover:bg-teal-dark border-teal hover:border-teal-dark text-sm border-4 text-white py-1 px-2 rounded" type="button">
       Sign Up
     </button>
   </div>

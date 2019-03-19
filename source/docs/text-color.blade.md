@@ -65,12 +65,12 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @slot('xl')
-<div class="text-black text-xl truncate">
+<div class="text-gray-900 text-xl truncate">
   The quick brown fox jumped over the lazy dog.
 </div>
 @endslot
 @slot('code')
-<div class="none:text-blue-dark sm:text-green-dark md:text-indigo-dark lg:text-red-dark xl:text-black ...">
+<div class="none:text-blue-dark sm:text-green-dark md:text-indigo-dark lg:text-red-dark xl:text-gray-900 ...">
   The quick brown fox...
 </div>
 @endslot
@@ -104,18 +104,18 @@ To control the text color of an element on focus, add the `focus:` prefix to any
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="max-w-xs w-full mx-auto">
-  <input class="border border-grey-light focus:border-red bg-white text-black appearance-none inline-block w-full focus:text-red border rounded py-3 px-4 focus:outline-none" placeholder="Focus me" value="Focus me">
+  <input class="border border-grey-light focus:border-red bg-white text-gray-900 appearance-none inline-block w-full focus:text-red border rounded py-3 px-4 focus:outline-none" placeholder="Focus me" value="Focus me">
 </div>
 
 @slot('code')
-<input class="text-black focus:text-red ...">
+<input class="text-gray-900 focus:text-red ...">
 @endslot
 @endcomponent
 
 Focus utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
 
 ```html
-<input class="... md:text-black md:focus:text-red ...">
+<input class="... md:text-gray-900 md:focus:text-red ...">
 ```
 
 ## Customizing

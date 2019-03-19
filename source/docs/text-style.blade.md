@@ -17,7 +17,7 @@ features:
       'Italicizes the text within an element.',
     ],
     [
-      '.roman',
+      '.not-italic',
       'font-style: normal;',
       'Remove italics within an element.',
     ],
@@ -80,12 +80,12 @@ Use the `.italic` utility to make text italic.
 @endslot
 @endcomponent
 
-Use the `.roman` utility to display text normally. This is typically used to reset italic text at different breakpoints.
+Use the `.not-italic` utility to display text normally. This is typically used to reset italic text at different breakpoints.
 
 @component('_partials.code-sample')
-<p class="roman text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="not-italic text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
 @slot('code')
-<p class="roman ...">The quick brown fox ...</p>
+<p class="not-italic ...">The quick brown fox ...</p>
 @endslot
 @endcomponent
 
@@ -225,7 +225,7 @@ To control the style and decoration of an element on focus, add the `focus:` pre
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="max-w-xs w-full mx-auto">
-  <input class="bg-white focus:uppercase focus:shadow-outline text-black appearance-none inline-block w-full text-black border rounded py-3 px-4 focus:outline-none" value="Focus me" placeholder="Focus me">
+  <input class="bg-white focus:uppercase focus:shadow-outline text-gray-900 appearance-none inline-block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" value="Focus me" placeholder="Focus me">
 </div>
 
 @slot('code')

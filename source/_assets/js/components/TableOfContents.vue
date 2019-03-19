@@ -1,7 +1,7 @@
 <template>
   <ul class="list-reset" v-if="links.length > 0">
     <li class="mb-2" :class="link.isChild ? 'ml-2' : ''" v-for="link in links">
-      <a :href="link.href" class="text-grey-dark hover:text-grey-darkest">{{ link.text }}</a>
+      <a :href="link.href" class="text-gray-600 hover:text-gray-900">{{ link.text }}</a>
     </li>
   </ul>
 </template>
@@ -35,7 +35,7 @@ export default {
     }
   },
   mounted() {
-    anchors.options = { placement: 'left', class: 'text-grey-dark' }
+    anchors.options = { placement: 'left', class: 'text-gray-500' }
     anchors.add()
     this.links = anchors.elements.filter((el) => _.includes(['H2', 'H3'], el.tagName)).map((el) => {
       return {
