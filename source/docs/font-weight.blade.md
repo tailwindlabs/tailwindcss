@@ -65,40 +65,40 @@ Control the font weight of an element using the `.font-{weight}` utilities.
 
 @component('_partials.code-sample', ['class' => 'font-sans'])
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.font-hairline</p>
-  <p class="font-hairline text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+  <p class="text-sm text-gray-600">.font-hairline</p>
+  <p class="font-hairline text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.font-thin</p>
-  <p class="font-thin text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+  <p class="text-sm text-gray-600">.font-thin</p>
+  <p class="font-thin text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.font-light</p>
-  <p class="font-light text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+  <p class="text-sm text-gray-600">.font-light</p>
+  <p class="font-light text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.font-normal</p>
-  <p class="font-normal text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+  <p class="text-sm text-gray-600">.font-normal</p>
+  <p class="font-normal text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.font-medium</p>
-  <p class="font-medium text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+  <p class="text-sm text-gray-600">.font-medium</p>
+  <p class="font-medium text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.font-semibold</p>
-  <p class="font-semibold text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+  <p class="text-sm text-gray-600">.font-semibold</p>
+  <p class="font-semibold text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.font-bold</p>
-  <p class="font-bold text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+  <p class="text-sm text-gray-600">.font-bold</p>
+  <p class="font-bold text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.font-extrabold</p>
-  <p class="font-extrabold text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+  <p class="text-sm text-gray-600">.font-extrabold</p>
+  <p class="font-extrabold text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div>
-  <p class="text-sm text-grey-dark">.font-black</p>
-  <p class="font-black text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+  <p class="text-sm text-gray-600">.font-black</p>
+  <p class="font-black text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 @slot('code')
 <p class="font-hairline ...">The quick brown fox ...</p>
@@ -121,19 +121,19 @@ For more information about Tailwind's responsive design features, check out the 
 
 @component('_partials.responsive-code-sample', ['class' => 'font-sans'])
 @slot('none')
-<p class="font-normal text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="font-normal text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @endslot
 @slot('sm')
-<p class="font-bold text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="font-bold text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @endslot
 @slot('md')
-<p class="font-thin text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="font-thin text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @endslot
 @slot('lg')
-<p class="font-semibold text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="font-semibold text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @endslot
 @slot('xl')
-<p class="font-black text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="font-black text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @endslot
 @slot('code')
 <p class="none:font-normal sm:font-bold md:font-thin lg:font-semibold xl:font-black ...">The quick brown fox jumped over the lazy dog.</p>

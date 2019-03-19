@@ -25,7 +25,7 @@ Remove default list styles using the `.list-reset` utility.
 
 @component('_partials.code-sample')
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">Default</p>
+  <p class="text-sm text-gray-600">Default</p>
   <ul class="default">
     <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
     <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
@@ -34,7 +34,7 @@ Remove default list styles using the `.list-reset` utility.
 </p>
 </div>
 <div>
-  <p class="text-sm text-grey-dark">With .list-reset</p>
+  <p class="text-sm text-gray-600">With .list-reset</p>
   <ul class="list-reset">
     <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
     <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>

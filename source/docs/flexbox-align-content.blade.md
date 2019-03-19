@@ -39,26 +39,26 @@ features:
   ]
 ])
 
-## Start <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Start <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
 
 Use `.content-start` to pack lines in a flex container against the start of the cross axis:
 
 @component('_partials.code-sample')
 <div class="flex content-start flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">5</div>
   </div>
 </div>
 @endcomponent
@@ -70,19 +70,19 @@ Use `.content-center` to pack lines in a flex container in the center of the cro
 @component('_partials.code-sample')
 <div class="flex content-center flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">5</div>
   </div>
 </div>
 @endcomponent
@@ -94,19 +94,19 @@ Use `.content-end` to pack lines in a flex container against the end of the cros
 @component('_partials.code-sample')
 <div class="flex content-end flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">5</div>
   </div>
 </div>
 @endcomponent
@@ -118,19 +118,19 @@ Use `.content-between` to distribute lines in a flex container such that there i
 @component('_partials.code-sample')
 <div class="flex content-between flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">5</div>
   </div>
 </div>
 @endcomponent
@@ -142,19 +142,19 @@ Use `.content-around` to distribute lines in a flex container such that there is
 @component('_partials.code-sample')
 <div class="flex content-around flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">5</div>
   </div>
 </div>
 @endcomponent
@@ -169,95 +169,95 @@ For more information about Tailwind's responsive design features, check out the 
 @slot('none')
 <div class="flex content-start flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">5</div>
   </div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex content-end flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">5</div>
   </div>
 </div>
 @endslot
 @slot('md')
 <div class="flex content-center flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">5</div>
   </div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex content-between flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">5</div>
   </div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex content-around flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
   </div>
   <div class="w-1/3 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">5</div>
   </div>
 </div>
 @endslot

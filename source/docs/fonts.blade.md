@@ -34,7 +34,7 @@ features:
 Use `.font-sans` to apply a web safe sans-serif font family:
 
 @component('_partials.code-sample')
-<p class="font-sans text-lg text-grey-darkest text-center">
+<p class="font-sans text-lg text-gray-800 text-center">
   I'm a sans-serif paragraph.
 </p>
 @endcomponent
@@ -44,7 +44,7 @@ Use `.font-sans` to apply a web safe sans-serif font family:
 Use `.font-serif` to apply a web safe serif font family:
 
 @component('_partials.code-sample')
-<p class="font-serif text-lg text-grey-darkest text-center">
+<p class="font-serif text-lg text-gray-800 text-center">
   I'm a serif paragraph.
 </p>
 @endcomponent
@@ -54,7 +54,7 @@ Use `.font-serif` to apply a web safe serif font family:
 Use `.font-mono` to apply a web safe monospaced font family:
 
 @component('_partials.code-sample')
-<p class="font-mono text-lg text-grey-darkest text-center">
+<p class="font-mono text-lg text-gray-800 text-center">
   I'm a monospaced paragraph.
 </p>
 @endcomponent

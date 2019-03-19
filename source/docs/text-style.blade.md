@@ -74,7 +74,7 @@ features:
 Use the `.italic` utility to make text italic.
 
 @component('_partials.code-sample')
-<p class="italic text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="italic text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @slot('code')
 <p class="italic ...">The quick brown fox ...</p>
 @endslot
@@ -83,7 +83,7 @@ Use the `.italic` utility to make text italic.
 Use the `.not-italic` utility to display text normally. This is typically used to reset italic text at different breakpoints.
 
 @component('_partials.code-sample')
-<p class="not-italic text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="not-italic text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @slot('code')
 <p class="not-italic ...">The quick brown fox ...</p>
 @endslot
@@ -94,7 +94,7 @@ Use the `.not-italic` utility to display text normally. This is typically used t
 Use the `.uppercase` utility to uppercase text.
 
 @component('_partials.code-sample')
-<p class="uppercase text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="uppercase text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @slot('code')
 <p class="uppercase ...">The quick brown fox ...</p>
 @endslot
@@ -103,7 +103,7 @@ Use the `.uppercase` utility to uppercase text.
 Use the `.lowercase` utility to lowercase text.
 
 @component('_partials.code-sample')
-<p class="lowercase text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="lowercase text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @slot('code')
 <p class="lowercase ...">The quick brown fox ...</p>
 @endslot
@@ -112,7 +112,7 @@ Use the `.lowercase` utility to lowercase text.
 Use the `.capitalize` utility to capitalize text.
 
 @component('_partials.code-sample')
-<p class="capitalize text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="capitalize text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @slot('code')
 <p class="capitalize ...">The quick brown fox ...</p>
 @endslot
@@ -121,7 +121,7 @@ Use the `.capitalize` utility to capitalize text.
 Use the `.normal-case` utility to preserve the original casing. This is typically used to reset capitalization at different breakpoints.
 
 @component('_partials.code-sample')
-<p class="normal-case text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="normal-case text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @slot('code')
 <p class="normal-case ...">The quick brown fox ...</p>
 @endslot
@@ -132,7 +132,7 @@ Use the `.normal-case` utility to preserve the original casing. This is typicall
 Use the `.underline` utility to underline text.
 
 @component('_partials.code-sample')
-<p class="underline text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="underline text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @slot('code')
 <p class="underline ...">The quick brown fox ...</p>
 @endslot
@@ -141,7 +141,7 @@ Use the `.underline` utility to underline text.
 Use the `.line-through` utility to strike out text.
 
 @component('_partials.code-sample')
-<p class="line-through text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="line-through text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @slot('code')
 <p class="line-through ...">The quick brown fox ...</p>
 @endslot
@@ -163,7 +163,7 @@ Use the `.no-underline` utility to remove underline or line-through styling.
 Use the `.antialiased` utility to render text using grayscale antialiasing.
 
 @component('_partials.code-sample')
-<p class="antialiased text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="antialiased text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @slot('code')
 <p class="antialiased ...">The quick brown fox ...</p>
 @endslot
@@ -172,7 +172,7 @@ Use the `.antialiased` utility to render text using grayscale antialiasing.
 Use the `.subpixel-antialiased` utility to render text using subpixel antialiasing.
 
 @component('_partials.code-sample')
-<p class="subpixel-antialiased text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="subpixel-antialiased text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @slot('code')
 <p class="subpixel-antialiased ...">The quick brown fox ...</p>
 @endslot
@@ -186,19 +186,19 @@ For more information about Tailwind's responsive design features, check out the 
 
 @component('_partials.responsive-code-sample')
 @slot('none')
-<p class="underline text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="underline text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @endslot
 @slot('sm')
-<p class="no-underline text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="no-underline text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @endslot
 @slot('md')
-<p class="uppercase text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="uppercase text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @endslot
 @slot('lg')
-<p class="normal-case text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="normal-case text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @endslot
 @slot('xl')
-<p class="italic text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="italic text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @endslot
 @slot('code')
 <p class="none:underline sm:no-underline md:uppercase lg:normal-case xl:italic ...">The quick brown fox jumped over the lazy dog.</p>

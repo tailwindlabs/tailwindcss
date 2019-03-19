@@ -67,9 +67,9 @@ Use `.flex` to create a block-level flex container:
 
 @component('_partials.code-sample')
 <div class="flex bg-gray-200">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -79,9 +79,9 @@ Use `.inline-flex` to create an inline flex container:
 
 @component('_partials.code-sample')
 <div class="inline-flex bg-gray-200">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -94,37 +94,37 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex bg-gray-200">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('sm')
 <div class="inline-flex bg-gray-200">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('md')
 <div class="block bg-gray-200">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('lg')
 <div class="hidden bg-gray-200">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex bg-gray-200">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('code')

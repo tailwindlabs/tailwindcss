@@ -29,20 +29,20 @@ features:
   ]
 ])
 
-## Don't wrap <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Don't wrap <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
 
 Use `.flex-no-wrap` to prevent flex items from wrapping, causing inflexible items to overflow the container if necessary:
 
 @component('_partials.code-sample')
 <div class="flex flex-no-wrap bg-gray-200">
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
 </div>
 @endcomponent
@@ -54,13 +54,13 @@ Use `.flex-wrap` to allow flex items to wrap:
 @component('_partials.code-sample')
 <div class="flex flex-wrap bg-gray-200">
   <div class="w-2/5 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-2/5 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-2/5 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
 </div>
 @endcomponent
@@ -72,13 +72,13 @@ Use `.flex-wrap-reverse` to wrap flex items in the reverse direction:
 @component('_partials.code-sample')
 <div class="flex flex-wrap-reverse bg-gray-200">
   <div class="w-2/5 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-2/5 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-2/5 p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
 </div>
 @endcomponent
@@ -93,65 +93,65 @@ For more information about Tailwind's responsive design features, check out the 
 @slot('none')
 <div class="flex flex-no-wrap bg-gray-200">
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex flex-wrap bg-gray-200">
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
 </div>
 @endslot
 @slot('md')
 <div class="flex flex-wrap-reverse bg-gray-200">
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex flex-no-wrap bg-gray-200">
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex flex-wrap bg-gray-200">
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
   </div>
   <div class="w-2/5 flex-none p-2">
-    <div class="text-grey-darker text-center bg-gray-400 p-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   </div>
 </div>
 @endslot
