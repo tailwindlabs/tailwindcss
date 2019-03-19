@@ -332,31 +332,31 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
   <div>
     <p class="text-center text-sm text-gray-600 mb-1">.inset-x-0.top-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
-      <div class="absolute inset-x-0 top-0 h-8 bg-grey-darker"></div>
+      <div class="absolute inset-x-0 top-0 h-8 bg-gray-700"></div>
     </div>
   </div>
   <div>
     <p class="text-center text-sm text-gray-600 mb-1">.inset-y-0.right-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
-      <div class="absolute inset-y-0 right-0 w-8 bg-grey-darker"></div>
+      <div class="absolute inset-y-0 right-0 w-8 bg-gray-700"></div>
     </div>
   </div>
   <div>
     <p class="text-center text-sm text-gray-600 mb-1">.inset-x-0.bottom-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
-      <div class="absolute inset-x-0 bottom-0 h-8 bg-grey-darker"></div>
+      <div class="absolute inset-x-0 bottom-0 h-8 bg-gray-700"></div>
     </div>
   </div>
   <div>
     <p class="text-center text-sm text-gray-600 mb-1">.inset-y-0.left-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
-      <div class="absolute inset-y-0 left-0 w-8 bg-grey-darker"></div>
+      <div class="absolute inset-y-0 left-0 w-8 bg-gray-700"></div>
     </div>
   </div>
   <div>
     <p class="text-center text-sm text-gray-600 mb-1">.inset-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
-      <div class="absolute inset-0 bg-grey-darker"></div>
+      <div class="absolute inset-0 bg-gray-700"></div>
     </div>
   </div>
 </div>
@@ -364,25 +364,25 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
   <div>
     <p class="text-center text-sm text-gray-600 mb-1">.left-0.top-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
-      <div class="absolute left-0 top-0 h-8 w-8 bg-grey-darker"></div>
+      <div class="absolute left-0 top-0 h-8 w-8 bg-gray-700"></div>
     </div>
   </div>
   <div>
     <p class="text-center text-sm text-gray-600 mb-1">.top-0.right-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
-      <div class="absolute top-0 right-0 h-8 w-8 bg-grey-darker"></div>
+      <div class="absolute top-0 right-0 h-8 w-8 bg-gray-700"></div>
     </div>
   </div>
   <div>
     <p class="text-center text-sm text-gray-600 mb-1">.right-0.bottom-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
-      <div class="absolute right-0 bottom-0 h-8 w-8 bg-grey-darker"></div>
+      <div class="absolute right-0 bottom-0 h-8 w-8 bg-gray-700"></div>
     </div>
   </div>
   <div>
     <p class="text-center text-sm text-gray-600 mb-1">.bottom-0.left-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
-      <div class="absolute bottom-0 left-0 h-8 w-8 bg-grey-darker"></div>
+      <div class="absolute bottom-0 left-0 h-8 w-8 bg-gray-700"></div>
     </div>
   </div>
   <div class="relative h-24 w-24 opacity-0"></div>
@@ -391,47 +391,47 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
 @slot('code')
 <!-- Span top edge -->
 <div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute inset-x-0 top-0 h-8 bg-grey-darker"></div>
+  <div class="absolute inset-x-0 top-0 h-8 bg-gray-700"></div>
 </div>
 
 <!-- Span right edge -->
 <div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute inset-y-0 right-0 w-8 bg-grey-darker"></div>
+  <div class="absolute inset-y-0 right-0 w-8 bg-gray-700"></div>
 </div>
 
 <!-- Span bottom edge -->
 <div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute inset-x-0 bottom-0 h-8 bg-grey-darker"></div>
+  <div class="absolute inset-x-0 bottom-0 h-8 bg-gray-700"></div>
 </div>
 
 <!-- Span left edge -->
 <div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute inset-y-0 left-0 bg-grey-darker"></div>
+  <div class="absolute inset-y-0 left-0 bg-gray-700"></div>
 </div>
 
 <!-- Fill entire parent -->
 <div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute inset-0 bg-grey-darker"></div>
+  <div class="absolute inset-0 bg-gray-700"></div>
 </div>
 
 <!-- Pin to top left corner -->
 <div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute left-0 top-0 h-8 w-8 bg-grey-darker"></div>
+  <div class="absolute left-0 top-0 h-8 w-8 bg-gray-700"></div>
 </div>
 
 <!-- Pin to top right corner -->
 <div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute top-0 right-0 h-8 w-8 bg-grey-darker"></div>
+  <div class="absolute top-0 right-0 h-8 w-8 bg-gray-700"></div>
 </div>
 
 <!-- Pin to bottom right corner -->
 <div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute bottom-0 right-0 h-8 w-8 bg-grey-darker"></div>
+  <div class="absolute bottom-0 right-0 h-8 w-8 bg-gray-700"></div>
 </div>
 
 <!-- Pin to bottom left corner -->
 <div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute bottom-0 left-0 h-8 w-8 bg-grey-darker"></div>
+  <div class="absolute bottom-0 left-0 h-8 w-8 bg-gray-700"></div>
 </div>
 @endslot
 @endcomponent
