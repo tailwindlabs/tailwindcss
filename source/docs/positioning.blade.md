@@ -235,7 +235,7 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 
     <div class="absolute left-0 right-0 top-0 bg-grey-darkest text-grey-light z-10 px-4 py-3">
       Fixed child
-      <div class="absolute top-0 bottom-0 right-0 px-4 py-3 bg-grey text-grey-darkest">
+      <div class="absolute top-0 bottom-0 right-0 px-4 py-3 bg-grey text-gray-800">
         Absolute child
       </div>
     </div>

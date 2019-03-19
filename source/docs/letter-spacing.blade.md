@@ -51,27 +51,27 @@ Control the letter spacing of an element using the `.tracking-{size}` utilities.
 @component('_partials.code-sample')
 <div class="mb-6">
   <p class="text-sm text-grey-dark">.tracking-tighter</p>
-  <p class="tracking-tighter text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+  <p class="tracking-tighter text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
   <p class="text-sm text-grey-dark">.tracking-tight</p>
-  <p class="tracking-tight text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+  <p class="tracking-tight text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
   <p class="text-sm text-grey-dark">.tracking-normal</p>
-  <p class="tracking-normal text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+  <p class="tracking-normal text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
   <p class="text-sm text-grey-dark">.tracking-wide</p>
-  <p class="tracking-wide text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+  <p class="tracking-wide text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
   <p class="text-sm text-grey-dark">.tracking-wider</p>
-  <p class="tracking-wider text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+  <p class="tracking-wider text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div>
   <p class="text-sm text-grey-dark">.tracking-widest</p>
-  <p class="tracking-widest text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+  <p class="tracking-widest text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 @slot('code')
 <p class="tracking-tighter ...">The quick brown fox ...</p>
@@ -91,19 +91,19 @@ For more information about Tailwind's responsive design features, check out the 
 
 @component('_partials.responsive-code-sample')
 @slot('none')
-<p class="tracking-tight text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="tracking-tight text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @endslot
 @slot('sm')
-<p class="tracking-normal text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="tracking-normal text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @endslot
 @slot('md')
-<p class="tracking-wide text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="tracking-wide text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @endslot
 @slot('lg')
-<p class="tracking-normal text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="tracking-normal text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @endslot
 @slot('xl')
-<p class="tracking-tight text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+<p class="tracking-tight text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 @endslot
 @slot('code')
 <p class="none:tracking-tight sm:tracking-normal md:tracking-wide lg:tracking-normal xl:tracking-tight ...">The quick brown fox jumped over the lazy dog.</p>
