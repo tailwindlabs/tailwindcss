@@ -13,7 +13,6 @@ const paths = [
   'tracking',
   'textColors',
   'backgroundColors',
-  'backgroundPosition',
   'backgroundSize',
   'borderWidths',
   'borderColors',
