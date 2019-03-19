@@ -37,44 +37,74 @@ features:
       "Position an element relatively until its containing block crosses a specified threshold, then position it relative to the viewport.",
     ],
     [
-      '.pin-t',
+      '.top-0',
       "top: 0;",
       "Anchor absolutely positioned element to the top edge of the nearest positioned parent.",
     ],
     [
-      '.pin-r',
+      '.right-0',
       "right: 0;",
       "Anchor absolutely positioned element to the right edge of the nearest positioned parent.",
     ],
     [
-      '.pin-b',
+      '.bottom-0',
       "bottom: 0;",
       "Anchor absolutely positioned element to the bottom edge of the nearest positioned parent.",
     ],
     [
-      '.pin-l',
+      '.left-0',
       "left: 0;",
       "Anchor absolutely positioned element to the left edge of the nearest positioned parent.",
     ],
     [
-      '.pin-y',
+      '.inset-y-0',
       "top: 0;\nbottom: 0;",
       "Anchor absolutely positioned element to the top and bottom edges of the nearest positioned parent.",
     ],
     [
-      '.pin-x',
+      '.inset-x-0',
       "right: 0;\nleft: 0;",
       "Anchor absolutely positioned element to the left and right edges of the nearest positioned parent.",
     ],
     [
-      '.pin',
+      '.inset-0',
       "top: 0;\nright: 0;\nbottom: 0;\nleft: 0;",
       "Anchor absolutely positioned element to all the edges of the nearest positioned parent.",
     ],
     [
-      '.pin-none',
+      '.inset-auto',
       "top: auto;\nright: auto;\nbottom: auto;\nleft: auto;",
       "Reset absolutely positioned element to all the edges from a given breakpoint onwards.",
+    ],
+    [
+      '.top-auto',
+      "top: auto;",
+      "Reset absolutely positioned element to the top edge",
+    ],
+    [
+      '.bottom-auto',
+      "bottom: auto;",
+      "Reset absolutely positioned element to the bottom edge",
+    ],
+    [
+      '.left-auto',
+      "left: auto;",
+      "Reset absolutely positioned element to the left edge",
+    ],
+    [
+      '.right-auto',
+      "right: auto;",
+      "Reset absolutely positioned element to the right edge",
+    ],
+    [
+      '.inset-y-auto',
+      "top: auto;\nbottom: auto;",
+      "Reset absolutely positioned element to the top and bottom edge",
+    ],
+    [
+      '.inset-x-auto',
+      "left: auto;\nright: auto;",
+      "Reset absolutely positioned element to the left and right edge",
     ],
   ]
 ])
@@ -89,7 +119,7 @@ Any offsets will be ignored and the element will not act as a position reference
 <div class="relative bg-grey-light p-4">
   <div class="static h-32 bg-grey-dark p-4 text-black">
     <p>Static parent</p>
-    <div class="absolute pin-b pin-l bg-grey-darkest p-4 text-grey-light">
+    <div class="absolute bottom-0 left-0 bg-grey-darkest p-4 text-grey-light">
       <p>Absolute child</p>
     </div>
   </div>
@@ -98,7 +128,7 @@ Any offsets will be ignored and the element will not act as a position reference
 @slot('code')
 <div class="static bg-grey-dark">
   Static parent
-  <div class="absolute pin-b pin-l bg-grey-darkest">
+  <div class="absolute bottom-0 left-0 bg-grey-darkest">
     Absolute child
   </div>
 </div>
@@ -115,7 +145,7 @@ Offsets are calculated relative to the element's normal position and the element
 <div class="relative bg-grey-light p-4">
   <div class="relative h-32 bg-grey-dark p-4 text-black">
     <p>Relative parent</p>
-    <div class="absolute pin-b pin-l bg-grey-darkest p-4 text-grey-light">
+    <div class="absolute bottom-0 left-0 bg-grey-darkest p-4 text-grey-light">
       <p>Absolute child</p>
     </div>
   </div>
@@ -124,7 +154,7 @@ Offsets are calculated relative to the element's normal position and the element
 @slot('code')
 <div class="relative bg-grey-dark">
   Relative parent
-  <div class="absolute pin-b pin-l bg-grey-darkest">
+  <div class="absolute bottom-0 left-0 bg-grey-darkest">
     Absolute child
   </div>
 </div>
@@ -144,7 +174,7 @@ Offsets are calculated relative to the nearest parent that has a position other 
   <p class="mb-2 text-grey-darker">Relative parent</p>
   <div class="static bg-grey p-4 text-grey-darker">
     <p class="mb-2">Static parent</p>
-    <div class="static pin-b pin-l bg-grey-darkest p-4 text-grey-light inline-block">
+    <div class="static bottom-0 left-0 bg-grey-darkest p-4 text-grey-light inline-block">
       <p>Static child</p>
     </div>
     <div class="bg-grey-light p-4 text-grey-darker inline-block">
@@ -158,7 +188,7 @@ Offsets are calculated relative to the nearest parent that has a position other 
   <p class="mb-2 text-grey-darker">Relative parent</p>
   <div class="static bg-grey p-4 text-grey-darker">
     <p class="mb-2">Static parent</p>
-    <div class="absolute pin-t pin-r bg-grey-darkest p-4 text-grey-light inline-block">
+    <div class="absolute top-0 right-0 bg-grey-darkest p-4 text-grey-light inline-block">
       <p>Absolute child</p>
     </div>
     <div class="bg-grey-light p-4  text-grey-darker inline-block">
@@ -172,7 +202,7 @@ Offsets are calculated relative to the nearest parent that has a position other 
   Relative parent
   <div class="static bg-grey-dark">
     Static parent
-    <div class="absolute pin-t pin-r bg-grey-darkest">
+    <div class="absolute top-0 right-0 bg-grey-darkest">
       Absolute child
     </div>
     <div class="bg-grey-light inline-block">
@@ -203,13 +233,13 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 
     <!-- Hey fellow nerd! Yes, we're using position absolute instead of position fixed in the demo; it's the best way we could come up with to demonstrate how position fixed works without totally jacking up the layout of the entire documentation site. Forgive us! 😄 -->
 
-    <div class="absolute pin-l pin-r pin-t bg-grey-darkest text-grey-light z-10 px-4 py-3">
+    <div class="absolute left-0 right-0 top-0 bg-grey-darkest text-grey-light z-10 px-4 py-3">
       Fixed child
-      <div class="absolute pin-t pin-b pin-r px-4 py-3 bg-grey text-grey-darkest">
+      <div class="absolute top-0 bottom-0 right-0 px-4 py-3 bg-grey text-grey-darkest">
         Absolute child
       </div>
     </div>
-    <div class="absolute pin overflow-auto pt-16 px-4 pb-4">
+    <div class="absolute inset-0 overflow-auto pt-16 px-4 pb-4">
       <p class="mb-4">Scroll me!</p>
       <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. </p>
       <p class="mb-4">Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
@@ -227,7 +257,7 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 <div class="bg-grey-light pt-16">
   <div class="fixed bg-grey-dark">
     Fixed child
-    <div class="absolute pin-t pin-r bg-grey-darkest">
+    <div class="absolute top-0 right-0 bg-grey-darkest">
       Absolute child
     </div>
   </div>
@@ -262,15 +292,15 @@ Offsets are calculated relative to the element's normal position and the element
 
 @slot('code')
 <div>
-    <div class="sticky pin-t ...">Sticky Heading 1</div>
+    <div class="sticky top-0 ...">Sticky Heading 1</div>
     <p class="py-4">Quisque cursus...</p>
 </div>
 <div>
-    <div class="sticky pin-t ...">Sticky Heading 2</div>
+    <div class="sticky top-0 ...">Sticky Heading 2</div>
     <p class="py-4">Integer lacinia...</p>
 </div>
 <div>
-    <div class="sticky pin-t ...">Sticky Heading 3</div>
+    <div class="sticky top-0 ...">Sticky Heading 3</div>
     <p class="py-4">Nullam mauris...</p>
 </div>
 <!-- etc. -->
@@ -279,83 +309,80 @@ Offsets are calculated relative to the element's normal position and the element
 
 ## Pinning edges
 
-Use the `.pin{-edge?}` utilities to anchor absolutely positioned elements against any of the edges of the nearest positioned parent.
+Use the `.{top|right|bottom|left|inset}-{value}` utilities to anchor absolutely positioned elements against any of the edges of the nearest positioned parent.
 
 Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably find that these are all you need to precisely control absolutely positioned elements.
 
 <div class="flex items-start mt-8 text-sm leading-none mb-8">
   <div class="pr-12">
     <div class="mb-3 text-grey-darker uppercase">Class</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">pin</code></div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">top|right|bottom|left|inset</code></div>
   </div>
   <div class="pl-12 pr-12 border-l">
-    <div class="mb-3 text-grey-darker"><span class="uppercase">Edge</span> <span class="text-grey-dark text-xs">(optional)</span></div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded bg-grey-lighter">&nbsp;</code> All <em class="text-xs text-grey-dark">(default)</em></div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">t</code> Top</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">r</code> Right</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">b</code> Bottom</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">l</code> Left</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">y</code> Top and Bottom</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">x</code> Left and Right</div>
+    <div class="mb-3 text-grey-darker">
+    <span class="uppercase">space</span>
+  </div>
+  <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">0</code> 0</div>
+  <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">auto</code> auto</div>
   </div>
 </div>
 
 @component('_partials.code-sample')
 <div class="flex justify-around mb-8">
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.pin-x.pin-t</p>
+    <p class="text-center text-sm text-grey-dark mb-1">.inset-x-0.top-0</p>
     <div class="relative h-24 w-24 bg-grey-light">
-      <div class="absolute pin-x pin-t h-8 bg-grey-darker"></div>
+      <div class="absolute inset-x-0 top-0 h-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.pin-y.pin-r</p>
+    <p class="text-center text-sm text-grey-dark mb-1">.inset-y-0.right-0</p>
     <div class="relative h-24 w-24 bg-grey-light">
-      <div class="absolute pin-y pin-r w-8 bg-grey-darker"></div>
+      <div class="absolute inset-y-0 right-0 w-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.pin-x.pin-b</p>
+    <p class="text-center text-sm text-grey-dark mb-1">.inset-x-0.bottom-0</p>
     <div class="relative h-24 w-24 bg-grey-light">
-      <div class="absolute pin-x pin-b h-8 bg-grey-darker"></div>
+      <div class="absolute inset-x-0 bottom-0 h-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.pin-y.pin-l</p>
+    <p class="text-center text-sm text-grey-dark mb-1">.inset-y-0.left-0</p>
     <div class="relative h-24 w-24 bg-grey-light">
-      <div class="absolute pin-y pin-l w-8 bg-grey-darker"></div>
+      <div class="absolute inset-y-0 left-0 w-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.pin</p>
+    <p class="text-center text-sm text-grey-dark mb-1">.inset-0</p>
     <div class="relative h-24 w-24 bg-grey-light">
-      <div class="absolute pin bg-grey-darker"></div>
+      <div class="absolute inset-0 bg-grey-darker"></div>
     </div>
   </div>
 </div>
 <div class="flex justify-around">
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.pin-l.pin-t</p>
+    <p class="text-center text-sm text-grey-dark mb-1">.left-0.top-0</p>
     <div class="relative h-24 w-24 bg-grey-light">
-      <div class="absolute pin-l pin-t h-8 w-8 bg-grey-darker"></div>
+      <div class="absolute left-0 top-0 h-8 w-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.pin-t.pin-r</p>
+    <p class="text-center text-sm text-grey-dark mb-1">.top-0.right-0</p>
     <div class="relative h-24 w-24 bg-grey-light">
-      <div class="absolute pin-t pin-r h-8 w-8 bg-grey-darker"></div>
+      <div class="absolute top-0 right-0 h-8 w-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.pin-r.pin-b</p>
+    <p class="text-center text-sm text-grey-dark mb-1">.right-0.bottom-0</p>
     <div class="relative h-24 w-24 bg-grey-light">
-      <div class="absolute pin-r pin-b h-8 w-8 bg-grey-darker"></div>
+      <div class="absolute right-0 bottom-0 h-8 w-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.pin-b.pin-l</p>
+    <p class="text-center text-sm text-grey-dark mb-1">.bottom-0.left-0</p>
     <div class="relative h-24 w-24 bg-grey-light">
-      <div class="absolute pin-b pin-l h-8 w-8 bg-grey-darker"></div>
+      <div class="absolute bottom-0 left-0 h-8 w-8 bg-grey-darker"></div>
     </div>
   </div>
   <div class="relative h-24 w-24 opacity-0"></div>
@@ -364,54 +391,54 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
 @slot('code')
 <!-- Span top edge -->
 <div class="relative h-24 w-24 bg-grey-light">
-  <div class="absolute pin-x pin-t h-8 bg-grey-darker"></div>
+  <div class="absolute inset-x-0 top-0 h-8 bg-grey-darker"></div>
 </div>
 
 <!-- Span right edge -->
 <div class="relative h-24 w-24 bg-grey-light">
-  <div class="absolute pin-y pin-r w-8 bg-grey-darker"></div>
+  <div class="absolute inset-y-0 right-0 w-8 bg-grey-darker"></div>
 </div>
 
 <!-- Span bottom edge -->
 <div class="relative h-24 w-24 bg-grey-light">
-  <div class="absolute pin-x pin-b h-8 bg-grey-darker"></div>
+  <div class="absolute inset-x-0 bottom-0 h-8 bg-grey-darker"></div>
 </div>
 
 <!-- Span left edge -->
 <div class="relative h-24 w-24 bg-grey-light">
-  <div class="absolute pin-y pin-l bg-grey-darker"></div>
+  <div class="absolute inset-y-0 left-0 bg-grey-darker"></div>
 </div>
 
 <!-- Fill entire parent -->
 <div class="relative h-24 w-24 bg-grey-light">
-  <div class="absolute pin bg-grey-darker"></div>
+  <div class="absolute inset-0 bg-grey-darker"></div>
 </div>
 
 <!-- Pin to top left corner -->
 <div class="relative h-24 w-24 bg-grey-light">
-  <div class="absolute pin-l pin-t h-8 w-8 bg-grey-darker"></div>
+  <div class="absolute left-0 top-0 h-8 w-8 bg-grey-darker"></div>
 </div>
 
 <!-- Pin to top right corner -->
 <div class="relative h-24 w-24 bg-grey-light">
-  <div class="absolute pin-t pin-r h-8 w-8 bg-grey-darker"></div>
+  <div class="absolute top-0 right-0 h-8 w-8 bg-grey-darker"></div>
 </div>
 
 <!-- Pin to bottom right corner -->
 <div class="relative h-24 w-24 bg-grey-light">
-  <div class="absolute pin-b pin-r h-8 w-8 bg-grey-darker"></div>
+  <div class="absolute bottom-0 right-0 h-8 w-8 bg-grey-darker"></div>
 </div>
 
 <!-- Pin to bottom left corner -->
 <div class="relative h-24 w-24 bg-grey-light">
-  <div class="absolute pin-b pin-l h-8 w-8 bg-grey-darker"></div>
+  <div class="absolute bottom-0 left-0 h-8 w-8 bg-grey-darker"></div>
 </div>
 @endslot
 @endcomponent
 
 ## Responsive
 
-To position an element only at a specific breakpoint, add a `{screen}:` prefix to any existing positioning utility. For example, adding the class `md:absolute` to an element would apply the `absolute` utility at medium screen sizes and above, and adding `lg:pin-y` would apply `pin-y` at large screens and above.
+To position an element only at a specific breakpoint, add a `{screen}:` prefix to any existing positioning utility. For example, adding the class `md:absolute` to an element would apply the `absolute` utility at medium screen sizes and above, and adding `lg:inset-y-0` would apply `inset-y-0` at large screens and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
@@ -424,43 +451,66 @@ For more information about Tailwind's responsive design features, check out the 
 
 @slot('sm')
 <div class="relative h-32 bg-grey-light p-4">
-  <div class="absolute pin-b pin-l bg-grey-darkest p-4 text-grey">Responsive element</div>
+  <div class="absolute bottom-0 left-0 bg-grey-darkest p-4 text-grey">Responsive element</div>
 </div>
 @endslot
 
 @slot('md')
 <div class="relative h-32 bg-grey-light p-4">
-  <div class="absolute pin-t pin-x bg-grey-darkest p-4 text-grey">Responsive element</div>
+  <div class="absolute top-0 inset-x-0 bg-grey-darkest p-4 text-grey">Responsive element</div>
 </div>
 @endslot
 
 @slot('lg')
 <div class="relative h-32 bg-grey-light p-4">
-  <div class="absolute pin-r pin-y bg-grey-darkest p-4 text-grey">Responsive element</div>
+  <div class="absolute right-0 inset-y-0 bg-grey-darkest p-4 text-grey">Responsive element</div>
 </div>
 @endslot
 
 @slot('xl')
 <div class="relative h-32 bg-grey-light p-4">
-  <div class="absolute pin-b pin-x bg-grey-darkest p-4 text-grey">Responsive element</div>
+  <div class="absolute bottom-0 inset-x-0 bg-grey-darkest p-4 text-grey">Responsive element</div>
 </div>
 @endslot
 
 @slot('code')
 <div class="relative h-32 bg-grey-light p-4">
-  <div class="none:relative sm:absolute sm:pin-b sm:pin-l md:pin-t md:pin-x lg:pin-r lg:pin-y xl:pin-b xl:pin-x"></div>
+  <div class="none:relative sm:absolute sm:bottom-0 sm:left-0 md:top-0 md:inset-x-0 lg:right-0 lg:inset-y-0 xl:bottom-0 xl:inset-x-0"></div>
 </div>
 @endslot
 @endcomponent
 
 ## Customizing
 
-@include('_partials.variants-and-disabling', [
-    'utility' => [
-        'name' => 'positioning',
-        'property' => 'position',
-    ],
-    'variants' => [
-        'responsive',
-    ],
-])
+```javascript
+module.exports = {
+  theme: {
+    position: {
+      '0': 0,
+      auto: 'auto',
+    },
+  }
+}
+```
+
+```javascript
+module.exports = {
+  theme: {
+    inset: {
+      '0': 0,
+      auto: 'auto',
+    },
+  }
+}
+```
+
+The classes of the inset live in a new inset plugin instead of the position plugin, so their variants are also controlled separately:
+
+```javascript
+module.exports = {
+  variants: {
+    position: ['responsive'],
+    inset: ['responsive'],
+  }
+}
+```
