@@ -13,7 +13,7 @@ Deciding on the best way to extend a framework can be paralyzing, so here are so
 A bare-bones Tailwind setup is a single CSS file that looks like this:
 
 ```less
-@@tailwind preflight;
+@@tailwind base;
 
 @@tailwind components;
 
@@ -47,7 +47,7 @@ For example, given the following CSS:
 For this reason, **we recommend defining any custom utility classes at the end of your stylesheet,** *after* you inject Tailwind's utility classes:
 
 ```less
-@@tailwind preflight;
+@@tailwind base;
 
 @@tailwind components;
 
@@ -63,7 +63,7 @@ This way your custom utilities can override Tailwind utilities if needed, althou
 If you're using `postcss-import` or a preprocessor like Less, Sass, or Stylus, consider keeping your utilities in a separate file and importing them:
 
 ```less
-@@tailwind preflight;
+@@tailwind base;
 
 @@tailwind components;
 
@@ -77,7 +77,7 @@ If you're using `postcss-import` or a preprocessor like Less, Sass, or Stylus, c
 If you'd like to create responsive versions of your own utilities based on the breakpoints defined in your Tailwind config file, wrap your utilities in the `@responsive { ... }` directive:
 
 ```less
-@@tailwind preflight;
+@@tailwind base;
 
 @@tailwind components;
 
@@ -95,7 +95,7 @@ Tailwind will intelligently group the responsive versions into its existing medi
 The above code would generate CSS that looks something like this:
 
 ```css
-/* Preflight styles rendered here... */
+/* Base styles rendered here... */
 html { ... }
 /* ... */
 

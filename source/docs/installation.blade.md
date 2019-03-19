@@ -17,7 +17,7 @@ To pull in Tailwind for quick demos or just giving the framework a spin, grab th
 Or if you'd like to pull in the base styles separate from the utility classes:
 
 ```html
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/preflight.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/base.min.css" rel="stylesheet">
 
 <!-- Any of your own CSS would go here -->
 
@@ -56,7 +56,7 @@ If you're an experienced Tailwind user who doesn't need the comments in the conf
 
 ### 3. Use Tailwind in your CSS
 
-Use the `@@tailwind` directive to inject Tailwind's `preflight` and `utilities` styles into your CSS.
+Use the `@@tailwind` directive to inject Tailwind's `base` and `utilities` styles into your CSS.
 
 To avoid specificity issues, we highly recommend structuring your main stylesheet like this:
 
@@ -66,13 +66,13 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
  * Normalize.css and some additional base styles.
  *
  * You can see the styles here:
- * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
+ * https://github.com/tailwindcss/tailwindcss/blob/master/css/base.css
  *
  * If using `postcss-import`, use this import instead:
  *
- * @@import "tailwindcss/preflight";
+ * @@import "tailwindcss/base";
  */
-@@tailwind preflight;
+@@tailwind base;
 
 /**
  * This injects any component classes registered by plugins.

@@ -8,7 +8,7 @@ Tailwind exposes a few custom CSS functions and directives that can be used in y
 
 ## @@tailwind
 
-Use the `@@tailwind` directive to insert Tailwind's `preflight`, `utilities` and `screens` styles into your CSS. Here's a full example of how you might do this:
+Use the `@@tailwind` directive to insert Tailwind's `base`, `utilities` and `screens` styles into your CSS. Here's a full example of how you might do this:
 
 ```less
 /**
@@ -16,9 +16,9 @@ Use the `@@tailwind` directive to insert Tailwind's `preflight`, `utilities` and
  * Normalize.css and some additional base styles.
  *
  * You can see the styles here:
- * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
+ * https://github.com/tailwindcss/tailwindcss/blob/master/css/base.css
  */
-@@tailwind preflight;
+@@tailwind base;
 
 /**
  * This injects any component classes registered by plugins.
