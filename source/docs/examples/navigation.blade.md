@@ -20,7 +20,7 @@ Tailwind doesn't include pre-designed navigation components out of the box, but 
     <a class="text-blue hover:text-blue-darker" href="#">Link</a>
   </li>
   <li class="mr-6">
-    <a class="text-grey-light cursor-not-allowed" href="#">Disabled</a>
+    <a class="text-gray-400 cursor-not-allowed" href="#">Disabled</a>
   </li>
 </ul>
 @endcomponent
@@ -137,7 +137,7 @@ Tailwind doesn't include pre-designed navigation components out of the box, but 
     <a class="bg-white inline-block py-2 px-4 text-blue hover:text-blue-darker font-semibold" href="#">Tab</a>
   </li>
   <li class="mr-1">
-    <a class="bg-white inline-block py-2 px-4 text-grey-light font-semibold" href="#">Tab</a>
+    <a class="bg-white inline-block py-2 px-4 text-gray-400 font-semibold" href="#">Tab</a>
   </li>
 </ul>
 @endcomponent
@@ -153,7 +153,7 @@ Tailwind doesn't include pre-designed navigation components out of the box, but 
     <a class="inline-block border border-white rounded hover:border-grey-lighter text-blue hover:bg-gray-200 py-1 px-3" href="#">Pill</a>
   </li>
   <li class="mr-3">
-    <a class="inline-block py-1 px-3 text-grey-light cursor-not-allowed" href="#">Disabled Pill</a>
+    <a class="inline-block py-1 px-3 text-gray-400 cursor-not-allowed" href="#">Disabled Pill</a>
   </li>
 </ul>
 @endcomponent
@@ -169,7 +169,7 @@ Tailwind doesn't include pre-designed navigation components out of the box, but 
     <a class="text-center block border border-white rounded hover:border-grey-lighter text-blue hover:bg-gray-200 py-2 px-4" href="#">Nav Item</a>
   </li>
   <li class="text-center flex-1">
-    <a class="block py-2 px-4 text-grey-light cursor-not-allowed" href="#">Disabled Item</a>
+    <a class="block py-2 px-4 text-gray-400 cursor-not-allowed" href="#">Disabled Item</a>
   </li>
 </ul>
 @endcomponent
@@ -185,7 +185,7 @@ Tailwind doesn't include pre-designed navigation components out of the box, but 
     <a class="inline-block border border-white rounded hover:border-grey-lighter text-blue hover:bg-gray-200 py-2 px-4" href="#">Pill</a>
   </li>
   <li class="mr-3">
-    <a class="inline-block py-2 px-4 text-grey-light cursor-not-allowed" href="#">Disabled Pill</a>
+    <a class="inline-block py-2 px-4 text-gray-400 cursor-not-allowed" href="#">Disabled Pill</a>
   </li>
 </ul>
 @endcomponent
