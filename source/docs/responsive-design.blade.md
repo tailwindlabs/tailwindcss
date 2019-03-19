@@ -85,18 +85,18 @@ screens: {
 These screen names will be reflected in your utilities, so your `.bg-red` utilities would now look like this:
 
 ```css
-.bg-red { background-color: config('colors.red'); }
+.bg-red { background-color: theme('colors.red'); }
 
 @media (min-width: 576px) {
-  .tablet\:bg-red { background-color: config('colors.red'); }
+  .tablet\:bg-red { background-color: theme('colors.red'); }
 }
 
 @media (min-width: 992px) {
-  .laptop\:bg-red { background-color: config('colors.red'); }
+  .laptop\:bg-red { background-color: theme('colors.red'); }
 }
 
 @media (min-width: 1200px) {
-  .desktop\:bg-red { background-color: config('colors.red'); }
+  .desktop\:bg-red { background-color: theme('colors.red'); }
 }
 ```
 

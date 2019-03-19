@@ -31,7 +31,7 @@ Plugin functions receive a single object argument that can be [destructured](htt
 - `addVariant()`, for registering custom variants
 - `e()`, for escaping strings meant to be used in class names
 - `prefix()`, for manually applying the user's configured prefix to parts of a selector
-- `config()`, for looking up values in the user's Tailwind configuration
+- `theme()`, for looking up values in the user's Tailwind configuration
 
 ## Adding utilities
 
@@ -95,7 +95,7 @@ function({ addUtilities }) {
 
   addUtilities(newUtilities, {
     respectPrefix: false,
-    respectImportant: false,  
+    respectImportant: false,
   })
 }
 ```
@@ -338,7 +338,7 @@ For example, if you're creating a plugin to be reused across a set of internal p
 function({ prefix, addComponents }) {
   addComponents({
     [`.existing-class > ${prefix('.new-class')}`]: {
-      backgroundColor: '#fff',         
+      backgroundColor: '#fff',
     },
   })
 }
@@ -367,7 +367,7 @@ For example, this simplified version of the built-in [container](/docs/container
 
 ```js
 function({ addComponents, config }) {
-  const screens = config('screens', [])
+  const screens = theme('screens', [])
 
   const mediaQueries = _.map(screens, width => {
     return {
