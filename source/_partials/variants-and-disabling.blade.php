@@ -29,11 +29,11 @@
 
 <p>By default, {{ $whichVariants }} variants are generated for {{ $utility['name'] }} utilities.</p>
 
-<p>You can control which variants are generated for the {{ $utility['name'] }} utilities by modifying the <code>{{ $utility['property'] }}</code> property in the <code>modules</code> section of your Tailwind config file.</p>
+<p>You can control which variants are generated for the {{ $utility['name'] }} utilities by modifying the <code>{{ $utility['property'] }}</code> property in the <code>variants</code> section of your Tailwind config file.</p>
 
 <p>For example, this config will {{ is_array($variants) && count($variants) > 0 ? 'also ' : '' }}generate {{ $extraVariants }} variants:</p>
 
-@component('_partials.customized-config', ['key' => 'modules'])
+@component('_partials.customized-config', ['key' => 'variants'])
   // ...
 - {{ $utility['property'] }}: {{$currentVariants}},
 + {{ $utility['property'] }}: ['responsive', 'hover', 'focus', 'active', 'group-hover'],
@@ -46,11 +46,10 @@
 @if(is_array($variants))
 <h3>Disabling</h3>
 
-<p>If you don't plan to use the {{ $utility['name'] }} utilities in your project, you can disable them entirely by setting the <code>{{ $utility['property'] }}</code> property to <code>false</code> in the <code>modules</code> section of your config file:</p>
+<p>If you don't plan to use the {{ $utility['name'] }} utilities in your project, you can disable them entirely by setting the <code>{{ $utility['property'] }}</code> property to <code>false</code> in the <code>corePlugins</code> section of your config file:</p>
 
-@component('_partials.customized-config', ['key' => 'modules'])
+@component('_partials.customized-config', ['key' => 'corePlugins'])
   // ...
-- {{ $utility['property'] }}: {{$currentVariants}},
 + {{ $utility['property'] }}: false,
 @endcomponent
 

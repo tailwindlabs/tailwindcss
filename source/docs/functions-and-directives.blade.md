@@ -251,7 +251,7 @@ Using the default breakpoints, this would generate these classes:
 
 // ...
 
-@@media (min-width: 576px) {
+@@media (min-width: 640px) {
   .sm\:bg-gradient-brand {
     background-image: linear-gradient(blue, green);
   }
@@ -265,14 +265,14 @@ Using the default breakpoints, this would generate these classes:
   // ...
 }
 
-@@media (min-width: 992px) {
+@@media (min-width: 1024px) {
   .lg\:bg-gradient-brand {
     background-image: linear-gradient(blue, green);
   }
   // ...
 }
 
-@@media (min-width: 1200px) {
+@@media (min-width: 1280px) {
   .xl\:bg-gradient-brand {
     background-image: linear-gradient(blue, green);
   }
@@ -286,12 +286,12 @@ The responsive versions will be added to Tailwind's existing media queries **at 
 
 The `@@screen` directive allows you to create media queries that reference your breakpoints by name instead of duplicating their values in your own CSS.
 
-For example, say you have a `sm` breakpoint at `576px` and you need to write some custom CSS that references this breakpoint.
+For example, say you have a `sm` breakpoint at `640px` and you need to write some custom CSS that references this breakpoint.
 
 Instead of writing a raw media query that duplicates that value like this:
 
 ```less
-{{ '@media (min-width: 576px) {' }}
+{{ '@media (min-width: 640px) {' }}
   /* ... */
 }
 ```

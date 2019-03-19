@@ -107,7 +107,7 @@ html { ... }
   background-image: url('/path/to/image.jpg');
 }
 
-@media (min-width: 576px) {
+@media (min-width: 640px) {
   /* Tailwind utilities rendered here... */
   .sm\:bg-red { ... }
   /* ... */
@@ -127,7 +127,7 @@ html { ... }
   }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   /* Tailwind utilities rendered here... */
   .lg\:bg-red { ... }
   /* ... */
@@ -137,7 +137,7 @@ html { ... }
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1280px) {
   /* Tailwind utilities rendered here... */
   .xl\:bg-red { ... }
   /* ... */
