@@ -23,7 +23,7 @@ Add the `hover:` prefix to only apply a utility on hover.
 @endslot
 @endcomponent
 
-<div class="bg-blue-light text-white font-semibold px-4 py-3 mb-4 -mt-2">
+<div class="bg-blue-400 text-white font-semibold px-4 py-3 mb-4 -mt-2">
   <div class="flex">
     <div class="py-1">
       <svg class="fill-current h-6 w-6 text-white opacity-75 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10zm0-2c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm-.5-5h1c.276 0 .5.224.5.5v1c0 .276-.224.5-.5.5h-1c-.276 0-.5-.224-.5-.5v-1c0-.276.224-.5.5-.5zm0-8h1c.276 0 .5.224.5.5V8l-.5 3-1 .5L9 8V5.5c0-.276.224-.5.5-.5z"/></svg>
@@ -50,7 +50,7 @@ Add the `focus:` prefix to only apply a utility on focus.
 @endslot
 @endcomponent
 
-<div class="bg-blue-light text-white font-semibold px-4 py-3 mb-4 -mt-2">
+<div class="bg-blue-400 text-white font-semibold px-4 py-3 mb-4 -mt-2">
   <div class="flex">
     <div class="py-1">
       <svg class="fill-current h-6 w-6 text-white opacity-75 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10zm0-2c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm-.5-5h1c.276 0 .5.224.5.5v1c0 .276-.224.5-.5.5h-1c-.276 0-.5-.224-.5-.5v-1c0-.276.224-.5.5-.5zm0-8h1c.276 0 .5.224.5.5V8l-.5 3-1 .5L9 8V5.5c0-.276.224-.5.5-.5z"/></svg>
@@ -79,7 +79,7 @@ Add the `active:` prefix to only apply a utility when an element is active.
 @endslot
 @endcomponent
 
-<div class="bg-blue-light text-white font-semibold px-4 py-3 mb-4 -mt-2">
+<div class="bg-blue-400 text-white font-semibold px-4 py-3 mb-4 -mt-2">
   <div class="flex">
     <div class="py-1">
       <svg class="fill-current h-6 w-6 text-white opacity-75 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10zm0-2c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm-.5-5h1c.276 0 .5.224.5.5v1c0 .276-.224.5-.5.5h-1c-.276 0-.5-.224-.5-.5v-1c0-.276.224-.5.5-.5zm0-8h1c.276 0 .5.224.5.5V8l-.5 3-1 .5L9 8V5.5c0-.276.224-.5.5-.5z"/></svg>
@@ -111,7 +111,7 @@ If you need to style a child element when hovering over a specific parent elemen
 @endslot
 @endcomponent
 
-<div class="bg-blue-light text-white font-semibold px-4 py-3 mb-4 -mt-2">
+<div class="bg-blue-400 text-white font-semibold px-4 py-3 mb-4 -mt-2">
   <div class="flex">
     <div class="py-1">
       <svg class="fill-current h-6 w-6 text-white opacity-75 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10zm0-2c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm-.5-5h1c.276 0 .5.224.5.5v1c0 .276-.224.5-.5.5h-1c-.276 0-.5-.224-.5-.5v-1c0-.276.224-.5.5-.5zm0-8h1c.276 0 .5.224.5.5V8l-.5 3-1 .5L9 8V5.5c0-.276.224-.5.5-.5z"/></svg>
@@ -160,7 +160,7 @@ Add the `focus-within:` prefix to only apply a utility when a child element has 
 @endslot
 @endcomponent
 
-<div class="bg-blue-light text-white font-semibold px-4 py-3 mb-4 -mt-2">
+<div class="bg-blue-400 text-white font-semibold px-4 py-3 mb-4 -mt-2">
   <div class="flex">
     <div class="py-1">
       <svg class="fill-current h-6 w-6 text-white opacity-75 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10zm0-2c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm-.5-5h1c.276 0 .5.224.5.5v1c0 .276-.224.5-.5.5h-1c-.276 0-.5-.224-.5-.5v-1c0-.276.224-.5.5-.5zm0-8h1c.276 0 .5.224.5.5V8l-.5 3-1 .5L9 8V5.5c0-.276.224-.5.5-.5z"/></svg>
