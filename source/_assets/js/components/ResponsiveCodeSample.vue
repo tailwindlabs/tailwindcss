@@ -23,7 +23,7 @@
       </span>
     </div>
     <div class="rounded overflow-hidden border border-grey-light mb-8">
-      <div class="p-4 bg-gray-100 border-b border-grey-light">
+      <div class="p-4 bg-gray-100 border-b border-gray-300">
         <div class="whitespace-pre font-mono text-gray-500 text-xs overflow-x-auto" v-html="highlightedCode"></div>
       </div>
       <div class="bg-white p-4" :class="slotClass">
@@ -50,7 +50,7 @@ export default {
   computed: {
     highlightedCode() {
       const regex = new RegExp(`(${this.activeScreen}\:[^\\s\\&]+)`, 'g')
-      return escape(this.code).replace(regex, '<span class="text-purple">$1</span>').replace(/none:/g, '')
+      return escape(this.code).replace(regex, '<span class="text-purple-600">$1</span>').replace(/none:/g, '')
     }
   },
 }
