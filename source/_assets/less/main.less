@@ -53,7 +53,7 @@ ul:not(.default) {
 }
 
 @supports (position: sticky) {
-  @media (min-width: config('screens.lg')) {
+  @media (min-width: theme('screens.lg')) {
     .sticky\?lg\:h-\(screen-16\) {
       height: ~"calc(100vh - 4rem)";
     }
@@ -112,5 +112,3 @@ ul:not(.default) {
 [v-cloak] .v-cloak-hidden {
   display: none;
 }
-
-

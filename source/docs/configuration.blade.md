@@ -32,7 +32,7 @@ Your generated configuration file contains all of Tailwind's default configurati
 
 ### Colors
 
-The `colors` property doesn't actually affect your generated CSS on its own, but it's the perfect place to centralize your color palette so you can refer to it in your own CSS using Tailwind's [`config()`](/docs/functions-and-directives#config) function.
+The `colors` property doesn't actually affect your generated CSS on its own, but it's the perfect place to centralize your color palette so you can refer to it in your own CSS using Tailwind's [`theme()`](/docs/functions-and-directives#config) function.
 
 ```js
 // ...

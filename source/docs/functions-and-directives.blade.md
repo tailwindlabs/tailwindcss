@@ -304,17 +304,17 @@ Instead of writing a raw media query that duplicates that value like this:
 }
 ```
 
-## config()
+## theme()
 
 While it's recommended to use the `@@apply` directive to compose custom CSS out of existing utility classes whenever possible, sometimes you need direct access to your Tailwind config values.
 
-Use the `config()` function to access your Tailwind config values using dot notation:
+Use the `theme()` function to access your Tailwind config values using dot notation:
 
 ```less
 // Source
 .error {
-  font-size: config('textSizes.xs');
-  color: config('colors.red-darker');
+  font-size: theme('textSizes.xs');
+  color: theme('colors.red-darker');
 }
 
 // Output

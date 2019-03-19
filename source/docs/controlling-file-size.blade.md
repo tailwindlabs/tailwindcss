@@ -200,10 +200,3 @@ if (mix.inProduction()) {
 ```
 
 For more information on working with PurgeCSS, [visit the PurgeCSS documentation](https://github.com/FullHuman/purgecss).
-
-
-
-
-
-
-

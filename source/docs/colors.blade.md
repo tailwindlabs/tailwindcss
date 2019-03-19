@@ -407,10 +407,10 @@ module.exports = {
 }
 ```
 
-You'll notice above that the color palette is also assigned to the `colors` key of your Tailwind config. This makes it easy to access them in your custom CSS using the `config()` function. For example:
+You'll notice above that the color palette is also assigned to the `colors` key of your Tailwind config. This makes it easy to access them in your custom CSS using the `theme()` function. For example:
 
 ```css
-.error { color: config('colors.grey-darker') }
+.error { color: theme('colors.grey-darker') }
 ```
 
 ## Naming
