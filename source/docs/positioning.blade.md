@@ -221,7 +221,7 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 
 @component('_partials.code-sample')
 <div class="rounded-b overflow-hidden max-w-md mx-auto mt-4 mb-4">
-  <div class="rounded-t border-t border-l border-r border-grey-light bg-grey-lighter flex px-4 py-3">
+  <div class="rounded-t border-t border-l border-r border-grey-light bg-gray-200 flex px-4 py-3">
     <div class="mr-6">
       <span class="inline-block rounded-full bg-grey h-3 w-3 mr-1"></span>
       <span class="inline-block rounded-full bg-grey h-3 w-3 mr-1"></span>

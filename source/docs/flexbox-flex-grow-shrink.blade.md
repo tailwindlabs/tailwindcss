@@ -60,7 +60,7 @@ Use `.flex-initial` to allow a flex item to shrink but not grow, taking into acc
 
 @component('_partials.code-sample')
 <p class="text-sm text-grey-dark mb-1">Items don't grow when there's extra space</p>
-<div class="flex bg-grey-lighter mb-6">
+<div class="flex bg-gray-200 mb-6">
   <div class="flex-initial text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
@@ -70,7 +70,7 @@ Use `.flex-initial` to allow a flex item to shrink but not grow, taking into acc
 </div>
 
 <p class="text-sm text-grey-dark mb-1">Items shrink if possible when needed</p>
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-initial text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
@@ -83,7 +83,7 @@ Use `.flex-initial` to allow a flex item to shrink but not grow, taking into acc
 </div>
 
 @slot('code')
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-initial text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
@@ -92,7 +92,7 @@ Use `.flex-initial` to allow a flex item to shrink but not grow, taking into acc
   </div>
 </div>
 
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-initial text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
@@ -112,7 +112,7 @@ Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring its in
 
 @component('_partials.code-sample')
 <p class="text-sm text-grey-dark mb-1">Default behavior</p>
-<div class="flex bg-grey-lighter mb-6">
+<div class="flex bg-gray-200 mb-6">
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
@@ -124,7 +124,7 @@ Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring its in
   </div>
 </div>
 <p class="text-sm text-grey-dark mb-1">With <code>.flex-1</code></p>
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
@@ -137,7 +137,7 @@ Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring its in
 </div>
 
 @slot('code')
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
@@ -157,7 +157,7 @@ Use `.flex-auto` to allow a flex item to grow and shrink, taking into account it
 
 @component('_partials.code-sample')
 <p class="text-sm text-grey-dark mb-1">Default behavior</p>
-<div class="flex bg-grey-lighter mb-6">
+<div class="flex bg-gray-200 mb-6">
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
@@ -169,7 +169,7 @@ Use `.flex-auto` to allow a flex item to grow and shrink, taking into account it
   </div>
 </div>
 <p class="text-sm text-grey-dark mb-1">With <code>.flex-auto</code></p>
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-auto text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
@@ -182,7 +182,7 @@ Use `.flex-auto` to allow a flex item to grow and shrink, taking into account it
 </div>
 
 @slot('code')
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-auto text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Short
   </div>
@@ -201,7 +201,7 @@ Use `.flex-auto` to allow a flex item to grow and shrink, taking into account it
 Use `.flex-none` to prevent a flex item from growing or shrinking:
 
 @component('_partials.code-sample')
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
@@ -219,7 +219,7 @@ Use `.flex-none` to prevent a flex item from growing or shrinking:
 Use `.flex-grow` to allow a flex item to grow to fill any available space:
 
 @component('_partials.code-sample')
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-none text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Content that cannot flex
   </div>
@@ -237,7 +237,7 @@ Use `.flex-grow` to allow a flex item to grow to fill any available space:
 Use `.flex-grow-0` to prevent a flex item from growing:
 
 @component('_partials.code-sample')
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-grow text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Will grow
   </div>
@@ -255,7 +255,7 @@ Use `.flex-grow-0` to prevent a flex item from growing:
 Use `.flex-shrink` to allow a flex item to shrink if needed:
 
 @component('_partials.code-sample')
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-none text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Longer content that cannot flex
   </div>
@@ -273,7 +273,7 @@ Use `.flex-shrink` to allow a flex item to shrink if needed:
 Use `.flex-shrink-0` to prevent a flex item from shrinking:
 
 @component('_partials.code-sample')
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-shrink text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can shrink if needed
   </div>
@@ -294,7 +294,7 @@ For more information about Tailwind's responsive design features, check out the 
 
 @component('_partials.responsive-code-sample')
 @slot('none')
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
@@ -307,7 +307,7 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @slot('sm')
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
@@ -320,7 +320,7 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @slot('md')
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
@@ -333,7 +333,7 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @slot('lg')
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
@@ -346,7 +346,7 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @slot('xl')
-<div class="flex bg-grey-lighter">
+<div class="flex bg-gray-200">
   <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>

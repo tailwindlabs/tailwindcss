@@ -8,7 +8,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
 
 ## Login Form
 
-@component('_partials.code-sample', ['class' => 'px-3 py-10 bg-grey-lighter flex justify-center'])
+@component('_partials.code-sample', ['class' => 'px-3 py-10 bg-gray-200 flex justify-center'])
 <div class="w-full max-w-xs">
   <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
     <div class="mb-4">
@@ -50,7 +50,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
       </label>
     </div>
     <div class="md:w-2/3">
-      <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter rounded w-full py-2 px-4 text-grey-darker leading-tight focus:outline-none focus:bg-white focus:border-purple" id="inline-full-name" type="text" value="Jane Doe">
+      <input class="bg-gray-200 appearance-none border-2 border-grey-lighter rounded w-full py-2 px-4 text-grey-darker leading-tight focus:outline-none focus:bg-white focus:border-purple" id="inline-full-name" type="text" value="Jane Doe">
     </div>
   </div>
   <div class="md:flex md:items-center mb-6">
@@ -60,7 +60,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
       </label>
     </div>
     <div class="md:w-2/3">
-      <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter rounded w-full py-2 px-4 text-grey-darker leading-tight focus:outline-none focus:bg-white focus:border-purple" id="inline-username" type="password" placeholder="******************">
+      <input class="bg-gray-200 appearance-none border-2 border-grey-lighter rounded w-full py-2 px-4 text-grey-darker leading-tight focus:outline-none focus:bg-white focus:border-purple" id="inline-username" type="password" placeholder="******************">
     </div>
   </div>
   <div class="md:flex md:items-center mb-6">
@@ -92,14 +92,14 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
       <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-first-name">
         First Name
       </label>
-      <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Jane">
+      <input class="appearance-none block w-full bg-gray-200 text-grey-darker border border-red rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Jane">
       <p class="text-red text-xs italic">Please fill out this field.</p>
     </div>
     <div class="w-full md:w-1/2 px-3">
       <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-last-name">
         Last Name
       </label>
-      <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-last-name" type="text" placeholder="Doe">
+      <input class="appearance-none block w-full bg-gray-200 text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-last-name" type="text" placeholder="Doe">
     </div>
   </div>
   <div class="flex flex-wrap -mx-3 mb-6">
@@ -107,7 +107,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
       <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-password">
         Password
       </label>
-      <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-password" type="password" placeholder="******************">
+      <input class="appearance-none block w-full bg-gray-200 text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-password" type="password" placeholder="******************">
       <p class="text-grey-dark text-xs italic">Make it as long and as crazy as you'd like</p>
     </div>
   </div>
@@ -116,14 +116,14 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
       <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-city">
         City
       </label>
-      <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-city" type="text" placeholder="Albuquerque">
+      <input class="appearance-none block w-full bg-gray-200 text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-city" type="text" placeholder="Albuquerque">
     </div>
     <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
       <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-state">
         State
       </label>
       <div class="relative">
-        <select class="block appearance-none w-full bg-grey-lighter border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-state">
+        <select class="block appearance-none w-full bg-gray-200 border border-grey-lighter text-grey-darker py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-state">
           <option>New Mexico</option>
           <option>Missouri</option>
           <option>Texas</option>
@@ -137,7 +137,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
       <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-zip">
         Zip
       </label>
-      <input class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-zip" type="text" placeholder="90210">
+      <input class="appearance-none block w-full bg-gray-200 text-grey-darker border border-grey-lighter rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-zip" type="text" placeholder="90210">
     </div>
   </div>
 </form>

@@ -44,7 +44,7 @@ features:
 Use `.content-start` to pack lines in a flex container against the start of the cross axis:
 
 @component('_partials.code-sample')
-<div class="flex content-start flex-wrap bg-grey-lighter h-48">
+<div class="flex content-start flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
@@ -68,7 +68,7 @@ Use `.content-start` to pack lines in a flex container against the start of the 
 Use `.content-center` to pack lines in a flex container in the center of the cross axis:
 
 @component('_partials.code-sample')
-<div class="flex content-center flex-wrap bg-grey-lighter h-48">
+<div class="flex content-center flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
@@ -92,7 +92,7 @@ Use `.content-center` to pack lines in a flex container in the center of the cro
 Use `.content-end` to pack lines in a flex container against the end of the cross axis:
 
 @component('_partials.code-sample')
-<div class="flex content-end flex-wrap bg-grey-lighter h-48">
+<div class="flex content-end flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
@@ -116,7 +116,7 @@ Use `.content-end` to pack lines in a flex container against the end of the cros
 Use `.content-between` to distribute lines in a flex container such that there is an equal amount of space between each line:
 
 @component('_partials.code-sample')
-<div class="flex content-between flex-wrap bg-grey-lighter h-48">
+<div class="flex content-between flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
@@ -140,7 +140,7 @@ Use `.content-between` to distribute lines in a flex container such that there i
 Use `.content-around` to distribute lines in a flex container such that there is an equal amount of space around each line:
 
 @component('_partials.code-sample')
-<div class="flex content-around flex-wrap bg-grey-lighter h-48">
+<div class="flex content-around flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
@@ -167,7 +167,7 @@ For more information about Tailwind's responsive design features, check out the 
 
 @component('_partials.responsive-code-sample')
 @slot('none')
-<div class="flex content-start flex-wrap bg-grey-lighter h-48">
+<div class="flex content-start flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
@@ -186,7 +186,7 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @slot('sm')
-<div class="flex content-end flex-wrap bg-grey-lighter h-48">
+<div class="flex content-end flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
@@ -205,7 +205,7 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @slot('md')
-<div class="flex content-center flex-wrap bg-grey-lighter h-48">
+<div class="flex content-center flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
@@ -224,7 +224,7 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @slot('lg')
-<div class="flex content-between flex-wrap bg-grey-lighter h-48">
+<div class="flex content-between flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
@@ -243,7 +243,7 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @slot('xl')
-<div class="flex content-around flex-wrap bg-grey-lighter h-48">
+<div class="flex content-around flex-wrap bg-gray-200 h-48">
   <div class="w-1/3 p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>

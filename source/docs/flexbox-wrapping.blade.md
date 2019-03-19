@@ -34,7 +34,7 @@ features:
 Use `.flex-no-wrap` to prevent flex items from wrapping, causing inflexible items to overflow the container if necessary:
 
 @component('_partials.code-sample')
-<div class="flex flex-no-wrap bg-grey-lighter">
+<div class="flex flex-no-wrap bg-gray-200">
   <div class="w-2/5 flex-none p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
@@ -52,7 +52,7 @@ Use `.flex-no-wrap` to prevent flex items from wrapping, causing inflexible item
 Use `.flex-wrap` to allow flex items to wrap:
 
 @component('_partials.code-sample')
-<div class="flex flex-wrap bg-grey-lighter">
+<div class="flex flex-wrap bg-gray-200">
   <div class="w-2/5 p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
@@ -70,7 +70,7 @@ Use `.flex-wrap` to allow flex items to wrap:
 Use `.flex-wrap-reverse` to wrap flex items in the reverse direction:
 
 @component('_partials.code-sample')
-<div class="flex flex-wrap-reverse bg-grey-lighter">
+<div class="flex flex-wrap-reverse bg-gray-200">
   <div class="w-2/5 p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
@@ -91,7 +91,7 @@ For more information about Tailwind's responsive design features, check out the 
 
 @component('_partials.responsive-code-sample')
 @slot('none')
-<div class="flex flex-no-wrap bg-grey-lighter">
+<div class="flex flex-no-wrap bg-gray-200">
   <div class="w-2/5 flex-none p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
@@ -104,7 +104,7 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @slot('sm')
-<div class="flex flex-wrap bg-grey-lighter">
+<div class="flex flex-wrap bg-gray-200">
   <div class="w-2/5 flex-none p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
@@ -117,7 +117,7 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @slot('md')
-<div class="flex flex-wrap-reverse bg-grey-lighter">
+<div class="flex flex-wrap-reverse bg-gray-200">
   <div class="w-2/5 flex-none p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
@@ -130,7 +130,7 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @slot('lg')
-<div class="flex flex-no-wrap bg-grey-lighter">
+<div class="flex flex-no-wrap bg-gray-200">
   <div class="w-2/5 flex-none p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
@@ -143,7 +143,7 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @slot('xl')
-<div class="flex flex-wrap bg-grey-lighter">
+<div class="flex flex-wrap bg-gray-200">
   <div class="w-2/5 flex-none p-2">
     <div class="text-grey-darker text-center bg-grey-light p-2">1</div>
   </div>
