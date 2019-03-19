@@ -45,9 +45,9 @@ Use `.justify-start` to justify items against the start of the flex container's 
 
 @component('_partials.code-sample')
 <div class="flex justify-start bg-gray-200">
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -57,9 +57,9 @@ Use `.justify-center` to justify items along the center of the flex container's 
 
 @component('_partials.code-sample')
 <div class="flex justify-center bg-gray-200">
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -69,9 +69,9 @@ Use `.justify-end` to justify items against the end of the flex container's main
 
 @component('_partials.code-sample')
 <div class="flex justify-end bg-gray-200">
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -81,9 +81,9 @@ Use `.justify-between` to justify items along the flex container's main axis suc
 
 @component('_partials.code-sample')
 <div class="flex justify-between bg-gray-200">
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -93,9 +93,9 @@ Use `.justify-around` to justify items along the flex container's main axis such
 
 @component('_partials.code-sample')
 <div class="flex justify-around bg-gray-200">
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -108,37 +108,37 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex justify-start bg-gray-200">
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex justify-center bg-gray-200">
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('md')
 <div class="flex justify-end bg-gray-200">
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex justify-between bg-gray-200">
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex justify-around bg-gray-200">
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('code')

@@ -116,7 +116,7 @@ Use `.static` to position an element according to the normal flow of the documen
 Any offsets will be ignored and the element will not act as a position reference for absolutely positioned children.
 
 @component('_partials.code-sample')
-<div class="relative bg-grey-light p-4">
+<div class="relative bg-gray-400 p-4">
   <div class="static h-32 bg-grey-dark p-4 text-gray-900">
     <p>Static parent</p>
     <div class="absolute bottom-0 left-0 bg-grey-darkest p-4 text-grey-light">
@@ -142,7 +142,7 @@ Use `.relative` to position an element according to the normal flow of the docum
 Offsets are calculated relative to the element's normal position and the element *will* act as a position reference for absolutely positioned children.
 
 @component('_partials.code-sample')
-<div class="relative bg-grey-light p-4">
+<div class="relative bg-gray-400 p-4">
   <div class="relative h-32 bg-grey-dark p-4 text-gray-900">
     <p>Relative parent</p>
     <div class="absolute bottom-0 left-0 bg-grey-darkest p-4 text-grey-light">
@@ -170,42 +170,42 @@ Offsets are calculated relative to the nearest parent that has a position other 
 @component('_partials.code-sample')
 
 <p class="text-sm text-grey-dark mb-1">With static positioning</p>
-<div class="relative bg-grey-light px-4 pt-2 pb-4 mb-6">
+<div class="relative bg-gray-400 px-4 pt-2 pb-4 mb-6">
   <p class="mb-2 text-grey-darker">Relative parent</p>
   <div class="static bg-grey p-4 text-grey-darker">
     <p class="mb-2">Static parent</p>
     <div class="static bottom-0 left-0 bg-grey-darkest p-4 text-grey-light inline-block">
       <p>Static child</p>
     </div>
-    <div class="bg-grey-light p-4 text-grey-darker inline-block">
+    <div class="bg-gray-400 p-4 text-grey-darker inline-block">
       <p>Static sibling</p>
     </div>
   </div>
 </div>
 
 <p class="text-sm text-grey-dark mb-1">With absolute positioning</p>
-<div class="relative bg-grey-light px-4 pt-2 pb-4">
+<div class="relative bg-gray-400 px-4 pt-2 pb-4">
   <p class="mb-2 text-grey-darker">Relative parent</p>
   <div class="static bg-grey p-4 text-grey-darker">
     <p class="mb-2">Static parent</p>
     <div class="absolute top-0 right-0 bg-grey-darkest p-4 text-grey-light inline-block">
       <p>Absolute child</p>
     </div>
-    <div class="bg-grey-light p-4  text-grey-darker inline-block">
+    <div class="bg-gray-400 p-4  text-grey-darker inline-block">
       <p>Static sibling</p>
     </div>
   </div>
 </div>
 
 @slot('code')
-<div class="relative bg-grey-light">
+<div class="relative bg-gray-400">
   Relative parent
   <div class="static bg-grey-dark">
     Static parent
     <div class="absolute top-0 right-0 bg-grey-darkest">
       Absolute child
     </div>
-    <div class="bg-grey-light inline-block">
+    <div class="bg-gray-400 inline-block">
       Static sibling
     </div>
   </div>
@@ -229,7 +229,7 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
     </div>
     <div class="flex-1 bg-white border border-grey-light rounded mr-4"></div>
   </div>
-  <div class="relative bg-grey-light h-64">
+  <div class="relative bg-gray-400 h-64">
 
     <!-- Hey fellow nerd! Yes, we're using position absolute instead of position fixed in the demo; it's the best way we could come up with to demonstrate how position fixed works without totally jacking up the layout of the entire documentation site. Forgive us! 😄 -->
 
@@ -254,7 +254,7 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 </div>
 
 @slot('code')
-<div class="bg-grey-light pt-16">
+<div class="bg-gray-400 pt-16">
   <div class="fixed bg-grey-dark">
     Fixed child
     <div class="absolute top-0 right-0 bg-grey-darkest">
@@ -331,31 +331,31 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
 <div class="flex justify-around mb-8">
   <div>
     <p class="text-center text-sm text-grey-dark mb-1">.inset-x-0.top-0</p>
-    <div class="relative h-24 w-24 bg-grey-light">
+    <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute inset-x-0 top-0 h-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
     <p class="text-center text-sm text-grey-dark mb-1">.inset-y-0.right-0</p>
-    <div class="relative h-24 w-24 bg-grey-light">
+    <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute inset-y-0 right-0 w-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
     <p class="text-center text-sm text-grey-dark mb-1">.inset-x-0.bottom-0</p>
-    <div class="relative h-24 w-24 bg-grey-light">
+    <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute inset-x-0 bottom-0 h-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
     <p class="text-center text-sm text-grey-dark mb-1">.inset-y-0.left-0</p>
-    <div class="relative h-24 w-24 bg-grey-light">
+    <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute inset-y-0 left-0 w-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
     <p class="text-center text-sm text-grey-dark mb-1">.inset-0</p>
-    <div class="relative h-24 w-24 bg-grey-light">
+    <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute inset-0 bg-grey-darker"></div>
     </div>
   </div>
@@ -363,25 +363,25 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
 <div class="flex justify-around">
   <div>
     <p class="text-center text-sm text-grey-dark mb-1">.left-0.top-0</p>
-    <div class="relative h-24 w-24 bg-grey-light">
+    <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute left-0 top-0 h-8 w-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
     <p class="text-center text-sm text-grey-dark mb-1">.top-0.right-0</p>
-    <div class="relative h-24 w-24 bg-grey-light">
+    <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute top-0 right-0 h-8 w-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
     <p class="text-center text-sm text-grey-dark mb-1">.right-0.bottom-0</p>
-    <div class="relative h-24 w-24 bg-grey-light">
+    <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute right-0 bottom-0 h-8 w-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
     <p class="text-center text-sm text-grey-dark mb-1">.bottom-0.left-0</p>
-    <div class="relative h-24 w-24 bg-grey-light">
+    <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute bottom-0 left-0 h-8 w-8 bg-grey-darker"></div>
     </div>
   </div>
@@ -390,47 +390,47 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
 
 @slot('code')
 <!-- Span top edge -->
-<div class="relative h-24 w-24 bg-grey-light">
+<div class="relative h-24 w-24 bg-gray-400">
   <div class="absolute inset-x-0 top-0 h-8 bg-grey-darker"></div>
 </div>
 
 <!-- Span right edge -->
-<div class="relative h-24 w-24 bg-grey-light">
+<div class="relative h-24 w-24 bg-gray-400">
   <div class="absolute inset-y-0 right-0 w-8 bg-grey-darker"></div>
 </div>
 
 <!-- Span bottom edge -->
-<div class="relative h-24 w-24 bg-grey-light">
+<div class="relative h-24 w-24 bg-gray-400">
   <div class="absolute inset-x-0 bottom-0 h-8 bg-grey-darker"></div>
 </div>
 
 <!-- Span left edge -->
-<div class="relative h-24 w-24 bg-grey-light">
+<div class="relative h-24 w-24 bg-gray-400">
   <div class="absolute inset-y-0 left-0 bg-grey-darker"></div>
 </div>
 
 <!-- Fill entire parent -->
-<div class="relative h-24 w-24 bg-grey-light">
+<div class="relative h-24 w-24 bg-gray-400">
   <div class="absolute inset-0 bg-grey-darker"></div>
 </div>
 
 <!-- Pin to top left corner -->
-<div class="relative h-24 w-24 bg-grey-light">
+<div class="relative h-24 w-24 bg-gray-400">
   <div class="absolute left-0 top-0 h-8 w-8 bg-grey-darker"></div>
 </div>
 
 <!-- Pin to top right corner -->
-<div class="relative h-24 w-24 bg-grey-light">
+<div class="relative h-24 w-24 bg-gray-400">
   <div class="absolute top-0 right-0 h-8 w-8 bg-grey-darker"></div>
 </div>
 
 <!-- Pin to bottom right corner -->
-<div class="relative h-24 w-24 bg-grey-light">
+<div class="relative h-24 w-24 bg-gray-400">
   <div class="absolute bottom-0 right-0 h-8 w-8 bg-grey-darker"></div>
 </div>
 
 <!-- Pin to bottom left corner -->
-<div class="relative h-24 w-24 bg-grey-light">
+<div class="relative h-24 w-24 bg-gray-400">
   <div class="absolute bottom-0 left-0 h-8 w-8 bg-grey-darker"></div>
 </div>
 @endslot
@@ -444,37 +444,37 @@ For more information about Tailwind's responsive design features, check out the 
 
 @component('_partials.responsive-code-sample')
 @slot('none')
-<div class="relative h-32 bg-grey-light p-4">
+<div class="relative h-32 bg-gray-400 p-4">
   <div class="relative bg-grey-darkest p-4 text-grey">Responsive element</div>
 </div>
 @endslot
 
 @slot('sm')
-<div class="relative h-32 bg-grey-light p-4">
+<div class="relative h-32 bg-gray-400 p-4">
   <div class="absolute bottom-0 left-0 bg-grey-darkest p-4 text-grey">Responsive element</div>
 </div>
 @endslot
 
 @slot('md')
-<div class="relative h-32 bg-grey-light p-4">
+<div class="relative h-32 bg-gray-400 p-4">
   <div class="absolute top-0 inset-x-0 bg-grey-darkest p-4 text-grey">Responsive element</div>
 </div>
 @endslot
 
 @slot('lg')
-<div class="relative h-32 bg-grey-light p-4">
+<div class="relative h-32 bg-gray-400 p-4">
   <div class="absolute right-0 inset-y-0 bg-grey-darkest p-4 text-grey">Responsive element</div>
 </div>
 @endslot
 
 @slot('xl')
-<div class="relative h-32 bg-grey-light p-4">
+<div class="relative h-32 bg-gray-400 p-4">
   <div class="absolute bottom-0 inset-x-0 bg-grey-darkest p-4 text-grey">Responsive element</div>
 </div>
 @endslot
 
 @slot('code')
-<div class="relative h-32 bg-grey-light p-4">
+<div class="relative h-32 bg-gray-400 p-4">
   <div class="none:relative sm:absolute sm:bottom-0 sm:left-0 md:top-0 md:inset-x-0 lg:right-0 lg:inset-y-0 xl:bottom-0 xl:inset-x-0"></div>
 </div>
 @endslot
