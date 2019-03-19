@@ -63,14 +63,14 @@ For example, `.pt-2` would add `.5rem` of padding to the top of the element, `.m
 
 By default, only responsive variants are generated for margin, negative margin and padding utilities.
 
-You can control which variants are generated for the list utilities by modifying the `margin`, `negativeMargin` and `padding` property in the `modules` section of your Tailwind config file.
+You can control which variants are generated for the list utilities by modifying the `margin`, `negativeMargin` and `padding` property in the `variants` section of your Tailwind config file.
 
 For example, this config will _also_ generate hover and focus variants of the margin utilities, hover variants of the negative margin utilities, and focus variants of the padding utilities:
 
 ```js
 {
     // ...
-    modules: {
+    variants: {
         // ...
         margin: ['responsive', 'hover', 'focus'],
         negativeMargin: ['responsive', 'hover'],
@@ -81,12 +81,12 @@ For example, this config will _also_ generate hover and focus variants of the ma
 
 ### Disabling
 
-If you aren't using the margin, the negative margin, or padding utilities in your project, you can disable them entirely by setting the `margin`, `negativeMargin` and `padding` property to `false` in the `modules` section of your config file:
+If you aren't using the margin, the negative margin, or padding utilities in your project, you can disable them entirely by setting the `margin`, `negativeMargin` and `padding` property to `false` in the `variants` section of your config file:
 
 ```js
 {
     // ...
-    modules: {
+    variants: {
         // ...
         margin: false,
         negativeMargin: false,
