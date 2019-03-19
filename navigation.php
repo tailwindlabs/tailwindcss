@@ -54,7 +54,6 @@ return [
         'Border Radius' => 'border-radius',
     ],
     'Flexbox' => [
-        'Display' => 'flexbox-display',
         'Flex Direction' => 'flexbox-direction',
         'Flex Wrapping' => 'flexbox-wrapping',
         'Align Items' => 'flexbox-align-items',
