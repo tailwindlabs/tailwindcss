@@ -14,9 +14,9 @@ description: "A component for fixing an element's width to the current breakpoin
     </colgroup>
     <thead>
       <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Breakpoint</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-grey-lightest">Properties</th>
+        <th class="text-sm font-semibold text-grey-darker p-2 bg-gray-100">Class</th>
+        <th class="text-sm font-semibold text-grey-darker p-2 bg-gray-100">Breakpoint</th>
+        <th class="text-sm font-semibold text-grey-darker p-2 bg-gray-100">Properties</th>
       </tr>
     </thead>
     <tbody class="align-baseline">

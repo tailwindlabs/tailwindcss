@@ -32,7 +32,7 @@ For most projects (and to take advantage of Tailwind's customization features), 
 
 Tailwind is [available on npm](https://www.npmjs.com/package/tailwindcss) and can be installed using npm or Yarn.
 
-<div class="rounded bg-grey-lightest border border-grey-light font-mono text-xs p-4">
+<div class="rounded bg-gray-100 border border-grey-light font-mono text-xs p-4">
   <div class="text-grey-dark"># Using npm</div>
   <div class="text-purple-dark">npm install <span class="text-blue-dark">tailwindcss</span> <span class="text-grey-darker">--save-dev</span></div>
   <div class="text-grey-dark mt-6"># Using Yarn</div>
@@ -45,7 +45,7 @@ Tailwind is configured almost entirely in plain JavaScript. To do this you'll ne
 
 We've provided a CLI utility to do this easily:
 
-<div class="rounded bg-grey-lightest border border-grey-light font-mono text-xs p-4">
+<div class="rounded bg-gray-100 border border-grey-light font-mono text-xs p-4">
   <div class="text-grey-dark"># Using npm</div>
   <div class="text-purple-dark">npx tailwind <span class="text-blue-dark">init</span> <span class="text-grey-dark">[filename]</span></div>
   <div class="text-grey-dark mt-6"># Using Yarn</div>
@@ -131,7 +131,7 @@ To avoid specificity issues, we highly recommend structuring your main styleshee
 
 For simple projects or just giving Tailwind a spin, you can use the Tailwind CLI tool to process your CSS:
 
-<div class="bg-grey-lightest border rounded font-mono text-sm p-4">
+<div class="bg-gray-100 border rounded font-mono text-sm p-4">
   <div class="text-purple-dark">npx tailwind <span class="text-blue-dark">build styles.css</span> <span class="text-grey-dark">[-c ./tailwind.config.js] [-o ./output.css] [--no-autoprefixer]</span></div>
 </div>
 
