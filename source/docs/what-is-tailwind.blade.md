@@ -33,7 +33,7 @@ Instead, Tailwind provides highly composable, low-level *utility classes* that m
 
 Here's an example of a responsive contact card component built with Tailwind without writing a single line of CSS:
 
-@component('_partials.code-sample', ['class' => 'bg-grey-lighter py-8'])
+@component('_partials.code-sample', ['class' => 'bg-gray-200 py-8'])
 <div class="bg-white mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
   <div class="sm:flex sm:items-center px-6 py-4">
     <img class="block h-16 sm:h-24 rounded-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="https://avatars2.githubusercontent.com/u/4323180?s=400&u=4962a4441fae9fba5f0f86456c6c506a21ffca4f&v=4" alt="">
@@ -110,35 +110,35 @@ Tailwind uses an intuitive `{screen}:` prefix that makes it easy to notice respo
 
 @component('_partials.responsive-code-sample')
 @slot('none')
-<div class="flex justify-start bg-grey-lighter">
+<div class="flex justify-start bg-gray-200">
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('sm')
-<div class="flex justify-center bg-grey-lighter">
+<div class="flex justify-center bg-gray-200">
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('md')
-<div class="flex justify-end bg-grey-lighter">
+<div class="flex justify-end bg-gray-200">
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('lg')
-<div class="flex justify-between bg-grey-lighter">
+<div class="flex justify-between bg-gray-200">
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('xl')
-<div class="flex justify-around bg-grey-lighter">
+<div class="flex justify-around bg-gray-200">
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
   <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>

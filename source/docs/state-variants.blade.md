@@ -42,11 +42,11 @@ Add the `focus:` prefix to only apply a utility on focus.
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="max-w-xs w-full mx-auto">
-  <input class="bg-grey-lighter focus:bg-white border-transparent focus:border-blue-light text-gray-900 appearance-none inline-block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
+  <input class="bg-gray-200 focus:bg-white border-transparent focus:border-blue-light text-gray-900 appearance-none inline-block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
 </div>
 
 @slot('code')
-<input class="bg-grey-lighter focus:bg-white border-transparent focus:border-blue-light ..." placeholder="Focus me">
+<input class="bg-gray-200 focus:bg-white border-transparent focus:border-blue-light ..." placeholder="Focus me">
 @endslot
 @endcomponent
 
@@ -96,7 +96,7 @@ Add the `active:` prefix to only apply a utility when an element is active.
 
 If you need to style a child element when hovering over a specific parent element, add the `.group` class to the parent element and add the `group-hover:` prefix to the utility on the child element.
 
-@component('_partials.code-sample', ['lang' => 'html', 'class' => 'bg-grey-lighter p-8'])
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'bg-gray-200 p-8'])
 <div class="group hover:bg-blue p-4 cursor-pointer bg-white rounded max-w-xs w-full shadow-lg select-none overflow-hidden mx-auto">
   <p class="font-semibold text-lg mb-1 text-gray-900 group-hover:text-white">New Project</p>
   <p class="text-grey-darker group-hover:text-white mb-2">Create a new project from a variety of starting templates.</p>
