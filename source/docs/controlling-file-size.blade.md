@@ -169,7 +169,7 @@ class TailwindExtractor {
   }
 }
 
-mix.postCss("./src/styles.css", "public/css", [tailwindcss("./tailwind.js")]);
+mix.postCss("./src/styles.css", "public/css", [tailwindcss("./tailwind.config.js")]);
 
 // Only run PurgeCSS during production builds for faster development builds
 // and so you still have the full set of utilities available during
