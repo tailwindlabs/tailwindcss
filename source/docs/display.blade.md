@@ -29,6 +29,16 @@ features:
       "Set the box type of the element to <code>inline</code>.",
     ],
     [
+      '.flex',
+      'display: flex;',
+      "Set the box type of the element to <code>flex</code>.",
+    ],
+    [
+      '.inline-flex',
+      'display: inline-flex;',
+      "Set the box type of the element to <code>inline-flex</code>.",
+    ],
+    [
       '.table',
       'display: table;',
       "Set the box type of the element to <code>table</code>.",
@@ -47,16 +57,6 @@ features:
       '.hidden',
       'display: none;',
       "Set the box type of the element to <code>none</code>.",
-    ],
-    [
-      '.flex',
-      'display: flex;',
-      "Set the box type of the element to <code>flex</code>.",
-    ],
-    [
-      '.inline-flex',
-      'display: inline-flex;',
-      "Set the box type of the element to <code>inline-flex</code>.",
     ],
   ]
 ])
