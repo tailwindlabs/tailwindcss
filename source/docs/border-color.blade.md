@@ -108,11 +108,11 @@ To control the border color of an element on focus, add the `focus:` prefix to a
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="max-w-xs w-full mx-auto">
-  <input class="border border-grey-light focus:border-blue-500 bg-white text-gray-900 appearance-none inline-block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
+  <input class="border border-gray-400 focus:border-blue-500 bg-white text-gray-900 appearance-none inline-block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
 </div>
 
 @slot('code')
-<input class="border-grey-light focus:border-blue-500 ...">
+<input class="border-gray-400 focus:border-blue-500 ...">
 @endslot
 @endcomponent
 

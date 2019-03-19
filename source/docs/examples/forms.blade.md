@@ -163,7 +163,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <div class="inline-block relative w-64">
-  <select class="block appearance-none w-full bg-white border border-grey-light hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+  <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
     <option>Really long option that will likely overlap the chevron</option>
     <option>Option 2</option>
     <option>Option 3</option>

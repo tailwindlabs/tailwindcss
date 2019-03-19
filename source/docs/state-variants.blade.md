@@ -141,7 +141,7 @@ Add the `focus-within:` prefix to only apply a utility when a child element has 
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'bg-white p-8'])
 <form class="w-full max-w-sm mx-auto">
-  <div class="flex items-center border-b-2 border-grey-light focus-within:border-teal-500 py-2">
+  <div class="flex items-center border-b-2 border-gray-400 focus-within:border-teal-500 py-2">
     <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Jane Doe" aria-label="Full name">
     <button class="focus:shadow-outline focus:outline-none flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="button">
       Sign Up
@@ -151,7 +151,7 @@ Add the `focus-within:` prefix to only apply a utility when a child element has 
 
 
 @slot('code')
-<form class="border-b-2 border-grey-light focus-within:border-teal-500 ...">
+<form class="border-b-2 border-gray-400 focus-within:border-teal-500 ...">
   <input class="..." placeholder="Jane Doe" ...>
   <button class="...">
     Sign Up

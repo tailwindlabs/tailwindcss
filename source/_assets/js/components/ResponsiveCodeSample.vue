@@ -22,7 +22,7 @@
         <p class="text-xs">xl</p>
       </span>
     </div>
-    <div class="rounded overflow-hidden border border-grey-light mb-8">
+    <div class="rounded overflow-hidden border border-gray-400 mb-8">
       <div class="p-4 bg-gray-100 border-b border-gray-300">
         <div class="whitespace-pre font-mono text-gray-500 text-xs overflow-x-auto" v-html="highlightedCode"></div>
       </div>

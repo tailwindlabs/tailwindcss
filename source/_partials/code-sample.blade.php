@@ -1,5 +1,5 @@
-<div class="relative rounded overflow-hidden border border-grey-light mb-8 bg-white">
-  <div class="border-b border-grey-light p-4 {{ $class ?? '' }}">
+<div class="relative rounded overflow-hidden border border-gray-400 mb-8 bg-white">
+  <div class="border-b border-gray-400 p-4 {{ $class ?? '' }}">
     {{ $slot }}
   </div>
   <div class="p-4 bg-gray-100">

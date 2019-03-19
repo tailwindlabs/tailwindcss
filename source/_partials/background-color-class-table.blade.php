@@ -4,17 +4,17 @@
 @endphp
 
 <h2 style="visibility: hidden; font-size: 0; margin: 0;">Class reference</h2>
-<div class="border-t border-b border-grey-light overflow-hidden relative">
+<div class="border-t border-b border-gray-400 overflow-hidden relative">
   <div class="{{ $scroll ? 'lg:max-h-xs' : '' }} overflow-y-auto scrollbar-w-2 scrollbar-track-grey-lighter scrollbar-thumb-rounded scrollbar-thumb-grey scrolling-touch">
     <table class="relative w-full text-left table-collapse">
       <thead>
         <tr>
           <th class="z-20 sticky top-0 text-sm font-semibold text-gray-700 bg-gray-100 p-0">
-            <div class="p-2 border-b border-grey-light">Class</div>
+            <div class="p-2 border-b border-gray-400">Class</div>
           </th>
           <th class="relative z-20 sticky top-0 text-sm font-semibold text-gray-700 bg-gray-100 p-0" colspan="2">
-            <div class="sm:hidden absolute inset-0 p-2 border-b border-grey-light"></div>
-            <div class="hidden sm:block p-2 border-b border-grey-light">Properties</div>
+            <div class="sm:hidden absolute inset-0 p-2 border-b border-gray-400"></div>
+            <div class="hidden sm:block p-2 border-b border-gray-400">Properties</div>
           </th>
         </tr>
       </thead>

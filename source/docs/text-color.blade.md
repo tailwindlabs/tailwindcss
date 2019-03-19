@@ -109,7 +109,7 @@ To control the text color of an element on focus, add the `focus:` prefix to any
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="max-w-xs w-full mx-auto">
-  <input class="border border-grey-light focus:border-red-500 bg-white text-gray-900 appearance-none inline-block w-full focus:text-red-600 border rounded py-3 px-4 focus:outline-none" placeholder="Focus me" value="Focus me">
+  <input class="border border-gray-400 focus:border-red-500 bg-white text-gray-900 appearance-none inline-block w-full focus:text-red-600 border rounded py-3 px-4 focus:outline-none" placeholder="Focus me" value="Focus me">
 </div>
 
 @slot('code')

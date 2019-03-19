@@ -5,7 +5,7 @@ description: "A component for fixing an element's width to the current breakpoin
 ---
 
 <h2 style="visibility: hidden; font-size: 0; margin: 0;">Class reference</h2>
-<div class="border-t border-b border-grey-light mb-12">
+<div class="border-t border-b border-gray-400 mb-12">
   <table class="w-full text-left table-collapse">
     <colgroup>
       <col class="w-1/4">
@@ -21,25 +21,25 @@ description: "A component for fixing an element's width to the current breakpoin
     </thead>
     <tbody class="align-baseline">
       <tr>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-purple-700" rowspan="5">.container</td>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-gray-600"><span class="italic">None</span></td>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-700">width: 100%;</td>
+        <td class="p-2 border-t border-gray-400 font-mono text-xs text-purple-700" rowspan="5">.container</td>
+        <td class="p-2 border-t border-gray-400 font-mono text-xs text-gray-600"><span class="italic">None</span></td>
+        <td class="p-2 border-t border-gray-400 font-mono text-xs text-blue-700">width: 100%;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-gray-700">sm <span class="text-gray-600 italic">(640px)</span></td>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-700">max-width: 640px;</td>
+        <td class="p-2 border-t border-gray-400 font-mono text-xs text-gray-700">sm <span class="text-gray-600 italic">(640px)</span></td>
+        <td class="p-2 border-t border-gray-400 font-mono text-xs text-blue-700">max-width: 640px;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-gray-700">md <span class="text-gray-600 italic">(768px)</span></td>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-700">max-width: 768px;</td>
+        <td class="p-2 border-t border-gray-400 font-mono text-xs text-gray-700">md <span class="text-gray-600 italic">(768px)</span></td>
+        <td class="p-2 border-t border-gray-400 font-mono text-xs text-blue-700">max-width: 768px;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-gray-700">lg <span class="text-gray-600 italic">(1024px)</span></td>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-700">max-width: 1024px;</td>
+        <td class="p-2 border-t border-gray-400 font-mono text-xs text-gray-700">lg <span class="text-gray-600 italic">(1024px)</span></td>
+        <td class="p-2 border-t border-gray-400 font-mono text-xs text-blue-700">max-width: 1024px;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-gray-700">xl <span class="text-gray-600 italic">(1280px)</span></td>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-700">max-width: 1280px;</td>
+        <td class="p-2 border-t border-gray-400 font-mono text-xs text-gray-700">xl <span class="text-gray-600 italic">(1280px)</span></td>
+        <td class="p-2 border-t border-gray-400 font-mono text-xs text-blue-700">max-width: 1280px;</td>
       </tr>
     </tbody>
   </table>

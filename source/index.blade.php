@@ -40,7 +40,7 @@
     <span class="inline-block bg-soft px-4 text-gray-700 tracking-wide font-bold">A project by</span>
   </div>
   <div class="flex justify-center">
-    <div class="pb-4 flex justify-center flex-wrap max-w-md xl:max-w-full border-b-2 border-grey-light">
+    <div class="pb-4 flex justify-center flex-wrap max-w-md xl:max-w-full border-b-2 border-gray-400">
       <div class="mb-8 w-64 md:flex-x-center">
         <div class="flex items-center">
           <img class="h-16 w-16 rounded-full" src="https://adamwathan.nyc3.cdn.digitaloceanspaces.com/tailwindcss/adam-profile.jpg" alt="">

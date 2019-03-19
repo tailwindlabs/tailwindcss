@@ -106,7 +106,7 @@ To control the background color of an element on focus, add the `focus:` prefix 
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="max-w-xs w-full mx-auto">
-  <input class="border border-grey-light bg-gray-200 focus:bg-white text-gray-900 appearance-none inline-block w-full border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
+  <input class="border border-gray-400 bg-gray-200 focus:bg-white text-gray-900 appearance-none inline-block w-full border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
 </div>
 
 @slot('code')
