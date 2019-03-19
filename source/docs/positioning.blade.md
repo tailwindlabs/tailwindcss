@@ -87,7 +87,7 @@ Any offsets will be ignored and the element will not act as a position reference
 
 @component('_partials.code-sample')
 <div class="relative bg-grey-light p-4">
-  <div class="static h-32 bg-grey-dark p-4 text-black">
+  <div class="static h-32 bg-grey-dark p-4 text-gray-900">
     <p>Static parent</p>
     <div class="absolute bottom-0 left-0 bg-grey-darkest p-4 text-grey-light">
       <p>Absolute child</p>
@@ -113,7 +113,7 @@ Offsets are calculated relative to the element's normal position and the element
 
 @component('_partials.code-sample')
 <div class="relative bg-grey-light p-4">
-  <div class="relative h-32 bg-grey-dark p-4 text-black">
+  <div class="relative h-32 bg-grey-dark p-4 text-gray-900">
     <p>Relative parent</p>
     <div class="absolute bottom-0 left-0 bg-grey-darkest p-4 text-grey-light">
       <p>Absolute child</p>

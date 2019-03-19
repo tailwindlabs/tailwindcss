@@ -225,7 +225,7 @@ To control the style and decoration of an element on focus, add the `focus:` pre
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="max-w-xs w-full mx-auto">
-  <input class="bg-white focus:uppercase focus:shadow-outline text-black appearance-none inline-block w-full text-black border rounded py-3 px-4 focus:outline-none" value="Focus me" placeholder="Focus me">
+  <input class="bg-white focus:uppercase focus:shadow-outline text-gray-900 appearance-none inline-block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" value="Focus me" placeholder="Focus me">
 </div>
 
 @slot('code')

@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i,700,700i" rel="stylesheet">
   <link rel="stylesheet" href="{{ mix('/css/main.css') }}">
 </head>
-<body class="font-source-sans font-normal text-black leading-normal">
+<body class="font-source-sans font-normal text-gray-900 leading-normal">
   <div>
     <div>
         <div class="sticky top-0 bg-grey-light px-2 py-1 font-bold text-grey-darker">Sticky Heading 1</div>

@@ -91,7 +91,7 @@
         <nav id="nav" class="px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8 sticky?lg:h-(screen-16)">
           @foreach ($page->navigation as $sectionName => $sectionItems)
           <div class="mb-8">
-            <p class="mb-3 lg:mb-2 text-grey uppercase tracking-wide font-bold text-sm lg:text-xs">{{ $sectionName }}</p>
+            <p class="mb-3 lg:mb-2 text-gray-500 uppercase tracking-wide font-bold text-sm lg:text-xs">{{ $sectionName }}</p>
             <ul>
               @foreach ($sectionItems as $name => $slugOrChildren)
                 @if (is_string($slugOrChildren))
