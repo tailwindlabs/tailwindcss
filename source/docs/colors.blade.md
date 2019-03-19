@@ -11,11 +11,11 @@ Developing an organized, consistent and beautiful color palette is critical to t
 To get you started, we've provided a generous palette of great looking colors that are perfect for prototyping, or even as a starting point for your color palette. That said, don't hesitate to [customize](#customizing) them for your project.
 
 <div class="relative my-8 rounded overflow-hidden shadow-md">
-<div class="text-white bg-black px-2 py-4 text-sm font-semibold leading-tight text-right">
+<div class="text-white bg-black px-2 py-4 text-sm font-semibold leading-tight">
   <div class="mb-2">Black</div>
   <div class="font-normal text-xs opacity-75">{{ strtoupper($page->config['theme']['colors']['black']) }}</div>
 </div>
-<div class="text-black bg-white px-2 py-4 text-sm font-semibold leading-tight text-right">
+<div class="text-black bg-white px-2 py-4 text-sm font-semibold leading-tight">
   <div class="mb-2">White</div>
   <div class="font-normal text-xs opacity-75">{{ strtoupper($page->config['theme']['colors']['white']) }}</div>
 </div>
