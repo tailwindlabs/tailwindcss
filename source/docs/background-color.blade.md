@@ -10,7 +10,7 @@ features:
 ---
 
 @include('_partials.background-color-class-table', [
-  'rows' => $page->config['colors']->map(function ($value, $name) {
+  'rows' => $page->config['theme']['colors']->map(function ($value, $name) {
     $class = ".bg-{$name}";
     $code = "background-color: {$value};";
     $color = implode(' ', array_reverse(explode('-', $name)));

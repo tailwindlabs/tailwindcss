@@ -1,23 +1,23 @@
-var config = require('tailwindcss/defaultConfig')()
+var config = require('tailwindcss/defaultConfig')
 
-config.screens = {
+config.theme.screens = {
   'sm': '576px',
   'md': '768px',
   'lg': '992px',
   'xl': '1280px',
 }
 
-config.colors = Object.assign(config.colors, {
+config.theme.colors = Object.assign(config.theme.colors, {
   'tailwind-teal-light': '#5ebcca',
   'tailwind-teal': '#44a8b3',
   'tailwind-teal-dark': '#2f8696',
 })
 
-config.fonts = Object.assign(config.fonts, {
+config.theme.fontFamily = Object.assign(config.theme.fontFamily, {
   'source-sans': 'Source Sans Pro, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
 })
 
-config.textSizes = {
+config.theme.fontSize = {
   'xs': '.75rem',     // 12px
   'sm': '.875rem',    // 14px
   'base': '1rem',     // 16px
@@ -29,41 +29,41 @@ config.textSizes = {
   '5xl': '3rem',      // 48px
 }
 
-config.textColors = config.colors
+config.theme.textColor = config.theme.colors
 
-config.backgroundColors = config.colors
+config.theme.backgroundColor = config.theme.colors
 
-config.borderWidths = Object.assign(config.borderWidths, {
+config.theme.borderWidth = Object.assign(config.theme.borderWidth, {
   '6': '6px',
 })
 
-config.borderColors = Object.assign(config.colors, {
-  default: config.colors['grey-light'],
+config.theme.borderColor = Object.assign(config.theme.colors, {
+  default: config.theme.colors['grey-light'],
 })
 
-config.width = Object.assign(config.width, {
+config.theme.width = Object.assign(config.theme.width, {
   '5': '1.25rem',
   '128': '32rem',
 })
 
-config.maxWidth = Object.assign(config.maxWidth, {
-  'screen-xl': config.screens.xl,
+config.theme.maxWidth = Object.assign(config.theme.maxWidth, {
+  'screen-xl': config.theme.screens.xl,
 })
 
-config.height = Object.assign(config.height, {
+config.theme.height = Object.assign(config.theme.height, {
   '7': '1.75rem',
   '20': '5rem',
   '128': '32rem',
   '(screen-16)': 'calc(100vh - 4rem)',
 })
 
-config.maxHeight = Object.assign(config.maxHeight, {
+config.theme.maxHeight = Object.assign(config.theme.maxHeight, {
   'xs': '20rem',
   'sm': '30rem',
   '(screen-16)': 'calc(100vh - 4rem)',
 })
 
-config.padding = Object.assign(config.padding, {
+config.theme.padding = Object.assign(config.theme.padding, {
   '10': '2.5rem',
   '12': '3rem',
   '16': '4rem',
@@ -74,7 +74,7 @@ config.padding = Object.assign(config.padding, {
   '80': '20rem',
 })
 
-config.margin = Object.assign(config.margin, {
+config.theme.margin = Object.assign(config.theme.margin, {
   '10': '2.5rem',
   '12': '3rem',
   '16': '4rem',
@@ -85,19 +85,19 @@ config.margin = Object.assign(config.margin, {
   '80': '20rem',
 })
 
-config.negativeMargin = config.margin
+config.theme.negativeMargin = config.theme.margin
 
-config.shadows = Object.assign({
+config.theme.boxShadow = Object.assign({
   'md-light': '0 0 12px 8px rgb(255,255,255)'
-}, config.shadows)
+}, config.theme.boxShadow)
 
-config.zIndex = Object.assign(config.zIndex, {
+config.theme.zIndex = Object.assign(config.theme.zIndex, {
   '90': '90',
   '100': '100',
 })
 
-config.modules.backgroundColors = ['responsive', 'hover', 'focus']
-config.modules.borderColors = ['responsive', 'hover', 'focus']
-config.modules.borderWidths = ['responsive', 'hover', 'focus']
+config.variants.backgroundColor = ['responsive', 'hover', 'focus']
+config.variants.borderColor = ['responsive', 'hover', 'focus']
+config.variants.borderWidth = ['responsive', 'hover', 'focus']
 
 module.exports = config

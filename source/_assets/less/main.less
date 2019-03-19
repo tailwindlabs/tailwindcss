@@ -1,4 +1,4 @@
-@tailwind preflight;
+@tailwind base;
 
 html {
   font-size: 14px;
@@ -13,11 +13,6 @@ a {
   text-decoration: none;
 }
 
-ol:not(.default),
-ul:not(.default) {
-  @apply .list-reset;
-}
-
 @import "carbon-ads";
 @import "docsearch";
 @import "prism";
@@ -30,11 +25,11 @@ ul:not(.default) {
 }
 
 .scrollbar-track-grey-lighter::-webkit-scrollbar-track {
-  @apply bg-grey-lighter;
+  @apply bg-gray-300;
 }
 
 .scrollbar-thumb-grey::-webkit-scrollbar-thumb {
-  @apply bg-grey;
+  @apply bg-gray-400;
 }
 
 .scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
@@ -66,23 +61,23 @@ ul:not(.default) {
 }
 
 .focus\:bg-grey-dark:focus {
-  @apply .bg-grey-dark;
+  @apply bg-gray-700;
 }
 
 .focus\:text-white:focus {
-  @apply .text-white;
+  @apply text-white;
 }
 
 .group:hover .group-hover\:text-white {
-  @apply .text-white;
+  @apply text-white;
 }
 
 .focus-within\:border-teal:focus-within {
-  @apply .border-teal;
+  @apply border-teal-500;
 }
 
 .active\:bg-blue-dark:active {
-  @apply .bg-blue-dark;
+  @apply bg-blue-700;
 }
 
 .bg-pattern {
@@ -94,15 +89,15 @@ ul:not(.default) {
 }
 
 .placeholder-grey-dark::placeholder {
-  @apply .text-grey-dark;
+  @apply text-gray-700;
 }
 
 .placeholder-grey-darker::placeholder {
-  @apply .text-grey-darker;
+  @apply text-gray-800;
 }
 
 .placeholder-grey-darkest::placeholder {
-  @apply .text-grey-darkest;
+  @apply text-gray-900;
 }
 
 .focus\:outline-0:focus {

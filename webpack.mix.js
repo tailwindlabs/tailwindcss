@@ -8,7 +8,7 @@ const config = require('tailwindcss/defaultConfig')
 const fs = require('fs')
 const path = require('path')
 
-fs.writeFileSync('./tailwind.json', JSON.stringify(config()))
+fs.writeFileSync('./tailwind.json', JSON.stringify(config))
 
 const env = argv.e || argv.env || 'local'
 const plugins = [

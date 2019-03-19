@@ -22,7 +22,7 @@
     "postcss-cssnext": "^3.0.2",
     "prismjs": "^1.8.3",
     "stylefmt": "^6.0.0",
-    "tailwindcss": "0.7.4",
+    "tailwindcss": "^1.0.0-beta.3",
     "vue": "^2.5.2",
     "webpack-watch": "^0.2.0",
     "yargs": "^10.0.3"
