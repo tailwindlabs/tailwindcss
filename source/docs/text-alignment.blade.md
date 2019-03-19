@@ -40,19 +40,19 @@ Control the text alignment of an element using the `.text-left`, `.text-center`,
 
 @component('_partials.code-sample')
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.text-left</p>
+  <p class="text-sm text-gray-600">.text-left</p>
   <p class="text-left text-base text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis fugit, enim molestiae praesentium eveniet, recusandae et error beatae facilis ex harum consequuntur, quia pariatur non. Doloribus illo, ullam blanditiis ab.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.text-center</p>
+  <p class="text-sm text-gray-600">.text-center</p>
   <p class="text-center text-base text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis fugit, enim molestiae praesentium eveniet, recusandae et error beatae facilis ex harum consequuntur, quia pariatur non. Doloribus illo, ullam blanditiis ab.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.text-right</p>
+  <p class="text-sm text-gray-600">.text-right</p>
   <p class="text-right text-base text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis fugit, enim molestiae praesentium eveniet, recusandae et error beatae facilis ex harum consequuntur, quia pariatur non. Doloribus illo, ullam blanditiis ab.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.text-justify</p>
+  <p class="text-sm text-gray-600">.text-justify</p>
   <p class="text-justify text-base text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis fugit, enim molestiae praesentium eveniet, recusandae et error beatae facilis ex harum consequuntur, quia pariatur non. Doloribus illo, ullam blanditiis ab.</p>
 </div>
 @slot('code')

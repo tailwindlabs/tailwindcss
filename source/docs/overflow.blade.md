@@ -84,7 +84,7 @@ features:
   ]
 ])
 
-## Visible <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Visible <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
 
 Use `.overflow-visible` to prevent content within an element from being clipped. Note that any content that overflows the bounds of the element will then be visible.
 
@@ -186,17 +186,17 @@ Use `.overflow-y-scroll` to allow vertical scrolling and always show scrollbars 
 Use `.overflow-scroll` to add scrollbars to an element. Unlike `.overflow-auto`, which only shows scrollbars if they are necessary, this utility always shows them. Note that some operating systems (like macOS) hide unnecessary scrollbars regardless of this setting.
 
 @component('_partials.code-sample')
-<p class="text-sm text-grey-dark mb-1">Scroll horizontally when content can't wrap</p>
+<p class="text-sm text-gray-600 mb-1">Scroll horizontally when content can't wrap</p>
 <div class="overflow-scroll bg-gray-400 text-gray-700 p-2 mb-6">
   QrLmmW69vMQDtCOg48jidqvvWD2FzDt7I7bBoDc98SRP5OwvOScVYbRzFdfp540eF5v1pjogYkyI8NXqu4wY8chgsXIV0LU7XQKWJ98wLaBSHWiBhvkEU1T3sd6KEFo53CLjVjIz8UvZajb8sbsu62xTsF9cRtFdwEvusq6zJHvedymDCUkY6qXHsuL6fOmHo4KKMurZuJZrK3plRPUaI8XVciz8dVq5CEUXjMrTcB76H1w90CnkRER3nYjs3suTa3223xs8aL97m0peQfjlvKbF8HcmQG5mHEitCn1QZnbMZUK3zE9AIjwcVXP7R9V4fw2A93cZD7wj333X6aaiHZdkkTPtst0u05KSob5c0ZuKQi4D3V395NfFKKr8cR27jmpB7dqK2GiWXeOQUFcjmFVwlHWSlH8ZdUoVJpXf1xL6CRUxwZP4EhBbqQZaJm26ijWII6LRxJ5eVU9Y7KKvQsUeX5BawtgeMWRmjeCwQadTLTQG8gLpi2DvGpMtPWCdqHgEglVSB1ZlDrjEEsXYrNx1IOY0053K3pWNaR1ezyz8kahRfNs3byaHcIQu9tWTrcMpBWhZ45DzLjVV1N8Zt96uLnNWK5DvbKW8GgMuwY7fHkZFz85MN4d2gL0j85HmXGx9oPTFRkPWsmMOHUvm5IhB7QqGSAwT1uL7HgBrNX9a1BAWrp9zV1IWAd1q65sKOOCxTZrXJDpxBxYE4rJAGU6pcri9mUf4g49ZiIAwfu9njtZyYimmImCa6TFhk2jQcSmFDHacExxqC2BfYATHFrKSy94dbw6uWT52nM7MSM9JDu4cs9cbfnaf6amt4hTUotCTONg604b8JKPI1sfd4CG36fBNcnErhpllfRlXkY1xFwmwZT7IJV8okPGNQdTKpdPJOBGw3LHMKojPJl1nPiQB5C9bdePFMNLejSXY5DDvO70ehOCJpBtKZY2quoFJJjGfXe8T4DuGYGmM6JYd5DNinWZuUWXGvfIlJRHgf8BQNQvtmEzqGXIeQZitiq9F
 </div>
 
-<p class="text-sm text-grey-dark mb-1">Scroll vertically when content can wrap</p>
+<p class="text-sm text-gray-600 mb-1">Scroll vertically when content can wrap</p>
 <div class="overflow-scroll h-32 bg-gray-400 text-gray-700 p-2 mb-6">
   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eleifend rutrum auctor. Phasellus convallis sagittis augue ut ornare. Vestibulum et gravida lectus, sed ultrices sapien. Nullam aliquet elit dui, vitae hendrerit lectus volutpat eget. In porttitor tincidunt egestas. Pellentesque laoreet ligula at est vulputate facilisis. Etiam tristique justo ut odio placerat ornare. Cras bibendum, orci at ornare tincidunt, lacus nunc gravida enim, sit amet euismod nunc lectus in lectus. Ut dictum nulla et arcu aliquet ornare. Aliquam et dapibus lectus. Aenean mattis elit mi, sed ultricies augue consectetur id. Sed id magna malesuada, luctus urna a, bibendum tortor. Cras cursus cursus ex. Nulla fringilla elit vitae imperdiet scelerisque. Donec ac sem eu diam convallis mollis a sed leo. Proin congue augue turpis, eget rutrum dolor ultricies non. Nulla blandit venenatis dapibus. Sed tincidunt mollis elit, quis suscipit nibh eleifend quis. Donec ex lorem, auctor eu rutrum in, blandit id dolor. Nulla molestie arcu turpis. In id felis vulputate, tempor massa eget, malesuada mauris. Quisque fringilla consequat metus, luctus scelerisque leo fringilla vel.
 </div>
 
-<p class="text-sm text-grey-dark mb-1">Scroll both horizontally and vertically when some content can't wrap</p>
+<p class="text-sm text-gray-600 mb-1">Scroll both horizontally and vertically when some content can't wrap</p>
 <div class="overflow-scroll h-32 bg-gray-400 text-gray-700 p-2">
   Loremipsumdolorsitamet,consecteturadipiscingelit.Mauriseleifendrutrumauctor.Phasellusconvallissagittisaugueutornare.Donecexlorem,auctoreurutrumin,blanditiddolor.Nullamolestiearcuturpis.Inidfelisvulputate,tempormassaeget,malesuadamauris.Quisquefringillaconsequatmetus,luctusscelerisqueleofringillavel. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eleifend rutrum auctor. Phasellus convallis sagittis augue ut ornare. Donec ex lorem, auctor eu rutrum in, blandit id dolor. Nulla molestie arcu turpis. In id felis vulputate, tempor massa eget, malesuada mauris. Quisque fringilla consequat metus, luctus scelerisque leo fringilla vel. Ullam repudiandae omnis tempora soluta non, sed corporis vel reiciendis reprehenderit vitae nobis dolorum maiores eaque eos nemo mollitia animi, adipisci, molestias? Nam quo odio, similique iure, molestias ullam! Temporibus vel ab, fuga, ut nihil fugiat quaerat tenetur veniam, excepturi natus hic dolorum fugit. Ab sint molestiae nihil ex, minima facere sit adipisci. Totam quos eveniet, quibusdam qui quis aperiam aut nihil perferendis earum in error. Autem porro deleniti molestiae odio delectus alias dolorem nihil voluptates a, quam corrupti sapiente, nulla ea omnis quas ipsam rerum atque excepturi! Corporis culpa asperiores sint voluptatum, quos, cupiditate iste similique illum quas libero, temporibus laborum quisquam esse veritatis eligendi qui odit quo repellat!
 </div>

@@ -109,7 +109,7 @@ features:
   ]
 ])
 
-## Static <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Static <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
 
 Use `.static` to position an element according to the normal flow of the document.
 
@@ -169,7 +169,7 @@ Offsets are calculated relative to the nearest parent that has a position other 
 
 @component('_partials.code-sample')
 
-<p class="text-sm text-grey-dark mb-1">With static positioning</p>
+<p class="text-sm text-gray-600 mb-1">With static positioning</p>
 <div class="relative bg-gray-400 px-4 pt-2 pb-4 mb-6">
   <p class="mb-2 text-gray-700">Relative parent</p>
   <div class="static bg-grey p-4 text-gray-700">
@@ -183,7 +183,7 @@ Offsets are calculated relative to the nearest parent that has a position other 
   </div>
 </div>
 
-<p class="text-sm text-grey-dark mb-1">With absolute positioning</p>
+<p class="text-sm text-gray-600 mb-1">With absolute positioning</p>
 <div class="relative bg-gray-400 px-4 pt-2 pb-4">
   <p class="mb-2 text-gray-700">Relative parent</p>
   <div class="static bg-grey p-4 text-gray-700">
@@ -330,31 +330,31 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
 @component('_partials.code-sample')
 <div class="flex justify-around mb-8">
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.inset-x-0.top-0</p>
+    <p class="text-center text-sm text-gray-600 mb-1">.inset-x-0.top-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute inset-x-0 top-0 h-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.inset-y-0.right-0</p>
+    <p class="text-center text-sm text-gray-600 mb-1">.inset-y-0.right-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute inset-y-0 right-0 w-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.inset-x-0.bottom-0</p>
+    <p class="text-center text-sm text-gray-600 mb-1">.inset-x-0.bottom-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute inset-x-0 bottom-0 h-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.inset-y-0.left-0</p>
+    <p class="text-center text-sm text-gray-600 mb-1">.inset-y-0.left-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute inset-y-0 left-0 w-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.inset-0</p>
+    <p class="text-center text-sm text-gray-600 mb-1">.inset-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute inset-0 bg-grey-darker"></div>
     </div>
@@ -362,25 +362,25 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
 </div>
 <div class="flex justify-around">
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.left-0.top-0</p>
+    <p class="text-center text-sm text-gray-600 mb-1">.left-0.top-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute left-0 top-0 h-8 w-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.top-0.right-0</p>
+    <p class="text-center text-sm text-gray-600 mb-1">.top-0.right-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute top-0 right-0 h-8 w-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.right-0.bottom-0</p>
+    <p class="text-center text-sm text-gray-600 mb-1">.right-0.bottom-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute right-0 bottom-0 h-8 w-8 bg-grey-darker"></div>
     </div>
   </div>
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.bottom-0.left-0</p>
+    <p class="text-center text-sm text-gray-600 mb-1">.bottom-0.left-0</p>
     <div class="relative h-24 w-24 bg-gray-400">
       <div class="absolute bottom-0 left-0 h-8 w-8 bg-grey-darker"></div>
     </div>

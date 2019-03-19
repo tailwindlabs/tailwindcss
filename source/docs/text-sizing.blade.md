@@ -65,39 +65,39 @@ Control the font size of an element using the `.text-{size}` utilities.
 
 @component('_partials.code-sample')
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.text-xs</p>
+  <p class="text-sm text-gray-600">.text-xs</p>
   <p class="text-xs truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.text-sm</p>
+  <p class="text-sm text-gray-600">.text-sm</p>
   <p class="text-sm truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.text-base</p>
+  <p class="text-sm text-gray-600">.text-base</p>
   <p class="text-base truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.text-lg</p>
+  <p class="text-sm text-gray-600">.text-lg</p>
   <p class="text-lg truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.text-xl</p>
+  <p class="text-sm text-gray-600">.text-xl</p>
   <p class="text-xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.text-2xl</p>
+  <p class="text-sm text-gray-600">.text-2xl</p>
   <p class="text-2xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.text-3xl</p>
+  <p class="text-sm text-gray-600">.text-3xl</p>
   <p class="text-3xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.text-4xl</p>
+  <p class="text-sm text-gray-600">.text-4xl</p>
   <p class="text-4xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div>
-  <p class="text-sm text-grey-dark">.text-5xl</p>
+  <p class="text-sm text-gray-600">.text-5xl</p>
   <p class="text-5xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 @slot('code')

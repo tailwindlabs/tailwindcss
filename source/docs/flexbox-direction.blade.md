@@ -34,7 +34,7 @@ features:
   ]
 ])
 
-## Row <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Row <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
 
 Use `.flex-row` to position flex items horizontally in the same direction as text:
 

@@ -108,7 +108,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
         Password
       </label>
       <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-grey-lighter rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-grey" id="grid-password" type="password" placeholder="******************">
-      <p class="text-grey-dark text-xs italic">Make it as long and as crazy as you'd like</p>
+      <p class="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p>
     </div>
   </div>
   <div class="flex flex-wrap -mx-3 mb-2">

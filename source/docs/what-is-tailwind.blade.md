@@ -40,7 +40,7 @@ Here's an example of a responsive contact card component built with Tailwind wit
     <div class="text-center sm:text-left sm:flex-grow">
       <div class="mb-4">
         <p class="text-xl leading-tight">Adam Wathan</p>
-        <p class="text-sm leading-tight text-grey-dark">Developer at NothingWorks Inc.</p>
+        <p class="text-sm leading-tight text-gray-600">Developer at NothingWorks Inc.</p>
       </div>
       <div>
         <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>
@@ -55,7 +55,7 @@ Here's an example of a responsive contact card component built with Tailwind wit
     <div class="text-center sm:text-left sm:flex-grow">
       <div class="mb-4">
         <p class="text-xl leading-tight">Adam Wathan</p>
-        <p class="text-sm leading-tight text-grey-dark">Developer at NothingWorks Inc.</p>
+        <p class="text-sm leading-tight text-gray-600">Developer at NothingWorks Inc.</p>
       </div>
       <div>
         <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>

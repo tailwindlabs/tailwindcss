@@ -40,19 +40,19 @@ Control the line height of an element using the `.leading-{size}` utilities.
 
 @component('_partials.code-sample')
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.leading-none</p>
+  <p class="text-sm text-gray-600">.leading-none</p>
   <p class="leading-none text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.leading-tight</p>
+  <p class="text-sm text-gray-600">.leading-tight</p>
   <p class="leading-tight text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-grey-dark">.leading-normal</p>
+  <p class="text-sm text-gray-600">.leading-normal</p>
   <p class="leading-normal text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
 </div>
 <div>
-  <p class="text-sm text-grey-dark">.leading-loose</p>
+  <p class="text-sm text-gray-600">.leading-loose</p>
   <p class="leading-loose text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
 </div>
 @slot('code')

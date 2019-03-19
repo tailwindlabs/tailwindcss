@@ -54,12 +54,12 @@ features:
   ]
 ])
 
-## Initial <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Initial <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
 
 Use `.flex-initial` to allow a flex item to shrink but not grow, taking into account its initial size:
 
 @component('_partials.code-sample')
-<p class="text-sm text-grey-dark mb-1">Items don't grow when there's extra space</p>
+<p class="text-sm text-gray-600 mb-1">Items don't grow when there's extra space</p>
 <div class="flex bg-gray-200 mb-6">
   <div class="flex-initial text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
     Short
@@ -69,7 +69,7 @@ Use `.flex-initial` to allow a flex item to shrink but not grow, taking into acc
   </div>
 </div>
 
-<p class="text-sm text-grey-dark mb-1">Items shrink if possible when needed</p>
+<p class="text-sm text-gray-600 mb-1">Items shrink if possible when needed</p>
 <div class="flex bg-gray-200">
   <div class="flex-initial text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
     Short
@@ -111,7 +111,7 @@ Use `.flex-initial` to allow a flex item to shrink but not grow, taking into acc
 Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring its initial size:
 
 @component('_partials.code-sample')
-<p class="text-sm text-grey-dark mb-1">Default behavior</p>
+<p class="text-sm text-gray-600 mb-1">Default behavior</p>
 <div class="flex bg-gray-200 mb-6">
   <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
     Short
@@ -123,7 +123,7 @@ Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring its in
     Significantly larger amount of content
   </div>
 </div>
-<p class="text-sm text-grey-dark mb-1">With <code>.flex-1</code></p>
+<p class="text-sm text-gray-600 mb-1">With <code>.flex-1</code></p>
 <div class="flex bg-gray-200">
   <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
     Short
@@ -156,7 +156,7 @@ Use `.flex-1` to allow a flex item to grow and shrink as needed, ignoring its in
 Use `.flex-auto` to allow a flex item to grow and shrink, taking into account its initial size:
 
 @component('_partials.code-sample')
-<p class="text-sm text-grey-dark mb-1">Default behavior</p>
+<p class="text-sm text-gray-600 mb-1">Default behavior</p>
 <div class="flex bg-gray-200 mb-6">
   <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
     Short
@@ -168,7 +168,7 @@ Use `.flex-auto` to allow a flex item to grow and shrink, taking into account it
     Significantly larger amount of content
   </div>
 </div>
-<p class="text-sm text-grey-dark mb-1">With <code>.flex-auto</code></p>
+<p class="text-sm text-gray-600 mb-1">With <code>.flex-auto</code></p>
 <div class="flex bg-gray-200">
   <div class="flex-auto text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
     Short

@@ -29,7 +29,7 @@ features:
   ]
 ])
 
-## Don't wrap <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Don't wrap <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
 
 Use `.flex-no-wrap` to prevent flex items from wrapping, causing inflexible items to overflow the container if necessary:
 
