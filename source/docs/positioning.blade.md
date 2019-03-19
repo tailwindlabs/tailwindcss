@@ -117,7 +117,7 @@ Any offsets will be ignored and the element will not act as a position reference
 
 @component('_partials.code-sample')
 <div class="relative bg-gray-400 p-4">
-  <div class="static h-32 bg-grey-dark p-4 text-gray-900">
+  <div class="static h-32 bg-gray-600 p-4 text-gray-900">
     <p>Static parent</p>
     <div class="absolute bottom-0 left-0 bg-gray-800 p-4 text-gray-400">
       <p>Absolute child</p>
@@ -126,7 +126,7 @@ Any offsets will be ignored and the element will not act as a position reference
 </div>
 
 @slot('code')
-<div class="static bg-grey-dark">
+<div class="static bg-gray-600">
   Static parent
   <div class="absolute bottom-0 left-0 bg-gray-800">
     Absolute child
@@ -143,7 +143,7 @@ Offsets are calculated relative to the element's normal position and the element
 
 @component('_partials.code-sample')
 <div class="relative bg-gray-400 p-4">
-  <div class="relative h-32 bg-grey-dark p-4 text-gray-900">
+  <div class="relative h-32 bg-gray-600 p-4 text-gray-900">
     <p>Relative parent</p>
     <div class="absolute bottom-0 left-0 bg-gray-800 p-4 text-gray-400">
       <p>Absolute child</p>
@@ -152,7 +152,7 @@ Offsets are calculated relative to the element's normal position and the element
 </div>
 
 @slot('code')
-<div class="relative bg-grey-dark">
+<div class="relative bg-gray-600">
   Relative parent
   <div class="absolute bottom-0 left-0 bg-gray-800">
     Absolute child
@@ -200,7 +200,7 @@ Offsets are calculated relative to the nearest parent that has a position other 
 @slot('code')
 <div class="relative bg-gray-400">
   Relative parent
-  <div class="static bg-grey-dark">
+  <div class="static bg-gray-600">
     Static parent
     <div class="absolute top-0 right-0 bg-gray-800">
       Absolute child
@@ -255,7 +255,7 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 
 @slot('code')
 <div class="bg-gray-400 pt-16">
-  <div class="fixed bg-grey-dark">
+  <div class="fixed bg-gray-600">
     Fixed child
     <div class="absolute top-0 right-0 bg-gray-800">
       Absolute child
