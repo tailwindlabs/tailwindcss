@@ -12,9 +12,14 @@ features:
 @include('_partials.class-table', [
   'rows' => [
     [
-      '.tracking-tight',
+      '.tracking-tighter',
       'letter-spacing: -0.05em;',
       'Set the letter spacing of an element to <code>-0.05em</code>.',
+    ],
+    [
+      '.tracking-tight',
+      'letter-spacing: -0.025em;',
+      'Set the letter spacing of an element to <code>-0.025em</code>.',
     ],
     [
       '.tracking-normal',
@@ -23,8 +28,18 @@ features:
     ],
     [
       '.tracking-wide',
+      'letter-spacing: 0.025em;',
+      'Set the letter spacing of an element to <code>0.025em</code>.',
+    ],
+    [
+      '.tracking-wider',
       'letter-spacing: 0.05em;',
       'Set the letter spacing of an element to <code>0.05em</code>.',
+    ],
+    [
+      '.tracking-widest',
+      'letter-spacing: 1em;',
+      'Set the letter spacing of an element to <code>1em</code>.',
     ],
   ]
 ])
@@ -35,6 +50,10 @@ Control the letter spacing of an element using the `.tracking-{size}` utilities.
 
 @component('_partials.code-sample')
 <div class="mb-6">
+  <p class="text-sm text-grey-dark">.tracking-tighter</p>
+  <p class="tracking-tighter text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+</div>
+<div class="mb-6">
   <p class="text-sm text-grey-dark">.tracking-tight</p>
   <p class="tracking-tight text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
 </div>
@@ -42,14 +61,25 @@ Control the letter spacing of an element using the `.tracking-{size}` utilities.
   <p class="text-sm text-grey-dark">.tracking-normal</p>
   <p class="tracking-normal text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
 </div>
-<div>
+<div class="mb-6">
   <p class="text-sm text-grey-dark">.tracking-wide</p>
   <p class="tracking-wide text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
 </div>
+<div class="mb-6">
+  <p class="text-sm text-grey-dark">.tracking-wider</p>
+  <p class="tracking-wider text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+</div>
+<div>
+  <p class="text-sm text-grey-dark">.tracking-widest</p>
+  <p class="tracking-widest text-lg text-grey-darkest">The quick brown fox jumped over the lazy dog.</p>
+</div>
 @slot('code')
+<p class="tracking-tighter ...">The quick brown fox ...</p>
 <p class="tracking-tight ...">The quick brown fox ...</p>
 <p class="tracking-normal ...">The quick brown fox ...</p>
 <p class="tracking-wide ...">The quick brown fox ...</p>
+<p class="tracking-wider ...">The quick brown fox ...</p>
+<p class="tracking-widest ...">The quick brown fox ...</p>
 @endslot
 @endcomponent
 
