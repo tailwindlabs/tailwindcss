@@ -11,7 +11,8 @@ import oldDefaultConfig from '../../../stubs/oldDefaultConfig.stub.js'
 
 export const usage = 'update [source] [target]'
 export const description =
-  'Updates Tailwind configuration file. Default: ' + colors.file(constants.defaultConfigFile)
+  'Updates Tailwind configuration file. Default: ' +
+  colors.file(utils.getSimplePath(constants.defaultConfigFile))
 
 /**
  * Prints error messages and information about getting support to console

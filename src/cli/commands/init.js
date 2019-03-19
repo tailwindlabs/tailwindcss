@@ -5,7 +5,8 @@ import * as utils from '../utils'
 
 export const usage = 'init [file]'
 export const description =
-  'Creates Tailwind config file. Default: ' + colors.file(constants.defaultConfigFile)
+  'Creates Tailwind config file. Default: ' +
+  colors.file(utils.getSimplePath(constants.defaultConfigFile))
 
 export const options = [
   {
