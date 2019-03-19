@@ -445,31 +445,31 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="relative h-32 bg-gray-400 p-4">
-  <div class="relative bg-grey-darkest p-4 text-grey">Responsive element</div>
+  <div class="relative bg-grey-darkest p-4 text-gray-500">Responsive element</div>
 </div>
 @endslot
 
 @slot('sm')
 <div class="relative h-32 bg-gray-400 p-4">
-  <div class="absolute bottom-0 left-0 bg-grey-darkest p-4 text-grey">Responsive element</div>
+  <div class="absolute bottom-0 left-0 bg-grey-darkest p-4 text-gray-500">Responsive element</div>
 </div>
 @endslot
 
 @slot('md')
 <div class="relative h-32 bg-gray-400 p-4">
-  <div class="absolute top-0 inset-x-0 bg-grey-darkest p-4 text-grey">Responsive element</div>
+  <div class="absolute top-0 inset-x-0 bg-grey-darkest p-4 text-gray-500">Responsive element</div>
 </div>
 @endslot
 
 @slot('lg')
 <div class="relative h-32 bg-gray-400 p-4">
-  <div class="absolute right-0 inset-y-0 bg-grey-darkest p-4 text-grey">Responsive element</div>
+  <div class="absolute right-0 inset-y-0 bg-grey-darkest p-4 text-gray-500">Responsive element</div>
 </div>
 @endslot
 
 @slot('xl')
 <div class="relative h-32 bg-gray-400 p-4">
-  <div class="absolute bottom-0 inset-x-0 bg-grey-darkest p-4 text-grey">Responsive element</div>
+  <div class="absolute bottom-0 inset-x-0 bg-grey-darkest p-4 text-gray-500">Responsive element</div>
 </div>
 @endslot
 
