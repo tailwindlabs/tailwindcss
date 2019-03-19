@@ -28,7 +28,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
       <button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
         Sign In
       </button>
-      <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="#">
+      <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-800" href="#">
         Forgot Password?
       </a>
     </div>
@@ -152,7 +152,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
     <button class="flex-shrink-0 bg-teal hover:bg-teal-dark border-teal hover:border-teal-dark text-sm border-4 text-white py-1 px-2 rounded" type="button">
       Sign Up
     </button>
-    <button class="flex-shrink-0 border-transparent border-4 text-teal hover:text-teal-darker text-sm py-1 px-2 rounded" type="button">
+    <button class="flex-shrink-0 border-transparent border-4 text-teal hover:text-teal-800 text-sm py-1 px-2 rounded" type="button">
       Cancel
     </button>
   </div>

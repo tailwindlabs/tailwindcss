@@ -57,7 +57,7 @@ Tailwind doesn't include pre-designed button styles out of the box, but they're 
 ## Bordered
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 border border-blue-darker rounded">
+<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 border border-blue-800 rounded">
   Button
 </button>
 @endcomponent
