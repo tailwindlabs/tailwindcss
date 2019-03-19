@@ -78,7 +78,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
 ## Banner
 
 @component('_partials.code-sample', ['lang' => 'html'])
-<div class="bg-blue-lightest border-t border-b border-blue text-blue-dark px-4 py-3" role="alert">
+<div class="bg-blue-100 border-t border-b border-blue text-blue-dark px-4 py-3" role="alert">
   <p class="font-bold">Informational message</p>
   <p class="text-sm">Some additional text to explain said message.</p>
 </div>
