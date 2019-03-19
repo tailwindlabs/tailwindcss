@@ -67,14 +67,44 @@ features:
       "Anchor absolutely positioned element to the left and right edges of the nearest positioned parent.",
     ],
     [
-      '.pin',
+      '.inset-0',
       "top: 0;\nright: 0;\nbottom: 0;\nleft: 0;",
       "Anchor absolutely positioned element to all the edges of the nearest positioned parent.",
     ],
     [
-      '.pin-none',
+      '.inset-auto',
       "top: auto;\nright: auto;\nbottom: auto;\nleft: auto;",
       "Reset absolutely positioned element to all the edges from a given breakpoint onwards.",
+    ],
+    [
+      '.top-auto',
+      "top: auto;",
+      "Reset absolutely positioned element to the top edge",
+    ],
+    [
+      '.bottom-auto',
+      "bottom: auto;",
+      "Reset absolutely positioned element to the bottom edge",
+    ],
+    [
+      '.left-auto',
+      "left: auto;",
+      "Reset absolutely positioned element to the left edge",
+    ],
+    [
+      '.right-auto',
+      "right: auto;",
+      "Reset absolutely positioned element to the right edge",
+    ],
+    [
+      '.inset-y-auto',
+      "top: auto;\nbottom: auto;",
+      "Reset absolutely positioned element to the top and bottom edge",
+    ],
+    [
+      '.inset-x-auto',
+      "left: auto;\nright: auto;",
+      "Reset absolutely positioned element to the left and right edge",
     ],
   ]
 ])
@@ -209,7 +239,7 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
         Absolute child
       </div>
     </div>
-    <div class="absolute pin overflow-auto pt-16 px-4 pb-4">
+    <div class="absolute inset-0 overflow-auto pt-16 px-4 pb-4">
       <p class="mb-4">Scroll me!</p>
       <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. </p>
       <p class="mb-4">Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
@@ -279,24 +309,21 @@ Offsets are calculated relative to the element's normal position and the element
 
 ## Pinning edges
 
-Use the `.pin{-edge?}` utilities to anchor absolutely positioned elements against any of the edges of the nearest positioned parent.
+Use the `.{top|right|bottom|left|inset}-{value}` utilities to anchor absolutely positioned elements against any of the edges of the nearest positioned parent.
 
 Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably find that these are all you need to precisely control absolutely positioned elements.
 
 <div class="flex items-start mt-8 text-sm leading-none mb-8">
   <div class="pr-12">
     <div class="mb-3 text-grey-darker uppercase">Class</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">pin</code></div>
+    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">top|right|bottom|left|inset</code></div>
   </div>
   <div class="pl-12 pr-12 border-l">
-    <div class="mb-3 text-grey-darker"><span class="uppercase">Edge</span> <span class="text-grey-dark text-xs">(optional)</span></div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded bg-grey-lighter">&nbsp;</code> All <em class="text-xs text-grey-dark">(default)</em></div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">t</code> Top</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">r</code> Right</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">b</code> Bottom</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">l</code> Left</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">y</code> Top and Bottom</div>
-    <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">x</code> Left and Right</div>
+    <div class="mb-3 text-grey-darker">
+    <span class="uppercase">space</span>
+  </div>
+  <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">0</code> 0</div>
+  <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">auto</code> auto</div>
   </div>
 </div>
 
@@ -327,9 +354,9 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
     </div>
   </div>
   <div>
-    <p class="text-center text-sm text-grey-dark mb-1">.pin</p>
+    <p class="text-center text-sm text-grey-dark mb-1">.inset-0</p>
     <div class="relative h-24 w-24 bg-grey-light">
-      <div class="absolute pin bg-grey-darker"></div>
+      <div class="absolute inset-0 bg-grey-darker"></div>
     </div>
   </div>
 </div>
@@ -384,7 +411,7 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
 
 <!-- Fill entire parent -->
 <div class="relative h-24 w-24 bg-grey-light">
-  <div class="absolute pin bg-grey-darker"></div>
+  <div class="absolute inset-0 bg-grey-darker"></div>
 </div>
 
 <!-- Pin to top left corner -->
@@ -455,12 +482,35 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-@include('_partials.variants-and-disabling', [
-    'utility' => [
-        'name' => 'positioning',
-        'property' => 'position',
-    ],
-    'variants' => [
-        'responsive',
-    ],
-])
+```javascript
+module.exports = {
+  theme: {
+    position: {
+      '0': 0,
+      auto: 'auto',
+    },
+  }
+}
+```
+
+```javascript
+module.exports = {
+  theme: {
+    inset: {
+      '0': 0,
+      auto: 'auto',
+    },
+  }
+}
+```
+
+The classes of the inset live in a new inset plugin instead of the position plugin, so their variants are also controlled separately:
+
+```javascript
+module.exports = {
+  variants: {
+    position: ['responsive'],
+    inset: ['responsive'],
+  }
+}
+```
