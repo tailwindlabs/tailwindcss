@@ -34,9 +34,9 @@ Tailwind is [available on npm](https://www.npmjs.com/package/tailwindcss) and ca
 
 <div class="rounded bg-gray-100 border border-grey-light font-mono text-xs p-4">
   <div class="text-grey-dark"># Using npm</div>
-  <div class="text-purple-dark">npm install <span class="text-blue-dark">tailwindcss</span> <span class="text-grey-darker">--save-dev</span></div>
+  <div class="text-purple-dark">npm install <span class="text-blue-dark">tailwindcss</span> <span class="text-gray-700">--save-dev</span></div>
   <div class="text-grey-dark mt-6"># Using Yarn</div>
-  <div class="text-purple-dark">yarn add <span class="text-blue-dark">tailwindcss</span> <span class="text-grey-darker">--dev</span></div>
+  <div class="text-purple-dark">yarn add <span class="text-blue-dark">tailwindcss</span> <span class="text-gray-700">--dev</span></div>
 </div>
 
 ### 2. Create a Tailwind config file

@@ -232,7 +232,7 @@ Use `flex-row-reverse` to reverse column order. Useful for two-column responsive
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="flex md:flex-row-reverse flex-wrap">
   <div class="w-full md:w-3/4 bg-grey p-4 text-center text-grey-lighter">1</div>
-  <div class="w-full md:w-1/4 bg-gray-400 p-4 text-center text-grey-darker">2</div>
+  <div class="w-full md:w-1/4 bg-gray-400 p-4 text-center text-gray-700">2</div>
 </div>
 @endcomponent
 

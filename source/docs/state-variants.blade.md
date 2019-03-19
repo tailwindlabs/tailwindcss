@@ -99,14 +99,14 @@ If you need to style a child element when hovering over a specific parent elemen
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'bg-gray-200 p-8'])
 <div class="group hover:bg-blue p-4 cursor-pointer bg-white rounded max-w-xs w-full shadow-lg select-none overflow-hidden mx-auto">
   <p class="font-semibold text-lg mb-1 text-gray-900 group-hover:text-white">New Project</p>
-  <p class="text-grey-darker group-hover:text-white mb-2">Create a new project from a variety of starting templates.</p>
+  <p class="text-gray-700 group-hover:text-white mb-2">Create a new project from a variety of starting templates.</p>
 </div>
 
 
 @slot('code')
 <div class="group bg-white hover:bg-blue ...">
   <p class="text-gray-900 group-hover:text-white ...">New Project</p>
-  <p class="text-grey-darker group-hover:text-white ...">Create a new project from a variety of starting templates.</p>
+  <p class="text-gray-700 group-hover:text-white ...">Create a new project from a variety of starting templates.</p>
 </div>
 @endslot
 @endcomponent
@@ -142,7 +142,7 @@ Add the `focus-within:` prefix to only apply a utility when a child element has 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'bg-white p-8'])
 <form class="w-full max-w-sm mx-auto">
   <div class="flex items-center border-b-2 border-grey-light focus-within:border-teal py-2">
-    <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Jane Doe" aria-label="Full name">
+    <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Jane Doe" aria-label="Full name">
     <button class="focus:shadow-outline focus:outline-none flex-shrink-0 bg-teal hover:bg-teal-dark border-teal hover:border-teal-dark text-sm border-4 text-white py-1 px-2 rounded" type="button">
       Sign Up
     </button>

@@ -14,9 +14,9 @@ description: "A component for fixing an element's width to the current breakpoin
     </colgroup>
     <thead>
       <tr>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-gray-100">Class</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-gray-100">Breakpoint</th>
-        <th class="text-sm font-semibold text-grey-darker p-2 bg-gray-100">Properties</th>
+        <th class="text-sm font-semibold text-gray-700 p-2 bg-gray-100">Class</th>
+        <th class="text-sm font-semibold text-gray-700 p-2 bg-gray-100">Breakpoint</th>
+        <th class="text-sm font-semibold text-gray-700 p-2 bg-gray-100">Properties</th>
       </tr>
     </thead>
     <tbody class="align-baseline">
@@ -26,19 +26,19 @@ description: "A component for fixing an element's width to the current breakpoin
         <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">width: 100%;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-grey-darker">sm <span class="text-grey-dark italic">(640px)</span></td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-gray-700">sm <span class="text-grey-dark italic">(640px)</span></td>
         <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">max-width: 640px;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-grey-darker">md <span class="text-grey-dark italic">(768px)</span></td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-gray-700">md <span class="text-grey-dark italic">(768px)</span></td>
         <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">max-width: 768px;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-grey-darker">lg <span class="text-grey-dark italic">(1024px)</span></td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-gray-700">lg <span class="text-grey-dark italic">(1024px)</span></td>
         <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">max-width: 1024px;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-grey-darker">xl <span class="text-grey-dark italic">(1280px)</span></td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-gray-700">xl <span class="text-grey-dark italic">(1280px)</span></td>
         <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">max-width: 1280px;</td>
       </tr>
     </tbody>

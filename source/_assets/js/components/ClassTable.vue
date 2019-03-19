@@ -3,16 +3,16 @@
     <table class="w-full text-left table-collapse">
       <thead>
         <tr>
-          <th class="text-sm font-semibold text-grey-darker p-2 bg-gray-100">Class</th>
-          <th class="text-sm font-semibold text-grey-darker p-2 bg-gray-100">Properties</th>
-          <!-- <th class="text-sm font-semibold text-grey-darker p-2 bg-gray-100">Description</th> -->
+          <th class="text-sm font-semibold text-gray-700 p-2 bg-gray-100">Class</th>
+          <th class="text-sm font-semibold text-gray-700 p-2 bg-gray-100">Properties</th>
+          <!-- <th class="text-sm font-semibold text-gray-700 p-2 bg-gray-100">Description</th> -->
         </tr>
       </thead>
       <tbody class="align-baseline">
         <tr v-for="(row, i) in visibleRows">
           <td :class="i === 0 ? 'border-smoke' : 'border-smoke-light'" class="p-2 border-t font-mono text-xs text-purple-dark whitespace-no-wrap">{{ row[0] }}</td>
           <td :class="i === 0 ? 'border-smoke' : 'border-smoke-light'" class="p-2 border-t font-mono text-xs text-blue-dark whitespace-pre">{{ row[1] }}</td>
-          <!-- <td :class="i === 0 ? 'border-smoke' : 'border-smoke-light'" class="p-2 border-t text-sm text-grey-darker">{{ row[2] }}</td> -->
+          <!-- <td :class="i === 0 ? 'border-smoke' : 'border-smoke-light'" class="p-2 border-t text-sm text-gray-700">{{ row[2] }}</td> -->
         </tr>
       </tbody>
     </table>

@@ -171,13 +171,13 @@ Offsets are calculated relative to the nearest parent that has a position other 
 
 <p class="text-sm text-grey-dark mb-1">With static positioning</p>
 <div class="relative bg-gray-400 px-4 pt-2 pb-4 mb-6">
-  <p class="mb-2 text-grey-darker">Relative parent</p>
-  <div class="static bg-grey p-4 text-grey-darker">
+  <p class="mb-2 text-gray-700">Relative parent</p>
+  <div class="static bg-grey p-4 text-gray-700">
     <p class="mb-2">Static parent</p>
     <div class="static bottom-0 left-0 bg-grey-darkest p-4 text-grey-light inline-block">
       <p>Static child</p>
     </div>
-    <div class="bg-gray-400 p-4 text-grey-darker inline-block">
+    <div class="bg-gray-400 p-4 text-gray-700 inline-block">
       <p>Static sibling</p>
     </div>
   </div>
@@ -185,13 +185,13 @@ Offsets are calculated relative to the nearest parent that has a position other 
 
 <p class="text-sm text-grey-dark mb-1">With absolute positioning</p>
 <div class="relative bg-gray-400 px-4 pt-2 pb-4">
-  <p class="mb-2 text-grey-darker">Relative parent</p>
-  <div class="static bg-grey p-4 text-grey-darker">
+  <p class="mb-2 text-gray-700">Relative parent</p>
+  <div class="static bg-grey p-4 text-gray-700">
     <p class="mb-2">Static parent</p>
     <div class="absolute top-0 right-0 bg-grey-darkest p-4 text-grey-light inline-block">
       <p>Absolute child</p>
     </div>
-    <div class="bg-gray-400 p-4  text-grey-darker inline-block">
+    <div class="bg-gray-400 p-4  text-gray-700 inline-block">
       <p>Static sibling</p>
     </div>
   </div>
@@ -315,11 +315,11 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
 
 <div class="flex items-start mt-8 text-sm leading-none mb-8">
   <div class="pr-12">
-    <div class="mb-3 text-grey-darker uppercase">Class</div>
+    <div class="mb-3 text-gray-700 uppercase">Class</div>
     <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">top|right|bottom|left|inset</code></div>
   </div>
   <div class="pl-12 pr-12 border-l">
-    <div class="mb-3 text-grey-darker">
+    <div class="mb-3 text-gray-700">
     <span class="uppercase">space</span>
   </div>
   <div><code class="inline-block my-1 mr-1 px-2 py-1 font-mono border rounded">0</code> 0</div>

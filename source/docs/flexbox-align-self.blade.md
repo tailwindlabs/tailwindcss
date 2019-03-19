@@ -45,9 +45,9 @@ Use `.self-auto` to align an item based on the value of the flex container's `al
 
 @component('_partials.code-sample')
 <div class="flex items-stretch bg-gray-200 h-24">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
   <div class="self-auto flex-1 text-gray-800 text-center bg-grey px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -57,9 +57,9 @@ Use `.self-start` to align an item to the start of the flex container's cross ax
 
 @component('_partials.code-sample')
 <div class="flex items-stretch bg-gray-200 h-24">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
   <div class="self-start flex-1 text-gray-800 text-center bg-grey px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -69,9 +69,9 @@ Use `.self-center` to align an item along the center of the flex container's cro
 
 @component('_partials.code-sample')
 <div class="flex items-stretch bg-gray-200 h-24">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
   <div class="self-center flex-1 text-gray-800 text-center bg-grey px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -81,9 +81,9 @@ Use `.self-end` to align an item to the end of the flex container's cross axis, 
 
 @component('_partials.code-sample')
 <div class="flex items-stretch bg-gray-200 h-24">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
   <div class="self-end flex-1 text-gray-800 text-center bg-grey px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -93,9 +93,9 @@ Use `.self-stretch` to stretch an item to fill the flex container's cross axis, 
 
 @component('_partials.code-sample')
 <div class="flex items-start bg-gray-200 h-24">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
   <div class="self-stretch flex-1 text-gray-800 text-center bg-grey px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endcomponent
 
@@ -108,37 +108,37 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex items-stretch bg-gray-200 h-24">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
   <div class="self-auto flex-1 text-gray-800 text-center bg-grey px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex items-stretch bg-gray-200 h-24">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
   <div class="self-start flex-1 text-gray-800 text-center bg-grey px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('md')
 <div class="flex items-stretch bg-gray-200 h-24">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
   <div class="self-end flex-1 text-gray-800 text-center bg-grey px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex items-stretch bg-gray-200 h-24">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
   <div class="self-center flex-1 text-gray-800 text-center bg-grey px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex items-stretch bg-gray-200 h-24">
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
   <div class="self-stretch flex-1 text-gray-800 text-center bg-grey px-4 py-2 m-2">2</div>
-  <div class="flex-1 text-grey-darker text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('code')
