@@ -21,43 +21,48 @@ features:
     ],
     [
       '.max-w-sm',
-      'max-width: 30rem;',
-      "Set the element's maximum width to 30rem.",
+      'max-width: 24rem;',
+      "Set the element's maximum width to 24rem.",
     ],
     [
       '.max-w-md',
-      'max-width: 40rem;',
-      "Set the element's maximum width to 40rem.",
+      'max-width: 28rem;',
+      "Set the element's maximum width to 28rem.",
     ],
     [
       '.max-w-lg',
-      'max-width: 50rem;',
-      "Set the element's maximum width to 50rem.",
+      'max-width: 32rem;',
+      "Set the element's maximum width to 32rem.",
     ],
     [
       '.max-w-xl',
-      'max-width: 60rem;',
-      "Set the element's maximum width to 60rem.",
+      'max-width: 36rem;',
+      "Set the element's maximum width to 36rem.",
     ],
     [
       '.max-w-2xl',
-      'max-width: 70rem;',
-      "Set the element's maximum width to 70rem.",
+      'max-width: 42rem;',
+      "Set the element's maximum width to 42rem.",
     ],
     [
       '.max-w-3xl',
-      'max-width: 80rem;',
-      "Set the element's maximum width to 80rem.",
+      'max-width: 48rem;',
+      "Set the element's maximum width to 48rem.",
     ],
     [
       '.max-w-4xl',
-      'max-width: 90rem;',
-      "Set the element's maximum width to 90rem.",
+      'max-width: 56rem;',
+      "Set the element's maximum width to 56rem.",
     ],
     [
       '.max-w-5xl',
-      'max-width: 100rem;',
-      "Set the element's maximum width to 100rem.",
+      'max-width: 64rem;',
+      "Set the element's maximum width to 64rem.",
+    ],
+    [
+      '.max-w-6xl',
+      'max-width: 72rem;',
+      "Set the element's maximum width to 72rem.",
     ],
     [
       '.max-w-full',
@@ -71,18 +76,19 @@ features:
 
 ### Max-Width Scale
 
-By default Tailwind provides ten `max-width` utilities. You change, add, or remove these by editing the `maxWidth` section of your Tailwind config.
+By default Tailwind provides ten `max-width` utilities. You change, add, or remove these by editing the `maxWidth` values in the `theme` section of your Tailwind config.
 
 @component('_partials.customized-config', ['key' => 'maxWidth'])
   'xs': '20rem',
-  'sm': '30rem',
-  'md': '40rem',
-  'lg': '50rem',
-  'xl': '60rem',
-- '2xl': '70rem',
-- '3xl': '80rem',
-- '4xl': '90rem',
-- '5xl': '100rem',
+  'sm': '24rem',
+  'md': '28rem',
+  'lg': '32rem',
+  'xl': '36rem',
+- '2xl': '42rem',
+- '3xl': '48rem',
+- '4xl': '56rem',
+- '5xl': '64rem',
+- '6xl': '72rem',
 + '1/4': '25%',
 + '1/2': '50%',
 + '3/4': '75%',
