@@ -20,7 +20,7 @@ Generate a Tailwind config file for your project using the Tailwind CLI utility 
   <div class="text-purple-dark">./node_modules/.bin/tailwind <span class="text-blue-dark">init</span> <span class="text-grey-dark">[filename]</span></div>
 </div>
 
-By default, `tailwind init` will generate a `tailwind.js` config file at the root of your project, but feel free to name this file differently or store it in a different location if you prefer.
+By default, `tailwind init` will generate a `tailwind.config.js` config file at the root of your project, but feel free to name this file differently or store it in a different location if you prefer.
 
 ### Default configuration
 

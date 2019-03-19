@@ -36,7 +36,7 @@ mix
   .less('source/_assets/less/main.less', 'source/css')
   .options({
     postCss: [
-      tailwind('tailwind.js'),
+      tailwind('tailwind.config.js'),
     ]
   })
   .version()
