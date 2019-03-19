@@ -1,21 +1,9 @@
 import fs from 'fs'
 import path from 'path'
-import rimraf from 'rimraf'
 import postcss from 'postcss'
 import tailwind from '../src/index'
 import { defaultConfigFile } from '../src/constants'
-
-function inTempDirectory(callback) {
-  return new Promise(resolve => {
-    rimraf.sync('./__tmp')
-    fs.mkdirSync(path.resolve('./__tmp'))
-    process.chdir(path.resolve('./__tmp'))
-    callback().then(() => {
-      process.chdir(path.resolve('../'))
-      rimraf('./__tmp', resolve)
-    })
-  })
-}
+import inTempDirectory from '../jest/runInTempDirectory'
 
 test('it uses the values from the custom config file', () => {
   return postcss([tailwind(path.resolve(`${__dirname}/fixtures/custom-config.js`))])

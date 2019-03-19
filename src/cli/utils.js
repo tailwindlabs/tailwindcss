@@ -1,7 +1,7 @@
-import chalk from 'chalk'
-import { ensureFileSync, existsSync, outputFileSync, readFileSync } from 'fs-extra'
-import { findKey, mapValues, trimStart } from 'lodash'
+import { copyFileSync, ensureFileSync, existsSync, outputFileSync, readFileSync } from 'fs-extra'
+import { findKey, mapValues, startsWith, trimStart } from 'lodash'
 
+import * as colors from './colors'
 import * as emoji from './emoji'
 import packageJson from '../../package.json'
 
@@ -58,7 +58,7 @@ export function log(...msgs) {
  */
 export function header() {
   log()
-  log(chalk.bold(packageJson.name), chalk.bold.cyan(packageJson.version))
+  log(colors.bold(packageJson.name), colors.info(packageJson.version))
 }
 
 /**
@@ -75,7 +75,7 @@ export function footer() {
  */
 export function error(...msgs) {
   log()
-  console.error('  ', emoji.no, chalk.bold.red(msgs.join(' ')))
+  console.error('  ', emoji.no, colors.error(msgs.join(' ')))
 }
 
 /**
@@ -100,6 +100,16 @@ export function exists(path) {
 }
 
 /**
+ * Copies file source to destination.
+ *
+ * @param {string} source
+ * @param {string} destination
+ */
+export function copyFile(source, destination) {
+  copyFileSync(source, destination)
+}
+
+/**
  * Gets file content.
  *
  * @param {string} path
@@ -120,4 +130,14 @@ export function writeFile(path, content) {
   ensureFileSync(path)
 
   return outputFileSync(path, content)
+}
+
+/**
+ * Strips leading ./ from path
+ *
+ * @param {string} path
+ * @return {string}
+ */
+export function getSimplePath(path) {
+  return startsWith(path, './') ? path.slice(2) : path
 }

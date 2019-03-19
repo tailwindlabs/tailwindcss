@@ -56,4 +56,18 @@ describe('cli utils', () => {
       expect(result).toEqual({ test: ['c', 'd', 'h'] })
     })
   })
+
+  describe('getSimplePath', () => {
+    it('strips leading ./', () => {
+      const result = utils.getSimplePath('./test')
+
+      expect(result).toEqual('test')
+    })
+
+    it('returns unchanged path if it does not begin with ./', () => {
+      const result = utils.getSimplePath('../test')
+
+      expect(result).toEqual('../test')
+    })
+  })
 })
