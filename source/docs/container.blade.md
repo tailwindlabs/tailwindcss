@@ -71,7 +71,7 @@ If you'd like to center your containers by default or include default horizontal
 
 ### Centering by default
 
-To center containers by default, set the `center` option to `true` in the plugins section of your config file:
+To center containers by default, set the `center` option to `true` in the `theme.container` section of your config file:
 
 ```js
 // ...
@@ -79,17 +79,17 @@ To center containers by default, set the `center` option to `true` in the plugin
 module.exports = {
   // ...
 
-  plugins: [
-    require('tailwindcss/plugins/container')({
+  theme: {
+    container: {
       center: true,
-    })
-  ],
+    },
+  },
 }
 ```
 
 ### Horizontal padding
 
-To add horizontal padding by default, specify the amount of padding you'd like using the `padding` option in the plugins section of your config file:
+To add horizontal padding by default, specify the amount of padding you'd like using the `padding` option in the `theme.container` section of your config file:
 
 ```js
 // ...
@@ -97,16 +97,19 @@ To add horizontal padding by default, specify the amount of padding you'd like u
 module.exports = {
   // ...
 
-  plugins: [
-    require('tailwindcss/plugins/container')({
+  theme: {
+    container: {
       padding: '2rem',
-    })
-  ],
+    }
+  },
 }
 ```
 
 ### Disabling
 
-Unlike most of Tailwind's other styles, the container component is included as a built-in plugin rather than a traditional utility module. To disable it, remove the plugin from the `plugins` section of your config file:
+If you don't plan to use the `.container` class in your project, you can disable it entirely by setting the `container` property to `false` in the `corePlugins` section of your config file:
 
-<div class="bg-grey-lightest p-4 font-mono text-xs"><div class="whitespace-pre text-grey-dark">{</div> <div class="whitespace-pre text-grey-light">  // ...</div> <div class="whitespace-pre text-grey-dark"><span class="text-purple-dark">  plugins</span>: [</div> <div><div class="text-grey"><span class="text-grey">-</span>&nbsp;&nbsp;&nbsp;require('tailwindcss/plugins/container')(),</div></div> <div class="whitespace-pre text-grey-dark">  ]</div> <div class="whitespace-pre text-grey-dark">}</div></div>
+@component('_partials.customized-config', ['key' => 'corePlugins'])
+  // ...
++ container: false,
+@endcomponent
