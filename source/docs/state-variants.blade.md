@@ -143,7 +143,7 @@ Add the `focus-within:` prefix to only apply a utility when a child element has 
 <form class="w-full max-w-sm mx-auto">
   <div class="flex items-center border-b-2 border-grey-light focus-within:border-teal py-2">
     <input class="appearance-none bg-transparent border-none w-full text-grey-darker mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Jane Doe" aria-label="Full name">
-    <button class="focus:shadow-outline focus:outline-none flex-no-shrink bg-teal hover:bg-teal-dark border-teal hover:border-teal-dark text-sm border-4 text-white py-1 px-2 rounded" type="button">
+    <button class="focus:shadow-outline focus:outline-none flex-shrink-0 bg-teal hover:bg-teal-dark border-teal hover:border-teal-dark text-sm border-4 text-white py-1 px-2 rounded" type="button">
       Sign Up
     </button>
   </div>
