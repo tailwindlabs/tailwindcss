@@ -9,11 +9,11 @@
     <table class="relative w-full text-left table-collapse">
       <thead>
         <tr>
-          <th class="z-20 sticky pin-t text-sm font-semibold text-grey-darker bg-grey-lightest p-0">
+          <th class="z-20 sticky top-0 text-sm font-semibold text-grey-darker bg-grey-lightest p-0">
             <div class="p-2 border-b border-grey-light">Class</div>
           </th>
-          <th class="relative z-20 sticky pin-t text-sm font-semibold text-grey-darker bg-grey-lightest p-0" colspan="2">
-            <div class="sm:hidden absolute pin p-2 border-b border-grey-light"></div>
+          <th class="relative z-20 sticky top-0 text-sm font-semibold text-grey-darker bg-grey-lightest p-0" colspan="2">
+            <div class="sm:hidden absolute inset-0 p-2 border-b border-grey-light"></div>
             <div class="hidden sm:block p-2 border-b border-grey-light">Properties</div>
           </th>
         </tr>
