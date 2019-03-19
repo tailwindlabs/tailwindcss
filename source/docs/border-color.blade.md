@@ -10,16 +10,21 @@ features:
 ---
 
 @include('_partials.border-color-class-table', [
-  'rows' => $page->config['theme']['colors']->map(function ($value, $name) {
-    $class = ".border-{$name}";
-    $code = "border-color: {$value};";
-    $color = implode(' ', array_reverse(explode('-', $name)));
-    $description = "Set the border color of an element to {$color}.";
-    return [
-      $class,
-      $code,
-      $description,
-    ];
+  'rows' => $page->config['theme']['colors']->flatMap(function ($colors, $name) {
+    if (is_string($colors)) {
+      return [
+        [".border-{$name}", "color: {$colors}"]
+      ];
+    }
+
+    return collect($colors)->map(function ($value, $key) use ($name) {
+      $class = ".border-{$name}-{$key}";
+      $code = "border-color: {$value};";
+      return [
+        $class,
+        $code,
+      ];
+    });
   })->values()->all()
 ])
 

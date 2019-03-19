@@ -18,41 +18,41 @@ Use the existing [Flexbox](/docs/flexbox-display) and [percentage width](/docs/w
 
 <!-- Two columns -->
 <div class="flex mb-4">
-  <div class="w-1/2 bg-grey-light h-12"></div>
+  <div class="w-1/2 bg-gray-400 h-12"></div>
   <div class="w-1/2 bg-grey h-12"></div>
 </div>
 
 <!-- Three columns -->
 <div class="flex mb-4">
-  <div class="w-1/3 bg-grey-light h-12"></div>
+  <div class="w-1/3 bg-gray-400 h-12"></div>
   <div class="w-1/3 bg-grey h-12"></div>
-  <div class="w-1/3 bg-grey-light h-12"></div>
+  <div class="w-1/3 bg-gray-400 h-12"></div>
 </div>
 
 <!-- Four columns -->
 <div class="flex mb-4">
   <div class="w-1/4 bg-grey h-12"></div>
-  <div class="w-1/4 bg-grey-light h-12"></div>
+  <div class="w-1/4 bg-gray-400 h-12"></div>
   <div class="w-1/4 bg-grey h-12"></div>
-  <div class="w-1/4 bg-grey-light h-12"></div>
+  <div class="w-1/4 bg-gray-400 h-12"></div>
 </div>
 
 <!-- Five columns -->
 <div class="flex mb-4">
   <div class="w-1/5 bg-grey h-12"></div>
-  <div class="w-1/5 bg-grey-light h-12"></div>
+  <div class="w-1/5 bg-gray-400 h-12"></div>
   <div class="w-1/5 bg-grey h-12"></div>
-  <div class="w-1/5 bg-grey-light h-12"></div>
+  <div class="w-1/5 bg-gray-400 h-12"></div>
   <div class="w-1/5 bg-grey h-12"></div>
 </div>
 
 <!-- Six columns -->
 <div class="flex">
-  <div class="w-1/6 bg-grey-light h-12"></div>
+  <div class="w-1/6 bg-gray-400 h-12"></div>
   <div class="w-1/6 bg-grey h-12"></div>
-  <div class="w-1/6 bg-grey-light h-12"></div>
+  <div class="w-1/6 bg-gray-400 h-12"></div>
   <div class="w-1/6 bg-grey h-12"></div>
-  <div class="w-1/6 bg-grey-light h-12"></div>
+  <div class="w-1/6 bg-gray-400 h-12"></div>
   <div class="w-1/6 bg-grey h-12"></div>
 </div>
 @endcomponent
@@ -65,61 +65,61 @@ Use the responsive variants of the width utilities to build responsive grid layo
 @slot('none')
 <div class="flex flex-wrap">
   <div class="h-12 w-full mb-4 bg-grey"></div>
-  <div class="h-12 w-full mb-4 bg-grey-light"></div>
+  <div class="h-12 w-full mb-4 bg-gray-400"></div>
   <div class="h-12 w-full mb-4 bg-grey"></div>
-  <div class="h-12 w-full mb-4 bg-grey-light"></div>
+  <div class="h-12 w-full mb-4 bg-gray-400"></div>
   <div class="h-12 w-full mb-4 bg-grey"></div>
-  <div class="h-12 w-full mb-4 bg-grey-light"></div>
+  <div class="h-12 w-full mb-4 bg-gray-400"></div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex flex-wrap">
   <div class="h-12 w-1/2 mb-4 bg-grey"></div>
-  <div class="h-12 w-1/2 mb-4 bg-grey-light"></div>
+  <div class="h-12 w-1/2 mb-4 bg-gray-400"></div>
   <div class="h-12 w-1/2 mb-4 bg-grey"></div>
-  <div class="h-12 w-1/2 mb-4 bg-grey-light"></div>
+  <div class="h-12 w-1/2 mb-4 bg-gray-400"></div>
   <div class="h-12 w-1/2 mb-4 bg-grey"></div>
-  <div class="h-12 w-1/2 mb-4 bg-grey-light"></div>
+  <div class="h-12 w-1/2 mb-4 bg-gray-400"></div>
 </div>
 @endslot
 @slot('md')
 <div class="flex flex-wrap">
   <div class="h-12 w-1/3 mb-4 bg-grey"></div>
-  <div class="h-12 w-1/3 mb-4 bg-grey-light"></div>
+  <div class="h-12 w-1/3 mb-4 bg-gray-400"></div>
   <div class="h-12 w-1/3 mb-4 bg-grey"></div>
-  <div class="h-12 w-1/3 mb-4 bg-grey-light"></div>
+  <div class="h-12 w-1/3 mb-4 bg-gray-400"></div>
   <div class="h-12 w-1/3 mb-4 bg-grey"></div>
-  <div class="h-12 w-1/3 mb-4 bg-grey-light"></div>
+  <div class="h-12 w-1/3 mb-4 bg-gray-400"></div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex flex-wrap">
   <div class="h-12 w-1/4 mb-4 bg-grey"></div>
-  <div class="h-12 w-1/4 mb-4 bg-grey-light"></div>
+  <div class="h-12 w-1/4 mb-4 bg-gray-400"></div>
   <div class="h-12 w-1/4 mb-4 bg-grey"></div>
-  <div class="h-12 w-1/4 mb-4 bg-grey-light"></div>
+  <div class="h-12 w-1/4 mb-4 bg-gray-400"></div>
   <div class="h-12 w-1/2 mb-4 bg-grey"></div>
-  <div class="h-12 w-1/2 mb-4 bg-grey-light"></div>
+  <div class="h-12 w-1/2 mb-4 bg-gray-400"></div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex flex-wrap">
   <div class="h-12 w-1/6 mb-4 bg-grey"></div>
-  <div class="h-12 w-1/6 mb-4 bg-grey-light"></div>
+  <div class="h-12 w-1/6 mb-4 bg-gray-400"></div>
   <div class="h-12 w-1/6 mb-4 bg-grey"></div>
-  <div class="h-12 w-1/6 mb-4 bg-grey-light"></div>
+  <div class="h-12 w-1/6 mb-4 bg-gray-400"></div>
   <div class="h-12 w-1/6 mb-4 bg-grey"></div>
-  <div class="h-12 w-1/6 mb-4 bg-grey-light"></div>
+  <div class="h-12 w-1/6 mb-4 bg-gray-400"></div>
 </div>
 @endslot
 @slot('code')
 <div class="flex flex-wrap">
   <div class="none:w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 mb-4 bg-grey"></div>
-  <div class="none:w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 mb-4 bg-grey-light"></div>
+  <div class="none:w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 mb-4 bg-gray-400"></div>
   <div class="none:w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 mb-4 bg-grey"></div>
-  <div class="none:w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 mb-4 bg-grey-light"></div>
+  <div class="none:w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 mb-4 bg-gray-400"></div>
   <div class="none:w-full sm:w-1/2 md:w-1/3 lg:w-1/2 xl:w-1/6 mb-4 bg-grey"></div>
-  <div class="none:w-full sm:w-1/2 md:w-1/3 lg:w-1/2 xl:w-1/6 mb-4 bg-grey-light"></div>
+  <div class="none:w-full sm:w-1/2 md:w-1/3 lg:w-1/2 xl:w-1/6 mb-4 bg-gray-400"></div>
 </div>
 @endslot
 @endcomponent
@@ -132,13 +132,13 @@ Mix different percentage width utilities to build mixed size grids.
 <!-- Narrower side column -->
 <div class="flex mb-4">
   <div class="w-3/4 bg-grey h-12"></div>
-  <div class="w-1/4 bg-grey-light h-12"></div>
+  <div class="w-1/4 bg-gray-400 h-12"></div>
 </div>
 
 <!-- Wide center column -->
 <div class="flex">
   <div class="w-1/5 bg-grey h-12"></div>
-  <div class="w-3/5 bg-grey-light h-12"></div>
+  <div class="w-3/5 bg-gray-400 h-12"></div>
   <div class="w-1/5 bg-grey h-12"></div>
 </div>
 @endcomponent
@@ -149,11 +149,11 @@ Add `flex-wrap` to your column container to allow columns to wrap when they run 
 
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="flex flex-wrap -mb-4">
-  <div class="w-1/3 mb-4 bg-grey-light h-12"></div>
+  <div class="w-1/3 mb-4 bg-gray-400 h-12"></div>
   <div class="w-1/3 mb-4 bg-grey h-12"></div>
-  <div class="w-1/3 mb-4 bg-grey-light h-12"></div>
+  <div class="w-1/3 mb-4 bg-gray-400 h-12"></div>
   <div class="w-1/3 mb-4 bg-grey h-12"></div>
-  <div class="w-1/3 mb-4 bg-grey-light h-12"></div>
+  <div class="w-1/3 mb-4 bg-gray-400 h-12"></div>
 </div>
 @endcomponent
 
@@ -167,13 +167,13 @@ To prevent horizontal scrolling in full width layouts, add `overflow-hidden` to 
 <div class="px-2">
   <div class="flex -mx-2">
     <div class="w-1/3 px-2">
-      <div class="bg-grey-light h-12"></div>
+      <div class="bg-gray-400 h-12"></div>
     </div>
     <div class="w-1/3 px-2">
       <div class="bg-grey h-12"></div>
     </div>
     <div class="w-1/3 px-2">
-      <div class="bg-grey-light h-12"></div>
+      <div class="bg-gray-400 h-12"></div>
     </div>
   </div>
 </div>
@@ -191,37 +191,37 @@ Use `flex-1` instead of an explicit width on your columns to have them size auto
 
 <!-- Five columns -->
 <div class="flex mb-4">
-  <div class="flex-1 bg-grey-light h-12"></div>
+  <div class="flex-1 bg-gray-400 h-12"></div>
   <div class="flex-1 bg-grey h-12"></div>
-  <div class="flex-1 bg-grey-light h-12"></div>
+  <div class="flex-1 bg-gray-400 h-12"></div>
   <div class="flex-1 bg-grey h-12"></div>
-  <div class="flex-1 bg-grey-light h-12"></div>
+  <div class="flex-1 bg-gray-400 h-12"></div>
 </div>
 
 <!-- Seven columns -->
 <div class="flex mb-4">
-  <div class="flex-1 bg-grey-light h-12"></div>
+  <div class="flex-1 bg-gray-400 h-12"></div>
   <div class="flex-1 bg-grey h-12"></div>
-  <div class="flex-1 bg-grey-light h-12"></div>
+  <div class="flex-1 bg-gray-400 h-12"></div>
   <div class="flex-1 bg-grey h-12"></div>
-  <div class="flex-1 bg-grey-light h-12"></div>
+  <div class="flex-1 bg-gray-400 h-12"></div>
   <div class="flex-1 bg-grey h-12"></div>
-  <div class="flex-1 bg-grey-light h-12"></div>
+  <div class="flex-1 bg-gray-400 h-12"></div>
 </div>
 
 <!-- Eleven columns -->
 <div class="flex mb-4">
-  <div class="flex-1 bg-grey-light h-12"></div>
+  <div class="flex-1 bg-gray-400 h-12"></div>
   <div class="flex-1 bg-grey h-12"></div>
-  <div class="flex-1 bg-grey-light h-12"></div>
+  <div class="flex-1 bg-gray-400 h-12"></div>
   <div class="flex-1 bg-grey h-12"></div>
-  <div class="flex-1 bg-grey-light h-12"></div>
+  <div class="flex-1 bg-gray-400 h-12"></div>
   <div class="flex-1 bg-grey h-12"></div>
-  <div class="flex-1 bg-grey-light h-12"></div>
+  <div class="flex-1 bg-gray-400 h-12"></div>
   <div class="flex-1 bg-grey h-12"></div>
-  <div class="flex-1 bg-grey-light h-12"></div>
+  <div class="flex-1 bg-gray-400 h-12"></div>
   <div class="flex-1 bg-grey h-12"></div>
-  <div class="flex-1 bg-grey-light h-12"></div>
+  <div class="flex-1 bg-gray-400 h-12"></div>
 </div>
 @endcomponent
 
@@ -232,7 +232,7 @@ Use `flex-row-reverse` to reverse column order. Useful for two-column responsive
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="flex md:flex-row-reverse flex-wrap">
   <div class="w-full md:w-3/4 bg-grey p-4 text-center text-grey-lighter">1</div>
-  <div class="w-full md:w-1/4 bg-grey-light p-4 text-center text-grey-darker">2</div>
+  <div class="w-full md:w-1/4 bg-gray-400 p-4 text-center text-grey-darker">2</div>
 </div>
 @endcomponent
 
@@ -243,6 +243,6 @@ Use auto margin utilities like `ml-auto` and `mr-auto` to offset columns in a ro
 @component('_partials.code-sample', ['lang' => 'html'])
 <div class="flex flex-wrap">
   <div class="w-1/3 ml-auto bg-grey h-12"></div>
-  <div class="w-1/3 mr-auto bg-grey-light h-12"></div>
+  <div class="w-1/3 mr-auto bg-gray-400 h-12"></div>
 </div>
 @endcomponent

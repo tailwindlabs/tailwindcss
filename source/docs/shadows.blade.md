@@ -75,10 +75,10 @@ Use the `.shadow-inner` utility to apply a subtle inset box shadow to an element
 Use the `.shadow-outline` utility to apply a focus-ring-style shadow to an element. This can be useful when combined with `.focus:outline-none` to create a better looking focus style that follows an element's border radius.
 
 @component('_partials.code-sample', ['class' => 'flex justify-center text-sm py-8'])
-<button class="focus:outline-none focus:shadow-outline bg-grey-light hover:bg-grey text-grey-darkest font-bold py-2 px-4 rounded w-24 mr-6">
+<button class="focus:outline-none focus:shadow-outline bg-gray-400 hover:bg-grey text-grey-darkest font-bold py-2 px-4 rounded w-24 mr-6">
   Unfocused
 </button>
-<button class="focus:outline-none shadow-outline bg-grey-light hover:bg-grey text-grey-darkest font-bold py-2 px-4 rounded w-24">
+<button class="focus:outline-none shadow-outline bg-gray-400 hover:bg-grey text-grey-darkest font-bold py-2 px-4 rounded w-24">
   Focused
 </button>
 @slot('code')
@@ -93,7 +93,7 @@ Use the `.shadow-outline` utility to apply a focus-ring-style shadow to an eleme
 Use `.shadow-none` to remove an existing box shadow from an element. This is most commonly used to remove a shadow that was applied at a smaller breakpoint.
 
 @component('_partials.code-sample', ['class' => 'flex justify-around text-sm py-8'])
-<div class="p-4 shadow-none bg-grey-light">.shadow-none</div>
+<div class="p-4 shadow-none bg-gray-400">.shadow-none</div>
 @slot('code')
 <div class="shadow-none"></div>
 @endslot
