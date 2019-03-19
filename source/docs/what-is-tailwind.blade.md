@@ -33,32 +33,32 @@ Instead, Tailwind provides highly composable, low-level *utility classes* that m
 
 Here's an example of a responsive contact card component built with Tailwind without writing a single line of CSS:
 
-@component('_partials.code-sample', ['class' => 'bg-grey-lighter py-8'])
-<div class="bg-white mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
+@component('_partials.code-sample', ['class' => 'bg-gray-200 py-8'])
+<div class="bg-white mx-auto max-w-sm shadow-xl rounded-lg overflow-hidden">
   <div class="sm:flex sm:items-center px-6 py-4">
     <img class="block h-16 sm:h-24 rounded-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="https://avatars2.githubusercontent.com/u/4323180?s=400&u=4962a4441fae9fba5f0f86456c6c506a21ffca4f&v=4" alt="">
     <div class="text-center sm:text-left sm:flex-grow">
       <div class="mb-4">
         <p class="text-xl leading-tight">Adam Wathan</p>
-        <p class="text-sm leading-tight text-grey-dark">Developer at NothingWorks Inc.</p>
+        <p class="text-sm leading-tight text-gray-600">Developer at NothingWorks Inc.</p>
       </div>
       <div>
-        <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>
+        <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white">Message</button>
       </div>
     </div>
   </div>
 </div>
 @slot('code')
-<div class="bg-white mx-auto max-w-sm shadow-lg rounded-lg overflow-hidden">
+<div class="bg-white mx-auto max-w-sm shadow-xl rounded-lg overflow-hidden">
   <div class="sm:flex sm:items-center px-6 py-4">
     <img class="block h-16 sm:h-24 rounded-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="https://avatars2.githubusercontent.com/u/4323180?s=400&u=4962a4441fae9fba5f0f86456c6c506a21ffca4f&v=4" alt="">
     <div class="text-center sm:text-left sm:flex-grow">
       <div class="mb-4">
         <p class="text-xl leading-tight">Adam Wathan</p>
-        <p class="text-sm leading-tight text-grey-dark">Developer at NothingWorks Inc.</p>
+        <p class="text-sm leading-tight text-gray-600">Developer at NothingWorks Inc.</p>
       </div>
       <div>
-        <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple text-purple hover:bg-purple hover:text-white">Message</button>
+        <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white">Message</button>
       </div>
     </div>
   </div>
@@ -73,13 +73,13 @@ While you can do a *lot* with just utility classes, sometimes a component class 
 Tailwind provides tools for [extracting component classes](/docs/extracting-components) from repeated utility patterns, making it easy to update multiple instances of a component from one place:
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded">
+<button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
   Button
 </button>
 
 @slot('code')
 <!-- Using utilities: -->
-<button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded">
+<button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
   Button
 </button>
 
@@ -93,10 +93,10 @@ Tailwind provides tools for [extracting component classes](/docs/extracting-comp
     @apply&nbsp;font-bold py-2 px-4 rounded;
   }
   .btn-blue {
-    @apply&nbsp;bg-blue text-white;
+    @apply&nbsp;bg-blue-500 text-white;
   }
   .btn-blue:hover {
-    @apply&nbsp;bg-blue-dark;
+    @apply&nbsp;bg-blue-600;
   }
 </style>
 @endslot
@@ -110,38 +110,38 @@ Tailwind uses an intuitive `{screen}:` prefix that makes it easy to notice respo
 
 @component('_partials.responsive-code-sample')
 @slot('none')
-<div class="flex justify-start bg-grey-lighter">
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
+<div class="flex justify-start bg-gray-200">
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('sm')
-<div class="flex justify-center bg-grey-lighter">
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
+<div class="flex justify-center bg-gray-200">
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('md')
-<div class="flex justify-end bg-grey-lighter">
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
+<div class="flex justify-end bg-gray-200">
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('lg')
-<div class="flex justify-between bg-grey-lighter">
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
+<div class="flex justify-between bg-gray-200">
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('xl')
-<div class="flex justify-around bg-grey-lighter">
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">1</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">2</div>
-  <div class="text-grey-darker text-center bg-grey-light px-4 py-2 m-2">3</div>
+<div class="flex justify-around bg-gray-200">
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
 @endslot
 @slot('code')
