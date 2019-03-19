@@ -205,7 +205,7 @@ Use `.flex-none` to prevent a flex item from growing or shrinking:
   <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
-  <div class="flex-none text-gray-800 text-center bg-grey px-4 py-2 m-2">
+  <div class="flex-none text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">
     Item that cannot grow or shrink
   </div>
   <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
@@ -223,7 +223,7 @@ Use `.flex-grow` to allow a flex item to grow to fill any available space:
   <div class="flex-none text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
     Content that cannot flex
   </div>
-  <div class="flex-grow text-gray-800 text-center bg-grey px-4 py-2 m-2">
+  <div class="flex-grow text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">
     Item that will grow
   </div>
   <div class="flex-none text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
@@ -241,7 +241,7 @@ Use `.flex-grow-0` to prevent a flex item from growing:
   <div class="flex-grow text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
     Will grow
   </div>
-  <div class="flex-grow-0 text-gray-800 text-center bg-grey px-4 py-2 m-2">
+  <div class="flex-grow-0 text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">
     Will not grow
   </div>
   <div class="flex-grow text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
@@ -259,7 +259,7 @@ Use `.flex-shrink` to allow a flex item to shrink if needed:
   <div class="flex-none text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
     Longer content that cannot flex
   </div>
-  <div class="flex-shrink text-gray-800 text-center bg-grey px-4 py-2 m-2">
+  <div class="flex-shrink text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">
     Item that will shrink even if it causes the content to wrap
   </div>
   <div class="flex-none text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
@@ -277,7 +277,7 @@ Use `.flex-shrink-0` to prevent a flex item from shrinking:
   <div class="flex-shrink text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
     Item that can shrink if needed
   </div>
-  <div class="flex-shrink-0 text-gray-800 text-center bg-grey px-4 py-2 m-2">
+  <div class="flex-shrink-0 text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">
     Item that cannot shrink below its initial size
   </div>
   <div class="flex-shrink text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
@@ -298,7 +298,7 @@ For more information about Tailwind's responsive design features, check out the 
   <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
-  <div class="flex-none text-gray-800 text-center bg-grey px-4 py-2 m-2">
+  <div class="flex-none text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">
     Responsive flex item
   </div>
   <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
@@ -311,7 +311,7 @@ For more information about Tailwind's responsive design features, check out the 
   <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
-  <div class="flex-grow text-gray-800 text-center bg-grey px-4 py-2 m-2">
+  <div class="flex-grow text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">
     Responsive flex item
   </div>
   <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
@@ -324,7 +324,7 @@ For more information about Tailwind's responsive design features, check out the 
   <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
-  <div class="flex-shrink text-gray-800 text-center bg-grey px-4 py-2 m-2">
+  <div class="flex-shrink text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">
     Responsive flex item
   </div>
   <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
@@ -337,7 +337,7 @@ For more information about Tailwind's responsive design features, check out the 
   <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
-  <div class="flex-1 text-gray-800 text-center bg-grey px-4 py-2 m-2">
+  <div class="flex-1 text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">
     Responsive flex item
   </div>
   <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
@@ -350,7 +350,7 @@ For more information about Tailwind's responsive design features, check out the 
   <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
     Item that can grow or shrink if needed
   </div>
-  <div class="flex-initial text-gray-800 text-center bg-grey px-4 py-2 m-2">
+  <div class="flex-initial text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">
     Responsive flex item
   </div>
   <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">

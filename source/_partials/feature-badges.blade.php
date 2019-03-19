@@ -9,7 +9,7 @@
     </a>
     @else
     <span class="mb-2 inline-flex items-center rounded-full border border-grey-light bg-gray-100 text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none opacity-50 mr-2">
-      <span class="inline-flex rounded-full bg-grey text-white mr-1">
+      <span class="inline-flex rounded-full bg-gray-500 text-white mr-1">
         <svg class="fill-current h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 8.586L6.707 5.293c-.39-.39-1.024-.39-1.414 0-.39.39-.39 1.024 0 1.414L8.586 10l-3.293 3.293c-.39.39-.39 1.024 0 1.414.39.39 1.024.39 1.414 0L10 11.414l3.293 3.293c.39.39 1.024.39 1.414 0 .39-.39.39-1.024 0-1.414L11.414 10l3.293-3.293c.39-.39.39-1.024 0-1.414-.39-.39-1.024-.39-1.414 0L10 8.586z"/></svg>
       </span>
       <span>Responsive</span>
@@ -25,7 +25,7 @@
     </a>
     @else
     <span class="mb-2 inline-flex items-center rounded-full border border-grey-light bg-gray-100 text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none opacity-50 mr-2">
-      <span class="inline-flex rounded-full bg-grey text-white mr-1">
+      <span class="inline-flex rounded-full bg-gray-500 text-white mr-1">
         <svg class="fill-current h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 8.586L6.707 5.293c-.39-.39-1.024-.39-1.414 0-.39.39-.39 1.024 0 1.414L8.586 10l-3.293 3.293c-.39.39-.39 1.024 0 1.414.39.39 1.024.39 1.414 0L10 11.414l3.293 3.293c.39.39 1.024.39 1.414 0 .39-.39.39-1.024 0-1.414L11.414 10l3.293-3.293c.39-.39.39-1.024 0-1.414-.39-.39-1.024-.39-1.414 0L10 8.586z"/></svg>
       </span>
       <span>Customizable</span>
@@ -41,7 +41,7 @@
     </a>
     @else
     <span class="mb-2 inline-flex items-center rounded-full border border-grey-light bg-gray-100 text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none opacity-50 mr-2">
-      <span class="inline-flex rounded-full bg-grey text-white mr-1">
+      <span class="inline-flex rounded-full bg-gray-500 text-white mr-1">
         <svg class="fill-current h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 8.586L6.707 5.293c-.39-.39-1.024-.39-1.414 0-.39.39-.39 1.024 0 1.414L8.586 10l-3.293 3.293c-.39.39-.39 1.024 0 1.414.39.39 1.024.39 1.414 0L10 11.414l3.293 3.293c.39.39 1.024.39 1.414 0 .39-.39.39-1.024 0-1.414L11.414 10l3.293-3.293c.39-.39.39-1.024 0-1.414-.39-.39-1.024-.39-1.414 0L10 8.586z"/></svg>
       </span>
       <span>Hover</span>
@@ -57,7 +57,7 @@
     </span>
     @else
     <span class="mb-2 inline-flex items-center rounded-full border border-grey-light bg-gray-100 text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none opacity-50 mr-2">
-      <span class="inline-flex rounded-full bg-grey text-white mr-1">
+      <span class="inline-flex rounded-full bg-gray-500 text-white mr-1">
         <svg class="fill-current h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 8.586L6.707 5.293c-.39-.39-1.024-.39-1.414 0-.39.39-.39 1.024 0 1.414L8.586 10l-3.293 3.293c-.39.39-.39 1.024 0 1.414.39.39 1.024.39 1.414 0L10 11.414l3.293 3.293c.39.39 1.024.39 1.414 0 .39-.39.39-1.024 0-1.414L11.414 10l3.293-3.293c.39-.39.39-1.024 0-1.414-.39-.39-1.024-.39-1.414 0L10 8.586z"/></svg>
       </span>
       <span>Focus</span>

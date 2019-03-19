@@ -66,7 +66,7 @@ Say you have these two buttons:
   Button
 </button>
 
-<button class="bg-gray-400 hover:bg-grey text-gray-800 font-bold py-2 px-4 rounded">
+<button class="bg-gray-400 hover:bg-gray-500 text-gray-800 font-bold py-2 px-4 rounded">
   Button
 </button>
 
@@ -75,7 +75,7 @@ Say you have these two buttons:
   Button
 </button>
 
-<button class="bg-gray-400 hover:bg-grey text-gray-800 font-bold py-2 px-4 rounded">
+<button class="bg-gray-400 hover:bg-gray-500 text-gray-800 font-bold py-2 px-4 rounded">
   Button
 </button>
 @endslot
@@ -95,7 +95,7 @@ It might be tempting to implement component classes for these buttons like this:
   @@apply bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded;
 }
 .btn-grey:hover {
-  @@apply bg-grey;
+  @@apply bg-gray-500;
 }
 ```
 
@@ -121,7 +121,7 @@ A better approach is to extract the parts that are the same into a separate clas
   @@apply bg-gray-400 text-gray-800;
 }
 .btn-grey:hover {
-  @@apply bg-grey;
+  @@apply bg-gray-500;
 }
 ```
 
@@ -132,7 +132,7 @@ Now you'd apply two classes any time you needed to style a button:
   Button
 </button>
 
-<button class="bg-gray-400 hover:bg-grey text-gray-800 font-bold py-2 px-4 rounded">
+<button class="bg-gray-400 hover:bg-gray-500 text-gray-800 font-bold py-2 px-4 rounded">
   Button
 </button>
 

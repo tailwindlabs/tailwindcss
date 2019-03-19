@@ -324,27 +324,27 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex justify-center">
-  <div class="bg-grey w-12 h-12 rounded"></div>
+  <div class="bg-gray-500 w-12 h-12 rounded"></div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex justify-center">
-  <div class="bg-grey w-12 h-12 rounded-t"></div>
+  <div class="bg-gray-500 w-12 h-12 rounded-t"></div>
 </div>
 @endslot
 @slot('md')
 <div class="flex justify-center">
-  <div class="bg-grey w-12 h-12 rounded-b-lg"></div>
+  <div class="bg-gray-500 w-12 h-12 rounded-b-lg"></div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex justify-center">
-  <div class="bg-grey w-12 h-12 rounded-none"></div>
+  <div class="bg-gray-500 w-12 h-12 rounded-none"></div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex justify-center">
-  <div class="bg-grey w-12 h-12 rounded-r"></div>
+  <div class="bg-gray-500 w-12 h-12 rounded-r"></div>
 </div>
 @endslot
 @slot('code')

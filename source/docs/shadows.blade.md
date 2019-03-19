@@ -75,10 +75,10 @@ Use the `.shadow-inner` utility to apply a subtle inset box shadow to an element
 Use the `.shadow-outline` utility to apply a focus-ring-style shadow to an element. This can be useful when combined with `.focus:outline-none` to create a better looking focus style that follows an element's border radius.
 
 @component('_partials.code-sample', ['class' => 'flex justify-center text-sm py-8'])
-<button class="focus:outline-none focus:shadow-outline bg-gray-400 hover:bg-grey text-gray-800 font-bold py-2 px-4 rounded w-24 mr-6">
+<button class="focus:outline-none focus:shadow-outline bg-gray-400 hover:bg-gray-500 text-gray-800 font-bold py-2 px-4 rounded w-24 mr-6">
   Unfocused
 </button>
-<button class="focus:outline-none shadow-outline bg-gray-400 hover:bg-grey text-gray-800 font-bold py-2 px-4 rounded w-24">
+<button class="focus:outline-none shadow-outline bg-gray-400 hover:bg-gray-500 text-gray-800 font-bold py-2 px-4 rounded w-24">
   Focused
 </button>
 @slot('code')

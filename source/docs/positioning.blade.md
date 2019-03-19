@@ -172,7 +172,7 @@ Offsets are calculated relative to the nearest parent that has a position other 
 <p class="text-sm text-gray-600 mb-1">With static positioning</p>
 <div class="relative bg-gray-400 px-4 pt-2 pb-4 mb-6">
   <p class="mb-2 text-gray-700">Relative parent</p>
-  <div class="static bg-grey p-4 text-gray-700">
+  <div class="static bg-gray-500 p-4 text-gray-700">
     <p class="mb-2">Static parent</p>
     <div class="static bottom-0 left-0 bg-grey-darkest p-4 text-gray-400 inline-block">
       <p>Static child</p>
@@ -186,7 +186,7 @@ Offsets are calculated relative to the nearest parent that has a position other 
 <p class="text-sm text-gray-600 mb-1">With absolute positioning</p>
 <div class="relative bg-gray-400 px-4 pt-2 pb-4">
   <p class="mb-2 text-gray-700">Relative parent</p>
-  <div class="static bg-grey p-4 text-gray-700">
+  <div class="static bg-gray-500 p-4 text-gray-700">
     <p class="mb-2">Static parent</p>
     <div class="absolute top-0 right-0 bg-grey-darkest p-4 text-gray-400 inline-block">
       <p>Absolute child</p>
@@ -223,9 +223,9 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 <div class="rounded-b overflow-hidden max-w-md mx-auto mt-4 mb-4">
   <div class="rounded-t border-t border-l border-r border-grey-light bg-gray-200 flex px-4 py-3">
     <div class="mr-6">
-      <span class="inline-block rounded-full bg-grey h-3 w-3 mr-1"></span>
-      <span class="inline-block rounded-full bg-grey h-3 w-3 mr-1"></span>
-      <span class="inline-block rounded-full bg-grey h-3 w-3"></span>
+      <span class="inline-block rounded-full bg-gray-500 h-3 w-3 mr-1"></span>
+      <span class="inline-block rounded-full bg-gray-500 h-3 w-3 mr-1"></span>
+      <span class="inline-block rounded-full bg-gray-500 h-3 w-3"></span>
     </div>
     <div class="flex-1 bg-white border border-grey-light rounded mr-4"></div>
   </div>
@@ -235,7 +235,7 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 
     <div class="absolute left-0 right-0 top-0 bg-grey-darkest text-gray-400 z-10 px-4 py-3">
       Fixed child
-      <div class="absolute top-0 bottom-0 right-0 px-4 py-3 bg-grey text-gray-800">
+      <div class="absolute top-0 bottom-0 right-0 px-4 py-3 bg-gray-500 text-gray-800">
         Absolute child
       </div>
     </div>
