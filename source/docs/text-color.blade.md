@@ -132,10 +132,11 @@ By default Tailwind makes the entire [default color palette](/docs/colors#defaul
 You can [customize your color palette](/docs/colors#customizing) by editing `theme.colors` in your Tailwind config file, or customize just your text colors in the `theme.textColor` section.
 
 @component('_partials.customized-theme', ['key' => 'textColors'])
-- ...colors,
-+ 'primary': '#3490dc',
-+ 'secondary': '#ffed4a',
-+ 'danger': '#e3342f',
++ textColor: {
++ &nbsp;&nbsp;'primary': '#3490dc',
++ &nbsp;&nbsp;'secondary': '#ffed4a',
++ &nbsp;&nbsp;'danger': '#e3342f',
++ }
 @endcomponent
 
 @include('_partials.variants-and-disabling', [
