@@ -95,14 +95,14 @@
             <ul>
               @foreach ($sectionItems as $name => $slugOrChildren)
                 @if (is_string($slugOrChildren))
-                  <li class="mb-3 lg:mb-2"><a class="hover:underline {{ $page->active('/docs/' . $slugOrChildren) ? 'text-teal-dark font-semibold' : 'text-grey-darkest' }}" href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren }}">{{ $name }}</a></li>
+                  <li class="mb-3 lg:mb-2"><a class="hover:underline {{ $page->active('/docs/' . $slugOrChildren) ? 'text-teal-500 font-bold' : 'text-gray-800' }}" href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren }}">{{ $name }}</a></li>
                 @else
                   <li class="mb-3 lg:mb-2">
-                    <a href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren->first() }}" class="hover:underline block mb-3 lg:mb-2 {{ $page->anyChildrenActive($slugOrChildren) ? 'text-teal-dark font-semibold' : 'text-grey-darkest' }}">{{ $name }}</a>
+                    <a href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren->first() }}" class="hover:underline block mb-3 lg:mb-2 {{ $page->anyChildrenActive($slugOrChildren) ? 'text-teal-500 font-bold' : 'text-gray-800' }}">{{ $name }}</a>
                     <ul class="pl-4 {{ $page->anyChildrenActive($slugOrChildren) ? 'block' : 'hidden' }}">
                     @foreach ($slugOrChildren as $title => $link)
                       <li class="mb-3 lg:mb-2">
-                        <a class="hover:underline {{ $page->active('/docs/' . $link) ? 'text-teal-dark font-semibold' : 'text-grey-darkest' }}" href="{{ $page->baseUrl }}/docs/{{ $link }}">
+                        <a class="hover:underline {{ $page->active('/docs/' . $link) ? 'text-teal-500 font-bold' : 'text-gray-800' }}" href="{{ $page->baseUrl }}/docs/{{ $link }}">
                           {{ $title }}
                         </a>
                       </li>

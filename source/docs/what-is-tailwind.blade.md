@@ -9,7 +9,7 @@ description: null
   <h1 class="text-center font-semibold text-4xl sm:text-5xl tracking-tight mb-1">Tailwind CSS</h1>
 </div>
 
-<div class="max-w-sm mx-auto text-center text-xl sm:text-2xl text-grey-dark mb-16">
+<div class="max-w-md mx-auto text-center text-xl sm:text-2xl text-gray-600 mb-16">
   <p class="leading-tight">
    A utility-first CSS framework for rapidly building custom user interfaces.
   </p>
