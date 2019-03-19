@@ -9,7 +9,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
 ## Traditional
 
 @component('_partials.code-sample', ['lang' => 'html'])
-<div class="bg-red-lightest border border-red-light text-red-700 px-4 py-3 rounded relative" role="alert">
+<div class="bg-red-100 border border-red-light text-red-700 px-4 py-3 rounded relative" role="alert">
   <strong class="font-bold">Holy smokes!</strong>
   <span class="block sm:inline">Something seriously bad happened.</span>
   <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
@@ -22,7 +22,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'px-0 py-0'])
 <div class="bg-indigo-900 text-center py-4 lg:px-4">
-  <div class="p-2 bg-indigo-800 items-center text-indigo-lightest leading-none lg:rounded-full flex lg:inline-flex" role="alert">
+  <div class="p-2 bg-indigo-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
     <span class="flex rounded-full bg-indigo uppercase px-2 py-1 text-xs font-bold mr-3">New</span>
     <span class="font-semibold mr-2 text-left flex-auto">Get the coolest t-shirts from our brand new store</span>
     <svg class="fill-current opacity-75 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z"/></svg>
@@ -33,7 +33,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
 ## Left Accent Border
 
 @component('_partials.code-sample', ['lang' => 'html'])
-<div class="bg-orange-lightest border-l-4 border-orange text-orange-700 p-4" role="alert">
+<div class="bg-orange-100 border-l-4 border-orange text-orange-700 p-4" role="alert">
   <p class="font-bold">Be Warned</p>
   <p>Something not ideal might be happening.</p>
 </div>
@@ -46,7 +46,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
   <div class="bg-red text-white font-bold rounded-t px-4 py-2">
     Danger
   </div>
-  <div class="border border-t-0 border-red-light rounded-b bg-red-lightest px-4 py-3 text-red-700">
+  <div class="border border-t-0 border-red-light rounded-b bg-red-100 px-4 py-3 text-red-700">
     <p>Something not ideal might be happening.</p>
   </div>
 </div>
@@ -64,7 +64,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
 ## Top Accent Border
 
 @component('_partials.code-sample', ['lang' => 'html'])
-<div class="bg-teal-lightest border-t-4 border-teal rounded-b text-teal-900 px-4 py-3 shadow-md" role="alert">
+<div class="bg-teal-100 border-t-4 border-teal rounded-b text-teal-900 px-4 py-3 shadow-md" role="alert">
   <div class="flex">
     <div class="py-1"><svg class="fill-current h-6 w-6 text-teal mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
     <div>
