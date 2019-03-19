@@ -119,7 +119,7 @@ Any offsets will be ignored and the element will not act as a position reference
 <div class="relative bg-gray-400 p-4">
   <div class="static h-32 bg-grey-dark p-4 text-gray-900">
     <p>Static parent</p>
-    <div class="absolute bottom-0 left-0 bg-grey-darkest p-4 text-gray-400">
+    <div class="absolute bottom-0 left-0 bg-gray-800 p-4 text-gray-400">
       <p>Absolute child</p>
     </div>
   </div>
@@ -128,7 +128,7 @@ Any offsets will be ignored and the element will not act as a position reference
 @slot('code')
 <div class="static bg-grey-dark">
   Static parent
-  <div class="absolute bottom-0 left-0 bg-grey-darkest">
+  <div class="absolute bottom-0 left-0 bg-gray-800">
     Absolute child
   </div>
 </div>
@@ -145,7 +145,7 @@ Offsets are calculated relative to the element's normal position and the element
 <div class="relative bg-gray-400 p-4">
   <div class="relative h-32 bg-grey-dark p-4 text-gray-900">
     <p>Relative parent</p>
-    <div class="absolute bottom-0 left-0 bg-grey-darkest p-4 text-gray-400">
+    <div class="absolute bottom-0 left-0 bg-gray-800 p-4 text-gray-400">
       <p>Absolute child</p>
     </div>
   </div>
@@ -154,7 +154,7 @@ Offsets are calculated relative to the element's normal position and the element
 @slot('code')
 <div class="relative bg-grey-dark">
   Relative parent
-  <div class="absolute bottom-0 left-0 bg-grey-darkest">
+  <div class="absolute bottom-0 left-0 bg-gray-800">
     Absolute child
   </div>
 </div>
@@ -174,7 +174,7 @@ Offsets are calculated relative to the nearest parent that has a position other 
   <p class="mb-2 text-gray-700">Relative parent</p>
   <div class="static bg-gray-500 p-4 text-gray-700">
     <p class="mb-2">Static parent</p>
-    <div class="static bottom-0 left-0 bg-grey-darkest p-4 text-gray-400 inline-block">
+    <div class="static bottom-0 left-0 bg-gray-800 p-4 text-gray-400 inline-block">
       <p>Static child</p>
     </div>
     <div class="bg-gray-400 p-4 text-gray-700 inline-block">
@@ -188,7 +188,7 @@ Offsets are calculated relative to the nearest parent that has a position other 
   <p class="mb-2 text-gray-700">Relative parent</p>
   <div class="static bg-gray-500 p-4 text-gray-700">
     <p class="mb-2">Static parent</p>
-    <div class="absolute top-0 right-0 bg-grey-darkest p-4 text-gray-400 inline-block">
+    <div class="absolute top-0 right-0 bg-gray-800 p-4 text-gray-400 inline-block">
       <p>Absolute child</p>
     </div>
     <div class="bg-gray-400 p-4  text-gray-700 inline-block">
@@ -202,7 +202,7 @@ Offsets are calculated relative to the nearest parent that has a position other 
   Relative parent
   <div class="static bg-grey-dark">
     Static parent
-    <div class="absolute top-0 right-0 bg-grey-darkest">
+    <div class="absolute top-0 right-0 bg-gray-800">
       Absolute child
     </div>
     <div class="bg-gray-400 inline-block">
@@ -233,7 +233,7 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 
     <!-- Hey fellow nerd! Yes, we're using position absolute instead of position fixed in the demo; it's the best way we could come up with to demonstrate how position fixed works without totally jacking up the layout of the entire documentation site. Forgive us! 😄 -->
 
-    <div class="absolute left-0 right-0 top-0 bg-grey-darkest text-gray-400 z-10 px-4 py-3">
+    <div class="absolute left-0 right-0 top-0 bg-gray-800 text-gray-400 z-10 px-4 py-3">
       Fixed child
       <div class="absolute top-0 bottom-0 right-0 px-4 py-3 bg-gray-500 text-gray-800">
         Absolute child
@@ -257,7 +257,7 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 <div class="bg-gray-400 pt-16">
   <div class="fixed bg-grey-dark">
     Fixed child
-    <div class="absolute top-0 right-0 bg-grey-darkest">
+    <div class="absolute top-0 right-0 bg-gray-800">
       Absolute child
     </div>
   </div>
@@ -445,31 +445,31 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="relative h-32 bg-gray-400 p-4">
-  <div class="relative bg-grey-darkest p-4 text-gray-500">Responsive element</div>
+  <div class="relative bg-gray-800 p-4 text-gray-500">Responsive element</div>
 </div>
 @endslot
 
 @slot('sm')
 <div class="relative h-32 bg-gray-400 p-4">
-  <div class="absolute bottom-0 left-0 bg-grey-darkest p-4 text-gray-500">Responsive element</div>
+  <div class="absolute bottom-0 left-0 bg-gray-800 p-4 text-gray-500">Responsive element</div>
 </div>
 @endslot
 
 @slot('md')
 <div class="relative h-32 bg-gray-400 p-4">
-  <div class="absolute top-0 inset-x-0 bg-grey-darkest p-4 text-gray-500">Responsive element</div>
+  <div class="absolute top-0 inset-x-0 bg-gray-800 p-4 text-gray-500">Responsive element</div>
 </div>
 @endslot
 
 @slot('lg')
 <div class="relative h-32 bg-gray-400 p-4">
-  <div class="absolute right-0 inset-y-0 bg-grey-darkest p-4 text-gray-500">Responsive element</div>
+  <div class="absolute right-0 inset-y-0 bg-gray-800 p-4 text-gray-500">Responsive element</div>
 </div>
 @endslot
 
 @slot('xl')
 <div class="relative h-32 bg-gray-400 p-4">
-  <div class="absolute bottom-0 inset-x-0 bg-grey-darkest p-4 text-gray-500">Responsive element</div>
+  <div class="absolute bottom-0 inset-x-0 bg-gray-800 p-4 text-gray-500">Responsive element</div>
 </div>
 @endslot
 
