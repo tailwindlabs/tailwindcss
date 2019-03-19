@@ -55,7 +55,7 @@ This is extremely useful when you find a common utility pattern in your HTML tha
   @@apply bg-blue text-white;
 }
 .btn-blue:hover {
-  @@apply bg-blue-dark;
+  @@apply bg-blue-700;
 }
 ```
 
@@ -74,7 +74,7 @@ You can mix `@@apply` declarations with normal CSS declarations too of course:
 
 ```less
 .btn:hover {
-  @@apply bg-blue-dark;
+  @@apply bg-blue-700;
   transform: translateY(-1px);
 }
 ```

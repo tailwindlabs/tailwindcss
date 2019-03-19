@@ -128,7 +128,7 @@ Tailwind doesn't include pre-designed navigation components out of the box, but 
 @component('_partials.code-sample')
 <ul class="list-reset flex border-b">
   <li class="-mb-px mr-1">
-    <a class="bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-dark font-semibold" href="#">Active</a>
+    <a class="bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700 font-semibold" href="#">Active</a>
   </li>
   <li class="mr-1">
     <a class="bg-white inline-block py-2 px-4 text-blue hover:text-blue-800 font-semibold" href="#">Tab</a>
@@ -163,7 +163,7 @@ Tailwind doesn't include pre-designed navigation components out of the box, but 
 @component('_partials.code-sample')
 <ul class="list-reset flex">
   <li class="flex-1 mr-2">
-    <a class="text-center block border border-blue rounded py-2 px-4 bg-blue hover:bg-blue-dark text-white" href="#">Active Item</a>
+    <a class="text-center block border border-blue rounded py-2 px-4 bg-blue hover:bg-blue-700 text-white" href="#">Active Item</a>
   </li>
   <li class="flex-1 mr-2">
     <a class="text-center block border border-white rounded hover:border-grey-lighter text-blue hover:bg-gray-200 py-2 px-4" href="#">Nav Item</a>
@@ -179,7 +179,7 @@ Tailwind doesn't include pre-designed navigation components out of the box, but 
 @component('_partials.code-sample')
 <ul class="list-reset flex justify-between">
   <li class="mr-3">
-    <a class="inline-block border border-blue rounded py-2 px-4 bg-blue hover:bg-blue-dark text-white" href="#">Active Pill</a>
+    <a class="inline-block border border-blue rounded py-2 px-4 bg-blue hover:bg-blue-700 text-white" href="#">Active Pill</a>
   </li>
   <li class="mr-3">
     <a class="inline-block border border-white rounded hover:border-grey-lighter text-blue hover:bg-gray-200 py-2 px-4" href="#">Pill</a>

@@ -83,12 +83,12 @@ For more information about Tailwind's responsive design features, check out the 
 To control the background color of an element on hover, add the `hover:` prefix to any existing background color utility. For example, use `hover:bg-blue` to apply the `bg-blue` utility on hover.
 
 @component('_partials.code-sample', ['class' => 'text-center'])
-<button type="button" class="bg-blue hover:bg-blue-dark text-white font-semibold px-4 py-2 rounded">
+<button type="button" class="bg-blue hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded">
   Hover me
 </button>
 
 @slot('code')
-<button class="bg-blue hover:bg-blue-dark ...">
+<button class="bg-blue hover:bg-blue-700 ...">
   Hover me
 </button>
 @endslot
@@ -97,7 +97,7 @@ To control the background color of an element on hover, add the `hover:` prefix 
 Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
 
 ```html
-<button class="... md:bg-blue md:hover:bg-blue-dark ...">Button</button>
+<button class="... md:bg-blue md:hover:bg-blue-700 ...">Button</button>
 ```
 
 ## Focus

@@ -49,22 +49,22 @@ For more information about Tailwind's responsive design features, check out the 
 
 @component('_partials.responsive-code-sample', ['class' => 'text-center'])
 @slot('none')
-<button class="border-2 border-blue bg-transparent text-blue-dark py-2 px-4 font-semibold rounded">
+<button class="border-2 border-blue bg-transparent text-blue-700 py-2 px-4 font-semibold rounded">
   Button
 </button>
 @endslot
 @slot('sm')
-<button class="border-2 border-green bg-transparent text-green-dark py-2 px-4 font-semibold rounded">
+<button class="border-2 border-green bg-transparent text-green-700 py-2 px-4 font-semibold rounded">
   Button
 </button>
 @endslot
 @slot('md')
-<button class="border-2 border-indigo bg-transparent text-indigo-dark py-2 px-4 font-semibold rounded">
+<button class="border-2 border-indigo bg-transparent text-indigo-700 py-2 px-4 font-semibold rounded">
   Button
 </button>
 @endslot
 @slot('lg')
-<button class="border-2 border-red bg-transparent text-red-dark py-2 px-4 font-semibold rounded">
+<button class="border-2 border-red bg-transparent text-red-700 py-2 px-4 font-semibold rounded">
   Button
 </button>
 @endslot
@@ -85,7 +85,7 @@ For more information about Tailwind's responsive design features, check out the 
 To control the border color of an element on hover, add the `hover:` prefix to any existing border color utility. For example, use `hover:border-blue` to apply the `border-blue` utility on hover.
 
 @component('_partials.code-sample', ['class' => 'text-center'])
-<button class="border-2 border-blue hover:border-red bg-transparent text-blue-dark hover:text-red-dark py-2 px-4 font-semibold rounded">
+<button class="border-2 border-blue hover:border-red bg-transparent text-blue-700 hover:text-red-700 py-2 px-4 font-semibold rounded">
   Button
 </button>
 
@@ -99,7 +99,7 @@ To control the border color of an element on hover, add the `hover:` prefix to a
 Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
 
 ```html
-<button class="... md:border-blue md:hover:border-blue-dark ...">Button</button>
+<button class="... md:border-blue md:hover:border-blue-700 ...">Button</button>
 ```
 
 ## Focus

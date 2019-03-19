@@ -11,13 +11,13 @@ Similar to our [responsive prefixes](/docs/responsive-design), Tailwind makes it
 Add the `hover:` prefix to only apply a utility on hover.
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button type="button" class="bg-transparent hover:bg-blue text-blue-dark font-semibold hover:text-white py-2 px-4 border border-blue hover:border-transparent rounded focus:outline-none focus:shadow-outline">
+<button type="button" class="bg-transparent hover:bg-blue text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue hover:border-transparent rounded focus:outline-none focus:shadow-outline">
   Hover me
 </button>
 
 
 @slot('code')
-<button class="bg-transparent hover:bg-blue text-blue-dark hover:text-white...">
+<button class="bg-transparent hover:bg-blue text-blue-700 hover:text-white...">
   Hover me
 </button>
 @endslot
@@ -68,12 +68,12 @@ Add the `focus:` prefix to only apply a utility on focus.
 Add the `active:` prefix to only apply a utility when an element is active.
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button type="button" class="bg-blue active:bg-blue-dark text-white font-semibold hover:text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+<button type="button" class="bg-blue active:bg-blue-700 text-white font-semibold hover:text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
   Click me
 </button>
 
 @slot('code')
-<button class="bg-blue active:bg-blue-dark text-white...">
+<button class="bg-blue active:bg-blue-700 text-white...">
   Click me
 </button>
 @endslot
@@ -126,7 +126,7 @@ If you need to style a child element when hovering over a specific parent elemen
 
 ## Focus-Within
 
-<div class="text-sm bg-blue-100 text-blue-dark font-semi-bold px-4 py-2 mb-4 rounded">
+<div class="text-sm bg-blue-100 text-blue-700 font-semi-bold px-4 py-2 mb-4 rounded">
   <div class="flex items-center">
     <div class="mr-2">
       <svg class="block text-blue-light h-5 w-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.432 15C14.387 9.893 12 8.547 12 6V3h.5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5H8v3c0 2.547-2.387 3.893-4.432 9-.651 1.625-2.323 4 6.432 4s7.083-2.375 6.432-4zm-1.617 1.751c-.702.21-2.099.449-4.815.449s-4.113-.239-4.815-.449c-.249-.074-.346-.363-.258-.628.22-.67.635-1.828 1.411-3.121 1.896-3.159 3.863.497 5.5.497s1.188-1.561 1.824-.497a15.353 15.353 0 0 1 1.411 3.121c.088.265-.009.553-.258.628z"/></svg>
@@ -143,7 +143,7 @@ Add the `focus-within:` prefix to only apply a utility when a child element has 
 <form class="w-full max-w-sm mx-auto">
   <div class="flex items-center border-b-2 border-grey-light focus-within:border-teal py-2">
     <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Jane Doe" aria-label="Full name">
-    <button class="focus:shadow-outline focus:outline-none flex-shrink-0 bg-teal hover:bg-teal-dark border-teal hover:border-teal-dark text-sm border-4 text-white py-1 px-2 rounded" type="button">
+    <button class="focus:shadow-outline focus:outline-none flex-shrink-0 bg-teal hover:bg-teal-700 border-teal hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="button">
       Sign Up
     </button>
   </div>

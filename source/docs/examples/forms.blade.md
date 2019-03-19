@@ -25,7 +25,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
       <p class="text-red text-xs italic">Please choose a password.</p>
     </div>
     <div class="flex items-center justify-between">
-      <button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+      <button class="bg-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
         Sign In
       </button>
       <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-800" href="#">
@@ -149,7 +149,7 @@ Tailwind doesn't include purpose-built form control classes out of the box, but 
 <form class="w-full max-w-sm">
   <div class="flex items-center border-b border-b-2 border-teal py-2">
     <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Jane Doe" aria-label="Full name">
-    <button class="flex-shrink-0 bg-teal hover:bg-teal-dark border-teal hover:border-teal-dark text-sm border-4 text-white py-1 px-2 rounded" type="button">
+    <button class="flex-shrink-0 bg-teal hover:bg-teal-700 border-teal hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="button">
       Sign Up
     </button>
     <button class="flex-shrink-0 border-transparent border-4 text-teal hover:text-teal-800 text-sm py-1 px-2 rounded" type="button">

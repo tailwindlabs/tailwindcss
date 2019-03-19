@@ -145,7 +145,7 @@ For more information about Tailwind's responsive design features, check out the 
 To control the font weight of an element on hover, add the `hover:` prefix to any existing style and decoration utility. For example, use `hover:font-bold` to apply the `font-bold` utility on hover.
 
 @component('_partials.code-sample')
-<div class="text-center text-blue-dark">
+<div class="text-center text-blue-700">
   <a href="#" class="font-normal hover:font-bold">Hover over this link</a>
 </div>
 @endcomponent

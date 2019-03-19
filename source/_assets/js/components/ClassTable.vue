@@ -10,8 +10,8 @@
       </thead>
       <tbody class="align-baseline">
         <tr v-for="(row, i) in visibleRows">
-          <td :class="i === 0 ? 'border-smoke' : 'border-smoke-light'" class="p-2 border-t font-mono text-xs text-purple-dark whitespace-no-wrap">{{ row[0] }}</td>
-          <td :class="i === 0 ? 'border-smoke' : 'border-smoke-light'" class="p-2 border-t font-mono text-xs text-blue-dark whitespace-pre">{{ row[1] }}</td>
+          <td :class="i === 0 ? 'border-smoke' : 'border-smoke-light'" class="p-2 border-t font-mono text-xs text-purple-700 whitespace-no-wrap">{{ row[0] }}</td>
+          <td :class="i === 0 ? 'border-smoke' : 'border-smoke-light'" class="p-2 border-t font-mono text-xs text-blue-700 whitespace-pre">{{ row[1] }}</td>
           <!-- <td :class="i === 0 ? 'border-smoke' : 'border-smoke-light'" class="p-2 border-t text-sm text-gray-700">{{ row[2] }}</td> -->
         </tr>
       </tbody>

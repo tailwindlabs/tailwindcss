@@ -9,7 +9,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
 ## Traditional
 
 @component('_partials.code-sample', ['lang' => 'html'])
-<div class="bg-red-lightest border border-red-light text-red-dark px-4 py-3 rounded relative" role="alert">
+<div class="bg-red-lightest border border-red-light text-red-700 px-4 py-3 rounded relative" role="alert">
   <strong class="font-bold">Holy smokes!</strong>
   <span class="block sm:inline">Something seriously bad happened.</span>
   <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
@@ -33,7 +33,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
 ## Left Accent Border
 
 @component('_partials.code-sample', ['lang' => 'html'])
-<div class="bg-orange-lightest border-l-4 border-orange text-orange-dark p-4" role="alert">
+<div class="bg-orange-lightest border-l-4 border-orange text-orange-700 p-4" role="alert">
   <p class="font-bold">Be Warned</p>
   <p>Something not ideal might be happening.</p>
 </div>
@@ -46,7 +46,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
   <div class="bg-red text-white font-bold rounded-t px-4 py-2">
     Danger
   </div>
-  <div class="border border-t-0 border-red-light rounded-b bg-red-lightest px-4 py-3 text-red-dark">
+  <div class="border border-t-0 border-red-light rounded-b bg-red-lightest px-4 py-3 text-red-700">
     <p>Something not ideal might be happening.</p>
   </div>
 </div>
@@ -78,7 +78,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
 ## Banner
 
 @component('_partials.code-sample', ['lang' => 'html'])
-<div class="bg-blue-100 border-t border-b border-blue text-blue-dark px-4 py-3" role="alert">
+<div class="bg-blue-100 border-t border-b border-blue text-blue-700 px-4 py-3" role="alert">
   <p class="font-bold">Informational message</p>
   <p class="text-sm">Some additional text to explain said message.</p>
 </div>
