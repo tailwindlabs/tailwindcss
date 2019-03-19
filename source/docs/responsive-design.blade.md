@@ -51,17 +51,17 @@ Here are the default screen sizes:
 
 ```js
 screens: {
-  'sm': '576px',
-  // => @media (min-width: 576px) { ... }
+  'sm': '640px',
+  // => @media (min-width: 640px) { ... }
 
   'md': '768px',
   // => @media (min-width: 768px) { ... }
 
-  'lg': '992px',
-  // => @media (min-width: 992px) { ... }
+  'lg': '1024px',
+  // => @media (min-width: 1024px) { ... }
 
-  'xl': '1200px',
-  // => @media (min-width: 1200px) { ... }
+  'xl': '1280px',
+  // => @media (min-width: 1280px) { ... }
 },
 ```
 
@@ -71,14 +71,14 @@ For example, you could use device names instead of sizes:
 
 ```js
 screens: {
-  'tablet': '576px',
-  // => @media (min-width: 576px) { ... }
+  'tablet': '640px',
+  // => @media (min-width: 640px) { ... }
 
-  'laptop': '992px',
-  // => @media (min-width: 992px) { ... }
+  'laptop': '1024px',
+  // => @media (min-width: 1024px) { ... }
 
-  'desktop': '1200px',
-  // => @media (min-width: 1200px) { ... }
+  'desktop': '1280px',
+  // => @media (min-width: 1280px) { ... }
 },
 ```
 
@@ -87,15 +87,15 @@ These screen names will be reflected in your utilities, so your `.bg-red` utilit
 ```css
 .bg-red { background-color: theme('colors.red'); }
 
-@media (min-width: 576px) {
+@media (min-width: 640px) {
   .tablet\:bg-red { background-color: theme('colors.red'); }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .laptop\:bg-red { background-color: theme('colors.red'); }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1280px) {
   .desktop\:bg-red { background-color: theme('colors.red'); }
 }
 ```
@@ -106,10 +106,10 @@ Tailwind also allows for more complex screen definitions, which can be useful in
 
 ```js
 screens: {
-  'sm': {'min': '576px', 'max': '767px'},
-  'md': {'min': '768px', 'max': '991px'},
-  'lg': {'min': '992px', 'max': '1199px'},
-  'xl': {'min': '1200px'},
+  'sm': {'min': '640px', 'max': '767px'},
+  'md': {'min': '768px', 'max': '1023px'},
+  'lg': {'min': '1024px', 'max': '1279px'},
+  'xl': {'min': '1280px'},
 },
 ```
 
@@ -136,10 +136,10 @@ As mentioned earlier, screens in Tailwind are essentially just CSS media queries
 
 ```js
 screens: {
-  'sm': '576px',
+  'sm': '640px',
   'md': '768px',
-  'lg': '992px',
-  'xl': '1200px',
+  'lg': '1024px',
+  'xl': '1280px',
   'print': {'raw': 'print'}
 },
 ```

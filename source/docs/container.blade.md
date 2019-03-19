@@ -26,20 +26,20 @@ description: "A component for fixing an element's width to the current breakpoin
         <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">width: 100%;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-grey-darker">sm <span class="text-grey-dark italic">(576px)</span></td>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">max-width: 576px;</td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-grey-darker">sm <span class="text-grey-dark italic">(640px)</span></td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">max-width: 640px;</td>
       </tr>
       <tr>
         <td class="p-2 border-t border-grey-light font-mono text-xs text-grey-darker">md <span class="text-grey-dark italic">(768px)</span></td>
         <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">max-width: 768px;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-grey-darker">lg <span class="text-grey-dark italic">(992px)</span></td>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">max-width: 992px;</td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-grey-darker">lg <span class="text-grey-dark italic">(1024px)</span></td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">max-width: 1024px;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-grey-darker">xl <span class="text-grey-dark italic">(1200px)</span></td>
-        <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">max-width: 1200px;</td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-grey-darker">xl <span class="text-grey-dark italic">(1280px)</span></td>
+        <td class="p-2 border-t border-grey-light font-mono text-xs text-blue-dark">max-width: 1280px;</td>
       </tr>
     </tbody>
   </table>
