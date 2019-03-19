@@ -79,7 +79,7 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="relative w-full h-32 text-center">
-  <div class="z-0 absolute w-full h-12 mt-12 bg-yellow-light flex justify-center items-center">yellow</div>
+  <div class="z-0 absolute w-full h-12 mt-12 bg-yellow-400 flex justify-center items-center">yellow</div>
   <div class="z-40 absolute w-24 h-24 ml-4 mt-0 bg-gray-400 flex justify-center items-center">z-40</div>
   <div class="z-30 absolute w-24 h-24 ml-6 mt-2 bg-grey flex justify-center items-center">z-30</div>
   <div class="z-20 absolute w-24 h-24 ml-8 mt-4 bg-grey-dark flex justify-center items-center">z-20</div>
@@ -89,7 +89,7 @@ For more information about Tailwind's responsive design features, check out the 
 @endslot
 @slot('sm')
 <div class="relative h-32 text-center">
-  <div class="z-10 absolute w-full h-12 mt-12 bg-yellow-light flex justify-center items-center">yellow</div>
+  <div class="z-10 absolute w-full h-12 mt-12 bg-yellow-400 flex justify-center items-center">yellow</div>
   <div class="z-40 absolute w-24 h-24 ml-4 mt-0 bg-gray-400 flex justify-center items-center">z-40</div>
   <div class="z-30 absolute w-24 h-24 ml-6 mt-2 bg-grey flex justify-center items-center">z-30</div>
   <div class="z-20 absolute w-24 h-24 ml-8 mt-4 bg-grey-dark flex justify-center items-center">z-20</div>
@@ -99,7 +99,7 @@ For more information about Tailwind's responsive design features, check out the 
 @endslot
 @slot('md')
 <div class="relative h-32 text-center">
-  <div class="z-20 absolute w-full h-12 mt-12 bg-yellow-light flex justify-center items-center">yellow</div>
+  <div class="z-20 absolute w-full h-12 mt-12 bg-yellow-400 flex justify-center items-center">yellow</div>
   <div class="z-40 absolute w-24 h-24 ml-4 mt-0 bg-gray-400 flex justify-center items-center">z-40</div>
   <div class="z-30 absolute w-24 h-24 ml-6 mt-2 bg-grey flex justify-center items-center">z-30</div>
   <div class="z-20 absolute w-24 h-24 ml-8 mt-4 bg-grey-dark flex justify-center items-center">z-20</div>
@@ -109,7 +109,7 @@ For more information about Tailwind's responsive design features, check out the 
 @endslot
 @slot('lg')
 <div class="relative h-32 text-center">
-  <div class="z-30 absolute w-full h-12 mt-12 bg-yellow-light flex justify-center items-center">yellow</div>
+  <div class="z-30 absolute w-full h-12 mt-12 bg-yellow-400 flex justify-center items-center">yellow</div>
   <div class="z-40 absolute w-24 h-24 ml-4 mt-0 bg-gray-400 flex justify-center items-center">z-40</div>
   <div class="z-30 absolute w-24 h-24 ml-6 mt-2 bg-grey flex justify-center items-center">z-30</div>
   <div class="z-20 absolute w-24 h-24 ml-8 mt-4 bg-grey-dark flex justify-center items-center">z-20</div>
@@ -119,7 +119,7 @@ For more information about Tailwind's responsive design features, check out the 
 @endslot
 @slot('xl')
 <div class="relative h-32 text-center">
-  <div class="z-40 absolute w-full h-12 mt-12 bg-yellow-light flex justify-center items-center">yellow</div>
+  <div class="z-40 absolute w-full h-12 mt-12 bg-yellow-400 flex justify-center items-center">yellow</div>
   <div class="z-40 absolute w-24 h-24 ml-4 mt-0 bg-gray-400 flex justify-center items-center">z-40</div>
   <div class="z-30 absolute w-24 h-24 ml-6 mt-2 bg-grey flex justify-center items-center">z-30</div>
   <div class="z-20 absolute w-24 h-24 ml-8 mt-4 bg-grey-dark flex justify-center items-center">z-20</div>
@@ -128,7 +128,7 @@ For more information about Tailwind's responsive design features, check out the 
 </div>
 @endslot
 @slot('code')
-<div class="none:z-0 sm:z-10 md:z-20 lg:z-30 xl:z-40 bg-yellow-light">yellow</div>
+<div class="none:z-0 sm:z-10 md:z-20 lg:z-30 xl:z-40 bg-yellow-400">yellow</div>
 <div class="z-40 ml-4 mt-0 bg-gray-400">z-40</div>
 <div class="z-30 ml-6 mt-2 bg-grey">z-30</div>
 <div class="z-20 ml-8 mt-4 bg-grey-dark">z-20</div>

@@ -152,12 +152,12 @@ This makes it easy to change the shared styles in one place by just editing the 
 It also allows you to add new one-off button styles without being forced to create a new component class or duplicated the shared styles:
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-green hover:bg-green-light text-white font-bold py-2 px-4 rounded">
+<button class="bg-green hover:bg-green-400 text-white font-bold py-2 px-4 rounded">
   Button
 </button>
 
 @slot('code')
-<button class="btn bg-green hover:bg-green-light text-white">
+<button class="btn bg-green hover:bg-green-400 text-white">
   Button
 </button>
 @endslot

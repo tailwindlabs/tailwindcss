@@ -2,7 +2,7 @@
   <div class="flex flex-wrap -mb-2">
     @if ($responsive)
     <a href="#responsive" class="mb-2 inline-flex items-center rounded-full border border-grey-light bg-gray-100 text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none mr-2">
-      <span class="inline-flex rounded-full bg-green-light text-white mr-1">
+      <span class="inline-flex rounded-full bg-green-400 text-white mr-1">
         <svg class="fill-current h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5.8 9.4c-.33-.442-.958-.53-1.4-.2-.442.33-.53.958-.2 1.4l3 4c.38.508 1.134.537 1.553.06l7-8c.363-.417.32-1.05-.094-1.413-.417-.363-1.05-.32-1.413.094L8.06 12.414 5.8 9.4z"/></svg>
       </span>
       <span>Responsive</span>
@@ -18,7 +18,7 @@
 
     @if ($customizable)
     <a href="#customizing" class="mb-2 inline-flex items-center rounded-full border border-grey-light bg-gray-100 text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none mr-2">
-      <span class="inline-flex rounded-full bg-green-light text-white mr-1">
+      <span class="inline-flex rounded-full bg-green-400 text-white mr-1">
         <svg class="fill-current h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5.8 9.4c-.33-.442-.958-.53-1.4-.2-.442.33-.53.958-.2 1.4l3 4c.38.508 1.134.537 1.553.06l7-8c.363-.417.32-1.05-.094-1.413-.417-.363-1.05-.32-1.413.094L8.06 12.414 5.8 9.4z"/></svg>
       </span>
       <span>Customizable</span>
@@ -34,7 +34,7 @@
 
     @if ($hover)
     <a href="#hover" class="mb-2 inline-flex items-center rounded-full border border-grey-light bg-gray-100 text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none mr-2">
-      <span class="inline-flex rounded-full bg-green-light text-white mr-1">
+      <span class="inline-flex rounded-full bg-green-400 text-white mr-1">
         <svg class="fill-current h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5.8 9.4c-.33-.442-.958-.53-1.4-.2-.442.33-.53.958-.2 1.4l3 4c.38.508 1.134.537 1.553.06l7-8c.363-.417.32-1.05-.094-1.413-.417-.363-1.05-.32-1.413.094L8.06 12.414 5.8 9.4z"/></svg>
       </span>
       <span>Hover</span>
@@ -50,7 +50,7 @@
 
     @if ($focus)
     <span class="mb-2 inline-flex items-center rounded-full border border-grey-light bg-gray-100 text-xs font-semibold pl-1 pt-1 pb-1 pr-2 leading-none mr-2">
-      <span class="inline-flex rounded-full bg-green-light text-white mr-1">
+      <span class="inline-flex rounded-full bg-green-400 text-white mr-1">
         <svg class="fill-current h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5.8 9.4c-.33-.442-.958-.53-1.4-.2-.442.33-.53.958-.2 1.4l3 4c.38.508 1.134.537 1.553.06l7-8c.363-.417.32-1.05-.094-1.413-.417-.363-1.05-.32-1.413.094L8.06 12.414 5.8 9.4z"/></svg>
       </span>
       <span>Focus</span>

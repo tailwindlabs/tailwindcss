@@ -5,7 +5,7 @@
     <div class="whitespace-pre text-gray-700"><span class="text-purple-600">  {{ $key }}</span>: {</div>
     <div>{!! collect(explode("\n", $slot))->map(function ($line) {
       if (starts_with($line, '+')) {
-        return '<div class="text-blue-600"><span class="text-blue-light">+</span>&nbsp;&nbsp;&nbsp;' . e(trim(substr($line, 1))) . '</div>';
+        return '<div class="text-blue-600"><span class="text-blue-400">+</span>&nbsp;&nbsp;&nbsp;' . e(trim(substr($line, 1))) . '</div>';
       }
       if (starts_with($line, '-')) {
         return '<div class="text-gray-500"><span class="text-gray-500">-</span>&nbsp;&nbsp;&nbsp;' . e(trim(substr($line, 1))) . '</div>';
