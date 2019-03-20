@@ -8,6 +8,7 @@ export default function() {
         '.cursor-wait': { cursor: 'wait' },
         '.cursor-move': { cursor: 'move' },
         '.cursor-not-allowed': { cursor: 'not-allowed' },
+        '.cursor-text': { cursor: 'text'}
       },
       config('modules.cursor')
     )
