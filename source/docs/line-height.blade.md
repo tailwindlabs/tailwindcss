@@ -10,28 +10,12 @@ features:
 ---
 
 @include('_partials.class-table', [
-  'rows' => [
-    [
-      '.leading-none',
-      'line-height: 1;',
-      'Set the line height of an element to <code>1</code>.',
-    ],
-    [
-      '.leading-tight',
-      'line-height: 1.25;',
-      'Set the line height of an element to <code>1.25</code>.',
-    ],
-    [
-      '.leading-normal',
-      'line-height: 1.5;',
-      'Set the line height of an element to <code>1.5</code>.',
-    ],
-    [
-      '.leading-loose',
-      'line-height: 2;',
-      'Set the line height of an element to <code>2</code>.',
-    ],
-  ]
+  'rows' => $page->config['theme']['lineHeight']->map(function ($value, $name) {
+    $class = ".leading-{$name}";
+    $code = "line-height: {$value};";
+    $description = "Set the line height of an element to <code>{$value}</code>.";
+    return [$class, $code, $description];
+  })
 ])
 
 ## Usage
@@ -39,27 +23,16 @@ features:
 Control the line height of an element using the `.leading-{size}` utilities.
 
 @component('_partials.code-sample')
-<div class="mb-6">
-  <p class="text-sm text-gray-600">.leading-none</p>
-  <p class="leading-none text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
+@foreach ($page->config['theme']['lineHeight'] as $name => $value)
+<div @if(!$loop->last) class="mb-6" @endif>
+  <p class="text-sm text-gray-600">.leading-{{ $name }}</p>
+  <p class="leading-{{ $name }} text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
 </div>
-<div class="mb-6">
-  <p class="text-sm text-gray-600">.leading-tight</p>
-  <p class="leading-tight text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
-</div>
-<div class="mb-6">
-  <p class="text-sm text-gray-600">.leading-normal</p>
-  <p class="leading-normal text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
-</div>
-<div>
-  <p class="text-sm text-gray-600">.leading-loose</p>
-  <p class="leading-loose text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
-</div>
+@endforeach
 @slot('code')
-<p class="leading-none ...">Lorem ipsum dolor sit amet ...</p>
-<p class="leading-tight ...">Lorem ipsum dolor sit amet ...</p>
-<p class="leading-normal ...">Lorem ipsum dolor sit amet ...</p>
-<p class="leading-loose ...">Lorem ipsum dolor sit amet ...</p>
+@foreach ($page->config['theme']['lineHeight'] as $name => $value)
+<p class="leading-{{ $name }} ...">Lorem ipsum dolor sit amet ...</p>
+@endforeach
 @endslot
 @endcomponent
 
