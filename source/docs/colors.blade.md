@@ -92,10 +92,18 @@ var colors = {
   'transparent': 'transparent',
 
   'black': '#222b2f',
-  'gray-darkest': '#364349',
-  'gray-darker': '#596a73',
-  'gray-dark': '#70818a',
-  'gray': '#9babb4',
+
+  'gray': {
+      '100': '#F7FAFC',
+      '200': '#EDF2F7',
+      '300': '#E2E8F0',
+      '400': '#CBD5E0',
+      '500': '#A0AEC0',
+      '600': '#718096',
+      '700': '#4A5568',
+      '800': '#2D3748',
+      '900': '#1A202C',
+   },
 
   // ...
 }
@@ -104,7 +112,7 @@ module.exports = {
   colors: colors,
   textColors: colors,
   backgroundColors: colors,
-  borderColors: Object.assign({ default: colors['gray-light'] }, colors),
+  borderColors: Object.assign({ default: colors.gray[300] }, colors),
 
   // ...
 }
@@ -113,13 +121,13 @@ module.exports = {
 You'll notice above that the color palette is also assigned to the `colors` key of your Tailwind config. This makes it easy to access them in your custom CSS using the `theme()` function. For example:
 
 ```css
-.error { color: theme('colors.gray-darker') }
+.error { color: theme('colors.gray[700]') }
 ```
 
 ## Naming
 
 In the default color palette we've used literal color names, like `red`, `green` and `blue`. Another common approach to naming colors is choosing functional names based on how the colors are used, such as `primary`, `secondary`, and `brand`.
 
-You can also choose different approaches to how you name your color variants. In the default color palette we've again used literal variants, like `light`, `dark`, and `darker`. Another common approach here is to use a numeric scale, like `100`, `200` and `300`.
+You can also choose different approaches to how you name your color variants. In the default color palette we've used a numeric scale, like `100`, `200` and `300`. Another common approach here is to use literal variants, like `light`, `dark`, and `darker`.
 
 You should feel free to choose whatever color naming approach makes the most sense to you.
