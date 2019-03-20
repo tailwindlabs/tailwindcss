@@ -10,23 +10,16 @@ features:
 ---
 
 @include('_partials.class-table', [
-  'rows' => [
-    [
-      '.font-sans',
-      "font-family: system-ui, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;",
-      'Set the font family to the sans font stack.',
-    ],
-    [
-      '.font-serif',
-      "font-family: Constantia, Lucida Bright, Lucidabright, Lucida Serif, Lucida, DejaVu Serif, Bitstream Vera Serif, Liberation Serif, Georgia, serif;",
-      'Set the font family to the serif font stack.',
-    ],
-    [
-      '.font-mono',
-      "font-family: Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;",
-      'Set the font family to the mono font stack.',
-    ],
-  ]
+  'rows' => $page->config['theme']['fontFamily']->map(function ($fonts, $variant) {
+    $class = ".font-{$variant}";
+    $code = 'font-family: '.$fonts->implode(', ').';';
+    $description = "Set the font family to the {$variant} font stack.";
+    return [
+      $class,
+      $code,
+      $description,
+    ];
+  })
 ])
 
 ### Sans-serif
@@ -66,9 +59,9 @@ Use `.font-mono` to apply a web safe monospaced font family:
 By default Tailwind provides three font family utilities: a cross-browser sans-serif stack, a cross-browser serif stack, and a cross-browser monospaced stack. You can change, add, or remove these by editing the `fonts` section of your Tailwind config.
 
 @component('_partials.customized-config', ['key' => 'fonts'])
-- 'sans': ['system-ui', 'BlinkMacSystemFont', ...],
-- 'serif': ['Constantia', 'Lucida Bright', ...],
-- 'mono': ['Menlo', 'Monaco', ...],
+- 'sans': ['-apple-system', 'BlinkMacSystemFont', ...],
+- 'serif': ['Georgia', 'Cambria', ...],
+- 'mono': ['SFMono-Regular', 'Menlo', ...],
 + 'display': ['Oswald', ...],
 + 'body': ['Open Sans', ...],
 @endcomponent
