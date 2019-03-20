@@ -13,7 +13,7 @@ features:
   'rows' => $page->config['theme']['colors']->flatMap(function ($colors, $name) {
     if (is_string($colors)) {
       return [
-        [".text-{$name}", "color: {$colors}"]
+        [".text-{$name}", "color: {$colors};"]
       ];
     }
 
