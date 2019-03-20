@@ -170,7 +170,7 @@ Since Tailwind's utility classes don't rely on `!important` to defeat other styl
 Here's an example:
 
 ```less
-@@tailwind preflight;
+@@tailwind base;
 
 @@tailwind components;
 
@@ -190,7 +190,7 @@ Here's an example:
 If you're using a preprocessor like Less or Sass, consider keeping your components in separate files and importing them:
 
 ```less
-@@tailwind preflight;
+@@tailwind base;
 
 @@tailwind components;
 
