@@ -1,5 +1,6 @@
 .markdown {
   @apply text-gray-700;
+  @apply leading-relaxed;
 
   > *:first-child {
     @apply mt-0;
@@ -31,7 +32,7 @@
   }
 
   > hr {
-    @apply my-12 border-t-0 border-r-0 border-l-0 border-b border-gray-300;
+    @apply border-t-0 border-r-0 border-l-0 border-b border-gray-300;
   }
 
   > a, > p a, > ul li a, a& {
@@ -78,16 +79,16 @@
     @apply mb-1;
     @apply leading-none;
     @apply text-gray-900;
-    @apply font-semibold;
+    @apply font-light;
     @apply text-3xl;
   }
 
   > h2, h2& {
-    @apply mt-12;
+    @apply mt-16;
     @apply mb-4;
     @apply text-gray-900;
     @apply leading-none;
-    @apply font-semibold;
+    @apply font-normal;
     @apply text-xl;
   }
 
@@ -100,8 +101,8 @@
     @apply mb-4;
     @apply text-gray-900;
     @apply leading-none;
-    @apply font-semibold;
-    @apply text-xl;
+    @apply font-medium;
+    @apply text-base;
   }
 
   > h4, h4& {
@@ -126,7 +127,6 @@
 
   > p, p&, > blockquote > p {
     @apply text-base;
-    @apply leading-normal;
     @apply mt-4;
     @apply mb-4;
   }

@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "State Variants"
 description: "Using utilities to style elements on hover, focus, and more."
+titleBorder: true
 ---
 
 Similar to our [responsive prefixes](/docs/responsive-design), Tailwind makes it easy to style elements on hover, focus, and more using *state* prefixes.

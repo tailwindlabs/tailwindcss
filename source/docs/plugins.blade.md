@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Plugins"
 description: "Extending Tailwind with reusable third-party plugins."
+titleBorder: true
 ---
 
 <h2 style="visibility: hidden; font-size: 0; margin: 0 0 -1rem 0;">Overview</h2>

@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Functions &amp; Directives"
 description: null
+titleBorder: true
 ---
 
 Tailwind exposes a few custom CSS functions and directives that can be used in your actual CSS files.

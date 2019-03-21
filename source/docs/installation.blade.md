@@ -2,7 +2,9 @@
 extends: _layouts.documentation
 title: "Installation"
 description: "Quick start guide for installing and configuring Tailwind CSS."
+titleBorder: true
 ---
+
 
 ## CDN
 

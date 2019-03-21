@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Controlling File Size"
 description: "Strategies for keeping your generated CSS small and performant."
+titleBorder: true
 ---
 
 Using the default configuration, Tailwind CSS comes in at **36.4kb minified and gzipped.**

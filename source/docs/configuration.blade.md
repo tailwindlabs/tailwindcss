@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Configuration"
 description: "A guide to configuring and customizing your Tailwind installation."
+titleBorder: true
 ---
 
 At the heart of every Tailwind project is a JavaScript configuration file that serves as the home for your project's design system.
