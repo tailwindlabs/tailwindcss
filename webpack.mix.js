@@ -5,10 +5,11 @@ const OnBuild = require('on-build-webpack')
 const Watch = require('webpack-watch')
 const tailwind = require('tailwindcss')
 const config = require('tailwindcss/defaultConfig')
+const resolveConfig = require('tailwindcss/lib/util/resolveConfig').default
 const fs = require('fs')
 const path = require('path')
 
-fs.writeFileSync('./tailwind.json', JSON.stringify(config))
+fs.writeFileSync('./tailwind.json', JSON.stringify(resolveConfig([config])))
 
 const env = argv.e || argv.env || 'local'
 const plugins = [
