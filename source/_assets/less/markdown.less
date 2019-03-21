@@ -1,4 +1,6 @@
 .markdown {
+  @apply text-gray-700;
+
   > *:first-child {
     @apply mt-0;
   }
@@ -41,6 +43,7 @@
 
   > p strong, > ul strong {
     @apply font-semibold;
+    @apply text-gray-800;
   }
 
   > p code, > ul li code, p& code& {
@@ -123,7 +126,6 @@
 
   > p, p&, > blockquote > p {
     @apply text-base;
-    @apply text-gray-900;
     @apply leading-normal;
     @apply mt-4;
     @apply mb-4;
