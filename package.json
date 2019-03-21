@@ -18,6 +18,7 @@
     "mousetrap": "^1.6.1",
     "node-cmd": "^3.0.0",
     "normalize.css": "^7.0.0",
+    "nprogress": "^0.2.0",
     "on-build-webpack": "^0.1.0",
     "postcss-cssnext": "^3.0.2",
     "prismjs": "^1.8.3",
