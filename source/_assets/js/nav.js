@@ -11,7 +11,7 @@ $.when($.ready).then(function() {
   $('#nav').on('click', 'a', function (event) {
 
     // Start progress
-    let progress = setTimeout(() => nprogress.start(), 500)
+    let progress = setTimeout(() => nprogress.start(), 100)
 
     // Allow opening links in new tabs
     if (event.metaKey) {

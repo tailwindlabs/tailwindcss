@@ -4,7 +4,7 @@
 }
 
 #nprogress .bar {
-  background: config('colors.teal');
+  background: theme('colors.teal.400');
 
   position: fixed;
   z-index: 1031;
@@ -22,7 +22,7 @@
   right: 0px;
   width: 100px;
   height: 100%;
-  box-shadow: 0 0 10px config('colors.teal'), 0 0 5px config('colors.teal');
+  box-shadow: 0 0 10px theme('colors.teal.400'), 0 0 5px theme('colors.teal.400');
   opacity: 1.0;
 
   -webkit-transform: rotate(3deg) translate(0px, -4px);
@@ -45,8 +45,8 @@
   box-sizing: border-box;
 
   border: solid 2px transparent;
-  border-top-color: config('colors.teal');
-  border-left-color: config('colors.teal');
+  border-top-color: theme('colors.teal.400');
+  border-left-color: theme('colors.teal.400');
   border-radius: 50%;
 
   -webkit-animation: nprogress-spinner 400ms linear infinite;
