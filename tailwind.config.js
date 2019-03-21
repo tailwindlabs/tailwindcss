@@ -1,4 +1,7 @@
+const defaultConfig = require('tailwindcss/defaultConfig')
+
 module.exports = {
+  important: true,
   theme: {
     screens: {
       'sm': '576px',
@@ -8,6 +11,10 @@ module.exports = {
     },
     extend: {
       colors: {
+        gray: {
+          ...defaultConfig.theme.colors.gray,
+          600: '#647287',
+        },
         'tailwind-teal-light': '#5ebcca',
         'tailwind-teal': '#44a8b3',
         'tailwind-teal-dark': '#2f8696',

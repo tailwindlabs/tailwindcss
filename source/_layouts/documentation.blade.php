@@ -91,25 +91,15 @@
         <nav id="nav" class="px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8 sticky?lg:h-(screen-16)">
           @foreach ($page->navigation as $sectionName => $sectionItems)
           <div class="mb-8">
-            <p class="mb-3 lg:mb-2 text-gray-500 uppercase tracking-wide font-bold text-sm lg:text-xs">{{ $sectionName }}</p>
+            <h5 class="mb-3 lg:mb-2 text-gray-500 uppercase tracking-wide font-bold text-sm lg:text-xs">{{ $sectionName }}</h5>
             <ul>
               @foreach ($sectionItems as $name => $slugOrChildren)
-                @if (is_string($slugOrChildren))
-                  <li class="mb-3 lg:mb-2"><a class="hover:underline {{ $page->active('/docs/' . $slugOrChildren) ? 'text-teal-500 font-bold' : 'text-gray-800' }}" href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren }}">{{ $name }}</a></li>
-                @else
-                  <li class="mb-3 lg:mb-2">
-                    <a href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren->first() }}" class="hover:underline block mb-3 lg:mb-2 {{ $page->anyChildrenActive($slugOrChildren) ? 'text-teal-500 font-bold' : 'text-gray-800' }}">{{ $name }}</a>
-                    <ul class="pl-4 {{ $page->anyChildrenActive($slugOrChildren) ? 'block' : 'hidden' }}">
-                    @foreach ($slugOrChildren as $title => $link)
-                      <li class="mb-3 lg:mb-2">
-                        <a class="hover:underline {{ $page->active('/docs/' . $link) ? 'text-teal-500 font-bold' : 'text-gray-800' }}" href="{{ $page->baseUrl }}/docs/{{ $link }}">
-                          {{ $title }}
-                        </a>
-                      </li>
-                    @endforeach
-                    </ul>
-                  </li>
-                @endif
+                <li class="mb-3 lg:mb-1">
+                  <a class="px-2 -mx-2 py-1 transition-fast relative block {{ $page->active('/docs/' . $slugOrChildren) ? 'text-teal-600 font-medium' : 'hover:translate-r-2px hover:text-gray-900 text-gray-600 font-medium' }}" href="{{ $page->baseUrl }}/docs/{{ $slugOrChildren }}">
+                    <span class="rounded absolute inset-0 bg-teal-200 {{ $page->active('/docs/' . $slugOrChildren) ? 'opacity-25' : 'opacity-0' }}"></span>
+                    <span class="relative">{{ $name }}</span>
+                  </a>
+                </li>
               @endforeach
             </ul>
           </div>

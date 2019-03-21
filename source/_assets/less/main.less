@@ -21,6 +21,15 @@ a {
 
 @tailwind utilities;
 
+@variants responsive, hover {
+  .translate-r-2px {
+    transform: translateX(2px);
+  }
+  .transition-fast {
+    transition: all .2s ease;
+  }
+}
+
 .scrollbar-w-2::-webkit-scrollbar {
   @apply w-2 h-2;
 }
