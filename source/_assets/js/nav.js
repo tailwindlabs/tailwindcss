@@ -1,3 +1,5 @@
+import nprogress from 'nprogress'
+
 $.when($.ready).then(function() {
   window.history.replaceState({
     'href': window.location.href,
@@ -7,6 +9,9 @@ $.when($.ready).then(function() {
   }, '', window.location.href)
 
   $('#nav').on('click', 'a', function (event) {
+
+    // Start progress
+    let progress = setTimeout(() => nprogress.start(), 500)
 
     // Allow opening links in new tabs
     if (event.metaKey) {
@@ -52,6 +57,10 @@ $.when($.ready).then(function() {
         'nav': $(html).find('#nav').html(),
         'content': $(html).find('#content').html()
       }, '', href)
+
+      // Clear progress
+      nprogress.done()
+      clearInterval(progress)
 
       // Track on Google Analytics
       if (typeof(ga) === 'function') {
