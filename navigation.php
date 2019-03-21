@@ -80,7 +80,7 @@ return [
         'Table Layout' => 'table-layout',
     ],
     'Effects' => [
-        'Box Shadow' => 'shadows',
+        'Box Shadow' => 'box-shadow',
         'Opacity' => 'opacity',
     ],
     'Interactivity' => [
