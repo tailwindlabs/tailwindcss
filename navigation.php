@@ -63,7 +63,9 @@ return [
         'Flex, Grow, &amp; Shrink' => 'flexbox-flex-grow-shrink',
     ],
     'Spacing' => [
-        'Margin &amp; Padding' => 'spacing',
+        'Padding' => 'padding',
+        'Margin' => 'margin',
+        'Negative Margin' => 'negative-margin',
     ],
     'Sizing' => [
         'Width' => 'width',
