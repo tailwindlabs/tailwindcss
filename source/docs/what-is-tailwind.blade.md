@@ -162,19 +162,22 @@ Tailwind is written in [PostCSS](http://postcss.org/) and configured in JavaScri
 Tailwind is more than a CSS framework, *it's an engine for creating design systems.*
 
 ```js
-const colorPalette = {
-  // ...
-  'gray-lighter': '#f3f7f9',
-  // ...
-}
-
+// tailwind.config.js
 module.exports = {
-  // ...
-  backgroundColors: colorPalette,
-  borderColors: {
-    default: colorPalette['gray-lighter'],
-    ...colorPalette,
-  },
-  // ...
+  theme: {
+    colors: {
+      apple: {
+        // ...
+      },
+      banana: {
+        // ...
+      },
+    },
+    extend: {
+      boxShadow: {
+        '3xl': '0 30px 60px -15px rgba(0, 0, 0, .25)'
+      }
+    }
+  }
 }
 ```
