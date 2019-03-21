@@ -11,18 +11,10 @@ Before getting started please note, **many of the features that make Tailwind CS
 To pull in Tailwind for quick demos or just giving the framework a spin, grab the latest default configuration build via CDN:
 
 ```html
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+<link href="https://unpkg.com/tailwindcss@next/dist/tailwind.min.css" rel="stylesheet">
 ```
 
-Or if you'd like to pull in the base styles separate from the utility classes:
-
-```html
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/base.min.css" rel="stylesheet">
-
-<!-- Any of your own CSS would go here -->
-
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/utilities.min.css" rel="stylesheet">
-```
+Note that while the CDN build is large *(58kb compressed, 348kb raw)*, it's not representative of the sizes you see when including Tailwind as part of your build process. Sites that follow our [best practices](/docs/controlling-file-size) are almost always under 10kb compressed. For example, [Firefox Send](https://send.firefox.com/) is built with Tailwind and gets a perfect score in [Lighthouse](https://developers.google.com/web/tools/lighthouse/).
 
 ## NPM
 
