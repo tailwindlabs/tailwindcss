@@ -44,7 +44,7 @@ features:
 @component('_partials.code-sample')
 <div class="flex -mx-2">
   @foreach ($page->config['theme']['opacity']->reverse() as $name => $value)
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 mx-2 opacity-{{ $name }}">.opacity-{{ $name }}</div>
+    <div class="text-sm flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 mx-2 opacity-{{ $name }}">.opacity-{{ $name }}</div>
   @endforeach
 </div>
 @slot('code')
