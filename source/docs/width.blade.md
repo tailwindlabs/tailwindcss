@@ -12,7 +12,7 @@ features:
 @include('_partials.work-in-progress')
 
 @include('_partials.class-table', [
-  'scroll' => false,
+  'scroll' => true,
   'rows' => $page->config['theme']['width']->map(function ($value, $name) {
     $class = ".w-{$name}";
     $code = "width: {$value};";
