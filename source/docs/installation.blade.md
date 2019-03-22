@@ -92,14 +92,26 @@ module.exports = {
 ...or include it directly in your [postcss-loader](https://github.com/postcss/postcss-loader) configuration in your `webpack.config.js` file:
 
 ```js
-{
-  loader: 'postcss-loader',
-  options: {
-    ident: 'postcss',
-    plugins: [
-      require('tailwindcss'),
-      require('autoprefixer'),
-    ]
+// webpack.config.js
+module.exports = {
+  // ...
+  module: {
+    rules: [
+      // ...
+      use: [
+        // ...
+        {
+          loader: 'postcss-loader',
+          options: {
+            ident: 'postcss',
+            plugins: [
+              require('tailwindcss'),
+              require('autoprefixer'),
+            ],
+          },
+        },
+      ],
+    ],
   }
 }
 ```

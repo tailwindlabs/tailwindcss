@@ -9,6 +9,32 @@ Because Tailwind is a framework for building bespoke user interfaces, it has bee
 
 By default, Tailwind will look for a `tailwind.config.js` file at the root of your project where you can define all of your customizations.
 
+```js
+// Example `tailwind.config.js` file
+
+module.exports = {
+  important: true,
+  theme: {
+    fontFamily: {
+      display: ['Gilroy', 'sans-serif'],
+      body: ['Graphik', 'sans-serif'],
+    },
+    extend: {
+      colors: theme => ({
+        primary: theme('colors.blue.500'),
+      }),
+      margin: {
+        '96': '24rem',
+        '128': '32rem',
+      },
+    }
+  },
+  variants: {
+    opacity: ['responsive', 'hover']
+  }
+}
+```
+
 ## Creating your configuration file
 
 Generate a Tailwind config file for your project using the Tailwind CLI utility included when you install the `tailwindcss` npm package:
@@ -61,58 +87,71 @@ You'll get a file that matches the [default configuration file](https://github.c
 
 ## Theme
 
-This is where you can define your own color palette, font stacks, type scale, border sizes, breakpoints, you name it. Your config file is like an executable style guide for your project.
+The `theme` section is where you define your color palette, font stacks, type scale, border sizes, breakpoints — you name it. It's like an executable design system for your project.
 
-We provide a sensible default configuration with a very generous set of values to get you started, but you don't be afraid to; you're encouraged to change it as much as you need to fit the goals of your design.
+We provide a sensible default system with a very generous set of values to get you started, but don't be afraid to change it or extend; you're encouraged to customize it as much as you need to to fit the goals of your design.
 
-It's important to understand that unlike other CSS frameworks you might have used, **none of the settings in this file are coupled to each other**. Nothing bad will happen even if you completely delete all of the values for a given module.
+In this guide we'll be focusing on a few of the more special theme properties as well as general customization information and best practices, but for a complete reference of available theme properties, take a look at the default theme:
+
+[View the complete default theme properties](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js#L5-L376)
 
 ### Colors
 
-The `colors` property doesn't actually affect your generated CSS on its own, but it's the perfect place to centralize your color palette so you can refer to it in your own CSS using Tailwind's [`theme()`](/docs/functions-and-directives#config) function.
+The `theme.colors` property is where you define your project's color palette.
 
 ```js
-// ...
-
-var colors = {
-  'transparent': 'transparent',
-  // ...
-  'pink-lightest': '#ffebef',
-}
-
-// ...
-
+// tailwind.config.js
 module.exports = {
-  // ...
-  colors: colors,
-  // ...
+  theme: {
+    colors: {
+      indigo: '#5c6ac4',
+      blue: '#007ace',
+      red: '#de3618',
+    }
+  }
 }
 ```
 
-By default, the `colors` property simply references a `colors` variable defined earlier in the file. Using a separate variable for your color palette like this makes it easy to re-use those colors when defining the color palette for individual utilities, like background colors, text colors, or border colors.
+By default this color palette is shared by the `textColor`, `borderColor`, and `backgroundColor` utilities. The above configuration would generate classes like `.text-indigo`, `.border-blue`, and `.bg-red`.
 
-Learn more about defining colors in Tailwind in the [Colors](/docs/colors) documentation.
+You can define your colors as a simple list of key-value pairs, or using a nested object notation where the nested keys are added to the base color name as modifiers:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    colors: {
+      indigo: {
+        lighter: '#b3bcf5',
+        default: '#5c6ac4',
+        dark: '#202e78',
+      }
+    }
+  }
+}
+```
+
+Like many other places in Tailwind, the `default` key is special and means "no modifier", so this configuration would generate classes like `.text-indigo-lighter`, `.text-indigo`, and `.text-dark`.
 
 ### Screens
 
-The `screens` property is where you define your project's breakpoints, and will be used to generate responsive versions of Tailwind's utility classes.
+The `theme.screens` property is where you define your project's breakpoints.
 
 ```js
-// ...
-
+// tailwind.config.js
 module.exports = {
-  // ...
-  screens: {
-    'sm': '640px',
-    'md': '768px',
-    'lg': '1024px',
-    'xl': '1280px',
-  },
-  // ...
+  theme: {
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+    }
+  }
 }
 ```
 
-We provide a familiar set of breakpoints that you might recognize from [Bootstrap](http://getbootstrap.com/docs/4.0/layout/overview/#responsive-breakpoints) to get you started, but you're free to change these as needed to suit your project.
+We provide a well-considered set of default breakpoints based on common device resolutions to get you started, but you're free to change these as needed to suit your project.
 
 Learn more about customizing screens in the [Responsive Design](/docs/responsive-design#customizing-screens) documentation.
 
