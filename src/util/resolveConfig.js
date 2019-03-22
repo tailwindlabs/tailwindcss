@@ -39,7 +39,7 @@ export default function resolveConfig(configs) {
   return defaults(
     {
       theme: resolveFunctionKeys(mergeExtensions(defaults({}, ...map(configs, 'theme')))),
-      variants: defaults(...map(configs, 'variants')),
+      variants: defaults({}, ...map(configs, 'variants')),
     },
     ...configs
   )

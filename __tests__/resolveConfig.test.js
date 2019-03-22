@@ -836,6 +836,9 @@ test('the original theme is not mutated', () => {
         },
       },
     },
+    variants: {
+      borderColor: ['responsive', 'hover'],
+    }
   }
 
   const defaultConfig = {
@@ -850,7 +853,7 @@ test('the original theme is not mutated', () => {
       },
     },
     variants: {
-      borderColor: ['responsive', 'hover', 'focus'],
+      backgroundColor: ['responsive', 'hover', 'focus'],
     },
   }
 
@@ -864,5 +867,8 @@ test('the original theme is not mutated', () => {
         },
       },
     },
+    variants: {
+      borderColor: ['responsive', 'hover'],
+    }
   })
 })
