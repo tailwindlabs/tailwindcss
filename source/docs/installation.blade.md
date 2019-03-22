@@ -110,7 +110,7 @@ Add `tailwindcss` to the list of plugins you pass to [gulp-postcss](https://gith
 
 ```js
 gulp.task('css', function () {
-  const postcss = require('gulp-postcss');
+  const postcss = require('gulp-postcss')
 
   return gulp.src('src/styles.css')
     // ...
@@ -121,8 +121,8 @@ gulp.task('css', function () {
       // ...
     ]))
     // ...
-    .pipe(gulp.dest('build/'));
-});
+    .pipe(gulp.dest('build/'))
+})
 ```
 
 ### Laravel Mix
@@ -132,32 +132,32 @@ If you're writing your project in plain CSS, use Mix's `postCss` method to proce
 ```js
 mix.postCss('resources/css/main.css', 'public/css', [
   require('tailwindcss'),
-]);
+])
 ```
 
 If you're using a preprocessor, use the `options` method to add `tailwindcss` as a PostCSS plugin:
 
 ```js
-var tailwindcss = require('tailwindcss');
+var tailwindcss = require('tailwindcss')
 
 mix.less('resources/less/app.less', 'public/css')
   .options({
     postCss: [
       tailwindcss('./path/to/your/tailwind.config.js'),
     ]
-  });
+  })
 ```
 
 **Note for Sass users:** Due to [an unresolved issue](https://github.com/bholloway/resolve-url-loader/issues/28) with one of Mix's dependencies, to use Sass with Tailwind you'll need to disable `processCssUrls`:
 
 ```js
-var tailwindcss = require('tailwindcss');
+var tailwindcss = require('tailwindcss')
 
 mix.sass('resources/sass/app.scss', 'public/css')
   .options({
     processCssUrls: false,
     postCss: [ tailwindcss('./path/to/your/tailwind.config.js') ],
-  });
+  })
 ```
 
 For more information on what this feature does and the implications of disabling it, [see the Laravel Mix documentation](https://github.com/JeffreyWay/laravel-mix/blob/master/docs/css-preprocessors.md#css-url-rewriting).
