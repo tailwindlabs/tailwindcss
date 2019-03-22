@@ -826,3 +826,43 @@ test('theme values in the extend section are lazily evaluated', () => {
     },
   })
 })
+
+test('the original theme is not mutated', () => {
+  const userConfig = {
+    theme: {
+      extend: {
+        colors: {
+          orange: 'orange',
+        },
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        cyan: 'cyan',
+        magenta: 'magenta',
+        yellow: 'yellow',
+      },
+    },
+    variants: {
+      borderColor: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  resolveConfig([userConfig, defaultConfig])
+
+  expect(userConfig).toEqual({
+    theme: {
+      extend: {
+        colors: {
+          orange: 'orange',
+        },
+      },
+    },
+  })
+})
