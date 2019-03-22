@@ -2,6 +2,11 @@
 extends: _layouts.documentation
 title: "Object Position"
 description: "Utilities for controlling the element's respond to the height and width of its content box."
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
 ---
 
 @include('_partials.work-in-progress')
@@ -58,10 +63,28 @@ description: "Utilities for controlling the element's respond to the height and 
 
 ## Customizing
 
+### Object Positioning
+
+By default Tailwind provides nine object position utilities. You can change, add, or remove these by editing the `objectPosition` section of your Tailwind config.
+
+@component('_partials.customized-config', ['key' => 'objectPosition'])
+  bottom: 'bottom',
+  center: 'center',
+  left: 'left',
+- 'left-bottom': 'left bottom',
+- 'left-top': 'left top',
+  right: 'right',
+  'right-bottom': 'right bottom',
+  'right-top': 'right top',
+  top: 'top',
++ 'center-bottom': 'center bottom'
++ 'center-top': 'center top',
+@endcomponent
+
 @include('_partials.variants-and-disabling', [
     'utility' => [
         'name' => 'object position',
         'property' => 'objectPosition',
     ],
-    'variants' => false,
+    'variants' => ['responsive'],
 ])
