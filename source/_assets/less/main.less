@@ -24,70 +24,65 @@ a {
 
 @variants responsive, hover {
   .translate-r-2px {
-    transform: translateX(2px);
+    transform: translateX(2px) !important;
   }
   .transition-fast {
-    transition: all .2s ease;
+    transition: all .2s ease !important;
   }
 }
 
 .scrollbar-w-2::-webkit-scrollbar {
-  @apply w-2 h-2;
+  @apply w-2 h-2 !important;
 }
 
 .scrollbar-track-gray-lighter::-webkit-scrollbar-track {
-  @apply bg-gray-300;
+  @apply bg-gray-300 !important;
 }
 
 .scrollbar-thumb-gray::-webkit-scrollbar-thumb {
-  @apply bg-gray-400;
+  @apply bg-gray-400 !important;
 }
 
 .scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
-  @apply rounded;
-}
-
-// Fucking hack because our order sucks
-.hidden {
-  display: none;
+  @apply rounded !important;
 }
 
 @responsive {
   .top-16 {
-    top: 4rem;
+    top: 4rem !important;
   }
 }
 
 @supports (position: sticky) {
   @media (min-width: theme('screens.lg')) {
     .sticky\?lg\:h-\(screen-16\) {
-      height: ~"calc(100vh - 4rem)";
+      height: ~"calc(100vh - 4rem)" !important;
     }
   }
 }
 
 .transition {
-  transition: all .1s ease-in;
+  transition: all .1s ease-in !important;
 }
 
 .focus\:bg-gray-600:focus {
-  @apply bg-gray-700;
+  @apply bg-gray-700 !important;
 }
 
 .focus\:text-white:focus {
-  @apply text-white;
+  @apply text-white !important;
 }
 
 .group:hover .group-hover\:text-white {
-  @apply text-white;
+  @apply text-white !important;
 }
 
 .focus-within\:border-teal-500:focus-within {
-  @apply border-teal-500;
+  @apply border-teal-500 !important;
 }
 
 .active\:bg-blue-700:active {
-  @apply bg-blue-700;
+  @apply bg-blue-700 !important;
 }
 
 .bg-pattern {
@@ -95,25 +90,25 @@ a {
 }
 
 .table-collapse {
-  border-collapse: collapse;
+  border-collapse: collapse !important;
 }
 
 .placeholder-gray-700::placeholder {
-  @apply text-gray-700;
+  @apply text-gray-700 !important;
 }
 
 .placeholder-gray-800::placeholder {
-  @apply text-gray-800;
+  @apply text-gray-800 !important;
 }
 
 .placeholder-gray-900::placeholder {
-  @apply text-gray-900;
+  @apply text-gray-900 !important;
 }
 
 .focus\:outline-0:focus {
-  outline: 0;
+  outline: 0 !important;
 }
 
 [v-cloak] .v-cloak-hidden {
-  display: none;
+  display: none !important;
 }

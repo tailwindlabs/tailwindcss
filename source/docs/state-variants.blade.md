@@ -24,18 +24,17 @@ Add the `hover:` prefix to only apply a utility on hover.
 @endslot
 @endcomponent
 
-<div class="bg-blue-400 text-white font-semibold px-4 py-3 mb-4 -mt-2">
-  <div class="flex">
-    <div class="py-1">
-      <svg class="fill-current h-6 w-6 text-white opacity-75 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10zm0-2c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm-.5-5h1c.276 0 .5.224.5.5v1c0 .276-.224.5-.5.5h-1c-.276 0-.5-.224-.5-.5v-1c0-.276.224-.5.5-.5zm0-8h1c.276 0 .5.224.5.5V8l-.5 3-1 .5L9 8V5.5c0-.276.224-.5.5-.5z"/></svg>
-    </div>
-    <div>
-      <p class="leading-tight mb-2"><strong class="font-bold">By default, hover variants are only generated for background color, border color, font weight, shadow, text color, and text style utilities.</strong></p>
-      <p>You can customize this in the <a href="/docs/configuration#modules" class="underline">modules section</a> of your configuration file.</p>
-    </div>
-  </div>
-</div>
+You can enable `hover` variants for a core utility plugin in the `variants` section of your `tailwind.config.js` file:
 
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    backgroundColor: ['hover'],
+  },
+}
+```
 
 ## Focus
 
@@ -51,17 +50,17 @@ Add the `focus:` prefix to only apply a utility on focus.
 @endslot
 @endcomponent
 
-<div class="bg-blue-400 text-white font-semibold px-4 py-3 mb-4 -mt-2">
-  <div class="flex">
-    <div class="py-1">
-      <svg class="fill-current h-6 w-6 text-white opacity-75 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10zm0-2c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm-.5-5h1c.276 0 .5.224.5.5v1c0 .276-.224.5-.5.5h-1c-.276 0-.5-.224-.5-.5v-1c0-.276.224-.5.5-.5zm0-8h1c.276 0 .5.224.5.5V8l-.5 3-1 .5L9 8V5.5c0-.276.224-.5.5-.5z"/></svg>
-    </div>
-    <div>
-      <p class="leading-tight mb-2"><strong class="font-bold">By default, focus variants are only generated for background color, border color, font weight, outline, shadow, text color, and text style utilities.</strong></p>
-      <p>You can customize this in the <a href="/docs/configuration#modules" class="underline">modules section</a> of your configuration file.</p>
-    </div>
-  </div>
-</div>
+You can enable `focus` variants for a core utility plugin in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    backgroundColor: ['focus'],
+  },
+}
+```
 
 
 ## Active
@@ -80,17 +79,17 @@ Add the `active:` prefix to only apply a utility when an element is active.
 @endslot
 @endcomponent
 
-<div class="bg-blue-400 text-white font-semibold px-4 py-3 mb-4 -mt-2">
-  <div class="flex">
-    <div class="py-1">
-      <svg class="fill-current h-6 w-6 text-white opacity-75 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10zm0-2c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm-.5-5h1c.276 0 .5.224.5.5v1c0 .276-.224.5-.5.5h-1c-.276 0-.5-.224-.5-.5v-1c0-.276.224-.5.5-.5zm0-8h1c.276 0 .5.224.5.5V8l-.5 3-1 .5L9 8V5.5c0-.276.224-.5.5-.5z"/></svg>
-    </div>
-    <div>
-      <p class="leading-tight mb-2"><strong class="font-bold">By default, active variants are not generated for any utilities.</strong></p>
-      <p>You can customize this in the <a href="/docs/configuration#modules" class="underline">modules section</a> of your configuration file.</p>
-    </div>
-  </div>
-</div>
+You can enable `active` variants for a core utility plugin in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    backgroundColor: ['active'],
+  },
+}
+```
 
 
 ## Group Hover
@@ -112,17 +111,17 @@ If you need to style a child element when hovering over a specific parent elemen
 @endslot
 @endcomponent
 
-<div class="bg-blue-400 text-white font-semibold px-4 py-3 mb-4 -mt-2">
-  <div class="flex">
-    <div class="py-1">
-      <svg class="fill-current h-6 w-6 text-white opacity-75 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10zm0-2c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm-.5-5h1c.276 0 .5.224.5.5v1c0 .276-.224.5-.5.5h-1c-.276 0-.5-.224-.5-.5v-1c0-.276.224-.5.5-.5zm0-8h1c.276 0 .5.224.5.5V8l-.5 3-1 .5L9 8V5.5c0-.276.224-.5.5-.5z"/></svg>
-    </div>
-    <div>
-      <p class="leading-tight mb-2"><strong class="font-bold">By default, group hover variants are not generated for any utilities.</strong></p>
-      <p>You can customize this in the <a href="/docs/configuration#modules" class="underline">modules section</a> of your configuration file.</p>
-    </div>
-  </div>
-</div>
+You can enable `group-hover` variants for a core utility plugin in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    backgroundColor: ['group-hover'],
+  },
+}
+```
 
 
 ## Focus-Within
@@ -161,23 +160,23 @@ Add the `focus-within:` prefix to only apply a utility when a child element has 
 @endslot
 @endcomponent
 
-<div class="bg-blue-400 text-white font-semibold px-4 py-3 mb-4 -mt-2">
-  <div class="flex">
-    <div class="py-1">
-      <svg class="fill-current h-6 w-6 text-white opacity-75 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10zm0-2c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm-.5-5h1c.276 0 .5.224.5.5v1c0 .276-.224.5-.5.5h-1c-.276 0-.5-.224-.5-.5v-1c0-.276.224-.5.5-.5zm0-8h1c.276 0 .5.224.5.5V8l-.5 3-1 .5L9 8V5.5c0-.276.224-.5.5-.5z"/></svg>
-    </div>
-    <div>
-      <p class="leading-tight mb-2"><strong class="font-bold">By default, focus-within variants are not generated for any utilities.</strong></p>
-      <p>You can customize this in the <a href="/docs/configuration#modules" class="underline">modules section</a> of your configuration file.</p>
-    </div>
-  </div>
-</div>
+You can enable `focus-within` variants for a core utility plugin in the `variants` section of your `tailwind.config.js` file:
 
-## Responsive Prefixes
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    backgroundColor: ['focus-within'],
+  },
+}
+```
+
+## Combining with Responsive Prefixes
 
 State variants are also responsive, meaning you can change an element's hover style for example at different breakpoints.
 
-To apply a state variant responsively, **add the responsive prefix first, before the state prefix.**
+To apply a state variant responsively, add the responsive prefix first, before the state prefix:
 
 ```html
 <button class="... md:bg-orange-500 md:hover:bg-red-500 ...">Button</button>
@@ -189,7 +188,7 @@ You can generate state variants for your own custom utilities using the `@@varia
 
 ```less
 // Input:
-@@variants hover, focus {
+@@variants group-hover, hover, focus {
   .banana {
     color: yellow;
   }
@@ -199,10 +198,13 @@ You can generate state variants for your own custom utilities using the `@@varia
 .banana {
   color: yellow;
 }
-.focus\:banana:focus {
+.group:hover group-hover\:banana {
   color: yellow;
 }
 .hover\:banana:hover {
+  color: yellow;
+}
+.focus\:banana:focus {
   color: yellow;
 }
 

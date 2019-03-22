@@ -5,31 +5,67 @@ description: "A guide to configuring and customizing your Tailwind installation.
 titleBorder: true
 ---
 
-At the heart of every Tailwind project is a JavaScript configuration file that serves as the home for your project's design system.
+Because Tailwind is a framework for building bespoke user interfaces, it has been designed from the ground up with customization in mind.
 
-It's where you define your color palette, font stacks, type scale, border sizes, breakpoints, opacity scale, you name it. Your config file is like an executable style guide for your project.
+By default, Tailwind will look for a `tailwind.config.js` file at the root of your project where you can define all of your customizations.
 
-We provide a sensible default configuration with a very generous set of values to get you started, but you own this file; you're encouraged to change it as much as you need to fit the goals of your design.
-
-It's important to understand that unlike other CSS frameworks you might have used, **none of the settings in this file are coupled to each other**. Nothing bad will happen even if you completely delete all of the values for a given module.
-
-## Generating your configuration file
+## Creating your configuration file
 
 Generate a Tailwind config file for your project using the Tailwind CLI utility included when you install the `tailwindcss` npm package:
 
-<div class="bg-gray-100 font-mono text-sm p-4">
-  <div class="text-purple-700">./node_modules/.bin/tailwind <span class="text-blue-700">init</span> <span class="text-gray-600">[filename]</span></div>
-</div>
+```bash
+npx tailwind init
+```
 
-By default, `tailwind init` will generate a `tailwind.config.js` config file at the root of your project, but feel free to name this file differently or store it in a different location if you prefer.
+This will create a minimal `tailwind.config.js` file at the root of your project:
 
-### Default configuration
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {},
+  variants: {},
+  plugins: [],
+}
+```
 
-Your generated configuration file contains all of Tailwind's default configuration values, ready for you to customize.
+### Using a different file name
 
-<pre class="h-128 overflow-y-auto language-javascript"><code>{!! str_replace('./plugins/container', 'tailwindcss/plugins/container', str_replace('// var defaultConfig', 'var defaultConfig', file_get_contents(dirname(__DIR__).'/node_modules/tailwindcss/defaultConfig.stub.js'))) !!}</code></pre>
+To use a name other than `tailwind.config.js`, pass it as an argument on the command-line:
 
-## Configuration Sections
+```bash
+npx tailwind init tailwindcss-config.js
+```
+
+If you use a custom file name, you will need to specify it when including Tailwind as a plugin in your PostCSS configuration as well:
+
+```js
+// postcss.config.js
+module.exports = {
+  plugins: [
+    require('tailwindcss')('./tailwindcss-config.js'),
+  ],
+}
+```
+
+### Scaffolding the entire default configuration
+
+For most users we encourage you to keep your config file as minimal as possible, and only specify the things you want to customize.
+
+If you'd rather scaffold a complete configuration file that includes all of Tailwind's default configuration, use the `--full` option:
+
+```bash
+npx tailwind init --full
+```
+
+You'll get a file that matches the [default configuration file](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js) Tailwind uses internally.
+
+## Theme
+
+This is where you can define your own color palette, font stacks, type scale, border sizes, breakpoints, you name it. Your config file is like an executable style guide for your project.
+
+We provide a sensible default configuration with a very generous set of values to get you started, but you don't be afraid to; you're encouraged to change it as much as you need to fit the goals of your design.
+
+It's important to understand that unlike other CSS frameworks you might have used, **none of the settings in this file are coupled to each other**. Nothing bad will happen even if you completely delete all of the values for a given module.
 
 ### Colors
 
@@ -134,41 +170,23 @@ module.exports = {
 
 Read through the generated config file or visit the "customizing" documentation for each module to learn more.
 
-### Modules
+## Variants
 
-The `modules` property is where you control which modules are generated, and what state variants to generate for each module.
+The `variants` section is where you control which [state variants](/docs/state-variants) are generated for each core utility plugin.
 
 ```js
-// ...
-
+// tailwind.config.js
 module.exports = {
   // ...
-
-  modules: {
+  variants: {
     appearance: ['responsive'],
-    backgroundAttachment: ['responsive'],
-    backgroundColors: ['responsive', 'hover'],
-    backgroundPosition: ['responsive'],
-    backgroundRepeat: ['responsive'],
-    // ...
+    backgroundColors: ['responsive', 'hover', 'focus'],
+    fill: [],
   },
-
-  // ...
 }
 ```
 
-Each property is a module name pointing to an array of state variants to generate for that module.
-
-The available state variants are:
-
-- `responsive`, for generating breakpoint-specific versions of those utilities
-- `hover`, for generating versions of those utilities that only take effect on hover
-- `focus`, for generating versions of those utilities that only take effect on focus
-- `active`, for generating versions of those utilities that only take effect when an element is active
-- `group-hover`, for generating versions of those utilities that only take effect when a marked parent element is hovered
-- `focus-within`, for generating versions of those utilities that only take effect when a child element has focus
-
-...as well as any [custom variants](/docs/plugins#adding-variants) added through plugins.
+Each property is a core plugin name pointing to an array of state variants to generate for that plugin.
 
 It's important to note that (`responsive` excluded) **variants are generated in the order you specify them**, so variants at the end of the list will take precedence over variants at the beginning of the list.
 
@@ -177,20 +195,14 @@ Learn more about state variants in the ["State Variants" documentation](/docs/st
 To include a module but not generate any state variants, use an empty array:
 
 ```js
-// ...
-
+// tailwind.config.js
 module.exports = {
   // ...
-
-  modules: {
-
+  variants: {
     // Include the `appearance` utilities, but not responsive,
     // focus, hover, etc. versions.
     appearance: [],
-    // ...
   },
-
-  // ...
 }
 ```
 
@@ -215,9 +227,11 @@ module.exports = {
 
 If a module is missing from your configuration file, the default configuration for that module will be used.
 
-### Options
+## Plugins
 
-#### Prefix
+// To do...
+
+## Prefix
 
 The `prefix` option allows you to add a custom prefix to all of Tailwind's generated utility classes.
 
@@ -226,7 +240,8 @@ This can be really useful when layering Tailwind on top of existing CSS where th
 For example, you could add a `tw-` prefix by setting the `prefix` option like so:
 
 ```js
-{
+// tailwind.config.js
+module.exports = {
   // ...
   options: {
     prefix: 'tw-',
@@ -235,21 +250,19 @@ For example, you could add a `tw-` prefix by setting the `prefix` option like so
 }
 ```
 
-+You can also pass a function to the `prefix` option if you need more fine-grained control:
+You can also pass a function to the `prefix` option if you need more fine-grained control:
 
 ```js
-{
+// tailwind.config.js
+module.exports = {
   // ...
-  options: {
-    prefix: function (selector) {
-      if (selector === '.container') {
-        return 'tw-'
-      }
+  prefix: function (selector) {
+    if (selector === '.container') {
+      return 'tw-'
+    }
 
-      return ''
-    },
-    // ...
-  }
+    return ''
+  },
 }
 ```
 
@@ -299,7 +312,7 @@ If you'd like to prefix your own utilities as well, just add the prefix to the c
 }
 ```
 
-#### Important
+## Important
 
 The `important` option lets you control whether or not Tailwind's utilities should be marked with `!important`.
 
@@ -308,12 +321,10 @@ This can be really useful when using Tailwind with existing CSS that has high sp
 To generate utilities as `!important`, set the `important` key in your configuration options to `true`:
 
 ```js
-{
+// tailwind.config.js
+module.exports = {
   // ...
-  options: {
-    important: true,
-    // ...
-  }
+  important: true,
 }
 ```
 
@@ -346,22 +357,16 @@ If you'd like to make your own utilities `!important`, just add `!important` to 
 }
 ```
 
-#### Separator
+## Separator
 
 The `separator` option lets you customize what character or string should be used to separate state variant prefixes (screen sizes, `hover`, `focus`, etc.) from utility names (`text-center`, `items-end`, etc.).
 
 We use a colon by default (`:`), but it can be useful to change this if you're using a templating language like [Pug](https://pugjs.org) that doesn't support special characters in class names.
 
 ```js
-// ...
-
+// tailwind.config.js
 module.exports = {
   // ...
-
-  options: {
-    // ...
-    separator: '_',
-  },
-
+  separator: '_',
 }
 ```
