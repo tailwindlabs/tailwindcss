@@ -22,11 +22,11 @@
         <p class="text-xs">xl</p>
       </span>
     </div>
-    <div class="rounded overflow-hidden border border-gray-400 mb-8">
-      <div class="p-4 bg-gray-100 border-b border-gray-300">
+    <div class="rounded overflow-hidden mb-8">
+      <div class="p-4 bg-gray-800 border-b border-gray-300">
         <div class="whitespace-pre font-mono text-gray-500 text-xs overflow-x-auto" v-html="highlightedCode"></div>
       </div>
-      <div class="bg-white p-4" :class="slotClass">
+      <div class="border-l border-r border-b border-gray-400 bg-white p-4" :class="slotClass">
         <slot v-if="activeScreen === 'none'" name="none"></slot>
         <slot v-if="activeScreen === 'sm'" name="sm"></slot>
         <slot v-if="activeScreen === 'md'" name="md"></slot>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import escape from 'escape-html'
+import escapeHtml from 'escape-html'
 
 export default {
   props: ['code', 'slotClass'],
@@ -50,7 +50,7 @@ export default {
   computed: {
     highlightedCode() {
       const regex = new RegExp(`(${this.activeScreen}\:[^\\s\\&]+)`, 'g')
-      return escape(this.code).replace(regex, '<span class="text-purple-600">$1</span>').replace(/none:/g, '')
+      return escapeHtml(this.code).replace(regex, '<span style="color: #f9ee98;">$1</span>').replace(/none:/g, '')
     }
   },
 }

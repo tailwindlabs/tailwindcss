@@ -63,8 +63,6 @@
 
   > pre, pre& {
     @apply font-mono;
-    @apply border;
-    @apply border-gray-300;
     @apply rounded;
     font-weight: 400;
   }
@@ -148,8 +146,14 @@
     @apply my-2;
   }
 
-  > :not(pre):not(h1):not(h2):not(h3):not(h4) > code, > pre, pre& {
+  > :not(pre):not(h1):not(h2):not(h3):not(h4) > code {
     @apply bg-gray-100;
+    @apply text-xs;
+    @apply leading-normal;
+  }
+
+  > pre, pre& {
+    @apply bg-gray-800;
     @apply text-xs;
     @apply leading-normal;
   }
