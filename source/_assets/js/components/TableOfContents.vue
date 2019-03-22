@@ -1,7 +1,7 @@
 <template>
   <div>
     <h5 class="text-gray-500 uppercase tracking-wide font-bold text-sm lg:text-xs">On this page</h5>
-    <ul class="mt-2" v-if="links.length > 0">
+    <ul class="mt-4" v-if="links.length > 0">
       <li class="mb-2" :class="link.isChild ? 'ml-2' : ''" v-for="link in links">
         <a :href="link.href" class="block transition-fast hover:translate-r-2px hover:text-gray-900 text-gray-600 font-medium">{{ link.text }}</a>
       </li>
