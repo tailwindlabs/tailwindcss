@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
-title: "List Style Types"
-description: "Utilities for controlling list style types."
+title: "List Style Type"
+description: "Utilities for controlling the bullet/number style of a list."
 features:
   responsive: true
   customizable: true

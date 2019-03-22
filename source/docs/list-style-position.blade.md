@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
-title: "List Style Positions"
-description: "Utilities for controlling list style positions."
+title: "List Style Position"
+description: "Utilities for controlling the position of bullets/numbers in lists."
 features:
   responsive: true
   customizable: false
