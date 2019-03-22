@@ -6,6 +6,15 @@
     @apply mt-0;
   }
 
+  > * + * {
+    @apply mt-6;
+  }
+
+  > ul > * + *,
+  > ol > * + * {
+    @apply mt-4;
+  }
+
   .subnav, .subnav& {
     @apply flex;
     @apply mt-6;
@@ -125,13 +134,7 @@
 
   > p, p&, > blockquote > p {
     @apply text-base;
-    @apply mt-4;
-    @apply mb-4;
-  }
-
-  > ul, > ol {
-    @apply m-0;
-    @apply mb-4;
+    @apply mt-6;
   }
 
   > ul {
@@ -140,10 +143,6 @@
 
   > ol {
     @apply pl-4 list-decimal list-inside;
-  }
-
-  > ul > li {
-    @apply my-2;
   }
 
   > :not(pre):not(h1):not(h2):not(h3):not(h4) > code {

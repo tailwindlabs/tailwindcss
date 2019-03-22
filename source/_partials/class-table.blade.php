@@ -4,7 +4,7 @@
 @endphp
 
 <h2 style="visibility: hidden; font-size: 0; margin: 0;">Class reference</h2>
-<div class="border-t border-b border-gray-300 overflow-hidden relative">
+<div class="mt-0 border-t border-b border-gray-300 overflow-hidden relative">
   <div class="{{ $scroll ? 'lg:max-h-sm' : '' }} overflow-y-auto scrollbar-w-2 scrollbar-track-gray-lighter scrollbar-thumb-rounded scrollbar-thumb-gray scrolling-touch">
     <table class="w-full text-left table-collapse">
       <thead>

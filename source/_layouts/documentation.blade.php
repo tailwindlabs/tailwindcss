@@ -126,7 +126,7 @@
               @endif
 
               @if ($page->description)
-                <div class="text-gray-600 mb-4">
+                <div class="mt-0 mb-4 text-gray-600">
                   {{ $page->description }}
                 </div>
               @endif

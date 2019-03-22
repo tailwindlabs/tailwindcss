@@ -39,7 +39,9 @@ To pull in Tailwind for quick demos or just giving the framework a spin, grab th
 <link href="https://unpkg.com/tailwindcss@next/dist/tailwind.min.css" rel="stylesheet">
 ```
 
-Note that while the CDN build is large *(27kb compressed, 348kb raw)*, it's not representative of the sizes you see when including Tailwind as part of your build process. Sites that follow our [best practices](/docs/controlling-file-size) are almost always under 10kb compressed. For example, [Firefox Send](https://send.firefox.com/) is built with Tailwind and their CSS is under 4kb compressed and minified.
+Note that while the CDN build is large *(27kb compressed, 348kb raw)*, **it's not representative of the sizes you see when including Tailwind as part of your build process**.
+
+Sites that follow our [best practices](/docs/controlling-file-size) are almost always under 10kb compressed. For example, [Firefox Send](https://send.firefox.com/) is built with Tailwind and their CSS is under 4kb compressed and minified.
 
 ## Install Tailwind via npm
 
