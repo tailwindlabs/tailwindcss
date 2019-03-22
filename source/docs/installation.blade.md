@@ -8,7 +8,30 @@ titleBorder: true
 
 ## CDN
 
-Before getting started please note, **many of the features that make Tailwind CSS great are not available using the CDN builds.** To take full advantage of Tailwind's features, [install Tailwind via npm](#npm).
+Before using the CDN build please note, many of the features that make Tailwind CSS great are not available without incorporating Tailwind into your build process.
+
+Using the CDN you cannot:
+
+<ul class="list-none pl-2">
+  <li class="flex items-center">
+    <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
+    <span>Customize Tailwind's default theme</span>
+  </li>
+  <li class="flex items-center">
+    <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
+    <span>Use any of our <a href="/docs/functions-and-directives">directives</a> like <code>@apply</code>, <code>@variants</code>, etc.</span>
+  </li>
+  <li class="flex items-center">
+    <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
+    <span>Enable features like <a href="/docs/state-variants#group-hover"><code>group-hover</code></a></span>
+  </li>
+  <li class="flex items-center">
+    <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
+    <span>Install third-party plugins</span>
+  </li>
+</ul>
+
+So to get the most out of Tailwind, you really should [install it via npm](#install-tailwind-via-npm).
 
 To pull in Tailwind for quick demos or just giving the framework a spin, grab the latest default configuration build via CDN:
 
@@ -16,160 +39,120 @@ To pull in Tailwind for quick demos or just giving the framework a spin, grab th
 <link href="https://unpkg.com/tailwindcss@next/dist/tailwind.min.css" rel="stylesheet">
 ```
 
-Note that while the CDN build is large *(58kb compressed, 348kb raw)*, it's not representative of the sizes you see when including Tailwind as part of your build process. Sites that follow our [best practices](/docs/controlling-file-size) are almost always under 10kb compressed. For example, [Firefox Send](https://send.firefox.com/) is built with Tailwind and their CSS is under 4kb compressed and minified.
+Note that while the CDN build is large *(27kb compressed, 348kb raw)*, it's not representative of the sizes you see when including Tailwind as part of your build process. Sites that follow our [best practices](/docs/controlling-file-size) are almost always under 10kb compressed. For example, [Firefox Send](https://send.firefox.com/) is built with Tailwind and their CSS is under 4kb compressed and minified.
 
-## NPM
+## Install Tailwind via npm
 
 For most projects (and to take advantage of Tailwind's customization features), you'll want to install Tailwind via npm.
 
-### 1. Install Tailwind via npm
-
 Tailwind is [available on npm](https://www.npmjs.com/package/tailwindcss) and can be installed using npm or Yarn.
 
-<div class="rounded bg-gray-100 border border-gray-400 font-mono text-xs p-4">
-  <div class="text-gray-600"># Using npm</div>
-  <div class="text-purple-700">npm install <span class="text-blue-700">tailwindcss</span> <span class="text-gray-700">--save-dev</span></div>
-  <div class="text-gray-600 mt-6"># Using Yarn</div>
-  <div class="text-purple-700">yarn add <span class="text-blue-700">tailwindcss</span> <span class="text-gray-700">--dev</span></div>
-</div>
+```bash
+# Using npm
+npm install tailwindcss --save-dev
 
-### 2. Create a Tailwind config file
-
-Tailwind is configured almost entirely in plain JavaScript. To do this you'll need to generate a Tailwind config file for your project. We recommend creating a `tailwind.config.js` file in your project's root.
-
-We've provided a CLI utility to do this easily:
-
-<div class="rounded bg-gray-100 border border-gray-400 font-mono text-xs p-4">
-  <div class="text-gray-600"># Using npm</div>
-  <div class="text-purple-700">npx tailwind <span class="text-blue-700">init</span> <span class="text-gray-600">[filename]</span></div>
-  <div class="text-gray-600 mt-6"># Using Yarn</div>
-  <div class="text-purple-700">yarn tailwind <span class="text-blue-700">init</span> <span class="text-gray-600">[filename]</span></div>
-</div>
-
-If you're an experienced Tailwind user who doesn't need the comments in the config file, use the `--no-comments` flag when generating your config file to strip them out.
-
-### 3. Use Tailwind in your CSS
-
-Use the `@@tailwind` directive to inject Tailwind's `base` and `utilities` styles into your CSS.
-
-To avoid specificity issues, we highly recommend structuring your main stylesheet like this:
-
-```less
-/**
- * This injects Tailwind's base styles, which is a combination of
- * Normalize.css and some additional base styles.
- *
- * You can see the styles here:
- * https://github.com/tailwindcss/tailwindcss/blob/master/css/base.css
- *
- * If using `postcss-import`, use this import instead:
- *
- * @@import "tailwindcss/base";
- */
-@@tailwind base;
-
-/**
- * This injects any component classes registered by plugins.
- *
- * If using `postcss-import`, use this import instead:
- *
- * @@import "tailwindcss/components";
- */
-@@tailwind components;
-
-/**
- * Here you would add any of your custom component classes; stuff that you'd
- * want loaded *before* the utilities so that the utilities could still
- * override them.
- *
- * Example:
- *
- * .btn { ... }
- * .form-input { ... }
- *
- * Or if using a preprocessor or `postcss-import`:
- *
- * @@import "components/buttons";
- * @@import "components/forms";
- */
-
-/**
- * This injects all of Tailwind's utility classes, generated based on your
- * config file.
- *
- * If using `postcss-import`, use this import instead:
- *
- * @@import "tailwindcss/utilities";
- */
-@@tailwind utilities;
-
-/**
- * Here you would add any custom utilities you need that don't come out of the
- * box with Tailwind.
- *
- * Example :
- *
- * .bg-pattern-graph-paper { ... }
- * .skew-45 { ... }
- *
- * Or if using a preprocessor or `postcss-import`:
- *
- * @@import "utilities/background-patterns";
- * @@import "utilities/skew-transforms";
- */
+# Using Yarn
+yarn add tailwindcss --dev
 ```
 
-### 4. Process your CSS with Tailwind
+## Add Tailwind to your CSS
 
-#### Using Tailwind CLI
+Use the `@@tailwind` directive to inject Tailwind's `base`, `components`, and `utilities` styles into your CSS:
+
+```less
+@@tailwind base;
+
+@@tailwind components;
+
+@@tailwind utilities;
+```
+
+Tailwind will swap these directives out at build time with all of its generated CSS.
+
+If you're using `postcss-import`, use our imports instead of the `@@tailwind` directive to avoid issues when importing any of your own additional files:
+
+```less
+@@import "tailwindcss/base";
+
+@@import "tailwindcss/components";
+
+@@import "tailwindcss/utilities";
+```
+
+## Process your CSS with Tailwind
+
+### Using Tailwind CLI
 
 For simple projects or just giving Tailwind a spin, you can use the Tailwind CLI tool to process your CSS:
 
-<div class="bg-gray-100 border rounded font-mono text-sm p-4">
-  <div class="text-purple-700">npx tailwind <span class="text-blue-700">build styles.css</span> <span class="text-gray-600">[-c ./tailwind.config.js] [-o ./output.css] [--no-autoprefixer]</span></div>
-</div>
+```bash
+npx tailwind build styles.css -o output.css
+```
 
 Use the `npx tailwind help build` command to learn more about the various CLI options.
 
-#### Using Tailwind with PostCSS
+### Using Tailwind with PostCSS
 
 For most projects, you'll want to add Tailwind as a PostCSS plugin in your build chain.
 
-We've included the Tailwind-specific instructions for a few popular tools below, but for instructions on getting started with PostCSS in general, see the [PostCSS documentation](https://github.com/postcss/postcss#usage).
-
-#### Webpack
-
-Add `tailwindcss` as a plugin in your  `postcss.config.js` file, passing the path to your config file:
+Generally this means adding Tailwind as a plugin your `postcss.config.js` file:
 
 ```js
-var tailwindcss = require('tailwindcss');
-
 module.exports = {
   plugins: [
     // ...
-    tailwindcss('./path/to/your/tailwind.config.js'),
+    require('tailwindcss'),
     require('autoprefixer'),
     // ...
   ]
 }
 ```
 
-For a complete example, check out our [webpack-starter](https://github.com/tailwindcss/webpack-starter) template.
+We've included more specific instructions for a few popular tools below, but for instructions on getting started with PostCSS in general, see the [PostCSS documentation](https://github.com/postcss/postcss#usage).
 
-#### Gulp
+### Webpack
 
-Add `tailwindcss` to the list of plugins you pass to [gulp-postcss](https://github.com/postcss/gulp-postcss), passing the path to your config file:
+Add `tailwindcss` as a plugin in your  `postcss.config.js` file:
+
+```js
+module.exports = {
+  plugins: [
+    // ...
+    require('tailwindcss'),
+    require('autoprefixer'),
+    // ...
+  ]
+}
+```
+
+...or include it directly in your [postcss-loader](https://github.com/postcss/postcss-loader) configuration in your `webpack.config.js` file:
+
+```js
+{
+  loader: 'postcss-loader',
+  options: {
+    ident: 'postcss',
+    plugins: [
+      require('tailwindcss'),
+      require('autoprefixer'),
+    ]
+  }
+}
+```
+
+### Gulp
+
+Add `tailwindcss` to the list of plugins you pass to [gulp-postcss](https://github.com/postcss/gulp-postcss):
 
 ```js
 gulp.task('css', function () {
-  var postcss = require('gulp-postcss');
-  var tailwindcss = require('tailwindcss');
+  const postcss = require('gulp-postcss');
 
   return gulp.src('src/styles.css')
     // ...
     .pipe(postcss([
       // ...
-      tailwindcss('./path/to/your/tailwind.config.js'),
+      require('tailwindcss'),
       require('autoprefixer'),
       // ...
     ]))
@@ -178,15 +161,13 @@ gulp.task('css', function () {
 });
 ```
 
-#### Laravel Mix
+### Laravel Mix
 
-If you're writing your project in plain CSS, use Mix's `postCss` method to process your CSS. Include `tailwindcss` as a plugin and pass the path to your config file:
+If you're writing your project in plain CSS, use Mix's `postCss` method to process your CSS and include `tailwindcss` as a plugin:
 
 ```js
-var tailwindcss = require('tailwindcss');
-
 mix.postCss('resources/css/main.css', 'public/css', [
-  tailwindcss('./path/to/your/tailwind.config.js'),
+  require('tailwindcss'),
 ]);
 ```
 
@@ -217,14 +198,14 @@ mix.sass('resources/sass/app.scss', 'public/css')
 
 For more information on what this feature does and the implications of disabling it, [see the Laravel Mix documentation](https://github.com/JeffreyWay/laravel-mix/blob/master/docs/css-preprocessors.md#css-url-rewriting).
 
-#### Webpack Encore
+### Webpack Encore
 
 Create a `postcss.config.js` file, add `tailwindcss` as a plugin and pass the path to your config file:
 
 ```js
 module.exports = {
   plugins: [
-    require('tailwindcss')('./path/to/your/tailwind.config.js'),
+    require('tailwindcss'),
   ]
 }
 ```
@@ -232,42 +213,39 @@ module.exports = {
 Within `webpack.config.js`, create a style entry and enable the PostCSS loader.
 
 ```js
-var Encore = require('@symfony/webpack-encore');
+const Encore = require('@symfony/webpack-encore')
 
 Encore
-    .setOutputPath('public/build/')
-    .setPublicPath('/build')
-    .addStyleEntry('app', './css/app.css')
-    .enablePostCssLoader()
-;
+  .setOutputPath('public/build/')
+  .setPublicPath('/build')
+  .addStyleEntry('app', './css/app.css')
+  .enablePostCssLoader()
 
-module.exports = Encore.getWebpackConfig();
+module.exports = Encore.getWebpackConfig()
 ```
 
 You can also pass options into the PostCSS loader by passing a callback, as per the [Encore PostCSS docs](https://symfony.com/doc/current/frontend/encore/postcss.html):
 
 ```js
-.enablePostCssLoader(function(options) {
-    options.config = {
-        path: 'config/postcss.config.js'
-    };
+Encore.enablePostCssLoader(function(options) {
+  options.config = {
+    path: 'config/postcss.config.js'
+  }
 })
 ```
 
 **Note for Sass users:** Due to [an unresolved issue](https://github.com/bholloway/resolve-url-loader/issues/28) with one of Encore's dependencies, to use Sass with Tailwind you'll need to disable `resolveUrlLoader`:
 
 ```js
-Encore
-    .enableSassLoader(function (options) {}, {
-        resolveUrlLoader: false
-    })
-    ;
+Encore.enableSassLoader(function (options) {}, {
+  resolveUrlLoader: false
+})
 ```
 
 
-#### Brunch
+### Brunch
 
-Add `tailwindcss` to the list of processors you pass to [postcss-brunch](https://github.com/brunch/postcss-brunch), passing the path to your config file:
+Add `tailwindcss` to the list of processors you pass to [postcss-brunch](https://github.com/brunch/postcss-brunch):
 
 ```js
 exports.config = {
@@ -276,10 +254,10 @@ exports.config = {
     // ...
     postcss: {
       processors: [
-        require('tailwindcss')('./tailwind.config.js')
+        require('tailwindcss'),
       ]
     }
     // ...
   }
-};
+}
 ```
