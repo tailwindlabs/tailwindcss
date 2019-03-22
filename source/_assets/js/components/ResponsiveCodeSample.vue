@@ -22,11 +22,11 @@
         <p class="text-xs">xl</p>
       </span>
     </div>
-    <div class="rounded overflow-hidden mb-8">
-      <div class="p-4 bg-gray-800 border-b border-gray-300">
+    <div class="overflow-hidden mb-8">
+      <div class="rounded-t-lg p-4 bg-gray-800 border-b border-gray-300">
         <div class="whitespace-pre font-mono text-gray-500 text-xs overflow-x-auto" v-html="highlightedCode"></div>
       </div>
-      <div class="border-l border-r border-b border-gray-400 bg-white p-4" :class="slotClass">
+      <div class="rounded-b-lg border-l border-r border-b border-gray-400 bg-white p-4" :class="slotClass">
         <slot v-if="activeScreen === 'none'" name="none"></slot>
         <slot v-if="activeScreen === 'sm'" name="sm"></slot>
         <slot v-if="activeScreen === 'md'" name="md"></slot>

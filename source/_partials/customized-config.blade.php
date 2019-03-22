@@ -1,4 +1,4 @@
-<div class="rounded mb-8 overflow-hidden">
+<div class="rounded-lg mb-8 overflow-hidden">
   <div class="bg-gray-800 p-4 font-mono text-xs overflow-x-scroll whitespace-no-wrap">
     <div class="whitespace-pre text-gray-200">{</div>
     <div class="whitespace-pre text-gray-400">  // ...</div>
@@ -13,7 +13,7 @@
       if (starts_with($line, '//')) {
         return '<div class="text-gray-400">&nbsp;&nbsp;&nbsp;&nbsp;' . e(trim($line)) . '</div>';
       }
-      return '<div class="text-gray-800">&nbsp;&nbsp;&nbsp;&nbsp;' . e(trim($line)) . '</div>';
+      return '<div class="text-gray-300">&nbsp;&nbsp;&nbsp;&nbsp;' . e(trim($line)) . '</div>';
     })->implode("\n") !!}</div>
     <div class="whitespace-pre text-gray-200">  }</div>
     <div class="whitespace-pre text-gray-200">}</div>

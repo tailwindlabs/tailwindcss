@@ -5,44 +5,6 @@ description: "Quick start guide for installing and configuring Tailwind CSS."
 titleBorder: true
 ---
 
-
-## CDN
-
-Before using the CDN build please note, many of the features that make Tailwind CSS great are not available without incorporating Tailwind into your build process.
-
-Using the CDN you cannot:
-
-<ul class="list-none pl-2">
-  <li class="flex items-center">
-    <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
-    <span>Customize Tailwind's default theme</span>
-  </li>
-  <li class="flex items-center">
-    <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
-    <span>Use any of our <a href="/docs/functions-and-directives">directives</a> like <code>@apply</code>, <code>@variants</code>, etc.</span>
-  </li>
-  <li class="flex items-center">
-    <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
-    <span>Enable features like <a href="/docs/state-variants#group-hover"><code>group-hover</code></a></span>
-  </li>
-  <li class="flex items-center">
-    <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
-    <span>Install third-party plugins</span>
-  </li>
-</ul>
-
-So to get the most out of Tailwind, you really should [install it via npm](#install-tailwind-via-npm).
-
-To pull in Tailwind for quick demos or just giving the framework a spin, grab the latest default configuration build via CDN:
-
-```html
-<link href="https://unpkg.com/tailwindcss@next/dist/tailwind.min.css" rel="stylesheet">
-```
-
-Note that while the CDN build is large *(27kb compressed, 348kb raw)*, **it's not representative of the sizes you see when including Tailwind as part of your build process**.
-
-Sites that follow our [best practices](/docs/controlling-file-size) are almost always under 10kb compressed. For example, [Firefox Send](https://send.firefox.com/) is built with Tailwind and their CSS is under 4kb compressed and minified.
-
 ## Install Tailwind via npm
 
 For most projects (and to take advantage of Tailwind's customization features), you'll want to install Tailwind via npm.
@@ -263,3 +225,38 @@ exports.config = {
   }
 }
 ```
+
+## Using Tailwind via CDN
+
+Before using the CDN build please note, many of the features that make Tailwind CSS great are not available without incorporating Tailwind into your build process.
+
+<ul class="list-none pl-0">
+  <li class="flex items-center">
+    <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
+    <span>You can't customize Tailwind's default theme</span>
+  </li>
+  <li class="flex items-center">
+    <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
+    <span>You can't use any <a href="/docs/functions-and-directives">directives</a> like <code>@apply</code>, <code>@variants</code>, etc.</span>
+  </li>
+  <li class="flex items-center">
+    <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
+    <span>You can't enable features like <a href="/docs/state-variants#group-hover"><code>group-hover</code></a></span>
+  </li>
+  <li class="flex items-center">
+    <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
+    <span>You can't install third-party plugins</span>
+  </li>
+</ul>
+
+So to get the most out of Tailwind, you really should [install it via npm](#install-tailwind-via-npm).
+
+To pull in Tailwind for quick demos or just giving the framework a spin, grab the latest default configuration build via CDN:
+
+```html
+<link href="https://unpkg.com/tailwindcss@next/dist/tailwind.min.css" rel="stylesheet">
+```
+
+Note that while the CDN build is large *(27kb compressed, 348kb raw)*, **it's not representative of the sizes you see when including Tailwind as part of your build process**.
+
+Sites that follow our [best practices](/docs/controlling-file-size) are almost always under 10kb compressed. For example, [Firefox Send](https://send.firefox.com/) is built with Tailwind and their CSS is under 4kb compressed and minified.
