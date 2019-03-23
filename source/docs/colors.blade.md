@@ -11,16 +11,31 @@ Developing an organized, consistent and beautiful color palette is critical to t
 
 To get you started, we've provided a generous palette of great looking colors that are perfect for prototyping, or even as a starting point for your color palette. That said, don't hesitate to [customize](#customizing) them for your project.
 
-<div class="relative my-8 rounded overflow-hidden shadow-md">
-<div class="text-white bg-black px-2 py-4 text-sm font-semibold leading-tight">
-  <div class="mb-2">Black</div>
-  <div class="font-normal text-xs opacity-75">{{ strtoupper($page->config['theme']['colors']['black']) }}</div>
-</div>
-<div class="text-black bg-white px-2 py-4 text-sm font-semibold leading-tight">
-  <div class="mb-2">White</div>
-  <div class="font-normal text-xs opacity-75">{{ strtoupper($page->config['theme']['colors']['white']) }}</div>
-</div>
-</div>
+<div class="flex flex-wrap -mx-2">
+
+  <div class="px-2 w-full relative mt-4">
+    <h3 class="markdown">Black & White</h3>
+    <div class="-mx-2 -mt-5 flex flex-wrap">
+      <div class="w-1/2 md:w-1/3 px-2">
+        <div class="flex items-center mt-5">
+          <div class="h-12 w-12 rounded-lg shadow-inner bg-black"></div>
+          <div class="ml-2 text-gray-800 text-xs leading-none pl-1">
+            <div class="font-semibold">Black</div>
+            <div class="mt-1 font-normal opacity-75">#000000</div>
+          </div>
+        </div>
+      </div>
+      <div class="w-1/2 md:w-1/3 px-2">
+        <div class="flex items-center mt-5">
+          <div class="h-12 w-12 rounded-lg shadow-inner bg-white"></div>
+          <div class="ml-2 text-gray-800 text-xs leading-none pl-1">
+            <div class="font-semibold">White</div>
+            <div class="mt-1 font-normal opacity-75">#FFFFFF</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 @include('_partials.color-palette', [
   'colorName' => 'Gray',
@@ -81,6 +96,7 @@ To get you started, we've provided a generous palette of great looking colors th
   'color' => 'pink',
   'breakpoint' => '400',
 ])
+</div>
 
 ## Customizing
 
