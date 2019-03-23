@@ -66,39 +66,39 @@ Control the font weight of an element using the `.font-{weight}` utilities.
 @component('_partials.code-sample', ['class' => 'font-sans'])
 <div class="mb-6">
   <p class="text-sm text-gray-600">.font-hairline</p>
-  <p class="font-hairline text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  <p class="font-hairline text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
   <p class="text-sm text-gray-600">.font-thin</p>
-  <p class="font-thin text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  <p class="font-thin text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
   <p class="text-sm text-gray-600">.font-light</p>
-  <p class="font-light text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  <p class="font-light text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
   <p class="text-sm text-gray-600">.font-normal</p>
-  <p class="font-normal text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  <p class="font-normal text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
   <p class="text-sm text-gray-600">.font-medium</p>
-  <p class="font-medium text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  <p class="font-medium text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
   <p class="text-sm text-gray-600">.font-semibold</p>
-  <p class="font-semibold text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  <p class="font-semibold text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
   <p class="text-sm text-gray-600">.font-bold</p>
-  <p class="font-bold text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  <p class="font-bold text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div class="mb-6">
   <p class="text-sm text-gray-600">.font-extrabold</p>
-  <p class="font-extrabold text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  <p class="font-extrabold text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 <div>
   <p class="text-sm text-gray-600">.font-black</p>
-  <p class="font-black text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  <p class="font-black text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
 </div>
 @slot('code')
 <p class="font-hairline ...">The quick brown fox ...</p>
