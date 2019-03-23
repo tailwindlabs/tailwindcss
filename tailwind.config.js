@@ -11,7 +11,7 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        // mono: 'Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+        mono: 'Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
       },
       colors: {
         gray: {
