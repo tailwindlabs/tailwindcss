@@ -10,6 +10,9 @@ module.exports = {
       'xl': '1280px',
     },
     extend: {
+      fontFamily: {
+        // mono: 'Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+      },
       colors: {
         gray: {
           ...defaultConfig.theme.colors.gray,
