@@ -1,5 +1,5 @@
 <div class="rounded-lg mb-8 overflow-hidden">
-  <div class="bg-gray-800 p-4 font-mono text-xs overflow-x-scroll whitespace-no-wrap">
+  <div class="bg-gray-800 p-4 font-mono text-sm overflow-x-scroll whitespace-no-wrap">
     <div class="whitespace-pre text-gray-200">{</div>
     <div class="whitespace-pre text-gray-400">  // ...</div>
     <div class="whitespace-pre text-gray-200"><span style="color: #f9ee98;">  {{ $key }}</span>: {</div>
