@@ -22,23 +22,23 @@ description: "A component for fixing an element's width to the current breakpoin
     <tbody class="align-baseline">
       <tr>
         <td class="p-2 border-t border-gray-300 font-mono text-xs text-purple-700" rowspan="5">.container</td>
-        <td class="p-2 border-t border-gray-300 font-mono text-xs text-gray-600"><span class="italic">None</span></td>
+        <td class="p-2 border-t border-gray-300 font-mono text-xs text-gray-600"><span class="font-sans italic font-sans">None</span></td>
         <td class="p-2 border-t border-gray-300 font-mono text-xs text-blue-700">width: 100%;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-gray-300 font-mono text-xs text-gray-700">sm <span class="text-gray-600 italic">(640px)</span></td>
+        <td class="p-2 border-t border-gray-300 font-mono text-xs text-gray-700">sm <span class="text-gray-600 font-sans italic">(640px)</span></td>
         <td class="p-2 border-t border-gray-300 font-mono text-xs text-blue-700">max-width: 640px;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-gray-300 font-mono text-xs text-gray-700">md <span class="text-gray-600 italic">(768px)</span></td>
+        <td class="p-2 border-t border-gray-300 font-mono text-xs text-gray-700">md <span class="text-gray-600 font-sans italic">(768px)</span></td>
         <td class="p-2 border-t border-gray-300 font-mono text-xs text-blue-700">max-width: 768px;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-gray-300 font-mono text-xs text-gray-700">lg <span class="text-gray-600 italic">(1024px)</span></td>
+        <td class="p-2 border-t border-gray-300 font-mono text-xs text-gray-700">lg <span class="text-gray-600 font-sans italic">(1024px)</span></td>
         <td class="p-2 border-t border-gray-300 font-mono text-xs text-blue-700">max-width: 1024px;</td>
       </tr>
       <tr>
-        <td class="p-2 border-t border-gray-300 font-mono text-xs text-gray-700">xl <span class="text-gray-600 italic">(1280px)</span></td>
+        <td class="p-2 border-t border-gray-300 font-mono text-xs text-gray-700">xl <span class="text-gray-600 font-sans italic">(1280px)</span></td>
         <td class="p-2 border-t border-gray-300 font-mono text-xs text-blue-700">max-width: 1280px;</td>
       </tr>
     </tbody>
