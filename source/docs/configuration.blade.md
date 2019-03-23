@@ -97,7 +97,7 @@ In this guide we'll be focusing on a few of the more special theme properties as
 
 ### Colors
 
-The `theme.colors` property is where you define your project's color palette.
+The `theme.colors` property allows you to override Tailwind's default color palette.
 
 ```js
 // tailwind.config.js
@@ -132,6 +132,28 @@ module.exports = {
 ```
 
 Like many other places in Tailwind, the `default` key is special and means "no modifier", so this configuration would generate classes like `.text-indigo-lighter`, `.text-indigo`, and `.text-dark`.
+
+### Spacing
+
+The `themes.spacing` property allows you to override Tailwind's default spacing/sizing scale.
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    spacing: {
+      '1': '8px',
+      '2': '12px',
+      '3': '16px',
+      '4': '24px',
+      '5': '32px',
+      '6': '48px',
+    }
+  }
+}
+```
+
+By default the spacing scale is shared by the `padding`, `margin`, `negativeMargin`, `width`, and `height` utilities. The above configuration would generate classes like `.text-indigo`, `.border-blue`, and `.bg-red`.
 
 ### Screens
 
