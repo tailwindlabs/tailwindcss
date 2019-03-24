@@ -758,6 +758,66 @@ test('the theme function can use a default value if the key is missing', () => {
   })
 })
 
+test('the theme function can resolve function values', () => {
+  const userConfig = {
+    theme: {
+      backgroundColor: theme => ({
+        orange: 'orange',
+        ...theme('colors'),
+      }),
+      borderColor: theme => theme('backgroundColor'),
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+    },
+    variants: {
+      backgroundColor: ['responsive', 'hover', 'focus'],
+      borderColor: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+      backgroundColor: {
+        orange: 'orange',
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+      borderColor: {
+        orange: 'orange',
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
+    },
+    variants: {
+      backgroundColor: ['responsive', 'hover', 'focus'],
+      borderColor: ['responsive', 'hover', 'focus'],
+    },
+  })
+})
+
 test('theme values in the extend section are lazily evaluated', () => {
   const userConfig = {
     theme: {
