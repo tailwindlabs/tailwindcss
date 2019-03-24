@@ -31,6 +31,13 @@ a {
   }
 }
 
+.scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
 .scrollbar-w-2::-webkit-scrollbar {
   @apply w-2 h-2 !important;
 }
