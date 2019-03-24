@@ -25,7 +25,10 @@ function mergeExtensions({ extend, ...theme }) {
 }
 
 function resolveFunctionKeys(object) {
-  const resolveObjectPath = (key, defaultValue) => get(object, key, defaultValue)
+  const resolveObjectPath = (key, defaultValue) => {
+    const val = get(object, key, defaultValue)
+    return isFunction(val) ? val(resolveObjectPath) : val
+  }
 
   return Object.keys(object).reduce((resolved, key) => {
     return {
