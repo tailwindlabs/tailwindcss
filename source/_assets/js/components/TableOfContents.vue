@@ -38,7 +38,7 @@ export default {
   },
   mounted() {
     anchors.options = { placement: 'left', class: 'text-gray-500' }
-    anchors.add('h2, h3')
+    anchors.add('#content h2, #content h3')
     this.links = anchors.elements.map((el) => {
       return {
         isChild: el.tagName === 'H3',

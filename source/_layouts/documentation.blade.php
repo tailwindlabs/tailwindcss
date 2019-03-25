@@ -119,7 +119,7 @@
         <div id="app" class="flex" v-cloak>
 
           {{-- Main content area --}}
-          <div class="pt-24 pb-16 lg:pt-28 w-full">
+          <div id="content" class="pt-24 pb-16 lg:pt-28 w-full">
             <div class="markdown mb-6 px-6 max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:px-12 xl:w-3/4">
               @if ($page->title)
                 <h1>{{ $page->title }}</h1>
