@@ -550,10 +550,10 @@ The `addVariant` function allows you to register your own custom [variants](/doc
 To add a new variant, call the `addVariant` function, passing in the name of your custom variant, and a callback that modifies the affected CSS rules as needed.
 
 ```js
-function({ addVariant }) {
+function({ addVariant, e }) {
   addVariant('disabled', ({ modifySelectors, separator }) => {
     modifySelectors(({ className }) => {
-      return `.disabled${separator}${className}:disabled`
+      return `.${e(`disabled${separator}${className}`)}:disabled`
     })
   })
 }
@@ -579,10 +579,10 @@ The function you pass to `modifySelectors` should simply return the modified sel
 For example, a `first-child` variant plugin could be written like this:
 
 ```js
-function({ addVariant }) {
+function({ addVariant, e }) {
   addVariant('first-child', ({ modifySelectors, separator }) => {
     modifySelectors(({ className }) => {
-      return `.first-child${separator}${className}:first-child`
+      return `.${e(`first-child${separator}${className}`)}:first-child`
     })
   })
 }
@@ -614,13 +614,13 @@ This plugin takes all of the rules inside the container, wraps them in a `@suppo
 ```js
 const postcss = require('postcss')
 
-function({ addVariant }) {
+function({ addVariant, e }) {
   addVariant('supports-grid', ({ container, separator }) => {
     const supportsRule = postcss.atRule({ name: 'supports', params: '(display: grid)' })
     supportsRule.nodes = container.nodes
     container.nodes = [supportsRule]
     supportsRule.walkRules(rule => {
-      rule.selector = `.supports-grid${separator}${rule.selector.slice(1)}`
+      rule.selector = `.${e(`supports-grid${separator}${rule.selector.slice(1)}``)}
     })
   })
 }
