@@ -4,8 +4,8 @@
  * @author Joe Gibson (@gibsjose)
  */
 
-code[class*="language-"],
-pre[class*="language-"] {
+ code[class*="language-"],
+ pre[class*="language-"] {
   @apply font-mono text-gray-200;
   // color: #c5c8c6;
   text-shadow: 0 1px rgba(0, 0, 0, 0.3);
@@ -66,7 +66,7 @@ pre[class*="language-"] {
 .token.property,
 .token.keyword,
 .token.tag {
-    color: #96CBFE;
+  color: #96CBFE;
 }
 
 .token.class-name {
@@ -76,7 +76,7 @@ pre[class*="language-"] {
 
 .token.boolean,
 .token.constant {
-    color: #99CC99;
+  color: #99CC99;
 }
 
 .token.symbol,
@@ -102,16 +102,16 @@ pre[class*="language-"] {
 }
 
 .token.operator {
-    color: #EDEDED;
+  color: #EDEDED;
 }
 
 .token.entity {
-    color: #FFFFB6;
-    /* text-decoration: underline; */
+  color: #FFFFB6;
+  /* text-decoration: underline; */
 }
 
 .token.url {
-    color: #96CBFE;
+  color: #96CBFE;
 }
 
 .language-css .token.string,
@@ -121,7 +121,7 @@ pre[class*="language-"] {
 
 .token.atrule,
 .token.attr-value {
-    color: #F9EE98;
+  color: #F9EE98;
 }
 
 .token.function {
@@ -129,7 +129,7 @@ pre[class*="language-"] {
 }
 
 .token.regex {
-    color: #E9C062;
+  color: #E9C062;
 }
 
 .token.important {
@@ -154,3 +154,13 @@ pre[class*="language-"] {
   @apply text-sm;
 }
 
+// Custom overrides
+.token.atrule, .token.atrule .token.number {
+  color: #fff;
+}
+.token.atrule .token.rule {
+  color: #f9ee98;
+}
+.token.function {
+  color: #f9ee98;
+}
