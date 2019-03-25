@@ -164,7 +164,6 @@ module.exports = {
       ],
       serif: ['Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
       mono: [
-        'SFMono-Regular',
         'Menlo',
         'Monaco',
         'Consolas',
