@@ -15,9 +15,6 @@ Use the `@@tailwind` directive to insert Tailwind's `base`, `utilities` and `scr
 /**
  * This injects Tailwind's base styles, which is a combination of
  * Normalize.css and some additional base styles.
- *
- * You can see the styles here:
- * https://github.com/tailwindcss/tailwindcss/blob/master/css/base.css
  */
 @@tailwind base;
 
