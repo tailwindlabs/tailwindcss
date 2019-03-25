@@ -553,7 +553,7 @@ To add a new variant, call the `addVariant` function, passing in the name of you
 function({ addVariant, e }) {
   addVariant('disabled', ({ modifySelectors, separator }) => {
     modifySelectors(({ className }) => {
-      return `.disabled${e(separator)}${className}:disabled`
+      return `.${e(`disabled${separator}${className}`)}:disabled`
     })
   })
 }
@@ -582,7 +582,7 @@ For example, a `first-child` variant plugin could be written like this:
 function({ addVariant, e }) {
   addVariant('first-child', ({ modifySelectors, separator }) => {
     modifySelectors(({ className }) => {
-      return `.first-child${e(separator)}${className}:first-child`
+      return `.${e(`first-child${separator}${className}`)}:first-child`
     })
   })
 }
@@ -620,7 +620,7 @@ function({ addVariant, e }) {
     supportsRule.nodes = container.nodes
     container.nodes = [supportsRule]
     supportsRule.walkRules(rule => {
-      rule.selector = `.supports-grid${e(separator)}${rule.selector.slice(1)}`
+      rule.selector = `.${e(`supports-grid${separator}${rule.selector.slice(1)}``)}
     })
   })
 }
