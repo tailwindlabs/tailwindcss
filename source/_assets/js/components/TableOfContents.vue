@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
 const anchorJS = require('anchor-js')
 const anchors = new anchorJS()
 
@@ -39,8 +38,8 @@ export default {
   },
   mounted() {
     anchors.options = { placement: 'left', class: 'text-gray-500' }
-    anchors.add()
-    this.links = anchors.elements.filter((el) => _.includes(['H2', 'H3'], el.tagName)).map((el) => {
+    anchors.add('h2, h3')
+    this.links = anchors.elements.map((el) => {
       return {
         isChild: el.tagName === 'H3',
         text: getHeadingText(el),
