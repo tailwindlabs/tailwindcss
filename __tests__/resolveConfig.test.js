@@ -758,7 +758,7 @@ test('the theme function can use a default value if the key is missing', () => {
   })
 })
 
-test.only('the theme function can resolve function values', () => {
+test('the theme function can resolve function values', () => {
   const userConfig = {
     theme: {
       textColor: theme => ({
@@ -910,7 +910,7 @@ test('the original theme is not mutated', () => {
     },
     variants: {
       borderColor: ['responsive', 'hover'],
-    }
+    },
   }
 
   const defaultConfig = {
@@ -941,6 +941,6 @@ test('the original theme is not mutated', () => {
     },
     variants: {
       borderColor: ['responsive', 'hover'],
-    }
+    },
   })
 })
