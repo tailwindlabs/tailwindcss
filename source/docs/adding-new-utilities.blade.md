@@ -13,7 +13,7 @@ Deciding on the best way to extend a framework can be paralyzing, so here are so
 
 A bare-bones Tailwind setup is a single CSS file that looks like this:
 
-```less
+```css
 @@tailwind base;
 
 @@tailwind components;
@@ -27,7 +27,7 @@ If two rules have the same [specificity](https://developer.mozilla.org/en-US/doc
 
 For example, given the following CSS:
 
-```less
+```css
 .bg-red-500 {
   background: #ff0000;
 }
@@ -47,11 +47,9 @@ For example, given the following CSS:
 
 For this reason, **we recommend defining any custom utility classes at the end of your stylesheet,** *after* you inject Tailwind's utility classes:
 
-```less
+```css
 @@tailwind base;
-
 @@tailwind components;
-
 @@tailwind utilities;
 
 .bg-cover-image {
@@ -63,13 +61,17 @@ This way your custom utilities can override Tailwind utilities if needed, althou
 
 If you're using `postcss-import` or a preprocessor like Less, Sass, or Stylus, consider keeping your utilities in a separate file and importing them:
 
-```less
+```css
+/* Using postcss-import */
+@@import "tailwindcss/base";
+@@import "tailwindcss/components";
+@@import "tailwindcss/utilities";
+@@import "custom-utilities";
+
+/* Using Sass or Less */
 @@tailwind base;
-
 @@tailwind components;
-
 @@tailwind utilities;
-
 @@import "custom-utilities";
 ```
 
@@ -77,11 +79,9 @@ If you're using `postcss-import` or a preprocessor like Less, Sass, or Stylus, c
 
 If you'd like to create responsive versions of your own utilities based on the breakpoints defined in your Tailwind config file, wrap your utilities in the `@responsive { ... }` directive:
 
-```less
+```css
 @@tailwind base;
-
 @@tailwind components;
-
 @@tailwind utilities;
 
 @@responsive {
@@ -96,12 +96,16 @@ Tailwind will intelligently group the responsive versions into its existing medi
 The above code would generate CSS that looks something like this:
 
 ```css
-/* Base styles rendered here... */
-html { ... }
+/* Tailwind base styles rendered here... */
+html { /* ... */ }
+/* ... */
+
+/* Tailwind components rendered here... */
+.container { /* ... */ }
 /* ... */
 
 /* Tailwind utilities rendered here... */
-.bg-red-500 { ... }
+.bg-red-100 { /* ... */ }
 /* ... */
 
 .bg-cover-image {
@@ -109,8 +113,7 @@ html { ... }
 }
 
 @media (min-width: 640px) {
-  /* Tailwind utilities rendered here... */
-  .sm\:bg-red-500 { ... }
+  .sm\:bg-red-100 { /* ... */ }
   /* ... */
 
   .sm\:bg-cover-image {
@@ -119,8 +122,7 @@ html { ... }
 }
 
 @media (min-width: 768px) {
-  /* Tailwind utilities rendered here... */
-  .md\:bg-red-500 { ... }
+  .md\:bg-red-100 { /* ... */ }
   /* ... */
 
   .md\:bg-cover-image {
@@ -129,8 +131,7 @@ html { ... }
 }
 
 @media (min-width: 1024px) {
-  /* Tailwind utilities rendered here... */
-  .lg\:bg-red-500 { ... }
+  .lg\:bg-red-100 { /* ... */ }
   /* ... */
 
   .lg\:bg-cover-image {
@@ -139,8 +140,7 @@ html { ... }
 }
 
 @media (min-width: 1280px) {
-  /* Tailwind utilities rendered here... */
-  .xl\:bg-red-500 { ... }
+  .xl\:bg-red-100 { /* ... */ }
   /* ... */
 
   .xl\:bg-cover-image {
