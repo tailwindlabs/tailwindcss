@@ -26,10 +26,10 @@ features:
 
 Control an list's style position to be inside or outside, using `.list-inside` and `.list-outside`, respectively.
 
-@component('_partials.code-sample')
+@component('_partials.code-sample', ['class' => 'px-8'])
 <div class="mb-6">
   <p class="text-sm text-gray-600">Inside</p>
-  <ul class="list-disc list-inside bg-gray-200 text-gray-800 border-2 border-gray-500">
+  <ul class="list-disc list-inside bg-gray-200 text-gray-800 py-2">
     <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
     <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
     <li>Quidem, ipsam illum quis sed voluptatum quae eum fugit earum</li>
@@ -38,19 +38,19 @@ Control an list's style position to be inside or outside, using `.list-inside` a
 </div>
 <div class="mb-6">
   <p class="text-sm text-gray-600">Outside</p>
-  <ul class="list-disc list-outside bg-gray-200 text-gray-800 border-2 border-gray-500">
+  <ul class="list-disc list-outside bg-gray-200 text-gray-800 py-2">
     <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
     <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
     <li>Quidem, ipsam illum quis sed voluptatum quae eum fugit earum</li>
   </ul>
 </div>
 @slot('code')
-<ul class="list-inside ...">
+<ul class="list-inside bg-gray-200 ...">
   <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
   ...
 </ul>
 
-<ul class="list-outside ...">
+<ul class="list-outside bg-gray-200 ...">
   <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
   ...
 </ul>
@@ -100,7 +100,7 @@ For more information about Tailwind's responsive design features, check out the 
 </ul>
 @endslot
 @slot('code')
-<ul class="list-disc none:list-inside sm:list-outside md:list-inside lg:list-outside xl:list-inside">
+<ul class="none:list-inside sm:list-outside md:list-inside lg:list-outside xl:list-inside">
   <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
   <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
   <li>Quidem, ipsam illum quis sed voluptatum quae eum fugit earum</li>
