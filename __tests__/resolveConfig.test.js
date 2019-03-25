@@ -758,12 +758,16 @@ test('the theme function can use a default value if the key is missing', () => {
   })
 })
 
-test('the theme function can resolve function values', () => {
+test.only('the theme function can resolve function values', () => {
   const userConfig = {
     theme: {
+      textColor: theme => ({
+        lime: 'lime',
+        ...theme('colors'),
+      }),
       backgroundColor: theme => ({
         orange: 'orange',
-        ...theme('colors'),
+        ...theme('textColor'),
       }),
       borderColor: theme => theme('backgroundColor'),
     },
@@ -798,13 +802,21 @@ test('the theme function can resolve function values', () => {
         green: 'green',
         blue: 'blue',
       },
+      textColor: {
+        lime: 'lime',
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+      },
       backgroundColor: {
+        lime: 'lime',
         orange: 'orange',
         red: 'red',
         green: 'green',
         blue: 'blue',
       },
       borderColor: {
+        lime: 'lime',
         orange: 'orange',
         red: 'red',
         green: 'green',
