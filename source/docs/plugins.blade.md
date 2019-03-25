@@ -647,7 +647,7 @@ modules.exports = {
 
 To use custom variants with custom utilities in your own CSS, use the [variants at-rule](/docs/functions-and-directives#variants):
 
-```less
+```css
 @variants hover, first-child {
   .bg-cover-image {
     background-image: url('/path/to/image.jpg');

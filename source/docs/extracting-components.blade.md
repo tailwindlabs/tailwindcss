@@ -84,7 +84,7 @@ Say you have these two buttons:
 
 It might be tempting to implement component classes for these buttons like this:
 
-```less
+```css
 .btn-blue {
   @@apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
 }
@@ -106,7 +106,7 @@ If you wanted to change the padding, font weight, or border radius of all the bu
 
 A better approach is to extract the parts that are the same into a separate class:
 
-```less
+```css
 .btn {
   @@apply font-bold py-2 px-4 rounded;
 }
@@ -170,7 +170,7 @@ Since Tailwind's utility classes don't rely on `!important` to defeat other styl
 
 Here's an example:
 
-```less
+```css
 @@tailwind base;
 
 @@tailwind components;
@@ -190,7 +190,7 @@ Here's an example:
 
 If you're using a preprocessor like Less or Sass, consider keeping your components in separate files and importing them:
 
-```less
+```css
 @@tailwind base;
 
 @@tailwind components;

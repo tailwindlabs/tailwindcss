@@ -23,7 +23,7 @@ yarn add tailwindcss --dev
 
 Use the `@@tailwind` directive to inject Tailwind's `base`, `components`, and `utilities` styles into your CSS:
 
-```less
+```css
 @@tailwind base;
 
 @@tailwind components;
@@ -35,7 +35,7 @@ Tailwind will swap these directives out at build time with all of its generated 
 
 If you're using `postcss-import`, use our imports instead of the `@@tailwind` directive to avoid issues when importing any of your own additional files:
 
-```less
+```css
 @@import "tailwindcss/base";
 
 @@import "tailwindcss/components";

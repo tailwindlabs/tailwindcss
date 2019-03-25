@@ -186,15 +186,15 @@ To apply a state variant responsively, add the responsive prefix first, before t
 
 You can generate state variants for your own custom utilities using the `@@variants` directive:
 
-```less
-// Input:
+```css
+/* Input: */
 @@variants group-hover, hover, focus {
   .banana {
     color: yellow;
   }
 }
 
-// Output:
+/* Output: */
 .banana {
   color: yellow;
 }
