@@ -32,7 +32,7 @@ By default lists are unstyled. That means if you want to create lists that have 
 
 @component('_partials.code-sample')
 <div class="mb-6">
-  <p class="text-sm text-gray-600">Default</p>
+  <p class="text-sm text-gray-600">.list-none (default)</p>
   <ul class="default">
     <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
     <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
@@ -41,7 +41,7 @@ By default lists are unstyled. That means if you want to create lists that have 
 </p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-gray-600">Styled unordered list</p>
+  <p class="text-sm text-gray-600">.list-disc</p>
   <ul class="list-disc list-inside">
     <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
     <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
@@ -49,7 +49,7 @@ By default lists are unstyled. That means if you want to create lists that have 
   </ul>
 </div>
 <div>
-  <p class="text-sm text-gray-600">Styled ordered list</p>
+  <p class="text-sm text-gray-600">.list-decimal</p>
   <ol class="list-decimal list-inside">
     <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
     <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
@@ -62,12 +62,12 @@ By default lists are unstyled. That means if you want to create lists that have 
   ...
 </ul>
 
-<ul class="list-disc list-inside">
+<ul class="list-disc">
   <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
   ...
 </ul>
 
-<ol class="list-decimal list-inside">
+<ol class="list-decimal">
   <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
   ...
 </ol>
@@ -117,7 +117,7 @@ For more information about Tailwind's responsive design features, check out the 
 </ul>
 @endslot
 @slot('code')
-<ul class="none:list-inside list-none sm:list-disc md:list-decimal lg:list-disc xl:list-none">
+<ul class="none:list-none sm:list-disc md:list-decimal lg:list-disc xl:list-none">
   <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
   <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
   <li>Quidem, ipsam illum quis sed voluptatum quae eum fugit earum</li>
