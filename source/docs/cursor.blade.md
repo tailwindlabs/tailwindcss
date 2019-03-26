@@ -4,7 +4,7 @@ title: "Cursor"
 description: "Utilities for controlling the cursor style when hovering over an element."
 features:
   responsive: true
-  customizable: false
+  customizable: true
   hover: false
   focus: false
 ---
@@ -47,6 +47,21 @@ features:
 ])
 
 ## Customizing
+
+### Cursors
+
+By default Tailwind provides six `cursor` utilities. You change, add, or remove these by editing the `cursor` values in the `theme` section of your Tailwind config.
+
+@component('_partials.customized-config', ['key' => 'cursor'])
+  auto: 'auto',
+  default: 'default',
+  pointer: 'pointer',
+- wait: 'wait',
+- move: 'move',
+  'not-allowed': 'not-allowed',
++ crosshair: 'crosshair',
++ 'zoom-in': 'zoom-in',
+@endcomponent
 
 @include('_partials.variants-and-disabling', [
     'utility' => [
