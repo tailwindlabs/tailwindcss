@@ -9,8 +9,6 @@ titleBorder: true
 
 For most projects (and to take advantage of Tailwind's customization features), you'll want to install Tailwind via npm.
 
-Tailwind is [available on npm](https://www.npmjs.com/package/tailwindcss) and can be installed using npm or Yarn.
-
 ```bash
 # Using npm
 npm install tailwindcss --save-dev
@@ -150,7 +148,7 @@ mix.postCss('resources/css/main.css', 'public/css', [
 If you're using a preprocessor, use the `options` method to add `tailwindcss` as a PostCSS plugin:
 
 ```js
-var tailwindcss = require('tailwindcss')
+const tailwindcss = require('tailwindcss')
 
 mix.less('resources/less/app.less', 'public/css')
   .options({
@@ -163,7 +161,7 @@ mix.less('resources/less/app.less', 'public/css')
 **Note for Sass users:** Due to [an unresolved issue](https://github.com/bholloway/resolve-url-loader/issues/28) with one of Mix's dependencies, to use Sass with Tailwind you'll need to disable `processCssUrls`:
 
 ```js
-var tailwindcss = require('tailwindcss')
+const tailwindcss = require('tailwindcss')
 
 mix.sass('resources/sass/app.scss', 'public/css')
   .options({
