@@ -253,41 +253,6 @@ It's important to note that (`responsive` excluded) **variants are generated in 
 
 Learn more about state variants in the ["State Variants" documentation](/docs/state-variants).
 
-To include a module but not generate any state variants, use an empty array:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    // Include the `appearance` utilities, but not responsive,
-    // focus, hover, etc. versions.
-    appearance: [],
-  },
-}
-```
-
-To completely disable a module, set it to `false`:
-
-```js
-// ...
-
-module.exports = {
-  // ...
-
-  variants: {
-
-    // Don't include this module at all.
-    appearance: false,
-    // ...
-  },
-
-  // ...
-}
-```
-
-If a module is missing from your configuration file, the default configuration for that module will be used.
-
 ## Plugins
 
 // To do...
