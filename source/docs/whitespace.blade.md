@@ -1,12 +1,7 @@
 ---
 extends: _layouts.documentation
-title: "Whitespace &amp; Wrapping"
-description: "Utilities for controlling the whitespace and wrapping of an element."
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: false
+title: "Whitespace"
+description: "Utilities for controlling an element's white-space property."
 ---
 
 @include('_partials.work-in-progress')
@@ -38,21 +33,6 @@ features:
       'white-space: pre-wrap;',
       'Preserve spaces but not line returns within an element.',
     ],
-    [
-      '.break-words',
-      'word-wrap: break-word;',
-      'Add line breaks mid-word if needed.',
-    ],
-    [
-      '.break-normal',
-      'word-wrap: normal;',
-      'Only add line breaks at normal word break points.',
-    ],
-    [
-      '.truncate',
-      "overflow: hidden;\ntext-overflow: ellipsis;\nwhite-space: nowrap",
-      'Truncate overflowing text with an ellipsis (<code>…</code>) if needed.',
-    ],
   ]
 ])
 
@@ -60,7 +40,7 @@ features:
 
 @include('_partials.variants-and-disabling', [
     'utility' => [
-        'name' => 'whitespace & wrapping',
+        'name' => 'whitespace',
         'property' => 'whitespace',
     ],
     'variants' => [

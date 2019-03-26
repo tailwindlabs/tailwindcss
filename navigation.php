@@ -39,7 +39,8 @@ return [
         'Style &amp; Decoration' => 'text-style',
         'Text Alignment' => 'text-alignment',
         'Vertical Alignment' => 'vertical-alignment',
-        'Whitespace &amp; Wrapping' => 'whitespace-and-wrapping',
+        'Whitespace' => 'whitespace',
+        'Word Break' => 'word-break',
     ],
     'Backgrounds' => [
         'Background Attachment' => 'background-attachment',
