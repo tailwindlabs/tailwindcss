@@ -308,25 +308,25 @@ That means if you add your own responsive utility like this:
 
 ```css
 @responsive {
-  .bg-brand-gradient { ... }
+  .bg-brand-gradient { /* ... */ }
 }
 ```
 
 ...the generated responsive classes will not have your configured prefix:
 
 ```css
-.bg-brand-gradient { ... }
+.bg-brand-gradient { /* ... */ }
 @media (min-width: 640px) {
-  .sm\:bg-brand-gradient { ... }
+  .sm\:bg-brand-gradient { /* ... */ }
 }
 @media (min-width: 768px) {
-  .md\:bg-brand-gradient { ... }
+  .md\:bg-brand-gradient { /* ... */ }
 }
 @media (min-width: 992) {
-  .lg\:bg-brand-gradient { ... }
+  .lg\:bg-brand-gradient { /* ... */ }
 }
 @media (min-width: 1280px) {
-  .xl\:bg-brand-gradient { ... }
+  .xl\:bg-brand-gradient { /* ... */ }
 }
 ```
 
@@ -334,7 +334,7 @@ If you'd like to prefix your own utilities as well, just add the prefix to the c
 
 ```css
 @responsive {
-  .tw-bg-brand-gradient { ... }
+  .tw-bg-brand-gradient { /* ... */ }
 }
 ```
 
