@@ -11,7 +11,7 @@ return [
         $pages = collect(array_wrap($page));
 
         return $pages->contains(function ($page) use ($path) {
-            return str_contains($page->getPath(), $path);
+            return $page->getPath() === $path;
         });
     },
     'anyChildrenActive' => function ($page, $children) {
