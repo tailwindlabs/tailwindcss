@@ -275,7 +275,7 @@ To completely disable a module, set it to `false`:
 module.exports = {
   // ...
 
-  modules: {
+  variants: {
 
     // Don't include this module at all.
     appearance: false,
