@@ -142,7 +142,11 @@
   }
 
   > ul {
-    @apply pl-4 list-disc list-inside;
+    @apply pl-0 list-none;
+    li::before {
+      @apply text-gray-400 inline-block mr-3;
+      content: "\2022";
+    }
   }
 
   > ol {

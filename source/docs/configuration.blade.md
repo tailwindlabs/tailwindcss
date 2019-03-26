@@ -177,59 +177,27 @@ We provide a well-considered set of default breakpoints based on common device r
 
 Learn more about customizing screens in the [Responsive Design](/docs/responsive-design#customizing-screens) documentation.
 
-### Styles
+### Core plugin styles
 
-The next set of properties define all of the values you'd like to use for utilities that are dynamically generated.
+The rest of the `theme` section is used to configure which values are available for each individual core plugin.
 
-This includes things like:
-
-- Background colors
-- Border widths
-- Font families
-- Font weights
-- Text sizes
-- Padding, margin, and negative margin scales
-- Width and height scales
-
-...and many others.
-
-For example, here's the section used to customize which border radius utilities will be generated:
+For example, you can use `theme.borderRadius` to customize which border radius utilities will be generated:
 
 ```js
-// ...
-
 module.exports = {
-  // ...
-
-  /*
-  |-----------------------------------------------------------------------------
-  | Border radius                    https://tailwindcss.com/docs/border-radius
-  |-----------------------------------------------------------------------------
-  |
-  | Here is where you define your border radius values. If a `default` radius
-  | is provided, it will be made available as the non-suffixed `.rounded`
-  | utility.
-  |
-  | If your scale includes a `0` value to reset already rounded corners, it's
-  | a good idea to put it first so other values are able to override it.
-  |
-  | Class name: .rounded{-side?}{-size?}
-  |
-  */
-
-  borderRadius: {
-    'none': '0',
-    'sm': '.125rem',
-    default: '.25rem',
-    'lg': '.5rem',
-    'full': '9999px',
-  },
-
-  // ...
+  theme: {
+    borderRadius: {
+      'none': '0',
+      'sm': '.125rem',
+      default: '.25rem',
+      'lg': '.5rem',
+      'full': '9999px',
+    },
+  }
 }
 ```
 
-Read through the generated config file or visit the "customizing" documentation for each module to learn more.
+To learn more about customizing a specific core plugin, visit the documentation for that plugin.
 
 ## Variants
 
