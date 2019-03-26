@@ -61,7 +61,9 @@ return [
         'Align Content' => 'flexbox-align-content',
         'Align Self' => 'flexbox-align-self',
         'Justify Content' => 'flexbox-justify-content',
-        'Flex, Grow, &amp; Shrink' => 'flexbox-flex-grow-shrink',
+        'Flex' => 'flexbox-flex',
+        'Flex Grow' => 'flexbox-flex-grow',
+        'Flex Shrink' => 'flexbox-flex-shrink',
     ],
     'Spacing' => [
         'Padding' => 'padding',
