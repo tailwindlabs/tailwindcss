@@ -1,13 +1,17 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const verticalAlign = config('classesNames').verticalAlign
+
     addUtilities(
       {
-        '.align-baseline': { 'vertical-align': 'baseline' },
-        '.align-top': { 'vertical-align': 'top' },
-        '.align-middle': { 'vertical-align': 'middle' },
-        '.align-bottom': { 'vertical-align': 'bottom' },
-        '.align-text-top': { 'vertical-align': 'text-top' },
-        '.align-text-bottom': { 'vertical-align': 'text-bottom' },
+        [`.${verticalAlign}-baseline`]: { 'vertical-align': 'baseline' },
+        [`.${verticalAlign}-top`]: { 'vertical-align': 'top' },
+        [`.${verticalAlign}-middle`]: { 'vertical-align': 'middle' },
+        [`.${verticalAlign}-bottom`]: { 'vertical-align': 'bottom' },
+        [`.${verticalAlign}-text-top`]: { 'vertical-align': 'text-top' },
+        [`.${verticalAlign}-text-bottom`]: {
+          'vertical-align': 'text-bottom',
+        },
       },
       config('variants.verticalAlign')
     )

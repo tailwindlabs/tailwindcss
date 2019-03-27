@@ -2,7 +2,7 @@ export default function() {
   return function({ addUtilities, config }) {
     addUtilities(
       {
-        '.outline-none': { outline: '0' },
+        [`.${config('classesNames').outline}-none`]: { outline: '0' },
       },
       config('variants.outline')
     )

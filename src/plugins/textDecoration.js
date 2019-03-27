@@ -1,10 +1,12 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const textDecoration = config('classesNames').textDecoration
+
     addUtilities(
       {
-        '.underline': { 'text-decoration': 'underline' },
-        '.line-through': { 'text-decoration': 'line-through' },
-        '.no-underline': { 'text-decoration': 'none' },
+        [`.${textDecoration}underline`]: { 'text-decoration': 'underline' },
+        [`.${textDecoration}line-through`]: { 'text-decoration': 'line-through' },
+        [`.${textDecoration}no-underline`]: { 'text-decoration': 'none' },
       },
       config('variants.textDecoration')
     )

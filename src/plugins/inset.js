@@ -2,9 +2,11 @@ import _ from 'lodash'
 
 export default function() {
   return function({ addUtilities, e, config }) {
+    const inset = config('classesNames').inset
+
     const generators = [
       (size, modifier) => ({
-        [`.${e(`inset-${modifier}`)}`]: {
+        [`.${e(`${inset}-${modifier}`)}`]: {
           top: `${size}`,
           right: `${size}`,
           bottom: `${size}`,
@@ -12,8 +14,14 @@ export default function() {
         },
       }),
       (size, modifier) => ({
-        [`.${e(`inset-y-${modifier}`)}`]: { top: `${size}`, bottom: `${size}` },
-        [`.${e(`inset-x-${modifier}`)}`]: { right: `${size}`, left: `${size}` },
+        [`.${e(`${inset}-${config('sides').vertical}-${modifier}`)}`]: {
+          top: `${size}`,
+          bottom: `${size}`,
+        },
+        [`.${e(`${inset}-${config('sides').horizontal}-${modifier}`)}`]: {
+          right: `${size}`,
+          left: `${size}`,
+        },
       }),
       (size, modifier) => ({
         [`.${e(`top-${modifier}`)}`]: { top: `${size}` },

@@ -1,17 +1,19 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const borderStyle = config('classesNames').borderStyle
+
     addUtilities(
       {
-        '.border-solid': {
+        [`.${borderStyle}-solid`]: {
           'border-style': 'solid',
         },
-        '.border-dashed': {
+        [`.${borderStyle}-dashed`]: {
           'border-style': 'dashed',
         },
-        '.border-dotted': {
+        [`.${borderStyle}-dotted`]: {
           'border-style': 'dotted',
         },
-        '.border-none': {
+        [`.${borderStyle}-none`]: {
           'border-style': 'none',
         },
       },

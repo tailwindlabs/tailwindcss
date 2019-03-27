@@ -1,9 +1,11 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const pointerEvents = config('classesNames').pointerEvents
+
     addUtilities(
       {
-        '.pointer-events-none': { 'pointer-events': 'none' },
-        '.pointer-events-auto': { 'pointer-events': 'auto' },
+        [`.${pointerEvents}-none`]: { 'pointer-events': 'none' },
+        [`.${pointerEvents}-auto`]: { 'pointer-events': 'auto' },
       },
       config('variants.pointerEvents')
     )

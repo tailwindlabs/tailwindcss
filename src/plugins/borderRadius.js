@@ -1,34 +1,46 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, config }) {
+  return function({ addUtilities, config, e }) {
+    const borderRadius = config('classesNames').borderRadius
+
     const generators = [
       (value, modifier) => ({
-        [`.${e(`rounded${modifier}`)}`]: { borderRadius: `${value}` },
-      }),
-      (value, modifier) => ({
-        [`.${e(`rounded-t${modifier}`)}`]: {
-          borderTopLeftRadius: `${value}`,
-          borderTopRightRadius: `${value}`,
-        },
-        [`.${e(`rounded-r${modifier}`)}`]: {
-          borderTopRightRadius: `${value}`,
-          borderBottomRightRadius: `${value}`,
-        },
-        [`.${e(`rounded-b${modifier}`)}`]: {
-          borderBottomRightRadius: `${value}`,
-          borderBottomLeftRadius: `${value}`,
-        },
-        [`.${e(`rounded-l${modifier}`)}`]: {
-          borderTopLeftRadius: `${value}`,
-          borderBottomLeftRadius: `${value}`,
+        [`.${e(`${borderRadius}${modifier}`)}`]: {
+          borderRadius: `${value}`,
         },
       }),
       (value, modifier) => ({
-        [`.${e(`rounded-tl${modifier}`)}`]: { borderTopLeftRadius: `${value}` },
-        [`.${e(`rounded-tr${modifier}`)}`]: { borderTopRightRadius: `${value}` },
-        [`.${e(`rounded-br${modifier}`)}`]: { borderBottomRightRadius: `${value}` },
-        [`.${e(`rounded-bl${modifier}`)}`]: { borderBottomLeftRadius: `${value}` },
+        [`.${e(`${borderRadius}-${config('sides').top}${modifier}`)}`]: {
+          borderTopLeftRadius: `${value}`,
+          borderTopRightRadius: `${value}`,
+        },
+        [`.${e(`${borderRadius}-${config('sides').right}${modifier}`)}`]: {
+          borderTopRightRadius: `${value}`,
+          borderBottomRightRadius: `${value}`,
+        },
+        [`.${e(`${borderRadius}-${config('sides').bottom}${modifier}`)}`]: {
+          borderBottomRightRadius: `${value}`,
+          borderBottomLeftRadius: `${value}`,
+        },
+        [`.${e(`${borderRadius}-${config('sides').left}${modifier}`)}`]: {
+          borderTopLeftRadius: `${value}`,
+          borderBottomLeftRadius: `${value}`,
+        },
+      }),
+      (value, modifier) => ({
+        [`.${e(`${borderRadius}-tl${modifier}`)}`]: {
+          borderTopLeftRadius: `${value}`,
+        },
+        [`.${e(`${borderRadius}-tr${modifier}`)}`]: {
+          borderTopRightRadius: `${value}`,
+        },
+        [`.${e(`${borderRadius}-br${modifier}`)}`]: {
+          borderBottomRightRadius: `${value}`,
+        },
+        [`.${e(`${borderRadius}-bl${modifier}`)}`]: {
+          borderBottomLeftRadius: `${value}`,
+        },
       }),
     ]
 

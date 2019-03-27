@@ -5,7 +5,7 @@ export default function() {
     const utilities = _.fromPairs(
       _.map(config('theme.zIndex'), (value, modifier) => {
         return [
-          `.z-${modifier}`,
+          `.${config('classesNames').zIndex}-${modifier}`,
           {
             'z-index': value,
           },

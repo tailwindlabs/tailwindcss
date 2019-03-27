@@ -1,11 +1,11 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, config }) {
+  return function({ addUtilities, config, e }) {
     const utilities = _.fromPairs(
       _.map(config('theme.backgroundSize'), (value, modifier) => {
         return [
-          `.${e(`bg-${modifier}`)}`,
+          `.${e(`${config('classesNames').backgroundSize}-${modifier}`)}`,
           {
             'background-size': value,
           },

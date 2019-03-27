@@ -1,20 +1,22 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const alignContent = config('classesNames').alignContent
+
     addUtilities(
       {
-        '.content-center': {
+        [`.${alignContent}-center`]: {
           'align-content': 'center',
         },
-        '.content-start': {
+        [`.${alignContent}-start`]: {
           'align-content': 'flex-start',
         },
-        '.content-end': {
+        [`.${alignContent}-end`]: {
           'align-content': 'flex-end',
         },
-        '.content-between': {
+        [`.${alignContent}-between`]: {
           'align-content': 'space-between',
         },
-        '.content-around': {
+        [`.${alignContent}-around`]: {
           'align-content': 'space-around',
         },
       },

@@ -1,9 +1,11 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const userSelect = config('classesNames').userSelect
+
     addUtilities(
       {
-        '.select-none': { 'user-select': 'none' },
-        '.select-text': { 'user-select': 'text' },
+        [`.${userSelect}-none`]: { 'user-select': 'none' },
+        [`.${userSelect}-text`]: { 'user-select': 'text' },
       },
       config('variants.userSelect')
     )

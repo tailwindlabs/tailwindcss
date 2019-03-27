@@ -1,20 +1,39 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, config }) {
+  return function({ addUtilities, config, e }) {
+    const classesNames = config('classesNames')
+    const negativeMargin = classesNames.negativeMargin
+
     const generators = [
       (size, modifier) => ({
-        [`.${e(`-m-${modifier}`)}`]: { margin: `${size}` },
+        [`.${e(`${negativeMargin.replace(/-$/g, '')}-${modifier}`)}`]: {
+          margin: `${size}`,
+        },
       }),
       (size, modifier) => ({
-        [`.${e(`-my-${modifier}`)}`]: { 'margin-top': `${size}`, 'margin-bottom': `${size}` },
-        [`.${e(`-mx-${modifier}`)}`]: { 'margin-left': `${size}`, 'margin-right': `${size}` },
+        [`.${e(`${negativeMargin}${config('sides').vertical}-${modifier}`)}`]: {
+          'margin-top': `${size}`,
+          'margin-bottom': `${size}`,
+        },
+        [`.${e(`${negativeMargin}${config('sides').horizontal}-${modifier}`)}`]: {
+          'margin-left': `${size}`,
+          'margin-right': `${size}`,
+        },
       }),
       (size, modifier) => ({
-        [`.${e(`-mt-${modifier}`)}`]: { 'margin-top': `${size}` },
-        [`.${e(`-mr-${modifier}`)}`]: { 'margin-right': `${size}` },
-        [`.${e(`-mb-${modifier}`)}`]: { 'margin-bottom': `${size}` },
-        [`.${e(`-ml-${modifier}`)}`]: { 'margin-left': `${size}` },
+        [`.${e(`${negativeMargin}${config('sides').top}-${modifier}`)}`]: {
+          'margin-top': `${size}`,
+        },
+        [`.${e(`${negativeMargin}${config('sides').right}-${modifier}`)}`]: {
+          'margin-right': `${size}`,
+        },
+        [`.${e(`${negativeMargin}${config('sides').bottom}-${modifier}`)}`]: {
+          'margin-bottom': `${size}`,
+        },
+        [`.${e(`${negativeMargin}${config('sides').left}-${modifier}`)}`]: {
+          'margin-left': `${size}`,
+        },
       }),
     ]
 

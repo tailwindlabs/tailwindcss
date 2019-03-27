@@ -1,11 +1,11 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, config }) {
+  return function({ addUtilities, config, e }) {
     const utilities = _.fromPairs(
       _.map(config('theme.opacity'), (value, modifier) => {
         return [
-          `.${e(`opacity-${modifier}`)}`,
+          `.${e(`${config('classesNames').opacity}-${modifier}`)}`,
           {
             opacity: value,
           },

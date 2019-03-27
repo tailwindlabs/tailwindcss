@@ -5,7 +5,7 @@ export default function() {
     const utilities = _.fromPairs(
       _.map(config('theme.lineHeight'), (value, modifier) => {
         return [
-          `.${e(`leading-${modifier}`)}`,
+          `.${e(`${config('classesNames').lineHeight}-${modifier}`)}`,
           {
             'line-height': value,
           },

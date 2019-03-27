@@ -1,9 +1,11 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const tableLayout = config('classesNames').tableLayout
+
     addUtilities(
       {
-        '.table-auto': { 'table-layout': 'auto' },
-        '.table-fixed': { 'table-layout': 'fixed' },
+        [`.${tableLayout}-auto`]: { 'table-layout': 'auto' },
+        [`.${tableLayout}-fixed`]: { 'table-layout': 'fixed' },
       },
       config('variants.tableLayout')
     )

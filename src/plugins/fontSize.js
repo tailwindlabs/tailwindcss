@@ -5,7 +5,7 @@ export default function() {
     const utilities = _.fromPairs(
       _.map(config('theme.fontSize'), (value, modifier) => {
         return [
-          `.${e(`text-${modifier}`)}`,
+          `.${e(`${config('classesNames').fontSize}-${modifier}`)}`,
           {
             'font-size': value,
           },

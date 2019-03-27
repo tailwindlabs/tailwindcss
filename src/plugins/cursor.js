@@ -1,18 +1,17 @@
-import _ from 'lodash'
-
 export default function() {
-  return function({ addUtilities, e, config }) {
-    const utilities = _.fromPairs(
-      _.map(config('theme.cursor'), (value, modifier) => {
-        return [
-          `.${e(`cursor-${modifier}`)}`,
-          {
-            cursor: value,
-          },
-        ]
-      })
-    )
+  return function({ addUtilities, config }) {
+    const cursor = config('classesNames').cursor
 
-    addUtilities(utilities, config('variants.cursor'))
+    addUtilities(
+      {
+        [`.${cursor}-auto`]: { cursor: 'auto' },
+        [`.${cursor}-default`]: { cursor: 'default' },
+        [`.${cursor}-pointer`]: { cursor: 'pointer' },
+        [`.${cursor}-wait`]: { cursor: 'wait' },
+        [`.${cursor}-move`]: { cursor: 'move' },
+        [`.${cursor}-not-allowed`]: { cursor: 'not-allowed' },
+      },
+      config('variants.cursor')
+    )
   }
 }

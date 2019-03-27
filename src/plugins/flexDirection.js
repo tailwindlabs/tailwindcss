@@ -1,17 +1,19 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const flexDirection = config('classesNames').flexDirection
+
     addUtilities(
       {
-        '.flex-row': {
+        [`.${flexDirection}-row`]: {
           'flex-direction': 'row',
         },
-        '.flex-row-reverse': {
+        [`.${flexDirection}-row-reverse`]: {
           'flex-direction': 'row-reverse',
         },
-        '.flex-col': {
+        [`.${flexDirection}-col`]: {
           'flex-direction': 'column',
         },
-        '.flex-col-reverse': {
+        [`.${flexDirection}-col-reverse`]: {
           'flex-direction': 'column-reverse',
         },
       },

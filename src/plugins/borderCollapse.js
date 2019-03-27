@@ -1,9 +1,11 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const borderCollapse = config('classesNames').borderCollapse
+
     addUtilities(
       {
-        '.border-collapse': { 'border-collapse': 'collapse' },
-        '.border-separate': { 'border-collapse': 'separate' },
+        [`.${borderCollapse}-collapse`]: { 'border-collapse': 'collapse' },
+        [`.${borderCollapse}-separate`]: { 'border-collapse': 'separate' },
       },
       config('variants.borderCollapse')
     )

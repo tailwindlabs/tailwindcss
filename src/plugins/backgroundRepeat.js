@@ -1,11 +1,19 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const backgroundRepeat = config('classesNames').backgroundRepeat
+
     addUtilities(
       {
-        '.bg-repeat': { 'background-repeat': 'repeat' },
-        '.bg-no-repeat': { 'background-repeat': 'no-repeat' },
-        '.bg-repeat-x': { 'background-repeat': 'repeat-x' },
-        '.bg-repeat-y': { 'background-repeat': 'repeat-y' },
+        [`.${backgroundRepeat}-repeat`]: { 'background-repeat': 'repeat' },
+        [`.${backgroundRepeat}-no-repeat`]: {
+          'background-repeat': 'no-repeat',
+        },
+        [`.${backgroundRepeat}-repeat-x`]: {
+          'background-repeat': 'repeat-x',
+        },
+        [`.${backgroundRepeat}-repeat-y`]: {
+          'background-repeat': 'repeat-y',
+        },
       },
       config('variants.backgroundRepeat')
     )

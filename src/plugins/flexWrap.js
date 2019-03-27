@@ -1,11 +1,13 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const flexWrap = config('classesNames').flexWrap
+
     addUtilities(
       {
-        '.flex-wrap': {
+        [`.${flexWrap}`]: {
           'flex-wrap': 'wrap',
         },
-        '.flex-wrap-reverse': {
+        [`.${flexWrap}-reverse`]: {
           'flex-wrap': 'wrap-reverse',
         },
         '.flex-no-wrap': {

@@ -1,32 +1,34 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const display = config('classesNames').display
+
     addUtilities(
       {
-        '.block': {
+        [`.${display}block`]: {
           display: 'block',
         },
-        '.inline-block': {
+        [`.${display}inline-block`]: {
           display: 'inline-block',
         },
-        '.inline': {
+        [`.${display}inline`]: {
           display: 'inline',
         },
-        '.flex': {
+        [`.${display}flex`]: {
           display: 'flex',
         },
-        '.inline-flex': {
+        [`.${display}inline-flex`]: {
           display: 'inline-flex',
         },
-        '.table': {
+        [`.${display}table`]: {
           display: 'table',
         },
-        '.table-row': {
+        [`.${display}table-row`]: {
           display: 'table-row',
         },
-        '.table-cell': {
+        [`.${display}table-cell`]: {
           display: 'table-cell',
         },
-        '.hidden': {
+        [`.${display}hidden`]: {
           display: 'none',
         },
       },

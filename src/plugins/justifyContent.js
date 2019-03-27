@@ -1,20 +1,22 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const justifyContent = config('classesNames').justifyContent
+
     addUtilities(
       {
-        '.justify-start': {
+        [`.${justifyContent}-start`]: {
           'justify-content': 'flex-start',
         },
-        '.justify-end': {
+        [`.${justifyContent}-end`]: {
           'justify-content': 'flex-end',
         },
-        '.justify-center': {
+        [`.${justifyContent}-center`]: {
           'justify-content': 'center',
         },
-        '.justify-between': {
+        [`.${justifyContent}-between`]: {
           'justify-content': 'space-between',
         },
-        '.justify-around': {
+        [`.${justifyContent}-around`]: {
           'justify-content': 'space-around',
         },
       },

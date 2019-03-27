@@ -1,11 +1,11 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, config }) {
+  return function({ addUtilities, config, e }) {
     const utilities = _.fromPairs(
       _.map(config('theme.maxHeight'), (value, modifier) => {
         return [
-          `.${e(`max-h-${modifier}`)}`,
+          `.${e(`${config('classesNames').maxHeight}-${modifier}`)}`,
           {
             'max-height': value,
           },

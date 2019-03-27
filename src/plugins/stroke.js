@@ -5,7 +5,7 @@ export default function() {
     const utilities = _.fromPairs(
       _.map(config('theme.stroke'), (value, modifier) => {
         return [
-          `.${e(`stroke-${modifier}`)}`,
+          `.${e(`${config('classesNames').stroke}-${modifier}`)}`,
           {
             stroke: value,
           },

@@ -1,9 +1,11 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const fontStyle = config('classesNames').fontStyle
+
     addUtilities(
       {
-        '.italic': { 'font-style': 'italic' },
-        '.not-italic': { 'font-style': 'normal' },
+        [`.${fontStyle}italic`]: { 'font-style': 'italic' },
+        [`.${fontStyle}not-italic`]: { 'font-style': 'normal' },
       },
       config('variants.fontStyle')
     )

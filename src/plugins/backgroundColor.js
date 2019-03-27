@@ -6,7 +6,7 @@ export default function() {
     const utilities = _.fromPairs(
       _.map(flattenColorPalette(config('theme.backgroundColor')), (value, modifier) => {
         return [
-          `.${e(`bg-${modifier}`)}`,
+          `.${e(`${config('classesNames').backgroundColor}-${modifier}`)}`,
           {
             'background-color': value,
           },

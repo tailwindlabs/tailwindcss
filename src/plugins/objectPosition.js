@@ -1,18 +1,24 @@
-import _ from 'lodash'
-
 export default function() {
-  return function({ addUtilities, e, config }) {
-    const utilities = _.fromPairs(
-      _.map(config('theme.objectPosition'), (value, modifier) => {
-        return [
-          `.${e(`object-${modifier}`)}`,
-          {
-            'object-position': value,
-          },
-        ]
-      })
-    )
+  return function({ addUtilities, config }) {
+    const objectPosition = config('classesNames').objectPosition
 
-    addUtilities(utilities, config('variants.objectPosition'))
+    addUtilities(
+      {
+        [`.${objectPosition}-bottom`]: { 'object-position': 'bottom' },
+        [`.${objectPosition}-center`]: { 'object-position': 'center' },
+        [`.${objectPosition}-left`]: { 'object-position': 'left' },
+        [`.${objectPosition}-left-bottom`]: {
+          'object-position': 'left bottom',
+        },
+        [`.${objectPosition}-left-top`]: { 'object-position': 'left top' },
+        [`.${objectPosition}-right`]: { 'object-position': 'right' },
+        [`.${objectPosition}-right-bottom`]: {
+          'object-position': 'right bottom',
+        },
+        [`.${objectPosition}-right-top`]: { 'object-position': 'right top' },
+        [`.${objectPosition}-top`]: { 'object-position': 'top' },
+      },
+      config('variants.objectPosition')
+    )
   }
 }

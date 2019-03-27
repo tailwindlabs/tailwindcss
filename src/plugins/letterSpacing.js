@@ -5,7 +5,7 @@ export default function() {
     const utilities = _.fromPairs(
       _.map(config('theme.letterSpacing'), (value, modifier) => {
         return [
-          `.${e(`tracking-${modifier}`)}`,
+          `.${e(`${config('classesNames').letterSpacing}-${modifier}`)}`,
           {
             'letter-spacing': value,
           },

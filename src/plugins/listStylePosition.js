@@ -1,9 +1,11 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const listStylePosition = config('classesNames').listStylePosition
+
     addUtilities(
       {
-        '.list-inside': { 'list-style-position': 'inside' },
-        '.list-outside': { 'list-style-position': 'outside' },
+        [`.${listStylePosition}-inside`]: { 'list-style-position': 'inside' },
+        [`.${listStylePosition}-outside`]: { 'list-style-position': 'outside' },
       },
       config('variants.listStylePosition')
     )

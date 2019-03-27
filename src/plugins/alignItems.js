@@ -1,20 +1,22 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const alignItems = config('classesNames').alignItems
+
     addUtilities(
       {
-        '.items-start': {
+        [`.${alignItems}-start`]: {
           'align-items': 'flex-start',
         },
-        '.items-end': {
+        [`.${alignItems}-end`]: {
           'align-items': 'flex-end',
         },
-        '.items-center': {
+        [`.${alignItems}-center`]: {
           'align-items': 'center',
         },
-        '.items-baseline': {
+        [`.${alignItems}-baseline`]: {
           'align-items': 'baseline',
         },
-        '.items-stretch': {
+        [`.${alignItems}-stretch`]: {
           'align-items': 'stretch',
         },
       },

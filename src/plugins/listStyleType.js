@@ -5,7 +5,7 @@ export default function() {
     const utilities = _.fromPairs(
       _.map(config('theme.listStyleType'), (value, modifier) => {
         return [
-          `.${e(`list-${modifier}`)}`,
+          `.${e(`${config('classesNames').listStyleType}-${modifier}`)}`,
           {
             'list-style-type': value,
           },

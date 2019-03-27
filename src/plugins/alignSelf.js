@@ -1,20 +1,22 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const alignSelf = config('classesNames').alignSelf
+
     addUtilities(
       {
-        '.self-auto': {
+        [`.${alignSelf}-auto`]: {
           'align-self': 'auto',
         },
-        '.self-start': {
+        [`.${alignSelf}-start`]: {
           'align-self': 'flex-start',
         },
-        '.self-end': {
+        [`.${alignSelf}-end`]: {
           'align-self': 'flex-end',
         },
-        '.self-center': {
+        [`.${alignSelf}-center`]: {
           'align-self': 'center',
         },
-        '.self-stretch': {
+        [`.${alignSelf}-stretch`]: {
           'align-self': 'stretch',
         },
       },

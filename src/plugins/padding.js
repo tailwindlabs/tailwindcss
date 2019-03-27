@@ -1,20 +1,36 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, config }) {
+  return function({ addUtilities, config, e }) {
+    const padding = config('classesNames').padding
+
     const generators = [
       (size, modifier) => ({
-        [`.${e(`p-${modifier}`)}`]: { padding: `${size}` },
+        [`.${e(`${padding.replace(/-$/g, '')}-${modifier}`)}`]: { padding: `${size}` },
       }),
       (size, modifier) => ({
-        [`.${e(`py-${modifier}`)}`]: { 'padding-top': `${size}`, 'padding-bottom': `${size}` },
-        [`.${e(`px-${modifier}`)}`]: { 'padding-left': `${size}`, 'padding-right': `${size}` },
+        [`.${e(`${padding}${config('sides').vertical}-${modifier}`)}`]: {
+          'padding-top': `${size}`,
+          'padding-bottom': `${size}`,
+        },
+        [`.${e(`${padding}${config('sides').horizontal}-${modifier}`)}`]: {
+          'padding-left': `${size}`,
+          'padding-right': `${size}`,
+        },
       }),
       (size, modifier) => ({
-        [`.${e(`pt-${modifier}`)}`]: { 'padding-top': `${size}` },
-        [`.${e(`pr-${modifier}`)}`]: { 'padding-right': `${size}` },
-        [`.${e(`pb-${modifier}`)}`]: { 'padding-bottom': `${size}` },
-        [`.${e(`pl-${modifier}`)}`]: { 'padding-left': `${size}` },
+        [`.${e(`${padding}${config('sides').top}-${modifier}`)}`]: {
+          'padding-top': `${size}`,
+        },
+        [`.${e(`${padding}${config('sides').right}-${modifier}`)}`]: {
+          'padding-right': `${size}`,
+        },
+        [`.${e(`${padding}${config('sides').bottom}-${modifier}`)}`]: {
+          'padding-bottom': `${size}`,
+        },
+        [`.${e(`${padding}${config('sides').left}-${modifier}`)}`]: {
+          'padding-left': `${size}`,
+        },
       }),
     ]
 

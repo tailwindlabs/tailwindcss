@@ -35,6 +35,9 @@ test('colors can be a nested object', () => {
     variants: {
       textColor: ['responsive'],
     },
+    classesNames: {
+      textColor: 'text',
+    },
   }
 
   const pluginApi = {

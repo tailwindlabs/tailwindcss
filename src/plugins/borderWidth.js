@@ -1,16 +1,28 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, config }) {
+  return function({ addUtilities, config, e }) {
+    const borderWidth = config('classesNames').borderWidth
+
     const generators = [
       (value, modifier) => ({
-        [`.${e(`border${modifier}`)}`]: { borderWidth: `${value}` },
+        [`.${e(`${borderWidth.replace(/-$/g, '')}${modifier}`)}`]: {
+          borderWidth: `${value}`,
+        },
       }),
       (value, modifier) => ({
-        [`.${e(`border-t${modifier}`)}`]: { borderTopWidth: `${value}` },
-        [`.${e(`border-r${modifier}`)}`]: { borderRightWidth: `${value}` },
-        [`.${e(`border-b${modifier}`)}`]: { borderBottomWidth: `${value}` },
-        [`.${e(`border-l${modifier}`)}`]: { borderLeftWidth: `${value}` },
+        [`.${e(`${borderWidth}-${config('sides').top}${modifier}`)}`]: {
+          borderTopWidth: `${value}`,
+        },
+        [`.${e(`${borderWidth}-${config('sides').right}${modifier}`)}`]: {
+          borderRightWidth: `${value}`,
+        },
+        [`.${e(`${borderWidth}-${config('sides').bottom}${modifier}`)}`]: {
+          borderBottomWidth: `${value}`,
+        },
+        [`.${e(`${borderWidth}-${config('sides').left}${modifier}`)}`]: {
+          borderLeftWidth: `${value}`,
+        },
       }),
     ]
 

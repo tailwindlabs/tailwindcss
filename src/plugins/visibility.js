@@ -1,9 +1,11 @@
 export default function() {
   return function({ addUtilities, config }) {
+    const visibility = config('classesNames').visibility
+
     addUtilities(
       {
-        '.visible': { visibility: 'visible' },
-        '.invisible': { visibility: 'hidden' },
+        [`.${visibility}visible`]: { visibility: 'visible' },
+        [`.${visibility}invisible`]: { visibility: 'hidden' },
       },
       config('variants.visibility')
     )
