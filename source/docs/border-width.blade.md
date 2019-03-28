@@ -38,12 +38,54 @@ For example, `.border` would add a `1px` border to all sides of the element, whe
   </div>
 </div>
 
+## Responsive
+
+To control the border width of an element at a specific breakpoint, add a `{screen}:` prefix to any existing border width utility. For example, use `md:border-t-4` to apply the `border-t-4` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+@component('_partials.responsive-code-sample', ['class' => 'text-center'])
+@slot('none')
+<div class="w-12 h-12 mx-auto border-2 border-gray-600 bg-gray-200"></div>
+@endslot
+@slot('sm')
+<div class="w-12 h-12 mx-auto border-2 border-t-8 border-gray-600 bg-gray-200"></div>
+@endslot
+@slot('md')
+<div class="w-12 h-12 mx-auto border-2 border-t-8 border-r-8 border-gray-600 bg-gray-200"></div>
+@endslot
+@slot('lg')
+<div class="w-12 h-12 mx-auto border-2 border-t-8 border-r-8 border-b-8 border-gray-600 bg-gray-200"></div>
+@endslot
+@slot('xl')
+<div class="w-12 h-12 mx-auto border-8 border-gray-600 bg-gray-200"></div>
+@endslot
+@slot('code')
+<div class="none:border-2 sm:border-t-8 md:border-r-8 lg:border-b-8 xl:border-8">
+</div>
+@endslot
+@endcomponent
+
 ## Customizing
+
+### Border Widths
+
+By default Tailwind provides five `border-width` utilities, and the same number of utilities per side (top, right, bottom, and left). You change, add, or remove these by editing the `borderWidth` section of your Tailwind config. The values in this section will also control which utilities will be generated side.
+
+@component('_partials.customized-config', ['key' => 'borderWidth'])
+  default: '1px',
+  '0': '0',
+  '2': '2px',
++ '3': '3px',
+  '4': '4px',
++ '6': '6px',
+- '8': '8px',
+@endcomponent
 
 @include('_partials.variants-and-disabling', [
     'utility' => [
         'name' => 'border width',
-        'property' => 'borderWidths',
+        'property' => 'borderWidth',
     ],
     'variants' => [
         'responsive',
