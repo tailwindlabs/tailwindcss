@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Navigation"
 description: Examples of building navigation components with Tailwind CSS.
+titleBorder: true
 ---
 
 Tailwind doesn't include pre-designed navigation components out of the box, but they're easy to build using existing utilities.

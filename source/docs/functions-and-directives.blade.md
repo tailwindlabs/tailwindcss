@@ -125,8 +125,8 @@ Note that `@@apply` **will not work** for mixing in hover, focus, or responsive 
 /* Won't work: */
 .btn {
   @@apply block bg-red-500;
-  @@apply md:inline-block;
   @@apply hover:bg-blue-500;
+  @@apply md:inline-block;
 }
 
 /* Do this instead: */
@@ -217,7 +217,7 @@ So if you want focus utilities to take priority over hover utilities for example
 }
 ```
 
-The `@variants` at-rule supports all of the values that are supported in the `modules` section of your config file:
+The `@variants` at-rule supports all of the values that are supported in the `variants` section of your config file:
 
 - `responsive`
 - `hover`
@@ -311,8 +311,8 @@ Use the `theme()` function to access your Tailwind config values using dot notat
 ```css
 /* Source */
 .error {
-  font-size: theme('textSizes.xs');
-  color: theme('colors.red-darker');
+  font-size: theme('fontSize.xs');
+  color: theme('colors.red.700');
 }
 
 /* Output */

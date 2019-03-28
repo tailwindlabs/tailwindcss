@@ -93,7 +93,7 @@ We provide a sensible default system with a very generous set of values to get y
 
 In this guide we'll be focusing on a few of the more special theme properties as well as general customization information and best practices, but for a complete reference of available theme properties, take a look at the default theme:
 
-[View the complete default theme properties](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js#L5-L376)
+[**View the complete list of theme properties &rarr;**](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js#L5-L376)
 
 ### Colors
 

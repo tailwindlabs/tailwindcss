@@ -10,18 +10,13 @@ titleBorder: true
 At their simplest, plugins are just functions that register new styles for Tailwind to inject into the user's stylesheet. That means that to get started authoring your own plugin, all you need to do is add an anonymous function to the `plugins` list in your config file:
 
 ```js
-// ...
-
+// tailwind.config.js
 module.exports = {
-  // ...
   plugins: [
-
     function({ addUtilities, addComponents, e, prefix, config }) {
       // This function is your plugin
     },
-
-  ],
-  // ...
+  ]
 }
 ```
 
