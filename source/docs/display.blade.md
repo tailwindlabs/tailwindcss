@@ -85,6 +85,73 @@ Use `.inline-flex` to create an inline flex container:
 </div>
 @endcomponent
 
+## Block
+
+Use `.block` to create a block-level element:
+
+@component('_partials.code-sample')
+<div class="bg-gray-200">
+  <span class="block text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</span>
+  <span class="block text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</span>
+  <span class="block text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</span>
+</div>
+@endcomponent
+
+## Inline Block
+
+Use `.inline-block` to create an inline block-level element:
+
+@component('_partials.code-sample')
+<div class="bg-gray-200">
+  <div class="inline-block text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="inline-block text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="inline-block text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+</div>
+@endcomponent
+
+## Inline
+
+Use `.inline` to create an inline element:
+
+@component('_partials.code-sample')
+<div class="bg-gray-200">
+  <div class="inline text-gray-700 text-center bg-gray-400 px-4 py-2">1</div>
+  <div class="inline text-gray-700 text-center bg-gray-400 px-4 py-2">2</div>
+  <div class="inline text-gray-700 text-center bg-gray-400 px-4 py-2">3</div>
+</div>
+@endcomponent
+
+## Table
+
+Use the `.table`, `.table-row`, and `.table-cell` to create elements that behave like a `<table>`, `<tr>`, or `<td>` element, respectively.
+
+@component('_partials.code-sample')
+<div class="table w-full">
+  <div class="table-row">
+    <div class="table-cell bg-gray-400 text-gray-700 px-4 py-2">A cell with more content</div>
+    <div class="table-cell bg-gray-200 text-gray-700 px-4 py-2">Cell 2</div>
+    <div class="table-cell bg-gray-400 text-gray-700 px-4 py-2">Cell 3</div>
+  </div>
+  <div class="table-row">
+    <div class="table-cell bg-gray-200 text-gray-700 px-4 py-2">Cell 4</div>
+    <div class="table-cell bg-gray-400 text-gray-700 px-4 py-2">A cell with more content</div>
+    <div class="table-cell bg-gray-200 text-gray-700 px-4 py-2">Cell 6</div>
+  </div>
+</div>
+@endcomponent
+
+## Hidden
+
+Use `.hidden` to turn off the display of an element:
+
+@component('_partials.code-sample')
+<div class="flex bg-gray-200">
+  <div class="hidden text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+</div>
+@endcomponent
+
 ## Responsive
 
 To control the display property of an element at a specific breakpoint, add a `{screen}:` prefix to any existing display utility class. For example, use `md:inline-flex` to apply the `inline-flex` utility at only medium screen sizes and above.
