@@ -63,6 +63,25 @@ features:
 
 ## Customizing
 
+### Background Positions
+
+By default Tailwind provides nine `background-position` utilities. You change, add, or remove these by editing the `backgroundPosition` section of your Tailwind config.
+
+@component('_partials.customized-config', ['key' => 'backgroundPosition'])
+  bottom: 'bottom',
++ 'bottom-4': 'center bottom 1rem',
+  center: 'center',
+  left: 'left',
+- 'left-bottom': 'left bottom',
+- 'left-top': 'left top',
+  right: 'right',
+  'right-bottom': 'right bottom',
+  'right-top': 'right top',
+  top: 'top',
++ 'top-4': 'center top 1rem',
+@endcomponent
+
+
 @include('_partials.variants-and-disabling', [
     'utility' => [
         'name' => 'background position',
