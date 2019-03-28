@@ -38,8 +38,8 @@ features:
     ],
     [
       '.tracking-widest',
-      'letter-spacing: 1em;',
-      'Set the letter spacing of an element to <code>1em</code>.',
+      'letter-spacing: 0.1em;',
+      'Set the letter spacing of an element to <code>0.1em</code>.',
     ],
   ]
 ])
