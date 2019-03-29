@@ -1,13 +1,14 @@
 <?php
 
 return [
-    'Introduction' => [
-        'What is Tailwind?' => 'what-is-tailwind',
+    'Upgrading' => [
+        'Upgrading from v0.x to v1.0' => 'upgrading-to-v1',
     ],
     'Getting Started' => [
+        'What is Tailwind?' => 'what-is-tailwind',
         'Installation' => 'installation',
         'Configuration' => 'configuration',
-        'Colors' => 'colors',
+        // 'Colors' => 'colors',
         'Responsive Design' => 'responsive-design',
         'State Variants' => 'state-variants',
         'Adding New Utilities' => 'adding-new-utilities',

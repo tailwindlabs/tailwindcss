@@ -44,7 +44,7 @@
     @apply border-t-0 border-r-0 border-l-0 border-b border-gray-300;
   }
 
-  > a, > p a, > ul li a, a& {
+  > a, > p a, > ul li a, > ol li a, a& {
     @apply text-blue-500;
     &:hover {
       @apply underline;
@@ -59,7 +59,7 @@
     @apply text-gray-800;
   }
 
-  > p code, > ul li code, p& code& {
+  > p code, > ul li *:not(pre) code, > ol li *:not(pre) code, p& code& {
     @apply inline-block;
     @apply bg-gray-100;
     @apply rounded-sm;
@@ -146,9 +146,12 @@
 
   > ul:not(.list-none) {
     @apply pl-0 list-none;
-    li::before {
-      @apply text-gray-400 inline-block mr-3;
-      content: "\2022";
+    li {
+      @apply relative pl-5;
+      &::before {
+        @apply absolute left-0 text-gray-400 inline-block mr-3;
+        content: "\2022";
+      }
     }
   }
 
@@ -156,13 +159,13 @@
     @apply pl-4 list-decimal list-inside;
   }
 
-  > :not(pre):not(h1):not(h2):not(h3):not(h4) > code {
+  > :not(pre):not(h1):not(h2):not(h3):not(h4):not(ul li pre):not(ol li pre) > code {
     @apply bg-gray-100;
     @apply text-sm;
     @apply leading-normal;
   }
 
-  > pre, pre& {
+  > pre, pre&, > ul li pre, > ol li pre {
     @apply p-4;
     @apply bg-gray-800;
     @apply text-sm;

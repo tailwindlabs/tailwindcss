@@ -39,7 +39,9 @@ export default {
   mounted() {
     anchors.options = { placement: 'left', class: 'text-gray-500' }
     anchors.add('#content h2, #content h3')
-    this.links = anchors.elements.map((el) => {
+    this.links = anchors.elements.filter(el => {
+      return !el.classList.contains('no-toc')
+    }).map(el => {
       return {
         isChild: el.tagName === 'H3',
         text: getHeadingText(el),
