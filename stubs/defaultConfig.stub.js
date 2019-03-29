@@ -236,9 +236,10 @@ module.exports = {
       '4': '4px',
       '8': '8px',
     },
-    borderColor: theme => {
-      return global.Object.assign({ default: theme('colors.gray.300', 'currentColor') }, theme('colors'))
-    },
+    borderColor: theme => ({
+      ...theme('colors'),
+      default: theme('colors.gray.300', 'currentColor'),
+    }),
     borderRadius: {
       none: '0',
       sm: '.125rem',
