@@ -9012,10 +9012,10 @@ table@^4.0.1:
     slice-ansi "1.0.0"
     string-width "^2.1.1"
 
-tailwindcss@^1.0.0-beta.3:
-  version "1.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.0.0-beta.3.tgz#66ac8e15377f4038cea6877e834a54edbc5ca295"
-  integrity sha512-J3KZ0gtpz1XVQ/D2xTuBMII1KmEb9LrQibIWtFRAXpa81yIeDM3v1g88M3Qr/lnjrJymi7zC3T2f9AdGuZ4oMw==
+tailwindcss@^1.0.0-beta.4:
+  version "1.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.0.0-beta.4.tgz#b69ab23c8ad6b937c12598310d44589f1d9f5d27"
+  integrity sha512-He5eWVg3ZxHWBwabh+w8yBu1mTyat4fvPpIobteAXtxDxEk+gSY7U2DoxpWq42r7EKr/rxRVsJXw3L6cL87I4A==
   dependencies:
     autoprefixer "^9.4.5"
     bytes "^3.0.0"

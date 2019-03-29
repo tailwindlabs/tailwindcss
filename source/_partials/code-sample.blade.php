@@ -1,4 +1,4 @@
-<div class="relative mb-8">
+<div class="relative overflow-hidden mb-8">
   <div class="bg-white rounded-t-lg border border-gray-400 p-4 {{ $class ?? '' }}">
     {{ $slot }}
   </div>
