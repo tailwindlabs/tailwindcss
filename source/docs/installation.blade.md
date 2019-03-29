@@ -5,7 +5,7 @@ description: "Quick start guide for installing and configuring Tailwind CSS."
 titleBorder: true
 ---
 
-## Install Tailwind via npm
+## <span class="text-purple-500">Step 1:</span> Install Tailwind via npm
 
 For most projects (and to take advantage of Tailwind's customization features), you'll want to install Tailwind via npm.
 
@@ -17,7 +17,7 @@ npm install tailwindcss --save-dev
 yarn add tailwindcss --dev
 ```
 
-## Add Tailwind to your CSS
+## <span class="text-purple-500">Step 2:</span> Add Tailwind to your CSS
 
 Use the `@@tailwind` directive to inject Tailwind's `base`, `components`, and `utilities` styles into your CSS:
 
@@ -41,7 +41,7 @@ If you're using `postcss-import`, use our imports instead of the `@@tailwind` di
 @@import "tailwindcss/utilities";
 ```
 
-## Process your CSS with Tailwind
+## <span class="text-purple-500">Step 3:</span> Process your CSS with Tailwind
 
 ### Using Tailwind CLI
 
@@ -235,6 +235,8 @@ exports.config = {
   }
 }
 ```
+
+<hr class="my-16">
 
 ## Using Tailwind via CDN
 
