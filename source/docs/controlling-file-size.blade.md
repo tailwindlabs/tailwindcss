@@ -5,14 +5,14 @@ description: "Strategies for keeping your generated CSS small and performant."
 titleBorder: true
 ---
 
-Using the default configuration, Tailwind CSS comes in at **27.1kb minified and compressed.**
+Using the default configuration, Tailwind CSS comes in at 27.1kb minified and compressed.
 
 Here's a few other popular frameworks for comparison:
 
 - Bootstrap: 20.4kb
 - Bulma: 21.2kb
-- Foundation: 16.7kb
-- Tachyons: 13.6kb
+- Foundation: 14.5kb
+- Tachyons: 10.5kb
 
 By comparison Tailwind seems really heavy *(over 1.5x larger than Bootstrap!)*, but it turns out that this comparison isn't totally fair.
 
