@@ -96,7 +96,8 @@ return [
         'User Select' => 'user-select',
     ],
     'SVG' => [
-        'Fill &amp; Stroke' => 'svg',
+        'Fill' => 'fill',
+        'Stroke' => 'stroke',
     ],
     'Component Examples' => [
         'Alerts' => 'examples/alerts',

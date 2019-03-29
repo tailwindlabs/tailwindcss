@@ -1,7 +1,7 @@
 <div class="rounded-lg mb-8 overflow-hidden">
   <div class="bg-gray-800 p-4 font-mono text-sm overflow-x-scroll whitespace-no-wrap">
-    <div class="whitespace-pre text-gray-200">{</div>
-    <div class="whitespace-pre text-gray-400">  // ...</div>
+    <div class="whitespace-pre text-gray-400">// tailwind.config.js</div>
+    <div class="whitespace-pre text-gray-200">module.exports = {</div>
     <div class="whitespace-pre text-gray-200"><span style="color: #f9ee98;">  {{ $key }}</span>: {</div>
     <div>{!! collect(explode("\n", $slot))->map(function ($line) {
       if (starts_with($line, '+')) {
