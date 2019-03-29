@@ -177,6 +177,25 @@ We provide a well-considered set of default breakpoints based on common device r
 
 Learn more about customizing screens in the [Responsive Design](/docs/responsive-design#customizing-screens) documentation.
 
+### Extend
+
+The `theme.extend` property allows you to extend parts of the default theme without completely replacing them.
+
+For example, if you wanted to add an extra breakpoint but preserve the existing ones, you could extend the `screens` property:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      screens: {
+        '2xl': '1440px',
+      }
+    }
+  }
+}
+```
+
 ### Core plugin styles
 
 The rest of the `theme` section is used to configure which values are available for each individual core plugin.
