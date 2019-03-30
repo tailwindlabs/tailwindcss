@@ -195,7 +195,7 @@ This will generate the following CSS:
 
 It's important to note that **variants are generated in the order you specify them**.
 
-So if you want focus utilities to take priority over hover utilities for example, make sure focus comes *before* hover in the list:
+So if you want focus utilities to take priority over hover utilities for example, make sure focus comes *after* hover in the list:
 
 ```css
 /* Input */
