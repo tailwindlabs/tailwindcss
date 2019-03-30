@@ -59,7 +59,12 @@
     @apply text-gray-800;
   }
 
-  > p code, > ul li *:not(pre) code, > ol li *:not(pre) code, p& code& {
+  > p code,
+  > ul li *:not(pre) code,
+  > ul li > code,
+  > ol li *:not(pre) code,
+  > ol li > code,
+  p& code& {
     @apply inline-block;
     @apply bg-gray-100;
     @apply rounded-sm;
@@ -156,10 +161,12 @@
   }
 
   > ol {
-    @apply pl-4 list-decimal list-inside;
+    @apply pl-8 list-decimal list-outside;
   }
 
-  > :not(pre):not(h1):not(h2):not(h3):not(h4):not(ul li pre):not(ol li pre) > code {
+  > :not(pre):not(h1):not(h2):not(h3):not(h4) > code,
+  > ul code,
+  > ol code {
     @apply bg-gray-100;
     @apply text-sm;
     @apply leading-normal;

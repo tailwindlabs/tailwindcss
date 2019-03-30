@@ -11,39 +11,39 @@ So while there's not a ton of exciting new features, you can at least be excited
 
 ## New features
 
-- New config file structure: [#637](https://github.com/tailwindcss/tailwindcss/pull/637), [Sample](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js)
-- New expanded default color palette: [#737](https://github.com/tailwindcss/tailwindcss/pull/737)
-- New default `maxWidth` scale: [#701](https://github.com/tailwindcss/tailwindcss/pull/701)
-- Default variant output position can be customized: [#657](https://github.com/tailwindcss/tailwindcss/pull/657)
-- Extended default line-height scale: [#673](https://github.com/tailwindcss/tailwindcss/pull/673)
-- Extended default letter-spacing scale: [#671](https://github.com/tailwindcss/tailwindcss/pull/671)
-- `object-position` utilities are now customizable under `theme.objectPosition`: [#676](https://github.com/tailwindcss/tailwindcss/pull/676)
-- `cursor` utilities are now customizable under `theme.cursors`: [#679](https://github.com/tailwindcss/tailwindcss/pull/679)
-- `flex-grow/shrink` utilities are now customizable under `theme.flexGrow/flexShrink`: [#690](https://github.com/tailwindcss/tailwindcss/pull/690)
-- Added utilities for `list-style-type` and `list-style-position`: [#761](https://github.com/tailwindcss/tailwindcss/pull/761)
-- Added `break-all` utility: [#763](https://github.com/tailwindcss/tailwindcss/pull/763)
+- New config file structure ([#637](https://github.com/tailwindcss/tailwindcss/pull/637), [Sample](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js))
+- New expanded default color palette ([#737](https://github.com/tailwindcss/tailwindcss/pull/737))
+- New default `maxWidth` scale ([#701](https://github.com/tailwindcss/tailwindcss/pull/701))
+- Default variant output position can be customized ([#657](https://github.com/tailwindcss/tailwindcss/pull/657))
+- Extended default line-height scale ([#673](https://github.com/tailwindcss/tailwindcss/pull/673))
+- Extended default letter-spacing scale ([#671](https://github.com/tailwindcss/tailwindcss/pull/671))
+- `object-position` utilities are now customizable under `theme.objectPosition` ([#676](https://github.com/tailwindcss/tailwindcss/pull/676))
+- `cursor` utilities are now customizable under `theme.cursors` ([#679](https://github.com/tailwindcss/tailwindcss/pull/679))
+- `flex-grow/shrink` utilities are now customizable under `theme.flexGrow/flexShrink` ([#690](https://github.com/tailwindcss/tailwindcss/pull/690))
+- Added utilities for `list-style-type` and `list-style-position` ([#761](https://github.com/tailwindcss/tailwindcss/pull/761))
+- Added `break-all` utility ([#763](https://github.com/tailwindcss/tailwindcss/pull/763))
 
 ## Upgrade steps for all users
 
 These changes affect all users, whether you are using Tailwind with PostCSS and your own custom config file, or just using the default config file or CDN.
 
-1. [Update Tailwind](#update-tailwind)
-2. [Update your config file](#update-your-config-file)
-3. [Rename `tailwind.js` to `tailwind.config.js`](#rename-tailwind-js-to-tailwind-config-js)
-3. [Replace `@tailwind preflight` with `@tailwind base`](#replace-preflight-with-base)
-4. [Replace `config()` with `theme()`](#replace-config-with-theme)
-5. [Explicitly style any headings](#explicitly-style-any-headings)
-6. [Explicitly style any lists that should have bullets/numbers](#explicitly-style-any-lists)
-7. [Remove any usage of `.list-reset`](#remove-any-usage-of-list-reset)
-8. [Replace `.pin-{side}` with `.{top|left|bottom|right|inset}-{value}`](#replace-pin-with-inset)
-9. [Replace `.roman` with `.not-italic`](#replace-roman-with-not-italic)
-10. [Replace `.flex-no-grow/shrink` with `.flex-grow/shrink-0`](#replace-flex-no-grow-shrink-with-flex-grow-shrink-0)
-11. [Explicitly add color and underline styles to links](#explicitly-add-color-and-underline-styles-to-links)
-12. [Add `inline` to any replaced elements (`img`, `video`, etc.) that should not be `display: block`](#add-inline-to-any-replaced-elements-img-video-etc-that-should-not-be-display-block)
-13. [Adjust the line-height and padding on your form elements](#adjust-the-line-height-and-padding-on-your-form-elements)
-14. [Adjust the text color on your form elements](#adjust-the-text-color-on-your-form-elements)
-15. [Double check your default font family](#double-check-your-default-font-family)
-16. [Double check your default line-height](#double-check-your-default-line-height)
+- [Update Tailwind](#update-tailwind)
+- [Update your config file](#update-your-config-file)
+- [Rename `tailwind.js` to `tailwind.config.js`](#rename-tailwind-js-to-tailwind-config-js)
+- [Replace `@tailwind preflight` with `@tailwind base`](#replace-preflight-with-base)
+- [Replace `config()` with `theme()`](#replace-config-with-theme)
+- [Explicitly style any headings](#explicitly-style-any-headings)
+- [Explicitly style any lists that should have bullets/numbers](#explicitly-style-any-lists)
+- [Remove any usage of `.list-reset`](#remove-any-usage-of-list-reset)
+- [Replace `.pin-{side}` with `.{top|left|bottom|right|inset}-{value}`](#replace-pin-with-inset)
+- [Replace `.roman` with `.not-italic`](#replace-roman-with-not-italic)
+- [Replace `.flex-no-grow/shrink` with `.flex-grow/shrink-0`](#replace-flex-no-grow-shrink-with-flex-grow-shrink-0)
+- [Explicitly add color and underline styles to links](#explicitly-add-color-and-underline-styles-to-links)
+- [Add `inline` to any replaced elements (`img`, `video`, etc.) that should not be `display: block`](#add-inline-to-any-replaced-elements-img-video-etc-that-should-not-be-display-block)
+- [Adjust the line-height and padding on your form elements](#adjust-the-line-height-and-padding-on-your-form-elements)
+- [Adjust the text color on your form elements](#adjust-the-text-color-on-your-form-elements)
+- [Double check your default font family](#double-check-your-default-font-family)
+- [Double check your default line-height](#double-check-your-default-line-height)
 
 <h3 class="no-toc">Update Tailwind</h3>
 
@@ -61,7 +61,7 @@ yarn add -D tailwindcss@next
 
 <h3 class="no-toc">Update your config file</h3>
 
-*Impact: All users, Effort: Moderate*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: All users, Effort: Moderate</p>
 
 This is really the big change in v1.0 — you can read all about the new config file format and motivation behind it in [the initial pull request](https://github.com/tailwindcss/tailwindcss/pull/637).
 
@@ -92,522 +92,522 @@ See the new [default config file](https://github.com/tailwindcss/tailwindcss/blo
 
 There are a lot of changes here but they are all fairly cosmetic and entirely localized to this one file, so while it may look intimidating it's actually only 10-15 minutes of work.
 
-1. **Move all design-related top-level keys into a new section called `theme`**.
+**Move all design-related top-level keys into a new section called `theme`**.
 
-    Every key except `options`, `modules`, and `plugins` should be nested under a new `theme` key.
+Every key except `options`, `modules`, and `plugins` should be nested under a new `theme` key.
 
-    Your config file should look generally like this at this point:
+Your config file should look generally like this at this point:
 
-    ```diff
-      let defaultConfig = require('tailwindcss/defaultConfig')()
+```diff
+  let defaultConfig = require('tailwindcss/defaultConfig')()
 
-      let colors = {
-        // ...
-      }
+  let colors = {
+    // ...
+  }
 
-      module.exports = {
-    -   colors: colors,
-    -   screens: {
-    -     // ...
-    -   },
-    -   // ...
-    -   zIndex: {
-    -     // ...
-    -   },
-    +   theme: {
-    +     colors: colors,
-    +     screens: {
-    +       // ...
-    +     },
-    +     // ...
-    +     zIndex: {
-    +       // ...
-    +     },
-    +   },
-        modules: {
-          appearance: ['responsive'],
-          // ...
-          zIndex: ['responsive'],
-        },
-        plugins: [
-          require('tailwindcss/plugins/container')({
-            // ...
-          }),
-        ],
-        options: {
-          prefix: '',
-          important: false,
-          separator: ':',
-        }
-      }
-    ```
-
-2. **Rename `modules` to `variants`.**
-
-    "Modules" was a word we just kinda grabbed because we needed *something*, and we wanted to use that section of the config to both specify variants and disable modules if necessary.
-
-    Now that all of Tailwind's internal "modules" are actually just core plugins, I've decided to deprecate this terminology entirely, and make this section of the config purely about configuring variants for core plugins.
-
-    After making this change, your config file should look like this:
-
-    ```diff
-      let defaultConfig = require('tailwindcss/defaultConfig')()
-
-      let colors = {
-        // ...
-      }
-
-      module.exports = {
-        theme: {
-          // ...
-        },
-    -   modules: {
-    +   variants: {
-          appearance: ['responsive'],
-          backgroundAttachment: ['responsive'],
-          backgroundColors: ['responsive', 'hover', 'focus'],
-          // ...
-          zIndex: ['responsive'],
-        },
-        plugins: [
-          require('tailwindcss/plugins/container')({
-            // ...
-          }),
-        ],
-        options: {
-          prefix: '',
-          important: false,
-          separator: ':',
-        }
-      }
-    ```
-
-3. **Move your `options` settings to the top-level.**
-
-    The advanced options have been moved to the top-level of the config file instead of being nested under the redundant `options` key.
-
-    After making this change, your config file should look like this:
-
-    ```diff
-      let defaultConfig = require('tailwindcss/defaultConfig')()
-
-      let colors = {
-        // ...
-      }
-
-      module.exports = {
-    +   prefix: '',
-    +   important: false,
-    +   separator: ':',
-        theme: {
-          // ...
-        },
-        variants: {
-          appearance: ['responsive'],
-          backgroundAttachment: ['responsive'],
-          backgroundColors: ['responsive', 'hover', 'focus'],
-          // ...
-          zIndex: ['responsive'],
-        },
-        plugins: [
-          require('tailwindcss/plugins/container')({
-            // ...
-          }),
-        ],
-    -   options: {
-    -     prefix: '',
-    -     important: false,
-    -     separator: ':',
-    -   }
-      }
-    ```
-
-4. **Update the sections under `theme` to their new names.**
-
-    As part of an effort to make the naming in the config file more consistent, many of the sections under `theme` have been renamed.
-
-    These are the sections that need to be updated:
-
-    | Old | New |
-    |---|---|
-    | `fonts` | `fontFamily` |
-    | `textSizes` | `fontSize` |
-    | `fontWeights` | `fontWeight` |
-    | `leading` | `lineHeight` |
-    | `tracking` | `letterSpacing` |
-    | `textColors` | `textColor` |
-    | `backgroundColors` | `backgroundColor` |
-    | `borderWidths` | `borderWidth` |
-    | `borderColors` | `borderColor` |
-    | `shadows` | `boxShadow` |
-    | `svgFill` | `fill` |
-    | `svgStroke` | `stroke` |
-
-    These names need to change in the `variants` section as well, so feel free to do a find and replace across the whole file.
-
-5. **Update the sections under `variants` to their new names.**
-
-    As alluded to in the previous step, many of the sections under `variants` have been renamed as well.
-
-    These are the sections that need to be renamed *(it is the same as the list above)*:
-
-    | Old | New |
-    |---|---|
-    | `fonts` | `fontFamily` |
-    | `textSizes` | `fontSize` |
-    | `fontWeights` | `fontWeight` |
-    | `leading` | `lineHeight` |
-    | `tracking` | `letterSpacing` |
-    | `textColors` | `textColor` |
-    | `backgroundColors` | `backgroundColor` |
-    | `borderWidths` | `borderWidth` |
-    | `borderColors` | `borderColor` |
-    | `shadows` | `boxShadow` |
-    | `svgFill` | `fill` |
-    | `svgStroke` | `stroke` |
-
-    Several sections under `variants` have also been **split** into multiple sections, for example `lists` has been split into `listStylePosition` and `listStyleType`:
-
-    ```diff
+  module.exports = {
+-   colors: colors,
+-   screens: {
+-     // ...
+-   },
+-   // ...
+-   zIndex: {
+-     // ...
+-   },
++   theme: {
++     colors: colors,
++     screens: {
++       // ...
++     },
++     // ...
++     zIndex: {
++       // ...
++     },
++   },
+    modules: {
+      appearance: ['responsive'],
       // ...
-
-      module.exports = {
+      zIndex: ['responsive'],
+    },
+    plugins: [
+      require('tailwindcss/plugins/container')({
         // ...
-        variants: {
-          // ...
-    -     lists: ['responsive'],
-    +     listStylePosition: ['responsive'],
-    +     listStyleType: ['responsive'],
-        }
-      }
-    ```
+      }),
+    ],
+    options: {
+      prefix: '',
+      important: false,
+      separator: ':',
+    }
+  }
+```
 
-    Here is a complete list of the sections that been split into multiple sections:
+**Rename `modules` to `variants`.**
 
-    | Old | New |
-    | --- | --- |
-    | `flexbox` | `flexDirection`, `flexWrap`, `alignItems`, `alignSelf`, `justifyContent`, `alignContent`, `flex`, `flexGrow`, `flexShrink` |
-    | `lists` | `listStylePosition`, `listStyleType` |
-    | `position` | `position`, `inset` |
-    | `textStyle` | `fontStyle`, `fontSmoothing`, `textDecoration`, `textTransform` |
-    | `whitespace` | `whitespace`, `wordBreak` |
+"Modules" was a word we just kinda grabbed because we needed *something*, and we wanted to use that section of the config to both specify variants and disable modules if necessary.
 
-    Note that in some cases (`position`, `whitespace`) the original section still exists, while in others (`flexbox`, `textStyle`), the original section has been completely removed.
+Now that all of Tailwind's internal "modules" are actually just core plugins, I've decided to deprecate this terminology entirely, and make this section of the config purely about configuring variants for core plugins.
 
-    You should reference the new [default config file](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js) if you are ever unsure if you are making the right changes.
+After making this change, your config file should look like this:
 
-    The simplest way to make these changes is to just copy the value you were using for the old section (something like `['responsive']`) to all of the new sections that replace that section, but if you choose you can also use this as an opportunity to cull generated utilities you don't actually need.
+```diff
+  let defaultConfig = require('tailwindcss/defaultConfig')()
 
-    For example, if you never use the responsive variants of `antialiased` or `subpixel-antialiased`, you could set `fontSmoothing` to `[]` while still using `['responsive']` for `fontStyle`, `textDecoration`, and `textTransform`.
+  let colors = {
+    // ...
+  }
 
-6. **Add any disabled ~~modules~~ core plugins to `corePlugins`.**
-
-    In v0.x, you could disable a ~~module~~ core plugin by setting it to `false` in what is now the `variants` section.
-
-    In v1.0, to disable a plugin you need to set it to `false` in the `corePlugins` section instead:
-
-    ```diff
-      let defaultConfig = require('tailwindcss/defaultConfig')()
-
-      let colors = {
+  module.exports = {
+    theme: {
+      // ...
+    },
+-   modules: {
++   variants: {
+      appearance: ['responsive'],
+      backgroundAttachment: ['responsive'],
+      backgroundColors: ['responsive', 'hover', 'focus'],
+      // ...
+      zIndex: ['responsive'],
+    },
+    plugins: [
+      require('tailwindcss/plugins/container')({
         // ...
-      }
+      }),
+    ],
+    options: {
+      prefix: '',
+      important: false,
+      separator: ':',
+    }
+  }
+```
 
-      module.exports = {
-        prefix: '',
-        important: false,
-        separator: ':',
-        theme: {
-          // ...
-        },
-        variants: {
-          // ...
-    -     float: false,
-          // ...
-        },
-    +   corePlugins: {
-    +     float: false,
-    +   },
-        plugins: [
-          require('tailwindcss/plugins/container')({
-            // ...
-          }),
-        ],
-      }
-    ```
+**Move your `options` settings to the top-level.**
 
-    This change was made to make it possible to disable other core plugins where `variants` are irrelevant, like `preflight` or `container` (more on this later).
+The advanced options have been moved to the top-level of the config file instead of being nested under the redundant `options` key.
 
-7. **Remove the `container` plugin from `plugins` and move any configuration to `theme`.**
+After making this change, your config file should look like this:
 
-    In v1.0, the `container` plugin is a core plugin just like `padding`, `margin`, etc. and should not be listed in your `plugins` section:
-    
-    ```diff
-      let defaultConfig = require('tailwindcss/defaultConfig')()
+```diff
+  let defaultConfig = require('tailwindcss/defaultConfig')()
 
-      let colors = {
+  let colors = {
+    // ...
+  }
+
+  module.exports = {
++   prefix: '',
++   important: false,
++   separator: ':',
+    theme: {
+      // ...
+    },
+    variants: {
+      appearance: ['responsive'],
+      backgroundAttachment: ['responsive'],
+      backgroundColors: ['responsive', 'hover', 'focus'],
+      // ...
+      zIndex: ['responsive'],
+    },
+    plugins: [
+      require('tailwindcss/plugins/container')({
         // ...
-      }
+      }),
+    ],
+-   options: {
+-     prefix: '',
+-     important: false,
+-     separator: ':',
+-   }
+  }
+```
 
-      module.exports = {
-        prefix: '',
-        important: false,
-        separator: ':',
-        theme: {
-          // ...
-        },
-        variants: {
-          // ...
-        },
-        plugins: [
-    -     require('tailwindcss/plugins/container')({
-    -       center: true,
-    -       padding: '1rem',
-    -     }),
-        ],
-      }
-    ```
+**Update the sections under `theme` to their new names.**
 
-    If you had already removed the container plugin because you don't want those classes in your project, you should explicitly disable it using the `corePlugins` option:
+As part of an effort to make the naming in the config file more consistent, many of the sections under `theme` have been renamed.
 
-    ```diff
-      let defaultConfig = require('tailwindcss/defaultConfig')()
+These are the sections that need to be updated:
 
-      let colors = {
+| Old | New |
+|---|---|
+| `fonts` | `fontFamily` |
+| `textSizes` | `fontSize` |
+| `fontWeights` | `fontWeight` |
+| `leading` | `lineHeight` |
+| `tracking` | `letterSpacing` |
+| `textColors` | `textColor` |
+| `backgroundColors` | `backgroundColor` |
+| `borderWidths` | `borderWidth` |
+| `borderColors` | `borderColor` |
+| `shadows` | `boxShadow` |
+| `svgFill` | `fill` |
+| `svgStroke` | `stroke` |
+
+These names need to change in the `variants` section as well, so feel free to do a find and replace across the whole file.
+
+**Update the sections under `variants` to their new names.**
+
+As alluded to in the previous step, many of the sections under `variants` have been renamed as well.
+
+These are the sections that need to be renamed *(it is the same as the list above)*:
+
+| Old | New |
+|---|---|
+| `fonts` | `fontFamily` |
+| `textSizes` | `fontSize` |
+| `fontWeights` | `fontWeight` |
+| `leading` | `lineHeight` |
+| `tracking` | `letterSpacing` |
+| `textColors` | `textColor` |
+| `backgroundColors` | `backgroundColor` |
+| `borderWidths` | `borderWidth` |
+| `borderColors` | `borderColor` |
+| `shadows` | `boxShadow` |
+| `svgFill` | `fill` |
+| `svgStroke` | `stroke` |
+
+Several sections under `variants` have also been **split** into multiple sections, for example `lists` has been split into `listStylePosition` and `listStyleType`:
+
+```diff
+  // ...
+
+  module.exports = {
+    // ...
+    variants: {
+      // ...
+-     lists: ['responsive'],
++     listStylePosition: ['responsive'],
++     listStyleType: ['responsive'],
+    }
+  }
+```
+
+Here is a complete list of the sections that been split into multiple sections:
+
+| Old | New |
+| --- | --- |
+| `flexbox` | `flexDirection`, `flexWrap`, `alignItems`, `alignSelf`, `justifyContent`, `alignContent`, `flex`, `flexGrow`, `flexShrink` |
+| `lists` | `listStylePosition`, `listStyleType` |
+| `position` | `position`, `inset` |
+| `textStyle` | `fontStyle`, `fontSmoothing`, `textDecoration`, `textTransform` |
+| `whitespace` | `whitespace`, `wordBreak` |
+
+Note that in some cases (`position`, `whitespace`) the original section still exists, while in others (`flexbox`, `textStyle`), the original section has been completely removed.
+
+You should reference the new [default config file](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js) if you are ever unsure if you are making the right changes.
+
+The simplest way to make these changes is to just copy the value you were using for the old section (something like `['responsive']`) to all of the new sections that replace that section, but if you choose you can also use this as an opportunity to cull generated utilities you don't actually need.
+
+For example, if you never use the responsive variants of `antialiased` or `subpixel-antialiased`, you could set `fontSmoothing` to `[]` while still using `['responsive']` for `fontStyle`, `textDecoration`, and `textTransform`.
+
+**Add any disabled ~~modules~~ core plugins to `corePlugins`.**
+
+In v0.x, you could disable a ~~module~~ core plugin by setting it to `false` in what is now the `variants` section.
+
+In v1.0, to disable a plugin you need to set it to `false` in the `corePlugins` section instead:
+
+```diff
+  let defaultConfig = require('tailwindcss/defaultConfig')()
+
+  let colors = {
+    // ...
+  }
+
+  module.exports = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      // ...
+    },
+    variants: {
+      // ...
+-     float: false,
+      // ...
+    },
++   corePlugins: {
++     float: false,
++   },
+    plugins: [
+      require('tailwindcss/plugins/container')({
         // ...
-      }
+      }),
+    ],
+  }
+```
 
-      module.exports = {
-        prefix: '',
-        important: false,
-        separator: ':',
-        theme: {
-          // ...
-        },
-        variants: {
-          // ...
-        },
-    +   corePlugins: {
-    +     container: false
-    +   },
-      }
-    ```
+This change was made to make it possible to disable other core plugins where `variants` are irrelevant, like `preflight` or `container` (more on this later).
 
-    If you are taking advantage the `center` or `padding` options exposed by the `container` plugin, you should specify those options under `theme.container` instead of as direct arguments to the plugin.
+**Remove the `container` plugin from `plugins` and move any configuration to `theme`.**
 
-    ```diff
-      let defaultConfig = require('tailwindcss/defaultConfig')()
+In v1.0, the `container` plugin is a core plugin just like `padding`, `margin`, etc. and should not be listed in your `plugins` section:
 
-      let colors = {
+```diff
+  let defaultConfig = require('tailwindcss/defaultConfig')()
+
+  let colors = {
+    // ...
+  }
+
+  module.exports = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      // ...
+    },
+    variants: {
+      // ...
+    },
+    plugins: [
+-     require('tailwindcss/plugins/container')({
+-       center: true,
+-       padding: '1rem',
+-     }),
+    ],
+  }
+```
+
+If you had already removed the container plugin because you don't want those classes in your project, you should explicitly disable it using the `corePlugins` option:
+
+```diff
+  let defaultConfig = require('tailwindcss/defaultConfig')()
+
+  let colors = {
+    // ...
+  }
+
+  module.exports = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      // ...
+    },
+    variants: {
+      // ...
+    },
++   corePlugins: {
++     container: false
++   },
+  }
+```
+
+If you are taking advantage the `center` or `padding` options exposed by the `container` plugin, you should specify those options under `theme.container` instead of as direct arguments to the plugin.
+
+```diff
+  let defaultConfig = require('tailwindcss/defaultConfig')()
+
+  let colors = {
+    // ...
+  }
+
+  module.exports = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      // ...
++     container: {
++       center: true,
++       padding: '1rem',
++     }
+    },
+    variants: {
+      // ...
+    },
+    plugins: [
+-     require('tailwindcss/plugins/container')({
+-       center: true,
+-       padding: '1rem',
+-     }),
+-   ],
+  }
+```
+
+**Inline your `colors` variable into `theme.colors`.**
+
+In v1.0, it's possible to specify that parts of your theme _depend_ on other parts of your theme, and because of that it's no longer necessary to hold your `colors` in a separate variable.
+
+Start by inlining your `colors` variable directly into `theme.colors`:
+
+```diff
+  let defaultConfig = require('tailwindcss/defaultConfig')()
+
+- let colors = {
+-   'transparent': 'transparent',
+-   'black': '#22292f',
+-   // ...
+-   'pink-lightest': '#ffebef','
+- }
+
+  module.exports = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+-     colors: colors,
++     colors: {
++       'transparent': 'transparent',
++       'black': '#22292f',
++       // ...
++       'pink-lightest': '#ffebef','
++     },
+      // ...
+    },
+    variants: {
+      // ...
+    },
+    plugins: [],
+  }
+```
+
+Next, update any sections that were referencing the `colors` variable using the new closure syntax:
+
+```diff
+  let defaultConfig = require('tailwindcss/defaultConfig')()
+
+  module.exports = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      colors; {
+        'transparent': 'transparent',
+        'black': '#22292f',
         // ...
-      }
+        'pink-lightest': '#ffebef','
+      },
+      // ...
+-     backgroundColor: colors,
++     backgroundColor: theme => theme('colors'),
+      // ...
+-     textColor: colors,
++     textColor: theme => theme('colors'),
+      // ...
+-     borderColor: global.Object.assign({ default: colors['grey-light'] }, colors),
++     borderColor: theme => ({
++       default: theme('colors.grey-light'),
++       ...theme('colors'),
++     }),
+      // ...
+    },
+    variants: {
+      // ...
+    },
+    plugins: [],
+  }
+```
 
-      module.exports = {
-        prefix: '',
-        important: false,
-        separator: ':',
-        theme: {
-          // ...
-    +     container: {
-    +       center: true,
-    +       padding: '1rem',
-    +     }
-        },
-        variants: {
-          // ...
-        },
-        plugins: [
-    -     require('tailwindcss/plugins/container')({
-    -       center: true,
-    -       padding: '1rem',
-    -     }),
-    -   ],
-      }
-    ```
+**Don't invoke the default config as a function.**
 
-8. **Inline your `colors` variable into `theme.colors`.**
+In v0.x, `require('tailwindcss/defaultConfig')` returned a function that returned the default config when invoked.
 
-    In v1.0, it's possible to specify that parts of your theme _depend_ on other parts of your theme, and because of that it's no longer necessary to hold your `colors` in a separate variable.
+In v1.0, it simply returns the object:
 
-    Start by inlining your `colors` variable directly into `theme.colors`:
+```diff
+- let defaultConfig = require('tailwindcss/defaultConfig')()
++ let defaultConfig = require('tailwindcss/defaultConfig')
 
-    ```diff
-      let defaultConfig = require('tailwindcss/defaultConfig')()
+  module.exports = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      // ...
+    },
+    variants: {
+      // ...
+    },
+    plugins: [],
+  }
+```
 
-    - let colors = {
-    -   'transparent': 'transparent',
-    -   'black': '#22292f',
-    -   // ...
-    -   'pink-lightest': '#ffebef','
-    - }
+**Remove any configuration you haven't customized.**
 
-      module.exports = {
-        prefix: '',
-        important: false,
-        separator: ':',
-        theme: {
-    -     colors: colors,
-    +     colors: {
-    +       'transparent': 'transparent',
-    +       'black': '#22292f',
-    +       // ...
-    +       'pink-lightest': '#ffebef','
-    +     },
-          // ...
-        },
-        variants: {
-          // ...
-        },
-        plugins: [],
-      }
-    ```
+One of the philosophical changes in v1.0 is that we are encouraging people to use their configuration files solely for specifying _changes_ from the default config, rather than including the entire default config _plus_ their changes.
 
-    Next, update any sections that were referencing the `colors` variable using the new closure syntax:
+Every single key in the config file is optional (in fact the file itself is optional too), so if there are things you've never customized, you're encouraged to remove them entirely.
 
-    ```diff
-      let defaultConfig = require('tailwindcss/defaultConfig')()
+For example, if you aren't specifying a custom separator or prefix or enabling the `important` option, you can remove them entirely:
 
-      module.exports = {
-        prefix: '',
-        important: false,
-        separator: ':',
-        theme: {
-          colors; {
-            'transparent': 'transparent',
-            'black': '#22292f',
-            // ...
-            'pink-lightest': '#ffebef','
-          },
-          // ...
-    -     backgroundColor: colors,
-    +     backgroundColor: theme => theme('colors'),
-          // ...
-    -     textColor: colors,
-    +     textColor: theme => theme('colors'),
-          // ...
-    -     borderColor: global.Object.assign({ default: colors['grey-light'] }, colors),
-    +     borderColor: theme => ({
-    +       default: theme('colors.grey-light'),
-    +       ...theme('colors'),
-    +     }),
-          // ...
-        },
-        variants: {
-          // ...
-        },
-        plugins: [],
-      }
-    ```
+```diff
+  let defaultConfig = require('tailwindcss/defaultConfig')
 
-9. **Don't invoke the default config as a function.**
+  module.exports = {
+-   prefix: '',
+-   important: false,
+-   separator: ':',
+    theme: {
+      // ...
+    },
+    variants: {
+      // ...
+    },
+    plugins: [],
+  }
+```
 
-    In v0.x, `require('tailwindcss/defaultConfig')` returned a function that returned the default config when invoked.
+Similarly, if you aren't referencing the `defaultConfig` variable anywhere, remove that too:
 
-    In v1.0, it simply returns the object:
+```diff
+- let defaultConfig = require('tailwindcss/defaultConfig')
 
-    ```diff
-    - let defaultConfig = require('tailwindcss/defaultConfig')()
-    + let defaultConfig = require('tailwindcss/defaultConfig')
+  module.exports = {
+    theme: {
+      // ...
+    },
+    variants: {
+      // ...
+    },
+    plugins: [],
+  }
+```
 
-      module.exports = {
-        prefix: '',
-        important: false,
-        separator: ':',
-        theme: {
-          // ...
-        },
-        variants: {
-          // ...
-        },
-        plugins: [],
-      }
-    ```
+If you haven't customized the `opacity` values, remove them:
 
-10. **Remove any configuration you haven't customized.**
+```diff
+  module.exports = {
+    theme: {
+      // ...
+-     opacity: {
+-       '0': '0',
+-       '25': '.25',
+-       '50': '.5',
+-       '75': '.75',
+-       '100': '1',
+-     },
+      // ...
+    },
+    variants: {
+      // ...
+    },
+    plugins: [],
+  }
+```
 
-    One of the philosophical changes in v1.0 is that we are encouraging people to use their configuration files solely for specifying _changes_ from the default config, rather than including the entire default config _plus_ their changes.
+We will not change any of this configuration outside of a major version bump, so you are totally safe to depend on inheriting the default values.
 
-    Every single key in the config file is optional (in fact the file itself is optional too), so if there are things you've never customized, you're encouraged to remove them entirely.
+The way your configuration is merged with the defaults is designed to be very intuitive and mostly just work, but for the curious:
 
-    For example, if you aren't specifying a custom separator or prefix or enabling the `important` option, you can remove them entirely:
+- `prefix` is replaced
+- `separator` is replaced
+- `important` is replaced
+- `theme` is merged one level deep, so if you provide an object for `theme.opacity` it replaces the default `theme.opacity` object
+- `variants` is merged one level deep, so if you provide an array for `variants.opacity` it replaces the default `variants.opacity` object
+- `plugins` is merged, but the default is an empty array so it's really the same as replacing
 
-    ```diff
-      let defaultConfig = require('tailwindcss/defaultConfig')
+It's worth noting that you are not _required_ to remove any redundant configuration, so if you'd prefer to own the entire system and be able to see it all in one place, you're absolutely welcome to keep everything in your config file.
 
-      module.exports = {
-    -   prefix: '',
-    -   important: false,
-    -   separator: ':',
-        theme: {
-          // ...
-        },
-        variants: {
-          // ...
-        },
-        plugins: [],
-      }
-    ```
+**It's very important to realize that many of the theme values have changed from v0.7.4 to v1.0**, so just because you never customized a value that shipped by default in v0.x, that doesn't guarantee that you are safe to remove it from your config file.
 
-    Similarly, if you aren't referencing the `defaultConfig` variable anywhere, remove that too:
+A perfect example of this is colors. The default color palette is completely new in v1.0 with a new naming scheme, so even if you were using the default color palette in v0.x, you're actually using a custom color palette in v1.0.
 
-    ```diff
-    - let defaultConfig = require('tailwindcss/defaultConfig')
-
-      module.exports = {
-        theme: {
-          // ...
-        },
-        variants: {
-          // ...
-        },
-        plugins: [],
-      }
-    ```
-
-    If you haven't customized the `opacity` values, remove them:
-
-    ```diff
-      module.exports = {
-        theme: {
-          // ...
-    -     opacity: {
-    -       '0': '0',
-    -       '25': '.25',
-    -       '50': '.5',
-    -       '75': '.75',
-    -       '100': '1',
-    -     },
-          // ...
-        },
-        variants: {
-          // ...
-        },
-        plugins: [],
-      }
-    ```
-
-    We will not change any of this configuration outside of a major version bump, so you are totally safe to depend on inheriting the default values.
-
-    The way your configuration is merged with the defaults is designed to be very intuitive and mostly just work, but for the curious:
-
-    - `prefix` is replaced
-    - `separator` is replaced
-    - `important` is replaced
-    - `theme` is merged one level deep, so if you provide an object for `theme.opacity` it replaces the default `theme.opacity` object
-    - `variants` is merged one level deep, so if you provide an array for `variants.opacity` it replaces the default `variants.opacity` object
-    - `plugins` is merged, but the default is an empty array so it's really the same as replacing
-
-    It's worth noting that you are not _required_ to remove any redundant configuration, so if you'd prefer to own the entire system and be able to see it all in one place, you're absolutely welcome to keep everything in your config file.
-
-    **It's very important to realize that many of the theme values have changed from v0.7.4 to v1.0**, so just because you never customized a value that shipped by default in v0.x, that doesn't guarantee that you are safe to remove it from your config file.
-
-    A perfect example of this is colors. The default color palette is completely new in v1.0 with a new naming scheme, so even if you were using the default color palette in v0.x, you're actually using a custom color palette in v1.0.
-
-    **Always double check that anything you want to remove is identical to the _new_ default config file values before you remove it.**
+**Always double check that anything you want to remove is identical to the _new_ default config file values before you remove it.**
 
 <h3 class="no-toc">Rename `tailwind.js` to `tailwind.config.js`</h3>
 
-*Impact: N/A, Effort: Trivial*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: N/A, Effort: Trivial</p>
 
 This is entirely optional but recommended — if you are using the old default config file name (`tailwind.js`), rename it to `tailwind.config.js`.
 
@@ -633,7 +633,7 @@ If you keep your config file in a different folder, you'll still need to provide
 
 <h3 class="no-toc">Replace `@tailwind preflight` with `@tailwind base`</h3>
 
-*Impact: All users, Effort: Trivial*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: All users, Effort: Trivial</p>
 
 One of the new features in v1.0 is the ability for plugins to register base styles. As a result, our `preflight` styles are actually just another core plugin now, and the general "bucket" for base styles has been renamed from `preflight` to `base`.
 
@@ -661,7 +661,7 @@ If you are using `postcss-import` and relying on our imports instead of the `@ta
 
 <h3 class="no-toc">Replace `config()` with `theme()`</h3>
 
-*Impact: Moderate, Effort: Low*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Low</p>
 
 The `config()` helper function that Tailwind makes available to your CSS files has been replaced with a new `theme()` function that is automatically scoped to the `theme` section of your config file and should work as a drop-in replacement:
 
@@ -677,7 +677,7 @@ A simple find and replace across your CSS files that switches `config(` to `them
 
 <h3 class="no-toc">Explicitly style any headings</h3>
 
-*Impact: Moderate, Effort: Moderate*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Moderate</p>
 
 If you are using our `preflight` styles, all `h1-h6` elements are unstyled by default in v1.0.
 
@@ -702,7 +702,7 @@ This is a bit of an annoying change, but if it breaks your site, you could argue
 
 <h3 class="no-toc">Explicitly style any lists that should have bullets/numbers</h3>
 
-*Impact: Moderate, Effort: Moderate*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Moderate</p>
 
 If you are using our `preflight` styles, all `ul` and `ol` elements are unstyled by default in v1.0.
 
@@ -737,7 +737,7 @@ ol {
 
 <h3 class="no-toc">Remove any usage of `.list-reset`</h3>
 
-*Impact: Moderate, Effort: Low*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Low</p>
 
 Since lists are now unstyled by default, `.list-reset` has been removed. You technically don't need to change anything, but you're encouraged to remove any usage of it as it's now just dead code:
 
@@ -759,7 +759,7 @@ This change only really affects you if you are _not_ using our `preflight` style
 
 <h3 class="no-toc">Replace `.pin-{side}` with `.{top|left|bottom|right|inset}-{value}`</h3>
 
-*Impact: High, Effort: Moderate*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: High, Effort: Moderate</p>
 
 Utilities like `.pin`, `.pin-x`, and `.pin-t` have been removed in favor of less cleverly named classes like `.top-0`, `.right-0`, etc.
 
@@ -795,7 +795,7 @@ This is an annoying change, sorry.
 
 <h3 class="no-toc">Replace `.roman` with `.not-italic`</h3>
 
-*Impact: Low, Effort: Low*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
 
 Previously we used the name `.roman` for `font-style: normal` because of a bug in `postcss-selector-not` that prevented us from using `.not-italic`. That bug has been fixed, so this name has been changed.
 
@@ -810,7 +810,7 @@ I would be surprised if more than 5 people are even affected by this, I've never
 
 <h3 class="no-toc">Replace `.flex-no-grow/shrink` with `.flex-grow/shrink-0`</h3>
 
-*Impact: High, Effort: Low*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: High, Effort: Low</p>
 
 In order to make these utilities more easily customizable, their names have changed to match our existing conventions.
 
@@ -830,7 +830,7 @@ These utilities are also now customizable in the `theme.flexGrow` and `theme.fle
 
 <h3 class="no-toc">Explicitly add color and underline styles to links</h3>
 
-*Impact: High, Effort: Moderate*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: High, Effort: Moderate</p>
 
 In v1.0, `a` tags automatically inherit the parent `color` and `text-decoration` styles which means that by default links are no longer blue and do not have an underline.
 
@@ -877,7 +877,7 @@ a {
 
 <h3 class="no-toc">Add `inline` to any replaced elements (`img`, `video`, etc.) that should be `display: block`</h3>
 
-*Impact: Moderate, Effort: Moderate*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Moderate</p>
 
 In v1.0, all replaced elements (like `img`, `svg`, `video`, `canvas`, `iframe`, etc.) are set to `display: block` by default. This is counter to the browser default which is `inline`.
 
@@ -895,7 +895,7 @@ I don't think this will actually affect many people or projects, as you almost a
 
 <h3 class="no-toc">Adjust the line-height and padding on your form elements</h3>
 
-*Impact: High, Effort: Moderate*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: High, Effort: Moderate</p>
 
 **If you are already setting an explicit line-height on form elements, this change will not affect you.**
 
@@ -947,7 +947,7 @@ textarea {
 
 <h3 class="no-toc">Adjust the text color on your form elements</h3>
 
-*Impact: Low, Effort: Moderate*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Moderate</p>
 
 **If you are already setting an explicit text color on form elements, this change will not affect you.**
 
@@ -974,7 +974,7 @@ You can fix this by setting a text color on form elements explicitly:
 
 <h3 class="no-toc">Double check your default font family</h3>
 
-*Impact: Low, Effort: Trivial*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Trivial</p>
 
 **If you are already setting a default font family on your project (either with a class on `html`/`body` or using custom CSS), this change will not affect you.**
 
@@ -997,7 +997,7 @@ html {
 
 <h3 class="no-toc">Double check your default line-height</h3>
 
-*Impact: Moderate, Effort: Moderate*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Moderate</p>
 
 **If you are already setting a default line-height on your project (either with a class on `html`/`body` or using custom CSS), this change will not affect you.**
 
@@ -1032,7 +1032,7 @@ These steps only affect users that are depending on the 0.x configuration file v
 
 <h3 class="no-toc">Update any usage of `text/bg/border-{color}` classes</h3>
 
-*Impact: Low, Effort: High*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: High</p>
 
 **This change only affects you if you don't have a color palette defined in your config file or you are using Tailwind through a CDN.**
 
@@ -1073,7 +1073,7 @@ Again, this change only affects you if you do not have your own color palette sp
 
 <h3 class="no-toc">Replace `tracking-tight/wide` with `tracking-tighter/wider`</h3>
 
-*Impact: Low, Effort: Low*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
 
 **This change only affects you if you don't have a tracking/letter-spacing scale defined in your config file or you are using Tailwind through a CDN.**
 
@@ -1100,7 +1100,7 @@ If you started with a complete config file, your old scale will continue to work
 
 <h3 class="no-toc">Check your design against the updated default breakpoints</h3>
 
-*Impact: Low, Effort: Low*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
 
 **This change only affects you if you don't have `screens` defined in your config file or you are using Tailwind through a CDN.**
 
@@ -1121,7 +1121,7 @@ If you started with a complete config file, your old screens values will continu
 
 <h3 class="no-toc">Double check any usage of the default `shadow-{size}` utilities</h3>
 
-*Impact: Low, Effort: Low*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
 
 **This change only affects you if you don't have a box-shadow scale defined in your config file or you are using Tailwind through a CDN.**
 
@@ -1136,7 +1136,7 @@ If you started with a complete config file, your old box-shadow values will cont
 
 <h3 class="no-toc">Update any usage of the default `max-w-{size}` utilities</h3>
 
-*Impact: Low, Effort: Low*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
 
 **This change only affects you if you don't have a max-width scale defined in your config file or you are using Tailwind through a CDN.**
 
@@ -1157,7 +1157,7 @@ These steps only affect users who have authored their own plugins.
 
 <h3 class="no-toc">Escape the class portion of any custom variants you have created</h3>
 
-*Impact: Low, Effort: Low*
+<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
 
 In v1.0, you are required to manually escape the class name portion of any selectors you create when adding a new variant using a plugin.
 
