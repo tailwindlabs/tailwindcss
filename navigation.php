@@ -8,7 +8,7 @@ return [
         'What is Tailwind?' => 'what-is-tailwind',
         'Installation' => 'installation',
         'Configuration' => 'configuration',
-        // 'Colors' => 'colors',
+        'Colors' => 'colors',
         'Responsive Design' => 'responsive-design',
         'State Variants' => 'state-variants',
         'Adding New Utilities' => 'adding-new-utilities',
