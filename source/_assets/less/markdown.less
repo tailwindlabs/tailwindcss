@@ -44,13 +44,13 @@
     @apply border-t-0 border-r-0 border-l-0 border-b border-gray-300;
   }
 
-  > a, > p a, > ul li a, a& {
-    @apply text-blue-500;
+  > a, > p a, > ul li a, > ol li a, a& {
+    @apply text-blue-600;
     &:hover {
       @apply underline;
     }
     strong {
-      @apply text-blue-500;
+      @apply text-blue-600;
     }
   }
 
@@ -59,7 +59,12 @@
     @apply text-gray-800;
   }
 
-  > p code, > ul li code, p& code& {
+  > p code,
+  > ul li *:not(pre) code,
+  > ul li > code,
+  > ol li *:not(pre) code,
+  > ol li > code,
+  p& code& {
     @apply inline-block;
     @apply bg-gray-100;
     @apply rounded-sm;
@@ -103,7 +108,7 @@
     @apply text-gray-900;
     @apply leading-none;
     @apply font-normal;
-    @apply text-xl;
+    @apply text-2xl;
   }
 
   > h2 + h3 {
@@ -111,21 +116,21 @@
   }
 
   > h3, h3& {
-    @apply mt-12;
+    @apply mt-16;
     @apply mb-4;
     @apply text-gray-900;
-    @apply leading-none;
+    @apply leading-tight;
     @apply font-medium;
-    @apply text-base;
+    @apply text-xl;
   }
 
   > h4, h4& {
-    @apply mt-8;
+    @apply mt-12;
     @apply mb-0;
     @apply text-gray-900;
     @apply leading-none;
-    @apply font-bold;
-    @apply text-sm;
+    @apply font-medium;
+    @apply text-lg;
   }
 
   > h1 + p {
@@ -136,7 +141,16 @@
   > h2 > code,
   > h3 > code,
   > h4 > code {
+    @apply text-purple-600;
     @apply font-mono;
+  }
+
+  > h3 > code {
+    @apply text-lg px-1 bg-gray-100;
+  }
+
+  > h4 > code {
+    @apply text-base px-1 bg-gray-100;
   }
 
   > p, p&, > blockquote > p {
@@ -146,26 +160,56 @@
 
   > ul:not(.list-none) {
     @apply pl-0 list-none;
-    li::before {
-      @apply text-gray-400 inline-block mr-3;
-      content: "\2022";
+    li {
+      @apply relative pl-5;
+      &::before {
+        @apply absolute left-0 text-gray-400 inline-block mr-3;
+        content: "\2022";
+      }
     }
   }
 
   > ol {
-    @apply pl-4 list-decimal list-inside;
+    @apply list-none;
+    counter-reset: item;
+    > li {
+      @apply relative pl-10;
+    }
+    > li::before {
+      @apply absolute top-0 left-0 mt-px;
+      @apply flex items-center justify-center;
+      @apply h-6 w-6 bg-gray-300 rounded-full;
+      @apply text-gray-700 text-xs font-bold;
+      content: counter(item);
+      counter-increment: item;
+    }
   }
 
-  > :not(pre):not(h1):not(h2):not(h3):not(h4) > code {
+  > :not(pre):not(h1):not(h2):not(h3):not(h4) > code,
+  > ul code,
+  > ol code {
     @apply bg-gray-100;
     @apply text-sm;
     @apply leading-normal;
   }
 
-  > pre, pre& {
+  > pre, pre&, > ul li pre, > ol li pre {
     @apply p-4;
     @apply bg-gray-800;
     @apply text-sm;
     @apply leading-normal;
+  }
+
+  > table {
+    @apply w-full text-left table-collapse;
+    th {
+      @apply text-sm font-semibold text-gray-700 p-2 bg-gray-100;
+    }
+    td {
+      @apply p-2 border-t border-gray-200 font-mono text-xs text-purple-700 align-baseline;
+      &:first-child {
+        @apply border-gray-300;
+      }
+    }
   }
 }
