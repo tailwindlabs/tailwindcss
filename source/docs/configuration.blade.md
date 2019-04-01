@@ -135,7 +135,7 @@ Like many other places in Tailwind, the `default` key is special and means "no m
 
 ### Spacing
 
-The `themes.spacing` property allows you to override Tailwind's default spacing/sizing scale.
+The `theme.spacing` property allows you to override Tailwind's default spacing/sizing scale.
 
 ```js
 // tailwind.config.js
