@@ -9,43 +9,29 @@ Tailwind v1.0 is mostly focused on changing things from 0.x that I would have do
 
 So while there's not a ton of exciting new features, you can at least be excited about the fact that we now have a really stable base to build on, and that you can feel comfortable using Tailwind in production if the 0.x label gave you pause.
 
-## New features
-
-- New config file structure ([#637](https://github.com/tailwindcss/tailwindcss/pull/637), [Sample](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js))
-- New expanded default color palette ([#737](https://github.com/tailwindcss/tailwindcss/pull/737))
-- New default `maxWidth` scale ([#701](https://github.com/tailwindcss/tailwindcss/pull/701))
-- Default variant output position can be customized ([#657](https://github.com/tailwindcss/tailwindcss/pull/657))
-- Extended default line-height scale ([#673](https://github.com/tailwindcss/tailwindcss/pull/673))
-- Extended default letter-spacing scale ([#671](https://github.com/tailwindcss/tailwindcss/pull/671))
-- `object-position` utilities are now customizable under `theme.objectPosition` ([#676](https://github.com/tailwindcss/tailwindcss/pull/676))
-- `cursor` utilities are now customizable under `theme.cursors` ([#679](https://github.com/tailwindcss/tailwindcss/pull/679))
-- `flex-grow/shrink` utilities are now customizable under `theme.flexGrow/flexShrink` ([#690](https://github.com/tailwindcss/tailwindcss/pull/690))
-- Added utilities for `list-style-type` and `list-style-position` ([#761](https://github.com/tailwindcss/tailwindcss/pull/761))
-- Added `break-all` utility ([#763](https://github.com/tailwindcss/tailwindcss/pull/763))
-
 ## Upgrade steps for all users
 
 These changes affect all users, whether you are using Tailwind with PostCSS and your own custom config file, or just using the default config file or CDN.
 
-- [Update Tailwind](#update-tailwind)
-- [Update your config file](#update-your-config-file)
-- [Rename `tailwind.js` to `tailwind.config.js`](#rename-tailwind-js-to-tailwind-config-js)
-- [Replace `@tailwind preflight` with `@tailwind base`](#replace-preflight-with-base)
-- [Replace `config()` with `theme()`](#replace-config-with-theme)
-- [Explicitly style any headings](#explicitly-style-any-headings)
-- [Explicitly style any lists that should have bullets/numbers](#explicitly-style-any-lists)
-- [Remove any usage of `.list-reset`](#remove-any-usage-of-list-reset)
-- [Replace `.pin-{side}` with `.{top|left|bottom|right|inset}-{value}`](#replace-pin-with-inset)
-- [Replace `.roman` with `.not-italic`](#replace-roman-with-not-italic)
-- [Replace `.flex-no-grow/shrink` with `.flex-grow/shrink-0`](#replace-flex-no-grow-shrink-with-flex-grow-shrink-0)
-- [Explicitly add color and underline styles to links](#explicitly-add-color-and-underline-styles-to-links)
-- [Add `inline` to any replaced elements (`img`, `video`, etc.) that should not be `display: block`](#add-inline-to-any-replaced-elements-img-video-etc-that-should-not-be-display-block)
-- [Adjust the line-height and padding on your form elements](#adjust-the-line-height-and-padding-on-your-form-elements)
-- [Adjust the text color on your form elements](#adjust-the-text-color-on-your-form-elements)
-- [Double check your default font family](#double-check-your-default-font-family)
-- [Double check your default line-height](#double-check-your-default-line-height)
+1. [Update Tailwind](#update-tailwind)
+1. [Update your config file](#update-your-config-file)
+1. [Rename `tailwind.js` to `tailwind.config.js`](#rename-tailwind-js-to-tailwind-config-js)
+1. [Replace `@tailwind preflight` with `@tailwind base`](#replace-preflight-with-base)
+1. [Replace `config()` with `theme()`](#replace-config-with-theme)
+1. [Explicitly style any headings](#explicitly-style-any-headings)
+1. [Explicitly style any lists that should have bullets/numbers](#explicitly-style-any-lists)
+1. [Remove any usage of `.list-reset`](#remove-any-usage-of-list-reset)
+1. [Replace `.pin-{side}` with `.{top|left|bottom|right|inset}-{value}`](#replace-pin-with-inset)
+1. [Replace `.roman` with `.not-italic`](#replace-roman-with-not-italic)
+1. [Replace `.flex-no-grow/shrink` with `.flex-grow/shrink-0`](#replace-flex-no-grow-shrink-with-flex-grow-shrink-0)
+1. [Explicitly add color and underline styles to links](#explicitly-add-color-and-underline-styles-to-links)
+1. [Add `inline` to any replaced elements (`img`, `video`, etc.) that should not be `display: block`](#add-inline-to-any-replaced-elements-img-video-etc-that-should-not-be-display-block)
+1. [Adjust the line-height and padding on your form elements](#adjust-the-line-height-and-padding-on-your-form-elements)
+1. [Adjust the text color on your form elements](#adjust-the-text-color-on-your-form-elements)
+1. [Double check your default font family](#double-check-your-default-font-family)
+1. [Double check your default line-height](#double-check-your-default-line-height)
 
-<h3 class="no-toc">Update Tailwind</h3>
+<h3 class="no-toc">1. Update Tailwind</h3>
 
 While v1.0 is still in a pre-release state, you can pull it in to your project using npm:
 
@@ -59,7 +45,7 @@ Or using Yarn:
 yarn add -D tailwindcss@next
 ```
 
-<h3 class="no-toc">Update your config file</h3>
+<h3 class="no-toc">2. Update your config file</h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: All users, Effort: Moderate</p>
 
@@ -92,7 +78,7 @@ See the new [default config file](https://github.com/tailwindcss/tailwindcss/blo
 
 There are a lot of changes here but they are all fairly cosmetic and entirely localized to this one file, so while it may look intimidating it's actually only 10-15 minutes of work.
 
-**Move all design-related top-level keys into a new section called `theme`**.
+#### 2.1. Move all design-related top-level keys into a new section called `theme`
 
 Every key except `options`, `modules`, and `plugins` should be nested under a new `theme` key.
 
@@ -142,7 +128,7 @@ Your config file should look generally like this at this point:
   }
 ```
 
-**Rename `modules` to `variants`.**
+#### 2.2. Rename `modules` to `variants`
 
 "Modules" was a word we just kinda grabbed because we needed *something*, and we wanted to use that section of the config to both specify variants and disable modules if necessary.
 
@@ -182,7 +168,7 @@ After making this change, your config file should look like this:
   }
 ```
 
-**Move your `options` settings to the top-level.**
+#### 2.3. Move your `options` settings to the top-level
 
 The advanced options have been moved to the top-level of the config file instead of being nested under the redundant `options` key.
 
@@ -222,7 +208,7 @@ After making this change, your config file should look like this:
   }
 ```
 
-**Update the sections under `theme` to their new names.**
+#### 2.4. Update the sections under `theme` to their new names
 
 As part of an effort to make the naming in the config file more consistent, many of the sections under `theme` have been renamed.
 
@@ -245,7 +231,7 @@ These are the sections that need to be updated:
 
 These names need to change in the `variants` section as well, so feel free to do a find and replace across the whole file.
 
-**Update the sections under `variants` to their new names.**
+#### 2.5. Update the sections under `variants` to their new names
 
 As alluded to in the previous step, many of the sections under `variants` have been renamed as well.
 
@@ -286,11 +272,11 @@ Here is a complete list of the sections that been split into multiple sections:
 
 | Old | New |
 | --- | --- |
-| `flexbox` | `flexDirection`, `flexWrap`, `alignItems`, `alignSelf`, `justifyContent`, `alignContent`, `flex`, `flexGrow`, `flexShrink` |
-| `lists` | `listStylePosition`, `listStyleType` |
-| `position` | `position`, `inset` |
-| `textStyle` | `fontStyle`, `fontSmoothing`, `textDecoration`, `textTransform` |
-| `whitespace` | `whitespace`, `wordBreak` |
+| `flexbox` | `flexDirection`<br>`flexWrap`<br>`alignItems`<br>`alignSelf`<br>`justifyContent`<br>`alignContent`<br>`flex`<br>`flexGrow`<br>`flexShrink` |
+| `lists` | `listStylePosition`<br>`listStyleType` |
+| `position` | `position`<br>`inset` |
+| `textStyle` | `fontStyle`<br>`fontSmoothing`<br>`textDecoration`<br>`textTransform` |
+| `whitespace` | `whitespace`<br>`wordBreak` |
 
 Note that in some cases (`position`, `whitespace`) the original section still exists, while in others (`flexbox`, `textStyle`), the original section has been completely removed.
 
@@ -300,7 +286,7 @@ The simplest way to make these changes is to just copy the value you were using 
 
 For example, if you never use the responsive variants of `antialiased` or `subpixel-antialiased`, you could set `fontSmoothing` to `[]` while still using `['responsive']` for `fontStyle`, `textDecoration`, and `textTransform`.
 
-**Add any disabled ~~modules~~ core plugins to `corePlugins`.**
+#### 2.6. Add any disabled ~~modules~~ core plugins to `corePlugins`
 
 In v0.x, you could disable a ~~module~~ core plugin by setting it to `false` in what is now the `variants` section.
 
@@ -338,7 +324,7 @@ In v1.0, to disable a plugin you need to set it to `false` in the `corePlugins` 
 
 This change was made to make it possible to disable other core plugins where `variants` are irrelevant, like `preflight` or `container` (more on this later).
 
-**Remove the `container` plugin from `plugins` and move any configuration to `theme`.**
+#### 2.7. Remove the `container` plugin from `plugins` and move any configuration to `theme`
 
 In v1.0, the `container` plugin is a core plugin just like `padding`, `margin`, etc. and should not be listed in your `plugins` section:
 
@@ -425,7 +411,7 @@ If you are taking advantage the `center` or `padding` options exposed by the `co
   }
 ```
 
-**Inline your `colors` variable into `theme.colors`.**
+#### 2.8. Inline your `colors` variable into `theme.colors`
 
 In v1.0, it's possible to specify that parts of your theme _depend_ on other parts of your theme, and because of that it's no longer necessary to hold your `colors` in a separate variable.
 
@@ -499,7 +485,7 @@ Next, update any sections that were referencing the `colors` variable using the 
   }
 ```
 
-**Don't invoke the default config as a function.**
+#### 2.9. Don't invoke the default config as a function
 
 In v0.x, `require('tailwindcss/defaultConfig')` returned a function that returned the default config when invoked.
 
@@ -523,7 +509,7 @@ In v1.0, it simply returns the object:
   }
 ```
 
-**Remove any configuration you haven't customized.**
+#### 2.10. Remove any configuration you haven't customized
 
 One of the philosophical changes in v1.0 is that we are encouraging people to use their configuration files solely for specifying _changes_ from the default config, rather than including the entire default config _plus_ their changes.
 
@@ -605,7 +591,7 @@ A perfect example of this is colors. The default color palette is completely new
 
 **Always double check that anything you want to remove is identical to the _new_ default config file values before you remove it.**
 
-<h3 class="no-toc">Rename `tailwind.js` to `tailwind.config.js`</h3>
+<h3 class="no-toc">3. Rename <code>tailwind.js</code> to <code>tailwind.config.js</code></h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: N/A, Effort: Trivial</p>
 
@@ -631,7 +617,7 @@ If you keep your config file in a different folder, you'll still need to provide
     ])
 ```
 
-<h3 class="no-toc">Replace `@tailwind preflight` with `@tailwind base`</h3>
+<h3 class="no-toc">4. Replace <code>@tailwind preflight</code> with <code>@tailwind base</code></h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: All users, Effort: Trivial</p>
 
@@ -659,7 +645,7 @@ If you are using `postcss-import` and relying on our imports instead of the `@ta
   @import "tailwindcss/utilities";
 ```
 
-<h3 class="no-toc">Replace `config()` with `theme()`</h3>
+<h3 class="no-toc">5. Replace <code>config()</code> with <code>theme()</code></h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Low</p>
 
@@ -675,7 +661,7 @@ The `config()` helper function that Tailwind makes available to your CSS files h
 
 A simple find and replace across your CSS files that switches `config(` to `theme(` should do it.
 
-<h3 class="no-toc">Explicitly style any headings</h3>
+<h3 class="no-toc">6. Explicitly style any headings</h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Moderate</p>
 
@@ -700,7 +686,7 @@ The exact changes you need to make will be highly specific to what you want to a
 
 This is a bit of an annoying change, but if it breaks your site, you could argue that it's actually revealing bugs in your markup.
 
-<h3 class="no-toc">Explicitly style any lists that should have bullets/numbers</h3>
+<h3 class="no-toc">7. Explicitly style any lists that should have bullets/numbers</h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Moderate</p>
 
@@ -735,7 +721,7 @@ ol {
 @tailwind utilities;
 ```
 
-<h3 class="no-toc">Remove any usage of `.list-reset`</h3>
+<h3 class="no-toc">8. Remove any usage of <code>.list-reset</code></h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Low</p>
 
@@ -757,7 +743,7 @@ Again, **if you are using our `preflight` styles unmodified (you probably are), 
 
 This change only really affects you if you are _not_ using our `preflight` styles, or overriding our global list reset.
 
-<h3 class="no-toc">Replace `.pin-{side}` with `.{top|left|bottom|right|inset}-{value}`</h3>
+<h3 class="no-toc">9. Replace <code>.pin-{side}</code> with <code>.{top|left|bottom|right|inset}-{value}</code></h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: High, Effort: Moderate</p>
 
@@ -793,7 +779,7 @@ These are all now customizable in `theme.inset` too, whereas the `pin-{side}` ut
 
 This is an annoying change, sorry.
 
-<h3 class="no-toc">Replace `.roman` with `.not-italic`</h3>
+<h3 class="no-toc">10. Replace <code>.roman</code> with <code>.not-italic</code></h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
 
@@ -808,7 +794,7 @@ Previously we used the name `.roman` for `font-style: normal` because of a bug i
 
 I would be surprised if more than 5 people are even affected by this, I've never used this class once myself.
 
-<h3 class="no-toc">Replace `.flex-no-grow/shrink` with `.flex-grow/shrink-0`</h3>
+<h3 class="no-toc">11. Replace <code>.flex-no-grow/shrink</code> with <code>.flex-grow/shrink-0</code></h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: High, Effort: Low</p>
 
@@ -828,7 +814,7 @@ In order to make these utilities more easily customizable, their names have chan
 
 These utilities are also now customizable in the `theme.flexGrow` and `theme.flexShrink` sections of your config file.
 
-<h3 class="no-toc">Explicitly add color and underline styles to links</h3>
+<h3 class="no-toc">12. Explicitly add color and underline styles to links</h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: High, Effort: Moderate</p>
 
@@ -875,7 +861,7 @@ a {
 @tailwind utilities;
 ```
 
-<h3 class="no-toc">Add `inline` to any replaced elements (`img`, `video`, etc.) that should be `display: block`</h3>
+<h3 class="no-toc">13. Add <code>inline</code> to any replaced elements (<code>img</code>, <code>video</code>, etc.) that should be <code>display: block</code></h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Moderate</p>
 
@@ -893,7 +879,7 @@ If you have any instances in your project where you actually want these elements
 
 I don't think this will actually affect many people or projects, as you almost always want these elements to be `block` or you have them nested inside a flex container where it doesn't matter.
 
-<h3 class="no-toc">Adjust the line-height and padding on your form elements</h3>
+<h3 class="no-toc">14. Adjust the line-height and padding on your form elements</h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: High, Effort: Moderate</p>
 
@@ -945,7 +931,7 @@ textarea {
 @tailwind utilities;
 ```
 
-<h3 class="no-toc">Adjust the text color on your form elements</h3>
+<h3 class="no-toc">15. Adjust the text color on your form elements</h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Moderate</p>
 
@@ -972,7 +958,7 @@ You can fix this by setting a text color on form elements explicitly:
   </div>
 ```
 
-<h3 class="no-toc">Double check your default font family</h3>
+<h3 class="no-toc">16. Double check your default font family</h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Trivial</p>
 
@@ -995,7 +981,7 @@ html {
 @tailwind utilities;
 ```
 
-<h3 class="no-toc">Double check your default line-height</h3>
+<h3 class="no-toc">17. Double check your default line-height</h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Moderate</p>
 
@@ -1020,7 +1006,9 @@ html {
 
 However, a better long-term solution would be to pick a default line-height that matches a value in your line-height scale, and audit your site to find situations where it makes the design look worse and tweak those one at a time.
 
-## Additional steps for CDN users, or others without a config file
+<hr class="my-16">
+
+<h2>Additional steps for CDN users, or others without a config file</h2>
 
 These steps only affect users that are depending on the 0.x configuration file values. This includes CDN users, or anyone that is omitting sections from their config file, referencing our config file, or not using a config file at all.
 
@@ -1030,7 +1018,7 @@ These steps only affect users that are depending on the 0.x configuration file v
 4. [Double check any usage of the default `shadow-{size}` utilities](#double-check-any-usage-of-the-default-shadow-size-utilities)
 5. [Update any usage of the default `max-w-{size}` utilities](#update-any-usage-of-the-default-max-w-size-utilities)
 
-<h3 class="no-toc">Update any usage of `text/bg/border-{color}` classes</h3>
+<h3 class="no-toc mt-12">1. Update any usage of <code>text/bg/border-{color}</code> classes</h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: High</p>
 
@@ -1044,7 +1032,7 @@ There is no way to map the old colors to the new colors 1:1 because the new pale
 
 I would recommend starting with the following substitutions and then adjusting colors up or down a shade on a case-by-case basis as you feel is needed.
 
-For greys (note that `grey` has changed to `gray` 🇺🇸):
+For grays (note that `grey` has changed to `gray`):
 
 | Old | New |
 | --- | --- |
@@ -1071,7 +1059,7 @@ For other colors:
 
 Again, this change only affects you if you do not have your own color palette specified in your config file, or you are using the default Tailwind build through a CDN. If you are using the v0.x color palette in your project, you can absolutely keep using it. You do not need to make these changes unless you have a hard dependency on our default color palette in some way.
 
-<h3 class="no-toc">Replace `tracking-tight/wide` with `tracking-tighter/wider`</h3>
+<h3 class="no-toc">2. Replace <code>tracking-tight/wide</code> with `tracking-tighter/wider`</h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
 
@@ -1098,7 +1086,7 @@ Again, this only applies if you do not have a letter-spacing scale defined in yo
 
 If you started with a complete config file, your old scale will continue to work the same way in v1.0 and you don't need to make any changes.
 
-<h3 class="no-toc">Check your design against the updated default breakpoints</h3>
+<h3 class="no-toc">3. Check your design against the updated default breakpoints</h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
 
@@ -1119,7 +1107,7 @@ Again, this only applies if you do not have any screens defined in your config f
 
 If you started with a complete config file, your old screens values will continue to work the same way in v1.0 and you don't need to make any changes.
 
-<h3 class="no-toc">Double check any usage of the default `shadow-{size}` utilities</h3>
+<h3 class="no-toc">4. Double check any usage of the default <code>shadow-{size}</code> utilities</h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
 
@@ -1134,7 +1122,7 @@ Again, this only applies if you do not have a box-shadow defined in your config 
 If you started with a complete config file, your old box-shadow values will continue to work the same way in v1.0 and you don't need to make any changes.
 
 
-<h3 class="no-toc">Update any usage of the default `max-w-{size}` utilities</h3>
+<h3 class="no-toc">5. Update any usage of the default <code>max-w-{size}</code> utilities</h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
 
@@ -1148,14 +1136,13 @@ Again, this only applies if you do not have a max-width defined in your config f
 
 If you started with a complete config file, your old max-width values will continue to work the same way in v1.0 and you don't need to make any changes.
 
+<hr class="my-16">
 
 ## Additional steps for plugin authors
 
-These steps only affect users who have authored their own plugins.
+This step only affects users who have authored their own plugins.
 
-1. [Escape the class portion of any custom variants you have created](#escape-the-class-portion-of-any-custom-variants-you-have-created)
-
-<h3 class="no-toc">Escape the class portion of any custom variants you have created</h3>
+<h3 class="no-toc mt-6">Escape the class portion of any custom variants you have created</h3>
 
 <p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
 
