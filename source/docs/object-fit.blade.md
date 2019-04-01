@@ -36,6 +36,77 @@ description: "Utilities for controlling the element's respond to the height and 
     ]
 ])
 
+## Usage
+
+@component('_partials.code-sample')
+<div class="flex flex-wrap bg-gray-200">
+  <div class="p-4 mb-2">
+    <p class="mb-2 text-gray-700">.object-contain</p>
+    <div class="h-32 w-64 bg-gray-400">
+      <img class="h-full w-full object-contain" src="https://user-images.githubusercontent.com/4323180/37476373-5f8b7524-284b-11e8-8bc3-8dcb98dd2685.png" alt="">
+    </div>
+  </div>
+  <div class="p-4 mb-2">
+    <p class="mb-2 text-gray-700">.object-cover</p>
+    <div class="h-32 w-64 bg-gray-400">
+      <img class="h-full w-full object-cover" src="https://user-images.githubusercontent.com/4323180/37476373-5f8b7524-284b-11e8-8bc3-8dcb98dd2685.png" alt="">
+    </div>
+  </div>
+  <div class="p-4 mb-2">
+    <p class="mb-2 text-gray-700">.object-fill</p>
+    <div class="h-32 w-64 bg-gray-400">
+      <img class="h-full w-full object-fill" src="https://user-images.githubusercontent.com/4323180/37476373-5f8b7524-284b-11e8-8bc3-8dcb98dd2685.png" alt="">
+    </div>
+  </div>
+  <div class="p-4 mb-2">
+    <p class="mb-2 text-gray-700">.object-none</p>
+    <div class="h-32 w-64 bg-gray-400">
+      <img class="h-full w-full object-none" src="https://user-images.githubusercontent.com/4323180/37476373-5f8b7524-284b-11e8-8bc3-8dcb98dd2685.png" alt="">
+    </div>
+  </div>
+  <div class="p-4 mb-2">
+    <p class="mb-2 text-gray-700">.object-scale-down</p>
+    <div class="h-32 w-64 bg-gray-400">
+      <img class="h-full w-full object-scale-down" src="https://user-images.githubusercontent.com/4323180/37476373-5f8b7524-284b-11e8-8bc3-8dcb98dd2685.png" alt="">
+    </div>
+  </div>
+</div>
+@slot('code')
+<div class="flex flex-wrap bg-gray-200">
+  <div class="p-4 mb-2">
+    <p class="mb-2 text-gray-700">.object-contain</p>
+    <div class="h-32 w-64 bg-gray-400">
+      <img class="h-full w-full object-contain ...">
+    </div>
+  </div>
+  <div class="p-4 mb-2">
+    <p class="mb-2 text-gray-700">.object-cover</p>
+    <div class="h-32 w-64 bg-gray-400">
+      <img class="h-full w-full object-cover ...">
+    </div>
+  </div>
+  <div class="p-4 mb-2">
+    <p class="mb-2 text-gray-700">.object-fill</p>
+    <div class="h-32 w-64 bg-gray-400">
+      <img class="h-full w-full object-fill ...">
+    </div>
+  </div>
+  <div class="p-4 mb-2">
+    <p class="mb-2 text-gray-700">.object-none</p>
+    <div class="h-32 w-64 bg-gray-400">
+      <img class="h-full w-full object-none ...">
+    </div>
+  </div>
+  <div class="p-4 mb-2">
+    <p class="mb-2 text-gray-700">.object-scale-down</p>
+    <div class="h-32 w-64 bg-gray-400">
+      <img class="h-full w-full object-scale-down ...">
+    </div>
+  </div>
+</div>
+@endslot
+@endcomponent
+
 ## Customizing
 
 @include('_partials.variants-and-disabling', [
