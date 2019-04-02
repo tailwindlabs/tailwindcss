@@ -99,34 +99,25 @@ To control the shadow of an element at a specific breakpoint, add a `{screen}:` 
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-@component('_partials.responsive-code-sample')
+
+@component('_partials.responsive-code-sample', ['class' => 'bg-gray-200 flex justify-around items-center text-sm py-8'])
 @slot('none')
-<div class="flex justify-center">
-  <div class="shadow px-4 py-2 bg-gray-100 opacity-100 w-24 h-24 rounded-full"></div>
-</div>
+<div class="h-16 w-16 bg-white rounded shadow"></div>
 @endslot
 @slot('sm')
-<div class="flex justify-center">
-  <div class="shadow-md px-4 py-2 bg-gray-100 opacity-100 w-24 h-24 rounded-full"></div>
-</div>
+<div class="h-16 w-16 bg-white rounded shadow-md"></div>
 @endslot
 @slot('md')
-<div class="flex justify-center">
-  <div class="shadow-lg px-4 py-2 bg-gray-100 opacity-100 w-24 h-24 rounded-full"></div>
-</div>
+<div class="h-16 w-16 bg-white rounded shadow-lg"></div>
 @endslot
 @slot('lg')
-<div class="flex justify-center">
-  <div class="shadow-inner px-4 py-2 bg-gray-100 opacity-100 w-24 h-24 rounded-full"></div>
-</div>
+<div class="h-16 w-16 bg-white rounded shadow-xl"></div>
 @endslot
 @slot('xl')
-<div class="flex justify-center">
-  <div class="shadow-none px-4 py-2 bg-gray-100 opacity-100 w-24 h-24 rounded-full"></div>
-</div>
+<div class="h-16 w-16 bg-white rounded shadow-2xl"></div>
 @endslot
 @slot('code')
-<div class="none:shadow sm:shadow-md md:shadow-lg lg:shadow-inner xl:shadow-none ...">
+<div class="none:shadow sm:shadow-md md:shadow-lg lg:shadow-xl xl:shadow-2xl ...">
   <!-- ... -->
 </div>
 @endslot
@@ -136,21 +127,17 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Box Shadows
 
-By default Tailwind provides three drop shadow utilities, one inner shadow utility, and a utility for removing existing shadows. You can change, add, or remove these by editing the `shadows` section of your Tailwind config.
+By default Tailwind provides three drop shadow utilities, one inner shadow utility, and a utility for removing existing shadows. You can change, add, or remove these by editing the `boxShadow` section of your Tailwind config.
 
 If a `default` shadow is provided, it will be used for the non-suffixed `.shadow` utility. Any other keys will be used as suffixes, for example the key `'2'` will create a corresponding `.shadow-2` utility.
 
-@component('_partials.customized-config', ['key' => 'shadows'])
-- default: '0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06)'
-- md: ' 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .06)'
-- lg: ' 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05)'
-- xl: ' 0 20px 25px -5px rgba(0, 0, 0, .1), 0 10px 10px -5px rgba(0, 0, 0, .04)'
-- 2xl: '0 25px 50px -12px rgba(0, 0, 0, .25)'
-+ default: '0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06)'
-+ md: ' 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .06)'
-+ lg: ' 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05)'
-+ xl: ' 0 20px 25px -5px rgba(0, 0, 0, .1), 0 10px 10px -5px rgba(0, 0, 0, .04)'
-+ 2xl: '0 25px 50px -12px rgba(0, 0, 0, .25)'
+@component('_partials.customized-config', ['key' => 'boxShadow'])
+  default: '0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06)'
+  md: ' 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .06)'
+  lg: ' 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05)'
+  xl: ' 0 20px 25px -5px rgba(0, 0, 0, .1), 0 10px 10px -5px rgba(0, 0, 0, .04)'
+  2xl: '0 25px 50px -12px rgba(0, 0, 0, .25)'
++ 3xl: '0 35px 60px -15px rgba(0, 0, 0, .3)'
   inner: 'inset 0 2px 4px 0 rgba(0,0,0,0.06)'
 - outline: '0 0 0 3px rgba(66,153,225,0.5)'
 + focus: '0 0 0 3px rgba(66,153,225,0.5)'
