@@ -52,13 +52,52 @@ Use `.font-mono` to apply a web safe monospaced font family:
 </p>
 @endcomponent
 
+## Responsive
+
+To control the font family of an element at a specific breakpoint, add a `{screen}:` prefix to any existing font family utility class. For example, use `md:font-serif` to apply the `font-serif` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+@component('_partials.responsive-code-sample')
+@slot('none')
+<p class="font-sans text-lg text-gray-800 text-center">
+  I'm a paragraph.
+</p>
+@endslot
+@slot('sm')
+<p class="font-serif text-lg text-gray-800 text-center">
+  I'm a paragraph.
+</p>
+@endslot
+@slot('md')
+<p class="font-mono text-lg text-gray-800 text-center">
+  I'm a paragraph.
+</p>
+@endslot
+@slot('lg')
+<p class="font-sans text-lg text-gray-800 text-center">
+  I'm a paragraph.
+</p>
+@endslot
+@slot('xl')
+<p class="font-serif text-lg text-gray-800 text-center">
+  I'm a paragraph.
+</p>
+@endslot
+@slot('code')
+<p class="none:font-sans sm:font-serif md:font-mono lg:font-sans xl:font-serif">
+  <!-- ... -->
+</p>
+@endslot
+@endcomponent
+
 ## Customizing
 
 ### Font Families
 
-By default Tailwind provides three font family utilities: a cross-browser sans-serif stack, a cross-browser serif stack, and a cross-browser monospaced stack. You can change, add, or remove these by editing the `fonts` section of your Tailwind config.
+By default Tailwind provides three font family utilities: a cross-browser sans-serif stack, a cross-browser serif stack, and a cross-browser monospaced stack. You can change, add, or remove these by editing the `fontFamily` section of your Tailwind config.
 
-@component('_partials.customized-config', ['key' => 'fonts'])
+@component('_partials.customized-config', ['key' => 'fontFamily'])
 - 'sans': ['-apple-system', 'BlinkMacSystemFont', ...],
 - 'serif': ['Georgia', 'Cambria', ...],
 - 'mono': ['SFMono-Regular', 'Menlo', ...],
@@ -96,8 +135,8 @@ Note that **Tailwind does not automatically escape font names** for you. If you'
 
 @include('_partials.variants-and-disabling', [
     'utility' => [
-        'name' => 'font',
-        'property' => 'fonts',
+        'name' => 'font family',
+        'property' => 'fontFamily',
     ],
     'variants' => [
         'responsive',
