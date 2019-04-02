@@ -1,20 +1,28 @@
 <?php
 
 return [
-    'Upgrading' => [
-        'Upgrading from v0.x to v1.0' => 'upgrading-to-v1',
-    ],
     'Getting Started' => [
-        'What is Tailwind?' => 'what-is-tailwind',
+        'Quick Start' => 'quick-start',
         'Installation' => 'installation',
-        'Configuration' => 'configuration',
-        'Colors' => 'colors',
+        'Using with Sass/Less/Stylus' => 'using-preprocessors',
+        'Controlling File Size' => 'controlling-file-size',
+        'Upgrade Guide' => 'upgrading-to-v1',
+    ],
+    'Core Concepts' => [
+        'Utility-First' => 'utility-first',
         'Responsive Design' => 'responsive-design',
         'State Variants' => 'state-variants',
         'Adding New Utilities' => 'adding-new-utilities',
         'Extracting Components' => 'extracting-components',
         'Functions &amp; Directives' => 'functions-and-directives',
-        'Controlling File Size' => 'controlling-file-size',
+    ],
+    'Customizing' => [
+        'Configuration' => 'configuration',
+        'Theme' => '_',
+        'Colors' => 'colors',
+        'Spacing' => '_',
+        'Breakpoints' => '_',
+        'Variants' => '_',
         'Plugins' => 'plugins',
     ],
     'Layout' => [
@@ -25,6 +33,7 @@ return [
         'Object Position' => 'object-position',
         'Overflow' => 'overflow',
         'Position' => 'position',
+        'Top / Right / Bottom / Left' => 'position',
         'Visibility' => 'visibility',
         'Z-Index' => 'z-index',
     ],

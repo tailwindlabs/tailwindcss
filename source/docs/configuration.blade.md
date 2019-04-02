@@ -87,6 +87,13 @@ You'll get a file that matches the [default configuration file](https://github.c
 
 ## Theme
 
+To Document:
+
+- Explain how default configuration is always inherited
+- Explain how to use closures to depend on other parts of the theme, warn about infinite recursion
+- How to use `extend` and how that works
+- Complete table of core plugin keys
+
 The `theme` section is where you define your color palette, font stacks, type scale, border sizes, breakpoints — you name it. It's like an executable design system for your project.
 
 We provide a sensible default system with a very generous set of values to get you started, but don't be afraid to change it or extend; you're encouraged to customize it as much as you need to to fit the goals of your design.
@@ -219,6 +226,12 @@ module.exports = {
 To learn more about customizing a specific core plugin, visit the documentation for that plugin.
 
 ## Variants
+
+To Document:
+
+- Demo why you might want a different variant order for different utilities
+- Link to creating your own variants using plugins
+- Complete table of default enabled variants
 
 The `variants` section is where you control which [state variants](/docs/state-variants) are generated for each core utility plugin.
 
@@ -383,3 +396,7 @@ module.exports = {
   separator: '_',
 }
 ```
+
+## Core Plugins
+
+- Explain how to disable core plugins, include complete list of keys
