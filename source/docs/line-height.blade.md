@@ -53,22 +53,36 @@ For more information about Tailwind's responsive design features, check out the 
 <p class="leading-normal text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
 @endslot
 @slot('lg')
-<p class="leading-loose text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
+<p class="leading-relaxed text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
 @endslot
 @slot('xl')
-<p class="leading-normal text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
+<p class="leading-loose text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
 @endslot
 @slot('code')
-<p class="none:leading-none sm:leading-tight md:leading-normal lg:leading-loose xl:leading-normal ...">Lorem ipsum dolor sit amet ...</p>
+<p class="none:leading-none sm:leading-tight md:leading-normal lg:leading-relaxed xl:leading-loose ...">Lorem ipsum dolor sit amet ...</p>
 @endslot
 @endcomponent
 
 ## Customizing
 
+### Line Heights
+
+By default Tailwind provides six `line-height` utilities. You change, add, or remove these by editing the `lineHeight` section of your Tailwind config.
+
+@component('_partials.customized-config', ['key' => 'lineHeight'])
+  none: 1,
+  tight: 1.25,
+- snug: 1.375,
+  normal: 1.5,
+- relaxed: 1.625,
++ relaxed: 1.75,
+  loose: 2,
+@endcomponent
+
 @include('_partials.variants-and-disabling', [
     'utility' => [
-        'name' => 'leading',
-        'property' => 'leading',
+        'name' => 'line height',
+        'property' => 'lineHeight',
     ],
     'variants' => [
         'responsive',
