@@ -5,7 +5,7 @@ description: "Strategies for keeping your generated CSS small and performant."
 titleBorder: true
 ---
 
-Using the default configuration, Tailwind CSS comes in at 27.1kb minified and compressed.
+Using the default configuration, Tailwind CSS comes in at 58.1kb minified and compressed.
 
 Here's a few other popular frameworks for comparison:
 
@@ -14,7 +14,7 @@ Here's a few other popular frameworks for comparison:
 - Foundation: 14.5kb
 - Tachyons: 10.5kb
 
-By comparison Tailwind seems really heavy *(over 1.5x larger than Bootstrap!)*, but it turns out that this comparison isn't totally fair.
+By comparison Tailwind seems really heavy *(over 2.5x larger than Bootstrap!)*, but it turns out that this comparison isn't totally fair.
 
 Tailwind is not a pre-packaged set of styles like a traditional CSS framework. Instead, Tailwind is a tool for generating CSS based on the style guide you define for your own project.
 
@@ -30,59 +30,42 @@ That said, here are a few strategies you can use to keep your generated CSS smal
 
 ## Limiting your color palette
 
-The default color palette includes a whopping [73 colors](/docs/colors) to make sure that if you're pulling Tailwind in for a prototype or demo, the color you're looking for is already there.
+The default color palette includes a whopping [93 colors](/docs/colors) to make sure that if you're pulling Tailwind in for a prototype or demo, the color you're looking for is already there.
 
 These colors are used for background colors, border colors, and text colors, all of which also have `hover:` variants, all of which have responsive variants at the five default screen sizes.
 
-This means that by default, **there are 2190 classes generated** from this color palette, out of a total 4732 classes in the entire default build.
+This means that by default, **there are 4185 classes generated** from this color palette, out of a total 8271 classes in the entire default build.
 
 Here's how using a smaller color palette affects the overall file size:
 
-- 73 colors *(default)*: 36.4kb
-- 50 colors: 30.4kb
-- 25 colors: 18.3kb
+- 93 colors *(default)*: 58.1kb
+- 50 colors: 45.1kb
+- 25 colors: 37.4kb
 
 Not only can colors be removed globally, you can also remove them for a specific module.
 
-For example, maybe you need 25 background colors but only 15 text colors. Instead of assigning your entire `colors` variable to the `textColors` property in your config, assign only the colors you need:
-
+For example, maybe you need 25 background colors but only 15 text colors. Instead of assigning your entire `colors` variable to the `theme.textColor` property in your config, assign only the colors you need:
+	
 ```js
-// ...
-
 module.exports = {
-  // ...
-
-  textColors: {
-    'black': colors['black'],
-    'gray-darker': colors['gray-darker'],
-    'gray-dark': colors['gray-dark'],
-    'red-dark': colors['red-dark'],
-    'red': colors['red'],
-    'blue-dark': colors['blue-dark'],
-    'blue': colors['blue'],
-    // ...
+  theme: {
+    textColor: theme => ({
+      black: theme('colors').black,
+      gray: {
+        700: theme('colors').gray[700],
+        600: theme('colors').gray[600],
+      },
+      red: {
+        600: theme('colors').red[600],
+        500: theme('colors').red[500],
+      },
+      blue: {
+        600: theme('colors').blue[600],
+        500: theme('colors').blue[500],
+      },
+      // ...
+    })
   }
-}
-
-```
-
-Since your config file is just JavaScript, you could even use a function like [`lodash#pick`](https://lodash.com/docs/4.17.4#pick) to make this a little less monotonous:
-
-```js
-// ...
-
-module.exports = {
-  // ...
-
-  textColors: _.pick(colors, [
-    'black',
-    'gray-darker',
-    'gray-dark',
-    'red-dark',
-    'red',
-    'blue-dark',
-    'blue',
-  ]),
 }
 ```
 
@@ -92,25 +75,22 @@ Since every Tailwind utility is copied for every screen size, using fewer screen
 
 Here's how defining fewer screens affects the output:
 
-- 5 screen sizes *(default)*: 36.4kb
-- 4 screen sizes: 29.4kb
-- 3 screen sizes: 22.4kb
-- 2 screen sizes: 15.4kb
-- 1 screen size: 8.4kb
+- 4 screen sizes *(default)*: 58.1kb
+- 3 screen sizes: 46.9kb
+- 2 screen sizes: 35.5kb
+- 1 screen size: 24.3kb
 
-If you only need 3 screen sizes and 35 colors, you're down to 13.4kb without changing anything else.
+If you only need 3 screen sizes and 35 colors, you're down to 32.5kb without changing anything else.
 
 ## Disabling unused modules and variants
 
-If you don't expect to need a module at all in your project, you can completely disable it by setting it to `false` in your config file:
+If you don't expect to need a module at all in your project, you can completely disable it by setting its variants to `false` in your config file:
 
 ```js
-// ...
-
 module.exports = {
   // ...
 
-  modules: {
+  variants: {
     // ...
     float: false,
     // ...
@@ -120,15 +100,13 @@ module.exports = {
 }
 ```
 
-If you need a module but don't need the responsive versions, set it to an empty array:
-
+If you need a module but don't need the responsive versions, set its variants to an empty array:
+	
 ```js
-// ...
-
 module.exports = {
   // ...
 
-  modules: {
+  variants: {
     // ...
     appearance: [],
     // ...
