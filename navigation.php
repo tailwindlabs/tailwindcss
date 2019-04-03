@@ -4,7 +4,7 @@ return [
     'Getting Started' => [
         'Quick Start' => 'quick-start',
         'Installation' => 'installation',
-        'Using with Sass/Less/Stylus' => 'using-preprocessors',
+        'Using with Sass/Less/Stylus' => 'using-with-sass-less-stylus',
         'Controlling File Size' => 'controlling-file-size',
         'Upgrade Guide' => 'upgrading-to-v1',
     ],
@@ -18,11 +18,11 @@ return [
     ],
     'Customizing' => [
         'Configuration' => 'configuration',
-        'Theme' => '_',
+        'Theme' => 'theme',
         'Colors' => 'colors',
-        'Spacing' => '_',
-        'Breakpoints' => '_',
-        'Variants' => '_',
+        'Spacing' => 'spacing',
+        'Breakpoints' => 'breakpoints',
+        'Variants' => 'configuring-variants',
         'Plugins' => 'plugins',
     ],
     'Layout' => [
@@ -33,7 +33,7 @@ return [
         'Object Position' => 'object-position',
         'Overflow' => 'overflow',
         'Position' => 'position',
-        'Top / Right / Bottom / Left' => 'position',
+        'Top / Right / Bottom / Left' => 'top-right-bottom-left',
         'Visibility' => 'visibility',
         'Z-Index' => 'z-index',
     ],

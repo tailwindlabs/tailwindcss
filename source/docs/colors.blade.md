@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Colors"
-description: null
+description: "Customizing the default color palette for your project."
 titleBorder: true
 ---
 

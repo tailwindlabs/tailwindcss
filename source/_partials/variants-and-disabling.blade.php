@@ -5,7 +5,7 @@
             $whichVariants .= (($i == count($variants) - 1) ? ' and ' : ', ') . $variants[$i];
         }
 
-        $currentVariants = '[\'' . collect($variants)->implode('\', \'') . '\']';
+        $currentVariants = collect($variants);
 
         $extraVariants = collect([
             'responsive',
@@ -14,14 +14,13 @@
             'active',
             'group-hover',
         ])->diff($variants)
-        ->take(3 - count($variants))
-        ->implode(' and ');
+        ->take(2);
     } else {
         $whichVariants = 'no responsive, hover, focus, active, or group-hover';
 
-        $currentVariants = is_array($variants) ? '[]' : 'false';
+        $currentVariants = collect([]);
 
-        $extraVariants = 'responsive, hover and focus';
+        $extraVariants = collect(['responsive', 'hover']);
     }
 @endphp
 
@@ -31,12 +30,12 @@
 
 <p>You can control which variants are generated for the {{ $utility['name'] }} utilities by modifying the <code>{{ $utility['property'] }}</code> property in the <code>variants</code> section of your Tailwind config file.</p>
 
-<p>For example, this config will {{ is_array($variants) && count($variants) > 0 ? 'also ' : '' }}generate {{ $extraVariants }} variants:</p>
+<p>For example, this config will {{ is_array($variants) && count($variants) > 0 ? 'also ' : '' }}generate {{ $extraVariants->implode(' and ') }} variants:</p>
 
 @component('_partials.customized-config', ['key' => 'variants'])
   // ...
-- {{ $utility['property'] }}: {{$currentVariants}},
-+ {{ $utility['property'] }}: ['responsive', 'hover', 'focus', 'active', 'group-hover'],
+- {{ $utility['property'] }}: ['{{$currentVariants->implode('\', \'')}}'],
++ {{ $utility['property'] }}: ['{{$currentVariants->merge($extraVariants)->implode('\', \'')}}'],
 @endcomponent
 
 @isset($extraMessage)
