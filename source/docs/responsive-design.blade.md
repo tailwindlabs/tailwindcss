@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Responsive Design"
-description: null
+description: "Using responsive utility variants to build adaptive user interfaces."
 titleBorder: true
 ---
 
