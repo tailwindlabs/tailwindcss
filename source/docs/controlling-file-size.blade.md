@@ -44,45 +44,28 @@ Here's how using a smaller color palette affects the overall file size:
 
 Not only can colors be removed globally, you can also remove them for a specific module.
 
-For example, maybe you need 25 background colors but only 15 text colors. Instead of assigning your entire `colors` variable to the `textColors` property in your config, assign only the colors you need:
-
+For example, maybe you need 25 background colors but only 15 text colors. Instead of assigning your entire `colors` variable to the `theme.textColor` property in your config, assign only the colors you need:
+	
 ```js
-// ...
-
 module.exports = {
-  // ...
-
-  textColors: {
-    'black': colors['black'],
-    'gray-darker': colors['gray-darker'],
-    'gray-dark': colors['gray-dark'],
-    'red-dark': colors['red-dark'],
-    'red': colors['red'],
-    'blue-dark': colors['blue-dark'],
-    'blue': colors['blue'],
-    // ...
+  theme: {
+    textColor: theme => ({
+      black: theme('colors').black,
+      gray: {
+        700: theme('colors').gray[700],
+        600: theme('colors').gray[600],
+      },
+      red: {
+        600: theme('colors').red[600],
+        500: theme('colors').red[500],
+      },
+      blue: {
+        600: theme('colors').blue[600],
+        500: theme('colors').blue[500],
+      },
+      // ...
+    })
   }
-}
-
-```
-
-Since your config file is just JavaScript, you could even use a function like [`lodash#pick`](https://lodash.com/docs/4.17.4#pick) to make this a little less monotonous:
-
-```js
-// ...
-
-module.exports = {
-  // ...
-
-  textColors: _.pick(colors, [
-    'black',
-    'gray-darker',
-    'gray-dark',
-    'red-dark',
-    'red',
-    'blue-dark',
-    'blue',
-  ]),
 }
 ```
 
@@ -102,15 +85,13 @@ If you only need 3 screen sizes and 35 colors, you're down to 13.4kb without cha
 
 ## Disabling unused modules and variants
 
-If you don't expect to need a module at all in your project, you can completely disable it by setting it to `false` in your config file:
+If you don't expect to need a module at all in your project, you can completely disable it by setting its variants to `false` in your config file:
 
 ```js
-// ...
-
 module.exports = {
   // ...
 
-  modules: {
+  variants: {
     // ...
     float: false,
     // ...
@@ -120,15 +101,13 @@ module.exports = {
 }
 ```
 
-If you need a module but don't need the responsive versions, set it to an empty array:
-
+If you need a module but don't need the responsive versions, set its variants to an empty array:
+	
 ```js
-// ...
-
 module.exports = {
   // ...
 
-  modules: {
+  variants: {
     // ...
     appearance: [],
     // ...
