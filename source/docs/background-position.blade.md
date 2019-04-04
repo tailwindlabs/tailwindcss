@@ -65,9 +65,9 @@ features:
 
 ### Background Positions
 
-By default Tailwind provides nine `background-position` utilities. You change, add, or remove these by editing the `backgroundPosition` section of your Tailwind config.
+By default Tailwind provides nine `background-position` utilities. You change, add, or remove these by editing the `theme.backgroundPosition` section of your Tailwind config.
 
-@component('_partials.customized-config', ['key' => 'backgroundPosition'])
+@component('_partials.customized-config', ['key' => 'theme.backgroundPosition'])
   bottom: 'bottom',
 + 'bottom-4': 'center bottom 1rem',
   center: 'center',

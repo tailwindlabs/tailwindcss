@@ -76,9 +76,9 @@ features:
 
 ### Max-Width Scale
 
-By default Tailwind provides ten `max-width` utilities. You change, add, or remove these by editing the `maxWidth` values in the `theme` section of your Tailwind config.
+By default Tailwind provides ten `max-width` utilities. You change, add, or remove these by editing the `theme.maxWidth` section of your Tailwind config.
 
-@component('_partials.customized-config', ['key' => 'maxWidth'])
+@component('_partials.customized-config', ['key' => 'theme.maxWidth'])
   'xs': '20rem',
   'sm': '24rem',
   'md': '28rem',

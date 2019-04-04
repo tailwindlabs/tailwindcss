@@ -70,9 +70,9 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Border Widths
 
-By default Tailwind provides five `border-width` utilities, and the same number of utilities per side (top, right, bottom, and left). You change, add, or remove these by editing the `borderWidth` section of your Tailwind config. The values in this section will also control which utilities will be generated side.
+By default Tailwind provides five `border-width` utilities, and the same number of utilities per side (top, right, bottom, and left). You change, add, or remove these by editing the `theme.borderWidth` section of your Tailwind config. The values in this section will also control which utilities will be generated side.
 
-@component('_partials.customized-config', ['key' => 'borderWidth'])
+@component('_partials.customized-config', ['key' => 'theme.borderWidth'])
   default: '1px',
   '0': '0',
   '2': '2px',

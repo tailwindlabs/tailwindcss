@@ -95,9 +95,9 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Font Families
 
-By default Tailwind provides three font family utilities: a cross-browser sans-serif stack, a cross-browser serif stack, and a cross-browser monospaced stack. You can change, add, or remove these by editing the `fontFamily` section of your Tailwind config.
+By default Tailwind provides three font family utilities: a cross-browser sans-serif stack, a cross-browser serif stack, and a cross-browser monospaced stack. You can change, add, or remove these by editing the `theme.fontFamily` section of your Tailwind config.
 
-@component('_partials.customized-config', ['key' => 'fontFamily'])
+@component('_partials.customized-config', ['key' => 'theme.fontFamily'])
 - 'sans': ['-apple-system', 'BlinkMacSystemFont', ...],
 - 'serif': ['Georgia', 'Cambria', ...],
 - 'mono': ['SFMono-Regular', 'Menlo', ...],

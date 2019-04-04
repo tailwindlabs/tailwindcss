@@ -50,9 +50,9 @@ features:
 
 ### Cursors
 
-By default Tailwind provides six `cursor` utilities. You change, add, or remove these by editing the `cursor` values in the `theme` section of your Tailwind config.
+By default Tailwind provides six `cursor` utilities. You change, add, or remove these by editing the `theme.cursor` section of your Tailwind config.
 
-@component('_partials.customized-config', ['key' => 'cursor'])
+@component('_partials.customized-config', ['key' => 'theme.cursor'])
   auto: 'auto',
   default: 'default',
   pointer: 'pointer',

@@ -33,6 +33,9 @@ Useful for styling icon sets like [Feather](https://feathericons.com/) that are 
 Control which stroke utilities Tailwind generates by customizing the `theme.stroke` section in your Tailwind config file:
 
 @component('_partials.customized-config', ['key' => 'theme'])
+- stroke: {
+- &nbsp;&nbsp;current: 'currentColor',
+- }
 + stroke: theme => ({
 + &nbsp;&nbsp;'red': theme('colors.red.500'),
 + &nbsp;&nbsp;'green': theme('colors.green.500'),

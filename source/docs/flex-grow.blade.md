@@ -147,9 +147,9 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Grow Values
 
-By default Tailwind provides two `flex-grow` utilities. You change, add, or remove these by editing the `flexGrow` section of your Tailwind config.
+By default Tailwind provides two `flex-grow` utilities. You change, add, or remove these by editing the `theme.flexGrow` section of your Tailwind config.
 
-@component('_partials.customized-config', ['key' => 'flexGrow'])
+@component('_partials.customized-config', ['key' => 'theme.flexGrow'])
   '0': 0,
 - default: 1,
 + default: 2,

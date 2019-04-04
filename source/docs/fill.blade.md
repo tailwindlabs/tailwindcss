@@ -28,9 +28,12 @@ Useful for styling icon sets like [Zondicons](http://www.zondicons.com/) that ar
 
 ## Customizing
 
-Control which fill utilities Tailwind generates by customizing the `theme.fill` section in your Tailwind config file:
+Control which fill utilities Tailwind generates by customizing the `theme.fill` section of your Tailwind config file:
 
 @component('_partials.customized-config', ['key' => 'theme'])
+- fill: {
+- &nbsp;&nbsp;current: 'currentColor',
+- }
 + fill: theme => ({
 + &nbsp;&nbsp;'red': theme('colors.red.500'),
 + &nbsp;&nbsp;'green': theme('colors.green.500'),
