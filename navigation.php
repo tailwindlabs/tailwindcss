@@ -4,9 +4,10 @@ return [
     'Getting Started' => [
         'Quick Start' => 'quick-start',
         'Installation' => 'installation',
+        'Upgrade Guide' => 'upgrading-to-v1',
         'Using with Sass/Less/Stylus' => 'using-with-sass-less-stylus',
         'Controlling File Size' => 'controlling-file-size',
-        'Upgrade Guide' => 'upgrading-to-v1',
+        'Browser Support' => 'browser-support',
     ],
     'Core Concepts' => [
         'Utility-First' => 'utility-first',
