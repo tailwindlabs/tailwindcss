@@ -196,14 +196,14 @@ Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably fin
 
 ## Responsive
 
-To position an element only at a specific breakpoint, add a `{screen}:` prefix to any existing positioning utility. For example, adding the class `md:absolute` to an element would apply the `absolute` utility at medium screen sizes and above, and adding `lg:inset-y-0` would apply `inset-y-0` at large screens and above.
+To position an element only at a specific breakpoint, add a `{screen}:` prefix to any existing positioning utility. For example, adding the class `md:inset-y-0` to an element would apply the `inset-y-0` utility at medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="relative h-32 bg-gray-400 p-4">
-  <div class="relative bg-gray-800 p-4 text-gray-500">Responsive element</div>
+  <div class="absolute inset-0 bg-gray-800 p-4 text-gray-500">Responsive element</div>
 </div>
 @endslot
 
@@ -233,12 +233,22 @@ For more information about Tailwind's responsive design features, check out the 
 
 @slot('code')
 <div class="relative h-32 bg-gray-400 p-4">
-  <div class="none:relative sm:absolute sm:bottom-0 sm:left-0 md:top-0 md:inset-x-0 lg:right-0 lg:inset-y-0 xl:bottom-0 xl:inset-x-0"></div>
+  <div class="none:absolute none:inset-0 sm:bottom-0 sm:left-0 md:top-0 md:inset-x-0 lg:right-0 lg:inset-y-0 xl:bottom-0 xl:inset-x-0"></div>
 </div>
 @endslot
 @endcomponent
 
 ## Customizing
+
+### Positions
+
+By default Tailwind provides utilities for `0` and `auto` positions for each side. You change, add, or remove these by editing the `theme.inset` section of your Tailwind config.
+
+@component('_partials.customized-config', ['key' => 'theme.inset'])
+  '0': 0,
+- auto: 'auto',
++ '1/2': '50%',
+@endcomponent
 
 @include('_partials.variants-and-disabling', [
     'utility' => [
