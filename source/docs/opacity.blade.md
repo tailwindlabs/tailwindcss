@@ -97,9 +97,9 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Opacity Scale
 
-By default Tailwind provides five opacity utilities based on a simple numeric scale. You change, add, or remove these by editing the `opacity` section of your Tailwind config.
+By default Tailwind provides five opacity utilities based on a simple numeric scale. You change, add, or remove these by editing the `theme.opacity` section of your Tailwind config.
 
-@component('_partials.customized-config', ['key' => 'opacity'])
+@component('_partials.customized-config', ['key' => 'theme.opacity'])
   '0': '0',
 - '25': '.25',
 - '50': '.5',

@@ -141,9 +141,9 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Z-Index Scale
 
-By default Tailwind provides six numeric `z-index` utilities and an `auto` utility. You change, add, or remove these by editing the `zIndex` section of your Tailwind config.
+By default Tailwind provides six numeric `z-index` utilities and an `auto` utility. You change, add, or remove these by editing the `theme.zIndex` section of your Tailwind config.
 
-@component('_partials.customized-config', ['key' => 'zIndex'])
+@component('_partials.customized-config', ['key' => 'theme.zIndex'])
   '0': 0,
 - '10': 10,
 - '20': 20,

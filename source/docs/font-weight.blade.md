@@ -180,9 +180,9 @@ Focus utilities can also be combined with responsive utilities by adding the res
 
 ### Font Weights
 
-By default Tailwind provides 10 `font-weight` utilities. You change, add, or remove these by editing the `fontWeight` section of your Tailwind config.
+By default Tailwind provides 10 `font-weight` utilities. You change, add, or remove these by editing the `theme.fontWeight` section of your Tailwind config.
 
-@component('_partials.customized-config', ['key' => 'fontWeight'])
+@component('_partials.customized-config', ['key' => 'theme.fontWeight'])
 - hairline: 100,
 + 'extra-light': 100,
 - thin: 200,

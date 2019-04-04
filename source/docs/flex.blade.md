@@ -281,9 +281,9 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Flex Values
 
-By default Tailwind provides four `flex` utilities. You change, add, or remove these by editing the `flex` section of your Tailwind config.
+By default Tailwind provides four `flex` utilities. You change, add, or remove these by editing the `theme.flex` section of your Tailwind config.
 
-@component('_partials.customized-config', ['key' => 'flex'])
+@component('_partials.customized-config', ['key' => 'theme.flex'])
   '1': '1 1 0%',
   auto: '1 1 auto',
 - initial: '0 1 auto',

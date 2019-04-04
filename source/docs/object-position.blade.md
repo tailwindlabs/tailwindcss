@@ -65,9 +65,9 @@ features:
 
 ### Object Positioning
 
-By default Tailwind provides nine object position utilities. You can change, add, or remove these by editing the `objectPosition` section of your Tailwind config.
+By default Tailwind provides nine object position utilities. You can change, add, or remove these by editing the `theme.objectPosition` section of your Tailwind config.
 
-@component('_partials.customized-config', ['key' => 'objectPosition'])
+@component('_partials.customized-config', ['key' => 'theme.objectPosition'])
   bottom: 'bottom',
   center: 'center',
   left: 'left',

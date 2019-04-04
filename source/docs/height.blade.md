@@ -24,9 +24,9 @@ features:
 
 ### Height Scale
 
-By default Tailwind provides 19 fixed `height` utilities, a 100% height utilitiy, an `auto` utility, and a utility for setting the height of an element to match the viewport height. You change, add, or remove these by editing the `height` section of your Tailwind config.
+By default Tailwind provides 19 fixed `height` utilities, a 100% height utility, an `auto` utility, and a utility for setting the height of an element to match the viewport height. You change, add, or remove these by editing the `theme.height` section of your Tailwind config.
 
-@component('_partials.customized-config', ['key' => 'height'])
+@component('_partials.customized-config', ['key' => 'theme.height', 'usesTheme' => true])
   'auto': 'auto',
   ...theme('spacing'),
 + '72': '18rem',

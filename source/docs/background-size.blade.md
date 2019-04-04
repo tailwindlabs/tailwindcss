@@ -33,9 +33,9 @@ features:
 
 ## Customizing
 
-By default Tailwind provides utilities for `auto`, `cover`, and `contain` background sizes. You can change, add, or remove these by editing the `backgroundSize` section of your config.
+By default Tailwind provides utilities for `auto`, `cover`, and `contain` background sizes. You can change, add, or remove these by editing the `theme.backgroundSize` section of your config.
 
-@component('_partials.customized-config', ['key' => 'backgroundSize'])
+@component('_partials.customized-config', ['key' => 'theme.backgroundSize'])
   'auto': 'auto',
   'cover': 'cover',
   'contain': 'contain',

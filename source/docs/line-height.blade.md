@@ -67,9 +67,9 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Line Heights
 
-By default Tailwind provides six `line-height` utilities. You change, add, or remove these by editing the `lineHeight` section of your Tailwind config.
+By default Tailwind provides six `line-height` utilities. You change, add, or remove these by editing the `theme.lineHeight` section of your Tailwind config.
 
-@component('_partials.customized-config', ['key' => 'lineHeight'])
+@component('_partials.customized-config', ['key' => 'theme.lineHeight'])
   none: 1,
   tight: 1.25,
 - snug: 1.375,

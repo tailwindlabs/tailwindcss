@@ -147,9 +147,9 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Shrink Values
 
-By default Tailwind provides two `flex-shrink` utilities. You change, add, or remove these by editing the `flexShrink` section of your Tailwind config.
+By default Tailwind provides two `flex-shrink` utilities. You change, add, or remove these by editing the `theme.flexShrink` section of your Tailwind config.
 
-@component('_partials.customized-config', ['key' => 'flexShrink'])
+@component('_partials.customized-config', ['key' => 'theme.flexShrink'])
   '0': 0,
 - default: 1,
 + default: 2,
