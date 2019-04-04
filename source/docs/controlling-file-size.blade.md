@@ -21,6 +21,8 @@ Here are a few other popular frameworks for comparison:
 
 By comparison Tailwind definitely seems on the heavy side *(although if you use [Brotli](https://github.com/google/brotli) instead of gzip it's still very reasonable)*, but there are a number of strategies you can use to reduce this file size dramatically.
 
+<hr class="my-16">
+
 ## Removing unused CSS
 
 Mozilla's [Firefox Send](https://send.firefox.com/) is built with Tailwind, yet somehow their CSS is only 13.1kb minified, and only 4.7kb gzipped! How?
