@@ -58,6 +58,7 @@ const purgecss = require('@fullhuman/postcss-purgecss')({
     './src/**/*.html',
     './src/**/*.vue',
     './src/**/*.jsx',
+    // etc.
   ],
   extractors: [
     {
@@ -68,7 +69,7 @@ const purgecss = require('@fullhuman/postcss-purgecss')({
       },
 
       // Specify all of the extensions of your template files 
-      extensions: ['html', 'vue', 'jsx']
+      extensions: ['html', 'vue', 'jsx', /* etc. */]
     }
   ]
 })
