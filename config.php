@@ -4,6 +4,7 @@ return [
     'baseUrl' => '',
     'production' => false,
     'collections' => [],
+    'docSearchVersion' => 'v1',
     'config' => json_decode(file_get_contents(__DIR__ . '/tailwind.json'), true),
     'version' => json_decode(file_get_contents(__DIR__ . '/node_modules/tailwindcss/package.json'), true)['version'],
     'colors' => ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'indigo', 'purple', 'pink'],
