@@ -18,7 +18,7 @@ return [
         'Adding Base Styles' => 'adding-base-styles',
         'Functions &amp; Directives' => 'functions-and-directives',
     ],
-    'Customizing' => [
+    'Customization' => [
         'Configuration' => 'configuration',
         'Theme' => 'theme',
         'Colors' => 'colors',

@@ -206,7 +206,10 @@
       @apply text-sm font-semibold text-gray-700 p-2 bg-gray-100;
     }
     td {
-      @apply p-2 border-t border-gray-200 font-mono text-xs text-purple-700 align-baseline;
+      @apply p-2 border-t border-gray-200 text-sm;
+      code {
+        @apply bg-gray-100 px-1 font-mono text-xs text-purple-700 align-baseline;
+      }
       &:first-child {
         @apply border-gray-300;
       }

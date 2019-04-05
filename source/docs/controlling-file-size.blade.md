@@ -10,7 +10,7 @@ Using the default configuration, Tailwind CSS comes in at 58.1kb minified and gz
 Here are a few other popular frameworks for comparison:
 
 | Framework | Original Size | Minified | Gzip | Brotli |
-| --------- | ------------- | -------- | ---- | ------ |
+| --------- | -------------: | --------: | ----: | ------: |
 | Tailwind  | 472.5kb | 347.7kb | 58.1kb | 17.3kb |
 | Bootstrap  | 187.8kb | 152.1kb |  22.7kb  | 16.7kb  |
 | Bulma  | 205.6kb   | 172.4kb   | 23.0kb  | 18.0kb  |
@@ -160,7 +160,7 @@ Very few projects actually need this many colors, and removing colors you don't 
 Here's how using a smaller color palette affects the final size:
 
 | Colors | Original | Minified | Gzip   | Brotli |
-| --- | --- | --- | --- | --- |
+| --- | ---: | ---: | ---: | ---: |
 | 93 *(default)* | 472.5kb   | 347.7kb   | 58.1kb  | 17.3kb  |
 | 50 | 356.3kb   | 257.5kb   | 45.1kb  | 13.7kb  |
 | 25 | 288.0kb   | 204.5kb   | 37.4kb  | 11.9kb  |
@@ -172,7 +172,7 @@ Since almost every Tailwind utility is copied for every screen size, using fewer
 Here's how defining fewer screens affects the output:
 
 | Breakpoints | Original | Minified | Gzip   | Brotli |
-| --- | --- | --- | --- | --- |
+| --- | ---: | ---: | ---: | ---: |
 | 4 *(default)* | 472.5kb   | 347.7kb   | 58.1kb  | 17.3kb  |
 | 3 | 376.9kb   | 277.5kb   | 46.9kb  | 16.1kb  |
 | 2 | 281.2kb   | 207.4kb   | 35.5kb  | 14.9kb  |
