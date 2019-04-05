@@ -664,32 +664,42 @@ Using the `container` instance, you can traverse all of the rules within a given
 For example, this plugin creates an `important` version of each affected utility by prepending the class with an exclamation mark and modifying each declaration to be `important`:
 
 ```js
-function({ addVariant }) {
-  addVariant('important', ({ container }) => {
-    container.walkRules(rule => {
-      rule.selector = `.\\!${rule.selector.slice(1)}`
-      rule.walkDecls(decl => {
-        decl.important = true
+// tailwind.config.js
+module.exports = {
+  plugins: [
+    function({ addVariant }) {
+      addVariant('important', ({ container }) => {
+        container.walkRules(rule => {
+          rule.selector = `.\\!${rule.selector.slice(1)}`
+          rule.walkDecls(decl => {
+            decl.important = true
+          })
+        })
       })
-    })
-  })
+    }
+  ]
 }
 ```
 
 This plugin takes all of the rules inside the container, wraps them in a `@supports (display: grid)` at-rule, and prefixes each rule with `supports-grid`:
 
 ```js
+// tailwind.config.js
 const postcss = require('postcss')
 
-function({ addVariant, e }) {
-  addVariant('supports-grid', ({ container, separator }) => {
-    const supportsRule = postcss.atRule({ name: 'supports', params: '(display: grid)' })
-    supportsRule.nodes = container.nodes
-    container.nodes = [supportsRule]
-    supportsRule.walkRules(rule => {
-      rule.selector = `.${e(`supports-grid${separator}${rule.selector.slice(1)}``)}
-    })
-  })
+module.exports = {
+  plugins: [
+    function({ addVariant, e }) {
+      addVariant('supports-grid', ({ container, separator }) => {
+        const supportsRule = postcss.atRule({ name: 'supports', params: '(display: grid)' })
+        supportsRule.nodes = container.nodes
+        container.nodes = [supportsRule]
+        supportsRule.walkRules(rule => {
+          rule.selector = `.${e(`supports-grid${separator}${rule.selector.slice(1)}``)}
+        })
+      })
+    }
+  ]
 }
 ```
 
@@ -699,15 +709,13 @@ To learn more about working with PostCSS directly, check out the [PostCSS API do
 
 Using custom variants is no different than using Tailwind's built-in variants.
 
-To use custom variants with Tailwind's modules, add them to the `modules` section of your config file:
+To use custom variants with Tailwind's core plugins, add them to the `variants` section of your config file:
 
 ```js
+// tailwind.config.js
 modules.exports = {
-  // ...
-  modules: {
-    // ...
+  variants: {
     borderWidths: ['responsive', 'hover', 'focus', 'first-child', 'disabled'],
-    // ...
   }
 }
 ```
