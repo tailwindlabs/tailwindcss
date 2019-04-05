@@ -5,6 +5,15 @@ description: "Using utilities to style elements on hover, focus, and more."
 titleBorder: true
 ---
 
+@include('_partials.work-in-progress')
+
+To Document:
+
+- Add reference table with all of the default variant configuration
+- Briefly document responsive variants again, linking to responsive design docs?
+
+---
+
 Similar to our [responsive prefixes](/docs/responsive-design), Tailwind makes it easy to style elements on hover, focus, and more using *state* prefixes.
 
 ## Hover

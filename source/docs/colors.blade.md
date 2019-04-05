@@ -5,6 +5,8 @@ description: "Customizing the default color palette for your project."
 titleBorder: true
 ---
 
+@include('_partials.work-in-progress')
+
 Developing an organized color palette is critical to the design success of a project. Tailwind provides a well-thought-out default color system that makes this very easy to accomplish.
 
 ## Default color palette
@@ -97,3 +99,42 @@ To get you started, we've provided a generous palette of great looking colors th
   'breakpoint' => '400',
 ])
 </div>
+
+### Customizing
+
+The `theme.colors` property allows you to override Tailwind's default color palette.
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    colors: {
+      indigo: '#5c6ac4',
+      blue: '#007ace',
+      red: '#de3618',
+    }
+  }
+}
+```
+
+By default this color palette is shared by the `textColor`, `borderColor`, and `backgroundColor` utilities. The above configuration would generate classes like `.text-indigo`, `.border-blue`, and `.bg-red`.
+
+You can define your colors as a simple list of key-value pairs, or using a nested object notation where the nested keys are added to the base color name as modifiers:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    colors: {
+      indigo: {
+        lighter: '#b3bcf5',
+        default: '#5c6ac4',
+        dark: '#202e78',
+      }
+    }
+  }
+}
+```
+
+Like many other places in Tailwind, the `default` key is special and means "no modifier", so this configuration would generate classes like `.text-indigo-lighter`, `.text-indigo`, and `.text-indigo-dark`.
+

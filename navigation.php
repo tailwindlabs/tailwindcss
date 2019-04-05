@@ -2,7 +2,7 @@
 
 return [
     'Getting Started' => [
-        'Quick Start' => 'quick-start',
+        // 'Quick Start' => 'quick-start',
         'Installation' => 'installation',
         'Upgrade Guide' => 'upgrading-to-v1',
         'Using with Sass/Less/Stylus' => 'using-with-sass-less-stylus',

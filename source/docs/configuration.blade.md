@@ -87,158 +87,50 @@ You'll get a file that matches the [default configuration file](https://github.c
 
 ## Theme
 
-To Document:
-
-- Explain how default configuration is always inherited
-- Explain how to use closures to depend on other parts of the theme, warn about infinite recursion
-- How to use `extend` and how that works
-- Complete table of core plugin keys
-
 The `theme` section is where you define your color palette, font stacks, type scale, border sizes, breakpoints — you name it. It's like an executable design system for your project.
-
-We provide a sensible default system with a very generous set of values to get you started, but don't be afraid to change it or extend; you're encouraged to customize it as much as you need to to fit the goals of your design.
-
-In this guide we'll be focusing on a few of the more special theme properties as well as general customization information and best practices, but for a complete reference of available theme properties, take a look at the default theme:
-
-[**View the complete list of theme properties &rarr;**](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js#L5-L376)
-
-### Colors
-
-The `theme.colors` property allows you to override Tailwind's default color palette.
-
-```js
-// tailwind.config.js
-module.exports = {
-  theme: {
-    colors: {
-      indigo: '#5c6ac4',
-      blue: '#007ace',
-      red: '#de3618',
-    }
-  }
-}
-```
-
-By default this color palette is shared by the `textColor`, `borderColor`, and `backgroundColor` utilities. The above configuration would generate classes like `.text-indigo`, `.border-blue`, and `.bg-red`.
-
-You can define your colors as a simple list of key-value pairs, or using a nested object notation where the nested keys are added to the base color name as modifiers:
-
-```js
-// tailwind.config.js
-module.exports = {
-  theme: {
-    colors: {
-      indigo: {
-        lighter: '#b3bcf5',
-        default: '#5c6ac4',
-        dark: '#202e78',
-      }
-    }
-  }
-}
-```
-
-Like many other places in Tailwind, the `default` key is special and means "no modifier", so this configuration would generate classes like `.text-indigo-lighter`, `.text-indigo`, and `.text-indigo-dark`.
-
-### Spacing
-
-The `theme.spacing` property allows you to override Tailwind's default spacing/sizing scale.
-
-```js
-// tailwind.config.js
-module.exports = {
-  theme: {
-    spacing: {
-      '1': '8px',
-      '2': '12px',
-      '3': '16px',
-      '4': '24px',
-      '5': '32px',
-      '6': '48px',
-    }
-  }
-}
-```
-
-By default the spacing scale is shared by the `padding`, `margin`, `negativeMargin`, `width`, and `height` utilities. The above configuration would generate classes like `.p-2`, `.mt-3`, `.-mx-4`, `.w-5`, `.h-6`, etc.
-
-### Screens
-
-The `theme.screens` property is where you define your project's breakpoints.
 
 ```js
 // tailwind.config.js
 module.exports = {
   theme: {
     screens: {
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
-    }
-  }
-}
-```
-
-We provide a well-considered set of default breakpoints based on common device resolutions to get you started, but you're free to change these as needed to suit your project.
-
-Learn more about customizing screens in the [Responsive Design](/docs/responsive-design#customizing-screens) documentation.
-
-### Extend
-
-The `theme.extend` property allows you to extend parts of the default theme without completely replacing them.
-
-For example, if you wanted to add an extra breakpoint but preserve the existing ones, you could extend the `screens` property:
-
-```js
-// tailwind.config.js
-module.exports = {
-  theme: {
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+    },
+    fontFamily: {
+      display: ['Gilroy', 'sans-serif'],
+      body: ['Graphik', 'sans-serif'],
+    },
+    borderWidth: {
+      default: '1px',
+      '0': '0',
+      '2': '2px',
+      '4': '4px',
+    },
     extend: {
-      screens: {
-        '2xl': '1440px',
+      colors: {
+        cyan: '#9cdbff',
+      },
+      spacing: {
+        '96': '24rem',
+        '128': '32rem',
       }
     }
   }
 }
 ```
 
-### Core plugin styles
-
-The rest of the `theme` section is used to configure which values are available for each individual core plugin.
-
-For example, you can use `theme.borderRadius` to customize which border radius utilities will be generated:
-
-```js
-module.exports = {
-  theme: {
-    borderRadius: {
-      'none': '0',
-      'sm': '.125rem',
-      default: '.25rem',
-      'lg': '.5rem',
-      'full': '9999px',
-    },
-  }
-}
-```
-
-To learn more about customizing a specific core plugin, visit the documentation for that plugin.
+Learn more about the default theme and how to customize it in the [theme configuration guide](/docs/theme).
 
 ## Variants
 
-To Document:
-
-- Demo why you might want a different variant order for different utilities
-- Link to creating your own variants using plugins
-- Complete table of default enabled variants
-
-The `variants` section is where you control which [state variants](/docs/state-variants) are generated for each core utility plugin.
+The `variants` section lets you control which [variants](/docs/state-variants) are generated for each core utility plugin.
 
 ```js
 // tailwind.config.js
 module.exports = {
-  // ...
   variants: {
     appearance: ['responsive'],
     backgroundColors: ['responsive', 'hover', 'focus'],
@@ -247,49 +139,51 @@ module.exports = {
 }
 ```
 
-Each property is a core plugin name pointing to an array of state variants to generate for that plugin.
-
-It's important to note that (`responsive` excluded) **variants are generated in the order you specify them**, so variants at the end of the list will take precedence over variants at the beginning of the list.
-
-Learn more about state variants in the ["State Variants" documentation](/docs/state-variants).
+Learn more in the [variants configuration guide](/docs/configuring-variants).
 
 ## Plugins
 
-// To do...
+The `plugins` section allows you to register third-party plugins with Tailwind that can be used to generate extra utilities, components, base styles, or custom variants.
+
+```js
+// tailwind.config.js
+module.exports = {
+  plugins: [
+    require('tailwindcss-transforms'),
+    require('tailwindcss-transitions'),
+    require('tailwindcss-border-gradients'),
+  ],
+}
+```
+
+Learn more about writing your own plugins in the [plugin authoring guide](/docs/plugins).
 
 ## Prefix
 
-The `prefix` option allows you to add a custom prefix to all of Tailwind's generated utility classes.
-
-This can be really useful when layering Tailwind on top of existing CSS where there might be naming conflicts.
+The `prefix` option allows you to add a custom prefix to all of Tailwind's generated utility classes. This can be really useful when layering Tailwind on top of existing CSS where there might be naming conflicts.
 
 For example, you could add a `tw-` prefix by setting the `prefix` option like so:
 
 ```js
 // tailwind.config.js
 module.exports = {
-  // ...
-  options: {
-    prefix: 'tw-',
-    // ...
-  }
+  prefix: 'tw-',
 }
 ```
 
-You can also pass a function to the `prefix` option if you need more fine-grained control:
+Now every utility will be generated with the configured prefix:
 
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  prefix: function (selector) {
-    if (selector === '.container') {
-      return 'tw-'
-    }
-
-    return ''
-  },
+```css
+.tw-text-left {
+  text-align: left;
 }
+.tw-text-center {
+  text-align: center;
+}
+.tw-text-right {
+  text-align: right;
+}
+/* etc. */
 ```
 
 It's important to understand that this prefix is added to the beginning of each *utility* name, not to the entire class name.
@@ -302,7 +196,7 @@ That means that classes with responsive or state prefixes like `sm:` or `hover:`
 </div>
 ```
 
-Prefixes are only added to standard Tailwind utilities; **no prefix will be added to your own custom utilities.**
+Prefixes are only added to classes generated by Tailwind; **no prefix will be added to your own custom classes.**
 
 That means if you add your own responsive utility like this:
 
@@ -340,16 +234,13 @@ If you'd like to prefix your own utilities as well, just add the prefix to the c
 
 ## Important
 
-The `important` option lets you control whether or not Tailwind's utilities should be marked with `!important`.
-
-This can be really useful when using Tailwind with existing CSS that has high specificity selectors.
+The `important` option lets you control whether or not Tailwind's utilities should be marked with `!important`. This can be really useful when using Tailwind with existing CSS that has high specificity selectors.
 
 To generate utilities as `!important`, set the `important` key in your configuration options to `true`:
 
 ```js
 // tailwind.config.js
 module.exports = {
-  // ...
   important: true,
 }
 ```
@@ -363,15 +254,13 @@ Now all of Tailwind's utility classes will be generated as `!important`:
 .leading-tight {
   line-height: 1.25 !important;
 }
-.leading-normal {
-  line-height: 1.5 !important;
+.leading-snug {
+  line-height: 1.375 !important;
 }
-.leading-loose {
-  line-height: 2 !important;
-}
+/* etc. */
 ```
 
-Note that any of your own custom utilities **will not** be marked as `!important` just by enabling this option.
+Note that any of your own custom utilities **will not** automatically be marked as `!important` by enabling this option.
 
 If you'd like to make your own utilities `!important`, just add `!important` to the end of each declaration yourself:
 
@@ -392,7 +281,6 @@ We use a colon by default (`:`), but it can be useful to change this if you're u
 ```js
 // tailwind.config.js
 module.exports = {
-  // ...
   separator: '_',
 }
 ```
