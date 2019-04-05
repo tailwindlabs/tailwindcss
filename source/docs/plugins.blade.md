@@ -1,11 +1,11 @@
 ---
 extends: _layouts.documentation
-title: "Plugins"
+title: "Writing Plugins"
 description: "Extending Tailwind with reusable third-party plugins."
 titleBorder: true
 ---
 
-<h2 style="visibility: hidden; font-size: 0; margin: 0 0 -1rem 0;">Overview</h2>
+<h2 style="font-size: 0" class="invisible m-0 -mb-6">Overview</h2>
 
 At their simplest, plugins are just functions that register new styles for Tailwind to inject into the user's stylesheet. That means that to get started authoring your own plugin, all you need to do is add an anonymous function to the `plugins` list in your config file:
 
@@ -24,6 +24,7 @@ Plugin functions receive a single object argument that can be [destructured](htt
 
 - `addUtilities()`, for registering new utility styles
 - `addComponents()`, for registering new component styles
+- `addBase()`, for registering new base styles
 - `addVariant()`, for registering custom variants
 - `e()`, for escaping strings meant to be used in class names
 - `prefix()`, for manually applying the user's configured prefix to parts of a selector
@@ -38,17 +39,22 @@ Plugin utilities are output in the order they are registered, *after* built-in u
 To add new utilities from a plugin, call `addUtilities`, passing in your styles using [CSS-in-JS syntax](#css-in-js-syntax):
 
 ```js
-function({ addUtilities }) {
-  const newUtilities = {
-    '.skew-10deg': {
-      transform: 'skewY(-10deg)',
-    },
-    '.skew-15deg': {
-      transform: 'skewY(-15deg)',
-    },
-  }
+// tailwind.config.js
+module.exports = {
+  plugins: [
+    function({ addUtilities }) {
+      const newUtilities = {
+        '.skew-10deg': {
+          transform: 'skewY(-10deg)',
+        },
+        '.skew-15deg': {
+          transform: 'skewY(-15deg)',
+        },
+      }
 
-  addUtilities(newUtilities)
+      addUtilities(newUtilities)
+    }
+  ]
 }
 ```
 
@@ -59,16 +65,11 @@ By default, plugin utilities automatically respect the user's [`prefix`](/docs/c
 That means that given this Tailwind configuration:
 
 ```js
-// ...
-
+// tailwind.config.js
 module.exports = {
+  prefix: 'tw-',
+  important: true,
   // ...
-
-  options: {
-    prefix: 'tw-',
-    important: true,
-  },
-
 }
 ```
 
@@ -86,13 +87,20 @@ module.exports = {
 If necessary, you can opt out of this behavior by passing an options object as a second parameter to `addUtilities`:
 
 ```js
-function({ addUtilities }) {
-  // ...
+// tailwind.config.js
+module.exports = {
+  plugins: [
+    function({ addUtilities }) {
+      const newUtilities = {
+        // ...
+      }
 
-  addUtilities(newUtilities, {
-    respectPrefix: false,
-    respectImportant: false,
-  })
+      addUtilities(newUtilities, {
+        respectPrefix: false,
+        respectImportant: false,
+      })
+    }
+  ]
 }
 ```
 
@@ -101,22 +109,36 @@ function({ addUtilities }) {
 To generate responsive, hover, focus, active, or group-hover variants of your styles, specify the variants you'd like to generate using the `variants` option:
 
 ```js
-function({ addUtilities }) {
-  // ...
+// tailwind.config.js
+module.exports = {
+  plugins: [
+    function({ addUtilities }) {
+      const newUtilities = {
+        // ...
+      }
 
-  addUtilities(newUtilities, {
-    variants: ['responsive', 'hover'],
-  })
+      addUtilities(newUtilities, {
+        variants: ['responsive', 'hover'],
+      })
+    }
+  ]
 }
 ```
 
 If you only need to specify variants and don't need to opt-out of the default prefix or important options, you can also pass the array of variants as the second parameter directly:
 
 ```js
-function({ addUtilities }) {
-  // ...
+// tailwind.config.js
+module.exports = {
+  plugins: [
+    function({ addUtilities }) {
+      const newUtilities = {
+        // ...
+      }
 
-  addUtilities(newUtilities, ['responsive', 'hover'])
+      addUtilities(newUtilities, ['responsive', 'hover'])
+    }
+  ]
 }
 ```
 
@@ -129,30 +151,35 @@ Use it to add more opinionated, complex classes like buttons, form controls, ale
 To add new component styles from a plugin, call `addComponents`, passing in your styles using [CSS-in-JS syntax](#css-in-js-syntax):
 
 ```js
-function({ addComponents }) {
-  const buttons = {
-    '.btn': {
-      padding: '.5rem 1rem',
-      borderRadius: '.25rem',
-      fontWeight: '600',
-    },
-    '.btn-blue': {
-      backgroundColor: '#3490dc',
-      color: '#fff',
-      '&:hover': {
-        backgroundColor: '#2779bd'
-      },
-    },
-    '.btn-red': {
-      backgroundColor: '#e3342f',
-      color: '#fff',
-      '&:hover': {
-        backgroundColor: '#cc1f1a'
-      },
-    },
-  }
+// tailwind.config.js
+module.exports = {
+  plugins: [
+    function({ addComponents }) {
+      const buttons = {
+        '.btn': {
+          padding: '.5rem 1rem',
+          borderRadius: '.25rem',
+          fontWeight: '600',
+        },
+        '.btn-blue': {
+          backgroundColor: '#3490dc',
+          color: '#fff',
+          '&:hover': {
+            backgroundColor: '#2779bd'
+          },
+        },
+        '.btn-red': {
+          backgroundColor: '#e3342f',
+          color: '#fff',
+          '&:hover': {
+            backgroundColor: '#cc1f1a'
+          },
+        },
+      }
 
-  addComponents(buttons)
+      addComponents(buttons)
+    }
+  ]
 }
 ```
 
@@ -163,16 +190,11 @@ By default, component classes automatically respect the user's `prefix` preferen
 That means that given this Tailwind configuration:
 
 ```js
-// ...
-
+// tailwind.config.js
 module.exports = {
+  prefix: 'tw-',
+  important: true,
   // ...
-
-  options: {
-    prefix: 'tw-',
-    important: true,
-  },
-
 }
 ```
 
@@ -203,28 +225,43 @@ module.exports = {
 Although there's rarely a good reason to make component declarations important, if you really need to do it you can always add `!important` manually:
 
 ```js
-function({ addComponents }) {
-  addComponents({
-    '.btn': {
-      padding: '.5rem 1rem !important',
-      borderRadius: '.25rem !important',
-      fontWeight: '600 !important',
-    },
-    // ...
-  })
+// tailwind.config.js
+module.exports = {
+  plugins: [
+    function({ addComponents }) {
+      const buttons = {
+        '.btn': {
+          padding: '.5rem 1rem !important',
+          borderRadius: '.25rem !important',
+          fontWeight: '600 !important',
+        },
+        // ...
+      }
+
+      addComponents(buttons)
+    }
+  ]
 }
 ```
 
-All classes in a selector will be prefixed, so if you add a more complex style like:
+All classes in a selector will be prefixed by default, so if you add a more complex style like:
 
 ```js
-function({ addComponents }) {
-  addComponents({
-    // ...
-    '.navbar-inverse a.nav-link': {
-        color: '#fff',
+// tailwind.config.js
+module.exports = {
+  prefix: 'tw-',
+  plugins: [
+    function({ addComponents }) {
+      const components = {
+        // ...
+        '.navbar-inverse a.nav-link': {
+            color: '#fff',
+        }
+      }
+
+      addComponents(components)
     }
-  })
+  ]
 }
 ```
 
@@ -238,13 +275,22 @@ function({ addComponents }) {
 
 To opt out of prefixing, pass an options object as a second parameter to `addComponents`:
 
-```js
-function({ addComponents }) {
-  // ...
 
-  addComponents(buttons, {
-    respectPrefix: false,
-  })
+```js
+// tailwind.config.js
+module.exports = {
+  prefix: 'tw-',
+  plugins: [
+    function({ addComponents }) {
+      const components = {
+        // ...
+      }
+
+      addComponents(components, {
+        respectPrefix: false
+      })
+    }
+  ]
 }
 ```
 
@@ -275,24 +321,32 @@ If your plugin generates classes that contain user-provided strings, you can use
 
 For example, this plugin generates a set of `.rotate-{angle}` utilities where `{angle}` is a user provided string. The `e` function is used to escape the concatenated class name to make sure classes like `.rotate-1/4` work as expected:
 
+
 ```js
+// tailwind.config.js
+const _ = require('lodash')
 
-function({ e, addUtilities }) {
-  const angles = {
-    '1/4': '90deg',
-    '1/2': '180deg',
-    '3/4': '270deg',
-  }
-
-  const rotateUtilities = _.map(angles, (value, key) => {
-    return {
-      [`.${e(`rotate-${key}`)}`]: {
-        transform: `rotate(${value})`
-      }
+module.exports = {
+  theme: {
+    rotate: {
+      '1/4': '90deg',
+      '1/2': '180deg',
+      '3/4': '270deg',
     }
-  })
+  },
+  plugins: [
+    function({ addUtilities, config }) {
+      const rotateUtilities = _.map(config('theme.angles'), (value, key) => {
+        return {
+          [`.${e(`rotate-${key}`)}`]: {
+            transform: `rotate(${value})`
+          }
+        }
+      })
 
-  addUtilities(rotateUtilities)
+      addUtilities(rotateUtilities)
+    }
+  ]
 }
 ```
 
@@ -331,16 +385,22 @@ If you're writing something complex where you only want to prefix certain classe
 For example, if you're creating a plugin to be reused across a set of internal projects that includes existing classes in its selectors, you might only want to prefix the new classes:
 
 ```js
-function({ prefix, addComponents }) {
-  addComponents({
-    [`.existing-class > ${prefix('.new-class')}`]: {
-      backgroundColor: '#fff',
-    },
-  })
+// tailwind.config.js
+module.exports = {
+  prefix: 'tw-',
+  plugins: [
+    function({ addComponents, prefix }) {
+      addComponents({
+        [`.existing-class > ${prefix('.new-class')}`]: {
+          backgroundColor: '#fff',
+        }
+      })
+    }
+  ]
 }
 ```
 
-Assuming a configured prefix of `tw-`, this would generate the following CSS:
+This would generate the following CSS:
 
 ```css
 .existing-class > .tw-new-class {
@@ -362,80 +422,83 @@ The `config` function allows you to ask for a value from the user's Tailwind con
 For example, this simplified version of the built-in [container](/docs/container) plugin uses the config function to get the user's configured breakpoints:
 
 ```js
-function({ addComponents, config }) {
-  const screens = config('theme.screens', [])
+// tailwind.config.js
+const _ = require('lodash')
 
-  const mediaQueries = _.map(screens, width => {
-    return {
-      [`@media (min-width: ${width})`]: {
-        '.container': {
-          'max-width': width,
-        },
-      },
+module.exports = {
+  plugins: [
+    function({ addComponents, config }) {
+      const screens = config('theme.screens', {})
+
+      const mediaQueries = _.map(screens, width => {
+        return {
+          [`@media (min-width: ${width})`]: {
+            '.container': {
+              'max-width': width,
+            },
+          },
+        }
+      })
+
+      addComponents([
+        { '.container': { width: '100%' } },
+        ...mediaQueries,
+      ])
     }
-  })
-
-  addComponents([
-    { '.container': { width: '100%' } },
-    ...mediaQueries,
-  ])
+  ]
 }
 ```
-
-Avoid relying too heavily on using the config function as a way to make your plugin customizable; it's much better to [accept configuration options explicitly](#exposing-options).
-
-Use the config function as a convenience to the end-user when it makes sense to use their existing configuration values by default, but always provide explicit options that allow the user to configure your plugin directly as well.
 
 ## Exposing options
 
 It often makes sense for a plugin to expose its own options that the user can configure to customize the plugin's behavior.
 
-The best way to accomplish this is to design your plugins as functions that accept configuration and return another function that has access to that configuration from the parent scope.
+The best way to accomplish this is to claim your own key in the user's `theme` and `variants` configuration and ask them to provide any options there so you can access them with the `config()` function.
 
 For example, here's a plugin *(extracted to its own module)* for creating simple gradient utilities that accepts the gradients and variants to generate as options:
 
 ```js
+// ./plugins/gradients.js
 const _ = require('lodash')
 
-module.exports = function({ gradients, variants }) {
-  return function({ addUtilities, e }) {
-    const utilities = _.map(gradients, ([start, end], name) => ({
-      [`.bg-gradient-${e(name)}`]: {
-        backgroundImage: `linear-gradient(to right, ${start}, ${end})`
-      }
-    }))
+module.exports = function({ addUtilities, e }) {
+  const gradients = config('theme.gradients', {})
+  const variants = config('variants.gradients', [])
 
-    addUtilities(utilities, variants)
-  }
+  const utilities = _.map(gradients, ([start, end], name) => ({
+    [`.bg-gradient-${e(name)}`]: {
+      backgroundImage: `linear-gradient(to right, ${start}, ${end})`
+    }
+  }))
+
+  addUtilities(utilities, variants)
 }
 ```
 
-To use it, you'd `require` it in your plugins list, passing through your gradients and variants:
+To use it, you'd `require` it in your plugins list, specifying your configuration under the `gradients` key in both `theme` and `variants`:
 
 ```js
-// ...
-
+// tailwind.config.js
 module.exports = {
-  // ...
-  plugins: [
-    require('./path/to/plugin')({
-      gradients: {
-        'blue-green': [colors['blue'], colors['green']],
-        'purple-blue': [colors['purple'], colors['blue']],
-        // ...
-      },
-      variants: ['responsive', 'hover'],
+  theme: {
+    gradients: theme => ({
+      'blue-green': [theme('colors.blue.500'), theme('colors.green.500')],
+      'purple-blue': [theme('colors.purple.500'), theme('colors.blue.500')],
+      // ...
     })
+  },
+  variants: {
+    gradients: ['responsive', 'hover'],
+  },
+  plugins: [
+    require('./plugins/gradients')
   ],
-  // ...
 }
 ```
-
-There's no rules about how your plugin needs to be configured; you are in total control of the options you expose and how they work. Tailwind only cares about the actual plugin function you return when it's all said and done.
 
 ## CSS-in-JS syntax
 
-Both `addUtilities` and `addComponents` expect CSS rules written as JavaScript objects. Tailwind uses the same sort of syntax you might recognize from CSS-in-JS libraries like [Emotion](https://emotion.sh/docs/object-styles), and is powered by [postcss-js](https://github.com/postcss/postcss-js) under the hood.
+Each of `addUtilities`, `addComponents`, and `addBase` expect CSS rules written as JavaScript objects. Tailwind uses the same sort of syntax you might recognize from CSS-in-JS libraries like [Emotion](https://emotion.sh/docs/object-styles), and is powered by [postcss-js](https://github.com/postcss/postcss-js) under the hood.
 
 Consider this simple CSS rule:
 
@@ -471,8 +534,7 @@ addComponents({
 })
 ```
 
-Nesting is also supported, using the same syntax you might be familiar with from Sass or Less:
-
+Nesting is also supported (powered by [postcss-nested](https://github.com/postcss/postcss-nested)), using the same syntax you might be familiar with from Sass or Less:
 
 ```js
 addComponents({
@@ -545,12 +607,17 @@ The `addVariant` function allows you to register your own custom [variants](/doc
 To add a new variant, call the `addVariant` function, passing in the name of your custom variant, and a callback that modifies the affected CSS rules as needed.
 
 ```js
-function({ addVariant, e }) {
-  addVariant('disabled', ({ modifySelectors, separator }) => {
-    modifySelectors(({ className }) => {
-      return `.${e(`disabled${separator}${className}`)}:disabled`
-    })
-  })
+// tailwind.config.js
+module.exports = {
+  plugins: [
+    function({ addVariant, e }) {
+      addVariant('disabled', ({ modifySelectors, separator }) => {
+        modifySelectors(({ className }) => {
+          return `.${e(`disabled${separator}${className}`)}:disabled`
+        })
+      })
+    }
+  ]
 }
 ```
 
@@ -574,12 +641,17 @@ The function you pass to `modifySelectors` should simply return the modified sel
 For example, a `first-child` variant plugin could be written like this:
 
 ```js
-function({ addVariant, e }) {
-  addVariant('first-child', ({ modifySelectors, separator }) => {
-    modifySelectors(({ className }) => {
-      return `.${e(`first-child${separator}${className}`)}:first-child`
-    })
-  })
+// tailwind.config.js
+module.exports = {
+  plugins: [
+    function({ addVariant, e }) {
+      addVariant('first-child', ({ modifySelectors, separator }) => {
+        modifySelectors(({ className }) => {
+          return `.${e(`first-child${separator}${className}`)}:first-child`
+        })
+      })
+    }
+  ]
 }
 ```
 

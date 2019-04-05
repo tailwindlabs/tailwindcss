@@ -25,7 +25,7 @@ return [
         'Spacing' => 'spacing',
         'Breakpoints' => 'breakpoints',
         'Variants' => 'configuring-variants',
-        'Plugins' => 'plugins',
+        'Writing Plugins' => 'plugins',
     ],
     'Layout' => [
         'Container' => 'container',
