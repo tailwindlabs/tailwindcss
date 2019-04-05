@@ -300,6 +300,8 @@ module.exports = {
 }
 ```
 
+Here's a list of every core plugin for reference:
+
 | Core Plugin | Description |
 | --- | --- |
 | `preflight` | Tailwind's base/reset styles |
