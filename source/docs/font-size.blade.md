@@ -145,7 +145,7 @@ For more information about Tailwind's responsive design features, check out the 
 @include('_partials.variants-and-disabling', [
     'utility' => [
         'name' => 'text sizing',
-        'property' => 'textSizes',
+        'property' => 'fontSize',
     ],
     'variants' => [
         'responsive',
