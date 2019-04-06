@@ -407,7 +407,7 @@ If you are taking advantage the `center` or `padding` options exposed by the `co
 -       center: true,
 -       padding: '1rem',
 -     }),
--   ],
+    ],
   }
 ```
 
