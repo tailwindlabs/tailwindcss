@@ -11,6 +11,7 @@ return [
     ],
     'Core Concepts' => [
         'Utility-First' => 'utility-first',
+        'Core Plugins' => 'core-plugins',
         'Responsive Design' => 'responsive-design',
         'State Variants' => 'state-variants',
         'Adding New Utilities' => 'adding-new-utilities',

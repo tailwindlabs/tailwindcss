@@ -7,7 +7,7 @@ titleBorder: true
 
 Because Tailwind is a framework for building bespoke user interfaces, it has been designed from the ground up with customization in mind.
 
-By default, Tailwind will look for a `tailwind.config.js` file at the root of your project where you can define all of your customizations.
+By default, Tailwind will look for an optional `tailwind.config.js` file at the root of your project where you can define any customizations.
 
 ```js
 // Example `tailwind.config.js` file
@@ -34,6 +34,8 @@ module.exports = {
   }
 }
 ```
+
+Every section of the config file is optional, so you only have to specify what you'd like to change. Any missing sections will fall back to Tailwind's [default configuration](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js).
 
 ## Creating your configuration file
 
@@ -87,7 +89,7 @@ You'll get a file that matches the [default configuration file](https://github.c
 
 ## Theme
 
-The `theme` section is where you define your color palette, font stacks, type scale, border sizes, breakpoints — you name it. It's like an executable design system for your project.
+The `theme` section is where you define your color palette, font stacks, type scale, border sizes, breakpoints — anything related to the visual design of your site.
 
 ```js
 // tailwind.config.js
