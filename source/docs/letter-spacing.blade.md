@@ -115,7 +115,7 @@ For more information about Tailwind's responsive design features, check out the 
 @include('_partials.variants-and-disabling', [
     'utility' => [
         'name' => 'tracking',
-        'property' => 'tracking',
+        'property' => 'letterSpacing',
     ],
     'variants' => [
         'responsive',

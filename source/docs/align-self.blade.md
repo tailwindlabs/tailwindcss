@@ -155,10 +155,9 @@ For more information about Tailwind's responsive design features, check out the 
 @include('_partials.variants-and-disabling', [
     'utility' => [
         'name' => 'align-self',
-        'property' => 'flexbox',
+        'property' => 'alignSelf',
     ],
     'variants' => [
         'responsive',
     ],
-    'extraMessage' => 'Note that modifying the <code>flexbox</code> property will affect which variants are generated for <em>all</em> Flexbox utilities, not just the align-self utilities.'
 ])

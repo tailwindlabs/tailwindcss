@@ -143,7 +143,7 @@ You can [customize your color palette](/docs/colors#customizing) by editing `the
 @include('_partials.variants-and-disabling', [
     'utility' => [
         'name' => 'text color',
-        'property' => 'textColors',
+        'property' => 'textColor',
     ],
     'variants' => [
         'responsive',
