@@ -25,7 +25,7 @@ description: "Utilities for controlling how a replaced element's content should 
         [
             '.object-scale-down',
             'object-fit: scale-down;',
-        ], 
+        ],
     ]
 ])
 
@@ -115,6 +115,50 @@ Display an element's content at its original size but scale it down to fit its c
 @slot('code')
 <div class="bg-gray-400">
   <img class="object-scale-down h-48 w-full ...">
+</div>
+@endslot
+@endcomponent
+
+## Responsive
+
+To control how a replaced element's content should be resized only at a specific breakpoint, add a `{screen}:` prefix to any existing object fit utility. For example, adding the class `md:object-scale-down` to an element would apply the `object-scale-down` utility at medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+@component('_partials.responsive-code-sample')
+@slot('none')
+<div class="bg-gray-400">
+  <img class="h-48 w-full object-contain" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="">
+</div>
+@endslot
+
+@slot('sm')
+<div class="bg-gray-400">
+  <img class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="">
+</div>
+@endslot
+
+@slot('md')
+<div class="bg-gray-400">
+  <img class="h-48 w-full object-fill" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="">
+</div>
+@endslot
+
+@slot('lg')
+<div class="bg-gray-400">
+  <img class="h-48 w-full object-none" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="">
+</div>
+@endslot
+
+@slot('xl')
+<div class="bg-gray-400">
+  <img class="h-48 w-full object-scale-down" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&h=128&q=80" alt="">
+</div>
+@endslot
+
+@slot('code')
+<div class="bg-gray-400">
+  <img class="none:object-contain sm:object-cover md:object-fill lg:object-none xl:object-scale-down ..." src="...">
 </div>
 @endslot
 @endcomponent
