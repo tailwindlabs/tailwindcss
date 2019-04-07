@@ -112,6 +112,21 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
+### Letter Spacings
+
+By default Tailwind provides six tracking utilities. You can change, add, or remove these by editing the `theme.letterSpacing` section of your Tailwind config.
+
+@component('_partials.customized-config', ['key' => 'theme.letterSpacing'])
++ tightest: '-.075em',
+  tighter: '-.05em',
+- tight: '-.025em',
+  normal: '0',
+- wide: '.025em',
+  wider: '.05em',
+- widest: '.1em',
++ widest: '.25em',
+@endcomponent
+
 @include('_partials.variants-and-disabling', [
     'utility' => [
         'name' => 'tracking',
