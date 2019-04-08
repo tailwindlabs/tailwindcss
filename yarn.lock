@@ -1163,7 +1163,7 @@ callsites@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/callsites/-/callsites-3.0.0.tgz#fb7eb569b72ad7a45812f93fd9430a3e410b3dd3"
 
-camelcase-css@^2.0.0:
+camelcase-css@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/camelcase-css/-/camelcase-css-2.0.1.tgz#ee978f6947914cc30c6b44741b6ed1df7f043fd5"
 
@@ -3571,11 +3571,11 @@ postcss-functions@^3.0.0:
     postcss-value-parser "^3.3.0"
 
 postcss-js@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/postcss-js/-/postcss-js-2.0.0.tgz#f75b70470009eb37f998ee9bb516a2899c19ef8d"
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/postcss-js/-/postcss-js-2.0.1.tgz#4154e906ff410930afab63a24210be1b831e89a9"
   dependencies:
-    camelcase-css "^2.0.0"
-    postcss "^7.0.0"
+    camelcase-css "^2.0.1"
+    postcss "^7.0.14"
 
 postcss-nested@^4.1.1:
   version "4.1.2"
@@ -3627,7 +3627,7 @@ postcss@^6.0.9:
     source-map "^0.6.1"
     supports-color "^5.4.0"
 
-postcss@^7.0.0, postcss@^7.0.11, postcss@^7.0.14:
+postcss@^7.0.11, postcss@^7.0.14:
   version "7.0.14"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.14.tgz#4527ed6b1ca0d82c53ce5ec1a2041c2346bbd6e5"
   dependencies:
