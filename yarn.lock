@@ -1010,11 +1010,11 @@ atob@^2.1.1:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.1.tgz#ae2d5a729477f289d60dd7f96a6314a22dd6c22a"
 
 autoprefixer@^9.4.5:
-  version "9.5.0"
-  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-9.5.0.tgz#7e51d0355c11596e6cf9a0afc9a44e86d1596c70"
+  version "9.5.1"
+  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-9.5.1.tgz#243b1267b67e7e947f28919d786b50d3bb0fb357"
   dependencies:
-    browserslist "^4.4.2"
-    caniuse-lite "^1.0.30000947"
+    browserslist "^4.5.4"
+    caniuse-lite "^1.0.30000957"
     normalize-range "^0.1.2"
     num2fraction "^1.2.2"
     postcss "^7.0.14"
@@ -1119,7 +1119,7 @@ browser-resolve@^1.11.3:
   dependencies:
     resolve "1.1.7"
 
-browserslist@^4.4.2, browserslist@^4.5.1, browserslist@^4.5.2:
+browserslist@^4.5.1, browserslist@^4.5.2, browserslist@^4.5.4:
   version "4.5.4"
   resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.5.4.tgz#166c4ecef3b51737a42436ea8002aeea466ea2c7"
   dependencies:
@@ -1171,11 +1171,7 @@ camelcase@^5.0.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-5.2.0.tgz#e7522abda5ed94cc0489e1b8466610e88404cf45"
 
-caniuse-lite@^1.0.30000947:
-  version "1.0.30000947"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000947.tgz#c30305e9701449c22e97f4e9837cea3d76aa3273"
-
-caniuse-lite@^1.0.30000955:
+caniuse-lite@^1.0.30000955, caniuse-lite@^1.0.30000957:
   version "1.0.30000957"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000957.tgz#fb1026bf184d7d62c685205358c3b24b9e29f7b3"
 
