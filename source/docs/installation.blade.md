@@ -57,7 +57,7 @@ Use the `npx tailwind help build` command to learn more about the various CLI op
 
 For most projects, you'll want to add Tailwind as a PostCSS plugin in your build chain.
 
-Generally this means adding Tailwind as a plugin your `postcss.config.js` file:
+Generally this means adding Tailwind as a plugin in your `postcss.config.js` file:
 
 ```js
 module.exports = {
