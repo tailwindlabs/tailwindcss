@@ -2,7 +2,6 @@
 
 return [
     'Getting Started' => [
-        // 'Quick Start' => 'quick-start',
         'Installation' => 'installation',
         'Upgrade Guide' => 'upgrading-to-v1',
         'Using with Sass/Less/Stylus' => 'using-with-sass-less-stylus',
@@ -22,9 +21,9 @@ return [
     'Customization' => [
         'Configuration' => 'configuration',
         'Theme' => 'theme',
+        'Breakpoints' => 'breakpoints',
         'Colors' => 'colors',
         'Spacing' => 'spacing',
-        'Breakpoints' => 'breakpoints',
         'Variants' => 'configuring-variants',
         'Writing Plugins' => 'plugins',
     ],
