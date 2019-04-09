@@ -15,9 +15,7 @@ description: null
   </p>
 </div>
 
-Tailwind is different from frameworks like Bootstrap, Foundation, or Bulma in that **it's not a UI kit.**
-
-It doesn't have a default theme, and there are no built-in UI components.
+Tailwind is different from frameworks like Bootstrap, Foundation, or Bulma in that it's not a UI kit and doesn't include any built-in UI components like form controls, buttons, cards, or navbars.
 
 On the flip side, it also has no opinion about how your site should look and doesn't impose design decisions that you have to fight to undo.
 
