@@ -27,6 +27,9 @@ return [
         'Variants' => 'configuring-variants',
         'Writing Plugins' => 'plugins',
     ],
+    'Base styles' => [
+        'Preflight' => 'preflight',
+    ],
     'Layout' => [
         'Container' => 'container',
         'Display' => 'display',
