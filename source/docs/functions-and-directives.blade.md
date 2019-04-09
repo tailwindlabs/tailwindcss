@@ -161,11 +161,11 @@ You can generate `responsive`, `hover`, `focus`, `active`, and `group-hover` ver
 
 ```css
 @@variants focus, hover {
-  .banana {
-    color: yellow;
+  .rotate-0 {
+    transform: rotate(0deg);
   }
-  .chocolate {
-    color: brown;
+  .rotate-90 {
+    transform: rotate(90deg);
   }
 }
 ```
@@ -173,23 +173,25 @@ You can generate `responsive`, `hover`, `focus`, `active`, and `group-hover` ver
 This will generate the following CSS:
 
 ```css
-.banana {
-  color: yellow;
+.rotate-0 {
+  transform: rotate(0deg);
 }
-.chocolate {
-  color: brown;
+.rotate-90 {
+  transform: rotate(90deg);
 }
-.focus\:banana:focus {
-  color: yellow;
+
+.focus\:rotate-0:focus {
+  transform: rotate(0deg);
 }
-.focus\:chocolate:focus {
-  color: brown;
+.focus\:rotate-90:focus {
+  transform: rotate(90deg);
 }
-.hover\:banana:hover {
-  color: yellow;
+
+.hover\:rotate-0:hover {
+  transform: rotate(0deg);
 }
-.hover\:chocolate:hover {
-  color: brown;
+.hover\:rotate-90:hover {
+  transform: rotate(90deg);
 }
 ```
 

@@ -7,16 +7,25 @@ titleBorder: true
 
 @include('_partials.work-in-progress')
 
-Developing an organized color palette is critical to the design success of a project. Tailwind provides a well-thought-out default color system that makes this very easy to accomplish.
+To Document:
 
-## Default color palette
+- Explaining the numeric scale
+- Literal color names vs. "semantic" color names
+- How to remove unused colors
+- How the colors were picked (by hand), and why it's not easy for you to generate your own set of colors
+- Nested object syntax vs key-value syntax
+- Customizing colors for core plugins separately instead of globally
 
-To get you started, we've provided a generous palette of great looking colors that are perfect for prototyping, or even as a starting point for your own custom color palette.
+---
+
+<h2 style="font-size: 0" class="invisible m-0 -mb-6">Default color palette</h2>
+
+To get you started, Tailwind includes a generous palette of great looking colors that are perfect for prototyping, or even as a starting point for your own custom color palette.
 
 <div class="flex flex-wrap -mx-2">
 
   <div class="px-2 w-full relative mt-4">
-    <h3 class="markdown">Black & White</h3>
+    <h3 class="markdown mb-4">Black & White</h3>
     <div class="-mx-2 -mt-5 flex flex-wrap">
       <div class="w-1/2 md:w-1/3 px-2">
         <div class="flex items-center mt-5">

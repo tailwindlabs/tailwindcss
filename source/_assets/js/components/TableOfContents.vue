@@ -37,7 +37,7 @@ export default {
     }
   },
   mounted() {
-    anchors.options = { placement: 'left', class: 'text-gray-500' }
+    anchors.options = { placement: 'left', class: 'text-gray-500 no-underline', icon: '#' }
     anchors.add('#content h2, #content h3')
     this.links = anchors.elements.filter(el => {
       return !el.classList.contains('no-toc')
