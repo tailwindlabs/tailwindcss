@@ -348,7 +348,7 @@ module.exports = {
 }
 ```
 
-Another example is adding a new key to reference inside a custom plugins. For example, if you've written a `gradients` plugin for your project, you might add a `gradients` key to your `theme` object that the plugin references:
+Another example is adding a new key to reference inside a custom plugin. For example, if you've written a `gradients` plugin for your project, you might add a `gradients` key to your `theme` object that the plugin references:
 
 ```js
 // tailwind.config.js
