@@ -44,7 +44,7 @@ We provide a sensible [default theme](https://github.com/tailwindcss/tailwindcss
 
 ## Theme structure
 
-Except for `screens`, `colors`, and `spacing`, all of the keys in the `theme` object map to one of Tailwind's [core plugins](/docs/core-plugins).
+The `theme` object contains keys for `screens`, `colors`, and `spacing`, as well as a key for each customizable [core plugin](/docs/core-plugins).
 
 See the [theme configuration reference](#configuration-reference) or the [default theme](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js#L5) for a complete list of theme options.
 
@@ -92,7 +92,7 @@ module.exports = {
 }
 ```
 
-By default, these colors are shared by the `backgroundColor`, `textColor`, and `borderColor` core plugins.
+By default, these colors are inherited by the `backgroundColor`, `textColor`, and `borderColor` core plugins.
 
 To learn more, see the [color customization documentation](/docs/colors).
 
@@ -129,7 +129,7 @@ module.exports = {
 }
 ```
 
-By default, these values are shared by the `padding`, `margin`, `negativeMargin`, `width`, and `height` core plugins.
+By default, these values are inherited by the `padding`, `margin`, `negativeMargin`, `width`, and `height` core plugins.
 
 To learn more, see the [spacing customization documentation](/docs/spacing).
 
@@ -153,24 +153,31 @@ module.exports = {
 }
 ```
 
+The keys determine the suffix for the generated classes, and the values determine the value of the actual CSS declaration.
+
+The example `borderRadius` configuration above would generate the following CSS classes:
+
+```css
+.rounded-none { border-radius: 0 }
+.rounded-sm   { border-radius: .125rem }
+.rounded      { border-radius: .25rem }
+.rounded-lg   { border-radius: .5rem }
+.rounded-full { border-radius: 9999px }
+```
+
+You'll notice that using a key of `default` in the theme configuration created the class `rounded` with no suffix. This is a common convention in Tailwind supported by many (although not all) of the core plugins.
+
 To learn more about customizing a specific core plugin, visit the documentation for that plugin.
 
 For a complete reference of available theme properties and their default values, [see the default theme configuration](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js#L5).
 
 ## Customizing the default theme
 
-Out of the box, your project will automatically inherit the values from [the default theme configuration](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js#L5). That means that if you don't want to change anything, you don't have to create a `theme` section in your `tailwind.config.js` file at all.
+Out of the box, your project will automatically inherit the values from [the default theme configuration](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js#L5). If you would like to customize the default theme, you have a few different options depending on your goals.
 
-```js
-// tailwind.config.js
-module.exports = {}
-```
+### Overriding the default theme
 
-If you would like to customize the default theme, you have a few different options depending on your goals.
-
-### Overriding the default value
-
-If you do create a `theme` section, any keys you provide will **replace** those keys in the default theme.
+To override an option in the default theme, create a `theme` section in your `tailwind.config.js` file and add the key you'd like to override.
 
 ```js
 // tailwind.config.js
@@ -188,6 +195,8 @@ module.exports = {
   }
 }
 ```
+
+This will completely replace Tailwind's default configuration for that key, so in the example above none of the default opacity utilities would be generated.
 
 Any keys you **do not** provide will be inherited from the default theme, so in the above example, the default theme configuration for things like colors, spacing, border radius, background position, etc. would be preserved.
 
@@ -238,7 +247,7 @@ module.exports = {
 
 If you need to reference another value in your theme, you can do so by providing a closure instead of a static value. The closure will receive a `theme()` function that you can use to look up other values in your theme using dot notation.
 
-For example, by default the `backgroundColor` plugin references the `colors` theme property by being defined like this:
+For example, you could generate `fill` utilities for every color in your color palette by referencing `theme('colors')` in your `fill` configuration:
 
 ```js
 // tailwind.config.js
@@ -247,18 +256,18 @@ module.exports = {
     colors: {
       // ...
     },
-    backgroundColor: theme => theme('colors')
+    fill: theme => theme('colors')
   }
 }
 ```
 
 The `theme()` function attempts to find the value you are looking for from the fully merged theme object, so it can reference your own customizations as well as the default theme values. It also works recursively, so as long as there is a static value at the end of the chain it will be able to resolve the value you are looking for.
 
-### Removing a default value
+### Referencing the default theme
 
-Although sort of a weird thing to do, if you'd like to inherit most of the default values for a certain property but not all of them, you can import the default theme from `tailwindcss/defaultTheme` and reference that in your own configuration.
+If you'd like to reference a value in the default theme for any reason, you can import it from `tailwindcss/defaultTheme`.
 
-Using some clever destructuring, you can omit any values you don't want to inherit from a specific theme property. This example removes the `serif` font family while preserving any other default font families:
+One example of where this is useful is if you'd like to add a font family to one of Tailwind's default font stacks:
 
 ```js
 // tailwind.config.js
@@ -266,7 +275,14 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
   theme: {
-    fontFamily: (({ serif, ...others }) => others)(defaultTheme.fontFamily)
+    extend: {
+      fontFamily: {
+        sans: [
+          'Lato',
+          ...defaultTheme.fontFamily.sans,
+        ]
+      }
+    }
   }
 }
 ```
