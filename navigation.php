@@ -52,7 +52,7 @@ return [
         'List Style Position' => 'list-style-position',
         'Text Align' => 'text-align',
         'Text Decoration' => 'text-decoration',
-        'Text Tranform' => 'text-transform',
+        'Text Transform' => 'text-transform',
         'Vertical Align' => 'vertical-align',
         'Whitespace' => 'whitespace',
         'Word Break' => 'word-break',
