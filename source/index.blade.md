@@ -66,7 +66,7 @@ Here's an example of a responsive contact card component built with Tailwind wit
 
 ## Component-friendly
 
-While you can do a *lot* with just utility classes, sometimes a component class is the right decision.
+While you can do a *lot* with just utility classes, as a project grows it can be useful to codify common patterns into higher level abstractions.
 
 Tailwind provides tools for [extracting component classes](/docs/extracting-components) from repeated utility patterns, making it easy to update multiple instances of a component from one place:
 
@@ -151,9 +151,7 @@ Tailwind uses an intuitive `{screen}:` prefix that makes it easy to notice respo
 
 ## Designed to be customized
 
-If it makes sense to be customizable, Tailwind lets you customize it.
-
-This includes colors, border sizes, font weights, spacing utilities, breakpoints, shadows, and tons more.
+If it makes sense to be customizable, Tailwind lets you customize it. This includes colors, border sizes, font weights, spacing utilities, breakpoints, shadows, and tons more.
 
 Tailwind is written in [PostCSS](http://postcss.org/) and configured in JavaScript, which means you have the full power of a real programming language at your fingertips.
 
