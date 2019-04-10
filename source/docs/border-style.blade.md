@@ -9,8 +9,6 @@ features:
   focus: false
 ---
 
-@include('_partials.work-in-progress')
-
 @include('_partials.class-table', [
   'rows' => [
     [
@@ -36,6 +34,68 @@ features:
   ]
 ])
 
+## Usage
+
+Use `.border-{style}` to control an element's border style.
+
+@component('_partials.code-sample')
+<div class="block sm:flex sm:justify-around">
+  <div class="sm:flex-1 flex justify-around mb-6">
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.border-solid</p>
+      <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-solid"></div>
+    </div>
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.border-dashed</p>
+      <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-dashed"></div>
+    </div>
+  </div>
+  <div class="sm:flex-1 flex justify-around">
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.border-dotted</p>
+      <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-dotted"></div>
+    </div>
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.border-none</p>
+      <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-none"></div>
+    </div>
+  </div>
+</div>
+@slot('code')
+<div class="border-solid border-4 border-gray-600 ..."></div>
+<div class="border-dashed border-4 border-gray-600 ..."></div>
+<div class="border-dotted border-4 border-gray-600 ..."></div>
+<div class="border-none border-4 border-gray-600 ..."></div>
+@endslot
+@endcomponent
+
+## Responsive
+
+To control the border style of an element at a specific breakpoint, add a `{screen}:` prefix to any existing border style utility. For example, use `md:border-dotted` to apply the `border-dotted` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+@component('_partials.responsive-code-sample')
+@slot('none')
+<div class="border-solid w-24 h-24 mx-auto border-8 border-gray-600 bg-gray-400"></div>
+@endslot
+@slot('sm')
+<div class="border-dashed w-24 h-24 mx-auto border-8 border-gray-600 bg-gray-400"></div>
+@endslot
+@slot('md')
+<div class="border-dotted w-24 h-24 mx-auto border-8 border-gray-600 bg-gray-400"></div>
+@endslot
+@slot('lg')
+<div class="border-none w-24 h-24 mx-auto border-8 border-gray-600 bg-gray-400"></div>
+@endslot
+@slot('xl')
+<div class="border-dashed w-24 h-24 mx-auto border-8 border-gray-600 bg-gray-400"></div>
+@endslot
+@slot('code')
+<div class="none:border-solid sm:border-dashed md:border-dotted lg:border-none xl:border-dashed">
+</div>
+@endslot
+@endcomponent
 
 ## Customizing
 
