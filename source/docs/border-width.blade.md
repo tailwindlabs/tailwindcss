@@ -9,8 +9,6 @@ features:
   focus: false
 ---
 
-@include('_partials.work-in-progress')
-
 Add borders to any element using the `.border{-side?}{-width?}` syntax.
 
 For example, `.border` would add a `1px` border to all sides of the element, where `.border-b-4` would add a `4px` border to the bottom of the element.
@@ -46,19 +44,19 @@ For more information about Tailwind's responsive design features, check out the 
 
 @component('_partials.responsive-code-sample', ['class' => 'text-center'])
 @slot('none')
-<div class="w-12 h-12 mx-auto border-2 border-gray-600 bg-gray-200"></div>
+<div class="w-24 h-24 mx-auto border-2 border-gray-600 bg-gray-400"></div>
 @endslot
 @slot('sm')
-<div class="w-12 h-12 mx-auto border-2 border-t-8 border-gray-600 bg-gray-200"></div>
+<div class="w-24 h-24 mx-auto border-2 border-t-8 border-gray-600 bg-gray-400"></div>
 @endslot
 @slot('md')
-<div class="w-12 h-12 mx-auto border-2 border-t-8 border-r-8 border-gray-600 bg-gray-200"></div>
+<div class="w-24 h-24 mx-auto border-2 border-t-8 border-r-8 border-gray-600 bg-gray-400"></div>
 @endslot
 @slot('lg')
-<div class="w-12 h-12 mx-auto border-2 border-t-8 border-r-8 border-b-8 border-gray-600 bg-gray-200"></div>
+<div class="w-24 h-24 mx-auto border-2 border-t-8 border-r-8 border-b-8 border-gray-600 bg-gray-400"></div>
 @endslot
 @slot('xl')
-<div class="w-12 h-12 mx-auto border-8 border-gray-600 bg-gray-200"></div>
+<div class="w-24 h-24 mx-auto border-8 border-gray-600 bg-gray-400"></div>
 @endslot
 @slot('code')
 <div class="none:border-2 sm:border-t-8 md:border-r-8 lg:border-b-8 xl:border-8">
