@@ -34,7 +34,7 @@ features:
   ]
 ])
 
-## Float Right
+## Float right
 
 Use `.float-right` to float an element to the right of its container.
 
@@ -46,7 +46,7 @@ Use `.float-right` to float an element to the right of its container.
 </div>
 @endcomponent
 
-## Float Left
+## Float left
 
 Use `.float-left` to float an element to the left of its container.
 
@@ -58,7 +58,7 @@ Use `.float-left` to float an element to the left of its container.
 </div>
 @endcomponent
 
-## Reset Float
+## Don't float
 
 Use `.float-none` to reset any floats that are applied to an element. This is the default value for the float property.
 

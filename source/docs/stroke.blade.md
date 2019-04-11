@@ -30,7 +30,7 @@ Useful for styling icon sets like [Feather](https://feathericons.com/) that are 
 
 ## Customizing
 
-Control which stroke utilities Tailwind generates by customizing the `theme.stroke` section in your Tailwind config file:
+Control which stroke utilities Tailwind generates by customizing the `theme.stroke` section in your `tailwind.config.js` file:
 
 @component('_partials.customized-config', ['key' => 'theme'])
 - stroke: {

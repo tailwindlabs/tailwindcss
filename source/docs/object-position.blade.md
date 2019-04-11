@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Object Position"
-description: "Utilities for controlling the element's respond to the height and width of its content box."
+description: "Utilities for controlling how a replaced element's content should be positioned within its container."
 features:
   responsive: true
   customizable: true
@@ -59,11 +59,9 @@ features:
     ]
 ])
 
-## Object Positioning
+## Usage
 
-Use the `.object-{side}` utilities to specify the alignment of an element's content to a specific side.
-
-Note that this only applies to [replaced elements](https://developer.mozilla.org/en-US/docs/Web/CSS/Replaced_element) like `<img>`, `<iframe>`, `<embed>`, and `<video>`.
+Use the `.object-{side}` utilities to specify how a replaced element's content should be positioned within its container.
 
 @component('_partials.code-sample')
 <div class="flex justify-around mb-8">

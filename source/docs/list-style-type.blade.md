@@ -26,7 +26,7 @@ features:
   ]
 ])
 
-## Styling lists
+## Usage
 
 By default lists are unstyled. That means if you want to create lists that have the default browser styling (bullets/numbers and a bit of left padding), you need to explicitly style those.
 

@@ -77,7 +77,7 @@ If you're using `postcss-import` or a preprocessor like Less, Sass, or Stylus, c
 
 ## Responsive Variants
 
-If you'd like to create responsive versions of your own utilities based on the breakpoints defined in your Tailwind config file, wrap your utilities in the `@responsive { ... }` directive:
+If you'd like to create responsive versions of your own utilities based on the breakpoints defined in your `tailwind.config.js` file, wrap your utilities in the `@responsive { ... }` directive:
 
 ```css
 @@tailwind base;

@@ -126,7 +126,7 @@ Focus utilities can also be combined with responsive utilities by adding the res
 
 By default Tailwind makes the entire [default color palette](/docs/colors#default-color-palette) available as background colors.
 
-You can [customize your color palette](/docs/colors#customizing) by editing the `theme.colors` variable in your Tailwind config file, or customize just your background colors using the `theme.backgroundColor` section of your Tailwind config.
+You can [customize your color palette](/docs/colors#customizing) by editing the `theme.colors` variable in your `tailwind.config.js` file, or customize just your background colors using the `theme.backgroundColor` section of your Tailwind config.
 
 @component('_partials.customized-config', ['key' => 'theme.backgroundColor', 'usesTheme' => true])
 - ...theme('colors'),

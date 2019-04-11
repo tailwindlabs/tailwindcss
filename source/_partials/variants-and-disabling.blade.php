@@ -28,7 +28,7 @@
 
 <p>By default, {{ $whichVariants }} variants are generated for {{ $utility['name'] }} utilities.</p>
 
-<p>You can control which variants are generated for the {{ $utility['name'] }} utilities by modifying the <code>{{ $utility['property'] }}</code> property in the <code>variants</code> section of your Tailwind config file.</p>
+<p>You can control which variants are generated for the {{ $utility['name'] }} utilities by modifying the <code>{{ $utility['property'] }}</code> property in the <code>variants</code> section of your <code>tailwind.config.js</code> file.</p>
 
 <p>For example, this config will {{ is_array($variants) && count($variants) > 0 ? 'also ' : '' }}generate {{ $extraVariants->implode(' and ') }} variants:</p>
 

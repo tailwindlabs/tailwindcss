@@ -79,11 +79,11 @@ description: "Utilities for controlling the placement of positioned elements."
   ]
 ])
 
-## Pinning edges
+## Usage
 
-Use the `.{top|right|bottom|left|inset}-{value}` utilities to anchor absolutely positioned elements against any of the edges of the nearest positioned parent.
+Use the `.{top|right|bottom|left|inset}-0` utilities to anchor absolutely positioned elements against any of the edges of the nearest positioned parent.
 
-Combined with Tailwind's [spacing utilities](/docs/spacing), you'll probably find that these are all you need to precisely control absolutely positioned elements.
+Combined with Tailwind's padding and margin utilities, you'll probably find that these are all you need to precisely control absolutely positioned elements.
 
 @component('_partials.code-sample')
 <div class="flex justify-around mb-8">
@@ -242,7 +242,7 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Positions
 
-By default Tailwind provides utilities for `0` and `auto` positions for each side. You change, add, or remove these by editing the `theme.inset` section of your Tailwind config.
+By default Tailwind only provides `0` and `auto` top/right/bottom/left/inset utilities. You can change, add, or remove these by editing the `theme.inset` section of your `tailwind.config.js` file.
 
 @component('_partials.customized-config', ['key' => 'theme.inset'])
   '0': 0,
