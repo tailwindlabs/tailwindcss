@@ -1,6 +1,6 @@
 ---
 extends: _layouts.documentation
-title: "Box Shadows"
+title: "Box Shadow"
 description: "Utilities for controlling the box shadow of an element."
 features:
   responsive: true
