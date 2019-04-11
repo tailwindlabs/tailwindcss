@@ -9,8 +9,6 @@ features:
   focus: false
 ---
 
-@include('_partials.work-in-progress')
-
 @include('_partials.class-table', [
   'scroll' => true,
   'rows' => collect([
@@ -28,7 +26,7 @@ features:
         return "{$property}: {$value};";
       })->implode("\n");
       return [$class, $code];
-    });
+    })->values();
   })
 ])
 
@@ -93,12 +91,12 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Margins
 
-By default Tailwind provides 19 fixed `margin` utilities and an `auto` utility. These utilities will also be generated for every side and axis. You change, add, or remove these by editing the `theme.margin` section of your Tailwind config. The values in this section will also control which utilities will be generated per side/axis.
+By default Tailwind provides 19 fixed `margin` utilities and an `auto` utility. These utilities will also be generated for every side and axis. You change, add, or remove these by editing the `theme.margin` section of your `tailwind.config.js` file.
 
 @component('_partials.customized-config', ['key' => 'theme.margin', 'usesTheme' => true])
 - 'auto': 'auto',
   ...theme('spacing'),
-+ '28': '7rem',
++ '72': '18rem',
 + '2px': '2px',
 @endcomponent
 
