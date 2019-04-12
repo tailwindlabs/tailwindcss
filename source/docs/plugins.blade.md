@@ -461,7 +461,7 @@ For example, here's a plugin *(extracted to its own module)* for creating simple
 // ./plugins/gradients.js
 const _ = require('lodash')
 
-module.exports = function({ addUtilities, e }) {
+module.exports = function({ addUtilities, e, config }) {
   const gradients = config('theme.gradients', {})
   const variants = config('variants.gradients', [])
 
