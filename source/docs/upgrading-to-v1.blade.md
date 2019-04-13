@@ -1012,11 +1012,11 @@ However, a better long-term solution would be to pick a default line-height that
 
 These steps only affect users that are depending on the 0.x configuration file values. This includes CDN users, or anyone that is omitting sections from their config file, referencing our config file, or not using a config file at all.
 
-1. [Update any usage of `text/bg/border-{color}` classes](#update-any-usage-of-text-bg-border-color-classes)
-2. [Replace `tracking-tight/wide` with `tracking-tighter/wider`](#replace-tracking-tight-wide-with-tracking-tighter-wider)
-3. [Check your design against the updated default breakpoints](#check-your-design-against-the-updated-default-breakpoints)
-4. [Double check any usage of the default `shadow-{size}` utilities](#double-check-any-usage-of-the-default-shadow-size-utilities)
-5. [Update any usage of the default `max-w-{size}` utilities](#update-any-usage-of-the-default-max-w-size-utilities)
+1. [Update any usage of `text/bg/border-{color}` classes](#1-update-any-usage-of-text-bg-border-color-classes)
+2. [Replace `tracking-tight/wide` with `tracking-tighter/wider`](#2-replace-tracking-tight-wide-with-tracking-tighter-wider)
+3. [Check your design against the updated default breakpoints](#3-check-your-design-against-the-updated-default-breakpoints)
+4. [Double check any usage of the default `shadow-{size}` utilities](#4-double-check-any-usage-of-the-default-shadow-size-utilities)
+5. [Update any usage of the default `max-w-{size}` utilities](#5-update-any-usage-of-the-default-max-w-size-utilities)
 
 <h3 class="no-toc mt-12">1. Update any usage of <code>text/bg/border-{color}</code> classes</h3>
 
