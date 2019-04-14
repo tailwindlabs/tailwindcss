@@ -45,14 +45,14 @@ Use `.w-screen` to make an element span the entire width of the viewport.
 Use `.w-{number}` or `.w-px` to set an element to a fixed width.
 
 @component('_partials.code-sample')
-@foreach ($page->config['theme']['spacing'] as $name => $width)
+@foreach (collect([0 => '0', 'px' => '1px'])->union($page->config['theme']['spacing']->except(['0', 'px'])) as $name => $width)
 <div class="flex items-center mb-1">
   <p class="text-sm text-gray-600 w-12 mr-2">.w-{{ $name }}</p>
   <div class="h-4 bg-gray-400 w-{{ $name }}"></div>
 </div>
 @endforeach
 @slot('code')
-@foreach ($page->config['theme']['spacing'] as $name => $width)
+@foreach (collect([0 => '0', 'px' => '1px'])->union($page->config['theme']['spacing']->except(['0', 'px'])) as $name => $width)
 <div class="w-{{ $name }} ..."></div>
 @endforeach
 @endslot
