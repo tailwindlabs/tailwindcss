@@ -118,6 +118,10 @@
          --><div class="hidden code-green">p</div><!--
          --><div class="hidden code-green">l</div><!--
          --><div class="hidden code-green">e</div><!--
+         --><div class="hidden code-green">-</div><!--
+         --><div class="hidden code-green">5</div><!--
+         --><div class="hidden code-green">0</div><!--
+         --><div class="hidden code-green">0</div><!--
          --><div class="hidden code-blue">&quot;</div><!--
        --></div><!--
        --><div ref="roleCursor" class="invisible inline-block border-r-2 border-yellow h-6 absolute" style="margin-top: -0.125rem"></div><!--
@@ -146,13 +150,12 @@
          --><div class="hidden code-green">-</div><!--
          --><div class="hidden code-green">g</div><!--
          --><div class="hidden code-green">r</div><!--
-         --><div class="hidden code-green">e</div><!--
+         --><div class="hidden code-green">a</div><!--
          --><div class="hidden code-green">y</div><!--
          --><div class="hidden code-green">-</div><!--
-         --><div class="hidden code-green">d</div><!--
-         --><div class="hidden code-green">a</div><!--
-         --><div class="hidden code-green">r</div><!--
-         --><div class="hidden code-green">k</div><!--
+         --><div class="hidden code-green">6</div><!--
+         --><div class="hidden code-green">0</div><!--
+         --><div class="hidden code-green">0</div><!--
          --><div class="hidden code-blue">&quot;</div><!--
        --></div><!--
        --><div ref="contactCursor1" class="invisible inline-block border-r-2 border-yellow h-6 absolute" style="margin-top: -0.125rem"></div><!--
@@ -181,13 +184,12 @@
          --><div class="hidden code-green">-</div><!--
          --><div class="hidden code-green">g</div><!--
          --><div class="hidden code-green">r</div><!--
-         --><div class="hidden code-green">e</div><!--
+         --><div class="hidden code-green">a</div><!--
          --><div class="hidden code-green">y</div><!--
          --><div class="hidden code-green">-</div><!--
-         --><div class="hidden code-green">d</div><!--
-         --><div class="hidden code-green">a</div><!--
-         --><div class="hidden code-green">r</div><!--
-         --><div class="hidden code-green">k</div><!--
+         --><div class="hidden code-green">6</div><!--
+         --><div class="hidden code-green">0</div><!--
+         --><div class="hidden code-green">0</div><!--
          --><div class="hidden code-blue">&quot;</div><!--
        --></div><!--
        --><div ref="contactCursor2" class="invisible inline-block border-r-2 border-yellow h-6 absolute" style="margin-top: -0.125rem"></div><!--
@@ -208,7 +210,7 @@
        --><div class="inline-block code-blue">&gt;</div><!--
      --></div><!--
    --></div>
-      <div ref="card" class="shadow-lg leading-normal self-end bg-white w-64 rounded -mt-16 relative" style="width: 20rem; font-family: Akagi Pro">
+      <div ref="card" class="shadow-lg leading-normal self-end bg-white w-64 rounded -mt-16 relative" style="width: 20rem;">
         <div ref="cardLarge" class="hidden p-6">
           <img ref="avatar" class="h-24 w-24 block mr-6 rounded-full" src="https://randomuser.me/api/portraits/women/17.jpg" alt="">
           <div ref="content" class="text-gray-800 text-left">
@@ -216,13 +218,13 @@
               <div class="inline-block relative">Erin Lindford</div>
             </h2>
             <div ref="role">
-              <div class="inline-block relative text-purple-600">Customer Support</div>
+              <div class="inline-block relative text-purple-500">Customer Support</div>
             </div>
             <div ref="email">
-              <div class="inline-block relative text-gray-700">erinlindford@example.com</div>
+              <div class="inline-block relative text-gray-600">erinlindford@example.com</div>
             </div>
             <div ref="phone">
-              <div class="inline-block relative text-gray-700">(555) 765-4321</div>
+              <div class="inline-block relative text-gray-600">(555) 765-4321</div>
             </div>
           </div>
         </div>
@@ -233,13 +235,13 @@
               <div class="inline-block relative">Erin Lindford</div>
             </h2>
             <div ref="role">
-              <div class="inline-block relative text-purple-600">Customer Support</div>
+              <div class="inline-block relative text-purple-500">Customer Support</div>
             </div>
             <div ref="email">
-              <div class="inline-block relative text-gray-700">erinlindford@example.com</div>
+              <div class="inline-block relative text-gray-600">erinlindford@example.com</div>
             </div>
             <div ref="phone">
-              <div class="inline-block relative text-gray-700">(555) 765-4321</div>
+              <div class="inline-block relative text-gray-600">(555) 765-4321</div>
             </div>
           </div>
         </div>
@@ -348,7 +350,7 @@
       animateRoleColor() {
         return tweenTo(this.$refs.roleCursor, .08, { visibility: 'visible'})
           .then(() => tweenStaggerTo(this.$refs.classRoleColor.children, 0.08, { display: 'inline-block' }, 0.08))
-          .then(() => tweenTo(this.$refs.role, 1, { color: '#9561e2', ease: Power4.easeOut }, '+=.25'))
+          .then(() => tweenTo(this.$refs.role, 1, { color: '#9f7aea', ease: Power4.easeOut }, '+=.25'))
           .then(() => tweenTo(this.$refs.roleCursor, .08, { visibility: 'hidden'}))
       },
       animateContactColors() {
@@ -362,8 +364,8 @@
           })
           .then(() => {
             return Promise.all([
-              tweenTo(this.$refs.email, 1, { color: '#8795a1', ease: Power4.easeOut }, '+=.25'),
-              tweenTo(this.$refs.phone, 1, { color: '#8795a1', ease: Power4.easeOut }, '+=.25'),
+              tweenTo(this.$refs.email, 1, { color: '#647287', ease: Power4.easeOut }, '+=.25'),
+              tweenTo(this.$refs.phone, 1, { color: '#647287', ease: Power4.easeOut }, '+=.25'),
             ])
           })
           .then(() => {
