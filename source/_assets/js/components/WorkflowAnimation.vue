@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto" style="width: 40rem; height: 28rem">
     <div class="flex flex-col">
-      <div class="code-white text-sm font-mono bg-black p-6 rounded leading-normal overflow-hidden" style="width: 36rem; line-height: 1.675">
+      <div class="code-white text-sm font-mono bg-gray-900 p-6 rounded leading-normal overflow-hidden" style="width: 36rem; line-height: 1.675">
         <div class="whitespace-no-wrap"><!--
        --><div class="inline-block code-blue">&lt;</div><!--
        --><div class="inline-block code-red">div&nbsp;</div><!--
