@@ -31,5 +31,8 @@
   },
   "browserslist": [
     "> 1%"
-  ]
+  ],
+  "dependencies": {
+    "gsap": "^2.1.2"
+  }
 }

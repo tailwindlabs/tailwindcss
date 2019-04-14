@@ -1,7 +1,7 @@
 const defaultConfig = require('tailwindcss/defaultConfig')
 
 module.exports = {
-  important: true,
+  // important: true,
   theme: {
     screens: {
       'sm': '576px',
