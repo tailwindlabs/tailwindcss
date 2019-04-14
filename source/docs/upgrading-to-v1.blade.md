@@ -47,7 +47,7 @@ yarn add -D tailwindcss@next
 
 <h3 class="no-toc">2. Update your config file</h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: All users, Effort: Moderate</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: All users, Effort: Moderate</p>
 
 This is really the big change in v1.0 — you can read all about the new config file format and motivation behind it in [the initial pull request](https://github.com/tailwindcss/tailwindcss/pull/637).
 
@@ -593,7 +593,7 @@ A perfect example of this is colors. The default color palette is completely new
 
 <h3 class="no-toc">3. Rename <code>tailwind.js</code> to <code>tailwind.config.js</code></h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: N/A, Effort: Trivial</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: N/A, Effort: Trivial</p>
 
 This is entirely optional but recommended — if you are using the old default config file name (`tailwind.js`), rename it to `tailwind.config.js`.
 
@@ -619,7 +619,7 @@ If you keep your config file in a different folder, you'll still need to provide
 
 <h3 class="no-toc">4. Replace <code>@tailwind preflight</code> with <code>@tailwind base</code></h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: All users, Effort: Trivial</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: All users, Effort: Trivial</p>
 
 One of the new features in v1.0 is the ability for plugins to register base styles. As a result, our `preflight` styles are actually just another core plugin now, and the general "bucket" for base styles has been renamed from `preflight` to `base`.
 
@@ -647,7 +647,7 @@ If you are using `postcss-import` and relying on our imports instead of the `@ta
 
 <h3 class="no-toc">5. Replace <code>config()</code> with <code>theme()</code></h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Low</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: Moderate, Effort: Low</p>
 
 The `config()` helper function that Tailwind makes available to your CSS files has been replaced with a new `theme()` function that is automatically scoped to the `theme` section of your config file and should work as a drop-in replacement:
 
@@ -663,7 +663,7 @@ A simple find and replace across your CSS files that switches `config(` to `them
 
 <h3 class="no-toc">6. Explicitly style any headings</h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Moderate</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: Moderate, Effort: Moderate</p>
 
 If you are using our `preflight` styles, all `h1-h6` elements are unstyled by default in v1.0.
 
@@ -688,7 +688,7 @@ This is a bit of an annoying change, but if it breaks your site, you could argue
 
 <h3 class="no-toc">7. Explicitly style any lists that should have bullets/numbers</h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Moderate</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: Moderate, Effort: Moderate</p>
 
 If you are using our `preflight` styles, all `ul` and `ol` elements are unstyled by default in v1.0.
 
@@ -723,7 +723,7 @@ ol {
 
 <h3 class="no-toc">8. Remove any usage of <code>.list-reset</code></h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Low</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: Moderate, Effort: Low</p>
 
 Since lists are now unstyled by default, `.list-reset` has been removed. You technically don't need to change anything, but you're encouraged to remove any usage of it as it's now just dead code:
 
@@ -745,7 +745,7 @@ This change only really affects you if you are _not_ using our `preflight` style
 
 <h3 class="no-toc">9. Replace <code>.pin-{side}</code> with <code>.{top|left|bottom|right|inset}-{value}</code></h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: High, Effort: Moderate</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: High, Effort: Moderate</p>
 
 Utilities like `.pin`, `.pin-x`, and `.pin-t` have been removed in favor of less cleverly named classes like `.top-0`, `.right-0`, etc.
 
@@ -781,7 +781,7 @@ This is an annoying change, sorry.
 
 <h3 class="no-toc">10. Replace <code>.roman</code> with <code>.not-italic</code></h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: Low, Effort: Low</p>
 
 Previously we used the name `.roman` for `font-style: normal` because of a bug in `postcss-selector-not` that prevented us from using `.not-italic`. That bug has been fixed, so this name has been changed.
 
@@ -796,7 +796,7 @@ I would be surprised if more than 5 people are even affected by this, I've never
 
 <h3 class="no-toc">11. Replace <code>.flex-no-grow/shrink</code> with <code>.flex-grow/shrink-0</code></h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: High, Effort: Low</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: High, Effort: Low</p>
 
 In order to make these utilities more easily customizable, their names have changed to match our existing conventions.
 
@@ -816,7 +816,7 @@ These utilities are also now customizable in the `theme.flexGrow` and `theme.fle
 
 <h3 class="no-toc">12. Explicitly add color and underline styles to links</h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: High, Effort: Moderate</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: High, Effort: Moderate</p>
 
 In v1.0, `a` tags automatically inherit the parent `color` and `text-decoration` styles which means that by default links are no longer blue and do not have an underline.
 
@@ -863,7 +863,7 @@ a {
 
 <h3 class="no-toc">13. Add <code>inline</code> to any replaced elements (<code>img</code>, <code>video</code>, etc.) that should be <code>display: block</code></h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Moderate</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: Moderate, Effort: Moderate</p>
 
 In v1.0, all replaced elements (like `img`, `svg`, `video`, `canvas`, `iframe`, etc.) are set to `display: block` by default. This is counter to the browser default which is `inline`.
 
@@ -881,7 +881,7 @@ I don't think this will actually affect many people or projects, as you almost a
 
 <h3 class="no-toc">14. Adjust the line-height and padding on your form elements</h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: High, Effort: Moderate</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: High, Effort: Moderate</p>
 
 **If you are already setting an explicit line-height on form elements, this change will not affect you.**
 
@@ -933,7 +933,7 @@ textarea {
 
 <h3 class="no-toc">15. Adjust the text color on your form elements</h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Moderate</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: Low, Effort: Moderate</p>
 
 **If you are already setting an explicit text color on form elements, this change will not affect you.**
 
@@ -960,7 +960,7 @@ You can fix this by setting a text color on form elements explicitly:
 
 <h3 class="no-toc">16. Double check your default font family</h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Trivial</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: Low, Effort: Trivial</p>
 
 **If you are already setting a default font family on your project (either with a class on `html`/`body` or using custom CSS), this change will not affect you.**
 
@@ -983,7 +983,7 @@ html {
 
 <h3 class="no-toc">17. Double check your default line-height</h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: Moderate, Effort: Moderate</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: Moderate, Effort: Moderate</p>
 
 **If you are already setting a default line-height on your project (either with a class on `html`/`body` or using custom CSS), this change will not affect you.**
 
@@ -1020,7 +1020,7 @@ These steps only affect users that are depending on the 0.x configuration file v
 
 <h3 class="no-toc mt-12">1. Update any usage of <code>text/bg/border-{color}</code> classes</h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: High</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: Low, Effort: High</p>
 
 **This change only affects you if you don't have a color palette defined in your config file or you are using Tailwind through a CDN.**
 
@@ -1061,7 +1061,7 @@ Again, this change only affects you if you do not have your own color palette sp
 
 <h3 class="no-toc">2. Replace <code>tracking-tight/wide</code> with `tracking-tighter/wider`</h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: Low, Effort: Low</p>
 
 **This change only affects you if you don't have a tracking/letter-spacing scale defined in your config file or you are using Tailwind through a CDN.**
 
@@ -1088,7 +1088,7 @@ If you started with a complete config file, your old scale will continue to work
 
 <h3 class="no-toc">3. Check your design against the updated default breakpoints</h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: Low, Effort: Low</p>
 
 **This change only affects you if you don't have `screens` defined in your config file or you are using Tailwind through a CDN.**
 
@@ -1109,7 +1109,7 @@ If you started with a complete config file, your old screens values will continu
 
 <h3 class="no-toc">4. Double check any usage of the default <code>shadow-{size}</code> utilities</h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: Low, Effort: Low</p>
 
 **This change only affects you if you don't have a box-shadow scale defined in your config file or you are using Tailwind through a CDN.**
 
@@ -1124,7 +1124,7 @@ If you started with a complete config file, your old box-shadow values will cont
 
 <h3 class="no-toc">5. Update any usage of the default <code>max-w-{size}</code> utilities</h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: Low, Effort: Low</p>
 
 **This change only affects you if you don't have a max-width scale defined in your config file or you are using Tailwind through a CDN.**
 
@@ -1144,7 +1144,7 @@ This step only affects users who have authored their own plugins.
 
 <h3 class="no-toc mt-6">Escape the class portion of any custom variants you have created</h3>
 
-<p class="italic font-normal text-gray-600 -mt-2">Impact: Low, Effort: Low</p>
+<p class="italic font-normal text-gray-600 mt-4">Impact: Low, Effort: Low</p>
 
 In v1.0, you are required to manually escape the class name portion of any selectors you create when adding a new variant using a plugin.
 
