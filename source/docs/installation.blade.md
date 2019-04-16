@@ -37,7 +37,7 @@ Use the `@@tailwind` directive to inject Tailwind's `base`, `components`, and `u
 
 Tailwind will swap these directives out at build time with all of its generated CSS.
 
-If you're using `postcss-import`, use our imports instead of the `@@tailwind` directive to avoid issues when importing any of your own additional files:
+If you're using `postcss-import` (or a tool that uses it under the hood, such as [Webpacker](https://github.com/rails/webpacker) for Rails), use our imports instead of the `@@tailwind` directive to avoid issues when importing any of your own additional files:
 
 ```css
 @@import "tailwindcss/base";
