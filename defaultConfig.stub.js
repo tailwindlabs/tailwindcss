@@ -673,7 +673,7 @@ module.exports = {
 
   /*
   |-----------------------------------------------------------------------------
-  | Padding                                https://tailwindcss.com/docs/padding
+  | Padding                                https://tailwindcss.com/docs/spacing
   |-----------------------------------------------------------------------------
   |
   | Here is where you define your padding utility sizes. These can be
@@ -708,7 +708,7 @@ module.exports = {
 
   /*
   |-----------------------------------------------------------------------------
-  | Margin                                  https://tailwindcss.com/docs/margin
+  | Margin                                  https://tailwindcss.com/docs/spacing
   |-----------------------------------------------------------------------------
   |
   | Here is where you define your margin utility sizes. These can be
