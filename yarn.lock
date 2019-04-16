@@ -25,15 +25,15 @@
     "@babel/highlight" "^7.0.0"
 
 "@babel/core@^7.0.0", "@babel/core@^7.1.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.4.0.tgz#248fd6874b7d755010bfe61f557461d4f446d9e9"
+  version "7.4.3"
+  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.4.3.tgz#198d6d3af4567be3989550d97e068de94503074f"
   dependencies:
     "@babel/code-frame" "^7.0.0"
     "@babel/generator" "^7.4.0"
-    "@babel/helpers" "^7.4.0"
-    "@babel/parser" "^7.4.0"
+    "@babel/helpers" "^7.4.3"
+    "@babel/parser" "^7.4.3"
     "@babel/template" "^7.4.0"
-    "@babel/traverse" "^7.4.0"
+    "@babel/traverse" "^7.4.3"
     "@babel/types" "^7.4.0"
     convert-source-map "^1.1.0"
     debug "^4.1.0"
@@ -221,12 +221,12 @@
     "@babel/traverse" "^7.1.0"
     "@babel/types" "^7.2.0"
 
-"@babel/helpers@^7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@babel/helpers/-/helpers-7.4.0.tgz#03392e52c4ce7ad2e7b1cc07d1aba867a8ce2e32"
+"@babel/helpers@^7.4.3":
+  version "7.4.3"
+  resolved "https://registry.yarnpkg.com/@babel/helpers/-/helpers-7.4.3.tgz#7b1d354363494b31cb9a2417ae86af32b7853a3b"
   dependencies:
     "@babel/template" "^7.4.0"
-    "@babel/traverse" "^7.4.0"
+    "@babel/traverse" "^7.4.3"
     "@babel/types" "^7.4.0"
 
 "@babel/highlight@^7.0.0":
@@ -247,9 +247,9 @@
     lodash "^4.17.10"
     v8flags "^3.1.1"
 
-"@babel/parser@^7.0.0", "@babel/parser@^7.1.0", "@babel/parser@^7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.4.0.tgz#6de669e73ac3a32c754280d0fef8fca6aad2c416"
+"@babel/parser@^7.0.0", "@babel/parser@^7.1.0", "@babel/parser@^7.4.0", "@babel/parser@^7.4.3":
+  version "7.4.3"
+  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.4.3.tgz#eb3ac80f64aa101c907d4ce5406360fe75b7895b"
 
 "@babel/plugin-proposal-async-generator-functions@^7.2.0":
   version "7.2.0"
@@ -604,15 +604,15 @@
     "@babel/parser" "^7.4.0"
     "@babel/types" "^7.4.0"
 
-"@babel/traverse@^7.0.0", "@babel/traverse@^7.1.0", "@babel/traverse@^7.3.4", "@babel/traverse@^7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.4.0.tgz#14006967dd1d2b3494cdd650c686db9daf0ddada"
+"@babel/traverse@^7.0.0", "@babel/traverse@^7.1.0", "@babel/traverse@^7.3.4", "@babel/traverse@^7.4.0", "@babel/traverse@^7.4.3":
+  version "7.4.3"
+  resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.4.3.tgz#1a01f078fc575d589ff30c0f71bf3c3d9ccbad84"
   dependencies:
     "@babel/code-frame" "^7.0.0"
     "@babel/generator" "^7.4.0"
     "@babel/helper-function-name" "^7.1.0"
     "@babel/helper-split-export-declaration" "^7.4.0"
-    "@babel/parser" "^7.4.0"
+    "@babel/parser" "^7.4.3"
     "@babel/types" "^7.4.0"
     debug "^4.1.0"
     globals "^11.1.0"
