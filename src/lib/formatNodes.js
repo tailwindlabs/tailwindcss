@@ -1,11 +1,12 @@
-function indentRecursive(node, indentLevel = 0) {
-  node.each && node.each((child, i) => {
-    if (!child.raws.before || child.raws.before.includes('\n')) {
-      child.raws.before = `${ node.type === 'rule' || i === 0 ? '\n' : '\n\n'}${'  '.repeat(indentLevel)}`
-    }
-    child.raws.after = `\n${'  '.repeat(indentLevel)}`
-    indentRecursive(child, indentLevel + 1)
-  })
+function indentRecursive(node, indent = 0) {
+  node.each &&
+    node.each((child, i) => {
+      if (!child.raws.before || child.raws.before.includes('\n')) {
+        child.raws.before = `\n${node.type !== 'rule' && i > 0 ? '\n' : ''}${'  '.repeat(indent)}`
+      }
+      child.raws.after = `\n${'  '.repeat(indent)}`
+      indentRecursive(child, indent + 1)
+    })
 }
 
 export default function formatNodes(root) {
