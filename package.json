@@ -46,7 +46,6 @@
     "lodash": "^4.17.11",
     "node-emoji": "^1.8.1",
     "normalize.css": "^8.0.1",
-    "perfectionist": "^2.4.0",
     "postcss": "^7.0.11",
     "postcss-functions": "^3.0.0",
     "postcss-js": "^2.0.0",
