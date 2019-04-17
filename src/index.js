@@ -3,10 +3,10 @@ import fs from 'fs'
 
 import _ from 'lodash'
 import postcss from 'postcss'
-import perfectionist from 'perfectionist'
 
 import registerConfigAsDependency from './lib/registerConfigAsDependency'
 import processTailwindFeatures from './processTailwindFeatures'
+import formatCSS from './lib/formatCSS'
 import resolveConfig from './util/resolveConfig'
 import { defaultConfigFile } from './constants'
 
@@ -53,16 +53,7 @@ const plugin = postcss.plugin('tailwind', config => {
   return postcss([
     ...plugins,
     processTailwindFeatures(getConfigFunction(resolvedConfigPath || config)),
-    perfectionist({
-      cascade: true,
-      colorShorthand: true,
-      indentSize: 2,
-      maxSelectorLength: 1,
-      maxValueLength: false,
-      trimLeadingZero: true,
-      trimTrailingZeros: true,
-      zeroLengthNoUnit: false,
-    }),
+    formatCSS,
   ])
 })
 
