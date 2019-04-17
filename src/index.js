@@ -6,7 +6,7 @@ import postcss from 'postcss'
 
 import registerConfigAsDependency from './lib/registerConfigAsDependency'
 import processTailwindFeatures from './processTailwindFeatures'
-import formatNodes from './lib/formatNodes'
+import formatCSS from './lib/formatCSS'
 import resolveConfig from './util/resolveConfig'
 import { defaultConfigFile } from './constants'
 
@@ -53,7 +53,7 @@ const plugin = postcss.plugin('tailwind', config => {
   return postcss([
     ...plugins,
     processTailwindFeatures(getConfigFunction(resolvedConfigPath || config)),
-    formatNodes,
+    formatCSS,
   ])
 })
 
