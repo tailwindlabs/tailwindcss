@@ -25,7 +25,7 @@ To get you started, Tailwind includes a generous palette of great looking colors
 <div class="flex flex-wrap -mx-2">
 
   <div class="px-2 w-full relative mt-4">
-    <h3 class="markdown mb-4">Black & White</h3>
+    <h3 class="markdown no-toc mb-4">Black & White</h3>
     <div class="-mx-2 -mt-5 flex flex-wrap">
       <div class="w-1/2 md:w-1/3 px-2">
         <div class="flex items-center mt-5">
@@ -109,7 +109,7 @@ To get you started, Tailwind includes a generous palette of great looking colors
 ])
 </div>
 
-### Customizing
+## Customizing
 
 The `theme.colors` property allows you to override Tailwind's default color palette.
 
