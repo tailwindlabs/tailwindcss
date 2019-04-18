@@ -28,3 +28,15 @@ test('passing only false removes all plugins', () => {
 
   expect(configuredPlugins).toEqual([])
 })
+
+test('passing an array whitelists plugins', () => {
+  const plugins = {
+    fontSize: () => 'fontSize',
+    display: () => 'display',
+    backgroundPosition: () => 'backgroundPosition',
+  }
+
+  const configuredPlugins = configurePlugins(['display'], plugins)
+
+  expect(configuredPlugins).toEqual(['display'])
+})
