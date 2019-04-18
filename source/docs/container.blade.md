@@ -76,11 +76,8 @@ If you'd like to center your containers by default or include default horizontal
 To center containers by default, set the `center` option to `true` in the `theme.container` section of your config file:
 
 ```js
-// ...
-
+// tailwind.config.js
 module.exports = {
-  // ...
-
   theme: {
     container: {
       center: true,
@@ -94,15 +91,12 @@ module.exports = {
 To add horizontal padding by default, specify the amount of padding you'd like using the `padding` option in the `theme.container` section of your config file:
 
 ```js
-// ...
-
+// tailwind.config.js
 module.exports = {
-  // ...
-
   theme: {
     container: {
       padding: '2rem',
-    }
+    },
   },
 }
 ```

@@ -498,7 +498,6 @@ module.exports = {
   variants: ['responsive', 'hover', 'focus'],
   plugins: [
     function ({ config, variants }) {
-
       config('variants.customPlugin')
       // => undefined
 
@@ -522,9 +521,9 @@ For example, here's a plugin *(extracted to its own module)* for creating simple
 // ./plugins/gradients.js
 const _ = require('lodash')
 
-module.exports = function({ addUtilities, e, config }) {
+module.exports = function({ addUtilities, e, config, variants }) {
   const gradients = config('theme.gradients', {})
-  const variants = config('variants.gradients', [])
+  const variants = variants('gradients', [])
 
   const utilities = _.map(gradients, ([start, end], name) => ({
     [`.bg-gradient-${e(name)}`]: {
