@@ -1,11 +1,11 @@
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.border-collapse': { 'border-collapse': 'collapse' },
         '.border-separate': { 'border-collapse': 'separate' },
       },
-      config('variants.borderCollapse')
+      variants('borderCollapse')
     )
   }
 }

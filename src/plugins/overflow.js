@@ -1,5 +1,5 @@
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.overflow-auto': { overflow: 'auto' },
@@ -17,7 +17,7 @@ export default function() {
         '.scrolling-touch': { '-webkit-overflow-scrolling': 'touch' },
         '.scrolling-auto': { '-webkit-overflow-scrolling': 'auto' },
       },
-      config('variants.overflow')
+      variants('overflow')
     )
   }
 }

@@ -1,11 +1,11 @@
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.pointer-events-none': { 'pointer-events': 'none' },
         '.pointer-events-auto': { 'pointer-events': 'auto' },
       },
-      config('variants.pointerEvents')
+      variants('pointerEvents')
     )
   }
 }

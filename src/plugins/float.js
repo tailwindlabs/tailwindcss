@@ -1,5 +1,5 @@
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.float-right': { float: 'right' },
@@ -11,7 +11,7 @@ export default function() {
           clear: 'both',
         },
       },
-      config('variants.float')
+      variants('float')
     )
   }
 }

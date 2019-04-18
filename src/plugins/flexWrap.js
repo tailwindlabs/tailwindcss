@@ -1,5 +1,5 @@
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.flex-wrap': {
@@ -12,7 +12,7 @@ export default function() {
           'flex-wrap': 'nowrap',
         },
       },
-      config('variants.flexWrap')
+      variants('flexWrap')
     )
   }
 }

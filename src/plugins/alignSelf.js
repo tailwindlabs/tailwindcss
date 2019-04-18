@@ -1,5 +1,5 @@
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.self-auto': {
@@ -18,7 +18,7 @@ export default function() {
           'align-self': 'stretch',
         },
       },
-      config('variants.alignSelf')
+      variants('alignSelf')
     )
   }
 }

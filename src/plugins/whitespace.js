@@ -1,5 +1,5 @@
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.whitespace-normal': { 'white-space': 'normal' },
@@ -8,7 +8,7 @@ export default function() {
         '.whitespace-pre-line': { 'white-space': 'pre-line' },
         '.whitespace-pre-wrap': { 'white-space': 'pre-wrap' },
       },
-      config('variants.whitespace')
+      variants('whitespace')
     )
   }
 }

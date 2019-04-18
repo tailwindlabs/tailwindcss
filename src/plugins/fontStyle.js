@@ -1,11 +1,11 @@
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.italic': { 'font-style': 'italic' },
         '.not-italic': { 'font-style': 'normal' },
       },
-      config('variants.fontStyle')
+      variants('fontStyle')
     )
   }
 }

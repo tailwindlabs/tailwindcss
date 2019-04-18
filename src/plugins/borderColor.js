@@ -2,7 +2,7 @@ import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
 
 export default function() {
-  return function({ addUtilities, e, config }) {
+  return function({ addUtilities, e, config, variants }) {
     const colors = flattenColorPalette(config('theme.borderColor'))
 
     const utilities = _.fromPairs(
@@ -16,6 +16,6 @@ export default function() {
       })
     )
 
-    addUtilities(utilities, config('variants.borderColor'))
+    addUtilities(utilities, variants('borderColor'))
   }
 }

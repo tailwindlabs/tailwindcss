@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, config }) {
+  return function({ addUtilities, e, config, variants }) {
     const generators = [
       (value, modifier) => ({
         [`.${e(`rounded${modifier}`)}`]: { borderRadius: `${value}` },
@@ -38,6 +38,6 @@ export default function() {
       })
     })
 
-    addUtilities(utilities, config('variants.borderRadius'))
+    addUtilities(utilities, variants('borderRadius'))
   }
 }

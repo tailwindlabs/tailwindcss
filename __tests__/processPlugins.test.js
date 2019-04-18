@@ -657,6 +657,91 @@ test('plugins can access the current config', () => {
     `)
 })
 
+test('plugins can access the variants config directly', () => {
+  const { components, utilities } = processPlugins(
+    [
+      function({ addUtilities, variants }) {
+        addUtilities(
+          {
+            '.object-fill': {
+              'object-fit': 'fill',
+            },
+            '.object-contain': {
+              'object-fit': 'contain',
+            },
+            '.object-cover': {
+              'object-fit': 'cover',
+            },
+          },
+          variants('objectFit')
+        )
+      },
+    ],
+    makeConfig({
+      variants: {
+        objectFit: ['responsive', 'focus', 'hover'],
+      },
+    })
+  )
+
+  expect(components.length).toBe(0)
+  expect(css(utilities)).toMatchCss(`
+    @variants responsive, focus, hover {
+      .object-fill {
+        object-fit: fill
+      }
+      .object-contain {
+        object-fit: contain
+      }
+      .object-cover {
+        object-fit: cover
+      }
+    }
+    `)
+})
+
+test('plugins apply all global variants when variants are configured globally', () => {
+  const { components, utilities } = processPlugins(
+    [
+      function({ addUtilities, variants }) {
+        addUtilities(
+          {
+            '.object-fill': {
+              'object-fit': 'fill',
+            },
+          },
+          variants('objectFit')
+        )
+        addUtilities(
+          {
+            '.rotate-90deg': {
+              transform: 'rotate(90deg)',
+            },
+          },
+          variants('rotate')
+        )
+      },
+    ],
+    makeConfig({
+      variants: ['responsive', 'focus', 'hover'],
+    })
+  )
+
+  expect(components.length).toBe(0)
+  expect(css(utilities)).toMatchCss(`
+    @variants responsive, focus, hover {
+      .object-fill {
+        object-fit: fill
+      }
+    }
+    @variants responsive, focus, hover {
+      .rotate-90deg {
+        transform: rotate(90deg)
+      }
+    }
+    `)
+})
+
 test('plugins can provide fallbacks to keys missing from the config', () => {
   const { components, utilities } = processPlugins(
     [
