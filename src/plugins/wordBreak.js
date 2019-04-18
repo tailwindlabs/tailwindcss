@@ -1,5 +1,5 @@
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.break-normal': {
@@ -15,7 +15,7 @@ export default function() {
           'white-space': 'nowrap',
         },
       },
-      config('variants.wordBreak')
+      variants('wordBreak')
     )
   }
 }

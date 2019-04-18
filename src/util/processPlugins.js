@@ -29,6 +29,13 @@ export default function(plugins, config) {
     plugin({
       postcss,
       config: (path, defaultValue) => _.get(config, path, defaultValue),
+      variants: (path, defaultValue) => {
+        if (_.isArray(config.variants)) {
+          return config.variants
+        }
+
+        return _.get(config.variants, path, defaultValue)
+      },
       e: escapeClassName,
       prefix: applyConfiguredPrefix,
       addUtilities: (utilities, options) => {

@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, config }) {
+  return function({ addUtilities, e, config, variants }) {
     const generators = [
       (size, modifier) => ({
         [`.${e(`inset-${modifier}`)}`]: {
@@ -27,6 +27,6 @@ export default function() {
       return _.flatMap(config('theme.inset'), generator)
     })
 
-    addUtilities(utilities, config('variants.inset'))
+    addUtilities(utilities, variants('inset'))
   }
 }

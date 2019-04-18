@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, config, e }) {
+  return function({ addUtilities, config, variants, e }) {
     const utilities = _.fromPairs(
       _.map(config('theme.letterSpacing'), (value, modifier) => {
         return [
@@ -13,6 +13,6 @@ export default function() {
       })
     )
 
-    addUtilities(utilities, config('variants.letterSpacing'))
+    addUtilities(utilities, variants('letterSpacing'))
   }
 }

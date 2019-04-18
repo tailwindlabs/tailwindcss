@@ -1,11 +1,11 @@
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.select-none': { 'user-select': 'none' },
         '.select-text': { 'user-select': 'text' },
       },
-      config('variants.userSelect')
+      variants('userSelect')
     )
   }
 }

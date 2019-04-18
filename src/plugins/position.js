@@ -1,5 +1,5 @@
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.static': { position: 'static' },
@@ -8,7 +8,7 @@ export default function() {
         '.relative': { position: 'relative' },
         '.sticky': { position: 'sticky' },
       },
-      config('variants.position')
+      variants('position')
     )
   }
 }

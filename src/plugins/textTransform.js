@@ -1,5 +1,5 @@
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.uppercase': { 'text-transform': 'uppercase' },
@@ -7,7 +7,7 @@ export default function() {
         '.capitalize': { 'text-transform': 'capitalize' },
         '.normal-case': { 'text-transform': 'none' },
       },
-      config('variants.textTransform')
+      variants('textTransform')
     )
   }
 }

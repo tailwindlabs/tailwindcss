@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, config }) {
+  return function({ addUtilities, e, config, variants }) {
     addUtilities(
       _.fromPairs(
         _.map(config('theme.flexGrow'), (value, modifier) => {
@@ -14,7 +14,7 @@ export default function() {
           ]
         })
       ),
-      config('variants.flexGrow')
+      variants('flexGrow')
     )
   }
 }

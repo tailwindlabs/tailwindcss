@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, config }) {
+  return function({ addUtilities, e, config, variants }) {
     const generators = [
       (size, modifier) => ({
         [`.${e(`p-${modifier}`)}`]: { padding: `${size}` },
@@ -22,6 +22,6 @@ export default function() {
       return _.flatMap(config('theme.padding'), generator)
     })
 
-    addUtilities(utilities, config('variants.padding'))
+    addUtilities(utilities, variants('padding'))
   }
 }

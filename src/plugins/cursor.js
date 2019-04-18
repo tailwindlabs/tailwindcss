@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, config }) {
+  return function({ addUtilities, e, config, variants }) {
     const utilities = _.fromPairs(
       _.map(config('theme.cursor'), (value, modifier) => {
         return [
@@ -13,6 +13,6 @@ export default function() {
       })
     )
 
-    addUtilities(utilities, config('variants.cursor'))
+    addUtilities(utilities, variants('cursor'))
   }
 }

@@ -1,5 +1,5 @@
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.resize-none': { resize: 'none' },
@@ -7,7 +7,7 @@ export default function() {
         '.resize-x': { resize: 'horizontal' },
         '.resize': { resize: 'both' },
       },
-      config('variants.resize')
+      variants('resize')
     )
   }
 }

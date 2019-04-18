@@ -1,10 +1,10 @@
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.outline-none': { outline: '0' },
       },
-      config('variants.outline')
+      variants('outline')
     )
   }
 }
