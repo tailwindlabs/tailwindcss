@@ -64,7 +64,7 @@ Use `.break-all` to add line breaks whenever necessary, without trying to preser
 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
 </p>
 @slot('code')
-<p class="break-words ...">...</p>
+<p class="break-all ...">...</p>
 @endslot
 @endcomponent
 
