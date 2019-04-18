@@ -28,6 +28,7 @@ Plugin functions receive a single object argument that can be [destructured](htt
 - `addVariant()`, for registering custom variants
 - `e()`, for escaping strings meant to be used in class names
 - `prefix()`, for manually applying the user's configured prefix to parts of a selector
+- `variants()`, for looking up values in the user's variants configuration
 - `config()`, for looking up values in the user's Tailwind configuration
 
 ## Adding utilities
@@ -137,6 +138,26 @@ module.exports = {
       }
 
       addUtilities(newUtilities, ['responsive', 'hover'])
+    }
+  ]
+}
+```
+
+If you'd like the user to provide the variants themselves under the `variants` section in their `tailwind.config.js` file, you can use the `variants()` function to get the variants they have configured:
+
+```js
+// tailwind.config.js
+module.exports = {
+  variants: {
+    customPlugin: ['responsive', 'hover'],
+  },
+  plugins: [
+    function({ addUtilities, variants }) {
+      const newUtilities = {
+        // ...
+      }
+
+      addUtilities(newUtilities, variants('customPlugin'))
     }
   ]
 }
@@ -448,6 +469,46 @@ module.exports = {
   ]
 }
 ```
+
+If you'd like to reference the user's `variants` configuration, it's recommended that you use the `variants()` function instead of the config function.
+
+<p class="flex items-center mt-8 mb-0">
+  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
+  <strong class="text-s  font-semibold text-gray-600">Don't use the config function to look up variants</strong>
+</p>
+
+```js
+addUtilities(newUtilities, config('variants.customPlugin'))
+```
+
+<p class="flex items-center mt-8 mb-0">
+  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-check"><circle class="text-green-200 fill-current" cx="12" cy="12" r="10" /><path class="text-green-600 fill-current" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
+  <strong class="text-s  font-semibold text-gray-600">Do use the variants function instead</strong>
+</p>
+
+```js
+addUtilities(newUtilities, variants('customPlugin'))
+```
+
+Since `variants` could simply be a global list of variants to configure for every plugin in the whole project, using the `variants()` function lets you easily respect the user's configuration without reimplementing that logic yourself.
+
+```js
+// tailwind.config.js
+module.exports = {
+  variants: ['responsive', 'hover', 'focus'],
+  plugins: [
+    function ({ config, variants }) {
+
+      config('variants.customPlugin')
+      // => undefined
+
+      variants('customPlugin')
+      // => ['reponsive', 'hover', 'focus']
+    }
+  ]
+}
+```
+
 
 ## Exposing options
 
