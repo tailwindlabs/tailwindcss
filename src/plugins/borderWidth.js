@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, config, variants }) {
+  return function({ addUtilities, e, theme, variants }) {
     const generators = [
       (value, modifier) => ({
         [`.${e(`border${modifier}`)}`]: { borderWidth: `${value}` },
@@ -15,7 +15,7 @@ export default function() {
     ]
 
     const utilities = _.flatMap(generators, generator => {
-      return _.flatMap(config('theme.borderWidth'), (value, modifier) => {
+      return _.flatMap(theme('borderWidth'), (value, modifier) => {
         return generator(value, modifier === 'default' ? '' : `-${modifier}`)
       })
     })

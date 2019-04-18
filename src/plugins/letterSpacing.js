@@ -1,9 +1,9 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, config, variants, e }) {
+  return function({ addUtilities, theme, variants, e }) {
     const utilities = _.fromPairs(
-      _.map(config('theme.letterSpacing'), (value, modifier) => {
+      _.map(theme('letterSpacing'), (value, modifier) => {
         return [
           `.${e(`tracking-${modifier}`)}`,
           {

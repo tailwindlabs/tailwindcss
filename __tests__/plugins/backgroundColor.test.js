@@ -37,15 +37,17 @@ test('colors can be a nested object', () => {
     },
   }
 
+  const getConfigValue = (path, defaultValue) => _.get(config, path, defaultValue)
   const pluginApi = {
-    config: (key, defaultValue) => _.get(config, key, defaultValue),
+    config: getConfigValue,
     e: escapeClassName,
+    theme: (path, defaultValue) => getConfigValue(`theme.${path}`, defaultValue),
     variants: (path, defaultValue) => {
       if (_.isArray(config.variants)) {
         return config.variants
       }
 
-      return _.get(config.variants, path, defaultValue)
+      return getConfigValue(`variants.${path}`, defaultValue)
     },
     addUtilities(utilities, variants) {
       addedUtilities.push({

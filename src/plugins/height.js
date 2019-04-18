@@ -1,9 +1,9 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, config, variants }) {
+  return function({ addUtilities, e, theme, variants }) {
     const utilities = _.fromPairs(
-      _.map(config('theme.height'), (value, modifier) => {
+      _.map(theme('height'), (value, modifier) => {
         return [
           `.${e(`h-${modifier}`)}`,
           {

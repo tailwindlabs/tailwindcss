@@ -1,9 +1,9 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, config, variants }) {
+  return function({ addUtilities, e, theme, variants }) {
     const utilities = _.fromPairs(
-      _.map(config('theme.listStyleType'), (value, modifier) => {
+      _.map(theme('listStyleType'), (value, modifier) => {
         return [
           `.${e(`list-${modifier}`)}`,
           {

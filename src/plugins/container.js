@@ -23,8 +23,8 @@ function extractMinWidths(breakpoints) {
 }
 
 module.exports = function() {
-  return function({ addComponents, config }) {
-    const minWidths = extractMinWidths(config('theme.container.screens', config('theme.screens')))
+  return function({ addComponents, theme }) {
+    const minWidths = extractMinWidths(theme('container.screens', theme('screens')))
 
     const atRules = _.map(minWidths, minWidth => {
       return {
@@ -40,13 +40,11 @@ module.exports = function() {
       {
         '.container': Object.assign(
           { width: '100%' },
-          config('theme.container.center', false)
-            ? { marginRight: 'auto', marginLeft: 'auto' }
-            : {},
-          _.has(config('theme.container', {}), 'padding')
+          theme('container.center', false) ? { marginRight: 'auto', marginLeft: 'auto' } : {},
+          _.has(theme('container', {}), 'padding')
             ? {
-                paddingRight: config('theme.container.padding'),
-                paddingLeft: config('theme.container.padding'),
+                paddingRight: theme('container.padding'),
+                paddingLeft: theme('container.padding'),
               }
             : {}
         ),

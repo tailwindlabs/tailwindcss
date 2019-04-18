@@ -24,17 +24,19 @@ export default function(plugins, config) {
   const applyConfiguredPrefix = selector => {
     return prefixSelector(config.prefix, selector)
   }
+  const getConfigValue = (path, defaultValue) => _.get(config, path, defaultValue)
 
   plugins.forEach(plugin => {
     plugin({
       postcss,
-      config: (path, defaultValue) => _.get(config, path, defaultValue),
+      config: getConfigValue,
+      theme: (path, defaultValue) => getConfigValue(`theme.${path}`, defaultValue),
       variants: (path, defaultValue) => {
         if (_.isArray(config.variants)) {
           return config.variants
         }
 
-        return _.get(config.variants, path, defaultValue)
+        return getConfigValue(`variants.${path}`, defaultValue)
       },
       e: escapeClassName,
       prefix: applyConfiguredPrefix,
