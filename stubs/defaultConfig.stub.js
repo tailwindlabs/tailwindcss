@@ -163,14 +163,7 @@ module.exports = {
         '"Noto Color Emoji"',
       ],
       serif: ['Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
-      mono: [
-        'Menlo',
-        'Monaco',
-        'Consolas',
-        '"Liberation Mono"',
-        '"Courier New"',
-        'monospace',
-      ],
+      mono: ['Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', '"Courier New"', 'monospace'],
     },
     fontSize: {
       xs: '0.75rem',
@@ -373,7 +366,7 @@ module.exports = {
       '0': 0,
       auto: 'auto',
     },
-    container: {}
+    container: {},
   },
   variants: {
     appearance: ['responsive'],

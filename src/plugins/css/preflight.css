@@ -129,7 +129,7 @@ textarea::placeholder {
 }
 
 button,
-[role="button"] {
+[role='button'] {
   cursor: pointer;
 }
 
@@ -186,7 +186,16 @@ pre,
 code,
 kbd,
 samp {
-  font-family: theme('fontFamily.mono', SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+  font-family: theme(
+    'fontFamily.mono',
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    'Liberation Mono',
+    'Courier New',
+    monospace
+  );
 }
 
 /**
