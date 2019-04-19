@@ -291,6 +291,15 @@ module.exports = {
 
 The `corePlugins` section lets you completely disable classes that Tailwind would normally generate by default if you don't need them for your project.
 
+If you don't provide any `corePlugins` configuration, all core plugins will be enabled by default:
+
+```js
+// tailwind.config.js
+module.exports = {}
+```
+
+If you'd like to disable specific core plugins, provide an object for `corePlugins` that sets those plugins to `false`:
+
 ```js
 // tailwind.config.js
 module.exports = {
@@ -301,6 +310,30 @@ module.exports = {
   }
 }
 ```
+
+If you'd like to whitelist which core plugins should be enabled, provide an array that includes a list of the core plugins you'd like to use:
+
+```js
+// tailwind.config.js
+module.exports = {
+  corePlugins: [
+    'margin',
+    'padding',
+    'backgroundColor',
+    // ...
+  ]
+}
+```
+
+If you'd like to disable all of Tailwind's core plugins and simply use Tailwind as a tool for processing your own custom plugins, provide an empty array:
+
+```js
+// tailwind.config.js
+module.exports = {
+  corePlugins: []
+}
+```
+
 
 Here's a list of every core plugin for reference:
 
