@@ -5,9 +5,7 @@ test('it prefixes classes with the provided prefix', () => {
 })
 
 test('it handles a function as the prefix', () => {
-  const prefixFunc = selector => {
-    return selector === '.foo' ? 'tw-' : ''
-  }
+  const prefixFunc = selector => (selector === '.foo' ? 'tw-' : '')
 
   expect(prefix(prefixFunc, '.foo')).toEqual('.tw-foo')
   expect(prefix(prefixFunc, '.bar')).toEqual('.bar')

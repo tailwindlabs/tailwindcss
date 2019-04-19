@@ -5,42 +5,32 @@ import chalk from 'chalk'
  *
  * @param {...string} msgs
  */
-export function bold(...msgs) {
-  return chalk.bold(...msgs)
-}
+export const bold = (...msgs) => chalk.bold(...msgs)
 
 /**
  * Applies colors to inform
  *
  * @param {...string} msgs
  */
-export function info(...msgs) {
-  return chalk.bold.cyan(...msgs)
-}
+export const info = (...msgs) => chalk.bold.cyan(...msgs)
 
 /**
  * Applies colors to signify error
  *
  * @param {...string} msgs
  */
-export function error(...msgs) {
-  return chalk.bold.red(...msgs)
-}
+export const error = (...msgs) => chalk.bold.red(...msgs)
 
 /**
  * Applies colors to represent a command
  *
  * @param {...string} msgs
  */
-export function command(...msgs) {
-  return chalk.bold.magenta(...msgs)
-}
+export const command = (...msgs) => chalk.bold.magenta(...msgs)
 
 /**
  * Applies colors to represent a file
  *
  * @param {...string} msgs
  */
-export function file(...msgs) {
-  return chalk.bold.magenta(...msgs)
-}
+export const file = (...msgs) => chalk.bold.magenta(...msgs)

@@ -3,7 +3,7 @@ import postcss from 'postcss'
 import postcssNested from 'postcss-nested'
 import postcssJs from 'postcss-js'
 
-export default function parseObjectStyles(styles) {
+const parseObjectStyles = styles => {
   if (!Array.isArray(styles)) {
     return parseObjectStyles([styles])
   }
@@ -13,3 +13,5 @@ export default function parseObjectStyles(styles) {
     style => postcss([postcssNested]).process(style, { parser: postcssJs }).root.nodes
   )
 }
+
+export default parseObjectStyles

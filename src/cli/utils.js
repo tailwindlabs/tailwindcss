@@ -11,7 +11,7 @@ import packageJson from '../../package.json'
  * @param {string[]} cliArgs
  * @return {string[]}
  */
-export function parseCliParams(cliArgs) {
+export const parseCliParams = cliArgs => {
   const firstOptionIndex = cliArgs.findIndex(cliArg => cliArg.startsWith('-'))
 
   return firstOptionIndex > -1 ? cliArgs.slice(0, firstOptionIndex) : cliArgs
@@ -24,7 +24,7 @@ export function parseCliParams(cliArgs) {
  * @param {object} [optionMap]
  * @return {object}
  */
-export function parseCliOptions(cliArgs, optionMap = {}) {
+export const parseCliOptions = (cliArgs, optionMap = {}) => {
   let options = {}
   let currentOption = []
 
@@ -49,14 +49,14 @@ export function parseCliOptions(cliArgs, optionMap = {}) {
  *
  * @param {...string} [msgs]
  */
-export function log(...msgs) {
+export const log = (...msgs) => {
   console.log('  ', ...msgs)
 }
 
 /**
  * Prints application header to console.
  */
-export function header() {
+export const header = () => {
   log()
   log(colors.bold(packageJson.name), colors.info(packageJson.version))
 }
@@ -64,7 +64,7 @@ export function header() {
 /**
  * Prints application footer to console.
  */
-export function footer() {
+export const footer = () => {
   log()
 }
 
@@ -73,7 +73,7 @@ export function footer() {
  *
  * @param {...string} [msgs]
  */
-export function error(...msgs) {
+export const error = (...msgs) => {
   log()
   console.error('  ', emoji.no, colors.error(msgs.join(' ')))
 }
@@ -83,7 +83,7 @@ export function error(...msgs) {
  *
  * @param {...string} [msgs]
  */
-export function die(...msgs) {
+export const die = (...msgs) => {
   msgs.length && error(...msgs)
   footer()
   process.exit(1) // eslint-disable-line
@@ -95,9 +95,7 @@ export function die(...msgs) {
  * @param {string} path
  * @return {boolean}
  */
-export function exists(path) {
-  return existsSync(path)
-}
+export const exists = path => existsSync(path)
 
 /**
  * Copies file source to destination.
@@ -105,7 +103,7 @@ export function exists(path) {
  * @param {string} source
  * @param {string} destination
  */
-export function copyFile(source, destination) {
+export const copyFile = (source, destination) => {
   copyFileSync(source, destination)
 }
 
@@ -115,9 +113,7 @@ export function copyFile(source, destination) {
  * @param {string} path
  * @return {string}
  */
-export function readFile(path) {
-  return readFileSync(path, 'utf-8')
-}
+export const readFile = path => readFileSync(path, 'utf-8')
 
 /**
  * Writes content to file.
@@ -126,7 +122,7 @@ export function readFile(path) {
  * @param {string} content
  * @return {string}
  */
-export function writeFile(path, content) {
+export const writeFile = (path, content) => {
   ensureFileSync(path)
 
   return outputFileSync(path, content)
@@ -138,6 +134,4 @@ export function writeFile(path, content) {
  * @param {string} path
  * @return {string}
  */
-export function getSimplePath(path) {
-  return startsWith(path, './') ? path.slice(2) : path
-}
+export const getSimplePath = path => (startsWith(path, './') ? path.slice(2) : path)

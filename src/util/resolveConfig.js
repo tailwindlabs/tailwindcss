@@ -4,12 +4,11 @@ import defaults from 'lodash/defaults'
 import map from 'lodash/map'
 import get from 'lodash/get'
 
-function value(valueToResolve, ...args) {
-  return isFunction(valueToResolve) ? valueToResolve(...args) : valueToResolve
-}
+const value = (valueToResolve, ...args) =>
+  isFunction(valueToResolve) ? valueToResolve(...args) : valueToResolve
 
-function mergeExtensions({ extend, ...theme }) {
-  return mergeWith(theme, extend, (themeValue, extensions) => {
+const mergeExtensions = ({ extend, ...theme }) =>
+  mergeWith(theme, extend, (themeValue, extensions) => {
     if (!isFunction(themeValue) && !isFunction(extensions)) {
       return {
         ...themeValue,
@@ -22,28 +21,27 @@ function mergeExtensions({ extend, ...theme }) {
       ...value(extensions, resolveThemePath),
     })
   })
-}
 
-function resolveFunctionKeys(object) {
+const resolveFunctionKeys = object => {
   const resolveObjectPath = (key, defaultValue) => {
     const val = get(object, key, defaultValue)
     return isFunction(val) ? val(resolveObjectPath) : val
   }
 
-  return Object.keys(object).reduce((resolved, key) => {
-    return {
+  return Object.keys(object).reduce(
+    (resolved, key) => ({
       ...resolved,
       [key]: isFunction(object[key]) ? object[key](resolveObjectPath) : object[key],
-    }
-  }, {})
+    }),
+    {}
+  )
 }
 
-export default function resolveConfig(configs) {
-  return defaults(
+export default configs =>
+  defaults(
     {
       theme: resolveFunctionKeys(mergeExtensions(defaults({}, ...map(configs, 'theme')))),
       variants: defaults({}, ...map(configs, 'variants')),
     },
     ...configs
   )
-}

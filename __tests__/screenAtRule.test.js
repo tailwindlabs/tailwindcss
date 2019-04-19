@@ -2,9 +2,7 @@ import postcss from 'postcss'
 import plugin from '../src/lib/substituteScreenAtRules'
 import config from '../stubs/defaultConfig.stub.js'
 
-function run(input, opts = config) {
-  return postcss([plugin(opts)]).process(input, { from: undefined })
-}
+const run = (input, opts = config) => postcss([plugin(opts)]).process(input, { from: undefined })
 
 test('it can generate media queries from configured screen sizes', () => {
   const input = `

@@ -1,5 +1,3 @@
 import _ from 'lodash'
 
-export default function cloneNodes(nodes) {
-  return _.map(nodes, node => node.clone())
-}
+export default nodes => _.map(nodes, node => node.clone())

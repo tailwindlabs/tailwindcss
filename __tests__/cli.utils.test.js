@@ -2,7 +2,7 @@ import * as utils from '../src/cli/utils'
 
 describe('cli utils', () => {
   describe('parseCliParams', () => {
-    it('parses CLI parameters', () => {
+    test('parses CLI parameters', () => {
       const result = utils.parseCliParams(['a', 'b', '-c', 'd'])
 
       expect(result).toEqual(['a', 'b'])
@@ -10,13 +10,13 @@ describe('cli utils', () => {
   })
 
   describe('parseCliOptions', () => {
-    it('parses CLI options', () => {
+    test('parses CLI options', () => {
       const result = utils.parseCliOptions(['a', '-b', 'c'], { test: ['b'] })
 
       expect(result).toEqual({ test: ['c'] })
     })
 
-    it('parses multiple types of options', () => {
+    test('parses multiple types of options', () => {
       const result = utils.parseCliOptions(['a', '-b', 'c', '--test', 'd', '-test', 'e'], {
         test: ['test', 'b'],
       })
@@ -24,31 +24,31 @@ describe('cli utils', () => {
       expect(result).toEqual({ test: ['c', 'd', 'e'] })
     })
 
-    it('ignores unknown options', () => {
+    test('ignores unknown options', () => {
       const result = utils.parseCliOptions(['a', '-b', 'c'], {})
 
       expect(result).toEqual({})
     })
 
-    it('maps options', () => {
+    test('maps options', () => {
       const result = utils.parseCliOptions(['a', '-b', 'c', '-d', 'e'], { test: ['b', 'd'] })
 
       expect(result).toEqual({ test: ['c', 'e'] })
     })
 
-    it('parses undefined options', () => {
+    test('parses undefined options', () => {
       const result = utils.parseCliOptions(['a'], { test: ['b'] })
 
       expect(result).toEqual({ test: undefined })
     })
 
-    it('parses flags', () => {
+    test('parses flags', () => {
       const result = utils.parseCliOptions(['a', '-b'], { test: ['b'] })
 
       expect(result).toEqual({ test: [] })
     })
 
-    it('accepts multiple values per option', () => {
+    test('accepts multiple values per option', () => {
       const result = utils.parseCliOptions(['a', '-b', 'c', 'd', '-e', 'f', '-g', 'h'], {
         test: ['b', 'g'],
       })
@@ -58,13 +58,13 @@ describe('cli utils', () => {
   })
 
   describe('getSimplePath', () => {
-    it('strips leading ./', () => {
+    test('strips leading ./', () => {
       const result = utils.getSimplePath('./test')
 
       expect(result).toEqual('test')
     })
 
-    it('returns unchanged path if it does not begin with ./', () => {
+    test('returns unchanged path if it does not begin with ./', () => {
       const result = utils.getSimplePath('../test')
 
       expect(result).toEqual('../test')

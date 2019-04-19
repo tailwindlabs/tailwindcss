@@ -3,12 +3,10 @@ import postcss from 'postcss'
 import processPlugins from '../src/util/processPlugins'
 import container from '../src/plugins/container'
 
-function css(nodes) {
-  return postcss.root({ nodes }).toString()
-}
+const css = nodes => postcss.root({ nodes }).toString()
 
-function config(overrides) {
-  return _.defaultsDeep(overrides, {
+const config = overrides =>
+  _.defaultsDeep(overrides, {
     theme: {
       screens: {
         sm: '576px',
@@ -19,7 +17,6 @@ function config(overrides) {
     },
     prefix: '',
   })
-}
 
 test.only('options are not required', () => {
   const { components } = processPlugins([container()], config())

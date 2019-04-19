@@ -2,22 +2,19 @@ import _ from 'lodash'
 import _postcss from 'postcss'
 import processPlugins from '../src/util/processPlugins'
 
-function css(nodes) {
-  return _postcss.root({ nodes }).toString()
-}
+const css = nodes => _postcss.root({ nodes }).toString()
 
-function makeConfig(overrides) {
-  return _.defaultsDeep(overrides, {
+const makeConfig = overrides =>
+  _.defaultsDeep(overrides, {
     prefix: '',
     important: false,
     separator: ':',
   })
-}
 
 test('plugins can create utilities with object syntax', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      ({ addUtilities }) => {
         addUtilities({
           '.object-fill': {
             'object-fit': 'fill',
@@ -53,7 +50,7 @@ test('plugins can create utilities with object syntax', () => {
 test('plugins can create utilities with arrays of objects', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      ({ addUtilities }) => {
         addUtilities([
           {
             '.object-fill': {
@@ -95,7 +92,7 @@ test('plugins can create utilities with arrays of objects', () => {
 test('plugins can create utilities with raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities, postcss }) {
+      ({ addUtilities, postcss }) => {
         addUtilities([
           postcss.rule({ selector: '.object-fill' }).append([
             postcss.decl({
@@ -140,7 +137,7 @@ test('plugins can create utilities with raw PostCSS nodes', () => {
 test('plugins can create utilities with mixed object styles and PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities, postcss }) {
+      ({ addUtilities, postcss }) => {
         addUtilities([
           {
             '.object-fill': {
@@ -184,7 +181,7 @@ test('plugins can create utilities with mixed object styles and PostCSS nodes', 
 test('plugins can create utilities with variants', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      ({ addUtilities }) => {
         addUtilities(
           {
             '.object-fill': {
@@ -223,7 +220,7 @@ test('plugins can create utilities with variants', () => {
 test('plugins can create components with object syntax', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents }) {
+      ({ addComponents }) => {
         addComponents({
           '.btn-blue': {
             backgroundColor: 'blue',
@@ -257,7 +254,7 @@ test('plugins can create components with object syntax', () => {
 test('plugins can add base styles with object syntax', () => {
   const { base } = processPlugins(
     [
-      function({ addBase }) {
+      ({ addBase }) => {
         addBase({
           img: {
             maxWidth: '100%',
@@ -284,7 +281,7 @@ test('plugins can add base styles with object syntax', () => {
 test('plugins can add base styles with raw PostCSS nodes', () => {
   const { base } = processPlugins(
     [
-      function({ addBase, postcss }) {
+      ({ addBase, postcss }) => {
         addBase([
           postcss.rule({ selector: 'img' }).append([
             postcss.decl({
@@ -317,7 +314,7 @@ test('plugins can add base styles with raw PostCSS nodes', () => {
 test('plugins can create components with raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents, postcss }) {
+      ({ addComponents, postcss }) => {
         addComponents([
           postcss.rule({ selector: '.btn-blue' }).append([
             postcss.decl({
@@ -366,7 +363,7 @@ test('plugins can create components with raw PostCSS nodes', () => {
 test('plugins can create components with mixed object styles and raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents, postcss }) {
+      ({ addComponents, postcss }) => {
         addComponents([
           postcss.rule({ selector: '.btn-blue' }).append([
             postcss.decl({
@@ -414,7 +411,7 @@ test('plugins can create components with mixed object styles and raw PostCSS nod
 test('plugins can create components with media queries with object syntax', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents }) {
+      ({ addComponents }) => {
         addComponents({
           '.container': {
             width: '100%',
@@ -466,7 +463,7 @@ test('plugins can create components with media queries with object syntax', () =
 test('media queries can be defined multiple times using objects-in-array syntax', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents }) {
+      ({ addComponents }) => {
         addComponents([
           {
             '.container': {
@@ -520,7 +517,7 @@ test('media queries can be defined multiple times using objects-in-array syntax'
 test('plugins can create nested rules', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents }) {
+      ({ addComponents }) => {
         addComponents({
           '.btn-blue': {
             backgroundColor: 'blue',
@@ -576,7 +573,7 @@ test('plugins can create nested rules', () => {
 test('plugins can create rules with escaped selectors', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ e, addUtilities }) {
+      ({ e, addUtilities }) => {
         addUtilities({
           [`.${e('top-1/4')}`]: {
             top: '25%',
@@ -600,7 +597,7 @@ test('plugins can create rules with escaped selectors', () => {
 test('plugins can access the current config', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents, config }) {
+      ({ addComponents, config }) => {
         const containerClasses = [
           {
             '.container': {
@@ -660,7 +657,7 @@ test('plugins can access the current config', () => {
 test('plugins can access the variants config directly', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities, variants }) {
+      ({ addUtilities, variants }) => {
         addUtilities(
           {
             '.object-fill': {
@@ -703,7 +700,7 @@ test('plugins can access the variants config directly', () => {
 test('plugins apply all global variants when variants are configured globally', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities, variants }) {
+      ({ addUtilities, variants }) => {
         addUtilities(
           {
             '.object-fill': {
@@ -745,7 +742,7 @@ test('plugins apply all global variants when variants are configured globally', 
 test('plugins can provide fallbacks to keys missing from the config', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents, config }) {
+      ({ addComponents, config }) => {
         addComponents({
           '.btn': {
             borderRadius: config('borderRadius.default', '.25rem'),
@@ -774,7 +771,7 @@ test('plugins can provide fallbacks to keys missing from the config', () => {
 test('variants are optional when adding utilities', () => {
   const { utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      ({ addUtilities }) => {
         addUtilities({
           '.border-collapse': {
             'border-collapse': 'collapse',
@@ -796,7 +793,7 @@ test('variants are optional when adding utilities', () => {
 test('plugins can add multiple sets of utilities and components', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities, addComponents }) {
+      ({ addUtilities, addComponents }) => {
         addComponents({
           '.card': {
             padding: '1rem',
@@ -854,7 +851,7 @@ test('plugins can add multiple sets of utilities and components', () => {
 test('plugins respect prefix and important options by default when adding utilities', () => {
   const { utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      ({ addUtilities }) => {
         addUtilities({
           '.rotate-90': {
             transform: 'rotate(90deg)',
@@ -880,7 +877,7 @@ test('plugins respect prefix and important options by default when adding utilit
 test("component declarations respect the 'prefix' option by default", () => {
   const { components } = processPlugins(
     [
-      function({ addComponents }) {
+      ({ addComponents }) => {
         addComponents({
           '.btn-blue': {
             backgroundColor: 'blue',
@@ -903,7 +900,7 @@ test("component declarations respect the 'prefix' option by default", () => {
 test('all selectors in a rule are prefixed', () => {
   const { utilities, components } = processPlugins(
     [
-      function({ addUtilities, addComponents }) {
+      ({ addUtilities, addComponents }) => {
         addUtilities({
           '.rotate-90, .rotate-1\\/4': {
             transform: 'rotate(90deg)',
@@ -939,7 +936,7 @@ test('all selectors in a rule are prefixed', () => {
 test("component declarations can optionally ignore 'prefix' option", () => {
   const { components } = processPlugins(
     [
-      function({ addComponents }) {
+      ({ addComponents }) => {
         addComponents(
           {
             '.btn-blue': {
@@ -965,7 +962,7 @@ test("component declarations can optionally ignore 'prefix' option", () => {
 test("component declarations are not affected by the 'important' option", () => {
   const { components } = processPlugins(
     [
-      function({ addComponents }) {
+      ({ addComponents }) => {
         addComponents({
           '.btn-blue': {
             backgroundColor: 'blue',
@@ -988,7 +985,7 @@ test("component declarations are not affected by the 'important' option", () => 
 test("plugins can apply the user's chosen prefix to components manually", () => {
   const { components } = processPlugins(
     [
-      function({ addComponents, prefix }) {
+      ({ addComponents, prefix }) => {
         addComponents(
           {
             [prefix('.btn-blue')]: {
@@ -1014,7 +1011,7 @@ test("plugins can apply the user's chosen prefix to components manually", () => 
 test('prefix can optionally be ignored for utilities', () => {
   const { utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      ({ addUtilities }) => {
         addUtilities(
           {
             '.rotate-90': {
@@ -1045,7 +1042,7 @@ test('prefix can optionally be ignored for utilities', () => {
 test('important can optionally be ignored for utilities', () => {
   const { utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      ({ addUtilities }) => {
         addUtilities(
           {
             '.rotate-90': {
@@ -1076,7 +1073,7 @@ test('important can optionally be ignored for utilities', () => {
 test('variants can still be specified when ignoring prefix and important options', () => {
   const { utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      ({ addUtilities }) => {
         addUtilities(
           {
             '.rotate-90': {
@@ -1109,7 +1106,7 @@ test('variants can still be specified when ignoring prefix and important options
 test('prefix will prefix all classes in a selector', () => {
   const { components } = processPlugins(
     [
-      function({ addComponents, prefix }) {
+      ({ addComponents, prefix }) => {
         addComponents(
           {
             [prefix('.btn-blue .w-1\\/4 > h1.text-xl + a .bar')]: {

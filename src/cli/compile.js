@@ -23,7 +23,7 @@ const defaultOptions = {
  * @param {CompileOptions} options
  * @return {Promise}
  */
-export default function compile(options = {}) {
+export default (options = {}) => {
   const config = { ...defaultOptions, ...options }
   const css = utils.readFile(config.inputFile)
 

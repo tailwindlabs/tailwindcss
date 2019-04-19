@@ -10,10 +10,9 @@ describe('cli compile', () => {
   const outputFile = 'output.css'
   const plugins = [tailwind(), autoprefixer]
 
-  it('compiles CSS file', () => {
-    return compile({ inputFile, outputFile, plugins }).then(result => {
+  test('compiles CSS file', () =>
+    compile({ inputFile, outputFile, plugins }).then(result => {
       expect(result.css).toContain('.example')
       expect(result.css).toContain('-ms-input-placeholder')
-    })
-  })
+    }))
 })

@@ -5,8 +5,8 @@ import tailwind from '../src/index'
 import { defaultConfigFile } from '../src/constants'
 import inTempDirectory from '../jest/runInTempDirectory'
 
-test('it uses the values from the custom config file', () => {
-  return postcss([tailwind(path.resolve(`${__dirname}/fixtures/custom-config.js`))])
+test('it uses the values from the custom config file', () =>
+  postcss([tailwind(path.resolve(`${__dirname}/fixtures/custom-config.js`))])
     .process(
       `
         @responsive {
@@ -29,11 +29,10 @@ test('it uses the values from the custom config file', () => {
         }
       `
       expect(result.css).toMatchCss(expected)
-    })
-})
+    }))
 
-test('custom config can be passed as an object', () => {
-  return postcss([
+test('custom config can be passed as an object', () =>
+  postcss([
     tailwind({
       theme: {
         screens: {
@@ -65,11 +64,10 @@ test('custom config can be passed as an object', () => {
       `
 
       expect(result.css).toMatchCss(expected)
-    })
-})
+    }))
 
-test('tailwind.config.js is picked up by default', () => {
-  return inTempDirectory(() => {
+test('tailwind.config.js is picked up by default', () =>
+  inTempDirectory(() => {
     fs.writeFileSync(
       path.resolve(defaultConfigFile),
       `module.exports = {
@@ -104,5 +102,4 @@ test('tailwind.config.js is picked up by default', () => {
           }
         `)
       })
-  })
-})
+  }))

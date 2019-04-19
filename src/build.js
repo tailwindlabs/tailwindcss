@@ -1,14 +1,16 @@
+import CleanCSS from 'clean-css'
 import fs from 'fs'
 import postcss from 'postcss'
 import tailwind from '..'
-import CleanCSS from 'clean-css'
 
-function buildDistFile(filename) {
-  return new Promise((resolve, reject) => {
+const buildDistFile = filename =>
+  new Promise((resolve, reject) => {
     console.log(`Processing ./${filename}.css...`)
 
     fs.readFile(`./${filename}.css`, (err, css) => {
-      if (err) throw err
+      if (err) {
+        throw err
+      }
 
       return postcss([tailwind(), require('autoprefixer')])
         .process(css, {
@@ -21,6 +23,7 @@ function buildDistFile(filename) {
           if (result.map) {
             fs.writeFileSync(`./dist/${filename}.css.map`, result.map)
           }
+
           return result
         })
         .then(result => {
@@ -34,7 +37,6 @@ function buildDistFile(filename) {
         })
     })
   })
-}
 
 console.info('Building Tailwind!')
 

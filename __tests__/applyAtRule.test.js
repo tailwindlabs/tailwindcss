@@ -12,11 +12,10 @@ const { utilities: defaultUtilities } = processPlugins(
   resolvedDefaultConfig
 )
 
-function run(input, config = resolvedDefaultConfig, utilities = defaultUtilities) {
-  return postcss([substituteClassApplyAtRules(config, utilities)]).process(input, {
+const run = (input, config = resolvedDefaultConfig, utilities = defaultUtilities) =>
+  postcss([substituteClassApplyAtRules(config, utilities)]).process(input, {
     from: undefined,
   })
-}
 
 test("it copies a class's declarations into itself", () => {
   const output = '.a { color: red; } .b { color: red; }'
@@ -104,11 +103,10 @@ test('cssnext custom property sets are preserved', () => {
   })
 })
 
-test('it fails if the class does not exist', () => {
-  return run('.b { @apply .a; }').catch(e => {
+test('it fails if the class does not exist', () =>
+  run('.b { @apply .a; }').catch(e => {
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
-  })
-})
+  }))
 
 test('applying classes that are defined in a media query is not supported', () => {
   const input = `
@@ -231,9 +229,7 @@ test('you can apply utility classes without using the given prefix when using a 
   const config = resolveConfig([
     {
       ...defaultConfig,
-      prefix: () => {
-        return 'tw-'
-      },
+      prefix: () => 'tw-',
     },
   ])
 

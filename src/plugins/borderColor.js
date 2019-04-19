@@ -1,21 +1,17 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
 
-export default function() {
-  return function({ addUtilities, e, theme, variants }) {
-    const colors = flattenColorPalette(theme('borderColor'))
+export default () => ({ addUtilities, e, theme, variants }) => {
+  const colors = flattenColorPalette(theme('borderColor'))
 
-    const utilities = _.fromPairs(
-      _.map(_.omit(colors, 'default'), (value, modifier) => {
-        return [
-          `.${e(`border-${modifier}`)}`,
-          {
-            'border-color': value,
-          },
-        ]
-      })
-    )
+  const utilities = _.fromPairs(
+    _.map(_.omit(colors, 'default'), (value, modifier) => [
+      `.${e(`border-${modifier}`)}`,
+      {
+        'border-color': value,
+      },
+    ])
+  )
 
-    addUtilities(utilities, variants('borderColor'))
-  }
+  addUtilities(utilities, variants('borderColor'))
 }

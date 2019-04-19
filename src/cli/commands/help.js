@@ -13,7 +13,7 @@ const PADDING_SIZE = 3
 /**
  * Prints general help.
  */
-export function forApp() {
+export const forApp = () => {
   const pad = Math.max(...map(commands, 'usage.length')) + PADDING_SIZE
 
   utils.log()
@@ -31,7 +31,7 @@ export function forApp() {
  *
  * @param {object} command
  */
-export function forCommand(command) {
+export const forCommand = command => {
   utils.log()
   utils.log('Usage:')
   utils.log('  ', colors.bold(constants.cli, command.usage))
@@ -55,7 +55,7 @@ export function forCommand(command) {
  *
  * @param {string} commandName
  */
-export function invalidCommand(commandName) {
+export const invalidCommand = commandName => {
   utils.error('Invalid command:', colors.command(commandName))
   forApp()
   utils.die()
@@ -67,8 +67,8 @@ export function invalidCommand(commandName) {
  * @param {string[]} cliParams
  * @return {Promise}
  */
-export function run(cliParams) {
-  return new Promise(resolve => {
+export const run = cliParams =>
+  new Promise(resolve => {
     utils.header()
 
     const commandName = cliParams[0]
@@ -82,4 +82,3 @@ export function run(cliParams) {
 
     resolve()
   })
-}

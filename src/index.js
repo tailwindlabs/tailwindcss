@@ -12,7 +12,7 @@ import { defaultConfigFile } from './constants'
 
 import defaultConfig from '../stubs/defaultConfig.stub.js'
 
-function resolveConfigPath(filePath) {
+const resolveConfigPath = filePath => {
   if (_.isObject(filePath)) {
     return undefined
   }

@@ -1,9 +1,7 @@
 import parseObjectStyles from '../src/util/parseObjectStyles'
 import postcss from 'postcss'
 
-function css(nodes) {
-  return postcss.root({ nodes }).toString()
-}
+const css = nodes => postcss.root({ nodes }).toString()
 
 test('it parses simple single class definitions', () => {
   const result = parseObjectStyles({

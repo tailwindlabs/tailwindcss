@@ -1,7 +1,7 @@
 import parser from 'postcss-selector-parser'
 import tap from 'lodash/tap'
 
-export default function(prefix, selector) {
+export default (prefix, selector) => {
   const getPrefix = typeof prefix === 'function' ? prefix : () => prefix
 
   return parser(selectors => {

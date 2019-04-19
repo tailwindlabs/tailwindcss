@@ -3,11 +3,10 @@ import plugin from '../src/lib/substituteVariantsAtRules'
 import processPlugins from '../src/util/processPlugins'
 import config from '../stubs/defaultConfig.stub.js'
 
-function run(input, opts = config) {
-  return postcss([plugin(opts, processPlugins(opts.plugins, opts))]).process(input, {
+const run = (input, opts = config) =>
+  postcss([plugin(opts, processPlugins(opts.plugins, opts))]).process(input, {
     from: undefined,
   })
-}
 
 test('it can generate hover variants', () => {
   const input = `
@@ -264,7 +263,7 @@ test('plugin variants can modify rules using the raw PostCSS API', () => {
     ...config,
     plugins: [
       ...config.plugins,
-      function({ addVariant }) {
+      ({ addVariant }) => {
         addVariant('important', ({ container }) => {
           container.walkRules(rule => {
             rule.selector = `.\\!${rule.selector.slice(1)}`
@@ -300,11 +299,11 @@ test('plugin variants can modify selectors with a simplified API', () => {
     ...config,
     plugins: [
       ...config.plugins,
-      function({ addVariant, e }) {
+      ({ addVariant, e }) => {
         addVariant('first-child', ({ modifySelectors, separator }) => {
-          modifySelectors(({ className }) => {
-            return `.${e(`first-child${separator}${className}`)}:first-child`
-          })
+          modifySelectors(
+            ({ className }) => `.${e(`first-child${separator}${className}`)}:first-child`
+          )
         })
       },
     ],
@@ -333,11 +332,11 @@ test('plugin variants that use modify selectors need to manually escape the clas
     ...config,
     plugins: [
       ...config.plugins,
-      function({ addVariant, e }) {
+      ({ addVariant, e }) => {
         addVariant('first-child', ({ modifySelectors, separator }) => {
-          modifySelectors(({ className }) => {
-            return `.${e(`first-child${separator}${className}`)}:first-child`
-          })
+          modifySelectors(
+            ({ className }) => `.${e(`first-child${separator}${className}`)}:first-child`
+          )
         })
       },
     ],
@@ -368,7 +367,7 @@ test('plugin variants can wrap rules in another at-rule using the raw PostCSS AP
     ...config,
     plugins: [
       ...config.plugins,
-      function({ addVariant, e }) {
+      ({ addVariant, e }) => {
         addVariant('supports-grid', ({ container, separator }) => {
           const supportsRule = postcss.atRule({ name: 'supports', params: '(display: grid)' })
           supportsRule.nodes = container.nodes

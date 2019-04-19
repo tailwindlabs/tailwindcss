@@ -7,7 +7,7 @@ import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
 import wrapWithVariants from '../util/wrapWithVariants'
 
-function parseStyles(styles) {
+const parseStyles = styles => {
   if (!Array.isArray(styles)) {
     return parseStyles([styles])
   }
@@ -15,15 +15,14 @@ function parseStyles(styles) {
   return _.flatMap(styles, style => (style instanceof Node ? style : parseObjectStyles(style)))
 }
 
-export default function(plugins, config) {
+export default (plugins, config) => {
   const pluginBaseStyles = []
   const pluginComponents = []
   const pluginUtilities = []
   const pluginVariantGenerators = {}
 
-  const applyConfiguredPrefix = selector => {
-    return prefixSelector(config.prefix, selector)
-  }
+  const applyConfiguredPrefix = selector => prefixSelector(config.prefix, selector)
+
   const getConfigValue = (path, defaultValue) => _.get(config, path, defaultValue)
 
   plugins.forEach(plugin => {

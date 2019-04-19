@@ -9,7 +9,7 @@ function indentRecursive(node, indent = 0) {
     })
 }
 
-export default function formatNodes(root) {
+export default root => {
   indentRecursive(root)
   root.first.raws.before = ''
 }

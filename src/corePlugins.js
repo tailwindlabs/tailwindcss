@@ -67,8 +67,8 @@ import zIndex from './plugins/zIndex'
 
 import configurePlugins from './util/configurePlugins'
 
-export default function({ corePlugins: corePluginConfig }) {
-  return configurePlugins(corePluginConfig, {
+export default ({ corePlugins: corePluginConfig }) =>
+  configurePlugins(corePluginConfig, {
     preflight,
     container,
     appearance,
@@ -136,4 +136,3 @@ export default function({ corePlugins: corePluginConfig }) {
     width,
     zIndex,
   })
-}

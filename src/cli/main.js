@@ -7,8 +7,8 @@ import * as utils from './utils'
  * @param {string[]} cliArgs
  * @return {Promise}
  */
-export default function run(cliArgs) {
-  return new Promise((resolve, reject) => {
+export default cliArgs =>
+  new Promise((resolve, reject) => {
     const params = utils.parseCliParams(cliArgs)
     const command = commands[params[0]]
     const options = command ? utils.parseCliOptions(cliArgs, command.optionMap) : {}
@@ -19,4 +19,3 @@ export default function run(cliArgs) {
 
     commandPromise.then(resolve).catch(reject)
   })
-}

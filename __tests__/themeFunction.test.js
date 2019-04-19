@@ -1,9 +1,7 @@
 import postcss from 'postcss'
 import plugin from '../src/lib/evaluateTailwindFunctions'
 
-function run(input, opts = {}) {
-  return postcss([plugin(opts)]).process(input, { from: undefined })
-}
+const run = (input, opts = {}) => postcss([plugin(opts)]).process(input, { from: undefined })
 
 test('it looks up values in the theme using dot notation', () => {
   const input = `

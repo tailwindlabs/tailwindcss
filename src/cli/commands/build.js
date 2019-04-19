@@ -39,7 +39,7 @@ export const optionMap = {
  *
  * @param {...string} [msgs]
  */
-function stop(...msgs) {
+const stop = (...msgs) => {
   utils.header()
   utils.error(...msgs)
   utils.die()
@@ -50,7 +50,7 @@ function stop(...msgs) {
  *
  * @param {...string} [msgs]
  */
-function stopWithHelp(...msgs) {
+const stopWithHelp = (...msgs) => {
   utils.header()
   utils.error(...msgs)
   commands.help.forCommand(commands.build)
@@ -63,9 +63,8 @@ function stopWithHelp(...msgs) {
  * @param {CompileOptions} compileOptions
  * @return {Promise}
  */
-function buildToStdout(compileOptions) {
-  return compile(compileOptions).then(result => process.stdout.write(result.css))
-}
+const buildToStdout = compileOptions =>
+  compile(compileOptions).then(result => process.stdout.write(result.css))
 
 /**
  * Compiles CSS file and writes it to a file.
@@ -74,7 +73,7 @@ function buildToStdout(compileOptions) {
  * @param {int[]} startTime
  * @return {Promise}
  */
-function buildToFile(compileOptions, startTime) {
+const buildToFile = (compileOptions, startTime) => {
   const inputFileSimplePath = utils.getSimplePath(compileOptions.inputFile)
   const outputFileSimplePath = utils.getSimplePath(compileOptions.outputFile)
 
@@ -102,8 +101,8 @@ function buildToFile(compileOptions, startTime) {
  * @param {object} cliOptions
  * @return {Promise}
  */
-export function run(cliParams, cliOptions) {
-  return new Promise((resolve, reject) => {
+export const run = (cliParams, cliOptions) =>
+  new Promise((resolve, reject) => {
     const startTime = process.hrtime()
     const inputFile = cliParams[0]
     const configFile = cliOptions.config && cliOptions.config[0]
@@ -131,4 +130,3 @@ export function run(cliParams, cliOptions) {
 
     buildPromise.then(resolve).catch(reject)
   })
-}

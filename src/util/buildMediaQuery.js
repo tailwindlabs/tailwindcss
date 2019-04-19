@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-export default function buildMediaQuery(screens) {
+export default screens => {
   if (_.isString(screens)) {
     screens = { min: screens }
   }

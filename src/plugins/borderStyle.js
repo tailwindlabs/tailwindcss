@@ -1,21 +1,19 @@
-export default function() {
-  return function({ addUtilities, variants }) {
-    addUtilities(
-      {
-        '.border-solid': {
-          'border-style': 'solid',
-        },
-        '.border-dashed': {
-          'border-style': 'dashed',
-        },
-        '.border-dotted': {
-          'border-style': 'dotted',
-        },
-        '.border-none': {
-          'border-style': 'none',
-        },
+export default () => ({ addUtilities, variants }) => {
+  addUtilities(
+    {
+      '.border-solid': {
+        'border-style': 'solid',
       },
-      variants('borderStyle')
-    )
-  }
+      '.border-dashed': {
+        'border-style': 'dashed',
+      },
+      '.border-dotted': {
+        'border-style': 'dotted',
+      },
+      '.border-none': {
+        'border-style': 'none',
+      },
+    },
+    variants('borderStyle')
+  )
 }

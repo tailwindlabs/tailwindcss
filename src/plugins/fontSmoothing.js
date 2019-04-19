@@ -1,17 +1,15 @@
-export default function() {
-  return function({ addUtilities, variants }) {
-    addUtilities(
-      {
-        '.antialiased': {
-          '-webkit-font-smoothing': 'antialiased',
-          '-moz-osx-font-smoothing': 'grayscale',
-        },
-        '.subpixel-antialiased': {
-          '-webkit-font-smoothing': 'auto',
-          '-moz-osx-font-smoothing': 'auto',
-        },
+export default () => ({ addUtilities, variants }) => {
+  addUtilities(
+    {
+      '.antialiased': {
+        '-webkit-font-smoothing': 'antialiased',
+        '-moz-osx-font-smoothing': 'grayscale',
       },
-      variants('fontSmoothing')
-    )
-  }
+      '.subpixel-antialiased': {
+        '-webkit-font-smoothing': 'auto',
+        '-moz-osx-font-smoothing': 'auto',
+      },
+    },
+    variants('fontSmoothing')
+  )
 }

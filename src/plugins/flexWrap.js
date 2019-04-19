@@ -1,18 +1,16 @@
-export default function() {
-  return function({ addUtilities, variants }) {
-    addUtilities(
-      {
-        '.flex-wrap': {
-          'flex-wrap': 'wrap',
-        },
-        '.flex-wrap-reverse': {
-          'flex-wrap': 'wrap-reverse',
-        },
-        '.flex-no-wrap': {
-          'flex-wrap': 'nowrap',
-        },
+export default () => ({ addUtilities, variants }) => {
+  addUtilities(
+    {
+      '.flex-wrap': {
+        'flex-wrap': 'wrap',
       },
-      variants('flexWrap')
-    )
-  }
+      '.flex-wrap-reverse': {
+        'flex-wrap': 'wrap-reverse',
+      },
+      '.flex-no-wrap': {
+        'flex-wrap': 'nowrap',
+      },
+    },
+    variants('flexWrap')
+  )
 }
