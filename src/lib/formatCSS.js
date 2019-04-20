@@ -11,5 +11,7 @@ function indentRecursive(node, indent = 0) {
 
 export default function formatNodes(root) {
   indentRecursive(root)
-  root.first.raws.before = ''
+  if (root.first) {
+    root.first.raws.before = ''
+  }
 }
