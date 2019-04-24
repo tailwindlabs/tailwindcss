@@ -305,20 +305,11 @@ module.exports = {
       screen: '100vh',
     },
     padding: theme => theme('spacing'),
-    margin: theme => {
-      const negativeSpacing = Object.keys(theme('spacing'))
-        .filter(key => theme('spacing')[key] !== '0')
-        .reduce((negativeSpacing, key) => ({
-          ...negativeSpacing,
-          [`-${key}`]: `-${theme('spacing')[key]}`
-        }), {})
-
-      return {
-        auto: 'auto',
-        ...theme('spacing'),
-        ...negativeSpacing,
-      }
-    },
+    margin: (theme, { negative }) => ({
+      auto: 'auto',
+      ...theme('spacing'),
+      ...negative(theme('spacing')),
+    }),
     objectPosition: {
       bottom: 'bottom',
       center: 'center',
