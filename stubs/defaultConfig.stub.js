@@ -1,5 +1,3 @@
-const _ = require('lodash')
-
 module.exports = {
   prefix: '',
   important: false,
@@ -310,9 +308,10 @@ module.exports = {
     margin: theme => {
       const negativeSpacing = Object.keys(theme('spacing'))
         .filter(key => theme('spacing')[key] !== '0')
-        .reduce((negativeSpacing, key) => {
-          return { ...negativeSpacing, [`-${key}`]: `-${theme('spacing')[key]}` }
-        }, {})
+        .reduce((negativeSpacing, key) => ({
+          ...negativeSpacing,
+          [`-${key}`]: `-${theme('spacing')[key]}`
+        }), {})
 
       return {
         auto: 'auto',
