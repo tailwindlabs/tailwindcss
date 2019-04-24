@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 module.exports = {
   prefix: '',
   important: false,
@@ -305,8 +307,19 @@ module.exports = {
       screen: '100vh',
     },
     padding: theme => theme('spacing'),
-    margin: theme => ({ auto: 'auto', ...theme('spacing') }),
-    negativeMargin: theme => theme('spacing'),
+    margin: theme => {
+      const negativeSpacing = Object.keys(theme('spacing'))
+        .filter(key => theme('spacing')[key] !== '0')
+        .reduce((negativeSpacing, key) => {
+          return { ...negativeSpacing, [`-${key}`]: `-${theme('spacing')[key]}` }
+        }, {})
+
+      return {
+        auto: 'auto',
+        ...theme('spacing'),
+        ...negativeSpacing,
+      }
+    },
     objectPosition: {
       bottom: 'bottom',
       center: 'center',
