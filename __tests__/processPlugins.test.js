@@ -633,6 +633,30 @@ test('plugins can create class names accounting for special naming rules easily'
     `)
 })
 
+test('the second parameter in className is optional', () => {
+  const { components, utilities } = processPlugins(
+    [
+      function({ className, addUtilities }) {
+        addUtilities({
+          [className('rotate')]: {
+            transform: 'rotate(180deg)',
+          },
+        })
+      },
+    ],
+    makeConfig()
+  )
+
+  expect(components.length).toBe(0)
+  expect(css(utilities)).toMatchCss(`
+    @variants {
+      .rotate {
+        transform: rotate(180deg)
+      }
+    }
+    `)
+})
+
 test('plugins can access the current config', () => {
   const { components, utilities } = processPlugins(
     [

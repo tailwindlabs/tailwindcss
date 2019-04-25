@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import escapeClassName from './escapeClassName'
 
-export default function className(base, modifier) {
+export default function className(base, modifier = 'default') {
   const name = (() => {
     if (modifier === 'default') {
       return base
