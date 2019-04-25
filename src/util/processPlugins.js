@@ -2,6 +2,7 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import Node from 'postcss/lib/node'
 import escapeClassName from '../util/escapeClassName'
+import className from '../util/className'
 import generateVariantFunction from '../util/generateVariantFunction'
 import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
@@ -39,6 +40,7 @@ export default function(plugins, config) {
         return getConfigValue(`variants.${path}`, defaultValue)
       },
       e: escapeClassName,
+      className,
       prefix: applyConfiguredPrefix,
       addUtilities: (utilities, options) => {
         const defaultOptions = { variants: [], respectPrefix: true, respectImportant: true }

@@ -5,14 +5,17 @@ import map from 'lodash/map'
 import get from 'lodash/get'
 
 const utils = {
-  negative: function (scale) {
+  negative(scale) {
     return Object.keys(scale)
       .filter(key => scale[key] !== '0')
-      .reduce((negativeScale, key) => ({
-        ...negativeScale,
-        [`-${key}`]: `-${scale[key]}`
-      }), {})
-  }
+      .reduce(
+        (negativeScale, key) => ({
+          ...negativeScale,
+          [`-${key}`]: `-${scale[key]}`,
+        }),
+        {}
+      )
+  },
 }
 
 function value(valueToResolve, ...args) {

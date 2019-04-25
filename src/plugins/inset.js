@@ -1,10 +1,10 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants }) {
+  return function({ addUtilities, className, theme, variants }) {
     const generators = [
       (size, modifier) => ({
-        [`.${e(`inset-${modifier}`)}`]: {
+        [className('inset', modifier)]: {
           top: `${size}`,
           right: `${size}`,
           bottom: `${size}`,
@@ -12,14 +12,14 @@ export default function() {
         },
       }),
       (size, modifier) => ({
-        [`.${e(`inset-y-${modifier}`)}`]: { top: `${size}`, bottom: `${size}` },
-        [`.${e(`inset-x-${modifier}`)}`]: { right: `${size}`, left: `${size}` },
+        [className('inset-y', modifier)]: { top: `${size}`, bottom: `${size}` },
+        [className('inset-x', modifier)]: { right: `${size}`, left: `${size}` },
       }),
       (size, modifier) => ({
-        [`.${e(`top-${modifier}`)}`]: { top: `${size}` },
-        [`.${e(`right-${modifier}`)}`]: { right: `${size}` },
-        [`.${e(`bottom-${modifier}`)}`]: { bottom: `${size}` },
-        [`.${e(`left-${modifier}`)}`]: { left: `${size}` },
+        [className('top', modifier)]: { top: `${size}` },
+        [className('right', modifier)]: { right: `${size}` },
+        [className('bottom', modifier)]: { bottom: `${size}` },
+        [className('left', modifier)]: { left: `${size}` },
       }),
     ]
 
