@@ -7095,11 +7095,11 @@ video {
 }
 
 .tracking-tighter {
-  letter-spacing: -.05em !important;
+  letter-spacing: -0.05em !important;
 }
 
 .tracking-tight {
-  letter-spacing: -.025em !important;
+  letter-spacing: -0.025em !important;
 }
 
 .tracking-normal {
@@ -13832,11 +13832,11 @@ video {
   }
 
   .sm\:tracking-tighter {
-    letter-spacing: -.05em !important;
+    letter-spacing: -0.05em !important;
   }
 
   .sm\:tracking-tight {
-    letter-spacing: -.025em !important;
+    letter-spacing: -0.025em !important;
   }
 
   .sm\:tracking-normal {
@@ -20570,11 +20570,11 @@ video {
   }
 
   .md\:tracking-tighter {
-    letter-spacing: -.05em !important;
+    letter-spacing: -0.05em !important;
   }
 
   .md\:tracking-tight {
-    letter-spacing: -.025em !important;
+    letter-spacing: -0.025em !important;
   }
 
   .md\:tracking-normal {
@@ -27308,11 +27308,11 @@ video {
   }
 
   .lg\:tracking-tighter {
-    letter-spacing: -.05em !important;
+    letter-spacing: -0.05em !important;
   }
 
   .lg\:tracking-tight {
-    letter-spacing: -.025em !important;
+    letter-spacing: -0.025em !important;
   }
 
   .lg\:tracking-normal {
@@ -34046,11 +34046,11 @@ video {
   }
 
   .xl\:tracking-tighter {
-    letter-spacing: -.05em !important;
+    letter-spacing: -0.05em !important;
   }
 
   .xl\:tracking-tight {
-    letter-spacing: -.025em !important;
+    letter-spacing: -0.025em !important;
   }
 
   .xl\:tracking-normal {
