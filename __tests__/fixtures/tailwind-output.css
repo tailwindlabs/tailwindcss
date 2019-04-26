@@ -3346,23 +3346,23 @@ video {
   align-items: stretch;
 }
 
-.self-auto {
+.align-self-auto {
   align-self: auto;
 }
 
-.self-start {
+.align-self-start {
   align-self: flex-start;
 }
 
-.self-end {
+.align-self-end {
   align-self: flex-end;
 }
 
-.self-center {
+.align-self-center {
   align-self: center;
 }
 
-.self-stretch {
+.align-self-stretch {
   align-self: stretch;
 }
 
@@ -10099,23 +10099,23 @@ video {
     align-items: stretch;
   }
 
-  .sm\:self-auto {
+  .sm\:align-self-auto {
     align-self: auto;
   }
 
-  .sm\:self-start {
+  .sm\:align-self-start {
     align-self: flex-start;
   }
 
-  .sm\:self-end {
+  .sm\:align-self-end {
     align-self: flex-end;
   }
 
-  .sm\:self-center {
+  .sm\:align-self-center {
     align-self: center;
   }
 
-  .sm\:self-stretch {
+  .sm\:align-self-stretch {
     align-self: stretch;
   }
 
@@ -16837,23 +16837,23 @@ video {
     align-items: stretch;
   }
 
-  .md\:self-auto {
+  .md\:align-self-auto {
     align-self: auto;
   }
 
-  .md\:self-start {
+  .md\:align-self-start {
     align-self: flex-start;
   }
 
-  .md\:self-end {
+  .md\:align-self-end {
     align-self: flex-end;
   }
 
-  .md\:self-center {
+  .md\:align-self-center {
     align-self: center;
   }
 
-  .md\:self-stretch {
+  .md\:align-self-stretch {
     align-self: stretch;
   }
 
@@ -23575,23 +23575,23 @@ video {
     align-items: stretch;
   }
 
-  .lg\:self-auto {
+  .lg\:align-self-auto {
     align-self: auto;
   }
 
-  .lg\:self-start {
+  .lg\:align-self-start {
     align-self: flex-start;
   }
 
-  .lg\:self-end {
+  .lg\:align-self-end {
     align-self: flex-end;
   }
 
-  .lg\:self-center {
+  .lg\:align-self-center {
     align-self: center;
   }
 
-  .lg\:self-stretch {
+  .lg\:align-self-stretch {
     align-self: stretch;
   }
 
@@ -30313,23 +30313,23 @@ video {
     align-items: stretch;
   }
 
-  .xl\:self-auto {
+  .xl\:align-self-auto {
     align-self: auto;
   }
 
-  .xl\:self-start {
+  .xl\:align-self-start {
     align-self: flex-start;
   }
 
-  .xl\:self-end {
+  .xl\:align-self-end {
     align-self: flex-end;
   }
 
-  .xl\:self-center {
+  .xl\:align-self-center {
     align-self: center;
   }
 
-  .xl\:self-stretch {
+  .xl\:align-self-stretch {
     align-self: stretch;
   }
 

@@ -3346,23 +3346,23 @@ video {
   align-items: stretch !important;
 }
 
-.self-auto {
+.align-self-auto {
   align-self: auto !important;
 }
 
-.self-start {
+.align-self-start {
   align-self: flex-start !important;
 }
 
-.self-end {
+.align-self-end {
   align-self: flex-end !important;
 }
 
-.self-center {
+.align-self-center {
   align-self: center !important;
 }
 
-.self-stretch {
+.align-self-stretch {
   align-self: stretch !important;
 }
 
@@ -10099,23 +10099,23 @@ video {
     align-items: stretch !important;
   }
 
-  .sm\:self-auto {
+  .sm\:align-self-auto {
     align-self: auto !important;
   }
 
-  .sm\:self-start {
+  .sm\:align-self-start {
     align-self: flex-start !important;
   }
 
-  .sm\:self-end {
+  .sm\:align-self-end {
     align-self: flex-end !important;
   }
 
-  .sm\:self-center {
+  .sm\:align-self-center {
     align-self: center !important;
   }
 
-  .sm\:self-stretch {
+  .sm\:align-self-stretch {
     align-self: stretch !important;
   }
 
@@ -16837,23 +16837,23 @@ video {
     align-items: stretch !important;
   }
 
-  .md\:self-auto {
+  .md\:align-self-auto {
     align-self: auto !important;
   }
 
-  .md\:self-start {
+  .md\:align-self-start {
     align-self: flex-start !important;
   }
 
-  .md\:self-end {
+  .md\:align-self-end {
     align-self: flex-end !important;
   }
 
-  .md\:self-center {
+  .md\:align-self-center {
     align-self: center !important;
   }
 
-  .md\:self-stretch {
+  .md\:align-self-stretch {
     align-self: stretch !important;
   }
 
@@ -23575,23 +23575,23 @@ video {
     align-items: stretch !important;
   }
 
-  .lg\:self-auto {
+  .lg\:align-self-auto {
     align-self: auto !important;
   }
 
-  .lg\:self-start {
+  .lg\:align-self-start {
     align-self: flex-start !important;
   }
 
-  .lg\:self-end {
+  .lg\:align-self-end {
     align-self: flex-end !important;
   }
 
-  .lg\:self-center {
+  .lg\:align-self-center {
     align-self: center !important;
   }
 
-  .lg\:self-stretch {
+  .lg\:align-self-stretch {
     align-self: stretch !important;
   }
 
@@ -30313,23 +30313,23 @@ video {
     align-items: stretch !important;
   }
 
-  .xl\:self-auto {
+  .xl\:align-self-auto {
     align-self: auto !important;
   }
 
-  .xl\:self-start {
+  .xl\:align-self-start {
     align-self: flex-start !important;
   }
 
-  .xl\:self-end {
+  .xl\:align-self-end {
     align-self: flex-end !important;
   }
 
-  .xl\:self-center {
+  .xl\:align-self-center {
     align-self: center !important;
   }
 
-  .xl\:self-stretch {
+  .xl\:align-self-stretch {
     align-self: stretch !important;
   }
 
