@@ -1,26 +1,27 @@
 import _ from 'lodash'
+import prefixNegativeModifiers from '../util/prefixNegativeModifiers'
 
 export default function() {
-  return function({ addUtilities, className, theme, variants }) {
+  return function({ addUtilities, e, theme, variants }) {
     const generators = [
       (size, modifier) => ({
-        [className('m', modifier)]: { margin: `${size}` },
+        [`.${e(prefixNegativeModifiers('m', modifier))}`]: { margin: `${size}` },
       }),
       (size, modifier) => ({
-        [className('my', modifier)]: {
+        [`.${e(prefixNegativeModifiers('my', modifier))}`]: {
           'margin-top': `${size}`,
           'margin-bottom': `${size}`,
         },
-        [className('mx', modifier)]: {
+        [`.${e(prefixNegativeModifiers('mx', modifier))}`]: {
           'margin-left': `${size}`,
           'margin-right': `${size}`,
         },
       }),
       (size, modifier) => ({
-        [className('mt', modifier)]: { 'margin-top': `${size}` },
-        [className('mr', modifier)]: { 'margin-right': `${size}` },
-        [className('mb', modifier)]: { 'margin-bottom': `${size}` },
-        [className('ml', modifier)]: { 'margin-left': `${size}` },
+        [`.${e(prefixNegativeModifiers('mt', modifier))}`]: { 'margin-top': `${size}` },
+        [`.${e(prefixNegativeModifiers('mr', modifier))}`]: { 'margin-right': `${size}` },
+        [`.${e(prefixNegativeModifiers('mb', modifier))}`]: { 'margin-bottom': `${size}` },
+        [`.${e(prefixNegativeModifiers('ml', modifier))}`]: { 'margin-left': `${size}` },
       }),
     ]
 
