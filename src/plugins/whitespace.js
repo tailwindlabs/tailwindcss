@@ -1,5 +1,5 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.whitespace-normal': { 'white-space': 'normal' },
@@ -7,17 +7,8 @@ export default function({ variants }) {
         '.whitespace-pre': { 'white-space': 'pre' },
         '.whitespace-pre-line': { 'white-space': 'pre-line' },
         '.whitespace-pre-wrap': { 'white-space': 'pre-wrap' },
-
-        '.break-words': { 'word-wrap': 'break-word' },
-        '.break-normal': { 'word-wrap': 'normal' },
-
-        '.truncate': {
-          overflow: 'hidden',
-          'text-overflow': 'ellipsis',
-          'white-space': 'nowrap',
-        },
       },
-      variants
+      variants('whitespace')
     )
   }
 }

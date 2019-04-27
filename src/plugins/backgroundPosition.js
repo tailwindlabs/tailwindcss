@@ -1,18 +1,18 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
-    addUtilities(
-      {
-        '.bg-bottom': { 'background-position': 'bottom' },
-        '.bg-center': { 'background-position': 'center' },
-        '.bg-left': { 'background-position': 'left' },
-        '.bg-left-bottom': { 'background-position': 'left bottom' },
-        '.bg-left-top': { 'background-position': 'left top' },
-        '.bg-right': { 'background-position': 'right' },
-        '.bg-right-bottom': { 'background-position': 'right bottom' },
-        '.bg-right-top': { 'background-position': 'right top' },
-        '.bg-top': { 'background-position': 'top' },
-      },
-      variants
+import _ from 'lodash'
+
+export default function() {
+  return function({ addUtilities, e, theme, variants }) {
+    const utilities = _.fromPairs(
+      _.map(theme('backgroundPosition'), (value, modifier) => {
+        return [
+          `.${e(`bg-${modifier}`)}`,
+          {
+            'background-position': value,
+          },
+        ]
+      })
     )
+
+    addUtilities(utilities, variants('backgroundPosition'))
   }
 }

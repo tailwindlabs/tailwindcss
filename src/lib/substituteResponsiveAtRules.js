@@ -10,12 +10,12 @@ export default function(config) {
       theme: { screens },
       separator,
     } = config
-    const responsiveRules = []
+    const responsiveRules = postcss.root()
     const finalRules = []
 
     css.walkAtRules('responsive', atRule => {
       const nodes = atRule.nodes
-      responsiveRules.push(...cloneNodes(nodes))
+      responsiveRules.append(...cloneNodes(nodes))
       atRule.before(nodes)
       atRule.remove()
     })
@@ -27,14 +27,14 @@ export default function(config) {
       })
 
       mediaQuery.append(
-        responsiveRules.map(rule => {
-          const cloned = rule.clone()
-          cloned.selectors = _.map(rule.selectors, selector =>
-            buildSelectorVariant(selector, screen, separator, message => {
-              throw rule.error(message)
-            })
-          )
-          return cloned
+        _.tap(responsiveRules.clone(), clonedRoot => {
+          clonedRoot.walkRules(rule => {
+            rule.selectors = _.map(rule.selectors, selector =>
+              buildSelectorVariant(selector, screen, separator, message => {
+                throw rule.error(message)
+              })
+            )
+          })
         })
       )
 

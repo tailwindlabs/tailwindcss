@@ -1,5 +1,5 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.align-baseline': { 'vertical-align': 'baseline' },
@@ -9,7 +9,7 @@ export default function({ variants }) {
         '.align-text-top': { 'vertical-align': 'text-top' },
         '.align-text-bottom': { 'vertical-align': 'text-bottom' },
       },
-      variants
+      variants('verticalAlign')
     )
   }
 }

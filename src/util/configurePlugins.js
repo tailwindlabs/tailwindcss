@@ -1,11 +1,9 @@
-import _ from 'lodash'
+export default function(pluginConfig, plugins) {
+  const pluginNames = Array.isArray(pluginConfig)
+    ? pluginConfig
+    : Object.keys(plugins).filter(pluginName => {
+        return pluginConfig !== false && pluginConfig[pluginName] !== false
+      })
 
-export default function(plugins, pluginConfig, defaultPluginConfig = {}) {
-  return Object.keys(plugins)
-    .filter(pluginName => {
-      return pluginConfig[pluginName] !== false
-    })
-    .map(pluginName => {
-      return plugins[pluginName](_.get(pluginConfig, pluginName, defaultPluginConfig[pluginName]))
-    })
+  return pluginNames.map(pluginName => plugins[pluginName]())
 }

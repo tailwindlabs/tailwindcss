@@ -1,8 +1,8 @@
-import chalk from 'chalk'
 import { forEach, map, padEnd } from 'lodash'
 
 import commands from '.'
-import * as constants from '../constants'
+import * as constants from '../../constants'
+import * as colors from '../colors'
 import * as utils from '../utils'
 
 export const usage = 'help [command]'
@@ -18,11 +18,11 @@ export function forApp() {
 
   utils.log()
   utils.log('Usage:')
-  utils.log('  ', chalk.bold(constants.cli + ' <command> [options]'))
+  utils.log('  ', colors.bold(constants.cli + ' <command> [options]'))
   utils.log()
   utils.log('Commands:')
   forEach(commands, command => {
-    utils.log('  ', chalk.bold(padEnd(command.usage, pad)), command.description)
+    utils.log('  ', colors.bold(padEnd(command.usage, pad)), command.description)
   })
 }
 
@@ -34,10 +34,10 @@ export function forApp() {
 export function forCommand(command) {
   utils.log()
   utils.log('Usage:')
-  utils.log('  ', chalk.bold(constants.cli, command.usage))
+  utils.log('  ', colors.bold(constants.cli, command.usage))
   utils.log()
   utils.log('Description:')
-  utils.log('  ', chalk.bold(command.description))
+  utils.log('  ', colors.bold(command.description))
 
   if (command.options) {
     const pad = Math.max(...map(command.options, 'usage.length')) + PADDING_SIZE
@@ -45,7 +45,7 @@ export function forCommand(command) {
     utils.log()
     utils.log('Options:')
     forEach(command.options, option => {
-      utils.log('  ', chalk.bold(padEnd(option.usage, pad)), option.description)
+      utils.log('  ', colors.bold(padEnd(option.usage, pad)), option.description)
     })
   }
 }
@@ -56,7 +56,7 @@ export function forCommand(command) {
  * @param {string} commandName
  */
 export function invalidCommand(commandName) {
-  utils.error('Invalid command:', chalk.bold.magenta(commandName))
+  utils.error('Invalid command:', colors.command(commandName))
   forApp()
   utils.die()
 }

@@ -1,19 +1,25 @@
 import _ from 'lodash'
 import postcss from 'postcss'
 import generateVariantFunction from '../util/generateVariantFunction'
+import e from '../util/escapeClassName'
 
 function generatePseudoClassVariant(pseudoClass) {
   return generateVariantFunction(({ modifySelectors, separator }) => {
     return modifySelectors(({ className }) => {
-      return `.${pseudoClass}${separator}${className}:${pseudoClass}`
+      return `.${e(`${pseudoClass}${separator}${className}`)}:${pseudoClass}`
     })
   })
 }
 
+function ensureIncludesDefault(variants) {
+  return variants.includes('default') ? variants : ['default', ...variants]
+}
+
 const defaultVariantGenerators = {
+  default: generateVariantFunction(() => {}),
   'group-hover': generateVariantFunction(({ modifySelectors, separator }) => {
     return modifySelectors(({ className }) => {
-      return `.group:hover .group-hover${separator}${className}`
+      return `.group:hover .${e(`group-hover${separator}${className}`)}`
     })
   }),
   hover: generatePseudoClassVariant('hover'),
@@ -38,9 +44,7 @@ export default function(config, { variantGenerators: pluginVariantGenerators }) 
         responsiveParent.append(atRule)
       }
 
-      atRule.before(atRule.clone().nodes)
-
-      _.forEach(_.without(variants, 'responsive'), variant => {
+      _.forEach(_.without(ensureIncludesDefault(variants), 'responsive'), variant => {
         variantGenerators[variant](atRule, config)
       })
 

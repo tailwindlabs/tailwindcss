@@ -1,8 +1,7 @@
-import chalk from 'chalk'
-import { ensureFileSync, existsSync, outputFileSync, readFileSync } from 'fs-extra'
-import { findKey, mapValues, trimStart } from 'lodash'
-import stripComments from 'strip-comments'
+import { copyFileSync, ensureFileSync, existsSync, outputFileSync, readFileSync } from 'fs-extra'
+import { findKey, mapValues, startsWith, trimStart } from 'lodash'
 
+import * as colors from './colors'
 import * as emoji from './emoji'
 import packageJson from '../../package.json'
 
@@ -59,7 +58,7 @@ export function log(...msgs) {
  */
 export function header() {
   log()
-  log(chalk.bold(packageJson.name), chalk.bold.cyan(packageJson.version))
+  log(colors.bold(packageJson.name), colors.info(packageJson.version))
 }
 
 /**
@@ -76,7 +75,7 @@ export function footer() {
  */
 export function error(...msgs) {
   log()
-  console.error('  ', emoji.no, chalk.bold.red(msgs.join(' ')))
+  console.error('  ', emoji.no, colors.error(msgs.join(' ')))
 }
 
 /**
@@ -98,6 +97,16 @@ export function die(...msgs) {
  */
 export function exists(path) {
   return existsSync(path)
+}
+
+/**
+ * Copies file source to destination.
+ *
+ * @param {string} source
+ * @param {string} destination
+ */
+export function copyFile(source, destination) {
+  copyFileSync(source, destination)
 }
 
 /**
@@ -124,15 +133,11 @@ export function writeFile(path, content) {
 }
 
 /**
- * Strips block comments from input string. Consolidates multiple line breaks.
+ * Strips leading ./ from path
  *
- * @param {string} input
+ * @param {string} path
  * @return {string}
  */
-export function stripBlockComments(input) {
-  return stripComments
-    .block(input, { keepProtected: true })
-    .replace(/\n\s*\n\s*\n/g, '\n\n') // Strip unnecessary line breaks
-    .trim()
-    .concat('\n')
+export function getSimplePath(path) {
+  return startsWith(path, './') ? path.slice(2) : path
 }

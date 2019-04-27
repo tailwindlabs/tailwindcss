@@ -1,5 +1,5 @@
-export default function({ variants }) {
-  return function({ addUtilities }) {
+export default function() {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.border-solid': {
@@ -15,7 +15,7 @@ export default function({ variants }) {
           'border-style': 'none',
         },
       },
-      variants
+      variants('borderStyle')
     )
   }
 }

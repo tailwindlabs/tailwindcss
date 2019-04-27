@@ -1,9 +1,9 @@
 import _ from 'lodash'
-import postcss from 'postcss'
+import _postcss from 'postcss'
 import processPlugins from '../src/util/processPlugins'
 
 function css(nodes) {
-  return postcss.root({ nodes }).toString()
+  return _postcss.root({ nodes }).toString()
 }
 
 function makeConfig(overrides) {
@@ -95,7 +95,7 @@ test('plugins can create utilities with arrays of objects', () => {
 test('plugins can create utilities with raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      function({ addUtilities, postcss }) {
         addUtilities([
           postcss.rule({ selector: '.object-fill' }).append([
             postcss.decl({
@@ -140,7 +140,7 @@ test('plugins can create utilities with raw PostCSS nodes', () => {
 test('plugins can create utilities with mixed object styles and PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      function({ addUtilities, postcss }) {
         addUtilities([
           {
             '.object-fill': {
@@ -254,10 +254,70 @@ test('plugins can create components with object syntax', () => {
     `)
 })
 
+test('plugins can add base styles with object syntax', () => {
+  const { base } = processPlugins(
+    [
+      function({ addBase }) {
+        addBase({
+          img: {
+            maxWidth: '100%',
+          },
+          button: {
+            fontFamily: 'inherit',
+          },
+        })
+      },
+    ],
+    makeConfig()
+  )
+
+  expect(css(base)).toMatchCss(`
+    img {
+      max-width: 100%
+    }
+    button {
+      font-family: inherit
+    }
+    `)
+})
+
+test('plugins can add base styles with raw PostCSS nodes', () => {
+  const { base } = processPlugins(
+    [
+      function({ addBase, postcss }) {
+        addBase([
+          postcss.rule({ selector: 'img' }).append([
+            postcss.decl({
+              prop: 'max-width',
+              value: '100%',
+            }),
+          ]),
+          postcss.rule({ selector: 'button' }).append([
+            postcss.decl({
+              prop: 'font-family',
+              value: 'inherit',
+            }),
+          ]),
+        ])
+      },
+    ],
+    makeConfig()
+  )
+
+  expect(css(base)).toMatchCss(`
+    img {
+      max-width: 100%
+    }
+    button {
+      font-family: inherit
+    }
+    `)
+})
+
 test('plugins can create components with raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents }) {
+      function({ addComponents, postcss }) {
         addComponents([
           postcss.rule({ selector: '.btn-blue' }).append([
             postcss.decl({
@@ -306,7 +366,7 @@ test('plugins can create components with raw PostCSS nodes', () => {
 test('plugins can create components with mixed object styles and raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents }) {
+      function({ addComponents, postcss }) {
         addComponents([
           postcss.rule({ selector: '.btn-blue' }).append([
             postcss.decl({
@@ -592,6 +652,91 @@ test('plugins can access the current config', () => {
     @media (min-width: 1200px) {
       .container {
         max-width: 1200px
+      }
+    }
+    `)
+})
+
+test('plugins can access the variants config directly', () => {
+  const { components, utilities } = processPlugins(
+    [
+      function({ addUtilities, variants }) {
+        addUtilities(
+          {
+            '.object-fill': {
+              'object-fit': 'fill',
+            },
+            '.object-contain': {
+              'object-fit': 'contain',
+            },
+            '.object-cover': {
+              'object-fit': 'cover',
+            },
+          },
+          variants('objectFit')
+        )
+      },
+    ],
+    makeConfig({
+      variants: {
+        objectFit: ['responsive', 'focus', 'hover'],
+      },
+    })
+  )
+
+  expect(components.length).toBe(0)
+  expect(css(utilities)).toMatchCss(`
+    @variants responsive, focus, hover {
+      .object-fill {
+        object-fit: fill
+      }
+      .object-contain {
+        object-fit: contain
+      }
+      .object-cover {
+        object-fit: cover
+      }
+    }
+    `)
+})
+
+test('plugins apply all global variants when variants are configured globally', () => {
+  const { components, utilities } = processPlugins(
+    [
+      function({ addUtilities, variants }) {
+        addUtilities(
+          {
+            '.object-fill': {
+              'object-fit': 'fill',
+            },
+          },
+          variants('objectFit')
+        )
+        addUtilities(
+          {
+            '.rotate-90deg': {
+              transform: 'rotate(90deg)',
+            },
+          },
+          variants('rotate')
+        )
+      },
+    ],
+    makeConfig({
+      variants: ['responsive', 'focus', 'hover'],
+    })
+  )
+
+  expect(components.length).toBe(0)
+  expect(css(utilities)).toMatchCss(`
+    @variants responsive, focus, hover {
+      .object-fill {
+        object-fit: fill
+      }
+    }
+    @variants responsive, focus, hover {
+      .rotate-90deg {
+        transform: rotate(90deg)
       }
     }
     `)

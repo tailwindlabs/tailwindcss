@@ -16,6 +16,7 @@ function parseStyles(styles) {
 }
 
 export default function(plugins, config) {
+  const pluginBaseStyles = []
   const pluginComponents = []
   const pluginUtilities = []
   const pluginVariantGenerators = {}
@@ -23,10 +24,20 @@ export default function(plugins, config) {
   const applyConfiguredPrefix = selector => {
     return prefixSelector(config.prefix, selector)
   }
+  const getConfigValue = (path, defaultValue) => _.get(config, path, defaultValue)
 
   plugins.forEach(plugin => {
     plugin({
-      config: (path, defaultValue) => _.get(config, path, defaultValue),
+      postcss,
+      config: getConfigValue,
+      theme: (path, defaultValue) => getConfigValue(`theme.${path}`, defaultValue),
+      variants: (path, defaultValue) => {
+        if (_.isArray(config.variants)) {
+          return config.variants
+        }
+
+        return getConfigValue(`variants.${path}`, defaultValue)
+      },
       e: escapeClassName,
       prefix: applyConfiguredPrefix,
       addUtilities: (utilities, options) => {
@@ -63,6 +74,9 @@ export default function(plugins, config) {
 
         pluginComponents.push(...styles.nodes)
       },
+      addBase: baseStyles => {
+        pluginBaseStyles.push(...parseStyles(baseStyles))
+      },
       addVariant: (name, generator) => {
         pluginVariantGenerators[name] = generateVariantFunction(generator)
       },
@@ -70,6 +84,7 @@ export default function(plugins, config) {
   })
 
   return {
+    base: pluginBaseStyles,
     components: pluginComponents,
     utilities: pluginUtilities,
     variantGenerators: pluginVariantGenerators,

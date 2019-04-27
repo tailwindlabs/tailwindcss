@@ -22,11 +22,9 @@ function extractMinWidths(breakpoints) {
   })
 }
 
-module.exports = function(options) {
-  return function({ addComponents, config }) {
-    const screens = _.get(options, 'screens', config('theme.screens'))
-
-    const minWidths = extractMinWidths(screens)
+module.exports = function() {
+  return function({ addComponents, theme }) {
+    const minWidths = extractMinWidths(theme('container.screens', theme('screens')))
 
     const atRules = _.map(minWidths, minWidth => {
       return {
@@ -42,9 +40,12 @@ module.exports = function(options) {
       {
         '.container': Object.assign(
           { width: '100%' },
-          _.get(options, 'center', false) ? { marginRight: 'auto', marginLeft: 'auto' } : {},
-          _.has(options, 'padding')
-            ? { paddingRight: options.padding, paddingLeft: options.padding }
+          theme('container.center', false) ? { marginRight: 'auto', marginLeft: 'auto' } : {},
+          _.has(theme('container', {}), 'padding')
+            ? {
+                paddingRight: theme('container.padding'),
+                paddingLeft: theme('container.padding'),
+              }
             : {}
         ),
       },
