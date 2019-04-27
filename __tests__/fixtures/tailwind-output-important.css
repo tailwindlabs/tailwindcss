@@ -3442,6 +3442,66 @@ video {
   flex-shrink: 1 !important;
 }
 
+.order-1 {
+  order: 1 !important;
+}
+
+.order-2 {
+  order: 2 !important;
+}
+
+.order-3 {
+  order: 3 !important;
+}
+
+.order-4 {
+  order: 4 !important;
+}
+
+.order-5 {
+  order: 5 !important;
+}
+
+.order-6 {
+  order: 6 !important;
+}
+
+.order-7 {
+  order: 7 !important;
+}
+
+.order-8 {
+  order: 8 !important;
+}
+
+.order-9 {
+  order: 9 !important;
+}
+
+.order-10 {
+  order: 10 !important;
+}
+
+.order-11 {
+  order: 11 !important;
+}
+
+.order-12 {
+  order: 12 !important;
+}
+
+.order-first {
+  order: -1 !important;
+}
+
+.order-last {
+  order: 999 !important;
+}
+
+.order-none {
+  order: 0 !important;
+}
+
 .float-right {
   float: right !important;
 }
