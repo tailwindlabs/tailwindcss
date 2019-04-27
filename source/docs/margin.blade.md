@@ -21,7 +21,9 @@ features:
     ['ml', ['margin-left']],
   ])->flatMap(function ($side) use ($page) {
     return $page->config['theme']['margin']->map(function ($value, $name) use ($side) {
-      $class = ".{$side[0]}-{$name}";
+      $class = starts_with($name, '-')
+        ? ".-{$side[0]}-".substr($name, 1)
+        : ".{$side[0]}-{$name}";
       $code = collect($side[1])->map(function ($property) use ($value) {
         return "{$property}: {$value};";
       })->implode("\n");
@@ -35,6 +37,12 @@ features:
 Control an element's margin using the `.m{side?}-{size}` utilities.
 
 For example, `.m-6` would add `1.5rem` of margin on all sides of an element, `.mx-0` would make the horizontal margin zero, and `.mt-2` would add `.5rem` of margin to the top of the element.
+
+## Negative Margins
+
+Control an element's negative margin using the `.-m{side?}-{size}` utilities.
+
+For example, `.-m-6` would add `-1.5rem` of margin on all sides of an element, `.-mx-4` would make the horizontal margin `-1rem`, and `.-mt-2` would add `-.5rem` of margin to the top of the element.
 
 ## Responsive
 

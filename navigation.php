@@ -87,7 +87,6 @@ return [
     'Spacing' => [
         'Padding' => 'padding',
         'Margin' => 'margin',
-        'Negative Margin' => 'negative-margin',
     ],
     'Sizing' => [
         'Width' => 'width',
