@@ -3254,6 +3254,10 @@ video {
   cursor: wait;
 }
 
+.cursor-text {
+  cursor: text;
+}
+
 .cursor-move {
   cursor: move;
 }
@@ -10067,6 +10071,10 @@ video {
     cursor: wait;
   }
 
+  .sm\:cursor-text {
+    cursor: text;
+  }
+
   .sm\:cursor-move {
     cursor: move;
   }
@@ -16863,6 +16871,10 @@ video {
 
   .md\:cursor-wait {
     cursor: wait;
+  }
+
+  .md\:cursor-text {
+    cursor: text;
   }
 
   .md\:cursor-move {
@@ -23663,6 +23675,10 @@ video {
     cursor: wait;
   }
 
+  .lg\:cursor-text {
+    cursor: text;
+  }
+
   .lg\:cursor-move {
     cursor: move;
   }
@@ -30459,6 +30475,10 @@ video {
 
   .xl\:cursor-wait {
     cursor: wait;
+  }
+
+  .xl\:cursor-text {
+    cursor: text;
   }
 
   .xl\:cursor-move {

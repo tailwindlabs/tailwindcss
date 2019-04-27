@@ -3254,6 +3254,10 @@ video {
   cursor: wait !important;
 }
 
+.cursor-text {
+  cursor: text !important;
+}
+
 .cursor-move {
   cursor: move !important;
 }
@@ -10067,6 +10071,10 @@ video {
     cursor: wait !important;
   }
 
+  .sm\:cursor-text {
+    cursor: text !important;
+  }
+
   .sm\:cursor-move {
     cursor: move !important;
   }
@@ -16863,6 +16871,10 @@ video {
 
   .md\:cursor-wait {
     cursor: wait !important;
+  }
+
+  .md\:cursor-text {
+    cursor: text !important;
   }
 
   .md\:cursor-move {
@@ -23663,6 +23675,10 @@ video {
     cursor: wait !important;
   }
 
+  .lg\:cursor-text {
+    cursor: text !important;
+  }
+
   .lg\:cursor-move {
     cursor: move !important;
   }
@@ -30459,6 +30475,10 @@ video {
 
   .xl\:cursor-wait {
     cursor: wait !important;
+  }
+
+  .xl\:cursor-text {
+    cursor: text !important;
   }
 
   .xl\:cursor-move {
