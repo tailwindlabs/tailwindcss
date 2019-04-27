@@ -899,6 +899,75 @@ test('theme values in the extend section are lazily evaluated', () => {
   })
 })
 
+test('lazily evaluated values have access to the config utils', () => {
+  const userConfig = {
+    theme: {
+      shift: (theme, { negative }) => ({
+        ...theme('spacing'),
+        ...negative(theme('spacing')),
+      }),
+      extend: {
+        nudge: (theme, { negative }) => ({
+          ...theme('spacing'),
+          ...negative(theme('spacing')),
+        }),
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      spacing: {
+        '1': '1px',
+        '2': '2px',
+        '3': '3px',
+        '4': '4px',
+      },
+    },
+    variants: {},
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      spacing: {
+        '1': '1px',
+        '2': '2px',
+        '3': '3px',
+        '4': '4px',
+      },
+      shift: {
+        '-1': '-1px',
+        '-2': '-2px',
+        '-3': '-3px',
+        '-4': '-4px',
+        '1': '1px',
+        '2': '2px',
+        '3': '3px',
+        '4': '4px',
+      },
+      nudge: {
+        '-1': '-1px',
+        '-2': '-2px',
+        '-3': '-3px',
+        '-4': '-4px',
+        '1': '1px',
+        '2': '2px',
+        '3': '3px',
+        '4': '4px',
+      },
+    },
+    variants: {},
+  })
+})
+
 test('the original theme is not mutated', () => {
   const userConfig = {
     theme: {

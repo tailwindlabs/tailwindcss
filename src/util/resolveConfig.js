@@ -4,7 +4,7 @@ import defaults from 'lodash/defaults'
 import map from 'lodash/map'
 import get from 'lodash/get'
 
-const utils = {
+const configUtils = {
   negative(scale) {
     return Object.keys(scale)
       .filter(key => scale[key] !== '0')
@@ -31,23 +31,23 @@ function mergeExtensions({ extend, ...theme }) {
       }
     }
 
-    return resolveThemePath => ({
-      ...value(themeValue, resolveThemePath),
-      ...value(extensions, resolveThemePath),
+    return (resolveThemePath, utils) => ({
+      ...value(themeValue, resolveThemePath, utils),
+      ...value(extensions, resolveThemePath, utils),
     })
   })
 }
 
 function resolveFunctionKeys(object) {
-  const resolveObjectPath = (key, defaultValue) => {
+  const resolveThemePath = (key, defaultValue) => {
     const val = get(object, key, defaultValue)
-    return isFunction(val) ? val(resolveObjectPath) : val
+    return isFunction(val) ? val(resolveThemePath) : val
   }
 
   return Object.keys(object).reduce((resolved, key) => {
     return {
       ...resolved,
-      [key]: isFunction(object[key]) ? object[key](resolveObjectPath, utils) : object[key],
+      [key]: isFunction(object[key]) ? object[key](resolveThemePath, configUtils) : object[key],
     }
   }, {})
 }
