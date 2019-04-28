@@ -440,6 +440,7 @@ module.exports = {
     flex: ['responsive'],
     flexGrow: ['responsive'],
     flexShrink: ['responsive'],
+    order: ['responsive'],
     float: ['responsive'],
     fontFamily: ['responsive'],
     fontWeight: ['responsive', 'hover', 'focus'],
