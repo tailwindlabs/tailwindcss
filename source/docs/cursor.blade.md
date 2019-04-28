@@ -34,6 +34,11 @@ features:
       "Set the mouse cursor to indicate that the application is busy.",
     ],
     [
+      '.cursor-text',
+      'cursor: text;',
+      "Set the mouse cursor to indicate that the application is busy.",
+    ],
+    [
       '.cursor-move',
       'cursor: move;',
       "Set the mouse cursor to indicate that the element can be moved.",
@@ -57,6 +62,7 @@ By default Tailwind provides six `cursor` utilities. You change, add, or remove 
   default: 'default',
   pointer: 'pointer',
 - wait: 'wait',
+  text: 'text',
 - move: 'move',
   'not-allowed': 'not-allowed',
 + crosshair: 'crosshair',
