@@ -60,18 +60,9 @@ const purgecss = require('@fullhuman/postcss-purgecss')({
     './src/**/*.jsx',
     // etc.
   ],
-  extractors: [
-    {
-      extractor: class {
-        static extract(content) {
-          return content.match(/[A-Za-z0-9-_:/]+/g) || [];
-        }
-      },
 
-      // Specify all of the extensions of your template files 
-      extensions: ['html', 'vue', 'jsx', /* etc. */]
-    }
-  ]
+  // Include any special characters you're using in this regular expression
+  defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
 })
 
 module.exports = {
@@ -92,11 +83,10 @@ Note that in this example, **we're only enabling Purgecss in production**. We re
 Purgecss uses "extractors" to determine what strings in your templates are classes. In the example above, we use a custom extractor that will find all of the classes Tailwind generates by default:
 
 ```js
-class {
-  static extract(content) {
-    return content.match(/[A-Za-z0-9-_:/]+/g) || [];
-  }
-}
+const purgecss = require('@fullhuman/postcss-purgecss')({
+  // ...
+  defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
+})
 ```
 
 The way it works is intentionally very "dumb". It doesn't try to parse your HTML and look for class attributes or dynamically execute your JavaScript — it simply looks for any strings in the entire file that match this regular expression:
@@ -131,8 +121,9 @@ If you are using any other special characters in your class names, make sure to 
 
 For example, if you have customized Tailwind to create classes like `w-50%`, you'll want to add `%` to the regular expression:
 
-```js
-/[A-Za-z0-9-_:/%]+/g
+```diff
+- /[A-Za-z0-9-_:/]+/g
++ /[A-Za-z0-9-_:/%]+/g
 ```
 
 <hr class="my-16">
