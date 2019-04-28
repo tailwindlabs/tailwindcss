@@ -83,6 +83,7 @@ return [
         'Flex' => 'flex',
         'Flex Grow' => 'flex-grow',
         'Flex Shrink' => 'flex-shrink',
+        'Order' => 'order',
     ],
     'Spacing' => [
         'Padding' => 'padding',
