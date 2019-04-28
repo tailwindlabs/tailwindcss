@@ -7056,6 +7056,14 @@ video {
   color: #702459 !important;
 }
 
+.text-shadow {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
+}
+
+.text-shadow-none {
+  text-shadow: none !important;
+}
+
 .text-xs {
   font-size: 0.75rem !important;
 }
@@ -13955,6 +13963,14 @@ video {
 
   .sm\:focus\:text-pink-900:focus {
     color: #702459 !important;
+  }
+
+  .sm\:text-shadow {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
+  }
+
+  .sm\:text-shadow-none {
+    text-shadow: none !important;
   }
 
   .sm\:text-xs {
@@ -20859,6 +20875,14 @@ video {
     color: #702459 !important;
   }
 
+  .md\:text-shadow {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
+  }
+
+  .md\:text-shadow-none {
+    text-shadow: none !important;
+  }
+
   .md\:text-xs {
     font-size: 0.75rem !important;
   }
@@ -27761,6 +27785,14 @@ video {
     color: #702459 !important;
   }
 
+  .lg\:text-shadow {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
+  }
+
+  .lg\:text-shadow-none {
+    text-shadow: none !important;
+  }
+
   .lg\:text-xs {
     font-size: 0.75rem !important;
   }
@@ -34661,6 +34693,14 @@ video {
 
   .xl\:focus\:text-pink-900:focus {
     color: #702459 !important;
+  }
+
+  .xl\:text-shadow {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
+  }
+
+  .xl\:text-shadow-none {
+    text-shadow: none !important;
   }
 
   .xl\:text-xs {

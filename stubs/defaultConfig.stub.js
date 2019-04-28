@@ -375,6 +375,10 @@ module.exports = {
       current: 'currentColor',
     },
     textColor: theme => theme('colors'),
+    textShadow: {
+      default: '0 1px 3px rgba(0, 0, 0, 0.25)',
+      none: 'none',
+    },
     width: theme => ({
       auto: 'auto',
       ...theme('spacing'),
@@ -474,6 +478,7 @@ module.exports = {
     textAlign: ['responsive'],
     textColor: ['responsive', 'hover', 'focus'],
     textDecoration: ['responsive', 'hover', 'focus'],
+    textShadow: ['responsive'],
     textTransform: ['responsive'],
     userSelect: ['responsive'],
     verticalAlign: ['responsive'],
