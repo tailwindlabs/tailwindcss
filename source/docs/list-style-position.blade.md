@@ -24,11 +24,11 @@ features:
 
 ## Usage
 
-Control an list's style position to be inside or outside, using `.list-inside` and `.list-outside`, respectively.
+Control the position of the markers in a list using the `list-inside` and `list-outside` utilities.
 
 @component('_partials.code-sample', ['class' => 'px-8'])
 <div class="mb-6">
-  <p class="text-sm text-gray-600">Inside</p>
+  <p class="text-sm text-gray-600">.list-inside</p>
   <ul class="list-disc list-inside bg-gray-200 text-gray-800 py-2">
     <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
     <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
@@ -37,7 +37,7 @@ Control an list's style position to be inside or outside, using `.list-inside` a
 </p>
 </div>
 <div class="mb-6">
-  <p class="text-sm text-gray-600">Outside</p>
+  <p class="text-sm text-gray-600">.list-outside</p>
   <ul class="list-disc list-outside bg-gray-200 text-gray-800 py-2">
     <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
     <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
