@@ -56,7 +56,7 @@ description: "Utilities for controlling the display box type of an element."
 
 ## Block
 
-Use `.block` to create a block-level element:
+Use `.block` to create a block-level element.
 
 @component('_partials.code-sample')
 <div class="bg-gray-200 p-4">
@@ -68,7 +68,7 @@ Use `.block` to create a block-level element:
 
 ## Inline Block
 
-Use `.inline-block` to create an inline block-level element:
+Use `.inline-block` to create an inline block-level element.
 
 @component('_partials.code-sample')
 <div class="bg-gray-200">
@@ -80,7 +80,7 @@ Use `.inline-block` to create an inline block-level element:
 
 ## Inline
 
-Use `.inline` to create an inline element:
+Use `.inline` to create an inline element.
 
 @component('_partials.code-sample')
 <div class="bg-gray-200">
@@ -92,7 +92,7 @@ Use `.inline` to create an inline element:
 
 ## Flex
 
-Use `.flex` to create a block-level flex container:
+Use `.flex` to create a block-level flex container.
 
 @component('_partials.code-sample')
 <div class="flex bg-gray-200">
@@ -104,7 +104,7 @@ Use `.flex` to create a block-level flex container:
 
 ## Inline flex
 
-Use `.inline-flex` to create an inline flex container:
+Use `.inline-flex` to create an inline flex container.
 
 @component('_partials.code-sample')
 <div class="inline-flex bg-gray-200">
@@ -135,7 +135,7 @@ Use the `.table`, `.table-row`, and `.table-cell` to create elements that behave
 
 ## Hidden
 
-Use `.hidden` to turn off the display of an element:
+Use `.hidden` to set an element to `display: none` and remove it from the DOM.
 
 @component('_partials.code-sample')
 <div class="flex bg-gray-200">
