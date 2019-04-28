@@ -7255,6 +7255,10 @@ video {
   word-break: break-all !important;
 }
 
+.ellipsis {
+  text-overflow: ellipsis !important;
+}
+
 .truncate {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
@@ -14114,6 +14118,10 @@ video {
 
   .sm\:break-all {
     word-break: break-all !important;
+  }
+
+  .sm\:ellipsis {
+    text-overflow: ellipsis !important;
   }
 
   .sm\:truncate {
@@ -20978,6 +20986,10 @@ video {
     word-break: break-all !important;
   }
 
+  .md\:ellipsis {
+    text-overflow: ellipsis !important;
+  }
+
   .md\:truncate {
     overflow: hidden !important;
     text-overflow: ellipsis !important;
@@ -27840,6 +27852,10 @@ video {
     word-break: break-all !important;
   }
 
+  .lg\:ellipsis {
+    text-overflow: ellipsis !important;
+  }
+
   .lg\:truncate {
     overflow: hidden !important;
     text-overflow: ellipsis !important;
@@ -34700,6 +34716,10 @@ video {
 
   .xl\:break-all {
     word-break: break-all !important;
+  }
+
+  .xl\:ellipsis {
+    text-overflow: ellipsis !important;
   }
 
   .xl\:truncate {
