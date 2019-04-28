@@ -1,5 +1,5 @@
 <div class="relative overflow-hidden mb-8">
-  <div class="bg-white rounded-t-lg border border-gray-400 p-4 {{ $class ?? '' }}">
+  <div class="bg-white rounded-t-lg overflow-hidden border-t border-l border-r border-gray-400 p-4 {{ $class ?? '' }}">
     {{ $slot }}
   </div>
   <div class="scollbar-none rounded-b-lg p-4 bg-gray-800">

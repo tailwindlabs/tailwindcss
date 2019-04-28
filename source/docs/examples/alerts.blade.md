@@ -21,7 +21,7 @@ Tailwind doesn't include pre-designed alert components out of the box, but they'
 
 ## Modern with Badge
 
-@component('_partials.code-sample', ['lang' => 'html', 'class' => 'px-0 py-0'])
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'px-0 py-0 border-indigo-900'])
 <div class="bg-indigo-900 text-center py-4 lg:px-4">
   <div class="p-2 bg-indigo-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
     <span class="flex rounded-full bg-indigo-500 uppercase px-2 py-1 text-xs font-bold mr-3">New</span>
