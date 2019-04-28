@@ -51,6 +51,7 @@ import stroke from './plugins/stroke'
 import tableLayout from './plugins/tableLayout'
 import textAlign from './plugins/textAlign'
 import textColor from './plugins/textColor'
+import textShadow from './plugins/textShadow'
 import fontSize from './plugins/fontSize'
 import fontStyle from './plugins/fontStyle'
 import textTransform from './plugins/textTransform'
@@ -122,6 +123,7 @@ export default function({ corePlugins: corePluginConfig }) {
     tableLayout,
     textAlign,
     textColor,
+    textShadow,
     fontSize,
     fontStyle,
     textTransform,

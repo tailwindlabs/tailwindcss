@@ -7048,6 +7048,14 @@ video {
   color: #702459;
 }
 
+.text-shadow {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.text-shadow-none {
+  text-shadow: none;
+}
+
 .text-xs {
   font-size: 0.75rem;
 }
@@ -13907,6 +13915,14 @@ video {
 
   .sm\:focus\:text-pink-900:focus {
     color: #702459;
+  }
+
+  .sm\:text-shadow {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  }
+
+  .sm\:text-shadow-none {
+    text-shadow: none;
   }
 
   .sm\:text-xs {
@@ -20771,6 +20787,14 @@ video {
     color: #702459;
   }
 
+  .md\:text-shadow {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  }
+
+  .md\:text-shadow-none {
+    text-shadow: none;
+  }
+
   .md\:text-xs {
     font-size: 0.75rem;
   }
@@ -27633,6 +27657,14 @@ video {
     color: #702459;
   }
 
+  .lg\:text-shadow {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  }
+
+  .lg\:text-shadow-none {
+    text-shadow: none;
+  }
+
   .lg\:text-xs {
     font-size: 0.75rem;
   }
@@ -34493,6 +34525,14 @@ video {
 
   .xl\:focus\:text-pink-900:focus {
     color: #702459;
+  }
+
+  .xl\:text-shadow {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  }
+
+  .xl\:text-shadow-none {
+    text-shadow: none;
   }
 
   .xl\:text-xs {

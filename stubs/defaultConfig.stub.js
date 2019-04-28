@@ -353,6 +353,10 @@ module.exports = {
       outline: '0 0 0 3px rgba(66, 153, 225, 0.5)',
       none: 'none',
     },
+    textShadow: {
+      default: '0 1px 3px rgba(0, 0, 0, 0.25)',
+      none: 'none',
+    },
     zIndex: {
       auto: 'auto',
       '0': '0',
@@ -470,6 +474,7 @@ module.exports = {
     tableLayout: ['responsive'],
     textAlign: ['responsive'],
     textColor: ['responsive', 'hover', 'focus'],
+    textShadow: ['responsive'],
     fontSize: ['responsive'],
     fontStyle: ['responsive'],
     textTransform: ['responsive'],
