@@ -28,18 +28,9 @@ features:
 
 ## Usage
 
-By default lists are unstyled. That means if you want to create lists that have the default browser styling (bullets/numbers and a bit of left padding), you need to explicitly style those.
+To create bulleted or numeric lists, use the `list-disc` and `list-decimal` utilities.
 
 @component('_partials.code-sample')
-<div class="mb-6">
-  <p class="text-sm text-gray-600">.list-none (default)</p>
-  <ul class="default">
-    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
-    <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
-    <li>Quidem, ipsam illum quis sed voluptatum quae eum fugit earum</li>
-  </ul>
-</p>
-</div>
 <div class="mb-6">
   <p class="text-sm text-gray-600">.list-disc</p>
   <ul class="list-disc list-inside">
@@ -48,7 +39,7 @@ By default lists are unstyled. That means if you want to create lists that have 
     <li>Quidem, ipsam illum quis sed voluptatum quae eum fugit earum</li>
   </ul>
 </div>
-<div>
+<div class="mb-6">
   <p class="text-sm text-gray-600">.list-decimal</p>
   <ol class="list-decimal list-inside">
     <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
@@ -56,12 +47,16 @@ By default lists are unstyled. That means if you want to create lists that have 
     <li>Quidem, ipsam illum quis sed voluptatum quae eum fugit earum</li>
   </ol>
 </div>
+<div>
+  <p class="text-sm text-gray-600">.list-none (default)</p>
+  <ul class="default">
+    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
+    <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
+    <li>Quidem, ipsam illum quis sed voluptatum quae eum fugit earum</li>
+  </ul>
+</p>
+</div>
 @slot('code')
-<ul>
-  <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
-  ...
-</ul>
-
 <ul class="list-disc">
   <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
   ...
@@ -71,6 +66,11 @@ By default lists are unstyled. That means if you want to create lists that have 
   <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
   ...
 </ol>
+
+<ul>
+  <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
+  ...
+</ul>
 @endslot
 @endcomponent
 
