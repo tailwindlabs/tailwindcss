@@ -82,7 +82,7 @@
   <div class="w-full max-w-screen-xl relative mx-auto px-6 pt-24">
     <div class="flex -mx-6">
       <div class="px-6">
-        <h1 class="text-4xl font-normal leading-tight">A utility-first CSS framework for <span class="text-teal-500 font-medium">rapidly building custom designs.</span></h1>
+        <h1 class="text-4xl font-semibold leading-tight">A utility-first CSS framework for <span class="text-teal-500 font-normal">rapidly building custom designs.</span></h1>
         <p class="mt-6 leading-relaxed text-lg text-gray-600">
           Tailwind is different from frameworks like Bootstrap, Foundation, or Bulma in that it's not a UI kit and doesn't include any built-in UI components like form controls, buttons, cards, or navbars.
         </p>
