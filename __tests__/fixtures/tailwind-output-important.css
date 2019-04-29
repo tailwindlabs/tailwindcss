@@ -1786,6 +1786,14 @@ video {
   background-repeat: repeat-y !important;
 }
 
+.bg-repeat-round {
+  background-repeat: round !important;
+}
+
+.bg-repeat-space {
+  background-repeat: space !important;
+}
+
 .bg-auto {
   background-size: auto !important;
 }
@@ -8671,6 +8679,14 @@ video {
     background-repeat: repeat-y !important;
   }
 
+  .sm\:bg-repeat-round {
+    background-repeat: round !important;
+  }
+
+  .sm\:bg-repeat-space {
+    background-repeat: space !important;
+  }
+
   .sm\:bg-auto {
     background-size: auto !important;
   }
@@ -15531,6 +15547,14 @@ video {
 
   .md\:bg-repeat-y {
     background-repeat: repeat-y !important;
+  }
+
+  .md\:bg-repeat-round {
+    background-repeat: round !important;
+  }
+
+  .md\:bg-repeat-space {
+    background-repeat: space !important;
   }
 
   .md\:bg-auto {
@@ -22395,6 +22419,14 @@ video {
     background-repeat: repeat-y !important;
   }
 
+  .lg\:bg-repeat-round {
+    background-repeat: round !important;
+  }
+
+  .lg\:bg-repeat-space {
+    background-repeat: space !important;
+  }
+
   .lg\:bg-auto {
     background-size: auto !important;
   }
@@ -29255,6 +29287,14 @@ video {
 
   .xl\:bg-repeat-y {
     background-repeat: repeat-y !important;
+  }
+
+  .xl\:bg-repeat-round {
+    background-repeat: round !important;
+  }
+
+  .xl\:bg-repeat-space {
+    background-repeat: space !important;
   }
 
   .xl\:bg-auto {

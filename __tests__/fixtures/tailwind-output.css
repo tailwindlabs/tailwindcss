@@ -1786,6 +1786,14 @@ video {
   background-repeat: repeat-y;
 }
 
+.bg-repeat-round {
+  background-repeat: round;
+}
+
+.bg-repeat-space {
+  background-repeat: space;
+}
+
 .bg-auto {
   background-size: auto;
 }
@@ -8671,6 +8679,14 @@ video {
     background-repeat: repeat-y;
   }
 
+  .sm\:bg-repeat-round {
+    background-repeat: round;
+  }
+
+  .sm\:bg-repeat-space {
+    background-repeat: space;
+  }
+
   .sm\:bg-auto {
     background-size: auto;
   }
@@ -15531,6 +15547,14 @@ video {
 
   .md\:bg-repeat-y {
     background-repeat: repeat-y;
+  }
+
+  .md\:bg-repeat-round {
+    background-repeat: round;
+  }
+
+  .md\:bg-repeat-space {
+    background-repeat: space;
   }
 
   .md\:bg-auto {
@@ -22395,6 +22419,14 @@ video {
     background-repeat: repeat-y;
   }
 
+  .lg\:bg-repeat-round {
+    background-repeat: round;
+  }
+
+  .lg\:bg-repeat-space {
+    background-repeat: space;
+  }
+
   .lg\:bg-auto {
     background-size: auto;
   }
@@ -29255,6 +29287,14 @@ video {
 
   .xl\:bg-repeat-y {
     background-repeat: repeat-y;
+  }
+
+  .xl\:bg-repeat-round {
+    background-repeat: round;
+  }
+
+  .xl\:bg-repeat-space {
+    background-repeat: space;
   }
 
   .xl\:bg-auto {
