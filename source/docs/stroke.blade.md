@@ -14,7 +14,7 @@ description: "Utilities for styling the stroke of SVG elements."
   ]
 ])
 
-## Stroke color
+## Usage
 
 Use `.stroke-current` to set the stroke color of an SVG to the current text color. This makes it easy to set an element's stroke color by combining this class with an existing [text color utility](/docs/text-color).
 

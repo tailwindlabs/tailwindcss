@@ -142,7 +142,7 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Width Scale
 
-By default Tailwind provides 19 fixed `width` utilities, 12 percentage-based utilities, an `auto` utility, and a utility for setting the width of an element to match the viewport width. You change, add, or remove these by editing the `theme.width` section of your `tailwind.config.js` file.
+By default Tailwind provides 19 fixed `width` utilities, 27 percentage-based utilities, an `auto` utility, and a utility for setting the width of an element to match the viewport width. You change, add, or remove these by editing the `theme.width` section of your `tailwind.config.js` file.
 
 @component('_partials.customized-config', ['key' => 'theme.width', 'usesTheme' => true])
   'auto': 'auto',

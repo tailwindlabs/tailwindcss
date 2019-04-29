@@ -1,6 +1,6 @@
 ---
 extends: _layouts.documentation
-title: "Flex Wrapping"
+title: "Flex Wrap"
 description: "Utilities for controlling how flex items wrap."
 features:
   responsive: true

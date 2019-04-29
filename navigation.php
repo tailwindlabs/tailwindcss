@@ -75,7 +75,7 @@ return [
     ],
     'Flexbox' => [
         'Flex Direction' => 'flex-direction',
-        'Flex Wrapping' => 'flex-wrap',
+        'Flex Wrap' => 'flex-wrap',
         'Align Items' => 'align-items',
         'Align Content' => 'align-content',
         'Align Self' => 'align-self',
