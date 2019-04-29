@@ -1,8 +1,8 @@
 ---
 extends: _layouts.homepage
 title: "Why Tailwind?"
-description: Because it's the fucking best, that's why.
-titleBorder: true
+description: null
+titleBorder: false
 ---
 
 Tailwind is different from frameworks like Bootstrap, Foundation, or Bulma in that it's not a UI kit and doesn't include any built-in UI components like form controls, buttons, cards, or navbars.
