@@ -14,10 +14,10 @@ For most projects (and to take advantage of Tailwind's customization features), 
 
 ```bash
 # Using npm
-npm install tailwindcss --save-dev
+npm install tailwindcss@next --save-dev
 
 # Using Yarn
-yarn add tailwindcss --dev
+yarn add tailwindcss@next --dev
 ```
 
 <h2 class="flex">
