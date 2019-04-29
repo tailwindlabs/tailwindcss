@@ -1,23 +1,9 @@
 ---
-extends: _layouts.documentation
-title: ""
-description: null
+extends: _layouts.homepage
+title: "Why Tailwind?"
+description: Because it's the fucking best, that's why.
+titleBorder: true
 ---
-
-<div class="flex items-center justify-center">
-  <svg class="h-20 w-20 sm:w-24 sm:h-24 block mr-4 -ml-4" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient x1="0%" y1="0%" y2="100%" id="a"><stop stop-color="#2383AE" offset="0%"/><stop stop-color="#6DD7B9" offset="100%"/></linearGradient></defs><path d="M10 8c1.333-5.333 4.667-8 10-8 8 0 9 6 13 7 2.667.667 5-.333 7-3-1.333 5.333-4.667 8-10 8-8 0-9-6-13-7-2.667-.667-5 .333-7 3zM0 20c1.333-5.333 4.667-8 10-8 8 0 9 6 13 7 2.667.667 5-.333 7-3-1.333 5.333-4.667 8-10 8-8 0-9-6-13-7-2.667-.667-5 .333-7 3z" transform="translate(4 12)" fill="url(#a)" fill-rule="nonzero"/></svg>
-  <h1 class="text-gray-900 text-center font-semibold text-4xl sm:text-5xl tracking-tight mb-1">Tailwind CSS</h1>
-</div>
-
-<div class="mt-0 max-w-md mx-auto text-center text-xl sm:text-2xl text-gray-600 mb-16">
-  <p class="leading-tight">
-   A utility-first CSS framework for rapidly building custom user interfaces.
-  </p>
-</div>
-
-<div>
-  <workflow-animation></workflow-animation>
-</div>
 
 Tailwind is different from frameworks like Bootstrap, Foundation, or Bulma in that it's not a UI kit and doesn't include any built-in UI components like form controls, buttons, cards, or navbars.
 

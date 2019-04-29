@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto" style="width: 40rem; height: 28rem">
     <div class="flex flex-col">
-      <div class="code-white text-sm font-mono bg-gray-900 p-6 rounded leading-normal overflow-hidden" style="width: 36rem; line-height: 1.675">
+      <div class="shadow-lg code-white text-sm font-mono bg-gray-900 p-6 rounded-lg leading-normal overflow-hidden" style="width: 36rem; line-height: 1.675">
         <div class="whitespace-no-wrap"><!--
        --><div class="inline-block code-blue">&lt;</div><!--
        --><div class="inline-block code-red">div&nbsp;</div><!--
@@ -9,7 +9,7 @@
        --><div class="inline-block code-blue">=&quot;</div><!--
        --><animation-code-text ref="classCardFlex" class="inline-block code-green" text="md:flex "></animation-code-text><!--
        --><div ref="cardFlexCursor" class="invisible inline-block border-r-2 border-yellow h-6 absolute" style="margin-top: -0.125rem"></div><!--
-       --><div class="inline-block code-green">bg-white rounded</div><!--
+       --><div class="inline-block code-green">bg-white rounded-lg</div><!--
        --><animation-code-text ref="classCardPadding" class="inline-block code-green" text=" p-6"></animation-code-text><!--
        --><div ref="cardCursor" class="inline-block border-r-2 border-yellow h-6 absolute" style="margin-top: -0.125rem"></div><!--
        --><div class="inline-block code-blue">&quot;&gt;</div><!--
@@ -210,7 +210,7 @@
        --><div class="inline-block code-blue">&gt;</div><!--
      --></div><!--
    --></div>
-      <div ref="card" class="shadow-lg leading-normal self-end bg-white w-64 rounded -mt-16 relative" style="width: 20rem;">
+      <div ref="card" class="shadow-lg leading-normal self-end bg-white w-64 rounded-lg -mt-16 relative" style="width: 20rem;">
         <div ref="cardLarge" class="hidden p-6">
           <img ref="avatar" class="h-24 w-24 block mr-6 rounded-full" src="https://randomuser.me/api/portraits/women/17.jpg" alt="">
           <div ref="content" class="text-gray-800 text-left">
