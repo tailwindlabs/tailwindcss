@@ -9,15 +9,15 @@ Using the default configuration, Tailwind CSS comes in at 58.1kb minified and gz
 
 Here are a few other popular frameworks for comparison:
 
-| Framework | Original Size | Minified | Gzip | Brotli |
-| --------- | -------------: | --------: | ----: | ------: |
-| Tailwind  | 472.5kb | 347.7kb | 58.1kb | 17.3kb |
-| Bootstrap  | 187.8kb | 152.1kb |  22.7kb  | 16.7kb  |
-| Bulma  | 205.6kb   | 172.4kb   | 23.0kb  | 18.0kb  |
-| Foundation  | 154.1kb   | 119.2kb   | 15.9kb  | 12.9kb  | 
-| Tachyons  | 111.7kb   | 71.8kb    | 13.4kb  | 7.5kb   | 
-| Semantic UI  | 809.4kb   | 613.8kb   | 100.6kb | 77.8kb  | 
-| Materialize  | 175.0kb   | 138.5kb   | 21.1kb  | 17.1kb  |
+| Framework   | Original Size | Minified |    Gzip | Brotli |
+| ----------- | ------------: | -------: | ------: | -----: |
+| Tailwind    |       477.6kb |  350.4kb |  58.8kb | 17.1kb |
+| Bootstrap   |       187.8kb |  152.1kb |  22.7kb | 16.7kb |
+| Bulma       |       205.6kb |  172.4kb |  23.0kb | 18.0kb |
+| Foundation  |       154.1kb |  119.2kb |  15.9kb | 12.9kb |
+| Tachyons    |       111.7kb |   71.8kb |  13.4kb |  7.5kb |
+| Semantic UI |       809.4kb |  613.8kb | 100.6kb | 77.8kb |
+| Materialize |       175.0kb |  138.5kb |  21.1kb | 17.1kb |
 
 By comparison Tailwind definitely seems on the heavy side *(although if you use [Brotli](https://github.com/google/brotli) instead of gzip it's still very reasonable)*, but there are a number of strategies you can use to reduce this file size dramatically.
 
@@ -150,11 +150,11 @@ Very few projects actually need this many colors, and removing colors you don't 
 
 Here's how using a smaller color palette affects the final size:
 
-| Colors | Original | Minified | Gzip   | Brotli |
-| --- | ---: | ---: | ---: | ---: |
-| 93 *(default)* | 472.5kb   | 347.7kb   | 58.1kb  | 17.3kb  |
-| 50 | 356.3kb   | 257.5kb   | 45.1kb  | 13.7kb  |
-| 25 | 288.0kb   | 204.5kb   | 37.4kb  | 11.9kb  |
+| Colors         | Original | Minified |   Gzip | Brotli |
+| -------------- | -------: | -------: | -----: | -----: |
+| 93 _(default)_ |  477.6kb |  350.4kb | 58.8kb | 17.1kb |
+| 50             |  361.3kb |  260.3kb | 45.7kb | 13.9kb |
+| 25             |  293.1kb |  207.2kb | 38.0kb | 12.2kb |
 
 ### Removing unused breakpoints
 
@@ -162,12 +162,12 @@ Since almost every Tailwind utility is copied for every screen size, using fewer
 
 Here's how defining fewer screens affects the output:
 
-| Breakpoints | Original | Minified | Gzip   | Brotli |
-| --- | ---: | ---: | ---: | ---: |
-| 4 *(default)* | 472.5kb   | 347.7kb   | 58.1kb  | 17.3kb  |
-| 3 | 376.9kb   | 277.5kb   | 46.9kb  | 16.1kb  |
-| 2 | 281.2kb   | 207.4kb   | 35.5kb  | 14.9kb  |
-| 1 | 185.6kb   | 137.2kb   | 24.3kb  | 13.4kb  |
+| Breakpoints   | Original | Minified |   Gzip | Brotli |
+| ------------- | -------: | -------: | -----: | -----: |
+| 4 _(default)_ |  477.6kb |  350.4kb | 58.8kb | 17.1kb |
+| 3             |  380.9kb |  279.7kb | 47.4kb | 16.3kb |
+| 2             |  284.2kb |  209.0kb | 36.0kb | 15.0kb |
+| 1             |  187.5kb |  138.3kb | 24.5kb | 13.7kb |
 
 If you only need 3 screen sizes and 35 colors, you're down to 32.5kb after gzip _(11.7kb after Brotli!)_ without changing anything else.
 
