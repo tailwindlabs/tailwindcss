@@ -23,10 +23,10 @@
 <div class="bg-gray-100">
 
   {{-- Top nav --}}
-  <div class="flex h-16 items-center">
+  <div class="flex items-center">
     <div class="w-full max-w-screen-xl relative mx-auto px-6">
-      <div class="border-b-2 border-gray-200 py-12">
-        <div class="flex items-center -mx-6">
+      <div class="border-b-2 border-gray-200 py-4">
+        <div class="h-16 flex items-center -mx-6">
 
           {{-- Logo section --}}
           <div class="lg:w-1/4 xl:w-1/5 pl-6 pr-6 lg:pr-8">
@@ -81,23 +81,26 @@
   </div>
   {{-- /Top nav --}}
 
-  <div class="w-full max-w-screen-xl relative mx-auto px-6 pt-24">
-    <div class="flex -mx-6">
-      <div class="px-6">
-        <h1 class="text-4xl font-light leading-tight">A utility-first CSS framework for <span class="text-teal-500 font-normal">rapidly building custom designs.</span></h1>
-        <p class="mt-6 leading-relaxed text-lg text-gray-600">
+  <div class="w-full max-w-screen-xl relative mx-auto px-6 pt-16 pb-16">
+    <div class="xl:flex -mx-6">
+      <div class="px-6 text-center xl:text-left max-w-3xl mx-auto">
+        <h1 class="text-4xl lg:text-5xl xl:text-4xl font-light leading-tight">A utility-first CSS framework for <span class="text-teal-500 font-normal">rapidly building custom designs.</span></h1>
+        <p class="mt-6 leading-relaxed text-lg lg:text-xl xl:text-lg text-gray-600">
           Tailwind is different from frameworks like Bootstrap, Foundation, or Bulma in that it's not a UI kit and doesn't include any built-in UI components like form controls, buttons, cards, or navbars.
         </p>
-        <div class="flex mt-6">
+        <div class="flex mt-6 justify-center xl:justify-start">
           <a href="#" class="rounded-lg px-4 py-3 bg-teal-500 text-lg text-white font-semibold shadow-md">Get Started</a>
           <a href="#" class="ml-4 rounded-lg px-4 py-3 bg-white text-lg text-gray-800 font-semibold shadow-md">Why Tailwind?</a>
         </div>
       </div>
-      <div class="px-6 flex-shrink-0">
-        <iframe src="/workflow-animation" class="border-0" style="width: 40rem; height: 28rem;"></iframe>
+      <div class="mt-12 xl:mt-0 px-6 flex-shrink-0 hidden md:block">
+        <iframe src="/workflow-animation" class="border-0 mx-auto" style="width: 40rem; height: 28rem;"></iframe>
       </div>
     </div>
   </div>
+</div>
+
+<div class="bg-center bg-repeat-x -mb-8" style="height: 100px; margin-top: -100px; background-image: url(&quot;data:image/svg+xml,%3Csvg width='1440' height='100' viewBox='0 0 1440 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1440 100H0V45C0 45 202.817 0 360 0C517.183 0 720 45 720 45C720 45 922.817 90 1080 90C1237.18 90 1440 45 1440 45V100Z' fill='white'/%3E%3C/svg%3E%0A&quot;);">
 </div>
 
 

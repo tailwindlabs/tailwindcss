@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto" style="width: 40rem; height: 28rem">
+  <div>
     <div class="flex flex-col">
       <div class="shadow-lg code-white text-sm font-mono bg-gray-900 p-6 rounded-lg leading-normal overflow-hidden" style="width: 36rem; line-height: 1.675">
         <div class="whitespace-no-wrap"><!--

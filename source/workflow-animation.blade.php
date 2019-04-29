@@ -7,7 +7,7 @@
   <script src="/js/workflow-animation.js" defer></script>
 </head>
 <body>
-  <div id="app">
+  <div id="app" class="p-2">
     <workflow-animation></workflow-animation>
   </div>
 </body>
