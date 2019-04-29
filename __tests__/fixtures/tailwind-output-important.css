@@ -7190,6 +7190,18 @@ video {
   user-select: text !important;
 }
 
+.select-all {
+  user-select: all !important;
+}
+
+.select-contain {
+  user-select: contain !important;
+}
+
+.select-auto {
+  user-select: auto !important;
+}
+
 .align-baseline {
   vertical-align: baseline !important;
 }
@@ -14049,6 +14061,18 @@ video {
 
   .sm\:select-text {
     user-select: text !important;
+  }
+
+  .sm\:select-all {
+    user-select: all !important;
+  }
+
+  .sm\:select-contain {
+    user-select: contain !important;
+  }
+
+  .sm\:select-auto {
+    user-select: auto !important;
   }
 
   .sm\:align-baseline {
@@ -20913,6 +20937,18 @@ video {
     user-select: text !important;
   }
 
+  .md\:select-all {
+    user-select: all !important;
+  }
+
+  .md\:select-contain {
+    user-select: contain !important;
+  }
+
+  .md\:select-auto {
+    user-select: auto !important;
+  }
+
   .md\:align-baseline {
     vertical-align: baseline !important;
   }
@@ -27775,6 +27811,18 @@ video {
     user-select: text !important;
   }
 
+  .lg\:select-all {
+    user-select: all !important;
+  }
+
+  .lg\:select-contain {
+    user-select: contain !important;
+  }
+
+  .lg\:select-auto {
+    user-select: auto !important;
+  }
+
   .lg\:align-baseline {
     vertical-align: baseline !important;
   }
@@ -34635,6 +34683,18 @@ video {
 
   .xl\:select-text {
     user-select: text !important;
+  }
+
+  .xl\:select-all {
+    user-select: all !important;
+  }
+
+  .xl\:select-contain {
+    user-select: contain !important;
+  }
+
+  .xl\:select-auto {
+    user-select: auto !important;
   }
 
   .xl\:align-baseline {
