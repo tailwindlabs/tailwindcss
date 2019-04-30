@@ -205,7 +205,7 @@
        --><div class="inline-block code-blue">&gt;</div><!--
      --></div><!--
      --><div><!--
-       --><div class="inline-block code-blue">&lt;</div><!--
+       --><div class="inline-block code-blue">&lt;/</div><!--
        --><div class="inline-block code-red">div</div><!--
        --><div class="inline-block code-blue">&gt;</div><!--
      --></div><!--
