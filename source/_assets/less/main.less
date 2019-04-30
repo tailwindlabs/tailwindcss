@@ -62,6 +62,9 @@ a {
 
 @supports (position: sticky) {
   @media (min-width: theme('screens.lg')) {
+    .sticky\?lg\:h-screen {
+      height: 100vh !important;
+    }
     .sticky\?lg\:h-\(screen-16\) {
       height: ~"calc(100vh - 4rem)" !important;
     }

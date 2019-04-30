@@ -29,10 +29,11 @@
         <div class="h-16 flex items-center -mx-6">
 
           {{-- Logo section --}}
-          <div class="lg:w-1/4 xl:w-1/5 pl-6 pr-6 lg:pr-8">
+          <div class="lg:w-1/4 xl:w-1/5 pl-6 pr-6">
             <div class="flex items-center">
-              <a href="/" class="block lg:mr-4">
-                <img src="/img/logo.svg" class="h-8 w-auto">
+              <a href="/" class="block">
+                <img src="/img/logo.svg" class="h-6 w-auto hidden md:block">
+                <svg class="w-10 h-10 block md:hidden" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 11.1C15.3 3.9 19.8.3 27 .3c10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 27.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z" transform="translate(5 16)" fill="url(#logoGradient)" fill-rule="evenodd"></path></svg>
               </a>
             </div>
           </div>
@@ -109,8 +110,8 @@
   <div class="lg:flex -mx-6">
     {{-- Side nav --}}
     <div id="sidebar" class="hidden absolute z-90 top-16 bg-white w-full border-b -mb-16 lg:-mb-0 lg:static lg:bg-transparent lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5">
-      <div class="lg:block lg:relative lg:sticky lg:top-16 overflow-hidden">
-        <nav id="nav" class="px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8 sticky?lg:h-(screen-16)">
+      <div class="lg:block lg:relative lg:sticky lg:top-0 overflow-hidden">
+        <nav id="nav" class="px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8 sticky?lg:h-screen">
           @foreach ($page->navigation as $sectionName => $sectionItems)
           <div class="mb-8">
             <h5 class="mb-3 lg:mb-2 text-gray-500 uppercase tracking-wide font-bold text-sm lg:text-xs">{{ $sectionName }}</h5>
@@ -163,7 +164,7 @@
 
               {{-- Table of contents --}}
               <div class="hidden xl:text-sm xl:block xl:w-1/4 xl:px-6">
-                <div class="flex flex-col justify-between overflow-y-auto sticky top-16 max-h-(screen-16) pt-12 pb-4 -mt-12">
+                <div class="flex flex-col justify-between overflow-y-auto sticky top-0 max-h-screen pt-12 pb-4 -mt-12">
                   <table-of-contents class="mb-8"></table-of-contents>
                   <div id="ad"></div>
                 </div>
