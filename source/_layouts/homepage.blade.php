@@ -3,7 +3,7 @@
 @section('meta')
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@tailwindcss">
-<meta name="twitter:title" content="{{ $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS - A Utility-First CSS Framework for Rapid UI Development' }}">
+<meta name="twitter:title" content="Tailwind CSS - A Utility-First CSS Framework for Rapid UI Development">
 <meta name="twitter:description" content="{{ $page->description ? $page->description : 'Documentation for the Tailwind CSS framework.' }}">
 <meta name="twitter:image" content="https://tailwindcss.com/img/tailwind-square.png">
 <meta name="twitter:creator" content="@tailwindcss">
@@ -13,6 +13,8 @@
 <meta property="og:description" content="{{ $page->description ? $page->description : 'Documentation for the Tailwind CSS framework.' }}" />
 <meta property="og:image" content="https://tailwindcss.com/img/twitter-card.png" />
 @endsection
+
+@section('title', 'Tailwind CSS - A Utility-First CSS Framework for Rapid UI Development')
 
 @push('headScripts')
 <script src="{{ mix('/js/nav.js') }}"></script>
