@@ -86,9 +86,9 @@
 
   <div class="w-full max-w-screen-xl relative mx-auto px-6 pt-16 pb-16">
     <div class="xl:flex -mx-6">
-      <div class="px-6 text-center xl:text-left max-w-3xl mx-auto">
-        <h1 class="text-4xl lg:text-5xl xl:text-4xl font-light leading-tight">A utility-first CSS framework for <span class="text-teal-500 font-normal">rapidly building custom designs.</span></h1>
-        <p class="mt-6 leading-relaxed text-lg lg:text-xl xl:text-lg text-gray-600">
+      <div class="px-6 text-center xl:text-left max-w-2xl md:max-w-3xl mx-auto">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl xl:text-4xl font-light leading-tight">A utility-first CSS framework for <span class="block text-teal-500 font-normal">rapidly building custom designs.</span></h1>
+        <p class="mt-6 leading-relaxed sm:text-lg md:text-xl xl:text-lg text-gray-600">
           Tailwind is different from frameworks like Bootstrap, Foundation, or Bulma in that it's not a UI kit and doesn't include any built-in UI components like form controls, buttons, cards, or navbars.
         </p>
         <div class="flex mt-6 justify-center xl:justify-start">
