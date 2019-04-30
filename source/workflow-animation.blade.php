@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="https://unpkg.com/tailwindcss@next/dist/tailwind.min.css">
   <script src="/js/workflow-animation.js" defer></script>
 </head>
-<body>
+<body style="width: 640px; height: 448px; overflow: hidden">
   <div id="app" class="p-2">
     <workflow-animation></workflow-animation>
   </div>
