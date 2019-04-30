@@ -92,8 +92,8 @@
           Tailwind is different from frameworks like Bootstrap, Foundation, or Bulma in that it's not a UI kit and doesn't include any built-in UI components like form controls, buttons, cards, or navbars.
         </p>
         <div class="flex mt-6 justify-center xl:justify-start">
-          <a href="#" class="rounded-lg px-4 py-3 bg-teal-500 text-lg text-white font-semibold shadow-md">Get Started</a>
-          <a href="#" class="ml-4 rounded-lg px-4 py-3 bg-white text-lg text-gray-800 font-semibold shadow-md">Why Tailwind?</a>
+          <a href="#" class="rounded-lg px-4 md:px-5 xl:px-4 py-3 md:py-4 xl:py-3 bg-teal-500 md:text-lg xl:text-base text-white font-semibold leading-tight shadow-md">Get Started</a>
+          <a href="#" class="ml-4 rounded-lg px-4 md:px-5 xl:px-4 py-3 md:py-4 xl:py-3 bg-white md:text-lg xl:text-base text-gray-800 font-semibold leading-tight shadow-md">Why Tailwind?</a>
         </div>
       </div>
       <div class="mt-12 xl:mt-0 px-6 flex-shrink-0 hidden md:block">
