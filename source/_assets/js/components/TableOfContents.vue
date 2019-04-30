@@ -38,9 +38,9 @@ export default {
   },
   mounted() {
     anchors.options = { placement: 'left', class: 'text-gray-500 no-underline', icon: '#' }
-    anchors.add('#content h2, #content h3')
+    anchors.add('#content h2, #content h3, #content h4')
     this.links = anchors.elements.filter(el => {
-      return !el.classList.contains('no-toc')
+      return !el.classList.contains('no-toc') && el.tagName !== 'H4'
     }).map(el => {
       return {
         isChild: el.tagName === 'H3',

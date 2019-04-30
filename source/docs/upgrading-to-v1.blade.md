@@ -14,22 +14,22 @@ So while there's not a ton of exciting new features, you can at least be excited
 These changes affect all users, whether you are using Tailwind with PostCSS and your own custom config file, or just using the default config file or CDN.
 
 1. [Update Tailwind](#1-update-tailwind)
-1. [Update your config file](#2-update-your-config-file)
-1. [Rename `tailwind.js` to `tailwind.config.js`](#3-rename-tailwind-js-to-tailwind-config-js)
-1. [Replace `@tailwind preflight` with `@tailwind base`](#4-replace-tailwind-preflight-with-tailwind-base)
-1. [Replace `config()` with `theme()`](#5-replace-config-with-theme)
-1. [Explicitly style any headings](#6-explicitly-style-any-headings)
-1. [Explicitly style any lists that should have bullets/numbers](#7-explicitly-style-any-lists-that-should-have-bullets-numbers)
-1. [Remove any usage of `.list-reset`](#8-remove-any-usage-of-list-reset)
-1. [Replace `.pin-{side}` with `.{top|left|bottom|right|inset}-{value}`](#9-replace-pin-side-with-top-left-bottom-right-inset-value)
-1. [Replace `.roman` with `.not-italic`](#10-replace-roman-with-not-italic)
-1. [Replace `.flex-no-grow/shrink` with `.flex-grow/shrink-0`](#11-replace-flex-no-grow-shrink-with-flex-grow-shrink-0)
-1. [Explicitly add color and underline styles to links](#12-explicitly-add-color-and-underline-styles-to-links)
-1. [Add `inline` to any replaced elements (`img`, `video`, etc.) that should not be `display: block`](#13-add-inline-to-any-replaced-elements-img-video-etc-that-should)
-1. [Adjust the line-height and padding on your form elements](#14-adjust-the-line-height-and-padding-on-your-form-elements)
-1. [Adjust the text color on your form elements](#15-adjust-the-text-color-on-your-form-elements)
-1. [Double check your default font family](#16-double-check-your-default-font-family)
-1. [Double check your default line-height](#17-double-check-your-default-line-height)
+2. [Update your config file](#2-update-your-config-file)
+3. [Rename `tailwind.js` to `tailwind.config.js`](#3-rename-tailwind-js-to-tailwind-config-js)
+4. [Replace `@tailwind preflight` with `@tailwind base`](#4-replace-tailwind-preflight-with-tailwind-base)
+5. [Replace `config()` with `theme()`](#5-replace-config-with-theme)
+6. [Explicitly style any headings](#6-explicitly-style-any-headings)
+7. [Explicitly style any lists that should have bullets/numbers](#7-explicitly-style-any-lists-that-should-have-bullets-numbers)
+8. [Remove any usage of `.list-reset`](#8-remove-any-usage-of-list-reset)
+9. [Replace `.pin-{side}` with `.{top|left|bottom|right|inset}-{value}`](#9-replace-pin-side-with-top-left-bottom-right-inset-value)
+10. [Replace `.roman` with `.not-italic`](#10-replace-roman-with-not-italic)
+11. [Replace `.flex-no-grow/shrink` with `.flex-grow/shrink-0`](#11-replace-flex-no-grow-shrink-with-flex-grow-shrink-0)
+12. [Explicitly add color and underline styles to links](#12-explicitly-add-color-and-underline-styles-to-links)
+13. [Add `inline` to any replaced elements (`img`, `video`, etc.) that should not be `display: block`](#13-add-inline-to-any-replaced-elements-img-video-etc-that-should)
+14. [Adjust the line-height and padding on your form elements](#14-adjust-the-line-height-and-padding-on-your-form-elements)
+15. [Adjust the text color on your form elements](#15-adjust-the-text-color-on-your-form-elements)
+16. [Double check your default font family](#16-double-check-your-default-font-family)
+17. [Double check your default line-height](#17-double-check-your-default-line-height)
 
 <h3 class="no-toc">1. Update Tailwind</h3>
 
@@ -208,7 +208,67 @@ After making this change, your config file should look like this:
   }
 ```
 
-#### 2.4. Update the sections under `theme` to their new names
+#### 2.4. Move your `negativeMargin` config to `margin`
+
+Negative margins are now handled by the same core plugin that handles positive margins.
+
+Take any values you had configured under `negativeMargin` and move them to `margin`, being sure to add a leading dash to the keys and making the actual value negative.
+
+```diff
+  margin: {
+    'auto': 'auto',
+    'px': '1px',
+    '0': '0',
+    '1': '0.25rem',
+    '2': '0.5rem',
+    '3': '0.75rem',
+    '4': '1rem',
+    '5': '1.25rem',
+    '6': '1.5rem',
+    '8': '2rem',
+    '10': '2.5rem',
+    '12': '3rem',
+    '16': '4rem',
+    '20': '5rem',
+    '24': '6rem',
+    '32': '8rem',
++   '-px': '-1px',
++   '-1': '-0.25rem',
++   '-2': '-0.5rem',
++   '-3': '-0.75rem',
++   '-4': '-1rem',
++   '-5': '-1.25rem',
++   '-6': '-1.5rem',
++   '-8': '-2rem',
++   '-10': '-2.5rem',
++   '-12': '-3rem',
++   '-16': '-4rem',
++   '-20': '-5rem',
++   '-24': '-6rem',
++   '-32': '-8rem',
+  },
+- negativeMargin: {
+-   'px': '1px',
+-   '0': '0',
+-   '1': '0.25rem',
+-   '2': '0.5rem',
+-   '3': '0.75rem',
+-   '4': '1rem',
+-   '5': '1.25rem',
+-   '6': '1.5rem',
+-   '8': '2rem',
+-   '10': '2.5rem',
+-   '12': '3rem',
+-   '16': '4rem',
+-   '20': '5rem',
+-   '24': '6rem',
+-   '32': '8rem',
+- },
+```
+
+Note that the class names themselves have not changed — while you might expect that a key like `-6` would generate classes like `mx--6`, the `margin` plugin is intelligent enough to detect those keys and create the class names you're used to like `-mx-6`.
+
+#### 2.5. Update the sections under `theme` to their new names
 
 As part of an effort to make the naming in the config file more consistent, many of the sections under `theme` have been renamed.
 
@@ -231,7 +291,7 @@ These are the sections that need to be updated:
 
 These names need to change in the `variants` section as well, so feel free to do a find and replace across the whole file.
 
-#### 2.5. Update the sections under `variants` to their new names
+#### 2.6. Update the sections under `variants` to their new names
 
 As alluded to in the previous step, many of the sections under `variants` have been renamed as well.
 
@@ -286,7 +346,7 @@ The simplest way to make these changes is to just copy the value you were using 
 
 For example, if you never use the responsive variants of `antialiased` or `subpixel-antialiased`, you could set `fontSmoothing` to `[]` while still using `['responsive']` for `fontStyle`, `textDecoration`, and `textTransform`.
 
-#### 2.6. Add any disabled ~~modules~~ core plugins to `corePlugins`
+#### 2.7. Add any disabled ~~modules~~ core plugins to `corePlugins`
 
 In v0.x, you could disable a ~~module~~ core plugin by setting it to `false` in what is now the `variants` section.
 
@@ -324,7 +384,7 @@ In v1.0, to disable a plugin you need to set it to `false` in the `corePlugins` 
 
 This change was made to make it possible to disable other core plugins where `variants` are irrelevant, like `preflight` or `container` (more on this later).
 
-#### 2.7. Remove the `container` plugin from `plugins` and move any configuration to `theme`
+#### 2.8. Remove the `container` plugin from `plugins` and move any configuration to `theme`
 
 In v1.0, the `container` plugin is a core plugin just like `padding`, `margin`, etc. and should not be listed in your `plugins` section:
 
@@ -411,7 +471,7 @@ If you are taking advantage the `center` or `padding` options exposed by the `co
   }
 ```
 
-#### 2.8. Inline your `colors` variable into `theme.colors`
+#### 2.9. Inline your `colors` variable into `theme.colors`
 
 In v1.0, it's possible to specify that parts of your theme _depend_ on other parts of your theme, and because of that it's no longer necessary to hold your `colors` in a separate variable.
 
@@ -485,7 +545,7 @@ Next, update any sections that were referencing the `colors` variable using the 
   }
 ```
 
-#### 2.9. Don't invoke the default config as a function
+#### 2.10. Don't invoke the default config as a function
 
 In v0.x, `require('tailwindcss/defaultConfig')` returned a function that returned the default config when invoked.
 
@@ -509,7 +569,7 @@ In v1.0, it simply returns the object:
   }
 ```
 
-#### 2.10. Remove any configuration you haven't customized
+#### 2.11. Remove any configuration you haven't customized
 
 One of the philosophical changes in v1.0 is that we are encouraging people to use their configuration files solely for specifying _changes_ from the default config, rather than including the entire default config _plus_ their changes.
 
