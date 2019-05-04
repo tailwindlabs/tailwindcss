@@ -1,6 +1,6 @@
 import nprogress from 'nprogress'
 
-$.when($.ready).then(function() {
+(function() {
   window.history.replaceState({
     'href': window.location.href,
     'title': $('head').filter('title').text(),
@@ -111,4 +111,4 @@ $.when($.ready).then(function() {
       $('#sidebar-close').removeClass('hidden')
       $('#content-wrapper').addClass('overflow-hidden max-h-screen fixed')
   })
-})
+})()

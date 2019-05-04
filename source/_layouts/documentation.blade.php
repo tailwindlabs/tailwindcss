@@ -15,7 +15,7 @@
 @endsection
 
 @push('headScripts')
-<script src="{{ mix('/js/nav.js') }}"></script>
+<script src="{{ mix('/js/nav.js') }}" defer></script>
 @endpush
 
 @section('body')
