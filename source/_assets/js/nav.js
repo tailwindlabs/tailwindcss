@@ -27,13 +27,9 @@ import nprogress from 'nprogress'
     var href = $(this).attr('href')
 
     // Make Ajax request to get the page content
-    $.ajax({
-      method: 'GET',
-      url: href,
-      cache: false,
-      dataType: 'html',
-      async: true,
-    }).done(function(html) {
+    fetch(href).then(function (response) {
+      return response.text()
+    }).then(function (html) {
       // Parse the HTML response
       var title = $(html).filter('title').text()
       var header = $(html).find('#header').html()
