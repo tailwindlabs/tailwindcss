@@ -1,6 +1,6 @@
 ---
 extends: _layouts.homepage
-title: "Why Tailwind?"
+title: "What is Tailwind?"
 description: null
 titleBorder: false
 ---
