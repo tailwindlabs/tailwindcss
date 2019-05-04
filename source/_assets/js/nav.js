@@ -1,21 +1,13 @@
 import nprogress from 'nprogress'
 
-function ready(fn) {
-  if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading"){
-    fn();
-  } else {
-    document.addEventListener('DOMContentLoaded', fn);
-  }
-}
-
-ready(function() {
+$.when($.ready).then(function() {
   window.history.replaceState({
     'href': window.location.href,
-    'title': document.querySelector('head title').text,
-    'header': document.querySelector('#header').innerHTML,
-    'nav': document.querySelector('#nav').innerHTML,
-    'navClasses': document.querySelector('#navWrapper').className,
-    'content': document.querySelector('#content').innerHTML
+    'title': $('head').filter('title').text(),
+    'header': $(document).find('#header').html(),
+    'nav': $(document).find('#nav').html(),
+    'navClasses': $(document).find('#navWrapper').attr('class'),
+    'content': $(document).find('#content').html()
   }, '', window.location.href)
 
   $('#nav').on('click', 'a', function (event) {
@@ -35,9 +27,7 @@ ready(function() {
     var href = $(this).attr('href')
 
     // Make Ajax request to get the page content
-    fetch(href).then(function (response) {
-      return response.text()
-    }).then(function (html) {
+    $.get(href, html => {
       // Parse the HTML response
       var title = $(html).filter('title').text()
       var header = $(html).find('#header').html()
