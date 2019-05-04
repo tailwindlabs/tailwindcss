@@ -11,14 +11,13 @@ $.when($.ready).then(function() {
   }, '', window.location.href)
 
   $('#nav').on('click', 'a', function (event) {
-
-    // Start progress
-    let progress = setTimeout(() => nprogress.start(), 100)
-
     // Allow opening links in new tabs
     if (event.metaKey) {
       return
     }
+
+    // Start progress
+    let progress = setTimeout(() => nprogress.start(), 100)
 
     // Prevent following link
     event.preventDefault()
