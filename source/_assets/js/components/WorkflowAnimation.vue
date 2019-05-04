@@ -339,7 +339,7 @@
             TweenLite.set(this.$refs.avatar, { x: oldPosition.left - this.$refs.avatar.getBoundingClientRect().left })
             return tweenTo(this.$refs.avatar, 1, { x: 0, ease: Power4.easeOut }, '+=.25')
           })
-          .then(tweenTo(this.$refs.avatarCursor, .08, { visibility: 'hidden'}))
+          .then(() => tweenTo(this.$refs.avatarCursor, .08, { visibility: 'hidden'}))
       },
       animateNameSize() {
         return tweenTo(this.$refs.nameCursor, .08, { visibility: 'visible'})
