@@ -1,13 +1,21 @@
 import nprogress from 'nprogress'
 
-(function() {
+function ready(fn) {
+  if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading"){
+    fn();
+  } else {
+    document.addEventListener('DOMContentLoaded', fn);
+  }
+}
+
+ready(function() {
   window.history.replaceState({
     'href': window.location.href,
-    'title': $('head').filter('title').text(),
-    'header': $(document).find('#header').html(),
-    'nav': $(document).find('#nav').html(),
-    'navClasses': $(document).find('#navWrapper').attr('class'),
-    'content': $(document).find('#content').html()
+    'title': document.querySelector('head title').text,
+    'header': document.querySelector('#header').innerHTML,
+    'nav': document.querySelector('#nav').innerHTML,
+    'navClasses': document.querySelector('#navWrapper').className,
+    'content': document.querySelector('#content').innerHTML
   }, '', window.location.href)
 
   $('#nav').on('click', 'a', function (event) {
@@ -107,4 +115,4 @@ import nprogress from 'nprogress'
       $('#sidebar-close').removeClass('hidden')
       $('#content-wrapper').addClass('overflow-hidden max-h-screen fixed')
   })
-})()
+})
