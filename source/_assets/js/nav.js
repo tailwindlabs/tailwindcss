@@ -4,7 +4,9 @@ $.when($.ready).then(function() {
   window.history.replaceState({
     'href': window.location.href,
     'title': $('head').filter('title').text(),
+    'header': $(document).find('#header').html(),
     'nav': $(document).find('#nav').html(),
+    'navClasses': $(document).find('#navWrapper').attr('class'),
     'content': $(document).find('#content').html()
   }, '', window.location.href)
 
@@ -30,11 +32,13 @@ $.when($.ready).then(function() {
       url: href,
       cache: false,
       dataType: 'html',
+      async: true,
     }).done(function(html) {
-
       // Parse the HTML response
       var title = $(html).filter('title').text()
+      var header = $(html).find('#header').html()
       var nav = $(html).find('#nav').html()
+      var navClasses = $(html).find('#navWrapper').attr('class')
       var content = $(html).find('#content').html()
 
       $('#sidebar').addClass('hidden')
@@ -44,7 +48,9 @@ $.when($.ready).then(function() {
 
       // Update the page
       $('head title').text(title)
+      $('#header').html(header)
       $('#nav').html(nav)
+      $('#navWrapper').attr('class', navClasses)
       $('#content').html(content)
 
       // Scroll to the top of the page
@@ -54,7 +60,9 @@ $.when($.ready).then(function() {
       window.history.pushState({
         'href': href,
         'title': title,
+        'header': $(html).find('#header').html(),
         'nav': $(html).find('#nav').html(),
+        'navClasses': $(html).find('#navWrapper').attr('class'),
         'content': $(html).find('#content').html()
       }, '', href)
 
@@ -75,7 +83,9 @@ $.when($.ready).then(function() {
     if(e.state){
       // Update the page
       $('title').text(e.state.title)
+      $('#header').html(e.state.header)
       $('#nav').html(e.state.nav)
+      $('#navWrapper').attr('class', e.state.navClasses)
       $('#content').html(e.state.content)
 
       // Track on Google Analytics
@@ -87,7 +97,7 @@ $.when($.ready).then(function() {
   }
 
   // Close sidebar (mobile)
-  $('#sidebar-close').on('click', function () {
+  $(document).on('click', '#sidebar-close', function () {
     $('#sidebar').addClass('hidden')
     $('#sidebar-close').addClass('hidden')
     $('#sidebar-open').removeClass('hidden')
@@ -95,7 +105,7 @@ $.when($.ready).then(function() {
   })
 
   // Show sidebar (mobile)
-  $('#sidebar-open').on('click', function () {
+  $(document).on('click', '#sidebar-open', function () {
       $('#sidebar-open').addClass('hidden')
       $('#sidebar').removeClass('hidden')
       $('#sidebar-close').removeClass('hidden')
