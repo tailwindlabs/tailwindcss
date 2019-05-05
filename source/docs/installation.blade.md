@@ -5,10 +5,12 @@ description: "Quick start guide for installing and configuring Tailwind CSS."
 titleBorder: true
 ---
 
-<h2 class="flex">
-  <span class="text-lg bg-gray-200 text-gray-700 h-6 w-6 rounded-full inline-flex justify-center items-center mt-px mr-3">1</span>
-  Install Tailwind via npm
-</h2>
+<div class="heading mt-0">
+  <h2 class="flex markdown mt-0">
+    <span class="text-lg bg-gray-200 text-gray-700 h-6 w-6 rounded-full inline-flex justify-center items-center mt-px mr-3">1</span>
+    Install Tailwind via npm 
+  </h2>
+</div>
 
 For most projects (and to take advantage of Tailwind's customization features), you'll want to install Tailwind via npm.
 
@@ -20,10 +22,12 @@ npm install tailwindcss@next --save-dev
 yarn add tailwindcss@next --dev
 ```
 
-<h2 class="flex">
-  <span class="text-lg bg-gray-200 text-gray-700 h-6 w-6 rounded-full inline-flex justify-center items-center mt-px mr-3">2</span>
-  Add Tailwind to your CSS
-</h2>
+<div class="heading mt-0">
+  <h2 class="flex markdown">
+    <span class="text-lg bg-gray-200 text-gray-700 h-6 w-6 rounded-full inline-flex justify-center items-center mt-px mr-3">2</span>
+    Add Tailwind to your CSS
+  </h2>
+</div>
 
 Use the `@@tailwind` directive to inject Tailwind's `base`, `components`, and `utilities` styles into your CSS:
 
@@ -47,10 +51,12 @@ If you're using `postcss-import` (or a tool that uses it under the hood, such as
 @@import "tailwindcss/utilities";
 ```
 
-<h2 class="flex">
-  <span class="text-lg bg-gray-200 text-gray-700 h-6 w-6 rounded-full inline-flex justify-center items-center mt-px mr-3">3</span>
-  Process your CSS with Tailwind
-</h2>
+<div class="heading mt-0">
+  <h2 class="flex markdown">
+    <span class="text-lg bg-gray-200 text-gray-700 h-6 w-6 rounded-full inline-flex justify-center items-center mt-px mr-3">3</span>
+    Process your CSS with Tailwind
+  </h2>
+</div>
 
 ### Using Tailwind CLI
 
