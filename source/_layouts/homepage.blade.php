@@ -29,8 +29,8 @@
       {{-- Top nav --}}
       <div class="flex items-center">
         <div class="w-full max-w-screen-xl relative mx-auto px-6">
-          <div class="border-b-2 border-gray-200 py-4">
-            <div class="h-16 flex items-center -mx-6">
+          <div class="border-b-2 border-gray-200">
+            <div class="h-24 flex items-center -mx-6">
 
               {{-- Logo section --}}
               <div class="lg:w-1/4 xl:w-1/5 pl-6 pr-6">
@@ -55,13 +55,13 @@
                 </div>
 
 
-                <button type="button" id="sidebar-open" class="flex px-6 items-center lg:hidden">
-                  <svg class="fill-current w-4 h-4 cursor-pointer text-gray-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+                <button type="button" id="sidebar-open" class="text-gray-500 focus:outline-none focus:text-gray-700 flex px-6 items-center lg:hidden">
+                  <svg class="fill-current w-4 h-4 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
                 </button type="button">
 
 
-                <button type="button" id="sidebar-close" class="hidden flex px-6 items-center lg:hidden">
-                  <svg class="fill-current w-4 h-4 cursor-pointer text-gray-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"/></svg>
+                <button type="button" id="sidebar-close" class="text-gray-500 focus:outline-none focus:text-gray-700 hidden flex px-6 items-center lg:hidden">
+                  <svg class="fill-current w-4 h-4 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"/></svg>
                 </button type="button">
 
                 {{-- Links section --}}
@@ -114,10 +114,10 @@
 <div class="w-full max-w-screen-xl mx-auto px-6">
   <div class="lg:flex -mx-6">
     {{-- Side nav --}}
-    <div id="sidebar" class="hidden absolute z-90 top-16 bg-white w-full border-b -mb-16 lg:-mb-0 lg:static lg:bg-transparent lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5">
+    <div id="sidebar" class="hidden absolute z-90 top-24 bg-white w-full border-b -mb-16 lg:-mb-0 lg:static lg:bg-transparent lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5">
       <div id="navWrapper" class="lg:block lg:relative lg:sticky lg:top-0 overflow-hidden">
-        <div id="nav" class="h-16 pointer-events-none absolute inset-x-0 z-10" style="background-image: linear-gradient(rgba(255,255,255,1), rgba(255,255,255,0));"></div>
-        <nav class="px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8 sticky?lg:h-screen">
+        <div id="navGradient" class="hidden lg:block h-16 pointer-events-none absolute inset-x-0 z-10" style="background-image: linear-gradient(rgba(255,255,255,1), rgba(255,255,255,0));"></div>
+        <nav id="nav" class="px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8 sticky?lg:h-screen">
           @foreach ($page->navigation as $sectionName => $sectionItems)
           <div class="mb-8">
             <h5 class="mb-3 lg:mb-2 text-gray-500 uppercase tracking-wide font-bold text-sm lg:text-xs">{{ $sectionName }}</h5>

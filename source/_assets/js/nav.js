@@ -6,7 +6,9 @@ $.when($.ready).then(function() {
     'title': $('head').filter('title').text(),
     'header': $(document).find('#header').html(),
     'nav': $(document).find('#nav').html(),
-    'navClasses': $(document).find('#navWrapper').attr('class'),
+    'navClasses': $(document).find('#nav').attr('class'),
+    'navGradientClasses': $(document).find('#navGradient').attr('class'),
+    'navWrapperClasses': $(document).find('#navWrapper').attr('class'),
     'content': $(document).find('#content').html()
   }, '', window.location.href)
 
@@ -31,7 +33,9 @@ $.when($.ready).then(function() {
       var title = $(html).filter('title').text()
       var header = $(html).find('#header').html()
       var nav = $(html).find('#nav').html()
-      var navClasses = $(html).find('#navWrapper').attr('class')
+      var navClasses = $(html).find('#nav').attr('class')
+      var navGradientClasses = $(html).find('#navGradient').attr('class')
+      var navWrapperClasses = $(html).find('#navWrapper').attr('class')
       var content = $(html).find('#content').html()
 
       $('#sidebar').addClass('hidden')
@@ -43,7 +47,9 @@ $.when($.ready).then(function() {
       $('head title').text(title)
       $('#header').html(header)
       $('#nav').html(nav)
-      $('#navWrapper').attr('class', navClasses)
+      $('#nav').attr('class', navClasses)
+      $('#navGradient').attr('class', navGradientClasses)
+      $('#navWrapper').attr('class', navWrapperClasses)
       $('#content').html(content)
 
       // Scroll to the top of the page
@@ -55,7 +61,9 @@ $.when($.ready).then(function() {
         'title': title,
         'header': $(html).find('#header').html(),
         'nav': $(html).find('#nav').html(),
-        'navClasses': $(html).find('#navWrapper').attr('class'),
+        'navClasses': $(html).find('#nav').attr('class'),
+        'navGradientClasses': $(html).find('#navGradient').attr('class'),
+        'navWrapperClasses': $(html).find('#navWrapper').attr('class'),
         'content': $(html).find('#content').html()
       }, '', href)
 
@@ -78,7 +86,9 @@ $.when($.ready).then(function() {
       $('title').text(e.state.title)
       $('#header').html(e.state.header)
       $('#nav').html(e.state.nav)
-      $('#navWrapper').attr('class', e.state.navClasses)
+      $('#nav').attr('class', e.state.navClasses)
+      $('#navGradient').attr('class', e.state.navGradientClasses)
+      $('#navWrapper').attr('class', e.state.navWrapperClasses)
       $('#content').html(e.state.content)
 
       // Track on Google Analytics

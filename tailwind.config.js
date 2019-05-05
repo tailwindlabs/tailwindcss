@@ -35,6 +35,11 @@ module.exports = {
         '128': '32rem',
         '(screen-16)': 'calc(100vh - 4rem)',
       },
+      inset: {
+        '16': '4rem',
+        '20': '5rem',
+        '24': '6rem',
+      },
       borderWidth: {
         '6': '6px',
       },
