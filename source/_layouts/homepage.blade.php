@@ -29,8 +29,8 @@
       {{-- Top nav --}}
       <div class="flex items-center">
         <div class="w-full max-w-screen-xl relative mx-auto px-6">
-          <div class="border-b-2 border-gray-200">
-            <div class="h-24 flex items-center -mx-6">
+          <div class="border-b-2 border-gray-200 h-24 flex flex-col justify-center">
+            <div class="flex items-center -mx-6">
 
               {{-- Logo section --}}
               <div class="lg:w-1/4 xl:w-1/5 pl-6 pr-6">
@@ -92,7 +92,7 @@
       <div class="w-full max-w-screen-xl relative mx-auto px-6 pt-16 pb-48 md:pb-24">
         <div class="xl:flex -mx-6">
           <div class="px-6 text-left md:text-center xl:text-left max-w-2xl md:max-w-3xl mx-auto">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl xl:text-4xl font-light leading-tight">A utility-first CSS framework for <span class="block text-teal-500 font-normal">rapidly building custom designs.</span></h1>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl xl:text-4xl font-light leading-tight">A utility-first CSS framework for <span class="sm:block text-teal-500 font-normal">rapidly building custom designs.</span></h1>
             <p class="mt-6 leading-relaxed sm:text-lg md:text-xl xl:text-lg text-gray-600">
               Tailwind CSS is a highly customizable, low-level CSS framework that gives you all of the building blocks you need to build bespoke designs without any of the annoying opinionated styles you have to fight to override.
             </p>
@@ -117,8 +117,8 @@
 <div class="w-full max-w-screen-xl mx-auto px-6">
   <div class="lg:flex -mx-6">
     {{-- Side nav --}}
-    <div id="sidebar" class="hidden absolute z-90 top-24 bg-white w-full border-b -mb-16 lg:-mb-0 lg:static lg:bg-transparent lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5">
-      <div id="navWrapper" class="lg:block lg:relative lg:sticky lg:top-0 overflow-hidden">
+    <div id="sidebar" class="hidden absolute z-90 top-24 w-full border-b -mb-16 lg:-mb-0 lg:static lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5">
+      <div id="navWrapper" class="bg-gray-100 lg:bg-transparent lg:block lg:relative lg:sticky lg:top-0 overflow-hidden">
         <div id="navGradient" class="hidden lg:block h-16 pointer-events-none absolute inset-x-0 z-10" style="background-image: linear-gradient(rgba(255,255,255,1), rgba(255,255,255,0));"></div>
         <nav id="nav" class="px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8 sticky?lg:h-screen">
           @foreach ($page->navigation as $sectionName => $sectionItems)
