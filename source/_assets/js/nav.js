@@ -5,6 +5,7 @@ $.when($.ready).then(function() {
     'href': window.location.href,
     'title': $('head').filter('title').text(),
     'header': $(document).find('#header').html(),
+    'sidebarClasses': $(document).find('#sidebar').attr('class'),
     'nav': $(document).find('#nav').html(),
     'navClasses': $(document).find('#nav').attr('class'),
     'navGradientClasses': $(document).find('#navGradient').attr('class'),
@@ -32,6 +33,7 @@ $.when($.ready).then(function() {
       // Parse the HTML response
       var title = $(html).filter('title').text()
       var header = $(html).find('#header').html()
+      var sidebarClasses = $(html).find('#sidebar').attr('class')
       var nav = $(html).find('#nav').html()
       var navClasses = $(html).find('#nav').attr('class')
       var navGradientClasses = $(html).find('#navGradient').attr('class')
@@ -46,6 +48,7 @@ $.when($.ready).then(function() {
       // Update the page
       $('head title').text(title)
       $('#header').html(header)
+      $('#sidebar').attr('class', sidebarClasses)
       $('#nav').html(nav)
       $('#nav').attr('class', navClasses)
       $('#navGradient').attr('class', navGradientClasses)
@@ -60,6 +63,7 @@ $.when($.ready).then(function() {
         'href': href,
         'title': title,
         'header': $(html).find('#header').html(),
+        'sidebarClasses': $(html).find('#sidebar').attr('class'),
         'nav': $(html).find('#nav').html(),
         'navClasses': $(html).find('#nav').attr('class'),
         'navGradientClasses': $(html).find('#navGradient').attr('class'),
@@ -85,6 +89,7 @@ $.when($.ready).then(function() {
       // Update the page
       $('title').text(e.state.title)
       $('#header').html(e.state.header)
+      $('#sidebar').attr('class', e.state.sidebarClasses)
       $('#nav').html(e.state.nav)
       $('#nav').attr('class', e.state.navClasses)
       $('#navGradient').attr('class', e.state.navGradientClasses)

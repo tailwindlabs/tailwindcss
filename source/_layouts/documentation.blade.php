@@ -31,9 +31,17 @@
           <div class="lg:w-1/4 xl:w-1/5 pl-6 pr-6 lg:pr-8">
             <div class="flex items-center">
               <a href="/" class="block lg:mr-4">
-                <svg class="w-8 h-8 lg:w-12 lg:h-12 block" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-10 h-10 lg:w-12 lg:h-12 block" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
                   <title>Tailwind CSS</title>
-                  <path d="M13.5 11.1C15.3 3.9 19.8.3 27 .3c10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 27.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z" transform="translate(5 16)" fill="url(#logoGradient)" fill-rule="evenodd"></path>
+                  <path d="M13.5 11.1C15.3 3.9 19.8.3 27 .3c10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 27.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z" transform="translate(5 16)" fill="url(#logoMarkGradient)" fill-rule="evenodd"></path>
+                  <defs>
+                    <linearGradient x1="0%" y1="0%" y2="100%" id="logoMarkGradient">
+                      <stop stop-color="#2298BD"/>
+                      <stop offset="1" stop-color="#0ED7B5"/>
+                      {{-- <stop stop-color="#2383AE" offset="0%"></stop> --}}
+                      {{-- <stop stop-color="#6DD7B9" offset="100%"></stop> --}}
+                    </linearGradient>
+                  </defs>
                 </svg>
               </a>
               <a href="https://github.com/tailwindcss/tailwindcss/releases" class="hidden lg:block font-semibold text-base text-gray-500 hover:text-gray-700">
@@ -93,8 +101,8 @@
   <div class="lg:flex -mx-6">
 
     {{-- Side nav --}}
-    <div id="sidebar" class="hidden absolute z-90 top-16 bg-white w-full border-b -mb-16 lg:-mb-0 lg:static lg:bg-transparent lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5">
-      <div id="navWrapper" class="lg:block lg:relative lg:sticky lg:top-16 overflow-hidden">
+    <div id="sidebar" class="hidden absolute z-90 top-16 w-full border-b -mb-16 lg:-mb-0 lg:static lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5">
+      <div id="navWrapper" class="lg:block lg:relative lg:sticky lg:top-16 bg-white lg:bg-transparent overflow-hidden">
         <div id="navGradient" class="hidden"></div>
         <nav id="nav" class="px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8 sticky?lg:h-(screen-16)">
           @foreach ($page->navigation as $sectionName => $sectionItems)
@@ -175,15 +183,6 @@
   </div>
 </div>
 {{-- /Main container --}}
-
-<svg style="height: 0; width: 0; position: absolute; visibility: hidden;">
-  <defs>
-    <linearGradient x1="0%" y1="0%" y2="100%" id="logoGradient">
-      <stop stop-color="#2383AE" offset="0%"></stop>
-      <stop stop-color="#6DD7B9" offset="100%"></stop>
-    </linearGradient>
-  </defs>
-</svg>
 @endsection
 
 @push('scripts')
