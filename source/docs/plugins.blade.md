@@ -755,7 +755,7 @@ module.exports = {
         supportsRule.nodes = container.nodes
         container.nodes = [supportsRule]
         supportsRule.walkRules(rule => {
-          rule.selector = `.${e(`supports-grid${separator}${rule.selector.slice(1)}``)}
+          rule.selector = `.${e(`supports-grid${separator}${rule.selector.slice(1)}`)}`
         })
       })
     }
