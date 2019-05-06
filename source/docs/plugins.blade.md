@@ -752,8 +752,8 @@ module.exports = {
     function({ addVariant, e }) {
       addVariant('supports-grid', ({ container, separator }) => {
         const supportsRule = postcss.atRule({ name: 'supports', params: '(display: grid)' })
-        supportsRule.nodes = container.nodes
-        container.nodes = [supportsRule]
+        supportsRule.append(container.nodes)
+        container.append(supportsRule)
         supportsRule.walkRules(rule => {
           rule.selector = `.${e(`supports-grid${separator}${rule.selector.slice(1)}``)}
         })
