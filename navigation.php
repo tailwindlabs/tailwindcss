@@ -4,7 +4,7 @@ return [
     'Getting Started' => [
         'Installation' => 'installation',
         'Upgrade Guide' => 'upgrading-to-v1',
-        'Using with Sass/Less/Stylus' => 'using-with-sass-less-stylus',
+        'Using with Preprocessors' => 'using-with-preprocessors',
         'Controlling File Size' => 'controlling-file-size',
         'Browser Support' => 'browser-support',
     ],
