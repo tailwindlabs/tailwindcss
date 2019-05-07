@@ -208,7 +208,7 @@
         </div>
         {{-- /Vue-enabled area --}}
 
-        <script src="/js/app.js"></script>
+        <script src="{{ mix('/js/app.js', 'assets/build') }}"></script>
       </div>
       {{-- /"Turbolinks" --}}
 
