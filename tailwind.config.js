@@ -12,19 +12,12 @@ module.exports = {
     extend: {
       colors: {
         code: {
-          green: '#bdfab3',
-          yellow: '#f9e189',
-          purple: '#e1bbff',
-          red: '#ff88ac',
-          blue: '#93ddfd',
-          white: '#fff',
-
-          // green: 'hsl(88, 72%, 71%)',
-          // blue: 'hsl(193, 100%, 71%)',
-          // red: 'hsl(355, 100%, 70%)',
-          // purple: 'hsl(281, 77%, 75%)',
-          // white: 'hsl(180, 100%, 96%)',
-          // yellow: 'hsl(41, 100%, 67%)',
+          green: 'var(--color-code-green)',
+          yellow: 'var(--color-code-yellow)',
+          purple: 'var(--color-code-purple)',
+          red: 'var(--color-code-red)',
+          blue: 'var(--color-code-blue)',
+          white: 'var(--color-code-white)',
         }
       },
       spacing: {
