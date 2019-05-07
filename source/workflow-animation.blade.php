@@ -22,7 +22,7 @@
     }
   </style>
 </head>
-<body style="width: 640px; height: 448px; overflow: hidden">
+<body style="width: 640px; height: 480px; overflow: hidden">
   <div id="app" class="p-2">
     <workflow-animation></workflow-animation>
   </div>

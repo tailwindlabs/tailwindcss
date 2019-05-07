@@ -124,7 +124,7 @@
             </div>
           </div>
           <div class="mt-12 xl:mt-0 px-6 flex-shrink-0 hidden md:block">
-            <iframe src="/workflow-animation" class="border-0 mx-auto" style="width: 40rem; height: 28rem;"></iframe>
+            <iframe src="/workflow-animation" class="border-0 mx-auto" style="width: 40rem; height: 30rem;"></iframe>
           </div>
         </div>
       </div>
