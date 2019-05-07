@@ -411,7 +411,8 @@ fieldset {
 }
 
 ol,
-ul {
+ul,
+menu {
   margin: 0;
 }
 
