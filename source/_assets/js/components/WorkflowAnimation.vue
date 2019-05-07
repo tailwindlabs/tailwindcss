@@ -527,21 +527,21 @@
 
 <style>
   .code-green {
-    color: hsl(88, 72%, 71%);
+    color: var(--color-code-green);
   }
   .code-blue {
-    color: hsl(193, 100%, 71%);
+    color: var(--color-code-blue);
   }
   .code-red {
-    color: hsl(355, 100%, 70%);
+    color: var(--color-code-red);
   }
   .code-purple {
-    color: hsl(281, 77%, 75%);
+    color: var(--color-code-purple);
   }
   .code-white {
-    color: hsl(180, 100%, 96%);
+    color: var(--color-code-white);
   }
   .code-yellow {
-    color: hsl(41, 100%, 67%);
+    color: var(--color-code-yellow);
   }
 </style>
