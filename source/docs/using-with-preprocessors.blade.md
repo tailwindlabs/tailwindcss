@@ -44,12 +44,12 @@ Then add it as the very first plugin in your PostCSS configuration:
 
 ```js
 // postcss.config.js
-module.exports {
-  plugins: {
+module.exports = {
+  plugins: [
     require('postcss-import'),
     require('tailwindcss'),
     require('autoprefixer'),
-  }
+  ]
 }
 ```
 
@@ -158,13 +158,13 @@ Then add them to your PostCSS configuration, somewhere after Tailwind itself but
 
 ```js
 // postcss.config.js
-module.exports {
-  plugins: {
+module.exports = {
+  plugins: [
     require('postcss-import'),
     require('tailwindcss'),
     require('postcss-nested'), // or require('postcss-nesting')
     require('autoprefixer'),
-  }
+  ]
 }
 ```
 
@@ -188,14 +188,14 @@ Then add it to your PostCSS configuration, somewhere after Tailwind itself but b
 
 ```js
 // postcss.config.js
-module.exports {
-  plugins: {
+module.exports = {
+  plugins: [
     require('postcss-import'),
     require('tailwindcss'),
     require('postcss-nested'),
     require('postcss-custom-properties'),
     require('autoprefixer'),
-  }
+  ]
 }
 ```
 
@@ -217,12 +217,12 @@ Then add it to your PostCSS configuration somewhere after Tailwind itself:
 
 ```js
 // postcss.config.js
-module.exports {
-  plugins: {
+module.exports = {
+  plugins: [
     require('postcss-import'),
     require('tailwindcss'),
     require('postcss-preset-env')({ stage: 1 }),
-  }
+  ]
 }
 ```
 
