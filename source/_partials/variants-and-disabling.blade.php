@@ -34,8 +34,8 @@
 
 @component('_partials.customized-config', ['key' => 'variants'])
   // ...
-- {{ $utility['property'] }}: ['{{$currentVariants->implode('\', \'')}}'],
-+ {{ $utility['property'] }}: ['{{$currentVariants->merge($extraVariants)->implode('\', \'')}}'],
+- {{ $utility['property'] }}: ['{!! $currentVariants->implode('\', \'') !!}'],
++ {{ $utility['property'] }}: ['{!! $currentVariants->merge($extraVariants)->implode('\', \'') !!}'],
 @endcomponent
 
 @isset($extraMessage)
