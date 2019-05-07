@@ -12,7 +12,7 @@
   <title>@yield('title', $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS - A Utility-First CSS Framework for Rapid UI Development')</title>
   <meta name="theme-color" content="#ffffff">
   @yield('meta')
-  <link rel="stylesheet" href="{{ mix('/css/main.css') }}">
+  <link rel="stylesheet" href="{{ mix('/css/main.css', 'assets/build') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css">
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   @stack('headScripts')

@@ -16,7 +16,7 @@ return [
         'Adding New Utilities' => 'adding-new-utilities',
         'Extracting Components' => 'extracting-components',
         'Adding Base Styles' => 'adding-base-styles',
-        'Functions &amp; Directives' => 'functions-and-directives',
+        'Functions & Directives' => 'functions-and-directives',
     ],
     'Customization' => [
         'Configuration' => 'configuration',

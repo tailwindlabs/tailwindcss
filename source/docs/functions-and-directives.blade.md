@@ -1,6 +1,6 @@
 ---
 extends: _layouts.documentation
-title: "Functions &amp; Directives"
+title: "Functions & Directives"
 description: null
 titleBorder: true
 ---

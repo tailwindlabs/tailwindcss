@@ -17,7 +17,7 @@
 @section('title', 'Tailwind CSS - A Utility-First CSS Framework for Rapid UI Development')
 
 @push('headScripts')
-<script src="{{ mix('/js/nav.js') }}"></script>
+<script src="{{ mix('/js/nav.js', 'assets/build') }}"></script>
 @endpush
 
 @section('body')

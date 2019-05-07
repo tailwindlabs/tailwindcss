@@ -11,7 +11,7 @@
   <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#00b4b6">
   <meta name="theme-color" content="#ffffff">
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i,700,700i" rel="stylesheet">
-  <link rel="stylesheet" href="{{ mix('/css/main.css') }}">
+  <link rel="stylesheet" href="{{ mix('/css/main.css', 'assets/build') }}">
 </head>
 <body class="font-source-sans font-normal text-gray-900 leading-normal">
   <div>
