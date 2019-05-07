@@ -50,7 +50,7 @@ export default {
   computed: {
     highlightedCode() {
       const regex = new RegExp(`(${this.activeScreen}\:[^\\s\\&]+)`, 'g')
-      return escapeHtml(this.code).replace(regex, '<span style="color: #f9ee98;">$1</span>').replace(/none:/g, '')
+      return escapeHtml(this.code).replace(regex, `<span class="text-code-yellow">$1</span>`).replace(/none:/g, '')
     }
   },
 }

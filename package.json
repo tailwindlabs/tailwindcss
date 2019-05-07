@@ -12,7 +12,7 @@
     "anchor-js": "^4.1.0",
     "cross-env": "^3.2.3",
     "escape-html": "^1.0.3",
-    "laravel-mix": "^1.5.1",
+    "laravel-mix": "^4.0.15",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
     "lodash": "^4.17.4",
@@ -25,7 +25,8 @@
     "prismjs": "^1.8.3",
     "stylefmt": "^6.0.0",
     "tailwindcss": "^1.0.0-beta.8",
-    "vue": "^2.5.2",
+    "vue": "^2.6.10",
+    "vue-template-compiler": "^2.6.10",
     "webpack-watch": "^0.2.0",
     "yargs": "^10.0.3"
   },
