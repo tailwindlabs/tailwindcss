@@ -10,17 +10,15 @@ module.exports = {
       'xl': '1280px',
     },
     extend: {
-      fontFamily: {
-        mono: 'Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-      },
       colors: {
-        gray: {
-          ...defaultConfig.theme.colors.gray,
-          600: '#647287',
-        },
-        'tailwind-teal-light': '#5ebcca',
-        'tailwind-teal': '#44a8b3',
-        'tailwind-teal-dark': '#2f8696',
+        code: {
+          green: '#bdfab3',
+          yellow: '#f9e189',
+          purple: '#e1bbff',
+          red: '#ff88ac',
+          blue: '#93ddfd',
+          white: '#fff',
+        }
       },
       spacing: {
         '7': '1.75rem',

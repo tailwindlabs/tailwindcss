@@ -251,28 +251,28 @@ Using the default breakpoints, this would generate these classes:
 
 /* ... */
 
-@@media (min-width: 640px) {
+@media (min-width: 640px) {
   .sm\:bg-gradient-brand {
     background-image: linear-gradient(blue, green);
   }
   /* ... */
 }
 
-@@media (min-width: 768px) {
+@media  (min-width: 768px) {
   .md\:bg-gradient-brand {
     background-image: linear-gradient(blue, green);
   }
   /* ... */
 }
 
-@@media (min-width: 1024px) {
+@media (min-width: 1024px) {
   .lg\:bg-gradient-brand {
     background-image: linear-gradient(blue, green);
   }
   /* ... */
 }
 
-@@media (min-width: 1280px) {
+@media (min-width: 1280px) {
   .xl\:bg-gradient-brand {
     background-image: linear-gradient(blue, green);
   }
