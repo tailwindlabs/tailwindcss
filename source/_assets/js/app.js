@@ -5,7 +5,6 @@ window.Vue = require('vue')
 
 Vue.component('responsive-code-sample', require('./components/ResponsiveCodeSample.vue').default)
 Vue.component('table-of-contents', require('./components/TableOfContents.vue').default)
-Vue.component('workflow-animation', require('./components/WorkflowAnimation.vue').default)
 
 
 const app = new Vue({
