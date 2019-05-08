@@ -474,7 +474,7 @@ If you'd like to reference the user's `variants` configuration, it's recommended
 
 <p class="flex items-center mt-8 mb-0">
   <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
-  <strong class="text-s  font-semibold text-gray-600">Don't use the config function to look up variants</strong>
+  <strong class="text-sm font-semibold text-gray-700">Don't use the config function to look up variants</strong>
 </p>
 
 ```js
@@ -483,7 +483,7 @@ addUtilities(newUtilities, config('variants.customPlugin'))
 
 <p class="flex items-center mt-8 mb-0">
   <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-check"><circle class="text-green-200 fill-current" cx="12" cy="12" r="10" /><path class="text-green-600 fill-current" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
-  <strong class="text-s  font-semibold text-gray-600">Do use the variants function instead</strong>
+  <strong class="text-sm font-semibold text-gray-700">Do use the variants function instead</strong>
 </p>
 
 ```js

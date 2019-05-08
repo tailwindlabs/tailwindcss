@@ -99,14 +99,14 @@ That means that **it is important to avoid dynamically creating class strings in
 
 <p class="flex items-center mt-8 mb-0">
   <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
-  <strong class="text-s  font-semibold text-gray-600">Don't use string concatenation to create class names</strong>
+  <strong class="text-sm font-semibold text-gray-700">Don't use string concatenation to create class names</strong>
 </p>
 
 <pre class="language-html mt-4" v-pre><code>&lt;div :class="text-@{{ error ? 'red' : 'green' }}-600"&gt;&lt;/div&gt;</code></pre>
 
 <p class="flex items-center mt-8 mb-0">
   <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-check"><circle class="text-green-200 fill-current" cx="12" cy="12" r="10" /><path class="text-green-600 fill-current" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
-  <strong class="text-s  font-semibold text-gray-600">Do dynamically select a complete class name</strong>
+  <strong class="text-sm font-semibold text-gray-700">Do dynamically select a complete class name</strong>
 </p>
 
 <pre class="language-html mt-4" v-pre><code>&lt;div :class="@{{ error ? 'text-red-600' : 'text-green-600' }}"&gt;&lt;/div&gt;</code></pre>

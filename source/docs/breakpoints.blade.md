@@ -37,16 +37,21 @@ Feel free to have as few or as many screens as you want, naming them in whatever
 For example, you could use device names instead of sizes:
 
 ```js
-screens: {
-  'tablet': '640px',
-  // => @media (min-width: 640px) { ... }
+// tailwind.config.js
+module.exports = {
+  theme: {
+    screens: {
+      'tablet': '640px',
+      // => @media (min-width: 640px) { ... }
 
-  'laptop': '1024px',
-  // => @media (min-width: 1024px) { ... }
+      'laptop': '1024px',
+      // => @media (min-width: 1024px) { ... }
 
-  'desktop': '1280px',
-  // => @media (min-width: 1280px) { ... }
-},
+      'desktop': '1280px',
+      // => @media (min-width: 1280px) { ... }
+    },
+  }
+}
 ```
 
 These screen names will be reflected in your utilities, so your `text-center` utilities would now look like this:
@@ -95,12 +100,17 @@ module.exports = {
 You can even create breakpoints with both `min-width` and `max-width` definitions if necessary, for example:
 
 ```js
-screens: {
-  'sm': {'min': '640px', 'max': '767px'},
-  'md': {'min': '768px', 'max': '1023px'},
-  'lg': {'min': '1024px', 'max': '1279px'},
-  'xl': {'min': '1280px'},
-},
+// tailwind.config.js
+module.exports = {
+  theme: {
+    screens: {
+      'sm': {'min': '640px', 'max': '767px'},
+      'md': {'min': '768px', 'max': '1023px'},
+      'lg': {'min': '1024px', 'max': '1279px'},
+      'xl': {'min': '1280px'},
+    },
+  }
+}
 ```
 
 ## Multi-range breakpoints
