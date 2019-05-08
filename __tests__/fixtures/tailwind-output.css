@@ -8711,6 +8711,14 @@ video {
     background-size: contain;
   }
 
+  .sm\:border-collapse {
+    border-collapse: collapse;
+  }
+
+  .sm\:border-separate {
+    border-collapse: separate;
+  }
+
   .sm\:border-transparent {
     border-color: transparent;
   }
@@ -11965,6 +11973,14 @@ video {
     opacity: 1;
   }
 
+  .sm\:outline-none {
+    outline: 0;
+  }
+
+  .sm\:focus\:outline-none:focus {
+    outline: 0;
+  }
+
   .sm\:overflow-auto {
     overflow: auto;
   }
@@ -12795,6 +12811,14 @@ video {
 
   .sm\:focus\:shadow-none:focus {
     box-shadow: none;
+  }
+
+  .sm\:fill-current {
+    fill: currentColor;
+  }
+
+  .sm\:stroke-current {
+    stroke: currentColor;
   }
 
   .sm\:table-auto {
@@ -15591,6 +15615,14 @@ video {
 
   .md\:bg-contain {
     background-size: contain;
+  }
+
+  .md\:border-collapse {
+    border-collapse: collapse;
+  }
+
+  .md\:border-separate {
+    border-collapse: separate;
   }
 
   .md\:border-transparent {
@@ -18847,6 +18879,14 @@ video {
     opacity: 1;
   }
 
+  .md\:outline-none {
+    outline: 0;
+  }
+
+  .md\:focus\:outline-none:focus {
+    outline: 0;
+  }
+
   .md\:overflow-auto {
     overflow: auto;
   }
@@ -19677,6 +19717,14 @@ video {
 
   .md\:focus\:shadow-none:focus {
     box-shadow: none;
+  }
+
+  .md\:fill-current {
+    fill: currentColor;
+  }
+
+  .md\:stroke-current {
+    stroke: currentColor;
   }
 
   .md\:table-auto {
@@ -22473,6 +22521,14 @@ video {
 
   .lg\:bg-contain {
     background-size: contain;
+  }
+
+  .lg\:border-collapse {
+    border-collapse: collapse;
+  }
+
+  .lg\:border-separate {
+    border-collapse: separate;
   }
 
   .lg\:border-transparent {
@@ -25729,6 +25785,14 @@ video {
     opacity: 1;
   }
 
+  .lg\:outline-none {
+    outline: 0;
+  }
+
+  .lg\:focus\:outline-none:focus {
+    outline: 0;
+  }
+
   .lg\:overflow-auto {
     overflow: auto;
   }
@@ -26559,6 +26623,14 @@ video {
 
   .lg\:focus\:shadow-none:focus {
     box-shadow: none;
+  }
+
+  .lg\:fill-current {
+    fill: currentColor;
+  }
+
+  .lg\:stroke-current {
+    stroke: currentColor;
   }
 
   .lg\:table-auto {
@@ -29355,6 +29427,14 @@ video {
 
   .xl\:bg-contain {
     background-size: contain;
+  }
+
+  .xl\:border-collapse {
+    border-collapse: collapse;
+  }
+
+  .xl\:border-separate {
+    border-collapse: separate;
   }
 
   .xl\:border-transparent {
@@ -32611,6 +32691,14 @@ video {
     opacity: 1;
   }
 
+  .xl\:outline-none {
+    outline: 0;
+  }
+
+  .xl\:focus\:outline-none:focus {
+    outline: 0;
+  }
+
   .xl\:overflow-auto {
     overflow: auto;
   }
@@ -33441,6 +33529,14 @@ video {
 
   .xl\:focus\:shadow-none:focus {
     box-shadow: none;
+  }
+
+  .xl\:fill-current {
+    fill: currentColor;
+  }
+
+  .xl\:stroke-current {
+    stroke: currentColor;
   }
 
   .xl\:table-auto {

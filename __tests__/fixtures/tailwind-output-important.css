@@ -8711,6 +8711,14 @@ video {
     background-size: contain !important;
   }
 
+  .sm\:border-collapse {
+    border-collapse: collapse !important;
+  }
+
+  .sm\:border-separate {
+    border-collapse: separate !important;
+  }
+
   .sm\:border-transparent {
     border-color: transparent !important;
   }
@@ -11965,6 +11973,14 @@ video {
     opacity: 1 !important;
   }
 
+  .sm\:outline-none {
+    outline: 0 !important;
+  }
+
+  .sm\:focus\:outline-none:focus {
+    outline: 0 !important;
+  }
+
   .sm\:overflow-auto {
     overflow: auto !important;
   }
@@ -12795,6 +12811,14 @@ video {
 
   .sm\:focus\:shadow-none:focus {
     box-shadow: none !important;
+  }
+
+  .sm\:fill-current {
+    fill: currentColor !important;
+  }
+
+  .sm\:stroke-current {
+    stroke: currentColor !important;
   }
 
   .sm\:table-auto {
@@ -15591,6 +15615,14 @@ video {
 
   .md\:bg-contain {
     background-size: contain !important;
+  }
+
+  .md\:border-collapse {
+    border-collapse: collapse !important;
+  }
+
+  .md\:border-separate {
+    border-collapse: separate !important;
   }
 
   .md\:border-transparent {
@@ -18847,6 +18879,14 @@ video {
     opacity: 1 !important;
   }
 
+  .md\:outline-none {
+    outline: 0 !important;
+  }
+
+  .md\:focus\:outline-none:focus {
+    outline: 0 !important;
+  }
+
   .md\:overflow-auto {
     overflow: auto !important;
   }
@@ -19677,6 +19717,14 @@ video {
 
   .md\:focus\:shadow-none:focus {
     box-shadow: none !important;
+  }
+
+  .md\:fill-current {
+    fill: currentColor !important;
+  }
+
+  .md\:stroke-current {
+    stroke: currentColor !important;
   }
 
   .md\:table-auto {
@@ -22473,6 +22521,14 @@ video {
 
   .lg\:bg-contain {
     background-size: contain !important;
+  }
+
+  .lg\:border-collapse {
+    border-collapse: collapse !important;
+  }
+
+  .lg\:border-separate {
+    border-collapse: separate !important;
   }
 
   .lg\:border-transparent {
@@ -25729,6 +25785,14 @@ video {
     opacity: 1 !important;
   }
 
+  .lg\:outline-none {
+    outline: 0 !important;
+  }
+
+  .lg\:focus\:outline-none:focus {
+    outline: 0 !important;
+  }
+
   .lg\:overflow-auto {
     overflow: auto !important;
   }
@@ -26559,6 +26623,14 @@ video {
 
   .lg\:focus\:shadow-none:focus {
     box-shadow: none !important;
+  }
+
+  .lg\:fill-current {
+    fill: currentColor !important;
+  }
+
+  .lg\:stroke-current {
+    stroke: currentColor !important;
   }
 
   .lg\:table-auto {
@@ -29355,6 +29427,14 @@ video {
 
   .xl\:bg-contain {
     background-size: contain !important;
+  }
+
+  .xl\:border-collapse {
+    border-collapse: collapse !important;
+  }
+
+  .xl\:border-separate {
+    border-collapse: separate !important;
   }
 
   .xl\:border-transparent {
@@ -32611,6 +32691,14 @@ video {
     opacity: 1 !important;
   }
 
+  .xl\:outline-none {
+    outline: 0 !important;
+  }
+
+  .xl\:focus\:outline-none:focus {
+    outline: 0 !important;
+  }
+
   .xl\:overflow-auto {
     overflow: auto !important;
   }
@@ -33441,6 +33529,14 @@ video {
 
   .xl\:focus\:shadow-none:focus {
     box-shadow: none !important;
+  }
+
+  .xl\:fill-current {
+    fill: currentColor !important;
+  }
+
+  .xl\:stroke-current {
+    stroke: currentColor !important;
   }
 
   .xl\:table-auto {
