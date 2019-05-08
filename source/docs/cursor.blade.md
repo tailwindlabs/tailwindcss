@@ -126,7 +126,7 @@ Use `.cursor-text` to change the mouse cursor to indicate the text can be select
 
 ## Move
 
-Use `.cursor-move` to change the mouse cursor to indicate the something that can be moved.
+Use `.cursor-move` to change the mouse cursor to indicate something that can be moved.
 
 @component('_partials.code-sample', ['class' => 'text-center'])
 <div class="cursor-move max-w-xs p-2 bg-gray-200 mx-auto">
@@ -141,7 +141,7 @@ Use `.cursor-move` to change the mouse cursor to indicate the something that can
 
 ## Not Allowed
 
-Use `.cursor-not-allowed` to change the mouse cursor to indicate the something that can not be interacted with or clicked.
+Use `.cursor-not-allowed` to change the mouse cursor to indicate something can not be interacted with or clicked.
 
 @component('_partials.code-sample', ['class' => 'text-center'])
 <div class="cursor-not-allowed max-w-xs p-2 bg-gray-200 mx-auto">
