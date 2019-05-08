@@ -336,6 +336,31 @@ function({ addComponents }) {
 }
 ```
 
+## Adding base styles
+
+The `addBase` function allows you to register new styles to be output at the `@@tailwind base` directive.
+
+Use it to add things like base typography styles, opinionated global resets, or `@font-face` rules.
+
+To add new component styles from a plugin, call `addBase`, passing in your styles using [CSS-in-JS syntax](#css-in-js-syntax):
+
+```js
+// tailwind.config.js
+module.exports = {
+  plugins: [
+    function({ addComponents }) {
+      addBase({
+        'h1': { fontSize: config('theme.fontSize.2xl') },
+        'h2': { fontSize: config('theme.fontSize.xl') },
+        'h3': { fontSize: config('theme.fontSize.lg') },
+      })
+    }
+  ]
+}
+```
+
+Since base styles are meant to target bare selectors like `div`, `h1`, etc., they do not respect the user's `prefix` or `important` configuration.
+
 ## Escaping class names
 
 If your plugin generates classes that contain user-provided strings, you can use the `e` function to escape those class names to make sure non-standard characters are handled properly automatically.

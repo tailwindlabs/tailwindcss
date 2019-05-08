@@ -13,9 +13,9 @@ return [
         'Core Plugins' => 'core-plugins',
         'Responsive Design' => 'responsive-design',
         'State Variants' => 'state-variants',
-        'Adding New Utilities' => 'adding-new-utilities',
-        'Extracting Components' => 'extracting-components',
         'Adding Base Styles' => 'adding-base-styles',
+        'Extracting Components' => 'extracting-components',
+        'Adding New Utilities' => 'adding-new-utilities',
         'Functions & Directives' => 'functions-and-directives',
     ],
     'Customization' => [
