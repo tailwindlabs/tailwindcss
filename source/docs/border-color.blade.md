@@ -34,7 +34,7 @@ Control the border color of an element using the `.border-{color}` utilities.
 
 @component('_partials.code-sample', ['class' => 'text-center'])
 <div class="max-w-xs w-full mx-auto">
-  <input class="border border-red-500 focus:border-blue-500 bg-white text-gray-900 appearance-none block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Your email">
+  <input class="border border-red-500 bg-white text-gray-900 appearance-none block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Your email">
 </div>
 @slot('code')
 <input class="border border-red-500 ...">

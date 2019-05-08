@@ -67,52 +67,43 @@ Use the `.bg-{side}` utilities to control the position of an element's backgroun
 <div class="flex justify-around mb-8">
   <div class="flex-1">
     <p class="text-center text-sm text-gray-600 mb-1">.bg-left-top</p>
-    <div class="mx-auto bg-gray-400 w-24 h-24 bg-left-top bg-no-repeat"
-        style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
+    <div class="mx-auto bg-gray-400 w-24 h-24 bg-left-top bg-no-repeat" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
   </div>
   <div class="flex-1">
     <p class="text-center text-sm text-gray-600 mb-1">.bg-top</p>
-    <div class="mx-auto bg-gray-400 w-24 h-24 bg-top bg-no-repeat"
-         style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
+    <div class="mx-auto bg-gray-400 w-24 h-24 bg-top bg-no-repeat" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
   </div>
   <div class="flex-1">
     <p class="text-center text-sm text-gray-600 mb-1">.bg-right-top</p>
-    <div class="mx-auto bg-gray-400 w-24 h-24 bg-right-top bg-no-repeat"
-         style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
+    <div class="mx-auto bg-gray-400 w-24 h-24 bg-right-top bg-no-repeat" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
   </div>
 </div>
 <div class="flex justify-around mb-8">
   <div class="flex-1">
     <p class="text-center text-sm text-gray-600 mb-1">.bg-left</p>
-    <div class="mx-auto bg-gray-400 w-24 h-24 bg-left bg-no-repeat"
-         style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
+    <div class="mx-auto bg-gray-400 w-24 h-24 bg-left bg-no-repeat" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
   </div>
   <div class="flex-1">
     <p class="text-center text-sm text-gray-600 mb-1">.bg-center</p>
-    <div class="mx-auto bg-gray-400 w-24 h-24 bg-center bg-no-repeat"
-         style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
+    <div class="mx-auto bg-gray-400 w-24 h-24 bg-center bg-no-repeat" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
   </div>
   <div class="flex-1">
     <p class="text-center text-sm text-gray-600 mb-1">.bg-right</p>
-    <div class="mx-auto bg-gray-400 w-24 h-24 bg-right bg-no-repeat"
-         style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
+    <div class="mx-auto bg-gray-400 w-24 h-24 bg-right bg-no-repeat" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
   </div>
 </div>
 <div class="flex justify-around">
   <div class="flex-1">
     <p class="text-center text-sm text-gray-600 mb-1">.bg-left-bottom</p>
-    <div class="mx-auto bg-gray-400 w-24 h-24 bg-left-bottom bg-no-repeat"
-         style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
+    <div class="mx-auto bg-gray-400 w-24 h-24 bg-left-bottom bg-no-repeat" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
   </div>
   <div class="flex-1">
     <p class="text-center text-sm text-gray-600 mb-1">.bg-bottom</p>
-    <div class="mx-auto bg-gray-400 w-24 h-24 bg-bottom bg-no-repeat"
-         style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
+    <div class="mx-auto bg-gray-400 w-24 h-24 bg-bottom bg-no-repeat" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
   </div>
   <div class="flex-1">
     <p class="text-center text-sm text-gray-600 mb-1">.bg-right-bottom</p>
-    <div class="mx-auto bg-gray-400 w-24 h-24 bg-right-bottom bg-no-repeat"
-         style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
+    <div class="mx-auto bg-gray-400 w-24 h-24 bg-right-bottom bg-no-repeat" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80');"></div>
   </div>
 </div>
 @slot('code')
