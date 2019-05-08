@@ -291,10 +291,9 @@ module.exports = {
 
 If you don't want to generate any classes for a certain core plugin, it's better to set that plugin to false in your `corePlugins` configuration than to provide an empty object for that key in your `theme` configuration.
 
-<p class="flex items-center mt-8 -mb-2">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Don't assign an empty object in your theme configuration</strong>
-</p>
+@component('_partials.tip-bad')
+Don't assign an empty object in your theme configuration
+@endcomponent
 
 ```js
 // tailwind.config.js
@@ -305,10 +304,9 @@ module.exports = {
 }
 ```
 
-<p class="flex items-center mt-8 -mb-2">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-check"><circle class="text-green-200 fill-current" cx="12" cy="12" r="10" /><path class="text-green-600 fill-current" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Do disable the plugin in your corePlugins configuration</strong>
-</p>
+@component('_partials.tip-good')
+Do disable the plugin in your corePlugins configuration
+@endcomponent
 
 ```js
 // tailwind.config.js

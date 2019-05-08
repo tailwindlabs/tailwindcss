@@ -55,10 +55,9 @@ module.exports = {
 
 One important thing to note about `postcss-import` is that it strictly adheres to the CSS spec and disallows `@import` statements anywhere except at the very top of a file.
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Won't work, `@@import` statements must come first</strong>
-</p>
+@component('_partials.tip-bad')
+Won't work, `@@import` statements must come first
+@endcomponent
 
 ```css
 /* components.css */
@@ -73,10 +72,9 @@ One important thing to note about `postcss-import` is that it strictly adheres t
 
 The easiest solution to this problem is to never mix regular CSS and imports in the same file. Instead, create one main entry-point file for your imports, and keep all of your actual CSS in separate files.
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-check"><circle class="text-green-200 fill-current" cx="12" cy="12" r="10" /><path class="text-green-600 fill-current" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Use separate files for imports and actual CSS</strong>
-</p>
+@component('_partials.tip-good')
+Use separate files for imports and actual CSS
+@endcomponent
 
 ```css
 /* components.css */
@@ -100,10 +98,9 @@ The easiest solution to this problem is to never mix regular CSS and imports in 
 
 The place you are most likely to run into this situation is in your main CSS file that includes your `@@tailwind` declarations.
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Won't work, `@@import` statements must come first</strong>
-</p>
+@component('_partials.tip-bad')
+Won't work, `@@import` statements must come first
+@endcomponent
 
 ```css
 @@tailwind base;
@@ -118,10 +115,9 @@ The place you are most likely to run into this situation is in your main CSS fil
 
 You can solve this by putting your `@@tailwind` declarations each in their own file. To make this easy, we provide separate files for each `@@tailwind` declaration with the framework itself that you can import directly from `node_modules`.
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-check"><circle class="text-green-200 fill-current" cx="12" cy="12" r="10" /><path class="text-green-600 fill-current" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Import our provided CSS files</strong>
-</p>
+@component('_partials.tip-good')
+Import our provided CSS files
+@endcomponent
 
 ```css
 @@import "tailwindcss/base";
@@ -238,10 +234,9 @@ The exact instructions will be different depending on which build tool you are u
 
 The most important thing to understand about using Tailwind with a preprocessor is that **preprocessors like Sass, Less, and Stylus run separately, before Tailwind**. This means that you can't feed output from Tailwind's `theme()` function into a Sass color function for example, because the `theme()` function isn't actually evaluated until your Sass has been compiled to CSS and fed into PostCSS.
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Won't work, Sass is processed first</strong>
-</p>
+@component('_partials.tip-bad')
+Won't work, Sass is processed first
+@endcomponent
 
 ```css
 .alert {
@@ -257,10 +252,9 @@ Aside from that, each preprocessor has its own quirk or two when used with Tailw
 
 When using Tailwind with Sass, using `!important` with `@@apply` requires you to use interpolation to compile properly.
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Won't work, Sass complains about !important</strong>
-</p>
+@component('_partials.tip-bad')
+Won't work, Sass complains about !important
+@endcomponent
 
 ```css
 .alert {
@@ -268,10 +262,9 @@ When using Tailwind with Sass, using `!important` with `@@apply` requires you to
 }
 ```
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-check"><circle class="text-green-200 fill-current" cx="12" cy="12" r="10" /><path class="text-green-600 fill-current" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Use interpolation as a workaround</strong>
-</p>
+@component('_partials.tip-good')
+Use interpolation as a workaround
+@endcomponent
 
 ```css
 .alert {
@@ -283,10 +276,9 @@ When using Tailwind with Sass, using `!important` with `@@apply` requires you to
 
 When using Tailwind with Less, you cannot nest Tailwind's `@@screen` directive.
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Won't work, Less doesn't realise it's a media query</strong>
-</p>
+@component('_partials.tip-bad')
+Won't work, Less doesn't realise it's a media query
+@endcomponent
 
 ```css
 .card {
@@ -300,10 +292,9 @@ When using Tailwind with Less, you cannot nest Tailwind's `@@screen` directive.
 
 Instead, use a regular media query along with the `theme()` function to reference your screen sizes, or simply don't nest your `@@screen` directives.
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-check"><circle class="text-green-200 fill-current" cx="12" cy="12" r="10" /><path class="text-green-600 fill-current" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Use a regular media query and theme()</strong>
-</p>
+@component('_partials.tip-good')
+Use a regular media query and theme()
+@endcomponent
 
 ```css
 .card {
@@ -315,10 +306,9 @@ Instead, use a regular media query along with the `theme()` function to referenc
 }
 ```
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-check"><circle class="text-green-200 fill-current" cx="12" cy="12" r="10" /><path class="text-green-600 fill-current" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Use the @@screen directive at the top-level</strong>
-</p>
+@component('_partials.tip-good')
+Use the @@screen directive at the top-level
+@endcomponent
 
 ```css
 .card {
@@ -335,10 +325,9 @@ Instead, use a regular media query along with the `theme()` function to referenc
 
 When using Tailwind with Stylus, you can't use Tailwind's `@@apply` feature without wrapping the entire CSS rule in `@@css` so that Stylus treats it as literal CSS:
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Won't work, Stylus complains about @@apply</strong>
-</p>
+@component('_partials.tip-bad')
+Won't work, Stylus complains about @@apply
+@endcomponent
 
 ```css
 .card {
@@ -346,10 +335,9 @@ When using Tailwind with Stylus, you can't use Tailwind's `@@apply` feature with
 }
 ```
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-check"><circle class="text-green-200 fill-current" cx="12" cy="12" r="10" /><path class="text-green-600 fill-current" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Use @@css to avoid processing as Stylus</strong>
-</p>
+@component('_partials.tip-good')
+Use @@css to avoid processing as Stylus
+@endcomponent
 
 ```css
 @@css {
@@ -363,10 +351,9 @@ This comes with a signficant cost however, which is that **you cannot use any St
 
 Another option is to use the `theme()` function instead of `@@apply`, and write out the actual CSS properties in long form:
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-check"><circle class="text-green-200 fill-current" cx="12" cy="12" r="10" /><path class="text-green-600 fill-current" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Use theme() instead of @@apply</strong>
-</p>
+@component('_partials.tip-good')
+Use theme() instead of @@apply
+@endcomponent
 
 ```css
 .card {
@@ -378,10 +365,9 @@ Another option is to use the `theme()` function instead of `@@apply`, and write 
 
 In addition to this, Stylus doesn't support nesting the `@@screen` directive (just like Less).
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Won't work, Stylus doesn't realise it's a media query</strong>
-</p>
+@component('_partials.tip-bad')
+Won't work, Stylus doesn't realise it's a media query
+@endcomponent
 
 ```css
 .card {
@@ -395,10 +381,9 @@ In addition to this, Stylus doesn't support nesting the `@@screen` directive (ju
 
 Instead, use a regular media query along with the `theme()` function to reference your screen sizes, or simply don't nest your `@@screen` directives.
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-check"><circle class="text-green-200 fill-current" cx="12" cy="12" r="10" /><path class="text-green-600 fill-current" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Use a regular media query and theme()</strong>
-</p>
+@component('_partials.tip-good')
+Use a regular media query and theme()
+@endcomponent
 
 ```css
 .card {
@@ -410,10 +395,9 @@ Instead, use a regular media query along with the `theme()` function to referenc
 }
 ```
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-check"><circle class="text-green-200 fill-current" cx="12" cy="12" r="10" /><path class="text-green-600 fill-current" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Use the @@screen directive at the top-level</strong>
-</p>
+@component('_partials.tip-good')
+Use the @@screen directive at the top-level
+@endcomponent
 
 ```css
 .card {

@@ -98,20 +98,18 @@ Examples like this intentionally **do not react to changing your browser size**.
 
 Where this approach surprises people most often is that to style something for mobile, you need to use the unprefixed version of a utility, not the `sm:` prefixed version. Don't think of `sm:` as meaning "on small screens", think of it as "at the small *breakpoint*".
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Don't use <code class="text-xs font-bold text-gray-700">sm:</code> to target mobile devices</strong>
-</p>
+@component('_partials.tip-bad')
+Don't use <code class="text-sm font-bold text-gray-800">sm:</code> to target mobile devices
+@endcomponent
 
 ```html
 <!-- This will only center text on screens 640px and wider, not on small screens -->
 <div class="sm:text-center"></div>
 ```
 
-<p class="flex items-center mt-8 mb-0">
-  <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-check"><circle class="text-green-200 fill-current" cx="12" cy="12" r="10" /><path class="text-green-600 fill-current" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z"/></svg>
-  <strong class="text-sm font-semibold text-gray-700">Use unprefixed utilities to target mobile, and override them at larger breakpoints</strong>
-</p>
+@component('_partials.tip-good')
+Use unprefixed utilities to target mobile, and override them at larger breakpoints
+@endcomponent
 
 ```html
 <!-- This will center text on mobile, and left align it on screens 640px and wider -->
