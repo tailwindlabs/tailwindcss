@@ -148,7 +148,7 @@ Here is an example where the background color is red at the `md` breakpoint, but
 @endslot
 
 @slot('code')
-<div class="bg-teal-500 md:bg-red-500 lg:bg-teal-500"></div>
+<div class="none:bg-teal-500 md:bg-red-500 lg:bg-teal-500"></div>
 @endslot
 @endcomponent
 
