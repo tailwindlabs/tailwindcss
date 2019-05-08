@@ -3,10 +3,10 @@ import path from 'path'
 
 import rimraf from 'rimraf'
 
-const tmpPath = path.resolve(__dirname, '../__tmp')
-
 export default function(callback) {
   return new Promise(resolve => {
+    const timestamp = new Date().valueOf()
+    const tmpPath = path.resolve(__dirname, `../__tmp_${timestamp}`)
     const currentPath = process.cwd()
 
     rimraf.sync(tmpPath)
