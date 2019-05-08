@@ -85,7 +85,7 @@ You can use the same approach to add your `@font-face` rules for any custom font
 
 ## Using a plugin
 
-You can also add base styles by [writing a plugin](/docs/plugins) and using the `addBase` function:
+You can also add base styles by [writing a plugin](/docs/plugins#adding-base-styles) and using the `addBase` function:
 
 ```js
 // tailwind.config.js
