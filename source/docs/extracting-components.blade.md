@@ -95,39 +95,37 @@ By creating a single source of truth for a template, you can keep using utility 
 Create a template partial or JavaScript component
 @endcomponent
 
-```html
-<!-- In use -->
-<VacationCard
-  img="/img/cancun.jpg"
-  imgAlt="Beach in Cancun"
-  eyebrow="Private Villa"
-  title="Relaxing All-Inclusive Resort in Cancun"
-  pricing="$299 USD per night"
-  url="/vacations/cancun"
-/>
+<pre v-pre class="language-html"><code>&lt;!-- In use --&gt;
+&lt;VacationCard
+  img=&quot;/img/cancun.jpg&quot;
+  imgAlt=&quot;Beach in Cancun&quot;
+  eyebrow=&quot;Private Villa&quot;
+  title=&quot;Relaxing All-Inclusive Resort in Cancun&quot;
+  pricing=&quot;$299 USD per night&quot;
+  url=&quot;/vacations/cancun&quot;
+/&gt;
 
-<!-- ./components/VacationCard.vue -->
-<template>
-  <div>
-    <img class="rounded" :src="img" :alt="imgAlt">
-    <div class="mt-2">
-      <div>
-        <div class="text-xs text-gray-600 uppercase font-bold">@{{ eyebrow }}</div>
-        <div class="font-bold text-gray-700 leading-snug">
-          <a :href="url" class="hover:underline">@{{ title }}</a>
-        </div>
-        <div class="mt-2 text-sm text-gray-600">@{{ pricing }}</div>
-      </div>
-    </div>
-  </div>
-</template>
+&lt;!-- ./components/VacationCard.vue --&gt;
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;img class=&quot;rounded&quot; :src=&quot;img&quot; :alt=&quot;imgAlt&quot;&gt;
+    &lt;div class=&quot;mt-2&quot;&gt;
+      &lt;div&gt;
+        &lt;div class=&quot;text-xs text-gray-600 uppercase font-bold&quot;&gt;@{{ eyebrow }}&lt;/div&gt;
+        &lt;div class=&quot;font-bold text-gray-700 leading-snug&quot;&gt;
+          &lt;a :href=&quot;url&quot; class=&quot;hover:underline&quot;&gt;@{{ title }}&lt;/a&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;mt-2 text-sm text-gray-600&quot;&gt;@{{ pricing }}&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
 
-<script>
+&lt;script&gt;
   export default {
     props: ['img', 'imgAlt' 'eyebrow', 'title', 'pricing', 'url']
   }
-</script>
-```
+&lt;/script&gt;</code></pre>
 
 The above example uses [Vue](https://vuejs.org/v2/guide/components.html), but the same approach can be used with [React components](https://reactjs.org/docs/components-and-props.html), [ERB partials](https://guides.rubyonrails.org/v5.2/layouts_and_rendering.html#using-partials), [Blade components](https://laravel.com/docs/5.8/blade#components-and-slots), [Twig includes](https://twig.symfony.com/doc/2.x/templates.html#including-other-templates), etc.
 
