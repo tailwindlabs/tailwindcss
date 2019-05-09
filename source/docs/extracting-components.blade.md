@@ -48,7 +48,7 @@ It's very rare that all of the information needed to define a UI component can l
 Don't rely on CSS alone to extract complex components
 @endcomponent
 
-@component('_partials.code-sample')
+@component('_partials.code-sample', ['class' => 'p-8'])
 <div class="w-64 mx-auto">
   <img class="rounded" src="https://images.unsplash.com/photo-1452784444945-3f422708fe5e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2552&q=80" alt="Beach">
   <div class="mt-2">
