@@ -32,9 +32,9 @@ For a complete list of which variants are enabled by default, see the [reference
 
 ---
 
-## Pseudo-Class Variants
+## Using pseudo-class variants
 
-Tailwind includes first-class support for styling elements on hover, focus, active, group-hover, and focus-within. If you need to target a pseudo-class that Tailwind doesn't support, you can extend the supported variants by [writing a variant plugin](#creating-custom-variants).
+Tailwind includes first-class support for styling elements on [hover](#hover), [focus](#focus), [active](#active), [group-hover](#group-hover), and [focus-within](#focus-within). If you need to target a pseudo-class that Tailwind doesn't support, you can extend the supported variants by [writing a variant plugin](#creating-custom-variants).
 
 ### Hover
 
@@ -119,7 +119,7 @@ module.exports = {
 }
 ```
 
-### Group Hover
+### Group-hover
 
 If you need to style a child element when hovering over a specific parent element, add the `.group` class to the parent element and add the `group-hover:` prefix to the utility on the child element.
 
@@ -150,7 +150,7 @@ module.exports = {
 }
 ```
 
-### Focus Within
+### Focus-within
 
 <div class="text-sm bg-blue-100 text-blue-700 font-semi-bold px-4 py-2 mb-4 rounded">
   <div class="flex items-center">
@@ -200,7 +200,7 @@ module.exports = {
 
 ---
 
-## Combining with Responsive Prefixes
+## Combining with responsive prefixes
 
 Pseudo-class variants are also responsive, meaning you can do things like change an element's hover style at different breakpoints for example.
 
@@ -236,7 +236,7 @@ To apply a pseudo-class variant at a specific breakpoint, add the responsive pre
 
 ---
 
-## Generative Variants for Custom Utilities
+## Generative variants for custom utilities
 
 You can generate pseudo-class variants for your own custom utilities by wrapping them with the `@@variants` directive in your CSS:
 
@@ -268,7 +268,7 @@ For more information, see the [@@variants directive documentation](/docs/functio
 
 ---
 
-## Creating Custom Variants
+## Creating custom variants
 
 You can create your own variants for any pseudo-classes Tailwind doesn't include by default by writing a custom variant plugin.
 
@@ -293,11 +293,11 @@ Learn more about writing variant plugins in the [variant plugin documentation](/
 
 ---
 
-## Default Variants Reference
+## Default variants reference
 
 Due to file-size considerations, Tailwind does not generate `active`, `group-hover`, or `focus-within` variants for any utilities by default.
 
-To customize your variants configuration for your project, see the [configuring variants documentation](/docs/configuring-variants).
+To configure which variants are enabled for your project, see the [configuring variants documentation](/docs/configuring-variants).
 
 | Core Plugin            | Hover   | Focus   |
 | ---------------------- | ------- | ------- |
