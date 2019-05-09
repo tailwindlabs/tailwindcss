@@ -224,7 +224,7 @@ To apply a pseudo-class variant at a specific breakpoint, add the responsive pre
 @endslot
 
 @slot('xl')
-<button class="px-4 py-2 rounded text-white font-bold bg-pink-500 hover:bg-orange-600">Button</button>
+<button class="px-4 py-2 rounded text-white font-bold bg-pink-500 hover:bg-pink-600">Button</button>
 @endslot
 
 @slot('code')
