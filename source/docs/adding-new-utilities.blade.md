@@ -25,7 +25,7 @@ Add any custom utilities to the end of your CSS file
 @@tailwind utilities;
 
 .rotate-0 {
-  transform: rotate(90deg);
+  transform: rotate(0deg);
 }
 .rotate-90 {
   transform: rotate(90deg);
