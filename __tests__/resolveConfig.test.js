@@ -830,6 +830,59 @@ test('the theme function can resolve function values', () => {
   })
 })
 
+test('the theme function can resolve deep function values', () => {
+  const userConfig = {
+    theme: {
+      minWidth: theme => ({
+        '1/3': theme('width.1/3'),
+      }),
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      spacing: {
+        '0': '0',
+      },
+      width: theme => ({
+        ...theme('spacing'),
+        '1/3': '33.33333%',
+      }),
+    },
+    variants: {
+      backgroundColor: ['responsive', 'hover', 'focus'],
+      borderColor: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      spacing: {
+        '0': '0',
+      },
+      width: {
+        '0': '0',
+        '1/3': '33.33333%',
+      },
+      minWidth: {
+        '1/3': '33.33333%',
+      },
+    },
+    variants: {
+      backgroundColor: ['responsive', 'hover', 'focus'],
+      borderColor: ['responsive', 'hover', 'focus'],
+    },
+  })
+})
+
 test('theme values in the extend section are lazily evaluated', () => {
   const userConfig = {
     theme: {

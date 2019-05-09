@@ -2,7 +2,7 @@ import mergeWith from 'lodash/mergeWith'
 import isFunction from 'lodash/isFunction'
 import defaults from 'lodash/defaults'
 import map from 'lodash/map'
-import get from 'lodash/get'
+import toPath from 'lodash/toPath'
 
 const configUtils = {
   negative(scale) {
@@ -40,8 +40,17 @@ function mergeExtensions({ extend, ...theme }) {
 
 function resolveFunctionKeys(object) {
   const resolveThemePath = (key, defaultValue) => {
-    const val = get(object, key, defaultValue)
-    return isFunction(val) ? val(resolveThemePath) : val
+    const path = toPath(key)
+
+    let index = 0
+    let val = object
+
+    while (val !== undefined && val !== null && index < path.length) {
+      val = val[path[index++]]
+      val = isFunction(val) ? val(resolveThemePath) : val
+    }
+
+    return val === undefined ? defaultValue : val
   }
 
   return Object.keys(object).reduce((resolved, key) => {
