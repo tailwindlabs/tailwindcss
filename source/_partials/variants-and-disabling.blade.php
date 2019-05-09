@@ -24,7 +24,7 @@
     }
 @endphp
 
-<h3>Responsive and State Variants</h3>
+<h3>Responsive and Pseudo-Class Variants</h3>
 
 <p>By default, {{ $whichVariants }} variants are generated for {{ $utility['name'] }} utilities.</p>
 

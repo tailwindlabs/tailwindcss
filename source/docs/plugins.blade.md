@@ -105,7 +105,7 @@ module.exports = {
 }
 ```
 
-### Responsive and state variants
+### Responsive and pseudo-class variants
 
 To generate responsive, hover, focus, active, or group-hover variants of your styles, specify the variants you'd like to generate using the `variants` option:
 
@@ -315,7 +315,7 @@ module.exports = {
 }
 ```
 
-### Responsive and state variants
+### Responsive and pseudo-class variants
 
 The `addComponents` function doesn't provide the ability to automatically generate variants since it doesn't typically make sense to do so for component classes.
 
@@ -685,7 +685,7 @@ addComponents([
 
 ## Adding variants
 
-The `addVariant` function allows you to register your own custom [variants](/docs/state-variants) that can be used just like the built-in hover, focus, active, etc. variants.
+The `addVariant` function allows you to register your own custom [variants](/docs/pseudo-class-variants) that can be used just like the built-in hover, focus, active, etc. variants.
 
 To add a new variant, call the `addVariant` function, passing in the name of your custom variant, and a callback that modifies the affected CSS rules as needed.
 

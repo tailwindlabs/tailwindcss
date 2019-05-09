@@ -128,7 +128,7 @@ Learn more about the default theme and how to customize it in the [theme configu
 
 ## Variants
 
-The `variants` section lets you control which [variants](/docs/state-variants) are generated for each core utility plugin.
+The `variants` section lets you control which [variants](/docs/pseudo-class-variants) are generated for each core utility plugin.
 
 ```js
 // tailwind.config.js
@@ -276,7 +276,7 @@ If you'd like to make your own utilities `!important`, just add `!important` to 
 
 ## Separator
 
-The `separator` option lets you customize what character or string should be used to separate state variant prefixes (screen sizes, `hover`, `focus`, etc.) from utility names (`text-center`, `items-end`, etc.).
+The `separator` option lets you customize what character or string should be used to separate variant prefixes (screen sizes, `hover`, `focus`, etc.) from utility names (`text-center`, `items-end`, etc.).
 
 We use a colon by default (`:`), but it can be useful to change this if you're using a templating language like [Pug](https://pugjs.org) that doesn't support special characters in class names.
 

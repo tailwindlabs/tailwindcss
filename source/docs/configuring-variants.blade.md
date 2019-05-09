@@ -16,7 +16,7 @@ To Document:
 
 ---
 
-The `variants` section is where you control which [state variants](/docs/state-variants) are generated for each core utility plugin.
+The `variants` section is where you control which [pseudo-class variants](/docs/pseudo-class-variants) are generated for each core utility plugin.
 
 ```js
 // tailwind.config.js
@@ -30,8 +30,8 @@ module.exports = {
 }
 ```
 
-Each property is a core plugin name pointing to an array of state variants to generate for that plugin.
+Each property is a core plugin name pointing to an array of variants to generate for that plugin.
 
 It's important to note that (`responsive` excluded) **variants are generated in the order you specify them**, so variants at the end of the list will take precedence over variants at the beginning of the list.
 
-Learn more about state variants in the ["State Variants" documentation](/docs/state-variants).
+Learn more about pseudo-class variants in the ["Pseudo-Classes Variants" documentation](/docs/pseudo-class-variants).
