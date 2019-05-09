@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Extracting Components"
-description: null
+description: "Dealing with duplication and keeping utility-first projects maintainable."
 titleBorder: true
 ---
 
@@ -45,7 +45,7 @@ Keeping a long list of utility classes in sync across many component instances c
 It's very rare that all of the information needed to define a UI component can live entirely in CSS — there's almost always some important corresponding HTML structure you need to use as well.
 
 @component('_partials.tip-bad')
-Don't rely on CSS alone to extract complex components
+Don't rely on CSS classes to extract complex components
 @endcomponent
 
 @component('_partials.code-sample', ['class' => 'p-8'])
@@ -95,37 +95,43 @@ By creating a single source of truth for a template, you can keep using utility 
 Create a template partial or JavaScript component
 @endcomponent
 
-<pre v-pre class="language-html"><code>&lt;!-- In use --&gt;
-&lt;VacationCard
-  img=&quot;/img/cancun.jpg&quot;
-  imgAlt=&quot;Beach in Cancun&quot;
-  eyebrow=&quot;Private Villa&quot;
-  title=&quot;Relaxing All-Inclusive Resort in Cancun&quot;
-  pricing=&quot;$299 USD per night&quot;
-  url=&quot;/vacations/cancun&quot;
-/&gt;
+@php
+$code = <<<EOF
+<!-- In use -->
+<VacationCard
+  img="/img/cancun.jpg"
+  imgAlt="Beach in Cancun"
+  eyebrow="Private Villa"
+  title="Relaxing All-Inclusive Resort in Cancun"
+  pricing="$299 USD per night"
+  url="/vacations/cancun"
+/>
 
-&lt;!-- ./components/VacationCard.vue --&gt;
-&lt;template&gt;
-  &lt;div&gt;
-    &lt;img class=&quot;rounded&quot; :src=&quot;img&quot; :alt=&quot;imgAlt&quot;&gt;
-    &lt;div class=&quot;mt-2&quot;&gt;
-      &lt;div&gt;
-        &lt;div class=&quot;text-xs text-gray-600 uppercase font-bold&quot;&gt;@{{ eyebrow }}&lt;/div&gt;
-        &lt;div class=&quot;font-bold text-gray-700 leading-snug&quot;&gt;
-          &lt;a :href=&quot;url&quot; class=&quot;hover:underline&quot;&gt;@{{ title }}&lt;/a&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;mt-2 text-sm text-gray-600&quot;&gt;@{{ pricing }}&lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-&lt;/template&gt;
+<!-- ./components/VacationCard.vue -->
+<template>
+  <div>
+    <img class="rounded" :src="img" :alt="imgAlt">
+    <div class="mt-2">
+      <div>
+        <div class="text-xs text-gray-600 uppercase font-bold">{{ eyebrow }}</div>
+        <div class="font-bold text-gray-700 leading-snug">
+          <a :href="url" class="hover:underline">{{ title }}</a>
+        </div>
+        <div class="mt-2 text-sm text-gray-600">{{ pricing }}</div>
+      </div>
+    </div>
+  </div>
+</template>
 
-&lt;script&gt;
+<script>
   export default {
-    props: ['img', 'imgAlt' 'eyebrow', 'title', 'pricing', 'url']
+    props: ['img', 'imgAlt', 'eyebrow', 'title', 'pricing', 'url']
   }
-&lt;/script&gt;</code></pre>
+</script>
+EOF;
+@endphp
+
+<pre v-pre class="language-html"><code>{{ trim($code) }}</code></pre>
 
 The above example uses [Vue](https://vuejs.org/v2/guide/components.html), but the same approach can be used with [React components](https://reactjs.org/docs/components-and-props.html), [ERB partials](https://guides.rubyonrails.org/v5.2/layouts_and_rendering.html#using-partials), [Blade components](https://laravel.com/docs/5.8/blade#components-and-slots), [Twig includes](https://twig.symfony.com/doc/2.x/templates.html#including-other-templates), etc.
 
@@ -133,9 +139,9 @@ The above example uses [Vue](https://vuejs.org/v2/guide/components.html), but th
 
 ## Extracting CSS components with @@apply
 
-For small components like buttons and form elements, creating a template partial or JavaScript component can often feel too heavy compared to a simple CSS.
+For small components like buttons and form elements, creating a template partial or JavaScript component can often feel too heavy compared to a simple CSS class.
 
-In these situations, you can use Tailwind's `@apply` directive to easily extract common utility patterns to simple CSS component classes.
+In these situations, you can use Tailwind's `@apply` directive to easily extract common utility patterns to CSS component classes.
 
 Here's what a `.btn-blue` class might look like using `@apply` to compose it from existing utilities:
 
