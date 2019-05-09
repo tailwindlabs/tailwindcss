@@ -11,7 +11,7 @@ Tailwind encourages a [utility-first](/docs/utility-first) workflow, where desig
 <!-- A marketing page card built entirely with utility classes -->
 <div class="md:flex">
   <div class="md:flex-shrink-0">
-    <img class="rounded-lg md:w-56" src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80" alt="Woman paying for a purchase">
+    <img class="rounded-lg md:w-56" src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=448&q=80" alt="Woman paying for a purchase">
   </div>
   <div class="mt-4 md:mt-0 md:ml-6">
     <div class="uppercase tracking-wide text-sm text-indigo-600 font-bold">Marketing</div>
@@ -50,7 +50,7 @@ Don't rely on CSS classes to extract complex components
 
 @component('_partials.code-sample', ['class' => 'p-8'])
 <div class="w-64 mx-auto">
-  <img class="rounded" src="https://images.unsplash.com/photo-1452784444945-3f422708fe5e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2552&q=80" alt="Beach">
+  <img class="rounded" src="https://images.unsplash.com/photo-1452784444945-3f422708fe5e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=512&q=80" alt="Beach">
   <div class="mt-2">
     <div>
       <div class="text-xs text-gray-600 uppercase font-bold">Private Villa</div>
