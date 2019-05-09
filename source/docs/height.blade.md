@@ -32,9 +32,9 @@ By default Tailwind provides 19 fixed `height` utilities, a 100% height utility,
 + '72': '18rem',
 + '1/2': '50%',
   'full': '100%',
-+ 'screen-1/2': '50vw'
-- 'screen': '100vw'
-+ 'screen-full': '100vw'
++ 'screen-1/2': '50vh'
+- 'screen': '100vh'
++ 'screen-full': '100vh'
 @endcomponent
 
 @include('_partials.variants-and-disabling', [
