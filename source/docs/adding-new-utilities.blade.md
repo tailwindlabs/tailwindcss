@@ -157,7 +157,7 @@ Pseudo-class variants are generated in the same order you list them in the `@@va
 }
 
 /* Hover will take precedence over focus */
-@@variants hover, focus {
+@@variants focus, hover {
   .rotate-0 {
     transform: rotate(0deg);
   }
