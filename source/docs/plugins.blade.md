@@ -546,7 +546,7 @@ const _ = require('lodash')
 
 module.exports = function({ addUtilities, e, config, variants }) {
   const gradients = config('theme.gradients', {})
-  const newVariants = variants('gradients', [])
+  const gradientVariants = variants('gradients', [])
 
   const utilities = _.map(gradients, ([start, end], name) => ({
     [`.bg-gradient-${e(name)}`]: {
@@ -554,7 +554,7 @@ module.exports = function({ addUtilities, e, config, variants }) {
     }
   }))
 
-  addUtilities(utilities, newVariants)
+  addUtilities(utilities, gradientVariants)
 }
 ```
 
