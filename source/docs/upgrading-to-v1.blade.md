@@ -518,7 +518,7 @@ Next, update any sections that were referencing the `colors` variable using the 
     important: false,
     separator: ':',
     theme: {
-      colors; {
+      colors: {
         'transparent': 'transparent',
         'black': '#22292f',
         // ...
