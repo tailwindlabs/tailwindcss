@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <div class="flex items-end justify-center mb-2 bg-white">
       <span class="inline-block text-center cursor-pointer select-none mr-8" :class="activeScreen === 'none' ? 'text-gray-800' : 'text-gray-500'" @click="activeScreen = 'none'" >
         <svg :width="0.857142857142857 * 10" height="24" class="fill-current block mx-auto mb-1" viewBox="0 0 10 28" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 12h7a1.5 1.5 0 0 1 1.5 1.5v13A1.5 1.5 0 0 1 8.5 28h-7A1.5 1.5 0 0 1 0 26.5v-13A1.5 1.5 0 0 1 1.5 12zM1 15v10h8V15H1zm4 12.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM4 13v1h2v-1H4z" fill-rule="evenodd"/></svg>
@@ -22,10 +23,13 @@
         <p class="text-xs">xl</p>
       </span>
     </div>
+
     <div class="overflow-hidden mb-8">
-      <div class="rounded-t-lg p-4 bg-gray-800 border-b border-gray-300">
-        <div class="scrollbar-none whitespace-pre font-mono text-gray-500 text-sm overflow-x-auto" v-html="highlightedCode"></div>
+
+      <div class="rounded-t-lg bg-gray-800 border-b border-gray-300 whitespace-pre font-mono text-gray-500 text-sm">
+        <pre class="scrollbar-none m-0 p-0 overflow-auto scrolling-touch"><code class="inline-block p-4" v-html="highlightedCode" /></pre>
       </div>
+
       <div class="rounded-b-lg border-l border-r border-b border-gray-400 bg-white p-4" :class="slotClass">
         <slot v-if="activeScreen === 'none'" name="none"></slot>
         <slot v-if="activeScreen === 'sm'" name="sm"></slot>
@@ -34,6 +38,7 @@
         <slot v-if="activeScreen === 'xl'" name="xl"></slot>
       </div>
     </div>
+
   </div>
 </template>
 

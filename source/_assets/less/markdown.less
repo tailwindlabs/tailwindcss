@@ -196,10 +196,12 @@
   }
 
   > pre, pre&, > ul li pre, > ol li pre {
+    @apply flex p-0 bg-gray-800;
+    @apply text-sm leading-normal;
+  }
+
+  > pre code, pre code&, > ul li pre code, > ol li pre code {
     @apply p-4;
-    @apply bg-gray-800;
-    @apply text-sm;
-    @apply leading-normal;
   }
 
   > table {
