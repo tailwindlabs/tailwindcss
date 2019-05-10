@@ -26,7 +26,7 @@ Instead of opinionated predesigned components, Tailwind provides low-level utili
 </div>
 @endcomponent
 
-If you're sick of fighting the framework, struggling to override unwanted styles, and battling specificity wars, Tailwind was made for you.
+If you're sick of fighting the framework, overriding unwanted styles, and battling specificity wars, Tailwind was made for you.
 
 [Learn more about Tailwind's utility-first workflow &rarr;](/docs/utility-first)
 

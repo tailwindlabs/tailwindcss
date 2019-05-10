@@ -126,7 +126,7 @@ If you need to style a child element when hovering over a specific parent elemen
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'bg-gray-200 p-8'])
 <div class="group hover:bg-blue-500 p-4 cursor-pointer bg-white rounded max-w-xs w-full shadow-lg select-none overflow-hidden mx-auto">
   <p class="font-semibold text-lg mb-1 text-gray-900 group-hover:text-white">New Project</p>
-  <p class="hover:bg-red-500 text-gray-700 group-hover:text-white mb-2">Create a new project from a variety of starting templates.</p>
+  <p class="text-gray-700 group-hover:text-white mb-2">Create a new project from a variety of starting templates.</p>
 </div>
 
 
