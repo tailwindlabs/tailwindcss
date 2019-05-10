@@ -9,8 +9,6 @@ features:
   focus: false
 ---
 
-@include('_partials.work-in-progress')
-
 @include('_partials.class-table', [
   'rows' => [
     [
@@ -26,7 +24,48 @@ features:
   ]
 ])
 
+## Disabling text selection
+
+Use `.select-none` to prevent selecting text in an element and its children.
+
+@component('_partials.code-sample', ['class' => 'text-center'])
+<div class="mx-auto max-w-sm bg-gray-200 p-2 select-none">
+  This text is not selectable
+</div>
+@slot('code')
+<div class="... select-none">
+  This text is not selectable
+</div>
+@endslot
+@endcomponent
+
+## Allowing text selection
+
+Use `.select-text` to allow selecting text in an element and its children.
+
+@component('_partials.code-sample', ['class' => 'text-center'])
+<div class="mx-auto max-w-sm bg-gray-200 p-2 select-text">
+  This text is selectable
+</div>
+@slot('code')
+<div class="... select-text">
+  This text is selectable
+</div>
+@endslot
+@endcomponent
+
 ## Customizing
+
+### User select values
+
+By default Tailwind provides two `user-select` utilities. You can change, add, or remove these by editing the `theme.userSelect` section of your Tailwind config.
+
+@component('_partials.customized-config', ['key' => 'theme.userSelect'])
++ all: 'all',
++ auto: 'auto',
+- none: 'none',
+  text: 'text',
+@endcomponent
 
 @include('_partials.variants-and-disabling', [
     'utility' => [
