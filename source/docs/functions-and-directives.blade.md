@@ -324,3 +324,25 @@ This can be a useful alternative to `@@apply` when you want to reference a value
   height: calc(100vh - theme('spacing.12'));
 }
 ```
+
+Since Tailwind uses the [nested object syntax](/docs/colors#nested-object-syntax) to define its default color palette, make sure to use dot notation to access the nested colors.
+
+@component('_partials.tip-bad')
+Don't use the dash syntax when accessing nested color values
+@endcomponent
+
+```css
+.btn-blue {
+  background-color: theme('colors.blue-500');
+}
+```
+
+@component('_partials.tip-good')
+Use dot notation to access nested color values
+@endcomponent
+
+```css
+.btn-blue {
+  background-color: theme('colors.blue.500');
+}
+```

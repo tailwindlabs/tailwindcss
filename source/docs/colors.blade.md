@@ -45,6 +45,28 @@ module.exports = {
 
 Like many other places in Tailwind, the `default` key is special and means "no modifier", so this configuration would generate classes like `.text-indigo-lighter`, `.text-indigo`, and `.text-indigo-dark`.
 
+Note that you need to use dot notation to access nested colors when using the `theme()` function — the colors are only converted to dash-case for the actual CSS class names.
+
+@component('_partials.tip-bad')
+Don't use the dash syntax to access nested color values with theme()
+@endcomponent
+
+```css
+.btn-blue {
+  background-color: theme('colors.blue-500');
+}
+```
+
+@component('_partials.tip-good')
+Use dot notation to access nested color values with theme()
+@endcomponent
+
+```css
+.btn-blue {
+  background-color: theme('colors.blue.500');
+}
+```
+
 ---
 
 ## Overriding the default color palette
