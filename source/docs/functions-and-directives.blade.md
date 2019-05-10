@@ -87,7 +87,7 @@ Any rules inlined with `@@apply` will have `!important` **removed** by default t
 }
 
 .bar {
-  @@apply bar;
+  @@apply foo;
 }
 
 /* Output */
