@@ -1,98 +1,40 @@
 ---
 extends: _layouts.homepage
-title: "What is Tailwind?"
+title: "Most CSS frameworks do too much."
 description: null
 titleBorder: false
 ---
 
-Tailwind is different from frameworks like Bootstrap, Foundation, or Bulma in that it's not a UI kit and doesn't include any built-in UI components like form controls, buttons, cards, or navbars.
+<h2 style="font-size: 0" class="invisible m-0 -mb-6">Utility-first</h2>
 
-On the flip side, it also has no opinion about how your site should look and doesn't impose design decisions that you have to fight to undo.
+They come with all sorts of predesigned components like buttons, cards, and alerts that might help you move quickly at first, but cause more pain than they cure when it comes time to make your site stand out with a custom design.
 
-If you're looking for a framework that comes with a menu of predesigned widgets to build your site with, Tailwind might not be the right framework for you.
+Tailwind is different.
 
-But if you want a huge head start implementing a custom design with its own identity, Tailwind might be just what you're looking for.
+Instead of opinionated predesigned components, Tailwind provides low-level utility classes that let you build completely custom designs without ever leaving your HTML.
 
-## Utility-first
-
-Creating a framework for building custom UIs means you can't provide abstractions at the usual level of buttons, forms, cards, navbars, etc.
-
-Instead, Tailwind provides highly composable, low-level *utility classes* that make it easy to build complex user interfaces **without encouraging any two sites to look the same.**
-
-Here's an example of a responsive contact card component built with Tailwind without writing a single line of CSS:
-
-@component('_partials.code-sample', ['class' => 'bg-gray-200 py-8'])
-<div class="bg-white mx-auto max-w-sm shadow-xl rounded-lg overflow-hidden">
-  <div class="sm:flex sm:items-center px-6 py-4">
-    <img class="block h-16 sm:h-24 rounded-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="https://avatars2.githubusercontent.com/u/4323180?s=400&u=4962a4441fae9fba5f0f86456c6c506a21ffca4f&v=4" alt="">
-    <div class="text-center sm:text-left sm:flex-grow">
-      <div class="mb-4">
-        <p class="text-xl leading-tight">Adam Wathan</p>
-        <p class="text-sm leading-tight text-gray-600">Developer at NothingWorks Inc.</p>
-      </div>
-      <div>
-        <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white">Message</button>
-      </div>
-    </div>
+@component('_partials.code-sample', ['class' => 'p-8'])
+<div class="md:flex">
+  <div class="md:flex-shrink-0">
+    <img class="rounded-lg md:w-56" src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=448&q=80" alt="Woman paying for a purchase">
+  </div>
+  <div class="mt-4 md:mt-0 md:ml-6">
+    <div class="uppercase tracking-wide text-sm text-indigo-600 font-bold">Marketing</div>
+    <a href="#" class="block mt-1 text-lg leading-tight font-semibold text-gray-900 hover:underline">Finding customers for your new business</a>
+    <p class="mt-2 text-gray-600">Getting a new business off the ground is a lot of hard work. Here are five ideas you can use to find your first customers.</p>
   </div>
 </div>
-@slot('code')
-<div class="bg-white mx-auto max-w-sm shadow-xl rounded-lg overflow-hidden">
-  <div class="sm:flex sm:items-center px-6 py-4">
-    <img class="block h-16 sm:h-24 rounded-full mx-auto mb-4 sm:mb-0 sm:mr-4 sm:ml-0" src="https://avatars2.githubusercontent.com/u/4323180?s=400&u=4962a4441fae9fba5f0f86456c6c506a21ffca4f&v=4" alt="">
-    <div class="text-center sm:text-left sm:flex-grow">
-      <div class="mb-4">
-        <p class="text-xl leading-tight">Adam Wathan</p>
-        <p class="text-sm leading-tight text-gray-600">Developer at NothingWorks Inc.</p>
-      </div>
-      <div>
-        <button class="text-xs font-semibold rounded-full px-4 py-1 leading-normal bg-white border border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white">Message</button>
-      </div>
-    </div>
-  </div>
-</div>
-@endslot
 @endcomponent
 
-## Component-friendly
+If you're sick of fighting the framework, struggling to override unwanted styles, and battling specificity wars, Tailwind was made for you.
 
-While you can do a *lot* with just utility classes, as a project grows it can be useful to codify common patterns into higher level abstractions.
+[Learn more about Tailwind's utility-first workflow &rarr;](/docs/utility-first)
 
-Tailwind provides tools for [extracting component classes](/docs/extracting-components) from repeated utility patterns, making it easy to update multiple instances of a component from one place:
-
-@component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
-<button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-  Button
-</button>
-
-@slot('code')
-<!-- Using utilities: -->
-<button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-  Button
-</button>
-
-<!-- Extracting component classes: -->
-<button class="btn btn-blue">
-  Button
-</button>
-
-<style>
-  .btn {
-    @@apply font-bold py-2 px-4 rounded;
-  }
-  .btn-blue {
-    @@apply bg-blue-500 text-white;
-  }
-  .btn-blue:hover {
-    @@apply bg-blue-600;
-  }
-</style>
-@endslot
-@endcomponent
+---
 
 ## Responsive to the core
 
-Every Tailwind utility also comes in responsive flavors, making it extremely easy to build responsive interfaces without ever leaving your HTML.
+Every Tailwind utility also comes with responsive variants, making it extremely easy to build responsive interfaces without resorting to custom CSS.
 
 Tailwind uses an intuitive `{screen}:` prefix that makes it easy to notice responsive classes in your markup while keeping the original class name recognizable and intact.
 
@@ -139,6 +81,50 @@ Tailwind uses an intuitive `{screen}:` prefix that makes it easy to notice respo
 @endslot
 @endcomponent
 
+[Learn more about responsive design with Tailwind &rarr;](/docs/responsive-design)
+
+---
+
+## Component-friendly
+
+While you can do a *lot* with just utility classes, as a project grows it can be useful to codify common patterns into higher level abstractions.
+
+Tailwind provides tools for [extracting component classes](/docs/extracting-components) from repeated utility patterns, making it easy to update multiple instances of a component from one place:
+
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
+<button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+  Button
+</button>
+
+@slot('code')
+<!-- Using utilities: -->
+<button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+  Button
+</button>
+
+<!-- Extracting component classes: -->
+<button class="btn btn-blue">
+  Button
+</button>
+
+<style>
+  .btn {
+    @@apply font-bold py-2 px-4 rounded;
+  }
+  .btn-blue {
+    @@apply bg-blue-500 text-white;
+  }
+  .btn-blue:hover {
+    @@apply bg-blue-600;
+  }
+</style>
+@endslot
+@endcomponent
+
+[Learn more about extracting components with Tailwind &rarr;](/docs/extracting-components)
+
+---
+
 ## Designed to be customized
 
 If it makes sense to be customizable, Tailwind lets you customize it. This includes colors, border sizes, font weights, spacing utilities, breakpoints, shadows, and tons more.
@@ -179,3 +165,6 @@ module.exports = {
   }
 }
 ```
+
+[Learn more about customizing Tailwind &rarr;](/docs/configuration)
+
