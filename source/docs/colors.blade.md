@@ -15,6 +15,7 @@ To Document:
 - How the colors were picked (by hand), and why it's not easy for you to generate your own set of colors
 - Nested object syntax vs key-value syntax
 - Customizing colors for core plugins separately instead of globally
+- How to add colors without overriding them (extend)
 
 ---
 
