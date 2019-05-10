@@ -7,7 +7,7 @@ titleBorder: true
 
 ## @@tailwind
 
-Use the `@@tailwind` directive to insert Tailwind's `base`, `utilities` and `screens` styles into your CSS. Here's a full example of how you might do this:
+Use the `@@tailwind` directive to insert Tailwind's `base`, `components`, `utilities` and `screens` styles into your CSS.
 
 ```css
 /**
@@ -233,6 +233,8 @@ The `@variants` at-rule supports all of the values that are supported in the `va
 
 ...as well as any [custom variants](/docs/plugins#adding-variants) added through plugins.
 
+---
+
 ## @@responsive
 
 You can generate responsive variants of your own classes by wrapping their definitions in the `@responsive` directive:
@@ -285,6 +287,8 @@ Using the default breakpoints, this would generate these classes:
 
 The responsive variants will be added to Tailwind's existing media queries at the end of your stylesheet. This makes sure that classes with a responsive prefix always defeat non-responsive classes that are targeting the same CSS property.
 
+---
+
 ## @@screen
 
 The `@@screen` directive allows you to create media queries that reference your breakpoints by name instead of duplicating their values in your own CSS.
@@ -306,6 +310,8 @@ Instead of writing a raw media query that duplicates that value like this:
   /* ... */
 }
 ```
+
+---
 
 ## theme()
 
