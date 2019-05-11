@@ -177,6 +177,8 @@
             <div class="markdown mb-6 px-6 max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:px-12 xl:w-3/4">
               <h1>{{ $page->title }}</h1>
 
+              {{-- <p class="text-gray-600 text-xl leading-snug mt-4">Tailwind is different from frameworks like Bootstrap, Foundation, or Bulma in that it's not a UI kit and doesn't include any built-in UI components.</p> --}}
+
               @if ($page->description)
                 <div class="mt-0 mb-4 text-gray-600">
                   {{ $page->description }}

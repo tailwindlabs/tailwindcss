@@ -31,6 +31,8 @@ Plugin functions receive a single object argument that can be [destructured](htt
 - `variants()`, for looking up values in the user's variants configuration
 - `config()`, for looking up values in the user's Tailwind configuration
 
+---
+
 ## Adding utilities
 
 The `addUtilities` function allows you to register new styles to be output (along with the built-in utilities) at the `@@tailwind utilities` directive.
@@ -105,7 +107,7 @@ module.exports = {
 }
 ```
 
-### Responsive and state variants
+### Responsive and pseudo-class variants
 
 To generate responsive, hover, focus, active, or group-hover variants of your styles, specify the variants you'd like to generate using the `variants` option:
 
@@ -162,6 +164,8 @@ module.exports = {
   ]
 }
 ```
+
+---
 
 ## Adding components
 
@@ -315,7 +319,7 @@ module.exports = {
 }
 ```
 
-### Responsive and state variants
+### Responsive and pseudo-class variants
 
 The `addComponents` function doesn't provide the ability to automatically generate variants since it doesn't typically make sense to do so for component classes.
 
@@ -335,6 +339,8 @@ function({ addComponents }) {
   })
 }
 ```
+
+---
 
 ## Adding base styles
 
@@ -360,6 +366,8 @@ module.exports = {
 ```
 
 Since base styles are meant to target bare selectors like `div`, `h1`, etc., they do not respect the user's `prefix` or `important` configuration.
+
+---
 
 ## Escaping class names
 
@@ -424,6 +432,8 @@ Additionally, because CSS has rules about the characters a class name can *start
 // => '.rotate-1\/4'
 ```
 
+--- 
+
 ## Manually prefixing selectors
 
 If you're writing something complex where you only want to prefix certain classes, you can use the `prefix` function to have fine-grained control of when the user's configured prefix is applied.
@@ -460,6 +470,8 @@ The `prefix` function will prefix all classes in a selector and ignore non-class
 prefix('.btn-blue .w-1\/4 > h1.text-xl + a .bar')
 // => '.tw-btn-blue .tw-w-1\/4 > h1.tw-text-xl + a .tw-bar'
 ```
+
+---
 
 ## Referencing the user's config
 
@@ -531,6 +543,7 @@ module.exports = {
 }
 ```
 
+---
 
 ## Exposing options
 
@@ -578,6 +591,8 @@ module.exports = {
   ],
 }
 ```
+
+---
 
 ## CSS-in-JS syntax
 
@@ -683,9 +698,11 @@ addComponents([
 ])
 ```
 
+---
+
 ## Adding variants
 
-The `addVariant` function allows you to register your own custom [variants](/docs/state-variants) that can be used just like the built-in hover, focus, active, etc. variants.
+The `addVariant` function allows you to register your own custom [variants](/docs/pseudo-class-variants) that can be used just like the built-in hover, focus, active, etc. variants.
 
 To add a new variant, call the `addVariant` function, passing in the name of your custom variant, and a callback that modifies the affected CSS rules as needed.
 
@@ -812,6 +829,8 @@ To use custom variants with custom utilities in your own CSS, use the [variants 
   }
 }
 ```
+
+---
 
 ## Example plugins
 

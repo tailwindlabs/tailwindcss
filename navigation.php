@@ -12,7 +12,7 @@ return [
         'Utility-First' => 'utility-first',
         'Core Plugins' => 'core-plugins',
         'Responsive Design' => 'responsive-design',
-        'State Variants' => 'state-variants',
+        'Pseudo-Class Variants' => 'pseudo-class-variants',
         'Adding Base Styles' => 'adding-base-styles',
         'Extracting Components' => 'extracting-components',
         'Adding New Utilities' => 'adding-new-utilities',

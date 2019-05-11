@@ -1,31 +1,30 @@
 ---
 extends: _layouts.documentation
 title: "Functions & Directives"
-description: null
+description: "A reference for the custom functions and directives Tailwind exposes to your CSS."
 titleBorder: true
 ---
 
-Tailwind exposes a few custom CSS functions and directives that can be used in your actual CSS files.
-
 ## @@tailwind
 
-Use the `@@tailwind` directive to insert Tailwind's `base`, `utilities` and `screens` styles into your CSS. Here's a full example of how you might do this:
+Use the `@@tailwind` directive to insert Tailwind's `base`, `components`, `utilities` and `screens` styles into your CSS.
 
 ```css
 /**
- * This injects Tailwind's base styles, which is a combination of
- * Normalize.css and some additional base styles.
+ * This injects Tailwind's base styles and any base styles registered by
+ * plugins.
  */
 @@tailwind base;
 
 /**
- * This injects any component classes registered by plugins.
+ * This injects Tailwind's component classes and any component classes
+ * registered by plugins.
  */
 @@tailwind components;
 
 /**
- * This injects all of Tailwind's utility classes, generated based on your
- * config file. It also injects any utility classes registered by plugins.
+ * This injects Tailwind's utility classes and any utility classes registered
+ * by plugins.
  */
 @@tailwind utilities;
 
@@ -39,11 +38,13 @@ Use the `@@tailwind` directive to insert Tailwind's `base`, `utilities` and `scr
  @@tailwind screens;
 ```
 
+---
+
 ## @@apply
 
-Use `@@apply` to mix-in the contents of existing classes into your custom CSS.
+Use `@@apply` to inline any existing utility classes into your own custom CSS.
 
-This is extremely useful when you find a common utility pattern in your HTML that you'd like to extract to a new component.
+This is useful when you find a common utility pattern in your HTML that you'd like to extract to a new component.
 
 ```css
 .btn {
@@ -77,25 +78,25 @@ You can mix `@@apply` declarations with normal CSS declarations too of course:
 }
 ```
 
-Any rules mixed in with `@@apply` will have `!important` **removed** by default to avoid specificity issues:
+Any rules inlined with `@@apply` will have `!important` **removed** by default to avoid specificity issues:
 
 ```css
 /* Input */
 .foo {
-  @@apply bar;
+  color: blue !important;
 }
 
 .bar {
-  color: blue !important;
+  @@apply foo;
 }
 
 /* Output */
 .foo {
-  color: blue;
+  color: blue !important;
 }
 
 .bar {
-  color: blue !important;
+  color: blue;
 }
 ```
 
@@ -119,7 +120,7 @@ If you'd like to `@@apply` an existing class and make it `!important`, simply ad
 }
 ```
 
-Note that `@@apply` **will not work** for mixing in hover, focus, or responsive variants of another utility. Instead, mix in the plain version of that utility into the appropriate pseudo-selector or a new media query:
+Note that `@@apply` **will not work** for inlining pseudo-class or responsive variants of another utility. Instead, apply the plain version of that utility into the appropriate pseudo-selector or a new media query:
 
 ```css
 /* Won't work: */
@@ -155,7 +156,9 @@ If you've [configured a prefix](/docs/configuration#prefix) for your utilities, 
 }
 ```
 
-## @variants
+---
+
+## @@variants
 
 You can generate `responsive`, `hover`, `focus`, `active`, and `group-hover` versions of your own utilities by wrapping their definitions in the `@variants` directive
 
@@ -230,9 +233,11 @@ The `@variants` at-rule supports all of the values that are supported in the `va
 
 ...as well as any [custom variants](/docs/plugins#adding-variants) added through plugins.
 
+---
+
 ## @@responsive
 
-You can generate responsive versions of your own classes by wrapping their definitions in the `@responsive` directive:
+You can generate responsive variants of your own classes by wrapping their definitions in the `@responsive` directive:
 
 ```css
 @@responsive {
@@ -280,7 +285,9 @@ Using the default breakpoints, this would generate these classes:
 }
 ```
 
-The responsive versions will be added to Tailwind's existing media queries **at the end of your stylesheet.** This makes sure that classes with a responsive prefix always defeat non-responsive classes that are targeting the same CSS property.
+The responsive variants will be added to Tailwind's existing media queries at the end of your stylesheet. This makes sure that classes with a responsive prefix always defeat non-responsive classes that are targeting the same CSS property.
+
+---
 
 ## @@screen
 
@@ -304,22 +311,38 @@ Instead of writing a raw media query that duplicates that value like this:
 }
 ```
 
+---
+
 ## theme()
 
-While it's recommended to use the `@@apply` directive to compose custom CSS out of existing utility classes whenever possible, sometimes you need direct access to your Tailwind config values.
+Use the `theme()` function to access your Tailwind config values using dot notation.
 
-Use the `theme()` function to access your Tailwind config values using dot notation:
+This can be a useful alternative to `@@apply` when you want to reference a value from your theme configuration for only part of a declaration:
 
 ```css
-/* Source */
-.error {
-  font-size: theme('fontSize.xs');
-  color: theme('colors.red.700');
+.content-area {
+  height: calc(100vh - theme('spacing.12'));
 }
+```
 
-/* Output */
-.error {
-  font-size: .75rem;
-  color: #a61611;
+Since Tailwind uses the [nested object syntax](/docs/colors#nested-object-syntax) to define its default color palette, make sure to use dot notation to access the nested colors.
+
+@component('_partials.tip-bad')
+Don't use the dash syntax when accessing nested color values
+@endcomponent
+
+```css
+.btn-blue {
+  background-color: theme('colors.blue-500');
+}
+```
+
+@component('_partials.tip-good')
+Use dot notation to access nested color values
+@endcomponent
+
+```css
+.btn-blue {
+  background-color: theme('colors.blue.500');
 }
 ```

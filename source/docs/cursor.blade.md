@@ -9,8 +9,6 @@ features:
   focus: false
 ---
 
-@include('_partials.work-in-progress')
-
 @include('_partials.class-table', [
   'rows' => [
     [
@@ -50,6 +48,111 @@ features:
     ],
   ]
 ])
+
+## Auto <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+
+Use `.cursor-auto` to allow the browser to change the cursor based on the current content (e.g. automatically change to `text` cursor when hovering over text).
+
+@component('_partials.code-sample', ['class' => 'text-center'])
+<div class="cursor-auto max-w-xs p-2 bg-gray-200 mx-auto">
+  Hover over this text
+</div>
+@slot('code')
+<div class="cursor-auto ...">
+  Hover over this text
+</div>
+@endslot
+@endcomponent
+
+## Default
+
+Use `.cursor-default` to change the mouse cursor to always use the platform-dependent default cursor (usually an arrow).
+
+@component('_partials.code-sample', ['class' => 'text-center'])
+<div class="cursor-default max-w-xs p-2 bg-gray-200 mx-auto">
+  Hover over this text
+</div>
+@slot('code')
+<div class="cursor-default ...">
+  Hover over this text
+</div>
+@endslot
+@endcomponent
+
+## Pointer
+
+Use `.cursor-pointer` to change the mouse cursor to indicate an interactive element (usually a pointing hand).
+
+@component('_partials.code-sample', ['class' => 'text-center'])
+<div class="cursor-pointer max-w-xs p-2 bg-gray-200 mx-auto">
+  Hover me
+</div>
+@slot('code')
+<div class="cursor-pointer ...">
+  Hover me
+</div>
+@endslot
+@endcomponent
+
+## Pointer
+
+Use `.cursor-wait` to change the mouse cursor to indicate something is happening in the background (usually an hourglass or watch).
+
+@component('_partials.code-sample', ['class' => 'text-center'])
+<div class="cursor-wait max-w-xs p-2 bg-gray-200 mx-auto">
+  Hover me
+</div>
+@slot('code')
+<div class="cursor-wait ...">
+  Hover me
+</div>
+@endslot
+@endcomponent
+
+## Text
+
+Use `.cursor-text` to change the mouse cursor to indicate the text can be selected (usually an I-beam shape).
+
+@component('_partials.code-sample', ['class' => 'text-center'])
+<div class="cursor-text max-w-xs p-2 bg-gray-200 mx-auto">
+  Hover me
+</div>
+@slot('code')
+<div class="cursor-text ...">
+  Hover me
+</div>
+@endslot
+@endcomponent
+
+## Move
+
+Use `.cursor-move` to change the mouse cursor to indicate something that can be moved.
+
+@component('_partials.code-sample', ['class' => 'text-center'])
+<div class="cursor-move max-w-xs p-2 bg-gray-200 mx-auto">
+  Hover me
+</div>
+@slot('code')
+<div class="cursor-move ...">
+  Hover me
+</div>
+@endslot
+@endcomponent
+
+## Not Allowed
+
+Use `.cursor-not-allowed` to change the mouse cursor to indicate something can not be interacted with or clicked.
+
+@component('_partials.code-sample', ['class' => 'text-center'])
+<div class="cursor-not-allowed max-w-xs p-2 bg-gray-200 mx-auto">
+  Hover me
+</div>
+@slot('code')
+<div class="cursor-not-allowed ...">
+  Hover me
+</div>
+@endslot
+@endcomponent
 
 ## Customizing
 

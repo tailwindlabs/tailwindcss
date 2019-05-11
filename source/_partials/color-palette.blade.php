@@ -1,5 +1,5 @@
 <div class="w-1/2 px-2 md:w-full relative mt-4">
-  <h3 class="markdown no-toc mb-4">{{ $colorName }}</h3>
+  <h3 class="markdown no-toc mb-4 mt-8">{{ $colorName }}</h3>
   <div class="md:-mx-2 md:-mt-5 md:flex md:flex-wrap">
     @foreach (collect(range(100, 900, 100))->chunk(3) as $chunk)
       <div class="md:w-1/3 md:px-2">
