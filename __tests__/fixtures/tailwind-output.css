@@ -7202,10 +7202,6 @@ video {
   user-select: all;
 }
 
-.select-contain {
-  user-select: contain;
-}
-
 .select-auto {
   user-select: auto;
 }
@@ -14105,10 +14101,6 @@ video {
 
   .sm\:select-all {
     user-select: all;
-  }
-
-  .sm\:select-contain {
-    user-select: contain;
   }
 
   .sm\:select-auto {
@@ -21013,10 +21005,6 @@ video {
     user-select: all;
   }
 
-  .md\:select-contain {
-    user-select: contain;
-  }
-
   .md\:select-auto {
     user-select: auto;
   }
@@ -27919,10 +27907,6 @@ video {
     user-select: all;
   }
 
-  .lg\:select-contain {
-    user-select: contain;
-  }
-
   .lg\:select-auto {
     user-select: auto;
   }
@@ -34823,10 +34807,6 @@ video {
 
   .xl\:select-all {
     user-select: all;
-  }
-
-  .xl\:select-contain {
-    user-select: contain;
   }
 
   .xl\:select-auto {
