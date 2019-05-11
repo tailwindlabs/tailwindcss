@@ -7,7 +7,7 @@ titleBorder: true
 
 <h2 style="font-size: 0" class="invisible m-0 -mb-6">Overview</h2>
 
-The `theme.colors` section of your `tailwind.config.js` file is where you define your project's color palette.
+The `theme.colors` section of your `tailwind.config.js` file allows you to override Tailwind's [default color palette](#default-color-palette).
 
 ```js
 // tailwind.config.js
