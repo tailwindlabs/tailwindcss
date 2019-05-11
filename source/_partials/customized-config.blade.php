@@ -18,15 +18,15 @@ $usesTheme = $usesTheme ?? false;
     <div>{!! collect(explode("\n", $slot))->map(function ($line) use ($keyDepth) {
       $indentation = str_repeat('&nbsp;&nbsp;', $keyDepth + 1);
       if (starts_with($line, '+')) {
-        return '<div class="text-code-green"><span>+</span>&nbsp;' . $indentation . e(trim(substr($line, 1))) . '</div>';
+        return '<div class="text-code-green"><span>+</span>&nbsp;' . $indentation . trim(substr($line, 1)) . '</div>';
       }
       if (starts_with($line, '-')) {
-        return '<div class="text-gray-500"><span>-</span>&nbsp;' . $indentation . e(trim(substr($line, 1))) . '</div>';
+        return '<div class="text-gray-500"><span>-</span>&nbsp;' . $indentation . trim(substr($line, 1)) . '</div>';
       }
       if (starts_with($line, '//')) {
-        return '<div class="text-gray-400">&nbsp;&nbsp;' . $indentation . e(trim($line)) . '</div>';
+        return '<div class="text-gray-400">&nbsp;&nbsp;' . $indentation . trim($line) . '</div>';
       }
-      return '<div class="text-gray-300">&nbsp;&nbsp;' . $indentation . e(trim($line)) . '</div>';
+      return '<div class="text-gray-300">&nbsp;&nbsp;' . $indentation . trim($line) . '</div>';
     })->implode("\n") !!}</div>
     {!! collect(range($keyDepth, 0))->map(function ($depth) use ($keyDepth, $usesTheme) {
       $closingBrace = $usesTheme && $depth === $keyDepth ? '})' : '}';

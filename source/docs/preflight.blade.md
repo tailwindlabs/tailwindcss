@@ -12,8 +12,7 @@ Built on top of [normalize.css](https://github.com/necolas/normalize.css/), Pref
 Tailwind automatically injects these styles when you include `@@tailwind base` in your CSS:
 
 ```css
-/* Preflight will be injected here */
-@@tailwind base;
+@@tailwind base; /* Preflight will be injected here */
 
 @@tailwind components;
 
@@ -106,35 +105,93 @@ You can always add default list styles to your project by [adding your own base 
 
 ## Images are block-level
 
+Images and other replaced elements (like `svg`, `video`, `canvas`, and others) are `display: block` by default.
+
+```css
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  vertical-align: middle;
+}
+```
+
+This helps to avoid unexpected alignment issues that you often run into using the browser default of `display: inline`.
+
+If you ever need to make one of these elements `inline` instead of `block`, simply use the `inline` utility:
+
+```html
+<img class="inline" src="..." alt="...">
+```
+
 ---
 
-## Borders are solid by default
+## Border styles are reset globally
 
----
+In order to make it easy to add a border by simply adding the `border` class, Tailwind overrides the default border styles for all elements:
 
-## Customizing Preflight
+```css
+*,
+*::before,
+*::after {
+  border-width: 0;
+  border-style: solid;
+  border-color: theme('borderColor.default', currentColor);
+}
+```
 
-- Changing the base font family, line height, font size, etc.
+Since the `border` class only sets the `border-width` property, this reset ensures that adding that class always adds a solid 1px border using your configured default border color.
+
+This can cause some unexpected results when integrating certain third-party libraries, like [Google maps](https://github.com/tailwindcss/tailwindcss/issues/484) for example.
+
+When you run into situations like this, you can work around them by overriding the Preflight styles with your own custom CSS:
+
+```css
+.google-map * {
+  border-style: none;
+}
+```
 
 ---
 
 ## Extending Preflight
 
-- Adding your own base styles, mostly just link to other page
+If you'd like to add your own base styles on top of Preflight, simply add them to your CSS after `@@tailwind base`:
+
+```css
+@@tailwind base;
+
+h1 {
+  @@apply text-2xl;
+}
+h2 {
+  @@apply text-xl;
+}
+h3 {
+  @@apply text-lg;
+}
+a {
+  @@apply text-blue-600 underline;
+}
+
+@@tailwind components;
+
+@@tailwind utilities;
+```
+
+Learn more in the [adding base styles documentation](/docs/adding-base-styles).
 
 ---
 
 ## Disabling Preflight
 
-- Disable in corePlugins section of config
+If you'd like to completely disable Preflight — perhaps because you're integrating Tailwind into an existing project or because you'd like to provide your own base styles — all you need to do is set `preflight` to `false` in the `corePlugins` section of your `tailwind.config.js` file:
 
----
-
-
-Coming soon.
-
-In a nutshell:
-
-- An opinionated layer on top of [normalize.css](https://github.com/necolas/normalize.css/)
-- Intended to make it hard to accidentally deviate from your design system, so elements like headings are intentionally unstyled
-- [See the source code](https://github.com/tailwindcss/tailwindcss/blob/next/src/plugins/css/preflight.css) to see what styles are applied
+@component('_partials.customized-config', ['key' => 'corePlugins'])
++ preflight: false,
+@endcomponent
