@@ -390,8 +390,8 @@ module.exports = {
       default: '1',
     },
     order: {
-      first: '-1',
-      last: '999',
+      first: '-9999',
+      last: '9999',
       none: '0',
       '1': '1',
       '2': '2',

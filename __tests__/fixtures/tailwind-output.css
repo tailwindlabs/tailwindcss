@@ -3499,11 +3499,11 @@ video {
 }
 
 .order-first {
-  order: -1;
+  order: -9999;
 }
 
 .order-last {
-  order: 999;
+  order: 9999;
 }
 
 .order-none {
@@ -10400,11 +10400,11 @@ video {
   }
 
   .sm\:order-first {
-    order: -1;
+    order: -9999;
   }
 
   .sm\:order-last {
-    order: 999;
+    order: 9999;
   }
 
   .sm\:order-none {
@@ -17302,11 +17302,11 @@ video {
   }
 
   .md\:order-first {
-    order: -1;
+    order: -9999;
   }
 
   .md\:order-last {
-    order: 999;
+    order: 9999;
   }
 
   .md\:order-none {
@@ -24204,11 +24204,11 @@ video {
   }
 
   .lg\:order-first {
-    order: -1;
+    order: -9999;
   }
 
   .lg\:order-last {
-    order: 999;
+    order: 9999;
   }
 
   .lg\:order-none {
@@ -31106,11 +31106,11 @@ video {
   }
 
   .xl\:order-first {
-    order: -1;
+    order: -9999;
   }
 
   .xl\:order-last {
-    order: 999;
+    order: 9999;
   }
 
   .xl\:order-none {

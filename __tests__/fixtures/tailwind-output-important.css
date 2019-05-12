@@ -3499,11 +3499,11 @@ video {
 }
 
 .order-first {
-  order: -1 !important;
+  order: -9999 !important;
 }
 
 .order-last {
-  order: 999 !important;
+  order: 9999 !important;
 }
 
 .order-none {
@@ -10400,11 +10400,11 @@ video {
   }
 
   .sm\:order-first {
-    order: -1 !important;
+    order: -9999 !important;
   }
 
   .sm\:order-last {
-    order: 999 !important;
+    order: 9999 !important;
   }
 
   .sm\:order-none {
@@ -17302,11 +17302,11 @@ video {
   }
 
   .md\:order-first {
-    order: -1 !important;
+    order: -9999 !important;
   }
 
   .md\:order-last {
-    order: 999 !important;
+    order: 9999 !important;
   }
 
   .md\:order-none {
@@ -24204,11 +24204,11 @@ video {
   }
 
   .lg\:order-first {
-    order: -1 !important;
+    order: -9999 !important;
   }
 
   .lg\:order-last {
-    order: 999 !important;
+    order: 9999 !important;
   }
 
   .lg\:order-none {
@@ -31106,11 +31106,11 @@ video {
   }
 
   .xl\:order-first {
-    order: -1 !important;
+    order: -9999 !important;
   }
 
   .xl\:order-last {
-    order: 999 !important;
+    order: 9999 !important;
   }
 
   .xl\:order-none {
