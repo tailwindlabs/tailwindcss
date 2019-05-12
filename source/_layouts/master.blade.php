@@ -14,8 +14,6 @@
   @yield('meta')
   <link rel="stylesheet" href="{{ mix('/css/main.css', 'assets/build') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css">
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-  @stack('headScripts')
 </head>
 <body data-sidebar-visible="true" class="text-gray-900 leading-normal">
 
@@ -33,6 +31,7 @@
   </script>
 @endif
 
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 @stack('scripts')
 
 </body>

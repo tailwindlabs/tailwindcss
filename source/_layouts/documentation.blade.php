@@ -14,7 +14,7 @@
 <meta property="og:image" content="https://tailwindcss.com/img/twitter-card.png" />
 @endsection
 
-@push('headScripts')
+@push('scripts')
 <script src="{{ mix('/js/nav.js', 'assets/build') }}" defer></script>
 @endpush
 
