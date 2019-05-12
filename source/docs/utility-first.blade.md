@@ -114,7 +114,13 @@ In the example above, we've used:
 
 Now I know what you're thinking, _"this is an atrocity, what a horrible mess!"_ and you're right, it's kind of ugly. In fact it's just about impossible to think this is a good idea the first time you see it — **you have to actually try it**.
 
-When you realize how productive you can be when you don't have to invent arbitrary names for elements just to attach styles to them, working any other way will feel like torture.
+But once you've actually built something this way, you'll quickly notice some really important benefits:
+
+- **You aren't wasting energy inventing class names**. No more adding silly class names like `sidebar-inner-wrapper` just to be able to style something, and no more agonizing over the perfect abstract name for something that's really just a flex container.
+- **Your CSS stops growing**. Using a traditional approach, your CSS files get bigger every time you add a new feature. With utilities, everything is reusable so you rarely need to write new CSS.
+- **Making changes feels safer**. CSS is global and you never know what you're breaking when you make a change. Classes in your HTML are local, so you can change them without worrying about something else breaking.
+
+When you realize how productive you can be working exclusively in HTML with predefined utility classes, working any other way will feel like torture.
 
 ---
 
