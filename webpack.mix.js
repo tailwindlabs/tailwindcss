@@ -22,6 +22,7 @@ const purgecss = require('@fullhuman/postcss-purgecss')({
     './source/**/*.vue',
     './source/**/*.js',
     './source/_assets/less/docsearch.less',
+    './source/_assets/less/prism-atom-dark.less',
   ],
   defaultExtractor: content => content.match(/[A-Za-z0-9-_:/\?\(\)]+/g) || []
 })
