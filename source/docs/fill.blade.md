@@ -46,5 +46,5 @@ Control which fill utilities Tailwind generates by customizing the `theme.fill` 
         'name' => 'fill',
         'property' => 'fill',
     ],
-    'variants' => [],
+    'variants' => ['responsive'],
 ])

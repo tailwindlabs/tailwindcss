@@ -29,5 +29,5 @@ description: "Utilities for controlling whether table borders should collapse or
         'name' => 'border collapse',
         'property' => 'borderCollapse',
     ],
-    'variants' => [],
+    'variants' => ['responsive'],
 ])

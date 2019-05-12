@@ -48,5 +48,5 @@ Control which stroke utilities Tailwind generates by customizing the `theme.stro
         'name' => 'stroke',
         'property' => 'stroke',
     ],
-    'variants' => [],
+    'variants' => ['responsive'],
 ])

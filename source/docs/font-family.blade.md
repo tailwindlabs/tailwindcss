@@ -1,6 +1,6 @@
 ---
 extends: _layouts.documentation
-title: "Font Families"
+title: "Font Family"
 description: "Utilities for controlling the font family of an element."
 features:
   responsive: true
