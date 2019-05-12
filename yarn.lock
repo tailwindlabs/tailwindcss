@@ -7820,10 +7820,10 @@ table@^4.0.1:
     slice-ansi "1.0.0"
     string-width "^2.1.1"
 
-tailwindcss@^1.0.0-beta.8:
-  version "1.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.0.0-beta.8.tgz#62c04d4bb342933b45164735b0334119651cd733"
-  integrity sha512-rHS9yx2KzQPnfE++in2FcZ9yPt1KwdqENvMbmJzgWwidD4riNdTtGDKSk/3g7A8I2D7hMFvk6l6H3B52vOpqwQ==
+tailwindcss@^1.0.0-beta.10:
+  version "1.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.0.0-beta.10.tgz#9e86e23f9742c90be72de1592c2f988942746b8c"
+  integrity sha512-TH8UCo7KYyGHpuWL0tNoD859ljSthG1a5Jf7hbHY6EXLn4pMN82xFyYM9rVNJiaMnFSSJy9fSVcEWJZAo/in/Q==
   dependencies:
     autoprefixer "^9.4.5"
     bytes "^3.0.0"

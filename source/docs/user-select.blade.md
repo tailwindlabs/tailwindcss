@@ -11,11 +11,6 @@ features:
 
 @include('_partials.class-table', [
  'rows' => [
-    [
-     '.select-auto',
-     'user-select: auto;',
-     "Default browser behavior",
-   ],
    [
      '.select-none',
      'user-select: none;',
@@ -31,14 +26,15 @@ features:
      'user-select: all;',
      "Allow clicking to select all text in an element.",
    ],
+   [
+     '.select-auto',
+     'user-select: auto;',
+     "Default browser behavior",
+   ],
  ]
 ])
 
-## Select Auto <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
-
-Use `.select-auto` to use the default browser behavior for selecting text.
-
-## Select None
+## Disable selecting text
 
 Use `.select-none` to prevent selecting text in an element and its children.
 
@@ -53,7 +49,7 @@ Use `.select-none` to prevent selecting text in an element and its children.
 @endslot
 @endcomponent
 
-## Select Text
+## Allow selecting text
 
 Use `.select-text` to allow selecting text in an element and its children.
 
@@ -68,9 +64,9 @@ Use `.select-text` to allow selecting text in an element and its children.
 @endslot
 @endcomponent
 
-## Select All
+## Select all text in one click
 
-Use `.select-all` to allow selecting all text in an element when double-clicking.
+Use `.select-all` to automatically select all the text in an element when a user clicks.
 
 @component('_partials.code-sample', ['class' => 'text-center'])
 <div class="mx-auto max-w-sm bg-gray-200 p-2 select-all">
@@ -79,6 +75,21 @@ Use `.select-all` to allow selecting all text in an element when double-clicking
 @slot('code')
 <div class="select-all ...">
   Click anywhere in this text to select it all
+</div>
+@endslot
+@endcomponent
+
+## Auto
+
+Use `.select-auto` to use the default browser behavior for selecting text. Useful for undoing other classes like `.select-none` at different breakpoints.
+
+@component('_partials.code-sample', ['class' => 'text-center'])
+<div class="mx-auto max-w-sm bg-gray-200 p-2 select-auto">
+  This text is selectable
+</div>
+@slot('code')
+<div class="select-auto ...">
+  This text is selectable
 </div>
 @endslot
 @endcomponent
