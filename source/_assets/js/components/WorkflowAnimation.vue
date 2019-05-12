@@ -290,7 +290,7 @@
 
 <script>
   import { TimelineLite, TweenLite, Power4 } from 'gsap/TweenMax'
-  import _ from 'lodash'
+  import flatMap from 'lodash/flatMap'
   import AnimationCodeText from './AnimationCodeText'
 
   function tweenTo(el, duration, vars, position) {
@@ -393,7 +393,7 @@
         return tweenTo(this.$refs.contentCursor, .08, { visibility: 'visible'})
           .then(() => tweenStaggerTo(this.$refs.classContentCenter.children, 0.08, { display: 'inline-block' }, 0.08))
           .then(() => {
-            const elements = _.flatMap([...this.$refs.content.children], el => [...el.children])
+            const elements = flatMap([...this.$refs.content.children], el => [...el.children])
             const oldPositions = elements.map(el => el.getBoundingClientRect())
 
             TweenLite.set(this.$refs.content, { textAlign: 'center' })
@@ -417,7 +417,7 @@
         return tweenTo(this.$refs.cardFlexCursor, .25, { visibility: 'visible'})
           .then(() => tweenStaggerTo(this.$refs.classCardFlex.$el.children, 0.08, { display: 'inline-block' }, 0.08))
           .then(() => {
-            const contentElements = _.flatMap([...this.$refs.content.children], el => [...el.children])
+            const contentElements = flatMap([...this.$refs.content.children], el => [...el.children])
             const oldCardPosition = this.$refs.cardInner.getBoundingClientRect()
             const oldAvatarPosition = this.$refs.avatar.getBoundingClientRect()
             const oldContentPositions = contentElements.map(el => el.getBoundingClientRect())
@@ -471,7 +471,7 @@
         return tweenTo(this.$refs.contentLeftAlignCursor, .25, { visibility: 'visible'})
           .then(() => tweenStaggerTo(this.$refs.classContentLeftAlign.children, 0.08, { display: 'inline-block' }, 0.08))
           .then(() => {
-            const elements = _.flatMap([...this.$refs.content.children], el => [...el.children])
+            const elements = flatMap([...this.$refs.content.children], el => [...el.children])
             const oldPositions = elements.map(el => el.getBoundingClientRect())
 
             TweenLite.set(this.$refs.content, { textAlign: 'left' })
