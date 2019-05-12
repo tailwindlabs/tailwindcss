@@ -133,7 +133,7 @@ If you ever need to make one of these elements `inline` instead of `block`, simp
 
 ## Border styles are reset globally
 
-In order to make it easy to add a border by simply adding the `border` class, Tailwind overrides the default border styles for all elements:
+In order to make it easy to add a border by simply adding the `border` class, Tailwind overrides the default border styles for all elements with the following rules:
 
 ```css
 *,
