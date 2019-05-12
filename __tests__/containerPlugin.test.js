@@ -64,6 +64,56 @@ test.only('screens can be passed explicitly', () => {
   `)
 })
 
+test.only('screens are ordered ascending by min-width', () => {
+  const { components } = processPlugins(
+    [container()],
+    config({
+      theme: {
+        container: {
+          screens: ['500px', '400px'],
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    .container { width: 100% }
+    @media (min-width: 400px) {
+      .container { max-width: 400px }
+    }
+    @media (min-width: 500px) {
+      .container { max-width: 500px }
+    }
+  `)
+})
+
+test.only('screens are deduplicated by min-width', () => {
+  const { components } = processPlugins(
+    [container()],
+    config({
+      theme: {
+        container: {
+          screens: {
+            sm: '576px',
+            md: '768px',
+            'sm-only': { min: '576px', max: '767px' },
+          },
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    .container { width: 100% }
+    @media (min-width: 576px) {
+      .container { max-width: 576px }
+    }
+    @media (min-width: 768px) {
+      .container { max-width: 768px }
+    }
+  `)
+})
+
 test.only('the container can be centered by default', () => {
   const { components } = processPlugins(
     [container()],
