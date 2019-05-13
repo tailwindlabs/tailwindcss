@@ -64,10 +64,10 @@ For example, `.pt-6` would add `1.5rem` of padding to the top of an element, `pr
   </div>
 </div>
 @slot('code')
-<div class="pt-8"><!-- ... --></div>
-<div class="pr-8"><!-- ... --></div>
-<div class="pb-8"><!-- ... --></div>
-<div class="pl-8"><!-- ... --></div>
+<div class="pt-8"><span class="bg-yellow-200">Target</span></div>
+<div class="pr-8"><span class="bg-yellow-200">Target</span></div>
+<div class="pb-8"><span class="bg-yellow-200">Target</span></div>
+<div class="pl-8"><span class="bg-yellow-200">Target</span></div>
 @endslot
 @endcomponent
 
@@ -85,7 +85,7 @@ Control the horizontal padding of an element using the `.px-{size}` utilities.
   </div>
 </div>
 @slot('code')
-<div class="px-8"><!-- ... --></div>
+<div class="px-8"><span class="bg-yellow-200">Target</span></div>
 @endslot
 @endcomponent
 
@@ -103,7 +103,7 @@ Control the vertical padding of an element using the `.py-{size}` utilities.
   </div>
 </div>
 @slot('code')
-<div class="py-8"><!-- ... --></div>
+<div class="py-8"><span class="bg-yellow-200">Target</span></div>
 @endslot
 @endcomponent
 
@@ -121,7 +121,7 @@ Control the padding on all sides of an element using the `.p-{size}` utilities.
   </div>
 </div>
 @slot('code')
-<div class="p-8"><!-- ... --></div>
+<div class="p-8"><span class="bg-yellow-200">Target</span></div>
 @endslot
 @endcomponent
 
@@ -166,7 +166,7 @@ For more information about Tailwind's responsive design features, check out the 
 
 @slot('code')
 <div class="none:pt-8 sm:pr-6 md:pb-4 lg:pl-2 xl:p-0 ...">
-    <!-- ... -->
+  <span class="bg-yellow-200">Target</span>
 </div>
 @endslot
 @endcomponent
