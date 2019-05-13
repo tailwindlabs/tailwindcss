@@ -2,14 +2,7 @@
 extends: _layouts.documentation
 title: "Max-Width"
 description: "Utilities for setting the maximum width of an element"
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: false
 ---
-
-@include('_partials.work-in-progress')
 
 @include('_partials.class-table', [
   'scroll' => false,
@@ -72,28 +65,77 @@ features:
   ]
 ])
 
+## Usage
+
+Set the maximum width of an element using the `max-w-{size}` utilities.
+
+@component('_partials.code-sample')
+<div class="max-w-md mx-auto text-center p-6 bg-gray-300">
+  max-w-md
+</div>
+@slot('code')
+<div class="max-w-md mx-auto ...">
+  max-w-md
+</div>
+@endslot
+@endcomponent
+
+---
+
+## Responsive
+
+To control the min-width of an element at a specific breakpoint, add a `{screen}:` prefix to any existing min-width utility.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+@component('_partials.responsive-code-sample')
+@slot('none')
+<div class="max-w-sm mx-auto text-center p-6 bg-gray-300">
+  Target
+</div>
+@endslot
+@slot('sm')
+<div class="max-w-md mx-auto text-center p-6 bg-gray-300">
+  Target
+</div>
+@endslot
+@slot('md')
+<div class="max-w-lg mx-auto text-center p-6 bg-gray-300">
+  Target
+</div>
+@endslot
+@slot('lg')
+<div class="max-w-xl mx-auto text-center p-6 bg-gray-300">
+  Target
+</div>
+@endslot
+@slot('xl')
+<div class="max-w-2xl mx-auto text-center p-6 bg-gray-300">
+  Target
+</div>
+@endslot
+@slot('code')
+<div class="none:max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl ...">
+  Target
+</div>
+@endslot
+@endcomponent
+
+---
+
 ## Customizing
 
 ### Max-Width Scale
 
-By default Tailwind provides ten `max-width` utilities. You change, add, or remove these by editing the `theme.maxWidth` section of your Tailwind config.
+Customize Tailwind's default max-width scale in the `theme.maxWidth` section of your `tailwind.config.js` file.
 
 @component('_partials.customized-config', ['key' => 'theme.maxWidth'])
-  'xs': '20rem',
-  'sm': '24rem',
-  'md': '28rem',
-  'lg': '32rem',
-  'xl': '36rem',
-- '2xl': '42rem',
-- '3xl': '48rem',
-- '4xl': '56rem',
-- '5xl': '64rem',
-- '6xl': '72rem',
 + '1/4': '25%',
 + '1/2': '50%',
 + '3/4': '75%',
-  'full': '100%',
 @endcomponent
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
 
 @include('_partials.variants-and-disabling', [
     'utility' => [

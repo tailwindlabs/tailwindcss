@@ -76,7 +76,7 @@ For more information about Tailwind's responsive design features, check out the 
 @endslot
 @slot('code')
 <div class="w-24 none:min-w-0 sm:min-w-full md:min-w-0 lg:min-w-full xl:min-w-0 ...">
-  <!-- ... -->
+  Target
 </div>
 @endslot
 @endcomponent
@@ -87,7 +87,7 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Min-width scale
 
-To customize Tailwind's default min-width scale, use the `theme.minWidth` section of your `tailwind.config.js` file.
+Customize Tailwind's default min-width scale in the `theme.minWidth` section of your `tailwind.config.js` file.
 
 @component('_partials.customized-config', ['key' => 'theme.minWidth'])
 + '0': '0',
