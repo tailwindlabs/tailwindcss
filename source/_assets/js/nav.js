@@ -114,9 +114,18 @@ $.when($.ready).then(function() {
 
   // Show sidebar (mobile)
   $(document).on('click', '#sidebar-open', function () {
-      $('#sidebar-open').addClass('hidden')
-      $('#sidebar').removeClass('hidden')
-      $('#sidebar-close').removeClass('hidden')
-      $('#content-wrapper').addClass('overflow-hidden max-h-screen fixed')
+    $('#sidebar-open').addClass('hidden')
+    $('#sidebar').removeClass('hidden')
+    $('#sidebar-close').removeClass('hidden')
+    $('#content-wrapper').addClass('overflow-hidden max-h-screen fixed')
+  })
+
+  // Navigate to old docs
+  $('[data-version-switcher]').val('v1')
+  $(document).on('change', '[data-version-switcher]', function (e) {
+    e.preventDefault()
+    if (e.target.value === "v0") {
+      window.location.assign('https://v0.tailwindcss.com')
+    }
   })
 })
