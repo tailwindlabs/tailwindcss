@@ -85,7 +85,7 @@ If you'd rather scaffold a complete configuration file that includes all of Tail
 npx tailwind init --full
 ```
 
-You'll get a file that matches the [default configuration file](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js) Tailwind uses internally.
+You'll get a file that matches the [default configuration file](https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js) Tailwind uses internally.
 
 ## Theme
 
