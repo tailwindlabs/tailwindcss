@@ -32,9 +32,9 @@ features:
 
 ## Add padding to a single side
 
-Control the padding on one side of an element using the `.p{t|r|b|l}-{size}` utilities.
+Control the padding on one side of an element using the `p{t|r|b|l}-{size}` utilities.
 
-For example, `.pt-6` would add `1.5rem` of padding to the top of an element, `pr-4` would add `1rem` of padding to the right of an element, `pb-8` would add `2rem` of padding to the bottom of an element, and `pl-2` would add `0.5rem` of padding to the left of an element.
+For example, `pt-6` would add `1.5rem` of padding to the top of an element, `pr-4` would add `1rem` of padding to the right of an element, `pb-8` would add `2rem` of padding to the bottom of an element, and `pl-2` would add `0.5rem` of padding to the left of an element.
 
 @component('_partials.code-sample')
 <div class="flex justify-around items-start">
@@ -73,7 +73,7 @@ For example, `.pt-6` would add `1.5rem` of padding to the top of an element, `pr
 
 ## Add horizontal padding
 
-Control the horizontal padding of an element using the `.px-{size}` utilities.
+Control the horizontal padding of an element using the `px-{size}` utilities.
 
 @component('_partials.code-sample')
 <div class="flex justify-around items-center">
@@ -91,7 +91,7 @@ Control the horizontal padding of an element using the `.px-{size}` utilities.
 
 ## Add vertical padding
 
-Control the vertical padding of an element using the `.py-{size}` utilities.
+Control the vertical padding of an element using the `py-{size}` utilities.
 
 @component('_partials.code-sample')
 <div class="flex justify-around items-center">
@@ -109,7 +109,7 @@ Control the vertical padding of an element using the `.py-{size}` utilities.
 
 ## Add padding to all sides
 
-Control the padding on all sides of an element using the `.p-{size}` utilities.
+Control the padding on all sides of an element using the `p-{size}` utilities.
 
 @component('_partials.code-sample')
 <div class="flex justify-around items-center">

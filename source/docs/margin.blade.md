@@ -32,81 +32,196 @@ features:
   })
 ])
 
-## Usage
+## Add margin to a single side
 
-Control an element's margin using the `.m{side?}-{size}` utilities.
+Control the margin on one side of an element using the `m{t|r|b|l}-{size}` utilities.
 
-For example, `.m-6` would add `1.5rem` of margin on all sides of an element, `.mx-0` would make the horizontal margin zero, and `.mt-2` would add `.5rem` of margin to the top of the element.
+For example, `mt-6` would add `1.5rem` of margin to the top of an element, `mr-4` would add `1rem` of margin to the right of an element, `mb-8` would add `2rem` of margin to the bottom of an element, and `ml-2` would add `0.5rem` of margin to the left of an element.
 
-## Negative Margins
+@component('_partials.code-sample')
+<div class="flex justify-around items-start">
+  <div>
+    <p class="text-center text-sm text-gray-600 mb-1">mt-8</p>
+    <div class="flex bg-gray-400">
+      <span class="mt-8 bg-yellow-200">Target</span>
+    </div>
+  </div>
+  <div>
+    <p class="text-center text-sm text-gray-600 mb-1">mr-8</p>
+    <div class="flex bg-gray-400">
+      <span class="mr-8 bg-yellow-200">Target</span>
+    </div>
+  </div>
+  <div>
+    <p class="text-center text-sm text-gray-600 mb-1">mb-8</p>
+    <div class="flex bg-gray-400">
+      <span class="mb-8 bg-yellow-200">Target</span>
+    </div>
+  </div>
+  <div>
+    <p class="text-center text-sm text-gray-600 mb-1">ml-8</p>
+    <div class="flex bg-gray-400">
+      <span class="ml-8 bg-yellow-200">Target</span>
+    </div>
+  </div>
+</div>
+@slot('code')
+<div class="bg-gray-400"><span class="mt-8 bg-yellow-200">Target</span></div>
+<div class="bg-gray-400"><span class="mr-8 bg-yellow-200">Target</span></div>
+<div class="bg-gray-400"><span class="mb-8 bg-yellow-200">Target</span></div>
+<div class="bg-gray-400"><span class="ml-8 bg-yellow-200">Target</span></div>
+@endslot
+@endcomponent
 
-Control an element's negative margin using the `.-m{side?}-{size}` utilities.
+## Add horizontal margin
 
-For example, `.-m-6` would add `-1.5rem` of margin on all sides of an element, `.-mx-4` would make the horizontal margin `-1rem`, and `.-mt-2` would add `-.5rem` of margin to the top of the element.
+Control the horizontal margin of an element using the `mx-{size}` utilities.
+
+@component('_partials.code-sample')
+<div class="flex justify-around items-center">
+  <div>
+    <p class="text-center text-sm text-gray-600 mb-1">mx-8</p>
+    <div class="flex bg-gray-400">
+      <span class="mx-8 bg-yellow-200">Target</span>
+    </div>
+  </div>
+</div>
+@slot('code')
+<div class="bg-gray-400"><span class="mx-8 bg-yellow-200">Target</span></div>
+@endslot
+@endcomponent
+
+## Add vertical margin
+
+Control the vertical margin of an element using the `my-{size}` utilities.
+
+@component('_partials.code-sample')
+<div class="flex justify-around items-center">
+  <div>
+    <p class="text-center text-sm text-gray-600 mb-1">my-8</p>
+    <div class="flex bg-gray-400">
+      <span class="my-8 bg-yellow-200">Target</span>
+    </div>
+  </div>
+</div>
+@slot('code')
+<div class="bg-gray-400"><span class="my-8 bg-yellow-200">Target</span></div>
+@endslot
+@endcomponent
+
+## Add margin to all sides
+
+Control the margin on all sides of an element using the `m-{size}` utilities.
+
+@component('_partials.code-sample')
+<div class="flex justify-around items-center">
+  <div>
+    <p class="text-center text-sm text-gray-600 mb-1">m-8</p>
+    <div class="flex bg-gray-400">
+      <span class="m-8 bg-yellow-200">Target</span>
+    </div>
+  </div>
+</div>
+@slot('code')
+<div class="bg-gray-400"><span class="m-8 bg-yellow-200">Target</span></div>
+@endslot
+@endcomponent
+
+## Negative margins
+
+Control the negative margin of an element using the `-m{side?}-{size}` utilities.
+
+@component('_partials.code-sample')
+<div class="flex justify-around items-center">
+  <div>
+    <div class="bg-gray-400 h-16 w-32"></div>
+    <div class="bg-yellow-200 h-16 mx-auto -mt-8 w-24 flex items-center justify-center">
+      -mt-8
+    </div>
+  </div>
+</div>
+@slot('code')
+<div class="bg-gray-400 h-16 w-32"></div>
+<div class="-mt-8 bg-yellow-200 mx-auto h-16 w-24 ...">
+  -mt-8
+</div>
+@endslot
+@endcomponent
+
+---
 
 ## Responsive
 
-To control the margin of an element at a specific breakpoint, add a `{screen}:` prefix to any existing background color utility. For example, use `md:mx-4` to apply the `mx-4` utility at only medium screen sizes and above.
+To control the margin of an element at a specific breakpoint, add a `{screen}:` prefix to any existing margin utility. For example, adding the class `md:my-8` to an element would apply the `my-8` utility at medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-@component('_partials.responsive-code-sample')
+@component('_partials.responsive-code-sample', ['class' => 'text-center'])
 @slot('none')
-<div class="bg-orange-400 flex">
-  <div class="bg-gray-200 flex-1"></div>
-  <div class="bg-gray-600 w-12 h-12 m-0"></div>
-  <div class="bg-gray-200 flex-1"></div>
+<div class="inline-block bg-gray-400">
+  <div class="mt-8 bg-yellow-200">Target</div>
 </div>
 @endslot
+
 @slot('sm')
-<div class="bg-orange-400 flex">
-  <div class="bg-gray-200 flex-1"></div>
-  <div class="bg-gray-600 w-12 h-12 ml-4"></div>
-  <div class="bg-gray-200 flex-1"></div>
+<div class="inline-block bg-gray-400">
+  <div class="mt-8 mr-6 bg-yellow-200">Target</div>
 </div>
 @endslot
+
 @slot('md')
-<div class="bg-orange-400 flex">
-  <div class="bg-gray-200 flex-1"></div>
-  <div class="bg-gray-600 w-12 h-12 ml-4 mr-4"></div>
-  <div class="bg-gray-200 flex-1"></div>
+<div class="inline-block bg-gray-400">
+  <div class="mt-8 mr-6 mb-4 bg-yellow-200">Target</div>
 </div>
 @endslot
+
 @slot('lg')
-<div class="bg-orange-400 flex">
-  <div class="bg-gray-200 flex-1"></div>
-  <div class="bg-gray-600 w-12 h-12 ml-4 mr-4 mt-4"></div>
-  <div class="bg-gray-200 flex-1"></div>
+<div class="inline-block bg-gray-400">
+  <div class="mt-8 mr-8 mb-4 ml-2 bg-yellow-200">Target</div>
 </div>
 @endslot
+
 @slot('xl')
-<div class="bg-orange-400 flex">
-  <div class="bg-gray-200 flex-1"></div>
-  <div class="bg-gray-600 w-12 h-12 ml-4 mr-4 mt-4 mb-4"></div>
-  <div class="bg-gray-200 flex-1"></div>
+<div class="inline-block bg-gray-400">
+  <div class="m-0 bg-yellow-200">Target</div>
 </div>
 @endslot
+
 @slot('code')
-<div class="bg-orange-400 flex">
-  <!-- ... -->
-  <div class="none:m-0 sm:ml-4 md:mr-4 lg:mt-4 xl:mb-4 ..."></div>
-  <!-- ... -->
+<div class="bg-gray-400 ...">
+  <span class="none:mt-8 sm:mr-6 md:mb-4 lg:ml-2 xl:m-0 bg-yellow-200">Target</span>
 </div>
 @endslot
 @endcomponent
+
+---
 
 ## Customizing
 
-### Margins
+### Margin scale
 
-By default Tailwind provides 19 fixed `margin` utilities and an `auto` utility. These utilities will also be generated for every side and axis. You change, add, or remove these by editing the `theme.margin` section of your `tailwind.config.js` file.
+By default Tailwind provides 20 margin utilities for each side and axis.
 
-@component('_partials.customized-config', ['key' => 'theme.margin', 'usesTheme' => true])
-- 'auto': 'auto',
-  ...theme('spacing'),
-+ '72': '18rem',
-+ '2px': '2px',
+If you'd like to customize these values for padding, margin, width, and height all at once, use the `theme.spacing` section of your `tailwind.config.js` file.
+
+@component('_partials.customized-config', ['key' => 'theme.spacing'])
++ sm: '8px',
++ md: '16px',
++ lg: '24px',
++ xl: '48px',
 @endcomponent
+
+To customize only the margin values, use the `theme.margin` section of your `tailwind.config.js` file.
+
+@component('_partials.customized-config', ['key' => 'theme.margin'])
++ sm: '8px',
++ md: '16px',
++ lg: '24px',
++ xl: '48px',
+@endcomponent
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+
 
 @include('_partials.variants-and-disabling', [
     'utility' => [
@@ -117,4 +232,3 @@ By default Tailwind provides 19 fixed `margin` utilities and an `auto` utility. 
         'responsive',
     ],
 ])
-
