@@ -94,7 +94,7 @@ Use `.cursor-pointer` to change the mouse cursor to indicate an interactive elem
 @endslot
 @endcomponent
 
-## Pointer
+## Wait
 
 Use `.cursor-wait` to change the mouse cursor to indicate something is happening in the background (usually an hourglass or watch).
 
