@@ -29,7 +29,7 @@ features:
   ]
 ])
 
-## Auto <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+## Auto
 
 Use `.bg-auto` to display the background image at its default size.
 

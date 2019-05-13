@@ -116,7 +116,7 @@
           <div class="px-6 text-left md:text-center xl:text-left max-w-2xl md:max-w-3xl mx-auto">
             <h1 class="text-3xl sm:text-4xl md:text-5xl xl:text-4xl font-light leading-tight">A utility-first CSS framework for <span class="sm:block text-teal-500 font-normal">rapidly building custom designs.</span></h1>
             <p class="mt-6 leading-relaxed sm:text-lg md:text-xl xl:text-lg text-gray-600">
-              Tailwind CSS is a highly customizable, low-level CSS framework that gives you all of the building blocks you need to build bespoke designs without any of the annoying opinionated styles you have to fight to override.
+              Tailwind CSS is a highly customizable, low-level CSS framework that gives you all of the building blocks you need to build bespoke designs without any annoying opinionated styles you have to fight to override.
             </p>
             <div class="flex mt-6 justify-start md:justify-center xl:justify-start">
               <a href="/docs/installation" class="rounded-lg px-4 md:px-5 xl:px-4 py-3 md:py-4 xl:py-3 bg-teal-500 hover:bg-teal-600 md:text-lg xl:text-base text-white font-semibold leading-tight shadow-md">Get Started</a>

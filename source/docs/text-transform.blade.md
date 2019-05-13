@@ -34,7 +34,7 @@ features:
   ]
 ])
 
-## Normal Case <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+## Normal Case
 
 Use the `.normal-case` utility to preserve the original casing. This is typically used to reset capitalization at different breakpoints.
 

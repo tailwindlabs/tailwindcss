@@ -44,7 +44,7 @@ features:
   ]
 ])
 
-## Repeat <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+## Repeat
 
 Use `.bg-repeat` to repeat the background image both vertically and horizontally.
 

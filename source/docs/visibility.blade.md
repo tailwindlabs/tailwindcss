@@ -24,7 +24,7 @@ features:
   ]
 ])
 
-## Visible <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+## Visible
 
 Use `.visible` to make an element visible. This is mostly useful for undoing the `.invisible` utility at different screen sizes.
 

@@ -29,7 +29,7 @@ description: "Utilities for controlling word breaks in an element."
   ]
 ])
 
-## Normal <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+## Normal
 
 Use `.break-normal` to only add line breaks at normal word break points.
 

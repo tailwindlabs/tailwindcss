@@ -39,7 +39,7 @@ features:
   ]
 ])
 
-## Auto <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+## Auto
 
 Use `.self-auto` to align an item based on the value of the flex container's `align-items` property:
 

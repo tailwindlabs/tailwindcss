@@ -19,7 +19,7 @@ features:
   })
 ])
 
-## Auto <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+## Auto
 
 Use `.w-auto` to let the browser calculate and select the width for the element.
 

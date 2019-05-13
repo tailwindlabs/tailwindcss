@@ -84,7 +84,7 @@ features:
   ]
 ])
 
-## Visible <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+## Visible
 
 Use `.overflow-visible` to prevent content within an element from being clipped. Note that any content that overflows the bounds of the element will then be visible.
 

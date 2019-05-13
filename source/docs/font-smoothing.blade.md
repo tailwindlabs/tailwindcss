@@ -24,7 +24,7 @@ features:
   ]
 ])
 
-## Subpixel Antialiasing <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+## Subpixel Antialiasing
 
 Use the `.subpixel-antialiased` utility to render text using subpixel antialiasing.
 

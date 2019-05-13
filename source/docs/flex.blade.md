@@ -34,7 +34,7 @@ features:
   ]
 ])
 
-## Initial <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+## Initial
 
 Use `.flex-initial` to allow a flex item to shrink but not grow, taking into account its initial size:
 

@@ -39,7 +39,7 @@ features:
   ]
 ])
 
-## Stretch <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+## Stretch
 
 Use `.items-stretch` to stretch items to fill the flex container's cross axis:
 

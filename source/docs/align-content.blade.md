@@ -39,7 +39,7 @@ features:
   ]
 ])
 
-## Start <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+## Start
 
 Use `.content-start` to pack lines in a flex container against the start of the cross axis:
 

@@ -49,7 +49,7 @@ features:
   ]
 ])
 
-## Auto <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+## Auto
 
 Use `.cursor-auto` to allow the browser to change the cursor based on the current content (e.g. automatically change to `text` cursor when hovering over text).
 

@@ -24,7 +24,7 @@ features:
   ]
 ])
 
-## No Italics <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+## No Italics
 
 Use the `.not-italic` utility to display text normally. This is typically used to reset italic text at different breakpoints.
 

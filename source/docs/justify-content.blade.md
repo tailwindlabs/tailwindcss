@@ -39,7 +39,7 @@ features:
   ]
 ])
 
-## Start <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+## Start
 
 Use `.justify-start` to justify items against the start of the flex container's main axis:
 

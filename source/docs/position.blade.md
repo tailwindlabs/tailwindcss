@@ -39,7 +39,7 @@ features:
   ]
 ])
 
-## Static <span class="ml-2 font-semibold text-gray-600 text-sm uppercase tracking-wide">Default</span>
+## Static
 
 Use `.static` to position an element according to the normal flow of the document.
 
