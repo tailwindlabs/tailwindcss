@@ -1190,7 +1190,7 @@ If you started with a complete config file, your old box-shadow values will cont
 
 Tailwind v1.0 introduces an all-new max-width scale that is much more usable than the previous default max-width scale ([\#701](https://github.com/tailwindcss/tailwindcss/pull/701)).
 
-If your config file doesn't have a box-shadow scale defined or you are using the default Tailwind build through a CDN, you should audit your project for any usage of the existing `max-w-{size}` utilities and change the sizes as needed. In general, the new values are smaller than the old ones, so `max-w-md` for example may need to be `max-w-xl` or `max-w-2xl` in the new scale
+If your config file doesn't have a max-width scale defined or you are using the default Tailwind build through a CDN, you should audit your project for any usage of the existing `max-w-{size}` utilities and change the sizes as needed. In general, the new values are smaller than the old ones, so `max-w-md` for example may need to be `max-w-xl` or `max-w-2xl` in the new scale
 
 Again, this only applies if you do not have a max-width defined in your config file or if you are using the default Tailwind build through a CDN.
 
