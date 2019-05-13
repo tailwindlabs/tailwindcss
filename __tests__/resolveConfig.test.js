@@ -261,6 +261,70 @@ test('variants key is merged instead of replaced', () => {
   })
 })
 
+test('a global variants list replaces the default', () => {
+  const userConfig = {
+    variants: ['responsive', 'hover', 'focus', 'active'],
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        'grey-darker': '#606f7b',
+        'grey-dark': '#8795a1',
+        grey: '#b8c2cc',
+        'grey-light': '#dae1e7',
+        'grey-lighter': '#f1f5f8',
+      },
+      fonts: {
+        sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
+        serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
+      },
+      screens: {
+        sm: '500px',
+        md: '750px',
+        lg: '1000px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      backgroundAttachment: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+      borderRadius: ['responsive'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        'grey-darker': '#606f7b',
+        'grey-dark': '#8795a1',
+        grey: '#b8c2cc',
+        'grey-light': '#dae1e7',
+        'grey-lighter': '#f1f5f8',
+      },
+      fonts: {
+        sans: ['system-ui', 'BlinkMacSystemFont', '-apple-system', 'Roboto', 'sans-serif'],
+        serif: ['Constantia', 'Lucida Bright', 'Georgia', 'serif'],
+      },
+      screens: {
+        sm: '500px',
+        md: '750px',
+        lg: '1000px',
+      },
+    },
+    variants: ['responsive', 'hover', 'focus', 'active'],
+  })
+})
+
 test('missing top level keys are pulled from the default config', () => {
   const userConfig = {}
 
