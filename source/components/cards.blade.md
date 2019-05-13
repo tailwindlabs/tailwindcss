@@ -7,6 +7,8 @@ titleBorder: true
 
 Tailwind doesn't include pre-designed card components out of the box, but they're easy to build using existing utilities.
 
+Here are a few examples to help you get an idea of how to build components like this using Tailwind.
+
 ## Stacked
 
 @component('_partials.code-sample', ['class' => 'p-10 flex justify-center'])

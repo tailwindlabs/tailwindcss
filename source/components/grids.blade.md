@@ -7,6 +7,8 @@ titleBorder: true
 
 Tailwind doesn't include purpose-built grid classes out of the box, but grid layouts are simple to build using the existing [Flexbox](/docs/flexbox-display) and [width](/docs/width) utilities.
 
+Here are a few examples to help you get an idea of how to build grids using Tailwind.
+
 ## Basic Grids
 
 Use the existing [Flexbox](/docs/flexbox-display) and [percentage width](/docs/width) utilities to construct basic grids.

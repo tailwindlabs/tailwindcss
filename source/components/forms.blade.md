@@ -7,6 +7,8 @@ titleBorder: true
 
 Tailwind doesn't include purpose-built form control classes out of the box, but form controls are easy to style using existing utilities.
 
+Here are a few examples to help you get an idea of how to build components like this using Tailwind.
+
 ## Login Form
 
 @component('_partials.code-sample', ['class' => 'px-3 py-10 bg-gray-200 flex justify-center'])
