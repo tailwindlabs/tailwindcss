@@ -26,15 +26,19 @@ module.exports = function() {
   return function({ addComponents, theme }) {
     const minWidths = extractMinWidths(theme('container.screens', theme('screens')))
 
-    const atRules = _.map(minWidths, minWidth => {
-      return {
-        [`@media (min-width: ${minWidth})`]: {
-          '.container': {
-            'max-width': minWidth,
+    const atRules = _(minWidths)
+      .sortBy(minWidth => parseInt(minWidth))
+      .sortedUniq()
+      .map(minWidth => {
+        return {
+          [`@media (min-width: ${minWidth})`]: {
+            '.container': {
+              'max-width': minWidth,
+            },
           },
-        },
-      }
-    })
+        }
+      })
+      .value()
 
     addComponents([
       {
