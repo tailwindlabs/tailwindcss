@@ -21,7 +21,7 @@ Tailwind automatically injects these styles when you include `@@tailwind base` i
 
 While most of the styles in Preflight are meant to go unnoticed — they simply make things behave more like you'd expect them to — some are more opinionated and can be surprising when you first encounter them.
 
-For a complete reference of all the styles applied by Preflight, [see the stylesheet](https://unpkg.com/tailwindcss@next/dist/base.css).
+For a complete reference of all the styles applied by Preflight, [see the stylesheet](https://unpkg.com/tailwindcss/dist/base.css).
 
 ---
 

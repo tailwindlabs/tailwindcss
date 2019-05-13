@@ -33,16 +33,16 @@ These changes affect all users, whether you are using Tailwind with PostCSS and 
 
 <h3 class="no-toc">1. Update Tailwind</h3>
 
-While v1.0 is still in a pre-release state, you can pull it in to your project using npm:
+Install the latest version of Tailwind:
 
 ```bash
-npm install tailwindcss@next --save-dev
+npm install tailwindcss --save-dev
 ```
 
 Or using Yarn:
 
 ```bash
-yarn add -D tailwindcss@next
+yarn add -D tailwindcss
 ```
 
 <h3 class="no-toc">2. Update your config file</h3>
