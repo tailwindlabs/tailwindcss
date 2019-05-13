@@ -49,6 +49,17 @@ Here's a simple example of a marketing page component that uses a stacked layout
 </div>
 @endcomponent
 
+Here's how the example above works:
+
+- By default, the outer `div` is `display: block`, but by adding the `md:flex` utility, it becomes `display: flex` on medium screens and larger.
+- When the parent is a flex container, we want to make sure the image never shrinks, so we've added `md:flex-shrink-0` to prevent shrinking on medium screens and larger. Technically we could have just used `flex-shrink-0` since it would do nothing on smaller screens, but since it only matters on `md` screens, it's a good idea to make that clear in the class name.
+- On small screens the image is automatically full width by default. On medium screens and up, we've constrained that width to a fixed size using `md:w-56`.
+- On small screens, the content section uses `mt-4` to add some margin between the content and the image. This margin isn't necessary in the horizontal layout, so we've used `md:mt-0` to undo that margin, and used `md:ml-6` to add some left margin instead.
+
+We've only used one breakpoint in this example, but you could easily customize this component at other sizes using the `sm`, `lg`, or `xl` responsive prefixes as well.
+
+---
+
 ## Mobile First
 
 By default, Tailwind uses a mobile first breakpoint system, similar to what you might be used to in Bootstrap or Foundation.
@@ -153,6 +164,8 @@ Here is an example where the background color is red at the `md` breakpoint, but
 @endcomponent
 
 Notice that **we did not** have to specify a background color for the `sm` breakpoint or the `xl` breakpoint — you only need to specify when a utility should *start* taking effect, not when it should stop.
+
+---
 
 ## Customizing breakpoints
 
