@@ -43,7 +43,6 @@ return [
         'Z-Index' => 'z-index',
     ],
     'Typography' => [
-        'Color' => 'text-color',
         'Font Family' => 'font-family',
         'Font Size' => 'font-size',
         'Font Smoothing' => 'font-smoothing',
@@ -54,6 +53,7 @@ return [
         'List Style Type' => 'list-style-type',
         'List Style Position' => 'list-style-position',
         'Text Align' => 'text-align',
+        'Text Color' => 'text-color',
         'Text Decoration' => 'text-decoration',
         'Text Transform' => 'text-transform',
         'Vertical Align' => 'vertical-align',
