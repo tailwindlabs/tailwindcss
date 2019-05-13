@@ -1,5 +1,5 @@
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.block': {
@@ -10,6 +10,12 @@ export default function() {
         },
         '.inline': {
           display: 'inline',
+        },
+        '.flex': {
+          display: 'flex',
+        },
+        '.inline-flex': {
+          display: 'inline-flex',
         },
         '.table': {
           display: 'table',
@@ -24,7 +30,7 @@ export default function() {
           display: 'none',
         },
       },
-      config('modules.display')
+      variants('display')
     )
   }
 }

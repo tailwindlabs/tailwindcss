@@ -1,10 +1,6 @@
-import path from 'path'
-
 import * as utils from '../src/cli/utils'
 
 describe('cli utils', () => {
-  const fixture = utils.readFile(path.resolve(__dirname, 'fixtures/cli-utils.js'))
-
   describe('parseCliParams', () => {
     it('parses CLI parameters', () => {
       const result = utils.parseCliParams(['a', 'b', '-c', 'd'])
@@ -61,52 +57,17 @@ describe('cli utils', () => {
     })
   })
 
-  describe('stripBlockComments', () => {
-    it('does not strip code', () => {
-      const result = utils.stripBlockComments(fixture)
+  describe('getSimplePath', () => {
+    it('strips leading ./', () => {
+      const result = utils.getSimplePath('./test')
 
-      expect(result).toEqual(expect.stringContaining('__code_no_comment__'))
-      expect(result).toEqual(expect.stringContaining('__code_comment_line__'))
-      expect(result).toEqual(expect.stringContaining('__code_comment_block__'))
-      expect(result).toEqual(expect.stringContaining('__code_comment_line_important__'))
-      expect(result).toEqual(expect.stringContaining('__code_comment_block_important__'))
+      expect(result).toEqual('test')
     })
 
-    it('strips block comments', () => {
-      const result = utils.stripBlockComments(fixture)
+    it('returns unchanged path if it does not begin with ./', () => {
+      const result = utils.getSimplePath('../test')
 
-      expect(result).not.toEqual(expect.stringContaining('__comment_block__'))
-      expect(result).not.toEqual(expect.stringContaining('__comment_block_multiline__'))
-      expect(result).not.toEqual(expect.stringContaining('__comment_block_code__'))
-    })
-
-    it('strips docblock comments', () => {
-      const result = utils.stripBlockComments(fixture)
-
-      expect(result).not.toEqual(expect.stringContaining('__comment_docblock__'))
-    })
-
-    it('does not strip line comments', () => {
-      const result = utils.stripBlockComments(fixture)
-
-      expect(result).toEqual(expect.stringContaining('__comment_line__'))
-      expect(result).toEqual(expect.stringContaining('__comment_line_important__'))
-      expect(result).toEqual(expect.stringContaining('__comment_line_code__'))
-      expect(result).toEqual(expect.stringContaining('__comment_line_important_code__'))
-    })
-
-    it('does not strip important block comments', () => {
-      const result = utils.stripBlockComments(fixture)
-
-      expect(result).toEqual(expect.stringContaining('__comment_block_important__'))
-      expect(result).toEqual(expect.stringContaining('__comment_block_multiline_important__'))
-      expect(result).toEqual(expect.stringContaining('__comment_block_important_code__'))
-    })
-
-    it('does not strip important docblock comments', () => {
-      const result = utils.stripBlockComments(fixture)
-
-      expect(result).toEqual(expect.stringContaining('__comment_docblock_important__'))
+      expect(result).toEqual('../test')
     })
   })
 })

@@ -1,11 +1,11 @@
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.table-auto': { 'table-layout': 'auto' },
         '.table-fixed': { 'table-layout': 'fixed' },
       },
-      config('modules.tableLayout')
+      variants('tableLayout')
     )
   }
 }

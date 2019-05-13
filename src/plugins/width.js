@@ -1,9 +1,9 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, config, e }) {
+  return function({ addUtilities, e, theme, variants }) {
     const utilities = _.fromPairs(
-      _.map(config('width'), (value, modifier) => {
+      _.map(theme('width'), (value, modifier) => {
         return [
           `.${e(`w-${modifier}`)}`,
           {
@@ -13,6 +13,6 @@ export default function() {
       })
     )
 
-    addUtilities(utilities, config('modules.width'))
+    addUtilities(utilities, variants('width'))
   }
 }

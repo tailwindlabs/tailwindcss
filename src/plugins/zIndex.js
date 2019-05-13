@@ -1,11 +1,12 @@
 import _ from 'lodash'
+import prefixNegativeModifiers from '../util/prefixNegativeModifiers'
 
 export default function() {
-  return function({ addUtilities, config }) {
+  return function({ addUtilities, e, theme, variants }) {
     const utilities = _.fromPairs(
-      _.map(config('zIndex'), (value, modifier) => {
+      _.map(theme('zIndex'), (value, modifier) => {
         return [
-          `.z-${modifier}`,
+          `.${e(prefixNegativeModifiers('z', modifier))}`,
           {
             'z-index': value,
           },
@@ -13,6 +14,6 @@ export default function() {
       })
     )
 
-    addUtilities(utilities, config('modules.zIndex'))
+    addUtilities(utilities, variants('zIndex'))
   }
 }

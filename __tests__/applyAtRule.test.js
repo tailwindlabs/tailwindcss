@@ -1,12 +1,18 @@
 import postcss from 'postcss'
 import substituteClassApplyAtRules from '../src/lib/substituteClassApplyAtRules'
 import processPlugins from '../src/util/processPlugins'
-import defaultPlugins from '../src/defaultPlugins'
-import defaultConfig from '../defaultConfig.stub.js'
+import resolveConfig from '../src/util/resolveConfig'
+import corePlugins from '../src/corePlugins'
+import defaultConfig from '../stubs/defaultConfig.stub.js'
 
-const { utilities: defaultUtilities } = processPlugins(defaultPlugins(defaultConfig), defaultConfig)
+const resolvedDefaultConfig = resolveConfig([defaultConfig])
 
-function run(input, config = defaultConfig, utilities = defaultUtilities) {
+const { utilities: defaultUtilities } = processPlugins(
+  corePlugins(resolvedDefaultConfig),
+  resolvedDefaultConfig
+)
+
+function run(input, config = resolvedDefaultConfig, utilities = defaultUtilities) {
   return postcss([substituteClassApplyAtRules(config, utilities)]).process(input, {
     from: undefined,
   })
@@ -200,20 +206,17 @@ test('you can apply utility classes without using the given prefix', () => {
     .foo { margin-top: 1rem; margin-bottom: 1rem; }
   `
 
-  const config = {
-    ...defaultConfig,
-    options: {
-      ...defaultConfig.options,
+  const config = resolveConfig([
+    {
+      ...defaultConfig,
       prefix: 'tw-',
     },
-  }
+  ])
 
-  return run(input, config, processPlugins(defaultPlugins(defaultConfig), config).utilities).then(
-    result => {
-      expect(result.css).toEqual(expected)
-      expect(result.warnings().length).toBe(0)
-    }
-  )
+  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
+  })
 })
 
 test('you can apply utility classes without using the given prefix when using a function for the prefix', () => {
@@ -225,20 +228,17 @@ test('you can apply utility classes without using the given prefix when using a 
     .foo { margin-top: 1rem; margin-bottom: 1rem; }
   `
 
-  const config = {
-    ...defaultConfig,
-    options: {
-      ...defaultConfig.options,
+  const config = resolveConfig([
+    {
+      ...defaultConfig,
       prefix: () => {
         return 'tw-'
       },
     },
-  }
+  ])
 
-  return run(input, config, processPlugins(defaultPlugins(defaultConfig), config).utilities).then(
-    result => {
-      expect(result.css).toEqual(expected)
-      expect(result.warnings().length).toBe(0)
-    }
-  )
+  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
+  })
 })

@@ -1,12 +1,12 @@
 import autoprefixer from 'autoprefixer'
 import bytes from 'bytes'
-import chalk from 'chalk'
 import prettyHrtime from 'pretty-hrtime'
 
 import tailwind from '../..'
 
 import commands from '.'
 import compile from '../compile'
+import * as colors from '../colors'
 import * as emoji from '../emoji'
 import * as utils from '../utils'
 
@@ -75,9 +75,12 @@ function buildToStdout(compileOptions) {
  * @return {Promise}
  */
 function buildToFile(compileOptions, startTime) {
+  const inputFileSimplePath = utils.getSimplePath(compileOptions.inputFile)
+  const outputFileSimplePath = utils.getSimplePath(compileOptions.outputFile)
+
   utils.header()
   utils.log()
-  utils.log(emoji.go, 'Building...', chalk.bold.cyan(compileOptions.inputFile))
+  utils.log(emoji.go, 'Building...', colors.file(inputFileSimplePath))
 
   return compile(compileOptions).then(result => {
     utils.writeFile(compileOptions.outputFile, result.css)
@@ -85,9 +88,9 @@ function buildToFile(compileOptions, startTime) {
     const prettyTime = prettyHrtime(process.hrtime(startTime))
 
     utils.log()
-    utils.log(emoji.yes, 'Finished in', chalk.bold.magenta(prettyTime))
-    utils.log(emoji.pack, 'Size:', chalk.bold.magenta(bytes(result.css.length)))
-    utils.log(emoji.disk, 'Saved to', chalk.bold.cyan(compileOptions.outputFile))
+    utils.log(emoji.yes, 'Finished in', colors.info(prettyTime))
+    utils.log(emoji.pack, 'Size:', colors.info(bytes(result.css.length)))
+    utils.log(emoji.disk, 'Saved to', colors.file(outputFileSimplePath))
     utils.footer()
   })
 }
@@ -106,13 +109,15 @@ export function run(cliParams, cliOptions) {
     const configFile = cliOptions.config && cliOptions.config[0]
     const outputFile = cliOptions.output && cliOptions.output[0]
     const autoprefix = !cliOptions.noAutoprefixer
+    const inputFileSimplePath = utils.getSimplePath(inputFile)
+    const configFileSimplePath = utils.getSimplePath(configFile)
 
     !inputFile && stopWithHelp('CSS file is required.')
-    !utils.exists(inputFile) && stop(chalk.bold.magenta(inputFile), 'does not exist.')
+    !utils.exists(inputFile) && stop(colors.file(inputFileSimplePath), 'does not exist.')
 
     configFile &&
       !utils.exists(configFile) &&
-      stop(chalk.bold.magenta(configFile), 'does not exist.')
+      stop(colors.file(configFileSimplePath), 'does not exist.')
 
     const compileOptions = {
       inputFile,

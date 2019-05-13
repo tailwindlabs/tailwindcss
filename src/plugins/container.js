@@ -22,29 +22,34 @@ function extractMinWidths(breakpoints) {
   })
 }
 
-module.exports = function(options) {
-  return function({ addComponents, config }) {
-    const screens = _.get(options, 'screens', config('screens'))
+module.exports = function() {
+  return function({ addComponents, theme }) {
+    const minWidths = extractMinWidths(theme('container.screens', theme('screens')))
 
-    const minWidths = extractMinWidths(screens)
-
-    const atRules = _.map(minWidths, minWidth => {
-      return {
-        [`@media (min-width: ${minWidth})`]: {
-          '.container': {
-            'max-width': minWidth,
+    const atRules = _(minWidths)
+      .sortBy(minWidth => parseInt(minWidth))
+      .sortedUniq()
+      .map(minWidth => {
+        return {
+          [`@media (min-width: ${minWidth})`]: {
+            '.container': {
+              'max-width': minWidth,
+            },
           },
-        },
-      }
-    })
+        }
+      })
+      .value()
 
     addComponents([
       {
         '.container': Object.assign(
           { width: '100%' },
-          _.get(options, 'center', false) ? { marginRight: 'auto', marginLeft: 'auto' } : {},
-          _.has(options, 'padding')
-            ? { paddingRight: options.padding, paddingLeft: options.padding }
+          theme('container.center', false) ? { marginRight: 'auto', marginLeft: 'auto' } : {},
+          _.has(theme('container', {}), 'padding')
+            ? {
+                paddingRight: theme('container.padding'),
+                paddingLeft: theme('container.padding'),
+              }
             : {}
         ),
       },

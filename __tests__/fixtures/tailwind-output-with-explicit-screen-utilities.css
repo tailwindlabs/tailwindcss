@@ -2,7 +2,7 @@
   color: red;
 }
 
-@media (min-width: 576px) {
+@media (min-width: 640px) {
   .sm\:example {
     color: red;
   }
@@ -14,13 +14,13 @@
   }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .lg\:example {
     color: red;
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1280px) {
   .xl\:example {
     color: red;
   }

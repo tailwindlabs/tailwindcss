@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import postcss from 'postcss'
 import tailwind from '../src/index'
-import config from '../defaultConfig.js'
+import config from '../stubs/defaultConfig.stub.js'
 
 it('generates the right CSS', () => {
   const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
@@ -24,7 +24,7 @@ it('generates the right CSS when "important" is enabled', () => {
   const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
   const input = fs.readFileSync(inputPath, 'utf8')
 
-  return postcss([tailwind({ ...config, options: { ...config.options, important: true } })])
+  return postcss([tailwind({ ...config, important: true })])
     .process(input, { from: inputPath })
     .then(result => {
       const expected = fs.readFileSync(

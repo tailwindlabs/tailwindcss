@@ -8,11 +8,9 @@ function css(nodes) {
 
 function makeConfig(overrides) {
   return _.defaultsDeep(overrides, {
-    options: {
-      prefix: '',
-      important: false,
-      separator: ':',
-    },
+    prefix: '',
+    important: false,
+    separator: ':',
   })
 }
 
@@ -252,6 +250,66 @@ test('plugins can create components with object syntax', () => {
     }
     .btn-blue:hover {
       background-color: darkblue
+    }
+    `)
+})
+
+test('plugins can add base styles with object syntax', () => {
+  const { base } = processPlugins(
+    [
+      function({ addBase }) {
+        addBase({
+          img: {
+            maxWidth: '100%',
+          },
+          button: {
+            fontFamily: 'inherit',
+          },
+        })
+      },
+    ],
+    makeConfig()
+  )
+
+  expect(css(base)).toMatchCss(`
+    img {
+      max-width: 100%
+    }
+    button {
+      font-family: inherit
+    }
+    `)
+})
+
+test('plugins can add base styles with raw PostCSS nodes', () => {
+  const { base } = processPlugins(
+    [
+      function({ addBase, postcss }) {
+        addBase([
+          postcss.rule({ selector: 'img' }).append([
+            postcss.decl({
+              prop: 'max-width',
+              value: '100%',
+            }),
+          ]),
+          postcss.rule({ selector: 'button' }).append([
+            postcss.decl({
+              prop: 'font-family',
+              value: 'inherit',
+            }),
+          ]),
+        ])
+      },
+    ],
+    makeConfig()
+  )
+
+  expect(css(base)).toMatchCss(`
+    img {
+      max-width: 100%
+    }
+    button {
+      font-family: inherit
     }
     `)
 })
@@ -599,6 +657,91 @@ test('plugins can access the current config', () => {
     `)
 })
 
+test('plugins can access the variants config directly', () => {
+  const { components, utilities } = processPlugins(
+    [
+      function({ addUtilities, variants }) {
+        addUtilities(
+          {
+            '.object-fill': {
+              'object-fit': 'fill',
+            },
+            '.object-contain': {
+              'object-fit': 'contain',
+            },
+            '.object-cover': {
+              'object-fit': 'cover',
+            },
+          },
+          variants('objectFit')
+        )
+      },
+    ],
+    makeConfig({
+      variants: {
+        objectFit: ['responsive', 'focus', 'hover'],
+      },
+    })
+  )
+
+  expect(components.length).toBe(0)
+  expect(css(utilities)).toMatchCss(`
+    @variants responsive, focus, hover {
+      .object-fill {
+        object-fit: fill
+      }
+      .object-contain {
+        object-fit: contain
+      }
+      .object-cover {
+        object-fit: cover
+      }
+    }
+    `)
+})
+
+test('plugins apply all global variants when variants are configured globally', () => {
+  const { components, utilities } = processPlugins(
+    [
+      function({ addUtilities, variants }) {
+        addUtilities(
+          {
+            '.object-fill': {
+              'object-fit': 'fill',
+            },
+          },
+          variants('objectFit')
+        )
+        addUtilities(
+          {
+            '.rotate-90deg': {
+              transform: 'rotate(90deg)',
+            },
+          },
+          variants('rotate')
+        )
+      },
+    ],
+    makeConfig({
+      variants: ['responsive', 'focus', 'hover'],
+    })
+  )
+
+  expect(components.length).toBe(0)
+  expect(css(utilities)).toMatchCss(`
+    @variants responsive, focus, hover {
+      .object-fill {
+        object-fit: fill
+      }
+    }
+    @variants responsive, focus, hover {
+      .rotate-90deg {
+        transform: rotate(90deg)
+      }
+    }
+    `)
+})
+
 test('plugins can provide fallbacks to keys missing from the config', () => {
   const { components, utilities } = processPlugins(
     [
@@ -720,10 +863,8 @@ test('plugins respect prefix and important options by default when adding utilit
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-        important: true,
-      },
+      prefix: 'tw-',
+      important: true,
     })
   )
 
@@ -748,9 +889,7 @@ test("component declarations respect the 'prefix' option by default", () => {
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-      },
+      prefix: 'tw-',
     })
   )
 
@@ -778,9 +917,7 @@ test('all selectors in a rule are prefixed', () => {
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-      },
+      prefix: 'tw-',
     })
   )
 
@@ -814,9 +951,7 @@ test("component declarations can optionally ignore 'prefix' option", () => {
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-      },
+      prefix: 'tw-',
     })
   )
 
@@ -839,9 +974,7 @@ test("component declarations are not affected by the 'important' option", () => 
       },
     ],
     makeConfig({
-      options: {
-        important: true,
-      },
+      important: true,
     })
   )
 
@@ -867,9 +1000,7 @@ test("plugins can apply the user's chosen prefix to components manually", () => 
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-      },
+      prefix: 'tw-',
     })
   )
 
@@ -897,10 +1028,8 @@ test('prefix can optionally be ignored for utilities', () => {
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-        important: true,
-      },
+      prefix: 'tw-',
+      important: true,
     })
   )
 
@@ -930,10 +1059,8 @@ test('important can optionally be ignored for utilities', () => {
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-        important: true,
-      },
+      prefix: 'tw-',
+      important: true,
     })
   )
 
@@ -965,10 +1092,8 @@ test('variants can still be specified when ignoring prefix and important options
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-        important: true,
-      },
+      prefix: 'tw-',
+      important: true,
     })
   )
 
@@ -996,9 +1121,7 @@ test('prefix will prefix all classes in a selector', () => {
       },
     ],
     makeConfig({
-      options: {
-        prefix: 'tw-',
-      },
+      prefix: 'tw-',
     })
   )
 

@@ -1,38 +1,43 @@
 import path from 'path'
 
 import cli from '../src/cli/main'
-import * as constants from '../src/cli/constants'
+import * as constants from '../src/constants'
 import * as utils from '../src/cli/utils'
+import runInTempDirectory from '../jest/runInTempDirectory'
 
 describe('cli', () => {
   const inputCssPath = path.resolve(__dirname, 'fixtures/tailwind-input.css')
   const customConfigPath = path.resolve(__dirname, 'fixtures/custom-config.js')
+  const defaultConfigFixture = utils.readFile(constants.defaultConfigStubFile)
+  const simpleConfigFixture = utils.readFile(constants.simpleConfigStubFile)
 
   beforeEach(() => {
     console.log = jest.fn()
     process.stdout.write = jest.fn()
-    utils.writeFile = jest.fn()
   })
 
   describe('init', () => {
     it('creates a Tailwind config file', () => {
-      return cli(['init']).then(() => {
-        expect(utils.writeFile.mock.calls[0][0]).toEqual(constants.defaultConfigFile)
-        expect(utils.writeFile.mock.calls[0][1]).toContain('defaultConfig')
+      return runInTempDirectory(() => {
+        return cli(['init']).then(() => {
+          expect(utils.readFile(constants.defaultConfigFile)).toEqual(simpleConfigFixture)
+        })
+      })
+    })
+
+    it('creates a full Tailwind config file', () => {
+      return runInTempDirectory(() => {
+        return cli(['init', '--full']).then(() => {
+          expect(utils.readFile(constants.defaultConfigFile)).toEqual(defaultConfigFixture)
+        })
       })
     })
 
     it('creates a Tailwind config file in a custom location', () => {
-      return cli(['init', 'custom.js']).then(() => {
-        expect(utils.writeFile.mock.calls[0][0]).toEqual('custom.js')
-        expect(utils.writeFile.mock.calls[0][1]).toContain('defaultConfig')
-      })
-    })
-
-    it('creates a Tailwind config file without comments', () => {
-      return cli(['init', '--no-comments']).then(() => {
-        expect(utils.writeFile.mock.calls[0][1]).not.toContain('/**')
-        expect(utils.writeFile.mock.calls[0][1]).toContain('//')
+      return runInTempDirectory(() => {
+        return cli(['init', 'custom.js']).then(() => {
+          expect(utils.exists('custom.js')).toEqual(true)
+        })
       })
     })
   })
@@ -51,9 +56,10 @@ describe('cli', () => {
     })
 
     it('creates compiled CSS file', () => {
-      return cli(['build', inputCssPath, '--output', 'output.css']).then(() => {
-        expect(utils.writeFile.mock.calls[0][0]).toEqual('output.css')
-        expect(utils.writeFile.mock.calls[0][1]).toContain('.example')
+      return runInTempDirectory(() => {
+        return cli(['build', inputCssPath, '--output', 'output.css']).then(() => {
+          expect(utils.readFile('output.css')).toContain('.example')
+        })
       })
     })
 

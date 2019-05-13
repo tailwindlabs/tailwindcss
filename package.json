@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss",
-  "version": "0.7.3",
+  "version": "1.0.0",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "main": "lib/index.js",
@@ -18,44 +18,40 @@
   ],
   "scripts": {
     "prebabelify": "rimraf lib",
-    "babelify": "babel src --out-dir lib",
+    "babelify": "babel src --out-dir lib --copy-files",
     "prepare": "npm run babelify && babel-node src/build.js",
     "style": "eslint .",
     "test": "jest && eslint ."
   },
   "devDependencies": {
-    "babel-cli": "^6.6.5",
-    "babel-core": "^6.7.2",
-    "babel-jest": "^20.0.3",
-    "babel-preset-env": "^1.0.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "babel-preset-stage-3": "^6.24.1",
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/node": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "babel-jest": "^24.3.1",
     "clean-css": "^4.1.9",
-    "eslint": "^4.10.0",
+    "eslint": "^5.15.1",
     "eslint-config-postcss": "^2.0.2",
-    "eslint-config-prettier": "^2.7.0",
-    "eslint-plugin-prettier": "^2.3.1",
-    "jest": "^23.6.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "jest": "^24.3.1",
     "prettier": "^1.7.4",
-    "rimraf": "^2.6.1"
+    "rimraf": "^2.6.3"
   },
   "dependencies": {
     "autoprefixer": "^9.4.5",
     "bytes": "^3.0.0",
     "chalk": "^2.4.1",
-    "css.escape": "^1.5.1",
-    "fs-extra": "^4.0.2",
+    "fs-extra": "^8.0.0",
     "lodash": "^4.17.11",
     "node-emoji": "^1.8.1",
-    "perfectionist": "^2.4.0",
+    "normalize.css": "^8.0.1",
     "postcss": "^7.0.11",
     "postcss-functions": "^3.0.0",
     "postcss-js": "^2.0.0",
     "postcss-nested": "^4.1.1",
-    "postcss-selector-parser": "^5.0.0",
-    "pretty-hrtime": "^1.0.3",
-    "strip-comments": "^1.0.2"
+    "postcss-selector-parser": "^6.0.0",
+    "pretty-hrtime": "^1.0.3"
   },
   "browserslist": [
     "> 1%"
@@ -63,25 +59,24 @@
   "babel": {
     "presets": [
       [
-        "env",
+        "@babel/preset-env",
         {
           "targets": {
-            "node": "6.9.0"
+            "node": "8.9.0"
           }
         }
-      ],
-      "stage-2",
-      "stage-3",
-      "react"
+      ]
     ]
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "<rootDir>/jest/customMatchers.js",
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest/customMatchers.js"
+    ],
     "testPathIgnorePatterns": [
       "<rootDir>/__tests__/fixtures/"
     ]
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=8.9.0"
   }
 }

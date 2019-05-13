@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import postcss from 'postcss'
-import escapeClassName from './escapeClassName'
+import selectorParser from 'postcss-selector-parser'
 
 export default function generateVariantFunction(generator) {
   return (container, config) => {
@@ -10,15 +10,19 @@ export default function generateVariantFunction(generator) {
       _.defaultTo(
         generator({
           container: cloned,
-          separator: escapeClassName(config.options.separator),
+          separator: config.separator,
           modifySelectors: modifierFunction => {
             cloned.walkRules(rule => {
-              rule.selectors = rule.selectors.map(selector =>
-                modifierFunction({
-                  className: selector.slice(1),
+              rule.selectors = rule.selectors.map(selector => {
+                const className = selectorParser(selectors => {
+                  return selectors.first.filter(({ type }) => type === 'class').pop().value
+                }).transformSync(selector)
+
+                return modifierFunction({
+                  className,
                   selector,
                 })
-              )
+              })
             })
             return cloned
           },

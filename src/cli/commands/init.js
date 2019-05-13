@@ -1,22 +1,22 @@
-import chalk from 'chalk'
-
-import * as constants from '../constants'
+import * as constants from '../../constants'
+import * as colors from '../colors'
 import * as emoji from '../emoji'
 import * as utils from '../utils'
 
 export const usage = 'init [file]'
 export const description =
-  'Creates Tailwind config file. Default: ' + chalk.bold.magenta(constants.defaultConfigFile)
+  'Creates Tailwind config file. Default: ' +
+  colors.file(utils.getSimplePath(constants.defaultConfigFile))
 
 export const options = [
   {
-    usage: '--no-comments',
-    description: 'Omit comments from the config file.',
+    usage: '--full',
+    description: 'Generate complete configuration file.',
   },
 ]
 
 export const optionMap = {
-  noComments: ['no-comments'],
+  full: ['full'],
 }
 
 /**
@@ -30,22 +30,18 @@ export function run(cliParams, cliOptions) {
   return new Promise(resolve => {
     utils.header()
 
-    const noComments = cliOptions.noComments
+    const full = cliOptions.full
     const file = cliParams[0] || constants.defaultConfigFile
+    const simplePath = utils.getSimplePath(file)
 
-    utils.exists(file) && utils.die(chalk.bold.magenta(file), 'already exists.')
+    utils.exists(file) && utils.die(colors.file(simplePath), 'already exists.')
 
-    let stub = utils
-      .readFile(constants.configStubFile)
-      .replace('// let defaultConfig', 'let defaultConfig')
-      .replace("require('./plugins/container')", "require('tailwindcss/plugins/container')")
+    const stubFile = full ? constants.defaultConfigStubFile : constants.simpleConfigStubFile
 
-    noComments && (stub = utils.stripBlockComments(stub))
-
-    utils.writeFile(file, stub)
+    utils.copyFile(stubFile, file)
 
     utils.log()
-    utils.log(emoji.yes, 'Created Tailwind config file:', chalk.bold.magenta(file))
+    utils.log(emoji.yes, 'Created Tailwind config file:', colors.file(simplePath))
 
     utils.footer()
 

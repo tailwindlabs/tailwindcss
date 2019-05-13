@@ -1,4 +1,3 @@
-import fs from 'fs'
 import _ from 'lodash'
 import postcss from 'postcss'
 
@@ -8,15 +7,14 @@ function updateSource(nodes, source) {
   })
 }
 
-export default function(config, { components: pluginComponents, utilities: pluginUtilities }) {
+export default function(
+  config,
+  { base: pluginBase, components: pluginComponents, utilities: pluginUtilities }
+) {
   return function(css) {
     css.walkAtRules('tailwind', atRule => {
-      if (atRule.params === 'preflight') {
-        const preflightTree = postcss.parse(
-          fs.readFileSync(`${__dirname}/../../css/preflight.css`, 'utf8')
-        )
-
-        atRule.before(updateSource(preflightTree, atRule.source))
+      if (atRule.params === 'base') {
+        atRule.before(updateSource(pluginBase, atRule.source))
         atRule.remove()
       }
 

@@ -3,11 +3,8 @@
     "jest": true
   },
   "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
-    }
+    "ecmaVersion": 2018,
+    "sourceType": "module"
   },
   "extends": ["eslint-config-postcss", "prettier"],
   "plugins": ["prettier"],

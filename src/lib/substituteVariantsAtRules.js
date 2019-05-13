@@ -1,11 +1,12 @@
 import _ from 'lodash'
 import postcss from 'postcss'
 import generateVariantFunction from '../util/generateVariantFunction'
+import e from '../util/escapeClassName'
 
 function generatePseudoClassVariant(pseudoClass) {
   return generateVariantFunction(({ modifySelectors, separator }) => {
     return modifySelectors(({ className }) => {
-      return `.${pseudoClass}${separator}${className}:${pseudoClass}`
+      return `.${e(`${pseudoClass}${separator}${className}`)}:${pseudoClass}`
     })
   })
 }
@@ -18,7 +19,7 @@ const defaultVariantGenerators = {
   default: generateVariantFunction(() => {}),
   'group-hover': generateVariantFunction(({ modifySelectors, separator }) => {
     return modifySelectors(({ className }) => {
-      return `.group:hover .group-hover${separator}${className}`
+      return `.group:hover .${e(`group-hover${separator}${className}`)}`
     })
   }),
   hover: generatePseudoClassVariant('hover'),

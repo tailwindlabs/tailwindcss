@@ -1,6 +1,9 @@
+import fs from 'fs'
 import path from 'path'
 import postcss from 'postcss'
 import tailwind from '../src/index'
+import { defaultConfigFile } from '../src/constants'
+import inTempDirectory from '../jest/runInTempDirectory'
 
 test('it uses the values from the custom config file', () => {
   return postcss([tailwind(path.resolve(`${__dirname}/fixtures/custom-config.js`))])
@@ -25,7 +28,6 @@ test('it uses the values from the custom config file', () => {
           }
         }
       `
-
       expect(result.css).toMatchCss(expected)
     })
 })
@@ -33,8 +35,10 @@ test('it uses the values from the custom config file', () => {
 test('custom config can be passed as an object', () => {
   return postcss([
     tailwind({
-      screens: {
-        mobile: '400px',
+      theme: {
+        screens: {
+          mobile: '400px',
+        },
       },
     }),
   ])
@@ -62,4 +66,43 @@ test('custom config can be passed as an object', () => {
 
       expect(result.css).toMatchCss(expected)
     })
+})
+
+test('tailwind.config.js is picked up by default', () => {
+  return inTempDirectory(() => {
+    fs.writeFileSync(
+      path.resolve(defaultConfigFile),
+      `module.exports = {
+        theme: {
+          screens: {
+            mobile: '400px',
+          },
+        },
+      }`
+    )
+
+    return postcss([tailwind])
+      .process(
+        `
+          @responsive {
+            .foo {
+              color: blue;
+            }
+          }
+        `,
+        { from: undefined }
+      )
+      .then(result => {
+        expect(result.css).toMatchCss(`
+          .foo {
+            color: blue;
+          }
+          @media (min-width: 400px) {
+            .mobile\\:foo {
+              color: blue;
+            }
+          }
+        `)
+      })
+  })
 })

@@ -1,9 +1,9 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, config, e }) {
+  return function({ addUtilities, e, theme, variants }) {
     const utilities = _.fromPairs(
-      _.map(config('backgroundPosition'), (value, modifier) => {
+      _.map(theme('backgroundPosition'), (value, modifier) => {
         return [
           `.${e(`bg-${modifier}`)}`,
           {
@@ -13,6 +13,6 @@ export default function() {
       })
     )
 
-    addUtilities(utilities, config('modules.backgroundPosition'))
+    addUtilities(utilities, variants('backgroundPosition'))
   }
 }

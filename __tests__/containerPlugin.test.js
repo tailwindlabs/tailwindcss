@@ -9,17 +9,15 @@ function css(nodes) {
 
 function config(overrides) {
   return _.defaultsDeep(overrides, {
-    screens: {
-      sm: '576px',
-      md: '768px',
-      lg: '992px',
-      xl: '1200px',
+    theme: {
+      screens: {
+        sm: '576px',
+        md: '768px',
+        lg: '992px',
+        xl: '1200px',
+      },
     },
-    options: {
-      prefix: '',
-      important: false,
-      separator: ':',
-    },
+    prefix: '',
   })
 }
 
@@ -43,17 +41,16 @@ test.only('options are not required', () => {
   `)
 })
 
-test.only('screens can be specified explicitly', () => {
+test.only('screens can be passed explicitly', () => {
   const { components } = processPlugins(
-    [
-      container({
-        screens: {
-          sm: '400px',
-          lg: '500px',
+    [container()],
+    config({
+      theme: {
+        container: {
+          screens: ['400px', '500px'],
         },
-      }),
-    ],
-    config()
+      },
+    })
   )
 
   expect(css(components)).toMatchCss(`
@@ -67,14 +64,16 @@ test.only('screens can be specified explicitly', () => {
   `)
 })
 
-test.only('screens can be an array', () => {
+test.only('screens are ordered ascending by min-width', () => {
   const { components } = processPlugins(
-    [
-      container({
-        screens: ['400px', '500px'],
-      }),
-    ],
-    config()
+    [container()],
+    config({
+      theme: {
+        container: {
+          screens: ['500px', '400px'],
+        },
+      },
+    })
   )
 
   expect(css(components)).toMatchCss(`
@@ -84,18 +83,47 @@ test.only('screens can be an array', () => {
     }
     @media (min-width: 500px) {
       .container { max-width: 500px }
+    }
+  `)
+})
+
+test.only('screens are deduplicated by min-width', () => {
+  const { components } = processPlugins(
+    [container()],
+    config({
+      theme: {
+        container: {
+          screens: {
+            sm: '576px',
+            md: '768px',
+            'sm-only': { min: '576px', max: '767px' },
+          },
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    .container { width: 100% }
+    @media (min-width: 576px) {
+      .container { max-width: 576px }
+    }
+    @media (min-width: 768px) {
+      .container { max-width: 768px }
     }
   `)
 })
 
 test.only('the container can be centered by default', () => {
   const { components } = processPlugins(
-    [
-      container({
-        center: true,
-      }),
-    ],
-    config()
+    [container()],
+    config({
+      theme: {
+        container: {
+          center: true,
+        },
+      },
+    })
   )
 
   expect(css(components)).toMatchCss(`
@@ -121,12 +149,14 @@ test.only('the container can be centered by default', () => {
 
 test.only('horizontal padding can be included by default', () => {
   const { components } = processPlugins(
-    [
-      container({
-        padding: '2rem',
-      }),
-    ],
-    config()
+    [container()],
+    config({
+      theme: {
+        container: {
+          padding: '2rem',
+        },
+      },
+    })
   )
 
   expect(css(components)).toMatchCss(`
@@ -152,17 +182,16 @@ test.only('horizontal padding can be included by default', () => {
 
 test.only('setting all options at once', () => {
   const { components } = processPlugins(
-    [
-      container({
-        screens: {
-          sm: '400px',
-          lg: '500px',
+    [container()],
+    config({
+      theme: {
+        container: {
+          screens: ['400px', '500px'],
+          center: true,
+          padding: '2rem',
         },
-        center: true,
-        padding: '2rem',
-      }),
-    ],
-    config()
+      },
+    })
   )
 
   expect(css(components)).toMatchCss(`

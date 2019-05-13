@@ -39,7 +39,7 @@ function buildDistFile(filename) {
 console.info('Building Tailwind!')
 
 Promise.all([
-  buildDistFile('preflight'),
+  buildDistFile('base'),
   buildDistFile('components'),
   buildDistFile('utilities'),
   buildDistFile('tailwind'),

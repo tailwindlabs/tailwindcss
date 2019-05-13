@@ -1,4 +1,4 @@
-@tailwind preflight;
+@tailwind base;
 
 @tailwind components;
 
@@ -7,6 +7,6 @@
 @responsive {
   .example {
     @apply .font-bold;
-    color: config('colors.red');
+    color: theme('colors.red.500');
   }
 }
