@@ -3331,6 +3331,15 @@ fs-extra@^7.0.1:
     jsonfile "^4.0.0"
     universalify "^0.1.0"
 
+fs-extra@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-8.0.0.tgz#3660bea66719e3a3c46bf7a4b1249fb658db3f0c"
+  integrity sha512-3hU7dzpfqG+A7gloPULls7j9mKDzpCyMOTBvQS0lZfqVfjA6/m0AkLXq0O1vnfP5roXjjL1DuUGKapr8vJWmQw==
+  dependencies:
+    graceful-fs "^4.1.2"
+    jsonfile "^4.0.0"
+    universalify "^0.1.0"
+
 fs-minipass@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/fs-minipass/-/fs-minipass-1.2.5.tgz#06c277218454ec288df77ada54a03b8702aacb9d"
@@ -7875,15 +7884,15 @@ table@^4.0.1:
     slice-ansi "1.0.0"
     string-width "^2.1.1"
 
-tailwindcss@^1.0.0-beta.10:
-  version "1.0.0-beta.10"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.0.0-beta.10.tgz#9e86e23f9742c90be72de1592c2f988942746b8c"
-  integrity sha512-TH8UCo7KYyGHpuWL0tNoD859ljSthG1a5Jf7hbHY6EXLn4pMN82xFyYM9rVNJiaMnFSSJy9fSVcEWJZAo/in/Q==
+tailwindcss@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.0.0.tgz#452e2d39729a44cf840d98a5282a5bc5c652ef72"
+  integrity sha512-D0dBBxlaRiYc5Jm/IMjkfr/AaxH5i5ZV6MpUOVZIadmULy7stfWViJ3f2u7bg1XPNy1g5DUsl4rjPVgfXoaVbQ==
   dependencies:
     autoprefixer "^9.4.5"
     bytes "^3.0.0"
     chalk "^2.4.1"
-    fs-extra "^7.0.1"
+    fs-extra "^8.0.0"
     lodash "^4.17.11"
     node-emoji "^1.8.1"
     normalize.css "^8.0.1"
