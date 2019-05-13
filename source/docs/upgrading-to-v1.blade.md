@@ -74,7 +74,7 @@ module.exports = {
 }
 ```
 
-See the new [default config file](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js) for a complete example.
+See the new [default config file](https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js) for a complete example.
 
 There are a lot of changes here but they are all fairly cosmetic and entirely localized to this one file, so while it may look intimidating it's actually only 10-15 minutes of work.
 
