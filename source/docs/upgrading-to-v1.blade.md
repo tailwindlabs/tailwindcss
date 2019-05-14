@@ -921,7 +921,7 @@ a {
 @tailwind utilities;
 ```
 
-<h3 class="no-toc">13. Add <code>inline</code> to any replaced elements (<code>img</code>, <code>video</code>, etc.) that should be <code>display: block</code></h3>
+<h3 class="no-toc">13. Add <code>inline</code> to any replaced elements (<code>img</code>, <code>video</code>, etc.) that should not be <code>display: block</code></h3>
 
 <p class="italic font-normal text-gray-600 mt-4">Impact: Moderate, Effort: Moderate</p>
 
