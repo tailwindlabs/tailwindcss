@@ -346,7 +346,7 @@ To configure which variants are enabled for your project, see the [configuring v
 | `objectPosition`       |         |         |
 | `opacity`              |         |         |
 | `order`                |         |         |
-| `outline`              | &check; |         |
+| `outline`              |         | &check; |
 | `overflow`             |         |         |
 | `padding`              |         |         |
 | `pointerEvents`        |         |         |
