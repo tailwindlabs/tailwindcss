@@ -3,6 +3,7 @@
 return [
     'Getting Started' => [
         'Installation' => 'installation',
+        'Release Notes' => 'release-notes',
         'Upgrade Guide' => 'upgrading-to-v1',
         'Using with Preprocessors' => 'using-with-preprocessors',
         'Controlling File Size' => 'controlling-file-size',
