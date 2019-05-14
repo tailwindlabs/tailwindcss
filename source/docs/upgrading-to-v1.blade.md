@@ -340,7 +340,7 @@ Here is a complete list of the sections that been split into multiple sections:
 
 Note that in some cases (`position`, `whitespace`) the original section still exists, while in others (`flexbox`, `textStyle`), the original section has been completely removed.
 
-You should reference the new [default config file](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js) if you are ever unsure if you are making the right changes.
+You should reference the new [default config file](https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js) if you are ever unsure if you are making the right changes.
 
 The simplest way to make these changes is to just copy the value you were using for the old section (something like `['responsive']`) to all of the new sections that replace that section, but if you choose you can also use this as an opportunity to cull generated utilities you don't actually need.
 
@@ -1098,10 +1098,10 @@ For grays (note that `grey` has changed to `gray`):
 | --- | --- |
 | black | gray-900 |
 | grey-darkest | gray-800 |
-| grey-darker | gray-700 | 
-| grey-dark | gray-600 | 
+| grey-darker | gray-700 |
+| grey-dark | gray-600 |
 | grey | gray-500 |
-| grey-light | gray-400 | 
+| grey-light | gray-400 |
 | grey-lighter | gray-200 |
 | grey-lightest | gray-100 |
 
@@ -1110,10 +1110,10 @@ For other colors:
 | Old | New |
 | --- | --- |
 | {color}-darkest | {color}-900 |
-| {color}-darker | {color}-800 | 
-| {color}-dark | {color}-600 | 
+| {color}-darker | {color}-800 |
+| {color}-dark | {color}-600 |
 | {color} | {color}-500 |
-| {color}-light | {color}-400 | 
+| {color}-light | {color}-400 |
 | {color}-lighter | {color}-200 |
 | {color}-lightest | {color}-100 |
 
