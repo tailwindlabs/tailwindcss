@@ -240,7 +240,7 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-### Positions
+### Top / Right / Bottom / Left scale
 
 By default Tailwind only provides `0` and `auto` top/right/bottom/left/inset utilities. You can change, add, or remove these by editing the `theme.inset` section of your `tailwind.config.js` file.
 
@@ -249,6 +249,16 @@ By default Tailwind only provides `0` and `auto` top/right/bottom/left/inset uti
 - auto: 'auto',
 + '1/2': '50%',
 @endcomponent
+
+### Negative values
+
+If you'd like to add any negative top/right/bottom/left classes that take the same form as Tailwind's [negative margin](/docs/margin#negative-margins) classes, prefix the keys in your config file with a dash:
+
+@component('_partials.customized-config', ['key' => 'theme.margin'])
++ '-16': '-4rem',
+@endcomponent
+
+Tailwind is smart enough to generate classes like `-top-16` when it sees the leading dash, not `top--16` like you might expect.
 
 @include('_partials.variants-and-disabling', [
     'utility' => [

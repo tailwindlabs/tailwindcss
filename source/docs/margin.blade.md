@@ -222,6 +222,15 @@ To customize only the margin values, use the `theme.margin` section of your `tai
 
 Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
 
+### Negative values
+
+If you'd like to add additional negative margin classes (taking the form `-m{side?}-{size}`), prefix the keys in your config file with a dash:
+
+@component('_partials.customized-config', ['key' => 'theme.margin'])
++ '-72': '-18rem',
+@endcomponent
+
+Tailwind is smart enough to generate classes like `-mx-72` when it sees the leading dash, not `mx--72` like you might expect.
 
 @include('_partials.variants-and-disabling', [
     'utility' => [

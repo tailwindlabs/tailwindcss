@@ -139,7 +139,7 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-### Z-Index Scale
+### Z-Index scale
 
 By default Tailwind provides six numeric `z-index` utilities and an `auto` utility. You change, add, or remove these by editing the `theme.zIndex` section of your Tailwind config.
 
@@ -156,6 +156,16 @@ By default Tailwind provides six numeric `z-index` utilities and an `auto` utili
 + '100': 100,
   'auto': 'auto',
 @endcomponent
+
+### Negative values
+
+If you'd like to add any negative z-index classes that take the same form as Tailwind's [negative margin](/docs/margin#negative-margins) classes, prefix the keys in your config file with a dash:
+
+@component('_partials.customized-config', ['key' => 'theme.margin'])
++ '-10': '-10',
+@endcomponent
+
+Tailwind is smart enough to generate classes like `-z-10` when it sees the leading dash, not `z--10` like you might expect.
 
 @include('_partials.variants-and-disabling', [
     'utility' => [
