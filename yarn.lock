@@ -1814,8 +1814,8 @@ fragment-cache@^0.2.1:
     map-cache "^0.2.2"
 
 fs-extra@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-8.0.0.tgz#3660bea66719e3a3c46bf7a4b1249fb658db3f0c"
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-8.0.1.tgz#90294081f978b1f182f347a440a209154344285b"
   dependencies:
     graceful-fs "^4.1.2"
     jsonfile "^4.0.0"
