@@ -120,6 +120,12 @@ module.exports = {
         900: '#702459',
       },
     },
+    screens: {
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+    },
     spacing: {
       px: '1px',
       '0': '0',
@@ -366,12 +372,6 @@ module.exports = {
       '12': '12',
     },
     padding: theme => theme('spacing'),
-    screens: {
-      sm: '640px',
-      md: '768px',
-      lg: '1024px',
-      xl: '1280px',
-    },
     stroke: {
       current: 'currentColor',
     },
