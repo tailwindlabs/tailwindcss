@@ -35,7 +35,7 @@ module.exports = {
 }
 ```
 
-Every section of the config file is optional, so you only have to specify what you'd like to change. Any missing sections will fall back to Tailwind's [default configuration](https://github.com/tailwindcss/tailwindcss/blob/next/stubs/defaultConfig.stub.js).
+Every section of the config file is optional, so you only have to specify what you'd like to change. Any missing sections will fall back to Tailwind's [default configuration](https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js).
 
 ## Creating your configuration file
 
