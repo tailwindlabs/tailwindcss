@@ -87,7 +87,7 @@ module.exports = {
 
 The new breakpoints are more practical to work with and make it a bit easier to avoid annoying compromises in your responsive designs.
 
-New to responsive design with Tailwind? Check out our [responsive design documentation](http://tailwind-docs.test/docs/responsive-design) to learn more.
+New to responsive design with Tailwind? Check out our [responsive design documentation](/docs/responsive-design) to learn more.
 
 ### New top/right/bottom/left utilities
 
