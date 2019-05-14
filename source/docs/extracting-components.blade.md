@@ -300,7 +300,7 @@ Now you'd apply two classes any time you needed to style a button:
 
 This makes it easy to change the shared styles in one place by just editing the `.btn` class.
 
-It also allows you to add new one-off button styles without being forced to create a new component class or duplicated the shared styles:
+It also allows you to add new one-off button styles without being forced to create a new component class or duplicate the shared styles:
 
 @component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
 <button class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">
