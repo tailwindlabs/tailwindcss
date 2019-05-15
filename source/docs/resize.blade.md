@@ -55,7 +55,7 @@ Use `.resize-x` to make an element horizontally resizable.
 
 ## Prevent resizing
 
-Use `.resize-none` to make an element horizontally resizable.
+Use `.resize-none` to prevent an element from being resizable.
 
 @component('_partials.code-sample')
 <textarea class="resize-none border rounded focus:outline-none focus:shadow-outline"></textarea>
