@@ -16,7 +16,7 @@ These changes affect all users, whether you are using Tailwind with PostCSS and 
 1. [Update Tailwind](#1-update-tailwind)
 2. [Update your config file](#2-update-your-config-file)
 3. [Rename `tailwind.js` to `tailwind.config.js`](#3-rename-tailwind-js-to-tailwind-config-js)
-4. [Replace `@tailwind preflight` with `@tailwind base`](#4-replace-tailwind-preflight-with-tailwind-base)
+4. [Replace `@@tailwind preflight` with `@@tailwind base`](#4-replace-tailwind-preflight-with-tailwind-base)
 5. [Replace `config()` with `theme()`](#5-replace-config-with-theme)
 6. [Explicitly style any headings](#6-explicitly-style-any-headings)
 7. [Explicitly style any lists that should have bullets/numbers](#7-explicitly-style-any-lists-that-should-have-bullets-numbers)
@@ -677,32 +677,32 @@ If you keep your config file in a different folder, you'll still need to provide
     ])
 ```
 
-<h3 class="no-toc">4. Replace <code>@tailwind preflight</code> with <code>@tailwind base</code></h3>
+<h3 class="no-toc">4. Replace <code>@@tailwind preflight</code> with <code>@@tailwind base</code></h3>
 
 <p class="italic font-normal text-gray-600 mt-4">Impact: All users, Effort: Trivial</p>
 
 One of the new features in v1.0 is the ability for plugins to register base styles. As a result, our `preflight` styles are actually just another core plugin now, and the general "bucket" for base styles has been renamed from `preflight` to `base`.
 
-Replace any instance of `@tailwind preflight` in your CSS files with `@tailwind base`:
+Replace any instance of `@@tailwind preflight` in your CSS files with `@@tailwind base`:
 
 ```diff
-- @tailwind preflight;
-+ @tailwind base;
+- @@tailwind preflight;
++ @@tailwind base;
 
-  @tailwind components;
+  @@tailwind components;
 
-  @tailwind utilities;
+  @@tailwind utilities;
 ```
 
-If you are using `postcss-import` and relying on our imports instead of the `@tailwind` directive, replace `@import "tailwindcss/preflight"` with `@import "tailwindcss/base"`:
+If you are using `postcss-import` and relying on our imports instead of the `@@tailwind` directive, replace `@@import "tailwindcss/preflight"` with `@@import "tailwindcss/base"`:
 
 ```diff
-- @import "tailwindcss/preflight";
-+ @import "tailwindcss/base";
+- @@import "tailwindcss/preflight";
++ @@import "tailwindcss/base";
 
-  @import "tailwindcss/components";
+  @@import "tailwindcss/components";
 
-  @import "tailwindcss/utilities";
+  @@import "tailwindcss/utilities";
 ```
 
 <h3 class="no-toc">5. Replace <code>config()</code> with <code>theme()</code></h3>
@@ -764,7 +764,7 @@ That means if you have any lists that depend on the default browser styling (bul
 If you really don't want to do this manually and would prefer that lists be styled by default, you can override our base styles with your own custom CSS by adding a couple of rules like this:
 
 ```css
-@tailwind base;
+@@tailwind base;
 
 ul {
   list-style-type: disc;
@@ -776,9 +776,9 @@ ol {
   padding-left: theme('padding.4');
 }
 
-@tailwind components;
+@@tailwind components;
 
-@tailwind utilities;
+@@tailwind utilities;
 ```
 
 <h3 class="no-toc">8. Remove any usage of <code>.list-reset</code></h3>
@@ -907,18 +907,18 @@ On the flip side, if you are using `no-underline` in a million places across you
   </a
 ```
 
-If you really don't like these new defaults, you can add your own base link styles after `@tailwind base`:
+If you really don't like these new defaults, you can add your own base link styles after `@@tailwind base`:
 
 ```css
-@tailwind base;
+@@tailwind base;
 
 a {
   color: theme('colors.blue');
   text-decoration: underline;
 }
 
-@tailwind components;
-@tailwind utilities;
+@@tailwind components;
+@@tailwind utilities;
 ```
 
 <h3 class="no-toc">13. Add <code>inline</code> to any replaced elements (<code>img</code>, <code>video</code>, etc.) that should not be <code>display: block</code></h3>
@@ -977,7 +977,7 @@ You might not get the exact same height you had before, but that's likely becaus
 If you really want to use 1.15 as your default line-height for form elements (I would recommend against it), you can add a rule like this to your own base styles:
 
 ```css
-@tailwind base;
+@@tailwind base;
 
 button,
 input,
@@ -987,8 +987,8 @@ textarea {
   line-height: 1.15;
 }
 
-@tailwind components;
-@tailwind utilities;
+@@tailwind components;
+@@tailwind utilities;
 ```
 
 <h3 class="no-toc">15. Adjust the text color on your form elements</h3>
@@ -1031,14 +1031,14 @@ It's very unlikely that you weren't already overriding this with your own font, 
 You don't really have to change anything unless for some unexplainable reason you want to use `sans-serif` as your default font family, in which case you can add a rule to your base styles:
 
 ```css
-@tailwind base;
+@@tailwind base;
 
 html {
   font-family: sans-serif;
 }
 
-@tailwind components;
-@tailwind utilities;
+@@tailwind components;
+@@tailwind utilities;
 ```
 
 <h3 class="no-toc">17. Double check your default line-height</h3>
@@ -1054,14 +1054,14 @@ This means that if you are not setting a line-height either using a `leading-{si
 The easiest solution is to reset the line-height to 1.15 by default:
 
 ```css
-@tailwind base;
+@@tailwind base;
 
 html {
   line-height: 1.15;
 }
 
-@tailwind components;
-@tailwind utilities;
+@@tailwind components;
+@@tailwind utilities;
 ```
 
 However, a better long-term solution would be to pick a default line-height that matches a value in your line-height scale, and audit your site to find situations where it makes the design look worse and tweak those one at a time.

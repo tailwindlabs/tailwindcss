@@ -262,3 +262,13 @@ code.language-bash, pre.language-bash {
     @apply text-code-white !important;
   }
 }
+
+code.language-diff, pre.language-diff {
+  @apply text-gray-400 !important;
+  .token.deleted {
+    @apply text-code-red !important;
+  }
+  .token.inserted {
+    @apply text-code-green !important;
+  }
+}
