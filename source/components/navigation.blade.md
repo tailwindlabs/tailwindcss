@@ -12,7 +12,7 @@ Here are a few examples to help you get an idea of how to build components like 
 ## Simple
 
 @component('_partials.code-sample')
-<ul class="list-reset flex">
+<ul class="flex">
   <li class="mr-6">
     <a class="text-blue-500 hover:text-blue-800" href="#">Active</a>
   </li>
@@ -129,7 +129,7 @@ Here are a few examples to help you get an idea of how to build components like 
 ## Tabs
 
 @component('_partials.code-sample')
-<ul class="list-reset flex border-b">
+<ul class="flex border-b">
   <li class="-mb-px mr-1">
     <a class="bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700 font-semibold" href="#">Active</a>
   </li>
@@ -148,7 +148,7 @@ Here are a few examples to help you get an idea of how to build components like 
 ## Pills
 
 @component('_partials.code-sample')
-<ul class="list-reset flex">
+<ul class="flex">
   <li class="mr-3">
     <a class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white" href="#">Active Pill</a>
   </li>
@@ -164,7 +164,7 @@ Here are a few examples to help you get an idea of how to build components like 
 ## Stretched
 
 @component('_partials.code-sample')
-<ul class="list-reset flex">
+<ul class="flex">
   <li class="flex-1 mr-2">
     <a class="text-center block border border-blue-500 rounded py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white" href="#">Active Item</a>
   </li>
@@ -180,7 +180,7 @@ Here are a few examples to help you get an idea of how to build components like 
 ## Justified
 
 @component('_partials.code-sample')
-<ul class="list-reset flex justify-between">
+<ul class="flex justify-between">
   <li class="mr-3">
     <a class="inline-block border border-blue-500 rounded py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white" href="#">Active Pill</a>
   </li>
