@@ -1109,6 +1109,7 @@ For other colors:
 
 | Old | New |
 | --- | --- |
+| white | white |
 | {color}-darkest | {color}-900 |
 | {color}-darker | {color}-800 |
 | {color}-dark | {color}-600 |
