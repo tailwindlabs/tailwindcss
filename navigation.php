@@ -132,18 +132,30 @@ return [
     ],
     'Resources' => [
         'Topics' => [
-            'Learning design' => '/resources#learning-design',
-            'Images and illustrations' => '/resources#images-and-illustrations',
-            'Icons' => '/resources#icons',
-            'Background patterns' => '/resources#background-patterns',
+            'Learning design' => '#learning-design',
+            'Images and illustrations' => '#images-and-illustrations',
+            'Icons' => '#icons',
+            'Background patterns' => '#background-patterns',
         ]
     ],
     'Community' => [
         'Links' => [
-            'Discord' => '/discord',
-            'Forum' => '/forum',
-            'GitHub' => 'https://github.com/tailwindcss/tailwindcss',
-            'Twitter' => 'https://twitter.com/tailwindcss',
+            'Discord' => [
+                'url' => '/discord',
+                'external' => true,
+            ],
+            'Forum' => [
+                'url' => '/forum',
+                'external' => true,
+            ],
+            'GitHub' => [
+                'url' => 'https://github.com/tailwindcss/tailwindcss',
+                'external' => true,
+            ],
+            'Twitter' => [
+                'url' => 'https://twitter.com/tailwindcss',
+                'external' => true,
+            ],
         ]
     ],
 ];

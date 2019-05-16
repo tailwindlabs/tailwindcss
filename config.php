@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Collection;
+
 return [
     'baseUrl' => '',
     'production' => false,
@@ -19,12 +21,20 @@ return [
             return 'Community';
         }
     },
-    'active' => function ($page, $path) {
+    'active' => function ($page, $link) {
+        $path = $link instanceof Collection ? $link['url'] : $link;
+
         $pages = collect(array_wrap($page));
 
         return $pages->contains(function ($page) use ($path) {
             return starts_with($page->getPath(), $path);
         });
+    },
+    'getLink' => function ($page, $link) {
+        return $link instanceof Collection ? $link['url'] : $link;
+    },
+    'isExternal' => function ($page, $link) {
+        return $link instanceof Collection ? $link['external'] : false;
     },
     'anyChildrenActive' => function ($page, $children) {
         return $children->contains(function ($link) use ($page) {

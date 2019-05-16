@@ -13,32 +13,37 @@ $.when($.ready).then(function() {
     'content': $(document).find('#content').html()
   }, '', window.location.href)
 
-  $('#nav').on('click', 'a', function (event) {
+  $('#nav').on('click', 'a:not([data-external])', function (event) {
     // Allow opening links in new tabs
     if (event.metaKey) {
       return
     }
 
+    // Get desired link
+    const href = $(this).attr('href')
+
+    // If it's just an ID on the current page, don't hijack
+    if (href[0] === '#') {
+      return
+    }
+
     // Start progress
-    let progress = setTimeout(() => nprogress.start(), 100)
+    const progress = setTimeout(() => nprogress.start(), 100)
 
     // Prevent following link
     event.preventDefault()
 
-    // Get desired link
-    var href = $(this).attr('href')
-
     // Make Ajax request to get the page content
     $.get(href, html => {
       // Parse the HTML response
-      var title = $(html).filter('title').text()
-      var header = $(html).find('#header').html()
-      var sidebarClasses = $(html).find('#sidebar').attr('class')
-      var nav = $(html).find('#nav').html()
-      var navClasses = $(html).find('#nav').attr('class')
-      var navGradientClasses = $(html).find('#navGradient').attr('class')
-      var navWrapperClasses = $(html).find('#navWrapper').attr('class')
-      var content = $(html).find('#content').html()
+      const title = $(html).filter('title').text()
+      const header = $(html).find('#header').html()
+      const sidebarClasses = $(html).find('#sidebar').attr('class')
+      const nav = $(html).find('#nav').html()
+      const navClasses = $(html).find('#nav').attr('class')
+      const navGradientClasses = $(html).find('#navGradient').attr('class')
+      const navWrapperClasses = $(html).find('#navWrapper').attr('class')
+      const content = $(html).find('#content').html()
 
       $('#sidebar').addClass('hidden')
       $('#sidebar-close').addClass('hidden')
