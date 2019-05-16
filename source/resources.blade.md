@@ -5,40 +5,74 @@ description: "Useful resources and assets for Tailwind users."
 titleBorder: true
 ---
 
-We think Tailwind is an amazing CSS framework, but you need more than just a CSS framework to produce visually awesome work. Here are some resources that can help you take your projects to the next level.
+We think Tailwind is an amazing CSS framework, but you need more than just a CSS framework to produce visually awesome work.
+
+Here are some resources that can help you take your Tailwind projects to the next level.
+
+---
 
 ## Learning design
 
 ### Refactoring UI
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla error amet quidem quis, omnis praesentium repudiandae illo, voluptate sed provident aperiam ratione. Tempora laboriosam, voluptatem cum odit rem eligendi soluta.
+[Refactoring UI](https://refactoringui.com/book) is a design-for-developers book + video series put together by [Adam Wathan](https://twitter.com/adamwathan) (that's me, the creator of Tailwind) and [Steve Schoger](https://twitter.com/steveschoger) (who created Tailwind's default design system).
+
+[![](https://refactoring-ui.nyc3.cdn.digitaloceanspaces.com/landing/twitter-card-launched-optimized.png)](https://refactoringui.com/book)
+
+It covers literally everything we know about making things look awesome, and purchasing it is a great way to support our work on Tailwind, allowing us to spend more time developing the framework and surrounding ecosystem.
+
+Almost 10,000 people have picked it up so far and have all sorts of [awesome things to say](https://refactoringui.com/book/kind-words/) about how it helped them improve their work.
+
+[Learn more about Refactoring UI &rarr;](https://refactoringui.com/book)
+
+---
 
 ## Images and illustrations
 
 ### Unsplash
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum fugiat voluptas totam, vitae optio sed aliquam itaque adipisci autem quod, dicta eius veritatis consectetur nulla illum mollitia. Sed, omnis cum.
+[Unsplash](https://unsplash.com/) is an amazing resource for finding beautiful, high-resolution, free photos that you can use in your projects.
+
+We use Unsplash any time we need example photos in the documentation, like for our [card components](/components/cards).
+
+[Find free photography on Unsplash &rarr;](https://unsplash.com)
 
 ### unDraw
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non officiis, natus quo, repellendus impedit minima voluptates sed, repudiandae eos perferendis porro eaque maiores aliquid ab tempora dolor itaque laboriosam at.
+[unDraw](https://undraw.co/) is like Unsplash but for amazing vector illustrations, created by the amazing [Katerina Limpitsouni](https://twitter.com/ninalimpi).
+
+They're easy to customize and perfect for landing pages, empty states, and more.
+
+[Find free illustrations on unDraw &rarr;](https://undraw.co/)
+
+---
 
 ## Icons
 
 ### Heroicons UI
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis tempora, in dicta laudantium beatae inventore qui ad illum! Quo omnis sint amet non doloribus assumenda nihil tempore at, aliquam reiciendis.
+[Heroicons UI](https://github.com/sschoger/heroicons-ui) is a free SVG icon set created by [Steve Schoger](https://twitter.com/steveschoger). They're pre-optimized and easy to use directly in your HTML where you can customize them using Tailwind's color and sizing utilities.
+
+[Get Heroicons UI &rarr;](https://github.com/sschoger/heroicons-ui)
 
 ### Zondicons
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui harum, atque iusto mollitia voluptatibus obcaecati aperiam architecto quidem et optio maiores asperiores reprehenderit dolor distinctio reiciendis, explicabo, iste impedit eum!
+[Zondicons](http://www.zondicons.com/) is another free SVG icon set by [Steve Schoger](https://twitter.com/steveschoger) drawn in a different style.
+
+[Get Zondicons &rarr;](https://github.com/sschoger/heroicons-ui)
 
 ### Entypo
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta dolores corrupti necessitatibus facere, voluptatibus unde itaque, tempore magnam accusamus totam dolore sequi natus quos nemo minus, cum tenetur quisquam laborum.
+[Entypo](http://www.entypo.com/) is a great free SVG icon set created by [Daniel Bruce](http://www.danielbruce.se/).
+
+[Get Entypo &rarr;](https://github.com/adamwathan/entypo-optimized)
+
+---
 
 ## Background patterns
 
 ### Hero Patterns
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum ducimus quibusdam quis, eos saepe voluptates nemo, incidunt ullam autem veritatis quae ad culpa nesciunt porro earum officia architecto dignissimos est.
+[Hero Patterns](http://www.heropatterns.com/) is a set of repeatable, customizable SVG background patterns, also created by [Steve Schoger](https://twitter.com/steveschoger). They're perfect for adding a little bit of excitement to an otherwise bland background, without all the weight of a raster format like JPG or PNG.
+
+[Get free background patterns at Hero Patterns &rarr;](http://www.heropatterns.com/)
