@@ -2,6 +2,7 @@
 /build_local/
 /node_modules/
 /vendor/
+/source/assets/build/
 /source/css/
 /source/js/
 /source/mix-manifest.json

@@ -43,12 +43,12 @@ features:
 
 @component('_partials.code-sample')
 <div class="flex -mx-2">
-  @foreach ($page->config['opacity']->reverse() as $name => $value)
-    <div class="flex-1 text-grey-darker text-center bg-grey-light px-4 py-2 mx-2 opacity-{{ $name }}">.opacity-{{ $name }}</div>
+  @foreach ($page->config['theme']['opacity']->reverse() as $name => $value)
+    <div class="text-sm flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 mx-2 opacity-{{ $name }}">.opacity-{{ $name }}</div>
   @endforeach
 </div>
 @slot('code')
-@foreach ($page->config['opacity']->reverse() as $name => $value)
+@foreach ($page->config['theme']['opacity']->reverse() as $name => $value)
 <div class="opacity-{{ $name }}">.opacity-{{ $name }}</div>
 @endforeach
 @endslot
@@ -63,27 +63,27 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="text-center">
-  <div class="px-4 py-2 bg-grey-light opacity-100 w-24 h-24 rounded-full inline-block"></div>
+  <div class="px-4 py-2 bg-gray-400 opacity-100 w-24 h-24 rounded-full inline-block"></div>
 </div>
 @endslot
 @slot('sm')
 <div class="text-center">
-  <div class="px-4 py-2 bg-grey-light opacity-75 w-24 h-24 rounded-full inline-block"></div>
+  <div class="px-4 py-2 bg-gray-400 opacity-75 w-24 h-24 rounded-full inline-block"></div>
 </div>
 @endslot
 @slot('md')
 <div class="text-center">
-  <div class="px-4 py-2 bg-grey-light opacity-50 w-24 h-24 rounded-full inline-block"></div>
+  <div class="px-4 py-2 bg-gray-400 opacity-50 w-24 h-24 rounded-full inline-block"></div>
 </div>
 @endslot
 @slot('lg')
 <div class="text-center">
-  <div class="px-4 py-2 bg-grey-light opacity-25 w-24 h-24 rounded-full inline-block"></div>
+  <div class="px-4 py-2 bg-gray-400 opacity-25 w-24 h-24 rounded-full inline-block"></div>
 </div>
 @endslot
 @slot('xl')
 <div class="text-center">
-  <div class="px-4 py-2 bg-grey-light opacity-0 w-24 h-24 rounded-full inline-block"></div>
+  <div class="px-4 py-2 bg-gray-400 opacity-0 w-24 h-24 rounded-full inline-block"></div>
 </div>
 @endslot
 @slot('code')
@@ -95,9 +95,11 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-By default Tailwind provides five opacity utilities based on a simple numeric scale. You change, add, or remove these by editing the `opacity` section of your Tailwind config.
+### Opacity Scale
 
-@component('_partials.customized-config', ['key' => 'opacity'])
+By default Tailwind provides five opacity utilities based on a simple numeric scale. You change, add, or remove these by editing the `theme.opacity` section of your Tailwind config.
+
+@component('_partials.customized-config', ['key' => 'theme.opacity'])
   '0': '0',
 - '25': '.25',
 - '50': '.5',

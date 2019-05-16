@@ -1,149 +1,230 @@
 ---
 extends: _layouts.documentation
 title: "Adding New Utilities"
-description: null
+description: "Extending Tailwind with your own custom utility classes."
+titleBorder: true
 ---
 
-Although Tailwind provides a pretty comprehensive set of utility classes out of the box, you're inevitably going to run into situations where you need to add a few of your own.
+Although Tailwind provides a pretty comprehensive set of utility classes out of the box, you may run into situations where you need to add a few of your own.
 
-Deciding on the best way to extend a framework can be paralyzing, so here's some best practices and tools to help you add your own utilities "the Tailwind way."
+Deciding on the best way to extend a framework can be paralyzing, so here are some best practices to help you add your own utilities in the most idiomatic way possible.
 
-## CSS Structure
+---
 
-A bare-bones Tailwind setup is a single CSS file that looks like this:
+## Using CSS
 
-```less
-@@tailwind preflight;
+The easiest way to add your own utilities to Tailwind is to simply add them to your CSS.
 
+@component('_partials.tip-good')
+Add any custom utilities to the end of your CSS file
+@endcomponent
+
+```css
+@@tailwind base;
 @@tailwind components;
-
-@@tailwind utilities;
-```
-
-In CSS, **the order of your rule definitions is extremely important**.
-
-If two rules have the same [specificity](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity), the rule defined *last* is the rule that is applied.
-
-For example, given the following CSS:
-
-```less
-.bg-red {
-  background: #ff0000;
-}
-
-.bg-green {
-  background-color: #00ff00;
-}
-```
-
-...and the following HTML:
-
-```html
-<div class="bg-green bg-red"></div>
-```
-
-...the `div` would be green, because `.bg-green` is defined *after* `.bg-red` in the CSS file.
-
-For this reason, **we recommend defining any custom utility classes at the end of your stylesheet,** *after* you inject Tailwind's utility classes:
-
-```less
-@@tailwind preflight;
-
-@@tailwind components;
-
 @@tailwind utilities;
 
-.bg-cover-image {
-  background-image: url('/path/to/image.jpg');
+.rotate-0 {
+  transform: rotate(0deg);
+}
+.rotate-90 {
+  transform: rotate(90deg);
+}
+.rotate-180 {
+  transform: rotate(180deg);
+}
+.rotate-270 {
+  transform: rotate(270deg);
 }
 ```
 
-This way your custom utilities can override Tailwind utilities if needed, although you should strive to avoid applying two utility classes to an element that target the same CSS property if at all possible.
+Since declaration order is important in CSS, always make sure you are adding new utilities to the _end_ of your CSS file to avoid specificity issues.
 
-If you're using a preprocessor like Less, Sass, or Stylus, consider keeping your utilities in a separate file and importing them:
+@component('_partials.tip-bad')
+Don't add custom utilities to the beginning of your CSS file
+@endcomponent
 
-```less
-@@tailwind preflight;
+```css
+/* Adding utilities to the beginning of your CSS can cause specificity issues */
+.rotate-0 {
+  transform: rotate(0deg);
+}
+.rotate-90 {
+  transform: rotate(90deg);
+}
+.rotate-180 {
+  transform: rotate(180deg);
+}
+.rotate-270 {
+  transform: rotate(270deg);
+}
 
+@@tailwind base;
 @@tailwind components;
-
 @@tailwind utilities;
-
-@@import "custom-utilities";
 ```
 
-## Responsive Variants
+If you're using `postcss-import` or a preprocessor like Less, Sass, or Stylus, consider keeping your utilities in a separate file and importing them:
 
-If you'd like to create responsive versions of your own utilities based on the breakpoints defined in your Tailwind config file, wrap your utilities in the `@responsive { ... }` directive:
+```css
+/* Using postcss-import */
+@@import "tailwindcss/base";
+@@import "tailwindcss/components";
+@@import "tailwindcss/utilities";
+@@import "./custom-utilities.css";
 
-```less
-@@tailwind preflight;
-
+/* Using Sass or Less */
+@@tailwind base;
 @@tailwind components;
+@@tailwind utilities;
+@@import "./custom-utilities";
+```
 
+### Generating responsive variants
+
+If you'd like to create [responsive variants](/docs/responsive-design) of your own utilities based on the breakpoints defined in your `tailwind.config.js` file, wrap your utilities in the `@@responsive` directive:
+
+```css
+@@tailwind base;
+@@tailwind components;
 @@tailwind utilities;
 
 @@responsive {
-  .bg-cover-image {
-    background-image: url('/path/to/image.jpg');
+  .rotate-0 {
+    transform: rotate(0deg);
+  }
+  .rotate-90 {
+    transform: rotate(90deg);
+  }
+  .rotate-180 {
+    transform: rotate(180deg);
+  }
+  .rotate-270 {
+    transform: rotate(270deg);
   }
 }
 ```
 
-Tailwind will intelligently group the responsive versions into its existing media queries which are output at the very end of the stylesheet. This ensures that any responsive utilities will always take precedence over unprefixed utilities.
+Tailwind will automatically generate prefixed versions of each custom utility that you can use to conditionally apply those styles at different breakpoints:
 
-The above code would generate CSS that looks something like this:
+```html
+<!-- Rotate 180 degrees by default, but remove that rotation on medium screens and up -->
+<div class="rotate-180 md:rotate-0"></div>
+```
+
+Learn more about responsive utilities in the [responsive design documentation](/docs/responsive-design).
+
+### Generating pseudo-class variants
+
+If you'd like to create [pseudo-class variants](/docs/pseudo-class-variants) of your own utilities, wrap your utilities in the `@@variants` directive:
 
 ```css
-/* Preflight styles rendered here... */
-html { ... }
-/* ... */
+@@tailwind base;
+@@tailwind components;
+@@tailwind utilities;
 
-/* Tailwind utilities rendered here... */
-.bg-red { ... }
-/* ... */
-
-.bg-cover-image {
-  background-image: url('/path/to/image.jpg');
-}
-
-@media (min-width: 576px) {
-  /* Tailwind utilities rendered here... */
-  .sm\:bg-red { ... }
-  /* ... */
-
-  .sm\:bg-cover-image {
-    background-image: url('/path/to/image.jpg');
+@@variants hover, focus {
+  .rotate-0 {
+    transform: rotate(0deg);
   }
-}
-
-@media (min-width: 768px) {
-  /* Tailwind utilities rendered here... */
-  .md\:bg-red { ... }
-  /* ... */
-
-  .md\:bg-cover-image {
-    background-image: url('/path/to/image.jpg');
+  .rotate-90 {
+    transform: rotate(90deg);
   }
-}
-
-@media (min-width: 992px) {
-  /* Tailwind utilities rendered here... */
-  .lg\:bg-red { ... }
-  /* ... */
-
-  .lg\:bg-cover-image {
-    background-image: url('/path/to/image.jpg');
+  .rotate-180 {
+    transform: rotate(180deg);
   }
-}
-
-@media (min-width: 1200px) {
-  /* Tailwind utilities rendered here... */
-  .xl\:bg-red { ... }
-  /* ... */
-
-  .xl\:bg-cover-image {
-    background-image: url('/path/to/image.jpg');
+  .rotate-270 {
+    transform: rotate(270deg);
   }
 }
 ```
+
+Tailwind will automatically generate prefixed versions of each custom utility that you can use to conditionally apply those styles at different states:
+
+```html
+<div class="rotate-0 hover:rotate-90"></div>
+```
+
+Pseudo-class variants are generated in the same order you list them in the `@@variants` directive, so if you'd like one pseudo-class to take precedence over another, make sure you list that one last:
+
+```css
+/* Focus will take precedence over hover */
+@@variants hover, focus {
+  .rotate-0 {
+    transform: rotate(0deg);
+  }
+  /* ... */
+}
+
+/* Hover will take precedence over focus */
+@@variants focus, hover {
+  .rotate-0 {
+    transform: rotate(0deg);
+  }
+  /* ... */
+}
+```
+
+If you'd like to generate both responsive _and_ pseudo-class variants of your custom utilities, wrap `@@variants` with `@@responsive`:
+
+```css
+@@tailwind base;
+@@tailwind components;
+@@tailwind utilities;
+
+@@responsive {
+  @@variants hover, focus {
+    .rotate-0 {
+      transform: rotate(0deg);
+    }
+    .rotate-90 {
+      transform: rotate(90deg);
+    }
+    .rotate-180 {
+      transform: rotate(180deg);
+    }
+    .rotate-270 {
+      transform: rotate(270deg);
+    }
+  }
+}
+```
+
+Learn more about pseudo-class variants utilities in the [pseudo-class variant documentation](/docs/pseudo-class-variants).
+
+---
+
+## Using a plugin
+
+In addition to adding new utility classes directly in your CSS files, you can also add utilities to Tailwind by writing your own plugin:
+
+```js
+// tailwind.config.js
+module.exports = {
+  plugins: [
+    function({ addUtilities }) {
+      const newUtilities = {
+        '.rotate-0': {
+          transform: 'rotate(0deg)',
+        },
+        '.rotate-90': {
+          transform: 'rotate(90deg)',
+        },
+        '.rotate-180': {
+          transform: 'rotate(180deg)',
+        },
+        '.rotate-270': {
+          transform: 'rotate(270deg)',
+        },
+      }
+
+      addUtilities(newUtilities, ['responsive', 'hover'])
+    }
+  ]
+}
+
+```
+
+This can be a good choice if you want to publish your custom utilities as a library or make it easier to share them across multiple projects.
+
+Learn more in the [utility plugin documentation](/docs/plugins#adding-utilities).

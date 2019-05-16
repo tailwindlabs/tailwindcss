@@ -1,4 +1,13 @@
-@tailwind preflight;
+@tailwind base;
+
+:root {
+  --color-code-green: #b5f4a5;
+  --color-code-yellow: #ffe484;
+  --color-code-purple: #d9a9ff;
+  --color-code-red: #ff8383;
+  --color-code-blue: #93ddfd;
+  --color-code-white: #fff;
+}
 
 html {
   font-size: 14px;
@@ -13,56 +22,81 @@ a {
   text-decoration: none;
 }
 
-ol,
-ul {
-  @apply .list-reset;
-}
-
+/*! purgecss start ignore */
 @import "carbon-ads";
 @import "docsearch";
-@import "prism";
+@import "prism-atom-dark";
+@import "nprogress";
 @import "markdown";
+/*! purgecss end ignore */
 
 @tailwind utilities;
 
-// Fucking hack because our order sucks
-.hidden {
-  display: none;
-}
-
-@responsive {
-  .top-16 {
-    top: 4rem;
+@variants responsive, hover {
+  .translate-r-2px {
+    transform: translateX(2px) !important;
+  }
+  .transition-fast {
+    transition: all .2s ease !important;
   }
 }
 
+.scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+.scrollbar-w-2::-webkit-scrollbar {
+  @apply w-2 h-2 !important;
+}
+
+.scrollbar-track-gray-lighter::-webkit-scrollbar-track {
+  @apply bg-gray-300 !important;
+}
+
+.scrollbar-thumb-gray::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 !important;
+}
+
+.scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
+  @apply rounded !important;
+}
+
 @supports (position: sticky) {
-  @media (min-width: config('screens.lg')) {
+  @media (min-width: theme('screens.lg')) {
+    .sticky\?lg\:h-screen {
+      height: 100vh !important;
+    }
     .sticky\?lg\:h-\(screen-16\) {
-      height: ~"calc(100vh - 4rem)";
+      height: ~"calc(100vh - 4rem)" !important;
     }
   }
 }
 
-
 .transition {
-  transition: all .1s ease-in;
+  transition: all .1s ease-in !important;
 }
 
-.focus\:bg-grey-dark:focus {
-  @apply .bg-grey-dark;
+.focus\:bg-gray-600:focus {
+  @apply bg-gray-700 !important;
 }
 
 .focus\:text-white:focus {
-  @apply .text-white;
+  @apply text-white !important;
 }
 
 .group:hover .group-hover\:text-white {
-  @apply .text-white;
+  @apply text-white !important;
 }
 
-.active\:bg-blue-dark:active {
-  @apply .bg-blue-dark;
+.focus-within\:border-teal-500:focus-within {
+  @apply border-teal-500 !important;
+}
+
+.active\:bg-blue-700:active {
+  @apply bg-blue-700 !important;
 }
 
 .bg-pattern {
@@ -70,27 +104,29 @@ ul {
 }
 
 .table-collapse {
-  border-collapse: collapse;
+  border-collapse: collapse !important;
 }
 
-.placeholder-grey-dark::placeholder {
-  @apply .text-grey-dark;
+.placeholder-gray-700::placeholder {
+  @apply text-gray-700 !important;
 }
 
-.placeholder-grey-darker::placeholder {
-  @apply .text-grey-darker;
+.placeholder-gray-800::placeholder {
+  @apply text-gray-800 !important;
 }
 
-.placeholder-grey-darkest::placeholder {
-  @apply .text-grey-darkest;
+.placeholder-gray-900::placeholder {
+  @apply text-gray-900 !important;
 }
 
 .focus\:outline-0:focus {
-  outline: 0;
+  outline: 0 !important;
 }
 
 [v-cloak] .v-cloak-hidden {
-  display: none;
+  display: none !important;
 }
 
-
+.appearance-none::-ms-expand {
+  display: none !important;
+}

@@ -3,10 +3,8 @@ const Mousetrap = require('mousetrap')
 
 window.Vue = require('vue')
 
-Vue.component('responsive-code-sample', require('./components/ResponsiveCodeSample.vue'))
-Vue.component('v-component', require('./components/MetaComponent.vue'))
-Vue.component('class-table', require('./components/ClassTable.vue'))
-Vue.component('table-of-contents', require('./components/TableOfContents.vue'))
+Vue.component('responsive-code-sample', require('./components/ResponsiveCodeSample.vue').default)
+Vue.component('table-of-contents', require('./components/TableOfContents.vue').default)
 
 
 const app = new Vue({
@@ -24,7 +22,7 @@ Mousetrap.bind('/', function (e) {
 ;(function () {
   var s = document.createElement('script')
   s.setAttribute('async', '')
-  s.src = '//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=tailwindcsscom'
+  s.src = '//cdn.carbonads.com/carbon.js?serve=CK7DTK3E&placement=tailwindcsscom'
   s.id = '_carbonads_js'
   var adElement = document.getElementById('ad')
   adElement.innerHTML = ''

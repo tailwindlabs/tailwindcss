@@ -1,33 +1,30 @@
 ---
 extends: _layouts.documentation
-title: "Functions &amp; Directives"
-description: null
+title: "Functions & Directives"
+description: "A reference for the custom functions and directives Tailwind exposes to your CSS."
+titleBorder: true
 ---
-
-Tailwind exposes a few custom CSS functions and directives that can be used in your actual CSS files.
 
 ## @@tailwind
 
-Use the `@@tailwind` directive to insert Tailwind's `preflight`, `utilities` and `screens` styles into your CSS. Here's a full example of how you might do this:
+Use the `@@tailwind` directive to insert Tailwind's `base`, `components`, `utilities` and `screens` styles into your CSS.
 
-```less
+```css
 /**
- * This injects Tailwind's base styles, which is a combination of
- * Normalize.css and some additional base styles.
- *
- * You can see the styles here:
- * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
+ * This injects Tailwind's base styles and any base styles registered by
+ * plugins.
  */
-@@tailwind preflight;
+@@tailwind base;
 
 /**
- * This injects any component classes registered by plugins.
+ * This injects Tailwind's component classes and any component classes
+ * registered by plugins.
  */
 @@tailwind components;
 
 /**
- * This injects all of Tailwind's utility classes, generated based on your
- * config file. It also injects any utility classes registered by plugins.
+ * This injects Tailwind's utility classes and any utility classes registered
+ * by plugins.
  */
 @@tailwind utilities;
 
@@ -41,76 +38,78 @@ Use the `@@tailwind` directive to insert Tailwind's `preflight`, `utilities` and
  @@tailwind screens;
 ```
 
+---
+
 ## @@apply
 
-Use `@@apply` to mixin the contents of existing classes into your custom CSS.
+Use `@@apply` to inline any existing utility classes into your own custom CSS.
 
-This is extremely useful when you find a common utility pattern in your HTML that you'd like to extract to a new component.
+This is useful when you find a common utility pattern in your HTML that you'd like to extract to a new component.
 
-```less
+```css
 .btn {
-  @@apply .font-bold .py-2 .px-4 .rounded;
+  @@apply font-bold py-2 px-4 rounded;
 }
 .btn-blue {
-  @@apply .bg-blue .text-white;
+  @@apply bg-blue-500 text-white;
 }
 .btn-blue:hover {
-  @@apply .bg-blue-dark;
+  @@apply bg-blue-700;
 }
 ```
 
-Rules can listed on a single line or with multiple calls to `@@apply`:
+Rules can be listed on a single line or with multiple calls to `@@apply`:
 
-```less
+```css
 .btn {
-  @@apply .font-bold;
-  @@apply .py-2;
-  @@apply .px-4;
-  @@apply .rounded;
+  @@apply font-bold;
+  @@apply py-2;
+  @@apply px-4;
+  @@apply rounded;
 }
 ```
 
 You can mix `@@apply` declarations with normal CSS declarations too of course:
 
-```less
+```css
 .btn:hover {
-  @@apply .bg-blue-dark;
+  @@apply bg-blue-700;
   transform: translateY(-1px);
 }
 ```
 
-Any rules mixed in with `@@apply` will have `!important` **removed** by default to avoid specificity issues:
+Any rules inlined with `@@apply` will have `!important` **removed** by default to avoid specificity issues:
 
-```less
-// Input
+```css
+/* Input */
 .foo {
-  @@apply .bar;
-}
-
-.bar {
   color: blue !important;
 }
 
-// Output
+.bar {
+  @@apply foo;
+}
+
+/* Output */
 .foo {
+  color: blue !important;
+}
+
+.bar {
   color: blue;
-}
-
-.bar {
-  color: blue !important;
 }
 ```
 
 If you'd like to `@@apply` an existing class and make it `!important`, simply add `!important` to the end of the declaration:
 
 
-```less
-// Input
+```css
+/* Input */
 .btn {
-  @@apply .font-bold .py-2 .px-4 .rounded !important;
+  @@apply font-bold py-2 px-4 rounded !important;
 }
 
-// Output
+/* Output */
 .btn {
   font-weight: 700 !important;
   padding-top: .5rem !important;
@@ -121,81 +120,126 @@ If you'd like to `@@apply` an existing class and make it `!important`, simply ad
 }
 ```
 
-Note that `@@apply` **will not work** for mixing in hover, focus, or responsive variants of another utility. Instead, mix in the plain version of that utility into the appropriate pseudo-selector or a new media query:
+Note that `@@apply` **will not work** for inlining pseudo-class or responsive variants of another utility. Instead, apply the plain version of that utility into the appropriate pseudo-selector or a new media query:
 
-```less
-// Won't work:
+```css
+/* Won't work: */
 .btn {
-  @@apply .block .bg-red;
-  @@apply .md:inline-block;
-  @@apply .hover:bg-blue;
+  @@apply block bg-red-500;
+  @@apply hover:bg-blue-500;
+  @@apply md:inline-block;
 }
 
-// Do this instead:
+/* Do this instead: */
 .btn {
-  @@apply .block .bg-red;
+  @@apply block bg-red-500;
 }
 .btn:hover {
-  @@apply .bg-blue;
+  @@apply bg-blue-500;
 }
 @@screen md {
   .btn {
-    @@apply .inline-block;
+    @@apply inline-block;
   }
 }
 ```
 
-## @variants
+If you've [configured a prefix](/docs/configuration#prefix) for your utilities, you can optionally omit the prefix when using `@@apply` if you prefer a terser syntax:
+
+```css
+/* Both of these will work */
+.btn {
+  @@apply tw-font-bold tw-py-2 tw-px-4 tw-rounded;
+}
+.btn {
+  @@apply font-bold py-2 px-4 rounded;
+}
+```
+
+---
+
+## @@variants
 
 You can generate `responsive`, `hover`, `focus`, `active`, and `group-hover` versions of your own utilities by wrapping their definitions in the `@variants` directive
 
-```less
-@@variants hover, focus {
-  .banana {
-    color: yellow;
+```css
+@@variants focus, hover {
+  .rotate-0 {
+    transform: rotate(0deg);
   }
-  .chocolate {
-    color: brown;
+  .rotate-90 {
+    transform: rotate(90deg);
   }
 }
 ```
 
 This will generate the following CSS:
 
-```less
+```css
+.rotate-0 {
+  transform: rotate(0deg);
+}
+.rotate-90 {
+  transform: rotate(90deg);
+}
+
+.focus\:rotate-0:focus {
+  transform: rotate(0deg);
+}
+.focus\:rotate-90:focus {
+  transform: rotate(90deg);
+}
+
+.hover\:rotate-0:hover {
+  transform: rotate(0deg);
+}
+.hover\:rotate-90:hover {
+  transform: rotate(90deg);
+}
+```
+
+It's important to note that **variants are generated in the order you specify them**.
+
+So if you want focus utilities to take priority over hover utilities for example, make sure focus comes *after* hover in the list:
+
+```css
+/* Input */
+@@variants hover, focus {
+  .banana {
+    color: yellow;
+  }
+}
+
+/* Output */
 .banana {
   color: yellow;
-}
-.chocolate {
-  color: brown;
-}
-.focus\:banana:focus {
-  color: yellow;
-}
-.focus\:chocolate:focus {
-  color: brown;
 }
 .hover\:banana:hover {
   color: yellow;
 }
-.hover\:chocolate:hover {
-  color: brown;
+.focus\:banana:focus {
+  color: yellow;
 }
 ```
 
-The `@variants` at-rule supports all of the values that are supported in the `modules` section of your config file:
+The `@variants` at-rule supports all of the values that are supported in the `variants` section of your config file:
 
 - `responsive`
 - `hover`
 - `focus`
 - `active`
 - `group-hover`
+- `focus-within`
+
+...as well as any [custom variants](/docs/plugins#adding-variants) added through plugins.
+
+---
 
 ## @@responsive
 
-You can generate responsive versions of your own classes by wrapping their definitions in the `@responsive` directive:
+You can generate responsive variants of your own classes by wrapping their definitions in the `@responsive` directive:
 
-```less
+```css
 @@responsive {
   .bg-gradient-brand {
     background-image: linear-gradient(blue, green);
@@ -205,82 +249,100 @@ You can generate responsive versions of your own classes by wrapping their defin
 
 Using the default breakpoints, this would generate these classes:
 
-```less
+```css
 .bg-gradient-brand {
   background-image: linear-gradient(blue, green);
 }
 
-// ...
+/* ... */
 
-@@media (min-width: 576px) {
+@media (min-width: 640px) {
   .sm\:bg-gradient-brand {
     background-image: linear-gradient(blue, green);
   }
-  // ...
+  /* ... */
 }
 
-@@media (min-width: 768px) {
+@media  (min-width: 768px) {
   .md\:bg-gradient-brand {
     background-image: linear-gradient(blue, green);
   }
-  // ...
+  /* ... */
 }
 
-@@media (min-width: 992px) {
+@media (min-width: 1024px) {
   .lg\:bg-gradient-brand {
     background-image: linear-gradient(blue, green);
   }
-  // ...
+  /* ... */
 }
 
-@@media (min-width: 1200px) {
+@media (min-width: 1280px) {
   .xl\:bg-gradient-brand {
     background-image: linear-gradient(blue, green);
   }
-  // ...
+  /* ... */
 }
 ```
 
-The responsive versions will be added to Tailwind's existing media queries **at the end of your stylesheet.** This makes sure that classes with a responsive prefix always defeat non-responsive classes that are targeting the same CSS property.
+The responsive variants will be added to Tailwind's existing media queries at the end of your stylesheet. This makes sure that classes with a responsive prefix always defeat non-responsive classes that are targeting the same CSS property.
+
+---
 
 ## @@screen
 
 The `@@screen` directive allows you to create media queries that reference your breakpoints by name instead of duplicating their values in your own CSS.
 
-For example, say you have a `sm` breakpoint at `576px` and you need to write some custom CSS that references this breakpoint.
+For example, say you have a `sm` breakpoint at `640px` and you need to write some custom CSS that references this breakpoint.
 
 Instead of writing a raw media query that duplicates that value like this:
 
-```less
-{{ '@media (min-width: 576px) {' }}
+```css
+{{ '@media (min-width: 640px) {' }}
   /* ... */
 }
 ```
 
 ...you can use the `@@screen` directive and reference the breakpoint by name:
 
-```less
+```css
 @@screen sm {
   /* ... */
 }
 ```
 
-## config()
+---
 
-While it's recommended to use the `@@apply` directive to compose custom CSS out of existing utility classes whenever possible, sometimes you need direct access to your Tailwind config values.
+## theme()
 
-Use the `config()` function to access your Tailwind config values using dot notation:
+Use the `theme()` function to access your Tailwind config values using dot notation.
 
-```less
-// Source
-.error {
-  font-size: config('textSizes.xs');
-  color: config('colors.red-darker');
+This can be a useful alternative to `@@apply` when you want to reference a value from your theme configuration for only part of a declaration:
+
+```css
+.content-area {
+  height: calc(100vh - theme('spacing.12'));
 }
+```
 
-// Output
-.error {
-  font-size: .75rem;
-  color: #a61611;
+Since Tailwind uses the [nested object syntax](/docs/colors#nested-object-syntax) to define its default color palette, make sure to use dot notation to access the nested colors.
+
+@component('_partials.tip-bad')
+Don't use the dash syntax when accessing nested color values
+@endcomponent
+
+```css
+.btn-blue {
+  background-color: theme('colors.blue-500');
+}
+```
+
+@component('_partials.tip-good')
+Use dot notation to access nested color values
+@endcomponent
+
+```css
+.btn-blue {
+  background-color: theme('colors.blue.500');
 }
 ```

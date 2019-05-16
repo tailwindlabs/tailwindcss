@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'baseUrl' => 'https://tailwindcss.com',
+    'baseUrl' => '',
     'production' => true,
 ];

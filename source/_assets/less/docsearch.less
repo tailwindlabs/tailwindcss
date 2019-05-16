@@ -9,7 +9,7 @@
     }
 
     .algolia-docsearch-suggestion--highlight {
-      color: config('colors.tailwind-teal');
+      color: theme('colors.teal.500');
       background: rgba(68, 168, 179, .1);
     }
   }
@@ -20,7 +20,7 @@
     min-width: 0 !important;
   }
 
-  @media (max-width: config('screens.md')) {
+  @media (max-width: theme('screens.md')) {
 
     .algolia-docsearch-suggestion--subcategory-column {
       display: none !important;

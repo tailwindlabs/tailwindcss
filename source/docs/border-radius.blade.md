@@ -244,9 +244,9 @@ features:
 Use the `.rounded-sm`, `.rounded`, or `.rounded-lg` utilities to apply different border radius sizes to an element.
 
 @component('_partials.code-sample', ['class' => 'flex justify-around text-sm'])
-<div class="bg-grey-light mr-3 p-4 rounded-sm">.rounded-sm</div>
-<div class="bg-grey-light mr-3 p-4 rounded">.rounded</div>
-<div class="bg-grey-light p-4 rounded-lg">.rounded-lg</div>
+<div class="bg-gray-400 mr-3 p-4 rounded-sm">.rounded-sm</div>
+<div class="bg-gray-400 mr-3 p-4 rounded">.rounded</div>
+<div class="bg-gray-400 p-4 rounded-lg">.rounded-lg</div>
 @slot('code')
 <div class="rounded-sm"></div>
 <div class="rounded"></div>
@@ -260,8 +260,8 @@ Use the `.rounded-sm`, `.rounded`, or `.rounded-lg` utilities to apply different
 Use the `.rounded-full` utility to create pills and circles.
 
 @component('_partials.code-sample', ['class' => 'flex items-center justify-around text-sm'])
-<div class="bg-grey-light mr-3 py-2 px-4 rounded-full">Pill shape</div>
-<div class="bg-grey-light h-16 w-16 rounded-full flex items-center justify-center">Circle</div>
+<div class="bg-gray-400 mr-3 py-2 px-4 rounded-full">Pill shape</div>
+<div class="bg-gray-400 h-16 w-16 rounded-full flex items-center justify-center">Circle</div>
 @slot('code')
 <div class="rounded-full py-2 px-4">Pill shape</div>
 <div class="rounded-full h-16 w-16 flex items-center justify-center">Circle</div>
@@ -275,7 +275,7 @@ Use `.rounded-none` to remove an existing border radius from an element.
 This is most commonly used to remove a border radius that was applied at a smaller breakpoint.
 
 @component('_partials.code-sample', ['class' => 'flex justify-around text-sm py-8'])
-<div class="p-4 rounded-none bg-grey-light">.rounded-none</div>
+<div class="p-4 rounded-none bg-gray-400">.rounded-none</div>
 @slot('code')
 <div class="rounded-none"></div>
 @endslot
@@ -286,10 +286,10 @@ This is most commonly used to remove a border radius that was applied at a small
 Use `.rounded-{t|r|b|l}{-size?}` to only round one side an element.
 
 @component('_partials.code-sample', ['class' => 'flex justify-around text-sm'])
-<div class="bg-grey-light mr-3 p-4 rounded-t-lg">.rounded-t-lg</div>
-<div class="bg-grey-light mr-3 p-4 rounded-r-lg">.rounded-r-lg</div>
-<div class="bg-grey-light mr-3 p-4 rounded-b-lg">.rounded-b-lg</div>
-<div class="bg-grey-light p-4 rounded-l-lg">.rounded-l-lg</div>
+<div class="bg-gray-400 mr-3 p-4 rounded-t-lg">.rounded-t-lg</div>
+<div class="bg-gray-400 mr-3 p-4 rounded-r-lg">.rounded-r-lg</div>
+<div class="bg-gray-400 mr-3 p-4 rounded-b-lg">.rounded-b-lg</div>
+<div class="bg-gray-400 p-4 rounded-l-lg">.rounded-l-lg</div>
 @slot('code')
 <div class="rounded-t-lg"></div>
 <div class="rounded-r-lg"></div>
@@ -303,10 +303,10 @@ Use `.rounded-{t|r|b|l}{-size?}` to only round one side an element.
 Use `.rounded-{tl|tr|br|bl}{-size?}` to only round one corner an element.
 
 @component('_partials.code-sample', ['class' => 'flex justify-around text-sm'])
-<div class="bg-grey-light mr-3 p-4 rounded-tl-lg">.rounded-tl-lg</div>
-<div class="bg-grey-light mr-3 p-4 rounded-tr-lg">.rounded-tr-lg</div>
-<div class="bg-grey-light mr-3 p-4 rounded-br-lg">.rounded-br-lg</div>
-<div class="bg-grey-light p-4 rounded-bl-lg">.rounded-bl-lg</div>
+<div class="bg-gray-400 mr-3 p-4 rounded-tl-lg">.rounded-tl-lg</div>
+<div class="bg-gray-400 mr-3 p-4 rounded-tr-lg">.rounded-tr-lg</div>
+<div class="bg-gray-400 mr-3 p-4 rounded-br-lg">.rounded-br-lg</div>
+<div class="bg-gray-400 p-4 rounded-bl-lg">.rounded-bl-lg</div>
 @slot('code')
 <div class="rounded-tl-lg"></div>
 <div class="rounded-tr-lg"></div>
@@ -324,27 +324,27 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex justify-center">
-  <div class="bg-grey w-12 h-12 rounded"></div>
+  <div class="bg-gray-500 w-12 h-12 rounded"></div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex justify-center">
-  <div class="bg-grey w-12 h-12 rounded-t"></div>
+  <div class="bg-gray-500 w-12 h-12 rounded-t"></div>
 </div>
 @endslot
 @slot('md')
 <div class="flex justify-center">
-  <div class="bg-grey w-12 h-12 rounded-b-lg"></div>
+  <div class="bg-gray-500 w-12 h-12 rounded-b-lg"></div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex justify-center">
-  <div class="bg-grey w-12 h-12 rounded-none"></div>
+  <div class="bg-gray-500 w-12 h-12 rounded-none"></div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex justify-center">
-  <div class="bg-grey w-12 h-12 rounded-r"></div>
+  <div class="bg-gray-500 w-12 h-12 rounded-r"></div>
 </div>
 @endslot
 @slot('code')
@@ -356,9 +356,11 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-By default Tailwind provides five border radius size utilities. You can change, add, or remove these by editing the `borderRadius` section of your Tailwind config.
+### Border Radiuses
 
-@component('_partials.customized-config', ['key' => 'borderRadius'])
+By default Tailwind provides five border radius size utilities. You can change, add, or remove these by editing the `theme.borderRadius` section of your Tailwind config.
+
+@component('_partials.customized-config', ['key' => 'theme.borderRadius'])
   'none': '0',
 - 'sm': '.125rem',
 - default: '.25rem',

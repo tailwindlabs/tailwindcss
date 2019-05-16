@@ -1,8 +1,8 @@
-<div class="rounded overflow-hidden border border-grey-light mb-8 bg-white">
-  <div class="border-b border-grey-light p-4 {{ $class ?? '' }}">
+<div class="relative overflow-hidden mb-8">
+  <div v-pre class="bg-white rounded-t-lg overflow-hidden border-t border-l border-r border-gray-400 p-4 {{ $class ?? '' }}">
     {{ $slot }}
   </div>
-  <div class="p-4 bg-grey-lightest">
-    <pre class="language-{{ $lang ?? 'html' }}" style="margin: 0; padding: 0;"><code>{{ e($code ?? $slot) }}</code></pre>
+  <div v-pre class="rounded-b-lg bg-gray-800">
+    <pre class="scrollbar-none m-0 p-0 language-{{ $lang ?? 'html' }}"><code class="inline-block p-4 scrolling-touch">{{ e($code ?? $slot) }}</code></pre>
   </div>
 </div>

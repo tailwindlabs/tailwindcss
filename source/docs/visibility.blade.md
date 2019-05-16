@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Visibility"
-description: "Utilities for controlling the visible of an element."
+description: "Utilities for controlling the visibility of an element."
 features:
   responsive: true
   customizable: false
@@ -24,20 +24,38 @@ features:
   ]
 ])
 
-## Visible <span class="ml-2 font-semibold text-grey-dark text-sm uppercase tracking-wide">Default</span>
+## Visible
 
-Use `.visible` to make an element visible. This will typically be used as a reset when using the `.invisible` utility.
+Use `.visible` to make an element visible. This is mostly useful for undoing the `.invisible` utility at different screen sizes.
 
 @component('_partials.code-sample', ['class' => 'flex justify-center'])
-<div class="visible bg-grey-light w-24 h-24 rounded-full"></div>
+<div class="bg-gray-400 w-32 h-12"></div>
+<div class="visible bg-gray-600 w-32 h-12"></div>
+<div class="bg-gray-400 w-32 h-12"></div>
+@slot('code')
+<div class="flex justify-center">
+  <div class="bg-gray-400"></div>
+  <div class="bg-gray-600 visible"></div>
+  <div class="bg-gray-400"></div>
+</div>
+@endslot
 @endcomponent
 
 ## Invisible
 
-Use `.invisible` to hide an element, but still maintain its space.
+Use `.invisible` to hide an element, but still maintain its place in the DOM, affecting the layout of other elements.
 
 @component('_partials.code-sample', ['class' => 'flex justify-center'])
-<div class="invisible bg-grey-light w-24 h-24 rounded-full"></div>
+<div class="bg-gray-400 w-32 h-12"></div>
+<div class="invisible bg-gray-600 w-32 h-12"></div>
+<div class="bg-gray-400 w-32 h-12"></div>
+@slot('code')
+<div class="flex justify-center">
+  <div class="bg-gray-400"></div>
+  <div class="bg-gray-600 invisible"></div>
+  <div class="bg-gray-400"></div>
+</div>
+@endslot
 @endcomponent
 
 ## Responsive
@@ -49,31 +67,45 @@ For more information about Tailwind's responsive design features, check out the 
 @component('_partials.responsive-code-sample')
 @slot('none')
 <div class="flex justify-center">
-  <div class="visible bg-grey-light w-24 h-24 rounded-full"></div>
+  <div class="bg-gray-400 w-32 h-12"></div>
+  <div class="visible bg-gray-600 w-32 h-12"></div>
+  <div class="bg-gray-400 w-32 h-12"></div>
 </div>
 @endslot
 @slot('sm')
 <div class="flex justify-center">
-  <div class="invisible bg-grey-light w-24 h-24 rounded-full"></div>
+  <div class="bg-gray-400 w-32 h-12"></div>
+  <div class="invisible bg-gray-600 w-32 h-12"></div>
+  <div class="bg-gray-400 w-32 h-12"></div>
 </div>
 @endslot
 @slot('md')
 <div class="flex justify-center">
-  <div class="visible bg-grey-light w-24 h-24 rounded-full"></div>
+  <div class="bg-gray-400 w-32 h-12"></div>
+  <div class="visible bg-gray-600 w-32 h-12"></div>
+  <div class="bg-gray-400 w-32 h-12"></div>
 </div>
 @endslot
 @slot('lg')
 <div class="flex justify-center">
-  <div class="invisible bg-grey-light w-24 h-24 rounded-full"></div>
+  <div class="bg-gray-400 w-32 h-12"></div>
+  <div class="invisible bg-gray-600 w-32 h-12"></div>
+  <div class="bg-gray-400 w-32 h-12"></div>
 </div>
 @endslot
 @slot('xl')
 <div class="flex justify-center">
-  <div class="visible bg-grey-light w-24 h-24 rounded-full"></div>
+  <div class="bg-gray-400 w-32 h-12"></div>
+  <div class="visible bg-gray-600 w-32 h-12"></div>
+  <div class="bg-gray-400 w-32 h-12"></div>
 </div>
 @endslot
 @slot('code')
-<div class="none:visible sm:invisible md:visible lg:invisible xl:visible ..."></div>
+<div class="flex justify-center">
+  <div class="bg-gray-400"></div>
+  <div class="bg-gray-600 none:visible sm:invisible md:visible lg:invisible xl:visible"></div>
+  <div class="bg-gray-400"></div>
+</div>
 @endslot
 @endcomponent
 
