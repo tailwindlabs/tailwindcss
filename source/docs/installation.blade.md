@@ -305,7 +305,7 @@ To get the most out of Tailwind, you really should [install it via npm](#step-1-
 To pull in Tailwind for quick demos or just giving the framework a spin, grab the latest default configuration build via CDN:
 
 ```html
-<link href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 ```
 
 Note that while the CDN build is large *(27kb compressed, 348kb raw)*, **it's not representative of the sizes you see when including Tailwind as part of your build process**.
