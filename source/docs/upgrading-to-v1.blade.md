@@ -439,7 +439,7 @@ If you had already removed the container plugin because you don't want those cla
   }
 ```
 
-If you are taking advantage the `center` or `padding` options exposed by the `container` plugin, you should specify those options under `theme.container` instead of as direct arguments to the plugin.
+If you are taking advantage of the `center` or `padding` options exposed by the `container` plugin, you should specify those options under `theme.container` instead of as direct arguments to the plugin.
 
 ```diff
   let defaultConfig = require('tailwindcss/defaultConfig')()
