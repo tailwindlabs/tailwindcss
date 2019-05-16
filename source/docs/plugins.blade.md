@@ -28,6 +28,7 @@ Plugin functions receive a single object argument that can be [destructured](htt
 - `addVariant()`, for registering custom variants
 - `e()`, for escaping strings meant to be used in class names
 - `prefix()`, for manually applying the user's configured prefix to parts of a selector
+- `theme()`, for looking up values in the user's theme configuration
 - `variants()`, for looking up values in the user's variants configuration
 - `config()`, for looking up values in the user's Tailwind configuration
 
