@@ -3,15 +3,15 @@
 @section('meta')
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@tailwindcss">
-<meta name="twitter:title" content="{{ $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS - A Utility-First CSS Framework for Rapid UI Development' }}">
+<meta name="twitter:title" content="{{ $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS - A utility-first CSS framework for rapidly building custom designs' }}">
 <meta name="twitter:description" content="{{ $page->description ? $page->description : 'Documentation for the Tailwind CSS framework.' }}">
-<meta name="twitter:image" content="https://tailwindcss.com/img/tailwind-square.png">
+<meta name="twitter:image" content="https://tailwindcss.com/img/tailwind-twitter-square.png">
 <meta name="twitter:creator" content="@tailwindcss">
 <meta property="og:url" content="https://tailwindcss.com/" />
 <meta property="og:type" content="article" />
-<meta property="og:title" content="{{ $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS - A Utility-First CSS Framework for Rapid UI Development' }}" />
+<meta property="og:title" content="{{ $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS - A utility-first CSS framework for rapidly building custom designs' }}" />
 <meta property="og:description" content="{{ $page->description ? $page->description : 'Documentation for the Tailwind CSS framework.' }}" />
-<meta property="og:image" content="https://tailwindcss.com/img/twitter-card.png" />
+<meta property="og:image" content="https://tailwindcss.com/img/twitter-large-card.png" />
 @endsection
 
 @push('scripts')
