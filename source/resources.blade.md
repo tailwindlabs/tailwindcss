@@ -5,7 +5,7 @@ description: "Useful resources and assets for Tailwind users."
 titleBorder: true
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid ratione, quisquam quaerat repellat consequuntur libero? Quas, et, quisquam? Illo necessitatibus expedita neque, maxime ea unde nemo accusantium a, consequatur aliquam?
+We think Tailwind is an amazing CSS framework, but you need more than just a CSS framework to produce visually awesome work. Here are some resources that can help you take your projects to the next level.
 
 ## Learning design
 
