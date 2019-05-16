@@ -476,9 +476,9 @@ prefix('.btn-blue .w-1\/4 > h1.text-xl + a .bar')
 
 ## Referencing the user's config
 
-The `config` function allows you to ask for a value from the user's Tailwind configuration using dot notation, providing a default value if that path doesn't exist.
+The `config`, `theme`, and `variants` functions allow you to ask for a value from the user's Tailwind configuration using dot notation, providing a default value if that path doesn't exist.
 
-For example, this simplified version of the built-in [container](/docs/container) plugin uses the config function to get the user's configured breakpoints:
+For example, this simplified version of the built-in [container](/docs/container) plugin uses the `theme` function to get the user's configured breakpoints:
 
 ```js
 // tailwind.config.js
@@ -486,8 +486,8 @@ const _ = require('lodash')
 
 module.exports = {
   plugins: [
-    function({ addComponents, config }) {
-      const screens = config('theme.screens', {})
+    function({ addComponents, theme }) {
+      const screens = theme('screens', {})
 
       const mediaQueries = _.map(screens, width => {
         return {
@@ -506,6 +506,14 @@ module.exports = {
     }
   ]
 }
+```
+
+Note that the `theme` function is really just a shortcut for using the `config` function to access the theme section of the user's config:
+
+```js
+// These are equivalent
+config('theme.screens')
+theme('screens')
 ```
 
 If you'd like to reference the user's `variants` configuration, it's recommended that you use the `variants()` function instead of the config function.
@@ -550,7 +558,7 @@ module.exports = {
 
 It often makes sense for a plugin to expose its own options that the user can configure to customize the plugin's behavior.
 
-The best way to accomplish this is to claim your own key in the user's `theme` and `variants` configuration and ask them to provide any options there so you can access them with the `config()` function.
+The best way to accomplish this is to claim your own key in the user's `theme` and `variants` configuration and ask them to provide any options there so you can access them with the `theme` and `variants` functions.
 
 For example, here's a plugin *(extracted to its own module)* for creating simple gradient utilities that accepts the gradients and variants to generate as options:
 
@@ -558,8 +566,8 @@ For example, here's a plugin *(extracted to its own module)* for creating simple
 // ./plugins/gradients.js
 const _ = require('lodash')
 
-module.exports = function({ addUtilities, e, config, variants }) {
-  const gradients = config('theme.gradients', {})
+module.exports = function({ addUtilities, e, theme, variants }) {
+  const gradients = theme('gradients', {})
   const gradientVariants = variants('gradients', [])
 
   const utilities = _.map(gradients, ([start, end], name) => ({
