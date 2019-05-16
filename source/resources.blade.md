@@ -59,7 +59,7 @@ They're easy to customize and perfect for landing pages, empty states, and more.
 
 [Zondicons](http://www.zondicons.com/) is another free SVG icon set by [Steve Schoger](https://twitter.com/steveschoger) drawn in a different style.
 
-[Get Zondicons &rarr;](https://github.com/sschoger/heroicons-ui)
+[Get Zondicons &rarr;](http://www.zondicons.com/)
 
 ### Entypo
 
