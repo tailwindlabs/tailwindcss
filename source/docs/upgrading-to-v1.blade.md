@@ -36,7 +36,7 @@ These changes affect all users, whether you are using Tailwind with PostCSS and 
 Install the latest version of Tailwind:
 
 ```bash
-npm install tailwindcss --save-dev
+npm install tailwindcss@1.0.0 --save-dev
 ```
 
 Or using Yarn:
