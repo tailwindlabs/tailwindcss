@@ -24,12 +24,12 @@
 
 <div>
   <div id="header">
-    <div class="bg-gray-100 pt-24 lg:pt-0">
+    <div class="bg-gray-100">
 
       {{-- Top nav --}}
-      <div class="fixed z-100 bg-gray-100 inset-x-0 top-0 border-b-2 border-gray-200 lg:border-b-0 lg:static flex items-center">
+      <div class="flex items-center">
         <div class="w-full max-w-screen-xl relative mx-auto px-6">
-          <div class="lg:border-b-2 lg:border-gray-200 h-24 flex flex-col justify-center">
+          <div class="border-b-2 border-gray-200 h-24 flex flex-col justify-center">
             <div class="flex items-center -mx-6">
 
               {{-- Logo section --}}
@@ -139,8 +139,8 @@
 <div class="w-full max-w-screen-xl mx-auto px-6">
   <div class="lg:flex -mx-6">
     {{-- Side nav --}}
-    <div id="sidebar" class="hidden fixed inset-0 h-full pt-24 bg-gray-100 z-90 w-full border-b -mb-16 lg:-mb-0 lg:static lg:bg-transparent lg:overflow-y-visible lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5">
-      <div id="navWrapper" class="h-full overflow-y-auto scrolling-touch lg:h-auto lg:block lg:relative lg:sticky lg:top-0 bg-gray-100 lg:bg-transparent overflow-hidden">
+    <div id="sidebar" class="hidden fixed inset-0 overflow-y-auto scrolling-touch bg-gray-100 z-90 top-24 w-full border-b -mb-16 lg:-mb-0 lg:static lg:bg-transparent lg:overflow-y-visible lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5">
+      <div id="navWrapper" class="lg:block lg:relative lg:sticky lg:top-0 bg-gray-100 lg:bg-transparent overflow-hidden">
         <div id="navGradient" class="hidden lg:block h-16 pointer-events-none absolute inset-x-0 z-10" style="background-image: linear-gradient(rgba(255,255,255,1), rgba(255,255,255,0));"></div>
         <nav id="nav" class="px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8 sticky?lg:h-screen">
           <div class="mb-10">
