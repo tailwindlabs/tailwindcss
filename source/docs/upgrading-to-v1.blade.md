@@ -36,13 +36,13 @@ These changes affect all users, whether you are using Tailwind with PostCSS and 
 Install the latest version of Tailwind:
 
 ```bash
-npm install tailwindcss@1.0.0 --save-dev
+npm install tailwindcss@^1.0 --save-dev
 ```
 
 Or using Yarn:
 
 ```bash
-yarn add -D tailwindcss
+yarn add -D tailwindcss@^1.0
 ```
 
 <h3 class="no-toc">2. Update your config file</h3>
