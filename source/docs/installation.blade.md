@@ -255,7 +255,7 @@ exports.config = {
 
 Add `tailwindcss` to the list of plugins you pass to [ember-cli-postcss](https://github.com/jeffjewiss/ember-cli-postcss):
 
-```
+```js
 // ember-cli-build.js 
 'use strict';
 
