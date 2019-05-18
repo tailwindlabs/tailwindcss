@@ -1104,12 +1104,12 @@ For grays (note that `grey` has changed to `gray`):
 | grey-light | gray-400 |
 | grey-lighter | gray-200 |
 | grey-lightest | gray-100 |
+| white | white |
 
 For other colors:
 
 | Old | New |
 | --- | --- |
-| white | white |
 | {color}-darkest | {color}-900 |
 | {color}-darker | {color}-800 |
 | {color}-dark | {color}-600 |
