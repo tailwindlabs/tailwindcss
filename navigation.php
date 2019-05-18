@@ -140,22 +140,10 @@ return [
     ],
     'Community' => [
         'Links' => [
-            'Discord' => [
-                'url' => '/discord',
-                'external' => true,
-            ],
-            'Forum' => [
-                'url' => '/forum',
-                'external' => true,
-            ],
-            'GitHub' => [
-                'url' => 'https://github.com/tailwindcss/tailwindcss',
-                'external' => true,
-            ],
-            'Twitter' => [
-                'url' => 'https://twitter.com/tailwindcss',
-                'external' => true,
-            ],
+            'Discord' => '#discord',
+            'Forum' => '#forum',
+            'GitHub' => '#github',
+            'Twitter' => '#twitter',
         ]
     ],
 ];
