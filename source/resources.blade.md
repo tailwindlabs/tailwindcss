@@ -3,6 +3,7 @@ extends: _layouts.documentation
 title: "Resources & Assets"
 description: "Useful resources and assets for Tailwind users."
 titleBorder: true
+hideTableOfContents: true
 ---
 
 We think Tailwind is an amazing CSS framework, but you need more than just a CSS framework to produce visually awesome work.

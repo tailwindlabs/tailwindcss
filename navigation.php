@@ -131,7 +131,7 @@ return [
         ],
     ],
     'Resources' => [
-        'Topics' => [
+        'On this page' => [
             'Learning design' => '#learning-design',
             'Images and illustrations' => '#images-and-illustrations',
             'Icons' => '#icons',
@@ -139,7 +139,7 @@ return [
         ]
     ],
     'Community' => [
-        'Links' => [
+        'On this page' => [
             'Discord' => '#discord',
             'Forum' => '#forum',
             'GitHub' => '#github',
