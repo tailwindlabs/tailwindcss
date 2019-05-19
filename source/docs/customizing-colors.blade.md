@@ -198,7 +198,7 @@ You could also use [destructuring](https://developer.mozilla.org/en-US/docs/Web/
 
 ```js
 // tailwind.config.js
-const { teal, orange, pink, ...colors } = require('tailwindcss/defaultTheme')
+const { colors: { teal, orange, pink, ...colors } } = require('tailwindcss/defaultTheme')
 
 module.exports = {
   theme: {
