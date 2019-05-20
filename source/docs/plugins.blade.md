@@ -390,7 +390,7 @@ module.exports = {
     }
   },
   plugins: [
-    function({ addUtilities, config }) {
+    function({ addUtilities, config, e }) {
       const rotateUtilities = _.map(config('theme.rotate'), (value, key) => {
         return {
           [`.${e(`rotate-${key}`)}`]: {
