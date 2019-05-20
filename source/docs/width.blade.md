@@ -144,23 +144,26 @@ For more information about Tailwind's responsive design features, check out the 
 
 By default, Tailwind's width scale is a combination of the [default spacing scale](/docs/customizing-spacing#default-spacing-scale) as well as some additional values specific to widths.
 
-You can customize the spacing scale for padding, margin, width, and height all at once in the `theme.spacing` section of your `tailwind.config.js` file:
+You can customize the spacing scale for padding, margin, width, and height all at once in the `theme.spacing` or `theme.extend.spacing` sections of your `tailwind.config.js` file:
 
-@component('_partials.customized-config', ['key' => 'theme.spacing'])
-+ sm: '8px',
-+ md: '16px',
-+ lg: '24px',
-+ xl: '48px',
+@component('_partials.customized-config', ['key' => 'theme.extend.spacing'])
++ '72': '18rem',
++ '84': '21rem',
++ '96': '24rem',
 @endcomponent
 
 To customize width separately, use the `theme.width` section of your `tailwind.config.js` file.
 
-@component('_partials.customized-config', ['key' => 'theme.width'])
-+ sm: '8px',
-+ md: '16px',
-+ lg: '24px',
-+ xl: '48px',
+@component('_partials.customized-config', ['key' => 'theme.extend.width'])
++ '1/7': '14.2857143%',
++ '2/7': '28.5714286%',
++ '3/7': '42.8571429%',
++ '4/7': '57.1428571%',
++ '5/7': '71.4285714%',
++ '6/7': '85.7142857%',
 @endcomponent
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
 
 @include('_partials.variants-and-disabling', [
     'utility' => [
