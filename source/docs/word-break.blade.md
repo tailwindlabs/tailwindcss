@@ -18,7 +18,7 @@ description: "Utilities for controlling word breaks in an element."
     ],
     [
       '.break-all',
-      'word-break: normal;',
+      'word-break: break-all;',
       'Break whenever necessary, without trying to preserve whole words.',
     ],
     [
