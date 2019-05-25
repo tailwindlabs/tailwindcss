@@ -24,9 +24,15 @@ module.exports = {
 }
 ```
 
-Each property is a core plugin name pointing to an array of variants to generate for that plugin.
+Each property is a core plugin name pointing to an array of variants to generate for that plugin. The following variants are supported out of the box:
+- `'responsive'`
+- `'group-hover'`
+- `'focus-within'`
+- `'hover'`
+- `'focus'`
+- `'active'`
 
-It's important to note that **these values are not merged with the defaults**, so if you'd like to enable another variant for a utility, you need to repeat the default variants for that utility as well.
+It's important to note that **your array of variants is not merged with the defaults**, so if you'd like to enable another variant for a utility, you need to repeat the default variants for that utility as well.
 
 @component('_partials.tip-bad')
 Don't list only the extra variants you want to enable
@@ -255,6 +261,21 @@ module.exports = {
 ```
 
 Learn more about creating custom variants in the [variant plugin documentation](/docs/plugins#adding-variants).
+
+---
+
+## Enabling all variants
+
+To specify a global set of variants that should be applied to all utilities, you can assign an array of variants directly to the `variants` property:
+
+```js
+// tailwind.config.js
+module.exports  = {
+  variants: ['responsive', 'group-hover', 'focus-within', 'hover', 'focus', 'active']
+}
+```
+
+Note that enabling all variants for all plugins will result in much bigger file sizes. Before you do this, be sure to read our guide on [controlling file size](/docs/controlling-file-size/).
 
 ---
 
