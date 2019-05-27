@@ -10,6 +10,6 @@ export default function parseObjectStyles(styles) {
 
   return _.flatMap(
     styles,
-    style => postcss([postcssNested]).process(style, { parser: postcssJs }).root.nodes
+    style => postcss([postcssNested({ bubble: ['screen'] })]).process(style, { parser: postcssJs }).root.nodes
   )
 }
