@@ -8,8 +8,13 @@ export default function parseObjectStyles(styles) {
     return parseObjectStyles([styles])
   }
 
-  return _.flatMap(
-    styles,
-    style => postcss([postcssNested({ bubble: ['screen'] })]).process(style, { parser: postcssJs }).root.nodes
-  )
+  return _.flatMap(styles, style => {
+    return postcss([
+      postcssNested({
+        bubble: ['screen'],
+      }),
+    ]).process(style, {
+      parser: postcssJs,
+    }).root.nodes
+  })
 }

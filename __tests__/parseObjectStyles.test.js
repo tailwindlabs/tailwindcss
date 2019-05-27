@@ -123,6 +123,32 @@ test('it parses nested media queries', () => {
   `)
 })
 
+test('it bubbles nested screen rules', () => {
+  const result = parseObjectStyles({
+    '.foo': {
+      backgroundColor: 'red',
+      color: 'white',
+      padding: '1rem',
+      '@screen sm': {
+        backgroundColor: 'orange',
+      },
+    },
+  })
+
+  expect(css(result)).toMatchCss(`
+    .foo {
+      background-color: red;
+      color: white;
+      padding: 1rem;
+    }
+    @screen sm {
+      .foo {
+        background-color: orange;
+      }
+    }
+  `)
+})
+
 test('it parses pseudo-selectors in nested media queries', () => {
   const result = parseObjectStyles({
     '.foo': {
