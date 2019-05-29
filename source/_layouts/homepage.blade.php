@@ -155,7 +155,7 @@
         <nav id="nav" class="px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8 sticky?lg:h-screen">
           <div class="relative -mx-2 w-24 mb-8 lg:hidden">
             <select data-version-switcher class="appearance-none block bg-transparent pl-2 pr-8 py-1 text-gray-500 font-medium text-base focus:outline-none focus:text-gray-800">
-              <option value="v1">v1.0.1</option>
+              <option value="v1">v{{ $page->version }}</option>
               <option value="v0">v0.7.4</option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
