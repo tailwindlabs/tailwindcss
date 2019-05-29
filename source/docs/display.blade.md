@@ -135,7 +135,7 @@ Use the `.table`, `.table-row`, and `.table-cell` to create elements that behave
 
 ## Hidden
 
-Use `.hidden` to set an element to `display: none` and remove it from the page layout (compare with `.invisible` from the [Visibility](/docs/visibility#invisible) documentation).
+Use `.hidden` to set an element to `display: none` and remove it from the page layout (compare with `.invisible` from the [visibility](/docs/visibility#invisible) documentation).
 
 @component('_partials.code-sample')
 <div class="flex bg-gray-200">
