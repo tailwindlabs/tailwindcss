@@ -43,7 +43,7 @@ Use `.visible` to make an element visible. This is mostly useful for undoing the
 
 ## Invisible
 
-Use `.invisible` to hide an element, but still maintain its place in the DOM, affecting the layout of other elements.
+Use `.invisible` to hide an element, but still maintain its place in the DOM, affecting the layout of other elements (compare with `.hidden` from the [Display](/docs/display#hidden) documentation).
 
 @component('_partials.code-sample', ['class' => 'flex justify-center'])
 <div class="bg-gray-400 w-32 h-12"></div>
