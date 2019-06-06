@@ -161,7 +161,7 @@ By default Tailwind provides six numeric `z-index` utilities and an `auto` utili
 
 If you'd like to add any negative z-index classes that take the same form as Tailwind's [negative margin](/docs/margin#negative-margins) classes, prefix the keys in your config file with a dash:
 
-@component('_partials.customized-config', ['key' => 'theme.margin'])
+@component('_partials.customized-config', ['key' => 'theme.zIndex'])
 + '-10': '-10',
 @endcomponent
 
