@@ -45,7 +45,7 @@
             </p>
             <div class="mt-6">
               <script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
-              <form class="font-medium text-gray-800 text-lg" action="https://app.convertkit.com/forms/961421/subscriptions" method="POST" data-sv-form="961421" data-uid="ce7d8ec042" data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;success_message&quot;:&quot;Thanks for signing up! Check your email to confirm your email address.&quot;}}}">
+              <form class="font-medium text-gray-800 text-lg" action="https://app.convertkit.com/forms/961421/subscriptions" method="POST" data-sv-form="961421" data-uid="ce7d8ec042" data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;success_message&quot;:&quot;Thanks for signing up!&quot;}}}">
                 <ul data-element="errors"></ul>
                 <div data-element="fields">
                   <p class="font-medium text-gray-800 text-lg">Get notified when the course is released for free this July.</p>
