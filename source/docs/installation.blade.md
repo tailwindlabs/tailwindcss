@@ -300,7 +300,7 @@ Before using the CDN build please note, many of the features that make Tailwind 
   </li>
 </ul>
 
-To get the most out of Tailwind, you really should [install it via npm](#step-1-install-tailwind-via-npm).
+To get the most out of Tailwind, you really should [install it via npm](#1-install-tailwind-via-npm).
 
 To pull in Tailwind for quick demos or just giving the framework a spin, grab the latest default configuration build via CDN:
 
