@@ -24,9 +24,9 @@
 <div>
   <div id="header">
     <div class="bg-gray-100 overflow-hidden">
-      <div class="w-full max-w-screen-xl relative mx-auto px-6 pt-16 pb-48">
-        <div class="flex -mx-6">
-          <div class="relative z-10 px-6 max-w-2xl mx-auto xl:mx-0 w-full flex-shrink-0">
+      <div class="w-full max-w-screen-xl relative mx-auto pt-16 pb-48">
+        <div class="flex">
+          <div class="relative z-10 px-6 max-w-3xl xl:max-w-2xl mx-auto xl:mx-0 px-6 sm:px-8 xl:px-12 w-full flex-shrink-0">
             <svg class="h-12 w-auto" viewBox="0 0 273 64" fill="none" xmlns="http://www.w3.org/2000/svg">
               <title>Tailwind CSS</title>
               <path fill-rule="evenodd" clip-rule="evenodd" d="M32 16C24.8 16 20.3 19.6 18.5 26.8C21.2 23.2 24.35 21.85 27.95 22.75C30.004 23.2635 31.4721 24.7536 33.0971 26.4031C35.7443 29.0901 38.8081 32.2 45.5 32.2C52.7 32.2 57.2 28.6 59 21.4C56.3 25 53.15 26.35 49.55 25.45C47.496 24.9365 46.0279 23.4464 44.4029 21.7969C41.7557 19.1099 38.6919 16 32 16ZM18.5 32.2C11.3 32.2 6.8 35.8 5 43C7.7 39.4 10.85 38.05 14.45 38.95C16.504 39.4635 17.9721 40.9536 19.5971 42.6031C22.2443 45.2901 25.3081 48.4 32 48.4C39.2 48.4 43.7 44.8 45.5 37.6C42.8 41.2 39.65 42.55 36.05 41.65C33.996 41.1365 32.5279 39.6464 30.9029 37.9969C28.2557 35.3099 25.1919 32.2 18.5 32.2Z" fill="url(#paint0_linear)"/>
@@ -75,8 +75,8 @@
   </div>
 </div>
 
-<div class="max-w-screen-xl mx-auto px-6 pt-12 pb-24">
-  <div class="max-w-2xl mx-auto xl:mx-0 text-gray-700 leading-relaxed text-lg">
+<div class="max-w-screen-xl mx-auto pt-12 pb-24">
+  <div class="max-w-3xl mx-auto px-6 sm:px-8 xl:px-12 xl:mx-0 text-gray-700 leading-relaxed text-lg">
     <p class="mt-4">
       <strong class="text-gray-800">Designing with Tailwind CSS</strong> is a free video course I'm working on that will teach you how to build fully responsive, professionally designed UIs from scratch using Tailwind CSS.
     </p>
