@@ -138,14 +138,14 @@ If you need to style a child element when hovering over a specific parent elemen
 @endslot
 @endcomponent
 
-You can control whether `group-hover` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+You can control whether `group-hover` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` for the class:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    backgroundColor: ['group-hover'],
+    textColor: ['group-hover'],
   },
 }
 ```
