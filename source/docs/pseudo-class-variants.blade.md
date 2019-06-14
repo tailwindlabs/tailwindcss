@@ -145,7 +145,7 @@ You can control whether `group-hover` variants are enabled for a utility in the 
 module.exports = {
   // ...
   variants: {
-    backgroundColor: ['group-hover'],
+    textColor: ['group-hover'],
   },
 }
 ```
