@@ -41,10 +41,10 @@ To get started with Purgecss, first install `@fullhuman/postcss-purgecss`:
 
 ```bash
 # Using npm
-npm install @fullhuman/postcss-purgecss
+npm install @fullhuman/postcss-purgecss --save-dev
 
 # Using yarn
-yarn add @fullhuman/postcss-purgecss
+yarn add @fullhuman/postcss-purgecss -D
 ```
 
 Next, add it as the last plugin in your `postcss.config.js` file:

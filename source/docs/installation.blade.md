@@ -16,10 +16,10 @@ For most projects (and to take advantage of Tailwind's customization features), 
 
 ```bash
 # Using npm
-npm install tailwindcss --save-dev
+npm install tailwindcss
 
 # Using Yarn
-yarn add tailwindcss --dev
+yarn add tailwindcss
 ```
 
 <div class="heading mt-0">
