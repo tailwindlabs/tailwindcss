@@ -53,7 +53,7 @@ Set the minimum height of an element using the `min-h-0`, `min-h-full`, or `min-
 
 ## Responsive
 
-To control the min-width of an element at a specific breakpoint, add a `{screen}:` prefix to any existing min-width utility.
+To control the min-height of an element at a specific breakpoint, add a `{screen}:` prefix to any existing min-height utility.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
