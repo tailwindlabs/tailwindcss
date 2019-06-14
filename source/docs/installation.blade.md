@@ -54,6 +54,32 @@ If you're using `postcss-import` (or a tool that uses it under the hood, such as
 <div class="heading mt-0">
   <h2 class="flex markdown">
     <span class="text-lg bg-gray-200 text-gray-700 h-6 w-6 rounded-full inline-flex justify-center items-center mt-px mr-3">3</span>
+    <span data-heading-text class="mt-0">Create your Tailwind config file <span class="text-gray-600">(optional)</span></span>
+  </h2>
+</div>
+
+If you'd like to customize your Tailwind installation, you can generate a config file for your project using the Tailwind CLI utility included when you install the `tailwindcss` npm package:
+
+```bash
+npx tailwind init
+```
+
+This will create a minimal `tailwind.config.js` file at the root of your project:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {},
+  variants: {},
+  plugins: [],
+}
+```
+
+Learn more about configuration Tailwind in the [configuration documentation](/docs/configuration).
+
+<div class="heading mt-0">
+  <h2 class="flex markdown">
+    <span class="text-lg bg-gray-200 text-gray-700 h-6 w-6 rounded-full inline-flex justify-center items-center mt-px mr-3">4</span>
     Process your CSS with Tailwind
   </h2>
 </div>

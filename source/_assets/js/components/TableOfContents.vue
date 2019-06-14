@@ -18,6 +18,12 @@ function getHeadingText(element) {
   for (var i = 0; i < element.childNodes.length; ++i) {
     if (element.childNodes[i].nodeType === 3) {
       text += element.childNodes[i].textContent;
+
+    // If there's a data-heading-text attribute, use the direct child text from that
+    } else if (element.childNodes[i].dataset && ('headingText' in element.childNodes[i].dataset)) {
+      // Assume the element has a text node as its first child and only use the content from that.
+      // This is to intentionally exclude any nested <span> stuff from the sidebar, like "(optional)".
+      text += element.childNodes[i].childNodes[0].textContent;
     }
   }
   return text
