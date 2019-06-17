@@ -142,6 +142,25 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
+### Font Sizes
+
+By default Tailwind provides 10 `font-size` utilities. You change, add, or remove these by editing the `theme.fontSize` section of your Tailwind config.
+
+@component('_partials.customized-config', ['key' => 'theme.fontSize'])
+- 'xs': '.75rem',
+- 'sm': '.875rem',
++ 'tiny': '.875rem',
+  'base': '1rem',
+  'lg': '1.125rem',
+  'xl': '1.25rem',
+  '2xl': '1.5rem',
+- '3xl': '1.875rem',
+- '4xl': '2.25rem',
+  '5xl': '3rem',
+  '6xl': '4rem',
++ '7xl': '5rem',
+@endcomponent
+
 @include('_partials.variants-and-disabling', [
     'utility' => [
         'name' => 'text sizing',
