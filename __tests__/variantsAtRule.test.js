@@ -51,6 +51,27 @@ test('it can generate active variants', () => {
   })
 })
 
+test('it can generate visited variants', () => {
+  const input = `
+    @variants visited {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+      .visited\\:banana:visited { color: yellow; }
+      .visited\\:chocolate:visited { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate focus variants', () => {
   const input = `
     @variants focus {
