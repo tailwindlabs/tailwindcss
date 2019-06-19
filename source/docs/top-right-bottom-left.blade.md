@@ -254,7 +254,7 @@ By default Tailwind only provides `0` and `auto` top/right/bottom/left/inset uti
 
 If you'd like to add any negative top/right/bottom/left classes that take the same form as Tailwind's [negative margin](/docs/margin#negative-margins) classes, prefix the keys in your config file with a dash:
 
-@component('_partials.customized-config', ['key' => 'theme.margin'])
+@component('_partials.customized-config', ['key' => 'theme.inset'])
 + '-16': '-4rem',
 @endcomponent
 
