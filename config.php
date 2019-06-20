@@ -10,7 +10,7 @@ return [
     'config' => json_decode(file_get_contents(__DIR__ . '/tailwind.json'), true),
     'version' => json_decode(file_get_contents(__DIR__ . '/node_modules/tailwindcss/package.json'), true)['version'],
     'colors' => ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'indigo', 'purple', 'pink'],
-    'activeCategory' => function ($page) {
+    'categoryName' => function ($page) {
         if (starts_with($page->getPath(), '/docs')) {
             return 'Documentation';
         } elseif (starts_with($page->getPath(), '/components')) {

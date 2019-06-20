@@ -172,7 +172,7 @@
               <span class="ml-3">Community</span>
             </a>
           </div>
-          @foreach ($page->navigation[$page->activeCategory()] as $sectionName => $sectionItems)
+          @foreach ($page->navigation[$page->categoryName()] as $sectionName => $sectionItems)
           <div class="mb-8">
             <h5 class="mb-3 lg:mb-2 text-gray-500 uppercase tracking-wide font-bold text-sm lg:text-xs">{{ $sectionName }}</h5>
             <ul>
