@@ -2,7 +2,6 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
 import generateVariantFunction from '../util/generateVariantFunction'
-import e from '../util/escapeClassName'
 
 function generatePseudoClassVariant(pseudoClass) {
   return generateVariantFunction(({ modifySelectors, separator }) => {
