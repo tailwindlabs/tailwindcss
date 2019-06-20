@@ -376,7 +376,8 @@ module.exports = {
     },
     textColor: theme => theme('colors'),
     textShadow: {
-      default: '0 1px 3px rgba(0, 0, 0, 0.25)',
+      default: '0 2px 5px rgba(0, 0, 0, 0.5)',
+      lg: '0 2px 10px rgba(0, 0, 0, 0.5)',
       none: 'none',
     },
     width: theme => ({
