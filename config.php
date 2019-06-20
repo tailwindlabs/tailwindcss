@@ -27,7 +27,7 @@ return [
         $pages = collect(array_wrap($page));
 
         return $pages->contains(function ($page) use ($path) {
-            return starts_with($page->getPath(), $path);
+            return str_is($page->getPath(), $path);
         });
     },
     'getLink' => function ($page, $link) {
