@@ -26,6 +26,11 @@ return [
 
         return str_is($page->getPath(), $path);
     },
+    'categoryActive' => function ($page, $link) {
+        $path = $link instanceof Collection ? $link['url'] : $link;
+
+        return starts_with($page->getPath(), $path);
+    },
     'getLink' => function ($page, $link) {
         return $link instanceof Collection ? $link['url'] : $link;
     },
