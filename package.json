@@ -32,7 +32,7 @@
     "clean-css": "^4.1.9",
     "eslint": "^6.0.1",
     "eslint-config-postcss": "^2.0.2",
-    "eslint-config-prettier": "^4.1.0",
+    "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.0.1",
     "jest": "^24.3.1",
     "prettier": "^1.7.4",
