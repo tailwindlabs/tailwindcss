@@ -10,7 +10,7 @@ return [
     'config' => json_decode(file_get_contents(__DIR__ . '/tailwind.json'), true),
     'version' => json_decode(file_get_contents(__DIR__ . '/node_modules/tailwindcss/package.json'), true)['version'],
     'colors' => ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'indigo', 'purple', 'pink'],
-    'activeCategory' => function ($page) {
+    'categoryName' => function ($page) {
         if (starts_with($page->getPath(), '/docs')) {
             return 'Documentation';
         } elseif (starts_with($page->getPath(), '/components')) {
@@ -24,11 +24,12 @@ return [
     'active' => function ($page, $link) {
         $path = $link instanceof Collection ? $link['url'] : $link;
 
-        $pages = collect(array_wrap($page));
+        return str_is($page->getPath(), $path);
+    },
+    'categoryActive' => function ($page, $link) {
+        $path = $link instanceof Collection ? $link['url'] : $link;
 
-        return $pages->contains(function ($page) use ($path) {
-            return starts_with($page->getPath(), $path);
-        });
+        return starts_with($page->getPath(), $path);
     },
     'getLink' => function ($page, $link) {
         return $link instanceof Collection ? $link['url'] : $link;
