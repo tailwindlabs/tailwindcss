@@ -8,11 +8,11 @@ description: "Utilities for controlling the order of flex items."
   'rows' => [
     [
       '.order-first',
-      'order: -1;',
+      'order: -9999;',
     ],
     [
       '.order-last',
-      'order: 999;',
+      'order: 9999;',
     ],
     [
       '.order-none',
@@ -157,8 +157,8 @@ For more information about Tailwind's responsive design features, check out the 
 By default Tailwind provides utilities for `order-first`, `order-last`, `order-none`, and an `order-{number}` utility for the numbers 1 through 12. You change, add, or remove these by editing the `theme.order` section of your `tailwind.config.js` file.
 
 @component('_partials.customized-config', ['key' => 'theme.order'])
-  first: '-1',
-  last: '999',
+  first: '-9999',
+  last: '9999',
 - none: '0',
 + normal: '0',
   '1': '1',
