@@ -105,6 +105,13 @@ html {
   border-color: theme('borderColor.default', currentColor);
 }
 
+/*
+ * Ensure horizontal rules are visible by default
+ */
+hr {
+  border-width: 1px;
+}
+
 /**
  * Undo the `border-style: none` reset that Normalize applies to images so that
  * our `border-{width}` utilities have the expected effect.
