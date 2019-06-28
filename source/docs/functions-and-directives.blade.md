@@ -120,6 +120,14 @@ If you'd like to `@@apply` an existing class and make it `!important`, simply ad
 }
 ```
 
+If you're using the Sass/SCSS preprocessor you need to use the interpolation to make the class `!important`:
+
+```scss
+.btn {
+  @@apply font-bold py-2 px-4 rounded #{!important};
+}
+```
+
 Note that `@@apply` **will not work** for inlining pseudo-class or responsive variants of another utility. Instead, apply the plain version of that utility into the appropriate pseudo-selector or a new media query:
 
 ```css
