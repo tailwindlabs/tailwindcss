@@ -5,8 +5,12 @@ export default function() {
   return function({ addUtilities, theme, variants, e }) {
     const utilities = _.fromPairs(
       _.map(theme('letterSpacing'), (value, modifier) => {
+        const className =
+          modifier === 'default'
+            ? 'tracking'
+            : `${e(prefixNegativeModifiers('tracking', modifier))}`
         return [
-          `.${e(prefixNegativeModifiers('tracking', modifier))}`,
+          `.${className}`,
           {
             'letter-spacing': value,
           },
