@@ -470,6 +470,10 @@ img {
   border-style: solid;
 }
 
+hr {
+  border-width: 1px;
+}
+
 textarea {
   resize: vertical;
 }
