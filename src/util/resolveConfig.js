@@ -58,7 +58,9 @@ function resolveFunctionKeys(object) {
       if (isFunction(otherObject[key])) {
         return otherObject[key](resolveThemePath, configUtils)
       } else {
-        if (typeof otherObject === 'object' && otherObject.isArray === false) {
+        if (Array.isArray(otherObject[key])) {
+          return otherObject[key]
+        } else if (typeof object === 'object') {
           return createObject(otherObject[key])
         }
         return otherObject[key]
