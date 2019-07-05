@@ -53,12 +53,31 @@ function resolveFunctionKeys(object) {
     return val === undefined ? defaultValue : val
   }
 
-  return Object.keys(object).reduce((resolved, key) => {
-    return {
-      ...resolved,
-      [key]: isFunction(object[key]) ? object[key](resolveThemePath, configUtils) : object[key],
+  function createObject(newObject) {
+    function resolveFunction(otherObject, key) {
+      if (isFunction(otherObject[key])) {
+        return otherObject[key](resolveThemePath, configUtils)
+      } else {
+        if (typeof otherObject === 'object' && otherObject.isArray === false) {
+          return createObject(otherObject[key])
+        }
+        return otherObject[key]
+      }
     }
-  }, {})
+
+    if (typeof newObject === 'object') {
+      return Object.keys(newObject).reduce((resolved, key) => {
+        return {
+          ...resolved,
+          [key]: resolveFunction(newObject, key),
+        }
+      }, {})
+    } else {
+      return newObject
+    }
+  }
+
+  return createObject(object)
 }
 
 export default function resolveConfig(configs) {
