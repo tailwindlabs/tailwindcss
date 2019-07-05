@@ -238,8 +238,8 @@
     js-tokens "^4.0.0"
 
 "@babel/node@^7.0.0":
-  version "7.4.5"
-  resolved "https://registry.yarnpkg.com/@babel/node/-/node-7.4.5.tgz#bce71bb44d902bfdd4da0b9c839a8a90fc084056"
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/@babel/node/-/node-7.5.0.tgz#bcc5a286317ad771703889fb658e1f768c0a2a2e"
   dependencies:
     "@babel/polyfill" "^7.0.0"
     "@babel/register" "^7.0.0"
