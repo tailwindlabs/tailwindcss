@@ -1,12 +1,17 @@
 import _ from 'lodash'
 import postcss from 'postcss'
+import selectorParser from 'postcss-selector-parser'
 import generateVariantFunction from '../util/generateVariantFunction'
-import e from '../util/escapeClassName'
 
 function generatePseudoClassVariant(pseudoClass) {
   return generateVariantFunction(({ modifySelectors, separator }) => {
-    return modifySelectors(({ className }) => {
-      return `.${e(`${pseudoClass}${separator}${className}`)}:${pseudoClass}`
+    return modifySelectors(({ selector }) => {
+      return selectorParser(selectors => {
+        selectors.walkClasses(sel => {
+          sel.value = `${pseudoClass}${separator}${sel.value}`
+          sel.parent.insertAfter(sel, selectorParser.pseudo({ value: `:${pseudoClass}` }))
+        })
+      }).processSync(selector)
     })
   })
 }
@@ -18,8 +23,13 @@ function ensureIncludesDefault(variants) {
 const defaultVariantGenerators = {
   default: generateVariantFunction(() => {}),
   'group-hover': generateVariantFunction(({ modifySelectors, separator }) => {
-    return modifySelectors(({ className }) => {
-      return `.group:hover .${e(`group-hover${separator}${className}`)}`
+    return modifySelectors(({ selector }) => {
+      return selectorParser(selectors => {
+        selectors.walkClasses(sel => {
+          sel.value = `group-hover${separator}${sel.value}`
+          sel.parent.insertBefore(sel, selectorParser().astSync('.group:hover '))
+        })
+      }).processSync(selector)
     })
   }),
   hover: generatePseudoClassVariant('hover'),

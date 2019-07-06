@@ -218,6 +218,28 @@ test('variants are generated in the order specified', () => {
   })
 })
 
+test('the built-in variant pseudo-selectors are appended before any pseudo-elements', () => {
+  const input = `
+    @variants hover, focus-within, focus, active, group-hover {
+      .placeholder-yellow::placeholder { color: yellow; }
+    }
+  `
+
+  const output = `
+    .placeholder-yellow::placeholder { color: yellow; }
+    .hover\\:placeholder-yellow:hover::placeholder { color: yellow; }
+    .focus-within\\:placeholder-yellow:focus-within::placeholder { color: yellow; }
+    .focus\\:placeholder-yellow:focus::placeholder { color: yellow; }
+    .active\\:placeholder-yellow:active::placeholder { color: yellow; }
+    .group:hover .group-hover\\:placeholder-yellow::placeholder { color: yellow; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('the default variant can be generated in a specified position', () => {
   const input = `
     @variants focus, active, default, hover {
