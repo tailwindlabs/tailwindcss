@@ -877,6 +877,31 @@ test('plugins respect prefix and important options by default when adding utilit
     `)
 })
 
+test('important utilities are not made double important when important option is used', () => {
+  const { utilities } = processPlugins(
+    [
+      function({ addUtilities }) {
+        addUtilities({
+          '.rotate-90': {
+            transform: 'rotate(90deg) !important',
+          },
+        })
+      },
+    ],
+    makeConfig({
+      important: true,
+    })
+  )
+
+  expect(css(utilities)).toMatchCss(`
+    @variants {
+      .rotate-90 {
+        transform: rotate(90deg) !important
+      }
+    }
+    `)
+})
+
 test("component declarations respect the 'prefix' option by default", () => {
   const { components } = processPlugins(
     [
