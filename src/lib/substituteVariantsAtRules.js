@@ -36,6 +36,7 @@ const defaultVariantGenerators = {
   'focus-within': generatePseudoClassVariant('focus-within'),
   focus: generatePseudoClassVariant('focus'),
   active: generatePseudoClassVariant('active'),
+  visited: generatePseudoClassVariant('visited'),
   disabled: generatePseudoClassVariant('disabled'),
 }
 
