@@ -30,6 +30,27 @@ test('it can generate hover variants', () => {
   })
 })
 
+test('it can generate disabled variants', () => {
+  const input = `
+    @variants disabled {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+      .disabled\\:banana:disabled { color: yellow; }
+      .disabled\\:chocolate:disabled { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate active variants', () => {
   const input = `
     @variants active {
