@@ -2,15 +2,15 @@ import _ from 'lodash'
 import escapeClassName from '../../src/util/escapeClassName'
 import plugin from '../../src/plugins/zIndex'
 
-test('z index can use default keyword and negative prefix syntax', () => {
+test('z index can use negative prefix syntax', () => {
   const addedUtilities = []
 
   const config = {
     theme: {
       zIndex: {
         '-20': '-20',
-        '-': '-10',
-        default: '10',
+        '-10': '-10',
+        '10': '10',
         '20': '20',
       },
     },
@@ -45,8 +45,8 @@ test('z index can use default keyword and negative prefix syntax', () => {
     {
       utilities: {
         '.-z-20': { 'z-index': '-20' },
-        '.-z': { 'z-index': '-10' },
-        '.z': { 'z-index': '10' },
+        '.-z-10': { 'z-index': '-10' },
+        '.z-10': { 'z-index': '10' },
         '.z-20': { 'z-index': '20' },
       },
       variants: ['responsive'],

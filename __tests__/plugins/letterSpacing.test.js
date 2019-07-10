@@ -2,16 +2,14 @@ import _ from 'lodash'
 import escapeClassName from '../../src/util/escapeClassName'
 import plugin from '../../src/plugins/letterSpacing'
 
-test('letter spacing can use default keyword and negative prefix syntax', () => {
+test('letter spacing can use negative prefix syntax', () => {
   const addedUtilities = []
 
   const config = {
     theme: {
       letterSpacing: {
-        '-1': '-0.05em',
-        '-': '-0.025em',
-        default: '0.025em',
-        '1': '0.05em',
+        '-1': '-0.025em',
+        '1': '0.025em',
       },
     },
     variants: {
@@ -44,10 +42,8 @@ test('letter spacing can use default keyword and negative prefix syntax', () => 
   expect(addedUtilities).toEqual([
     {
       utilities: {
-        '.-tracking-1': { 'letter-spacing': '-0.05em' },
-        '.-tracking': { 'letter-spacing': '-0.025em' },
-        '.tracking': { 'letter-spacing': '0.025em' },
-        '.tracking-1': { 'letter-spacing': '0.05em' },
+        '.-tracking-1': { 'letter-spacing': '-0.025em' },
+        '.tracking-1': { 'letter-spacing': '0.025em' },
       },
       variants: ['responsive'],
     },

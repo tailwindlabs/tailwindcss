@@ -5,10 +5,8 @@ export default function() {
   return function({ addUtilities, e, theme, variants }) {
     const utilities = _.fromPairs(
       _.map(theme('zIndex'), (value, modifier) => {
-        const className =
-          modifier === 'default' ? 'z' : `${e(prefixNegativeModifiers('z', modifier))}`
         return [
-          `.${className}`,
+          `.${e(prefixNegativeModifiers('z', modifier))}`,
           {
             'z-index': value,
           },
