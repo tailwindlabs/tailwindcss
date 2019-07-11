@@ -80,6 +80,46 @@ test('important key overrides default important', () => {
   })
 })
 
+test('important (string) key overrides default important', () => {
+  const userConfig = {
+    important: '#app',
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '',
+    important: '#app',
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  })
+})
+
 test('separator key overrides default separator', () => {
   const userConfig = {
     separator: '__',
