@@ -75,7 +75,7 @@ module.exports = {
 }
 ```
 
-Learn more about configuration Tailwind in the [configuration documentation](/docs/configuration).
+Learn more about configuring Tailwind in the [configuration documentation](/docs/configuration).
 
 <div class="heading mt-0">
   <h2 class="flex markdown">
@@ -305,7 +305,7 @@ module.exports = function(defaults) {
 
 ## Using Tailwind via CDN
 
-Before using the CDN build please note, many of the features that make Tailwind CSS great are not available without incorporating Tailwind into your build process.
+Before using the CDN build, please note that many of the features that make Tailwind CSS great are not available without incorporating Tailwind into your build process.
 
 <ul class="list-none pl-0">
   <li class="flex items-center">
