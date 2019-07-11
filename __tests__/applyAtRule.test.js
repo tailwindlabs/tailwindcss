@@ -243,7 +243,7 @@ test('you can apply utility classes without using the given prefix when using a 
   })
 })
 
-test('you can apply utility classes without specificity prefix even if important (string) is used.', () => {
+test('you can apply utility classes without specificity prefix even if important (selector) is used.', () => {
   const input = `
     .foo { @apply .mt-8 .mb-8; }
   `

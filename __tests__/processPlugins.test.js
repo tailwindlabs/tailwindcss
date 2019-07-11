@@ -877,7 +877,7 @@ test('plugins respect prefix and important options by default when adding utilit
     `)
 })
 
-test('plugins respect prefix and important (string) options by default when adding utilities', () => {
+test('plugins respect prefix and important (selector) options by default when adding utilities', () => {
   const { utilities } = processPlugins(
     [
       function({ addUtilities }) {

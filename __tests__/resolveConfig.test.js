@@ -80,7 +80,7 @@ test('important key overrides default important', () => {
   })
 })
 
-test('important (string) key overrides default important', () => {
+test('important (selector) key overrides default important', () => {
   const userConfig = {
     important: '#app',
   }
