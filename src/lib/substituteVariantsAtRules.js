@@ -38,6 +38,8 @@ const defaultVariantGenerators = {
   active: generatePseudoClassVariant('active'),
   visited: generatePseudoClassVariant('visited'),
   disabled: generatePseudoClassVariant('disabled'),
+  'first-child': generatePseudoClassVariant('first-child'),
+  'last-child': generatePseudoClassVariant('last-child'),
 }
 
 export default function(config, { variantGenerators: pluginVariantGenerators }) {
