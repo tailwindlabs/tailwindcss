@@ -3,6 +3,8 @@ import postcss from 'postcss'
 import escapeClassName from '../util/escapeClassName'
 import prefixSelector from '../util/prefixSelector'
 
+let generatedSelectors = {}
+
 function buildClassTable(css) {
   const classTable = {}
 
@@ -21,6 +23,12 @@ function buildShadowTable(generatedUtilities) {
 
   postcss.root({ nodes: generatedUtilities }).walkAtRules('variants', atRule => {
     utilities.append(atRule.clone().nodes)
+  })
+  
+  generatedUtilities.map(rule => {
+    rule.nodes.map(node => {
+      generatedSelectors[node.selector] = true
+    })
   })
 
   return buildClassTable(utilities)
@@ -44,7 +52,7 @@ function findClass(classToApply, classTable, onError) {
 
   const [match] = matches
 
-  if (match.parent.type !== 'root') {
+  if (match.parent.type !== 'root' && !generatedSelectors[classToApply]) {
     // prettier-ignore
     throw onError(`\`@apply\` cannot be used with ${classToApply} because ${classToApply} is nested inside of an at-rule (@${match.parent.name}).`)
   }
