@@ -5,7 +5,7 @@ export default function buildMediaQuery(screens) {
     screens = { min: screens }
   }
 
-  if (!_.isArray(screens)) {
+  if (!Array.isArray(screens)) {
     screens = [screens]
   }
 

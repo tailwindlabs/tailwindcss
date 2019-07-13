@@ -7,7 +7,7 @@ function extractMinWidths(breakpoints) {
       breakpoints = { min: breakpoints }
     }
 
-    if (!_.isArray(breakpoints)) {
+    if (!Array.isArray(breakpoints)) {
       breakpoints = [breakpoints]
     }
 
