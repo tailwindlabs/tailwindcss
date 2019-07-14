@@ -135,6 +135,48 @@ test('it can generate focus-within variants', () => {
   })
 })
 
+test('it can generate odd-child variants', () => {
+  const input = `
+    @variants odd-child {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .odd-child\\:banana:nth-child(odd) { color: yellow; }
+    .odd-child\\:chocolate:nth-child(odd) { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate even-child variants', () => {
+  const input = `
+    @variants even-child {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .even-child\\:banana:nth-child(even) { color: yellow; }
+    .even-child\\:chocolate:nth-child(even) { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate group-hover variants', () => {
   const input = `
     @variants group-hover {
