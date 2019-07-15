@@ -3,6 +3,7 @@ extends: _layouts.course-lesson
 title: "Hover, Focus, and Active Styles"
 description: "Learn how to use Tailwind's variant modifiers to style elements in different states."
 titleBorder: true
+hideTableOfContents: true
 vimeoId: 347138247
 prevUrl: "/course/responsive-design"
 prev: "Responsive Design"
