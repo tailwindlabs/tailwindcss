@@ -1,6 +1,6 @@
 ---
 extends: _layouts.course-lesson
-title: "The Utility-First Worfklow"
+title: "The Utility-First Workflow"
 description: "Learn how to use Tailwind's utility classes to build a custom marketing page."
 titleBorder: true
 hideTableOfContents: true
