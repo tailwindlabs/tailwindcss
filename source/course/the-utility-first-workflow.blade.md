@@ -5,9 +5,9 @@ description: "Learn how to use Tailwind's utility classes to build a custom mark
 titleBorder: true
 hideTableOfContents: true
 vimeoId: 345753452
-prevLink: "/course/setting-up-tailwind-and-postcss"
+prevUrl: "/course/setting-up-tailwind-and-postcss"
 prev: "Setting Up Tailwind and PostCSS"
-nextLink: "/course/responsive-design"
+nextUrl: "/course/responsive-design"
 next: "Responsive Design"
 ---
 

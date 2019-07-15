@@ -5,9 +5,9 @@ description: "Learn how to use Tailwind's responsive modifiers to design for mul
 titleBorder: true
 hideTableOfContents: true
 vimeoId: 346202233
-prevLink: "/course/the-utility-first-workflow"
+prevUrl: "/course/the-utility-first-workflow"
 prev: "The Utility-First Workflow"
-nextLink: "/course/hover-focus-and-active-styles"
+nextUrl: "/course/hover-focus-and-active-styles"
 next: "Hover, Focus, and Active Styles"
 ---
 

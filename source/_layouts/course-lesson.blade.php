@@ -227,7 +227,7 @@
             </div>
 
             @if ($page->vimeoId !== null)
-            <div class="mb-8 px-6 xl:px-12">
+            <div class="mb-8 px-6 xl:px-12 relative z-10">
               <video-player vimeo-url="https://vimeo.com/video/{{ $page->vimeoId }}"></video-player>
               <div class="mt-6 flex {{ $page->prev ? 'justify-between' : 'justify-end' }}">
                 @if ($page->prev)

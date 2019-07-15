@@ -5,9 +5,9 @@ description: "Learn how to avoid painful duplication without abandoning the util
 titleBorder: true
 hideTableOfContents: true
 vimeoId: 347734631
-prevLink: "/course/composing-utilities-with-apply"
+prevUrl: "/course/composing-utilities-with-apply"
 prev: "Composing Utilities with @apply"
-nextLink: "/course/customizing-your-design-system"
+nextUrl: "/course/customizing-your-design-system"
 next: "Customizing Your Design System"
 ---
 

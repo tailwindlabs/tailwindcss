@@ -5,9 +5,9 @@ description: "Learn how to use Purgecss to remove unused classes from your produ
 titleBorder: true
 hideTableOfContents: true
 vimeoId: 347734631
-prevLink: "/course/customizing-your-design-system"
+prevUrl: "/course/customizing-your-design-system"
 prev: "Customizing Your Design System"
-nextLink: "/course/coming-soon"
+nextUrl: "/course/coming-soon"
 next: "Designing an Image Card"
 ---
 

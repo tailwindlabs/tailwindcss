@@ -5,7 +5,7 @@ description: "Learn how to install Tailwind and get it compiling in a simple HTM
 titleBorder: true
 hideTableOfContents: true
 vimeoId: 345586861
-nextLink: "/course/the-utility-first-workflow"
+nextUrl: "/course/the-utility-first-workflow"
 next: "The Utility-First Workflow"
 ---
 
