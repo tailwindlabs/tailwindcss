@@ -15,6 +15,8 @@ return [
             return 'Documentation';
         } elseif (starts_with($page->getPath(), '/components')) {
             return 'Components';
+        } elseif (starts_with($page->getPath(), '/course') || starts_with($page->getPath(), '/screencasts')) {
+            return 'Screencasts';
         } elseif (starts_with($page->getPath(), '/resources')) {
             return 'Resources';
         } elseif (starts_with($page->getPath(), '/community')) {
@@ -23,6 +25,10 @@ return [
     },
     'active' => function ($page, $link) {
         $path = $link instanceof Collection ? $link['url'] : $link;
+        
+        if ($path === '/course/coming-soon') {
+            return false;
+        }
 
         return str_is($page->getPath(), $path);
     },

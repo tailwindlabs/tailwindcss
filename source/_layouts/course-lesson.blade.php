@@ -1,17 +1,17 @@
 @extends('_layouts.master')
 
 @section('meta')
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@tailwindcss">
-<meta name="twitter:title" content="{{ $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS - A utility-first CSS framework for rapidly building custom designs' }}">
-<meta name="twitter:description" content="{{ $page->description ? $page->description : 'Documentation for the Tailwind CSS framework.' }}">
-<meta name="twitter:image" content="https://tailwindcss.com/img/tailwind-twitter-square.png">
+<meta name="twitter:title" content="{{ ($page->title && $page->title !== 'Designing with Tailwind CSS') ? $page->title . ' - Designing with Tailwind CSS' : 'Designing with Tailwind CSS' }}">
+<meta name="twitter:description" content="{{ $page->description ? $page->description : 'A free video series on building beautiful UIs with Tailwind CSS.' }}">
+<meta name="twitter:image" content="https://tailwindcss.com/img/course-twitter-card.png">
 <meta name="twitter:creator" content="@tailwindcss">
 <meta property="og:url" content="https://tailwindcss.com/" />
 <meta property="og:type" content="article" />
-<meta property="og:title" content="{{ $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS - A utility-first CSS framework for rapidly building custom designs' }}" />
-<meta property="og:description" content="{{ $page->description ? $page->description : 'Documentation for the Tailwind CSS framework.' }}" />
-<meta property="og:image" content="https://tailwindcss.com/img/twitter-large-card.png" />
+<meta property="og:title" content="{{ $page->title ? $page->title . ' - Designing with Tailwind CSS' : 'Designing with Tailwind CSS' }}" />
+<meta property="og:description" content="{{ $page->description ? $page->description : 'A free video series on building beautiful UIs with Tailwind CSS.' }}" />
+<meta property="og:image" content="https://tailwindcss.com/img/course-twitter-card.png" />
 @endsection
 
 @push('scripts')
@@ -225,6 +225,27 @@
               <hr class="my-8 border-b-2 border-gray-200">
               @endif
             </div>
+
+            @if ($page->vimeoId !== null)
+            <div class="mb-8 px-6 xl:px-12">
+              <video-player vimeo-url="https://vimeo.com/video/{{ $page->vimeoId }}"></video-player>
+              <div class="mt-6 flex {{ $page->prev ? 'justify-between' : 'justify-end' }}">
+                @if ($page->prev)
+                <a href="{{ $page->prevUrl }}" class="inline-flex items-center">
+                  <svg class="mr-2 h-4 w-4 fill-current text-gray-600" viewBox="0 0 24 24"><path d="M5.41 11H21a1 1 0 0 1 0 2H5.41l5.3 5.3a1 1 0 0 1-1.42 1.4l-7-7a1 1 0 0 1 0-1.4l7-7a1 1 0 0 1 1.42 1.4L5.4 11z"/></svg>
+                  <span>{{ $page->prev }}</span>
+                </a>
+                @endif
+                @if ($page->next)
+                <a href="{{ $page->nextUrl }}" class="inline-flex items-center">
+                  <span>{{ $page->next }}</span>
+                  <svg class="ml-2 h-4 w-4 fill-current text-gray-600" viewBox="0 0 24 24"><path d="M18.59 13H3a1 1 0 0 1 0-2h15.59l-5.3-5.3a1 1 0 1 1 1.42-1.4l7 7a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.42-1.4l5.3-5.3z"/></svg>
+                </a>
+                @endif
+              </div>
+            </div>
+            @endif
+
             <div class="flex">
               <div class="markdown px-6 xl:px-12 w-full max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
                 @yield('content')
@@ -232,7 +253,7 @@
 
               {{-- Table of contents --}}
               <div class="hidden xl:text-sm xl:block xl:w-1/4 xl:px-6">
-                <div class="flex flex-col justify-between overflow-y-auto sticky top-16 max-h-(screen-16) pt-12 pb-4 -mt-12">
+                <div class="flex flex-col justify-between overflow-y-auto sticky top-16 max-h-(screen-16) pt-12 pb-4">
                   @unless($page->hideTableOfContents)
                   <table-of-contents class="mb-8"></table-of-contents>
                   @endunless

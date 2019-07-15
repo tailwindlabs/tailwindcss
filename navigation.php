@@ -12,7 +12,6 @@ return [
         ],
         'Core Concepts' => [
             'Utility-First' => '/docs/utility-first',
-            // 'Core Plugins' => '/docs/core-plugins',
             'Responsive Design' => '/docs/responsive-design',
             'Pseudo-Class Variants' => '/docs/pseudo-class-variants',
             'Adding Base Styles' => '/docs/adding-base-styles',
@@ -129,6 +128,60 @@ return [
             'Grids' => '/components/grids',
             'Navigation' => '/components/navigation',
         ],
+    ],
+    'Screencasts' => [
+        'Getting Up and Running' => [
+            'Setting Up Tailwind and PostCSS' => '/course/setting-up-tailwind-and-postcss',
+            'The Utility-First Workflow' => '/course/the-utility-first-workflow',
+            'Responsive Design' => '/course/responsive-design',
+            'Hover, Focus, and Active Styles' => '/course/hover-focus-and-active-styles',
+            'Composing Utilities with @apply' => '/course/composing-utilities-with-apply',
+            'Extracting Reusable Components' => '/course/extracting-reusable-components',
+            'Customizing Your Design System' => '/course/customizing-your-design-system',
+            'Optimizing for Production' => '/course/optimizing-for-production',
+        ],
+        'Designing an image card' => [
+            'Structuring a basic card' => '/course/coming-soon',
+            'Making text content feel designed' => '/course/coming-soon',
+            'Designing a badge' => '/course/coming-soon',
+            'Working with SVG icons' => '/course/coming-soon',
+            'Cropping and positioning images' => '/course/coming-soon',
+            'Locking images to a fixed aspect ratio' => '/course/coming-soon',
+            'Creating depth with layers and shadows' => '/course/coming-soon',
+        ],
+        'Building a responsive navbar' => [
+            'Laying out the elements with flexbox' => '/course/coming-soon',
+            'Styling the navigation links' => '/course/coming-soon',
+            'Making it responsive' => '/course/coming-soon',
+            'Building a dropdown menu' => '/course/coming-soon',
+        ],
+        'Styling form elements' => [
+            'Styling basic text inputs' => '/course/coming-soon',
+            'Using positioning to build a search input group' => '/course/coming-soon',
+            'Using focus-within to change the search icon color' => '/course/coming-soon',
+            'Styling custom select menus' => '/course/coming-soon',
+            'Styling custom checkboxes and radio buttons' => '/course/coming-soon',
+            'Using the custom forms plugin' => '/course/coming-soon',
+        ],
+        'Working with CMS content' => [
+            'Targeting elements when you can\'t add classes' => '/course/coming-soon',
+            'Styling headings' => '/course/coming-soon',
+            'Styling paragraph text' => '/course/coming-soon',
+            'Styling lists' => '/course/coming-soon',
+        ],
+        'Layout Patterns' => [
+            'Building a responsive sidebar layout with flexbox' => '/course/coming-soon',
+            'Building responsive grids' => '/course/coming-soon',
+            'Building a sticky footer' => '/course/coming-soon',
+            'Building a side-scrolling card layout' => '/course/coming-soon',
+        ],
+        'Extending Tailwind' => [
+            'Using custom fonts'  => '/course/coming-soon',
+            'Using a custom color palette'  => '/course/coming-soon',
+            'Adding custom utilities'  => '/course/coming-soon',
+            'Working with third-party plugins'  => '/course/coming-soon',
+            'Writing your own simple plugin'  => '/course/coming-soon',
+        ]
     ],
     'Resources' => [
         'On this page' => [
