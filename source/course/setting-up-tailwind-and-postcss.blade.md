@@ -18,6 +18,12 @@ npm init -y
 npm install tailwindcss postcss-cli autoprefixer
 ```
 
+Then, generate a `tailwind.config.js` file:
+
+```sh
+npx tailwind init
+```
+
 Next, create a `postcss.config.js` file:
 
 ```js
