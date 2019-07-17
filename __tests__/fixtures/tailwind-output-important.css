@@ -6817,6 +6817,14 @@ video {
   box-shadow: none !important;
 }
 
+.box-sizing-border {
+  box-sizing: border !important;
+}
+
+.box-sizing-content {
+  box-sizing: content !important;
+}
+
 .fill-current {
   fill: currentColor !important;
 }
@@ -16129,6 +16137,14 @@ video {
 
   .sm\:focus\:shadow-none:focus {
     box-shadow: none !important;
+  }
+
+  .sm\:box-sizing-border {
+    box-sizing: border !important;
+  }
+
+  .sm\:box-sizing-content {
+    box-sizing: content !important;
   }
 
   .sm\:fill-current {
@@ -25446,6 +25462,14 @@ video {
     box-shadow: none !important;
   }
 
+  .md\:box-sizing-border {
+    box-sizing: border !important;
+  }
+
+  .md\:box-sizing-content {
+    box-sizing: content !important;
+  }
+
   .md\:fill-current {
     fill: currentColor !important;
   }
@@ -34761,6 +34785,14 @@ video {
     box-shadow: none !important;
   }
 
+  .lg\:box-sizing-border {
+    box-sizing: border !important;
+  }
+
+  .lg\:box-sizing-content {
+    box-sizing: content !important;
+  }
+
   .lg\:fill-current {
     fill: currentColor !important;
   }
@@ -44074,6 +44106,14 @@ video {
 
   .xl\:focus\:shadow-none:focus {
     box-shadow: none !important;
+  }
+
+  .xl\:box-sizing-border {
+    box-sizing: border !important;
+  }
+
+  .xl\:box-sizing-content {
+    box-sizing: content !important;
   }
 
   .xl\:fill-current {

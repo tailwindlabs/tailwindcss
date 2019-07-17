@@ -48,6 +48,7 @@ import position from './plugins/position'
 import inset from './plugins/inset'
 import resize from './plugins/resize'
 import boxShadow from './plugins/boxShadow'
+import boxSizing from './plugins/boxSizing'
 import fill from './plugins/fill'
 import stroke from './plugins/stroke'
 import tableLayout from './plugins/tableLayout'
@@ -126,6 +127,7 @@ export default function({ corePlugins: corePluginConfig }) {
     inset,
     resize,
     boxShadow,
+    boxSizing,
     fill,
     stroke,
     tableLayout,
