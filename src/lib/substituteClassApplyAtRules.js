@@ -30,7 +30,7 @@ function normalizeClassName(className) {
   return `.${escapeClassName(_.trimStart(className, '.'))}`
 }
 
-function findClass(classToApply, classTable, onError, allowNested) {
+function findClass(classToApply, classTable, onError) {
   const matches = _.get(classTable, classToApply, [])
 
   if (_.isEmpty(matches)) {
@@ -44,12 +44,20 @@ function findClass(classToApply, classTable, onError, allowNested) {
 
   const [match] = matches
 
-  if (match.parent.type !== 'root' && !allowNested) {
+  if (match.parent.type !== 'root') {
     // prettier-ignore
     throw onError(`\`@apply\` cannot be used with ${classToApply} because ${classToApply} is nested inside of an at-rule (@${match.parent.name}).`)
   }
 
   return match.clone().nodes
+}
+
+function findUtility(prefix, classToApply, classTable) {
+  let matches = _.get(classTable, classToApply, [])
+  if (_.isEmpty(matches) && prefix) {
+    matches = _.get(classTable, prefixSelector(prefix, classToApply), [])
+  }
+  return _.isEmpty(matches) ? [] : matches[0].clone().nodes
 }
 
 export default function(config, generatedUtilities) {
@@ -83,14 +91,27 @@ export default function(config, generatedUtilities) {
             return _.reduce(
               [
                 () => findClass(classToApply, classLookup, onError),
-                () => findClass(classToApply, shadowLookup, onError, true),
-                () => findClass(prefixSelector(config.prefix, classToApply), shadowLookup, onError),
                 () => {
                   // prettier-ignore
                   throw onError(`\`@apply\` cannot be used with \`${classToApply}\` because \`${classToApply}\` either cannot be found, or its actual definition includes a pseudo-selector like :hover, :active, etc. If you're sure that \`${classToApply}\` exists, make sure that any \`@import\` statements are being properly processed *before* Tailwind CSS sees your CSS, as \`@apply\` can only be used for classes in the same CSS tree.`)
                 },
               ],
-              (classDecls, candidate) => (!_.isEmpty(classDecls) ? classDecls : candidate()),
+              (classDecls, candidate) => {
+                if (!_.isEmpty(classDecls)) {
+                  return classDecls
+                } else {
+                  try {
+                    return candidate()
+                  } catch (e) {
+                    classDecls = findUtility(config.prefix, classToApply, shadowLookup)
+                    if (_.isEmpty(classDecls)) {
+                      throw e
+                    } else {
+                      return classDecls
+                    }
+                  }
+                }
+              },
               []
             )
           })

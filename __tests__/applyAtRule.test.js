@@ -242,3 +242,33 @@ test('you can apply utility classes without using the given prefix when using a 
     expect(result.warnings().length).toBe(0)
   })
 })
+
+test('you can apply utility classes even if they have been nested', () => {
+  const input = `
+    .foo {
+      .mb-4 { margin-bottom: 1rem; }
+    }
+    .bar { @apply .mb-4; }
+  `
+
+  const expected = `
+    .foo {
+      .mb-4 { margin-bottom: 1rem; }
+    }
+    .bar { margin-bottom: 1rem; }
+  `
+
+  const config = resolveConfig([
+    {
+      ...defaultConfig,
+      prefix: () => {
+        return 'tw-'
+      },
+    },
+  ])
+
+  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
