@@ -247,15 +247,17 @@ test('you can apply utility classes even if they have been nested', () => {
   const input = `
     .foo {
       .mb-4 { margin-bottom: 1rem; }
+      .tw-mt-4 { margin-top: 1rem; }
     }
-    .bar { @apply .mb-4; }
+    .bar { @apply .mb-4 .tw-mt-4; }
   `
 
   const expected = `
     .foo {
       .mb-4 { margin-bottom: 1rem; }
+      .tw-mt-4 { margin-top: 1rem; }
     }
-    .bar { margin-bottom: 1rem; }
+    .bar { margin-bottom: 1rem; margin-top: 1rem; }
   `
 
   const config = resolveConfig([
