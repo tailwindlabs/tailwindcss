@@ -8,6 +8,7 @@
   "repository": "https://github.com/tailwindcss/tailwindcss.git",
   "bugs": "https://github.com/tailwindcss/tailwindcss/issues",
   "homepage": "https://tailwindcss.com",
+  "files": ["dist"],
   "bin": {
     "tailwind": "lib/cli.js"
   },
