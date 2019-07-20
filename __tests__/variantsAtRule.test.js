@@ -135,6 +135,48 @@ test('it can generate focus-within variants', () => {
   })
 })
 
+test('it can generate first-child variants', () => {
+  const input = `
+    @variants first {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+      .first\\:banana:first-child { color: yellow; }
+      .first\\:chocolate:first-child { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate last-child variants', () => {
+  const input = `
+    @variants last {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+      .last\\:banana:last-child { color: yellow; }
+      .last\\:chocolate:last-child { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate group-hover variants', () => {
   const input = `
     @variants group-hover {
