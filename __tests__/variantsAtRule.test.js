@@ -156,6 +156,27 @@ test('it can generate first-child variants', () => {
   })
 })
 
+test('it can generate odd variants', () => {
+  const input = `
+    @variants odd {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .odd\\:banana:nth-child(odd) { color: yellow; }
+    .odd\\:chocolate:nth-child(odd) { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate last-child variants', () => {
   const input = `
     @variants last {
@@ -169,6 +190,27 @@ test('it can generate last-child variants', () => {
       .chocolate { color: brown; }
       .last\\:banana:last-child { color: yellow; }
       .last\\:chocolate:last-child { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate even variants', () => {
+  const input = `
+    @variants even {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .even\\:banana:nth-child(even) { color: yellow; }
+    .even\\:chocolate:nth-child(even) { color: brown; }
   `
 
   return run(input).then(result => {
