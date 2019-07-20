@@ -137,7 +137,7 @@ test('it can generate focus-within variants', () => {
 
 test('it can generate first-child variants', () => {
   const input = `
-    @variants first-child {
+    @variants first {
       .banana { color: yellow; }
       .chocolate { color: brown; }
     }
@@ -146,8 +146,8 @@ test('it can generate first-child variants', () => {
   const output = `
       .banana { color: yellow; }
       .chocolate { color: brown; }
-      .first-child\\:banana:first-child { color: yellow; }
-      .first-child\\:chocolate:first-child { color: brown; }
+      .first\\:banana:first-child { color: yellow; }
+      .first\\:chocolate:first-child { color: brown; }
   `
 
   return run(input).then(result => {
@@ -158,7 +158,7 @@ test('it can generate first-child variants', () => {
 
 test('it can generate last-child variants', () => {
   const input = `
-    @variants last-child {
+    @variants last {
       .banana { color: yellow; }
       .chocolate { color: brown; }
     }
@@ -167,8 +167,8 @@ test('it can generate last-child variants', () => {
   const output = `
       .banana { color: yellow; }
       .chocolate { color: brown; }
-      .last-child\\:banana:last-child { color: yellow; }
-      .last-child\\:chocolate:last-child { color: brown; }
+      .last\\:banana:last-child { color: yellow; }
+      .last\\:chocolate:last-child { color: brown; }
   `
 
   return run(input).then(result => {

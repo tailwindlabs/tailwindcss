@@ -3,12 +3,12 @@ import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
 import generateVariantFunction from '../util/generateVariantFunction'
 
-function generatePseudoClassVariant(pseudoClass) {
+function generatePseudoClassVariant(pseudoClass, selectorPrefix = pseudoClass) {
   return generateVariantFunction(({ modifySelectors, separator }) => {
     return modifySelectors(({ selector }) => {
       return selectorParser(selectors => {
         selectors.walkClasses(sel => {
-          sel.value = `${pseudoClass}${separator}${sel.value}`
+          sel.value = `${selectorPrefix}${separator}${sel.value}`
           sel.parent.insertAfter(sel, selectorParser.pseudo({ value: `:${pseudoClass}` }))
         })
       }).processSync(selector)
@@ -38,8 +38,8 @@ const defaultVariantGenerators = {
   active: generatePseudoClassVariant('active'),
   visited: generatePseudoClassVariant('visited'),
   disabled: generatePseudoClassVariant('disabled'),
-  'first-child': generatePseudoClassVariant('first-child'),
-  'last-child': generatePseudoClassVariant('last-child'),
+  first: generatePseudoClassVariant('first-child', 'first'),
+  last: generatePseudoClassVariant('last-child', 'last'),
 }
 
 export default function(config, { variantGenerators: pluginVariantGenerators }) {
