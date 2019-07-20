@@ -3196,6 +3196,10 @@ video {
   border-style: dotted;
 }
 
+.border-double {
+  border-style: double;
+}
+
 .border-none {
   border-style: none;
 }
@@ -10141,6 +10145,10 @@ video {
 
   .sm\:border-dotted {
     border-style: dotted;
+  }
+
+  .sm\:border-double {
+    border-style: double;
   }
 
   .sm\:border-none {
@@ -17091,6 +17099,10 @@ video {
     border-style: dotted;
   }
 
+  .md\:border-double {
+    border-style: double;
+  }
+
   .md\:border-none {
     border-style: none;
   }
@@ -24039,6 +24051,10 @@ video {
     border-style: dotted;
   }
 
+  .lg\:border-double {
+    border-style: double;
+  }
+
   .lg\:border-none {
     border-style: none;
   }
@@ -30985,6 +31001,10 @@ video {
 
   .xl\:border-dotted {
     border-style: dotted;
+  }
+
+  .xl\:border-double {
+    border-style: double;
   }
 
   .xl\:border-none {

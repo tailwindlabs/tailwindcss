@@ -11,6 +11,9 @@ export default function() {
         '.border-dotted': {
           'border-style': 'dotted',
         },
+        '.border-double': {
+          'border-style': 'double',
+        },
         '.border-none': {
           'border-style': 'none',
         },
