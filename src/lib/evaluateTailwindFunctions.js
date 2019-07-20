@@ -6,7 +6,7 @@ export default function(config) {
     functions: {
       theme: (path, ...defaultValue) => {
         return _.thru(_.get(config.theme, _.trim(path, `'"`), defaultValue), value => {
-          return _.isArray(value) ? value.join(', ') : value
+          return Array.isArray(value) ? value.join(', ') : value
         })
       },
     },

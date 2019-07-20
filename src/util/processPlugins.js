@@ -32,7 +32,7 @@ export default function(plugins, config) {
       config: getConfigValue,
       theme: (path, defaultValue) => getConfigValue(`theme.${path}`, defaultValue),
       variants: (path, defaultValue) => {
-        if (_.isArray(config.variants)) {
+        if (Array.isArray(config.variants)) {
           return config.variants
         }
 
