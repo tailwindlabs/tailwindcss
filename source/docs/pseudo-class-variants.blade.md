@@ -60,7 +60,7 @@ You can control whether `hover` variants are enabled for a utility in the `varia
 module.exports = {
   // ...
   variants: {
-    backgroundColor: ['hover'],
+    backgroundColor: ['responsive', 'hover', 'focus'],
   },
 }
 ```
@@ -86,7 +86,7 @@ You can control whether `focus` variants are enabled for a utility in the `varia
 module.exports = {
   // ...
   variants: {
-    backgroundColor: ['focus'],
+    backgroundColor: ['responsive', 'hover', 'focus'],
   },
 }
 ```
@@ -114,7 +114,7 @@ You can control whether `active` variants are enabled for a utility in the `vari
 module.exports = {
   // ...
   variants: {
-    backgroundColor: ['active'],
+    backgroundColor: ['responsive', 'hover', 'focus', 'active'],
   },
 }
 ```
@@ -145,7 +145,7 @@ You can control whether `group-hover` variants are enabled for a utility in the 
 module.exports = {
   // ...
   variants: {
-    textColor: ['group-hover'],
+    borderColor: ['responsive', 'hover', 'focus', 'group-hover'],
   },
 }
 ```
@@ -193,7 +193,7 @@ You can control whether `focus-within` variants are enabled for a utility in the
 module.exports = {
   // ...
   variants: {
-    backgroundColor: ['focus-within'],
+    borderColor: ['responsive', 'hover', 'focus', 'focus-within'],
   },
 }
 ```
