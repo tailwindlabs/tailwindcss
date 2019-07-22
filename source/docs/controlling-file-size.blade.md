@@ -85,7 +85,7 @@ Purgecss uses "extractors" to determine what strings in your templates are class
 ```js
 const purgecss = require('@fullhuman/postcss-purgecss')({
   // ...
-  defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
+  defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]*[A-Za-z0-9-_/]/g) || []
 })
 ```
 
