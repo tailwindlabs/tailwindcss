@@ -16,10 +16,10 @@ Instead, you're encouraged work [utility-first](/docs/utility-first) and [extrac
 @component('_partials.code-sample', ['class' => 'p-8 bg-white'])
 <div class="max-w-sm mx-auto">
   <p class="text-sm mb-2 text-gray-600">Simple form input component</p>
-  <input class="bg-white focus:outline-0 focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" placeholder="jane@example.com">
+  <input class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" placeholder="jane@example.com">
 </div>
 @slot('code')
-<input class="bg-white focus:outline-0 focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" placeholder="jane@example.com">
+<input class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" placeholder="jane@example.com">
 @endslot
 @endcomponent
 
