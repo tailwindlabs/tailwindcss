@@ -12,7 +12,11 @@ export default function generateVariantFunction(generator) {
           container: cloned,
           separator: config.separator,
           modifySelectors: modifierFunction => {
-            cloned.walkRules(rule => {
+            cloned.each(rule => {
+              if (rule.type !== 'rule') {
+                return
+              }
+
               rule.selectors = rule.selectors.map(selector => {
                 const className = selectorParser(selectors => {
                   return selectors.first.filter(({ type }) => type === 'class').pop().value
