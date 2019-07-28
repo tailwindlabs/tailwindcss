@@ -393,6 +393,43 @@ test('the default variant can be generated in a specified position', () => {
   })
 })
 
+test('nested rules are not modified', () => {
+  const input = `
+    @variants focus, active, hover {
+      .banana {
+        color: yellow;
+        .chocolate { color: brown; }
+      }
+    }
+  `
+
+  const output = `
+    .banana {
+      color: yellow;
+      .chocolate { color: brown; }
+    }
+    .focus\\:banana:focus {
+      color: yellow;
+      .chocolate { color: brown; }
+    }
+    .active\\:banana:active {
+      color: yellow;
+      .chocolate { color: brown; }
+    }
+    .hover\\:banana:hover {
+      color: yellow;
+      .chocolate { color: brown; }
+    }
+  `
+
+  return run(input, {
+    ...config,
+  }).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('plugin variants can modify rules using the raw PostCSS API', () => {
   const input = `
     @variants important {
