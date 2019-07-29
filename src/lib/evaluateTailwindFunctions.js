@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import functions from 'postcss-functions'
 
-export default function(config) {
+export default function(config, postcssFunctions = []) {
   return functions({
     functions: {
       theme: (path, ...defaultValue) => {
@@ -12,6 +12,7 @@ export default function(config) {
           return Array.isArray(value) ? value.join(', ') : value
         })
       },
+      ...postcssFunctions,
     },
   })
 }

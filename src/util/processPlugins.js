@@ -19,6 +19,7 @@ export default function(plugins, config) {
   const pluginBaseStyles = []
   const pluginComponents = []
   const pluginUtilities = []
+  const pluginFunctions = []
   const pluginVariantGenerators = {}
 
   const applyConfiguredPrefix = selector => {
@@ -88,6 +89,9 @@ export default function(plugins, config) {
       addVariant: (name, generator) => {
         pluginVariantGenerators[name] = generateVariantFunction(generator)
       },
+      addFunction: (name, executor) => {
+        pluginFunctions[name] = executor
+      },
     })
   })
 
@@ -96,5 +100,6 @@ export default function(plugins, config) {
     components: pluginComponents,
     utilities: pluginUtilities,
     variantGenerators: pluginVariantGenerators,
+    postcssFunctions: pluginFunctions,
   }
 }
