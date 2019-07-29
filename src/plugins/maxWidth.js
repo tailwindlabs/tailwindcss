@@ -1,9 +1,9 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants }) {
+  return function({ addUtilities, e, config, variants }) {
     const utilities = _.fromPairs(
-      _.map(theme('maxWidth'), (value, modifier) => {
+      _.map(config('theme.maxWidth'), (value, modifier) => {
         return [
           `.${e(`max-w-${modifier}`)}`,
           {

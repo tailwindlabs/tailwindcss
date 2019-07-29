@@ -1,9 +1,9 @@
 import _ from 'lodash'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants }) {
+  return function({ addUtilities, e, config, variants }) {
     const utilities = _.fromPairs(
-      _.map(theme('objectPosition'), (value, modifier) => {
+      _.map(config('theme.objectPosition'), (value, modifier) => {
         return [
           `.${e(`object-${modifier}`)}`,
           {

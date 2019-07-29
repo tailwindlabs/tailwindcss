@@ -2,7 +2,7 @@ import _ from 'lodash'
 import prefixNegativeModifiers from '../util/prefixNegativeModifiers'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants }) {
+  return function({ addUtilities, e, config, variants }) {
     const generators = [
       (size, modifier) => ({
         [`.${e(prefixNegativeModifiers('m', modifier))}`]: { margin: `${size}` },
@@ -26,7 +26,7 @@ export default function() {
     ]
 
     const utilities = _.flatMap(generators, generator => {
-      return _.flatMap(theme('margin'), generator)
+      return _.flatMap(config('theme.margin'), generator)
     })
 
     addUtilities(utilities, variants('margin'))

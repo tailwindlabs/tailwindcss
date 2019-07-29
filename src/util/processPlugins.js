@@ -30,7 +30,15 @@ export default function(plugins, config) {
     plugin({
       postcss,
       config: getConfigValue,
-      theme: (path, defaultValue) => getConfigValue(`theme.${path}`, defaultValue),
+      theme: (path, defaultValue) => {
+        let value = getConfigValue(`theme.${path}`, defaultValue)
+
+        if (value && value.hasOwnProperty('default')) {
+          return value.default
+        } else {
+          return value
+        }
+      },
       variants: (path, defaultValue) => {
         if (Array.isArray(config.variants)) {
           return config.variants
