@@ -1,6 +1,6 @@
 ---
 extends: _layouts.course-lesson
-title: "Setting Up Tailwind and PostCSS"
+title: "Setting up Tailwind and PostCSS"
 description: "Learn how to install Tailwind and get it compiling in a simple HTML project."
 titleBorder: true
 hideTableOfContents: true
@@ -9,7 +9,7 @@ nextUrl: "/course/the-utility-first-workflow"
 next: "The Utility-First Workflow"
 ---
 
-## Notes
+## Setting up Tailwind and PostCSS
 
 First, create a `package.json` file and install `tailwindcss`, `postcss-cli`, and `autoprefixer`:
 
