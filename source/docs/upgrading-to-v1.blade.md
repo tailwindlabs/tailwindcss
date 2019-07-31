@@ -729,7 +729,7 @@ If you are using our `preflight` styles, all `h1-h6` elements are unstyled by de
 
 That means that out of the box, they all have a font-size of `1em` (whatever the parent font size is) and a font-weight of `inherit`, so they look exactly like a `p` tag.
 
-This might sound dumb at first, but in web application development it's very common for some piece of text to be a heading semantically, but actually be styled in a much less "in your face" way because it's meant to look more like a subtle label on a section of UI.
+We do this because in web application development it's very common for some piece of text to be a heading semantically, but actually be styled in a much less "in your face" way because it's meant to look more like a subtle label on a section of UI. Because of this, well-designed applications often need to "undo" the user agent styles for headings anyways, and we think it's better for styling to feel additive in Tailwind instead of subtractive.
 
 By using the user agent styles for headings, we also made it far too easy to accidentally deviate from your own design system. If the browser says that an `h1` should be `2em`, it could compute to a size that isn't part of your `fontSize` scale.
 
