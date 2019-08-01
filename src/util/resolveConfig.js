@@ -3,6 +3,7 @@ import isFunction from 'lodash/isFunction'
 import defaults from 'lodash/defaults'
 import map from 'lodash/map'
 import toPath from 'lodash/toPath'
+import startsWith from 'lodash/startsWith'
 
 const configUtils = {
   negative(scale) {
@@ -11,7 +12,9 @@ const configUtils = {
       .reduce(
         (negativeScale, key) => ({
           ...negativeScale,
-          [`-${key}`]: `-${scale[key]}`,
+          [`-${key}`]: startsWith(scale[key], 'var(')
+            ? `calc(${scale[key]} * -1)`
+            : `-${scale[key]}`,
         }),
         {}
       )
