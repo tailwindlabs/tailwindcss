@@ -26,6 +26,9 @@ export default function() {
         '.table-cell': {
           display: 'table-cell',
         },
+        '.contents': {
+          display: 'contents',
+        },
         '.hidden': {
           display: 'none',
         },
