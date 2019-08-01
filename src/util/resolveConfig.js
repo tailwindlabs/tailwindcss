@@ -12,7 +12,7 @@ const configUtils = {
       .reduce(
         (negativeScale, key) => ({
           ...negativeScale,
-          [`-${key}`]: startsWith(scale[key], 'var(')
+          [`-${key}`]: ['var(', 'calc('].some(prefix => startsWith(scale[key], prefix))
             ? `calc(${scale[key]} * -1)`
             : `-${scale[key]}`,
         }),
