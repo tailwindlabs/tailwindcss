@@ -1130,3 +1130,63 @@ test('the original theme is not mutated', () => {
     },
   })
 })
+
+test('custom properties are multiplied by -1 for negative values', () => {
+  const userConfig = {
+    theme: {
+      spacing: {
+        '1': '1px',
+        '2': '2px',
+        '3': '3px',
+        '4': '4px',
+        foo: 'var(--foo)',
+        bar: 'var(--bar, 500px)',
+      },
+      margin: (theme, { negative }) => ({
+        ...theme('spacing'),
+        ...negative(theme('spacing')),
+      }),
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {},
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      spacing: {
+        '1': '1px',
+        '2': '2px',
+        '3': '3px',
+        '4': '4px',
+        foo: 'var(--foo)',
+        bar: 'var(--bar, 500px)',
+      },
+      margin: {
+        '1': '1px',
+        '2': '2px',
+        '3': '3px',
+        '4': '4px',
+        foo: 'var(--foo)',
+        bar: 'var(--bar, 500px)',
+        '-1': '-1px',
+        '-2': '-2px',
+        '-3': '-3px',
+        '-4': '-4px',
+        '-foo': 'calc(var(--foo) * -1)',
+        '-bar': 'calc(var(--bar, 500px) * -1)',
+      },
+    },
+    variants: {},
+  })
+})
