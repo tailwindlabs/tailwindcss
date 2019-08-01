@@ -355,7 +355,7 @@ To add new component styles from a plugin, call `addBase`, passing in your style
 // tailwind.config.js
 module.exports = {
   plugins: [
-    function({ addBase }) {
+    function({ addBase, config }) {
       addBase({
         'h1': { fontSize: config('theme.fontSize.2xl') },
         'h2': { fontSize: config('theme.fontSize.xl') },
