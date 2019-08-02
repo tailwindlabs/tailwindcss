@@ -386,6 +386,7 @@ Here's a list of every core plugin for reference:
 | `objectFit` | The `object-fit` utilities like `object-cover` |
 | `objectPosition` | The `object-position` utilities like `object-center` |
 | `opacity` | The `opacity` utilities like `opacity-50` |
+| `order` | The flexbox `order` utilities like `order-last` |
 | `outline` | The `outline` utilities like `outline-none` |
 | `overflow` | The `overflow` utilities like `overflow-hidden` |
 | `padding` | The `padding` utilities like `py-12` |
