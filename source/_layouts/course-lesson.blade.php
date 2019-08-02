@@ -229,17 +229,19 @@
             @if ($page->vimeoId !== null)
             <div class="mb-8 px-6 xl:px-12 relative z-10">
               <video-player vimeo-url="https://vimeo.com/video/{{ $page->vimeoId }}"></video-player>
-              <div class="mt-6 flex {{ $page->prev ? 'justify-between' : 'justify-end' }}">
-                @if ($page->prev)
-                <a href="{{ $page->prevUrl }}" class="inline-flex items-center">
-                  <svg class="mr-2 h-4 w-4 fill-current text-gray-600" viewBox="0 0 24 24"><path d="M5.41 11H21a1 1 0 0 1 0 2H5.41l5.3 5.3a1 1 0 0 1-1.42 1.4l-7-7a1 1 0 0 1 0-1.4l7-7a1 1 0 0 1 1.42 1.4L5.4 11z"/></svg>
-                  <span>{{ $page->prev }}</span>
-                </a>
-                @endif
+              <div class="mt-4 flex justify-between">
+                <div>
+                  <a href="{{ $page->downloadHd }}" class="text-gray-600 hover:text-gray-900">
+                    <span>Download HD</span>
+                  </a>
+                  <a href="{{ $page->downloadHd }}" class="ml-6 text-gray-600 hover:text-gray-900">
+                    <span>Download SD</span>
+                  </a>
+                </div>
                 @if ($page->next)
-                <a href="{{ $page->nextUrl }}" class="inline-flex items-center">
-                  <span>{{ $page->next }}</span>
-                  <svg class="ml-2 h-4 w-4 fill-current text-gray-600" viewBox="0 0 24 24"><path d="M18.59 13H3a1 1 0 0 1 0-2h15.59l-5.3-5.3a1 1 0 1 1 1.42-1.4l7 7a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.42-1.4l5.3-5.3z"/></svg>
+                <a href="{{ $page->nextUrl }}" class="inline-flex items-center text-gray-600 hover:text-gray-900">
+                  <span>Next lesson</span>
+                  <svg class="ml-2 h-4 w-4 fill-current text-gray-500" viewBox="0 0 24 24"><path d="M18.59 13H3a1 1 0 0 1 0-2h15.59l-5.3-5.3a1 1 0 1 1 1.42-1.4l7 7a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.42-1.4l5.3-5.3z"/></svg>
                 </a>
                 @endif
               </div>
