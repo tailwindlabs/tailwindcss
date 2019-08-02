@@ -133,3 +133,42 @@ test('tailwind.config.js is picked up by default', () => {
       })
   })
 })
+
+test('tailwind.config.js is picked up by default when passing an empty object', () => {
+  return inTempDirectory(() => {
+    fs.writeFileSync(
+      path.resolve(defaultConfigFile),
+      `module.exports = {
+        theme: {
+          screens: {
+            mobile: '400px',
+          },
+        },
+      }`
+    )
+
+    return postcss([tailwind({})])
+      .process(
+        `
+          @responsive {
+            .foo {
+              color: blue;
+            }
+          }
+        `,
+        { from: undefined }
+      )
+      .then(result => {
+        expect(result.css).toMatchCss(`
+          .foo {
+            color: blue;
+          }
+          @media (min-width: 400px) {
+            .mobile\\:foo {
+              color: blue;
+            }
+          }
+        `)
+      })
+  })
+})
