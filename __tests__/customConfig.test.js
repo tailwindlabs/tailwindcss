@@ -95,6 +95,44 @@ test('custom config path can be passed using `config` property in an object', ()
     })
 })
 
+test('custom config can be passed under the `config` property', () => {
+  return postcss([
+    tailwind({
+      config: {
+        theme: {
+          screens: {
+            mobile: '400px',
+          },
+        },
+      },
+    }),
+  ])
+    .process(
+      `
+        @responsive {
+          .foo {
+            color: blue;
+          }
+        }
+      `,
+      { from: undefined }
+    )
+    .then(result => {
+      const expected = `
+        .foo {
+          color: blue;
+        }
+        @media (min-width: 400px) {
+          .mobile\\:foo {
+            color: blue;
+          }
+        }
+      `
+
+      expect(result.css).toMatchCss(expected)
+    })
+})
+
 test('tailwind.config.js is picked up by default', () => {
   return inTempDirectory(() => {
     fs.writeFileSync(
