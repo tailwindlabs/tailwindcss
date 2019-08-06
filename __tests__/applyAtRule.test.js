@@ -242,3 +242,25 @@ test('you can apply utility classes without using the given prefix when using a 
     expect(result.warnings().length).toBe(0)
   })
 })
+
+test('you can apply utility classes without specificity prefix even if important (selector) is used.', () => {
+  const input = `
+    .foo { @apply .mt-8 .mb-8; }
+  `
+
+  const expected = `
+    .foo { margin-top: 2rem; margin-bottom: 2rem; }
+  `
+
+  const config = resolveConfig([
+    {
+      ...defaultConfig,
+      important: '#app',
+    },
+  ])
+
+  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
