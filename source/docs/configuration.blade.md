@@ -414,7 +414,7 @@ You can import the Tailwind config file in your javascript code too! Tailwind pr
 ```js
 // src/tailwindConfig.js
 import resolveConfig from 'tailwindcss/resolveConfig'
-import config from '../../tailwind.config.js'
+import tailwindConfig from '../../tailwind.config.js'
 
 export default resolveConfig(tailwindConfig)
 ```
