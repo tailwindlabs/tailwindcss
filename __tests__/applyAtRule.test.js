@@ -243,7 +243,7 @@ test('you can apply utility classes without using the given prefix when using a 
   })
 })
 
-test('you can apply utility classes without specificity prefix even if important (selector) is used.', () => {
+test('you can apply utility classes without specificity prefix even if important (selector) is used', () => {
   const input = `
     .foo { @apply .mt-8 .mb-8; }
   `
@@ -255,6 +255,29 @@ test('you can apply utility classes without specificity prefix even if important
   const config = resolveConfig([
     {
       ...defaultConfig,
+      important: '#app',
+    },
+  ])
+
+  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
+    expect(result.css).toEqual(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('you can apply utility classes without using the given prefix even if important (selector) is used', () => {
+  const input = `
+    .foo { @apply .tw-mt-4 .mb-4; }
+  `
+
+  const expected = `
+    .foo { margin-top: 1rem; margin-bottom: 1rem; }
+  `
+
+  const config = resolveConfig([
+    {
+      ...defaultConfig,
+      prefix: 'tw-',
       important: '#app',
     },
   ])
