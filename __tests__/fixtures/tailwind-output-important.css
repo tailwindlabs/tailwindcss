@@ -5760,6 +5760,378 @@ video {
   padding-left: 1px !important;
 }
 
+.placeholder-transparent::placeholder {
+  color: transparent !important;
+}
+
+.placeholder-black::placeholder {
+  color: #000 !important;
+}
+
+.placeholder-white::placeholder {
+  color: #fff !important;
+}
+
+.placeholder-gray-100::placeholder {
+  color: #f7fafc !important;
+}
+
+.placeholder-gray-200::placeholder {
+  color: #edf2f7 !important;
+}
+
+.placeholder-gray-300::placeholder {
+  color: #e2e8f0 !important;
+}
+
+.placeholder-gray-400::placeholder {
+  color: #cbd5e0 !important;
+}
+
+.placeholder-gray-500::placeholder {
+  color: #a0aec0 !important;
+}
+
+.placeholder-gray-600::placeholder {
+  color: #718096 !important;
+}
+
+.placeholder-gray-700::placeholder {
+  color: #4a5568 !important;
+}
+
+.placeholder-gray-800::placeholder {
+  color: #2d3748 !important;
+}
+
+.placeholder-gray-900::placeholder {
+  color: #1a202c !important;
+}
+
+.placeholder-red-100::placeholder {
+  color: #fff5f5 !important;
+}
+
+.placeholder-red-200::placeholder {
+  color: #fed7d7 !important;
+}
+
+.placeholder-red-300::placeholder {
+  color: #feb2b2 !important;
+}
+
+.placeholder-red-400::placeholder {
+  color: #fc8181 !important;
+}
+
+.placeholder-red-500::placeholder {
+  color: #f56565 !important;
+}
+
+.placeholder-red-600::placeholder {
+  color: #e53e3e !important;
+}
+
+.placeholder-red-700::placeholder {
+  color: #c53030 !important;
+}
+
+.placeholder-red-800::placeholder {
+  color: #9b2c2c !important;
+}
+
+.placeholder-red-900::placeholder {
+  color: #742a2a !important;
+}
+
+.placeholder-orange-100::placeholder {
+  color: #fffaf0 !important;
+}
+
+.placeholder-orange-200::placeholder {
+  color: #feebc8 !important;
+}
+
+.placeholder-orange-300::placeholder {
+  color: #fbd38d !important;
+}
+
+.placeholder-orange-400::placeholder {
+  color: #f6ad55 !important;
+}
+
+.placeholder-orange-500::placeholder {
+  color: #ed8936 !important;
+}
+
+.placeholder-orange-600::placeholder {
+  color: #dd6b20 !important;
+}
+
+.placeholder-orange-700::placeholder {
+  color: #c05621 !important;
+}
+
+.placeholder-orange-800::placeholder {
+  color: #9c4221 !important;
+}
+
+.placeholder-orange-900::placeholder {
+  color: #7b341e !important;
+}
+
+.placeholder-yellow-100::placeholder {
+  color: #fffff0 !important;
+}
+
+.placeholder-yellow-200::placeholder {
+  color: #fefcbf !important;
+}
+
+.placeholder-yellow-300::placeholder {
+  color: #faf089 !important;
+}
+
+.placeholder-yellow-400::placeholder {
+  color: #f6e05e !important;
+}
+
+.placeholder-yellow-500::placeholder {
+  color: #ecc94b !important;
+}
+
+.placeholder-yellow-600::placeholder {
+  color: #d69e2e !important;
+}
+
+.placeholder-yellow-700::placeholder {
+  color: #b7791f !important;
+}
+
+.placeholder-yellow-800::placeholder {
+  color: #975a16 !important;
+}
+
+.placeholder-yellow-900::placeholder {
+  color: #744210 !important;
+}
+
+.placeholder-green-100::placeholder {
+  color: #f0fff4 !important;
+}
+
+.placeholder-green-200::placeholder {
+  color: #c6f6d5 !important;
+}
+
+.placeholder-green-300::placeholder {
+  color: #9ae6b4 !important;
+}
+
+.placeholder-green-400::placeholder {
+  color: #68d391 !important;
+}
+
+.placeholder-green-500::placeholder {
+  color: #48bb78 !important;
+}
+
+.placeholder-green-600::placeholder {
+  color: #38a169 !important;
+}
+
+.placeholder-green-700::placeholder {
+  color: #2f855a !important;
+}
+
+.placeholder-green-800::placeholder {
+  color: #276749 !important;
+}
+
+.placeholder-green-900::placeholder {
+  color: #22543d !important;
+}
+
+.placeholder-teal-100::placeholder {
+  color: #e6fffa !important;
+}
+
+.placeholder-teal-200::placeholder {
+  color: #b2f5ea !important;
+}
+
+.placeholder-teal-300::placeholder {
+  color: #81e6d9 !important;
+}
+
+.placeholder-teal-400::placeholder {
+  color: #4fd1c5 !important;
+}
+
+.placeholder-teal-500::placeholder {
+  color: #38b2ac !important;
+}
+
+.placeholder-teal-600::placeholder {
+  color: #319795 !important;
+}
+
+.placeholder-teal-700::placeholder {
+  color: #2c7a7b !important;
+}
+
+.placeholder-teal-800::placeholder {
+  color: #285e61 !important;
+}
+
+.placeholder-teal-900::placeholder {
+  color: #234e52 !important;
+}
+
+.placeholder-blue-100::placeholder {
+  color: #ebf8ff !important;
+}
+
+.placeholder-blue-200::placeholder {
+  color: #bee3f8 !important;
+}
+
+.placeholder-blue-300::placeholder {
+  color: #90cdf4 !important;
+}
+
+.placeholder-blue-400::placeholder {
+  color: #63b3ed !important;
+}
+
+.placeholder-blue-500::placeholder {
+  color: #4299e1 !important;
+}
+
+.placeholder-blue-600::placeholder {
+  color: #3182ce !important;
+}
+
+.placeholder-blue-700::placeholder {
+  color: #2b6cb0 !important;
+}
+
+.placeholder-blue-800::placeholder {
+  color: #2c5282 !important;
+}
+
+.placeholder-blue-900::placeholder {
+  color: #2a4365 !important;
+}
+
+.placeholder-indigo-100::placeholder {
+  color: #ebf4ff !important;
+}
+
+.placeholder-indigo-200::placeholder {
+  color: #c3dafe !important;
+}
+
+.placeholder-indigo-300::placeholder {
+  color: #a3bffa !important;
+}
+
+.placeholder-indigo-400::placeholder {
+  color: #7f9cf5 !important;
+}
+
+.placeholder-indigo-500::placeholder {
+  color: #667eea !important;
+}
+
+.placeholder-indigo-600::placeholder {
+  color: #5a67d8 !important;
+}
+
+.placeholder-indigo-700::placeholder {
+  color: #4c51bf !important;
+}
+
+.placeholder-indigo-800::placeholder {
+  color: #434190 !important;
+}
+
+.placeholder-indigo-900::placeholder {
+  color: #3c366b !important;
+}
+
+.placeholder-purple-100::placeholder {
+  color: #faf5ff !important;
+}
+
+.placeholder-purple-200::placeholder {
+  color: #e9d8fd !important;
+}
+
+.placeholder-purple-300::placeholder {
+  color: #d6bcfa !important;
+}
+
+.placeholder-purple-400::placeholder {
+  color: #b794f4 !important;
+}
+
+.placeholder-purple-500::placeholder {
+  color: #9f7aea !important;
+}
+
+.placeholder-purple-600::placeholder {
+  color: #805ad5 !important;
+}
+
+.placeholder-purple-700::placeholder {
+  color: #6b46c1 !important;
+}
+
+.placeholder-purple-800::placeholder {
+  color: #553c9a !important;
+}
+
+.placeholder-purple-900::placeholder {
+  color: #44337a !important;
+}
+
+.placeholder-pink-100::placeholder {
+  color: #fff5f7 !important;
+}
+
+.placeholder-pink-200::placeholder {
+  color: #fed7e2 !important;
+}
+
+.placeholder-pink-300::placeholder {
+  color: #fbb6ce !important;
+}
+
+.placeholder-pink-400::placeholder {
+  color: #f687b3 !important;
+}
+
+.placeholder-pink-500::placeholder {
+  color: #ed64a6 !important;
+}
+
+.placeholder-pink-600::placeholder {
+  color: #d53f8c !important;
+}
+
+.placeholder-pink-700::placeholder {
+  color: #b83280 !important;
+}
+
+.placeholder-pink-800::placeholder {
+  color: #97266d !important;
+}
+
+.placeholder-pink-900::placeholder {
+  color: #702459 !important;
+}
+
 .pointer-events-none {
   pointer-events: none !important;
 }
