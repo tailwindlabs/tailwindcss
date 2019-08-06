@@ -59,7 +59,9 @@ export default function(plugins, config) {
             if (config.important === true) {
               rule.walkDecls(decl => (decl.important = true))
             } else if (typeof config.important === 'string') {
-              rule.selector = increaseSpecificity(config.important, rule.selector)
+              rule.selectors = rule.selectors.map(selector => {
+                return increaseSpecificity(config.important, selector)
+              })
             }
           }
         })
