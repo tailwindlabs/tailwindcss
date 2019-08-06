@@ -5125,6 +5125,46 @@ video {
   opacity: 1 !important;
 }
 
+.hover\:opacity-0:hover {
+  opacity: 0 !important;
+}
+
+.hover\:opacity-25:hover {
+  opacity: 0.25 !important;
+}
+
+.hover\:opacity-50:hover {
+  opacity: 0.5 !important;
+}
+
+.hover\:opacity-75:hover {
+  opacity: 0.75 !important;
+}
+
+.hover\:opacity-100:hover {
+  opacity: 1 !important;
+}
+
+.focus\:opacity-0:focus {
+  opacity: 0 !important;
+}
+
+.focus\:opacity-25:focus {
+  opacity: 0.25 !important;
+}
+
+.focus\:opacity-50:focus {
+  opacity: 0.5 !important;
+}
+
+.focus\:opacity-75:focus {
+  opacity: 0.75 !important;
+}
+
+.focus\:opacity-100:focus {
+  opacity: 1 !important;
+}
+
 .outline-none {
   outline: 0 !important;
 }
@@ -12817,6 +12857,46 @@ video {
   }
 
   .sm\:opacity-100 {
+    opacity: 1 !important;
+  }
+
+  .sm\:hover\:opacity-0:hover {
+    opacity: 0 !important;
+  }
+
+  .sm\:hover\:opacity-25:hover {
+    opacity: 0.25 !important;
+  }
+
+  .sm\:hover\:opacity-50:hover {
+    opacity: 0.5 !important;
+  }
+
+  .sm\:hover\:opacity-75:hover {
+    opacity: 0.75 !important;
+  }
+
+  .sm\:hover\:opacity-100:hover {
+    opacity: 1 !important;
+  }
+
+  .sm\:focus\:opacity-0:focus {
+    opacity: 0 !important;
+  }
+
+  .sm\:focus\:opacity-25:focus {
+    opacity: 0.25 !important;
+  }
+
+  .sm\:focus\:opacity-50:focus {
+    opacity: 0.5 !important;
+  }
+
+  .sm\:focus\:opacity-75:focus {
+    opacity: 0.75 !important;
+  }
+
+  .sm\:focus\:opacity-100:focus {
     opacity: 1 !important;
   }
 
@@ -20516,6 +20596,46 @@ video {
     opacity: 1 !important;
   }
 
+  .md\:hover\:opacity-0:hover {
+    opacity: 0 !important;
+  }
+
+  .md\:hover\:opacity-25:hover {
+    opacity: 0.25 !important;
+  }
+
+  .md\:hover\:opacity-50:hover {
+    opacity: 0.5 !important;
+  }
+
+  .md\:hover\:opacity-75:hover {
+    opacity: 0.75 !important;
+  }
+
+  .md\:hover\:opacity-100:hover {
+    opacity: 1 !important;
+  }
+
+  .md\:focus\:opacity-0:focus {
+    opacity: 0 !important;
+  }
+
+  .md\:focus\:opacity-25:focus {
+    opacity: 0.25 !important;
+  }
+
+  .md\:focus\:opacity-50:focus {
+    opacity: 0.5 !important;
+  }
+
+  .md\:focus\:opacity-75:focus {
+    opacity: 0.75 !important;
+  }
+
+  .md\:focus\:opacity-100:focus {
+    opacity: 1 !important;
+  }
+
   .md\:outline-none {
     outline: 0 !important;
   }
@@ -28212,6 +28332,46 @@ video {
     opacity: 1 !important;
   }
 
+  .lg\:hover\:opacity-0:hover {
+    opacity: 0 !important;
+  }
+
+  .lg\:hover\:opacity-25:hover {
+    opacity: 0.25 !important;
+  }
+
+  .lg\:hover\:opacity-50:hover {
+    opacity: 0.5 !important;
+  }
+
+  .lg\:hover\:opacity-75:hover {
+    opacity: 0.75 !important;
+  }
+
+  .lg\:hover\:opacity-100:hover {
+    opacity: 1 !important;
+  }
+
+  .lg\:focus\:opacity-0:focus {
+    opacity: 0 !important;
+  }
+
+  .lg\:focus\:opacity-25:focus {
+    opacity: 0.25 !important;
+  }
+
+  .lg\:focus\:opacity-50:focus {
+    opacity: 0.5 !important;
+  }
+
+  .lg\:focus\:opacity-75:focus {
+    opacity: 0.75 !important;
+  }
+
+  .lg\:focus\:opacity-100:focus {
+    opacity: 1 !important;
+  }
+
   .lg\:outline-none {
     outline: 0 !important;
   }
@@ -35905,6 +36065,46 @@ video {
   }
 
   .xl\:opacity-100 {
+    opacity: 1 !important;
+  }
+
+  .xl\:hover\:opacity-0:hover {
+    opacity: 0 !important;
+  }
+
+  .xl\:hover\:opacity-25:hover {
+    opacity: 0.25 !important;
+  }
+
+  .xl\:hover\:opacity-50:hover {
+    opacity: 0.5 !important;
+  }
+
+  .xl\:hover\:opacity-75:hover {
+    opacity: 0.75 !important;
+  }
+
+  .xl\:hover\:opacity-100:hover {
+    opacity: 1 !important;
+  }
+
+  .xl\:focus\:opacity-0:focus {
+    opacity: 0 !important;
+  }
+
+  .xl\:focus\:opacity-25:focus {
+    opacity: 0.25 !important;
+  }
+
+  .xl\:focus\:opacity-50:focus {
+    opacity: 0.5 !important;
+  }
+
+  .xl\:focus\:opacity-75:focus {
+    opacity: 0.75 !important;
+  }
+
+  .xl\:focus\:opacity-100:focus {
     opacity: 1 !important;
   }
 
