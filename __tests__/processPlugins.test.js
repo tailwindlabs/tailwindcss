@@ -877,6 +877,56 @@ test('plugins respect prefix and important options by default when adding utilit
     `)
 })
 
+test('when important is a selector it is used to scope utilities instead of adding !important', () => {
+  const { utilities } = processPlugins(
+    [
+      function({ addUtilities }) {
+        addUtilities({
+          '.rotate-90': {
+            transform: 'rotate(90deg)',
+          },
+        })
+      },
+    ],
+    makeConfig({
+      important: '#app',
+    })
+  )
+
+  expect(css(utilities)).toMatchCss(`
+    @variants {
+      #app .rotate-90 {
+        transform: rotate(90deg)
+      }
+    }
+    `)
+})
+
+test('when important is a selector it scopes all selectors in a rule, even though defining utilities like this is stupid', () => {
+  const { utilities } = processPlugins(
+    [
+      function({ addUtilities }) {
+        addUtilities({
+          '.rotate-90, .rotate-1\\/4': {
+            transform: 'rotate(90deg)',
+          },
+        })
+      },
+    ],
+    makeConfig({
+      important: '#app',
+    })
+  )
+
+  expect(css(utilities)).toMatchCss(`
+    @variants {
+      #app .rotate-90, #app .rotate-1\\/4 {
+        transform: rotate(90deg)
+      }
+    }
+    `)
+})
+
 test('important utilities are not made double important when important option is used', () => {
   const { utilities } = processPlugins(
     [

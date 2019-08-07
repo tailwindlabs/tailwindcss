@@ -80,6 +80,46 @@ test('important key overrides default important', () => {
   })
 })
 
+test('important (selector) key overrides default important', () => {
+  const userConfig = {
+    important: '#app',
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '',
+    important: '#app',
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  })
+})
+
 test('separator key overrides default separator', () => {
   const userConfig = {
     separator: '__',
@@ -1128,5 +1168,69 @@ test('the original theme is not mutated', () => {
     variants: {
       borderColor: ['responsive', 'hover'],
     },
+  })
+})
+
+test('custom properties are multiplied by -1 for negative values', () => {
+  const userConfig = {
+    theme: {
+      spacing: {
+        '1': '1px',
+        '2': '2px',
+        '3': '3px',
+        '4': '4px',
+        foo: 'var(--foo)',
+        bar: 'var(--bar, 500px)',
+        baz: 'calc(50% - 10px)',
+      },
+      margin: (theme, { negative }) => ({
+        ...theme('spacing'),
+        ...negative(theme('spacing')),
+      }),
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {},
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      spacing: {
+        '1': '1px',
+        '2': '2px',
+        '3': '3px',
+        '4': '4px',
+        foo: 'var(--foo)',
+        bar: 'var(--bar, 500px)',
+        baz: 'calc(50% - 10px)',
+      },
+      margin: {
+        '1': '1px',
+        '2': '2px',
+        '3': '3px',
+        '4': '4px',
+        foo: 'var(--foo)',
+        bar: 'var(--bar, 500px)',
+        baz: 'calc(50% - 10px)',
+        '-1': '-1px',
+        '-2': '-2px',
+        '-3': '-3px',
+        '-4': '-4px',
+        '-foo': 'calc(var(--foo) * -1)',
+        '-bar': 'calc(var(--bar, 500px) * -1)',
+        '-baz': 'calc(-50% - -10px)',
+      },
+    },
+    variants: {},
   })
 })
