@@ -43,6 +43,7 @@ import outline from './plugins/outline'
 import overflow from './plugins/overflow'
 import padding from './plugins/padding'
 import placeholderColor from './plugins/placeholderColor'
+import placeholderPosition from './plugins/placeholderPosition'
 import pointerEvents from './plugins/pointerEvents'
 import position from './plugins/position'
 import inset from './plugins/inset'
@@ -116,6 +117,7 @@ export default function({ corePlugins: corePluginConfig }) {
     overflow,
     padding,
     placeholderColor,
+    placeholderPosition,
     pointerEvents,
     position,
     inset,

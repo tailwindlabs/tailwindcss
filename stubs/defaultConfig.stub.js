@@ -372,6 +372,11 @@ module.exports = {
     },
     padding: theme => theme('spacing'),
     placeholderColor: theme => theme('colors'),
+    placeholderPosition: {
+      center: 'center',
+      left: 'left',
+      right: 'right',
+    },
     stroke: {
       current: 'currentColor',
     },
@@ -469,6 +474,7 @@ module.exports = {
     overflow: ['responsive'],
     padding: ['responsive'],
     placeholderColor: ['responsive', 'focus'],
+    placeholderPosition: ['responsive'],
     pointerEvents: ['responsive'],
     position: ['responsive'],
     resize: ['responsive'],
