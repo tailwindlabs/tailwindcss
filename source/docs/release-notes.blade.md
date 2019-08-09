@@ -5,9 +5,25 @@ description: "What's new in the latest version of Tailwind CSS."
 titleBorder: true
 ---
 
+<h2 class="mb-0">Tailwind CSS v1.1</h2>
+<div class="mt-0 text-gray-600">Aug 6, 2019</div>
+
+The first new feature release since v1.0 has arrived! Tailwind v1.1 includes a bunch of new stuff, but I think the things you'll probably be most excited about are:
+
+- [New screenreader visibility utilities](https://github.com/tailwindcss/tailwindcss/releases/tag/v1.1.0#added-utilities-for-screenreader-visibility)
+- [New utilities for setting the placeholder color on form elements](https://github.com/tailwindcss/tailwindcss/releases/tag/v1.1.0#added-utilities-for-placeholder-color)
+- [New variants for `first-child`, `last-child`, `nth-child(odd)`, and `nth-child(even)`](https://github.com/tailwindcss/tailwindcss/releases/tag/v1.1.0#first-last-even-and-odd-child-variants)
+
+For the full list of changes, [check out the complete release notes on GitHub](https://github.com/tailwindcss/tailwindcss/releases/tag/v1.1.0).
+
+**Important note** — although this is a minor release, it includes two bug fixes that may have a superficial impact on how your site looks if you are using horizontal rules in your site or are relying on the default placeholder color defined in Tailwind's base styles.
+
+Be sure to read through the [fixes](https://github.com/tailwindcss/tailwindcss/releases/tag/v1.1.0#fixes) section before upgrading to understand the impact.
+
+---
+
 <h2 class="mb-0">Tailwind CSS v1.0</h2>
 <div class="mt-0 text-gray-600">May 13, 2019</div>
-
 
 A year and a half in the making, the first stable release of Tailwind CSS is finally here! 🎉
 
