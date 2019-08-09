@@ -5936,7 +5936,7 @@ reduce-css-calc@^1.2.7:
     math-expression-evaluator "^1.2.14"
     reduce-function-call "^1.0.1"
 
-reduce-css-calc@^2.0.0:
+reduce-css-calc@^2.0.0, reduce-css-calc@^2.1.6:
   version "2.1.6"
   resolved "https://registry.yarnpkg.com/reduce-css-calc/-/reduce-css-calc-2.1.6.tgz#050fe6ee7d98a1d70775d2e93ce0b713cee394d2"
   dependencies:
@@ -6834,10 +6834,10 @@ table@^4.0.1:
     slice-ansi "1.0.0"
     string-width "^2.1.1"
 
-tailwindcss@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.0.5.tgz#5145fd61f251be06a77748819e12fb126914095d"
-  integrity sha512-e5edrSKqNOvWAVEutXN5czeJSXjQQxO7zNN4RDd5vQF/JTxnKdndcMFIC6p6YkRvcGFKPCZ/0rY1zZvPeq9V4A==
+tailwindcss@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.1.0.tgz#c582a192e4976953eb54d59be4e8c6c9486ea5a6"
+  integrity sha512-hcxY5MUrY/LcdsX4Xr2aOF24eF4HaxDbHCbDu3W2+bCJRsXRhJmZfAgjipjsyhZult0YAa9HFp14xRXMqwUYTw==
   dependencies:
     autoprefixer "^9.4.5"
     bytes "^3.0.0"
@@ -6852,6 +6852,7 @@ tailwindcss@^1.0.5:
     postcss-nested "^4.1.1"
     postcss-selector-parser "^6.0.0"
     pretty-hrtime "^1.0.3"
+    reduce-css-calc "^2.1.6"
 
 tapable@^1.0.0, tapable@^1.1.0:
   version "1.1.3"

@@ -28,7 +28,7 @@
     "postcss-cssnext": "^3.0.2",
     "prismjs": "^1.8.3",
     "stylefmt": "^6.0.0",
-    "tailwindcss": "^1.0.5",
+    "tailwindcss": "1.1.0",
     "vue": "^2.6.10",
     "vue-template-compiler": "^2.6.10",
     "webpack-watch": "^0.2.0",

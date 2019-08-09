@@ -53,6 +53,7 @@ return [
             'Line Height' => '/docs/line-height',
             'List Style Type' => '/docs/list-style-type',
             'List Style Position' => '/docs/list-style-position',
+            'Placeholder Color' => '/docs/placeholder-color',
             'Text Align' => '/docs/text-align',
             'Text Color' => '/docs/text-color',
             'Text Decoration' => '/docs/text-decoration',
