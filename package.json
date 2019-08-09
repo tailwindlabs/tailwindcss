@@ -19,7 +19,7 @@
     "laravel-mix": "^4.0.15",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.13",
     "mousetrap": "^1.6.1",
     "node-cmd": "^3.0.0",
     "normalize.css": "^7.0.0",
