@@ -540,7 +540,7 @@ To configure which variants are enabled for your project, see the [configuring v
 | `minWidth`             |         |         |
 | `objectFit`            |         |         |
 | `objectPosition`       |         |         |
-| `opacity`              |         |         |
+| `opacity`              | &check; | &check; |
 | `order`                |         |         |
 | `outline`              |         | &check; |
 | `overflow`             |         |         |
