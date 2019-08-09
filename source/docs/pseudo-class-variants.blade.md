@@ -30,13 +30,13 @@ Similar to how Tailwind handles [responsive design](/docs/responsive-design), st
 
 For a complete list of which variants are enabled by default, see the [reference table](#default-variants-reference) at the end of this page.
 
+Tailwind includes first-class support for styling elements on [hover](#hover), [focus](#focus), [active](#active), [disabled](#disabled), [visited](#visited), [first-child](#first-child), [last-child](#first-child), [odd-child](#first-child), [even-child](#first-child), [group-hover](#group-hover), and [focus-within](#focus-within).
+
+If you need to target a pseudo-class that Tailwind doesn't support, you can extend the supported variants by [writing a variant plugin](#creating-custom-variants).
+
 ---
 
-## Using pseudo-class variants
-
-Tailwind includes first-class support for styling elements on [hover](#hover), [focus](#focus), [active](#active), [group-hover](#group-hover), and [focus-within](#focus-within). If you need to target a pseudo-class that Tailwind doesn't support, you can extend the supported variants by [writing a variant plugin](#creating-custom-variants).
-
-### Hover
+## Hover
 
 Add the `hover:` prefix to only apply a utility on hover.
 
@@ -65,7 +65,7 @@ module.exports = {
 }
 ```
 
-### Focus
+## Focus
 
 Add the `focus:` prefix to only apply a utility on focus.
 
@@ -91,7 +91,7 @@ module.exports = {
 }
 ```
 
-### Active
+## Active
 
 Add the `active:` prefix to only apply a utility when an element is active.
 
@@ -119,7 +119,203 @@ module.exports = {
 }
 ```
 
-### Group-hover
+## Disabled
+
+Add the `disabled:` prefix to only apply a utility when an element is disabled.
+
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
+<button type="button" class="ml-4 disabled:opacity-75 bg-blue-500 active:bg-blue-700 text-white font-semibold hover:text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+  Submit
+</button>
+<button disabled type="button" class="ml-4 disabled:opacity-75 bg-blue-500 active:bg-blue-700 text-white font-semibold hover:text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+  Submit
+</button>
+
+@slot('code')
+<button class="disabled:opacity-75 bg-blue-500...">
+  Submit
+</button>
+
+<button disabled class="disabled:opacity-75 bg-blue-500...">
+  Submit
+</button>
+@endslot
+@endcomponent
+
+You can control whether `disabled` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    opacity: ['responsive', 'hover', 'focus', 'disabled'],
+  },
+}
+```
+
+## Visited
+
+Add the `visited:` prefix to only apply a utility when a link has been visited.
+
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
+<a href="#" class="underline font-semibold text-blue-600">Unvisited link</a>
+<a href="#" class="ml-4 underline font-semibold text-purple-600">Visited link</a>
+
+@slot('code')
+<a href="#" class="text-blue-600 visited:text-purple-600 ...">Link</a>
+@endslot
+@endcomponent
+
+You can control whether `visited` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    textColor: ['responsive', 'hover', 'focus', 'visited'],
+  },
+}
+```
+
+## First-child
+
+Add the `first:` prefix to only apply a utility when it is the first-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
+
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
+<div class="text-left max-w-sm border rounded">
+  <div class="px-4 py-2 border-t first:border-t-0">One</div>
+  <div class="px-4 py-2 border-t first:border-t-0">Two</div>
+  <div class="px-4 py-2 border-t first:border-t-0">Three</div>
+</div>
+
+@slot('code')
+<div class="border rounded">
+  <div v-for="item in items" class="border-t first:border-t-0">
+    @{{ item }}
+  </div>
+</div>
+@endslot
+@endcomponent
+
+It's important to note that you should add any `first:` utilities to the child element, not the parent element.
+
+You can control whether `first` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    borderWidth: ['responsive', 'first', 'hover', 'focus'],
+  },
+}
+```
+
+## Last-child
+
+Add the `last:` prefix to only apply a utility when it is the last-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
+
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
+<div class="text-left max-w-sm border rounded">
+  <div class="px-4 py-2 border-b last:border-b-0">One</div>
+  <div class="px-4 py-2 border-b last:border-b-0">Two</div>
+  <div class="px-4 py-2 border-b last:border-b-0">Three</div>
+</div>
+
+@slot('code')
+<div class="border rounded">
+  <div v-for="item in items" class="border-b first:border-b-0">
+    @{{ item }}
+  </div>
+</div>
+@endslot
+@endcomponent
+
+It's important to note that you should add any `last:` utilities to the child element, not the parent element.
+
+You can control whether `last` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    borderWidth: ['responsive', 'last', 'hover', 'focus'],
+  },
+}
+```
+
+## Odd-child
+
+Add the `odd:` prefix to only apply a utility when it is an odd-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
+
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
+<div class="rounded overflow-hidden text-left max-w-sm border">
+  <div class="px-4 py-2 bg-white odd:bg-gray-200">One</div>
+  <div class="px-4 py-2 bg-white odd:bg-gray-200">Two</div>
+  <div class="px-4 py-2 bg-white odd:bg-gray-200">Three</div>
+</div>
+
+@slot('code')
+<div class="border rounded">
+  <div v-for="item in items" class="bg-white odd:bg-gray-200">
+    @{{ item }}
+  </div>
+</div>
+@endslot
+@endcomponent
+
+It's important to note that you should add any `odd:` utilities to the child element, not the parent element.
+
+You can control whether `odd` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    borderWidth: ['responsive', 'odd', 'hover', 'focus'],
+  },
+}
+```
+
+## Even-child
+
+Add the `even:` prefix to only apply a utility when it is an even-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
+
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center'])
+<div class="rounded overflow-hidden text-left max-w-sm border">
+  <div class="px-4 py-2 bg-white even:bg-gray-200">One</div>
+  <div class="px-4 py-2 bg-white even:bg-gray-200">Two</div>
+  <div class="px-4 py-2 bg-white even:bg-gray-200">Three</div>
+</div>
+
+@slot('code')
+<div class="border rounded">
+  <div v-for="item in items" class="bg-white even:bg-gray-200">
+    @{{ item }}
+  </div>
+</div>
+@endslot
+@endcomponent
+
+It's important to note that you should add any `even:` utilities to the child element, not the parent element.
+
+You can control whether `even` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    borderWidth: ['responsive', 'even', 'hover', 'focus'],
+  },
+}
+```
+
+## Group-hover
 
 If you need to style a child element when hovering over a specific parent element, add the `.group` class to the parent element and add the `group-hover:` prefix to the utility on the child element.
 
@@ -150,7 +346,7 @@ module.exports = {
 }
 ```
 
-### Focus-within
+## Focus-within
 
 <div class="text-sm bg-blue-100 text-blue-700 font-semi-bold px-4 py-2 mb-4 rounded">
   <div class="flex items-center">
