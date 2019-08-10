@@ -101,7 +101,7 @@ For more information about Tailwind's responsive design features, check out the 
 @endslot
 
 @slot('code')
-<div class="none:h-8 none:h-12 none:h-16 none:h-20 none:h-24 w-32 bg-gray-400"></div>
+<div class="none:h-8 sm:h-12 md:h-16 lg:h-20 xl:h-24 w-32 bg-gray-400"></div>
 @endslot
 @endcomponent
 
