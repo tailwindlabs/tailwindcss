@@ -406,3 +406,15 @@ Here's a list of every core plugin for reference:
 | `width` | The `width` utilities like `w-1/2` |
 | `wordBreak` | The `word-break` utilities like `break-all` |
 | `zIndex` | The `z-index` utilities like `z-50` |
+
+## Using your configuration file in javascript
+
+You can import the Tailwind config file in your javascript code too! Tailwind provides `resolveConfig` helper to get a fully merged version of your custom config file.
+
+```js
+// src/tailwindConfig.js
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '../../tailwind.config.js'
+
+export default resolveConfig(tailwindConfig)
+```
