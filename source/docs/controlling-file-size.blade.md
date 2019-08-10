@@ -62,7 +62,7 @@ const purgecss = require('@fullhuman/postcss-purgecss')({
   ],
 
   // Include any special characters you're using in this regular expression
-  defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
+  defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]*[A-Za-z0-9-_/]/g) || []
 })
 
 module.exports = {
@@ -85,14 +85,14 @@ Purgecss uses "extractors" to determine what strings in your templates are class
 ```js
 const purgecss = require('@fullhuman/postcss-purgecss')({
   // ...
-  defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
+  defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]*[A-Za-z0-9-_/]/g) || []
 })
 ```
 
 The way it works is intentionally very naive. It doesn't try to parse your HTML and look for class attributes or dynamically execute your JavaScript — it simply looks for any strings in the entire file that match this regular expression:
 
 ```js
-/[A-Za-z0-9-_:/]+/g
+/[A-Za-z0-9-_:/]*[A-Za-z0-9-_/]/g
 ```
 
 That means that **it is important to avoid dynamically creating class strings in your templates with string concatenation**, otherwise Purgecss won't know to preserve those classes.
@@ -120,8 +120,8 @@ If you are using any other special characters in your class names, make sure to 
 For example, if you have customized Tailwind to create classes like `w-50%`, you'll want to add `%` to the regular expression:
 
 ```diff
-- /[A-Za-z0-9-_:/]+/g
-+ /[A-Za-z0-9-_:/%]+/g
+- /[A-Za-z0-9-_:/]*[A-Za-z0-9-_/]/g
++ /[A-Za-z0-9-_:/%]*[A-Za-z0-9-_/%]/g
 ```
 
 <hr class="my-16">
