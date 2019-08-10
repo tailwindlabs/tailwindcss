@@ -226,7 +226,7 @@ Add the `last:` prefix to only apply a utility when it is the last-child of its 
 
 @slot('code')
 <div class="border rounded">
-  <div v-for="item in items" class="border-b first:border-b-0">
+  <div v-for="item in items" class="border-b last:border-b-0">
     @{{ item }}
   </div>
 </div>
