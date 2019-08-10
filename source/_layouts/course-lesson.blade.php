@@ -231,16 +231,19 @@
               <video-player vimeo-url="https://vimeo.com/video/{{ $page->vimeoId }}"></video-player>
               <div class="mt-4 flex justify-between">
                 <div>
-                  <a href="{{ $page->downloadHd }}" class="text-gray-600 hover:text-gray-900">
+                  <a href="{{ $page->downloadHd }}" class="hidden sm:inline text-gray-600 hover:text-gray-900">
                     <span>Download HD</span>
                   </a>
-                  <a href="{{ $page->downloadHd }}" class="ml-6 text-gray-600 hover:text-gray-900">
-                    <span>Download SD</span>
+                  <a href="{{ $page->downloadHd }}" class="sm:ml-6 text-gray-600 hover:text-gray-900">
+                    <span>Download<span class="sm:hidden"> video</span><span class="hidden sm:inline"> SD</span></span>
+                  </a>
+                  <a href="https://github.com/tailwindcss/designing-with-tailwindcss" class="ml-6 text-gray-600 hover:text-gray-900">
+                    <span>Source code</span>
                   </a>
                 </div>
                 @if ($page->next)
                 <a href="{{ $page->nextUrl }}" class="inline-flex items-center text-gray-600 hover:text-gray-900">
-                  <span>Next lesson</span>
+                  <span>Next<span class="hidden sm:inline"> lesson</span></span>
                   <svg class="ml-2 h-4 w-4 fill-current text-gray-500" viewBox="0 0 24 24"><path d="M18.59 13H3a1 1 0 0 1 0-2h15.59l-5.3-5.3a1 1 0 1 1 1.42-1.4l7 7a1 1 0 0 1 0 1.4l-7 7a1 1 0 0 1-1.42-1.4l5.3-5.3z"/></svg>
                 </a>
                 @endif
