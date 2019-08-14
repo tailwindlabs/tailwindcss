@@ -412,3 +412,6 @@ All of these keys are also available under the `theme.extend` key to enable [ext
 | `textColor` | Values for the `text-color` property |
 | `width` | Values for the `width` property |
 | `zIndex` | Values for the `z-index` property |
+
+
+
