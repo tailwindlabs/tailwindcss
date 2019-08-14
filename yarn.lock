@@ -6838,10 +6838,10 @@ table@^4.0.1:
     slice-ansi "1.0.0"
     string-width "^2.1.1"
 
-tailwindcss@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.1.0.tgz#c582a192e4976953eb54d59be4e8c6c9486ea5a6"
-  integrity sha512-hcxY5MUrY/LcdsX4Xr2aOF24eF4HaxDbHCbDu3W2+bCJRsXRhJmZfAgjipjsyhZult0YAa9HFp14xRXMqwUYTw==
+tailwindcss@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.1.2.tgz#0107dc092c3edee6132b105d896b109c0f66afd6"
+  integrity sha512-mcTzZHXMipnQY9haB17baNJmBTkYYcC8ljfMdB9/97FfhKJIzlglJcyGythuQTOu7r/QIbLfZYYWZhAvaGj95A==
   dependencies:
     autoprefixer "^9.4.5"
     bytes "^3.0.0"
