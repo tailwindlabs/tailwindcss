@@ -3,6 +3,7 @@ import isFunction from 'lodash/isFunction'
 import defaults from 'lodash/defaults'
 import map from 'lodash/map'
 import toPath from 'lodash/toPath'
+import negateValue from './negateValue'
 
 const configUtils = {
   negative(scale) {
@@ -11,7 +12,7 @@ const configUtils = {
       .reduce(
         (negativeScale, key) => ({
           ...negativeScale,
-          [`-${key}`]: `-${scale[key]}`,
+          [`-${key}`]: negateValue(scale[key]),
         }),
         {}
       )

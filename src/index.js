@@ -13,14 +13,27 @@ import { defaultConfigFile } from './constants'
 import defaultConfig from '../stubs/defaultConfig.stub.js'
 
 function resolveConfigPath(filePath) {
-  if (_.isObject(filePath)) {
+  // require('tailwindcss')({ theme: ..., variants: ... })
+  if (_.isObject(filePath) && !_.has(filePath, 'config') && !_.isEmpty(filePath)) {
     return undefined
   }
 
-  if (!_.isUndefined(filePath)) {
+  // require('tailwindcss')({ config: 'custom-config.js' })
+  if (_.isObject(filePath) && _.has(filePath, 'config') && _.isString(filePath.config)) {
+    return path.resolve(filePath.config)
+  }
+
+  // require('tailwindcss')({ config: { theme: ..., variants: ... } })
+  if (_.isObject(filePath) && _.has(filePath, 'config') && _.isObject(filePath.config)) {
+    undefined
+  }
+
+  // require('tailwindcss')('custom-config.js')
+  if (_.isString(filePath)) {
     return path.resolve(filePath)
   }
 
+  // require('tailwindcss')
   try {
     const defaultConfigPath = path.resolve(defaultConfigFile)
     fs.accessSync(defaultConfigPath)
@@ -39,7 +52,10 @@ const getConfigFunction = config => () => {
     delete require.cache[require.resolve(config)]
   }
 
-  return resolveConfig([_.isObject(config) ? config : require(config), defaultConfig])
+  return resolveConfig([
+    _.isObject(config) ? _.get(config, 'config', config) : require(config),
+    defaultConfig,
+  ])
 }
 
 const plugin = postcss.plugin('tailwind', config => {

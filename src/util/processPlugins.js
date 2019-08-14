@@ -6,6 +6,7 @@ import generateVariantFunction from '../util/generateVariantFunction'
 import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
 import wrapWithVariants from '../util/wrapWithVariants'
+import increaseSpecificity from '../util/increaseSpecificity'
 
 function parseStyles(styles) {
   if (!Array.isArray(styles)) {
@@ -64,7 +65,13 @@ export default function(plugins, config) {
           }
 
           if (options.respectImportant && _.get(config, 'important')) {
-            rule.walkDecls(decl => (decl.important = true))
+            if (config.important === true) {
+              rule.walkDecls(decl => (decl.important = true))
+            } else if (typeof config.important === 'string') {
+              rule.selectors = rule.selectors.map(selector => {
+                return increaseSpecificity(config.important, selector)
+              })
+            }
           }
         })
 
