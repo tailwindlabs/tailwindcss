@@ -131,7 +131,7 @@ module.exports = {
 
 By default, these values are inherited by the `padding`, `margin`, `negativeMargin`, `width`, and `height` core plugins.
 
-To learn more, see the [spacing customization documentation](/docs/spacing).
+To learn more, see the [spacing customization documentation](/docs/customizing-spacing).
 
 ### Core plugins
 
