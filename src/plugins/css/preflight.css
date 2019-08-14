@@ -34,6 +34,7 @@ h3,
 h4,
 h5,
 h6,
+hr,
 figure,
 p,
 pre {
@@ -109,7 +110,7 @@ html {
  * Ensure horizontal rules are visible by default
  */
 hr {
-  border-width: 1px;
+  border-top-width: 1px;
 }
 
 /**
