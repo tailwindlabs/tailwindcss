@@ -27,6 +27,11 @@ features:
       "Sets the border style on an element to dotted.",
     ],
     [
+      '.border-double',
+      'border-style: double;',
+      "Sets the border style on an element to double.",
+    ],
+    [
       '.border-none',
       'border-style: none;',
       "Disables the border on an element.",
@@ -40,7 +45,7 @@ Use `.border-{style}` to control an element's border style.
 
 @component('_partials.code-sample')
 <div class="block sm:flex sm:justify-around">
-  <div class="sm:flex-1 flex justify-around mb-6">
+  <div class="sm:w-3/5 sm:mb-0 flex justify-around mb-6">
     <div class="flex-1">
       <p class="text-center text-sm text-gray-600 mb-1">.border-solid</p>
       <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-solid"></div>
@@ -49,22 +54,28 @@ Use `.border-{style}` to control an element's border style.
       <p class="text-center text-sm text-gray-600 mb-1">.border-dashed</p>
       <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-dashed"></div>
     </div>
-  </div>
-  <div class="sm:flex-1 flex justify-around">
     <div class="flex-1">
       <p class="text-center text-sm text-gray-600 mb-1">.border-dotted</p>
       <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-dotted"></div>
+    </div>
+  </div>
+  <div class="sm:w-2/5 flex justify-around">
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.border-double</p>
+      <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-double"></div>
     </div>
     <div class="flex-1">
       <p class="text-center text-sm text-gray-600 mb-1">.border-none</p>
       <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-none"></div>
     </div>
+    <div class="flex-1 sm:hidden"></div>
   </div>
 </div>
 @slot('code')
 <div class="border-solid border-4 border-gray-600 ..."></div>
 <div class="border-dashed border-4 border-gray-600 ..."></div>
 <div class="border-dotted border-4 border-gray-600 ..."></div>
+<div class="border-double border-4 border-gray-600 ..."></div>
 <div class="border-none border-4 border-gray-600 ..."></div>
 @endslot
 @endcomponent
@@ -86,13 +97,13 @@ For more information about Tailwind's responsive design features, check out the 
 <div class="border-dotted w-24 h-24 mx-auto border-8 border-gray-600 bg-gray-400"></div>
 @endslot
 @slot('lg')
-<div class="border-none w-24 h-24 mx-auto border-8 border-gray-600 bg-gray-400"></div>
+<div class="border-double w-24 h-24 mx-auto border-8 border-gray-600 bg-gray-400"></div>
 @endslot
 @slot('xl')
-<div class="border-dashed w-24 h-24 mx-auto border-8 border-gray-600 bg-gray-400"></div>
+<div class="border-none w-24 h-24 mx-auto border-8 border-gray-600 bg-gray-400"></div>
 @endslot
 @slot('code')
-<div class="none:border-solid sm:border-dashed md:border-dotted lg:border-none xl:border-dashed">
+<div class="none:border-solid sm:border-dashed md:border-dotted lg:border-double xl:border-none">
 </div>
 @endslot
 @endcomponent
