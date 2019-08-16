@@ -123,5 +123,7 @@ By default Tailwind provides five opacity utilities based on a simple numeric sc
     ],
     'variants' => [
         'responsive',
+        'hover',
+        'focus',
     ],
 ])
