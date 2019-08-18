@@ -3456,6 +3456,10 @@ video {
   justify-content: space-around;
 }
 
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
 .content-center {
   align-content: center;
 }
@@ -11189,6 +11193,10 @@ video {
 
   .sm\:justify-around {
     justify-content: space-around;
+  }
+
+  .sm\:justify-evenly {
+    justify-content: space-evenly;
   }
 
   .sm\:content-center {
@@ -18927,6 +18935,10 @@ video {
     justify-content: space-around;
   }
 
+  .md\:justify-evenly {
+    justify-content: space-evenly;
+  }
+
   .md\:content-center {
     align-content: center;
   }
@@ -26663,6 +26675,10 @@ video {
     justify-content: space-around;
   }
 
+  .lg\:justify-evenly {
+    justify-content: space-evenly;
+  }
+
   .lg\:content-center {
     align-content: center;
   }
@@ -34397,6 +34413,10 @@ video {
 
   .xl\:justify-around {
     justify-content: space-around;
+  }
+
+  .xl\:justify-evenly {
+    justify-content: space-evenly;
   }
 
   .xl\:content-center {
