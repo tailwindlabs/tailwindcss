@@ -6758,6 +6758,26 @@ video {
   stroke: currentColor;
 }
 
+.stroke-w-0 {
+  stroke-width: 0;
+}
+
+.stroke-w-1 {
+  stroke-width: 1px;
+}
+
+.stroke-w-2 {
+  stroke-width: 2px;
+}
+
+.stroke-w-3 {
+  stroke-width: 3px;
+}
+
+.stroke-w-4 {
+  stroke-width: 4px;
+}
+
 .table-auto {
   table-layout: auto;
 }
@@ -14491,6 +14511,26 @@ video {
 
   .sm\:stroke-current {
     stroke: currentColor;
+  }
+
+  .sm\:stroke-w-0 {
+    stroke-width: 0;
+  }
+
+  .sm\:stroke-w-1 {
+    stroke-width: 1px;
+  }
+
+  .sm\:stroke-w-2 {
+    stroke-width: 2px;
+  }
+
+  .sm\:stroke-w-3 {
+    stroke-width: 3px;
+  }
+
+  .sm\:stroke-w-4 {
+    stroke-width: 4px;
   }
 
   .sm\:table-auto {
@@ -22229,6 +22269,26 @@ video {
     stroke: currentColor;
   }
 
+  .md\:stroke-w-0 {
+    stroke-width: 0;
+  }
+
+  .md\:stroke-w-1 {
+    stroke-width: 1px;
+  }
+
+  .md\:stroke-w-2 {
+    stroke-width: 2px;
+  }
+
+  .md\:stroke-w-3 {
+    stroke-width: 3px;
+  }
+
+  .md\:stroke-w-4 {
+    stroke-width: 4px;
+  }
+
   .md\:table-auto {
     table-layout: auto;
   }
@@ -29965,6 +30025,26 @@ video {
     stroke: currentColor;
   }
 
+  .lg\:stroke-w-0 {
+    stroke-width: 0;
+  }
+
+  .lg\:stroke-w-1 {
+    stroke-width: 1px;
+  }
+
+  .lg\:stroke-w-2 {
+    stroke-width: 2px;
+  }
+
+  .lg\:stroke-w-3 {
+    stroke-width: 3px;
+  }
+
+  .lg\:stroke-w-4 {
+    stroke-width: 4px;
+  }
+
   .lg\:table-auto {
     table-layout: auto;
   }
@@ -37699,6 +37779,26 @@ video {
 
   .xl\:stroke-current {
     stroke: currentColor;
+  }
+
+  .xl\:stroke-w-0 {
+    stroke-width: 0;
+  }
+
+  .xl\:stroke-w-1 {
+    stroke-width: 1px;
+  }
+
+  .xl\:stroke-w-2 {
+    stroke-width: 2px;
+  }
+
+  .xl\:stroke-w-3 {
+    stroke-width: 3px;
+  }
+
+  .xl\:stroke-w-4 {
+    stroke-width: 4px;
   }
 
   .xl\:table-auto {

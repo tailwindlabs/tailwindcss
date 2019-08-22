@@ -50,6 +50,7 @@ import resize from './plugins/resize'
 import boxShadow from './plugins/boxShadow'
 import fill from './plugins/fill'
 import stroke from './plugins/stroke'
+import strokeWidth from './plugins/strokeWidth'
 import tableLayout from './plugins/tableLayout'
 import textAlign from './plugins/textAlign'
 import textColor from './plugins/textColor'
@@ -123,6 +124,7 @@ export default function({ corePlugins: corePluginConfig }) {
     boxShadow,
     fill,
     stroke,
+    strokeWidth,
     tableLayout,
     textAlign,
     textColor,
