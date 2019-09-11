@@ -24,7 +24,9 @@ export default function getModuleDependencies(entryFile) {
         const depModule = createModule(depPath)
 
         modules.push(depModule)
-      } catch (_err) {}
+      } catch (_err) {
+        // eslint-disable-next-line no-empty
+      }
     })
   }
 
