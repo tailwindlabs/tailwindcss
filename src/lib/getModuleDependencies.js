@@ -18,11 +18,15 @@ export default function getModuleDependencies(entryFile) {
   // ones are being added
   for (const mdl of modules) {
     mdl.requires.forEach(dep => {
-      const basedir = path.dirname(mdl.file)
-      const depPath = resolve.sync(dep, { basedir })
-      const depModule = createModule(depPath)
+      try {
+        const basedir = path.dirname(mdl.file)
+        const depPath = resolve.sync(dep, { basedir })
+        const depModule = createModule(depPath)
 
-      modules.push(depModule)
+        modules.push(depModule)
+      } catch (_err) {
+        // eslint-disable-next-line no-empty
+      }
     })
   }
 
