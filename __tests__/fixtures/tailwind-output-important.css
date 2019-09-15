@@ -3456,6 +3456,10 @@ video {
   justify-content: space-around !important;
 }
 
+.justify-evenly {
+  justify-content: space-evenly !important;
+}
+
 .content-center {
   align-content: center !important;
 }
@@ -11189,6 +11193,10 @@ video {
 
   .sm\:justify-around {
     justify-content: space-around !important;
+  }
+
+  .sm\:justify-evenly {
+    justify-content: space-evenly !important;
   }
 
   .sm\:content-center {
@@ -18927,6 +18935,10 @@ video {
     justify-content: space-around !important;
   }
 
+  .md\:justify-evenly {
+    justify-content: space-evenly !important;
+  }
+
   .md\:content-center {
     align-content: center !important;
   }
@@ -26663,6 +26675,10 @@ video {
     justify-content: space-around !important;
   }
 
+  .lg\:justify-evenly {
+    justify-content: space-evenly !important;
+  }
+
   .lg\:content-center {
     align-content: center !important;
   }
@@ -34397,6 +34413,10 @@ video {
 
   .xl\:justify-around {
     justify-content: space-around !important;
+  }
+
+  .xl\:justify-evenly {
+    justify-content: space-evenly !important;
   }
 
   .xl\:content-center {
