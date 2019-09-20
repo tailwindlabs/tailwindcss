@@ -151,10 +151,14 @@ return [
             'Creating Depth with Shadows and Layers' => '/course/creating-depth-with-shadows-and-layers',
         ],
         'Building a responsive navbar' => [
-            'Laying out the elements with flexbox' => '/course/coming-soon',
-            'Styling the navigation links' => '/course/coming-soon',
-            'Making it responsive' => '/course/coming-soon',
-            'Building a dropdown menu' => '/course/coming-soon',
+            'Building a Navbar Layout with Flexbox' => '/course/building-a-navbar-layout-with-flexbox',
+            'Toggling the Navbar Links on Mobile' => '/course/toggling-the-navbar-links-on-mobile',
+            'Making the Navbar Responsive' => '/course/making-the-navbar-responsive',
+        ],
+        'Building a dropdown menu' => [
+            'Styling the avatar button' => '/course/coming-soon',
+            'Positioning the dropdown menu' => '/course/coming-soon',
+            'Displaying the dropdown contents on mobile' => '/course/coming-soon',
         ],
         'Styling form elements' => [
             'Styling basic text inputs' => '/course/coming-soon',
