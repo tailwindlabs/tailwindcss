@@ -386,6 +386,7 @@ Here's a list of every core plugin for reference:
 | `objectFit` | The `object-fit` utilities like `object-cover` |
 | `objectPosition` | The `object-position` utilities like `object-center` |
 | `opacity` | The `opacity` utilities like `opacity-50` |
+| `order` | The flexbox `order` utilities like `order-last` |
 | `outline` | The `outline` utilities like `outline-none` |
 | `overflow` | The `overflow` utilities like `overflow-hidden` |
 | `padding` | The `padding` utilities like `py-12` |
@@ -405,3 +406,25 @@ Here's a list of every core plugin for reference:
 | `width` | The `width` utilities like `w-1/2` |
 | `wordBreak` | The `word-break` utilities like `break-all` |
 | `zIndex` | The `z-index` utilities like `z-50` |
+
+## Referencing in JavaScript
+
+It can often be useful to reference your configuration values in your own client-side JavaScript — for example to access some of your theme values when dynamically applying inline styles in a React or Vue component.
+
+To make this easy, Tailwind provides a `resolveConfig` helper you can use to generate a fully merged version of your configuration object:
+
+```js
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from './tailwind.config.js'
+
+const fullConfig = resolveConfig(tailwindConfig)
+
+fullConfig.theme.width[4]
+// => '1rem'
+
+fullConfig.theme.screens.md
+// => '768px'
+
+fullConfig.theme.boxShadow['2xl']
+// => '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+```

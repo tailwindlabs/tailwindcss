@@ -41,10 +41,10 @@ To get started with Purgecss, first install `@fullhuman/postcss-purgecss`:
 
 ```bash
 # Using npm
-npm install @fullhuman/postcss-purgecss
+npm install @fullhuman/postcss-purgecss --save-dev
 
 # Using yarn
-yarn add @fullhuman/postcss-purgecss
+yarn add @fullhuman/postcss-purgecss -D
 ```
 
 Next, add it as the last plugin in your `postcss.config.js` file:
@@ -62,7 +62,7 @@ const purgecss = require('@fullhuman/postcss-purgecss')({
   ],
 
   // Include any special characters you're using in this regular expression
-  defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
+  defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
 })
 
 module.exports = {
@@ -85,14 +85,14 @@ Purgecss uses "extractors" to determine what strings in your templates are class
 ```js
 const purgecss = require('@fullhuman/postcss-purgecss')({
   // ...
-  defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
+  defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
 })
 ```
 
-The way it works is intentionally very "dumb". It doesn't try to parse your HTML and look for class attributes or dynamically execute your JavaScript — it simply looks for any strings in the entire file that match this regular expression:
+The way it works is intentionally very naive. It doesn't try to parse your HTML and look for class attributes or dynamically execute your JavaScript — it simply looks for any strings in the entire file that match this regular expression:
 
 ```js
-/[A-Za-z0-9-_:/]+/g
+/[\w-:/]+(?<!:)/g
 ```
 
 That means that **it is important to avoid dynamically creating class strings in your templates with string concatenation**, otherwise Purgecss won't know to preserve those classes.
@@ -111,18 +111,36 @@ Do dynamically select a complete class name
 
 As long as a class name appears in your template _in its entirety_, Purgecss will not remove it.
 
-### Customizing the regular expression
+### Understanding the regex
 
-In the example above, we use a regular expression that matches all of the non-standard characters Tailwind uses by default, like `:` and `/`.
+The `/[\w-/:]+(?<!:)/g` regular expression we recommend as a starting point matches all of the non-standard characters Tailwind uses by default, like `:` and `/`.
 
-If you are using any other special characters in your class names, make sure to update the regular expression to include those as well.
+It also uses a negative lookbehind to make sure that if a string ends in `:`, the `:` is not considered part of the string. This is to ensure compatibility with the class object syntax supported by Vue and the [Classnames](https://github.com/JedWatson/classnames) library for React:
+
+```html
+<!-- Match `hidden`, not `hidden:` -->
+<div :class="{ hidden: !isOpen, ... }"><!-- ... --></div>
+```
+
+It's important to note that because of the negative lookbehind in this regex, it's only compatible with Node.js 9.11.2 and above. If you need to use an older version of Node.js to build your assets, you can use this regular expression instead:
+
+
+```diff
+- /[\w-/:]+(?<!:)/g
++ /[\w-/:]*[\w-/:]/g
+```
+
+### Customizing the regex
+
+If you're using any other special characters in your class names, make sure to update the regular expression to include those as well.
 
 For example, if you have customized Tailwind to create classes like `w-50%`, you'll want to add `%` to the regular expression:
 
 ```diff
-- /[A-Za-z0-9-_:/]+/g
-+ /[A-Za-z0-9-_:/%]+/g
+- /[\w-/:]+(?<!:)/g
++ /[\w-/:%]+(?<!:)/g
 ```
+
 
 <hr class="my-16">
 

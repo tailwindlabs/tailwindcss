@@ -19,7 +19,7 @@
     "laravel-mix": "^4.0.15",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.13",
     "mousetrap": "^1.6.1",
     "node-cmd": "^3.0.0",
     "normalize.css": "^7.0.0",
@@ -28,7 +28,7 @@
     "postcss-cssnext": "^3.0.2",
     "prismjs": "^1.8.3",
     "stylefmt": "^6.0.0",
-    "tailwindcss": "^1.0.2",
+    "tailwindcss": "^1.1.2",
     "vue": "^2.6.10",
     "vue-template-compiler": "^2.6.10",
     "webpack-watch": "^0.2.0",
@@ -36,5 +36,8 @@
   },
   "browserslist": [
     "> 1%"
-  ]
+  ],
+  "dependencies": {
+    "@vimeo/player": "^2.10.0"
+  }
 }

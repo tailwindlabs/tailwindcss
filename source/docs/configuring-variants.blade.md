@@ -28,9 +28,15 @@ Each property is a core plugin name pointing to an array of variants to generate
 - `'responsive'`
 - `'group-hover'`
 - `'focus-within'`
+- `'first'`
+- `'last'`
+- `'odd'`
+- `'even'`
 - `'hover'`
 - `'focus'`
 - `'active'`
+- `'visited'`
+- `'disabled'`
 
 It's important to note that **your array of variants is not merged with the defaults**, so if you'd like to enable another variant for a utility, you need to repeat the default variants for that utility as well.
 
@@ -117,7 +123,7 @@ This means that given the following HTML:
 Generally, we recommend the following order for the built-in variants, although you are free to use whatever order makes the most sense for your own project:
 
 ```js
-['responsive', 'group-hover', 'focus-within', 'hover', 'focus', 'active']
+['responsive', 'group-hover', 'focus-within', 'first', 'last', 'odd', 'even', 'hover', 'focus', 'active', 'visited', 'disabled']
 ```
 
 ### The responsive variant
@@ -271,7 +277,7 @@ To specify a global set of variants that should be applied to all utilities, you
 ```js
 // tailwind.config.js
 module.exports  = {
-  variants: ['responsive', 'group-hover', 'focus-within', 'hover', 'focus', 'active']
+  variants: ['responsive', 'group-hover', 'focus-within', 'first', 'last', 'odd', 'even', 'hover', 'focus', 'active', 'visited', 'disabled']
 }
 ```
 
@@ -353,7 +359,7 @@ module.exports = {
     minWidth: ['responsive'],
     objectFit: ['responsive'],
     objectPosition: ['responsive'],
-    opacity: ['responsive'],
+    opacity: ['responsive', 'hover', 'focus'],
     order: ['responsive'],
     outline: ['responsive', 'focus'],
     overflow: ['responsive'],

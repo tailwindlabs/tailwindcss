@@ -3,7 +3,7 @@ extends: _layouts.documentation
 title: "Community"
 description: "How to find other Tailwind users and get involved in the community."
 titleBorder: true
-hideTableOfContents: true
+hideTableOfContents: false
 ---
 
 ## Discord
