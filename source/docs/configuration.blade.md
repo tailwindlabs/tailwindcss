@@ -274,6 +274,46 @@ If you'd like to make your own utilities `!important`, just add `!important` to 
 }
 ```
 
+Setting `important` to `true` is useful, but can introduce some issues when incorporating third-party JS libraries that add inline styles to your elements—in those cases, Tailwind's `!important` utilities defeat the inline styles. This is really common with animation libraries, for example.
+
+If you're _not_ facing that issue, feel free to skip to the next section! But if you _are_ facing that issue, you can make utilities "important" in a less aggressive manner by providing a _CSS selector_ instead of a boolean to the `important` option:
+
+```js
+// tailwind.config.js
+module.exports = {
+  important: '#app',
+}
+```
+
+This configuration will prefix all of your utilities with the given selector, effectively increasing their specificity without actually making them `!important`.
+
+After you specifify the `important` selector, you'll need to ensure that the root element of your site matches it.  Using the example above, we would need to set our root element's `id` attribute to `app` in order for styles to work properly.
+
+After your configuration is all set up and your root element matches the selector in your Tailwind config, all of Tailwind's utilities will have a high enough specificity to defeat other classes used in your project, **without** interfering with inline styles:
+
+```html
+<html>
+<!-- ... -->
+<style>
+  .high-specificity .nested .selector {
+    color: blue;
+  }
+</style>
+<body id="app">
+  <div class="high-specificity">
+    <div class="nested">
+      <!-- Will be red-500 -->
+      <div class="selector text-red-500"><!-- ... --></div>
+    </div>
+  </div>
+
+  <!-- Will be #bada55 -->
+  <div class="text-red-500" style="color: #bada55;"><!-- ... --></div>
+</body>
+</html>
+```
+
+
 ## Separator
 
 The `separator` option lets you customize what character or string should be used to separate variant prefixes (screen sizes, `hover`, `focus`, etc.) from utility names (`text-center`, `items-end`, etc.).
