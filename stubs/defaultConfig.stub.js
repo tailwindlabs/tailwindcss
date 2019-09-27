@@ -250,6 +250,10 @@ module.exports = {
         'monospace',
       ],
     },
+    textShadow:{
+      default: '0em 0.05em 0.1em rgba(72, 72, 103, 0.6)',
+      none: 'none',
+    },
     fontSize: {
       xs: '0.75rem',
       sm: '0.875rem',
@@ -478,6 +482,7 @@ module.exports = {
     textColor: ['responsive', 'hover', 'focus'],
     textDecoration: ['responsive', 'hover', 'focus'],
     textTransform: ['responsive'],
+    textShadow: ['responsive', 'hover', 'focus'],
     userSelect: ['responsive'],
     verticalAlign: ['responsive'],
     visibility: ['responsive'],

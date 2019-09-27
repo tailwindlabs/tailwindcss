@@ -55,6 +55,7 @@ import textAlign from './plugins/textAlign'
 import textColor from './plugins/textColor'
 import fontSize from './plugins/fontSize'
 import fontStyle from './plugins/fontStyle'
+import textShadow from './plugins/textShadow'
 import textTransform from './plugins/textTransform'
 import textDecoration from './plugins/textDecoration'
 import fontSmoothing from './plugins/fontSmoothing'
@@ -128,6 +129,7 @@ export default function({ corePlugins: corePluginConfig }) {
     textColor,
     fontSize,
     fontStyle,
+    textShadow,
     textTransform,
     textDecoration,
     fontSmoothing,
