@@ -156,9 +156,10 @@ return [
             'Making the Navbar Responsive' => '/course/making-the-navbar-responsive',
         ],
         'Building a dropdown menu' => [
-            'Styling the avatar button' => '/course/coming-soon',
-            'Positioning the dropdown menu' => '/course/coming-soon',
-            'Displaying the dropdown contents on mobile' => '/course/coming-soon',
+            'Styling the Basic Dropdown Elements' => '/course/styling-the-basic-dropdown-elements',
+            'Positioning the Dropdown Area' => '/course/positioning-the-dropdown-area',
+            'Making the Dropdown Interactive' => '/course/making-the-dropdown-interactive',
+            'Adapting the Dropdown for Mobile' => '/course/adapting-the-dropdown-for-mobile',
         ],
         'Styling form elements' => [
             'Styling basic text inputs' => '/course/coming-soon',
