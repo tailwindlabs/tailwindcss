@@ -347,7 +347,7 @@ Use @@css to avoid processing as Stylus
 }
 ```
 
-This comes with a signficant cost however, which is that **you cannot use any Stylus features inside a `@@css` block**.
+This comes with a significant cost however, which is that **you cannot use any Stylus features inside a `@@css` block**.
 
 Another option is to use the `theme()` function instead of `@@apply`, and write out the actual CSS properties in long form:
 

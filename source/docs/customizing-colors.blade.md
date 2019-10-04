@@ -285,7 +285,7 @@ Bad news: color is complicated and we've yet to find a tool that does a good job
 
 ## Default color palette
 
-Tailwind includes a generous palette of great looking, well-balanced colors that are perfect for prototyping or for kicking off a brand new project.
+Tailwind includes a generous palette of great-looking, well-balanced colors that are perfect for prototyping or for kicking off a brand new project.
 
 <div class="flex flex-wrap -mx-2 mt-0">
   <div class="px-2 w-full relative">
