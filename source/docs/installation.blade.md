@@ -211,7 +211,7 @@ mix.sass('resources/sass/app.scss', 'public/css')
   })
 ```
 
-For more information on what this feature does and the implications of disabling it, [see the Laravel Mix documentation](https://laravel-mix.com/docs/4.0/css-preprocessors#css-url-rewriting).
+For more information on what this feature does and the implications of disabling it, [see the Laravel Mix documentation](https://laravel-mix.com/docs/5.0/css-preprocessors#css-url-rewriting).
 
 ### Webpack Encore
 
