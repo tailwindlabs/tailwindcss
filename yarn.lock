@@ -3,9 +3,9 @@
 
 
 "@babel/cli@^7.0.0":
-  version "7.6.2"
-  resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.6.2.tgz#4ce8b5b4b2e4b4c1b7bd841cec62085e2dfc4465"
-  integrity sha512-JDZ+T/br9pPfT2lmAMJypJDTTTHM9ePD/ED10TRjRzJVdEVy+JB3iRlhzYmTt5YkNgHvxWGlUVnLtdv6ruiDrQ==
+  version "7.6.3"
+  resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.6.3.tgz#1b0c62098c8a5e01e4a4a59a52cba9682e7e0906"
+  integrity sha512-kWKOEeuylpa781yCeA5//eEx1u3WtLZqbi2VWXLKmb3QDPb5T2f7Yk311MK7bvvjR70dluAeiu4VXXsG1WwJsw==
   dependencies:
     commander "^2.8.1"
     convert-source-map "^1.1.0"
@@ -15,7 +15,7 @@
     mkdirp "^0.5.1"
     output-file-sync "^2.0.0"
     slash "^2.0.0"
-    source-map "^0.5.0"
+    source-map "^0.6.1"
   optionalDependencies:
     chokidar "^2.1.8"
 
