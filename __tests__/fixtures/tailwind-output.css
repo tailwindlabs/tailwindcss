@@ -3224,6 +3224,56 @@ video {
   border-width: 1px;
 }
 
+.border-y-0 {
+  border-top-width: 0;
+  border-bottom-width: 0;
+}
+
+.border-x-0 {
+  border-left-width: 0;
+  border-right-width: 0;
+}
+
+.border-y-2 {
+  border-top-width: 2px;
+  border-bottom-width: 2px;
+}
+
+.border-x-2 {
+  border-left-width: 2px;
+  border-right-width: 2px;
+}
+
+.border-y-4 {
+  border-top-width: 4px;
+  border-bottom-width: 4px;
+}
+
+.border-x-4 {
+  border-left-width: 4px;
+  border-right-width: 4px;
+}
+
+.border-y-8 {
+  border-top-width: 8px;
+  border-bottom-width: 8px;
+}
+
+.border-x-8 {
+  border-left-width: 8px;
+  border-right-width: 8px;
+}
+
+.border-y {
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+}
+
+.border-x {
+  border-left-width: 1px;
+  border-right-width: 1px;
+}
+
 .border-t-0 {
   border-top-width: 0;
 }
@@ -10961,6 +11011,56 @@ video {
 
   .sm\:border {
     border-width: 1px;
+  }
+
+  .sm\:border-y-0 {
+    border-top-width: 0;
+    border-bottom-width: 0;
+  }
+
+  .sm\:border-x-0 {
+    border-left-width: 0;
+    border-right-width: 0;
+  }
+
+  .sm\:border-y-2 {
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+  }
+
+  .sm\:border-x-2 {
+    border-left-width: 2px;
+    border-right-width: 2px;
+  }
+
+  .sm\:border-y-4 {
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+  }
+
+  .sm\:border-x-4 {
+    border-left-width: 4px;
+    border-right-width: 4px;
+  }
+
+  .sm\:border-y-8 {
+    border-top-width: 8px;
+    border-bottom-width: 8px;
+  }
+
+  .sm\:border-x-8 {
+    border-left-width: 8px;
+    border-right-width: 8px;
+  }
+
+  .sm\:border-y {
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+  }
+
+  .sm\:border-x {
+    border-left-width: 1px;
+    border-right-width: 1px;
   }
 
   .sm\:border-t-0 {
@@ -18703,6 +18803,56 @@ video {
     border-width: 1px;
   }
 
+  .md\:border-y-0 {
+    border-top-width: 0;
+    border-bottom-width: 0;
+  }
+
+  .md\:border-x-0 {
+    border-left-width: 0;
+    border-right-width: 0;
+  }
+
+  .md\:border-y-2 {
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+  }
+
+  .md\:border-x-2 {
+    border-left-width: 2px;
+    border-right-width: 2px;
+  }
+
+  .md\:border-y-4 {
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+  }
+
+  .md\:border-x-4 {
+    border-left-width: 4px;
+    border-right-width: 4px;
+  }
+
+  .md\:border-y-8 {
+    border-top-width: 8px;
+    border-bottom-width: 8px;
+  }
+
+  .md\:border-x-8 {
+    border-left-width: 8px;
+    border-right-width: 8px;
+  }
+
+  .md\:border-y {
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+  }
+
+  .md\:border-x {
+    border-left-width: 1px;
+    border-right-width: 1px;
+  }
+
   .md\:border-t-0 {
     border-top-width: 0;
   }
@@ -26443,6 +26593,56 @@ video {
     border-width: 1px;
   }
 
+  .lg\:border-y-0 {
+    border-top-width: 0;
+    border-bottom-width: 0;
+  }
+
+  .lg\:border-x-0 {
+    border-left-width: 0;
+    border-right-width: 0;
+  }
+
+  .lg\:border-y-2 {
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+  }
+
+  .lg\:border-x-2 {
+    border-left-width: 2px;
+    border-right-width: 2px;
+  }
+
+  .lg\:border-y-4 {
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+  }
+
+  .lg\:border-x-4 {
+    border-left-width: 4px;
+    border-right-width: 4px;
+  }
+
+  .lg\:border-y-8 {
+    border-top-width: 8px;
+    border-bottom-width: 8px;
+  }
+
+  .lg\:border-x-8 {
+    border-left-width: 8px;
+    border-right-width: 8px;
+  }
+
+  .lg\:border-y {
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+  }
+
+  .lg\:border-x {
+    border-left-width: 1px;
+    border-right-width: 1px;
+  }
+
   .lg\:border-t-0 {
     border-top-width: 0;
   }
@@ -34181,6 +34381,56 @@ video {
 
   .xl\:border {
     border-width: 1px;
+  }
+
+  .xl\:border-y-0 {
+    border-top-width: 0;
+    border-bottom-width: 0;
+  }
+
+  .xl\:border-x-0 {
+    border-left-width: 0;
+    border-right-width: 0;
+  }
+
+  .xl\:border-y-2 {
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+  }
+
+  .xl\:border-x-2 {
+    border-left-width: 2px;
+    border-right-width: 2px;
+  }
+
+  .xl\:border-y-4 {
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+  }
+
+  .xl\:border-x-4 {
+    border-left-width: 4px;
+    border-right-width: 4px;
+  }
+
+  .xl\:border-y-8 {
+    border-top-width: 8px;
+    border-bottom-width: 8px;
+  }
+
+  .xl\:border-x-8 {
+    border-left-width: 8px;
+    border-right-width: 8px;
+  }
+
+  .xl\:border-y {
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+  }
+
+  .xl\:border-x {
+    border-left-width: 1px;
+    border-right-width: 1px;
   }
 
   .xl\:border-t-0 {
