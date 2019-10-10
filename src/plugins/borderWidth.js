@@ -6,6 +6,16 @@ export default function() {
       (value, modifier) => ({
         [`.${e(`border${modifier}`)}`]: { borderWidth: `${value}` },
       }),
+      (size, modifier) => ({
+        [`.${e(`border-y${modifier}`)}`]: {
+          borderTopWidth: `${size}`,
+          borderBottomWidth: `${size}`,
+        },
+        [`.${e(`border-x${modifier}`)}`]: {
+          borderLeftWidth: `${size}`,
+          borderRightWidth: `${size}`,
+        },
+      }),
       (value, modifier) => ({
         [`.${e(`border-t${modifier}`)}`]: { borderTopWidth: `${value}` },
         [`.${e(`border-r${modifier}`)}`]: { borderRightWidth: `${value}` },
