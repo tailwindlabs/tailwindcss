@@ -47,7 +47,7 @@ test('plugins can create utilities with object syntax', () => {
         object-fit: cover
       }
     }
-    `)
+  `)
 })
 
 test('plugins can create utilities with arrays of objects', () => {
@@ -1205,4 +1205,42 @@ test('prefix will prefix all classes in a selector', () => {
       background-color: blue
     }
     `)
+})
+
+test('plugins can be provided as an object with a handler function', () => {
+  const { components, utilities } = processPlugins(
+    [
+      {
+        handler: function({ addUtilities }) {
+          addUtilities({
+            '.object-fill': {
+              'object-fit': 'fill',
+            },
+            '.object-contain': {
+              'object-fit': 'contain',
+            },
+            '.object-cover': {
+              'object-fit': 'cover',
+            },
+          })
+        },
+      }
+    ],
+    makeConfig()
+  )
+
+  expect(components.length).toBe(0)
+  expect(css(utilities)).toMatchCss(`
+    @variants {
+      .object-fill {
+        object-fit: fill
+      }
+      .object-contain {
+        object-fit: contain
+      }
+      .object-cover {
+        object-fit: cover
+      }
+    }
+  `)
 })

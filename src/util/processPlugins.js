@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import postcss from 'postcss'
 import Node from 'postcss/lib/node'
+import isFunction from 'lodash/isFunction'
 import escapeClassName from '../util/escapeClassName'
 import generateVariantFunction from '../util/generateVariantFunction'
 import parseObjectStyles from '../util/parseObjectStyles'
@@ -28,7 +29,9 @@ export default function(plugins, config) {
   const getConfigValue = (path, defaultValue) => _.get(config, path, defaultValue)
 
   plugins.forEach(plugin => {
-    plugin({
+    const handler = isFunction(plugin) ? plugin : plugin.handler
+
+    handler({
       postcss,
       config: getConfigValue,
       theme: (path, defaultValue) => getConfigValue(`theme.${path}`, defaultValue),
