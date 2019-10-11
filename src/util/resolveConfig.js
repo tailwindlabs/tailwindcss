@@ -1,7 +1,11 @@
+import some from 'lodash/some'
 import mergeWith from 'lodash/mergeWith'
+import assignWith from 'lodash/assignWith'
 import isFunction from 'lodash/isFunction'
+import isUndefined from 'lodash/isUndefined'
 import defaults from 'lodash/defaults'
 import map from 'lodash/map'
+import reduce from 'lodash/reduce'
 import toPath from 'lodash/toPath'
 import negateValue from './negateValue'
 
@@ -23,18 +27,46 @@ function value(valueToResolve, ...args) {
   return isFunction(valueToResolve) ? valueToResolve(...args) : valueToResolve
 }
 
+function mergeThemes(themes) {
+  const theme = (({ extend, ...t }) => t)(themes.reduce((merged, t) => {
+    return defaults(merged, t)
+  }, {}))
+
+  // In order to resolve n config objects, we combine all of their `extend` properties
+  // into arrays instead of objects so they aren't overridden.
+  const extend = themes.reduce((merged, { extend }) => {
+    return mergeWith(merged, extend, (mergedValue, extendValue) => {
+      if (isUndefined(mergedValue)) {
+        return [extendValue]
+      }
+
+      if (Array.isArray(mergedValue)) {
+        return [...mergedValue, extendValue]
+      }
+
+      return [mergedValue, extendValue]
+    })
+  }, {})
+
+  return {
+    ...theme,
+    extend,
+  }
+}
+
 function mergeExtensions({ extend, ...theme }) {
   return mergeWith(theme, extend, (themeValue, extensions) => {
-    if (!isFunction(themeValue) && !isFunction(extensions)) {
+    // The `extend` property is an array, so we need to check if it contains any functions
+    if (!isFunction(themeValue) && !some(extensions, isFunction)) {
       return {
         ...themeValue,
-        ...extensions,
+        ...Object.assign({}, ...extensions),
       }
     }
 
     return (resolveThemePath, utils) => ({
       ...value(themeValue, resolveThemePath, utils),
-      ...value(extensions, resolveThemePath, utils),
+      ...Object.assign({}, ...extensions.map(e => value(e, resolveThemePath, utils))),
     })
   })
 }
@@ -65,7 +97,7 @@ function resolveFunctionKeys(object) {
 export default function resolveConfig(configs) {
   return defaults(
     {
-      theme: resolveFunctionKeys(mergeExtensions(defaults({}, ...map(configs, 'theme')))),
+      theme: resolveFunctionKeys(mergeExtensions(mergeThemes(map(configs, 'theme')))),
       variants: (firstVariants => {
         return Array.isArray(firstVariants)
           ? firstVariants

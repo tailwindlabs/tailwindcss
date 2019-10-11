@@ -1234,3 +1234,133 @@ test('custom properties are multiplied by -1 for negative values', () => {
     variants: {},
   })
 })
+
+test('more than two config objects can be resolved', () => {
+  const firstConfig = {
+    theme: {
+      extend: {
+        fontFamily: () => ({
+          code: ['Menlo', 'monospace'],
+        }),
+        colors: {
+          red: 'red',
+        },
+        backgroundColor: {
+          customBackgroundOne: '#bada55',
+        },
+        textDecorationColor: {
+          orange: 'orange'
+        }
+      },
+    },
+  }
+
+  const secondConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      extend: {
+        fontFamily: {
+          quote: ['Helvetica', 'serif'],
+        },
+        colors: {
+          green: 'green',
+        },
+        backgroundColor: {
+          customBackgroundTwo: '#facade',
+        },
+        textDecorationColor: theme => theme('colors')
+      },
+    },
+  }
+
+  const thirdConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      extend: {
+        fontFamily: {
+          hero: ['Futura', 'sans-serif'],
+        },
+        colors: {
+          pink: 'pink',
+        },
+        backgroundColor: () => ({
+          customBackgroundThree: '#c0ffee',
+        }),
+        textDecorationColor: {
+          lime: 'lime',
+        }
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      fontFamily: {
+        body: ['Arial', 'sans-serif'],
+        display: ['Georgia', 'serif'],
+      },
+      colors: {
+        blue: 'blue',
+      },
+      backgroundColor: theme => theme('colors'),
+    },
+    variants: {
+      backgroundColor: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([
+    firstConfig,
+    secondConfig,
+    thirdConfig,
+    defaultConfig
+  ])
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      fontFamily: {
+        body: ['Arial', 'sans-serif'],
+        display: ['Georgia', 'serif'],
+        code: ['Menlo', 'monospace'],
+        quote: ['Helvetica', 'serif'],
+        hero: ['Futura', 'sans-serif'],
+      },
+      colors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+        pink: 'pink',
+      },
+      backgroundColor: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+        pink: 'pink',
+        customBackgroundOne: '#bada55',
+        customBackgroundTwo: '#facade',
+        customBackgroundThree: '#c0ffee',
+      },
+      textDecorationColor: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+        pink: 'pink',
+        orange: 'orange',
+        lime: 'lime',
+      },
+    },
+    variants: {
+      backgroundColor: ['responsive', 'hover', 'focus'],
+    },
+  })
+})
