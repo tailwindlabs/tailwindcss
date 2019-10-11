@@ -1363,15 +1363,15 @@ test('plugin config modifications are applied', () => {
   const userConfig = {
     plugins: [
       {
-        modifyConfig: function (config) {
+        modifyConfig(config) {
           return {
             ...config,
-            prefix: 'tw-'
+            prefix: 'tw-',
           }
         },
-        handler: function () {}
-      }
-    ]
+        handler() {},
+      },
+    ],
   }
 
   const defaultConfig = {
@@ -1391,7 +1391,7 @@ test('plugin config modifications are applied', () => {
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
-  
+
   expect(result).toEqual({
     prefix: 'tw-',
     important: false,
@@ -1415,15 +1415,15 @@ test('user config takes precedence over plugin config modifications', () => {
     prefix: 'user-',
     plugins: [
       {
-        modifyConfig: function (config) {
+        modifyConfig(config) {
           return {
             ...config,
-            prefix: 'plugin-'
+            prefix: 'plugin-',
           }
         },
-        handler: function () {}
-      }
-    ]
+        handler() {},
+      },
+    ],
   }
 
   const defaultConfig = {
@@ -1443,7 +1443,7 @@ test('user config takes precedence over plugin config modifications', () => {
   }
 
   const result = resolveConfig([userConfig, defaultConfig])
-  
+
   expect(result).toEqual({
     prefix: 'user-',
     important: false,

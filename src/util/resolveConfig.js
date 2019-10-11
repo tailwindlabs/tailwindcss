@@ -103,7 +103,10 @@ function resolveFunctionKeys(object) {
 }
 
 export default function resolveConfig([userConfig, defaultConfig]) {
-  const modifiedDefaultConfig = applyPluginConfigModifications(defaultConfig, get(userConfig, 'plugins', []))
+  const modifiedDefaultConfig = applyPluginConfigModifications(
+    defaultConfig,
+    get(userConfig, 'plugins', [])
+  )
   const configs = [userConfig, modifiedDefaultConfig]
 
   return defaults(

@@ -1211,7 +1211,7 @@ test('plugins can be provided as an object with a handler function', () => {
   const { components, utilities } = processPlugins(
     [
       {
-        handler: function({ addUtilities }) {
+        handler({ addUtilities }) {
           addUtilities({
             '.object-fill': {
               'object-fit': 'fill',
@@ -1224,7 +1224,7 @@ test('plugins can be provided as an object with a handler function', () => {
             },
           })
         },
-      }
+      },
     ],
     makeConfig()
   )

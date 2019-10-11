@@ -7,7 +7,7 @@ test('plugins can add new theme values', () => {
       corePlugins: [],
       plugins: [
         {
-          modifyConfig: function(config) {
+          modifyConfig(config) {
             return {
               ...config,
               theme: {
@@ -17,26 +17,26 @@ test('plugins can add new theme values', () => {
                   '90': '90deg',
                   '180': '180deg',
                   '270': '270deg',
-                }
-              }
+                },
+              },
             }
           },
-          handler: function({ addUtilities, theme }) {
-            addUtilities(Object.entries(theme('rotate')).map(([key, value]) => {
-              return {
-                [`.rotate-${key}`]: {
-                  transform: `rotate(${value})`,
-                },
-              }
-            }))
+          handler({ addUtilities, theme }) {
+            addUtilities(
+              Object.entries(theme('rotate')).map(([key, value]) => {
+                return {
+                  [`.rotate-${key}`]: {
+                    transform: `rotate(${value})`,
+                  },
+                }
+              })
+            )
           },
-        }
-      ]
+        },
+      ],
     }),
   ])
-    .process('@tailwind utilities;',
-      { from: undefined }
-    )
+    .process('@tailwind utilities;', { from: undefined })
     .then(result => {
       const expected = `
         .rotate-0 {
