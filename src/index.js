@@ -44,12 +44,6 @@ function resolveConfigPath(filePath) {
   }
 }
 
-function applyPluginConfigModifications(config) {
-  return [...config.plugins].reduce((modified, plugin) => {
-    return _.get(plugin, 'modifyConfig', _.identity)(modified)
-  }, config)
-}
-
 const getConfigFunction = config => () => {
   if (_.isUndefined(config) && !_.isObject(config)) {
     return resolveConfig([defaultConfig])
@@ -63,7 +57,7 @@ const getConfigFunction = config => () => {
 
   const configObject = _.isObject(config) ? _.get(config, 'config', config) : require(config)
 
-  return resolveConfig([applyPluginConfigModifications(configObject), defaultConfig])
+  return resolveConfig([configObject, defaultConfig])
 }
 
 const plugin = postcss.plugin('tailwind', config => {

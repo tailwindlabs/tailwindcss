@@ -3,6 +3,8 @@ import mergeWith from 'lodash/mergeWith'
 import isFunction from 'lodash/isFunction'
 import isUndefined from 'lodash/isUndefined'
 import defaults from 'lodash/defaults'
+import identity from 'lodash/identity'
+import get from 'lodash/get'
 import map from 'lodash/map'
 import get from 'lodash/get'
 import toPath from 'lodash/toPath'
@@ -20,6 +22,12 @@ const configUtils = {
         {}
       )
   },
+}
+
+function applyPluginConfigModifications(config, plugins) {
+  return plugins.reduce((modified, plugin) => {
+    return get(plugin, 'modifyConfig', identity)(modified)
+  }, config)
 }
 
 function value(valueToResolve, ...args) {
@@ -94,7 +102,10 @@ function resolveFunctionKeys(object) {
   }, {})
 }
 
-export default function resolveConfig(configs) {
+export default function resolveConfig([userConfig, defaultConfig]) {
+  const modifiedDefaultConfig = applyPluginConfigModifications(defaultConfig, get(userConfig, 'plugins', []))
+  const configs = [userConfig, modifiedDefaultConfig]
+
   return defaults(
     {
       // Need to get a default empty object if the config has no theme

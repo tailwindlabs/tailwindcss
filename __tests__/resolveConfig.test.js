@@ -1359,3 +1359,105 @@ test('more than two config objects can be resolved', () => {
     },
   })
 })
+test('plugin config modifications are applied', () => {
+  const userConfig = {
+    plugins: [
+      {
+        modifyConfig: function (config) {
+          return {
+            ...config,
+            prefix: 'tw-'
+          }
+        },
+        handler: function () {}
+      }
+    ]
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+  
+  expect(result).toEqual({
+    prefix: 'tw-',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+    plugins: userConfig.plugins,
+  })
+})
+
+test('user config takes precedence over plugin config modifications', () => {
+  const userConfig = {
+    prefix: 'user-',
+    plugins: [
+      {
+        modifyConfig: function (config) {
+          return {
+            ...config,
+            prefix: 'plugin-'
+          }
+        },
+        handler: function () {}
+      }
+    ]
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+  
+  expect(result).toEqual({
+    prefix: 'user-',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+    plugins: userConfig.plugins,
+  })
+})
