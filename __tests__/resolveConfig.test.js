@@ -1359,15 +1359,13 @@ test('more than two config objects can be resolved', () => {
     },
   })
 })
+
 test('plugin config modifications are applied', () => {
   const userConfig = {
     plugins: [
       {
-        modifyConfig(config) {
-          return {
-            ...config,
-            prefix: 'tw-',
-          }
+        config: {
+          prefix: 'tw-',
         },
         handler() {},
       },
@@ -1415,11 +1413,8 @@ test('user config takes precedence over plugin config modifications', () => {
     prefix: 'user-',
     plugins: [
       {
-        modifyConfig(config) {
-          return {
-            ...config,
-            prefix: 'plugin-',
-          }
+        config: {
+          prefix: 'tw-',
         },
         handler() {},
       },
@@ -1446,6 +1441,124 @@ test('user config takes precedence over plugin config modifications', () => {
 
   expect(result).toEqual({
     prefix: 'user-',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+    plugins: userConfig.plugins,
+  })
+})
+
+test('plugin config can register plugins that also have config', () => {
+  const userConfig = {
+    plugins: [
+      {
+        config: {
+          prefix: 'tw-',
+          plugins: [
+            {
+              config: {
+                important: true,
+              },
+              handler() {}
+            },
+            {
+              config: {
+                separator: '__',
+              },
+              handler() {}
+            },
+          ]
+        },
+        handler() {},
+      },
+    ],
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: 'tw-',
+    important: true,
+    separator: '__',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+    plugins: userConfig.plugins,
+  })
+})
+
+test('plugin configs take precedence over plugin configs registered by that plugin', () => {
+  const userConfig = {
+    plugins: [
+      {
+        config: {
+          prefix: 'outer-',
+          plugins: [
+            {
+              config: {
+                prefix: 'inner-',
+              },
+              handler() {}
+            }
+          ]
+        },
+        handler() {},
+      },
+    ],
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: 'outer-',
     important: false,
     separator: ':',
     theme: {

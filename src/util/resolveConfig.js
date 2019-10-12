@@ -1,10 +1,9 @@
 import some from 'lodash/some'
 import mergeWith from 'lodash/mergeWith'
+import isEmpty from 'lodash/isEmpty'
 import isFunction from 'lodash/isFunction'
 import isUndefined from 'lodash/isUndefined'
 import defaults from 'lodash/defaults'
-import identity from 'lodash/identity'
-import get from 'lodash/get'
 import map from 'lodash/map'
 import get from 'lodash/get'
 import toPath from 'lodash/toPath'
@@ -22,12 +21,6 @@ const configUtils = {
         {}
       )
   },
-}
-
-function applyPluginConfigModifications(config, plugins) {
-  return plugins.reduce((modified, plugin) => {
-    return get(plugin, 'modifyConfig', identity)(modified)
-  }, config)
 }
 
 function value(valueToResolve, ...args) {
@@ -102,25 +95,41 @@ function resolveFunctionKeys(object) {
   }, {})
 }
 
-export default function resolveConfig([userConfig, defaultConfig]) {
-  const modifiedDefaultConfig = applyPluginConfigModifications(
-    defaultConfig,
-    get(userConfig, 'plugins', [])
-  )
-  const configs = [userConfig, modifiedDefaultConfig]
+function extractPluginConfigs(configs) {
+  let allConfigs = []
+
+  configs.forEach(config => {
+    allConfigs = [...allConfigs, config]
+
+    const plugins = get(config, 'plugins', [])
+    
+    if (plugins.length === 0) {
+      return
+    }
+
+    plugins.forEach(plugin => {
+      allConfigs = [...allConfigs, ...extractPluginConfigs([get(plugin, 'config', {})])]
+    })
+  })
+
+  return allConfigs
+}
+
+export default function resolveConfig(configs) {
+  const allConfigs = extractPluginConfigs(configs)
 
   return defaults(
     {
       // Need to get a default empty object if the config has no theme
       theme: resolveFunctionKeys(
-        mergeExtensions(mergeThemes(map(configs, t => get(t, 'theme', {}))))
+        mergeExtensions(mergeThemes(map(allConfigs, t => get(t, 'theme', {}))))
       ),
       variants: (firstVariants => {
         return Array.isArray(firstVariants)
           ? firstVariants
-          : defaults({}, ...map(configs, 'variants'))
-      })(defaults({}, ...map(configs)).variants),
+          : defaults({}, ...map(allConfigs, 'variants'))
+      })(defaults({}, ...map(allConfigs)).variants),
     },
-    ...configs
+    ...allConfigs
   )
 }
