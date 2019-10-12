@@ -1,6 +1,5 @@
 import some from 'lodash/some'
 import mergeWith from 'lodash/mergeWith'
-import isEmpty from 'lodash/isEmpty'
 import isFunction from 'lodash/isFunction'
 import isUndefined from 'lodash/isUndefined'
 import defaults from 'lodash/defaults'
@@ -102,7 +101,7 @@ function extractPluginConfigs(configs) {
     allConfigs = [...allConfigs, config]
 
     const plugins = get(config, 'plugins', [])
-    
+
     if (plugins.length === 0) {
       return
     }

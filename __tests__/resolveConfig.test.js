@@ -1468,15 +1468,15 @@ test('plugin config can register plugins that also have config', () => {
               config: {
                 important: true,
               },
-              handler() {}
+              handler() {},
             },
             {
               config: {
                 separator: '__',
               },
-              handler() {}
+              handler() {},
             },
-          ]
+          ],
         },
         handler() {},
       },
@@ -1530,9 +1530,9 @@ test('plugin configs take precedence over plugin configs registered by that plug
               config: {
                 prefix: 'inner-',
               },
-              handler() {}
-            }
-          ]
+              handler() {},
+            },
+          ],
         },
         handler() {},
       },
