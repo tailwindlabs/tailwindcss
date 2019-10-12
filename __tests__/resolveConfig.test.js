@@ -1367,7 +1367,6 @@ test('plugin config modifications are applied', () => {
         config: {
           prefix: 'tw-',
         },
-        handler() {},
       },
     ],
   }
@@ -1416,7 +1415,6 @@ test('user config takes precedence over plugin config modifications', () => {
         config: {
           prefix: 'tw-',
         },
-        handler() {},
       },
     ],
   }
@@ -1468,13 +1466,11 @@ test('plugin config can register plugins that also have config', () => {
               config: {
                 important: true,
               },
-              handler() {},
             },
             {
               config: {
                 separator: '__',
               },
-              handler() {},
             },
           ],
         },
@@ -1530,7 +1526,6 @@ test('plugin configs take precedence over plugin configs registered by that plug
               config: {
                 prefix: 'inner-',
               },
-              handler() {},
             },
           ],
         },

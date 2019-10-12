@@ -29,7 +29,7 @@ export default function(plugins, config) {
   const getConfigValue = (path, defaultValue) => _.get(config, path, defaultValue)
 
   plugins.forEach(plugin => {
-    const handler = isFunction(plugin) ? plugin : plugin.handler
+    const handler = isFunction(plugin) ? plugin : _.get(plugin, 'handler', () => {})
 
     handler({
       postcss,
