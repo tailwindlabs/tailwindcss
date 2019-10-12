@@ -1249,8 +1249,8 @@ test('more than two config objects can be resolved', () => {
           customBackgroundOne: '#bada55',
         },
         textDecorationColor: {
-          orange: 'orange'
-        }
+          orange: 'orange',
+        },
       },
     },
   }
@@ -1270,7 +1270,7 @@ test('more than two config objects can be resolved', () => {
         backgroundColor: {
           customBackgroundTwo: '#facade',
         },
-        textDecorationColor: theme => theme('colors')
+        textDecorationColor: theme => theme('colors'),
       },
     },
   }
@@ -1292,7 +1292,7 @@ test('more than two config objects can be resolved', () => {
         }),
         textDecorationColor: {
           lime: 'lime',
-        }
+        },
       },
     },
   }
@@ -1316,12 +1316,7 @@ test('more than two config objects can be resolved', () => {
     },
   }
 
-  const result = resolveConfig([
-    firstConfig,
-    secondConfig,
-    thirdConfig,
-    defaultConfig
-  ])
+  const result = resolveConfig([firstConfig, secondConfig, thirdConfig, defaultConfig])
 
   expect(result).toEqual({
     prefix: '-',

@@ -1,11 +1,10 @@
 import some from 'lodash/some'
 import mergeWith from 'lodash/mergeWith'
-import assignWith from 'lodash/assignWith'
 import isFunction from 'lodash/isFunction'
 import isUndefined from 'lodash/isUndefined'
 import defaults from 'lodash/defaults'
 import map from 'lodash/map'
-import reduce from 'lodash/reduce'
+import get from 'lodash/get'
 import toPath from 'lodash/toPath'
 import negateValue from './negateValue'
 
@@ -28,29 +27,30 @@ function value(valueToResolve, ...args) {
 }
 
 function mergeThemes(themes) {
-  const theme = (({ extend, ...t }) => t)(themes.reduce((merged, t) => {
-    return defaults(merged, t)
-  }, {}))
-
-  // In order to resolve n config objects, we combine all of their `extend` properties
-  // into arrays instead of objects so they aren't overridden.
-  const extend = themes.reduce((merged, { extend }) => {
-    return mergeWith(merged, extend, (mergedValue, extendValue) => {
-      if (isUndefined(mergedValue)) {
-        return [extendValue]
-      }
-
-      if (Array.isArray(mergedValue)) {
-        return [...mergedValue, extendValue]
-      }
-
-      return [mergedValue, extendValue]
-    })
-  }, {})
+  const theme = (({ extend: _, ...t }) => t)(
+    themes.reduce((merged, t) => {
+      return defaults(merged, t)
+    }, {})
+  )
 
   return {
     ...theme,
-    extend,
+
+    // In order to resolve n config objects, we combine all of their `extend` properties
+    // into arrays instead of objects so they aren't overridden.
+    extend: themes.reduce((merged, { extend }) => {
+      return mergeWith(merged, extend, (mergedValue, extendValue) => {
+        if (isUndefined(mergedValue)) {
+          return [extendValue]
+        }
+
+        if (Array.isArray(mergedValue)) {
+          return [...mergedValue, extendValue]
+        }
+
+        return [mergedValue, extendValue]
+      })
+    }, {}),
   }
 }
 
@@ -97,7 +97,10 @@ function resolveFunctionKeys(object) {
 export default function resolveConfig(configs) {
   return defaults(
     {
-      theme: resolveFunctionKeys(mergeExtensions(mergeThemes(map(configs, 'theme')))),
+      // Need to get a default empty object if the config has no theme
+      theme: resolveFunctionKeys(
+        mergeExtensions(mergeThemes(map(configs, t => get(t, 'theme', {}))))
+      ),
       variants: (firstVariants => {
         return Array.isArray(firstVariants)
           ? firstVariants
