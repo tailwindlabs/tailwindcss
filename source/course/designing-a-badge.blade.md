@@ -13,6 +13,8 @@ downloadHd: https://player.vimeo.com/external/352533407.hd.mp4?s=0ef225dc85a3532
 downloadSd: https://player.vimeo.com/external/352533407.sd.mp4?s=f087275db180b3eaa84a839aca245498501d24e6&profile_id=165&download=1
 ---
 
-## Notes
+## Tools used
 
-Coming soon.
+- [VS Code](https://code.visualstudio.com/) as the editor
+- [Sizzy](https://sizzy.co/) for the browser preview on the right-hand side
+- [Tailwind CSS Intellisense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) for intelligent auto-completion in VS Code
