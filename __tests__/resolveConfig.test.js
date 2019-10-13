@@ -1569,3 +1569,79 @@ test('plugin configs take precedence over plugin configs registered by that plug
     plugins: userConfig.plugins,
   })
 })
+
+test('plugin theme extensions are added even if user overrides top-level theme config', () => {
+  const userConfig = {
+    plugins: [
+      {
+        config: {
+          theme: {
+            width: {
+              '1px': '1px'
+            }
+          },
+          plugins: [
+            {
+              config: {
+                theme: {
+                  extend: {
+                    width: {
+                      '2px': '2px',
+                      '3px': '3px',
+                    }
+                  } 
+                },
+              },
+            },
+          ],
+        },
+        handler() {},
+      },
+    ],
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      width: {
+        sm: '1rem',
+        md: '2rem',
+        lg: '3rem',
+      },
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      width: {
+        '1px': '1px',
+        '2px': '2px',
+        '3px': '3px',
+      },
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+    plugins: userConfig.plugins,
+  })
+})
