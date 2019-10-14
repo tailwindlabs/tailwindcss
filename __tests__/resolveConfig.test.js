@@ -1574,8 +1574,8 @@ test('plugin theme extensions are added even if user overrides top-level theme c
   const userConfig = {
     theme: {
       width: {
-        '1px': '1px'
-      }
+        '1px': '1px',
+      },
     },
     plugins: [
       {
@@ -1585,8 +1585,8 @@ test('plugin theme extensions are added even if user overrides top-level theme c
               width: {
                 '2px': '2px',
                 '3px': '3px',
-              }
-            } 
+              },
+            },
           },
         },
         handler() {},
@@ -1645,7 +1645,7 @@ test('user theme extensions take precedence over plugin theme extensions with th
     theme: {
       extend: {
         width: {
-          xl: '6rem'
+          xl: '6rem',
         },
       },
     },
@@ -1656,8 +1656,8 @@ test('user theme extensions take precedence over plugin theme extensions with th
             extend: {
               width: {
                 xl: '4rem',
-              }
-            } 
+              },
+            },
           },
         },
         handler() {},
