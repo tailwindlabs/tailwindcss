@@ -55,10 +55,9 @@ const getConfigFunction = config => () => {
     })
   }
 
-  return resolveConfig([
-    _.isObject(config) ? _.get(config, 'config', config) : require(config),
-    defaultConfig,
-  ])
+  const configObject = _.isObject(config) ? _.get(config, 'config', config) : require(config)
+
+  return resolveConfig([configObject, defaultConfig])
 }
 
 const plugin = postcss.plugin('tailwind', config => {

@@ -9,6 +9,7 @@
   "extends": ["eslint-config-postcss", "prettier"],
   "plugins": ["prettier"],
   "rules": {
+    "no-unused-vars": [2, {"args": "all", "argsIgnorePattern": "^_"}],
     "prettier/prettier": [
       "error",
       {
