@@ -45,10 +45,10 @@ function mergeThemes(themes) {
         }
 
         if (Array.isArray(mergedValue)) {
-          return [...mergedValue, extendValue]
+          return [extendValue, ...mergedValue]
         }
 
-        return [mergedValue, extendValue]
+        return [extendValue, mergedValue]
       })
     }, {}),
   }
@@ -119,7 +119,6 @@ export default function resolveConfig(configs) {
 
   return defaults(
     {
-      // Need to get a default empty object if the config has no theme
       theme: resolveFunctionKeys(
         mergeExtensions(mergeThemes(map(allConfigs, t => get(t, 'theme', {}))))
       ),

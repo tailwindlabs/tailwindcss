@@ -1639,3 +1639,75 @@ test('plugin theme extensions are added even if user overrides top-level theme c
     plugins: userConfig.plugins,
   })
 })
+
+test('user theme extensions take precedence over plugin theme extensions with the same key', () => {
+  const userConfig = {
+    theme: {
+      extend: {
+        width: {
+          xl: '6rem'
+        },
+      },
+    },
+    plugins: [
+      {
+        config: {
+          theme: {
+            extend: {
+              width: {
+                xl: '4rem',
+              }
+            } 
+          },
+        },
+        handler() {},
+      },
+    ],
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      width: {
+        sm: '1rem',
+        md: '2rem',
+        lg: '3rem',
+      },
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      width: {
+        sm: '1rem',
+        md: '2rem',
+        lg: '3rem',
+        xl: '6rem',
+      },
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+    plugins: userConfig.plugins,
+  })
+})
