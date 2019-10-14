@@ -1572,28 +1572,22 @@ test('plugin configs take precedence over plugin configs registered by that plug
 
 test('plugin theme extensions are added even if user overrides top-level theme config', () => {
   const userConfig = {
+    theme: {
+      width: {
+        '1px': '1px'
+      }
+    },
     plugins: [
       {
         config: {
           theme: {
-            width: {
-              '1px': '1px'
-            }
+            extend: {
+              width: {
+                '2px': '2px',
+                '3px': '3px',
+              }
+            } 
           },
-          plugins: [
-            {
-              config: {
-                theme: {
-                  extend: {
-                    width: {
-                      '2px': '2px',
-                      '3px': '3px',
-                    }
-                  } 
-                },
-              },
-            },
-          ],
         },
         handler() {},
       },
