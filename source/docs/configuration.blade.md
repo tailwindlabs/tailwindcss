@@ -135,7 +135,7 @@ The `variants` section lets you control which [variants](/docs/pseudo-class-vari
 module.exports = {
   variants: {
     appearance: ['responsive'],
-    backgroundColors: ['responsive', 'hover', 'focus'],
+    backgroundColor: ['responsive', 'hover', 'focus'],
     fill: [],
   },
 }
