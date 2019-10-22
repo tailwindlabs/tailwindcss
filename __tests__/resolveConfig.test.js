@@ -1059,6 +1059,7 @@ test('theme values in the extend section are lazily evaluated', () => {
 test('lazily evaluated values have access to the config utils', () => {
   const userConfig = {
     theme: {
+      inset: theme => theme('margin'),
       shift: (theme, { negative }) => ({
         ...theme('spacing'),
         ...negative(theme('spacing')),
@@ -1083,6 +1084,10 @@ test('lazily evaluated values have access to the config utils', () => {
         '3': '3px',
         '4': '4px',
       },
+      margin: (theme, { negative }) => ({
+        ...theme('spacing'),
+        ...negative(theme('spacing')),
+      }),
     },
     variants: {},
   }
@@ -1095,6 +1100,26 @@ test('lazily evaluated values have access to the config utils', () => {
     separator: ':',
     theme: {
       spacing: {
+        '1': '1px',
+        '2': '2px',
+        '3': '3px',
+        '4': '4px',
+      },
+      inset: {
+        '-1': '-1px',
+        '-2': '-2px',
+        '-3': '-3px',
+        '-4': '-4px',
+        '1': '1px',
+        '2': '2px',
+        '3': '3px',
+        '4': '4px',
+      },
+      margin: {
+        '-1': '-1px',
+        '-2': '-2px',
+        '-3': '-3px',
+        '-4': '-4px',
         '1': '1px',
         '2': '2px',
         '3': '3px',
