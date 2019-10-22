@@ -17,17 +17,22 @@ export default function getModuleDependencies(entryFile) {
   // Iterate over the modules, even when new
   // ones are being added
   for (const mdl of modules) {
-    mdl.requires.forEach(dep => {
-      try {
-        const basedir = path.dirname(mdl.file)
-        const depPath = resolve.sync(dep, { basedir })
-        const depModule = createModule(depPath)
+    mdl.requires
+      .filter(dep => {
+        // Only track local modules, not node_modules
+        return dep.startsWith('./') || dep.startsWith('../')
+      })
+      .forEach(dep => {
+        try {
+          const basedir = path.dirname(mdl.file)
+          const depPath = resolve.sync(dep, { basedir })
+          const depModule = createModule(depPath)
 
-        modules.push(depModule)
-      } catch (_err) {
-        // eslint-disable-next-line no-empty
-      }
-    })
+          modules.push(depModule)
+        } catch (_err) {
+          // eslint-disable-next-line no-empty
+        }
+      })
   }
 
   return modules
