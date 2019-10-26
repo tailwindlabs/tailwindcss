@@ -470,6 +470,7 @@ module.exports = {
     padding: ['responsive'],
     placeholderColor: ['responsive', 'focus'],
     pointerEvents: ['responsive'],
+    touchAction: ['responsive'],
     position: ['responsive'],
     resize: ['responsive'],
     stroke: ['responsive'],

@@ -44,6 +44,7 @@ import overflow from './plugins/overflow'
 import padding from './plugins/padding'
 import placeholderColor from './plugins/placeholderColor'
 import pointerEvents from './plugins/pointerEvents'
+import touchAction from './plugins/touchAction'
 import position from './plugins/position'
 import inset from './plugins/inset'
 import resize from './plugins/resize'
@@ -117,6 +118,7 @@ export default function({ corePlugins: corePluginConfig }) {
     padding,
     placeholderColor,
     pointerEvents,
+    touchAction,
     position,
     inset,
     resize,
