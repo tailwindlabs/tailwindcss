@@ -8,7 +8,7 @@ function updateSource(nodes, source) {
 }
 
 export default function(
-  config,
+  _config,
   { base: pluginBase, components: pluginComponents, utilities: pluginUtilities }
 ) {
   return function(css) {

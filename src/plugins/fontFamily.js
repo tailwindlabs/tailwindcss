@@ -7,7 +7,7 @@ export default function() {
         return [
           `.${e(`font-${modifier}`)}`,
           {
-            'font-family': _.isArray(value) ? value.join(', ') : value,
+            'font-family': Array.isArray(value) ? value.join(', ') : value,
           },
         ]
       })

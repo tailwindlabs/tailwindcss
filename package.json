@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss",
-  "version": "1.0.4",
+  "version": "1.2.0-canary.1",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "main": "lib/index.js",
@@ -36,12 +36,13 @@
     "eslint-plugin-prettier": "^3.0.1",
     "jest": "^24.3.1",
     "prettier": "^1.7.4",
-    "rimraf": "^2.6.3"
+    "rimraf": "^3.0.0"
   },
   "dependencies": {
     "autoprefixer": "^9.4.5",
     "bytes": "^3.0.0",
     "chalk": "^2.4.1",
+    "detective": "^5.2.0",
     "fs-extra": "^8.0.0",
     "lodash": "^4.17.11",
     "node-emoji": "^1.8.1",
@@ -51,7 +52,8 @@
     "postcss-js": "^2.0.0",
     "postcss-nested": "^4.1.1",
     "postcss-selector-parser": "^6.0.0",
-    "pretty-hrtime": "^1.0.3"
+    "pretty-hrtime": "^1.0.3",
+    "reduce-css-calc": "^2.1.6"
   },
   "browserslist": [
     "> 1%"

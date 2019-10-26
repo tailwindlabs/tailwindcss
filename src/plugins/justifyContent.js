@@ -17,6 +17,9 @@ export default function() {
         '.justify-around': {
           'justify-content': 'space-around',
         },
+        '.justify-evenly': {
+          'justify-content': 'space-evenly',
+        },
       },
       variants('justifyContent')
     )

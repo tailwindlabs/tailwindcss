@@ -1,11 +1,13 @@
 import _ from 'lodash'
 import postcss from 'postcss'
 import Node from 'postcss/lib/node'
+import isFunction from 'lodash/isFunction'
 import escapeClassName from '../util/escapeClassName'
 import generateVariantFunction from '../util/generateVariantFunction'
 import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
 import wrapWithVariants from '../util/wrapWithVariants'
+import increaseSpecificity from '../util/increaseSpecificity'
 
 function parseStyles(styles) {
   if (!Array.isArray(styles)) {
@@ -27,12 +29,14 @@ export default function(plugins, config) {
   const getConfigValue = (path, defaultValue) => _.get(config, path, defaultValue)
 
   plugins.forEach(plugin => {
-    plugin({
+    const handler = isFunction(plugin) ? plugin : _.get(plugin, 'handler', () => {})
+
+    handler({
       postcss,
       config: getConfigValue,
       theme: (path, defaultValue) => getConfigValue(`theme.${path}`, defaultValue),
       variants: (path, defaultValue) => {
-        if (_.isArray(config.variants)) {
+        if (Array.isArray(config.variants)) {
           return config.variants
         }
 
@@ -55,7 +59,13 @@ export default function(plugins, config) {
           }
 
           if (options.respectImportant && _.get(config, 'important')) {
-            rule.walkDecls(decl => (decl.important = true))
+            if (config.important === true) {
+              rule.walkDecls(decl => (decl.important = true))
+            } else if (typeof config.important === 'string') {
+              rule.selectors = rule.selectors.map(selector => {
+                return increaseSpecificity(config.important, selector)
+              })
+            }
           }
         })
 

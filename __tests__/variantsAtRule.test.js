@@ -18,10 +18,10 @@ test('it can generate hover variants', () => {
   `
 
   const output = `
-      .banana { color: yellow; }
-      .chocolate { color: brown; }
-      .hover\\:banana:hover { color: yellow; }
-      .hover\\:chocolate:hover { color: brown; }
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .hover\\:banana:hover { color: yellow; }
+    .hover\\:chocolate:hover { color: brown; }
   `
 
   return run(input).then(result => {
@@ -39,10 +39,10 @@ test('it can generate disabled variants', () => {
   `
 
   const output = `
-      .banana { color: yellow; }
-      .chocolate { color: brown; }
-      .disabled\\:banana:disabled { color: yellow; }
-      .disabled\\:chocolate:disabled { color: brown; }
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .disabled\\:banana:disabled { color: yellow; }
+    .disabled\\:chocolate:disabled { color: brown; }
   `
 
   return run(input).then(result => {
@@ -60,10 +60,10 @@ test('it can generate active variants', () => {
   `
 
   const output = `
-      .banana { color: yellow; }
-      .chocolate { color: brown; }
-      .active\\:banana:active { color: yellow; }
-      .active\\:chocolate:active { color: brown; }
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .active\\:banana:active { color: yellow; }
+    .active\\:chocolate:active { color: brown; }
   `
 
   return run(input).then(result => {
@@ -81,10 +81,10 @@ test('it can generate visited variants', () => {
   `
 
   const output = `
-      .banana { color: yellow; }
-      .chocolate { color: brown; }
-      .visited\\:banana:visited { color: yellow; }
-      .visited\\:chocolate:visited { color: brown; }
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .visited\\:banana:visited { color: yellow; }
+    .visited\\:chocolate:visited { color: brown; }
   `
 
   return run(input).then(result => {
@@ -102,10 +102,10 @@ test('it can generate focus variants', () => {
   `
 
   const output = `
-      .banana { color: yellow; }
-      .chocolate { color: brown; }
-      .focus\\:banana:focus { color: yellow; }
-      .focus\\:chocolate:focus { color: brown; }
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .focus\\:banana:focus { color: yellow; }
+    .focus\\:chocolate:focus { color: brown; }
   `
 
   return run(input).then(result => {
@@ -123,10 +123,94 @@ test('it can generate focus-within variants', () => {
   `
 
   const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .focus-within\\:banana:focus-within { color: yellow; }
+    .focus-within\\:chocolate:focus-within { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate first-child variants', () => {
+  const input = `
+    @variants first {
       .banana { color: yellow; }
       .chocolate { color: brown; }
-      .focus-within\\:banana:focus-within { color: yellow; }
-      .focus-within\\:chocolate:focus-within { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .first\\:banana:first-child { color: yellow; }
+    .first\\:chocolate:first-child { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate odd variants', () => {
+  const input = `
+    @variants odd {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .odd\\:banana:nth-child(odd) { color: yellow; }
+    .odd\\:chocolate:nth-child(odd) { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate last-child variants', () => {
+  const input = `
+    @variants last {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .last\\:banana:last-child { color: yellow; }
+    .last\\:chocolate:last-child { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate even variants', () => {
+  const input = `
+    @variants even {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .even\\:banana:nth-child(even) { color: yellow; }
+    .even\\:chocolate:nth-child(even) { color: brown; }
   `
 
   return run(input).then(result => {
@@ -144,10 +228,10 @@ test('it can generate group-hover variants', () => {
   `
 
   const output = `
-      .banana { color: yellow; }
-      .chocolate { color: brown; }
-      .group:hover .group-hover\\:banana { color: yellow; }
-      .group:hover .group-hover\\:chocolate { color: brown; }
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .group:hover .group-hover\\:banana { color: yellow; }
+    .group:hover .group-hover\\:chocolate { color: brown; }
   `
 
   return run(input).then(result => {
@@ -165,16 +249,16 @@ test('it can generate hover, active and focus variants', () => {
   `
 
   const output = `
-      .banana { color: yellow; }
-      .chocolate { color: brown; }
-      .group:hover .group-hover\\:banana { color: yellow; }
-      .group:hover .group-hover\\:chocolate { color: brown; }
-      .hover\\:banana:hover { color: yellow; }
-      .hover\\:chocolate:hover { color: brown; }
-      .focus\\:banana:focus { color: yellow; }
-      .focus\\:chocolate:focus { color: brown; }
-      .active\\:banana:active { color: yellow; }
-      .active\\:chocolate:active { color: brown; }
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .group:hover .group-hover\\:banana { color: yellow; }
+    .group:hover .group-hover\\:chocolate { color: brown; }
+    .hover\\:banana:hover { color: yellow; }
+    .hover\\:chocolate:hover { color: brown; }
+    .focus\\:banana:focus { color: yellow; }
+    .focus\\:chocolate:focus { color: brown; }
+    .active\\:banana:active { color: yellow; }
+    .active\\:chocolate:active { color: brown; }
   `
 
   return run(input).then(result => {
@@ -192,14 +276,14 @@ test('it can generate hover, active and focus variants for multiple classes in o
   `
 
   const output = `
-      .banana, .lemon { color: yellow; }
-      .chocolate, .coconut { color: brown; }
-      .hover\\:banana:hover, .hover\\:lemon:hover { color: yellow; }
-      .hover\\:chocolate:hover, .hover\\:coconut:hover { color: brown; }
-      .focus\\:banana:focus, .focus\\:lemon:focus { color: yellow; }
-      .focus\\:chocolate:focus, .focus\\:coconut:focus { color: brown; }
-      .active\\:banana:active, .active\\:lemon:active { color: yellow; }
-      .active\\:chocolate:active, .active\\:coconut:active { color: brown; }
+    .banana, .lemon { color: yellow; }
+    .chocolate, .coconut { color: brown; }
+    .hover\\:banana:hover, .hover\\:lemon:hover { color: yellow; }
+    .hover\\:chocolate:hover, .hover\\:coconut:hover { color: brown; }
+    .focus\\:banana:focus, .focus\\:lemon:focus { color: yellow; }
+    .focus\\:chocolate:focus, .focus\\:coconut:focus { color: brown; }
+    .active\\:banana:active, .active\\:lemon:active { color: yellow; }
+    .active\\:chocolate:active, .active\\:coconut:active { color: brown; }
   `
 
   return run(input).then(result => {
@@ -242,14 +326,14 @@ test('variants are generated in the order specified', () => {
   `
 
   const output = `
-      .banana { color: yellow; }
-      .chocolate { color: brown; }
-      .focus\\:banana:focus { color: yellow; }
-      .focus\\:chocolate:focus { color: brown; }
-      .active\\:banana:active { color: yellow; }
-      .active\\:chocolate:active { color: brown; }
-      .hover\\:banana:hover { color: yellow; }
-      .hover\\:chocolate:hover { color: brown; }
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .focus\\:banana:focus { color: yellow; }
+    .focus\\:chocolate:focus { color: brown; }
+    .active\\:banana:active { color: yellow; }
+    .active\\:chocolate:active { color: brown; }
+    .hover\\:banana:hover { color: yellow; }
+    .hover\\:chocolate:hover { color: brown; }
   `
 
   return run(input, {
@@ -291,14 +375,51 @@ test('the default variant can be generated in a specified position', () => {
   `
 
   const output = `
-      .focus\\:banana:focus { color: yellow; }
-      .focus\\:chocolate:focus { color: brown; }
-      .active\\:banana:active { color: yellow; }
-      .active\\:chocolate:active { color: brown; }
-      .banana { color: yellow; }
+    .focus\\:banana:focus { color: yellow; }
+    .focus\\:chocolate:focus { color: brown; }
+    .active\\:banana:active { color: yellow; }
+    .active\\:chocolate:active { color: brown; }
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .hover\\:banana:hover { color: yellow; }
+    .hover\\:chocolate:hover { color: brown; }
+  `
+
+  return run(input, {
+    ...config,
+  }).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('nested rules are not modified', () => {
+  const input = `
+    @variants focus, active, hover {
+      .banana {
+        color: yellow;
+        .chocolate { color: brown; }
+      }
+    }
+  `
+
+  const output = `
+    .banana {
+      color: yellow;
       .chocolate { color: brown; }
-      .hover\\:banana:hover { color: yellow; }
-      .hover\\:chocolate:hover { color: brown; }
+    }
+    .focus\\:banana:focus {
+      color: yellow;
+      .chocolate { color: brown; }
+    }
+    .active\\:banana:active {
+      color: yellow;
+      .chocolate { color: brown; }
+    }
+    .hover\\:banana:hover {
+      color: yellow;
+      .chocolate { color: brown; }
+    }
   `
 
   return run(input, {
@@ -318,10 +439,10 @@ test('plugin variants can modify rules using the raw PostCSS API', () => {
   `
 
   const output = `
-      .banana { color: yellow; }
-      .chocolate { color: brown; }
-      .\\!banana { color: yellow !important; }
-      .\\!chocolate { color: brown !important; }
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .\\!banana { color: yellow !important; }
+    .\\!chocolate { color: brown !important; }
   `
 
   return run(input, {
@@ -354,10 +475,10 @@ test('plugin variants can modify selectors with a simplified API', () => {
   `
 
   const output = `
-      .banana { color: yellow; }
-      .chocolate { color: brown; }
-      .first-child\\:banana:first-child { color: yellow; }
-      .first-child\\:chocolate:first-child { color: brown; }
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .first-child\\:banana:first-child { color: yellow; }
+    .first-child\\:chocolate:first-child { color: brown; }
   `
 
   return run(input, {
@@ -387,10 +508,10 @@ test('plugin variants that use modify selectors need to manually escape the clas
   `
 
   const output = `
-      .banana-1\\/2 { color: yellow; }
-      .chocolate-1\\.5 { color: brown; }
-      .first-child\\:banana-1\\/2:first-child { color: yellow; }
-      .first-child\\:chocolate-1\\.5:first-child { color: brown; }
+    .banana-1\\/2 { color: yellow; }
+    .chocolate-1\\.5 { color: brown; }
+    .first-child\\:banana-1\\/2:first-child { color: yellow; }
+    .first-child\\:chocolate-1\\.5:first-child { color: brown; }
   `
 
   return run(input, {
@@ -420,12 +541,12 @@ test('plugin variants can wrap rules in another at-rule using the raw PostCSS AP
   `
 
   const output = `
-      .banana { color: yellow; }
-      .chocolate { color: brown; }
-      @supports (display: grid) {
-        .supports-grid\\:banana { color: yellow; }
-        .supports-grid\\:chocolate { color: brown; }
-      }
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    @supports (display: grid) {
+      .supports-grid\\:banana { color: yellow; }
+      .supports-grid\\:chocolate { color: brown; }
+    }
   `
 
   return run(input, {
