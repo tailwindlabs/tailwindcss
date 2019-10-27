@@ -14335,6 +14335,46 @@ video {
     pointer-events: auto;
   }
 
+  .sm\:touch-none {
+    touch-action: none;
+  }
+
+  .sm\:touch-auto {
+    touch-action: auto;
+  }
+
+  .sm\:touch-pan-x {
+    touch-action: pan-x;
+  }
+
+  .sm\:touch-pan-left {
+    touch-action: pan-left;
+  }
+
+  .sm\:touch-pan-right {
+    touch-action: pan-right;
+  }
+
+  .sm\:touch-pan-y {
+    touch-action: pan-y;
+  }
+
+  .sm\:touch-pan-up {
+    touch-action: pan-up;
+  }
+
+  .sm\:touch-pan-down {
+    touch-action: pan-down;
+  }
+
+  .sm\:touch-pinch-zoom {
+    touch-action: pinch-zoom;
+  }
+
+  .sm\:touch-manipulation {
+    touch-action: manipulation;
+  }
+
   .sm\:static {
     position: static;
   }
@@ -22073,6 +22113,46 @@ video {
 
   .md\:pointer-events-auto {
     pointer-events: auto;
+  }
+
+  .md\:touch-none {
+    touch-action: none;
+  }
+
+  .md\:touch-auto {
+    touch-action: auto;
+  }
+
+  .md\:touch-pan-x {
+    touch-action: pan-x;
+  }
+
+  .md\:touch-pan-left {
+    touch-action: pan-left;
+  }
+
+  .md\:touch-pan-right {
+    touch-action: pan-right;
+  }
+
+  .md\:touch-pan-y {
+    touch-action: pan-y;
+  }
+
+  .md\:touch-pan-up {
+    touch-action: pan-up;
+  }
+
+  .md\:touch-pan-down {
+    touch-action: pan-down;
+  }
+
+  .md\:touch-pinch-zoom {
+    touch-action: pinch-zoom;
+  }
+
+  .md\:touch-manipulation {
+    touch-action: manipulation;
   }
 
   .md\:static {
@@ -29815,6 +29895,46 @@ video {
     pointer-events: auto;
   }
 
+  .lg\:touch-none {
+    touch-action: none;
+  }
+
+  .lg\:touch-auto {
+    touch-action: auto;
+  }
+
+  .lg\:touch-pan-x {
+    touch-action: pan-x;
+  }
+
+  .lg\:touch-pan-left {
+    touch-action: pan-left;
+  }
+
+  .lg\:touch-pan-right {
+    touch-action: pan-right;
+  }
+
+  .lg\:touch-pan-y {
+    touch-action: pan-y;
+  }
+
+  .lg\:touch-pan-up {
+    touch-action: pan-up;
+  }
+
+  .lg\:touch-pan-down {
+    touch-action: pan-down;
+  }
+
+  .lg\:touch-pinch-zoom {
+    touch-action: pinch-zoom;
+  }
+
+  .lg\:touch-manipulation {
+    touch-action: manipulation;
+  }
+
   .lg\:static {
     position: static;
   }
@@ -37553,6 +37673,46 @@ video {
 
   .xl\:pointer-events-auto {
     pointer-events: auto;
+  }
+
+  .xl\:touch-none {
+    touch-action: none;
+  }
+
+  .xl\:touch-auto {
+    touch-action: auto;
+  }
+
+  .xl\:touch-pan-x {
+    touch-action: pan-x;
+  }
+
+  .xl\:touch-pan-left {
+    touch-action: pan-left;
+  }
+
+  .xl\:touch-pan-right {
+    touch-action: pan-right;
+  }
+
+  .xl\:touch-pan-y {
+    touch-action: pan-y;
+  }
+
+  .xl\:touch-pan-up {
+    touch-action: pan-up;
+  }
+
+  .xl\:touch-pan-down {
+    touch-action: pan-down;
+  }
+
+  .xl\:touch-pinch-zoom {
+    touch-action: pinch-zoom;
+  }
+
+  .xl\:touch-manipulation {
+    touch-action: manipulation;
   }
 
   .xl\:static {
