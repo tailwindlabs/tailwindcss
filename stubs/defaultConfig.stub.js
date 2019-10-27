@@ -219,6 +219,18 @@ module.exports = {
       '0': '0',
       default: '1',
     },
+    touchAction: {
+      none: 'none',
+      auto: 'auto',
+      'pan-x': 'pan-x',
+      'pan-left': 'pan-left',
+      'pan-right': 'pan-right',
+      'pan-y': 'pan-y',
+      'pan-up': 'pan-up',
+      'pan-down': 'pan-down',
+      'pinch-zoom': 'pinch-zoom',
+      'manipulation': 'manipulation'
+    },
     fontFamily: {
       sans: [
         '-apple-system',
