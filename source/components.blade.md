@@ -11,7 +11,7 @@ Unlike many other CSS frameworks, **Tailwind doesn't include any component class
 
 Tailwind is a CSS framework for implementing custom designs, and even a component as simple as a button can look completely different from one site to another, so providing opinionated component styles that you'd end up wanting to override anyways would only make the development experience more frustrating.
 
-Instead, you're encouraged work [utility-first](/docs/utility-first) and [extract your own components](/docs/extracting-components) when you start to notice common patterns in your UI.
+Instead, you're encouraged to work [utility-first](/docs/utility-first) and [extract your own components](/docs/extracting-components) when you start to notice common patterns in your UI.
 
 @component('_partials.code-sample', ['class' => 'p-8 bg-white'])
 <div class="max-w-sm mx-auto">
