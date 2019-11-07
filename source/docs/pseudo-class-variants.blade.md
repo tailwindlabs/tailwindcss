@@ -448,7 +448,7 @@ You can generate pseudo-class variants for your own custom utilities by wrapping
 .banana {
   color: yellow;
 }
-.group:hover group-hover\:banana {
+.group:hover .group-hover\:banana {
   color: yellow;
 }
 .hover\:banana:hover {
