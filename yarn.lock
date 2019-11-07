@@ -3917,9 +3917,9 @@ postcss-js@^2.0.0:
     postcss "^7.0.18"
 
 postcss-nested@^4.1.1:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/postcss-nested/-/postcss-nested-4.2.0.tgz#e6e6777b05dddd47358c676d983bd7251d0e67a2"
-  integrity sha512-qRAOC0uJ4TbFXlURB+3Y5sCi9+MLTkXmt7VGpqHw5oAWCnHqeFa4MGf7kb5ceFDthknumJc+E4A0TjV4XEVWBQ==
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/postcss-nested/-/postcss-nested-4.2.1.tgz#4bc2e5b35e3b1e481ff81e23b700da7f82a8b248"
+  integrity sha512-AMayXX8tS0HCp4O4lolp4ygj9wBn32DJWXvG6gCv+ZvJrEa00GUxJcJEEzMh87BIe6FrWdYkpR2cuyqHKrxmXw==
   dependencies:
     postcss "^7.0.21"
     postcss-selector-parser "^6.0.2"
