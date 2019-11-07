@@ -1059,6 +1059,7 @@ test('theme values in the extend section are lazily evaluated', () => {
 test('lazily evaluated values have access to the config utils', () => {
   const userConfig = {
     theme: {
+      inset: theme => theme('margin'),
       shift: (theme, { negative }) => ({
         ...theme('spacing'),
         ...negative(theme('spacing')),
@@ -1083,6 +1084,10 @@ test('lazily evaluated values have access to the config utils', () => {
         '3': '3px',
         '4': '4px',
       },
+      margin: (theme, { negative }) => ({
+        ...theme('spacing'),
+        ...negative(theme('spacing')),
+      }),
     },
     variants: {},
   }
@@ -1095,6 +1100,26 @@ test('lazily evaluated values have access to the config utils', () => {
     separator: ':',
     theme: {
       spacing: {
+        '1': '1px',
+        '2': '2px',
+        '3': '3px',
+        '4': '4px',
+      },
+      inset: {
+        '-1': '-1px',
+        '-2': '-2px',
+        '-3': '-3px',
+        '-4': '-4px',
+        '1': '1px',
+        '2': '2px',
+        '3': '3px',
+        '4': '4px',
+      },
+      margin: {
+        '-1': '-1px',
+        '-2': '-2px',
+        '-3': '-3px',
+        '-4': '-4px',
         '1': '1px',
         '2': '2px',
         '3': '3px',
@@ -1232,5 +1257,482 @@ test('custom properties are multiplied by -1 for negative values', () => {
       },
     },
     variants: {},
+  })
+})
+
+test('more than two config objects can be resolved', () => {
+  const firstConfig = {
+    theme: {
+      extend: {
+        fontFamily: () => ({
+          code: ['Menlo', 'monospace'],
+        }),
+        colors: {
+          red: 'red',
+        },
+        backgroundColor: {
+          customBackgroundOne: '#bada55',
+        },
+        textDecorationColor: {
+          orange: 'orange',
+        },
+      },
+    },
+  }
+
+  const secondConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      extend: {
+        fontFamily: {
+          quote: ['Helvetica', 'serif'],
+        },
+        colors: {
+          green: 'green',
+        },
+        backgroundColor: {
+          customBackgroundTwo: '#facade',
+        },
+        textDecorationColor: theme => theme('colors'),
+      },
+    },
+  }
+
+  const thirdConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      extend: {
+        fontFamily: {
+          hero: ['Futura', 'sans-serif'],
+        },
+        colors: {
+          pink: 'pink',
+        },
+        backgroundColor: () => ({
+          customBackgroundThree: '#c0ffee',
+        }),
+        textDecorationColor: {
+          lime: 'lime',
+        },
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      fontFamily: {
+        body: ['Arial', 'sans-serif'],
+        display: ['Georgia', 'serif'],
+      },
+      colors: {
+        blue: 'blue',
+      },
+      backgroundColor: theme => theme('colors'),
+    },
+    variants: {
+      backgroundColor: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([firstConfig, secondConfig, thirdConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      fontFamily: {
+        body: ['Arial', 'sans-serif'],
+        display: ['Georgia', 'serif'],
+        code: ['Menlo', 'monospace'],
+        quote: ['Helvetica', 'serif'],
+        hero: ['Futura', 'sans-serif'],
+      },
+      colors: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+        pink: 'pink',
+      },
+      backgroundColor: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+        pink: 'pink',
+        customBackgroundOne: '#bada55',
+        customBackgroundTwo: '#facade',
+        customBackgroundThree: '#c0ffee',
+      },
+      textDecorationColor: {
+        red: 'red',
+        green: 'green',
+        blue: 'blue',
+        pink: 'pink',
+        orange: 'orange',
+        lime: 'lime',
+      },
+    },
+    variants: {
+      backgroundColor: ['responsive', 'hover', 'focus'],
+    },
+  })
+})
+
+test('plugin config modifications are applied', () => {
+  const userConfig = {
+    plugins: [
+      {
+        config: {
+          prefix: 'tw-',
+        },
+      },
+    ],
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: 'tw-',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+    plugins: userConfig.plugins,
+  })
+})
+
+test('user config takes precedence over plugin config modifications', () => {
+  const userConfig = {
+    prefix: 'user-',
+    plugins: [
+      {
+        config: {
+          prefix: 'tw-',
+        },
+      },
+    ],
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: 'user-',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+    plugins: userConfig.plugins,
+  })
+})
+
+test('plugin config can register plugins that also have config', () => {
+  const userConfig = {
+    plugins: [
+      {
+        config: {
+          prefix: 'tw-',
+          plugins: [
+            {
+              config: {
+                important: true,
+              },
+            },
+            {
+              config: {
+                separator: '__',
+              },
+            },
+          ],
+        },
+        handler() {},
+      },
+    ],
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: 'tw-',
+    important: true,
+    separator: '__',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+    plugins: userConfig.plugins,
+  })
+})
+
+test('plugin configs take precedence over plugin configs registered by that plugin', () => {
+  const userConfig = {
+    plugins: [
+      {
+        config: {
+          prefix: 'outer-',
+          plugins: [
+            {
+              config: {
+                prefix: 'inner-',
+              },
+            },
+          ],
+        },
+        handler() {},
+      },
+    ],
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: 'outer-',
+    important: false,
+    separator: ':',
+    theme: {
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+    plugins: userConfig.plugins,
+  })
+})
+
+test('plugin theme extensions are added even if user overrides top-level theme config', () => {
+  const userConfig = {
+    theme: {
+      width: {
+        '1px': '1px',
+      },
+    },
+    plugins: [
+      {
+        config: {
+          theme: {
+            extend: {
+              width: {
+                '2px': '2px',
+                '3px': '3px',
+              },
+            },
+          },
+        },
+        handler() {},
+      },
+    ],
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      width: {
+        sm: '1rem',
+        md: '2rem',
+        lg: '3rem',
+      },
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      width: {
+        '1px': '1px',
+        '2px': '2px',
+        '3px': '3px',
+      },
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+    plugins: userConfig.plugins,
+  })
+})
+
+test('user theme extensions take precedence over plugin theme extensions with the same key', () => {
+  const userConfig = {
+    theme: {
+      extend: {
+        width: {
+          xl: '6rem',
+        },
+      },
+    },
+    plugins: [
+      {
+        config: {
+          theme: {
+            extend: {
+              width: {
+                xl: '4rem',
+              },
+            },
+          },
+        },
+        handler() {},
+      },
+    ],
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      width: {
+        sm: '1rem',
+        md: '2rem',
+        lg: '3rem',
+      },
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {
+      width: {
+        sm: '1rem',
+        md: '2rem',
+        lg: '3rem',
+        xl: '6rem',
+      },
+      screens: {
+        mobile: '400px',
+      },
+    },
+    variants: {
+      appearance: ['responsive'],
+      borderCollapse: [],
+      borderColors: ['responsive', 'hover', 'focus'],
+    },
+    plugins: userConfig.plugins,
   })
 })

@@ -4,6 +4,7 @@ import fs from 'fs'
 import _ from 'lodash'
 import postcss from 'postcss'
 
+import getModuleDependencies from './lib/getModuleDependencies'
 import registerConfigAsDependency from './lib/registerConfigAsDependency'
 import processTailwindFeatures from './processTailwindFeatures'
 import formatCSS from './lib/formatCSS'
@@ -49,13 +50,14 @@ const getConfigFunction = config => () => {
   }
 
   if (!_.isObject(config)) {
-    delete require.cache[require.resolve(config)]
+    getModuleDependencies(config).forEach(mdl => {
+      delete require.cache[require.resolve(mdl.file)]
+    })
   }
 
-  return resolveConfig([
-    _.isObject(config) ? _.get(config, 'config', config) : require(config),
-    defaultConfig,
-  ])
+  const configObject = _.isObject(config) ? _.get(config, 'config', config) : require(config)
+
+  return resolveConfig([configObject, defaultConfig])
 }
 
 const plugin = postcss.plugin('tailwind', config => {

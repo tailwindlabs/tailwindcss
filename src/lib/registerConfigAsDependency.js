@@ -1,4 +1,5 @@
 import fs from 'fs'
+import getModuleDependencies from './getModuleDependencies'
 
 export default function(configFile) {
   if (!fs.existsSync(configFile)) {
@@ -6,10 +7,12 @@ export default function(configFile) {
   }
 
   return function(css, opts) {
-    opts.messages.push({
-      type: 'dependency',
-      file: configFile,
-      parent: css.source.input.file,
+    getModuleDependencies(configFile).forEach(mdl => {
+      opts.messages.push({
+        type: 'dependency',
+        parent: css.source.input.file,
+        file: mdl.file,
+      })
     })
   }
 }
