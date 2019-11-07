@@ -279,12 +279,12 @@ exports.config = {
 }
 ```
 
-#### Ember.js
+### Ember.js
 
 Add `tailwindcss` to the list of plugins you pass to [ember-cli-postcss](https://github.com/jeffjewiss/ember-cli-postcss):
 
 ```js
-// ember-cli-build.js 
+// ember-cli-build.js
 'use strict';
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
