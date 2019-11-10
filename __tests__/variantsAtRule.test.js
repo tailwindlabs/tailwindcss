@@ -240,6 +240,30 @@ test('it can generate group-hover variants', () => {
   })
 })
 
+test('group-hover variants respect any configured prefix', () => {
+  const input = `
+    @variants group-hover {
+      .tw-banana { color: yellow; }
+      .tw-chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .tw-banana { color: yellow; }
+    .tw-chocolate { color: brown; }
+    .tw-group:hover .group-hover\\:tw-banana { color: yellow; }
+    .tw-group:hover .group-hover\\:tw-chocolate { color: brown; }
+  `
+
+  return run(input, {
+    ...config,
+    prefix: 'tw-',
+  }).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate hover, active and focus variants', () => {
   const input = `
     @variants group-hover, hover, focus, active {
