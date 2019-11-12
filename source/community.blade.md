@@ -31,3 +31,10 @@ Want to keep up with what's new in the Tailwind ecosystem? We post all release a
 [Follow Tailwind on Twitter &rarr;](https://twitter.com/tailwindcss)
 
 
+## Awesome Tailwind CSS
+
+A curated list of awesome things related to Tailwind CSS, such as plugins, UI librarires and components, resources like tools, starters, templates and themes, IDE extensitons, open source projects, learning and even apps and websites built in Tailwind.
+
+[Checkout Awesome Tailwind CSS &rarr;](https://github.com/aniftyco/awesome-tailwindcss)
+
+
