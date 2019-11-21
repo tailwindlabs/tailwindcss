@@ -11,9 +11,9 @@ Here are a few other popular frameworks for comparison:
 
 | Framework   | Original Size | Minified |    Gzip | Brotli |
 | ----------- | ------------: | -------: | ------: | -----: |
-| Tailwind    |       477.6kb |  350.4kb |  58.8kb | 17.1kb |
+| Tailwind    |       783.5kb |  603.3kb |  78.0kb | 22.6kb |
 | Bootstrap   |       187.8kb |  152.1kb |  22.7kb | 16.7kb |
-| Bulma       |       205.6kb |  172.4kb |  23.0kb | 18.0kb |
+| Bulma       |       224.2kb |  189.9kb |  24.9kb | 19.1kb |
 | Foundation  |       154.1kb |  119.2kb |  15.9kb | 12.9kb |
 | Tachyons    |       111.7kb |   71.8kb |  13.4kb |  7.5kb |
 | Semantic UI |       809.4kb |  613.8kb | 100.6kb | 77.8kb |
@@ -171,9 +171,9 @@ Here are a few strategies you can use to keep your generated CSS small and perfo
 
 ### Limiting your color palette
 
-The default theme includes a whopping [93 colors](/docs/colors) used for backgrounds, borders, and text, all of which also have `hover:` and `focus` variants, as well as responsive variants at the five default screen sizes.
+The default theme includes a whopping [93 colors](/docs/colors) used for backgrounds, borders, text, and placeholders, all of which also have `hover:` and `focus` variants, as well as responsive variants at the five default screen sizes.
 
-This means that by default, there are 4185 classes generated from this color palette out of 8271 classes total in the entire default build.
+This means that by default, there are 5580 classes generated from this color palette out of 12,230 classes total in the entire default build.
 
 Very few projects actually need this many colors, and removing colors you don't need can have a huge impact on the overall file size.
 
@@ -181,9 +181,9 @@ Here's how using a smaller color palette affects the final size:
 
 | Colors         | Original | Minified |   Gzip | Brotli |
 | -------------- | -------: | -------: | -----: | -----: |
-| 93 _(default)_ |  477.6kb |  350.4kb | 58.8kb | 17.1kb |
-| 50             |  361.3kb |  260.3kb | 45.7kb | 13.9kb |
-| 25             |  293.1kb |  207.2kb | 38.0kb | 12.2kb |
+| 93 _(default)_ |  783.5kb │ 603.3kb  │ 78.0kb │ 22.6kb |
+| 50             |  530.2kb │ 399.3kb  │ 56.6kb │ 17.5kb |
+| 25             |  381.6kb │ 279.5kb  │ 44.1kb │ 14.0kb |
 
 ### Removing unused breakpoints
 
@@ -193,12 +193,12 @@ Here's how defining fewer screens affects the output:
 
 | Breakpoints   | Original | Minified |   Gzip | Brotli |
 | ------------- | -------: | -------: | -----: | -----: |
-| 4 _(default)_ |  477.6kb |  350.4kb | 58.8kb | 17.1kb |
-| 3             |  380.9kb |  279.7kb | 47.4kb | 16.3kb |
-| 2             |  284.2kb |  209.0kb | 36.0kb | 15.0kb |
-| 1             |  187.5kb |  138.3kb | 24.5kb | 13.7kb |
+| 4 _(default)_ |  783.5kb │ 603.3kb  │ 78.0kb │ 22.6kb |
+| 3             |  624.0kb │ 481.3kb  │ 62.7kb │ 20.8kb |
+| 2             |  464.6kb │ 359.4kb  │ 47.4kb │ 19.2kb |
+| 1             |  305.1kb │ 237.5kb  │ 32.1kb │ 17.6kb |
 
-If you only need 3 screen sizes and 35 colors, you're down to 32.5kb after gzip _(11.7kb after Brotli!)_ without changing anything else.
+If you only need 3 screen sizes and 35 colors, you're down to 39.5kb after gzip _(14.6kb after Brotli!)_ without changing anything else.
 
 ### Disabling unused utilities and variants
 
