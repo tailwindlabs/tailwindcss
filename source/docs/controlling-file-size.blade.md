@@ -78,6 +78,19 @@ module.exports = {
 
 Note that in this example, **we're only enabling Purgecss in production**. We recommend configuring Purgecss this way because it can be slow to run, and during development it's nice to have every class available so you don't need to wait for a rebuild every time you change some HTML.
 
+Finally, we recommend only applying Purgecss to Tailwind's utility classes, and not to [base styles](https://tailwindcss.com/docs/adding-base-styles) or [component classes](https://tailwindcss.com/docs/extracting-components#extracting-css-components-with-apply). The easiest way to do this is to use Purgecss's [whitelisting](https://github.com/FullHuman/purgecss-docs/blob/master/whitelisting.md) feature to disable Purgecss for non-utility classes:
+
+```css
+/* purgecss start ignore */
+@tailwind base;
+@tailwind components;
+/* purgecss end ignore */
+
+@tailwind utilities;
+```
+
+This will ensure you don't accidentally purge important base styles when working with frameworks like Next.js, Nuxt, vue-cli, create-react-app, and others that hide their base HTML template somewhere in your `node_modules` directory.
+
 ### Writing purgeable HTML
 
 Purgecss uses "extractors" to determine what strings in your templates are classes. In the example above, we use a custom extractor that will find all of the classes Tailwind generates by default:
