@@ -119,6 +119,9 @@ return [
             'Fill' => '/docs/fill',
             'Stroke' => '/docs/stroke',
         ],
+        'Accessibility' => [
+            'Screen Readers' => '/docs/screen-readers',
+        ],
     ],
     'Components' => [
         'Examples' => [
