@@ -380,7 +380,8 @@ Here's a list of every core plugin for reference:
 | Core Plugin | Description |
 | --- | --- |
 | `preflight` | Tailwind's base/reset styles |
-| `container` | The `.container` component |
+| `container` | The `container` component |
+| `accessibility` | The `sr-only` and `not-sr-only` utilities |
 | `alignContent` | The `align-content` utilities like `content-between` |
 | `alignItems` | The `align-items` utilities like `items-start`  |
 | `alignSelf` | The `align-self` utilities like `self-end` |
@@ -422,7 +423,6 @@ Here's a list of every core plugin for reference:
 | `maxWidth` | The `max-width` utilities like `max-w-full` |
 | `minHeight` | The `min-height` utilities like `min-h-screen` |
 | `minWidth` | The `min-width` utilities like `min-w-0` |
-| `negativeMargin` | The `negative-margin` utilities like `-mx-6` |
 | `objectFit` | The `object-fit` utilities like `object-cover` |
 | `objectPosition` | The `object-position` utilities like `object-center` |
 | `opacity` | The `opacity` utilities like `opacity-50` |
