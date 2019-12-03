@@ -11,6 +11,9 @@ export default function() {
         '.inline': {
           display: 'inline',
         },
+        '.flow-root': {
+          display: 'flow-root',
+        },
         '.flex': {
           display: 'flex',
         },
