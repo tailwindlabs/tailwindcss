@@ -237,7 +237,7 @@
                   <a href="{{ $page->downloadHd }}" class="sm:ml-6 text-gray-600 hover:text-gray-900">
                     <span>Download<span class="sm:hidden"> video</span><span class="hidden sm:inline"> SD</span></span>
                   </a>
-                  <a href="https://github.com/tailwindcss/designing-with-tailwindcss" class="ml-6 text-gray-600 hover:text-gray-900">
+                  <a href="{{ $page->sourceCode }}" class="ml-6 text-gray-600 hover:text-gray-900">
                     <span>Source code</span>
                   </a>
                 </div>
