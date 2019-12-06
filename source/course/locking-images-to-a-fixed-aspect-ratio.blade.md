@@ -11,6 +11,7 @@ nextUrl: "/course/creating-depth-with-shadows-and-layers"
 next: "Creating Depth with Shadows and Layers"
 downloadHd: https://player.vimeo.com/external/352766641.hd.mp4?s=abd86dd06723d552ea95cbb5eb52ad9ab798b63a&profile_id=175&download=1
 downloadSd: https://player.vimeo.com/external/352766641.sd.mp4?s=4606d5fadb5929ac86ac1ecd61080e896642aef0&profile_id=165&download=1
+sourceCode: https://github.com/tailwindcss/designing-with-tailwindcss/tree/master/02-designing-an-image-card/06-locking-images-to-a-fixed-aspect-ratio
 ---
 
 ## Tools used

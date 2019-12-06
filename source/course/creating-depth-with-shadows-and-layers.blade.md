@@ -11,6 +11,7 @@ nextUrl: "/course/building-a-navbar-layout-with-flexbox"
 next: "Building a Navbar Layout with Flexbox"
 downloadHd: https://player.vimeo.com/external/352955762.hd.mp4?s=bae9082f2e954fd24c848b52cfceec72a31e2319&profile_id=169&download=1
 downloadSd: https://player.vimeo.com/external/352955762.sd.mp4?s=05dfd0c9c41f4ebcc9d0baf17aeecc8859bbd92a&profile_id=165&download=1
+sourceCode: https://github.com/tailwindcss/designing-with-tailwindcss/tree/master/02-designing-an-image-card/07-creating-depth-with-layers-and-shadows
 ---
 
 ## Tools used
