@@ -10,7 +10,7 @@ It's never a fun experience to have your pull request declined after investing a
 
 ## Coding standards
 
-Our code formatting rules are defined in [.eslintrc](https://github.com/tailwindcss/tailwindcss/blob/master/.eslintrc). You can check your code against these standards by running:
+Our code formatting rules are defined in [.eslintrc](https://github.com/tailwindcss/tailwindcss/blob/master/.eslintrc.json). You can check your code against these standards by running:
 
 ```sh
 npm run style
