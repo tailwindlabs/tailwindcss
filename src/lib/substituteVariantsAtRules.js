@@ -46,6 +46,7 @@ const defaultVariantGenerators = config => ({
   last: generatePseudoClassVariant('last-child', 'last'),
   odd: generatePseudoClassVariant('nth-child(odd)', 'odd'),
   even: generatePseudoClassVariant('nth-child(even)', 'even'),
+  only: generatePseudoClassVariant('only-child', 'only'),
 })
 
 export default function(config, { variantGenerators: pluginVariantGenerators }) {

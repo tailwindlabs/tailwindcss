@@ -219,6 +219,27 @@ test('it can generate even variants', () => {
   })
 })
 
+test('it can generate only-child variants', () => {
+  const input = `
+    @variants only {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .only\\:banana:only-child { color: yellow; }
+    .only\\:chocolate:only-child { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate group-hover variants', () => {
   const input = `
     @variants group-hover {
