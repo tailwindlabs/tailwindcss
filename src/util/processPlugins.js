@@ -29,6 +29,10 @@ export default function(plugins, config) {
   const getConfigValue = (path, defaultValue) => _.get(config, path, defaultValue)
 
   plugins.forEach(plugin => {
+    if (plugin.__isOptionsFunction) {
+      plugin = plugin()
+    }
+
     const handler = isFunction(plugin) ? plugin : _.get(plugin, 'handler', () => {})
 
     handler({

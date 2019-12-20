@@ -107,6 +107,9 @@ function extractPluginConfigs(configs) {
     }
 
     plugins.forEach(plugin => {
+      if (plugin.__isOptionsFunction) {
+        plugin = plugin()
+      }
       allConfigs = [...allConfigs, ...extractPluginConfigs([get(plugin, 'config', {})])]
     })
   })
