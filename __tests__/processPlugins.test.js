@@ -1,6 +1,8 @@
 import _ from 'lodash'
 import _postcss from 'postcss'
+import tailwind from '../src/index'
 import processPlugins from '../src/util/processPlugins'
+import createPlugin from '../src/util/createPlugin'
 
 function css(nodes) {
   return _postcss.root({ nodes }).toString()
@@ -1286,4 +1288,285 @@ test('plugins can provide a config but no handler', () => {
       }
     }
   `)
+})
+
+test('plugins can be created using the `createPlugin` function', () => {
+  const plugin = createPlugin(
+    function({ addUtilities, theme, variants }) {
+      const utilities = _.fromPairs(
+        _.toPairs(theme('testPlugin')).map(([k, v]) => [`.test-${k}`, { testProperty: v }])
+      )
+
+      addUtilities(utilities, variants('testPlugin'))
+    },
+    {
+      theme: {
+        testPlugin: {
+          sm: '1rem',
+          md: '2rem',
+          lg: '3rem',
+        },
+      },
+      variants: {
+        testPlugin: ['responsive', 'hover'],
+      },
+    }
+  )
+
+  return _postcss([
+    tailwind({
+      corePlugins: [],
+      theme: {
+        screens: {
+          sm: '400px',
+        },
+      },
+      plugins: [plugin],
+    }),
+  ])
+    .process(
+      `
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      { from: undefined }
+    )
+    .then(result => {
+      const expected = `
+        .test-sm {
+          test-property: 1rem
+        }
+        .test-md {
+          test-property: 2rem
+        }
+        .test-lg {
+          test-property: 3rem
+        }
+        .hover\\:test-sm:hover {
+          test-property: 1rem
+        }
+        .hover\\:test-md:hover {
+          test-property: 2rem
+        }
+        .hover\\:test-lg:hover {
+          test-property: 3rem
+        }
+
+        @media (min-width: 400px) {
+          .sm\\:test-sm {
+            test-property: 1rem
+          }
+          .sm\\:test-md {
+            test-property: 2rem
+          }
+          .sm\\:test-lg {
+            test-property: 3rem
+          }
+          .sm\\:hover\\:test-sm:hover {
+            test-property: 1rem
+          }
+          .sm\\:hover\\:test-md:hover {
+            test-property: 2rem
+          }
+          .sm\\:hover\\:test-lg:hover {
+            test-property: 3rem
+          }
+        }
+      `
+
+      expect(result.css).toMatchCss(expected)
+    })
+})
+
+test('plugins with extra options can be created using the `createPlugin.withOptions` function', () => {
+  const plugin = createPlugin.withOptions(
+    function({ className }) {
+      return function({ addUtilities, theme, variants }) {
+        const utilities = _.fromPairs(
+          _.toPairs(theme('testPlugin')).map(([k, v]) => [
+            `.${className}-${k}`,
+            { testProperty: v },
+          ])
+        )
+
+        addUtilities(utilities, variants('testPlugin'))
+      }
+    },
+    function() {
+      return {
+        theme: {
+          testPlugin: {
+            sm: '1rem',
+            md: '2rem',
+            lg: '3rem',
+          },
+        },
+        variants: {
+          testPlugin: ['responsive', 'hover'],
+        },
+      }
+    }
+  )
+
+  return _postcss([
+    tailwind({
+      corePlugins: [],
+      theme: {
+        screens: {
+          sm: '400px',
+        },
+      },
+      plugins: [plugin({ className: 'banana' })],
+    }),
+  ])
+    .process(
+      `
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      { from: undefined }
+    )
+    .then(result => {
+      const expected = `
+        .banana-sm {
+          test-property: 1rem
+        }
+        .banana-md {
+          test-property: 2rem
+        }
+        .banana-lg {
+          test-property: 3rem
+        }
+        .hover\\:banana-sm:hover {
+          test-property: 1rem
+        }
+        .hover\\:banana-md:hover {
+          test-property: 2rem
+        }
+        .hover\\:banana-lg:hover {
+          test-property: 3rem
+        }
+
+        @media (min-width: 400px) {
+          .sm\\:banana-sm {
+            test-property: 1rem
+          }
+          .sm\\:banana-md {
+            test-property: 2rem
+          }
+          .sm\\:banana-lg {
+            test-property: 3rem
+          }
+          .sm\\:hover\\:banana-sm:hover {
+            test-property: 1rem
+          }
+          .sm\\:hover\\:banana-md:hover {
+            test-property: 2rem
+          }
+          .sm\\:hover\\:banana-lg:hover {
+            test-property: 3rem
+          }
+        }
+      `
+
+      expect(result.css).toMatchCss(expected)
+    })
+})
+
+test('plugins created using `createPlugin.withOptions` do not need to be invoked if the user wants to use the default options', () => {
+  const plugin = createPlugin.withOptions(
+    function({ className } = { className: 'banana' }) {
+      return function({ addUtilities, theme, variants }) {
+        const utilities = _.fromPairs(
+          _.toPairs(theme('testPlugin')).map(([k, v]) => [
+            `.${className}-${k}`,
+            { testProperty: v },
+          ])
+        )
+
+        addUtilities(utilities, variants('testPlugin'))
+      }
+    },
+    function() {
+      return {
+        theme: {
+          testPlugin: {
+            sm: '1rem',
+            md: '2rem',
+            lg: '3rem',
+          },
+        },
+        variants: {
+          testPlugin: ['responsive', 'hover'],
+        },
+      }
+    }
+  )
+
+  return _postcss([
+    tailwind({
+      corePlugins: [],
+      theme: {
+        screens: {
+          sm: '400px',
+        },
+      },
+      plugins: [plugin],
+    }),
+  ])
+    .process(
+      `
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      { from: undefined }
+    )
+    .then(result => {
+      const expected = `
+        .banana-sm {
+          test-property: 1rem
+        }
+        .banana-md {
+          test-property: 2rem
+        }
+        .banana-lg {
+          test-property: 3rem
+        }
+        .hover\\:banana-sm:hover {
+          test-property: 1rem
+        }
+        .hover\\:banana-md:hover {
+          test-property: 2rem
+        }
+        .hover\\:banana-lg:hover {
+          test-property: 3rem
+        }
+
+        @media (min-width: 400px) {
+          .sm\\:banana-sm {
+            test-property: 1rem
+          }
+          .sm\\:banana-md {
+            test-property: 2rem
+          }
+          .sm\\:banana-lg {
+            test-property: 3rem
+          }
+          .sm\\:hover\\:banana-sm:hover {
+            test-property: 1rem
+          }
+          .sm\\:hover\\:banana-md:hover {
+            test-property: 2rem
+          }
+          .sm\\:hover\\:banana-lg:hover {
+            test-property: 3rem
+          }
+        }
+      `
+
+      expect(result.css).toMatchCss(expected)
+    })
 })
