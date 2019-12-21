@@ -348,8 +348,6 @@ template {
   display: none;
 }
 
-@import url("https://rsms.me/inter/inter.css");
-
 /**
  * Manually forked from SUIT CSS Base: https://github.com/suitcss/base
  * A thin layer on top of normalize.css that provides a starting point more
@@ -414,7 +412,7 @@ ul {
  */
 
 html {
-  font-family: 'Inter', sans-serif; /* 1 */
+  font-family: Roboto, sans-serif; /* 1 */
   line-height: 1.5; /* 2 */
 }
 
@@ -3596,6 +3594,10 @@ video {
 
 .font-mono {
   font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+}
+
+.font-base {
+  font-family: Roboto, sans-serif !important;
 }
 
 .font-hairline {
@@ -11335,6 +11337,10 @@ video {
 
   .sm\:font-mono {
     font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  }
+
+  .sm\:font-base {
+    font-family: Roboto, sans-serif !important;
   }
 
   .sm\:font-hairline {
@@ -19077,6 +19083,10 @@ video {
     font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
   }
 
+  .md\:font-base {
+    font-family: Roboto, sans-serif !important;
+  }
+
   .md\:font-hairline {
     font-weight: 100 !important;
   }
@@ -26817,6 +26827,10 @@ video {
     font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
   }
 
+  .lg\:font-base {
+    font-family: Roboto, sans-serif !important;
+  }
+
   .lg\:font-hairline {
     font-weight: 100 !important;
   }
@@ -34555,6 +34569,10 @@ video {
 
   .xl\:font-mono {
     font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  }
+
+  .xl\:font-base {
+    font-family: Roboto, sans-serif !important;
   }
 
   .xl\:font-hairline {
