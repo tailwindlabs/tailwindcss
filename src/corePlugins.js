@@ -66,6 +66,11 @@ import whitespace from './plugins/whitespace'
 import wordBreak from './plugins/wordBreak'
 import width from './plugins/width'
 import zIndex from './plugins/zIndex'
+import transform from './plugins/transform'
+import transformOrigin from './plugins/transformOrigin'
+import scale from './plugins/scale'
+import rotate from './plugins/rotate'
+import translate from './plugins/translate'
 
 import configurePlugins from './util/configurePlugins'
 
@@ -139,5 +144,10 @@ export default function({ corePlugins: corePluginConfig }) {
     wordBreak,
     width,
     zIndex,
+    transform,
+    transformOrigin,
+    scale,
+    rotate,
+    translate,
   })
 }
