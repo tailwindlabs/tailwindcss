@@ -13,11 +13,7 @@ function className(classPrefix, key) {
   return `${classPrefix}-${key}`
 }
 
-export default function createUtilityPlugin(
-  classPrefix,
-  themeKey,
-  property = themeKey
-) {
+export default function createUtilityPlugin(classPrefix, themeKey, property = themeKey) {
   return function({ e, addUtilities, variants, theme }) {
     return addUtilities(
       fromPairs(

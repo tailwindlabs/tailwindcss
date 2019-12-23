@@ -8337,6 +8337,710 @@ video {
   z-index: auto;
 }
 
+.transform {
+  transform: scale(var(--transform-scale, 1)) rotate(var(--transform-rotate, 0)) translateX(var(--transform-translate-x, 0)) translateY(var(--transform-translate-y, 0));
+}
+
+.transform-none {
+  transform: none;
+}
+
+.origin-center {
+  transform-origin: center;
+}
+
+.origin-top {
+  transform-origin: top;
+}
+
+.origin-top-right {
+  transform-origin: top right;
+}
+
+.origin-right {
+  transform-origin: right;
+}
+
+.origin-bottom-right {
+  transform-origin: bottom right;
+}
+
+.origin-bottom {
+  transform-origin: bottom;
+}
+
+.origin-bottom-left {
+  transform-origin: bottom left;
+}
+
+.origin-left {
+  transform-origin: left;
+}
+
+.origin-top-left {
+  transform-origin: top left;
+}
+
+.scale-0 {
+  --transform-scale: 0;
+}
+
+.scale-50 {
+  --transform-scale: .5;
+}
+
+.scale-75 {
+  --transform-scale: .75;
+}
+
+.scale-90 {
+  --transform-scale: .9;
+}
+
+.scale-95 {
+  --transform-scale: .95;
+}
+
+.scale-100 {
+  --transform-scale: 1;
+}
+
+.scale-105 {
+  --transform-scale: 1.05;
+}
+
+.scale-110 {
+  --transform-scale: 1.1;
+}
+
+.scale-125 {
+  --transform-scale: 1.25;
+}
+
+.scale-150 {
+  --transform-scale: 1.5;
+}
+
+.hover\:scale-0:hover {
+  --transform-scale: 0;
+}
+
+.hover\:scale-50:hover {
+  --transform-scale: .5;
+}
+
+.hover\:scale-75:hover {
+  --transform-scale: .75;
+}
+
+.hover\:scale-90:hover {
+  --transform-scale: .9;
+}
+
+.hover\:scale-95:hover {
+  --transform-scale: .95;
+}
+
+.hover\:scale-100:hover {
+  --transform-scale: 1;
+}
+
+.hover\:scale-105:hover {
+  --transform-scale: 1.05;
+}
+
+.hover\:scale-110:hover {
+  --transform-scale: 1.1;
+}
+
+.hover\:scale-125:hover {
+  --transform-scale: 1.25;
+}
+
+.hover\:scale-150:hover {
+  --transform-scale: 1.5;
+}
+
+.focus\:scale-0:focus {
+  --transform-scale: 0;
+}
+
+.focus\:scale-50:focus {
+  --transform-scale: .5;
+}
+
+.focus\:scale-75:focus {
+  --transform-scale: .75;
+}
+
+.focus\:scale-90:focus {
+  --transform-scale: .9;
+}
+
+.focus\:scale-95:focus {
+  --transform-scale: .95;
+}
+
+.focus\:scale-100:focus {
+  --transform-scale: 1;
+}
+
+.focus\:scale-105:focus {
+  --transform-scale: 1.05;
+}
+
+.focus\:scale-110:focus {
+  --transform-scale: 1.1;
+}
+
+.focus\:scale-125:focus {
+  --transform-scale: 1.25;
+}
+
+.focus\:scale-150:focus {
+  --transform-scale: 1.5;
+}
+
+.rotate-0 {
+  --transform-rotate: 0;
+}
+
+.rotate-45 {
+  --transform-rotate: 45deg;
+}
+
+.rotate-90 {
+  --transform-rotate: 90deg;
+}
+
+.rotate-180 {
+  --transform-rotate: 180deg;
+}
+
+.-rotate-180 {
+  --transform-rotate: -180deg;
+}
+
+.-rotate-90 {
+  --transform-rotate: -90deg;
+}
+
+.-rotate-45 {
+  --transform-rotate: -45deg;
+}
+
+.hover\:rotate-0:hover {
+  --transform-rotate: 0;
+}
+
+.hover\:rotate-45:hover {
+  --transform-rotate: 45deg;
+}
+
+.hover\:rotate-90:hover {
+  --transform-rotate: 90deg;
+}
+
+.hover\:rotate-180:hover {
+  --transform-rotate: 180deg;
+}
+
+.hover\:-rotate-180:hover {
+  --transform-rotate: -180deg;
+}
+
+.hover\:-rotate-90:hover {
+  --transform-rotate: -90deg;
+}
+
+.hover\:-rotate-45:hover {
+  --transform-rotate: -45deg;
+}
+
+.focus\:rotate-0:focus {
+  --transform-rotate: 0;
+}
+
+.focus\:rotate-45:focus {
+  --transform-rotate: 45deg;
+}
+
+.focus\:rotate-90:focus {
+  --transform-rotate: 90deg;
+}
+
+.focus\:rotate-180:focus {
+  --transform-rotate: 180deg;
+}
+
+.focus\:-rotate-180:focus {
+  --transform-rotate: -180deg;
+}
+
+.focus\:-rotate-90:focus {
+  --transform-rotate: -90deg;
+}
+
+.focus\:-rotate-45:focus {
+  --transform-rotate: -45deg;
+}
+
+.translate-x-0 {
+  --transform-translate-x: 0;
+}
+
+.translate-x-1 {
+  --transform-translate-x: 0.25rem;
+}
+
+.translate-x-2 {
+  --transform-translate-x: 0.5rem;
+}
+
+.translate-x-3 {
+  --transform-translate-x: 0.75rem;
+}
+
+.translate-x-4 {
+  --transform-translate-x: 1rem;
+}
+
+.translate-x-5 {
+  --transform-translate-x: 1.25rem;
+}
+
+.translate-x-6 {
+  --transform-translate-x: 1.5rem;
+}
+
+.translate-x-8 {
+  --transform-translate-x: 2rem;
+}
+
+.translate-x-10 {
+  --transform-translate-x: 2.5rem;
+}
+
+.translate-x-12 {
+  --transform-translate-x: 3rem;
+}
+
+.translate-x-16 {
+  --transform-translate-x: 4rem;
+}
+
+.translate-x-20 {
+  --transform-translate-x: 5rem;
+}
+
+.translate-x-24 {
+  --transform-translate-x: 6rem;
+}
+
+.translate-x-32 {
+  --transform-translate-x: 8rem;
+}
+
+.translate-x-40 {
+  --transform-translate-x: 10rem;
+}
+
+.translate-x-48 {
+  --transform-translate-x: 12rem;
+}
+
+.translate-x-56 {
+  --transform-translate-x: 14rem;
+}
+
+.translate-x-64 {
+  --transform-translate-x: 16rem;
+}
+
+.translate-x-px {
+  --transform-translate-x: 1px;
+}
+
+.hover\:translate-x-0:hover {
+  --transform-translate-x: 0;
+}
+
+.hover\:translate-x-1:hover {
+  --transform-translate-x: 0.25rem;
+}
+
+.hover\:translate-x-2:hover {
+  --transform-translate-x: 0.5rem;
+}
+
+.hover\:translate-x-3:hover {
+  --transform-translate-x: 0.75rem;
+}
+
+.hover\:translate-x-4:hover {
+  --transform-translate-x: 1rem;
+}
+
+.hover\:translate-x-5:hover {
+  --transform-translate-x: 1.25rem;
+}
+
+.hover\:translate-x-6:hover {
+  --transform-translate-x: 1.5rem;
+}
+
+.hover\:translate-x-8:hover {
+  --transform-translate-x: 2rem;
+}
+
+.hover\:translate-x-10:hover {
+  --transform-translate-x: 2.5rem;
+}
+
+.hover\:translate-x-12:hover {
+  --transform-translate-x: 3rem;
+}
+
+.hover\:translate-x-16:hover {
+  --transform-translate-x: 4rem;
+}
+
+.hover\:translate-x-20:hover {
+  --transform-translate-x: 5rem;
+}
+
+.hover\:translate-x-24:hover {
+  --transform-translate-x: 6rem;
+}
+
+.hover\:translate-x-32:hover {
+  --transform-translate-x: 8rem;
+}
+
+.hover\:translate-x-40:hover {
+  --transform-translate-x: 10rem;
+}
+
+.hover\:translate-x-48:hover {
+  --transform-translate-x: 12rem;
+}
+
+.hover\:translate-x-56:hover {
+  --transform-translate-x: 14rem;
+}
+
+.hover\:translate-x-64:hover {
+  --transform-translate-x: 16rem;
+}
+
+.hover\:translate-x-px:hover {
+  --transform-translate-x: 1px;
+}
+
+.focus\:translate-x-0:focus {
+  --transform-translate-x: 0;
+}
+
+.focus\:translate-x-1:focus {
+  --transform-translate-x: 0.25rem;
+}
+
+.focus\:translate-x-2:focus {
+  --transform-translate-x: 0.5rem;
+}
+
+.focus\:translate-x-3:focus {
+  --transform-translate-x: 0.75rem;
+}
+
+.focus\:translate-x-4:focus {
+  --transform-translate-x: 1rem;
+}
+
+.focus\:translate-x-5:focus {
+  --transform-translate-x: 1.25rem;
+}
+
+.focus\:translate-x-6:focus {
+  --transform-translate-x: 1.5rem;
+}
+
+.focus\:translate-x-8:focus {
+  --transform-translate-x: 2rem;
+}
+
+.focus\:translate-x-10:focus {
+  --transform-translate-x: 2.5rem;
+}
+
+.focus\:translate-x-12:focus {
+  --transform-translate-x: 3rem;
+}
+
+.focus\:translate-x-16:focus {
+  --transform-translate-x: 4rem;
+}
+
+.focus\:translate-x-20:focus {
+  --transform-translate-x: 5rem;
+}
+
+.focus\:translate-x-24:focus {
+  --transform-translate-x: 6rem;
+}
+
+.focus\:translate-x-32:focus {
+  --transform-translate-x: 8rem;
+}
+
+.focus\:translate-x-40:focus {
+  --transform-translate-x: 10rem;
+}
+
+.focus\:translate-x-48:focus {
+  --transform-translate-x: 12rem;
+}
+
+.focus\:translate-x-56:focus {
+  --transform-translate-x: 14rem;
+}
+
+.focus\:translate-x-64:focus {
+  --transform-translate-x: 16rem;
+}
+
+.focus\:translate-x-px:focus {
+  --transform-translate-x: 1px;
+}
+
+.translate-y-0 {
+  --transform-translate-y: 0;
+}
+
+.translate-y-1 {
+  --transform-translate-y: 0.25rem;
+}
+
+.translate-y-2 {
+  --transform-translate-y: 0.5rem;
+}
+
+.translate-y-3 {
+  --transform-translate-y: 0.75rem;
+}
+
+.translate-y-4 {
+  --transform-translate-y: 1rem;
+}
+
+.translate-y-5 {
+  --transform-translate-y: 1.25rem;
+}
+
+.translate-y-6 {
+  --transform-translate-y: 1.5rem;
+}
+
+.translate-y-8 {
+  --transform-translate-y: 2rem;
+}
+
+.translate-y-10 {
+  --transform-translate-y: 2.5rem;
+}
+
+.translate-y-12 {
+  --transform-translate-y: 3rem;
+}
+
+.translate-y-16 {
+  --transform-translate-y: 4rem;
+}
+
+.translate-y-20 {
+  --transform-translate-y: 5rem;
+}
+
+.translate-y-24 {
+  --transform-translate-y: 6rem;
+}
+
+.translate-y-32 {
+  --transform-translate-y: 8rem;
+}
+
+.translate-y-40 {
+  --transform-translate-y: 10rem;
+}
+
+.translate-y-48 {
+  --transform-translate-y: 12rem;
+}
+
+.translate-y-56 {
+  --transform-translate-y: 14rem;
+}
+
+.translate-y-64 {
+  --transform-translate-y: 16rem;
+}
+
+.translate-y-px {
+  --transform-translate-y: 1px;
+}
+
+.hover\:translate-y-0:hover {
+  --transform-translate-y: 0;
+}
+
+.hover\:translate-y-1:hover {
+  --transform-translate-y: 0.25rem;
+}
+
+.hover\:translate-y-2:hover {
+  --transform-translate-y: 0.5rem;
+}
+
+.hover\:translate-y-3:hover {
+  --transform-translate-y: 0.75rem;
+}
+
+.hover\:translate-y-4:hover {
+  --transform-translate-y: 1rem;
+}
+
+.hover\:translate-y-5:hover {
+  --transform-translate-y: 1.25rem;
+}
+
+.hover\:translate-y-6:hover {
+  --transform-translate-y: 1.5rem;
+}
+
+.hover\:translate-y-8:hover {
+  --transform-translate-y: 2rem;
+}
+
+.hover\:translate-y-10:hover {
+  --transform-translate-y: 2.5rem;
+}
+
+.hover\:translate-y-12:hover {
+  --transform-translate-y: 3rem;
+}
+
+.hover\:translate-y-16:hover {
+  --transform-translate-y: 4rem;
+}
+
+.hover\:translate-y-20:hover {
+  --transform-translate-y: 5rem;
+}
+
+.hover\:translate-y-24:hover {
+  --transform-translate-y: 6rem;
+}
+
+.hover\:translate-y-32:hover {
+  --transform-translate-y: 8rem;
+}
+
+.hover\:translate-y-40:hover {
+  --transform-translate-y: 10rem;
+}
+
+.hover\:translate-y-48:hover {
+  --transform-translate-y: 12rem;
+}
+
+.hover\:translate-y-56:hover {
+  --transform-translate-y: 14rem;
+}
+
+.hover\:translate-y-64:hover {
+  --transform-translate-y: 16rem;
+}
+
+.hover\:translate-y-px:hover {
+  --transform-translate-y: 1px;
+}
+
+.focus\:translate-y-0:focus {
+  --transform-translate-y: 0;
+}
+
+.focus\:translate-y-1:focus {
+  --transform-translate-y: 0.25rem;
+}
+
+.focus\:translate-y-2:focus {
+  --transform-translate-y: 0.5rem;
+}
+
+.focus\:translate-y-3:focus {
+  --transform-translate-y: 0.75rem;
+}
+
+.focus\:translate-y-4:focus {
+  --transform-translate-y: 1rem;
+}
+
+.focus\:translate-y-5:focus {
+  --transform-translate-y: 1.25rem;
+}
+
+.focus\:translate-y-6:focus {
+  --transform-translate-y: 1.5rem;
+}
+
+.focus\:translate-y-8:focus {
+  --transform-translate-y: 2rem;
+}
+
+.focus\:translate-y-10:focus {
+  --transform-translate-y: 2.5rem;
+}
+
+.focus\:translate-y-12:focus {
+  --transform-translate-y: 3rem;
+}
+
+.focus\:translate-y-16:focus {
+  --transform-translate-y: 4rem;
+}
+
+.focus\:translate-y-20:focus {
+  --transform-translate-y: 5rem;
+}
+
+.focus\:translate-y-24:focus {
+  --transform-translate-y: 6rem;
+}
+
+.focus\:translate-y-32:focus {
+  --transform-translate-y: 8rem;
+}
+
+.focus\:translate-y-40:focus {
+  --transform-translate-y: 10rem;
+}
+
+.focus\:translate-y-48:focus {
+  --transform-translate-y: 12rem;
+}
+
+.focus\:translate-y-56:focus {
+  --transform-translate-y: 14rem;
+}
+
+.focus\:translate-y-64:focus {
+  --transform-translate-y: 16rem;
+}
+
+.focus\:translate-y-px:focus {
+  --transform-translate-y: 1px;
+}
+
 .example {
   font-weight: 700;
   color: #f56565;
@@ -16074,6 +16778,710 @@ video {
 
   .sm\:z-auto {
     z-index: auto;
+  }
+
+  .sm\:transform {
+    transform: scale(var(--transform-scale, 1)) rotate(var(--transform-rotate, 0)) translateX(var(--transform-translate-x, 0)) translateY(var(--transform-translate-y, 0));
+  }
+
+  .sm\:transform-none {
+    transform: none;
+  }
+
+  .sm\:origin-center {
+    transform-origin: center;
+  }
+
+  .sm\:origin-top {
+    transform-origin: top;
+  }
+
+  .sm\:origin-top-right {
+    transform-origin: top right;
+  }
+
+  .sm\:origin-right {
+    transform-origin: right;
+  }
+
+  .sm\:origin-bottom-right {
+    transform-origin: bottom right;
+  }
+
+  .sm\:origin-bottom {
+    transform-origin: bottom;
+  }
+
+  .sm\:origin-bottom-left {
+    transform-origin: bottom left;
+  }
+
+  .sm\:origin-left {
+    transform-origin: left;
+  }
+
+  .sm\:origin-top-left {
+    transform-origin: top left;
+  }
+
+  .sm\:scale-0 {
+    --transform-scale: 0;
+  }
+
+  .sm\:scale-50 {
+    --transform-scale: .5;
+  }
+
+  .sm\:scale-75 {
+    --transform-scale: .75;
+  }
+
+  .sm\:scale-90 {
+    --transform-scale: .9;
+  }
+
+  .sm\:scale-95 {
+    --transform-scale: .95;
+  }
+
+  .sm\:scale-100 {
+    --transform-scale: 1;
+  }
+
+  .sm\:scale-105 {
+    --transform-scale: 1.05;
+  }
+
+  .sm\:scale-110 {
+    --transform-scale: 1.1;
+  }
+
+  .sm\:scale-125 {
+    --transform-scale: 1.25;
+  }
+
+  .sm\:scale-150 {
+    --transform-scale: 1.5;
+  }
+
+  .sm\:hover\:scale-0:hover {
+    --transform-scale: 0;
+  }
+
+  .sm\:hover\:scale-50:hover {
+    --transform-scale: .5;
+  }
+
+  .sm\:hover\:scale-75:hover {
+    --transform-scale: .75;
+  }
+
+  .sm\:hover\:scale-90:hover {
+    --transform-scale: .9;
+  }
+
+  .sm\:hover\:scale-95:hover {
+    --transform-scale: .95;
+  }
+
+  .sm\:hover\:scale-100:hover {
+    --transform-scale: 1;
+  }
+
+  .sm\:hover\:scale-105:hover {
+    --transform-scale: 1.05;
+  }
+
+  .sm\:hover\:scale-110:hover {
+    --transform-scale: 1.1;
+  }
+
+  .sm\:hover\:scale-125:hover {
+    --transform-scale: 1.25;
+  }
+
+  .sm\:hover\:scale-150:hover {
+    --transform-scale: 1.5;
+  }
+
+  .sm\:focus\:scale-0:focus {
+    --transform-scale: 0;
+  }
+
+  .sm\:focus\:scale-50:focus {
+    --transform-scale: .5;
+  }
+
+  .sm\:focus\:scale-75:focus {
+    --transform-scale: .75;
+  }
+
+  .sm\:focus\:scale-90:focus {
+    --transform-scale: .9;
+  }
+
+  .sm\:focus\:scale-95:focus {
+    --transform-scale: .95;
+  }
+
+  .sm\:focus\:scale-100:focus {
+    --transform-scale: 1;
+  }
+
+  .sm\:focus\:scale-105:focus {
+    --transform-scale: 1.05;
+  }
+
+  .sm\:focus\:scale-110:focus {
+    --transform-scale: 1.1;
+  }
+
+  .sm\:focus\:scale-125:focus {
+    --transform-scale: 1.25;
+  }
+
+  .sm\:focus\:scale-150:focus {
+    --transform-scale: 1.5;
+  }
+
+  .sm\:rotate-0 {
+    --transform-rotate: 0;
+  }
+
+  .sm\:rotate-45 {
+    --transform-rotate: 45deg;
+  }
+
+  .sm\:rotate-90 {
+    --transform-rotate: 90deg;
+  }
+
+  .sm\:rotate-180 {
+    --transform-rotate: 180deg;
+  }
+
+  .sm\:-rotate-180 {
+    --transform-rotate: -180deg;
+  }
+
+  .sm\:-rotate-90 {
+    --transform-rotate: -90deg;
+  }
+
+  .sm\:-rotate-45 {
+    --transform-rotate: -45deg;
+  }
+
+  .sm\:hover\:rotate-0:hover {
+    --transform-rotate: 0;
+  }
+
+  .sm\:hover\:rotate-45:hover {
+    --transform-rotate: 45deg;
+  }
+
+  .sm\:hover\:rotate-90:hover {
+    --transform-rotate: 90deg;
+  }
+
+  .sm\:hover\:rotate-180:hover {
+    --transform-rotate: 180deg;
+  }
+
+  .sm\:hover\:-rotate-180:hover {
+    --transform-rotate: -180deg;
+  }
+
+  .sm\:hover\:-rotate-90:hover {
+    --transform-rotate: -90deg;
+  }
+
+  .sm\:hover\:-rotate-45:hover {
+    --transform-rotate: -45deg;
+  }
+
+  .sm\:focus\:rotate-0:focus {
+    --transform-rotate: 0;
+  }
+
+  .sm\:focus\:rotate-45:focus {
+    --transform-rotate: 45deg;
+  }
+
+  .sm\:focus\:rotate-90:focus {
+    --transform-rotate: 90deg;
+  }
+
+  .sm\:focus\:rotate-180:focus {
+    --transform-rotate: 180deg;
+  }
+
+  .sm\:focus\:-rotate-180:focus {
+    --transform-rotate: -180deg;
+  }
+
+  .sm\:focus\:-rotate-90:focus {
+    --transform-rotate: -90deg;
+  }
+
+  .sm\:focus\:-rotate-45:focus {
+    --transform-rotate: -45deg;
+  }
+
+  .sm\:translate-x-0 {
+    --transform-translate-x: 0;
+  }
+
+  .sm\:translate-x-1 {
+    --transform-translate-x: 0.25rem;
+  }
+
+  .sm\:translate-x-2 {
+    --transform-translate-x: 0.5rem;
+  }
+
+  .sm\:translate-x-3 {
+    --transform-translate-x: 0.75rem;
+  }
+
+  .sm\:translate-x-4 {
+    --transform-translate-x: 1rem;
+  }
+
+  .sm\:translate-x-5 {
+    --transform-translate-x: 1.25rem;
+  }
+
+  .sm\:translate-x-6 {
+    --transform-translate-x: 1.5rem;
+  }
+
+  .sm\:translate-x-8 {
+    --transform-translate-x: 2rem;
+  }
+
+  .sm\:translate-x-10 {
+    --transform-translate-x: 2.5rem;
+  }
+
+  .sm\:translate-x-12 {
+    --transform-translate-x: 3rem;
+  }
+
+  .sm\:translate-x-16 {
+    --transform-translate-x: 4rem;
+  }
+
+  .sm\:translate-x-20 {
+    --transform-translate-x: 5rem;
+  }
+
+  .sm\:translate-x-24 {
+    --transform-translate-x: 6rem;
+  }
+
+  .sm\:translate-x-32 {
+    --transform-translate-x: 8rem;
+  }
+
+  .sm\:translate-x-40 {
+    --transform-translate-x: 10rem;
+  }
+
+  .sm\:translate-x-48 {
+    --transform-translate-x: 12rem;
+  }
+
+  .sm\:translate-x-56 {
+    --transform-translate-x: 14rem;
+  }
+
+  .sm\:translate-x-64 {
+    --transform-translate-x: 16rem;
+  }
+
+  .sm\:translate-x-px {
+    --transform-translate-x: 1px;
+  }
+
+  .sm\:hover\:translate-x-0:hover {
+    --transform-translate-x: 0;
+  }
+
+  .sm\:hover\:translate-x-1:hover {
+    --transform-translate-x: 0.25rem;
+  }
+
+  .sm\:hover\:translate-x-2:hover {
+    --transform-translate-x: 0.5rem;
+  }
+
+  .sm\:hover\:translate-x-3:hover {
+    --transform-translate-x: 0.75rem;
+  }
+
+  .sm\:hover\:translate-x-4:hover {
+    --transform-translate-x: 1rem;
+  }
+
+  .sm\:hover\:translate-x-5:hover {
+    --transform-translate-x: 1.25rem;
+  }
+
+  .sm\:hover\:translate-x-6:hover {
+    --transform-translate-x: 1.5rem;
+  }
+
+  .sm\:hover\:translate-x-8:hover {
+    --transform-translate-x: 2rem;
+  }
+
+  .sm\:hover\:translate-x-10:hover {
+    --transform-translate-x: 2.5rem;
+  }
+
+  .sm\:hover\:translate-x-12:hover {
+    --transform-translate-x: 3rem;
+  }
+
+  .sm\:hover\:translate-x-16:hover {
+    --transform-translate-x: 4rem;
+  }
+
+  .sm\:hover\:translate-x-20:hover {
+    --transform-translate-x: 5rem;
+  }
+
+  .sm\:hover\:translate-x-24:hover {
+    --transform-translate-x: 6rem;
+  }
+
+  .sm\:hover\:translate-x-32:hover {
+    --transform-translate-x: 8rem;
+  }
+
+  .sm\:hover\:translate-x-40:hover {
+    --transform-translate-x: 10rem;
+  }
+
+  .sm\:hover\:translate-x-48:hover {
+    --transform-translate-x: 12rem;
+  }
+
+  .sm\:hover\:translate-x-56:hover {
+    --transform-translate-x: 14rem;
+  }
+
+  .sm\:hover\:translate-x-64:hover {
+    --transform-translate-x: 16rem;
+  }
+
+  .sm\:hover\:translate-x-px:hover {
+    --transform-translate-x: 1px;
+  }
+
+  .sm\:focus\:translate-x-0:focus {
+    --transform-translate-x: 0;
+  }
+
+  .sm\:focus\:translate-x-1:focus {
+    --transform-translate-x: 0.25rem;
+  }
+
+  .sm\:focus\:translate-x-2:focus {
+    --transform-translate-x: 0.5rem;
+  }
+
+  .sm\:focus\:translate-x-3:focus {
+    --transform-translate-x: 0.75rem;
+  }
+
+  .sm\:focus\:translate-x-4:focus {
+    --transform-translate-x: 1rem;
+  }
+
+  .sm\:focus\:translate-x-5:focus {
+    --transform-translate-x: 1.25rem;
+  }
+
+  .sm\:focus\:translate-x-6:focus {
+    --transform-translate-x: 1.5rem;
+  }
+
+  .sm\:focus\:translate-x-8:focus {
+    --transform-translate-x: 2rem;
+  }
+
+  .sm\:focus\:translate-x-10:focus {
+    --transform-translate-x: 2.5rem;
+  }
+
+  .sm\:focus\:translate-x-12:focus {
+    --transform-translate-x: 3rem;
+  }
+
+  .sm\:focus\:translate-x-16:focus {
+    --transform-translate-x: 4rem;
+  }
+
+  .sm\:focus\:translate-x-20:focus {
+    --transform-translate-x: 5rem;
+  }
+
+  .sm\:focus\:translate-x-24:focus {
+    --transform-translate-x: 6rem;
+  }
+
+  .sm\:focus\:translate-x-32:focus {
+    --transform-translate-x: 8rem;
+  }
+
+  .sm\:focus\:translate-x-40:focus {
+    --transform-translate-x: 10rem;
+  }
+
+  .sm\:focus\:translate-x-48:focus {
+    --transform-translate-x: 12rem;
+  }
+
+  .sm\:focus\:translate-x-56:focus {
+    --transform-translate-x: 14rem;
+  }
+
+  .sm\:focus\:translate-x-64:focus {
+    --transform-translate-x: 16rem;
+  }
+
+  .sm\:focus\:translate-x-px:focus {
+    --transform-translate-x: 1px;
+  }
+
+  .sm\:translate-y-0 {
+    --transform-translate-y: 0;
+  }
+
+  .sm\:translate-y-1 {
+    --transform-translate-y: 0.25rem;
+  }
+
+  .sm\:translate-y-2 {
+    --transform-translate-y: 0.5rem;
+  }
+
+  .sm\:translate-y-3 {
+    --transform-translate-y: 0.75rem;
+  }
+
+  .sm\:translate-y-4 {
+    --transform-translate-y: 1rem;
+  }
+
+  .sm\:translate-y-5 {
+    --transform-translate-y: 1.25rem;
+  }
+
+  .sm\:translate-y-6 {
+    --transform-translate-y: 1.5rem;
+  }
+
+  .sm\:translate-y-8 {
+    --transform-translate-y: 2rem;
+  }
+
+  .sm\:translate-y-10 {
+    --transform-translate-y: 2.5rem;
+  }
+
+  .sm\:translate-y-12 {
+    --transform-translate-y: 3rem;
+  }
+
+  .sm\:translate-y-16 {
+    --transform-translate-y: 4rem;
+  }
+
+  .sm\:translate-y-20 {
+    --transform-translate-y: 5rem;
+  }
+
+  .sm\:translate-y-24 {
+    --transform-translate-y: 6rem;
+  }
+
+  .sm\:translate-y-32 {
+    --transform-translate-y: 8rem;
+  }
+
+  .sm\:translate-y-40 {
+    --transform-translate-y: 10rem;
+  }
+
+  .sm\:translate-y-48 {
+    --transform-translate-y: 12rem;
+  }
+
+  .sm\:translate-y-56 {
+    --transform-translate-y: 14rem;
+  }
+
+  .sm\:translate-y-64 {
+    --transform-translate-y: 16rem;
+  }
+
+  .sm\:translate-y-px {
+    --transform-translate-y: 1px;
+  }
+
+  .sm\:hover\:translate-y-0:hover {
+    --transform-translate-y: 0;
+  }
+
+  .sm\:hover\:translate-y-1:hover {
+    --transform-translate-y: 0.25rem;
+  }
+
+  .sm\:hover\:translate-y-2:hover {
+    --transform-translate-y: 0.5rem;
+  }
+
+  .sm\:hover\:translate-y-3:hover {
+    --transform-translate-y: 0.75rem;
+  }
+
+  .sm\:hover\:translate-y-4:hover {
+    --transform-translate-y: 1rem;
+  }
+
+  .sm\:hover\:translate-y-5:hover {
+    --transform-translate-y: 1.25rem;
+  }
+
+  .sm\:hover\:translate-y-6:hover {
+    --transform-translate-y: 1.5rem;
+  }
+
+  .sm\:hover\:translate-y-8:hover {
+    --transform-translate-y: 2rem;
+  }
+
+  .sm\:hover\:translate-y-10:hover {
+    --transform-translate-y: 2.5rem;
+  }
+
+  .sm\:hover\:translate-y-12:hover {
+    --transform-translate-y: 3rem;
+  }
+
+  .sm\:hover\:translate-y-16:hover {
+    --transform-translate-y: 4rem;
+  }
+
+  .sm\:hover\:translate-y-20:hover {
+    --transform-translate-y: 5rem;
+  }
+
+  .sm\:hover\:translate-y-24:hover {
+    --transform-translate-y: 6rem;
+  }
+
+  .sm\:hover\:translate-y-32:hover {
+    --transform-translate-y: 8rem;
+  }
+
+  .sm\:hover\:translate-y-40:hover {
+    --transform-translate-y: 10rem;
+  }
+
+  .sm\:hover\:translate-y-48:hover {
+    --transform-translate-y: 12rem;
+  }
+
+  .sm\:hover\:translate-y-56:hover {
+    --transform-translate-y: 14rem;
+  }
+
+  .sm\:hover\:translate-y-64:hover {
+    --transform-translate-y: 16rem;
+  }
+
+  .sm\:hover\:translate-y-px:hover {
+    --transform-translate-y: 1px;
+  }
+
+  .sm\:focus\:translate-y-0:focus {
+    --transform-translate-y: 0;
+  }
+
+  .sm\:focus\:translate-y-1:focus {
+    --transform-translate-y: 0.25rem;
+  }
+
+  .sm\:focus\:translate-y-2:focus {
+    --transform-translate-y: 0.5rem;
+  }
+
+  .sm\:focus\:translate-y-3:focus {
+    --transform-translate-y: 0.75rem;
+  }
+
+  .sm\:focus\:translate-y-4:focus {
+    --transform-translate-y: 1rem;
+  }
+
+  .sm\:focus\:translate-y-5:focus {
+    --transform-translate-y: 1.25rem;
+  }
+
+  .sm\:focus\:translate-y-6:focus {
+    --transform-translate-y: 1.5rem;
+  }
+
+  .sm\:focus\:translate-y-8:focus {
+    --transform-translate-y: 2rem;
+  }
+
+  .sm\:focus\:translate-y-10:focus {
+    --transform-translate-y: 2.5rem;
+  }
+
+  .sm\:focus\:translate-y-12:focus {
+    --transform-translate-y: 3rem;
+  }
+
+  .sm\:focus\:translate-y-16:focus {
+    --transform-translate-y: 4rem;
+  }
+
+  .sm\:focus\:translate-y-20:focus {
+    --transform-translate-y: 5rem;
+  }
+
+  .sm\:focus\:translate-y-24:focus {
+    --transform-translate-y: 6rem;
+  }
+
+  .sm\:focus\:translate-y-32:focus {
+    --transform-translate-y: 8rem;
+  }
+
+  .sm\:focus\:translate-y-40:focus {
+    --transform-translate-y: 10rem;
+  }
+
+  .sm\:focus\:translate-y-48:focus {
+    --transform-translate-y: 12rem;
+  }
+
+  .sm\:focus\:translate-y-56:focus {
+    --transform-translate-y: 14rem;
+  }
+
+  .sm\:focus\:translate-y-64:focus {
+    --transform-translate-y: 16rem;
+  }
+
+  .sm\:focus\:translate-y-px:focus {
+    --transform-translate-y: 1px;
   }
 
   .sm\:example {
@@ -23816,6 +25224,710 @@ video {
     z-index: auto;
   }
 
+  .md\:transform {
+    transform: scale(var(--transform-scale, 1)) rotate(var(--transform-rotate, 0)) translateX(var(--transform-translate-x, 0)) translateY(var(--transform-translate-y, 0));
+  }
+
+  .md\:transform-none {
+    transform: none;
+  }
+
+  .md\:origin-center {
+    transform-origin: center;
+  }
+
+  .md\:origin-top {
+    transform-origin: top;
+  }
+
+  .md\:origin-top-right {
+    transform-origin: top right;
+  }
+
+  .md\:origin-right {
+    transform-origin: right;
+  }
+
+  .md\:origin-bottom-right {
+    transform-origin: bottom right;
+  }
+
+  .md\:origin-bottom {
+    transform-origin: bottom;
+  }
+
+  .md\:origin-bottom-left {
+    transform-origin: bottom left;
+  }
+
+  .md\:origin-left {
+    transform-origin: left;
+  }
+
+  .md\:origin-top-left {
+    transform-origin: top left;
+  }
+
+  .md\:scale-0 {
+    --transform-scale: 0;
+  }
+
+  .md\:scale-50 {
+    --transform-scale: .5;
+  }
+
+  .md\:scale-75 {
+    --transform-scale: .75;
+  }
+
+  .md\:scale-90 {
+    --transform-scale: .9;
+  }
+
+  .md\:scale-95 {
+    --transform-scale: .95;
+  }
+
+  .md\:scale-100 {
+    --transform-scale: 1;
+  }
+
+  .md\:scale-105 {
+    --transform-scale: 1.05;
+  }
+
+  .md\:scale-110 {
+    --transform-scale: 1.1;
+  }
+
+  .md\:scale-125 {
+    --transform-scale: 1.25;
+  }
+
+  .md\:scale-150 {
+    --transform-scale: 1.5;
+  }
+
+  .md\:hover\:scale-0:hover {
+    --transform-scale: 0;
+  }
+
+  .md\:hover\:scale-50:hover {
+    --transform-scale: .5;
+  }
+
+  .md\:hover\:scale-75:hover {
+    --transform-scale: .75;
+  }
+
+  .md\:hover\:scale-90:hover {
+    --transform-scale: .9;
+  }
+
+  .md\:hover\:scale-95:hover {
+    --transform-scale: .95;
+  }
+
+  .md\:hover\:scale-100:hover {
+    --transform-scale: 1;
+  }
+
+  .md\:hover\:scale-105:hover {
+    --transform-scale: 1.05;
+  }
+
+  .md\:hover\:scale-110:hover {
+    --transform-scale: 1.1;
+  }
+
+  .md\:hover\:scale-125:hover {
+    --transform-scale: 1.25;
+  }
+
+  .md\:hover\:scale-150:hover {
+    --transform-scale: 1.5;
+  }
+
+  .md\:focus\:scale-0:focus {
+    --transform-scale: 0;
+  }
+
+  .md\:focus\:scale-50:focus {
+    --transform-scale: .5;
+  }
+
+  .md\:focus\:scale-75:focus {
+    --transform-scale: .75;
+  }
+
+  .md\:focus\:scale-90:focus {
+    --transform-scale: .9;
+  }
+
+  .md\:focus\:scale-95:focus {
+    --transform-scale: .95;
+  }
+
+  .md\:focus\:scale-100:focus {
+    --transform-scale: 1;
+  }
+
+  .md\:focus\:scale-105:focus {
+    --transform-scale: 1.05;
+  }
+
+  .md\:focus\:scale-110:focus {
+    --transform-scale: 1.1;
+  }
+
+  .md\:focus\:scale-125:focus {
+    --transform-scale: 1.25;
+  }
+
+  .md\:focus\:scale-150:focus {
+    --transform-scale: 1.5;
+  }
+
+  .md\:rotate-0 {
+    --transform-rotate: 0;
+  }
+
+  .md\:rotate-45 {
+    --transform-rotate: 45deg;
+  }
+
+  .md\:rotate-90 {
+    --transform-rotate: 90deg;
+  }
+
+  .md\:rotate-180 {
+    --transform-rotate: 180deg;
+  }
+
+  .md\:-rotate-180 {
+    --transform-rotate: -180deg;
+  }
+
+  .md\:-rotate-90 {
+    --transform-rotate: -90deg;
+  }
+
+  .md\:-rotate-45 {
+    --transform-rotate: -45deg;
+  }
+
+  .md\:hover\:rotate-0:hover {
+    --transform-rotate: 0;
+  }
+
+  .md\:hover\:rotate-45:hover {
+    --transform-rotate: 45deg;
+  }
+
+  .md\:hover\:rotate-90:hover {
+    --transform-rotate: 90deg;
+  }
+
+  .md\:hover\:rotate-180:hover {
+    --transform-rotate: 180deg;
+  }
+
+  .md\:hover\:-rotate-180:hover {
+    --transform-rotate: -180deg;
+  }
+
+  .md\:hover\:-rotate-90:hover {
+    --transform-rotate: -90deg;
+  }
+
+  .md\:hover\:-rotate-45:hover {
+    --transform-rotate: -45deg;
+  }
+
+  .md\:focus\:rotate-0:focus {
+    --transform-rotate: 0;
+  }
+
+  .md\:focus\:rotate-45:focus {
+    --transform-rotate: 45deg;
+  }
+
+  .md\:focus\:rotate-90:focus {
+    --transform-rotate: 90deg;
+  }
+
+  .md\:focus\:rotate-180:focus {
+    --transform-rotate: 180deg;
+  }
+
+  .md\:focus\:-rotate-180:focus {
+    --transform-rotate: -180deg;
+  }
+
+  .md\:focus\:-rotate-90:focus {
+    --transform-rotate: -90deg;
+  }
+
+  .md\:focus\:-rotate-45:focus {
+    --transform-rotate: -45deg;
+  }
+
+  .md\:translate-x-0 {
+    --transform-translate-x: 0;
+  }
+
+  .md\:translate-x-1 {
+    --transform-translate-x: 0.25rem;
+  }
+
+  .md\:translate-x-2 {
+    --transform-translate-x: 0.5rem;
+  }
+
+  .md\:translate-x-3 {
+    --transform-translate-x: 0.75rem;
+  }
+
+  .md\:translate-x-4 {
+    --transform-translate-x: 1rem;
+  }
+
+  .md\:translate-x-5 {
+    --transform-translate-x: 1.25rem;
+  }
+
+  .md\:translate-x-6 {
+    --transform-translate-x: 1.5rem;
+  }
+
+  .md\:translate-x-8 {
+    --transform-translate-x: 2rem;
+  }
+
+  .md\:translate-x-10 {
+    --transform-translate-x: 2.5rem;
+  }
+
+  .md\:translate-x-12 {
+    --transform-translate-x: 3rem;
+  }
+
+  .md\:translate-x-16 {
+    --transform-translate-x: 4rem;
+  }
+
+  .md\:translate-x-20 {
+    --transform-translate-x: 5rem;
+  }
+
+  .md\:translate-x-24 {
+    --transform-translate-x: 6rem;
+  }
+
+  .md\:translate-x-32 {
+    --transform-translate-x: 8rem;
+  }
+
+  .md\:translate-x-40 {
+    --transform-translate-x: 10rem;
+  }
+
+  .md\:translate-x-48 {
+    --transform-translate-x: 12rem;
+  }
+
+  .md\:translate-x-56 {
+    --transform-translate-x: 14rem;
+  }
+
+  .md\:translate-x-64 {
+    --transform-translate-x: 16rem;
+  }
+
+  .md\:translate-x-px {
+    --transform-translate-x: 1px;
+  }
+
+  .md\:hover\:translate-x-0:hover {
+    --transform-translate-x: 0;
+  }
+
+  .md\:hover\:translate-x-1:hover {
+    --transform-translate-x: 0.25rem;
+  }
+
+  .md\:hover\:translate-x-2:hover {
+    --transform-translate-x: 0.5rem;
+  }
+
+  .md\:hover\:translate-x-3:hover {
+    --transform-translate-x: 0.75rem;
+  }
+
+  .md\:hover\:translate-x-4:hover {
+    --transform-translate-x: 1rem;
+  }
+
+  .md\:hover\:translate-x-5:hover {
+    --transform-translate-x: 1.25rem;
+  }
+
+  .md\:hover\:translate-x-6:hover {
+    --transform-translate-x: 1.5rem;
+  }
+
+  .md\:hover\:translate-x-8:hover {
+    --transform-translate-x: 2rem;
+  }
+
+  .md\:hover\:translate-x-10:hover {
+    --transform-translate-x: 2.5rem;
+  }
+
+  .md\:hover\:translate-x-12:hover {
+    --transform-translate-x: 3rem;
+  }
+
+  .md\:hover\:translate-x-16:hover {
+    --transform-translate-x: 4rem;
+  }
+
+  .md\:hover\:translate-x-20:hover {
+    --transform-translate-x: 5rem;
+  }
+
+  .md\:hover\:translate-x-24:hover {
+    --transform-translate-x: 6rem;
+  }
+
+  .md\:hover\:translate-x-32:hover {
+    --transform-translate-x: 8rem;
+  }
+
+  .md\:hover\:translate-x-40:hover {
+    --transform-translate-x: 10rem;
+  }
+
+  .md\:hover\:translate-x-48:hover {
+    --transform-translate-x: 12rem;
+  }
+
+  .md\:hover\:translate-x-56:hover {
+    --transform-translate-x: 14rem;
+  }
+
+  .md\:hover\:translate-x-64:hover {
+    --transform-translate-x: 16rem;
+  }
+
+  .md\:hover\:translate-x-px:hover {
+    --transform-translate-x: 1px;
+  }
+
+  .md\:focus\:translate-x-0:focus {
+    --transform-translate-x: 0;
+  }
+
+  .md\:focus\:translate-x-1:focus {
+    --transform-translate-x: 0.25rem;
+  }
+
+  .md\:focus\:translate-x-2:focus {
+    --transform-translate-x: 0.5rem;
+  }
+
+  .md\:focus\:translate-x-3:focus {
+    --transform-translate-x: 0.75rem;
+  }
+
+  .md\:focus\:translate-x-4:focus {
+    --transform-translate-x: 1rem;
+  }
+
+  .md\:focus\:translate-x-5:focus {
+    --transform-translate-x: 1.25rem;
+  }
+
+  .md\:focus\:translate-x-6:focus {
+    --transform-translate-x: 1.5rem;
+  }
+
+  .md\:focus\:translate-x-8:focus {
+    --transform-translate-x: 2rem;
+  }
+
+  .md\:focus\:translate-x-10:focus {
+    --transform-translate-x: 2.5rem;
+  }
+
+  .md\:focus\:translate-x-12:focus {
+    --transform-translate-x: 3rem;
+  }
+
+  .md\:focus\:translate-x-16:focus {
+    --transform-translate-x: 4rem;
+  }
+
+  .md\:focus\:translate-x-20:focus {
+    --transform-translate-x: 5rem;
+  }
+
+  .md\:focus\:translate-x-24:focus {
+    --transform-translate-x: 6rem;
+  }
+
+  .md\:focus\:translate-x-32:focus {
+    --transform-translate-x: 8rem;
+  }
+
+  .md\:focus\:translate-x-40:focus {
+    --transform-translate-x: 10rem;
+  }
+
+  .md\:focus\:translate-x-48:focus {
+    --transform-translate-x: 12rem;
+  }
+
+  .md\:focus\:translate-x-56:focus {
+    --transform-translate-x: 14rem;
+  }
+
+  .md\:focus\:translate-x-64:focus {
+    --transform-translate-x: 16rem;
+  }
+
+  .md\:focus\:translate-x-px:focus {
+    --transform-translate-x: 1px;
+  }
+
+  .md\:translate-y-0 {
+    --transform-translate-y: 0;
+  }
+
+  .md\:translate-y-1 {
+    --transform-translate-y: 0.25rem;
+  }
+
+  .md\:translate-y-2 {
+    --transform-translate-y: 0.5rem;
+  }
+
+  .md\:translate-y-3 {
+    --transform-translate-y: 0.75rem;
+  }
+
+  .md\:translate-y-4 {
+    --transform-translate-y: 1rem;
+  }
+
+  .md\:translate-y-5 {
+    --transform-translate-y: 1.25rem;
+  }
+
+  .md\:translate-y-6 {
+    --transform-translate-y: 1.5rem;
+  }
+
+  .md\:translate-y-8 {
+    --transform-translate-y: 2rem;
+  }
+
+  .md\:translate-y-10 {
+    --transform-translate-y: 2.5rem;
+  }
+
+  .md\:translate-y-12 {
+    --transform-translate-y: 3rem;
+  }
+
+  .md\:translate-y-16 {
+    --transform-translate-y: 4rem;
+  }
+
+  .md\:translate-y-20 {
+    --transform-translate-y: 5rem;
+  }
+
+  .md\:translate-y-24 {
+    --transform-translate-y: 6rem;
+  }
+
+  .md\:translate-y-32 {
+    --transform-translate-y: 8rem;
+  }
+
+  .md\:translate-y-40 {
+    --transform-translate-y: 10rem;
+  }
+
+  .md\:translate-y-48 {
+    --transform-translate-y: 12rem;
+  }
+
+  .md\:translate-y-56 {
+    --transform-translate-y: 14rem;
+  }
+
+  .md\:translate-y-64 {
+    --transform-translate-y: 16rem;
+  }
+
+  .md\:translate-y-px {
+    --transform-translate-y: 1px;
+  }
+
+  .md\:hover\:translate-y-0:hover {
+    --transform-translate-y: 0;
+  }
+
+  .md\:hover\:translate-y-1:hover {
+    --transform-translate-y: 0.25rem;
+  }
+
+  .md\:hover\:translate-y-2:hover {
+    --transform-translate-y: 0.5rem;
+  }
+
+  .md\:hover\:translate-y-3:hover {
+    --transform-translate-y: 0.75rem;
+  }
+
+  .md\:hover\:translate-y-4:hover {
+    --transform-translate-y: 1rem;
+  }
+
+  .md\:hover\:translate-y-5:hover {
+    --transform-translate-y: 1.25rem;
+  }
+
+  .md\:hover\:translate-y-6:hover {
+    --transform-translate-y: 1.5rem;
+  }
+
+  .md\:hover\:translate-y-8:hover {
+    --transform-translate-y: 2rem;
+  }
+
+  .md\:hover\:translate-y-10:hover {
+    --transform-translate-y: 2.5rem;
+  }
+
+  .md\:hover\:translate-y-12:hover {
+    --transform-translate-y: 3rem;
+  }
+
+  .md\:hover\:translate-y-16:hover {
+    --transform-translate-y: 4rem;
+  }
+
+  .md\:hover\:translate-y-20:hover {
+    --transform-translate-y: 5rem;
+  }
+
+  .md\:hover\:translate-y-24:hover {
+    --transform-translate-y: 6rem;
+  }
+
+  .md\:hover\:translate-y-32:hover {
+    --transform-translate-y: 8rem;
+  }
+
+  .md\:hover\:translate-y-40:hover {
+    --transform-translate-y: 10rem;
+  }
+
+  .md\:hover\:translate-y-48:hover {
+    --transform-translate-y: 12rem;
+  }
+
+  .md\:hover\:translate-y-56:hover {
+    --transform-translate-y: 14rem;
+  }
+
+  .md\:hover\:translate-y-64:hover {
+    --transform-translate-y: 16rem;
+  }
+
+  .md\:hover\:translate-y-px:hover {
+    --transform-translate-y: 1px;
+  }
+
+  .md\:focus\:translate-y-0:focus {
+    --transform-translate-y: 0;
+  }
+
+  .md\:focus\:translate-y-1:focus {
+    --transform-translate-y: 0.25rem;
+  }
+
+  .md\:focus\:translate-y-2:focus {
+    --transform-translate-y: 0.5rem;
+  }
+
+  .md\:focus\:translate-y-3:focus {
+    --transform-translate-y: 0.75rem;
+  }
+
+  .md\:focus\:translate-y-4:focus {
+    --transform-translate-y: 1rem;
+  }
+
+  .md\:focus\:translate-y-5:focus {
+    --transform-translate-y: 1.25rem;
+  }
+
+  .md\:focus\:translate-y-6:focus {
+    --transform-translate-y: 1.5rem;
+  }
+
+  .md\:focus\:translate-y-8:focus {
+    --transform-translate-y: 2rem;
+  }
+
+  .md\:focus\:translate-y-10:focus {
+    --transform-translate-y: 2.5rem;
+  }
+
+  .md\:focus\:translate-y-12:focus {
+    --transform-translate-y: 3rem;
+  }
+
+  .md\:focus\:translate-y-16:focus {
+    --transform-translate-y: 4rem;
+  }
+
+  .md\:focus\:translate-y-20:focus {
+    --transform-translate-y: 5rem;
+  }
+
+  .md\:focus\:translate-y-24:focus {
+    --transform-translate-y: 6rem;
+  }
+
+  .md\:focus\:translate-y-32:focus {
+    --transform-translate-y: 8rem;
+  }
+
+  .md\:focus\:translate-y-40:focus {
+    --transform-translate-y: 10rem;
+  }
+
+  .md\:focus\:translate-y-48:focus {
+    --transform-translate-y: 12rem;
+  }
+
+  .md\:focus\:translate-y-56:focus {
+    --transform-translate-y: 14rem;
+  }
+
+  .md\:focus\:translate-y-64:focus {
+    --transform-translate-y: 16rem;
+  }
+
+  .md\:focus\:translate-y-px:focus {
+    --transform-translate-y: 1px;
+  }
+
   .md\:example {
     font-weight: 700;
     color: #f56565;
@@ -31556,6 +33668,710 @@ video {
     z-index: auto;
   }
 
+  .lg\:transform {
+    transform: scale(var(--transform-scale, 1)) rotate(var(--transform-rotate, 0)) translateX(var(--transform-translate-x, 0)) translateY(var(--transform-translate-y, 0));
+  }
+
+  .lg\:transform-none {
+    transform: none;
+  }
+
+  .lg\:origin-center {
+    transform-origin: center;
+  }
+
+  .lg\:origin-top {
+    transform-origin: top;
+  }
+
+  .lg\:origin-top-right {
+    transform-origin: top right;
+  }
+
+  .lg\:origin-right {
+    transform-origin: right;
+  }
+
+  .lg\:origin-bottom-right {
+    transform-origin: bottom right;
+  }
+
+  .lg\:origin-bottom {
+    transform-origin: bottom;
+  }
+
+  .lg\:origin-bottom-left {
+    transform-origin: bottom left;
+  }
+
+  .lg\:origin-left {
+    transform-origin: left;
+  }
+
+  .lg\:origin-top-left {
+    transform-origin: top left;
+  }
+
+  .lg\:scale-0 {
+    --transform-scale: 0;
+  }
+
+  .lg\:scale-50 {
+    --transform-scale: .5;
+  }
+
+  .lg\:scale-75 {
+    --transform-scale: .75;
+  }
+
+  .lg\:scale-90 {
+    --transform-scale: .9;
+  }
+
+  .lg\:scale-95 {
+    --transform-scale: .95;
+  }
+
+  .lg\:scale-100 {
+    --transform-scale: 1;
+  }
+
+  .lg\:scale-105 {
+    --transform-scale: 1.05;
+  }
+
+  .lg\:scale-110 {
+    --transform-scale: 1.1;
+  }
+
+  .lg\:scale-125 {
+    --transform-scale: 1.25;
+  }
+
+  .lg\:scale-150 {
+    --transform-scale: 1.5;
+  }
+
+  .lg\:hover\:scale-0:hover {
+    --transform-scale: 0;
+  }
+
+  .lg\:hover\:scale-50:hover {
+    --transform-scale: .5;
+  }
+
+  .lg\:hover\:scale-75:hover {
+    --transform-scale: .75;
+  }
+
+  .lg\:hover\:scale-90:hover {
+    --transform-scale: .9;
+  }
+
+  .lg\:hover\:scale-95:hover {
+    --transform-scale: .95;
+  }
+
+  .lg\:hover\:scale-100:hover {
+    --transform-scale: 1;
+  }
+
+  .lg\:hover\:scale-105:hover {
+    --transform-scale: 1.05;
+  }
+
+  .lg\:hover\:scale-110:hover {
+    --transform-scale: 1.1;
+  }
+
+  .lg\:hover\:scale-125:hover {
+    --transform-scale: 1.25;
+  }
+
+  .lg\:hover\:scale-150:hover {
+    --transform-scale: 1.5;
+  }
+
+  .lg\:focus\:scale-0:focus {
+    --transform-scale: 0;
+  }
+
+  .lg\:focus\:scale-50:focus {
+    --transform-scale: .5;
+  }
+
+  .lg\:focus\:scale-75:focus {
+    --transform-scale: .75;
+  }
+
+  .lg\:focus\:scale-90:focus {
+    --transform-scale: .9;
+  }
+
+  .lg\:focus\:scale-95:focus {
+    --transform-scale: .95;
+  }
+
+  .lg\:focus\:scale-100:focus {
+    --transform-scale: 1;
+  }
+
+  .lg\:focus\:scale-105:focus {
+    --transform-scale: 1.05;
+  }
+
+  .lg\:focus\:scale-110:focus {
+    --transform-scale: 1.1;
+  }
+
+  .lg\:focus\:scale-125:focus {
+    --transform-scale: 1.25;
+  }
+
+  .lg\:focus\:scale-150:focus {
+    --transform-scale: 1.5;
+  }
+
+  .lg\:rotate-0 {
+    --transform-rotate: 0;
+  }
+
+  .lg\:rotate-45 {
+    --transform-rotate: 45deg;
+  }
+
+  .lg\:rotate-90 {
+    --transform-rotate: 90deg;
+  }
+
+  .lg\:rotate-180 {
+    --transform-rotate: 180deg;
+  }
+
+  .lg\:-rotate-180 {
+    --transform-rotate: -180deg;
+  }
+
+  .lg\:-rotate-90 {
+    --transform-rotate: -90deg;
+  }
+
+  .lg\:-rotate-45 {
+    --transform-rotate: -45deg;
+  }
+
+  .lg\:hover\:rotate-0:hover {
+    --transform-rotate: 0;
+  }
+
+  .lg\:hover\:rotate-45:hover {
+    --transform-rotate: 45deg;
+  }
+
+  .lg\:hover\:rotate-90:hover {
+    --transform-rotate: 90deg;
+  }
+
+  .lg\:hover\:rotate-180:hover {
+    --transform-rotate: 180deg;
+  }
+
+  .lg\:hover\:-rotate-180:hover {
+    --transform-rotate: -180deg;
+  }
+
+  .lg\:hover\:-rotate-90:hover {
+    --transform-rotate: -90deg;
+  }
+
+  .lg\:hover\:-rotate-45:hover {
+    --transform-rotate: -45deg;
+  }
+
+  .lg\:focus\:rotate-0:focus {
+    --transform-rotate: 0;
+  }
+
+  .lg\:focus\:rotate-45:focus {
+    --transform-rotate: 45deg;
+  }
+
+  .lg\:focus\:rotate-90:focus {
+    --transform-rotate: 90deg;
+  }
+
+  .lg\:focus\:rotate-180:focus {
+    --transform-rotate: 180deg;
+  }
+
+  .lg\:focus\:-rotate-180:focus {
+    --transform-rotate: -180deg;
+  }
+
+  .lg\:focus\:-rotate-90:focus {
+    --transform-rotate: -90deg;
+  }
+
+  .lg\:focus\:-rotate-45:focus {
+    --transform-rotate: -45deg;
+  }
+
+  .lg\:translate-x-0 {
+    --transform-translate-x: 0;
+  }
+
+  .lg\:translate-x-1 {
+    --transform-translate-x: 0.25rem;
+  }
+
+  .lg\:translate-x-2 {
+    --transform-translate-x: 0.5rem;
+  }
+
+  .lg\:translate-x-3 {
+    --transform-translate-x: 0.75rem;
+  }
+
+  .lg\:translate-x-4 {
+    --transform-translate-x: 1rem;
+  }
+
+  .lg\:translate-x-5 {
+    --transform-translate-x: 1.25rem;
+  }
+
+  .lg\:translate-x-6 {
+    --transform-translate-x: 1.5rem;
+  }
+
+  .lg\:translate-x-8 {
+    --transform-translate-x: 2rem;
+  }
+
+  .lg\:translate-x-10 {
+    --transform-translate-x: 2.5rem;
+  }
+
+  .lg\:translate-x-12 {
+    --transform-translate-x: 3rem;
+  }
+
+  .lg\:translate-x-16 {
+    --transform-translate-x: 4rem;
+  }
+
+  .lg\:translate-x-20 {
+    --transform-translate-x: 5rem;
+  }
+
+  .lg\:translate-x-24 {
+    --transform-translate-x: 6rem;
+  }
+
+  .lg\:translate-x-32 {
+    --transform-translate-x: 8rem;
+  }
+
+  .lg\:translate-x-40 {
+    --transform-translate-x: 10rem;
+  }
+
+  .lg\:translate-x-48 {
+    --transform-translate-x: 12rem;
+  }
+
+  .lg\:translate-x-56 {
+    --transform-translate-x: 14rem;
+  }
+
+  .lg\:translate-x-64 {
+    --transform-translate-x: 16rem;
+  }
+
+  .lg\:translate-x-px {
+    --transform-translate-x: 1px;
+  }
+
+  .lg\:hover\:translate-x-0:hover {
+    --transform-translate-x: 0;
+  }
+
+  .lg\:hover\:translate-x-1:hover {
+    --transform-translate-x: 0.25rem;
+  }
+
+  .lg\:hover\:translate-x-2:hover {
+    --transform-translate-x: 0.5rem;
+  }
+
+  .lg\:hover\:translate-x-3:hover {
+    --transform-translate-x: 0.75rem;
+  }
+
+  .lg\:hover\:translate-x-4:hover {
+    --transform-translate-x: 1rem;
+  }
+
+  .lg\:hover\:translate-x-5:hover {
+    --transform-translate-x: 1.25rem;
+  }
+
+  .lg\:hover\:translate-x-6:hover {
+    --transform-translate-x: 1.5rem;
+  }
+
+  .lg\:hover\:translate-x-8:hover {
+    --transform-translate-x: 2rem;
+  }
+
+  .lg\:hover\:translate-x-10:hover {
+    --transform-translate-x: 2.5rem;
+  }
+
+  .lg\:hover\:translate-x-12:hover {
+    --transform-translate-x: 3rem;
+  }
+
+  .lg\:hover\:translate-x-16:hover {
+    --transform-translate-x: 4rem;
+  }
+
+  .lg\:hover\:translate-x-20:hover {
+    --transform-translate-x: 5rem;
+  }
+
+  .lg\:hover\:translate-x-24:hover {
+    --transform-translate-x: 6rem;
+  }
+
+  .lg\:hover\:translate-x-32:hover {
+    --transform-translate-x: 8rem;
+  }
+
+  .lg\:hover\:translate-x-40:hover {
+    --transform-translate-x: 10rem;
+  }
+
+  .lg\:hover\:translate-x-48:hover {
+    --transform-translate-x: 12rem;
+  }
+
+  .lg\:hover\:translate-x-56:hover {
+    --transform-translate-x: 14rem;
+  }
+
+  .lg\:hover\:translate-x-64:hover {
+    --transform-translate-x: 16rem;
+  }
+
+  .lg\:hover\:translate-x-px:hover {
+    --transform-translate-x: 1px;
+  }
+
+  .lg\:focus\:translate-x-0:focus {
+    --transform-translate-x: 0;
+  }
+
+  .lg\:focus\:translate-x-1:focus {
+    --transform-translate-x: 0.25rem;
+  }
+
+  .lg\:focus\:translate-x-2:focus {
+    --transform-translate-x: 0.5rem;
+  }
+
+  .lg\:focus\:translate-x-3:focus {
+    --transform-translate-x: 0.75rem;
+  }
+
+  .lg\:focus\:translate-x-4:focus {
+    --transform-translate-x: 1rem;
+  }
+
+  .lg\:focus\:translate-x-5:focus {
+    --transform-translate-x: 1.25rem;
+  }
+
+  .lg\:focus\:translate-x-6:focus {
+    --transform-translate-x: 1.5rem;
+  }
+
+  .lg\:focus\:translate-x-8:focus {
+    --transform-translate-x: 2rem;
+  }
+
+  .lg\:focus\:translate-x-10:focus {
+    --transform-translate-x: 2.5rem;
+  }
+
+  .lg\:focus\:translate-x-12:focus {
+    --transform-translate-x: 3rem;
+  }
+
+  .lg\:focus\:translate-x-16:focus {
+    --transform-translate-x: 4rem;
+  }
+
+  .lg\:focus\:translate-x-20:focus {
+    --transform-translate-x: 5rem;
+  }
+
+  .lg\:focus\:translate-x-24:focus {
+    --transform-translate-x: 6rem;
+  }
+
+  .lg\:focus\:translate-x-32:focus {
+    --transform-translate-x: 8rem;
+  }
+
+  .lg\:focus\:translate-x-40:focus {
+    --transform-translate-x: 10rem;
+  }
+
+  .lg\:focus\:translate-x-48:focus {
+    --transform-translate-x: 12rem;
+  }
+
+  .lg\:focus\:translate-x-56:focus {
+    --transform-translate-x: 14rem;
+  }
+
+  .lg\:focus\:translate-x-64:focus {
+    --transform-translate-x: 16rem;
+  }
+
+  .lg\:focus\:translate-x-px:focus {
+    --transform-translate-x: 1px;
+  }
+
+  .lg\:translate-y-0 {
+    --transform-translate-y: 0;
+  }
+
+  .lg\:translate-y-1 {
+    --transform-translate-y: 0.25rem;
+  }
+
+  .lg\:translate-y-2 {
+    --transform-translate-y: 0.5rem;
+  }
+
+  .lg\:translate-y-3 {
+    --transform-translate-y: 0.75rem;
+  }
+
+  .lg\:translate-y-4 {
+    --transform-translate-y: 1rem;
+  }
+
+  .lg\:translate-y-5 {
+    --transform-translate-y: 1.25rem;
+  }
+
+  .lg\:translate-y-6 {
+    --transform-translate-y: 1.5rem;
+  }
+
+  .lg\:translate-y-8 {
+    --transform-translate-y: 2rem;
+  }
+
+  .lg\:translate-y-10 {
+    --transform-translate-y: 2.5rem;
+  }
+
+  .lg\:translate-y-12 {
+    --transform-translate-y: 3rem;
+  }
+
+  .lg\:translate-y-16 {
+    --transform-translate-y: 4rem;
+  }
+
+  .lg\:translate-y-20 {
+    --transform-translate-y: 5rem;
+  }
+
+  .lg\:translate-y-24 {
+    --transform-translate-y: 6rem;
+  }
+
+  .lg\:translate-y-32 {
+    --transform-translate-y: 8rem;
+  }
+
+  .lg\:translate-y-40 {
+    --transform-translate-y: 10rem;
+  }
+
+  .lg\:translate-y-48 {
+    --transform-translate-y: 12rem;
+  }
+
+  .lg\:translate-y-56 {
+    --transform-translate-y: 14rem;
+  }
+
+  .lg\:translate-y-64 {
+    --transform-translate-y: 16rem;
+  }
+
+  .lg\:translate-y-px {
+    --transform-translate-y: 1px;
+  }
+
+  .lg\:hover\:translate-y-0:hover {
+    --transform-translate-y: 0;
+  }
+
+  .lg\:hover\:translate-y-1:hover {
+    --transform-translate-y: 0.25rem;
+  }
+
+  .lg\:hover\:translate-y-2:hover {
+    --transform-translate-y: 0.5rem;
+  }
+
+  .lg\:hover\:translate-y-3:hover {
+    --transform-translate-y: 0.75rem;
+  }
+
+  .lg\:hover\:translate-y-4:hover {
+    --transform-translate-y: 1rem;
+  }
+
+  .lg\:hover\:translate-y-5:hover {
+    --transform-translate-y: 1.25rem;
+  }
+
+  .lg\:hover\:translate-y-6:hover {
+    --transform-translate-y: 1.5rem;
+  }
+
+  .lg\:hover\:translate-y-8:hover {
+    --transform-translate-y: 2rem;
+  }
+
+  .lg\:hover\:translate-y-10:hover {
+    --transform-translate-y: 2.5rem;
+  }
+
+  .lg\:hover\:translate-y-12:hover {
+    --transform-translate-y: 3rem;
+  }
+
+  .lg\:hover\:translate-y-16:hover {
+    --transform-translate-y: 4rem;
+  }
+
+  .lg\:hover\:translate-y-20:hover {
+    --transform-translate-y: 5rem;
+  }
+
+  .lg\:hover\:translate-y-24:hover {
+    --transform-translate-y: 6rem;
+  }
+
+  .lg\:hover\:translate-y-32:hover {
+    --transform-translate-y: 8rem;
+  }
+
+  .lg\:hover\:translate-y-40:hover {
+    --transform-translate-y: 10rem;
+  }
+
+  .lg\:hover\:translate-y-48:hover {
+    --transform-translate-y: 12rem;
+  }
+
+  .lg\:hover\:translate-y-56:hover {
+    --transform-translate-y: 14rem;
+  }
+
+  .lg\:hover\:translate-y-64:hover {
+    --transform-translate-y: 16rem;
+  }
+
+  .lg\:hover\:translate-y-px:hover {
+    --transform-translate-y: 1px;
+  }
+
+  .lg\:focus\:translate-y-0:focus {
+    --transform-translate-y: 0;
+  }
+
+  .lg\:focus\:translate-y-1:focus {
+    --transform-translate-y: 0.25rem;
+  }
+
+  .lg\:focus\:translate-y-2:focus {
+    --transform-translate-y: 0.5rem;
+  }
+
+  .lg\:focus\:translate-y-3:focus {
+    --transform-translate-y: 0.75rem;
+  }
+
+  .lg\:focus\:translate-y-4:focus {
+    --transform-translate-y: 1rem;
+  }
+
+  .lg\:focus\:translate-y-5:focus {
+    --transform-translate-y: 1.25rem;
+  }
+
+  .lg\:focus\:translate-y-6:focus {
+    --transform-translate-y: 1.5rem;
+  }
+
+  .lg\:focus\:translate-y-8:focus {
+    --transform-translate-y: 2rem;
+  }
+
+  .lg\:focus\:translate-y-10:focus {
+    --transform-translate-y: 2.5rem;
+  }
+
+  .lg\:focus\:translate-y-12:focus {
+    --transform-translate-y: 3rem;
+  }
+
+  .lg\:focus\:translate-y-16:focus {
+    --transform-translate-y: 4rem;
+  }
+
+  .lg\:focus\:translate-y-20:focus {
+    --transform-translate-y: 5rem;
+  }
+
+  .lg\:focus\:translate-y-24:focus {
+    --transform-translate-y: 6rem;
+  }
+
+  .lg\:focus\:translate-y-32:focus {
+    --transform-translate-y: 8rem;
+  }
+
+  .lg\:focus\:translate-y-40:focus {
+    --transform-translate-y: 10rem;
+  }
+
+  .lg\:focus\:translate-y-48:focus {
+    --transform-translate-y: 12rem;
+  }
+
+  .lg\:focus\:translate-y-56:focus {
+    --transform-translate-y: 14rem;
+  }
+
+  .lg\:focus\:translate-y-64:focus {
+    --transform-translate-y: 16rem;
+  }
+
+  .lg\:focus\:translate-y-px:focus {
+    --transform-translate-y: 1px;
+  }
+
   .lg\:example {
     font-weight: 700;
     color: #f56565;
@@ -39294,6 +42110,710 @@ video {
 
   .xl\:z-auto {
     z-index: auto;
+  }
+
+  .xl\:transform {
+    transform: scale(var(--transform-scale, 1)) rotate(var(--transform-rotate, 0)) translateX(var(--transform-translate-x, 0)) translateY(var(--transform-translate-y, 0));
+  }
+
+  .xl\:transform-none {
+    transform: none;
+  }
+
+  .xl\:origin-center {
+    transform-origin: center;
+  }
+
+  .xl\:origin-top {
+    transform-origin: top;
+  }
+
+  .xl\:origin-top-right {
+    transform-origin: top right;
+  }
+
+  .xl\:origin-right {
+    transform-origin: right;
+  }
+
+  .xl\:origin-bottom-right {
+    transform-origin: bottom right;
+  }
+
+  .xl\:origin-bottom {
+    transform-origin: bottom;
+  }
+
+  .xl\:origin-bottom-left {
+    transform-origin: bottom left;
+  }
+
+  .xl\:origin-left {
+    transform-origin: left;
+  }
+
+  .xl\:origin-top-left {
+    transform-origin: top left;
+  }
+
+  .xl\:scale-0 {
+    --transform-scale: 0;
+  }
+
+  .xl\:scale-50 {
+    --transform-scale: .5;
+  }
+
+  .xl\:scale-75 {
+    --transform-scale: .75;
+  }
+
+  .xl\:scale-90 {
+    --transform-scale: .9;
+  }
+
+  .xl\:scale-95 {
+    --transform-scale: .95;
+  }
+
+  .xl\:scale-100 {
+    --transform-scale: 1;
+  }
+
+  .xl\:scale-105 {
+    --transform-scale: 1.05;
+  }
+
+  .xl\:scale-110 {
+    --transform-scale: 1.1;
+  }
+
+  .xl\:scale-125 {
+    --transform-scale: 1.25;
+  }
+
+  .xl\:scale-150 {
+    --transform-scale: 1.5;
+  }
+
+  .xl\:hover\:scale-0:hover {
+    --transform-scale: 0;
+  }
+
+  .xl\:hover\:scale-50:hover {
+    --transform-scale: .5;
+  }
+
+  .xl\:hover\:scale-75:hover {
+    --transform-scale: .75;
+  }
+
+  .xl\:hover\:scale-90:hover {
+    --transform-scale: .9;
+  }
+
+  .xl\:hover\:scale-95:hover {
+    --transform-scale: .95;
+  }
+
+  .xl\:hover\:scale-100:hover {
+    --transform-scale: 1;
+  }
+
+  .xl\:hover\:scale-105:hover {
+    --transform-scale: 1.05;
+  }
+
+  .xl\:hover\:scale-110:hover {
+    --transform-scale: 1.1;
+  }
+
+  .xl\:hover\:scale-125:hover {
+    --transform-scale: 1.25;
+  }
+
+  .xl\:hover\:scale-150:hover {
+    --transform-scale: 1.5;
+  }
+
+  .xl\:focus\:scale-0:focus {
+    --transform-scale: 0;
+  }
+
+  .xl\:focus\:scale-50:focus {
+    --transform-scale: .5;
+  }
+
+  .xl\:focus\:scale-75:focus {
+    --transform-scale: .75;
+  }
+
+  .xl\:focus\:scale-90:focus {
+    --transform-scale: .9;
+  }
+
+  .xl\:focus\:scale-95:focus {
+    --transform-scale: .95;
+  }
+
+  .xl\:focus\:scale-100:focus {
+    --transform-scale: 1;
+  }
+
+  .xl\:focus\:scale-105:focus {
+    --transform-scale: 1.05;
+  }
+
+  .xl\:focus\:scale-110:focus {
+    --transform-scale: 1.1;
+  }
+
+  .xl\:focus\:scale-125:focus {
+    --transform-scale: 1.25;
+  }
+
+  .xl\:focus\:scale-150:focus {
+    --transform-scale: 1.5;
+  }
+
+  .xl\:rotate-0 {
+    --transform-rotate: 0;
+  }
+
+  .xl\:rotate-45 {
+    --transform-rotate: 45deg;
+  }
+
+  .xl\:rotate-90 {
+    --transform-rotate: 90deg;
+  }
+
+  .xl\:rotate-180 {
+    --transform-rotate: 180deg;
+  }
+
+  .xl\:-rotate-180 {
+    --transform-rotate: -180deg;
+  }
+
+  .xl\:-rotate-90 {
+    --transform-rotate: -90deg;
+  }
+
+  .xl\:-rotate-45 {
+    --transform-rotate: -45deg;
+  }
+
+  .xl\:hover\:rotate-0:hover {
+    --transform-rotate: 0;
+  }
+
+  .xl\:hover\:rotate-45:hover {
+    --transform-rotate: 45deg;
+  }
+
+  .xl\:hover\:rotate-90:hover {
+    --transform-rotate: 90deg;
+  }
+
+  .xl\:hover\:rotate-180:hover {
+    --transform-rotate: 180deg;
+  }
+
+  .xl\:hover\:-rotate-180:hover {
+    --transform-rotate: -180deg;
+  }
+
+  .xl\:hover\:-rotate-90:hover {
+    --transform-rotate: -90deg;
+  }
+
+  .xl\:hover\:-rotate-45:hover {
+    --transform-rotate: -45deg;
+  }
+
+  .xl\:focus\:rotate-0:focus {
+    --transform-rotate: 0;
+  }
+
+  .xl\:focus\:rotate-45:focus {
+    --transform-rotate: 45deg;
+  }
+
+  .xl\:focus\:rotate-90:focus {
+    --transform-rotate: 90deg;
+  }
+
+  .xl\:focus\:rotate-180:focus {
+    --transform-rotate: 180deg;
+  }
+
+  .xl\:focus\:-rotate-180:focus {
+    --transform-rotate: -180deg;
+  }
+
+  .xl\:focus\:-rotate-90:focus {
+    --transform-rotate: -90deg;
+  }
+
+  .xl\:focus\:-rotate-45:focus {
+    --transform-rotate: -45deg;
+  }
+
+  .xl\:translate-x-0 {
+    --transform-translate-x: 0;
+  }
+
+  .xl\:translate-x-1 {
+    --transform-translate-x: 0.25rem;
+  }
+
+  .xl\:translate-x-2 {
+    --transform-translate-x: 0.5rem;
+  }
+
+  .xl\:translate-x-3 {
+    --transform-translate-x: 0.75rem;
+  }
+
+  .xl\:translate-x-4 {
+    --transform-translate-x: 1rem;
+  }
+
+  .xl\:translate-x-5 {
+    --transform-translate-x: 1.25rem;
+  }
+
+  .xl\:translate-x-6 {
+    --transform-translate-x: 1.5rem;
+  }
+
+  .xl\:translate-x-8 {
+    --transform-translate-x: 2rem;
+  }
+
+  .xl\:translate-x-10 {
+    --transform-translate-x: 2.5rem;
+  }
+
+  .xl\:translate-x-12 {
+    --transform-translate-x: 3rem;
+  }
+
+  .xl\:translate-x-16 {
+    --transform-translate-x: 4rem;
+  }
+
+  .xl\:translate-x-20 {
+    --transform-translate-x: 5rem;
+  }
+
+  .xl\:translate-x-24 {
+    --transform-translate-x: 6rem;
+  }
+
+  .xl\:translate-x-32 {
+    --transform-translate-x: 8rem;
+  }
+
+  .xl\:translate-x-40 {
+    --transform-translate-x: 10rem;
+  }
+
+  .xl\:translate-x-48 {
+    --transform-translate-x: 12rem;
+  }
+
+  .xl\:translate-x-56 {
+    --transform-translate-x: 14rem;
+  }
+
+  .xl\:translate-x-64 {
+    --transform-translate-x: 16rem;
+  }
+
+  .xl\:translate-x-px {
+    --transform-translate-x: 1px;
+  }
+
+  .xl\:hover\:translate-x-0:hover {
+    --transform-translate-x: 0;
+  }
+
+  .xl\:hover\:translate-x-1:hover {
+    --transform-translate-x: 0.25rem;
+  }
+
+  .xl\:hover\:translate-x-2:hover {
+    --transform-translate-x: 0.5rem;
+  }
+
+  .xl\:hover\:translate-x-3:hover {
+    --transform-translate-x: 0.75rem;
+  }
+
+  .xl\:hover\:translate-x-4:hover {
+    --transform-translate-x: 1rem;
+  }
+
+  .xl\:hover\:translate-x-5:hover {
+    --transform-translate-x: 1.25rem;
+  }
+
+  .xl\:hover\:translate-x-6:hover {
+    --transform-translate-x: 1.5rem;
+  }
+
+  .xl\:hover\:translate-x-8:hover {
+    --transform-translate-x: 2rem;
+  }
+
+  .xl\:hover\:translate-x-10:hover {
+    --transform-translate-x: 2.5rem;
+  }
+
+  .xl\:hover\:translate-x-12:hover {
+    --transform-translate-x: 3rem;
+  }
+
+  .xl\:hover\:translate-x-16:hover {
+    --transform-translate-x: 4rem;
+  }
+
+  .xl\:hover\:translate-x-20:hover {
+    --transform-translate-x: 5rem;
+  }
+
+  .xl\:hover\:translate-x-24:hover {
+    --transform-translate-x: 6rem;
+  }
+
+  .xl\:hover\:translate-x-32:hover {
+    --transform-translate-x: 8rem;
+  }
+
+  .xl\:hover\:translate-x-40:hover {
+    --transform-translate-x: 10rem;
+  }
+
+  .xl\:hover\:translate-x-48:hover {
+    --transform-translate-x: 12rem;
+  }
+
+  .xl\:hover\:translate-x-56:hover {
+    --transform-translate-x: 14rem;
+  }
+
+  .xl\:hover\:translate-x-64:hover {
+    --transform-translate-x: 16rem;
+  }
+
+  .xl\:hover\:translate-x-px:hover {
+    --transform-translate-x: 1px;
+  }
+
+  .xl\:focus\:translate-x-0:focus {
+    --transform-translate-x: 0;
+  }
+
+  .xl\:focus\:translate-x-1:focus {
+    --transform-translate-x: 0.25rem;
+  }
+
+  .xl\:focus\:translate-x-2:focus {
+    --transform-translate-x: 0.5rem;
+  }
+
+  .xl\:focus\:translate-x-3:focus {
+    --transform-translate-x: 0.75rem;
+  }
+
+  .xl\:focus\:translate-x-4:focus {
+    --transform-translate-x: 1rem;
+  }
+
+  .xl\:focus\:translate-x-5:focus {
+    --transform-translate-x: 1.25rem;
+  }
+
+  .xl\:focus\:translate-x-6:focus {
+    --transform-translate-x: 1.5rem;
+  }
+
+  .xl\:focus\:translate-x-8:focus {
+    --transform-translate-x: 2rem;
+  }
+
+  .xl\:focus\:translate-x-10:focus {
+    --transform-translate-x: 2.5rem;
+  }
+
+  .xl\:focus\:translate-x-12:focus {
+    --transform-translate-x: 3rem;
+  }
+
+  .xl\:focus\:translate-x-16:focus {
+    --transform-translate-x: 4rem;
+  }
+
+  .xl\:focus\:translate-x-20:focus {
+    --transform-translate-x: 5rem;
+  }
+
+  .xl\:focus\:translate-x-24:focus {
+    --transform-translate-x: 6rem;
+  }
+
+  .xl\:focus\:translate-x-32:focus {
+    --transform-translate-x: 8rem;
+  }
+
+  .xl\:focus\:translate-x-40:focus {
+    --transform-translate-x: 10rem;
+  }
+
+  .xl\:focus\:translate-x-48:focus {
+    --transform-translate-x: 12rem;
+  }
+
+  .xl\:focus\:translate-x-56:focus {
+    --transform-translate-x: 14rem;
+  }
+
+  .xl\:focus\:translate-x-64:focus {
+    --transform-translate-x: 16rem;
+  }
+
+  .xl\:focus\:translate-x-px:focus {
+    --transform-translate-x: 1px;
+  }
+
+  .xl\:translate-y-0 {
+    --transform-translate-y: 0;
+  }
+
+  .xl\:translate-y-1 {
+    --transform-translate-y: 0.25rem;
+  }
+
+  .xl\:translate-y-2 {
+    --transform-translate-y: 0.5rem;
+  }
+
+  .xl\:translate-y-3 {
+    --transform-translate-y: 0.75rem;
+  }
+
+  .xl\:translate-y-4 {
+    --transform-translate-y: 1rem;
+  }
+
+  .xl\:translate-y-5 {
+    --transform-translate-y: 1.25rem;
+  }
+
+  .xl\:translate-y-6 {
+    --transform-translate-y: 1.5rem;
+  }
+
+  .xl\:translate-y-8 {
+    --transform-translate-y: 2rem;
+  }
+
+  .xl\:translate-y-10 {
+    --transform-translate-y: 2.5rem;
+  }
+
+  .xl\:translate-y-12 {
+    --transform-translate-y: 3rem;
+  }
+
+  .xl\:translate-y-16 {
+    --transform-translate-y: 4rem;
+  }
+
+  .xl\:translate-y-20 {
+    --transform-translate-y: 5rem;
+  }
+
+  .xl\:translate-y-24 {
+    --transform-translate-y: 6rem;
+  }
+
+  .xl\:translate-y-32 {
+    --transform-translate-y: 8rem;
+  }
+
+  .xl\:translate-y-40 {
+    --transform-translate-y: 10rem;
+  }
+
+  .xl\:translate-y-48 {
+    --transform-translate-y: 12rem;
+  }
+
+  .xl\:translate-y-56 {
+    --transform-translate-y: 14rem;
+  }
+
+  .xl\:translate-y-64 {
+    --transform-translate-y: 16rem;
+  }
+
+  .xl\:translate-y-px {
+    --transform-translate-y: 1px;
+  }
+
+  .xl\:hover\:translate-y-0:hover {
+    --transform-translate-y: 0;
+  }
+
+  .xl\:hover\:translate-y-1:hover {
+    --transform-translate-y: 0.25rem;
+  }
+
+  .xl\:hover\:translate-y-2:hover {
+    --transform-translate-y: 0.5rem;
+  }
+
+  .xl\:hover\:translate-y-3:hover {
+    --transform-translate-y: 0.75rem;
+  }
+
+  .xl\:hover\:translate-y-4:hover {
+    --transform-translate-y: 1rem;
+  }
+
+  .xl\:hover\:translate-y-5:hover {
+    --transform-translate-y: 1.25rem;
+  }
+
+  .xl\:hover\:translate-y-6:hover {
+    --transform-translate-y: 1.5rem;
+  }
+
+  .xl\:hover\:translate-y-8:hover {
+    --transform-translate-y: 2rem;
+  }
+
+  .xl\:hover\:translate-y-10:hover {
+    --transform-translate-y: 2.5rem;
+  }
+
+  .xl\:hover\:translate-y-12:hover {
+    --transform-translate-y: 3rem;
+  }
+
+  .xl\:hover\:translate-y-16:hover {
+    --transform-translate-y: 4rem;
+  }
+
+  .xl\:hover\:translate-y-20:hover {
+    --transform-translate-y: 5rem;
+  }
+
+  .xl\:hover\:translate-y-24:hover {
+    --transform-translate-y: 6rem;
+  }
+
+  .xl\:hover\:translate-y-32:hover {
+    --transform-translate-y: 8rem;
+  }
+
+  .xl\:hover\:translate-y-40:hover {
+    --transform-translate-y: 10rem;
+  }
+
+  .xl\:hover\:translate-y-48:hover {
+    --transform-translate-y: 12rem;
+  }
+
+  .xl\:hover\:translate-y-56:hover {
+    --transform-translate-y: 14rem;
+  }
+
+  .xl\:hover\:translate-y-64:hover {
+    --transform-translate-y: 16rem;
+  }
+
+  .xl\:hover\:translate-y-px:hover {
+    --transform-translate-y: 1px;
+  }
+
+  .xl\:focus\:translate-y-0:focus {
+    --transform-translate-y: 0;
+  }
+
+  .xl\:focus\:translate-y-1:focus {
+    --transform-translate-y: 0.25rem;
+  }
+
+  .xl\:focus\:translate-y-2:focus {
+    --transform-translate-y: 0.5rem;
+  }
+
+  .xl\:focus\:translate-y-3:focus {
+    --transform-translate-y: 0.75rem;
+  }
+
+  .xl\:focus\:translate-y-4:focus {
+    --transform-translate-y: 1rem;
+  }
+
+  .xl\:focus\:translate-y-5:focus {
+    --transform-translate-y: 1.25rem;
+  }
+
+  .xl\:focus\:translate-y-6:focus {
+    --transform-translate-y: 1.5rem;
+  }
+
+  .xl\:focus\:translate-y-8:focus {
+    --transform-translate-y: 2rem;
+  }
+
+  .xl\:focus\:translate-y-10:focus {
+    --transform-translate-y: 2.5rem;
+  }
+
+  .xl\:focus\:translate-y-12:focus {
+    --transform-translate-y: 3rem;
+  }
+
+  .xl\:focus\:translate-y-16:focus {
+    --transform-translate-y: 4rem;
+  }
+
+  .xl\:focus\:translate-y-20:focus {
+    --transform-translate-y: 5rem;
+  }
+
+  .xl\:focus\:translate-y-24:focus {
+    --transform-translate-y: 6rem;
+  }
+
+  .xl\:focus\:translate-y-32:focus {
+    --transform-translate-y: 8rem;
+  }
+
+  .xl\:focus\:translate-y-40:focus {
+    --transform-translate-y: 10rem;
+  }
+
+  .xl\:focus\:translate-y-48:focus {
+    --transform-translate-y: 12rem;
+  }
+
+  .xl\:focus\:translate-y-56:focus {
+    --transform-translate-y: 14rem;
+  }
+
+  .xl\:focus\:translate-y-64:focus {
+    --transform-translate-y: 16rem;
+  }
+
+  .xl\:focus\:translate-y-px:focus {
+    --transform-translate-y: 1px;
   }
 
   .xl\:example {
