@@ -8338,11 +8338,12 @@ video {
 }
 
 .transform {
-  --transform-scale: 1;
+  --transform-scale-x: 1;
+  --transform-scale-y: 1;
   --transform-rotate: 0;
   --transform-translate-x: 0;
   --transform-translate-y: 0;
-  transform: scale(var(--transform-scale)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y));
+  transform: scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y));
 }
 
 .transform-none {
@@ -8386,123 +8387,393 @@ video {
 }
 
 .scale-0 {
-  --transform-scale: 0;
+  --transform-scale-x: 0;
+  --transform-scale-y: 0;
 }
 
 .scale-50 {
-  --transform-scale: .5;
+  --transform-scale-x: .5;
+  --transform-scale-y: .5;
 }
 
 .scale-75 {
-  --transform-scale: .75;
+  --transform-scale-x: .75;
+  --transform-scale-y: .75;
 }
 
 .scale-90 {
-  --transform-scale: .9;
+  --transform-scale-x: .9;
+  --transform-scale-y: .9;
 }
 
 .scale-95 {
-  --transform-scale: .95;
+  --transform-scale-x: .95;
+  --transform-scale-y: .95;
 }
 
 .scale-100 {
-  --transform-scale: 1;
+  --transform-scale-x: 1;
+  --transform-scale-y: 1;
 }
 
 .scale-105 {
-  --transform-scale: 1.05;
+  --transform-scale-x: 1.05;
+  --transform-scale-y: 1.05;
 }
 
 .scale-110 {
-  --transform-scale: 1.1;
+  --transform-scale-x: 1.1;
+  --transform-scale-y: 1.1;
 }
 
 .scale-125 {
-  --transform-scale: 1.25;
+  --transform-scale-x: 1.25;
+  --transform-scale-y: 1.25;
 }
 
 .scale-150 {
-  --transform-scale: 1.5;
+  --transform-scale-x: 1.5;
+  --transform-scale-y: 1.5;
+}
+
+.scale-x-0 {
+  --transform-scale-x: 0;
+}
+
+.scale-x-50 {
+  --transform-scale-x: .5;
+}
+
+.scale-x-75 {
+  --transform-scale-x: .75;
+}
+
+.scale-x-90 {
+  --transform-scale-x: .9;
+}
+
+.scale-x-95 {
+  --transform-scale-x: .95;
+}
+
+.scale-x-100 {
+  --transform-scale-x: 1;
+}
+
+.scale-x-105 {
+  --transform-scale-x: 1.05;
+}
+
+.scale-x-110 {
+  --transform-scale-x: 1.1;
+}
+
+.scale-x-125 {
+  --transform-scale-x: 1.25;
+}
+
+.scale-x-150 {
+  --transform-scale-x: 1.5;
+}
+
+.scale-y-0 {
+  --transform-scale-y: 0;
+}
+
+.scale-y-50 {
+  --transform-scale-y: .5;
+}
+
+.scale-y-75 {
+  --transform-scale-y: .75;
+}
+
+.scale-y-90 {
+  --transform-scale-y: .9;
+}
+
+.scale-y-95 {
+  --transform-scale-y: .95;
+}
+
+.scale-y-100 {
+  --transform-scale-y: 1;
+}
+
+.scale-y-105 {
+  --transform-scale-y: 1.05;
+}
+
+.scale-y-110 {
+  --transform-scale-y: 1.1;
+}
+
+.scale-y-125 {
+  --transform-scale-y: 1.25;
+}
+
+.scale-y-150 {
+  --transform-scale-y: 1.5;
 }
 
 .hover\:scale-0:hover {
-  --transform-scale: 0;
+  --transform-scale-x: 0;
+  --transform-scale-y: 0;
 }
 
 .hover\:scale-50:hover {
-  --transform-scale: .5;
+  --transform-scale-x: .5;
+  --transform-scale-y: .5;
 }
 
 .hover\:scale-75:hover {
-  --transform-scale: .75;
+  --transform-scale-x: .75;
+  --transform-scale-y: .75;
 }
 
 .hover\:scale-90:hover {
-  --transform-scale: .9;
+  --transform-scale-x: .9;
+  --transform-scale-y: .9;
 }
 
 .hover\:scale-95:hover {
-  --transform-scale: .95;
+  --transform-scale-x: .95;
+  --transform-scale-y: .95;
 }
 
 .hover\:scale-100:hover {
-  --transform-scale: 1;
+  --transform-scale-x: 1;
+  --transform-scale-y: 1;
 }
 
 .hover\:scale-105:hover {
-  --transform-scale: 1.05;
+  --transform-scale-x: 1.05;
+  --transform-scale-y: 1.05;
 }
 
 .hover\:scale-110:hover {
-  --transform-scale: 1.1;
+  --transform-scale-x: 1.1;
+  --transform-scale-y: 1.1;
 }
 
 .hover\:scale-125:hover {
-  --transform-scale: 1.25;
+  --transform-scale-x: 1.25;
+  --transform-scale-y: 1.25;
 }
 
 .hover\:scale-150:hover {
-  --transform-scale: 1.5;
+  --transform-scale-x: 1.5;
+  --transform-scale-y: 1.5;
+}
+
+.hover\:scale-x-0:hover {
+  --transform-scale-x: 0;
+}
+
+.hover\:scale-x-50:hover {
+  --transform-scale-x: .5;
+}
+
+.hover\:scale-x-75:hover {
+  --transform-scale-x: .75;
+}
+
+.hover\:scale-x-90:hover {
+  --transform-scale-x: .9;
+}
+
+.hover\:scale-x-95:hover {
+  --transform-scale-x: .95;
+}
+
+.hover\:scale-x-100:hover {
+  --transform-scale-x: 1;
+}
+
+.hover\:scale-x-105:hover {
+  --transform-scale-x: 1.05;
+}
+
+.hover\:scale-x-110:hover {
+  --transform-scale-x: 1.1;
+}
+
+.hover\:scale-x-125:hover {
+  --transform-scale-x: 1.25;
+}
+
+.hover\:scale-x-150:hover {
+  --transform-scale-x: 1.5;
+}
+
+.hover\:scale-y-0:hover {
+  --transform-scale-y: 0;
+}
+
+.hover\:scale-y-50:hover {
+  --transform-scale-y: .5;
+}
+
+.hover\:scale-y-75:hover {
+  --transform-scale-y: .75;
+}
+
+.hover\:scale-y-90:hover {
+  --transform-scale-y: .9;
+}
+
+.hover\:scale-y-95:hover {
+  --transform-scale-y: .95;
+}
+
+.hover\:scale-y-100:hover {
+  --transform-scale-y: 1;
+}
+
+.hover\:scale-y-105:hover {
+  --transform-scale-y: 1.05;
+}
+
+.hover\:scale-y-110:hover {
+  --transform-scale-y: 1.1;
+}
+
+.hover\:scale-y-125:hover {
+  --transform-scale-y: 1.25;
+}
+
+.hover\:scale-y-150:hover {
+  --transform-scale-y: 1.5;
 }
 
 .focus\:scale-0:focus {
-  --transform-scale: 0;
+  --transform-scale-x: 0;
+  --transform-scale-y: 0;
 }
 
 .focus\:scale-50:focus {
-  --transform-scale: .5;
+  --transform-scale-x: .5;
+  --transform-scale-y: .5;
 }
 
 .focus\:scale-75:focus {
-  --transform-scale: .75;
+  --transform-scale-x: .75;
+  --transform-scale-y: .75;
 }
 
 .focus\:scale-90:focus {
-  --transform-scale: .9;
+  --transform-scale-x: .9;
+  --transform-scale-y: .9;
 }
 
 .focus\:scale-95:focus {
-  --transform-scale: .95;
+  --transform-scale-x: .95;
+  --transform-scale-y: .95;
 }
 
 .focus\:scale-100:focus {
-  --transform-scale: 1;
+  --transform-scale-x: 1;
+  --transform-scale-y: 1;
 }
 
 .focus\:scale-105:focus {
-  --transform-scale: 1.05;
+  --transform-scale-x: 1.05;
+  --transform-scale-y: 1.05;
 }
 
 .focus\:scale-110:focus {
-  --transform-scale: 1.1;
+  --transform-scale-x: 1.1;
+  --transform-scale-y: 1.1;
 }
 
 .focus\:scale-125:focus {
-  --transform-scale: 1.25;
+  --transform-scale-x: 1.25;
+  --transform-scale-y: 1.25;
 }
 
 .focus\:scale-150:focus {
-  --transform-scale: 1.5;
+  --transform-scale-x: 1.5;
+  --transform-scale-y: 1.5;
+}
+
+.focus\:scale-x-0:focus {
+  --transform-scale-x: 0;
+}
+
+.focus\:scale-x-50:focus {
+  --transform-scale-x: .5;
+}
+
+.focus\:scale-x-75:focus {
+  --transform-scale-x: .75;
+}
+
+.focus\:scale-x-90:focus {
+  --transform-scale-x: .9;
+}
+
+.focus\:scale-x-95:focus {
+  --transform-scale-x: .95;
+}
+
+.focus\:scale-x-100:focus {
+  --transform-scale-x: 1;
+}
+
+.focus\:scale-x-105:focus {
+  --transform-scale-x: 1.05;
+}
+
+.focus\:scale-x-110:focus {
+  --transform-scale-x: 1.1;
+}
+
+.focus\:scale-x-125:focus {
+  --transform-scale-x: 1.25;
+}
+
+.focus\:scale-x-150:focus {
+  --transform-scale-x: 1.5;
+}
+
+.focus\:scale-y-0:focus {
+  --transform-scale-y: 0;
+}
+
+.focus\:scale-y-50:focus {
+  --transform-scale-y: .5;
+}
+
+.focus\:scale-y-75:focus {
+  --transform-scale-y: .75;
+}
+
+.focus\:scale-y-90:focus {
+  --transform-scale-y: .9;
+}
+
+.focus\:scale-y-95:focus {
+  --transform-scale-y: .95;
+}
+
+.focus\:scale-y-100:focus {
+  --transform-scale-y: 1;
+}
+
+.focus\:scale-y-105:focus {
+  --transform-scale-y: 1.05;
+}
+
+.focus\:scale-y-110:focus {
+  --transform-scale-y: 1.1;
+}
+
+.focus\:scale-y-125:focus {
+  --transform-scale-y: 1.25;
+}
+
+.focus\:scale-y-150:focus {
+  --transform-scale-y: 1.5;
 }
 
 .rotate-0 {
@@ -17313,11 +17584,12 @@ video {
   }
 
   .sm\:transform {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
     --transform-rotate: 0;
     --transform-translate-x: 0;
     --transform-translate-y: 0;
-    transform: scale(var(--transform-scale)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y));
+    transform: scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y));
   }
 
   .sm\:transform-none {
@@ -17361,123 +17633,393 @@ video {
   }
 
   .sm\:scale-0 {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .sm\:scale-50 {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .sm\:scale-75 {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .sm\:scale-90 {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .sm\:scale-95 {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .sm\:scale-100 {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .sm\:scale-105 {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .sm\:scale-110 {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .sm\:scale-125 {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .sm\:scale-150 {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
+  }
+
+  .sm\:scale-x-0 {
+    --transform-scale-x: 0;
+  }
+
+  .sm\:scale-x-50 {
+    --transform-scale-x: .5;
+  }
+
+  .sm\:scale-x-75 {
+    --transform-scale-x: .75;
+  }
+
+  .sm\:scale-x-90 {
+    --transform-scale-x: .9;
+  }
+
+  .sm\:scale-x-95 {
+    --transform-scale-x: .95;
+  }
+
+  .sm\:scale-x-100 {
+    --transform-scale-x: 1;
+  }
+
+  .sm\:scale-x-105 {
+    --transform-scale-x: 1.05;
+  }
+
+  .sm\:scale-x-110 {
+    --transform-scale-x: 1.1;
+  }
+
+  .sm\:scale-x-125 {
+    --transform-scale-x: 1.25;
+  }
+
+  .sm\:scale-x-150 {
+    --transform-scale-x: 1.5;
+  }
+
+  .sm\:scale-y-0 {
+    --transform-scale-y: 0;
+  }
+
+  .sm\:scale-y-50 {
+    --transform-scale-y: .5;
+  }
+
+  .sm\:scale-y-75 {
+    --transform-scale-y: .75;
+  }
+
+  .sm\:scale-y-90 {
+    --transform-scale-y: .9;
+  }
+
+  .sm\:scale-y-95 {
+    --transform-scale-y: .95;
+  }
+
+  .sm\:scale-y-100 {
+    --transform-scale-y: 1;
+  }
+
+  .sm\:scale-y-105 {
+    --transform-scale-y: 1.05;
+  }
+
+  .sm\:scale-y-110 {
+    --transform-scale-y: 1.1;
+  }
+
+  .sm\:scale-y-125 {
+    --transform-scale-y: 1.25;
+  }
+
+  .sm\:scale-y-150 {
+    --transform-scale-y: 1.5;
   }
 
   .sm\:hover\:scale-0:hover {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .sm\:hover\:scale-50:hover {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .sm\:hover\:scale-75:hover {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .sm\:hover\:scale-90:hover {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .sm\:hover\:scale-95:hover {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .sm\:hover\:scale-100:hover {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .sm\:hover\:scale-105:hover {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .sm\:hover\:scale-110:hover {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .sm\:hover\:scale-125:hover {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .sm\:hover\:scale-150:hover {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
+  }
+
+  .sm\:hover\:scale-x-0:hover {
+    --transform-scale-x: 0;
+  }
+
+  .sm\:hover\:scale-x-50:hover {
+    --transform-scale-x: .5;
+  }
+
+  .sm\:hover\:scale-x-75:hover {
+    --transform-scale-x: .75;
+  }
+
+  .sm\:hover\:scale-x-90:hover {
+    --transform-scale-x: .9;
+  }
+
+  .sm\:hover\:scale-x-95:hover {
+    --transform-scale-x: .95;
+  }
+
+  .sm\:hover\:scale-x-100:hover {
+    --transform-scale-x: 1;
+  }
+
+  .sm\:hover\:scale-x-105:hover {
+    --transform-scale-x: 1.05;
+  }
+
+  .sm\:hover\:scale-x-110:hover {
+    --transform-scale-x: 1.1;
+  }
+
+  .sm\:hover\:scale-x-125:hover {
+    --transform-scale-x: 1.25;
+  }
+
+  .sm\:hover\:scale-x-150:hover {
+    --transform-scale-x: 1.5;
+  }
+
+  .sm\:hover\:scale-y-0:hover {
+    --transform-scale-y: 0;
+  }
+
+  .sm\:hover\:scale-y-50:hover {
+    --transform-scale-y: .5;
+  }
+
+  .sm\:hover\:scale-y-75:hover {
+    --transform-scale-y: .75;
+  }
+
+  .sm\:hover\:scale-y-90:hover {
+    --transform-scale-y: .9;
+  }
+
+  .sm\:hover\:scale-y-95:hover {
+    --transform-scale-y: .95;
+  }
+
+  .sm\:hover\:scale-y-100:hover {
+    --transform-scale-y: 1;
+  }
+
+  .sm\:hover\:scale-y-105:hover {
+    --transform-scale-y: 1.05;
+  }
+
+  .sm\:hover\:scale-y-110:hover {
+    --transform-scale-y: 1.1;
+  }
+
+  .sm\:hover\:scale-y-125:hover {
+    --transform-scale-y: 1.25;
+  }
+
+  .sm\:hover\:scale-y-150:hover {
+    --transform-scale-y: 1.5;
   }
 
   .sm\:focus\:scale-0:focus {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .sm\:focus\:scale-50:focus {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .sm\:focus\:scale-75:focus {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .sm\:focus\:scale-90:focus {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .sm\:focus\:scale-95:focus {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .sm\:focus\:scale-100:focus {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .sm\:focus\:scale-105:focus {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .sm\:focus\:scale-110:focus {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .sm\:focus\:scale-125:focus {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .sm\:focus\:scale-150:focus {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
+  }
+
+  .sm\:focus\:scale-x-0:focus {
+    --transform-scale-x: 0;
+  }
+
+  .sm\:focus\:scale-x-50:focus {
+    --transform-scale-x: .5;
+  }
+
+  .sm\:focus\:scale-x-75:focus {
+    --transform-scale-x: .75;
+  }
+
+  .sm\:focus\:scale-x-90:focus {
+    --transform-scale-x: .9;
+  }
+
+  .sm\:focus\:scale-x-95:focus {
+    --transform-scale-x: .95;
+  }
+
+  .sm\:focus\:scale-x-100:focus {
+    --transform-scale-x: 1;
+  }
+
+  .sm\:focus\:scale-x-105:focus {
+    --transform-scale-x: 1.05;
+  }
+
+  .sm\:focus\:scale-x-110:focus {
+    --transform-scale-x: 1.1;
+  }
+
+  .sm\:focus\:scale-x-125:focus {
+    --transform-scale-x: 1.25;
+  }
+
+  .sm\:focus\:scale-x-150:focus {
+    --transform-scale-x: 1.5;
+  }
+
+  .sm\:focus\:scale-y-0:focus {
+    --transform-scale-y: 0;
+  }
+
+  .sm\:focus\:scale-y-50:focus {
+    --transform-scale-y: .5;
+  }
+
+  .sm\:focus\:scale-y-75:focus {
+    --transform-scale-y: .75;
+  }
+
+  .sm\:focus\:scale-y-90:focus {
+    --transform-scale-y: .9;
+  }
+
+  .sm\:focus\:scale-y-95:focus {
+    --transform-scale-y: .95;
+  }
+
+  .sm\:focus\:scale-y-100:focus {
+    --transform-scale-y: 1;
+  }
+
+  .sm\:focus\:scale-y-105:focus {
+    --transform-scale-y: 1.05;
+  }
+
+  .sm\:focus\:scale-y-110:focus {
+    --transform-scale-y: 1.1;
+  }
+
+  .sm\:focus\:scale-y-125:focus {
+    --transform-scale-y: 1.25;
+  }
+
+  .sm\:focus\:scale-y-150:focus {
+    --transform-scale-y: 1.5;
   }
 
   .sm\:rotate-0 {
@@ -26289,11 +26831,12 @@ video {
   }
 
   .md\:transform {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
     --transform-rotate: 0;
     --transform-translate-x: 0;
     --transform-translate-y: 0;
-    transform: scale(var(--transform-scale)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y));
+    transform: scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y));
   }
 
   .md\:transform-none {
@@ -26337,123 +26880,393 @@ video {
   }
 
   .md\:scale-0 {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .md\:scale-50 {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .md\:scale-75 {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .md\:scale-90 {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .md\:scale-95 {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .md\:scale-100 {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .md\:scale-105 {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .md\:scale-110 {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .md\:scale-125 {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .md\:scale-150 {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
+  }
+
+  .md\:scale-x-0 {
+    --transform-scale-x: 0;
+  }
+
+  .md\:scale-x-50 {
+    --transform-scale-x: .5;
+  }
+
+  .md\:scale-x-75 {
+    --transform-scale-x: .75;
+  }
+
+  .md\:scale-x-90 {
+    --transform-scale-x: .9;
+  }
+
+  .md\:scale-x-95 {
+    --transform-scale-x: .95;
+  }
+
+  .md\:scale-x-100 {
+    --transform-scale-x: 1;
+  }
+
+  .md\:scale-x-105 {
+    --transform-scale-x: 1.05;
+  }
+
+  .md\:scale-x-110 {
+    --transform-scale-x: 1.1;
+  }
+
+  .md\:scale-x-125 {
+    --transform-scale-x: 1.25;
+  }
+
+  .md\:scale-x-150 {
+    --transform-scale-x: 1.5;
+  }
+
+  .md\:scale-y-0 {
+    --transform-scale-y: 0;
+  }
+
+  .md\:scale-y-50 {
+    --transform-scale-y: .5;
+  }
+
+  .md\:scale-y-75 {
+    --transform-scale-y: .75;
+  }
+
+  .md\:scale-y-90 {
+    --transform-scale-y: .9;
+  }
+
+  .md\:scale-y-95 {
+    --transform-scale-y: .95;
+  }
+
+  .md\:scale-y-100 {
+    --transform-scale-y: 1;
+  }
+
+  .md\:scale-y-105 {
+    --transform-scale-y: 1.05;
+  }
+
+  .md\:scale-y-110 {
+    --transform-scale-y: 1.1;
+  }
+
+  .md\:scale-y-125 {
+    --transform-scale-y: 1.25;
+  }
+
+  .md\:scale-y-150 {
+    --transform-scale-y: 1.5;
   }
 
   .md\:hover\:scale-0:hover {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .md\:hover\:scale-50:hover {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .md\:hover\:scale-75:hover {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .md\:hover\:scale-90:hover {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .md\:hover\:scale-95:hover {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .md\:hover\:scale-100:hover {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .md\:hover\:scale-105:hover {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .md\:hover\:scale-110:hover {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .md\:hover\:scale-125:hover {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .md\:hover\:scale-150:hover {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
+  }
+
+  .md\:hover\:scale-x-0:hover {
+    --transform-scale-x: 0;
+  }
+
+  .md\:hover\:scale-x-50:hover {
+    --transform-scale-x: .5;
+  }
+
+  .md\:hover\:scale-x-75:hover {
+    --transform-scale-x: .75;
+  }
+
+  .md\:hover\:scale-x-90:hover {
+    --transform-scale-x: .9;
+  }
+
+  .md\:hover\:scale-x-95:hover {
+    --transform-scale-x: .95;
+  }
+
+  .md\:hover\:scale-x-100:hover {
+    --transform-scale-x: 1;
+  }
+
+  .md\:hover\:scale-x-105:hover {
+    --transform-scale-x: 1.05;
+  }
+
+  .md\:hover\:scale-x-110:hover {
+    --transform-scale-x: 1.1;
+  }
+
+  .md\:hover\:scale-x-125:hover {
+    --transform-scale-x: 1.25;
+  }
+
+  .md\:hover\:scale-x-150:hover {
+    --transform-scale-x: 1.5;
+  }
+
+  .md\:hover\:scale-y-0:hover {
+    --transform-scale-y: 0;
+  }
+
+  .md\:hover\:scale-y-50:hover {
+    --transform-scale-y: .5;
+  }
+
+  .md\:hover\:scale-y-75:hover {
+    --transform-scale-y: .75;
+  }
+
+  .md\:hover\:scale-y-90:hover {
+    --transform-scale-y: .9;
+  }
+
+  .md\:hover\:scale-y-95:hover {
+    --transform-scale-y: .95;
+  }
+
+  .md\:hover\:scale-y-100:hover {
+    --transform-scale-y: 1;
+  }
+
+  .md\:hover\:scale-y-105:hover {
+    --transform-scale-y: 1.05;
+  }
+
+  .md\:hover\:scale-y-110:hover {
+    --transform-scale-y: 1.1;
+  }
+
+  .md\:hover\:scale-y-125:hover {
+    --transform-scale-y: 1.25;
+  }
+
+  .md\:hover\:scale-y-150:hover {
+    --transform-scale-y: 1.5;
   }
 
   .md\:focus\:scale-0:focus {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .md\:focus\:scale-50:focus {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .md\:focus\:scale-75:focus {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .md\:focus\:scale-90:focus {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .md\:focus\:scale-95:focus {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .md\:focus\:scale-100:focus {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .md\:focus\:scale-105:focus {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .md\:focus\:scale-110:focus {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .md\:focus\:scale-125:focus {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .md\:focus\:scale-150:focus {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
+  }
+
+  .md\:focus\:scale-x-0:focus {
+    --transform-scale-x: 0;
+  }
+
+  .md\:focus\:scale-x-50:focus {
+    --transform-scale-x: .5;
+  }
+
+  .md\:focus\:scale-x-75:focus {
+    --transform-scale-x: .75;
+  }
+
+  .md\:focus\:scale-x-90:focus {
+    --transform-scale-x: .9;
+  }
+
+  .md\:focus\:scale-x-95:focus {
+    --transform-scale-x: .95;
+  }
+
+  .md\:focus\:scale-x-100:focus {
+    --transform-scale-x: 1;
+  }
+
+  .md\:focus\:scale-x-105:focus {
+    --transform-scale-x: 1.05;
+  }
+
+  .md\:focus\:scale-x-110:focus {
+    --transform-scale-x: 1.1;
+  }
+
+  .md\:focus\:scale-x-125:focus {
+    --transform-scale-x: 1.25;
+  }
+
+  .md\:focus\:scale-x-150:focus {
+    --transform-scale-x: 1.5;
+  }
+
+  .md\:focus\:scale-y-0:focus {
+    --transform-scale-y: 0;
+  }
+
+  .md\:focus\:scale-y-50:focus {
+    --transform-scale-y: .5;
+  }
+
+  .md\:focus\:scale-y-75:focus {
+    --transform-scale-y: .75;
+  }
+
+  .md\:focus\:scale-y-90:focus {
+    --transform-scale-y: .9;
+  }
+
+  .md\:focus\:scale-y-95:focus {
+    --transform-scale-y: .95;
+  }
+
+  .md\:focus\:scale-y-100:focus {
+    --transform-scale-y: 1;
+  }
+
+  .md\:focus\:scale-y-105:focus {
+    --transform-scale-y: 1.05;
+  }
+
+  .md\:focus\:scale-y-110:focus {
+    --transform-scale-y: 1.1;
+  }
+
+  .md\:focus\:scale-y-125:focus {
+    --transform-scale-y: 1.25;
+  }
+
+  .md\:focus\:scale-y-150:focus {
+    --transform-scale-y: 1.5;
   }
 
   .md\:rotate-0 {
@@ -35265,11 +36078,12 @@ video {
   }
 
   .lg\:transform {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
     --transform-rotate: 0;
     --transform-translate-x: 0;
     --transform-translate-y: 0;
-    transform: scale(var(--transform-scale)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y));
+    transform: scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y));
   }
 
   .lg\:transform-none {
@@ -35313,123 +36127,393 @@ video {
   }
 
   .lg\:scale-0 {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .lg\:scale-50 {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .lg\:scale-75 {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .lg\:scale-90 {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .lg\:scale-95 {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .lg\:scale-100 {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .lg\:scale-105 {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .lg\:scale-110 {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .lg\:scale-125 {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .lg\:scale-150 {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
+  }
+
+  .lg\:scale-x-0 {
+    --transform-scale-x: 0;
+  }
+
+  .lg\:scale-x-50 {
+    --transform-scale-x: .5;
+  }
+
+  .lg\:scale-x-75 {
+    --transform-scale-x: .75;
+  }
+
+  .lg\:scale-x-90 {
+    --transform-scale-x: .9;
+  }
+
+  .lg\:scale-x-95 {
+    --transform-scale-x: .95;
+  }
+
+  .lg\:scale-x-100 {
+    --transform-scale-x: 1;
+  }
+
+  .lg\:scale-x-105 {
+    --transform-scale-x: 1.05;
+  }
+
+  .lg\:scale-x-110 {
+    --transform-scale-x: 1.1;
+  }
+
+  .lg\:scale-x-125 {
+    --transform-scale-x: 1.25;
+  }
+
+  .lg\:scale-x-150 {
+    --transform-scale-x: 1.5;
+  }
+
+  .lg\:scale-y-0 {
+    --transform-scale-y: 0;
+  }
+
+  .lg\:scale-y-50 {
+    --transform-scale-y: .5;
+  }
+
+  .lg\:scale-y-75 {
+    --transform-scale-y: .75;
+  }
+
+  .lg\:scale-y-90 {
+    --transform-scale-y: .9;
+  }
+
+  .lg\:scale-y-95 {
+    --transform-scale-y: .95;
+  }
+
+  .lg\:scale-y-100 {
+    --transform-scale-y: 1;
+  }
+
+  .lg\:scale-y-105 {
+    --transform-scale-y: 1.05;
+  }
+
+  .lg\:scale-y-110 {
+    --transform-scale-y: 1.1;
+  }
+
+  .lg\:scale-y-125 {
+    --transform-scale-y: 1.25;
+  }
+
+  .lg\:scale-y-150 {
+    --transform-scale-y: 1.5;
   }
 
   .lg\:hover\:scale-0:hover {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .lg\:hover\:scale-50:hover {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .lg\:hover\:scale-75:hover {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .lg\:hover\:scale-90:hover {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .lg\:hover\:scale-95:hover {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .lg\:hover\:scale-100:hover {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .lg\:hover\:scale-105:hover {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .lg\:hover\:scale-110:hover {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .lg\:hover\:scale-125:hover {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .lg\:hover\:scale-150:hover {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
+  }
+
+  .lg\:hover\:scale-x-0:hover {
+    --transform-scale-x: 0;
+  }
+
+  .lg\:hover\:scale-x-50:hover {
+    --transform-scale-x: .5;
+  }
+
+  .lg\:hover\:scale-x-75:hover {
+    --transform-scale-x: .75;
+  }
+
+  .lg\:hover\:scale-x-90:hover {
+    --transform-scale-x: .9;
+  }
+
+  .lg\:hover\:scale-x-95:hover {
+    --transform-scale-x: .95;
+  }
+
+  .lg\:hover\:scale-x-100:hover {
+    --transform-scale-x: 1;
+  }
+
+  .lg\:hover\:scale-x-105:hover {
+    --transform-scale-x: 1.05;
+  }
+
+  .lg\:hover\:scale-x-110:hover {
+    --transform-scale-x: 1.1;
+  }
+
+  .lg\:hover\:scale-x-125:hover {
+    --transform-scale-x: 1.25;
+  }
+
+  .lg\:hover\:scale-x-150:hover {
+    --transform-scale-x: 1.5;
+  }
+
+  .lg\:hover\:scale-y-0:hover {
+    --transform-scale-y: 0;
+  }
+
+  .lg\:hover\:scale-y-50:hover {
+    --transform-scale-y: .5;
+  }
+
+  .lg\:hover\:scale-y-75:hover {
+    --transform-scale-y: .75;
+  }
+
+  .lg\:hover\:scale-y-90:hover {
+    --transform-scale-y: .9;
+  }
+
+  .lg\:hover\:scale-y-95:hover {
+    --transform-scale-y: .95;
+  }
+
+  .lg\:hover\:scale-y-100:hover {
+    --transform-scale-y: 1;
+  }
+
+  .lg\:hover\:scale-y-105:hover {
+    --transform-scale-y: 1.05;
+  }
+
+  .lg\:hover\:scale-y-110:hover {
+    --transform-scale-y: 1.1;
+  }
+
+  .lg\:hover\:scale-y-125:hover {
+    --transform-scale-y: 1.25;
+  }
+
+  .lg\:hover\:scale-y-150:hover {
+    --transform-scale-y: 1.5;
   }
 
   .lg\:focus\:scale-0:focus {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .lg\:focus\:scale-50:focus {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .lg\:focus\:scale-75:focus {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .lg\:focus\:scale-90:focus {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .lg\:focus\:scale-95:focus {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .lg\:focus\:scale-100:focus {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .lg\:focus\:scale-105:focus {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .lg\:focus\:scale-110:focus {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .lg\:focus\:scale-125:focus {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .lg\:focus\:scale-150:focus {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
+  }
+
+  .lg\:focus\:scale-x-0:focus {
+    --transform-scale-x: 0;
+  }
+
+  .lg\:focus\:scale-x-50:focus {
+    --transform-scale-x: .5;
+  }
+
+  .lg\:focus\:scale-x-75:focus {
+    --transform-scale-x: .75;
+  }
+
+  .lg\:focus\:scale-x-90:focus {
+    --transform-scale-x: .9;
+  }
+
+  .lg\:focus\:scale-x-95:focus {
+    --transform-scale-x: .95;
+  }
+
+  .lg\:focus\:scale-x-100:focus {
+    --transform-scale-x: 1;
+  }
+
+  .lg\:focus\:scale-x-105:focus {
+    --transform-scale-x: 1.05;
+  }
+
+  .lg\:focus\:scale-x-110:focus {
+    --transform-scale-x: 1.1;
+  }
+
+  .lg\:focus\:scale-x-125:focus {
+    --transform-scale-x: 1.25;
+  }
+
+  .lg\:focus\:scale-x-150:focus {
+    --transform-scale-x: 1.5;
+  }
+
+  .lg\:focus\:scale-y-0:focus {
+    --transform-scale-y: 0;
+  }
+
+  .lg\:focus\:scale-y-50:focus {
+    --transform-scale-y: .5;
+  }
+
+  .lg\:focus\:scale-y-75:focus {
+    --transform-scale-y: .75;
+  }
+
+  .lg\:focus\:scale-y-90:focus {
+    --transform-scale-y: .9;
+  }
+
+  .lg\:focus\:scale-y-95:focus {
+    --transform-scale-y: .95;
+  }
+
+  .lg\:focus\:scale-y-100:focus {
+    --transform-scale-y: 1;
+  }
+
+  .lg\:focus\:scale-y-105:focus {
+    --transform-scale-y: 1.05;
+  }
+
+  .lg\:focus\:scale-y-110:focus {
+    --transform-scale-y: 1.1;
+  }
+
+  .lg\:focus\:scale-y-125:focus {
+    --transform-scale-y: 1.25;
+  }
+
+  .lg\:focus\:scale-y-150:focus {
+    --transform-scale-y: 1.5;
   }
 
   .lg\:rotate-0 {
@@ -44241,11 +45325,12 @@ video {
   }
 
   .xl\:transform {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
     --transform-rotate: 0;
     --transform-translate-x: 0;
     --transform-translate-y: 0;
-    transform: scale(var(--transform-scale)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y));
+    transform: scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y));
   }
 
   .xl\:transform-none {
@@ -44289,123 +45374,393 @@ video {
   }
 
   .xl\:scale-0 {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .xl\:scale-50 {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .xl\:scale-75 {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .xl\:scale-90 {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .xl\:scale-95 {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .xl\:scale-100 {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .xl\:scale-105 {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .xl\:scale-110 {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .xl\:scale-125 {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .xl\:scale-150 {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
+  }
+
+  .xl\:scale-x-0 {
+    --transform-scale-x: 0;
+  }
+
+  .xl\:scale-x-50 {
+    --transform-scale-x: .5;
+  }
+
+  .xl\:scale-x-75 {
+    --transform-scale-x: .75;
+  }
+
+  .xl\:scale-x-90 {
+    --transform-scale-x: .9;
+  }
+
+  .xl\:scale-x-95 {
+    --transform-scale-x: .95;
+  }
+
+  .xl\:scale-x-100 {
+    --transform-scale-x: 1;
+  }
+
+  .xl\:scale-x-105 {
+    --transform-scale-x: 1.05;
+  }
+
+  .xl\:scale-x-110 {
+    --transform-scale-x: 1.1;
+  }
+
+  .xl\:scale-x-125 {
+    --transform-scale-x: 1.25;
+  }
+
+  .xl\:scale-x-150 {
+    --transform-scale-x: 1.5;
+  }
+
+  .xl\:scale-y-0 {
+    --transform-scale-y: 0;
+  }
+
+  .xl\:scale-y-50 {
+    --transform-scale-y: .5;
+  }
+
+  .xl\:scale-y-75 {
+    --transform-scale-y: .75;
+  }
+
+  .xl\:scale-y-90 {
+    --transform-scale-y: .9;
+  }
+
+  .xl\:scale-y-95 {
+    --transform-scale-y: .95;
+  }
+
+  .xl\:scale-y-100 {
+    --transform-scale-y: 1;
+  }
+
+  .xl\:scale-y-105 {
+    --transform-scale-y: 1.05;
+  }
+
+  .xl\:scale-y-110 {
+    --transform-scale-y: 1.1;
+  }
+
+  .xl\:scale-y-125 {
+    --transform-scale-y: 1.25;
+  }
+
+  .xl\:scale-y-150 {
+    --transform-scale-y: 1.5;
   }
 
   .xl\:hover\:scale-0:hover {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .xl\:hover\:scale-50:hover {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .xl\:hover\:scale-75:hover {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .xl\:hover\:scale-90:hover {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .xl\:hover\:scale-95:hover {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .xl\:hover\:scale-100:hover {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .xl\:hover\:scale-105:hover {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .xl\:hover\:scale-110:hover {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .xl\:hover\:scale-125:hover {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .xl\:hover\:scale-150:hover {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
+  }
+
+  .xl\:hover\:scale-x-0:hover {
+    --transform-scale-x: 0;
+  }
+
+  .xl\:hover\:scale-x-50:hover {
+    --transform-scale-x: .5;
+  }
+
+  .xl\:hover\:scale-x-75:hover {
+    --transform-scale-x: .75;
+  }
+
+  .xl\:hover\:scale-x-90:hover {
+    --transform-scale-x: .9;
+  }
+
+  .xl\:hover\:scale-x-95:hover {
+    --transform-scale-x: .95;
+  }
+
+  .xl\:hover\:scale-x-100:hover {
+    --transform-scale-x: 1;
+  }
+
+  .xl\:hover\:scale-x-105:hover {
+    --transform-scale-x: 1.05;
+  }
+
+  .xl\:hover\:scale-x-110:hover {
+    --transform-scale-x: 1.1;
+  }
+
+  .xl\:hover\:scale-x-125:hover {
+    --transform-scale-x: 1.25;
+  }
+
+  .xl\:hover\:scale-x-150:hover {
+    --transform-scale-x: 1.5;
+  }
+
+  .xl\:hover\:scale-y-0:hover {
+    --transform-scale-y: 0;
+  }
+
+  .xl\:hover\:scale-y-50:hover {
+    --transform-scale-y: .5;
+  }
+
+  .xl\:hover\:scale-y-75:hover {
+    --transform-scale-y: .75;
+  }
+
+  .xl\:hover\:scale-y-90:hover {
+    --transform-scale-y: .9;
+  }
+
+  .xl\:hover\:scale-y-95:hover {
+    --transform-scale-y: .95;
+  }
+
+  .xl\:hover\:scale-y-100:hover {
+    --transform-scale-y: 1;
+  }
+
+  .xl\:hover\:scale-y-105:hover {
+    --transform-scale-y: 1.05;
+  }
+
+  .xl\:hover\:scale-y-110:hover {
+    --transform-scale-y: 1.1;
+  }
+
+  .xl\:hover\:scale-y-125:hover {
+    --transform-scale-y: 1.25;
+  }
+
+  .xl\:hover\:scale-y-150:hover {
+    --transform-scale-y: 1.5;
   }
 
   .xl\:focus\:scale-0:focus {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .xl\:focus\:scale-50:focus {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .xl\:focus\:scale-75:focus {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .xl\:focus\:scale-90:focus {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .xl\:focus\:scale-95:focus {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .xl\:focus\:scale-100:focus {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .xl\:focus\:scale-105:focus {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .xl\:focus\:scale-110:focus {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .xl\:focus\:scale-125:focus {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .xl\:focus\:scale-150:focus {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
+  }
+
+  .xl\:focus\:scale-x-0:focus {
+    --transform-scale-x: 0;
+  }
+
+  .xl\:focus\:scale-x-50:focus {
+    --transform-scale-x: .5;
+  }
+
+  .xl\:focus\:scale-x-75:focus {
+    --transform-scale-x: .75;
+  }
+
+  .xl\:focus\:scale-x-90:focus {
+    --transform-scale-x: .9;
+  }
+
+  .xl\:focus\:scale-x-95:focus {
+    --transform-scale-x: .95;
+  }
+
+  .xl\:focus\:scale-x-100:focus {
+    --transform-scale-x: 1;
+  }
+
+  .xl\:focus\:scale-x-105:focus {
+    --transform-scale-x: 1.05;
+  }
+
+  .xl\:focus\:scale-x-110:focus {
+    --transform-scale-x: 1.1;
+  }
+
+  .xl\:focus\:scale-x-125:focus {
+    --transform-scale-x: 1.25;
+  }
+
+  .xl\:focus\:scale-x-150:focus {
+    --transform-scale-x: 1.5;
+  }
+
+  .xl\:focus\:scale-y-0:focus {
+    --transform-scale-y: 0;
+  }
+
+  .xl\:focus\:scale-y-50:focus {
+    --transform-scale-y: .5;
+  }
+
+  .xl\:focus\:scale-y-75:focus {
+    --transform-scale-y: .75;
+  }
+
+  .xl\:focus\:scale-y-90:focus {
+    --transform-scale-y: .9;
+  }
+
+  .xl\:focus\:scale-y-95:focus {
+    --transform-scale-y: .95;
+  }
+
+  .xl\:focus\:scale-y-100:focus {
+    --transform-scale-y: 1;
+  }
+
+  .xl\:focus\:scale-y-105:focus {
+    --transform-scale-y: 1.05;
+  }
+
+  .xl\:focus\:scale-y-110:focus {
+    --transform-scale-y: 1.1;
+  }
+
+  .xl\:focus\:scale-y-125:focus {
+    --transform-scale-y: 1.25;
+  }
+
+  .xl\:focus\:scale-y-150:focus {
+    --transform-scale-y: 1.5;
   }
 
   .xl\:rotate-0 {
