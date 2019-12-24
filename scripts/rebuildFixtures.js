@@ -1,7 +1,6 @@
 import fs from 'fs'
 import postcss from 'postcss'
 import tailwind from '..'
-import CleanCSS from 'clean-css'
 
 function build({ from, to, config }) {
   return new Promise((resolve, reject) => {
