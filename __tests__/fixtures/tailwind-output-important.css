@@ -8338,7 +8338,11 @@ video {
 }
 
 .transform {
-  transform: scale(var(--transform-scale, 1)) rotate(var(--transform-rotate, 0)) translateX(var(--transform-translate-x, 0)) translateY(var(--transform-translate-y, 0)) !important;
+  --transform-scale: 1 !important;
+  --transform-rotate: 0 !important;
+  --transform-translate-x: 0 !important;
+  --transform-translate-y: 0 !important;
+  transform: scale(var(--transform-scale)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) !important;
 }
 
 .transform-none {
@@ -17309,7 +17313,11 @@ video {
   }
 
   .sm\:transform {
-    transform: scale(var(--transform-scale, 1)) rotate(var(--transform-rotate, 0)) translateX(var(--transform-translate-x, 0)) translateY(var(--transform-translate-y, 0)) !important;
+    --transform-scale: 1 !important;
+    --transform-rotate: 0 !important;
+    --transform-translate-x: 0 !important;
+    --transform-translate-y: 0 !important;
+    transform: scale(var(--transform-scale)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) !important;
   }
 
   .sm\:transform-none {
@@ -26281,7 +26289,11 @@ video {
   }
 
   .md\:transform {
-    transform: scale(var(--transform-scale, 1)) rotate(var(--transform-rotate, 0)) translateX(var(--transform-translate-x, 0)) translateY(var(--transform-translate-y, 0)) !important;
+    --transform-scale: 1 !important;
+    --transform-rotate: 0 !important;
+    --transform-translate-x: 0 !important;
+    --transform-translate-y: 0 !important;
+    transform: scale(var(--transform-scale)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) !important;
   }
 
   .md\:transform-none {
@@ -35253,7 +35265,11 @@ video {
   }
 
   .lg\:transform {
-    transform: scale(var(--transform-scale, 1)) rotate(var(--transform-rotate, 0)) translateX(var(--transform-translate-x, 0)) translateY(var(--transform-translate-y, 0)) !important;
+    --transform-scale: 1 !important;
+    --transform-rotate: 0 !important;
+    --transform-translate-x: 0 !important;
+    --transform-translate-y: 0 !important;
+    transform: scale(var(--transform-scale)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) !important;
   }
 
   .lg\:transform-none {
@@ -44225,7 +44241,11 @@ video {
   }
 
   .xl\:transform {
-    transform: scale(var(--transform-scale, 1)) rotate(var(--transform-rotate, 0)) translateX(var(--transform-translate-x, 0)) translateY(var(--transform-translate-y, 0)) !important;
+    --transform-scale: 1 !important;
+    --transform-rotate: 0 !important;
+    --transform-translate-x: 0 !important;
+    --transform-translate-y: 0 !important;
+    transform: scale(var(--transform-scale)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) !important;
   }
 
   .xl\:transform-none {
