@@ -10,8 +10,7 @@ function buildDistFile(filename) {
     fs.readFile(`./${filename}.css`, (err, css) => {
       if (err) throw err
 
-      // return postcss([tailwind(), require('autoprefixer')])
-      return postcss([tailwind()])
+      return postcss([tailwind(), require('autoprefixer')])
         .process(css, {
           from: `./${filename}.css`,
           to: `./dist/${filename}.css`,
