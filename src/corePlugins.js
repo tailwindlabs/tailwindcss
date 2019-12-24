@@ -69,12 +69,6 @@ import whitespace from './plugins/whitespace'
 import wordBreak from './plugins/wordBreak'
 import width from './plugins/width'
 import zIndex from './plugins/zIndex'
-import transform from './plugins/transform'
-import transformOrigin from './plugins/transformOrigin'
-import scale from './plugins/scale'
-import rotate from './plugins/rotate'
-import translate from './plugins/translate'
-import skew from './plugins/skew'
 import gap from './plugins/gap'
 import columnGap from './plugins/columnGap'
 import rowGap from './plugins/rowGap'
@@ -87,6 +81,15 @@ import gridTemplateRows from './plugins/gridTemplateRows'
 import gridRow from './plugins/gridRow'
 import gridRowStart from './plugins/gridRowStart'
 import gridRowEnd from './plugins/gridRowEnd'
+import transform from './plugins/transform'
+import transformOrigin from './plugins/transformOrigin'
+import scale from './plugins/scale'
+import rotate from './plugins/rotate'
+import translate from './plugins/translate'
+import skew from './plugins/skew'
+import transitionProperty from './plugins/transitionProperty'
+import transitionTimingFunction from './plugins/transitionTimingFunction'
+import transitionDuration from './plugins/transitionDuration'
 
 import configurePlugins from './util/configurePlugins'
 
@@ -181,5 +184,8 @@ export default function({ corePlugins: corePluginConfig }) {
     rotate,
     translate,
     skew,
+    transitionProperty,
+    transitionTimingFunction,
+    transitionDuration,
   })
 }

@@ -10294,6 +10294,74 @@ video {
   --transform-translate-y: 100% !important;
 }
 
+.transition-none {
+  transition-property: none !important;
+}
+
+.transition-all {
+  transition-property: all !important;
+}
+
+.transition {
+  transition-property: background-color, border-color, color, opacity, transform !important;
+}
+
+.transition-colors {
+  transition-property: background-color, border-color, color !important;
+}
+
+.transition-opacity {
+  transition-property: opacity !important;
+}
+
+.transition-transform {
+  transition-property: transform !important;
+}
+
+.ease-linear {
+  transition-timing-function: linear !important;
+}
+
+.ease-in {
+  transition-timing-function: cubic-bezier(0.4, 0, 1, 1) !important;
+}
+
+.ease-out {
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1) !important;
+}
+
+.ease-in-out {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.transition-fastest {
+  transition-duration: 75ms !important;
+}
+
+.transition-faster {
+  transition-duration: 100ms !important;
+}
+
+.transition-fast {
+  transition-duration: 150ms !important;
+}
+
+.transition-medium {
+  transition-duration: 200ms !important;
+}
+
+.transition-slow {
+  transition-duration: 300ms !important;
+}
+
+.transition-slower {
+  transition-duration: 500ms !important;
+}
+
+.transition-slowest {
+  transition-duration: 700ms !important;
+}
+
 .example {
   font-weight: 700;
   color: #f56565;
@@ -19987,6 +20055,74 @@ video {
 
   .sm\:focus\:translate-y-full:focus {
     --transform-translate-y: 100% !important;
+  }
+
+  .sm\:transition-none {
+    transition-property: none !important;
+  }
+
+  .sm\:transition-all {
+    transition-property: all !important;
+  }
+
+  .sm\:transition {
+    transition-property: background-color, border-color, color, opacity, transform !important;
+  }
+
+  .sm\:transition-colors {
+    transition-property: background-color, border-color, color !important;
+  }
+
+  .sm\:transition-opacity {
+    transition-property: opacity !important;
+  }
+
+  .sm\:transition-transform {
+    transition-property: transform !important;
+  }
+
+  .sm\:ease-linear {
+    transition-timing-function: linear !important;
+  }
+
+  .sm\:ease-in {
+    transition-timing-function: cubic-bezier(0.4, 0, 1, 1) !important;
+  }
+
+  .sm\:ease-out {
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1) !important;
+  }
+
+  .sm\:ease-in-out {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+  .sm\:transition-fastest {
+    transition-duration: 75ms !important;
+  }
+
+  .sm\:transition-faster {
+    transition-duration: 100ms !important;
+  }
+
+  .sm\:transition-fast {
+    transition-duration: 150ms !important;
+  }
+
+  .sm\:transition-medium {
+    transition-duration: 200ms !important;
+  }
+
+  .sm\:transition-slow {
+    transition-duration: 300ms !important;
+  }
+
+  .sm\:transition-slower {
+    transition-duration: 500ms !important;
+  }
+
+  .sm\:transition-slowest {
+    transition-duration: 700ms !important;
   }
 
   .sm\:example {
@@ -29685,6 +29821,74 @@ video {
     --transform-translate-y: 100% !important;
   }
 
+  .md\:transition-none {
+    transition-property: none !important;
+  }
+
+  .md\:transition-all {
+    transition-property: all !important;
+  }
+
+  .md\:transition {
+    transition-property: background-color, border-color, color, opacity, transform !important;
+  }
+
+  .md\:transition-colors {
+    transition-property: background-color, border-color, color !important;
+  }
+
+  .md\:transition-opacity {
+    transition-property: opacity !important;
+  }
+
+  .md\:transition-transform {
+    transition-property: transform !important;
+  }
+
+  .md\:ease-linear {
+    transition-timing-function: linear !important;
+  }
+
+  .md\:ease-in {
+    transition-timing-function: cubic-bezier(0.4, 0, 1, 1) !important;
+  }
+
+  .md\:ease-out {
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1) !important;
+  }
+
+  .md\:ease-in-out {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+  .md\:transition-fastest {
+    transition-duration: 75ms !important;
+  }
+
+  .md\:transition-faster {
+    transition-duration: 100ms !important;
+  }
+
+  .md\:transition-fast {
+    transition-duration: 150ms !important;
+  }
+
+  .md\:transition-medium {
+    transition-duration: 200ms !important;
+  }
+
+  .md\:transition-slow {
+    transition-duration: 300ms !important;
+  }
+
+  .md\:transition-slower {
+    transition-duration: 500ms !important;
+  }
+
+  .md\:transition-slowest {
+    transition-duration: 700ms !important;
+  }
+
   .md\:example {
     font-weight: 700;
     color: #f56565;
@@ -39381,6 +39585,74 @@ video {
     --transform-translate-y: 100% !important;
   }
 
+  .lg\:transition-none {
+    transition-property: none !important;
+  }
+
+  .lg\:transition-all {
+    transition-property: all !important;
+  }
+
+  .lg\:transition {
+    transition-property: background-color, border-color, color, opacity, transform !important;
+  }
+
+  .lg\:transition-colors {
+    transition-property: background-color, border-color, color !important;
+  }
+
+  .lg\:transition-opacity {
+    transition-property: opacity !important;
+  }
+
+  .lg\:transition-transform {
+    transition-property: transform !important;
+  }
+
+  .lg\:ease-linear {
+    transition-timing-function: linear !important;
+  }
+
+  .lg\:ease-in {
+    transition-timing-function: cubic-bezier(0.4, 0, 1, 1) !important;
+  }
+
+  .lg\:ease-out {
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1) !important;
+  }
+
+  .lg\:ease-in-out {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+  .lg\:transition-fastest {
+    transition-duration: 75ms !important;
+  }
+
+  .lg\:transition-faster {
+    transition-duration: 100ms !important;
+  }
+
+  .lg\:transition-fast {
+    transition-duration: 150ms !important;
+  }
+
+  .lg\:transition-medium {
+    transition-duration: 200ms !important;
+  }
+
+  .lg\:transition-slow {
+    transition-duration: 300ms !important;
+  }
+
+  .lg\:transition-slower {
+    transition-duration: 500ms !important;
+  }
+
+  .lg\:transition-slowest {
+    transition-duration: 700ms !important;
+  }
+
   .lg\:example {
     font-weight: 700;
     color: #f56565;
@@ -49075,6 +49347,74 @@ video {
 
   .xl\:focus\:translate-y-full:focus {
     --transform-translate-y: 100% !important;
+  }
+
+  .xl\:transition-none {
+    transition-property: none !important;
+  }
+
+  .xl\:transition-all {
+    transition-property: all !important;
+  }
+
+  .xl\:transition {
+    transition-property: background-color, border-color, color, opacity, transform !important;
+  }
+
+  .xl\:transition-colors {
+    transition-property: background-color, border-color, color !important;
+  }
+
+  .xl\:transition-opacity {
+    transition-property: opacity !important;
+  }
+
+  .xl\:transition-transform {
+    transition-property: transform !important;
+  }
+
+  .xl\:ease-linear {
+    transition-timing-function: linear !important;
+  }
+
+  .xl\:ease-in {
+    transition-timing-function: cubic-bezier(0.4, 0, 1, 1) !important;
+  }
+
+  .xl\:ease-out {
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1) !important;
+  }
+
+  .xl\:ease-in-out {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+  .xl\:transition-fastest {
+    transition-duration: 75ms !important;
+  }
+
+  .xl\:transition-faster {
+    transition-duration: 100ms !important;
+  }
+
+  .xl\:transition-fast {
+    transition-duration: 150ms !important;
+  }
+
+  .xl\:transition-medium {
+    transition-duration: 200ms !important;
+  }
+
+  .xl\:transition-slow {
+    transition-duration: 300ms !important;
+  }
+
+  .xl\:transition-slower {
+    transition-duration: 500ms !important;
+  }
+
+  .xl\:transition-slowest {
+    transition-duration: 700ms !important;
   }
 
   .xl\:example {
