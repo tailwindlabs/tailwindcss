@@ -1,5 +1,6 @@
 import fromPairs from 'lodash/fromPairs'
 import toPairs from 'lodash/toPairs'
+import castArray from 'lodash/castArray'
 
 function className(classPrefix, key) {
   if (key === 'default') {
@@ -13,15 +14,18 @@ function className(classPrefix, key) {
   return `${classPrefix}-${key}`
 }
 
-export default function createUtilityPlugin(classPrefix, themeKey, property = themeKey) {
+export default function createUtilityPlugin(themeKey, utilityVariations) {
   return function({ e, addUtilities, variants, theme }) {
-    return addUtilities(
-      fromPairs(
+    const utilities = utilityVariations.map(([classPrefix, properties]) => {
+      return fromPairs(
         toPairs(theme(themeKey)).map(([key, value]) => {
-          return [`.${e(className(classPrefix, key))}`, { [property]: value }]
+          return [
+            `.${e(className(classPrefix, key))}`,
+            fromPairs(castArray(properties).map(property => [property, value])),
+          ]
         })
-      ),
-      variants(themeKey)
-    )
+      )
+    })
+    return addUtilities(utilities, variants(themeKey))
   }
 }
