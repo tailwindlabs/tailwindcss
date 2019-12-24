@@ -436,7 +436,14 @@ module.exports = {
       '90': '90deg',
       '180': '180deg',
     },
-    translate: theme => theme('spacing'),
+    translate: (theme, { negative }) => ({
+      ...theme('spacing'),
+      ...negative(theme('spacing')),
+      '-full': '-100%',
+      '-1/2': '-50%',
+      '1/2': '50%',
+      full: '100%',
+    }),
   },
   variants: {
     accessibility: ['responsive', 'focus'],
