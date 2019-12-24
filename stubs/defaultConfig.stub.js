@@ -419,6 +419,7 @@ module.exports = {
       '11': 'repeat(11, 1fr)',
       '12': 'repeat(12, 1fr)',
     },
+    gridColumnGap: theme => theme('spacing'),
     gridColumn: {
       'span-1': 'span 1 / span 1',
       'span-2': 'span 2 / span 2',
@@ -463,12 +464,11 @@ module.exports = {
       '12': '12',
       '13': '13',
     },
-    gridColumnGap: theme => theme('spacing'),
     gridTemplateRows: {},
+    gridRowGap: theme => theme('spacing'),
     gridRow: {},
     gridRowStart: {},
     gridRowEnd: {},
-    gridRowGap: theme => theme('spacing'),
     transformOrigin: {
       center: 'center',
       top: 'top',
