@@ -405,6 +405,7 @@ module.exports = {
       '40': '40',
       '50': '50',
     },
+    gridGap: theme => theme('spacing'),
     gridTemplateColumns: {
       '1': 'repeat(1, 1fr)',
       '2': 'repeat(2, 1fr)',
@@ -419,7 +420,7 @@ module.exports = {
       '11': 'repeat(11, 1fr)',
       '12': 'repeat(12, 1fr)',
     },
-    gridColumnGap: theme => theme('spacing'),
+    gridColumnGap: {},
     gridColumn: {
       'span-1': 'span 1 / span 1',
       'span-2': 'span 2 / span 2',
@@ -465,7 +466,7 @@ module.exports = {
       '13': '13',
     },
     gridTemplateRows: {},
-    gridRowGap: theme => theme('spacing'),
+    gridRowGap: {},
     gridRow: {},
     gridRowStart: {},
     gridRowEnd: {},
@@ -577,6 +578,7 @@ module.exports = {
     width: ['responsive'],
     wordBreak: ['responsive'],
     zIndex: ['responsive'],
+    gridGap: ['responsive'],
     gridTemplateColumns: ['responsive'],
     gridColumnGap: ['responsive'],
     gridColumn: ['responsive'],

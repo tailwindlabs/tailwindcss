@@ -71,6 +71,7 @@ import transformOrigin from './plugins/transformOrigin'
 import scale from './plugins/scale'
 import rotate from './plugins/rotate'
 import translate from './plugins/translate'
+import gridGap from './plugins/gridGap'
 import gridTemplateColumns from './plugins/gridTemplateColumns'
 import gridColumnGap from './plugins/gridColumnGap'
 import gridColumn from './plugins/gridColumn'
@@ -154,6 +155,7 @@ export default function({ corePlugins: corePluginConfig }) {
     wordBreak,
     width,
     zIndex,
+    gridGap,
     gridTemplateColumns,
     gridColumnGap,
     gridColumn,
