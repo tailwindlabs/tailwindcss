@@ -71,14 +71,14 @@ import transformOrigin from './plugins/transformOrigin'
 import scale from './plugins/scale'
 import rotate from './plugins/rotate'
 import translate from './plugins/translate'
-import gridGap from './plugins/gridGap'
+import gap from './plugins/gap'
+import columnGap from './plugins/columnGap'
+import rowGap from './plugins/rowGap'
 import gridTemplateColumns from './plugins/gridTemplateColumns'
-import gridColumnGap from './plugins/gridColumnGap'
 import gridColumn from './plugins/gridColumn'
 import gridColumnStart from './plugins/gridColumnStart'
 import gridColumnEnd from './plugins/gridColumnEnd'
 import gridTemplateRows from './plugins/gridTemplateRows'
-import gridRowGap from './plugins/gridRowGap'
 import gridRow from './plugins/gridRow'
 import gridRowStart from './plugins/gridRowStart'
 import gridRowEnd from './plugins/gridRowEnd'
@@ -155,14 +155,14 @@ export default function({ corePlugins: corePluginConfig }) {
     wordBreak,
     width,
     zIndex,
-    gridGap,
+    gap,
+    columnGap,
+    rowGap,
     gridTemplateColumns,
-    gridColumnGap,
     gridColumn,
     gridColumnStart,
     gridColumnEnd,
     gridTemplateRows,
-    gridRowGap,
     gridRow,
     gridRowStart,
     gridRowEnd,
