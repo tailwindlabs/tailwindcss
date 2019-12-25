@@ -1,5 +1,5 @@
 import createUtilityPlugin from '../util/createUtilityPlugin'
 
 export default function() {
-  return createUtilityPlugin('gridGap', [['gap', ['gridGap']]])
+  return createUtilityPlugin('gap', [['gap', ['gridGap', 'gap']]])
 }
