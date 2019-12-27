@@ -475,6 +475,7 @@ module.exports = {
     flexShrink: ['responsive'],
     flexWrap: ['responsive'],
     float: ['responsive'],
+    clear: ['responsive'],
     fontFamily: ['responsive'],
     fontSize: ['responsive'],
     fontSmoothing: ['responsive'],

@@ -26,6 +26,7 @@ import flexGrow from './plugins/flexGrow'
 import flexShrink from './plugins/flexShrink'
 import order from './plugins/order'
 import float from './plugins/float'
+import clear from './plugins/clear'
 import fontFamily from './plugins/fontFamily'
 import fontWeight from './plugins/fontWeight'
 import height from './plugins/height'
@@ -105,6 +106,7 @@ export default function({ corePlugins: corePluginConfig }) {
     flexShrink,
     order,
     float,
+    clear,
     fontFamily,
     fontWeight,
     height,
