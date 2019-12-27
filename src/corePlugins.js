@@ -12,6 +12,7 @@ import borderColor from './plugins/borderColor'
 import borderRadius from './plugins/borderRadius'
 import borderStyle from './plugins/borderStyle'
 import borderWidth from './plugins/borderWidth'
+import boxSizing from './plugins/boxSizing'
 import cursor from './plugins/cursor'
 import display from './plugins/display'
 import flexDirection from './plugins/flexDirection'
@@ -48,7 +49,6 @@ import position from './plugins/position'
 import inset from './plugins/inset'
 import resize from './plugins/resize'
 import boxShadow from './plugins/boxShadow'
-import boxSizing from './plugins/boxSizing'
 import fill from './plugins/fill'
 import stroke from './plugins/stroke'
 import tableLayout from './plugins/tableLayout'
@@ -91,6 +91,7 @@ export default function({ corePlugins: corePluginConfig }) {
     borderRadius,
     borderStyle,
     borderWidth,
+    boxSizing,
     cursor,
     display,
     flexDirection,
@@ -127,7 +128,6 @@ export default function({ corePlugins: corePluginConfig }) {
     inset,
     resize,
     boxShadow,
-    boxSizing,
     fill,
     stroke,
     tableLayout,

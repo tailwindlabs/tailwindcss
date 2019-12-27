@@ -3339,6 +3339,14 @@ video {
   border-left-width: 1px;
 }
 
+.box-border {
+  box-sizing: border;
+}
+
+.box-content {
+  box-sizing: content;
+}
+
 .cursor-auto {
   cursor: auto;
 }
@@ -6815,14 +6823,6 @@ video {
 
 .focus\:shadow-none:focus {
   box-shadow: none;
-}
-
-.box-sizing-border {
-  box-sizing: border;
-}
-
-.box-sizing-content {
-  box-sizing: content;
 }
 
 .fill-current {
@@ -12661,6 +12661,14 @@ video {
     border-left-width: 1px;
   }
 
+  .sm\:box-border {
+    box-sizing: border;
+  }
+
+  .sm\:box-content {
+    box-sizing: content;
+  }
+
   .sm\:cursor-auto {
     cursor: auto;
   }
@@ -16137,14 +16145,6 @@ video {
 
   .sm\:focus\:shadow-none:focus {
     box-shadow: none;
-  }
-
-  .sm\:box-sizing-border {
-    box-sizing: border;
-  }
-
-  .sm\:box-sizing-content {
-    box-sizing: content;
   }
 
   .sm\:fill-current {
@@ -21984,6 +21984,14 @@ video {
     border-left-width: 1px;
   }
 
+  .md\:box-border {
+    box-sizing: border;
+  }
+
+  .md\:box-content {
+    box-sizing: content;
+  }
+
   .md\:cursor-auto {
     cursor: auto;
   }
@@ -25460,14 +25468,6 @@ video {
 
   .md\:focus\:shadow-none:focus {
     box-shadow: none;
-  }
-
-  .md\:box-sizing-border {
-    box-sizing: border;
-  }
-
-  .md\:box-sizing-content {
-    box-sizing: content;
   }
 
   .md\:fill-current {
@@ -31307,6 +31307,14 @@ video {
     border-left-width: 1px;
   }
 
+  .lg\:box-border {
+    box-sizing: border;
+  }
+
+  .lg\:box-content {
+    box-sizing: content;
+  }
+
   .lg\:cursor-auto {
     cursor: auto;
   }
@@ -34783,14 +34791,6 @@ video {
 
   .lg\:focus\:shadow-none:focus {
     box-shadow: none;
-  }
-
-  .lg\:box-sizing-border {
-    box-sizing: border;
-  }
-
-  .lg\:box-sizing-content {
-    box-sizing: content;
   }
 
   .lg\:fill-current {
@@ -40630,6 +40630,14 @@ video {
     border-left-width: 1px;
   }
 
+  .xl\:box-border {
+    box-sizing: border;
+  }
+
+  .xl\:box-content {
+    box-sizing: content;
+  }
+
   .xl\:cursor-auto {
     cursor: auto;
   }
@@ -44106,14 +44114,6 @@ video {
 
   .xl\:focus\:shadow-none:focus {
     box-shadow: none;
-  }
-
-  .xl\:box-sizing-border {
-    box-sizing: border;
-  }
-
-  .xl\:box-sizing-content {
-    box-sizing: content;
   }
 
   .xl\:fill-current {

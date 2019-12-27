@@ -3339,6 +3339,14 @@ video {
   border-left-width: 1px !important;
 }
 
+.box-border {
+  box-sizing: border !important;
+}
+
+.box-content {
+  box-sizing: content !important;
+}
+
 .cursor-auto {
   cursor: auto !important;
 }
@@ -6815,14 +6823,6 @@ video {
 
 .focus\:shadow-none:focus {
   box-shadow: none !important;
-}
-
-.box-sizing-border {
-  box-sizing: border !important;
-}
-
-.box-sizing-content {
-  box-sizing: content !important;
 }
 
 .fill-current {
@@ -12661,6 +12661,14 @@ video {
     border-left-width: 1px !important;
   }
 
+  .sm\:box-border {
+    box-sizing: border !important;
+  }
+
+  .sm\:box-content {
+    box-sizing: content !important;
+  }
+
   .sm\:cursor-auto {
     cursor: auto !important;
   }
@@ -16137,14 +16145,6 @@ video {
 
   .sm\:focus\:shadow-none:focus {
     box-shadow: none !important;
-  }
-
-  .sm\:box-sizing-border {
-    box-sizing: border !important;
-  }
-
-  .sm\:box-sizing-content {
-    box-sizing: content !important;
   }
 
   .sm\:fill-current {
@@ -21984,6 +21984,14 @@ video {
     border-left-width: 1px !important;
   }
 
+  .md\:box-border {
+    box-sizing: border !important;
+  }
+
+  .md\:box-content {
+    box-sizing: content !important;
+  }
+
   .md\:cursor-auto {
     cursor: auto !important;
   }
@@ -25460,14 +25468,6 @@ video {
 
   .md\:focus\:shadow-none:focus {
     box-shadow: none !important;
-  }
-
-  .md\:box-sizing-border {
-    box-sizing: border !important;
-  }
-
-  .md\:box-sizing-content {
-    box-sizing: content !important;
   }
 
   .md\:fill-current {
@@ -31307,6 +31307,14 @@ video {
     border-left-width: 1px !important;
   }
 
+  .lg\:box-border {
+    box-sizing: border !important;
+  }
+
+  .lg\:box-content {
+    box-sizing: content !important;
+  }
+
   .lg\:cursor-auto {
     cursor: auto !important;
   }
@@ -34783,14 +34791,6 @@ video {
 
   .lg\:focus\:shadow-none:focus {
     box-shadow: none !important;
-  }
-
-  .lg\:box-sizing-border {
-    box-sizing: border !important;
-  }
-
-  .lg\:box-sizing-content {
-    box-sizing: content !important;
   }
 
   .lg\:fill-current {
@@ -40630,6 +40630,14 @@ video {
     border-left-width: 1px !important;
   }
 
+  .xl\:box-border {
+    box-sizing: border !important;
+  }
+
+  .xl\:box-content {
+    box-sizing: content !important;
+  }
+
   .xl\:cursor-auto {
     cursor: auto !important;
   }
@@ -44106,14 +44114,6 @@ video {
 
   .xl\:focus\:shadow-none:focus {
     box-shadow: none !important;
-  }
-
-  .xl\:box-sizing-border {
-    box-sizing: border !important;
-  }
-
-  .xl\:box-sizing-content {
-    box-sizing: content !important;
   }
 
   .xl\:fill-current {
