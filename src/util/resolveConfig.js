@@ -20,6 +20,17 @@ const configUtils = {
         {}
       )
   },
+  breakpoints(screens) {
+    return Object.keys(screens)
+      .filter(key => typeof screens[key] === 'string')
+      .reduce(
+        (breakpoints, key) => ({
+          ...breakpoints,
+          [`screen-${key}`]: screens[key],
+        }),
+        {}
+      )
+  },
 }
 
 function value(valueToResolve, ...args) {
