@@ -42,6 +42,7 @@ const defaultVariantGenerators = config => ({
   active: generatePseudoClassVariant('active'),
   visited: generatePseudoClassVariant('visited'),
   disabled: generatePseudoClassVariant('disabled'),
+  checked: generatePseudoClassVariant('checked'),
   first: generatePseudoClassVariant('first-child', 'first'),
   last: generatePseudoClassVariant('last-child', 'last'),
   odd: generatePseudoClassVariant('nth-child(odd)', 'odd'),
