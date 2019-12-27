@@ -302,6 +302,7 @@ module.exports = {
       screen: '100vh',
     },
     maxWidth: {
+      none: 'none',
       xs: '20rem',
       sm: '24rem',
       md: '28rem',
