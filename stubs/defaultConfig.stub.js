@@ -365,6 +365,11 @@ module.exports = {
     },
     padding: theme => theme('spacing'),
     placeholderColor: theme => theme('colors'),
+    size: theme => ({
+      auto: 'auto',
+      ...theme('spacing'),
+      full: '100%',
+    }),
     stroke: {
       current: 'currentColor',
     },
@@ -507,6 +512,7 @@ module.exports = {
     pointerEvents: ['responsive'],
     position: ['responsive'],
     resize: ['responsive'],
+    size: ['responsive'],
     stroke: ['responsive'],
     tableLayout: ['responsive'],
     textAlign: ['responsive'],

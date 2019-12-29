@@ -29,11 +29,13 @@ import float from './plugins/float'
 import clear from './plugins/clear'
 import fontFamily from './plugins/fontFamily'
 import fontWeight from './plugins/fontWeight'
-import height from './plugins/height'
 import lineHeight from './plugins/lineHeight'
 import listStylePosition from './plugins/listStylePosition'
 import listStyleType from './plugins/listStyleType'
 import margin from './plugins/margin'
+import size from './plugins/size'
+import height from './plugins/height'
+import width from './plugins/width'
 import maxHeight from './plugins/maxHeight'
 import maxWidth from './plugins/maxWidth'
 import minHeight from './plugins/minHeight'
@@ -66,7 +68,6 @@ import verticalAlign from './plugins/verticalAlign'
 import visibility from './plugins/visibility'
 import whitespace from './plugins/whitespace'
 import wordBreak from './plugins/wordBreak'
-import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 import transform from './plugins/transform'
 import transformOrigin from './plugins/transformOrigin'
@@ -109,11 +110,13 @@ export default function({ corePlugins: corePluginConfig }) {
     clear,
     fontFamily,
     fontWeight,
-    height,
     lineHeight,
     listStylePosition,
     listStyleType,
     margin,
+    size,
+    height,
+    width,
     maxHeight,
     maxWidth,
     minHeight,
@@ -146,7 +149,6 @@ export default function({ corePlugins: corePluginConfig }) {
     visibility,
     whitespace,
     wordBreak,
-    width,
     zIndex,
     transform,
     transformOrigin,
