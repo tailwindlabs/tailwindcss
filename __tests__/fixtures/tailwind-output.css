@@ -8101,6 +8101,14 @@ video {
   text-decoration: none;
 }
 
+.ellipsis {
+  text-overflow: ellipsis;
+}
+
+.no-ellipsis {
+  text-overflow: clip;
+}
+
 .antialiased {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -17449,6 +17457,14 @@ video {
 
   .sm\:focus\:no-underline:focus {
     text-decoration: none;
+  }
+
+  .sm\:ellipsis {
+    text-overflow: ellipsis;
+  }
+
+  .sm\:no-ellipsis {
+    text-overflow: clip;
   }
 
   .sm\:antialiased {
@@ -26802,6 +26818,14 @@ video {
     text-decoration: none;
   }
 
+  .md\:ellipsis {
+    text-overflow: ellipsis;
+  }
+
+  .md\:no-ellipsis {
+    text-overflow: clip;
+  }
+
   .md\:antialiased {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -36153,6 +36177,14 @@ video {
     text-decoration: none;
   }
 
+  .lg\:ellipsis {
+    text-overflow: ellipsis;
+  }
+
+  .lg\:no-ellipsis {
+    text-overflow: clip;
+  }
+
   .lg\:antialiased {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -45502,6 +45534,14 @@ video {
 
   .xl\:focus\:no-underline:focus {
     text-decoration: none;
+  }
+
+  .xl\:ellipsis {
+    text-overflow: ellipsis;
+  }
+
+  .xl\:no-ellipsis {
+    text-overflow: clip;
   }
 
   .xl\:antialiased {

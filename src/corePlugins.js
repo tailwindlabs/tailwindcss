@@ -59,6 +59,7 @@ import fontSize from './plugins/fontSize'
 import fontStyle from './plugins/fontStyle'
 import textTransform from './plugins/textTransform'
 import textDecoration from './plugins/textDecoration'
+import textOverflow from './plugins/textOverflow'
 import fontSmoothing from './plugins/fontSmoothing'
 import letterSpacing from './plugins/letterSpacing'
 import userSelect from './plugins/userSelect'
@@ -139,6 +140,7 @@ export default function({ corePlugins: corePluginConfig }) {
     fontStyle,
     textTransform,
     textDecoration,
+    textOverflow,
     fontSmoothing,
     letterSpacing,
     userSelect,
