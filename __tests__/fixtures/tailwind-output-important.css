@@ -6865,6 +6865,18 @@ video {
   stroke: currentColor !important;
 }
 
+.stroke-0 {
+  stroke-width: 0 !important;
+}
+
+.stroke-1 {
+  stroke-width: 1 !important;
+}
+
+.stroke-2 {
+  stroke-width: 2 !important;
+}
+
 .table-auto {
   table-layout: auto !important;
 }
@@ -16544,6 +16556,18 @@ video {
 
   .sm\:stroke-current {
     stroke: currentColor !important;
+  }
+
+  .sm\:stroke-0 {
+    stroke-width: 0 !important;
+  }
+
+  .sm\:stroke-1 {
+    stroke-width: 1 !important;
+  }
+
+  .sm\:stroke-2 {
+    stroke-width: 2 !important;
   }
 
   .sm\:table-auto {
@@ -26228,6 +26252,18 @@ video {
     stroke: currentColor !important;
   }
 
+  .md\:stroke-0 {
+    stroke-width: 0 !important;
+  }
+
+  .md\:stroke-1 {
+    stroke-width: 1 !important;
+  }
+
+  .md\:stroke-2 {
+    stroke-width: 2 !important;
+  }
+
   .md\:table-auto {
     table-layout: auto !important;
   }
@@ -35910,6 +35946,18 @@ video {
     stroke: currentColor !important;
   }
 
+  .lg\:stroke-0 {
+    stroke-width: 0 !important;
+  }
+
+  .lg\:stroke-1 {
+    stroke-width: 1 !important;
+  }
+
+  .lg\:stroke-2 {
+    stroke-width: 2 !important;
+  }
+
   .lg\:table-auto {
     table-layout: auto !important;
   }
@@ -45590,6 +45638,18 @@ video {
 
   .xl\:stroke-current {
     stroke: currentColor !important;
+  }
+
+  .xl\:stroke-0 {
+    stroke-width: 0 !important;
+  }
+
+  .xl\:stroke-1 {
+    stroke-width: 1 !important;
+  }
+
+  .xl\:stroke-2 {
+    stroke-width: 2 !important;
   }
 
   .xl\:table-auto {

@@ -368,6 +368,11 @@ module.exports = {
     stroke: {
       current: 'currentColor',
     },
+    strokeWidth: {
+      '0': '0',
+      '1': '1',
+      '2': '2',
+    },
     textColor: theme => theme('colors'),
     width: theme => ({
       auto: 'auto',
@@ -577,6 +582,7 @@ module.exports = {
     position: ['responsive'],
     resize: ['responsive'],
     stroke: ['responsive'],
+    strokeWidth: ['responsive'],
     tableLayout: ['responsive'],
     textAlign: ['responsive'],
     textColor: ['responsive', 'hover', 'focus'],
