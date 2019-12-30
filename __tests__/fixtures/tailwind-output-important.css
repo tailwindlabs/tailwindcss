@@ -6861,23 +6861,23 @@ video {
   stroke: currentColor !important;
 }
 
-.stroke-w-0 {
+.stroke-0 {
   stroke-width: 0 !important;
 }
 
-.stroke-w-1 {
+.stroke-1 {
   stroke-width: 1px !important;
 }
 
-.stroke-w-2 {
+.stroke-2 {
   stroke-width: 2px !important;
 }
 
-.stroke-w-3 {
+.stroke-3 {
   stroke-width: 3px !important;
 }
 
-.stroke-w-4 {
+.stroke-4 {
   stroke-width: 4px !important;
 }
 
@@ -16231,23 +16231,23 @@ video {
     stroke: currentColor !important;
   }
 
-  .sm\:stroke-w-0 {
+  .sm\:stroke-0 {
     stroke-width: 0 !important;
   }
 
-  .sm\:stroke-w-1 {
+  .sm\:stroke-1 {
     stroke-width: 1px !important;
   }
 
-  .sm\:stroke-w-2 {
+  .sm\:stroke-2 {
     stroke-width: 2px !important;
   }
 
-  .sm\:stroke-w-3 {
+  .sm\:stroke-3 {
     stroke-width: 3px !important;
   }
 
-  .sm\:stroke-w-4 {
+  .sm\:stroke-4 {
     stroke-width: 4px !important;
   }
 
@@ -25602,23 +25602,23 @@ video {
     stroke: currentColor !important;
   }
 
-  .md\:stroke-w-0 {
+  .md\:stroke-0 {
     stroke-width: 0 !important;
   }
 
-  .md\:stroke-w-1 {
+  .md\:stroke-1 {
     stroke-width: 1px !important;
   }
 
-  .md\:stroke-w-2 {
+  .md\:stroke-2 {
     stroke-width: 2px !important;
   }
 
-  .md\:stroke-w-3 {
+  .md\:stroke-3 {
     stroke-width: 3px !important;
   }
 
-  .md\:stroke-w-4 {
+  .md\:stroke-4 {
     stroke-width: 4px !important;
   }
 
@@ -34973,23 +34973,23 @@ video {
     stroke: currentColor !important;
   }
 
-  .lg\:stroke-w-0 {
+  .lg\:stroke-0 {
     stroke-width: 0 !important;
   }
 
-  .lg\:stroke-w-1 {
+  .lg\:stroke-1 {
     stroke-width: 1px !important;
   }
 
-  .lg\:stroke-w-2 {
+  .lg\:stroke-2 {
     stroke-width: 2px !important;
   }
 
-  .lg\:stroke-w-3 {
+  .lg\:stroke-3 {
     stroke-width: 3px !important;
   }
 
-  .lg\:stroke-w-4 {
+  .lg\:stroke-4 {
     stroke-width: 4px !important;
   }
 
@@ -44344,23 +44344,23 @@ video {
     stroke: currentColor !important;
   }
 
-  .xl\:stroke-w-0 {
+  .xl\:stroke-0 {
     stroke-width: 0 !important;
   }
 
-  .xl\:stroke-w-1 {
+  .xl\:stroke-1 {
     stroke-width: 1px !important;
   }
 
-  .xl\:stroke-w-2 {
+  .xl\:stroke-2 {
     stroke-width: 2px !important;
   }
 
-  .xl\:stroke-w-3 {
+  .xl\:stroke-3 {
     stroke-width: 3px !important;
   }
 
-  .xl\:stroke-w-4 {
+  .xl\:stroke-4 {
     stroke-width: 4px !important;
   }
 
