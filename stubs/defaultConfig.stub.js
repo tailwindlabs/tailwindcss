@@ -369,11 +369,9 @@ module.exports = {
       current: 'currentColor',
     },
     strokeWidth: {
-      '0': '0',      
+      '0': '0',
       '1': '1px',
       '2': '2px',
-      '3': '3px',
-      '4': '4px',
     },
     textColor: theme => theme('colors'),
     width: theme => ({
