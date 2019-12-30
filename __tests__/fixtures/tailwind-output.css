@@ -3340,11 +3340,11 @@ video {
 }
 
 .box-border {
-  box-sizing: border;
+  box-sizing: border-box;
 }
 
 .box-content {
-  box-sizing: content;
+  box-sizing: content-box;
 }
 
 .cursor-auto {
@@ -13021,11 +13021,11 @@ video {
   }
 
   .sm\:box-border {
-    box-sizing: border;
+    box-sizing: border-box;
   }
 
   .sm\:box-content {
-    box-sizing: content;
+    box-sizing: content-box;
   }
 
   .sm\:cursor-auto {
@@ -22703,11 +22703,11 @@ video {
   }
 
   .md\:box-border {
-    box-sizing: border;
+    box-sizing: border-box;
   }
 
   .md\:box-content {
-    box-sizing: content;
+    box-sizing: content-box;
   }
 
   .md\:cursor-auto {
@@ -32385,11 +32385,11 @@ video {
   }
 
   .lg\:box-border {
-    box-sizing: border;
+    box-sizing: border-box;
   }
 
   .lg\:box-content {
-    box-sizing: content;
+    box-sizing: content-box;
   }
 
   .lg\:cursor-auto {
@@ -42067,11 +42067,11 @@ video {
   }
 
   .xl\:box-border {
-    box-sizing: border;
+    box-sizing: border-box;
   }
 
   .xl\:box-content {
-    box-sizing: content;
+    box-sizing: content-box;
   }
 
   .xl\:cursor-auto {

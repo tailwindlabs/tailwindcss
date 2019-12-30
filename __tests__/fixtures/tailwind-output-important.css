@@ -3340,11 +3340,11 @@ video {
 }
 
 .box-border {
-  box-sizing: border !important;
+  box-sizing: border-box !important;
 }
 
 .box-content {
-  box-sizing: content !important;
+  box-sizing: content-box !important;
 }
 
 .cursor-auto {
@@ -13021,11 +13021,11 @@ video {
   }
 
   .sm\:box-border {
-    box-sizing: border !important;
+    box-sizing: border-box !important;
   }
 
   .sm\:box-content {
-    box-sizing: content !important;
+    box-sizing: content-box !important;
   }
 
   .sm\:cursor-auto {
@@ -22703,11 +22703,11 @@ video {
   }
 
   .md\:box-border {
-    box-sizing: border !important;
+    box-sizing: border-box !important;
   }
 
   .md\:box-content {
-    box-sizing: content !important;
+    box-sizing: content-box !important;
   }
 
   .md\:cursor-auto {
@@ -32385,11 +32385,11 @@ video {
   }
 
   .lg\:box-border {
-    box-sizing: border !important;
+    box-sizing: border-box !important;
   }
 
   .lg\:box-content {
-    box-sizing: content !important;
+    box-sizing: content-box !important;
   }
 
   .lg\:cursor-auto {
@@ -42067,11 +42067,11 @@ video {
   }
 
   .xl\:box-border {
-    box-sizing: border !important;
+    box-sizing: border-box !important;
   }
 
   .xl\:box-content {
-    box-sizing: content !important;
+    box-sizing: content-box !important;
   }
 
   .xl\:cursor-auto {
