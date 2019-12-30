@@ -17,6 +17,9 @@ export default function() {
         '.inline-flex': {
           display: 'inline-flex',
         },
+        '.grid': {
+          display: 'grid',
+        },
         '.table': {
           display: 'table',
         },
