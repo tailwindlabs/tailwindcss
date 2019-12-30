@@ -6866,11 +6866,11 @@ video {
 }
 
 .stroke-1 {
-  stroke-width: 1px !important;
+  stroke-width: 1 !important;
 }
 
 .stroke-2 {
-  stroke-width: 2px !important;
+  stroke-width: 2 !important;
 }
 
 .table-auto {
@@ -16228,11 +16228,11 @@ video {
   }
 
   .sm\:stroke-1 {
-    stroke-width: 1px !important;
+    stroke-width: 1 !important;
   }
 
   .sm\:stroke-2 {
-    stroke-width: 2px !important;
+    stroke-width: 2 !important;
   }
 
   .sm\:table-auto {
@@ -25591,11 +25591,11 @@ video {
   }
 
   .md\:stroke-1 {
-    stroke-width: 1px !important;
+    stroke-width: 1 !important;
   }
 
   .md\:stroke-2 {
-    stroke-width: 2px !important;
+    stroke-width: 2 !important;
   }
 
   .md\:table-auto {
@@ -34954,11 +34954,11 @@ video {
   }
 
   .lg\:stroke-1 {
-    stroke-width: 1px !important;
+    stroke-width: 1 !important;
   }
 
   .lg\:stroke-2 {
-    stroke-width: 2px !important;
+    stroke-width: 2 !important;
   }
 
   .lg\:table-auto {
@@ -44317,11 +44317,11 @@ video {
   }
 
   .xl\:stroke-1 {
-    stroke-width: 1px !important;
+    stroke-width: 1 !important;
   }
 
   .xl\:stroke-2 {
-    stroke-width: 2px !important;
+    stroke-width: 2 !important;
   }
 
   .xl\:table-auto {

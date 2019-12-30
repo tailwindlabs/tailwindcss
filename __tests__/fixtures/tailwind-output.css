@@ -6866,11 +6866,11 @@ video {
 }
 
 .stroke-1 {
-  stroke-width: 1px;
+  stroke-width: 1;
 }
 
 .stroke-2 {
-  stroke-width: 2px;
+  stroke-width: 2;
 }
 
 .table-auto {
@@ -16228,11 +16228,11 @@ video {
   }
 
   .sm\:stroke-1 {
-    stroke-width: 1px;
+    stroke-width: 1;
   }
 
   .sm\:stroke-2 {
-    stroke-width: 2px;
+    stroke-width: 2;
   }
 
   .sm\:table-auto {
@@ -25591,11 +25591,11 @@ video {
   }
 
   .md\:stroke-1 {
-    stroke-width: 1px;
+    stroke-width: 1;
   }
 
   .md\:stroke-2 {
-    stroke-width: 2px;
+    stroke-width: 2;
   }
 
   .md\:table-auto {
@@ -34954,11 +34954,11 @@ video {
   }
 
   .lg\:stroke-1 {
-    stroke-width: 1px;
+    stroke-width: 1;
   }
 
   .lg\:stroke-2 {
-    stroke-width: 2px;
+    stroke-width: 2;
   }
 
   .lg\:table-auto {
@@ -44317,11 +44317,11 @@ video {
   }
 
   .xl\:stroke-1 {
-    stroke-width: 1px;
+    stroke-width: 1;
   }
 
   .xl\:stroke-2 {
-    stroke-width: 2px;
+    stroke-width: 2;
   }
 
   .xl\:table-auto {

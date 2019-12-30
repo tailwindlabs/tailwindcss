@@ -370,8 +370,8 @@ module.exports = {
     },
     strokeWidth: {
       '0': '0',
-      '1': '1px',
-      '2': '2px',
+      '1': '1',
+      '2': '2',
     },
     textColor: theme => theme('colors'),
     width: theme => ({
