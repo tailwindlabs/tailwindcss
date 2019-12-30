@@ -6861,6 +6861,26 @@ video {
   stroke: currentColor !important;
 }
 
+.stroke-w-0 {
+  stroke-width: 0 !important;
+}
+
+.stroke-w-1 {
+  stroke-width: 1px !important;
+}
+
+.stroke-w-2 {
+  stroke-width: 2px !important;
+}
+
+.stroke-w-3 {
+  stroke-width: 3px !important;
+}
+
+.stroke-w-4 {
+  stroke-width: 4px !important;
+}
+
 .table-auto {
   table-layout: auto !important;
 }
@@ -16209,6 +16229,26 @@ video {
 
   .sm\:stroke-current {
     stroke: currentColor !important;
+  }
+
+  .sm\:stroke-w-0 {
+    stroke-width: 0 !important;
+  }
+
+  .sm\:stroke-w-1 {
+    stroke-width: 1px !important;
+  }
+
+  .sm\:stroke-w-2 {
+    stroke-width: 2px !important;
+  }
+
+  .sm\:stroke-w-3 {
+    stroke-width: 3px !important;
+  }
+
+  .sm\:stroke-w-4 {
+    stroke-width: 4px !important;
   }
 
   .sm\:table-auto {
@@ -25562,6 +25602,26 @@ video {
     stroke: currentColor !important;
   }
 
+  .md\:stroke-w-0 {
+    stroke-width: 0 !important;
+  }
+
+  .md\:stroke-w-1 {
+    stroke-width: 1px !important;
+  }
+
+  .md\:stroke-w-2 {
+    stroke-width: 2px !important;
+  }
+
+  .md\:stroke-w-3 {
+    stroke-width: 3px !important;
+  }
+
+  .md\:stroke-w-4 {
+    stroke-width: 4px !important;
+  }
+
   .md\:table-auto {
     table-layout: auto !important;
   }
@@ -34913,6 +34973,26 @@ video {
     stroke: currentColor !important;
   }
 
+  .lg\:stroke-w-0 {
+    stroke-width: 0 !important;
+  }
+
+  .lg\:stroke-w-1 {
+    stroke-width: 1px !important;
+  }
+
+  .lg\:stroke-w-2 {
+    stroke-width: 2px !important;
+  }
+
+  .lg\:stroke-w-3 {
+    stroke-width: 3px !important;
+  }
+
+  .lg\:stroke-w-4 {
+    stroke-width: 4px !important;
+  }
+
   .lg\:table-auto {
     table-layout: auto !important;
   }
@@ -44262,6 +44342,26 @@ video {
 
   .xl\:stroke-current {
     stroke: currentColor !important;
+  }
+
+  .xl\:stroke-w-0 {
+    stroke-width: 0 !important;
+  }
+
+  .xl\:stroke-w-1 {
+    stroke-width: 1px !important;
+  }
+
+  .xl\:stroke-w-2 {
+    stroke-width: 2px !important;
+  }
+
+  .xl\:stroke-w-3 {
+    stroke-width: 3px !important;
+  }
+
+  .xl\:stroke-w-4 {
+    stroke-width: 4px !important;
   }
 
   .xl\:table-auto {
