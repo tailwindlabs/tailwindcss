@@ -585,6 +585,7 @@ module.exports = {
     gap: ['responsive'],
     columnGap: ['responsive'],
     rowGap: ['responsive'],
+    gridAutoFlow: ['responsive'],
     gridTemplateColumns: ['responsive'],
     gridColumn: ['responsive'],
     gridColumnStart: ['responsive'],

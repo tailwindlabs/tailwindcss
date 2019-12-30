@@ -74,6 +74,7 @@ import translate from './plugins/translate'
 import gap from './plugins/gap'
 import columnGap from './plugins/columnGap'
 import rowGap from './plugins/rowGap'
+import gridAutoFlow from './plugins/gridAutoFlow'
 import gridTemplateColumns from './plugins/gridTemplateColumns'
 import gridColumn from './plugins/gridColumn'
 import gridColumnStart from './plugins/gridColumnStart'
@@ -158,6 +159,7 @@ export default function({ corePlugins: corePluginConfig }) {
     gap,
     columnGap,
     rowGap,
+    gridAutoFlow,
     gridTemplateColumns,
     gridColumn,
     gridColumnStart,

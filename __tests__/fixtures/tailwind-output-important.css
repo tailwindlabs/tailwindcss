@@ -8461,6 +8461,22 @@ video {
   gap: 1px !important;
 }
 
+.grid-flow-row {
+  grid-auto-flow: row !important;
+}
+
+.grid-flow-col {
+  grid-auto-flow: column !important;
+}
+
+.grid-flow-row-dense {
+  grid-auto-flow: row dense !important;
+}
+
+.grid-flow-col-dense {
+  grid-auto-flow: column dense !important;
+}
+
 .grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
 }
@@ -18044,6 +18060,22 @@ video {
   .sm\:gap-px {
     grid-gap: 1px !important;
     gap: 1px !important;
+  }
+
+  .sm\:grid-flow-row {
+    grid-auto-flow: row !important;
+  }
+
+  .sm\:grid-flow-col {
+    grid-auto-flow: column !important;
+  }
+
+  .sm\:grid-flow-row-dense {
+    grid-auto-flow: row dense !important;
+  }
+
+  .sm\:grid-flow-col-dense {
+    grid-auto-flow: column dense !important;
   }
 
   .sm\:grid-cols-1 {
@@ -27632,6 +27664,22 @@ video {
     gap: 1px !important;
   }
 
+  .md\:grid-flow-row {
+    grid-auto-flow: row !important;
+  }
+
+  .md\:grid-flow-col {
+    grid-auto-flow: column !important;
+  }
+
+  .md\:grid-flow-row-dense {
+    grid-auto-flow: row dense !important;
+  }
+
+  .md\:grid-flow-col-dense {
+    grid-auto-flow: column dense !important;
+  }
+
   .md\:grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
   }
@@ -37218,6 +37266,22 @@ video {
     gap: 1px !important;
   }
 
+  .lg\:grid-flow-row {
+    grid-auto-flow: row !important;
+  }
+
+  .lg\:grid-flow-col {
+    grid-auto-flow: column !important;
+  }
+
+  .lg\:grid-flow-row-dense {
+    grid-auto-flow: row dense !important;
+  }
+
+  .lg\:grid-flow-col-dense {
+    grid-auto-flow: column dense !important;
+  }
+
   .lg\:grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
   }
@@ -46802,6 +46866,22 @@ video {
   .xl\:gap-px {
     grid-gap: 1px !important;
     gap: 1px !important;
+  }
+
+  .xl\:grid-flow-row {
+    grid-auto-flow: row !important;
+  }
+
+  .xl\:grid-flow-col {
+    grid-auto-flow: column !important;
+  }
+
+  .xl\:grid-flow-row-dense {
+    grid-auto-flow: row dense !important;
+  }
+
+  .xl\:grid-flow-col-dense {
+    grid-auto-flow: column dense !important;
   }
 
   .xl\:grid-cols-1 {
