@@ -409,6 +409,7 @@ module.exports = {
     rowGap: {},
     columnGap: {},
     gridTemplateColumns: {
+      none: 'none',
       '1': 'repeat(1, minmax(0, 1fr))',
       '2': 'repeat(2, minmax(0, 1fr))',
       '3': 'repeat(3, minmax(0, 1fr))',
@@ -423,6 +424,7 @@ module.exports = {
       '12': 'repeat(12, minmax(0, 1fr))',
     },
     gridColumn: {
+      auto: 'auto',
       'span-1': 'span 1 / span 1',
       'span-2': 'span 2 / span 2',
       'span-3': 'span 3 / span 3',
@@ -437,6 +439,7 @@ module.exports = {
       'span-12': 'span 12 / span 12',
     },
     gridColumnStart: {
+      auto: 'auto',
       '1': '1',
       '2': '2',
       '3': '3',
@@ -452,6 +455,7 @@ module.exports = {
       '13': '13',
     },
     gridColumnEnd: {
+      auto: 'auto',
       '1': '1',
       '2': '2',
       '3': '3',
