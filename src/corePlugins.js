@@ -73,6 +73,7 @@ import transformOrigin from './plugins/transformOrigin'
 import scale from './plugins/scale'
 import rotate from './plugins/rotate'
 import translate from './plugins/translate'
+import skew from './plugins/skew'
 
 import configurePlugins from './util/configurePlugins'
 
@@ -153,5 +154,6 @@ export default function({ corePlugins: corePluginConfig }) {
     scale,
     rotate,
     translate,
+    skew,
   })
 }
