@@ -9,7 +9,7 @@ createPlugin.withOptions = function(pluginFunction, configFunction) {
   const optionsFunction = function(options) {
     return {
       handler: pluginFunction(options),
-      config: configFunction(options),
+      config: configFunction ? configFunction(options) : {},
     }
   }
 
