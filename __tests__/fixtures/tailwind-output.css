@@ -8786,12 +8786,14 @@ video {
 }
 
 .transform {
-  --transform-scale-x: 1;
-  --transform-scale-y: 1;
-  --transform-rotate: 0;
   --transform-translate-x: 0;
   --transform-translate-y: 0;
-  transform: scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y));
+  --transform-rotate: 0;
+  --transform-skew-x: 0;
+  --transform-skew-y: 0;
+  --transform-scale-x: 1;
+  --transform-scale-y: 1;
+  transform: translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
 }
 
 .transform-none {
@@ -18479,12 +18481,14 @@ video {
   }
 
   .sm\:transform {
-    --transform-scale-x: 1;
-    --transform-scale-y: 1;
-    --transform-rotate: 0;
     --transform-translate-x: 0;
     --transform-translate-y: 0;
-    transform: scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y));
+    --transform-rotate: 0;
+    --transform-skew-x: 0;
+    --transform-skew-y: 0;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
+    transform: translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
   }
 
   .sm\:transform-none {
@@ -28173,12 +28177,14 @@ video {
   }
 
   .md\:transform {
-    --transform-scale-x: 1;
-    --transform-scale-y: 1;
-    --transform-rotate: 0;
     --transform-translate-x: 0;
     --transform-translate-y: 0;
-    transform: scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y));
+    --transform-rotate: 0;
+    --transform-skew-x: 0;
+    --transform-skew-y: 0;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
+    transform: translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
   }
 
   .md\:transform-none {
@@ -37867,12 +37873,14 @@ video {
   }
 
   .lg\:transform {
-    --transform-scale-x: 1;
-    --transform-scale-y: 1;
-    --transform-rotate: 0;
     --transform-translate-x: 0;
     --transform-translate-y: 0;
-    transform: scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y));
+    --transform-rotate: 0;
+    --transform-skew-x: 0;
+    --transform-skew-y: 0;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
+    transform: translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
   }
 
   .lg\:transform-none {
@@ -47561,12 +47569,14 @@ video {
   }
 
   .xl\:transform {
-    --transform-scale-x: 1;
-    --transform-scale-y: 1;
-    --transform-rotate: 0;
     --transform-translate-x: 0;
     --transform-translate-y: 0;
-    transform: scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) rotate(var(--transform-rotate)) translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y));
+    --transform-rotate: 0;
+    --transform-skew-x: 0;
+    --transform-skew-y: 0;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
+    transform: translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
   }
 
   .xl\:transform-none {

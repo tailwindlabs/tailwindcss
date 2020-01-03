@@ -524,6 +524,7 @@ module.exports = {
       '1/2': '50%',
       full: '100%',
     }),
+    skew: {},
   },
   variants: {
     accessibility: ['responsive', 'focus'],
@@ -612,6 +613,7 @@ module.exports = {
     scale: ['responsive', 'hover', 'focus'],
     rotate: ['responsive', 'hover', 'focus'],
     translate: ['responsive', 'hover', 'focus'],
+    skew: ['responsive', 'hover', 'focus'],
   },
   corePlugins: {},
   plugins: [],

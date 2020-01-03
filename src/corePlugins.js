@@ -74,6 +74,7 @@ import transformOrigin from './plugins/transformOrigin'
 import scale from './plugins/scale'
 import rotate from './plugins/rotate'
 import translate from './plugins/translate'
+import skew from './plugins/skew'
 import gap from './plugins/gap'
 import columnGap from './plugins/columnGap'
 import rowGap from './plugins/rowGap'
@@ -179,5 +180,6 @@ export default function({ corePlugins: corePluginConfig }) {
     scale,
     rotate,
     translate,
+    skew,
   })
 }
