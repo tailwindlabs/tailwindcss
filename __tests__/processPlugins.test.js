@@ -1570,3 +1570,88 @@ test('plugins created using `createPlugin.withOptions` do not need to be invoked
       expect(result.css).toMatchCss(expected)
     })
 })
+
+test('the configFunction parameter is optional when using the `createPlugin.withOptions` function', () => {
+  const plugin = createPlugin.withOptions(function({ className }) {
+    return function({ addUtilities, theme, variants }) {
+      const utilities = _.fromPairs(
+        _.toPairs(theme('testPlugin')).map(([k, v]) => [`.${className}-${k}`, { testProperty: v }])
+      )
+
+      addUtilities(utilities, variants('testPlugin'))
+    }
+  })
+
+  return _postcss([
+    tailwind({
+      corePlugins: [],
+      theme: {
+        screens: {
+          sm: '400px',
+        },
+        testPlugin: {
+          sm: '1px',
+          md: '2px',
+          lg: '3px',
+        },
+      },
+      variants: {
+        testPlugin: ['responsive', 'focus'],
+      },
+      plugins: [plugin({ className: 'banana' })],
+    }),
+  ])
+    .process(
+      `
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      { from: undefined }
+    )
+    .then(result => {
+      const expected = `
+        .banana-sm {
+          test-property: 1px
+        }
+        .banana-md {
+          test-property: 2px
+        }
+        .banana-lg {
+          test-property: 3px
+        }
+        .focus\\:banana-sm:focus {
+          test-property: 1px
+        }
+        .focus\\:banana-md:focus {
+          test-property: 2px
+        }
+        .focus\\:banana-lg:focus {
+          test-property: 3px
+        }
+
+        @media (min-width: 400px) {
+          .sm\\:banana-sm {
+            test-property: 1px
+          }
+          .sm\\:banana-md {
+            test-property: 2px
+          }
+          .sm\\:banana-lg {
+            test-property: 3px
+          }
+          .sm\\:focus\\:banana-sm:focus {
+            test-property: 1px
+          }
+          .sm\\:focus\\:banana-md:focus {
+            test-property: 2px
+          }
+          .sm\\:focus\\:banana-lg:focus {
+            test-property: 3px
+          }
+        }
+      `
+
+      expect(result.css).toMatchCss(expected)
+    })
+})
