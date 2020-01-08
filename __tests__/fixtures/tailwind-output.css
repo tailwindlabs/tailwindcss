@@ -10334,32 +10334,36 @@ video {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.transition-fastest {
+.duration-75 {
   transition-duration: 75ms;
 }
 
-.transition-faster {
+.duration-100 {
   transition-duration: 100ms;
 }
 
-.transition-fast {
+.duration-150 {
   transition-duration: 150ms;
 }
 
-.transition-medium {
+.duration-200 {
   transition-duration: 200ms;
 }
 
-.transition-slow {
+.duration-300 {
   transition-duration: 300ms;
 }
 
-.transition-slower {
+.duration-500 {
   transition-duration: 500ms;
 }
 
-.transition-slowest {
+.duration-700 {
   transition-duration: 700ms;
+}
+
+.duration-1000 {
+  transition-duration: 1000ms;
 }
 
 .example {
@@ -20097,32 +20101,36 @@ video {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .sm\:transition-fastest {
+  .sm\:duration-75 {
     transition-duration: 75ms;
   }
 
-  .sm\:transition-faster {
+  .sm\:duration-100 {
     transition-duration: 100ms;
   }
 
-  .sm\:transition-fast {
+  .sm\:duration-150 {
     transition-duration: 150ms;
   }
 
-  .sm\:transition-medium {
+  .sm\:duration-200 {
     transition-duration: 200ms;
   }
 
-  .sm\:transition-slow {
+  .sm\:duration-300 {
     transition-duration: 300ms;
   }
 
-  .sm\:transition-slower {
+  .sm\:duration-500 {
     transition-duration: 500ms;
   }
 
-  .sm\:transition-slowest {
+  .sm\:duration-700 {
     transition-duration: 700ms;
+  }
+
+  .sm\:duration-1000 {
+    transition-duration: 1000ms;
   }
 
   .sm\:example {
@@ -29861,32 +29869,36 @@ video {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .md\:transition-fastest {
+  .md\:duration-75 {
     transition-duration: 75ms;
   }
 
-  .md\:transition-faster {
+  .md\:duration-100 {
     transition-duration: 100ms;
   }
 
-  .md\:transition-fast {
+  .md\:duration-150 {
     transition-duration: 150ms;
   }
 
-  .md\:transition-medium {
+  .md\:duration-200 {
     transition-duration: 200ms;
   }
 
-  .md\:transition-slow {
+  .md\:duration-300 {
     transition-duration: 300ms;
   }
 
-  .md\:transition-slower {
+  .md\:duration-500 {
     transition-duration: 500ms;
   }
 
-  .md\:transition-slowest {
+  .md\:duration-700 {
     transition-duration: 700ms;
+  }
+
+  .md\:duration-1000 {
+    transition-duration: 1000ms;
   }
 
   .md\:example {
@@ -39625,32 +39637,36 @@ video {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .lg\:transition-fastest {
+  .lg\:duration-75 {
     transition-duration: 75ms;
   }
 
-  .lg\:transition-faster {
+  .lg\:duration-100 {
     transition-duration: 100ms;
   }
 
-  .lg\:transition-fast {
+  .lg\:duration-150 {
     transition-duration: 150ms;
   }
 
-  .lg\:transition-medium {
+  .lg\:duration-200 {
     transition-duration: 200ms;
   }
 
-  .lg\:transition-slow {
+  .lg\:duration-300 {
     transition-duration: 300ms;
   }
 
-  .lg\:transition-slower {
+  .lg\:duration-500 {
     transition-duration: 500ms;
   }
 
-  .lg\:transition-slowest {
+  .lg\:duration-700 {
     transition-duration: 700ms;
+  }
+
+  .lg\:duration-1000 {
+    transition-duration: 1000ms;
   }
 
   .lg\:example {
@@ -49389,32 +49405,36 @@ video {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .xl\:transition-fastest {
+  .xl\:duration-75 {
     transition-duration: 75ms;
   }
 
-  .xl\:transition-faster {
+  .xl\:duration-100 {
     transition-duration: 100ms;
   }
 
-  .xl\:transition-fast {
+  .xl\:duration-150 {
     transition-duration: 150ms;
   }
 
-  .xl\:transition-medium {
+  .xl\:duration-200 {
     transition-duration: 200ms;
   }
 
-  .xl\:transition-slow {
+  .xl\:duration-300 {
     transition-duration: 300ms;
   }
 
-  .xl\:transition-slower {
+  .xl\:duration-500 {
     transition-duration: 500ms;
   }
 
-  .xl\:transition-slowest {
+  .xl\:duration-700 {
     transition-duration: 700ms;
+  }
+
+  .xl\:duration-1000 {
+    transition-duration: 1000ms;
   }
 
   .xl\:example {
