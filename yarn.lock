@@ -249,12 +249,12 @@
     js-tokens "^4.0.0"
 
 "@babel/node@^7.0.0":
-  version "7.7.7"
-  resolved "https://registry.yarnpkg.com/@babel/node/-/node-7.7.7.tgz#10c488ca36da07670be0131679c4e22f9d7795d4"
-  integrity sha512-QWWbQ6AyDffz6mA2mF0jixb/3IyRlqWgz5JNa2F6kSYe4vhPEytwuGmanx0NQJxBufDjffm/jYPuIfKfAyVzuA==
+  version "7.8.0"
+  resolved "https://registry.yarnpkg.com/@babel/node/-/node-7.8.0.tgz#5398ab0a3ad9912c10400bdccc56d46acd7c515f"
+  integrity sha512-1foyevW7OivS9hEtc30KKUstiznyPkaTFojELc37qG4W33IDA6JbDdXs3zZLVu4uehzgmiPXwtaUEasI8SmALA==
   dependencies:
-    "@babel/register" "^7.7.7"
-    commander "^2.8.1"
+    "@babel/register" "^7.8.0"
+    commander "^4.0.1"
     core-js "^3.2.1"
     lodash "^4.17.13"
     node-environment-flags "^1.0.5"
@@ -659,10 +659,10 @@
     js-levenshtein "^1.1.3"
     semver "^5.5.0"
 
-"@babel/register@^7.7.7":
-  version "7.7.7"
-  resolved "https://registry.yarnpkg.com/@babel/register/-/register-7.7.7.tgz#46910c4d1926b9c6096421b23d1f9e159c1dcee1"
-  integrity sha512-S2mv9a5dc2pcpg/ConlKZx/6wXaEwHeqfo7x/QbXsdCAZm+WJC1ekVvL1TVxNsedTs5y/gG63MhJTEsmwmjtiA==
+"@babel/register@^7.8.0":
+  version "7.8.0"
+  resolved "https://registry.yarnpkg.com/@babel/register/-/register-7.8.0.tgz#a6515b7daab31209c584f2919702b1dcb6264105"
+  integrity sha512-i7CPQBzb/uALrZZozm6jXpSoieZvcTSOqonKA9UX4OLEvAYc4Y2VqgW67ZkSz6xfaNP6m1g1oBy0/zMA7YcdJA==
   dependencies:
     find-cache-dir "^2.0.0"
     lodash "^4.17.13"
@@ -1504,15 +1504,15 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@^2.8.1, commander@~2.20.3:
-  version "2.20.3"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
-  integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
-
 commander@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-4.0.1.tgz#b67622721785993182e807f4883633e6401ba53c"
   integrity sha512-IPF4ouhCP+qdlcmCedhxX4xiGBPyigb8v5NeUp+0LyhwLgxMqyp3S0vl7TAPfS/hiP7FC3caI/PB9lTmP8r1NA==
+
+commander@~2.20.3:
+  version "2.20.3"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
+  integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
 
 commondir@^1.0.1:
   version "1.0.1"
@@ -4252,14 +4252,7 @@ resolve@1.1.7:
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
   integrity sha1-IDEU2CrSxe2ejgQRs5ModeiJ6Xs=
 
-resolve@^1.10.0, resolve@^1.13.1, resolve@^1.3.2:
-  version "1.14.1"
-  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.14.1.tgz#9e018c540fcf0c427d678b9931cbf45e984bcaff"
-  integrity sha512-fn5Wobh4cxbLzuHaE+nphztHy43/b++4M6SsGFC2gB8uYwf0C8LcarfCz1un7UTW8OFQg9iNjZ4xpcFVGebDPg==
-  dependencies:
-    path-parse "^1.0.6"
-
-resolve@^1.14.2:
+resolve@^1.10.0, resolve@^1.13.1, resolve@^1.14.2, resolve@^1.3.2:
   version "1.14.2"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.14.2.tgz#dbf31d0fa98b1f29aa5169783b9c290cb865fea2"
   integrity sha512-EjlOBLBO1kxsUxsKjLt7TAECyKW6fOh1VRkykQkKGzcBbjjPIxBqGh0jf7GJ3k/f5mxMqW3htMD3WdTUVtW8HQ==
