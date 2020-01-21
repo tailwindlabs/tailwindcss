@@ -1855,6 +1855,18 @@ video {
   background-size: contain;
 }
 
+.bg-full {
+  background-size: 100% 100%;
+}
+
+.bg-full-h {
+  background-size: 100% auto;
+}
+
+.bg-full-w {
+  background-size: auto 100%;
+}
+
 .border-collapse {
   border-collapse: collapse;
 }
@@ -11632,6 +11644,18 @@ video {
 
   .sm\:bg-contain {
     background-size: contain;
+  }
+
+  .sm\:bg-full {
+    background-size: 100% 100%;
+  }
+
+  .sm\:bg-full-h {
+    background-size: 100% auto;
+  }
+
+  .sm\:bg-full-w {
+    background-size: auto 100%;
   }
 
   .sm\:border-collapse {
@@ -21414,6 +21438,18 @@ video {
     background-size: contain;
   }
 
+  .md\:bg-full {
+    background-size: 100% 100%;
+  }
+
+  .md\:bg-full-h {
+    background-size: 100% auto;
+  }
+
+  .md\:bg-full-w {
+    background-size: auto 100%;
+  }
+
   .md\:border-collapse {
     border-collapse: collapse;
   }
@@ -31194,6 +31230,18 @@ video {
     background-size: contain;
   }
 
+  .lg\:bg-full {
+    background-size: 100% 100%;
+  }
+
+  .lg\:bg-full-h {
+    background-size: 100% auto;
+  }
+
+  .lg\:bg-full-w {
+    background-size: auto 100%;
+  }
+
   .lg\:border-collapse {
     border-collapse: collapse;
   }
@@ -40972,6 +41020,18 @@ video {
 
   .xl\:bg-contain {
     background-size: contain;
+  }
+
+  .xl\:bg-full {
+    background-size: 100% 100%;
+  }
+
+  .xl\:bg-full-h {
+    background-size: 100% auto;
+  }
+
+  .xl\:bg-full-w {
+    background-size: auto 100%;
   }
 
   .xl\:border-collapse {

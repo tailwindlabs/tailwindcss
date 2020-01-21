@@ -163,6 +163,9 @@ module.exports = {
       auto: 'auto',
       cover: 'cover',
       contain: 'contain',
+      full: '100% 100%',
+      'full-h': '100% auto',
+      'full-w': 'auto 100%'
     },
     borderColor: theme => ({
       ...theme('colors'),
