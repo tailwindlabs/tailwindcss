@@ -237,6 +237,21 @@
                   <table-of-contents class="mb-8"></table-of-contents>
                   @endunless
                   <div id="ad"></div>
+                  <div id="refactoring-ui-widget" style="display: none;">
+                    <a href="https://refactoringui.com/book?utm_source=tailwindcss&utm_medium=sidebar-widget" class="mt-3 block">
+                      <img src="/img/refactoring-ui-book.png" alt="">
+                    </a>
+                    <p class="text-gray-700 text-center">
+                      <a href="https://refactoringui.com/book?utm_source=tailwindcss&utm_medium=sidebar-widget" class="text-gray-700">
+                      Learn UI design, from the creators of Tailwind CSS.
+                      </a>
+                    </p>
+                    <div class="mt-3 text-center">
+                      <a href="https://refactoringui.com/book?utm_source=tailwindcss&utm_medium=sidebar-widget" class="inline-block px-3 py-2 text-sm bg-indigo-500 text-white font-semibold rounded hover:bg-indigo-600">
+                        Learn more &rarr;
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
               {{-- /Table of contents --}}
