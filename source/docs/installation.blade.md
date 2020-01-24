@@ -75,7 +75,7 @@ module.exports = {
 }
 ```
 
-Learn more about configuration Tailwind in the [configuration documentation](/docs/configuration).
+Learn more about configuring Tailwind in the [configuration documentation](/docs/configuration).
 
 <div class="heading mt-0">
   <h2 class="flex markdown">
