@@ -36,6 +36,22 @@ it('generates the right CSS when "important" is enabled', () => {
     })
 })
 
+it('generates the right CSS when using @import instead of @tailwind', () => {
+  const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input-import.css`)
+  const input = fs.readFileSync(inputPath, 'utf8')
+
+  return postcss([tailwind()])
+    .process(input, { from: inputPath })
+    .then(result => {
+      const expected = fs.readFileSync(
+        path.resolve(`${__dirname}/fixtures/tailwind-output.css`),
+        'utf8'
+      )
+
+      expect(result.css).toBe(expected)
+    })
+})
+
 it('does not add any CSS if no Tailwind features are used', () => {
   return postcss([tailwind()])
     .process('.foo { color: blue; }', { from: undefined })
