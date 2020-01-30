@@ -5,7 +5,7 @@ description: "Strategies for keeping your generated CSS small and performant."
 titleBorder: true
 ---
 
-Using the default configuration, Tailwind CSS comes in at 58.1kb minified and gzipped.
+Using the default configuration, Tailwind CSS comes in at 78.0kb minified and gzipped.
 
 Here are a few other popular frameworks for comparison:
 
