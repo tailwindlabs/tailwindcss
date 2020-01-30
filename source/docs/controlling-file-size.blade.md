@@ -11,7 +11,7 @@ Here are a few other popular frameworks for comparison:
 
 | Framework   | Original Size | Minified |    Gzip | Brotli |
 | ----------- | ------------: | -------: | ------: | -----: |
-| Tailwind    |       783.5kb |  603.3kb |  78.0kb | 22.6kb |
+| Tailwind    |       783.5kb |  603.3kb |  58.1kb | 22.6kb |
 | Bootstrap   |       187.8kb |  152.1kb |  22.7kb | 16.7kb |
 | Bulma       |       224.2kb |  189.9kb |  24.9kb | 19.1kb |
 | Foundation  |       154.1kb |  119.2kb |  15.9kb | 12.9kb |
