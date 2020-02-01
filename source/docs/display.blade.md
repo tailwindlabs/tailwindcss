@@ -37,14 +37,44 @@ description: "Utilities for controlling the display box type of an element."
       "Set the box type of the element to <code>table</code>.",
     ],
     [
-      '.table-row',
-      'display: table-row;',
-      "Set the box type of the element to <code>table-row</code>.",
+      '.table-caption',
+      'display: table-caption;',
+      "Set the box type of the element to <code>table-caption</code>.",
     ],
     [
       '.table-cell',
       'display: table-cell;',
       "Set the box type of the element to <code>table-cell</code>.",
+    ],
+    [
+      '.table-column',
+      'display: table-column;',
+      "Set the box type of the element to <code>table-column</code>.",
+    ],
+    [
+      '.table-column-group',
+      'display: table-column-group;',
+      "Set the box type of the element to <code>table-column-group</code>.",
+    ],
+    [
+      '.table-footer-group',
+      'display: table-footer-group;',
+      "Set the box type of the element to <code>table-footer-group</code>.",
+    ],
+    [
+      '.table-header-group',
+      'display: table-header-group;',
+      "Set the box type of the element to <code>table-header-group</code>.",
+    ],
+    [
+      '.table-row-group',
+      'display: table-row-group;',
+      "Set the box type of the element to <code>table-row-group</code>.",
+    ],
+    [
+      '.table-row',
+      'display: table-row;',
+      "Set the box type of the element to <code>table-row</code>.",
     ],
     [
       '.hidden',
