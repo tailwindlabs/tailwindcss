@@ -1,0 +1,12 @@
+@import "tailwindcss/base";
+
+@import 'tailwindcss/components';
+
+@import "tailwindcss/utilities";
+
+@responsive {
+  .example {
+    @apply .font-bold;
+    color: theme('colors.red.500');
+  }
+}
