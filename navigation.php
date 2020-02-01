@@ -35,6 +35,7 @@ return [
             'Container' => '/docs/container',
             'Display' => '/docs/display',
             'Float' => '/docs/float',
+            'Clear' => '/docs/clear',
             'Object Fit' => '/docs/object-fit',
             'Object Position' => '/docs/object-position',
             'Overflow' => '/docs/overflow',
