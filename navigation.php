@@ -144,6 +144,7 @@ return [
         'SVG' => [
             'Fill' => '/docs/fill',
             'Stroke' => '/docs/stroke',
+            'Stroke Width' => '/docs/stroke-width',
         ],
         'Accessibility' => [
             'Screen Readers' => '/docs/screen-readers',
