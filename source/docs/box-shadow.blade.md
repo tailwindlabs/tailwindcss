@@ -21,30 +21,35 @@ features:
 
 ## Outer shadow
 
-Use the `.shadow`, `.shadow-md`, `.shadow-lg`, `.shadow-xl`, or `.shadow-2xl` utilities to apply different sized outer box shadows to an element.
+Use the `.shadow-sm`, `.shadow`, `.shadow-md`, `.shadow-lg`, `.shadow-xl`, or `.shadow-2xl` utilities to apply different sized outer box shadows to an element.
 
 @component('_partials.code-sample', ['class' => 'bg-gray-200 flex justify-around items-center text-sm py-8'])
 <div class="text-center px-2">
+  <div class="mb-1 text-xs text-gray-600">sm</div>
+  <div class="h-8 w-8 text-xs bg-white rounded p-4 shadow-sm"></div>
+</div>
+<div class="text-center px-2">
   <div class="mb-1 text-xs text-gray-600">base</div>
-  <div class="h-8 w-8 text-xs bg-white rounded p-4 shadow"></div>
+  <div class="h-10 w-10 text-xs bg-white rounded p-4 shadow"></div>
 </div>
 <div class="text-center px-2">
   <div class="mb-1 text-xs text-gray-600">md</div>
-  <div class="h-10 w-10 text-xs bg-white rounded p-4 shadow-md"></div>
+  <div class="h-12 w-12 text-xs bg-white rounded p-4 shadow-md"></div>
 </div>
 <div class="text-center px-2">
   <div class="mb-1 text-xs text-gray-600">lg</div>
-  <div class="h-12 w-12 text-xs bg-white rounded p-4 shadow-lg"></div>
+  <div class="h-16 w-16 text-xs bg-white rounded p-4 shadow-lg"></div>
 </div>
 <div class="text-center px-2">
   <div class="mb-1 text-xs text-gray-600">xl</div>
-  <div class="h-16 w-16 text-xs bg-white rounded p-4 shadow-xl"></div>
+  <div class="h-20 w-20 text-xs bg-white rounded p-4 shadow-xl"></div>
 </div>
 <div class="text-center px-2">
   <div class="mb-1 text-xs text-gray-600">2xl</div>
-  <div class="h-20 w-20 text-xs bg-white rounded p-4 shadow-2xl"></div>
+  <div class="h-24 w-24 text-xs bg-white rounded p-4 shadow-2xl"></div>
 </div>
 @slot('code')
+<div class="shadow-sm"></div>
 <div class="shadow"></div>
 <div class="shadow-md"></div>
 <div class="shadow-lg"></div>
