@@ -111,6 +111,7 @@ return [
             'Height' => '/docs/height',
             'Min-Height' => '/docs/min-height',
             'Max-Height' => '/docs/max-height',
+            'Box Sizing' => '/docs/box-sizing',
         ],
         'Tables' => [
             'Border Collapse' => '/docs/border-collapse',
