@@ -10327,7 +10327,7 @@ video {
 }
 
 .transition {
-  transition-property: background-color, border-color, color, fill, stroke, opacity,transform !important;
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform !important;
 }
 
 .transition-colors {
@@ -10336,6 +10336,10 @@ video {
 
 .transition-opacity {
   transition-property: opacity !important;
+}
+
+.transition-shadow {
+  transition-property: box-shadow !important;
 }
 
 .transition-transform {
@@ -20118,7 +20122,7 @@ video {
   }
 
   .sm\:transition {
-    transition-property: background-color, border-color, color, fill, stroke, opacity,transform !important;
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform !important;
   }
 
   .sm\:transition-colors {
@@ -20127,6 +20131,10 @@ video {
 
   .sm\:transition-opacity {
     transition-property: opacity !important;
+  }
+
+  .sm\:transition-shadow {
+    transition-property: box-shadow !important;
   }
 
   .sm\:transition-transform {
@@ -29910,7 +29918,7 @@ video {
   }
 
   .md\:transition {
-    transition-property: background-color, border-color, color, fill, stroke, opacity,transform !important;
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform !important;
   }
 
   .md\:transition-colors {
@@ -29919,6 +29927,10 @@ video {
 
   .md\:transition-opacity {
     transition-property: opacity !important;
+  }
+
+  .md\:transition-shadow {
+    transition-property: box-shadow !important;
   }
 
   .md\:transition-transform {
@@ -39702,7 +39714,7 @@ video {
   }
 
   .lg\:transition {
-    transition-property: background-color, border-color, color, fill, stroke, opacity,transform !important;
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform !important;
   }
 
   .lg\:transition-colors {
@@ -39711,6 +39723,10 @@ video {
 
   .lg\:transition-opacity {
     transition-property: opacity !important;
+  }
+
+  .lg\:transition-shadow {
+    transition-property: box-shadow !important;
   }
 
   .lg\:transition-transform {
@@ -49494,7 +49510,7 @@ video {
   }
 
   .xl\:transition {
-    transition-property: background-color, border-color, color, fill, stroke, opacity,transform !important;
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform !important;
   }
 
   .xl\:transition-colors {
@@ -49503,6 +49519,10 @@ video {
 
   .xl\:transition-opacity {
     transition-property: opacity !important;
+  }
+
+  .xl\:transition-shadow {
+    transition-property: box-shadow !important;
   }
 
   .xl\:transition-transform {
