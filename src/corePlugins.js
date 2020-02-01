@@ -70,8 +70,6 @@ import wordBreak from './plugins/wordBreak'
 import width from './plugins/width'
 import zIndex from './plugins/zIndex'
 import gap from './plugins/gap'
-import columnGap from './plugins/columnGap'
-import rowGap from './plugins/rowGap'
 import gridAutoFlow from './plugins/gridAutoFlow'
 import gridTemplateColumns from './plugins/gridTemplateColumns'
 import gridColumn from './plugins/gridColumn'
@@ -167,8 +165,6 @@ export default function({ corePlugins: corePluginConfig }) {
     width,
     zIndex,
     gap,
-    columnGap,
-    rowGap,
     gridAutoFlow,
     gridTemplateColumns,
     gridColumn,
