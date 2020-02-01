@@ -528,8 +528,8 @@ module.exports = {
     transitionProperty: {
       none: 'none',
       all: 'all',
-      default: 'background-color, border-color, color, opacity, transform',
-      colors: 'background-color, border-color, color',
+      default: 'background-color, border-color, color, fill, stroke, opacity,transform',
+      colors: 'background-color, border-color, color, fill, stroke',
       opacity: 'opacity',
       transform: 'transform',
     },

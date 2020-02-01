@@ -10327,11 +10327,11 @@ video {
 }
 
 .transition {
-  transition-property: background-color, border-color, color, opacity, transform !important;
+  transition-property: background-color, border-color, color, fill, stroke, opacity,transform !important;
 }
 
 .transition-colors {
-  transition-property: background-color, border-color, color !important;
+  transition-property: background-color, border-color, color, fill, stroke !important;
 }
 
 .transition-opacity {
@@ -20118,11 +20118,11 @@ video {
   }
 
   .sm\:transition {
-    transition-property: background-color, border-color, color, opacity, transform !important;
+    transition-property: background-color, border-color, color, fill, stroke, opacity,transform !important;
   }
 
   .sm\:transition-colors {
-    transition-property: background-color, border-color, color !important;
+    transition-property: background-color, border-color, color, fill, stroke !important;
   }
 
   .sm\:transition-opacity {
@@ -29910,11 +29910,11 @@ video {
   }
 
   .md\:transition {
-    transition-property: background-color, border-color, color, opacity, transform !important;
+    transition-property: background-color, border-color, color, fill, stroke, opacity,transform !important;
   }
 
   .md\:transition-colors {
-    transition-property: background-color, border-color, color !important;
+    transition-property: background-color, border-color, color, fill, stroke !important;
   }
 
   .md\:transition-opacity {
@@ -39702,11 +39702,11 @@ video {
   }
 
   .lg\:transition {
-    transition-property: background-color, border-color, color, opacity, transform !important;
+    transition-property: background-color, border-color, color, fill, stroke, opacity,transform !important;
   }
 
   .lg\:transition-colors {
-    transition-property: background-color, border-color, color !important;
+    transition-property: background-color, border-color, color, fill, stroke !important;
   }
 
   .lg\:transition-opacity {
@@ -49494,11 +49494,11 @@ video {
   }
 
   .xl\:transition {
-    transition-property: background-color, border-color, color, opacity, transform !important;
+    transition-property: background-color, border-color, color, fill, stroke, opacity,transform !important;
   }
 
   .xl\:transition-colors {
-    transition-property: background-color, border-color, color !important;
+    transition-property: background-color, border-color, color, fill, stroke !important;
   }
 
   .xl\:transition-opacity {
