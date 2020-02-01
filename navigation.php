@@ -107,6 +107,19 @@ return [
             'Box Shadow' => '/docs/box-shadow',
             'Opacity' => '/docs/opacity',
         ],
+        'CSS Transitions' => [
+            'Transition Property' => '/docs/transition-property',
+            'Transition Duration' => '/docs/transition-duration',
+            'Transition Timing Function' => '/docs/transition-timing-function',
+        ],
+        'CSS Transforms' => [
+            'Transform Origin' => '/docs/transform-origin',
+            'Scale' => '/docs/scale',
+            'Rotate' => '/docs/rotate',
+            'Translate' => '/docs/translate',
+            'Rotate' => '/docs/rotate',
+            'Skew' => '/docs/skew',
+        ],
         'Interactivity' => [
             'Appearance' => '/docs/appearance',
             'Cursor' => '/docs/cursor',
