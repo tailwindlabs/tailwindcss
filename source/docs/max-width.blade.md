@@ -62,6 +62,31 @@ description: "Utilities for setting the maximum width of an element"
       'max-width: 100%;',
       "Set the element's maximum width to 100%.",
     ],
+    [
+      '.max-w-screen-sm',
+      'max-width: 640px;',
+      "Set the element's maximum width to the small screen breakpoint.",
+    ],
+    [
+      '.max-w-screen-md',
+      'max-width: 768px;',
+      "Set the element's maximum width to the medium screen breakpoint.",
+    ],
+    [
+      '.max-w-screen-lg',
+      'max-width: 1024px;',
+      "Set the element's maximum width to the large screen breakpoint.",
+    ],
+    [
+      '.max-w-screen-xl',
+      'max-width: 1280px;',
+      "Set the element's maximum width to the extra large screen breakpoint.",
+    ],
+    [
+      '.max-w-none',
+      'max-width: none;',
+      "Remove the element's maximum width.",
+    ],
   ]
 ])
 

@@ -25,12 +25,7 @@ features:
       '.float-none',
       'float: none;',
       "Removes any previously defined float value.",
-    ],
-    [
-      '.clearfix',
-      "&amp;::after {\n&nbsp;&nbsp;content: \"\";\n&nbsp;&nbsp;display: table;\n&nbsp;&nbsp;clear: both;\n}",
-      "Clear any floats within an element.",
-    ],
+    ]
   ]
 ])
 
@@ -65,33 +60,6 @@ Use `.float-none` to reset any floats that are applied to an element. This is th
   <img class="float-none mb-4 h-32" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80">
   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis et lorem sit amet vehicula. Etiam vel nibh nec nisi euismod mollis ultrices condimentum velit. Proin velit libero, interdum ac rhoncus sit amet, pellentesque ac turpis. Quisque ac luctus turpis, vel efficitur ante. Cras convallis risus vel vehicula dapibus. Donec eget neque fringilla, faucibus mi quis, porttitor magna. Cras pellentesque leo est, et luctus neque rutrum eu. Aliquam consequat velit sed sem posuere, vitae sollicitudin mi consequat. Mauris eget ipsum sed dui rutrum fringilla. Donec varius vehicula magna sit amet auctor. Ut congue vehicula lectus in blandit. Vivamus suscipit eleifend turpis, nec sodales sem vulputate a. Curabitur pulvinar libero viverra, efficitur odio eu, finibus justo. Etiam eu vehicula felis.</p>
 </div>
-@endcomponent
-
-## Clearfix
-
-Use `.clearfix` to force an element to self-clear its children.
-
-@component('_partials.code-sample')
-<div class="clearfix mb-6">
-  <p class="text-sm text-gray-600">Without clearfix</p>
-  <div class="bg-gray-200 p-4">
-    <img class="float-left mr-4 my-2 h-32" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80">
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis et lorem sit amet vehicula.</p>
-  </div>
-</div>
-<div>
-  <p class="text-sm text-gray-600">With clearfix</p>
-  <div class="clearfix bg-gray-200 p-4">
-    <img class="float-left mr-4 my-2 h-32" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80">
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis et lorem sit amet vehicula.</p>
-  </div>
-</div>
-@slot('code')
-<div class="clearfix">
-  <img class="float-left mr-4 my-2 h-32" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80">
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis et lorem sit amet vehicula.</p>
-</div>
-@endslot
 @endcomponent
 
 ## Responsive

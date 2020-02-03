@@ -35,6 +35,7 @@ return [
             'Container' => '/docs/container',
             'Display' => '/docs/display',
             'Float' => '/docs/float',
+            'Clear' => '/docs/clear',
             'Object Fit' => '/docs/object-fit',
             'Object Position' => '/docs/object-position',
             'Overflow' => '/docs/overflow',
@@ -87,6 +88,19 @@ return [
             'Flex Shrink' => '/docs/flex-shrink',
             'Order' => '/docs/order',
         ],
+        'CSS Grid' => [
+            'Gap' => '/docs/gap',
+            'Row Gap' => '/docs/row-gap',
+            'Column Gap' => '/docs/column-gap',
+            'Grid Template Columns' => '/docs/grid-template-columns',
+            'Grid Column' => '/docs/grid-column',
+            'Grid Column Start' => '/docs/grid-column-start',
+            'Grid Column End' => '/docs/grid-column-end',
+            'Grid Template Rows' => '/docs/grid-template-rows',
+            'Grid Row' => '/docs/grid-row',
+            'Grid Row Start' => '/docs/grid-row-start',
+            'Grid Row End' => '/docs/grid-row-end',
+        ],
         'Spacing' => [
             'Padding' => '/docs/padding',
             'Margin' => '/docs/margin',
@@ -98,6 +112,7 @@ return [
             'Height' => '/docs/height',
             'Min-Height' => '/docs/min-height',
             'Max-Height' => '/docs/max-height',
+            'Box Sizing' => '/docs/box-sizing',
         ],
         'Tables' => [
             'Border Collapse' => '/docs/border-collapse',
@@ -106,6 +121,19 @@ return [
         'Effects' => [
             'Box Shadow' => '/docs/box-shadow',
             'Opacity' => '/docs/opacity',
+        ],
+        'CSS Transitions' => [
+            'Transition Property' => '/docs/transition-property',
+            'Transition Duration' => '/docs/transition-duration',
+            'Transition Timing Function' => '/docs/transition-timing-function',
+        ],
+        'CSS Transforms' => [
+            'Transform Origin' => '/docs/transform-origin',
+            'Scale' => '/docs/scale',
+            'Rotate' => '/docs/rotate',
+            'Translate' => '/docs/translate',
+            'Rotate' => '/docs/rotate',
+            'Skew' => '/docs/skew',
         ],
         'Interactivity' => [
             'Appearance' => '/docs/appearance',
@@ -118,6 +146,7 @@ return [
         'SVG' => [
             'Fill' => '/docs/fill',
             'Stroke' => '/docs/stroke',
+            'Stroke Width' => '/docs/stroke-width',
         ],
         'Accessibility' => [
             'Screen Readers' => '/docs/screen-readers',

@@ -27,6 +27,11 @@ features:
       "Apply the default border radius to all corners of an element.",
     ],
     [
+      '.rounded-md',
+      'border-radius: .375rem;',
+      "Apply a medium border radius to all corners of an element.",
+    ],
+    [
       '.rounded-lg',
       'border-radius: .5rem;',
       "Apply a large border radius to all corners of an element.",
@@ -246,10 +251,12 @@ Use the `.rounded-sm`, `.rounded`, or `.rounded-lg` utilities to apply different
 @component('_partials.code-sample', ['class' => 'flex justify-around text-sm'])
 <div class="bg-gray-400 mr-3 p-4 rounded-sm">.rounded-sm</div>
 <div class="bg-gray-400 mr-3 p-4 rounded">.rounded</div>
+<div class="bg-gray-400 mr-3 p-4 rounded">.rounded-md</div>
 <div class="bg-gray-400 p-4 rounded-lg">.rounded-lg</div>
 @slot('code')
 <div class="rounded-sm"></div>
 <div class="rounded"></div>
+<div class="rounded-md"></div>
 <div class="rounded-lg"></div>
 @endslot
 @endcomponent
@@ -379,4 +386,3 @@ By default Tailwind provides five border radius size utilities. You can change, 
         'responsive',
     ],
 ])
-
