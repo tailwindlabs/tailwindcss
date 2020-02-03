@@ -49,7 +49,7 @@ Use `.table-auto` to allow the table to automatically size columns to fit the co
       <td class="border px-4 py-2">112</td>
     </tr>
     <tr>
-      <td class="border px-4 py-2">Into to JavaScript</td>
+      <td class="border px-4 py-2">Intro to JavaScript</td>
       <td class="border px-4 py-2">Chris</td>
       <td class="border px-4 py-2">1,280</td>
     </tr>
@@ -84,7 +84,7 @@ You can manually set the widths for some columns and the rest of the available w
       <td class="border px-4 py-2">112</td>
     </tr>
     <tr>
-      <td class="border px-4 py-2">Into to JavaScript</td>
+      <td class="border px-4 py-2">Intro to JavaScript</td>
       <td class="border px-4 py-2">Chris</td>
       <td class="border px-4 py-2">1,280</td>
     </tr>
