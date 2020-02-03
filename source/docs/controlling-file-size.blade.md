@@ -181,9 +181,9 @@ Here's how using a smaller color palette affects the final size:
 
 | Colors         | Original | Minified |   Gzip | Brotli |
 | -------------- | -------: | -------: | -----: | -----: |
-| 93 _(default)_ |  783.5kb │ 603.3kb  │ 78.0kb │ 22.6kb |
-| 50             |  530.2kb │ 399.3kb  │ 56.6kb │ 17.5kb |
-| 25             |  381.6kb │ 279.5kb  │ 44.1kb │ 14.0kb |
+| 93 _(default)_ |  783.5kb |  603.3kb | 78.0kb | 22.6kb |
+| 50             |  530.2kb |  399.3kb | 56.6kb | 17.5kb |
+| 25             |  381.6kb |  279.5kb | 44.1kb | 14.0kb |
 
 ### Removing unused breakpoints
 
@@ -193,10 +193,10 @@ Here's how defining fewer screens affects the output:
 
 | Breakpoints   | Original | Minified |   Gzip | Brotli |
 | ------------- | -------: | -------: | -----: | -----: |
-| 4 _(default)_ |  783.5kb │ 603.3kb  │ 78.0kb │ 22.6kb |
-| 3             |  624.0kb │ 481.3kb  │ 62.7kb │ 20.8kb |
-| 2             |  464.6kb │ 359.4kb  │ 47.4kb │ 19.2kb |
-| 1             |  305.1kb │ 237.5kb  │ 32.1kb │ 17.6kb |
+| 4 _(default)_ |  783.5kb |  603.3kb | 78.0kb | 22.6kb |
+| 3             |  624.0kb |  481.3kb | 62.7kb | 20.8kb |
+| 2             |  464.6kb |  359.4kb | 47.4kb | 19.2kb |
+| 1             |  305.1kb |  237.5kb | 32.1kb | 17.6kb |
 
 If you only need 3 screen sizes and 35 colors, you're down to 39.5kb after gzip _(14.6kb after Brotli!)_ without changing anything else.
 
