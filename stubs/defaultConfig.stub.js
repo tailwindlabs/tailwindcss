@@ -558,7 +558,15 @@ module.exports = {
       '1/2': '50%',
       full: '100%',
     }),
-    skew: {},
+    skew: {
+      '-12': '-12deg',
+      '-6': '-6deg',
+      '-3': '-3deg',
+      '0': '0',
+      '3': '3deg',
+      '6': '6deg',
+      '12': '12deg',
+    },
     transitionProperty: {
       none: 'none',
       all: 'all',

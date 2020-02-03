@@ -10628,6 +10628,174 @@ video {
   --transform-translate-y: 100% !important;
 }
 
+.skew-x-0 {
+  --transform-skew-x: 0 !important;
+}
+
+.skew-x-3 {
+  --transform-skew-x: 3deg !important;
+}
+
+.skew-x-6 {
+  --transform-skew-x: 6deg !important;
+}
+
+.skew-x-12 {
+  --transform-skew-x: 12deg !important;
+}
+
+.-skew-x-12 {
+  --transform-skew-x: -12deg !important;
+}
+
+.-skew-x-6 {
+  --transform-skew-x: -6deg !important;
+}
+
+.-skew-x-3 {
+  --transform-skew-x: -3deg !important;
+}
+
+.skew-y-0 {
+  --transform-skew-y: 0 !important;
+}
+
+.skew-y-3 {
+  --transform-skew-y: 3deg !important;
+}
+
+.skew-y-6 {
+  --transform-skew-y: 6deg !important;
+}
+
+.skew-y-12 {
+  --transform-skew-y: 12deg !important;
+}
+
+.-skew-y-12 {
+  --transform-skew-y: -12deg !important;
+}
+
+.-skew-y-6 {
+  --transform-skew-y: -6deg !important;
+}
+
+.-skew-y-3 {
+  --transform-skew-y: -3deg !important;
+}
+
+.hover\:skew-x-0:hover {
+  --transform-skew-x: 0 !important;
+}
+
+.hover\:skew-x-3:hover {
+  --transform-skew-x: 3deg !important;
+}
+
+.hover\:skew-x-6:hover {
+  --transform-skew-x: 6deg !important;
+}
+
+.hover\:skew-x-12:hover {
+  --transform-skew-x: 12deg !important;
+}
+
+.hover\:-skew-x-12:hover {
+  --transform-skew-x: -12deg !important;
+}
+
+.hover\:-skew-x-6:hover {
+  --transform-skew-x: -6deg !important;
+}
+
+.hover\:-skew-x-3:hover {
+  --transform-skew-x: -3deg !important;
+}
+
+.hover\:skew-y-0:hover {
+  --transform-skew-y: 0 !important;
+}
+
+.hover\:skew-y-3:hover {
+  --transform-skew-y: 3deg !important;
+}
+
+.hover\:skew-y-6:hover {
+  --transform-skew-y: 6deg !important;
+}
+
+.hover\:skew-y-12:hover {
+  --transform-skew-y: 12deg !important;
+}
+
+.hover\:-skew-y-12:hover {
+  --transform-skew-y: -12deg !important;
+}
+
+.hover\:-skew-y-6:hover {
+  --transform-skew-y: -6deg !important;
+}
+
+.hover\:-skew-y-3:hover {
+  --transform-skew-y: -3deg !important;
+}
+
+.focus\:skew-x-0:focus {
+  --transform-skew-x: 0 !important;
+}
+
+.focus\:skew-x-3:focus {
+  --transform-skew-x: 3deg !important;
+}
+
+.focus\:skew-x-6:focus {
+  --transform-skew-x: 6deg !important;
+}
+
+.focus\:skew-x-12:focus {
+  --transform-skew-x: 12deg !important;
+}
+
+.focus\:-skew-x-12:focus {
+  --transform-skew-x: -12deg !important;
+}
+
+.focus\:-skew-x-6:focus {
+  --transform-skew-x: -6deg !important;
+}
+
+.focus\:-skew-x-3:focus {
+  --transform-skew-x: -3deg !important;
+}
+
+.focus\:skew-y-0:focus {
+  --transform-skew-y: 0 !important;
+}
+
+.focus\:skew-y-3:focus {
+  --transform-skew-y: 3deg !important;
+}
+
+.focus\:skew-y-6:focus {
+  --transform-skew-y: 6deg !important;
+}
+
+.focus\:skew-y-12:focus {
+  --transform-skew-y: 12deg !important;
+}
+
+.focus\:-skew-y-12:focus {
+  --transform-skew-y: -12deg !important;
+}
+
+.focus\:-skew-y-6:focus {
+  --transform-skew-y: -6deg !important;
+}
+
+.focus\:-skew-y-3:focus {
+  --transform-skew-y: -3deg !important;
+}
+
 .transition-none {
   transition-property: none !important;
 }
@@ -20731,6 +20899,174 @@ video {
 
   .sm\:focus\:translate-y-full:focus {
     --transform-translate-y: 100% !important;
+  }
+
+  .sm\:skew-x-0 {
+    --transform-skew-x: 0 !important;
+  }
+
+  .sm\:skew-x-3 {
+    --transform-skew-x: 3deg !important;
+  }
+
+  .sm\:skew-x-6 {
+    --transform-skew-x: 6deg !important;
+  }
+
+  .sm\:skew-x-12 {
+    --transform-skew-x: 12deg !important;
+  }
+
+  .sm\:-skew-x-12 {
+    --transform-skew-x: -12deg !important;
+  }
+
+  .sm\:-skew-x-6 {
+    --transform-skew-x: -6deg !important;
+  }
+
+  .sm\:-skew-x-3 {
+    --transform-skew-x: -3deg !important;
+  }
+
+  .sm\:skew-y-0 {
+    --transform-skew-y: 0 !important;
+  }
+
+  .sm\:skew-y-3 {
+    --transform-skew-y: 3deg !important;
+  }
+
+  .sm\:skew-y-6 {
+    --transform-skew-y: 6deg !important;
+  }
+
+  .sm\:skew-y-12 {
+    --transform-skew-y: 12deg !important;
+  }
+
+  .sm\:-skew-y-12 {
+    --transform-skew-y: -12deg !important;
+  }
+
+  .sm\:-skew-y-6 {
+    --transform-skew-y: -6deg !important;
+  }
+
+  .sm\:-skew-y-3 {
+    --transform-skew-y: -3deg !important;
+  }
+
+  .sm\:hover\:skew-x-0:hover {
+    --transform-skew-x: 0 !important;
+  }
+
+  .sm\:hover\:skew-x-3:hover {
+    --transform-skew-x: 3deg !important;
+  }
+
+  .sm\:hover\:skew-x-6:hover {
+    --transform-skew-x: 6deg !important;
+  }
+
+  .sm\:hover\:skew-x-12:hover {
+    --transform-skew-x: 12deg !important;
+  }
+
+  .sm\:hover\:-skew-x-12:hover {
+    --transform-skew-x: -12deg !important;
+  }
+
+  .sm\:hover\:-skew-x-6:hover {
+    --transform-skew-x: -6deg !important;
+  }
+
+  .sm\:hover\:-skew-x-3:hover {
+    --transform-skew-x: -3deg !important;
+  }
+
+  .sm\:hover\:skew-y-0:hover {
+    --transform-skew-y: 0 !important;
+  }
+
+  .sm\:hover\:skew-y-3:hover {
+    --transform-skew-y: 3deg !important;
+  }
+
+  .sm\:hover\:skew-y-6:hover {
+    --transform-skew-y: 6deg !important;
+  }
+
+  .sm\:hover\:skew-y-12:hover {
+    --transform-skew-y: 12deg !important;
+  }
+
+  .sm\:hover\:-skew-y-12:hover {
+    --transform-skew-y: -12deg !important;
+  }
+
+  .sm\:hover\:-skew-y-6:hover {
+    --transform-skew-y: -6deg !important;
+  }
+
+  .sm\:hover\:-skew-y-3:hover {
+    --transform-skew-y: -3deg !important;
+  }
+
+  .sm\:focus\:skew-x-0:focus {
+    --transform-skew-x: 0 !important;
+  }
+
+  .sm\:focus\:skew-x-3:focus {
+    --transform-skew-x: 3deg !important;
+  }
+
+  .sm\:focus\:skew-x-6:focus {
+    --transform-skew-x: 6deg !important;
+  }
+
+  .sm\:focus\:skew-x-12:focus {
+    --transform-skew-x: 12deg !important;
+  }
+
+  .sm\:focus\:-skew-x-12:focus {
+    --transform-skew-x: -12deg !important;
+  }
+
+  .sm\:focus\:-skew-x-6:focus {
+    --transform-skew-x: -6deg !important;
+  }
+
+  .sm\:focus\:-skew-x-3:focus {
+    --transform-skew-x: -3deg !important;
+  }
+
+  .sm\:focus\:skew-y-0:focus {
+    --transform-skew-y: 0 !important;
+  }
+
+  .sm\:focus\:skew-y-3:focus {
+    --transform-skew-y: 3deg !important;
+  }
+
+  .sm\:focus\:skew-y-6:focus {
+    --transform-skew-y: 6deg !important;
+  }
+
+  .sm\:focus\:skew-y-12:focus {
+    --transform-skew-y: 12deg !important;
+  }
+
+  .sm\:focus\:-skew-y-12:focus {
+    --transform-skew-y: -12deg !important;
+  }
+
+  .sm\:focus\:-skew-y-6:focus {
+    --transform-skew-y: -6deg !important;
+  }
+
+  .sm\:focus\:-skew-y-3:focus {
+    --transform-skew-y: -3deg !important;
   }
 
   .sm\:transition-none {
@@ -30839,6 +31175,174 @@ video {
     --transform-translate-y: 100% !important;
   }
 
+  .md\:skew-x-0 {
+    --transform-skew-x: 0 !important;
+  }
+
+  .md\:skew-x-3 {
+    --transform-skew-x: 3deg !important;
+  }
+
+  .md\:skew-x-6 {
+    --transform-skew-x: 6deg !important;
+  }
+
+  .md\:skew-x-12 {
+    --transform-skew-x: 12deg !important;
+  }
+
+  .md\:-skew-x-12 {
+    --transform-skew-x: -12deg !important;
+  }
+
+  .md\:-skew-x-6 {
+    --transform-skew-x: -6deg !important;
+  }
+
+  .md\:-skew-x-3 {
+    --transform-skew-x: -3deg !important;
+  }
+
+  .md\:skew-y-0 {
+    --transform-skew-y: 0 !important;
+  }
+
+  .md\:skew-y-3 {
+    --transform-skew-y: 3deg !important;
+  }
+
+  .md\:skew-y-6 {
+    --transform-skew-y: 6deg !important;
+  }
+
+  .md\:skew-y-12 {
+    --transform-skew-y: 12deg !important;
+  }
+
+  .md\:-skew-y-12 {
+    --transform-skew-y: -12deg !important;
+  }
+
+  .md\:-skew-y-6 {
+    --transform-skew-y: -6deg !important;
+  }
+
+  .md\:-skew-y-3 {
+    --transform-skew-y: -3deg !important;
+  }
+
+  .md\:hover\:skew-x-0:hover {
+    --transform-skew-x: 0 !important;
+  }
+
+  .md\:hover\:skew-x-3:hover {
+    --transform-skew-x: 3deg !important;
+  }
+
+  .md\:hover\:skew-x-6:hover {
+    --transform-skew-x: 6deg !important;
+  }
+
+  .md\:hover\:skew-x-12:hover {
+    --transform-skew-x: 12deg !important;
+  }
+
+  .md\:hover\:-skew-x-12:hover {
+    --transform-skew-x: -12deg !important;
+  }
+
+  .md\:hover\:-skew-x-6:hover {
+    --transform-skew-x: -6deg !important;
+  }
+
+  .md\:hover\:-skew-x-3:hover {
+    --transform-skew-x: -3deg !important;
+  }
+
+  .md\:hover\:skew-y-0:hover {
+    --transform-skew-y: 0 !important;
+  }
+
+  .md\:hover\:skew-y-3:hover {
+    --transform-skew-y: 3deg !important;
+  }
+
+  .md\:hover\:skew-y-6:hover {
+    --transform-skew-y: 6deg !important;
+  }
+
+  .md\:hover\:skew-y-12:hover {
+    --transform-skew-y: 12deg !important;
+  }
+
+  .md\:hover\:-skew-y-12:hover {
+    --transform-skew-y: -12deg !important;
+  }
+
+  .md\:hover\:-skew-y-6:hover {
+    --transform-skew-y: -6deg !important;
+  }
+
+  .md\:hover\:-skew-y-3:hover {
+    --transform-skew-y: -3deg !important;
+  }
+
+  .md\:focus\:skew-x-0:focus {
+    --transform-skew-x: 0 !important;
+  }
+
+  .md\:focus\:skew-x-3:focus {
+    --transform-skew-x: 3deg !important;
+  }
+
+  .md\:focus\:skew-x-6:focus {
+    --transform-skew-x: 6deg !important;
+  }
+
+  .md\:focus\:skew-x-12:focus {
+    --transform-skew-x: 12deg !important;
+  }
+
+  .md\:focus\:-skew-x-12:focus {
+    --transform-skew-x: -12deg !important;
+  }
+
+  .md\:focus\:-skew-x-6:focus {
+    --transform-skew-x: -6deg !important;
+  }
+
+  .md\:focus\:-skew-x-3:focus {
+    --transform-skew-x: -3deg !important;
+  }
+
+  .md\:focus\:skew-y-0:focus {
+    --transform-skew-y: 0 !important;
+  }
+
+  .md\:focus\:skew-y-3:focus {
+    --transform-skew-y: 3deg !important;
+  }
+
+  .md\:focus\:skew-y-6:focus {
+    --transform-skew-y: 6deg !important;
+  }
+
+  .md\:focus\:skew-y-12:focus {
+    --transform-skew-y: 12deg !important;
+  }
+
+  .md\:focus\:-skew-y-12:focus {
+    --transform-skew-y: -12deg !important;
+  }
+
+  .md\:focus\:-skew-y-6:focus {
+    --transform-skew-y: -6deg !important;
+  }
+
+  .md\:focus\:-skew-y-3:focus {
+    --transform-skew-y: -3deg !important;
+  }
+
   .md\:transition-none {
     transition-property: none !important;
   }
@@ -40945,6 +41449,174 @@ video {
     --transform-translate-y: 100% !important;
   }
 
+  .lg\:skew-x-0 {
+    --transform-skew-x: 0 !important;
+  }
+
+  .lg\:skew-x-3 {
+    --transform-skew-x: 3deg !important;
+  }
+
+  .lg\:skew-x-6 {
+    --transform-skew-x: 6deg !important;
+  }
+
+  .lg\:skew-x-12 {
+    --transform-skew-x: 12deg !important;
+  }
+
+  .lg\:-skew-x-12 {
+    --transform-skew-x: -12deg !important;
+  }
+
+  .lg\:-skew-x-6 {
+    --transform-skew-x: -6deg !important;
+  }
+
+  .lg\:-skew-x-3 {
+    --transform-skew-x: -3deg !important;
+  }
+
+  .lg\:skew-y-0 {
+    --transform-skew-y: 0 !important;
+  }
+
+  .lg\:skew-y-3 {
+    --transform-skew-y: 3deg !important;
+  }
+
+  .lg\:skew-y-6 {
+    --transform-skew-y: 6deg !important;
+  }
+
+  .lg\:skew-y-12 {
+    --transform-skew-y: 12deg !important;
+  }
+
+  .lg\:-skew-y-12 {
+    --transform-skew-y: -12deg !important;
+  }
+
+  .lg\:-skew-y-6 {
+    --transform-skew-y: -6deg !important;
+  }
+
+  .lg\:-skew-y-3 {
+    --transform-skew-y: -3deg !important;
+  }
+
+  .lg\:hover\:skew-x-0:hover {
+    --transform-skew-x: 0 !important;
+  }
+
+  .lg\:hover\:skew-x-3:hover {
+    --transform-skew-x: 3deg !important;
+  }
+
+  .lg\:hover\:skew-x-6:hover {
+    --transform-skew-x: 6deg !important;
+  }
+
+  .lg\:hover\:skew-x-12:hover {
+    --transform-skew-x: 12deg !important;
+  }
+
+  .lg\:hover\:-skew-x-12:hover {
+    --transform-skew-x: -12deg !important;
+  }
+
+  .lg\:hover\:-skew-x-6:hover {
+    --transform-skew-x: -6deg !important;
+  }
+
+  .lg\:hover\:-skew-x-3:hover {
+    --transform-skew-x: -3deg !important;
+  }
+
+  .lg\:hover\:skew-y-0:hover {
+    --transform-skew-y: 0 !important;
+  }
+
+  .lg\:hover\:skew-y-3:hover {
+    --transform-skew-y: 3deg !important;
+  }
+
+  .lg\:hover\:skew-y-6:hover {
+    --transform-skew-y: 6deg !important;
+  }
+
+  .lg\:hover\:skew-y-12:hover {
+    --transform-skew-y: 12deg !important;
+  }
+
+  .lg\:hover\:-skew-y-12:hover {
+    --transform-skew-y: -12deg !important;
+  }
+
+  .lg\:hover\:-skew-y-6:hover {
+    --transform-skew-y: -6deg !important;
+  }
+
+  .lg\:hover\:-skew-y-3:hover {
+    --transform-skew-y: -3deg !important;
+  }
+
+  .lg\:focus\:skew-x-0:focus {
+    --transform-skew-x: 0 !important;
+  }
+
+  .lg\:focus\:skew-x-3:focus {
+    --transform-skew-x: 3deg !important;
+  }
+
+  .lg\:focus\:skew-x-6:focus {
+    --transform-skew-x: 6deg !important;
+  }
+
+  .lg\:focus\:skew-x-12:focus {
+    --transform-skew-x: 12deg !important;
+  }
+
+  .lg\:focus\:-skew-x-12:focus {
+    --transform-skew-x: -12deg !important;
+  }
+
+  .lg\:focus\:-skew-x-6:focus {
+    --transform-skew-x: -6deg !important;
+  }
+
+  .lg\:focus\:-skew-x-3:focus {
+    --transform-skew-x: -3deg !important;
+  }
+
+  .lg\:focus\:skew-y-0:focus {
+    --transform-skew-y: 0 !important;
+  }
+
+  .lg\:focus\:skew-y-3:focus {
+    --transform-skew-y: 3deg !important;
+  }
+
+  .lg\:focus\:skew-y-6:focus {
+    --transform-skew-y: 6deg !important;
+  }
+
+  .lg\:focus\:skew-y-12:focus {
+    --transform-skew-y: 12deg !important;
+  }
+
+  .lg\:focus\:-skew-y-12:focus {
+    --transform-skew-y: -12deg !important;
+  }
+
+  .lg\:focus\:-skew-y-6:focus {
+    --transform-skew-y: -6deg !important;
+  }
+
+  .lg\:focus\:-skew-y-3:focus {
+    --transform-skew-y: -3deg !important;
+  }
+
   .lg\:transition-none {
     transition-property: none !important;
   }
@@ -51049,6 +51721,174 @@ video {
 
   .xl\:focus\:translate-y-full:focus {
     --transform-translate-y: 100% !important;
+  }
+
+  .xl\:skew-x-0 {
+    --transform-skew-x: 0 !important;
+  }
+
+  .xl\:skew-x-3 {
+    --transform-skew-x: 3deg !important;
+  }
+
+  .xl\:skew-x-6 {
+    --transform-skew-x: 6deg !important;
+  }
+
+  .xl\:skew-x-12 {
+    --transform-skew-x: 12deg !important;
+  }
+
+  .xl\:-skew-x-12 {
+    --transform-skew-x: -12deg !important;
+  }
+
+  .xl\:-skew-x-6 {
+    --transform-skew-x: -6deg !important;
+  }
+
+  .xl\:-skew-x-3 {
+    --transform-skew-x: -3deg !important;
+  }
+
+  .xl\:skew-y-0 {
+    --transform-skew-y: 0 !important;
+  }
+
+  .xl\:skew-y-3 {
+    --transform-skew-y: 3deg !important;
+  }
+
+  .xl\:skew-y-6 {
+    --transform-skew-y: 6deg !important;
+  }
+
+  .xl\:skew-y-12 {
+    --transform-skew-y: 12deg !important;
+  }
+
+  .xl\:-skew-y-12 {
+    --transform-skew-y: -12deg !important;
+  }
+
+  .xl\:-skew-y-6 {
+    --transform-skew-y: -6deg !important;
+  }
+
+  .xl\:-skew-y-3 {
+    --transform-skew-y: -3deg !important;
+  }
+
+  .xl\:hover\:skew-x-0:hover {
+    --transform-skew-x: 0 !important;
+  }
+
+  .xl\:hover\:skew-x-3:hover {
+    --transform-skew-x: 3deg !important;
+  }
+
+  .xl\:hover\:skew-x-6:hover {
+    --transform-skew-x: 6deg !important;
+  }
+
+  .xl\:hover\:skew-x-12:hover {
+    --transform-skew-x: 12deg !important;
+  }
+
+  .xl\:hover\:-skew-x-12:hover {
+    --transform-skew-x: -12deg !important;
+  }
+
+  .xl\:hover\:-skew-x-6:hover {
+    --transform-skew-x: -6deg !important;
+  }
+
+  .xl\:hover\:-skew-x-3:hover {
+    --transform-skew-x: -3deg !important;
+  }
+
+  .xl\:hover\:skew-y-0:hover {
+    --transform-skew-y: 0 !important;
+  }
+
+  .xl\:hover\:skew-y-3:hover {
+    --transform-skew-y: 3deg !important;
+  }
+
+  .xl\:hover\:skew-y-6:hover {
+    --transform-skew-y: 6deg !important;
+  }
+
+  .xl\:hover\:skew-y-12:hover {
+    --transform-skew-y: 12deg !important;
+  }
+
+  .xl\:hover\:-skew-y-12:hover {
+    --transform-skew-y: -12deg !important;
+  }
+
+  .xl\:hover\:-skew-y-6:hover {
+    --transform-skew-y: -6deg !important;
+  }
+
+  .xl\:hover\:-skew-y-3:hover {
+    --transform-skew-y: -3deg !important;
+  }
+
+  .xl\:focus\:skew-x-0:focus {
+    --transform-skew-x: 0 !important;
+  }
+
+  .xl\:focus\:skew-x-3:focus {
+    --transform-skew-x: 3deg !important;
+  }
+
+  .xl\:focus\:skew-x-6:focus {
+    --transform-skew-x: 6deg !important;
+  }
+
+  .xl\:focus\:skew-x-12:focus {
+    --transform-skew-x: 12deg !important;
+  }
+
+  .xl\:focus\:-skew-x-12:focus {
+    --transform-skew-x: -12deg !important;
+  }
+
+  .xl\:focus\:-skew-x-6:focus {
+    --transform-skew-x: -6deg !important;
+  }
+
+  .xl\:focus\:-skew-x-3:focus {
+    --transform-skew-x: -3deg !important;
+  }
+
+  .xl\:focus\:skew-y-0:focus {
+    --transform-skew-y: 0 !important;
+  }
+
+  .xl\:focus\:skew-y-3:focus {
+    --transform-skew-y: 3deg !important;
+  }
+
+  .xl\:focus\:skew-y-6:focus {
+    --transform-skew-y: 6deg !important;
+  }
+
+  .xl\:focus\:skew-y-12:focus {
+    --transform-skew-y: 12deg !important;
+  }
+
+  .xl\:focus\:-skew-y-12:focus {
+    --transform-skew-y: -12deg !important;
+  }
+
+  .xl\:focus\:-skew-y-6:focus {
+    --transform-skew-y: -6deg !important;
+  }
+
+  .xl\:focus\:-skew-y-3:focus {
+    --transform-skew-y: -3deg !important;
   }
 
   .xl\:transition-none {
