@@ -39,7 +39,9 @@ features:
   ]
 ])
 
-## Example
+## Usage
+
+Control the opacity of an element using the `.opacity-{color}` utilities.
 
 @component('_partials.code-sample')
 <div class="flex -mx-2">

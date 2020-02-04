@@ -122,12 +122,12 @@ return [
             'Transition Timing Function' => '/docs/transition-timing-function',
         ],
         'Transforms' => [
-            'Transform Origin' => '/docs/transform-origin',
             'Scale' => '/docs/scale',
             'Rotate' => '/docs/rotate',
             'Translate' => '/docs/translate',
             'Rotate' => '/docs/rotate',
             'Skew' => '/docs/skew',
+            'Transform Origin' => '/docs/transform-origin',
         ],
         'Interactivity' => [
             'Appearance' => '/docs/appearance',

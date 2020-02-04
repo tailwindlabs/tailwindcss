@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Box Sizing"
-description: "Utilities for controlling the box sizing model."
+description: "Utilities for controlling how the browser should calculate an element's total size."
 features:
   responsive: true
   customizable: true

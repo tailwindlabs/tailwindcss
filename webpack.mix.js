@@ -10,7 +10,7 @@ fs.writeFileSync('./tailwind.json', JSON.stringify(resolveConfig([config])))
 mix.webpackConfig({
   plugins: [
     build.jigsaw,
-    build.watch(['source/**/*.md', 'source/**/*.php', 'source/**/*.scss', '!source/**/_tmp/*']),
+    build.watch(['navigation.php', 'source/**/*.md', 'source/**/*.php', 'source/**/*.scss', '!source/**/_tmp/*']),
   ],
 })
 mix.setPublicPath('source/assets/build')
