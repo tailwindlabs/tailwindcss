@@ -36,7 +36,7 @@ Note that because Tailwind implements transforms using [CSS custom properties](h
 
 ## Responsive
 
-To control the scale of an element at a specific breakpoint, add a `{screen}:` prefix to any existing scale utility. For example, use `md:scale-75` to apply the `scale-75` utility at only medium screen sizes and above.
+To control the rotation of an element at a specific breakpoint, add a `{screen}:` prefix to any existing rotate utility. For example, use `md:rotate-90` to apply the `rotate-90` utility at only medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 

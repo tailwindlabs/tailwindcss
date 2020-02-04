@@ -72,7 +72,7 @@
                 {{-- Search section --}}
                 <div class="w-full lg:px-6 lg:w-3/4 xl:px-12">
                   <div class="relative">
-                    <input id="docsearch" class="transition bg-white shadow-md focus:outline-0 border border-transparent placeholder-gray-600 rounded-lg py-2 pr-4 pl-10 block w-full appearance-none leading-normal" type="text" placeholder="Search the docs (Press &quot;/&quot; to focus)">
+                    <input id="docsearch" class="transition-colors duration-100 ease-in-out bg-white shadow-md focus:outline-0 border border-transparent placeholder-gray-600 rounded-lg py-2 pr-4 pl-10 block w-full appearance-none leading-normal" type="text" placeholder="Search the docs (Press &quot;/&quot; to focus)">
                     <div class="pointer-events-none absolute inset-y-0 left-0 pl-4 flex items-center">
                       <svg class="fill-current pointer-events-none text-gray-600 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></svg>
                     </div>
@@ -205,7 +205,7 @@
             <ul>
               @foreach ($sectionItems as $name => $link)
                 <li class="mb-3 lg:mb-1">
-                  <a class="px-2 -mx-2 py-1 transition-fast relative block {{ $page->active($link) ? 'text-teal-600 font-medium' : 'hover:translate-r-2px hover:text-gray-900 text-gray-600 font-medium' }}" href="{{ $page->getLink($link) }}" {{ $page->isExternal($link) ? 'data-external' : '' }}>
+                  <a class="px-2 -mx-2 py-1 transition duration-200 ease-in-out relative block {{ $page->active($link) ? 'text-teal-600 font-medium' : 'hover:translate-x-2px hover:text-gray-900 text-gray-600 font-medium' }}" href="{{ $page->getLink($link) }}" {{ $page->isExternal($link) ? 'data-external' : '' }}>
                     <span class="rounded absolute inset-0 bg-teal-200 {{ $page->active($link) ? 'opacity-25' : 'opacity-0' }}"></span>
                     <span class="relative">{{ $name }}</span>
                   </a>
