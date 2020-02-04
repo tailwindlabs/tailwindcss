@@ -14,7 +14,7 @@ features:
 @include('_partials.class-table', [
   'scroll' => true,
   'rows' => collect([
-    ['scale', ['--transform-scale-x', '--transform-scale-x']],
+    ['scale', ['--transform-scale-x', '--transform-scale-y']],
     ['scale-x', ['--transform-scale-x']],
     ['scale-y', ['--transform-scale-y']],
   ])->flatMap(function ($scale) use ($page) {

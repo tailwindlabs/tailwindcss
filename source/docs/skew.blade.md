@@ -11,9 +11,21 @@ features:
 
 @include('_partials.work-in-progress')
 
-We do not include any default values for skew. If you'd like to add skew utilities to your project, add the values you need under the skew key in your theme.
+@include('_partials.class-table', [
+  'scroll' => true,
+  'rows' => collect([
+    ['skew-x', ['--transform-skew-x']],
+    ['skew-y', ['--transform-skew-y']],
+  ])->flatMap(function ($skew) use ($page) {
+    return $page->config['theme']['skew']->map(function ($value, $name) use ($skew) {
+      $class = starts_with($name, '-')
+        ? ".-{$skew[0]}-".substr($name, 1)
+        : ".{$skew[0]}-{$name}";
+      $code = collect($skew[1])->map(function ($property) use ($value) {
+        return "{$property}: {$value};";
+      })->implode("\n");
+      return [$class, $code];
+    })->values();
+  })
+])
 
-@component('_partials.customized-config', ['key' => 'theme.skew'])
-+ '15': '15deg, 15deg',
-+ 'tilt': '.312rad',
-@endcomponent

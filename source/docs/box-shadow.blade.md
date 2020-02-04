@@ -23,30 +23,34 @@ features:
 
 Use the `.shadow-sm`, `.shadow`, `.shadow-md`, `.shadow-lg`, `.shadow-xl`, or `.shadow-2xl` utilities to apply different sized outer box shadows to an element.
 
-@component('_partials.code-sample', ['class' => 'bg-gray-200 flex justify-around items-center text-sm py-8'])
+@component('_partials.code-sample', ['class' => 'bg-gray-100 lg:flex justify-around items-center text-sm py-8'])
 <div class="text-center px-2">
+  <div class="mb-1 text-xs text-gray-600">xs</div>
+  <div class="mx-auto h-6 w-6 text-xs bg-white rounded shadow-xs"></div>
+</div>
+<div class="mt-6 lg:mt-0 text-center px-2">
   <div class="mb-1 text-xs text-gray-600">sm</div>
-  <div class="h-8 w-8 text-xs bg-white rounded p-4 shadow-sm"></div>
+  <div class="mx-auto h-8 w-8 text-xs bg-white rounded shadow-sm"></div>
 </div>
-<div class="text-center px-2">
+<div class="mt-6 lg:mt-0 text-center px-2">
   <div class="mb-1 text-xs text-gray-600">base</div>
-  <div class="h-10 w-10 text-xs bg-white rounded p-4 shadow"></div>
+  <div class="mx-auto h-10 w-10 text-xs bg-white rounded shadow"></div>
 </div>
-<div class="text-center px-2">
+<div class="mt-6 lg:mt-0 text-center px-2">
   <div class="mb-1 text-xs text-gray-600">md</div>
-  <div class="h-12 w-12 text-xs bg-white rounded p-4 shadow-md"></div>
+  <div class="mx-auto h-12 w-12 text-xs bg-white rounded shadow-md"></div>
 </div>
-<div class="text-center px-2">
+<div class="mt-6 lg:mt-0 text-center px-2">
   <div class="mb-1 text-xs text-gray-600">lg</div>
-  <div class="h-16 w-16 text-xs bg-white rounded p-4 shadow-lg"></div>
+  <div class="mx-auto h-16 w-16 text-xs bg-white rounded shadow-md"></div>
 </div>
-<div class="text-center px-2">
+<div class="mt-6 lg:mt-0 text-center px-2">
   <div class="mb-1 text-xs text-gray-600">xl</div>
-  <div class="h-20 w-20 text-xs bg-white rounded p-4 shadow-xl"></div>
+  <div class="mx-auto h-20 w-20 text-xs bg-white rounded shadow-xl"></div>
 </div>
-<div class="text-center px-2">
+<div class="mt-6 lg:mt-0 text-center px-2">
   <div class="mb-1 text-xs text-gray-600">2xl</div>
-  <div class="h-24 w-24 text-xs bg-white rounded p-4 shadow-2xl"></div>
+  <div class="mx-auto h-24 w-24 text-xs bg-white rounded shadow-2xl"></div>
 </div>
 @slot('code')
 <div class="shadow-sm"></div>
@@ -69,7 +73,7 @@ Use the `.shadow-inner` utility to apply a subtle inset box shadow to an element
 @endslot
 @endcomponent
 
-## Outline shadow
+## Focus outline shadow
 
 Use the `.shadow-outline` utility to apply a focus-ring-style shadow to an element. This can be useful when combined with `.focus:outline-none` to create a better looking focus style that follows an element's border radius.
 

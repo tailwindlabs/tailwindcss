@@ -61,7 +61,7 @@ If you're using `postcss-import` (or a tool that uses it under the hood, such as
 If you'd like to customize your Tailwind installation, you can generate a config file for your project using the Tailwind CLI utility included when you install the `tailwindcss` npm package:
 
 ```bash
-npx tailwind init
+npx tailwindcss init
 ```
 
 This will create a minimal `tailwind.config.js` file at the root of your project:
@@ -89,10 +89,10 @@ Learn more about configuring Tailwind in the [configuration documentation](/docs
 For simple projects or just giving Tailwind a spin, you can use the Tailwind CLI tool to process your CSS:
 
 ```bash
-npx tailwind build styles.css -o output.css
+npx tailwindcss build styles.css -o output.css
 ```
 
-Use the `npx tailwind help build` command to learn more about the various CLI options.
+Use the `npx tailwindcss help build` command to learn more about the various CLI options.
 
 ### Using Tailwind with PostCSS
 

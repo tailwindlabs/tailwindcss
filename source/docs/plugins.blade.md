@@ -7,15 +7,19 @@ titleBorder: true
 
 <h2 style="font-size: 0" class="invisible m-0 -mb-6">Overview</h2>
 
-At their simplest, plugins are just functions that register new styles for Tailwind to inject into the user's stylesheet. That means that to get started authoring your own plugin, all you need to do is add an anonymous function to the `plugins` list in your config file:
+Plugins let you register new styles for Tailwind to inject into the user's stylesheet using JavaScript instead of CSS.
+
+To get started with your first plugin, import Tailwind's `plugin` function from `tailwindcss/plugin`, and call it with an anonymous function as the first argument in the `plugins` list in your config file:
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   plugins: [
-    function({ addUtilities, addComponents, e, prefix, config }) {
-      // This function is your plugin
-    },
+    plugin(function({ addUtilities, addComponents, e, prefix, config }) {
+      // Add your custom styles here
+    }),
   ]
 }
 ```
@@ -31,6 +35,7 @@ Plugin functions receive a single object argument that can be [destructured](htt
 - `theme()`, for looking up values in the user's theme configuration
 - `variants()`, for looking up values in the user's variants configuration
 - `config()`, for looking up values in the user's Tailwind configuration
+- `postcss`, for doing low-level manipulation with [PostCSS](https://api.postcss.org/postcss.html) directly
 
 ---
 
@@ -44,9 +49,11 @@ To add new utilities from a plugin, call `addUtilities`, passing in your styles 
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   plugins: [
-    function({ addUtilities }) {
+    plugin(function({ addUtilities }) {
       const newUtilities = {
         '.skew-10deg': {
           transform: 'skewY(-10deg)',
@@ -57,7 +64,7 @@ module.exports = {
       }
 
       addUtilities(newUtilities)
-    }
+    })
   ]
 }
 ```
@@ -92,9 +99,11 @@ If necessary, you can opt out of this behavior by passing an options object as a
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   plugins: [
-    function({ addUtilities }) {
+    plugin(function({ addUtilities }) {
       const newUtilities = {
         // ...
       }
@@ -103,7 +112,7 @@ module.exports = {
         respectPrefix: false,
         respectImportant: false,
       })
-    }
+    })
   ]
 }
 ```
@@ -114,9 +123,11 @@ To generate responsive, hover, focus, active, or group-hover variants of your st
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   plugins: [
-    function({ addUtilities }) {
+    plugin(function({ addUtilities }) {
       const newUtilities = {
         // ...
       }
@@ -124,7 +135,7 @@ module.exports = {
       addUtilities(newUtilities, {
         variants: ['responsive', 'hover'],
       })
-    }
+    })
   ]
 }
 ```
@@ -133,15 +144,17 @@ If you only need to specify variants and don't need to opt-out of the default pr
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   plugins: [
-    function({ addUtilities }) {
+    plugin(function({ addUtilities }) {
       const newUtilities = {
         // ...
       }
 
       addUtilities(newUtilities, ['responsive', 'hover'])
-    }
+    })
   ]
 }
 ```
@@ -150,18 +163,20 @@ If you'd like the user to provide the variants themselves under the `variants` s
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   variants: {
     customPlugin: ['responsive', 'hover'],
   },
   plugins: [
-    function({ addUtilities, variants }) {
+    plugin(function({ addUtilities, variants }) {
       const newUtilities = {
         // ...
       }
 
       addUtilities(newUtilities, variants('customPlugin'))
-    }
+    })
   ]
 }
 ```
@@ -178,9 +193,11 @@ To add new component styles from a plugin, call `addComponents`, passing in your
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   plugins: [
-    function({ addComponents }) {
+    plugin(function({ addComponents }) {
       const buttons = {
         '.btn': {
           padding: '.5rem 1rem',
@@ -204,7 +221,7 @@ module.exports = {
       }
 
       addComponents(buttons)
-    }
+    })
   ]
 }
 ```
@@ -252,9 +269,11 @@ Although there's rarely a good reason to make component declarations important, 
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   plugins: [
-    function({ addComponents }) {
+    plugin(function({ addComponents }) {
       const buttons = {
         '.btn': {
           padding: '.5rem 1rem !important',
@@ -265,7 +284,7 @@ module.exports = {
       }
 
       addComponents(buttons)
-    }
+    })
   ]
 }
 ```
@@ -274,10 +293,12 @@ All classes in a selector will be prefixed by default, so if you add a more comp
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   prefix: 'tw-',
   plugins: [
-    function({ addComponents }) {
+    plugin(function({ addComponents }) {
       const components = {
         // ...
         '.navbar-inverse a.nav-link': {
@@ -286,7 +307,7 @@ module.exports = {
       }
 
       addComponents(components)
-    }
+    })
   ]
 }
 ```
@@ -304,10 +325,12 @@ To opt out of prefixing, pass an options object as a second parameter to `addCom
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   prefix: 'tw-',
   plugins: [
-    function({ addComponents }) {
+    plugin(function({ addComponents }) {
       const components = {
         // ...
       }
@@ -315,7 +338,7 @@ module.exports = {
       addComponents(components, {
         respectPrefix: false
       })
-    }
+    })
   ]
 }
 ```
@@ -327,7 +350,7 @@ The `addComponents` function doesn't provide the ability to automatically genera
 You can always do this manually if necessary by wrapping your styles in the `@@variants` at-rule:
 
 ```js
-function({ addComponents }) {
+plugin(function({ addComponents }) {
   addComponents({
     '@@variants responsive, hover': {
       '.btn': {
@@ -338,7 +361,7 @@ function({ addComponents }) {
       // ...
     }
   })
-}
+})
 ```
 
 ---
@@ -353,15 +376,17 @@ To add new component styles from a plugin, call `addBase`, passing in your style
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   plugins: [
-    function({ addBase, config }) {
+    plugin(function({ addBase, config }) {
       addBase({
         'h1': { fontSize: config('theme.fontSize.2xl') },
         'h2': { fontSize: config('theme.fontSize.xl') },
         'h3': { fontSize: config('theme.fontSize.lg') },
       })
-    }
+    })
   ]
 }
 ```
@@ -380,6 +405,7 @@ For example, this plugin generates a set of `.rotate-{angle}` utilities where `{
 ```js
 // tailwind.config.js
 const _ = require('lodash')
+const plugin = require('tailwindcss/plugin')
 
 module.exports = {
   theme: {
@@ -390,7 +416,7 @@ module.exports = {
     }
   },
   plugins: [
-    function({ addUtilities, config, e }) {
+    plugin(function({ addUtilities, config, e }) {
       const rotateUtilities = _.map(config('theme.rotate'), (value, key) => {
         return {
           [`.${e(`rotate-${key}`)}`]: {
@@ -400,7 +426,7 @@ module.exports = {
       })
 
       addUtilities(rotateUtilities)
-    }
+    })
   ]
 }
 ```
@@ -433,7 +459,7 @@ Additionally, because CSS has rules about the characters a class name can *start
 // => '.rotate-1\/4'
 ```
 
---- 
+---
 
 ## Manually prefixing selectors
 
@@ -443,16 +469,18 @@ For example, if you're creating a plugin to be reused across a set of internal p
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   prefix: 'tw-',
   plugins: [
-    function({ addComponents, prefix }) {
+    plugin(function({ addComponents, prefix }) {
       addComponents({
         [`.existing-class > ${prefix('.new-class')}`]: {
           backgroundColor: '#fff',
         }
       })
-    }
+    })
   ]
 }
 ```
@@ -483,10 +511,11 @@ For example, this simplified version of the built-in [container](/docs/container
 ```js
 // tailwind.config.js
 const _ = require('lodash')
+const plugin = require('tailwindcss/plugin')
 
 module.exports = {
   plugins: [
-    function({ addComponents, theme }) {
+    plugin(function({ addComponents, theme }) {
       const screens = theme('screens', {})
 
       const mediaQueries = _.map(screens, width => {
@@ -503,7 +532,7 @@ module.exports = {
         { '.container': { width: '100%' } },
         ...mediaQueries,
       ])
-    }
+    })
   ]
 }
 ```
@@ -527,7 +556,7 @@ addUtilities(newUtilities, config('variants.customPlugin'))
 ```
 
 @component('_partials.tip-good')
-Use unprefixed utilities to target mobile, and override them at larger breakpoints
+Use the variants function instead
 @endcomponent
 
 ```js
@@ -538,16 +567,18 @@ Since `variants` could simply be a global list of variants to configure for ever
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   variants: ['responsive', 'hover', 'focus'],
   plugins: [
-    function ({ config, variants }) {
+    plugin(function ({ config, variants }) {
       config('variants.customPlugin')
       // => undefined
 
       variants('customPlugin')
       // => ['reponsive', 'hover', 'focus']
-    }
+    })
   ]
 }
 ```
@@ -565,8 +596,9 @@ For example, here's a plugin *(extracted to its own module)* for creating simple
 ```js
 // ./plugins/gradients.js
 const _ = require('lodash')
+const plugin = require('tailwindcss/plugin')
 
-module.exports = function({ addUtilities, e, theme, variants }) {
+module.exports = plugin(function({ addUtilities, e, theme, variants }) {
   const gradients = theme('gradients', {})
   const gradientVariants = variants('gradients', [])
 
@@ -577,7 +609,7 @@ module.exports = function({ addUtilities, e, theme, variants }) {
   }))
 
   addUtilities(utilities, gradientVariants)
-}
+})
 ```
 
 To use it, you'd `require` it in your plugins list, specifying your configuration under the `gradients` key in both `theme` and `variants`:
@@ -600,6 +632,35 @@ module.exports = {
   ],
 }
 ```
+
+### Providing default options
+
+To provide default `theme` and `variants` options for your plugin, pass a second argument to Tailwind's `plugin` function that includes your defaults:
+
+```js
+// ./plugins/gradients.js
+const _ = require('lodash')
+const plugin = require('tailwindcss/plugin')
+
+module.exports = plugin(function({ addUtilities, e, theme, variants }) {
+  // ...
+}, {
+  theme: {
+    gradients: theme => ({
+      'blue-green': [theme('colors.blue.500'), theme('colors.green.500')],
+      'purple-blue': [theme('colors.purple.500'), theme('colors.blue.500')],
+      // ...
+    })
+  },
+  variants: {
+    gradients: ['responsive', 'hover'],
+  }
+})
+```
+
+This object is just another [Tailwind configuration object](/docs/configuration) and has all of the same properties and features as the config object you're used to working with in `tailwind.config.js`.
+
+By providing your defaults this way, end users will be able to [override](/docs/theme#overriding-the-default-theme) and [extend](/docs/theme#extending-the-default-theme) your defaults the same way they can with Tailwind's built-in styles.
 
 ---
 
@@ -716,16 +777,17 @@ The `addVariant` function allows you to register your own custom [variants](/doc
 To add a new variant, call the `addVariant` function, passing in the name of your custom variant, and a callback that modifies the affected CSS rules as needed.
 
 ```js
-// tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   plugins: [
-    function({ addVariant, e }) {
+    plugin(function({ addVariant, e }) {
       addVariant('disabled', ({ modifySelectors, separator }) => {
         modifySelectors(({ className }) => {
           return `.${e(`disabled${separator}${className}`)}:disabled`
         })
       })
-    }
+    })
   ]
 }
 ```
@@ -751,15 +813,17 @@ For example, a `first-child` variant plugin could be written like this:
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   plugins: [
-    function({ addVariant, e }) {
+    plugin(function({ addVariant, e }) {
       addVariant('first-child', ({ modifySelectors, separator }) => {
         modifySelectors(({ className }) => {
           return `.${e(`first-child${separator}${className}`)}:first-child`
         })
       })
-    }
+    })
   ]
 }
 ```
@@ -774,9 +838,11 @@ For example, this plugin creates an `important` version of each affected utility
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   plugins: [
-    function({ addVariant }) {
+    plugin(function({ addVariant }) {
       addVariant('important', ({ container }) => {
         container.walkRules(rule => {
           rule.selector = `.\\!${rule.selector.slice(1)}`
@@ -785,7 +851,7 @@ module.exports = {
           })
         })
       })
-    }
+    })
   ]
 }
 ```
@@ -794,11 +860,11 @@ This plugin takes all of the rules inside the container, wraps them in a `@suppo
 
 ```js
 // tailwind.config.js
-const postcss = require('postcss')
+const plugin = require('tailwindcss/plugin')
 
 module.exports = {
   plugins: [
-    function({ addVariant, e }) {
+    plugin(function({ addVariant, e, postcss }) {
       addVariant('supports-grid', ({ container, separator }) => {
         const supportsRule = postcss.atRule({ name: 'supports', params: '(display: grid)' })
         supportsRule.append(container.nodes)
@@ -807,7 +873,7 @@ module.exports = {
           rule.selector = `.${e(`supports-grid${separator}${rule.selector.slice(1)}`)}`
         })
       })
-    }
+    })
   ]
 }
 ```
@@ -838,9 +904,3 @@ To use custom variants with custom utilities in your own CSS, use the [variants 
   }
 }
 ```
-
----
-
-## Example plugins
-
-To check out a few example plugins, [visit the plugin examples repository on GitHub](https://github.com/tailwindcss/plugin-examples).

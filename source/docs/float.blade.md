@@ -25,7 +25,12 @@ features:
       '.float-none',
       'float: none;',
       "Removes any previously defined float value.",
-    ]
+    ],
+    [
+      '.clearfix',
+      "&amp;::after {\n&nbsp;&nbsp;content: \"\";\n&nbsp;&nbsp;display: table;\n&nbsp;&nbsp;clear: both;\n}",
+      "Clear any floats within an element.",
+    ],
   ]
 ])
 

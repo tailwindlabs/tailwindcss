@@ -12,6 +12,7 @@
   <title>@yield('title', $page->title ? $page->title . ' - Tailwind CSS' : 'Tailwind CSS - A Utility-First CSS Framework for Rapid UI Development')</title>
   <meta name="theme-color" content="#ffffff">
   @yield('meta')
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
   <link rel="stylesheet" href="{{ mix('/css/main.css', 'assets/build') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css">
 </head>

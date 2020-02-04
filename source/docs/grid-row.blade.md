@@ -1,6 +1,6 @@
 ---
 extends: _layouts.documentation
-title: "Grid Row"
+title: "Grid Row Start / End"
 description: "Utilities for controlling the grid rows."
 features:
   responsive: true
@@ -11,8 +11,23 @@ features:
 
 @include('_partials.work-in-progress')
 
-We do not include any default values for grid rows. If you'd like to add grid row utilities to your project, add the values you need under the gridRow key in your theme.
-
-@component('_partials.customized-config', ['key' => 'theme.gridRow'])
-+ 'span-1': 'span 1 / span 1'
-@endcomponent
+@include('_partials.class-table', [
+  'scroll' => true,
+  'rows' => $page->config['theme']['gridRow']->map(function ($value, $name) {
+    $class = ".row-{$name}";
+    $code = "grid-row: {$value};";
+    return [$class, $code];
+  })->concat(
+    $page->config['theme']['gridRowStart']->map(function ($value, $name) {
+      $class = ".row-start-{$name}";
+      $code = "grid-row-start: {$value};";
+      return [$class, $code];
+    })
+  )->concat(
+    $page->config['theme']['gridRowEnd']->map(function ($value, $name) {
+      $class = ".row-end-{$name}";
+      $code = "grid-row-end: {$value};";
+      return [$class, $code];
+    })
+  )
+])

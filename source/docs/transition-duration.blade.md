@@ -14,7 +14,7 @@ features:
 @include('_partials.class-table', [
   'scroll' => true,
   'rows' => $page->config['theme']['transitionDuration']->map(function ($value, $name) {
-    $class = $name = ".transition-{$name}";
+    $class = $name = ".duration-{$name}";
     $code = "transition-duration: {$value};";
     return [$class, $code];
   })

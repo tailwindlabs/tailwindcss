@@ -472,15 +472,17 @@ For example, this simple plugin adds support for the `disabled` pseudo-class var
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   plugins: [
-    function({ addVariant, e }) {
+    plugin(function({ addVariant, e }) {
       addVariant('disabled', ({ modifySelectors, separator }) => {
         modifySelectors(({ className }) => {
           return `.${e(`disabled${separator}${className}`)}:disabled`
         })
       })
-    }
+    })
   ]
 }
 ```

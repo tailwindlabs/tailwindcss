@@ -320,9 +320,11 @@ In addition to writing component classes directly in your CSS files, you can als
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   plugins: [
-    function({ addComponents }) {
+    plugin(function({ addComponents }) {
       const buttons = {
         '.btn': {
           padding: '.5rem 1rem',
@@ -346,7 +348,7 @@ module.exports = {
       }
 
       addComponents(buttons)
-    }
+    })
   ]
 }
 ```

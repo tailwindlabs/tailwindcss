@@ -7,6 +7,11 @@ description: "Utilities for controlling the display box type of an element."
 @include('_partials.class-table', [
   'rows' => [
     [
+      '.hidden',
+      'display: none;',
+      "Set the box type of the element to <code>none</code>.",
+    ],
+    [
       '.block',
       'display: block;',
       "Set the box type of the element to <code>block</code>.",
@@ -20,6 +25,11 @@ description: "Utilities for controlling the display box type of an element."
       '.inline',
       'display: inline;',
       "Set the box type of the element to <code>inline</code>.",
+    ],
+    [
+      '.grid',
+      'display: grid;',
+      "Set the box type of the element to <code>grid</code>.",
     ],
     [
       '.flex',
@@ -75,11 +85,6 @@ description: "Utilities for controlling the display box type of an element."
       '.table-row',
       'display: table-row;',
       "Set the box type of the element to <code>table-row</code>.",
-    ],
-    [
-      '.hidden',
-      'display: none;',
-      "Set the box type of the element to <code>none</code>.",
     ],
   ]
 ])

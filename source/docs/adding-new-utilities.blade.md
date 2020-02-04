@@ -200,9 +200,11 @@ In addition to adding new utility classes directly in your CSS files, you can al
 
 ```js
 // tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   plugins: [
-    function({ addUtilities }) {
+    plugin(function({ addUtilities }) {
       const newUtilities = {
         '.rotate-0': {
           transform: 'rotate(0deg)',
@@ -219,7 +221,7 @@ module.exports = {
       }
 
       addUtilities(newUtilities, ['responsive', 'hover'])
-    }
+    })
   ]
 }
 

@@ -33,6 +33,7 @@ return [
         ],
         'Layout' => [
             'Container' => '/docs/container',
+            'Box Sizing' => '/docs/box-sizing',
             'Display' => '/docs/display',
             'Float' => '/docs/float',
             'Clear' => '/docs/clear',
@@ -88,18 +89,12 @@ return [
             'Flex Shrink' => '/docs/flex-shrink',
             'Order' => '/docs/order',
         ],
-        'CSS Grid' => [
+        'Grid' => [
             'Gap' => '/docs/gap',
-            'Row Gap' => '/docs/row-gap',
-            'Column Gap' => '/docs/column-gap',
             'Grid Template Columns' => '/docs/grid-template-columns',
-            'Grid Column' => '/docs/grid-column',
-            'Grid Column Start' => '/docs/grid-column-start',
-            'Grid Column End' => '/docs/grid-column-end',
+            'Grid Column Start / End' => '/docs/grid-column',
             'Grid Template Rows' => '/docs/grid-template-rows',
-            'Grid Row' => '/docs/grid-row',
-            'Grid Row Start' => '/docs/grid-row-start',
-            'Grid Row End' => '/docs/grid-row-end',
+            'Grid Row Start / End' => '/docs/grid-row',
         ],
         'Spacing' => [
             'Padding' => '/docs/padding',
@@ -112,7 +107,6 @@ return [
             'Height' => '/docs/height',
             'Min-Height' => '/docs/min-height',
             'Max-Height' => '/docs/max-height',
-            'Box Sizing' => '/docs/box-sizing',
         ],
         'Tables' => [
             'Border Collapse' => '/docs/border-collapse',
@@ -122,12 +116,12 @@ return [
             'Box Shadow' => '/docs/box-shadow',
             'Opacity' => '/docs/opacity',
         ],
-        'CSS Transitions' => [
+        'Transitions' => [
             'Transition Property' => '/docs/transition-property',
             'Transition Duration' => '/docs/transition-duration',
             'Transition Timing Function' => '/docs/transition-timing-function',
         ],
-        'CSS Transforms' => [
+        'Transforms' => [
             'Transform Origin' => '/docs/transform-origin',
             'Scale' => '/docs/scale',
             'Rotate' => '/docs/rotate',

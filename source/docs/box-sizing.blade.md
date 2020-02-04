@@ -14,12 +14,12 @@ features:
 @include('_partials.class-table', [
   'rows' => [
     [
-      '.box-sizing-border',
-      'box-sizing: border;',
+      '.box-border',
+      'box-sizing: border-box;',
     ],
     [
-      '.box-sizing-content',
-      'box-sizing: content;',
+      '.box-content',
+      'box-sizing: content-box;',
     ],
   ]
 ])

@@ -14,7 +14,6 @@ features:
 @include('_partials.class-table', [
   'scroll' => true,
   'rows' => collect([
-    ['translate', ['--transform-translate-x', '--transform-translate-x']],
     ['translate-x', ['--transform-translate-x']],
     ['translate-y', ['--transform-translate-y']],
   ])->flatMap(function ($translate) use ($page) {

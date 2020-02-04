@@ -11,9 +11,11 @@ features:
 
 @include('_partials.work-in-progress')
 
-We do not include any default values for grid template rows. If you'd like to add grid template row utilities to your project, add the values you need under the gridTemplateRows key in your theme.
-
-@component('_partials.customized-config', ['key' => 'theme.gridTemplateRows'])
-+ '1': 'repeat(1, minmax(0, 1fr))',
-+ '2': 'repeat(2, minmax(0, 1fr))',
-@endcomponent
+@include('_partials.class-table', [
+  'scroll' => false,
+  'rows' => $page->config['theme']['gridTemplateRows']->map(function ($value, $name) {
+    $class = ".grid-rows-{$name}";
+    $code = "grid-template-rows: {$value};";
+    return [$class, $code];
+  })
+])

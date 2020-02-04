@@ -4,10 +4,10 @@ module.exports = {
   important: true,
   theme: {
     screens: {
-      'sm': '576px',
-      'md': '768px',
-      'lg': '992px',
-      'xl': '1280px',
+      sm: '576px',
+      md: '768px',
+      lg: '992px',
+      xl: '1280px',
     },
     extend: {
       colors: {
@@ -18,7 +18,7 @@ module.exports = {
           red: 'var(--color-code-red)',
           blue: 'var(--color-code-blue)',
           white: 'var(--color-code-white)',
-        }
+        },
       },
       spacing: {
         '7': '1.75rem',
@@ -47,23 +47,23 @@ module.exports = {
         }
       },
       maxHeight: {
-        'xs': '20rem',
-        'sm': '30rem',
+        xs: '20rem',
+        sm: '30rem',
         '(screen-16)': 'calc(100vh - 4rem)',
       },
       boxShadow: {
-        'md-light': '0 0 12px 8px rgb(255,255,255)'
+        'md-light': '0 0 12px 8px rgb(255,255,255)',
       },
       zIndex: {
         '90': '90',
         '100': '100',
       },
-    }
+    },
   },
   variants: {
     backgroundColor: ['responsive', 'odd', 'even', 'hover', 'focus'],
     borderColor: ['responsive', 'hover', 'focus'],
     borderWidth: ['responsive', 'first', 'last', 'hover', 'focus'],
     opacity: ['responsive', 'hover', 'focus', 'disabled'],
-  }
+  },
 }

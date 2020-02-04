@@ -1,6 +1,6 @@
 ---
 extends: _layouts.documentation
-title: "Grid Column"
+title: "Grid Column Start / End"
 description: "Utilities for controlling the grid columns."
 features:
   responsive: true
@@ -17,5 +17,17 @@ features:
     $class = ".col-{$name}";
     $code = "grid-column: {$value};";
     return [$class, $code];
-  })
+  })->concat(
+    $page->config['theme']['gridColumnStart']->map(function ($value, $name) {
+      $class = ".col-start-{$name}";
+      $code = "grid-column-start: {$value};";
+      return [$class, $code];
+    })
+  )->concat(
+    $page->config['theme']['gridColumnEnd']->map(function ($value, $name) {
+      $class = ".col-end-{$name}";
+      $code = "grid-column-end: {$value};";
+      return [$class, $code];
+    })
+  )
 ])
