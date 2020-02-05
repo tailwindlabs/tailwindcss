@@ -416,8 +416,6 @@ module.exports = {
       '50': '50',
     },
     gap: theme => theme('spacing'),
-    rowGap: {},
-    columnGap: {},
     gridTemplateColumns: {
       none: 'none',
       '1': 'repeat(1, minmax(0, 1fr))',
@@ -664,8 +662,6 @@ module.exports = {
     wordBreak: ['responsive'],
     zIndex: ['responsive'],
     gap: ['responsive'],
-    columnGap: ['responsive'],
-    rowGap: ['responsive'],
     gridAutoFlow: ['responsive'],
     gridTemplateColumns: ['responsive'],
     gridColumn: ['responsive'],
