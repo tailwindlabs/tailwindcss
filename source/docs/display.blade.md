@@ -27,11 +27,6 @@ description: "Utilities for controlling the display box type of an element."
       "Set the box type of the element to <code>inline</code>.",
     ],
     [
-      '.grid',
-      'display: grid;',
-      "Set the box type of the element to <code>grid</code>.",
-    ],
-    [
       '.flex',
       'display: flex;',
       "Set the box type of the element to <code>flex</code>.",
@@ -40,6 +35,11 @@ description: "Utilities for controlling the display box type of an element."
       '.inline-flex',
       'display: inline-flex;',
       "Set the box type of the element to <code>inline-flex</code>.",
+    ],
+    [
+      '.grid',
+      'display: grid;',
+      "Set the box type of the element to <code>grid</code>.",
     ],
     [
       '.table',
@@ -147,6 +147,29 @@ Use `.inline-flex` to create an inline flex container.
   <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
   <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
 </div>
+@endcomponent
+
+## Grid
+
+Use `.grid` to create a grid container.
+
+@component('_partials.code-sample', ['class' => 'bg-white p-8'])
+<div class="grid gap-4 grid-cols-3">
+  <div class="bg-gray-300 h-12"></div>
+  <div class="bg-gray-500 h-12"></div>
+  <div class="bg-gray-300 h-12"></div>
+  <div class="bg-gray-500 h-12"></div>
+  <div class="bg-gray-300 h-12"></div>
+  <div class="bg-gray-500 h-12"></div>
+  <div class="bg-gray-300 h-12"></div>
+  <div class="bg-gray-500 h-12"></div>
+  <div class="bg-gray-300 h-12"></div>
+</div>
+@slot('code')
+<div class="grid gap-4 grid-cols-3">
+  <!-- ... -->
+</div>
+@endslot
 @endcomponent
 
 ## Table
