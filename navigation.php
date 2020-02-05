@@ -153,7 +153,7 @@ return [
             'Buttons' => '/components/buttons',
             'Cards' => '/components/cards',
             'Forms' => '/components/forms',
-            'Grids' => '/components/grids',
+            'Flexbox Grids' => '/components/flexbox-grids',
             'Navigation' => '/components/navigation',
         ],
     ],
