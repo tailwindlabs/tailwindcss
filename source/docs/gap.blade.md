@@ -102,6 +102,7 @@ Use `.col-gap-{size}` to change the gutter size between columns in grid layouts.
   <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
 </div>
+@endcomponent
 
 ## Responsive
 
