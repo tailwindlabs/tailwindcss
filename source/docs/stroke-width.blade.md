@@ -15,7 +15,7 @@ description: "Utilities for styling the stroke width of SVG elements."
 
 ## Usage
 
-Use the `.stroke-1` or `.stroke-2` utilities to set the stroke width of an SVG. Note that `.stroke-0` will cause no stroke to be painted.
+Use the `.stroke-{width}` utilities to set the stroke width of an SVG.
 
 Useful for styling icon sets like [Feather](https://feathericons.com/) that are drawn entirely with strokes.
 
@@ -120,7 +120,7 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-Control which stroke utilities Tailwind generates by customizing the `theme.strokeWidth` section in your `tailwind.config.js` file:
+Control which stroke-width utilities Tailwind generates by customizing the `theme.strokeWidth` section in your `tailwind.config.js` file:
 
 @component('_partials.customized-config', ['key' => 'theme.extend.strokeWidth'])
 + '3': '3',
@@ -131,7 +131,7 @@ Learn more about customizing the default theme in the [theme customization docum
 
 @include('_partials.variants-and-disabling', [
     'utility' => [
-        'name' => 'strokeWidth',
+        'name' => 'stroke-width',
         'property' => 'strokeWidth',
     ],
     'variants' => ['responsive'],

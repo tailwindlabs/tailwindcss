@@ -51,6 +51,12 @@ Use the `gap-{size}`, `col-gap-{size}`, and `row-gap-{size}` utilities to contro
 
 To control the gap at a specific breakpoint, add a `{screen}:` prefix to any existing gap utility. For example, use `md:gap-6` to apply the `gap-6` utility at only medium screen sizes and above.
 
+```html
+<div class="grid gap-4 sm:gap-6 md:gap-8 lg:gap-12 xl:gap-16 ...">
+  <!-- ... -->
+</div>
+```
+
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 ## Customizing
