@@ -10,7 +10,9 @@ features:
 ---
 
 @include('_partials.class-table', [
-  'rows' => $page->config['theme']['lineHeight']->map(function ($value, $name) {
+  'rows' => $page->config['theme']['lineHeight']->sortBy(function ($value, $name) {
+    return is_numeric($name) ? 1 : 0;
+  })->map(function ($value, $name) {
     $class = ".leading-{$name}";
     $code = "line-height: {$value};";
     $description = "Set the line height of an element to <code>{$value}</code>.";
@@ -18,19 +20,37 @@ features:
   })
 ])
 
-## Usage
+## Relative line-heights
 
-Control the line height of an element using the `.leading-{size}` utilities.
+Use the `leading-none`, `leading-tight`, `leading-snug`, `leading-normal`, `leading-relaxed`, and `leading-loose` utilities to give an element a relative line-height based on its current font-size.
 
 @component('_partials.code-sample')
-@foreach ($page->config['theme']['lineHeight'] as $name => $value)
+@foreach (['none', 'tight', 'snug', 'normal', 'relaxed', 'loose'] as $name)
 <div @if(!$loop->last) class="mb-6" @endif>
   <p class="text-sm text-gray-600">.leading-{{ $name }}</p>
   <p class="leading-{{ $name }} text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
 </div>
 @endforeach
 @slot('code')
-@foreach ($page->config['theme']['lineHeight'] as $name => $value)
+@foreach (['none', 'tight', 'snug', 'normal', 'relaxed', 'loose'] as $name)
+<p class="leading-{{ $name }} ...">Lorem ipsum dolor sit amet ...</p>
+@endforeach
+@endslot
+@endcomponent
+
+## Fixed line-heights
+
+Use the `leading-{size}` utilities to give an element a fixed line-height, irrespective of the current font-size. These are useful when you need very precise control over an element's final size.
+
+@component('_partials.code-sample')
+@foreach (range(3, 10) as $name)
+<div @if(!$loop->last) class="mb-6" @endif>
+  <p class="text-sm text-gray-600">.leading-{{ $name }}</p>
+  <p class="leading-{{ $name }} text-gray-800">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
+</div>
+@endforeach
+@slot('code')
+@foreach (range(3, 10) as $name)
 <p class="leading-{{ $name }} ...">Lorem ipsum dolor sit amet ...</p>
 @endforeach
 @endslot
@@ -65,18 +85,11 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-### Line Heights
+By default Tailwind provides six relative and eight fixed `line-height` utilities. You change, add, or remove these by customizing the `skew` section of your Tailwind theme config.
 
-By default Tailwind provides six `line-height` utilities. You change, add, or remove these by editing the `theme.lineHeight` section of your Tailwind config.
-
-@component('_partials.customized-config', ['key' => 'theme.lineHeight'])
-  none: 1,
-  tight: 1.25,
-- snug: 1.375,
-  normal: 1.5,
-- relaxed: 1.625,
-+ relaxed: 1.75,
-  loose: 2,
+@component('_partials.customized-config', ['key' => 'theme.extend.lineHeight'])
++ 'extra-loose': '2.5',
++ '12': '3rem',
 @endcomponent
 
 @include('_partials.variants-and-disabling', [

@@ -6923,10 +6923,10 @@ table@^4.0.1:
     slice-ansi "1.0.0"
     string-width "^2.1.1"
 
-tailwindcss@1.2.0-canary.7:
-  version "1.2.0-canary.7"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.2.0-canary.7.tgz#1ba44eed81ce94a7fa7fb59842b36869ec8a6382"
-  integrity sha512-TU2mARwIXYTBAINCydUqnQPi0HsbF2KOigj340Egu3tCzwLuVzLR+DA5SOmdwt7GtwZ3tOAvTWIXRA5+kBtL7w==
+tailwindcss@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.2.0.tgz#5df317cebac4f3131f275d258a39da1ba3a0f291"
+  integrity sha512-CKvY0ytB3ze5qvynG7qv4XSpQtFNGPbu9pUn8qFdkqgD8Yo/vGss8mhzbqls44YCXTl4G62p3qVZBj45qrd6FQ==
   dependencies:
     autoprefixer "^9.4.5"
     bytes "^3.0.0"

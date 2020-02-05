@@ -5,6 +5,21 @@ description: "What's new in the latest version of Tailwind CSS."
 titleBorder: true
 ---
 
+<h2 class="mb-0">Tailwind CSS v1.2</h2>
+<div class="mt-0 text-gray-600">Feb 5, 2020</div>
+
+Tailwind CSS v1.2 is here and it's the biggest feature release since v0.1 dropped two and a half years ago!
+
+Here are the features you're probably going to be the most excited about:
+
+- [CSS Grid support](/docs/grid-template-columns)
+- [CSS Transitions support](/docs/transition-property)
+- [CSS Transforms support](/docs/scale)
+
+For the full list of changes, [check out the complete release notes on GitHub](https://github.com/tailwindcss/tailwindcss/releases/tag/v1.2.0).
+
+---
+
 <h2 class="mb-0">Tailwind CSS v1.1</h2>
 <div class="mt-0 text-gray-600">Aug 6, 2019</div>
 
