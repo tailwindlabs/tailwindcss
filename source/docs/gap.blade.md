@@ -1,12 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Gap"
-description: "Utilities for controlling the grid gap (gutter) spacing."
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: false
+description: "Utilities for controlling gutters between grid rows and columns."
 ---
 
 @include('_partials.class-table', [
@@ -30,7 +25,7 @@ features:
 
 ## Gap
 
-Use `.gap-{number}` to change the gap (gutter) size between rows and columns.
+Use `.gap-{size}` to change the gutter size in grid layouts.
 
 @component('_partials.code-sample')
 <div class="grid grid-cols-2 gap-1 bg-red-200">
@@ -57,7 +52,7 @@ Use `.gap-{number}` to change the gap (gutter) size between rows and columns.
 
 ## Row Gap
 
-Use `.row-gap-{number}` to change the gap (gutter) size between rows.
+Use `.row-gap-{size}` to change the gutter size between rows in grid layouts.
 
 @component('_partials.code-sample')
 <div class="grid grid-cols-2 row-gap-1 bg-red-200">
@@ -84,7 +79,7 @@ Use `.row-gap-{number}` to change the gap (gutter) size between rows.
 
 ## Column Gap
 
-Use `.col-gap-{number}` to change the gap (gutter) size between columns.
+Use `.col-gap-{size}` to change the gutter size between columns in grid layouts.
 
 @component('_partials.code-sample')
 <div class="grid grid-cols-2 col-gap-1 bg-red-200">
@@ -107,11 +102,10 @@ Use `.col-gap-{number}` to change the gap (gutter) size between columns.
   <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
   <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
 </div>
-@endcomponent
 
 ## Responsive
 
-To control how grid gaps are sized at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:gap-4` to apply the `gap-4` utility at only medium screen sizes and above.
+To control the gap at a specific breakpoint, add a {screen}: prefix to any existing gap utility. For example, use md:gap-6 to apply the gap-6 utility at only medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
@@ -165,11 +159,11 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-### Gap scale
+### Gap values
 
-By default, Tailwind's grid gap (gutter) scale uses the [default spacing scale](/docs/customizing-spacing#default-spacing-scale).
+By default Tailwind's gap scale matches your configured [spacing scale](/docs/customizing-spacing).
 
-You can customize the spacing scale for padding, margin, width, and height all at once in the `theme.spacing` or `theme.extend.spacing` sections of your `tailwind.config.js` file:
+You can customize the global spacing scale in the `theme.spacing` or `theme.extend.spacing` sections of your `tailwind.config.js` file:
 
 @component('_partials.customized-config', ['key' => 'theme.extend.spacing'])
 + '72': '18rem',
@@ -177,21 +171,19 @@ You can customize the spacing scale for padding, margin, width, and height all a
 + '96': '24rem',
 @endcomponent
 
-To customize grid gap separately, use the `theme.width` section of your `tailwind.config.js` file.
+To customize the gap scale separately, use the `gap` section of your Tailwind theme config.
 
-@component('_partials.customized-config', ['key' => 'theme.extend.width'])
-+ '14': '3.5rem',
-+ '28': '7rem',
+@component('_partials.customized-config', ['key' => 'theme.extend.gap'])
++ '11': '2.75rem',
++ '13': '3.25rem',
 @endcomponent
 
 Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
 
 @include('_partials.variants-and-disabling', [
     'utility' => [
-        'name' => 'grid gap',
+        'name' => 'gap',
         'property' => 'gap',
     ],
-    'variants' => [
-        'responsive',
-    ],
+    'variants' => $page->config['variants']['gap'],
 ])
