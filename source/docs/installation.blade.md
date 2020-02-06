@@ -307,7 +307,7 @@ module.exports = function(defaults) {
 
 ## Using Tailwind via CDN
 
-Before using the CDN build please note, many of the features that make Tailwind CSS great are not available without incorporating Tailwind into your build process.
+Before using the CDN build, please note that many of the features that make Tailwind CSS great are not available without incorporating Tailwind into your build process.
 
 <ul class="list-none pl-0">
   <li class="flex items-center">
