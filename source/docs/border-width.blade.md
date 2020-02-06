@@ -1,7 +1,7 @@
 ---
 extends: _layouts.documentation
 title: "Border Width"
-description: "Utilities for controlling the width an element's borders."
+description: "Utilities for controlling the width of an element's borders."
 features:
   responsive: true
   customizable: true
