@@ -23,28 +23,85 @@ description: "Utilities for controlling gutters between grid rows and columns."
   })
 ])
 
+## Gap
 
-## Usage
+Use `.gap-{size}` to change the gutter size in grid layouts.
 
-Use the `gap-{size}`, `col-gap-{size}`, and `row-gap-{size}` utilities to control the gutter size in grid layouts.
-
-@component('_partials.code-sample', ['class' => 'bg-white p-8'])
-<div class="grid gap-4 grid-cols-3">
-  <div class="bg-gray-300 h-12"></div>
-  <div class="bg-gray-500 h-12"></div>
-  <div class="bg-gray-300 h-12"></div>
-  <div class="bg-gray-500 h-12"></div>
-  <div class="bg-gray-300 h-12"></div>
-  <div class="bg-gray-500 h-12"></div>
-  <div class="bg-gray-300 h-12"></div>
-  <div class="bg-gray-500 h-12"></div>
-  <div class="bg-gray-300 h-12"></div>
+@component('_partials.code-sample')
+<div class="grid grid-cols-2 gap-1 bg-red-200">
+  <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
 </div>
-@slot('code')
-<div class="grid gap-4 grid-cols-3">
-  <!-- ... -->
+
+<div class="grid grid-cols-2 gap-2 bg-red-200 my-6">
+  <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
 </div>
-@endslot
+
+<div class="grid grid-cols-2 gap-6 bg-red-200">
+  <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+</div>
+@endcomponent
+
+## Row Gap
+
+Use `.row-gap-{size}` to change the gutter size between rows in grid layouts.
+
+@component('_partials.code-sample')
+<div class="grid grid-cols-2 row-gap-1 bg-red-200">
+  <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+</div>
+
+<div class="grid grid-cols-2 row-gap-2 bg-red-200 my-6">
+  <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+</div>
+
+<div class="grid grid-cols-2 row-gap-6 bg-red-200">
+  <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+</div>
+@endcomponent
+
+## Column Gap
+
+Use `.col-gap-{size}` to change the gutter size between columns in grid layouts.
+
+@component('_partials.code-sample')
+<div class="grid grid-cols-2 col-gap-1 bg-red-200">
+  <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+</div>
+
+<div class="grid grid-cols-2 col-gap-2 bg-red-200 my-6">
+  <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+</div>
+
+<div class="grid grid-cols-2 col-gap-6 bg-red-200">
+  <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+</div>
 @endcomponent
 
 ## Responsive
@@ -52,6 +109,54 @@ Use the `gap-{size}`, `col-gap-{size}`, and `row-gap-{size}` utilities to contro
 To control the gap at a specific breakpoint, add a `{screen}:` prefix to any existing gap utility. For example, use `md:gap-6` to apply the `gap-6` utility at only medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+@component('_partials.responsive-code-sample')
+@slot('none')
+<div class="grid grid-cols-2 gap-2 bg-red-200 my-6">
+  <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+</div>
+@endslot
+@slot('sm')
+<div class="grid grid-cols-2 gap-1 bg-red-200 my-6">
+  <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+</div>
+@endslot
+@slot('md')
+<div class="grid grid-cols-2 gap-4 bg-red-200 my-6">
+  <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+</div>
+@endslot
+@slot('lg')
+<div class="grid grid-cols-2 row-gap-2 bg-red-200 my-6">
+  <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+</div>
+@endslot
+@slot('xl')
+<div class="grid grid-cols-2 col-gap-6 bg-red-200 my-6">
+  <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+  <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+</div>
+@endslot
+@slot('code')
+<div class="grid none:gap-2 sm:gap-1 md:gap-4 lg:row-gap-2 xl:col-gap-6 ...">
+  <!-- ... -->
+</div>
+@endslot
+@endcomponent
 
 ## Customizing
 
