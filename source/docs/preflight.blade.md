@@ -7,7 +7,7 @@ titleBorder: true
 
 <h2 style="font-size: 0" class="invisible m-0 -mb-6">Overview</h2>
 
-Built on top of [normalize.css](https://github.com/necolas/normalize.css/), Preflight is a set of base styles for Tailwind projects that are designed to smooth over cross-browser inconsistencies and make it easier for you work within the constraints of your design system.
+Built on top of [normalize.css](https://github.com/necolas/normalize.css/), Preflight is a set of base styles for Tailwind projects that are designed to smooth over cross-browser inconsistencies and make it easier for you to work within the constraints of your design system.
 
 Tailwind automatically injects these styles when you include `@@tailwind base` in your CSS:
 
