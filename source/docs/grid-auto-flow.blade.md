@@ -12,15 +12,15 @@ description: "Utilities for controlling how elements in a grid are auto-placed."
     ],
     [
       '.grid-flow-col',
-      'grid-auto-flow: col;',
+      'grid-auto-flow: column;',
     ],
     [
       '.grid-flow-row-dense',
-      'grid-auto-flow: row-dense;',
+      'grid-auto-flow: row dense;',
     ],
     [
       '.grid-flow-col-dense',
-      'grid-auto-flow: col-dense;',
+      'grid-auto-flow: column dense;',
     ],
   ]
 ])
