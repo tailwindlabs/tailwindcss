@@ -42,7 +42,7 @@ Every section of the config file is optional, so you only have to specify what y
 Generate a Tailwind config file for your project using the Tailwind CLI utility included when you install the `tailwindcss` npm package:
 
 ```bash
-npx tailwind init
+npx tailwindcss init
 ```
 
 This will create a minimal `tailwind.config.js` file at the root of your project:
@@ -61,7 +61,7 @@ module.exports = {
 To use a name other than `tailwind.config.js`, pass it as an argument on the command-line:
 
 ```bash
-npx tailwind init tailwindcss-config.js
+npx tailwindcss init tailwindcss-config.js
 ```
 
 If you use a custom file name, you will need to specify it when including Tailwind as a plugin in your PostCSS configuration as well:
@@ -82,7 +82,7 @@ For most users we encourage you to keep your config file as minimal as possible,
 If you'd rather scaffold a complete configuration file that includes all of Tailwind's default configuration, use the `--full` option:
 
 ```bash
-npx tailwind init --full
+npx tailwindcss init --full
 ```
 
 You'll get a file that matches the [default configuration file](https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js) Tailwind uses internally.
