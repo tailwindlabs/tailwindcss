@@ -251,7 +251,7 @@ Use the `.rounded-sm`, `.rounded`, or `.rounded-lg` utilities to apply different
 @component('_partials.code-sample', ['class' => 'flex justify-around text-sm'])
 <div class="bg-gray-400 mr-3 p-4 rounded-sm">.rounded-sm</div>
 <div class="bg-gray-400 mr-3 p-4 rounded">.rounded</div>
-<div class="bg-gray-400 mr-3 p-4 rounded">.rounded-md</div>
+<div class="bg-gray-400 mr-3 p-4 rounded-md">.rounded-md</div>
 <div class="bg-gray-400 p-4 rounded-lg">.rounded-lg</div>
 @slot('code')
 <div class="rounded-sm"></div>
