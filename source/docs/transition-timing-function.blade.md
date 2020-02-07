@@ -42,21 +42,21 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-### Duration values
+### Timing values
 
-By default Tailwind provides eight general purpose transition-duration utilities. You change, add, or remove these by customizing the `transitionDuration` section of your Tailwind theme config.
+By default Tailwind provides four general purpose transition-timing-function utilities. You change, add, or remove these by customizing the `transitionTimingFunction` section of your Tailwind theme config.
 
-@component('_partials.customized-config', ['key' => 'theme.extend.transitionDuration'])
-+ '0': '0ms',
-+ '2000': '2000ms',
+@component('_partials.customized-config', ['key' => 'theme.extend.transitionTimingFunction'])
++ 'ease-in-expo': 'cubic-bezier(0.95, 0.05, 0.795, 0.035)',
++ 'ease-out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
 @endcomponent
 
 Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
 
 @include('_partials.variants-and-disabling', [
     'utility' => [
-        'name' => 'transition-duration',
-        'property' => 'transitionDuration',
+        'name' => 'transition-timing-function',
+        'property' => 'transitionTimingFunction',
     ],
     'variants' => [
         'responsive',
