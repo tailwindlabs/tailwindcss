@@ -123,7 +123,7 @@ By default Tailwind includes grid-template-row utilities for creating basic grid
 
 You have direct access to the `grid-template-rows` CSS property here so you can make your custom rows values as generic or as complicated and site-specific as you like.
 
-@component('_partials.customized-config', ['key' => 'theme.extend.gridTemplateRow'])
+@component('_partials.customized-config', ['key' => 'theme.extend.gridTemplateRows'])
   // Simple 8 row grid
 + '8': 'repeat(8, minmax(0, 1fr))',
 
