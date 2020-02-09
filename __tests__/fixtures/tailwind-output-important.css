@@ -3400,6 +3400,10 @@ video {
   display: grid !important;
 }
 
+.inline-grid {
+  display: inline-grid !important;
+}
+
 .table {
   display: table !important;
 }
@@ -13703,6 +13707,10 @@ video {
 
   .sm\:grid {
     display: grid !important;
+  }
+
+  .sm\:inline-grid {
+    display: inline-grid !important;
   }
 
   .sm\:table {
@@ -24011,6 +24019,10 @@ video {
     display: grid !important;
   }
 
+  .md\:inline-grid {
+    display: inline-grid !important;
+  }
+
   .md\:table {
     display: table !important;
   }
@@ -34317,6 +34329,10 @@ video {
     display: grid !important;
   }
 
+  .lg\:inline-grid {
+    display: inline-grid !important;
+  }
+
   .lg\:table {
     display: table !important;
   }
@@ -44621,6 +44637,10 @@ video {
 
   .xl\:grid {
     display: grid !important;
+  }
+
+  .xl\:inline-grid {
+    display: inline-grid !important;
   }
 
   .xl\:table {
