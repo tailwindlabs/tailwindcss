@@ -102,6 +102,26 @@ features:
       "Apply the default border radius to the left corners of an element.",
     ],
     [
+      '.rounded-t-md',
+      "border-top-left-radius: .375rem;\nborder-top-right-radius: .375rem;",
+      "Apply a medium border radius to the top corners of an element.",
+    ],
+    [
+      '.rounded-r-md',
+      "border-top-right-radius: .375rem;\nborder-bottom-right-radius: .375rem;",
+      "Apply a medium border radius to the right corners of an element.",
+    ],
+    [
+      '.rounded-b-md',
+      "border-bottom-right-radius: .375rem;\nborder-bottom-left-radius: .375rem;",
+      "Apply a medium border radius to the bottom corners of an element.",
+    ],
+    [
+      '.rounded-l-md',
+      "border-top-left-radius: .375rem;\nborder-bottom-left-radius: .375rem;",
+      "Apply a medium border radius to the left corners of an element.",
+    ],
+    [
       '.rounded-t-lg',
       "border-top-left-radius: .5rem;\nborder-top-right-radius: .5rem;",
       "Apply a large border radius to the top corners of an element.",
@@ -200,6 +220,26 @@ features:
       '.rounded-bl',
       'border-bottom-left-radius: .25rem;',
       "Apply the default border radius to the bottom left corner of an element.",
+    ],
+    [
+      '.rounded-tl-md',
+      'border-top-left-radius: .375rem;',
+      "Apply a medium border radius to the top left corner of an element.",
+    ],
+    [
+      '.rounded-tr-md',
+      'border-top-right-radius: .375rem;',
+      "Apply a medium border radius to the top right corner of an element.",
+    ],
+    [
+      '.rounded-br-md',
+      'border-bottom-right-radius: .375rem;',
+      "Apply a medium border radius to the bottom right corner of an element.",
+    ],
+    [
+      '.rounded-bl-md',
+      'border-bottom-left-radius: .375rem;',
+      "Apply a medium border radius to the bottom left corner of an element.",
     ],
     [
       '.rounded-tl-lg',
@@ -372,6 +412,7 @@ By default Tailwind provides five border radius size utilities. You can change, 
 - 'sm': '.125rem',
 - default: '.25rem',
 + default: '4px',
+- 'md': '.375rem',
 - 'lg': '.5rem',
 - 'full': '9999px',
 + 'large': '12px',
