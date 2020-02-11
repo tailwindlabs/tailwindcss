@@ -11,8 +11,7 @@ export default function() {
           '--transform-scale-x': '1',
           '--transform-scale-y': '1',
           transform: [
-            'translateX(var(--transform-translate-x))',
-            'translateY(var(--transform-translate-y))',
+            'translate3d(var(--transform-translate-x), var(--transform-translate-y), 0)',
             'rotate(var(--transform-rotate))',
             'skewX(var(--transform-skew-x))',
             'skewY(var(--transform-skew-y))',
