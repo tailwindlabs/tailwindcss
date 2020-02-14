@@ -15,7 +15,11 @@ function className(classPrefix, key) {
   return `${classPrefix}-${key}`
 }
 
-export default function createUtilityPlugin(themeKey, utilityVariations, mapTheme = theme => theme) {
+export default function createUtilityPlugin(
+  themeKey,
+  utilityVariations,
+  mapTheme = theme => theme
+) {
   return function({ e, addUtilities, variants, theme }) {
     const utilities = utilityVariations.map(([classPrefix, properties]) => {
       return fromPairs(
@@ -32,5 +36,5 @@ export default function createUtilityPlugin(themeKey, utilityVariations, mapThem
 }
 
 export function convertDefaultKey(theme) {
-  return _.mapKeys(theme, (value, key) => key === 'default' ? '' : key)
+  return _.mapKeys(theme, (value, key) => (key === 'default' ? '' : key))
 }
