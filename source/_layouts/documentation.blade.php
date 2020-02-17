@@ -237,6 +237,21 @@
                   <table-of-contents class="mb-8"></table-of-contents>
                   @endunless
                   <div id="ad"></div>
+                  <div id="tailwind-ui-widget">
+                    <a href="https://tailwindui.com/book?utm_source=tailwindcss&utm_medium=sidebar-widget" class="mt-3 block">
+                      <img src="/img/tailwind-ui-sidebar.png" alt="">
+                    </a>
+                    <p class="mt-4 text-gray-700">
+                      <a href="https://tailwindui.com/book?utm_source=tailwindcss&utm_medium=sidebar-widget" class="text-gray-700">
+                      Beautiful UI components by the creators of Tailwind CSS.
+                      </a>
+                    </p>
+                    <div class="mt-2">
+                      <a href="https://tailwindui.com/book?utm_source=tailwindcss&utm_medium=sidebar-widget" class="text-sm text-gray-800 font-medium hover:underline">
+                        Learn more &rarr;
+                      </a>
+                    </div>
+                  </div>
                   <div id="refactoring-ui-widget" style="display: none;">
                     <a href="https://refactoringui.com/book?utm_source=tailwindcss&utm_medium=sidebar-widget" class="mt-3 block">
                       <img src="/img/refactoring-ui-book.png" alt="">
