@@ -29,10 +29,10 @@
           <img class="h-6" src="/img/tailwind-ui-logo-on-dark.svg" alt="">
           <p class="ml-3 font-medium text-white truncate">
             <span class="lg:hidden">
-              <span class="sr-only">Tailwind UI</span> is coming next week!
+              <span class="sr-only">Tailwind UI</span> is coming this week!
             </span>
             <span class="hidden lg:inline text-gray-400">
-              <strong class="text-white font-semibold mr-1">Coming next week!</strong>
+              <strong class="text-white font-semibold mr-1">Coming this week!</strong>
               <span class="xl:hidden">Beautiful UI components by the creators of Tailwind CSS.</span>
               <span class="hidden xl:inline">Beautiful UI components, crafted by the creators of Tailwind CSS.</span>
             </span>
