@@ -140,7 +140,7 @@ It's important to note that because of the negative lookbehind in this regex, it
 
 ```diff
 - /[\w-/:]+(?<!:)/g
-+ /[\w-/:]*[\w-/:]/g
++ /[\w-/:]*[\w-/]/g
 ```
 
 ### Customizing the regex
