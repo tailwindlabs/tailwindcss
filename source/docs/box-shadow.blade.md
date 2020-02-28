@@ -42,7 +42,7 @@ Use the `.shadow-xs`, `.shadow-sm`, `.shadow`, `.shadow-md`, `.shadow-lg`, `.sha
 </div>
 <div class="mt-6 lg:mt-0 text-center px-2">
   <div class="mb-1 text-xs text-gray-600">lg</div>
-  <div class="mx-auto h-16 w-16 text-xs bg-white rounded shadow-md"></div>
+  <div class="mx-auto h-16 w-16 text-xs bg-white rounded shadow-lg"></div>
 </div>
 <div class="mt-6 lg:mt-0 text-center px-2">
   <div class="mb-1 text-xs text-gray-600">xl</div>
