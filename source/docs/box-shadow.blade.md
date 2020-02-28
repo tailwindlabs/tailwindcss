@@ -21,7 +21,7 @@ features:
 
 ## Outer shadow
 
-Use the `.shadow-sm`, `.shadow`, `.shadow-md`, `.shadow-lg`, `.shadow-xl`, or `.shadow-2xl` utilities to apply different sized outer box shadows to an element.
+Use the `.shadow-xs`, `.shadow-sm`, `.shadow`, `.shadow-md`, `.shadow-lg`, `.shadow-xl`, or `.shadow-2xl` utilities to apply different sized outer box shadows to an element.
 
 @component('_partials.code-sample', ['class' => 'bg-gray-100 lg:flex justify-around items-center text-sm py-8'])
 <div class="text-center px-2">
@@ -53,6 +53,7 @@ Use the `.shadow-sm`, `.shadow`, `.shadow-md`, `.shadow-lg`, `.shadow-xl`, or `.
   <div class="mx-auto h-24 w-24 text-xs bg-white rounded shadow-2xl"></div>
 </div>
 @slot('code')
+<div class="shadow-xs"></div>
 <div class="shadow-sm"></div>
 <div class="shadow"></div>
 <div class="shadow-md"></div>
