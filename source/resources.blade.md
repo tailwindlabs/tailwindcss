@@ -56,7 +56,7 @@ They're easy to customize and perfect for landing pages, empty states, and more.
 
 ### Heroicons UI
 
-[Heroicons UI](https://github.com/sschoger/heroicons-ui) is a free SVG icon set created by [Steve Schoger](https://twitter.com/steveschoger). They're pre-optimized and easy to use directly in your HTML where you can customize them using Tailwind's color and sizing utilities.
+[Heroicons UI](https://github.com/refactoringui/heroicons) is a free SVG icon set created by [Steve Schoger](https://twitter.com/steveschoger). They're pre-optimized and easy to use directly in your HTML where you can customize them using Tailwind's color and sizing utilities.
 
 [![](/img/resources/heroicons-ui.png)](https://github.com/refactoringui/heroicons)
 
