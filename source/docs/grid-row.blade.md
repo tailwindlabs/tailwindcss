@@ -125,7 +125,7 @@ You can control which variants are generated for the grid-row utilities by modif
   // ...
 + gridRow: ['responsive', 'hover'],
 + gridRowStart: ['responsive', 'hover'],
-+ gridRowStartEnd: ['responsive', 'hover'],
++ gridRowEnd: ['responsive', 'hover'],
 @endcomponent
 
 Learn more about configuring variants in the [configuring variants documentation](/docs/configuring-variants/).
@@ -138,5 +138,5 @@ If you don't plan to use the grid-row utilities in your project, you can disable
   // ...
 + gridRow: false,
 + gridRowStart: false,
-+ gridRowStartEnd: false,
++ gridRowEnd: false,
 @endcomponent
