@@ -265,7 +265,7 @@
                   <div id="ad"></div>
                   <div id="tailwind-ui-widget">
                     <a href="https://tailwindui.com/?utm_source=tailwindcss&utm_medium=sidebar-widget" class="mt-3 block">
-                      <img src="/img/tailwind-ui-sidebar.png" alt="">
+                      <img src="/img/tailwind-ui-sidebar.png" alt="Tailwind UI">
                     </a>
                     <p class="mt-4 text-gray-700">
                       <a href="https://tailwindui.com/?utm_source=tailwindcss&utm_medium=sidebar-widget" class="text-gray-700">
