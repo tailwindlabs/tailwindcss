@@ -3674,6 +3674,10 @@ video {
   clear: both !important;
 }
 
+.clear-none {
+  clear: none !important;
+}
+
 .font-sans {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
 }
@@ -13977,6 +13981,10 @@ video {
 
   .sm\:clear-both {
     clear: both !important;
+  }
+
+  .sm\:clear-none {
+    clear: none !important;
   }
 
   .sm\:font-sans {
@@ -24285,6 +24293,10 @@ video {
     clear: both !important;
   }
 
+  .md\:clear-none {
+    clear: none !important;
+  }
+
   .md\:font-sans {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
   }
@@ -34591,6 +34603,10 @@ video {
     clear: both !important;
   }
 
+  .lg\:clear-none {
+    clear: none !important;
+  }
+
   .lg\:font-sans {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
   }
@@ -44895,6 +44911,10 @@ video {
 
   .xl\:clear-both {
     clear: both !important;
+  }
+
+  .xl\:clear-none {
+    clear: none !important;
   }
 
   .xl\:font-sans {
