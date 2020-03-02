@@ -23,6 +23,10 @@ features:
       '.clear-both',
       'clear: both;',
     ],
+    [
+      '.clear-none',
+      'clear: none;',
+    ],
   ]
 ])
 
