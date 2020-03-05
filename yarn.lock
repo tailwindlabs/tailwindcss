@@ -35,17 +35,17 @@
     semver "^5.5.0"
 
 "@babel/core@^7.0.0", "@babel/core@^7.1.0", "@babel/core@^7.7.5":
-  version "7.8.6"
-  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.8.6.tgz#27d7df9258a45c2e686b6f18b6c659e563aa4636"
-  integrity sha512-Sheg7yEJD51YHAvLEV/7Uvw95AeWqYPL3Vk3zGujJKIhJ+8oLw2ALaf3hbucILhKsgSoADOvtKRJuNVdcJkOrg==
+  version "7.8.7"
+  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.8.7.tgz#b69017d221ccdeb203145ae9da269d72cf102f3b"
+  integrity sha512-rBlqF3Yko9cynC5CCFy6+K/w2N+Sq/ff2BPy+Krp7rHlABIr5epbA7OxVeKoMHB39LZOp1UY5SuLjy6uWi35yA==
   dependencies:
     "@babel/code-frame" "^7.8.3"
-    "@babel/generator" "^7.8.6"
+    "@babel/generator" "^7.8.7"
     "@babel/helpers" "^7.8.4"
-    "@babel/parser" "^7.8.6"
+    "@babel/parser" "^7.8.7"
     "@babel/template" "^7.8.6"
     "@babel/traverse" "^7.8.6"
-    "@babel/types" "^7.8.6"
+    "@babel/types" "^7.8.7"
     convert-source-map "^1.7.0"
     debug "^4.1.0"
     gensync "^1.0.0-beta.1"
@@ -55,12 +55,12 @@
     semver "^5.4.1"
     source-map "^0.5.0"
 
-"@babel/generator@^7.8.6":
-  version "7.8.6"
-  resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.8.6.tgz#57adf96d370c9a63c241cd719f9111468578537a"
-  integrity sha512-4bpOR5ZBz+wWcMeVtcf7FbjcFzCp+817z2/gHNncIRcM9MmKzUhtWCYAq27RAfUrAFwb+OCG1s9WEaVxfi6cjg==
+"@babel/generator@^7.8.6", "@babel/generator@^7.8.7":
+  version "7.8.7"
+  resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.8.7.tgz#870b3cf7984f5297998152af625c4f3e341400f7"
+  integrity sha512-DQwjiKJqH4C3qGiyQCAExJHoZssn49JTMJgZ8SANGgVFdkupcUhLOdkAeoC6kmHZCPfoDG5M0b6cFlSN5wW7Ew==
   dependencies:
-    "@babel/types" "^7.8.6"
+    "@babel/types" "^7.8.7"
     jsesc "^2.5.1"
     lodash "^4.17.13"
     source-map "^0.5.0"
@@ -281,10 +281,10 @@
     resolve "^1.13.1"
     v8flags "^3.1.1"
 
-"@babel/parser@^7.1.0", "@babel/parser@^7.7.5", "@babel/parser@^7.8.6":
-  version "7.8.6"
-  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.8.6.tgz#ba5c9910cddb77685a008e3c587af8d27b67962c"
-  integrity sha512-trGNYSfwq5s0SgM1BMEB8hX3NDmO7EP2wsDGDexiaKMB92BaRpS+qZfpkMqUBhcsOTBwNy9B/jieo4ad/t/z2g==
+"@babel/parser@^7.1.0", "@babel/parser@^7.7.5", "@babel/parser@^7.8.6", "@babel/parser@^7.8.7":
+  version "7.8.7"
+  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.8.7.tgz#7b8facf95d25fef9534aad51c4ffecde1a61e26a"
+  integrity sha512-9JWls8WilDXFGxs0phaXAZgpxTZhSk/yOYH2hTHC0X1yC7Z78IJfvR1vJ+rmJKq3I35td2XzXzN6ZLYlna+r/A==
 
 "@babel/plugin-proposal-async-generator-functions@^7.8.3":
   version "7.8.3"
@@ -757,10 +757,10 @@
     globals "^11.1.0"
     lodash "^4.17.13"
 
-"@babel/types@^7.0.0", "@babel/types@^7.3.0", "@babel/types@^7.8.3", "@babel/types@^7.8.6":
-  version "7.8.6"
-  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.8.6.tgz#629ecc33c2557fcde7126e58053127afdb3e6d01"
-  integrity sha512-wqz7pgWMIrht3gquyEFPVXeXCti72Rm8ep9b5tQKz9Yg9LzJA3HxosF1SB3Kc81KD1A3XBkkVYtJvCKS2Z/QrA==
+"@babel/types@^7.0.0", "@babel/types@^7.3.0", "@babel/types@^7.8.3", "@babel/types@^7.8.6", "@babel/types@^7.8.7":
+  version "7.8.7"
+  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.8.7.tgz#1fc9729e1acbb2337d5b6977a63979b4819f5d1d"
+  integrity sha512-k2TreEHxFA4CjGkL+GYjRyx35W0Mr7DP5+9q6WMkyKXB+904bYmG40syjMFV0oLlhhFCwWl0vA0DyzTDkwAiJw==
   dependencies:
     esutils "^2.0.2"
     lodash "^4.17.13"
