@@ -26,6 +26,6 @@
 /docs/colors                        /docs/customizing-colors          302
 /course                             /screencasts                      302
 /discord                            https://discord.gg/7NF8GNe        302
-/forum                              https://github.com/tailwindcss/discuss/issues?q=is%3Aissue+sort%3Aupdated-desc        302
+/forum                              https://github.com/tailwindcss/tailwindcss/discussions        302
 /docs/examples/*                    /components/:splat                302
 /components/grids                   /components/flexbox-grids         302
