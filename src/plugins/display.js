@@ -20,6 +20,9 @@ export default function() {
         '.grid': {
           display: 'grid',
         },
+        '.inline-grid': {
+          display: 'inline-grid',
+        },
         '.table': {
           display: 'table',
         },
