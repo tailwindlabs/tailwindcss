@@ -9212,43 +9212,53 @@ video {
 }
 
 .scale-0 {
-  --transform-scale: 0;
+  --transform-scale-x: 0;
+  --transform-scale-y: 0;
 }
 
 .scale-50 {
-  --transform-scale: .5;
+  --transform-scale-x: .5;
+  --transform-scale-y: .5;
 }
 
 .scale-75 {
-  --transform-scale: .75;
+  --transform-scale-x: .75;
+  --transform-scale-y: .75;
 }
 
 .scale-90 {
-  --transform-scale: .9;
+  --transform-scale-x: .9;
+  --transform-scale-y: .9;
 }
 
 .scale-95 {
-  --transform-scale: .95;
+  --transform-scale-x: .95;
+  --transform-scale-y: .95;
 }
 
 .scale-100 {
-  --transform-scale: 1;
+  --transform-scale-x: 1;
+  --transform-scale-y: 1;
 }
 
 .scale-105 {
-  --transform-scale: 1.05;
+  --transform-scale-x: 1.05;
+  --transform-scale-y: 1.05;
 }
 
 .scale-110 {
-  --transform-scale: 1.1;
+  --transform-scale-x: 1.1;
+  --transform-scale-y: 1.1;
 }
 
 .scale-125 {
-  --transform-scale: 1.25;
+  --transform-scale-x: 1.25;
+  --transform-scale-y: 1.25;
 }
 
 .scale-150 {
-  --transform-scale: 1.5;
+  --transform-scale-x: 1.5;
+  --transform-scale-y: 1.5;
 }
 
 .scale-x-0 {
@@ -9332,43 +9342,53 @@ video {
 }
 
 .hover\:scale-0:hover {
-  --transform-scale: 0;
+  --transform-scale-x: 0;
+  --transform-scale-y: 0;
 }
 
 .hover\:scale-50:hover {
-  --transform-scale: .5;
+  --transform-scale-x: .5;
+  --transform-scale-y: .5;
 }
 
 .hover\:scale-75:hover {
-  --transform-scale: .75;
+  --transform-scale-x: .75;
+  --transform-scale-y: .75;
 }
 
 .hover\:scale-90:hover {
-  --transform-scale: .9;
+  --transform-scale-x: .9;
+  --transform-scale-y: .9;
 }
 
 .hover\:scale-95:hover {
-  --transform-scale: .95;
+  --transform-scale-x: .95;
+  --transform-scale-y: .95;
 }
 
 .hover\:scale-100:hover {
-  --transform-scale: 1;
+  --transform-scale-x: 1;
+  --transform-scale-y: 1;
 }
 
 .hover\:scale-105:hover {
-  --transform-scale: 1.05;
+  --transform-scale-x: 1.05;
+  --transform-scale-y: 1.05;
 }
 
 .hover\:scale-110:hover {
-  --transform-scale: 1.1;
+  --transform-scale-x: 1.1;
+  --transform-scale-y: 1.1;
 }
 
 .hover\:scale-125:hover {
-  --transform-scale: 1.25;
+  --transform-scale-x: 1.25;
+  --transform-scale-y: 1.25;
 }
 
 .hover\:scale-150:hover {
-  --transform-scale: 1.5;
+  --transform-scale-x: 1.5;
+  --transform-scale-y: 1.5;
 }
 
 .hover\:scale-x-0:hover {
@@ -9452,43 +9472,53 @@ video {
 }
 
 .focus\:scale-0:focus {
-  --transform-scale: 0;
+  --transform-scale-x: 0;
+  --transform-scale-y: 0;
 }
 
 .focus\:scale-50:focus {
-  --transform-scale: .5;
+  --transform-scale-x: .5;
+  --transform-scale-y: .5;
 }
 
 .focus\:scale-75:focus {
-  --transform-scale: .75;
+  --transform-scale-x: .75;
+  --transform-scale-y: .75;
 }
 
 .focus\:scale-90:focus {
-  --transform-scale: .9;
+  --transform-scale-x: .9;
+  --transform-scale-y: .9;
 }
 
 .focus\:scale-95:focus {
-  --transform-scale: .95;
+  --transform-scale-x: .95;
+  --transform-scale-y: .95;
 }
 
 .focus\:scale-100:focus {
-  --transform-scale: 1;
+  --transform-scale-x: 1;
+  --transform-scale-y: 1;
 }
 
 .focus\:scale-105:focus {
-  --transform-scale: 1.05;
+  --transform-scale-x: 1.05;
+  --transform-scale-y: 1.05;
 }
 
 .focus\:scale-110:focus {
-  --transform-scale: 1.1;
+  --transform-scale-x: 1.1;
+  --transform-scale-y: 1.1;
 }
 
 .focus\:scale-125:focus {
-  --transform-scale: 1.25;
+  --transform-scale-x: 1.25;
+  --transform-scale-y: 1.25;
 }
 
 .focus\:scale-150:focus {
-  --transform-scale: 1.5;
+  --transform-scale-x: 1.5;
+  --transform-scale-y: 1.5;
 }
 
 .focus\:scale-x-0:focus {
@@ -9572,31 +9602,38 @@ video {
 }
 
 .rotate-0 {
-  --transform-rotate: 0;
+  --transform-rotate-x: 0;
+  --transform-rotate-y: 0;
 }
 
 .rotate-45 {
-  --transform-rotate: 45deg;
+  --transform-rotate-x: 45deg;
+  --transform-rotate-y: 45deg;
 }
 
 .rotate-90 {
-  --transform-rotate: 90deg;
+  --transform-rotate-x: 90deg;
+  --transform-rotate-y: 90deg;
 }
 
 .rotate-180 {
-  --transform-rotate: 180deg;
+  --transform-rotate-x: 180deg;
+  --transform-rotate-y: 180deg;
 }
 
 .-rotate-180 {
-  --transform-rotate: -180deg;
+  --transform-rotate-x: -180deg;
+  --transform-rotate-y: -180deg;
 }
 
 .-rotate-90 {
-  --transform-rotate: -90deg;
+  --transform-rotate-x: -90deg;
+  --transform-rotate-y: -90deg;
 }
 
 .-rotate-45 {
-  --transform-rotate: -45deg;
+  --transform-rotate-x: -45deg;
+  --transform-rotate-y: -45deg;
 }
 
 .rotate-x-0 {
@@ -9656,31 +9693,38 @@ video {
 }
 
 .hover\:rotate-0:hover {
-  --transform-rotate: 0;
+  --transform-rotate-x: 0;
+  --transform-rotate-y: 0;
 }
 
 .hover\:rotate-45:hover {
-  --transform-rotate: 45deg;
+  --transform-rotate-x: 45deg;
+  --transform-rotate-y: 45deg;
 }
 
 .hover\:rotate-90:hover {
-  --transform-rotate: 90deg;
+  --transform-rotate-x: 90deg;
+  --transform-rotate-y: 90deg;
 }
 
 .hover\:rotate-180:hover {
-  --transform-rotate: 180deg;
+  --transform-rotate-x: 180deg;
+  --transform-rotate-y: 180deg;
 }
 
 .hover\:-rotate-180:hover {
-  --transform-rotate: -180deg;
+  --transform-rotate-x: -180deg;
+  --transform-rotate-y: -180deg;
 }
 
 .hover\:-rotate-90:hover {
-  --transform-rotate: -90deg;
+  --transform-rotate-x: -90deg;
+  --transform-rotate-y: -90deg;
 }
 
 .hover\:-rotate-45:hover {
-  --transform-rotate: -45deg;
+  --transform-rotate-x: -45deg;
+  --transform-rotate-y: -45deg;
 }
 
 .hover\:rotate-x-0:hover {
@@ -9740,31 +9784,38 @@ video {
 }
 
 .focus\:rotate-0:focus {
-  --transform-rotate: 0;
+  --transform-rotate-x: 0;
+  --transform-rotate-y: 0;
 }
 
 .focus\:rotate-45:focus {
-  --transform-rotate: 45deg;
+  --transform-rotate-x: 45deg;
+  --transform-rotate-y: 45deg;
 }
 
 .focus\:rotate-90:focus {
-  --transform-rotate: 90deg;
+  --transform-rotate-x: 90deg;
+  --transform-rotate-y: 90deg;
 }
 
 .focus\:rotate-180:focus {
-  --transform-rotate: 180deg;
+  --transform-rotate-x: 180deg;
+  --transform-rotate-y: 180deg;
 }
 
 .focus\:-rotate-180:focus {
-  --transform-rotate: -180deg;
+  --transform-rotate-x: -180deg;
+  --transform-rotate-y: -180deg;
 }
 
 .focus\:-rotate-90:focus {
-  --transform-rotate: -90deg;
+  --transform-rotate-x: -90deg;
+  --transform-rotate-y: -90deg;
 }
 
 .focus\:-rotate-45:focus {
-  --transform-rotate: -45deg;
+  --transform-rotate-x: -45deg;
+  --transform-rotate-y: -45deg;
 }
 
 .focus\:rotate-x-0:focus {
@@ -9824,167 +9875,208 @@ video {
 }
 
 .translate-0 {
-  --transform-translate: 0;
+  --transform-translate-x: 0;
+  --transform-translate-y: 0;
 }
 
 .translate-1 {
-  --transform-translate: 0.25rem;
+  --transform-translate-x: 0.25rem;
+  --transform-translate-y: 0.25rem;
 }
 
 .translate-2 {
-  --transform-translate: 0.5rem;
+  --transform-translate-x: 0.5rem;
+  --transform-translate-y: 0.5rem;
 }
 
 .translate-3 {
-  --transform-translate: 0.75rem;
+  --transform-translate-x: 0.75rem;
+  --transform-translate-y: 0.75rem;
 }
 
 .translate-4 {
-  --transform-translate: 1rem;
+  --transform-translate-x: 1rem;
+  --transform-translate-y: 1rem;
 }
 
 .translate-5 {
-  --transform-translate: 1.25rem;
+  --transform-translate-x: 1.25rem;
+  --transform-translate-y: 1.25rem;
 }
 
 .translate-6 {
-  --transform-translate: 1.5rem;
+  --transform-translate-x: 1.5rem;
+  --transform-translate-y: 1.5rem;
 }
 
 .translate-8 {
-  --transform-translate: 2rem;
+  --transform-translate-x: 2rem;
+  --transform-translate-y: 2rem;
 }
 
 .translate-10 {
-  --transform-translate: 2.5rem;
+  --transform-translate-x: 2.5rem;
+  --transform-translate-y: 2.5rem;
 }
 
 .translate-12 {
-  --transform-translate: 3rem;
+  --transform-translate-x: 3rem;
+  --transform-translate-y: 3rem;
 }
 
 .translate-16 {
-  --transform-translate: 4rem;
+  --transform-translate-x: 4rem;
+  --transform-translate-y: 4rem;
 }
 
 .translate-20 {
-  --transform-translate: 5rem;
+  --transform-translate-x: 5rem;
+  --transform-translate-y: 5rem;
 }
 
 .translate-24 {
-  --transform-translate: 6rem;
+  --transform-translate-x: 6rem;
+  --transform-translate-y: 6rem;
 }
 
 .translate-32 {
-  --transform-translate: 8rem;
+  --transform-translate-x: 8rem;
+  --transform-translate-y: 8rem;
 }
 
 .translate-40 {
-  --transform-translate: 10rem;
+  --transform-translate-x: 10rem;
+  --transform-translate-y: 10rem;
 }
 
 .translate-48 {
-  --transform-translate: 12rem;
+  --transform-translate-x: 12rem;
+  --transform-translate-y: 12rem;
 }
 
 .translate-56 {
-  --transform-translate: 14rem;
+  --transform-translate-x: 14rem;
+  --transform-translate-y: 14rem;
 }
 
 .translate-64 {
-  --transform-translate: 16rem;
+  --transform-translate-x: 16rem;
+  --transform-translate-y: 16rem;
 }
 
 .translate-px {
-  --transform-translate: 1px;
+  --transform-translate-x: 1px;
+  --transform-translate-y: 1px;
 }
 
 .-translate-1 {
-  --transform-translate: -0.25rem;
+  --transform-translate-x: -0.25rem;
+  --transform-translate-y: -0.25rem;
 }
 
 .-translate-2 {
-  --transform-translate: -0.5rem;
+  --transform-translate-x: -0.5rem;
+  --transform-translate-y: -0.5rem;
 }
 
 .-translate-3 {
-  --transform-translate: -0.75rem;
+  --transform-translate-x: -0.75rem;
+  --transform-translate-y: -0.75rem;
 }
 
 .-translate-4 {
-  --transform-translate: -1rem;
+  --transform-translate-x: -1rem;
+  --transform-translate-y: -1rem;
 }
 
 .-translate-5 {
-  --transform-translate: -1.25rem;
+  --transform-translate-x: -1.25rem;
+  --transform-translate-y: -1.25rem;
 }
 
 .-translate-6 {
-  --transform-translate: -1.5rem;
+  --transform-translate-x: -1.5rem;
+  --transform-translate-y: -1.5rem;
 }
 
 .-translate-8 {
-  --transform-translate: -2rem;
+  --transform-translate-x: -2rem;
+  --transform-translate-y: -2rem;
 }
 
 .-translate-10 {
-  --transform-translate: -2.5rem;
+  --transform-translate-x: -2.5rem;
+  --transform-translate-y: -2.5rem;
 }
 
 .-translate-12 {
-  --transform-translate: -3rem;
+  --transform-translate-x: -3rem;
+  --transform-translate-y: -3rem;
 }
 
 .-translate-16 {
-  --transform-translate: -4rem;
+  --transform-translate-x: -4rem;
+  --transform-translate-y: -4rem;
 }
 
 .-translate-20 {
-  --transform-translate: -5rem;
+  --transform-translate-x: -5rem;
+  --transform-translate-y: -5rem;
 }
 
 .-translate-24 {
-  --transform-translate: -6rem;
+  --transform-translate-x: -6rem;
+  --transform-translate-y: -6rem;
 }
 
 .-translate-32 {
-  --transform-translate: -8rem;
+  --transform-translate-x: -8rem;
+  --transform-translate-y: -8rem;
 }
 
 .-translate-40 {
-  --transform-translate: -10rem;
+  --transform-translate-x: -10rem;
+  --transform-translate-y: -10rem;
 }
 
 .-translate-48 {
-  --transform-translate: -12rem;
+  --transform-translate-x: -12rem;
+  --transform-translate-y: -12rem;
 }
 
 .-translate-56 {
-  --transform-translate: -14rem;
+  --transform-translate-x: -14rem;
+  --transform-translate-y: -14rem;
 }
 
 .-translate-64 {
-  --transform-translate: -16rem;
+  --transform-translate-x: -16rem;
+  --transform-translate-y: -16rem;
 }
 
 .-translate-px {
-  --transform-translate: -1px;
+  --transform-translate-x: -1px;
+  --transform-translate-y: -1px;
 }
 
 .-translate-full {
-  --transform-translate: -100%;
+  --transform-translate-x: -100%;
+  --transform-translate-y: -100%;
 }
 
 .-translate-1\/2 {
-  --transform-translate: -50%;
+  --transform-translate-x: -50%;
+  --transform-translate-y: -50%;
 }
 
 .translate-1\/2 {
-  --transform-translate: 50%;
+  --transform-translate-x: 50%;
+  --transform-translate-y: 50%;
 }
 
 .translate-full {
-  --transform-translate: 100%;
+  --transform-translate-x: 100%;
+  --transform-translate-y: 100%;
 }
 
 .translate-x-0 {
@@ -10316,167 +10408,208 @@ video {
 }
 
 .hover\:translate-0:hover {
-  --transform-translate: 0;
+  --transform-translate-x: 0;
+  --transform-translate-y: 0;
 }
 
 .hover\:translate-1:hover {
-  --transform-translate: 0.25rem;
+  --transform-translate-x: 0.25rem;
+  --transform-translate-y: 0.25rem;
 }
 
 .hover\:translate-2:hover {
-  --transform-translate: 0.5rem;
+  --transform-translate-x: 0.5rem;
+  --transform-translate-y: 0.5rem;
 }
 
 .hover\:translate-3:hover {
-  --transform-translate: 0.75rem;
+  --transform-translate-x: 0.75rem;
+  --transform-translate-y: 0.75rem;
 }
 
 .hover\:translate-4:hover {
-  --transform-translate: 1rem;
+  --transform-translate-x: 1rem;
+  --transform-translate-y: 1rem;
 }
 
 .hover\:translate-5:hover {
-  --transform-translate: 1.25rem;
+  --transform-translate-x: 1.25rem;
+  --transform-translate-y: 1.25rem;
 }
 
 .hover\:translate-6:hover {
-  --transform-translate: 1.5rem;
+  --transform-translate-x: 1.5rem;
+  --transform-translate-y: 1.5rem;
 }
 
 .hover\:translate-8:hover {
-  --transform-translate: 2rem;
+  --transform-translate-x: 2rem;
+  --transform-translate-y: 2rem;
 }
 
 .hover\:translate-10:hover {
-  --transform-translate: 2.5rem;
+  --transform-translate-x: 2.5rem;
+  --transform-translate-y: 2.5rem;
 }
 
 .hover\:translate-12:hover {
-  --transform-translate: 3rem;
+  --transform-translate-x: 3rem;
+  --transform-translate-y: 3rem;
 }
 
 .hover\:translate-16:hover {
-  --transform-translate: 4rem;
+  --transform-translate-x: 4rem;
+  --transform-translate-y: 4rem;
 }
 
 .hover\:translate-20:hover {
-  --transform-translate: 5rem;
+  --transform-translate-x: 5rem;
+  --transform-translate-y: 5rem;
 }
 
 .hover\:translate-24:hover {
-  --transform-translate: 6rem;
+  --transform-translate-x: 6rem;
+  --transform-translate-y: 6rem;
 }
 
 .hover\:translate-32:hover {
-  --transform-translate: 8rem;
+  --transform-translate-x: 8rem;
+  --transform-translate-y: 8rem;
 }
 
 .hover\:translate-40:hover {
-  --transform-translate: 10rem;
+  --transform-translate-x: 10rem;
+  --transform-translate-y: 10rem;
 }
 
 .hover\:translate-48:hover {
-  --transform-translate: 12rem;
+  --transform-translate-x: 12rem;
+  --transform-translate-y: 12rem;
 }
 
 .hover\:translate-56:hover {
-  --transform-translate: 14rem;
+  --transform-translate-x: 14rem;
+  --transform-translate-y: 14rem;
 }
 
 .hover\:translate-64:hover {
-  --transform-translate: 16rem;
+  --transform-translate-x: 16rem;
+  --transform-translate-y: 16rem;
 }
 
 .hover\:translate-px:hover {
-  --transform-translate: 1px;
+  --transform-translate-x: 1px;
+  --transform-translate-y: 1px;
 }
 
 .hover\:-translate-1:hover {
-  --transform-translate: -0.25rem;
+  --transform-translate-x: -0.25rem;
+  --transform-translate-y: -0.25rem;
 }
 
 .hover\:-translate-2:hover {
-  --transform-translate: -0.5rem;
+  --transform-translate-x: -0.5rem;
+  --transform-translate-y: -0.5rem;
 }
 
 .hover\:-translate-3:hover {
-  --transform-translate: -0.75rem;
+  --transform-translate-x: -0.75rem;
+  --transform-translate-y: -0.75rem;
 }
 
 .hover\:-translate-4:hover {
-  --transform-translate: -1rem;
+  --transform-translate-x: -1rem;
+  --transform-translate-y: -1rem;
 }
 
 .hover\:-translate-5:hover {
-  --transform-translate: -1.25rem;
+  --transform-translate-x: -1.25rem;
+  --transform-translate-y: -1.25rem;
 }
 
 .hover\:-translate-6:hover {
-  --transform-translate: -1.5rem;
+  --transform-translate-x: -1.5rem;
+  --transform-translate-y: -1.5rem;
 }
 
 .hover\:-translate-8:hover {
-  --transform-translate: -2rem;
+  --transform-translate-x: -2rem;
+  --transform-translate-y: -2rem;
 }
 
 .hover\:-translate-10:hover {
-  --transform-translate: -2.5rem;
+  --transform-translate-x: -2.5rem;
+  --transform-translate-y: -2.5rem;
 }
 
 .hover\:-translate-12:hover {
-  --transform-translate: -3rem;
+  --transform-translate-x: -3rem;
+  --transform-translate-y: -3rem;
 }
 
 .hover\:-translate-16:hover {
-  --transform-translate: -4rem;
+  --transform-translate-x: -4rem;
+  --transform-translate-y: -4rem;
 }
 
 .hover\:-translate-20:hover {
-  --transform-translate: -5rem;
+  --transform-translate-x: -5rem;
+  --transform-translate-y: -5rem;
 }
 
 .hover\:-translate-24:hover {
-  --transform-translate: -6rem;
+  --transform-translate-x: -6rem;
+  --transform-translate-y: -6rem;
 }
 
 .hover\:-translate-32:hover {
-  --transform-translate: -8rem;
+  --transform-translate-x: -8rem;
+  --transform-translate-y: -8rem;
 }
 
 .hover\:-translate-40:hover {
-  --transform-translate: -10rem;
+  --transform-translate-x: -10rem;
+  --transform-translate-y: -10rem;
 }
 
 .hover\:-translate-48:hover {
-  --transform-translate: -12rem;
+  --transform-translate-x: -12rem;
+  --transform-translate-y: -12rem;
 }
 
 .hover\:-translate-56:hover {
-  --transform-translate: -14rem;
+  --transform-translate-x: -14rem;
+  --transform-translate-y: -14rem;
 }
 
 .hover\:-translate-64:hover {
-  --transform-translate: -16rem;
+  --transform-translate-x: -16rem;
+  --transform-translate-y: -16rem;
 }
 
 .hover\:-translate-px:hover {
-  --transform-translate: -1px;
+  --transform-translate-x: -1px;
+  --transform-translate-y: -1px;
 }
 
 .hover\:-translate-full:hover {
-  --transform-translate: -100%;
+  --transform-translate-x: -100%;
+  --transform-translate-y: -100%;
 }
 
 .hover\:-translate-1\/2:hover {
-  --transform-translate: -50%;
+  --transform-translate-x: -50%;
+  --transform-translate-y: -50%;
 }
 
 .hover\:translate-1\/2:hover {
-  --transform-translate: 50%;
+  --transform-translate-x: 50%;
+  --transform-translate-y: 50%;
 }
 
 .hover\:translate-full:hover {
-  --transform-translate: 100%;
+  --transform-translate-x: 100%;
+  --transform-translate-y: 100%;
 }
 
 .hover\:translate-x-0:hover {
@@ -10808,167 +10941,208 @@ video {
 }
 
 .focus\:translate-0:focus {
-  --transform-translate: 0;
+  --transform-translate-x: 0;
+  --transform-translate-y: 0;
 }
 
 .focus\:translate-1:focus {
-  --transform-translate: 0.25rem;
+  --transform-translate-x: 0.25rem;
+  --transform-translate-y: 0.25rem;
 }
 
 .focus\:translate-2:focus {
-  --transform-translate: 0.5rem;
+  --transform-translate-x: 0.5rem;
+  --transform-translate-y: 0.5rem;
 }
 
 .focus\:translate-3:focus {
-  --transform-translate: 0.75rem;
+  --transform-translate-x: 0.75rem;
+  --transform-translate-y: 0.75rem;
 }
 
 .focus\:translate-4:focus {
-  --transform-translate: 1rem;
+  --transform-translate-x: 1rem;
+  --transform-translate-y: 1rem;
 }
 
 .focus\:translate-5:focus {
-  --transform-translate: 1.25rem;
+  --transform-translate-x: 1.25rem;
+  --transform-translate-y: 1.25rem;
 }
 
 .focus\:translate-6:focus {
-  --transform-translate: 1.5rem;
+  --transform-translate-x: 1.5rem;
+  --transform-translate-y: 1.5rem;
 }
 
 .focus\:translate-8:focus {
-  --transform-translate: 2rem;
+  --transform-translate-x: 2rem;
+  --transform-translate-y: 2rem;
 }
 
 .focus\:translate-10:focus {
-  --transform-translate: 2.5rem;
+  --transform-translate-x: 2.5rem;
+  --transform-translate-y: 2.5rem;
 }
 
 .focus\:translate-12:focus {
-  --transform-translate: 3rem;
+  --transform-translate-x: 3rem;
+  --transform-translate-y: 3rem;
 }
 
 .focus\:translate-16:focus {
-  --transform-translate: 4rem;
+  --transform-translate-x: 4rem;
+  --transform-translate-y: 4rem;
 }
 
 .focus\:translate-20:focus {
-  --transform-translate: 5rem;
+  --transform-translate-x: 5rem;
+  --transform-translate-y: 5rem;
 }
 
 .focus\:translate-24:focus {
-  --transform-translate: 6rem;
+  --transform-translate-x: 6rem;
+  --transform-translate-y: 6rem;
 }
 
 .focus\:translate-32:focus {
-  --transform-translate: 8rem;
+  --transform-translate-x: 8rem;
+  --transform-translate-y: 8rem;
 }
 
 .focus\:translate-40:focus {
-  --transform-translate: 10rem;
+  --transform-translate-x: 10rem;
+  --transform-translate-y: 10rem;
 }
 
 .focus\:translate-48:focus {
-  --transform-translate: 12rem;
+  --transform-translate-x: 12rem;
+  --transform-translate-y: 12rem;
 }
 
 .focus\:translate-56:focus {
-  --transform-translate: 14rem;
+  --transform-translate-x: 14rem;
+  --transform-translate-y: 14rem;
 }
 
 .focus\:translate-64:focus {
-  --transform-translate: 16rem;
+  --transform-translate-x: 16rem;
+  --transform-translate-y: 16rem;
 }
 
 .focus\:translate-px:focus {
-  --transform-translate: 1px;
+  --transform-translate-x: 1px;
+  --transform-translate-y: 1px;
 }
 
 .focus\:-translate-1:focus {
-  --transform-translate: -0.25rem;
+  --transform-translate-x: -0.25rem;
+  --transform-translate-y: -0.25rem;
 }
 
 .focus\:-translate-2:focus {
-  --transform-translate: -0.5rem;
+  --transform-translate-x: -0.5rem;
+  --transform-translate-y: -0.5rem;
 }
 
 .focus\:-translate-3:focus {
-  --transform-translate: -0.75rem;
+  --transform-translate-x: -0.75rem;
+  --transform-translate-y: -0.75rem;
 }
 
 .focus\:-translate-4:focus {
-  --transform-translate: -1rem;
+  --transform-translate-x: -1rem;
+  --transform-translate-y: -1rem;
 }
 
 .focus\:-translate-5:focus {
-  --transform-translate: -1.25rem;
+  --transform-translate-x: -1.25rem;
+  --transform-translate-y: -1.25rem;
 }
 
 .focus\:-translate-6:focus {
-  --transform-translate: -1.5rem;
+  --transform-translate-x: -1.5rem;
+  --transform-translate-y: -1.5rem;
 }
 
 .focus\:-translate-8:focus {
-  --transform-translate: -2rem;
+  --transform-translate-x: -2rem;
+  --transform-translate-y: -2rem;
 }
 
 .focus\:-translate-10:focus {
-  --transform-translate: -2.5rem;
+  --transform-translate-x: -2.5rem;
+  --transform-translate-y: -2.5rem;
 }
 
 .focus\:-translate-12:focus {
-  --transform-translate: -3rem;
+  --transform-translate-x: -3rem;
+  --transform-translate-y: -3rem;
 }
 
 .focus\:-translate-16:focus {
-  --transform-translate: -4rem;
+  --transform-translate-x: -4rem;
+  --transform-translate-y: -4rem;
 }
 
 .focus\:-translate-20:focus {
-  --transform-translate: -5rem;
+  --transform-translate-x: -5rem;
+  --transform-translate-y: -5rem;
 }
 
 .focus\:-translate-24:focus {
-  --transform-translate: -6rem;
+  --transform-translate-x: -6rem;
+  --transform-translate-y: -6rem;
 }
 
 .focus\:-translate-32:focus {
-  --transform-translate: -8rem;
+  --transform-translate-x: -8rem;
+  --transform-translate-y: -8rem;
 }
 
 .focus\:-translate-40:focus {
-  --transform-translate: -10rem;
+  --transform-translate-x: -10rem;
+  --transform-translate-y: -10rem;
 }
 
 .focus\:-translate-48:focus {
-  --transform-translate: -12rem;
+  --transform-translate-x: -12rem;
+  --transform-translate-y: -12rem;
 }
 
 .focus\:-translate-56:focus {
-  --transform-translate: -14rem;
+  --transform-translate-x: -14rem;
+  --transform-translate-y: -14rem;
 }
 
 .focus\:-translate-64:focus {
-  --transform-translate: -16rem;
+  --transform-translate-x: -16rem;
+  --transform-translate-y: -16rem;
 }
 
 .focus\:-translate-px:focus {
-  --transform-translate: -1px;
+  --transform-translate-x: -1px;
+  --transform-translate-y: -1px;
 }
 
 .focus\:-translate-full:focus {
-  --transform-translate: -100%;
+  --transform-translate-x: -100%;
+  --transform-translate-y: -100%;
 }
 
 .focus\:-translate-1\/2:focus {
-  --transform-translate: -50%;
+  --transform-translate-x: -50%;
+  --transform-translate-y: -50%;
 }
 
 .focus\:translate-1\/2:focus {
-  --transform-translate: 50%;
+  --transform-translate-x: 50%;
+  --transform-translate-y: 50%;
 }
 
 .focus\:translate-full:focus {
-  --transform-translate: 100%;
+  --transform-translate-x: 100%;
+  --transform-translate-y: 100%;
 }
 
 .focus\:translate-x-0:focus {
@@ -11299,6 +11473,41 @@ video {
   --transform-translate-y: 100%;
 }
 
+.skew-0 {
+  --transform-skew-x: 0;
+  --transform-skew-y: 0;
+}
+
+.skew-3 {
+  --transform-skew-x: 3deg;
+  --transform-skew-y: 3deg;
+}
+
+.skew-6 {
+  --transform-skew-x: 6deg;
+  --transform-skew-y: 6deg;
+}
+
+.skew-12 {
+  --transform-skew-x: 12deg;
+  --transform-skew-y: 12deg;
+}
+
+.-skew-12 {
+  --transform-skew-x: -12deg;
+  --transform-skew-y: -12deg;
+}
+
+.-skew-6 {
+  --transform-skew-x: -6deg;
+  --transform-skew-y: -6deg;
+}
+
+.-skew-3 {
+  --transform-skew-x: -3deg;
+  --transform-skew-y: -3deg;
+}
+
 .skew-x-0 {
   --transform-skew-x: 0;
 }
@@ -11355,6 +11564,41 @@ video {
   --transform-skew-y: -3deg;
 }
 
+.hover\:skew-0:hover {
+  --transform-skew-x: 0;
+  --transform-skew-y: 0;
+}
+
+.hover\:skew-3:hover {
+  --transform-skew-x: 3deg;
+  --transform-skew-y: 3deg;
+}
+
+.hover\:skew-6:hover {
+  --transform-skew-x: 6deg;
+  --transform-skew-y: 6deg;
+}
+
+.hover\:skew-12:hover {
+  --transform-skew-x: 12deg;
+  --transform-skew-y: 12deg;
+}
+
+.hover\:-skew-12:hover {
+  --transform-skew-x: -12deg;
+  --transform-skew-y: -12deg;
+}
+
+.hover\:-skew-6:hover {
+  --transform-skew-x: -6deg;
+  --transform-skew-y: -6deg;
+}
+
+.hover\:-skew-3:hover {
+  --transform-skew-x: -3deg;
+  --transform-skew-y: -3deg;
+}
+
 .hover\:skew-x-0:hover {
   --transform-skew-x: 0;
 }
@@ -11408,6 +11652,41 @@ video {
 }
 
 .hover\:-skew-y-3:hover {
+  --transform-skew-y: -3deg;
+}
+
+.focus\:skew-0:focus {
+  --transform-skew-x: 0;
+  --transform-skew-y: 0;
+}
+
+.focus\:skew-3:focus {
+  --transform-skew-x: 3deg;
+  --transform-skew-y: 3deg;
+}
+
+.focus\:skew-6:focus {
+  --transform-skew-x: 6deg;
+  --transform-skew-y: 6deg;
+}
+
+.focus\:skew-12:focus {
+  --transform-skew-x: 12deg;
+  --transform-skew-y: 12deg;
+}
+
+.focus\:-skew-12:focus {
+  --transform-skew-x: -12deg;
+  --transform-skew-y: -12deg;
+}
+
+.focus\:-skew-6:focus {
+  --transform-skew-x: -6deg;
+  --transform-skew-y: -6deg;
+}
+
+.focus\:-skew-3:focus {
+  --transform-skew-x: -3deg;
   --transform-skew-y: -3deg;
 }
 
@@ -20155,43 +20434,53 @@ video {
   }
 
   .sm\:scale-0 {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .sm\:scale-50 {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .sm\:scale-75 {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .sm\:scale-90 {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .sm\:scale-95 {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .sm\:scale-100 {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .sm\:scale-105 {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .sm\:scale-110 {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .sm\:scale-125 {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .sm\:scale-150 {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
   }
 
   .sm\:scale-x-0 {
@@ -20275,43 +20564,53 @@ video {
   }
 
   .sm\:hover\:scale-0:hover {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .sm\:hover\:scale-50:hover {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .sm\:hover\:scale-75:hover {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .sm\:hover\:scale-90:hover {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .sm\:hover\:scale-95:hover {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .sm\:hover\:scale-100:hover {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .sm\:hover\:scale-105:hover {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .sm\:hover\:scale-110:hover {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .sm\:hover\:scale-125:hover {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .sm\:hover\:scale-150:hover {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
   }
 
   .sm\:hover\:scale-x-0:hover {
@@ -20395,43 +20694,53 @@ video {
   }
 
   .sm\:focus\:scale-0:focus {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .sm\:focus\:scale-50:focus {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .sm\:focus\:scale-75:focus {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .sm\:focus\:scale-90:focus {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .sm\:focus\:scale-95:focus {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .sm\:focus\:scale-100:focus {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .sm\:focus\:scale-105:focus {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .sm\:focus\:scale-110:focus {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .sm\:focus\:scale-125:focus {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .sm\:focus\:scale-150:focus {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
   }
 
   .sm\:focus\:scale-x-0:focus {
@@ -20515,31 +20824,38 @@ video {
   }
 
   .sm\:rotate-0 {
-    --transform-rotate: 0;
+    --transform-rotate-x: 0;
+    --transform-rotate-y: 0;
   }
 
   .sm\:rotate-45 {
-    --transform-rotate: 45deg;
+    --transform-rotate-x: 45deg;
+    --transform-rotate-y: 45deg;
   }
 
   .sm\:rotate-90 {
-    --transform-rotate: 90deg;
+    --transform-rotate-x: 90deg;
+    --transform-rotate-y: 90deg;
   }
 
   .sm\:rotate-180 {
-    --transform-rotate: 180deg;
+    --transform-rotate-x: 180deg;
+    --transform-rotate-y: 180deg;
   }
 
   .sm\:-rotate-180 {
-    --transform-rotate: -180deg;
+    --transform-rotate-x: -180deg;
+    --transform-rotate-y: -180deg;
   }
 
   .sm\:-rotate-90 {
-    --transform-rotate: -90deg;
+    --transform-rotate-x: -90deg;
+    --transform-rotate-y: -90deg;
   }
 
   .sm\:-rotate-45 {
-    --transform-rotate: -45deg;
+    --transform-rotate-x: -45deg;
+    --transform-rotate-y: -45deg;
   }
 
   .sm\:rotate-x-0 {
@@ -20599,31 +20915,38 @@ video {
   }
 
   .sm\:hover\:rotate-0:hover {
-    --transform-rotate: 0;
+    --transform-rotate-x: 0;
+    --transform-rotate-y: 0;
   }
 
   .sm\:hover\:rotate-45:hover {
-    --transform-rotate: 45deg;
+    --transform-rotate-x: 45deg;
+    --transform-rotate-y: 45deg;
   }
 
   .sm\:hover\:rotate-90:hover {
-    --transform-rotate: 90deg;
+    --transform-rotate-x: 90deg;
+    --transform-rotate-y: 90deg;
   }
 
   .sm\:hover\:rotate-180:hover {
-    --transform-rotate: 180deg;
+    --transform-rotate-x: 180deg;
+    --transform-rotate-y: 180deg;
   }
 
   .sm\:hover\:-rotate-180:hover {
-    --transform-rotate: -180deg;
+    --transform-rotate-x: -180deg;
+    --transform-rotate-y: -180deg;
   }
 
   .sm\:hover\:-rotate-90:hover {
-    --transform-rotate: -90deg;
+    --transform-rotate-x: -90deg;
+    --transform-rotate-y: -90deg;
   }
 
   .sm\:hover\:-rotate-45:hover {
-    --transform-rotate: -45deg;
+    --transform-rotate-x: -45deg;
+    --transform-rotate-y: -45deg;
   }
 
   .sm\:hover\:rotate-x-0:hover {
@@ -20683,31 +21006,38 @@ video {
   }
 
   .sm\:focus\:rotate-0:focus {
-    --transform-rotate: 0;
+    --transform-rotate-x: 0;
+    --transform-rotate-y: 0;
   }
 
   .sm\:focus\:rotate-45:focus {
-    --transform-rotate: 45deg;
+    --transform-rotate-x: 45deg;
+    --transform-rotate-y: 45deg;
   }
 
   .sm\:focus\:rotate-90:focus {
-    --transform-rotate: 90deg;
+    --transform-rotate-x: 90deg;
+    --transform-rotate-y: 90deg;
   }
 
   .sm\:focus\:rotate-180:focus {
-    --transform-rotate: 180deg;
+    --transform-rotate-x: 180deg;
+    --transform-rotate-y: 180deg;
   }
 
   .sm\:focus\:-rotate-180:focus {
-    --transform-rotate: -180deg;
+    --transform-rotate-x: -180deg;
+    --transform-rotate-y: -180deg;
   }
 
   .sm\:focus\:-rotate-90:focus {
-    --transform-rotate: -90deg;
+    --transform-rotate-x: -90deg;
+    --transform-rotate-y: -90deg;
   }
 
   .sm\:focus\:-rotate-45:focus {
-    --transform-rotate: -45deg;
+    --transform-rotate-x: -45deg;
+    --transform-rotate-y: -45deg;
   }
 
   .sm\:focus\:rotate-x-0:focus {
@@ -20767,167 +21097,208 @@ video {
   }
 
   .sm\:translate-0 {
-    --transform-translate: 0;
+    --transform-translate-x: 0;
+    --transform-translate-y: 0;
   }
 
   .sm\:translate-1 {
-    --transform-translate: 0.25rem;
+    --transform-translate-x: 0.25rem;
+    --transform-translate-y: 0.25rem;
   }
 
   .sm\:translate-2 {
-    --transform-translate: 0.5rem;
+    --transform-translate-x: 0.5rem;
+    --transform-translate-y: 0.5rem;
   }
 
   .sm\:translate-3 {
-    --transform-translate: 0.75rem;
+    --transform-translate-x: 0.75rem;
+    --transform-translate-y: 0.75rem;
   }
 
   .sm\:translate-4 {
-    --transform-translate: 1rem;
+    --transform-translate-x: 1rem;
+    --transform-translate-y: 1rem;
   }
 
   .sm\:translate-5 {
-    --transform-translate: 1.25rem;
+    --transform-translate-x: 1.25rem;
+    --transform-translate-y: 1.25rem;
   }
 
   .sm\:translate-6 {
-    --transform-translate: 1.5rem;
+    --transform-translate-x: 1.5rem;
+    --transform-translate-y: 1.5rem;
   }
 
   .sm\:translate-8 {
-    --transform-translate: 2rem;
+    --transform-translate-x: 2rem;
+    --transform-translate-y: 2rem;
   }
 
   .sm\:translate-10 {
-    --transform-translate: 2.5rem;
+    --transform-translate-x: 2.5rem;
+    --transform-translate-y: 2.5rem;
   }
 
   .sm\:translate-12 {
-    --transform-translate: 3rem;
+    --transform-translate-x: 3rem;
+    --transform-translate-y: 3rem;
   }
 
   .sm\:translate-16 {
-    --transform-translate: 4rem;
+    --transform-translate-x: 4rem;
+    --transform-translate-y: 4rem;
   }
 
   .sm\:translate-20 {
-    --transform-translate: 5rem;
+    --transform-translate-x: 5rem;
+    --transform-translate-y: 5rem;
   }
 
   .sm\:translate-24 {
-    --transform-translate: 6rem;
+    --transform-translate-x: 6rem;
+    --transform-translate-y: 6rem;
   }
 
   .sm\:translate-32 {
-    --transform-translate: 8rem;
+    --transform-translate-x: 8rem;
+    --transform-translate-y: 8rem;
   }
 
   .sm\:translate-40 {
-    --transform-translate: 10rem;
+    --transform-translate-x: 10rem;
+    --transform-translate-y: 10rem;
   }
 
   .sm\:translate-48 {
-    --transform-translate: 12rem;
+    --transform-translate-x: 12rem;
+    --transform-translate-y: 12rem;
   }
 
   .sm\:translate-56 {
-    --transform-translate: 14rem;
+    --transform-translate-x: 14rem;
+    --transform-translate-y: 14rem;
   }
 
   .sm\:translate-64 {
-    --transform-translate: 16rem;
+    --transform-translate-x: 16rem;
+    --transform-translate-y: 16rem;
   }
 
   .sm\:translate-px {
-    --transform-translate: 1px;
+    --transform-translate-x: 1px;
+    --transform-translate-y: 1px;
   }
 
   .sm\:-translate-1 {
-    --transform-translate: -0.25rem;
+    --transform-translate-x: -0.25rem;
+    --transform-translate-y: -0.25rem;
   }
 
   .sm\:-translate-2 {
-    --transform-translate: -0.5rem;
+    --transform-translate-x: -0.5rem;
+    --transform-translate-y: -0.5rem;
   }
 
   .sm\:-translate-3 {
-    --transform-translate: -0.75rem;
+    --transform-translate-x: -0.75rem;
+    --transform-translate-y: -0.75rem;
   }
 
   .sm\:-translate-4 {
-    --transform-translate: -1rem;
+    --transform-translate-x: -1rem;
+    --transform-translate-y: -1rem;
   }
 
   .sm\:-translate-5 {
-    --transform-translate: -1.25rem;
+    --transform-translate-x: -1.25rem;
+    --transform-translate-y: -1.25rem;
   }
 
   .sm\:-translate-6 {
-    --transform-translate: -1.5rem;
+    --transform-translate-x: -1.5rem;
+    --transform-translate-y: -1.5rem;
   }
 
   .sm\:-translate-8 {
-    --transform-translate: -2rem;
+    --transform-translate-x: -2rem;
+    --transform-translate-y: -2rem;
   }
 
   .sm\:-translate-10 {
-    --transform-translate: -2.5rem;
+    --transform-translate-x: -2.5rem;
+    --transform-translate-y: -2.5rem;
   }
 
   .sm\:-translate-12 {
-    --transform-translate: -3rem;
+    --transform-translate-x: -3rem;
+    --transform-translate-y: -3rem;
   }
 
   .sm\:-translate-16 {
-    --transform-translate: -4rem;
+    --transform-translate-x: -4rem;
+    --transform-translate-y: -4rem;
   }
 
   .sm\:-translate-20 {
-    --transform-translate: -5rem;
+    --transform-translate-x: -5rem;
+    --transform-translate-y: -5rem;
   }
 
   .sm\:-translate-24 {
-    --transform-translate: -6rem;
+    --transform-translate-x: -6rem;
+    --transform-translate-y: -6rem;
   }
 
   .sm\:-translate-32 {
-    --transform-translate: -8rem;
+    --transform-translate-x: -8rem;
+    --transform-translate-y: -8rem;
   }
 
   .sm\:-translate-40 {
-    --transform-translate: -10rem;
+    --transform-translate-x: -10rem;
+    --transform-translate-y: -10rem;
   }
 
   .sm\:-translate-48 {
-    --transform-translate: -12rem;
+    --transform-translate-x: -12rem;
+    --transform-translate-y: -12rem;
   }
 
   .sm\:-translate-56 {
-    --transform-translate: -14rem;
+    --transform-translate-x: -14rem;
+    --transform-translate-y: -14rem;
   }
 
   .sm\:-translate-64 {
-    --transform-translate: -16rem;
+    --transform-translate-x: -16rem;
+    --transform-translate-y: -16rem;
   }
 
   .sm\:-translate-px {
-    --transform-translate: -1px;
+    --transform-translate-x: -1px;
+    --transform-translate-y: -1px;
   }
 
   .sm\:-translate-full {
-    --transform-translate: -100%;
+    --transform-translate-x: -100%;
+    --transform-translate-y: -100%;
   }
 
   .sm\:-translate-1\/2 {
-    --transform-translate: -50%;
+    --transform-translate-x: -50%;
+    --transform-translate-y: -50%;
   }
 
   .sm\:translate-1\/2 {
-    --transform-translate: 50%;
+    --transform-translate-x: 50%;
+    --transform-translate-y: 50%;
   }
 
   .sm\:translate-full {
-    --transform-translate: 100%;
+    --transform-translate-x: 100%;
+    --transform-translate-y: 100%;
   }
 
   .sm\:translate-x-0 {
@@ -21259,167 +21630,208 @@ video {
   }
 
   .sm\:hover\:translate-0:hover {
-    --transform-translate: 0;
+    --transform-translate-x: 0;
+    --transform-translate-y: 0;
   }
 
   .sm\:hover\:translate-1:hover {
-    --transform-translate: 0.25rem;
+    --transform-translate-x: 0.25rem;
+    --transform-translate-y: 0.25rem;
   }
 
   .sm\:hover\:translate-2:hover {
-    --transform-translate: 0.5rem;
+    --transform-translate-x: 0.5rem;
+    --transform-translate-y: 0.5rem;
   }
 
   .sm\:hover\:translate-3:hover {
-    --transform-translate: 0.75rem;
+    --transform-translate-x: 0.75rem;
+    --transform-translate-y: 0.75rem;
   }
 
   .sm\:hover\:translate-4:hover {
-    --transform-translate: 1rem;
+    --transform-translate-x: 1rem;
+    --transform-translate-y: 1rem;
   }
 
   .sm\:hover\:translate-5:hover {
-    --transform-translate: 1.25rem;
+    --transform-translate-x: 1.25rem;
+    --transform-translate-y: 1.25rem;
   }
 
   .sm\:hover\:translate-6:hover {
-    --transform-translate: 1.5rem;
+    --transform-translate-x: 1.5rem;
+    --transform-translate-y: 1.5rem;
   }
 
   .sm\:hover\:translate-8:hover {
-    --transform-translate: 2rem;
+    --transform-translate-x: 2rem;
+    --transform-translate-y: 2rem;
   }
 
   .sm\:hover\:translate-10:hover {
-    --transform-translate: 2.5rem;
+    --transform-translate-x: 2.5rem;
+    --transform-translate-y: 2.5rem;
   }
 
   .sm\:hover\:translate-12:hover {
-    --transform-translate: 3rem;
+    --transform-translate-x: 3rem;
+    --transform-translate-y: 3rem;
   }
 
   .sm\:hover\:translate-16:hover {
-    --transform-translate: 4rem;
+    --transform-translate-x: 4rem;
+    --transform-translate-y: 4rem;
   }
 
   .sm\:hover\:translate-20:hover {
-    --transform-translate: 5rem;
+    --transform-translate-x: 5rem;
+    --transform-translate-y: 5rem;
   }
 
   .sm\:hover\:translate-24:hover {
-    --transform-translate: 6rem;
+    --transform-translate-x: 6rem;
+    --transform-translate-y: 6rem;
   }
 
   .sm\:hover\:translate-32:hover {
-    --transform-translate: 8rem;
+    --transform-translate-x: 8rem;
+    --transform-translate-y: 8rem;
   }
 
   .sm\:hover\:translate-40:hover {
-    --transform-translate: 10rem;
+    --transform-translate-x: 10rem;
+    --transform-translate-y: 10rem;
   }
 
   .sm\:hover\:translate-48:hover {
-    --transform-translate: 12rem;
+    --transform-translate-x: 12rem;
+    --transform-translate-y: 12rem;
   }
 
   .sm\:hover\:translate-56:hover {
-    --transform-translate: 14rem;
+    --transform-translate-x: 14rem;
+    --transform-translate-y: 14rem;
   }
 
   .sm\:hover\:translate-64:hover {
-    --transform-translate: 16rem;
+    --transform-translate-x: 16rem;
+    --transform-translate-y: 16rem;
   }
 
   .sm\:hover\:translate-px:hover {
-    --transform-translate: 1px;
+    --transform-translate-x: 1px;
+    --transform-translate-y: 1px;
   }
 
   .sm\:hover\:-translate-1:hover {
-    --transform-translate: -0.25rem;
+    --transform-translate-x: -0.25rem;
+    --transform-translate-y: -0.25rem;
   }
 
   .sm\:hover\:-translate-2:hover {
-    --transform-translate: -0.5rem;
+    --transform-translate-x: -0.5rem;
+    --transform-translate-y: -0.5rem;
   }
 
   .sm\:hover\:-translate-3:hover {
-    --transform-translate: -0.75rem;
+    --transform-translate-x: -0.75rem;
+    --transform-translate-y: -0.75rem;
   }
 
   .sm\:hover\:-translate-4:hover {
-    --transform-translate: -1rem;
+    --transform-translate-x: -1rem;
+    --transform-translate-y: -1rem;
   }
 
   .sm\:hover\:-translate-5:hover {
-    --transform-translate: -1.25rem;
+    --transform-translate-x: -1.25rem;
+    --transform-translate-y: -1.25rem;
   }
 
   .sm\:hover\:-translate-6:hover {
-    --transform-translate: -1.5rem;
+    --transform-translate-x: -1.5rem;
+    --transform-translate-y: -1.5rem;
   }
 
   .sm\:hover\:-translate-8:hover {
-    --transform-translate: -2rem;
+    --transform-translate-x: -2rem;
+    --transform-translate-y: -2rem;
   }
 
   .sm\:hover\:-translate-10:hover {
-    --transform-translate: -2.5rem;
+    --transform-translate-x: -2.5rem;
+    --transform-translate-y: -2.5rem;
   }
 
   .sm\:hover\:-translate-12:hover {
-    --transform-translate: -3rem;
+    --transform-translate-x: -3rem;
+    --transform-translate-y: -3rem;
   }
 
   .sm\:hover\:-translate-16:hover {
-    --transform-translate: -4rem;
+    --transform-translate-x: -4rem;
+    --transform-translate-y: -4rem;
   }
 
   .sm\:hover\:-translate-20:hover {
-    --transform-translate: -5rem;
+    --transform-translate-x: -5rem;
+    --transform-translate-y: -5rem;
   }
 
   .sm\:hover\:-translate-24:hover {
-    --transform-translate: -6rem;
+    --transform-translate-x: -6rem;
+    --transform-translate-y: -6rem;
   }
 
   .sm\:hover\:-translate-32:hover {
-    --transform-translate: -8rem;
+    --transform-translate-x: -8rem;
+    --transform-translate-y: -8rem;
   }
 
   .sm\:hover\:-translate-40:hover {
-    --transform-translate: -10rem;
+    --transform-translate-x: -10rem;
+    --transform-translate-y: -10rem;
   }
 
   .sm\:hover\:-translate-48:hover {
-    --transform-translate: -12rem;
+    --transform-translate-x: -12rem;
+    --transform-translate-y: -12rem;
   }
 
   .sm\:hover\:-translate-56:hover {
-    --transform-translate: -14rem;
+    --transform-translate-x: -14rem;
+    --transform-translate-y: -14rem;
   }
 
   .sm\:hover\:-translate-64:hover {
-    --transform-translate: -16rem;
+    --transform-translate-x: -16rem;
+    --transform-translate-y: -16rem;
   }
 
   .sm\:hover\:-translate-px:hover {
-    --transform-translate: -1px;
+    --transform-translate-x: -1px;
+    --transform-translate-y: -1px;
   }
 
   .sm\:hover\:-translate-full:hover {
-    --transform-translate: -100%;
+    --transform-translate-x: -100%;
+    --transform-translate-y: -100%;
   }
 
   .sm\:hover\:-translate-1\/2:hover {
-    --transform-translate: -50%;
+    --transform-translate-x: -50%;
+    --transform-translate-y: -50%;
   }
 
   .sm\:hover\:translate-1\/2:hover {
-    --transform-translate: 50%;
+    --transform-translate-x: 50%;
+    --transform-translate-y: 50%;
   }
 
   .sm\:hover\:translate-full:hover {
-    --transform-translate: 100%;
+    --transform-translate-x: 100%;
+    --transform-translate-y: 100%;
   }
 
   .sm\:hover\:translate-x-0:hover {
@@ -21751,167 +22163,208 @@ video {
   }
 
   .sm\:focus\:translate-0:focus {
-    --transform-translate: 0;
+    --transform-translate-x: 0;
+    --transform-translate-y: 0;
   }
 
   .sm\:focus\:translate-1:focus {
-    --transform-translate: 0.25rem;
+    --transform-translate-x: 0.25rem;
+    --transform-translate-y: 0.25rem;
   }
 
   .sm\:focus\:translate-2:focus {
-    --transform-translate: 0.5rem;
+    --transform-translate-x: 0.5rem;
+    --transform-translate-y: 0.5rem;
   }
 
   .sm\:focus\:translate-3:focus {
-    --transform-translate: 0.75rem;
+    --transform-translate-x: 0.75rem;
+    --transform-translate-y: 0.75rem;
   }
 
   .sm\:focus\:translate-4:focus {
-    --transform-translate: 1rem;
+    --transform-translate-x: 1rem;
+    --transform-translate-y: 1rem;
   }
 
   .sm\:focus\:translate-5:focus {
-    --transform-translate: 1.25rem;
+    --transform-translate-x: 1.25rem;
+    --transform-translate-y: 1.25rem;
   }
 
   .sm\:focus\:translate-6:focus {
-    --transform-translate: 1.5rem;
+    --transform-translate-x: 1.5rem;
+    --transform-translate-y: 1.5rem;
   }
 
   .sm\:focus\:translate-8:focus {
-    --transform-translate: 2rem;
+    --transform-translate-x: 2rem;
+    --transform-translate-y: 2rem;
   }
 
   .sm\:focus\:translate-10:focus {
-    --transform-translate: 2.5rem;
+    --transform-translate-x: 2.5rem;
+    --transform-translate-y: 2.5rem;
   }
 
   .sm\:focus\:translate-12:focus {
-    --transform-translate: 3rem;
+    --transform-translate-x: 3rem;
+    --transform-translate-y: 3rem;
   }
 
   .sm\:focus\:translate-16:focus {
-    --transform-translate: 4rem;
+    --transform-translate-x: 4rem;
+    --transform-translate-y: 4rem;
   }
 
   .sm\:focus\:translate-20:focus {
-    --transform-translate: 5rem;
+    --transform-translate-x: 5rem;
+    --transform-translate-y: 5rem;
   }
 
   .sm\:focus\:translate-24:focus {
-    --transform-translate: 6rem;
+    --transform-translate-x: 6rem;
+    --transform-translate-y: 6rem;
   }
 
   .sm\:focus\:translate-32:focus {
-    --transform-translate: 8rem;
+    --transform-translate-x: 8rem;
+    --transform-translate-y: 8rem;
   }
 
   .sm\:focus\:translate-40:focus {
-    --transform-translate: 10rem;
+    --transform-translate-x: 10rem;
+    --transform-translate-y: 10rem;
   }
 
   .sm\:focus\:translate-48:focus {
-    --transform-translate: 12rem;
+    --transform-translate-x: 12rem;
+    --transform-translate-y: 12rem;
   }
 
   .sm\:focus\:translate-56:focus {
-    --transform-translate: 14rem;
+    --transform-translate-x: 14rem;
+    --transform-translate-y: 14rem;
   }
 
   .sm\:focus\:translate-64:focus {
-    --transform-translate: 16rem;
+    --transform-translate-x: 16rem;
+    --transform-translate-y: 16rem;
   }
 
   .sm\:focus\:translate-px:focus {
-    --transform-translate: 1px;
+    --transform-translate-x: 1px;
+    --transform-translate-y: 1px;
   }
 
   .sm\:focus\:-translate-1:focus {
-    --transform-translate: -0.25rem;
+    --transform-translate-x: -0.25rem;
+    --transform-translate-y: -0.25rem;
   }
 
   .sm\:focus\:-translate-2:focus {
-    --transform-translate: -0.5rem;
+    --transform-translate-x: -0.5rem;
+    --transform-translate-y: -0.5rem;
   }
 
   .sm\:focus\:-translate-3:focus {
-    --transform-translate: -0.75rem;
+    --transform-translate-x: -0.75rem;
+    --transform-translate-y: -0.75rem;
   }
 
   .sm\:focus\:-translate-4:focus {
-    --transform-translate: -1rem;
+    --transform-translate-x: -1rem;
+    --transform-translate-y: -1rem;
   }
 
   .sm\:focus\:-translate-5:focus {
-    --transform-translate: -1.25rem;
+    --transform-translate-x: -1.25rem;
+    --transform-translate-y: -1.25rem;
   }
 
   .sm\:focus\:-translate-6:focus {
-    --transform-translate: -1.5rem;
+    --transform-translate-x: -1.5rem;
+    --transform-translate-y: -1.5rem;
   }
 
   .sm\:focus\:-translate-8:focus {
-    --transform-translate: -2rem;
+    --transform-translate-x: -2rem;
+    --transform-translate-y: -2rem;
   }
 
   .sm\:focus\:-translate-10:focus {
-    --transform-translate: -2.5rem;
+    --transform-translate-x: -2.5rem;
+    --transform-translate-y: -2.5rem;
   }
 
   .sm\:focus\:-translate-12:focus {
-    --transform-translate: -3rem;
+    --transform-translate-x: -3rem;
+    --transform-translate-y: -3rem;
   }
 
   .sm\:focus\:-translate-16:focus {
-    --transform-translate: -4rem;
+    --transform-translate-x: -4rem;
+    --transform-translate-y: -4rem;
   }
 
   .sm\:focus\:-translate-20:focus {
-    --transform-translate: -5rem;
+    --transform-translate-x: -5rem;
+    --transform-translate-y: -5rem;
   }
 
   .sm\:focus\:-translate-24:focus {
-    --transform-translate: -6rem;
+    --transform-translate-x: -6rem;
+    --transform-translate-y: -6rem;
   }
 
   .sm\:focus\:-translate-32:focus {
-    --transform-translate: -8rem;
+    --transform-translate-x: -8rem;
+    --transform-translate-y: -8rem;
   }
 
   .sm\:focus\:-translate-40:focus {
-    --transform-translate: -10rem;
+    --transform-translate-x: -10rem;
+    --transform-translate-y: -10rem;
   }
 
   .sm\:focus\:-translate-48:focus {
-    --transform-translate: -12rem;
+    --transform-translate-x: -12rem;
+    --transform-translate-y: -12rem;
   }
 
   .sm\:focus\:-translate-56:focus {
-    --transform-translate: -14rem;
+    --transform-translate-x: -14rem;
+    --transform-translate-y: -14rem;
   }
 
   .sm\:focus\:-translate-64:focus {
-    --transform-translate: -16rem;
+    --transform-translate-x: -16rem;
+    --transform-translate-y: -16rem;
   }
 
   .sm\:focus\:-translate-px:focus {
-    --transform-translate: -1px;
+    --transform-translate-x: -1px;
+    --transform-translate-y: -1px;
   }
 
   .sm\:focus\:-translate-full:focus {
-    --transform-translate: -100%;
+    --transform-translate-x: -100%;
+    --transform-translate-y: -100%;
   }
 
   .sm\:focus\:-translate-1\/2:focus {
-    --transform-translate: -50%;
+    --transform-translate-x: -50%;
+    --transform-translate-y: -50%;
   }
 
   .sm\:focus\:translate-1\/2:focus {
-    --transform-translate: 50%;
+    --transform-translate-x: 50%;
+    --transform-translate-y: 50%;
   }
 
   .sm\:focus\:translate-full:focus {
-    --transform-translate: 100%;
+    --transform-translate-x: 100%;
+    --transform-translate-y: 100%;
   }
 
   .sm\:focus\:translate-x-0:focus {
@@ -22242,6 +22695,41 @@ video {
     --transform-translate-y: 100%;
   }
 
+  .sm\:skew-0 {
+    --transform-skew-x: 0;
+    --transform-skew-y: 0;
+  }
+
+  .sm\:skew-3 {
+    --transform-skew-x: 3deg;
+    --transform-skew-y: 3deg;
+  }
+
+  .sm\:skew-6 {
+    --transform-skew-x: 6deg;
+    --transform-skew-y: 6deg;
+  }
+
+  .sm\:skew-12 {
+    --transform-skew-x: 12deg;
+    --transform-skew-y: 12deg;
+  }
+
+  .sm\:-skew-12 {
+    --transform-skew-x: -12deg;
+    --transform-skew-y: -12deg;
+  }
+
+  .sm\:-skew-6 {
+    --transform-skew-x: -6deg;
+    --transform-skew-y: -6deg;
+  }
+
+  .sm\:-skew-3 {
+    --transform-skew-x: -3deg;
+    --transform-skew-y: -3deg;
+  }
+
   .sm\:skew-x-0 {
     --transform-skew-x: 0;
   }
@@ -22298,6 +22786,41 @@ video {
     --transform-skew-y: -3deg;
   }
 
+  .sm\:hover\:skew-0:hover {
+    --transform-skew-x: 0;
+    --transform-skew-y: 0;
+  }
+
+  .sm\:hover\:skew-3:hover {
+    --transform-skew-x: 3deg;
+    --transform-skew-y: 3deg;
+  }
+
+  .sm\:hover\:skew-6:hover {
+    --transform-skew-x: 6deg;
+    --transform-skew-y: 6deg;
+  }
+
+  .sm\:hover\:skew-12:hover {
+    --transform-skew-x: 12deg;
+    --transform-skew-y: 12deg;
+  }
+
+  .sm\:hover\:-skew-12:hover {
+    --transform-skew-x: -12deg;
+    --transform-skew-y: -12deg;
+  }
+
+  .sm\:hover\:-skew-6:hover {
+    --transform-skew-x: -6deg;
+    --transform-skew-y: -6deg;
+  }
+
+  .sm\:hover\:-skew-3:hover {
+    --transform-skew-x: -3deg;
+    --transform-skew-y: -3deg;
+  }
+
   .sm\:hover\:skew-x-0:hover {
     --transform-skew-x: 0;
   }
@@ -22351,6 +22874,41 @@ video {
   }
 
   .sm\:hover\:-skew-y-3:hover {
+    --transform-skew-y: -3deg;
+  }
+
+  .sm\:focus\:skew-0:focus {
+    --transform-skew-x: 0;
+    --transform-skew-y: 0;
+  }
+
+  .sm\:focus\:skew-3:focus {
+    --transform-skew-x: 3deg;
+    --transform-skew-y: 3deg;
+  }
+
+  .sm\:focus\:skew-6:focus {
+    --transform-skew-x: 6deg;
+    --transform-skew-y: 6deg;
+  }
+
+  .sm\:focus\:skew-12:focus {
+    --transform-skew-x: 12deg;
+    --transform-skew-y: 12deg;
+  }
+
+  .sm\:focus\:-skew-12:focus {
+    --transform-skew-x: -12deg;
+    --transform-skew-y: -12deg;
+  }
+
+  .sm\:focus\:-skew-6:focus {
+    --transform-skew-x: -6deg;
+    --transform-skew-y: -6deg;
+  }
+
+  .sm\:focus\:-skew-3:focus {
+    --transform-skew-x: -3deg;
     --transform-skew-y: -3deg;
   }
 
@@ -31099,43 +31657,53 @@ video {
   }
 
   .md\:scale-0 {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .md\:scale-50 {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .md\:scale-75 {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .md\:scale-90 {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .md\:scale-95 {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .md\:scale-100 {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .md\:scale-105 {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .md\:scale-110 {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .md\:scale-125 {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .md\:scale-150 {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
   }
 
   .md\:scale-x-0 {
@@ -31219,43 +31787,53 @@ video {
   }
 
   .md\:hover\:scale-0:hover {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .md\:hover\:scale-50:hover {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .md\:hover\:scale-75:hover {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .md\:hover\:scale-90:hover {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .md\:hover\:scale-95:hover {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .md\:hover\:scale-100:hover {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .md\:hover\:scale-105:hover {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .md\:hover\:scale-110:hover {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .md\:hover\:scale-125:hover {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .md\:hover\:scale-150:hover {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
   }
 
   .md\:hover\:scale-x-0:hover {
@@ -31339,43 +31917,53 @@ video {
   }
 
   .md\:focus\:scale-0:focus {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .md\:focus\:scale-50:focus {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .md\:focus\:scale-75:focus {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .md\:focus\:scale-90:focus {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .md\:focus\:scale-95:focus {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .md\:focus\:scale-100:focus {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .md\:focus\:scale-105:focus {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .md\:focus\:scale-110:focus {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .md\:focus\:scale-125:focus {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .md\:focus\:scale-150:focus {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
   }
 
   .md\:focus\:scale-x-0:focus {
@@ -31459,31 +32047,38 @@ video {
   }
 
   .md\:rotate-0 {
-    --transform-rotate: 0;
+    --transform-rotate-x: 0;
+    --transform-rotate-y: 0;
   }
 
   .md\:rotate-45 {
-    --transform-rotate: 45deg;
+    --transform-rotate-x: 45deg;
+    --transform-rotate-y: 45deg;
   }
 
   .md\:rotate-90 {
-    --transform-rotate: 90deg;
+    --transform-rotate-x: 90deg;
+    --transform-rotate-y: 90deg;
   }
 
   .md\:rotate-180 {
-    --transform-rotate: 180deg;
+    --transform-rotate-x: 180deg;
+    --transform-rotate-y: 180deg;
   }
 
   .md\:-rotate-180 {
-    --transform-rotate: -180deg;
+    --transform-rotate-x: -180deg;
+    --transform-rotate-y: -180deg;
   }
 
   .md\:-rotate-90 {
-    --transform-rotate: -90deg;
+    --transform-rotate-x: -90deg;
+    --transform-rotate-y: -90deg;
   }
 
   .md\:-rotate-45 {
-    --transform-rotate: -45deg;
+    --transform-rotate-x: -45deg;
+    --transform-rotate-y: -45deg;
   }
 
   .md\:rotate-x-0 {
@@ -31543,31 +32138,38 @@ video {
   }
 
   .md\:hover\:rotate-0:hover {
-    --transform-rotate: 0;
+    --transform-rotate-x: 0;
+    --transform-rotate-y: 0;
   }
 
   .md\:hover\:rotate-45:hover {
-    --transform-rotate: 45deg;
+    --transform-rotate-x: 45deg;
+    --transform-rotate-y: 45deg;
   }
 
   .md\:hover\:rotate-90:hover {
-    --transform-rotate: 90deg;
+    --transform-rotate-x: 90deg;
+    --transform-rotate-y: 90deg;
   }
 
   .md\:hover\:rotate-180:hover {
-    --transform-rotate: 180deg;
+    --transform-rotate-x: 180deg;
+    --transform-rotate-y: 180deg;
   }
 
   .md\:hover\:-rotate-180:hover {
-    --transform-rotate: -180deg;
+    --transform-rotate-x: -180deg;
+    --transform-rotate-y: -180deg;
   }
 
   .md\:hover\:-rotate-90:hover {
-    --transform-rotate: -90deg;
+    --transform-rotate-x: -90deg;
+    --transform-rotate-y: -90deg;
   }
 
   .md\:hover\:-rotate-45:hover {
-    --transform-rotate: -45deg;
+    --transform-rotate-x: -45deg;
+    --transform-rotate-y: -45deg;
   }
 
   .md\:hover\:rotate-x-0:hover {
@@ -31627,31 +32229,38 @@ video {
   }
 
   .md\:focus\:rotate-0:focus {
-    --transform-rotate: 0;
+    --transform-rotate-x: 0;
+    --transform-rotate-y: 0;
   }
 
   .md\:focus\:rotate-45:focus {
-    --transform-rotate: 45deg;
+    --transform-rotate-x: 45deg;
+    --transform-rotate-y: 45deg;
   }
 
   .md\:focus\:rotate-90:focus {
-    --transform-rotate: 90deg;
+    --transform-rotate-x: 90deg;
+    --transform-rotate-y: 90deg;
   }
 
   .md\:focus\:rotate-180:focus {
-    --transform-rotate: 180deg;
+    --transform-rotate-x: 180deg;
+    --transform-rotate-y: 180deg;
   }
 
   .md\:focus\:-rotate-180:focus {
-    --transform-rotate: -180deg;
+    --transform-rotate-x: -180deg;
+    --transform-rotate-y: -180deg;
   }
 
   .md\:focus\:-rotate-90:focus {
-    --transform-rotate: -90deg;
+    --transform-rotate-x: -90deg;
+    --transform-rotate-y: -90deg;
   }
 
   .md\:focus\:-rotate-45:focus {
-    --transform-rotate: -45deg;
+    --transform-rotate-x: -45deg;
+    --transform-rotate-y: -45deg;
   }
 
   .md\:focus\:rotate-x-0:focus {
@@ -31711,167 +32320,208 @@ video {
   }
 
   .md\:translate-0 {
-    --transform-translate: 0;
+    --transform-translate-x: 0;
+    --transform-translate-y: 0;
   }
 
   .md\:translate-1 {
-    --transform-translate: 0.25rem;
+    --transform-translate-x: 0.25rem;
+    --transform-translate-y: 0.25rem;
   }
 
   .md\:translate-2 {
-    --transform-translate: 0.5rem;
+    --transform-translate-x: 0.5rem;
+    --transform-translate-y: 0.5rem;
   }
 
   .md\:translate-3 {
-    --transform-translate: 0.75rem;
+    --transform-translate-x: 0.75rem;
+    --transform-translate-y: 0.75rem;
   }
 
   .md\:translate-4 {
-    --transform-translate: 1rem;
+    --transform-translate-x: 1rem;
+    --transform-translate-y: 1rem;
   }
 
   .md\:translate-5 {
-    --transform-translate: 1.25rem;
+    --transform-translate-x: 1.25rem;
+    --transform-translate-y: 1.25rem;
   }
 
   .md\:translate-6 {
-    --transform-translate: 1.5rem;
+    --transform-translate-x: 1.5rem;
+    --transform-translate-y: 1.5rem;
   }
 
   .md\:translate-8 {
-    --transform-translate: 2rem;
+    --transform-translate-x: 2rem;
+    --transform-translate-y: 2rem;
   }
 
   .md\:translate-10 {
-    --transform-translate: 2.5rem;
+    --transform-translate-x: 2.5rem;
+    --transform-translate-y: 2.5rem;
   }
 
   .md\:translate-12 {
-    --transform-translate: 3rem;
+    --transform-translate-x: 3rem;
+    --transform-translate-y: 3rem;
   }
 
   .md\:translate-16 {
-    --transform-translate: 4rem;
+    --transform-translate-x: 4rem;
+    --transform-translate-y: 4rem;
   }
 
   .md\:translate-20 {
-    --transform-translate: 5rem;
+    --transform-translate-x: 5rem;
+    --transform-translate-y: 5rem;
   }
 
   .md\:translate-24 {
-    --transform-translate: 6rem;
+    --transform-translate-x: 6rem;
+    --transform-translate-y: 6rem;
   }
 
   .md\:translate-32 {
-    --transform-translate: 8rem;
+    --transform-translate-x: 8rem;
+    --transform-translate-y: 8rem;
   }
 
   .md\:translate-40 {
-    --transform-translate: 10rem;
+    --transform-translate-x: 10rem;
+    --transform-translate-y: 10rem;
   }
 
   .md\:translate-48 {
-    --transform-translate: 12rem;
+    --transform-translate-x: 12rem;
+    --transform-translate-y: 12rem;
   }
 
   .md\:translate-56 {
-    --transform-translate: 14rem;
+    --transform-translate-x: 14rem;
+    --transform-translate-y: 14rem;
   }
 
   .md\:translate-64 {
-    --transform-translate: 16rem;
+    --transform-translate-x: 16rem;
+    --transform-translate-y: 16rem;
   }
 
   .md\:translate-px {
-    --transform-translate: 1px;
+    --transform-translate-x: 1px;
+    --transform-translate-y: 1px;
   }
 
   .md\:-translate-1 {
-    --transform-translate: -0.25rem;
+    --transform-translate-x: -0.25rem;
+    --transform-translate-y: -0.25rem;
   }
 
   .md\:-translate-2 {
-    --transform-translate: -0.5rem;
+    --transform-translate-x: -0.5rem;
+    --transform-translate-y: -0.5rem;
   }
 
   .md\:-translate-3 {
-    --transform-translate: -0.75rem;
+    --transform-translate-x: -0.75rem;
+    --transform-translate-y: -0.75rem;
   }
 
   .md\:-translate-4 {
-    --transform-translate: -1rem;
+    --transform-translate-x: -1rem;
+    --transform-translate-y: -1rem;
   }
 
   .md\:-translate-5 {
-    --transform-translate: -1.25rem;
+    --transform-translate-x: -1.25rem;
+    --transform-translate-y: -1.25rem;
   }
 
   .md\:-translate-6 {
-    --transform-translate: -1.5rem;
+    --transform-translate-x: -1.5rem;
+    --transform-translate-y: -1.5rem;
   }
 
   .md\:-translate-8 {
-    --transform-translate: -2rem;
+    --transform-translate-x: -2rem;
+    --transform-translate-y: -2rem;
   }
 
   .md\:-translate-10 {
-    --transform-translate: -2.5rem;
+    --transform-translate-x: -2.5rem;
+    --transform-translate-y: -2.5rem;
   }
 
   .md\:-translate-12 {
-    --transform-translate: -3rem;
+    --transform-translate-x: -3rem;
+    --transform-translate-y: -3rem;
   }
 
   .md\:-translate-16 {
-    --transform-translate: -4rem;
+    --transform-translate-x: -4rem;
+    --transform-translate-y: -4rem;
   }
 
   .md\:-translate-20 {
-    --transform-translate: -5rem;
+    --transform-translate-x: -5rem;
+    --transform-translate-y: -5rem;
   }
 
   .md\:-translate-24 {
-    --transform-translate: -6rem;
+    --transform-translate-x: -6rem;
+    --transform-translate-y: -6rem;
   }
 
   .md\:-translate-32 {
-    --transform-translate: -8rem;
+    --transform-translate-x: -8rem;
+    --transform-translate-y: -8rem;
   }
 
   .md\:-translate-40 {
-    --transform-translate: -10rem;
+    --transform-translate-x: -10rem;
+    --transform-translate-y: -10rem;
   }
 
   .md\:-translate-48 {
-    --transform-translate: -12rem;
+    --transform-translate-x: -12rem;
+    --transform-translate-y: -12rem;
   }
 
   .md\:-translate-56 {
-    --transform-translate: -14rem;
+    --transform-translate-x: -14rem;
+    --transform-translate-y: -14rem;
   }
 
   .md\:-translate-64 {
-    --transform-translate: -16rem;
+    --transform-translate-x: -16rem;
+    --transform-translate-y: -16rem;
   }
 
   .md\:-translate-px {
-    --transform-translate: -1px;
+    --transform-translate-x: -1px;
+    --transform-translate-y: -1px;
   }
 
   .md\:-translate-full {
-    --transform-translate: -100%;
+    --transform-translate-x: -100%;
+    --transform-translate-y: -100%;
   }
 
   .md\:-translate-1\/2 {
-    --transform-translate: -50%;
+    --transform-translate-x: -50%;
+    --transform-translate-y: -50%;
   }
 
   .md\:translate-1\/2 {
-    --transform-translate: 50%;
+    --transform-translate-x: 50%;
+    --transform-translate-y: 50%;
   }
 
   .md\:translate-full {
-    --transform-translate: 100%;
+    --transform-translate-x: 100%;
+    --transform-translate-y: 100%;
   }
 
   .md\:translate-x-0 {
@@ -32203,167 +32853,208 @@ video {
   }
 
   .md\:hover\:translate-0:hover {
-    --transform-translate: 0;
+    --transform-translate-x: 0;
+    --transform-translate-y: 0;
   }
 
   .md\:hover\:translate-1:hover {
-    --transform-translate: 0.25rem;
+    --transform-translate-x: 0.25rem;
+    --transform-translate-y: 0.25rem;
   }
 
   .md\:hover\:translate-2:hover {
-    --transform-translate: 0.5rem;
+    --transform-translate-x: 0.5rem;
+    --transform-translate-y: 0.5rem;
   }
 
   .md\:hover\:translate-3:hover {
-    --transform-translate: 0.75rem;
+    --transform-translate-x: 0.75rem;
+    --transform-translate-y: 0.75rem;
   }
 
   .md\:hover\:translate-4:hover {
-    --transform-translate: 1rem;
+    --transform-translate-x: 1rem;
+    --transform-translate-y: 1rem;
   }
 
   .md\:hover\:translate-5:hover {
-    --transform-translate: 1.25rem;
+    --transform-translate-x: 1.25rem;
+    --transform-translate-y: 1.25rem;
   }
 
   .md\:hover\:translate-6:hover {
-    --transform-translate: 1.5rem;
+    --transform-translate-x: 1.5rem;
+    --transform-translate-y: 1.5rem;
   }
 
   .md\:hover\:translate-8:hover {
-    --transform-translate: 2rem;
+    --transform-translate-x: 2rem;
+    --transform-translate-y: 2rem;
   }
 
   .md\:hover\:translate-10:hover {
-    --transform-translate: 2.5rem;
+    --transform-translate-x: 2.5rem;
+    --transform-translate-y: 2.5rem;
   }
 
   .md\:hover\:translate-12:hover {
-    --transform-translate: 3rem;
+    --transform-translate-x: 3rem;
+    --transform-translate-y: 3rem;
   }
 
   .md\:hover\:translate-16:hover {
-    --transform-translate: 4rem;
+    --transform-translate-x: 4rem;
+    --transform-translate-y: 4rem;
   }
 
   .md\:hover\:translate-20:hover {
-    --transform-translate: 5rem;
+    --transform-translate-x: 5rem;
+    --transform-translate-y: 5rem;
   }
 
   .md\:hover\:translate-24:hover {
-    --transform-translate: 6rem;
+    --transform-translate-x: 6rem;
+    --transform-translate-y: 6rem;
   }
 
   .md\:hover\:translate-32:hover {
-    --transform-translate: 8rem;
+    --transform-translate-x: 8rem;
+    --transform-translate-y: 8rem;
   }
 
   .md\:hover\:translate-40:hover {
-    --transform-translate: 10rem;
+    --transform-translate-x: 10rem;
+    --transform-translate-y: 10rem;
   }
 
   .md\:hover\:translate-48:hover {
-    --transform-translate: 12rem;
+    --transform-translate-x: 12rem;
+    --transform-translate-y: 12rem;
   }
 
   .md\:hover\:translate-56:hover {
-    --transform-translate: 14rem;
+    --transform-translate-x: 14rem;
+    --transform-translate-y: 14rem;
   }
 
   .md\:hover\:translate-64:hover {
-    --transform-translate: 16rem;
+    --transform-translate-x: 16rem;
+    --transform-translate-y: 16rem;
   }
 
   .md\:hover\:translate-px:hover {
-    --transform-translate: 1px;
+    --transform-translate-x: 1px;
+    --transform-translate-y: 1px;
   }
 
   .md\:hover\:-translate-1:hover {
-    --transform-translate: -0.25rem;
+    --transform-translate-x: -0.25rem;
+    --transform-translate-y: -0.25rem;
   }
 
   .md\:hover\:-translate-2:hover {
-    --transform-translate: -0.5rem;
+    --transform-translate-x: -0.5rem;
+    --transform-translate-y: -0.5rem;
   }
 
   .md\:hover\:-translate-3:hover {
-    --transform-translate: -0.75rem;
+    --transform-translate-x: -0.75rem;
+    --transform-translate-y: -0.75rem;
   }
 
   .md\:hover\:-translate-4:hover {
-    --transform-translate: -1rem;
+    --transform-translate-x: -1rem;
+    --transform-translate-y: -1rem;
   }
 
   .md\:hover\:-translate-5:hover {
-    --transform-translate: -1.25rem;
+    --transform-translate-x: -1.25rem;
+    --transform-translate-y: -1.25rem;
   }
 
   .md\:hover\:-translate-6:hover {
-    --transform-translate: -1.5rem;
+    --transform-translate-x: -1.5rem;
+    --transform-translate-y: -1.5rem;
   }
 
   .md\:hover\:-translate-8:hover {
-    --transform-translate: -2rem;
+    --transform-translate-x: -2rem;
+    --transform-translate-y: -2rem;
   }
 
   .md\:hover\:-translate-10:hover {
-    --transform-translate: -2.5rem;
+    --transform-translate-x: -2.5rem;
+    --transform-translate-y: -2.5rem;
   }
 
   .md\:hover\:-translate-12:hover {
-    --transform-translate: -3rem;
+    --transform-translate-x: -3rem;
+    --transform-translate-y: -3rem;
   }
 
   .md\:hover\:-translate-16:hover {
-    --transform-translate: -4rem;
+    --transform-translate-x: -4rem;
+    --transform-translate-y: -4rem;
   }
 
   .md\:hover\:-translate-20:hover {
-    --transform-translate: -5rem;
+    --transform-translate-x: -5rem;
+    --transform-translate-y: -5rem;
   }
 
   .md\:hover\:-translate-24:hover {
-    --transform-translate: -6rem;
+    --transform-translate-x: -6rem;
+    --transform-translate-y: -6rem;
   }
 
   .md\:hover\:-translate-32:hover {
-    --transform-translate: -8rem;
+    --transform-translate-x: -8rem;
+    --transform-translate-y: -8rem;
   }
 
   .md\:hover\:-translate-40:hover {
-    --transform-translate: -10rem;
+    --transform-translate-x: -10rem;
+    --transform-translate-y: -10rem;
   }
 
   .md\:hover\:-translate-48:hover {
-    --transform-translate: -12rem;
+    --transform-translate-x: -12rem;
+    --transform-translate-y: -12rem;
   }
 
   .md\:hover\:-translate-56:hover {
-    --transform-translate: -14rem;
+    --transform-translate-x: -14rem;
+    --transform-translate-y: -14rem;
   }
 
   .md\:hover\:-translate-64:hover {
-    --transform-translate: -16rem;
+    --transform-translate-x: -16rem;
+    --transform-translate-y: -16rem;
   }
 
   .md\:hover\:-translate-px:hover {
-    --transform-translate: -1px;
+    --transform-translate-x: -1px;
+    --transform-translate-y: -1px;
   }
 
   .md\:hover\:-translate-full:hover {
-    --transform-translate: -100%;
+    --transform-translate-x: -100%;
+    --transform-translate-y: -100%;
   }
 
   .md\:hover\:-translate-1\/2:hover {
-    --transform-translate: -50%;
+    --transform-translate-x: -50%;
+    --transform-translate-y: -50%;
   }
 
   .md\:hover\:translate-1\/2:hover {
-    --transform-translate: 50%;
+    --transform-translate-x: 50%;
+    --transform-translate-y: 50%;
   }
 
   .md\:hover\:translate-full:hover {
-    --transform-translate: 100%;
+    --transform-translate-x: 100%;
+    --transform-translate-y: 100%;
   }
 
   .md\:hover\:translate-x-0:hover {
@@ -32695,167 +33386,208 @@ video {
   }
 
   .md\:focus\:translate-0:focus {
-    --transform-translate: 0;
+    --transform-translate-x: 0;
+    --transform-translate-y: 0;
   }
 
   .md\:focus\:translate-1:focus {
-    --transform-translate: 0.25rem;
+    --transform-translate-x: 0.25rem;
+    --transform-translate-y: 0.25rem;
   }
 
   .md\:focus\:translate-2:focus {
-    --transform-translate: 0.5rem;
+    --transform-translate-x: 0.5rem;
+    --transform-translate-y: 0.5rem;
   }
 
   .md\:focus\:translate-3:focus {
-    --transform-translate: 0.75rem;
+    --transform-translate-x: 0.75rem;
+    --transform-translate-y: 0.75rem;
   }
 
   .md\:focus\:translate-4:focus {
-    --transform-translate: 1rem;
+    --transform-translate-x: 1rem;
+    --transform-translate-y: 1rem;
   }
 
   .md\:focus\:translate-5:focus {
-    --transform-translate: 1.25rem;
+    --transform-translate-x: 1.25rem;
+    --transform-translate-y: 1.25rem;
   }
 
   .md\:focus\:translate-6:focus {
-    --transform-translate: 1.5rem;
+    --transform-translate-x: 1.5rem;
+    --transform-translate-y: 1.5rem;
   }
 
   .md\:focus\:translate-8:focus {
-    --transform-translate: 2rem;
+    --transform-translate-x: 2rem;
+    --transform-translate-y: 2rem;
   }
 
   .md\:focus\:translate-10:focus {
-    --transform-translate: 2.5rem;
+    --transform-translate-x: 2.5rem;
+    --transform-translate-y: 2.5rem;
   }
 
   .md\:focus\:translate-12:focus {
-    --transform-translate: 3rem;
+    --transform-translate-x: 3rem;
+    --transform-translate-y: 3rem;
   }
 
   .md\:focus\:translate-16:focus {
-    --transform-translate: 4rem;
+    --transform-translate-x: 4rem;
+    --transform-translate-y: 4rem;
   }
 
   .md\:focus\:translate-20:focus {
-    --transform-translate: 5rem;
+    --transform-translate-x: 5rem;
+    --transform-translate-y: 5rem;
   }
 
   .md\:focus\:translate-24:focus {
-    --transform-translate: 6rem;
+    --transform-translate-x: 6rem;
+    --transform-translate-y: 6rem;
   }
 
   .md\:focus\:translate-32:focus {
-    --transform-translate: 8rem;
+    --transform-translate-x: 8rem;
+    --transform-translate-y: 8rem;
   }
 
   .md\:focus\:translate-40:focus {
-    --transform-translate: 10rem;
+    --transform-translate-x: 10rem;
+    --transform-translate-y: 10rem;
   }
 
   .md\:focus\:translate-48:focus {
-    --transform-translate: 12rem;
+    --transform-translate-x: 12rem;
+    --transform-translate-y: 12rem;
   }
 
   .md\:focus\:translate-56:focus {
-    --transform-translate: 14rem;
+    --transform-translate-x: 14rem;
+    --transform-translate-y: 14rem;
   }
 
   .md\:focus\:translate-64:focus {
-    --transform-translate: 16rem;
+    --transform-translate-x: 16rem;
+    --transform-translate-y: 16rem;
   }
 
   .md\:focus\:translate-px:focus {
-    --transform-translate: 1px;
+    --transform-translate-x: 1px;
+    --transform-translate-y: 1px;
   }
 
   .md\:focus\:-translate-1:focus {
-    --transform-translate: -0.25rem;
+    --transform-translate-x: -0.25rem;
+    --transform-translate-y: -0.25rem;
   }
 
   .md\:focus\:-translate-2:focus {
-    --transform-translate: -0.5rem;
+    --transform-translate-x: -0.5rem;
+    --transform-translate-y: -0.5rem;
   }
 
   .md\:focus\:-translate-3:focus {
-    --transform-translate: -0.75rem;
+    --transform-translate-x: -0.75rem;
+    --transform-translate-y: -0.75rem;
   }
 
   .md\:focus\:-translate-4:focus {
-    --transform-translate: -1rem;
+    --transform-translate-x: -1rem;
+    --transform-translate-y: -1rem;
   }
 
   .md\:focus\:-translate-5:focus {
-    --transform-translate: -1.25rem;
+    --transform-translate-x: -1.25rem;
+    --transform-translate-y: -1.25rem;
   }
 
   .md\:focus\:-translate-6:focus {
-    --transform-translate: -1.5rem;
+    --transform-translate-x: -1.5rem;
+    --transform-translate-y: -1.5rem;
   }
 
   .md\:focus\:-translate-8:focus {
-    --transform-translate: -2rem;
+    --transform-translate-x: -2rem;
+    --transform-translate-y: -2rem;
   }
 
   .md\:focus\:-translate-10:focus {
-    --transform-translate: -2.5rem;
+    --transform-translate-x: -2.5rem;
+    --transform-translate-y: -2.5rem;
   }
 
   .md\:focus\:-translate-12:focus {
-    --transform-translate: -3rem;
+    --transform-translate-x: -3rem;
+    --transform-translate-y: -3rem;
   }
 
   .md\:focus\:-translate-16:focus {
-    --transform-translate: -4rem;
+    --transform-translate-x: -4rem;
+    --transform-translate-y: -4rem;
   }
 
   .md\:focus\:-translate-20:focus {
-    --transform-translate: -5rem;
+    --transform-translate-x: -5rem;
+    --transform-translate-y: -5rem;
   }
 
   .md\:focus\:-translate-24:focus {
-    --transform-translate: -6rem;
+    --transform-translate-x: -6rem;
+    --transform-translate-y: -6rem;
   }
 
   .md\:focus\:-translate-32:focus {
-    --transform-translate: -8rem;
+    --transform-translate-x: -8rem;
+    --transform-translate-y: -8rem;
   }
 
   .md\:focus\:-translate-40:focus {
-    --transform-translate: -10rem;
+    --transform-translate-x: -10rem;
+    --transform-translate-y: -10rem;
   }
 
   .md\:focus\:-translate-48:focus {
-    --transform-translate: -12rem;
+    --transform-translate-x: -12rem;
+    --transform-translate-y: -12rem;
   }
 
   .md\:focus\:-translate-56:focus {
-    --transform-translate: -14rem;
+    --transform-translate-x: -14rem;
+    --transform-translate-y: -14rem;
   }
 
   .md\:focus\:-translate-64:focus {
-    --transform-translate: -16rem;
+    --transform-translate-x: -16rem;
+    --transform-translate-y: -16rem;
   }
 
   .md\:focus\:-translate-px:focus {
-    --transform-translate: -1px;
+    --transform-translate-x: -1px;
+    --transform-translate-y: -1px;
   }
 
   .md\:focus\:-translate-full:focus {
-    --transform-translate: -100%;
+    --transform-translate-x: -100%;
+    --transform-translate-y: -100%;
   }
 
   .md\:focus\:-translate-1\/2:focus {
-    --transform-translate: -50%;
+    --transform-translate-x: -50%;
+    --transform-translate-y: -50%;
   }
 
   .md\:focus\:translate-1\/2:focus {
-    --transform-translate: 50%;
+    --transform-translate-x: 50%;
+    --transform-translate-y: 50%;
   }
 
   .md\:focus\:translate-full:focus {
-    --transform-translate: 100%;
+    --transform-translate-x: 100%;
+    --transform-translate-y: 100%;
   }
 
   .md\:focus\:translate-x-0:focus {
@@ -33186,6 +33918,41 @@ video {
     --transform-translate-y: 100%;
   }
 
+  .md\:skew-0 {
+    --transform-skew-x: 0;
+    --transform-skew-y: 0;
+  }
+
+  .md\:skew-3 {
+    --transform-skew-x: 3deg;
+    --transform-skew-y: 3deg;
+  }
+
+  .md\:skew-6 {
+    --transform-skew-x: 6deg;
+    --transform-skew-y: 6deg;
+  }
+
+  .md\:skew-12 {
+    --transform-skew-x: 12deg;
+    --transform-skew-y: 12deg;
+  }
+
+  .md\:-skew-12 {
+    --transform-skew-x: -12deg;
+    --transform-skew-y: -12deg;
+  }
+
+  .md\:-skew-6 {
+    --transform-skew-x: -6deg;
+    --transform-skew-y: -6deg;
+  }
+
+  .md\:-skew-3 {
+    --transform-skew-x: -3deg;
+    --transform-skew-y: -3deg;
+  }
+
   .md\:skew-x-0 {
     --transform-skew-x: 0;
   }
@@ -33242,6 +34009,41 @@ video {
     --transform-skew-y: -3deg;
   }
 
+  .md\:hover\:skew-0:hover {
+    --transform-skew-x: 0;
+    --transform-skew-y: 0;
+  }
+
+  .md\:hover\:skew-3:hover {
+    --transform-skew-x: 3deg;
+    --transform-skew-y: 3deg;
+  }
+
+  .md\:hover\:skew-6:hover {
+    --transform-skew-x: 6deg;
+    --transform-skew-y: 6deg;
+  }
+
+  .md\:hover\:skew-12:hover {
+    --transform-skew-x: 12deg;
+    --transform-skew-y: 12deg;
+  }
+
+  .md\:hover\:-skew-12:hover {
+    --transform-skew-x: -12deg;
+    --transform-skew-y: -12deg;
+  }
+
+  .md\:hover\:-skew-6:hover {
+    --transform-skew-x: -6deg;
+    --transform-skew-y: -6deg;
+  }
+
+  .md\:hover\:-skew-3:hover {
+    --transform-skew-x: -3deg;
+    --transform-skew-y: -3deg;
+  }
+
   .md\:hover\:skew-x-0:hover {
     --transform-skew-x: 0;
   }
@@ -33295,6 +34097,41 @@ video {
   }
 
   .md\:hover\:-skew-y-3:hover {
+    --transform-skew-y: -3deg;
+  }
+
+  .md\:focus\:skew-0:focus {
+    --transform-skew-x: 0;
+    --transform-skew-y: 0;
+  }
+
+  .md\:focus\:skew-3:focus {
+    --transform-skew-x: 3deg;
+    --transform-skew-y: 3deg;
+  }
+
+  .md\:focus\:skew-6:focus {
+    --transform-skew-x: 6deg;
+    --transform-skew-y: 6deg;
+  }
+
+  .md\:focus\:skew-12:focus {
+    --transform-skew-x: 12deg;
+    --transform-skew-y: 12deg;
+  }
+
+  .md\:focus\:-skew-12:focus {
+    --transform-skew-x: -12deg;
+    --transform-skew-y: -12deg;
+  }
+
+  .md\:focus\:-skew-6:focus {
+    --transform-skew-x: -6deg;
+    --transform-skew-y: -6deg;
+  }
+
+  .md\:focus\:-skew-3:focus {
+    --transform-skew-x: -3deg;
     --transform-skew-y: -3deg;
   }
 
@@ -42043,43 +42880,53 @@ video {
   }
 
   .lg\:scale-0 {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .lg\:scale-50 {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .lg\:scale-75 {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .lg\:scale-90 {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .lg\:scale-95 {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .lg\:scale-100 {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .lg\:scale-105 {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .lg\:scale-110 {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .lg\:scale-125 {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .lg\:scale-150 {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
   }
 
   .lg\:scale-x-0 {
@@ -42163,43 +43010,53 @@ video {
   }
 
   .lg\:hover\:scale-0:hover {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .lg\:hover\:scale-50:hover {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .lg\:hover\:scale-75:hover {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .lg\:hover\:scale-90:hover {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .lg\:hover\:scale-95:hover {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .lg\:hover\:scale-100:hover {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .lg\:hover\:scale-105:hover {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .lg\:hover\:scale-110:hover {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .lg\:hover\:scale-125:hover {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .lg\:hover\:scale-150:hover {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
   }
 
   .lg\:hover\:scale-x-0:hover {
@@ -42283,43 +43140,53 @@ video {
   }
 
   .lg\:focus\:scale-0:focus {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .lg\:focus\:scale-50:focus {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .lg\:focus\:scale-75:focus {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .lg\:focus\:scale-90:focus {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .lg\:focus\:scale-95:focus {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .lg\:focus\:scale-100:focus {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .lg\:focus\:scale-105:focus {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .lg\:focus\:scale-110:focus {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .lg\:focus\:scale-125:focus {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .lg\:focus\:scale-150:focus {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
   }
 
   .lg\:focus\:scale-x-0:focus {
@@ -42403,31 +43270,38 @@ video {
   }
 
   .lg\:rotate-0 {
-    --transform-rotate: 0;
+    --transform-rotate-x: 0;
+    --transform-rotate-y: 0;
   }
 
   .lg\:rotate-45 {
-    --transform-rotate: 45deg;
+    --transform-rotate-x: 45deg;
+    --transform-rotate-y: 45deg;
   }
 
   .lg\:rotate-90 {
-    --transform-rotate: 90deg;
+    --transform-rotate-x: 90deg;
+    --transform-rotate-y: 90deg;
   }
 
   .lg\:rotate-180 {
-    --transform-rotate: 180deg;
+    --transform-rotate-x: 180deg;
+    --transform-rotate-y: 180deg;
   }
 
   .lg\:-rotate-180 {
-    --transform-rotate: -180deg;
+    --transform-rotate-x: -180deg;
+    --transform-rotate-y: -180deg;
   }
 
   .lg\:-rotate-90 {
-    --transform-rotate: -90deg;
+    --transform-rotate-x: -90deg;
+    --transform-rotate-y: -90deg;
   }
 
   .lg\:-rotate-45 {
-    --transform-rotate: -45deg;
+    --transform-rotate-x: -45deg;
+    --transform-rotate-y: -45deg;
   }
 
   .lg\:rotate-x-0 {
@@ -42487,31 +43361,38 @@ video {
   }
 
   .lg\:hover\:rotate-0:hover {
-    --transform-rotate: 0;
+    --transform-rotate-x: 0;
+    --transform-rotate-y: 0;
   }
 
   .lg\:hover\:rotate-45:hover {
-    --transform-rotate: 45deg;
+    --transform-rotate-x: 45deg;
+    --transform-rotate-y: 45deg;
   }
 
   .lg\:hover\:rotate-90:hover {
-    --transform-rotate: 90deg;
+    --transform-rotate-x: 90deg;
+    --transform-rotate-y: 90deg;
   }
 
   .lg\:hover\:rotate-180:hover {
-    --transform-rotate: 180deg;
+    --transform-rotate-x: 180deg;
+    --transform-rotate-y: 180deg;
   }
 
   .lg\:hover\:-rotate-180:hover {
-    --transform-rotate: -180deg;
+    --transform-rotate-x: -180deg;
+    --transform-rotate-y: -180deg;
   }
 
   .lg\:hover\:-rotate-90:hover {
-    --transform-rotate: -90deg;
+    --transform-rotate-x: -90deg;
+    --transform-rotate-y: -90deg;
   }
 
   .lg\:hover\:-rotate-45:hover {
-    --transform-rotate: -45deg;
+    --transform-rotate-x: -45deg;
+    --transform-rotate-y: -45deg;
   }
 
   .lg\:hover\:rotate-x-0:hover {
@@ -42571,31 +43452,38 @@ video {
   }
 
   .lg\:focus\:rotate-0:focus {
-    --transform-rotate: 0;
+    --transform-rotate-x: 0;
+    --transform-rotate-y: 0;
   }
 
   .lg\:focus\:rotate-45:focus {
-    --transform-rotate: 45deg;
+    --transform-rotate-x: 45deg;
+    --transform-rotate-y: 45deg;
   }
 
   .lg\:focus\:rotate-90:focus {
-    --transform-rotate: 90deg;
+    --transform-rotate-x: 90deg;
+    --transform-rotate-y: 90deg;
   }
 
   .lg\:focus\:rotate-180:focus {
-    --transform-rotate: 180deg;
+    --transform-rotate-x: 180deg;
+    --transform-rotate-y: 180deg;
   }
 
   .lg\:focus\:-rotate-180:focus {
-    --transform-rotate: -180deg;
+    --transform-rotate-x: -180deg;
+    --transform-rotate-y: -180deg;
   }
 
   .lg\:focus\:-rotate-90:focus {
-    --transform-rotate: -90deg;
+    --transform-rotate-x: -90deg;
+    --transform-rotate-y: -90deg;
   }
 
   .lg\:focus\:-rotate-45:focus {
-    --transform-rotate: -45deg;
+    --transform-rotate-x: -45deg;
+    --transform-rotate-y: -45deg;
   }
 
   .lg\:focus\:rotate-x-0:focus {
@@ -42655,167 +43543,208 @@ video {
   }
 
   .lg\:translate-0 {
-    --transform-translate: 0;
+    --transform-translate-x: 0;
+    --transform-translate-y: 0;
   }
 
   .lg\:translate-1 {
-    --transform-translate: 0.25rem;
+    --transform-translate-x: 0.25rem;
+    --transform-translate-y: 0.25rem;
   }
 
   .lg\:translate-2 {
-    --transform-translate: 0.5rem;
+    --transform-translate-x: 0.5rem;
+    --transform-translate-y: 0.5rem;
   }
 
   .lg\:translate-3 {
-    --transform-translate: 0.75rem;
+    --transform-translate-x: 0.75rem;
+    --transform-translate-y: 0.75rem;
   }
 
   .lg\:translate-4 {
-    --transform-translate: 1rem;
+    --transform-translate-x: 1rem;
+    --transform-translate-y: 1rem;
   }
 
   .lg\:translate-5 {
-    --transform-translate: 1.25rem;
+    --transform-translate-x: 1.25rem;
+    --transform-translate-y: 1.25rem;
   }
 
   .lg\:translate-6 {
-    --transform-translate: 1.5rem;
+    --transform-translate-x: 1.5rem;
+    --transform-translate-y: 1.5rem;
   }
 
   .lg\:translate-8 {
-    --transform-translate: 2rem;
+    --transform-translate-x: 2rem;
+    --transform-translate-y: 2rem;
   }
 
   .lg\:translate-10 {
-    --transform-translate: 2.5rem;
+    --transform-translate-x: 2.5rem;
+    --transform-translate-y: 2.5rem;
   }
 
   .lg\:translate-12 {
-    --transform-translate: 3rem;
+    --transform-translate-x: 3rem;
+    --transform-translate-y: 3rem;
   }
 
   .lg\:translate-16 {
-    --transform-translate: 4rem;
+    --transform-translate-x: 4rem;
+    --transform-translate-y: 4rem;
   }
 
   .lg\:translate-20 {
-    --transform-translate: 5rem;
+    --transform-translate-x: 5rem;
+    --transform-translate-y: 5rem;
   }
 
   .lg\:translate-24 {
-    --transform-translate: 6rem;
+    --transform-translate-x: 6rem;
+    --transform-translate-y: 6rem;
   }
 
   .lg\:translate-32 {
-    --transform-translate: 8rem;
+    --transform-translate-x: 8rem;
+    --transform-translate-y: 8rem;
   }
 
   .lg\:translate-40 {
-    --transform-translate: 10rem;
+    --transform-translate-x: 10rem;
+    --transform-translate-y: 10rem;
   }
 
   .lg\:translate-48 {
-    --transform-translate: 12rem;
+    --transform-translate-x: 12rem;
+    --transform-translate-y: 12rem;
   }
 
   .lg\:translate-56 {
-    --transform-translate: 14rem;
+    --transform-translate-x: 14rem;
+    --transform-translate-y: 14rem;
   }
 
   .lg\:translate-64 {
-    --transform-translate: 16rem;
+    --transform-translate-x: 16rem;
+    --transform-translate-y: 16rem;
   }
 
   .lg\:translate-px {
-    --transform-translate: 1px;
+    --transform-translate-x: 1px;
+    --transform-translate-y: 1px;
   }
 
   .lg\:-translate-1 {
-    --transform-translate: -0.25rem;
+    --transform-translate-x: -0.25rem;
+    --transform-translate-y: -0.25rem;
   }
 
   .lg\:-translate-2 {
-    --transform-translate: -0.5rem;
+    --transform-translate-x: -0.5rem;
+    --transform-translate-y: -0.5rem;
   }
 
   .lg\:-translate-3 {
-    --transform-translate: -0.75rem;
+    --transform-translate-x: -0.75rem;
+    --transform-translate-y: -0.75rem;
   }
 
   .lg\:-translate-4 {
-    --transform-translate: -1rem;
+    --transform-translate-x: -1rem;
+    --transform-translate-y: -1rem;
   }
 
   .lg\:-translate-5 {
-    --transform-translate: -1.25rem;
+    --transform-translate-x: -1.25rem;
+    --transform-translate-y: -1.25rem;
   }
 
   .lg\:-translate-6 {
-    --transform-translate: -1.5rem;
+    --transform-translate-x: -1.5rem;
+    --transform-translate-y: -1.5rem;
   }
 
   .lg\:-translate-8 {
-    --transform-translate: -2rem;
+    --transform-translate-x: -2rem;
+    --transform-translate-y: -2rem;
   }
 
   .lg\:-translate-10 {
-    --transform-translate: -2.5rem;
+    --transform-translate-x: -2.5rem;
+    --transform-translate-y: -2.5rem;
   }
 
   .lg\:-translate-12 {
-    --transform-translate: -3rem;
+    --transform-translate-x: -3rem;
+    --transform-translate-y: -3rem;
   }
 
   .lg\:-translate-16 {
-    --transform-translate: -4rem;
+    --transform-translate-x: -4rem;
+    --transform-translate-y: -4rem;
   }
 
   .lg\:-translate-20 {
-    --transform-translate: -5rem;
+    --transform-translate-x: -5rem;
+    --transform-translate-y: -5rem;
   }
 
   .lg\:-translate-24 {
-    --transform-translate: -6rem;
+    --transform-translate-x: -6rem;
+    --transform-translate-y: -6rem;
   }
 
   .lg\:-translate-32 {
-    --transform-translate: -8rem;
+    --transform-translate-x: -8rem;
+    --transform-translate-y: -8rem;
   }
 
   .lg\:-translate-40 {
-    --transform-translate: -10rem;
+    --transform-translate-x: -10rem;
+    --transform-translate-y: -10rem;
   }
 
   .lg\:-translate-48 {
-    --transform-translate: -12rem;
+    --transform-translate-x: -12rem;
+    --transform-translate-y: -12rem;
   }
 
   .lg\:-translate-56 {
-    --transform-translate: -14rem;
+    --transform-translate-x: -14rem;
+    --transform-translate-y: -14rem;
   }
 
   .lg\:-translate-64 {
-    --transform-translate: -16rem;
+    --transform-translate-x: -16rem;
+    --transform-translate-y: -16rem;
   }
 
   .lg\:-translate-px {
-    --transform-translate: -1px;
+    --transform-translate-x: -1px;
+    --transform-translate-y: -1px;
   }
 
   .lg\:-translate-full {
-    --transform-translate: -100%;
+    --transform-translate-x: -100%;
+    --transform-translate-y: -100%;
   }
 
   .lg\:-translate-1\/2 {
-    --transform-translate: -50%;
+    --transform-translate-x: -50%;
+    --transform-translate-y: -50%;
   }
 
   .lg\:translate-1\/2 {
-    --transform-translate: 50%;
+    --transform-translate-x: 50%;
+    --transform-translate-y: 50%;
   }
 
   .lg\:translate-full {
-    --transform-translate: 100%;
+    --transform-translate-x: 100%;
+    --transform-translate-y: 100%;
   }
 
   .lg\:translate-x-0 {
@@ -43147,167 +44076,208 @@ video {
   }
 
   .lg\:hover\:translate-0:hover {
-    --transform-translate: 0;
+    --transform-translate-x: 0;
+    --transform-translate-y: 0;
   }
 
   .lg\:hover\:translate-1:hover {
-    --transform-translate: 0.25rem;
+    --transform-translate-x: 0.25rem;
+    --transform-translate-y: 0.25rem;
   }
 
   .lg\:hover\:translate-2:hover {
-    --transform-translate: 0.5rem;
+    --transform-translate-x: 0.5rem;
+    --transform-translate-y: 0.5rem;
   }
 
   .lg\:hover\:translate-3:hover {
-    --transform-translate: 0.75rem;
+    --transform-translate-x: 0.75rem;
+    --transform-translate-y: 0.75rem;
   }
 
   .lg\:hover\:translate-4:hover {
-    --transform-translate: 1rem;
+    --transform-translate-x: 1rem;
+    --transform-translate-y: 1rem;
   }
 
   .lg\:hover\:translate-5:hover {
-    --transform-translate: 1.25rem;
+    --transform-translate-x: 1.25rem;
+    --transform-translate-y: 1.25rem;
   }
 
   .lg\:hover\:translate-6:hover {
-    --transform-translate: 1.5rem;
+    --transform-translate-x: 1.5rem;
+    --transform-translate-y: 1.5rem;
   }
 
   .lg\:hover\:translate-8:hover {
-    --transform-translate: 2rem;
+    --transform-translate-x: 2rem;
+    --transform-translate-y: 2rem;
   }
 
   .lg\:hover\:translate-10:hover {
-    --transform-translate: 2.5rem;
+    --transform-translate-x: 2.5rem;
+    --transform-translate-y: 2.5rem;
   }
 
   .lg\:hover\:translate-12:hover {
-    --transform-translate: 3rem;
+    --transform-translate-x: 3rem;
+    --transform-translate-y: 3rem;
   }
 
   .lg\:hover\:translate-16:hover {
-    --transform-translate: 4rem;
+    --transform-translate-x: 4rem;
+    --transform-translate-y: 4rem;
   }
 
   .lg\:hover\:translate-20:hover {
-    --transform-translate: 5rem;
+    --transform-translate-x: 5rem;
+    --transform-translate-y: 5rem;
   }
 
   .lg\:hover\:translate-24:hover {
-    --transform-translate: 6rem;
+    --transform-translate-x: 6rem;
+    --transform-translate-y: 6rem;
   }
 
   .lg\:hover\:translate-32:hover {
-    --transform-translate: 8rem;
+    --transform-translate-x: 8rem;
+    --transform-translate-y: 8rem;
   }
 
   .lg\:hover\:translate-40:hover {
-    --transform-translate: 10rem;
+    --transform-translate-x: 10rem;
+    --transform-translate-y: 10rem;
   }
 
   .lg\:hover\:translate-48:hover {
-    --transform-translate: 12rem;
+    --transform-translate-x: 12rem;
+    --transform-translate-y: 12rem;
   }
 
   .lg\:hover\:translate-56:hover {
-    --transform-translate: 14rem;
+    --transform-translate-x: 14rem;
+    --transform-translate-y: 14rem;
   }
 
   .lg\:hover\:translate-64:hover {
-    --transform-translate: 16rem;
+    --transform-translate-x: 16rem;
+    --transform-translate-y: 16rem;
   }
 
   .lg\:hover\:translate-px:hover {
-    --transform-translate: 1px;
+    --transform-translate-x: 1px;
+    --transform-translate-y: 1px;
   }
 
   .lg\:hover\:-translate-1:hover {
-    --transform-translate: -0.25rem;
+    --transform-translate-x: -0.25rem;
+    --transform-translate-y: -0.25rem;
   }
 
   .lg\:hover\:-translate-2:hover {
-    --transform-translate: -0.5rem;
+    --transform-translate-x: -0.5rem;
+    --transform-translate-y: -0.5rem;
   }
 
   .lg\:hover\:-translate-3:hover {
-    --transform-translate: -0.75rem;
+    --transform-translate-x: -0.75rem;
+    --transform-translate-y: -0.75rem;
   }
 
   .lg\:hover\:-translate-4:hover {
-    --transform-translate: -1rem;
+    --transform-translate-x: -1rem;
+    --transform-translate-y: -1rem;
   }
 
   .lg\:hover\:-translate-5:hover {
-    --transform-translate: -1.25rem;
+    --transform-translate-x: -1.25rem;
+    --transform-translate-y: -1.25rem;
   }
 
   .lg\:hover\:-translate-6:hover {
-    --transform-translate: -1.5rem;
+    --transform-translate-x: -1.5rem;
+    --transform-translate-y: -1.5rem;
   }
 
   .lg\:hover\:-translate-8:hover {
-    --transform-translate: -2rem;
+    --transform-translate-x: -2rem;
+    --transform-translate-y: -2rem;
   }
 
   .lg\:hover\:-translate-10:hover {
-    --transform-translate: -2.5rem;
+    --transform-translate-x: -2.5rem;
+    --transform-translate-y: -2.5rem;
   }
 
   .lg\:hover\:-translate-12:hover {
-    --transform-translate: -3rem;
+    --transform-translate-x: -3rem;
+    --transform-translate-y: -3rem;
   }
 
   .lg\:hover\:-translate-16:hover {
-    --transform-translate: -4rem;
+    --transform-translate-x: -4rem;
+    --transform-translate-y: -4rem;
   }
 
   .lg\:hover\:-translate-20:hover {
-    --transform-translate: -5rem;
+    --transform-translate-x: -5rem;
+    --transform-translate-y: -5rem;
   }
 
   .lg\:hover\:-translate-24:hover {
-    --transform-translate: -6rem;
+    --transform-translate-x: -6rem;
+    --transform-translate-y: -6rem;
   }
 
   .lg\:hover\:-translate-32:hover {
-    --transform-translate: -8rem;
+    --transform-translate-x: -8rem;
+    --transform-translate-y: -8rem;
   }
 
   .lg\:hover\:-translate-40:hover {
-    --transform-translate: -10rem;
+    --transform-translate-x: -10rem;
+    --transform-translate-y: -10rem;
   }
 
   .lg\:hover\:-translate-48:hover {
-    --transform-translate: -12rem;
+    --transform-translate-x: -12rem;
+    --transform-translate-y: -12rem;
   }
 
   .lg\:hover\:-translate-56:hover {
-    --transform-translate: -14rem;
+    --transform-translate-x: -14rem;
+    --transform-translate-y: -14rem;
   }
 
   .lg\:hover\:-translate-64:hover {
-    --transform-translate: -16rem;
+    --transform-translate-x: -16rem;
+    --transform-translate-y: -16rem;
   }
 
   .lg\:hover\:-translate-px:hover {
-    --transform-translate: -1px;
+    --transform-translate-x: -1px;
+    --transform-translate-y: -1px;
   }
 
   .lg\:hover\:-translate-full:hover {
-    --transform-translate: -100%;
+    --transform-translate-x: -100%;
+    --transform-translate-y: -100%;
   }
 
   .lg\:hover\:-translate-1\/2:hover {
-    --transform-translate: -50%;
+    --transform-translate-x: -50%;
+    --transform-translate-y: -50%;
   }
 
   .lg\:hover\:translate-1\/2:hover {
-    --transform-translate: 50%;
+    --transform-translate-x: 50%;
+    --transform-translate-y: 50%;
   }
 
   .lg\:hover\:translate-full:hover {
-    --transform-translate: 100%;
+    --transform-translate-x: 100%;
+    --transform-translate-y: 100%;
   }
 
   .lg\:hover\:translate-x-0:hover {
@@ -43639,167 +44609,208 @@ video {
   }
 
   .lg\:focus\:translate-0:focus {
-    --transform-translate: 0;
+    --transform-translate-x: 0;
+    --transform-translate-y: 0;
   }
 
   .lg\:focus\:translate-1:focus {
-    --transform-translate: 0.25rem;
+    --transform-translate-x: 0.25rem;
+    --transform-translate-y: 0.25rem;
   }
 
   .lg\:focus\:translate-2:focus {
-    --transform-translate: 0.5rem;
+    --transform-translate-x: 0.5rem;
+    --transform-translate-y: 0.5rem;
   }
 
   .lg\:focus\:translate-3:focus {
-    --transform-translate: 0.75rem;
+    --transform-translate-x: 0.75rem;
+    --transform-translate-y: 0.75rem;
   }
 
   .lg\:focus\:translate-4:focus {
-    --transform-translate: 1rem;
+    --transform-translate-x: 1rem;
+    --transform-translate-y: 1rem;
   }
 
   .lg\:focus\:translate-5:focus {
-    --transform-translate: 1.25rem;
+    --transform-translate-x: 1.25rem;
+    --transform-translate-y: 1.25rem;
   }
 
   .lg\:focus\:translate-6:focus {
-    --transform-translate: 1.5rem;
+    --transform-translate-x: 1.5rem;
+    --transform-translate-y: 1.5rem;
   }
 
   .lg\:focus\:translate-8:focus {
-    --transform-translate: 2rem;
+    --transform-translate-x: 2rem;
+    --transform-translate-y: 2rem;
   }
 
   .lg\:focus\:translate-10:focus {
-    --transform-translate: 2.5rem;
+    --transform-translate-x: 2.5rem;
+    --transform-translate-y: 2.5rem;
   }
 
   .lg\:focus\:translate-12:focus {
-    --transform-translate: 3rem;
+    --transform-translate-x: 3rem;
+    --transform-translate-y: 3rem;
   }
 
   .lg\:focus\:translate-16:focus {
-    --transform-translate: 4rem;
+    --transform-translate-x: 4rem;
+    --transform-translate-y: 4rem;
   }
 
   .lg\:focus\:translate-20:focus {
-    --transform-translate: 5rem;
+    --transform-translate-x: 5rem;
+    --transform-translate-y: 5rem;
   }
 
   .lg\:focus\:translate-24:focus {
-    --transform-translate: 6rem;
+    --transform-translate-x: 6rem;
+    --transform-translate-y: 6rem;
   }
 
   .lg\:focus\:translate-32:focus {
-    --transform-translate: 8rem;
+    --transform-translate-x: 8rem;
+    --transform-translate-y: 8rem;
   }
 
   .lg\:focus\:translate-40:focus {
-    --transform-translate: 10rem;
+    --transform-translate-x: 10rem;
+    --transform-translate-y: 10rem;
   }
 
   .lg\:focus\:translate-48:focus {
-    --transform-translate: 12rem;
+    --transform-translate-x: 12rem;
+    --transform-translate-y: 12rem;
   }
 
   .lg\:focus\:translate-56:focus {
-    --transform-translate: 14rem;
+    --transform-translate-x: 14rem;
+    --transform-translate-y: 14rem;
   }
 
   .lg\:focus\:translate-64:focus {
-    --transform-translate: 16rem;
+    --transform-translate-x: 16rem;
+    --transform-translate-y: 16rem;
   }
 
   .lg\:focus\:translate-px:focus {
-    --transform-translate: 1px;
+    --transform-translate-x: 1px;
+    --transform-translate-y: 1px;
   }
 
   .lg\:focus\:-translate-1:focus {
-    --transform-translate: -0.25rem;
+    --transform-translate-x: -0.25rem;
+    --transform-translate-y: -0.25rem;
   }
 
   .lg\:focus\:-translate-2:focus {
-    --transform-translate: -0.5rem;
+    --transform-translate-x: -0.5rem;
+    --transform-translate-y: -0.5rem;
   }
 
   .lg\:focus\:-translate-3:focus {
-    --transform-translate: -0.75rem;
+    --transform-translate-x: -0.75rem;
+    --transform-translate-y: -0.75rem;
   }
 
   .lg\:focus\:-translate-4:focus {
-    --transform-translate: -1rem;
+    --transform-translate-x: -1rem;
+    --transform-translate-y: -1rem;
   }
 
   .lg\:focus\:-translate-5:focus {
-    --transform-translate: -1.25rem;
+    --transform-translate-x: -1.25rem;
+    --transform-translate-y: -1.25rem;
   }
 
   .lg\:focus\:-translate-6:focus {
-    --transform-translate: -1.5rem;
+    --transform-translate-x: -1.5rem;
+    --transform-translate-y: -1.5rem;
   }
 
   .lg\:focus\:-translate-8:focus {
-    --transform-translate: -2rem;
+    --transform-translate-x: -2rem;
+    --transform-translate-y: -2rem;
   }
 
   .lg\:focus\:-translate-10:focus {
-    --transform-translate: -2.5rem;
+    --transform-translate-x: -2.5rem;
+    --transform-translate-y: -2.5rem;
   }
 
   .lg\:focus\:-translate-12:focus {
-    --transform-translate: -3rem;
+    --transform-translate-x: -3rem;
+    --transform-translate-y: -3rem;
   }
 
   .lg\:focus\:-translate-16:focus {
-    --transform-translate: -4rem;
+    --transform-translate-x: -4rem;
+    --transform-translate-y: -4rem;
   }
 
   .lg\:focus\:-translate-20:focus {
-    --transform-translate: -5rem;
+    --transform-translate-x: -5rem;
+    --transform-translate-y: -5rem;
   }
 
   .lg\:focus\:-translate-24:focus {
-    --transform-translate: -6rem;
+    --transform-translate-x: -6rem;
+    --transform-translate-y: -6rem;
   }
 
   .lg\:focus\:-translate-32:focus {
-    --transform-translate: -8rem;
+    --transform-translate-x: -8rem;
+    --transform-translate-y: -8rem;
   }
 
   .lg\:focus\:-translate-40:focus {
-    --transform-translate: -10rem;
+    --transform-translate-x: -10rem;
+    --transform-translate-y: -10rem;
   }
 
   .lg\:focus\:-translate-48:focus {
-    --transform-translate: -12rem;
+    --transform-translate-x: -12rem;
+    --transform-translate-y: -12rem;
   }
 
   .lg\:focus\:-translate-56:focus {
-    --transform-translate: -14rem;
+    --transform-translate-x: -14rem;
+    --transform-translate-y: -14rem;
   }
 
   .lg\:focus\:-translate-64:focus {
-    --transform-translate: -16rem;
+    --transform-translate-x: -16rem;
+    --transform-translate-y: -16rem;
   }
 
   .lg\:focus\:-translate-px:focus {
-    --transform-translate: -1px;
+    --transform-translate-x: -1px;
+    --transform-translate-y: -1px;
   }
 
   .lg\:focus\:-translate-full:focus {
-    --transform-translate: -100%;
+    --transform-translate-x: -100%;
+    --transform-translate-y: -100%;
   }
 
   .lg\:focus\:-translate-1\/2:focus {
-    --transform-translate: -50%;
+    --transform-translate-x: -50%;
+    --transform-translate-y: -50%;
   }
 
   .lg\:focus\:translate-1\/2:focus {
-    --transform-translate: 50%;
+    --transform-translate-x: 50%;
+    --transform-translate-y: 50%;
   }
 
   .lg\:focus\:translate-full:focus {
-    --transform-translate: 100%;
+    --transform-translate-x: 100%;
+    --transform-translate-y: 100%;
   }
 
   .lg\:focus\:translate-x-0:focus {
@@ -44130,6 +45141,41 @@ video {
     --transform-translate-y: 100%;
   }
 
+  .lg\:skew-0 {
+    --transform-skew-x: 0;
+    --transform-skew-y: 0;
+  }
+
+  .lg\:skew-3 {
+    --transform-skew-x: 3deg;
+    --transform-skew-y: 3deg;
+  }
+
+  .lg\:skew-6 {
+    --transform-skew-x: 6deg;
+    --transform-skew-y: 6deg;
+  }
+
+  .lg\:skew-12 {
+    --transform-skew-x: 12deg;
+    --transform-skew-y: 12deg;
+  }
+
+  .lg\:-skew-12 {
+    --transform-skew-x: -12deg;
+    --transform-skew-y: -12deg;
+  }
+
+  .lg\:-skew-6 {
+    --transform-skew-x: -6deg;
+    --transform-skew-y: -6deg;
+  }
+
+  .lg\:-skew-3 {
+    --transform-skew-x: -3deg;
+    --transform-skew-y: -3deg;
+  }
+
   .lg\:skew-x-0 {
     --transform-skew-x: 0;
   }
@@ -44186,6 +45232,41 @@ video {
     --transform-skew-y: -3deg;
   }
 
+  .lg\:hover\:skew-0:hover {
+    --transform-skew-x: 0;
+    --transform-skew-y: 0;
+  }
+
+  .lg\:hover\:skew-3:hover {
+    --transform-skew-x: 3deg;
+    --transform-skew-y: 3deg;
+  }
+
+  .lg\:hover\:skew-6:hover {
+    --transform-skew-x: 6deg;
+    --transform-skew-y: 6deg;
+  }
+
+  .lg\:hover\:skew-12:hover {
+    --transform-skew-x: 12deg;
+    --transform-skew-y: 12deg;
+  }
+
+  .lg\:hover\:-skew-12:hover {
+    --transform-skew-x: -12deg;
+    --transform-skew-y: -12deg;
+  }
+
+  .lg\:hover\:-skew-6:hover {
+    --transform-skew-x: -6deg;
+    --transform-skew-y: -6deg;
+  }
+
+  .lg\:hover\:-skew-3:hover {
+    --transform-skew-x: -3deg;
+    --transform-skew-y: -3deg;
+  }
+
   .lg\:hover\:skew-x-0:hover {
     --transform-skew-x: 0;
   }
@@ -44239,6 +45320,41 @@ video {
   }
 
   .lg\:hover\:-skew-y-3:hover {
+    --transform-skew-y: -3deg;
+  }
+
+  .lg\:focus\:skew-0:focus {
+    --transform-skew-x: 0;
+    --transform-skew-y: 0;
+  }
+
+  .lg\:focus\:skew-3:focus {
+    --transform-skew-x: 3deg;
+    --transform-skew-y: 3deg;
+  }
+
+  .lg\:focus\:skew-6:focus {
+    --transform-skew-x: 6deg;
+    --transform-skew-y: 6deg;
+  }
+
+  .lg\:focus\:skew-12:focus {
+    --transform-skew-x: 12deg;
+    --transform-skew-y: 12deg;
+  }
+
+  .lg\:focus\:-skew-12:focus {
+    --transform-skew-x: -12deg;
+    --transform-skew-y: -12deg;
+  }
+
+  .lg\:focus\:-skew-6:focus {
+    --transform-skew-x: -6deg;
+    --transform-skew-y: -6deg;
+  }
+
+  .lg\:focus\:-skew-3:focus {
+    --transform-skew-x: -3deg;
     --transform-skew-y: -3deg;
   }
 
@@ -52987,43 +54103,53 @@ video {
   }
 
   .xl\:scale-0 {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .xl\:scale-50 {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .xl\:scale-75 {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .xl\:scale-90 {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .xl\:scale-95 {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .xl\:scale-100 {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .xl\:scale-105 {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .xl\:scale-110 {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .xl\:scale-125 {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .xl\:scale-150 {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
   }
 
   .xl\:scale-x-0 {
@@ -53107,43 +54233,53 @@ video {
   }
 
   .xl\:hover\:scale-0:hover {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .xl\:hover\:scale-50:hover {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .xl\:hover\:scale-75:hover {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .xl\:hover\:scale-90:hover {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .xl\:hover\:scale-95:hover {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .xl\:hover\:scale-100:hover {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .xl\:hover\:scale-105:hover {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .xl\:hover\:scale-110:hover {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .xl\:hover\:scale-125:hover {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .xl\:hover\:scale-150:hover {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
   }
 
   .xl\:hover\:scale-x-0:hover {
@@ -53227,43 +54363,53 @@ video {
   }
 
   .xl\:focus\:scale-0:focus {
-    --transform-scale: 0;
+    --transform-scale-x: 0;
+    --transform-scale-y: 0;
   }
 
   .xl\:focus\:scale-50:focus {
-    --transform-scale: .5;
+    --transform-scale-x: .5;
+    --transform-scale-y: .5;
   }
 
   .xl\:focus\:scale-75:focus {
-    --transform-scale: .75;
+    --transform-scale-x: .75;
+    --transform-scale-y: .75;
   }
 
   .xl\:focus\:scale-90:focus {
-    --transform-scale: .9;
+    --transform-scale-x: .9;
+    --transform-scale-y: .9;
   }
 
   .xl\:focus\:scale-95:focus {
-    --transform-scale: .95;
+    --transform-scale-x: .95;
+    --transform-scale-y: .95;
   }
 
   .xl\:focus\:scale-100:focus {
-    --transform-scale: 1;
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
   }
 
   .xl\:focus\:scale-105:focus {
-    --transform-scale: 1.05;
+    --transform-scale-x: 1.05;
+    --transform-scale-y: 1.05;
   }
 
   .xl\:focus\:scale-110:focus {
-    --transform-scale: 1.1;
+    --transform-scale-x: 1.1;
+    --transform-scale-y: 1.1;
   }
 
   .xl\:focus\:scale-125:focus {
-    --transform-scale: 1.25;
+    --transform-scale-x: 1.25;
+    --transform-scale-y: 1.25;
   }
 
   .xl\:focus\:scale-150:focus {
-    --transform-scale: 1.5;
+    --transform-scale-x: 1.5;
+    --transform-scale-y: 1.5;
   }
 
   .xl\:focus\:scale-x-0:focus {
@@ -53347,31 +54493,38 @@ video {
   }
 
   .xl\:rotate-0 {
-    --transform-rotate: 0;
+    --transform-rotate-x: 0;
+    --transform-rotate-y: 0;
   }
 
   .xl\:rotate-45 {
-    --transform-rotate: 45deg;
+    --transform-rotate-x: 45deg;
+    --transform-rotate-y: 45deg;
   }
 
   .xl\:rotate-90 {
-    --transform-rotate: 90deg;
+    --transform-rotate-x: 90deg;
+    --transform-rotate-y: 90deg;
   }
 
   .xl\:rotate-180 {
-    --transform-rotate: 180deg;
+    --transform-rotate-x: 180deg;
+    --transform-rotate-y: 180deg;
   }
 
   .xl\:-rotate-180 {
-    --transform-rotate: -180deg;
+    --transform-rotate-x: -180deg;
+    --transform-rotate-y: -180deg;
   }
 
   .xl\:-rotate-90 {
-    --transform-rotate: -90deg;
+    --transform-rotate-x: -90deg;
+    --transform-rotate-y: -90deg;
   }
 
   .xl\:-rotate-45 {
-    --transform-rotate: -45deg;
+    --transform-rotate-x: -45deg;
+    --transform-rotate-y: -45deg;
   }
 
   .xl\:rotate-x-0 {
@@ -53431,31 +54584,38 @@ video {
   }
 
   .xl\:hover\:rotate-0:hover {
-    --transform-rotate: 0;
+    --transform-rotate-x: 0;
+    --transform-rotate-y: 0;
   }
 
   .xl\:hover\:rotate-45:hover {
-    --transform-rotate: 45deg;
+    --transform-rotate-x: 45deg;
+    --transform-rotate-y: 45deg;
   }
 
   .xl\:hover\:rotate-90:hover {
-    --transform-rotate: 90deg;
+    --transform-rotate-x: 90deg;
+    --transform-rotate-y: 90deg;
   }
 
   .xl\:hover\:rotate-180:hover {
-    --transform-rotate: 180deg;
+    --transform-rotate-x: 180deg;
+    --transform-rotate-y: 180deg;
   }
 
   .xl\:hover\:-rotate-180:hover {
-    --transform-rotate: -180deg;
+    --transform-rotate-x: -180deg;
+    --transform-rotate-y: -180deg;
   }
 
   .xl\:hover\:-rotate-90:hover {
-    --transform-rotate: -90deg;
+    --transform-rotate-x: -90deg;
+    --transform-rotate-y: -90deg;
   }
 
   .xl\:hover\:-rotate-45:hover {
-    --transform-rotate: -45deg;
+    --transform-rotate-x: -45deg;
+    --transform-rotate-y: -45deg;
   }
 
   .xl\:hover\:rotate-x-0:hover {
@@ -53515,31 +54675,38 @@ video {
   }
 
   .xl\:focus\:rotate-0:focus {
-    --transform-rotate: 0;
+    --transform-rotate-x: 0;
+    --transform-rotate-y: 0;
   }
 
   .xl\:focus\:rotate-45:focus {
-    --transform-rotate: 45deg;
+    --transform-rotate-x: 45deg;
+    --transform-rotate-y: 45deg;
   }
 
   .xl\:focus\:rotate-90:focus {
-    --transform-rotate: 90deg;
+    --transform-rotate-x: 90deg;
+    --transform-rotate-y: 90deg;
   }
 
   .xl\:focus\:rotate-180:focus {
-    --transform-rotate: 180deg;
+    --transform-rotate-x: 180deg;
+    --transform-rotate-y: 180deg;
   }
 
   .xl\:focus\:-rotate-180:focus {
-    --transform-rotate: -180deg;
+    --transform-rotate-x: -180deg;
+    --transform-rotate-y: -180deg;
   }
 
   .xl\:focus\:-rotate-90:focus {
-    --transform-rotate: -90deg;
+    --transform-rotate-x: -90deg;
+    --transform-rotate-y: -90deg;
   }
 
   .xl\:focus\:-rotate-45:focus {
-    --transform-rotate: -45deg;
+    --transform-rotate-x: -45deg;
+    --transform-rotate-y: -45deg;
   }
 
   .xl\:focus\:rotate-x-0:focus {
@@ -53599,167 +54766,208 @@ video {
   }
 
   .xl\:translate-0 {
-    --transform-translate: 0;
+    --transform-translate-x: 0;
+    --transform-translate-y: 0;
   }
 
   .xl\:translate-1 {
-    --transform-translate: 0.25rem;
+    --transform-translate-x: 0.25rem;
+    --transform-translate-y: 0.25rem;
   }
 
   .xl\:translate-2 {
-    --transform-translate: 0.5rem;
+    --transform-translate-x: 0.5rem;
+    --transform-translate-y: 0.5rem;
   }
 
   .xl\:translate-3 {
-    --transform-translate: 0.75rem;
+    --transform-translate-x: 0.75rem;
+    --transform-translate-y: 0.75rem;
   }
 
   .xl\:translate-4 {
-    --transform-translate: 1rem;
+    --transform-translate-x: 1rem;
+    --transform-translate-y: 1rem;
   }
 
   .xl\:translate-5 {
-    --transform-translate: 1.25rem;
+    --transform-translate-x: 1.25rem;
+    --transform-translate-y: 1.25rem;
   }
 
   .xl\:translate-6 {
-    --transform-translate: 1.5rem;
+    --transform-translate-x: 1.5rem;
+    --transform-translate-y: 1.5rem;
   }
 
   .xl\:translate-8 {
-    --transform-translate: 2rem;
+    --transform-translate-x: 2rem;
+    --transform-translate-y: 2rem;
   }
 
   .xl\:translate-10 {
-    --transform-translate: 2.5rem;
+    --transform-translate-x: 2.5rem;
+    --transform-translate-y: 2.5rem;
   }
 
   .xl\:translate-12 {
-    --transform-translate: 3rem;
+    --transform-translate-x: 3rem;
+    --transform-translate-y: 3rem;
   }
 
   .xl\:translate-16 {
-    --transform-translate: 4rem;
+    --transform-translate-x: 4rem;
+    --transform-translate-y: 4rem;
   }
 
   .xl\:translate-20 {
-    --transform-translate: 5rem;
+    --transform-translate-x: 5rem;
+    --transform-translate-y: 5rem;
   }
 
   .xl\:translate-24 {
-    --transform-translate: 6rem;
+    --transform-translate-x: 6rem;
+    --transform-translate-y: 6rem;
   }
 
   .xl\:translate-32 {
-    --transform-translate: 8rem;
+    --transform-translate-x: 8rem;
+    --transform-translate-y: 8rem;
   }
 
   .xl\:translate-40 {
-    --transform-translate: 10rem;
+    --transform-translate-x: 10rem;
+    --transform-translate-y: 10rem;
   }
 
   .xl\:translate-48 {
-    --transform-translate: 12rem;
+    --transform-translate-x: 12rem;
+    --transform-translate-y: 12rem;
   }
 
   .xl\:translate-56 {
-    --transform-translate: 14rem;
+    --transform-translate-x: 14rem;
+    --transform-translate-y: 14rem;
   }
 
   .xl\:translate-64 {
-    --transform-translate: 16rem;
+    --transform-translate-x: 16rem;
+    --transform-translate-y: 16rem;
   }
 
   .xl\:translate-px {
-    --transform-translate: 1px;
+    --transform-translate-x: 1px;
+    --transform-translate-y: 1px;
   }
 
   .xl\:-translate-1 {
-    --transform-translate: -0.25rem;
+    --transform-translate-x: -0.25rem;
+    --transform-translate-y: -0.25rem;
   }
 
   .xl\:-translate-2 {
-    --transform-translate: -0.5rem;
+    --transform-translate-x: -0.5rem;
+    --transform-translate-y: -0.5rem;
   }
 
   .xl\:-translate-3 {
-    --transform-translate: -0.75rem;
+    --transform-translate-x: -0.75rem;
+    --transform-translate-y: -0.75rem;
   }
 
   .xl\:-translate-4 {
-    --transform-translate: -1rem;
+    --transform-translate-x: -1rem;
+    --transform-translate-y: -1rem;
   }
 
   .xl\:-translate-5 {
-    --transform-translate: -1.25rem;
+    --transform-translate-x: -1.25rem;
+    --transform-translate-y: -1.25rem;
   }
 
   .xl\:-translate-6 {
-    --transform-translate: -1.5rem;
+    --transform-translate-x: -1.5rem;
+    --transform-translate-y: -1.5rem;
   }
 
   .xl\:-translate-8 {
-    --transform-translate: -2rem;
+    --transform-translate-x: -2rem;
+    --transform-translate-y: -2rem;
   }
 
   .xl\:-translate-10 {
-    --transform-translate: -2.5rem;
+    --transform-translate-x: -2.5rem;
+    --transform-translate-y: -2.5rem;
   }
 
   .xl\:-translate-12 {
-    --transform-translate: -3rem;
+    --transform-translate-x: -3rem;
+    --transform-translate-y: -3rem;
   }
 
   .xl\:-translate-16 {
-    --transform-translate: -4rem;
+    --transform-translate-x: -4rem;
+    --transform-translate-y: -4rem;
   }
 
   .xl\:-translate-20 {
-    --transform-translate: -5rem;
+    --transform-translate-x: -5rem;
+    --transform-translate-y: -5rem;
   }
 
   .xl\:-translate-24 {
-    --transform-translate: -6rem;
+    --transform-translate-x: -6rem;
+    --transform-translate-y: -6rem;
   }
 
   .xl\:-translate-32 {
-    --transform-translate: -8rem;
+    --transform-translate-x: -8rem;
+    --transform-translate-y: -8rem;
   }
 
   .xl\:-translate-40 {
-    --transform-translate: -10rem;
+    --transform-translate-x: -10rem;
+    --transform-translate-y: -10rem;
   }
 
   .xl\:-translate-48 {
-    --transform-translate: -12rem;
+    --transform-translate-x: -12rem;
+    --transform-translate-y: -12rem;
   }
 
   .xl\:-translate-56 {
-    --transform-translate: -14rem;
+    --transform-translate-x: -14rem;
+    --transform-translate-y: -14rem;
   }
 
   .xl\:-translate-64 {
-    --transform-translate: -16rem;
+    --transform-translate-x: -16rem;
+    --transform-translate-y: -16rem;
   }
 
   .xl\:-translate-px {
-    --transform-translate: -1px;
+    --transform-translate-x: -1px;
+    --transform-translate-y: -1px;
   }
 
   .xl\:-translate-full {
-    --transform-translate: -100%;
+    --transform-translate-x: -100%;
+    --transform-translate-y: -100%;
   }
 
   .xl\:-translate-1\/2 {
-    --transform-translate: -50%;
+    --transform-translate-x: -50%;
+    --transform-translate-y: -50%;
   }
 
   .xl\:translate-1\/2 {
-    --transform-translate: 50%;
+    --transform-translate-x: 50%;
+    --transform-translate-y: 50%;
   }
 
   .xl\:translate-full {
-    --transform-translate: 100%;
+    --transform-translate-x: 100%;
+    --transform-translate-y: 100%;
   }
 
   .xl\:translate-x-0 {
@@ -54091,167 +55299,208 @@ video {
   }
 
   .xl\:hover\:translate-0:hover {
-    --transform-translate: 0;
+    --transform-translate-x: 0;
+    --transform-translate-y: 0;
   }
 
   .xl\:hover\:translate-1:hover {
-    --transform-translate: 0.25rem;
+    --transform-translate-x: 0.25rem;
+    --transform-translate-y: 0.25rem;
   }
 
   .xl\:hover\:translate-2:hover {
-    --transform-translate: 0.5rem;
+    --transform-translate-x: 0.5rem;
+    --transform-translate-y: 0.5rem;
   }
 
   .xl\:hover\:translate-3:hover {
-    --transform-translate: 0.75rem;
+    --transform-translate-x: 0.75rem;
+    --transform-translate-y: 0.75rem;
   }
 
   .xl\:hover\:translate-4:hover {
-    --transform-translate: 1rem;
+    --transform-translate-x: 1rem;
+    --transform-translate-y: 1rem;
   }
 
   .xl\:hover\:translate-5:hover {
-    --transform-translate: 1.25rem;
+    --transform-translate-x: 1.25rem;
+    --transform-translate-y: 1.25rem;
   }
 
   .xl\:hover\:translate-6:hover {
-    --transform-translate: 1.5rem;
+    --transform-translate-x: 1.5rem;
+    --transform-translate-y: 1.5rem;
   }
 
   .xl\:hover\:translate-8:hover {
-    --transform-translate: 2rem;
+    --transform-translate-x: 2rem;
+    --transform-translate-y: 2rem;
   }
 
   .xl\:hover\:translate-10:hover {
-    --transform-translate: 2.5rem;
+    --transform-translate-x: 2.5rem;
+    --transform-translate-y: 2.5rem;
   }
 
   .xl\:hover\:translate-12:hover {
-    --transform-translate: 3rem;
+    --transform-translate-x: 3rem;
+    --transform-translate-y: 3rem;
   }
 
   .xl\:hover\:translate-16:hover {
-    --transform-translate: 4rem;
+    --transform-translate-x: 4rem;
+    --transform-translate-y: 4rem;
   }
 
   .xl\:hover\:translate-20:hover {
-    --transform-translate: 5rem;
+    --transform-translate-x: 5rem;
+    --transform-translate-y: 5rem;
   }
 
   .xl\:hover\:translate-24:hover {
-    --transform-translate: 6rem;
+    --transform-translate-x: 6rem;
+    --transform-translate-y: 6rem;
   }
 
   .xl\:hover\:translate-32:hover {
-    --transform-translate: 8rem;
+    --transform-translate-x: 8rem;
+    --transform-translate-y: 8rem;
   }
 
   .xl\:hover\:translate-40:hover {
-    --transform-translate: 10rem;
+    --transform-translate-x: 10rem;
+    --transform-translate-y: 10rem;
   }
 
   .xl\:hover\:translate-48:hover {
-    --transform-translate: 12rem;
+    --transform-translate-x: 12rem;
+    --transform-translate-y: 12rem;
   }
 
   .xl\:hover\:translate-56:hover {
-    --transform-translate: 14rem;
+    --transform-translate-x: 14rem;
+    --transform-translate-y: 14rem;
   }
 
   .xl\:hover\:translate-64:hover {
-    --transform-translate: 16rem;
+    --transform-translate-x: 16rem;
+    --transform-translate-y: 16rem;
   }
 
   .xl\:hover\:translate-px:hover {
-    --transform-translate: 1px;
+    --transform-translate-x: 1px;
+    --transform-translate-y: 1px;
   }
 
   .xl\:hover\:-translate-1:hover {
-    --transform-translate: -0.25rem;
+    --transform-translate-x: -0.25rem;
+    --transform-translate-y: -0.25rem;
   }
 
   .xl\:hover\:-translate-2:hover {
-    --transform-translate: -0.5rem;
+    --transform-translate-x: -0.5rem;
+    --transform-translate-y: -0.5rem;
   }
 
   .xl\:hover\:-translate-3:hover {
-    --transform-translate: -0.75rem;
+    --transform-translate-x: -0.75rem;
+    --transform-translate-y: -0.75rem;
   }
 
   .xl\:hover\:-translate-4:hover {
-    --transform-translate: -1rem;
+    --transform-translate-x: -1rem;
+    --transform-translate-y: -1rem;
   }
 
   .xl\:hover\:-translate-5:hover {
-    --transform-translate: -1.25rem;
+    --transform-translate-x: -1.25rem;
+    --transform-translate-y: -1.25rem;
   }
 
   .xl\:hover\:-translate-6:hover {
-    --transform-translate: -1.5rem;
+    --transform-translate-x: -1.5rem;
+    --transform-translate-y: -1.5rem;
   }
 
   .xl\:hover\:-translate-8:hover {
-    --transform-translate: -2rem;
+    --transform-translate-x: -2rem;
+    --transform-translate-y: -2rem;
   }
 
   .xl\:hover\:-translate-10:hover {
-    --transform-translate: -2.5rem;
+    --transform-translate-x: -2.5rem;
+    --transform-translate-y: -2.5rem;
   }
 
   .xl\:hover\:-translate-12:hover {
-    --transform-translate: -3rem;
+    --transform-translate-x: -3rem;
+    --transform-translate-y: -3rem;
   }
 
   .xl\:hover\:-translate-16:hover {
-    --transform-translate: -4rem;
+    --transform-translate-x: -4rem;
+    --transform-translate-y: -4rem;
   }
 
   .xl\:hover\:-translate-20:hover {
-    --transform-translate: -5rem;
+    --transform-translate-x: -5rem;
+    --transform-translate-y: -5rem;
   }
 
   .xl\:hover\:-translate-24:hover {
-    --transform-translate: -6rem;
+    --transform-translate-x: -6rem;
+    --transform-translate-y: -6rem;
   }
 
   .xl\:hover\:-translate-32:hover {
-    --transform-translate: -8rem;
+    --transform-translate-x: -8rem;
+    --transform-translate-y: -8rem;
   }
 
   .xl\:hover\:-translate-40:hover {
-    --transform-translate: -10rem;
+    --transform-translate-x: -10rem;
+    --transform-translate-y: -10rem;
   }
 
   .xl\:hover\:-translate-48:hover {
-    --transform-translate: -12rem;
+    --transform-translate-x: -12rem;
+    --transform-translate-y: -12rem;
   }
 
   .xl\:hover\:-translate-56:hover {
-    --transform-translate: -14rem;
+    --transform-translate-x: -14rem;
+    --transform-translate-y: -14rem;
   }
 
   .xl\:hover\:-translate-64:hover {
-    --transform-translate: -16rem;
+    --transform-translate-x: -16rem;
+    --transform-translate-y: -16rem;
   }
 
   .xl\:hover\:-translate-px:hover {
-    --transform-translate: -1px;
+    --transform-translate-x: -1px;
+    --transform-translate-y: -1px;
   }
 
   .xl\:hover\:-translate-full:hover {
-    --transform-translate: -100%;
+    --transform-translate-x: -100%;
+    --transform-translate-y: -100%;
   }
 
   .xl\:hover\:-translate-1\/2:hover {
-    --transform-translate: -50%;
+    --transform-translate-x: -50%;
+    --transform-translate-y: -50%;
   }
 
   .xl\:hover\:translate-1\/2:hover {
-    --transform-translate: 50%;
+    --transform-translate-x: 50%;
+    --transform-translate-y: 50%;
   }
 
   .xl\:hover\:translate-full:hover {
-    --transform-translate: 100%;
+    --transform-translate-x: 100%;
+    --transform-translate-y: 100%;
   }
 
   .xl\:hover\:translate-x-0:hover {
@@ -54583,167 +55832,208 @@ video {
   }
 
   .xl\:focus\:translate-0:focus {
-    --transform-translate: 0;
+    --transform-translate-x: 0;
+    --transform-translate-y: 0;
   }
 
   .xl\:focus\:translate-1:focus {
-    --transform-translate: 0.25rem;
+    --transform-translate-x: 0.25rem;
+    --transform-translate-y: 0.25rem;
   }
 
   .xl\:focus\:translate-2:focus {
-    --transform-translate: 0.5rem;
+    --transform-translate-x: 0.5rem;
+    --transform-translate-y: 0.5rem;
   }
 
   .xl\:focus\:translate-3:focus {
-    --transform-translate: 0.75rem;
+    --transform-translate-x: 0.75rem;
+    --transform-translate-y: 0.75rem;
   }
 
   .xl\:focus\:translate-4:focus {
-    --transform-translate: 1rem;
+    --transform-translate-x: 1rem;
+    --transform-translate-y: 1rem;
   }
 
   .xl\:focus\:translate-5:focus {
-    --transform-translate: 1.25rem;
+    --transform-translate-x: 1.25rem;
+    --transform-translate-y: 1.25rem;
   }
 
   .xl\:focus\:translate-6:focus {
-    --transform-translate: 1.5rem;
+    --transform-translate-x: 1.5rem;
+    --transform-translate-y: 1.5rem;
   }
 
   .xl\:focus\:translate-8:focus {
-    --transform-translate: 2rem;
+    --transform-translate-x: 2rem;
+    --transform-translate-y: 2rem;
   }
 
   .xl\:focus\:translate-10:focus {
-    --transform-translate: 2.5rem;
+    --transform-translate-x: 2.5rem;
+    --transform-translate-y: 2.5rem;
   }
 
   .xl\:focus\:translate-12:focus {
-    --transform-translate: 3rem;
+    --transform-translate-x: 3rem;
+    --transform-translate-y: 3rem;
   }
 
   .xl\:focus\:translate-16:focus {
-    --transform-translate: 4rem;
+    --transform-translate-x: 4rem;
+    --transform-translate-y: 4rem;
   }
 
   .xl\:focus\:translate-20:focus {
-    --transform-translate: 5rem;
+    --transform-translate-x: 5rem;
+    --transform-translate-y: 5rem;
   }
 
   .xl\:focus\:translate-24:focus {
-    --transform-translate: 6rem;
+    --transform-translate-x: 6rem;
+    --transform-translate-y: 6rem;
   }
 
   .xl\:focus\:translate-32:focus {
-    --transform-translate: 8rem;
+    --transform-translate-x: 8rem;
+    --transform-translate-y: 8rem;
   }
 
   .xl\:focus\:translate-40:focus {
-    --transform-translate: 10rem;
+    --transform-translate-x: 10rem;
+    --transform-translate-y: 10rem;
   }
 
   .xl\:focus\:translate-48:focus {
-    --transform-translate: 12rem;
+    --transform-translate-x: 12rem;
+    --transform-translate-y: 12rem;
   }
 
   .xl\:focus\:translate-56:focus {
-    --transform-translate: 14rem;
+    --transform-translate-x: 14rem;
+    --transform-translate-y: 14rem;
   }
 
   .xl\:focus\:translate-64:focus {
-    --transform-translate: 16rem;
+    --transform-translate-x: 16rem;
+    --transform-translate-y: 16rem;
   }
 
   .xl\:focus\:translate-px:focus {
-    --transform-translate: 1px;
+    --transform-translate-x: 1px;
+    --transform-translate-y: 1px;
   }
 
   .xl\:focus\:-translate-1:focus {
-    --transform-translate: -0.25rem;
+    --transform-translate-x: -0.25rem;
+    --transform-translate-y: -0.25rem;
   }
 
   .xl\:focus\:-translate-2:focus {
-    --transform-translate: -0.5rem;
+    --transform-translate-x: -0.5rem;
+    --transform-translate-y: -0.5rem;
   }
 
   .xl\:focus\:-translate-3:focus {
-    --transform-translate: -0.75rem;
+    --transform-translate-x: -0.75rem;
+    --transform-translate-y: -0.75rem;
   }
 
   .xl\:focus\:-translate-4:focus {
-    --transform-translate: -1rem;
+    --transform-translate-x: -1rem;
+    --transform-translate-y: -1rem;
   }
 
   .xl\:focus\:-translate-5:focus {
-    --transform-translate: -1.25rem;
+    --transform-translate-x: -1.25rem;
+    --transform-translate-y: -1.25rem;
   }
 
   .xl\:focus\:-translate-6:focus {
-    --transform-translate: -1.5rem;
+    --transform-translate-x: -1.5rem;
+    --transform-translate-y: -1.5rem;
   }
 
   .xl\:focus\:-translate-8:focus {
-    --transform-translate: -2rem;
+    --transform-translate-x: -2rem;
+    --transform-translate-y: -2rem;
   }
 
   .xl\:focus\:-translate-10:focus {
-    --transform-translate: -2.5rem;
+    --transform-translate-x: -2.5rem;
+    --transform-translate-y: -2.5rem;
   }
 
   .xl\:focus\:-translate-12:focus {
-    --transform-translate: -3rem;
+    --transform-translate-x: -3rem;
+    --transform-translate-y: -3rem;
   }
 
   .xl\:focus\:-translate-16:focus {
-    --transform-translate: -4rem;
+    --transform-translate-x: -4rem;
+    --transform-translate-y: -4rem;
   }
 
   .xl\:focus\:-translate-20:focus {
-    --transform-translate: -5rem;
+    --transform-translate-x: -5rem;
+    --transform-translate-y: -5rem;
   }
 
   .xl\:focus\:-translate-24:focus {
-    --transform-translate: -6rem;
+    --transform-translate-x: -6rem;
+    --transform-translate-y: -6rem;
   }
 
   .xl\:focus\:-translate-32:focus {
-    --transform-translate: -8rem;
+    --transform-translate-x: -8rem;
+    --transform-translate-y: -8rem;
   }
 
   .xl\:focus\:-translate-40:focus {
-    --transform-translate: -10rem;
+    --transform-translate-x: -10rem;
+    --transform-translate-y: -10rem;
   }
 
   .xl\:focus\:-translate-48:focus {
-    --transform-translate: -12rem;
+    --transform-translate-x: -12rem;
+    --transform-translate-y: -12rem;
   }
 
   .xl\:focus\:-translate-56:focus {
-    --transform-translate: -14rem;
+    --transform-translate-x: -14rem;
+    --transform-translate-y: -14rem;
   }
 
   .xl\:focus\:-translate-64:focus {
-    --transform-translate: -16rem;
+    --transform-translate-x: -16rem;
+    --transform-translate-y: -16rem;
   }
 
   .xl\:focus\:-translate-px:focus {
-    --transform-translate: -1px;
+    --transform-translate-x: -1px;
+    --transform-translate-y: -1px;
   }
 
   .xl\:focus\:-translate-full:focus {
-    --transform-translate: -100%;
+    --transform-translate-x: -100%;
+    --transform-translate-y: -100%;
   }
 
   .xl\:focus\:-translate-1\/2:focus {
-    --transform-translate: -50%;
+    --transform-translate-x: -50%;
+    --transform-translate-y: -50%;
   }
 
   .xl\:focus\:translate-1\/2:focus {
-    --transform-translate: 50%;
+    --transform-translate-x: 50%;
+    --transform-translate-y: 50%;
   }
 
   .xl\:focus\:translate-full:focus {
-    --transform-translate: 100%;
+    --transform-translate-x: 100%;
+    --transform-translate-y: 100%;
   }
 
   .xl\:focus\:translate-x-0:focus {
@@ -55074,6 +56364,41 @@ video {
     --transform-translate-y: 100%;
   }
 
+  .xl\:skew-0 {
+    --transform-skew-x: 0;
+    --transform-skew-y: 0;
+  }
+
+  .xl\:skew-3 {
+    --transform-skew-x: 3deg;
+    --transform-skew-y: 3deg;
+  }
+
+  .xl\:skew-6 {
+    --transform-skew-x: 6deg;
+    --transform-skew-y: 6deg;
+  }
+
+  .xl\:skew-12 {
+    --transform-skew-x: 12deg;
+    --transform-skew-y: 12deg;
+  }
+
+  .xl\:-skew-12 {
+    --transform-skew-x: -12deg;
+    --transform-skew-y: -12deg;
+  }
+
+  .xl\:-skew-6 {
+    --transform-skew-x: -6deg;
+    --transform-skew-y: -6deg;
+  }
+
+  .xl\:-skew-3 {
+    --transform-skew-x: -3deg;
+    --transform-skew-y: -3deg;
+  }
+
   .xl\:skew-x-0 {
     --transform-skew-x: 0;
   }
@@ -55130,6 +56455,41 @@ video {
     --transform-skew-y: -3deg;
   }
 
+  .xl\:hover\:skew-0:hover {
+    --transform-skew-x: 0;
+    --transform-skew-y: 0;
+  }
+
+  .xl\:hover\:skew-3:hover {
+    --transform-skew-x: 3deg;
+    --transform-skew-y: 3deg;
+  }
+
+  .xl\:hover\:skew-6:hover {
+    --transform-skew-x: 6deg;
+    --transform-skew-y: 6deg;
+  }
+
+  .xl\:hover\:skew-12:hover {
+    --transform-skew-x: 12deg;
+    --transform-skew-y: 12deg;
+  }
+
+  .xl\:hover\:-skew-12:hover {
+    --transform-skew-x: -12deg;
+    --transform-skew-y: -12deg;
+  }
+
+  .xl\:hover\:-skew-6:hover {
+    --transform-skew-x: -6deg;
+    --transform-skew-y: -6deg;
+  }
+
+  .xl\:hover\:-skew-3:hover {
+    --transform-skew-x: -3deg;
+    --transform-skew-y: -3deg;
+  }
+
   .xl\:hover\:skew-x-0:hover {
     --transform-skew-x: 0;
   }
@@ -55183,6 +56543,41 @@ video {
   }
 
   .xl\:hover\:-skew-y-3:hover {
+    --transform-skew-y: -3deg;
+  }
+
+  .xl\:focus\:skew-0:focus {
+    --transform-skew-x: 0;
+    --transform-skew-y: 0;
+  }
+
+  .xl\:focus\:skew-3:focus {
+    --transform-skew-x: 3deg;
+    --transform-skew-y: 3deg;
+  }
+
+  .xl\:focus\:skew-6:focus {
+    --transform-skew-x: 6deg;
+    --transform-skew-y: 6deg;
+  }
+
+  .xl\:focus\:skew-12:focus {
+    --transform-skew-x: 12deg;
+    --transform-skew-y: 12deg;
+  }
+
+  .xl\:focus\:-skew-12:focus {
+    --transform-skew-x: -12deg;
+    --transform-skew-y: -12deg;
+  }
+
+  .xl\:focus\:-skew-6:focus {
+    --transform-skew-x: -6deg;
+    --transform-skew-y: -6deg;
+  }
+
+  .xl\:focus\:-skew-3:focus {
+    --transform-skew-x: -3deg;
     --transform-skew-y: -3deg;
   }
 
