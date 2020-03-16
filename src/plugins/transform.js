@@ -5,7 +5,8 @@ export default function() {
         '.transform': {
           '--transform-translate-x': '0',
           '--transform-translate-y': '0',
-          '--transform-rotate': '0',
+          '--transform-rotate-x': '0',
+          '--transform-rotate-y': '0',
           '--transform-skew-x': '0',
           '--transform-skew-y': '0',
           '--transform-scale-x': '1',
@@ -13,7 +14,8 @@ export default function() {
           transform: [
             'translateX(var(--transform-translate-x))',
             'translateY(var(--transform-translate-y))',
-            'rotate(var(--transform-rotate))',
+            'rotateX(var(--transform-rotate-x))',
+            'rotateY(var(--transform-rotate-y))',
             'skewX(var(--transform-skew-x))',
             'skewY(var(--transform-skew-y))',
             'scaleX(var(--transform-scale-x))',
