@@ -8,6 +8,17 @@ Thanks for your interest in contributing to Tailwind CSS! Please take a moment t
 
 It's never a fun experience to have your pull request declined after investing a lot of time and effort into a new feature. To avoid this from happening, we request that contributors create [an issue](https://github.com/tailwindcss/tailwindcss/issues) to first discuss any significant new features. This includes things like adding new utilities, creating new at-rules, etc.
 
+### Contribute using one-click online setup
+
+You can use gitpod(a free online VS Code-like IDE) for contributing. With a single click it'll launch a workspace and automatically:
+
+- clone the tailwindcss repo.
+- install the dependencies.
+
+so that you can start contributing straight away.
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer/)
+
 ## Coding standards
 
 Our code formatting rules are defined in [.eslintrc](https://github.com/tailwindcss/tailwindcss/blob/master/.eslintrc.json). You can check your code against these standards by running:
