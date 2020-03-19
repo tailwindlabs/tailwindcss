@@ -8,7 +8,7 @@ export default function() {
         },
         '.break-words': { 'overflow-wrap': 'break-word' },
         '.break-all': { 'word-break': 'break-all' },
-
+        '.keep-all': { 'word-break': 'keep-all' },
         '.truncate': {
           overflow: 'hidden',
           'text-overflow': 'ellipsis',
