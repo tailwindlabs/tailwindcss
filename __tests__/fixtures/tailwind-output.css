@@ -10913,6 +10913,38 @@ video {
   transition-duration: 1000ms;
 }
 
+.delay-75 {
+  transition-delay: 75ms;
+}
+
+.delay-100 {
+  transition-delay: 100ms;
+}
+
+.delay-150 {
+  transition-delay: 150ms;
+}
+
+.delay-200 {
+  transition-delay: 200ms;
+}
+
+.delay-300 {
+  transition-delay: 300ms;
+}
+
+.delay-500 {
+  transition-delay: 500ms;
+}
+
+.delay-700 {
+  transition-delay: 700ms;
+}
+
+.delay-1000 {
+  transition-delay: 1000ms;
+}
+
 .example {
   font-weight: 700;
   color: #f56565;
@@ -21224,6 +21256,38 @@ video {
 
   .sm\:duration-1000 {
     transition-duration: 1000ms;
+  }
+
+  .sm\:delay-75 {
+    transition-delay: 75ms;
+  }
+
+  .sm\:delay-100 {
+    transition-delay: 100ms;
+  }
+
+  .sm\:delay-150 {
+    transition-delay: 150ms;
+  }
+
+  .sm\:delay-200 {
+    transition-delay: 200ms;
+  }
+
+  .sm\:delay-300 {
+    transition-delay: 300ms;
+  }
+
+  .sm\:delay-500 {
+    transition-delay: 500ms;
+  }
+
+  .sm\:delay-700 {
+    transition-delay: 700ms;
+  }
+
+  .sm\:delay-1000 {
+    transition-delay: 1000ms;
   }
 
   .sm\:example {
@@ -31540,6 +31604,38 @@ video {
     transition-duration: 1000ms;
   }
 
+  .md\:delay-75 {
+    transition-delay: 75ms;
+  }
+
+  .md\:delay-100 {
+    transition-delay: 100ms;
+  }
+
+  .md\:delay-150 {
+    transition-delay: 150ms;
+  }
+
+  .md\:delay-200 {
+    transition-delay: 200ms;
+  }
+
+  .md\:delay-300 {
+    transition-delay: 300ms;
+  }
+
+  .md\:delay-500 {
+    transition-delay: 500ms;
+  }
+
+  .md\:delay-700 {
+    transition-delay: 700ms;
+  }
+
+  .md\:delay-1000 {
+    transition-delay: 1000ms;
+  }
+
   .md\:example {
     font-weight: 700;
     color: #f56565;
@@ -41854,6 +41950,38 @@ video {
     transition-duration: 1000ms;
   }
 
+  .lg\:delay-75 {
+    transition-delay: 75ms;
+  }
+
+  .lg\:delay-100 {
+    transition-delay: 100ms;
+  }
+
+  .lg\:delay-150 {
+    transition-delay: 150ms;
+  }
+
+  .lg\:delay-200 {
+    transition-delay: 200ms;
+  }
+
+  .lg\:delay-300 {
+    transition-delay: 300ms;
+  }
+
+  .lg\:delay-500 {
+    transition-delay: 500ms;
+  }
+
+  .lg\:delay-700 {
+    transition-delay: 700ms;
+  }
+
+  .lg\:delay-1000 {
+    transition-delay: 1000ms;
+  }
+
   .lg\:example {
     font-weight: 700;
     color: #f56565;
@@ -52166,6 +52294,38 @@ video {
 
   .xl\:duration-1000 {
     transition-duration: 1000ms;
+  }
+
+  .xl\:delay-75 {
+    transition-delay: 75ms;
+  }
+
+  .xl\:delay-100 {
+    transition-delay: 100ms;
+  }
+
+  .xl\:delay-150 {
+    transition-delay: 150ms;
+  }
+
+  .xl\:delay-200 {
+    transition-delay: 200ms;
+  }
+
+  .xl\:delay-300 {
+    transition-delay: 300ms;
+  }
+
+  .xl\:delay-500 {
+    transition-delay: 500ms;
+  }
+
+  .xl\:delay-700 {
+    transition-delay: 700ms;
+  }
+
+  .xl\:delay-1000 {
+    transition-delay: 1000ms;
   }
 
   .xl\:example {

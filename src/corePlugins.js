@@ -88,6 +88,7 @@ import skew from './plugins/skew'
 import transitionProperty from './plugins/transitionProperty'
 import transitionTimingFunction from './plugins/transitionTimingFunction'
 import transitionDuration from './plugins/transitionDuration'
+import transitionDelay from './plugins/transitionDelay'
 
 import configurePlugins from './util/configurePlugins'
 
@@ -183,5 +184,6 @@ export default function({ corePlugins: corePluginConfig }) {
     transitionProperty,
     transitionTimingFunction,
     transitionDuration,
+    transitionDelay,
   })
 }
