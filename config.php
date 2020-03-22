@@ -2,6 +2,26 @@
 
 use Illuminate\Support\Collection;
 
+function getDocumentationLinkIndex ($page) {
+    $documentation = $page->navigation['Documentation'];
+    $links = array();
+
+    foreach ($documentation as $sectionName => $sectionItems) {
+      foreach ($sectionItems as $name => $link) {
+        $links[] = ['name' => $name, 'value' => $link];
+      }
+    }
+
+    $linkValue = function($link) {
+      return $link['value'];
+    };
+
+    return [
+      'index' => array_search($page->getPath(), array_map($linkValue, $links)),
+      'links' => $links
+    ];
+}
+
 return [
     'baseUrl' => '',
     'production' => false,
@@ -25,7 +45,7 @@ return [
     },
     'active' => function ($page, $link) {
         $path = $link instanceof Collection ? $link['url'] : $link;
-        
+
         if ($path === '/course/coming-soon') {
             return false;
         }
@@ -49,4 +69,22 @@ return [
         });
     },
     'navigation' => require_once('navigation.php'),
+    'prev' => function ($page) {
+      $found = getDocumentationLinkIndex($page);
+      ['index' => $index, 'links' => $links] = $found;
+
+      if ($index) {
+        return $links[$index - 1];
+      }
+      return null;
+    },
+    'next' => function ($page) {
+      $found = getDocumentationLinkIndex($page);
+      ['index' => $index, 'links' => $links] = $found;
+
+      if ($index !== false && $index !== count($links) - 1) {
+        return $links[$index + 1];
+      }
+      return null;
+    }
 ];
