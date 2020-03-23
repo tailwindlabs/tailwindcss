@@ -635,6 +635,7 @@ module.exports = {
     height: ['responsive'],
     inset: ['responsive'],
     justifyContent: ['responsive'],
+    justifySelf: ['responsive'],
     letterSpacing: ['responsive'],
     lineHeight: ['responsive'],
     listStylePosition: ['responsive'],

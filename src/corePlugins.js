@@ -21,6 +21,7 @@ import alignItems from './plugins/alignItems'
 import alignSelf from './plugins/alignSelf'
 import justifyContent from './plugins/justifyContent'
 import alignContent from './plugins/alignContent'
+import justifySelf from './plugins/justifySelf'
 import flex from './plugins/flex'
 import flexGrow from './plugins/flexGrow'
 import flexShrink from './plugins/flexShrink'
@@ -116,6 +117,7 @@ export default function({ corePlugins: corePluginConfig }) {
     alignSelf,
     justifyContent,
     alignContent,
+    justifySelf,
     flex,
     flexGrow,
     flexShrink,
