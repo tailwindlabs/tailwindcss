@@ -672,6 +672,10 @@ video {
   background-color: transparent !important;
 }
 
+.bg-current {
+  background-color: currentColor !important;
+}
+
 .bg-black {
   background-color: #000 !important;
 }
@@ -1044,6 +1048,10 @@ video {
   background-color: transparent !important;
 }
 
+.hover\:bg-current:hover {
+  background-color: currentColor !important;
+}
+
 .hover\:bg-black:hover {
   background-color: #000 !important;
 }
@@ -1414,6 +1422,10 @@ video {
 
 .focus\:bg-transparent:focus {
   background-color: transparent !important;
+}
+
+.focus\:bg-current:focus {
+  background-color: currentColor !important;
 }
 
 .focus\:bg-black:focus {
@@ -1868,6 +1880,10 @@ video {
   border-color: transparent !important;
 }
 
+.border-current {
+  border-color: currentColor !important;
+}
+
 .border-black {
   border-color: #000 !important;
 }
@@ -2240,6 +2256,10 @@ video {
   border-color: transparent !important;
 }
 
+.hover\:border-current:hover {
+  border-color: currentColor !important;
+}
+
 .hover\:border-black:hover {
   border-color: #000 !important;
 }
@@ -2610,6 +2630,10 @@ video {
 
 .focus\:border-transparent:focus {
   border-color: transparent !important;
+}
+
+.focus\:border-current:focus {
+  border-color: currentColor !important;
 }
 
 .focus\:border-black:focus {
@@ -5956,6 +5980,10 @@ video {
   color: transparent !important;
 }
 
+.placeholder-current::placeholder {
+  color: currentColor !important;
+}
+
 .placeholder-black::placeholder {
   color: #000 !important;
 }
@@ -6326,6 +6354,10 @@ video {
 
 .focus\:placeholder-transparent:focus::placeholder {
   color: transparent !important;
+}
+
+.focus\:placeholder-current:focus::placeholder {
+  color: currentColor !important;
 }
 
 .focus\:placeholder-black:focus::placeholder {
@@ -6974,6 +7006,10 @@ video {
   color: transparent !important;
 }
 
+.text-current {
+  color: currentColor !important;
+}
+
 .text-black {
   color: #000 !important;
 }
@@ -7346,6 +7382,10 @@ video {
   color: transparent !important;
 }
 
+.hover\:text-current:hover {
+  color: currentColor !important;
+}
+
 .hover\:text-black:hover {
   color: #000 !important;
 }
@@ -7716,6 +7756,10 @@ video {
 
 .focus\:text-transparent:focus {
   color: transparent !important;
+}
+
+.focus\:text-current:focus {
+  color: currentColor !important;
 }
 
 .focus\:text-black:focus {
@@ -11021,6 +11065,10 @@ video {
     background-color: transparent !important;
   }
 
+  .sm\:bg-current {
+    background-color: currentColor !important;
+  }
+
   .sm\:bg-black {
     background-color: #000 !important;
   }
@@ -11393,6 +11441,10 @@ video {
     background-color: transparent !important;
   }
 
+  .sm\:hover\:bg-current:hover {
+    background-color: currentColor !important;
+  }
+
   .sm\:hover\:bg-black:hover {
     background-color: #000 !important;
   }
@@ -11763,6 +11815,10 @@ video {
 
   .sm\:focus\:bg-transparent:focus {
     background-color: transparent !important;
+  }
+
+  .sm\:focus\:bg-current:focus {
+    background-color: currentColor !important;
   }
 
   .sm\:focus\:bg-black:focus {
@@ -12217,6 +12273,10 @@ video {
     border-color: transparent !important;
   }
 
+  .sm\:border-current {
+    border-color: currentColor !important;
+  }
+
   .sm\:border-black {
     border-color: #000 !important;
   }
@@ -12589,6 +12649,10 @@ video {
     border-color: transparent !important;
   }
 
+  .sm\:hover\:border-current:hover {
+    border-color: currentColor !important;
+  }
+
   .sm\:hover\:border-black:hover {
     border-color: #000 !important;
   }
@@ -12959,6 +13023,10 @@ video {
 
   .sm\:focus\:border-transparent:focus {
     border-color: transparent !important;
+  }
+
+  .sm\:focus\:border-current:focus {
+    border-color: currentColor !important;
   }
 
   .sm\:focus\:border-black:focus {
@@ -16305,6 +16373,10 @@ video {
     color: transparent !important;
   }
 
+  .sm\:placeholder-current::placeholder {
+    color: currentColor !important;
+  }
+
   .sm\:placeholder-black::placeholder {
     color: #000 !important;
   }
@@ -16675,6 +16747,10 @@ video {
 
   .sm\:focus\:placeholder-transparent:focus::placeholder {
     color: transparent !important;
+  }
+
+  .sm\:focus\:placeholder-current:focus::placeholder {
+    color: currentColor !important;
   }
 
   .sm\:focus\:placeholder-black:focus::placeholder {
@@ -17323,6 +17399,10 @@ video {
     color: transparent !important;
   }
 
+  .sm\:text-current {
+    color: currentColor !important;
+  }
+
   .sm\:text-black {
     color: #000 !important;
   }
@@ -17695,6 +17775,10 @@ video {
     color: transparent !important;
   }
 
+  .sm\:hover\:text-current:hover {
+    color: currentColor !important;
+  }
+
   .sm\:hover\:text-black:hover {
     color: #000 !important;
   }
@@ -18065,6 +18149,10 @@ video {
 
   .sm\:focus\:text-transparent:focus {
     color: transparent !important;
+  }
+
+  .sm\:focus\:text-current:focus {
+    color: currentColor !important;
   }
 
   .sm\:focus\:text-black:focus {
@@ -21371,6 +21459,10 @@ video {
     background-color: transparent !important;
   }
 
+  .md\:bg-current {
+    background-color: currentColor !important;
+  }
+
   .md\:bg-black {
     background-color: #000 !important;
   }
@@ -21743,6 +21835,10 @@ video {
     background-color: transparent !important;
   }
 
+  .md\:hover\:bg-current:hover {
+    background-color: currentColor !important;
+  }
+
   .md\:hover\:bg-black:hover {
     background-color: #000 !important;
   }
@@ -22113,6 +22209,10 @@ video {
 
   .md\:focus\:bg-transparent:focus {
     background-color: transparent !important;
+  }
+
+  .md\:focus\:bg-current:focus {
+    background-color: currentColor !important;
   }
 
   .md\:focus\:bg-black:focus {
@@ -22567,6 +22667,10 @@ video {
     border-color: transparent !important;
   }
 
+  .md\:border-current {
+    border-color: currentColor !important;
+  }
+
   .md\:border-black {
     border-color: #000 !important;
   }
@@ -22939,6 +23043,10 @@ video {
     border-color: transparent !important;
   }
 
+  .md\:hover\:border-current:hover {
+    border-color: currentColor !important;
+  }
+
   .md\:hover\:border-black:hover {
     border-color: #000 !important;
   }
@@ -23309,6 +23417,10 @@ video {
 
   .md\:focus\:border-transparent:focus {
     border-color: transparent !important;
+  }
+
+  .md\:focus\:border-current:focus {
+    border-color: currentColor !important;
   }
 
   .md\:focus\:border-black:focus {
@@ -26655,6 +26767,10 @@ video {
     color: transparent !important;
   }
 
+  .md\:placeholder-current::placeholder {
+    color: currentColor !important;
+  }
+
   .md\:placeholder-black::placeholder {
     color: #000 !important;
   }
@@ -27025,6 +27141,10 @@ video {
 
   .md\:focus\:placeholder-transparent:focus::placeholder {
     color: transparent !important;
+  }
+
+  .md\:focus\:placeholder-current:focus::placeholder {
+    color: currentColor !important;
   }
 
   .md\:focus\:placeholder-black:focus::placeholder {
@@ -27673,6 +27793,10 @@ video {
     color: transparent !important;
   }
 
+  .md\:text-current {
+    color: currentColor !important;
+  }
+
   .md\:text-black {
     color: #000 !important;
   }
@@ -28045,6 +28169,10 @@ video {
     color: transparent !important;
   }
 
+  .md\:hover\:text-current:hover {
+    color: currentColor !important;
+  }
+
   .md\:hover\:text-black:hover {
     color: #000 !important;
   }
@@ -28415,6 +28543,10 @@ video {
 
   .md\:focus\:text-transparent:focus {
     color: transparent !important;
+  }
+
+  .md\:focus\:text-current:focus {
+    color: currentColor !important;
   }
 
   .md\:focus\:text-black:focus {
@@ -31721,6 +31853,10 @@ video {
     background-color: transparent !important;
   }
 
+  .lg\:bg-current {
+    background-color: currentColor !important;
+  }
+
   .lg\:bg-black {
     background-color: #000 !important;
   }
@@ -32093,6 +32229,10 @@ video {
     background-color: transparent !important;
   }
 
+  .lg\:hover\:bg-current:hover {
+    background-color: currentColor !important;
+  }
+
   .lg\:hover\:bg-black:hover {
     background-color: #000 !important;
   }
@@ -32463,6 +32603,10 @@ video {
 
   .lg\:focus\:bg-transparent:focus {
     background-color: transparent !important;
+  }
+
+  .lg\:focus\:bg-current:focus {
+    background-color: currentColor !important;
   }
 
   .lg\:focus\:bg-black:focus {
@@ -32917,6 +33061,10 @@ video {
     border-color: transparent !important;
   }
 
+  .lg\:border-current {
+    border-color: currentColor !important;
+  }
+
   .lg\:border-black {
     border-color: #000 !important;
   }
@@ -33289,6 +33437,10 @@ video {
     border-color: transparent !important;
   }
 
+  .lg\:hover\:border-current:hover {
+    border-color: currentColor !important;
+  }
+
   .lg\:hover\:border-black:hover {
     border-color: #000 !important;
   }
@@ -33659,6 +33811,10 @@ video {
 
   .lg\:focus\:border-transparent:focus {
     border-color: transparent !important;
+  }
+
+  .lg\:focus\:border-current:focus {
+    border-color: currentColor !important;
   }
 
   .lg\:focus\:border-black:focus {
@@ -37005,6 +37161,10 @@ video {
     color: transparent !important;
   }
 
+  .lg\:placeholder-current::placeholder {
+    color: currentColor !important;
+  }
+
   .lg\:placeholder-black::placeholder {
     color: #000 !important;
   }
@@ -37375,6 +37535,10 @@ video {
 
   .lg\:focus\:placeholder-transparent:focus::placeholder {
     color: transparent !important;
+  }
+
+  .lg\:focus\:placeholder-current:focus::placeholder {
+    color: currentColor !important;
   }
 
   .lg\:focus\:placeholder-black:focus::placeholder {
@@ -38023,6 +38187,10 @@ video {
     color: transparent !important;
   }
 
+  .lg\:text-current {
+    color: currentColor !important;
+  }
+
   .lg\:text-black {
     color: #000 !important;
   }
@@ -38395,6 +38563,10 @@ video {
     color: transparent !important;
   }
 
+  .lg\:hover\:text-current:hover {
+    color: currentColor !important;
+  }
+
   .lg\:hover\:text-black:hover {
     color: #000 !important;
   }
@@ -38765,6 +38937,10 @@ video {
 
   .lg\:focus\:text-transparent:focus {
     color: transparent !important;
+  }
+
+  .lg\:focus\:text-current:focus {
+    color: currentColor !important;
   }
 
   .lg\:focus\:text-black:focus {
@@ -42071,6 +42247,10 @@ video {
     background-color: transparent !important;
   }
 
+  .xl\:bg-current {
+    background-color: currentColor !important;
+  }
+
   .xl\:bg-black {
     background-color: #000 !important;
   }
@@ -42443,6 +42623,10 @@ video {
     background-color: transparent !important;
   }
 
+  .xl\:hover\:bg-current:hover {
+    background-color: currentColor !important;
+  }
+
   .xl\:hover\:bg-black:hover {
     background-color: #000 !important;
   }
@@ -42813,6 +42997,10 @@ video {
 
   .xl\:focus\:bg-transparent:focus {
     background-color: transparent !important;
+  }
+
+  .xl\:focus\:bg-current:focus {
+    background-color: currentColor !important;
   }
 
   .xl\:focus\:bg-black:focus {
@@ -43267,6 +43455,10 @@ video {
     border-color: transparent !important;
   }
 
+  .xl\:border-current {
+    border-color: currentColor !important;
+  }
+
   .xl\:border-black {
     border-color: #000 !important;
   }
@@ -43639,6 +43831,10 @@ video {
     border-color: transparent !important;
   }
 
+  .xl\:hover\:border-current:hover {
+    border-color: currentColor !important;
+  }
+
   .xl\:hover\:border-black:hover {
     border-color: #000 !important;
   }
@@ -44009,6 +44205,10 @@ video {
 
   .xl\:focus\:border-transparent:focus {
     border-color: transparent !important;
+  }
+
+  .xl\:focus\:border-current:focus {
+    border-color: currentColor !important;
   }
 
   .xl\:focus\:border-black:focus {
@@ -47355,6 +47555,10 @@ video {
     color: transparent !important;
   }
 
+  .xl\:placeholder-current::placeholder {
+    color: currentColor !important;
+  }
+
   .xl\:placeholder-black::placeholder {
     color: #000 !important;
   }
@@ -47725,6 +47929,10 @@ video {
 
   .xl\:focus\:placeholder-transparent:focus::placeholder {
     color: transparent !important;
+  }
+
+  .xl\:focus\:placeholder-current:focus::placeholder {
+    color: currentColor !important;
   }
 
   .xl\:focus\:placeholder-black:focus::placeholder {
@@ -48373,6 +48581,10 @@ video {
     color: transparent !important;
   }
 
+  .xl\:text-current {
+    color: currentColor !important;
+  }
+
   .xl\:text-black {
     color: #000 !important;
   }
@@ -48745,6 +48957,10 @@ video {
     color: transparent !important;
   }
 
+  .xl\:hover\:text-current:hover {
+    color: currentColor !important;
+  }
+
   .xl\:hover\:text-black:hover {
     color: #000 !important;
   }
@@ -49115,6 +49331,10 @@ video {
 
   .xl\:focus\:text-transparent:focus {
     color: transparent !important;
+  }
+
+  .xl\:focus\:text-current:focus {
+    color: currentColor !important;
   }
 
   .xl\:focus\:text-black:focus {
