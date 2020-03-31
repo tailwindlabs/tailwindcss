@@ -5,11 +5,9 @@ description: "Understanding how to think about browser support with a utility-fi
 titleBorder: true
 ---
 
-**As a general rule, Tailwind targets IE11 and the latest version of all modern browsers like Chrome, Firefox, Safari, and Edge.**
+Tailwind includes support for a lot of CSS features that are only available in modern evergreen browsers, such as [grid layout](/docs/grid-template-columns), [object-fit](/docs/object-fit)/[position](/docs/object-position), and [sticky positioning](https://tailwindcss.com/docs/position/#sticky), and uses other modern CSS features like custom properties to implement utilities like [translate](/docs/translate), [rotate](/docs/rotate), and [scale](/docs/scale).
 
-We do include support for a few features out of the box that are not supported by IE11 (notably [object-fit](/docs/object-fit), [object-position](/docs/object-position), and [sticky positioning](/docs/position#sticky)), and have done our best to make it clear that those features require modern browsers in the documentation.
-
-That said, because Tailwind is such a low-level framework you can still easily use it to build sites that need to support older browsers.
+That said, because Tailwind is such a low-level framework you can still easily use it to build sites that need to support older browsers like IE10/11.
 
 ## Using Tailwind with older browsers
 
@@ -17,7 +15,7 @@ In popular component-based frameworks like Bootstrap or Bulma, it's important to
 
 For example, when you are building a grid with classes like `.row` or `.col-4`, you need to know which browsers the framework author is targeting because you have no idea if those classes are implemented using floats, Flexbox, or CSS Grid.
 
-Tailwind on the other hand is a low-level utility framework, where most of the classes map directly to individual CSS properties. This means that which browsers you support is really up to you, not the framework.
+Tailwind on the other hand is a low-level utility framework, where most of the classes map directly to individual CSS properties. This means that **which browsers you support is really up to you, not the framework**.
 
 For example, here is a three column grid built with Tailwind's Flexbox utilities, so it will only work in IE10+ since Flexbox isn't supported in IE9:
 
