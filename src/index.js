@@ -67,12 +67,18 @@ const plugin = postcss.plugin('tailwind', config => {
   if (!_.isUndefined(resolvedConfigPath)) {
     plugins.push(registerConfigAsDependency(resolvedConfigPath))
   }
+  
+  const getConfig = getConfigFunction(resolvedConfigPath || config)
 
-  return postcss([
+  const plugin = postcss([
     ...plugins,
-    processTailwindFeatures(getConfigFunction(resolvedConfigPath || config)),
+    processTailwindFeatures(getConfig),
     formatCSS,
   ])
+  
+  plugin.getConfig = getConfig
+  
+  return plugin
 })
 
 module.exports = plugin
