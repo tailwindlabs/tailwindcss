@@ -662,6 +662,7 @@ module.exports = {
     outline: ['responsive', 'focus'],
     overflow: ['responsive'],
     padding: ['responsive'],
+    placeItems: ['responsive'],
     placeholderColor: ['responsive', 'focus'],
     pointerEvents: ['responsive'],
     position: ['responsive'],

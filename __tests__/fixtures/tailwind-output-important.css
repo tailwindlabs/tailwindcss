@@ -17269,6 +17269,906 @@ video {
     padding-left: 1px !important;
   }
 
+  .sm\:place-auto {
+    place-items: auto !important;
+  }
+
+  .sm\:place-baseline {
+    place-items: baseline !important;
+  }
+
+  .sm\:place-center {
+    place-items: center !important;
+  }
+
+  .sm\:place-end {
+    place-items: end !important;
+  }
+
+  .sm\:place-first-baseline {
+    place-items: first baseline !important;
+  }
+
+  .sm\:place-flex-end {
+    place-items: flex-end !important;
+  }
+
+  .sm\:place-flex-start {
+    place-items: flex-start !important;
+  }
+
+  .sm\:place-last-baseline {
+    place-items: last baseline !important;
+  }
+
+  .sm\:place-left {
+    place-items: left !important;
+  }
+
+  .sm\:place-normal {
+    place-items: normal !important;
+  }
+
+  .sm\:place-right {
+    place-items: right !important;
+  }
+
+  .sm\:place-self-end {
+    place-items: self-end !important;
+  }
+
+  .sm\:place-self-start {
+    place-items: self-start !important;
+  }
+
+  .sm\:place-start {
+    place-items: start !important;
+  }
+
+  .sm\:place-stretch {
+    place-items: stretch !important;
+  }
+
+  .sm\:place-auto-baseline {
+    place-items: auto baseline !important;
+  }
+
+  .sm\:place-auto-center {
+    place-items: auto center !important;
+  }
+
+  .sm\:place-auto-end {
+    place-items: auto end !important;
+  }
+
+  .sm\:place-auto-first-baseline {
+    place-items: auto first baseline !important;
+  }
+
+  .sm\:place-auto-flex-end {
+    place-items: auto flex-end !important;
+  }
+
+  .sm\:place-auto-flex-start {
+    place-items: auto flex-start !important;
+  }
+
+  .sm\:place-auto-last-baseline {
+    place-items: auto last baseline !important;
+  }
+
+  .sm\:place-auto-left {
+    place-items: auto left !important;
+  }
+
+  .sm\:place-auto-normal {
+    place-items: auto normal !important;
+  }
+
+  .sm\:place-auto-right {
+    place-items: auto right !important;
+  }
+
+  .sm\:place-auto-self-end {
+    place-items: auto self-end !important;
+  }
+
+  .sm\:place-auto-self-start {
+    place-items: auto self-start !important;
+  }
+
+  .sm\:place-auto-start {
+    place-items: auto start !important;
+  }
+
+  .sm\:place-auto-stretch {
+    place-items: auto stretch !important;
+  }
+
+  .sm\:place-baseline-auto {
+    place-items: baseline auto !important;
+  }
+
+  .sm\:place-baseline-center {
+    place-items: baseline center !important;
+  }
+
+  .sm\:place-baseline-end {
+    place-items: baseline end !important;
+  }
+
+  .sm\:place-baseline-first-baseline {
+    place-items: baseline first baseline !important;
+  }
+
+  .sm\:place-baseline-flex-end {
+    place-items: baseline flex-end !important;
+  }
+
+  .sm\:place-baseline-flex-start {
+    place-items: baseline flex-start !important;
+  }
+
+  .sm\:place-baseline-last-baseline {
+    place-items: baseline last baseline !important;
+  }
+
+  .sm\:place-baseline-left {
+    place-items: baseline left !important;
+  }
+
+  .sm\:place-baseline-normal {
+    place-items: baseline normal !important;
+  }
+
+  .sm\:place-baseline-right {
+    place-items: baseline right !important;
+  }
+
+  .sm\:place-baseline-self-end {
+    place-items: baseline self-end !important;
+  }
+
+  .sm\:place-baseline-self-start {
+    place-items: baseline self-start !important;
+  }
+
+  .sm\:place-baseline-start {
+    place-items: baseline start !important;
+  }
+
+  .sm\:place-baseline-stretch {
+    place-items: baseline stretch !important;
+  }
+
+  .sm\:place-center-auto {
+    place-items: center auto !important;
+  }
+
+  .sm\:place-center-baseline {
+    place-items: center baseline !important;
+  }
+
+  .sm\:place-center-end {
+    place-items: center end !important;
+  }
+
+  .sm\:place-center-first-baseline {
+    place-items: center first baseline !important;
+  }
+
+  .sm\:place-center-flex-end {
+    place-items: center flex-end !important;
+  }
+
+  .sm\:place-center-flex-start {
+    place-items: center flex-start !important;
+  }
+
+  .sm\:place-center-last-baseline {
+    place-items: center last baseline !important;
+  }
+
+  .sm\:place-center-left {
+    place-items: center left !important;
+  }
+
+  .sm\:place-center-normal {
+    place-items: center normal !important;
+  }
+
+  .sm\:place-center-right {
+    place-items: center right !important;
+  }
+
+  .sm\:place-center-self-end {
+    place-items: center self-end !important;
+  }
+
+  .sm\:place-center-self-start {
+    place-items: center self-start !important;
+  }
+
+  .sm\:place-center-start {
+    place-items: center start !important;
+  }
+
+  .sm\:place-center-stretch {
+    place-items: center stretch !important;
+  }
+
+  .sm\:place-end-auto {
+    place-items: end auto !important;
+  }
+
+  .sm\:place-end-baseline {
+    place-items: end baseline !important;
+  }
+
+  .sm\:place-end-center {
+    place-items: end center !important;
+  }
+
+  .sm\:place-end-first-baseline {
+    place-items: end first baseline !important;
+  }
+
+  .sm\:place-end-flex-end {
+    place-items: end flex-end !important;
+  }
+
+  .sm\:place-end-flex-start {
+    place-items: end flex-start !important;
+  }
+
+  .sm\:place-end-last-baseline {
+    place-items: end last baseline !important;
+  }
+
+  .sm\:place-end-left {
+    place-items: end left !important;
+  }
+
+  .sm\:place-end-normal {
+    place-items: end normal !important;
+  }
+
+  .sm\:place-end-right {
+    place-items: end right !important;
+  }
+
+  .sm\:place-end-self-end {
+    place-items: end self-end !important;
+  }
+
+  .sm\:place-end-self-start {
+    place-items: end self-start !important;
+  }
+
+  .sm\:place-end-start {
+    place-items: end start !important;
+  }
+
+  .sm\:place-end-stretch {
+    place-items: end stretch !important;
+  }
+
+  .sm\:place-first-baseline-auto {
+    place-items: first baseline auto !important;
+  }
+
+  .sm\:place-first-baseline-baseline {
+    place-items: first baseline baseline !important;
+  }
+
+  .sm\:place-first-baseline-center {
+    place-items: first baseline center !important;
+  }
+
+  .sm\:place-first-baseline-end {
+    place-items: first baseline end !important;
+  }
+
+  .sm\:place-first-baseline-flex-end {
+    place-items: first baseline flex-end !important;
+  }
+
+  .sm\:place-first-baseline-flex-start {
+    place-items: first baseline flex-start !important;
+  }
+
+  .sm\:place-first-baseline-last-baseline {
+    place-items: first baseline last baseline !important;
+  }
+
+  .sm\:place-first-baseline-left {
+    place-items: first baseline left !important;
+  }
+
+  .sm\:place-first-baseline-normal {
+    place-items: first baseline normal !important;
+  }
+
+  .sm\:place-first-baseline-right {
+    place-items: first baseline right !important;
+  }
+
+  .sm\:place-first-baseline-self-end {
+    place-items: first baseline self-end !important;
+  }
+
+  .sm\:place-first-baseline-self-start {
+    place-items: first baseline self-start !important;
+  }
+
+  .sm\:place-first-baseline-start {
+    place-items: first baseline start !important;
+  }
+
+  .sm\:place-first-baseline-stretch {
+    place-items: first baseline stretch !important;
+  }
+
+  .sm\:place-flex-end-auto {
+    place-items: flex-end auto !important;
+  }
+
+  .sm\:place-flex-end-baseline {
+    place-items: flex-end baseline !important;
+  }
+
+  .sm\:place-flex-end-center {
+    place-items: flex-end center !important;
+  }
+
+  .sm\:place-flex-end-end {
+    place-items: flex-end end !important;
+  }
+
+  .sm\:place-flex-end-first-baseline {
+    place-items: flex-end first baseline !important;
+  }
+
+  .sm\:place-flex-end-flex-start {
+    place-items: flex-end flex-start !important;
+  }
+
+  .sm\:place-flex-end-last-baseline {
+    place-items: flex-end last baseline !important;
+  }
+
+  .sm\:place-flex-end-left {
+    place-items: flex-end left !important;
+  }
+
+  .sm\:place-flex-end-normal {
+    place-items: flex-end normal !important;
+  }
+
+  .sm\:place-flex-end-right {
+    place-items: flex-end right !important;
+  }
+
+  .sm\:place-flex-end-self-end {
+    place-items: flex-end self-end !important;
+  }
+
+  .sm\:place-flex-end-self-start {
+    place-items: flex-end self-start !important;
+  }
+
+  .sm\:place-flex-end-start {
+    place-items: flex-end start !important;
+  }
+
+  .sm\:place-flex-end-stretch {
+    place-items: flex-end stretch !important;
+  }
+
+  .sm\:place-flex-start-auto {
+    place-items: flex-start auto !important;
+  }
+
+  .sm\:place-flex-start-baseline {
+    place-items: flex-start baseline !important;
+  }
+
+  .sm\:place-flex-start-center {
+    place-items: flex-start center !important;
+  }
+
+  .sm\:place-flex-start-end {
+    place-items: flex-start end !important;
+  }
+
+  .sm\:place-flex-start-first-baseline {
+    place-items: flex-start first baseline !important;
+  }
+
+  .sm\:place-flex-start-flex-end {
+    place-items: flex-start flex-end !important;
+  }
+
+  .sm\:place-flex-start-last-baseline {
+    place-items: flex-start last baseline !important;
+  }
+
+  .sm\:place-flex-start-left {
+    place-items: flex-start left !important;
+  }
+
+  .sm\:place-flex-start-normal {
+    place-items: flex-start normal !important;
+  }
+
+  .sm\:place-flex-start-right {
+    place-items: flex-start right !important;
+  }
+
+  .sm\:place-flex-start-self-end {
+    place-items: flex-start self-end !important;
+  }
+
+  .sm\:place-flex-start-self-start {
+    place-items: flex-start self-start !important;
+  }
+
+  .sm\:place-flex-start-start {
+    place-items: flex-start start !important;
+  }
+
+  .sm\:place-flex-start-stretch {
+    place-items: flex-start stretch !important;
+  }
+
+  .sm\:place-last-baseline-auto {
+    place-items: last baseline auto !important;
+  }
+
+  .sm\:place-last-baseline-baseline {
+    place-items: last baseline baseline !important;
+  }
+
+  .sm\:place-last-baseline-center {
+    place-items: last baseline center !important;
+  }
+
+  .sm\:place-last-baseline-end {
+    place-items: last baseline end !important;
+  }
+
+  .sm\:place-last-baseline-first-baseline {
+    place-items: last baseline first baseline !important;
+  }
+
+  .sm\:place-last-baseline-flex-end {
+    place-items: last baseline flex-end !important;
+  }
+
+  .sm\:place-last-baseline-flex-start {
+    place-items: last baseline flex-start !important;
+  }
+
+  .sm\:place-last-baseline-left {
+    place-items: last baseline left !important;
+  }
+
+  .sm\:place-last-baseline-normal {
+    place-items: last baseline normal !important;
+  }
+
+  .sm\:place-last-baseline-right {
+    place-items: last baseline right !important;
+  }
+
+  .sm\:place-last-baseline-self-end {
+    place-items: last baseline self-end !important;
+  }
+
+  .sm\:place-last-baseline-self-start {
+    place-items: last baseline self-start !important;
+  }
+
+  .sm\:place-last-baseline-start {
+    place-items: last baseline start !important;
+  }
+
+  .sm\:place-last-baseline-stretch {
+    place-items: last baseline stretch !important;
+  }
+
+  .sm\:place-left-auto {
+    place-items: left auto !important;
+  }
+
+  .sm\:place-left-baseline {
+    place-items: left baseline !important;
+  }
+
+  .sm\:place-left-center {
+    place-items: left center !important;
+  }
+
+  .sm\:place-left-end {
+    place-items: left end !important;
+  }
+
+  .sm\:place-left-first-baseline {
+    place-items: left first baseline !important;
+  }
+
+  .sm\:place-left-flex-end {
+    place-items: left flex-end !important;
+  }
+
+  .sm\:place-left-flex-start {
+    place-items: left flex-start !important;
+  }
+
+  .sm\:place-left-last-baseline {
+    place-items: left last baseline !important;
+  }
+
+  .sm\:place-left-normal {
+    place-items: left normal !important;
+  }
+
+  .sm\:place-left-right {
+    place-items: left right !important;
+  }
+
+  .sm\:place-left-self-end {
+    place-items: left self-end !important;
+  }
+
+  .sm\:place-left-self-start {
+    place-items: left self-start !important;
+  }
+
+  .sm\:place-left-start {
+    place-items: left start !important;
+  }
+
+  .sm\:place-left-stretch {
+    place-items: left stretch !important;
+  }
+
+  .sm\:place-normal-auto {
+    place-items: normal auto !important;
+  }
+
+  .sm\:place-normal-baseline {
+    place-items: normal baseline !important;
+  }
+
+  .sm\:place-normal-center {
+    place-items: normal center !important;
+  }
+
+  .sm\:place-normal-end {
+    place-items: normal end !important;
+  }
+
+  .sm\:place-normal-first-baseline {
+    place-items: normal first baseline !important;
+  }
+
+  .sm\:place-normal-flex-end {
+    place-items: normal flex-end !important;
+  }
+
+  .sm\:place-normal-flex-start {
+    place-items: normal flex-start !important;
+  }
+
+  .sm\:place-normal-last-baseline {
+    place-items: normal last baseline !important;
+  }
+
+  .sm\:place-normal-left {
+    place-items: normal left !important;
+  }
+
+  .sm\:place-normal-right {
+    place-items: normal right !important;
+  }
+
+  .sm\:place-normal-self-end {
+    place-items: normal self-end !important;
+  }
+
+  .sm\:place-normal-self-start {
+    place-items: normal self-start !important;
+  }
+
+  .sm\:place-normal-start {
+    place-items: normal start !important;
+  }
+
+  .sm\:place-normal-stretch {
+    place-items: normal stretch !important;
+  }
+
+  .sm\:place-right-auto {
+    place-items: right auto !important;
+  }
+
+  .sm\:place-right-baseline {
+    place-items: right baseline !important;
+  }
+
+  .sm\:place-right-center {
+    place-items: right center !important;
+  }
+
+  .sm\:place-right-end {
+    place-items: right end !important;
+  }
+
+  .sm\:place-right-first-baseline {
+    place-items: right first baseline !important;
+  }
+
+  .sm\:place-right-flex-end {
+    place-items: right flex-end !important;
+  }
+
+  .sm\:place-right-flex-start {
+    place-items: right flex-start !important;
+  }
+
+  .sm\:place-right-last-baseline {
+    place-items: right last baseline !important;
+  }
+
+  .sm\:place-right-left {
+    place-items: right left !important;
+  }
+
+  .sm\:place-right-normal {
+    place-items: right normal !important;
+  }
+
+  .sm\:place-right-self-end {
+    place-items: right self-end !important;
+  }
+
+  .sm\:place-right-self-start {
+    place-items: right self-start !important;
+  }
+
+  .sm\:place-right-start {
+    place-items: right start !important;
+  }
+
+  .sm\:place-right-stretch {
+    place-items: right stretch !important;
+  }
+
+  .sm\:place-self-end-auto {
+    place-items: self-end auto !important;
+  }
+
+  .sm\:place-self-end-baseline {
+    place-items: self-end baseline !important;
+  }
+
+  .sm\:place-self-end-center {
+    place-items: self-end center !important;
+  }
+
+  .sm\:place-self-end-end {
+    place-items: self-end end !important;
+  }
+
+  .sm\:place-self-end-first-baseline {
+    place-items: self-end first baseline !important;
+  }
+
+  .sm\:place-self-end-flex-end {
+    place-items: self-end flex-end !important;
+  }
+
+  .sm\:place-self-end-flex-start {
+    place-items: self-end flex-start !important;
+  }
+
+  .sm\:place-self-end-last-baseline {
+    place-items: self-end last baseline !important;
+  }
+
+  .sm\:place-self-end-left {
+    place-items: self-end left !important;
+  }
+
+  .sm\:place-self-end-normal {
+    place-items: self-end normal !important;
+  }
+
+  .sm\:place-self-end-right {
+    place-items: self-end right !important;
+  }
+
+  .sm\:place-self-end-self-start {
+    place-items: self-end self-start !important;
+  }
+
+  .sm\:place-self-end-start {
+    place-items: self-end start !important;
+  }
+
+  .sm\:place-self-end-stretch {
+    place-items: self-end stretch !important;
+  }
+
+  .sm\:place-self-start-auto {
+    place-items: self-start auto !important;
+  }
+
+  .sm\:place-self-start-baseline {
+    place-items: self-start baseline !important;
+  }
+
+  .sm\:place-self-start-center {
+    place-items: self-start center !important;
+  }
+
+  .sm\:place-self-start-end {
+    place-items: self-start end !important;
+  }
+
+  .sm\:place-self-start-first-baseline {
+    place-items: self-start first baseline !important;
+  }
+
+  .sm\:place-self-start-flex-end {
+    place-items: self-start flex-end !important;
+  }
+
+  .sm\:place-self-start-flex-start {
+    place-items: self-start flex-start !important;
+  }
+
+  .sm\:place-self-start-last-baseline {
+    place-items: self-start last baseline !important;
+  }
+
+  .sm\:place-self-start-left {
+    place-items: self-start left !important;
+  }
+
+  .sm\:place-self-start-normal {
+    place-items: self-start normal !important;
+  }
+
+  .sm\:place-self-start-right {
+    place-items: self-start right !important;
+  }
+
+  .sm\:place-self-start-self-end {
+    place-items: self-start self-end !important;
+  }
+
+  .sm\:place-self-start-start {
+    place-items: self-start start !important;
+  }
+
+  .sm\:place-self-start-stretch {
+    place-items: self-start stretch !important;
+  }
+
+  .sm\:place-start-auto {
+    place-items: start auto !important;
+  }
+
+  .sm\:place-start-baseline {
+    place-items: start baseline !important;
+  }
+
+  .sm\:place-start-center {
+    place-items: start center !important;
+  }
+
+  .sm\:place-start-end {
+    place-items: start end !important;
+  }
+
+  .sm\:place-start-first-baseline {
+    place-items: start first baseline !important;
+  }
+
+  .sm\:place-start-flex-end {
+    place-items: start flex-end !important;
+  }
+
+  .sm\:place-start-flex-start {
+    place-items: start flex-start !important;
+  }
+
+  .sm\:place-start-last-baseline {
+    place-items: start last baseline !important;
+  }
+
+  .sm\:place-start-left {
+    place-items: start left !important;
+  }
+
+  .sm\:place-start-normal {
+    place-items: start normal !important;
+  }
+
+  .sm\:place-start-right {
+    place-items: start right !important;
+  }
+
+  .sm\:place-start-self-end {
+    place-items: start self-end !important;
+  }
+
+  .sm\:place-start-self-start {
+    place-items: start self-start !important;
+  }
+
+  .sm\:place-start-stretch {
+    place-items: start stretch !important;
+  }
+
+  .sm\:place-stretch-auto {
+    place-items: stretch auto !important;
+  }
+
+  .sm\:place-stretch-baseline {
+    place-items: stretch baseline !important;
+  }
+
+  .sm\:place-stretch-center {
+    place-items: stretch center !important;
+  }
+
+  .sm\:place-stretch-end {
+    place-items: stretch end !important;
+  }
+
+  .sm\:place-stretch-first-baseline {
+    place-items: stretch first baseline !important;
+  }
+
+  .sm\:place-stretch-flex-end {
+    place-items: stretch flex-end !important;
+  }
+
+  .sm\:place-stretch-flex-start {
+    place-items: stretch flex-start !important;
+  }
+
+  .sm\:place-stretch-last-baseline {
+    place-items: stretch last baseline !important;
+  }
+
+  .sm\:place-stretch-left {
+    place-items: stretch left !important;
+  }
+
+  .sm\:place-stretch-normal {
+    place-items: stretch normal !important;
+  }
+
+  .sm\:place-stretch-right {
+    place-items: stretch right !important;
+  }
+
+  .sm\:place-stretch-self-end {
+    place-items: stretch self-end !important;
+  }
+
+  .sm\:place-stretch-self-start {
+    place-items: stretch self-start !important;
+  }
+
+  .sm\:place-stretch-start {
+    place-items: stretch start !important;
+  }
+
   .sm\:placeholder-transparent::placeholder {
     color: transparent !important;
   }
@@ -27661,6 +28561,906 @@ video {
 
   .md\:pl-px {
     padding-left: 1px !important;
+  }
+
+  .md\:place-auto {
+    place-items: auto !important;
+  }
+
+  .md\:place-baseline {
+    place-items: baseline !important;
+  }
+
+  .md\:place-center {
+    place-items: center !important;
+  }
+
+  .md\:place-end {
+    place-items: end !important;
+  }
+
+  .md\:place-first-baseline {
+    place-items: first baseline !important;
+  }
+
+  .md\:place-flex-end {
+    place-items: flex-end !important;
+  }
+
+  .md\:place-flex-start {
+    place-items: flex-start !important;
+  }
+
+  .md\:place-last-baseline {
+    place-items: last baseline !important;
+  }
+
+  .md\:place-left {
+    place-items: left !important;
+  }
+
+  .md\:place-normal {
+    place-items: normal !important;
+  }
+
+  .md\:place-right {
+    place-items: right !important;
+  }
+
+  .md\:place-self-end {
+    place-items: self-end !important;
+  }
+
+  .md\:place-self-start {
+    place-items: self-start !important;
+  }
+
+  .md\:place-start {
+    place-items: start !important;
+  }
+
+  .md\:place-stretch {
+    place-items: stretch !important;
+  }
+
+  .md\:place-auto-baseline {
+    place-items: auto baseline !important;
+  }
+
+  .md\:place-auto-center {
+    place-items: auto center !important;
+  }
+
+  .md\:place-auto-end {
+    place-items: auto end !important;
+  }
+
+  .md\:place-auto-first-baseline {
+    place-items: auto first baseline !important;
+  }
+
+  .md\:place-auto-flex-end {
+    place-items: auto flex-end !important;
+  }
+
+  .md\:place-auto-flex-start {
+    place-items: auto flex-start !important;
+  }
+
+  .md\:place-auto-last-baseline {
+    place-items: auto last baseline !important;
+  }
+
+  .md\:place-auto-left {
+    place-items: auto left !important;
+  }
+
+  .md\:place-auto-normal {
+    place-items: auto normal !important;
+  }
+
+  .md\:place-auto-right {
+    place-items: auto right !important;
+  }
+
+  .md\:place-auto-self-end {
+    place-items: auto self-end !important;
+  }
+
+  .md\:place-auto-self-start {
+    place-items: auto self-start !important;
+  }
+
+  .md\:place-auto-start {
+    place-items: auto start !important;
+  }
+
+  .md\:place-auto-stretch {
+    place-items: auto stretch !important;
+  }
+
+  .md\:place-baseline-auto {
+    place-items: baseline auto !important;
+  }
+
+  .md\:place-baseline-center {
+    place-items: baseline center !important;
+  }
+
+  .md\:place-baseline-end {
+    place-items: baseline end !important;
+  }
+
+  .md\:place-baseline-first-baseline {
+    place-items: baseline first baseline !important;
+  }
+
+  .md\:place-baseline-flex-end {
+    place-items: baseline flex-end !important;
+  }
+
+  .md\:place-baseline-flex-start {
+    place-items: baseline flex-start !important;
+  }
+
+  .md\:place-baseline-last-baseline {
+    place-items: baseline last baseline !important;
+  }
+
+  .md\:place-baseline-left {
+    place-items: baseline left !important;
+  }
+
+  .md\:place-baseline-normal {
+    place-items: baseline normal !important;
+  }
+
+  .md\:place-baseline-right {
+    place-items: baseline right !important;
+  }
+
+  .md\:place-baseline-self-end {
+    place-items: baseline self-end !important;
+  }
+
+  .md\:place-baseline-self-start {
+    place-items: baseline self-start !important;
+  }
+
+  .md\:place-baseline-start {
+    place-items: baseline start !important;
+  }
+
+  .md\:place-baseline-stretch {
+    place-items: baseline stretch !important;
+  }
+
+  .md\:place-center-auto {
+    place-items: center auto !important;
+  }
+
+  .md\:place-center-baseline {
+    place-items: center baseline !important;
+  }
+
+  .md\:place-center-end {
+    place-items: center end !important;
+  }
+
+  .md\:place-center-first-baseline {
+    place-items: center first baseline !important;
+  }
+
+  .md\:place-center-flex-end {
+    place-items: center flex-end !important;
+  }
+
+  .md\:place-center-flex-start {
+    place-items: center flex-start !important;
+  }
+
+  .md\:place-center-last-baseline {
+    place-items: center last baseline !important;
+  }
+
+  .md\:place-center-left {
+    place-items: center left !important;
+  }
+
+  .md\:place-center-normal {
+    place-items: center normal !important;
+  }
+
+  .md\:place-center-right {
+    place-items: center right !important;
+  }
+
+  .md\:place-center-self-end {
+    place-items: center self-end !important;
+  }
+
+  .md\:place-center-self-start {
+    place-items: center self-start !important;
+  }
+
+  .md\:place-center-start {
+    place-items: center start !important;
+  }
+
+  .md\:place-center-stretch {
+    place-items: center stretch !important;
+  }
+
+  .md\:place-end-auto {
+    place-items: end auto !important;
+  }
+
+  .md\:place-end-baseline {
+    place-items: end baseline !important;
+  }
+
+  .md\:place-end-center {
+    place-items: end center !important;
+  }
+
+  .md\:place-end-first-baseline {
+    place-items: end first baseline !important;
+  }
+
+  .md\:place-end-flex-end {
+    place-items: end flex-end !important;
+  }
+
+  .md\:place-end-flex-start {
+    place-items: end flex-start !important;
+  }
+
+  .md\:place-end-last-baseline {
+    place-items: end last baseline !important;
+  }
+
+  .md\:place-end-left {
+    place-items: end left !important;
+  }
+
+  .md\:place-end-normal {
+    place-items: end normal !important;
+  }
+
+  .md\:place-end-right {
+    place-items: end right !important;
+  }
+
+  .md\:place-end-self-end {
+    place-items: end self-end !important;
+  }
+
+  .md\:place-end-self-start {
+    place-items: end self-start !important;
+  }
+
+  .md\:place-end-start {
+    place-items: end start !important;
+  }
+
+  .md\:place-end-stretch {
+    place-items: end stretch !important;
+  }
+
+  .md\:place-first-baseline-auto {
+    place-items: first baseline auto !important;
+  }
+
+  .md\:place-first-baseline-baseline {
+    place-items: first baseline baseline !important;
+  }
+
+  .md\:place-first-baseline-center {
+    place-items: first baseline center !important;
+  }
+
+  .md\:place-first-baseline-end {
+    place-items: first baseline end !important;
+  }
+
+  .md\:place-first-baseline-flex-end {
+    place-items: first baseline flex-end !important;
+  }
+
+  .md\:place-first-baseline-flex-start {
+    place-items: first baseline flex-start !important;
+  }
+
+  .md\:place-first-baseline-last-baseline {
+    place-items: first baseline last baseline !important;
+  }
+
+  .md\:place-first-baseline-left {
+    place-items: first baseline left !important;
+  }
+
+  .md\:place-first-baseline-normal {
+    place-items: first baseline normal !important;
+  }
+
+  .md\:place-first-baseline-right {
+    place-items: first baseline right !important;
+  }
+
+  .md\:place-first-baseline-self-end {
+    place-items: first baseline self-end !important;
+  }
+
+  .md\:place-first-baseline-self-start {
+    place-items: first baseline self-start !important;
+  }
+
+  .md\:place-first-baseline-start {
+    place-items: first baseline start !important;
+  }
+
+  .md\:place-first-baseline-stretch {
+    place-items: first baseline stretch !important;
+  }
+
+  .md\:place-flex-end-auto {
+    place-items: flex-end auto !important;
+  }
+
+  .md\:place-flex-end-baseline {
+    place-items: flex-end baseline !important;
+  }
+
+  .md\:place-flex-end-center {
+    place-items: flex-end center !important;
+  }
+
+  .md\:place-flex-end-end {
+    place-items: flex-end end !important;
+  }
+
+  .md\:place-flex-end-first-baseline {
+    place-items: flex-end first baseline !important;
+  }
+
+  .md\:place-flex-end-flex-start {
+    place-items: flex-end flex-start !important;
+  }
+
+  .md\:place-flex-end-last-baseline {
+    place-items: flex-end last baseline !important;
+  }
+
+  .md\:place-flex-end-left {
+    place-items: flex-end left !important;
+  }
+
+  .md\:place-flex-end-normal {
+    place-items: flex-end normal !important;
+  }
+
+  .md\:place-flex-end-right {
+    place-items: flex-end right !important;
+  }
+
+  .md\:place-flex-end-self-end {
+    place-items: flex-end self-end !important;
+  }
+
+  .md\:place-flex-end-self-start {
+    place-items: flex-end self-start !important;
+  }
+
+  .md\:place-flex-end-start {
+    place-items: flex-end start !important;
+  }
+
+  .md\:place-flex-end-stretch {
+    place-items: flex-end stretch !important;
+  }
+
+  .md\:place-flex-start-auto {
+    place-items: flex-start auto !important;
+  }
+
+  .md\:place-flex-start-baseline {
+    place-items: flex-start baseline !important;
+  }
+
+  .md\:place-flex-start-center {
+    place-items: flex-start center !important;
+  }
+
+  .md\:place-flex-start-end {
+    place-items: flex-start end !important;
+  }
+
+  .md\:place-flex-start-first-baseline {
+    place-items: flex-start first baseline !important;
+  }
+
+  .md\:place-flex-start-flex-end {
+    place-items: flex-start flex-end !important;
+  }
+
+  .md\:place-flex-start-last-baseline {
+    place-items: flex-start last baseline !important;
+  }
+
+  .md\:place-flex-start-left {
+    place-items: flex-start left !important;
+  }
+
+  .md\:place-flex-start-normal {
+    place-items: flex-start normal !important;
+  }
+
+  .md\:place-flex-start-right {
+    place-items: flex-start right !important;
+  }
+
+  .md\:place-flex-start-self-end {
+    place-items: flex-start self-end !important;
+  }
+
+  .md\:place-flex-start-self-start {
+    place-items: flex-start self-start !important;
+  }
+
+  .md\:place-flex-start-start {
+    place-items: flex-start start !important;
+  }
+
+  .md\:place-flex-start-stretch {
+    place-items: flex-start stretch !important;
+  }
+
+  .md\:place-last-baseline-auto {
+    place-items: last baseline auto !important;
+  }
+
+  .md\:place-last-baseline-baseline {
+    place-items: last baseline baseline !important;
+  }
+
+  .md\:place-last-baseline-center {
+    place-items: last baseline center !important;
+  }
+
+  .md\:place-last-baseline-end {
+    place-items: last baseline end !important;
+  }
+
+  .md\:place-last-baseline-first-baseline {
+    place-items: last baseline first baseline !important;
+  }
+
+  .md\:place-last-baseline-flex-end {
+    place-items: last baseline flex-end !important;
+  }
+
+  .md\:place-last-baseline-flex-start {
+    place-items: last baseline flex-start !important;
+  }
+
+  .md\:place-last-baseline-left {
+    place-items: last baseline left !important;
+  }
+
+  .md\:place-last-baseline-normal {
+    place-items: last baseline normal !important;
+  }
+
+  .md\:place-last-baseline-right {
+    place-items: last baseline right !important;
+  }
+
+  .md\:place-last-baseline-self-end {
+    place-items: last baseline self-end !important;
+  }
+
+  .md\:place-last-baseline-self-start {
+    place-items: last baseline self-start !important;
+  }
+
+  .md\:place-last-baseline-start {
+    place-items: last baseline start !important;
+  }
+
+  .md\:place-last-baseline-stretch {
+    place-items: last baseline stretch !important;
+  }
+
+  .md\:place-left-auto {
+    place-items: left auto !important;
+  }
+
+  .md\:place-left-baseline {
+    place-items: left baseline !important;
+  }
+
+  .md\:place-left-center {
+    place-items: left center !important;
+  }
+
+  .md\:place-left-end {
+    place-items: left end !important;
+  }
+
+  .md\:place-left-first-baseline {
+    place-items: left first baseline !important;
+  }
+
+  .md\:place-left-flex-end {
+    place-items: left flex-end !important;
+  }
+
+  .md\:place-left-flex-start {
+    place-items: left flex-start !important;
+  }
+
+  .md\:place-left-last-baseline {
+    place-items: left last baseline !important;
+  }
+
+  .md\:place-left-normal {
+    place-items: left normal !important;
+  }
+
+  .md\:place-left-right {
+    place-items: left right !important;
+  }
+
+  .md\:place-left-self-end {
+    place-items: left self-end !important;
+  }
+
+  .md\:place-left-self-start {
+    place-items: left self-start !important;
+  }
+
+  .md\:place-left-start {
+    place-items: left start !important;
+  }
+
+  .md\:place-left-stretch {
+    place-items: left stretch !important;
+  }
+
+  .md\:place-normal-auto {
+    place-items: normal auto !important;
+  }
+
+  .md\:place-normal-baseline {
+    place-items: normal baseline !important;
+  }
+
+  .md\:place-normal-center {
+    place-items: normal center !important;
+  }
+
+  .md\:place-normal-end {
+    place-items: normal end !important;
+  }
+
+  .md\:place-normal-first-baseline {
+    place-items: normal first baseline !important;
+  }
+
+  .md\:place-normal-flex-end {
+    place-items: normal flex-end !important;
+  }
+
+  .md\:place-normal-flex-start {
+    place-items: normal flex-start !important;
+  }
+
+  .md\:place-normal-last-baseline {
+    place-items: normal last baseline !important;
+  }
+
+  .md\:place-normal-left {
+    place-items: normal left !important;
+  }
+
+  .md\:place-normal-right {
+    place-items: normal right !important;
+  }
+
+  .md\:place-normal-self-end {
+    place-items: normal self-end !important;
+  }
+
+  .md\:place-normal-self-start {
+    place-items: normal self-start !important;
+  }
+
+  .md\:place-normal-start {
+    place-items: normal start !important;
+  }
+
+  .md\:place-normal-stretch {
+    place-items: normal stretch !important;
+  }
+
+  .md\:place-right-auto {
+    place-items: right auto !important;
+  }
+
+  .md\:place-right-baseline {
+    place-items: right baseline !important;
+  }
+
+  .md\:place-right-center {
+    place-items: right center !important;
+  }
+
+  .md\:place-right-end {
+    place-items: right end !important;
+  }
+
+  .md\:place-right-first-baseline {
+    place-items: right first baseline !important;
+  }
+
+  .md\:place-right-flex-end {
+    place-items: right flex-end !important;
+  }
+
+  .md\:place-right-flex-start {
+    place-items: right flex-start !important;
+  }
+
+  .md\:place-right-last-baseline {
+    place-items: right last baseline !important;
+  }
+
+  .md\:place-right-left {
+    place-items: right left !important;
+  }
+
+  .md\:place-right-normal {
+    place-items: right normal !important;
+  }
+
+  .md\:place-right-self-end {
+    place-items: right self-end !important;
+  }
+
+  .md\:place-right-self-start {
+    place-items: right self-start !important;
+  }
+
+  .md\:place-right-start {
+    place-items: right start !important;
+  }
+
+  .md\:place-right-stretch {
+    place-items: right stretch !important;
+  }
+
+  .md\:place-self-end-auto {
+    place-items: self-end auto !important;
+  }
+
+  .md\:place-self-end-baseline {
+    place-items: self-end baseline !important;
+  }
+
+  .md\:place-self-end-center {
+    place-items: self-end center !important;
+  }
+
+  .md\:place-self-end-end {
+    place-items: self-end end !important;
+  }
+
+  .md\:place-self-end-first-baseline {
+    place-items: self-end first baseline !important;
+  }
+
+  .md\:place-self-end-flex-end {
+    place-items: self-end flex-end !important;
+  }
+
+  .md\:place-self-end-flex-start {
+    place-items: self-end flex-start !important;
+  }
+
+  .md\:place-self-end-last-baseline {
+    place-items: self-end last baseline !important;
+  }
+
+  .md\:place-self-end-left {
+    place-items: self-end left !important;
+  }
+
+  .md\:place-self-end-normal {
+    place-items: self-end normal !important;
+  }
+
+  .md\:place-self-end-right {
+    place-items: self-end right !important;
+  }
+
+  .md\:place-self-end-self-start {
+    place-items: self-end self-start !important;
+  }
+
+  .md\:place-self-end-start {
+    place-items: self-end start !important;
+  }
+
+  .md\:place-self-end-stretch {
+    place-items: self-end stretch !important;
+  }
+
+  .md\:place-self-start-auto {
+    place-items: self-start auto !important;
+  }
+
+  .md\:place-self-start-baseline {
+    place-items: self-start baseline !important;
+  }
+
+  .md\:place-self-start-center {
+    place-items: self-start center !important;
+  }
+
+  .md\:place-self-start-end {
+    place-items: self-start end !important;
+  }
+
+  .md\:place-self-start-first-baseline {
+    place-items: self-start first baseline !important;
+  }
+
+  .md\:place-self-start-flex-end {
+    place-items: self-start flex-end !important;
+  }
+
+  .md\:place-self-start-flex-start {
+    place-items: self-start flex-start !important;
+  }
+
+  .md\:place-self-start-last-baseline {
+    place-items: self-start last baseline !important;
+  }
+
+  .md\:place-self-start-left {
+    place-items: self-start left !important;
+  }
+
+  .md\:place-self-start-normal {
+    place-items: self-start normal !important;
+  }
+
+  .md\:place-self-start-right {
+    place-items: self-start right !important;
+  }
+
+  .md\:place-self-start-self-end {
+    place-items: self-start self-end !important;
+  }
+
+  .md\:place-self-start-start {
+    place-items: self-start start !important;
+  }
+
+  .md\:place-self-start-stretch {
+    place-items: self-start stretch !important;
+  }
+
+  .md\:place-start-auto {
+    place-items: start auto !important;
+  }
+
+  .md\:place-start-baseline {
+    place-items: start baseline !important;
+  }
+
+  .md\:place-start-center {
+    place-items: start center !important;
+  }
+
+  .md\:place-start-end {
+    place-items: start end !important;
+  }
+
+  .md\:place-start-first-baseline {
+    place-items: start first baseline !important;
+  }
+
+  .md\:place-start-flex-end {
+    place-items: start flex-end !important;
+  }
+
+  .md\:place-start-flex-start {
+    place-items: start flex-start !important;
+  }
+
+  .md\:place-start-last-baseline {
+    place-items: start last baseline !important;
+  }
+
+  .md\:place-start-left {
+    place-items: start left !important;
+  }
+
+  .md\:place-start-normal {
+    place-items: start normal !important;
+  }
+
+  .md\:place-start-right {
+    place-items: start right !important;
+  }
+
+  .md\:place-start-self-end {
+    place-items: start self-end !important;
+  }
+
+  .md\:place-start-self-start {
+    place-items: start self-start !important;
+  }
+
+  .md\:place-start-stretch {
+    place-items: start stretch !important;
+  }
+
+  .md\:place-stretch-auto {
+    place-items: stretch auto !important;
+  }
+
+  .md\:place-stretch-baseline {
+    place-items: stretch baseline !important;
+  }
+
+  .md\:place-stretch-center {
+    place-items: stretch center !important;
+  }
+
+  .md\:place-stretch-end {
+    place-items: stretch end !important;
+  }
+
+  .md\:place-stretch-first-baseline {
+    place-items: stretch first baseline !important;
+  }
+
+  .md\:place-stretch-flex-end {
+    place-items: stretch flex-end !important;
+  }
+
+  .md\:place-stretch-flex-start {
+    place-items: stretch flex-start !important;
+  }
+
+  .md\:place-stretch-last-baseline {
+    place-items: stretch last baseline !important;
+  }
+
+  .md\:place-stretch-left {
+    place-items: stretch left !important;
+  }
+
+  .md\:place-stretch-normal {
+    place-items: stretch normal !important;
+  }
+
+  .md\:place-stretch-right {
+    place-items: stretch right !important;
+  }
+
+  .md\:place-stretch-self-end {
+    place-items: stretch self-end !important;
+  }
+
+  .md\:place-stretch-self-start {
+    place-items: stretch self-start !important;
+  }
+
+  .md\:place-stretch-start {
+    place-items: stretch start !important;
   }
 
   .md\:placeholder-transparent::placeholder {
@@ -38057,6 +39857,906 @@ video {
     padding-left: 1px !important;
   }
 
+  .lg\:place-auto {
+    place-items: auto !important;
+  }
+
+  .lg\:place-baseline {
+    place-items: baseline !important;
+  }
+
+  .lg\:place-center {
+    place-items: center !important;
+  }
+
+  .lg\:place-end {
+    place-items: end !important;
+  }
+
+  .lg\:place-first-baseline {
+    place-items: first baseline !important;
+  }
+
+  .lg\:place-flex-end {
+    place-items: flex-end !important;
+  }
+
+  .lg\:place-flex-start {
+    place-items: flex-start !important;
+  }
+
+  .lg\:place-last-baseline {
+    place-items: last baseline !important;
+  }
+
+  .lg\:place-left {
+    place-items: left !important;
+  }
+
+  .lg\:place-normal {
+    place-items: normal !important;
+  }
+
+  .lg\:place-right {
+    place-items: right !important;
+  }
+
+  .lg\:place-self-end {
+    place-items: self-end !important;
+  }
+
+  .lg\:place-self-start {
+    place-items: self-start !important;
+  }
+
+  .lg\:place-start {
+    place-items: start !important;
+  }
+
+  .lg\:place-stretch {
+    place-items: stretch !important;
+  }
+
+  .lg\:place-auto-baseline {
+    place-items: auto baseline !important;
+  }
+
+  .lg\:place-auto-center {
+    place-items: auto center !important;
+  }
+
+  .lg\:place-auto-end {
+    place-items: auto end !important;
+  }
+
+  .lg\:place-auto-first-baseline {
+    place-items: auto first baseline !important;
+  }
+
+  .lg\:place-auto-flex-end {
+    place-items: auto flex-end !important;
+  }
+
+  .lg\:place-auto-flex-start {
+    place-items: auto flex-start !important;
+  }
+
+  .lg\:place-auto-last-baseline {
+    place-items: auto last baseline !important;
+  }
+
+  .lg\:place-auto-left {
+    place-items: auto left !important;
+  }
+
+  .lg\:place-auto-normal {
+    place-items: auto normal !important;
+  }
+
+  .lg\:place-auto-right {
+    place-items: auto right !important;
+  }
+
+  .lg\:place-auto-self-end {
+    place-items: auto self-end !important;
+  }
+
+  .lg\:place-auto-self-start {
+    place-items: auto self-start !important;
+  }
+
+  .lg\:place-auto-start {
+    place-items: auto start !important;
+  }
+
+  .lg\:place-auto-stretch {
+    place-items: auto stretch !important;
+  }
+
+  .lg\:place-baseline-auto {
+    place-items: baseline auto !important;
+  }
+
+  .lg\:place-baseline-center {
+    place-items: baseline center !important;
+  }
+
+  .lg\:place-baseline-end {
+    place-items: baseline end !important;
+  }
+
+  .lg\:place-baseline-first-baseline {
+    place-items: baseline first baseline !important;
+  }
+
+  .lg\:place-baseline-flex-end {
+    place-items: baseline flex-end !important;
+  }
+
+  .lg\:place-baseline-flex-start {
+    place-items: baseline flex-start !important;
+  }
+
+  .lg\:place-baseline-last-baseline {
+    place-items: baseline last baseline !important;
+  }
+
+  .lg\:place-baseline-left {
+    place-items: baseline left !important;
+  }
+
+  .lg\:place-baseline-normal {
+    place-items: baseline normal !important;
+  }
+
+  .lg\:place-baseline-right {
+    place-items: baseline right !important;
+  }
+
+  .lg\:place-baseline-self-end {
+    place-items: baseline self-end !important;
+  }
+
+  .lg\:place-baseline-self-start {
+    place-items: baseline self-start !important;
+  }
+
+  .lg\:place-baseline-start {
+    place-items: baseline start !important;
+  }
+
+  .lg\:place-baseline-stretch {
+    place-items: baseline stretch !important;
+  }
+
+  .lg\:place-center-auto {
+    place-items: center auto !important;
+  }
+
+  .lg\:place-center-baseline {
+    place-items: center baseline !important;
+  }
+
+  .lg\:place-center-end {
+    place-items: center end !important;
+  }
+
+  .lg\:place-center-first-baseline {
+    place-items: center first baseline !important;
+  }
+
+  .lg\:place-center-flex-end {
+    place-items: center flex-end !important;
+  }
+
+  .lg\:place-center-flex-start {
+    place-items: center flex-start !important;
+  }
+
+  .lg\:place-center-last-baseline {
+    place-items: center last baseline !important;
+  }
+
+  .lg\:place-center-left {
+    place-items: center left !important;
+  }
+
+  .lg\:place-center-normal {
+    place-items: center normal !important;
+  }
+
+  .lg\:place-center-right {
+    place-items: center right !important;
+  }
+
+  .lg\:place-center-self-end {
+    place-items: center self-end !important;
+  }
+
+  .lg\:place-center-self-start {
+    place-items: center self-start !important;
+  }
+
+  .lg\:place-center-start {
+    place-items: center start !important;
+  }
+
+  .lg\:place-center-stretch {
+    place-items: center stretch !important;
+  }
+
+  .lg\:place-end-auto {
+    place-items: end auto !important;
+  }
+
+  .lg\:place-end-baseline {
+    place-items: end baseline !important;
+  }
+
+  .lg\:place-end-center {
+    place-items: end center !important;
+  }
+
+  .lg\:place-end-first-baseline {
+    place-items: end first baseline !important;
+  }
+
+  .lg\:place-end-flex-end {
+    place-items: end flex-end !important;
+  }
+
+  .lg\:place-end-flex-start {
+    place-items: end flex-start !important;
+  }
+
+  .lg\:place-end-last-baseline {
+    place-items: end last baseline !important;
+  }
+
+  .lg\:place-end-left {
+    place-items: end left !important;
+  }
+
+  .lg\:place-end-normal {
+    place-items: end normal !important;
+  }
+
+  .lg\:place-end-right {
+    place-items: end right !important;
+  }
+
+  .lg\:place-end-self-end {
+    place-items: end self-end !important;
+  }
+
+  .lg\:place-end-self-start {
+    place-items: end self-start !important;
+  }
+
+  .lg\:place-end-start {
+    place-items: end start !important;
+  }
+
+  .lg\:place-end-stretch {
+    place-items: end stretch !important;
+  }
+
+  .lg\:place-first-baseline-auto {
+    place-items: first baseline auto !important;
+  }
+
+  .lg\:place-first-baseline-baseline {
+    place-items: first baseline baseline !important;
+  }
+
+  .lg\:place-first-baseline-center {
+    place-items: first baseline center !important;
+  }
+
+  .lg\:place-first-baseline-end {
+    place-items: first baseline end !important;
+  }
+
+  .lg\:place-first-baseline-flex-end {
+    place-items: first baseline flex-end !important;
+  }
+
+  .lg\:place-first-baseline-flex-start {
+    place-items: first baseline flex-start !important;
+  }
+
+  .lg\:place-first-baseline-last-baseline {
+    place-items: first baseline last baseline !important;
+  }
+
+  .lg\:place-first-baseline-left {
+    place-items: first baseline left !important;
+  }
+
+  .lg\:place-first-baseline-normal {
+    place-items: first baseline normal !important;
+  }
+
+  .lg\:place-first-baseline-right {
+    place-items: first baseline right !important;
+  }
+
+  .lg\:place-first-baseline-self-end {
+    place-items: first baseline self-end !important;
+  }
+
+  .lg\:place-first-baseline-self-start {
+    place-items: first baseline self-start !important;
+  }
+
+  .lg\:place-first-baseline-start {
+    place-items: first baseline start !important;
+  }
+
+  .lg\:place-first-baseline-stretch {
+    place-items: first baseline stretch !important;
+  }
+
+  .lg\:place-flex-end-auto {
+    place-items: flex-end auto !important;
+  }
+
+  .lg\:place-flex-end-baseline {
+    place-items: flex-end baseline !important;
+  }
+
+  .lg\:place-flex-end-center {
+    place-items: flex-end center !important;
+  }
+
+  .lg\:place-flex-end-end {
+    place-items: flex-end end !important;
+  }
+
+  .lg\:place-flex-end-first-baseline {
+    place-items: flex-end first baseline !important;
+  }
+
+  .lg\:place-flex-end-flex-start {
+    place-items: flex-end flex-start !important;
+  }
+
+  .lg\:place-flex-end-last-baseline {
+    place-items: flex-end last baseline !important;
+  }
+
+  .lg\:place-flex-end-left {
+    place-items: flex-end left !important;
+  }
+
+  .lg\:place-flex-end-normal {
+    place-items: flex-end normal !important;
+  }
+
+  .lg\:place-flex-end-right {
+    place-items: flex-end right !important;
+  }
+
+  .lg\:place-flex-end-self-end {
+    place-items: flex-end self-end !important;
+  }
+
+  .lg\:place-flex-end-self-start {
+    place-items: flex-end self-start !important;
+  }
+
+  .lg\:place-flex-end-start {
+    place-items: flex-end start !important;
+  }
+
+  .lg\:place-flex-end-stretch {
+    place-items: flex-end stretch !important;
+  }
+
+  .lg\:place-flex-start-auto {
+    place-items: flex-start auto !important;
+  }
+
+  .lg\:place-flex-start-baseline {
+    place-items: flex-start baseline !important;
+  }
+
+  .lg\:place-flex-start-center {
+    place-items: flex-start center !important;
+  }
+
+  .lg\:place-flex-start-end {
+    place-items: flex-start end !important;
+  }
+
+  .lg\:place-flex-start-first-baseline {
+    place-items: flex-start first baseline !important;
+  }
+
+  .lg\:place-flex-start-flex-end {
+    place-items: flex-start flex-end !important;
+  }
+
+  .lg\:place-flex-start-last-baseline {
+    place-items: flex-start last baseline !important;
+  }
+
+  .lg\:place-flex-start-left {
+    place-items: flex-start left !important;
+  }
+
+  .lg\:place-flex-start-normal {
+    place-items: flex-start normal !important;
+  }
+
+  .lg\:place-flex-start-right {
+    place-items: flex-start right !important;
+  }
+
+  .lg\:place-flex-start-self-end {
+    place-items: flex-start self-end !important;
+  }
+
+  .lg\:place-flex-start-self-start {
+    place-items: flex-start self-start !important;
+  }
+
+  .lg\:place-flex-start-start {
+    place-items: flex-start start !important;
+  }
+
+  .lg\:place-flex-start-stretch {
+    place-items: flex-start stretch !important;
+  }
+
+  .lg\:place-last-baseline-auto {
+    place-items: last baseline auto !important;
+  }
+
+  .lg\:place-last-baseline-baseline {
+    place-items: last baseline baseline !important;
+  }
+
+  .lg\:place-last-baseline-center {
+    place-items: last baseline center !important;
+  }
+
+  .lg\:place-last-baseline-end {
+    place-items: last baseline end !important;
+  }
+
+  .lg\:place-last-baseline-first-baseline {
+    place-items: last baseline first baseline !important;
+  }
+
+  .lg\:place-last-baseline-flex-end {
+    place-items: last baseline flex-end !important;
+  }
+
+  .lg\:place-last-baseline-flex-start {
+    place-items: last baseline flex-start !important;
+  }
+
+  .lg\:place-last-baseline-left {
+    place-items: last baseline left !important;
+  }
+
+  .lg\:place-last-baseline-normal {
+    place-items: last baseline normal !important;
+  }
+
+  .lg\:place-last-baseline-right {
+    place-items: last baseline right !important;
+  }
+
+  .lg\:place-last-baseline-self-end {
+    place-items: last baseline self-end !important;
+  }
+
+  .lg\:place-last-baseline-self-start {
+    place-items: last baseline self-start !important;
+  }
+
+  .lg\:place-last-baseline-start {
+    place-items: last baseline start !important;
+  }
+
+  .lg\:place-last-baseline-stretch {
+    place-items: last baseline stretch !important;
+  }
+
+  .lg\:place-left-auto {
+    place-items: left auto !important;
+  }
+
+  .lg\:place-left-baseline {
+    place-items: left baseline !important;
+  }
+
+  .lg\:place-left-center {
+    place-items: left center !important;
+  }
+
+  .lg\:place-left-end {
+    place-items: left end !important;
+  }
+
+  .lg\:place-left-first-baseline {
+    place-items: left first baseline !important;
+  }
+
+  .lg\:place-left-flex-end {
+    place-items: left flex-end !important;
+  }
+
+  .lg\:place-left-flex-start {
+    place-items: left flex-start !important;
+  }
+
+  .lg\:place-left-last-baseline {
+    place-items: left last baseline !important;
+  }
+
+  .lg\:place-left-normal {
+    place-items: left normal !important;
+  }
+
+  .lg\:place-left-right {
+    place-items: left right !important;
+  }
+
+  .lg\:place-left-self-end {
+    place-items: left self-end !important;
+  }
+
+  .lg\:place-left-self-start {
+    place-items: left self-start !important;
+  }
+
+  .lg\:place-left-start {
+    place-items: left start !important;
+  }
+
+  .lg\:place-left-stretch {
+    place-items: left stretch !important;
+  }
+
+  .lg\:place-normal-auto {
+    place-items: normal auto !important;
+  }
+
+  .lg\:place-normal-baseline {
+    place-items: normal baseline !important;
+  }
+
+  .lg\:place-normal-center {
+    place-items: normal center !important;
+  }
+
+  .lg\:place-normal-end {
+    place-items: normal end !important;
+  }
+
+  .lg\:place-normal-first-baseline {
+    place-items: normal first baseline !important;
+  }
+
+  .lg\:place-normal-flex-end {
+    place-items: normal flex-end !important;
+  }
+
+  .lg\:place-normal-flex-start {
+    place-items: normal flex-start !important;
+  }
+
+  .lg\:place-normal-last-baseline {
+    place-items: normal last baseline !important;
+  }
+
+  .lg\:place-normal-left {
+    place-items: normal left !important;
+  }
+
+  .lg\:place-normal-right {
+    place-items: normal right !important;
+  }
+
+  .lg\:place-normal-self-end {
+    place-items: normal self-end !important;
+  }
+
+  .lg\:place-normal-self-start {
+    place-items: normal self-start !important;
+  }
+
+  .lg\:place-normal-start {
+    place-items: normal start !important;
+  }
+
+  .lg\:place-normal-stretch {
+    place-items: normal stretch !important;
+  }
+
+  .lg\:place-right-auto {
+    place-items: right auto !important;
+  }
+
+  .lg\:place-right-baseline {
+    place-items: right baseline !important;
+  }
+
+  .lg\:place-right-center {
+    place-items: right center !important;
+  }
+
+  .lg\:place-right-end {
+    place-items: right end !important;
+  }
+
+  .lg\:place-right-first-baseline {
+    place-items: right first baseline !important;
+  }
+
+  .lg\:place-right-flex-end {
+    place-items: right flex-end !important;
+  }
+
+  .lg\:place-right-flex-start {
+    place-items: right flex-start !important;
+  }
+
+  .lg\:place-right-last-baseline {
+    place-items: right last baseline !important;
+  }
+
+  .lg\:place-right-left {
+    place-items: right left !important;
+  }
+
+  .lg\:place-right-normal {
+    place-items: right normal !important;
+  }
+
+  .lg\:place-right-self-end {
+    place-items: right self-end !important;
+  }
+
+  .lg\:place-right-self-start {
+    place-items: right self-start !important;
+  }
+
+  .lg\:place-right-start {
+    place-items: right start !important;
+  }
+
+  .lg\:place-right-stretch {
+    place-items: right stretch !important;
+  }
+
+  .lg\:place-self-end-auto {
+    place-items: self-end auto !important;
+  }
+
+  .lg\:place-self-end-baseline {
+    place-items: self-end baseline !important;
+  }
+
+  .lg\:place-self-end-center {
+    place-items: self-end center !important;
+  }
+
+  .lg\:place-self-end-end {
+    place-items: self-end end !important;
+  }
+
+  .lg\:place-self-end-first-baseline {
+    place-items: self-end first baseline !important;
+  }
+
+  .lg\:place-self-end-flex-end {
+    place-items: self-end flex-end !important;
+  }
+
+  .lg\:place-self-end-flex-start {
+    place-items: self-end flex-start !important;
+  }
+
+  .lg\:place-self-end-last-baseline {
+    place-items: self-end last baseline !important;
+  }
+
+  .lg\:place-self-end-left {
+    place-items: self-end left !important;
+  }
+
+  .lg\:place-self-end-normal {
+    place-items: self-end normal !important;
+  }
+
+  .lg\:place-self-end-right {
+    place-items: self-end right !important;
+  }
+
+  .lg\:place-self-end-self-start {
+    place-items: self-end self-start !important;
+  }
+
+  .lg\:place-self-end-start {
+    place-items: self-end start !important;
+  }
+
+  .lg\:place-self-end-stretch {
+    place-items: self-end stretch !important;
+  }
+
+  .lg\:place-self-start-auto {
+    place-items: self-start auto !important;
+  }
+
+  .lg\:place-self-start-baseline {
+    place-items: self-start baseline !important;
+  }
+
+  .lg\:place-self-start-center {
+    place-items: self-start center !important;
+  }
+
+  .lg\:place-self-start-end {
+    place-items: self-start end !important;
+  }
+
+  .lg\:place-self-start-first-baseline {
+    place-items: self-start first baseline !important;
+  }
+
+  .lg\:place-self-start-flex-end {
+    place-items: self-start flex-end !important;
+  }
+
+  .lg\:place-self-start-flex-start {
+    place-items: self-start flex-start !important;
+  }
+
+  .lg\:place-self-start-last-baseline {
+    place-items: self-start last baseline !important;
+  }
+
+  .lg\:place-self-start-left {
+    place-items: self-start left !important;
+  }
+
+  .lg\:place-self-start-normal {
+    place-items: self-start normal !important;
+  }
+
+  .lg\:place-self-start-right {
+    place-items: self-start right !important;
+  }
+
+  .lg\:place-self-start-self-end {
+    place-items: self-start self-end !important;
+  }
+
+  .lg\:place-self-start-start {
+    place-items: self-start start !important;
+  }
+
+  .lg\:place-self-start-stretch {
+    place-items: self-start stretch !important;
+  }
+
+  .lg\:place-start-auto {
+    place-items: start auto !important;
+  }
+
+  .lg\:place-start-baseline {
+    place-items: start baseline !important;
+  }
+
+  .lg\:place-start-center {
+    place-items: start center !important;
+  }
+
+  .lg\:place-start-end {
+    place-items: start end !important;
+  }
+
+  .lg\:place-start-first-baseline {
+    place-items: start first baseline !important;
+  }
+
+  .lg\:place-start-flex-end {
+    place-items: start flex-end !important;
+  }
+
+  .lg\:place-start-flex-start {
+    place-items: start flex-start !important;
+  }
+
+  .lg\:place-start-last-baseline {
+    place-items: start last baseline !important;
+  }
+
+  .lg\:place-start-left {
+    place-items: start left !important;
+  }
+
+  .lg\:place-start-normal {
+    place-items: start normal !important;
+  }
+
+  .lg\:place-start-right {
+    place-items: start right !important;
+  }
+
+  .lg\:place-start-self-end {
+    place-items: start self-end !important;
+  }
+
+  .lg\:place-start-self-start {
+    place-items: start self-start !important;
+  }
+
+  .lg\:place-start-stretch {
+    place-items: start stretch !important;
+  }
+
+  .lg\:place-stretch-auto {
+    place-items: stretch auto !important;
+  }
+
+  .lg\:place-stretch-baseline {
+    place-items: stretch baseline !important;
+  }
+
+  .lg\:place-stretch-center {
+    place-items: stretch center !important;
+  }
+
+  .lg\:place-stretch-end {
+    place-items: stretch end !important;
+  }
+
+  .lg\:place-stretch-first-baseline {
+    place-items: stretch first baseline !important;
+  }
+
+  .lg\:place-stretch-flex-end {
+    place-items: stretch flex-end !important;
+  }
+
+  .lg\:place-stretch-flex-start {
+    place-items: stretch flex-start !important;
+  }
+
+  .lg\:place-stretch-last-baseline {
+    place-items: stretch last baseline !important;
+  }
+
+  .lg\:place-stretch-left {
+    place-items: stretch left !important;
+  }
+
+  .lg\:place-stretch-normal {
+    place-items: stretch normal !important;
+  }
+
+  .lg\:place-stretch-right {
+    place-items: stretch right !important;
+  }
+
+  .lg\:place-stretch-self-end {
+    place-items: stretch self-end !important;
+  }
+
+  .lg\:place-stretch-self-start {
+    place-items: stretch self-start !important;
+  }
+
+  .lg\:place-stretch-start {
+    place-items: stretch start !important;
+  }
+
   .lg\:placeholder-transparent::placeholder {
     color: transparent !important;
   }
@@ -48449,6 +51149,906 @@ video {
 
   .xl\:pl-px {
     padding-left: 1px !important;
+  }
+
+  .xl\:place-auto {
+    place-items: auto !important;
+  }
+
+  .xl\:place-baseline {
+    place-items: baseline !important;
+  }
+
+  .xl\:place-center {
+    place-items: center !important;
+  }
+
+  .xl\:place-end {
+    place-items: end !important;
+  }
+
+  .xl\:place-first-baseline {
+    place-items: first baseline !important;
+  }
+
+  .xl\:place-flex-end {
+    place-items: flex-end !important;
+  }
+
+  .xl\:place-flex-start {
+    place-items: flex-start !important;
+  }
+
+  .xl\:place-last-baseline {
+    place-items: last baseline !important;
+  }
+
+  .xl\:place-left {
+    place-items: left !important;
+  }
+
+  .xl\:place-normal {
+    place-items: normal !important;
+  }
+
+  .xl\:place-right {
+    place-items: right !important;
+  }
+
+  .xl\:place-self-end {
+    place-items: self-end !important;
+  }
+
+  .xl\:place-self-start {
+    place-items: self-start !important;
+  }
+
+  .xl\:place-start {
+    place-items: start !important;
+  }
+
+  .xl\:place-stretch {
+    place-items: stretch !important;
+  }
+
+  .xl\:place-auto-baseline {
+    place-items: auto baseline !important;
+  }
+
+  .xl\:place-auto-center {
+    place-items: auto center !important;
+  }
+
+  .xl\:place-auto-end {
+    place-items: auto end !important;
+  }
+
+  .xl\:place-auto-first-baseline {
+    place-items: auto first baseline !important;
+  }
+
+  .xl\:place-auto-flex-end {
+    place-items: auto flex-end !important;
+  }
+
+  .xl\:place-auto-flex-start {
+    place-items: auto flex-start !important;
+  }
+
+  .xl\:place-auto-last-baseline {
+    place-items: auto last baseline !important;
+  }
+
+  .xl\:place-auto-left {
+    place-items: auto left !important;
+  }
+
+  .xl\:place-auto-normal {
+    place-items: auto normal !important;
+  }
+
+  .xl\:place-auto-right {
+    place-items: auto right !important;
+  }
+
+  .xl\:place-auto-self-end {
+    place-items: auto self-end !important;
+  }
+
+  .xl\:place-auto-self-start {
+    place-items: auto self-start !important;
+  }
+
+  .xl\:place-auto-start {
+    place-items: auto start !important;
+  }
+
+  .xl\:place-auto-stretch {
+    place-items: auto stretch !important;
+  }
+
+  .xl\:place-baseline-auto {
+    place-items: baseline auto !important;
+  }
+
+  .xl\:place-baseline-center {
+    place-items: baseline center !important;
+  }
+
+  .xl\:place-baseline-end {
+    place-items: baseline end !important;
+  }
+
+  .xl\:place-baseline-first-baseline {
+    place-items: baseline first baseline !important;
+  }
+
+  .xl\:place-baseline-flex-end {
+    place-items: baseline flex-end !important;
+  }
+
+  .xl\:place-baseline-flex-start {
+    place-items: baseline flex-start !important;
+  }
+
+  .xl\:place-baseline-last-baseline {
+    place-items: baseline last baseline !important;
+  }
+
+  .xl\:place-baseline-left {
+    place-items: baseline left !important;
+  }
+
+  .xl\:place-baseline-normal {
+    place-items: baseline normal !important;
+  }
+
+  .xl\:place-baseline-right {
+    place-items: baseline right !important;
+  }
+
+  .xl\:place-baseline-self-end {
+    place-items: baseline self-end !important;
+  }
+
+  .xl\:place-baseline-self-start {
+    place-items: baseline self-start !important;
+  }
+
+  .xl\:place-baseline-start {
+    place-items: baseline start !important;
+  }
+
+  .xl\:place-baseline-stretch {
+    place-items: baseline stretch !important;
+  }
+
+  .xl\:place-center-auto {
+    place-items: center auto !important;
+  }
+
+  .xl\:place-center-baseline {
+    place-items: center baseline !important;
+  }
+
+  .xl\:place-center-end {
+    place-items: center end !important;
+  }
+
+  .xl\:place-center-first-baseline {
+    place-items: center first baseline !important;
+  }
+
+  .xl\:place-center-flex-end {
+    place-items: center flex-end !important;
+  }
+
+  .xl\:place-center-flex-start {
+    place-items: center flex-start !important;
+  }
+
+  .xl\:place-center-last-baseline {
+    place-items: center last baseline !important;
+  }
+
+  .xl\:place-center-left {
+    place-items: center left !important;
+  }
+
+  .xl\:place-center-normal {
+    place-items: center normal !important;
+  }
+
+  .xl\:place-center-right {
+    place-items: center right !important;
+  }
+
+  .xl\:place-center-self-end {
+    place-items: center self-end !important;
+  }
+
+  .xl\:place-center-self-start {
+    place-items: center self-start !important;
+  }
+
+  .xl\:place-center-start {
+    place-items: center start !important;
+  }
+
+  .xl\:place-center-stretch {
+    place-items: center stretch !important;
+  }
+
+  .xl\:place-end-auto {
+    place-items: end auto !important;
+  }
+
+  .xl\:place-end-baseline {
+    place-items: end baseline !important;
+  }
+
+  .xl\:place-end-center {
+    place-items: end center !important;
+  }
+
+  .xl\:place-end-first-baseline {
+    place-items: end first baseline !important;
+  }
+
+  .xl\:place-end-flex-end {
+    place-items: end flex-end !important;
+  }
+
+  .xl\:place-end-flex-start {
+    place-items: end flex-start !important;
+  }
+
+  .xl\:place-end-last-baseline {
+    place-items: end last baseline !important;
+  }
+
+  .xl\:place-end-left {
+    place-items: end left !important;
+  }
+
+  .xl\:place-end-normal {
+    place-items: end normal !important;
+  }
+
+  .xl\:place-end-right {
+    place-items: end right !important;
+  }
+
+  .xl\:place-end-self-end {
+    place-items: end self-end !important;
+  }
+
+  .xl\:place-end-self-start {
+    place-items: end self-start !important;
+  }
+
+  .xl\:place-end-start {
+    place-items: end start !important;
+  }
+
+  .xl\:place-end-stretch {
+    place-items: end stretch !important;
+  }
+
+  .xl\:place-first-baseline-auto {
+    place-items: first baseline auto !important;
+  }
+
+  .xl\:place-first-baseline-baseline {
+    place-items: first baseline baseline !important;
+  }
+
+  .xl\:place-first-baseline-center {
+    place-items: first baseline center !important;
+  }
+
+  .xl\:place-first-baseline-end {
+    place-items: first baseline end !important;
+  }
+
+  .xl\:place-first-baseline-flex-end {
+    place-items: first baseline flex-end !important;
+  }
+
+  .xl\:place-first-baseline-flex-start {
+    place-items: first baseline flex-start !important;
+  }
+
+  .xl\:place-first-baseline-last-baseline {
+    place-items: first baseline last baseline !important;
+  }
+
+  .xl\:place-first-baseline-left {
+    place-items: first baseline left !important;
+  }
+
+  .xl\:place-first-baseline-normal {
+    place-items: first baseline normal !important;
+  }
+
+  .xl\:place-first-baseline-right {
+    place-items: first baseline right !important;
+  }
+
+  .xl\:place-first-baseline-self-end {
+    place-items: first baseline self-end !important;
+  }
+
+  .xl\:place-first-baseline-self-start {
+    place-items: first baseline self-start !important;
+  }
+
+  .xl\:place-first-baseline-start {
+    place-items: first baseline start !important;
+  }
+
+  .xl\:place-first-baseline-stretch {
+    place-items: first baseline stretch !important;
+  }
+
+  .xl\:place-flex-end-auto {
+    place-items: flex-end auto !important;
+  }
+
+  .xl\:place-flex-end-baseline {
+    place-items: flex-end baseline !important;
+  }
+
+  .xl\:place-flex-end-center {
+    place-items: flex-end center !important;
+  }
+
+  .xl\:place-flex-end-end {
+    place-items: flex-end end !important;
+  }
+
+  .xl\:place-flex-end-first-baseline {
+    place-items: flex-end first baseline !important;
+  }
+
+  .xl\:place-flex-end-flex-start {
+    place-items: flex-end flex-start !important;
+  }
+
+  .xl\:place-flex-end-last-baseline {
+    place-items: flex-end last baseline !important;
+  }
+
+  .xl\:place-flex-end-left {
+    place-items: flex-end left !important;
+  }
+
+  .xl\:place-flex-end-normal {
+    place-items: flex-end normal !important;
+  }
+
+  .xl\:place-flex-end-right {
+    place-items: flex-end right !important;
+  }
+
+  .xl\:place-flex-end-self-end {
+    place-items: flex-end self-end !important;
+  }
+
+  .xl\:place-flex-end-self-start {
+    place-items: flex-end self-start !important;
+  }
+
+  .xl\:place-flex-end-start {
+    place-items: flex-end start !important;
+  }
+
+  .xl\:place-flex-end-stretch {
+    place-items: flex-end stretch !important;
+  }
+
+  .xl\:place-flex-start-auto {
+    place-items: flex-start auto !important;
+  }
+
+  .xl\:place-flex-start-baseline {
+    place-items: flex-start baseline !important;
+  }
+
+  .xl\:place-flex-start-center {
+    place-items: flex-start center !important;
+  }
+
+  .xl\:place-flex-start-end {
+    place-items: flex-start end !important;
+  }
+
+  .xl\:place-flex-start-first-baseline {
+    place-items: flex-start first baseline !important;
+  }
+
+  .xl\:place-flex-start-flex-end {
+    place-items: flex-start flex-end !important;
+  }
+
+  .xl\:place-flex-start-last-baseline {
+    place-items: flex-start last baseline !important;
+  }
+
+  .xl\:place-flex-start-left {
+    place-items: flex-start left !important;
+  }
+
+  .xl\:place-flex-start-normal {
+    place-items: flex-start normal !important;
+  }
+
+  .xl\:place-flex-start-right {
+    place-items: flex-start right !important;
+  }
+
+  .xl\:place-flex-start-self-end {
+    place-items: flex-start self-end !important;
+  }
+
+  .xl\:place-flex-start-self-start {
+    place-items: flex-start self-start !important;
+  }
+
+  .xl\:place-flex-start-start {
+    place-items: flex-start start !important;
+  }
+
+  .xl\:place-flex-start-stretch {
+    place-items: flex-start stretch !important;
+  }
+
+  .xl\:place-last-baseline-auto {
+    place-items: last baseline auto !important;
+  }
+
+  .xl\:place-last-baseline-baseline {
+    place-items: last baseline baseline !important;
+  }
+
+  .xl\:place-last-baseline-center {
+    place-items: last baseline center !important;
+  }
+
+  .xl\:place-last-baseline-end {
+    place-items: last baseline end !important;
+  }
+
+  .xl\:place-last-baseline-first-baseline {
+    place-items: last baseline first baseline !important;
+  }
+
+  .xl\:place-last-baseline-flex-end {
+    place-items: last baseline flex-end !important;
+  }
+
+  .xl\:place-last-baseline-flex-start {
+    place-items: last baseline flex-start !important;
+  }
+
+  .xl\:place-last-baseline-left {
+    place-items: last baseline left !important;
+  }
+
+  .xl\:place-last-baseline-normal {
+    place-items: last baseline normal !important;
+  }
+
+  .xl\:place-last-baseline-right {
+    place-items: last baseline right !important;
+  }
+
+  .xl\:place-last-baseline-self-end {
+    place-items: last baseline self-end !important;
+  }
+
+  .xl\:place-last-baseline-self-start {
+    place-items: last baseline self-start !important;
+  }
+
+  .xl\:place-last-baseline-start {
+    place-items: last baseline start !important;
+  }
+
+  .xl\:place-last-baseline-stretch {
+    place-items: last baseline stretch !important;
+  }
+
+  .xl\:place-left-auto {
+    place-items: left auto !important;
+  }
+
+  .xl\:place-left-baseline {
+    place-items: left baseline !important;
+  }
+
+  .xl\:place-left-center {
+    place-items: left center !important;
+  }
+
+  .xl\:place-left-end {
+    place-items: left end !important;
+  }
+
+  .xl\:place-left-first-baseline {
+    place-items: left first baseline !important;
+  }
+
+  .xl\:place-left-flex-end {
+    place-items: left flex-end !important;
+  }
+
+  .xl\:place-left-flex-start {
+    place-items: left flex-start !important;
+  }
+
+  .xl\:place-left-last-baseline {
+    place-items: left last baseline !important;
+  }
+
+  .xl\:place-left-normal {
+    place-items: left normal !important;
+  }
+
+  .xl\:place-left-right {
+    place-items: left right !important;
+  }
+
+  .xl\:place-left-self-end {
+    place-items: left self-end !important;
+  }
+
+  .xl\:place-left-self-start {
+    place-items: left self-start !important;
+  }
+
+  .xl\:place-left-start {
+    place-items: left start !important;
+  }
+
+  .xl\:place-left-stretch {
+    place-items: left stretch !important;
+  }
+
+  .xl\:place-normal-auto {
+    place-items: normal auto !important;
+  }
+
+  .xl\:place-normal-baseline {
+    place-items: normal baseline !important;
+  }
+
+  .xl\:place-normal-center {
+    place-items: normal center !important;
+  }
+
+  .xl\:place-normal-end {
+    place-items: normal end !important;
+  }
+
+  .xl\:place-normal-first-baseline {
+    place-items: normal first baseline !important;
+  }
+
+  .xl\:place-normal-flex-end {
+    place-items: normal flex-end !important;
+  }
+
+  .xl\:place-normal-flex-start {
+    place-items: normal flex-start !important;
+  }
+
+  .xl\:place-normal-last-baseline {
+    place-items: normal last baseline !important;
+  }
+
+  .xl\:place-normal-left {
+    place-items: normal left !important;
+  }
+
+  .xl\:place-normal-right {
+    place-items: normal right !important;
+  }
+
+  .xl\:place-normal-self-end {
+    place-items: normal self-end !important;
+  }
+
+  .xl\:place-normal-self-start {
+    place-items: normal self-start !important;
+  }
+
+  .xl\:place-normal-start {
+    place-items: normal start !important;
+  }
+
+  .xl\:place-normal-stretch {
+    place-items: normal stretch !important;
+  }
+
+  .xl\:place-right-auto {
+    place-items: right auto !important;
+  }
+
+  .xl\:place-right-baseline {
+    place-items: right baseline !important;
+  }
+
+  .xl\:place-right-center {
+    place-items: right center !important;
+  }
+
+  .xl\:place-right-end {
+    place-items: right end !important;
+  }
+
+  .xl\:place-right-first-baseline {
+    place-items: right first baseline !important;
+  }
+
+  .xl\:place-right-flex-end {
+    place-items: right flex-end !important;
+  }
+
+  .xl\:place-right-flex-start {
+    place-items: right flex-start !important;
+  }
+
+  .xl\:place-right-last-baseline {
+    place-items: right last baseline !important;
+  }
+
+  .xl\:place-right-left {
+    place-items: right left !important;
+  }
+
+  .xl\:place-right-normal {
+    place-items: right normal !important;
+  }
+
+  .xl\:place-right-self-end {
+    place-items: right self-end !important;
+  }
+
+  .xl\:place-right-self-start {
+    place-items: right self-start !important;
+  }
+
+  .xl\:place-right-start {
+    place-items: right start !important;
+  }
+
+  .xl\:place-right-stretch {
+    place-items: right stretch !important;
+  }
+
+  .xl\:place-self-end-auto {
+    place-items: self-end auto !important;
+  }
+
+  .xl\:place-self-end-baseline {
+    place-items: self-end baseline !important;
+  }
+
+  .xl\:place-self-end-center {
+    place-items: self-end center !important;
+  }
+
+  .xl\:place-self-end-end {
+    place-items: self-end end !important;
+  }
+
+  .xl\:place-self-end-first-baseline {
+    place-items: self-end first baseline !important;
+  }
+
+  .xl\:place-self-end-flex-end {
+    place-items: self-end flex-end !important;
+  }
+
+  .xl\:place-self-end-flex-start {
+    place-items: self-end flex-start !important;
+  }
+
+  .xl\:place-self-end-last-baseline {
+    place-items: self-end last baseline !important;
+  }
+
+  .xl\:place-self-end-left {
+    place-items: self-end left !important;
+  }
+
+  .xl\:place-self-end-normal {
+    place-items: self-end normal !important;
+  }
+
+  .xl\:place-self-end-right {
+    place-items: self-end right !important;
+  }
+
+  .xl\:place-self-end-self-start {
+    place-items: self-end self-start !important;
+  }
+
+  .xl\:place-self-end-start {
+    place-items: self-end start !important;
+  }
+
+  .xl\:place-self-end-stretch {
+    place-items: self-end stretch !important;
+  }
+
+  .xl\:place-self-start-auto {
+    place-items: self-start auto !important;
+  }
+
+  .xl\:place-self-start-baseline {
+    place-items: self-start baseline !important;
+  }
+
+  .xl\:place-self-start-center {
+    place-items: self-start center !important;
+  }
+
+  .xl\:place-self-start-end {
+    place-items: self-start end !important;
+  }
+
+  .xl\:place-self-start-first-baseline {
+    place-items: self-start first baseline !important;
+  }
+
+  .xl\:place-self-start-flex-end {
+    place-items: self-start flex-end !important;
+  }
+
+  .xl\:place-self-start-flex-start {
+    place-items: self-start flex-start !important;
+  }
+
+  .xl\:place-self-start-last-baseline {
+    place-items: self-start last baseline !important;
+  }
+
+  .xl\:place-self-start-left {
+    place-items: self-start left !important;
+  }
+
+  .xl\:place-self-start-normal {
+    place-items: self-start normal !important;
+  }
+
+  .xl\:place-self-start-right {
+    place-items: self-start right !important;
+  }
+
+  .xl\:place-self-start-self-end {
+    place-items: self-start self-end !important;
+  }
+
+  .xl\:place-self-start-start {
+    place-items: self-start start !important;
+  }
+
+  .xl\:place-self-start-stretch {
+    place-items: self-start stretch !important;
+  }
+
+  .xl\:place-start-auto {
+    place-items: start auto !important;
+  }
+
+  .xl\:place-start-baseline {
+    place-items: start baseline !important;
+  }
+
+  .xl\:place-start-center {
+    place-items: start center !important;
+  }
+
+  .xl\:place-start-end {
+    place-items: start end !important;
+  }
+
+  .xl\:place-start-first-baseline {
+    place-items: start first baseline !important;
+  }
+
+  .xl\:place-start-flex-end {
+    place-items: start flex-end !important;
+  }
+
+  .xl\:place-start-flex-start {
+    place-items: start flex-start !important;
+  }
+
+  .xl\:place-start-last-baseline {
+    place-items: start last baseline !important;
+  }
+
+  .xl\:place-start-left {
+    place-items: start left !important;
+  }
+
+  .xl\:place-start-normal {
+    place-items: start normal !important;
+  }
+
+  .xl\:place-start-right {
+    place-items: start right !important;
+  }
+
+  .xl\:place-start-self-end {
+    place-items: start self-end !important;
+  }
+
+  .xl\:place-start-self-start {
+    place-items: start self-start !important;
+  }
+
+  .xl\:place-start-stretch {
+    place-items: start stretch !important;
+  }
+
+  .xl\:place-stretch-auto {
+    place-items: stretch auto !important;
+  }
+
+  .xl\:place-stretch-baseline {
+    place-items: stretch baseline !important;
+  }
+
+  .xl\:place-stretch-center {
+    place-items: stretch center !important;
+  }
+
+  .xl\:place-stretch-end {
+    place-items: stretch end !important;
+  }
+
+  .xl\:place-stretch-first-baseline {
+    place-items: stretch first baseline !important;
+  }
+
+  .xl\:place-stretch-flex-end {
+    place-items: stretch flex-end !important;
+  }
+
+  .xl\:place-stretch-flex-start {
+    place-items: stretch flex-start !important;
+  }
+
+  .xl\:place-stretch-last-baseline {
+    place-items: stretch last baseline !important;
+  }
+
+  .xl\:place-stretch-left {
+    place-items: stretch left !important;
+  }
+
+  .xl\:place-stretch-normal {
+    place-items: stretch normal !important;
+  }
+
+  .xl\:place-stretch-right {
+    place-items: stretch right !important;
+  }
+
+  .xl\:place-stretch-self-end {
+    place-items: stretch self-end !important;
+  }
+
+  .xl\:place-stretch-self-start {
+    place-items: stretch self-start !important;
+  }
+
+  .xl\:place-stretch-start {
+    place-items: stretch start !important;
   }
 
   .xl\:placeholder-transparent::placeholder {
