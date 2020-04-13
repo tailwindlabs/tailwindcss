@@ -5976,6 +5976,906 @@ video {
   padding-left: 1px;
 }
 
+.place-auto {
+  place-items: auto;
+}
+
+.place-baseline {
+  place-items: baseline;
+}
+
+.place-center {
+  place-items: center;
+}
+
+.place-end {
+  place-items: end;
+}
+
+.place-first-baseline {
+  place-items: first baseline;
+}
+
+.place-flex-end {
+  place-items: flex-end;
+}
+
+.place-flex-start {
+  place-items: flex-start;
+}
+
+.place-last-baseline {
+  place-items: last baseline;
+}
+
+.place-left {
+  place-items: left;
+}
+
+.place-normal {
+  place-items: normal;
+}
+
+.place-right {
+  place-items: right;
+}
+
+.place-self-end {
+  place-items: self-end;
+}
+
+.place-self-start {
+  place-items: self-start;
+}
+
+.place-start {
+  place-items: start;
+}
+
+.place-stretch {
+  place-items: stretch;
+}
+
+.place-auto-baseline {
+  place-items: auto baseline;
+}
+
+.place-auto-center {
+  place-items: auto center;
+}
+
+.place-auto-end {
+  place-items: auto end;
+}
+
+.place-auto-first-baseline {
+  place-items: auto first baseline;
+}
+
+.place-auto-flex-end {
+  place-items: auto flex-end;
+}
+
+.place-auto-flex-start {
+  place-items: auto flex-start;
+}
+
+.place-auto-last-baseline {
+  place-items: auto last baseline;
+}
+
+.place-auto-left {
+  place-items: auto left;
+}
+
+.place-auto-normal {
+  place-items: auto normal;
+}
+
+.place-auto-right {
+  place-items: auto right;
+}
+
+.place-auto-self-end {
+  place-items: auto self-end;
+}
+
+.place-auto-self-start {
+  place-items: auto self-start;
+}
+
+.place-auto-start {
+  place-items: auto start;
+}
+
+.place-auto-stretch {
+  place-items: auto stretch;
+}
+
+.place-baseline-auto {
+  place-items: baseline auto;
+}
+
+.place-baseline-center {
+  place-items: baseline center;
+}
+
+.place-baseline-end {
+  place-items: baseline end;
+}
+
+.place-baseline-first-baseline {
+  place-items: baseline first baseline;
+}
+
+.place-baseline-flex-end {
+  place-items: baseline flex-end;
+}
+
+.place-baseline-flex-start {
+  place-items: baseline flex-start;
+}
+
+.place-baseline-last-baseline {
+  place-items: baseline last baseline;
+}
+
+.place-baseline-left {
+  place-items: baseline left;
+}
+
+.place-baseline-normal {
+  place-items: baseline normal;
+}
+
+.place-baseline-right {
+  place-items: baseline right;
+}
+
+.place-baseline-self-end {
+  place-items: baseline self-end;
+}
+
+.place-baseline-self-start {
+  place-items: baseline self-start;
+}
+
+.place-baseline-start {
+  place-items: baseline start;
+}
+
+.place-baseline-stretch {
+  place-items: baseline stretch;
+}
+
+.place-center-auto {
+  place-items: center auto;
+}
+
+.place-center-baseline {
+  place-items: center baseline;
+}
+
+.place-center-end {
+  place-items: center end;
+}
+
+.place-center-first-baseline {
+  place-items: center first baseline;
+}
+
+.place-center-flex-end {
+  place-items: center flex-end;
+}
+
+.place-center-flex-start {
+  place-items: center flex-start;
+}
+
+.place-center-last-baseline {
+  place-items: center last baseline;
+}
+
+.place-center-left {
+  place-items: center left;
+}
+
+.place-center-normal {
+  place-items: center normal;
+}
+
+.place-center-right {
+  place-items: center right;
+}
+
+.place-center-self-end {
+  place-items: center self-end;
+}
+
+.place-center-self-start {
+  place-items: center self-start;
+}
+
+.place-center-start {
+  place-items: center start;
+}
+
+.place-center-stretch {
+  place-items: center stretch;
+}
+
+.place-end-auto {
+  place-items: end auto;
+}
+
+.place-end-baseline {
+  place-items: end baseline;
+}
+
+.place-end-center {
+  place-items: end center;
+}
+
+.place-end-first-baseline {
+  place-items: end first baseline;
+}
+
+.place-end-flex-end {
+  place-items: end flex-end;
+}
+
+.place-end-flex-start {
+  place-items: end flex-start;
+}
+
+.place-end-last-baseline {
+  place-items: end last baseline;
+}
+
+.place-end-left {
+  place-items: end left;
+}
+
+.place-end-normal {
+  place-items: end normal;
+}
+
+.place-end-right {
+  place-items: end right;
+}
+
+.place-end-self-end {
+  place-items: end self-end;
+}
+
+.place-end-self-start {
+  place-items: end self-start;
+}
+
+.place-end-start {
+  place-items: end start;
+}
+
+.place-end-stretch {
+  place-items: end stretch;
+}
+
+.place-first-baseline-auto {
+  place-items: first baseline auto;
+}
+
+.place-first-baseline-baseline {
+  place-items: first baseline baseline;
+}
+
+.place-first-baseline-center {
+  place-items: first baseline center;
+}
+
+.place-first-baseline-end {
+  place-items: first baseline end;
+}
+
+.place-first-baseline-flex-end {
+  place-items: first baseline flex-end;
+}
+
+.place-first-baseline-flex-start {
+  place-items: first baseline flex-start;
+}
+
+.place-first-baseline-last-baseline {
+  place-items: first baseline last baseline;
+}
+
+.place-first-baseline-left {
+  place-items: first baseline left;
+}
+
+.place-first-baseline-normal {
+  place-items: first baseline normal;
+}
+
+.place-first-baseline-right {
+  place-items: first baseline right;
+}
+
+.place-first-baseline-self-end {
+  place-items: first baseline self-end;
+}
+
+.place-first-baseline-self-start {
+  place-items: first baseline self-start;
+}
+
+.place-first-baseline-start {
+  place-items: first baseline start;
+}
+
+.place-first-baseline-stretch {
+  place-items: first baseline stretch;
+}
+
+.place-flex-end-auto {
+  place-items: flex-end auto;
+}
+
+.place-flex-end-baseline {
+  place-items: flex-end baseline;
+}
+
+.place-flex-end-center {
+  place-items: flex-end center;
+}
+
+.place-flex-end-end {
+  place-items: flex-end end;
+}
+
+.place-flex-end-first-baseline {
+  place-items: flex-end first baseline;
+}
+
+.place-flex-end-flex-start {
+  place-items: flex-end flex-start;
+}
+
+.place-flex-end-last-baseline {
+  place-items: flex-end last baseline;
+}
+
+.place-flex-end-left {
+  place-items: flex-end left;
+}
+
+.place-flex-end-normal {
+  place-items: flex-end normal;
+}
+
+.place-flex-end-right {
+  place-items: flex-end right;
+}
+
+.place-flex-end-self-end {
+  place-items: flex-end self-end;
+}
+
+.place-flex-end-self-start {
+  place-items: flex-end self-start;
+}
+
+.place-flex-end-start {
+  place-items: flex-end start;
+}
+
+.place-flex-end-stretch {
+  place-items: flex-end stretch;
+}
+
+.place-flex-start-auto {
+  place-items: flex-start auto;
+}
+
+.place-flex-start-baseline {
+  place-items: flex-start baseline;
+}
+
+.place-flex-start-center {
+  place-items: flex-start center;
+}
+
+.place-flex-start-end {
+  place-items: flex-start end;
+}
+
+.place-flex-start-first-baseline {
+  place-items: flex-start first baseline;
+}
+
+.place-flex-start-flex-end {
+  place-items: flex-start flex-end;
+}
+
+.place-flex-start-last-baseline {
+  place-items: flex-start last baseline;
+}
+
+.place-flex-start-left {
+  place-items: flex-start left;
+}
+
+.place-flex-start-normal {
+  place-items: flex-start normal;
+}
+
+.place-flex-start-right {
+  place-items: flex-start right;
+}
+
+.place-flex-start-self-end {
+  place-items: flex-start self-end;
+}
+
+.place-flex-start-self-start {
+  place-items: flex-start self-start;
+}
+
+.place-flex-start-start {
+  place-items: flex-start start;
+}
+
+.place-flex-start-stretch {
+  place-items: flex-start stretch;
+}
+
+.place-last-baseline-auto {
+  place-items: last baseline auto;
+}
+
+.place-last-baseline-baseline {
+  place-items: last baseline baseline;
+}
+
+.place-last-baseline-center {
+  place-items: last baseline center;
+}
+
+.place-last-baseline-end {
+  place-items: last baseline end;
+}
+
+.place-last-baseline-first-baseline {
+  place-items: last baseline first baseline;
+}
+
+.place-last-baseline-flex-end {
+  place-items: last baseline flex-end;
+}
+
+.place-last-baseline-flex-start {
+  place-items: last baseline flex-start;
+}
+
+.place-last-baseline-left {
+  place-items: last baseline left;
+}
+
+.place-last-baseline-normal {
+  place-items: last baseline normal;
+}
+
+.place-last-baseline-right {
+  place-items: last baseline right;
+}
+
+.place-last-baseline-self-end {
+  place-items: last baseline self-end;
+}
+
+.place-last-baseline-self-start {
+  place-items: last baseline self-start;
+}
+
+.place-last-baseline-start {
+  place-items: last baseline start;
+}
+
+.place-last-baseline-stretch {
+  place-items: last baseline stretch;
+}
+
+.place-left-auto {
+  place-items: left auto;
+}
+
+.place-left-baseline {
+  place-items: left baseline;
+}
+
+.place-left-center {
+  place-items: left center;
+}
+
+.place-left-end {
+  place-items: left end;
+}
+
+.place-left-first-baseline {
+  place-items: left first baseline;
+}
+
+.place-left-flex-end {
+  place-items: left flex-end;
+}
+
+.place-left-flex-start {
+  place-items: left flex-start;
+}
+
+.place-left-last-baseline {
+  place-items: left last baseline;
+}
+
+.place-left-normal {
+  place-items: left normal;
+}
+
+.place-left-right {
+  place-items: left right;
+}
+
+.place-left-self-end {
+  place-items: left self-end;
+}
+
+.place-left-self-start {
+  place-items: left self-start;
+}
+
+.place-left-start {
+  place-items: left start;
+}
+
+.place-left-stretch {
+  place-items: left stretch;
+}
+
+.place-normal-auto {
+  place-items: normal auto;
+}
+
+.place-normal-baseline {
+  place-items: normal baseline;
+}
+
+.place-normal-center {
+  place-items: normal center;
+}
+
+.place-normal-end {
+  place-items: normal end;
+}
+
+.place-normal-first-baseline {
+  place-items: normal first baseline;
+}
+
+.place-normal-flex-end {
+  place-items: normal flex-end;
+}
+
+.place-normal-flex-start {
+  place-items: normal flex-start;
+}
+
+.place-normal-last-baseline {
+  place-items: normal last baseline;
+}
+
+.place-normal-left {
+  place-items: normal left;
+}
+
+.place-normal-right {
+  place-items: normal right;
+}
+
+.place-normal-self-end {
+  place-items: normal self-end;
+}
+
+.place-normal-self-start {
+  place-items: normal self-start;
+}
+
+.place-normal-start {
+  place-items: normal start;
+}
+
+.place-normal-stretch {
+  place-items: normal stretch;
+}
+
+.place-right-auto {
+  place-items: right auto;
+}
+
+.place-right-baseline {
+  place-items: right baseline;
+}
+
+.place-right-center {
+  place-items: right center;
+}
+
+.place-right-end {
+  place-items: right end;
+}
+
+.place-right-first-baseline {
+  place-items: right first baseline;
+}
+
+.place-right-flex-end {
+  place-items: right flex-end;
+}
+
+.place-right-flex-start {
+  place-items: right flex-start;
+}
+
+.place-right-last-baseline {
+  place-items: right last baseline;
+}
+
+.place-right-left {
+  place-items: right left;
+}
+
+.place-right-normal {
+  place-items: right normal;
+}
+
+.place-right-self-end {
+  place-items: right self-end;
+}
+
+.place-right-self-start {
+  place-items: right self-start;
+}
+
+.place-right-start {
+  place-items: right start;
+}
+
+.place-right-stretch {
+  place-items: right stretch;
+}
+
+.place-self-end-auto {
+  place-items: self-end auto;
+}
+
+.place-self-end-baseline {
+  place-items: self-end baseline;
+}
+
+.place-self-end-center {
+  place-items: self-end center;
+}
+
+.place-self-end-end {
+  place-items: self-end end;
+}
+
+.place-self-end-first-baseline {
+  place-items: self-end first baseline;
+}
+
+.place-self-end-flex-end {
+  place-items: self-end flex-end;
+}
+
+.place-self-end-flex-start {
+  place-items: self-end flex-start;
+}
+
+.place-self-end-last-baseline {
+  place-items: self-end last baseline;
+}
+
+.place-self-end-left {
+  place-items: self-end left;
+}
+
+.place-self-end-normal {
+  place-items: self-end normal;
+}
+
+.place-self-end-right {
+  place-items: self-end right;
+}
+
+.place-self-end-self-start {
+  place-items: self-end self-start;
+}
+
+.place-self-end-start {
+  place-items: self-end start;
+}
+
+.place-self-end-stretch {
+  place-items: self-end stretch;
+}
+
+.place-self-start-auto {
+  place-items: self-start auto;
+}
+
+.place-self-start-baseline {
+  place-items: self-start baseline;
+}
+
+.place-self-start-center {
+  place-items: self-start center;
+}
+
+.place-self-start-end {
+  place-items: self-start end;
+}
+
+.place-self-start-first-baseline {
+  place-items: self-start first baseline;
+}
+
+.place-self-start-flex-end {
+  place-items: self-start flex-end;
+}
+
+.place-self-start-flex-start {
+  place-items: self-start flex-start;
+}
+
+.place-self-start-last-baseline {
+  place-items: self-start last baseline;
+}
+
+.place-self-start-left {
+  place-items: self-start left;
+}
+
+.place-self-start-normal {
+  place-items: self-start normal;
+}
+
+.place-self-start-right {
+  place-items: self-start right;
+}
+
+.place-self-start-self-end {
+  place-items: self-start self-end;
+}
+
+.place-self-start-start {
+  place-items: self-start start;
+}
+
+.place-self-start-stretch {
+  place-items: self-start stretch;
+}
+
+.place-start-auto {
+  place-items: start auto;
+}
+
+.place-start-baseline {
+  place-items: start baseline;
+}
+
+.place-start-center {
+  place-items: start center;
+}
+
+.place-start-end {
+  place-items: start end;
+}
+
+.place-start-first-baseline {
+  place-items: start first baseline;
+}
+
+.place-start-flex-end {
+  place-items: start flex-end;
+}
+
+.place-start-flex-start {
+  place-items: start flex-start;
+}
+
+.place-start-last-baseline {
+  place-items: start last baseline;
+}
+
+.place-start-left {
+  place-items: start left;
+}
+
+.place-start-normal {
+  place-items: start normal;
+}
+
+.place-start-right {
+  place-items: start right;
+}
+
+.place-start-self-end {
+  place-items: start self-end;
+}
+
+.place-start-self-start {
+  place-items: start self-start;
+}
+
+.place-start-stretch {
+  place-items: start stretch;
+}
+
+.place-stretch-auto {
+  place-items: stretch auto;
+}
+
+.place-stretch-baseline {
+  place-items: stretch baseline;
+}
+
+.place-stretch-center {
+  place-items: stretch center;
+}
+
+.place-stretch-end {
+  place-items: stretch end;
+}
+
+.place-stretch-first-baseline {
+  place-items: stretch first baseline;
+}
+
+.place-stretch-flex-end {
+  place-items: stretch flex-end;
+}
+
+.place-stretch-flex-start {
+  place-items: stretch flex-start;
+}
+
+.place-stretch-last-baseline {
+  place-items: stretch last baseline;
+}
+
+.place-stretch-left {
+  place-items: stretch left;
+}
+
+.place-stretch-normal {
+  place-items: stretch normal;
+}
+
+.place-stretch-right {
+  place-items: stretch right;
+}
+
+.place-stretch-self-end {
+  place-items: stretch self-end;
+}
+
+.place-stretch-self-start {
+  place-items: stretch self-start;
+}
+
+.place-stretch-start {
+  place-items: stretch start;
+}
+
 .placeholder-transparent::placeholder {
   color: transparent;
 }

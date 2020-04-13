@@ -5976,6 +5976,906 @@ video {
   padding-left: 1px !important;
 }
 
+.place-auto {
+  place-items: auto !important;
+}
+
+.place-baseline {
+  place-items: baseline !important;
+}
+
+.place-center {
+  place-items: center !important;
+}
+
+.place-end {
+  place-items: end !important;
+}
+
+.place-first-baseline {
+  place-items: first baseline !important;
+}
+
+.place-flex-end {
+  place-items: flex-end !important;
+}
+
+.place-flex-start {
+  place-items: flex-start !important;
+}
+
+.place-last-baseline {
+  place-items: last baseline !important;
+}
+
+.place-left {
+  place-items: left !important;
+}
+
+.place-normal {
+  place-items: normal !important;
+}
+
+.place-right {
+  place-items: right !important;
+}
+
+.place-self-end {
+  place-items: self-end !important;
+}
+
+.place-self-start {
+  place-items: self-start !important;
+}
+
+.place-start {
+  place-items: start !important;
+}
+
+.place-stretch {
+  place-items: stretch !important;
+}
+
+.place-auto-baseline {
+  place-items: auto baseline !important;
+}
+
+.place-auto-center {
+  place-items: auto center !important;
+}
+
+.place-auto-end {
+  place-items: auto end !important;
+}
+
+.place-auto-first-baseline {
+  place-items: auto first baseline !important;
+}
+
+.place-auto-flex-end {
+  place-items: auto flex-end !important;
+}
+
+.place-auto-flex-start {
+  place-items: auto flex-start !important;
+}
+
+.place-auto-last-baseline {
+  place-items: auto last baseline !important;
+}
+
+.place-auto-left {
+  place-items: auto left !important;
+}
+
+.place-auto-normal {
+  place-items: auto normal !important;
+}
+
+.place-auto-right {
+  place-items: auto right !important;
+}
+
+.place-auto-self-end {
+  place-items: auto self-end !important;
+}
+
+.place-auto-self-start {
+  place-items: auto self-start !important;
+}
+
+.place-auto-start {
+  place-items: auto start !important;
+}
+
+.place-auto-stretch {
+  place-items: auto stretch !important;
+}
+
+.place-baseline-auto {
+  place-items: baseline auto !important;
+}
+
+.place-baseline-center {
+  place-items: baseline center !important;
+}
+
+.place-baseline-end {
+  place-items: baseline end !important;
+}
+
+.place-baseline-first-baseline {
+  place-items: baseline first baseline !important;
+}
+
+.place-baseline-flex-end {
+  place-items: baseline flex-end !important;
+}
+
+.place-baseline-flex-start {
+  place-items: baseline flex-start !important;
+}
+
+.place-baseline-last-baseline {
+  place-items: baseline last baseline !important;
+}
+
+.place-baseline-left {
+  place-items: baseline left !important;
+}
+
+.place-baseline-normal {
+  place-items: baseline normal !important;
+}
+
+.place-baseline-right {
+  place-items: baseline right !important;
+}
+
+.place-baseline-self-end {
+  place-items: baseline self-end !important;
+}
+
+.place-baseline-self-start {
+  place-items: baseline self-start !important;
+}
+
+.place-baseline-start {
+  place-items: baseline start !important;
+}
+
+.place-baseline-stretch {
+  place-items: baseline stretch !important;
+}
+
+.place-center-auto {
+  place-items: center auto !important;
+}
+
+.place-center-baseline {
+  place-items: center baseline !important;
+}
+
+.place-center-end {
+  place-items: center end !important;
+}
+
+.place-center-first-baseline {
+  place-items: center first baseline !important;
+}
+
+.place-center-flex-end {
+  place-items: center flex-end !important;
+}
+
+.place-center-flex-start {
+  place-items: center flex-start !important;
+}
+
+.place-center-last-baseline {
+  place-items: center last baseline !important;
+}
+
+.place-center-left {
+  place-items: center left !important;
+}
+
+.place-center-normal {
+  place-items: center normal !important;
+}
+
+.place-center-right {
+  place-items: center right !important;
+}
+
+.place-center-self-end {
+  place-items: center self-end !important;
+}
+
+.place-center-self-start {
+  place-items: center self-start !important;
+}
+
+.place-center-start {
+  place-items: center start !important;
+}
+
+.place-center-stretch {
+  place-items: center stretch !important;
+}
+
+.place-end-auto {
+  place-items: end auto !important;
+}
+
+.place-end-baseline {
+  place-items: end baseline !important;
+}
+
+.place-end-center {
+  place-items: end center !important;
+}
+
+.place-end-first-baseline {
+  place-items: end first baseline !important;
+}
+
+.place-end-flex-end {
+  place-items: end flex-end !important;
+}
+
+.place-end-flex-start {
+  place-items: end flex-start !important;
+}
+
+.place-end-last-baseline {
+  place-items: end last baseline !important;
+}
+
+.place-end-left {
+  place-items: end left !important;
+}
+
+.place-end-normal {
+  place-items: end normal !important;
+}
+
+.place-end-right {
+  place-items: end right !important;
+}
+
+.place-end-self-end {
+  place-items: end self-end !important;
+}
+
+.place-end-self-start {
+  place-items: end self-start !important;
+}
+
+.place-end-start {
+  place-items: end start !important;
+}
+
+.place-end-stretch {
+  place-items: end stretch !important;
+}
+
+.place-first-baseline-auto {
+  place-items: first baseline auto !important;
+}
+
+.place-first-baseline-baseline {
+  place-items: first baseline baseline !important;
+}
+
+.place-first-baseline-center {
+  place-items: first baseline center !important;
+}
+
+.place-first-baseline-end {
+  place-items: first baseline end !important;
+}
+
+.place-first-baseline-flex-end {
+  place-items: first baseline flex-end !important;
+}
+
+.place-first-baseline-flex-start {
+  place-items: first baseline flex-start !important;
+}
+
+.place-first-baseline-last-baseline {
+  place-items: first baseline last baseline !important;
+}
+
+.place-first-baseline-left {
+  place-items: first baseline left !important;
+}
+
+.place-first-baseline-normal {
+  place-items: first baseline normal !important;
+}
+
+.place-first-baseline-right {
+  place-items: first baseline right !important;
+}
+
+.place-first-baseline-self-end {
+  place-items: first baseline self-end !important;
+}
+
+.place-first-baseline-self-start {
+  place-items: first baseline self-start !important;
+}
+
+.place-first-baseline-start {
+  place-items: first baseline start !important;
+}
+
+.place-first-baseline-stretch {
+  place-items: first baseline stretch !important;
+}
+
+.place-flex-end-auto {
+  place-items: flex-end auto !important;
+}
+
+.place-flex-end-baseline {
+  place-items: flex-end baseline !important;
+}
+
+.place-flex-end-center {
+  place-items: flex-end center !important;
+}
+
+.place-flex-end-end {
+  place-items: flex-end end !important;
+}
+
+.place-flex-end-first-baseline {
+  place-items: flex-end first baseline !important;
+}
+
+.place-flex-end-flex-start {
+  place-items: flex-end flex-start !important;
+}
+
+.place-flex-end-last-baseline {
+  place-items: flex-end last baseline !important;
+}
+
+.place-flex-end-left {
+  place-items: flex-end left !important;
+}
+
+.place-flex-end-normal {
+  place-items: flex-end normal !important;
+}
+
+.place-flex-end-right {
+  place-items: flex-end right !important;
+}
+
+.place-flex-end-self-end {
+  place-items: flex-end self-end !important;
+}
+
+.place-flex-end-self-start {
+  place-items: flex-end self-start !important;
+}
+
+.place-flex-end-start {
+  place-items: flex-end start !important;
+}
+
+.place-flex-end-stretch {
+  place-items: flex-end stretch !important;
+}
+
+.place-flex-start-auto {
+  place-items: flex-start auto !important;
+}
+
+.place-flex-start-baseline {
+  place-items: flex-start baseline !important;
+}
+
+.place-flex-start-center {
+  place-items: flex-start center !important;
+}
+
+.place-flex-start-end {
+  place-items: flex-start end !important;
+}
+
+.place-flex-start-first-baseline {
+  place-items: flex-start first baseline !important;
+}
+
+.place-flex-start-flex-end {
+  place-items: flex-start flex-end !important;
+}
+
+.place-flex-start-last-baseline {
+  place-items: flex-start last baseline !important;
+}
+
+.place-flex-start-left {
+  place-items: flex-start left !important;
+}
+
+.place-flex-start-normal {
+  place-items: flex-start normal !important;
+}
+
+.place-flex-start-right {
+  place-items: flex-start right !important;
+}
+
+.place-flex-start-self-end {
+  place-items: flex-start self-end !important;
+}
+
+.place-flex-start-self-start {
+  place-items: flex-start self-start !important;
+}
+
+.place-flex-start-start {
+  place-items: flex-start start !important;
+}
+
+.place-flex-start-stretch {
+  place-items: flex-start stretch !important;
+}
+
+.place-last-baseline-auto {
+  place-items: last baseline auto !important;
+}
+
+.place-last-baseline-baseline {
+  place-items: last baseline baseline !important;
+}
+
+.place-last-baseline-center {
+  place-items: last baseline center !important;
+}
+
+.place-last-baseline-end {
+  place-items: last baseline end !important;
+}
+
+.place-last-baseline-first-baseline {
+  place-items: last baseline first baseline !important;
+}
+
+.place-last-baseline-flex-end {
+  place-items: last baseline flex-end !important;
+}
+
+.place-last-baseline-flex-start {
+  place-items: last baseline flex-start !important;
+}
+
+.place-last-baseline-left {
+  place-items: last baseline left !important;
+}
+
+.place-last-baseline-normal {
+  place-items: last baseline normal !important;
+}
+
+.place-last-baseline-right {
+  place-items: last baseline right !important;
+}
+
+.place-last-baseline-self-end {
+  place-items: last baseline self-end !important;
+}
+
+.place-last-baseline-self-start {
+  place-items: last baseline self-start !important;
+}
+
+.place-last-baseline-start {
+  place-items: last baseline start !important;
+}
+
+.place-last-baseline-stretch {
+  place-items: last baseline stretch !important;
+}
+
+.place-left-auto {
+  place-items: left auto !important;
+}
+
+.place-left-baseline {
+  place-items: left baseline !important;
+}
+
+.place-left-center {
+  place-items: left center !important;
+}
+
+.place-left-end {
+  place-items: left end !important;
+}
+
+.place-left-first-baseline {
+  place-items: left first baseline !important;
+}
+
+.place-left-flex-end {
+  place-items: left flex-end !important;
+}
+
+.place-left-flex-start {
+  place-items: left flex-start !important;
+}
+
+.place-left-last-baseline {
+  place-items: left last baseline !important;
+}
+
+.place-left-normal {
+  place-items: left normal !important;
+}
+
+.place-left-right {
+  place-items: left right !important;
+}
+
+.place-left-self-end {
+  place-items: left self-end !important;
+}
+
+.place-left-self-start {
+  place-items: left self-start !important;
+}
+
+.place-left-start {
+  place-items: left start !important;
+}
+
+.place-left-stretch {
+  place-items: left stretch !important;
+}
+
+.place-normal-auto {
+  place-items: normal auto !important;
+}
+
+.place-normal-baseline {
+  place-items: normal baseline !important;
+}
+
+.place-normal-center {
+  place-items: normal center !important;
+}
+
+.place-normal-end {
+  place-items: normal end !important;
+}
+
+.place-normal-first-baseline {
+  place-items: normal first baseline !important;
+}
+
+.place-normal-flex-end {
+  place-items: normal flex-end !important;
+}
+
+.place-normal-flex-start {
+  place-items: normal flex-start !important;
+}
+
+.place-normal-last-baseline {
+  place-items: normal last baseline !important;
+}
+
+.place-normal-left {
+  place-items: normal left !important;
+}
+
+.place-normal-right {
+  place-items: normal right !important;
+}
+
+.place-normal-self-end {
+  place-items: normal self-end !important;
+}
+
+.place-normal-self-start {
+  place-items: normal self-start !important;
+}
+
+.place-normal-start {
+  place-items: normal start !important;
+}
+
+.place-normal-stretch {
+  place-items: normal stretch !important;
+}
+
+.place-right-auto {
+  place-items: right auto !important;
+}
+
+.place-right-baseline {
+  place-items: right baseline !important;
+}
+
+.place-right-center {
+  place-items: right center !important;
+}
+
+.place-right-end {
+  place-items: right end !important;
+}
+
+.place-right-first-baseline {
+  place-items: right first baseline !important;
+}
+
+.place-right-flex-end {
+  place-items: right flex-end !important;
+}
+
+.place-right-flex-start {
+  place-items: right flex-start !important;
+}
+
+.place-right-last-baseline {
+  place-items: right last baseline !important;
+}
+
+.place-right-left {
+  place-items: right left !important;
+}
+
+.place-right-normal {
+  place-items: right normal !important;
+}
+
+.place-right-self-end {
+  place-items: right self-end !important;
+}
+
+.place-right-self-start {
+  place-items: right self-start !important;
+}
+
+.place-right-start {
+  place-items: right start !important;
+}
+
+.place-right-stretch {
+  place-items: right stretch !important;
+}
+
+.place-self-end-auto {
+  place-items: self-end auto !important;
+}
+
+.place-self-end-baseline {
+  place-items: self-end baseline !important;
+}
+
+.place-self-end-center {
+  place-items: self-end center !important;
+}
+
+.place-self-end-end {
+  place-items: self-end end !important;
+}
+
+.place-self-end-first-baseline {
+  place-items: self-end first baseline !important;
+}
+
+.place-self-end-flex-end {
+  place-items: self-end flex-end !important;
+}
+
+.place-self-end-flex-start {
+  place-items: self-end flex-start !important;
+}
+
+.place-self-end-last-baseline {
+  place-items: self-end last baseline !important;
+}
+
+.place-self-end-left {
+  place-items: self-end left !important;
+}
+
+.place-self-end-normal {
+  place-items: self-end normal !important;
+}
+
+.place-self-end-right {
+  place-items: self-end right !important;
+}
+
+.place-self-end-self-start {
+  place-items: self-end self-start !important;
+}
+
+.place-self-end-start {
+  place-items: self-end start !important;
+}
+
+.place-self-end-stretch {
+  place-items: self-end stretch !important;
+}
+
+.place-self-start-auto {
+  place-items: self-start auto !important;
+}
+
+.place-self-start-baseline {
+  place-items: self-start baseline !important;
+}
+
+.place-self-start-center {
+  place-items: self-start center !important;
+}
+
+.place-self-start-end {
+  place-items: self-start end !important;
+}
+
+.place-self-start-first-baseline {
+  place-items: self-start first baseline !important;
+}
+
+.place-self-start-flex-end {
+  place-items: self-start flex-end !important;
+}
+
+.place-self-start-flex-start {
+  place-items: self-start flex-start !important;
+}
+
+.place-self-start-last-baseline {
+  place-items: self-start last baseline !important;
+}
+
+.place-self-start-left {
+  place-items: self-start left !important;
+}
+
+.place-self-start-normal {
+  place-items: self-start normal !important;
+}
+
+.place-self-start-right {
+  place-items: self-start right !important;
+}
+
+.place-self-start-self-end {
+  place-items: self-start self-end !important;
+}
+
+.place-self-start-start {
+  place-items: self-start start !important;
+}
+
+.place-self-start-stretch {
+  place-items: self-start stretch !important;
+}
+
+.place-start-auto {
+  place-items: start auto !important;
+}
+
+.place-start-baseline {
+  place-items: start baseline !important;
+}
+
+.place-start-center {
+  place-items: start center !important;
+}
+
+.place-start-end {
+  place-items: start end !important;
+}
+
+.place-start-first-baseline {
+  place-items: start first baseline !important;
+}
+
+.place-start-flex-end {
+  place-items: start flex-end !important;
+}
+
+.place-start-flex-start {
+  place-items: start flex-start !important;
+}
+
+.place-start-last-baseline {
+  place-items: start last baseline !important;
+}
+
+.place-start-left {
+  place-items: start left !important;
+}
+
+.place-start-normal {
+  place-items: start normal !important;
+}
+
+.place-start-right {
+  place-items: start right !important;
+}
+
+.place-start-self-end {
+  place-items: start self-end !important;
+}
+
+.place-start-self-start {
+  place-items: start self-start !important;
+}
+
+.place-start-stretch {
+  place-items: start stretch !important;
+}
+
+.place-stretch-auto {
+  place-items: stretch auto !important;
+}
+
+.place-stretch-baseline {
+  place-items: stretch baseline !important;
+}
+
+.place-stretch-center {
+  place-items: stretch center !important;
+}
+
+.place-stretch-end {
+  place-items: stretch end !important;
+}
+
+.place-stretch-first-baseline {
+  place-items: stretch first baseline !important;
+}
+
+.place-stretch-flex-end {
+  place-items: stretch flex-end !important;
+}
+
+.place-stretch-flex-start {
+  place-items: stretch flex-start !important;
+}
+
+.place-stretch-last-baseline {
+  place-items: stretch last baseline !important;
+}
+
+.place-stretch-left {
+  place-items: stretch left !important;
+}
+
+.place-stretch-normal {
+  place-items: stretch normal !important;
+}
+
+.place-stretch-right {
+  place-items: stretch right !important;
+}
+
+.place-stretch-self-end {
+  place-items: stretch self-end !important;
+}
+
+.place-stretch-self-start {
+  place-items: stretch self-start !important;
+}
+
+.place-stretch-start {
+  place-items: stretch start !important;
+}
+
 .placeholder-transparent::placeholder {
   color: transparent !important;
 }
