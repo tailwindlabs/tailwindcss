@@ -1,6 +1,6 @@
 import preflight from './plugins/preflight'
 import container from './plugins/container'
-import stack from './plugins/stack'
+import space from './plugins/space'
 import divideWidth from './plugins/divideWidth'
 import divideColor from './plugins/divideColor'
 import accessibility from './plugins/accessibility'
@@ -99,7 +99,7 @@ export default function({ corePlugins: corePluginConfig }) {
   return configurePlugins(corePluginConfig, {
     preflight,
     container,
-    stack,
+    space,
     divideWidth,
     divideColor,
     accessibility,

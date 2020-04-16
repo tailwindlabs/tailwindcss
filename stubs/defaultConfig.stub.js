@@ -376,7 +376,7 @@ module.exports = {
     },
     padding: theme => theme('spacing'),
     placeholderColor: theme => theme('colors'),
-    stack: theme => theme('spacing'),
+    space: theme => theme('spacing'),
     stroke: {
       current: 'currentColor',
     },

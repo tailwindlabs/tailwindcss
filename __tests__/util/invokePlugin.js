@@ -24,6 +24,9 @@ export default function(plugin, config) {
   plugin(pluginApi)
 
   return {
-    utilities: addedUtilities,
+    utilities: addedUtilities.map(([utilities, variants]) => [
+      _.merge({}, ..._.castArray(utilities)),
+      variants,
+    ]),
   }
 }
