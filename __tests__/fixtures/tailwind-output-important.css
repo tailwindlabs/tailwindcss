@@ -606,6 +606,158 @@ video {
   }
 }
 
+.stack-y-0 > * + * {
+  margin-top: 0 !important;
+}
+
+.stack-x-0 > * + * {
+  margin-left: 0 !important;
+}
+
+.stack-y-1 > * + * {
+  margin-top: 0.25rem !important;
+}
+
+.stack-x-1 > * + * {
+  margin-left: 0.25rem !important;
+}
+
+.stack-y-2 > * + * {
+  margin-top: 0.5rem !important;
+}
+
+.stack-x-2 > * + * {
+  margin-left: 0.5rem !important;
+}
+
+.stack-y-3 > * + * {
+  margin-top: 0.75rem !important;
+}
+
+.stack-x-3 > * + * {
+  margin-left: 0.75rem !important;
+}
+
+.stack-y-4 > * + * {
+  margin-top: 1rem !important;
+}
+
+.stack-x-4 > * + * {
+  margin-left: 1rem !important;
+}
+
+.stack-y-5 > * + * {
+  margin-top: 1.25rem !important;
+}
+
+.stack-x-5 > * + * {
+  margin-left: 1.25rem !important;
+}
+
+.stack-y-6 > * + * {
+  margin-top: 1.5rem !important;
+}
+
+.stack-x-6 > * + * {
+  margin-left: 1.5rem !important;
+}
+
+.stack-y-8 > * + * {
+  margin-top: 2rem !important;
+}
+
+.stack-x-8 > * + * {
+  margin-left: 2rem !important;
+}
+
+.stack-y-10 > * + * {
+  margin-top: 2.5rem !important;
+}
+
+.stack-x-10 > * + * {
+  margin-left: 2.5rem !important;
+}
+
+.stack-y-12 > * + * {
+  margin-top: 3rem !important;
+}
+
+.stack-x-12 > * + * {
+  margin-left: 3rem !important;
+}
+
+.stack-y-16 > * + * {
+  margin-top: 4rem !important;
+}
+
+.stack-x-16 > * + * {
+  margin-left: 4rem !important;
+}
+
+.stack-y-20 > * + * {
+  margin-top: 5rem !important;
+}
+
+.stack-x-20 > * + * {
+  margin-left: 5rem !important;
+}
+
+.stack-y-24 > * + * {
+  margin-top: 6rem !important;
+}
+
+.stack-x-24 > * + * {
+  margin-left: 6rem !important;
+}
+
+.stack-y-32 > * + * {
+  margin-top: 8rem !important;
+}
+
+.stack-x-32 > * + * {
+  margin-left: 8rem !important;
+}
+
+.stack-y-40 > * + * {
+  margin-top: 10rem !important;
+}
+
+.stack-x-40 > * + * {
+  margin-left: 10rem !important;
+}
+
+.stack-y-48 > * + * {
+  margin-top: 12rem !important;
+}
+
+.stack-x-48 > * + * {
+  margin-left: 12rem !important;
+}
+
+.stack-y-56 > * + * {
+  margin-top: 14rem !important;
+}
+
+.stack-x-56 > * + * {
+  margin-left: 14rem !important;
+}
+
+.stack-y-64 > * + * {
+  margin-top: 16rem !important;
+}
+
+.stack-x-64 > * + * {
+  margin-left: 16rem !important;
+}
+
+.stack-y-px > * + * {
+  margin-top: 1px !important;
+}
+
+.stack-x-px > * + * {
+  margin-left: 1px !important;
+}
+
 .sr-only {
   position: absolute !important;
   width: 1px !important;

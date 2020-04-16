@@ -1,5 +1,6 @@
 import preflight from './plugins/preflight'
 import container from './plugins/container'
+import stack from './plugins/stack'
 import accessibility from './plugins/accessibility'
 import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
@@ -96,6 +97,7 @@ export default function({ corePlugins: corePluginConfig }) {
   return configurePlugins(corePluginConfig, {
     preflight,
     container,
+    stack,
     accessibility,
     appearance,
     backgroundAttachment,
