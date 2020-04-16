@@ -43,7 +43,7 @@
   "dependencies": {
     "autoprefixer": "^9.4.5",
     "bytes": "^3.0.0",
-    "chalk": "^3.0.0",
+    "chalk": "^4.0.0",
     "detective": "^5.2.0",
     "fs-extra": "^9.0.0",
     "lodash": "^4.17.15",
