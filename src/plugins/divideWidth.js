@@ -4,8 +4,8 @@ export default function() {
   return function({ addUtilities, e, theme, variants }) {
     const generators = [
       (value, modifier) => ({
-        [`.${e(`divide-y${modifier}`)} > * + *`]: { 'border-top-width': `${value}` },
-        [`.${e(`divide-x${modifier}`)} > * + *`]: { 'border-left-width': `${value}` },
+        [`.${e(`divide-y${modifier}`)} > :not(:last-child)`]: { 'border-bottom-width': `${value}` },
+        [`.${e(`divide-x${modifier}`)} > :not(:last-child)`]: { 'border-right-width': `${value}` },
       }),
     ]
 

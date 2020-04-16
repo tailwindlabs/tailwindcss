@@ -606,571 +606,571 @@ video {
   }
 }
 
-.space-y-0 > * + * {
-  margin-top: 0 !important;
+.space-y-0 > :not(:last-child) {
+  margin-bottom: 0 !important;
 }
 
-.space-x-0 > * + * {
-  margin-left: 0 !important;
+.space-x-0 > :not(:last-child) {
+  margin-right: 0 !important;
 }
 
-.space-y-1 > * + * {
-  margin-top: 0.25rem !important;
+.space-y-1 > :not(:last-child) {
+  margin-bottom: 0.25rem !important;
 }
 
-.space-x-1 > * + * {
-  margin-left: 0.25rem !important;
+.space-x-1 > :not(:last-child) {
+  margin-right: 0.25rem !important;
 }
 
-.space-y-2 > * + * {
-  margin-top: 0.5rem !important;
+.space-y-2 > :not(:last-child) {
+  margin-bottom: 0.5rem !important;
 }
 
-.space-x-2 > * + * {
-  margin-left: 0.5rem !important;
+.space-x-2 > :not(:last-child) {
+  margin-right: 0.5rem !important;
 }
 
-.space-y-3 > * + * {
-  margin-top: 0.75rem !important;
+.space-y-3 > :not(:last-child) {
+  margin-bottom: 0.75rem !important;
 }
 
-.space-x-3 > * + * {
-  margin-left: 0.75rem !important;
+.space-x-3 > :not(:last-child) {
+  margin-right: 0.75rem !important;
 }
 
-.space-y-4 > * + * {
-  margin-top: 1rem !important;
+.space-y-4 > :not(:last-child) {
+  margin-bottom: 1rem !important;
 }
 
-.space-x-4 > * + * {
-  margin-left: 1rem !important;
+.space-x-4 > :not(:last-child) {
+  margin-right: 1rem !important;
 }
 
-.space-y-5 > * + * {
-  margin-top: 1.25rem !important;
+.space-y-5 > :not(:last-child) {
+  margin-bottom: 1.25rem !important;
 }
 
-.space-x-5 > * + * {
-  margin-left: 1.25rem !important;
+.space-x-5 > :not(:last-child) {
+  margin-right: 1.25rem !important;
 }
 
-.space-y-6 > * + * {
-  margin-top: 1.5rem !important;
+.space-y-6 > :not(:last-child) {
+  margin-bottom: 1.5rem !important;
 }
 
-.space-x-6 > * + * {
-  margin-left: 1.5rem !important;
+.space-x-6 > :not(:last-child) {
+  margin-right: 1.5rem !important;
 }
 
-.space-y-8 > * + * {
-  margin-top: 2rem !important;
+.space-y-8 > :not(:last-child) {
+  margin-bottom: 2rem !important;
 }
 
-.space-x-8 > * + * {
-  margin-left: 2rem !important;
+.space-x-8 > :not(:last-child) {
+  margin-right: 2rem !important;
 }
 
-.space-y-10 > * + * {
-  margin-top: 2.5rem !important;
+.space-y-10 > :not(:last-child) {
+  margin-bottom: 2.5rem !important;
 }
 
-.space-x-10 > * + * {
-  margin-left: 2.5rem !important;
+.space-x-10 > :not(:last-child) {
+  margin-right: 2.5rem !important;
 }
 
-.space-y-12 > * + * {
-  margin-top: 3rem !important;
+.space-y-12 > :not(:last-child) {
+  margin-bottom: 3rem !important;
 }
 
-.space-x-12 > * + * {
-  margin-left: 3rem !important;
+.space-x-12 > :not(:last-child) {
+  margin-right: 3rem !important;
 }
 
-.space-y-16 > * + * {
-  margin-top: 4rem !important;
+.space-y-16 > :not(:last-child) {
+  margin-bottom: 4rem !important;
 }
 
-.space-x-16 > * + * {
-  margin-left: 4rem !important;
+.space-x-16 > :not(:last-child) {
+  margin-right: 4rem !important;
 }
 
-.space-y-20 > * + * {
-  margin-top: 5rem !important;
+.space-y-20 > :not(:last-child) {
+  margin-bottom: 5rem !important;
 }
 
-.space-x-20 > * + * {
-  margin-left: 5rem !important;
+.space-x-20 > :not(:last-child) {
+  margin-right: 5rem !important;
 }
 
-.space-y-24 > * + * {
-  margin-top: 6rem !important;
+.space-y-24 > :not(:last-child) {
+  margin-bottom: 6rem !important;
 }
 
-.space-x-24 > * + * {
-  margin-left: 6rem !important;
+.space-x-24 > :not(:last-child) {
+  margin-right: 6rem !important;
 }
 
-.space-y-32 > * + * {
-  margin-top: 8rem !important;
+.space-y-32 > :not(:last-child) {
+  margin-bottom: 8rem !important;
 }
 
-.space-x-32 > * + * {
-  margin-left: 8rem !important;
+.space-x-32 > :not(:last-child) {
+  margin-right: 8rem !important;
 }
 
-.space-y-40 > * + * {
-  margin-top: 10rem !important;
+.space-y-40 > :not(:last-child) {
+  margin-bottom: 10rem !important;
 }
 
-.space-x-40 > * + * {
-  margin-left: 10rem !important;
+.space-x-40 > :not(:last-child) {
+  margin-right: 10rem !important;
 }
 
-.space-y-48 > * + * {
-  margin-top: 12rem !important;
+.space-y-48 > :not(:last-child) {
+  margin-bottom: 12rem !important;
 }
 
-.space-x-48 > * + * {
-  margin-left: 12rem !important;
+.space-x-48 > :not(:last-child) {
+  margin-right: 12rem !important;
 }
 
-.space-y-56 > * + * {
-  margin-top: 14rem !important;
+.space-y-56 > :not(:last-child) {
+  margin-bottom: 14rem !important;
 }
 
-.space-x-56 > * + * {
-  margin-left: 14rem !important;
+.space-x-56 > :not(:last-child) {
+  margin-right: 14rem !important;
 }
 
-.space-y-64 > * + * {
-  margin-top: 16rem !important;
+.space-y-64 > :not(:last-child) {
+  margin-bottom: 16rem !important;
 }
 
-.space-x-64 > * + * {
-  margin-left: 16rem !important;
+.space-x-64 > :not(:last-child) {
+  margin-right: 16rem !important;
 }
 
-.space-y-px > * + * {
-  margin-top: 1px !important;
+.space-y-px > :not(:last-child) {
+  margin-bottom: 1px !important;
 }
 
-.space-x-px > * + * {
-  margin-left: 1px !important;
+.space-x-px > :not(:last-child) {
+  margin-right: 1px !important;
 }
 
-.divide-y-0 > * + * {
-  border-top-width: 0 !important;
+.divide-y-0 > :not(:last-child) {
+  border-bottom-width: 0 !important;
 }
 
-.divide-x-0 > * + * {
-  border-left-width: 0 !important;
+.divide-x-0 > :not(:last-child) {
+  border-right-width: 0 !important;
 }
 
-.divide-y-2 > * + * {
-  border-top-width: 2px !important;
+.divide-y-2 > :not(:last-child) {
+  border-bottom-width: 2px !important;
 }
 
-.divide-x-2 > * + * {
-  border-left-width: 2px !important;
+.divide-x-2 > :not(:last-child) {
+  border-right-width: 2px !important;
 }
 
-.divide-y-4 > * + * {
-  border-top-width: 4px !important;
+.divide-y-4 > :not(:last-child) {
+  border-bottom-width: 4px !important;
 }
 
-.divide-x-4 > * + * {
-  border-left-width: 4px !important;
+.divide-x-4 > :not(:last-child) {
+  border-right-width: 4px !important;
 }
 
-.divide-y-8 > * + * {
-  border-top-width: 8px !important;
+.divide-y-8 > :not(:last-child) {
+  border-bottom-width: 8px !important;
 }
 
-.divide-x-8 > * + * {
-  border-left-width: 8px !important;
+.divide-x-8 > :not(:last-child) {
+  border-right-width: 8px !important;
 }
 
-.divide-y > * + * {
-  border-top-width: 1px !important;
+.divide-y > :not(:last-child) {
+  border-bottom-width: 1px !important;
 }
 
-.divide-x > * + * {
-  border-left-width: 1px !important;
+.divide-x > :not(:last-child) {
+  border-right-width: 1px !important;
 }
 
-.divide-transparent > * + * {
+.divide-transparent > :not(:last-child) {
   border-color: transparent !important;
 }
 
-.divide-current > * + * {
+.divide-current > :not(:last-child) {
   border-color: currentColor !important;
 }
 
-.divide-black > * + * {
+.divide-black > :not(:last-child) {
   border-color: #000 !important;
 }
 
-.divide-white > * + * {
+.divide-white > :not(:last-child) {
   border-color: #fff !important;
 }
 
-.divide-gray-100 > * + * {
+.divide-gray-100 > :not(:last-child) {
   border-color: #f7fafc !important;
 }
 
-.divide-gray-200 > * + * {
+.divide-gray-200 > :not(:last-child) {
   border-color: #edf2f7 !important;
 }
 
-.divide-gray-300 > * + * {
+.divide-gray-300 > :not(:last-child) {
   border-color: #e2e8f0 !important;
 }
 
-.divide-gray-400 > * + * {
+.divide-gray-400 > :not(:last-child) {
   border-color: #cbd5e0 !important;
 }
 
-.divide-gray-500 > * + * {
+.divide-gray-500 > :not(:last-child) {
   border-color: #a0aec0 !important;
 }
 
-.divide-gray-600 > * + * {
+.divide-gray-600 > :not(:last-child) {
   border-color: #718096 !important;
 }
 
-.divide-gray-700 > * + * {
+.divide-gray-700 > :not(:last-child) {
   border-color: #4a5568 !important;
 }
 
-.divide-gray-800 > * + * {
+.divide-gray-800 > :not(:last-child) {
   border-color: #2d3748 !important;
 }
 
-.divide-gray-900 > * + * {
+.divide-gray-900 > :not(:last-child) {
   border-color: #1a202c !important;
 }
 
-.divide-red-100 > * + * {
+.divide-red-100 > :not(:last-child) {
   border-color: #fff5f5 !important;
 }
 
-.divide-red-200 > * + * {
+.divide-red-200 > :not(:last-child) {
   border-color: #fed7d7 !important;
 }
 
-.divide-red-300 > * + * {
+.divide-red-300 > :not(:last-child) {
   border-color: #feb2b2 !important;
 }
 
-.divide-red-400 > * + * {
+.divide-red-400 > :not(:last-child) {
   border-color: #fc8181 !important;
 }
 
-.divide-red-500 > * + * {
+.divide-red-500 > :not(:last-child) {
   border-color: #f56565 !important;
 }
 
-.divide-red-600 > * + * {
+.divide-red-600 > :not(:last-child) {
   border-color: #e53e3e !important;
 }
 
-.divide-red-700 > * + * {
+.divide-red-700 > :not(:last-child) {
   border-color: #c53030 !important;
 }
 
-.divide-red-800 > * + * {
+.divide-red-800 > :not(:last-child) {
   border-color: #9b2c2c !important;
 }
 
-.divide-red-900 > * + * {
+.divide-red-900 > :not(:last-child) {
   border-color: #742a2a !important;
 }
 
-.divide-orange-100 > * + * {
+.divide-orange-100 > :not(:last-child) {
   border-color: #fffaf0 !important;
 }
 
-.divide-orange-200 > * + * {
+.divide-orange-200 > :not(:last-child) {
   border-color: #feebc8 !important;
 }
 
-.divide-orange-300 > * + * {
+.divide-orange-300 > :not(:last-child) {
   border-color: #fbd38d !important;
 }
 
-.divide-orange-400 > * + * {
+.divide-orange-400 > :not(:last-child) {
   border-color: #f6ad55 !important;
 }
 
-.divide-orange-500 > * + * {
+.divide-orange-500 > :not(:last-child) {
   border-color: #ed8936 !important;
 }
 
-.divide-orange-600 > * + * {
+.divide-orange-600 > :not(:last-child) {
   border-color: #dd6b20 !important;
 }
 
-.divide-orange-700 > * + * {
+.divide-orange-700 > :not(:last-child) {
   border-color: #c05621 !important;
 }
 
-.divide-orange-800 > * + * {
+.divide-orange-800 > :not(:last-child) {
   border-color: #9c4221 !important;
 }
 
-.divide-orange-900 > * + * {
+.divide-orange-900 > :not(:last-child) {
   border-color: #7b341e !important;
 }
 
-.divide-yellow-100 > * + * {
+.divide-yellow-100 > :not(:last-child) {
   border-color: #fffff0 !important;
 }
 
-.divide-yellow-200 > * + * {
+.divide-yellow-200 > :not(:last-child) {
   border-color: #fefcbf !important;
 }
 
-.divide-yellow-300 > * + * {
+.divide-yellow-300 > :not(:last-child) {
   border-color: #faf089 !important;
 }
 
-.divide-yellow-400 > * + * {
+.divide-yellow-400 > :not(:last-child) {
   border-color: #f6e05e !important;
 }
 
-.divide-yellow-500 > * + * {
+.divide-yellow-500 > :not(:last-child) {
   border-color: #ecc94b !important;
 }
 
-.divide-yellow-600 > * + * {
+.divide-yellow-600 > :not(:last-child) {
   border-color: #d69e2e !important;
 }
 
-.divide-yellow-700 > * + * {
+.divide-yellow-700 > :not(:last-child) {
   border-color: #b7791f !important;
 }
 
-.divide-yellow-800 > * + * {
+.divide-yellow-800 > :not(:last-child) {
   border-color: #975a16 !important;
 }
 
-.divide-yellow-900 > * + * {
+.divide-yellow-900 > :not(:last-child) {
   border-color: #744210 !important;
 }
 
-.divide-green-100 > * + * {
+.divide-green-100 > :not(:last-child) {
   border-color: #f0fff4 !important;
 }
 
-.divide-green-200 > * + * {
+.divide-green-200 > :not(:last-child) {
   border-color: #c6f6d5 !important;
 }
 
-.divide-green-300 > * + * {
+.divide-green-300 > :not(:last-child) {
   border-color: #9ae6b4 !important;
 }
 
-.divide-green-400 > * + * {
+.divide-green-400 > :not(:last-child) {
   border-color: #68d391 !important;
 }
 
-.divide-green-500 > * + * {
+.divide-green-500 > :not(:last-child) {
   border-color: #48bb78 !important;
 }
 
-.divide-green-600 > * + * {
+.divide-green-600 > :not(:last-child) {
   border-color: #38a169 !important;
 }
 
-.divide-green-700 > * + * {
+.divide-green-700 > :not(:last-child) {
   border-color: #2f855a !important;
 }
 
-.divide-green-800 > * + * {
+.divide-green-800 > :not(:last-child) {
   border-color: #276749 !important;
 }
 
-.divide-green-900 > * + * {
+.divide-green-900 > :not(:last-child) {
   border-color: #22543d !important;
 }
 
-.divide-teal-100 > * + * {
+.divide-teal-100 > :not(:last-child) {
   border-color: #e6fffa !important;
 }
 
-.divide-teal-200 > * + * {
+.divide-teal-200 > :not(:last-child) {
   border-color: #b2f5ea !important;
 }
 
-.divide-teal-300 > * + * {
+.divide-teal-300 > :not(:last-child) {
   border-color: #81e6d9 !important;
 }
 
-.divide-teal-400 > * + * {
+.divide-teal-400 > :not(:last-child) {
   border-color: #4fd1c5 !important;
 }
 
-.divide-teal-500 > * + * {
+.divide-teal-500 > :not(:last-child) {
   border-color: #38b2ac !important;
 }
 
-.divide-teal-600 > * + * {
+.divide-teal-600 > :not(:last-child) {
   border-color: #319795 !important;
 }
 
-.divide-teal-700 > * + * {
+.divide-teal-700 > :not(:last-child) {
   border-color: #2c7a7b !important;
 }
 
-.divide-teal-800 > * + * {
+.divide-teal-800 > :not(:last-child) {
   border-color: #285e61 !important;
 }
 
-.divide-teal-900 > * + * {
+.divide-teal-900 > :not(:last-child) {
   border-color: #234e52 !important;
 }
 
-.divide-blue-100 > * + * {
+.divide-blue-100 > :not(:last-child) {
   border-color: #ebf8ff !important;
 }
 
-.divide-blue-200 > * + * {
+.divide-blue-200 > :not(:last-child) {
   border-color: #bee3f8 !important;
 }
 
-.divide-blue-300 > * + * {
+.divide-blue-300 > :not(:last-child) {
   border-color: #90cdf4 !important;
 }
 
-.divide-blue-400 > * + * {
+.divide-blue-400 > :not(:last-child) {
   border-color: #63b3ed !important;
 }
 
-.divide-blue-500 > * + * {
+.divide-blue-500 > :not(:last-child) {
   border-color: #4299e1 !important;
 }
 
-.divide-blue-600 > * + * {
+.divide-blue-600 > :not(:last-child) {
   border-color: #3182ce !important;
 }
 
-.divide-blue-700 > * + * {
+.divide-blue-700 > :not(:last-child) {
   border-color: #2b6cb0 !important;
 }
 
-.divide-blue-800 > * + * {
+.divide-blue-800 > :not(:last-child) {
   border-color: #2c5282 !important;
 }
 
-.divide-blue-900 > * + * {
+.divide-blue-900 > :not(:last-child) {
   border-color: #2a4365 !important;
 }
 
-.divide-indigo-100 > * + * {
+.divide-indigo-100 > :not(:last-child) {
   border-color: #ebf4ff !important;
 }
 
-.divide-indigo-200 > * + * {
+.divide-indigo-200 > :not(:last-child) {
   border-color: #c3dafe !important;
 }
 
-.divide-indigo-300 > * + * {
+.divide-indigo-300 > :not(:last-child) {
   border-color: #a3bffa !important;
 }
 
-.divide-indigo-400 > * + * {
+.divide-indigo-400 > :not(:last-child) {
   border-color: #7f9cf5 !important;
 }
 
-.divide-indigo-500 > * + * {
+.divide-indigo-500 > :not(:last-child) {
   border-color: #667eea !important;
 }
 
-.divide-indigo-600 > * + * {
+.divide-indigo-600 > :not(:last-child) {
   border-color: #5a67d8 !important;
 }
 
-.divide-indigo-700 > * + * {
+.divide-indigo-700 > :not(:last-child) {
   border-color: #4c51bf !important;
 }
 
-.divide-indigo-800 > * + * {
+.divide-indigo-800 > :not(:last-child) {
   border-color: #434190 !important;
 }
 
-.divide-indigo-900 > * + * {
+.divide-indigo-900 > :not(:last-child) {
   border-color: #3c366b !important;
 }
 
-.divide-purple-100 > * + * {
+.divide-purple-100 > :not(:last-child) {
   border-color: #faf5ff !important;
 }
 
-.divide-purple-200 > * + * {
+.divide-purple-200 > :not(:last-child) {
   border-color: #e9d8fd !important;
 }
 
-.divide-purple-300 > * + * {
+.divide-purple-300 > :not(:last-child) {
   border-color: #d6bcfa !important;
 }
 
-.divide-purple-400 > * + * {
+.divide-purple-400 > :not(:last-child) {
   border-color: #b794f4 !important;
 }
 
-.divide-purple-500 > * + * {
+.divide-purple-500 > :not(:last-child) {
   border-color: #9f7aea !important;
 }
 
-.divide-purple-600 > * + * {
+.divide-purple-600 > :not(:last-child) {
   border-color: #805ad5 !important;
 }
 
-.divide-purple-700 > * + * {
+.divide-purple-700 > :not(:last-child) {
   border-color: #6b46c1 !important;
 }
 
-.divide-purple-800 > * + * {
+.divide-purple-800 > :not(:last-child) {
   border-color: #553c9a !important;
 }
 
-.divide-purple-900 > * + * {
+.divide-purple-900 > :not(:last-child) {
   border-color: #44337a !important;
 }
 
-.divide-pink-100 > * + * {
+.divide-pink-100 > :not(:last-child) {
   border-color: #fff5f7 !important;
 }
 
-.divide-pink-200 > * + * {
+.divide-pink-200 > :not(:last-child) {
   border-color: #fed7e2 !important;
 }
 
-.divide-pink-300 > * + * {
+.divide-pink-300 > :not(:last-child) {
   border-color: #fbb6ce !important;
 }
 
-.divide-pink-400 > * + * {
+.divide-pink-400 > :not(:last-child) {
   border-color: #f687b3 !important;
 }
 
-.divide-pink-500 > * + * {
+.divide-pink-500 > :not(:last-child) {
   border-color: #ed64a6 !important;
 }
 
-.divide-pink-600 > * + * {
+.divide-pink-600 > :not(:last-child) {
   border-color: #d53f8c !important;
 }
 
-.divide-pink-700 > * + * {
+.divide-pink-700 > :not(:last-child) {
   border-color: #b83280 !important;
 }
 
-.divide-pink-800 > * + * {
+.divide-pink-800 > :not(:last-child) {
   border-color: #97266d !important;
 }
 
-.divide-pink-900 > * + * {
+.divide-pink-900 > :not(:last-child) {
   border-color: #702459 !important;
 }
 
