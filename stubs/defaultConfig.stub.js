@@ -206,6 +206,7 @@ module.exports = {
       move: 'move',
       'not-allowed': 'not-allowed',
     },
+    divideWidth: theme => theme('borderWidth'),
     fill: {
       current: 'currentColor',
     },

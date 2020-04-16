@@ -758,6 +758,46 @@ video {
   margin-left: 1px !important;
 }
 
+.divide-y-0 > * + * {
+  border-top-width: 0 !important;
+}
+
+.divide-x-0 > * + * {
+  border-left-width: 0 !important;
+}
+
+.divide-y-2 > * + * {
+  border-top-width: 2px !important;
+}
+
+.divide-x-2 > * + * {
+  border-left-width: 2px !important;
+}
+
+.divide-y-4 > * + * {
+  border-top-width: 4px !important;
+}
+
+.divide-x-4 > * + * {
+  border-left-width: 4px !important;
+}
+
+.divide-y-8 > * + * {
+  border-top-width: 8px !important;
+}
+
+.divide-x-8 > * + * {
+  border-left-width: 8px !important;
+}
+
+.divide-y > * + * {
+  border-top-width: 1px !important;
+}
+
+.divide-x > * + * {
+  border-left-width: 1px !important;
+}
+
 .sr-only {
   position: absolute !important;
   width: 1px !important;
