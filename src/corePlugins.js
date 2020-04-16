@@ -2,6 +2,7 @@ import preflight from './plugins/preflight'
 import container from './plugins/container'
 import stack from './plugins/stack'
 import divideWidth from './plugins/divideWidth'
+import divideColor from './plugins/divideColor'
 import accessibility from './plugins/accessibility'
 import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
@@ -100,6 +101,7 @@ export default function({ corePlugins: corePluginConfig }) {
     container,
     stack,
     divideWidth,
+    divideColor,
     accessibility,
     appearance,
     backgroundAttachment,
