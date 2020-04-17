@@ -3918,6 +3918,46 @@ video {
   height: 100vh !important;
 }
 
+.text-xs {
+  font-size: 0.75rem !important;
+}
+
+.text-sm {
+  font-size: 0.875rem !important;
+}
+
+.text-base {
+  font-size: 1rem !important;
+}
+
+.text-lg {
+  font-size: 1.125rem !important;
+}
+
+.text-xl {
+  font-size: 1.25rem !important;
+}
+
+.text-2xl {
+  font-size: 1.5rem !important;
+}
+
+.text-3xl {
+  font-size: 1.875rem !important;
+}
+
+.text-4xl {
+  font-size: 2.25rem !important;
+}
+
+.text-5xl {
+  font-size: 3rem !important;
+}
+
+.text-6xl {
+  font-size: 4rem !important;
+}
+
 .leading-3 {
   line-height: .75rem !important;
 }
@@ -8128,46 +8168,6 @@ video {
 
 .focus\:text-pink-900:focus {
   color: #702459 !important;
-}
-
-.text-xs {
-  font-size: 0.75rem !important;
-}
-
-.text-sm {
-  font-size: 0.875rem !important;
-}
-
-.text-base {
-  font-size: 1rem !important;
-}
-
-.text-lg {
-  font-size: 1.125rem !important;
-}
-
-.text-xl {
-  font-size: 1.25rem !important;
-}
-
-.text-2xl {
-  font-size: 1.5rem !important;
-}
-
-.text-3xl {
-  font-size: 1.875rem !important;
-}
-
-.text-4xl {
-  font-size: 2.25rem !important;
-}
-
-.text-5xl {
-  font-size: 3rem !important;
-}
-
-.text-6xl {
-  font-size: 4rem !important;
 }
 
 .italic {
@@ -14311,6 +14311,46 @@ video {
     height: 100vh !important;
   }
 
+  .sm\:text-xs {
+    font-size: 0.75rem !important;
+  }
+
+  .sm\:text-sm {
+    font-size: 0.875rem !important;
+  }
+
+  .sm\:text-base {
+    font-size: 1rem !important;
+  }
+
+  .sm\:text-lg {
+    font-size: 1.125rem !important;
+  }
+
+  .sm\:text-xl {
+    font-size: 1.25rem !important;
+  }
+
+  .sm\:text-2xl {
+    font-size: 1.5rem !important;
+  }
+
+  .sm\:text-3xl {
+    font-size: 1.875rem !important;
+  }
+
+  .sm\:text-4xl {
+    font-size: 2.25rem !important;
+  }
+
+  .sm\:text-5xl {
+    font-size: 3rem !important;
+  }
+
+  .sm\:text-6xl {
+    font-size: 4rem !important;
+  }
+
   .sm\:leading-3 {
     line-height: .75rem !important;
   }
@@ -18521,46 +18561,6 @@ video {
 
   .sm\:focus\:text-pink-900:focus {
     color: #702459 !important;
-  }
-
-  .sm\:text-xs {
-    font-size: 0.75rem !important;
-  }
-
-  .sm\:text-sm {
-    font-size: 0.875rem !important;
-  }
-
-  .sm\:text-base {
-    font-size: 1rem !important;
-  }
-
-  .sm\:text-lg {
-    font-size: 1.125rem !important;
-  }
-
-  .sm\:text-xl {
-    font-size: 1.25rem !important;
-  }
-
-  .sm\:text-2xl {
-    font-size: 1.5rem !important;
-  }
-
-  .sm\:text-3xl {
-    font-size: 1.875rem !important;
-  }
-
-  .sm\:text-4xl {
-    font-size: 2.25rem !important;
-  }
-
-  .sm\:text-5xl {
-    font-size: 3rem !important;
-  }
-
-  .sm\:text-6xl {
-    font-size: 4rem !important;
   }
 
   .sm\:italic {
@@ -24705,6 +24705,46 @@ video {
     height: 100vh !important;
   }
 
+  .md\:text-xs {
+    font-size: 0.75rem !important;
+  }
+
+  .md\:text-sm {
+    font-size: 0.875rem !important;
+  }
+
+  .md\:text-base {
+    font-size: 1rem !important;
+  }
+
+  .md\:text-lg {
+    font-size: 1.125rem !important;
+  }
+
+  .md\:text-xl {
+    font-size: 1.25rem !important;
+  }
+
+  .md\:text-2xl {
+    font-size: 1.5rem !important;
+  }
+
+  .md\:text-3xl {
+    font-size: 1.875rem !important;
+  }
+
+  .md\:text-4xl {
+    font-size: 2.25rem !important;
+  }
+
+  .md\:text-5xl {
+    font-size: 3rem !important;
+  }
+
+  .md\:text-6xl {
+    font-size: 4rem !important;
+  }
+
   .md\:leading-3 {
     line-height: .75rem !important;
   }
@@ -28915,46 +28955,6 @@ video {
 
   .md\:focus\:text-pink-900:focus {
     color: #702459 !important;
-  }
-
-  .md\:text-xs {
-    font-size: 0.75rem !important;
-  }
-
-  .md\:text-sm {
-    font-size: 0.875rem !important;
-  }
-
-  .md\:text-base {
-    font-size: 1rem !important;
-  }
-
-  .md\:text-lg {
-    font-size: 1.125rem !important;
-  }
-
-  .md\:text-xl {
-    font-size: 1.25rem !important;
-  }
-
-  .md\:text-2xl {
-    font-size: 1.5rem !important;
-  }
-
-  .md\:text-3xl {
-    font-size: 1.875rem !important;
-  }
-
-  .md\:text-4xl {
-    font-size: 2.25rem !important;
-  }
-
-  .md\:text-5xl {
-    font-size: 3rem !important;
-  }
-
-  .md\:text-6xl {
-    font-size: 4rem !important;
   }
 
   .md\:italic {
@@ -35099,6 +35099,46 @@ video {
     height: 100vh !important;
   }
 
+  .lg\:text-xs {
+    font-size: 0.75rem !important;
+  }
+
+  .lg\:text-sm {
+    font-size: 0.875rem !important;
+  }
+
+  .lg\:text-base {
+    font-size: 1rem !important;
+  }
+
+  .lg\:text-lg {
+    font-size: 1.125rem !important;
+  }
+
+  .lg\:text-xl {
+    font-size: 1.25rem !important;
+  }
+
+  .lg\:text-2xl {
+    font-size: 1.5rem !important;
+  }
+
+  .lg\:text-3xl {
+    font-size: 1.875rem !important;
+  }
+
+  .lg\:text-4xl {
+    font-size: 2.25rem !important;
+  }
+
+  .lg\:text-5xl {
+    font-size: 3rem !important;
+  }
+
+  .lg\:text-6xl {
+    font-size: 4rem !important;
+  }
+
   .lg\:leading-3 {
     line-height: .75rem !important;
   }
@@ -39309,46 +39349,6 @@ video {
 
   .lg\:focus\:text-pink-900:focus {
     color: #702459 !important;
-  }
-
-  .lg\:text-xs {
-    font-size: 0.75rem !important;
-  }
-
-  .lg\:text-sm {
-    font-size: 0.875rem !important;
-  }
-
-  .lg\:text-base {
-    font-size: 1rem !important;
-  }
-
-  .lg\:text-lg {
-    font-size: 1.125rem !important;
-  }
-
-  .lg\:text-xl {
-    font-size: 1.25rem !important;
-  }
-
-  .lg\:text-2xl {
-    font-size: 1.5rem !important;
-  }
-
-  .lg\:text-3xl {
-    font-size: 1.875rem !important;
-  }
-
-  .lg\:text-4xl {
-    font-size: 2.25rem !important;
-  }
-
-  .lg\:text-5xl {
-    font-size: 3rem !important;
-  }
-
-  .lg\:text-6xl {
-    font-size: 4rem !important;
   }
 
   .lg\:italic {
@@ -45493,6 +45493,46 @@ video {
     height: 100vh !important;
   }
 
+  .xl\:text-xs {
+    font-size: 0.75rem !important;
+  }
+
+  .xl\:text-sm {
+    font-size: 0.875rem !important;
+  }
+
+  .xl\:text-base {
+    font-size: 1rem !important;
+  }
+
+  .xl\:text-lg {
+    font-size: 1.125rem !important;
+  }
+
+  .xl\:text-xl {
+    font-size: 1.25rem !important;
+  }
+
+  .xl\:text-2xl {
+    font-size: 1.5rem !important;
+  }
+
+  .xl\:text-3xl {
+    font-size: 1.875rem !important;
+  }
+
+  .xl\:text-4xl {
+    font-size: 2.25rem !important;
+  }
+
+  .xl\:text-5xl {
+    font-size: 3rem !important;
+  }
+
+  .xl\:text-6xl {
+    font-size: 4rem !important;
+  }
+
   .xl\:leading-3 {
     line-height: .75rem !important;
   }
@@ -49703,46 +49743,6 @@ video {
 
   .xl\:focus\:text-pink-900:focus {
     color: #702459 !important;
-  }
-
-  .xl\:text-xs {
-    font-size: 0.75rem !important;
-  }
-
-  .xl\:text-sm {
-    font-size: 0.875rem !important;
-  }
-
-  .xl\:text-base {
-    font-size: 1rem !important;
-  }
-
-  .xl\:text-lg {
-    font-size: 1.125rem !important;
-  }
-
-  .xl\:text-xl {
-    font-size: 1.25rem !important;
-  }
-
-  .xl\:text-2xl {
-    font-size: 1.5rem !important;
-  }
-
-  .xl\:text-3xl {
-    font-size: 1.875rem !important;
-  }
-
-  .xl\:text-4xl {
-    font-size: 2.25rem !important;
-  }
-
-  .xl\:text-5xl {
-    font-size: 3rem !important;
-  }
-
-  .xl\:text-6xl {
-    font-size: 4rem !important;
   }
 
   .xl\:italic {
