@@ -22,9 +22,64 @@ function extractMinWidths(breakpoints) {
   })
 }
 
+function mapMinWidthsToPadding(minWidths, screens, paddings) {
+  if (typeof paddings === 'undefined') {
+    return []
+  }
+
+  if (!_.isObject(paddings)) {
+    return [
+      {
+        screen: 'default',
+        minWidth: 0,
+        padding: paddings,
+      },
+    ]
+  }
+
+  const mapping = []
+
+  if (paddings.default) {
+    mapping.push({
+      screen: 'default',
+      minWidth: 0,
+      padding: paddings.default,
+    })
+  }
+
+  _.each(minWidths, minWidth => {
+    Object.keys(screens).forEach(screen => {
+      if (`${screens[screen]}` === `${minWidth}`) {
+        mapping.push({
+          screen,
+          minWidth,
+          padding: paddings[screen],
+        })
+      }
+    })
+  })
+
+  return mapping
+}
+
 module.exports = function() {
   return function({ addComponents, theme }) {
-    const minWidths = extractMinWidths(theme('container.screens', theme('screens')))
+    const screens = theme('container.screens', theme('screens'))
+    const minWidths = extractMinWidths(screens)
+    const paddings = mapMinWidthsToPadding(minWidths, screens, theme('container.padding'))
+
+    const generatePaddingFor = minWidth => {
+      const paddingConfig = _.find(paddings, padding => `${padding.minWidth}` === `${minWidth}`)
+
+      if (!paddingConfig) {
+        return {}
+      }
+
+      return {
+        paddingRight: paddingConfig.padding,
+        paddingLeft: paddingConfig.padding,
+      }
+    }
 
     const atRules = _(minWidths)
       .sortBy(minWidth => parseInt(minWidth))
@@ -34,6 +89,7 @@ module.exports = function() {
           [`@media (min-width: ${minWidth})`]: {
             '.container': {
               'max-width': minWidth,
+              ...generatePaddingFor(minWidth),
             },
           },
         }
@@ -45,12 +101,7 @@ module.exports = function() {
         '.container': Object.assign(
           { width: '100%' },
           theme('container.center', false) ? { marginRight: 'auto', marginLeft: 'auto' } : {},
-          _.has(theme('container', {}), 'padding')
-            ? {
-                paddingRight: theme('container.padding'),
-                paddingLeft: theme('container.padding'),
-              }
-            : {}
+          generatePaddingFor(0)
         ),
       },
       ...atRules,

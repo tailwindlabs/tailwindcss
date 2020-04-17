@@ -180,6 +180,56 @@ test.only('horizontal padding can be included by default', () => {
   `)
 })
 
+test.only('responsive horizontal padding can be included by default', () => {
+  const { components } = processPlugins(
+    [container()],
+    config({
+      theme: {
+        container: {
+          padding: {
+            default: '1rem',
+            sm: '2rem',
+            lg: '4rem',
+            xl: '5rem',
+          },
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    .container {
+      width: 100%;
+      padding-right: 1rem;
+      padding-left: 1rem
+    }
+    @media (min-width: 576px) {
+      .container {
+        max-width: 576px;
+        padding-right: 2rem;
+        padding-left: 2rem
+      }
+    }
+    @media (min-width: 768px) {
+      .container { max-width: 768px }
+    }
+    @media (min-width: 992px) {
+      .container {
+        max-width: 992px;
+        padding-right: 4rem;
+        padding-left: 4rem
+      }
+    }
+    @media (min-width: 1200px) {
+      .container {
+        max-width: 1200px;
+        padding-right: 5rem;
+        padding-left: 5rem
+      }
+    }
+  `)
+})
+
 test.only('setting all options at once', () => {
   const { components } = processPlugins(
     [container()],
