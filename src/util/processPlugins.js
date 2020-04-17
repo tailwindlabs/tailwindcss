@@ -26,7 +26,7 @@ export default function(plugins, config) {
   const applyConfiguredPrefix = selector => {
     return prefixSelector(config.prefix, selector)
   }
-  const getConfigValue = (path, defaultValue) => _.get(config, path, defaultValue)
+  const getConfigValue = (path, defaultValue) => path ? _.get(config, path, defaultValue) : config
 
   plugins.forEach(plugin => {
     if (plugin.__isOptionsFunction) {
