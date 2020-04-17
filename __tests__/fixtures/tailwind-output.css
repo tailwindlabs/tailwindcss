@@ -606,571 +606,571 @@ video {
   }
 }
 
-.space-y-0 > :not(:last-child) {
-  margin-bottom: 0;
+.space-y-0 > :not(template) ~ :not(template) {
+  margin-top: 0;
 }
 
-.space-x-0 > :not(:last-child) {
-  margin-right: 0;
+.space-x-0 > :not(template) ~ :not(template) {
+  margin-left: 0;
 }
 
-.space-y-1 > :not(:last-child) {
-  margin-bottom: 0.25rem;
+.space-y-1 > :not(template) ~ :not(template) {
+  margin-top: 0.25rem;
 }
 
-.space-x-1 > :not(:last-child) {
-  margin-right: 0.25rem;
+.space-x-1 > :not(template) ~ :not(template) {
+  margin-left: 0.25rem;
 }
 
-.space-y-2 > :not(:last-child) {
-  margin-bottom: 0.5rem;
+.space-y-2 > :not(template) ~ :not(template) {
+  margin-top: 0.5rem;
 }
 
-.space-x-2 > :not(:last-child) {
-  margin-right: 0.5rem;
+.space-x-2 > :not(template) ~ :not(template) {
+  margin-left: 0.5rem;
 }
 
-.space-y-3 > :not(:last-child) {
-  margin-bottom: 0.75rem;
+.space-y-3 > :not(template) ~ :not(template) {
+  margin-top: 0.75rem;
 }
 
-.space-x-3 > :not(:last-child) {
-  margin-right: 0.75rem;
+.space-x-3 > :not(template) ~ :not(template) {
+  margin-left: 0.75rem;
 }
 
-.space-y-4 > :not(:last-child) {
-  margin-bottom: 1rem;
+.space-y-4 > :not(template) ~ :not(template) {
+  margin-top: 1rem;
 }
 
-.space-x-4 > :not(:last-child) {
-  margin-right: 1rem;
+.space-x-4 > :not(template) ~ :not(template) {
+  margin-left: 1rem;
 }
 
-.space-y-5 > :not(:last-child) {
-  margin-bottom: 1.25rem;
+.space-y-5 > :not(template) ~ :not(template) {
+  margin-top: 1.25rem;
 }
 
-.space-x-5 > :not(:last-child) {
-  margin-right: 1.25rem;
+.space-x-5 > :not(template) ~ :not(template) {
+  margin-left: 1.25rem;
 }
 
-.space-y-6 > :not(:last-child) {
-  margin-bottom: 1.5rem;
+.space-y-6 > :not(template) ~ :not(template) {
+  margin-top: 1.5rem;
 }
 
-.space-x-6 > :not(:last-child) {
-  margin-right: 1.5rem;
+.space-x-6 > :not(template) ~ :not(template) {
+  margin-left: 1.5rem;
 }
 
-.space-y-8 > :not(:last-child) {
-  margin-bottom: 2rem;
+.space-y-8 > :not(template) ~ :not(template) {
+  margin-top: 2rem;
 }
 
-.space-x-8 > :not(:last-child) {
-  margin-right: 2rem;
+.space-x-8 > :not(template) ~ :not(template) {
+  margin-left: 2rem;
 }
 
-.space-y-10 > :not(:last-child) {
-  margin-bottom: 2.5rem;
+.space-y-10 > :not(template) ~ :not(template) {
+  margin-top: 2.5rem;
 }
 
-.space-x-10 > :not(:last-child) {
-  margin-right: 2.5rem;
+.space-x-10 > :not(template) ~ :not(template) {
+  margin-left: 2.5rem;
 }
 
-.space-y-12 > :not(:last-child) {
-  margin-bottom: 3rem;
+.space-y-12 > :not(template) ~ :not(template) {
+  margin-top: 3rem;
 }
 
-.space-x-12 > :not(:last-child) {
-  margin-right: 3rem;
+.space-x-12 > :not(template) ~ :not(template) {
+  margin-left: 3rem;
 }
 
-.space-y-16 > :not(:last-child) {
-  margin-bottom: 4rem;
+.space-y-16 > :not(template) ~ :not(template) {
+  margin-top: 4rem;
 }
 
-.space-x-16 > :not(:last-child) {
-  margin-right: 4rem;
+.space-x-16 > :not(template) ~ :not(template) {
+  margin-left: 4rem;
 }
 
-.space-y-20 > :not(:last-child) {
-  margin-bottom: 5rem;
+.space-y-20 > :not(template) ~ :not(template) {
+  margin-top: 5rem;
 }
 
-.space-x-20 > :not(:last-child) {
-  margin-right: 5rem;
+.space-x-20 > :not(template) ~ :not(template) {
+  margin-left: 5rem;
 }
 
-.space-y-24 > :not(:last-child) {
-  margin-bottom: 6rem;
+.space-y-24 > :not(template) ~ :not(template) {
+  margin-top: 6rem;
 }
 
-.space-x-24 > :not(:last-child) {
-  margin-right: 6rem;
+.space-x-24 > :not(template) ~ :not(template) {
+  margin-left: 6rem;
 }
 
-.space-y-32 > :not(:last-child) {
-  margin-bottom: 8rem;
+.space-y-32 > :not(template) ~ :not(template) {
+  margin-top: 8rem;
 }
 
-.space-x-32 > :not(:last-child) {
-  margin-right: 8rem;
+.space-x-32 > :not(template) ~ :not(template) {
+  margin-left: 8rem;
 }
 
-.space-y-40 > :not(:last-child) {
-  margin-bottom: 10rem;
+.space-y-40 > :not(template) ~ :not(template) {
+  margin-top: 10rem;
 }
 
-.space-x-40 > :not(:last-child) {
-  margin-right: 10rem;
+.space-x-40 > :not(template) ~ :not(template) {
+  margin-left: 10rem;
 }
 
-.space-y-48 > :not(:last-child) {
-  margin-bottom: 12rem;
+.space-y-48 > :not(template) ~ :not(template) {
+  margin-top: 12rem;
 }
 
-.space-x-48 > :not(:last-child) {
-  margin-right: 12rem;
+.space-x-48 > :not(template) ~ :not(template) {
+  margin-left: 12rem;
 }
 
-.space-y-56 > :not(:last-child) {
-  margin-bottom: 14rem;
+.space-y-56 > :not(template) ~ :not(template) {
+  margin-top: 14rem;
 }
 
-.space-x-56 > :not(:last-child) {
-  margin-right: 14rem;
+.space-x-56 > :not(template) ~ :not(template) {
+  margin-left: 14rem;
 }
 
-.space-y-64 > :not(:last-child) {
-  margin-bottom: 16rem;
+.space-y-64 > :not(template) ~ :not(template) {
+  margin-top: 16rem;
 }
 
-.space-x-64 > :not(:last-child) {
-  margin-right: 16rem;
+.space-x-64 > :not(template) ~ :not(template) {
+  margin-left: 16rem;
 }
 
-.space-y-px > :not(:last-child) {
-  margin-bottom: 1px;
+.space-y-px > :not(template) ~ :not(template) {
+  margin-top: 1px;
 }
 
-.space-x-px > :not(:last-child) {
-  margin-right: 1px;
+.space-x-px > :not(template) ~ :not(template) {
+  margin-left: 1px;
 }
 
-.divide-y-0 > :not(:last-child) {
-  border-bottom-width: 0;
+.divide-y-0 > :not(template) ~ :not(template) {
+  border-top-width: 0;
 }
 
-.divide-x-0 > :not(:last-child) {
-  border-right-width: 0;
+.divide-x-0 > :not(template) ~ :not(template) {
+  border-left-width: 0;
 }
 
-.divide-y-2 > :not(:last-child) {
-  border-bottom-width: 2px;
+.divide-y-2 > :not(template) ~ :not(template) {
+  border-top-width: 2px;
 }
 
-.divide-x-2 > :not(:last-child) {
-  border-right-width: 2px;
+.divide-x-2 > :not(template) ~ :not(template) {
+  border-left-width: 2px;
 }
 
-.divide-y-4 > :not(:last-child) {
-  border-bottom-width: 4px;
+.divide-y-4 > :not(template) ~ :not(template) {
+  border-top-width: 4px;
 }
 
-.divide-x-4 > :not(:last-child) {
-  border-right-width: 4px;
+.divide-x-4 > :not(template) ~ :not(template) {
+  border-left-width: 4px;
 }
 
-.divide-y-8 > :not(:last-child) {
-  border-bottom-width: 8px;
+.divide-y-8 > :not(template) ~ :not(template) {
+  border-top-width: 8px;
 }
 
-.divide-x-8 > :not(:last-child) {
-  border-right-width: 8px;
+.divide-x-8 > :not(template) ~ :not(template) {
+  border-left-width: 8px;
 }
 
-.divide-y > :not(:last-child) {
-  border-bottom-width: 1px;
+.divide-y > :not(template) ~ :not(template) {
+  border-top-width: 1px;
 }
 
-.divide-x > :not(:last-child) {
-  border-right-width: 1px;
+.divide-x > :not(template) ~ :not(template) {
+  border-left-width: 1px;
 }
 
-.divide-transparent > :not(:last-child) {
+.divide-transparent > :not(template) ~ :not(template) {
   border-color: transparent;
 }
 
-.divide-current > :not(:last-child) {
+.divide-current > :not(template) ~ :not(template) {
   border-color: currentColor;
 }
 
-.divide-black > :not(:last-child) {
+.divide-black > :not(template) ~ :not(template) {
   border-color: #000;
 }
 
-.divide-white > :not(:last-child) {
+.divide-white > :not(template) ~ :not(template) {
   border-color: #fff;
 }
 
-.divide-gray-100 > :not(:last-child) {
+.divide-gray-100 > :not(template) ~ :not(template) {
   border-color: #f7fafc;
 }
 
-.divide-gray-200 > :not(:last-child) {
+.divide-gray-200 > :not(template) ~ :not(template) {
   border-color: #edf2f7;
 }
 
-.divide-gray-300 > :not(:last-child) {
+.divide-gray-300 > :not(template) ~ :not(template) {
   border-color: #e2e8f0;
 }
 
-.divide-gray-400 > :not(:last-child) {
+.divide-gray-400 > :not(template) ~ :not(template) {
   border-color: #cbd5e0;
 }
 
-.divide-gray-500 > :not(:last-child) {
+.divide-gray-500 > :not(template) ~ :not(template) {
   border-color: #a0aec0;
 }
 
-.divide-gray-600 > :not(:last-child) {
+.divide-gray-600 > :not(template) ~ :not(template) {
   border-color: #718096;
 }
 
-.divide-gray-700 > :not(:last-child) {
+.divide-gray-700 > :not(template) ~ :not(template) {
   border-color: #4a5568;
 }
 
-.divide-gray-800 > :not(:last-child) {
+.divide-gray-800 > :not(template) ~ :not(template) {
   border-color: #2d3748;
 }
 
-.divide-gray-900 > :not(:last-child) {
+.divide-gray-900 > :not(template) ~ :not(template) {
   border-color: #1a202c;
 }
 
-.divide-red-100 > :not(:last-child) {
+.divide-red-100 > :not(template) ~ :not(template) {
   border-color: #fff5f5;
 }
 
-.divide-red-200 > :not(:last-child) {
+.divide-red-200 > :not(template) ~ :not(template) {
   border-color: #fed7d7;
 }
 
-.divide-red-300 > :not(:last-child) {
+.divide-red-300 > :not(template) ~ :not(template) {
   border-color: #feb2b2;
 }
 
-.divide-red-400 > :not(:last-child) {
+.divide-red-400 > :not(template) ~ :not(template) {
   border-color: #fc8181;
 }
 
-.divide-red-500 > :not(:last-child) {
+.divide-red-500 > :not(template) ~ :not(template) {
   border-color: #f56565;
 }
 
-.divide-red-600 > :not(:last-child) {
+.divide-red-600 > :not(template) ~ :not(template) {
   border-color: #e53e3e;
 }
 
-.divide-red-700 > :not(:last-child) {
+.divide-red-700 > :not(template) ~ :not(template) {
   border-color: #c53030;
 }
 
-.divide-red-800 > :not(:last-child) {
+.divide-red-800 > :not(template) ~ :not(template) {
   border-color: #9b2c2c;
 }
 
-.divide-red-900 > :not(:last-child) {
+.divide-red-900 > :not(template) ~ :not(template) {
   border-color: #742a2a;
 }
 
-.divide-orange-100 > :not(:last-child) {
+.divide-orange-100 > :not(template) ~ :not(template) {
   border-color: #fffaf0;
 }
 
-.divide-orange-200 > :not(:last-child) {
+.divide-orange-200 > :not(template) ~ :not(template) {
   border-color: #feebc8;
 }
 
-.divide-orange-300 > :not(:last-child) {
+.divide-orange-300 > :not(template) ~ :not(template) {
   border-color: #fbd38d;
 }
 
-.divide-orange-400 > :not(:last-child) {
+.divide-orange-400 > :not(template) ~ :not(template) {
   border-color: #f6ad55;
 }
 
-.divide-orange-500 > :not(:last-child) {
+.divide-orange-500 > :not(template) ~ :not(template) {
   border-color: #ed8936;
 }
 
-.divide-orange-600 > :not(:last-child) {
+.divide-orange-600 > :not(template) ~ :not(template) {
   border-color: #dd6b20;
 }
 
-.divide-orange-700 > :not(:last-child) {
+.divide-orange-700 > :not(template) ~ :not(template) {
   border-color: #c05621;
 }
 
-.divide-orange-800 > :not(:last-child) {
+.divide-orange-800 > :not(template) ~ :not(template) {
   border-color: #9c4221;
 }
 
-.divide-orange-900 > :not(:last-child) {
+.divide-orange-900 > :not(template) ~ :not(template) {
   border-color: #7b341e;
 }
 
-.divide-yellow-100 > :not(:last-child) {
+.divide-yellow-100 > :not(template) ~ :not(template) {
   border-color: #fffff0;
 }
 
-.divide-yellow-200 > :not(:last-child) {
+.divide-yellow-200 > :not(template) ~ :not(template) {
   border-color: #fefcbf;
 }
 
-.divide-yellow-300 > :not(:last-child) {
+.divide-yellow-300 > :not(template) ~ :not(template) {
   border-color: #faf089;
 }
 
-.divide-yellow-400 > :not(:last-child) {
+.divide-yellow-400 > :not(template) ~ :not(template) {
   border-color: #f6e05e;
 }
 
-.divide-yellow-500 > :not(:last-child) {
+.divide-yellow-500 > :not(template) ~ :not(template) {
   border-color: #ecc94b;
 }
 
-.divide-yellow-600 > :not(:last-child) {
+.divide-yellow-600 > :not(template) ~ :not(template) {
   border-color: #d69e2e;
 }
 
-.divide-yellow-700 > :not(:last-child) {
+.divide-yellow-700 > :not(template) ~ :not(template) {
   border-color: #b7791f;
 }
 
-.divide-yellow-800 > :not(:last-child) {
+.divide-yellow-800 > :not(template) ~ :not(template) {
   border-color: #975a16;
 }
 
-.divide-yellow-900 > :not(:last-child) {
+.divide-yellow-900 > :not(template) ~ :not(template) {
   border-color: #744210;
 }
 
-.divide-green-100 > :not(:last-child) {
+.divide-green-100 > :not(template) ~ :not(template) {
   border-color: #f0fff4;
 }
 
-.divide-green-200 > :not(:last-child) {
+.divide-green-200 > :not(template) ~ :not(template) {
   border-color: #c6f6d5;
 }
 
-.divide-green-300 > :not(:last-child) {
+.divide-green-300 > :not(template) ~ :not(template) {
   border-color: #9ae6b4;
 }
 
-.divide-green-400 > :not(:last-child) {
+.divide-green-400 > :not(template) ~ :not(template) {
   border-color: #68d391;
 }
 
-.divide-green-500 > :not(:last-child) {
+.divide-green-500 > :not(template) ~ :not(template) {
   border-color: #48bb78;
 }
 
-.divide-green-600 > :not(:last-child) {
+.divide-green-600 > :not(template) ~ :not(template) {
   border-color: #38a169;
 }
 
-.divide-green-700 > :not(:last-child) {
+.divide-green-700 > :not(template) ~ :not(template) {
   border-color: #2f855a;
 }
 
-.divide-green-800 > :not(:last-child) {
+.divide-green-800 > :not(template) ~ :not(template) {
   border-color: #276749;
 }
 
-.divide-green-900 > :not(:last-child) {
+.divide-green-900 > :not(template) ~ :not(template) {
   border-color: #22543d;
 }
 
-.divide-teal-100 > :not(:last-child) {
+.divide-teal-100 > :not(template) ~ :not(template) {
   border-color: #e6fffa;
 }
 
-.divide-teal-200 > :not(:last-child) {
+.divide-teal-200 > :not(template) ~ :not(template) {
   border-color: #b2f5ea;
 }
 
-.divide-teal-300 > :not(:last-child) {
+.divide-teal-300 > :not(template) ~ :not(template) {
   border-color: #81e6d9;
 }
 
-.divide-teal-400 > :not(:last-child) {
+.divide-teal-400 > :not(template) ~ :not(template) {
   border-color: #4fd1c5;
 }
 
-.divide-teal-500 > :not(:last-child) {
+.divide-teal-500 > :not(template) ~ :not(template) {
   border-color: #38b2ac;
 }
 
-.divide-teal-600 > :not(:last-child) {
+.divide-teal-600 > :not(template) ~ :not(template) {
   border-color: #319795;
 }
 
-.divide-teal-700 > :not(:last-child) {
+.divide-teal-700 > :not(template) ~ :not(template) {
   border-color: #2c7a7b;
 }
 
-.divide-teal-800 > :not(:last-child) {
+.divide-teal-800 > :not(template) ~ :not(template) {
   border-color: #285e61;
 }
 
-.divide-teal-900 > :not(:last-child) {
+.divide-teal-900 > :not(template) ~ :not(template) {
   border-color: #234e52;
 }
 
-.divide-blue-100 > :not(:last-child) {
+.divide-blue-100 > :not(template) ~ :not(template) {
   border-color: #ebf8ff;
 }
 
-.divide-blue-200 > :not(:last-child) {
+.divide-blue-200 > :not(template) ~ :not(template) {
   border-color: #bee3f8;
 }
 
-.divide-blue-300 > :not(:last-child) {
+.divide-blue-300 > :not(template) ~ :not(template) {
   border-color: #90cdf4;
 }
 
-.divide-blue-400 > :not(:last-child) {
+.divide-blue-400 > :not(template) ~ :not(template) {
   border-color: #63b3ed;
 }
 
-.divide-blue-500 > :not(:last-child) {
+.divide-blue-500 > :not(template) ~ :not(template) {
   border-color: #4299e1;
 }
 
-.divide-blue-600 > :not(:last-child) {
+.divide-blue-600 > :not(template) ~ :not(template) {
   border-color: #3182ce;
 }
 
-.divide-blue-700 > :not(:last-child) {
+.divide-blue-700 > :not(template) ~ :not(template) {
   border-color: #2b6cb0;
 }
 
-.divide-blue-800 > :not(:last-child) {
+.divide-blue-800 > :not(template) ~ :not(template) {
   border-color: #2c5282;
 }
 
-.divide-blue-900 > :not(:last-child) {
+.divide-blue-900 > :not(template) ~ :not(template) {
   border-color: #2a4365;
 }
 
-.divide-indigo-100 > :not(:last-child) {
+.divide-indigo-100 > :not(template) ~ :not(template) {
   border-color: #ebf4ff;
 }
 
-.divide-indigo-200 > :not(:last-child) {
+.divide-indigo-200 > :not(template) ~ :not(template) {
   border-color: #c3dafe;
 }
 
-.divide-indigo-300 > :not(:last-child) {
+.divide-indigo-300 > :not(template) ~ :not(template) {
   border-color: #a3bffa;
 }
 
-.divide-indigo-400 > :not(:last-child) {
+.divide-indigo-400 > :not(template) ~ :not(template) {
   border-color: #7f9cf5;
 }
 
-.divide-indigo-500 > :not(:last-child) {
+.divide-indigo-500 > :not(template) ~ :not(template) {
   border-color: #667eea;
 }
 
-.divide-indigo-600 > :not(:last-child) {
+.divide-indigo-600 > :not(template) ~ :not(template) {
   border-color: #5a67d8;
 }
 
-.divide-indigo-700 > :not(:last-child) {
+.divide-indigo-700 > :not(template) ~ :not(template) {
   border-color: #4c51bf;
 }
 
-.divide-indigo-800 > :not(:last-child) {
+.divide-indigo-800 > :not(template) ~ :not(template) {
   border-color: #434190;
 }
 
-.divide-indigo-900 > :not(:last-child) {
+.divide-indigo-900 > :not(template) ~ :not(template) {
   border-color: #3c366b;
 }
 
-.divide-purple-100 > :not(:last-child) {
+.divide-purple-100 > :not(template) ~ :not(template) {
   border-color: #faf5ff;
 }
 
-.divide-purple-200 > :not(:last-child) {
+.divide-purple-200 > :not(template) ~ :not(template) {
   border-color: #e9d8fd;
 }
 
-.divide-purple-300 > :not(:last-child) {
+.divide-purple-300 > :not(template) ~ :not(template) {
   border-color: #d6bcfa;
 }
 
-.divide-purple-400 > :not(:last-child) {
+.divide-purple-400 > :not(template) ~ :not(template) {
   border-color: #b794f4;
 }
 
-.divide-purple-500 > :not(:last-child) {
+.divide-purple-500 > :not(template) ~ :not(template) {
   border-color: #9f7aea;
 }
 
-.divide-purple-600 > :not(:last-child) {
+.divide-purple-600 > :not(template) ~ :not(template) {
   border-color: #805ad5;
 }
 
-.divide-purple-700 > :not(:last-child) {
+.divide-purple-700 > :not(template) ~ :not(template) {
   border-color: #6b46c1;
 }
 
-.divide-purple-800 > :not(:last-child) {
+.divide-purple-800 > :not(template) ~ :not(template) {
   border-color: #553c9a;
 }
 
-.divide-purple-900 > :not(:last-child) {
+.divide-purple-900 > :not(template) ~ :not(template) {
   border-color: #44337a;
 }
 
-.divide-pink-100 > :not(:last-child) {
+.divide-pink-100 > :not(template) ~ :not(template) {
   border-color: #fff5f7;
 }
 
-.divide-pink-200 > :not(:last-child) {
+.divide-pink-200 > :not(template) ~ :not(template) {
   border-color: #fed7e2;
 }
 
-.divide-pink-300 > :not(:last-child) {
+.divide-pink-300 > :not(template) ~ :not(template) {
   border-color: #fbb6ce;
 }
 
-.divide-pink-400 > :not(:last-child) {
+.divide-pink-400 > :not(template) ~ :not(template) {
   border-color: #f687b3;
 }
 
-.divide-pink-500 > :not(:last-child) {
+.divide-pink-500 > :not(template) ~ :not(template) {
   border-color: #ed64a6;
 }
 
-.divide-pink-600 > :not(:last-child) {
+.divide-pink-600 > :not(template) ~ :not(template) {
   border-color: #d53f8c;
 }
 
-.divide-pink-700 > :not(:last-child) {
+.divide-pink-700 > :not(template) ~ :not(template) {
   border-color: #b83280;
 }
 
-.divide-pink-800 > :not(:last-child) {
+.divide-pink-800 > :not(template) ~ :not(template) {
   border-color: #97266d;
 }
 
-.divide-pink-900 > :not(:last-child) {
+.divide-pink-900 > :not(template) ~ :not(template) {
   border-color: #702459;
 }
 

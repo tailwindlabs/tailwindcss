@@ -4,8 +4,12 @@ export default function() {
   return function({ addUtilities, e, theme, variants }) {
     const generators = [
       (size, modifier) => ({
-        [`.${e(`space-y-${modifier}`)} > :not(:last-child)`]: { 'margin-bottom': `${size}` },
-        [`.${e(`space-x-${modifier}`)} > :not(:last-child)`]: { 'margin-right': `${size}` },
+        [`.${e(`space-y-${modifier}`)} > :not(template) ~ :not(template)`]: {
+          'margin-top': `${size}`,
+        },
+        [`.${e(`space-x-${modifier}`)} > :not(template) ~ :not(template)`]: {
+          'margin-left': `${size}`,
+        },
       }),
     ]
 

@@ -40,20 +40,48 @@ test('generating divide color utilities', () => {
   expect(utilities).toEqual([
     [
       {
-        '.divide-purple > * + *': { 'border-color': 'purple' },
-        '.divide-white-25 > * + *': { 'border-color': 'rgba(255,255,255,.25)' },
-        '.divide-white-50 > * + *': { 'border-color': 'rgba(255,255,255,.5)' },
-        '.divide-white-75 > * + *': { 'border-color': 'rgba(255,255,255,.75)' },
-        '.divide-white > * + *': { 'border-color': '#fff' },
-        '.divide-red-1 > * + *': { 'border-color': 'rgb(33,0,0)' },
-        '.divide-red-2 > * + *': { 'border-color': 'rgb(67,0,0)' },
-        '.divide-red-3 > * + *': { 'border-color': 'rgb(100,0,0)' },
-        '.divide-green-1 > * + *': { 'border-color': 'rgb(0,33,0)' },
-        '.divide-green-2 > * + *': { 'border-color': 'rgb(0,67,0)' },
-        '.divide-green-3 > * + *': { 'border-color': 'rgb(0,100,0)' },
-        '.divide-blue-1 > * + *': { 'border-color': 'rgb(0,0,33)' },
-        '.divide-blue-2 > * + *': { 'border-color': 'rgb(0,0,67)' },
-        '.divide-blue-3 > * + *': { 'border-color': 'rgb(0,0,100)' },
+        '.divide-purple > :not(template) ~ :not(template)': {
+          'border-color': 'purple',
+        },
+        '.divide-white-25 > :not(template) ~ :not(template)': {
+          'border-color': 'rgba(255,255,255,.25)',
+        },
+        '.divide-white-50 > :not(template) ~ :not(template)': {
+          'border-color': 'rgba(255,255,255,.5)',
+        },
+        '.divide-white-75 > :not(template) ~ :not(template)': {
+          'border-color': 'rgba(255,255,255,.75)',
+        },
+        '.divide-white > :not(template) ~ :not(template)': {
+          'border-color': '#fff',
+        },
+        '.divide-red-1 > :not(template) ~ :not(template)': {
+          'border-color': 'rgb(33,0,0)',
+        },
+        '.divide-red-2 > :not(template) ~ :not(template)': {
+          'border-color': 'rgb(67,0,0)',
+        },
+        '.divide-red-3 > :not(template) ~ :not(template)': {
+          'border-color': 'rgb(100,0,0)',
+        },
+        '.divide-green-1 > :not(template) ~ :not(template)': {
+          'border-color': 'rgb(0,33,0)',
+        },
+        '.divide-green-2 > :not(template) ~ :not(template)': {
+          'border-color': 'rgb(0,67,0)',
+        },
+        '.divide-green-3 > :not(template) ~ :not(template)': {
+          'border-color': 'rgb(0,100,0)',
+        },
+        '.divide-blue-1 > :not(template) ~ :not(template)': {
+          'border-color': 'rgb(0,0,33)',
+        },
+        '.divide-blue-2 > :not(template) ~ :not(template)': {
+          'border-color': 'rgb(0,0,67)',
+        },
+        '.divide-blue-3 > :not(template) ~ :not(template)': {
+          'border-color': 'rgb(0,0,100)',
+        },
       },
       ['responsive'],
     ],
