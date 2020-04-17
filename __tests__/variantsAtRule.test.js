@@ -264,6 +264,51 @@ test('group-hover variants respect any configured prefix', () => {
   })
 })
 
+test('it can generate group-focus variants', () => {
+  const input = `
+    @variants group-focus {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .group:focus .group-focus\\:banana { color: yellow; }
+    .group:focus .group-focus\\:chocolate { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('group-focus variants respect any configured prefix', () => {
+  const input = `
+    @variants group-focus {
+      .tw-banana { color: yellow; }
+      .tw-chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .tw-banana { color: yellow; }
+    .tw-chocolate { color: brown; }
+    .tw-group:focus .group-focus\\:tw-banana { color: yellow; }
+    .tw-group:focus .group-focus\\:tw-chocolate { color: brown; }
+  `
+
+  return run(input, {
+    ...config,
+    prefix: 'tw-',
+  }).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate hover, active and focus variants', () => {
   const input = `
     @variants group-hover, hover, focus, active {

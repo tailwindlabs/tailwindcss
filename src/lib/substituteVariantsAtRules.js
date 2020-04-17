@@ -36,6 +36,19 @@ const defaultVariantGenerators = config => ({
       }).processSync(selector)
     })
   }),
+  'group-focus': generateVariantFunction(({ modifySelectors, separator }) => {
+    return modifySelectors(({ selector }) => {
+      return selectorParser(selectors => {
+        selectors.walkClasses(sel => {
+          sel.value = `group-focus${separator}${sel.value}`
+          sel.parent.insertBefore(
+            sel,
+            selectorParser().astSync(prefixSelector(config.prefix, '.group:focus '))
+          )
+        })
+      }).processSync(selector)
+    })
+  }),
   hover: generatePseudoClassVariant('hover'),
   'focus-within': generatePseudoClassVariant('focus-within'),
   focus: generatePseudoClassVariant('focus'),
