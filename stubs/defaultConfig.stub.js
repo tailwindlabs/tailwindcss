@@ -376,7 +376,10 @@ module.exports = {
     },
     padding: theme => theme('spacing'),
     placeholderColor: theme => theme('colors'),
-    space: theme => theme('spacing'),
+    space: (theme, { negative }) => ({
+      ...theme('spacing'),
+      ...negative(theme('spacing')),
+    }),
     stroke: {
       current: 'currentColor',
     },

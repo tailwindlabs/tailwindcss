@@ -1,15 +1,16 @@
 import _ from 'lodash'
+import prefixNegativeModifiers from '../util/prefixNegativeModifiers'
 
 export default function() {
   return function({ addUtilities, e, theme, variants }) {
     const generators = [
       (size, modifier) => ({
-        [`.${e(`space-y-${modifier}`)} > :not(template) ~ :not(template)`]: {
+        [`.${e(prefixNegativeModifiers('space-y', modifier))} > :not(template) ~ :not(template)`]: {
           '--space-y-reverse': '0',
           'margin-top': `calc(${size} * calc(1 - var(--space-y-reverse)))`,
           'margin-bottom': `calc(${size} * var(--space-y-reverse))`,
         },
-        [`.${e(`space-x-${modifier}`)} > :not(template) ~ :not(template)`]: {
+        [`.${e(prefixNegativeModifiers('space-x', modifier))} > :not(template) ~ :not(template)`]: {
           '--space-x-reverse': '0',
           'margin-right': `calc(${size} * var(--space-y-reverse))`,
           'margin-left': `calc(${size} * calc(1 - var(--space-y-reverse)))`,
