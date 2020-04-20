@@ -8,7 +8,6 @@ test('generating space utilities', () => {
         '1': '1px',
         '2': '2px',
         '4': '4px',
-        '8': '8px',
       },
     },
     variants: {
@@ -21,14 +20,42 @@ test('generating space utilities', () => {
   expect(utilities).toEqual([
     [
       {
-        '.space-y-1 > :not(template) ~ :not(template)': { 'margin-top': '1px' },
-        '.space-x-1 > :not(template) ~ :not(template)': { 'margin-left': '1px' },
-        '.space-y-2 > :not(template) ~ :not(template)': { 'margin-top': '2px' },
-        '.space-x-2 > :not(template) ~ :not(template)': { 'margin-left': '2px' },
-        '.space-y-4 > :not(template) ~ :not(template)': { 'margin-top': '4px' },
-        '.space-x-4 > :not(template) ~ :not(template)': { 'margin-left': '4px' },
-        '.space-y-8 > :not(template) ~ :not(template)': { 'margin-top': '8px' },
-        '.space-x-8 > :not(template) ~ :not(template)': { 'margin-left': '8px' },
+        '.space-y-1 > :not(template) ~ :not(template)': {
+          '--space-y-reverse': '0',
+          'margin-top': 'calc(1px * calc(1 - var(--space-y-reverse)))',
+          'margin-bottom': 'calc(1px * var(--space-y-reverse))',
+        },
+        '.space-x-1 > :not(template) ~ :not(template)': {
+          '--space-x-reverse': '0',
+          'margin-right': 'calc(1px * var(--space-y-reverse))',
+          'margin-left': 'calc(1px * calc(1 - var(--space-y-reverse)))',
+        },
+        '.space-y-2 > :not(template) ~ :not(template)': {
+          '--space-y-reverse': '0',
+          'margin-top': 'calc(2px * calc(1 - var(--space-y-reverse)))',
+          'margin-bottom': 'calc(2px * var(--space-y-reverse))',
+        },
+        '.space-x-2 > :not(template) ~ :not(template)': {
+          '--space-x-reverse': '0',
+          'margin-right': 'calc(2px * var(--space-y-reverse))',
+          'margin-left': 'calc(2px * calc(1 - var(--space-y-reverse)))',
+        },
+        '.space-y-4 > :not(template) ~ :not(template)': {
+          '--space-y-reverse': '0',
+          'margin-top': 'calc(4px * calc(1 - var(--space-y-reverse)))',
+          'margin-bottom': 'calc(4px * var(--space-y-reverse))',
+        },
+        '.space-x-4 > :not(template) ~ :not(template)': {
+          '--space-x-reverse': '0',
+          'margin-right': 'calc(4px * var(--space-y-reverse))',
+          'margin-left': 'calc(4px * calc(1 - var(--space-y-reverse)))',
+        },
+        '.space-y-reverse > :not(template) ~ :not(template)': {
+          '--space-y-reverse': '1',
+        },
+        '.space-x-reverse > :not(template) ~ :not(template)': {
+          '--space-x-reverse': '1',
+        },
       },
       ['responsive'],
     ],
