@@ -844,62 +844,62 @@ video {
 
 .divide-y-0 > :not(template) ~ :not(template) {
   --divide-y-reverse: 0 !important;
-  border-top: calc(0 * calc(1 - var(--divide-y-reverse))) !important;
-  border-bottom: calc(0 * var(--divide-y-reverse)) !important;
+  border-top-width: calc(0 * calc(1 - var(--divide-y-reverse))) !important;
+  border-bottom-width: calc(0 * var(--divide-y-reverse)) !important;
 }
 
 .divide-x-0 > :not(template) ~ :not(template) {
   --divide-x-reverse: 0 !important;
-  border-right: calc(0 * var(--divide-y-reverse)) !important;
-  border-left: calc(0 * calc(1 - var(--divide-y-reverse))) !important;
+  border-right-width: calc(0 * var(--divide-y-reverse)) !important;
+  border-left-width: calc(0 * calc(1 - var(--divide-y-reverse))) !important;
 }
 
 .divide-y-2 > :not(template) ~ :not(template) {
   --divide-y-reverse: 0 !important;
-  border-top: calc(2px * calc(1 - var(--divide-y-reverse))) !important;
-  border-bottom: calc(2px * var(--divide-y-reverse)) !important;
+  border-top-width: calc(2px * calc(1 - var(--divide-y-reverse))) !important;
+  border-bottom-width: calc(2px * var(--divide-y-reverse)) !important;
 }
 
 .divide-x-2 > :not(template) ~ :not(template) {
   --divide-x-reverse: 0 !important;
-  border-right: calc(2px * var(--divide-y-reverse)) !important;
-  border-left: calc(2px * calc(1 - var(--divide-y-reverse))) !important;
+  border-right-width: calc(2px * var(--divide-y-reverse)) !important;
+  border-left-width: calc(2px * calc(1 - var(--divide-y-reverse))) !important;
 }
 
 .divide-y-4 > :not(template) ~ :not(template) {
   --divide-y-reverse: 0 !important;
-  border-top: calc(4px * calc(1 - var(--divide-y-reverse))) !important;
-  border-bottom: calc(4px * var(--divide-y-reverse)) !important;
+  border-top-width: calc(4px * calc(1 - var(--divide-y-reverse))) !important;
+  border-bottom-width: calc(4px * var(--divide-y-reverse)) !important;
 }
 
 .divide-x-4 > :not(template) ~ :not(template) {
   --divide-x-reverse: 0 !important;
-  border-right: calc(4px * var(--divide-y-reverse)) !important;
-  border-left: calc(4px * calc(1 - var(--divide-y-reverse))) !important;
+  border-right-width: calc(4px * var(--divide-y-reverse)) !important;
+  border-left-width: calc(4px * calc(1 - var(--divide-y-reverse))) !important;
 }
 
 .divide-y-8 > :not(template) ~ :not(template) {
   --divide-y-reverse: 0 !important;
-  border-top: calc(8px * calc(1 - var(--divide-y-reverse))) !important;
-  border-bottom: calc(8px * var(--divide-y-reverse)) !important;
+  border-top-width: calc(8px * calc(1 - var(--divide-y-reverse))) !important;
+  border-bottom-width: calc(8px * var(--divide-y-reverse)) !important;
 }
 
 .divide-x-8 > :not(template) ~ :not(template) {
   --divide-x-reverse: 0 !important;
-  border-right: calc(8px * var(--divide-y-reverse)) !important;
-  border-left: calc(8px * calc(1 - var(--divide-y-reverse))) !important;
+  border-right-width: calc(8px * var(--divide-y-reverse)) !important;
+  border-left-width: calc(8px * calc(1 - var(--divide-y-reverse))) !important;
 }
 
 .divide-y > :not(template) ~ :not(template) {
   --divide-y-reverse: 0 !important;
-  border-top: calc(1px * calc(1 - var(--divide-y-reverse))) !important;
-  border-bottom: calc(1px * var(--divide-y-reverse)) !important;
+  border-top-width: calc(1px * calc(1 - var(--divide-y-reverse))) !important;
+  border-bottom-width: calc(1px * var(--divide-y-reverse)) !important;
 }
 
 .divide-x > :not(template) ~ :not(template) {
   --divide-x-reverse: 0 !important;
-  border-right: calc(1px * var(--divide-y-reverse)) !important;
-  border-left: calc(1px * calc(1 - var(--divide-y-reverse))) !important;
+  border-right-width: calc(1px * var(--divide-y-reverse)) !important;
+  border-left-width: calc(1px * calc(1 - var(--divide-y-reverse))) !important;
 }
 
 .divide-y-reverse > :not(template) ~ :not(template) {
