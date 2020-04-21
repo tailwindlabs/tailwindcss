@@ -12,8 +12,8 @@ export default function() {
         },
         [`.${e(prefixNegativeModifiers('space-x', modifier))} > :not(template) ~ :not(template)`]: {
           '--space-x-reverse': '0',
-          'margin-right': `calc(${size} * var(--space-y-reverse))`,
-          'margin-left': `calc(${size} * calc(1 - var(--space-y-reverse)))`,
+          'margin-right': `calc(${size} * var(--space-x-reverse))`,
+          'margin-left': `calc(${size} * calc(1 - var(--space-x-reverse)))`,
         },
       }),
     ]
