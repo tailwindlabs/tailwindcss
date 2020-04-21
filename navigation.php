@@ -68,6 +68,7 @@ return [
         'Spacing' => [
             'Padding' => '/docs/padding',
             'Margin' => '/docs/margin',
+            'Space Between' => '/docs/space',
         ],
         'Sizing' => [
             'Width' => '/docs/width',
