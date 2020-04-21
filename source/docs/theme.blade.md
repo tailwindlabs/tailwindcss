@@ -40,7 +40,7 @@ module.exports = {
 }
 ```
 
-We provide a sensible [default theme](https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js#L5) with a very generous set of values to get you started, but don't be afraid to change it or extend; you're encouraged to customize it as much as you need to to fit the goals of your design.
+We provide a sensible [default theme](https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js#L5) with a very generous set of values to get you started, but don't be afraid to change it or extend; you're encouraged to customize it as much as you need to fit the goals of your design.
 
 ## Theme structure
 
