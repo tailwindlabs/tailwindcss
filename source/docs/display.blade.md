@@ -17,6 +17,11 @@ description: "Utilities for controlling the display box type of an element."
       "Set the box type of the element to <code>block</code>.",
     ],
     [
+      '.flow-root',
+      'display: flow-root;',
+      "Set the box type of the element to <code>flow-root</code>.",
+    ],
+    [
       '.inline-block',
       'display: inline-block;',
       "Set the box type of the element to <code>inline-block</code>.",
@@ -40,6 +45,11 @@ description: "Utilities for controlling the display box type of an element."
       '.grid',
       'display: grid;',
       "Set the box type of the element to <code>grid</code>.",
+    ],
+    [
+      '.inline-grid',
+      'display: inline-grid;',
+      "Set the box type of the element to <code>inline-grid</code>.",
     ],
     [
       '.table',
@@ -169,6 +179,29 @@ Use `.grid` to create a grid container.
 <div class="grid gap-4 grid-cols-3">
   <!-- ... -->
 </div>
+@endslot
+@endcomponent
+
+
+## Inline Grid
+
+Use `.inline-grid` to create an inline grid container.
+
+@component('_partials.code-sample', ['class' => 'bg-white p-8'])
+<div class="inline-grid grid-cols-3 col-gap-4 p-2 bg-gray-200">
+  <div class="px-4 py-2 text-center bg-gray-400">1</div>
+  <div class="px-4 py-2 text-center bg-gray-400">1</div>
+  <div class="px-4 py-2 text-center bg-gray-400">1</div>
+</div>
+<div class="inline-grid grid-cols-3 col-gap-4 p-2 bg-gray-200">
+  <div class="px-4 py-2 text-center bg-gray-400">2</div>
+  <div class="px-4 py-2 text-center bg-gray-400">2</div>
+  <div class="px-4 py-2 text-center bg-gray-400">2</div>
+</div>
+@slot('code')
+<span class="inline-grid grid-cols-3 col-gap-4">
+  <!-- ... -->
+</span>
 @endslot
 @endcomponent
 
