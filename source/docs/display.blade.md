@@ -111,6 +111,19 @@ Use `.block` to create a block-level element.
 </div>
 @endcomponent
 
+## Flow-Root
+
+Use `.flow-root` to create a block-level element with its own [block formatting context](https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Block_formatting_context).
+
+@component('_partials.code-sample')
+<div class="flow-root bg-gray-400">
+  <div class="my-4 block text-gray-700 text-center bg-gray-500 px-4 py-2">1</div>
+</div>
+<div class="flow-root bg-gray-200">
+  <div class="my-4 block text-gray-700 text-center bg-gray-400 px-4 py-2">2</div>
+</div>
+@endcomponent
+
 ## Inline Block
 
 Use `.inline-block` to create an inline block-level element.

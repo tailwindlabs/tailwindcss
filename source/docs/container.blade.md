@@ -101,7 +101,7 @@ module.exports = {
 }
 ```
 
-If you want different amounts of horizontal padding at each breakpoint, you can set the padding option to an object specifying a different amount for each breakpoint.
+If you want to specify a different padding amount for each breakpoint, use an object to provide a `default` value and any breakpoint-specific overrides:
 
 ```js
 // tailwind.config.js
