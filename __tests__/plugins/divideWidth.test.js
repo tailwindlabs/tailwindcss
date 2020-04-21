@@ -6,6 +6,7 @@ test('generating divide width utilities', () => {
     theme: {
       divideWidth: {
         default: '1px',
+        '0': '0',
         '2': '2px',
         '4': '4px',
       },
@@ -29,6 +30,16 @@ test('generating divide width utilities', () => {
           '--divide-x-reverse': '0',
           'border-right-width': 'calc(1px * var(--divide-x-reverse))',
           'border-left-width': 'calc(1px * calc(1 - var(--divide-x-reverse)))',
+        },
+        '.divide-y-0 > :not(template) ~ :not(template)': {
+          '--divide-y-reverse': '0',
+          'border-top-width': 'calc(0px * calc(1 - var(--divide-y-reverse)))',
+          'border-bottom-width': 'calc(0px * var(--divide-y-reverse))',
+        },
+        '.divide-x-0 > :not(template) ~ :not(template)': {
+          '--divide-x-reverse': '0',
+          'border-right-width': 'calc(0px * var(--divide-x-reverse))',
+          'border-left-width': 'calc(0px * calc(1 - var(--divide-x-reverse)))',
         },
         '.divide-y-2 > :not(template) ~ :not(template)': {
           '--divide-y-reverse': '0',

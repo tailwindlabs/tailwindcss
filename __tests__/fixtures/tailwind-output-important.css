@@ -1060,14 +1060,14 @@ video {
 
 .divide-y-0 > :not(template) ~ :not(template) {
   --divide-y-reverse: 0 !important;
-  border-top-width: calc(0 * calc(1 - var(--divide-y-reverse))) !important;
-  border-bottom-width: calc(0 * var(--divide-y-reverse)) !important;
+  border-top-width: calc(0px * calc(1 - var(--divide-y-reverse))) !important;
+  border-bottom-width: calc(0px * var(--divide-y-reverse)) !important;
 }
 
 .divide-x-0 > :not(template) ~ :not(template) {
   --divide-x-reverse: 0 !important;
-  border-right-width: calc(0 * var(--divide-x-reverse)) !important;
-  border-left-width: calc(0 * calc(1 - var(--divide-x-reverse))) !important;
+  border-right-width: calc(0px * var(--divide-x-reverse)) !important;
+  border-left-width: calc(0px * calc(1 - var(--divide-x-reverse))) !important;
 }
 
 .divide-y-2 > :not(template) ~ :not(template) {
@@ -12349,14 +12349,14 @@ video {
 
   .sm\:divide-y-0 > :not(template) ~ :not(template) {
     --divide-y-reverse: 0 !important;
-    border-top-width: calc(0 * calc(1 - var(--divide-y-reverse))) !important;
-    border-bottom-width: calc(0 * var(--divide-y-reverse)) !important;
+    border-top-width: calc(0px * calc(1 - var(--divide-y-reverse))) !important;
+    border-bottom-width: calc(0px * var(--divide-y-reverse)) !important;
   }
 
   .sm\:divide-x-0 > :not(template) ~ :not(template) {
     --divide-x-reverse: 0 !important;
-    border-right-width: calc(0 * var(--divide-x-reverse)) !important;
-    border-left-width: calc(0 * calc(1 - var(--divide-x-reverse))) !important;
+    border-right-width: calc(0px * var(--divide-x-reverse)) !important;
+    border-left-width: calc(0px * calc(1 - var(--divide-x-reverse))) !important;
   }
 
   .sm\:divide-y-2 > :not(template) ~ :not(template) {
@@ -23639,14 +23639,14 @@ video {
 
   .md\:divide-y-0 > :not(template) ~ :not(template) {
     --divide-y-reverse: 0 !important;
-    border-top-width: calc(0 * calc(1 - var(--divide-y-reverse))) !important;
-    border-bottom-width: calc(0 * var(--divide-y-reverse)) !important;
+    border-top-width: calc(0px * calc(1 - var(--divide-y-reverse))) !important;
+    border-bottom-width: calc(0px * var(--divide-y-reverse)) !important;
   }
 
   .md\:divide-x-0 > :not(template) ~ :not(template) {
     --divide-x-reverse: 0 !important;
-    border-right-width: calc(0 * var(--divide-x-reverse)) !important;
-    border-left-width: calc(0 * calc(1 - var(--divide-x-reverse))) !important;
+    border-right-width: calc(0px * var(--divide-x-reverse)) !important;
+    border-left-width: calc(0px * calc(1 - var(--divide-x-reverse))) !important;
   }
 
   .md\:divide-y-2 > :not(template) ~ :not(template) {
@@ -34929,14 +34929,14 @@ video {
 
   .lg\:divide-y-0 > :not(template) ~ :not(template) {
     --divide-y-reverse: 0 !important;
-    border-top-width: calc(0 * calc(1 - var(--divide-y-reverse))) !important;
-    border-bottom-width: calc(0 * var(--divide-y-reverse)) !important;
+    border-top-width: calc(0px * calc(1 - var(--divide-y-reverse))) !important;
+    border-bottom-width: calc(0px * var(--divide-y-reverse)) !important;
   }
 
   .lg\:divide-x-0 > :not(template) ~ :not(template) {
     --divide-x-reverse: 0 !important;
-    border-right-width: calc(0 * var(--divide-x-reverse)) !important;
-    border-left-width: calc(0 * calc(1 - var(--divide-x-reverse))) !important;
+    border-right-width: calc(0px * var(--divide-x-reverse)) !important;
+    border-left-width: calc(0px * calc(1 - var(--divide-x-reverse))) !important;
   }
 
   .lg\:divide-y-2 > :not(template) ~ :not(template) {
@@ -46219,14 +46219,14 @@ video {
 
   .xl\:divide-y-0 > :not(template) ~ :not(template) {
     --divide-y-reverse: 0 !important;
-    border-top-width: calc(0 * calc(1 - var(--divide-y-reverse))) !important;
-    border-bottom-width: calc(0 * var(--divide-y-reverse)) !important;
+    border-top-width: calc(0px * calc(1 - var(--divide-y-reverse))) !important;
+    border-bottom-width: calc(0px * var(--divide-y-reverse)) !important;
   }
 
   .xl\:divide-x-0 > :not(template) ~ :not(template) {
     --divide-x-reverse: 0 !important;
-    border-right-width: calc(0 * var(--divide-x-reverse)) !important;
-    border-left-width: calc(0 * calc(1 - var(--divide-x-reverse))) !important;
+    border-right-width: calc(0px * var(--divide-x-reverse)) !important;
+    border-left-width: calc(0px * calc(1 - var(--divide-x-reverse))) !important;
   }
 
   .xl\:divide-y-2 > :not(template) ~ :not(template) {
