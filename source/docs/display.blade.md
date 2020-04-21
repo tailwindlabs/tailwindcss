@@ -42,6 +42,11 @@ description: "Utilities for controlling the display box type of an element."
       "Set the box type of the element to <code>grid</code>.",
     ],
     [
+      '.inline-grid',
+      'display: inline-grid;',
+      "Set the box type of the element to <code>inline-grid</code>.",
+    ],
+    [
       '.table',
       'display: table;',
       "Set the box type of the element to <code>table</code>.",
