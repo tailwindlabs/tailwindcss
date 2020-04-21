@@ -101,6 +101,24 @@ module.exports = {
 }
 ```
 
+If you want different amounts of horizontal padding at each breakpoint, you can set the padding option to an object specifying a different amount for each breakpoint.
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    container: {
+      padding: {
+        default: '1rem',
+        sm: '2rem',
+        lg: '4rem',
+        xl: '5rem',
+      },
+    },
+  },
+};
+```
+
 ### Disabling
 
 If you don't plan to use the `.container` class in your project, you can disable it entirely by setting the `container` property to `false` in the `corePlugins` section of your config file:
