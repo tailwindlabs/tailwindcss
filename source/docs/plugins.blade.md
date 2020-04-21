@@ -119,7 +119,7 @@ module.exports = {
 
 ### Responsive and pseudo-class variants
 
-To generate responsive, hover, focus, active, or group-hover variants of your styles, specify the variants you'd like to generate using the `variants` option:
+To generate responsive, hover, focus, active, or other variants of your styles, specify the variants you'd like to generate using the `variants` option:
 
 ```js
 // tailwind.config.js

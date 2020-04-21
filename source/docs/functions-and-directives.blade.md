@@ -168,7 +168,7 @@ If you've [configured a prefix](/docs/configuration#prefix) for your utilities, 
 
 ## @@variants
 
-You can generate `responsive`, `hover`, `focus`, `active`, and `group-hover` versions of your own utilities by wrapping their definitions in the `@variants` directive
+You can generate `responsive`, `hover`, `focus`, `active`, and other [variants](/docs/pseudo-class-variants) of your own utilities by wrapping their definitions in the `@variants` directive
 
 ```css
 @@variants focus, hover {
@@ -230,16 +230,7 @@ So if you want focus utilities to take priority over hover utilities for example
 }
 ```
 
-The `@variants` at-rule supports all of the values that are supported in the `variants` section of your config file:
-
-- `responsive`
-- `hover`
-- `focus`
-- `active`
-- `group-hover`
-- `focus-within`
-
-...as well as any [custom variants](/docs/plugins#adding-variants) added through plugins.
+The `@variants` at-rule supports all of the values that are supported in the `variants` section of your config file, as well as any [custom variants](/docs/plugins#adding-variants) added through plugins.
 
 ---
 

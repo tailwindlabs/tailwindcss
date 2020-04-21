@@ -123,7 +123,7 @@ This means that given the following HTML:
 Generally, we recommend the following order for the built-in variants, although you are free to use whatever order makes the most sense for your own project:
 
 ```js
-['responsive', 'group-hover', 'focus-within', 'first', 'last', 'odd', 'even', 'hover', 'focus', 'active', 'visited', 'disabled']
+['responsive', 'group-hover', 'group-focus', 'focus-within', 'first', 'last', 'odd', 'even', 'hover', 'focus', 'active', 'visited', 'disabled']
 ```
 
 ### The responsive variant

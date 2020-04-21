@@ -16,7 +16,7 @@
         ])->diff($variants)
         ->take(2);
     } else {
-        $whichVariants = 'no responsive, hover, focus, active, or group-hover';
+        $whichVariants = 'no';
 
         $currentVariants = collect([]);
 

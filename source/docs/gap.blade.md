@@ -210,5 +210,5 @@ Learn more about customizing the default theme in the [theme customization docum
         'name' => 'gap',
         'property' => 'gap',
     ],
-    'variants' => $page->config['variants']['gap'],
+    'variants' => $page->config['variants']['gap']->all(),
 ])

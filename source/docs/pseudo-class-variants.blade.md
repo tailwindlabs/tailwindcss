@@ -30,7 +30,7 @@ Similar to how Tailwind handles [responsive design](/docs/responsive-design), st
 
 For a complete list of which variants are enabled by default, see the [reference table](#default-variants-reference) at the end of this page.
 
-Tailwind includes first-class support for styling elements on [hover](#hover), [focus](#focus), [active](#active), [disabled](#disabled), [visited](#visited), [first-child](#first-child), [last-child](#last-child), [odd-child](#odd-child), [even-child](#even-child), [group-hover](#group-hover), and [focus-within](#focus-within).
+Tailwind includes first-class support for styling elements on [hover](#hover), [focus](#focus), [active](#active), [disabled](#disabled), [visited](#visited), [first-child](#first-child), [last-child](#last-child), [odd-child](#odd-child), [even-child](#even-child), [group-hover](#group-hover), [group-focus](#group-focus), and [focus-within](#focus-within).
 
 If you need to target a pseudo-class that Tailwind doesn't support, you can extend the supported variants by [writing a variant plugin](#creating-custom-variants).
 
@@ -346,6 +346,40 @@ module.exports = {
 }
 ```
 
+## Group-focus
+
+The `group-focus` variant works just like [`group-hover`](#group-hover) except for focus:
+
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center bg-white p-8'])
+<span class="inline-flex rounded-md shadow-sm">
+  <button type="button" class="group inline-flex items-center px-4 py-2 border border-gray-400 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-900 focus:outline-none focus:text-gray-900 focus:border-gray-500 hover:border-gray-500">
+  <svg fill="currentColor" viewBox="0 0 20 20" class="-ml-1 mr-3 w-5 h-5 text-gray-400 group-focus:text-gray-500"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
+    Bookmark
+  </button>
+</span>
+
+@slot('code')
+<button class="group text-gray-700 focus:text-gray-900 ...">
+  <svg class="h-6 w-6 text-gray-400 group-focus:text-gray-500"><!-- ... --></svg>
+  Submit
+</button>
+@endslot
+@endcomponent
+
+You can control whether `group-focus` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    textColor: ['responsive', 'hover', 'focus', 'group-focus'],
+  },
+}
+```
+
+
+
 ## Focus-within
 
 <div class="text-sm bg-blue-100 text-blue-700 font-semi-bold px-4 py-2 mb-4 rounded">
@@ -493,7 +527,7 @@ Learn more about writing variant plugins in the [variant plugin documentation](/
 
 ## Default variants reference
 
-Due to file-size considerations, Tailwind does not generate `active`, `group-hover`, or `focus-within` variants for any utilities by default.
+Due to file-size considerations, Tailwind does not generate `active`, `group-hover`, `group-focus`, or `focus-within` variants for any utilities by default.
 
 To configure which variants are enabled for your project, see the [configuring variants documentation](/docs/configuring-variants).
 
