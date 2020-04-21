@@ -27,8 +27,8 @@ test('generating divide width utilities', () => {
         },
         '.divide-x > :not(template) ~ :not(template)': {
           '--divide-x-reverse': '0',
-          'border-right-width': 'calc(1px * var(--divide-y-reverse))',
-          'border-left-width': 'calc(1px * calc(1 - var(--divide-y-reverse)))',
+          'border-right-width': 'calc(1px * var(--divide-x-reverse))',
+          'border-left-width': 'calc(1px * calc(1 - var(--divide-x-reverse)))',
         },
         '.divide-y-2 > :not(template) ~ :not(template)': {
           '--divide-y-reverse': '0',
@@ -37,8 +37,8 @@ test('generating divide width utilities', () => {
         },
         '.divide-x-2 > :not(template) ~ :not(template)': {
           '--divide-x-reverse': '0',
-          'border-right-width': 'calc(2px * var(--divide-y-reverse))',
-          'border-left-width': 'calc(2px * calc(1 - var(--divide-y-reverse)))',
+          'border-right-width': 'calc(2px * var(--divide-x-reverse))',
+          'border-left-width': 'calc(2px * calc(1 - var(--divide-x-reverse)))',
         },
         '.divide-y-4 > :not(template) ~ :not(template)': {
           '--divide-y-reverse': '0',
@@ -47,8 +47,8 @@ test('generating divide width utilities', () => {
         },
         '.divide-x-4 > :not(template) ~ :not(template)': {
           '--divide-x-reverse': '0',
-          'border-right-width': 'calc(4px * var(--divide-y-reverse))',
-          'border-left-width': 'calc(4px * calc(1 - var(--divide-y-reverse)))',
+          'border-right-width': 'calc(4px * var(--divide-x-reverse))',
+          'border-left-width': 'calc(4px * calc(1 - var(--divide-x-reverse)))',
         },
         '.divide-y-reverse > :not(template) ~ :not(template)': {
           '--divide-y-reverse': '1',

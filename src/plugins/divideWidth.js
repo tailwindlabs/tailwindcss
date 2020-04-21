@@ -11,8 +11,8 @@ export default function() {
         },
         [`.${e(`divide-x${modifier}`)} > :not(template) ~ :not(template)`]: {
           '--divide-x-reverse': '0',
-          'border-right-width': `calc(${size} * var(--divide-y-reverse))`,
-          'border-left-width': `calc(${size} * calc(1 - var(--divide-y-reverse)))`,
+          'border-right-width': `calc(${size} * var(--divide-x-reverse))`,
+          'border-left-width': `calc(${size} * calc(1 - var(--divide-x-reverse)))`,
         },
       }),
     ]
