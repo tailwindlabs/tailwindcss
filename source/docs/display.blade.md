@@ -188,19 +188,26 @@ Use `.grid` to create a grid container.
 Use `.inline-grid` to create an inline grid container.
 
 @component('_partials.code-sample', ['class' => 'bg-white p-8'])
-<div class="inline-grid grid-cols-3 col-gap-4 p-2 bg-gray-200">
-  <div class="px-4 py-2 text-center bg-gray-400">1</div>
-  <div class="px-4 py-2 text-center bg-gray-400">1</div>
-  <div class="px-4 py-2 text-center bg-gray-400">1</div>
-</div>
-<div class="inline-grid grid-cols-3 col-gap-4 p-2 bg-gray-200">
-  <div class="px-4 py-2 text-center bg-gray-400">2</div>
-  <div class="px-4 py-2 text-center bg-gray-400">2</div>
-  <div class="px-4 py-2 text-center bg-gray-400">2</div>
-</div>
+<span class="inline-grid grid-cols-3 col-gap-4 p-2 bg-gray-200">
+  <span class="px-4 py-2 text-center bg-gray-400">1</span>
+  <span class="px-4 py-2 text-center bg-gray-400">1</span>
+  <span class="px-4 py-2 text-center bg-gray-400">1</span>
+</span>
+<span class="inline-grid grid-cols-3 col-gap-4 p-2 bg-gray-200">
+  <span class="px-4 py-2 text-center bg-gray-400">2</span>
+  <span class="px-4 py-2 text-center bg-gray-400">2</span>
+  <span class="px-4 py-2 text-center bg-gray-400">2</span>
+</span>
 @slot('code')
 <span class="inline-grid grid-cols-3 col-gap-4">
-  <!-- ... -->
+  <span>1</span>
+  <span>1</span>
+  <span>1</span>
+</span>
+<span class="inline-grid grid-cols-3 col-gap-4">
+  <span>2</span>
+  <span>2</span>
+  <span>2</span>
 </span>
 @endslot
 @endcomponent
