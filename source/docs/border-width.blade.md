@@ -181,6 +181,28 @@ Use the `.border-{side}`, `.border-{side}-0`, `.border-{side}-2`, `.border-{side
 @endslot
 @endcomponent
 
+## Between elements
+
+You can also add borders between child elements using the `divide-{x/y}-{width}` and `divide-{color}` utilities.
+
+Learn more in the [Divide Width](/docs/divide-width) and [Divide Color](/docs/divide-color) documentation.
+
+@component('_partials.code-sample')
+<div class="divide-y divide-gray-400">
+  <div class="text-center py-2">1</div>
+  <div class="text-center py-2">2</div>
+  <div class="text-center py-2">3</div>
+</div>
+
+@slot('code')
+<div class="divide-y divide-gray-400">
+  <div class="text-center py-2">1</div>
+  <div class="text-center py-2">2</div>
+  <div class="text-center py-2">3</div>
+</div>
+@endslot
+@endcomponent
+
 ## Responsive
 
 To control the border width of an element at a specific breakpoint, add a `{screen}:` prefix to any existing border width utility. For example, use `md:border-t-4` to apply the `border-t-4` utility at only medium screen sizes and above.

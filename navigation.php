@@ -105,10 +105,12 @@ return [
             'Background Size' => '/docs/background-size',
         ],
         'Borders' => [
+            'Border Radius' => '/docs/border-radius',
+            'Border Width' => '/docs/border-width',
             'Border Color' => '/docs/border-color',
             'Border Style' => '/docs/border-style',
-            'Border Width' => '/docs/border-width',
-            'Border Radius' => '/docs/border-radius',
+            'Divide Width' => '/docs/divide-width',
+            'Divide Color' => '/docs/divide-color',
         ],
         'Tables' => [
             'Border Collapse' => '/docs/border-collapse',
