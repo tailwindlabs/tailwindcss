@@ -36,6 +36,11 @@ features:
       'justify-content: space-around;',
       "Justify items by adding an equal amount of space around each one.",
     ],
+    [
+      '.justify-evenly',
+      'justify-content: space-evenly;',
+      "Justify items evenly in the container."
+    ]
   ]
 ])
 
@@ -89,10 +94,22 @@ Use `.justify-between` to justify items along the flex container's main axis suc
 
 ## Space around
 
-Use `.justify-around` to justify items along the flex container's main axis such that there is an equal amount of space around each item:
+Use `.justify-around` to justify items along the flex container's main axis such that there is an equal amount of space around each item, with half the space at the ends:
 
 @component('_partials.code-sample')
 <div class="flex justify-around bg-gray-200">
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+</div>
+@endcomponent
+
+## Space evenly
+
+Use `.justify-evenly` to justify items along the flex container's main axis such that there is an equal amount of space around each item:
+
+@component('_partials.code-sample')
+<div class="flex justify-evenly bg-gray-200">
   <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
   <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
   <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
@@ -136,6 +153,13 @@ For more information about Tailwind's responsive design features, check out the 
 @endslot
 @slot('xl')
 <div class="flex justify-around bg-gray-200">
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+  <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+</div>
+@endslot
+@slot('2xl')
+<div class="flex justify-evenly bg-gray-200">
   <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
   <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
   <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
