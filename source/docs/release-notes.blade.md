@@ -12,8 +12,8 @@ Tailwind CSS v1.3 is now available with a bunch of super useful new features, in
 
 - [New "space between" layout utilities](/docs/space)
 - [New "border between" utilities](/docs/divide-width)
-- [New transition-delay utilities](/docs/scale)
-- [New group-focus variant](/docs/scale)
+- [New transition-delay utilities](/docs/transition-delay)
+- [New group-focus variant](/docs/pseudo-class-variants/#group-focus)
 
 For the full list of changes, [check out the complete release notes on GitHub](https://github.com/tailwindcss/tailwindcss/releases/tag/v1.3.0).
 
