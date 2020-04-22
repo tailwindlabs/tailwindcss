@@ -124,6 +124,7 @@ return [
             'Transition Property' => '/docs/transition-property',
             'Transition Duration' => '/docs/transition-duration',
             'Transition Timing Function' => '/docs/transition-timing-function',
+            'Transition Delay' => '/docs/transition-delay',
         ],
         'Transforms' => [
             'Scale' => '/docs/scale',
