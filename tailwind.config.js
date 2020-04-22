@@ -1,4 +1,5 @@
 const defaultConfig = require('tailwindcss/defaultConfig')
+const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
   important: true,
@@ -10,6 +11,10 @@ module.exports = {
       xl: '1280px',
     },
     extend: {
+      fontFamily: {
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        system: defaultTheme.fontFamily.sans,
+      },
       colors: {
         code: {
           green: 'var(--color-code-green)',

@@ -5,6 +5,20 @@ description: "What's new in the latest version of Tailwind CSS."
 titleBorder: true
 ---
 
+<h2 class="mb-0">Tailwind CSS v1.3</h2>
+<div class="mt-0 text-gray-600">Apr 21, 2020</div>
+
+Tailwind CSS v1.3 is now available with a bunch of super useful new features, including:
+
+- [New "space between" layout utilities](/docs/space)
+- [New "border between" utilities](/docs/divide-width)
+- [New transition-delay utilities](/docs/scale)
+- [New group-focus variant](/docs/scale)
+
+For the full list of changes, [check out the complete release notes on GitHub](https://github.com/tailwindcss/tailwindcss/releases/tag/v1.3.0).
+
+---
+
 <h2 class="mb-0">Tailwind CSS v1.2</h2>
 <div class="mt-0 text-gray-600">Feb 5, 2020</div>
 

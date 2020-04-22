@@ -27,9 +27,14 @@ features:
 Use `.font-sans` to apply a web safe sans-serif font family:
 
 @component('_partials.code-sample')
+<p class="font-system text-lg text-gray-800 text-center">
+  I'm a sans-serif paragraph.
+</p>
+@slot('code')
 <p class="font-sans text-lg text-gray-800 text-center">
   I'm a sans-serif paragraph.
 </p>
+@endslot
 @endcomponent
 
 ### Serif

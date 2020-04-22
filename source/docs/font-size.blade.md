@@ -161,6 +161,26 @@ By default Tailwind provides 10 `font-size` utilities. You change, add, or remov
 + '7xl': '5rem',
 @endcomponent
 
+### Providing a default line-height
+
+You can provide a default line-height for each of your font-sizes using a tuple of the form `[fontSize, lineHeight]` in your `tailwind.config.js` file.
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    fontSize: {
+      sm: ['14px', '20px'],
+      base: ['16px', '24px'],
+      lg: ['20px', '28px'],
+      xl: ['24px', '32px'],
+    }
+  }
+}
+```
+
+We don't do this out-of-the-box for backwards compatibility reasons, but it can be a very convenient customization to make in your own projects
+
 @include('_partials.variants-and-disabling', [
     'utility' => [
         'name' => 'text sizing',
