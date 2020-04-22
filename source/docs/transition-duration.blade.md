@@ -2,11 +2,7 @@
 extends: _layouts.documentation
 title: "Transition Duration"
 description: "Utilities for controlling the duration of CSS transitions."
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: false
+featureVersion: "v1.2.0+"
 ---
 
 @include('_partials.class-table', [

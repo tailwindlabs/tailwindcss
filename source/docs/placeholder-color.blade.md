@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Placeholder Color"
 description: "Utilities for controlling the color of placeholder text."
+featureVersion: "v1.1.0+"
 ---
 
 @include('_partials.placeholder-color-class-table', [

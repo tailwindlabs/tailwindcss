@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Grid Row Start / End"
 description: "Utilities for controlling how elements are sized and placed across grid rows."
+featureVersion: "v1.2.0+"
 ---
 
 

@@ -38,7 +38,12 @@ Use the `leading-none`, `leading-tight`, `leading-snug`, `leading-normal`, `lead
 @endslot
 @endcomponent
 
-## Fixed line-heights
+<h2 class="flex items-center">
+  Fixed line-heights
+  <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
+    v1.2.0+
+  </span>
+</h2>
 
 Use the `leading-{size}` utilities to give an element a fixed line-height, irrespective of the current font-size. These are useful when you need very precise control over an element's final size.
 

@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Divide Width"
 description: "Utilities for controlling the border width between elements."
+featureVersion: "v1.3.0+"
 ---
 
 @php

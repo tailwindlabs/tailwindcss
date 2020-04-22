@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Box Sizing"
 description: "Utilities for controlling how the browser should calculate an element's total size."
+featureVersion: "v1.2.0+"
 ---
 
 @include('_partials.class-table', [

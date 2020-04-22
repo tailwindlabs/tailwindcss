@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Divide Color"
 description: "Utilities for controlling the border color between elements."
+featureVersion: "v1.3.0+"
 ---
 
 @php

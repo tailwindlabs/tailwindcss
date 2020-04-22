@@ -213,7 +213,15 @@
           <div class="pt-24 pb-16 lg:pt-28 w-full">
             <div class="markdown mb-6 px-6 max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:px-12 xl:w-3/4">
               @if ($page->title)
-                <h1>{{ $page->title }}</h1>
+                <h1 class="flex items-center">
+                  {{ $page->title }}
+                  <!-- <span class="ml-4 text-teal-600 font-semibold text-base">v1.3.0+</span> -->
+                  @if ($page->featureVersion)
+                  <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
+                    {{ $page->featureVersion }}
+                  </span>
+                  @endif
+                </h1>
               @endif
 
               @if ($page->description)

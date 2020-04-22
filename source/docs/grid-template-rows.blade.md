@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Grid Template Rows"
 description: "Utilities for specifying the rows in a grid layout."
+featureVersion: "v1.2.0+"
 ---
 
 @include('_partials.class-table', [

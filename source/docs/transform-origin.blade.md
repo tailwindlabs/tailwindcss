@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Transform Origin"
 description: "Utilities for specifying the origin for an element's transformations."
+featureVersion: "v1.2.0+"
 ---
 
 @include('_partials.class-table', [

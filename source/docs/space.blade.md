@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Space Between"
 description: "Utilities for controlling the space between child elements."
+featureVersion: "v1.3.0+"
 ---
 
 @php

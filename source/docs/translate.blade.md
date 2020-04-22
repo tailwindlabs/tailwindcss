@@ -2,11 +2,7 @@
 extends: _layouts.documentation
 title: "Translate"
 description: "Utilities for translating elements with transform."
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: false
+featureVersion: "v1.2.0+"
 ---
 
 @include('_partials.class-table', [

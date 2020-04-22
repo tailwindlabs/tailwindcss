@@ -24,6 +24,7 @@ module.exports = {
           blue: 'var(--color-code-blue)',
           white: 'var(--color-code-white)',
         },
+        'green-150': '#e6ffee',
       },
       spacing: {
         '2px': '2px',

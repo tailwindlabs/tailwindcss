@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Transition Property"
 description: "Utilities for controlling which CSS properties transition."
+featureVersion: "v1.2.0+"
 ---
 
 @include('_partials.class-table', [

@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Gap"
 description: "Utilities for controlling gutters between grid rows and columns."
+featureVersion: "v1.2.0+"
 ---
 
 @include('_partials.class-table', [

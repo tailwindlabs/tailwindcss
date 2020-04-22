@@ -2,11 +2,7 @@
 extends: _layouts.documentation
 title: "Clear"
 description: "Utilities for controlling the wrapping of content around an element."
-features:
-  responsive: true
-  customizable: false
-  hover: false
-  focus: false
+featureVersion: "v1.2.0+"
 ---
 
 @include('_partials.class-table', [

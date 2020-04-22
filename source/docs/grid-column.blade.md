@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Grid Column Start / End"
 description: "Utilities for controlling how elements are sized and placed across grid columns."
+featureVersion: "v1.2.0+"
 ---
 
 @include('_partials.class-table', [

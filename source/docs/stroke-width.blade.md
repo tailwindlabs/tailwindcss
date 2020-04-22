@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Stroke Width"
 description: "Utilities for styling the stroke width of SVG elements."
+featureVersion: "v1.2.0+"
 ---
 
 @include('_partials.class-table', [

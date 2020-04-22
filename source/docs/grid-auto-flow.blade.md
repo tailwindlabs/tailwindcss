@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Grid Auto Flow"
 description: "Utilities for controlling how elements in a grid are auto-placed."
+featureVersion: "v1.2.0+"
 ---
 
 @include('_partials.class-table', [

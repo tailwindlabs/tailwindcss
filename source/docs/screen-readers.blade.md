@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Screen readers"
 description: "Utilities for improving accessibility with screen readers."
+featureVersion: "v1.1.0+"
 ---
 
 @include('_partials.class-table', [

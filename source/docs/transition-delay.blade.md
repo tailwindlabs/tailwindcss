@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Transition Delay"
 description: "Utilities for controlling the delay of CSS transitions."
+featureVersion: "v1.3.0+"
 ---
 
 @include('_partials.class-table', [

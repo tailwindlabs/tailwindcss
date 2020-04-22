@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Transition Timing Function"
 description: "Utilities for controlling the easing of CSS transitions."
+featureVersion: "v1.2.0+"
 ---
 
 @include('_partials.class-table', [

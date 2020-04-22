@@ -2,6 +2,7 @@
 extends: _layouts.documentation
 title: "Rotate"
 description: "Utilities for rotating elements with transform."
+featureVersion: "v1.2.0+"
 ---
 
 @include('_partials.class-table', [
