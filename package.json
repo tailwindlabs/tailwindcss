@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "main": "lib/index.js",
