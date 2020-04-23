@@ -90,7 +90,7 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-By default Tailwind provides six relative and eight fixed `line-height` utilities. You change, add, or remove these by customizing the `skew` section of your Tailwind theme config.
+By default Tailwind provides six relative and eight fixed `line-height` utilities. You change, add, or remove these by customizing the `lineHeight` section of your Tailwind theme config.
 
 @component('_partials.customized-config', ['key' => 'theme.extend.lineHeight'])
 + 'extra-loose': '2.5',
