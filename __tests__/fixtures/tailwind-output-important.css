@@ -608,14 +608,14 @@ video {
 
 .space-y-0 > :not(template) ~ :not(template) {
   --space-y-reverse: 0 !important;
-  margin-top: calc(0 * calc(1 - var(--space-y-reverse))) !important;
-  margin-bottom: calc(0 * var(--space-y-reverse)) !important;
+  margin-top: calc(0px * calc(1 - var(--space-y-reverse))) !important;
+  margin-bottom: calc(0px * var(--space-y-reverse)) !important;
 }
 
 .space-x-0 > :not(template) ~ :not(template) {
   --space-x-reverse: 0 !important;
-  margin-right: calc(0 * var(--space-x-reverse)) !important;
-  margin-left: calc(0 * calc(1 - var(--space-x-reverse))) !important;
+  margin-right: calc(0px * var(--space-x-reverse)) !important;
+  margin-left: calc(0px * calc(1 - var(--space-x-reverse))) !important;
 }
 
 .space-y-1 > :not(template) ~ :not(template) {
@@ -11897,14 +11897,14 @@ video {
 @media (min-width: 640px) {
   .sm\:space-y-0 > :not(template) ~ :not(template) {
     --space-y-reverse: 0 !important;
-    margin-top: calc(0 * calc(1 - var(--space-y-reverse))) !important;
-    margin-bottom: calc(0 * var(--space-y-reverse)) !important;
+    margin-top: calc(0px * calc(1 - var(--space-y-reverse))) !important;
+    margin-bottom: calc(0px * var(--space-y-reverse)) !important;
   }
 
   .sm\:space-x-0 > :not(template) ~ :not(template) {
     --space-x-reverse: 0 !important;
-    margin-right: calc(0 * var(--space-x-reverse)) !important;
-    margin-left: calc(0 * calc(1 - var(--space-x-reverse))) !important;
+    margin-right: calc(0px * var(--space-x-reverse)) !important;
+    margin-left: calc(0px * calc(1 - var(--space-x-reverse))) !important;
   }
 
   .sm\:space-y-1 > :not(template) ~ :not(template) {
@@ -23187,14 +23187,14 @@ video {
 @media (min-width: 768px) {
   .md\:space-y-0 > :not(template) ~ :not(template) {
     --space-y-reverse: 0 !important;
-    margin-top: calc(0 * calc(1 - var(--space-y-reverse))) !important;
-    margin-bottom: calc(0 * var(--space-y-reverse)) !important;
+    margin-top: calc(0px * calc(1 - var(--space-y-reverse))) !important;
+    margin-bottom: calc(0px * var(--space-y-reverse)) !important;
   }
 
   .md\:space-x-0 > :not(template) ~ :not(template) {
     --space-x-reverse: 0 !important;
-    margin-right: calc(0 * var(--space-x-reverse)) !important;
-    margin-left: calc(0 * calc(1 - var(--space-x-reverse))) !important;
+    margin-right: calc(0px * var(--space-x-reverse)) !important;
+    margin-left: calc(0px * calc(1 - var(--space-x-reverse))) !important;
   }
 
   .md\:space-y-1 > :not(template) ~ :not(template) {
@@ -34477,14 +34477,14 @@ video {
 @media (min-width: 1024px) {
   .lg\:space-y-0 > :not(template) ~ :not(template) {
     --space-y-reverse: 0 !important;
-    margin-top: calc(0 * calc(1 - var(--space-y-reverse))) !important;
-    margin-bottom: calc(0 * var(--space-y-reverse)) !important;
+    margin-top: calc(0px * calc(1 - var(--space-y-reverse))) !important;
+    margin-bottom: calc(0px * var(--space-y-reverse)) !important;
   }
 
   .lg\:space-x-0 > :not(template) ~ :not(template) {
     --space-x-reverse: 0 !important;
-    margin-right: calc(0 * var(--space-x-reverse)) !important;
-    margin-left: calc(0 * calc(1 - var(--space-x-reverse))) !important;
+    margin-right: calc(0px * var(--space-x-reverse)) !important;
+    margin-left: calc(0px * calc(1 - var(--space-x-reverse))) !important;
   }
 
   .lg\:space-y-1 > :not(template) ~ :not(template) {
@@ -45767,14 +45767,14 @@ video {
 @media (min-width: 1280px) {
   .xl\:space-y-0 > :not(template) ~ :not(template) {
     --space-y-reverse: 0 !important;
-    margin-top: calc(0 * calc(1 - var(--space-y-reverse))) !important;
-    margin-bottom: calc(0 * var(--space-y-reverse)) !important;
+    margin-top: calc(0px * calc(1 - var(--space-y-reverse))) !important;
+    margin-bottom: calc(0px * var(--space-y-reverse)) !important;
   }
 
   .xl\:space-x-0 > :not(template) ~ :not(template) {
     --space-x-reverse: 0 !important;
-    margin-right: calc(0 * var(--space-x-reverse)) !important;
-    margin-left: calc(0 * calc(1 - var(--space-x-reverse))) !important;
+    margin-right: calc(0px * var(--space-x-reverse)) !important;
+    margin-left: calc(0px * calc(1 - var(--space-x-reverse))) !important;
   }
 
   .xl\:space-y-1 > :not(template) ~ :not(template) {

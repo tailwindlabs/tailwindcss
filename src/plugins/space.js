@@ -7,13 +7,13 @@ export default function() {
       (size, modifier) => ({
         [`.${e(prefixNegativeModifiers('space-y', modifier))} > :not(template) ~ :not(template)`]: {
           '--space-y-reverse': '0',
-          'margin-top': `calc(${size} * calc(1 - var(--space-y-reverse)))`,
-          'margin-bottom': `calc(${size} * var(--space-y-reverse))`,
+          'margin-top': `calc(${size === '0' ? '0px' : size} * calc(1 - var(--space-y-reverse)))`,
+          'margin-bottom': `calc(${size === '0' ? '0px' : size} * var(--space-y-reverse))`,
         },
         [`.${e(prefixNegativeModifiers('space-x', modifier))} > :not(template) ~ :not(template)`]: {
           '--space-x-reverse': '0',
-          'margin-right': `calc(${size} * var(--space-x-reverse))`,
-          'margin-left': `calc(${size} * calc(1 - var(--space-x-reverse)))`,
+          'margin-right': `calc(${size === '0' ? '0px' : size} * var(--space-x-reverse))`,
+          'margin-left': `calc(${size === '0' ? '0px' : size} * calc(1 - var(--space-x-reverse)))`,
         },
       }),
     ]

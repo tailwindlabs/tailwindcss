@@ -5,6 +5,7 @@ test('generating space utilities', () => {
   const config = {
     theme: {
       space: {
+        '0': '0',
         '1': '1px',
         '2': '2px',
         '4': '4px',
@@ -22,6 +23,16 @@ test('generating space utilities', () => {
   expect(utilities).toEqual([
     [
       {
+        '.space-y-0 > :not(template) ~ :not(template)': {
+          '--space-y-reverse': '0',
+          'margin-top': 'calc(0px * calc(1 - var(--space-y-reverse)))',
+          'margin-bottom': 'calc(0px * var(--space-y-reverse))',
+        },
+        '.space-x-0 > :not(template) ~ :not(template)': {
+          '--space-x-reverse': '0',
+          'margin-right': 'calc(0px * var(--space-x-reverse))',
+          'margin-left': 'calc(0px * calc(1 - var(--space-x-reverse)))',
+        },
         '.space-y-1 > :not(template) ~ :not(template)': {
           '--space-y-reverse': '0',
           'margin-top': 'calc(1px * calc(1 - var(--space-y-reverse)))',
