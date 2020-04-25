@@ -21,7 +21,7 @@ function ensureIncludesDefault(variants) {
   return variants.includes('default') ? variants : ['default', ...variants]
 }
 
-const defaultVariantGenerators = config => ({
+export const defaultVariantGenerators = config => ({
   default: generateVariantFunction(() => {}),
   'group-hover': generateVariantFunction(({ modifySelectors, separator }) => {
     return modifySelectors(({ selector }) => {
