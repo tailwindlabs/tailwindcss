@@ -161,7 +161,14 @@ By default Tailwind provides 10 `font-size` utilities. You change, add, or remov
 + '7xl': '5rem',
 @endcomponent
 
-### Providing a default line-height
+<h3>
+  <span class="flex items-center" data-heading-text>
+    Providing a default line-height
+    <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
+      v1.3.0+
+    </span>
+  </span>
+</h3>
 
 You can provide a default line-height for each of your font-sizes using a tuple of the form `[fontSize, lineHeight]` in your `tailwind.config.js` file.
 

@@ -376,10 +376,12 @@ module.exports = {
 }
 ```
 
-<h2 class="flex items-center">
-  Group-focus
-  <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
-    v1.3.0+
+<h2>
+  <span class="flex items-center" data-heading-text>
+    Group-focus
+    <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
+      v1.3.0+
+    </span>
   </span>
 </h2>
 

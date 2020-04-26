@@ -181,13 +181,14 @@ Use the `.border-{side}`, `.border-{side}-0`, `.border-{side}-2`, `.border-{side
 @endslot
 @endcomponent
 
-<h2 class="flex items-center">
-  Between elements
-  <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
-    v1.3.0+
+<h2>
+  <span class="flex items-center" data-heading-text>
+    Between elements
+    <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
+      v1.3.0+
+    </span>
   </span>
 </h2>
-
 
 You can also add borders between child elements using the `divide-{x/y}-{width}` and `divide-{color}` utilities.
 
