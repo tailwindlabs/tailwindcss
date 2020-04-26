@@ -46,7 +46,7 @@
     "chalk": "^4.0.0",
     "color": "^3.1.2",
     "detective": "^5.2.0",
-    "fs-extra": "^8.0.0",
+    "fs-extra": "^9.0.0",
     "lodash": "^4.17.15",
     "node-emoji": "^1.8.1",
     "normalize.css": "^8.0.1",
