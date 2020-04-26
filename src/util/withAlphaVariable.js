@@ -1,4 +1,4 @@
-import createColor from 'Color'
+import createColor from 'color'
 
 function hasAlpha(color) {
   return (
