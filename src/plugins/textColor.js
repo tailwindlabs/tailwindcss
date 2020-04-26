@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
+import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function() {
   return function({ addUtilities, e, theme, variants }) {
@@ -7,9 +8,7 @@ export default function() {
       _.map(flattenColorPalette(theme('textColor')), (value, modifier) => {
         return [
           `.${e(`text-${modifier}`)}`,
-          {
-            color: value,
-          },
+          withAlphaVariable({ color: value, property: 'color', variable: '--text-opacity' }),
         ]
       })
     )
