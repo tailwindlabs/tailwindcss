@@ -92,6 +92,11 @@ import transitionProperty from './plugins/transitionProperty'
 import transitionTimingFunction from './plugins/transitionTimingFunction'
 import transitionDuration from './plugins/transitionDuration'
 import transitionDelay from './plugins/transitionDelay'
+import divideOpacity from './plugins/divideOpacity'
+import backgroundOpacity from './plugins/backgroundOpacity'
+import borderOpacity from './plugins/borderOpacity'
+import textOpacity from './plugins/textOpacity'
+import placeholderOpacity from './plugins/placeholderOpacity'
 
 import configurePlugins from './util/configurePlugins'
 
@@ -102,15 +107,18 @@ export default function({ corePlugins: corePluginConfig }) {
     space,
     divideWidth,
     divideColor,
+    divideOpacity,
     accessibility,
     appearance,
     backgroundAttachment,
     backgroundColor,
+    backgroundOpacity,
     backgroundPosition,
     backgroundRepeat,
     backgroundSize,
     borderCollapse,
     borderColor,
+    borderOpacity,
     borderRadius,
     borderStyle,
     borderWidth,
@@ -148,6 +156,7 @@ export default function({ corePlugins: corePluginConfig }) {
     overflow,
     padding,
     placeholderColor,
+    placeholderOpacity,
     pointerEvents,
     position,
     inset,
@@ -159,6 +168,7 @@ export default function({ corePlugins: corePluginConfig }) {
     tableLayout,
     textAlign,
     textColor,
+    textOpacity,
     fontStyle,
     textTransform,
     textDecoration,

@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
+import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function() {
   return function({ addUtilities, e, theme, variants }) {
@@ -9,9 +10,11 @@ export default function() {
       _.map(_.omit(colors, 'default'), (value, modifier) => {
         return [
           `.${e(`border-${modifier}`)}`,
-          {
-            'border-color': value,
-          },
+          withAlphaVariable({
+            color: value,
+            property: 'border-color',
+            variable: '--border-opacity',
+          }),
         ]
       })
     )
