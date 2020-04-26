@@ -1,14 +1,21 @@
 export default function() {
-  return function({ addUtilities, variants }) {
-    addUtilities(
+  return function({ addUtilities, variants, target }) {
+    target(
       {
-        '.object-contain': { 'object-fit': 'contain' },
-        '.object-cover': { 'object-fit': 'cover' },
-        '.object-fill': { 'object-fit': 'fill' },
-        '.object-none': { 'object-fit': 'none' },
-        '.object-scale-down': { 'object-fit': 'scale-down' },
+        ie11: () => {},
       },
-      variants('objectFit')
+      () => {
+        addUtilities(
+          {
+            '.object-contain': { 'object-fit': 'contain' },
+            '.object-cover': { 'object-fit': 'cover' },
+            '.object-fill': { 'object-fit': 'fill' },
+            '.object-none': { 'object-fit': 'none' },
+            '.object-scale-down': { 'object-fit': 'scale-down' },
+          },
+          variants('objectFit')
+        )
+      }
     )
   }
 }

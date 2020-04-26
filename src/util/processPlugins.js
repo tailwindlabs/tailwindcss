@@ -27,6 +27,9 @@ export default function(plugins, config) {
     return prefixSelector(config.prefix, selector)
   }
   const getConfigValue = (path, defaultValue) => _.get(config, path, defaultValue)
+  const target = (targets, defaultTarget) => {
+    return _.get(targets, getConfigValue('target'), defaultTarget)()
+  }
 
   plugins.forEach(plugin => {
     if (plugin.__isOptionsFunction) {
@@ -38,6 +41,7 @@ export default function(plugins, config) {
     handler({
       postcss,
       config: getConfigValue,
+      target,
       theme: (path, defaultValue) => getConfigValue(`theme.${path}`, defaultValue),
       variants: (path, defaultValue) => {
         if (Array.isArray(config.variants)) {
