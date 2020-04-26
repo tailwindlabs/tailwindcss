@@ -209,7 +209,7 @@ module.exports = {
       'not-allowed': 'not-allowed',
     },
     divideColor: theme => theme('borderColor'),
-    divideOpacity: theme => theme('opacity'),
+    divideOpacity: theme => theme('borderOpacity'),
     divideWidth: theme => theme('borderWidth'),
     fill: {
       current: 'currentColor',
