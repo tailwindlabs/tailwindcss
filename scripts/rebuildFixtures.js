@@ -39,6 +39,11 @@ Promise.all([
     to: '__tests__/fixtures/tailwind-output-important.css',
     config: { important: true },
   }),
+  build({
+    from: '__tests__/fixtures/tailwind-input.css',
+    to: '__tests__/fixtures/tailwind-output-ie11.css',
+    config: { target: 'ie11' },
+  }),
 ]).then(() => {
   console.log('\nFinished rebuilding fixtures.')
   console.log(

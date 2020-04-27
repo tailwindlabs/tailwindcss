@@ -2,7 +2,32 @@ import _ from 'lodash'
 import prefixNegativeModifiers from '../util/prefixNegativeModifiers'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants }) {
+  return function({ addUtilities, e, theme, variants, config }) {
+    if (config('target') === 'ie11') {
+      const generators = [
+        (size, modifier) => ({
+          [`.${e(
+            prefixNegativeModifiers('space-y', modifier)
+          )} > :not(template) ~ :not(template)`]: {
+            'margin-top': size,
+          },
+          [`.${e(
+            prefixNegativeModifiers('space-x', modifier)
+          )} > :not(template) ~ :not(template)`]: {
+            'margin-left': size,
+          },
+        }),
+      ]
+
+      const utilities = _.flatMap(generators, generator => {
+        return _.flatMap(theme('space'), generator)
+      })
+
+      addUtilities(utilities, variants('space'))
+
+      return
+    }
+
     const generators = [
       (size, modifier) => ({
         [`.${e(prefixNegativeModifiers('space-y', modifier))} > :not(template) ~ :not(template)`]: {
