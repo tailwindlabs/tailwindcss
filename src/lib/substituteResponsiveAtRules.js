@@ -43,22 +43,16 @@ export default function(config) {
 
     const hasScreenRules = finalRules.some(i => i.nodes.length !== 0)
 
-    if (!hasScreenRules) {
-      return
-    }
-
-    let includesScreensExplicitly = false
-
     css.walkAtRules('tailwind', atRule => {
-      if (atRule.params === 'screens') {
-        atRule.replaceWith(finalRules)
-        includesScreensExplicitly = true
+      if (atRule.params !== 'screens') {
+        return
       }
-    })
 
-    if (!includesScreensExplicitly) {
-      css.append(finalRules)
-      return
-    }
+      if (hasScreenRules) {
+        atRule.before(finalRules)
+      }
+
+      atRule.remove()
+    })
   }
 }

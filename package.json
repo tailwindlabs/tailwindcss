@@ -41,6 +41,7 @@
     "rimraf": "^3.0.0"
   },
   "dependencies": {
+    "@fullhuman/postcss-purgecss": "^2.1.2",
     "autoprefixer": "^9.4.5",
     "bytes": "^3.0.0",
     "chalk": "^4.0.0",

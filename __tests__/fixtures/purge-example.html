@@ -1,0 +1,15 @@
+<!-- Basic HTML -->
+<div class="bg-red-500 md:bg-blue-300 w-1/2"></div>
+
+<!-- Vue dynamic classes -->
+<span :class="{ block: enabled, 'md:flow-root': !enabled }"></span>
+
+<!-- JSX with template strings -->
+<script>
+  function Component() {
+    return <div class={`h-screen`}></div>
+  }
+</script>
+
+<!-- Custom classes with really weird characters -->
+<div class="min-h-(screen-4) bg-black! font-%#$@ w-(1/2+8)"></div>
