@@ -3,6 +3,12 @@ import createUtilityPlugin from '../util/createUtilityPlugin'
 export default function() {
   return function({ target, ...args }) {
     if (target('scale') === 'ie11') {
+      createUtilityPlugin('scale', [
+        ['scale', ['transform'], value => `scale(${value})`],
+        ['scale-x', ['transform'], value => `scaleX(${value})`],
+        ['scale-y', ['transform'], value => `scaleY(${value})`],
+      ])({ target, ...args })
+
       return
     }
 
