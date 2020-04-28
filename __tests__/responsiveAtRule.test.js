@@ -12,6 +12,8 @@ test('it can generate responsive variants', () => {
       .banana { color: yellow; }
       .chocolate { color: brown; }
     }
+
+    @tailwind screens;
   `
 
   const output = `
@@ -52,6 +54,8 @@ test('it can generate responsive variants with a custom separator', () => {
       .banana { color: yellow; }
       .chocolate { color: brown; }
     }
+
+    @tailwind screens;
   `
 
   const output = `
@@ -92,6 +96,8 @@ test('it can generate responsive variants when classes have non-standard charact
       .hover\\:banana { color: yellow; }
       .chocolate-2\\.5 { color: brown; }
     }
+
+    @tailwind screens;
   `
 
   const output = `
@@ -137,6 +143,8 @@ test('responsive variants are grouped', () => {
     @responsive {
       .chocolate { color: brown; }
     }
+
+    @tailwind screens;
   `
 
   const output = `
@@ -181,6 +189,8 @@ test('it can generate responsive variants for nested at-rules', () => {
         .grid\\:banana { color: blue; }
       }
     }
+
+    @tailwind screens;
   `
 
   const output = `
@@ -244,6 +254,8 @@ test('it can generate responsive variants for deeply nested at-rules', () => {
         }
       }
     }
+
+    @tailwind screens;
   `
 
   const output = `
@@ -307,6 +319,8 @@ test('screen prefix is only applied to the last class in a selector', () => {
     @responsive {
       .banana li * .sandwich #foo > div { color: yellow; }
     }
+
+    @tailwind screens;
   `
 
   const output = `
@@ -342,6 +356,8 @@ test('responsive variants are generated for all selectors in a rule', () => {
     @responsive {
       .foo, .bar { color: yellow; }
     }
+
+    @tailwind screens;
   `
 
   const output = `
@@ -377,6 +393,8 @@ test('selectors with no classes cannot be made responsive', () => {
     @responsive {
       div { color: yellow; }
     }
+
+    @tailwind screens;
   `
   expect.assertions(1)
   return run(input, {
@@ -398,6 +416,8 @@ test('all selectors in a rule must contain classes', () => {
     @responsive {
       .foo, div { color: yellow; }
     }
+
+    @tailwind screens;
   `
   expect.assertions(1)
   return run(input, {

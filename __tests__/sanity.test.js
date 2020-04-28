@@ -77,3 +77,19 @@ it('generates the right CSS with implicit screen utilities', () => {
       expect(result.css).toBe(expected)
     })
 })
+
+it('generates the right CSS when "important" is enabled', () => {
+  const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+  const input = fs.readFileSync(inputPath, 'utf8')
+
+  return postcss([tailwind({ ...config, important: true })])
+    .process(input, { from: inputPath })
+    .then(result => {
+      const expected = fs.readFileSync(
+        path.resolve(`${__dirname}/fixtures/tailwind-output-important.css`),
+        'utf8'
+      )
+
+      expect(result.css).toBe(expected)
+    })
+})
