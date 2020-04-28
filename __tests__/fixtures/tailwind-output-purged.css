@@ -594,6 +594,10 @@ video {
   display: block;
 }
 
+.inline-grid {
+  display: inline-grid;
+}
+
 .font-\%\#\$\@ {
   font-family: Comic Sans;
 }
@@ -602,12 +606,28 @@ video {
   height: 100vh;
 }
 
+.text-center {
+  text-align: center;
+}
+
 .w-\(1\/2\+8\) {
   width: calc(50% + 2rem);
 }
 
 .w-1\/2 {
   width: 50%;
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.col-span-1 {
+  grid-column: span 1 / span 1;
+}
+
+.col-span-2 {
+  grid-column: span 2 / span 2;
 }
 
 .example {
