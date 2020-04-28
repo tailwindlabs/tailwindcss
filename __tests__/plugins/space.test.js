@@ -3,6 +3,7 @@ import plugin from '../../src/plugins/space'
 
 test('generating space utilities', () => {
   const config = {
+    target: 'relaxed',
     theme: {
       space: {
         '0': '0',

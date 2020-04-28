@@ -1,11 +1,11 @@
 import createUtilityPlugin from '../util/createUtilityPlugin'
 
 export default function() {
-  return function({ config, ...args }) {
-    if (config('target') === 'ie11') {
+  return function({ target, ...args }) {
+    if (target('rotate') === 'ie11') {
       return
     }
 
-    createUtilityPlugin('rotate', [['rotate', ['--transform-rotate']]])({ config, ...args })
+    createUtilityPlugin('rotate', [['rotate', ['--transform-rotate']]])({ target, ...args })
   }
 }

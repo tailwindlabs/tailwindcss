@@ -1,11 +1,11 @@
 import createUtilityPlugin from '../util/createUtilityPlugin'
 
 export default function() {
-  return function({ config, ...args }) {
-    if (config('target') === 'ie11') {
+  return function({ target, ...args }) {
+    if (target('gridRow') === 'ie11') {
       return
     }
 
-    createUtilityPlugin('gridRow', [['row', ['gridRow']]])({ config, ...args })
+    createUtilityPlugin('gridRow', [['row', ['gridRow']]])({ target, ...args })
   }
 }

@@ -3,6 +3,7 @@ import plugin from '../../src/plugins/divideWidth'
 
 test('generating divide width utilities', () => {
   const config = {
+    target: 'relaxed',
     theme: {
       divideWidth: {
         default: '1px',

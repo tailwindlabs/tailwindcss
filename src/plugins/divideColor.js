@@ -3,10 +3,10 @@ import flattenColorPalette from '../util/flattenColorPalette'
 import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants, config }) {
+  return function({ addUtilities, e, theme, variants, target }) {
     const colors = flattenColorPalette(theme('divideColor'))
 
-    if (config('target') === 'ie11') {
+    if (target('divideColor') === 'ie11') {
       const utilities = _.fromPairs(
         _.map(_.omit(colors, 'default'), (value, modifier) => {
           return [

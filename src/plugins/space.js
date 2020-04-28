@@ -2,8 +2,8 @@ import _ from 'lodash'
 import prefixNegativeModifiers from '../util/prefixNegativeModifiers'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants, config }) {
-    if (config('target') === 'ie11') {
+  return function({ addUtilities, e, theme, variants, target }) {
+    if (target('space') === 'ie11') {
       const generators = [
         (size, modifier) => ({
           [`.${e(

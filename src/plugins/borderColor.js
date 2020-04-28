@@ -3,8 +3,8 @@ import flattenColorPalette from '../util/flattenColorPalette'
 import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants, config }) {
-    if (config('target') === 'ie11') {
+  return function({ addUtilities, e, theme, variants, target }) {
+    if (target('borderColor') === 'ie11') {
       const colors = flattenColorPalette(theme('borderColor'))
 
       const utilities = _.fromPairs(

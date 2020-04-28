@@ -1,8 +1,8 @@
 import createUtilityPlugin from '../util/createUtilityPlugin'
 
 export default function() {
-  return function({ config, ...args }) {
-    if (config('target') === 'ie11') {
+  return function({ target, ...args }) {
+    if (target('scale') === 'ie11') {
       return
     }
 
@@ -10,6 +10,6 @@ export default function() {
       ['scale', ['--transform-scale-x', '--transform-scale-y']],
       ['scale-x', ['--transform-scale-x']],
       ['scale-y', ['--transform-scale-y']],
-    ])({ config, ...args })
+    ])({ target, ...args })
   }
 }

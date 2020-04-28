@@ -1,6 +1,6 @@
 export default function() {
-  return function({ addUtilities, variants, config }) {
-    if (config('target') === 'ie11') {
+  return function({ addUtilities, variants, target }) {
+    if (target('objectFit') === 'ie11') {
       return
     }
 

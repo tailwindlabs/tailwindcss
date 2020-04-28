@@ -1,5 +1,5 @@
 export default function() {
-  return function({ addUtilities, variants, config }) {
+  return function({ addUtilities, variants, target }) {
     addUtilities(
       {
         '.block': {
@@ -44,7 +44,7 @@ export default function() {
         '.table-row': {
           display: 'table-row',
         },
-        ...(config('target') === 'ie11'
+        ...(target('display') === 'ie11'
           ? {}
           : {
               '.flow-root': {
