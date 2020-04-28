@@ -1,12 +1,18 @@
 export default function() {
-  return function({ addUtilities, variants }) {
+  return function({ addUtilities, variants, target }) {
     addUtilities(
       {
         '.static': { position: 'static' },
         '.fixed': { position: 'fixed' },
         '.absolute': { position: 'absolute' },
         '.relative': { position: 'relative' },
-        '.sticky': { position: 'sticky' },
+        ...(target('position') === 'ie11'
+          ? {}
+          : {
+              '.sticky': {
+                position: 'sticky',
+              },
+            }),
       },
       variants('position')
     )

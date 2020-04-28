@@ -8188,10 +8188,6 @@ video {
   position: relative;
 }
 
-.sticky {
-  position: sticky;
-}
-
 .inset-0 {
   top: 0;
   right: 0;
@@ -19293,10 +19289,6 @@ video {
 
   .sm\:relative {
     position: relative;
-  }
-
-  .sm\:sticky {
-    position: sticky;
   }
 
   .sm\:inset-0 {
@@ -30403,10 +30395,6 @@ video {
     position: relative;
   }
 
-  .md\:sticky {
-    position: sticky;
-  }
-
   .md\:inset-0 {
     top: 0;
     right: 0;
@@ -41511,10 +41499,6 @@ video {
     position: relative;
   }
 
-  .lg\:sticky {
-    position: sticky;
-  }
-
   .lg\:inset-0 {
     top: 0;
     right: 0;
@@ -52617,10 +52601,6 @@ video {
 
   .xl\:relative {
     position: relative;
-  }
-
-  .xl\:sticky {
-    position: sticky;
   }
 
   .xl\:inset-0 {
