@@ -50,7 +50,7 @@ export default function purgeUnusedUtilities(config) {
     },
     purgecss({
       content: Array.isArray(config.purge) ? config.purge : config.purge.paths,
-      defaultExtractor: content => content.match(/[^<>"'`\s]+(?<![:=])/g) || [],
+      defaultExtractor: content => content.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || [],
     }),
   ])
 }
