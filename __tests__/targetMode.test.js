@@ -5,6 +5,7 @@ import postcss from 'postcss'
 import tailwind from '../src/index'
 import config from '../stubs/defaultConfig.stub.js'
 import processPlugins from '../src/util/processPlugins'
+import runInTempDirectory from '../jest/runInTempDirectory'
 
 function css(nodes) {
   return postcss.root({ nodes }).toString()
@@ -80,4 +81,71 @@ test('plugins can request the target for a specific plugin key', () => {
       }
     }
     `)
+})
+
+test('browserslist target is translated to a target preset', () => {
+  return runInTempDirectory(() => {
+    fs.writeFileSync(
+      path.resolve('./.browserslistrc'),
+      `
+      last 2 versions
+      IE 11
+      `
+    )
+    const { utilities } = processPlugins(
+      [
+        function({ addUtilities, target }) {
+          addUtilities({
+            '.testA': {
+              target: target('testPluginA'),
+            },
+          })
+        },
+        function({ addUtilities, target }) {
+          addUtilities({
+            '.testB': {
+              target: target('testPluginB'),
+            },
+          })
+        },
+        function({ addUtilities, target }) {
+          addUtilities({
+            '.testC': {
+              target: target('testPluginC'),
+            },
+          })
+        },
+      ],
+      {
+        ...config,
+        target: [
+          'browserslist',
+          {
+            testPluginA: 'modern',
+            testPluginB: 'relaxed',
+          },
+        ],
+      }
+    )
+
+    expect(css(utilities)).toMatchCss(`
+          @variants {
+            .testA {
+              target: modern
+            }
+          }
+          @variants {
+            .testB {
+              target: relaxed
+            }
+          }
+          @variants {
+            .testC {
+              target: ie11
+            }
+          }
+    `)
+
+    return Promise.resolve()
+  })
 })
