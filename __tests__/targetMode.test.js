@@ -1,6 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import _ from 'lodash'
 import postcss from 'postcss'
 import tailwind from '../src/index'
 import config from '../stubs/defaultConfig.stub.js'

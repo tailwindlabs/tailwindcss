@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 import createUtilityPlugin from '../util/createUtilityPlugin'
 
 export default function() {
