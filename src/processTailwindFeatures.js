@@ -7,7 +7,7 @@ import substituteVariantsAtRules from './lib/substituteVariantsAtRules'
 import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
 import substituteScreenAtRules from './lib/substituteScreenAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
-import purgeUnusedUtilities from './lib/purgeUnusedUtilities'
+import purgeUnusedStyles from './lib/purgeUnusedStyles'
 
 import corePlugins from './corePlugins'
 import processPlugins from './util/processPlugins'
@@ -24,7 +24,7 @@ export default function(getConfig) {
       substituteResponsiveAtRules(config),
       substituteScreenAtRules(config),
       substituteClassApplyAtRules(config, processedPlugins.utilities),
-      purgeUnusedUtilities(config),
+      purgeUnusedStyles(config),
     ]).process(css, { from: _.get(css, 'source.input.file') })
   }
 }

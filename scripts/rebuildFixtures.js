@@ -39,29 +39,6 @@ Promise.all([
     to: '__tests__/fixtures/tailwind-output-important.css',
     config: { important: true },
   }),
-  build({
-    from: '__tests__/fixtures/tailwind-input.css',
-    to: '__tests__/fixtures/tailwind-output-purged.css',
-    config: {
-      theme: {
-        extend: {
-          colors: {
-            'black!': '#000',
-          },
-          spacing: {
-            '(1/2+8)': 'calc(50% + 2rem)',
-          },
-          minHeight: {
-            '(screen-100)': 'calc(100vh - 1rem)',
-          },
-          fontFamily: {
-            '%#$@': 'Comic Sans',
-          },
-        },
-      },
-      purge: { enabled: true, paths: ['./__tests__/fixtures/**/*.html'] },
-    },
-  }),
 ]).then(() => {
   console.log('\nFinished rebuilding fixtures.')
   console.log(
