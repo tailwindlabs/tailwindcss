@@ -20,7 +20,7 @@ For full documentation, visit [tailwindcss.com](https://tailwindcss.com/).
 
 For help, discussion about best practices, or any other conversation that would benefit from being searchable:
 
-[Discuss Tailwind CSS on GitHub](https://github.com/tailwindcss/discuss/issues?q=is%3Aissue+sort%3Aupdated-desc)
+[Discuss Tailwind CSS on GitHub](https://github.com/tailwindcss/tailwindcss/discussions)
 
 For casual chit-chat with others using the framework:
 
