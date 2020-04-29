@@ -428,6 +428,7 @@ All of these keys are also available under the `theme.extend` key to enable [ext
 | `rotate` | Values for the `rotate` plugin |
 | `scale` | Values for the `scale` plugin |
 | `skew` | Values for the `skew` plugin |
+| `space` | Values for the `space` plugin |
 | `stroke` | Values for the `stroke` property |
 | `strokeWidth` | Values for the `stroke-width` property |
 | `textColor` | Values for the `text-color` property |

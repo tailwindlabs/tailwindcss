@@ -564,73 +564,112 @@ Learn more about writing variant plugins in the [variant plugin documentation](/
 
 ## Default variants reference
 
-Due to file-size considerations, Tailwind does not generate `active`, `group-hover`, `group-focus`, or `focus-within` variants for any utilities by default.
+Due to file-size considerations, Tailwind does not all variants for all utilities by default.
 
 To configure which variants are enabled for your project, see the [configuring variants documentation](/docs/configuring-variants).
 
-| Core Plugin            | Hover   | Focus   |
-| ---------------------- | ------- | ------- |
-| `alignContent`         |         |         |
-| `alignItems`           |         |         |
-| `alignSelf`            |         |         |
-| `appearance`           |         |         |
-| `backgroundAttachment` |         |         |
-| `backgroundColor`      | &check; | &check; |
-| `backgroundPosition`   |         |         |
-| `backgroundRepeat`     |         |         |
-| `backgroundSize`       |         |         |
-| `borderCollapse`       |         |         |
-| `borderColor`          | &check; | &check; |
-| `borderRadius`         |         |         |
-| `borderStyle`          |         |         |
-| `borderWidth`          |         |         |
-| `boxShadow`            | &check; | &check; |
-| `cursor`               |         |         |
-| `display`              |         |         |
-| `fill`                 |         |         |
-| `flex`                 |         |         |
-| `flexDirection`        |         |         |
-| `flexGrow`             |         |         |
-| `flexShrink`           |         |         |
-| `flexWrap`             |         |         |
-| `float`                |         |         |
-| `fontFamily`           |         |         |
-| `fontSize`             |         |         |
-| `fontSmoothing`        |         |         |
-| `fontStyle`            |         |         |
-| `fontWeight`           | &check; | &check; |
-| `height`               |         |         |
-| `inset`                |         |         |
-| `justifyContent`       |         |         |
-| `letterSpacing`        |         |         |
-| `lineHeight`           |         |         |
-| `listStylePosition`    |         |         |
-| `listStyleType`        |         |         |
-| `margin`               |         |         |
-| `maxHeight`            |         |         |
-| `maxWidth`             |         |         |
-| `minHeight`            |         |         |
-| `minWidth`             |         |         |
-| `objectFit`            |         |         |
-| `objectPosition`       |         |         |
-| `opacity`              | &check; | &check; |
-| `order`                |         |         |
-| `outline`              |         | &check; |
-| `overflow`             |         |         |
-| `padding`              |         |         |
-| `pointerEvents`        |         |         |
-| `position`             |         |         |
-| `resize`               |         |         |
-| `stroke`               |         |         |
-| `tableLayout`          |         |         |
-| `textAlign`            |         |         |
-| `textColor`            | &check; | &check; |
-| `textDecoration`       | &check; | &check; |
-| `textTransform`        |         |         |
-| `userSelect`           |         |         |
-| `verticalAlign`        |         |         |
-| `visibility`           |         |         |
-| `whitespace`           |         |         |
-| `width`                |         |         |
-| `wordBreak`            |         |         |
-| `zIndex`               |         |         |
+```js
+// Default configuration
+module.exports = {
+  // ...
+  variants: {
+    accessibility: ['responsive', 'focus'],
+    alignContent: ['responsive'],
+    alignItems: ['responsive'],
+    alignSelf: ['responsive'],
+    appearance: ['responsive'],
+    backgroundAttachment: ['responsive'],
+    backgroundColor: ['responsive', 'hover', 'focus'],
+    backgroundOpacity: ['responsive', 'hover', 'focus'],
+    backgroundPosition: ['responsive'],
+    backgroundRepeat: ['responsive'],
+    backgroundSize: ['responsive'],
+    borderCollapse: ['responsive'],
+    borderColor: ['responsive', 'hover', 'focus'],
+    borderOpacity: ['responsive', 'hover', 'focus'],
+    borderRadius: ['responsive'],
+    borderStyle: ['responsive'],
+    borderWidth: ['responsive'],
+    boxShadow: ['responsive', 'hover', 'focus'],
+    boxSizing: ['responsive'],
+    clear: ['responsive'],
+    cursor: ['responsive'],
+    display: ['responsive'],
+    divideColor: ['responsive'],
+    divideOpacity: ['responsive'],
+    divideWidth: ['responsive'],
+    fill: ['responsive'],
+    flex: ['responsive'],
+    flexDirection: ['responsive'],
+    flexGrow: ['responsive'],
+    flexShrink: ['responsive'],
+    flexWrap: ['responsive'],
+    float: ['responsive'],
+    fontFamily: ['responsive'],
+    fontSize: ['responsive'],
+    fontSmoothing: ['responsive'],
+    fontStyle: ['responsive'],
+    fontWeight: ['responsive', 'hover', 'focus'],
+    gap: ['responsive'],
+    gridAutoFlow: ['responsive'],
+    gridColumn: ['responsive'],
+    gridColumnEnd: ['responsive'],
+    gridColumnStart: ['responsive'],
+    gridRow: ['responsive'],
+    gridRowEnd: ['responsive'],
+    gridRowStart: ['responsive'],
+    gridTemplateColumns: ['responsive'],
+    gridTemplateRows: ['responsive'],
+    height: ['responsive'],
+    inset: ['responsive'],
+    justifyContent: ['responsive'],
+    letterSpacing: ['responsive'],
+    lineHeight: ['responsive'],
+    listStylePosition: ['responsive'],
+    listStyleType: ['responsive'],
+    margin: ['responsive'],
+    maxHeight: ['responsive'],
+    maxWidth: ['responsive'],
+    minHeight: ['responsive'],
+    minWidth: ['responsive'],
+    objectFit: ['responsive'],
+    objectPosition: ['responsive'],
+    opacity: ['responsive', 'hover', 'focus'],
+    order: ['responsive'],
+    outline: ['responsive', 'focus'],
+    overflow: ['responsive'],
+    padding: ['responsive'],
+    placeholderColor: ['responsive', 'focus'],
+    placeholderOpacity: ['responsive', 'focus'],
+    pointerEvents: ['responsive'],
+    position: ['responsive'],
+    resize: ['responsive'],
+    rotate: ['responsive', 'hover', 'focus'],
+    scale: ['responsive', 'hover', 'focus'],
+    skew: ['responsive', 'hover', 'focus'],
+    space: ['responsive'],
+    stroke: ['responsive'],
+    strokeWidth: ['responsive'],
+    tableLayout: ['responsive'],
+    textAlign: ['responsive'],
+    textColor: ['responsive', 'hover', 'focus'],
+    textDecoration: ['responsive', 'hover', 'focus'],
+    textOpacity: ['responsive', 'hover', 'focus'],
+    textTransform: ['responsive'],
+    transform: ['responsive'],
+    transformOrigin: ['responsive'],
+    transitionDelay: ['responsive'],
+    transitionDuration: ['responsive'],
+    transitionProperty: ['responsive'],
+    transitionTimingFunction: ['responsive'],
+    translate: ['responsive', 'hover', 'focus'],
+    userSelect: ['responsive'],
+    verticalAlign: ['responsive'],
+    visibility: ['responsive'],
+    whitespace: ['responsive'],
+    width: ['responsive'],
+    wordBreak: ['responsive'],
+    zIndex: ['responsive'],
+  }
+}
+```
