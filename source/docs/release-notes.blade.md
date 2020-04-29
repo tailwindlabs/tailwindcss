@@ -5,6 +5,19 @@ description: "What's new in the latest version of Tailwind CSS."
 titleBorder: true
 ---
 
+<h2 class="mb-0">Tailwind CSS v1.4</h2>
+<div class="mt-0 text-gray-600">Apr 29, 2020</div>
+
+Tailwind CSS v1.4 is out now with a couple of major new features:
+
+- [New color opacity utilities](/docs/background-opacity)
+- [Built-in PurgeCSS support](/docs/controlling-file-size)
+
+For the full list of changes, [check out the complete release notes on GitHub](https://github.com/tailwindcss/tailwindcss/releases/tag/v1.4.0).
+
+---
+
+
 <h2 class="mb-0">Tailwind CSS v1.3</h2>
 <div class="mt-0 text-gray-600">Apr 21, 2020</div>
 
