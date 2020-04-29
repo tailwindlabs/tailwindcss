@@ -388,11 +388,13 @@ Here's a list of every core plugin for reference:
 | `appearance` | The `appearance` utilities like `appearance-none` |
 | `backgroundAttachment` | The `background-attachment` utilities like `bg-fixed` |
 | `backgroundColor` | The `background-color` utilities like `bg-gray-200` |
+| `backgroundOpacity` | The `background-color` opacity utilities like `bg-opacity-25` |
 | `backgroundPosition` | The `background-position` utilities like `bg-center` |
 | `backgroundRepeat` | The `background-repeat` utilities like `bg-no-repeat` |
 | `backgroundSize` | The `background-size` utilities like `bg-cover` |
 | `borderCollapse` | The `border-collapse` utilities like `border-separate` |
 | `borderColor` | The `border-color` utilities like `border-gray-300` |
+| `borderOpacity` | The `border-color` opacity utilities like `border-opacity-25` |
 | `borderRadius` | The `border-radius` utilities like `rounded-lg` |
 | `borderStyle` | The `border-style` utilities like `border-dashed` |
 | `borderWidth` | The `border-width` utilities like `border-2` |
@@ -401,6 +403,8 @@ Here's a list of every core plugin for reference:
 | `clear` | The `clear` utilities like `clear-left` |
 | `cursor` | The `cursor` utilities like `cursor-pointer` |
 | `display` | The `display` utilities like `block` |
+| `divideColor` | The between elements `border-color` utilities like `divide-gray-500` |
+| `divideWidth` | The between elements `border-width` utilities like `divide-x-2` |
 | `fill` | The `fill` utilities like `fill-current` |
 | `flex` | The `flex` utilities like `flex-1` |
 | `flexDirection` | The `flex-direction` utilities like `flex-col` |
@@ -442,17 +446,21 @@ Here's a list of every core plugin for reference:
 | `outline` | The `outline` utilities like `outline-none` |
 | `overflow` | The `overflow` utilities like `overflow-hidden` |
 | `padding` | The `padding` utilities like `py-12` |
+| `placeholderColor` | The placeholder `color` utilities like `placeholder-red-600` |
+| `placeholderOpacity` | The placeholder `color` opacity utilities like `placeholder-opacity-25` |
 | `pointerEvents` | The `pointer-events` utilities like `pointer-events-none` |
 | `position` | The `position` utilities like `absolute` |
 | `resize` | The `resize` utilities like `resize-y` |
 | `rotate` | The `rotate` utilities like `rotate-90` |
 | `scale` | The `scale` utilities like `scale-150` |
 | `skew` | The `skew` utilities like `skew-y-3` |
+| `space` | The "space-between" utilities like `space-x-4` |
 | `stroke` | The `stroke` utilities like `stroke-current` |
 | `strokeWidth` | The `stroke-width` utilities like `stroke-2` |
 | `tableLayout` | The `table-layout` utilities like `table-fixed` |
 | `textAlign` | The `text-align` utilities like `text-center` |
 | `textColor` | The `text-color` utilities like `text-red-600` |
+| `textOpacity` | The `text-color` opacity utilities like `text-opacity-25` |
 | `textDecoration` | The `text-decoration` utilities like `underline` |
 | `textTransform` | The `text-transform` utilities like `uppercase` |
 | `transform` | The `transform` utility (for enabling transform features) |
