@@ -39,7 +39,14 @@ Control the placeholder color of an element using the `.placeholder-{color}` uti
 @endslot
 @endcomponent
 
-### Changing opacity
+<h3>
+  <span class="flex items-center" data-heading-text>
+    Changing opacity
+    <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
+      v1.4.0+
+    </span>
+  </span>
+</h3>
 
 Control the opacity of an element's placeholder color using the `.placeholder-opacity-{amount}` utilities.
 

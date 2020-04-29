@@ -20,10 +20,10 @@
       </thead>
       <tbody class="align-baseline">
         @foreach ($rows as $row)
-        <tr>
+        <tr class="text-black">
           <td class="p-2 {{ $loop->first ? '' : 'border-t border-gray-200' }} font-mono text-xs text-purple-700 whitespace-no-wrap">{!! $row[0] !!}</td>
           <td class="hidden sm:table-cell p-2 {{ $loop->first ? '' : 'border-t border-gray-200' }} font-mono text-xs text-blue-700 whitespace-pre">{!! $row[1] !!}</td>
-          <td class="relative w-16 p-2 {{ $loop->first ? '' : 'border-t border-gray-200' }} font-mono text-xs text-blue-700 whitespace-pre">
+          <td class="relative w-16 p-2 {{ $loop->first ? '' : 'border-t border-gray-200' }} font-mono text-xs whitespace-pre">
             <div class="absolute inset-0 m-2 border {{ substr($row[0], 1) }}"></div>
           </td>
         </tr>
