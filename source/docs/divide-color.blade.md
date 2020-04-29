@@ -85,6 +85,28 @@ Control the border color between elements using the `divide-{color}` utilities.
 @endslot
 @endcomponent
 
+### Changing opacity
+
+Control the opacity of borders between elements using the `.divide-opacity-{amount}` utilities.
+
+@component('_partials.code-sample', ['style' => "background-image: url('/img/transparent-bg.svg')"])
+<div class="divide-y-4 divide-black divide-opacity-25">
+  <div class="text-center py-2">1</div>
+  <div class="text-center py-2">2</div>
+  <div class="text-center py-2">3</div>
+</div>
+
+@slot('code')
+<div class="divide-y-4 divide-black divide-opacity-25">
+  <div class="text-center py-2">1</div>
+  <div class="text-center py-2">2</div>
+  <div class="text-center py-2">3</div>
+</div>
+@endslot
+@endcomponent
+
+Learn more in the [divide opacity documentation](/docs/divide-opacity).
+
 ---
 
 ## Responsive

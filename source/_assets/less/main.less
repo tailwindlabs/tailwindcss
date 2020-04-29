@@ -23,11 +23,11 @@ a {
 }
 
 /*! purgecss start ignore */
-@import "carbon-ads";
-@import "docsearch";
-@import "prism-atom-dark";
-@import "nprogress";
-@import "markdown";
+@import 'carbon-ads';
+@import 'docsearch';
+@import 'prism-atom-dark';
+@import 'nprogress';
+@import 'markdown';
 /*! purgecss end ignore */
 
 @tailwind utilities;
@@ -37,7 +37,7 @@ a {
     transform: translateX(2px) !important;
   }
   .transition-fast {
-    transition: all .2s ease !important;
+    transition: all 0.2s ease !important;
   }
 }
 
@@ -70,7 +70,7 @@ a {
       height: 100vh !important;
     }
     .sticky\?lg\:h-\(screen-16\) {
-      height: ~"calc(100vh - 4rem)" !important;
+      height: ~'calc(100vh - 4rem)' !important;
     }
   }
 }
@@ -101,22 +101,6 @@ a {
 
 .table-collapse {
   border-collapse: collapse !important;
-}
-
-.placeholder-gray-700::placeholder {
-  @apply text-gray-700 !important;
-}
-
-.placeholder-gray-800::placeholder {
-  @apply text-gray-800 !important;
-}
-
-.placeholder-gray-900::placeholder {
-  @apply text-gray-900 !important;
-}
-
-.focus\:outline-0:focus {
-  outline: 0 !important;
 }
 
 [v-cloak] .v-cloak-hidden {

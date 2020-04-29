@@ -34,13 +34,32 @@ Control the text color of an element using the `.text-{color}` utilities.
 
 @component('_partials.code-sample', ['class' => 'text-center'])
 
-<div class="text-purple-600 text-xl truncate">
+<div class="text-purple-600 text-xl font-semibold truncate">
   The quick brown fox jumped over the lazy dog.
 </div>
 @slot('code')
 <input class="text-purple-600 ...">
 @endslot
 @endcomponent
+
+### Changing opacity
+
+Control the opacity of an element's text color using the `.text-opacity-{amount}` utilities.
+
+@component('_partials.code-sample')
+<div class="space-y-4">
+  @foreach ($page->config['theme']['backgroundOpacity']->reverse() as $name => $value)
+  <p class="font-semibold text-xl text-purple-700 text-opacity-{{ $name }}">The quick brown fox jumped over the lazy dog.</p>
+  @endforeach
+</div>
+@slot('code')
+@foreach ($page->config['theme']['opacity']->reverse() as $name => $value)
+<p class="text-purple-700 text-opacity-{{ $name }}">The quick brown fox ...</p>
+@endforeach
+@endslot
+@endcomponent
+
+Learn more in the [text opacity documentation](/docs/text-opacity).
 
 ## Responsive
 

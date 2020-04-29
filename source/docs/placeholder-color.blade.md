@@ -39,6 +39,27 @@ Control the placeholder color of an element using the `.placeholder-{color}` uti
 @endslot
 @endcomponent
 
+### Changing opacity
+
+Control the opacity of an element's placeholder color using the `.placeholder-opacity-{amount}` utilities.
+
+@component('_partials.code-sample')
+<div class="space-y-4">
+  @foreach ($page->config['theme']['backgroundOpacity']->reverse() as $name => $value)
+  <div class="max-w-xs">
+    <input class="block appearance-none placeholder-gray-500 placeholder-opacity-{{ $name }} border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
+  </div>
+  @endforeach
+</div>
+@slot('code')
+@foreach ($page->config['theme']['opacity']->reverse() as $name => $value)
+<input class="placeholder-gray-500 placeholder-opacity-{{ $name }} ..." placeholder="jane@example.com">
+@endforeach
+@endslot
+@endcomponent
+
+Learn more in the [placeholder opacity documentation](/docs/placeholder-opacity).
+
 ## Responsive
 
 To control the text color of an element at a specific breakpoint, add a `{screen}:` prefix to any existing text color utility. For example, use `md:text-green-600` to apply the `text-green-600` utility at only medium screen sizes and above.
