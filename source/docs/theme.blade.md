@@ -382,11 +382,14 @@ All of these keys are also available under the `theme.extend` key to enable [ext
 | `backgroundPosition` | Values for the `background-position` property |
 | `backgroundSize` | Values for the `background-size` property |
 | `borderColor` | Values for the `border-color` property |
+| `borderOpacity` | Values for the `borderOpacity`  plugin |
 | `borderRadius` | Values for the `border-radius` property |
 | `borderStyle` | Values for the `border-style` property |
 | `borderWidth` | Values for the `border-width` property |
 | `boxShadow` | Values for the `box-shadow` property |
 | `cursor` | Values for the `cursor` property |
+| `divideColor` | Values for the `divideColor` plugin |
+| `divideWidth` | Values for the `divideWidth` plugin |
 | `fill` | Values for the `fill` property |
 | `flex` | Values for the `flex` property |
 | `flexGrow` | Values for the `flex-grow` property |
@@ -396,6 +399,17 @@ All of these keys are also available under the `theme.extend` key to enable [ext
 | `fontWeight` | Values for the `font-weight` property |
 | `height` | Values for the `height` property |
 | `inset` | Values for the `inset` property |
+| `gap` | Values for the `gap` property |
+| `gridTemplateColumns` | Values for the `grid-template-columns` property |
+| `gridColumn` | Values for the `grid-column` property |
+| `gridColumnStart` | Values for the `grid-column-start` property |
+| `gridColumnEnd` | Values for the `grid-column-end` property |
+| `gridTemplateRows` | Values for the `grid-template-rows` property |
+| `gridRow` | Values for the `grid-row` property |
+| `gridRowStart` | Values for the `grid-row-start` property |
+| `gridRowEnd` | Values for the `grid-row-end` property |
+| `height`` | Values for the `height` property |
+| `inset` | Values for the `top`, `right`, `bottom`, and `left` properties |
 | `letterSpacing` | Values for the `letter-spacing` property |
 | `lineHeight` | Values for the `line-height` property |
 | `listStyleType` | Values for the `list-style-type` property |
@@ -407,9 +421,23 @@ All of these keys are also available under the `theme.extend` key to enable [ext
 | `negativeMargin` | Values for the `negative-margin` property |
 | `objectPosition` | Values for the `object-position` property |
 | `opacity` | Values for the `opacity` property |
+| `order` | Values for the `order` property |
 | `padding` | Values for the `padding` property |
+| `placeholderColor` | Values for the `placeholderColor` plugin |
+| `placeholderOpacity` | Values for the `placeholderOpacity` plugin |
+| `rotate` | Values for the `rotate` plugin |
+| `scale` | Values for the `scale` plugin |
+| `skew` | Values for the `skew` plugin |
 | `stroke` | Values for the `stroke` property |
+| `strokeWidth` | Values for the `stroke-width` property |
 | `textColor` | Values for the `text-color` property |
+| `textOpacity` | Values for the `textOpacity` plugin |
+| `transformOrigin` | Values for the `transform-origin` property |
+| `transitionDelay` | Values for the `transition-delay` property |
+| `transitionDuration` | Values for the `transition-duration` property |
+| `transitionProperty` | Values for the `transition-property` property |
+| `transitionTimingFunction` | Values for the `transition-timing-function` property |
+| `translate` | Values for the `translate` plugin |
 | `width` | Values for the `width` property |
 | `zIndex` | Values for the `z-index` property |
 
