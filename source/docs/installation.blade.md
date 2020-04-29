@@ -84,16 +84,6 @@ Learn more about configuring Tailwind in the [configuration documentation](/docs
   </h2>
 </div>
 
-### Using Tailwind CLI
-
-For simple projects or just giving Tailwind a spin, you can use the Tailwind CLI tool to process your CSS:
-
-```bash
-npx tailwindcss build styles.css -o output.css
-```
-
-Use the `npx tailwindcss help build` command to learn more about the various CLI options.
-
 ### Using Tailwind with PostCSS
 
 For most projects, you'll want to add Tailwind as a PostCSS plugin in your build chain.
@@ -113,7 +103,21 @@ module.exports = {
 
 We've included more specific instructions for a few popular tools below, but for instructions on getting started with PostCSS in general, see the [PostCSS documentation](https://github.com/postcss/postcss#usage).
 
-### Webpack
+### Using Tailwind CLI
+
+For simple projects or just giving Tailwind a spin, you can use the Tailwind CLI tool to process your CSS:
+
+```bash
+npx tailwindcss build styles.css -o output.css
+```
+
+Use the `npx tailwindcss help build` command to learn more about the various CLI options.
+
+### Build Tool Examples
+
+We've included some basic examples of setting up Tailwind with common build tools below, but also look at our [setup-examples](https://github.com/tailwindcss/setup-examples/) repository for even more examples that you can even clone and play with locally.
+
+#### Webpack
 
 Add `tailwindcss` as a plugin in your  `postcss.config.js` file:
 
@@ -157,7 +161,7 @@ module.exports = {
 }
 ```
 
-### Gulp
+#### Gulp
 
 Add `tailwindcss` to the list of plugins you pass to [gulp-postcss](https://github.com/postcss/gulp-postcss):
 
@@ -178,7 +182,7 @@ gulp.task('css', function () {
 })
 ```
 
-### Laravel Mix
+#### Laravel Mix
 
 If you're writing your project in plain CSS, use Mix's `postCss` method to process your CSS and include `tailwindcss` as a plugin:
 
@@ -215,7 +219,7 @@ mix.sass('resources/sass/app.scss', 'public/css')
 
 For more information on what this feature does and the implications of disabling it, [see the Laravel Mix documentation](https://laravel-mix.com/docs/5.0/css-preprocessors#css-url-rewriting).
 
-### Webpack Encore
+#### Webpack Encore
 
 Create a `postcss.config.js` file, add `tailwindcss` as a plugin and pass the path to your config file:
 
@@ -260,7 +264,7 @@ Encore.enableSassLoader(function (options) {}, {
 ```
 
 
-### Brunch
+#### Brunch
 
 Add `tailwindcss` to the list of processors you pass to [postcss-brunch](https://github.com/brunch/postcss-brunch):
 
@@ -279,7 +283,7 @@ exports.config = {
 }
 ```
 
-### Ember.js
+#### Ember.js
 
 Add `tailwindcss` to the list of plugins you pass to [ember-cli-postcss](https://github.com/jeffjewiss/ember-cli-postcss):
 
