@@ -1686,23 +1686,23 @@ video {
   border-color: rgba(112, 36, 89, var(--divide-opacity)) !important;
 }
 
-.divide-opacity-0 {
+.divide-opacity-0 > :not(template) ~ :not(template) {
   --divide-opacity: 0 !important;
 }
 
-.divide-opacity-25 {
+.divide-opacity-25 > :not(template) ~ :not(template) {
   --divide-opacity: 0.25 !important;
 }
 
-.divide-opacity-50 {
+.divide-opacity-50 > :not(template) ~ :not(template) {
   --divide-opacity: 0.5 !important;
 }
 
-.divide-opacity-75 {
+.divide-opacity-75 > :not(template) ~ :not(template) {
   --divide-opacity: 0.75 !important;
 }
 
-.divide-opacity-100 {
+.divide-opacity-100 > :not(template) ~ :not(template) {
   --divide-opacity: 1 !important;
 }
 
@@ -9460,43 +9460,43 @@ video {
   color: rgba(112, 36, 89, var(--placeholder-opacity)) !important;
 }
 
-.placeholder-opacity-0 {
+.placeholder-opacity-0::placeholder {
   --placeholder-opacity: 0 !important;
 }
 
-.placeholder-opacity-25 {
+.placeholder-opacity-25::placeholder {
   --placeholder-opacity: 0.25 !important;
 }
 
-.placeholder-opacity-50 {
+.placeholder-opacity-50::placeholder {
   --placeholder-opacity: 0.5 !important;
 }
 
-.placeholder-opacity-75 {
+.placeholder-opacity-75::placeholder {
   --placeholder-opacity: 0.75 !important;
 }
 
-.placeholder-opacity-100 {
+.placeholder-opacity-100::placeholder {
   --placeholder-opacity: 1 !important;
 }
 
-.focus\:placeholder-opacity-0:focus {
+.focus\:placeholder-opacity-0:focus::placeholder {
   --placeholder-opacity: 0 !important;
 }
 
-.focus\:placeholder-opacity-25:focus {
+.focus\:placeholder-opacity-25:focus::placeholder {
   --placeholder-opacity: 0.25 !important;
 }
 
-.focus\:placeholder-opacity-50:focus {
+.focus\:placeholder-opacity-50:focus::placeholder {
   --placeholder-opacity: 0.5 !important;
 }
 
-.focus\:placeholder-opacity-75:focus {
+.focus\:placeholder-opacity-75:focus::placeholder {
   --placeholder-opacity: 0.75 !important;
 }
 
-.focus\:placeholder-opacity-100:focus {
+.focus\:placeholder-opacity-100:focus::placeholder {
   --placeholder-opacity: 1 !important;
 }
 
@@ -15423,23 +15423,23 @@ video {
     border-color: rgba(112, 36, 89, var(--divide-opacity)) !important;
   }
 
-  .sm\:divide-opacity-0 {
+  .sm\:divide-opacity-0 > :not(template) ~ :not(template) {
     --divide-opacity: 0 !important;
   }
 
-  .sm\:divide-opacity-25 {
+  .sm\:divide-opacity-25 > :not(template) ~ :not(template) {
     --divide-opacity: 0.25 !important;
   }
 
-  .sm\:divide-opacity-50 {
+  .sm\:divide-opacity-50 > :not(template) ~ :not(template) {
     --divide-opacity: 0.5 !important;
   }
 
-  .sm\:divide-opacity-75 {
+  .sm\:divide-opacity-75 > :not(template) ~ :not(template) {
     --divide-opacity: 0.75 !important;
   }
 
-  .sm\:divide-opacity-100 {
+  .sm\:divide-opacity-100 > :not(template) ~ :not(template) {
     --divide-opacity: 1 !important;
   }
 
@@ -23197,43 +23197,43 @@ video {
     color: rgba(112, 36, 89, var(--placeholder-opacity)) !important;
   }
 
-  .sm\:placeholder-opacity-0 {
+  .sm\:placeholder-opacity-0::placeholder {
     --placeholder-opacity: 0 !important;
   }
 
-  .sm\:placeholder-opacity-25 {
+  .sm\:placeholder-opacity-25::placeholder {
     --placeholder-opacity: 0.25 !important;
   }
 
-  .sm\:placeholder-opacity-50 {
+  .sm\:placeholder-opacity-50::placeholder {
     --placeholder-opacity: 0.5 !important;
   }
 
-  .sm\:placeholder-opacity-75 {
+  .sm\:placeholder-opacity-75::placeholder {
     --placeholder-opacity: 0.75 !important;
   }
 
-  .sm\:placeholder-opacity-100 {
+  .sm\:placeholder-opacity-100::placeholder {
     --placeholder-opacity: 1 !important;
   }
 
-  .sm\:focus\:placeholder-opacity-0:focus {
+  .sm\:focus\:placeholder-opacity-0:focus::placeholder {
     --placeholder-opacity: 0 !important;
   }
 
-  .sm\:focus\:placeholder-opacity-25:focus {
+  .sm\:focus\:placeholder-opacity-25:focus::placeholder {
     --placeholder-opacity: 0.25 !important;
   }
 
-  .sm\:focus\:placeholder-opacity-50:focus {
+  .sm\:focus\:placeholder-opacity-50:focus::placeholder {
     --placeholder-opacity: 0.5 !important;
   }
 
-  .sm\:focus\:placeholder-opacity-75:focus {
+  .sm\:focus\:placeholder-opacity-75:focus::placeholder {
     --placeholder-opacity: 0.75 !important;
   }
 
-  .sm\:focus\:placeholder-opacity-100:focus {
+  .sm\:focus\:placeholder-opacity-100:focus::placeholder {
     --placeholder-opacity: 1 !important;
   }
 
@@ -29161,23 +29161,23 @@ video {
     border-color: rgba(112, 36, 89, var(--divide-opacity)) !important;
   }
 
-  .md\:divide-opacity-0 {
+  .md\:divide-opacity-0 > :not(template) ~ :not(template) {
     --divide-opacity: 0 !important;
   }
 
-  .md\:divide-opacity-25 {
+  .md\:divide-opacity-25 > :not(template) ~ :not(template) {
     --divide-opacity: 0.25 !important;
   }
 
-  .md\:divide-opacity-50 {
+  .md\:divide-opacity-50 > :not(template) ~ :not(template) {
     --divide-opacity: 0.5 !important;
   }
 
-  .md\:divide-opacity-75 {
+  .md\:divide-opacity-75 > :not(template) ~ :not(template) {
     --divide-opacity: 0.75 !important;
   }
 
-  .md\:divide-opacity-100 {
+  .md\:divide-opacity-100 > :not(template) ~ :not(template) {
     --divide-opacity: 1 !important;
   }
 
@@ -36935,43 +36935,43 @@ video {
     color: rgba(112, 36, 89, var(--placeholder-opacity)) !important;
   }
 
-  .md\:placeholder-opacity-0 {
+  .md\:placeholder-opacity-0::placeholder {
     --placeholder-opacity: 0 !important;
   }
 
-  .md\:placeholder-opacity-25 {
+  .md\:placeholder-opacity-25::placeholder {
     --placeholder-opacity: 0.25 !important;
   }
 
-  .md\:placeholder-opacity-50 {
+  .md\:placeholder-opacity-50::placeholder {
     --placeholder-opacity: 0.5 !important;
   }
 
-  .md\:placeholder-opacity-75 {
+  .md\:placeholder-opacity-75::placeholder {
     --placeholder-opacity: 0.75 !important;
   }
 
-  .md\:placeholder-opacity-100 {
+  .md\:placeholder-opacity-100::placeholder {
     --placeholder-opacity: 1 !important;
   }
 
-  .md\:focus\:placeholder-opacity-0:focus {
+  .md\:focus\:placeholder-opacity-0:focus::placeholder {
     --placeholder-opacity: 0 !important;
   }
 
-  .md\:focus\:placeholder-opacity-25:focus {
+  .md\:focus\:placeholder-opacity-25:focus::placeholder {
     --placeholder-opacity: 0.25 !important;
   }
 
-  .md\:focus\:placeholder-opacity-50:focus {
+  .md\:focus\:placeholder-opacity-50:focus::placeholder {
     --placeholder-opacity: 0.5 !important;
   }
 
-  .md\:focus\:placeholder-opacity-75:focus {
+  .md\:focus\:placeholder-opacity-75:focus::placeholder {
     --placeholder-opacity: 0.75 !important;
   }
 
-  .md\:focus\:placeholder-opacity-100:focus {
+  .md\:focus\:placeholder-opacity-100:focus::placeholder {
     --placeholder-opacity: 1 !important;
   }
 
@@ -42899,23 +42899,23 @@ video {
     border-color: rgba(112, 36, 89, var(--divide-opacity)) !important;
   }
 
-  .lg\:divide-opacity-0 {
+  .lg\:divide-opacity-0 > :not(template) ~ :not(template) {
     --divide-opacity: 0 !important;
   }
 
-  .lg\:divide-opacity-25 {
+  .lg\:divide-opacity-25 > :not(template) ~ :not(template) {
     --divide-opacity: 0.25 !important;
   }
 
-  .lg\:divide-opacity-50 {
+  .lg\:divide-opacity-50 > :not(template) ~ :not(template) {
     --divide-opacity: 0.5 !important;
   }
 
-  .lg\:divide-opacity-75 {
+  .lg\:divide-opacity-75 > :not(template) ~ :not(template) {
     --divide-opacity: 0.75 !important;
   }
 
-  .lg\:divide-opacity-100 {
+  .lg\:divide-opacity-100 > :not(template) ~ :not(template) {
     --divide-opacity: 1 !important;
   }
 
@@ -50673,43 +50673,43 @@ video {
     color: rgba(112, 36, 89, var(--placeholder-opacity)) !important;
   }
 
-  .lg\:placeholder-opacity-0 {
+  .lg\:placeholder-opacity-0::placeholder {
     --placeholder-opacity: 0 !important;
   }
 
-  .lg\:placeholder-opacity-25 {
+  .lg\:placeholder-opacity-25::placeholder {
     --placeholder-opacity: 0.25 !important;
   }
 
-  .lg\:placeholder-opacity-50 {
+  .lg\:placeholder-opacity-50::placeholder {
     --placeholder-opacity: 0.5 !important;
   }
 
-  .lg\:placeholder-opacity-75 {
+  .lg\:placeholder-opacity-75::placeholder {
     --placeholder-opacity: 0.75 !important;
   }
 
-  .lg\:placeholder-opacity-100 {
+  .lg\:placeholder-opacity-100::placeholder {
     --placeholder-opacity: 1 !important;
   }
 
-  .lg\:focus\:placeholder-opacity-0:focus {
+  .lg\:focus\:placeholder-opacity-0:focus::placeholder {
     --placeholder-opacity: 0 !important;
   }
 
-  .lg\:focus\:placeholder-opacity-25:focus {
+  .lg\:focus\:placeholder-opacity-25:focus::placeholder {
     --placeholder-opacity: 0.25 !important;
   }
 
-  .lg\:focus\:placeholder-opacity-50:focus {
+  .lg\:focus\:placeholder-opacity-50:focus::placeholder {
     --placeholder-opacity: 0.5 !important;
   }
 
-  .lg\:focus\:placeholder-opacity-75:focus {
+  .lg\:focus\:placeholder-opacity-75:focus::placeholder {
     --placeholder-opacity: 0.75 !important;
   }
 
-  .lg\:focus\:placeholder-opacity-100:focus {
+  .lg\:focus\:placeholder-opacity-100:focus::placeholder {
     --placeholder-opacity: 1 !important;
   }
 
@@ -56637,23 +56637,23 @@ video {
     border-color: rgba(112, 36, 89, var(--divide-opacity)) !important;
   }
 
-  .xl\:divide-opacity-0 {
+  .xl\:divide-opacity-0 > :not(template) ~ :not(template) {
     --divide-opacity: 0 !important;
   }
 
-  .xl\:divide-opacity-25 {
+  .xl\:divide-opacity-25 > :not(template) ~ :not(template) {
     --divide-opacity: 0.25 !important;
   }
 
-  .xl\:divide-opacity-50 {
+  .xl\:divide-opacity-50 > :not(template) ~ :not(template) {
     --divide-opacity: 0.5 !important;
   }
 
-  .xl\:divide-opacity-75 {
+  .xl\:divide-opacity-75 > :not(template) ~ :not(template) {
     --divide-opacity: 0.75 !important;
   }
 
-  .xl\:divide-opacity-100 {
+  .xl\:divide-opacity-100 > :not(template) ~ :not(template) {
     --divide-opacity: 1 !important;
   }
 
@@ -64411,43 +64411,43 @@ video {
     color: rgba(112, 36, 89, var(--placeholder-opacity)) !important;
   }
 
-  .xl\:placeholder-opacity-0 {
+  .xl\:placeholder-opacity-0::placeholder {
     --placeholder-opacity: 0 !important;
   }
 
-  .xl\:placeholder-opacity-25 {
+  .xl\:placeholder-opacity-25::placeholder {
     --placeholder-opacity: 0.25 !important;
   }
 
-  .xl\:placeholder-opacity-50 {
+  .xl\:placeholder-opacity-50::placeholder {
     --placeholder-opacity: 0.5 !important;
   }
 
-  .xl\:placeholder-opacity-75 {
+  .xl\:placeholder-opacity-75::placeholder {
     --placeholder-opacity: 0.75 !important;
   }
 
-  .xl\:placeholder-opacity-100 {
+  .xl\:placeholder-opacity-100::placeholder {
     --placeholder-opacity: 1 !important;
   }
 
-  .xl\:focus\:placeholder-opacity-0:focus {
+  .xl\:focus\:placeholder-opacity-0:focus::placeholder {
     --placeholder-opacity: 0 !important;
   }
 
-  .xl\:focus\:placeholder-opacity-25:focus {
+  .xl\:focus\:placeholder-opacity-25:focus::placeholder {
     --placeholder-opacity: 0.25 !important;
   }
 
-  .xl\:focus\:placeholder-opacity-50:focus {
+  .xl\:focus\:placeholder-opacity-50:focus::placeholder {
     --placeholder-opacity: 0.5 !important;
   }
 
-  .xl\:focus\:placeholder-opacity-75:focus {
+  .xl\:focus\:placeholder-opacity-75:focus::placeholder {
     --placeholder-opacity: 0.75 !important;
   }
 
-  .xl\:focus\:placeholder-opacity-100:focus {
+  .xl\:focus\:placeholder-opacity-100:focus::placeholder {
     --placeholder-opacity: 1 !important;
   }
 
