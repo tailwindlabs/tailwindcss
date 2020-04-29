@@ -1,4 +1,5 @@
 module.exports = {
+  purge: [],
   prefix: '',
   important: false,
   separator: ':',
