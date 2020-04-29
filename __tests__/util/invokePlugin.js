@@ -16,6 +16,15 @@ export default function(plugin, config) {
 
       return getConfigValue(`variants.${path}`, defaultValue)
     },
+    target: path => {
+      if (_.isString(config.target)) {
+        return config.target
+      }
+
+      const [defaultTarget, targetOverrides] = getConfigValue('target')
+
+      return _.get(targetOverrides, path, defaultTarget)
+    },
     addUtilities(utilities, variants) {
       addedUtilities.push([utilities, variants])
     },

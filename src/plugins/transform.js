@@ -1,5 +1,9 @@
 export default function() {
-  return function({ addUtilities, variants }) {
+  return function({ addUtilities, variants, target }) {
+    if (target('transform') === 'ie11') {
+      return
+    }
+
     addUtilities(
       {
         '.transform': {

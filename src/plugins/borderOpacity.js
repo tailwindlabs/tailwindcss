@@ -1,5 +1,14 @@
 import createUtilityPlugin from '../util/createUtilityPlugin'
 
 export default function() {
-  return createUtilityPlugin('borderOpacity', [['border-opacity', ['--border-opacity']]])
+  return function({ target, ...args }) {
+    if (target('borderOpacity') === 'ie11') {
+      return
+    }
+
+    createUtilityPlugin('borderOpacity', [['border-opacity', ['--border-opacity']]])({
+      target,
+      ...args,
+    })
+  }
 }
