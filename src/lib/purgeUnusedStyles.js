@@ -28,6 +28,12 @@ export default function purgeUnusedUtilities(config) {
     return removeTailwindComments
   }
 
+  // Skip if `purge: []` since that's part of the default config
+  if (Array.isArray(config.purge) && config.purge.length === 0) {
+    console.log('Skipping purge because no template paths provided...')
+    return removeTailwindComments
+  }
+
   return postcss([
     function(css) {
       const mode = _.get(config, 'purge.mode', 'conservative')
@@ -38,12 +44,10 @@ export default function purgeUnusedUtilities(config) {
 
         css.walkComments(comment => {
           switch (comment.text.trim()) {
-            case 'tailwind start components':
             case 'tailwind start utilities':
             case 'tailwind start screens':
               comment.text = 'purgecss end ignore'
               break
-            case 'tailwind end components':
             case 'tailwind end utilities':
             case 'tailwind end screens':
               comment.text = 'purgecss start ignore'
