@@ -49,10 +49,13 @@ const getConfigFunction = config => () => {
     return resolveConfig([defaultConfig])
   }
 
-  if (!_.isObject(config)) {
-    getModuleDependencies(config).forEach(mdl => {
-      delete require.cache[require.resolve(mdl.file)]
-    })
+  // Skip this if Jest is running: https://github.com/facebook/jest/pull/9841#issuecomment-621417584
+  if (process.env.JEST_WORKER_ID === undefined) {
+    if (!_.isObject(config)) {
+      getModuleDependencies(config).forEach(mdl => {
+        delete require.cache[require.resolve(mdl.file)]
+      })
+    }
   }
 
   const configObject = _.isObject(config) ? _.get(config, 'config', config) : require(config)
