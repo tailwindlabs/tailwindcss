@@ -2,6 +2,12 @@ const defaultConfig = require('tailwindcss/defaultConfig')
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
+  purge: [
+    './source/**/*.blade.php',
+    './source/**/*.blade.md',
+    './source/**/*.vue',
+    './source/**/*.js',
+  ],
   important: true,
   theme: {
     screens: {
