@@ -54,6 +54,10 @@ function assertPurged(result) {
   expect(result.css).toContain('.text-green-700')
   expect(result.css).toContain('.bg-green-100')
   expect(result.css).toContain('.text-left')
+  expect(result.css).toContain('.font-mono')
+  expect(result.css).toContain('.col-span-4')
+  expect(result.css).toContain('.tracking-tight')
+  expect(result.css).toContain('.tracking-tight')
 }
 
 test('purges unused classes', () => {
