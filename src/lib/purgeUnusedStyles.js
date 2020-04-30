@@ -20,9 +20,7 @@ function removeTailwindComments(css) {
 }
 
 export default function purgeUnusedUtilities(config) {
-  const purgeEnabled =
-    _.get(config, 'purge.enabled', false) === true ||
-    (config.purge !== undefined && process.env.NODE_ENV === 'production')
+  const purgeEnabled = _.get(config, 'purge.enabled', config.purge !== undefined && process.env.NODE_ENV === 'production')
 
   if (!purgeEnabled) {
     return removeTailwindComments
