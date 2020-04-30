@@ -9590,8 +9590,28 @@ video {
   text-decoration: underline;
 }
 
+.overline {
+  text-decoration: overline;
+}
+
 .line-through {
   text-decoration: line-through;
+}
+
+.underline.overline {
+  text-decoration: underline overline;
+}
+
+.underline.line-through {
+  text-decoration: underline line-through;
+}
+
+.overline.line-through {
+  text-decoration: overline line-through;
+}
+
+.underline.overline.line-through {
+  text-decoration: underline overline line-through;
 }
 
 .no-underline {
@@ -9602,8 +9622,28 @@ video {
   text-decoration: underline;
 }
 
+.hover\:overline:hover {
+  text-decoration: overline;
+}
+
 .hover\:line-through:hover {
   text-decoration: line-through;
+}
+
+.hover\:underline:hover.hover\:overline:hover {
+  text-decoration: underline overline;
+}
+
+.hover\:underline:hover.hover\:line-through:hover {
+  text-decoration: underline line-through;
+}
+
+.hover\:overline:hover.hover\:line-through:hover {
+  text-decoration: overline line-through;
+}
+
+.hover\:underline:hover.hover\:overline:hover.hover\:line-through:hover {
+  text-decoration: underline overline line-through;
 }
 
 .hover\:no-underline:hover {
@@ -9614,8 +9654,28 @@ video {
   text-decoration: underline;
 }
 
+.focus\:overline:focus {
+  text-decoration: overline;
+}
+
 .focus\:line-through:focus {
   text-decoration: line-through;
+}
+
+.focus\:underline:focus.focus\:overline:focus {
+  text-decoration: underline overline;
+}
+
+.focus\:underline:focus.focus\:line-through:focus {
+  text-decoration: underline line-through;
+}
+
+.focus\:overline:focus.focus\:line-through:focus {
+  text-decoration: overline line-through;
+}
+
+.focus\:underline:focus.focus\:overline:focus.focus\:line-through:focus {
+  text-decoration: underline overline line-through;
 }
 
 .focus\:no-underline:focus {
@@ -20693,8 +20753,28 @@ video {
     text-decoration: underline;
   }
 
+  .sm\:overline {
+    text-decoration: overline;
+  }
+
   .sm\:line-through {
     text-decoration: line-through;
+  }
+
+  .underline.sm\:overline {
+    text-decoration: underline overline;
+  }
+
+  .underline.sm\:line-through {
+    text-decoration: underline line-through;
+  }
+
+  .overline.sm\:line-through {
+    text-decoration: overline line-through;
+  }
+
+  .underline.overline.sm\:line-through {
+    text-decoration: underline overline line-through;
   }
 
   .sm\:no-underline {
@@ -20705,8 +20785,28 @@ video {
     text-decoration: underline;
   }
 
+  .sm\:hover\:overline:hover {
+    text-decoration: overline;
+  }
+
   .sm\:hover\:line-through:hover {
     text-decoration: line-through;
+  }
+
+  .hover\:underline:hover.sm\:hover\:overline:hover {
+    text-decoration: underline overline;
+  }
+
+  .hover\:underline:hover.sm\:hover\:line-through:hover {
+    text-decoration: underline line-through;
+  }
+
+  .hover\:overline:hover.sm\:hover\:line-through:hover {
+    text-decoration: overline line-through;
+  }
+
+  .hover\:underline:hover.hover\:overline:hover.sm\:hover\:line-through:hover {
+    text-decoration: underline overline line-through;
   }
 
   .sm\:hover\:no-underline:hover {
@@ -20717,8 +20817,28 @@ video {
     text-decoration: underline;
   }
 
+  .sm\:focus\:overline:focus {
+    text-decoration: overline;
+  }
+
   .sm\:focus\:line-through:focus {
     text-decoration: line-through;
+  }
+
+  .focus\:underline:focus.sm\:focus\:overline:focus {
+    text-decoration: underline overline;
+  }
+
+  .focus\:underline:focus.sm\:focus\:line-through:focus {
+    text-decoration: underline line-through;
+  }
+
+  .focus\:overline:focus.sm\:focus\:line-through:focus {
+    text-decoration: overline line-through;
+  }
+
+  .focus\:underline:focus.focus\:overline:focus.sm\:focus\:line-through:focus {
+    text-decoration: underline overline line-through;
   }
 
   .sm\:focus\:no-underline:focus {
@@ -31797,8 +31917,28 @@ video {
     text-decoration: underline;
   }
 
+  .md\:overline {
+    text-decoration: overline;
+  }
+
   .md\:line-through {
     text-decoration: line-through;
+  }
+
+  .underline.md\:overline {
+    text-decoration: underline overline;
+  }
+
+  .underline.md\:line-through {
+    text-decoration: underline line-through;
+  }
+
+  .overline.md\:line-through {
+    text-decoration: overline line-through;
+  }
+
+  .underline.overline.md\:line-through {
+    text-decoration: underline overline line-through;
   }
 
   .md\:no-underline {
@@ -31809,8 +31949,28 @@ video {
     text-decoration: underline;
   }
 
+  .md\:hover\:overline:hover {
+    text-decoration: overline;
+  }
+
   .md\:hover\:line-through:hover {
     text-decoration: line-through;
+  }
+
+  .hover\:underline:hover.md\:hover\:overline:hover {
+    text-decoration: underline overline;
+  }
+
+  .hover\:underline:hover.md\:hover\:line-through:hover {
+    text-decoration: underline line-through;
+  }
+
+  .hover\:overline:hover.md\:hover\:line-through:hover {
+    text-decoration: overline line-through;
+  }
+
+  .hover\:underline:hover.hover\:overline:hover.md\:hover\:line-through:hover {
+    text-decoration: underline overline line-through;
   }
 
   .md\:hover\:no-underline:hover {
@@ -31821,8 +31981,28 @@ video {
     text-decoration: underline;
   }
 
+  .md\:focus\:overline:focus {
+    text-decoration: overline;
+  }
+
   .md\:focus\:line-through:focus {
     text-decoration: line-through;
+  }
+
+  .focus\:underline:focus.md\:focus\:overline:focus {
+    text-decoration: underline overline;
+  }
+
+  .focus\:underline:focus.md\:focus\:line-through:focus {
+    text-decoration: underline line-through;
+  }
+
+  .focus\:overline:focus.md\:focus\:line-through:focus {
+    text-decoration: overline line-through;
+  }
+
+  .focus\:underline:focus.focus\:overline:focus.md\:focus\:line-through:focus {
+    text-decoration: underline overline line-through;
   }
 
   .md\:focus\:no-underline:focus {
@@ -42901,8 +43081,28 @@ video {
     text-decoration: underline;
   }
 
+  .lg\:overline {
+    text-decoration: overline;
+  }
+
   .lg\:line-through {
     text-decoration: line-through;
+  }
+
+  .underline.lg\:overline {
+    text-decoration: underline overline;
+  }
+
+  .underline.lg\:line-through {
+    text-decoration: underline line-through;
+  }
+
+  .overline.lg\:line-through {
+    text-decoration: overline line-through;
+  }
+
+  .underline.overline.lg\:line-through {
+    text-decoration: underline overline line-through;
   }
 
   .lg\:no-underline {
@@ -42913,8 +43113,28 @@ video {
     text-decoration: underline;
   }
 
+  .lg\:hover\:overline:hover {
+    text-decoration: overline;
+  }
+
   .lg\:hover\:line-through:hover {
     text-decoration: line-through;
+  }
+
+  .hover\:underline:hover.lg\:hover\:overline:hover {
+    text-decoration: underline overline;
+  }
+
+  .hover\:underline:hover.lg\:hover\:line-through:hover {
+    text-decoration: underline line-through;
+  }
+
+  .hover\:overline:hover.lg\:hover\:line-through:hover {
+    text-decoration: overline line-through;
+  }
+
+  .hover\:underline:hover.hover\:overline:hover.lg\:hover\:line-through:hover {
+    text-decoration: underline overline line-through;
   }
 
   .lg\:hover\:no-underline:hover {
@@ -42925,8 +43145,28 @@ video {
     text-decoration: underline;
   }
 
+  .lg\:focus\:overline:focus {
+    text-decoration: overline;
+  }
+
   .lg\:focus\:line-through:focus {
     text-decoration: line-through;
+  }
+
+  .focus\:underline:focus.lg\:focus\:overline:focus {
+    text-decoration: underline overline;
+  }
+
+  .focus\:underline:focus.lg\:focus\:line-through:focus {
+    text-decoration: underline line-through;
+  }
+
+  .focus\:overline:focus.lg\:focus\:line-through:focus {
+    text-decoration: overline line-through;
+  }
+
+  .focus\:underline:focus.focus\:overline:focus.lg\:focus\:line-through:focus {
+    text-decoration: underline overline line-through;
   }
 
   .lg\:focus\:no-underline:focus {
@@ -54005,8 +54245,28 @@ video {
     text-decoration: underline;
   }
 
+  .xl\:overline {
+    text-decoration: overline;
+  }
+
   .xl\:line-through {
     text-decoration: line-through;
+  }
+
+  .underline.xl\:overline {
+    text-decoration: underline overline;
+  }
+
+  .underline.xl\:line-through {
+    text-decoration: underline line-through;
+  }
+
+  .overline.xl\:line-through {
+    text-decoration: overline line-through;
+  }
+
+  .underline.overline.xl\:line-through {
+    text-decoration: underline overline line-through;
   }
 
   .xl\:no-underline {
@@ -54017,8 +54277,28 @@ video {
     text-decoration: underline;
   }
 
+  .xl\:hover\:overline:hover {
+    text-decoration: overline;
+  }
+
   .xl\:hover\:line-through:hover {
     text-decoration: line-through;
+  }
+
+  .hover\:underline:hover.xl\:hover\:overline:hover {
+    text-decoration: underline overline;
+  }
+
+  .hover\:underline:hover.xl\:hover\:line-through:hover {
+    text-decoration: underline line-through;
+  }
+
+  .hover\:overline:hover.xl\:hover\:line-through:hover {
+    text-decoration: overline line-through;
+  }
+
+  .hover\:underline:hover.hover\:overline:hover.xl\:hover\:line-through:hover {
+    text-decoration: underline overline line-through;
   }
 
   .xl\:hover\:no-underline:hover {
@@ -54029,8 +54309,28 @@ video {
     text-decoration: underline;
   }
 
+  .xl\:focus\:overline:focus {
+    text-decoration: overline;
+  }
+
   .xl\:focus\:line-through:focus {
     text-decoration: line-through;
+  }
+
+  .focus\:underline:focus.xl\:focus\:overline:focus {
+    text-decoration: underline overline;
+  }
+
+  .focus\:underline:focus.xl\:focus\:line-through:focus {
+    text-decoration: underline line-through;
+  }
+
+  .focus\:overline:focus.xl\:focus\:line-through:focus {
+    text-decoration: overline line-through;
+  }
+
+  .focus\:underline:focus.focus\:overline:focus.xl\:focus\:line-through:focus {
+    text-decoration: underline overline line-through;
   }
 
   .xl\:focus\:no-underline:focus {
