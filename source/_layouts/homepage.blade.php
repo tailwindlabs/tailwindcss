@@ -123,7 +123,7 @@
       <div class="w-full max-w-screen-xl relative mx-auto px-6 pt-16 pb-40 md:pb-24">
         <div class="xl:flex -mx-6">
           <div class="px-6 text-left md:text-center xl:text-left max-w-2xl md:max-w-3xl mx-auto">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl xl:text-4xl font-light leading-tight">A utility-first CSS framework for <span class="sm:block text-teal-500 font-normal">rapidly building custom designs.</span></h1>
+            <h1 class="text-3xl tracking-tight sm:text-4xl md:text-5xl xl:text-4xl font-medium leading-tight">A utility-first CSS framework for <span class="sm:block text-teal-500 font-medium">rapidly building custom designs.</span></h1>
             <p class="mt-6 leading-relaxed sm:text-lg md:text-xl xl:text-lg text-gray-600">
               Tailwind CSS is a highly customizable, low-level CSS framework that gives you all of the building blocks you need to build bespoke designs without any annoying opinionated styles you have to fight to override.
             </p>
