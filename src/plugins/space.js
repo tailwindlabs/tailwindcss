@@ -8,12 +8,12 @@ export default function() {
         (size, modifier) => ({
           [`.${e(
             prefixNegativeModifiers('space-y', modifier)
-          )} > :not(template) ~ :not(template)`]: {
+          )} > :not(template):not([type=hidden]) ~ :not(template):not([type=hidden])`]: {
             'margin-top': size,
           },
           [`.${e(
             prefixNegativeModifiers('space-x', modifier)
-          )} > :not(template) ~ :not(template)`]: {
+          )} > :not(template):not([type=hidden]) ~ :not(template):not([type=hidden])`]: {
             'margin-left': size,
           },
         }),
@@ -47,10 +47,10 @@ export default function() {
       return [
         ..._.flatMap(theme('space'), generator),
         {
-          '.space-y-reverse > :not(template) ~ :not(template)': {
+          '.space-y-reverse > :not(template):not([type=hidden]) ~ :not(template):not([type=hidden])': {
             '--space-y-reverse': '1',
           },
-          '.space-x-reverse > :not(template) ~ :not(template)': {
+          '.space-x-reverse > :not(template):not([type=hidden]) ~ :not(template):not([type=hidden])': {
             '--space-x-reverse': '1',
           },
         },
