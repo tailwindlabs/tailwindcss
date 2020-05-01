@@ -744,6 +744,62 @@ test('plugins apply all global variants when variants are configured globally', 
     `)
 })
 
+test('plugins can check if corePlugins are enabled', () => {
+  const { components, utilities } = processPlugins(
+    [
+      function({ addUtilities, corePlugins }) {
+        addUtilities({
+          '.test': {
+            'text-color': corePlugins('textColor') ? 'true' : 'false',
+            opacity: corePlugins('opacity') ? 'true' : 'false',
+          },
+        })
+      },
+    ],
+    makeConfig({
+      corePlugins: { textColor: false },
+    })
+  )
+
+  expect(components.length).toBe(0)
+  expect(css(utilities)).toMatchCss(`
+    @variants {
+      .test {
+        text-color: false;
+        opacity: true
+      }
+    }
+    `)
+})
+
+test('plugins can check if corePlugins are enabled when using array white-listing', () => {
+  const { components, utilities } = processPlugins(
+    [
+      function({ addUtilities, corePlugins }) {
+        addUtilities({
+          '.test': {
+            'text-color': corePlugins('textColor') ? 'true' : 'false',
+            opacity: corePlugins('opacity') ? 'true' : 'false',
+          },
+        })
+      },
+    ],
+    makeConfig({
+      corePlugins: ['textColor'],
+    })
+  )
+
+  expect(components.length).toBe(0)
+  expect(css(utilities)).toMatchCss(`
+    @variants {
+      .test {
+        text-color: true;
+        opacity: false
+      }
+    }
+    `)
+})
+
 test('plugins can provide fallbacks to keys missing from the config', () => {
   const { components, utilities } = processPlugins(
     [

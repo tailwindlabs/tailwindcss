@@ -41,6 +41,13 @@ export default function(plugins, config) {
       postcss,
       config: getConfigValue,
       theme: (path, defaultValue) => getConfigValue(`theme.${path}`, defaultValue),
+      corePlugins: path => {
+        if (Array.isArray(config.corePlugins)) {
+          return config.corePlugins.includes(path)
+        }
+
+        return getConfigValue(`corePlugins.${path}`, true)
+      },
       variants: (path, defaultValue) => {
         if (Array.isArray(config.variants)) {
           return config.variants
