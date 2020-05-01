@@ -1,6 +1,9 @@
 import _ from 'lodash'
 import postcss from 'postcss'
 import purgecss from '@fullhuman/postcss-purgecss'
+import chalk from 'chalk'
+import { log } from '../cli/utils'
+import * as emoji from '../cli/emoji'
 
 function removeTailwindComments(css) {
   css.walkComments(comment => {
@@ -23,7 +26,7 @@ export default function purgeUnusedUtilities(config) {
   const purgeEnabled = _.get(
     config,
     'purge.enabled',
-    config.purge !== undefined && process.env.NODE_ENV === 'production'
+    config.purge !== false && config.purge !== undefined && process.env.NODE_ENV === 'production'
   )
 
   if (!purgeEnabled) {
@@ -32,7 +35,9 @@ export default function purgeUnusedUtilities(config) {
 
   // Skip if `purge: []` since that's part of the default config
   if (Array.isArray(config.purge) && config.purge.length === 0) {
-    console.log('Skipping purge because no template paths provided...')
+    log()
+    log(emoji.warning, chalk.yellow(' Skipping purge because no template paths provided.'))
+    log(chalk.white('   To silence this warning, set `purge: false` in your Tailwind config file.'))
     return removeTailwindComments
   }
 

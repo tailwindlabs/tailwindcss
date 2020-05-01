@@ -173,6 +173,30 @@ test('does not purge if explicitly disabled', () => {
     })
 })
 
+test('does not purge if purge is simply false', () => {
+  const OLD_NODE_ENV = process.env.NODE_ENV
+  process.env.NODE_ENV = 'production'
+  const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+  const input = fs.readFileSync(inputPath, 'utf8')
+
+  return postcss([
+    tailwind({
+      ...defaultConfig,
+      purge: false,
+    }),
+  ])
+    .process(input, { from: inputPath })
+    .then(result => {
+      process.env.NODE_ENV = OLD_NODE_ENV
+      const expected = fs.readFileSync(
+        path.resolve(`${__dirname}/fixtures/tailwind-output.css`),
+        'utf8'
+      )
+
+      expect(result.css).toBe(expected)
+    })
+})
+
 test('purges outside of production if explicitly enabled', () => {
   const OLD_NODE_ENV = process.env.NODE_ENV
   process.env.NODE_ENV = 'development'
