@@ -1,4 +1,5 @@
 import createColor from 'color'
+import _ from 'lodash'
 
 function hasAlpha(color) {
   return (
@@ -18,6 +19,12 @@ function toRgba(color) {
 }
 
 export default function withAlphaVariable({ color, property, variable }) {
+  if (_.isFunction(color)) {
+    return {
+      [property]: color(variable),
+    }
+  }
+
   try {
     const [r, g, b, a] = toRgba(color)
 
