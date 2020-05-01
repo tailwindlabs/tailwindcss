@@ -3,7 +3,7 @@ import flattenColorPalette from '../util/flattenColorPalette'
 import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants, target }) {
+  return function({ addUtilities, e, theme, variants, target, corePlugins }) {
     if (target('textColor') === 'ie11') {
       const utilities = _.fromPairs(
         _.map(flattenColorPalette(theme('textColor')), (value, modifier) => {
@@ -20,7 +20,9 @@ export default function() {
       _.map(flattenColorPalette(theme('textColor')), (value, modifier) => {
         return [
           `.${e(`text-${modifier}`)}`,
-          withAlphaVariable({ color: value, property: 'color', variable: '--text-opacity' }),
+          corePlugins('textOpacity')
+            ? withAlphaVariable({ color: value, property: 'color', variable: '--text-opacity' })
+            : { color: value },
         ]
       })
     )

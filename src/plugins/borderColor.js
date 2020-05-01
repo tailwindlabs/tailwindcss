@@ -3,7 +3,7 @@ import flattenColorPalette from '../util/flattenColorPalette'
 import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants, target }) {
+  return function({ addUtilities, e, theme, variants, target, corePlugins }) {
     if (target('borderColor') === 'ie11') {
       const colors = flattenColorPalette(theme('borderColor'))
 
@@ -24,11 +24,13 @@ export default function() {
       _.map(_.omit(colors, 'default'), (value, modifier) => {
         return [
           `.${e(`border-${modifier}`)}`,
-          withAlphaVariable({
-            color: value,
-            property: 'border-color',
-            variable: '--border-opacity',
-          }),
+          corePlugins('borderOpacity')
+            ? withAlphaVariable({
+                color: value,
+                property: 'border-color',
+                variable: '--border-opacity',
+              })
+            : { 'border-color': value },
         ]
       })
     )

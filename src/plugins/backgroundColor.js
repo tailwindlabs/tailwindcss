@@ -3,7 +3,7 @@ import flattenColorPalette from '../util/flattenColorPalette'
 import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants, target }) {
+  return function({ addUtilities, e, theme, variants, target, corePlugins }) {
     if (target('backgroundColor') === 'ie11') {
       const utilities = _.fromPairs(
         _.map(flattenColorPalette(theme('backgroundColor')), (value, modifier) => {
@@ -20,11 +20,13 @@ export default function() {
       _.map(flattenColorPalette(theme('backgroundColor')), (value, modifier) => {
         return [
           `.${e(`bg-${modifier}`)}`,
-          withAlphaVariable({
-            color: value,
-            property: 'background-color',
-            variable: '--bg-opacity',
-          }),
+          corePlugins('backgroundOpacity')
+            ? withAlphaVariable({
+                color: value,
+                property: 'background-color',
+                variable: '--bg-opacity',
+              })
+            : { 'background-color': value },
         ]
       })
     )

@@ -3,7 +3,7 @@ import flattenColorPalette from '../util/flattenColorPalette'
 import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants, target }) {
+  return function({ addUtilities, e, theme, variants, target, corePlugins }) {
     if (target('placeholderColor') === 'ie11') {
       const utilities = _.fromPairs(
         _.map(flattenColorPalette(theme('placeholderColor')), (value, modifier) => {
@@ -20,7 +20,13 @@ export default function() {
       _.map(flattenColorPalette(theme('placeholderColor')), (value, modifier) => {
         return [
           `.${e(`placeholder-${modifier}`)}::placeholder`,
-          withAlphaVariable({ color: value, property: 'color', variable: '--placeholder-opacity' }),
+          corePlugins('placeholderOpacity')
+            ? withAlphaVariable({
+                color: value,
+                property: 'color',
+                variable: '--placeholder-opacity',
+              })
+            : { color: value },
         ]
       })
     )
