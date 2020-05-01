@@ -52,6 +52,34 @@ it('generates the right CSS when using @import instead of @tailwind', () => {
     })
 })
 
+// TODO: Move to per plugin unit tests for this sort of thing
+it('generates the right CSS when color opacity plugins are disabled', () => {
+  const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+  const input = fs.readFileSync(inputPath, 'utf8')
+
+  return postcss([
+    tailwind({
+      ...config,
+      corePlugins: {
+        textOpacity: false,
+        backgroundOpacity: false,
+        borderOpacity: false,
+        placeholderOpacity: false,
+        divideOpacity: false,
+      },
+    }),
+  ])
+    .process(input, { from: inputPath })
+    .then(result => {
+      const expected = fs.readFileSync(
+        path.resolve(`${__dirname}/fixtures/tailwind-output-no-color-opacity.css`),
+        'utf8'
+      )
+
+      expect(result.css).toBe(expected)
+    })
+})
+
 it('does not add any CSS if no Tailwind features are used', () => {
   return postcss([tailwind()])
     .process('.foo { color: blue; }', { from: undefined })

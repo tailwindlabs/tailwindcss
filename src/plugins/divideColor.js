@@ -3,7 +3,7 @@ import flattenColorPalette from '../util/flattenColorPalette'
 import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants, target }) {
+  return function({ addUtilities, e, theme, variants, target, corePlugins }) {
     const colors = flattenColorPalette(theme('divideColor'))
 
     if (target('divideColor') === 'ie11') {
@@ -25,11 +25,13 @@ export default function() {
       _.map(_.omit(colors, 'default'), (value, modifier) => {
         return [
           `.${e(`divide-${modifier}`)} > :not(template) ~ :not(template)`,
-          withAlphaVariable({
-            color: value,
-            property: 'border-color',
-            variable: '--divide-opacity',
-          }),
+          corePlugins('divideOpacity')
+            ? withAlphaVariable({
+                color: value,
+                property: 'border-color',
+                variable: '--divide-opacity',
+              })
+            : { 'border-color': value },
         ]
       })
     )
