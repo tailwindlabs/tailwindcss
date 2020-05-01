@@ -95,6 +95,43 @@ test('browserslist target is translated to a target preset', () => {
       [
         function({ addUtilities, target }) {
           addUtilities({
+            '.test': {
+              target: target('testPlugin'),
+            },
+          })
+        },
+      ],
+      {
+        ...config,
+        target: 'browserslist',
+      }
+    )
+
+    expect(css(utilities)).toMatchCss(`
+      @variants {
+        .test {
+          target: ie11
+        }
+      }
+    `)
+
+    return Promise.resolve()
+  })
+})
+
+test('browserslist target is translated to a target preset with overrides', () => {
+  return runInTempDirectory(() => {
+    fs.writeFileSync(
+      path.resolve('./.browserslistrc'),
+      `
+      last 2 versions
+      IE 11
+      `
+    )
+    const { utilities } = processPlugins(
+      [
+        function({ addUtilities, target }) {
+          addUtilities({
             '.testA': {
               target: target('testPluginA'),
             },

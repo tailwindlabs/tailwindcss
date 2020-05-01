@@ -57,7 +57,7 @@ export default function(plugins, config) {
       },
       target: path => {
         if (_.isString(config.target)) {
-          return config.target
+          return config.target === 'browserslist' ? browserslistTarget : config.target
         }
 
         const [defaultTarget, targetOverrides] = getConfigValue('target')
