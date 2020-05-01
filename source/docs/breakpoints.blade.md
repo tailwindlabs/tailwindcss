@@ -184,3 +184,31 @@ Then you can use classes like `print:text-black` to specify styles that should o
   <!-- ... -->
 </div>
 ```
+
+### Dark mode
+
+The `raw` option can even be used to implement a "dark mode" screen:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      screens: {
+        'dark': {'raw': '(prefers-color-scheme: dark)'},
+        // => @media (prefers-color-scheme: dark) { ... }
+      }
+    }
+  }
+}
+```
+
+Then you can style elements differently in dark mode using the `dark:` prefix:
+
+```html
+<div class="text-gray-700 dark:text-gray-200">
+  <!-- ... -->
+</div>
+```
+
+Note that because of how these screen variants are implemented in Tailwind **you can't combine breakpoints with dark mode using this approach**, for example `md:dark:text-gray-300` won't work. This is something we're hoping to address with official dark mode support in a future release.
