@@ -187,5 +187,5 @@ If you don't plan to use the grid-column utilities in your project, you can disa
   // ...
 + gridColumn: false,
 + gridColumnStart: false,
-+ gridColumnStartEnd: false,
++ gridColumnEnd: false,
 @endcomponent
