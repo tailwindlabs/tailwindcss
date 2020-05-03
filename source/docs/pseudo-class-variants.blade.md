@@ -564,7 +564,7 @@ Learn more about writing variant plugins in the [variant plugin documentation](/
 
 ## Default variants reference
 
-Due to file-size considerations, Tailwind does not all variants for all utilities by default.
+Due to file-size considerations, Tailwind does not include all variants for all utilities by default.
 
 To configure which variants are enabled for your project, see the [configuring variants documentation](/docs/configuring-variants).
 
