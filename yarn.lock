@@ -4413,7 +4413,7 @@ postcss-value-parser@^4.0.3:
   resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-4.0.3.tgz#651ff4593aa9eda8d5d0d66593a2417aeaeb325d"
   integrity sha512-N7h4pG+Nnu5BEIzyeaaIYWs0LI5XC40OrRh5L60z0QjFsqGWcHcbkBvpe1WYpcIS9yQ8sOi/vIPt1ejQCrMVrg==
 
-postcss@7.0.27, postcss@^7.0.11, postcss@^7.0.18, postcss@^7.0.21, postcss@^7.0.27:
+postcss@7.0.27:
   version "7.0.27"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.27.tgz#cc67cdc6b0daa375105b7c424a85567345fc54d9"
   integrity sha512-WuQETPMcW9Uf1/22HWUWP9lgsIC+KEHg2kozMflKjbeUtw9ujvFX6QmIfozaErDkmLWS9WEnEdEe6Uo9/BNTdQ==
@@ -4430,6 +4430,15 @@ postcss@^6.0.9:
     chalk "^2.4.1"
     source-map "^0.6.1"
     supports-color "^5.4.0"
+
+postcss@^7.0.11, postcss@^7.0.18, postcss@^7.0.21, postcss@^7.0.27:
+  version "7.0.28"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.28.tgz#d349ced7743475717ba91f6810efb58c51fb5dbb"
+  integrity sha512-YU6nVhyWIsVtlNlnAj1fHTsUKW5qxm3KEgzq2Jj6KTEFOTK8QWR12eIDvrlWhiSTK8WIBFTBhOJV4DY6dUuEbw==
+  dependencies:
+    chalk "^2.4.2"
+    source-map "^0.6.1"
+    supports-color "^6.1.0"
 
 prelude-ls@~1.1.2:
   version "1.1.2"
