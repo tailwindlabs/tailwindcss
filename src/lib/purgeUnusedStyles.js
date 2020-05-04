@@ -26,7 +26,7 @@ export default function purgeUnusedUtilities(config) {
   const purgeEnabled = _.get(
     config,
     'purge.enabled',
-    config.purge !== false && config.purge !== undefined && process.env.NODE_ENV === 'production'
+    config.purge !== false && config.purge !== undefined && process.env.NODE_ENV !== undefined && process.env.NODE_ENV.trim() === 'production'
   )
 
   if (!purgeEnabled) {
