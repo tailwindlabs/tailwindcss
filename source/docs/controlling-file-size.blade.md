@@ -115,7 +115,7 @@ a { /* ... */ }
 .text-shadow-sm { /* ... */ }
 ```
 
-This is to avoid accidentally removing styles that you might need but not directly reference in your templates, for example base syles for elements like `html` and `body`, or classes that are only referenced deep in your `node_modules` folder that are part of some other dependency.
+This is to avoid accidentally removing styles that you might need but not directly reference in your templates, for example base styles for elements like `html` and `body`, or classes that are only referenced deep in your `node_modules` folder that are part of some other dependency.
 
 If you really want to remove _all_ unused styles, use the `mode: 'all'` option and **be very careful** to provide the paths to _all_ files that might reference any classes or HTML elements:
 
