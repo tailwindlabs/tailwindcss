@@ -30,7 +30,7 @@
     "@babel/core": "^7.0.0",
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
-    "babel-jest": "^25.1.0",
+    "babel-jest": "^26.0.0",
     "clean-css": "^4.1.9",
     "eslint": "^6.0.1",
     "eslint-config-postcss": "^2.0.2",
