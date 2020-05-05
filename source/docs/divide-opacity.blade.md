@@ -7,9 +7,9 @@ featureVersion: "v1.4.0+"
 
 @include('_partials.class-table', [
   'scroll' => true,
-  'rows' => $page->config['theme']['borderOpacity']->map(function ($value, $name) {
-    $class = $name = ".border-opacity-{$name}";
-    $code = "--border-opacity: {$value};";
+  'rows' => $page->config['theme']['divideOpacity']->map(function ($value, $name) {
+    $class = $name = ".divide-opacity-{$name}";
+    $code = "--divide-opacity: {$value};";
     return [$class, $code];
   })
 ])
