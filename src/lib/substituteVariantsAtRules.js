@@ -78,6 +78,9 @@ export default function(config, { variantGenerators: pluginVariantGenerators }) 
       }
 
       _.forEach(_.without(ensureIncludesDefault(variants), 'responsive'), variant => {
+        if (!variantGenerators[variant]) {
+          throw new Error(`Your config mentions the "${variant}" variant, but "${variant}" doesn't appear to be a variant. Did you forget or misconfigure a plugin that supplies that variant?`);
+        }
         variantGenerators[variant](atRule, config)
       })
 
