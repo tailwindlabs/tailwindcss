@@ -7,10 +7,7 @@ export default function() {
 
     const utilities = _.fromPairs(
       _.map(colors, (value, modifier) => {
-        return [
-          `.${e(`fill-${modifier}`)}`,
-          { fill: value },
-        ]
+        return [`.${e(`fill-${modifier}`)}`, { fill: value }]
       })
     )
 

@@ -24,10 +24,7 @@ export default function() {
 
     const utilities = _.fromPairs(
       _.map(colors, (value, modifier) => {
-        return [
-          `.${e(`text-${modifier}`)}`,
-          getProperties(value),
-        ]
+        return [`.${e(`text-${modifier}`)}`, getProperties(value)]
       })
     )
 
