@@ -4,9 +4,11 @@ import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function() {
   return function({ addUtilities, e, theme, variants, target, corePlugins }) {
+    const colors = flattenColorPalette(theme('backgroundColor'))
+
     if (target('backgroundColor') === 'ie11') {
       const utilities = _.fromPairs(
-        _.map(flattenColorPalette(theme('backgroundColor')), (value, modifier) => {
+        _.map(colors, (value, modifier) => {
           return [`.${e(`bg-${modifier}`)}`, { 'background-color': value }]
         })
       )
@@ -17,7 +19,7 @@ export default function() {
     }
 
     const utilities = _.fromPairs(
-      _.map(flattenColorPalette(theme('backgroundColor')), (value, modifier) => {
+      _.map(colors, (value, modifier) => {
         return [
           `.${e(`bg-${modifier}`)}`,
           corePlugins('backgroundOpacity')

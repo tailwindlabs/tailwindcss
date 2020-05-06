@@ -4,9 +4,9 @@ import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function() {
   return function({ addUtilities, e, theme, variants, target, corePlugins }) {
-    if (target('borderColor') === 'ie11') {
-      const colors = flattenColorPalette(theme('borderColor'))
+    const colors = flattenColorPalette(theme('borderColor'))
 
+    if (target('borderColor') === 'ie11') {
       const utilities = _.fromPairs(
         _.map(_.omit(colors, 'default'), (value, modifier) => {
           return [`.${e(`border-${modifier}`)}`, { 'border-color': value }]
@@ -17,8 +17,6 @@ export default function() {
 
       return
     }
-
-    const colors = flattenColorPalette(theme('borderColor'))
 
     const utilities = _.fromPairs(
       _.map(_.omit(colors, 'default'), (value, modifier) => {

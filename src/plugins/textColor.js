@@ -4,9 +4,11 @@ import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function() {
   return function({ addUtilities, e, theme, variants, target, corePlugins }) {
+    const colors = flattenColorPalette(theme('textColor'))
+
     if (target('textColor') === 'ie11') {
       const utilities = _.fromPairs(
-        _.map(flattenColorPalette(theme('textColor')), (value, modifier) => {
+        _.map(colors, (value, modifier) => {
           return [`.${e(`text-${modifier}`)}`, { color: value }]
         })
       )
@@ -17,7 +19,7 @@ export default function() {
     }
 
     const utilities = _.fromPairs(
-      _.map(flattenColorPalette(theme('textColor')), (value, modifier) => {
+      _.map(colors, (value, modifier) => {
         return [
           `.${e(`text-${modifier}`)}`,
           corePlugins('textOpacity')
