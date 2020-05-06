@@ -36,8 +36,20 @@ export default function purgeUnusedUtilities(config) {
   // Skip if `purge: []` since that's part of the default config
   if (Array.isArray(config.purge) && config.purge.length === 0) {
     log()
-    log(emoji.warning, chalk.yellow(' Skipping purge because no template paths provided.'))
-    log(chalk.white('   To silence this warning, set `purge: false` in your Tailwind config file.'))
+    log(
+      emoji.warning,
+      chalk.yellow(
+        ' Tailwind is not purging unused styles because no template paths have been provided.'
+      )
+    )
+    log(
+      chalk.white(
+        '   If you have manually configured PurgeCSS outside of Tailwind or are deliberately not\n      removing unused styles, set `purge: false` in your Tailwind config file to silence\n      this warning.'
+      )
+    )
+    log(
+      chalk.white('\n      https://tailwindcss.com/docs/controlling-file-size/#removing-unused-css')
+    )
     return removeTailwindComments
   }
 
