@@ -7013,10 +7013,10 @@ table@^4.0.1:
     slice-ansi "1.0.0"
     string-width "^2.1.1"
 
-tailwindcss@1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.4.0.tgz#bf4b0aba44319aedfddfc75ed4704f162ad13a50"
-  integrity sha512-Np/VKalw2CI8EUSKNwGLFoqWIiBYVv5LpzBjQKI8XajA2SaVDj/C+YKHctmSZKR97LiiB1S81itZwtGT+BQAiQ==
+tailwindcss@1.4.5:
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.4.5.tgz#893ccddd226dc264f2bd53acd11e58077149e11d"
+  integrity sha512-MJW96Rz3G3RrFDbDuQCU893y4bf5hMWeVbMgcCqUfLNPbO9wRogDibCEvdKitD6aX9Y90SDT2FOKD17+WmIFLQ==
   dependencies:
     "@fullhuman/postcss-purgecss" "^2.1.2"
     autoprefixer "^9.4.5"

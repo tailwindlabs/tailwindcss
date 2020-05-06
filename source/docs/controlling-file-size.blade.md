@@ -90,7 +90,7 @@ We recomend only removing unused styles in production, as removing them in devel
 
 ### Removing all unused styles
 
-By default, Tailwind will only remove unused component and utility styles that it itself generates. You can conceptually think of it working like this:
+By default, Tailwind will only remove unused utility styles that it itself generates. You can conceptually think of it working like this:
 
 ```css
 @tailwind base;
@@ -99,9 +99,7 @@ By default, Tailwind will only remove unused component and utility styles that i
 h1 { /* ... */ }
 a { /* ... */ }
 
-/* Start purging... */
 @tailwind components;
-/* Stop purging. */
 
 /* Your own custom component styles */
 .btn { /* ... */ }
