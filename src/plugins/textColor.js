@@ -26,7 +26,11 @@ export default function() {
         return [
           `.${e(`text-${modifier}`)}`,
           corePlugins('textOpacity')
-            ? withAlphaVariable({ color: value, property: 'color', variable: '--text-opacity' })
+            ? withAlphaVariable({
+                color: value,
+                property: 'color',
+                variable: '--text-opacity',
+              })
             : { color: value },
         ]
       })
