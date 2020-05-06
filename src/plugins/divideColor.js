@@ -16,7 +16,7 @@ export default function() {
         })
       )
 
-      addUtilities(utilities, variants('textColor'))
+      addUtilities(utilities, variants('divideColor'))
 
       return
     }
