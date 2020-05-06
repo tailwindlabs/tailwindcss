@@ -6,32 +6,27 @@ export default function() {
   return function({ addUtilities, e, theme, variants, target, corePlugins }) {
     const colors = flattenColorPalette(theme('divideColor'))
 
-    if (target('divideColor') === 'ie11') {
-      const utilities = _.fromPairs(
-        _.map(_.omit(colors, 'default'), (value, modifier) => {
-          return [
-            `.${e(`divide-${modifier}`)} > :not(template) ~ :not(template)`,
-            { 'border-color': value },
-          ]
+    const getProperties = value => {
+      if (target('divideColor') === 'ie11') {
+        return { 'border-color': value }
+      }
+
+      if (corePlugins('divideOpacity')) {
+        return withAlphaVariable({
+          color: value,
+          property: 'border-color',
+          variable: '--divide-opacity',
         })
-      )
+      }
 
-      addUtilities(utilities, variants('divideColor'))
-
-      return
+      return { 'border-color': value }
     }
 
     const utilities = _.fromPairs(
       _.map(_.omit(colors, 'default'), (value, modifier) => {
         return [
           `.${e(`divide-${modifier}`)} > :not(template) ~ :not(template)`,
-          corePlugins('divideOpacity')
-            ? withAlphaVariable({
-                color: value,
-                property: 'border-color',
-                variable: '--divide-opacity',
-              })
-            : { 'border-color': value },
+          getProperties(value),
         ]
       })
     )

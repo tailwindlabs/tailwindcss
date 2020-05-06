@@ -6,32 +6,27 @@ export default function() {
   return function({ addUtilities, e, theme, variants, target, corePlugins }) {
     const colors = flattenColorPalette(theme('borderColor'))
 
-    if (target('borderColor') === 'ie11') {
-      const utilities = _.fromPairs(
-        _.map(_.omit(colors, 'default'), (value, modifier) => {
-          return [
-            `.${e(`border-${modifier}`)}`,
-            { 'border-color': value },
-          ]
+    const getProperties = value => {
+      if (target('borderColor') === 'ie11') {
+        return { 'border-color': value }
+      }
+
+      if (corePlugins('borderOpacity')) {
+        return withAlphaVariable({
+          color: value,
+          property: 'border-color',
+          variable: '--border-opacity',
         })
-      )
+      }
 
-      addUtilities(utilities, variants('borderColor'))
-
-      return
+      return { 'border-color': value }
     }
 
     const utilities = _.fromPairs(
       _.map(_.omit(colors, 'default'), (value, modifier) => {
         return [
           `.${e(`border-${modifier}`)}`,
-          corePlugins('borderOpacity')
-            ? withAlphaVariable({
-                color: value,
-                property: 'border-color',
-                variable: '--border-opacity',
-              })
-            : { 'border-color': value },
+          getProperties(value),
         ]
       })
     )
