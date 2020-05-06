@@ -9,9 +9,7 @@ export default function() {
       _.map(colors, (value, modifier) => {
         return [
           `.${e(`fill-${modifier}`)}`,
-          {
-            fill: value,
-          },
+          { fill: value },
         ]
       })
     )

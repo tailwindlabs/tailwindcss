@@ -9,7 +9,10 @@ export default function() {
     if (target('borderColor') === 'ie11') {
       const utilities = _.fromPairs(
         _.map(_.omit(colors, 'default'), (value, modifier) => {
-          return [`.${e(`border-${modifier}`)}`, { 'border-color': value }]
+          return [
+            `.${e(`border-${modifier}`)}`,
+            { 'border-color': value },
+          ]
         })
       )
 

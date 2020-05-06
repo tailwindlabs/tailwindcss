@@ -9,7 +9,10 @@ export default function() {
     if (target('textColor') === 'ie11') {
       const utilities = _.fromPairs(
         _.map(colors, (value, modifier) => {
-          return [`.${e(`text-${modifier}`)}`, { color: value }]
+          return [
+            `.${e(`text-${modifier}`)}`,
+            { color: value },
+          ]
         })
       )
 

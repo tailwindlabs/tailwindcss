@@ -9,9 +9,7 @@ export default function() {
       _.map(colors, (value, modifier) => {
         return [
           `.${e(`stroke-${modifier}`)}`,
-          {
-            stroke: value,
-          },
+          { stroke: value },
         ]
       })
     )

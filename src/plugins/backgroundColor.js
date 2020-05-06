@@ -9,7 +9,10 @@ export default function() {
     if (target('backgroundColor') === 'ie11') {
       const utilities = _.fromPairs(
         _.map(colors, (value, modifier) => {
-          return [`.${e(`bg-${modifier}`)}`, { 'background-color': value }]
+          return [
+            `.${e(`bg-${modifier}`)}`,
+            { 'background-color': value },
+          ]
         })
       )
 

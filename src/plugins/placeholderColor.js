@@ -9,7 +9,10 @@ export default function() {
     if (target('placeholderColor') === 'ie11') {
       const utilities = _.fromPairs(
         _.map(colors, (value, modifier) => {
-          return [`.${e(`placeholder-${modifier}`)}::placeholder`, { color: value }]
+          return [
+            `.${e(`placeholder-${modifier}`)}::placeholder`,
+            { color: value },
+          ]
         })
       )
 
