@@ -9,6 +9,8 @@ function generatePseudoClassVariant(pseudoClass, selectorPrefix = pseudoClass) {
     return modifySelectors(({ selector }) => {
       return selectorParser(selectors => {
         selectors.walkClasses(sel => {
+          if (sel.value === 'app') return
+
           sel.value = `${selectorPrefix}${separator}${sel.value}`
           sel.parent.insertAfter(sel, selectorParser.pseudo({ value: `:${pseudoClass}` }))
         })

@@ -30,6 +30,27 @@ test('it can generate hover variants', () => {
   })
 })
 
+test('it can generate focus variants when important uses a class', () => {
+  const input = `
+    @variants focus {
+      .app .banana { color: yellow; }
+      .app .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .app .banana { color: yellow; }
+    .app .chocolate { color: brown; }
+    .app .focus\\:banana:focus { color: yellow; }
+    .app .focus\\:chocolate:focus { color: brown; }
+  `
+
+  return run(input, { ...config, important: '.app' }).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate disabled variants', () => {
   const input = `
     @variants disabled {
