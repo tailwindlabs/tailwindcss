@@ -960,6 +960,25 @@ test('when important is a selector it is used to scope utilities instead of addi
     `)
 })
 
+test('when important contains a class an error is thrown', () => {
+  expect(() => {
+    processPlugins(
+      [
+        function({ addUtilities }) {
+          addUtilities({
+            '.rotate-90': {
+              transform: 'rotate(90deg)',
+            },
+          })
+        },
+      ],
+      makeConfig({
+        important: '#app .project',
+      })
+    )
+  }).toThrow()
+})
+
 test('when important is a selector it scopes all selectors in a rule, even though defining utilities like this is stupid', () => {
   const { utilities } = processPlugins(
     [
