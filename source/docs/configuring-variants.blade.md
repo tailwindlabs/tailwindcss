@@ -277,7 +277,7 @@ To specify a global set of variants that should be applied to all utilities, you
 ```js
 // tailwind.config.js
 module.exports  = {
-  variants: ['responsive', 'group-hover', 'focus-within', 'first', 'last', 'odd', 'even', 'hover', 'focus', 'active', 'visited', 'disabled']
+  variants: ['responsive', 'group-hover', 'group-focus', 'focus-within', 'first', 'last', 'odd', 'even', 'hover', 'focus', 'active', 'visited', 'disabled']
 }
 ```
 
