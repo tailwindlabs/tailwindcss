@@ -27,7 +27,7 @@ Control the opacity of an element's background color using the `.border-opacity-
 </div>
 @slot('code')
 @foreach ($page->config['theme']['opacity']->reverse() as $name => $value)
-<div class="bg-blue-500 bg-opacity-{{ $name }}"></div>
+<div class="border-blue-500 border-opacity-{{ $name }}"></div>
 @endforeach
 @endslot
 @endcomponent
