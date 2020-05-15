@@ -253,7 +253,7 @@
                 <div class="flex flex-col justify-between overflow-y-auto sticky top-0 max-h-screen pt-12 pb-4 -mt-12">
                   <table-of-contents class="mb-8"></table-of-contents>
                   <div id="ad"></div>
-                  <div id="tailwind-ui-widget">
+                  <div id="tailwind-ui-widget" style="display: none;">
                     <a href="https://tailwindui.com/?utm_source=tailwindcss&utm_medium=sidebar-widget" class="mt-3 block">
                       <img src="/img/tailwind-ui-sidebar.png" alt="Tailwind UI">
                     </a>
@@ -265,6 +265,21 @@
                     <div class="mt-2">
                       <a href="https://tailwindui.com/?utm_source=tailwindcss&utm_medium=sidebar-widget" class="text-sm text-gray-800 font-medium hover:underline">
                         Learn more &rarr;
+                      </a>
+                    </div>
+                  </div>
+                  <div id="tailwind-ui-job-widget" style="display: none;">
+                    <a href="https://jobs.tailwindui.com/full-stack-developer" class="mt-3 block">
+                      <img class="rounded-lg" src="/img/tailwind-ui-hiring.svg" alt="Tailwind UI">
+                    </a>
+                    <p class="mt-4 text-gray-700">
+                      <a href="https://jobs.tailwindui.com/full-stack-developer" class="text-gray-700">
+                        We're hiring a full-stack developer to help us make UI development faster, easier, and a lot more fun.
+                      </a>
+                    </p>
+                    <div class="mt-2">
+                      <a href="https://jobs.tailwindui.com/full-stack-developer" class="text-sm text-gray-800 font-medium hover:underline">
+                        Learn more and apply &rarr;
                       </a>
                     </div>
                   </div>
