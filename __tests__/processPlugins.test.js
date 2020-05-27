@@ -960,7 +960,7 @@ test('when important is a selector it is used to scope utilities instead of addi
     `)
 })
 
-test('when important contains a class an error is thrown', () => {
+test('when important contains a class an error is NOT thrown', () => {
   expect(() => {
     processPlugins(
       [
