@@ -19,14 +19,6 @@ function parseStyles(styles) {
   return _.flatMap(styles, style => (style instanceof Node ? style : parseObjectStyles(style)))
 }
 
-function containsClass(value) {
-  return selectorParser(selectors => {
-    let classFound = false
-    selectors.walkClasses(() => (classFound = true))
-    return classFound
-  }).transformSync(value)
-}
-
 export default function(plugins, config) {
   const pluginBaseStyles = []
   const pluginComponents = []
@@ -95,12 +87,6 @@ export default function(plugins, config) {
             if (config.important === true) {
               rule.walkDecls(decl => (decl.important = true))
             } else if (typeof config.important === 'string') {
-              if (containsClass(config.important)) {
-                throw rule.error(
-                  `Classes are not allowed when using the \`important\` option with a string argument. Please use an ID instead.`
-                )
-              }
-
               rule.selectors = rule.selectors.map(selector => {
                 return increaseSpecificity(config.important, selector)
               })
