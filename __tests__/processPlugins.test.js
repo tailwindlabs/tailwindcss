@@ -976,7 +976,7 @@ test('when important contains a class an error is thrown', () => {
         important: '#app .project',
       })
     )
-  }).toThrow()
+  }).not.toThrow()
 })
 
 test('when important is a selector it scopes all selectors in a rule, even though defining utilities like this is stupid', () => {
