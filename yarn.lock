@@ -3,9 +3,9 @@
 
 
 "@babel/cli@^7.0.0":
-  version "7.10.0"
-  resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.10.0.tgz#44bfd08feb6f9e4791bf69c62e3b35196269b0e3"
-  integrity sha512-AziyYI4DpD4NmAcBD2xnH8CcIgdRrCGlW7wVL9Ysk736PCSNn2ZZedAUMu5rx/SfMT7Yv+3UReHcWKeQ3wNd/Q==
+  version "7.10.1"
+  resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.10.1.tgz#b6e5cd43a17b8f639442ab027976408ebe6d79a0"
+  integrity sha512-cVB+dXeGhMOqViIaZs3A9OUAe4pKw4SBNdMw6yHJMYR7s4TB+Cei7ThquV/84O19PdIFWuwe03vxxES0BHUm5g==
   dependencies:
     commander "^4.0.1"
     convert-source-map "^1.1.0"
