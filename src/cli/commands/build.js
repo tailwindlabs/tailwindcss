@@ -80,7 +80,11 @@ function buildToFile(compileOptions, startTime) {
 
   utils.header()
   utils.log()
-  utils.log(emoji.go, 'Building...', colors.file(inputFileSimplePath || 'defaults: @base, @components and @utilities.'))
+  utils.log(
+    emoji.go,
+    'Building...',
+    colors.file(inputFileSimplePath || 'defaults: @base, @components and @utilities.')
+  )
 
   return compile(compileOptions).then(result => {
     utils.writeFile(compileOptions.outputFile, result.css)
