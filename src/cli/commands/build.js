@@ -80,7 +80,7 @@ function buildToFile(compileOptions, startTime) {
 
   utils.header()
   utils.log()
-  utils.log(emoji.go, 'Building...', colors.file(inputFileSimplePath))
+  utils.log(emoji.go, 'Building...', colors.file(inputFileSimplePath || 'defaults: @base, @components and @utilities.'))
 
   return compile(compileOptions).then(result => {
     utils.writeFile(compileOptions.outputFile, result.css)
@@ -112,8 +112,9 @@ export function run(cliParams, cliOptions) {
     const inputFileSimplePath = utils.getSimplePath(inputFile)
     const configFileSimplePath = utils.getSimplePath(configFile)
 
-    !inputFile && stopWithHelp('CSS file is required.')
-    !utils.exists(inputFile) && stop(colors.file(inputFileSimplePath), 'does not exist.')
+    if (inputFile) {
+      !utils.exists(inputFile) && stop(colors.file(inputFileSimplePath), 'does not exist.')
+    }
 
     configFile &&
       !utils.exists(configFile) &&
