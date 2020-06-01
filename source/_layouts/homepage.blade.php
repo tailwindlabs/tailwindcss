@@ -253,7 +253,7 @@
                 <div class="flex flex-col justify-between overflow-y-auto sticky top-0 max-h-screen pt-12 pb-4 -mt-12">
                   <table-of-contents class="mb-8"></table-of-contents>
                   <div id="ad"></div>
-                  <div id="tailwind-ui-widget" style="display: none;">
+                  <div id="tailwind-ui-widget">
                     <a href="https://tailwindui.com/?utm_source=tailwindcss&utm_medium=sidebar-widget" class="mt-3 block">
                       <img src="/img/tailwind-ui-sidebar.png" alt="Tailwind UI">
                     </a>

@@ -18,13 +18,13 @@ Mousetrap.bind('/', function(e) {
   e.preventDefault()
   document.getElementById('docsearch').focus()
 })
-;(function() {
-  if (Math.random() >= 0.5) {
-    document.getElementById('tailwind-ui-widget').removeAttribute('style')
-  } else {
-    document.getElementById('tailwind-ui-job-widget').removeAttribute('style')
-  }
-})()
+// ;(function() {
+//   if (Math.random() >= 0.5) {
+//     document.getElementById('tailwind-ui-widget').removeAttribute('style')
+//   } else {
+//     document.getElementById('tailwind-ui-job-widget').removeAttribute('style')
+//   }
+// })()
 
 // Re-enable sometime after Tailwind UI launch...
 // fetch('//cdn.carbonads.com/carbon.js?serve=CK7DTK3E&placement=tailwindcsscom', {
