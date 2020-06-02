@@ -10,8 +10,7 @@ export default function() {
         '.mask-clip-stroke': { 'mask-clip': 'stroke-box' },
         '.mask-clip-view': { 'mask-clip': 'view-box' },
         '.mask-clip-no': { 'mask-clip': 'no-box' },
-      },
-      variants('overflow')
+      }
     )
   }
 }
