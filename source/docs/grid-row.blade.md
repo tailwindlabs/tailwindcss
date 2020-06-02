@@ -29,7 +29,7 @@ featureVersion: "v1.2.0+"
 
 ## Spanning rows
 
-Use the `rows-span-{n}` utilities to make an element span _n_ rows.
+Use the `row-span-{n}` utilities to make an element span _n_ rows.
 
 @component('_partials.code-sample', ['class' => 'bg-white p-8'])
 <div class="h-64 grid grid-rows-3 grid-flow-col gap-4">
