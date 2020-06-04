@@ -53,6 +53,16 @@ import position from './plugins/position'
 import inset from './plugins/inset'
 import resize from './plugins/resize'
 import boxShadow from './plugins/boxShadow'
+import filter from './plugins/filter'
+import filterBlur from './plugins/filterBlur'
+import filterBrightness from './plugins/filterBrightness'
+import filterContrast from './plugins/filterContrast'
+import filterGrayscale from './plugins/filterGrayscale'
+import filterHueRotate from './plugins/filterHueRotate'
+import filterInvert from './plugins/filterInvert'
+import filterOpacity from './plugins/filterOpacity'
+import filterSaturate from './plugins/filterSaturate'
+import filterSepia from './plugins/filterSepia'
 import fill from './plugins/fill'
 import stroke from './plugins/stroke'
 import strokeWidth from './plugins/strokeWidth'
@@ -134,6 +144,16 @@ export default function({ corePlugins: corePluginConfig }) {
     flex,
     flexGrow,
     flexShrink,
+    filter,
+    filterBlur,
+    filterBrightness,
+    filterContrast,
+    filterGrayscale,
+    filterHueRotate,
+    filterInvert,
+    filterOpacity,
+    filterSaturate,
+    filterSepia,
     order,
     float,
     clear,
