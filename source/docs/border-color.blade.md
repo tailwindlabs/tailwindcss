@@ -50,18 +50,18 @@ Control the border color of an element using the `.border-{color}` utilities.
   </span>
 </h3>
 
-Control the opacity of an element's background color using the `.border-opacity-{amount}` utilities.
+Control the opacity of an element's border color using the `.border-opacity-{amount}` utilities.
 
 @component('_partials.code-sample', ['style' => "background-image: url('/img/transparent-bg.svg')"])
 <div class="flex justify-around" >
-  @foreach ($page->config['theme']['backgroundOpacity']->reverse() as $name => $value)
+  @foreach ($page->config['theme']['opacity']->reverse() as $name => $value)
     <div class="h-16 w-16 rounded border-4 border-blue-500 border-opacity-{{ $name }}">
     </div>
   @endforeach
 </div>
 @slot('code')
 @foreach ($page->config['theme']['opacity']->reverse() as $name => $value)
-<div class="bg-blue-500 bg-opacity-{{ $name }}"></div>
+<div class="border-blue-500 border-opacity-{{ $name }}"></div>
 @endforeach
 @endslot
 @endcomponent
