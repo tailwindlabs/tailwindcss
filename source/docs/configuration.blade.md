@@ -287,7 +287,7 @@ module.exports = {
 
 This configuration will prefix all of your utilities with the given selector, effectively increasing their specificity without actually making them `!important`.
 
-After you specifify the `important` selector, you'll need to ensure that the root element of your site matches it.  Using the example above, we would need to set our root element's `id` attribute to `app` in order for styles to work properly.
+After you specify the `important` selector, you'll need to ensure that the root element of your site matches it.  Using the example above, we would need to set our root element's `id` attribute to `app` in order for styles to work properly.
 
 After your configuration is all set up and your root element matches the selector in your Tailwind config, all of Tailwind's utilities will have a high enough specificity to defeat other classes used in your project, **without** interfering with inline styles:
 
