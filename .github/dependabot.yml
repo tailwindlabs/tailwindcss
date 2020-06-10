@@ -1,0 +1,18 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: '00:00'
+  open-pull-requests-limit: 10
+  reviewers:
+  - adamwathan
+  assignees:
+  - adamwathan
+  labels:
+  - dependencies
+  commit-message:
+    prefix: fix
+    prefix-development: chore
+    include: scope
