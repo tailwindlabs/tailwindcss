@@ -32,7 +32,7 @@
     "@babel/preset-env": "^7.0.0",
     "babel-jest": "^26.0.0",
     "clean-css": "^4.1.9",
-    "eslint": "^6.0.1",
+    "eslint": "^7.2.0",
     "eslint-config-postcss": "^2.0.2",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.0.1",
