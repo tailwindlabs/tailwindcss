@@ -452,7 +452,7 @@ Additionally, because CSS has rules about the characters a class name can *start
 ```js
 // Will unnecessarily escape `1`
 `.rotate-${e('1/4')}`
-// => '.rotate-\31 \/4'
+// => '.rotate-\1\/4'
 
 // Won't escape `1` because it's not the first character
 `.${e('rotate-1/4')}`
@@ -603,7 +603,7 @@ module.exports = plugin(function({ addUtilities, e, theme, variants }) {
   const gradientVariants = variants('gradients', [])
 
   const utilities = _.map(gradients, ([start, end], name) => ({
-    [`.bg-gradient-${e(name)}`]: {
+    [`.${e(`bg-gradient-${name}`)}`]: {
       backgroundImage: `linear-gradient(to right, ${start}, ${end})`
     }
   }))
