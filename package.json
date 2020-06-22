@@ -77,7 +77,7 @@
     ]
   },
   "jest": {
-    "collectCoverage":true,
+    "collectCoverage": true,
     "setupFilesAfterEnv": [
       "<rootDir>/jest/customMatchers.js"
     ],
