@@ -9,6 +9,7 @@ return [
             'Using with Preprocessors' => '/docs/using-with-preprocessors',
             'Controlling File Size' => '/docs/controlling-file-size',
             'Browser Support' => '/docs/browser-support',
+            'IntelliSense' => '/docs/intellisense',
         ],
         'Core Concepts' => [
             'Utility-First' => '/docs/utility-first',
