@@ -8,7 +8,7 @@ description: "Utilities for controlling word breaks in an element."
   'rows' => [
     [
       '.break-normal',
-      "word-break: normal;\noverflow-wrap: normal",
+      "word-break: normal;\noverflow-wrap: normal;",
       'Only add line breaks at normal word break points.',
     ],
     [
