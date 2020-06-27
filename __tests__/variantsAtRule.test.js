@@ -135,6 +135,27 @@ test('it can generate focus-within variants', () => {
   })
 })
 
+test('it can generate focus-visible variants', () => {
+  const input = `
+    @variants focus-visible {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .focus-visible\\:banana:focus-visible { color: yellow; }
+    .focus-visible\\:chocolate:focus-visible { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate first-child variants', () => {
   const input = `
     @variants first {
@@ -415,7 +436,7 @@ test('variants are generated in the order specified', () => {
 
 test('the built-in variant pseudo-selectors are appended before any pseudo-elements', () => {
   const input = `
-    @variants hover, focus-within, focus, active, group-hover {
+    @variants hover, focus-within, focus-visible, focus, active, group-hover {
       .placeholder-yellow::placeholder { color: yellow; }
     }
   `
@@ -424,6 +445,7 @@ test('the built-in variant pseudo-selectors are appended before any pseudo-eleme
     .placeholder-yellow::placeholder { color: yellow; }
     .hover\\:placeholder-yellow:hover::placeholder { color: yellow; }
     .focus-within\\:placeholder-yellow:focus-within::placeholder { color: yellow; }
+    .focus-visible\\:placeholder-yellow:focus-visible::placeholder { color: yellow; }
     .focus\\:placeholder-yellow:focus::placeholder { color: yellow; }
     .active\\:placeholder-yellow:active::placeholder { color: yellow; }
     .group:hover .group-hover\\:placeholder-yellow::placeholder { color: yellow; }
@@ -624,7 +646,10 @@ test('plugin variants can wrap rules in another at-rule using the raw PostCSS AP
       ...config.plugins,
       function({ addVariant, e }) {
         addVariant('supports-grid', ({ container, separator }) => {
-          const supportsRule = postcss.atRule({ name: 'supports', params: '(display: grid)' })
+          const supportsRule = postcss.atRule({
+            name: 'supports',
+            params: '(display: grid)',
+          })
           supportsRule.nodes = container.nodes
           container.nodes = [supportsRule]
           supportsRule.walkRules(rule => {
