@@ -19,7 +19,7 @@ npm run style
 To automatically fix any style violations in your code, you can run:
 
 ```sh
-npm run style --fix
+npm run style -- --fix
 ```
 
 ## Running tests
@@ -43,19 +43,19 @@ npm run prepare
 This will create new CSS files in the `/dist` folder which you can reference in your own test HTML file. We often test our own changes by creating an `index.html` file in the root of the Tailwind project itself that pulls in the `/dist/tailwind.css` stylesheet:
 
 ```html
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="/dist/tailwind.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="stylesheet" href="/dist/tailwind.css" />
     <title>Hello, world!</title>
   </head>
   <body>
     <h1 class="text-2xl font-bold text-center">Hello world!</h1>
   </body>
 </html>
-````
+```
 
 You can then use a tool like [live-server](https://www.npmjs.com/package/live-server) to preview it in the browser:
 
