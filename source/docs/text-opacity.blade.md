@@ -31,6 +31,8 @@ Control the opacity of an element's text color using the `.text-opacity-{amount}
 @endslot
 @endcomponent
 
+This utility works as a modifier to the `.text-{color}` utilities, and must be applied to the same element as the color utility to function. Inheritance of `.text-opacity-{amount}` to child `.text-{color}` elements and vice-versa is not supported.
+
 ## Responsive
 
 To control an element's text color opacity at a specific breakpoint, add a `{screen}:` prefix to any existing text color opacity utility. For example, use `md:text-opacity-50` to apply the `text-opacity-50` utility at only medium screen sizes and above.
