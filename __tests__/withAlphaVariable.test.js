@@ -99,7 +99,7 @@ test('it ignores colors that already have an alpha channel', () => {
 test('it allows a closure to be passed', () => {
   expect(
     withAlphaVariable({
-      color: variable => `rgba(0, 0, 0, var(${variable}))`,
+      color: ({ opacityVariable }) => `rgba(0, 0, 0, var(${opacityVariable}))`,
       property: 'background-color',
       variable: '--bg-opacity',
     })
