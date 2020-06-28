@@ -226,7 +226,7 @@
    --></div>
       <div ref="card" class="shadow-lg leading-normal self-end bg-white w-64 rounded-lg -mt-16 relative" style="width: 20rem;">
         <div ref="cardLarge" class="hidden p-6">
-          <img ref="avatar" class="h-24 w-24 block mr-6 rounded-full" src="https://randomuser.me/api/portraits/women/17.jpg" alt="">
+          <img ref="avatar" class="h-24 w-24 block mr-6 rounded-full" src="https://images.unsplash.com/photo-1590955256762-e60f6e08122a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&w=512&h=512&fit=crop&crop=focalpoint&fp-z=2&fp-y=0.25" alt="">
           <div ref="content" class="text-gray-800 text-left">
             <h2 ref="name" class="text-xl font-normal text-gray-800">
               <div class="inline-block relative">Erin Lindford</div>
@@ -243,7 +243,7 @@
           </div>
         </div>
         <div ref="cardSmall" class="hidden p-6">
-          <img ref="avatar" class="h-16 w-16 block mb-4 mx-auto rounded-full" src="https://randomuser.me/api/portraits/women/17.jpg" alt="">
+          <img ref="avatar" class="h-16 w-16 block mb-4 mx-auto rounded-full" src="https://images.unsplash.com/photo-1590955256762-e60f6e08122a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&w=512&h=512&fit=crop&crop=focalpoint&fp-z=2&fp-y=0.25" alt="">
           <div ref="content" class="text-gray-800 text-center">
             <h2 ref="name" class="text-xl font-normal text-gray-800">
               <div class="inline-block relative">Erin Lindford</div>
@@ -260,7 +260,7 @@
           </div>
         </div>
         <div ref="cardInner">
-          <img ref="avatar" class="h-16 w-16 block mb-4" src="https://randomuser.me/api/portraits/women/17.jpg" alt="">
+          <img ref="avatar" class="h-16 w-16 block mb-4" src="https://images.unsplash.com/photo-1590955256762-e60f6e08122a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&w=512&h=512&fit=crop&crop=focalpoint&fp-z=2&fp-y=0.25" alt="">
           <div ref="content" class="text-gray-800">
             <h2 ref="name" class="text-base font-normal text-gray-800">
               <div class="inline-block relative">Erin Lindford</div>
