@@ -139,7 +139,7 @@ This component is fully responsive and includes a button with hover styles, and 
 @component('_partials.code-sample', ['class' => 'p-8 bg-gray-200'])
 <div class="max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
   <div class="sm:flex sm:items-center px-6 py-4">
-    <img class="block mx-auto sm:mx-0 sm:flex-shrink-0 h-16 sm:h-24 rounded-full" src="https://randomuser.me/api/portraits/women/17.jpg" alt="Woman's Face">
+    <img class="block mx-auto sm:mx-0 sm:flex-shrink-0 h-16 sm:h-24 rounded-full" src="https://images.unsplash.com/photo-1590955256762-e60f6e08122a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&w=512&h=512&fit=crop&crop=focalpoint&fp-z=2&fp-y=0.25" alt="Woman's Face">
     <div class="mt-4 sm:mt-0 sm:ml-4 text-center sm:text-left">
       <p class="text-xl leading-tight">Erin Lindford</p>
       <p class="text-sm leading-tight text-gray-600">Customer Support Specialist</p>
