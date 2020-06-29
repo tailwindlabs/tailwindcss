@@ -25,6 +25,14 @@
     "style": "eslint .",
     "test": "jest && eslint ."
   },
+  "files": [
+    "dist/*.css",
+    "lib/*",
+    "scripts/*.js",
+    "stubs/*.stub.js",
+    "*.css",
+    "*.js"
+  ],
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
