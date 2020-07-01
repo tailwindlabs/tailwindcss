@@ -7,10 +7,15 @@ export default function() {
         [`.${e(`border${modifier}`)}`]: { borderWidth: `${value}` },
       }),
       (value, modifier) => ({
+        [`.${e(`border-y${modifier}`)}`]: { borderTopWidth: `${value}`, borderBottomWidth: `${value}` },
+        [`.${e(`border-x${modifier}`)}`]: { borderLeftWidth: `${value}`, borderRightWidth: `${value}` },
+      }),
+      (value, modifier) => ({
         [`.${e(`border-t${modifier}`)}`]: { borderTopWidth: `${value}` },
         [`.${e(`border-r${modifier}`)}`]: { borderRightWidth: `${value}` },
         [`.${e(`border-b${modifier}`)}`]: { borderBottomWidth: `${value}` },
         [`.${e(`border-l${modifier}`)}`]: { borderLeftWidth: `${value}` },
+        
       }),
     ]
 
@@ -23,3 +28,4 @@ export default function() {
     addUtilities(utilities, variants('borderWidth'))
   }
 }
+
