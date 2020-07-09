@@ -9153,14 +9153,25 @@ video {
 }
 
 .transform {
-  --transform-translate-x: 0;
-  --transform-translate-y: 0;
-  --transform-rotate: 0;
-  --transform-skew-x: 0;
-  --transform-skew-y: 0;
-  --transform-scale-x: 1;
-  --transform-scale-y: 1;
-  transform: translate3d(var(--transform-translate-x), var(--transform-translate-y), 0) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
+  --transform-translate-x: 0 !important;
+  --transform-translate-y: 0 !important;
+  --transform-rotate: 0 !important;
+  --transform-skew-x: 0 !important;
+  --transform-skew-y: 0 !important;
+  --transform-scale-x: 1 !important;
+  --transform-scale-y: 1 !important;
+  transform: translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) !important;
+}
+
+.transform-gpu {
+  --transform-translate-x: 0 !important;
+  --transform-translate-y: 0 !important;
+  --transform-rotate: 0 !important;
+  --transform-skew-x: 0 !important;
+  --transform-skew-y: 0 !important;
+  --transform-scale-x: 1 !important;
+  --transform-scale-y: 1 !important;
+  transform: translate3d(var(--transform-translate-x), var(--transform-translate-y), 0) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) !important;
 }
 
 .transform-none {
@@ -19458,14 +19469,25 @@ video {
   }
 
   .sm\:transform {
-    --transform-translate-x: 0;
-    --transform-translate-y: 0;
-    --transform-rotate: 0;
-    --transform-skew-x: 0;
-    --transform-skew-y: 0;
-    --transform-scale-x: 1;
-    --transform-scale-y: 1;
-    transform: translate3d(var(--transform-translate-x), var(--transform-translate-y), 0) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
+    --transform-translate-x: 0 !important;
+    --transform-translate-y: 0 !important;
+    --transform-rotate: 0 !important;
+    --transform-skew-x: 0 !important;
+    --transform-skew-y: 0 !important;
+    --transform-scale-x: 1 !important;
+    --transform-scale-y: 1 !important;
+    transform: translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) !important;
+  }
+
+  .sm\:transform-gpu {
+    --transform-translate-x: 0 !important;
+    --transform-translate-y: 0 !important;
+    --transform-rotate: 0 !important;
+    --transform-skew-x: 0 !important;
+    --transform-skew-y: 0 !important;
+    --transform-scale-x: 1 !important;
+    --transform-scale-y: 1 !important;
+    transform: translate3d(var(--transform-translate-x), var(--transform-translate-y), 0) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) !important;
   }
 
   .sm\:transform-none {
@@ -29764,14 +29786,25 @@ video {
   }
 
   .md\:transform {
-    --transform-translate-x: 0;
-    --transform-translate-y: 0;
-    --transform-rotate: 0;
-    --transform-skew-x: 0;
-    --transform-skew-y: 0;
-    --transform-scale-x: 1;
-    --transform-scale-y: 1;
-    transform: translate3d(var(--transform-translate-x), var(--transform-translate-y), 0) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
+    --transform-translate-x: 0 !important;
+    --transform-translate-y: 0 !important;
+    --transform-rotate: 0 !important;
+    --transform-skew-x: 0 !important;
+    --transform-skew-y: 0 !important;
+    --transform-scale-x: 1 !important;
+    --transform-scale-y: 1 !important;
+    transform: translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) !important;
+  }
+
+  .md\:transform-gpu {
+    --transform-translate-x: 0 !important;
+    --transform-translate-y: 0 !important;
+    --transform-rotate: 0 !important;
+    --transform-skew-x: 0 !important;
+    --transform-skew-y: 0 !important;
+    --transform-scale-x: 1 !important;
+    --transform-scale-y: 1 !important;
+    transform: translate3d(var(--transform-translate-x), var(--transform-translate-y), 0) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) !important;
   }
 
   .md\:transform-none {
@@ -40070,14 +40103,25 @@ video {
   }
 
   .lg\:transform {
-    --transform-translate-x: 0;
-    --transform-translate-y: 0;
-    --transform-rotate: 0;
-    --transform-skew-x: 0;
-    --transform-skew-y: 0;
-    --transform-scale-x: 1;
-    --transform-scale-y: 1;
-    transform: translate3d(var(--transform-translate-x), var(--transform-translate-y), 0) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
+    --transform-translate-x: 0 !important;
+    --transform-translate-y: 0 !important;
+    --transform-rotate: 0 !important;
+    --transform-skew-x: 0 !important;
+    --transform-skew-y: 0 !important;
+    --transform-scale-x: 1 !important;
+    --transform-scale-y: 1 !important;
+    transform: translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) !important;
+  }
+
+  .lg\:transform-gpu {
+    --transform-translate-x: 0 !important;
+    --transform-translate-y: 0 !important;
+    --transform-rotate: 0 !important;
+    --transform-skew-x: 0 !important;
+    --transform-skew-y: 0 !important;
+    --transform-scale-x: 1 !important;
+    --transform-scale-y: 1 !important;
+    transform: translate3d(var(--transform-translate-x), var(--transform-translate-y), 0) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) !important;
   }
 
   .lg\:transform-none {
@@ -50376,14 +50420,25 @@ video {
   }
 
   .xl\:transform {
-    --transform-translate-x: 0;
-    --transform-translate-y: 0;
-    --transform-rotate: 0;
-    --transform-skew-x: 0;
-    --transform-skew-y: 0;
-    --transform-scale-x: 1;
-    --transform-scale-y: 1;
-    transform: translate3d(var(--transform-translate-x), var(--transform-translate-y), 0) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
+    --transform-translate-x: 0 !important;
+    --transform-translate-y: 0 !important;
+    --transform-rotate: 0 !important;
+    --transform-skew-x: 0 !important;
+    --transform-skew-y: 0 !important;
+    --transform-scale-x: 1 !important;
+    --transform-scale-y: 1 !important;
+    transform: translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) !important;
+  }
+
+  .xl\:transform-gpu {
+    --transform-translate-x: 0 !important;
+    --transform-translate-y: 0 !important;
+    --transform-rotate: 0 !important;
+    --transform-skew-x: 0 !important;
+    --transform-skew-y: 0 !important;
+    --transform-scale-x: 1 !important;
+    --transform-scale-y: 1 !important;
+    transform: translate3d(var(--transform-translate-x), var(--transform-translate-y), 0) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y)) !important;
   }
 
   .xl\:transform-none {
