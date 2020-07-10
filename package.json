@@ -53,7 +53,7 @@
     "autoprefixer": "^9.4.5",
     "browserslist": "^4.12.0",
     "bytes": "^3.0.0",
-    "chalk": "^4.0.0",
+    "chalk": "^3.0.0 || ^4.0.0",
     "color": "^3.1.2",
     "detective": "^5.2.0",
     "fs-extra": "^8.0.0",
