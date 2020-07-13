@@ -156,6 +156,9 @@ return [
         'Accessibility' => [
             'Screen Readers' => '/docs/screen-readers',
         ],
+        'Official Plugins' => [
+            'Typography' => '/docs/typography-plugin',
+        ],
     ],
     'Components' => [
         'Examples' => [

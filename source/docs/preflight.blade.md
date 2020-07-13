@@ -73,6 +73,8 @@ The reason for this is two-fold:
 
 You can always add default header styles to your project by [adding your own base styles](/docs/adding-base-styles).
 
+If you'd like to selectively introduce sensible default heading styles into article-style parts of a page, we recommend the [@tailwindcss/typography plugin](/docs/typography-plugin/).
+
 ---
 
 ## Lists are unstyled
@@ -100,6 +102,7 @@ If you'd like to style a list, you can do so using the [list-style-type](/docs/l
 
 You can always add default list styles to your project by [adding your own base styles](/docs/adding-base-styles).
 
+If you'd like to selectively introduce default list styles into article-style parts of a page, we recommend the [@tailwindcss/typography plugin](/docs/typography-plugin/).
 
 ---
 
