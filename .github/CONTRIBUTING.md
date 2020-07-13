@@ -32,6 +32,12 @@ npm test
 
 Please ensure that the tests are passing when submitting a pull request. If you're adding new features to Tailwind, please include tests.
 
+After writing tests, you should run `rebuild-fixtures` command. So you can use the following commands:
+
+```bash
+npm run rebuild-fixtures
+```
+
 ## Building the CSS and trying your changes manually
 
 In addition to the automated tests, if you'd like to test the generated CSS manually with your own test HTML file, you can generate the default build by running:
