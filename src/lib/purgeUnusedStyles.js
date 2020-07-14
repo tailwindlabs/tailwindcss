@@ -8,12 +8,16 @@ import * as emoji from '../cli/emoji'
 function removeTailwindComments(css) {
   css.walkComments(comment => {
     switch (comment.text.trim()) {
+      case 'tailwind start base':
+      case 'tailwind end base':
       case 'tailwind start components':
-      case 'tailwind start utilities':
-      case 'tailwind start screens':
       case 'tailwind end components':
+      case 'tailwind start screens components':
+      case 'tailwind end screens components':
+      case 'tailwind start utilities':
       case 'tailwind end utilities':
-      case 'tailwind end screens':
+      case 'tailwind start screens utilities':
+      case 'tailwind end screens utilities':
         comment.remove()
         break
       default:
@@ -64,11 +68,11 @@ export default function purgeUnusedUtilities(config) {
         css.walkComments(comment => {
           switch (comment.text.trim()) {
             case 'tailwind start utilities':
-            case 'tailwind start screens':
+            case 'tailwind start screens utilities':
               comment.text = 'purgecss end ignore'
               break
             case 'tailwind end utilities':
-            case 'tailwind end screens':
+            case 'tailwind end screens utilities':
               comment.text = 'purgecss start ignore'
               break
             default:

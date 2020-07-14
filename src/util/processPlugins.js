@@ -111,7 +111,11 @@ export default function(plugins, config) {
         pluginUtilities.push(wrapWithVariants(styles.nodes, options.variants))
       },
       addComponents: (components, options) => {
-        options = Object.assign({ respectPrefix: true }, options)
+        const defaultOptions = { variants: [], respectPrefix: true }
+
+        options = Array.isArray(options)
+          ? Object.assign({}, defaultOptions, { variants: options })
+          : _.defaults(options, defaultOptions)
 
         const styles = postcss.root({ nodes: parseStyles(components) })
 
@@ -121,7 +125,11 @@ export default function(plugins, config) {
           }
         })
 
-        pluginComponents.push(...styles.nodes)
+        if (options.variants.length > 0) {
+          pluginComponents.push(wrapWithVariants(styles.nodes, options.variants, 'components'))
+        } else {
+          pluginComponents.push(...styles.nodes)
+        }
       },
       addBase: baseStyles => {
         pluginBaseStyles.push(...parseStyles(baseStyles))

@@ -4,55 +4,69 @@ import cloneNodes from '../util/cloneNodes'
 import buildMediaQuery from '../util/buildMediaQuery'
 import buildSelectorVariant from '../util/buildSelectorVariant'
 
-export default function(config) {
-  return function(css) {
-    const {
-      theme: { screens },
-      separator,
-    } = config
-    const responsiveRules = postcss.root()
-    const finalRules = []
+function matchesBucket(atRule, bucket) {
+  return (
+    atRule.params === bucket ||
+    (bucket === 'utilities' && (atRule.params === '' || atRule.params === undefined))
+  )
+}
 
-    css.walkAtRules('responsive', atRule => {
+function insertResponsiveRules(config, css, bucket) {
+  const {
+    theme: { screens },
+    separator,
+  } = config
+  const responsiveRules = postcss.root()
+  const finalRules = []
+
+  css.walkAtRules('responsive', atRule => {
+    if (matchesBucket(atRule, bucket)) {
       const nodes = atRule.nodes
       responsiveRules.append(...cloneNodes(nodes))
       atRule.before(nodes)
       atRule.remove()
+    }
+  })
+
+  _.keys(screens).forEach(screen => {
+    const mediaQuery = postcss.atRule({
+      name: 'media',
+      params: buildMediaQuery(screens[screen]),
     })
 
-    _.keys(screens).forEach(screen => {
-      const mediaQuery = postcss.atRule({
-        name: 'media',
-        params: buildMediaQuery(screens[screen]),
-      })
-
-      mediaQuery.append(
-        _.tap(responsiveRules.clone(), clonedRoot => {
-          clonedRoot.walkRules(rule => {
-            rule.selectors = _.map(rule.selectors, selector =>
-              buildSelectorVariant(selector, screen, separator, message => {
-                throw rule.error(message)
-              })
-            )
-          })
+    mediaQuery.append(
+      _.tap(responsiveRules.clone(), clonedRoot => {
+        clonedRoot.walkRules(rule => {
+          rule.selectors = _.map(rule.selectors, selector =>
+            buildSelectorVariant(selector, screen, separator, message => {
+              throw rule.error(message)
+            })
+          )
         })
-      )
+      })
+    )
 
-      finalRules.push(mediaQuery)
-    })
+    finalRules.push(mediaQuery)
+  })
 
-    const hasScreenRules = finalRules.some(i => i.nodes.length !== 0)
+  const hasScreenRules = finalRules.some(i => i.nodes.length !== 0)
 
-    css.walkAtRules('tailwind', atRule => {
-      if (atRule.params !== 'screens') {
-        return
-      }
+  css.walkAtRules('screens', atRule => {
+    if (atRule.params !== bucket) {
+      return
+    }
 
-      if (hasScreenRules) {
-        atRule.before(finalRules)
-      }
+    if (hasScreenRules) {
+      atRule.before(finalRules)
+    }
 
-      atRule.remove()
-    })
+    atRule.remove()
+  })
+}
+
+export default function(config) {
+  return function(css) {
+    insertResponsiveRules(config, css, 'components')
+    insertResponsiveRules(config, css, 'utilities')
   }
 }

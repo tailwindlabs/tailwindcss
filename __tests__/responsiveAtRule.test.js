@@ -13,7 +13,7 @@ test('it can generate responsive variants', () => {
       .chocolate { color: brown; }
     }
 
-    @tailwind screens;
+    @screens utilities;
   `
 
   const output = `
@@ -55,7 +55,7 @@ test('it can generate responsive variants with a custom separator', () => {
       .chocolate { color: brown; }
     }
 
-    @tailwind screens;
+    @screens utilities;
   `
 
   const output = `
@@ -97,7 +97,7 @@ test('it can generate responsive variants when classes have non-standard charact
       .chocolate-2\\.5 { color: brown; }
     }
 
-    @tailwind screens;
+    @screens utilities;
   `
 
   const output = `
@@ -144,7 +144,7 @@ test('responsive variants are grouped', () => {
       .chocolate { color: brown; }
     }
 
-    @tailwind screens;
+    @screens utilities;
   `
 
   const output = `
@@ -190,7 +190,7 @@ test('it can generate responsive variants for nested at-rules', () => {
       }
     }
 
-    @tailwind screens;
+    @screens utilities;
   `
 
   const output = `
@@ -255,7 +255,7 @@ test('it can generate responsive variants for deeply nested at-rules', () => {
       }
     }
 
-    @tailwind screens;
+    @screens utilities;
   `
 
   const output = `
@@ -320,7 +320,7 @@ test('screen prefix is only applied to the last class in a selector', () => {
       .banana li * .sandwich #foo > div { color: yellow; }
     }
 
-    @tailwind screens;
+    @screens utilities;
   `
 
   const output = `
@@ -357,7 +357,7 @@ test('responsive variants are generated for all selectors in a rule', () => {
       .foo, .bar { color: yellow; }
     }
 
-    @tailwind screens;
+    @screens utilities;
   `
 
   const output = `
@@ -394,7 +394,7 @@ test('selectors with no classes cannot be made responsive', () => {
       div { color: yellow; }
     }
 
-    @tailwind screens;
+    @screens utilities;
   `
   expect.assertions(1)
   return run(input, {
@@ -417,7 +417,7 @@ test('all selectors in a rule must contain classes', () => {
       .foo, div { color: yellow; }
     }
 
-    @tailwind screens;
+    @screens utilities;
   `
   expect.assertions(1)
   return run(input, {
@@ -431,5 +431,61 @@ test('all selectors in a rule must contain classes', () => {
     separator: ':',
   }).catch(e => {
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
+  })
+})
+
+test('responsive components are inserted at @screens components', () => {
+  const input = `
+    @responsive components {
+      .banana { color: yellow; }
+    }
+
+    .apple { color: red; }
+
+    @screens components;
+
+    @responsive {
+      .chocolate { color: brown; }
+    }
+
+    @screens utilities;
+  `
+
+  const output = `
+      .banana { color: yellow; }
+      .apple { color: red; }
+      @media (min-width: 500px) {
+        .sm\\:banana { color: yellow; }
+      }
+      @media (min-width: 750px) {
+        .md\\:banana { color: yellow; }
+      }
+      @media (min-width: 1000px) {
+        .lg\\:banana { color: yellow; }
+      }
+      .chocolate { color: brown; }
+      @media (min-width: 500px) {
+        .sm\\:chocolate { color: brown; }
+      }
+      @media (min-width: 750px) {
+        .md\\:chocolate { color: brown; }
+      }
+      @media (min-width: 1000px) {
+        .lg\\:chocolate { color: brown; }
+      }
+  `
+
+  return run(input, {
+    theme: {
+      screens: {
+        sm: '500px',
+        md: '750px',
+        lg: '1000px',
+      },
+    },
+    separator: ':',
+  }).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
   })
 })
