@@ -8,10 +8,8 @@ import * as emoji from '../cli/emoji'
 function removeTailwindComments(css) {
   css.walkComments(comment => {
     switch (comment.text.trim()) {
-      case 'tailwind start base':
       case 'tailwind start components':
       case 'tailwind start utilities':
-      case 'tailwind end base':
       case 'tailwind end components':
       case 'tailwind end utilities':
         comment.remove()
