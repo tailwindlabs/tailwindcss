@@ -62,6 +62,10 @@ export default function(
         atRule.before(updateSource(pluginUtilities, atRule.source))
         atRule.remove()
       }
+
+      if (atRule.params === 'screens') {
+        includesScreensExplicitly = true
+      }
     })
 
     if (!includesScreensExplicitly) {
