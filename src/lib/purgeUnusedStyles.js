@@ -11,11 +11,9 @@ function removeTailwindComments(css) {
       case 'tailwind start base':
       case 'tailwind start components':
       case 'tailwind start utilities':
-      case 'tailwind start screens':
       case 'tailwind end base':
       case 'tailwind end components':
       case 'tailwind end utilities':
-      case 'tailwind end screens':
         comment.remove()
         break
       default:

@@ -8,6 +8,7 @@ import generateVariantFunction from '../util/generateVariantFunction'
 import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
 import wrapWithVariants from '../util/wrapWithVariants'
+import cloneNodes from '../util/cloneNodes'
 import increaseSpecificity from '../util/increaseSpecificity'
 import selectorParser from 'postcss-selector-parser'
 
@@ -25,6 +26,15 @@ function containsClass(value) {
     selectors.walkClasses(() => (classFound = true))
     return classFound
   }).transformSync(value)
+}
+
+function wrapWithBucket(rules, bucket) {
+  return postcss
+    .atRule({
+      name: 'bucket',
+      params: bucket,
+    })
+    .append(cloneNodes(Array.isArray(rules) ? rules : [rules]))
 }
 
 export default function(plugins, config) {
@@ -108,7 +118,9 @@ export default function(plugins, config) {
           }
         })
 
-        pluginUtilities.push(wrapWithVariants(styles.nodes, options.variants))
+        pluginUtilities.push(
+          wrapWithVariants(wrapWithBucket(styles.nodes, 'utilities'), options.variants)
+        )
       },
       addComponents: (components, options) => {
         const defaultOptions = { variants: [], respectPrefix: true }
@@ -125,11 +137,9 @@ export default function(plugins, config) {
           }
         })
 
-        if (options.variants.length > 0) {
-          pluginComponents.push(wrapWithVariants(styles.nodes, options.variants, 'components'))
-        } else {
-          pluginComponents.push(...styles.nodes)
-        }
+        pluginComponents.push(
+          wrapWithVariants(wrapWithBucket(styles.nodes, 'components'), options.variants)
+        )
       },
       addBase: baseStyles => {
         pluginBaseStyles.push(...parseStyles(baseStyles))

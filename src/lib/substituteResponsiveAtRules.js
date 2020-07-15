@@ -10,16 +10,12 @@ export default function(config) {
       theme: { screens },
       separator,
     } = config
-    const responsiveRules = {
-      components: postcss.root(),
-      utilities: postcss.root(),
-    }
+    const responsiveRules = postcss.root()
     const finalRules = []
 
     css.walkAtRules('responsive', atRule => {
-      const bucket = atRule.params === 'components' ? 'components' : 'utilities'
       const nodes = atRule.nodes
-      responsiveRules[bucket].append(...cloneNodes(nodes))
+      responsiveRules.append(...cloneNodes(nodes))
       atRule.before(nodes)
       atRule.remove()
     })
@@ -30,10 +26,8 @@ export default function(config) {
         params: buildMediaQuery(screens[screen]),
       })
 
-      mediaQuery.append(postcss.comment({ text: 'tailwind start components' }))
-
       mediaQuery.append(
-        _.tap(responsiveRules.components.clone(), clonedRoot => {
+        _.tap(responsiveRules.clone(), clonedRoot => {
           clonedRoot.walkRules(rule => {
             rule.selectors = _.map(rule.selectors, selector =>
               buildSelectorVariant(selector, screen, separator, message => {
@@ -43,24 +37,6 @@ export default function(config) {
           })
         })
       )
-
-      mediaQuery.append(postcss.comment({ text: 'tailwind end components' }))
-
-      mediaQuery.append(postcss.comment({ text: 'tailwind start utilities' }))
-
-      mediaQuery.append(
-        _.tap(responsiveRules.utilities.clone(), clonedRoot => {
-          clonedRoot.walkRules(rule => {
-            rule.selectors = _.map(rule.selectors, selector =>
-              buildSelectorVariant(selector, screen, separator, message => {
-                throw rule.error(message)
-              })
-            )
-          })
-        })
-      )
-
-      mediaQuery.append(postcss.comment({ text: 'tailwind end utilities' }))
 
       finalRules.push(mediaQuery)
     })
