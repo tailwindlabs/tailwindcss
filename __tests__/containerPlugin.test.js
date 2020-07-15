@@ -25,18 +25,22 @@ test.only('options are not required', () => {
   const { components } = processPlugins([container()], config())
 
   expect(css(components)).toMatchCss(`
-    .container { width: 100% }
-    @media (min-width: 576px) {
-      .container { max-width: 576px }
-    }
-    @media (min-width: 768px) {
-      .container { max-width: 768px }
-    }
-    @media (min-width: 992px) {
-      .container { max-width: 992px }
-    }
-    @media (min-width: 1200px) {
-      .container { max-width: 1200px }
+    @layer components {
+      @variants {
+        .container { width: 100% }
+        @media (min-width: 576px) {
+          .container { max-width: 576px }
+        }
+        @media (min-width: 768px) {
+          .container { max-width: 768px }
+        }
+        @media (min-width: 992px) {
+          .container { max-width: 992px }
+        }
+        @media (min-width: 1200px) {
+          .container { max-width: 1200px }
+        }
+      }
     }
   `)
 })
@@ -54,12 +58,16 @@ test.only('screens can be passed explicitly', () => {
   )
 
   expect(css(components)).toMatchCss(`
-    .container { width: 100% }
-    @media (min-width: 400px) {
-      .container { max-width: 400px }
-    }
-    @media (min-width: 500px) {
-      .container { max-width: 500px }
+    @layer components {
+      @variants {
+        .container { width: 100% }
+        @media (min-width: 400px) {
+          .container { max-width: 400px }
+        }
+        @media (min-width: 500px) {
+          .container { max-width: 500px }
+        }
+      }
     }
   `)
 })
@@ -77,12 +85,16 @@ test.only('screens are ordered ascending by min-width', () => {
   )
 
   expect(css(components)).toMatchCss(`
-    .container { width: 100% }
-    @media (min-width: 400px) {
-      .container { max-width: 400px }
-    }
-    @media (min-width: 500px) {
-      .container { max-width: 500px }
+  @layer components {
+      @variants {
+        .container { width: 100% }
+        @media (min-width: 400px) {
+          .container { max-width: 400px }
+        }
+        @media (min-width: 500px) {
+          .container { max-width: 500px }
+        }
+      }
     }
   `)
 })
@@ -104,12 +116,16 @@ test.only('screens are deduplicated by min-width', () => {
   )
 
   expect(css(components)).toMatchCss(`
-    .container { width: 100% }
-    @media (min-width: 576px) {
-      .container { max-width: 576px }
-    }
-    @media (min-width: 768px) {
-      .container { max-width: 768px }
+    @layer components {
+      @variants {
+        .container { width: 100% }
+        @media (min-width: 576px) {
+          .container { max-width: 576px }
+        }
+        @media (min-width: 768px) {
+          .container { max-width: 768px }
+        }
+      }
     }
   `)
 })
@@ -127,22 +143,26 @@ test.only('the container can be centered by default', () => {
   )
 
   expect(css(components)).toMatchCss(`
-    .container {
-      width: 100%;
-      margin-right: auto;
-      margin-left: auto
-    }
-    @media (min-width: 576px) {
-      .container { max-width: 576px }
-    }
-    @media (min-width: 768px) {
-      .container { max-width: 768px }
-    }
-    @media (min-width: 992px) {
-      .container { max-width: 992px }
-    }
-    @media (min-width: 1200px) {
-      .container { max-width: 1200px }
+    @layer components {
+      @variants {
+        .container {
+          width: 100%;
+          margin-right: auto;
+          margin-left: auto
+        }
+        @media (min-width: 576px) {
+          .container { max-width: 576px }
+        }
+        @media (min-width: 768px) {
+          .container { max-width: 768px }
+        }
+        @media (min-width: 992px) {
+          .container { max-width: 992px }
+        }
+        @media (min-width: 1200px) {
+          .container { max-width: 1200px }
+        }
+      }
     }
   `)
 })
@@ -160,22 +180,26 @@ test.only('horizontal padding can be included by default', () => {
   )
 
   expect(css(components)).toMatchCss(`
-    .container {
-      width: 100%;
-      padding-right: 2rem;
-      padding-left: 2rem
-    }
-    @media (min-width: 576px) {
-      .container { max-width: 576px }
-    }
-    @media (min-width: 768px) {
-      .container { max-width: 768px }
-    }
-    @media (min-width: 992px) {
-      .container { max-width: 992px }
-    }
-    @media (min-width: 1200px) {
-      .container { max-width: 1200px }
+    @layer components {
+      @variants {
+        .container {
+          width: 100%;
+          padding-right: 2rem;
+          padding-left: 2rem
+        }
+        @media (min-width: 576px) {
+          .container { max-width: 576px }
+        }
+        @media (min-width: 768px) {
+          .container { max-width: 768px }
+        }
+        @media (min-width: 992px) {
+          .container { max-width: 992px }
+        }
+        @media (min-width: 1200px) {
+          .container { max-width: 1200px }
+        }
+      }
     }
   `)
 })
@@ -198,33 +222,37 @@ test.only('responsive horizontal padding can be included by default', () => {
   )
 
   expect(css(components)).toMatchCss(`
-    .container {
-      width: 100%;
-      padding-right: 1rem;
-      padding-left: 1rem
-    }
-    @media (min-width: 576px) {
-      .container {
-        max-width: 576px;
-        padding-right: 2rem;
-        padding-left: 2rem
-      }
-    }
-    @media (min-width: 768px) {
-      .container { max-width: 768px }
-    }
-    @media (min-width: 992px) {
-      .container {
-        max-width: 992px;
-        padding-right: 4rem;
-        padding-left: 4rem
-      }
-    }
-    @media (min-width: 1200px) {
-      .container {
-        max-width: 1200px;
-        padding-right: 5rem;
-        padding-left: 5rem
+    @layer components {
+      @variants {
+        .container {
+          width: 100%;
+          padding-right: 1rem;
+          padding-left: 1rem
+        }
+        @media (min-width: 576px) {
+          .container {
+            max-width: 576px;
+            padding-right: 2rem;
+            padding-left: 2rem
+          }
+        }
+        @media (min-width: 768px) {
+          .container { max-width: 768px }
+        }
+        @media (min-width: 992px) {
+          .container {
+            max-width: 992px;
+            padding-right: 4rem;
+            padding-left: 4rem
+          }
+        }
+        @media (min-width: 1200px) {
+          .container {
+            max-width: 1200px;
+            padding-right: 5rem;
+            padding-left: 5rem
+          }
+        }
       }
     }
   `)
@@ -245,18 +273,22 @@ test.only('setting all options at once', () => {
   )
 
   expect(css(components)).toMatchCss(`
-    .container {
-      width: 100%;
-      margin-right: auto;
-      margin-left: auto;
-      padding-right: 2rem;
-      padding-left: 2rem
-    }
-    @media (min-width: 400px) {
-      .container { max-width: 400px }
-    }
-    @media (min-width: 500px) {
-      .container { max-width: 500px }
+    @layer components {
+      @variants {
+        .container {
+          width: 100%;
+          margin-right: auto;
+          margin-left: auto;
+          padding-right: 2rem;
+          padding-left: 2rem
+        }
+        @media (min-width: 400px) {
+          .container { max-width: 400px }
+        }
+        @media (min-width: 500px) {
+          .container { max-width: 500px }
+        }
+      }
     }
   `)
 })
