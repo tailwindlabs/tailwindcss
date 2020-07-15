@@ -643,6 +643,7 @@ module.exports = {
     borderWidth: ['responsive'],
     boxShadow: ['responsive', 'hover', 'focus'],
     boxSizing: ['responsive'],
+    container: ['responsive'],
     cursor: ['responsive'],
     display: ['responsive'],
     divideColor: ['responsive'],

@@ -63,7 +63,7 @@ function mapMinWidthsToPadding(minWidths, screens, paddings) {
 }
 
 module.exports = function() {
-  return function({ addComponents, theme }) {
+  return function({ addComponents, theme, variants }) {
     const screens = theme('container.screens', theme('screens'))
     const minWidths = extractMinWidths(screens)
     const paddings = mapMinWidthsToPadding(minWidths, screens, theme('container.padding'))
@@ -96,15 +96,18 @@ module.exports = function() {
       })
       .value()
 
-    addComponents([
-      {
-        '.container': Object.assign(
-          { width: '100%' },
-          theme('container.center', false) ? { marginRight: 'auto', marginLeft: 'auto' } : {},
-          generatePaddingFor(0)
-        ),
-      },
-      ...atRules,
-    ])
+    addComponents(
+      [
+        {
+          '.container': Object.assign(
+            { width: '100%' },
+            theme('container.center', false) ? { marginRight: 'auto', marginLeft: 'auto' } : {},
+            generatePaddingFor(0)
+          ),
+        },
+        ...atRules,
+      ],
+      variants('container')
+    )
   }
 }

@@ -21,7 +21,7 @@ function config(overrides) {
   })
 }
 
-test.only('options are not required', () => {
+test('options are not required', () => {
   const { components } = processPlugins([container()], config())
 
   expect(css(components)).toMatchCss(`
@@ -45,7 +45,7 @@ test.only('options are not required', () => {
   `)
 })
 
-test.only('screens can be passed explicitly', () => {
+test('screens can be passed explicitly', () => {
   const { components } = processPlugins(
     [container()],
     config({
@@ -72,7 +72,7 @@ test.only('screens can be passed explicitly', () => {
   `)
 })
 
-test.only('screens are ordered ascending by min-width', () => {
+test('screens are ordered ascending by min-width', () => {
   const { components } = processPlugins(
     [container()],
     config({
@@ -99,7 +99,7 @@ test.only('screens are ordered ascending by min-width', () => {
   `)
 })
 
-test.only('screens are deduplicated by min-width', () => {
+test('screens are deduplicated by min-width', () => {
   const { components } = processPlugins(
     [container()],
     config({
@@ -130,7 +130,7 @@ test.only('screens are deduplicated by min-width', () => {
   `)
 })
 
-test.only('the container can be centered by default', () => {
+test('the container can be centered by default', () => {
   const { components } = processPlugins(
     [container()],
     config({
@@ -167,7 +167,7 @@ test.only('the container can be centered by default', () => {
   `)
 })
 
-test.only('horizontal padding can be included by default', () => {
+test('horizontal padding can be included by default', () => {
   const { components } = processPlugins(
     [container()],
     config({
@@ -204,7 +204,7 @@ test.only('horizontal padding can be included by default', () => {
   `)
 })
 
-test.only('responsive horizontal padding can be included by default', () => {
+test('responsive horizontal padding can be included by default', () => {
   const { components } = processPlugins(
     [container()],
     config({
@@ -258,7 +258,7 @@ test.only('responsive horizontal padding can be included by default', () => {
   `)
 })
 
-test.only('setting all options at once', () => {
+test('setting all options at once', () => {
   const { components } = processPlugins(
     [container()],
     config({
@@ -287,6 +287,42 @@ test.only('setting all options at once', () => {
         }
         @media (min-width: 500px) {
           .container { max-width: 500px }
+        }
+      }
+    }
+  `)
+})
+
+test('container can use variants', () => {
+  const { components } = processPlugins(
+    [container()],
+    config({
+      theme: {
+        container: {
+          screens: ['400px', '500px'],
+        },
+      },
+      variants: {
+        container: ['responsive', 'hover'],
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants responsive, hover {
+        .container {
+          width: 100%
+        }
+        @media (min-width: 400px) {
+          .container {
+            max-width: 400px
+          }
+        }
+        @media (min-width: 500px) {
+          .container {
+            max-width: 500px
+          }
         }
       }
     }
