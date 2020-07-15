@@ -684,3 +684,32 @@ test('plugin variants can wrap rules in another at-rule using the raw PostCSS AP
     expect(result.warnings().length).toBe(0)
   })
 })
+
+test('nested variants are all applied', () => {
+  const input = `
+    @variants responsive {
+      @variants hover {
+        @variants focus {
+          .banana { color: yellow; }
+          .chocolate { color: brown; }
+        }
+      }
+    }
+  `
+
+  const output = `
+    @responsive {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+      .focus\\:banana:focus { color: yellow; }
+      .focus\\:chocolate:focus { color: brown; }
+      .hover\\:banana:hover { color: yellow; }
+      .hover\\:chocolate:hover { color: brown; }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
