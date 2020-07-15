@@ -5,6 +5,40 @@ import chalk from 'chalk'
 import { log } from '../cli/utils'
 import * as emoji from '../cli/emoji'
 
+function convertLayersToControlComments(css) {
+  css.walkAtRules('layer', atRule => {
+    const layer = atRule.params
+    atRule.before(postcss.comment({ text: `tailwind start ${layer}` }))
+    atRule.before(atRule.nodes)
+    atRule.before(postcss.comment({ text: `tailwind end ${layer}` }))
+    atRule.remove()
+  })
+}
+
+function convertControlCommentsToPurgeIgnoreComments(config) {
+  return function(css) {
+    const mode = _.get(config, 'purge.mode', 'conservative')
+
+    if (mode === 'conservative') {
+      css.prepend(postcss.comment({ text: 'purgecss start ignore' }))
+      css.append(postcss.comment({ text: 'purgecss end ignore' }))
+
+      css.walkComments(comment => {
+        switch (comment.text.trim()) {
+          case 'tailwind start utilities':
+            comment.text = 'purgecss end ignore'
+            break
+          case 'tailwind end utilities':
+            comment.text = 'purgecss start ignore'
+            break
+          default:
+            break
+        }
+      })
+    }
+  }
+}
+
 function removeTailwindComments(css) {
   css.walkComments(comment => {
     switch (comment.text.trim()) {
@@ -28,7 +62,7 @@ export default function purgeUnusedUtilities(config) {
   )
 
   if (!purgeEnabled) {
-    return removeTailwindComments
+    return postcss([convertLayersToControlComments, removeTailwindComments])
   }
 
   // Skip if `purge: []` since that's part of the default config
@@ -52,29 +86,9 @@ export default function purgeUnusedUtilities(config) {
   }
 
   return postcss([
-    function(css) {
-      const mode = _.get(config, 'purge.mode', 'conservative')
-
-      if (mode === 'conservative') {
-        css.prepend(postcss.comment({ text: 'purgecss start ignore' }))
-        css.append(postcss.comment({ text: 'purgecss end ignore' }))
-
-        css.walkComments(comment => {
-          switch (comment.text.trim()) {
-            case 'tailwind start utilities':
-              comment.text = 'purgecss end ignore'
-              break
-            case 'tailwind end utilities':
-              comment.text = 'purgecss start ignore'
-              break
-            default:
-              break
-          }
-        })
-      }
-
-      removeTailwindComments(css)
-    },
+    convertLayersToControlComments,
+    convertControlCommentsToPurgeIgnoreComments(config),
+    removeTailwindComments,
     purgecss({
       content: Array.isArray(config.purge) ? config.purge : config.purge.content,
       defaultExtractor: content => {

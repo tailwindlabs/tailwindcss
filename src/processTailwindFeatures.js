@@ -24,15 +24,6 @@ export default function(getConfig) {
       substituteResponsiveAtRules(config),
       substituteScreenAtRules(config),
       substituteClassApplyAtRules(config, processedPlugins.utilities),
-      function(css) {
-        css.walkAtRules('bucket', atRule => {
-          const bucket = atRule.params
-          atRule.before(postcss.comment({ text: `tailwind start ${bucket}` }))
-          atRule.before(atRule.nodes)
-          atRule.before(postcss.comment({ text: `tailwind end ${bucket}` }))
-          atRule.remove()
-        })
-      },
       purgeUnusedStyles(config),
     ]).process(css, { from: _.get(css, 'source.input.file') })
   }

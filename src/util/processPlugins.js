@@ -28,11 +28,11 @@ function containsClass(value) {
   }).transformSync(value)
 }
 
-function wrapWithBucket(rules, bucket) {
+function wrapWithLayer(rules, layer) {
   return postcss
     .atRule({
-      name: 'bucket',
-      params: bucket,
+      name: 'layer',
+      params: layer,
     })
     .append(cloneNodes(Array.isArray(rules) ? rules : [rules]))
 }
@@ -119,7 +119,7 @@ export default function(plugins, config) {
         })
 
         pluginUtilities.push(
-          wrapWithVariants(wrapWithBucket(styles.nodes, 'utilities'), options.variants)
+          wrapWithLayer(wrapWithVariants(styles.nodes, options.variants), 'utilities')
         )
       },
       addComponents: (components, options) => {
@@ -138,7 +138,7 @@ export default function(plugins, config) {
         })
 
         pluginComponents.push(
-          wrapWithVariants(wrapWithBucket(styles.nodes, 'components'), options.variants)
+          wrapWithLayer(wrapWithVariants(styles.nodes, options.variants), 'components')
         )
       },
       addBase: baseStyles => {
