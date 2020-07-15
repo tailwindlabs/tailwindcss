@@ -40,13 +40,6 @@ export default function(
       }
     })
 
-    css.walkAtRules('tailwind', atRule => {
-      if (atRule.params === 'screens') {
-        atRule.name = 'screens'
-        atRule.params = 'utilities'
-      }
-    })
-
     let includesScreensExplicitly = false
 
     css.walkAtRules('tailwind', atRule => {
