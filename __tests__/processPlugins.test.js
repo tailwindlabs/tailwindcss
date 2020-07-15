@@ -1114,7 +1114,7 @@ test("component declarations can optionally ignore 'prefix' option", () => {
     `)
 })
 
-test('responsive components are generated with the components at-rule argument', () => {
+test('plugins can create components with variants', () => {
   const { components } = processPlugins(
     [
       function({ addComponents }) {
@@ -1132,7 +1132,7 @@ test('responsive components are generated with the components at-rule argument',
   )
 
   expect(css(components)).toMatchCss(`
-    @responsive components {
+    @responsive {
       @variants {
         .btn-blue {
           background-color: blue
@@ -1142,7 +1142,7 @@ test('responsive components are generated with the components at-rule argument',
     `)
 })
 
-test('components can use the array shorthand to add variants', () => {
+test('plugins can use the array shorthand to add variants to components', () => {
   const { components } = processPlugins(
     [
       function({ addComponents }) {
@@ -1152,7 +1152,7 @@ test('components can use the array shorthand to add variants', () => {
               backgroundColor: 'blue',
             },
           },
-          ['responsive']
+          ['responsive', 'hover']
         )
       },
     ],
@@ -1160,8 +1160,8 @@ test('components can use the array shorthand to add variants', () => {
   )
 
   expect(css(components)).toMatchCss(`
-    @responsive components {
-      @variants {
+    @responsive {
+      @variants hover {
         .btn-blue {
           background-color: blue
         }
