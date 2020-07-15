@@ -54,32 +54,22 @@ export default function(
       }
 
       if (atRule.params === 'components') {
-        atRule.before(postcss.comment({ text: 'tailwind start components' }))
         atRule.before(updateSource(pluginComponents, atRule.source))
-        atRule.after(postcss.comment({ text: 'tailwind end components' }))
         atRule.remove()
       }
 
       if (atRule.params === 'utilities') {
-        atRule.before(postcss.comment({ text: 'tailwind start utilities' }))
         atRule.before(updateSource(pluginUtilities, atRule.source))
-        atRule.after(postcss.comment({ text: 'tailwind end utilities' }))
         atRule.remove()
       }
 
       if (atRule.params === 'screens') {
         includesScreensExplicitly = true
-        atRule.before(postcss.comment({ text: 'tailwind start screens' }))
-        atRule.after(postcss.comment({ text: 'tailwind end screens' }))
       }
     })
 
     if (!includesScreensExplicitly) {
-      css.append([
-        postcss.comment({ text: 'tailwind start screens' }),
-        postcss.atRule({ name: 'tailwind', params: 'screens' }),
-        postcss.comment({ text: 'tailwind end screens' }),
-      ])
+      css.append([postcss.atRule({ name: 'tailwind', params: 'screens' })])
     }
   }
 }

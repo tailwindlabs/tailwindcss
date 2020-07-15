@@ -10,10 +10,8 @@ function removeTailwindComments(css) {
     switch (comment.text.trim()) {
       case 'tailwind start components':
       case 'tailwind start utilities':
-      case 'tailwind start screens':
       case 'tailwind end components':
       case 'tailwind end utilities':
-      case 'tailwind end screens':
         comment.remove()
         break
       default:
@@ -64,21 +62,18 @@ export default function purgeUnusedUtilities(config) {
         css.walkComments(comment => {
           switch (comment.text.trim()) {
             case 'tailwind start utilities':
-            case 'tailwind start screens':
               comment.text = 'purgecss end ignore'
               break
             case 'tailwind end utilities':
-            case 'tailwind end screens':
               comment.text = 'purgecss start ignore'
               break
             default:
               break
           }
         })
-      } else if (mode === 'all') {
-        removeTailwindComments(css)
       }
     },
+    removeTailwindComments,
     purgecss({
       content: Array.isArray(config.purge) ? config.purge : config.purge.content,
       defaultExtractor: content => {

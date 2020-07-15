@@ -38,15 +38,17 @@ test('plugins can create utilities with object syntax', () => {
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .object-fill {
-        object-fit: fill
-      }
-      .object-contain {
-        object-fit: contain
-      }
-      .object-cover {
-        object-fit: cover
+    @layer utilities {
+      @variants {
+        .object-fill {
+          object-fit: fill
+        }
+        .object-contain {
+          object-fit: contain
+        }
+        .object-cover {
+          object-fit: cover
+        }
       }
     }
   `)
@@ -80,18 +82,20 @@ test('plugins can create utilities with arrays of objects', () => {
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .object-fill {
-        object-fit: fill
-      }
-      .object-contain {
-        object-fit: contain
-      }
-      .object-cover {
-        object-fit: cover
+    @layer utilities {
+      @variants {
+        .object-fill {
+          object-fit: fill
+        }
+        .object-contain {
+          object-fit: contain
+        }
+        .object-cover {
+          object-fit: cover
+        }
       }
     }
-    `)
+  `)
 })
 
 test('plugins can create utilities with raw PostCSS nodes', () => {
@@ -125,18 +129,20 @@ test('plugins can create utilities with raw PostCSS nodes', () => {
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .object-fill {
-        object-fit: fill
-      }
-      .object-contain {
-        object-fit: contain
-      }
-      .object-cover {
-        object-fit: cover
+    @layer utilities {
+      @variants {
+        .object-fill {
+          object-fit: fill
+        }
+        .object-contain {
+          object-fit: contain
+        }
+        .object-cover {
+          object-fit: cover
+        }
       }
     }
-    `)
+  `)
 })
 
 test('plugins can create utilities with mixed object styles and PostCSS nodes', () => {
@@ -169,18 +175,20 @@ test('plugins can create utilities with mixed object styles and PostCSS nodes', 
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .object-fill {
-        object-fit: fill
-      }
-      .object-contain {
-        object-fit: contain
-      }
-      .object-cover {
-        object-fit: cover
+    @layer utilities {
+      @variants {
+        .object-fill {
+          object-fit: fill
+        }
+        .object-contain {
+          object-fit: contain
+        }
+        .object-cover {
+          object-fit: cover
+        }
       }
     }
-    `)
+  `)
 })
 
 test('plugins can create utilities with variants', () => {
@@ -208,18 +216,20 @@ test('plugins can create utilities with variants', () => {
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
-    @variants responsive, hover, group-hover, focus {
-      .object-fill {
-        object-fit: fill
-      }
-      .object-contain {
-        object-fit: contain
-      }
-      .object-cover {
-        object-fit: cover
+    @layer utilities {
+      @variants responsive, hover, group-hover, focus {
+        .object-fill {
+          object-fit: fill
+        }
+        .object-contain {
+          object-fit: contain
+        }
+        .object-cover {
+          object-fit: cover
+        }
       }
     }
-    `)
+  `)
 })
 
 test('plugins can create components with object syntax', () => {
@@ -244,16 +254,20 @@ test('plugins can create components with object syntax', () => {
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
-    .btn-blue {
-      background-color: blue;
-      color: white;
-      padding: .5rem 1rem;
-      border-radius: .25rem
+    @layer components {
+      @variants {
+        .btn-blue {
+          background-color: blue;
+          color: white;
+          padding: .5rem 1rem;
+          border-radius: .25rem
+        }
+        .btn-blue:hover {
+          background-color: darkblue
+        }
+      }
     }
-    .btn-blue:hover {
-      background-color: darkblue
-    }
-    `)
+  `)
 })
 
 test('plugins can add base styles with object syntax', () => {
@@ -280,7 +294,7 @@ test('plugins can add base styles with object syntax', () => {
     button {
       font-family: inherit
     }
-    `)
+  `)
 })
 
 test('plugins can add base styles with raw PostCSS nodes', () => {
@@ -313,7 +327,7 @@ test('plugins can add base styles with raw PostCSS nodes', () => {
     button {
       font-family: inherit
     }
-    `)
+  `)
 })
 
 test('plugins can create components with raw PostCSS nodes', () => {
@@ -353,16 +367,20 @@ test('plugins can create components with raw PostCSS nodes', () => {
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
-    .btn-blue {
-      background-color: blue;
-      color: white;
-      padding: .5rem 1rem;
-      border-radius: .25rem
+    @layer components {
+      @variants {
+        .btn-blue {
+          background-color: blue;
+          color: white;
+          padding: .5rem 1rem;
+          border-radius: .25rem
+        }
+        .btn-blue:hover {
+          background-color: darkblue
+        }
+      }
     }
-    .btn-blue:hover {
-      background-color: darkblue
-    }
-    `)
+  `)
 })
 
 test('plugins can create components with mixed object styles and raw PostCSS nodes', () => {
@@ -401,16 +419,20 @@ test('plugins can create components with mixed object styles and raw PostCSS nod
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
-    .btn-blue {
-      background-color: blue;
-      color: white;
-      padding: .5rem 1rem;
-      border-radius: .25rem
+    @layer components {
+      @variants {
+        .btn-blue {
+          background-color: blue;
+          color: white;
+          padding: .5rem 1rem;
+          border-radius: .25rem
+        }
+        .btn-blue:hover {
+          background-color: darkblue
+        }
+      }
     }
-    .btn-blue:hover {
-      background-color: darkblue
-    }
-    `)
+  `)
 })
 
 test('plugins can create components with media queries with object syntax', () => {
@@ -444,25 +466,29 @@ test('plugins can create components with media queries with object syntax', () =
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
-    .container {
-      width: 100%
-    }
-    @media (min-width: 100px) {
-      .container {
-        max-width: 100px
+    @layer components {
+      @variants {
+        .container {
+          width: 100%
+        }
+        @media (min-width: 100px) {
+          .container {
+            max-width: 100px
+          }
+        }
+        @media (min-width: 200px) {
+          .container {
+            max-width: 200px
+          }
+        }
+        @media (min-width: 300px) {
+          .container {
+            max-width: 300px
+          }
+        }
       }
     }
-    @media (min-width: 200px) {
-      .container {
-        max-width: 200px
-      }
-    }
-    @media (min-width: 300px) {
-      .container {
-        max-width: 300px
-      }
-    }
-    `)
+  `)
 })
 
 test('media queries can be defined multiple times using objects-in-array syntax', () => {
@@ -499,24 +525,28 @@ test('media queries can be defined multiple times using objects-in-array syntax'
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
-    .container {
-      width: 100%
-    }
-    @media (min-width: 100px) {
-      .container {
-        max-width: 100px
+    @layer components {
+      @variants {
+        .container {
+          width: 100%
+        }
+        @media (min-width: 100px) {
+          .container {
+            max-width: 100px
+          }
+        }
+        .btn {
+          padding: 1rem .5rem;
+          display: block
+        }
+        @media (min-width: 100px) {
+          .btn {
+            display: inline-block
+          }
+        }
       }
     }
-    .btn {
-      padding: 1rem .5rem;
-      display: block
-    }
-    @media (min-width: 100px) {
-      .btn {
-        display: inline-block
-      }
-    }
-    `)
+  `)
 })
 
 test('plugins can create nested rules', () => {
@@ -552,27 +582,31 @@ test('plugins can create nested rules', () => {
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
-    .btn-blue {
-      background-color: blue;
-      color: white;
-      padding: .5rem 1rem;
-      border-radius: .25rem;
-    }
-    .btn-blue:hover {
-      background-color: darkblue;
-    }
-    @media (min-width: 500px) {
-      .btn-blue:hover {
-        background-color: orange;
+    @layer components {
+      @variants {
+        .btn-blue {
+          background-color: blue;
+          color: white;
+          padding: .5rem 1rem;
+          border-radius: .25rem;
+        }
+        .btn-blue:hover {
+          background-color: darkblue;
+        }
+        @media (min-width: 500px) {
+          .btn-blue:hover {
+            background-color: orange;
+          }
+        }
+        .btn-blue > a {
+          color: red;
+        }
+        h1 .btn-blue {
+          color: purple;
+        }
       }
     }
-    .btn-blue > a {
-      color: red;
-    }
-    h1 .btn-blue {
-      color: purple;
-    }
-    `)
+  `)
 })
 
 test('plugins can create rules with escaped selectors', () => {
@@ -591,12 +625,14 @@ test('plugins can create rules with escaped selectors', () => {
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .top-1\\/4 {
-        top: 25%
+    @layer utilities {
+      @variants {
+        .top-1\\/4 {
+          top: 25%
+        }
       }
     }
-    `)
+  `)
 })
 
 test('plugins can access the current config', () => {
@@ -633,30 +669,34 @@ test('plugins can access the current config', () => {
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
-    .container {
-      width: 100%
-    }
-    @media (min-width: 576px) {
-      .container {
-        max-width: 576px
+    @layer components {
+      @variants {
+        .container {
+          width: 100%
+        }
+        @media (min-width: 576px) {
+          .container {
+            max-width: 576px
+          }
+        }
+        @media (min-width: 768px) {
+          .container {
+            max-width: 768px
+          }
+        }
+        @media (min-width: 992px) {
+          .container {
+            max-width: 992px
+          }
+        }
+        @media (min-width: 1200px) {
+          .container {
+            max-width: 1200px
+          }
+        }
       }
     }
-    @media (min-width: 768px) {
-      .container {
-        max-width: 768px
-      }
-    }
-    @media (min-width: 992px) {
-      .container {
-        max-width: 992px
-      }
-    }
-    @media (min-width: 1200px) {
-      .container {
-        max-width: 1200px
-      }
-    }
-    `)
+  `)
 })
 
 test('plugins can access the variants config directly', () => {
@@ -688,18 +728,20 @@ test('plugins can access the variants config directly', () => {
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
-    @variants responsive, focus, hover {
-      .object-fill {
-        object-fit: fill
-      }
-      .object-contain {
-        object-fit: contain
-      }
-      .object-cover {
-        object-fit: cover
+    @layer utilities {
+      @variants responsive, focus, hover {
+        .object-fill {
+          object-fit: fill
+        }
+        .object-contain {
+          object-fit: contain
+        }
+        .object-cover {
+          object-fit: cover
+        }
       }
     }
-    `)
+  `)
 })
 
 test('plugins apply all global variants when variants are configured globally', () => {
@@ -731,17 +773,21 @@ test('plugins apply all global variants when variants are configured globally', 
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
-    @variants responsive, focus, hover {
-      .object-fill {
-        object-fit: fill
+    @layer utilities {
+      @variants responsive, focus, hover {
+        .object-fill {
+          object-fit: fill
+        }
       }
     }
-    @variants responsive, focus, hover {
-      .rotate-90deg {
-        transform: rotate(90deg)
+    @layer utilities {
+      @variants responsive, focus, hover {
+        .rotate-90deg {
+          transform: rotate(90deg)
+        }
       }
     }
-    `)
+  `)
 })
 
 test('plugins can check if corePlugins are enabled', () => {
@@ -763,13 +809,15 @@ test('plugins can check if corePlugins are enabled', () => {
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .test {
-        text-color: false;
-        opacity: true
+    @layer utilities {
+      @variants {
+        .test {
+          text-color: false;
+          opacity: true
+        }
       }
     }
-    `)
+  `)
 })
 
 test('plugins can check if corePlugins are enabled when using array white-listing', () => {
@@ -791,13 +839,15 @@ test('plugins can check if corePlugins are enabled when using array white-listin
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .test {
-        text-color: true;
-        opacity: false
+    @layer utilities {
+      @variants {
+        .test {
+          text-color: true;
+          opacity: false
+        }
       }
     }
-    `)
+  `)
 })
 
 test('plugins can provide fallbacks to keys missing from the config', () => {
@@ -823,10 +873,14 @@ test('plugins can provide fallbacks to keys missing from the config', () => {
 
   expect(utilities.length).toBe(0)
   expect(css(components)).toMatchCss(`
-    .btn {
-      border-radius: .25rem
+    @layer components {
+      @variants {
+        .btn {
+          border-radius: .25rem
+        }
+      }
     }
-    `)
+  `)
 })
 
 test('variants are optional when adding utilities', () => {
@@ -844,11 +898,14 @@ test('variants are optional when adding utilities', () => {
   )
 
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .border-collapse {
-        border-collapse: collapse
+    @layer utilities {
+      @variants {
+        .border-collapse {
+          border-collapse: collapse
+        }
       }
-    }`)
+    }
+  `)
 })
 
 test('plugins can add multiple sets of utilities and components', () => {
@@ -886,27 +943,39 @@ test('plugins can add multiple sets of utilities and components', () => {
   )
 
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .skew-12deg {
-        transform: skewY(-12deg)
+    @layer utilities {
+      @variants {
+        .skew-12deg {
+          transform: skewY(-12deg)
+        }
       }
     }
-    @variants {
-      .border-collapse {
-        border-collapse: collapse
+    @layer utilities {
+      @variants {
+        .border-collapse {
+          border-collapse: collapse
+        }
       }
     }
-    `)
+  `)
   expect(css(components)).toMatchCss(`
-    .card {
-      padding: 1rem;
-      border-radius: .25rem
+    @layer components {
+      @variants {
+        .card {
+          padding: 1rem;
+          border-radius: .25rem
+        }
+      }
     }
-    .btn {
-      padding: 1rem .5rem;
-      display: inline-block
+    @layer components {
+      @variants {
+        .btn {
+          padding: 1rem .5rem;
+          display: inline-block
+        }
+      }
     }
-    `)
+  `)
 })
 
 test('plugins respect prefix and important options by default when adding utilities', () => {
@@ -927,12 +996,14 @@ test('plugins respect prefix and important options by default when adding utilit
   )
 
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .tw-rotate-90 {
-        transform: rotate(90deg) !important
+    @layer utilities {
+      @variants {
+        .tw-rotate-90 {
+          transform: rotate(90deg) !important
+        }
       }
     }
-    `)
+  `)
 })
 
 test('when important is a selector it is used to scope utilities instead of adding !important', () => {
@@ -952,12 +1023,14 @@ test('when important is a selector it is used to scope utilities instead of addi
   )
 
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      #app .rotate-90 {
-        transform: rotate(90deg)
+    @layer utilities {
+      @variants {
+        #app .rotate-90 {
+          transform: rotate(90deg)
+        }
       }
     }
-    `)
+  `)
 })
 
 test('when important contains a class an error is thrown', () => {
@@ -996,12 +1069,14 @@ test('when important is a selector it scopes all selectors in a rule, even thoug
   )
 
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      #app .rotate-90, #app .rotate-1\\/4 {
-        transform: rotate(90deg)
+    @layer utilities {
+      @variants {
+        #app .rotate-90, #app .rotate-1\\/4 {
+          transform: rotate(90deg)
+        }
       }
     }
-    `)
+  `)
 })
 
 test('important utilities are not made double important when important option is used', () => {
@@ -1021,12 +1096,14 @@ test('important utilities are not made double important when important option is
   )
 
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .rotate-90 {
-        transform: rotate(90deg) !important
+    @layer utilities {
+      @variants {
+        .rotate-90 {
+          transform: rotate(90deg) !important
+        }
       }
     }
-    `)
+  `)
 })
 
 test("component declarations respect the 'prefix' option by default", () => {
@@ -1046,10 +1123,14 @@ test("component declarations respect the 'prefix' option by default", () => {
   )
 
   expect(css(components)).toMatchCss(`
-    .tw-btn-blue {
-      background-color: blue
+    @layer components {
+      @variants {
+        .tw-btn-blue {
+          background-color: blue
+        }
+      }
     }
-    `)
+  `)
 })
 
 test('all selectors in a rule are prefixed', () => {
@@ -1074,18 +1155,24 @@ test('all selectors in a rule are prefixed', () => {
   )
 
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .tw-rotate-90, .tw-rotate-1\\/4 {
-        transform: rotate(90deg)
+    @layer utilities {
+      @variants {
+        .tw-rotate-90, .tw-rotate-1\\/4 {
+          transform: rotate(90deg)
+        }
       }
     }
-    `)
+  `)
 
   expect(css(components)).toMatchCss(`
-    .tw-btn-blue, .tw-btn-red {
-      padding: 10px
+    @layer components {
+      @variants {
+        .tw-btn-blue, .tw-btn-red {
+          padding: 10px
+        }
+      }
     }
-    `)
+  `)
 })
 
 test("component declarations can optionally ignore 'prefix' option", () => {
@@ -1108,10 +1195,70 @@ test("component declarations can optionally ignore 'prefix' option", () => {
   )
 
   expect(css(components)).toMatchCss(`
-    .btn-blue {
-      background-color: blue
+    @layer components {
+      @variants {
+        .btn-blue {
+          background-color: blue
+        }
+      }
     }
-    `)
+  `)
+})
+
+test('plugins can create components with variants', () => {
+  const { components } = processPlugins(
+    [
+      function({ addComponents }) {
+        addComponents(
+          {
+            '.btn-blue': {
+              backgroundColor: 'blue',
+            },
+          },
+          { variants: ['responsive'] }
+        )
+      },
+    ],
+    makeConfig()
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants responsive {
+        .btn-blue {
+          background-color: blue
+        }
+      }
+    }
+  `)
+})
+
+test('plugins can use the array shorthand to add variants to components', () => {
+  const { components } = processPlugins(
+    [
+      function({ addComponents }) {
+        addComponents(
+          {
+            '.btn-blue': {
+              backgroundColor: 'blue',
+            },
+          },
+          ['responsive', 'hover']
+        )
+      },
+    ],
+    makeConfig()
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants responsive, hover {
+        .btn-blue {
+          background-color: blue
+        }
+      }
+    }
+  `)
 })
 
 test("component declarations are not affected by the 'important' option", () => {
@@ -1131,10 +1278,14 @@ test("component declarations are not affected by the 'important' option", () => 
   )
 
   expect(css(components)).toMatchCss(`
-    .btn-blue {
-      background-color: blue
+    @layer components {
+      @variants {
+        .btn-blue {
+          background-color: blue
+        }
+      }
     }
-    `)
+  `)
 })
 
 test("plugins can apply the user's chosen prefix to components manually", () => {
@@ -1157,10 +1308,14 @@ test("plugins can apply the user's chosen prefix to components manually", () => 
   )
 
   expect(css(components)).toMatchCss(`
-    .tw-btn-blue {
-      background-color: blue
+    @layer components {
+      @variants {
+        .tw-btn-blue {
+          background-color: blue
+        }
+      }
     }
-    `)
+  `)
 })
 
 test('prefix can optionally be ignored for utilities', () => {
@@ -1186,12 +1341,14 @@ test('prefix can optionally be ignored for utilities', () => {
   )
 
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .rotate-90 {
-        transform: rotate(90deg) !important
+    @layer utilities {
+      @variants {
+        .rotate-90 {
+          transform: rotate(90deg) !important
+        }
       }
     }
-    `)
+  `)
 })
 
 test('important can optionally be ignored for utilities', () => {
@@ -1217,12 +1374,14 @@ test('important can optionally be ignored for utilities', () => {
   )
 
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .tw-rotate-90 {
-        transform: rotate(90deg)
+    @layer utilities {
+      @variants {
+        .tw-rotate-90 {
+          transform: rotate(90deg)
+        }
       }
     }
-    `)
+  `)
 })
 
 test('variants can still be specified when ignoring prefix and important options', () => {
@@ -1250,12 +1409,14 @@ test('variants can still be specified when ignoring prefix and important options
   )
 
   expect(css(utilities)).toMatchCss(`
-    @variants responsive, hover, focus {
-      .rotate-90 {
-        transform: rotate(90deg)
+    @layer utilities {
+      @variants responsive, hover, focus {
+        .rotate-90 {
+          transform: rotate(90deg)
+        }
       }
     }
-    `)
+  `)
 })
 
 test('prefix will prefix all classes in a selector', () => {
@@ -1278,10 +1439,14 @@ test('prefix will prefix all classes in a selector', () => {
   )
 
   expect(css(components)).toMatchCss(`
-    .tw-btn-blue .tw-w-1\\/4 > h1.tw-text-xl + a .tw-bar {
-      background-color: blue
+    @layer components {
+      @variants {
+        .tw-btn-blue .tw-w-1\\/4 > h1.tw-text-xl + a .tw-bar {
+          background-color: blue
+        }
+      }
     }
-    `)
+  `)
 })
 
 test('plugins can be provided as an object with a handler function', () => {
@@ -1308,15 +1473,17 @@ test('plugins can be provided as an object with a handler function', () => {
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .object-fill {
-        object-fit: fill
-      }
-      .object-contain {
-        object-fit: contain
-      }
-      .object-cover {
-        object-fit: cover
+    @layer utilities {
+      @variants {
+        .object-fill {
+          object-fit: fill
+        }
+        .object-contain {
+          object-fit: contain
+        }
+        .object-cover {
+          object-fit: cover
+        }
       }
     }
   `)
@@ -1351,15 +1518,17 @@ test('plugins can provide a config but no handler', () => {
 
   expect(components.length).toBe(0)
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .object-fill {
-        object-fit: fill
-      }
-      .object-contain {
-        object-fit: contain
-      }
-      .object-cover {
-        object-fit: cover
+    @layer utilities {
+      @variants {
+        .object-fill {
+          object-fit: fill
+        }
+        .object-contain {
+          object-fit: contain
+        }
+        .object-cover {
+          object-fit: cover
+        }
       }
     }
   `)

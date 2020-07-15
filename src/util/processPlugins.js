@@ -8,6 +8,7 @@ import generateVariantFunction from '../util/generateVariantFunction'
 import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
 import wrapWithVariants from '../util/wrapWithVariants'
+import cloneNodes from '../util/cloneNodes'
 import increaseSpecificity from '../util/increaseSpecificity'
 import selectorParser from 'postcss-selector-parser'
 
@@ -25,6 +26,15 @@ function containsClass(value) {
     selectors.walkClasses(() => (classFound = true))
     return classFound
   }).transformSync(value)
+}
+
+function wrapWithLayer(rules, layer) {
+  return postcss
+    .atRule({
+      name: 'layer',
+      params: layer,
+    })
+    .append(cloneNodes(Array.isArray(rules) ? rules : [rules]))
 }
 
 export default function(plugins, config) {
@@ -108,10 +118,16 @@ export default function(plugins, config) {
           }
         })
 
-        pluginUtilities.push(wrapWithVariants(styles.nodes, options.variants))
+        pluginUtilities.push(
+          wrapWithLayer(wrapWithVariants(styles.nodes, options.variants), 'utilities')
+        )
       },
       addComponents: (components, options) => {
-        options = Object.assign({ respectPrefix: true }, options)
+        const defaultOptions = { variants: [], respectPrefix: true }
+
+        options = Array.isArray(options)
+          ? Object.assign({}, defaultOptions, { variants: options })
+          : _.defaults(options, defaultOptions)
 
         const styles = postcss.root({ nodes: parseStyles(components) })
 
@@ -121,7 +137,9 @@ export default function(plugins, config) {
           }
         })
 
-        pluginComponents.push(...styles.nodes)
+        pluginComponents.push(
+          wrapWithLayer(wrapWithVariants(styles.nodes, options.variants), 'components')
+        )
       },
       addBase: baseStyles => {
         pluginBaseStyles.push(...parseStyles(baseStyles))
