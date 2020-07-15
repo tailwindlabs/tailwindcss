@@ -1261,6 +1261,33 @@ test('plugins can use the array shorthand to add variants to components', () => 
   `)
 })
 
+test('components that add variants manually do not add an extra variants wrapper', () => {
+  const { components } = processPlugins(
+    [
+      function({ addComponents }) {
+        addComponents({
+          '@variants responsive': {
+            '.btn-blue': {
+              backgroundColor: 'blue',
+            },
+          },
+        })
+      },
+    ],
+    makeConfig()
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants responsive {
+        .btn-blue {
+          background-color: blue
+        }
+      }
+    }
+  `)
+})
+
 test("component declarations are not affected by the 'important' option", () => {
   const { components } = processPlugins(
     [
