@@ -174,7 +174,7 @@ You can control which variants are generated for the grid-column utilities by mo
   // ...
 + gridColumn: ['responsive', 'hover'],
 + gridColumnStart: ['responsive', 'hover'],
-+ gridColumnStartEnd: ['responsive', 'hover'],
++ gridColumnEnd: ['responsive', 'hover'],
 @endcomponent
 
 Learn more about configuring variants in the [configuring variants documentation](/docs/configuring-variants/).
