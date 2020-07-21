@@ -12,20 +12,30 @@ import purgeUnusedStyles from './lib/purgeUnusedStyles'
 
 import corePlugins from './corePlugins'
 import processPlugins from './util/processPlugins'
+import cloneNodes from './util/cloneNodes'
 
 export default function(getConfig) {
   return function(css) {
     const config = getConfig()
     const processedPlugins = processPlugins([...corePlugins(config), ...config.plugins], config)
 
+    const getProcessedPlugins = function() {
+      return {
+        ...processedPlugins,
+        base: cloneNodes(processedPlugins.base),
+        components: cloneNodes(processedPlugins.components),
+        utilities: cloneNodes(processedPlugins.utilities),
+      }
+    }
+
     return postcss([
-      substituteTailwindAtRules(config, processedPlugins),
+      substituteTailwindAtRules(config, getProcessedPlugins()),
       evaluateTailwindFunctions(config),
-      substituteVariantsAtRules(config, processedPlugins),
+      substituteVariantsAtRules(config, getProcessedPlugins()),
       substituteResponsiveAtRules(config),
       convertLayerAtRulesToControlComments(config),
       substituteScreenAtRules(config),
-      substituteClassApplyAtRules(config, processedPlugins.utilities),
+      substituteClassApplyAtRules(config, getProcessedPlugins().utilities),
       purgeUnusedStyles(config),
     ]).process(css, { from: _.get(css, 'source.input.file') })
   }
