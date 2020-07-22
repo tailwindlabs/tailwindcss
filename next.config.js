@@ -10,8 +10,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
-function isSubDirectory(parent, child) {
-  return path.relative(child, parent).startsWith('..')
+function isSubDirectory(child, parent) {
+  if (child === parent) return false
+  const parentTokens = parent.split('/')
+  return parentTokens.every((t, i) => child.split('/')[i] === t)
 }
 
 function getRewrites() {
@@ -62,7 +64,7 @@ module.exports = withBundleAnalyzer({
 
           let layout = []
           if (!/^\s*export default /m.test(source)) {
-            if (isSubDirectory(path.resolve(__dirname, 'src/pages/docs'), this.context)) {
+            if (isSubDirectory(this.context, path.resolve(__dirname, 'src/pages/docs'))) {
               layout = [
                 `import { ContentsLayout } from '@/layouts/ContentsLayout'`,
                 'export default ContentsLayout',
