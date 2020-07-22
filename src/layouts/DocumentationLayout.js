@@ -67,13 +67,15 @@ function Nav({ pages }) {
   ))
 }
 
-export function DocumentationLayout({ children }) {
+export function DocumentationLayout({ children, navIsOpen }) {
   return (
     <div className="w-full max-w-screen-xl mx-auto px-6">
       <div className="lg:flex -mx-6">
         <div
           id="sidebar"
-          className="hidden fixed inset-0 pt-16 h-full bg-white z-90 w-full border-b -mb-16 lg:-mb-0 lg:static lg:h-auto lg:overflow-y-visible lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5"
+          className={`fixed inset-0 pt-16 h-full bg-white z-90 w-full border-b -mb-16 lg:-mb-0 lg:static lg:h-auto lg:overflow-y-visible lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5 ${
+            navIsOpen ? '' : 'hidden'
+          }`}
         >
           <div
             id="navWrapper"
@@ -215,7 +217,9 @@ export function DocumentationLayout({ children }) {
         </div>
         <div
           id="content-wrapper"
-          className="min-h-screen w-full lg:static lg:max-h-full lg:overflow-visible lg:w-3/4 xl:w-4/5 "
+          className={`min-h-screen w-full lg:static lg:max-h-full lg:overflow-visible lg:w-3/4 xl:w-4/5 ${
+            navIsOpen ? 'overflow-hidden max-h-screen fixed' : ''
+          }`}
         >
           <div id="content">
             <div id="app" className="flex">
