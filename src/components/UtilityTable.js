@@ -48,8 +48,6 @@ export const UtilityTable = memo(
   ({ plugin, filterProperties, preview, transformSelector = (x) => x, transformValue }) => {
     const utilities = getUtilities(plugin)
 
-    console.log('rdnder')
-
     return (
       <div className="mt-0 border-t border-b border-gray-300 overflow-hidden relative">
         <div className="lg:max-h-xs overflow-y-auto scrollbar-w-2 scrollbar-track-gray-lighter scrollbar-thumb-rounded scrollbar-thumb-gray scrolling-touch">
