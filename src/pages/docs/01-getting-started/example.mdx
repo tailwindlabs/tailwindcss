@@ -1,0 +1,52 @@
+---
+description: Lorem ipsum dolor sit amet
+---
+
+import backgroundColorPlugin from 'tailwindcss/lib/plugins/backgroundColor'
+import { ResponsiveExample } from '@/components/ResponsiveExample'
+
+export const classes = {
+  plugin: backgroundColorPlugin,
+  filterProperties: (prop, value) => prop.indexOf('--') === -1 && value.indexOf('--') === -1,
+  preview: (css) => (
+    <td
+      className="w-24"
+      style={{
+        backgroundColor: Array.isArray(css['background-color'])
+          ? css['background-color'][0]
+          : css['background-color'],
+      }}
+    />
+  ),
+}
+
+## Hello world
+
+Ea amet a nisi. Veniam aut sit nostrum doloremque nihil omnis ex vitae. Quam perspiciatis totam qui qui eum. Dolor perferendis molestiae nam quia sit et nisi tempora. Molestiae distinctio est. Quod iusto voluptate qui.
+
+### Lorem Ipsum
+
+Voluptates praesentium iste recusandae quis fugiat in. Eos quas sit ducimus doloremque corrupti officiis. Est amet maiores dolores dolor minima amet.
+
+Nam adipisci vitae quisquam. Quia repellat repudiandae molestiae sit debitis non repellat et. Natus magni voluptas expedita voluptatibus.
+
+## Another
+
+Ea amet a nisi. Veniam aut sit nostrum doloremque nihil omnis ex vitae. Quam perspiciatis totam qui qui eum. Dolor perferendis molestiae nam quia sit et nisi tempora. Molestiae distinctio est. Quod iusto voluptate qui.
+
+Voluptates praesentium iste recusandae quis fugiat in. Eos quas sit ducimus doloremque corrupti officiis. Est amet maiores dolores dolor minima amet.
+
+Nam adipisci vitae quisquam. Quia repellat repudiandae molestiae sit debitis non repellat et. Natus magni voluptas expedita voluptatibus.
+
+## Third
+
+Ea amet a nisi. Veniam aut sit nostrum doloremque nihil omnis ex vitae. Quam perspiciatis totam qui qui eum. Dolor perferendis molestiae nam quia sit et nisi tempora. Molestiae distinctio est. Quod iusto voluptate qui.
+
+Voluptates praesentium iste recusandae quis fugiat in. Eos quas sit ducimus doloremque corrupti officiis. Est amet maiores dolores dolor minima amet.
+
+Nam adipisci vitae quisquam. Quia repellat repudiandae molestiae sit debitis non repellat et. Natus magni voluptas expedita voluptatibus.
+
+<ResponsiveExample
+  classNames={['bg-red-500', 'bg-green-500', 'bg-blue-500', 'bg-pink-500', 'bg-teal-500']}
+  preview={(className) => <div className={`h-20 w-20 mx-auto rounded-lg ${className}`} />}
+/>

@@ -1,7 +1,0 @@
-{
-    "require": {
-        "tightenco/jigsaw": "^1.3.9",
-        "erusev/parsedown-extra": "^0.8.0@beta",
-        "erusev/parsedown": "^1.8.0@beta"
-    }
-}
