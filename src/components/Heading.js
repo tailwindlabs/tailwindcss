@@ -12,7 +12,14 @@ export function Heading({ level, id, children }) {
   }, [id, bounds.top, updateHeading])
 
   return (
-    <Component id={id} ref={ref}>
+    <Component className="group" id={id} ref={ref}>
+      {/* eslint-disable-next-line */}
+      <a
+        href={`#${id}`}
+        className="absolute text-gray-500 no-underline after:hash opacity-0 group-hover:opacity-100"
+        style={{ marginLeft: '-1em', paddingRight: '0.5em' }}
+        aria-label="Anchor"
+      />
       {children}
     </Component>
   )
