@@ -20,12 +20,14 @@
     "next": "9.4.4",
     "postcss-nested": "^4.2.3",
     "preval.macro": "^5.0.0",
+    "prismjs": "^1.20.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-use-measure": "^2.0.1",
     "redent": "^3.0.0",
     "simple-functional-loader": "^1.2.1",
-    "tailwindcss": "^1.5.1"
+    "tailwindcss": "^1.5.1",
+    "unist-util-visit": "^2.0.3"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "2.x",

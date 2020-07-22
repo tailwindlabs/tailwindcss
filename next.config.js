@@ -4,6 +4,7 @@ const querystring = require('querystring')
 const { createLoader } = require('simple-functional-loader')
 const frontMatter = require('front-matter')
 const { withTableOfContents } = require('./remark/withTableOfContents')
+const { withSyntaxHighlighting } = require('./remark/withSyntaxHighlighting')
 const { withProse } = require('./remark/withProse')
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
@@ -45,7 +46,7 @@ module.exports = withBundleAnalyzer({
         {
           loader: '@mdx-js/loader',
           options: {
-            remarkPlugins: [withProse, withTableOfContents],
+            remarkPlugins: [withProse, withTableOfContents, withSyntaxHighlighting],
           },
         },
         createLoader(function (source, ...args) {
