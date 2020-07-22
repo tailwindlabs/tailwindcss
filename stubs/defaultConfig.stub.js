@@ -15,8 +15,30 @@ module.exports = {
       transparent: 'transparent',
       current: 'currentColor',
 
-      black: '#000',
-      white: '#fff',
+      black: {
+        default: '#fff',
+        100: '#000',
+        200: '#000',
+        300: '#000',
+        400: '#000',
+        500: '#000',
+        600: '#000',
+        700: '#000',
+        800: '#000',
+        900: '#000',
+      },
+      white: {
+        default: '#fff',
+        100: '#fff',
+        200: '#fff',
+        300: '#fff',
+        400: '#fff',
+        500: '#fff',
+        600: '#fff',
+        700: '#fff',
+        800: '#fff',
+        900: '#fff',
+      },
 
       gray: {
         100: '#f7fafc',
