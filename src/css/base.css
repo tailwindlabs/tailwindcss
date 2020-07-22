@@ -1,3 +1,21 @@
+@font-face {
+  font-family: 'Inter var';
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+  font-named-instance: 'Regular';
+  src: url('../fonts/Inter-roman-latin.var.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter var';
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: italic;
+  font-named-instance: 'Italic';
+  src: url('../fonts/Inter-italic-latin.var.woff2') format('woff2');
+}
+
 @tailwind base;
 
 :root {
