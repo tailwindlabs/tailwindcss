@@ -15,6 +15,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
   }, [])
 
   useEffect(() => {
+    if (tableOfContents.length === 0) return
     function onScroll() {
       let y = window.pageYOffset
       let windowHeight = window.innerHeight
