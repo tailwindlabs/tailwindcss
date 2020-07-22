@@ -11,7 +11,7 @@ export const classes = {
   filterProperties: (prop, value) => prop.indexOf('--') === -1 && value.indexOf('--') === -1,
   preview: (css) => (
     <td
-      className="w-24"
+      className={`w-24 ${css['background-color'] === 'transparent' ? 'bg-checkered' : ''}`}
       style={{
         backgroundColor: Array.isArray(css['background-color'])
           ? css['background-color'][0]
