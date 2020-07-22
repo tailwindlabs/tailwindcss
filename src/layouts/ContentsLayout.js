@@ -65,43 +65,45 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
         </div>
         <div className="hidden xl:text-sm xl:block xl:w-1/4 xl:px-6">
           <div className="flex flex-col justify-between overflow-y-auto sticky top-16 max-h-(screen-16) pt-12 pb-4 -mt-12">
-            <div className="mb-8">
-              <h5 className="text-gray-500 uppercase tracking-wide font-bold text-sm lg:text-xs">
-                On this page
-              </h5>
-              <ul className="mt-4 overflow-x-hidden">
-                {tableOfContents.map((section) => (
-                  <Fragment key={section.slug}>
-                    <li className="mb-2">
-                      <a
-                        href={`#${section.slug}`}
-                        className={`block transition-fast hover:translate-r-2px hover:text-gray-900 font-medium ${
-                          currentSection === section.slug
-                            ? 'translate-r-2px text-gray-900'
-                            : 'text-gray-600'
-                        }`}
-                      >
-                        {section.title}
-                      </a>
-                    </li>
-                    {section.children.map((subsection) => (
-                      <li className="mb-2 ml-2" key={subsection.slug}>
+            {tableOfContents.length > 0 && (
+              <div className="mb-8">
+                <h5 className="text-gray-500 uppercase tracking-wide font-bold text-sm lg:text-xs">
+                  On this page
+                </h5>
+                <ul className="mt-4 overflow-x-hidden">
+                  {tableOfContents.map((section) => (
+                    <Fragment key={section.slug}>
+                      <li className="mb-2">
                         <a
-                          href={`#${subsection.slug}`}
+                          href={`#${section.slug}`}
                           className={`block transition-fast hover:translate-r-2px hover:text-gray-900 font-medium ${
-                            currentSection === subsection.slug
+                            currentSection === section.slug
                               ? 'translate-r-2px text-gray-900'
                               : 'text-gray-600'
                           }`}
                         >
-                          {subsection.title}
+                          {section.title}
                         </a>
                       </li>
-                    ))}
-                  </Fragment>
-                ))}
-              </ul>
-            </div>
+                      {section.children.map((subsection) => (
+                        <li className="mb-2 ml-2" key={subsection.slug}>
+                          <a
+                            href={`#${subsection.slug}`}
+                            className={`block transition-fast hover:translate-r-2px hover:text-gray-900 font-medium ${
+                              currentSection === subsection.slug
+                                ? 'translate-r-2px text-gray-900'
+                                : 'text-gray-600'
+                            }`}
+                          >
+                            {subsection.title}
+                          </a>
+                        </li>
+                      ))}
+                    </Fragment>
+                  ))}
+                </ul>
+              </div>
+            )}
             <div id="ad" />
             <div id="tailwind-ui-widget">
               <a
