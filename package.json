@@ -37,5 +37,8 @@
   },
   "browserslist": [
     "> 1%"
-  ]
+  ],
+  "dependencies": {
+    "focus-visible": "^5.1.0"
+  }
 }

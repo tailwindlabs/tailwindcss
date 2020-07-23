@@ -1,3 +1,4 @@
+require('focus-visible')
 const Prism = require('./prism')
 const Mousetrap = require('mousetrap')
 
