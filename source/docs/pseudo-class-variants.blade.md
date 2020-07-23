@@ -466,7 +466,12 @@ module.exports = {
 ```
 
 
-## Focus-visible
+<h2 class="flex items-center">
+  Focus-visible
+  <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
+    v1.5.0+
+  </span>
+</h2>
 
 <div class="text-sm bg-blue-100 text-blue-700 font-semi-bold px-4 py-2 mb-4 rounded">
   <div class="flex items-center">
