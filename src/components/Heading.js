@@ -2,7 +2,7 @@ import useMeasure from 'react-use-measure'
 import { useEffect, useContext } from 'react'
 import { DocumentContext } from '@/layouts/ContentsLayout'
 
-export function Heading({ level, id, children }) {
+export function Heading({ level, id, children, number, badge }) {
   let Component = `h${level}`
   let [ref, bounds] = useMeasure()
   const { updateHeading } = useContext(DocumentContext)
@@ -12,7 +12,7 @@ export function Heading({ level, id, children }) {
   }, [id, bounds.top, updateHeading])
 
   return (
-    <Component className="group" id={id} ref={ref}>
+    <Component className="group flex" id={id} ref={ref}>
       {/* eslint-disable-next-line */}
       <a
         href={`#${id}`}
@@ -20,7 +20,17 @@ export function Heading({ level, id, children }) {
         style={{ marginLeft: '-1em', paddingRight: '0.5em' }}
         aria-label="Anchor"
       />
+      {number && (
+        <span className="bg-gray-200 h-6 inline-flex items-center justify-center rounded-full text-gray-700 text-lg w-6 mr-3 flex-none">
+          {number}
+        </span>
+      )}
       {children}
+      {badge && (
+        <span className="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
+          {badge}
+        </span>
+      )}
     </Component>
   )
 }

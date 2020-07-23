@@ -19,10 +19,24 @@ module.exports.withTableOfContents = () => {
           .replace(/[^a-z-]/gi, '')
           .replace(/-+/, '-')
           .toLowerCase()
+
         node.type = 'jsx'
-        node.value = `<${component} level={${level}} id="${slug}">${node.children
-          .map(({ value }) => value)
-          .join('')}</${component}>`
+
+        if (node.children[0].type === 'jsx' && /^\s*<Heading[\s>]/.test(node.children[0].value)) {
+          node.value =
+            node.children[0].value.replace(
+              /^\s*<Heading([\s>])/,
+              `<Heading level={${level}} id="${slug}"$1`
+            ) +
+            node.children
+              .slice(1)
+              .map((n) => n.value)
+              .join('')
+        } else {
+          node.value = `<${component} level={${level}} id="${slug}">${node.children
+            .map(({ value }) => value)
+            .join('')}</${component}>`
+        }
 
         if (level === 2) {
           contents.push({ title, slug, children: [] })
