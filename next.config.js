@@ -7,6 +7,7 @@ const { withTableOfContents } = require('./remark/withTableOfContents')
 const { withSyntaxHighlighting } = require('./remark/withSyntaxHighlighting')
 const { withProse } = require('./remark/withProse')
 const minimatch = require('minimatch')
+const withExamples = require('./remark/withExamples')
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
@@ -58,7 +59,7 @@ module.exports = withBundleAnalyzer({
         {
           loader: '@mdx-js/loader',
           options: {
-            remarkPlugins: [withProse, withTableOfContents, withSyntaxHighlighting],
+            remarkPlugins: [withExamples, withProse, withTableOfContents, withSyntaxHighlighting],
           },
         },
         createLoader(function (source) {
