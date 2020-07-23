@@ -15,7 +15,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
   }, [])
 
   useEffect(() => {
-    if (tableOfContents.length === 0) return
+    if (tableOfContents.length === 0 || headings.length === 0) return
     function onScroll() {
       let y = window.pageYOffset
       let windowHeight = window.innerHeight
@@ -29,7 +29,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
         return
       }
       const middle = y + windowHeight / 2
-      let current
+      let current = sortedHeadings[0].id
       for (let i = 0; i < sortedHeadings.length - 1; i++) {
         if (middle >= sortedHeadings[i].top) {
           current = sortedHeadings[i].id
@@ -41,8 +41,9 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
       capture: true,
       passive: true,
     })
+    onScroll()
     return () => window.removeEventListener('scroll', onScroll, true)
-  }, [headings])
+  }, [headings, tableOfContents])
 
   return (
     <div className="pt-24 pb-16 lg:pt-28 w-full">
