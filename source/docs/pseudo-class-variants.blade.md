@@ -190,6 +190,50 @@ module.exports = {
 ```
 
 <h2 class="flex items-center">
+  Checked
+  <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
+    v1.5.0+
+  </span>
+</h2>
+
+Add the `checked:` prefix to only apply a utility when a radio or checkbox is currently checked.
+
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'flex items-center justify-center p-8'])
+
+<div class="space-y-2">
+  <label class="flex items-center space-x-4">
+    <input type="radio" name="checked-demo" value="1" class="appearance-none h-3 w-3 border border-gray-400 rounded-full checked:bg-gray-900 checked:border-transparent focus:outline-none">
+    <span>Option 1</span>
+  </label>
+  <label class="flex items-center space-x-4">
+    <input type="radio" name="checked-demo" value="2" class="appearance-none h-3 w-3 border border-gray-400 rounded-full checked:bg-gray-900 checked:border-transparent focus:outline-none">
+    <span>Option 2</span>
+  </label>
+  <label class="flex items-center space-x-4">
+    <input type="radio" name="checked-demo" value="3" class="appearance-none h-3 w-3 border border-gray-400 rounded-full checked:bg-gray-900 checked:border-transparent focus:outline-none">
+    <span>Option 3</span>
+  </label>
+</div>
+
+
+@slot('code')
+<input type="radio" class="appearance-none checked:bg-gray-900 checked:border-transparent ...">
+@endslot
+@endcomponent
+
+You can control whether `checked` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    backgroundColor: ['responsive', 'hover', 'focus', 'checked'],
+  },
+}
+```
+
+<h2 class="flex items-center">
   First-child
   <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
     v1.1.0+
