@@ -13,20 +13,24 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const fallbackLayouts = {
   'src/pages/docs/**/*': ['@/layouts/DocumentationLayout', 'DocumentationLayout'],
+  'src/pages/screencasts/**/*': ['@/layouts/ScreencastsLayout', 'ScreencastsLayout'],
 }
 
 const fallbackDefaultExports = {
   'src/pages/docs/**/*': ['@/layouts/ContentsLayout', 'ContentsLayout'],
+  'src/pages/screencasts/**/*': ['@/layouts/VideoLayout', 'VideoLayout'],
 }
 
 function getRewrites() {
-  return glob
-    .sync('*/*.mdx', { cwd: path.resolve(__dirname, 'src/pages/docs') })
-    .map((file) => file.replace(/\.mdx$/, ''))
-    .map((file) => ({
-      source: `/docs/${file.replace(/^[^/]+\//, '')}`,
-      destination: `/docs/${file}`,
-    }))
+  return ['docs', 'screencasts'].flatMap((dir) =>
+    glob
+      .sync('*/*.mdx', { cwd: path.resolve(__dirname, `src/pages/${dir}`) })
+      .map((file) => file.replace(/\.mdx$/, ''))
+      .map((file) => ({
+        source: `/${dir}/${file.replace(/^[^/]+\//, '').replace(/^[0-9]+-/, '')}`,
+        destination: `/${dir}/${file}`,
+      }))
+  )
 }
 
 module.exports = withBundleAnalyzer({
