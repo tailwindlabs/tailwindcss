@@ -69,6 +69,17 @@ To add horizontal padding, use the `.px-{size}` utilities:
 
 If you'd like to center your containers by default or include default horizontal padding, see the [customization options](#customizing) below.
 
+## Responsive variants
+
+The `container` class also includes responsive variants like `md:container` by default that allow you to make something behave like a container at only a certain breakpoint and up:
+
+```html
+<!-- Full-width fluid until the `lg` breakpoint, then lock to container -->
+<div class="lg:container lg:mx-auto">
+  <!-- ... -->
+</div>
+```
+
 ## Customizing
 
 ### Centering by default
@@ -119,9 +130,19 @@ module.exports = {
 };
 ```
 
-### Disabling
+### Disabling responsive variants
+
+If you'd like to disable the responsive variants, you can do so using by setting `container` to an empty array in the `variants` section of your `tailwind.config.js` file:
+
+@component('_partials.customized-config', ['key' => 'variants'])
+  // ...
++ container: [],
+@endcomponent
+
+### Disabling entirely
 
 If you don't plan to use the `.container` class in your project, you can disable it entirely by setting the `container` property to `false` in the `corePlugins` section of your config file:
+
 
 @component('_partials.customized-config', ['key' => 'corePlugins'])
   // ...

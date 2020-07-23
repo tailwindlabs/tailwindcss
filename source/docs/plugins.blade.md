@@ -345,23 +345,66 @@ module.exports = {
 
 ### Responsive and pseudo-class variants
 
-The `addComponents` function doesn't provide the ability to automatically generate variants since it doesn't typically make sense to do so for component classes.
-
-You can always do this manually if necessary by wrapping your styles in the `@@variants` at-rule:
+To generate responsive, hover, focus, active, or other variants of your components, specify the variants you'd like to generate using the `variants` option:
 
 ```js
-plugin(function({ addComponents }) {
-  addComponents({
-    '@@variants responsive, hover': {
-      '.btn': {
-        padding: '.5rem 1rem !important',
-        borderRadius: '.25rem !important',
-        fontWeight: '600 !important',
-      },
-      // ...
-    }
-  })
-})
+// tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
+module.exports = {
+  plugins: [
+    plugin(function({ addComponents }) {
+      const newComponents = {
+        // ...
+      }
+
+      addComponents(newComponents, {
+        variants: ['responsive', 'hover'],
+      })
+    })
+  ]
+}
+```
+
+If you only need to specify variants and don't need to opt-out of the default prefix or important options, you can also pass the array of variants as the second parameter directly:
+
+```js
+// tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
+module.exports = {
+  plugins: [
+    plugin(function({ addComponents }) {
+      const newComponents = {
+        // ...
+      }
+
+      addComponents(newComponents, ['responsive', 'hover'])
+    })
+  ]
+}
+```
+
+If you'd like the user to provide the variants themselves under the `variants` section in their `tailwind.config.js` file, you can use the `variants()` function to get the variants they have configured:
+
+```js
+// tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
+module.exports = {
+  variants: {
+    customPlugin: ['responsive', 'hover'],
+  },
+  plugins: [
+    plugin(function({ addComponents, variants }) {
+      const newComponents = {
+        // ...
+      }
+
+      addComponents(newComponents, variants('customPlugin'))
+    })
+  ]
+}
 ```
 
 ---
