@@ -2,6 +2,7 @@ import { useState, useEffect, createContext, Fragment, useCallback } from 'react
 import { useRouter } from 'next/router'
 import { kebabToTitleCase } from '@/utils/kebabToTitleCase'
 import { UtilityTable } from '@/components/UtilityTable'
+import { useIsHome } from '@/hooks/useIsHome'
 
 export const DocumentContext = createContext()
 
@@ -9,6 +10,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
   const router = useRouter()
   let [currentSection, setCurrentSection] = useState(tableOfContents[0]?.slug)
   let [headings, setHeadings] = useState([])
+  let isHome = useIsHome()
 
   const updateHeading = useCallback((id, top) => {
     setHeadings((headings) => [...headings.filter((h) => id !== h.id), { id, top }])
@@ -46,19 +48,21 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
   }, [headings, tableOfContents])
 
   return (
-    <div className="pt-24 pb-16 lg:pt-28 w-full">
-      <div className="markdown mb-6 px-6 max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:px-12 xl:w-3/4">
-        <h1 className="flex items-center">
-          {meta.title || kebabToTitleCase(router.pathname.split('/').pop())}
-          {meta.tailwindVersion && (
-            <span className="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
-              {meta.tailwindVersion}
-            </span>
-          )}
-        </h1>
-        <div className="mt-0 mb-4 text-gray-600">{meta.description}</div>
-        {!classes && <hr className="my-8 border-b-2 border-gray-200" />}
-      </div>
+    <div className={`pb-16 w-full ${isHome ? 'pt-12' : 'pt-24 lg:pt-28'}`}>
+      {(meta.title || meta.description) && (
+        <div className="markdown mb-6 px-6 max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:px-12 xl:w-3/4">
+          <h1 className="flex items-center">
+            {meta.title || kebabToTitleCase(router.pathname.split('/').pop())}
+            {meta.tailwindVersion && (
+              <span className="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
+                {meta.tailwindVersion}
+              </span>
+            )}
+          </h1>
+          <div className="mt-0 mb-4 text-gray-600">{meta.description}</div>
+          {!classes && <hr className="my-8 border-b-2 border-gray-200" />}
+        </div>
+      )}
       <div className="flex">
         <div className="px-6 xl:px-12 w-full max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
           {classes && <UtilityTable {...classes} />}

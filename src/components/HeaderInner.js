@@ -1,7 +1,10 @@
 import Link from 'next/link'
 import { VersionSwitcher } from '@/components/VersionSwitcher'
+import { useIsHome } from '@/hooks/useIsHome'
 
-export function HeaderInner({ variant = 'default', navIsOpen, onNavToggle }) {
+export function HeaderInner({ navIsOpen, onNavToggle }) {
+  let isHome = useIsHome()
+
   return (
     <div className="flex items-center -mx-6">
       <div className="lg:w-1/4 xl:w-1/5 pl-6 pr-6 lg:pr-8">
@@ -9,7 +12,7 @@ export function HeaderInner({ variant = 'default', navIsOpen, onNavToggle }) {
           <Link href="/">
             <a className="block lg:mr-4">
               <svg
-                className={`w-auto hidden md:block ${variant === 'home' ? 'h-12' : 'h-10'}`}
+                className={`w-auto hidden md:block ${isHome ? 'h-12' : 'h-10'}`}
                 viewBox="0 0 273 64"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -78,9 +81,7 @@ export function HeaderInner({ variant = 'default', navIsOpen, onNavToggle }) {
               <input
                 id="docsearch"
                 className={`transition-colors duration-100 ease-in-out placeholder-gray-600 py-2 pr-4 pl-10 block w-full appearance-none leading-normal ds-input border border-transparent rounded-lg focus:outline-0 ${
-                  variant === 'home'
-                    ? 'bg-white shadow-md'
-                    : 'focus:bg-white focus:border-gray-300 bg-gray-200'
+                  isHome ? 'bg-white shadow-md' : 'focus:bg-white focus:border-gray-300 bg-gray-200'
                 }`}
                 type="text"
                 placeholder='Search the docs (Press "/" to focus)'

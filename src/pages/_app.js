@@ -1,8 +1,7 @@
 import '../css/main.css'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import { Header } from '@/components/Header'
 import { HeaderHome } from '@/components/HeaderHome'
-import { DocumentationLayout } from '@/layouts/DocumentationLayout'
 import Router from 'next/router'
 
 export default function App({ Component, pageProps, router }) {
@@ -22,12 +21,15 @@ export default function App({ Component, pageProps, router }) {
   const isHome = router.pathname === '/'
   const PageHeader = isHome ? HeaderHome : Header
 
+  const Layout = Component.Layout || Fragment
+  const layoutProps = Component.Layout ? { navIsOpen } : {}
+
   return (
     <>
       <PageHeader navIsOpen={navIsOpen} onNavToggle={(isOpen) => setNavIsOpen(isOpen)} />
-      <DocumentationLayout navIsOpen={navIsOpen} variant={isHome ? 'home' : 'default'}>
+      <Layout {...layoutProps}>
         <Component {...pageProps} />
-      </DocumentationLayout>
+      </Layout>
     </>
   )
 }

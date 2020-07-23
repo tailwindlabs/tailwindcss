@@ -8,7 +8,7 @@ module.exports.withTableOfContents = () => {
     for (let i = 0; i < tree.children.length; i++) {
       let node = tree.children[i]
 
-      if (node.type === 'heading') {
+      if (node.type === 'heading' && [2, 3].includes(node.depth)) {
         const level = node.depth
         const title = node.children
           .filter((n) => n.type === 'text')
@@ -26,7 +26,7 @@ module.exports.withTableOfContents = () => {
 
         if (level === 2) {
           contents.push({ title, slug, children: [] })
-        } else if (level === 3) {
+        } else {
           contents[contents.length - 1].children.push({ title, slug })
         }
       }
