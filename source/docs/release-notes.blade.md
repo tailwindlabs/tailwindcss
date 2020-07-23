@@ -5,6 +5,20 @@ description: "What's new in the latest version of Tailwind CSS."
 titleBorder: true
 ---
 
+<h2 class="mb-0">Tailwind CSS v1.5</h2>
+<div class="mt-0 text-gray-600">July 15, 2020</div>
+
+Tailwind CSS v1.5 is now available with a handful of useful new features:
+
+- [Component variants support](https://github.com/tailwindlabs/tailwindcss/releases#component-variants-support)
+- [Responsive container variants](https://github.com/tailwindlabs/tailwindcss/releases#responsive-container-variants)
+- [New focus-visible variant](https://github.com/tailwindlabs/tailwindcss/releases#new-focus-visible-variant)
+- [New checked variant](https://github.com/tailwindlabs/tailwindcss/releases#new-checked-variant)
+
+For the full list of changes, [check out the complete release notes on GitHub](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.5.0).
+
+---
+
 <h2 class="mb-0">Tailwind CSS v1.4</h2>
 <div class="mt-0 text-gray-600">Apr 29, 2020</div>
 
