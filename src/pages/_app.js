@@ -3,6 +3,18 @@ import { useState, useEffect, Fragment } from 'react'
 import { Header } from '@/components/Header'
 import { HeaderHome } from '@/components/HeaderHome'
 import Router from 'next/router'
+import ProgressBar from '@badrap/bar-of-progress'
+
+const progress = new ProgressBar({
+  size: 2,
+  color: '#4fd1c5',
+  className: 'bar-of-progress',
+  delay: 100,
+})
+
+Router.events.on('routeChangeStart', progress.start)
+Router.events.on('routeChangeComplete', progress.finish)
+Router.events.on('routeChangeError', progress.finish)
 
 export default function App({ Component, pageProps, router }) {
   let [navIsOpen, setNavIsOpen] = useState(false)

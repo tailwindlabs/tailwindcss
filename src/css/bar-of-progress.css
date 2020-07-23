@@ -1,0 +1,12 @@
+.bar-of-progress {
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    right: 0;
+    width: 100px;
+    height: 100%;
+    box-shadow: 0 0 10px currentColor, 0 0 5px currentColor;
+    transform: rotate(3deg) translate(0, -4px);
+  }
+}

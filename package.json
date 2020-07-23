@@ -9,6 +9,7 @@
     "export": "next build && next export"
   },
   "dependencies": {
+    "@badrap/bar-of-progress": "^0.1.1",
     "@mdx-js/loader": "^1.6.13",
     "@next/bundle-analyzer": "^9.4.4",
     "@next/mdx": "^9.4.4",
