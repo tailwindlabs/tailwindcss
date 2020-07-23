@@ -1,10 +1,11 @@
 import '../css/main.css'
 import { useState, useEffect } from 'react'
 import { Header } from '@/components/Header'
+import { HeaderHome } from '@/components/HeaderHome'
 import { DocumentationLayout } from '@/layouts/DocumentationLayout'
 import Router from 'next/router'
 
-export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps, router }) {
   let [navIsOpen, setNavIsOpen] = useState(false)
 
   useEffect(() => {
@@ -18,10 +19,13 @@ export default function App({ Component, pageProps }) {
     }
   }, [navIsOpen])
 
+  const isHome = router.pathname === '/'
+  const PageHeader = isHome ? HeaderHome : Header
+
   return (
     <>
-      <Header navIsOpen={navIsOpen} onNavToggle={(isOpen) => setNavIsOpen(isOpen)} />
-      <DocumentationLayout navIsOpen={navIsOpen}>
+      <PageHeader navIsOpen={navIsOpen} onNavToggle={(isOpen) => setNavIsOpen(isOpen)} />
+      <DocumentationLayout navIsOpen={navIsOpen} variant={isHome ? 'home' : 'default'}>
         <Component {...pageProps} />
       </DocumentationLayout>
     </>

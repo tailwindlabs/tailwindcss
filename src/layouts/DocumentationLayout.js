@@ -3,7 +3,7 @@ import { importAll } from '@/utils/importAll'
 import { useRouter } from 'next/router'
 import { kebabToTitleCase } from '@/utils/kebabToTitleCase'
 import { removeOrderPrefix } from '@/utils/removeOrderPrefix'
-import { tailwindVersion } from '@/utils/tailwindVersion'
+import { VersionSwitcher } from '@/components/VersionSwitcher'
 
 const pages = {}
 importAll(require.context('../pages/docs/?meta=title', true, /\.mdx$/)).forEach(
@@ -68,19 +68,21 @@ function Nav({ pages }) {
   ))
 }
 
-export function DocumentationLayout({ children, navIsOpen }) {
+export function DocumentationLayout({ children, navIsOpen, variant = 'default' }) {
   return (
     <div className="w-full max-w-screen-xl mx-auto px-6">
       <div className="lg:flex -mx-6">
         <div
           id="sidebar"
-          className={`fixed inset-0 pt-16 h-full bg-white z-90 w-full border-b -mb-16 lg:-mb-0 lg:static lg:h-auto lg:overflow-y-visible lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5 ${
+          className={`fixed inset-0 h-full bg-white z-90 w-full border-b -mb-16 lg:-mb-0 lg:static lg:h-auto lg:overflow-y-visible lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5 ${
             navIsOpen ? '' : 'hidden'
-          }`}
+          } ${variant === 'home' ? 'pt-24' : 'pt-16'}`}
         >
           <div
             id="navWrapper"
-            className="h-full overflow-y-auto scrolling-touch lg:h-auto lg:block lg:relative lg:sticky lg:top-16 bg-white lg:bg-transparent"
+            className={`h-full overflow-y-auto scrolling-touch lg:h-auto lg:block lg:relative lg:sticky lg:bg-transparent overflow-hidden ${
+              variant === 'home' ? 'lg:top-0 bg-gray-100' : 'lg:top-16 bg-white'
+            }`}
           >
             <div id="navGradient" className="hidden" />
             <nav
@@ -88,13 +90,7 @@ export function DocumentationLayout({ children, navIsOpen }) {
               className="px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8 sticky?lg:h-(screen-16)"
             >
               <div className="relative -mx-2 w-24 mb-8 lg:hidden">
-                <select
-                  data-version-switcher
-                  className="appearance-none block bg-white pl-2 pr-8 py-1 text-gray-500 font-medium text-base focus:outline-none focus:text-gray-800"
-                >
-                  <option value="v1">v{tailwindVersion}</option>
-                  <option value="v0">v0.7.4</option>
-                </select>
+                <VersionSwitcher />
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
                   <svg
                     className="fill-current h-4 w-4"
