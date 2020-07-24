@@ -87,7 +87,7 @@ export function VideoLayout({ children, meta }) {
             <li>
               <a href="https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss">
                 Tailwind CSS Intellisense
-              </a>
+              </a>{' '}
               for intelligent auto-completion in VS Code
             </li>
           </ul>
