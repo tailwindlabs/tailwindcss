@@ -59,7 +59,7 @@ module.exports = withBundleAnalyzer({
         {
           loader: '@mdx-js/loader',
           options: {
-            remarkPlugins: [withExamples, withProse, withTableOfContents, withSyntaxHighlighting],
+            remarkPlugins: [withExamples, /*withProse,*/ withTableOfContents, withSyntaxHighlighting],
           },
         },
         createLoader(function (source) {

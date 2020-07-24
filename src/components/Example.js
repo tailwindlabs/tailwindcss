@@ -1,6 +1,6 @@
 export function Example({ preview, snippet, previewClassName }) {
   return (
-    <div className="relative overflow-hidden mt-6 mb-8">
+    <div className="relative overflow-hidden mb-8">
       <div
         className={`rounded-t-lg overflow-hidden border-t border-l border-r border-gray-400 ${
           previewClassName || 'p-4'

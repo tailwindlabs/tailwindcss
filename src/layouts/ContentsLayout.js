@@ -64,7 +64,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
         </div>
       )}
       <div className="flex">
-        <div className="px-6 xl:px-12 w-full max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
+        <div className="markdown px-6 xl:px-12 w-full max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
           {classes && <UtilityTable {...classes} />}
           <DocumentContext.Provider value={{ updateHeading }}>{children}</DocumentContext.Provider>
         </div>
