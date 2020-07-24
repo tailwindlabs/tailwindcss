@@ -599,7 +599,7 @@ video {
   }
 }
 
-@keyframes fade {
+@keyframes pulse {
   0%, 100% {
     opacity: 1;
   }
@@ -11944,8 +11944,8 @@ video {
   animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
-.animate-fade {
-  animation: fade 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .animate-bounce {
@@ -23281,8 +23281,8 @@ video {
     animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
 
-  .sm\:animate-fade {
-    animation: fade 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  .sm\:animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
   .sm\:animate-bounce {
@@ -34619,8 +34619,8 @@ video {
     animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
 
-  .md\:animate-fade {
-    animation: fade 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  .md\:animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
   .md\:animate-bounce {
@@ -45957,8 +45957,8 @@ video {
     animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
 
-  .lg\:animate-fade {
-    animation: fade 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  .lg\:animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
   .lg\:animate-bounce {
@@ -57295,8 +57295,8 @@ video {
     animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
 
-  .xl\:animate-fade {
-    animation: fade 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  .xl\:animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
   .xl\:animate-bounce {
