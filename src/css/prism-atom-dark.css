@@ -265,10 +265,17 @@ code.language-bash, pre.language-bash {
 
 code.language-diff, pre.language-diff {
   @apply text-gray-400 !important;
+}
+
+code[class^='language-diff'], pre[class^='language-diff'] {
   .token.deleted {
-    @apply text-code-red !important;
+    &, * {
+      @apply text-code-red !important;
+    }
   }
   .token.inserted {
-    @apply text-code-green !important;
+    &, * {
+      @apply text-code-green !important;
+    }
   }
 }
