@@ -1,12 +1,6 @@
 import dlv from 'dlv'
-import preval from 'preval.macro'
 import { memo } from 'react'
-
-const config = preval`
-  const defaultTheme = require('tailwindcss/defaultTheme')
-  const resolveConfig = require('tailwindcss/resolveConfig')
-  module.exports = resolveConfig({ theme: defaultTheme })
-`
+import { defaultConfig } from '@/utils/defaultConfig'
 
 function getUtilities(plugin) {
   const utilities = {}
@@ -17,7 +11,7 @@ function getUtilities(plugin) {
         Object.assign(utilities, utils[i])
       }
     },
-    theme: (path, defaultValue) => dlv(config.theme, path, defaultValue),
+    theme: (path, defaultValue) => dlv(defaultConfig.theme, path, defaultValue),
     variants: () => [],
     e: (x) => x.replace(/([:.])/g, '\\$1'),
     target: () => 'modern',
