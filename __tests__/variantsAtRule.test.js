@@ -177,6 +177,29 @@ test('it can generate focus-visible variants', () => {
   })
 })
 
+test('it can generate reduce-motion variants', () => {
+  const input = `
+    @variants reduce-motion {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    @media (prefers-reduced-motion: reduce) {
+      .reduce-motion\\:banana { color: yellow; }
+      .reduce-motion\\:chocolate { color: brown; }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate first-child variants', () => {
   const input = `
     @variants first {

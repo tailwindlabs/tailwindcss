@@ -23,6 +23,18 @@ function ensureIncludesDefault(variants) {
 
 const defaultVariantGenerators = config => ({
   default: generateVariantFunction(() => {}),
+  'reduce-motion': generateVariantFunction(({ container, separator, modifySelectors }) => {
+    const modified = modifySelectors(({ selector }) => {
+      return selectorParser(selectors => {
+        selectors.walkClasses(sel => {
+          sel.value = `reduce-motion${separator}${sel.value}`
+        })
+      }).processSync(selector)
+    })
+    const mediaQuery = postcss.atRule({ name: 'media', params: '(prefers-reduced-motion: reduce)' })
+    mediaQuery.append(modified)
+    container.append(mediaQuery)
+  }),
   'group-hover': generateVariantFunction(({ modifySelectors, separator }) => {
     return modifySelectors(({ selector }) => {
       return selectorParser(selectors => {
