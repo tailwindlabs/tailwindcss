@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { VersionSwitcher } from '@/components/VersionSwitcher'
 import { useIsHome } from '@/hooks/useIsHome'
+import { Search } from '@/components/Search'
 
 export function HeaderInner({ navIsOpen, onNavToggle }) {
   let isHome = useIsHome()
@@ -69,77 +70,7 @@ export function HeaderInner({ navIsOpen, onNavToggle }) {
       </div>
       <div className="flex flex-grow lg:w-3/4 xl:w-4/5">
         <div className="w-full lg:px-6 xl:w-3/4 xl:px-12">
-          <div className="relative">
-            <span
-              className="algolia-autocomplete"
-              style={{
-                position: 'relative',
-                display: 'inline-block',
-                direction: 'ltr',
-              }}
-            >
-              <input
-                id="docsearch"
-                className={`transition-colors duration-100 ease-in-out placeholder-gray-600 py-2 pr-4 pl-10 block w-full appearance-none leading-normal ds-input border border-transparent rounded-lg focus:outline-0 ${
-                  isHome ? 'bg-white shadow-md' : 'focus:bg-white focus:border-gray-300 bg-gray-200'
-                }`}
-                type="text"
-                placeholder='Search the docs (Press "/" to focus)'
-                autoComplete="off"
-                spellCheck="false"
-                role="combobox"
-                aria-autocomplete="list"
-                aria-expanded="false"
-                aria-label="search input"
-                aria-owns="algolia-autocomplete-listbox-0"
-                dir="auto"
-                style={{ position: 'relative', verticalAlign: 'top' }}
-              />
-              <pre
-                aria-hidden="true"
-                style={{
-                  position: 'absolute',
-                  visibility: 'hidden',
-                  whiteSpace: 'pre',
-                  fontFamily:
-                    '"Inter var", system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
-                  fontSize: '16px',
-                  fontStyle: 'normal',
-                  fontVariant: 'normal',
-                  fontWeight: 400,
-                  wordSpacing: '0px',
-                  letterSpacing: 'normal',
-                  textIndent: '0px',
-                  textRendering: 'auto',
-                  textTransform: 'none',
-                }}
-              />
-              <span
-                className="ds-dropdown-menu"
-                role="listbox"
-                id="algolia-autocomplete-listbox-0"
-                style={{
-                  position: 'absolute',
-                  top: '100%',
-                  zIndex: 100,
-                  display: 'none',
-                  left: '0px',
-                  right: 'auto',
-                }}
-              >
-                <div className="ds-dataset-1" />
-              </span>
-            </span>
-            <div className="pointer-events-none absolute inset-y-0 left-0 pl-4 flex items-center">
-              <svg
-                className="fill-current pointer-events-none text-gray-600 w-4 h-4"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" />
-              </svg>
-            </div>
-          </div>
+          <Search />
         </div>
         <button
           type="button"
