@@ -61,7 +61,7 @@ export const UtilityTable = memo(
                 {preview && (
                   <th className="z-20 sticky top-0 text-sm font-semibold text-gray-700 bg-gray-100 p-0">
                     <div className="p-2 border-b border-gray-300">
-                      <span className="invisible">Preview</span>
+                      <span className="sr-only">Preview</span>&nbsp;
                     </div>
                   </th>
                 )}
@@ -86,9 +86,7 @@ export const UtilityTable = memo(
                   </td>
                   {preview &&
                     preview(utilities[utility], {
-                      className: `p-2 font-mono text-xs whitespace-pre ${
-                        i === 0 ? '' : 'border-t border-gray-200'
-                      }`,
+                      className: i === 0 ? '' : 'border-t border-gray-200',
                     })}
                 </tr>
               ))}
