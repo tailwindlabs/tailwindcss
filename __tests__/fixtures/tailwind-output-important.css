@@ -7769,6 +7769,42 @@ video {
   -webkit-overflow-scrolling: auto !important;
 }
 
+.overscroll-auto {
+  overscroll-behavior: auto !important;
+}
+
+.overscroll-contain {
+  overscroll-behavior: contain !important;
+}
+
+.overscroll-none {
+  overscroll-behavior: none !important;
+}
+
+.overscroll-y-auto {
+  overscroll-behavior-y: auto !important;
+}
+
+.overscroll-y-contain {
+  overscroll-behavior-y: contain !important;
+}
+
+.overscroll-y-none {
+  overscroll-behavior-y: none !important;
+}
+
+.overscroll-x-auto {
+  overscroll-behavior-x: auto !important;
+}
+
+.overscroll-x-contain {
+  overscroll-behavior-x: contain !important;
+}
+
+.overscroll-x-none {
+  overscroll-behavior-x: none !important;
+}
+
 .p-0 {
   padding: 0 !important;
 }
