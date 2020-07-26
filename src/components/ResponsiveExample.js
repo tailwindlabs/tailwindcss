@@ -107,15 +107,15 @@ export function ResponsiveExample({ classNames, template = defaultTemplate, prev
               {redent(template('{{CLASSNAMES}}'))
                 .trim()
                 .split(/(\{\{CLASSNAMES\}\})/)
-                .flatMap((x, i) =>
-                  i === 1
+                .flatMap((segment, i) =>
+                  i % 2 === 1
                     ? classNames.map((className, i) => (
                         <span key={i} className={active === i ? 'text-code-yellow' : ''}>
                           {i === 0 ? '' : ' '}
                           {`${screens[i]}${className}`}
                         </span>
                       ))
-                    : x
+                    : segment
                 )}
             </code>
           </pre>
