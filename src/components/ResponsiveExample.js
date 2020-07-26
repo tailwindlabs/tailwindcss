@@ -23,7 +23,7 @@ export function ResponsiveExample({ classNames, template = defaultTemplate, prev
   let [active, setActive] = useState(0)
 
   return (
-    <div class="mt-8">
+    <div className="mt-8">
       <div className="flex justify-center">
         <div className="grid grid-cols-5 mb-2 bg-white">
           <Button active={active === 0} onClick={() => setActive(0)}>
