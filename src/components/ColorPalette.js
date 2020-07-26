@@ -46,11 +46,11 @@ export function ColorPalette({ colors }) {
 
         if (palette.length < 3) {
           return (
-            <div className={`px-2 w-full relative ${i === 0 ? '' : 'mt-4'}`}>
+            <div key={i} className={`px-2 w-full relative ${i === 0 ? '' : 'mt-4'}`}>
               <h3 className="markdown no-toc mb-4 mt-8">{title}</h3>
               <div className="-mx-2 -mt-5 flex flex-wrap">
-                {palette.map((variant) => (
-                  <div className="w-1/2 md:w-1/3 px-2">
+                {palette.map((variant, j) => (
+                  <div key={j} className="w-1/2 md:w-1/3 px-2">
                     <Color {...variant} />
                   </div>
                 ))}
@@ -60,13 +60,13 @@ export function ColorPalette({ colors }) {
         }
 
         return (
-          <div className={`w-1/2 px-2 md:w-full relative ${i === 0 ? '' : 'mt-4'}`}>
+          <div key={i} className={`w-1/2 px-2 md:w-full relative ${i === 0 ? '' : 'mt-4'}`}>
             <h3 className="markdown no-toc mb-4 mt-8">{title}</h3>
             <div className="md:-mx-2 md:-mt-5 md:flex md:flex-wrap">
-              {chunkArray(palette, 3).map((chunk) => (
-                <div className="md:w-1/3 md:px-2">
-                  {chunk.map((variant) => (
-                    <Color {...variant} />
+              {chunkArray(palette, 3).map((chunk, j) => (
+                <div key={j} className="md:w-1/3 md:px-2">
+                  {chunk.map((variant, k) => (
+                    <Color key={k} {...variant} />
                   ))}
                 </div>
               ))}
