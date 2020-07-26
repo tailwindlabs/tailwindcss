@@ -109,10 +109,10 @@ export function ResponsiveExample({ classNames, template = defaultTemplate, prev
                 .split(/(\{\{CLASSNAMES\}\})/)
                 .flatMap((segment, i) =>
                   i % 2 === 1
-                    ? classNames.map((className, i) => (
-                        <span key={i} className={active === i ? 'text-code-yellow' : ''}>
-                          {i === 0 ? '' : ' '}
-                          {`${screens[i]}${className}`}
+                    ? classNames.map((className, j) => (
+                        <span key={`${i}-${j}`} className={active === j ? 'text-code-yellow' : ''}>
+                          {j === 0 ? '' : ' '}
+                          {`${screens[j]}${className}`}
                         </span>
                       ))
                     : segment
