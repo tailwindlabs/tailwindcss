@@ -22,7 +22,7 @@ If you've hit a problem with something your working on and could use some help, 
 
 Found a bug, have a feature request, or want to contribute to the framework itself? All of our code is open-source on GitHub.
 
-[Contribute to Tailwind &rarr;](https://github.com/tailwindcss/tailwindcss)
+[Contribute to Tailwind &rarr;](https://github.com/tailwindlabs/tailwindcss)
 
 ## Twitter
 

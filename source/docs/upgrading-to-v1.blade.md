@@ -49,7 +49,7 @@ yarn add -D tailwindcss@^1.0
 
 <p class="italic font-normal text-gray-600 mt-4">Impact: All users, Effort: Moderate</p>
 
-This is really the big change in v1.0 — you can read all about the new config file format and motivation behind it in [the initial pull request](https://github.com/tailwindcss/tailwindcss/pull/637).
+This is really the big change in v1.0 — you can read all about the new config file format and motivation behind it in [the initial pull request](https://github.com/tailwindlabs/tailwindcss/pull/637).
 
 The new general config structure looks like this:
 
@@ -74,7 +74,7 @@ module.exports = {
 }
 ```
 
-See the new [default config file](https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js) for a complete example.
+See the new [default config file](https://github.com/tailwindlabs/tailwindcss/blob/master/stubs/defaultConfig.stub.js) for a complete example.
 
 There are a lot of changes here but they are all fairly cosmetic and entirely localized to this one file, so while it may look intimidating it's actually only 10-15 minutes of work.
 
@@ -340,7 +340,7 @@ Here is a complete list of the sections that been split into multiple sections:
 
 Note that in some cases (`position`, `whitespace`) the original section still exists, while in others (`flexbox`, `textStyle`), the original section has been completely removed.
 
-You should reference the new [default config file](https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js) if you are ever unsure if you are making the right changes.
+You should reference the new [default config file](https://github.com/tailwindlabs/tailwindcss/blob/master/stubs/defaultConfig.stub.js) if you are ever unsure if you are making the right changes.
 
 The simplest way to make these changes is to just copy the value you were using for the old section (something like `['responsive']`) to all of the new sections that replace that section, but if you choose you can also use this as an opportunity to cull generated utilities you don't actually need.
 
@@ -809,7 +809,7 @@ This change only really affects you if you are _not_ using our `preflight` style
 
 Utilities like `.pin`, `.pin-x`, and `.pin-t` have been removed in favor of less cleverly named classes like `.top-0`, `.right-0`, etc.
 
-See the [pull request](https://github.com/tailwindcss/tailwindcss/pull/764) for more details on the motivation behind this change.
+See the [pull request](https://github.com/tailwindlabs/tailwindcss/pull/764) for more details on the motivation behind this change.
 
 Here is a complete list of the changes:
 
@@ -1084,7 +1084,7 @@ These steps only affect users that are depending on the 0.x configuration file v
 
 **This change only affects you if you don't have a color palette defined in your config file or you are using Tailwind through a CDN.**
 
-Tailwind v1.0 comes with an entirely new color palette that provides 9 shades for each color instead of 7 ([\#737](https://github.com/tailwindcss/tailwindcss/pull/737)).
+Tailwind v1.0 comes with an entirely new color palette that provides 9 shades for each color instead of 7 ([\#737](https://github.com/tailwindlabs/tailwindcss/pull/737)).
 
 The naming scheme has changed from using words like `darkest` and `lighter` to a numeric scaled inspired by Material Design that starts at `100` for the lightest shade and ends at `900` for the darkest shade.
 
@@ -1174,7 +1174,7 @@ If you started with a complete config file, your old screens values will continu
 
 **This change only affects you if you don't have a box-shadow scale defined in your config file or you are using Tailwind through a CDN.**
 
-Tailwind v1.0 introduces two new box-shadow sizes (`xl`, and `2xl`) and the rest of the shadows have been adjusted as well ([\#691](https://github.com/tailwindcss/tailwindcss/pull/691)).
+Tailwind v1.0 introduces two new box-shadow sizes (`xl`, and `2xl`) and the rest of the shadows have been adjusted as well ([\#691](https://github.com/tailwindlabs/tailwindcss/pull/691)).
 
 If your config file doesn't have a box-shadow scale defined or you are using the default Tailwind build through a CDN, you should double check that you are still happy with how your shadows look. You may want to replace some instances of `lg` with `xl` or `2xl`, as the new `lg` shadow is a bit tighter than the old one.
 
@@ -1189,7 +1189,7 @@ If you started with a complete config file, your old box-shadow values will cont
 
 **This change only affects you if you don't have a max-width scale defined in your config file or you are using Tailwind through a CDN.**
 
-Tailwind v1.0 introduces an all-new max-width scale that is much more usable than the previous default max-width scale ([\#701](https://github.com/tailwindcss/tailwindcss/pull/701)).
+Tailwind v1.0 introduces an all-new max-width scale that is much more usable than the previous default max-width scale ([\#701](https://github.com/tailwindlabs/tailwindcss/pull/701)).
 
 If your config file doesn't have a max-width scale defined or you are using the default Tailwind build through a CDN, you should audit your project for any usage of the existing `max-w-{size}` utilities and change the sizes as needed. In general, the new values are smaller than the old ones, so `max-w-md` for example may need to be `max-w-xl` or `max-w-2xl` in the new scale
 

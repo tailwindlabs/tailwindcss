@@ -150,7 +150,7 @@ In order to make it easy to add a border by simply adding the `border` class, Ta
 
 Since the `border` class only sets the `border-width` property, this reset ensures that adding that class always adds a solid 1px border using your configured default border color.
 
-This can cause some unexpected results when integrating certain third-party libraries, like [Google maps](https://github.com/tailwindcss/tailwindcss/issues/484) for example.
+This can cause some unexpected results when integrating certain third-party libraries, like [Google maps](https://github.com/tailwindlabs/tailwindcss/issues/484) for example.
 
 When you run into situations like this, you can work around them by overriding the Preflight styles with your own custom CSS:
 
