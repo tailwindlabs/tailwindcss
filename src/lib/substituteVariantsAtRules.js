@@ -23,11 +23,26 @@ function ensureIncludesDefault(variants) {
 
 const defaultVariantGenerators = config => ({
   default: generateVariantFunction(() => {}),
-  'reduce-motion': generateVariantFunction(({ container, separator, modifySelectors }) => {
+  'motion-safe': generateVariantFunction(({ container, separator, modifySelectors }) => {
     const modified = modifySelectors(({ selector }) => {
       return selectorParser(selectors => {
         selectors.walkClasses(sel => {
-          sel.value = `reduce-motion${separator}${sel.value}`
+          sel.value = `motion-safe${separator}${sel.value}`
+        })
+      }).processSync(selector)
+    })
+    const mediaQuery = postcss.atRule({
+      name: 'media',
+      params: '(prefers-reduced-motion: no-preference)',
+    })
+    mediaQuery.append(modified)
+    container.append(mediaQuery)
+  }),
+  'motion-reduced': generateVariantFunction(({ container, separator, modifySelectors }) => {
+    const modified = modifySelectors(({ selector }) => {
+      return selectorParser(selectors => {
+        selectors.walkClasses(sel => {
+          sel.value = `motion-reduced${separator}${sel.value}`
         })
       }).processSync(selector)
     })

@@ -177,9 +177,9 @@ test('it can generate focus-visible variants', () => {
   })
 })
 
-test('it can generate reduce-motion variants', () => {
+test('it can generate motion-reduced variants', () => {
   const input = `
-    @variants reduce-motion {
+    @variants motion-reduced {
       .banana { color: yellow; }
       .chocolate { color: brown; }
     }
@@ -189,8 +189,31 @@ test('it can generate reduce-motion variants', () => {
     .banana { color: yellow; }
     .chocolate { color: brown; }
     @media (prefers-reduced-motion: reduce) {
-      .reduce-motion\\:banana { color: yellow; }
-      .reduce-motion\\:chocolate { color: brown; }
+      .motion-reduced\\:banana { color: yellow; }
+      .motion-reduced\\:chocolate { color: brown; }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate motion-safe variants', () => {
+  const input = `
+    @variants motion-safe {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    @media (prefers-reduced-motion: no-preference) {
+      .motion-safe\\:banana { color: yellow; }
+      .motion-safe\\:chocolate { color: brown; }
     }
   `
 
