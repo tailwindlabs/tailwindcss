@@ -223,6 +223,120 @@ test('it can generate motion-safe variants', () => {
   })
 })
 
+test('it can generate motion-safe and motion-reduced variants', () => {
+  const input = `
+    @variants motion-safe, motion-reduced {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    @media (prefers-reduced-motion: no-preference) {
+      .motion-safe\\:banana { color: yellow; }
+      .motion-safe\\:chocolate { color: brown; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .motion-reduced\\:banana { color: yellow; }
+      .motion-reduced\\:chocolate { color: brown; }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('motion-reduced variants stack with basic variants', () => {
+  const input = `
+    @variants motion-reduced, hover {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .hover\\:banana:hover { color: yellow; }
+    .hover\\:chocolate:hover { color: brown; }
+    @media (prefers-reduced-motion: reduce) {
+      .motion-reduced\\:banana { color: yellow; }
+      .motion-reduced\\:chocolate { color: brown; }
+      .motion-reduced\\:hover\\:banana:hover { color: yellow; }
+      .motion-reduced\\:hover\\:chocolate:hover { color: brown; }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('motion-safe variants stack with basic variants', () => {
+  const input = `
+    @variants motion-safe, hover {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .hover\\:banana:hover { color: yellow; }
+    .hover\\:chocolate:hover { color: brown; }
+    @media (prefers-reduced-motion: no-preference) {
+      .motion-safe\\:banana { color: yellow; }
+      .motion-safe\\:chocolate { color: brown; }
+      .motion-safe\\:hover\\:banana:hover { color: yellow; }
+      .motion-safe\\:hover\\:chocolate:hover { color: brown; }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('motion-safe and motion-reduced variants stack with basic variants', () => {
+  const input = `
+    @variants motion-reduced, motion-safe, hover {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .hover\\:banana:hover { color: yellow; }
+    .hover\\:chocolate:hover { color: brown; }
+    @media (prefers-reduced-motion: reduce) {
+      .motion-reduced\\:banana { color: yellow; }
+      .motion-reduced\\:chocolate { color: brown; }
+      .motion-reduced\\:hover\\:banana:hover { color: yellow; }
+      .motion-reduced\\:hover\\:chocolate:hover { color: brown; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .motion-safe\\:banana { color: yellow; }
+      .motion-safe\\:chocolate { color: brown; }
+      .motion-safe\\:hover\\:banana:hover { color: yellow; }
+      .motion-safe\\:hover\\:chocolate:hover { color: brown; }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate first-child variants', () => {
   const input = `
     @variants first {
