@@ -1,0 +1,3 @@
+[build]
+  publish = "build_production/"
+  command = "composer install && yarn && yarn run production && mv build_production/redirects build_production/_redirects"
