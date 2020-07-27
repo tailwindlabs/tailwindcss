@@ -97,6 +97,7 @@ import backgroundOpacity from './plugins/backgroundOpacity'
 import borderOpacity from './plugins/borderOpacity'
 import textOpacity from './plugins/textOpacity'
 import placeholderOpacity from './plugins/placeholderOpacity'
+import animation from './plugins/animation'
 
 import configurePlugins from './util/configurePlugins'
 
@@ -201,5 +202,6 @@ export default function({ corePlugins: corePluginConfig }) {
     transitionTimingFunction,
     transitionDuration,
     transitionDelay,
+    animation,
   })
 }

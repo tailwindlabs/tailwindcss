@@ -577,6 +577,50 @@ video {
   height: auto;
 }
 
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ping {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: .5;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8,0,1,1);
+  }
+
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+}
+
 .container {
   width: 100%;
 }
@@ -11886,6 +11930,26 @@ video {
 
 .delay-1000 {
   transition-delay: 1000ms;
+}
+
+.animate-none {
+  animation: none;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-bounce {
+  animation: bounce 1s infinite;
 }
 
 .example {
@@ -23203,6 +23267,26 @@ video {
 
   .sm\:delay-1000 {
     transition-delay: 1000ms;
+  }
+
+  .sm\:animate-none {
+    animation: none;
+  }
+
+  .sm\:animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  .sm\:animate-ping {
+    animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  .sm\:animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .sm\:animate-bounce {
+    animation: bounce 1s infinite;
   }
 
   .sm\:example {
@@ -34523,6 +34607,26 @@ video {
     transition-delay: 1000ms;
   }
 
+  .md\:animate-none {
+    animation: none;
+  }
+
+  .md\:animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  .md\:animate-ping {
+    animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  .md\:animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .md\:animate-bounce {
+    animation: bounce 1s infinite;
+  }
+
   .md\:example {
     font-weight: 700;
     color: #f56565;
@@ -45841,6 +45945,26 @@ video {
     transition-delay: 1000ms;
   }
 
+  .lg\:animate-none {
+    animation: none;
+  }
+
+  .lg\:animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  .lg\:animate-ping {
+    animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  .lg\:animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .lg\:animate-bounce {
+    animation: bounce 1s infinite;
+  }
+
   .lg\:example {
     font-weight: 700;
     color: #f56565;
@@ -57157,6 +57281,26 @@ video {
 
   .xl\:delay-1000 {
     transition-delay: 1000ms;
+  }
+
+  .xl\:animate-none {
+    animation: none;
+  }
+
+  .xl\:animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  .xl\:animate-ping {
+    animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  .xl\:animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .xl\:animate-bounce {
+    animation: bounce 1s infinite;
   }
 
   .xl\:example {
