@@ -1,6 +1,7 @@
 @php
   $scroll = isset($scroll) ? $scroll : true;
   $scroll = (count($rows) > 12 && ($scroll !== false));
+  $scroll = (isset($forceScroll) && $forceScroll === true) ? true : $scroll
 @endphp
 
 <h2 style="visibility: hidden; font-size: 0; margin: 0;">Class reference</h2>

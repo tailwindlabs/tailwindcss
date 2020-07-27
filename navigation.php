@@ -126,11 +126,12 @@ return [
             'Box Shadow' => '/docs/box-shadow',
             'Opacity' => '/docs/opacity',
         ],
-        'Transitions' => [
+        'Transitions and Animation' => [
             'Transition Property' => '/docs/transition-property',
             'Transition Duration' => '/docs/transition-duration',
             'Transition Timing Function' => '/docs/transition-timing-function',
             'Transition Delay' => '/docs/transition-delay',
+            'Animation' => '/docs/animation',
         ],
         'Transforms' => [
             'Scale' => '/docs/scale',
