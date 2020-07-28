@@ -245,6 +245,23 @@
             <div class="flex">
               <div class="markdown px-6 xl:px-12 w-full max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
                 @yield('content')
+
+                <div class="mt-10">
+                  <?php
+                  $prev = $page->prev();
+                  $next = $page->next();
+                  ?>
+                  @if ($prev)
+                  <a href="{{ $prev['value'] }}" class="text-blue-500 underline hover:text-blue-700">
+                    &larr; {{ $prev['name'] }}
+                  </a>
+                  @endif
+                  @if ($next)
+                  <a href="{{ $next['value'] }}" class="float-right text-blue-500 underline hover:text-blue-700">
+                    {{ $next['name'] }} &rarr;
+                  </a>
+                  @endif
+                </div>
               </div>
 
               {{-- Table of contents --}}
