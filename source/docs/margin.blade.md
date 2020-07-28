@@ -226,7 +226,7 @@ Learn more about customizing the default theme in the [theme customization docum
 
 If you'd like to add additional negative margin classes (taking the form `-m{side?}-{size}`), prefix the keys in your config file with a dash:
 
-@component('_partials.customized-config', ['key' => 'theme.margin'])
+@component('_partials.customized-config', ['key' => 'theme.extend.margin'])
 + '-72': '-18rem',
 @endcomponent
 
