@@ -48,8 +48,8 @@ For more information about Tailwind's responsive design features, check out the 
 By default Tailwind provides four general purpose transition-timing-function utilities. You change, add, or remove these by customizing the `transitionTimingFunction` section of your Tailwind theme config.
 
 @component('_partials.customized-config', ['key' => 'theme.extend.transitionTimingFunction'])
-+ 'ease-in-expo': 'cubic-bezier(0.95, 0.05, 0.795, 0.035)',
-+ 'ease-out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
++ 'in-expo': 'cubic-bezier(0.95, 0.05, 0.795, 0.035)',
++ 'out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
 @endcomponent
 
 Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
