@@ -38,11 +38,11 @@ const defaultVariantGenerators = config => ({
     mediaQuery.append(modified)
     container.append(mediaQuery)
   }),
-  'motion-reduced': generateVariantFunction(({ container, separator, modifySelectors }) => {
+  'motion-reduce': generateVariantFunction(({ container, separator, modifySelectors }) => {
     const modified = modifySelectors(({ selector }) => {
       return selectorParser(selectors => {
         selectors.walkClasses(sel => {
-          sel.value = `motion-reduced${separator}${sel.value}`
+          sel.value = `motion-reduce${separator}${sel.value}`
         })
       }).processSync(selector)
     })
@@ -91,7 +91,7 @@ const defaultVariantGenerators = config => ({
 })
 
 function prependStackableVariants(atRule, variants) {
-  const stackableVariants = ['motion-safe', 'motion-reduced']
+  const stackableVariants = ['motion-safe', 'motion-reduce']
 
   if (!_.some(variants, v => stackableVariants.includes(v))) {
     return variants
