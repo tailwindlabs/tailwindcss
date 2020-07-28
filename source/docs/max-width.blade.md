@@ -109,7 +109,7 @@ Set the maximum width of an element using the `max-w-{size}` utilities.
 
 ## Responsive
 
-To control the min-width of an element at a specific breakpoint, add a `{screen}:` prefix to any existing min-width utility.
+To control the max-width of an element at a specific breakpoint, add a `{screen}:` prefix to any existing max-width utility.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
