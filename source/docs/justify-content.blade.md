@@ -94,7 +94,7 @@ Use `.justify-between` to justify items along the flex container's main axis suc
 
 ## Space around
 
-Use `.justify-around` to justify items along the flex container's main axis such that there is an equal amount of space around each item, with half the space at the ends:
+Use `.justify-around` to justify items along the flex container's main axis such that there is an equal amount of space on each side of each item:
 
 @component('_partials.code-sample')
 <div class="flex justify-around bg-gray-200">
@@ -106,7 +106,7 @@ Use `.justify-around` to justify items along the flex container's main axis such
 
 ## Space evenly
 
-Use `.justify-evenly` to justify items along the flex container's main axis such that there is an equal amount of space around each item:
+Use `.justify-evenly` to justify items along the flex container's main axis such that there is an equal amount of space around each item, but also accounting for the doubling of space you would normally see between each item when using `justify-around`:
 
 @component('_partials.code-sample')
 <div class="flex justify-evenly bg-gray-200">
