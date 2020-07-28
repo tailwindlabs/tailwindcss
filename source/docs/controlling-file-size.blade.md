@@ -86,7 +86,7 @@ module.exports = {
 }
 ```
 
-We recomend only removing unused styles in production, as removing them in development means you need to recompile any time you change your templates and compiling with PurgeCSS enabled is much slower.
+We recommend only removing unused styles in production, as removing them in development means you need to recompile any time you change your templates and compiling with PurgeCSS enabled is much slower.
 
 ### Removing all unused styles
 
