@@ -4,7 +4,6 @@ import prettyHrtime from 'pretty-hrtime'
 
 import tailwind from '../..'
 
-import commands from '.'
 import compile from '../compile'
 import * as colors from '../colors'
 import * as emoji from '../emoji'
@@ -42,18 +41,6 @@ export const optionMap = {
 function stop(...msgs) {
   utils.header()
   utils.error(...msgs)
-  utils.die()
-}
-
-/**
- * Prints the error message and help for this command, then stops the process.
- *
- * @param {...string} [msgs]
- */
-function stopWithHelp(...msgs) {
-  utils.header()
-  utils.error(...msgs)
-  commands.help.forCommand(commands.build)
   utils.die()
 }
 
