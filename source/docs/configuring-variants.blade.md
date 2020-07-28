@@ -251,7 +251,7 @@ module.exports = {
 /* Generated CSS */
 
 .children\:bg-black > * { background-color: #000; }
-.children\:bg-black > * { background-color: #000; }
+.children\:bg-white > * { background-color: #fff; }
 
 .bg-black { background-color: #000 }
 .bg-white { background-color: #fff }
