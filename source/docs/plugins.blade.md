@@ -452,7 +452,7 @@ Additionally, because CSS has rules about the characters a class name can *start
 ```js
 // Will unnecessarily escape `1`
 `.rotate-${e('1/4')}`
-// => '.rotate-\1\/4'
+// => '.rotate-\31 \/4'
 
 // Won't escape `1` because it's not the first character
 `.${e('rotate-1/4')}`
