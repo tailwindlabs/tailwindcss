@@ -2,10 +2,12 @@
 /build_local/
 /node_modules/
 /vendor/
+/measure-output/
 /source/assets/build/
 /source/css/
 /source/js/
 /source/mix-manifest.json
+/stats.json
 /tailwind.json
 /_tmp
 /yarn-error.log

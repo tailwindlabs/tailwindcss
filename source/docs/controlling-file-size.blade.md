@@ -7,11 +7,11 @@ titleBorder: true
 
 <h2 style="visibility: hidden; font-size: 0; margin: 0;">Overview</h2>
 
-Using the default configuration, the development build of Tailwind CSS is 1996kb uncompressed, 144.6kb minified and compressed with [Gzip](https://www.gnu.org/software/gzip/), and 37.kb when compressed with [Brotli](https://github.com/google/brotli).
+Using the default configuration, the development build of Tailwind CSS is {{ $page['stats']['default.config.js'][0] }} uncompressed, {{ $page['stats']['default.config.js'][2] }} minified and compressed with [Gzip](https://www.gnu.org/software/gzip/), and {{ $page['stats']['default.config.js'][3] }} when compressed with [Brotli](https://github.com/google/brotli).
 
 | Uncompressed | Minified |    Gzip | Brotli |
 | ------------ | ------- | ------ | ----- |
-|       1996.1kb |  1599.8kb |  144.6kb | 37.6kb |
+|       {{ $page['stats']['default.config.js'][0] }} |  {{ $page['stats']['default.config.js'][1] }} |  {{ $page['stats']['default.config.js'][2] }} | {{ $page['stats']['default.config.js'][3] }} |
 
 This might sound enormous but **the development build is large by design**.
 
@@ -270,7 +270,7 @@ Here are a few strategies you can use to keep your generated CSS small and perfo
 
 The default theme includes a whopping [93 colors](/docs/colors) used for backgrounds, borders, text, and placeholders, all of which also have `hover:` and `focus` variants, as well as responsive variants at the five default screen sizes.
 
-This means that by default, there are 5580 classes generated from this color palette out of 12,230 classes total in the entire default build.
+By default, there are _thousands_ of classes generated to accommodate these colors, and it makes up close to half of the final build size.
 
 Very few projects actually need this many colors, and removing colors you don't need can have a huge impact on the overall file size.
 
@@ -278,9 +278,9 @@ Here's how using a smaller color palette affects the final size:
 
 | Colors         | Original | Minified |   Gzip | Brotli |
 | -------------- | -------: | -------: | -----: | -----: |
-| 93 _(default)_ |  783.5kb |  603.3kb | 78.0kb | 22.6kb |
-| 50             |  530.2kb |  399.3kb | 56.6kb | 17.5kb |
-| 25             |  381.6kb |  279.5kb | 44.1kb | 14.0kb |
+| 93 _(default)_ |  {{ $page['stats']['default.config.js'][0] }} |  {{ $page['stats']['default.config.js'][1] }} | {{ $page['stats']['default.config.js'][2] }} | {{ $page['stats']['default.config.js'][3] }} |
+| 50 |  {{ $page['stats']['50-colors.config.js'][0] }} |  {{ $page['stats']['50-colors.config.js'][1] }} | {{ $page['stats']['50-colors.config.js'][2] }} | {{ $page['stats']['50-colors.config.js'][3] }} |
+| 25 |  {{ $page['stats']['25-colors.config.js'][0] }} |  {{ $page['stats']['25-colors.config.js'][1] }} | {{ $page['stats']['25-colors.config.js'][2] }} | {{ $page['stats']['25-colors.config.js'][3] }} |
 
 ### Removing unused breakpoints
 
@@ -290,12 +290,12 @@ Here's how defining fewer screens affects the output:
 
 | Breakpoints   | Original | Minified |   Gzip | Brotli |
 | ------------- | -------: | -------: | -----: | -----: |
-| 4 _(default)_ |  783.5kb |  603.3kb | 78.0kb | 22.6kb |
-| 3             |  624.0kb |  481.3kb | 62.7kb | 20.8kb |
-| 2             |  464.6kb |  359.4kb | 47.4kb | 19.2kb |
-| 1             |  305.1kb |  237.5kb | 32.1kb | 17.6kb |
+| 4 _(default)_ |  {{ $page['stats']['default.config.js'][0] }} |  {{ $page['stats']['default.config.js'][1] }} | {{ $page['stats']['default.config.js'][2] }} | {{ $page['stats']['default.config.js'][3] }} |
+| 3 |  {{ $page['stats']['3-screens.config.js'][0] }} |  {{ $page['stats']['3-screens.config.js'][1] }} | {{ $page['stats']['3-screens.config.js'][2] }} | {{ $page['stats']['3-screens.config.js'][3] }} |
+| 2 |  {{ $page['stats']['2-screens.config.js'][0] }} |  {{ $page['stats']['2-screens.config.js'][1] }} | {{ $page['stats']['2-screens.config.js'][2] }} | {{ $page['stats']['2-screens.config.js'][3] }} |
+| 1 |  {{ $page['stats']['1-screen.config.js'][0] }} |  {{ $page['stats']['1-screen.config.js'][1] }} | {{ $page['stats']['1-screen.config.js'][2] }} | {{ $page['stats']['1-screen.config.js'][3] }} |
 
-If you only need 3 screen sizes and 35 colors, you're down to 39.5kb after gzip _(14.6kb after Brotli!)_ without changing anything else.
+If you only need 3 screen sizes and 35 colors, you're down to {{ $page['stats']['35-colors-3-screens.config.js'][2] }} after gzip _({{ $page['stats']['35-colors-3-screens.config.js'][3] }} after Brotli!)_ without changing anything else.
 
 ### Disabling unused utilities and variants
 

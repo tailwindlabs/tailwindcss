@@ -333,6 +333,10 @@ Before using the CDN build, please note that many of the features that make Tail
     <svg class="h-6 w-6 mr-2 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
     <span>You can't install third-party plugins</span>
   </li>
+  <li class="flex items-center">
+    <svg class="h-6 w-6 mr-2 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-close-circle"><circle cx="12" cy="12" r="10" fill="#fed7d7"/><path fill="#f56565" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"/></svg>
+    <span>You can't tree-shake unused styles</span>
+  </li>
 </ul>
 
 To get the most out of Tailwind, you really should [install it via npm](#1-install-tailwind-via-npm).
@@ -343,6 +347,6 @@ To pull in Tailwind for quick demos or just giving the framework a spin, grab th
 <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 ```
 
-Note that while the CDN build is large *(27kb compressed, 348kb raw)*, **it's not representative of the sizes you see when including Tailwind as part of your build process**.
+Note that while the CDN build is large *({{ $page['stats']['default.config.js'][3] }}, {{ $page['stats']['default.config.js'][0] }} raw)*, **it's not representative of the sizes you see when including Tailwind as part of your build process**.
 
 Sites that follow our [best practices](/docs/controlling-file-size) are almost always under 10kb compressed. For example, [Firefox Send](https://send.firefox.com/) is built with Tailwind and their CSS is under 4kb compressed and minified.

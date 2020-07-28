@@ -27,6 +27,7 @@ return [
     'production' => false,
     'collections' => [],
     'docSearchVersion' => 'v1',
+    'stats' => json_decode(file_get_contents(__DIR__ . '/stats.json'), true),
     'config' => json_decode(file_get_contents(__DIR__ . '/tailwind.json'), true),
     'version' => json_decode(file_get_contents(__DIR__ . '/node_modules/tailwindcss/package.json'), true)['version'],
     'colors' => ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'indigo', 'purple', 'pink'],
@@ -65,7 +66,7 @@ return [
     },
     'anyChildrenActive' => function ($page, $children) {
         return $children->contains(function ($link) use ($page) {
-            return $page->getPath() == '/docs/'. $link;
+            return $page->getPath() == '/docs/' . $link;
         });
     },
     'navigation' => require_once('navigation.php'),

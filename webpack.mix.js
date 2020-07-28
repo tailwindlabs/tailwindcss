@@ -4,8 +4,13 @@ const config = require('tailwindcss/defaultConfig')
 const resolveConfig = require('tailwindcss/lib/util/resolveConfig').default
 const fs = require('fs')
 const build = require('./tasks/build.js')
+const measure = require('./tasks/measure.js')
 
 fs.writeFileSync('./tailwind.json', JSON.stringify(resolveConfig([config])))
+
+measure('./tasks/measure-configs/', './tailwind.css').then(measurements => {
+  fs.writeFileSync('./stats.json', JSON.stringify(measurements))
+})
 
 mix.webpackConfig({
   plugins: [
