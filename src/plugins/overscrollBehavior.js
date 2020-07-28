@@ -1,5 +1,9 @@
 export default function() {
-  return function({ addUtilities, variants }) {
+  return function({ addUtilities, variants, target }) {
+    if (target('overscrollBehavior') === 'ie11') {
+      return
+    }
+
     addUtilities(
       {
         '.overscroll-auto': { 'overscroll-behavior': 'auto' },
@@ -12,7 +16,7 @@ export default function() {
         '.overscroll-x-contain': { 'overscroll-behavior-x': 'contain' },
         '.overscroll-x-none': { 'overscroll-behavior-x': 'none' },
       },
-      variants('overscroll')
+      variants('overscrollBehavior')
     )
   }
 }

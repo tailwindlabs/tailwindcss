@@ -21634,6 +21634,42 @@ video {
     -webkit-overflow-scrolling: auto;
   }
 
+  .sm\:overscroll-auto {
+    overscroll-behavior: auto;
+  }
+
+  .sm\:overscroll-contain {
+    overscroll-behavior: contain;
+  }
+
+  .sm\:overscroll-none {
+    overscroll-behavior: none;
+  }
+
+  .sm\:overscroll-y-auto {
+    overscroll-behavior-y: auto;
+  }
+
+  .sm\:overscroll-y-contain {
+    overscroll-behavior-y: contain;
+  }
+
+  .sm\:overscroll-y-none {
+    overscroll-behavior-y: none;
+  }
+
+  .sm\:overscroll-x-auto {
+    overscroll-behavior-x: auto;
+  }
+
+  .sm\:overscroll-x-contain {
+    overscroll-behavior-x: contain;
+  }
+
+  .sm\:overscroll-x-none {
+    overscroll-behavior-x: none;
+  }
+
   .sm\:p-0 {
     padding: 0;
   }
@@ -35418,6 +35454,42 @@ video {
 
   .md\:scrolling-auto {
     -webkit-overflow-scrolling: auto;
+  }
+
+  .md\:overscroll-auto {
+    overscroll-behavior: auto;
+  }
+
+  .md\:overscroll-contain {
+    overscroll-behavior: contain;
+  }
+
+  .md\:overscroll-none {
+    overscroll-behavior: none;
+  }
+
+  .md\:overscroll-y-auto {
+    overscroll-behavior-y: auto;
+  }
+
+  .md\:overscroll-y-contain {
+    overscroll-behavior-y: contain;
+  }
+
+  .md\:overscroll-y-none {
+    overscroll-behavior-y: none;
+  }
+
+  .md\:overscroll-x-auto {
+    overscroll-behavior-x: auto;
+  }
+
+  .md\:overscroll-x-contain {
+    overscroll-behavior-x: contain;
+  }
+
+  .md\:overscroll-x-none {
+    overscroll-behavior-x: none;
   }
 
   .md\:p-0 {
@@ -49206,6 +49278,42 @@ video {
     -webkit-overflow-scrolling: auto;
   }
 
+  .lg\:overscroll-auto {
+    overscroll-behavior: auto;
+  }
+
+  .lg\:overscroll-contain {
+    overscroll-behavior: contain;
+  }
+
+  .lg\:overscroll-none {
+    overscroll-behavior: none;
+  }
+
+  .lg\:overscroll-y-auto {
+    overscroll-behavior-y: auto;
+  }
+
+  .lg\:overscroll-y-contain {
+    overscroll-behavior-y: contain;
+  }
+
+  .lg\:overscroll-y-none {
+    overscroll-behavior-y: none;
+  }
+
+  .lg\:overscroll-x-auto {
+    overscroll-behavior-x: auto;
+  }
+
+  .lg\:overscroll-x-contain {
+    overscroll-behavior-x: contain;
+  }
+
+  .lg\:overscroll-x-none {
+    overscroll-behavior-x: none;
+  }
+
   .lg\:p-0 {
     padding: 0;
   }
@@ -62990,6 +63098,42 @@ video {
 
   .xl\:scrolling-auto {
     -webkit-overflow-scrolling: auto;
+  }
+
+  .xl\:overscroll-auto {
+    overscroll-behavior: auto;
+  }
+
+  .xl\:overscroll-contain {
+    overscroll-behavior: contain;
+  }
+
+  .xl\:overscroll-none {
+    overscroll-behavior: none;
+  }
+
+  .xl\:overscroll-y-auto {
+    overscroll-behavior-y: auto;
+  }
+
+  .xl\:overscroll-y-contain {
+    overscroll-behavior-y: contain;
+  }
+
+  .xl\:overscroll-y-none {
+    overscroll-behavior-y: none;
+  }
+
+  .xl\:overscroll-x-auto {
+    overscroll-behavior-x: auto;
+  }
+
+  .xl\:overscroll-x-contain {
+    overscroll-behavior-x: contain;
+  }
+
+  .xl\:overscroll-x-none {
+    overscroll-behavior-x: none;
   }
 
   .xl\:p-0 {
