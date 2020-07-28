@@ -5,6 +5,20 @@ description: "What's new in the latest version of Tailwind CSS."
 titleBorder: true
 ---
 
+<h2 class="mb-0">Tailwind CSS v1.6</h2>
+<div class="mt-0 text-gray-600">July 28, 2020</div>
+
+Tailwind CSS v1.6 is now available animation support (!) and a bunch of other neat stuff:
+
+- [Animation support](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.6.0#animation-support)
+- [New prefers-reduced-motion variants](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.6.0#new-prefers-reduced-motion-variants)
+- [New overscroll-behavior utilities](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.6.0#new-overscroll-behavior-utilities)
+- [Generate your CSS without an input file](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.6.0#generate-your-css-without-an-input-file)
+
+For all the details, [check out the complete release notes on GitHub](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.6.0).
+
+---
+
 <h2 class="mb-0">Tailwind CSS v1.5</h2>
 <div class="mt-0 text-gray-600">July 15, 2020</div>
 
