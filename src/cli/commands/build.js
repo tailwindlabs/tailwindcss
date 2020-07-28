@@ -82,8 +82,9 @@ function buildToFile(compileOptions, startTime) {
   utils.log()
   utils.log(
     emoji.go,
-    'Building...',
-    colors.file(inputFileSimplePath || 'defaults: @base, @components and @utilities.')
+    ...(inputFileSimplePath
+      ? ['Building:', colors.file(inputFileSimplePath)]
+      : ['Building from default CSS...', colors.info('(No input file provided)')])
   )
 
   return compile(compileOptions).then(result => {
