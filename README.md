@@ -16,7 +16,7 @@ Tailwind uses the [Jigsaw](http://jigsaw.tighten.co/) static site generator for 
     npm install
     ```
 
-3. Install PHP dependencies for docs (requires Composer: https://getcomposer.org)
+3. Install PHP dependencies for docs (requires [Composer](https://getcomposer.org))
 
     ```sh
     composer install
