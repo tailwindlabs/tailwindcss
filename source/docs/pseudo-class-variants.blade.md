@@ -30,8 +30,6 @@ Similar to how Tailwind handles [responsive design](/docs/responsive-design), st
 
 For a complete list of which variants are enabled by default, see the [reference table](#default-variants-reference) at the end of this page.
 
-Tailwind includes first-class support for styling elements on [hover](#hover), [focus](#focus), [active](#active), [disabled](#disabled), [visited](#visited), [first-child](#first-child), [last-child](#last-child), [odd-child](#odd-child), [even-child](#even-child), [group-hover](#group-hover), [group-focus](#group-focus), and [focus-within](#focus-within).
-
 If you need to target a pseudo-class that Tailwind doesn't support, you can extend the supported variants by [writing a variant plugin](#creating-custom-variants).
 
 ---
