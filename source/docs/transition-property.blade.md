@@ -29,6 +29,31 @@ Use the `transition-{properties}` utilities to specify which properties should t
 @endslot
 @endcomponent
 
+
+## Prefers-reduced-motion
+
+You can conditionally apply animations and transitions using the `motion-safe` and `motion-reduce` variants:
+
+```html
+<button class="transition transform hover:-translate-y-1 motion-reduce:transition-none motion-reduce:transform-none ...">
+  Hover me
+</button>
+```
+
+**These variants are not enabled by default**, but you can enable them in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    transitionProperty: ['responsive', 'motion-safe', 'motion-reduce']
+  }
+}
+```
+
+Learn more in the [variants documentation](/docs/pseudo-class-variants#motion-safe-v1-6-0).
+
 ## Responsive
 
 To change which properties of an element transition at a specific breakpoint, add a `{screen}:` prefix to any existing transition-property utility. For example, use `md:transition-colors` to apply the `transition-colors` utility at only medium screen sizes and above.

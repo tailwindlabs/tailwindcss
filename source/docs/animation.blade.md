@@ -133,6 +133,33 @@ Add the `animate-bounce` utility to make an element bounce up and down — usefu
 @endslot
 @endcomponent
 
+## Prefers-reduced-motion
+
+You can conditionally apply animations and transitions using the `motion-safe` and `motion-reduce` variants:
+
+```html
+<button type="button" class="bg-indigo-600 ..." disabled>
+  <svg class="motion-safe:animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
+    <!-- ... -->
+  </svg>
+  Processing
+</button>
+```
+
+**These variants are not enabled by default**, but you can enable them in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    animation: ['responsive', 'motion-safe', 'motion-reduce']
+  }
+}
+```
+
+Learn more in the [variants documentation](/docs/pseudo-class-variants#motion-safe-v1-6-0).
+
 ## Responsive
 
 To change or disable an animation at a specific breakpoint, add a `{screen}:` prefix to any existing animation utility. For example, use `md:animate-none` to apply the `animate-none` utility at only medium screen sizes and above.
