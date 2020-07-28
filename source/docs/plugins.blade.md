@@ -415,7 +415,7 @@ The `addBase` function allows you to register new styles to be output at the `@@
 
 Use it to add things like base typography styles, opinionated global resets, or `@font-face` rules.
 
-To add new component styles from a plugin, call `addBase`, passing in your styles using [CSS-in-JS syntax](#css-in-js-syntax):
+To add new base styles from a plugin, call `addBase`, passing in your styles using [CSS-in-JS syntax](#css-in-js-syntax):
 
 ```js
 // tailwind.config.js
