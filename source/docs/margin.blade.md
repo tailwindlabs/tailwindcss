@@ -177,7 +177,7 @@ For more information about Tailwind's responsive design features, check out the 
 
 @slot('lg')
 <div class="inline-block bg-gray-400">
-  <div class="mt-8 mr-8 mb-4 ml-2 bg-yellow-200">Target</div>
+  <div class="mt-8 mr-6 mb-4 ml-2 bg-yellow-200">Target</div>
 </div>
 @endslot
 
