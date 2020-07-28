@@ -119,6 +119,283 @@ module.exports = {
 }
 ```
 
+## Group-hover
+
+If you need to style a child element when hovering over a specific parent element, add the `.group` class to the parent element and add the `group-hover:` prefix to the utility on the child element.
+
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'bg-gray-200 p-8'])
+<div class="group hover:bg-blue-500 p-4 cursor-pointer bg-white rounded max-w-xs w-full shadow-lg select-none overflow-hidden mx-auto">
+  <p class="font-semibold text-lg mb-1 text-gray-900 group-hover:text-white">New Project</p>
+  <p class="text-gray-700 group-hover:text-white mb-2">Create a new project from a variety of starting templates.</p>
+</div>
+
+
+@slot('code')
+<div class="group bg-white hover:bg-blue-500 ...">
+  <p class="text-gray-900 group-hover:text-white ...">New Project</p>
+  <p class="text-gray-700 group-hover:text-white ...">Create a new project from a variety of starting templates.</p>
+</div>
+@endslot
+@endcomponent
+
+You can control whether `group-hover` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    textColor: ['responsive', 'hover', 'focus', 'group-hover'],
+  },
+}
+```
+
+<h2>
+  <span class="flex items-center" data-heading-text>
+    Group-focus
+    <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
+      v1.3.0+
+    </span>
+  </span>
+</h2>
+
+The `group-focus` variant works just like [`group-hover`](#group-hover) except for focus:
+
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center bg-white p-8'])
+<span class="inline-flex rounded-md shadow-sm">
+  <button type="button" class="group inline-flex items-center px-4 py-2 border border-gray-400 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-900 focus:outline-none focus:text-gray-900 focus:border-gray-500 hover:border-gray-500">
+  <svg fill="currentColor" viewBox="0 0 20 20" class="-ml-1 mr-3 w-5 h-5 text-gray-400 group-focus:text-gray-500"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
+    Bookmark
+  </button>
+</span>
+
+@slot('code')
+<button class="group text-gray-700 focus:text-gray-900 ...">
+  <svg class="h-6 w-6 text-gray-400 group-focus:text-gray-500"><!-- ... --></svg>
+  Submit
+</button>
+@endslot
+@endcomponent
+
+You can control whether `group-focus` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    textColor: ['responsive', 'hover', 'focus', 'group-focus'],
+  },
+}
+```
+
+
+
+## Focus-within
+
+<div class="text-sm bg-blue-100 text-blue-700 font-semi-bold px-4 py-2 mb-4 rounded">
+  <div class="flex items-center">
+    <div class="mr-2">
+      <svg class="block text-blue-400 h-5 w-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.432 15C14.387 9.893 12 8.547 12 6V3h.5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5H8v3c0 2.547-2.387 3.893-4.432 9-.651 1.625-2.323 4 6.432 4s7.083-2.375 6.432-4zm-1.617 1.751c-.702.21-2.099.449-4.815.449s-4.113-.239-4.815-.449c-.249-.074-.346-.363-.258-.628.22-.67.635-1.828 1.411-3.121 1.896-3.159 3.863.497 5.5.497s1.188-1.561 1.824-.497a15.353 15.353 0 0 1 1.411 3.121c.088.265-.009.553-.258.628z"/></svg>
+    </div>
+    <div>
+      <p class="font-semibold">Note that focus-within is not supported in IE or Edge &lt; 79.</p>
+    </div>
+  </div>
+</div>
+
+Add the `focus-within:` prefix to only apply a utility when a child element has focus.
+
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'bg-white p-8'])
+<form class="w-full max-w-sm mx-auto">
+  <div class="flex items-center border-b-2 border-gray-400 focus-within:border-teal-500 py-2">
+    <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Jane Doe" aria-label="Full name">
+    <button class="focus:shadow-outline focus:outline-none flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="button">
+      Sign Up
+    </button>
+  </div>
+</form>
+
+
+@slot('code')
+<form class="border-b-2 border-gray-400 focus-within:border-teal-500 ...">
+  <input class="..." placeholder="Jane Doe" ...>
+  <button class="...">
+    Sign Up
+  </button>
+</form>
+@endslot
+@endcomponent
+
+You can control whether `focus-within` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    borderColor: ['responsive', 'hover', 'focus', 'focus-within'],
+  },
+}
+```
+
+<h2 class="flex items-center">
+  Focus-visible
+  <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
+    v1.5.0+
+  </span>
+</h2>
+
+<div class="text-sm bg-blue-100 text-blue-700 font-semi-bold px-4 py-2 mb-4 rounded">
+  <div class="flex items-center">
+    <div class="mr-2">
+      <svg class="block text-blue-400 h-5 w-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.432 15C14.387 9.893 12 8.547 12 6V3h.5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5H8v3c0 2.547-2.387 3.893-4.432 9-.651 1.625-2.323 4 6.432 4s7.083-2.375 6.432-4zm-1.617 1.751c-.702.21-2.099.449-4.815.449s-4.113-.239-4.815-.449c-.249-.074-.346-.363-.258-.628.22-.67.635-1.828 1.411-3.121 1.896-3.159 3.863.497 5.5.497s1.188-1.561 1.824-.497a15.353 15.353 0 0 1 1.411 3.121c.088.265-.009.553-.258.628z"/></svg>
+    </div>
+    <div>
+      <p class="font-semibold">Note that focus-visible currently requires a polyfill for sufficient browser support.</p>
+    </div>
+  </div>
+</div>
+
+Add the `focus-visible:` prefix to only apply a utility when an element has focus but only if the user is using the keyboard.
+
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'p-8'])
+<ul class="flex space-x-8">
+  <li>
+    <a class="text-blue-500 hover:text-blue-800 focus:outline-none focus:underline" href="#" onclick="((e) => {e.stopPropagation(); e.preventDefault()})(event)">Underlined on focus</a>
+  </li>
+  <li>
+    <a class="text-blue-500 hover:text-blue-800 focus:outline-none focus-visible:underline" href="#" onclick="((e) => {e.stopPropagation(); e.preventDefault()})(event)">Underlined on focus-visible</a>
+  </li>
+</ul>
+
+@slot('code')
+<ul class="flex space-x-8">
+  <li>
+    <a class="focus:outline-none focus:underline ..." href="#">
+      Underlined on focus
+    </a>
+  </li>
+  <li>
+    <a class="focus:outline-none focus-visible:underline ..." href="#">
+      Underlined on focus-visible
+    </a>
+  </li>
+</ul>
+@endslot
+@endcomponent
+
+Note that only Firefox supports `focus-visible` natively, so for sufficient browser support you should install and configure both the [focus-visible JS polyfill](https://github.com/WICG/focus-visible) and the [focus-visible PostCSS polyfill](https://github.com/csstools/postcss-focus-visible). Make sure to include the PostCSS plugin _after_ Tailwind in your list of PostCSS plugins:
+
+```js
+// postcss.config.js
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    'postcss-focus-visible': {},
+    autoprefixer: {}
+  }
+}
+```
+
+You can control whether `focus-visible` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    textDecoration: ['responsive', 'hover', 'focus', 'focus-visible'],
+  },
+}
+```
+
+<h2 class="flex items-center">
+  Motion-safe
+  <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
+    v1.6.0+
+  </span>
+</h2>
+
+Add the `motion-safe:` prefix to only apply a utility when the `prefers-reduced-motion` media feature matches `no-preference`.
+
+For example, this button will only animate on hover if the user hasn't enabled "Reduce motion" on their system.
+
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'p-6 text-center'])
+<button type="button" class="bg-blue-500 active:bg-blue-700 text-white font-semibold hover:text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline transition transform ease-in-out duration-300 motion-safe:hover:-translate-y-1 motion-safe:hover:scale-110">
+  Hover
+</button>
+
+@slot('code')
+<button class="transform motion-safe:hover:-translate-y-1 motion-safe:hover:scale-110 transition ease-in-out duration-300 ...">
+  Hover
+</button>
+@endslot
+@endcomponent
+
+Note that unlike most other variants, `motion-safe` can be combined with both responsive variants _and_ other variants like `hover`, by stacking them in this order:
+
+```html
+<div class="sm:motion-safe:hover:animate-spin">
+  <!-- ... -->
+</div>
+```
+
+You can control whether `motion-safe` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    translate: ['responsive', 'hover', 'focus', 'motion-safe'],
+  },
+}
+```
+
+<h2 class="flex items-center">
+  Motion-reduce
+  <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
+    v1.6.0+
+  </span>
+</h2>
+
+Add the `motion-reduce:` prefix to only apply a utility when the `prefers-reduced-motion` media feature matches `reduce`.
+
+For example, this button will animate on hover by default, but the animations will be disabled if the user has enabled "Reduce motion" on their system.
+
+@component('_partials.code-sample', ['lang' => 'html', 'class' => 'p-6 text-center'])
+<button type="button" class="bg-blue-500 active:bg-blue-700 text-white font-semibold hover:text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline transition transform ease-in-out duration-300 hover:-translate-y-1 hover:scale-110 motion-reduce:hover:transform-none">
+  Hover
+</button>
+
+@slot('code')
+<button class="transform motion-reduce:transform-none hover:-translate-y-1 hover:scale-110 transition ease-in-out duration-300 ...">
+  Hover
+</button>
+@endslot
+@endcomponent
+
+Note that unlike most other variants, `motion-reduce` can be combined with both responsive variants _and_ other variants like `hover`, by stacking them in this order:
+
+```html
+<div class="sm:motion-reduce:hover:animate-none">
+  <!-- ... -->
+</div>
+```
+
+You can control whether `motion-reduce` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    translate: ['responsive', 'hover', 'focus', 'motion-reduce'],
+  },
+}
+```
+
 <h2 class="flex items-center">
   Disabled
   <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
@@ -385,198 +662,6 @@ module.exports = {
   // ...
   variants: {
     backgroundColor: ['responsive', 'even', 'hover', 'focus'],
-  },
-}
-```
-
-## Group-hover
-
-If you need to style a child element when hovering over a specific parent element, add the `.group` class to the parent element and add the `group-hover:` prefix to the utility on the child element.
-
-@component('_partials.code-sample', ['lang' => 'html', 'class' => 'bg-gray-200 p-8'])
-<div class="group hover:bg-blue-500 p-4 cursor-pointer bg-white rounded max-w-xs w-full shadow-lg select-none overflow-hidden mx-auto">
-  <p class="font-semibold text-lg mb-1 text-gray-900 group-hover:text-white">New Project</p>
-  <p class="text-gray-700 group-hover:text-white mb-2">Create a new project from a variety of starting templates.</p>
-</div>
-
-
-@slot('code')
-<div class="group bg-white hover:bg-blue-500 ...">
-  <p class="text-gray-900 group-hover:text-white ...">New Project</p>
-  <p class="text-gray-700 group-hover:text-white ...">Create a new project from a variety of starting templates.</p>
-</div>
-@endslot
-@endcomponent
-
-You can control whether `group-hover` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    textColor: ['responsive', 'hover', 'focus', 'group-hover'],
-  },
-}
-```
-
-<h2>
-  <span class="flex items-center" data-heading-text>
-    Group-focus
-    <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
-      v1.3.0+
-    </span>
-  </span>
-</h2>
-
-The `group-focus` variant works just like [`group-hover`](#group-hover) except for focus:
-
-@component('_partials.code-sample', ['lang' => 'html', 'class' => 'text-center bg-white p-8'])
-<span class="inline-flex rounded-md shadow-sm">
-  <button type="button" class="group inline-flex items-center px-4 py-2 border border-gray-400 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-900 focus:outline-none focus:text-gray-900 focus:border-gray-500 hover:border-gray-500">
-  <svg fill="currentColor" viewBox="0 0 20 20" class="-ml-1 mr-3 w-5 h-5 text-gray-400 group-focus:text-gray-500"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
-    Bookmark
-  </button>
-</span>
-
-@slot('code')
-<button class="group text-gray-700 focus:text-gray-900 ...">
-  <svg class="h-6 w-6 text-gray-400 group-focus:text-gray-500"><!-- ... --></svg>
-  Submit
-</button>
-@endslot
-@endcomponent
-
-You can control whether `group-focus` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    textColor: ['responsive', 'hover', 'focus', 'group-focus'],
-  },
-}
-```
-
-
-
-## Focus-within
-
-<div class="text-sm bg-blue-100 text-blue-700 font-semi-bold px-4 py-2 mb-4 rounded">
-  <div class="flex items-center">
-    <div class="mr-2">
-      <svg class="block text-blue-400 h-5 w-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.432 15C14.387 9.893 12 8.547 12 6V3h.5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5H8v3c0 2.547-2.387 3.893-4.432 9-.651 1.625-2.323 4 6.432 4s7.083-2.375 6.432-4zm-1.617 1.751c-.702.21-2.099.449-4.815.449s-4.113-.239-4.815-.449c-.249-.074-.346-.363-.258-.628.22-.67.635-1.828 1.411-3.121 1.896-3.159 3.863.497 5.5.497s1.188-1.561 1.824-.497a15.353 15.353 0 0 1 1.411 3.121c.088.265-.009.553-.258.628z"/></svg>
-    </div>
-    <div>
-      <p class="font-semibold">Note that focus-within is not supported in IE or Edge &lt; 79.</p>
-    </div>
-  </div>
-</div>
-
-Add the `focus-within:` prefix to only apply a utility when a child element has focus.
-
-@component('_partials.code-sample', ['lang' => 'html', 'class' => 'bg-white p-8'])
-<form class="w-full max-w-sm mx-auto">
-  <div class="flex items-center border-b-2 border-gray-400 focus-within:border-teal-500 py-2">
-    <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Jane Doe" aria-label="Full name">
-    <button class="focus:shadow-outline focus:outline-none flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="button">
-      Sign Up
-    </button>
-  </div>
-</form>
-
-
-@slot('code')
-<form class="border-b-2 border-gray-400 focus-within:border-teal-500 ...">
-  <input class="..." placeholder="Jane Doe" ...>
-  <button class="...">
-    Sign Up
-  </button>
-</form>
-@endslot
-@endcomponent
-
-You can control whether `focus-within` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    borderColor: ['responsive', 'hover', 'focus', 'focus-within'],
-  },
-}
-```
-
-
-<h2 class="flex items-center">
-  Focus-visible
-  <span class="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
-    v1.5.0+
-  </span>
-</h2>
-
-<div class="text-sm bg-blue-100 text-blue-700 font-semi-bold px-4 py-2 mb-4 rounded">
-  <div class="flex items-center">
-    <div class="mr-2">
-      <svg class="block text-blue-400 h-5 w-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.432 15C14.387 9.893 12 8.547 12 6V3h.5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5H8v3c0 2.547-2.387 3.893-4.432 9-.651 1.625-2.323 4 6.432 4s7.083-2.375 6.432-4zm-1.617 1.751c-.702.21-2.099.449-4.815.449s-4.113-.239-4.815-.449c-.249-.074-.346-.363-.258-.628.22-.67.635-1.828 1.411-3.121 1.896-3.159 3.863.497 5.5.497s1.188-1.561 1.824-.497a15.353 15.353 0 0 1 1.411 3.121c.088.265-.009.553-.258.628z"/></svg>
-    </div>
-    <div>
-      <p class="font-semibold">Note that focus-visible currently requires a polyfill for sufficient browser support.</p>
-    </div>
-  </div>
-</div>
-
-Add the `focus-visible:` prefix to only apply a utility when an element has focus but only if the user is using the keyboard.
-
-@component('_partials.code-sample', ['lang' => 'html', 'class' => 'p-8'])
-<ul class="flex space-x-8">
-  <li>
-    <a class="text-blue-500 hover:text-blue-800 focus:outline-none focus:underline" href="#" onclick="((e) => {e.stopPropagation(); e.preventDefault()})(event)">Underlined on focus</a>
-  </li>
-  <li>
-    <a class="text-blue-500 hover:text-blue-800 focus:outline-none focus-visible:underline" href="#" onclick="((e) => {e.stopPropagation(); e.preventDefault()})(event)">Underlined on focus-visible</a>
-  </li>
-</ul>
-
-@slot('code')
-<ul class="flex space-x-8">
-  <li>
-    <a class="focus:outline-none focus:underline ..." href="#">
-      Underlined on focus
-    </a>
-  </li>
-  <li>
-    <a class="focus:outline-none focus-visible:underline ..." href="#">
-      Underlined on focus-visible
-    </a>
-  </li>
-</ul>
-@endslot
-@endcomponent
-
-Note that only Firefox supports `focus-visible` natively, so for sufficient browser support you should install and configure both the [focus-visible JS polyfill](https://github.com/WICG/focus-visible) and the [focus-visible PostCSS polyfill](https://github.com/csstools/postcss-focus-visible). Make sure to include the PostCSS plugin _after_ Tailwind in your list of PostCSS plugins:
-
-```js
-// postcss.config.js
-module.exports = {
-  plugins: {
-    tailwindcss: {},
-    'postcss-focus-visible': {},
-    autoprefixer: {}
-  }
-}
-```
-
-You can control whether `focus-visible` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  // ...
-  variants: {
-    textDecoration: ['responsive', 'hover', 'focus', 'focus-visible'],
   },
 }
 ```

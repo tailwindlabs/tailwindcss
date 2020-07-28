@@ -75,6 +75,25 @@ a {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .motion-reduce\:transform-none:hover {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .motion-safe\:hover\:-translate-y-1:hover {
+    --transform-translate-y: -0.25rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .motion-safe\:hover\:scale-110:hover {
+    --transform-scale-x: 1.1 !important;
+    --transform-scale-y: 1.1 !important;
+  }
+}
+
 .focus\:bg-gray-600:focus {
   @apply bg-gray-600 !important;
 }
