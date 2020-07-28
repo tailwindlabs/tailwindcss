@@ -46,18 +46,18 @@ featureVersion: "v1.3.0+"
         </tr>
         @endforeach
         <tr>
-          <td class="p-2 border-t {{ $loop->first ? 'border-gray-300' : 'border-gray-200' }} font-mono text-xs text-purple-700 whitespace-no-wrap">
+          <td class="p-2 border-t border-gray-200 font-mono text-xs text-purple-700 whitespace-no-wrap">
           .divide-x-reverse
           <span class="ml-1 text-purple-300">> * + *</span>
           </td>
-          <td class="p-2 border-t {{ $loop->first ? 'border-gray-300' : 'border-gray-200' }} font-mono text-xs text-blue-700 whitespace-pre">--divide-x-reverse: 1</td>
+          <td class="p-2 border-t border-gray-200 font-mono text-xs text-blue-700 whitespace-pre">--divide-x-reverse: 1</td>
         </tr>
         <tr>
-          <td class="p-2 border-t {{ $loop->first ? 'border-gray-300' : 'border-gray-200' }} font-mono text-xs text-purple-700 whitespace-no-wrap">
+          <td class="p-2 border-t border-gray-200 font-mono text-xs text-purple-700 whitespace-no-wrap">
           .divide-y-reverse
           <span class="ml-1 text-purple-300">> * + *</span>
           </td>
-          <td class="p-2 border-t {{ $loop->first ? 'border-gray-300' : 'border-gray-200' }} font-mono text-xs text-blue-700 whitespace-pre">--divide-y-reverse: 1</td>
+          <td class="p-2 border-t border-gray-200 font-mono text-xs text-blue-700 whitespace-pre">--divide-y-reverse: 1</td>
         </tr>
       </tbody>
     </table>
