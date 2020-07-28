@@ -39,7 +39,7 @@ features:
     [
       '.justify-evenly',
       'justify-content: space-evenly;',
-      "Justify items evenly in the container."
+      "Justify items by dividing the amount of available space around and between each one."
     ]
   ]
 ])
