@@ -31,7 +31,7 @@
     "prismjs": "^1.8.3",
     "rimraf": "^3.0.2",
     "stylefmt": "^6.0.0",
-    "tailwindcss": "1.5.2",
+    "tailwindcss": "^1.6.0",
     "vue": "^2.6.10",
     "vue-template-compiler": "^2.6.10",
     "webpack-watch": "^0.2.0",
