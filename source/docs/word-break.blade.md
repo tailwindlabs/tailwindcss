@@ -8,7 +8,7 @@ description: "Utilities for controlling word breaks in an element."
   'rows' => [
     [
       '.break-normal',
-      "word-break: normal;\noverflow-wrap: normal",
+      "word-break: normal;\noverflow-wrap: normal;",
       'Only add line breaks at normal word break points.',
     ],
     [
@@ -23,7 +23,7 @@ description: "Utilities for controlling word breaks in an element."
     ],
     [
       '.truncate',
-      "overflow: hidden;\ntext-overflow: ellipsis;\nwhite-space: nowrap",
+      "overflow: hidden;\ntext-overflow: ellipsis;\nwhite-space: nowrap;",
       'Truncate overflowing text with an ellipsis (<code>…</code>) if needed.',
     ],
   ]
