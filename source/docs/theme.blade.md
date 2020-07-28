@@ -397,7 +397,6 @@ All of these keys are also available under the `theme.extend` key to enable [ext
 | `fontFamily` | Values for the `font-family` property |
 | `fontSize` | Values for the `font-size` property |
 | `fontWeight` | Values for the `font-weight` property |
-| `height` | Values for the `height` property |
 | `inset` | Values for the `inset` property |
 | `gap` | Values for the `gap` property |
 | `gridTemplateColumns` | Values for the `grid-template-columns` property |
