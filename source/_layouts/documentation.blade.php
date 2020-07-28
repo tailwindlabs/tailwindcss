@@ -246,18 +246,20 @@
               <div class="markdown px-6 xl:px-12 w-full max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
                 @yield('content')
 
-                <div class="mt-10">
-                  <?php
+                <hr>
+
+                <div class="-mt-6 flex justify-between">
+                  @php
                   $prev = $page->prev();
                   $next = $page->next();
-                  ?>
+                  @endphp
                   @if ($prev)
-                  <a href="{{ $prev['value'] }}" class="text-blue-500 underline hover:text-blue-700">
+                  <a href="{{ $prev['value'] }}" class="font-medium text-blue-500 underline hover:text-blue-700">
                     &larr; {{ $prev['name'] }}
                   </a>
                   @endif
                   @if ($next)
-                  <a href="{{ $next['value'] }}" class="float-right text-blue-500 underline hover:text-blue-700">
+                  <a href="{{ $next['value'] }}" class="font-medium text-blue-500 underline hover:text-blue-700">
                     {{ $next['name'] }} &rarr;
                   </a>
                   @endif
