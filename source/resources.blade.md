@@ -54,13 +54,13 @@ They're easy to customize and perfect for landing pages, empty states, and more.
 
 ## Icons
 
-### Heroicons UI
+### Heroicons
 
-[Heroicons UI](https://github.com/refactoringui/heroicons) is a free SVG icon set created by [Steve Schoger](https://twitter.com/steveschoger). They're pre-optimized and easy to use directly in your HTML where you can customize them using Tailwind's color and sizing utilities.
+[Heroicons](https://github.com/tailwindlabs/heroicons) is a free SVG icon set created by [Steve Schoger](https://twitter.com/steveschoger). They're pre-optimized and easy to use directly in your HTML where you can customize them using Tailwind's color and sizing utilities.
 
-[![](/img/resources/heroicons-ui.png)](https://github.com/refactoringui/heroicons)
+[![](/img/resources/heroicons-ui.png)](https://github.com/tailwindlabs/heroicons)
 
-[Get Heroicons UI &rarr;](https://github.com/refactoringui/heroicons)
+[Get Heroicons &rarr;](https://github.com/tailwindlabs/heroicons)
 
 ### Zondicons
 
