@@ -2,6 +2,7 @@ import '../css/main.css'
 import { useState, useEffect, Fragment } from 'react'
 import { Header } from '@/components/Header'
 import { HeaderHome } from '@/components/HeaderHome'
+import { TuiBanner } from '@/components/TuiBanner'
 import Router from 'next/router'
 import ProgressBar from '@badrap/bar-of-progress'
 
@@ -42,6 +43,7 @@ export default function App({ Component, pageProps, router }) {
       <Layout {...layoutProps}>
         <Component {...pageProps} />
       </Layout>
+      <TuiBanner />
     </>
   )
 }

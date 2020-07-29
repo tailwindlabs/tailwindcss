@@ -50,6 +50,19 @@ module.exports = withBundleAnalyzer({
   },
   webpack(config, options) {
     config.module.rules.push({
+      test: /\.(png|jpe?g|gif|svg)$/i,
+      use: [
+        {
+          loader: 'file-loader',
+          options: {
+            publicPath: '/_next',
+            name: 'static/media/[name].[hash].[ext]',
+          },
+        },
+      ],
+    })
+
+    config.module.rules.push({
       test: /\.mdx$/,
       use: [
         options.defaultLoaders.babel,
@@ -59,7 +72,11 @@ module.exports = withBundleAnalyzer({
         {
           loader: '@mdx-js/loader',
           options: {
-            remarkPlugins: [withExamples, /*withProse,*/ withTableOfContents, withSyntaxHighlighting],
+            remarkPlugins: [
+              withExamples,
+              /*withProse,*/ withTableOfContents,
+              withSyntaxHighlighting,
+            ],
           },
         },
         createLoader(function (source) {
