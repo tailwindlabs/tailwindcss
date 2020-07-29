@@ -1,7 +1,7 @@
-import { useState, useEffect, createContext, Fragment, useCallback } from 'react'
+import { useState, useEffect, createContext, Fragment, useCallback, isValidElement } from 'react'
 import { useRouter } from 'next/router'
 import { kebabToTitleCase } from '@/utils/kebabToTitleCase'
-import { UtilityTable } from '@/components/UtilityTable'
+import { ClassTable } from '@/components/ClassTable'
 import { useIsHome } from '@/hooks/useIsHome'
 
 export const DocumentContext = createContext()
@@ -65,7 +65,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
       )}
       <div className="flex">
         <div className="markdown px-6 xl:px-12 w-full max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
-          {classes && <UtilityTable {...classes} />}
+          {classes && <ClassTable {...(isValidElement(classes) ? { custom: classes } : classes)} />}
           <DocumentContext.Provider value={{ updateHeading }}>{children}</DocumentContext.Provider>
         </div>
         <div className="hidden xl:text-sm xl:block xl:w-1/4 xl:px-6">

@@ -7,7 +7,7 @@ import divideColorPlugin from 'tailwindcss/lib/plugins/divideColor'
 
 export const classes = {
   plugin: divideColorPlugin,
-  filterProperties: (prop, value) => prop.indexOf('--') === -1 && value.indexOf('--') === -1,
+  filterProperties: (prop, value) => !prop.includes('--') && !value.includes('--'),
   transformSelector: (selector) => (
     <>
       {selector.split('>').shift().trim()} <span className="ml-1 text-purple-300">> * + *</span>
@@ -15,10 +15,10 @@ export const classes = {
   ),
   preview: (css, { className }) => (
     <td className={`relative w-20 p-2 ${className}`}>
-      <div class="absolute inset-0 flex flex-col m-2">
-        <div class="flex-1" />
+      <div className="absolute inset-0 flex flex-col m-2">
+        <div className="flex-1" />
         <div
-          class="flex-1 border-t"
+          className="flex-1 border-t"
           style={{
             borderColor: Array.isArray(css['border-color'])
               ? css['border-color'][0]

@@ -7,11 +7,11 @@ import borderColorPlugin from 'tailwindcss/lib/plugins/borderColor'
 
 export const classes = {
   plugin: borderColorPlugin,
-  filterProperties: (prop, value) => prop.indexOf('--') === -1 && value.indexOf('--') === -1,
+  filterProperties: (prop, value) => !prop.includes('--') && !value.includes('--'),
   preview: (css, { className }) => (
     <td className={`relative w-16 p-2 font-mono text-xs whitespace-pre ${className}`}>
       <div
-        class="absolute inset-0 m-2 border"
+        className="absolute inset-0 m-2 border"
         style={{
           borderColor: Array.isArray(css['border-color'])
             ? css['border-color'][0]

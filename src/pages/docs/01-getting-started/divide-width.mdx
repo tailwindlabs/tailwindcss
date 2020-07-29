@@ -1,0 +1,25 @@
+---
+description: Lorem ipsum dolor sit amet
+tailwindVersion: v1.2.0+
+---
+
+import divideWidthPlugin from 'tailwindcss/lib/plugins/divideWidth'
+
+export const classes = {
+  plugin: divideWidthPlugin,
+  filterProperties: (prop, value, properties) => {
+    if (Object.keys(properties).length === 1) return true
+    return !prop.includes('--') && !prop.includes('bottom') && !prop.includes('right')
+  },
+  transformValue: (value) => {
+    if (value.includes('calc(')) {
+      return value.match(/calc\(([^ ]+) /)[1].replace(/^0px$/, '0')
+    }
+    return value
+  },
+  transformSelector: (selector) => (
+    <>
+      {selector.split('>').shift().trim()} <span className="ml-1 text-purple-300">> * + *</span>
+    </>
+  ),
+}

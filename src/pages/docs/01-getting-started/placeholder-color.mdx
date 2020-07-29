@@ -3,11 +3,17 @@ description: Lorem ipsum dolor sit amet
 tailwindVersion: v1.2.0+
 ---
 
-import textColorPlugin from 'tailwindcss/lib/plugins/textColor'
+import placeholderColorPlugin from 'tailwindcss/lib/plugins/placeholderColor'
 
 export const classes = {
-  plugin: textColorPlugin,
+  plugin: placeholderColorPlugin,
   filterProperties: (prop, value) => !prop.includes('--') && !value.includes('--'),
+  transformSelector: (selector) => (
+    <>
+      {selector.split('::').shift().trim()}
+      <span className="text-gray-500">::placeholder</span>
+    </>
+  ),
   preview: (css, { className }) => (
     <td
       className={`w-16 font-medium text-base whitespace-no-wrap ${className}`}
