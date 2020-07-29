@@ -58,8 +58,6 @@ export const ClassTable = memo(
   }) => {
     const utilities = getUtilities(plugin)
 
-    console.log(custom)
-
     return (
       <div className="mt-0 border-t border-b border-gray-300 overflow-hidden relative">
         <div
