@@ -27,7 +27,6 @@
     "prismjs": "^1.20.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-use-measure": "^2.0.1",
     "redent": "^3.0.0",
     "simple-functional-loader": "^1.2.1",
     "tailwindcss": "^1.5.1",

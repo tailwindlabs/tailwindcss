@@ -1,15 +1,21 @@
-import useMeasure from 'react-use-measure'
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext, useRef } from 'react'
 import { DocumentContext } from '@/layouts/ContentsLayout'
 
 export function Heading({ level, id, children, number, badge }) {
   let Component = `h${level}`
-  let [ref, bounds] = useMeasure()
   const { updateHeading } = useContext(DocumentContext)
 
+  let ref = useRef()
+
   useEffect(() => {
-    updateHeading(id, bounds.top + window.pageYOffset)
-  }, [id, bounds.top, updateHeading])
+    const resizeObserver = new ResizeObserver(() => {
+      updateHeading(id, ref.current.getBoundingClientRect().top + window.pageYOffset)
+    })
+    resizeObserver.observe(ref.current)
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [id, updateHeading])
 
   return (
     <Component className="group flex" id={id} ref={ref}>
