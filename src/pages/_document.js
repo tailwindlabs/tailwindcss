@@ -8,7 +8,7 @@ export default class Document extends NextDocument {
 
   render() {
     return (
-      <Html lang="en">
+      <Html lang="en" className="bg-white antialiased">
         <Head />
         <body>
           <Main />
