@@ -41,6 +41,7 @@ return [
             'Object Fit' => '/docs/object-fit',
             'Object Position' => '/docs/object-position',
             'Overflow' => '/docs/overflow',
+            'Overscroll Behavior' => '/docs/overscroll-behavior',
             'Position' => '/docs/position',
             'Top / Right / Bottom / Left' => '/docs/top-right-bottom-left',
             'Visibility' => '/docs/visibility',
