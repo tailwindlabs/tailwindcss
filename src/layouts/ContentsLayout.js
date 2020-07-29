@@ -32,7 +32,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
       }
       const middle = y + windowHeight / 2
       let current = sortedHeadings[0].id
-      for (let i = 0; i < sortedHeadings.length - 1; i++) {
+      for (let i = 0; i < sortedHeadings.length; i++) {
         if (middle >= sortedHeadings[i].top) {
           current = sortedHeadings[i].id
         }
