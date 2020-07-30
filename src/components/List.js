@@ -1,9 +1,5 @@
 export function List({ children }) {
-  return (
-    <div className="markdown">
-      <ul className="list-none pl-0">{children}</ul>
-    </div>
-  )
+  return <ul className="list-none pl-0">{children}</ul>
 }
 
 export function ListItemGood({ children }) {
