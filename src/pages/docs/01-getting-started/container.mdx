@@ -2,6 +2,10 @@
 title: Container
 ---
 
+import { defaultConfig } from '@/utils/defaultConfig'
+
+export const screens = defaultConfig.theme.screens
+
 export const classes = (
   <table className="w-full text-left table-collapse">
     <colgroup>
@@ -28,38 +32,16 @@ export const classes = (
           width: 100%;
         </td>
       </tr>
-      <tr>
-        <td className="p-2 border-t border-gray-300 font-mono text-xs text-gray-700">
-          sm <span className="text-gray-600 font-sans italic">(640px)</span>
-        </td>
-        <td className="p-2 border-t border-gray-300 font-mono text-xs text-blue-700">
-          max-width: 640px;
-        </td>
-      </tr>
-      <tr>
-        <td className="p-2 border-t border-gray-300 font-mono text-xs text-gray-700">
-          md <span className="text-gray-600 font-sans italic">(768px)</span>
-        </td>
-        <td className="p-2 border-t border-gray-300 font-mono text-xs text-blue-700">
-          max-width: 768px;
-        </td>
-      </tr>
-      <tr>
-        <td className="p-2 border-t border-gray-300 font-mono text-xs text-gray-700">
-          lg <span className="text-gray-600 font-sans italic">(1024px)</span>
-        </td>
-        <td className="p-2 border-t border-gray-300 font-mono text-xs text-blue-700">
-          max-width: 1024px;
-        </td>
-      </tr>
-      <tr>
-        <td className="p-2 border-t border-gray-300 font-mono text-xs text-gray-700">
-          xl <span className="text-gray-600 font-sans italic">(1280px)</span>
-        </td>
-        <td className="p-2 border-t border-gray-300 font-mono text-xs text-blue-700">
-          max-width: 1280px;
-        </td>
-      </tr>
+      {Object.keys(screens).map((screen) => (
+        <tr key={screen}>
+          <td className="p-2 border-t border-gray-300 font-mono text-xs text-gray-700">
+            {screen} <span className="text-gray-600 font-sans italic">({screens[screen]})</span>
+          </td>
+          <td className="p-2 border-t border-gray-300 font-mono text-xs text-blue-700">
+            max-width: {screens[screen]};
+          </td>
+        </tr>
+      ))}
     </tbody>
   </table>
 )
