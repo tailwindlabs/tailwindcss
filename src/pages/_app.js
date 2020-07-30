@@ -30,8 +30,8 @@ export default function App({ Component, pageProps, router }) {
     }
   }, [navIsOpen])
 
-  const Layout = Component.Layout || Fragment
-  const layoutProps = Component.Layout ? { navIsOpen } : {}
+  const Layout = Component.layoutProps?.Layout || Fragment
+  const layoutProps = Component.layoutProps?.Layout ? { navIsOpen } : {}
 
   return (
     <>

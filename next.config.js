@@ -79,7 +79,7 @@ module.exports = withBundleAnalyzer({
       use: [
         options.defaultLoaders.babel,
         createLoader(function (source) {
-          return source + `\nMDXContent.Layout = layoutProps.Layout\n`
+          return source + `\nMDXContent.layoutProps = layoutProps\n`
         }),
         {
           loader: '@mdx-js/loader',
