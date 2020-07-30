@@ -43,5 +43,8 @@
     "eslint-plugin-jsx-a11y": "6.x",
     "eslint-plugin-react": "7.x",
     "eslint-plugin-react-hooks": "2.x"
+  },
+  "resolutions": {
+    "webpack": "^5.0.0-beta.22"
   }
 }
