@@ -38,6 +38,9 @@ function getRewrites() {
 module.exports = withBundleAnalyzer({
   pageExtensions: ['js', 'jsx', 'mdx'],
   rewrites: getRewrites,
+  experimental: {
+    modern: true
+  },
   exportPathMap: async function (defaultPathMap) {
     const rewrites = getRewrites()
     const pathMap = {}
