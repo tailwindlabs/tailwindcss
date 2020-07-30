@@ -1,18 +1,13 @@
 import { useRouter } from 'next/router'
 import { kebabToTitleCase } from '@/utils/kebabToTitleCase'
 import { removeOrderPrefix } from '@/utils/removeOrderPrefix'
-import { useContext } from 'react'
-import { SidebarContext } from '@/layouts/SidebarLayout'
 import Link from 'next/link'
+import { usePrevNext } from '@/hooks/usePrevNext'
 
 export function VideoLayout({ children, meta }) {
   const router = useRouter()
   const title = meta.title || kebabToTitleCase(router.pathname.split('/').pop())
-  let {
-    pages: { flat: pages },
-  } = useContext(SidebarContext)
-  let pageIndex = pages.findIndex((page) => page.slug === router.pathname.split('/').pop())
-  let nextVideo = pages[pageIndex + 1]
+  let { next } = usePrevNext()
 
   return (
     <div className="pt-24 pb-16 lg:pt-28 w-full">
@@ -55,12 +50,8 @@ export function VideoLayout({ children, meta }) {
             </a>
           </div>
           <Link
-            href={
-              nextVideo
-                ? `/screencasts/${nextVideo.category}/${nextVideo.slug}`
-                : '/screencasts/coming-soon'
-            }
-            as={nextVideo ? `/screencasts/${removeOrderPrefix(nextVideo.slug)}` : undefined}
+            href={next ? `/screencasts/${next.category}/${next.slug}` : '/screencasts/coming-soon'}
+            as={next ? `/screencasts/${removeOrderPrefix(next.slug)}` : undefined}
           >
             <a className="inline-flex items-center text-gray-600 hover:text-gray-900">
               <span>

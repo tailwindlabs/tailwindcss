@@ -3,6 +3,8 @@ import { useRouter } from 'next/router'
 import { kebabToTitleCase } from '@/utils/kebabToTitleCase'
 import { ClassTable } from '@/components/ClassTable'
 import { useIsHome } from '@/hooks/useIsHome'
+import { usePrevNext } from '@/hooks/usePrevNext'
+import Link from 'next/link'
 
 export const DocumentContext = createContext()
 
@@ -11,6 +13,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
   let [currentSection, setCurrentSection] = useState(tableOfContents[0]?.slug)
   let [headings, setHeadings] = useState([])
   let isHome = useIsHome()
+  let { prev, next } = usePrevNext()
 
   const updateHeading = useCallback((id, top) => {
     setHeadings((headings) => [...headings.filter((h) => id !== h.id), { id, top }])
@@ -67,6 +70,27 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
         <div className="markdown px-6 xl:px-12 w-full max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
           {classes && <ClassTable {...(isValidElement(classes) ? { custom: classes } : classes)} />}
           <DocumentContext.Provider value={{ updateHeading }}>{children}</DocumentContext.Provider>
+          {(prev || next) && (
+            <>
+              <hr />
+              <div className="-mt-6 flex justify-between">
+                {prev && (
+                  <Link href={`/docs/${prev.category}/${prev.slug}`} as={`/docs/${prev.slug}`}>
+                    <a className="font-medium text-blue-500 underline hover:text-blue-700">
+                      ← {prev.title}
+                    </a>
+                  </Link>
+                )}
+                {next && (
+                  <Link href={`/docs/${next.category}/${next.slug}`} as={`/docs/${next.slug}`}>
+                    <a className="font-medium text-blue-500 underline hover:text-blue-700">
+                      {next.title} →
+                    </a>
+                  </Link>
+                )}
+              </div>
+            </>
+          )}
         </div>
         <div className="hidden xl:text-sm xl:block xl:w-1/4 xl:px-6">
           <div className="flex flex-col justify-between overflow-y-auto sticky top-16 max-h-(screen-16) pt-12 pb-4 -mt-12">
