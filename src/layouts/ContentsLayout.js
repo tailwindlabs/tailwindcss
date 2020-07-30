@@ -62,8 +62,10 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
               </span>
             )}
           </h1>
-          <div className="mt-0 mb-4 text-gray-600">{meta.description}</div>
-          {!classes && <hr className="my-8 border-b-2 border-gray-200" />}
+          {meta.description && <div className="mt-0 mb-4 text-gray-600">{meta.description}</div>}
+          {!classes && meta.headerSeparator !== false && (
+            <hr className="my-8 border-b-2 border-gray-200" />
+          )}
         </div>
       )}
       <div className="flex">
@@ -93,7 +95,11 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
           )}
         </div>
         <div className="hidden xl:text-sm xl:block xl:w-1/4 xl:px-6">
-          <div className="flex flex-col justify-between overflow-y-auto sticky top-16 max-h-(screen-16) pt-12 pb-4 -mt-12">
+          <div
+            className={`flex flex-col justify-between overflow-y-auto sticky max-h-(screen-16) pt-12 pb-4 -mt-12 ${
+              isHome ? 'top-0' : 'top-16'
+            }`}
+          >
             {tableOfContents.length > 0 && (
               <div className="mb-8">
                 <h5 className="text-gray-500 uppercase tracking-wide font-bold text-sm lg:text-xs">
