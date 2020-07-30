@@ -21,7 +21,7 @@
     "front-matter": "^4.0.2",
     "glob": "^7.1.6",
     "minimatch": "^3.0.4",
-    "next": "9.4.4",
+    "next": "^9.5.1",
     "postcss-nested": "^4.2.3",
     "preval.macro": "^5.0.0",
     "prismjs": "^1.20.0",
