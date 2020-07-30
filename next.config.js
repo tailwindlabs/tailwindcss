@@ -1,3 +1,4 @@
+const fs = require('fs')
 const path = require('path')
 const glob = require('glob')
 const querystring = require('querystring')
@@ -43,6 +44,17 @@ module.exports = withBundleAnalyzer({
     const rewrites = getRewrites()
     const pathMap = {}
     for (let pathname in defaultPathMap) {
+      try {
+        let { attributes } = frontMatter(
+          fs.readFileSync(
+            path.resolve(__dirname, `./src/pages${defaultPathMap[pathname].page}.mdx`),
+            'utf8'
+          )
+        )
+        if (attributes.published === false) {
+          continue
+        }
+      } catch (_) {}
       const rewrite = rewrites.find((rw) => rw.destination === pathname)
       pathMap[rewrite ? rewrite.source : pathname] = defaultPathMap[pathname]
     }
