@@ -9,16 +9,27 @@ import classnames from 'classnames'
 
 export const SidebarContext = createContext()
 
-function NavItem({ href, as, children, isActive }) {
-  const linkClassName = 'hover:translate-x-2px hover:text-gray-900 text-gray-600 font-medium'
+function NavItem({ href, as, children, isActive, isPublished, fallbackLink = {} }) {
+  const publishedLinkClassName =
+    'hover:translate-x-2px hover:text-gray-900 text-gray-600 font-medium'
+  const unpublishedLinkClassName = 'hover:translate-x-2px text-gray-400 font-medium'
   const activeLinkClassName = 'text-teal-600 font-medium'
+
+  if (!isPublished) {
+    href = fallbackLink.href
+    as = fallbackLink.as
+  }
 
   return (
     <li className="mb-3 lg:mb-1">
       <Link href={href} as={as}>
         <a
           className={`px-2 -mx-2 py-1 transition duration-200 ease-in-out relative block ${
-            isActive ? activeLinkClassName : linkClassName
+            isActive
+              ? activeLinkClassName
+              : isPublished
+              ? publishedLinkClassName
+              : unpublishedLinkClassName
           }`}
         >
           <span
@@ -33,28 +44,40 @@ function NavItem({ href, as, children, isActive }) {
   )
 }
 
-function Nav({ base, pages }) {
+function Nav({ base, pages, fallbackLink }) {
   const router = useRouter()
 
-  return Object.keys(pages).map((category) => (
-    <div className="mb-8" key={category}>
-      <h5 className="mb-3 lg:mb-2 text-gray-500 uppercase tracking-wide font-bold text-sm lg:text-xs">
-        {kebabToTitleCase(removeOrderPrefix(category))}
-      </h5>
-      <ul>
-        {pages[category].map((item) => (
-          <NavItem
-            key={item.slug}
-            href={`/${base}/${category}/${item.slug}`}
-            as={`/${base}/${removeOrderPrefix(item.slug)}`}
-            isActive={item.slug === router.pathname.split('/').pop()}
+  return Object.keys(pages)
+    .map((category) => {
+      let publishedItems = pages[category].filter((item) => item.published)
+      if (publishedItems.length === 0 && !fallbackLink) return null
+      return (
+        <div className="mb-8" key={category}>
+          <h5
+            className={`mb-3 lg:mb-2 uppercase tracking-wide font-bold text-sm lg:text-xs ${
+              publishedItems.length ? 'text-gray-500' : 'text-gray-400'
+            }`}
           >
-            {item.title}
-          </NavItem>
-        ))}
-      </ul>
-    </div>
-  ))
+            {kebabToTitleCase(removeOrderPrefix(category))}
+          </h5>
+          <ul>
+            {(fallbackLink ? pages[category] : publishedItems).map((item) => (
+              <NavItem
+                key={item.slug}
+                href={`/${base}/${category}/${item.slug}`}
+                as={`/${base}/${removeOrderPrefix(item.slug)}`}
+                isActive={item.slug === router.pathname.split('/').pop()}
+                isPublished={item.published}
+                fallbackLink={fallbackLink}
+              >
+                {item.title}
+              </NavItem>
+            ))}
+          </ul>
+        </div>
+      )
+    })
+    .filter(Boolean)
 }
 
 const TopLevelAnchor = forwardRef(({ children, href, className, icon, isActive, onClick }, ref) => {
@@ -212,7 +235,7 @@ function TopLevelNav() {
   )
 }
 
-export function SidebarLayout({ children, navIsOpen, pages, base }) {
+export function SidebarLayout({ children, navIsOpen, pages, base, fallbackLink }) {
   let isHome = useIsHome()
 
   return (
@@ -239,16 +262,13 @@ export function SidebarLayout({ children, navIsOpen, pages, base }) {
                 <div className="relative -mx-2 w-24 mb-8 lg:hidden">
                   <VersionSwitcher />
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
-                    <svg
-                      className="fill-current h-4 w-4"
-                      viewBox="0 0 20 20"
-                    >
+                    <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
                       <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                     </svg>
                   </div>
                 </div>
                 <TopLevelNav />
-                <Nav base={base} pages={pages.categorised} />
+                <Nav base={base} pages={pages.categorised} fallbackLink={fallbackLink} />
               </nav>
             </div>
           </div>

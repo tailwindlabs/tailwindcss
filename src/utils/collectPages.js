@@ -12,12 +12,20 @@ export function collectPages(imported) {
     if (match === null) return
     const category = match.groups.category
     const title = meta.title || kebabToTitleCase(removeOrderPrefix(match.groups.slug))
-    if (pages.categorised[category]) {
-      pages.categorised[category].push({ title, slug: match.groups.slug })
-    } else {
-      pages.categorised[category] = [{ title, slug: match.groups.slug }]
+    const item = {
+      title,
+      slug: match.groups.slug,
+      published: meta.published !== false,
     }
-    pages.flat.push({ title, slug: match.groups.slug, category })
+    if (pages.categorised[category]) {
+      pages.categorised[category].push(item)
+    } else {
+      pages.categorised[category] = [item]
+    }
+    pages.flat.push({
+      ...item,
+      category,
+    })
   })
 
   return pages
