@@ -5,8 +5,8 @@ const { addImport } = require('./utils')
 
 module.exports = () => {
   return (tree) => {
-    let hasExamples = false
-    let component = addImport(tree, '@/components/Example', 'Example')
+    let hasCodeSample = false
+    let component = addImport(tree, '@/components/CodeSample', 'CodeSample')
 
     visit(tree, 'code', (node) => {
       if (node.lang !== 'html') return
@@ -38,10 +38,10 @@ module.exports = () => {
         />
       `.trim()
 
-      hasExamples = true
+      hasCodeSample = true
     })
 
-    if (!hasExamples) {
+    if (!hasCodeSample) {
       // remove import
       tree.children.shift()
     }

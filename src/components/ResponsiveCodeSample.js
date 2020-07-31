@@ -20,7 +20,7 @@ function Button({ children, active, onClick }) {
 
 const defaultTemplate = (classNames) => `<div class="${classNames}"></div>`
 
-export function ResponsiveExample({ classNames, template = defaultTemplate, preview }) {
+export function ResponsiveCodeSample({ classNames, template = defaultTemplate, preview }) {
   let [active, setActive] = useState(0)
 
   return (

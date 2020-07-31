@@ -7,7 +7,7 @@ export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayo
 
 export default require('@/layouts/ContentsLayout').ContentsLayout
 
-import { ResponsiveExample } from '@/components/ResponsiveExample'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 They come with all sorts of predesigned components like buttons, cards, and alerts that might help you move quickly at first, but cause more pain than they cure when it comes time to make your site stand out with a custom design.
 
@@ -42,7 +42,7 @@ Every Tailwind utility also comes with responsive variants, making it extremely 
 
 Tailwind uses an intuitive `{screen}:` prefix that makes it easy to notice responsive classes in your markup while keeping the original class name recognizable and intact.
 
-<ResponsiveExample
+<ResponsiveCodeSample
   classNames={['justify-start', 'justify-center', 'justify-end', 'justify-between', 'justify-around']}
   preview={(className) => (
     <div className={`flex bg-gray-200 ${className}`}>

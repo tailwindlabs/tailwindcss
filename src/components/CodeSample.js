@@ -1,4 +1,4 @@
-export function Example({ preview, snippet, previewClassName }) {
+export function CodeSample({ preview, snippet, previewClassName }) {
   return (
     <div className="relative overflow-hidden mb-8">
       <div
