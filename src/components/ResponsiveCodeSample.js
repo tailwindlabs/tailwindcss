@@ -18,9 +18,9 @@ function Button({ children, active, onClick }) {
   )
 }
 
-const defaultTemplate = (classNames) => `<div class="${classNames}"></div>`
+const defaultSnippet = (classNames) => `<div class="${classNames}"></div>`
 
-export function ResponsiveCodeSample({ classNames, template = defaultTemplate, preview }) {
+export function ResponsiveCodeSample({ classNames, snippet = defaultSnippet, preview }) {
   let [active, setActive] = useState(0)
 
   return (
@@ -105,7 +105,7 @@ export function ResponsiveCodeSample({ classNames, template = defaultTemplate, p
         <div className="rounded-t-lg bg-gray-800 border-b border-gray-300 whitespace-pre font-mono text-gray-500 text-sm">
           <pre className="scrollbar-none m-0 p-0 overflow-auto scrolling-touch">
             <code className="inline-block p-4">
-              {redent(template('{{CLASSNAMES}}'))
+              {redent(snippet('{{CLASSNAMES}}'))
                 .trim()
                 .split(/(\{\{CLASSNAMES\}\})/)
                 .flatMap((segment, i) =>
