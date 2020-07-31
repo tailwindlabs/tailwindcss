@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import redent from 'redent'
+import { castArray } from '@/utils/castArray'
 
 const screens = ['', 'sm:', 'md:', 'lg:', 'xl:']
 
@@ -112,7 +113,9 @@ export function ResponsiveExample({ classNames, template = defaultTemplate, prev
                     ? classNames.map((className, j) => (
                         <span key={`${i}-${j}`} className={active === j ? 'text-code-yellow' : ''}>
                           {j === 0 ? '' : ' '}
-                          {`${screens[j]}${className}`}
+                          {castArray(className)
+                            .map((cn) => `${screens[j]}${cn}`)
+                            .join(' ')}
                         </span>
                       ))
                     : segment
@@ -121,7 +124,7 @@ export function ResponsiveExample({ classNames, template = defaultTemplate, prev
           </pre>
         </div>
         <div className="rounded-b-lg border-l border-r border-b border-gray-400 bg-white p-4">
-          {preview(classNames[active])}
+          {preview(castArray(classNames[active]).join(' '))}
         </div>
       </div>
     </div>
