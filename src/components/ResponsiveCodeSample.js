@@ -23,6 +23,12 @@ const defaultSnippet = (classNames) => `<div class="${classNames}"></div>`
 export function ResponsiveCodeSample({ classNames, snippet = defaultSnippet, preview }) {
   let [active, setActive] = useState(0)
 
+  function getActiveClassName(index) {
+    for (let i = index; i >= 0; i--) {
+      if (classNames[i]) return classNames[i]
+    }
+  }
+
   return (
     <div className="mt-8">
       <div className="flex justify-center">
@@ -110,21 +116,28 @@ export function ResponsiveCodeSample({ classNames, snippet = defaultSnippet, pre
                 .split(/(\{\{CLASSNAMES\}\})/)
                 .flatMap((segment, i) =>
                   i % 2 === 1
-                    ? classNames.map((className, j) => (
-                        <span key={`${i}-${j}`} className={active === j ? 'text-code-yellow' : ''}>
-                          {j === 0 ? '' : ' '}
-                          {castArray(className)
-                            .map((cn) => `${screens[j]}${cn}`)
-                            .join(' ')}
-                        </span>
-                      ))
+                    ? classNames
+                        .map((className, j) =>
+                          className ? (
+                            <span
+                              key={`${i}-${j}`}
+                              className={active === j ? 'text-code-yellow' : ''}
+                            >
+                              {j === 0 ? '' : ' '}
+                              {castArray(className)
+                                .map((cn) => `${screens[j]}${cn}`)
+                                .join(' ')}
+                            </span>
+                          ) : null
+                        )
+                        .filter(Boolean)
                     : segment
                 )}
             </code>
           </pre>
         </div>
         <div className="rounded-b-lg border-l border-r border-b border-gray-400 bg-white p-4">
-          {preview(castArray(classNames[active]).join(' '))}
+          {preview(castArray(getActiveClassName(active)).join(' '))}
         </div>
       </div>
     </div>

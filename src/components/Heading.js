@@ -1,7 +1,7 @@
 import { useEffect, useContext, useRef } from 'react'
 import { DocumentContext } from '@/layouts/ContentsLayout'
 
-export function Heading({ level, id, children, number, badge, hidden = false }) {
+export function Heading({ level, id, children, number, badge, className = '', hidden = false }) {
   let Component = `h${level}`
   const { updateHeading } = useContext(DocumentContext)
 
@@ -18,7 +18,11 @@ export function Heading({ level, id, children, number, badge, hidden = false }) 
   }, [id, updateHeading])
 
   return (
-    <Component className={`group flex ${hidden ? '-mb-6' : ''}`} id={id} ref={ref}>
+    <Component
+      className={`group flex whitespace-pre-wrap ${hidden ? '-mb-6' : ''} ${className}`}
+      id={id}
+      ref={ref}
+    >
       {!hidden && (
         // eslint-disable-next-line
         <a
@@ -33,7 +37,7 @@ export function Heading({ level, id, children, number, badge, hidden = false }) 
           {number}
         </span>
       )}
-      {hidden ? <span className="sr-only">{children}</span> : children}
+      <span className={hidden ? 'sr-only' : undefined}>{children}</span>
       {badge && (
         <span className="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
           {badge}

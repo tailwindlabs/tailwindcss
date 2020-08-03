@@ -39,7 +39,7 @@ module.exports = withBundleAnalyzer({
   pageExtensions: ['js', 'jsx', 'mdx'],
   rewrites: getRewrites,
   experimental: {
-    modern: true
+    modern: true,
   },
   exportPathMap: async function (defaultPathMap) {
     const rewrites = getRewrites()
@@ -118,7 +118,7 @@ module.exports = withBundleAnalyzer({
             }
           }
 
-          if (!/^\s*export\s+default\s+/m.test(source)) {
+          if (!/^\s*export\s+default\s+/m.test(source.replace(/```(.*?)```/gs, ''))) {
             for (let glob in fallbackDefaultExports) {
               if (minimatch(resourcePath, glob)) {
                 extra.push(

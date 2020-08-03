@@ -1,4 +1,5 @@
 const { addImport, addExport } = require('./utils')
+const slugify = require('@sindresorhus/slugify')
 
 module.exports.withTableOfContents = () => {
   return (tree) => {
@@ -14,11 +15,7 @@ module.exports.withTableOfContents = () => {
           .filter((n) => n.type === 'text')
           .map((n) => n.value)
           .join('')
-        const slug = title
-          .replace(/\s+/g, '-')
-          .replace(/[^a-z-]/gi, '')
-          .replace(/-+/, '-')
-          .toLowerCase()
+        const slug = slugify(title)
 
         node.type = 'jsx'
 
@@ -43,6 +40,15 @@ module.exports.withTableOfContents = () => {
         } else {
           contents[contents.length - 1].children.push({ title, slug })
         }
+      } else if (
+        node.type === 'jsx' &&
+        /^\s*<Heading[\s>]/.test(node.value) &&
+        !/^\s*<Heading[^>]*\sid=/.test(node.value)
+      ) {
+        const title = node.value
+          .replace(/<[^>]+>/g, '')
+          .replace(/\{(["'])((?:(?=(\\?))\3.)*?)\1\}/g, '$2')
+        node.value = node.value.replace(/^\s*<Heading([\s>])/, `<Heading id="${slugify(title)}"$1`)
       }
     }
 

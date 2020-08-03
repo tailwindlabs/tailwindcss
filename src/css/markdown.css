@@ -158,19 +158,19 @@
     @apply mt-8;
   }
 
-  > h1 > code,
-  > h2 > code,
-  > h3 > code,
-  > h4 > code {
+  > h1 code,
+  > h2 code,
+  > h3 code,
+  > h4 code {
     @apply text-purple-600;
     @apply font-mono;
   }
 
-  > h3 > code {
+  > h3 code {
     @apply text-lg px-1 bg-gray-100;
   }
 
-  > h4 > code {
+  > h4 code {
     @apply text-base px-1 bg-gray-100;
   }
 
