@@ -1,0 +1,675 @@
+---
+title: Pseudo-Class Variants
+description: Using utilities to style elements on hover, focus, and more.
+---
+
+import { Heading } from '@/components/Heading'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+import { TipCompat } from '@/components/Tip'
+import { DefaultVariantsConfig } from '@/components/DefaultVariantsConfig'
+
+## <Heading hidden>Overview</Heading>
+
+Similar to how Tailwind handles [responsive design](/docs/responsive-design), styling elements on hover, focus, and more can be accomplished by prefixing utilities with the appropriate pseudo-class.
+
+```html
+<template preview>
+  <form class="flex w-full max-w-sm mx-auto">
+    <input class="flex-1 bg-gray-200 hover:bg-white hover:border-gray-300 focus:outline-none focus:bg-white focus:shadow-outline focus:border-gray-300 appearance-none border border-transparent rounded w-full py-2 px-4 text-gray-700 leading-tight " type="email" placeholder="Your email">
+    <button class="ml-4 flex-shrink-0 bg-teal-500 hover:bg-teal-600 focus:outline-none focus:shadow-outline text-white font-bold py-2 px-4 rounded" type="button">
+      Sign Up
+    </button>
+  </form>
+</template>
+
+<form>
+  <input class="bg-gray-200 hover:bg-white hover:border-gray-300 focus:outline-none focus:bg-white focus:shadow-outline focus:border-gray-300 ...">
+  <button class="bg-teal-500 hover:bg-teal-600 focus:outline-none focus:shadow-outline ...">
+    Sign Up
+  </button>
+</form>
+```
+
+**Not all pseudo-class variants are enabled for all utilities by default due to file-size considerations**, but we've tried our best to enable the most commonly used combinations out of the box.
+
+For a complete list of which variants are enabled by default, see the [reference table](#default-variants-reference) at the end of this page.
+
+If you need to target a pseudo-class that Tailwind doesn't support, you can extend the supported variants by [writing a variant plugin](#creating-custom-variants).
+
+---
+
+## Hover
+
+Add the `hover:` prefix to only apply a utility on hover.
+
+```html
+<template preview class="text-center p-4">
+  <button type="button" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded focus:outline-none focus:shadow-outline">
+    Hover me
+  </button>
+</template>
+
+<button class="bg-transparent hover:bg-blue-500 text-blue-700 hover:text-white...">
+  Hover me
+</button>
+```
+
+You can control whether `hover` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    backgroundColor: ['responsive', 'hover', 'focus'],
+  },
+}
+```
+
+## Focus
+
+Add the `focus:` prefix to only apply a utility on focus.
+
+```html
+<template preview>
+  <div class="max-w-xs w-full mx-auto">
+    <input class="bg-gray-200 focus:bg-white border-transparent focus:border-blue-400 text-gray-900 appearance-none inline-block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
+  </div>
+</template>
+
+<input class="bg-gray-200 focus:bg-white border-transparent focus:border-blue-400 ..." placeholder="Focus me">
+```
+
+You can control whether `focus` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    backgroundColor: ['responsive', 'hover', 'focus'],
+  },
+}
+```
+
+## Active
+
+Add the `active:` prefix to only apply a utility when an element is active.
+
+```html
+<template preview class="text-center p-4">
+  <button type="button" class="bg-blue-500 active:bg-blue-700 text-white font-semibold hover:text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+    Click me
+  </button>
+</template>
+
+<button class="bg-blue-500 active:bg-blue-700 text-white...">
+  Click me
+</button>
+```
+
+You can control whether `active` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    backgroundColor: ['responsive', 'hover', 'focus', 'active'],
+  },
+}
+```
+
+## Group-hover
+
+If you need to style a child element when hovering over a specific parent element, add the `.group` class to the parent element and add the `group-hover:` prefix to the utility on the child element.
+
+```html
+<template preview class="bg-gray-200 p-8">
+  <div class="group hover:bg-blue-500 p-4 cursor-pointer bg-white rounded max-w-xs w-full shadow-lg select-none overflow-hidden mx-auto">
+    <p class="font-semibold text-lg mb-1 text-gray-900 group-hover:text-white">New Project</p>
+    <p class="text-gray-700 group-hover:text-white mb-2">Create a new project from a variety of starting templates.</p>
+  </div>
+</template>
+
+<div class="group bg-white hover:bg-blue-500 ...">
+  <p class="text-gray-900 group-hover:text-white ...">New Project</p>
+  <p class="text-gray-700 group-hover:text-white ...">Create a new project from a variety of starting templates.</p>
+</div>
+```
+
+You can control whether `group-hover` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    textColor: ['responsive', 'hover', 'focus', 'group-hover'],
+  },
+}
+```
+
+## <Heading badge="v1.3.0+">Group-focus</Heading>
+
+The `group-focus` variant works just like [`group-hover`](#group-hover) except for focus:
+
+```html
+<template preview class="text-center p-8">
+  <span class="inline-flex rounded-md shadow-sm">
+    <button type="button" class="group inline-flex items-center px-4 py-2 border border-gray-400 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-900 focus:outline-none focus:text-gray-900 focus:border-gray-500 hover:border-gray-500">
+    <svg fill="currentColor" viewBox="0 0 20 20" class="-ml-1 mr-3 w-5 h-5 text-gray-400 group-focus:text-gray-500"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
+      Bookmark
+    </button>
+  </span>
+</template>
+
+<button class="group text-gray-700 focus:text-gray-900 ...">
+  <svg class="h-6 w-6 text-gray-400 group-focus:text-gray-500"><!-- ... --></svg>
+  Submit
+</button>
+```
+
+You can control whether `group-focus` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    textColor: ['responsive', 'hover', 'focus', 'group-focus'],
+  },
+}
+```
+
+
+
+## Focus-within
+
+<TipCompat>Note that focus-within is not supported in IE or Edge &lt; 79.</TipCompat>
+
+Add the `focus-within:` prefix to only apply a utility when a child element has focus.
+
+```html
+<template preview class="p-8">
+  <form class="w-full max-w-sm mx-auto">
+    <div class="flex items-center border-b-2 border-gray-400 focus-within:border-teal-500 py-2">
+      <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Jane Doe" aria-label="Full name">
+      <button class="focus:shadow-outline focus:outline-none flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="button">
+        Sign Up
+      </button>
+    </div>
+  </form>
+</template>
+
+<form class="border-b-2 border-gray-400 focus-within:border-teal-500 ...">
+  <input class="..." placeholder="Jane Doe" ...>
+  <button class="...">
+    Sign Up
+  </button>
+</form>
+```
+
+You can control whether `focus-within` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    borderColor: ['responsive', 'hover', 'focus', 'focus-within'],
+  },
+}
+```
+
+## <Heading badge="v1.5.0+">Focus-visible</Heading>
+
+<TipCompat>Note that focus-visible currently requires a polyfill for sufficient browser support.</TipCompat>
+
+Add the `focus-visible:` prefix to only apply a utility when an element has focus but only if the user is using the keyboard.
+
+```html
+<template preview class="p-8">
+  <ul class="flex space-x-8">
+    <li>
+      <a class="text-blue-500 hover:text-blue-800 focus:outline-none focus:underline" href="#" onclick="((e) => {e.stopPropagation(); e.preventDefault()})(event)">Underlined on focus</a>
+    </li>
+    <li>
+      <a class="text-blue-500 hover:text-blue-800 focus:outline-none focus-visible:underline" href="#" onclick="((e) => {e.stopPropagation(); e.preventDefault()})(event)">Underlined on focus-visible</a>
+    </li>
+  </ul>
+</template>
+
+<ul class="flex space-x-8">
+  <li>
+    <a class="focus:outline-none focus:underline ..." href="#">
+      Underlined on focus
+    </a>
+  </li>
+  <li>
+    <a class="focus:outline-none focus-visible:underline ..." href="#">
+      Underlined on focus-visible
+    </a>
+  </li>
+</ul>
+```
+
+Note that only Firefox supports `focus-visible` natively, so for sufficient browser support you should install and configure both the [focus-visible JS polyfill](https://github.com/WICG/focus-visible) and the [focus-visible PostCSS polyfill](https://github.com/csstools/postcss-focus-visible). Make sure to include the PostCSS plugin _after_ Tailwind in your list of PostCSS plugins:
+
+```js
+// postcss.config.js
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    'postcss-focus-visible': {},
+    autoprefixer: {}
+  }
+}
+```
+
+You can control whether `focus-visible` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    textDecoration: ['responsive', 'hover', 'focus', 'focus-visible'],
+  },
+}
+```
+
+## <Heading badge="v1.6.0+">Motion-safe</Heading>
+
+Add the `motion-safe:` prefix to only apply a utility when the `prefers-reduced-motion` media feature matches `no-preference`.
+
+For example, this button will only animate on hover if the user hasn't enabled "Reduce motion" on their system.
+
+```html
+<template preview class="p-6 text-center">
+  <button type="button" class="bg-blue-500 active:bg-blue-700 text-white font-semibold hover:text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline transition transform ease-in-out duration-300 motion-safe:hover:-translate-y-1 motion-safe:hover:scale-110">
+    Hover
+  </button>
+</template>
+
+<button class="transform motion-safe:hover:-translate-y-1 motion-safe:hover:scale-110 transition ease-in-out duration-300 ...">
+  Hover
+</button>
+```
+
+Note that unlike most other variants, `motion-safe` can be combined with both responsive variants _and_ other variants like `hover`, by stacking them in this order:
+
+```html
+<div class="sm:motion-safe:hover:animate-spin">
+  <!-- ... -->
+</div>
+```
+
+You can control whether `motion-safe` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    translate: ['responsive', 'hover', 'focus', 'motion-safe'],
+  },
+}
+```
+
+## <Heading badge="v1.6.0+">Motion-reduce</Heading>
+
+Add the `motion-reduce:` prefix to only apply a utility when the `prefers-reduced-motion` media feature matches `reduce`.
+
+For example, this button will animate on hover by default, but the animations will be disabled if the user has enabled "Reduce motion" on their system.
+
+```html
+<template preview class="p-6 text-center">
+  <button type="button" class="bg-blue-500 active:bg-blue-700 text-white font-semibold hover:text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline transition transform ease-in-out duration-300 hover:-translate-y-1 hover:scale-110 motion-reduce:hover:transform-none">
+    Hover
+  </button>
+</template>
+
+<button class="transform motion-reduce:transform-none hover:-translate-y-1 hover:scale-110 transition ease-in-out duration-300 ...">
+  Hover
+</button>
+```
+
+Note that unlike most other variants, `motion-reduce` can be combined with both responsive variants _and_ other variants like `hover`, by stacking them in this order:
+
+```html
+<div class="sm:motion-reduce:hover:animate-none">
+  <!-- ... -->
+</div>
+```
+
+You can control whether `motion-reduce` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    translate: ['responsive', 'hover', 'focus', 'motion-reduce'],
+  },
+}
+```
+
+## <Heading badge="v1.1.0+">Disabled</Heading>
+
+Add the `disabled:` prefix to only apply a utility when an element is disabled.
+
+```html
+<template preview class="text-center p-4">
+  <button type="button" class="ml-4 disabled:opacity-75 bg-blue-500 active:bg-blue-700 text-white font-semibold hover:text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+    Submit
+  </button>
+  <button disabled type="button" class="ml-4 disabled:opacity-75 bg-blue-500 active:bg-blue-700 text-white font-semibold hover:text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+    Submit
+  </button>
+</template>
+
+<button class="disabled:opacity-75 bg-blue-500...">
+  Submit
+</button>
+
+<button disabled class="disabled:opacity-75 bg-blue-500...">
+  Submit
+</button>
+```
+
+You can control whether `disabled` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    opacity: ['responsive', 'hover', 'focus', 'disabled'],
+  },
+}
+```
+
+## <Heading badge="v1.1.0+">Visited</Heading>
+
+Add the `visited:` prefix to only apply a utility when a link has been visited.
+
+```html
+<template preview class="text-center p-4">
+  <a href="#" class="underline font-semibold text-blue-600">Unvisited link</a>
+  <a href="#" class="ml-4 underline font-semibold text-purple-600">Visited link</a>
+</template>
+
+<a href="#" class="text-blue-600 visited:text-purple-600 ...">Link</a>
+```
+
+You can control whether `visited` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    textColor: ['responsive', 'hover', 'focus', 'visited'],
+  },
+}
+```
+
+## <Heading badge="v1.5.0+">Checked</Heading>
+
+Add the `checked:` prefix to only apply a utility when a radio or checkbox is currently checked.
+
+```html
+<template preview class="flex items-center justify-center p-8">
+  <div class="space-y-2">
+    <label class="flex items-center space-x-4">
+      <input type="radio" name="checked-demo" value="1" class="appearance-none h-3 w-3 border border-gray-400 rounded-full checked:bg-gray-900 checked:border-transparent focus:outline-none">
+      <span>Option 1</span>
+    </label>
+    <label class="flex items-center space-x-4">
+      <input type="radio" name="checked-demo" value="2" class="appearance-none h-3 w-3 border border-gray-400 rounded-full checked:bg-gray-900 checked:border-transparent focus:outline-none">
+      <span>Option 2</span>
+    </label>
+    <label class="flex items-center space-x-4">
+      <input type="radio" name="checked-demo" value="3" class="appearance-none h-3 w-3 border border-gray-400 rounded-full checked:bg-gray-900 checked:border-transparent focus:outline-none">
+      <span>Option 3</span>
+    </label>
+  </div>
+</template>
+
+<input type="radio" class="appearance-none checked:bg-gray-900 checked:border-transparent ...">
+```
+
+You can control whether `checked` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    backgroundColor: ['responsive', 'hover', 'focus', 'checked'],
+  },
+}
+```
+
+## <Heading badge="v1.1.0+">First-child</Heading>
+
+Add the `first:` prefix to only apply a utility when it is the first-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
+
+```html
+<template preview class="text-center p-4">
+  <div class="text-left max-w-sm border rounded">
+    <div class="px-4 py-2 border-t first:border-t-0">One</div>
+    <div class="px-4 py-2 border-t first:border-t-0">Two</div>
+    <div class="px-4 py-2 border-t first:border-t-0">Three</div>
+  </div>
+</template>
+
+<div class="border rounded">
+  <div v-for="item in items" class="border-t first:border-t-0">
+    {{ item }}
+  </div>
+</div>
+```
+
+It's important to note that you should add any `first:` utilities to the child element, not the parent element.
+
+You can control whether `first` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    borderWidth: ['responsive', 'first', 'hover', 'focus'],
+  },
+}
+```
+
+## <Heading badge="v1.1.0+">Last-child</Heading>
+
+Add the `last:` prefix to only apply a utility when it is the last-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
+
+```html
+<template preview class="text-center p-4">
+  <div class="text-left max-w-sm border rounded">
+    <div class="px-4 py-2 border-b last:border-b-0">One</div>
+    <div class="px-4 py-2 border-b last:border-b-0">Two</div>
+    <div class="px-4 py-2 border-b last:border-b-0">Three</div>
+  </div>
+</template>
+
+<div class="border rounded">
+  <div v-for="item in items" class="border-b last:border-b-0">
+    {{ item }}
+  </div>
+</div>
+```
+
+It's important to note that you should add any `last:` utilities to the child element, not the parent element.
+
+You can control whether `last` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    borderWidth: ['responsive', 'last', 'hover', 'focus'],
+  },
+}
+```
+
+## <Heading badge="v1.1.0+">Odd-child</Heading>
+
+Add the `odd:` prefix to only apply a utility when it is an odd-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
+
+```html
+<template preview class="text-center p-4">
+  <div class="rounded overflow-hidden text-left max-w-sm border">
+    <div class="px-4 py-2 bg-white odd:bg-gray-200">One</div>
+    <div class="px-4 py-2 bg-white odd:bg-gray-200">Two</div>
+    <div class="px-4 py-2 bg-white odd:bg-gray-200">Three</div>
+  </div>
+</template>
+
+<div class="border rounded">
+  <div v-for="item in items" class="bg-white odd:bg-gray-200">
+    {{ item }}
+  </div>
+</div>
+```
+
+It's important to note that you should add any `odd:` utilities to the child element, not the parent element.
+
+You can control whether `odd` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    backgroundColor: ['responsive', 'odd', 'hover', 'focus'],
+  },
+}
+```
+
+## <Heading badge="v1.1.0+">Even-child</Heading>
+
+Add the `even:` prefix to only apply a utility when it is an even-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
+
+```html
+<template preview class="text-center p-4">
+  <div class="rounded overflow-hidden text-left max-w-sm border">
+    <div class="px-4 py-2 bg-white even:bg-gray-200">One</div>
+    <div class="px-4 py-2 bg-white even:bg-gray-200">Two</div>
+    <div class="px-4 py-2 bg-white even:bg-gray-200">Three</div>
+  </div>
+</template>
+
+<div class="border rounded">
+  <div v-for="item in items" class="bg-white even:bg-gray-200">
+    {{ item }}
+  </div>
+</div>
+```
+
+It's important to note that you should add any `even:` utilities to the child element, not the parent element.
+
+You can control whether `even` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variants: {
+    backgroundColor: ['responsive', 'even', 'hover', 'focus'],
+  },
+}
+```
+
+---
+
+## Combining with responsive prefixes
+
+Pseudo-class variants are also responsive, meaning you can do things like change an element's hover style at different breakpoints for example.
+
+To apply a pseudo-class variant at a specific breakpoint, add the responsive prefix first, before the pseudo-class prefix:
+
+<ResponsiveCodeSample
+  classNames={[['bg-orange-500', 'hover:bg-orange-600'], ['bg-green-500', 'hover:bg-green-600'], ['bg-red-500', 'hover:bg-red-600'], ['bg-indigo-500', 'hover:bg-indigo-600'], ['bg-pink-500', 'hover:bg-pink-600']]}
+  preview={(className) => (
+    <div className="text-center">
+      <button className={`px-4 py-2 rounded text-white font-bold ${className}`}>Button</button>
+    </div>
+  )}
+/>
+
+---
+
+## Generative variants for custom utilities
+
+You can generate pseudo-class variants for your own custom utilities by wrapping them with the `@variants` directive in your CSS:
+
+```css
+/* Input: */
+@variants group-hover, hover, focus {
+  .banana {
+    color: yellow;
+  }
+}
+
+/* Output: */
+.banana {
+  color: yellow;
+}
+.group:hover .group-hover\:banana {
+  color: yellow;
+}
+.hover\:banana:hover {
+  color: yellow;
+}
+.focus\:banana:focus {
+  color: yellow;
+}
+
+```
+
+For more information, see the [@variants directive documentation](/docs/functions-and-directives#variants).
+
+---
+
+## Creating custom variants
+
+You can create your own variants for any pseudo-classes Tailwind doesn't include by default by writing a custom variant plugin.
+
+For example, this simple plugin adds support for the `disabled` pseudo-class variant:
+
+```js
+// tailwind.config.js
+const plugin = require('tailwindcss/plugin')
+
+module.exports = {
+  plugins: [
+    plugin(function({ addVariant, e }) {
+      addVariant('disabled', ({ modifySelectors, separator }) => {
+        modifySelectors(({ className }) => {
+          return `.${e(`disabled${separator}${className}`)}:disabled`
+        })
+      })
+    })
+  ]
+}
+```
+
+Learn more about writing variant plugins in the [variant plugin documentation](/docs/plugins#adding-variants).
+
+---
+
+## Default variants reference
+
+Due to file-size considerations, Tailwind does not include all variants for all utilities by default.
+
+To configure which variants are enabled for your project, see the [configuring variants documentation](/docs/configuring-variants).
+
+<DefaultVariantsConfig />

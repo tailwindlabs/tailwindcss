@@ -1,0 +1,203 @@
+---
+title: Release Notes
+description: What's new in the latest version of Tailwind CSS.
+---
+
+import { ColorPalette } from '@/components/ColorPalette'
+
+## Tailwind CSS v1.6
+
+<div className="-mt-4 text-gray-600">July 28, 2020</div>
+
+Tailwind CSS v1.6 is now available animation support (!) and a bunch of other neat stuff:
+
+- [Animation support](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.6.0#animation-support)
+- [New prefers-reduced-motion variants](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.6.0#new-prefers-reduced-motion-variants)
+- [New overscroll-behavior utilities](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.6.0#new-overscroll-behavior-utilities)
+- [Generate your CSS without an input file](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.6.0#generate-your-css-without-an-input-file)
+
+For all the details, [check out the complete release notes on GitHub](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.6.0).
+
+---
+
+## Tailwind CSS v1.5
+
+<div className="-mt-4 text-gray-600">July 15, 2020</div>
+
+Tailwind CSS v1.5 is now available with a handful of useful new features:
+
+- [Component variants support](https://github.com/tailwindlabs/tailwindcss/releases#component-variants-support)
+- [Responsive container variants](https://github.com/tailwindlabs/tailwindcss/releases#responsive-container-variants)
+- [New focus-visible variant](https://github.com/tailwindlabs/tailwindcss/releases#new-focus-visible-variant)
+- [New checked variant](https://github.com/tailwindlabs/tailwindcss/releases#new-checked-variant)
+
+For the full list of changes, [check out the complete release notes on GitHub](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.5.0).
+
+---
+
+## Tailwind CSS v1.4
+
+<div className="-mt-4 text-gray-600">Apr 29, 2020</div>
+
+Tailwind CSS v1.4 is out now with a couple of major new features:
+
+- [New color opacity utilities](/docs/background-opacity)
+- [Built-in PurgeCSS support](/docs/controlling-file-size)
+
+For the full list of changes, [check out the complete release notes on GitHub](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.4.0).
+
+---
+
+
+## Tailwind CSS v1.3
+
+<div className="-mt-4 text-gray-600">Apr 21, 2020</div>
+
+Tailwind CSS v1.3 is now available with a bunch of super useful new features, including:
+
+- [New "space between" layout utilities](/docs/space)
+- [New "border between" utilities](/docs/divide-width)
+- [New transition-delay utilities](/docs/transition-delay)
+- [New group-focus variant](/docs/pseudo-class-variants/#group-focus)
+
+For the full list of changes, [check out the complete release notes on GitHub](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.3.0).
+
+---
+
+## Tailwind CSS v1.2
+
+<div className="-mt-4 text-gray-600">Feb 5, 2020</div>
+
+Tailwind CSS v1.2 is here and it's the biggest feature release since v0.1 dropped two and a half years ago!
+
+Here are the features you're probably going to be the most excited about:
+
+- [CSS Grid support](/docs/grid-template-columns)
+- [CSS Transitions support](/docs/transition-property)
+- [CSS Transforms support](/docs/scale)
+
+For the full list of changes, [check out the complete release notes on GitHub](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.2.0).
+
+---
+
+## Tailwind CSS v1.1
+
+<div className="-mt-4 text-gray-600">Aug 6, 2019</div>
+
+The first new feature release since v1.0 has arrived! Tailwind v1.1 includes a bunch of new stuff, but I think the things you'll probably be most excited about are:
+
+- [New screenreader visibility utilities](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.1.0#added-utilities-for-screenreader-visibility)
+- [New utilities for setting the placeholder color on form elements](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.1.0#added-utilities-for-placeholder-color)
+- [New variants for `first-child`, `last-child`, `nth-child(odd)`, and `nth-child(even)`](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.1.0#first-last-even-and-odd-child-variants)
+
+For the full list of changes, [check out the complete release notes on GitHub](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.1.0).
+
+**Important note** — although this is a minor release, it includes two bug fixes that may have a superficial impact on how your site looks if you are using horizontal rules in your site or are relying on the default placeholder color defined in Tailwind's base styles.
+
+Be sure to read through the [fixes](https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.1.0#fixes) section before upgrading to understand the impact.
+
+---
+
+## Tailwind CSS v1.0
+
+<div className="-mt-4 text-gray-600">May 13, 2019</div>
+
+A year and a half in the making, the first stable release of Tailwind CSS is finally here! 🎉
+
+Since we released the first alpha on November 1st, 2017, the framework has seen **43 releases**, racked up **2,281 commits** from **88 contributors**, and been installed over **1.4 million times**.
+
+It's been adopted by big companies like [Algolia](https://www.algolia.com/doc/) and [Mozilla](https://send.firefox.com/), and used to build new startups like [RightMessage](https://rightmessage.com/) and [PingPing](https://pingping.io/).
+
+It's been a long road, but I'm super excited to finally have a truly stable version in the wild for us to build on for the future.
+
+This release focuses mostly on solidifying the existing API and locking in any breaking changes, but does include some exciting changes too.
+
+For a full list of changes and instructions on upgrading, [read the upgrade guide](/docs/upgrading-to-v1).
+
+### Revamped config file format
+
+In v1.0, the config file is completely optional, and if you do add a config file, you only need to specify your customizations, not your entire design system.
+
+```js
+// Example `tailwind.config.js` file
+
+module.exports = {
+  important: true,
+  theme: {
+    fontFamily: {
+      display: ['Gilroy', 'sans-serif'],
+      body: ['Graphik', 'sans-serif'],
+    },
+    extend: {
+      colors: {
+        cyan: '#9cdbff',
+      },
+      margin: {
+        '96': '24rem',
+        '128': '32rem',
+      },
+    }
+  },
+  variants: {
+    opacity: ['responsive', 'hover']
+  }
+}
+```
+
+This makes it a lot easier to know what values are custom for your project and which ones are built in to Tailwind by default, and in general keeps your config file a lot simpler and more manageable.
+
+Learn more about the new configuration format in [the configuration documentation](/docs/configuration).
+
+### Redesigned color palette
+
+Tailwind v1.0 includes a brand new numeric color palette, where each color now comes with nine shades instead of seven.
+
+<ColorPalette colors={['teal']} />
+
+Explore the new color palette in [the customizing colors documentation](/docs/customizing-colors#default-color-palette).
+
+### Updated breakpoints
+
+We've updated the default breakpoints for v1.0 to better reflect common modern device resolutions.
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+    }
+  }
+}
+```
+
+The new breakpoints are more practical to work with and make it a bit easier to avoid annoying compromises in your responsive designs.
+
+New to responsive design with Tailwind? Check out our [responsive design documentation](/docs/responsive-design) to learn more.
+
+### New top/right/bottom/left utilities
+
+Tailwind v1.0 includes new configurable utilities for `top`, `right`, `bottom`, and `left`, so you're no longer limited by the old `pin` classes.
+
+```html
+<div class="top-16"><!-- ... --></div>
+```
+
+Learn more in the [top/right/bottom/left documentation](/docs/top-right-bottom-left).
+
+### New order utilities
+
+Tailwind v1.0 also includes new utilities for the `order` property so you can easily re-order elements inside of flex containers.
+
+```html
+<div class="flex">
+  <div class="order-last">1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
+```
+
+Learn more in the [order documentation](/docs/order).
