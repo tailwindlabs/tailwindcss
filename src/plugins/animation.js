@@ -8,7 +8,7 @@ export default function() {
         return [`@keyframes ${name}`, keyframes]
       })
     )
-    addUtilities(keyframesStyles)
+    addUtilities(keyframesStyles, { respectImportant: false })
 
     const animationConfig = theme('animation')
     const utilities = _.fromPairs(
