@@ -112,7 +112,8 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
                         <a
                           href={`#${section.slug}`}
                           className={`block transition-fast hover:translate-r-2px hover:text-gray-900 font-medium ${
-                            currentSection === section.slug
+                            currentSection === section.slug ||
+                            section.children.findIndex(({ slug }) => slug === currentSection) > -1
                               ? 'translate-r-2px text-gray-900'
                               : 'text-gray-600'
                           }`}
