@@ -13,6 +13,7 @@
     "@mdx-js/loader": "^1.6.13",
     "@next/bundle-analyzer": "^9.4.4",
     "@next/mdx": "^9.4.4",
+    "@reach/rect": "^0.10.5",
     "@sindresorhus/slugify": "^1.1.0",
     "autoprefixer": "^9.8.5",
     "babel-plugin-preval": "^5.0.0",

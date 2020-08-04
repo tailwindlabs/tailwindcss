@@ -1,21 +1,19 @@
 import { useEffect, useContext, useRef } from 'react'
 import { DocumentContext } from '@/layouts/ContentsLayout'
+import { useTop } from '@/hooks/useTop'
 
 export function Heading({ level, id, children, number, badge, className = '', hidden = false }) {
   let Component = `h${level}`
   const { updateHeading } = useContext(DocumentContext)
 
   let ref = useRef()
+  let top = useTop(ref)
 
   useEffect(() => {
-    const resizeObserver = new ResizeObserver(() => {
-      updateHeading(id, ref.current.getBoundingClientRect().top + window.pageYOffset)
-    })
-    resizeObserver.observe(ref.current)
-    return () => {
-      resizeObserver.disconnect()
+    if (typeof top !== 'undefined') {
+      updateHeading(id, top)
     }
-  }, [id, updateHeading])
+  }, [top, id, updateHeading])
 
   return (
     <Component
