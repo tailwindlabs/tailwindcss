@@ -15,7 +15,17 @@ module.exports.withTableOfContents = () => {
           .filter((n) => n.type === 'text')
           .map((n) => n.value)
           .join('')
-        const slug = slugify(title)
+        let slug = slugify(title)
+
+        let allOtherSlugs = contents.flatMap((entry) => [
+          entry.slug,
+          ...entry.children.map(({ slug }) => slug),
+        ])
+        let i = 1
+        while (allOtherSlugs.indexOf(slug) > -1) {
+          slug = `${slugify(title)}-${i}`
+          i++
+        }
 
         node.type = 'jsx'
 
