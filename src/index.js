@@ -10,8 +10,19 @@ import processTailwindFeatures from './processTailwindFeatures'
 import formatCSS from './lib/formatCSS'
 import resolveConfig from './util/resolveConfig'
 import { defaultConfigFile } from './constants'
-
 import defaultConfig from '../stubs/defaultConfig.stub.js'
+
+import uniformColorPalette from './flagged/uniformColorPalette.js'
+
+function getDefaultConfigs(config) {
+  const configs = [defaultConfig]
+
+  if (_.get(config, ['experimental', 'uniformColorPalette'], false)) {
+    configs.unshift(uniformColorPalette)
+  }
+
+  return configs
+}
 
 function resolveConfigPath(filePath) {
   // require('tailwindcss')({ theme: ..., variants: ... })
@@ -46,7 +57,7 @@ function resolveConfigPath(filePath) {
 
 const getConfigFunction = config => () => {
   if (_.isUndefined(config) && !_.isObject(config)) {
-    return resolveConfig([defaultConfig])
+    return resolveConfig([...getDefaultConfigs(defaultConfig)])
   }
 
   // Skip this if Jest is running: https://github.com/facebook/jest/pull/9841#issuecomment-621417584
@@ -60,7 +71,7 @@ const getConfigFunction = config => () => {
 
   const configObject = _.isObject(config) ? _.get(config, 'config', config) : require(config)
 
-  return resolveConfig([configObject, defaultConfig])
+  return resolveConfig([configObject, ...getDefaultConfigs(configObject)])
 }
 
 const plugin = postcss.plugin('tailwind', config => {
