@@ -32,12 +32,11 @@ export function Header({ navIsOpen, onNavToggle }) {
                   opinionated styles you have to fight to override.
                 </p>
                 <div className="flex mt-6 justify-start md:justify-center xl:justify-start">
-                  <a
-                    href="/docs/installation"
-                    className="rounded-lg px-4 md:px-5 xl:px-4 py-3 md:py-4 xl:py-3 bg-teal-500 hover:bg-teal-600 md:text-lg xl:text-base text-white font-semibold leading-tight shadow-md"
-                  >
-                    Get Started
-                  </a>
+                  <Link href="/docs/installation">
+                    <a className="rounded-lg px-4 md:px-5 xl:px-4 py-3 md:py-4 xl:py-3 bg-teal-500 hover:bg-teal-600 md:text-lg xl:text-base text-white font-semibold leading-tight shadow-md">
+                      Get Started
+                    </a>
+                  </Link>
                   <a
                     href="#what-is-tailwind"
                     className="ml-4 rounded-lg px-4 md:px-5 xl:px-4 py-3 md:py-4 xl:py-3 bg-white hover:bg-gray-200 md:text-lg xl:text-base text-gray-800 font-semibold leading-tight shadow-md"
