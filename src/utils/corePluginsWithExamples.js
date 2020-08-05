@@ -32,9 +32,12 @@ module.exports.corePluginsWithExamples = plugins.map((plugin) => {
   })
   return {
     plugin,
-    example: Object.keys(utilities)
-      [Math.floor((Object.keys(utilities).length - 1) / 2)]?.split(/[>:]/)[0]
-      .trim()
-      .substr(1),
+    example:
+      Object.keys(utilities).length > 0
+        ? Object.keys(utilities)
+            [Math.floor((Object.keys(utilities).length - 1) / 2)].split(/[>:]/)[0]
+            .trim()
+            .substr(1)
+        : undefined,
   }
 })
