@@ -1,7 +1,5 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { kebabToTitleCase } from '@/utils/kebabToTitleCase'
-import { removeOrderPrefix } from '@/utils/removeOrderPrefix'
 import { VersionSwitcher } from '@/components/VersionSwitcher'
 import { useIsHome } from '@/hooks/useIsHome'
 import { createContext, forwardRef } from 'react'
@@ -9,20 +7,19 @@ import classnames from 'classnames'
 
 export const SidebarContext = createContext()
 
-function NavItem({ href, as, children, isActive, isPublished, fallbackLink = {} }) {
+function NavItem({ href, children, isActive, isPublished, fallbackHref }) {
   const publishedLinkClassName =
     'hover:translate-x-2px hover:text-gray-900 text-gray-600 font-medium'
   const unpublishedLinkClassName = 'hover:translate-x-2px text-gray-400 font-medium'
   const activeLinkClassName = 'text-teal-600 font-medium'
 
   if (!isPublished) {
-    href = fallbackLink.href
-    as = fallbackLink.as
+    href = fallbackHref
   }
 
   return (
     <li className="mb-3 lg:mb-1">
-      <Link href={href} as={as}>
+      <Link href={href}>
         <a
           className={`px-2 -mx-2 py-1 transition duration-200 ease-in-out relative block ${
             isActive
@@ -44,13 +41,13 @@ function NavItem({ href, as, children, isActive, isPublished, fallbackLink = {} 
   )
 }
 
-function Nav({ base, pages, fallbackLink }) {
+function Nav({ nav, fallbackHref }) {
   const router = useRouter()
 
-  return Object.keys(pages)
+  return Object.keys(nav)
     .map((category) => {
-      let publishedItems = pages[category].filter((item) => item.published)
-      if (publishedItems.length === 0 && !fallbackLink) return null
+      let publishedItems = nav[category].filter((item) => item.published !== false)
+      if (publishedItems.length === 0 && !fallbackHref) return null
       return (
         <div className="mb-8" key={category}>
           <h5
@@ -58,19 +55,18 @@ function Nav({ base, pages, fallbackLink }) {
               publishedItems.length ? 'text-gray-500' : 'text-gray-400'
             }`}
           >
-            {kebabToTitleCase(removeOrderPrefix(category))}
+            {category}
           </h5>
           <ul>
-            {(fallbackLink ? pages[category] : publishedItems).map((item) => (
+            {(fallbackHref ? nav[category] : publishedItems).map((item) => (
               <NavItem
-                key={item.slug}
-                href={`/${base}/${category}/${item.slug}`}
-                as={`/${base}/${removeOrderPrefix(item.slug)}`}
-                isActive={item.slug === router.pathname.split('/').pop()}
-                isPublished={item.published}
-                fallbackLink={fallbackLink}
+                key={item.href}
+                href={item.href}
+                isActive={item.href === router.pathname}
+                isPublished={item.published !== false}
+                fallbackHref={fallbackHref}
               >
-                {item.title}
+                {item.shortTitle || item.title}
               </NavItem>
             ))}
           </ul>
@@ -122,8 +118,7 @@ function TopLevelNav() {
   return (
     <div className="mb-10">
       <TopLevelLink
-        href="/docs/01-getting-started/01-installation"
-        as="/docs/installation"
+        href="/docs/installation"
         isActive={current === '' || current === 'docs'}
         icon={
           <>
@@ -235,11 +230,11 @@ function TopLevelNav() {
   )
 }
 
-export function SidebarLayout({ children, navIsOpen, pages, base, fallbackLink }) {
+export function SidebarLayout({ children, navIsOpen, nav, base, fallbackHref }) {
   let isHome = useIsHome()
 
   return (
-    <SidebarContext.Provider value={{ pages }}>
+    <SidebarContext.Provider value={{ nav }}>
       <div className="w-full max-w-screen-xl mx-auto px-6">
         <div className="lg:flex -mx-6">
           <div
@@ -268,7 +263,7 @@ export function SidebarLayout({ children, navIsOpen, pages, base, fallbackLink }
                   </div>
                 </div>
                 <TopLevelNav />
-                <Nav base={base} pages={pages.categorised} fallbackLink={fallbackLink} />
+                <Nav nav={nav} fallbackHref={fallbackHref} />
               </nav>
             </div>
           </div>

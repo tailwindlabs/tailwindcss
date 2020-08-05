@@ -1,18 +1,13 @@
-import { useRouter } from 'next/router'
-import { kebabToTitleCase } from '@/utils/kebabToTitleCase'
-import { removeOrderPrefix } from '@/utils/removeOrderPrefix'
 import Link from 'next/link'
 import { usePrevNext } from '@/hooks/usePrevNext'
 
 export function VideoLayout({ children, meta }) {
-  const router = useRouter()
-  const title = meta.title || kebabToTitleCase(router.pathname.split('/').pop())
   let { next } = usePrevNext()
 
   return (
     <div className="pt-24 pb-16 lg:pt-28 w-full">
       <div className="markdown mb-6 px-6 max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:px-12 xl:w-3/4">
-        <h1>{title}</h1>
+        <h1>{meta.title}</h1>
         <div className="mt-0 mb-4 text-gray-600">{meta.description}</div>
         <hr className="my-8 border-b-2 border-gray-200" />
       </div>
@@ -21,7 +16,7 @@ export function VideoLayout({ children, meta }) {
           <div className="absolute inset-0" data-vimeo-initialized="true">
             <div className="relative" style={{ paddingTop: '56.25%' }}>
               <iframe
-                title={title}
+                title={meta.title}
                 src={`https://player.vimeo.com/video/${meta.vimeoId}?title=0&byline=0&portrait=0&speed=1&app_id=122963`}
                 frameBorder={0}
                 allow="autoplay; fullscreen"
@@ -49,10 +44,7 @@ export function VideoLayout({ children, meta }) {
               <span>Source code</span>
             </a>
           </div>
-          <Link
-            href={next ? `/screencasts/${next.category}/${next.slug}` : '/screencasts/coming-soon'}
-            as={next ? `/screencasts/${removeOrderPrefix(next.slug)}` : undefined}
-          >
+          <Link href={next ? next.href : '/screencasts/coming-soon'}>
             <a className="inline-flex items-center text-gray-600 hover:text-gray-900">
               <span>
                 Next<span className="hidden sm:inline"> lesson</span>

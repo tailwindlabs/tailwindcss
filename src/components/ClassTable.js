@@ -4,6 +4,7 @@ import { defaultConfig } from '@/utils/defaultConfig'
 import { isObject } from '@/utils/isObject'
 import { castArray } from '@/utils/castArray'
 import classnames from 'classnames'
+import { Heading } from '@/components/Heading'
 
 let normalizeProperties = function (input) {
   if (typeof input !== 'object') return input
@@ -76,6 +77,9 @@ export const ClassTable = memo(
 
     return (
       <div className="mt-0 border-t border-b border-gray-300 overflow-hidden relative">
+        <Heading level={2} id="class-reference">
+          <span className="sr-only">Class reference</span>
+        </Heading>
         <div
           className={classnames(
             'overflow-y-auto scrollbar-w-2 scrollbar-track-gray-lighter scrollbar-thumb-rounded scrollbar-thumb-gray scrolling-touch',

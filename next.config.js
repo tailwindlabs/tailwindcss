@@ -1,12 +1,11 @@
-const fs = require('fs')
 const path = require('path')
-const glob = require('glob')
 const querystring = require('querystring')
 const { createLoader } = require('simple-functional-loader')
 const frontMatter = require('front-matter')
 const { withTableOfContents } = require('./remark/withTableOfContents')
 const { withSyntaxHighlighting } = require('./remark/withSyntaxHighlighting')
 const { withProse } = require('./remark/withProse')
+const { withNextLinks } = require('./remark/withNextLinks')
 const minimatch = require('minimatch')
 const withCodeSamples = require('./remark/withCodeSamples')
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
@@ -23,43 +22,10 @@ const fallbackDefaultExports = {
   'src/pages/screencasts/**/*': ['@/layouts/VideoLayout', 'VideoLayout'],
 }
 
-function getRewrites() {
-  return ['docs', 'screencasts'].flatMap((dir) =>
-    glob
-      .sync('*/*.mdx', { cwd: path.resolve(__dirname, `src/pages/${dir}`) })
-      .map((file) => file.replace(/\.mdx$/, ''))
-      .map((file) => ({
-        source: `/${dir}/${file.replace(/^[^/]+\//, '').replace(/^[0-9]+-/, '')}`,
-        destination: `/${dir}/${file}`,
-      }))
-  )
-}
-
 module.exports = withBundleAnalyzer({
   pageExtensions: ['js', 'jsx', 'mdx'],
-  rewrites: getRewrites,
   experimental: {
     modern: true,
-  },
-  exportPathMap: async function (defaultPathMap) {
-    const rewrites = getRewrites()
-    const pathMap = {}
-    for (let pathname in defaultPathMap) {
-      try {
-        let { attributes } = frontMatter(
-          fs.readFileSync(
-            path.resolve(__dirname, `./src/pages${defaultPathMap[pathname].page}.mdx`),
-            'utf8'
-          )
-        )
-        if (attributes.published === false) {
-          continue
-        }
-      } catch (_) {}
-      const rewrite = rewrites.find((rw) => rw.destination === pathname)
-      pathMap[rewrite ? rewrite.source : pathname] = defaultPathMap[pathname]
-    }
-    return pathMap
   },
   webpack(config, options) {
     config.module.rules.push({
@@ -89,6 +55,7 @@ module.exports = withBundleAnalyzer({
               withCodeSamples,
               /*withProse,*/ withTableOfContents,
               withSyntaxHighlighting,
+              withNextLinks,
             ],
           },
         },
@@ -131,7 +98,7 @@ module.exports = withBundleAnalyzer({
           }
 
           return [
-            ...extra,
+            ...(typeof fields === 'undefined' ? extra : []),
             typeof fields === 'undefined' ? body : '',
             `export const meta = ${JSON.stringify(meta)}`,
           ].join('\n\n')

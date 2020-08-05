@@ -9,8 +9,13 @@ import Link from 'next/link'
 export const DocumentContext = createContext()
 
 export function ContentsLayout({ children, meta, classes, tableOfContents }) {
+  const toc = [
+    ...(classes ? [{ title: 'Class reference', slug: 'class-reference', children: [] }] : []),
+    ...tableOfContents,
+  ]
+
   const router = useRouter()
-  let [currentSection, setCurrentSection] = useState(tableOfContents[0]?.slug)
+  let [currentSection, setCurrentSection] = useState(toc[0]?.slug)
   let [headings, setHeadings] = useState([])
   let isHome = useIsHome()
   let { prev, next } = usePrevNext()
@@ -20,7 +25,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
   }, [])
 
   useEffect(() => {
-    if (tableOfContents.length === 0 || headings.length === 0) return
+    if (toc.length === 0 || headings.length === 0) return
     function onScroll() {
       let y = window.pageYOffset
       let windowHeight = window.innerHeight
@@ -48,7 +53,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
     })
     onScroll()
     return () => window.removeEventListener('scroll', onScroll, true)
-  }, [headings, tableOfContents])
+  }, [headings, toc])
 
   return (
     <div className={`pb-16 w-full ${isHome ? 'pt-12' : 'pt-24 lg:pt-28'}`}>
@@ -70,23 +75,27 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
       )}
       <div className="flex">
         <div className="markdown px-6 xl:px-12 w-full max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
-          {classes && <ClassTable {...(isValidElement(classes) ? { custom: classes } : classes)} />}
-          <DocumentContext.Provider value={{ updateHeading }}>{children}</DocumentContext.Provider>
+          <DocumentContext.Provider value={{ updateHeading }}>
+            {classes && (
+              <ClassTable {...(isValidElement(classes) ? { custom: classes } : classes)} />
+            )}
+            {children}
+          </DocumentContext.Provider>
           {(prev || next) && (
             <>
               <hr />
               <div className="-mt-6 flex justify-between">
                 {prev && (
-                  <Link href={`/docs/${prev.category}/${prev.slug}`} as={`/docs/${prev.slug}`}>
+                  <Link href={prev.href}>
                     <a className="font-medium text-blue-500 underline hover:text-blue-700">
-                      ← {prev.title}
+                      ← {prev.shortTitle || prev.title}
                     </a>
                   </Link>
                 )}
                 {next && (
-                  <Link href={`/docs/${next.category}/${next.slug}`} as={`/docs/${next.slug}`}>
+                  <Link href={next.href}>
                     <a className="font-medium text-blue-500 underline hover:text-blue-700">
-                      {next.title} →
+                      {next.shortTitle || next.title} →
                     </a>
                   </Link>
                 )}
@@ -100,13 +109,13 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
               isHome ? 'top-0' : 'top-16'
             }`}
           >
-            {tableOfContents.length > 0 && (
+            {toc.length > 0 && (
               <div className="mb-8">
                 <h5 className="text-gray-500 uppercase tracking-wide font-bold text-sm lg:text-xs">
                   On this page
                 </h5>
                 <ul className="mt-4 overflow-x-hidden">
-                  {tableOfContents.map((section) => (
+                  {toc.map((section) => (
                     <Fragment key={section.slug}>
                       <li className="mb-2">
                         <a
