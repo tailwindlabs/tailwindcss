@@ -1,0 +1,100 @@
+---
+title: "Word Break"
+description: "Utilities for controlling word breaks in an element."
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/wordBreak'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Normal
+
+Use `.break-normal` to only add line breaks at normal word break points.
+
+```html
+<template preview>
+  <p class="break-normal max-w-xs p-2 bg-gray-200 mx-auto">
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
+  </p>
+</template>
+
+<p class="break-normal ...">...</p>
+```
+
+## Break Words
+
+Use `.break-words` to add line breaks mid-word if needed.
+
+```html
+<template preview>
+  <p class="break-words max-w-xs p-2 bg-gray-200 mx-auto">
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
+  </p>
+</template>
+
+<p class="break-words ...">...</p>
+```
+
+## Break All
+
+Use `.break-all` to add line breaks whenever necessary, without trying to preserve whole words.
+
+```html
+<template preview>
+  <p class="break-all max-w-xs p-2 bg-gray-200 mx-auto">
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
+  </p>
+</template>
+
+<p class="break-all ...">...</p>
+```
+
+## Truncate
+
+Use `.truncate` to truncate overflowing text with an ellipsis (<code>…</code>) if needed.
+
+```html
+<template preview>
+  <p class="truncate max-w-xs p-2 bg-gray-200 mx-auto">
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
+  </p>
+</template>
+
+<p class="truncate ...">...</p>
+```
+
+## Responsive
+
+To control the word breaks in an element only at a specific breakpoint, add a `{screen}:` prefix to any existing word break utility. For example, adding the class `md:break-all` to an element would apply the `break-all` utility at medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['break-normal', 'break-words', 'break-all', 'truncate', 'break-normal']}
+  snippet={(classNames) => `
+    <p class="${classNames} ...">
+      ...
+    </p>
+  `}
+  preview={(className) => (
+    <p className={`max-w-xs p-2 bg-gray-200 mx-auto ${className}`}>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
+    </p>
+  )}
+/>
+
+## Customizing
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="wordBreak" />
+
+### Disabling
+
+<Disabling plugin="wordBreak" />

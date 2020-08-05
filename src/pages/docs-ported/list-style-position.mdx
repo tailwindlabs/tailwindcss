@@ -1,0 +1,89 @@
+---
+title: "List Style Position"
+description: "Utilities for controlling the position of bullets/numbers in lists."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/listStylePosition'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Usage
+
+Control the position of the markers in a list using the `list-inside` and `list-outside` utilities.
+
+```html
+<template preview class="p-4 px-8">
+  <div class="mb-6">
+    <p class="text-sm text-gray-600">.list-inside</p>
+    <ul class="list-disc list-inside bg-gray-200 text-gray-800 py-2">
+      <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
+      <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
+      <li>Quidem, ipsam illum quis sed voluptatum quae eum fugit earum</li>
+    </ul>
+  </p>
+  </div>
+  <div class="mb-6">
+    <p class="text-sm text-gray-600">.list-outside</p>
+    <ul class="list-disc list-outside bg-gray-200 text-gray-800 py-2">
+      <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
+      <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
+      <li>Quidem, ipsam illum quis sed voluptatum quae eum fugit earum</li>
+    </ul>
+  </div>
+</template>
+
+<ul class="list-inside bg-gray-200 ...">
+  <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
+  ...
+</ul>
+
+<ul class="list-outside bg-gray-200 ...">
+  <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
+  ...
+</ul>
+```
+
+## Responsive
+
+To control the list style position of a list element at a specific breakpoint, add a `{screen}:` prefix to any existing list utility. For example, use `.md:list-inside` to apply the `.list-inside` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['list-inside', 'list-outside', 'list-inside', 'list-outside', 'list-inside']}
+  snippet={(classNames) => `
+    <ul class="${classNames}">
+      <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
+      <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
+      <li>Quidem, ipsam illum quis sed voluptatum quae eum fugit earum</li>
+    </ul>
+  `}
+  preview={(className) => (
+    <ul className={`list-disc ${className}`}>
+      <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
+      <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
+      <li>Quidem, ipsam illum quis sed voluptatum quae eum fugit earum</li>
+    </ul>
+  )}
+/>
+
+## Customizing
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="listStylePosition" />
+
+### Disabling
+
+<Disabling plugin="listStylePosition" />

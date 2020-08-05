@@ -1,0 +1,139 @@
+---
+title: "Object Fit"
+description: "Utilities for controlling how a replaced element's content should be resized."
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/objectFit'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Contain
+
+Resize an element's content to stay contained within its container using `.object-contain`.
+
+```html
+<template preview>
+  <div class="p-4">
+    <p class="text-sm text-gray-600">.object-contain</p>
+    <div class="bg-gray-400">
+      <img class="h-48 w-full object-contain" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="">
+    </div>
+  </div>
+</template>
+
+<div class="bg-gray-400">
+  <img class="object-contain h-48 w-full ...">
+</div>
+```
+
+## Cover
+
+Resize an element's content to cover its container using `.object-cover`.
+
+```html
+<template preview>
+  <div class="p-4">
+    <p class="text-sm text-gray-600">.object-cover</p>
+    <div class="bg-gray-400">
+      <img class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="">
+    </div>
+  </div>
+</template>
+
+<div class="bg-gray-400">
+  <img class="object-cover h-48 w-full ...">
+</div>
+```
+
+## Fill
+
+Stretch an element's content to fit its container using `.object-fill`.
+
+```html
+<template preview>
+  <div class="p-4">
+    <p class="text-sm text-gray-600">.object-fill</p>
+    <div class="bg-gray-400">
+      <img class="h-48 w-full object-fill" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="">
+    </div>
+  </div>
+</template>
+
+<div class="bg-gray-400">
+  <img class="object-fill h-48 w-full ...">
+</div>
+```
+
+## None
+
+Display an element's content at its original size ignoring the container size using `.object-none`.
+
+```html
+<template preview>
+  <div class="p-4">
+    <p class="text-sm text-gray-600">.object-none</p>
+    <div class="bg-gray-400">
+      <img class="h-48 w-full object-none" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="">
+    </div>
+  </div>
+</template>
+
+<div class="bg-gray-400">
+  <img class="object-none h-48 w-full ...">
+</div>
+```
+
+## Scale Down
+
+Display an element's content at its original size but scale it down to fit its container if necessary using `.object-scale-down`.
+
+```html
+<template preview>
+  <div class="p-4">
+    <p class="text-sm text-gray-600">.object-scale-down</p>
+    <div class="bg-gray-400">
+      <img class="h-48 w-full object-scale-down" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&h=128&q=80" alt="">
+    </div>
+  </div>
+</template>
+
+<div class="bg-gray-400">
+  <img class="object-scale-down h-48 w-full ...">
+</div>
+```
+
+## Responsive
+
+To control how a replaced element's content should be resized only at a specific breakpoint, add a `{screen}:` prefix to any existing object fit utility. For example, adding the class `md:object-scale-down` to an element would apply the `object-scale-down` utility at medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['object-contain', 'object-cover', 'object-fill', 'object-none', 'object-scale-down']}
+  snippet={(classNames) => `
+    <div class="bg-gray-400">
+      <img class="${classNames} ..." src="...">
+    </div>
+  `}
+  preview={(className) => (
+    <div className="bg-gray-400">
+      <img className={`h-48 w-full ${className}`} src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="" />
+    </div>
+  )}
+/>
+
+## Customizing
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="objectFit" name="object-fit" />
+
+### Disabling
+
+<Disabling plugin="objectFit" name="object-fit" />

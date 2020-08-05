@@ -1,0 +1,89 @@
+---
+title: "Visibility"
+description: "Utilities for controlling the visibility of an element."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/visibility'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Visible
+
+Use `.visible` to make an element visible. This is mostly useful for undoing the `.invisible` utility at different screen sizes.
+
+```html
+<template preview class="flex justify-center p-4">
+  <div class="bg-gray-400 w-32 h-12"></div>
+  <div class="visible bg-gray-600 w-32 h-12"></div>
+  <div class="bg-gray-400 w-32 h-12"></div>
+</template>
+
+<div class="flex justify-center">
+  <div class="bg-gray-400"></div>
+  <div class="bg-gray-600 visible"></div>
+  <div class="bg-gray-400"></div>
+</div>
+```
+
+## Invisible
+
+Use `.invisible` to hide an element, but still maintain its place in the DOM, affecting the layout of other elements (compare with `.hidden` from the [display](/docs/display#hidden) documentation).
+
+```html
+<template preview class="flex justify-center p-4">
+  <div class="bg-gray-400 w-32 h-12"></div>
+  <div class="invisible bg-gray-600 w-32 h-12"></div>
+  <div class="bg-gray-400 w-32 h-12"></div>
+</template>
+
+<div class="flex justify-center">
+  <div class="bg-gray-400"></div>
+  <div class="bg-gray-600 invisible"></div>
+  <div class="bg-gray-400"></div>
+</div>
+```
+
+## Responsive
+
+To apply a visibility utility only at a specific breakpoint, add a `{screen}:` prefix to the existing class name. For example, adding the class `md:invisible` to an element would apply the `invisible` utility at medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['visible', 'invisible', 'visible', 'invisible', 'visible']}
+  snippet={(classNames) => `
+    <div class="flex justify-center">
+      <div class="bg-gray-400"></div>
+      <div class="bg-gray-600 ${classNames}"></div>
+      <div class="bg-gray-400"></div>
+    </div>
+  `}
+  preview={(className) => (
+    <div className="flex justify-center">
+      <div className="bg-gray-400 w-32 h-12" />
+      <div className={`bg-gray-600 w-32 h-12 ${className}`} />
+      <div className="bg-gray-400 w-32 h-12" />
+    </div>
+  )}
+/>
+
+## Customizing
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="visibility" />
+
+### Disabling
+
+<Disabling plugin="visibility" />

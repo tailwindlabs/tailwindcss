@@ -1,0 +1,95 @@
+---
+title: "Text Transform"
+description: "Utilities for controlling the transformation of text."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/textTransform'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Normal Case
+
+Use the `.normal-case` utility to preserve the original casing. This is typically used to reset capitalization at different breakpoints.
+
+```html
+<template preview>
+  <p class="normal-case text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+</template>
+
+<p class="normal-case ...">The quick brown fox ...</p>
+```
+
+## Uppercase
+
+Use the `.uppercase` utility to uppercase text.
+
+```html
+<template preview>
+  <p class="uppercase text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+</template>
+
+<p class="uppercase ...">The quick brown fox ...</p>
+```
+
+## Lowercase
+
+Use the `.lowercase` utility to lowercase text.
+
+```html
+<template preview>
+  <p class="lowercase text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+</template>
+
+<p class="lowercase ...">The quick brown fox ...</p>
+```
+
+## Capitalize
+
+Use the `.capitalize` utility to capitalize text.
+
+```html
+<template preview>
+  <p class="capitalize text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+</template>
+
+<p class="capitalize ...">The quick brown fox ...</p>
+```
+
+## Responsive
+
+To control the text transformation of an element at a specific breakpoint, add a `{screen}:` prefix to any existing text transformation utility. For example, use `md:uppercase` to apply the `uppercase` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['uppercase', 'lowercase', 'capitalize', 'normal-case', 'uppercase']}
+  snippet={(classNames) => `
+    <p class="${classNames} ...">
+      The quick brown fox jumped over the lazy dog.
+    </p>
+  `}
+  preview={(className) => (
+    <p className={`text-lg text-gray-800 ${className}`}>The quick brown fox jumped over the lazy dog.</p>
+  )}
+/>
+
+## Customizing
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="textTransform" name="text transformation" />
+
+### Disabling
+
+<Disabling plugin="textTransform" name="text transformation" />

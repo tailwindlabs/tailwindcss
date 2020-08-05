@@ -1,0 +1,106 @@
+---
+title: "Grid Template Columns"
+description: "Utilities for specifying the columns in a grid layout."
+featureVersion: "v1.2.0+"
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/gridTemplateColumns'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Usage
+
+Use the `grid-cols-{n}` utilities to create grids with _n_ equally sized columns.
+
+```html
+<template preview class="bg-white p-8">
+  <div class="grid grid-cols-3 gap-4">
+    <div class="bg-gray-300 h-12 flex items-center justify-center">1</div>
+    <div class="bg-gray-500 h-12 flex items-center justify-center">2</div>
+    <div class="bg-gray-300 h-12 flex items-center justify-center">3</div>
+    <div class="bg-gray-500 h-12 flex items-center justify-center">4</div>
+    <div class="bg-gray-300 h-12 flex items-center justify-center">5</div>
+    <div class="bg-gray-500 h-12 flex items-center justify-center">6</div>
+    <div class="bg-gray-300 h-12 flex items-center justify-center">7</div>
+    <div class="bg-gray-500 h-12 flex items-center justify-center">8</div>
+    <div class="bg-gray-300 h-12 flex items-center justify-center">9</div>
+  </div>
+</template>
+
+<div class="grid grid-cols-3 gap-4">
+  <div>1</div>
+  <!-- ... -->
+  <div>9</div>
+</div>
+```
+
+## Responsive
+
+To control the columns of a grid at a specific breakpoint, add a `{screen}:` prefix to any existing grid-template-columns utility. For example, use `md:grid-cols-6` to apply the `grid-cols-6` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4', 'grid-cols-6']}
+  snippet={(classNames) => `
+    <div class="grid ${classNames}">
+      <!-- ... -->
+    </div>
+  `}
+  previewClassName="p-8"
+  preview={(className) => (
+    <div className={`grid gap-4 ${className}`}>
+      <div className="bg-gray-300 h-12"></div>
+      <div className="bg-gray-500 h-12"></div>
+      <div className="bg-gray-300 h-12"></div>
+      <div className="bg-gray-500 h-12"></div>
+      <div className="bg-gray-300 h-12"></div>
+      <div className="bg-gray-500 h-12"></div>
+      <div className="bg-gray-300 h-12"></div>
+      <div className="bg-gray-500 h-12"></div>
+      <div className="bg-gray-300 h-12"></div>
+      <div className="bg-gray-500 h-12"></div>
+      <div className="bg-gray-300 h-12"></div>
+      <div className="bg-gray-500 h-12"></div>
+    </div>
+  )}
+/>
+
+## Customizing
+
+By default Tailwind includes grid-template-column utilities for creating basic grids with up to 12 equal width columns. You change, add, or remove these by customizing the `gridTemplateColumns` section of your Tailwind theme config.
+
+You have direct access to the `grid-template-columns` CSS property here so you can make your custom column values as generic or as complicated and site-specific as you like.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
+        gridTemplateColumns: {
+          // Simple 16 column grid
++         '16': 'repeat(16, minmax(0, 1fr))',
+
+          // Complex site-specific column configuration
++         'footer': '200px minmax(900px, 1fr) 100px',
+        }
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="gridTemplateColumns" name="grid-template-columns" />
+
+### Disabling
+
+<Disabling plugin="gridTemplateColumns" name="grid-template-columns" />

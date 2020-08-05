@@ -1,0 +1,232 @@
+---
+title: "Margin"
+description: "Utilities for controlling an element's margin."
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/margin'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Add margin to a single side
+
+Control the margin on one side of an element using the `m{t|r|b|l}-{size}` utilities.
+
+For example, `mt-6` would add `1.5rem` of margin to the top of an element, `mr-4` would add `1rem` of margin to the right of an element, `mb-8` would add `2rem` of margin to the bottom of an element, and `ml-2` would add `0.5rem` of margin to the left of an element.
+
+```html
+<template preview>
+  <div class="flex justify-around items-start">
+    <div>
+      <p class="text-center text-sm text-gray-600 mb-1">mt-8</p>
+      <div class="flex bg-gray-400">
+        <span class="mt-8 bg-yellow-200">Target</span>
+      </div>
+    </div>
+    <div>
+      <p class="text-center text-sm text-gray-600 mb-1">mr-8</p>
+      <div class="flex bg-gray-400">
+        <span class="mr-8 bg-yellow-200">Target</span>
+      </div>
+    </div>
+    <div>
+      <p class="text-center text-sm text-gray-600 mb-1">mb-8</p>
+      <div class="flex bg-gray-400">
+        <span class="mb-8 bg-yellow-200">Target</span>
+      </div>
+    </div>
+    <div>
+      <p class="text-center text-sm text-gray-600 mb-1">ml-8</p>
+      <div class="flex bg-gray-400">
+        <span class="ml-8 bg-yellow-200">Target</span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<div class="bg-gray-400"><span class="mt-8 bg-yellow-200">Target</span></div>
+<div class="bg-gray-400"><span class="mr-8 bg-yellow-200">Target</span></div>
+<div class="bg-gray-400"><span class="mb-8 bg-yellow-200">Target</span></div>
+<div class="bg-gray-400"><span class="ml-8 bg-yellow-200">Target</span></div>
+```
+
+## Add horizontal margin
+
+Control the horizontal margin of an element using the `mx-{size}` utilities.
+
+```html
+<template preview>
+  <div class="flex justify-around items-center">
+    <div>
+      <p class="text-center text-sm text-gray-600 mb-1">mx-8</p>
+      <div class="flex bg-gray-400">
+        <span class="mx-8 bg-yellow-200">Target</span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<div class="bg-gray-400"><span class="mx-8 bg-yellow-200">Target</span></div>
+```
+
+## Add vertical margin
+
+Control the vertical margin of an element using the `my-{size}` utilities.
+
+```html
+<template preview>
+  <div class="flex justify-around items-center">
+    <div>
+      <p class="text-center text-sm text-gray-600 mb-1">my-8</p>
+      <div class="flex bg-gray-400">
+        <span class="my-8 bg-yellow-200">Target</span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<div class="bg-gray-400"><span class="my-8 bg-yellow-200">Target</span></div>
+```
+
+## Add margin to all sides
+
+Control the margin on all sides of an element using the `m-{size}` utilities.
+
+```html
+<template preview>
+  <div class="flex justify-around items-center">
+    <div>
+      <p class="text-center text-sm text-gray-600 mb-1">m-8</p>
+      <div class="flex bg-gray-400">
+        <span class="m-8 bg-yellow-200">Target</span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<div class="bg-gray-400"><span class="m-8 bg-yellow-200">Target</span></div>
+```
+
+## Negative margins
+
+Control the negative margin of an element using the `-m{side?}-{size}` utilities.
+
+```html
+<template preview>
+  <div class="flex justify-around items-center">
+    <div>
+      <div class="bg-gray-400 h-16 w-32"></div>
+      <div class="bg-yellow-200 h-16 mx-auto -mt-8 w-24 flex items-center justify-center">
+        -mt-8
+      </div>
+    </div>
+  </div>
+</template>
+
+<div class="bg-gray-400 h-16 w-32"></div>
+<div class="-mt-8 bg-yellow-200 mx-auto h-16 w-24 ...">
+  -mt-8
+</div>
+```
+
+---
+
+## Responsive
+
+To control the margin of an element at a specific breakpoint, add a `{screen}:` prefix to any existing margin utility. For example, adding the class `md:my-8` to an element would apply the `my-8` utility at medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['mt-8', '(mt-8) mr-6', '(mt-8 mr-6) mb-4', '(mt-8 mr-6 mb-4) ml-2', 'm-0']}
+  snippet={(classNames) => `
+    <div class="bg-gray-400 ...">
+      <span class="${classNames} bg-yellow-200">Target</span>
+    </div>
+  `}
+  previewClassName="text-center p-4"
+  preview={(className) => (
+    <div className="inline-block bg-gray-400">
+      <div className={`bg-yellow-200 ${className}`}>Target</div>
+    </div>
+  )}
+/>
+
+---
+
+## Customizing
+
+### Margin scale
+
+By default Tailwind provides 20 margin utilities for each side and axis.
+
+If you'd like to customize these values for padding, margin, width, and height all at once, use the `theme.spacing` section of your `tailwind.config.js` file.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      spacing: {
++       sm: '8px',
++       md: '16px',
++       lg: '24px',
++       xl: '48px',
+      }
+    }
+  }
+```
+
+To customize only the margin values, use the `theme.margin` section of your `tailwind.config.js` file.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      margin: {
++       sm: '8px',
++       md: '16px',
++       lg: '24px',
++       xl: '48px',
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+
+### Negative values
+
+If you'd like to add additional negative margin classes (taking the form `-m{side?}-{size}`), prefix the keys in your config file with a dash:
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
+        margin: {
++         '-72': '-18rem',
+        }
+      }
+    }
+  }
+```
+
+Tailwind is smart enough to generate classes like `-mx-72` when it sees the leading dash, not `mx--72` like you might expect.
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="margin" />
+
+### Disabling
+
+<Disabling plugin="margin" />

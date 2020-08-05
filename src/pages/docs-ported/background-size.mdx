@@ -1,0 +1,106 @@
+---
+title: "Background Size"
+description: "Utilities for controlling the background size of an element's background image."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/backgroundSize'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Auto
+
+Use `.bg-auto` to display the background image at its default size.
+
+```html
+<template preview>
+  <div class="w-full bg-gray-400 h-48 bg-center bg-auto" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80');">
+  </div>
+</template>
+
+<div class="bg-auto bg-center ..." style="background-image: url(...)"></div>
+```
+
+## Cover
+
+Use `.bg-cover` to scale the background image until it fills the background layer.
+
+```html
+<template preview>
+  <div class="w-full mx-auto bg-gray-400 h-48 bg-center bg-cover" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80');">
+  </div>
+</template>
+
+<div class="bg-cover bg-center ..." style="background-image: url(...)"></div>
+```
+
+## Contain
+
+Use `.bg-contain` to scale the background image to the outer edges without cropping or stretching.
+
+```html
+<template preview>
+  <div class="w-full bg-gray-400 h-48 bg-center bg-no-repeat bg-contain" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80');">
+  </div>
+</template>
+
+<div class="bg-contain bg-center ..." style="background-image: url(...)"></div>
+```
+
+## Responsive
+
+To control the size of an element's background image at a specific breakpoint, add a `{screen}:` prefix to any existing background size utility. For example, adding the class `md:bg-contain` to an element would apply the `bg-contain` utility at medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['bg-auto', 'bg-cover', 'bg-contain', 'bg-auto', 'bg-cover']}
+  snippet={(classNames) => `
+    <div class="${classNames} ..." style="background-image: url(...)"></div>
+  `}
+  preview={(className) => (
+    <div
+      className={`mx-auto w-64 bg-gray-400 h-48 bg-center bg-no-repeat ${className}`}
+      style={{
+        backgroundImage: `url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80')`
+      }}
+    />
+  )}
+/>
+
+## Customizing
+
+By default Tailwind provides utilities for `auto`, `cover`, and `contain` background sizes. You can change, add, or remove these by editing the `theme.backgroundSize` section of your config.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      backgroundSize: {
+        'auto': 'auto',
+        'cover': 'cover',
+        'contain': 'contain',
++       '50%': '50%',
++       '16': '4rem',
+      }
+    }
+  }
+```
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="backgroundSize" />
+
+### Disabling
+
+<Disabling plugin="backgroundSize" />

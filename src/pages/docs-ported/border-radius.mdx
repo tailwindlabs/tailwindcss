@@ -1,0 +1,153 @@
+---
+title: "Border Radius"
+description: "Utilities for controlling the border radius of an element."
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/borderRadius'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Rounded corners
+
+Use the `.rounded-sm`, `.rounded`, or `.rounded-lg` utilities to apply different border radius sizes to an element.
+
+```html
+<template preview class="flex justify-around text-sm p-4">
+  <div class="bg-gray-400 mr-3 p-4 rounded-sm">.rounded-sm</div>
+  <div class="bg-gray-400 mr-3 p-4 rounded">.rounded</div>
+  <div class="bg-gray-400 mr-3 p-4 rounded-md">.rounded-md</div>
+  <div class="bg-gray-400 p-4 rounded-lg">.rounded-lg</div>
+</template>
+
+<div class="rounded-sm"></div>
+<div class="rounded"></div>
+<div class="rounded-md"></div>
+<div class="rounded-lg"></div>
+```
+
+## Pills and circles
+
+Use the `.rounded-full` utility to create pills and circles.
+
+```html
+<template preview class="flex items-center justify-around text-sm p-4">
+  <div class="bg-gray-400 mr-3 py-2 px-4 rounded-full">Pill shape</div>
+  <div class="bg-gray-400 h-16 w-16 rounded-full flex items-center justify-center">Circle</div>
+</template>
+
+<div class="rounded-full py-2 px-4">Pill shape</div>
+<div class="rounded-full h-16 w-16 flex items-center justify-center">Circle</div>
+```
+
+## No rounding
+
+Use `.rounded-none` to remove an existing border radius from an element.
+
+This is most commonly used to remove a border radius that was applied at a smaller breakpoint.
+
+```html
+<template preview class="flex justify-around text-sm p-4 py-8">
+  <div class="p-4 rounded-none bg-gray-400">.rounded-none</div>
+</template>
+
+<div class="rounded-none"></div>
+```
+
+## Rounding sides separately
+
+Use `.rounded-{t|r|b|l}{-size?}` to only round one side an element.
+
+```html
+<template preview class="flex justify-around text-sm p-4">
+  <div class="bg-gray-400 mr-3 p-4 rounded-t-lg">.rounded-t-lg</div>
+  <div class="bg-gray-400 mr-3 p-4 rounded-r-lg">.rounded-r-lg</div>
+  <div class="bg-gray-400 mr-3 p-4 rounded-b-lg">.rounded-b-lg</div>
+  <div class="bg-gray-400 p-4 rounded-l-lg">.rounded-l-lg</div>
+</template>
+
+<div class="rounded-t-lg"></div>
+<div class="rounded-r-lg"></div>
+<div class="rounded-b-lg"></div>
+<div class="rounded-l-lg"></div>
+```
+
+## Rounding corners separately
+
+Use `.rounded-{tl|tr|br|bl}{-size?}` to only round one corner an element.
+
+```html
+<template preview class="flex justify-around text-sm p-4">
+  <div class="bg-gray-400 mr-3 p-4 rounded-tl-lg">.rounded-tl-lg</div>
+  <div class="bg-gray-400 mr-3 p-4 rounded-tr-lg">.rounded-tr-lg</div>
+  <div class="bg-gray-400 mr-3 p-4 rounded-br-lg">.rounded-br-lg</div>
+  <div class="bg-gray-400 p-4 rounded-bl-lg">.rounded-bl-lg</div>
+</template>
+
+<div class="rounded-tl-lg"></div>
+<div class="rounded-tr-lg"></div>
+<div class="rounded-br-lg"></div>
+<div class="rounded-bl-lg"></div>
+```
+
+## Responsive
+
+To control the border radius of an element at a specific breakpoint, add a `{screen}:` prefix to any existing border radius utility. For example, use `md:rounded-lg` to apply the `rounded-lg` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['rounded', 'rounded-t', 'rounded-b-lg', 'rounded-none', 'rounded-r']}
+  snippet={(classNames) => `
+    <div class="${classNames} ...">
+      <!-- ... -->
+    </div>
+  `}
+  preview={(className) => (
+    <div className="flex justify-center">
+      <div className={`bg-gray-500 w-12 h-12 ${className}`}></div>
+    </div>
+  )}
+/>
+
+## Customizing
+
+### Border Radiuses
+
+By default Tailwind provides five border radius size utilities. You can change, add, or remove these by editing the `theme.borderRadius` section of your Tailwind config.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      borderRadius: {
+        'none': '0',
+-       'sm': '0.125rem',
+-       default: '0.25rem',
++       default: '4px',
+-       'md': '0.375rem',
+-       'lg': '0.5rem',
+-       'full': '9999px',
++       'large': '12px',
+      }
+    }
+  }
+```
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="borderRadius" />
+
+### Disabling
+
+<Disabling plugin="borderRadius" />

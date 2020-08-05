@@ -5,6 +5,17 @@ import { isObject } from '@/utils/isObject'
 import { castArray } from '@/utils/castArray'
 import classnames from 'classnames'
 
+let normalizeProperties = function (input) {
+  if (typeof input !== 'object') return input
+  if (Array.isArray(input)) return input.map(normalizeProperties)
+  return Object.keys(input).reduce((newObj, key) => {
+    let val = input[key]
+    let newVal = typeof val === 'object' ? normalizeProperties(val) : val
+    newObj[key.replace(/([a-z])([A-Z])/g, (m, p1, p2) => `${p1}-${p2.toLowerCase()}`)] = newVal
+    return newObj
+  }, {})
+}
+
 function getUtilities(plugin) {
   if (!plugin) return {}
   const utilities = {}
@@ -12,7 +23,9 @@ function getUtilities(plugin) {
     addUtilities: (utils) => {
       utils = Array.isArray(utils) ? utils : [utils]
       for (let i = 0; i < utils.length; i++) {
-        Object.assign(utilities, utils[i])
+        for (let prop in utils[i]) {
+          utilities[prop] = normalizeProperties(utils[i][prop])
+        }
       }
     },
     theme: (path, defaultValue) => dlv(defaultConfig.theme, path, defaultValue),
@@ -56,7 +69,10 @@ export const ClassTable = memo(
     transformValue,
     custom,
   }) => {
-    const utilities = getUtilities(plugin)
+    const utilities = {}
+    castArray(plugin).forEach((p) => {
+      Object.assign(utilities, getUtilities(p))
+    })
 
     return (
       <div className="mt-0 border-t border-b border-gray-300 overflow-hidden relative">

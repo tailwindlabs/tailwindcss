@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import redent from 'redent'
-import { castArray } from '@/utils/castArray'
+import classnames from 'classnames'
 
 const screens = ['', 'sm:', 'md:', 'lg:', 'xl:']
 
@@ -20,12 +20,26 @@ function Button({ children, active, onClick }) {
 
 const defaultSnippet = (classNames) => `<div class="${classNames}"></div>`
 
-export function ResponsiveCodeSample({ classNames, snippet = defaultSnippet, preview }) {
+export function ResponsiveCodeSample({
+  classNames,
+  snippet = defaultSnippet,
+  preview,
+  previewClassName,
+}) {
+  let groups = Array.isArray(classNames[0]) ? classNames.length : 1
   let [active, setActive] = useState(0)
 
   function getActiveClassName(index) {
+    if (groups > 1) {
+      return classNames.map((group) => {
+        for (let i = index; i >= 0; i--) {
+          if (group[i]) return group[i].replace(/\(([^)]+)\)/g, '$1')
+        }
+        return undefined
+      })
+    }
     for (let i = index; i >= 0; i--) {
-      if (classNames[i]) return classNames[i]
+      if (classNames[i]) return classNames[i].replace(/\(([^)]+)\)/g, '$1')
     }
   }
 
@@ -111,33 +125,50 @@ export function ResponsiveCodeSample({ classNames, snippet = defaultSnippet, pre
         <div className="rounded-t-lg bg-gray-800 border-b border-gray-300 whitespace-pre font-mono text-gray-500 text-sm">
           <pre className="scrollbar-none m-0 p-0 overflow-auto scrolling-touch">
             <code className="inline-block p-4">
-              {redent(snippet('{{CLASSNAMES}}'))
+              {redent(
+                snippet(
+                  groups === 1
+                    ? '{{CLASSNAMES}}'
+                    : Array.from({ length: groups }).map((_, i) => `{{CLASSNAMES[${i}]}}`)
+                )
+              )
                 .trim()
-                .split(/(\{\{CLASSNAMES\}\})/)
-                .flatMap((segment, i) =>
-                  i % 2 === 1
-                    ? classNames
-                        .map((className, j) =>
-                          className ? (
-                            <span
-                              key={`${i}-${j}`}
-                              className={active === j ? 'text-code-yellow' : ''}
-                            >
-                              {j === 0 ? '' : ' '}
-                              {castArray(className)
-                                .map((cn) => `${screens[j]}${cn}`)
-                                .join(' ')}
-                            </span>
-                          ) : null
-                        )
-                        .filter(Boolean)
-                    : segment
-                )}
+                .split(/(\{\{CLASSNAMES(?:\[[0-9]+\])?\}\})/)
+                .flatMap((segment, i) => {
+                  if (i % 2 === 1) {
+                    let match = segment.match(/\[([0-9]+)\]/)
+                    return (match ? classNames[parseInt(match[1], 10)] : classNames)
+                      .map((className, j) =>
+                        className ? (
+                          <span
+                            key={`${i}-${j}`}
+                            className={active === j ? 'text-code-yellow' : ''}
+                          >
+                            {j === 0 ? '' : ' '}
+                            {className
+                              .replace(/\(([^)]+)\)/g, '')
+                              .trim()
+                              .split(/\s+/)
+                              .map((cn) => `${screens[j]}${cn}`)
+                              .join(' ')}
+                          </span>
+                        ) : null
+                      )
+                      .filter(Boolean)
+                  }
+                  return segment
+                })}
             </code>
           </pre>
         </div>
-        <div className="rounded-b-lg border-l border-r border-b border-gray-400 bg-white p-4">
-          {preview(castArray(getActiveClassName(active)).join(' '))}
+        <div
+          className={classnames(
+            'rounded-b-lg border-l border-r border-b border-gray-400 bg-white',
+            previewClassName,
+            { 'p-4': !previewClassName }
+          )}
+        >
+          {preview(getActiveClassName(active))}
         </div>
       </div>
     </div>

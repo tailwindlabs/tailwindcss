@@ -1,0 +1,182 @@
+---
+title: "Grid Column Start / End"
+description: "Utilities for controlling how elements are sized and placed across grid columns."
+featureVersion: "v1.2.0+"
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import gridColumnPlugin from 'tailwindcss/lib/plugins/gridColumn'
+import gridColumnStartPlugin from 'tailwindcss/lib/plugins/gridColumnStart'
+import gridColumnEndPlugin from 'tailwindcss/lib/plugins/gridColumnEnd'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = {
+  plugin: [gridColumnPlugin, gridColumnStartPlugin, gridColumnEndPlugin]
+}
+
+## Spanning columns
+
+Use the `col-span-{n}` utilities to make an element span _n_ columns.
+
+```html
+<template preview class="bg-white p-8">
+  <div class="grid grid-cols-3 gap-4">
+    <div class="col-span-3 bg-gray-300 h-12 flex items-center justify-center"></div>
+    <div class="col-span-2 bg-gray-500 h-12 flex items-center justify-center"></div>
+    <div class="col-span-1 bg-gray-300 h-12 flex items-center justify-center"></div>
+    <div class="col-span-1 bg-gray-300 h-12 flex items-center justify-center"></div>
+    <div class="col-span-2 bg-gray-500 h-12 flex items-center justify-center"></div>
+  </div>
+</template>
+
+<div class="grid grid-cols-3 gap-4">
+  <div class="col-span-3 ..."></div>
+  <div class="col-span-2 ..."></div>
+  <div class="col-span-1 ..."></div>
+  <div class="col-span-1 ..."></div>
+  <div class="col-span-2 ..."></div>
+</div>
+```
+
+## Starting and ending lines
+
+Use the `col-start-{n}` and `col-end-{n}` utilities to make an element start or end at the _nth_ grid line. These can also be combined with the `col-span-{n}` utilities to span a specific number of columns.
+
+Note that CSS grid lines start at 1, not 0, so a full-width element in a 6-column grid would start at line 1 and end at line 7.
+
+```html
+<template preview class="bg-white p-8">
+  <div class="grid grid-cols-6 gap-4">
+    <div class="col-start-2 col-span-4 bg-gray-300 h-12 flex items-center justify-center"></div>
+    <div class="col-start-1 col-end-3 bg-gray-500 h-12 flex items-center justify-center"></div>
+    <div class="col-end-7 col-span-2 bg-gray-500 h-12 flex items-center justify-center"></div>
+    <div class="col-start-1 col-end-7 bg-gray-300 h-12 flex items-center justify-center"></div>
+  </div>
+</template>
+
+<div class="grid grid-cols-6 gap-4">
+  <div class="col-start-2 col-span-4 ..."></div>
+  <div class="col-start-1 col-end-3 ..."></div>
+  <div class="col-end-7 col-span-2 ..."></div>
+  <div class="col-start-1 col-end-7 ..."></div>
+</div>
+```
+
+## Responsive
+
+To control the column placement of an element at a specific breakpoint, add a `{screen}:` prefix to any existing grid-column utility. For example, use `md:col-span-6` to apply the `col-span-6` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={[
+    ['col-span-6', 'col-span-4', 'col-span-3', 'col-span-5', 'col-span-2'],
+    ['col-span-3', 'col-span-2', 'col-span-3', 'col-span-1', 'col-span-4'],
+    ['col-span-3', 'col-span-2', 'col-span-3', 'col-span-4', 'col-span-2'],
+    ['col-span-6', 'col-span-4', 'col-span-3', 'col-span-2', 'col-span-4'],
+  ]}
+  snippet={(classNames) => `
+    <div class="grid grid-cols-6 gap-4">
+      <div class="${classNames[0]}..."></div>
+      <div class="${classNames[1]}..."></div>
+      <div class="${classNames[2]}..."></div>
+      <div class="${classNames[3]}..."></div>
+    </div>
+  `}
+  preview={(className) => (
+    <div className="grid grid-cols-6 gap-4">
+      <div className={`bg-gray-500 h-12 flex items-center justify-center ${className[0]}`}></div>
+      <div className={`bg-gray-300 h-12 flex items-center justify-center ${className[1]}`}></div>
+      <div className={`bg-gray-300 h-12 flex items-center justify-center ${className[2]}`}></div>
+      <div className={`bg-gray-500 h-12 flex items-center justify-center ${className[3]}`}></div>
+    </div>
+  )}
+/>
+
+## Customizing
+
+By default Tailwind includes grid-column utilities for working with grids with up to 12 columns. You change, add, or remove these by customizing the `gridColumn`, `gridColumnStart`, and `gridColumnEnd` sections of your Tailwind theme config.
+
+For creating more `col-{value}` utilities that control the `grid-column` shorthand property directly, customize the `gridColumn` section of your Tailwind theme config:
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
+        gridColumn: {
++         'span-16': 'span 16 / span 16',
+        }
+      }
+    }
+  }
+```
+
+We use this internally for our `col-span-{n}` utilities. Note that since this configures the `grid-column` shorthand property directly, we include the word `span` directly in the value name, it's _not_ baked into the class name automatically. That means you are free to add entries that do whatever you want here — they don't just have to be `span` utilities.
+
+To add new `col-start-{n}` utilities, use the `gridColumnStart` section of your Tailwind theme config:
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
+        gridColumnStart: {
++         '13': '13',
++         '14': '14',
++         '15': '15',
++         '16': '16',
++         '17': '17',
+        }
+      }
+    }
+  }
+```
+
+To add new `col-end-{n}` utilities, use the `gridColumnEnd` section of your Tailwind theme config:
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
+        gridColumnEnd: {
++         '13': '13',
++         '14': '14',
++         '15': '15',
++         '16': '16',
++         '17': '17',
+        }
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+
+### Responsive and pseudo-class variants
+
+By default, only responsive variants are generated for grid-column utilities.
+
+You can control which variants are generated for the grid-column utilities by modifying the `gridColumn`, `gridColumnStart`, and `gridColumnEnd` properties in the `variants` section of your `tailwind.config.js` file.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    variants: {
+      // ...
++     gridColumn: ['responsive', 'hover'],
++     gridColumnStart: ['responsive', 'hover'],
++     gridColumnEnd: ['responsive', 'hover'],
+    }
+  }
+```
+
+Learn more about configuring variants in the [configuring variants documentation](/docs/configuring-variants/).
+
+### Disabling
+
+<Disabling plugin={['gridColumn', 'gridColumnStart', 'gridColumnEnd']} name="grid-column" />

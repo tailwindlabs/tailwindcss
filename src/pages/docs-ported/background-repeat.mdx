@@ -1,0 +1,102 @@
+---
+title: "Background Repeat"
+description: "Utilities for controlling the repetition of an element's background image."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/backgroundRepeat'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Repeat
+
+Use `.bg-repeat` to repeat the background image both vertically and horizontally.
+
+```html
+<template preview>
+  <div class="w-full bg-gray-400 h-48 bg-center bg-repeat" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=128&q=80');">
+  </div>
+</template>
+
+<div class="bg-repeat bg-center ..." style="background-image: url(...)"></div>
+```
+
+## No Repeat
+
+Use `.bg-no-repeat` when you don't want to repeat the background image.
+
+```html
+<template preview>
+  <div class="w-full bg-gray-400 h-48 bg-center bg-no-repeat" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=128&q=80');">
+  </div>
+</template>
+
+<div class="bg-no-repeat bg-center ..." style="background-image: url(...)"></div>
+```
+
+## Repeat Horizontally
+
+Use `.bg-repeat-x` to repeat the background image only horizontally.
+
+```html
+<template preview>
+  <div class="w-full bg-gray-400 h-48 bg-center bg-repeat-x" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=128&q=80');">
+  </div>
+</template>
+
+<div class="bg-repeat-x bg-center ..." style="background-image: url(...)"></div>
+```
+
+## Repeat Vertically
+
+Use `.bg-repeat-y` to repeat the background image only vertically.
+
+```html
+<template preview>
+  <div class="w-full bg-gray-400 h-48 bg-center bg-repeat-y" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=128&q=80');">
+  </div>
+</template>
+
+<div class="bg-repeat-y bg-center ..." style="background-image: url(...)"></div>
+```
+
+## Responsive
+
+To control the repetition of an element's background image at a specific breakpoint, add a `{screen}:` prefix to any existing background repeat utility. For example, adding the class `md:bg-repeat-x` to an element would apply the `bg-repeat-x` utility at medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['bg-repeat', 'bg-no-repeat', 'bg-repeat-x', 'bg-repeat-y', 'bg-no-repeat']}
+  snippet={(classNames) => `
+    <div class="${classNames} ..." style="background-image: url(...)"></div>
+  `}
+  preview={(className) => (
+    <div
+      className={`w-full bg-gray-400 h-48 bg-center ${className}`}
+      style={{
+        backgroundImage: `url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=128&q=80')`
+      }}
+    />
+  )}
+/>
+
+## Customizing
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="backgroundRepeat" />
+
+### Disabling
+
+<Disabling plugin="backgroundRepeat" />

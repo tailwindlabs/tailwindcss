@@ -1,0 +1,119 @@
+---
+title: "Flex Shrink"
+description: "Utilities for controlling how flex items shrink."
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/flexShrink'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Shrink
+
+Use `.flex-shrink` to allow a flex item to shrink if needed:
+
+```html
+<template preview>
+  <div class="flex bg-gray-200">
+    <div class="flex-none text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+      Longer content that cannot flex
+    </div>
+    <div class="flex-shrink text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">
+      Item that will shrink even if it causes the content to wrap
+    </div>
+    <div class="flex-none text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+      Longer content that cannot flex
+    </div>
+  </div>
+</template>
+```
+
+## Don't shrink
+
+Use `.flex-shrink-0` to prevent a flex item from shrinking:
+
+```html
+<template preview>
+  <div class="flex bg-gray-200">
+    <div class="flex-shrink text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+      Item that can shrink if needed
+    </div>
+    <div class="flex-shrink-0 text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">
+      Item that cannot shrink below its initial size
+    </div>
+    <div class="flex-shrink text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+      Item that can shrink if needed
+    </div>
+  </div>
+</template>
+```
+
+## Responsive
+
+To control how a flex item shrinks at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:flex-shrink-0` to apply the `flex-shrink-0` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['flex-shrink', 'flex-shrink-0', 'flex-shrink', 'flex-shrink-0', 'flex-shrink']}
+  snippet={(classNames) => `
+    <div class="flex ...">
+      <!-- ... -->
+      <div class="${classNames} ...">
+        Responsive flex item
+      </div>
+      <!-- ... -->
+    </div>
+  `}
+  preview={(className) => (
+    <div className="flex bg-gray-200">
+      <div className="flex-shrink text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+        Item that can grow or shrink if needed
+      </div>
+      <div className={`text-gray-800 text-center bg-gray-500 px-4 py-2 m-2 ${className}`}>
+        Responsive flex item
+      </div>
+      <div className="flex-shrink text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+        Item that can grow or shrink if needed
+      </div>
+    </div>
+  )}
+/>
+
+## Customizing
+
+### Shrink Values
+
+By default Tailwind provides two `flex-shrink` utilities. You change, add, or remove these by editing the `theme.flexShrink` section of your Tailwind config.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      flexShrink: {
+        '0': 0,
+-       default: 1,
++       default: 2,
++       '1': 1,
+      }
+    }
+  }
+```
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="flexShrink" />
+
+### Disabling
+
+<Disabling plugin="flexShrink" />

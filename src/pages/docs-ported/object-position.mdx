@@ -1,0 +1,131 @@
+---
+title: "Object Position"
+description: "Utilities for controlling how a replaced element's content should be positioned within its container."
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/objectPosition'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Usage
+
+Use the `.object-{side}` utilities to specify how a replaced element's content should be positioned within its container.
+
+```html
+<template preview>
+  <div class="flex justify-around mb-8">
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.object-left-top</p>
+      <img class="mx-auto bg-gray-400 w-24 h-24 object-left-top object-none" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80">
+    </div>
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.object-top</p>
+      <img class="mx-auto bg-gray-400 w-24 h-24 object-top object-none" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80">
+    </div>
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.object-right-top</p>
+      <img class="mx-auto bg-gray-400 w-24 h-24 object-right-top object-none" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80">
+    </div>
+  </div>
+  <div class="flex justify-around mb-8">
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.object-left</p>
+      <img class="mx-auto bg-gray-400 w-24 h-24 object-left object-none" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80">
+    </div>
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.object-center</p>
+      <img class="mx-auto bg-gray-400 w-24 h-24 object-center object-none" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80">
+    </div>
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.object-right</p>
+      <img class="mx-auto bg-gray-400 w-24 h-24 object-right object-none" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80">
+    </div>
+  </div>
+  <div class="flex justify-around">
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.object-left-bottom</p>
+      <img class="mx-auto bg-gray-400 w-24 h-24 object-left-bottom object-none" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80">
+    </div>
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.object-bottom</p>
+      <img class="mx-auto bg-gray-400 w-24 h-24 object-bottom object-none" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80">
+    </div>
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.object-right-bottom</p>
+      <img class="mx-auto bg-gray-400 w-24 h-24 object-right-bottom object-none" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=64&h=64&q=80">
+    </div>
+  </div>
+</template>
+
+<img class="object-none object-left-top bg-gray-400 w-24 h-24" src="...">
+<img class="object-none object-top bg-gray-400 w-24 h-24" src="...">
+<img class="object-none object-right-top bg-gray-400 w-24 h-24" src="...">
+<img class="object-none object-left bg-gray-400 w-24 h-24" src="...">
+<img class="object-none object-center bg-gray-400 w-24 h-24" src="...">
+<img class="object-none object-right bg-gray-400 w-24 h-24" src="...">
+<img class="object-none object-left-bottom bg-gray-400 w-24 h-24" src="...">
+<img class="object-none object-bottom bg-gray-400 w-24 h-24" src="...">
+<img class="object-none object-right-bottom bg-gray-400 w-24 h-24" src="...">
+```
+
+## Responsive
+
+To position an object only at a specific breakpoint, add a `{screen}:` prefix to any existing object position utility. For example, adding the class `md:object-top` to an element would apply the `object-top` utility at medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['object-center', 'object-top', 'object-right', 'object-bottom', 'object-left']}
+  snippet={(classNames) => `
+    <img class="${classNames} ..." src="...">
+  `}
+  preview={(className) => (
+    <img className={`mx-auto bg-gray-400 w-48 h-48 object-none ${className}`} src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=128&h=128&q=80" />
+  )}
+/>
+
+## Customizing
+
+### Object Positioning
+
+By default Tailwind provides nine object position utilities. You can change, add, or remove these by editing the `theme.objectPosition` section of your Tailwind config.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      objectPosition: {
+        bottom: 'bottom',
+        center: 'center',
+        left: 'left',
+-       'left-bottom': 'left bottom',
+-       'left-top': 'left top',
+        right: 'right',
+        'right-bottom': 'right bottom',
+        'right-top': 'right top',
+        top: 'top',
++       'center-bottom': 'center bottom'
++       'center-top': 'center top',
+      }
+    }
+  }
+```
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="objectPosition" />
+
+### Disabling
+
+<Disabling plugin="objectPosition" />

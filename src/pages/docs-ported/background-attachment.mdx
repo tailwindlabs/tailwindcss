@@ -1,0 +1,96 @@
+---
+title: "Background Attachment"
+description: "Utilities for controlling how a background image behaves when scrolling."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/backgroundAttachment'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Fixed
+
+Use `.bg-fixed` to fix the background image relative to the viewport.
+
+```html
+<template preview>
+  <div class="w-full h-48 bg-fixed bg-center overflow-y-scroll" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80');">
+    <div class="h-64"></div>
+  </div>
+</template>
+
+<div class="bg-fixed ..." style="background-image: url(...)"></div>
+```
+
+## Local
+
+Use `.bg-local` to scroll the background image with the container and the viewport.
+
+```html
+<template preview>
+  <div class="w-full h-48 bg-local bg-center overflow-y-scroll" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80');">
+    <div class="h-64"></div>
+  </div>
+</template>
+
+<div class="bg-local ..." style="background-image: url(...)"></div>
+```
+
+## Scroll
+
+Use `.bg-scroll` to scroll the background image with the viewport, but not with the container.
+
+```html
+<template preview>
+  <div class="w-full h-48 bg-scroll bg-center overflow-y-scroll" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80');">
+    <div class="h-64"></div>
+  </div>
+</template>
+
+<div class="bg-scroll ..." style="background-image: url(...)"></div>
+```
+
+## Responsive
+
+To control the background attachment of an element at a specific breakpoint, add a `{screen}:` prefix to any existing background attachment utility. For example, use `md:bg-fixed` to apply the `bg-fixed` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['bg-fixed', 'bg-local', 'bg-scroll', 'bg-local', 'bg-fixed']}
+  snippet={(classNames) => `
+    <div class="${classNames} ...">
+      <!-- ... -->
+    </div>
+  `}
+  preview={(className => (
+    <div
+      className={`w-full h-48 bg-center overflow-y-scroll ${className}`}
+      style={{
+        backgroundImage: `url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80')`
+      }}
+    >
+      <div className="h-64"></div>
+    </div>
+  ))}
+/>
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'background attachment',
+        'property' => 'backgroundAttachment',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

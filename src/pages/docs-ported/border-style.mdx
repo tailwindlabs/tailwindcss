@@ -1,0 +1,88 @@
+---
+title: "Border Style"
+description: "Utilities for controlling the style of an element's borders."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/borderStyle'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Usage
+
+Use `.border-{style}` to control an element's border style.
+
+```html
+<template preview>
+  <div class="block sm:flex sm:justify-around">
+    <div class="sm:w-3/5 sm:mb-0 flex justify-around mb-6">
+      <div class="flex-1">
+        <p class="text-center text-sm text-gray-600 mb-1">.border-solid</p>
+        <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-solid"></div>
+      </div>
+      <div class="flex-1">
+        <p class="text-center text-sm text-gray-600 mb-1">.border-dashed</p>
+        <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-dashed"></div>
+      </div>
+      <div class="flex-1">
+        <p class="text-center text-sm text-gray-600 mb-1">.border-dotted</p>
+        <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-dotted"></div>
+      </div>
+    </div>
+    <div class="sm:w-2/5 flex justify-around">
+      <div class="flex-1">
+        <p class="text-center text-sm text-gray-600 mb-1">.border-double</p>
+        <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-double"></div>
+      </div>
+      <div class="flex-1">
+        <p class="text-center text-sm text-gray-600 mb-1">.border-none</p>
+        <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-none"></div>
+      </div>
+      <div class="flex-1 sm:hidden"></div>
+    </div>
+  </div>
+</template>
+
+<div class="border-solid border-4 border-gray-600 ..."></div>
+<div class="border-dashed border-4 border-gray-600 ..."></div>
+<div class="border-dotted border-4 border-gray-600 ..."></div>
+<div class="border-double border-4 border-gray-600 ..."></div>
+<div class="border-none border-4 border-gray-600 ..."></div>
+```
+
+## Responsive
+
+To control the border style of an element at a specific breakpoint, add a `{screen}:` prefix to any existing border style utility. For example, use `md:border-dotted` to apply the `border-dotted` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['border-solid', 'border-dashed', 'border-dotted', 'border-double', 'border-none']}
+  snippet={(classNames) => `
+    <div class="${classNames}">
+    </div>
+  `}
+  preview={(className) => (
+    <div className={`w-24 h-24 mx-auto border-8 border-gray-600 bg-gray-400 ${className}`} />
+  )}
+/>
+
+## Customizing
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="borderStyle" />
+
+### Disabling
+
+<Disabling plugin="borderStyle" />

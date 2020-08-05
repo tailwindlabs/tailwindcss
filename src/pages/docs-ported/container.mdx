@@ -1,0 +1,163 @@
+---
+title: "Container"
+description: "A component for fixing an element's width to the current breakpoint."
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import { defaultConfig } from '@/utils/defaultConfig'
+export const screens = defaultConfig.theme.screens
+
+export const classes = (
+  <table className="w-full text-left table-collapse">
+    <colgroup>
+      <col className="w-1/4" />
+      <col className="w-1/4" />
+      <col className="w-1/2" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th className="text-sm font-semibold text-gray-700 p-2 bg-gray-100">Class</th>
+        <th className="text-sm font-semibold text-gray-700 p-2 bg-gray-100">Breakpoint</th>
+        <th className="text-sm font-semibold text-gray-700 p-2 bg-gray-100">Properties</th>
+      </tr>
+    </thead>
+    <tbody className="align-baseline">
+      <tr>
+        <td rowSpan={5} className="p-2 border-t border-gray-300 font-mono text-xs text-purple-700">
+          .container
+        </td>
+        <td className="p-2 border-t border-gray-300 font-mono text-xs text-gray-600">
+          <span className="font-sans italic font-sans">None</span>
+        </td>
+        <td className="p-2 border-t border-gray-300 font-mono text-xs text-blue-700">
+          width: 100%;
+        </td>
+      </tr>
+      {Object.keys(screens).map((screen) => (
+        <tr key={screen}>
+          <td className="p-2 border-t border-gray-300 font-mono text-xs text-gray-700">
+            {screen} <span className="text-gray-600 font-sans italic">({screens[screen]})</span>
+          </td>
+          <td className="p-2 border-t border-gray-300 font-mono text-xs text-blue-700">
+            max-width: {screens[screen]};
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+)
+
+## Usage
+
+The `.container` class sets the `max-width` of an element to match the `min-width` of the current breakpoint. This is useful if you'd prefer to design for a fixed set of screen sizes instead of trying to accommodate a fully fluid viewport.
+
+Note that unlike containers you might have used in other frameworks, **Tailwind's container does not center itself automatically and does not have any built-in horizontal padding.**
+
+To center a container, use the `.mx-auto` utility:
+
+```html
+<div class="container mx-auto">
+  <!-- ... -->
+</div>
+```
+
+To add horizontal padding, use the `.px-{size}` utilities:
+
+```html
+<div class="container mx-auto px-4">
+  <!-- ... -->
+</div>
+```
+
+If you'd like to center your containers by default or include default horizontal padding, see the [customization options](#customizing) below.
+
+## Responsive variants
+
+The `container` class also includes responsive variants like `md:container` by default that allow you to make something behave like a container at only a certain breakpoint and up:
+
+```html
+<!-- Full-width fluid until the `lg` breakpoint, then lock to container -->
+<div class="lg:container lg:mx-auto">
+  <!-- ... -->
+</div>
+```
+
+## Customizing
+
+### Centering by default
+
+To center containers by default, set the `center` option to `true` in the `theme.container` section of your config file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    container: {
+      center: true,
+    },
+  },
+}
+```
+
+### Horizontal padding
+
+To add horizontal padding by default, specify the amount of padding you'd like using the `padding` option in the `theme.container` section of your config file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    container: {
+      padding: '2rem',
+    },
+  },
+}
+```
+
+If you want to specify a different padding amount for each breakpoint, use an object to provide a `default` value and any breakpoint-specific overrides:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    container: {
+      padding: {
+        default: '1rem',
+        sm: '2rem',
+        lg: '4rem',
+        xl: '5rem',
+      },
+    },
+  },
+};
+```
+
+### Disabling responsive variants
+
+If you'd like to disable the responsive variants, you can do so using by setting `container` to an empty array in the `variants` section of your `tailwind.config.js` file:
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    variants: {
+      // ...
++     container: [],
+    }
+  }
+```
+
+### Disabling entirely
+
+If you don't plan to use the `.container` class in your project, you can disable it entirely by setting the `container` property to `false` in the `corePlugins` section of your config file:
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    corePlugins: {
+      // ...
++     container: false,
+    }
+  }
+```

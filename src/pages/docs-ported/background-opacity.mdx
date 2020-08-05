@@ -1,0 +1,94 @@
+---
+title: "Background Opacity"
+description: "Utilities for controlling the opacity of an element's background color."
+featureVersion: "v1.4.0+"
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/backgroundOpacity'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+
+export const classes = { plugin }
+
+## Usage
+
+Control the opacity of an element's background color using the `.bg-opacity-{amount}` utilities.
+
+```html
+<template preview class="bg-checkered p-4">
+  <div class="flex justify-around">
+    <div class="h-16 w-16 rounded bg-blue-500 bg-opacity-100"></div>
+    <div class="h-16 w-16 rounded bg-blue-500 bg-opacity-75"></div>
+    <div class="h-16 w-16 rounded bg-blue-500 bg-opacity-50"></div>
+    <div class="h-16 w-16 rounded bg-blue-500 bg-opacity-25"></div>
+    <div class="h-16 w-16 rounded bg-blue-500 bg-opacity-0"></div>
+  </div>
+</template>
+
+<div class="bg-blue-500 bg-opacity-100"></div>
+<div class="bg-blue-500 bg-opacity-75"></div>
+<div class="bg-blue-500 bg-opacity-50"></div>
+<div class="bg-blue-500 bg-opacity-25"></div>
+<div class="bg-blue-500 bg-opacity-0"></div>
+```
+
+## Responsive
+
+To control an element's background color opacity at a specific breakpoint, add a `{screen}:` prefix to any existing background color opacity utility. For example, use `md:bg-opacity-50` to apply the `bg-opacity-50` utility at only medium screen sizes and above.
+
+```html
+<div class="bg-blue-500 bg-opacity-75 md:bg-opacity-50">
+  <!-- ... -->
+</div>
+```
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+## Customizing
+
+To customize the opacity values for all opacity-related utilities at once, use the `opacity` section of your `tailwind.config.js` theme configuration:
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
+        opacity: {
++         '10': '0.1',
++         '20': '0.2',
++         '95': '0.95',
+        }
+      }
+    }
+  }
+```
+
+If you want to customize only the background opacity utilities, use the `backgroundOpacity` section:
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
+        backgroundOpacity: {
++         '10': '0.1',
++         '20': '0.2',
++         '95': '0.95',
+        }
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="backgroundOpacity" />
+
+### Disabling
+
+<Disabling plugin="backgroundOpacity" />

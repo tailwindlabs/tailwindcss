@@ -1,0 +1,121 @@
+---
+title: "Align Items"
+description: "Utilities for controlling how flex items are positioned along a container's cross axis."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/alignItems'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Stretch
+
+Use `.items-stretch` to stretch items to fill the flex container's cross axis:
+
+```html
+<template preview>
+  <div class="flex items-stretch bg-gray-200 h-24">
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  </div>
+</template>
+```
+
+## Start
+
+Use `.items-start` to align items to the start of the flex container's cross axis:
+
+```html
+<template preview>
+  <div class="flex items-start bg-gray-200 h-24">
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  </div>
+</template>
+```
+
+## Center
+
+Use `.items-center` to align items along the center of the flex container's cross axis:
+
+```html
+<template preview>
+  <div class="flex items-center bg-gray-200 h-24">
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  </div>
+</template>
+```
+
+## End
+
+Use `.items-end` to align items to the end of the flex container's cross axis:
+
+```html
+<template preview>
+  <div class="flex items-end bg-gray-200 h-24">
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  </div>
+</template>
+```
+
+## Baseline
+
+Use `.items-baseline` to align items along the flex container's cross axis such that all of their baselines align:
+
+```html
+<template preview>
+  <div class="flex items-baseline bg-gray-200 h-24">
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2 text-base">1</div>
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2 text-2xl">2</div>
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2 text-lg">3</div>
+  </div>
+</template>
+```
+
+## Responsive
+
+To control the alignment of flex items at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:items-center` to apply the `items-center` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['items-stretch', 'items-start', 'items-center', 'items-end', 'items-baseline']}
+  snippet={(classNames) => `
+    <div class="${classNames} ...">
+      <!-- ... -->
+    </div>
+  `}
+  preview={(className) => (
+    <div className={`flex bg-gray-200 h-24 ${className}`}>
+      <div className="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2 text-base">1</div>
+      <div className="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2 text-2xl">2</div>
+      <div className="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2 text-lg">3</div>
+    </div>
+  )}
+/>
+
+## Customizing
+
+@include('_partials.variants-and-disabling', [
+    'utility' => [
+        'name' => 'align-items',
+        'property' => 'alignItems',
+    ],
+    'variants' => [
+        'responsive',
+    ],
+])

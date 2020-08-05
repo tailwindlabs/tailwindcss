@@ -1,0 +1,98 @@
+---
+title: "Max-Height"
+description: "Utilities for setting the maximum height of an element"
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/maxHeight'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Usage
+
+Set the maximum height of an element using the `max-h-full` or `max-h-screen` utilities.
+
+```html
+<template preview>
+  <div class="h-24 p-6 bg-gray-300">
+    <div class="h-48 max-h-full p-6 bg-gray-400 flex items-center justify-center">
+      <span>max-h-full</span>
+    </div>
+  </div>
+</template>
+
+<div class="h-24 ...">
+  <div class="h-48 max-h-full ...">
+    max-h-full
+  </div>
+</div>
+```
+
+---
+
+## Responsive
+
+To control the max-height of an element at a specific breakpoint, add a `{screen}:` prefix to any existing max-height utility.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['max-h-full', 'max-h-screen', 'max-h-full', 'max-h-screen', 'max-h-full']}
+  snippet={(classNames) => `
+    <div class="h-24 ...">
+      <div class="h-48 ${classNames} ...">
+        <span>Target</span>
+      </div>
+    </div>
+  `}
+  preview={(className) => (
+    <div className="h-24 p-6 bg-gray-300">
+      <div className={`h-48 p-6 bg-gray-400 flex items-center justify-center ${className}`}>
+        <span>Target</span>
+      </div>
+    </div>
+  )}
+/>
+
+---
+
+## Customizing
+
+### Max-height scale
+
+Customize Tailwind's default max-height scale in the `theme.maxHeight` section of your `tailwind.config.js` file.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      maxHeight: {
++       '0': '0',
++       '1/4': '25%',
++       '1/2': '50%',
++       '3/4': '75%',
++       'full': '100%',
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="maxHeight" name="max-height" />
+
+### Disabling
+
+<Disabling plugin="maxHeight" name="max-height" />

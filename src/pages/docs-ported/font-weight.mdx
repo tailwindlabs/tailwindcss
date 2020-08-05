@@ -1,0 +1,163 @@
+---
+title: "Font Weight"
+description: "Utilities for controlling the font weight of an element."
+features:
+  responsive: true
+  customizable: true
+  hover: true
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/fontWeight'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Usage
+
+Control the font weight of an element using the `.font-{weight}` utilities.
+
+```html
+<template preview class="font-sans p-4">
+  <div class="mb-6">
+    <p class="text-sm text-gray-600">.font-hairline</p>
+    <p class="font-hairline text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  </div>
+  <div class="mb-6">
+    <p class="text-sm text-gray-600">.font-thin</p>
+    <p class="font-thin text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  </div>
+  <div class="mb-6">
+    <p class="text-sm text-gray-600">.font-light</p>
+    <p class="font-light text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  </div>
+  <div class="mb-6">
+    <p class="text-sm text-gray-600">.font-normal</p>
+    <p class="font-normal text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  </div>
+  <div class="mb-6">
+    <p class="text-sm text-gray-600">.font-medium</p>
+    <p class="font-medium text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  </div>
+  <div class="mb-6">
+    <p class="text-sm text-gray-600">.font-semibold</p>
+    <p class="font-semibold text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  </div>
+  <div class="mb-6">
+    <p class="text-sm text-gray-600">.font-bold</p>
+    <p class="font-bold text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  </div>
+  <div class="mb-6">
+    <p class="text-sm text-gray-600">.font-extrabold</p>
+    <p class="font-extrabold text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  </div>
+  <div>
+    <p class="text-sm text-gray-600">.font-black</p>
+    <p class="font-black text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  </div>
+</template>
+
+<p class="font-hairline ...">The quick brown fox ...</p>
+<p class="font-thin ...">The quick brown fox ...</p>
+<p class="font-light ...">The quick brown fox ...</p>
+<p class="font-normal ...">The quick brown fox ...</p>
+<p class="font-medium ...">The quick brown fox ...</p>
+<p class="font-semibold ...">The quick brown fox ...</p>
+<p class="font-bold ...">The quick brown fox ...</p>
+<p class="font-extrabold ...">The quick brown fox ...</p>
+<p class="font-black ...">The quick brown fox ...</p>
+```
+
+## Responsive
+
+To control the font weight of an element at a specific breakpoint, add a `{screen}:` prefix to any existing font weight utility. For example, use `md:font-bold` to apply the `font-bold` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['font-normal', 'font-bold', 'font-thin', 'font-semibold', 'font-black']}
+  snippet={(classNames) => `
+    <p class="${classNames} ...">The quick brown fox jumped over the lazy dog.</p>
+  `}
+  preview={(className) => (
+    <p className={`text-lg text-gray-800 ${className}`}>The quick brown fox jumped over the lazy dog.</p>
+  )}
+/>
+
+## Hover
+
+To control the font weight of an element on hover, add the `hover:` prefix to any existing style and decoration utility. For example, use `hover:font-bold` to apply the `font-bold` utility on hover.
+
+```html
+<template preview>
+  <div class="text-center text-blue-700">
+    <a href="#" class="font-normal hover:font-bold">Hover over this link</a>
+  </div>
+</template>
+```
+
+Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.
+
+```html
+<a href="#" class="... md:font-normal md:hover:font-bold ...">Link</a>
+```
+
+## Focus
+
+To control the font weight of an element on focus, add the `focus:` prefix to any existing style and decoration utility. For example, use `focus:font-bold` to apply the `font-bold` utility on focus.
+
+```html
+<template preview>
+  <div class="max-w-xs w-full mx-auto">
+    <input class="bg-white font-normal focus:font-bold focus:shadow-outline text-gray-900 appearance-none inline-block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" value="Focus me" placeholder="Focus me">
+  </div>
+</template>
+
+<input class="font-normal focus:font-bold ..." value="Focus me">
+```
+
+Focus utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
+
+```html
+<input class="... md:font-normal md:focus:font-bold ..." value="Focus me">
+```
+
+## Customizing
+
+### Font Weights
+
+By default Tailwind provides 10 `font-weight` utilities. You change, add, or remove these by editing the `theme.fontWeight` section of your Tailwind config.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      fontWeight: {
+-       hairline: 100,
++       'extra-light': 100,
+-       thin: 200,
+        light: 300,
+        normal: 400,
+        medium: 500,
+-       semibold: 600,
+        bold: 700,
+-       extrabold: 800,
++       'extra-bold': 800,
+        black: 900,
+      }
+    }
+  }
+```
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="fontWeight" />
+
+### Disabling
+
+<Disabling plugin="fontWeight" />

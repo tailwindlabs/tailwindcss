@@ -1,0 +1,228 @@
+---
+title: "Gap"
+description: "Utilities for controlling gutters between grid rows and columns."
+featureVersion: "v1.2.0+"
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/gap'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+
+export const classes = {
+  plugin,
+  filterProperties: (property) => !property.startsWith('grid-'),
+}
+
+## Gap
+
+Use `.gap-{size}` to change the gutter size in grid layouts.
+
+```html
+<template preview>
+  <div>
+    <div class="mb-1 text-sm text-gray-600">gap-1</div>
+    <div class="grid grid-cols-2 gap-1">
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <div class="mb-1 text-sm text-gray-600">gap-2</div>
+    <div class="grid grid-cols-2 gap-2">
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <div class="mb-1 text-sm text-gray-600">gap-6</div>
+    <div class="grid grid-cols-2 gap-6">
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+    </div>
+  </div>
+</template>
+
+<div class="grid gap-1 grid-cols-2">
+  <!-- ... -->
+</div>
+
+<div class="grid gap-2 grid-cols-2">
+  <!-- ... -->
+</div>
+
+<div class="grid gap-6 grid-cols-2">
+  <!-- ... -->
+</div>
+```
+
+## Row Gap
+
+Use `.row-gap-{size}` to change the gutter size between rows in grid layouts.
+
+```html
+<template preview>
+  <div>
+    <div class="mb-1 text-sm text-gray-600">row-gap-1</div>
+    <div class="grid grid-cols-2 row-gap-1">
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <div class="mb-1 text-sm text-gray-600">row-gap-2</div>
+    <div class="grid grid-cols-2 row-gap-2">
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <div class="mb-1 text-sm text-gray-600">row-gap-6</div>
+    <div class="grid grid-cols-2 row-gap-6">
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+    </div>
+  </div>
+</template>
+
+<div class="grid row-gap-1 grid-cols-2">
+  <!-- ... -->
+</div>
+
+<div class="grid row-gap-2 grid-cols-2">
+  <!-- ... -->
+</div>
+
+<div class="grid row-gap-6 grid-cols-2">
+  <!-- ... -->
+</div>
+```
+
+## Column Gap
+
+Use `.col-gap-{size}` to change the gutter size between columns in grid layouts.
+
+```html
+<template preview>
+  <div>
+    <div class="mb-1 text-sm text-gray-600">col-gap-1</div>
+    <div class="grid grid-cols-2 col-gap-1">
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <div class="mb-1 text-sm text-gray-600">col-gap-2</div>
+    <div class="grid grid-cols-2 col-gap-2">
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <div class="mb-1 text-sm text-gray-600">col-gap-6</div>
+    <div class="grid grid-cols-2 col-gap-6">
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-500 h-16"></div>
+      <div class="text-gray-700 text-center bg-gray-400 h-16"></div>
+    </div>
+  </div>
+</template>
+
+<div class="grid col-gap-1 grid-cols-2">
+  <!-- ... -->
+</div>
+
+<div class="grid col-gap-2 grid-cols-2">
+  <!-- ... -->
+</div>
+
+<div class="grid col-gap-6 grid-cols-2">
+  <!-- ... -->
+</div>
+```
+
+## Responsive
+
+To control the gap at a specific breakpoint, add a `{screen}:` prefix to any existing gap utility. For example, use `md:gap-6` to apply the `gap-6` utility at only medium screen sizes and above.
+
+```html
+<div class="grid gap-4 sm:gap-6 md:gap-8 lg:gap-12 xl:gap-16 ...">
+  <!-- ... -->
+</div>
+```
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+## Customizing
+
+### Gap values
+
+By default Tailwind's gap scale matches your configured [spacing scale](/docs/customizing-spacing).
+
+You can customize the global spacing scale in the `theme.spacing` or `theme.extend.spacing` sections of your `tailwind.config.js` file:
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
+        spacing: {
++         '72': '18rem',
++         '84': '21rem',
++         '96': '24rem',
+        }
+      }
+    }
+  }
+```
+
+To customize the gap scale separately, use the `gap` section of your Tailwind theme config.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
+        gap: {
++         '11': '2.75rem',
++         '13': '3.25rem',
+        }
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="gap" />
+
+### Disabling
+
+<Disabling plugin="gap" />

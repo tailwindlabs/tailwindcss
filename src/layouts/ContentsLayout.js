@@ -56,9 +56,9 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
         <div className="markdown mb-6 px-6 max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:px-12 xl:w-3/4">
           <h1 className="flex items-center">
             {meta.title || kebabToTitleCase(router.pathname.split('/').pop())}
-            {meta.tailwindVersion && (
+            {meta.featureVersion && (
               <span className="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
-                {meta.tailwindVersion}
+                {meta.featureVersion}
               </span>
             )}
           </h1>

@@ -1,0 +1,82 @@
+---
+title: "Skew"
+description: "Utilities for skewing elements with transform."
+featureVersion: "v1.2.0+"
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/skew'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Usage
+
+Skew an element by first enabling transforms with the `transform` utility, then specifying the skew angle using the `skew-x-{amount}` and `skew-y-{amount}` utilities.
+
+```html
+<template preview class="bg-white lg:flex justify-around items-center text-sm p-4 py-12">
+  <img class="h-16 w-16 rounded transform skew-y-0" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80">
+  <img class="h-16 w-16 rounded transform skew-y-3" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80">
+  <img class="h-16 w-16 rounded transform skew-y-6" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80">
+  <img class="h-16 w-16 rounded transform skew-y-12" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80">
+</template>
+
+<img class="transform skew-y-0 ...">
+<img class="transform skew-y-3 ...">
+<img class="transform skew-y-6 ...">
+<img class="transform skew-y-12 ...">
+```
+
+Note that because Tailwind implements transforms using [CSS custom properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties), **the transform utilities are not supported in older browsers like IE11**. If you need transforms for your project and need to support older browsers, [add your own utilities](/docs/adding-new-utilities) or other custom CSS.
+
+## Responsive
+
+To control the skew of an element at a specific breakpoint, add a `{screen}:` prefix to any existing skew utility. For example, use `md:skew-6` to apply the `skew-6` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['skew-y-0', 'skew-y-12', '-skew-y-12', 'skew-x-6', '-skew-x-6']}
+  snippet={(classNames) => `
+    <img class="transform ${classNames}...">
+  `}
+  previewClassName="flex justify-center items-center px-4 py-12"
+  preview={(className) => (
+    <img className={`h-16 w-16 rounded transform ${className}`} src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" />
+  )}
+/>
+
+## Customizing
+
+### Skew scale
+
+By default Tailwind provides seven general purpose skew utilities. You change, add, or remove these by customizing the `skew` section of your Tailwind theme config.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
+        skew: {
++         '25': '25deg',
++         '60': '60deg',
+        }
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="skew" />
+
+### Disabling
+
+<Disabling plugin="skew" />

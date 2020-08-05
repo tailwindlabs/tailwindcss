@@ -1,0 +1,83 @@
+---
+title: "Max-Width"
+description: "Utilities for setting the maximum width of an element"
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/maxWidth'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Usage
+
+Set the maximum width of an element using the `max-w-{size}` utilities.
+
+```html
+<template preview>
+  <div class="max-w-md mx-auto text-center p-6 bg-gray-300">
+    max-w-md
+  </div>
+</template>
+
+<div class="max-w-md mx-auto ...">
+  max-w-md
+</div>
+```
+
+---
+
+## Responsive
+
+To control the max-width of an element at a specific breakpoint, add a `{screen}:` prefix to any existing max-width utility.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['max-w-sm', 'max-w-md', 'max-w-lg', 'max-w-xl', 'max-w-2xl']}
+  snippet={(classNames) => `
+    <div class="${classNames} ...">
+      Target
+    </div>
+  `}
+  preview={(className) => (
+    <div className={`mx-auto text-center p-6 bg-gray-300 ${className}`}>
+      Target
+    </div>
+  )}
+/>
+
+---
+
+## Customizing
+
+### Max-Width Scale
+
+Customize Tailwind's default max-width scale in the `theme.maxWidth` section of your `tailwind.config.js` file.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      maxWidth: {
++       '1/4': '25%',
++       '1/2': '50%',
++       '3/4': '75%',
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="maxWidth" name="max-width" />
+
+### Disabling
+
+<Disabling plugin="maxWidth" name="max-width" />

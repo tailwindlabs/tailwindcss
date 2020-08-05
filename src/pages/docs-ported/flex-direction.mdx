@@ -1,0 +1,107 @@
+---
+title: "Flex Direction"
+description: "Utilities for controlling the direction of flex items."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/flexDirection'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Row
+
+Use `.flex-row` to position flex items horizontally in the same direction as text:
+
+```html
+<template preview>
+  <div class="flex flex-row bg-gray-200">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  </div>
+</template>
+```
+
+## Row reversed
+
+Use `.flex-row-reverse` to position flex items horizontally in the opposite direction:
+
+```html
+<template preview>
+  <div class="flex flex-row-reverse bg-gray-200">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  </div>
+</template>
+```
+
+## Column
+
+Use `.flex-col` to position flex items vertically:
+
+```html
+<template preview>
+  <div class="flex flex-col bg-gray-200">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  </div>
+</template>
+```
+
+## Column reversed
+
+Use `.flex-col-reverse` to position flex items vertically in the opposite direction:
+
+```html
+<template preview>
+  <div class="flex flex-col-reverse bg-gray-200">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  </div>
+</template>
+```
+
+## Responsive
+
+To apply a flex direction utility only at a specific breakpoint, add a `{screen}:` prefix to the existing class name. For example, adding the class `md:flex-row` to an element would apply the `flex-row` utility at medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['flex-row', 'flex-col', 'flex-row-reverse', 'flex-col-reverse', 'flex-row']}
+  snippet={(classNames) => `
+    <div class="${classNames} ...">
+      <!-- ... -->
+    </div>
+  `}
+  preview={(className) => (
+    <div className={`flex bg-gray-200 ${className}`}>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    </div>
+  )}
+/>
+
+## Customizing
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="flexDirection" name="flex-direction" />
+
+### Disabling
+
+<Disabling plugin="flexDirection" name="flex-direction" />

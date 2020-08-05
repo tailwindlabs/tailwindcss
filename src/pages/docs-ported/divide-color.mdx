@@ -1,0 +1,140 @@
+---
+title: "Divide Color"
+description: "Utilities for controlling the border color between elements."
+featureVersion: "v1.3.0+"
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/divideColor'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+import { Heading } from '@/components/Heading'
+
+export const classes = {
+  plugin,
+  filterProperties: (prop, value) => !prop.includes('--') && !value.includes('--'),
+  transformSelector: (selector) => (
+    <>
+      {selector.split('>').shift().trim()} <span className="ml-1 text-purple-300">> * + *</span>
+    </>
+  ),
+  preview: (css, { className }) => (
+    <td className={`relative w-20 p-2 ${className}`}>
+      <div className="absolute inset-0 flex flex-col m-2">
+        <div className="flex-1" />
+        <div
+          className="flex-1 border-t"
+          style={{
+            borderColor: Array.isArray(css['border-color'])
+              ? css['border-color'][0]
+              : css['border-color'],
+          }}
+        />
+      </div>
+    </td>
+  ),
+}
+
+## Usage
+
+Control the border color between elements using the `divide-{color}` utilities.
+
+```html
+<template preview>
+  <div class="divide-y divide-blue-300">
+    <div class="text-center py-2">1</div>
+    <div class="text-center py-2">2</div>
+    <div class="text-center py-2">3</div>
+  </div>
+</template>
+
+<div class="divide-y divide-blue-300">
+  <div class="text-center py-2">1</div>
+  <div class="text-center py-2">2</div>
+  <div class="text-center py-2">3</div>
+</div>
+```
+
+### <Heading badge="v1.4.0+">Changing opacity</Heading>
+
+Control the opacity of borders between elements using the `.divide-opacity-{amount}` utilities.
+
+```html
+<template preview class="bg-checkered p-4">
+  <div class="divide-y-4 divide-black divide-opacity-25">
+    <div class="text-center py-2">1</div>
+    <div class="text-center py-2">2</div>
+    <div class="text-center py-2">3</div>
+  </div>
+</template>
+
+<div class="divide-y-4 divide-black divide-opacity-25">
+  <div class="text-center py-2">1</div>
+  <div class="text-center py-2">2</div>
+  <div class="text-center py-2">3</div>
+</div>
+```
+
+Learn more in the [divide opacity documentation](/docs/divide-opacity).
+
+---
+
+## Responsive
+
+To control the borders between elements at a specific breakpoint, add a `{screen}:` prefix to any existing divide utility. For example, adding the class `md:divide-x-8` to an element would apply the `divide-x-8` utility at medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['divide-teal-400', 'divide-pink-400', 'divide-orange-400', 'divide-green-400', 'divide-red-400']}
+  snippet={(classNames) => `
+    <div class="${classNames} divide-y">
+      <div class="text-center py-2">1</div>
+      <div class="text-center py-2">2</div>
+      <div class="text-center py-2">3</div>
+    </div>
+  `}
+  preview={(className) => (
+    <div className={`divide-y ${className}`}>
+      <div className="text-center py-2">1</div>
+      <div className="text-center py-2">2</div>
+      <div className="text-center py-2">3</div>
+    </div>
+  )}
+/>
+
+---
+
+## Customizing
+
+### Border Colors
+
+By default Tailwind makes the entire [default color palette](/docs/customizing-colors#default-color-palette) available as divide colors.
+
+You can [customize your color palette](/docs/colors#customizing) by editing the `theme.colors` section of your `tailwind.config.js` file, customize just your border and divide colors together using the `theme.borderColor` section, or customize only the divide colors using the `theme.divideColor` section.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      divideColor: theme => ({
+-       ...theme('borderColors'),
++       'primary': '#3490dc',
++       'secondary': '#ffed4a',
++       'danger': '#e3342f',
+      })
+    }
+  }
+```
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="divideColor" />
+
+### Disabling
+
+<Disabling plugin="divideColor" />
+

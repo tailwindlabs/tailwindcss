@@ -1,0 +1,167 @@
+---
+title: "Space Between"
+description: "Utilities for controlling the space between child elements."
+featureVersion: "v1.3.0+"
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/space'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = {
+  plugin,
+  filterProperties: (prop, value, properties) => {
+    if (Object.keys(properties).length === 1) return true
+    return !prop.includes('--') && !prop.includes('bottom') && !prop.includes('right')
+  },
+  transformValue: (value) => {
+    if (value.includes('calc(')) {
+      return value.match(/calc\(([^ ]+) /)[1].replace(/^0px$/, '0')
+    }
+    return value
+  },
+  transformSelector: (selector) => (
+    <>
+      {selector.split('>').shift().trim()} <span className="ml-1 text-purple-300">> * + *</span>
+    </>
+  ),
+}
+
+## Add horizontal space between children
+
+Control the horizontal space between elements using the `space-x-{amount}` utilities.
+
+```html
+<template preview>
+  <div class="flex space-x-4 bg-gray-200">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2">3</div>
+  </div>
+</template>
+
+<div class="flex space-x-4">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
+```
+
+## Add vertical space between children
+
+Control the horizontal space between elements using the `space-y-{amount}` utilities.
+
+```html
+<template preview>
+  <div class="space-y-6 bg-gray-200">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2">3</div>
+  </div>
+</template>
+
+<div class="space-y-6">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
+```
+
+## Reversing children order
+
+If your elements are in reverse order (using say `flex-row-reverse` or `flex-col-reverse`), use the `space-x-reverse` or `space-y-reverse` utilities to ensure the space is added to the correct side of each element.
+
+```html
+<template preview>
+  <div class="flex flex-row-reverse space-x-4 space-x-reverse bg-gray-200">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2">3</div>
+  </div>
+</template>
+
+<div class="flex flex-row-reverse space-x-4 space-x-reverse">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
+```
+
+---
+
+## Responsive
+
+To control the space between elements at a specific breakpoint, add a `{screen}:` prefix to any existing space utility. For example, adding the class `md:space-x-8` to an element would apply the `space-x-8` utility at medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['space-x-2', 'space-x-4', 'space-x-6', 'space-x-8', 'space-x-12']}
+  snippet={(classNames) => `
+    <div class="flex ${classNames}">
+      <div>1</div>
+      <div>2</div>
+      <div>3</div>
+    </div>
+  `}
+  previewClassName="text-center p-4"
+  preview={(className) => (
+    <div className={`flex bg-gray-200 ${className}`}>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2">1</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2">2</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2">3</div>
+    </div>
+  )}
+/>
+
+---
+
+## Customizing
+
+### Spacing scale
+
+If you'd like to customize your values for space between, padding, margin, width, and height all at once, use the `theme.spacing` section of your `tailwind.config.js` file.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      spacing: {
++       sm: '8px',
++       md: '16px',
++       lg: '24px',
++       xl: '48px',
+      }
+    }
+  }
+```
+
+To customize only the space between values, use the `theme.space` section of your `tailwind.config.js` file.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      space: {
++       sm: '8px',
++       md: '16px',
++       lg: '24px',
++       xl: '48px',
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="space" />
+
+### Disabling
+
+<Disabling plugin="space" />

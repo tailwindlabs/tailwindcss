@@ -1,0 +1,90 @@
+---
+title: "Min-Width"
+description: "Utilities for setting the minimum width of an element"
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/minWidth'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Usage
+
+Set the minimum width of an element using the `min-w-0` or `min-w-full` utilities.
+
+```html
+<template preview>
+  <div class="w-24 min-w-full text-center p-6 bg-gray-300">
+    min-w-full
+  </div>
+</template>
+
+<div class="w-24 min-w-full ...">
+  min-w-full
+</div>
+```
+
+---
+
+## Responsive
+
+To control the min-width of an element at a specific breakpoint, add a `{screen}:` prefix to any existing min-width utility.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['min-w-0', 'min-w-full', 'min-w-0', 'min-w-full', 'min-w-0']}
+  snippet={(classNames) => `
+    <div class="w-24 ${classNames} ...">
+      Target
+    </div>
+  `}
+  preview={(className) => (
+    <div className={`w-24 text-center p-6 bg-gray-300 ${className}`}>
+      Target
+    </div>
+  )}
+/>
+
+---
+
+## Customizing
+
+### Min-width scale
+
+Customize Tailwind's default min-width scale in the `theme.minWidth` section of your `tailwind.config.js` file.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      minWidth: {
++       '0': '0',
++       '1/4': '25%',
++       '1/2': '50%',
++       '3/4': '75%',
++       'full': '100%',
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="minWidth" name="min-width" />
+
+### Disabling
+
+<Disabling plugin="minWidth" name="min-width" />

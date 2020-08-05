@@ -1,0 +1,101 @@
+---
+title: "Order"
+description: "Utilities for controlling the order of flex items."
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/order'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Usage
+
+Use `.order-{order}` to render flex items in a different order than they appear in the DOM.
+
+```html
+<template preview>
+  <div class="flex bg-gray-200">
+    <div class="order-last text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  </div>
+</template>
+
+<div class="flex">
+  <div class="order-last">1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
+```
+
+
+## Responsive
+
+To apply a flex direction utility only at a specific breakpoint, add a `{screen}:` prefix to the existing class name. For example, adding the class `md:flex-row` to an element would apply the `flex-row` utility at medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['order-first', 'order-last', 'order-none', 'order-first', 'order-last']}
+  snippet={(classNames) => `
+    <div class="flex">
+      <div>1</div>
+      <div>2</div>
+      <div class="${classNames}">3</div>
+      <div>4</div>
+      <div>5</div>
+    </div>
+  `}
+  preview={(className) => (
+    <div className="flex bg-gray-200">
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+      <div className={`text-gray-700 text-center bg-white px-4 py-2 m-2 ${className}`}>3</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    </div>
+  )}
+/>
+
+## Customizing
+
+By default Tailwind provides utilities for `order-first`, `order-last`, `order-none`, and an `order-{number}` utility for the numbers 1 through 12. You change, add, or remove these by editing the `theme.order` section of your `tailwind.config.js` file.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      order: {
+        first: '-9999',
+        last: '9999',
+-       none: '0',
++       normal: '0',
+        '1': '1',
+        '2': '2',
+        '3': '3',
+        '4': '4',
+        '5': '5',
+        '6': '6',
+-       '7': '7',
+-       '8': '8',
+-       '9': '9',
+-       '10': '10',
+-       '11': '11',
+-       '12': '12',
+      }
+    }
+  }
+```
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="order" />
+
+### Disabling
+
+<Disabling plugin="order" />

@@ -1,0 +1,259 @@
+---
+title: "Width"
+description: "Utilities for setting the width of an element"
+features:
+  responsive: true
+  customizable: true
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/width'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Auto
+
+Use `.w-auto` to let the browser calculate and select the width for the element.
+
+```html
+<template preview>
+  <div class="w-auto bg-gray-400 mb-4 px-2">.w-auto on block element</div>
+  <div class="w-auto inline-block bg-gray-400 px-2">.w-auto on inline-block element</div>
+</template>
+
+<div class="w-auto ..."></div>
+<div class="w-auto inline-block ..."></div>
+```
+
+## Screen Width
+
+Use `.w-screen` to make an element span the entire width of the viewport.
+
+```html
+<template preview class="overflow-x-scroll p-4">
+  <div class="w-screen bg-gray-400 h-4"></div>
+</template>
+```
+
+## Fixed Width
+
+Use `.w-{number}` or `.w-px` to set an element to a fixed width.
+
+```html
+<template preview>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-0</p>
+    <div class="h-4 bg-gray-400 w-0"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-px</p>
+    <div class="h-4 bg-gray-400 w-px"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-1</p>
+    <div class="h-4 bg-gray-400 w-1"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-2</p>
+    <div class="h-4 bg-gray-400 w-2"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-3</p>
+    <div class="h-4 bg-gray-400 w-3"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-4</p>
+    <div class="h-4 bg-gray-400 w-4"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-5</p>
+    <div class="h-4 bg-gray-400 w-5"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-6</p>
+    <div class="h-4 bg-gray-400 w-6"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-8</p>
+    <div class="h-4 bg-gray-400 w-8"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-10</p>
+    <div class="h-4 bg-gray-400 w-10"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-12</p>
+    <div class="h-4 bg-gray-400 w-12"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-16</p>
+    <div class="h-4 bg-gray-400 w-16"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-20</p>
+    <div class="h-4 bg-gray-400 w-20"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-24</p>
+    <div class="h-4 bg-gray-400 w-24"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-32</p>
+    <div class="h-4 bg-gray-400 w-32"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-40</p>
+    <div class="h-4 bg-gray-400 w-40"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-48</p>
+    <div class="h-4 bg-gray-400 w-48"></div>
+  </div>
+  <div class="flex items-center mb-1">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-56</p>
+    <div class="h-4 bg-gray-400 w-56"></div>
+  </div>
+  <div class="flex items-center">
+    <p class="text-sm text-gray-600 w-12 mr-2">.w-64</p>
+    <div class="h-4 bg-gray-400 w-64"></div>
+  </div>
+</template>
+
+<div class="w-0 ..."></div>
+<div class="w-px ..."></div>
+<div class="w-1 ..."></div>
+<div class="w-2 ..."></div>
+<div class="w-3 ..."></div>
+<div class="w-4 ..."></div>
+<div class="w-5 ..."></div>
+<div class="w-6 ..."></div>
+<div class="w-8 ..."></div>
+<div class="w-10 ..."></div>
+<div class="w-12 ..."></div>
+<div class="w-16 ..."></div>
+<div class="w-20 ..."></div>
+<div class="w-24 ..."></div>
+<div class="w-32 ..."></div>
+<div class="w-40 ..."></div>
+<div class="w-48 ..."></div>
+<div class="w-56 ..."></div>
+<div class="w-64 ..."></div>
+```
+
+## Fluid Width
+
+Use `.w-{fraction}` or `.w-full` to set an element to a percentage based width.
+
+```html
+<template preview>
+  <div class="bg-gray-200 p-4">
+    <div class="flex mb-4">
+      <div class="w-1/2 p-2 bg-gray-400 text-center">.w-1/2</div>
+      <div class="w-1/2 p-2 bg-gray-500 text-center">.w-1/2</div>
+    </div>
+    <div class="flex mb-4">
+      <div class="w-2/5 p-2 bg-gray-400 text-center">.w-2/5</div>
+      <div class="w-3/5 p-2 bg-gray-500 text-center">.w-3/5</div>
+    </div>
+    <div class="flex mb-4">
+      <div class="w-1/3 p-2 bg-gray-400 text-center">.w-1/3</div>
+      <div class="w-2/3 p-2 bg-gray-500 text-center">.w-2/3</div>
+    </div>
+    <div class="flex mb-4">
+      <div class="w-1/4 p-2 bg-gray-400 text-center">.w-1/4</div>
+      <div class="w-3/4 p-2 bg-gray-500 text-center">.w-3/4</div>
+    </div>
+    <div class="flex mb-4">
+      <div class="w-1/5 p-2 bg-gray-400 text-center">.w-1/5</div>
+      <div class="w-4/5 p-2 bg-gray-500 text-center">.w-4/5</div>
+    </div>
+    <div class="flex mb-4">
+      <div class="w-1/6 p-2 bg-gray-400 text-center">.w-1/6</div>
+      <div class="w-5/6 p-2 bg-gray-500 text-center">.w-5/6</div>
+    </div>
+    <div class="w-full p-2 bg-gray-400 text-center">.w-full</div>
+  </div>
+</template>
+```
+
+## Responsive
+
+To control the width of an element at a specific breakpoint, add a `{screen}:` prefix to any existing width utility. For example, adding the class `md:w-full` to an element would apply the `w-full` utility at medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['w-1/2', 'w-auto', 'w-full', 'w-32', 'w-3/4']}
+  snippet={(classNames) => `
+    <div class="bg-gray-400 p-4 text-center">
+      <div class="${classNames} ...">
+        Responsive Element
+      </div>
+    </div>
+  `}
+  preview={(className) => (
+    <div className="bg-gray-400 p-4 text-center">
+      <div className={`inline-block bg-gray-800 text-white p-2 truncate ${className}`}>Responsive Element</div>
+    </div>
+  )}
+/>
+
+## Customizing
+
+### Width scale
+
+By default, Tailwind's width scale is a combination of the [default spacing scale](/docs/customizing-spacing#default-spacing-scale) as well as some additional values specific to widths.
+
+You can customize the spacing scale for padding, margin, width, and height all at once in the `theme.spacing` or `theme.extend.spacing` sections of your `tailwind.config.js` file:
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
+        spacing: {
++         '72': '18rem',
++         '84': '21rem',
++         '96': '24rem',
+        }
+      }
+    }
+  }
+```
+
+To customize width separately, use the `theme.width` section of your `tailwind.config.js` file.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
+        width: {
++         '1/7': '14.2857143%',
++         '2/7': '28.5714286%',
++         '3/7': '42.8571429%',
++         '4/7': '57.1428571%',
++         '5/7': '71.4285714%',
++         '6/7': '85.7142857%',
+        }
+      }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="width" />
+
+### Disabling
+
+<Disabling plugin="width" />

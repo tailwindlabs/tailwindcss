@@ -1,0 +1,117 @@
+---
+title: "Flex Wrap"
+description: "Utilities for controlling how flex items wrap."
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
+---
+
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
+
+import plugin from 'tailwindcss/lib/plugins/flexWrap'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Don't wrap
+
+Use `.flex-no-wrap` to prevent flex items from wrapping, causing inflexible items to overflow the container if necessary:
+
+```html
+<template preview>
+  <div class="flex flex-no-wrap bg-gray-200">
+    <div class="w-2/5 flex-none p-2">
+      <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+    </div>
+    <div class="w-2/5 flex-none p-2">
+      <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+    </div>
+    <div class="w-2/5 flex-none p-2">
+      <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+    </div>
+  </div>
+</template>
+```
+
+## Wrap normally
+
+Use `.flex-wrap` to allow flex items to wrap:
+
+```html
+<template preview>
+  <div class="flex flex-wrap bg-gray-200">
+    <div class="w-2/5 p-2">
+      <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+    </div>
+    <div class="w-2/5 p-2">
+      <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+    </div>
+    <div class="w-2/5 p-2">
+      <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+    </div>
+  </div>
+</template>
+```
+
+## Wrap reversed
+
+Use `.flex-wrap-reverse` to wrap flex items in the reverse direction:
+
+```html
+<template preview>
+  <div class="flex flex-wrap-reverse bg-gray-200">
+    <div class="w-2/5 p-2">
+      <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+    </div>
+    <div class="w-2/5 p-2">
+      <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+    </div>
+    <div class="w-2/5 p-2">
+      <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+    </div>
+  </div>
+</template>
+```
+
+## Responsive
+
+To control how flex items wrap at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:flex-wrap-reverse` to apply the `flex-wrap-reverse` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['flex-no-wrap', 'flex-wrap', 'flex-wrap-reverse', 'flex-no-wrap', 'flex-wrap']}
+  snippet={(classNames) => `
+    <div class="${classNames} ...">
+      <!-- ... -->
+    </div>
+  `}
+  preview={(className) => (
+    <div className={`flex bg-gray-200 ${className}`}>
+      <div className="w-2/5 flex-none p-2">
+        <div className="text-gray-700 text-center bg-gray-400 p-2">1</div>
+      </div>
+      <div className="w-2/5 flex-none p-2">
+        <div className="text-gray-700 text-center bg-gray-400 p-2">2</div>
+      </div>
+      <div className="w-2/5 flex-none p-2">
+        <div className="text-gray-700 text-center bg-gray-400 p-2">3</div>
+      </div>
+    </div>
+  )}
+/>
+
+## Customizing
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="flexWrap" name="flex-wrap" />
+
+### Disabling
+
+<Disabling plugin="flexWrap" name="flex-wrap" />
