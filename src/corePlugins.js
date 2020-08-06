@@ -1,5 +1,8 @@
 import preflight from './plugins/preflight'
 import container from './plugins/container'
+import space from './plugins/space'
+import divideWidth from './plugins/divideWidth'
+import divideColor from './plugins/divideColor'
 import accessibility from './plugins/accessibility'
 import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
@@ -43,6 +46,7 @@ import objectPosition from './plugins/objectPosition'
 import opacity from './plugins/opacity'
 import outline from './plugins/outline'
 import overflow from './plugins/overflow'
+import overscrollBehavior from './plugins/overscrollBehavior'
 import padding from './plugins/padding'
 import placeholderColor from './plugins/placeholderColor'
 import pointerEvents from './plugins/pointerEvents'
@@ -89,6 +93,12 @@ import transitionProperty from './plugins/transitionProperty'
 import transitionTimingFunction from './plugins/transitionTimingFunction'
 import transitionDuration from './plugins/transitionDuration'
 import transitionDelay from './plugins/transitionDelay'
+import divideOpacity from './plugins/divideOpacity'
+import backgroundOpacity from './plugins/backgroundOpacity'
+import borderOpacity from './plugins/borderOpacity'
+import textOpacity from './plugins/textOpacity'
+import placeholderOpacity from './plugins/placeholderOpacity'
+import animation from './plugins/animation'
 
 import configurePlugins from './util/configurePlugins'
 
@@ -96,15 +106,21 @@ export default function({ corePlugins: corePluginConfig }) {
   return configurePlugins(corePluginConfig, {
     preflight,
     container,
+    space,
+    divideWidth,
+    divideColor,
+    divideOpacity,
     accessibility,
     appearance,
     backgroundAttachment,
     backgroundColor,
+    backgroundOpacity,
     backgroundPosition,
     backgroundRepeat,
     backgroundSize,
     borderCollapse,
     borderColor,
+    borderOpacity,
     borderRadius,
     borderStyle,
     borderWidth,
@@ -126,6 +142,7 @@ export default function({ corePlugins: corePluginConfig }) {
     fontFamily,
     fontWeight,
     height,
+    fontSize,
     lineHeight,
     listStylePosition,
     listStyleType,
@@ -139,8 +156,10 @@ export default function({ corePlugins: corePluginConfig }) {
     opacity,
     outline,
     overflow,
+    overscrollBehavior,
     padding,
     placeholderColor,
+    placeholderOpacity,
     pointerEvents,
     position,
     inset,
@@ -152,7 +171,7 @@ export default function({ corePlugins: corePluginConfig }) {
     tableLayout,
     textAlign,
     textColor,
-    fontSize,
+    textOpacity,
     fontStyle,
     textTransform,
     textDecoration,
@@ -185,5 +204,6 @@ export default function({ corePlugins: corePluginConfig }) {
     transitionTimingFunction,
     transitionDuration,
     transitionDelay,
+    animation,
   })
 }

@@ -40,6 +40,8 @@ export default function(
       }
     })
 
+    let includesScreensExplicitly = false
+
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'preflight') {
         // prettier-ignore
@@ -60,6 +62,14 @@ export default function(
         atRule.before(updateSource(pluginUtilities, atRule.source))
         atRule.remove()
       }
+
+      if (atRule.params === 'screens') {
+        includesScreensExplicitly = true
+      }
     })
+
+    if (!includesScreensExplicitly) {
+      css.append([postcss.atRule({ name: 'tailwind', params: 'screens' })])
+    }
   }
 }

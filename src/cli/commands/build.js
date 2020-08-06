@@ -4,7 +4,6 @@ import prettyHrtime from 'pretty-hrtime'
 
 import tailwind from '../..'
 
-import commands from '.'
 import compile from '../compile'
 import * as colors from '../colors'
 import * as emoji from '../emoji'
@@ -46,18 +45,6 @@ function stop(...msgs) {
 }
 
 /**
- * Prints the error message and help for this command, then stops the process.
- *
- * @param {...string} [msgs]
- */
-function stopWithHelp(...msgs) {
-  utils.header()
-  utils.error(...msgs)
-  commands.help.forCommand(commands.build)
-  utils.die()
-}
-
-/**
  * Compiles CSS file and writes it to stdout.
  *
  * @param {CompileOptions} compileOptions
@@ -80,7 +67,12 @@ function buildToFile(compileOptions, startTime) {
 
   utils.header()
   utils.log()
-  utils.log(emoji.go, 'Building...', colors.file(inputFileSimplePath))
+  utils.log(
+    emoji.go,
+    ...(inputFileSimplePath
+      ? ['Building:', colors.file(inputFileSimplePath)]
+      : ['Building from default CSS...', colors.info('(No input file provided)')])
+  )
 
   return compile(compileOptions).then(result => {
     utils.writeFile(compileOptions.outputFile, result.css)
@@ -112,8 +104,9 @@ export function run(cliParams, cliOptions) {
     const inputFileSimplePath = utils.getSimplePath(inputFile)
     const configFileSimplePath = utils.getSimplePath(configFile)
 
-    !inputFile && stopWithHelp('CSS file is required.')
-    !utils.exists(inputFile) && stop(colors.file(inputFileSimplePath), 'does not exist.')
+    if (inputFile) {
+      !utils.exists(inputFile) && stop(colors.file(inputFileSimplePath), 'does not exist.')
+    }
 
     configFile &&
       !utils.exists(configFile) &&

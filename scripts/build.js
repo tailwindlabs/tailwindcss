@@ -14,13 +14,9 @@ function buildDistFile(filename) {
         .process(css, {
           from: `./${filename}.css`,
           to: `./dist/${filename}.css`,
-          map: { inline: false },
         })
         .then(result => {
           fs.writeFileSync(`./dist/${filename}.css`, result.css)
-          if (result.map) {
-            fs.writeFileSync(`./dist/${filename}.css.map`, result.map)
-          }
           return result
         })
         .then(result => {

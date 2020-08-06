@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss",
-  "version": "1.2.0",
+  "version": "1.6.2",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "main": "lib/index.js",
@@ -25,12 +25,20 @@
     "style": "eslint .",
     "test": "jest && eslint ."
   },
+  "files": [
+    "dist/*.css",
+    "lib/*",
+    "scripts/*.js",
+    "stubs/*.stub.js",
+    "*.css",
+    "*.js"
+  ],
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
-    "babel-jest": "^25.1.0",
+    "babel-jest": "^26.0.0",
     "clean-css": "^4.1.9",
     "eslint": "^6.0.1",
     "eslint-config-postcss": "^2.0.2",
@@ -41,11 +49,14 @@
     "rimraf": "^3.0.0"
   },
   "dependencies": {
+    "@fullhuman/postcss-purgecss": "^2.1.2",
     "autoprefixer": "^9.4.5",
+    "browserslist": "^4.12.0",
     "bytes": "^3.0.0",
-    "chalk": "^4.0.0",
+    "chalk": "^3.0.0 || ^4.0.0",
+    "color": "^3.1.2",
     "detective": "^5.2.0",
-    "fs-extra": "^9.0.0",
+    "fs-extra": "^8.0.0",
     "lodash": "^4.17.15",
     "node-emoji": "^1.8.1",
     "normalize.css": "^8.0.1",

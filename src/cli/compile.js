@@ -25,7 +25,14 @@ const defaultOptions = {
  */
 export default function compile(options = {}) {
   const config = { ...defaultOptions, ...options }
-  const css = utils.readFile(config.inputFile)
+
+  const css = config.inputFile
+    ? utils.readFile(config.inputFile)
+    : `
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
 
   return new Promise((resolve, reject) => {
     postcss(config.plugins)

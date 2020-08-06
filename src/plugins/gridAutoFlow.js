@@ -1,5 +1,9 @@
 export default function() {
-  return function({ addUtilities, variants }) {
+  return function({ addUtilities, variants, target }) {
+    if (target('gridAutoFlow') === 'ie11') {
+      return
+    }
+
     addUtilities(
       {
         '.grid-flow-row': { gridAutoFlow: 'row' },

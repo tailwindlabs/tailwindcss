@@ -1,0 +1,39 @@
+<!-- Basic HTML -->
+<html>
+  <head>
+    <title>My Page</title>
+  </head>
+  <body>
+    <main>
+      <div class="bg-red-500 md:bg-blue-300 w-1/2"></div>
+    </main>
+  </body>
+</html>
+
+<!-- Vue dynamic classes -->
+<span :class="{ block: enabled, 'md:flow-root': !enabled }"></span>
+
+<!-- JSX with template strings -->
+<script>
+  function Component() {
+    return <div class={`h-screen`}></div>
+  }
+</script>
+
+<!-- Custom classes with really weird characters -->
+<div class="min-h-(screen-4) bg-black! font-%#$@ w-(1/2+8)"></div>
+
+<!-- Pug -->
+span.inline-grid.grid-cols-3(class="px-1.5")
+  .col-span-2
+    Hello
+  .col-span-1.text-center
+    World!
+
+<!-- Haml -->
+.flow-root
+  .text-green-700.bg-green-100
+    .text-left= content
+    %samp.font-mono{:data-foo => "bar"}= output
+    .col-span-4[aria-hidden=true]
+    .tracking-tight#headline

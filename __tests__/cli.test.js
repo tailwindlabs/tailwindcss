@@ -43,9 +43,17 @@ describe('cli', () => {
   })
 
   describe('build', () => {
-    it('compiles CSS file', () => {
+    it('compiles CSS file using an input css file', () => {
       return cli(['build', inputCssPath]).then(() => {
         expect(process.stdout.write.mock.calls[0][0]).toContain('.example')
+      })
+    })
+
+    it('compiles CSS file without an input css file', () => {
+      return cli(['build']).then(() => {
+        expect(process.stdout.write.mock.calls[0][0]).toContain('normalize.css') // base
+        expect(process.stdout.write.mock.calls[0][0]).toContain('.container') // components
+        expect(process.stdout.write.mock.calls[0][0]).toContain('.mx-auto') // utilities
       })
     })
 

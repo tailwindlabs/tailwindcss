@@ -39,6 +39,34 @@ Promise.all([
     to: '__tests__/fixtures/tailwind-output-important.css',
     config: { important: true },
   }),
+  build({
+    from: '__tests__/fixtures/tailwind-input.css',
+    to: '__tests__/fixtures/tailwind-output-ie11.css',
+    config: { target: 'ie11' },
+  }),
+  build({
+    from: '__tests__/fixtures/tailwind-input.css',
+    to: '__tests__/fixtures/tailwind-output-no-color-opacity.css',
+    config: {
+      corePlugins: {
+        textOpacity: false,
+        backgroundOpacity: false,
+        borderOpacity: false,
+        placeholderOpacity: false,
+        divideOpacity: false,
+      },
+    },
+  }),
+  build({
+    from: '__tests__/fixtures/tailwind-input.css',
+    to: '__tests__/fixtures/tailwind-output-flagged.css',
+    config: {
+      future: {},
+      experimental: {
+        uniformColorPalette: true,
+      },
+    },
+  }),
 ]).then(() => {
   console.log('\nFinished rebuilding fixtures.')
   console.log(
