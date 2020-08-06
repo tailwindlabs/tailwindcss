@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { VersionSwitcher } from '@/components/VersionSwitcher'
 import { useIsHome } from '@/hooks/useIsHome'
 import { createContext, forwardRef } from 'react'
-import classnames from 'classnames'
+import clsx from 'clsx'
 
 export const SidebarContext = createContext()
 
@@ -82,7 +82,7 @@ const TopLevelAnchor = forwardRef(({ children, href, className, icon, isActive, 
       ref={ref}
       href={href}
       onClick={onClick}
-      className={classnames(
+      className={clsx(
         'flex items-center px-2 -mx-2 py-1 hover:text-gray-900 font-medium',
         className,
         {

@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
-import classnames from 'classnames'
+import clsx from 'clsx'
 import logo from '@/img/tailwind-ui-logo-on-dark.svg'
 import { wait } from '@/utils/wait'
 import { loadImage } from '@/utils/loadImage'
@@ -37,7 +37,7 @@ export function TuiBanner() {
   return (
     <div
       ref={ref}
-      className={classnames('transition transform fixed z-100 bottom-0 inset-x-0 pb-2 sm:pb-5', {
+      className={clsx('transition transform fixed z-100 bottom-0 inset-x-0 pb-2 sm:pb-5', {
         'opacity-0 scale-95 translate-y-2 pointer-events-none':
           state === 'waiting' || state === 'hidden',
         'opacity-100 scale-100 translate-y-0 ease-out duration-500': state === 'visible',

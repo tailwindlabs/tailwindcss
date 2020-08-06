@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { defaultConfig } from '@/utils/defaultConfig'
 import { isObject } from '@/utils/isObject'
 import { castArray } from '@/utils/castArray'
-import classnames from 'classnames'
+import clsx from 'clsx'
 import { Heading } from '@/components/Heading'
 
 let normalizeProperties = function (input) {
@@ -81,7 +81,7 @@ export const ClassTable = memo(
           <span className="sr-only">Class reference</span>
         </Heading>
         <div
-          className={classnames(
+          className={clsx(
             'overflow-y-auto scrollbar-w-2 scrollbar-track-gray-lighter scrollbar-thumb-rounded scrollbar-thumb-gray scrolling-touch',
             { 'lg:max-h-xs': Object.keys(utilities).length > 12 }
           )}

@@ -17,7 +17,7 @@
     "@sindresorhus/slugify": "^1.1.0",
     "autoprefixer": "^9.8.5",
     "babel-plugin-preval": "^5.0.0",
-    "classnames": "^2.2.6",
+    "clsx": "^1.1.1",
     "dlv": "^1.1.3",
     "file-loader": "^6.0.0",
     "front-matter": "^4.0.2",

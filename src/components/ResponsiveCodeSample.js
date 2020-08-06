@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import redent from 'redent'
-import classnames from 'classnames'
+import clsx from 'clsx'
 
 const screens = ['', 'sm:', 'md:', 'lg:', 'xl:']
 
@@ -162,7 +162,7 @@ export function ResponsiveCodeSample({
           </pre>
         </div>
         <div
-          className={classnames(
+          className={clsx(
             'rounded-b-lg border-l border-r border-b border-gray-400 bg-white',
             previewClassName,
             { 'p-4': !previewClassName }
