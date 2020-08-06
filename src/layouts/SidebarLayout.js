@@ -58,9 +58,9 @@ function Nav({ nav, fallbackHref }) {
             {category}
           </h5>
           <ul>
-            {(fallbackHref ? nav[category] : publishedItems).map((item) => (
+            {(fallbackHref ? nav[category] : publishedItems).map((item, i) => (
               <NavItem
-                key={item.href}
+                key={i}
                 href={item.href}
                 isActive={item.href === router.pathname}
                 isPublished={item.published !== false}
