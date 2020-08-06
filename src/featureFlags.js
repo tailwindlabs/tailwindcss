@@ -2,7 +2,7 @@ import _ from 'lodash'
 import chalk from 'chalk'
 
 const featureFlags = {
-  future: [],
+  future: ['removeDeprecatedGapUtilities'],
   experimental: ['uniformColorPalette'],
 }
 
