@@ -44,7 +44,7 @@ export function VideoLayout({ children, meta }) {
               <span>Source code</span>
             </a>
           </div>
-          <Link href={next ? next.href : '/screencasts/coming-soon'}>
+          <Link href={next && next.published ? next.href : '/screencasts/coming-soon'}>
             <a className="inline-flex items-center text-gray-600 hover:text-gray-900">
               <span>
                 Next<span className="hidden sm:inline"> lesson</span>
