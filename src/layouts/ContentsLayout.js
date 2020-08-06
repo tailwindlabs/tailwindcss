@@ -149,13 +149,17 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
                 </ul>
               </div>
             )}
-            <div id="ad" />
             <div id="tailwind-ui-widget">
               <a
                 href="https://tailwindui.com/?utm_source=tailwindcss&utm_medium=sidebar-widget"
                 className="mt-3 block"
               >
-                <img src="/img/tailwind-ui-sidebar.png" alt="Tailwind UI" />
+                <img
+                  src={require('@/img/tailwind-ui-sidebar.png').default}
+                  alt="Tailwind UI"
+                  width={457}
+                  height={336}
+                />
               </a>
               <p className="mt-4 text-gray-700">
                 <a
@@ -169,30 +173,6 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
                 <a
                   href="https://tailwindui.com/?utm_source=tailwindcss&utm_medium=sidebar-widget"
                   className="text-sm text-gray-800 font-medium hover:underline"
-                >
-                  Learn more →
-                </a>
-              </div>
-            </div>
-            <div id="refactoring-ui-widget" style={{ display: 'none' }}>
-              <a
-                href="https://refactoringui.com/book?utm_source=tailwindcss&utm_medium=sidebar-widget"
-                className="mt-3 block"
-              >
-                <img src="/img/refactoring-ui-book.png" alt="" />
-              </a>
-              <p className="text-gray-700 text-center">
-                <a
-                  href="https://refactoringui.com/book?utm_source=tailwindcss&utm_medium=sidebar-widget"
-                  className="text-gray-700"
-                >
-                  Learn UI design, from the creators of Tailwind CSS.
-                </a>
-              </p>
-              <div className="mt-3 text-center">
-                <a
-                  href="https://refactoringui.com/book?utm_source=tailwindcss&utm_medium=sidebar-widget"
-                  className="inline-block px-3 py-2 text-sm bg-indigo-500 text-white font-semibold rounded hover:bg-indigo-600"
                 >
                   Learn more →
                 </a>
