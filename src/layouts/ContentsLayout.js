@@ -56,7 +56,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
   }, [headings, toc])
 
   return (
-    <div className={`pb-16 w-full ${isHome ? 'pt-12' : 'pt-24 lg:pt-28'}`}>
+    <div id={meta.containerId} className={`pb-16 w-full ${isHome ? 'pt-12' : 'pt-24 lg:pt-28'}`}>
       {(meta.title || meta.description) && (
         <div className="markdown mb-6 px-6 max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:px-12 xl:w-3/4">
           <h1 className="flex items-center">
