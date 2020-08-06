@@ -1,4 +1,5 @@
 import '../css/main.css'
+import 'focus-visible'
 import { useState, useEffect, Fragment } from 'react'
 import { Header } from '@/components/Header'
 import { TuiBanner } from '@/components/TuiBanner'
