@@ -5,10 +5,11 @@ export default function() {
     const utilities = _.fromPairs(
       _.map(theme('fontSize'), (value, modifier) => {
         const [fontSize, options] = Array.isArray(value) ? value : [value]
-        // Tailwind 1.3+ syntax allowed line height to be specified in the array like
-        // ['16px', '24px'], so we can get it from there as well as from object syntax
-        const lineHeight = options instanceof Object ? options.lineHeight : options
-        const letterSpacing = options && options.letterSpacing
+        const { lineHeight, letterSpacing } = _.isPlainObject(options)
+          ? options
+          : {
+              lineHeight: options,
+            }
 
         return [
           `.${e(`text-${modifier}`)}`,
