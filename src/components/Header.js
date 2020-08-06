@@ -2,6 +2,11 @@ import { useIsHome } from '@/hooks/useIsHome'
 import Link from 'next/link'
 import { VersionSwitcher } from '@/components/VersionSwitcher'
 import { Search } from '@/components/Search'
+import dynamic from 'next/dynamic'
+
+const WorkflowAnimation = dynamic(() =>
+  import('@/components/WorkflowAnimation').then((mod) => mod.WorkflowAnimation)
+)
 
 export function Header({ navIsOpen, onNavToggle }) {
   let isHome = useIsHome()
@@ -46,16 +51,9 @@ export function Header({ navIsOpen, onNavToggle }) {
                 </div>
               </div>
               <div className="mt-12 xl:mt-0 px-6 flex-shrink-0 hidden md:block">
-                <div className="flex flex-col p-2" style={{ width: '40rem' }}>
-                  <div
-                    className="shadow-lg code-white text-sm font-mono subpixel-antialiased bg-gray-800 px-5 pb-6 pt-4 rounded-lg leading-normal overflow-hidden whitespace-pre"
-                    style={{ lineHeight: 1.675 }}
-                  >
-                    <div className="flex mb-4">
-                      <span className="h-3 w-3 bg-red-500 rounded-full" />
-                      <span className="ml-2 h-3 w-3 bg-orange-300 rounded-full" />
-                      <span className="ml-2 h-3 w-3 bg-green-500 rounded-full" />
-                    </div>
+                <div className="mx-auto" style={{ width: '40rem', height: '30rem' }}>
+                  <div className="flex flex-col p-2">
+                    <WorkflowAnimation />
                   </div>
                 </div>
               </div>
