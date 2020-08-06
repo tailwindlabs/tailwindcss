@@ -11,13 +11,14 @@ import formatCSS from './lib/formatCSS'
 import resolveConfig from './util/resolveConfig'
 import { defaultConfigFile } from './constants'
 import defaultConfig from '../stubs/defaultConfig.stub.js'
+import { flagEnabled } from './featureFlags'
 
 import uniformColorPalette from './flagged/uniformColorPalette.js'
 
 function getDefaultConfigs(config) {
   const configs = [defaultConfig]
 
-  if (_.get(config, ['experimental', 'uniformColorPalette'], false)) {
+  if (flagEnabled(config, 'uniformColorPalette')) {
     configs.unshift(uniformColorPalette)
   }
 
