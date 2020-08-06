@@ -11,6 +11,7 @@ export function Heading({
   className = '',
   hidden = false,
   toc = false,
+  ...props
 }) {
   let Component = `h${level}`
   const { updateHeading } = useContext(DocumentContext)
@@ -29,6 +30,7 @@ export function Heading({
       className={`group flex whitespace-pre-wrap ${hidden ? '-mb-6' : ''} ${className}`}
       id={id}
       ref={ref}
+      {...props}
     >
       {!hidden && (
         // eslint-disable-next-line

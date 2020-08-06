@@ -77,7 +77,13 @@ export const ClassTable = memo(
 
     return (
       <div className="mt-0 border-t border-b border-gray-300 overflow-hidden relative">
-        <Heading level={2} id="class-reference">
+        <Heading
+          level={2}
+          id="class-reference"
+          toc={true}
+          className="relative"
+          style={{ top: '-100vh' }}
+        >
           <span className="sr-only">Class reference</span>
         </Heading>
         <div
