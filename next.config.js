@@ -14,11 +14,12 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const fallbackLayouts = {
   'src/pages/docs/**/*': ['@/layouts/DocumentationLayout', 'DocumentationLayout'],
+  'src/pages/components/**/*': ['@/layouts/ComponentsLayout', 'ComponentsLayout'],
   'src/pages/screencasts/**/*': ['@/layouts/ScreencastsLayout', 'ScreencastsLayout'],
 }
 
 const fallbackDefaultExports = {
-  'src/pages/docs/**/*': ['@/layouts/ContentsLayout', 'ContentsLayout'],
+  'src/pages/{docs,components}/**/*': ['@/layouts/ContentsLayout', 'ContentsLayout'],
   'src/pages/screencasts/**/*': ['@/layouts/VideoLayout', 'VideoLayout'],
 }
 
