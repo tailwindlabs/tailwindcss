@@ -2,7 +2,16 @@ import { useEffect, useContext, useRef } from 'react'
 import { DocumentContext } from '@/layouts/ContentsLayout'
 import { useTop } from '@/hooks/useTop'
 
-export function Heading({ level, id, children, number, badge, className = '', hidden = false }) {
+export function Heading({
+  level,
+  id,
+  children,
+  number,
+  badge,
+  className = '',
+  hidden = false,
+  toc = false,
+}) {
   let Component = `h${level}`
   const { updateHeading } = useContext(DocumentContext)
 
@@ -10,10 +19,10 @@ export function Heading({ level, id, children, number, badge, className = '', hi
   let top = useTop(ref)
 
   useEffect(() => {
-    if (typeof top !== 'undefined') {
+    if (toc && typeof top !== 'undefined') {
       updateHeading(id, top)
     }
-  }, [top, id, updateHeading])
+  }, [toc, top, id, updateHeading])
 
   return (
     <Component

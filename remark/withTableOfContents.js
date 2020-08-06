@@ -33,14 +33,14 @@ module.exports.withTableOfContents = () => {
           node.value =
             node.children[0].value.replace(
               /^\s*<Heading([\s>])/,
-              `<Heading level={${level}} id="${slug}"$1`
+              `<Heading level={${level}} id="${slug}" toc={true}$1`
             ) +
             node.children
               .slice(1)
               .map((n) => n.value)
               .join('')
         } else {
-          node.value = `<${component} level={${level}} id="${slug}">${node.children
+          node.value = `<${component} level={${level}} id="${slug}" toc={true}>${node.children
             .map(({ value }) => value)
             .join('')}</${component}>`
         }
