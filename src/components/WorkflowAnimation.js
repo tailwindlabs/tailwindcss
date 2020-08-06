@@ -1,5 +1,5 @@
 import { forwardRef, useRef, useEffect } from 'react'
-import { TimelineLite, TweenLite, Power4 } from 'gsap/TweenMax'
+import { gsap } from 'gsap'
 
 const AnimationCodeText = forwardRef((props, ref) => {
   let text = typeof props.text === 'string' ? [props.text] : props.text
@@ -95,7 +95,7 @@ export function WorkflowAnimation() {
         { display: 'inline-block' },
         0.08
       )
-      await tweenTo(cardInner.current, 1, { padding: '1.5rem', ease: Power4.easeOut }, '+=.25')
+      await tweenTo(cardInner.current, 1, { padding: '1.5rem', ease: 'power4.out' }, '+=.25')
       await tweenTo(cardCursor.current, 0.08, { visibility: 'hidden' })
     }
 
@@ -107,7 +107,7 @@ export function WorkflowAnimation() {
         { display: 'inline-block' },
         0.08
       )
-      await tweenTo(avatar.current, 1, { borderRadius: '2rem', ease: Power4.easeOut }, '+=.25')
+      await tweenTo(avatar.current, 1, { borderRadius: '2rem', ease: 'power4.out' }, '+=.25')
     }
 
     async function animateAvatarCentering() {
@@ -119,12 +119,12 @@ export function WorkflowAnimation() {
       )
 
       const oldPosition = avatar.current.getBoundingClientRect()
-      TweenLite.set(avatar.current, { marginLeft: 'auto', marginRight: 'auto' })
-      TweenLite.set(avatar.current, { x: 0 })
-      TweenLite.set(avatar.current, {
+      gsap.set(avatar.current, { marginLeft: 'auto', marginRight: 'auto' })
+      gsap.set(avatar.current, { x: 0 })
+      gsap.set(avatar.current, {
         x: oldPosition.left - avatar.current.getBoundingClientRect().left,
       })
-      await tweenTo(avatar.current, 1, { x: 0, ease: Power4.easeOut }, '+=.25')
+      await tweenTo(avatar.current, 1, { x: 0, ease: 'power4.out' }, '+=.25')
 
       await tweenTo(avatarCursor.current, 0.08, { visibility: 'hidden' })
     }
@@ -132,14 +132,14 @@ export function WorkflowAnimation() {
     async function animateNameSize() {
       await tweenTo(nameCursor.current, 0.08, { visibility: 'visible' })
       await tweenStaggerTo(classNameSize.current.children, 0.08, { display: 'inline-block' }, 0.08)
-      await tweenTo(name.current, 1, { fontSize: '1.25rem', ease: Power4.easeOut }, '+=.25')
+      await tweenTo(name.current, 1, { fontSize: '1.25rem', ease: 'power4.out' }, '+=.25')
       await tweenTo(nameCursor.current, 0.08, { visibility: 'hidden' })
     }
 
     async function animateRoleColor() {
       await tweenTo(roleCursor.current, 0.08, { visibility: 'visible' })
       await tweenStaggerTo(classRoleColor.current.children, 0.08, { display: 'inline-block' }, 0.08)
-      await tweenTo(role.current, 1, { color: '#9f7aea', ease: Power4.easeOut }, '+=.25')
+      await tweenTo(role.current, 1, { color: '#9f7aea', ease: 'power4.out' }, '+=.25')
       await tweenTo(roleCursor.current, 0.08, { visibility: 'hidden' })
     }
 
@@ -161,8 +161,8 @@ export function WorkflowAnimation() {
         ),
       ])
       await Promise.all([
-        tweenTo(email.current, 1, { color: '#647287', ease: Power4.easeOut }, '+=.25'),
-        tweenTo(phone.current, 1, { color: '#647287', ease: Power4.easeOut }, '+=.25'),
+        tweenTo(email.current, 1, { color: '#647287', ease: 'power4.out' }, '+=.25'),
+        tweenTo(phone.current, 1, { color: '#647287', ease: 'power4.out' }, '+=.25'),
       ])
       await Promise.all([
         tweenTo(contactCursor1.current, 0.08, { visibility: 'hidden' }),
@@ -181,24 +181,24 @@ export function WorkflowAnimation() {
 
       const elements = [...content.current.children].flatMap((el) => [...el.children])
       const oldPositions = elements.map((el) => el.getBoundingClientRect())
-      TweenLite.set(content.current, { textAlign: 'center' })
+      gsap.set(content.current, { textAlign: 'center' })
       elements.forEach((el, i) => {
-        TweenLite.set(el, { x: oldPositions[i].left - el.getBoundingClientRect().left })
+        gsap.set(el, { x: oldPositions[i].left - el.getBoundingClientRect().left })
       })
-      await tweenTo(elements, 1, { x: 0, ease: Power4.easeOut })
+      await tweenTo(elements, 1, { x: 0, ease: 'power4.out' })
 
       await tweenTo(contentCursor.current, 0.25, { visibility: 'hidden' })
     }
 
     async function animateCardWidening() {
-      await tweenTo(resizeCursor.current, 1, { opacity: 1, x: 0, y: 0, ease: Power4.easeOut })
+      await tweenTo(resizeCursor.current, 1, { opacity: 1, x: 0, y: 0, ease: 'power4.out' })
       await tweenTo(resizeCursorCircle.current, 0, { opacity: 1 })
-      await tweenTo(card.current, 2, { width: '30rem', ease: Power4.easeOut }, '+=.25')
+      await tweenTo(card.current, 2, { width: '30rem', ease: 'power4.out' }, '+=.25')
       await tweenTo(resizeCursorCircle.current, 0, { opacity: 0.5 })
       await tweenTo(
         resizeCursor.current,
         1,
-        { opacity: 0, x: 100, y: 150, ease: Power4.easeInOut },
+        { opacity: 0, x: 100, y: 150, ease: 'power4.inOut' },
         '+=.25'
       )
     }
@@ -211,25 +211,25 @@ export function WorkflowAnimation() {
       const oldCardPosition = cardInner.current.getBoundingClientRect()
       const oldAvatarPosition = avatar.current.getBoundingClientRect()
       const oldContentPositions = contentElements.map((el) => el.getBoundingClientRect())
-      TweenLite.set(cardInner.current, { display: 'flex' })
+      gsap.set(cardInner.current, { display: 'flex' })
       const newCardPosition = cardInner.current.getBoundingClientRect()
       const newAvatarPosition = avatar.current.getBoundingClientRect()
       const newContentPositions = contentElements.map((el) => el.getBoundingClientRect())
-      TweenLite.set(cardInner.current, { height: oldCardPosition.height })
-      TweenLite.set(avatar.current, { x: oldAvatarPosition.left - newAvatarPosition.left })
+      gsap.set(cardInner.current, { height: oldCardPosition.height })
+      gsap.set(avatar.current, { x: oldAvatarPosition.left - newAvatarPosition.left })
       contentElements.forEach((el, i) => {
-        TweenLite.set(el, {
+        gsap.set(el, {
           x: oldContentPositions[i].left - newContentPositions[i].left,
           y: oldContentPositions[i].top - newContentPositions[i].top,
         })
       })
       await Promise.all([
-        tweenTo(avatar.current, 1, { x: 0, ease: Power4.easeOut }, '+=.25'),
-        tweenTo(contentElements, 1, { x: 0, y: 0, ease: Power4.easeOut }, '+=.25'),
+        tweenTo(avatar.current, 1, { x: 0, ease: 'power4.out' }, '+=.25'),
+        tweenTo(contentElements, 1, { x: 0, y: 0, ease: 'power4.out' }, '+=.25'),
         tweenTo(
           cardInner.current,
           1,
-          { height: newCardPosition.height, ease: Power4.easeOut },
+          { height: newCardPosition.height, ease: 'power4.out' },
           '+=.25'
         ),
       ])
@@ -248,14 +248,14 @@ export function WorkflowAnimation() {
 
       const oldAvatarPosition = avatar.current.getBoundingClientRect()
       const oldContentPosition = content.current.getBoundingClientRect()
-      TweenLite.set(avatar.current, { marginRight: 0, marginLeft: 0 })
+      gsap.set(avatar.current, { marginRight: 0, marginLeft: 0 })
       const newAvatarPosition = avatar.current.getBoundingClientRect()
       const newContentPosition = content.current.getBoundingClientRect()
-      TweenLite.set(avatar.current, { x: oldAvatarPosition.left - newAvatarPosition.left })
-      TweenLite.set(content.current, { x: oldContentPosition.left - newContentPosition.left })
+      gsap.set(avatar.current, { x: oldAvatarPosition.left - newAvatarPosition.left })
+      gsap.set(content.current, { x: oldContentPosition.left - newContentPosition.left })
       await Promise.all([
-        tweenTo(avatar.current, 1, { x: 0, ease: Power4.easeOut }, '+=.25'),
-        tweenTo(content.current, 1, { x: 0, ease: Power4.easeOut }, '+=.25'),
+        tweenTo(avatar.current, 1, { x: 0, ease: 'power4.out' }, '+=.25'),
+        tweenTo(content.current, 1, { x: 0, ease: 'power4.out' }, '+=.25'),
       ])
 
       await tweenTo(avatarCursor.current, 0.25, { visibility: 'hidden' })
@@ -272,11 +272,11 @@ export function WorkflowAnimation() {
 
       const elements = [...content.current.children].flatMap((el) => [...el.children])
       const oldPositions = elements.map((el) => el.getBoundingClientRect())
-      TweenLite.set(content.current, { textAlign: 'left' })
+      gsap.set(content.current, { textAlign: 'left' })
       elements.forEach((el, i) => {
-        TweenLite.set(el, { x: oldPositions[i].left - el.getBoundingClientRect().left })
+        gsap.set(el, { x: oldPositions[i].left - el.getBoundingClientRect().left })
       })
-      await tweenTo(elements, 1, { x: 0, ease: Power4.easeOut })
+      await tweenTo(elements, 1, { x: 0, ease: 'power4.out' })
 
       await tweenTo(contentLeftAlignCursor.current, 0.25, { visibility: 'hidden' })
     }
@@ -291,16 +291,16 @@ export function WorkflowAnimation() {
       )
 
       const oldContentPosition = content.current.getBoundingClientRect()
-      TweenLite.set(avatar.current, { marginRight: '1.5rem' })
+      gsap.set(avatar.current, { marginRight: '1.5rem' })
       const newContentPosition = content.current.getBoundingClientRect()
-      TweenLite.set(content.current, { x: oldContentPosition.left - newContentPosition.left })
-      await tweenTo(content.current, 1, { x: 0, ease: Power4.easeOut }, '+=.25')
+      gsap.set(content.current, { x: oldContentPosition.left - newContentPosition.left })
+      await tweenTo(content.current, 1, { x: 0, ease: 'power4.out' }, '+=.25')
 
       await tweenTo(avatarCursor.current, 0.25, { visibility: 'hidden' })
     }
 
     async function animateAvatarLarger() {
-      TweenLite.set(avatar.current, { borderRadius: '100%' })
+      gsap.set(avatar.current, { borderRadius: '100%' })
       await tweenTo(avatarLargerCursor.current, 0.08, { visibility: 'visible' })
       await tweenStaggerTo(
         classAvatarLarger.current.children,
@@ -311,20 +311,20 @@ export function WorkflowAnimation() {
       await tweenTo(
         avatar.current,
         1,
-        { height: '6rem', width: '6rem', ease: Power4.easeOut },
+        { height: '6rem', width: '6rem', ease: 'power4.out' },
         '+=.25'
       )
       await tweenTo(avatarLargerCursor.current, 0.08, { visibility: 'hidden' })
     }
 
     async function animateResizeCursorIntoPosition() {
-      TweenLite.set(cardInner.current, { display: 'none' })
-      TweenLite.set(cardLarge.current, { display: 'flex' })
+      gsap.set(cardInner.current, { display: 'none' })
+      gsap.set(cardLarge.current, { display: 'flex' })
       await tweenTo(resizeCursor.current, 1, {
         opacity: 1,
         x: 0,
         y: 0,
-        ease: Power4.easeOut,
+        ease: 'power4.out',
       })
       await tweenTo(resizeCursorCircle.current, 0, { opacity: 1 })
     }
@@ -333,19 +333,19 @@ export function WorkflowAnimation() {
       await Promise.all([
         tweenTo(cardLarge.current, 0, { display: 'none' }, '+=.65'),
         tweenTo(cardSmall.current, 0, { display: 'block' }, '+=.65'),
-        tweenTo(card.current, 2, { width: '20rem', ease: Power4.easeOut }, '+=.25'),
+        tweenTo(card.current, 2, { width: '20rem', ease: 'power4.out' }, '+=.25'),
       ])
       await Promise.all([
         tweenTo(cardLarge.current, 0, { display: 'flex' }, '+=.5'),
         tweenTo(cardSmall.current, 0, { display: 'none' }, '+=.5'),
-        tweenTo(card.current, 2, { width: '30rem', ease: Power4.easeOut }, '+=.25'),
+        tweenTo(card.current, 2, { width: '30rem', ease: 'power4.out' }, '+=.25'),
       ])
       await animateCardResizing()
     }
 
     function tweenTo(el, duration, vars, position) {
       return new Promise((resolve) => {
-        const timeline = new TimelineLite()
+        const timeline = gsap.timeline()
         timelines.push(timeline)
         timeline.to(
           el,
@@ -361,7 +361,7 @@ export function WorkflowAnimation() {
 
     function tweenStaggerTo(el, duration, vars, stagger, position) {
       return new Promise((resolve) => {
-        const timeline = new TimelineLite()
+        const timeline = gsap.timeline()
         timelines.push(timeline)
         timeline.staggerTo(
           el,
@@ -378,7 +378,7 @@ export function WorkflowAnimation() {
 
     return () => {
       window.clearTimeout(delay)
-      timelines.forEach(timeline => {
+      timelines.forEach((timeline) => {
         timeline.kill()
       })
     }
