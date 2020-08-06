@@ -61,10 +61,8 @@ Promise.all([
     from: '__tests__/fixtures/tailwind-input.css',
     to: '__tests__/fixtures/tailwind-output-flagged.css',
     config: {
-      future: {},
-      experimental: {
-        uniformColorPalette: true,
-      },
+      future: 'all',
+      experimental: 'all',
     },
   }),
 ]).then(() => {
