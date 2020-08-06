@@ -252,7 +252,10 @@ export function SidebarLayout({ children, navIsOpen, nav, base, fallbackHref }) 
               <div id="navGradient" className="hidden" />
               <nav
                 id="nav"
-                className="px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8 sticky?lg:h-(screen-16)"
+                className={clsx(
+                  'px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8',
+                  { 'sticky?lg:h-screen': isHome, 'sticky?lg:h-(screen-16)': !isHome }
+                )}
               >
                 <div className="relative -mx-2 w-24 mb-8 lg:hidden">
                   <VersionSwitcher />
