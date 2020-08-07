@@ -3,6 +3,8 @@ title: Functions & Directives
 description: A reference for the custom functions and directives Tailwind exposes to your CSS.
 ---
 
+import { TipGood, TipBad } from '@/components/Tip'
+
 ## @tailwind
 
 Use the `@tailwind` directive to insert Tailwind's `base`, `components`, `utilities` and `screens` styles into your CSS.
@@ -295,7 +297,7 @@ For example, say you have a `sm` breakpoint at `640px` and you need to write som
 Instead of writing a raw media query that duplicates that value like this:
 
 ```css
-{{ '@media (min-width: 640px) {' }}
+@media (min-width: 640px) {
   /* ... */
 }
 ```
@@ -324,9 +326,7 @@ This can be a useful alternative to `@apply` when you want to reference a value 
 
 Since Tailwind uses the [nested object syntax](/docs/colors#nested-object-syntax) to define its default color palette, make sure to use dot notation to access the nested colors.
 
-@component('_partials.tip-bad')
-Don't use the dash syntax when accessing nested color values
-@endcomponent
+<TipBad>Don't use the dash syntax when accessing nested color values</TipBad>
 
 ```css
 .btn-blue {
@@ -334,9 +334,7 @@ Don't use the dash syntax when accessing nested color values
 }
 ```
 
-@component('_partials.tip-good')
-Use dot notation to access nested color values
-@endcomponent
+<TipGood>Use dot notation to access nested color values</TipGood>
 
 ```css
 .btn-blue {

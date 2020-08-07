@@ -4,6 +4,7 @@ description: An opinionated set of base styles for Tailwind projects.
 ---
 
 import { Heading } from '@/components/Heading'
+import { ConfigSample } from '@/components/ConfigSample'
 
 ## <Heading hidden>Overview</Heading>
 
@@ -195,6 +196,7 @@ Learn more in the [adding base styles documentation](/docs/adding-base-styles).
 
 If you'd like to completely disable Preflight — perhaps because you're integrating Tailwind into an existing project or because you'd like to provide your own base styles — all you need to do is set `preflight` to `false` in the `corePlugins` section of your `tailwind.config.js` file:
 
-@component('_partials.customized-config', ['key' => 'corePlugins'])
-+ preflight: false,
-@endcomponent
+<ConfigSample
+  path="corePlugins"
+  add={{ preflight: false }}
+/>
