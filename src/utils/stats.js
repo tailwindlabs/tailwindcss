@@ -11,12 +11,15 @@ const { loopWhile } = require('deasync')
 
 const convertToKB = (bytes) => (bytes / 1024).toFixed(1) + 'K'
 
-const compareTailwindBuilds = (configDirectory, cssPath) => {
-  const configs = fs.readdirSync(configDirectory)
-  return configs.map((config) => {
+module.exports = () => {
+  const stats = {}
+  const configDir = path.resolve(__dirname, '../fixtures/configs')
+  const configs = fs.readdirSync(configDir)
+
+  configs.forEach((config) => {
     let css
 
-    postcss([tailwindcss(path.join(configDirectory, config)), autoprefixer()])
+    postcss([tailwindcss(path.join(configDir, config)), autoprefixer()])
       .process(['@tailwind base;', '@tailwind components;', '@tailwind utilities;'].join('\n'), {
         from: undefined,
       })
@@ -28,25 +31,13 @@ const compareTailwindBuilds = (configDirectory, cssPath) => {
 
     const { styles: minified } = new CleanCSS().minify(css)
 
-    return {
-      [config.split('.')[0]]: {
-        original: convertToKB(Buffer.byteLength(css, 'utf8')),
-        minified: convertToKB(Buffer.byteLength(minified, 'utf8')),
-        gzipped: convertToKB(gzipSize.sync(minified)),
-        brotlified: convertToKB(brotliSize.sync(minified)),
-      },
+    stats[config.split('.')[0]] = {
+      original: convertToKB(Buffer.byteLength(css, 'utf8')),
+      minified: convertToKB(Buffer.byteLength(minified, 'utf8')),
+      gzipped: convertToKB(gzipSize.sync(minified)),
+      brotlified: convertToKB(brotliSize.sync(minified)),
     }
   })
-}
 
-module.exports = function () {
-  const tailwindData = compareTailwindBuilds(path.resolve(__dirname, '../fixtures/configs'))
-
-  return tailwindData.reduce((flattened, config) => {
-    Object.entries(config).forEach(([key, value]) => {
-      flattened[key] = value
-    })
-
-    return flattened
-  }, {})
+  return stats
 }
