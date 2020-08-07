@@ -15,6 +15,7 @@ import { flagEnabled } from './featureFlags'
 
 import uniformColorPalette from './flagged/uniformColorPalette.js'
 import extendedSpacingScale from './flagged/extendedSpacingScale.js'
+import defaultLineHeights from './flagged/defaultLineHeights.js'
 
 function getDefaultConfigs(config) {
   const configs = [defaultConfig]
@@ -25,6 +26,10 @@ function getDefaultConfigs(config) {
 
   if (flagEnabled(config, 'extendedSpacingScale')) {
     configs.unshift(extendedSpacingScale)
+  }
+
+  if (flagEnabled(config, 'defaultLineHeights')) {
+    configs.unshift(defaultLineHeights)
   }
 
   return configs
