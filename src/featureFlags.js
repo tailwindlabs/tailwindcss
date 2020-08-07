@@ -3,7 +3,12 @@ import chalk from 'chalk'
 
 const featureFlags = {
   future: ['removeDeprecatedGapUtilities'],
-  experimental: ['uniformColorPalette', 'extendedSpacingScale', 'defaultLineHeights'],
+  experimental: [
+    'uniformColorPalette',
+    'extendedSpacingScale',
+    'defaultLineHeights',
+    'extendedFontSizeScale',
+  ],
 }
 
 export function flagEnabled(config, flag) {
