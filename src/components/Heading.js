@@ -1,5 +1,5 @@
 import { useEffect, useContext, useRef } from 'react'
-import { DocumentContext } from '@/layouts/ContentsLayout'
+import { ContentsContext } from '@/layouts/ContentsLayout'
 import { useTop } from '@/hooks/useTop'
 
 export function Heading({
@@ -14,16 +14,19 @@ export function Heading({
   ...props
 }) {
   let Component = `h${level}`
-  const { updateHeading } = useContext(DocumentContext)
+  const { registerHeading, unregisterHeading } = useContext(ContentsContext)
 
   let ref = useRef()
   let top = useTop(ref)
 
   useEffect(() => {
     if (toc && typeof top !== 'undefined') {
-      updateHeading(id, top)
+      registerHeading(id, top)
     }
-  }, [toc, top, id, updateHeading])
+    return () => {
+      unregisterHeading(id)
+    }
+  }, [toc, top, id, registerHeading, unregisterHeading])
 
   return (
     <Component

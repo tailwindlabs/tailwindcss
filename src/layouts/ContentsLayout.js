@@ -1,31 +1,71 @@
 import { useState, useEffect, createContext, Fragment, useCallback, isValidElement } from 'react'
-import { useRouter } from 'next/router'
-import { kebabToTitleCase } from '@/utils/kebabToTitleCase'
 import { ClassTable } from '@/components/ClassTable'
 import { useIsHome } from '@/hooks/useIsHome'
 import { usePrevNext } from '@/hooks/usePrevNext'
 import Link from 'next/link'
+import { SidebarLayout } from '@/layouts/SidebarLayout'
+import { Ad } from '@/components/Ad'
+import { PageHeader } from '@/components/PageHeader'
 
-export const DocumentContext = createContext()
+export const ContentsContext = createContext()
 
-export function ContentsLayout({ children, meta, classes, tableOfContents }) {
-  const toc = [
-    ...(classes ? [{ title: 'Class reference', slug: 'class-reference', children: [] }] : []),
-    ...tableOfContents,
-  ]
+function TableOfContents({ tableOfContents, currentSection }) {
+  return (
+    <>
+      <h5 className="text-gray-500 uppercase tracking-wide font-bold text-sm lg:text-xs">
+        On this page
+      </h5>
+      <ul className="mt-4 overflow-x-hidden">
+        {tableOfContents.map((section) => (
+          <Fragment key={section.slug}>
+            <li className="mb-2">
+              <a
+                href={`#${section.slug}`}
+                className={`block transition-fast hover:translate-r-2px hover:text-gray-900 font-medium ${
+                  currentSection === section.slug ||
+                  section.children.findIndex(({ slug }) => slug === currentSection) > -1
+                    ? 'translate-r-2px text-gray-900'
+                    : 'text-gray-600'
+                }`}
+              >
+                {section.title}
+              </a>
+            </li>
+            {section.children.map((subsection) => (
+              <li className="mb-2 ml-2" key={subsection.slug}>
+                <a
+                  href={`#${subsection.slug}`}
+                  className={`block transition-fast hover:translate-r-2px hover:text-gray-900 font-medium ${
+                    currentSection === subsection.slug
+                      ? 'translate-r-2px text-gray-900'
+                      : 'text-gray-600'
+                  }`}
+                >
+                  {subsection.title}
+                </a>
+              </li>
+            ))}
+          </Fragment>
+        ))}
+      </ul>
+    </>
+  )
+}
 
-  const router = useRouter()
-  let [currentSection, setCurrentSection] = useState(toc[0]?.slug)
+function useTableOfContents(tableOfContents) {
+  let [currentSection, setCurrentSection] = useState(tableOfContents[0]?.slug)
   let [headings, setHeadings] = useState([])
-  let isHome = useIsHome()
-  let { prev, next } = usePrevNext()
 
-  const updateHeading = useCallback((id, top) => {
+  const registerHeading = useCallback((id, top) => {
     setHeadings((headings) => [...headings.filter((h) => id !== h.id), { id, top }])
   }, [])
 
+  const unregisterHeading = useCallback((id) => {
+    setHeadings((headings) => headings.filter((h) => id !== h.id))
+  }, [])
+
   useEffect(() => {
-    if (toc.length === 0 || headings.length === 0) return
+    if (tableOfContents.length === 0 || headings.length === 0) return
     function onScroll() {
       let y = window.pageYOffset
       let windowHeight = window.innerHeight
@@ -53,34 +93,58 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
     })
     onScroll()
     return () => window.removeEventListener('scroll', onScroll, true)
-  }, [headings, toc])
+  }, [headings, tableOfContents])
+
+  return { currentSection, registerHeading, unregisterHeading }
+}
+
+export function ContentsLayoutOuter({ children, layoutProps }) {
+  const { currentSection, registerHeading, unregisterHeading } = useTableOfContents(
+    layoutProps.tableOfContents
+  )
+
+  return (
+    <SidebarLayout
+      sidebar={
+        <TableOfContents
+          tableOfContents={layoutProps.tableOfContents}
+          currentSection={currentSection}
+        />
+      }
+    >
+      <ContentsContext.Provider value={{ registerHeading, unregisterHeading }}>
+        {children}
+      </ContentsContext.Provider>
+    </SidebarLayout>
+  )
+}
+
+export function ContentsLayout({ children, meta, classes, tableOfContents }) {
+  const toc = [
+    ...(classes ? [{ title: 'Class reference', slug: 'class-reference', children: [] }] : []),
+    ...tableOfContents,
+  ]
+
+  const { currentSection, registerHeading, unregisterHeading } = useTableOfContents(toc)
+  let isHome = useIsHome()
+  let { prev, next } = usePrevNext()
 
   return (
     <div id={meta.containerId} className={`pb-16 w-full ${isHome ? 'pt-12' : 'pt-24 lg:pt-28'}`}>
-      {(meta.title || meta.description) && (
-        <div className="markdown mb-6 px-6 max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:px-12 xl:w-3/4">
-          <h1 className="flex items-center">
-            {meta.title || kebabToTitleCase(router.pathname.split('/').pop())}
-            {meta.featureVersion && (
-              <span className="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium leading-4 bg-green-150 text-green-900">
-                {meta.featureVersion}
-              </span>
-            )}
-          </h1>
-          {meta.description && <div className="mt-0 mb-4 text-gray-600">{meta.description}</div>}
-          {!classes && meta.headerSeparator !== false && (
-            <hr className="my-8 border-b-2 border-gray-200" />
-          )}
-        </div>
-      )}
+      <PageHeader
+        title={meta.title}
+        description={meta.description}
+        badge={meta.featureVersion}
+        border={!classes && meta.headerSeparator !== false}
+      />
       <div className="flex">
         <div className="markdown px-6 xl:px-12 w-full max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
-          <DocumentContext.Provider value={{ updateHeading }}>
+          <ContentsContext.Provider value={{ registerHeading, unregisterHeading }}>
             {classes && (
               <ClassTable {...(isValidElement(classes) ? { custom: classes } : classes)} />
             )}
             {children}
-          </DocumentContext.Provider>
+          </ContentsContext.Provider>
           {(prev || next) && (
             <>
               <hr />
@@ -111,73 +175,10 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
           >
             {toc.length > 0 && (
               <div className="mb-8">
-                <h5 className="text-gray-500 uppercase tracking-wide font-bold text-sm lg:text-xs">
-                  On this page
-                </h5>
-                <ul className="mt-4 overflow-x-hidden">
-                  {toc.map((section) => (
-                    <Fragment key={section.slug}>
-                      <li className="mb-2">
-                        <a
-                          href={`#${section.slug}`}
-                          className={`block transition-fast hover:translate-r-2px hover:text-gray-900 font-medium ${
-                            currentSection === section.slug ||
-                            section.children.findIndex(({ slug }) => slug === currentSection) > -1
-                              ? 'translate-r-2px text-gray-900'
-                              : 'text-gray-600'
-                          }`}
-                        >
-                          {section.title}
-                        </a>
-                      </li>
-                      {section.children.map((subsection) => (
-                        <li className="mb-2 ml-2" key={subsection.slug}>
-                          <a
-                            href={`#${subsection.slug}`}
-                            className={`block transition-fast hover:translate-r-2px hover:text-gray-900 font-medium ${
-                              currentSection === subsection.slug
-                                ? 'translate-r-2px text-gray-900'
-                                : 'text-gray-600'
-                            }`}
-                          >
-                            {subsection.title}
-                          </a>
-                        </li>
-                      ))}
-                    </Fragment>
-                  ))}
-                </ul>
+                <TableOfContents tableOfContents={toc} currentSection={currentSection} />
               </div>
             )}
-            <div id="tailwind-ui-widget">
-              <a
-                href="https://tailwindui.com/?utm_source=tailwindcss&utm_medium=sidebar-widget"
-                className="mt-3 block"
-              >
-                <img
-                  src={require('@/img/tailwind-ui-sidebar.png').default}
-                  alt="Tailwind UI"
-                  width={457}
-                  height={336}
-                />
-              </a>
-              <p className="mt-4 text-gray-700">
-                <a
-                  href="https://tailwindui.com/?utm_source=tailwindcss&utm_medium=sidebar-widget"
-                  className="text-gray-700"
-                >
-                  Beautiful UI components by the creators of Tailwind CSS.
-                </a>
-              </p>
-              <div className="mt-2">
-                <a
-                  href="https://tailwindui.com/?utm_source=tailwindcss&utm_medium=sidebar-widget"
-                  className="text-sm text-gray-800 font-medium hover:underline"
-                >
-                  Learn more →
-                </a>
-              </div>
-            </div>
+            <Ad />
           </div>
         </div>
       </div>

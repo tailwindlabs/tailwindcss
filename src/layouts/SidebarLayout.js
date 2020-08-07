@@ -230,7 +230,7 @@ function TopLevelNav() {
   )
 }
 
-export function SidebarLayout({ children, navIsOpen, nav, base, fallbackHref }) {
+export function SidebarLayout({ children, navIsOpen, nav, sidebar, fallbackHref }) {
   let isHome = useIsHome()
 
   return (
@@ -266,7 +266,8 @@ export function SidebarLayout({ children, navIsOpen, nav, base, fallbackHref }) 
                   </div>
                 </div>
                 <TopLevelNav />
-                <Nav nav={nav} fallbackHref={fallbackHref} />
+                {sidebar}
+                {nav && <Nav nav={nav} fallbackHref={fallbackHref} />}
               </nav>
             </div>
           </div>

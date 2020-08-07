@@ -1,16 +1,14 @@
 import Link from 'next/link'
 import { usePrevNext } from '@/hooks/usePrevNext'
+import { Ad } from '@/components/Ad'
+import { PageHeader } from '@/components/PageHeader'
 
 export function VideoLayout({ children, meta }) {
   let { next } = usePrevNext()
 
   return (
     <div className="pt-24 pb-16 lg:pt-28 w-full">
-      <div className="markdown mb-6 px-6 max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:px-12 xl:w-3/4">
-        <h1>{meta.title}</h1>
-        <div className="mt-0 mb-4 text-gray-600">{meta.description}</div>
-        <hr className="my-8 border-b-2 border-gray-200" />
-      </div>
+      <PageHeader title={meta.title} description={meta.description} />
       <div className="mb-8 px-6 xl:px-12 relative z-10">
         <div className="relative bg-gray-900" style={{ paddingBottom: '56.25%' }}>
           <div className="absolute inset-0" data-vimeo-initialized="true">
@@ -77,55 +75,7 @@ export function VideoLayout({ children, meta }) {
         </div>
         <div className="hidden xl:text-sm xl:block xl:w-1/4 xl:px-6">
           <div className="flex flex-col justify-between overflow-y-auto sticky top-16 max-h-(screen-16) pt-12 pb-4">
-            <div id="ad" />
-            <div id="tailwind-ui-widget">
-              <a
-                href="https://tailwindui.com/?utm_source=tailwindcss&utm_medium=sidebar-widget"
-                className="mt-3 block"
-              >
-                <img src="/img/tailwind-ui-sidebar.png" alt="Tailwind UI" />
-              </a>
-              <p className="mt-4 text-gray-700">
-                <a
-                  href="https://tailwindui.com/?utm_source=tailwindcss&utm_medium=sidebar-widget"
-                  className="text-gray-700"
-                >
-                  Beautiful UI components by the creators of Tailwind CSS.
-                </a>
-              </p>
-              <div className="mt-2">
-                <a
-                  href="https://tailwindui.com?utm_source=tailwindcss&utm_medium=sidebar-widget"
-                  className="text-sm text-gray-800 font-medium hover:underline"
-                >
-                  Learn more →
-                </a>
-              </div>
-            </div>
-            <div id="refactoring-ui-widget" style={{ display: 'none' }}>
-              <a
-                href="https://refactoringui.com/book?utm_source=tailwindcss&utm_medium=sidebar-widget"
-                className="mt-3 block"
-              >
-                <img src="/img/refactoring-ui-book.png" alt="" />
-              </a>
-              <p className="text-gray-700 text-center">
-                <a
-                  href="https://refactoringui.com/book?utm_source=tailwindcss&utm_medium=sidebar-widget"
-                  className="text-gray-700"
-                >
-                  Learn UI design, from the creators of Tailwind CSS.
-                </a>
-              </p>
-              <div className="mt-3 text-center">
-                <a
-                  href="https://refactoringui.com/book?utm_source=tailwindcss&utm_medium=sidebar-widget"
-                  className="inline-block px-3 py-2 text-sm bg-indigo-500 text-white font-semibold rounded hover:bg-indigo-600"
-                >
-                  Learn more →
-                </a>
-              </div>
-            </div>
+            <Ad />
           </div>
         </div>
       </div>
