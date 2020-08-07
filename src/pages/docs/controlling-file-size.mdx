@@ -5,14 +5,30 @@ description: Strategies for keeping your generated CSS small and performant.
 
 import { Heading } from '@/components/Heading'
 import { TipGood, TipBad } from '@/components/Tip'
+import stats from '@/utils/stats'
 
 ## <Heading hidden>Overview</Heading>
 
-Using the default configuration, the development build of Tailwind CSS is {{ $page['stats']['default.config.js'][0] }} uncompressed, {{ $page['stats']['default.config.js'][2] }} minified and compressed with [Gzip](https://www.gnu.org/software/gzip/), and {{ $page['stats']['default.config.js'][3] }} when compressed with [Brotli](https://github.com/google/brotli).
+<p>Using the default configuration, the development build of Tailwind CSS is {stats.default.original} uncompressed, {stats.default.gzipped} minified and compressed with <a href="https://www.gnu.org/software/gzip/">Gzip</a>, and {stats.default.brotlified} when compressed with <a href="https://github.com/google/brotli">Brotli</a>.</p>
 
-| Uncompressed | Minified |    Gzip | Brotli |
-| ------------ | ------- | ------ | ----- |
-|       {{ $page['stats']['default.config.js'][0] }} |  {{ $page['stats']['default.config.js'][1] }} |  {{ $page['stats']['default.config.js'][2] }} | {{ $page['stats']['default.config.js'][3] }} |
+<table>
+  <thead>
+    <tr>
+      <th>Uncompressed</th>
+      <th>Minified</th>
+      <th>Gzip</th>
+      <th>Brotli</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{stats.default.original}</td>
+      <td>{stats.default.minified}</td>
+      <td>{stats.default.gzipped}</td>
+      <td>{stats.default.brotlified}</td>
+    </tr>
+  </tbody>
+</table>
 
 This might sound enormous but **the development build is large by design**.
 
@@ -268,7 +284,7 @@ Here are a few strategies you can use to keep your generated CSS small and perfo
 
 ### Limiting your color palette
 
-The default theme includes a whopping [93 colors](/docs/colors) used for backgrounds, borders, text, and placeholders, all of which also have `hover:` and `focus` variants, as well as responsive variants at the five default screen sizes.
+The default theme includes a whopping [93 colors](/docs/customizing-colors) used for backgrounds, borders, text, and placeholders, all of which also have `hover:` and `focus` variants, as well as responsive variants at the five default screen sizes.
 
 By default, there are _thousands_ of classes generated to accommodate these colors, and it makes up close to half of the final build size.
 
@@ -276,11 +292,40 @@ Very few projects actually need this many colors, and removing colors you don't 
 
 Here's how using a smaller color palette affects the final size:
 
-| Colors         | Original | Minified |   Gzip | Brotli |
-| -------------- | -------: | -------: | -----: | -----: |
-| 93 _(default)_ |  {{ $page['stats']['default.config.js'][0] }} |  {{ $page['stats']['default.config.js'][1] }} | {{ $page['stats']['default.config.js'][2] }} | {{ $page['stats']['default.config.js'][3] }} |
-| 50 |  {{ $page['stats']['50-colors.config.js'][0] }} |  {{ $page['stats']['50-colors.config.js'][1] }} | {{ $page['stats']['50-colors.config.js'][2] }} | {{ $page['stats']['50-colors.config.js'][3] }} |
-| 25 |  {{ $page['stats']['25-colors.config.js'][0] }} |  {{ $page['stats']['25-colors.config.js'][1] }} | {{ $page['stats']['25-colors.config.js'][2] }} | {{ $page['stats']['25-colors.config.js'][3] }} |
+<table>
+  <thead>
+    <tr>
+      <th>Colors</th>
+      <th>Original</th>
+      <th>Minified</th>
+      <th>Gzip</th>
+      <th>Brotli</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>93 <em>(default)</em></td>
+      <td>{stats.default.original}</td>
+      <td>{stats.default.minified}</td>
+      <td>{stats.default.gzipped}</td>
+      <td>{stats.default.brotlified}</td>
+    </tr>
+    <tr>
+      <td>50</td>
+      <td>{stats['50-colors'].original}</td>
+      <td>{stats['50-colors'].minified}</td>
+      <td>{stats['50-colors'].gzipped}</td>
+      <td>{stats['50-colors'].brotlified}</td>
+    </tr>
+    <tr>
+      <td>25</td>
+      <td>{stats['25-colors'].original}</td>
+      <td>{stats['25-colors'].minified}</td>
+      <td>{stats['25-colors'].gzipped}</td>
+      <td>{stats['25-colors'].brotlified}</td>
+    </tr>
+  </tbody>
+</table>
 
 ### Removing unused breakpoints
 
@@ -288,14 +333,49 @@ Since almost every Tailwind utility is copied for every screen size, using fewer
 
 Here's how defining fewer screens affects the output:
 
-| Breakpoints   | Original | Minified |   Gzip | Brotli |
-| ------------- | -------: | -------: | -----: | -----: |
-| 4 _(default)_ |  {{ $page['stats']['default.config.js'][0] }} |  {{ $page['stats']['default.config.js'][1] }} | {{ $page['stats']['default.config.js'][2] }} | {{ $page['stats']['default.config.js'][3] }} |
-| 3 |  {{ $page['stats']['3-screens.config.js'][0] }} |  {{ $page['stats']['3-screens.config.js'][1] }} | {{ $page['stats']['3-screens.config.js'][2] }} | {{ $page['stats']['3-screens.config.js'][3] }} |
-| 2 |  {{ $page['stats']['2-screens.config.js'][0] }} |  {{ $page['stats']['2-screens.config.js'][1] }} | {{ $page['stats']['2-screens.config.js'][2] }} | {{ $page['stats']['2-screens.config.js'][3] }} |
-| 1 |  {{ $page['stats']['1-screen.config.js'][0] }} |  {{ $page['stats']['1-screen.config.js'][1] }} | {{ $page['stats']['1-screen.config.js'][2] }} | {{ $page['stats']['1-screen.config.js'][3] }} |
+<table>
+  <thead>
+    <tr>
+      <th>Breakpoints</th>
+      <th>Original</th>
+      <th>Minified</th>
+      <th>Gzip</th>
+      <th>Brotli</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>4 <em>(default)</em></td>
+      <td>{stats.default.original}</td>
+      <td>{stats.default.minified}</td>
+      <td>{stats.default.gzipped}</td>
+      <td>{stats.default.brotlified}</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>{stats['3-screens'].original}</td>
+      <td>{stats['3-screens'].minified}</td>
+      <td>{stats['3-screens'].gzipped}</td>
+      <td>{stats['3-screens'].brotlified}</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>{stats['2-screens'].original}</td>
+      <td>{stats['2-screens'].minified}</td>
+      <td>{stats['2-screens'].gzipped}</td>
+      <td>{stats['2-screens'].brotlified}</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>{stats['1-screen'].original}</td>
+      <td>{stats['1-screen'].minified}</td>
+      <td>{stats['1-screen'].gzipped}</td>
+      <td>{stats['1-screen'].brotlified}</td>
+    </tr>
+  </tbody>
+</table>
 
-If you only need 3 screen sizes and 35 colors, you're down to {{ $page['stats']['35-colors-3-screens.config.js'][2] }} after gzip _({{ $page['stats']['35-colors-3-screens.config.js'][3] }} after Brotli!)_ without changing anything else.
+<p>If you only need 3 screen sizes and 35 colors, you're down to {stats['35-colors-3-screens'].gzipped} after gzip <em>({stats['35-colors-3-screens'].brotlified} after Brotli!)</em> without changing anything else.</p>
 
 ### Disabling unused utilities and variants
 
