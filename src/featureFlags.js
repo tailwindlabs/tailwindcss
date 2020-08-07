@@ -93,6 +93,7 @@ export function issueFlagNotices(config) {
     log.risk(
       'We highly recommend opting-in to these changes now to simplify upgrading Tailwind in the future.'
     )
+    log.risk('https://tailwindcss.com/docs/upcoming-changes')
   }
 }
 
