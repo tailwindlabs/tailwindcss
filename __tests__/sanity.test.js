@@ -58,9 +58,8 @@ it('generates the right CSS when enabling flagged features', () => {
 
   return postcss([
     tailwind({
-      experimental: {
-        uniformColorPalette: true,
-      },
+      future: 'all',
+      experimental: 'all',
     }),
   ])
     .process(input, { from: inputPath })
