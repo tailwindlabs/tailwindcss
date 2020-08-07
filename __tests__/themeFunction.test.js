@@ -109,3 +109,48 @@ test('an unquoted list is valid as a default value', () => {
     expect(result.warnings().length).toBe(0)
   })
 })
+
+test('array values are joined by default', () => {
+  const input = `
+    .heading { font-family: theme('fontFamily.sans'); }
+  `
+
+  const output = `
+    .heading { font-family: Inter, Helvetica, sans-serif; }
+  `
+
+  return run(input, {
+    theme: {
+      fontFamily: {
+        sans: ['Inter', 'Helvetica', 'sans-serif'],
+      },
+    },
+  }).then(result => {
+    expect(result.css).toEqual(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('font sizes are retrieved without default line-heights or letter-spacing', () => {
+  const input = `
+    .heading-1 { font-size: theme('fontSize.lg'); }
+    .heading-2 { font-size: theme('fontSize.xl'); }
+  `
+
+  const output = `
+    .heading-1 { font-size: 20px; }
+    .heading-2 { font-size: 24px; }
+  `
+
+  return run(input, {
+    theme: {
+      fontSize: {
+        lg: ['20px', '28px'],
+        xl: ['24px', { lineHeight: '32px', letterSpacing: '-0.01em' }],
+      },
+    },
+  }).then(result => {
+    expect(result.css).toEqual(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
