@@ -14,12 +14,17 @@ import defaultConfig from '../stubs/defaultConfig.stub.js'
 import { flagEnabled } from './featureFlags'
 
 import uniformColorPalette from './flagged/uniformColorPalette.js'
+import extendedSpacingScale from './flagged/extendedSpacingScale.js'
 
 function getDefaultConfigs(config) {
   const configs = [defaultConfig]
 
   if (flagEnabled(config, 'uniformColorPalette')) {
     configs.unshift(uniformColorPalette)
+  }
+
+  if (flagEnabled(config, 'extendedSpacingScale')) {
+    configs.unshift(extendedSpacingScale)
   }
 
   return configs
