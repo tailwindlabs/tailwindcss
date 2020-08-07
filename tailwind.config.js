@@ -1,15 +1,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
-  // purge: [
-  //   './source/**/*.blade.php',
-  //   './source/**/*.blade.md',
-  //   './source/**/*.vue',
-  //   './source/**/*.js',
-  // ],
-  purge: [
-    './src/**/*.{js,mdx}',
-  ],
+  purge: ['./src/**/*.{js,mdx}'],
   important: true,
   theme: {
     screens: {
@@ -56,11 +48,9 @@ module.exports = {
       borderWidth: {
         '6': '6px',
       },
-      maxWidth: theme => {
-        return {
-          'screen-xl': theme('screens.xl'),
-        }
-      },
+      maxWidth: (theme) => ({
+        'screen-xl': theme('screens.xl'),
+      }),
       maxHeight: {
         xs: '20rem',
         sm: '30rem',
