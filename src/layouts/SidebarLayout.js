@@ -8,31 +8,22 @@ import clsx from 'clsx'
 export const SidebarContext = createContext()
 
 function NavItem({ href, children, isActive, isPublished, fallbackHref }) {
-  const publishedLinkClassName =
-    'hover:translate-x-2px hover:text-gray-900 text-gray-600 font-medium'
-  const unpublishedLinkClassName = 'hover:translate-x-2px text-gray-400 font-medium'
-  const activeLinkClassName = 'text-teal-600 font-medium'
-
-  if (!isPublished) {
-    href = fallbackHref
-  }
-
   return (
     <li className="mb-3 lg:mb-1">
-      <Link href={href}>
+      <Link href={isPublished ? href : fallbackHref}>
         <a
-          className={`px-2 -mx-2 py-1 transition duration-200 ease-in-out relative block ${
-            isActive
-              ? activeLinkClassName
-              : isPublished
-              ? publishedLinkClassName
-              : unpublishedLinkClassName
-          }`}
+          className={clsx('px-2 -mx-2 py-1 transition duration-200 ease-in-out relative block', {
+            'text-teal-600 font-medium': isActive,
+            'hover:translate-x-2px hover:text-gray-900 text-gray-600 font-medium':
+              !isActive && isPublished,
+            'hover:translate-x-2px text-gray-400 font-medium': !isActive && !isPublished,
+          })}
         >
           <span
-            className={`rounded absolute inset-0 bg-teal-200 ${
-              isActive ? 'opacity-25' : 'opacity-0'
-            }`}
+            className={clsx('rounded absolute inset-0 bg-teal-200', {
+              'opacity-25': isActive,
+              'opacity-0': !isActive,
+            })}
           />
           <span className="relative">{children}</span>
         </a>
@@ -51,9 +42,10 @@ function Nav({ nav, fallbackHref }) {
       return (
         <div className="mb-8" key={category}>
           <h5
-            className={`mb-3 lg:mb-2 uppercase tracking-wide font-bold text-sm lg:text-xs ${
-              publishedItems.length ? 'text-gray-500' : 'text-gray-400'
-            }`}
+            className={clsx('mb-3 lg:mb-2 uppercase tracking-wide font-bold text-sm lg:text-xs', {
+              'text-gray-500': publishedItems.length > 0,
+              'text-gray-400': publishedItems.length === 0,
+            })}
           >
             {category}
           </h5>
@@ -239,15 +231,24 @@ export function SidebarLayout({ children, navIsOpen, nav, sidebar, fallbackHref 
         <div className="lg:flex -mx-6">
           <div
             id="sidebar"
-            className={`fixed inset-0 h-full bg-white z-90 w-full border-b -mb-16 lg:-mb-0 lg:static lg:h-auto lg:overflow-y-visible lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5 ${
-              navIsOpen ? '' : 'hidden'
-            } ${isHome ? 'pt-24' : 'pt-16'}`}
+            className={clsx(
+              'fixed inset-0 h-full bg-white z-90 w-full border-b -mb-16 lg:-mb-0 lg:static lg:h-auto lg:overflow-y-visible lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-1/5',
+              {
+                hidden: !navIsOpen,
+                'pt-24': isHome,
+                'pt-16': !isHome,
+              }
+            )}
           >
             <div
               id="navWrapper"
-              className={`h-full overflow-y-auto scrolling-touch lg:h-auto lg:block lg:relative lg:sticky lg:bg-transparent overflow-hidden ${
-                isHome ? 'lg:top-0 bg-gray-100' : 'lg:top-16 bg-white'
-              }`}
+              className={clsx(
+                'h-full overflow-y-auto scrolling-touch lg:h-auto lg:block lg:relative lg:sticky lg:bg-transparent overflow-hidden',
+                {
+                  'lg:top-0 bg-gray-100': isHome,
+                  'lg:top-16 bg-white': !isHome,
+                }
+              )}
             >
               <div id="navGradient" className="hidden" />
               <nav
@@ -273,9 +274,12 @@ export function SidebarLayout({ children, navIsOpen, nav, sidebar, fallbackHref 
           </div>
           <div
             id="content-wrapper"
-            className={`min-h-screen w-full lg:static lg:max-h-full lg:overflow-visible lg:w-3/4 xl:w-4/5 ${
-              navIsOpen ? 'overflow-hidden max-h-screen fixed' : ''
-            }`}
+            className={clsx(
+              'min-h-screen w-full lg:static lg:max-h-full lg:overflow-visible lg:w-3/4 xl:w-4/5',
+              {
+                'overflow-hidden max-h-screen fixed': navIsOpen,
+              }
+            )}
           >
             <div id="content">
               <div id="app" className="flex">

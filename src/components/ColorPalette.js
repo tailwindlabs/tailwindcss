@@ -1,6 +1,7 @@
 import { defaultConfig } from '@/utils/defaultConfig'
 import { kebabToTitleCase } from '@/utils/kebabToTitleCase'
 import dlv from 'dlv'
+import clsx from 'clsx'
 
 function chunkArray(array, size) {
   let result = []
@@ -46,7 +47,12 @@ export function ColorPalette({ colors }) {
 
         if (palette.length < 3) {
           return (
-            <div key={i} className={`px-2 w-full relative ${i === 0 ? '' : 'mt-4'}`}>
+            <div
+              key={i}
+              className={clsx('px-2 w-full relative', {
+                'mt-4': i !== 0,
+              })}
+            >
               <h3 className="markdown no-toc mb-4 mt-8">{title}</h3>
               <div className="-mx-2 -mt-5 flex flex-wrap">
                 {palette.map((variant, j) => (
@@ -60,7 +66,12 @@ export function ColorPalette({ colors }) {
         }
 
         return (
-          <div key={i} className={`w-1/2 px-2 md:w-full relative ${i === 0 ? '' : 'mt-4'}`}>
+          <div
+            key={i}
+            className={clsx('w-1/2 px-2 md:w-full relative', {
+              'mt-4': i !== 0,
+            })}
+          >
             <h3 className="markdown no-toc mb-4 mt-8">{title}</h3>
             <div className="md:-mx-2 md:-mt-5 md:flex md:flex-wrap">
               {chunkArray(palette, 3).map((chunk, j) => (

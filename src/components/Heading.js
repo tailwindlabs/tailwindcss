@@ -1,6 +1,7 @@
 import { useEffect, useContext, useRef } from 'react'
 import { ContentsContext } from '@/layouts/ContentsLayout'
 import { useTop } from '@/hooks/useTop'
+import clsx from 'clsx'
 
 export function Heading({
   level,
@@ -30,7 +31,9 @@ export function Heading({
 
   return (
     <Component
-      className={`group flex whitespace-pre-wrap ${hidden ? '-mb-6' : ''} ${className}`}
+      className={clsx('group flex whitespace-pre-wrap', className, {
+        '-mb-6': hidden,
+      })}
       id={id}
       ref={ref}
       {...props}

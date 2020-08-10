@@ -100,9 +100,10 @@ export const ClassTable = memo(
                     <div className="p-2 border-b border-gray-300">Class</div>
                   </th>
                   <th
-                    className={`z-20 sticky top-0 text-sm font-semibold text-gray-700 bg-gray-100 p-0 ${
-                      preview && 'hidden sm:table-cell'
-                    }`}
+                    className={clsx(
+                      'z-20 sticky top-0 text-sm font-semibold text-gray-700 bg-gray-100 p-0',
+                      { 'hidden sm:table-cell': preview }
+                    )}
                   >
                     <div className="p-2 border-b border-gray-300">Properties</div>
                   </th>
@@ -123,16 +124,20 @@ export const ClassTable = memo(
                   return (
                     <tr key={utility}>
                       <td
-                        className={`p-2 font-mono text-xs text-purple-700 whitespace-no-wrap ${
-                          i === 0 ? '' : 'border-t border-gray-200'
-                        }`}
+                        className={clsx(
+                          'p-2 font-mono text-xs text-purple-700 whitespace-no-wrap',
+                          {
+                            'border-t border-gray-200': i !== 0,
+                          }
+                        )}
                       >
                         {transformSelector(selector)}
                       </td>
                       <td
-                        className={`p-2 font-mono text-xs text-blue-700 whitespace-pre ${
-                          i === 0 ? '' : 'border-t border-gray-200'
-                        } ${preview && 'hidden sm:table-cell'}`}
+                        className={clsx('p-2 font-mono text-xs text-blue-700 whitespace-pre', {
+                          'border-t border-gray-200': i !== 0,
+                          'hidden sm:table-cell': preview,
+                        })}
                       >
                         {stringifyProperties(transformProperties({ selector, properties }), {
                           filter: filterProperties,

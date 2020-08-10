@@ -8,9 +8,10 @@ function Button({ children, active, onClick }) {
   return (
     <button
       type="button"
-      className={`inline-block text-center cursor-pointer select-none px-3 ${
-        active ? 'text-gray-800' : 'text-gray-500'
-      }`}
+      className={clsx('inline-block text-center cursor-pointer select-none px-3', {
+        'text-gray-800': active,
+        'text-gray-500': !active,
+      })}
       onClick={onClick}
     >
       {children}
