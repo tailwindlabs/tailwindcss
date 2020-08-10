@@ -4,7 +4,7 @@ export function List({ children }) {
 
 export function ListItemGood({ children }) {
   return (
-    <li className="flex items-center">
+    <li className="flex">
       <svg viewBox="0 0 24 24" className="h-6 w-6 mr-2 flex-shrink-0">
         <circle cx="12" cy="12" r="10" className="text-green-200 fill-current" />
         <path
@@ -12,14 +12,14 @@ export function ListItemGood({ children }) {
           className="text-green-600 fill-current"
         />
       </svg>
-      <span>{children}</span>
+      <span className="-mt-px">{children}</span>
     </li>
   )
 }
 
 export function ListItemBad({ children }) {
   return (
-    <li className="flex items-center">
+    <li className="flex">
       <svg viewBox="0 0 24 24" className="h-6 w-6 mr-2 flex-shrink-0">
         <circle cx="12" cy="12" r="10" fill="#fed7d7" />
         <path
@@ -27,7 +27,7 @@ export function ListItemBad({ children }) {
           d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z"
         />
       </svg>
-      <span>{children}</span>
+      <span className="-mt-px">{children}</span>
     </li>
   )
 }
