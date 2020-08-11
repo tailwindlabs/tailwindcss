@@ -9,104 +9,106 @@ import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
 
 export const classes = (
-  <table className="w-full text-left table-collapse">
-    <thead>
-      <tr>
-        <th className="text-sm font-semibold text-gray-700 p-2 bg-gray-100">
-          Class
-        </th>
-        <th className="text-sm font-semibold text-gray-700 p-2 bg-gray-100">
-          Properties
-        </th>
-      </tr>
-    </thead>
-    <tbody className="align-baseline">
-      <tr>
-        <td className="p-2 border-t border-gray-300 font-mono text-xs text-purple-700 whitespace-no-wrap">
-          .animate-none
-        </td>
-        <td className="p-2 border-t border-gray-300 font-mono text-xs text-blue-700 whitespace-pre">
-          animation: none;
-        </td>
-      </tr>
-      <tr>
-        <td className="p-2 border-t border-gray-200 font-mono text-xs text-purple-700 whitespace-no-wrap">
-          .animate-spin
-        </td>
-        <td className="p-2 border-t border-gray-200 font-mono text-xs text-blue-700 whitespace-pre">
-          {redent(`
-            animation: spin 1s linear infinite;\n
-            @keyframes spin {
-              from {
-                transform: rotate(0deg);
+  <div className="overflow-y-auto scrollbar-w-2 scrollbar-track-gray-lighter scrollbar-thumb-rounded scrollbar-thumb-gray scrolling-touch lg:max-h-sm">
+    <table className="w-full text-left table-collapse">
+      <thead>
+        <tr>
+          <th className="text-sm font-semibold text-gray-700 p-2 bg-gray-100">
+            Class
+          </th>
+          <th className="text-sm font-semibold text-gray-700 p-2 bg-gray-100">
+            Properties
+          </th>
+        </tr>
+      </thead>
+      <tbody className="align-baseline">
+        <tr>
+          <td className="p-2 border-t border-gray-300 font-mono text-xs text-purple-700 whitespace-no-wrap">
+            .animate-none
+          </td>
+          <td className="p-2 border-t border-gray-300 font-mono text-xs text-blue-700 whitespace-pre">
+            animation: none;
+          </td>
+        </tr>
+        <tr>
+          <td className="p-2 border-t border-gray-200 font-mono text-xs text-purple-700 whitespace-no-wrap">
+            .animate-spin
+          </td>
+          <td className="p-2 border-t border-gray-200 font-mono text-xs text-blue-700 whitespace-pre">
+            {redent(`
+              animation: spin 1s linear infinite;\n
+              @keyframes spin {
+                from {
+                  transform: rotate(0deg);
+                }
+                to {
+                  transform: rotate(360deg);
+                }
               }
-              to {
-                transform: rotate(360deg);
+            `).trim()}
+          </td>
+        </tr>
+        <tr>
+          <td className="p-2 border-t border-gray-200 font-mono text-xs text-purple-700 whitespace-no-wrap">
+            .animate-ping
+          </td>
+          <td className="p-2 border-t border-gray-200 font-mono text-xs text-blue-700 whitespace-pre">
+            {redent(`
+              animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;\n
+              @keyframes ping {
+                0% {
+                  transform: scale(1);
+                  opacity: 1;
+                }
+                75%, 100% {
+                  transform: scale(2);
+                  opacity: 0;
+                }
               }
-            }
-          `).trim()}
-        </td>
-      </tr>
-      <tr>
-        <td className="p-2 border-t border-gray-200 font-mono text-xs text-purple-700 whitespace-no-wrap">
-          .animate-ping
-        </td>
-        <td className="p-2 border-t border-gray-200 font-mono text-xs text-blue-700 whitespace-pre">
-          {redent(`
-            animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;\n
-            @keyframes ping {
-              0% {
-                transform: scale(1);
-                opacity: 1;
+            `).trim()}
+          </td>
+        </tr>
+        <tr>
+          <td className="p-2 border-t border-gray-200 font-mono text-xs text-purple-700 whitespace-no-wrap">
+            .animate-pulse
+          </td>
+          <td className="p-2 border-t border-gray-200 font-mono text-xs text-blue-700 whitespace-pre">
+            {redent(`
+              animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;\n
+              @keyframes pulse {
+                0%, 100% {
+                  opacity: 1;
+                }
+                50% {
+                  opacity: .5;
+                }
               }
-              75%, 100% {
-                transform: scale(2);
-                opacity: 0;
+            `).trim()}
+          </td>
+        </tr>
+        <tr>
+          <td className="p-2 border-t border-gray-200 font-mono text-xs text-purple-700 whitespace-no-wrap">
+            .animate-bounce
+          </td>
+          <td className="p-2 border-t border-gray-200 font-mono text-xs text-blue-700 whitespace-pre">
+            {redent(`
+              animation: bounce 1s infinite;\n
+              @keyframes bounce {
+                0%, 100% {
+                  transform: translateY(-25%);
+                  animationTimingFunction: cubic-bezier(0.8, 0, 1, 1);
+                }
+                50% {
+                  transform: translateY(0);
+                  animationTimingFunction: cubic-bezier(0, 0, 0.2, 1);
+                }
               }
-            }
-          `).trim()}
-        </td>
-      </tr>
-      <tr>
-        <td className="p-2 border-t border-gray-200 font-mono text-xs text-purple-700 whitespace-no-wrap">
-          .animate-pulse
-        </td>
-        <td className="p-2 border-t border-gray-200 font-mono text-xs text-blue-700 whitespace-pre">
-          {redent(`
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;\n
-            @keyframes pulse {
-              0%, 100% {
-                opacity: 1;
-              }
-              50% {
-                opacity: .5;
-              }
-            }
-          `).trim()}
-        </td>
-      </tr>
-      <tr>
-        <td className="p-2 border-t border-gray-200 font-mono text-xs text-purple-700 whitespace-no-wrap">
-          .animate-bounce
-        </td>
-        <td className="p-2 border-t border-gray-200 font-mono text-xs text-blue-700 whitespace-pre">
-          {redent(`
-            animation: bounce 1s infinite;\n
-            @keyframes bounce {
-              0%, 100% {
-                transform: translateY(-25%);
-                animationTimingFunction: cubic-bezier(0.8, 0, 1, 1);
-              }
-              50% {
-                transform: translateY(0);
-                animationTimingFunction: cubic-bezier(0, 0, 0.2, 1);
-              }
-            }
-          `).trim()}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+            `).trim()}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 )
 
 ## Spin
