@@ -9,6 +9,8 @@ features:
 ---
 
 import plugin from 'tailwindcss/lib/plugins/appearance'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
 
 export const classes = { plugin }
 
@@ -57,12 +59,10 @@ Use `.appearance-none` to reset any browser specific styling on an element. This
 
 ## Customizing
 
-@include('_partials.variants-and-disabling', [
-    'utility' => [
-        'name' => 'appearance',
-        'property' => 'appearance',
-    ],
-    'variants' => [
-        'responsive',
-    ],
-])
+### Responsive and pseudo-class variants
+
+<Variants plugin="appearance" />
+
+### Disabling
+
+<Disabling plugin="appearance" />

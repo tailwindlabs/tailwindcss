@@ -11,6 +11,8 @@ features:
 import plugin from 'tailwindcss/lib/plugins/backgroundColor'
 import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 import { Heading } from '@/components/Heading'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
 
 export const classes = {
   plugin,
@@ -149,14 +151,10 @@ You can [customize your color palette](/docs/colors#customizing) by editing the 
   }
 ```
 
-@include('_partials.variants-and-disabling', [
-    'utility' => [
-        'name' => 'background color',
-        'property' => 'backgroundColor',
-    ],
-    'variants' => [
-        'responsive',
-        'hover',
-        'focus'
-    ],
-])
+### Responsive and pseudo-class variants
+
+<Variants plugin="backgroundColor" />
+
+### Disabling
+
+<Disabling plugin="backgroundColor" />

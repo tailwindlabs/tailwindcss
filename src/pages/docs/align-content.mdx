@@ -10,6 +10,8 @@ features:
 
 import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 import plugin from 'tailwindcss/lib/plugins/alignContent'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
 
 export const classes = { plugin }
 
@@ -179,12 +181,10 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-@include('_partials.variants-and-disabling', [
-    'utility' => [
-        'name' => 'align-content',
-        'property' => 'alignContent',
-    ],
-    'variants' => [
-        'responsive',
-    ],
-])
+### Responsive and pseudo-class variants
+
+<Variants plugin="alignContent" name="align-content" />
+
+### Disabling
+
+<Disabling plugin="alignContent" name="align-content" />

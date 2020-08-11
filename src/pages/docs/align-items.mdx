@@ -10,6 +10,8 @@ features:
 
 import plugin from 'tailwindcss/lib/plugins/alignItems'
 import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
 
 export const classes = { plugin }
 
@@ -107,12 +109,10 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-@include('_partials.variants-and-disabling', [
-    'utility' => [
-        'name' => 'align-items',
-        'property' => 'alignItems',
-    ],
-    'variants' => [
-        'responsive',
-    ],
-])
+### Responsive and pseudo-class variants
+
+<Variants plugin="alignItems" name="align-items" />
+
+### Disabling
+
+<Disabling plugin="alignItems" name="align-items" />

@@ -10,6 +10,8 @@ features:
 
 import plugin from 'tailwindcss/lib/plugins/alignSelf'
 import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
 
 export const classes = { plugin }
 
@@ -109,12 +111,10 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-@include('_partials.variants-and-disabling', [
-    'utility' => [
-        'name' => 'align-self',
-        'property' => 'alignSelf',
-    ],
-    'variants' => [
-        'responsive',
-    ],
-])
+### Responsive and pseudo-class variants
+
+<Variants plugin="alignSelf" name="align-self" />
+
+### Disabling
+
+<Disabling plugin="alignSelf" name="align-self" />
