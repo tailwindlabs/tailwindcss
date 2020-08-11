@@ -250,7 +250,14 @@ export function SidebarLayout({ children, navIsOpen, nav, sidebar, fallbackHref 
                 }
               )}
             >
-              <div id="navGradient" className="hidden" />
+              {isHome && (
+                <div
+                  class="hidden lg:block h-16 pointer-events-none absolute inset-x-0 z-10"
+                  style={{
+                    backgroundImage: 'linear-gradient(rgba(255,255,255,1), rgba(255,255,255,0))',
+                  }}
+                />
+              )}
               <nav
                 id="nav"
                 className={clsx(
