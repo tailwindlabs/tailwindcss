@@ -144,8 +144,8 @@ function TopLevelNav() {
         Components
       </TopLevelLink>
       <TopLevelLink
-        href="/screencasts"
-        isActive={current === 'screencasts'}
+        href="/course"
+        isActive={current === 'course'}
         className="mt-3 lg:mt-1"
         icon={
           <>

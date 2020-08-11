@@ -6,8 +6,8 @@ import { Title } from '@/components/Title'
 import { createPageList } from '@/utils/createPageList'
 
 const pages = createPageList(
-  require.context('../pages/screencasts/?meta=title,shortTitle,published', true, /\.mdx$/),
-  'screencasts'
+  require.context('../pages/course/?meta=title,shortTitle,published', true, /\.mdx$/),
+  'course'
 )
 
 const nav = {
@@ -73,14 +73,12 @@ const nav = {
   ],
 }
 
-export function ScreencastsLayout(props) {
+export function CourseLayout(props) {
   const router = useRouter()
 
   return (
     <>
-      <Title
-        suffix={router.pathname === '/screencasts' ? undefined : 'Designing with Tailwind CSS'}
-      >
+      <Title suffix={router.pathname === '/course' ? undefined : 'Designing with Tailwind CSS'}>
         {props.layoutProps.meta.metaTitle || props.layoutProps.meta.title}
       </Title>
       <Head>
@@ -95,7 +93,7 @@ export function ScreencastsLayout(props) {
           content={`https://tailwindcss.com${twitterCardScreencasts}`}
         />
       </Head>
-      <SidebarLayout nav={nav} fallbackHref="/screencasts/coming-soon" {...props} />
+      <SidebarLayout nav={nav} fallbackHref="/course/coming-soon" {...props} />
     </>
   )
 }
