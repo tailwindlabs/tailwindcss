@@ -36,7 +36,7 @@ export default function App({ Component, pageProps, router }) {
 
   const Layout = Component.layoutProps?.Layout || Fragment
   const layoutProps = Component.layoutProps?.Layout
-    ? { layoutProps: Component.layoutProps, navIsOpen }
+    ? { layoutProps: Component.layoutProps, navIsOpen, setNavIsOpen }
     : {}
   const meta = Component.layoutProps?.meta || {}
   const description =

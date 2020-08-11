@@ -222,11 +222,11 @@ function TopLevelNav() {
   )
 }
 
-export function SidebarLayout({ children, navIsOpen, nav, sidebar, fallbackHref }) {
+export function SidebarLayout({ children, navIsOpen, setNavIsOpen, nav, sidebar, fallbackHref }) {
   let isHome = useIsHome()
 
   return (
-    <SidebarContext.Provider value={{ nav }}>
+    <SidebarContext.Provider value={{ nav, navIsOpen, setNavIsOpen }}>
       <div className="w-full max-w-screen-xl mx-auto px-6">
         <div className="lg:flex -mx-6">
           <div

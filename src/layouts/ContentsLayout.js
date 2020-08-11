@@ -1,9 +1,17 @@
-import { useState, useEffect, createContext, Fragment, useCallback, isValidElement } from 'react'
+import {
+  useState,
+  useEffect,
+  createContext,
+  Fragment,
+  useCallback,
+  isValidElement,
+  useContext,
+} from 'react'
 import { ClassTable } from '@/components/ClassTable'
 import { useIsHome } from '@/hooks/useIsHome'
 import { usePrevNext } from '@/hooks/usePrevNext'
 import Link from 'next/link'
-import { SidebarLayout } from '@/layouts/SidebarLayout'
+import { SidebarLayout, SidebarContext } from '@/layouts/SidebarLayout'
 import { Ad } from '@/components/Ad'
 import { PageHeader } from '@/components/PageHeader'
 import clsx from 'clsx'
@@ -11,6 +19,15 @@ import clsx from 'clsx'
 export const ContentsContext = createContext()
 
 function TableOfContents({ tableOfContents, currentSection }) {
+  let sidebarContext = useContext(SidebarContext)
+  let isMainNav = Boolean(sidebarContext)
+
+  function closeNav() {
+    if (isMainNav) {
+      sidebarContext.setNavIsOpen(false)
+    }
+  }
+
   return (
     <>
       <h5 className="text-gray-500 uppercase tracking-wide font-bold text-sm lg:text-xs">
@@ -24,9 +41,10 @@ function TableOfContents({ tableOfContents, currentSection }) {
 
           return (
             <Fragment key={section.slug}>
-              <li className="mb-2">
+              <li className={clsx({ 'mb-4 lg:mb-2': isMainNav, 'mb-2': !isMainNav })}>
                 <a
                   href={`#${section.slug}`}
+                  onClick={closeNav}
                   className={clsx(
                     'block transition-fast hover:translate-r-2px hover:text-gray-900 font-medium',
                     {
@@ -42,9 +60,16 @@ function TableOfContents({ tableOfContents, currentSection }) {
                 let subsectionIsActive = currentSection === subsection.slug
 
                 return (
-                  <li className="mb-2 ml-2" key={subsection.slug}>
+                  <li
+                    className={clsx({
+                      'mb-4 ml-4 lg:mb-2 lg:ml-2': isMainNav,
+                      'mb-2 ml-2': !isMainNav,
+                    })}
+                    key={subsection.slug}
+                  >
                     <a
                       href={`#${subsection.slug}`}
+                      onClick={closeNav}
                       className={clsx(
                         'block transition-fast hover:translate-r-2px hover:text-gray-900 font-medium',
                         {
@@ -112,7 +137,7 @@ function useTableOfContents(tableOfContents) {
   return { currentSection, registerHeading, unregisterHeading }
 }
 
-export function ContentsLayoutOuter({ children, layoutProps }) {
+export function ContentsLayoutOuter({ children, layoutProps, ...props }) {
   const { currentSection, registerHeading, unregisterHeading } = useTableOfContents(
     layoutProps.tableOfContents
   )
@@ -120,11 +145,14 @@ export function ContentsLayoutOuter({ children, layoutProps }) {
   return (
     <SidebarLayout
       sidebar={
-        <TableOfContents
-          tableOfContents={layoutProps.tableOfContents}
-          currentSection={currentSection}
-        />
+        <div className="mb-8">
+          <TableOfContents
+            tableOfContents={layoutProps.tableOfContents}
+            currentSection={currentSection}
+          />
+        </div>
       }
+      {...props}
     >
       <ContentsContext.Provider value={{ registerHeading, unregisterHeading }}>
         {children}
