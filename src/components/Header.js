@@ -162,8 +162,8 @@ function HeaderInner({ navIsOpen, onNavToggle }) {
           </Link>
         </div>
       </div>
-      <div className="flex flex-grow lg:w-3/4 xl:w-4/5">
-        <div className="w-full lg:px-6 xl:w-3/4 xl:px-12">
+      <div className="flex flex-grow min-w-0 lg:w-3/4 xl:w-4/5">
+        <div className="w-full min-w-0 lg:px-6 xl:w-3/4 xl:px-12">
           <Search />
         </div>
         <button
