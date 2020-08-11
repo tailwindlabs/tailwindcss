@@ -62,7 +62,11 @@ export default function App({ Component, pageProps, router }) {
         />
         <meta key="og:type" property="og:type" content="article" />
         <meta key="og:description" property="og:description" content={description} />
-        <meta key="og:image" property="og:image" content={twitterLargeCard} />
+        <meta
+          key="og:image"
+          property="og:image"
+          content={`https://tailwindcss.com${twitterLargeCard}`}
+        />
       </Head>
       <Header navIsOpen={navIsOpen} onNavToggle={(isOpen) => setNavIsOpen(isOpen)} />
       <Layout {...layoutProps}>
