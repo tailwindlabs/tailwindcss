@@ -89,7 +89,7 @@ export const ClassTable = memo(
         <div
           className={clsx(
             'overflow-y-auto scrollbar-w-2 scrollbar-track-gray-lighter scrollbar-thumb-rounded scrollbar-thumb-gray scrolling-touch',
-            { 'lg:max-h-xs': Object.keys(utilities).length > 12 }
+            { 'lg:max-h-sm': Object.keys(utilities).length > 12 }
           )}
         >
           {custom || (
