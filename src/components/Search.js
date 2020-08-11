@@ -64,6 +64,7 @@ export function Search() {
         createPortal(
           <DocSearchModal
             initialQuery={initialQuery}
+            initialScrollY={window.scrollY}
             searchParameters={{
               facetFilters: 'version:v1',
               distinct: 1,
