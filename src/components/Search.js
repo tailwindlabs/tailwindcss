@@ -2,6 +2,7 @@ import { useIsHome } from '@/hooks/useIsHome'
 import { useState, useCallback, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { DocSearchModal, useDocSearchKeyboardEvents } from '@docsearch/react'
 import clsx from 'clsx'
@@ -47,6 +48,9 @@ export function Search() {
 
   return (
     <div className="relative">
+      <Head>
+        <link rel="preconnect" href="https://BH4D9OD16A-dsn.algolia.net" crossOrigin="true" />
+      </Head>
       <button
         ref={searchButtonRef}
         onClick={onOpen}
