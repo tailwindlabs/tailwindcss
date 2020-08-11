@@ -1,6 +1,4 @@
 {
-  "name": "docs",
-  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,6 +6,9 @@
     "start": "next start",
     "export": "next build && next export"
   },
+  "browserslist": [
+    "> 1%"
+  ],
   "dependencies": {
     "@badrap/bar-of-progress": "^0.1.1",
     "@docsearch/react": "^1.0.0-alpha.27",
