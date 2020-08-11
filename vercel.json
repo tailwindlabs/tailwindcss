@@ -62,7 +62,7 @@
       "permanent": false
     },
     { "source": "/docs/colors", "destination": "/docs/customizing-colors", "permanent": false },
-    { "source": "/course", "destination": "/screencasts", "permanent": false },
+    { "source": "/screencasts", "destination": "/course", "permanent": false },
     { "source": "/discord", "destination": "https://discord.gg/7NF8GNe", "permanent": false },
     {
       "source": "/forum",
