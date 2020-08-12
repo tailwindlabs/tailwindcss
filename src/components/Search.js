@@ -62,7 +62,7 @@ export function Search() {
           }
         )}
       >
-        Search the docs (Press "/" to focus)
+        Search <span className="hidden sm:inline">the docs (Press "/" to focus)</span>
       </button>
       {isOpen &&
         createPortal(
