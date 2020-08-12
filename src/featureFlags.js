@@ -8,6 +8,7 @@ const featureFlags = {
     'extendedSpacingScale',
     'defaultLineHeights',
     'extendedFontSizeScale',
+    'applyComplexClasses',
   ],
 }
 

@@ -4,6 +4,9 @@ import escapeClassName from '../util/escapeClassName'
 import prefixSelector from '../util/prefixSelector'
 import increaseSpecificity from '../util/increaseSpecificity'
 
+import { flagEnabled } from '../featureFlags'
+import applyComplexClasses from '../flagged/applyComplexClasses'
+
 function buildClassTable(css) {
   const classTable = {}
 
@@ -54,6 +57,10 @@ function findClass(classToApply, classTable, onError) {
 }
 
 export default function(config, generatedUtilities) {
+  if (flagEnabled(config, 'applyComplexClasses')) {
+    return applyComplexClasses
+  }
+
   return function(css) {
     const classLookup = buildClassTable(css)
     const shadowLookup = buildShadowTable(generatedUtilities)
