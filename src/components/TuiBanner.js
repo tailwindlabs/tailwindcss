@@ -10,7 +10,11 @@ export function TuiBanner() {
 
   useEffect(() => {
     if (state === 'waiting') {
-      if (window.localStorage.getItem('hideBanner') !== null) {
+      try {
+        if (window.localStorage.getItem('hideBanner') !== null) {
+          return
+        }
+      } catch (_) {
         return
       }
       let current = true
@@ -78,7 +82,9 @@ export function TuiBanner() {
             <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-2">
               <button
                 onClick={() => {
-                  window.localStorage.setItem('hideBanner', true)
+                  try {
+                    window.localStorage.setItem('hideBanner', true)
+                  } catch (_) {}
                   setState('hidden')
                 }}
                 type="button"
