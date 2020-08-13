@@ -81,7 +81,7 @@ test.skip('applied rules can be made !important', () => {
   })
 })
 
-test.skip('cssnext custom property sets are preserved', () => {
+test('cssnext custom property sets are no longer supported', () => {
   const input = `
     .a {
       color: red;
@@ -101,9 +101,8 @@ test.skip('cssnext custom property sets are preserved', () => {
     }
   `
 
-  return run(input).then(result => {
-    expect(result.css).toEqual(expected)
-    expect(result.warnings().length).toBe(0)
+  return run(input).catch(e => {
+    expect(e).toMatchObject({ name: 'CssSyntaxError' })
   })
 })
 
