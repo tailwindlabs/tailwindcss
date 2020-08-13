@@ -91,16 +91,6 @@ test('cssnext custom property sets are no longer supported', () => {
     }
   `
 
-  const expected = `
-    .a {
-      color: red;
-    }
-    .b {
-      color: red;
-      @apply --custom-property-set;
-    }
-  `
-
   return run(input).catch(e => {
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
   })
