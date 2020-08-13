@@ -1,8 +1,18 @@
 import _ from 'lodash'
 import selectorParser from 'postcss-selector-parser'
 
+function hasInject(css) {
+  let foundInject = false
+
+  css.walkAtRules('apply', () => {
+    foundInject = true
+    return false
+  })
+
+  return foundInject
+}
 function applyUtility(rule, className, replaceWith) {
-  const selectors = rule.selectors.map(selector => {
+  const processedSelectors = rule.selectors.map(selector => {
     const processor = selectorParser(selectors => {
       selectors.walkClasses(c => {
         if (c.value === className) {
@@ -34,7 +44,7 @@ function applyUtility(rule, className, replaceWith) {
     parent = parent.parent
   }
 
-  cloned.selectors = selectors
+  cloned.selectors = processedSelectors
   return current
 }
 
@@ -115,7 +125,7 @@ function mergeAdjacentRules(initialRule, rulesToInsert) {
 function makeExtractUtilityRules(css) {
   const utilityMap = buildUtilityMap(css)
   const orderUtilityMap = Object.fromEntries(
-    Object.entries(utilityMap).flatMap(([utilityName, utilities]) => {
+    Object.entries(utilityMap).flatMap(([_utilityName, utilities]) => {
       return utilities.map(utility => {
         return [utility.index, utility]
       })
@@ -135,17 +145,6 @@ function makeExtractUtilityRules(css) {
       .sort((a, b) => a - b)
       .map(i => orderUtilityMap[i])
   }
-}
-
-function hasInject(css) {
-  let foundInject = false
-
-  css.walkAtRules('apply', () => {
-    foundInject = true
-    return false
-  })
-
-  return foundInject
 }
 
 export default function applyComplexClasses(css) {
