@@ -124,8 +124,8 @@ function mergeAdjacentRules(initialRule, rulesToInsert) {
 
 function makeExtractUtilityRules(css) {
   const utilityMap = buildUtilityMap(css)
-  const orderUtilityMap = Object.fromEntries(
-    _.flatMap(Object.entries(utilityMap), ([_utilityName, utilities]) => {
+  const orderUtilityMap = _.fromPairs(
+    _.flatMap(_.toPairs(utilityMap), ([_utilityName, utilities]) => {
       return utilities.map(utility => {
         return [utility.index, utility]
       })
