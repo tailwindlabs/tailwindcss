@@ -125,23 +125,22 @@ function mergeAdjacentRules(initialRule, rulesToInsert) {
 function makeExtractUtilityRules(css) {
   const utilityMap = buildUtilityMap(css)
   const orderUtilityMap = Object.fromEntries(
-    Object.entries(utilityMap).flatMap(([_utilityName, utilities]) => {
+    _.flatMap(Object.entries(utilityMap), ([_utilityName, utilities]) => {
       return utilities.map(utility => {
         return [utility.index, utility]
       })
     })
   )
   return function(utilityNames, rule) {
-    return utilityNames
-      .flatMap(utilityName => {
-        if (utilityMap[utilityName] === undefined) {
-          throw rule.error(
-            `The \`${utilityName}\` utility does not exist. If you're sure that \`${utilityName}\` exists, make sure that any \`@import\` statements are being properly processed before Tailwind CSS sees your CSS, as \`@apply\` can only be used for classes in the same CSS tree.`,
-            { word: utilityName }
-          )
-        }
-        return utilityMap[utilityName].map(({ index }) => index)
-      })
+    return _.flatMap(utilityNames, utilityName => {
+      if (utilityMap[utilityName] === undefined) {
+        throw rule.error(
+          `The \`${utilityName}\` utility does not exist. If you're sure that \`${utilityName}\` exists, make sure that any \`@import\` statements are being properly processed before Tailwind CSS sees your CSS, as \`@apply\` can only be used for classes in the same CSS tree.`,
+          { word: utilityName }
+        )
+      }
+      return utilityMap[utilityName].map(({ index }) => index)
+    })
       .sort((a, b) => a - b)
       .map(i => orderUtilityMap[i])
   }
