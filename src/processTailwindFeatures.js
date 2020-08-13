@@ -39,7 +39,7 @@ export default function(getConfig) {
       substituteResponsiveAtRules(config),
       convertLayerAtRulesToControlComments(config),
       substituteScreenAtRules(config),
-      substituteClassApplyAtRules(config, getProcessedPlugins().utilities),
+      substituteClassApplyAtRules(config, getProcessedPlugins),
       purgeUnusedStyles(config),
     ]).process(css, { from: _.get(css, 'source.input.file') })
   }

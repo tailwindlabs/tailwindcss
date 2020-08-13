@@ -56,14 +56,14 @@ function findClass(classToApply, classTable, onError) {
   return match.clone().nodes
 }
 
-export default function(config, generatedUtilities) {
+export default function(config, getProcessedPlugins) {
   if (flagEnabled(config, 'applyComplexClasses')) {
-    return applyComplexClasses
+    return applyComplexClasses(config, getProcessedPlugins)
   }
 
   return function(css) {
     const classLookup = buildClassTable(css)
-    const shadowLookup = buildShadowTable(generatedUtilities)
+    const shadowLookup = buildShadowTable(getProcessedPlugins().utilities)
 
     css.walkRules(rule => {
       rule.walkAtRules('apply', atRule => {

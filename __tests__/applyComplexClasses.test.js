@@ -4,19 +4,33 @@ import processPlugins from '../src/util/processPlugins'
 import resolveConfig from '../src/util/resolveConfig'
 import corePlugins from '../src/corePlugins'
 import defaultConfig from '../stubs/defaultConfig.stub.js'
+import cloneNodes from '../src/util/cloneNodes'
 
 const resolvedDefaultConfig = resolveConfig([defaultConfig])
 
-const { utilities: defaultUtilities } = processPlugins(
-  corePlugins(resolvedDefaultConfig),
+const defaultProcessedPlugins = processPlugins(
+  [...corePlugins(resolvedDefaultConfig), ...resolvedDefaultConfig.plugins],
   resolvedDefaultConfig
 )
 
-function run(input, config = resolvedDefaultConfig, utilities = defaultUtilities) {
+const defaultGetProcessedPlugins = function() {
+  return {
+    ...defaultProcessedPlugins,
+    base: cloneNodes(defaultProcessedPlugins.base),
+    components: cloneNodes(defaultProcessedPlugins.components),
+    utilities: cloneNodes(defaultProcessedPlugins.utilities),
+  }
+}
+
+function run(
+  input,
+  config = resolvedDefaultConfig,
+  getProcessedPlugins = defaultGetProcessedPlugins
+) {
   config.experimental = {
     applyComplexClasses: true,
   }
-  return postcss([substituteClassApplyAtRules(config, utilities)]).process(input, {
+  return postcss([substituteClassApplyAtRules(config, getProcessedPlugins)]).process(input, {
     from: undefined,
   })
 }
@@ -47,7 +61,7 @@ test('selectors with invalid characters do not need to be manually escaped', () 
   })
 })
 
-test.skip('it removes important from applied classes by default', () => {
+test('it removes important from applied classes by default', () => {
   const input = `
     .a { color: red !important; }
     .b { @apply a; }
@@ -64,7 +78,7 @@ test.skip('it removes important from applied classes by default', () => {
   })
 })
 
-test.skip('applied rules can be made !important', () => {
+test('applied rules can be made !important', () => {
   const input = `
     .a { color: red; }
     .b { @apply a !important; }
@@ -230,7 +244,7 @@ test('it matches classes that have multiple rules', () => {
   })
 })
 
-test.skip('you can apply utility classes that do not actually exist as long as they would exist if utilities were being generated', () => {
+test('you can apply utility classes that do not actually exist as long as they would exist if utilities were being generated', () => {
   const input = `
     .foo { @apply mt-4; }
   `
@@ -293,11 +307,16 @@ test.skip('you can apply utility classes without using the given prefix when usi
 
 test.skip('you can apply utility classes without specificity prefix even if important (selector) is used', () => {
   const input = `
-    .foo { @apply .mt-8 .mb-8; }
+    .foo {
+      @apply mt-8 mb-8;
+    }
   `
 
   const expected = `
-    .foo { margin-top: 2rem; margin-bottom: 2rem; }
+    .foo {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
   `
 
   const config = resolveConfig([

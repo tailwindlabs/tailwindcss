@@ -1,5 +1,12 @@
 import _ from 'lodash'
 import selectorParser from 'postcss-selector-parser'
+import postcss from 'postcss'
+import substituteTailwindAtRules from '../lib/substituteTailwindAtRules'
+import evaluateTailwindFunctions from '../lib/evaluateTailwindFunctions'
+import substituteVariantsAtRules from '../lib/substituteVariantsAtRules'
+import substituteResponsiveAtRules from '../lib/substituteResponsiveAtRules'
+import convertLayerAtRulesToControlComments from '../lib/convertLayerAtRulesToControlComments'
+import substituteScreenAtRules from '../lib/substituteScreenAtRules'
 
 function hasInject(css) {
   let foundInject = false
@@ -146,8 +153,8 @@ function makeExtractUtilityRules(css) {
   }
 }
 
-export default function applyComplexClasses(css) {
-  const extractUtilityRules = makeExtractUtilityRules(css)
+function themagic(css, lookupTree) {
+  const extractUtilityRules = makeExtractUtilityRules(lookupTree)
 
   while (hasInject(css)) {
     css.walkRules(rule => {
@@ -161,7 +168,12 @@ export default function applyComplexClasses(css) {
       })
 
       injectRules.forEach(inject => {
-        const injectUtilityNames = inject.params.split(' ')
+        const [
+          importantEntries,
+          injectUtilityNames,
+          important = importantEntries.length > 0,
+        ] = _.partition(inject.params.split(' '), n => n === '!important')
+
         const currentUtilityNames = extractUtilityNames(rule.selector)
 
         if (_.intersection(injectUtilityNames, currentUtilityNames).length > 0) {
@@ -187,7 +199,11 @@ export default function applyComplexClasses(css) {
           afterRule,
         ]
 
-        const mergedRules = mergeAdjacentRules(rule, rulesToInsert)
+        const root = _.tap(postcss.root({ nodes: rulesToInsert }), root =>
+          root.walkDecls(d => (d.important = important))
+        )
+
+        const mergedRules = mergeAdjacentRules(rule, root.nodes)
 
         inject.remove()
         rule.after(mergedRules)
@@ -202,4 +218,31 @@ export default function applyComplexClasses(css) {
   }
 
   return css
+}
+
+export default function applyComplexClasses(config, getProcessedPlugins) {
+  return function(css) {
+    return postcss([
+      substituteTailwindAtRules(config, getProcessedPlugins()),
+      evaluateTailwindFunctions(config),
+      substituteVariantsAtRules(config, getProcessedPlugins()),
+      substituteResponsiveAtRules(config),
+      convertLayerAtRulesToControlComments(config),
+      substituteScreenAtRules(config),
+    ])
+      .process(
+        `
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+        `,
+        { from: undefined }
+      )
+      .then(result => {
+        // if css already contains tailwind, css is the lookup tree
+        const lookupTree = _.tap(css.clone(), tree => tree.prepend(result.root))
+
+        return themagic(css, lookupTree)
+      })
+  }
 }
