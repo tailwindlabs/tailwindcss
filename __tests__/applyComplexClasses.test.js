@@ -773,7 +773,7 @@ describe('using apply with the prefix option', () => {
   })
 })
 
-test.skip('you can apply utility classes without specificity prefix even if important (selector) is used', () => {
+test.skip('you can apply utility classes when a selector is used for the important option', () => {
   const input = `
     .foo {
       @apply mt-8 mb-8;
