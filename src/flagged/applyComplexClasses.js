@@ -255,9 +255,8 @@ export default function applyComplexClasses(config, getProcessedPlugins) {
         { from: undefined }
       )
       .then(result => {
-        // if css already contains tailwind, css is the lookup tree
+        // Prepend Tailwind's generated classes to the tree so they are available for `@apply`
         const lookupTree = _.tap(css.clone(), tree => tree.prepend(result.root))
-
         return processApplyAtRules(css, lookupTree, config)
       })
   }
