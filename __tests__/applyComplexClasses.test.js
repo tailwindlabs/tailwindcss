@@ -25,7 +25,10 @@ const defaultGetProcessedPlugins = function() {
 function run(
   input,
   config = resolvedDefaultConfig,
-  getProcessedPlugins = defaultGetProcessedPlugins
+  getProcessedPlugins = () =>
+    config === resolvedDefaultConfig
+      ? defaultGetProcessedPlugins()
+      : processPlugins(corePlugins(config), config)
 ) {
   config.experimental = {
     applyComplexClasses: true,
