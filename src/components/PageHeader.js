@@ -1,4 +1,4 @@
-export function PageHeader({ title, description, badge, border = true }) {
+export function PageHeader({ title, description, badge = {}, border = true }) {
   if (!title && !description) return null
 
   return (
