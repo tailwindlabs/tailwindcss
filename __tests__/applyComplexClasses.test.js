@@ -56,7 +56,7 @@ test('selectors with invalid characters do not need to be manually escaped', () 
   `
 
   return run(input).then(result => {
-    expect(result.css).toEqual(expected)
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -73,7 +73,7 @@ test('it removes important from applied classes by default', () => {
   `
 
   return run(input).then(result => {
-    expect(result.css).toEqual(expected)
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -90,7 +90,7 @@ test('applied rules can be made !important', () => {
   `
 
   return run(input).then(result => {
-    expect(result.css).toEqual(expected)
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -254,7 +254,7 @@ test('you can apply utility classes that do not actually exist as long as they w
   `
 
   return run(input).then(result => {
-    expect(result.css).toEqual(expected)
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -267,6 +267,371 @@ test('the shadow lookup is only used if no @tailwind rules were in the source tr
 
   return run(input).catch(e => {
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
+  })
+})
+
+test('you can apply a class that is defined in multiple rules', () => {
+  const input = `
+    .foo {
+      color: red;
+    }
+    .bar {
+      @apply foo;
+    }
+    .foo {
+      oapcity: .5;
+    }
+  `
+  const expected = `
+    .foo {
+      color: red;
+    }
+    .bar {
+      color: red;
+      oapcity: .5;
+    }
+    .foo {
+      oapcity: .5;
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('you can apply a class that is defined in a media query', () => {
+  const input = `
+    .foo {
+      @apply sm:text-center;
+    }
+  `
+  const expected = `
+    @media (min-width: 640px) {
+      .foo {
+        text-align: center
+      }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('you can apply pseudo-class variant utilities', () => {
+  const input = `
+    .foo {
+      @apply hover:opacity-50;
+    }
+  `
+  const expected = `
+    .foo:hover {
+      opacity: 0.5
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('you can apply responsive pseudo-class variant utilities', () => {
+  const input = `
+    .foo {
+      @apply sm:hover:opacity-50;
+    }
+  `
+  const expected = `
+    @media (min-width: 640px) {
+      .foo:hover {
+        opacity: 0.5
+      }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('you can apply the container component', () => {
+  const input = `
+    .foo {
+      @apply container;
+    }
+  `
+  const expected = `
+    .foo {
+      width: 100%;
+    }
+    @media (min-width: 640px) {
+      .foo {
+        max-width: 640px;
+      }
+    }
+    @media (min-width: 768px) {
+      .foo {
+        max-width: 768px;
+      }
+    }
+    @media (min-width: 1024px) {
+      .foo {
+        max-width: 1024px;
+      }
+    }
+    @media (min-width: 1280px) {
+      .foo {
+        max-width: 1280px;
+      }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('classes are applied according to CSS source order, not apply order', () => {
+  const input = `
+    .foo {
+      color: red;
+    }
+    .bar {
+      color: blue;
+    }
+    .baz {
+      @apply bar foo;
+    }
+  `
+  const expected = `
+    .foo {
+      color: red;
+    }
+    .bar {
+      color: blue;
+    }
+    .baz {
+      color: red;
+      color: blue;
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('you can apply utilities with multi-class selectors like group-hover variants', () => {
+  const input = `
+    .foo {
+      @apply group-hover:bar;
+    }
+    .bar {
+      color: blue;
+    }
+    .group:hover .group-hover\\:bar {
+      color: blue;
+    }
+  `
+  const expected = `
+    .group:hover .foo {
+      color: blue;
+    }
+    .bar {
+      color: blue;
+    }
+    .group:hover .group-hover\\:bar {
+      color: blue;
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('you can apply classes recursively', () => {
+  const input = `
+    .foo {
+      @apply bar;
+    }
+    .bar {
+      @apply baz;
+    }
+    .baz {
+      color: blue;
+    }
+  `
+  const expected = `
+    .foo {
+      color: blue;
+    }
+    .bar {
+      color: blue;
+    }
+    .baz {
+      color: blue;
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('applied classes are always inserted before subsequent declarations in the same rule, even if it means moving those subsequent declarations to a new rule', () => {
+  const input = `
+    .foo {
+      background: blue;
+      @apply opacity-50 hover:opacity-100 text-right sm:align-middle;
+      color: red;
+    }
+  `
+  const expected = `
+    .foo {
+      background: blue;
+      opacity: 0.5;
+    }
+    .foo:hover {
+      opacity: 1;
+    }
+    .foo {
+      text-align: right;
+    }
+    @media (min-width: 640px) {
+      .foo {
+        vertical-align: middle;
+      }
+    }
+    .foo {
+      color: red;
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('adjacent rules are collapsed after being applied', () => {
+  const input = `
+    .foo {
+      @apply hover:bg-white hover:opacity-50 absolute text-right sm:align-middle sm:text-center;
+    }
+  `
+  const expected = `
+    .foo:hover {
+      --bg-opacity: 1;
+      background-color: #fff;
+      background-color: rgba(255, 255, 255, var(--bg-opacity));
+      opacity: 0.5;
+    }
+    .foo {
+      position: absolute;
+      text-align: right;
+    }
+    @media (min-width: 640px) {
+      .foo {
+        text-align: center;
+        vertical-align: middle;
+      }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('applying a class applies all instances of that class, even complex selectors', () => {
+  const input = `
+    h1 > p:hover .banana:first-child * {
+      @apply bar;
+    }
+    .bar {
+      color: blue;
+    }
+    @media (print) {
+      @supports (display: grid) {
+        .baz .bar:hover {
+          text-align: right;
+          float: left;
+        }
+      }
+    }
+    `
+  const expected = `
+    h1 > p:hover .banana:first-child * {
+      color: blue;
+    }
+    @media (print) {
+      @supports (display: grid) {
+        .baz h1 > p:hover .banana:first-child *:hover {
+          text-align: right;
+          float: left;
+        }
+      }
+    }
+    .bar {
+      color: blue;
+    }
+    @media (print) {
+      @supports (display: grid) {
+        .baz .bar:hover {
+          text-align: right;
+          float: left;
+        }
+      }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('you can apply classes to rules within at-rules', () => {
+  const input = `
+    @supports (display: grid) {
+      .baz .bar {
+        @apply text-right float-left hover:opacity-50 md:float-right;
+      }
+    }
+  `
+  const expected = `
+    @supports (display: grid) {
+      .baz .bar {
+        float: left;
+      }
+      .baz .bar:hover {
+        opacity: 0.5;
+      }
+      .baz .bar {
+        text-align: right;
+      }
+      @media (min-width: 768px) {
+        .baz .bar {
+          float: right;
+        }
+      }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
   })
 })
 
@@ -287,7 +652,7 @@ test.skip('you can apply utility classes without using the given prefix', () => 
   ])
 
   return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
-    expect(result.css).toEqual(expected)
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -311,7 +676,7 @@ test.skip('you can apply utility classes without using the given prefix when usi
   ])
 
   return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
-    expect(result.css).toEqual(expected)
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -338,7 +703,7 @@ test.skip('you can apply utility classes without specificity prefix even if impo
   ])
 
   return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
-    expect(result.css).toEqual(expected)
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -361,7 +726,7 @@ test.skip('you can apply utility classes without using the given prefix even if 
   ])
 
   return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
-    expect(result.css).toEqual(expected)
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
