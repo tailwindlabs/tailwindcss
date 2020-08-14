@@ -279,7 +279,7 @@ test('you can apply a class that is defined in multiple rules', () => {
       @apply foo;
     }
     .foo {
-      oapcity: .5;
+      opacity: .5;
     }
   `
   const expected = `
@@ -288,10 +288,10 @@ test('you can apply a class that is defined in multiple rules', () => {
     }
     .bar {
       color: red;
-      oapcity: .5;
+      opacity: .5;
     }
     .foo {
-      oapcity: .5;
+      opacity: .5;
     }
   `
 
