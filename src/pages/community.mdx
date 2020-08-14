@@ -14,7 +14,7 @@ If you want to chat with other Tailwind users in real-time, check out our [Disco
 
 ## Forum
 
-If you've hit a problem with something your working on and could use some help, the best place to ask is our [discuss repo](/forum) on GitHub where we use issues as a message board. These discussions are indexed by search engines which means asking your questions here will make it easier for others to find the answer if they have a similar problem in the future.
+If you've hit a problem with something you're working on and could use some help, the best place to ask is our [discuss repo](/forum) on GitHub where we use issues as a message board. These discussions are indexed by search engines which means asking your questions here will make it easier for others to find the answer if they have a similar problem in the future.
 
 [Get help on the forum &rarr;](/forum)
 
