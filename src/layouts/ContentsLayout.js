@@ -182,7 +182,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
       <PageHeader
         title={meta.title}
         description={meta.description}
-        badge={meta.featureVersion}
+        badge={{ key: 'Tailwind CSS version', value: meta.featureVersion }}
         border={!classes && meta.headerSeparator !== false}
       />
       <div className="flex">

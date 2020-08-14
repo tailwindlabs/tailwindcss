@@ -14,7 +14,7 @@ export function BasicLayout({ children, meta, classes, tableOfContents }) {
       <PageHeader
         title={meta.title}
         description={meta.description}
-        badge={meta.featureVersion}
+        badge={{ key: 'Tailwind CSS version', value: meta.featureVersion }}
         border={meta.headerSeparator !== false}
       />
       <div className="flex">
