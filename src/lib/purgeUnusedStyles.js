@@ -5,7 +5,8 @@ import chalk from 'chalk'
 import { log } from '../cli/utils'
 import * as emoji from '../cli/emoji'
 
-function removeTailwindComments(css) {
+function removeTailwindMarkers(css) {
+  css.walkAtRules('tailwind', rule => rule.remove())
   css.walkComments(comment => {
     switch (comment.text.trim()) {
       case 'tailwind start components':
@@ -28,7 +29,7 @@ export default function purgeUnusedUtilities(config) {
   )
 
   if (!purgeEnabled) {
-    return removeTailwindComments
+    return removeTailwindMarkers
   }
 
   // Skip if `purge: []` since that's part of the default config
@@ -48,7 +49,7 @@ export default function purgeUnusedUtilities(config) {
     log(
       chalk.white('\n      https://tailwindcss.com/docs/controlling-file-size/#removing-unused-css')
     )
-    return removeTailwindComments
+    return removeTailwindMarkers
   }
 
   return postcss([
@@ -73,7 +74,7 @@ export default function purgeUnusedUtilities(config) {
         })
       }
     },
-    removeTailwindComments,
+    removeTailwindMarkers,
     purgecss({
       content: Array.isArray(config.purge) ? config.purge : config.purge.content,
       defaultExtractor: content => {

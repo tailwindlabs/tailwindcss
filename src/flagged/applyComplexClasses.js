@@ -210,11 +210,11 @@ function processApplyAtRules(css, lookupTree, config) {
           afterRule,
         ]
 
-        const root = _.tap(postcss.root({ nodes: rulesToInsert }), root =>
+        const { nodes } = _.tap(postcss.root({ nodes: rulesToInsert }), root =>
           root.walkDecls(d => (d.important = important))
         )
 
-        const mergedRules = mergeAdjacentRules(rule, root.nodes)
+        const mergedRules = mergeAdjacentRules(rule, nodes)
 
         inject.remove()
         rule.after(mergedRules)

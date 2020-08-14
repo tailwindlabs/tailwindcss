@@ -655,7 +655,7 @@ describe('using apply with the prefix option', () => {
       },
     ])
 
-    return run(input, config, () => processPlugins(corePlugins(config), config)).then(result => {
+    return run(input, config).then(result => {
       expect(result.css).toMatchCss(expected)
       expect(result.warnings().length).toBe(0)
     })
@@ -679,7 +679,7 @@ describe('using apply with the prefix option', () => {
       },
     ])
 
-    return run(input, config, () => processPlugins(corePlugins(config), config)).then(result => {
+    return run(input, config).then(result => {
       expect(result.css).toMatchCss(expected)
       expect(result.warnings().length).toBe(0)
     })
@@ -697,7 +697,7 @@ describe('using apply with the prefix option', () => {
       },
     ])
 
-    return run(input, config, () => processPlugins(corePlugins(config), config)).catch(e => {
+    return run(input, config).catch(e => {
       expect(e).toMatchObject({ name: 'CssSyntaxError' })
     })
   })
@@ -720,7 +720,7 @@ describe('using apply with the prefix option', () => {
       },
     ])
 
-    return run(input, config, () => processPlugins(corePlugins(config), config)).then(result => {
+    return run(input, config).then(result => {
       expect(result.css).toMatchCss(expected)
       expect(result.warnings().length).toBe(0)
     })
@@ -744,7 +744,7 @@ describe('using apply with the prefix option', () => {
       },
     ])
 
-    return run(input, config, () => processPlugins(corePlugins(config), config)).then(result => {
+    return run(input, config).then(result => {
       expect(result.css).toMatchCss(expected)
       expect(result.warnings().length).toBe(0)
     })
@@ -764,16 +764,62 @@ describe('using apply with the prefix option', () => {
 
     expect.assertions(1)
 
-    return run(input, config, () => processPlugins(corePlugins(config), config)).catch(e => {
+    return run(input, config).catch(e => {
       expect(e).toMatchObject({
         name: 'CssSyntaxError',
         reason: 'The `mt-4` class does not exist, but `tw-mt-4` does. Did you forget the prefix?',
       })
     })
   })
+
+  test('you can apply classes with important and a prefix enabled', () => {
+    const input = `
+      .foo { @apply tw-mt-4; }
+    `
+
+    const expected = `
+      .foo { margin-top: 1rem; }
+    `
+
+    const config = resolveConfig([
+      {
+        ...defaultConfig,
+        prefix: 'tw-',
+        important: true,
+      },
+    ])
+
+    return run(input, config).then(result => {
+      expect(result.css).toMatchCss(expected)
+      expect(result.warnings().length).toBe(0)
+    })
+  })
+
+  test('you can apply classes with an important selector and a prefix enabled', () => {
+    const input = `
+      .foo { @apply tw-mt-4; }
+    `
+
+    const expected = `
+      .foo { margin-top: 1rem; }
+    `
+
+    const config = resolveConfig([
+      {
+        ...defaultConfig,
+        prefix: 'tw-',
+        important: '#app',
+      },
+    ])
+
+    return run(input, config).then(result => {
+      expect(result.css).toMatchCss(expected)
+      expect(result.warnings().length).toBe(0)
+    })
+  })
 })
 
-test.skip('you can apply utility classes when a selector is used for the important option', () => {
+test('you can apply utility classes when a selector is used for the important option', () => {
   const input = `
     .foo {
       @apply mt-8 mb-8;
@@ -794,30 +840,7 @@ test.skip('you can apply utility classes when a selector is used for the importa
     },
   ])
 
-  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
-    expect(result.css).toMatchCss(expected)
-    expect(result.warnings().length).toBe(0)
-  })
-})
-
-test.skip('you can apply utility classes without using the given prefix even if important (selector) is used', () => {
-  const input = `
-    .foo { @apply .tw-mt-4 .mb-4; }
-  `
-
-  const expected = `
-    .foo { margin-top: 1rem; margin-bottom: 1rem; }
-  `
-
-  const config = resolveConfig([
-    {
-      ...defaultConfig,
-      prefix: 'tw-',
-      important: '#app',
-    },
-  ])
-
-  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
+  return run(input, config).then(result => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
