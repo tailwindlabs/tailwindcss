@@ -259,6 +259,17 @@ test('you can apply utility classes that do not actually exist as long as they w
   })
 })
 
+test('the shadow lookup is only used if no @tailwind rules were in the source tree', () => {
+  const input = `
+    @tailwind base;
+    .foo { @apply mt-4; }
+  `
+
+  return run(input).catch(e => {
+    expect(e).toMatchObject({ name: 'CssSyntaxError' })
+  })
+})
+
 test.skip('you can apply utility classes without using the given prefix', () => {
   const input = `
     .foo { @apply .tw-mt-4 .mb-4; }

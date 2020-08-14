@@ -40,6 +40,9 @@ export default function(getConfig) {
       convertLayerAtRulesToControlComments(config),
       substituteScreenAtRules(config),
       substituteClassApplyAtRules(config, getProcessedPlugins),
+      function(css) {
+        css.walkAtRules('tailwind', rule => rule.remove())
+      },
       purgeUnusedStyles(config),
     ]).process(css, { from: _.get(css, 'source.input.file') })
   }

@@ -13,7 +13,11 @@ const { utilities: defaultUtilities } = processPlugins(
 )
 
 function run(input, config = resolvedDefaultConfig, utilities = defaultUtilities) {
-  return postcss([substituteClassApplyAtRules(config, utilities)]).process(input, {
+  return postcss([
+    substituteClassApplyAtRules(config, () => ({
+      utilities,
+    })),
+  ]).process(input, {
     from: undefined,
   })
 }

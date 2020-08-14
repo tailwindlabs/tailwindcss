@@ -8,16 +8,17 @@ import substituteResponsiveAtRules from '../lib/substituteResponsiveAtRules'
 import convertLayerAtRulesToControlComments from '../lib/convertLayerAtRulesToControlComments'
 import substituteScreenAtRules from '../lib/substituteScreenAtRules'
 
-function hasInject(css) {
-  let foundInject = false
+function hasAtRule(css, atRule) {
+  let foundAtRule = false
 
-  css.walkAtRules('apply', () => {
-    foundInject = true
+  css.walkAtRules(atRule, () => {
+    foundAtRule = true
     return false
   })
 
-  return foundInject
+  return foundAtRule
 }
+
 function applyUtility(rule, className, replaceWith) {
   const processedSelectors = rule.selectors.map(selector => {
     const processor = selectorParser(selectors => {
@@ -85,7 +86,7 @@ function buildUtilityMap(css) {
         index,
         utilityName,
         rule: rule.clone({ parent: rule.parent }),
-        containsApply: hasInject(rule),
+        containsApply: hasAtRule(rule, 'apply'),
       })
       index++
     })
@@ -153,10 +154,10 @@ function makeExtractUtilityRules(css) {
   }
 }
 
-function themagic(css, lookupTree) {
+function processApplyAtRules(css, lookupTree) {
   const extractUtilityRules = makeExtractUtilityRules(lookupTree)
 
-  while (hasInject(css)) {
+  while (hasAtRule(css, 'apply')) {
     css.walkRules(rule => {
       const injectRules = []
 
@@ -222,6 +223,11 @@ function themagic(css, lookupTree) {
 
 export default function applyComplexClasses(config, getProcessedPlugins) {
   return function(css) {
+    // Tree already contains @tailwind rules, don't prepend default Tailwind tree
+    if (hasAtRule(css, 'tailwind')) {
+      return processApplyAtRules(css, css)
+    }
+
     return postcss([
       substituteTailwindAtRules(config, getProcessedPlugins()),
       evaluateTailwindFunctions(config),
@@ -242,7 +248,7 @@ export default function applyComplexClasses(config, getProcessedPlugins) {
         // if css already contains tailwind, css is the lookup tree
         const lookupTree = _.tap(css.clone(), tree => tree.prepend(result.root))
 
-        return themagic(css, lookupTree)
+        return processApplyAtRules(css, lookupTree)
       })
   }
 }
