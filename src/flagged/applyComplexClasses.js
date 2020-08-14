@@ -7,6 +7,7 @@ import substituteVariantsAtRules from '../lib/substituteVariantsAtRules'
 import substituteResponsiveAtRules from '../lib/substituteResponsiveAtRules'
 import convertLayerAtRulesToControlComments from '../lib/convertLayerAtRulesToControlComments'
 import substituteScreenAtRules from '../lib/substituteScreenAtRules'
+import prefixSelector from '../util/prefixSelector'
 
 function hasAtRule(css, atRule) {
   let foundAtRule = false
@@ -130,7 +131,7 @@ function mergeAdjacentRules(initialRule, rulesToInsert) {
   return rulesToInsert.filter(r => r.nodes.length > 0)
 }
 
-function makeExtractUtilityRules(css) {
+function makeExtractUtilityRules(css, config) {
   const utilityMap = buildUtilityMap(css)
   const orderUtilityMap = _.fromPairs(
     _.flatMap(_.toPairs(utilityMap), ([_utilityName, utilities]) => {
@@ -142,8 +143,17 @@ function makeExtractUtilityRules(css) {
   return function(utilityNames, rule) {
     return _.flatMap(utilityNames, utilityName => {
       if (utilityMap[utilityName] === undefined) {
+        // Look for prefixed utility in case the user has goofed
+        const prefixedUtility = prefixSelector(config.prefix, `.${utilityName}`).slice(1)
+
+        if (utilityMap[prefixedUtility] !== undefined) {
+          throw rule.error(
+            `The \`${utilityName}\` class does not exist, but \`${prefixedUtility}\` does. Did you forget the prefix?`
+          )
+        }
+
         throw rule.error(
-          `The \`${utilityName}\` utility does not exist. If you're sure that \`${utilityName}\` exists, make sure that any \`@import\` statements are being properly processed before Tailwind CSS sees your CSS, as \`@apply\` can only be used for classes in the same CSS tree.`,
+          `The \`${utilityName}\` class does not exist. If you're sure that \`${utilityName}\` exists, make sure that any \`@import\` statements are being properly processed before Tailwind CSS sees your CSS, as \`@apply\` can only be used for classes in the same CSS tree.`,
           { word: utilityName }
         )
       }
@@ -154,8 +164,8 @@ function makeExtractUtilityRules(css) {
   }
 }
 
-function processApplyAtRules(css, lookupTree) {
-  const extractUtilityRules = makeExtractUtilityRules(lookupTree)
+function processApplyAtRules(css, lookupTree, config) {
+  const extractUtilityRules = makeExtractUtilityRules(lookupTree, config)
 
   while (hasAtRule(css, 'apply')) {
     css.walkRules(rule => {
@@ -225,7 +235,7 @@ export default function applyComplexClasses(config, getProcessedPlugins) {
   return function(css) {
     // Tree already contains @tailwind rules, don't prepend default Tailwind tree
     if (hasAtRule(css, 'tailwind')) {
-      return processApplyAtRules(css, css)
+      return processApplyAtRules(css, css, config)
     }
 
     return postcss([
@@ -248,7 +258,7 @@ export default function applyComplexClasses(config, getProcessedPlugins) {
         // if css already contains tailwind, css is the lookup tree
         const lookupTree = _.tap(css.clone(), tree => tree.prepend(result.root))
 
-        return processApplyAtRules(css, lookupTree)
+        return processApplyAtRules(css, lookupTree, config)
       })
   }
 }

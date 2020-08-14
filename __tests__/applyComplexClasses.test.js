@@ -635,49 +635,138 @@ test('you can apply classes to rules within at-rules', () => {
   })
 })
 
-test.skip('you can apply utility classes without using the given prefix', () => {
-  const input = `
-    .foo { @apply .tw-mt-4 .mb-4; }
-  `
+describe('using apply with the prefix option', () => {
+  test('applying a class including the prefix', () => {
+    const input = `
+      .foo { @apply tw-mt-4; }
+    `
 
-  const expected = `
-    .foo { margin-top: 1rem; margin-bottom: 1rem; }
-  `
+    const expected = `
+      .foo { margin-top: 1rem; }
+    `
 
-  const config = resolveConfig([
-    {
-      ...defaultConfig,
-      prefix: 'tw-',
-    },
-  ])
-
-  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
-    expect(result.css).toMatchCss(expected)
-    expect(result.warnings().length).toBe(0)
-  })
-})
-
-test.skip('you can apply utility classes without using the given prefix when using a function for the prefix', () => {
-  const input = `
-    .foo { @apply .tw-mt-4 .mb-4; }
-  `
-
-  const expected = `
-    .foo { margin-top: 1rem; margin-bottom: 1rem; }
-  `
-
-  const config = resolveConfig([
-    {
-      ...defaultConfig,
-      prefix: () => {
-        return 'tw-'
+    const config = resolveConfig([
+      {
+        ...defaultConfig,
+        prefix: 'tw-',
       },
-    },
-  ])
+    ])
 
-  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
-    expect(result.css).toMatchCss(expected)
-    expect(result.warnings().length).toBe(0)
+    return run(input, config, () => processPlugins(corePlugins(config), config)).then(result => {
+      expect(result.css).toMatchCss(expected)
+      expect(result.warnings().length).toBe(0)
+    })
+  })
+
+  test('applying a class including the prefix when using a prefix function', () => {
+    const input = `
+      .foo { @apply tw-func-mt-4; }
+    `
+
+    const expected = `
+      .foo { margin-top: 1rem; }
+    `
+
+    const config = resolveConfig([
+      {
+        ...defaultConfig,
+        prefix: () => {
+          return 'tw-func-'
+        },
+      },
+    ])
+
+    return run(input, config, () => processPlugins(corePlugins(config), config)).then(result => {
+      expect(result.css).toMatchCss(expected)
+      expect(result.warnings().length).toBe(0)
+    })
+  })
+
+  test('applying a class without the prefix fails', () => {
+    const input = `
+      .foo { @apply mt-4; }
+    `
+
+    const config = resolveConfig([
+      {
+        ...defaultConfig,
+        prefix: 'tw-',
+      },
+    ])
+
+    return run(input, config, () => processPlugins(corePlugins(config), config)).catch(e => {
+      expect(e).toMatchObject({ name: 'CssSyntaxError' })
+    })
+  })
+
+  test('custom classes with no prefix can be applied', () => {
+    const input = `
+      .foo { @apply mt-4; }
+      .mt-4 { color: red; }
+    `
+
+    const expected = `
+      .foo { color: red; }
+      .mt-4 { color: red; }
+    `
+
+    const config = resolveConfig([
+      {
+        ...defaultConfig,
+        prefix: 'tw-',
+      },
+    ])
+
+    return run(input, config, () => processPlugins(corePlugins(config), config)).then(result => {
+      expect(result.css).toMatchCss(expected)
+      expect(result.warnings().length).toBe(0)
+    })
+  })
+
+  test('built-in prefixed utilities can be extended and applied', () => {
+    const input = `
+      .foo { @apply tw-mt-4; }
+      .tw-mt-4 { color: red; }
+    `
+
+    const expected = `
+      .foo { margin-top: 1rem; color: red; }
+      .tw-mt-4 { color: red; }
+    `
+
+    const config = resolveConfig([
+      {
+        ...defaultConfig,
+        prefix: 'tw-',
+      },
+    ])
+
+    return run(input, config, () => processPlugins(corePlugins(config), config)).then(result => {
+      expect(result.css).toMatchCss(expected)
+      expect(result.warnings().length).toBe(0)
+    })
+  })
+
+  test('a helpful error message is provided if it appears the user forgot to include their prefix', () => {
+    const input = `
+        .foo { @apply mt-4; }
+      `
+
+    const config = resolveConfig([
+      {
+        ...defaultConfig,
+        prefix: 'tw-',
+      },
+    ])
+
+    expect.assertions(1)
+
+    return run(input, config, () => processPlugins(corePlugins(config), config)).catch(e => {
+      expect(e).toMatchObject({
+        name: 'CssSyntaxError',
+        reason: 'The `mt-4` class does not exist, but `tw-mt-4` does. Did you forget the prefix?',
+      })
+    })
   })
 })
 
