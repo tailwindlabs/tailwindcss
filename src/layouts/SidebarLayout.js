@@ -2,14 +2,15 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { VersionSwitcher } from '@/components/VersionSwitcher'
 import { useIsHome } from '@/hooks/useIsHome'
-import { createContext, forwardRef } from 'react'
+import { createContext, forwardRef, useRef } from 'react'
+import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
 import clsx from 'clsx'
 
 export const SidebarContext = createContext()
 
-function NavItem({ href, children, isActive, isPublished, fallbackHref }) {
+const NavItem = forwardRef(({ href, children, isActive, isPublished, fallbackHref }, ref) => {
   return (
-    <li className="mb-3 lg:mb-1">
+    <li className="mb-3 lg:mb-1" ref={ref}>
       <Link href={isPublished ? href : fallbackHref}>
         <a
           className={clsx('px-2 -mx-2 py-1 transition duration-200 ease-in-out relative block', {
@@ -30,42 +31,80 @@ function NavItem({ href, children, isActive, isPublished, fallbackHref }) {
       </Link>
     </li>
   )
-}
+})
 
-function Nav({ nav, fallbackHref }) {
+function Nav({ nav, children, fallbackHref }) {
   const router = useRouter()
+  const isHome = useIsHome()
+  const activeItemRef = useRef()
+  const scrollRef = useRef()
 
-  return Object.keys(nav)
-    .map((category) => {
-      let publishedItems = nav[category].filter((item) => item.published !== false)
-      if (publishedItems.length === 0 && !fallbackHref) return null
-      return (
-        <div className="mb-8" key={category}>
-          <h5
-            className={clsx('mb-3 lg:mb-2 uppercase tracking-wide font-bold text-sm lg:text-xs', {
-              'text-gray-500': publishedItems.length > 0,
-              'text-gray-400': publishedItems.length === 0,
-            })}
-          >
-            {category}
-          </h5>
-          <ul>
-            {(fallbackHref ? nav[category] : publishedItems).map((item, i) => (
-              <NavItem
-                key={i}
-                href={item.href}
-                isActive={item.href === router.pathname}
-                isPublished={item.published !== false}
-                fallbackHref={fallbackHref}
-              >
-                {item.shortTitle || item.title}
-              </NavItem>
-            ))}
-          </ul>
+  useIsomorphicLayoutEffect(() => {
+    if (activeItemRef.current) {
+      const scrollRect = scrollRef.current.getBoundingClientRect()
+      const activeItemRect = activeItemRef.current.getBoundingClientRect()
+      scrollRef.current.scrollTop =
+        activeItemRect.top - scrollRect.top - scrollRect.height / 2 + activeItemRect.height / 2
+    }
+  }, [])
+
+  return (
+    <nav
+      id="nav"
+      ref={scrollRef}
+      className={clsx('px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8', {
+        'sticky?lg:h-screen': isHome,
+        'sticky?lg:h-(screen-16)': !isHome,
+      })}
+    >
+      <div className="relative -mx-2 w-24 mb-8 lg:hidden">
+        <VersionSwitcher />
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+          <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
+            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+          </svg>
         </div>
-      )
-    })
-    .filter(Boolean)
+      </div>
+      <TopLevelNav />
+      {children}
+      {nav &&
+        Object.keys(nav)
+          .map((category) => {
+            let publishedItems = nav[category].filter((item) => item.published !== false)
+            if (publishedItems.length === 0 && !fallbackHref) return null
+            return (
+              <div className="mb-8" key={category}>
+                <h5
+                  className={clsx(
+                    'mb-3 lg:mb-2 uppercase tracking-wide font-bold text-sm lg:text-xs',
+                    {
+                      'text-gray-500': publishedItems.length > 0,
+                      'text-gray-400': publishedItems.length === 0,
+                    }
+                  )}
+                >
+                  {category}
+                </h5>
+                <ul>
+                  {(fallbackHref ? nav[category] : publishedItems).map((item, i) => (
+                    <NavItem
+                      key={i}
+                      href={item.href}
+                      isActive={item.href === router.pathname}
+                      ref={item.href === router.pathname ? activeItemRef : undefined}
+                      isPublished={item.published !== false}
+                      fallbackHref={fallbackHref}
+                    >
+                      {item.shortTitle || item.title}
+                    </NavItem>
+                  ))}
+                </ul>
+              </div>
+            )
+          })
+          .filter(Boolean)}
+    </nav>
+  )
 }
 
 const TopLevelAnchor = forwardRef(({ children, href, className, icon, isActive, onClick }, ref) => {
@@ -258,25 +297,9 @@ export function SidebarLayout({ children, navIsOpen, setNavIsOpen, nav, sidebar,
                   }}
                 />
               )}
-              <nav
-                id="nav"
-                className={clsx(
-                  'px-6 pt-6 overflow-y-auto text-base lg:text-sm lg:py-12 lg:pl-6 lg:pr-8',
-                  { 'sticky?lg:h-screen': isHome, 'sticky?lg:h-(screen-16)': !isHome }
-                )}
-              >
-                <div className="relative -mx-2 w-24 mb-8 lg:hidden">
-                  <VersionSwitcher />
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
-                    <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
-                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                    </svg>
-                  </div>
-                </div>
-                <TopLevelNav />
+              <Nav nav={nav} fallbackHref={fallbackHref}>
                 {sidebar}
-                {nav && <Nav nav={nav} fallbackHref={fallbackHref} />}
-              </nav>
+              </Nav>
             </div>
           </div>
           <div
