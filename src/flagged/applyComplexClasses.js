@@ -20,13 +20,15 @@ function hasAtRule(css, atRule) {
   return foundAtRule
 }
 
-function applyUtility(rule, className, replaceWith) {
+function applyUtility({ rule, utilityName: className, classPosition }, replaceWith) {
   const processedSelectors = rule.selectors.map(selector => {
     const processor = selectorParser(selectors => {
+      let i = 0
       selectors.walkClasses(c => {
-        if (c.value === className) {
+        if (c.value === className && classPosition === i) {
           c.replaceWith(selectorParser.attribute({ attribute: '__TAILWIND-APPLY-PLACEHOLDER__' }))
         }
+        i++
       })
     })
 
@@ -78,7 +80,7 @@ function buildUtilityMap(css) {
   css.walkRules(rule => {
     const utilityNames = extractUtilityNames(rule.selector)
 
-    utilityNames.forEach(utilityName => {
+    utilityNames.forEach((utilityName, i) => {
       if (utilityMap[utilityName] === undefined) {
         utilityMap[utilityName] = []
       }
@@ -86,6 +88,7 @@ function buildUtilityMap(css) {
       utilityMap[utilityName].push({
         index,
         utilityName,
+        classPosition: i,
         rule: rule.clone({ parent: rule.parent }),
         containsApply: hasAtRule(rule, 'apply'),
       })
@@ -205,7 +208,7 @@ function processApplyAtRules(css, lookupTree, config) {
         // Get new rules with the utility portion of the selector replaced with the new selector
         const rulesToInsert = [
           ...injects.map(injectUtility => {
-            return applyUtility(injectUtility.rule, injectUtility.utilityName, rule.selector)
+            return applyUtility(injectUtility, rule.selector)
           }),
           afterRule,
         ]

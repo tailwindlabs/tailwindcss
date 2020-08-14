@@ -247,6 +247,38 @@ test('it matches classes that have multiple rules', () => {
   })
 })
 
+test('applying a class that appears multiple times in one selector', () => {
+  const input = `
+    .a + .a > .a {
+      color: red;
+    }
+
+    .b {
+      @apply a;
+    }
+  `
+
+  const output = `
+    .a + .a > .a {
+      color: red;
+    }
+    .b + .a > .a {
+      color: red;
+    }
+    .a + .b > .a {
+      color: red;
+    }
+    .a + .a > .b {
+      color: red;
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('you can apply utility classes that do not actually exist as long as they would exist if utilities were being generated', () => {
   const input = `
     .foo { @apply mt-4; }
