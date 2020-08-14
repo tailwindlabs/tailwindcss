@@ -176,6 +176,7 @@ function HeaderInner({ navIsOpen, onNavToggle }) {
             }
           )}
           onClick={() => onNavToggle(true)}
+          aria-label="Open site navigation"
         >
           <svg
             className="fill-current w-4 h-4"
@@ -195,6 +196,7 @@ function HeaderInner({ navIsOpen, onNavToggle }) {
             }
           )}
           onClick={() => onNavToggle(false)}
+          aria-label="Close site navigation"
         >
           <svg
             className="fill-current w-4 h-4"

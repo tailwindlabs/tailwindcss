@@ -89,6 +89,7 @@ export function TuiBanner() {
                 }}
                 type="button"
                 className="-mr-1 flex p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-gray-800"
+                aria-label="Hide banner"
               >
                 <svg
                   className="h-6 w-6 text-white"
