@@ -241,6 +241,8 @@ export default function applyComplexClasses(config, getProcessedPlugins) {
       return processApplyAtRules(css, css, config)
     }
 
+    // Tree contains no @tailwind rules, so generate all of Tailwind's styles and
+    // prepend them to the user's CSS. Important for <style> blocks in Vue components.
     return postcss([
       substituteTailwindAtRules(config, getProcessedPlugins()),
       evaluateTailwindFunctions(config),
