@@ -1767,6 +1767,23 @@ video {
   background-attachment: scroll !important;
 }
 
+.bg-clip-border {
+  background-clip: border-box !important;
+}
+
+.bg-clip-padding {
+  background-clip: padding-box !important;
+}
+
+.bg-clip-content {
+  background-clip: content-box !important;
+}
+
+.bg-clip-text {
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+}
+
 .bg-transparent {
   background-color: transparent !important;
 }
@@ -15813,6 +15830,23 @@ video {
     background-attachment: scroll !important;
   }
 
+  .sm\:bg-clip-border {
+    background-clip: border-box !important;
+  }
+
+  .sm\:bg-clip-padding {
+    background-clip: padding-box !important;
+  }
+
+  .sm\:bg-clip-content {
+    background-clip: content-box !important;
+  }
+
+  .sm\:bg-clip-text {
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+  }
+
   .sm\:bg-transparent {
     background-color: transparent !important;
   }
@@ -29827,6 +29861,23 @@ video {
 
   .md\:bg-scroll {
     background-attachment: scroll !important;
+  }
+
+  .md\:bg-clip-border {
+    background-clip: border-box !important;
+  }
+
+  .md\:bg-clip-padding {
+    background-clip: padding-box !important;
+  }
+
+  .md\:bg-clip-content {
+    background-clip: content-box !important;
+  }
+
+  .md\:bg-clip-text {
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
   }
 
   .md\:bg-transparent {
@@ -43845,6 +43896,23 @@ video {
     background-attachment: scroll !important;
   }
 
+  .lg\:bg-clip-border {
+    background-clip: border-box !important;
+  }
+
+  .lg\:bg-clip-padding {
+    background-clip: padding-box !important;
+  }
+
+  .lg\:bg-clip-content {
+    background-clip: content-box !important;
+  }
+
+  .lg\:bg-clip-text {
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+  }
+
   .lg\:bg-transparent {
     background-color: transparent !important;
   }
@@ -57859,6 +57927,23 @@ video {
 
   .xl\:bg-scroll {
     background-attachment: scroll !important;
+  }
+
+  .xl\:bg-clip-border {
+    background-clip: border-box !important;
+  }
+
+  .xl\:bg-clip-padding {
+    background-clip: padding-box !important;
+  }
+
+  .xl\:bg-clip-content {
+    background-clip: content-box !important;
+  }
+
+  .xl\:bg-clip-text {
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
   }
 
   .xl\:bg-transparent {

@@ -1379,6 +1379,18 @@ video {
   background-attachment: scroll;
 }
 
+.bg-clip-border {
+  background-clip: border-box;
+}
+
+.bg-clip-padding {
+  background-clip: padding-box;
+}
+
+.bg-clip-content {
+  background-clip: content-box;
+}
+
 .bg-transparent {
   background-color: transparent;
 }
@@ -11809,6 +11821,18 @@ video {
     background-attachment: scroll;
   }
 
+  .sm\:bg-clip-border {
+    background-clip: border-box;
+  }
+
+  .sm\:bg-clip-padding {
+    background-clip: padding-box;
+  }
+
+  .sm\:bg-clip-content {
+    background-clip: content-box;
+  }
+
   .sm\:bg-transparent {
     background-color: transparent;
   }
@@ -22207,6 +22231,18 @@ video {
 
   .md\:bg-scroll {
     background-attachment: scroll;
+  }
+
+  .md\:bg-clip-border {
+    background-clip: border-box;
+  }
+
+  .md\:bg-clip-padding {
+    background-clip: padding-box;
+  }
+
+  .md\:bg-clip-content {
+    background-clip: content-box;
   }
 
   .md\:bg-transparent {
@@ -32609,6 +32645,18 @@ video {
     background-attachment: scroll;
   }
 
+  .lg\:bg-clip-border {
+    background-clip: border-box;
+  }
+
+  .lg\:bg-clip-padding {
+    background-clip: padding-box;
+  }
+
+  .lg\:bg-clip-content {
+    background-clip: content-box;
+  }
+
   .lg\:bg-transparent {
     background-color: transparent;
   }
@@ -43007,6 +43055,18 @@ video {
 
   .xl\:bg-scroll {
     background-attachment: scroll;
+  }
+
+  .xl\:bg-clip-border {
+    background-clip: border-box;
+  }
+
+  .xl\:bg-clip-padding {
+    background-clip: padding-box;
+  }
+
+  .xl\:bg-clip-content {
+    background-clip: content-box;
   }
 
   .xl\:bg-transparent {
