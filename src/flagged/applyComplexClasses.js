@@ -20,7 +20,7 @@ function hasAtRule(css, atRule) {
   return foundAtRule
 }
 
-function applyUtility({ rule, utilityName: className, classPosition }, replaceWith) {
+function generateRulesFromApply({ rule, utilityName: className, classPosition }, replaceWith) {
   const processedSelectors = rule.selectors.map(selector => {
     const processor = selectorParser(selectors => {
       let i = 0
@@ -172,43 +172,43 @@ function processApplyAtRules(css, lookupTree, config) {
 
   while (hasAtRule(css, 'apply')) {
     css.walkRules(rule => {
-      const injectRules = []
+      const applyRules = []
 
       // Only walk direct children to avoid issues with nesting plugins
       rule.each(child => {
         if (child.type === 'atrule' && child.name === 'apply') {
-          injectRules.unshift(child)
+          applyRules.unshift(child)
         }
       })
 
-      injectRules.forEach(inject => {
+      applyRules.forEach(applyRule => {
         const [
           importantEntries,
-          injectUtilityNames,
+          applyUtilityNames,
           important = importantEntries.length > 0,
-        ] = _.partition(inject.params.split(' '), n => n === '!important')
+        ] = _.partition(applyRule.params.split(' '), n => n === '!important')
 
         const currentUtilityNames = extractUtilityNames(rule.selector)
 
-        if (_.intersection(injectUtilityNames, currentUtilityNames).length > 0) {
-          const currentUtilityName = _.intersection(injectUtilityNames, currentUtilityNames)[0]
+        if (_.intersection(applyUtilityNames, currentUtilityNames).length > 0) {
+          const currentUtilityName = _.intersection(applyUtilityNames, currentUtilityNames)[0]
           throw rule.error(
             `You cannot \`@apply\` the \`${currentUtilityName}\` utility here because it creates a circular dependency.`
           )
         }
 
-        // Extract any post-inject declarations and re-insert them after inject rules
+        // Extract any post-apply declarations and re-insert them after apply rules
         const afterRule = rule.clone({ raws: {} })
-        afterRule.nodes = afterRule.nodes.slice(rule.index(inject) + 1)
-        rule.nodes = rule.nodes.slice(0, rule.index(inject) + 1)
+        afterRule.nodes = afterRule.nodes.slice(rule.index(applyRule) + 1)
+        rule.nodes = rule.nodes.slice(0, rule.index(applyRule) + 1)
 
-        // Sort injects to match CSS source order
-        const injects = extractUtilityRules(injectUtilityNames, inject)
+        // Sort applys to match CSS source order
+        const applys = extractUtilityRules(applyUtilityNames, applyRule)
 
         // Get new rules with the utility portion of the selector replaced with the new selector
         const rulesToInsert = [
-          ...injects.map(injectUtility => {
-            return applyUtility(injectUtility, rule.selector)
+          ...applys.map(applyUtility => {
+            return generateRulesFromApply(applyUtility, rule.selector)
           }),
           afterRule,
         ]
@@ -219,11 +219,11 @@ function processApplyAtRules(css, lookupTree, config) {
 
         const mergedRules = mergeAdjacentRules(rule, nodes)
 
-        inject.remove()
+        applyRule.remove()
         rule.after(mergedRules)
       })
 
-      // If the base rule has nothing in it (all injects were pseudo or responsive variants),
+      // If the base rule has nothing in it (all applys were pseudo or responsive variants),
       // remove the rule fuggit.
       if (rule.nodes.length === 0) {
         rule.remove()
