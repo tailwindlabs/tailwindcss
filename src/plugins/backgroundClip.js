@@ -8,7 +8,7 @@ export default function() {
         ...(target('display') === 'ie11'
           ? {}
           : {
-              '.bg-clip-text': { 'background-clip': 'text', '-webkit-background-clip': 'text' },
+              '.bg-clip-text': { 'background-clip': 'text' },
             }),
       },
       variants('backgroundClip')

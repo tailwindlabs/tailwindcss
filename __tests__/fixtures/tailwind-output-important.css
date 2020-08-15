@@ -1781,7 +1781,6 @@ video {
 
 .bg-clip-text {
   background-clip: text !important;
-  -webkit-background-clip: text !important;
 }
 
 .bg-transparent {
@@ -15844,7 +15843,6 @@ video {
 
   .sm\:bg-clip-text {
     background-clip: text !important;
-    -webkit-background-clip: text !important;
   }
 
   .sm\:bg-transparent {
@@ -29877,7 +29875,6 @@ video {
 
   .md\:bg-clip-text {
     background-clip: text !important;
-    -webkit-background-clip: text !important;
   }
 
   .md\:bg-transparent {
@@ -43910,7 +43907,6 @@ video {
 
   .lg\:bg-clip-text {
     background-clip: text !important;
-    -webkit-background-clip: text !important;
   }
 
   .lg\:bg-transparent {
@@ -57943,7 +57939,6 @@ video {
 
   .xl\:bg-clip-text {
     background-clip: text !important;
-    -webkit-background-clip: text !important;
   }
 
   .xl\:bg-transparent {
