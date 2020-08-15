@@ -979,64 +979,12 @@ test('plugins can add multiple sets of utilities and components', () => {
 })
 
 test('plugins respect prefix and important options by default when adding utilities', () => {
-  const { utilities } = processPlugins(
-    [
-      function({ addUtilities }) {
-        addUtilities({
-          '.rotate-90': {
-            transform: 'rotate(90deg)',
-          },
-        })
-      },
-    ],
-    makeConfig({
+  return _postcss([
+    tailwind({
       prefix: 'tw-',
       important: true,
-    })
-  )
-
-  expect(css(utilities)).toMatchCss(`
-    @layer utilities {
-      @variants {
-        .tw-rotate-90 {
-          transform: rotate(90deg) !important
-        }
-      }
-    }
-  `)
-})
-
-test('when important is a selector it is used to scope utilities instead of adding !important', () => {
-  const { utilities } = processPlugins(
-    [
-      function({ addUtilities }) {
-        addUtilities({
-          '.rotate-90': {
-            transform: 'rotate(90deg)',
-          },
-        })
-      },
-    ],
-    makeConfig({
-      important: '#app',
-    })
-  )
-
-  expect(css(utilities)).toMatchCss(`
-    @layer utilities {
-      @variants {
-        #app .rotate-90 {
-          transform: rotate(90deg)
-        }
-      }
-    }
-  `)
-})
-
-test('when important contains a class an error is thrown', () => {
-  expect(() => {
-    processPlugins(
-      [
+      corePlugins: [],
+      plugins: [
         function({ addUtilities }) {
           addUtilities({
             '.rotate-90': {
@@ -1045,65 +993,123 @@ test('when important contains a class an error is thrown', () => {
           })
         },
       ],
-      makeConfig({
-        important: '#app .project',
-      })
+    }),
+  ])
+    .process(
+      `
+        @tailwind utilities;
+      `,
+      { from: undefined }
     )
-  }).toThrow()
+    .then(result => {
+      const expected = `
+        .tw-rotate-90 {
+          transform: rotate(90deg) !important
+        }
+      `
+
+      expect(result.css).toMatchCss(expected)
+    })
+})
+
+test('when important is a selector it is used to scope utilities instead of adding !important', () => {
+  return _postcss([
+    tailwind({
+      prefix: 'tw-',
+      important: '#app',
+      corePlugins: [],
+      plugins: [
+        function({ addUtilities }) {
+          addUtilities({
+            '.rotate-90': {
+              transform: 'rotate(90deg)',
+            },
+          })
+        },
+      ],
+    }),
+  ])
+    .process(
+      `
+        @tailwind utilities;
+      `,
+      { from: undefined }
+    )
+    .then(result => {
+      const expected = `
+        #app .tw-rotate-90 {
+          transform: rotate(90deg)
+        }
+      `
+
+      expect(result.css).toMatchCss(expected)
+    })
 })
 
 test('when important is a selector it scopes all selectors in a rule, even though defining utilities like this is stupid', () => {
-  const { utilities } = processPlugins(
-    [
-      function({ addUtilities }) {
-        addUtilities({
-          '.rotate-90, .rotate-1\\/4': {
-            transform: 'rotate(90deg)',
-          },
-        })
-      },
-    ],
-    makeConfig({
+  return _postcss([
+    tailwind({
       important: '#app',
-    })
-  )
-
-  expect(css(utilities)).toMatchCss(`
-    @layer utilities {
-      @variants {
+      corePlugins: [],
+      plugins: [
+        function({ addUtilities }) {
+          addUtilities({
+            '.rotate-90, .rotate-1\\/4': {
+              transform: 'rotate(90deg)',
+            },
+          })
+        },
+      ],
+    }),
+  ])
+    .process(
+      `
+        @tailwind utilities;
+      `,
+      { from: undefined }
+    )
+    .then(result => {
+      const expected = `
         #app .rotate-90, #app .rotate-1\\/4 {
           transform: rotate(90deg)
         }
-      }
-    }
-  `)
+      `
+
+      expect(result.css).toMatchCss(expected)
+    })
 })
 
 test('important utilities are not made double important when important option is used', () => {
-  const { utilities } = processPlugins(
-    [
-      function({ addUtilities }) {
-        addUtilities({
-          '.rotate-90': {
-            transform: 'rotate(90deg) !important',
-          },
-        })
-      },
-    ],
-    makeConfig({
+  return _postcss([
+    tailwind({
       important: true,
-    })
-  )
-
-  expect(css(utilities)).toMatchCss(`
-    @layer utilities {
-      @variants {
+      corePlugins: [],
+      plugins: [
+        function({ addUtilities }) {
+          addUtilities({
+            '.rotate-90': {
+              transform: 'rotate(90deg) !important',
+            },
+          })
+        },
+      ],
+    }),
+  ])
+    .process(
+      `
+        @tailwind utilities;
+      `,
+      { from: undefined }
+    )
+    .then(result => {
+      const expected = `
         .rotate-90 {
           transform: rotate(90deg) !important
         }
-      }
-    }
-  `)
+      `
+
+      expect(result.css).toMatchCss(expected)
+    })
 })
 
 test("component declarations respect the 'prefix' option by default", () => {
@@ -1346,69 +1352,79 @@ test("plugins can apply the user's chosen prefix to components manually", () => 
 })
 
 test('prefix can optionally be ignored for utilities', () => {
-  const { utilities } = processPlugins(
-    [
-      function({ addUtilities }) {
-        addUtilities(
-          {
-            '.rotate-90': {
-              transform: 'rotate(90deg)',
-            },
-          },
-          {
-            respectPrefix: false,
-          }
-        )
-      },
-    ],
-    makeConfig({
+  return _postcss([
+    tailwind({
       prefix: 'tw-',
-      important: true,
-    })
-  )
-
-  expect(css(utilities)).toMatchCss(`
-    @layer utilities {
-      @variants {
+      corePlugins: [],
+      plugins: [
+        function({ addUtilities }) {
+          addUtilities(
+            {
+              '.rotate-90': {
+                transform: 'rotate(90deg)',
+              },
+            },
+            {
+              respectPrefix: false,
+            }
+          )
+        },
+      ],
+    }),
+  ])
+    .process(
+      `
+        @tailwind utilities;
+      `,
+      { from: undefined }
+    )
+    .then(result => {
+      const expected = `
         .rotate-90 {
-          transform: rotate(90deg) !important
+          transform: rotate(90deg)
         }
-      }
-    }
-  `)
+      `
+
+      expect(result.css).toMatchCss(expected)
+    })
 })
 
 test('important can optionally be ignored for utilities', () => {
-  const { utilities } = processPlugins(
-    [
-      function({ addUtilities }) {
-        addUtilities(
-          {
-            '.rotate-90': {
-              transform: 'rotate(90deg)',
-            },
-          },
-          {
-            respectImportant: false,
-          }
-        )
-      },
-    ],
-    makeConfig({
-      prefix: 'tw-',
+  return _postcss([
+    tailwind({
       important: true,
-    })
-  )
-
-  expect(css(utilities)).toMatchCss(`
-    @layer utilities {
-      @variants {
-        .tw-rotate-90 {
+      corePlugins: [],
+      plugins: [
+        function({ addUtilities }) {
+          addUtilities(
+            {
+              '.rotate-90': {
+                transform: 'rotate(90deg)',
+              },
+            },
+            {
+              respectImportant: false,
+            }
+          )
+        },
+      ],
+    }),
+  ])
+    .process(
+      `
+        @tailwind utilities;
+      `,
+      { from: undefined }
+    )
+    .then(result => {
+      const expected = `
+        .rotate-90 {
           transform: rotate(90deg)
         }
-      }
-    }
-  `)
+      `
+
+      expect(result.css).toMatchCss(expected)
+    })
 })
 
 test('variants can still be specified when ignoring prefix and important options', () => {

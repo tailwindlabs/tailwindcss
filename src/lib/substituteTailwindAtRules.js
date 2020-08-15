@@ -49,18 +49,15 @@ export default function(
       }
 
       if (atRule.params === 'base') {
-        atRule.before(updateSource(pluginBase, atRule.source))
-        atRule.remove()
+        atRule.after(updateSource(pluginBase, atRule.source))
       }
 
       if (atRule.params === 'components') {
-        atRule.before(updateSource(pluginComponents, atRule.source))
-        atRule.remove()
+        atRule.after(updateSource(pluginComponents, atRule.source))
       }
 
       if (atRule.params === 'utilities') {
-        atRule.before(updateSource(pluginUtilities, atRule.source))
-        atRule.remove()
+        atRule.after(updateSource(pluginUtilities, atRule.source))
       }
 
       if (atRule.params === 'screens') {

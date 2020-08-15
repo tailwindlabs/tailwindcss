@@ -3,7 +3,7 @@ expect.extend({
   // This is probably naive but it's fast and works well enough.
   toMatchCss(received, argument) {
     function stripped(str) {
-      return str.replace(/\s/g, '')
+      return str.replace(/\s/g, '').replace(/;/g, '')
     }
 
     if (stripped(received) === stripped(argument)) {

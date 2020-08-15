@@ -8,6 +8,7 @@ import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
 import convertLayerAtRulesToControlComments from './lib/convertLayerAtRulesToControlComments'
 import substituteScreenAtRules from './lib/substituteScreenAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
+import applyImportantConfiguration from './lib/applyImportantConfiguration'
 import purgeUnusedStyles from './lib/purgeUnusedStyles'
 
 import corePlugins from './corePlugins'
@@ -39,7 +40,8 @@ export default function(getConfig) {
       substituteResponsiveAtRules(config),
       convertLayerAtRulesToControlComments(config),
       substituteScreenAtRules(config),
-      substituteClassApplyAtRules(config, getProcessedPlugins().utilities),
+      substituteClassApplyAtRules(config, getProcessedPlugins),
+      applyImportantConfiguration(config),
       purgeUnusedStyles(config),
     ]).process(css, { from: _.get(css, 'source.input.file') })
   }
