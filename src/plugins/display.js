@@ -5,9 +5,6 @@ export default function() {
         '.block': {
           display: 'block',
         },
-        '.contents': {
-          display: 'contents',
-        },
         '.inline-block': {
           display: 'inline-block',
         },
@@ -58,6 +55,9 @@ export default function() {
               },
               '.inline-grid': {
                 display: 'inline-grid',
+              },
+              '.contents': {
+                display: 'contents',
               },
             }),
         '.hidden': {

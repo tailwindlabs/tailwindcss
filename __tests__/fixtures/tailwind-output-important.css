@@ -5791,6 +5791,10 @@ video {
   display: inline-grid !important;
 }
 
+.contents {
+  display: contents !important;
+}
+
 .hidden {
   display: none !important;
 }
@@ -19833,6 +19837,10 @@ video {
     display: inline-grid !important;
   }
 
+  .sm\:contents {
+    display: contents !important;
+  }
+
   .sm\:hidden {
     display: none !important;
   }
@@ -33843,6 +33851,10 @@ video {
 
   .md\:inline-grid {
     display: inline-grid !important;
+  }
+
+  .md\:contents {
+    display: contents !important;
   }
 
   .md\:hidden {
@@ -47857,6 +47869,10 @@ video {
     display: inline-grid !important;
   }
 
+  .lg\:contents {
+    display: contents !important;
+  }
+
   .lg\:hidden {
     display: none !important;
   }
@@ -61867,6 +61883,10 @@ video {
 
   .xl\:inline-grid {
     display: inline-grid !important;
+  }
+
+  .xl\:contents {
+    display: contents !important;
   }
 
   .xl\:hidden {
