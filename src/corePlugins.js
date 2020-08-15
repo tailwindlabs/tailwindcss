@@ -6,6 +6,7 @@ import divideColor from './plugins/divideColor'
 import accessibility from './plugins/accessibility'
 import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
+import backgroundClip from './plugins/backgroundClip'
 import backgroundColor from './plugins/backgroundColor'
 import backgroundPosition from './plugins/backgroundPosition'
 import backgroundRepeat from './plugins/backgroundRepeat'
@@ -113,6 +114,7 @@ export default function({ corePlugins: corePluginConfig }) {
     accessibility,
     appearance,
     backgroundAttachment,
+    backgroundClip,
     backgroundColor,
     backgroundOpacity,
     backgroundPosition,
