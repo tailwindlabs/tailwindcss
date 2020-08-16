@@ -22,10 +22,10 @@ export default function generateVariantFunction(generator) {
               }
 
               rule.selectors = rule.selectors.map(selector => {
-                const className = classNameParser.transformSync(selector)
-
                 return modifierFunction({
-                  className,
+                  get className() {
+                    return classNameParser.transformSync(selector)
+                  },
                   selector,
                 })
               })
