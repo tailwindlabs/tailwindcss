@@ -151,6 +151,13 @@ module.exports = {
       '64': '16rem',
     },
     backgroundColor: theme => theme('colors'),
+    backgroundImage: {
+      'gradient-up': 'linear-gradient(0deg, var(--gradient-color-stops))',
+      'gradient-right': 'linear-gradient(90deg, var(--gradient-color-stops))',
+      'gradient-down': 'linear-gradient(180deg, var(--gradient-color-stops))',
+      'gradient-left': 'linear-gradient(270deg, var(--gradient-color-stops))',
+    },
+    gradientColor: theme => theme('colors'),
     backgroundOpacity: theme => theme('opacity'),
     backgroundPosition: {
       bottom: 'bottom',
@@ -660,6 +667,8 @@ module.exports = {
     backgroundAttachment: ['responsive'],
     backgroundClip: ['responsive'],
     backgroundColor: ['responsive', 'hover', 'focus'],
+    backgroundImage: ['responsive'],
+    gradientColor: ['responsive', 'hover', 'focus'],
     backgroundOpacity: ['responsive', 'hover', 'focus'],
     backgroundPosition: ['responsive'],
     backgroundRepeat: ['responsive'],
