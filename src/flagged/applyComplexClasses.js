@@ -25,24 +25,20 @@ const tailwindApplyPlaceholder = selectorParser.attribute({
 })
 
 function generateRulesFromApply({ rule, utilityName: className, classPosition }, replaceWith) {
-  const processedSelectors = rule.selectors.map(selector => {
-    const processor = selectorParser(selectors => {
-      let i = 0
-      selectors.walkClasses(c => {
-        if (classPosition === i++ && c.value === className) {
-          c.replaceWith(tailwindApplyPlaceholder)
-        }
-      })
+  const processor = selectorParser(selectors => {
+    let i = 0
+    selectors.walkClasses(c => {
+      if (classPosition === i++ && c.value === className) {
+        c.replaceWith(tailwindApplyPlaceholder)
+      }
     })
+  })
 
+  const processedSelectors = rule.selectors.map(selector => {
     // You could argue we should make this replacement at the AST level, but if we believe
     // the placeholder string is safe from collisions then it is safe to do this is a simple
     // string replacement, and much, much faster.
-    const processedSelector = processor
-      .processSync(selector)
-      .replace('[__TAILWIND-APPLY-PLACEHOLDER__]', replaceWith)
-
-    return processedSelector
+    return processor.processSync(selector).replace('[__TAILWIND-APPLY-PLACEHOLDER__]', replaceWith)
   })
 
   const cloned = rule.clone()
