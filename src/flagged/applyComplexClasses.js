@@ -139,15 +139,11 @@ function mergeAdjacentRules(initialRule, rulesToInsert) {
 
 function makeExtractUtilityRules(css, config) {
   const utilityMap = buildUtilityMap(css)
-  const orderUtilityMap = _.fromPairs(
-    _.flatMap(_.toPairs(utilityMap), ([_utilityName, utilities]) => {
-      return utilities.map(utility => {
-        return [utility.index, utility]
-      })
-    })
-  )
-  return function(utilityNames, rule) {
-    return _.flatMap(utilityNames, utilityName => {
+
+  return function extractUtilityRules(utilityNames, rule) {
+    const combined = []
+
+    utilityNames.forEach(utilityName => {
       if (utilityMap[utilityName] === undefined) {
         // Look for prefixed utility in case the user has goofed
         const prefixedUtility = prefixSelector(config.prefix, `.${utilityName}`).slice(1)
@@ -163,10 +159,11 @@ function makeExtractUtilityRules(css, config) {
           { word: utilityName }
         )
       }
-      return utilityMap[utilityName].map(({ index }) => index)
+
+      combined.push(...utilityMap[utilityName])
     })
-      .sort((a, b) => a - b)
-      .map(i => orderUtilityMap[i])
+
+    return combined.sort((a, b) => a.index - b.index)
   }
 }
 
