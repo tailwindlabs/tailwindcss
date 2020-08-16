@@ -6,14 +6,14 @@ import prefixSelector from '../util/prefixSelector'
 
 function generatePseudoClassVariant(pseudoClass, selectorPrefix = pseudoClass) {
   return generateVariantFunction(({ modifySelectors, separator }) => {
-    return modifySelectors(({ selector }) => {
-      return selectorParser(selectors => {
-        selectors.walkClasses(sel => {
-          sel.value = `${selectorPrefix}${separator}${sel.value}`
-          sel.parent.insertAfter(sel, selectorParser.pseudo({ value: `:${pseudoClass}` }))
-        })
-      }).processSync(selector)
+    const parser = selectorParser(selectors => {
+      selectors.walkClasses(sel => {
+        sel.value = `${selectorPrefix}${separator}${sel.value}`
+        sel.parent.insertAfter(sel, selectorParser.pseudo({ value: `:${pseudoClass}` }))
+      })
     })
+
+    return modifySelectors(({ selector }) => parser.processSync(selector))
   })
 }
 
@@ -24,13 +24,12 @@ function ensureIncludesDefault(variants) {
 const defaultVariantGenerators = config => ({
   default: generateVariantFunction(() => {}),
   'motion-safe': generateVariantFunction(({ container, separator, modifySelectors }) => {
-    const modified = modifySelectors(({ selector }) => {
-      return selectorParser(selectors => {
-        selectors.walkClasses(sel => {
-          sel.value = `motion-safe${separator}${sel.value}`
-        })
-      }).processSync(selector)
+    const parser = selectorParser(selectors => {
+      selectors.walkClasses(sel => {
+        sel.value = `motion-safe${separator}${sel.value}`
+      })
     })
+    const modified = modifySelectors(({ selector }) => parser.processSync(selector))
     const mediaQuery = postcss.atRule({
       name: 'media',
       params: '(prefers-reduced-motion: no-preference)',
@@ -39,42 +38,42 @@ const defaultVariantGenerators = config => ({
     container.append(mediaQuery)
   }),
   'motion-reduce': generateVariantFunction(({ container, separator, modifySelectors }) => {
-    const modified = modifySelectors(({ selector }) => {
-      return selectorParser(selectors => {
-        selectors.walkClasses(sel => {
-          sel.value = `motion-reduce${separator}${sel.value}`
-        })
-      }).processSync(selector)
+    const parser = selectorParser(selectors => {
+      selectors.walkClasses(sel => {
+        sel.value = `motion-reduce${separator}${sel.value}`
+      })
     })
-    const mediaQuery = postcss.atRule({ name: 'media', params: '(prefers-reduced-motion: reduce)' })
+    const modified = modifySelectors(({ selector }) => parser.processSync(selector))
+    const mediaQuery = postcss.atRule({
+      name: 'media',
+      params: '(prefers-reduced-motion: reduce)',
+    })
     mediaQuery.append(modified)
     container.append(mediaQuery)
   }),
   'group-hover': generateVariantFunction(({ modifySelectors, separator }) => {
-    return modifySelectors(({ selector }) => {
-      return selectorParser(selectors => {
-        selectors.walkClasses(sel => {
-          sel.value = `group-hover${separator}${sel.value}`
-          sel.parent.insertBefore(
-            sel,
-            selectorParser().astSync(prefixSelector(config.prefix, '.group:hover '))
-          )
-        })
-      }).processSync(selector)
+    const parser = selectorParser(selectors => {
+      selectors.walkClasses(sel => {
+        sel.value = `group-hover${separator}${sel.value}`
+        sel.parent.insertBefore(
+          sel,
+          selectorParser().astSync(prefixSelector(config.prefix, '.group:hover '))
+        )
+      })
     })
+    return modifySelectors(({ selector }) => parser.processSync(selector))
   }),
   'group-focus': generateVariantFunction(({ modifySelectors, separator }) => {
-    return modifySelectors(({ selector }) => {
-      return selectorParser(selectors => {
-        selectors.walkClasses(sel => {
-          sel.value = `group-focus${separator}${sel.value}`
-          sel.parent.insertBefore(
-            sel,
-            selectorParser().astSync(prefixSelector(config.prefix, '.group:focus '))
-          )
-        })
-      }).processSync(selector)
+    const parser = selectorParser(selectors => {
+      selectors.walkClasses(sel => {
+        sel.value = `group-focus${separator}${sel.value}`
+        sel.parent.insertBefore(
+          sel,
+          selectorParser().astSync(prefixSelector(config.prefix, '.group:focus '))
+        )
+      })
     })
+    return modifySelectors(({ selector }) => parser.processSync(selector))
   }),
   hover: generatePseudoClassVariant('hover'),
   'focus-within': generatePseudoClassVariant('focus-within'),
