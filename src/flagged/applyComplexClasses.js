@@ -173,7 +173,7 @@ function makeExtractUtilityRules(css, config) {
 function processApplyAtRules(css, lookupTree, config) {
   const extractUtilityRules = makeExtractUtilityRules(lookupTree, config)
 
-  while (hasAtRule(css, 'apply')) {
+  do {
     css.walkRules(rule => {
       const applyRules = []
 
@@ -232,7 +232,18 @@ function processApplyAtRules(css, lookupTree, config) {
         rule.remove()
       }
     })
-  }
+
+    // We already know that we have at least 1 @apply rule. Otherwise this
+    // function would not have been called. Therefore we can execute this code
+    // at least once. This also means that in the best case scenario we only
+    // call this 2 times, instead of 3 times.
+    // 1st time -> before we call this function
+    // 2nd time -> when we check if we have to do this loop again (because do {} while (check))
+    // .. instead of
+    // 1st time -> before we call this function
+    // 2nd time -> when we check the first time (because while (check) do {})
+    // 3rd time -> when we re-check to see if we should do this loop again
+  } while (hasAtRule(css, 'apply'))
 
   return css
 }
