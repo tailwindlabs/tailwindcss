@@ -20,6 +20,20 @@ function hasAtRule(css, atRule) {
   return foundAtRule
 }
 
+function cloneWithoutChildren(node) {
+  if (node.type === 'atrule') {
+    return postcss.atRule({ name: node.name, params: node.params })
+  }
+
+  if (node.type === 'rule') {
+    return postcss.rule({ name: node.name, selectors: node.selectors })
+  }
+
+  const clone = node.clone()
+  clone.removeAll()
+  return clone
+}
+
 const tailwindApplyPlaceholder = selectorParser.attribute({
   attribute: '__TAILWIND-APPLY-PLACEHOLDER__',
 })
@@ -46,8 +60,8 @@ function generateRulesFromApply({ rule, utilityName: className, classPosition },
   let parent = rule.parent
 
   while (parent && parent.type !== 'root') {
-    const parentClone = parent.clone()
-    parentClone.removeAll()
+    const parentClone = cloneWithoutChildren(parent)
+
     parentClone.append(current)
     current.parent = parentClone
     current = parentClone
