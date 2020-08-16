@@ -90,7 +90,6 @@ function buildUtilityMap(css) {
         utilityName,
         classPosition: i,
         rule: rule.clone({ parent: rule.parent }),
-        containsApply: hasAtRule(rule, 'apply'),
       })
       index++
     })
