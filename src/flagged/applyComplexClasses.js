@@ -20,15 +20,18 @@ function hasAtRule(css, atRule) {
   return foundAtRule
 }
 
+const tailwindApplyPlaceholder = selectorParser.attribute({
+  attribute: '__TAILWIND-APPLY-PLACEHOLDER__',
+})
+
 function generateRulesFromApply({ rule, utilityName: className, classPosition }, replaceWith) {
   const processedSelectors = rule.selectors.map(selector => {
     const processor = selectorParser(selectors => {
       let i = 0
       selectors.walkClasses(c => {
-        if (c.value === className && classPosition === i) {
-          c.replaceWith(selectorParser.attribute({ attribute: '__TAILWIND-APPLY-PLACEHOLDER__' }))
+        if (classPosition === i++ && c.value === className) {
+          c.replaceWith(tailwindApplyPlaceholder)
         }
-        i++
       })
     })
 
