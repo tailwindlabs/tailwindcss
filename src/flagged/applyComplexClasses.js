@@ -8,6 +8,7 @@ import substituteResponsiveAtRules from '../lib/substituteResponsiveAtRules'
 import convertLayerAtRulesToControlComments from '../lib/convertLayerAtRulesToControlComments'
 import substituteScreenAtRules from '../lib/substituteScreenAtRules'
 import prefixSelector from '../util/prefixSelector'
+import { useMemo } from '../util/useMemo'
 
 function hasAtRule(css, atRule) {
   let foundAtRule = false
@@ -39,7 +40,7 @@ const tailwindApplyPlaceholder = selectorParser.attribute({
 })
 
 function generateRulesFromApply({ rule, utilityName: className, classPosition }, replaceWith) {
-  const processor = selectorParser(selectors => {
+  const parser = selectorParser(selectors => {
     let i = 0
     selectors.walkClasses(c => {
       if (classPosition === i++ && c.value === className) {
@@ -52,7 +53,7 @@ function generateRulesFromApply({ rule, utilityName: className, classPosition },
     // You could argue we should make this replacement at the AST level, but if we believe
     // the placeholder string is safe from collisions then it is safe to do this is a simple
     // string replacement, and much, much faster.
-    return processor.processSync(selector).replace('[__TAILWIND-APPLY-PLACEHOLDER__]', replaceWith)
+    return parser.processSync(selector).replace('[__TAILWIND-APPLY-PLACEHOLDER__]', replaceWith)
   })
 
   const cloned = rule.clone()
@@ -72,19 +73,16 @@ function generateRulesFromApply({ rule, utilityName: className, classPosition },
   return current
 }
 
-function extractUtilityNames(selector) {
-  const processor = selectorParser(selectors => {
-    let classes = []
+const extractUtilityNamesParser = selectorParser(selectors => {
+  let classes = []
+  selectors.walkClasses(c => classes.push(c.value))
+  return classes
+})
 
-    selectors.walkClasses(c => {
-      classes.push(c)
-    })
-
-    return classes.map(c => c.value)
-  })
-
-  return processor.transformSync(selector)
-}
+const extractUtilityNames = useMemo(
+  selector => extractUtilityNamesParser.transformSync(selector),
+  selector => selector
+)
 
 function buildUtilityMap(css) {
   let index = 0
