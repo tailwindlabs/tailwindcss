@@ -236,6 +236,11 @@ function processApplyAtRules(css, lookupTree, config) {
 
 export default function applyComplexClasses(config, getProcessedPlugins) {
   return function(css) {
+    // We can stop already when we don't have any @apply rules. Vue users: you're welcome!
+    if (!hasAtRule(css, 'apply')) {
+      return css
+    }
+
     // Tree already contains @tailwind rules, don't prepend default Tailwind tree
     if (hasAtRule(css, 'tailwind')) {
       return processApplyAtRules(css, css, config)
