@@ -89,7 +89,11 @@ function buildUtilityMap(css) {
         index,
         utilityName,
         classPosition: i,
-        rule: rule.clone({ parent: rule.parent }),
+        get rule() {
+          // TODO: #perf every time we "read" this value we will create a copy.
+          // Is this an issue?
+          return rule.clone({ parent: rule.parent })
+        },
       })
       index++
     })
