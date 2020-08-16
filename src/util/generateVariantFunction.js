@@ -2,6 +2,10 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
 
+const classNameParser = selectorParser(selectors => {
+  return selectors.first.filter(({ type }) => type === 'class').pop().value
+})
+
 export default function generateVariantFunction(generator) {
   return (container, config) => {
     const cloned = postcss.root({ nodes: container.clone().nodes })
@@ -18,9 +22,7 @@ export default function generateVariantFunction(generator) {
               }
 
               rule.selectors = rule.selectors.map(selector => {
-                const className = selectorParser(selectors => {
-                  return selectors.first.filter(({ type }) => type === 'class').pop().value
-                }).transformSync(selector)
+                const className = classNameParser.transformSync(selector)
 
                 return modifierFunction({
                   className,
