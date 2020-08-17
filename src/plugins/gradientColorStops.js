@@ -16,7 +16,7 @@ export default function() {
           try {
             const [r, g, b] = toRgba(value)
             return `rgba(${r}, ${g}, ${b}, 0)`
-          } catch {
+          } catch (_error) {
             return `rgba(255, 255, 255, 0)`
           }
         })()
