@@ -30,10 +30,10 @@ export default function() {
             },
           ],
           [
-            `.${e(`mid-${modifier}`)}`,
+            `.${e(`via-${modifier}`)}`,
             {
-              '--gradient-mid-color': value,
-              '--gradient-color-stops': `var(--gradient-from-color), var(--gradient-mid-color), var(--gradient-to-color, ${transparentTo})`,
+              '--gradient-via-color': value,
+              '--gradient-color-stops': `var(--gradient-from-color), var(--gradient-via-color), var(--gradient-to-color, ${transparentTo})`,
             },
           ],
           [
