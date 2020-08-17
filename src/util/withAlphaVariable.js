@@ -10,7 +10,7 @@ function hasAlpha(color) {
   )
 }
 
-function toRgba(color) {
+export function toRgba(color) {
   const [r, g, b, a] = createColor(color)
     .rgb()
     .array()
