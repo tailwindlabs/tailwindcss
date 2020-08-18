@@ -111,32 +111,37 @@ test('it can generate responsive variants when classes have non-standard charact
     @responsive {
       .hover\\:banana { color: yellow; }
       .chocolate-2\\.5 { color: brown; }
+      .group:hover .group-hover\\:toast { color: black; }
     }
 
     @tailwind screens;
-  `
+    `
 
   const output = `
     @layer utilities {
       .hover\\:banana { color: yellow; }
       .chocolate-2\\.5 { color: brown; }
+      .group:hover .group-hover\\:toast { color: black; }
     }
     @media (min-width: 500px) {
       @layer utilities {
         .sm\\:hover\\:banana { color: yellow; }
         .sm\\:chocolate-2\\.5 { color: brown; }
+        .group:hover .sm\\:group-hover\\:toast { color: black; }
       }
     }
     @media (min-width: 750px) {
       @layer utilities {
         .md\\:hover\\:banana { color: yellow; }
         .md\\:chocolate-2\\.5 { color: brown; }
+        .group:hover .md\\:group-hover\\:toast { color: black; }
       }
     }
     @media (min-width: 1000px) {
       @layer utilities {
         .lg\\:hover\\:banana { color: yellow; }
         .lg\\:chocolate-2\\.5 { color: brown; }
+        .group:hover .lg\\:group-hover\\:toast { color: black; }
       }
     }
   `

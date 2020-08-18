@@ -3,6 +3,7 @@ import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
 import generateVariantFunction from '../util/generateVariantFunction'
 import prefixSelector from '../util/prefixSelector'
+import buildSelectorVariant from '../util/buildSelectorVariant'
 
 function generatePseudoClassVariant(pseudoClass, selectorPrefix = pseudoClass) {
   return generateVariantFunction(({ modifySelectors, separator }) => {
@@ -25,11 +26,9 @@ const defaultVariantGenerators = config => ({
   default: generateVariantFunction(() => {}),
   'motion-safe': generateVariantFunction(({ container, separator, modifySelectors }) => {
     const modified = modifySelectors(({ selector }) => {
-      return selectorParser(selectors => {
-        selectors.walkClasses(sel => {
-          sel.value = `motion-safe${separator}${sel.value}`
-        })
-      }).processSync(selector)
+      return buildSelectorVariant(selector, 'motion-safe', separator, message => {
+        throw container.error(message)
+      })
     })
     const mediaQuery = postcss.atRule({
       name: 'media',
@@ -40,11 +39,9 @@ const defaultVariantGenerators = config => ({
   }),
   'motion-reduce': generateVariantFunction(({ container, separator, modifySelectors }) => {
     const modified = modifySelectors(({ selector }) => {
-      return selectorParser(selectors => {
-        selectors.walkClasses(sel => {
-          sel.value = `motion-reduce${separator}${sel.value}`
-        })
-      }).processSync(selector)
+      return buildSelectorVariant(selector, 'motion-reduce', separator, message => {
+        throw container.error(message)
+      })
     })
     const mediaQuery = postcss.atRule({ name: 'media', params: '(prefers-reduced-motion: reduce)' })
     mediaQuery.append(modified)

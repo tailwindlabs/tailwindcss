@@ -252,7 +252,7 @@ test('it can generate motion-safe and motion-reduce variants', () => {
 
 test('motion-reduce variants stack with basic variants', () => {
   const input = `
-    @variants motion-reduce, hover {
+    @variants motion-reduce, hover, group-hover {
       .banana { color: yellow; }
       .chocolate { color: brown; }
     }
@@ -263,11 +263,15 @@ test('motion-reduce variants stack with basic variants', () => {
     .chocolate { color: brown; }
     .hover\\:banana:hover { color: yellow; }
     .hover\\:chocolate:hover { color: brown; }
+    .group:hover .group-hover\\:banana { color: yellow; }
+    .group:hover .group-hover\\:chocolate { color: brown; }
     @media (prefers-reduced-motion: reduce) {
       .motion-reduce\\:banana { color: yellow; }
       .motion-reduce\\:chocolate { color: brown; }
       .motion-reduce\\:hover\\:banana:hover { color: yellow; }
       .motion-reduce\\:hover\\:chocolate:hover { color: brown; }
+      .group:hover .motion-reduce\\:group-hover\\:banana { color: yellow; }
+      .group:hover .motion-reduce\\:group-hover\\:chocolate { color: brown; }
     }
   `
 
@@ -279,7 +283,7 @@ test('motion-reduce variants stack with basic variants', () => {
 
 test('motion-safe variants stack with basic variants', () => {
   const input = `
-    @variants motion-safe, hover {
+    @variants motion-safe, hover, group-hover {
       .banana { color: yellow; }
       .chocolate { color: brown; }
     }
@@ -290,11 +294,15 @@ test('motion-safe variants stack with basic variants', () => {
     .chocolate { color: brown; }
     .hover\\:banana:hover { color: yellow; }
     .hover\\:chocolate:hover { color: brown; }
+    .group:hover .group-hover\\:banana { color: yellow; }
+    .group:hover .group-hover\\:chocolate { color: brown; }
     @media (prefers-reduced-motion: no-preference) {
       .motion-safe\\:banana { color: yellow; }
       .motion-safe\\:chocolate { color: brown; }
       .motion-safe\\:hover\\:banana:hover { color: yellow; }
       .motion-safe\\:hover\\:chocolate:hover { color: brown; }
+      .group:hover .motion-safe\\:group-hover\\:banana { color: yellow; }
+      .group:hover .motion-safe\\:group-hover\\:chocolate { color: brown; }
     }
   `
 
