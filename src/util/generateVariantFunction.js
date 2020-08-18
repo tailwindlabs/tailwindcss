@@ -1,6 +1,16 @@
 import _ from 'lodash'
 import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
+import { useMemo } from './useMemo'
+
+const classNameParser = selectorParser(selectors => {
+  return selectors.first.filter(({ type }) => type === 'class').pop().value
+})
+
+const getClassNameFromSelector = useMemo(
+  selector => classNameParser.transformSync(selector),
+  selector => selector
+)
 
 export default function generateVariantFunction(generator) {
   return (container, config) => {
@@ -18,12 +28,10 @@ export default function generateVariantFunction(generator) {
               }
 
               rule.selectors = rule.selectors.map(selector => {
-                const className = selectorParser(selectors => {
-                  return selectors.first.filter(({ type }) => type === 'class').pop().value
-                }).transformSync(selector)
-
                 return modifierFunction({
-                  className,
+                  get className() {
+                    return getClassNameFromSelector(selector)
+                  },
                   selector,
                 })
               })

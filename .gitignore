@@ -4,3 +4,6 @@
 index.html
 package-lock.json
 yarn-error.log
+
+# Perf related files
+isolate*.log

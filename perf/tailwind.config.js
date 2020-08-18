@@ -1,0 +1,28 @@
+module.exports = {
+  future: 'all',
+  experimental: 'all',
+  purge: [],
+  theme: {
+    extend: {},
+  },
+  variants: [
+    'responsive',
+    'motion-safe',
+    'motion-reduce',
+    'group-hover',
+    'group-focus',
+    'hover',
+    'focus-within',
+    'focus-visible',
+    'focus',
+    'active',
+    'visited',
+    'disabled',
+    'checked',
+    'first',
+    'last',
+    'odd',
+    'even',
+  ],
+  plugins: [],
+}
