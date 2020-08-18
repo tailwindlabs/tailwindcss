@@ -9,6 +9,8 @@ import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
 import backgroundClip from './plugins/backgroundClip'
 import backgroundColor from './plugins/backgroundColor'
+import backgroundImage from './plugins/backgroundImage'
+import gradientColorStops from './plugins/gradientColorStops'
 import backgroundPosition from './plugins/backgroundPosition'
 import backgroundRepeat from './plugins/backgroundRepeat'
 import backgroundSize from './plugins/backgroundSize'
@@ -118,6 +120,8 @@ export default function({ corePlugins: corePluginConfig }) {
     backgroundAttachment,
     backgroundClip,
     backgroundColor,
+    backgroundImage,
+    gradientColorStops,
     backgroundOpacity,
     backgroundPosition,
     backgroundRepeat,
