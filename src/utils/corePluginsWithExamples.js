@@ -24,6 +24,7 @@ module.exports.corePluginsWithExamples = plugins.map((plugin) => {
     },
     addComponents: () => {},
     addBase: () => {},
+    config: () => ({ future: 'all' }),
     theme: (path, defaultValue) => dlv(defaultConfig.theme, path, defaultValue),
     variants: () => [],
     e: (x) => x.replace(/([:.])/g, '\\$1'),
