@@ -8,6 +8,7 @@ import substituteResponsiveAtRules from '../lib/substituteResponsiveAtRules'
 import convertLayerAtRulesToControlComments from '../lib/convertLayerAtRulesToControlComments'
 import substituteScreenAtRules from '../lib/substituteScreenAtRules'
 import prefixSelector from '../util/prefixSelector'
+import { useMemo } from '../util/useMemo'
 
 function hasAtRule(css, atRule) {
   let foundAtRule = false
@@ -20,26 +21,39 @@ function hasAtRule(css, atRule) {
   return foundAtRule
 }
 
-function generateRulesFromApply({ rule, utilityName: className, classPosition }, replaceWith) {
-  const processedSelectors = rule.selectors.map(selector => {
-    const processor = selectorParser(selectors => {
-      let i = 0
-      selectors.walkClasses(c => {
-        if (c.value === className && classPosition === i) {
-          c.replaceWith(selectorParser.attribute({ attribute: '__TAILWIND-APPLY-PLACEHOLDER__' }))
-        }
-        i++
-      })
-    })
+function cloneWithoutChildren(node) {
+  if (node.type === 'atrule') {
+    return postcss.atRule({ name: node.name, params: node.params })
+  }
 
+  if (node.type === 'rule') {
+    return postcss.rule({ name: node.name, selectors: node.selectors })
+  }
+
+  const clone = node.clone()
+  clone.removeAll()
+  return clone
+}
+
+const tailwindApplyPlaceholder = selectorParser.attribute({
+  attribute: '__TAILWIND-APPLY-PLACEHOLDER__',
+})
+
+function generateRulesFromApply({ rule, utilityName: className, classPosition }, replaceWith) {
+  const parser = selectorParser(selectors => {
+    let i = 0
+    selectors.walkClasses(c => {
+      if (classPosition === i++ && c.value === className) {
+        c.replaceWith(tailwindApplyPlaceholder)
+      }
+    })
+  })
+
+  const processedSelectors = rule.selectors.map(selector => {
     // You could argue we should make this replacement at the AST level, but if we believe
     // the placeholder string is safe from collisions then it is safe to do this is a simple
     // string replacement, and much, much faster.
-    const processedSelector = processor
-      .processSync(selector)
-      .replace('[__TAILWIND-APPLY-PLACEHOLDER__]', replaceWith)
-
-    return processedSelector
+    return parser.processSync(selector).replace('[__TAILWIND-APPLY-PLACEHOLDER__]', replaceWith)
   })
 
   const cloned = rule.clone()
@@ -47,8 +61,8 @@ function generateRulesFromApply({ rule, utilityName: className, classPosition },
   let parent = rule.parent
 
   while (parent && parent.type !== 'root') {
-    const parentClone = parent.clone()
-    parentClone.removeAll()
+    const parentClone = cloneWithoutChildren(parent)
+
     parentClone.append(current)
     current.parent = parentClone
     current = parentClone
@@ -59,19 +73,21 @@ function generateRulesFromApply({ rule, utilityName: className, classPosition },
   return current
 }
 
-function extractUtilityNames(selector) {
-  const processor = selectorParser(selectors => {
-    let classes = []
+const extractUtilityNamesParser = selectorParser(selectors => {
+  let classes = []
+  selectors.walkClasses(c => classes.push(c.value))
+  return classes
+})
 
-    selectors.walkClasses(c => {
-      classes.push(c)
-    })
+const extractUtilityNames = useMemo(
+  selector => extractUtilityNamesParser.transformSync(selector),
+  selector => selector
+)
 
-    return classes.map(c => c.value)
-  })
-
-  return processor.transformSync(selector)
-}
+const cloneRuleWithParent = useMemo(
+  rule => rule.clone({ parent: rule.parent }),
+  rule => rule
+)
 
 function buildUtilityMap(css) {
   let index = 0
@@ -89,8 +105,9 @@ function buildUtilityMap(css) {
         index,
         utilityName,
         classPosition: i,
-        rule: rule.clone({ parent: rule.parent }),
-        containsApply: hasAtRule(rule, 'apply'),
+        get rule() {
+          return cloneRuleWithParent(rule)
+        },
       })
       index++
     })
@@ -136,15 +153,11 @@ function mergeAdjacentRules(initialRule, rulesToInsert) {
 
 function makeExtractUtilityRules(css, config) {
   const utilityMap = buildUtilityMap(css)
-  const orderUtilityMap = _.fromPairs(
-    _.flatMap(_.toPairs(utilityMap), ([_utilityName, utilities]) => {
-      return utilities.map(utility => {
-        return [utility.index, utility]
-      })
-    })
-  )
-  return function(utilityNames, rule) {
-    return _.flatMap(utilityNames, utilityName => {
+
+  return function extractUtilityRules(utilityNames, rule) {
+    const combined = []
+
+    utilityNames.forEach(utilityName => {
       if (utilityMap[utilityName] === undefined) {
         // Look for prefixed utility in case the user has goofed
         const prefixedUtility = prefixSelector(config.prefix, `.${utilityName}`).slice(1)
@@ -160,17 +173,18 @@ function makeExtractUtilityRules(css, config) {
           { word: utilityName }
         )
       }
-      return utilityMap[utilityName].map(({ index }) => index)
+
+      combined.push(...utilityMap[utilityName])
     })
-      .sort((a, b) => a - b)
-      .map(i => orderUtilityMap[i])
+
+    return combined.sort((a, b) => a.index - b.index)
   }
 }
 
 function processApplyAtRules(css, lookupTree, config) {
   const extractUtilityRules = makeExtractUtilityRules(lookupTree, config)
 
-  while (hasAtRule(css, 'apply')) {
+  do {
     css.walkRules(rule => {
       const applyRules = []
 
@@ -229,13 +243,29 @@ function processApplyAtRules(css, lookupTree, config) {
         rule.remove()
       }
     })
-  }
+
+    // We already know that we have at least 1 @apply rule. Otherwise this
+    // function would not have been called. Therefore we can execute this code
+    // at least once. This also means that in the best case scenario we only
+    // call this 2 times, instead of 3 times.
+    // 1st time -> before we call this function
+    // 2nd time -> when we check if we have to do this loop again (because do {} while (check))
+    // .. instead of
+    // 1st time -> before we call this function
+    // 2nd time -> when we check the first time (because while (check) do {})
+    // 3rd time -> when we re-check to see if we should do this loop again
+  } while (hasAtRule(css, 'apply'))
 
   return css
 }
 
 export default function applyComplexClasses(config, getProcessedPlugins) {
   return function(css) {
+    // We can stop already when we don't have any @apply rules. Vue users: you're welcome!
+    if (!hasAtRule(css, 'apply')) {
+      return css
+    }
+
     // Tree already contains @tailwind rules, don't prepend default Tailwind tree
     if (hasAtRule(css, 'tailwind')) {
       return processApplyAtRules(css, css, config)
@@ -261,7 +291,7 @@ export default function applyComplexClasses(config, getProcessedPlugins) {
       )
       .then(result => {
         // Prepend Tailwind's generated classes to the tree so they are available for `@apply`
-        const lookupTree = _.tap(css.clone(), tree => tree.prepend(result.root))
+        const lookupTree = _.tap(result.root, tree => tree.append(css.clone()))
         return processApplyAtRules(css, lookupTree, config)
       })
   }
