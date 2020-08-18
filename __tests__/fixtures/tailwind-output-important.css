@@ -19747,6 +19747,26 @@ video {
     border-color: rgba(112, 36, 89, var(--divide-opacity)) !important;
   }
 
+  .sm\:divide-solid > :not(template) ~ :not(template) {
+    border-style: solid !important;
+  }
+
+  .sm\:divide-dashed > :not(template) ~ :not(template) {
+    border-style: dashed !important;
+  }
+
+  .sm\:divide-dotted > :not(template) ~ :not(template) {
+    border-style: dotted !important;
+  }
+
+  .sm\:divide-double > :not(template) ~ :not(template) {
+    border-style: double !important;
+  }
+
+  .sm\:divide-none > :not(template) ~ :not(template) {
+    border-style: none !important;
+  }
+
   .sm\:divide-opacity-0 > :not(template) ~ :not(template) {
     --divide-opacity: 0 !important;
   }
@@ -37757,6 +37777,26 @@ video {
     --divide-opacity: 1 !important;
     border-color: #702459 !important;
     border-color: rgba(112, 36, 89, var(--divide-opacity)) !important;
+  }
+
+  .md\:divide-solid > :not(template) ~ :not(template) {
+    border-style: solid !important;
+  }
+
+  .md\:divide-dashed > :not(template) ~ :not(template) {
+    border-style: dashed !important;
+  }
+
+  .md\:divide-dotted > :not(template) ~ :not(template) {
+    border-style: dotted !important;
+  }
+
+  .md\:divide-double > :not(template) ~ :not(template) {
+    border-style: double !important;
+  }
+
+  .md\:divide-none > :not(template) ~ :not(template) {
+    border-style: none !important;
   }
 
   .md\:divide-opacity-0 > :not(template) ~ :not(template) {
@@ -55771,6 +55811,26 @@ video {
     border-color: rgba(112, 36, 89, var(--divide-opacity)) !important;
   }
 
+  .lg\:divide-solid > :not(template) ~ :not(template) {
+    border-style: solid !important;
+  }
+
+  .lg\:divide-dashed > :not(template) ~ :not(template) {
+    border-style: dashed !important;
+  }
+
+  .lg\:divide-dotted > :not(template) ~ :not(template) {
+    border-style: dotted !important;
+  }
+
+  .lg\:divide-double > :not(template) ~ :not(template) {
+    border-style: double !important;
+  }
+
+  .lg\:divide-none > :not(template) ~ :not(template) {
+    border-style: none !important;
+  }
+
   .lg\:divide-opacity-0 > :not(template) ~ :not(template) {
     --divide-opacity: 0 !important;
   }
@@ -73781,6 +73841,26 @@ video {
     --divide-opacity: 1 !important;
     border-color: #702459 !important;
     border-color: rgba(112, 36, 89, var(--divide-opacity)) !important;
+  }
+
+  .xl\:divide-solid > :not(template) ~ :not(template) {
+    border-style: solid !important;
+  }
+
+  .xl\:divide-dashed > :not(template) ~ :not(template) {
+    border-style: dashed !important;
+  }
+
+  .xl\:divide-dotted > :not(template) ~ :not(template) {
+    border-style: dotted !important;
+  }
+
+  .xl\:divide-double > :not(template) ~ :not(template) {
+    border-style: double !important;
+  }
+
+  .xl\:divide-none > :not(template) ~ :not(template) {
+    border-style: none !important;
   }
 
   .xl\:divide-opacity-0 > :not(template) ~ :not(template) {

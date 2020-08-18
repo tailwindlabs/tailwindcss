@@ -11779,6 +11779,26 @@ video {
     border-color: #702459;
   }
 
+  .sm\:divide-solid > :not(template) ~ :not(template) {
+    border-style: solid;
+  }
+
+  .sm\:divide-dashed > :not(template) ~ :not(template) {
+    border-style: dashed;
+  }
+
+  .sm\:divide-dotted > :not(template) ~ :not(template) {
+    border-style: dotted;
+  }
+
+  .sm\:divide-double > :not(template) ~ :not(template) {
+    border-style: double;
+  }
+
+  .sm\:divide-none > :not(template) ~ :not(template) {
+    border-style: none;
+  }
+
   .sm\:sr-only {
     position: absolute;
     width: 1px;
@@ -22189,6 +22209,26 @@ video {
 
   .md\:divide-pink-900 > :not(template) ~ :not(template) {
     border-color: #702459;
+  }
+
+  .md\:divide-solid > :not(template) ~ :not(template) {
+    border-style: solid;
+  }
+
+  .md\:divide-dashed > :not(template) ~ :not(template) {
+    border-style: dashed;
+  }
+
+  .md\:divide-dotted > :not(template) ~ :not(template) {
+    border-style: dotted;
+  }
+
+  .md\:divide-double > :not(template) ~ :not(template) {
+    border-style: double;
+  }
+
+  .md\:divide-none > :not(template) ~ :not(template) {
+    border-style: none;
   }
 
   .md\:sr-only {
@@ -32603,6 +32643,26 @@ video {
     border-color: #702459;
   }
 
+  .lg\:divide-solid > :not(template) ~ :not(template) {
+    border-style: solid;
+  }
+
+  .lg\:divide-dashed > :not(template) ~ :not(template) {
+    border-style: dashed;
+  }
+
+  .lg\:divide-dotted > :not(template) ~ :not(template) {
+    border-style: dotted;
+  }
+
+  .lg\:divide-double > :not(template) ~ :not(template) {
+    border-style: double;
+  }
+
+  .lg\:divide-none > :not(template) ~ :not(template) {
+    border-style: none;
+  }
+
   .lg\:sr-only {
     position: absolute;
     width: 1px;
@@ -43013,6 +43073,26 @@ video {
 
   .xl\:divide-pink-900 > :not(template) ~ :not(template) {
     border-color: #702459;
+  }
+
+  .xl\:divide-solid > :not(template) ~ :not(template) {
+    border-style: solid;
+  }
+
+  .xl\:divide-dashed > :not(template) ~ :not(template) {
+    border-style: dashed;
+  }
+
+  .xl\:divide-dotted > :not(template) ~ :not(template) {
+    border-style: dotted;
+  }
+
+  .xl\:divide-double > :not(template) ~ :not(template) {
+    border-style: double;
+  }
+
+  .xl\:divide-none > :not(template) ~ :not(template) {
+    border-style: none;
   }
 
   .xl\:sr-only {

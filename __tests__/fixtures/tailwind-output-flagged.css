@@ -32342,6 +32342,26 @@ video {
     border-color: rgba(117, 26, 61, var(--divide-opacity));
   }
 
+  .sm\:divide-solid > :not(template) ~ :not(template) {
+    border-style: solid;
+  }
+
+  .sm\:divide-dashed > :not(template) ~ :not(template) {
+    border-style: dashed;
+  }
+
+  .sm\:divide-dotted > :not(template) ~ :not(template) {
+    border-style: dotted;
+  }
+
+  .sm\:divide-double > :not(template) ~ :not(template) {
+    border-style: double;
+  }
+
+  .sm\:divide-none > :not(template) ~ :not(template) {
+    border-style: none;
+  }
+
   .sm\:divide-opacity-0 > :not(template) ~ :not(template) {
     --divide-opacity: 0;
   }
@@ -61807,6 +61827,26 @@ video {
     --divide-opacity: 1;
     border-color: #751a3d;
     border-color: rgba(117, 26, 61, var(--divide-opacity));
+  }
+
+  .md\:divide-solid > :not(template) ~ :not(template) {
+    border-style: solid;
+  }
+
+  .md\:divide-dashed > :not(template) ~ :not(template) {
+    border-style: dashed;
+  }
+
+  .md\:divide-dotted > :not(template) ~ :not(template) {
+    border-style: dotted;
+  }
+
+  .md\:divide-double > :not(template) ~ :not(template) {
+    border-style: double;
+  }
+
+  .md\:divide-none > :not(template) ~ :not(template) {
+    border-style: none;
   }
 
   .md\:divide-opacity-0 > :not(template) ~ :not(template) {
@@ -91276,6 +91316,26 @@ video {
     border-color: rgba(117, 26, 61, var(--divide-opacity));
   }
 
+  .lg\:divide-solid > :not(template) ~ :not(template) {
+    border-style: solid;
+  }
+
+  .lg\:divide-dashed > :not(template) ~ :not(template) {
+    border-style: dashed;
+  }
+
+  .lg\:divide-dotted > :not(template) ~ :not(template) {
+    border-style: dotted;
+  }
+
+  .lg\:divide-double > :not(template) ~ :not(template) {
+    border-style: double;
+  }
+
+  .lg\:divide-none > :not(template) ~ :not(template) {
+    border-style: none;
+  }
+
   .lg\:divide-opacity-0 > :not(template) ~ :not(template) {
     --divide-opacity: 0;
   }
@@ -120741,6 +120801,26 @@ video {
     --divide-opacity: 1;
     border-color: #751a3d;
     border-color: rgba(117, 26, 61, var(--divide-opacity));
+  }
+
+  .xl\:divide-solid > :not(template) ~ :not(template) {
+    border-style: solid;
+  }
+
+  .xl\:divide-dashed > :not(template) ~ :not(template) {
+    border-style: dashed;
+  }
+
+  .xl\:divide-dotted > :not(template) ~ :not(template) {
+    border-style: dotted;
+  }
+
+  .xl\:divide-double > :not(template) ~ :not(template) {
+    border-style: double;
+  }
+
+  .xl\:divide-none > :not(template) ~ :not(template) {
+    border-style: none;
   }
 
   .xl\:divide-opacity-0 > :not(template) ~ :not(template) {

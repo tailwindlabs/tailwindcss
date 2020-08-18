@@ -690,6 +690,7 @@ module.exports = {
     display: ['responsive'],
     divideColor: ['responsive'],
     divideOpacity: ['responsive'],
+    divideStyle: ['responsive'],
     divideWidth: ['responsive'],
     fill: ['responsive'],
     flex: ['responsive'],
