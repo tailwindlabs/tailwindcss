@@ -3,6 +3,7 @@ import container from './plugins/container'
 import space from './plugins/space'
 import divideWidth from './plugins/divideWidth'
 import divideColor from './plugins/divideColor'
+import divideStyle from './plugins/divideStyle'
 import accessibility from './plugins/accessibility'
 import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
@@ -110,6 +111,7 @@ export default function({ corePlugins: corePluginConfig }) {
     space,
     divideWidth,
     divideColor,
+    divideStyle,
     divideOpacity,
     accessibility,
     appearance,
