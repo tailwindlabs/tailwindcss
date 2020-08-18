@@ -2825,6 +2825,26 @@ video {
   border-color: rgba(117, 26, 61, var(--divide-opacity));
 }
 
+.divide-solid > :not(template) ~ :not(template) {
+  border-style: solid;
+}
+
+.divide-dashed > :not(template) ~ :not(template) {
+  border-style: dashed;
+}
+
+.divide-dotted > :not(template) ~ :not(template) {
+  border-style: dotted;
+}
+
+.divide-double > :not(template) ~ :not(template) {
+  border-style: double;
+}
+
+.divide-none > :not(template) ~ :not(template) {
+  border-style: none;
+}
+
 .divide-opacity-0 > :not(template) ~ :not(template) {
   --divide-opacity: 0;
 }
