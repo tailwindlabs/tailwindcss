@@ -54,14 +54,23 @@ function futureFlagsAvailable(config) {
 
 export function issueFlagNotices(config) {
   const log = {
-    info(message) {
-      console.log(chalk.bold.cyan('info'), '-', message)
+    info(messages) {
+      console.log('')
+      messages.forEach(message => {
+        console.log(chalk.bold.cyan('info'), '-', message)
+      })
     },
-    warn(message) {
-      console.log(chalk.bold.yellow('warn'), '-', message)
+    warn(messages) {
+      console.log('')
+      messages.forEach(message => {
+        console.log(chalk.bold.yellow('warn'), '-', message)
+      })
     },
-    risk(message) {
-      console.log(chalk.bold.magenta('risk'), '-', message)
+    risk(messages) {
+      console.log('')
+      messages.forEach(message => {
+        console.log(chalk.bold.magenta('risk'), '-', message)
+      })
     },
   }
 
@@ -70,10 +79,10 @@ export function issueFlagNotices(config) {
       .map(s => chalk.cyan(s))
       .join(', ')
 
-    log.info(`\nYou have opted-in to future-facing breaking changes: ${changes}`)
-    log.info(
-      'These changes are stable and will be the default behavior in the next major version of Tailwind.'
-    )
+    log.info([
+      `You have opted-in to future-facing breaking changes: ${changes}`,
+      'These changes are stable and will be the default behavior in the next major version of Tailwind.',
+    ])
   }
 
   if (experimentalFlagsEnabled(config).length > 0) {
@@ -81,10 +90,10 @@ export function issueFlagNotices(config) {
       .map(s => chalk.yellow(s))
       .join(', ')
 
-    log.warn(`\nYou have enabled experimental features: ${changes}`)
-    log.warn(
-      'Experimental features are not covered by semver, may introduce breaking changes, and can change at any time.'
-    )
+    log.warn([
+      `You have enabled experimental features: ${changes}`,
+      'Experimental features are not covered by semver, may introduce breaking changes, and can change at any time.',
+    ])
   }
 
   if (futureFlagsAvailable(config).length > 0) {
@@ -92,11 +101,11 @@ export function issueFlagNotices(config) {
       .map(s => chalk.magenta(s))
       .join(', ')
 
-    log.risk(`\nThere are upcoming breaking changes: ${changes}`)
-    log.risk(
-      'We highly recommend opting-in to these changes now to simplify upgrading Tailwind in the future.'
-    )
-    log.risk('https://tailwindcss.com/docs/upcoming-changes')
+    log.risk([
+      `There are upcoming breaking changes: ${changes}`,
+      'We highly recommend opting-in to these changes now to simplify upgrading Tailwind in the future.',
+      'https://tailwindcss.com/docs/upcoming-changes',
+    ])
   }
 }
 
