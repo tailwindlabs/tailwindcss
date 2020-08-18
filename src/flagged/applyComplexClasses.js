@@ -84,6 +84,11 @@ const extractUtilityNames = useMemo(
   selector => selector
 )
 
+const cloneRuleWithParent = useMemo(
+  rule => rule.clone({ parent: rule.parent }),
+  rule => rule
+)
+
 function buildUtilityMap(css) {
   let index = 0
   const utilityMap = {}
@@ -101,9 +106,7 @@ function buildUtilityMap(css) {
         utilityName,
         classPosition: i,
         get rule() {
-          // TODO: #perf every time we "read" this value we will create a copy.
-          // Is this an issue?
-          return rule.clone({ parent: rule.parent })
+          return cloneRuleWithParent(rule)
         },
       })
       index++
