@@ -14,6 +14,7 @@ const nav = {
   'Getting started': [
     pages['installation'],
     pages['release-notes'],
+    pages['upcoming-changes'],
     pages['upgrading-to-v1'],
     pages['using-with-preprocessors'],
     pages['controlling-file-size'],
@@ -106,11 +107,14 @@ const nav = {
   ],
   Backgrounds: [
     pages['background-attachment'],
+    pages['background-clip'],
     pages['background-color'],
     pages['background-opacity'],
     pages['background-position'],
     pages['background-repeat'],
     pages['background-size'],
+    pages['background-image'],
+    pages['gradient-color-stops'],
   ],
   Borders: [
     pages['border-radius'],
@@ -121,6 +125,7 @@ const nav = {
     pages['divide-width'],
     pages['divide-color'],
     pages['divide-opacity'],
+    pages['divide-style'],
   ],
   Tables: [pages['border-collapse'], pages['table-layout']],
   Effects: [pages['box-shadow'], pages['opacity']],

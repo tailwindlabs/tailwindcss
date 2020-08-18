@@ -29,6 +29,9 @@ function getUtilities(plugin) {
         }
       }
     },
+    config: () => ({
+      future: 'all',
+    }),
     theme: (path, defaultValue) => dlv(defaultConfig.theme, path, defaultValue),
     variants: () => [],
     e: (x) => x.replace(/([:.])/g, '\\$1'),

@@ -1,0 +1,76 @@
+---
+title: "Background Clip"
+description: "Utilities for controlling the bounding box of an element's background."
+featureVersion: "v1.7.0+"
+---
+
+import plugin from 'tailwindcss/lib/plugins/backgroundClip'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+import { ConfigSample } from '@/components/ConfigSample'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+
+export const classes = { plugin }
+
+## Usage
+
+Use the `bg-clip-{keyword}` utilities to control the bounding box of an element's background.
+
+```html
+<template preview>
+  <div class="flex justify-around">
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.bg-clip-border</p>
+      <div class="mx-auto bg-purple-500 w-24 h-24 bg-clip-border border-4 border-dashed border-purple-800 p-4"></div>
+    </div>
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.bg-clip-padding</p>
+      <div class="mx-auto bg-purple-500 w-24 h-24 bg-clip-padding border-4 border-dashed border-purple-800 p-4"></div>
+    </div>
+    <div class="flex-1">
+      <p class="text-center text-sm text-gray-600 mb-1">.bg-clip-content</p>
+      <div class="mx-auto bg-purple-500 w-24 h-24 bg-clip-content border-4 border-dashed border-purple-800 p-4"></div>
+    </div>
+  </div>
+</template>
+
+<div class="bg-clip-border p-4 border-4 border-dashed border-purple-800 bg-purple-500"></div>
+<div class="bg-clip-padding p-4 border-4 border-dashed border-purple-800 bg-purple-500"></div>
+<div class="bg-clip-content p-4 border-4 border-dashed border-purple-800 bg-purple-500"></div>
+```
+
+## Cropping to text
+
+Use `bg-clip-text` to crop an element's background to match the shape of the text. Useful for effects where you want a background image to be visible through the text.
+
+```html
+<template preview class="p-8">
+  <div class="text-center text-5xl font-extrabold leading-none tracking-tight">
+    <span class="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-500">
+      Hello world
+    </span>
+  </div>
+</template>
+```
+
+## Responsive
+
+To control the bounding box of an element's background at a specific breakpoint, add a `{screen}:` prefix to any existing background clip utility. For example, adding the class `md:bg-clip-padding` to an element would apply the `bg-clip-padding` utility at medium screen sizes and above.
+
+```html
+<div class="bg-clip-padding md:bg-clip-border">
+  <!-- ... -->
+</div>
+```
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+## Customizing
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="backgroundClip" />
+
+### Disabling
+
+<Disabling plugin="backgroundClip" />

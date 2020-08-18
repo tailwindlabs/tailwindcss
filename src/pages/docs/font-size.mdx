@@ -138,7 +138,29 @@ module.exports = {
 }
 ```
 
-We don't do this out-of-the-box for backwards compatibility reasons, but it can be a very convenient customization to make in your own projects
+We don't do this out-of-the-box for backwards compatibility reasons, but it can be a very convenient customization to make in your own projects.
+
+### <Heading badge="v1.7.0+">Providing a default letter-spacing</Heading>
+
+If you also want to provide a default letter-spacing value for a font size, you can do so using a tuple of the form `[fontSize, { letterSpacing, lineHeight }]` in your `tailwind.config.js` file.
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    fontSize: {
+      2xl: ['24px', {
+        letterSpacing: '-0.01em',
+      }],
+      // Or with a default line-height as well
+      3xl: ['32px', {
+        letterSpacing: '-0.02em',
+        lineHeight: '40px',
+      }],
+    }
+  }
+}
+```
 
 ### Responsive and pseudo-class variants
 

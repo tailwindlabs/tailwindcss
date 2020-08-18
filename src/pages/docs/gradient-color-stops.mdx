@@ -1,0 +1,150 @@
+---
+title: "Gradient Color Stops"
+description: "Utilities for controlling the color stops in background gradients."
+features:
+  responsive: true
+  customizable: true
+  hover: true
+  focus: false
+---
+
+import plugin from 'tailwindcss/lib/plugins/gradientColorStops'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+import { Heading } from '@/components/Heading'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+
+export const classes = {
+  plugin,
+  transformProperties: ({ selector, properties }) => {
+    delete properties['--gradient-color-stops']
+    return properties
+  },
+  preview: (css) => (
+    <td
+      className={`w-24 ${css['background-color'] === 'transparent' ? 'bg-checkered' : ''}`}
+      style={{
+        backgroundColor: ([
+          css['--gradient-from-color'],
+          css['--gradient-via-color'],
+          css['--gradient-to-color']
+        ]).filter(c => c !== undefined)[0],
+      }}
+    />
+  ),
+}
+
+## Starting color
+
+Set the starting color of a gradient using the `from-{color}` utilities.
+
+```html
+<template preview class="p-8">
+  <div class="h-24 bg-gradient-to-r from-red-500"></div>
+</template>
+```
+
+Gradients fade out to transparent by default.
+
+## Ending color
+
+Set the ending color of a gradient using the `to-{color}` utilities.
+
+```html
+<template preview class="p-8">
+  <div class="h-24 bg-gradient-to-r from-teal-400 to-blue-500"></div>
+</template>
+```
+
+Gradients to **do not** fade in from transparent by default. To fade in from transparent, reverse the gradient direction and use a `from-{color}` utility.
+
+## Middle color
+
+Add a middle color to a gradient using the `via-{color}` utilities.
+
+```html
+<template preview class="p-8">
+  <div class="h-24 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500"></div>
+</template>
+```
+
+Gradients with a `from-{color}` and `via-{color}` will fade out to transparent by default if no `to-{color}` is present.
+
+
+## Responsive
+
+To control the gradient color stops of an element at a specific breakpoint, add a `{screen}:` prefix to any existing gradient color stop utility. For example, use `md:from-green-500` to apply the `from-green-500` utility at only medium screen sizes and above.
+
+```html
+<div class="bg-gradient-to-r from-purple-400 md:from-orange-500"></div>
+```
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+
+## Hover
+
+To control the gradient color stops of an element on hover, add the `hover:` prefix to any existing gradient color stop utility. For example, use `hover:bg-blue-500` to apply the `bg-blue-500` utility on hover.
+
+```html
+<template preview class="text-center p-4">
+  <button type="button" class="bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 text-white font-semibold px-4 py-2 rounded">
+    Hover me
+  </button>
+</template>
+```
+
+Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
+
+```html
+<button class="... md:from-blue-500 md:hover:from-blue-700 ...">Button</button>
+```
+
+## Focus
+
+To control the gradient color stops of an element on focus, add the `focus:` prefix to any existing gradient color stop utility. For example, use `focus:bg-blue-500` to apply the `bg-blue-500` utility on focus.
+
+```html
+<template preview class="text-center p-4">
+  <button type="button" class="bg-gradient-to-r from-teal-400 to-blue-500 focus:from-pink-500 focus:to-orange-500 text-white font-semibold px-4 py-2 rounded">
+    Focus me
+  </button>
+</template>
+```
+
+Focus utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
+
+```html
+<button class="... md:from-blue-500 md:focus:from-blue-700 ...">Button</button>
+```
+
+
+## Customizing
+
+### Background Colors
+
+By default Tailwind makes the entire [default color palette](/docs/customizing-colors#default-color-palette) available as gradient color stops.
+
+You can [customize your color palette](/docs/colors#customizing) by editing the `theme.colors` variable in your `tailwind.config.js` file, or customize just your gradient color stop colors using the `theme.gradientColorStops` section of your Tailwind config.
+
+```diff
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      gradientColorStops: theme => ({
+-       ...theme('colors'),
++       'primary': '#3490dc',
++       'secondary': '#ffed4a',
++       'danger': '#e3342f',
+      })
+    }
+  }
+```
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="gradientColorStops" />
+
+### Disabling
+
+<Disabling plugin="gradientColorStops" />

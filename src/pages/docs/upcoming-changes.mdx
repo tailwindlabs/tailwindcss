@@ -1,0 +1,28 @@
+---
+title: Upcoming Changes
+description: Updates and deprecations coming in the future and how to prepare for them.
+---
+
+## <Heading hidden>Overview</Heading>
+
+Tailwind follows [semantic versioning](https://semver.org/), so we never introduce breaking changes until a new major release _(v2.0 is the next one)_.
+
+Rather than drop a bunch of breaking changes on you at once though, we use feature flags as an incremental adoption strategy so you can opt-in to breaking changes early, and save the upgrade hassle down the road.
+
+The following breaking changes are currently available in Tailwind behind flags.
+
+## Remove deprecated gap utilities
+
+Tailwind v1.7.0 introduced new `gap-x-{n}` and `gap-y-{n}` utilities to replace the existing `col-gap-{n}` and `row-gap-{n}` utilities. We currently include both by default, but the old utilities will be removed in v2.0.
+
+To opt-in to removing the now, use the `removeDeprecatedGapUtilities` flag:
+
+```js
+// tailwind.config.js
+module.exports = {
+  future: {
+    removeDeprecatedGapUtilities: true,
+  },
+  // ...
+}
+```

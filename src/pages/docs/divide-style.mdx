@@ -1,0 +1,63 @@
+---
+title: "Divide Style"
+description: "Utilities for controlling the border style between elements."
+featureVersion: "v1.7.0+"
+---
+
+import plugin from 'tailwindcss/lib/plugins/divideStyle'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+import { Heading } from '@/components/Heading'
+
+export const classes = {
+  plugin,
+  filterProperties: (prop, value) => !prop.includes('--') && !value.includes('--'),
+  transformSelector: (selector) => (
+    <>
+      {selector.split('>').shift().trim()} <span className="ml-1 text-purple-300">> * + *</span>
+    </>
+  ),
+}
+
+## Usage
+
+Control the border style between elements using the `divide-{style}` utilities.
+
+```html
+<template preview>
+  <div class="divide-y-2 divide-gray-500 divide-dashed">
+    <div class="text-center py-2">1</div>
+    <div class="text-center py-2">2</div>
+    <div class="text-center py-2">3</div>
+  </div>
+</template>
+
+<div class="divide-y-2 divide-gray-500 divide-dashed">
+  <div class="text-center py-2">1</div>
+  <div class="text-center py-2">2</div>
+  <div class="text-center py-2">3</div>
+</div>
+```
+
+## Responsive
+
+To control the border style between elements at a specific breakpoint, add a `{screen}:` prefix to any existing divide style utility. For example, use `md:divide-dashed` to apply the `divide-dashed` utility at only medium screen sizes and above.
+
+```html
+<div class="divide-y-2 divide-dashed md:divide-solid">
+  <!-- ... -->
+</div>
+```
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+## Customizing
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="divideStyle" />
+
+### Disabling
+
+<Disabling plugin="divideStyle" />

@@ -125,28 +125,45 @@ Use `.inline-grid` to create an inline grid container.
 
 ```html
 <template preview class="bg-white p-8">
-  <span class="inline-grid grid-cols-3 col-gap-4 p-2 bg-gray-200">
+  <span class="inline-grid grid-cols-3 gap-x-4 p-2 bg-gray-200">
     <span class="px-4 py-2 text-center bg-gray-400">1</span>
     <span class="px-4 py-2 text-center bg-gray-400">1</span>
     <span class="px-4 py-2 text-center bg-gray-400">1</span>
   </span>
-  <span class="inline-grid grid-cols-3 col-gap-4 p-2 bg-gray-200">
+  <span class="inline-grid grid-cols-3 gap-x-4 p-2 bg-gray-200">
     <span class="px-4 py-2 text-center bg-gray-400">2</span>
     <span class="px-4 py-2 text-center bg-gray-400">2</span>
     <span class="px-4 py-2 text-center bg-gray-400">2</span>
   </span>
 </template>
 
-<span class="inline-grid grid-cols-3 col-gap-4">
+<span class="inline-grid grid-cols-3 gap-x-4">
   <span>1</span>
   <span>1</span>
   <span>1</span>
 </span>
-<span class="inline-grid grid-cols-3 col-gap-4">
+<span class="inline-grid grid-cols-3 gap-x-4">
   <span>2</span>
   <span>2</span>
   <span>2</span>
 </span>
+```
+
+## Contents
+
+Use `.contents` to create a "phantom" container whose children act like direct children of the parent..
+
+```html
+<template preview>
+  <div class="flex bg-gray-200">
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="contents">
+      <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+      <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    </div>
+    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+  </div>
+</template>
 ```
 
 ## Table
