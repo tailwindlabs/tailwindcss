@@ -3,7 +3,7 @@ import _ from 'lodash'
 export default function flattenColorPalette(colors) {
   const result = _(colors)
     .flatMap((color, name) => {
-      if (!_.isObject(color)) {
+      if (_.isFunction(color) || !_.isObject(color)) {
         return [[name, color]]
       }
 
