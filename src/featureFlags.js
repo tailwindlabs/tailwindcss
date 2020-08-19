@@ -58,17 +58,6 @@ export function issueFlagNotices(config) {
     return
   }
 
-  if (futureFlagsEnabled(config).length > 0) {
-    const changes = futureFlagsEnabled(config)
-      .map(s => chalk.cyan(s))
-      .join(', ')
-
-    log.info([
-      `You have opted-in to future-facing breaking changes: ${changes}`,
-      'These changes are stable and will be the default behavior in the next major version of Tailwind.',
-    ])
-  }
-
   if (experimentalFlagsEnabled(config).length > 0) {
     const changes = experimentalFlagsEnabled(config)
       .map(s => chalk.yellow(s))
