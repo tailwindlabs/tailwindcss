@@ -89,9 +89,29 @@ const cloneRuleWithParent = useMemo(
   rule => rule
 )
 
-function buildUtilityMap(css) {
+function buildUtilityMap(css, lookupTree) {
   let index = 0
   const utilityMap = {}
+
+  lookupTree.walkRules(rule => {
+    const utilityNames = extractUtilityNames(rule.selector)
+
+    utilityNames.forEach((utilityName, i) => {
+      if (utilityMap[utilityName] === undefined) {
+        utilityMap[utilityName] = []
+      }
+
+      utilityMap[utilityName].push({
+        index,
+        utilityName,
+        classPosition: i,
+        get rule() {
+          return cloneRuleWithParent(rule)
+        },
+      })
+      index++
+    })
+  })
 
   css.walkRules(rule => {
     const utilityNames = extractUtilityNames(rule.selector)
@@ -151,8 +171,8 @@ function mergeAdjacentRules(initialRule, rulesToInsert) {
   return rulesToInsert.filter(r => r.nodes.length > 0)
 }
 
-function makeExtractUtilityRules(css, config) {
-  const utilityMap = buildUtilityMap(css)
+function makeExtractUtilityRules(css, lookupTree, config) {
+  const utilityMap = buildUtilityMap(css, lookupTree)
 
   return function extractUtilityRules(utilityNames, rule) {
     const combined = []
@@ -182,7 +202,7 @@ function makeExtractUtilityRules(css, config) {
 }
 
 function processApplyAtRules(css, lookupTree, config) {
-  const extractUtilityRules = makeExtractUtilityRules(lookupTree, config)
+  const extractUtilityRules = makeExtractUtilityRules(css, lookupTree, config)
 
   do {
     css.walkRules(rule => {
@@ -259,7 +279,9 @@ function processApplyAtRules(css, lookupTree, config) {
   return css
 }
 
-export default function applyComplexClasses(config, getProcessedPlugins) {
+let defaultTailwindTree = null
+
+export default function applyComplexClasses(config, getProcessedPlugins, configChanged) {
   return function(css) {
     // We can stop already when we don't have any @apply rules. Vue users: you're welcome!
     if (!hasAtRule(css, 'apply')) {
@@ -268,31 +290,39 @@ export default function applyComplexClasses(config, getProcessedPlugins) {
 
     // Tree already contains @tailwind rules, don't prepend default Tailwind tree
     if (hasAtRule(css, 'tailwind')) {
-      return processApplyAtRules(css, css, config)
+      return processApplyAtRules(css, postcss.root(), config)
     }
 
     // Tree contains no @tailwind rules, so generate all of Tailwind's styles and
     // prepend them to the user's CSS. Important for <style> blocks in Vue components.
-    return postcss([
-      substituteTailwindAtRules(config, getProcessedPlugins()),
-      evaluateTailwindFunctions(config),
-      substituteVariantsAtRules(config, getProcessedPlugins()),
-      substituteResponsiveAtRules(config),
-      convertLayerAtRulesToControlComments(config),
-      substituteScreenAtRules(config),
-    ])
-      .process(
-        `
-        @tailwind base;
-        @tailwind components;
-        @tailwind utilities;
-        `,
-        { from: undefined }
-      )
-      .then(result => {
-        // Prepend Tailwind's generated classes to the tree so they are available for `@apply`
-        const lookupTree = _.tap(result.root, tree => tree.append(css.clone()))
-        return processApplyAtRules(css, lookupTree, config)
-      })
+    const generateLookupTree =
+      configChanged || defaultTailwindTree === null
+        ? () => {
+            return postcss([
+              substituteTailwindAtRules(config, getProcessedPlugins()),
+              evaluateTailwindFunctions(config),
+              substituteVariantsAtRules(config, getProcessedPlugins()),
+              substituteResponsiveAtRules(config),
+              convertLayerAtRulesToControlComments(config),
+              substituteScreenAtRules(config),
+            ])
+              .process(
+                `
+                  @tailwind base;
+                  @tailwind components;
+                  @tailwind utilities;
+                `,
+                { from: undefined }
+              )
+              .then(result => {
+                defaultTailwindTree = result
+                return defaultTailwindTree
+              })
+          }
+        : () => Promise.resolve(defaultTailwindTree)
+
+    return generateLookupTree().then(result => {
+      return processApplyAtRules(css, result.root, config)
+    })
   }
 }

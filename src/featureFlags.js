@@ -53,6 +53,10 @@ function futureFlagsAvailable(config) {
 }
 
 export function issueFlagNotices(config) {
+  if (process.env.JEST_WORKER_ID !== undefined) {
+    return
+  }
+
   const log = {
     info(messages) {
       console.log('')

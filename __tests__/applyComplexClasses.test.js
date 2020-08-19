@@ -1,48 +1,19 @@
 import postcss from 'postcss'
-import substituteClassApplyAtRules from '../src/lib/substituteClassApplyAtRules'
-import processPlugins from '../src/util/processPlugins'
 import resolveConfig from '../src/util/resolveConfig'
-import corePlugins from '../src/corePlugins'
 import defaultConfig from '../stubs/defaultConfig.stub.js'
-import cloneNodes from '../src/util/cloneNodes'
+import tailwind from '../src/index'
 
-const resolvedDefaultConfig = resolveConfig([defaultConfig])
-
-const defaultProcessedPlugins = processPlugins(
-  [...corePlugins(resolvedDefaultConfig), ...resolvedDefaultConfig.plugins],
-  resolvedDefaultConfig
-)
-
-const defaultGetProcessedPlugins = function() {
-  return {
-    ...defaultProcessedPlugins,
-    base: cloneNodes(defaultProcessedPlugins.base),
-    components: cloneNodes(defaultProcessedPlugins.components),
-    utilities: cloneNodes(defaultProcessedPlugins.utilities),
-  }
-}
-
-function run(
-  input,
-  config = resolvedDefaultConfig,
-  getProcessedPlugins = () =>
-    config === resolvedDefaultConfig
-      ? defaultGetProcessedPlugins()
-      : processPlugins(corePlugins(config), config)
-) {
-  config.experimental = {
-    applyComplexClasses: true,
-  }
-  return postcss([substituteClassApplyAtRules(config, getProcessedPlugins)]).process(input, {
-    from: undefined,
-  })
+function run(input, config = {}) {
+  return postcss([
+    tailwind({ experimental: { applyComplexClasses: true }, ...config }),
+  ]).process(input, { from: undefined })
 }
 
 test('it copies class declarations into itself', () => {
   const output = '.a { color: red; } .b { color: red; }'
 
   return run('.a { color: red; } .b { @apply a; }').then(result => {
-    expect(result.css).toEqual(output)
+    expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
