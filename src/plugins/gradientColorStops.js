@@ -12,6 +12,16 @@ export default function() {
 
     const utilities = _(colors)
       .map((value, modifier) => {
+        const getColorValue = (color, type) => {
+          if (_.isFunction(color)) {
+            return value({
+              opacityVariable: `--gradient-${type}-opacity`,
+            })
+          }
+
+          return color
+        }
+
         const transparentTo = (() => {
           try {
             const [r, g, b] = toRgba(value)
@@ -25,21 +35,21 @@ export default function() {
           [
             `.${e(`from-${modifier}`)}`,
             {
-              '--gradient-from-color': value,
+              '--gradient-from-color': getColorValue(value, 'from'),
               '--gradient-color-stops': `var(--gradient-from-color), var(--gradient-to-color, ${transparentTo})`,
             },
           ],
           [
             `.${e(`via-${modifier}`)}`,
             {
-              '--gradient-via-color': value,
+              '--gradient-via-color': getColorValue(value, 'via'),
               '--gradient-color-stops': `var(--gradient-from-color), var(--gradient-via-color), var(--gradient-to-color, ${transparentTo})`,
             },
           ],
           [
             `.${e(`to-${modifier}`)}`,
             {
-              '--gradient-to-color': value,
+              '--gradient-to-color': getColorValue(value, 'to'),
             },
           ],
         ]
