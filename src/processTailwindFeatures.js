@@ -16,11 +16,16 @@ import processPlugins from './util/processPlugins'
 import cloneNodes from './util/cloneNodes'
 import { issueFlagNotices } from './featureFlags.js'
 
+let flagsIssued = null
+
 export default function(getConfig) {
   return function(css) {
     const config = getConfig()
 
-    issueFlagNotices(config)
+    if (!flagsIssued || !_.isEqual(flagsIssued, _.pick(config, ['future', 'experimental']))) {
+      flagsIssued = _.pick(config, ['future', 'experimental'])
+      issueFlagNotices(config)
+    }
 
     const processedPlugins = processPlugins([...corePlugins(config), ...config.plugins], config)
 
