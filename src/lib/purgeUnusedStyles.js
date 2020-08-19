@@ -1,9 +1,7 @@
 import _ from 'lodash'
 import postcss from 'postcss'
 import purgecss from '@fullhuman/postcss-purgecss'
-import chalk from 'chalk'
-import { log } from '../cli/utils'
-import * as emoji from '../cli/emoji'
+import log from '../util/log'
 
 function removeTailwindMarkers(css) {
   css.walkAtRules('tailwind', rule => rule.remove())
@@ -21,7 +19,7 @@ function removeTailwindMarkers(css) {
   })
 }
 
-export default function purgeUnusedUtilities(config) {
+export default function purgeUnusedUtilities(config, configChanged) {
   const purgeEnabled = _.get(
     config,
     'purge.enabled',
@@ -34,21 +32,14 @@ export default function purgeUnusedUtilities(config) {
 
   // Skip if `purge: []` since that's part of the default config
   if (Array.isArray(config.purge) && config.purge.length === 0) {
-    log()
-    log(
-      emoji.warning,
-      chalk.yellow(
-        ' Tailwind is not purging unused styles because no template paths have been provided.'
-      )
-    )
-    log(
-      chalk.white(
-        '   If you have manually configured PurgeCSS outside of Tailwind or are deliberately not\n      removing unused styles, set `purge: false` in your Tailwind config file to silence\n      this warning.'
-      )
-    )
-    log(
-      chalk.white('\n      https://tailwindcss.com/docs/controlling-file-size/#removing-unused-css')
-    )
+    if (configChanged) {
+      log.warn([
+        'Tailwind is not purging unused styles because no template paths have been provided.',
+        'If you have manually configured PurgeCSS outside of Tailwind or are deliberately not removing unused styles, set `purge: false` in your Tailwind config file to silence this warning.',
+        'https://tailwindcss.com/docs/controlling-file-size/#removing-unused-css',
+      ])
+    }
+
     return removeTailwindMarkers
   }
 

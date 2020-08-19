@@ -18,7 +18,6 @@ import { issueFlagNotices } from './featureFlags.js'
 
 import hash from 'object-hash'
 
-let flagsIssued = null
 let previousConfig = null
 let processedPlugins = null
 let getProcessedPlugins = null
@@ -29,12 +28,9 @@ export default function(getConfig) {
     const configChanged = hash(previousConfig) !== hash(config)
     previousConfig = config
 
-    if (!flagsIssued || !_.isEqual(flagsIssued, _.pick(config, ['future', 'experimental']))) {
-      flagsIssued = _.pick(config, ['future', 'experimental'])
-      issueFlagNotices(config)
-    }
-
     if (configChanged) {
+      issueFlagNotices(config)
+
       processedPlugins = processPlugins([...corePlugins(config), ...config.plugins], config)
       getProcessedPlugins = function() {
         return {
@@ -55,7 +51,7 @@ export default function(getConfig) {
       substituteScreenAtRules(config),
       substituteClassApplyAtRules(config, getProcessedPlugins, configChanged),
       applyImportantConfiguration(config),
-      purgeUnusedStyles(config),
+      purgeUnusedStyles(config, configChanged),
     ]).process(css, { from: _.get(css, 'source.input.file') })
   }
 }
