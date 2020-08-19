@@ -25,16 +25,6 @@ export function flagEnabled(config, flag) {
   return false
 }
 
-function futureFlagsEnabled(config) {
-  if (config.future === 'all') {
-    return featureFlags.future
-  }
-
-  return Object.keys(_.get(config, 'future', {})).filter(
-    flag => featureFlags.future.includes(flag) && config.future[flag]
-  )
-}
-
 function experimentalFlagsEnabled(config) {
   if (config.experimental === 'all') {
     return featureFlags.experimental
