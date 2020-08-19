@@ -6,30 +6,49 @@ test('opacity variables are given to colors defined as closures', () => {
     tailwind({
       theme: {
         colors: {
-          primary: ({ opacityVariable }) => `rgba(31,31,31,var(${opacityVariable},1))`,
+          primary: ({ opacityVariable, opacityValue }) => {
+            if (opacityValue !== undefined) {
+              return `rgba(31,31,31,${opacityValue})`
+            }
+
+            if (opacityVariable !== undefined) {
+              return `rgba(31,31,31,var(${opacityVariable},1))`
+            }
+
+            return `rgb(31,31,31)`
+          },
+        },
+        opacity: {
+          '50': '0.5',
         },
       },
       variants: {
+        textColor: [],
+        textOpacity: [],
         gradientColorStops: [],
       },
-      corePlugins: ['gradientColorStops'],
+      corePlugins: ['textColor', 'textOpacity', 'gradientColorStops'],
     }),
   ])
     .process('@tailwind utilities', { from: undefined })
     .then(result => {
       const expected = `
+        .text-primary {
+          color: rgba(31,31,31,var(--text-opacity,1))
+        }
+        .text-opacity-50 {
+          --text-opacity: 0.5
+        }
 				.from-primary {
-					--gradient-from-color: rgba(31,31,31,var(--gradient-from-opacity,1));
-					--gradient-color-stops: var(--gradient-from-color), var(--gradient-to-color, rgba(255, 255, 255, 0))
+					--gradient-from-color: rgb(31,31,31);
+					--gradient-color-stops: var(--gradient-from-color), var(--gradient-to-color, rgba(31, 31, 31, 0))
 				}
-		
 				.via-primary {
-					--gradient-via-color: rgba(31,31,31,var(--gradient-via-opacity,1));
-					--gradient-color-stops: var(--gradient-from-color), var(--gradient-via-color), var(--gradient-to-color, rgba(255, 255, 255, 0))
+					--gradient-via-color: rgb(31,31,31);
+					--gradient-color-stops: var(--gradient-from-color), var(--gradient-via-color), var(--gradient-to-color, rgba(31, 31, 31, 0))
 				}
-		
 				.to-primary {
-					--gradient-to-color: rgba(31,31,31,var(--gradient-to-opacity,1))
+					--gradient-to-color: rgb(31,31,31)
 				}
       `
 

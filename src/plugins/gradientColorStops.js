@@ -12,17 +12,19 @@ export default function() {
 
     const utilities = _(colors)
       .map((value, modifier) => {
-        const getColorValue = (color, type) => {
+        const getColorValue = color => {
           if (_.isFunction(color)) {
-            return value({
-              opacityVariable: `--gradient-${type}-opacity`,
-            })
+            return value({})
           }
 
           return color
         }
 
         const transparentTo = (() => {
+          if (_.isFunction(value)) {
+            return value({ opacityValue: 0 })
+          }
+
           try {
             const [r, g, b] = toRgba(value)
             return `rgba(${r}, ${g}, ${b}, 0)`
