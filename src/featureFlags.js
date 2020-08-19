@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import chalk from 'chalk'
+import log from './util/log'
 
 const featureFlags = {
   future: ['removeDeprecatedGapUtilities'],
@@ -53,25 +54,8 @@ function futureFlagsAvailable(config) {
 }
 
 export function issueFlagNotices(config) {
-  const log = {
-    info(messages) {
-      console.log('')
-      messages.forEach(message => {
-        console.log(chalk.bold.cyan('info'), '-', message)
-      })
-    },
-    warn(messages) {
-      console.log('')
-      messages.forEach(message => {
-        console.log(chalk.bold.yellow('warn'), '-', message)
-      })
-    },
-    risk(messages) {
-      console.log('')
-      messages.forEach(message => {
-        console.log(chalk.bold.magenta('risk'), '-', message)
-      })
-    },
+  if (process.env.JEST_WORKER_ID !== undefined) {
+    return
   }
 
   if (futureFlagsEnabled(config).length > 0) {

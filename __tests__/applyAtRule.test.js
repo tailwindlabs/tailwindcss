@@ -1,32 +1,15 @@
 import postcss from 'postcss'
-import substituteClassApplyAtRules from '../src/lib/substituteClassApplyAtRules'
-import processPlugins from '../src/util/processPlugins'
-import resolveConfig from '../src/util/resolveConfig'
-import corePlugins from '../src/corePlugins'
-import defaultConfig from '../stubs/defaultConfig.stub.js'
+import tailwind from '../src/index'
 
-const resolvedDefaultConfig = resolveConfig([defaultConfig])
-
-const { utilities: defaultUtilities } = processPlugins(
-  corePlugins(resolvedDefaultConfig),
-  resolvedDefaultConfig
-)
-
-function run(input, config = resolvedDefaultConfig, utilities = defaultUtilities) {
-  return postcss([
-    substituteClassApplyAtRules(config, () => ({
-      utilities,
-    })),
-  ]).process(input, {
-    from: undefined,
-  })
+function run(input, config = {}) {
+  return postcss([tailwind({ ...config })]).process(input, { from: undefined })
 }
 
-test("it copies a class's declarations into itself", () => {
+test('it copies the declarations from a class into itself', () => {
   const output = '.a { color: red; } .b { color: red; }'
 
   return run('.a { color: red; } .b { @apply .a; }').then(result => {
-    expect(result.css).toEqual(output)
+    expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -43,7 +26,7 @@ test('selectors with invalid characters do not need to be manually escaped', () 
   `
 
   return run(input).then(result => {
-    expect(result.css).toEqual(expected)
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -60,7 +43,7 @@ test('it removes important from applied classes by default', () => {
   `
 
   return run(input).then(result => {
-    expect(result.css).toEqual(expected)
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -77,7 +60,7 @@ test('applied rules can be made !important', () => {
   `
 
   return run(input).then(result => {
-    expect(result.css).toEqual(expected)
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -103,7 +86,7 @@ test('cssnext custom property sets are preserved', () => {
   `
 
   return run(input).then(result => {
-    expect(result.css).toEqual(expected)
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -196,7 +179,7 @@ test('you can apply utility classes that do not actually exist as long as they w
   `
 
   return run(input).then(result => {
-    expect(result.css).toEqual(expected)
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -210,15 +193,8 @@ test('you can apply utility classes without using the given prefix', () => {
     .foo { margin-top: 1rem; margin-bottom: 1rem; }
   `
 
-  const config = resolveConfig([
-    {
-      ...defaultConfig,
-      prefix: 'tw-',
-    },
-  ])
-
-  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
-    expect(result.css).toEqual(expected)
+  return run(input, { prefix: 'tw-' }).then(result => {
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -232,17 +208,12 @@ test('you can apply utility classes without using the given prefix when using a 
     .foo { margin-top: 1rem; margin-bottom: 1rem; }
   `
 
-  const config = resolveConfig([
-    {
-      ...defaultConfig,
-      prefix: () => {
-        return 'tw-'
-      },
+  return run(input, {
+    prefix: () => {
+      return 'tw-'
     },
-  ])
-
-  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
-    expect(result.css).toEqual(expected)
+  }).then(result => {
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -256,15 +227,8 @@ test('you can apply utility classes without specificity prefix even if important
     .foo { margin-top: 2rem; margin-bottom: 2rem; }
   `
 
-  const config = resolveConfig([
-    {
-      ...defaultConfig,
-      important: '#app',
-    },
-  ])
-
-  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
-    expect(result.css).toEqual(expected)
+  return run(input, { important: '#app' }).then(result => {
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -278,16 +242,11 @@ test('you can apply utility classes without using the given prefix even if impor
     .foo { margin-top: 1rem; margin-bottom: 1rem; }
   `
 
-  const config = resolveConfig([
-    {
-      ...defaultConfig,
-      prefix: 'tw-',
-      important: '#app',
-    },
-  ])
-
-  return run(input, config, processPlugins(corePlugins(config), config).utilities).then(result => {
-    expect(result.css).toEqual(expected)
+  return run(input, {
+    prefix: 'tw-',
+    important: '#app',
+  }).then(result => {
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })

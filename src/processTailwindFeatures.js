@@ -16,25 +16,29 @@ import processPlugins from './util/processPlugins'
 import cloneNodes from './util/cloneNodes'
 import { issueFlagNotices } from './featureFlags.js'
 
-let flagsIssued = null
+import hash from 'object-hash'
+
+let previousConfig = null
+let processedPlugins = null
+let getProcessedPlugins = null
 
 export default function(getConfig) {
   return function(css) {
     const config = getConfig()
+    const configChanged = hash(previousConfig) !== hash(config)
+    previousConfig = config
 
-    if (!flagsIssued || !_.isEqual(flagsIssued, _.pick(config, ['future', 'experimental']))) {
-      flagsIssued = _.pick(config, ['future', 'experimental'])
+    if (configChanged) {
       issueFlagNotices(config)
-    }
 
-    const processedPlugins = processPlugins([...corePlugins(config), ...config.plugins], config)
-
-    const getProcessedPlugins = function() {
-      return {
-        ...processedPlugins,
-        base: cloneNodes(processedPlugins.base),
-        components: cloneNodes(processedPlugins.components),
-        utilities: cloneNodes(processedPlugins.utilities),
+      processedPlugins = processPlugins([...corePlugins(config), ...config.plugins], config)
+      getProcessedPlugins = function() {
+        return {
+          ...processedPlugins,
+          base: cloneNodes(processedPlugins.base),
+          components: cloneNodes(processedPlugins.components),
+          utilities: cloneNodes(processedPlugins.utilities),
+        }
       }
     }
 
@@ -45,9 +49,9 @@ export default function(getConfig) {
       substituteResponsiveAtRules(config),
       convertLayerAtRulesToControlComments(config),
       substituteScreenAtRules(config),
-      substituteClassApplyAtRules(config, getProcessedPlugins),
+      substituteClassApplyAtRules(config, getProcessedPlugins, configChanged),
       applyImportantConfiguration(config),
-      purgeUnusedStyles(config),
+      purgeUnusedStyles(config, configChanged),
     ]).process(css, { from: _.get(css, 'source.input.file') })
   }
 }
