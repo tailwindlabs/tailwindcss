@@ -3483,6 +3483,10 @@ video {
   background-color: rgba(112, 36, 89, var(--bg-opacity)) !important;
 }
 
+.bg-none {
+  background-image: none !important;
+}
+
 .bg-gradient-to-t {
   background-image: linear-gradient(to top, var(--gradient-color-stops)) !important;
 }
@@ -21545,6 +21549,10 @@ video {
     background-color: rgba(112, 36, 89, var(--bg-opacity)) !important;
   }
 
+  .sm\:bg-none {
+    background-image: none !important;
+  }
+
   .sm\:bg-gradient-to-t {
     background-image: linear-gradient(to top, var(--gradient-color-stops)) !important;
   }
@@ -39575,6 +39583,10 @@ video {
     --bg-opacity: 1 !important;
     background-color: #702459 !important;
     background-color: rgba(112, 36, 89, var(--bg-opacity)) !important;
+  }
+
+  .md\:bg-none {
+    background-image: none !important;
   }
 
   .md\:bg-gradient-to-t {
@@ -57609,6 +57621,10 @@ video {
     background-color: rgba(112, 36, 89, var(--bg-opacity)) !important;
   }
 
+  .lg\:bg-none {
+    background-image: none !important;
+  }
+
   .lg\:bg-gradient-to-t {
     background-image: linear-gradient(to top, var(--gradient-color-stops)) !important;
   }
@@ -75639,6 +75655,10 @@ video {
     --bg-opacity: 1 !important;
     background-color: #702459 !important;
     background-color: rgba(112, 36, 89, var(--bg-opacity)) !important;
+  }
+
+  .xl\:bg-none {
+    background-image: none !important;
   }
 
   .xl\:bg-gradient-to-t {

@@ -2727,6 +2727,10 @@ video {
   background-color: #702459;
 }
 
+.bg-none {
+  background-image: none;
+}
+
 .bg-gradient-to-t {
   background-image: linear-gradient(to top, var(--gradient-color-stops));
 }
@@ -18341,6 +18345,10 @@ video {
     background-color: #702459;
   }
 
+  .sm\:bg-none {
+    background-image: none;
+  }
+
   .sm\:bg-gradient-to-t {
     background-image: linear-gradient(to top, var(--gradient-color-stops));
   }
@@ -33923,6 +33931,10 @@ video {
 
   .md\:focus\:bg-pink-900:focus {
     background-color: #702459;
+  }
+
+  .md\:bg-none {
+    background-image: none;
   }
 
   .md\:bg-gradient-to-t {
@@ -49509,6 +49521,10 @@ video {
     background-color: #702459;
   }
 
+  .lg\:bg-none {
+    background-image: none;
+  }
+
   .lg\:bg-gradient-to-t {
     background-image: linear-gradient(to top, var(--gradient-color-stops));
   }
@@ -65091,6 +65107,10 @@ video {
 
   .xl\:focus\:bg-pink-900:focus {
     background-color: #702459;
+  }
+
+  .xl\:bg-none {
+    background-image: none;
   }
 
   .xl\:bg-gradient-to-t {
