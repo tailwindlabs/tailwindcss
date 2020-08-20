@@ -46,7 +46,7 @@ We provide a sensible [default theme](https://github.com/tailwindlabs/tailwindcs
 
 ## Theme structure
 
-The `theme` object contains keys for `screens`, `colors`, and `spacing`, as well as a key for each customizable [core plugin](/docs/core-plugins).
+The `theme` object contains keys for `screens`, `colors`, and `spacing`, as well as a key for each customizable [core plugin](/docs/configuration#core-plugins).
 
 See the [theme configuration reference](#configuration-reference) or the [default theme](https://github.com/tailwindlabs/tailwindcss/blob/master/stubs/defaultConfig.stub.js#L5) for a complete list of theme options.
 
@@ -366,7 +366,7 @@ Since the entire `theme` object is available in your CSS using the [theme functi
 
 ## Configuration reference
 
-Except for `screens`, `colors`, and `spacing`, all of the keys in the `theme` object map to one of Tailwind's [core plugins](/docs/core-plugins). Since many plugins are responsible for CSS properties that only accept a static set of values (like `float` for example), note that not every plugin has a corresponding key in the `theme` object.
+Except for `screens`, `colors`, and `spacing`, all of the keys in the `theme` object map to one of Tailwind's [core plugins](/docs/configuration#core-plugins). Since many plugins are responsible for CSS properties that only accept a static set of values (like `float` for example), note that not every plugin has a corresponding key in the `theme` object.
 
 All of these keys are also available under the `theme.extend` key to enable [extending the default theme](#extending-the-default-theme).
 
