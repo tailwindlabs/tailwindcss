@@ -80,6 +80,27 @@ test('purges unused classes', () => {
     })
 })
 
+test('purges unused classes with important string', () => {
+  const OLD_NODE_ENV = process.env.NODE_ENV
+  process.env.NODE_ENV = 'production'
+  const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+  const input = fs.readFileSync(inputPath, 'utf8')
+
+  return postcss([
+    tailwind({
+      ...config,
+      important: '#tailwind',
+      purge: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
+    }),
+  ])
+    .process(input, { from: inputPath })
+    .then(result => {
+      process.env.NODE_ENV = OLD_NODE_ENV
+
+      assertPurged(result)
+    })
+})
+
 test('does not purge components', () => {
   const OLD_NODE_ENV = process.env.NODE_ENV
   process.env.NODE_ENV = 'production'
