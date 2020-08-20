@@ -2,21 +2,21 @@ import chalk from 'chalk'
 
 export default {
   info(messages) {
-    console.log('')
+    console.warn('')
     messages.forEach(message => {
-      console.log(chalk.bold.cyan('info'), '-', message)
+      console.warn(chalk.bold.cyan('info'), '-', message)
     })
   },
   warn(messages) {
-    console.log('')
+    console.warn('')
     messages.forEach(message => {
-      console.log(chalk.bold.yellow('warn'), '-', message)
+      console.warn(chalk.bold.yellow('warn'), '-', message)
     })
   },
   risk(messages) {
-    console.log('')
+    console.warn('')
     messages.forEach(message => {
-      console.log(chalk.bold.magenta('risk'), '-', message)
+      console.warn(chalk.bold.magenta('risk'), '-', message)
     })
   },
 }
