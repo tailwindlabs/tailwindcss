@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _, { replace } from 'lodash'
 import selectorParser from 'postcss-selector-parser'
 import postcss from 'postcss'
 import substituteTailwindAtRules from '../lib/substituteTailwindAtRules'
@@ -39,7 +39,7 @@ const tailwindApplyPlaceholder = selectorParser.attribute({
   attribute: '__TAILWIND-APPLY-PLACEHOLDER__',
 })
 
-function generateRulesFromApply({ rule, utilityName: className, classPosition }, replaceWith) {
+function generateRulesFromApply({ rule, utilityName: className, classPosition }, replaceWiths) {
   const parser = selectorParser(selectors => {
     let i = 0
     selectors.walkClasses(c => {
@@ -49,11 +49,13 @@ function generateRulesFromApply({ rule, utilityName: className, classPosition },
     })
   })
 
-  const processedSelectors = rule.selectors.map(selector => {
+  const processedSelectors = _.flatMap(rule.selectors, selector => {
     // You could argue we should make this replacement at the AST level, but if we believe
     // the placeholder string is safe from collisions then it is safe to do this is a simple
     // string replacement, and much, much faster.
-    return parser.processSync(selector).replace('[__TAILWIND-APPLY-PLACEHOLDER__]', replaceWith)
+    return replaceWiths.map(replaceWith =>
+      parser.processSync(selector).replace('[__TAILWIND-APPLY-PLACEHOLDER__]', replaceWith)
+    )
   })
 
   const cloned = rule.clone()
@@ -242,7 +244,7 @@ function processApplyAtRules(css, lookupTree, config) {
         // Get new rules with the utility portion of the selector replaced with the new selector
         const rulesToInsert = [
           ...applys.map(applyUtility => {
-            return generateRulesFromApply(applyUtility, rule.selector)
+            return generateRulesFromApply(applyUtility, rule.selectors)
           }),
           afterRule,
         ]

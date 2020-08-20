@@ -848,3 +848,35 @@ test('you can apply utility classes when a selector is used for the important op
     expect(result.warnings().length).toBe(0)
   })
 })
+
+test('you can apply classes to a rule with multiple selectors', () => {
+  const input = `
+    @supports (display: grid) {
+      .foo, h1 > .bar * {
+        @apply float-left opacity-50 hover:opacity-100 md:float-right;
+      }
+    }
+    `
+
+  const expected = `
+    @supports (display: grid) {
+      .foo, h1 > .bar * {
+        float: left;
+        opacity: 0.5;
+      }
+      .foo:hover, h1 > .bar *:hover {
+        opacity: 1;
+      }
+      @media (min-width: 768px) {
+        .foo, h1 > .bar * {
+          float: right;
+        }
+      }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
