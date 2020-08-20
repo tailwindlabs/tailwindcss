@@ -1,4 +1,4 @@
-import _, { replace } from 'lodash'
+import _ from 'lodash'
 import selectorParser from 'postcss-selector-parser'
 import postcss from 'postcss'
 import substituteTailwindAtRules from '../lib/substituteTailwindAtRules'
