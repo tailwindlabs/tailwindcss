@@ -12,8 +12,57 @@ function run(input, config = {}) {
 test('it copies class declarations into itself', () => {
   const output = '.a { color: red; } .b { color: red; }'
 
+  expect.assertions(2)
+
   return run('.a { color: red; } .b { @apply a; }').then(result => {
     expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('apply values can contain tabs', () => {
+  const input = `
+    .a {
+      @apply p-4\tm-4;
+    }
+  `
+
+  const expected = `
+    .a {
+      margin: 1rem;
+      padding: 1rem;
+    }
+  `
+
+  expect.assertions(2)
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('apply values can contain newlines', () => {
+  const input = `
+    .a {
+      @apply p-4 m-4
+      flex flex-col;
+    }
+  `
+
+  const expected = `
+    .a {
+      display: flex;
+      flex-direction: column;
+      margin: 1rem;
+      padding: 1rem;
+    }
+  `
+
+  expect.assertions(2)
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
 })
@@ -28,6 +77,8 @@ test('selectors with invalid characters do not need to be manually escaped', () 
     .a\\:1\\/2 { color: red; }
     .b { color: red; }
   `
+
+  expect.assertions(2)
 
   return run(input).then(result => {
     expect(result.css).toMatchCss(expected)
@@ -46,6 +97,8 @@ test('it removes important from applied classes by default', () => {
     .b { color: red; }
   `
 
+  expect.assertions(2)
+
   return run(input).then(result => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
@@ -63,6 +116,8 @@ test('applied rules can be made !important', () => {
     .b { color: red !important; }
   `
 
+  expect.assertions(2)
+
   return run(input).then(result => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
@@ -79,12 +134,16 @@ test('cssnext custom property sets are no longer supported', () => {
     }
   `
 
+  expect.assertions(1)
+
   return run(input).catch(e => {
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
   })
 })
 
 test('it fails if the class does not exist', () => {
+  expect.assertions(1)
+
   return run('.b { @apply a; }').catch(e => {
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
   })
@@ -109,6 +168,8 @@ test('applying classes that are defined in a media query is supported', () => {
       .b { color: blue; }
     }
   `
+
+  expect.assertions(2)
 
   return run(input).then(result => {
     expect(result.css).toMatchCss(output)
@@ -149,6 +210,8 @@ test('applying classes that are used in a media query is supported', () => {
     }
   `
 
+  expect.assertions(2)
+
   return run(input).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
@@ -175,6 +238,8 @@ test('it matches classes that include pseudo-selectors', () => {
       color: red;
     }
   `
+
+  expect.assertions(2)
 
   return run(input).then(result => {
     expect(result.css).toMatchCss(output)
@@ -212,6 +277,8 @@ test('it matches classes that have multiple rules', () => {
     }
   `
 
+  expect.assertions(2)
+
   return run(input).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
@@ -244,6 +311,8 @@ test('applying a class that appears multiple times in one selector', () => {
     }
   `
 
+  expect.assertions(2)
+
   return run(input).then(result => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
@@ -259,6 +328,8 @@ test('you can apply utility classes that do not actually exist as long as they w
     .foo { margin-top: 1rem; }
   `
 
+  expect.assertions(2)
+
   return run(input).then(result => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
@@ -270,6 +341,8 @@ test('the shadow lookup is only used if no @tailwind rules were in the source tr
     @tailwind base;
     .foo { @apply mt-4; }
   `
+
+  expect.assertions(1)
 
   return run(input).catch(e => {
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
@@ -301,6 +374,8 @@ test('you can apply a class that is defined in multiple rules', () => {
     }
   `
 
+  expect.assertions(2)
+
   return run(input).then(result => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
@@ -321,6 +396,8 @@ test('you can apply a class that is defined in a media query', () => {
     }
   `
 
+  expect.assertions(2)
+
   return run(input).then(result => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
@@ -338,6 +415,8 @@ test('you can apply pseudo-class variant utilities', () => {
       opacity: 0.5
     }
   `
+
+  expect.assertions(2)
 
   return run(input).then(result => {
     expect(result.css).toMatchCss(expected)
@@ -358,6 +437,8 @@ test('you can apply responsive pseudo-class variant utilities', () => {
       }
     }
   `
+
+  expect.assertions(2)
 
   return run(input).then(result => {
     expect(result.css).toMatchCss(expected)
@@ -397,6 +478,8 @@ test('you can apply the container component', () => {
     }
   `
 
+  expect.assertions(2)
+
   return run(input).then(result => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
@@ -428,6 +511,8 @@ test('classes are applied according to CSS source order, not apply order', () =>
     }
   `
 
+  expect.assertions(2)
+
   return run(input).then(result => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
@@ -458,6 +543,8 @@ test('you can apply utilities with multi-class selectors like group-hover varian
     }
   `
 
+  expect.assertions(2)
+
   return run(input).then(result => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
@@ -487,6 +574,8 @@ test('you can apply classes recursively', () => {
       color: blue;
     }
   `
+
+  expect.assertions(2)
 
   return run(input).then(result => {
     expect(result.css).toMatchCss(expected)
@@ -523,6 +612,8 @@ test('applied classes are always inserted before subsequent declarations in the 
     }
   `
 
+  expect.assertions(2)
+
   return run(input).then(result => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
@@ -553,6 +644,8 @@ test('adjacent rules are collapsed after being applied', () => {
       }
     }
   `
+
+  expect.assertions(2)
 
   return run(input).then(result => {
     expect(result.css).toMatchCss(expected)
@@ -602,6 +695,8 @@ test('applying a class applies all instances of that class, even complex selecto
     }
   `
 
+  expect.assertions(2)
+
   return run(input).then(result => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
@@ -635,6 +730,8 @@ test('you can apply classes to rules within at-rules', () => {
     }
   `
 
+  expect.assertions(2)
+
   return run(input).then(result => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
@@ -657,6 +754,8 @@ describe('using apply with the prefix option', () => {
         prefix: 'tw-',
       },
     ])
+
+    expect.assertions(2)
 
     return run(input, config).then(result => {
       expect(result.css).toMatchCss(expected)
@@ -682,6 +781,8 @@ describe('using apply with the prefix option', () => {
       },
     ])
 
+    expect.assertions(2)
+
     return run(input, config).then(result => {
       expect(result.css).toMatchCss(expected)
       expect(result.warnings().length).toBe(0)
@@ -699,6 +800,8 @@ describe('using apply with the prefix option', () => {
         prefix: 'tw-',
       },
     ])
+
+    expect.assertions(1)
 
     return run(input, config).catch(e => {
       expect(e).toMatchObject({ name: 'CssSyntaxError' })
@@ -723,6 +826,8 @@ describe('using apply with the prefix option', () => {
       },
     ])
 
+    expect.assertions(2)
+
     return run(input, config).then(result => {
       expect(result.css).toMatchCss(expected)
       expect(result.warnings().length).toBe(0)
@@ -746,6 +851,8 @@ describe('using apply with the prefix option', () => {
         prefix: 'tw-',
       },
     ])
+
+    expect.assertions(2)
 
     return run(input, config).then(result => {
       expect(result.css).toMatchCss(expected)
@@ -792,6 +899,8 @@ describe('using apply with the prefix option', () => {
       },
     ])
 
+    expect.assertions(2)
+
     return run(input, config).then(result => {
       expect(result.css).toMatchCss(expected)
       expect(result.warnings().length).toBe(0)
@@ -814,6 +923,8 @@ describe('using apply with the prefix option', () => {
         important: '#app',
       },
     ])
+
+    expect.assertions(2)
 
     return run(input, config).then(result => {
       expect(result.css).toMatchCss(expected)
@@ -842,6 +953,8 @@ test('you can apply utility classes when a selector is used for the important op
       important: '#app',
     },
   ])
+
+  expect.assertions(2)
 
   return run(input, config).then(result => {
     expect(result.css).toMatchCss(expected)
