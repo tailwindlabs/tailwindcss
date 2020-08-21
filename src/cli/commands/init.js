@@ -13,10 +13,15 @@ export const options = [
     usage: '--full',
     description: 'Generate complete configuration file.',
   },
+  {
+    usage: '-p',
+    description: 'Generate a postcss configuration file.',
+  },
 ]
 
 export const optionMap = {
   full: ['full'],
+  postcss: ['p'],
 }
 
 /**
@@ -42,6 +47,14 @@ export function run(cliParams, cliOptions) {
 
     utils.log()
     utils.log(emoji.yes, 'Created Tailwind config file:', colors.file(simplePath))
+
+    if (cliOptions.postcss) {
+      const path = utils.getSimplePath(constants.defaultPostCssConfigFile)
+      utils.exists(constants.defaultPostCssConfigFile) &&
+        utils.die(colors.file(path), 'already exists.')
+      utils.copyFile(constants.defaultPostCssConfigStubFile, constants.defaultPostCssConfigFile)
+      utils.log(emoji.yes, 'Created PostCSS config file:', colors.file(path))
+    }
 
     utils.footer()
 
