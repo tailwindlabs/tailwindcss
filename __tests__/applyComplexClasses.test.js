@@ -47,6 +47,53 @@ test('it copies class declarations into itself', () => {
   })
 })
 
+test('apply values can contain tabs', () => {
+  const input = `
+    .a {
+      @apply p-4\tm-4;
+    }
+  `
+
+  const expected = `
+    .a {
+      margin: 1rem;
+      padding: 1rem;
+    }
+  `
+
+  expect.assertions(2)
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('apply values can contain newlines', () => {
+  const input = `
+    .a {
+      @apply p-4 m-4
+      flex flex-col;
+    }
+  `
+
+  const expected = `
+    .a {
+      display: flex;
+      flex-direction: column;
+      margin: 1rem;
+      padding: 1rem;
+    }
+  `
+
+  expect.assertions(2)
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('selectors with invalid characters do not need to be manually escaped', () => {
   const input = `
     .a\\:1\\/2 { color: red; }

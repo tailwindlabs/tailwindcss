@@ -200,7 +200,7 @@ function processApplyAtRules(css, lookupTree, config) {
           importantEntries,
           applyUtilityNames,
           important = importantEntries.length > 0,
-        ] = _.partition(applyRule.params.split(' '), n => n === '!important')
+        ] = _.partition(applyRule.params.split(/[\s\t\n]+/g), n => n === '!important')
 
         const currentUtilityNames = extractUtilityNames(rule.selector)
 
