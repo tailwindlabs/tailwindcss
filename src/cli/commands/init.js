@@ -15,7 +15,7 @@ export const options = [
   },
   {
     usage: '-p',
-    description: 'Generate a postcss configuration file.',
+    description: 'Generate postcss.config.js file.',
   },
 ]
 
