@@ -7,7 +7,7 @@ export function VersionSwitcher() {
   function submit(e) {
     e.preventDefault()
     if (selectRef.current.value === 'v0') {
-      window.location = 'https://v0.tailwindcss.com'
+      window.location = 'https://tailwindcss-v0.netlify.app/'
     }
   }
 
