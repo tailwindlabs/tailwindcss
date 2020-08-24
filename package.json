@@ -23,7 +23,9 @@
     "rebuild-fixtures": "npm run babelify && babel-node scripts/rebuildFixtures.js",
     "prepare": "npm run babelify && babel-node scripts/build.js",
     "style": "eslint .",
-    "test": "jest && eslint ."
+    "test": "jest && eslint .",
+    "commit": "git-cz",
+    "semantic-release": "semantic-release"
   },
   "files": [
     "dist/*.css",
@@ -38,15 +40,21 @@
     "@babel/core": "^7.0.0",
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
+    "@commitlint/cli": "^9.1.2",
+    "@commitlint/config-conventional": "^9.1.2",
     "babel-jest": "^26.0.0",
     "clean-css": "^4.1.9",
+    "commitizen": "^4.1.5",
+    "cz-conventional-changelog": "^3.2.0",
     "eslint": "^6.0.1",
     "eslint-config-postcss": "^2.0.2",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.0.1",
+    "husky": "^4.2.5",
     "jest": "^25.1.0",
     "prettier": "^1.7.4",
-    "rimraf": "^3.0.0"
+    "rimraf": "^3.0.0",
+    "semantic-release": "^17.1.1"
   },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^2.1.2",
@@ -93,6 +101,27 @@
     "testPathIgnorePatterns": [
       "<rootDir>/__tests__/fixtures/",
       "<rootDir>/__tests__/util/"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "release": {
+    "branches": [
+      "+([0-9])?(.{+([0-9]),x}).x",
+      "master",
+      {
+        "name": "develop",
+        "channel": "next",
+        "prerelease": true
+      }
     ]
   },
   "engines": {
