@@ -15,7 +15,7 @@ module.exports = {
             inlineCharacterLimit: Infinity,
           })}`
       )
-      .join('\n    ')}
+      .join(',\n    ')}
   }
 }`,
   Prism.languages.js,
