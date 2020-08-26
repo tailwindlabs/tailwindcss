@@ -7,5 +7,4 @@ updates:
     allow:
       - dependency-name: 'tailwindcss'
     labels:
-      - 'npm'
       - 'dependencies'
