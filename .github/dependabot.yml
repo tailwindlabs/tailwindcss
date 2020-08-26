@@ -7,11 +7,11 @@ updates:
     time: '00:00'
   open-pull-requests-limit: 10
   reviewers:
-  - adamwathan
+    - adamwathan
   assignees:
-  - adamwathan
+    - adamwathan
   labels:
-  - dependencies
+    - dependencies
   commit-message:
     prefix: fix
     prefix-development: chore
