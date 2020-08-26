@@ -39,7 +39,7 @@
     "redent": "^3.0.0",
     "simple-functional-loader": "^1.2.1",
     "stringify-object": "^3.3.0",
-    "tailwindcss": "^1.7.0",
+    "tailwindcss": "^1.7.3",
     "unist-util-visit": "^2.0.3"
   },
   "devDependencies": {
