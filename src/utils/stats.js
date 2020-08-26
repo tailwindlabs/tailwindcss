@@ -9,7 +9,7 @@ const brotliSize = require('brotli-size')
 const CleanCSS = require('clean-css')
 const { loopWhile } = require('deasync')
 
-const convertToKB = (bytes) => (bytes / 1024).toFixed(1) + 'K'
+const convertToKB = (bytes) => (bytes / 1000).toFixed(1) + 'kB'
 
 module.exports = () => {
   const stats = {}
