@@ -53,7 +53,7 @@ function resolveConfigPath(filePath) {
 
   // require('tailwindcss')({ config: { theme: ..., variants: ... } })
   if (_.isObject(filePath) && _.has(filePath, 'config') && _.isObject(filePath.config)) {
-    undefined
+    return undefined
   }
 
   // require('tailwindcss')('custom-config.js')
