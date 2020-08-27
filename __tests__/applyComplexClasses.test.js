@@ -993,3 +993,51 @@ test('you can apply classes to a rule with multiple selectors', () => {
     expect(result.warnings().length).toBe(0)
   })
 })
+
+test('it works properly with important option as boolean', () => {
+  const input = `
+    .foo {
+      @apply opacity-0 hover:opacity-50;
+    }
+  `
+  const expected = `
+    .foo {
+      opacity: 0 !important;
+    }
+
+    .foo:hover {
+      opacity: 0.5 !important;
+    }
+  `
+
+  expect.assertions(2)
+
+  return run(input, { important: true }).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it works properly with important option as selector', () => {
+  const input = `
+    .foo {
+      @apply opacity-0 hover:opacity-50;
+    }
+  `
+  const expected = `
+    #foo .foo {
+      opacity: 0;
+    }
+
+    #foo .foo:hover {
+      opacity: 0.5
+    }
+  `
+
+  expect.assertions(2)
+
+  return run(input, { important: '#foo' }).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
