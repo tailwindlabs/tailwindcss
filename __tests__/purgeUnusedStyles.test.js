@@ -4,6 +4,16 @@ import postcss from 'postcss'
 import tailwind from '../src/index'
 import defaultConfig from '../stubs/defaultConfig.stub.js'
 
+function suppressConsoleLogs(cb, type = 'warn') {
+  return () => {
+    const spy = jest.spyOn(global.console, type).mockImplementation(jest.fn())
+
+    return new Promise((resolve, reject) => {
+      Promise.resolve(cb()).then(resolve, reject)
+    }).finally(() => spy.mockRestore())
+  }
+}
+
 const config = {
   ...defaultConfig,
   theme: {
@@ -146,29 +156,32 @@ test('does not purge except in production', () => {
     })
 })
 
-test('does not purge if the array is empty', () => {
-  const OLD_NODE_ENV = process.env.NODE_ENV
-  process.env.NODE_ENV = 'production'
-  const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
-  const input = fs.readFileSync(inputPath, 'utf8')
+test(
+  'does not purge if the array is empty',
+  suppressConsoleLogs(() => {
+    const OLD_NODE_ENV = process.env.NODE_ENV
+    process.env.NODE_ENV = 'production'
+    const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+    const input = fs.readFileSync(inputPath, 'utf8')
 
-  return postcss([
-    tailwind({
-      ...defaultConfig,
-      purge: [],
-    }),
-  ])
-    .process(input, { from: inputPath })
-    .then(result => {
-      process.env.NODE_ENV = OLD_NODE_ENV
-      const expected = fs.readFileSync(
-        path.resolve(`${__dirname}/fixtures/tailwind-output.css`),
-        'utf8'
-      )
+    return postcss([
+      tailwind({
+        ...defaultConfig,
+        purge: [],
+      }),
+    ])
+      .process(input, { from: inputPath })
+      .then(result => {
+        process.env.NODE_ENV = OLD_NODE_ENV
+        const expected = fs.readFileSync(
+          path.resolve(`${__dirname}/fixtures/tailwind-output.css`),
+          'utf8'
+        )
 
-      expect(result.css).toBe(expected)
-    })
-})
+        expect(result.css).toBe(expected)
+      })
+  })
+)
 
 test('does not purge if explicitly disabled', () => {
   const OLD_NODE_ENV = process.env.NODE_ENV
