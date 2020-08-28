@@ -8,9 +8,13 @@ function suppressConsoleLogs(cb, type = 'warn') {
   return () => {
     const spy = jest.spyOn(global.console, type).mockImplementation(jest.fn())
 
-    return new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       Promise.resolve(cb()).then(resolve, reject)
-    }).finally(() => spy.mockRestore())
+    })
+
+    promise.then(spy.mockRestor, spy.mockRestore)
+
+    return promise
   }
 }
 
