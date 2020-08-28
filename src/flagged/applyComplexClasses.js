@@ -95,7 +95,7 @@ function buildUtilityMap(css, lookupTree) {
   let index = 0
   const utilityMap = {}
 
-  lookupTree.walkRules(rule => {
+  function handle(rule) {
     const utilityNames = extractUtilityNames(rule.selector)
 
     utilityNames.forEach((utilityName, i) => {
@@ -113,27 +113,10 @@ function buildUtilityMap(css, lookupTree) {
       })
       index++
     })
-  })
+  }
 
-  css.walkRules(rule => {
-    const utilityNames = extractUtilityNames(rule.selector)
-
-    utilityNames.forEach((utilityName, i) => {
-      if (utilityMap[utilityName] === undefined) {
-        utilityMap[utilityName] = []
-      }
-
-      utilityMap[utilityName].push({
-        index,
-        utilityName,
-        classPosition: i,
-        get rule() {
-          return cloneRuleWithParent(rule)
-        },
-      })
-      index++
-    })
-  })
+  lookupTree.walkRules(handle)
+  css.walkRules(handle)
 
   return utilityMap
 }
