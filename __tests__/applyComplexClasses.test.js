@@ -89,12 +89,15 @@ test('selectors with invalid characters do not need to be manually escaped', () 
 test('it removes important from applied classes by default', () => {
   const input = `
     .a { color: red !important; }
+    .a:hover { color: blue !important; }
     .b { @apply a; }
   `
 
   const expected = `
     .a { color: red !important; }
+    .a:hover { color: blue !important; }
     .b { color: red; }
+    .b:hover { color: blue; }
   `
 
   expect.assertions(2)
