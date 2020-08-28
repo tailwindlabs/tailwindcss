@@ -939,7 +939,7 @@ describe('using apply with the prefix option', () => {
 test('you can apply utility classes when a selector is used for the important option', () => {
   const input = `
     .foo {
-      @apply mt-8 mb-8;
+      @apply mt-8 mb-8 sm:mb-16 hover:opacity-0;
     }
   `
 
@@ -948,12 +948,61 @@ test('you can apply utility classes when a selector is used for the important op
       margin-top: 2rem;
       margin-bottom: 2rem;
     }
+
+    .foo:hover {
+      opacity: 0;
+    }
+
+    @media (min-width: 640px) {
+     .foo {
+        margin-bottom: 4rem;
+      }
+    }
   `
 
   const config = resolveConfig([
     {
       ...defaultConfig,
       important: '#app',
+    },
+  ])
+
+  expect.assertions(2)
+
+  return run(input, config).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('you can apply utility classes when true is used for the important option', () => {
+  const input = `
+    .foo {
+      @apply mt-8 mb-8 sm:mb-16 hover:opacity-0;
+    }
+  `
+
+  const expected = `
+    .foo {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .foo:hover {
+      opacity: 0;
+    }
+
+    @media (min-width: 640px) {
+     .foo {
+        margin-bottom: 4rem;
+      }
+    }
+  `
+
+  const config = resolveConfig([
+    {
+      ...defaultConfig,
+      important: true,
     },
   ])
 
