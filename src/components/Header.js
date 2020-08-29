@@ -222,7 +222,7 @@ function HeaderInner({ navIsOpen, onNavToggle }) {
           <div className="flex justify-start items-center text-gray-500">
             <a
               className="block flex items-center hover:text-gray-700 mr-5"
-              href="https://github.com/tailwindcss/tailwindcss"
+              href="https://github.com/tailwindlabs/tailwindcss"
             >
               <svg
                 className="fill-current w-5 h-5"
