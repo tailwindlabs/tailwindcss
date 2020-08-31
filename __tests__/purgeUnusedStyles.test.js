@@ -12,7 +12,7 @@ function suppressConsoleLogs(cb, type = 'warn') {
       Promise.resolve(cb()).then(resolve, reject)
     })
 
-    promise.then(spy.mockRestore, spy.mockRestore);
+    promise.then(spy.mockRestore, spy.mockRestore)
 
     return promise
   }
