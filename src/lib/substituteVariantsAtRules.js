@@ -24,6 +24,35 @@ function ensureIncludesDefault(variants) {
 
 const defaultVariantGenerators = config => ({
   default: generateVariantFunction(() => {}),
+  dark: generateVariantFunction(({ container, separator, modifySelectors }) => {
+    if (config.dark === 'media') {
+      const modified = modifySelectors(({ selector }) => {
+        return buildSelectorVariant(selector, 'dark', separator, message => {
+          throw container.error(message)
+        })
+      })
+      const mediaQuery = postcss.atRule({
+        name: 'media',
+        params: '(prefers-color-scheme: dark)',
+      })
+      mediaQuery.append(modified)
+      container.append(mediaQuery)
+      return
+    }
+
+    if (config.dark === 'class') {
+      const parser = selectorParser(selectors => {
+        selectors.walkClasses(sel => {
+          sel.value = `dark${separator}${sel.value}`
+          sel.parent.insertBefore(
+            sel,
+            selectorParser().astSync(prefixSelector(config.prefix, '.dark '))
+          )
+        })
+      })
+      return modifySelectors(({ selector }) => parser.processSync(selector))
+    }
+  }),
   'motion-safe': generateVariantFunction(({ container, separator, modifySelectors }) => {
     const modified = modifySelectors(({ selector }) => {
       return buildSelectorVariant(selector, 'motion-safe', separator, message => {
@@ -89,7 +118,7 @@ const defaultVariantGenerators = config => ({
 })
 
 function prependStackableVariants(atRule, variants) {
-  const stackableVariants = ['motion-safe', 'motion-reduce']
+  const stackableVariants = ['dark', 'motion-safe', 'motion-reduce']
 
   if (!_.some(variants, v => stackableVariants.includes(v))) {
     return variants
