@@ -89,7 +89,7 @@ const defaultVariantGenerators = config => ({
 })
 
 function prependStackableVariants(atRule, variants) {
-  const stackableVariants = ['motion-safe', 'motion-reduce']
+  const stackableVariants = ['dark', 'motion-safe', 'motion-reduce']
 
   if (!_.some(variants, v => stackableVariants.includes(v))) {
     return variants
