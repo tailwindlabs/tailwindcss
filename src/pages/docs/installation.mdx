@@ -56,7 +56,10 @@ This will create a minimal `tailwind.config.js` file at the root of your project
 ```js
 // tailwind.config.js
 module.exports = {
-  theme: {},
+  purge: [],
+  theme: {
+    extend: {},
+  },
   variants: {},
   plugins: [],
 }
