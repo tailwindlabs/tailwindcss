@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import selectorParser from 'postcss-selector-parser'
 import buildSelectorVariant from '../util/buildSelectorVariant'
 import defaultConfig from '../../defaultConfig'
@@ -28,7 +27,7 @@ export default {
           })
           mediaQuery.append(modified)
           container.append(mediaQuery)
-          return
+          return container
         }
 
         if (config('dark') === 'class') {
@@ -40,6 +39,8 @@ export default {
           })
           return modifySelectors(({ selector }) => parser.processSync(selector))
         }
+
+        throw new Error("The `dark` config option must be either 'media' or 'class'.")
       })
     },
   ],
