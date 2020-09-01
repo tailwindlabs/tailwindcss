@@ -18,6 +18,16 @@ function suppressConsoleLogs(cb, type = 'warn') {
   }
 }
 
+function extractRules(root) {
+  let rules = []
+
+  root.walkRules(r => {
+    rules = rules.concat(r.selectors)
+  })
+
+  return rules
+}
+
 const config = {
   ...defaultConfig,
   theme: {
@@ -302,9 +312,8 @@ test('can purge all CSS, not just Tailwind classes', () => {
       expect(result.css).toContain('html')
       expect(result.css).toContain('body')
       expect(result.css).toContain('samp')
-      expect(result.css).not.toContain('button')
-      expect(result.css).not.toContain('legend')
-      expect(result.css).not.toContain('progress')
+      expect(result.css).not.toContain('.example')
+      expect(result.css).not.toContain('.sm\\:example')
 
       assertPurged(result)
     })
@@ -353,5 +362,104 @@ test('the `conservative` mode can be set explicitly', () => {
       expect(result.css).toContain('.col-span-2')
       expect(result.css).toContain('.col-span-1')
       expect(result.css).toContain('.text-center')
+    })
+})
+
+test('element selectors are preserved by default', () => {
+  const OLD_NODE_ENV = process.env.NODE_ENV
+  process.env.NODE_ENV = 'production'
+  const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+  const input = fs.readFileSync(inputPath, 'utf8')
+
+  return postcss([
+    tailwind({
+      ...config,
+      purge: {
+        content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
+        mode: 'all',
+      },
+    }),
+  ])
+    .process(input, { from: inputPath })
+    .then(result => {
+      process.env.NODE_ENV = OLD_NODE_ENV
+      const rules = extractRules(result.root)
+      ;[
+        'a',
+        'blockquote',
+        'body',
+        'code',
+        'fieldset',
+        'figure',
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'hr',
+        'html',
+        'img',
+        'kbd',
+        'ol',
+        'p',
+        'pre',
+        'strong',
+        'sup',
+        'table',
+        'ul',
+      ].forEach(e => expect(rules).toContain(e))
+
+      assertPurged(result)
+    })
+})
+
+test('preserving element selectors can be disabled', () => {
+  const OLD_NODE_ENV = process.env.NODE_ENV
+  process.env.NODE_ENV = 'production'
+  const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+  const input = fs.readFileSync(inputPath, 'utf8')
+
+  return postcss([
+    tailwind({
+      ...config,
+      purge: {
+        content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
+        mode: 'all',
+        preserveHtmlElements: false,
+      },
+    }),
+  ])
+    .process(input, { from: inputPath })
+    .then(result => {
+      process.env.NODE_ENV = OLD_NODE_ENV
+
+      const rules = extractRules(result.root)
+
+      ;[
+        'blockquote',
+        'code',
+        'em',
+        'fieldset',
+        'figure',
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'hr',
+        'img',
+        'kbd',
+        'li',
+        'ol',
+        'pre',
+        'strong',
+        'sup',
+        'table',
+        'ul',
+      ].forEach(e => expect(rules).not.toContain(e))
+
+      assertPurged(result)
     })
 })

@@ -2,6 +2,7 @@ import _ from 'lodash'
 import postcss from 'postcss'
 import purgecss from '@fullhuman/postcss-purgecss'
 import log from '../util/log'
+import htmlTags from 'html-tags'
 
 function removeTailwindMarkers(css) {
   css.walkAtRules('tailwind', rule => rule.remove())
@@ -75,7 +76,11 @@ export default function purgeUnusedUtilities(config, configChanged) {
         // Capture classes within other delimiters like .block(class="w-1/2") in Pug
         const innerMatches = content.match(/[^<>"'`\s.(){}[\]#=%]*[^<>"'`\s.(){}[\]#=%:]/g) || []
 
-        return broadMatches.concat(innerMatches)
+        if (_.get(config, 'purge.preserveHtmlElements', true)) {
+          return [...htmlTags].concat(broadMatches).concat(innerMatches)
+        } else {
+          return broadMatches.concat(innerMatches)
+        }
       },
       ...config.purge.options,
     }),
