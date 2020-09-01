@@ -10,6 +10,7 @@ const featureFlags = {
     'defaultLineHeights',
     'extendedFontSizeScale',
     'applyComplexClasses',
+    'darkModeVariant',
   ],
 }
 
