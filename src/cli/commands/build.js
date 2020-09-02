@@ -65,7 +65,7 @@ function buildToStdout(compileOptions) {
  * Compiles CSS file and writes it to a file.
  *
  * @param {CompileOptions} compileOptions
- * @param {int[]} startTime
+ * @param {[number, number]} startTime
  * @return {Promise}
  */
 function buildToFile(compileOptions, startTime) {
@@ -97,7 +97,7 @@ function buildToFile(compileOptions, startTime) {
  * Starts a watcher.
  *
  * @param {string[]} files
- * @param {(startTime: int[]) => Promise} build
+ * @param {(startTime: [number, number]) => Promise} build
  */
 function startWatcher(files, build) {
   utils.log(emoji.eyes, 'Started a watcher. Files being watched:', colors.info(files.join(', ')))
