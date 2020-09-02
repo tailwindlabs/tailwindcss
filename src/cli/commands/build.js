@@ -98,10 +98,13 @@ function buildToFile(compileOptions, startTime) {
  *
  * @param {string[]} files
  * @param {(startTime: [number, number]) => Promise} build
+ * @param {boolean} canLog
  */
-function startWatcher(files, build) {
-  utils.log(emoji.eyes, 'Started a watcher. Files being watched:', colors.info(files.join(', ')))
-  utils.log()
+function startWatcher(files, build, canLog) {
+  if (canLog) {
+    utils.log(emoji.eyes, 'Started a watcher. Files being watched:', colors.info(files.join(', ')))
+    utils.log()
+  }
 
   build(process.hrtime())
 
@@ -152,7 +155,7 @@ export function run(cliParams, cliOptions) {
       outputFile ? buildToFile(compileOptions, startTimeToReport) : buildToStdout(compileOptions)
 
     if (watch) {
-      startWatcher([configFile || defaultConfigFile, inputFile], build)
+      startWatcher([configFile || defaultConfigFile, inputFile], build, !!outputFile)
     } else {
       build(startTime)
         .then(resolve)
