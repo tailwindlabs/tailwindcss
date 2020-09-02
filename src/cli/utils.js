@@ -1,5 +1,5 @@
 import { copyFileSync, ensureFileSync, existsSync, outputFileSync, readFileSync } from 'fs-extra'
-import { findKey, mapValues, startsWith, trimStart } from 'lodash'
+import { findKey, mapValues, startsWith, trimStart, isArray, initial, last, sum } from 'lodash'
 
 import * as colors from './colors'
 import * as emoji from './emoji'
@@ -50,7 +50,7 @@ export function parseCliOptions(cliArgs, optionMap = {}) {
  * @param {...string} [msgs]
  */
 export function log(...msgs) {
-  console.log('  ', ...msgs)
+  console.log(...msgs)
 }
 
 /**
@@ -76,6 +76,41 @@ export function footer() {
 export function error(...msgs) {
   log()
   console.error('  ', emoji.no, colors.error(msgs.join(' ')))
+}
+
+/**
+ * Clears the console.
+ */
+export function clear() {
+  console.clear()
+}
+
+/**
+ * Logs to the console with the last item pulled to the right edge of the terminal window.
+ *
+ * @param {...(string | [string, string])} [items] - When an item is a tuple of two strings, the first value is a
+ * modifier (e.g. color) that does not take any vertical space on the screen (i.e. its characters are not occupying
+ * available columns). The second value is a string that is visible to the user and does take vertical space.
+ */
+export function pad(...items) {
+  const paddingWidth =
+    process.stdout.columns -
+    // all strings
+    sum(items.map(item => (isArray(item) ? item[1] : item).length)) -
+    // all spaces between strings
+    (items.length - 1) -
+    // additional space character from the padding section
+    1
+
+  const padding = Array(paddingWidth || 0)
+    .fill(' ')
+    .join('')
+
+  log(
+    ...initial(items).map(item => (isArray(item) ? item[0](item[1]) : item)),
+    padding,
+    (item => (isArray(item) ? item[0](item[1]) : item))(last(items))
+  )
 }
 
 /**

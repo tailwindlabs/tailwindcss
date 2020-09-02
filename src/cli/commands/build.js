@@ -1,8 +1,10 @@
 import autoprefixer from 'autoprefixer'
 import bytes from 'bytes'
+import chokidar from 'chokidar'
 import prettyHrtime from 'pretty-hrtime'
 
 import tailwind from '../..'
+import { defaultConfigFile } from '../../constants'
 
 import compile from '../compile'
 import * as colors from '../colors'
@@ -25,12 +27,17 @@ export const options = [
     usage: '--no-autoprefixer',
     description: "Don't add vendor prefixes using autoprefixer.",
   },
+  {
+    usage: '--watch',
+    description: 'Watch for the file changes.',
+  },
 ]
 
 export const optionMap = {
   output: ['output', 'o'],
   config: ['config', 'c'],
   noAutoprefixer: ['no-autoprefixer'],
+  watch: ['watch'],
 }
 
 /**
@@ -65,13 +72,12 @@ function buildToFile(compileOptions, startTime) {
   const inputFileSimplePath = utils.getSimplePath(compileOptions.inputFile)
   const outputFileSimplePath = utils.getSimplePath(compileOptions.outputFile)
 
-  utils.header()
-  utils.log()
-  utils.log(
+  utils.pad(
     emoji.go,
     ...(inputFileSimplePath
-      ? ['Building:', colors.file(inputFileSimplePath)]
-      : ['Building from default CSS...', colors.info('(No input file provided)')])
+      ? ['Building:', [colors.file, inputFileSimplePath]]
+      : ['Building from default CSS...', [colors.info, '(No input file provided)']]),
+    [colors.info, new Date().toLocaleTimeString()]
   )
 
   return compile(compileOptions).then(result => {
@@ -98,9 +104,10 @@ export function run(cliParams, cliOptions) {
   return new Promise((resolve, reject) => {
     const startTime = process.hrtime()
     const inputFile = cliParams[0]
-    const configFile = cliOptions.config && cliOptions.config[0]
+    const configFile = (cliOptions.config && cliOptions.config[0]) || defaultConfigFile
     const outputFile = cliOptions.output && cliOptions.output[0]
     const autoprefix = !cliOptions.noAutoprefixer
+    const watch = cliOptions.watch
     const inputFileSimplePath = utils.getSimplePath(inputFile)
     const configFileSimplePath = utils.getSimplePath(configFile)
 
@@ -118,10 +125,34 @@ export function run(cliParams, cliOptions) {
       plugins: [tailwind(configFile)].concat(autoprefix ? [autoprefixer] : []),
     }
 
-    const buildPromise = outputFile
-      ? buildToFile(compileOptions, startTime)
-      : buildToStdout(compileOptions)
+    if (outputFile) {
+      utils.header()
+      utils.log()
+    }
 
-    buildPromise.then(resolve).catch(reject)
+    const build = startTimeToReport =>
+      outputFile ? buildToFile(compileOptions, startTimeToReport) : buildToStdout(compileOptions)
+
+    if (watch) {
+      const files = [configFile, inputFile]
+
+      utils.log(
+        emoji.eyes,
+        'Started a watcher. Files being watched:',
+        colors.info(files.join(', '))
+      )
+      utils.log()
+
+      build(process.hrtime())
+
+      chokidar.watch(files).on('change', () => {
+        utils.clear()
+        build(process.hrtime())
+      })
+    } else {
+      build(startTime)
+        .then(resolve)
+        .catch(reject)
+    }
   })
 }
