@@ -104,7 +104,7 @@ export function run(cliParams, cliOptions) {
   return new Promise((resolve, reject) => {
     const startTime = process.hrtime()
     const inputFile = cliParams[0]
-    const configFile = (cliOptions.config && cliOptions.config[0]) || defaultConfigFile
+    const configFile = cliOptions.config && cliOptions.config[0]
     const outputFile = cliOptions.output && cliOptions.output[0]
     const autoprefix = !cliOptions.noAutoprefixer
     const watch = cliOptions.watch
@@ -134,7 +134,7 @@ export function run(cliParams, cliOptions) {
       outputFile ? buildToFile(compileOptions, startTimeToReport) : buildToStdout(compileOptions)
 
     if (watch) {
-      const files = [configFile, inputFile]
+      const files = [configFile || defaultConfigFile, inputFile]
 
       utils.log(
         emoji.eyes,
