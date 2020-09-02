@@ -3,11 +3,14 @@ import postcss from 'postcss'
 import purgecss from '@fullhuman/postcss-purgecss'
 import log from '../util/log'
 import htmlTags from 'html-tags'
+import { flagEnabled } from '../featureFlags'
 
 function removeTailwindMarkers(css) {
   css.walkAtRules('tailwind', rule => rule.remove())
   css.walkComments(comment => {
     switch (comment.text.trim()) {
+      case 'tailwind start base':
+      case 'tailwind end base':
       case 'tailwind start components':
       case 'tailwind start utilities':
       case 'tailwind end components':
@@ -46,25 +49,49 @@ export default function purgeUnusedUtilities(config, configChanged) {
 
   return postcss([
     function(css) {
-      const mode = _.get(config, 'purge.mode', 'conservative')
+      const mode = _.get(
+        config,
+        'purge.mode',
+        flagEnabled(config, 'purgeLayersByDefault') ? 'layers' : 'conservative'
+      )
+
+      if (!['all', 'layers', 'conservative'].includes(mode)) {
+        throw new Error('Purge `mode` must be one of `layers` or `all`.')
+      }
+
+      if (mode === 'all') {
+        return
+      }
 
       if (mode === 'conservative') {
-        css.prepend(postcss.comment({ text: 'purgecss start ignore' }))
-        css.append(postcss.comment({ text: 'purgecss end ignore' }))
+        log.warn([
+          'The `conservative` purge mode will be removed in Tailwind 2.0.',
+          'Please switch to the new `layers` mode instead.',
+        ])
+      }
 
-        css.walkComments(comment => {
+      const layers =
+        mode === 'conservative'
+          ? ['utilities']
+          : _.get(config, 'purge.layers', ['base', 'components', 'utilities'])
+
+      css.prepend(postcss.comment({ text: 'purgecss start ignore' }))
+      css.append(postcss.comment({ text: 'purgecss end ignore' }))
+
+      css.walkComments(comment => {
+        layers.forEach(layer => {
           switch (comment.text.trim()) {
-            case 'tailwind start utilities':
+            case `tailwind start ${layer}`:
               comment.text = 'purgecss end ignore'
               break
-            case 'tailwind end utilities':
+            case `tailwind end ${layer}`:
               comment.text = 'purgecss start ignore'
               break
             default:
               break
           }
         })
-      }
+      })
     },
     removeTailwindMarkers,
     purgecss({

@@ -288,11 +288,13 @@ test('plugins can add base styles with object syntax', () => {
   )
 
   expect(css(base)).toMatchCss(`
-    img {
-      max-width: 100%
-    }
-    button {
-      font-family: inherit
+    @layer base {
+      img {
+        max-width: 100%
+      }
+      button {
+        font-family: inherit
+      }
     }
   `)
 })
@@ -321,11 +323,13 @@ test('plugins can add base styles with raw PostCSS nodes', () => {
   )
 
   expect(css(base)).toMatchCss(`
-    img {
-      max-width: 100%
-    }
-    button {
-      font-family: inherit
+    @layer base {
+      img {
+        max-width: 100%
+      }
+      button {
+        font-family: inherit
+      }
     }
   `)
 })
