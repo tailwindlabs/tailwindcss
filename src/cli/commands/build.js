@@ -132,13 +132,13 @@ export function run(cliParams, cliOptions) {
     const inputFileSimplePath = utils.getSimplePath(inputFile)
     const configFileSimplePath = utils.getSimplePath(configFile)
 
-    if (inputFile) {
-      !utils.exists(inputFile) && stop(colors.file(inputFileSimplePath), 'does not exist.')
+    if (inputFile && !utils.exists(inputFile)) {
+      stop(colors.file(inputFileSimplePath), 'does not exist.')
     }
 
-    configFile &&
-      !utils.exists(configFile) &&
+    if (configFile && !utils.exists(configFile)) {
       stop(colors.file(configFileSimplePath), 'does not exist.')
+    }
 
     const compileOptions = {
       inputFile,
