@@ -5,8 +5,8 @@
   "license": "MIT",
   "main": "lib/index.js",
   "style": "dist/tailwind.css",
-  "repository": "https://github.com/tailwindcss/tailwindcss.git",
-  "bugs": "https://github.com/tailwindcss/tailwindcss/issues",
+  "repository": "https://github.com/tailwindlabs/tailwindcss.git",
+  "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
   "homepage": "https://tailwindcss.com",
   "bin": {
     "tailwind": "lib/cli.js",
