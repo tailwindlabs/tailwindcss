@@ -94,6 +94,24 @@ function buildToFile(compileOptions, startTime) {
 }
 
 /**
+ * Starts a watcher.
+ *
+ * @param {string[]} files
+ * @param {(startTime: int[]) => Promise} build
+ */
+function startWatcher(files, build) {
+  utils.log(emoji.eyes, 'Started a watcher. Files being watched:', colors.info(files.join(', ')))
+  utils.log()
+
+  build(process.hrtime())
+
+  chokidar.watch(files).on('change', () => {
+    utils.clear()
+    build(process.hrtime())
+  })
+}
+
+/**
  * Runs the command.
  *
  * @param {string[]} cliParams
@@ -134,21 +152,7 @@ export function run(cliParams, cliOptions) {
       outputFile ? buildToFile(compileOptions, startTimeToReport) : buildToStdout(compileOptions)
 
     if (watch) {
-      const files = [configFile || defaultConfigFile, inputFile]
-
-      utils.log(
-        emoji.eyes,
-        'Started a watcher. Files being watched:',
-        colors.info(files.join(', '))
-      )
-      utils.log()
-
-      build(process.hrtime())
-
-      chokidar.watch(files).on('change', () => {
-        utils.clear()
-        build(process.hrtime())
-      })
+      startWatcher([configFile || defaultConfigFile, inputFile], build)
     } else {
       build(startTime)
         .then(resolve)
