@@ -325,6 +325,68 @@ test('components are purged by default in layers mode', () => {
   )
 })
 
+test('you can specify which layers to purge', () => {
+  return inProduction(
+    suppressConsoleLogs(() => {
+      const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+      const input = fs.readFileSync(inputPath, 'utf8')
+
+      return postcss([
+        tailwind({
+          ...config,
+          future: {
+            purgeLayersByDefault: true,
+          },
+          purge: {
+            mode: 'layers',
+            layers: ['utilities'],
+            content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
+          },
+        }),
+      ])
+        .process(input, { from: inputPath })
+        .then(result => {
+          const rules = extractRules(result.root)
+          expect(rules).toContain('optgroup')
+          expect(rules).toContain('.container')
+          assertPurged(result)
+        })
+    })
+  )
+})
+
+test('you can purge just base and component layers (but why)', () => {
+  return inProduction(
+    suppressConsoleLogs(() => {
+      const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+      const input = fs.readFileSync(inputPath, 'utf8')
+
+      return postcss([
+        tailwind({
+          ...config,
+          future: {
+            purgeLayersByDefault: true,
+          },
+          purge: {
+            mode: 'layers',
+            layers: ['base', 'components'],
+            content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
+          },
+        }),
+      ])
+        .process(input, { from: inputPath })
+        .then(result => {
+          const rules = extractRules(result.root)
+          expect(rules).not.toContain('[type="checkbox"]')
+          expect(rules).not.toContain('.container')
+          expect(rules).toContain('.float-left')
+          expect(rules).toContain('.md\\:bg-red-500')
+          expect(rules).toContain('.lg\\:appearance-none')
+        })
+    })
+  )
+})
+
 test('does not purge components when mode is conservative', () => {
   return inProduction(
     suppressConsoleLogs(() => {

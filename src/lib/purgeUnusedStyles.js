@@ -9,6 +9,8 @@ function removeTailwindMarkers(css) {
   css.walkAtRules('tailwind', rule => rule.remove())
   css.walkComments(comment => {
     switch (comment.text.trim()) {
+      case 'tailwind start base':
+      case 'tailwind end base':
       case 'tailwind start components':
       case 'tailwind start utilities':
       case 'tailwind end components':
