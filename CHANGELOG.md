@@ -107,7 +107,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.4.2] - 2020-05-01
 ### Fixed
-- Fix issue where p``urge: { enabled: false }`` was ignored, add ``purge: false`` shorthand
+- Fix issue where ``purge: { enabled: false }`` was ignored, add ``purge: false`` shorthand
 
 ## [1.4.1] - 2020-04-30
 ### Changed
@@ -358,18 +358,18 @@ No release notes
 
 ## [1.0.0-beta.1] - 2019-03-17
 ### Added 
-New config file structure
-New expanded default color palette
-New default ``maxWidth`` scale
-Added utilities for ``list-style-type`` and ``list-style-position``
-Added ``break-all`` utility
+- New config file structure
+- New expanded default color palette
+- New default ``maxWidth`` scale
+- Added utilities for ``list-style-type`` and ``list-style-position``
+- Added ``break-all`` utility
 ### Changed
-``object-position`` utilities are now customizable under ``theme.objectPosition``
-``cursor`` utilities are now customizable under ``theme.cursors``
-``flex-grow/shrink`` utilities are now customizable under ``theme.flexGrow/flexShrink``
-Default variant output position can be customized
-Extended default line-height scale
-Extended default letter-spacing scale
+- ``object-position`` utilities are now customizable under ``theme.objectPosition``
+- ``cursor`` utilities are now customizable under ``theme.cursors``
+- ``flex-grow/shrink`` utilities are now customizable under ``theme.flexGrow/flexShrink``
+- Default variant output position can be customized
+- Extended default line-height scale
+- Extended default letter-spacing scale
 
 ## [0.7.4] - 2019-01-23
 ### Changed
@@ -426,7 +426,7 @@ Extended default letter-spacing scale
 - Registering new variants from plugins (experimental)
 - Allow ``@apply``-ing classes that aren't defined but would be generated (experimental)
 ### Changed
-Default config file changes
+- Default config file changes
 
 ## [0.6.1] - 2018-06-22
 ### Fixed
@@ -457,7 +457,7 @@ Default config file changes
 
 ## [0.5.1] - 2018-03-13
 ### Removed
-- Reverts a change that renamed the ``.roman`` class to ``.not-italic`` due to the fact that it breaks compatibility with cssnext: postcss/postcss-selector-not#10. We'll stick with ``.roman`` for now with a plan to switch to ``.not-italic`` in another breaking version should that issue get resolved in postcss-selector-not.
+- Reverts a change that renamed the ``.roman`` class to ``.not-italic`` due to the fact that it breaks compatibility with cssnext: [postcss/postcss-selector-not#10](https://github.com/postcss/postcss-selector-not/issues/10). We'll stick with ``.roman`` for now with a plan to switch to ``.not-italic`` in another breaking version should that issue get resolved in postcss-selector-not.
 
 ## [0.5.0] - 2018-03-13
 ### Added 
@@ -490,8 +490,8 @@ Default config file changes
 
 ## [0.4.1] - 2018-01-22
 ### Changed
- -Make default sans-serif font stack more future proof and safe to use with CSS ``font`` shorthand
- -Replace stylefmt with Perfectionist to avoid weird stylelint conflicts
+- Make default sans-serif font stack more future proof and safe to use with CSS ``font`` shorthand
+- Replace stylefmt with Perfectionist to avoid weird stylelint conflicts
 
 ## [0.4.0] - 2017-12-15
 ### Added 
