@@ -69,6 +69,7 @@ import fontStyle from './plugins/fontStyle'
 import textTransform from './plugins/textTransform'
 import textDecoration from './plugins/textDecoration'
 import fontSmoothing from './plugins/fontSmoothing'
+import fontVariantNumeric from './plugins/fontVariantNumeric'
 import letterSpacing from './plugins/letterSpacing'
 import userSelect from './plugins/userSelect'
 import verticalAlign from './plugins/verticalAlign'
@@ -184,6 +185,7 @@ export default function({ corePlugins: corePluginConfig }) {
     textTransform,
     textDecoration,
     fontSmoothing,
+    fontVariantNumeric,
     letterSpacing,
     userSelect,
     verticalAlign,

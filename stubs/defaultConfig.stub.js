@@ -704,6 +704,7 @@ module.exports = {
     fontFamily: ['responsive'],
     fontSize: ['responsive'],
     fontSmoothing: ['responsive'],
+    fontVariantNumeric: ['responsive'],
     fontStyle: ['responsive'],
     fontWeight: ['responsive', 'hover', 'focus'],
     height: ['responsive'],
