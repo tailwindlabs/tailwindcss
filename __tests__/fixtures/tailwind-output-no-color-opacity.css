@@ -8503,6 +8503,26 @@ video {
   align-content: space-around;
 }
 
+.justify-self-start {
+  justify-self: start;
+}
+
+.justify-self-end {
+  justify-self: end;
+}
+
+.justify-self-center {
+  justify-self: center;
+}
+
+.justify-self-stretch {
+  justify-self: stretch;
+}
+
+.justify-self-baseline {
+  justify-self: baseline;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -24166,6 +24186,26 @@ video {
     align-content: space-around;
   }
 
+  .sm\:justify-self-start {
+    justify-self: start;
+  }
+
+  .sm\:justify-self-end {
+    justify-self: end;
+  }
+
+  .sm\:justify-self-center {
+    justify-self: center;
+  }
+
+  .sm\:justify-self-stretch {
+    justify-self: stretch;
+  }
+
+  .sm\:justify-self-baseline {
+    justify-self: baseline;
+  }
+
   .sm\:flex-1 {
     flex: 1 1 0%;
   }
@@ -39797,6 +39837,26 @@ video {
 
   .md\:content-around {
     align-content: space-around;
+  }
+
+  .md\:justify-self-start {
+    justify-self: start;
+  }
+
+  .md\:justify-self-end {
+    justify-self: end;
+  }
+
+  .md\:justify-self-center {
+    justify-self: center;
+  }
+
+  .md\:justify-self-stretch {
+    justify-self: stretch;
+  }
+
+  .md\:justify-self-baseline {
+    justify-self: baseline;
   }
 
   .md\:flex-1 {
@@ -55432,6 +55492,26 @@ video {
     align-content: space-around;
   }
 
+  .lg\:justify-self-start {
+    justify-self: start;
+  }
+
+  .lg\:justify-self-end {
+    justify-self: end;
+  }
+
+  .lg\:justify-self-center {
+    justify-self: center;
+  }
+
+  .lg\:justify-self-stretch {
+    justify-self: stretch;
+  }
+
+  .lg\:justify-self-baseline {
+    justify-self: baseline;
+  }
+
   .lg\:flex-1 {
     flex: 1 1 0%;
   }
@@ -71063,6 +71143,26 @@ video {
 
   .xl\:content-around {
     align-content: space-around;
+  }
+
+  .xl\:justify-self-start {
+    justify-self: start;
+  }
+
+  .xl\:justify-self-end {
+    justify-self: end;
+  }
+
+  .xl\:justify-self-center {
+    justify-self: center;
+  }
+
+  .xl\:justify-self-stretch {
+    justify-self: stretch;
+  }
+
+  .xl\:justify-self-baseline {
+    justify-self: baseline;
   }
 
   .xl\:flex-1 {
