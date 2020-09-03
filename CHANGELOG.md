@@ -90,7 +90,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New ``focus-visible`` variant
 - New ``checked`` variant
 
-## [v0.0.0-658250a96] - 2020-07-12 [YANKED]
+## v0.0.0-658250a96 - 2020-07-12 [YANKED]
 No release notes
 
 ## [1.4.6] - 2020-05-08
@@ -428,7 +428,7 @@ No release notes
 - Normalize.css updated to v8.0.0
 - Removed CSS fix for Chrome 62 button border radius change
 
-# [0.6.6] - 2018-09-21
+## [0.6.6] - 2018-09-21
 ### Changed
 - Promote ``shadowLookup`` from experiment to official feature
 
@@ -615,3 +615,91 @@ No release notes
 
 ## [0.1.0] - 2017-11-01
 No release notes
+
+[1.7.6]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.7.6
+[1.7.5]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.7.5
+[1.7.4]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.7.4
+[1.7.3]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.7.3
+[1.7.2]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.7.2
+[1.7.1]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.7.1
+[1.7.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.7.0
+[1.6.3]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.6.3
+[1.6.2]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.6.2
+[1.6.1]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.6.1
+[1.6.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.6.0
+[1.5.2]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.5.2
+[1.5.1]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.5.1
+[1.5.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.5.0
+[1.4.6]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.4.6
+[1.4.5]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.4.5
+[1.4.4]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.4.4
+[1.4.3]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.4.3
+[1.4.2]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.4.2
+[1.4.1]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.4.1
+[1.4.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.4.0
+[1.3.5]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.3.5
+[1.3.4]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.3.4
+[1.3.3]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.3.3
+[1.3.1]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.3.1
+[1.3.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.3.0
+[1.2.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.2.0
+[1.2.0-canary.8]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.2.0-canary.8
+[1.2.0-canary.7]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.2.0-canary.7
+[1.2.0-canary.6]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.2.0-canary.6
+[1.2.0-canary.5]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.2.0-canary.5
+[1.2.0-canary.4]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.2.0-canary.4
+[1.1.4]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.1.4
+[1.2.0-canary.1]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.2.0-canary.1
+[1.1.3]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.1.3
+[1.2.0-canary.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.2.0-canary.0
+[1.1.2]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.1.2
+[1.1.1]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.1.1
+[1.1.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.1.0
+[1.0.6]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.6
+[1.0.5]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.5
+[1.0.4]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.4
+[1.0.3]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.3
+[1.0.2]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.2
+[1.0.1]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.1
+[1.0.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.0
+[1.0.0-beta.10]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.0-beta.10
+[1.0.0-beta.9]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.0-beta.9
+[1.0.0-beta.8]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.0-beta.8
+[1.0.0-beta.7]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.0-beta.7
+[1.0.0-beta.6]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.0-beta.6
+[1.0.0-beta.5]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.0-beta.5
+[1.0.0-beta.4]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.0-beta.4
+[1.0.0-beta.3]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.0-beta.3
+[1.0.0-beta.2]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.0-beta.2
+[1.0.0-beta.1]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.0-beta.1
+[0.7.4]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.7.4
+[0.7.3]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.7.3
+[0.7.2]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.7.2
+[0.7.1]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.7.1
+[0.7.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.7.0
+[0.6.6]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.6.6
+[0.6.5]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.6.5
+[0.6.4]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.6.4
+[0.6.3]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.6.3
+[0.6.2]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.6.2
+[0.6.1]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.6.1
+[0.6.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.6.0
+[0.5.3]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.5.3
+[0.5.2]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.5.2
+[0.5.1]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.5.1
+[0.5.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.5.0
+[0.4.3]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.4.3
+[0.4.2]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.4.2
+[0.4.1]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.4.1
+[0.4.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.4.0
+[0.3.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.3.0
+[0.2.2]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.2.2
+[0.2.1]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.2.1
+[0.2.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.2.0
+[0.1.6]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.1.6
+[0.1.5]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.1.5
+[0.1.4]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.1.4
+[0.1.3]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.1.3
+[0.1.2]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.1.2
+[0.1.1]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.1.1
+[0.1.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v0.1.0
