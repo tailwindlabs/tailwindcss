@@ -1,11 +1,32 @@
-import createUtilityPlugin from '../util/createUtilityPlugin'
+import _ from 'lodash'
+import extractGridLineNames from '../util/extractGridLineNames'
 
 export default function() {
-  return function({ target, ...args }) {
+  return function({ addUtilities, target, theme, variants }) {
     if (target('gridRowEnd') === 'ie11') {
       return
     }
 
-    createUtilityPlugin('gridRowEnd', [['row-end', ['gridRowEnd']]])({ target, ...args })
+    const utilities = _.fromPairs(
+      _.map(theme('gridRowEnd'), value => {
+        return [
+          `.row-end-${value}`,
+          {
+            'grid-row-end': value,
+          },
+        ]
+      })
+    )
+
+    const namedLines = _.fromPairs(
+      _.map(extractGridLineNames(theme('gridTemplateRows')), name => [
+        `.row-end-${name}`,
+        {
+          'grid-row-end': name,
+        },
+      ])
+    )
+
+    addUtilities({ ...utilities, ...namedLines }, variants('gridRowEnd'))
   }
 }
