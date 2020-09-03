@@ -68,8 +68,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use `@apply` with variants and other complex classes (experimental)
 - New additional color-palette (experimental)
 - Extended spacing scale (experimental)
-- Default line-heights per font-size by default
-- Extended font size scale
+- Default line-heights per font-size by default (experimental)
+- Extended font size scale (experimental)
 
 ### Deprecated
 
