@@ -9931,6 +9931,26 @@ video {
   align-content: space-around !important;
 }
 
+.justify-self-start {
+  justify-self: start !important;
+}
+
+.justify-self-end {
+  justify-self: end !important;
+}
+
+.justify-self-center {
+  justify-self: center !important;
+}
+
+.justify-self-stretch {
+  justify-self: stretch !important;
+}
+
+.justify-self-baseline {
+  justify-self: baseline !important;
+}
+
 .flex-1 {
   flex: 1 1 0% !important;
 }
@@ -28042,6 +28062,26 @@ video {
     align-content: space-around !important;
   }
 
+  .sm\:justify-self-start {
+    justify-self: start !important;
+  }
+
+  .sm\:justify-self-end {
+    justify-self: end !important;
+  }
+
+  .sm\:justify-self-center {
+    justify-self: center !important;
+  }
+
+  .sm\:justify-self-stretch {
+    justify-self: stretch !important;
+  }
+
+  .sm\:justify-self-baseline {
+    justify-self: baseline !important;
+  }
+
   .sm\:flex-1 {
     flex: 1 1 0% !important;
   }
@@ -46121,6 +46161,26 @@ video {
 
   .md\:content-around {
     align-content: space-around !important;
+  }
+
+  .md\:justify-self-start {
+    justify-self: start !important;
+  }
+
+  .md\:justify-self-end {
+    justify-self: end !important;
+  }
+
+  .md\:justify-self-center {
+    justify-self: center !important;
+  }
+
+  .md\:justify-self-stretch {
+    justify-self: stretch !important;
+  }
+
+  .md\:justify-self-baseline {
+    justify-self: baseline !important;
   }
 
   .md\:flex-1 {
@@ -64204,6 +64264,26 @@ video {
     align-content: space-around !important;
   }
 
+  .lg\:justify-self-start {
+    justify-self: start !important;
+  }
+
+  .lg\:justify-self-end {
+    justify-self: end !important;
+  }
+
+  .lg\:justify-self-center {
+    justify-self: center !important;
+  }
+
+  .lg\:justify-self-stretch {
+    justify-self: stretch !important;
+  }
+
+  .lg\:justify-self-baseline {
+    justify-self: baseline !important;
+  }
+
   .lg\:flex-1 {
     flex: 1 1 0% !important;
   }
@@ -82283,6 +82363,26 @@ video {
 
   .xl\:content-around {
     align-content: space-around !important;
+  }
+
+  .xl\:justify-self-start {
+    justify-self: start !important;
+  }
+
+  .xl\:justify-self-end {
+    justify-self: end !important;
+  }
+
+  .xl\:justify-self-center {
+    justify-self: center !important;
+  }
+
+  .xl\:justify-self-stretch {
+    justify-self: stretch !important;
+  }
+
+  .xl\:justify-self-baseline {
+    justify-self: baseline !important;
   }
 
   .xl\:flex-1 {
