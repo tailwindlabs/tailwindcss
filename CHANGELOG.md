@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.7.6] - 2020-08-29
 ### Fixed
-- Fix bug where the new experimental @apply implementation broke when applying a variant class with the important option globally enabled
+- Fix bug where the new experimental ``@apply`` implementation broke when applying a variant class with the important option globally enabled
 
 ## [1.7.5] - 2020-08-28
 ### Changed
@@ -14,13 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.7.4] - 2020-08-26
 ### Added
-- Add new -p flag to CLI to quickly scaffold a postcss.config.js file
+- Add new -p flag to CLI to quickly scaffold a ``postcss.config.js`` file
 
 ### Changed
-- Make @apply insensitive to whitespace in the new applyComplexClasses experiment
+- Make ``@apply`` insensitive to whitespace in the new ``applyComplexClasses`` experiment
 
 ### Fixed
-- Fix bug where the new applyComplexClasses experiment didn't behave as expected with rules with multiple selectors, like .foo, .bar { color: red }
+- Fix bug where the new ``applyComplexClasses`` experiment didn't behave as expected with rules with multiple selectors, like ``.foo, .bar { color: red }``
 
 ## [1.7.3] - 2020-08-20
 ### Changed
@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add missing bg-none utility for disabling background images
 
 ### Fixed
-- Fix bug that prevented defining colors as closures when the gradientColorStops plugin was enabled
+- Fix bug that prevented defining colors as closures when the ``gradientColorStops`` plugin was enabled
 
 ## [1.7.2] - 2020-08-19
 ### Added
@@ -47,7 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Divide border styles
 - Access entire config object from plugins
 - Define colors as closures
-- Use @apply with variants and other complex classes (experimental)
+- Use ``@apply`` with variants and other complex classes (experimental)
 - New additional color-palette (experimental)
 - Extended spacing scale (experimental)
 - Default line-heights per font-size by default
@@ -62,7 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.6.2] - 2020-08-03
 ### Fixed
-- Fixes issue where @keyframes respecting the important option would break animations in Chrome
+- Fixes issue where ``@keyframes`` respecting the important option would break animations in Chrome
 
 ## [1.6.1] - 2020-08-02
 ### Fixed
