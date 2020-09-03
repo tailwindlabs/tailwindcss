@@ -24,10 +24,14 @@ import cursor from './plugins/cursor'
 import display from './plugins/display'
 import flexDirection from './plugins/flexDirection'
 import flexWrap from './plugins/flexWrap'
+import placeItems from './plugins/placeItems'
+import placeContent from './plugins/placeContent'
+import placeSelf from './plugins/placeSelf'
 import alignItems from './plugins/alignItems'
-import alignSelf from './plugins/alignSelf'
-import justifyContent from './plugins/justifyContent'
 import alignContent from './plugins/alignContent'
+import alignSelf from './plugins/alignSelf'
+import justifyItems from './plugins/justifyItems'
+import justifyContent from './plugins/justifyContent'
 import justifySelf from './plugins/justifySelf'
 import flex from './plugins/flex'
 import flexGrow from './plugins/flexGrow'
@@ -139,10 +143,14 @@ export default function({ corePlugins: corePluginConfig }) {
     display,
     flexDirection,
     flexWrap,
+    placeItems,
+    placeContent,
+    placeSelf,
     alignItems,
-    alignSelf,
-    justifyContent,
     alignContent,
+    alignSelf,
+    justifyItems,
+    justifyContent,
     justifySelf,
     flex,
     flexGrow,

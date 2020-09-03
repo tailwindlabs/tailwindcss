@@ -1,7 +1,14 @@
 export default function() {
-  return function({ addUtilities, variants }) {
+  return function({ addUtilities, variants, target }) {
+    if (target('justifySelf') === 'ie11') {
+      return
+    }
+
     addUtilities(
       {
+        '.justify-self-auto': {
+          'justify-self': 'auto',
+        },
         '.justify-self-start': {
           'justify-self': 'start',
         },
@@ -13,9 +20,6 @@ export default function() {
         },
         '.justify-self-stretch': {
           'justify-self': 'stretch',
-        },
-        '.justify-self-baseline': {
-          'justify-self': 'baseline',
         },
       },
       variants('justifySelf')

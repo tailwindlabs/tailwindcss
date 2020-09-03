@@ -17,6 +17,9 @@ export default function() {
         '.content-around': {
           'align-content': 'space-around',
         },
+        '.content-evenly': {
+          'align-content': 'space-evenly',
+        },
       },
       variants('alignContent')
     )
