@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing new yet!
 
+## [1.8.1] - 2020-09-04
+
+### Fixed
+
+- Fix bug in the new font-variant-numeric utilities which broke the whole rule
+
 ## [1.8.0] - 2020-09-04
 
 ### Added
