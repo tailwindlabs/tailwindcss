@@ -32,23 +32,6 @@ export default function(config) {
       })
     })
 
-    // Find any `responsive` rules with no parent `layer` (these only come
-    // from the user's CSS, Tailwind never generates things this way itself)
-    // and wrap them with a default `layer` of `utilities`.
-    css.walkAtRules('responsive', responsiveAtRule => {
-      const [node] = responsiveAtRule.nodes
-      if (node.type === 'atrule' && node.name === 'layer') {
-        return
-      }
-      const nestedlayerAtRule = postcss.atRule({
-        name: 'layer',
-        params: 'utilities',
-      })
-      nestedlayerAtRule.prepend(responsiveAtRule.nodes)
-      responsiveAtRule.removeAll()
-      responsiveAtRule.prepend(nestedlayerAtRule)
-    })
-
     const {
       theme: { screens },
       separator,
