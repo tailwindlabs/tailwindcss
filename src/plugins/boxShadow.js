@@ -10,7 +10,7 @@ export default function() {
         return [
           `.${className}`,
           {
-            'box-shadow': value,
+            'box-shadow': Array.isArray(value) ? value.join(', ') : value,
           },
         ]
       })
