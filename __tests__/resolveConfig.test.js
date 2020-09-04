@@ -1736,3 +1736,65 @@ test('user theme extensions take precedence over plugin theme extensions with th
     plugins: userConfig.plugins,
   })
 })
+
+test('variants can be defined as a function', () => {
+  const userConfig = {
+    variants: {
+      backgroundColor: ({ variants }) => [...variants('backgroundColor'), 'disabled'],
+      padding: ({ before }) => before(['active']),
+      float: ({ before }) => before(['disabled'], 'focus'),
+      margin: ({ before }) => before(['hover'], 'focus'),
+      borderWidth: ({ after }) => after(['active']),
+      backgroundImage: ({ after }) => after(['disabled'], 'hover'),
+      opacity: ({ after }) => after(['hover'], 'focus'),
+      rotate: ({ without }) => without(['hover']),
+      cursor: ({ before, after, without }) =>
+        without(['responsive'], before(['checked'], 'hover', after(['hover'], 'focus'))),
+    },
+  }
+
+  const otherConfig = {
+    variants: {
+      backgroundColor: ({ variants }) => [...variants('backgroundColor'), 'active'],
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {
+      backgroundColor: ['responsive', 'hover', 'focus'],
+      padding: ['responsive', 'focus'],
+      float: ['responsive', 'hover', 'focus'],
+      margin: ['responsive'],
+      borderWidth: ['responsive', 'focus'],
+      backgroundImage: ['responsive', 'hover', 'focus'],
+      opacity: ['responsive'],
+      rotate: ['responsive', 'hover', 'focus'],
+      cursor: ['responsive', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, otherConfig, defaultConfig])
+
+  expect(result).toEqual({
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {
+      backgroundColor: ['responsive', 'hover', 'focus', 'active', 'disabled'],
+      padding: ['active', 'responsive', 'focus'],
+      float: ['responsive', 'hover', 'disabled', 'focus'],
+      margin: ['responsive', 'hover'],
+      borderWidth: ['responsive', 'focus', 'active'],
+      backgroundImage: ['responsive', 'hover', 'disabled', 'focus'],
+      opacity: ['hover', 'responsive'],
+      rotate: ['responsive', 'focus'],
+      cursor: ['focus', 'checked', 'hover'],
+    },
+    plugins: userConfig.plugins,
+  })
+})
