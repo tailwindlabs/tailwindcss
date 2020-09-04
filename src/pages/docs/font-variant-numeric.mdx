@@ -1,0 +1,129 @@
+---
+title: "Font Variant Numeric"
+description: "Utilities for controlling the variant of numbers."
+featureVersion: "v1.8.0+"
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
+---
+
+import plugin from 'tailwindcss/lib/plugins/fontVariantNumeric'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Usage
+
+Use the `font-variant-numeric` utilities to enable additional glyphs for numbers, fractions, and ordinal markers.
+
+All properties are composable so you can enable multiple `font-variant-numeric` features by adding multiple classes.
+
+*Attention: Not every font supports each specific numeric font variant.*
+
+## Ordinal
+
+Use the `.ordinal` utility to enable special glyphs for the ordinal markers.
+
+```html
+<p class="ordinal ...">1st</p>
+```
+
+
+## Slashed Zero
+
+Use the `.slashed-zero` utility to force a 0 with a slash; this is useful when a clear distinction between O and 0 is needed.
+```html
+<p class="slashed-zero ...">0</p>
+```
+
+## Lining Nums
+
+Use the `.lining-nums` utility to set all numbers on the baseline.
+
+```html
+<p class="lining-nums ...">12345</p>
+```
+
+## Oldstyle Nums
+
+Use the `.oldstyle-nums` utility to set numbers (e.g. 3, 4, 5, 7 and 9) with descenders.
+
+```html
+<p class="oldstyle-nums ...">123456789</p>
+```
+
+## Proportional Nums
+
+Use the `.proportional-nums` utility to set all numbers proportionally according to space requirements.
+
+```html
+<p class="proportional-nums ...">1234567890</p>
+```
+
+## Tabular Nums
+
+Use the `.tabular-nums` utility to sets all digits to have the same width (non-proportional).
+
+```html
+<p class="tabular-nums ...">1234567890</p>
+```
+
+## Diagonal Fractions
+
+Use the `.diagonal-fractions` utility to enable diagonal fractions where the numerator and denominator are made smaller and separated by a slash.
+```html
+<template preview>
+  <p class="diagonal-fractions text-lg text-gray-800">3/4</p>
+</template>
+
+<p class="diagonal-fractions ...">3/4</p>
+```
+
+## Stacked Fractions
+
+Use the `.stacked-fractions` utility to enable stacked-fractions where the numerator and denominator are made smaller, stacked and separated by a horizontal line.
+
+```html
+<p class="stacked-fractions ...">3/4</p>
+```
+
+
+## Resetting numeric font variants
+
+Use the `.normal-nums` propery to reset numeric font variants. This is usally useful at a particular breakpoint:
+
+```html
+<p class="slashed-zero tabular-nums diagonal-fractions md:normal-nums ...">12345</p>
+```
+
+## Responsive
+
+To control the numeric font variant of an element at a specific breakpoint, add a `{screen}:` prefix to any existing font style utility. For example, use `md:diagonal-fractions` to apply the `diagonal-fractions` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['diagonal-fractions', 'normal-nums', 'diagonal-fractions', 'diagonal-fractions', 'diagonal-fractions']}
+  snippet={(classNames) => `
+    <p class="${classNames} ...">
+      3/4
+    </p>
+  `}
+  preview={(className) => (
+    <p className={`text-lg text-gray-800 ${className}`}>3/4</p>
+  )}
+/>
+
+## Customizing
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="fontVariantNumeric" />
+
+### Disabling
+
+<Disabling plugin="fontVariantNumeric" />

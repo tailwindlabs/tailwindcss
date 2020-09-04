@@ -90,6 +90,7 @@ const nav = {
     pages['font-smoothing'],
     pages['font-style'],
     pages['font-weight'],
+    pages['font-variant-numeric'],
     pages['letter-spacing'],
     pages['line-height'],
     pages['list-style-type'],
