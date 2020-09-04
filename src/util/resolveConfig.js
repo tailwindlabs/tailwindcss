@@ -137,10 +137,10 @@ function resolveVariants([firstConfig, ...variantConfigs]) {
     Object.entries(variants || {}).forEach(([plugin, pluginVariants]) => {
       if (isFunction(pluginVariants)) {
         resolved[plugin] = pluginVariants({
-          variants: function(path) {
+          variants(path) {
             return get(resolved, path, [])
           },
-          before: function(toInsert, variant, existingPluginVariants = get(resolved, plugin, [])) {
+          before(toInsert, variant, existingPluginVariants = get(resolved, plugin, [])) {
             if (variant === undefined) {
               return [...toInsert, ...existingPluginVariants]
             }
@@ -157,7 +157,7 @@ function resolveVariants([firstConfig, ...variantConfigs]) {
               ...existingPluginVariants.slice(index),
             ]
           },
-          after: function(toInsert, variant, existingPluginVariants = get(resolved, plugin, [])) {
+          after(toInsert, variant, existingPluginVariants = get(resolved, plugin, [])) {
             if (variant === undefined) {
               return [...existingPluginVariants, ...toInsert]
             }
