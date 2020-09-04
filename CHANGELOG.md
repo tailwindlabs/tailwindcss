@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix bug in the new font-variant-numeric utilities which broke the whole rule
+- Fix bug while purging
 
 ## [1.8.0] - 2020-09-04
 
