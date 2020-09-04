@@ -174,6 +174,9 @@ function resolveVariants([firstConfig, ...variantConfigs]) {
               ...existingPluginVariants.slice(index + 1),
             ]
           },
+          without(toRemove, existingPluginVariants = get(resolved, plugin, [])) {
+            return existingPluginVariants.filter(v => !toRemove.includes(v))
+          },
         })
       } else {
         resolved[plugin] = pluginVariants

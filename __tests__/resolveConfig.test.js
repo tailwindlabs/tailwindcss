@@ -1747,7 +1747,9 @@ test('variants can be defined as a function', () => {
       borderWidth: ({ after }) => after(['active']),
       backgroundImage: ({ after }) => after(['disabled'], 'hover'),
       opacity: ({ after }) => after(['hover'], 'focus'),
-      cursor: ({ before, after }) => before(['checked'], 'hover', after(['hover'], 'focus')),
+      rotate: ({ without }) => without(['hover']),
+      cursor: ({ before, after, without }) =>
+        without(['responsive'], before(['checked'], 'hover', after(['hover'], 'focus'))),
     },
   }
 
@@ -1770,6 +1772,7 @@ test('variants can be defined as a function', () => {
       borderWidth: ['responsive', 'focus'],
       backgroundImage: ['responsive', 'hover', 'focus'],
       opacity: ['responsive'],
+      rotate: ['responsive', 'hover', 'focus'],
       cursor: ['responsive', 'focus'],
     },
   }
@@ -1789,7 +1792,8 @@ test('variants can be defined as a function', () => {
       borderWidth: ['responsive', 'focus', 'active'],
       backgroundImage: ['responsive', 'hover', 'disabled', 'focus'],
       opacity: ['hover', 'responsive'],
-      cursor: ['responsive', 'focus', 'checked', 'hover'],
+      rotate: ['responsive', 'focus'],
+      cursor: ['focus', 'checked', 'hover'],
     },
     plugins: userConfig.plugins,
   })
