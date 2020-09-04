@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New `place-items`, `place-content`, `place-self`, `justify-items`, and `justify-self` utilities ([#2306](https://github.com/tailwindlabs/tailwindcss/pull/2306))
 - Support configuring variants as functions ([#2309](https://github.com/tailwindlabs/tailwindcss/pull/2309))
 
+### Changed
+
+- CSS within `@layer` at-rules are now grouped with the corresponding `@tailwind` at-rule ([#2312](https://github.com/tailwindlabs/tailwindcss/pull/2312))
+
 ### Deprecated
 
 - `conservative` purge mode, deprecated in favor of `layers`
