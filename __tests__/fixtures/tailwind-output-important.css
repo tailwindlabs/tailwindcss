@@ -15760,7 +15760,7 @@ video {
   --font-variant-numeric-slashed-zero: /*!*/ !important;
   --font-variant-numeric-figure: /*!*/ !important;
   --font-variant-numeric-spacing: /*!*/ !important;
-  --font-variant-numeric-fractions: /*!*/ !important;
+  --font-variant-numeric-fraction: /*!*/ !important;
   font-variant-numeric: var(--font-variant-numeric-ordinal) var(--font-variant-numeric-slashed-zero) var(--font-variant-numeric-figure) var(--font-variant-numeric-spacing) var(--font-variant-numeric-fraction) !important;
 }
 
@@ -33983,7 +33983,7 @@ video {
     --font-variant-numeric-slashed-zero: /*!*/ !important;
     --font-variant-numeric-figure: /*!*/ !important;
     --font-variant-numeric-spacing: /*!*/ !important;
-    --font-variant-numeric-fractions: /*!*/ !important;
+    --font-variant-numeric-fraction: /*!*/ !important;
     font-variant-numeric: var(--font-variant-numeric-ordinal) var(--font-variant-numeric-slashed-zero) var(--font-variant-numeric-figure) var(--font-variant-numeric-spacing) var(--font-variant-numeric-fraction) !important;
   }
 
@@ -52176,7 +52176,7 @@ video {
     --font-variant-numeric-slashed-zero: /*!*/ !important;
     --font-variant-numeric-figure: /*!*/ !important;
     --font-variant-numeric-spacing: /*!*/ !important;
-    --font-variant-numeric-fractions: /*!*/ !important;
+    --font-variant-numeric-fraction: /*!*/ !important;
     font-variant-numeric: var(--font-variant-numeric-ordinal) var(--font-variant-numeric-slashed-zero) var(--font-variant-numeric-figure) var(--font-variant-numeric-spacing) var(--font-variant-numeric-fraction) !important;
   }
 
@@ -70369,7 +70369,7 @@ video {
     --font-variant-numeric-slashed-zero: /*!*/ !important;
     --font-variant-numeric-figure: /*!*/ !important;
     --font-variant-numeric-spacing: /*!*/ !important;
-    --font-variant-numeric-fractions: /*!*/ !important;
+    --font-variant-numeric-fraction: /*!*/ !important;
     font-variant-numeric: var(--font-variant-numeric-ordinal) var(--font-variant-numeric-slashed-zero) var(--font-variant-numeric-figure) var(--font-variant-numeric-spacing) var(--font-variant-numeric-fraction) !important;
   }
 
@@ -88562,7 +88562,7 @@ video {
     --font-variant-numeric-slashed-zero: /*!*/ !important;
     --font-variant-numeric-figure: /*!*/ !important;
     --font-variant-numeric-spacing: /*!*/ !important;
-    --font-variant-numeric-fractions: /*!*/ !important;
+    --font-variant-numeric-fraction: /*!*/ !important;
     font-variant-numeric: var(--font-variant-numeric-ordinal) var(--font-variant-numeric-slashed-zero) var(--font-variant-numeric-figure) var(--font-variant-numeric-spacing) var(--font-variant-numeric-fraction) !important;
   }
 
