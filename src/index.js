@@ -17,9 +17,9 @@ import uniformColorPalette from './flagged/uniformColorPalette.js'
 import extendedSpacingScale from './flagged/extendedSpacingScale.js'
 import defaultLineHeights from './flagged/defaultLineHeights.js'
 import extendedFontSizeScale from './flagged/extendedFontSizeScale.js'
-import darkModeVariant from './flagged/darkModeVariant'
+import darkModeVariant from './flagged/darkModeVariant.js'
 
-function getDefaultConfigs(config) {
+function getAllConfigs(config) {
   const configs = [defaultConfig]
 
   if (flagEnabled(config, 'uniformColorPalette')) {
@@ -40,9 +40,12 @@ function getDefaultConfigs(config) {
 
   if (flagEnabled(config, 'darkModeVariant')) {
     configs.unshift(darkModeVariant)
+    if (Array.isArray(config.plugins)) {
+      config.plugins = [...darkModeVariant.plugins, ...config.plugins]
+    }
   }
 
-  return configs
+  return [config, ...configs]
 }
 
 function resolveConfigPath(filePath) {
@@ -78,7 +81,7 @@ function resolveConfigPath(filePath) {
 
 const getConfigFunction = config => () => {
   if (_.isUndefined(config) && !_.isObject(config)) {
-    return resolveConfig([...getDefaultConfigs(defaultConfig)])
+    return resolveConfig([...getAllConfigs(defaultConfig)])
   }
 
   // Skip this if Jest is running: https://github.com/facebook/jest/pull/9841#issuecomment-621417584
@@ -92,7 +95,7 @@ const getConfigFunction = config => () => {
 
   const configObject = _.isObject(config) ? _.get(config, 'config', config) : require(config)
 
-  return resolveConfig([configObject, ...getDefaultConfigs(configObject)])
+  return resolveConfig([...getAllConfigs(configObject)])
 }
 
 const plugin = postcss.plugin('tailwind', config => {
