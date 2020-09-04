@@ -430,7 +430,7 @@ test(
           'utf8'
         )
 
-        expect(result.css).toBe(expected)
+        expect(result.css).toMatchCss(expected)
       })
   })
 )
@@ -457,7 +457,7 @@ test('does not purge if the array is empty', () => {
             'utf8'
           )
 
-          expect(result.css).toBe(expected)
+          expect(result.css).toMatchCss(expected)
         })
     })
   )
@@ -482,7 +482,7 @@ test('does not purge if explicitly disabled', () => {
             'utf8'
           )
 
-          expect(result.css).toBe(expected)
+          expect(result.css).toMatchCss(expected)
         })
     })
   )
@@ -507,7 +507,7 @@ test('does not purge if purge is simply false', () => {
             'utf8'
           )
 
-          expect(result.css).toBe(expected)
+          expect(result.css).toMatchCss(expected)
         })
     })
   )
