@@ -105,32 +105,48 @@ module.exports = {
 
 We recommend only removing unused styles in production, as removing them in development means you need to recompile any time you change your templates and compiling with PurgeCSS enabled is much slower.
 
-### Removing all unused styles
+### Preserving HTML elements
 
-By default, Tailwind will only remove unused utility styles that it itself generates. You can conceptually think of it working like this:
+By default, Tailwind will preserve all basic HTML element styles in your CSS, like styles for the `html`, `body`, `p`, `h1`, etc. tags. This is to minimize accidentally over-purging in cases where you are using markdown source files for example (where there is no actual `h1` tag present), or using a framework that hides the document shell (containing the `html` and `body` tags) somewhere in a vendor directory (like Next.js does).
 
-```css
-@tailwind base;
+If you want to disable this behavior, you can set `preserveHtmlElements` to false:
 
-/* Your own custom base styles */
-h1 { /* ... */ }
-a { /* ... */ }
 
-@tailwind components;
-
-/* Your own custom component styles */
-.btn { /* ... */ }
-.card { /* ... */ }
-
-/* Start purging... */
-@tailwind utilities;
-/* Stop purging. */
-
-/* Your own custom utilities */
-.text-shadow-sm { /* ... */ }
+```js
+// tailwind.config.js
+module.exports = {
+  purge: {
+    preserveHtmlElements: false,
+    content: ['./src/**/*.html'],
+  },
+  // ...
+}
 ```
 
-This is to avoid accidentally removing styles that you might need but not directly reference in your templates, for example base styles for elements like `html` and `body`, or classes that are only referenced deep in your `node_modules` folder that are part of some other dependency.
+We generally do not recommend this and believe that the risks outweigh the benefits, but we're not the cops, do whatever you want.
+
+### Purging specific layers
+
+By default, Tailwind will purge styles in all of the `base`, `components`, and `utilities` layers. If you'd like to change this, use the `layers` option:
+
+```js
+// tailwind.config.js
+module.exports = {
+  purge: {
+    layers: ['components', 'utilties'],
+    content: ['./src/**/*.html'],
+  },
+  // ...
+}
+```
+
+Note that the `mode` must be set to `layers` for this option to be respected.
+
+### Removing all unused styles
+
+By default, Tailwind will only remove unused classes that it generates itself. It will _not_ remove unused styles from third-party CSS you pull in to your project, like a datepicker library you pull in for example.
+
+This is to avoid accidentally removing styles that you might need but are not directly referenced in your templates, like classes that are only referenced deep in your `node_modules` folder that are part of some other dependency.
 
 If you really want to remove _all_ unused styles, use the `mode: 'all'` option and **be very careful** to provide the paths to _all_ files that might reference any classes or HTML elements:
 
@@ -141,9 +157,6 @@ module.exports = {
     mode: 'all',
     content: [
       './src/**/*.js',
-      './node_modules/next/dist/pages/**/*.js',
-      './node_modules/next/dist/pages/**/*.ts',
-      './node_modules/next/dist/pages/**/*.ts',
       './node_modules/pikaday/pikaday.js',
     ],
   },
