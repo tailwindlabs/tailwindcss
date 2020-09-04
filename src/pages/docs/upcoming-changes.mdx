@@ -26,3 +26,41 @@ module.exports = {
   // ...
 }
 ```
+
+## Purge layers by default
+
+Tailwind v1.8.0 introduced new `layers` purge mode which will be the default in v2.0. It purges all layers (`base`, `components`, and `utilities`) by default, whereas the previous default mode (`conservative`, now deprecated) only purged the `utilities` layer.
+
+With the introduction of the new `preserveHtmlElements` purge option (which is `true` by default), we consider this more aggressive purging mode very safe, and it is unlikely to actually be a breaking change in your application.
+
+You should see an even smaller CSS file by default with the new `layers` mode enabled, and shouldn't see any negative consequences unless you were deliberately relying on the fact that Tailwind was previously not purging the `base` or `components` layers by default.
+
+To opt-in to using the new `layers` mode by default, use the `purgeLayersByDefault` flag:
+
+```js
+// tailwind.config.js
+module.exports = {
+  future: {
+    purgeLayersByDefault: true,
+  },
+  // ...
+}
+```
+
+If you'd like to only purge the `utilities` layer (like the `conservative` mode did), you can still opt-in with this flag, but then explicitly specify that you'd only like to purge the `utilities` layer:
+
+```js
+// tailwind.config.js
+module.exports = {
+  future: {
+    purgeLayersByDefault: true,
+  },
+  purge: {
+    layers: ['utilities'],
+    content: [
+      // Paths to your templates...
+    ],
+  },
+  // ...
+}
+```
