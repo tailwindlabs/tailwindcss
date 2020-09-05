@@ -9,12 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing new yet!
 
+## [1.8.2] - 2020-09-04
+
+### Fixed
+
+- Fix bug where dark mode variants would cause an error if you had a `plugins` array in your config ([#2322](https://github.com/tailwindlabs/tailwindcss/pull/2322))
+
 ## [1.8.1] - 2020-09-04
 
 ### Fixed
 
-- Fix bug in the new font-variant-numeric utilities which broke the whole rule
-- Fix bug while purging
+- Fix bug in the new font-variant-numeric utilities which broke the whole rule ([#2318](https://github.com/tailwindlabs/tailwindcss/pull/2318))
+- Fix bug while purging ([#2320](https://github.com/tailwindlabs/tailwindcss/pull/2320))
 
 ## [1.8.0] - 2020-09-04
 
