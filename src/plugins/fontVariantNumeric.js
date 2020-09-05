@@ -11,7 +11,7 @@ export default function() {
           '--font-variant-numeric-slashed-zero': '/*!*/',
           '--font-variant-numeric-figure': '/*!*/',
           '--font-variant-numeric-spacing': '/*!*/',
-          '--font-variant-numeric-fractions': '/*!*/',
+          '--font-variant-numeric-fraction': '/*!*/',
           'font-variant-numeric':
             'var(--font-variant-numeric-ordinal) var(--font-variant-numeric-slashed-zero) var(--font-variant-numeric-figure) var(--font-variant-numeric-spacing) var(--font-variant-numeric-fraction)',
         },

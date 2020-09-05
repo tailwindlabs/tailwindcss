@@ -7,12 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing new yet!
+
+## [1.8.2] - 2020-09-04
+
+### Fixed
+
+- Fix bug where dark mode variants would cause an error if you had a `plugins` array in your config ([#2322](https://github.com/tailwindlabs/tailwindcss/pull/2322)).
+
+## [1.8.1] - 2020-09-04
+
+### Fixed
+
+- Fix bug in the new font-variant-numeric utilities which broke the whole rule ([#2318](https://github.com/tailwindlabs/tailwindcss/pull/2318)).
+- Fix bug while purging ([#2320](https://github.com/tailwindlabs/tailwindcss/pull/2320)).
+
+## [1.8.0] - 2020-09-04
+
 ### Added
 
 - Dark mode variant (experimental) ([#2279](https://github.com/tailwindlabs/tailwindcss/pull/2279)).
 - New `preserveHtmlElements` option for `purge` ([#2283](https://github.com/tailwindlabs/tailwindcss/pull/2283)).
 - New `layers` mode for `purge` ([#2288](https://github.com/tailwindlabs/tailwindcss/pull/2288)).
 - New `font-variant-numeric` utilities ([#2305](https://github.com/tailwindlabs/tailwindcss/pull/2305)).
+- New `place-items`, `place-content`, `place-self`, `justify-items`, and `justify-self` utilities ([#2306](https://github.com/tailwindlabs/tailwindcss/pull/2306)).
+- Support configuring variants as functions ([#2309](https://github.com/tailwindlabs/tailwindcss/pull/2309)).
+
+### Changed
+
+- CSS within `@layer` at-rules are now grouped with the corresponding `@tailwind` at-rule ([#2312](https://github.com/tailwindlabs/tailwindcss/pull/2312)).
 
 ### Deprecated
 
@@ -844,6 +867,7 @@ No release notes.
 - Everything!.
 
 [unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v1.7.6...HEAD
+[1.8.0]: https://github.com/tailwindlabs/tailwindcss/compare/v1.7.6...v1.8.0
 [1.7.6]: https://github.com/tailwindlabs/tailwindcss/compare/v1.7.5...v1.7.6
 [1.7.5]: https://github.com/tailwindlabs/tailwindcss/compare/v1.7.4...v1.7.5
 [1.7.4]: https://github.com/tailwindlabs/tailwindcss/compare/v1.7.3...v1.7.4

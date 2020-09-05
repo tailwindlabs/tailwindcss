@@ -49,6 +49,34 @@ test('generating dark mode variants uses the media strategy by default', () => {
   })
 })
 
+test('dark mode variants can be generated even when the user has their own plugins array', () => {
+  const input = `
+    @variants dark {
+      .text-red {
+        color: red;
+      }
+    }
+  `
+
+  const expected = `
+    .text-red {
+      color: red;
+    }
+    @media (prefers-color-scheme: dark) {
+      .dark\\:text-red {
+        color: red;
+      }
+    }
+  `
+
+  expect.assertions(2)
+
+  return run(input, { plugins: [] }).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('dark mode variants can be generated using the class strategy', () => {
   const input = `
     @variants dark {
