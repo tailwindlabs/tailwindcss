@@ -40,30 +40,147 @@ Each property is a core plugin name pointing to an array of variants to generate
 - `'active'`
 - `'visited'`
 - `'disabled'`
+- `'motion-safe'`
+- `'motion-reduce'`
 
-It's important to note that **your array of variants is not merged with the defaults**, so if you'd like to enable another variant for a utility, you need to repeat the default variants for that utility as well.
+## Overriding default variants
 
-<TipBad>Don't list only the extra variants you want to enable</TipBad>
+Any variants you specify will **override* the default variants for that plugin.
 
 ```js
 // tailwind.config.js
 module.exports = {
   variants: {
+    // Only 'active' variants will be generated
     backgroundColor: ['active'],
   },
 }
 ```
 
-<TipGood>Always provide the complete list of variants you want to enable</TipGood>
+When overriding the default variants, make sure you always specify _all_ the variants you'd like to enable, not just the new ones you'd like to add.
+
+## Extending default variants
+
+If you'd like to enable extra variants for a plugin in addition to the defaults, you can configure your variants using a function instead of an array:
 
 ```js
 // tailwind.config.js
 module.exports = {
   variants: {
-    backgroundColor: ['responsive', 'hover', 'focus', 'active'],
+    // The 'active' variant will be generated in addition to the defaults
+    backgroundColor: ({ after }) => after(['active']),
   },
 }
 ```
+
+Because [the order of variants is important](/docs/configuring-variants#ordering-variants), we provide a few helper functions as arguments that make it easy to add new variants in the right place.
+
+### before
+
+The `before` helper lets you add new variants to the beginning of a plugin's default variant list.
+
+```js
+// tailwind.config.js
+module.exports = {
+  variants: {
+    // Defaults are ['responsive', 'hover', 'focus']
+    backgroundColor: ({ before }) => before(['active']),
+    // Output: ['active', 'responsive', 'hover', 'focus']
+  },
+}
+```
+
+If you'd like to add new variants before a _specific_ variant in the list, pass that as the second argument:
+
+```js
+// tailwind.config.js
+module.exports = {
+  variants: {
+    // Defaults are ['responsive', 'hover', 'focus']
+    backgroundColor: ({ before }) => before(['active'], 'focus'),
+    // Output: ['responsive', 'hover', 'active', 'focus']
+  },
+}
+```
+
+### after
+
+The `after` helper lets you add new variants to the end of a plugin's default variant list.
+
+```js
+// tailwind.config.js
+module.exports = {
+  variants: {
+    // Defaults are ['responsive', 'hover', 'focus']
+    backgroundColor: ({ after }) => after(['active']),
+    // Output: [responsive', 'hover', 'focus', 'active']
+  },
+}
+```
+
+If you'd like to add new variants after a _specific_ variant in the list, pass that as the second argument:
+
+```js
+// tailwind.config.js
+module.exports = {
+  variants: {
+    // Defaults are ['responsive', 'hover', 'focus']
+    backgroundColor: ({ after }) => after(['active'], 'hover'),
+    // Output: ['responsive', 'hover', 'active', 'focus']
+  },
+}
+```
+
+### without
+
+The `without` helper lets you disable a variant that is enabled by default.
+
+```js
+// tailwind.config.js
+module.exports = {
+  variants: {
+    // Defaults are ['responsive', 'hover', 'focus']
+    backgroundColor: ({ without }) => without(['focus']),
+    // Output: [responsive', 'hover']
+  },
+}
+```
+
+### variants
+
+The `variants` helper lets you retrieve the variants for a specific plugin to read from directly.
+
+```js
+// tailwind.config.js
+module.exports = {
+  variants: {
+    // Defaults are ['responsive', 'hover', 'focus']
+    backgroundColor: ({ variants }) => [...variants('backgroundColor'), 'active'],
+    // Output: [responsive', 'hover', 'focus', 'active']
+  },
+}
+```
+
+This is an escape hatch and you probably won't ever need it. Stick to `before`, `after`, and `without` — they will handle everything you actually need.
+
+### Composing multiple helpers
+
+Each helper can optionally take a list of variants as the final argument, and if provided, will apply against that list instead of the default variant list for the current plugin.
+
+This makes it possible to compose them together and add variants both before and after, or add a variant before another variant while removing another variant, etc.
+
+```js
+// tailwind.config.js
+module.exports = {
+  variants: {
+    // Defaults are ['responsive', 'hover', 'focus']
+    backgroundColor: ({ before, after, without }) => without(['focus'], before(['active'], 'hover', after(['focus-within'], 'responsive'))),
+    // Output: [responsive', 'focus-within', 'active', 'hover']
+  },
+}
+```
+
+This looks complex and you probably won't need to do this often, but the power is there if you need it.
 
 ---
 
@@ -269,18 +386,18 @@ Learn more about creating custom variants in the [variant plugin documentation](
 
 ---
 
-## Enabling all variants
+## Enabling variants globally
 
-To specify a global set of variants that should be applied to all utilities, you can assign an array of variants directly to the `variants` property:
+To specify a global set of variants that should be applied to all utilities, you can assign an array of variants directly to the `variants` property instead of configuring variants separately:
 
 ```js
 // tailwind.config.js
 module.exports  = {
-  variants: ['responsive', 'group-hover', 'group-focus', 'focus-within', 'first', 'last', 'odd', 'even', 'hover', 'focus', 'active', 'visited', 'disabled']
+  variants: ['responsive', 'group-hover', 'disabled', 'hover', 'focus', 'active']
 }
 ```
 
-Note that enabling all variants for all plugins will result in much bigger file sizes. Before you do this, be sure to read our guide on [controlling file size](/docs/controlling-file-size/).
+Note that enabling a lot of variants for all plugins will result in much bigger file sizes. Before you do this, be sure to read our guide on [Controlling File Size](/docs/controlling-file-size/).
 
 ---
 
@@ -288,13 +405,13 @@ Note that enabling all variants for all plugins will result in much bigger file 
 
 If you've written or installed a [plugin](/docs/plugins) that adds a new variant, you can enable that variant by including it in your variants configuration just like if it were a built-in variant.
 
-For example, the [tailwindcss-interaction-variants plugin](https://github.com/benface/tailwindcss-interaction-variants) adds a `visited` variant (among others):
+For example, the [tailwindcss-interaction-variants plugin](https://github.com/benface/tailwindcss-interaction-variants) adds a `group-disabled` variant (among others):
 
 ```js
 // tailwind.config.js
 {
   variants: {
-    backgroundColor: ['responsive', 'hover', 'focus', 'visited'],
+    backgroundColor: ['responsive', 'hover', 'focus', 'group-disabled'],
   },
   plugins: [
     require('tailwindcss-interaction-variants')(),
