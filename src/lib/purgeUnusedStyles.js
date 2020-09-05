@@ -64,10 +64,12 @@ export default function purgeUnusedUtilities(config, configChanged) {
       }
 
       if (mode === 'conservative') {
-        log.warn([
-          'The `conservative` purge mode will be removed in Tailwind 2.0.',
-          'Please switch to the new `layers` mode instead.',
-        ])
+        if (configChanged) {
+          log.warn([
+            'The `conservative` purge mode will be removed in Tailwind 2.0.',
+            'Please switch to the new `layers` mode instead.',
+          ])
+        }
       }
 
       const layers =
