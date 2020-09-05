@@ -16,6 +16,21 @@
   src: url('../fonts/Inter-italic-latin.var.woff2') format('woff2');
 }
 
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/SourceSansPro-Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Ubuntu Mono';
+  font-weight: 700;
+  font-style: normal;
+  src: url('../fonts/Ubuntu-Mono-bold.woff2') format('woff2');
+}
+
 @tailwind base;
 
 :root {

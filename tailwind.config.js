@@ -13,6 +13,8 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        source: ['Source Sans Pro', ...defaultTheme.fontFamily.sans],
+        'ubuntu-mono': ['Ubuntu Mono', ...defaultTheme.fontFamily.mono],
         system: defaultTheme.fontFamily.sans,
       },
       colors: {

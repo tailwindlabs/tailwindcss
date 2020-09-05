@@ -2,121 +2,168 @@
 title: "Font Variant Numeric"
 description: "Utilities for controlling the variant of numbers."
 featureVersion: "v1.8.0+"
-features:
-  responsive: true
-  customizable: false
-  hover: false
-  focus: false
 ---
 
-import plugin from 'tailwindcss/lib/plugins/fontVariantNumeric'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
 import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
-export const classes = { plugin }
+export const classes = {
+  plugin: function () {
+    return function ({ addUtilities }) {
+      addUtilities({
+        '.normal-nums': { fontVariantNumeric: 'normal' },
+        '.ordinal': { fontVariantNumeric: 'ordinal' },
+        '.slashed-zero': { fontVariantNumeric: 'slashed-zero' },
+        '.lining-nums': { fontVariantNumeric: 'lining-nums' },
+        '.oldstyle-nums': { fontVariantNumeric: 'oldstyle-nums' },
+        '.proportional-nums': { fontVariantNumeric: 'proportional-nums' },
+        '.tabular-nums': { fontVariantNumeric: 'tabular-nums' },
+        '.diagonal-fractions': { fontVariantNumeric: 'diagonal-fractions' },
+        '.stacked-fractions': { fontVariantNumeric: 'stacked-fractions' },
+      })
+    }
+  }
+}
 
 ## Usage
 
-Use the `font-variant-numeric` utilities to enable additional glyphs for numbers, fractions, and ordinal markers.
+Use the `font-variant-numeric` utilities to enable additional glyphs for numbers, fractions, and ordinal markers *(in fonts that support them)*.
 
-All properties are composable so you can enable multiple `font-variant-numeric` features by adding multiple classes.
+These utilities are composable so you can enable multiple `font-variant-numeric` features by combining multiple classes in your HTML:
 
-*Attention: Not every font supports each specific numeric font variant.*
+```html
+<p class="ordinal slashed-zero tabular-nums ...">1234567890</p>
+```
 
-## Ordinal
+Note that many fonts don't support these features *(stacked fractions support for example is especially rare)*, so some of these utilities may have no effect depending on the font family you are using.
+
+### Ordinal
 
 Use the `.ordinal` utility to enable special glyphs for the ordinal markers.
 
 ```html
+<template preview>
+  <p class="font-source ordinal text-xl text-center text-gray-800">1st</p>
+</template>
+
 <p class="ordinal ...">1st</p>
 ```
 
 
-## Slashed Zero
+### Slashed Zero
 
 Use the `.slashed-zero` utility to force a 0 with a slash; this is useful when a clear distinction between O and 0 is needed.
+
 ```html
+<template preview>
+  <p class="font-source slashed-zero text-xl text-center text-gray-800">0</p>
+</template>
+
 <p class="slashed-zero ...">0</p>
 ```
 
-## Lining Nums
+### Lining figures
 
-Use the `.lining-nums` utility to set all numbers on the baseline.
+Use the `.lining-nums` utility to use the numeric glyphs that are all aligned by their baseline. This corresponds to the `lnum` OpenType feature. This is the default for most fonts.
 
-```html
-<p class="lining-nums ...">12345</p>
-```
-
-## Oldstyle Nums
-
-Use the `.oldstyle-nums` utility to set numbers (e.g. 3, 4, 5, 7 and 9) with descenders.
-
-```html
-<p class="oldstyle-nums ...">123456789</p>
-```
-
-## Proportional Nums
-
-Use the `.proportional-nums` utility to set all numbers proportionally according to space requirements.
-
-```html
-<p class="proportional-nums ...">1234567890</p>
-```
-
-## Tabular Nums
-
-Use the `.tabular-nums` utility to sets all digits to have the same width (non-proportional).
-
-```html
-<p class="tabular-nums ...">1234567890</p>
-```
-
-## Diagonal Fractions
-
-Use the `.diagonal-fractions` utility to enable diagonal fractions where the numerator and denominator are made smaller and separated by a slash.
 ```html
 <template preview>
-  <p class="diagonal-fractions text-lg text-gray-800">3/4</p>
+  <p class="font-source lining-nums text-xl text-center text-gray-800">1234567890</p>
 </template>
 
-<p class="diagonal-fractions ...">3/4</p>
+<p class="lining-nums ...">1234567890</p>
 ```
 
-## Stacked Fractions
+### Oldstyle figures
 
-Use the `.stacked-fractions` utility to enable stacked-fractions where the numerator and denominator are made smaller, stacked and separated by a horizontal line.
+Use the `.oldstyle-nums` utility to use numeric glyphs where some numbers have descenders. This corresponds to the `onum` OpenType feature.
 
 ```html
-<p class="stacked-fractions ...">3/4</p>
+<template preview>
+  <p class="font-source oldstyle-nums text-xl text-center text-gray-800">1234567890</p>
+</template>
+
+<p class="oldstyle-nums ...">1234567890</p>
+```
+
+### Proportional figures
+
+Use the `.proportional-nums` utility to use numeric glyphs that have proportional widths (rather than uniform/tabular). This corresponds to the `pnum` OpenType feature.
+
+```html
+<template preview>
+  <div class="max-w-sm text-right">
+    <p class="font-source proportional-nums text-xl text-gray-800">12121</p>
+    <p class="font-source proportional-nums text-xl text-gray-800">90909</p>
+  </div>
+</template>
+
+<p class="proportional-nums ...">12121</p>
+<p class="proportional-nums ...">90909</p>
+```
+
+### Tabular figures
+
+Use the `.tabular-nums` utility to use numeric glyphs that have uniform/tabular widths (rather than proportional). This corresponds to the `tnum` OpenType feature.
+
+```html
+<template preview>
+  <div class="max-w-sm text-right">
+    <p class="font-source tabular-nums text-xl text-gray-800">12121</p>
+    <p class="font-source tabular-nums text-xl text-gray-800">90909</p>
+  </div>
+</template>
+
+<p class="tabular-nums ...">12121</p>
+<p class="tabular-nums ...">90909</p>
+```
+
+### Diagonal fractions
+
+Use the `.diagonal-fractions` utility to replace numbers separated by a slash with common diagonal fractions. This corresponds to the `frac` OpenType feature.
+
+```html
+<template preview>
+  <p class="font-source diagonal-fractions text-xl text-center text-gray-800">1/2 3/4 5/6</p>
+</template>
+
+<p class="diagonal-fractions ...">1/2 3/4 5/6</p>
+```
+
+### Stacked fractions
+
+Use the `.stacked-fractions` utility to replace numbers separated by a slash with common stacked fractions. This corresponds to the `frac` OpenType feature. Very few fonts seem to support this feature — we've used Ubuntu Mono here.
+
+```html
+<template preview>
+  <p class="font-ubuntu-mono stacked-fractions text-xl text-center text-gray-800">1/2 3/4 5/6</p>
+</template>
+
+<p class="stacked-fractions ...">1/2 3/4 5/6</p>
 ```
 
 
-## Resetting numeric font variants
+### Resetting numeric font variants
 
-Use the `.normal-nums` propery to reset numeric font variants. This is usally useful at a particular breakpoint:
+Use the `.normal-nums` propery to reset numeric font variants. This is usually useful for resetting a font feature at a particular breakpoint:
 
 ```html
-<p class="slashed-zero tabular-nums diagonal-fractions md:normal-nums ...">12345</p>
+<p class="slashed-zero tabular-nums md:normal-nums ...">12345</p>
 ```
 
 ## Responsive
 
-To control the numeric font variant of an element at a specific breakpoint, add a `{screen}:` prefix to any existing font style utility. For example, use `md:diagonal-fractions` to apply the `diagonal-fractions` utility at only medium screen sizes and above.
+To control `font-variant-numeric` property of an element at a specific breakpoint, add a `{screen}:` prefix to any existing `font-variant-numeric` utility. For example, use `md:tabular-nums` to apply the `tabular-nums` utility at only medium screen sizes and above.
+
+```html
+<div class="proportional-nums md:tabular-nums">
+  <!-- ... -->
+</div>
+```
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['diagonal-fractions', 'normal-nums', 'diagonal-fractions', 'diagonal-fractions', 'diagonal-fractions']}
-  snippet={(classNames) => `
-    <p class="${classNames} ...">
-      3/4
-    </p>
-  `}
-  preview={(className) => (
-    <p className={`text-lg text-gray-800 ${className}`}>3/4</p>
-  )}
-/>
 
 ## Customizing
 
