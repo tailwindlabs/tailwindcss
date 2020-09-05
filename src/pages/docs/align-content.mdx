@@ -1,11 +1,6 @@
 ---
 title: "Align Content"
-description: "Utilities for controlling how lines are positioned in multi-line flex containers."
-features:
-  responsive: true
-  customizable: false
-  hover: false
-  focus: false
+description: "Utilities for controlling how rows are positioned in multi-row flex and grid containers."
 ---
 
 import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
@@ -17,7 +12,7 @@ export const classes = { plugin }
 
 ## Start
 
-Use `.content-start` to pack lines in a flex container against the start of the cross axis:
+Use `content-start` to pack rows in a container against the start of the cross axis:
 
 ```html
 <template preview>
@@ -43,7 +38,7 @@ Use `.content-start` to pack lines in a flex container against the start of the 
 
 ## Center
 
-Use `.content-center` to pack lines in a flex container in the center of the cross axis:
+Use `content-center` to pack rows in a container in the center of the cross axis:
 
 ```html
 <template preview>
@@ -69,7 +64,7 @@ Use `.content-center` to pack lines in a flex container in the center of the cro
 
 ## End
 
-Use `.content-end` to pack lines in a flex container against the end of the cross axis:
+Use `content-end` to pack rows in a container against the end of the cross axis:
 
 ```html
 <template preview>
@@ -95,7 +90,7 @@ Use `.content-end` to pack lines in a flex container against the end of the cros
 
 ## Space between
 
-Use `.content-between` to distribute lines in a flex container such that there is an equal amount of space between each line:
+Use `content-between` to distribute rows in a container such that there is an equal amount of space between each line:
 
 ```html
 <template preview>
@@ -121,7 +116,7 @@ Use `.content-between` to distribute lines in a flex container such that there i
 
 ## Space around
 
-Use `.content-around` to distribute lines in a flex container such that there is an equal amount of space around each line:
+Use `content-around` to distribute rows in a container such that there is an equal amount of space around each line:
 
 ```html
 <template preview>

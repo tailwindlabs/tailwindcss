@@ -1,12 +1,7 @@
 ---
 title: "Justify Self"
-description: "Utilities for controlling how an individual grid item is positioned inside its grid area on the inline axis."
+description: "Utilities for controlling how an individual grid item is aligned along its inline axis."
 featureVersion: "v1.8.0+"
-features:
-  responsive: true
-  customizable: false
-  hover: false
-  focus: false
 ---
 
 import plugin from 'tailwindcss/lib/plugins/justifySelf'
@@ -18,7 +13,7 @@ export const classes = { plugin }
 
 ## Auto
 
-Use `.justify-self-auto` to align an item based on the value of the grid's `justify-items` property:
+Use `justify-self-auto` to align an item based on the value of the grid's `justify-items` property:
 
 ```html
 <template preview>
@@ -35,7 +30,7 @@ Use `.justify-self-auto` to align an item based on the value of the grid's `just
 
 ## Start
 
-Use `.justify-self-start` to align a grid item to the start of the grid area on the inline axis of the grid, despite the grid's `justify-items` value:
+Use `justify-self-start` to align a grid item to the start its inline axis:
 
 ```html
 <template preview>
@@ -52,7 +47,7 @@ Use `.justify-self-start` to align a grid item to the start of the grid area on 
 
 ## Center
 
-Use `.justify-self-center` to align a grid item along the center of the grid area on the inline axis of the grid, despite the grid's `justify-items` value:
+Use `justify-self-center` to align a grid item along the center its inline axis:
 
 ```html
 <template preview>
@@ -69,7 +64,7 @@ Use `.justify-self-center` to align a grid item along the center of the grid are
 
 ## End
 
-Use `.justify-self-end` to align a grid item to the end of the grid area on the inline axis of the grid, despite the grid's `justify-items` value:
+Use `justify-self-end` to align a grid item to the end its inline axis:
 
 ```html
 <template preview>
@@ -86,11 +81,11 @@ Use `.justify-self-end` to align a grid item to the end of the grid area on the 
 
 ## Stretch
 
-Use `.justify-self-stretch` to stretch a grid item to fill the grid area on its inline axis, despite the grid's `justify-items` value:
+Use `justify-self-stretch` to stretch a grid item to fill the grid area on its inline axis:
 
 ```html
 <template preview>
-  <div class="grid grid-cols-3 gap-4 justify-items-stretch h-48">
+  <div class="grid grid-cols-3 gap-4 justify-items-start h-48">
     <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">1</div>
     <div class="justify-self-stretch text-gray-800 bg-gray-500 flex justify-center items-center px-4 py-2">2</div>
     <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">3</div>
@@ -106,27 +101,6 @@ Use `.justify-self-stretch` to stretch a grid item to fill the grid area on its 
 To control the alignment of a grid item inside its grid area at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:justify-self-end` to apply the `justify-self-end` utility at only medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
-
-<ResponsiveCodeSample
-  classNames={['justify-self-auto', 'justify-self-start', 'justify-self-end', 'justify-self-center', 'justify-self-stretch']}
-  snippet={(classNames) => `
-    <div class="justify-items-stretch ...">
-      <!-- ... -->
-      <div class="${classNames} ...">2</div>
-      <!-- ... -->
-    </div>
-  `}
-  preview={(className) => (
-    <div className="grid grid-cols-3 gap-4 h-48">
-      <div className="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">1</div>
-      <div className={`text-gray-800 bg-gray-500 flex justify-center items-center px-4 py-2 ${className}`}>2</div>
-      <div className="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">3</div>
-      <div className="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">4</div>
-      <div className="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">5</div>
-      <div className="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">6</div>
-    </div>
-  )}
-/>
 
 ## Customizing
 

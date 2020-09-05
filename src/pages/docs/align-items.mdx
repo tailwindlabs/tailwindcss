@@ -1,11 +1,6 @@
 ---
 title: "Align Items"
-description: "Utilities for controlling how flex items are positioned along a container's cross axis."
-features:
-  responsive: true
-  customizable: false
-  hover: false
-  focus: false
+description: "Utilities for controlling how flex and grid items are positioned along a container's cross axis."
 ---
 
 import plugin from 'tailwindcss/lib/plugins/alignItems'
@@ -17,7 +12,7 @@ export const classes = { plugin }
 
 ## Stretch
 
-Use `.items-stretch` to stretch items to fill the flex container's cross axis:
+Use `items-stretch` to stretch items to fill the container's cross axis:
 
 ```html
 <template preview>
@@ -31,7 +26,7 @@ Use `.items-stretch` to stretch items to fill the flex container's cross axis:
 
 ## Start
 
-Use `.items-start` to align items to the start of the flex container's cross axis:
+Use `items-start` to align items to the start of the container's cross axis:
 
 ```html
 <template preview>
@@ -45,7 +40,7 @@ Use `.items-start` to align items to the start of the flex container's cross axi
 
 ## Center
 
-Use `.items-center` to align items along the center of the flex container's cross axis:
+Use `items-center` to align items along the center of the container's cross axis:
 
 ```html
 <template preview>
@@ -59,7 +54,7 @@ Use `.items-center` to align items along the center of the flex container's cros
 
 ## End
 
-Use `.items-end` to align items to the end of the flex container's cross axis:
+Use `items-end` to align items to the end of the container's cross axis:
 
 ```html
 <template preview>
@@ -73,7 +68,7 @@ Use `.items-end` to align items to the end of the flex container's cross axis:
 
 ## Baseline
 
-Use `.items-baseline` to align items along the flex container's cross axis such that all of their baselines align:
+Use `items-baseline` to align items along the container's cross axis such that all of their baselines align:
 
 ```html
 <template preview>
