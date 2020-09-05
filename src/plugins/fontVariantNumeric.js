@@ -7,11 +7,11 @@ export default function() {
     addUtilities(
       {
         '.ordinal, .slashed-zero, .lining-nums, .oldstyle-nums, .proportional-nums, .tabular-nums, .diagonal-fractions, .stacked-fractions': {
-          '--font-variant-numeric-ordinal': '/*!*/',
-          '--font-variant-numeric-slashed-zero': '/*!*/',
-          '--font-variant-numeric-figure': '/*!*/',
-          '--font-variant-numeric-spacing': '/*!*/',
-          '--font-variant-numeric-fraction': '/*!*/',
+          '--font-variant-numeric-ordinal': 'var(--tailwind-empty,/*!*/ /*!*/)',
+          '--font-variant-numeric-slashed-zero': 'var(--tailwind-empty,/*!*/ /*!*/)',
+          '--font-variant-numeric-figure': 'var(--tailwind-empty,/*!*/ /*!*/)',
+          '--font-variant-numeric-spacing': 'var(--tailwind-empty,/*!*/ /*!*/)',
+          '--font-variant-numeric-fraction': 'var(--tailwind-empty,/*!*/ /*!*/)',
           'font-variant-numeric':
             'var(--font-variant-numeric-ordinal) var(--font-variant-numeric-slashed-zero) var(--font-variant-numeric-figure) var(--font-variant-numeric-spacing) var(--font-variant-numeric-fraction)',
         },
