@@ -124,7 +124,14 @@ export default function(plugins, config) {
         )
       },
       addBase: baseStyles => {
-        pluginBaseStyles.push(wrapWithLayer(parseStyles(baseStyles), 'base'))
+        const styles = postcss.root({ nodes: parseStyles(baseStyles) })
+        styles.walkRules(rule => {
+          rule.nodes = rule.nodes.filter(node =>
+            node.prop === 'font-size' ? !_.isPlainObject(node.value) : true
+          )
+        })
+
+        pluginBaseStyles.push(wrapWithLayer(styles.nodes, 'base'))
       },
       addVariant: (name, generator) => {
         pluginVariantGenerators[name] = generateVariantFunction(generator)
