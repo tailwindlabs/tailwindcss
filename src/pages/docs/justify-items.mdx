@@ -23,10 +23,13 @@ Use `.justify-items-auto` to justify grid items automatically on their grid area
 
 ```html
 <template preview>
-  <div class="grid grid-cols-3 bg-gray-200 justify-items-auto">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="grid grid-cols-3 gap-4 justify-items-auto h-48">
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">1</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">2</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">3</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">4</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">5</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">6</div>
   </div>
 </template>
 ```
@@ -37,25 +40,31 @@ Use `.justify-items-start` to justify grid items against the start of their grid
 
 ```html
 <template preview>
-  <div class="grid grid-cols-3 gap-3 bg-gray-200 justify-items-start">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="grid grid-cols-3 gap-4 justify-items-start h-48">
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">1</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">2</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">3</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">4</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">5</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">6</div>
   </div>
 </template>
 ```
 
 ## End
 
-Use `.justify-items-start` to justify grid items against the end of their grid areas on the inline axis:
+Use `.justify-items-end` to justify grid items against the end of their grid areas on the inline axis:
 
 ```html
 <template preview>
-  <div class="grid grid-cols-3 bg-gray-200 justify-items-end">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-  </div>
+  <div class="grid grid-cols-3 gap-4 justify-items-end h-48">
+      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">1</div>
+      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">2</div>
+      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">3</div>
+      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">4</div>
+      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">5</div>
+      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">6</div>
+    </div>
 </template>
 ```
 
@@ -65,10 +74,13 @@ Use `.justify-items-center` to justify grid items along their grid areas on the 
 
 ```html
 <template preview>
-  <div class="grid grid-cols-3 bg-gray-200 justify-items-center">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="grid grid-cols-3 gap-4 justify-items-center h-48">
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">1</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">2</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">3</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">4</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">5</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">6</div>
   </div>
 </template>
 ```
@@ -79,10 +91,13 @@ Use `.justify-items-stretch` to stretch items along their grid areas on the inli
 
 ```html
 <template preview>
-  <div class="grid grid-cols-3 bg-gray-200 justify-items-stretch">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="grid grid-cols-3 gap-4 justify-items-stretch h-48">
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">1</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">2</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">3</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">4</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">5</div>
+    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">6</div>
   </div>
 </template>
 ```
@@ -101,10 +116,13 @@ For more information about Tailwind's responsive design features, check out the 
     </div>
   `}
   preview={(className) => (
-    <div className={`grid grid-cols-3 bg-gray-200 ${className}`}>
-      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div className={`grid grid-cols-3 gap-4 h-48 ${className}`}>
+      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">1</div>
+      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">2</div>
+      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">3</div>
+      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">4</div>
+      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">5</div>
+      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">6</div>
     </div>
   )}
 />

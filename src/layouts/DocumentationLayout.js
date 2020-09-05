@@ -76,6 +76,9 @@ const nav = {
     pages['grid-auto-flow'],
     pages['justify-items'],
     pages['justify-self'],
+    pages['place-content'],
+    pages['place-items'],
+    pages['place-self'],
   ],
   Spacing: [pages['padding'], pages['margin'], pages['space']],
   Sizing: [

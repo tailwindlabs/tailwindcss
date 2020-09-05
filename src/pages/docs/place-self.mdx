@@ -1,0 +1,139 @@
+---
+title: "Place Self"
+description: "Utilities for controlling how an individual grid item is positioned inside its grid area."
+featureVersion: "v1.8.0+"
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
+---
+
+import plugin from 'tailwindcss/lib/plugins/placeSelf'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+
+export const classes = { plugin }
+
+## Auto
+
+Use `.place-self-auto` to align an item based on the value of the grid's `place-items` property:
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 place-items-stretch bg-gray-200 h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="place-self-auto text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## Start
+
+Use `.place-self-start` to align a grid item to the start of the grid area on both axis, despite the grid's `place-items` value:
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 place-items-stretch bg-gray-200 h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="place-self-start text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## Center
+
+Use `.place-self-center` to align a grid item at the center of the grid area, despite the grid's `place-items` value:
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 place-items-stretch bg-gray-200 h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="place-self-center text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## End
+
+Use `.place-self-end` to align a grid item to the end of the grid area on both axis, despite the grid's `place-items` value:
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 place-items-stretch bg-gray-200 h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="place-self-end text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## Stretch
+
+Use `.place-self-stretch` to stretch a grid item to fill the grid area on both axis, despite the grid's `place-items` value:
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 place-items-stretch bg-gray-200 h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="place-self-stretch text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## Responsive
+
+To control the alignment of a grid item inside its grid area at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:place-self-end` to apply the `place-self-end` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['place-self-auto', 'place-self-start', 'place-self-end', 'place-self-center', 'place-self-stretch']}
+  snippet={(classNames) => `
+    <div class="place-items-stretch ...">
+      <!-- ... -->
+      <div class="${classNames} ...">2</div>
+      <!-- ... -->
+    </div>
+  `}
+  preview={(className) => (
+    <div className="grid grid-cols-3 place-items-stretch bg-gray-200 h-48">
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+      <div className={`text-gray-800 text-center bg-gray-500 px-4 py-2 m-2 ${className}`}>2</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+    </div>
+  )}
+/>
+
+## Customizing
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="placeSelf" name="place-self" />
+
+### Disabling
+
+<Disabling plugin="placeSelf" name="place-self" />

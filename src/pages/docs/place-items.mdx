@@ -1,0 +1,138 @@
+---
+title: "Place Items"
+description: "Utilities for controlling how grid items are placed in their grid areas."
+featureVersion: "v1.8.0+"
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
+
+---
+
+import plugin from 'tailwindcss/lib/plugins/placeItems'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Auto
+
+Use `.place-items-auto` to place grid items automatically in their grid areas:
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 place-items-auto bg-gray-200 h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## Start
+
+Use `.place-items-start` to place grid items on the start of their grid areas on both axis:
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 place-items-start bg-gray-200 h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## End
+
+Use `.place-items-start` to place grid items on the end of their grid areas on both axis:
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 place-items-end bg-gray-200 h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## Center
+
+Use `.place-items-center` to place grid items on the center of their grid areas on both axis:
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 place-items-center bg-gray-200 h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## Stretch
+
+Use `.place-items-stretch` to stretch items along their grid areas on both axis:
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 place-items-stretch bg-gray-200 h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## Responsive
+
+To place flex items at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:place-items-center` to apply the `place-items-center` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['place-items-auto', 'place-items-start', 'place-items-end', 'place-items-center', 'place-items-stretch']}
+  snippet={(classNames) => `
+    <div class="${classNames} ...">
+      <!-- ... -->
+    </div>
+  `}
+  preview={(className) => (
+    <div className={`grid grid-cols-3 place-items-stretch bg-gray-200 h-48 ${className}`}>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+    </div>
+  )}
+/>
+
+## Customizing
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="placeItems" name="place-items" />
+
+### Disabling
+
+<Disabling plugin="placeItems" name="place-items" />

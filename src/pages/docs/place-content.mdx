@@ -1,0 +1,172 @@
+---
+title: "Place Content"
+description: "Utilities for controlling how the content is placed in the grid."
+featureVersion: "v1.8.0+"
+features:
+  responsive: true
+  customizable: false
+  hover: false
+  focus: false
+
+---
+
+import plugin from 'tailwindcss/lib/plugins/placeContent'
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
+
+export const classes = { plugin }
+
+## Center
+
+Use `.place-content-center` to pack items in a grid container in the center of the block axis: 
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 bg-gray-200 place-content-center h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## Start
+
+Use `.place-content-start` to pack items in a grid container against the start of the block axis:
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 bg-gray-200 place-content-start h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## End
+
+Use `.place-content-end` to to pack items in a grid container against the end of the block axis:
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 bg-gray-200 place-content-end h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## Space between
+
+Use `.place-content-between` to distribute grid items along the block axis so that that there is an equal amount of space between each row on the block axis.
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 bg-gray-200 place-content-between h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## Space around
+
+Use `.place-content-around` distribute grid items in a grid container such that there is an equal amount of space around each row on the block axis: 
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 bg-gray-200 place-content-around h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## Space evenly
+
+Use `.place-content-evenly` to distribute grid items in a grid container such that they are evenly spaced on the block axis:
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 bg-gray-200 place-content-evenly h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## Stretch
+
+Use `.place-content-stretch` to stretch grid items along their grid areas on the block axis:
+
+```html
+<template preview>
+  <div class="grid grid-cols-3 bg-gray-200 place-content-stretch h-48">
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  </div>
+</template>
+```
+
+## Responsive
+
+To place grid items at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:place-content-center` to apply the `place-content-centerr` utility at only medium screen sizes and above.
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+<ResponsiveCodeSample
+  classNames={['place-content-center', 'place-content-start', 'place-content-end', 'place-content-between', 'place-content-around']}
+  snippet={(classNames) => `
+    <div class="${classNames} ...">
+      <!-- ... -->
+    </div>
+  `}
+  preview={(className) => (
+    <div className={`grid grid-cols-3 bg-gray-200 ${className} h-48`}>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
+      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+    </div>
+  )}
+/>
+
+## Customizing
+
+### Responsive and pseudo-class variants
+
+<Variants plugin="placeContent" name="place-content" />
+
+### Disabling
+
+<Disabling plugin="placeContent" name="place-content" />
