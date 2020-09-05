@@ -31,28 +31,24 @@ If you just want to apply some global styling to the `html` or `body` elements, 
 
 If you want to apply some base styles to specific elements, the easiest way is to simply add them in your CSS.
 
-Define any of your own custom base styles directly after `@tailwind base` and before `@tailwind components` to avoid specificity issues:
-
 ```css
 @tailwind base;
-
-h1 {
-  @apply text-2xl;
-}
-h2 {
-  @apply text-xl;
-}
-h3 {
-  @apply text-lg;
-}
-a {
-  @apply text-blue-600 underline;
-}
-
 @tailwind components;
-
 @tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl;
+  }
+}
 ```
+
+By using the `@layer` directive, Tailwind will automatically move those styles to the same place as `@tailwind base` to avoid unintended specificity issues..
+
+Using the `@layer` directive will also instruct Tailwind to consider those styles for purging when purging the `base` layer. Read our [Controlling File Size](/docs/controlling-file-size) documentation for more details.
 
 It's a good idea to use [@apply](/docs/functions-and-directives#apply) or [theme()](/docs/functions-and-directives#theme) to define these styles to avoid introducing new magic values or accidentally deviating from your design system.
 
@@ -62,21 +58,21 @@ You can use the same approach to add your `@font-face` rules for any custom font
 
 ```css
 @tailwind base;
-
-@font-face {
-  font-family: Proxima Nova;
-  font-weight: 400;
-  src: url(/fonts/proxima-nova/400-regular.woff) format("woff");
-}
-@font-face {
-  font-family: Proxima Nova;
-  font-weight: 500;
-  src: url(/fonts/proxima-nova/500-medium.woff) format("woff");
-}
-
 @tailwind components;
-
 @tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: Proxima Nova;
+    font-weight: 400;
+    src: url(/fonts/proxima-nova/400-regular.woff) format("woff");
+  }
+  @font-face {
+    font-family: Proxima Nova;
+    font-weight: 500;
+    src: url(/fonts/proxima-nova/500-medium.woff) format("woff");
+  }
+}
 ```
 
 ---

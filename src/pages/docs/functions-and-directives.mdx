@@ -166,9 +166,55 @@ If you've [configured a prefix](/docs/configuration#prefix) for your utilities, 
 
 ---
 
+## @layer
+
+Use the `@layer` directive to tell Tailwind which "bucket" a set of custom styles belong in. Valid layers are a `base`, `components`, and `utilities`.
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl;
+  }
+}
+
+@layer components {
+  .btn-blue {
+    @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
+  }
+  .btn-blue:hover {
+    @apply bg-blue-700;
+  }
+}
+
+@layer utilities {
+  @variants hover, focus {
+    .filter-none {
+      filter: none;
+    }
+    .filter-grayscale {
+      filter: grayscale(100%);
+    }
+  }
+}
+```
+
+Tailwind will automatically move any CSS within a `@layer` directive to the same place as the corresponding `@tailwind` rule, so you don't have to worry as much about authoring your CSS in a specific order to avoid specificity issues.
+
+Wrapping any custom CSS in a `@layer` directive also tells Tailwind to consider those styles for purging when purging that layer. Read our [Controlling File Size](/docs/controlling-file-size) documentation for more details.
+
+---
+
+
 ## @variants
 
-You can generate `responsive`, `hover`, `focus`, `active`, and other [variants](/docs/pseudo-class-variants) of your own utilities by wrapping their definitions in the `@variants` directive
+You can generate `responsive`, `hover`, `focus`, `active`, and other [variants](/docs/pseudo-class-variants) of your own utilities by wrapping their definitions in the `@variants` directive.
 
 ```css
 @variants focus, hover {

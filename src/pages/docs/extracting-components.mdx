@@ -162,41 +162,26 @@ Here's what a `.btn-blue` class might look like using `@apply` to compose it fro
 
 Note that variants like `hover:`, `focus:`, and `{screen}:` can't be applied directly, so instead apply the plain version of the utility to the appropriate pseudo-selector or media query.
 
-Classes like this should be added directly after the `@tailwind components` directive to avoid specificity issues.
-
-<TipBad>Don't add custom component classes to the end of your CSS</TipBad>
+To avoid unintended specificity issues, we recommend wrapping your custom component styles with the `@layer components { ... }` directive to tell Tailwind what layer those styles belong to:
 
 ```css
 @tailwind base;
-
 @tailwind components;
-
 @tailwind utilities;
 
-.btn-blue {
-  @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
-}
-.btn-blue:hover {
-  @apply bg-blue-700;
+@layer components {
+  .btn-blue {
+    @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
+  }
+  .btn-blue:hover {
+    @apply bg-blue-700;
+  }
 }
 ```
 
-<TipGood>Add custom component classes before your utilities</TipGood>
+Tailwind will automatically move those styles to the same place as `@tailwind components`, so you don't have to worry about getting the order right in your source files.
 
-```css
-@tailwind base;
-
-@tailwind components;
-
-.btn-blue {
-  @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
-}
-.btn-blue:hover {
-  @apply bg-blue-700;
-}
-
-@tailwind utilities;
-```
+Using the `@layer` directive will also instruct Tailwind to consider those styles for purging when purging the `components` layer. Read our [Controlling File Size](/docs/controlling-file-size) documentation for more details.
 
 ### Keeping things composable
 
@@ -225,18 +210,20 @@ Say you have these two buttons:
 It might be tempting to implement component classes for these buttons like this:
 
 ```css
-.btn-blue {
-  @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
-}
-.btn-blue:hover {
-  @apply bg-blue-700;
-}
+@layer components {
+  .btn-blue {
+    @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
+  }
+  .btn-blue:hover {
+    @apply bg-blue-700;
+  }
 
-.btn-gray {
-  @apply bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded;
-}
-.btn-gray:hover {
-  @apply bg-gray-500;
+  .btn-gray {
+    @apply bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded;
+  }
+  .btn-gray:hover {
+    @apply bg-gray-500;
+  }
 }
 ```
 
@@ -247,22 +234,24 @@ If you wanted to change the padding, font weight, or border radius of all the bu
 A better approach is to extract the parts that are the same into a separate class:
 
 ```css
-.btn {
-  @apply font-bold py-2 px-4 rounded;
-}
+@layer components {
+  .btn {
+    @apply font-bold py-2 px-4 rounded;
+  }
 
-.btn-blue {
-  @apply bg-blue-500 text-white;
-}
-.btn-blue:hover {
-  @apply bg-blue-700;
-}
+  .btn-blue {
+    @apply bg-blue-500 text-white;
+  }
+  .btn-blue:hover {
+    @apply bg-blue-700;
+  }
 
-.btn-gray {
-  @apply bg-gray-400 text-gray-800;
-}
-.btn-gray:hover {
-  @apply bg-gray-500;
+  .btn-gray {
+    @apply bg-gray-400 text-gray-800;
+  }
+  .btn-gray:hover {
+    @apply bg-gray-500;
+  }
 }
 ```
 
