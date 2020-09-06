@@ -3,7 +3,7 @@ import chalk from 'chalk'
 import log from './util/log'
 
 const featureFlags = {
-  future: ['removeDeprecatedGapUtilities', 'purgeLayersByDefault'],
+  future: ['removeDeprecatedGapUtilities', 'purgeLayersByDefault', 'standardFontWeights'],
   experimental: [
     'uniformColorPalette',
     'extendedSpacingScale',
