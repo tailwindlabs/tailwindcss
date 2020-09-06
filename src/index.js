@@ -18,6 +18,7 @@ import extendedSpacingScale from './flagged/extendedSpacingScale.js'
 import defaultLineHeights from './flagged/defaultLineHeights.js'
 import extendedFontSizeScale from './flagged/extendedFontSizeScale.js'
 import darkModeVariant from './flagged/darkModeVariant.js'
+import standardFontWeights from './flagged/standardFontWeights'
 
 function getAllConfigs(config) {
   const configs = [defaultConfig]
@@ -36,6 +37,10 @@ function getAllConfigs(config) {
 
   if (flagEnabled(config, 'extendedFontSizeScale')) {
     configs.unshift(extendedFontSizeScale)
+  }
+
+  if (flagEnabled(config, 'standardFontWeights')) {
+    configs.unshift(standardFontWeights)
   }
 
   if (flagEnabled(config, 'darkModeVariant')) {
