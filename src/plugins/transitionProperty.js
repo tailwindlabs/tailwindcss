@@ -5,7 +5,7 @@ export default function() {
     const utilities = _.fromPairs(
       _.map(theme('transitionProperty'), (value, modifier) => {
         return [
-          `.${e(`transition-${modifier}`)}`,
+          `.${e(`${modifier !== 'default' ? `transition-${modifier}` : 'transition'}`)}`,
           {
             transitionProperty: value,
             transitionDuration: '250ms',
