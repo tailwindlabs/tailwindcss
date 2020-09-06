@@ -189,7 +189,7 @@ test('dark mode variants stack with other variants', () => {
 
 test('dark mode variants stack with other variants when using the class strategy', () => {
   const input = `
-    @variants responsive, dark, hover, focus {
+    @variants responsive, dark, group-hover, hover, focus {
       .text-red {
         color: red;
       }
@@ -200,6 +200,9 @@ test('dark mode variants stack with other variants when using the class strategy
     .text-red {
       color: red;
     }
+    .group:hover .group-hover\\:text-red {
+      color: red;
+    }
     .hover\\:text-red:hover {
       color: red;
     }
@@ -207,6 +210,9 @@ test('dark mode variants stack with other variants when using the class strategy
       color: red;
     }
     .dark .dark\\:text-red {
+      color: red;
+    }
+    .dark .group:hover .dark\\:group-hover\\:text-red {
       color: red;
     }
     .dark .dark\\:hover\\:text-red:hover {
@@ -219,6 +225,9 @@ test('dark mode variants stack with other variants when using the class strategy
       .sm\\:text-red {
         color: red;
       }
+      .group:hover .sm\\:group-hover\\:text-red {
+        color: red;
+      }
       .sm\\:hover\\:text-red:hover {
         color: red;
       }
@@ -226,6 +235,9 @@ test('dark mode variants stack with other variants when using the class strategy
         color: red;
       }
       .dark .sm\\:dark\\:text-red {
+        color: red;
+      }
+      .dark .group:hover .sm\\:dark\\:group-hover\\:text-red {
         color: red;
       }
       .dark .sm\\:dark\\:hover\\:text-red:hover {
@@ -239,6 +251,9 @@ test('dark mode variants stack with other variants when using the class strategy
       .lg\\:text-red {
         color: red;
       }
+      .group:hover .lg\\:group-hover\\:text-red {
+        color: red;
+      }
       .lg\\:hover\\:text-red:hover {
         color: red;
       }
@@ -246,6 +261,9 @@ test('dark mode variants stack with other variants when using the class strategy
         color: red;
       }
       .dark .lg\\:dark\\:text-red {
+        color: red;
+      }
+      .dark .group:hover .lg\\:dark\\:group-hover\\:text-red {
         color: red;
       }
       .dark .lg\\:dark\\:hover\\:text-red:hover {
