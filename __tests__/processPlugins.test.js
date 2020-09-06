@@ -1946,3 +1946,60 @@ test('the configFunction parameter is optional when using the `createPlugin.with
       expect(result.css).toMatchCss(expected)
     })
 })
+
+test('plugins can extend variants', () => {
+  const plugin = createPlugin(function() {}, {
+    variants: {
+      opacity: ({ before }) => before(['active'], 'focus'),
+    },
+  })
+
+  return _postcss([
+    tailwind({
+      theme: {
+        opacity: { '0': '0', '100': '1' },
+      },
+      corePlugins: ['opacity'],
+      variants: { opacity: ({ without }) => without(['responsive']) },
+      plugins: [plugin],
+    }),
+  ])
+    .process(
+      `
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      { from: undefined }
+    )
+    .then(result => {
+      const expected = `
+        .opacity-0 {
+          opacity: 0
+        }
+        .opacity-100 {
+          opacity: 1
+        }
+        .hover\\:opacity-0:hover {
+          opacity: 0
+        }
+        .hover\\:opacity-100:hover {
+          opacity: 1
+        }
+        .active\\:opacity-0:active {
+          opacity: 0
+        }
+        .active\\:opacity-100:active {
+          opacity: 1
+        }
+        .focus\\:opacity-0:focus {
+          opacity: 0
+        }
+        .focus\\:opacity-100:focus {
+          opacity: 1
+        }
+      `
+
+      expect(result.css).toMatchCss(expected)
+    })
+})
