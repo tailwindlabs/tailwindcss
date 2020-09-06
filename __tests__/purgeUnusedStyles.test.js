@@ -195,19 +195,19 @@ test('custom css in a layer is purged by default when using layers mode', () => 
       ])
         .process(
           `
-        @tailwind base;
+          @tailwind base;
 
-        @tailwind components;
+          @tailwind components;
 
-        @layer components {
-          .example {
-            @apply font-bold;
-            color: theme('colors.red.500');
+          @layer components {
+            .example {
+              @apply font-bold;
+              color: theme('colors.red.500');
+            }
           }
-        }
 
-        @tailwind utilities;
-      `,
+          @tailwind utilities;
+        `,
           { from: null }
         )
         .then(result => {
@@ -405,6 +405,43 @@ test('does not purge components when mode is conservative', () => {
         .process(input, { from: inputPath })
         .then(result => {
           expect(result.css).toContain('.container')
+          assertPurged(result)
+        })
+    })
+  )
+})
+
+test('extra purgecss control comments can be added manually', () => {
+  return inProduction(
+    suppressConsoleLogs(() => {
+      const input = `
+        @tailwind base;
+
+        /* purgecss start ignore */
+        .btn {
+          background: red;
+        }
+        /* purgecss end ignore */
+
+        @tailwind components;
+        @tailwind utilities;
+      `
+
+      return postcss([
+        tailwind({
+          ...config,
+          purge: {
+            layers: ['utilities'],
+            content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
+          },
+        }),
+      ])
+        .process(input, { from: null })
+        .then(result => {
+          const rules = extractRules(result.root)
+
+          expect(rules).toContain('.btn')
+          expect(rules).toContain('.container')
           assertPurged(result)
         })
     })
