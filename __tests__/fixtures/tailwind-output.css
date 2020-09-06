@@ -18637,30 +18637,37 @@ video {
 
 .transition-none {
   transition-property: none;
+  transition-duration: 250ms;
 }
 
 .transition-all {
   transition-property: all;
+  transition-duration: 250ms;
 }
 
 .transition {
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-duration: 250ms;
 }
 
 .transition-colors {
   transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 250ms;
 }
 
 .transition-opacity {
   transition-property: opacity;
+  transition-duration: 250ms;
 }
 
 .transition-shadow {
   transition-property: box-shadow;
+  transition-duration: 250ms;
 }
 
 .transition-transform {
   transition-property: transform;
+  transition-duration: 250ms;
 }
 
 .ease-linear {
@@ -36860,30 +36867,37 @@ video {
 
   .sm\:transition-none {
     transition-property: none;
+    transition-duration: 250ms;
   }
 
   .sm\:transition-all {
     transition-property: all;
+    transition-duration: 250ms;
   }
 
   .sm\:transition {
     transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+    transition-duration: 250ms;
   }
 
   .sm\:transition-colors {
     transition-property: background-color, border-color, color, fill, stroke;
+    transition-duration: 250ms;
   }
 
   .sm\:transition-opacity {
     transition-property: opacity;
+    transition-duration: 250ms;
   }
 
   .sm\:transition-shadow {
     transition-property: box-shadow;
+    transition-duration: 250ms;
   }
 
   .sm\:transition-transform {
     transition-property: transform;
+    transition-duration: 250ms;
   }
 
   .sm\:ease-linear {
@@ -55053,30 +55067,37 @@ video {
 
   .md\:transition-none {
     transition-property: none;
+    transition-duration: 250ms;
   }
 
   .md\:transition-all {
     transition-property: all;
+    transition-duration: 250ms;
   }
 
   .md\:transition {
     transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+    transition-duration: 250ms;
   }
 
   .md\:transition-colors {
     transition-property: background-color, border-color, color, fill, stroke;
+    transition-duration: 250ms;
   }
 
   .md\:transition-opacity {
     transition-property: opacity;
+    transition-duration: 250ms;
   }
 
   .md\:transition-shadow {
     transition-property: box-shadow;
+    transition-duration: 250ms;
   }
 
   .md\:transition-transform {
     transition-property: transform;
+    transition-duration: 250ms;
   }
 
   .md\:ease-linear {
@@ -73246,30 +73267,37 @@ video {
 
   .lg\:transition-none {
     transition-property: none;
+    transition-duration: 250ms;
   }
 
   .lg\:transition-all {
     transition-property: all;
+    transition-duration: 250ms;
   }
 
   .lg\:transition {
     transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+    transition-duration: 250ms;
   }
 
   .lg\:transition-colors {
     transition-property: background-color, border-color, color, fill, stroke;
+    transition-duration: 250ms;
   }
 
   .lg\:transition-opacity {
     transition-property: opacity;
+    transition-duration: 250ms;
   }
 
   .lg\:transition-shadow {
     transition-property: box-shadow;
+    transition-duration: 250ms;
   }
 
   .lg\:transition-transform {
     transition-property: transform;
+    transition-duration: 250ms;
   }
 
   .lg\:ease-linear {
@@ -91439,30 +91467,37 @@ video {
 
   .xl\:transition-none {
     transition-property: none;
+    transition-duration: 250ms;
   }
 
   .xl\:transition-all {
     transition-property: all;
+    transition-duration: 250ms;
   }
 
   .xl\:transition {
     transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+    transition-duration: 250ms;
   }
 
   .xl\:transition-colors {
     transition-property: background-color, border-color, color, fill, stroke;
+    transition-duration: 250ms;
   }
 
   .xl\:transition-opacity {
     transition-property: opacity;
+    transition-duration: 250ms;
   }
 
   .xl\:transition-shadow {
     transition-property: box-shadow;
+    transition-duration: 250ms;
   }
 
   .xl\:transition-transform {
     transition-property: transform;
+    transition-duration: 250ms;
   }
 
   .xl\:ease-linear {
