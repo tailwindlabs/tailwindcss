@@ -77,10 +77,18 @@ export default function purgeUnusedUtilities(config, configChanged) {
           ? ['utilities']
           : _.get(config, 'purge.layers', ['base', 'components', 'utilities'])
 
-      css.prepend(postcss.comment({ text: 'purgecss start ignore' }))
-      css.append(postcss.comment({ text: 'purgecss end ignore' }))
-
       css.walkComments(comment => {
+        switch (comment.text.trim()) {
+          case `purgecss start ignore`:
+            comment.before(postcss.comment({ text: 'purgecss end ignore' }))
+            break
+          case `purgecss end ignore`:
+            comment.before(postcss.comment({ text: 'purgecss end ignore' }))
+            comment.text = 'purgecss start ignore'
+            break
+          default:
+            break
+        }
         layers.forEach(layer => {
           switch (comment.text.trim()) {
             case `tailwind start ${layer}`:
@@ -94,6 +102,9 @@ export default function purgeUnusedUtilities(config, configChanged) {
           }
         })
       })
+
+      css.prepend(postcss.comment({ text: 'purgecss start ignore' }))
+      css.append(postcss.comment({ text: 'purgecss end ignore' }))
     },
     removeTailwindMarkers,
     purgecss({
