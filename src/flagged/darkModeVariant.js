@@ -1,4 +1,3 @@
-import selectorParser from 'postcss-selector-parser'
 import buildSelectorVariant from '../util/buildSelectorVariant'
 import defaultConfig from '../../defaultConfig'
 
@@ -31,13 +30,19 @@ export default {
         }
 
         if (config('dark') === 'class') {
-          const parser = selectorParser(selectors => {
-            selectors.walkClasses(sel => {
-              sel.value = `dark${separator}${sel.value}`
-              sel.parent.insertBefore(sel, selectorParser().astSync(prefix('.dark ')))
+          const modified = modifySelectors(({ selector }) => {
+            return buildSelectorVariant(selector, 'dark', separator, message => {
+              throw container.error(message)
             })
           })
-          return modifySelectors(({ selector }) => parser.processSync(selector))
+
+          modified.walkRules(rule => {
+            rule.selectors = rule.selectors.map(selector => {
+              return `${prefix('.dark ')} ${selector}`
+            })
+          })
+
+          return modified
         }
 
         throw new Error("The `dark` config option must be either 'media' or 'class'.")
