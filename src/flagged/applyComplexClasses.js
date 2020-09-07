@@ -95,7 +95,7 @@ function buildUtilityMap(css, lookupTree) {
   let index = 0
   const utilityMap = {}
 
-  lookupTree.walkRules(rule => {
+  function handle(rule) {
     const utilityNames = extractUtilityNames(rule.selector)
 
     utilityNames.forEach((utilityName, i) => {
@@ -113,27 +113,10 @@ function buildUtilityMap(css, lookupTree) {
       })
       index++
     })
-  })
+  }
 
-  css.walkRules(rule => {
-    const utilityNames = extractUtilityNames(rule.selector)
-
-    utilityNames.forEach((utilityName, i) => {
-      if (utilityMap[utilityName] === undefined) {
-        utilityMap[utilityName] = []
-      }
-
-      utilityMap[utilityName].push({
-        index,
-        utilityName,
-        classPosition: i,
-        get rule() {
-          return cloneRuleWithParent(rule)
-        },
-      })
-      index++
-    })
-  })
+  lookupTree.walkRules(handle)
+  css.walkRules(handle)
 
   return utilityMap
 }
@@ -203,68 +186,75 @@ function makeExtractUtilityRules(css, lookupTree, config) {
   }
 }
 
+function findParent(rule, predicate) {
+  let parent = rule.parent
+  while (parent) {
+    if (predicate(parent)) {
+      return parent
+    }
+
+    parent = parent.parent
+  }
+
+  throw new Error('No parent could be found')
+}
+
 function processApplyAtRules(css, lookupTree, config) {
   const extractUtilityRules = makeExtractUtilityRules(css, lookupTree, config)
 
   do {
-    css.walkRules(rule => {
-      const applyRules = []
+    css.walkAtRules('apply', applyRule => {
+      const parent = applyRule.parent // Direct parent
+      const nearestParentRule = findParent(applyRule, r => r.type === 'rule')
+      const currentUtilityNames = extractUtilityNames(nearestParentRule.selector)
 
-      // Only walk direct children to avoid issues with nesting plugins
-      rule.each(child => {
-        if (child.type === 'atrule' && child.name === 'apply') {
-          applyRules.unshift(child)
-        }
-      })
+      const [
+        importantEntries,
+        applyUtilityNames,
+        important = importantEntries.length > 0,
+      ] = _.partition(applyRule.params.split(/[\s\t\n]+/g), n => n === '!important')
 
-      applyRules.forEach(applyRule => {
-        const [
-          importantEntries,
-          applyUtilityNames,
-          important = importantEntries.length > 0,
-        ] = _.partition(applyRule.params.split(/[\s\t\n]+/g), n => n === '!important')
-
-        const currentUtilityNames = extractUtilityNames(rule.selector)
-
-        if (_.intersection(applyUtilityNames, currentUtilityNames).length > 0) {
-          const currentUtilityName = _.intersection(applyUtilityNames, currentUtilityNames)[0]
-          throw rule.error(
-            `You cannot \`@apply\` the \`${currentUtilityName}\` utility here because it creates a circular dependency.`
-          )
-        }
-
-        // Extract any post-apply declarations and re-insert them after apply rules
-        const afterRule = rule.clone({ raws: {} })
-        afterRule.nodes = afterRule.nodes.slice(rule.index(applyRule) + 1)
-        rule.nodes = rule.nodes.slice(0, rule.index(applyRule) + 1)
-
-        // Sort applys to match CSS source order
-        const applys = extractUtilityRules(applyUtilityNames, applyRule)
-
-        // Get new rules with the utility portion of the selector replaced with the new selector
-        const rulesToInsert = [
-          ...applys.map(applyUtility => {
-            return generateRulesFromApply(applyUtility, rule.selectors)
-          }),
-          afterRule,
-        ]
-
-        const { nodes } = _.tap(postcss.root({ nodes: rulesToInsert }), root =>
-          root.walkDecls(d => {
-            d.important = important
-          })
+      if (_.intersection(applyUtilityNames, currentUtilityNames).length > 0) {
+        const currentUtilityName = _.intersection(applyUtilityNames, currentUtilityNames)[0]
+        throw parent.error(
+          `You cannot \`@apply\` the \`${currentUtilityName}\` utility here because it creates a circular dependency.`
         )
+      }
 
-        const mergedRules = mergeAdjacentRules(rule, nodes)
+      // Extract any post-apply declarations and re-insert them after apply rules
+      const afterRule = parent.clone({ raws: {} })
+      afterRule.nodes = afterRule.nodes.slice(parent.index(applyRule) + 1)
+      parent.nodes = parent.nodes.slice(0, parent.index(applyRule) + 1)
 
-        applyRule.remove()
-        rule.after(mergedRules)
-      })
+      // Sort applys to match CSS source order
+      const applys = extractUtilityRules(applyUtilityNames, applyRule)
+
+      // Get new rules with the utility portion of the selector replaced with the new selector
+      const rulesToInsert = []
+
+      applys.forEach(
+        nearestParentRule === parent
+          ? util => rulesToInsert.push(generateRulesFromApply(util, parent.selectors))
+          : util => util.rule.nodes.forEach(n => afterRule.append(n.clone()))
+      )
+
+      rulesToInsert.push(afterRule)
+
+      const { nodes } = _.tap(postcss.root({ nodes: rulesToInsert }), root =>
+        root.walkDecls(d => {
+          d.important = important
+        })
+      )
+
+      const mergedRules = mergeAdjacentRules(nearestParentRule, nodes)
+
+      applyRule.remove()
+      parent.after(mergedRules)
 
       // If the base rule has nothing in it (all applys were pseudo or responsive variants),
       // remove the rule fuggit.
-      if (rule.nodes.length === 0) {
-        rule.remove()
+      if (parent.nodes.length === 0) {
+        parent.remove()
       }
     })
 

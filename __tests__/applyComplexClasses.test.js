@@ -996,3 +996,101 @@ test('you can apply classes to a rule with multiple selectors', () => {
     expect(result.warnings().length).toBe(0)
   })
 })
+
+test('you can apply classes in a nested rule', () => {
+  const input = `
+    .selector {
+      &:hover {
+        @apply text-white;
+      }
+    }
+    `
+
+  const expected = `
+    .selector {
+      &:hover {
+        --text-opacity: 1;
+        color: #fff;
+        color: rgba(255, 255, 255, var(--text-opacity));
+      }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('you can apply classes in a nested @atrule', () => {
+  const input = `
+    .selector {
+      @media (min-width: 200px) {
+        @apply overflow-hidden;
+      }
+    }
+  `
+
+  const expected = `
+    .selector {
+      @media (min-width: 200px) {
+        overflow: hidden;
+      }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('you can apply classes in a custom nested @atrule', () => {
+  const input = `
+    .selector {
+      @screen md {
+        @apply w-2/6;
+      }
+    }
+  `
+
+  const expected = `
+    .selector {
+      @media (min-width: 768px) {
+        width: 33.333333%;
+      }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('you can deeply apply classes in a custom nested @atrule', () => {
+  const input = `
+    .selector {
+      .subselector {
+        @screen md {
+          @apply w-2/6;
+        }
+      }
+    }
+  `
+
+  const expected = `
+    .selector {
+      .subselector {
+        @media (min-width: 768px) {
+          width: 33.333333%
+        }
+      }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
