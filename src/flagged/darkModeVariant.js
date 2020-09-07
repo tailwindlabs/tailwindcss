@@ -38,7 +38,7 @@ export default {
 
           modified.walkRules(rule => {
             rule.selectors = rule.selectors.map(selector => {
-              return `${prefix('.dark ')} ${selector}`
+              return `${prefix('.dark')} ${selector}`
             })
           })
 
