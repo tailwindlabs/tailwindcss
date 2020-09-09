@@ -14,3 +14,17 @@ updates:
     prefix: fix
     prefix-development: chore
     include: scope
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: daily
+    time: '00:00'
+  open-pull-requests-limit: 10
+  reviewers:
+    - adamwathan
+  assignees:
+    - adamwathan
+  commit-message:
+    prefix: fix
+    prefix-development: chore
+    include: scope
