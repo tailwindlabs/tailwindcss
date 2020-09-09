@@ -209,6 +209,12 @@ test('responsive horizontal padding can be included by default', () => {
     [container()],
     config({
       theme: {
+        screens: {
+          sm: '576px',
+          md: { min: '768px' },
+          lg: { 'min-width': '992px' },
+          xl: { min: '1200px', max: '1600px' },
+        },
         container: {
           padding: {
             default: '1rem',
