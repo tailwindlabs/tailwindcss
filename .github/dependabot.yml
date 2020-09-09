@@ -10,8 +10,6 @@ updates:
     - adamwathan
   assignees:
     - adamwathan
-  labels:
-    - dependencies
   commit-message:
     prefix: fix
     prefix-development: chore
