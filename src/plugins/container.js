@@ -49,7 +49,11 @@ function mapMinWidthsToPadding(minWidths, screens, paddings) {
 
   _.each(minWidths, minWidth => {
     Object.keys(screens).forEach(screen => {
-      if (`${screens[screen]}` === `${minWidth}`) {
+      const screenMinWidth = _.isPlainObject(screens[screen])
+        ? screens[screen].min || screens[screen]['min-width']
+        : screens[screen]
+
+      if (`${screenMinWidth}` === `${minWidth}`) {
         mapping.push({
           screen,
           minWidth,
