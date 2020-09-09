@@ -66,9 +66,10 @@ export default {
       '11/12': '91.666667%',
       full: '100%',
     },
-    inset: theme => ({
+    inset: (theme, { negative }) => ({
       auto: 'auto',
       ...theme('spacing'),
+      ...negative(theme('spacing')),
     }),
     minWidth: {
       '0': '0',
