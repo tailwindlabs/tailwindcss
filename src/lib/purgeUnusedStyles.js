@@ -112,14 +112,17 @@ export default function purgeUnusedUtilities(config, configChanged) {
       defaultExtractor: content => {
         // Capture as liberally as possible, including things like `h-(screen-1.5)`
         const broadMatches = content.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || []
+        const broadMatchesWithoutTrailingSlash = broadMatches.map(match => _.trimEnd(match, '\\'))
 
         // Capture classes within other delimiters like .block(class="w-1/2") in Pug
         const innerMatches = content.match(/[^<>"'`\s.(){}[\]#=%]*[^<>"'`\s.(){}[\]#=%:]/g) || []
 
+        const matches = broadMatches.concat(broadMatchesWithoutTrailingSlash).concat(innerMatches)
+
         if (_.get(config, 'purge.preserveHtmlElements', true)) {
-          return [...htmlTags].concat(broadMatches).concat(innerMatches)
+          return [...htmlTags].concat(matches)
         } else {
-          return broadMatches.concat(innerMatches)
+          return matches
         }
       },
       ...config.purge.options,
