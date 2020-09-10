@@ -1,5 +1,6 @@
 version: 2
 updates:
+# Dependabot will automatically update npm packages
 - package-ecosystem: npm
   directory: "/"
   schedule:
@@ -14,6 +15,7 @@ updates:
     prefix: fix
     prefix-development: chore
     include: scope
+# Dependabot will automatically update packages in GitHub actions
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
