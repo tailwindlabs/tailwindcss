@@ -32,9 +32,6 @@ export default function getAllConfigs(config) {
 
   if (flagEnabled(config, 'darkModeVariant')) {
     configs.unshift(darkModeVariant)
-    if (Array.isArray(config.plugins)) {
-      config.plugins = [...darkModeVariant.plugins, ...config.plugins]
-    }
   }
 
   return [config, ...configs]

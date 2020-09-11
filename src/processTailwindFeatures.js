@@ -14,7 +14,9 @@ import purgeUnusedStyles from './lib/purgeUnusedStyles'
 import corePlugins from './corePlugins'
 import processPlugins from './util/processPlugins'
 import cloneNodes from './util/cloneNodes'
-import { issueFlagNotices } from './featureFlags.js'
+import { issueFlagNotices, flagEnabled } from './featureFlags.js'
+
+import darkModeVariantPlugin from './flagged/darkModeVariantPlugin'
 
 import hash from 'object-hash'
 
@@ -31,7 +33,15 @@ export default function(getConfig) {
     if (configChanged) {
       issueFlagNotices(config)
 
-      processedPlugins = processPlugins([...corePlugins(config), ...config.plugins], config)
+      processedPlugins = processPlugins(
+        [
+          ...corePlugins(config),
+          ...[flagEnabled(config, 'darkModeVariant') ? darkModeVariantPlugin : () => {}],
+          ...config.plugins,
+        ],
+        config
+      )
+
       getProcessedPlugins = function() {
         return {
           ...processedPlugins,
