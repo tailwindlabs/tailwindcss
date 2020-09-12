@@ -4,6 +4,9 @@ module.exports = {
   theme: {
     extend: {},
   },
-  future: {},
+  future: {
+    // removeDeprecatedGapUtilities: true,
+    // purgeLayersByDefault: true,
+  },
   variants: {},
 }
