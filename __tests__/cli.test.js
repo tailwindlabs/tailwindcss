@@ -4,6 +4,7 @@ import cli from '../src/cli/main'
 import * as constants from '../src/constants'
 import * as utils from '../src/cli/utils'
 import runInTempDirectory from '../jest/runInTempDirectory'
+import featureFlags from '../src/featureFlags'
 
 describe('cli', () => {
   const inputCssPath = path.resolve(__dirname, 'fixtures/tailwind-input.css')
@@ -92,6 +93,16 @@ describe('cli', () => {
     it('compiles CSS file without autoprefixer', () => {
       return cli(['build', inputCssPath, '--no-autoprefixer']).then(() => {
         expect(process.stdout.write.mock.calls[0][0]).not.toContain('-ms-input-placeholder')
+      })
+    })
+
+    it('creates a Tailwind config file with future flags', () => {
+      return runInTempDirectory(() => {
+        return cli(['init']).then(() => {
+          featureFlags.future.forEach(flag => {
+            expect(utils.readFile(constants.defaultConfigFile)).toContain(`${flag}: true`)
+          })
+        })
       })
     })
   })

@@ -17,11 +17,16 @@ export const options = [
     usage: '-p',
     description: 'Generate postcss.config.js file.',
   },
+  {
+    usage: '--future',
+    description: 'Add enable future flags within simple config stub',
+  },
 ]
 
 export const optionMap = {
   full: ['full'],
   postcss: ['p'],
+  future: ['future'],
 }
 
 /**
@@ -35,15 +40,33 @@ export function run(cliParams, cliOptions) {
   return new Promise(resolve => {
     utils.header()
 
-    const full = cliOptions.full
     const file = cliParams[0] || constants.defaultConfigFile
     const simplePath = utils.getSimplePath(file)
 
     utils.exists(file) && utils.die(colors.file(simplePath), 'already exists.')
 
-    const stubFile = full ? constants.defaultConfigStubFile : constants.simpleConfigStubFile
+    const stubFile = cliOptions.full
+      ? constants.defaultConfigStubFile
+      : constants.simpleConfigStubFile
 
-    utils.copyFile(stubFile, file)
+    if (!cliOptions.future) {
+      utils.copyFile(stubFile, file)
+    } else {
+      const config = require(stubFile)
+      const { future: flags } = require('../../featureFlags').default
+
+      flags.forEach(flag => {
+        config.future[flag] = true
+      })
+
+      utils.writeFile(
+        file,
+        `module.exports = ${JSON.stringify(config, null, 2).replace(/"([^"]+)":/g, '$1:')}\n`
+      )
+      utils.footer()
+      resolve()
+      return
+    }
 
     utils.log()
     utils.log(emoji.yes, 'Created Tailwind config file:', colors.file(simplePath))
