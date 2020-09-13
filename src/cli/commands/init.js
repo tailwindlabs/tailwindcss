@@ -63,9 +63,6 @@ export function run(cliParams, cliOptions) {
         file,
         `module.exports = ${JSON.stringify(config, null, 2).replace(/"([^"]+)":/g, '$1:')}\n`
       )
-      utils.footer()
-      resolve()
-      return
     }
 
     utils.log()
