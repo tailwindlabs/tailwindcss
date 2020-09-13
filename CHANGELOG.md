@@ -7,9 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [1.8.9] - 2020-09-13
+
+### Fixed
+
 - Add negative spacing values to inset plugin in the `extendedSpacingScale` experiment ([#2358](https://github.com/tailwindlabs/tailwindcss/pull/2358))
-- Add `future` section to config stubs ([#2372](https://github.com/tailwindlabs/tailwindcss/pull/2372), [3090b98](https://github.com/tailwindlabs/tailwindcss/commit/3090b98ece766b1046abe5bbaa94204e811f7fac))
 - Fix issue where `!important` was stripped from declarations within rules that used `@apply` with `applyComplexClasses` ([#2376](https://github.com/tailwindlabs/tailwindcss/pull/2376))
+
+### Changed
+
+- Add `future` section to config stubs ([#2372](https://github.com/tailwindlabs/tailwindcss/pull/2372), [3090b98](https://github.com/tailwindlabs/tailwindcss/commit/3090b98ece766b1046abe5bbaa94204e811f7fac))
 
 ## [1.8.8] - 2020-09-11
 
@@ -911,7 +920,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.8...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.9...HEAD
+[1.8.9]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.8...v1.8.9
 [1.8.8]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.7...v1.8.8
 [1.8.7]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.6...v1.8.7
 [1.8.6]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.5...v1.8.6
