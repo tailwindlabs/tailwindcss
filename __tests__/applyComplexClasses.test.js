@@ -1094,3 +1094,53 @@ test('you can deeply apply classes in a custom nested @atrule', () => {
     expect(result.warnings().length).toBe(0)
   })
 })
+
+test('declarations within a rule that uses @apply can be !important', () => {
+  const input = `
+    .foo {
+      @apply text-center;
+      float: left;
+      display: block !important;
+    }
+  `
+
+  const expected = `
+  .foo {
+    text-align: center;
+    float: left;
+    display: block !important;
+  }
+  `
+
+  expect.assertions(2)
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('declarations within a rule that uses @apply with !important remain not !important', () => {
+  const input = `
+    .foo {
+      @apply text-center !important;
+      float: left;
+      display: block !important;
+    }
+  `
+
+  const expected = `
+  .foo {
+    text-align: center !important;
+    float: left;
+    display: block !important;
+  }
+  `
+
+  expect.assertions(2)
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})

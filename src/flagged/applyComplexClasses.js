@@ -238,15 +238,13 @@ function processApplyAtRules(css, lookupTree, config) {
           : util => util.rule.nodes.forEach(n => afterRule.append(n.clone()))
       )
 
-      rulesToInsert.push(afterRule)
-
       const { nodes } = _.tap(postcss.root({ nodes: rulesToInsert }), root =>
         root.walkDecls(d => {
           d.important = important
         })
       )
 
-      const mergedRules = mergeAdjacentRules(nearestParentRule, nodes)
+      const mergedRules = mergeAdjacentRules(nearestParentRule, [...nodes, afterRule])
 
       applyRule.remove()
       parent.after(mergedRules)
