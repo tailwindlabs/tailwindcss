@@ -88,9 +88,7 @@ const defaultVariantGenerators = config => ({
   even: generatePseudoClassVariant('nth-child(even)', 'even'),
 })
 
-function prependStackableVariants(atRule, variants) {
-  const stackableVariants = ['dark', 'motion-safe', 'motion-reduce']
-
+function prependStackableVariants(atRule, variants, stackableVariants) {
   if (!_.some(variants, v => stackableVariants.includes(v))) {
     return variants
   }
@@ -117,6 +115,11 @@ export default function(config, { variantGenerators: pluginVariantGenerators }) 
       ...pluginVariantGenerators,
     }
 
+    const stackableVariants = ['motion-safe', 'motion-reduce']
+    const darkEnabled =
+      config.experimental === 'all' || _.get(config, ['experimental', 'darkModeVariant'], false)
+    if (darkEnabled) stackableVariants.unshift('dark')
+
     let variantsFound = false
 
     do {
@@ -132,7 +135,7 @@ export default function(config, { variantGenerators: pluginVariantGenerators }) 
           responsiveParent.append(atRule)
         }
 
-        const remainingVariants = prependStackableVariants(atRule, variants)
+        const remainingVariants = prependStackableVariants(atRule, variants, stackableVariants)
 
         _.forEach(_.without(ensureIncludesDefault(remainingVariants), 'responsive'), variant => {
           if (!variantGenerators[variant]) {
