@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [1.8.10] - 2020-09-14
+
 ### Fixed
 
 - Prevent new `dark` experiment from causing third-party `dark` variants to inherit stacking behavior ([#2382](https://github.com/tailwindlabs/tailwindcss/pull/2382))
@@ -922,7 +926,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.9...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.10...HEAD
+[1.8.9]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.9...v1.8.10
 [1.8.9]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.8...v1.8.9
 [1.8.8]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.7...v1.8.8
 [1.8.7]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.6...v1.8.7
