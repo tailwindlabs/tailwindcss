@@ -22,7 +22,7 @@ test('dark mode variants cannot be generated without enabling the dark mode expe
   return expect(run(input, { experimental: {} })).rejects.toThrow()
 })
 
-test("user-defined dark mode variants won't stack when the dark mode experiment is disabled", () => {
+test('user-defined dark mode variants do not stack when the dark mode experiment is disabled', () => {
   const input = `
     @variants dark, hover {
       .text-red {

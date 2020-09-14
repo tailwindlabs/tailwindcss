@@ -12,35 +12,38 @@ const getClassNameFromSelector = useMemo(
   selector => selector
 )
 
-export default function generateVariantFunction(generator) {
-  return (container, config) => {
-    const cloned = postcss.root({ nodes: container.clone().nodes })
+export default function generateVariantFunction(generator, options = {}) {
+  return {
+    options,
+    handler: (container, config) => {
+      const cloned = postcss.root({ nodes: container.clone().nodes })
 
-    container.before(
-      _.defaultTo(
-        generator({
-          container: cloned,
-          separator: config.separator,
-          modifySelectors: modifierFunction => {
-            cloned.each(rule => {
-              if (rule.type !== 'rule') {
-                return
-              }
+      container.before(
+        _.defaultTo(
+          generator({
+            container: cloned,
+            separator: config.separator,
+            modifySelectors: modifierFunction => {
+              cloned.each(rule => {
+                if (rule.type !== 'rule') {
+                  return
+                }
 
-              rule.selectors = rule.selectors.map(selector => {
-                return modifierFunction({
-                  get className() {
-                    return getClassNameFromSelector(selector)
-                  },
-                  selector,
+                rule.selectors = rule.selectors.map(selector => {
+                  return modifierFunction({
+                    get className() {
+                      return getClassNameFromSelector(selector)
+                    },
+                    selector,
+                  })
                 })
               })
-            })
-            return cloned
-          },
-        }),
-        cloned
-      ).nodes
-    )
+              return cloned
+            },
+          }),
+          cloned
+        ).nodes
+      )
+    },
   }
 }

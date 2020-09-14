@@ -24,32 +24,38 @@ function ensureIncludesDefault(variants) {
 
 const defaultVariantGenerators = config => ({
   default: generateVariantFunction(() => {}),
-  'motion-safe': generateVariantFunction(({ container, separator, modifySelectors }) => {
-    const modified = modifySelectors(({ selector }) => {
-      return buildSelectorVariant(selector, 'motion-safe', separator, message => {
-        throw container.error(message)
+  'motion-safe': generateVariantFunction(
+    ({ container, separator, modifySelectors }) => {
+      const modified = modifySelectors(({ selector }) => {
+        return buildSelectorVariant(selector, 'motion-safe', separator, message => {
+          throw container.error(message)
+        })
       })
-    })
-    const mediaQuery = postcss.atRule({
-      name: 'media',
-      params: '(prefers-reduced-motion: no-preference)',
-    })
-    mediaQuery.append(modified)
-    container.append(mediaQuery)
-  }),
-  'motion-reduce': generateVariantFunction(({ container, separator, modifySelectors }) => {
-    const modified = modifySelectors(({ selector }) => {
-      return buildSelectorVariant(selector, 'motion-reduce', separator, message => {
-        throw container.error(message)
+      const mediaQuery = postcss.atRule({
+        name: 'media',
+        params: '(prefers-reduced-motion: no-preference)',
       })
-    })
-    const mediaQuery = postcss.atRule({
-      name: 'media',
-      params: '(prefers-reduced-motion: reduce)',
-    })
-    mediaQuery.append(modified)
-    container.append(mediaQuery)
-  }),
+      mediaQuery.append(modified)
+      container.append(mediaQuery)
+    },
+    { unstable_stack: true }
+  ),
+  'motion-reduce': generateVariantFunction(
+    ({ container, separator, modifySelectors }) => {
+      const modified = modifySelectors(({ selector }) => {
+        return buildSelectorVariant(selector, 'motion-reduce', separator, message => {
+          throw container.error(message)
+        })
+      })
+      const mediaQuery = postcss.atRule({
+        name: 'media',
+        params: '(prefers-reduced-motion: reduce)',
+      })
+      mediaQuery.append(modified)
+      container.append(mediaQuery)
+    },
+    { unstable_stack: true }
+  ),
   'group-hover': generateVariantFunction(({ modifySelectors, separator }) => {
     const parser = selectorParser(selectors => {
       selectors.walkClasses(sel => {
@@ -115,10 +121,9 @@ export default function(config, { variantGenerators: pluginVariantGenerators }) 
       ...pluginVariantGenerators,
     }
 
-    const stackableVariants = ['motion-safe', 'motion-reduce']
-    const darkEnabled =
-      config.experimental === 'all' || _.get(config, ['experimental', 'darkModeVariant'], false)
-    if (darkEnabled) stackableVariants.unshift('dark')
+    const stackableVariants = Object.entries(variantGenerators)
+      .filter(([_variant, { options }]) => options.unstable_stack)
+      .map(([variant]) => variant)
 
     let variantsFound = false
 
@@ -143,7 +148,7 @@ export default function(config, { variantGenerators: pluginVariantGenerators }) 
               `Your config mentions the "${variant}" variant, but "${variant}" doesn't appear to be a variant. Did you forget or misconfigure a plugin that supplies that variant?`
             )
           }
-          variantGenerators[variant](atRule, config)
+          variantGenerators[variant].handler(atRule, config)
         })
 
         atRule.remove()
