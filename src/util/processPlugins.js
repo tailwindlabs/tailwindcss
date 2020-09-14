@@ -126,8 +126,8 @@ export default function(plugins, config) {
       addBase: baseStyles => {
         pluginBaseStyles.push(wrapWithLayer(parseStyles(baseStyles), 'base'))
       },
-      addVariant: (name, generator) => {
-        pluginVariantGenerators[name] = generateVariantFunction(generator)
+      addVariant: (name, generator, options = {}) => {
+        pluginVariantGenerators[name] = generateVariantFunction(generator, options)
       },
     })
   })

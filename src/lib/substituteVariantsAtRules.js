@@ -24,32 +24,38 @@ function ensureIncludesDefault(variants) {
 
 const defaultVariantGenerators = config => ({
   default: generateVariantFunction(() => {}),
-  'motion-safe': generateVariantFunction(({ container, separator, modifySelectors }) => {
-    const modified = modifySelectors(({ selector }) => {
-      return buildSelectorVariant(selector, 'motion-safe', separator, message => {
-        throw container.error(message)
+  'motion-safe': generateVariantFunction(
+    ({ container, separator, modifySelectors }) => {
+      const modified = modifySelectors(({ selector }) => {
+        return buildSelectorVariant(selector, 'motion-safe', separator, message => {
+          throw container.error(message)
+        })
       })
-    })
-    const mediaQuery = postcss.atRule({
-      name: 'media',
-      params: '(prefers-reduced-motion: no-preference)',
-    })
-    mediaQuery.append(modified)
-    container.append(mediaQuery)
-  }),
-  'motion-reduce': generateVariantFunction(({ container, separator, modifySelectors }) => {
-    const modified = modifySelectors(({ selector }) => {
-      return buildSelectorVariant(selector, 'motion-reduce', separator, message => {
-        throw container.error(message)
+      const mediaQuery = postcss.atRule({
+        name: 'media',
+        params: '(prefers-reduced-motion: no-preference)',
       })
-    })
-    const mediaQuery = postcss.atRule({
-      name: 'media',
-      params: '(prefers-reduced-motion: reduce)',
-    })
-    mediaQuery.append(modified)
-    container.append(mediaQuery)
-  }),
+      mediaQuery.append(modified)
+      container.append(mediaQuery)
+    },
+    { unstable_stack: true }
+  ),
+  'motion-reduce': generateVariantFunction(
+    ({ container, separator, modifySelectors }) => {
+      const modified = modifySelectors(({ selector }) => {
+        return buildSelectorVariant(selector, 'motion-reduce', separator, message => {
+          throw container.error(message)
+        })
+      })
+      const mediaQuery = postcss.atRule({
+        name: 'media',
+        params: '(prefers-reduced-motion: reduce)',
+      })
+      mediaQuery.append(modified)
+      container.append(mediaQuery)
+    },
+    { unstable_stack: true }
+  ),
   'group-hover': generateVariantFunction(({ modifySelectors, separator }) => {
     const parser = selectorParser(selectors => {
       selectors.walkClasses(sel => {
@@ -88,9 +94,7 @@ const defaultVariantGenerators = config => ({
   even: generatePseudoClassVariant('nth-child(even)', 'even'),
 })
 
-function prependStackableVariants(atRule, variants) {
-  const stackableVariants = ['dark', 'motion-safe', 'motion-reduce']
-
+function prependStackableVariants(atRule, variants, stackableVariants) {
   if (!_.some(variants, v => stackableVariants.includes(v))) {
     return variants
   }
@@ -117,6 +121,10 @@ export default function(config, { variantGenerators: pluginVariantGenerators }) 
       ...pluginVariantGenerators,
     }
 
+    const stackableVariants = Object.entries(variantGenerators)
+      .filter(([_variant, { options }]) => options.unstable_stack)
+      .map(([variant]) => variant)
+
     let variantsFound = false
 
     do {
@@ -132,7 +140,7 @@ export default function(config, { variantGenerators: pluginVariantGenerators }) 
           responsiveParent.append(atRule)
         }
 
-        const remainingVariants = prependStackableVariants(atRule, variants)
+        const remainingVariants = prependStackableVariants(atRule, variants, stackableVariants)
 
         _.forEach(_.without(ensureIncludesDefault(remainingVariants), 'responsive'), variant => {
           if (!variantGenerators[variant]) {
@@ -140,7 +148,7 @@ export default function(config, { variantGenerators: pluginVariantGenerators }) 
               `Your config mentions the "${variant}" variant, but "${variant}" doesn't appear to be a variant. Did you forget or misconfigure a plugin that supplies that variant?`
             )
           }
-          variantGenerators[variant](atRule, config)
+          variantGenerators[variant].handler(atRule, config)
         })
 
         atRule.remove()

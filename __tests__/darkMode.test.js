@@ -1,5 +1,6 @@
 import postcss from 'postcss'
 import tailwind from '../src/index'
+import createPlugin from '../src/util/createPlugin'
 
 function run(input, config = {}) {
   return postcss([tailwind({ experimental: { darkModeVariant: true }, ...config })]).process(
@@ -19,6 +20,45 @@ test('dark mode variants cannot be generated without enabling the dark mode expe
 
   expect.assertions(1)
   return expect(run(input, { experimental: {} })).rejects.toThrow()
+})
+
+test('user-defined dark mode variants do not stack when the dark mode experiment is disabled', () => {
+  const input = `
+    @variants dark, hover {
+      .text-red {
+        color: red;
+      }
+    }
+  `
+
+  const expected = `
+    .text-red {
+      color: red;
+    }
+    .custom-dark .custom-dark\\:text-red {
+      color: red;
+    }
+    .hover\\:text-red:hover {
+      color: red;
+    }
+  `
+
+  const userPlugin = createPlugin(function({ addVariant }) {
+    addVariant('dark', function({ modifySelectors }) {
+      modifySelectors(function({ className }) {
+        return `.custom-dark .custom-dark\\:${className}`
+      })
+    })
+  })
+
+  expect.assertions(2)
+
+  return postcss([tailwind({ experimental: { darkModeVariant: false }, plugins: [userPlugin] })])
+    .process(input, { from: undefined })
+    .then(result => {
+      expect(result.css).toMatchCss(expected)
+      expect(result.warnings().length).toBe(0)
+    })
 })
 
 test('generating dark mode variants uses the media strategy by default', () => {
