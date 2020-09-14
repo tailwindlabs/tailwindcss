@@ -72,6 +72,27 @@ test('it can generate checked variants', () => {
   })
 })
 
+test('it can generate selected variants', () => {
+  const input = `
+    @variants selected {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .selected\\:banana::selection { color: yellow; }
+    .selected\\:chocolate::selection { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate active variants', () => {
   const input = `
     @variants active {

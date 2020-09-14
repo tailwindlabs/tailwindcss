@@ -80,6 +80,7 @@ const defaultVariantGenerators = config => ({
     })
     return modifySelectors(({ selector }) => parser.processSync(selector))
   }),
+  selected: generatePseudoClassVariant(':selection', 'selected'),
   hover: generatePseudoClassVariant('hover'),
   'focus-within': generatePseudoClassVariant('focus-within'),
   'focus-visible': generatePseudoClassVariant('focus-visible'),

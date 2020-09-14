@@ -11,6 +11,7 @@ module.exports = {
     'motion-reduce',
     'group-hover',
     'group-focus',
+    'selected',
     'hover',
     'focus-within',
     'focus-visible',
