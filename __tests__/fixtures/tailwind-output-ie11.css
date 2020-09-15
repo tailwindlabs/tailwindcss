@@ -9012,12 +9012,12 @@ video {
 }
 
 .break-normal {
-  overflow-wrap: normal;
+  word-wrap: normal;
   word-break: normal;
 }
 
 .break-words {
-  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .break-all {
@@ -19482,12 +19482,12 @@ video {
   }
 
   .sm\:break-normal {
-    overflow-wrap: normal;
+    word-wrap: normal;
     word-break: normal;
   }
 
   .sm\:break-words {
-    overflow-wrap: break-word;
+    word-wrap: break-word;
   }
 
   .sm\:break-all {
@@ -29922,12 +29922,12 @@ video {
   }
 
   .md\:break-normal {
-    overflow-wrap: normal;
+    word-wrap: normal;
     word-break: normal;
   }
 
   .md\:break-words {
-    overflow-wrap: break-word;
+    word-wrap: break-word;
   }
 
   .md\:break-all {
@@ -40362,12 +40362,12 @@ video {
   }
 
   .lg\:break-normal {
-    overflow-wrap: normal;
+    word-wrap: normal;
     word-break: normal;
   }
 
   .lg\:break-words {
-    overflow-wrap: break-word;
+    word-wrap: break-word;
   }
 
   .lg\:break-all {
@@ -50802,12 +50802,12 @@ video {
   }
 
   .xl\:break-normal {
-    overflow-wrap: normal;
+    word-wrap: normal;
     word-break: normal;
   }
 
   .xl\:break-words {
-    overflow-wrap: break-word;
+    word-wrap: break-word;
   }
 
   .xl\:break-all {
