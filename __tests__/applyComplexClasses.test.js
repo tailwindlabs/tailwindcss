@@ -5,7 +5,7 @@ import tailwind from '../src/index'
 
 function run(input, config = {}) {
   return postcss([
-    tailwind({ experimental: { applyComplexClasses: true }, ...config }),
+    tailwind({ ...config, experimental: { applyComplexClasses: true } }),
   ]).process(input, { from: undefined })
 }
 
