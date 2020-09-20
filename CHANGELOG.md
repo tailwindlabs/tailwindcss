@@ -927,7 +927,7 @@ No release notes
 - Everything!
 
 [unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.10...HEAD
-[1.8.9]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.9...v1.8.10
+[1.8.10]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.9...v1.8.10
 [1.8.9]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.8...v1.8.9
 [1.8.8]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.7...v1.8.8
 [1.8.7]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.6...v1.8.7
