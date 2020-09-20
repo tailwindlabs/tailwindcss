@@ -45,10 +45,14 @@ export function run(cliParams, cliOptions) {
       : constants.simpleConfigStubFile
 
     const config = require(stubFile)
-    const { future: flags } = require('../../featureFlags').default
+    const { future, experimental } = require('../../featureFlags').default
 
-    flags.forEach(flag => {
+    future.forEach(flag => {
       config.future[`// ${flag}`] = true
+    })
+
+    experimental.forEach(flag => {
+      config.experimental[`// ${flag}`] = true
     })
 
     utils.writeFile(

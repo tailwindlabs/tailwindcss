@@ -103,5 +103,15 @@ describe('cli', () => {
         })
       })
     })
+
+    it('creates a Tailwind config file with experimental flags', () => {
+      return runInTempDirectory(() => {
+        return cli(['init']).then(() => {
+          featureFlags.experimental.forEach(flag => {
+            expect(utils.readFile(constants.defaultConfigFile)).toContain(`${flag}: true`)
+          })
+        })
+      })
+    })
   })
 })
