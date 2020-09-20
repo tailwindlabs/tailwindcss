@@ -248,12 +248,3 @@ video {
   max-width: 100%;
   height: auto;
 }
-
-/**
- * Cater for the 'hidden' attribute:
- * https://css-tricks.com/the-hidden-attribute-is-visibly-weak/
- */
-
-[hidden] {
-	display: none !important;
-}

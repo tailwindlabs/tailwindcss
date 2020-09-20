@@ -350,6 +350,7 @@ template {
 
 /**
  * Manually forked from SUIT CSS Base: https://github.com/suitcss/base
+ * Modern reset obtained from: https://github.com/kripod/css-homogenizer
  * A thin layer on top of normalize.css that provides a starting point more
  * suitable for web applications.
  */
@@ -358,20 +359,40 @@ template {
  * Removes the default spacing and border for appropriate elements.
  */
 
-blockquote,
-dl,
-dd,
+p,
 h1,
 h2,
 h3,
 h4,
 h5,
 h6,
-hr,
+blockquote,
+dl,
+dd,
 figure,
-p,
-pre {
+pre,
+hr,
+fieldset,
+ol,
+ul,
+menu {
   margin: 0;
+}
+
+th,
+td,
+legend,
+fieldset,
+ol,
+ul,
+menu {
+  padding: 0;
+}
+
+hr,
+fieldset,
+iframe {
+  border: 0;
 }
 
 button {
@@ -389,16 +410,10 @@ button:focus {
   outline: 5px auto -webkit-focus-ring-color;
 }
 
-fieldset {
-  margin: 0;
-  padding: 0;
-}
-
 ol,
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+ul,
+menu {
+  list-style: none; /* list-style-type */
 }
 
 /**
@@ -410,11 +425,13 @@ ul {
  *    sans-serif font stack as a fallback) as a sane default.
  * 2. Use Tailwind's default "normal" line-height so the user isn't forced
  *    to override it to ensure consistency even when using the default theme.
+ * 3. Prevent overflow caused by long words when absolutely necessary.
  */
 
 html {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; /* 1 */
   line-height: 1.5; /* 2 */
+  overflow-wrap: break-word; /* 3 */
 }
 
 /**
@@ -489,7 +506,12 @@ button,
 }
 
 table {
+  border-spacing: 0;
   border-collapse: collapse;
+}
+
+th {
+  text-align: inherit;
 }
 
 h1,
@@ -497,9 +519,10 @@ h2,
 h3,
 h4,
 h5,
-h6 {
-  font-size: inherit;
-  font-weight: inherit;
+h6,
+th,
+address {
+  font: inherit; /* font-size, font-weight, font-style */
 }
 
 /**
@@ -525,7 +548,6 @@ input,
 optgroup,
 select,
 textarea {
-  padding: 0;
   line-height: inherit;
   color: inherit;
 }
