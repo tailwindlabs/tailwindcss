@@ -35,15 +35,26 @@ export function run(cliParams, cliOptions) {
   return new Promise(resolve => {
     utils.header()
 
-    const full = cliOptions.full
     const file = cliParams[0] || constants.defaultConfigFile
     const simplePath = utils.getSimplePath(file)
 
     utils.exists(file) && utils.die(colors.file(simplePath), 'already exists.')
 
-    const stubFile = full ? constants.defaultConfigStubFile : constants.simpleConfigStubFile
+    const stubFile = cliOptions.full
+      ? constants.defaultConfigStubFile
+      : constants.simpleConfigStubFile
 
-    utils.copyFile(stubFile, file)
+    const config = require(stubFile)
+    const { future: flags } = require('../../featureFlags').default
+
+    flags.forEach(flag => {
+      config.future[`// ${flag}`] = true
+    })
+
+    utils.writeFile(
+      file,
+      `module.exports = ${JSON.stringify(config, null, 2).replace(/"([^-_\d"]+)":/g, '$1:')}\n`
+    )
 
     utils.log()
     utils.log(emoji.yes, 'Created Tailwind config file:', colors.file(simplePath))
