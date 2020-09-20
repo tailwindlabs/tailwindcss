@@ -1,5 +1,6 @@
 module.exports = {
   future: {},
+  experimental: {},
   purge: [],
   target: 'relaxed',
   prefix: '',
