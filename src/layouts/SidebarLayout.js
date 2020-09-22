@@ -167,8 +167,7 @@ function TopLevelNav() {
         Documentation
       </TopLevelLink>
       <TopLevelLink
-        href="/components"
-        isActive={current === 'components'}
+        href="https://tailwindui.com/components"
         className="mt-3 lg:mt-1"
         icon={
           <>
