@@ -48,7 +48,7 @@ This will create new CSS files in the `/dist` folder which you can reference in 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <link rel="stylesheet" href="/dist/tailwind.css" />
+    <link rel="stylesheet" href="dist/tailwind.css" />
     <title>Hello, world!</title>
   </head>
   <body>
