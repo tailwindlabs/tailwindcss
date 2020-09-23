@@ -27,6 +27,10 @@ function wrapWithLayer(rules, layer) {
     .append(cloneNodes(Array.isArray(rules) ? rules : [rules]))
 }
 
+function isKeyframeRule(rule) {
+  return rule.parent && rule.parent.type === 'atrule' && /keyframes$/.test(rule.parent.name)
+}
+
 export default function(plugins, config) {
   const pluginBaseStyles = []
   const pluginComponents = []
@@ -88,7 +92,7 @@ export default function(plugins, config) {
         const styles = postcss.root({ nodes: parseStyles(utilities) })
 
         styles.walkRules(rule => {
-          if (options.respectPrefix) {
+          if (options.respectPrefix && !isKeyframeRule(rule)) {
             rule.selector = applyConfiguredPrefix(rule.selector)
           }
 
@@ -114,7 +118,7 @@ export default function(plugins, config) {
         const styles = postcss.root({ nodes: parseStyles(components) })
 
         styles.walkRules(rule => {
-          if (options.respectPrefix) {
+          if (options.respectPrefix && !isKeyframeRule(rule)) {
             rule.selector = applyConfiguredPrefix(rule.selector)
           }
         })

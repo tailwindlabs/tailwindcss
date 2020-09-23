@@ -2003,3 +2003,50 @@ test('plugins can extend variants', () => {
       expect(result.css).toMatchCss(expected)
     })
 })
+
+test('keyframes are not escaped', () => {
+  const { components, utilities } = processPlugins(
+    [
+      function({ addUtilities, addComponents }) {
+        addComponents({
+          '@keyframes foo': {
+            '25.001%': {
+              color: 'black',
+            },
+          },
+        })
+        addUtilities({
+          '@keyframes bar': {
+            '75.001%': {
+              color: 'white',
+            },
+          },
+        })
+      },
+    ],
+    makeConfig()
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants {
+        @keyframes foo {
+          25.001% {
+            color: black
+          }
+        }
+      }
+    }
+  `)
+  expect(css(utilities)).toMatchCss(`
+    @layer utilities {
+      @variants {
+        @keyframes bar {
+          75.001% {
+            color: white
+          }
+        }
+      }
+    }
+  `)
+})
