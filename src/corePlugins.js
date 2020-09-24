@@ -46,6 +46,11 @@ import lineHeight from './plugins/lineHeight'
 import listStylePosition from './plugins/listStylePosition'
 import listStyleType from './plugins/listStyleType'
 import margin from './plugins/margin'
+import markerColor from './plugins/markerColor'
+import markerSpace from './plugins/markerSpace'
+import markerOpacity from './plugins/markerOpacity'
+import markerListStyleType from './plugins/markerListStyleType'
+import markerContentType from './plugins/markerContentType'
 import maxHeight from './plugins/maxHeight'
 import maxWidth from './plugins/maxWidth'
 import minHeight from './plugins/minHeight'
@@ -166,6 +171,11 @@ export default function({ corePlugins: corePluginConfig }) {
     listStylePosition,
     listStyleType,
     margin,
+    markerColor,
+    markerSpace,
+    markerOpacity,
+    markerListStyleType,
+    markerContentType,
     maxHeight,
     maxWidth,
     minHeight,
