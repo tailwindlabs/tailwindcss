@@ -167,7 +167,7 @@ function TopLevelNav() {
         Documentation
       </TopLevelLink>
       <TopLevelLink
-        href="https://tailwindui.com/components"
+        href="https://tailwindui.com/components?utm_source=tailwindcss&utm_medium=navigation"
         className="mt-3 lg:mt-1"
         icon={
           <>
