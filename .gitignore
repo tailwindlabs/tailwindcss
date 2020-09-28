@@ -1,6 +1,7 @@
 /node_modules
 /lib
 /example
+tailwind.config.js
 index.html
 package-lock.json
 yarn-error.log
