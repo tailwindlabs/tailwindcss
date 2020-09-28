@@ -1,6 +1,6 @@
 export default {
   rose: {
-    '050': '#fff1f2',
+    '50': '#fff1f2',
     '100': '#ffe4e6',
     '200': '#fecdd3',
     '300': '#fda4af',
@@ -12,7 +12,7 @@ export default {
     '900': '#881337',
   },
   pink: {
-    '050': '#fdf2f8',
+    '50': '#fdf2f8',
     '100': '#fce7f3',
     '200': '#fbcfe8',
     '300': '#f9a8d4',
@@ -24,7 +24,7 @@ export default {
     '900': '#831843',
   },
   fuchsia: {
-    '050': '#fdf4ff',
+    '50': '#fdf4ff',
     '100': '#fae8ff',
     '200': '#f5d0fe',
     '300': '#f0abfc',
@@ -36,7 +36,7 @@ export default {
     '900': '#701a75',
   },
   purple: {
-    '050': '#faf5ff',
+    '50': '#faf5ff',
     '100': '#f3e8ff',
     '200': '#e9d5ff',
     '300': '#d8b4fe',
@@ -48,7 +48,7 @@ export default {
     '900': '#581c87',
   },
   violet: {
-    '050': '#f5f3ff',
+    '50': '#f5f3ff',
     '100': '#ede9fe',
     '200': '#ddd6fe',
     '300': '#c4b5fd',
@@ -60,7 +60,7 @@ export default {
     '900': '#4c1d95',
   },
   indigo: {
-    '050': '#eef2ff',
+    '50': '#eef2ff',
     '100': '#e0e7ff',
     '200': '#c7d2fe',
     '300': '#a5b4fc',
@@ -72,7 +72,7 @@ export default {
     '900': '#312e81',
   },
   blue: {
-    '050': '#eff6ff',
+    '50': '#eff6ff',
     '100': '#dbeafe',
     '200': '#bfdbfe',
     '300': '#93c5fd',
@@ -84,19 +84,19 @@ export default {
     '900': '#1e3a8a',
   },
   lightBlue: {
-    '050': '#f0f9ff',
+    '50': '#f0f9ff',
     '100': '#e0f2fe',
     '200': '#bae6fd',
-    '400': '#7dd3fc',
-    '500': '#38bdf8',
-    '600': '#0ea5e9',
+    '300': '#7dd3fc',
+    '400': '#38bdf8',
+    '500': '#0ea5e9',
     '600': '#0284c7',
     '700': '#0369a1',
     '800': '#075985',
     '900': '#0c4a6e',
   },
   turquoise: {
-    '050': '#effdfd',
+    '50': '#effdfd',
     '100': '#d2f7f9',
     '200': '#aaf0f4',
     '300': '#76e4ec',
@@ -108,7 +108,7 @@ export default {
     '900': '#0d4f5a',
   },
   cyan: {
-    '050': '#ecfeff',
+    '50': '#ecfeff',
     '100': '#cffafe',
     '200': '#a5f3fc',
     '300': '#67e8f9',
@@ -120,7 +120,7 @@ export default {
     '900': '#164e63',
   },
   teal: {
-    '050': '#f0fdfa',
+    '50': '#f0fdfa',
     '100': '#ccfbf1',
     '200': '#99f6e4',
     '300': '#5eead4',
@@ -132,7 +132,7 @@ export default {
     '900': '#134e4a',
   },
   emerald: {
-    '050': '#ecfdf5',
+    '50': '#ecfdf5',
     '100': '#d1fae5',
     '200': '#a7f3d0',
     '300': '#6ee7b7',
@@ -144,7 +144,7 @@ export default {
     '900': '#064e3b',
   },
   green: {
-    '050': '#f0fdf4',
+    '50': '#f0fdf4',
     '100': '#dcfce7',
     '200': '#bbf7d0',
     '300': '#86efac',
@@ -156,7 +156,7 @@ export default {
     '900': '#14532d',
   },
   lime: {
-    '050': '#f7fee7',
+    '50': '#f7fee7',
     '100': '#ecfccb',
     '200': '#d9f99d',
     '300': '#bef264',
@@ -168,7 +168,7 @@ export default {
     '900': '#365314',
   },
   yellow: {
-    '050': '#fefce8',
+    '50': '#fefce8',
     '100': '#fef9c3',
     '200': '#fef08a',
     '300': '#fde047',
@@ -180,7 +180,7 @@ export default {
     '900': '#713f12',
   },
   amber: {
-    '050': '#fffbeb',
+    '50': '#fffbeb',
     '100': '#fef3c7',
     '200': '#fde68a',
     '300': '#fcd34d',
@@ -192,7 +192,7 @@ export default {
     '900': '#78350f',
   },
   orange: {
-    '050': '#fff7ed',
+    '50': '#fff7ed',
     '100': '#ffedd5',
     '200': '#fed7aa',
     '300': '#fdba74',
@@ -204,7 +204,7 @@ export default {
     '900': '#7c2d12',
   },
   red: {
-    '050': '#fef2f2',
+    '50': '#fef2f2',
     '100': '#fee2e2',
     '200': '#fecaca',
     '300': '#fca5a5',
@@ -216,7 +216,7 @@ export default {
     '900': '#7f1d1d',
   },
   trueGray: {
-    '050': '#fafafa',
+    '50': '#fafafa',
     '100': '#f5f5f5',
     '200': '#e6e6e6',
     '300': '#d6d6d6',
@@ -228,7 +228,7 @@ export default {
     '900': '#1f1f1f',
   },
   gray: {
-    '050': '#fafafa',
+    '50': '#fafafa',
     '100': '#f4f4f5',
     '200': '#e4e4e7',
     '300': '#d4d4d8',
@@ -240,7 +240,7 @@ export default {
     '900': '#18181b',
   },
   coolGray: {
-    '050': '#f9fafb',
+    '50': '#f9fafb',
     '100': '#f4f5f7',
     '200': '#e5e7eb',
     '300': '#d2d6dc',
