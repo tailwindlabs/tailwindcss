@@ -6,33 +6,25 @@ import defaultLineHeights from '../flagged/defaultLineHeights.js'
 import extendedFontSizeScale from '../flagged/extendedFontSizeScale.js'
 import darkModeVariant from '../flagged/darkModeVariant.js'
 import standardFontWeights from '../flagged/standardFontWeights'
+import additionalBreakpoint from '../flagged/additionalBreakpoint'
 
 export default function getAllConfigs(config) {
   const configs = [defaultConfig]
-
-  if (flagEnabled(config, 'uniformColorPalette')) {
-    configs.unshift(uniformColorPalette)
+  const features = {
+    uniformColorPalette,
+    extendedSpacingScale,
+    defaultLineHeights,
+    extendedFontSizeScale,
+    standardFontWeights,
+    darkModeVariant,
+    additionalBreakpoint,
   }
 
-  if (flagEnabled(config, 'extendedSpacingScale')) {
-    configs.unshift(extendedSpacingScale)
-  }
-
-  if (flagEnabled(config, 'defaultLineHeights')) {
-    configs.unshift(defaultLineHeights)
-  }
-
-  if (flagEnabled(config, 'extendedFontSizeScale')) {
-    configs.unshift(extendedFontSizeScale)
-  }
-
-  if (flagEnabled(config, 'standardFontWeights')) {
-    configs.unshift(standardFontWeights)
-  }
-
-  if (flagEnabled(config, 'darkModeVariant')) {
-    configs.unshift(darkModeVariant)
-  }
+  Object.keys(features).forEach(feature => {
+    if (flagEnabled(config, feature)) {
+      configs.unshift(features[feature])
+    }
+  })
 
   return [config, ...configs]
 }
