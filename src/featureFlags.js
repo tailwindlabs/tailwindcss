@@ -12,6 +12,7 @@ const featureFlags = {
     'applyComplexClasses',
     'darkModeVariant',
     'standardFontWeights',
+    'additionalBreakpoint',
   ],
 }
 
