@@ -7,6 +7,8 @@ import map from 'lodash/map'
 import get from 'lodash/get'
 import toPath from 'lodash/toPath'
 import negateValue from './negateValue'
+import { corePluginList } from '../corePlugins'
+import configurePlugins from './configurePlugins'
 
 const configUtils = {
   negative(scale) {
@@ -187,6 +189,14 @@ function resolveVariants([firstConfig, ...variantConfigs]) {
   }, {})
 }
 
+function resolveCorePlugins(corePluginConfigs) {
+  const result = [...corePluginConfigs].reverse().reduce((resolved, corePluginConfig) => {
+    return configurePlugins(corePluginConfig, resolved)
+  }, Object.keys(corePluginList))
+
+  return result
+}
+
 export default function resolveConfig(configs) {
   const allConfigs = extractPluginConfigs(configs)
 
@@ -196,6 +206,7 @@ export default function resolveConfig(configs) {
         mergeExtensions(mergeThemes(map(allConfigs, t => get(t, 'theme', {}))))
       ),
       variants: resolveVariants(allConfigs.map(c => c.variants)),
+      corePlugins: resolveCorePlugins(allConfigs.map(c => c.corePlugins)),
     },
     ...allConfigs
   )

@@ -1,3 +1,4 @@
+import { corePluginList } from '../src/corePlugins'
 import resolveConfig from '../src/util/resolveConfig'
 
 test('prefix key overrides default prefix', () => {
@@ -23,7 +24,7 @@ test('prefix key overrides default prefix', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: 'tw-',
     important: false,
     separator: ':',
@@ -63,7 +64,7 @@ test('important key overrides default important', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '',
     important: true,
     separator: ':',
@@ -103,7 +104,7 @@ test('important (selector) key overrides default important', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '',
     important: '#app',
     separator: ':',
@@ -143,7 +144,7 @@ test('separator key overrides default separator', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '',
     important: false,
     separator: '__',
@@ -200,7 +201,7 @@ test('theme key is merged instead of replaced', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -269,7 +270,7 @@ test('variants key is merged instead of replaced', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -339,7 +340,7 @@ test('a global variants list replaces the default', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -387,7 +388,7 @@ test('missing top level keys are pulled from the default config', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -437,7 +438,7 @@ test('functions in the default theme section are lazily evaluated', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -505,7 +506,7 @@ test('functions in the user theme section are lazily evaluated', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -575,7 +576,7 @@ test('theme values in the extend section extend the existing theme', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -659,7 +660,7 @@ test('theme values in the extend section extend the user theme', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -731,7 +732,7 @@ test('theme values in the extend section can extend values that are depended on 
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -789,7 +790,7 @@ test('theme values in the extend section are not deeply merged', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -839,7 +840,7 @@ test('the theme function can use a default value if the key is missing', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -896,7 +897,7 @@ test('the theme function can resolve function values', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -964,7 +965,7 @@ test('the theme function can resolve deep function values', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -1029,7 +1030,7 @@ test('theme values in the extend section are lazily evaluated', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -1094,7 +1095,7 @@ test('lazily evaluated values have access to the config utils', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -1225,7 +1226,7 @@ test('custom properties are multiplied by -1 for negative values', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -1343,7 +1344,7 @@ test('more than two config objects can be resolved', () => {
 
   const result = resolveConfig([firstConfig, secondConfig, thirdConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -1414,7 +1415,7 @@ test('plugin config modifications are applied', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: 'tw-',
     important: false,
     separator: ':',
@@ -1462,7 +1463,7 @@ test('user config takes precedence over plugin config modifications', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: 'user-',
     important: false,
     separator: ':',
@@ -1522,7 +1523,7 @@ test('plugin config can register plugins that also have config', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: 'tw-',
     important: true,
     separator: '__',
@@ -1577,7 +1578,7 @@ test('plugin configs take precedence over plugin configs registered by that plug
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: 'outer-',
     important: false,
     separator: ':',
@@ -1642,7 +1643,7 @@ test('plugin theme extensions are added even if user overrides top-level theme c
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '',
     important: false,
     separator: ':',
@@ -1713,7 +1714,7 @@ test('user theme extensions take precedence over plugin theme extensions with th
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '',
     important: false,
     separator: ':',
@@ -1779,7 +1780,7 @@ test('variants can be defined as a function', () => {
 
   const result = resolveConfig([userConfig, otherConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '',
     important: false,
     separator: ':',
@@ -1796,5 +1797,57 @@ test('variants can be defined as a function', () => {
       cursor: ['focus', 'checked', 'hover'],
     },
     plugins: userConfig.plugins,
+  })
+})
+
+test('core plugin configuration builds on the default list when starting with an empty object', () => {
+  const userConfig = {
+    corePlugins: { display: false },
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {},
+    corePlugins: {},
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toMatchObject({
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {},
+    corePlugins: Object.keys(corePluginList).filter(c => c !== 'display'),
+  })
+})
+
+test('core plugin configurations stack', () => {
+  const userConfig = {
+    corePlugins: { display: false },
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {},
+    corePlugins: ['float', 'display', 'padding'],
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toMatchObject({
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {},
+    corePlugins: ['float', 'padding'],
   })
 })
