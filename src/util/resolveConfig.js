@@ -191,6 +191,9 @@ function resolveVariants([firstConfig, ...variantConfigs]) {
 
 function resolveCorePlugins(corePluginConfigs) {
   const result = [...corePluginConfigs].reverse().reduce((resolved, corePluginConfig) => {
+    if (isFunction(corePluginConfig)) {
+      return corePluginConfig({ corePlugins: resolved })
+    }
     return configurePlugins(corePluginConfig, resolved)
   }, Object.keys(corePluginList))
 

@@ -210,3 +210,90 @@ test('tailwind.config.js is picked up by default when passing an empty object', 
       })
   })
 })
+
+test('when custom config is an array the default config is not included', () => {
+  return postcss([
+    tailwind([
+      {
+        theme: {
+          extend: {
+            colors: {
+              black: 'black',
+            },
+            backgroundColor: theme => theme('colors'),
+          },
+        },
+        corePlugins: ['backgroundColor'],
+      },
+      {
+        theme: {
+          extend: { colors: { white: 'white' } },
+        },
+      },
+    ]),
+  ])
+    .process(
+      `
+        @tailwind utilities
+      `,
+      { from: undefined }
+    )
+    .then(result => {
+      const expected = `
+        .bg-black {
+          background-color: black;
+        }
+        .bg-white {
+          background-color: white;
+        }
+      `
+
+      expect(result.css).toMatchCss(expected)
+    })
+})
+
+test('when custom config is an array in a file the default config is not included', () => {
+  return inTempDirectory(() => {
+    fs.writeFileSync(
+      path.resolve(defaultConfigFile),
+      `module.exports = [
+        {
+          theme: {
+            extend: {
+              colors: {
+                black: 'black',
+              },
+              backgroundColor: theme => theme('colors'),
+            },
+          },
+          corePlugins: ['backgroundColor'],
+        },
+        {
+          theme: {
+            extend: { colors: { white: 'white' } },
+          },
+        }
+      ]`
+    )
+
+    return postcss([tailwind()])
+      .process(
+        `
+          @tailwind utilities
+        `,
+        { from: undefined }
+      )
+      .then(result => {
+        const expected = `
+          .bg-black {
+            background-color: black;
+          }
+          .bg-white {
+            background-color: white;
+          }
+        `
+
+        expect(result.css).toMatchCss(expected)
+      })
+  })
+})

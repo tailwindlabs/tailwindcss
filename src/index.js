@@ -14,6 +14,10 @@ import { defaultConfigFile } from './constants'
 import defaultConfig from '../stubs/defaultConfig.stub.js'
 
 function resolveConfigPath(filePath) {
+  // require('tailwindcss')([{ theme: ..., variants: ... }, {...}])
+  if (Array.isArray(filePath)) {
+    return undefined
+  }
   // require('tailwindcss')({ theme: ..., variants: ... })
   if (_.isObject(filePath) && !_.has(filePath, 'config') && !_.isEmpty(filePath)) {
     return undefined
@@ -45,7 +49,7 @@ function resolveConfigPath(filePath) {
 }
 
 const getConfigFunction = config => () => {
-  if (_.isUndefined(config) && !_.isObject(config)) {
+  if (_.isUndefined(config)) {
     return resolveConfig([...getAllConfigs(defaultConfig)])
   }
 
@@ -59,6 +63,10 @@ const getConfigFunction = config => () => {
   }
 
   const configObject = _.isObject(config) ? _.get(config, 'config', config) : require(config)
+
+  if (Array.isArray(configObject)) {
+    return resolveConfig([...configObject].reverse())
+  }
 
   return resolveConfig([...getAllConfigs(configObject)])
 }

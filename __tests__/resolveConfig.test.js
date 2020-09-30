@@ -1796,7 +1796,6 @@ test('variants can be defined as a function', () => {
       rotate: ['responsive', 'focus'],
       cursor: ['focus', 'checked', 'hover'],
     },
-    plugins: userConfig.plugins,
   })
 })
 
@@ -1831,6 +1830,12 @@ test('core plugin configurations stack', () => {
     corePlugins: { display: false },
   }
 
+  const otherConfig = {
+    corePlugins: ({ corePlugins }) => {
+      return [...corePlugins, 'margin']
+    },
+  }
+
   const defaultConfig = {
     prefix: '',
     important: false,
@@ -1840,7 +1845,7 @@ test('core plugin configurations stack', () => {
     corePlugins: ['float', 'display', 'padding'],
   }
 
-  const result = resolveConfig([userConfig, defaultConfig])
+  const result = resolveConfig([userConfig, otherConfig, defaultConfig])
 
   expect(result).toMatchObject({
     prefix: '',
@@ -1848,6 +1853,6 @@ test('core plugin configurations stack', () => {
     separator: ':',
     theme: {},
     variants: {},
-    corePlugins: ['float', 'padding'],
+    corePlugins: ['float', 'padding', 'margin'],
   })
 })

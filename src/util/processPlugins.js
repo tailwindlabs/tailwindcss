@@ -74,7 +74,7 @@ export default function(plugins, config) {
           return config.target === 'browserslist' ? browserslistTarget : config.target
         }
 
-        const [defaultTarget, targetOverrides] = getConfigValue('target')
+        const [defaultTarget, targetOverrides] = getConfigValue('target', 'relaxed')
 
         const target = _.get(targetOverrides, path, defaultTarget)
 
