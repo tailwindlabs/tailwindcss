@@ -100,8 +100,10 @@ If you'd like to add any negative z-index classes that take the same form as Tai
   // tailwind.config.js
   module.exports = {
     theme: {
-      zIndex: {
-+       '-10': '-10',
+      extend: {
+        zIndex: {
++         '-10': '-10',
+        }
       }
     }
   }

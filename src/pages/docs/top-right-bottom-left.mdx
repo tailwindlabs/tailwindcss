@@ -172,8 +172,10 @@ If you'd like to add any negative top/right/bottom/left classes that take the sa
   // tailwind.config.js
   module.exports = {
     theme: {
-      inset: {
-+       '-16': '-4rem',
+      extend: {
+        inset: {
++         '-16': '-4rem',
+        }
       }
     }
   }
