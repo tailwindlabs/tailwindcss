@@ -7,6 +7,7 @@ import extendedFontSizeScale from '../flagged/extendedFontSizeScale.js'
 import darkModeVariant from '../flagged/darkModeVariant.js'
 import standardFontWeights from '../flagged/standardFontWeights'
 import additionalBreakpoint from '../flagged/additionalBreakpoint'
+import redesignedColorPalette from '../flagged/redesignedColorPalette'
 
 export default function getAllConfigs(config) {
   const configs = [defaultConfig]
@@ -18,6 +19,7 @@ export default function getAllConfigs(config) {
     standardFontWeights,
     darkModeVariant,
     additionalBreakpoint,
+    redesignedColorPalette,
   }
 
   Object.keys(features).forEach(feature => {

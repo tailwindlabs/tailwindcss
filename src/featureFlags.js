@@ -16,6 +16,7 @@ const featureFlags = {
     'applyComplexClasses',
     'darkModeVariant',
     'additionalBreakpoint',
+    'redesignedColorPalette',
   ],
 }
 
