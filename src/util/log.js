@@ -19,4 +19,10 @@ export default {
       console.warn(chalk.bold.magenta('risk'), '-', message)
     })
   },
+  error(messages) {
+    console.warn('')
+    messages.forEach(message => {
+      console.warn(chalk.bold.red('error'), '-', message)
+    })
+  },
 }
