@@ -211,26 +211,26 @@ test('tailwind.config.js is picked up by default when passing an empty object', 
   })
 })
 
-test('when custom config is an array the default config is not included', () => {
+test('the default config can be overridden using the presets key', () => {
   return postcss([
-    tailwind([
-      {
-        theme: {
-          extend: {
-            colors: {
-              black: 'black',
+    tailwind({
+      presets: [
+        {
+          theme: {
+            extend: {
+              colors: {
+                black: 'black',
+              },
+              backgroundColor: theme => theme('colors'),
             },
-            backgroundColor: theme => theme('colors'),
           },
+          corePlugins: ['backgroundColor'],
         },
-        corePlugins: ['backgroundColor'],
+      ],
+      theme: {
+        extend: { colors: { white: 'white' } },
       },
-      {
-        theme: {
-          extend: { colors: { white: 'white' } },
-        },
-      },
-    ]),
+    }),
   ])
     .process(
       `
@@ -252,48 +252,65 @@ test('when custom config is an array the default config is not included', () => 
     })
 })
 
-test('when custom config is an array in a file the default config is not included', () => {
-  return inTempDirectory(() => {
-    fs.writeFileSync(
-      path.resolve(defaultConfigFile),
-      `module.exports = [
+test('presets can have their own presets', () => {
+  return postcss([
+    tailwind({
+      presets: [
         {
+          theme: {
+            colors: { red: '#dd0000' },
+          },
+        },
+        {
+          presets: [
+            {
+              theme: {
+                colors: {
+                  transparent: 'transparent',
+                  red: '#ff0000',
+                },
+              },
+            },
+          ],
           theme: {
             extend: {
               colors: {
                 black: 'black',
+                red: '#ee0000',
               },
               backgroundColor: theme => theme('colors'),
             },
           },
           corePlugins: ['backgroundColor'],
         },
-        {
-          theme: {
-            extend: { colors: { white: 'white' } },
-          },
-        }
-      ]`
+      ],
+      theme: {
+        extend: { colors: { white: 'white' } },
+      },
+    }),
+  ])
+    .process(
+      `
+        @tailwind utilities
+      `,
+      { from: undefined }
     )
+    .then(result => {
+      const expected = `
+        .bg-transparent {
+          background-color: transparent;
+        }
+        .bg-red {
+          background-color: #ee0000;
+        }
+        .bg-black {
+          background-color: black;
+        }
+        .bg-white {
+          background-color: white;
+        }
+      `
 
-    return postcss([tailwind()])
-      .process(
-        `
-          @tailwind utilities
-        `,
-        { from: undefined }
-      )
-      .then(result => {
-        const expected = `
-          .bg-black {
-            background-color: black;
-          }
-          .bg-white {
-            background-color: white;
-          }
-        `
-
-        expect(result.css).toMatchCss(expected)
-      })
-  })
+      expect(result.css).toMatchCss(expected)
+    })
 })

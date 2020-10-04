@@ -7,9 +7,13 @@ import extendedFontSizeScale from '../flagged/extendedFontSizeScale.js'
 import darkModeVariant from '../flagged/darkModeVariant.js'
 import standardFontWeights from '../flagged/standardFontWeights'
 import additionalBreakpoint from '../flagged/additionalBreakpoint'
+import { flatMap, get } from 'lodash'
 
-export default function getAllConfigs(config) {
-  const configs = [defaultConfig]
+export default function getAllConfigs(config, defaultPresets = [defaultConfig]) {
+  const configs = flatMap([...get(config, 'presets', defaultPresets)].reverse(), preset => {
+    return getAllConfigs(preset, [])
+  })
+
   const features = {
     uniformColorPalette,
     extendedSpacingScale,
