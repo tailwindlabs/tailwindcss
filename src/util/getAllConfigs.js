@@ -1,6 +1,5 @@
 import defaultConfig from '../../stubs/defaultConfig.stub.js'
 import { flagEnabled } from '../featureFlags'
-import uniformColorPalette from '../flagged/uniformColorPalette.js'
 import extendedSpacingScale from '../flagged/extendedSpacingScale.js'
 import defaultLineHeights from '../flagged/defaultLineHeights.js'
 import extendedFontSizeScale from '../flagged/extendedFontSizeScale.js'
@@ -12,7 +11,6 @@ import redesignedColorPalette from '../flagged/redesignedColorPalette'
 export default function getAllConfigs(config) {
   const configs = [defaultConfig]
   const features = {
-    uniformColorPalette,
     extendedSpacingScale,
     defaultLineHeights,
     extendedFontSizeScale,
