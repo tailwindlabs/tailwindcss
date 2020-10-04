@@ -480,6 +480,7 @@ module.exports = {
       'span-10': 'span 10 / span 10',
       'span-11': 'span 11 / span 11',
       'span-12': 'span 12 / span 12',
+      'span-full': '1 / -1',
     },
     gridColumnStart: {
       auto: 'auto',
@@ -530,6 +531,7 @@ module.exports = {
       'span-4': 'span 4 / span 4',
       'span-5': 'span 5 / span 5',
       'span-6': 'span 6 / span 6',
+      'span-full': '1 / -1',
     },
     gridRowStart: {
       auto: 'auto',
