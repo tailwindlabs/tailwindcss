@@ -6,28 +6,44 @@ export default function() {
   return function({ addUtilities, e, theme, variants, target, corePlugins }) {
     const colors = flattenColorPalette(theme('borderColor'))
 
-    const getProperties = value => {
+    const getProperties = (property, value) => {
       if (target('borderColor') === 'ie11') {
-        return { 'border-color': value }
+        return { [property]: value }
       }
 
       if (corePlugins('borderOpacity')) {
         return withAlphaVariable({
           color: value,
-          property: 'border-color',
+          property,
           variable: '--border-opacity',
         })
       }
 
-      return { 'border-color': value }
+      return { borderColor: value }
     }
 
-    const utilities = _.fromPairs(
-      _.map(_.omit(colors, 'default'), (value, modifier) => {
-        return [`.${e(`border-${modifier}`)}`, getProperties(value)]
-      })
-    )
+    const generators = [
+      function generateBorderColor(value, modifier) {
+        return {
+          [`.${e(`border${modifier}`)}`]: getProperties('border-color', value),
+        }
+      },
+      function generateBorderColorPerThingy(value, modifier) {
+        return {
+          [`.${e(`border-t${modifier}`)}`]: getProperties('borderTopColor', value), // { borderTopColor: `${value}` },
+          [`.${e(`border-r${modifier}`)}`]: getProperties('borderRightColor', value), // { borderRightColor: `${value}` },
+          [`.${e(`border-b${modifier}`)}`]: getProperties('borderBottomColor', value), // { borderBottomColor: `${value}` },
+          [`.${e(`border-l${modifier}`)}`]: getProperties('borderLeftColor', value), // { borderLeftColor: `${value}` },
+        }
+      },
+    ]
 
-    addUtilities(utilities, variants('borderColor'))
+    const utilities = _.flatMap(generators, (generator) => {
+      return _.flatMap(colors, (value, modifier) => {
+        return generator(value, modifier === 'default' ? '' : `-${modifier}`)
+      })
+    })
+
+    addUtilities(utilities, variants('border'))
   }
 }
