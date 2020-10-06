@@ -40,20 +40,20 @@ const tailwindApplyPlaceholder = selectorParser.attribute({
 })
 
 function generateRulesFromApply({ rule, utilityName: className, classPosition }, replaceWiths) {
-  const parser = selectorParser(selectors => {
+  const parser = selectorParser((selectors) => {
     let i = 0
-    selectors.walkClasses(c => {
+    selectors.walkClasses((c) => {
       if (classPosition === i++ && c.value === className) {
         c.replaceWith(tailwindApplyPlaceholder)
       }
     })
   })
 
-  const processedSelectors = _.flatMap(rule.selectors, selector => {
+  const processedSelectors = _.flatMap(rule.selectors, (selector) => {
     // You could argue we should make this replacement at the AST level, but if we believe
     // the placeholder string is safe from collisions then it is safe to do this is a simple
     // string replacement, and much, much faster.
-    return replaceWiths.map(replaceWith =>
+    return replaceWiths.map((replaceWith) =>
       parser.processSync(selector).replace('[__TAILWIND-APPLY-PLACEHOLDER__]', replaceWith)
     )
   })
@@ -75,20 +75,20 @@ function generateRulesFromApply({ rule, utilityName: className, classPosition },
   return current
 }
 
-const extractUtilityNamesParser = selectorParser(selectors => {
+const extractUtilityNamesParser = selectorParser((selectors) => {
   let classes = []
-  selectors.walkClasses(c => classes.push(c.value))
+  selectors.walkClasses((c) => classes.push(c.value))
   return classes
 })
 
 const extractUtilityNames = useMemo(
-  selector => extractUtilityNamesParser.transformSync(selector),
-  selector => selector
+  (selector) => extractUtilityNamesParser.transformSync(selector),
+  (selector) => selector
 )
 
 const cloneRuleWithParent = useMemo(
-  rule => rule.clone({ parent: rule.parent }),
-  rule => rule
+  (rule) => rule.clone({ parent: rule.parent }),
+  (rule) => rule
 )
 
 function buildUtilityMap(css, lookupTree) {
@@ -124,7 +124,7 @@ function buildUtilityMap(css, lookupTree) {
 function mergeAdjacentRules(initialRule, rulesToInsert) {
   let previousRule = initialRule
 
-  rulesToInsert.forEach(toInsert => {
+  rulesToInsert.forEach((toInsert) => {
     if (
       toInsert.type === 'rule' &&
       previousRule.type === 'rule' &&
@@ -146,14 +146,14 @@ function mergeAdjacentRules(initialRule, rulesToInsert) {
       previousRule = toInsert
     }
 
-    toInsert.walk(n => {
+    toInsert.walk((n) => {
       if (n.nodes && n.nodes.length === 0) {
         n.remove()
       }
     })
   })
 
-  return rulesToInsert.filter(r => r.nodes.length > 0)
+  return rulesToInsert.filter((r) => r.nodes.length > 0)
 }
 
 function makeExtractUtilityRules(css, lookupTree, config) {
@@ -162,7 +162,7 @@ function makeExtractUtilityRules(css, lookupTree, config) {
   return function extractUtilityRules(utilityNames, rule) {
     const combined = []
 
-    utilityNames.forEach(utilityName => {
+    utilityNames.forEach((utilityName) => {
       if (utilityMap[utilityName] === undefined) {
         // Look for prefixed utility in case the user has goofed
         const prefixedUtility = prefixSelector(config.prefix, `.${utilityName}`).slice(1)
@@ -203,16 +203,16 @@ function processApplyAtRules(css, lookupTree, config) {
   const extractUtilityRules = makeExtractUtilityRules(css, lookupTree, config)
 
   do {
-    css.walkAtRules('apply', applyRule => {
+    css.walkAtRules('apply', (applyRule) => {
       const parent = applyRule.parent // Direct parent
-      const nearestParentRule = findParent(applyRule, r => r.type === 'rule')
+      const nearestParentRule = findParent(applyRule, (r) => r.type === 'rule')
       const currentUtilityNames = extractUtilityNames(nearestParentRule.selector)
 
       const [
         importantEntries,
         applyUtilityNames,
         important = importantEntries.length > 0,
-      ] = _.partition(applyRule.params.split(/[\s\t\n]+/g), n => n === '!important')
+      ] = _.partition(applyRule.params.split(/[\s\t\n]+/g), (n) => n === '!important')
 
       if (_.intersection(applyUtilityNames, currentUtilityNames).length > 0) {
         const currentUtilityName = _.intersection(applyUtilityNames, currentUtilityNames)[0]
@@ -234,12 +234,12 @@ function processApplyAtRules(css, lookupTree, config) {
 
       applys.forEach(
         nearestParentRule === parent
-          ? util => rulesToInsert.push(generateRulesFromApply(util, parent.selectors))
-          : util => util.rule.nodes.forEach(n => afterRule.append(n.clone()))
+          ? (util) => rulesToInsert.push(generateRulesFromApply(util, parent.selectors))
+          : (util) => util.rule.nodes.forEach((n) => afterRule.append(n.clone()))
       )
 
-      const { nodes } = _.tap(postcss.root({ nodes: rulesToInsert }), root =>
-        root.walkDecls(d => {
+      const { nodes } = _.tap(postcss.root({ nodes: rulesToInsert }), (root) =>
+        root.walkDecls((d) => {
           d.important = important
         })
       )
@@ -306,14 +306,14 @@ export default function applyComplexClasses(config, getProcessedPlugins, configC
                 `,
                 { from: undefined }
               )
-              .then(result => {
+              .then((result) => {
                 defaultTailwindTree = result
                 return defaultTailwindTree
               })
           }
         : () => Promise.resolve(defaultTailwindTree)
 
-    return generateLookupTree().then(result => {
+    return generateLookupTree().then((result) => {
       return processApplyAtRules(css, result.root, config)
     })
   }

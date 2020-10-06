@@ -6,7 +6,7 @@ export default function() {
   return function({ addUtilities, e, theme, variants, target, corePlugins }) {
     const colors = flattenColorPalette(theme('borderColor'))
 
-    const getProperties = value => {
+    const getProperties = (value) => {
       if (target('borderColor') === 'ie11') {
         return { 'border-color': value }
       }

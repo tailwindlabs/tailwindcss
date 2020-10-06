@@ -31,7 +31,7 @@ test('opacity variables are given to colors defined as closures', () => {
     }),
   ])
     .process('@tailwind utilities', { from: undefined })
-    .then(result => {
+    .then((result) => {
       const expected = `
         .text-primary {
           color: rgba(31,31,31,var(--text-opacity,1))

@@ -6,8 +6,8 @@ import htmlTags from 'html-tags'
 import { flagEnabled } from '../featureFlags'
 
 function removeTailwindMarkers(css) {
-  css.walkAtRules('tailwind', rule => rule.remove())
-  css.walkComments(comment => {
+  css.walkAtRules('tailwind', (rule) => rule.remove())
+  css.walkComments((comment) => {
     switch (comment.text.trim()) {
       case 'tailwind start base':
       case 'tailwind end base':
@@ -77,7 +77,7 @@ export default function purgeUnusedUtilities(config, configChanged) {
           ? ['utilities']
           : _.get(config, 'purge.layers', ['base', 'components', 'utilities'])
 
-      css.walkComments(comment => {
+      css.walkComments((comment) => {
         switch (comment.text.trim()) {
           case `purgecss start ignore`:
             comment.before(postcss.comment({ text: 'purgecss end ignore' }))
@@ -89,7 +89,7 @@ export default function purgeUnusedUtilities(config, configChanged) {
           default:
             break
         }
-        layers.forEach(layer => {
+        layers.forEach((layer) => {
           switch (comment.text.trim()) {
             case `tailwind start ${layer}`:
               comment.text = 'purgecss end ignore'
@@ -109,10 +109,10 @@ export default function purgeUnusedUtilities(config, configChanged) {
     removeTailwindMarkers,
     purgecss({
       content: Array.isArray(config.purge) ? config.purge : config.purge.content,
-      defaultExtractor: content => {
+      defaultExtractor: (content) => {
         // Capture as liberally as possible, including things like `h-(screen-1.5)`
         const broadMatches = content.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || []
-        const broadMatchesWithoutTrailingSlash = broadMatches.map(match => _.trimEnd(match, '\\'))
+        const broadMatchesWithoutTrailingSlash = broadMatches.map((match) => _.trimEnd(match, '\\'))
 
         // Capture classes within other delimiters like .block(class="w-1/2") in Pug
         const innerMatches = content.match(/[^<>"'`\s.(){}[\]#=%]*[^<>"'`\s.(){}[\]#=%:]/g) || []

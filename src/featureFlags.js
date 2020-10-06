@@ -37,7 +37,7 @@ function experimentalFlagsEnabled(config) {
   }
 
   return Object.keys(_.get(config, 'experimental', {})).filter(
-    flag => featureFlags.experimental.includes(flag) && config.experimental[flag]
+    (flag) => featureFlags.experimental.includes(flag) && config.experimental[flag]
   )
 }
 
@@ -46,7 +46,7 @@ function futureFlagsAvailable(config) {
     return []
   }
 
-  return featureFlags.future.filter(flag => !_.has(config, ['future', flag]))
+  return featureFlags.future.filter((flag) => !_.has(config, ['future', flag]))
 }
 
 export function issueFlagNotices(config) {
@@ -56,7 +56,7 @@ export function issueFlagNotices(config) {
 
   if (experimentalFlagsEnabled(config).length > 0) {
     const changes = experimentalFlagsEnabled(config)
-      .map(s => chalk.yellow(s))
+      .map((s) => chalk.yellow(s))
       .join(', ')
 
     log.warn([
@@ -67,7 +67,7 @@ export function issueFlagNotices(config) {
 
   if (futureFlagsAvailable(config).length > 0) {
     const changes = futureFlagsAvailable(config)
-      .map(s => chalk.magenta(s))
+      .map((s) => chalk.magenta(s))
       .join(', ')
 
     log.risk([

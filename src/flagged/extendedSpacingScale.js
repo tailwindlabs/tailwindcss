@@ -77,7 +77,7 @@ export default {
       'min-content': 'min-content',
       'max-content': 'max-content',
     },
-    width: theme => ({
+    width: (theme) => ({
       auto: 'auto',
       ...theme('spacing'),
       screen: '100vw',
@@ -103,7 +103,7 @@ export default {
       'max-content': 'max-content',
       ...breakpoints(theme('screens')),
     }),
-    maxHeight: theme => ({
+    maxHeight: (theme) => ({
       screen: '100vh',
       ...theme('spacing'),
     }),

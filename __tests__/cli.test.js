@@ -97,7 +97,7 @@ describe('cli', () => {
     it('creates a Tailwind config file with future flags', () => {
       return runInTempDirectory(() => {
         return cli(['init']).then(() => {
-          featureFlags.future.forEach(flag => {
+          featureFlags.future.forEach((flag) => {
             expect(utils.readFile(constants.defaultConfigFile)).toContain(`${flag}: true`)
           })
         })

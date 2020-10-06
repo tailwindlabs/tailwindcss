@@ -23,7 +23,7 @@ export default function createUtilityPlugin(themeKey, utilityVariations) {
           toPairs(theme(themeKey)).map(([key, value]) => {
             return [
               `.${e(className(classPrefix, key))}`,
-              fromPairs(castArray(properties).map(property => [property, transformValue(value)])),
+              fromPairs(castArray(properties).map((property) => [property, transformValue(value)])),
             ]
           })
         )

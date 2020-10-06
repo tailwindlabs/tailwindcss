@@ -12,7 +12,7 @@ export default function() {
 
     const utilities = _(colors)
       .map((value, modifier) => {
-        const getColorValue = color => {
+        const getColorValue = (color) => {
           if (_.isFunction(color)) {
             return value({})
           }

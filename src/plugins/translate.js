@@ -4,8 +4,8 @@ export default function() {
   return function({ target, ...args }) {
     if (target('translate') === 'ie11') {
       createUtilityPlugin('translate', [
-        ['translate-x', ['transform'], value => `translateX(${value})`],
-        ['translate-y', ['transform'], value => `translateY(${value})`],
+        ['translate-x', ['transform'], (value) => `translateX(${value})`],
+        ['translate-y', ['transform'], (value) => `translateY(${value})`],
       ])({ target, ...args })
 
       return

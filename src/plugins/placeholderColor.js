@@ -6,7 +6,7 @@ export default function() {
   return function({ addUtilities, e, theme, variants, target, corePlugins }) {
     const colors = flattenColorPalette(theme('placeholderColor'))
 
-    const getProperties = value => {
+    const getProperties = (value) => {
       if (target('placeholderColor') === 'ie11') {
         return { color: value }
       }

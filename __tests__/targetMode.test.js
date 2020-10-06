@@ -16,7 +16,7 @@ it('generates the right CSS in IE11 mode', () => {
 
   return postcss([tailwind({ ...config, target: 'ie11' })])
     .process(input, { from: inputPath })
-    .then(result => {
+    .then((result) => {
       const expected = fs.readFileSync(
         path.resolve(`${__dirname}/fixtures/tailwind-output-ie11.css`),
         'utf8'

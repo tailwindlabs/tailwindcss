@@ -6,7 +6,7 @@ export default function() {
   return function({ addUtilities, e, theme, variants, target, corePlugins }) {
     const colors = flattenColorPalette(theme('backgroundColor'))
 
-    const getProperties = value => {
+    const getProperties = (value) => {
       if (target('backgroundColor') === 'ie11') {
         return { 'background-color': value }
       }

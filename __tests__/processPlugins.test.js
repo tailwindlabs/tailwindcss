@@ -651,7 +651,7 @@ test('plugins can access the current config', () => {
           },
         ]
 
-        _.forEach(config('screens'), breakpoint => {
+        _.forEach(config('screens'), (breakpoint) => {
           containerClasses.push({
             [`@media (min-width: ${breakpoint})`]: {
               '.container': { maxWidth: breakpoint },
@@ -1005,7 +1005,7 @@ test('plugins respect prefix and important options by default when adding utilit
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         .tw-rotate-90 {
           transform: rotate(90deg) !important
@@ -1039,7 +1039,7 @@ test('when important is a selector it is used to scope utilities instead of addi
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         #app .tw-rotate-90 {
           transform: rotate(90deg)
@@ -1072,7 +1072,7 @@ test('when important is a selector it scopes all selectors in a rule, even thoug
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         #app .rotate-90, #app .rotate-1\\/4 {
           transform: rotate(90deg)
@@ -1105,7 +1105,7 @@ test('important utilities are not made double important when important option is
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         .rotate-90 {
           transform: rotate(90deg) !important
@@ -1382,7 +1382,7 @@ test('prefix can optionally be ignored for utilities', () => {
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         .rotate-90 {
           transform: rotate(90deg)
@@ -1420,7 +1420,7 @@ test('important can optionally be ignored for utilities', () => {
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         .rotate-90 {
           transform: rotate(90deg)
@@ -1623,7 +1623,7 @@ test('plugins can be created using the `createPlugin` function', () => {
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         .test-sm {
           test-property: 1rem
@@ -1719,7 +1719,7 @@ test('plugins with extra options can be created using the `createPlugin.withOpti
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         .banana-sm {
           test-property: 1rem
@@ -1815,7 +1815,7 @@ test('plugins created using `createPlugin.withOptions` do not need to be invoked
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         .banana-sm {
           test-property: 1rem
@@ -1900,7 +1900,7 @@ test('the configFunction parameter is optional when using the `createPlugin.with
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         .banana-sm {
           test-property: 1px
@@ -1972,7 +1972,7 @@ test('plugins can extend variants', () => {
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         .opacity-0 {
           opacity: 0

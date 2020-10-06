@@ -6,7 +6,7 @@ export default function() {
   return function({ addUtilities, e, theme, variants, target, corePlugins }) {
     const colors = flattenColorPalette(theme('textColor'))
 
-    const getProperties = value => {
+    const getProperties = (value) => {
       if (target('textColor') === 'ie11') {
         return { color: value }
       }

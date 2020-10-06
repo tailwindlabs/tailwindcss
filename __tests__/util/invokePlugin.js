@@ -16,7 +16,7 @@ export default function(plugin, config) {
 
       return getConfigValue(`variants.${path}`, defaultValue)
     },
-    target: path => {
+    target: (path) => {
       if (_.isString(config.target)) {
         return config.target
       }

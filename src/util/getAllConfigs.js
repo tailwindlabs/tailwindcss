@@ -20,7 +20,7 @@ export default function getAllConfigs(config) {
     additionalBreakpoint,
   }
 
-  Object.keys(features).forEach(feature => {
+  Object.keys(features).forEach((feature) => {
     if (flagEnabled(config, feature)) {
       configs.unshift(features[feature])
     }

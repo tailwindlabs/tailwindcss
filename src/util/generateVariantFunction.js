@@ -3,13 +3,13 @@ import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
 import { useMemo } from './useMemo'
 
-const classNameParser = selectorParser(selectors => {
+const classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
 })
 
 const getClassNameFromSelector = useMemo(
-  selector => classNameParser.transformSync(selector),
-  selector => selector
+  (selector) => classNameParser.transformSync(selector),
+  (selector) => selector
 )
 
 export default function generateVariantFunction(generator, options = {}) {
@@ -23,13 +23,13 @@ export default function generateVariantFunction(generator, options = {}) {
           generator({
             container: cloned,
             separator: config.separator,
-            modifySelectors: modifierFunction => {
-              cloned.each(rule => {
+            modifySelectors: (modifierFunction) => {
+              cloned.each((rule) => {
                 if (rule.type !== 'rule') {
                   return
                 }
 
-                rule.selectors = rule.selectors.map(selector => {
+                rule.selectors = rule.selectors.map((selector) => {
                   return modifierFunction({
                     get className() {
                       return getClassNameFromSelector(selector)

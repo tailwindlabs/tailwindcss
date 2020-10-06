@@ -32,7 +32,7 @@ export const optionMap = {
  * @return {Promise}
  */
 export function run(cliParams, cliOptions) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     utils.header()
 
     const file = cliParams[0] || constants.defaultConfigFile
@@ -47,7 +47,7 @@ export function run(cliParams, cliOptions) {
     const config = require(stubFile)
     const { future: flags } = require('../../featureFlags').default
 
-    flags.forEach(flag => {
+    flags.forEach((flag) => {
       config.future[`// ${flag}`] = true
     })
 
