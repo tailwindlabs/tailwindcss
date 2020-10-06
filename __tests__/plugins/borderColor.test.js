@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import tailwind from '../../src/index'
 
-test('border corner color utilities are generated', () => {
+test('border edges color utilities are generated', () => {
   return postcss([
     tailwind({
       theme: {
@@ -114,7 +114,7 @@ test('border corner color utilities are generated', () => {
     })
 })
 
-test('border corner color utilities without border opacity are generated', () => {
+test('border edges color utilities without border opacity are generated', () => {
   return postcss([
     tailwind({
       theme: {
