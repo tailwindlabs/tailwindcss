@@ -19,7 +19,7 @@ export default function() {
         })
       }
 
-      return { borderColor: value }
+      return { [property]: value }
     }
 
     const generators = [
@@ -30,10 +30,10 @@ export default function() {
       },
       function generateBorderColorPerThingy(value, modifier) {
         return {
-          [`.${e(`border-t${modifier}`)}`]: getProperties('borderTopColor', value), // { borderTopColor: `${value}` },
-          [`.${e(`border-r${modifier}`)}`]: getProperties('borderRightColor', value), // { borderRightColor: `${value}` },
-          [`.${e(`border-b${modifier}`)}`]: getProperties('borderBottomColor', value), // { borderBottomColor: `${value}` },
-          [`.${e(`border-l${modifier}`)}`]: getProperties('borderLeftColor', value), // { borderLeftColor: `${value}` },
+          [`.${e(`border-t${modifier}`)}`]: getProperties('borderTopColor', value),
+          [`.${e(`border-r${modifier}`)}`]: getProperties('borderRightColor', value),
+          [`.${e(`border-b${modifier}`)}`]: getProperties('borderBottomColor', value),
+          [`.${e(`border-l${modifier}`)}`]: getProperties('borderLeftColor', value),
         }
       },
     ]
@@ -44,6 +44,6 @@ export default function() {
       })
     })
 
-    addUtilities(utilities, variants('border'))
+    addUtilities(utilities, variants('borderColor'))
   }
 }
