@@ -34,6 +34,7 @@ test('opacity variables are given to colors defined as closures', () => {
     .then(result => {
       const expected = `
         .text-primary {
+          --text-opacity: 1;
           color: rgba(31,31,31,var(--text-opacity,1))
         }
         .text-opacity-50 {
