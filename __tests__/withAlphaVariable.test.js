@@ -104,6 +104,7 @@ test('it allows a closure to be passed', () => {
       variable: '--bg-opacity',
     })
   ).toEqual({
+    '--bg-opacity': '1',
     'background-color': 'rgba(0, 0, 0, var(--bg-opacity))',
   })
 })

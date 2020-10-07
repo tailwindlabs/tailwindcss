@@ -21,6 +21,7 @@ export function toRgba(color) {
 export default function withAlphaVariable({ color, property, variable }) {
   if (_.isFunction(color)) {
     return {
+      [variable]: '1',
       [property]: color({ opacityVariable: variable }),
     }
   }
