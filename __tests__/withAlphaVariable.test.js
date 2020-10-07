@@ -17,6 +17,7 @@ test('it ignores colors that cannot be parsed', () => {
       variable: '--bg-opacity',
     })
   ).toEqual({
+    '--bg-opacity': '1',
     'background-color': 'currentColor',
   })
 })
@@ -29,6 +30,7 @@ test('it ignores colors that already have an alpha channel', () => {
       variable: '--bg-opacity',
     })
   ).toEqual({
+    '--bg-opacity': '1',
     'background-color': '#ff0000ff',
   })
   expect(
@@ -38,6 +40,7 @@ test('it ignores colors that already have an alpha channel', () => {
       variable: '--bg-opacity',
     })
   ).toEqual({
+    '--bg-opacity': '1',
     'background-color': '#ff000080',
   })
   expect(
@@ -47,6 +50,7 @@ test('it ignores colors that already have an alpha channel', () => {
       variable: '--bg-opacity',
     })
   ).toEqual({
+    '--bg-opacity': '1',
     'background-color': '#f00a',
   })
   expect(
@@ -56,6 +60,7 @@ test('it ignores colors that already have an alpha channel', () => {
       variable: '--bg-opacity',
     })
   ).toEqual({
+    '--bg-opacity': '1',
     'background-color': '#f00f',
   })
   expect(
@@ -65,6 +70,7 @@ test('it ignores colors that already have an alpha channel', () => {
       variable: '--bg-opacity',
     })
   ).toEqual({
+    '--bg-opacity': '1',
     'background-color': 'rgba(255, 255, 255, 1)',
   })
   expect(
@@ -74,6 +80,7 @@ test('it ignores colors that already have an alpha channel', () => {
       variable: '--bg-opacity',
     })
   ).toEqual({
+    '--bg-opacity': '1',
     'background-color': 'rgba(255, 255, 255, 0.5)',
   })
   expect(
@@ -83,6 +90,7 @@ test('it ignores colors that already have an alpha channel', () => {
       variable: '--bg-opacity',
     })
   ).toEqual({
+    '--bg-opacity': '1',
     'background-color': 'hsla(240, 100%, 50%, 1)',
   })
   expect(
@@ -92,6 +100,7 @@ test('it ignores colors that already have an alpha channel', () => {
       variable: '--bg-opacity',
     })
   ).toEqual({
+    '--bg-opacity': '1',
     'background-color': 'hsla(240, 100%, 50%, 0.5)',
   })
 })
@@ -104,6 +113,7 @@ test('it allows a closure to be passed', () => {
       variable: '--bg-opacity',
     })
   ).toEqual({
+    '--bg-opacity': '1',
     'background-color': 'rgba(0, 0, 0, var(--bg-opacity))',
   })
 })
