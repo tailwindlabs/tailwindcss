@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Scaffold new `tailwind.config.js` files with available `future` flags commented out ([#2379](https://github.com/tailwindlabs/tailwindcss/pull/2379))
 - Don't escape keyframe values ([#2432](https://github.com/tailwindlabs/tailwindcss/pull/2432))
-- Add experimental `2xl` breakpoint ([#2468](https://github.com/tailwindlabs/tailwindcss/pull/2471))
+- Add experimental `2xl` breakpoint ([#2468](https://github.com/tailwindlabs/tailwindcss/pull/2468))
 - Add `col-span-full` and `row-span-full` ([#2471](https://github.com/tailwindlabs/tailwindcss/pull/2471))
 - Promote `defaultLineHeights` and `standardFontWeights` from experimental to future
 
