@@ -45,7 +45,7 @@ function resolveConfigPath(filePath) {
 }
 
 const getConfigFunction = config => () => {
-  if (_.isUndefined(config) && !_.isObject(config)) {
+  if (_.isUndefined(config)) {
     return resolveConfig([...getAllConfigs(defaultConfig)])
   }
 

@@ -37,7 +37,7 @@ export default function(getConfig) {
         [
           ...corePlugins(config),
           ...[flagEnabled(config, 'darkModeVariant') ? darkModeVariantPlugin : () => {}],
-          ...config.plugins,
+          ..._.get(config, 'plugins', []),
         ],
         config
       )
