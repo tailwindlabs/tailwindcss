@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `col-span-full` and `row-span-full` ([#2471](https://github.com/tailwindlabs/tailwindcss/pull/2471))
 - Promote `defaultLineHeights` and `standardFontWeights` from experimental to future
 - Add new `presets` config option ([#2474](https://github.com/tailwindlabs/tailwindcss/pull/2474))
+- Make `outline` configurable, `outline-none` more accessible by default, and add `outline-black` and `outline-white` ([#2460](https://github.com/tailwindlabs/tailwindcss/pull/2460))
 
 ## [1.8.12] - 2020-10-07
 
