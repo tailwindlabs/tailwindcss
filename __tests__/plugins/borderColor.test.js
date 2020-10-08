@@ -23,7 +23,7 @@ test('border edges color utilities are generated', () => {
     }),
   ])
     .process('@tailwind utilities', { from: undefined })
-    .then((result) => {
+    .then(result => {
       const expected = `
       .border-red {
         --border-opacity: 1;
@@ -133,7 +133,7 @@ test('border edges color utilities without border opacity are generated', () => 
     }),
   ])
     .process('@tailwind utilities', { from: undefined })
-    .then((result) => {
+    .then(result => {
       const expected = `
       .border-red {
         border-color: #ff0000
