@@ -9014,14 +9014,17 @@ video {
 .break-normal {
   overflow-wrap: normal;
   word-break: normal;
+  white-space: normal;
 }
 
 .break-words {
   overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .break-all {
   word-break: break-all;
+  white-space: normal;
 }
 
 .truncate {
@@ -19484,14 +19487,17 @@ video {
   .sm\:break-normal {
     overflow-wrap: normal;
     word-break: normal;
+    white-space: normal;
   }
 
   .sm\:break-words {
     overflow-wrap: break-word;
+    white-space: normal;
   }
 
   .sm\:break-all {
     word-break: break-all;
+    white-space: normal;
   }
 
   .sm\:truncate {
@@ -29924,14 +29930,17 @@ video {
   .md\:break-normal {
     overflow-wrap: normal;
     word-break: normal;
+    white-space: normal;
   }
 
   .md\:break-words {
     overflow-wrap: break-word;
+    white-space: normal;
   }
 
   .md\:break-all {
     word-break: break-all;
+    white-space: normal;
   }
 
   .md\:truncate {
@@ -40364,14 +40373,17 @@ video {
   .lg\:break-normal {
     overflow-wrap: normal;
     word-break: normal;
+    white-space: normal;
   }
 
   .lg\:break-words {
     overflow-wrap: break-word;
+    white-space: normal;
   }
 
   .lg\:break-all {
     word-break: break-all;
+    white-space: normal;
   }
 
   .lg\:truncate {
@@ -50804,14 +50816,17 @@ video {
   .xl\:break-normal {
     overflow-wrap: normal;
     word-break: normal;
+    white-space: normal;
   }
 
   .xl\:break-words {
     overflow-wrap: break-word;
+    white-space: normal;
   }
 
   .xl\:break-all {
     word-break: break-all;
+    white-space: normal;
   }
 
   .xl\:truncate {

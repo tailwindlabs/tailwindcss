@@ -5,9 +5,10 @@ export default function() {
         '.break-normal': {
           'overflow-wrap': 'normal',
           'word-break': 'normal',
+          'white-space': 'normal',
         },
-        '.break-words': { 'overflow-wrap': 'break-word' },
-        '.break-all': { 'word-break': 'break-all' },
+        '.break-words': { 'overflow-wrap': 'break-word', 'white-space': 'normal' },
+        '.break-all': { 'word-break': 'break-all', 'white-space': 'normal' },
 
         '.truncate': {
           overflow: 'hidden',
