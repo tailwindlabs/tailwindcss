@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add additional small `rotate` and `skew` values ([#2528](https://github.com/tailwindlabs/tailwindcss/pull/2528))
 - Add `xl`, `2xl`, and `3xl` border radius values ([#2529](https://github.com/tailwindlabs/tailwindcss/pull/2529))
 - Support disabling dark mode variants globally ([#2530](https://github.com/tailwindlabs/tailwindcss/pull/2530))
+- Add new utilities for `grid-auto-columns` and `grid-auto-rows` ([#2531](https://github.com/tailwindlabs/tailwindcss/pull/2531))
 
 ## [1.8.12] - 2020-10-07
 

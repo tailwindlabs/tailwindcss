@@ -86,10 +86,12 @@ import zIndex from './plugins/zIndex'
 import gap from './plugins/gap'
 import gridAutoFlow from './plugins/gridAutoFlow'
 import gridTemplateColumns from './plugins/gridTemplateColumns'
+import gridAutoColumns from './plugins/gridAutoColumns'
 import gridColumn from './plugins/gridColumn'
 import gridColumnStart from './plugins/gridColumnStart'
 import gridColumnEnd from './plugins/gridColumnEnd'
 import gridTemplateRows from './plugins/gridTemplateRows'
+import gridAutoRows from './plugins/gridAutoRows'
 import gridRow from './plugins/gridRow'
 import gridRowStart from './plugins/gridRowStart'
 import gridRowEnd from './plugins/gridRowEnd'
@@ -206,10 +208,12 @@ export const corePluginList = {
   gap,
   gridAutoFlow,
   gridTemplateColumns,
+  gridAutoColumns,
   gridColumn,
   gridColumnStart,
   gridColumnEnd,
   gridTemplateRows,
+  gridAutoRows,
   gridRow,
   gridRowStart,
   gridRowEnd,

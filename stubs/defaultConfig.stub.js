@@ -474,6 +474,12 @@ module.exports = {
       '11': 'repeat(11, minmax(0, 1fr))',
       '12': 'repeat(12, minmax(0, 1fr))',
     },
+    gridAutoColumns: {
+      auto: 'auto',
+      min: 'min-content',
+      max: 'max-content',
+      fr: 'minmax(0, 1fr)',
+    },
     gridColumn: {
       auto: 'auto',
       'span-1': 'span 1 / span 1',
@@ -530,6 +536,12 @@ module.exports = {
       '4': 'repeat(4, minmax(0, 1fr))',
       '5': 'repeat(5, minmax(0, 1fr))',
       '6': 'repeat(6, minmax(0, 1fr))',
+    },
+    gridAutoRows: {
+      auto: 'auto',
+      min: 'min-content',
+      max: 'max-content',
+      fr: 'minmax(0, 1fr)',
     },
     gridRow: {
       auto: 'auto',
@@ -781,10 +793,12 @@ module.exports = {
     gap: ['responsive'],
     gridAutoFlow: ['responsive'],
     gridTemplateColumns: ['responsive'],
+    gridAutoColumns: ['responsive'],
     gridColumn: ['responsive'],
     gridColumnStart: ['responsive'],
     gridColumnEnd: ['responsive'],
     gridTemplateRows: ['responsive'],
+    gridAutoRows: ['responsive'],
     gridRow: ['responsive'],
     gridRowStart: ['responsive'],
     gridRowEnd: ['responsive'],

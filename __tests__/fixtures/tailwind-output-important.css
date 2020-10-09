@@ -16816,6 +16816,22 @@ video {
   grid-template-columns: none !important;
 }
 
+.auto-cols-auto {
+  grid-auto-columns: auto !important;
+}
+
+.auto-cols-min {
+  grid-auto-columns: min-content !important;
+}
+
+.auto-cols-max {
+  grid-auto-columns: max-content !important;
+}
+
+.auto-cols-fr {
+  grid-auto-columns: minmax(0, 1fr) !important;
+}
+
 .col-auto {
   grid-column: auto !important;
 }
@@ -17010,6 +17026,22 @@ video {
 
 .grid-rows-none {
   grid-template-rows: none !important;
+}
+
+.auto-rows-auto {
+  grid-auto-rows: auto !important;
+}
+
+.auto-rows-min {
+  grid-auto-rows: min-content !important;
+}
+
+.auto-rows-max {
+  grid-auto-rows: max-content !important;
+}
+
+.auto-rows-fr {
+  grid-auto-rows: minmax(0, 1fr) !important;
 }
 
 .row-auto {
@@ -35405,6 +35437,22 @@ video {
     grid-template-columns: none !important;
   }
 
+  .sm\:auto-cols-auto {
+    grid-auto-columns: auto !important;
+  }
+
+  .sm\:auto-cols-min {
+    grid-auto-columns: min-content !important;
+  }
+
+  .sm\:auto-cols-max {
+    grid-auto-columns: max-content !important;
+  }
+
+  .sm\:auto-cols-fr {
+    grid-auto-columns: minmax(0, 1fr) !important;
+  }
+
   .sm\:col-auto {
     grid-column: auto !important;
   }
@@ -35599,6 +35647,22 @@ video {
 
   .sm\:grid-rows-none {
     grid-template-rows: none !important;
+  }
+
+  .sm\:auto-rows-auto {
+    grid-auto-rows: auto !important;
+  }
+
+  .sm\:auto-rows-min {
+    grid-auto-rows: min-content !important;
+  }
+
+  .sm\:auto-rows-max {
+    grid-auto-rows: max-content !important;
+  }
+
+  .sm\:auto-rows-fr {
+    grid-auto-rows: minmax(0, 1fr) !important;
   }
 
   .sm\:row-auto {
@@ -53964,6 +54028,22 @@ video {
     grid-template-columns: none !important;
   }
 
+  .md\:auto-cols-auto {
+    grid-auto-columns: auto !important;
+  }
+
+  .md\:auto-cols-min {
+    grid-auto-columns: min-content !important;
+  }
+
+  .md\:auto-cols-max {
+    grid-auto-columns: max-content !important;
+  }
+
+  .md\:auto-cols-fr {
+    grid-auto-columns: minmax(0, 1fr) !important;
+  }
+
   .md\:col-auto {
     grid-column: auto !important;
   }
@@ -54158,6 +54238,22 @@ video {
 
   .md\:grid-rows-none {
     grid-template-rows: none !important;
+  }
+
+  .md\:auto-rows-auto {
+    grid-auto-rows: auto !important;
+  }
+
+  .md\:auto-rows-min {
+    grid-auto-rows: min-content !important;
+  }
+
+  .md\:auto-rows-max {
+    grid-auto-rows: max-content !important;
+  }
+
+  .md\:auto-rows-fr {
+    grid-auto-rows: minmax(0, 1fr) !important;
   }
 
   .md\:row-auto {
@@ -72523,6 +72619,22 @@ video {
     grid-template-columns: none !important;
   }
 
+  .lg\:auto-cols-auto {
+    grid-auto-columns: auto !important;
+  }
+
+  .lg\:auto-cols-min {
+    grid-auto-columns: min-content !important;
+  }
+
+  .lg\:auto-cols-max {
+    grid-auto-columns: max-content !important;
+  }
+
+  .lg\:auto-cols-fr {
+    grid-auto-columns: minmax(0, 1fr) !important;
+  }
+
   .lg\:col-auto {
     grid-column: auto !important;
   }
@@ -72717,6 +72829,22 @@ video {
 
   .lg\:grid-rows-none {
     grid-template-rows: none !important;
+  }
+
+  .lg\:auto-rows-auto {
+    grid-auto-rows: auto !important;
+  }
+
+  .lg\:auto-rows-min {
+    grid-auto-rows: min-content !important;
+  }
+
+  .lg\:auto-rows-max {
+    grid-auto-rows: max-content !important;
+  }
+
+  .lg\:auto-rows-fr {
+    grid-auto-rows: minmax(0, 1fr) !important;
   }
 
   .lg\:row-auto {
@@ -91082,6 +91210,22 @@ video {
     grid-template-columns: none !important;
   }
 
+  .xl\:auto-cols-auto {
+    grid-auto-columns: auto !important;
+  }
+
+  .xl\:auto-cols-min {
+    grid-auto-columns: min-content !important;
+  }
+
+  .xl\:auto-cols-max {
+    grid-auto-columns: max-content !important;
+  }
+
+  .xl\:auto-cols-fr {
+    grid-auto-columns: minmax(0, 1fr) !important;
+  }
+
   .xl\:col-auto {
     grid-column: auto !important;
   }
@@ -91276,6 +91420,22 @@ video {
 
   .xl\:grid-rows-none {
     grid-template-rows: none !important;
+  }
+
+  .xl\:auto-rows-auto {
+    grid-auto-rows: auto !important;
+  }
+
+  .xl\:auto-rows-min {
+    grid-auto-rows: min-content !important;
+  }
+
+  .xl\:auto-rows-max {
+    grid-auto-rows: max-content !important;
+  }
+
+  .xl\:auto-rows-fr {
+    grid-auto-rows: minmax(0, 1fr) !important;
   }
 
   .xl\:row-auto {
