@@ -17433,6 +17433,26 @@ video {
   --transform-rotate: 0 !important;
 }
 
+.rotate-1 {
+  --transform-rotate: 1deg !important;
+}
+
+.rotate-2 {
+  --transform-rotate: 2deg !important;
+}
+
+.rotate-3 {
+  --transform-rotate: 3deg !important;
+}
+
+.rotate-6 {
+  --transform-rotate: 6deg !important;
+}
+
+.rotate-12 {
+  --transform-rotate: 12deg !important;
+}
+
 .rotate-45 {
   --transform-rotate: 45deg !important;
 }
@@ -17457,8 +17477,48 @@ video {
   --transform-rotate: -45deg !important;
 }
 
+.-rotate-12 {
+  --transform-rotate: -12deg !important;
+}
+
+.-rotate-6 {
+  --transform-rotate: -6deg !important;
+}
+
+.-rotate-3 {
+  --transform-rotate: -3deg !important;
+}
+
+.-rotate-2 {
+  --transform-rotate: -2deg !important;
+}
+
+.-rotate-1 {
+  --transform-rotate: -1deg !important;
+}
+
 .hover\:rotate-0:hover {
   --transform-rotate: 0 !important;
+}
+
+.hover\:rotate-1:hover {
+  --transform-rotate: 1deg !important;
+}
+
+.hover\:rotate-2:hover {
+  --transform-rotate: 2deg !important;
+}
+
+.hover\:rotate-3:hover {
+  --transform-rotate: 3deg !important;
+}
+
+.hover\:rotate-6:hover {
+  --transform-rotate: 6deg !important;
+}
+
+.hover\:rotate-12:hover {
+  --transform-rotate: 12deg !important;
 }
 
 .hover\:rotate-45:hover {
@@ -17485,8 +17545,48 @@ video {
   --transform-rotate: -45deg !important;
 }
 
+.hover\:-rotate-12:hover {
+  --transform-rotate: -12deg !important;
+}
+
+.hover\:-rotate-6:hover {
+  --transform-rotate: -6deg !important;
+}
+
+.hover\:-rotate-3:hover {
+  --transform-rotate: -3deg !important;
+}
+
+.hover\:-rotate-2:hover {
+  --transform-rotate: -2deg !important;
+}
+
+.hover\:-rotate-1:hover {
+  --transform-rotate: -1deg !important;
+}
+
 .focus\:rotate-0:focus {
   --transform-rotate: 0 !important;
+}
+
+.focus\:rotate-1:focus {
+  --transform-rotate: 1deg !important;
+}
+
+.focus\:rotate-2:focus {
+  --transform-rotate: 2deg !important;
+}
+
+.focus\:rotate-3:focus {
+  --transform-rotate: 3deg !important;
+}
+
+.focus\:rotate-6:focus {
+  --transform-rotate: 6deg !important;
+}
+
+.focus\:rotate-12:focus {
+  --transform-rotate: 12deg !important;
 }
 
 .focus\:rotate-45:focus {
@@ -17511,6 +17611,26 @@ video {
 
 .focus\:-rotate-45:focus {
   --transform-rotate: -45deg !important;
+}
+
+.focus\:-rotate-12:focus {
+  --transform-rotate: -12deg !important;
+}
+
+.focus\:-rotate-6:focus {
+  --transform-rotate: -6deg !important;
+}
+
+.focus\:-rotate-3:focus {
+  --transform-rotate: -3deg !important;
+}
+
+.focus\:-rotate-2:focus {
+  --transform-rotate: -2deg !important;
+}
+
+.focus\:-rotate-1:focus {
+  --transform-rotate: -1deg !important;
 }
 
 .translate-x-0 {
@@ -18501,6 +18621,14 @@ video {
   --transform-skew-x: 0 !important;
 }
 
+.skew-x-1 {
+  --transform-skew-x: 1deg !important;
+}
+
+.skew-x-2 {
+  --transform-skew-x: 2deg !important;
+}
+
 .skew-x-3 {
   --transform-skew-x: 3deg !important;
 }
@@ -18525,8 +18653,24 @@ video {
   --transform-skew-x: -3deg !important;
 }
 
+.-skew-x-2 {
+  --transform-skew-x: -2deg !important;
+}
+
+.-skew-x-1 {
+  --transform-skew-x: -1deg !important;
+}
+
 .skew-y-0 {
   --transform-skew-y: 0 !important;
+}
+
+.skew-y-1 {
+  --transform-skew-y: 1deg !important;
+}
+
+.skew-y-2 {
+  --transform-skew-y: 2deg !important;
 }
 
 .skew-y-3 {
@@ -18553,8 +18697,24 @@ video {
   --transform-skew-y: -3deg !important;
 }
 
+.-skew-y-2 {
+  --transform-skew-y: -2deg !important;
+}
+
+.-skew-y-1 {
+  --transform-skew-y: -1deg !important;
+}
+
 .hover\:skew-x-0:hover {
   --transform-skew-x: 0 !important;
+}
+
+.hover\:skew-x-1:hover {
+  --transform-skew-x: 1deg !important;
+}
+
+.hover\:skew-x-2:hover {
+  --transform-skew-x: 2deg !important;
 }
 
 .hover\:skew-x-3:hover {
@@ -18581,8 +18741,24 @@ video {
   --transform-skew-x: -3deg !important;
 }
 
+.hover\:-skew-x-2:hover {
+  --transform-skew-x: -2deg !important;
+}
+
+.hover\:-skew-x-1:hover {
+  --transform-skew-x: -1deg !important;
+}
+
 .hover\:skew-y-0:hover {
   --transform-skew-y: 0 !important;
+}
+
+.hover\:skew-y-1:hover {
+  --transform-skew-y: 1deg !important;
+}
+
+.hover\:skew-y-2:hover {
+  --transform-skew-y: 2deg !important;
 }
 
 .hover\:skew-y-3:hover {
@@ -18609,8 +18785,24 @@ video {
   --transform-skew-y: -3deg !important;
 }
 
+.hover\:-skew-y-2:hover {
+  --transform-skew-y: -2deg !important;
+}
+
+.hover\:-skew-y-1:hover {
+  --transform-skew-y: -1deg !important;
+}
+
 .focus\:skew-x-0:focus {
   --transform-skew-x: 0 !important;
+}
+
+.focus\:skew-x-1:focus {
+  --transform-skew-x: 1deg !important;
+}
+
+.focus\:skew-x-2:focus {
+  --transform-skew-x: 2deg !important;
 }
 
 .focus\:skew-x-3:focus {
@@ -18637,8 +18829,24 @@ video {
   --transform-skew-x: -3deg !important;
 }
 
+.focus\:-skew-x-2:focus {
+  --transform-skew-x: -2deg !important;
+}
+
+.focus\:-skew-x-1:focus {
+  --transform-skew-x: -1deg !important;
+}
+
 .focus\:skew-y-0:focus {
   --transform-skew-y: 0 !important;
+}
+
+.focus\:skew-y-1:focus {
+  --transform-skew-y: 1deg !important;
+}
+
+.focus\:skew-y-2:focus {
+  --transform-skew-y: 2deg !important;
 }
 
 .focus\:skew-y-3:focus {
@@ -18663,6 +18871,14 @@ video {
 
 .focus\:-skew-y-3:focus {
   --transform-skew-y: -3deg !important;
+}
+
+.focus\:-skew-y-2:focus {
+  --transform-skew-y: -2deg !important;
+}
+
+.focus\:-skew-y-1:focus {
+  --transform-skew-y: -1deg !important;
 }
 
 .transition-none {
@@ -35686,6 +35902,26 @@ video {
     --transform-rotate: 0 !important;
   }
 
+  .sm\:rotate-1 {
+    --transform-rotate: 1deg !important;
+  }
+
+  .sm\:rotate-2 {
+    --transform-rotate: 2deg !important;
+  }
+
+  .sm\:rotate-3 {
+    --transform-rotate: 3deg !important;
+  }
+
+  .sm\:rotate-6 {
+    --transform-rotate: 6deg !important;
+  }
+
+  .sm\:rotate-12 {
+    --transform-rotate: 12deg !important;
+  }
+
   .sm\:rotate-45 {
     --transform-rotate: 45deg !important;
   }
@@ -35710,8 +35946,48 @@ video {
     --transform-rotate: -45deg !important;
   }
 
+  .sm\:-rotate-12 {
+    --transform-rotate: -12deg !important;
+  }
+
+  .sm\:-rotate-6 {
+    --transform-rotate: -6deg !important;
+  }
+
+  .sm\:-rotate-3 {
+    --transform-rotate: -3deg !important;
+  }
+
+  .sm\:-rotate-2 {
+    --transform-rotate: -2deg !important;
+  }
+
+  .sm\:-rotate-1 {
+    --transform-rotate: -1deg !important;
+  }
+
   .sm\:hover\:rotate-0:hover {
     --transform-rotate: 0 !important;
+  }
+
+  .sm\:hover\:rotate-1:hover {
+    --transform-rotate: 1deg !important;
+  }
+
+  .sm\:hover\:rotate-2:hover {
+    --transform-rotate: 2deg !important;
+  }
+
+  .sm\:hover\:rotate-3:hover {
+    --transform-rotate: 3deg !important;
+  }
+
+  .sm\:hover\:rotate-6:hover {
+    --transform-rotate: 6deg !important;
+  }
+
+  .sm\:hover\:rotate-12:hover {
+    --transform-rotate: 12deg !important;
   }
 
   .sm\:hover\:rotate-45:hover {
@@ -35738,8 +36014,48 @@ video {
     --transform-rotate: -45deg !important;
   }
 
+  .sm\:hover\:-rotate-12:hover {
+    --transform-rotate: -12deg !important;
+  }
+
+  .sm\:hover\:-rotate-6:hover {
+    --transform-rotate: -6deg !important;
+  }
+
+  .sm\:hover\:-rotate-3:hover {
+    --transform-rotate: -3deg !important;
+  }
+
+  .sm\:hover\:-rotate-2:hover {
+    --transform-rotate: -2deg !important;
+  }
+
+  .sm\:hover\:-rotate-1:hover {
+    --transform-rotate: -1deg !important;
+  }
+
   .sm\:focus\:rotate-0:focus {
     --transform-rotate: 0 !important;
+  }
+
+  .sm\:focus\:rotate-1:focus {
+    --transform-rotate: 1deg !important;
+  }
+
+  .sm\:focus\:rotate-2:focus {
+    --transform-rotate: 2deg !important;
+  }
+
+  .sm\:focus\:rotate-3:focus {
+    --transform-rotate: 3deg !important;
+  }
+
+  .sm\:focus\:rotate-6:focus {
+    --transform-rotate: 6deg !important;
+  }
+
+  .sm\:focus\:rotate-12:focus {
+    --transform-rotate: 12deg !important;
   }
 
   .sm\:focus\:rotate-45:focus {
@@ -35764,6 +36080,26 @@ video {
 
   .sm\:focus\:-rotate-45:focus {
     --transform-rotate: -45deg !important;
+  }
+
+  .sm\:focus\:-rotate-12:focus {
+    --transform-rotate: -12deg !important;
+  }
+
+  .sm\:focus\:-rotate-6:focus {
+    --transform-rotate: -6deg !important;
+  }
+
+  .sm\:focus\:-rotate-3:focus {
+    --transform-rotate: -3deg !important;
+  }
+
+  .sm\:focus\:-rotate-2:focus {
+    --transform-rotate: -2deg !important;
+  }
+
+  .sm\:focus\:-rotate-1:focus {
+    --transform-rotate: -1deg !important;
   }
 
   .sm\:translate-x-0 {
@@ -36754,6 +37090,14 @@ video {
     --transform-skew-x: 0 !important;
   }
 
+  .sm\:skew-x-1 {
+    --transform-skew-x: 1deg !important;
+  }
+
+  .sm\:skew-x-2 {
+    --transform-skew-x: 2deg !important;
+  }
+
   .sm\:skew-x-3 {
     --transform-skew-x: 3deg !important;
   }
@@ -36778,8 +37122,24 @@ video {
     --transform-skew-x: -3deg !important;
   }
 
+  .sm\:-skew-x-2 {
+    --transform-skew-x: -2deg !important;
+  }
+
+  .sm\:-skew-x-1 {
+    --transform-skew-x: -1deg !important;
+  }
+
   .sm\:skew-y-0 {
     --transform-skew-y: 0 !important;
+  }
+
+  .sm\:skew-y-1 {
+    --transform-skew-y: 1deg !important;
+  }
+
+  .sm\:skew-y-2 {
+    --transform-skew-y: 2deg !important;
   }
 
   .sm\:skew-y-3 {
@@ -36806,8 +37166,24 @@ video {
     --transform-skew-y: -3deg !important;
   }
 
+  .sm\:-skew-y-2 {
+    --transform-skew-y: -2deg !important;
+  }
+
+  .sm\:-skew-y-1 {
+    --transform-skew-y: -1deg !important;
+  }
+
   .sm\:hover\:skew-x-0:hover {
     --transform-skew-x: 0 !important;
+  }
+
+  .sm\:hover\:skew-x-1:hover {
+    --transform-skew-x: 1deg !important;
+  }
+
+  .sm\:hover\:skew-x-2:hover {
+    --transform-skew-x: 2deg !important;
   }
 
   .sm\:hover\:skew-x-3:hover {
@@ -36834,8 +37210,24 @@ video {
     --transform-skew-x: -3deg !important;
   }
 
+  .sm\:hover\:-skew-x-2:hover {
+    --transform-skew-x: -2deg !important;
+  }
+
+  .sm\:hover\:-skew-x-1:hover {
+    --transform-skew-x: -1deg !important;
+  }
+
   .sm\:hover\:skew-y-0:hover {
     --transform-skew-y: 0 !important;
+  }
+
+  .sm\:hover\:skew-y-1:hover {
+    --transform-skew-y: 1deg !important;
+  }
+
+  .sm\:hover\:skew-y-2:hover {
+    --transform-skew-y: 2deg !important;
   }
 
   .sm\:hover\:skew-y-3:hover {
@@ -36862,8 +37254,24 @@ video {
     --transform-skew-y: -3deg !important;
   }
 
+  .sm\:hover\:-skew-y-2:hover {
+    --transform-skew-y: -2deg !important;
+  }
+
+  .sm\:hover\:-skew-y-1:hover {
+    --transform-skew-y: -1deg !important;
+  }
+
   .sm\:focus\:skew-x-0:focus {
     --transform-skew-x: 0 !important;
+  }
+
+  .sm\:focus\:skew-x-1:focus {
+    --transform-skew-x: 1deg !important;
+  }
+
+  .sm\:focus\:skew-x-2:focus {
+    --transform-skew-x: 2deg !important;
   }
 
   .sm\:focus\:skew-x-3:focus {
@@ -36890,8 +37298,24 @@ video {
     --transform-skew-x: -3deg !important;
   }
 
+  .sm\:focus\:-skew-x-2:focus {
+    --transform-skew-x: -2deg !important;
+  }
+
+  .sm\:focus\:-skew-x-1:focus {
+    --transform-skew-x: -1deg !important;
+  }
+
   .sm\:focus\:skew-y-0:focus {
     --transform-skew-y: 0 !important;
+  }
+
+  .sm\:focus\:skew-y-1:focus {
+    --transform-skew-y: 1deg !important;
+  }
+
+  .sm\:focus\:skew-y-2:focus {
+    --transform-skew-y: 2deg !important;
   }
 
   .sm\:focus\:skew-y-3:focus {
@@ -36916,6 +37340,14 @@ video {
 
   .sm\:focus\:-skew-y-3:focus {
     --transform-skew-y: -3deg !important;
+  }
+
+  .sm\:focus\:-skew-y-2:focus {
+    --transform-skew-y: -2deg !important;
+  }
+
+  .sm\:focus\:-skew-y-1:focus {
+    --transform-skew-y: -1deg !important;
   }
 
   .sm\:transition-none {
@@ -53909,6 +54341,26 @@ video {
     --transform-rotate: 0 !important;
   }
 
+  .md\:rotate-1 {
+    --transform-rotate: 1deg !important;
+  }
+
+  .md\:rotate-2 {
+    --transform-rotate: 2deg !important;
+  }
+
+  .md\:rotate-3 {
+    --transform-rotate: 3deg !important;
+  }
+
+  .md\:rotate-6 {
+    --transform-rotate: 6deg !important;
+  }
+
+  .md\:rotate-12 {
+    --transform-rotate: 12deg !important;
+  }
+
   .md\:rotate-45 {
     --transform-rotate: 45deg !important;
   }
@@ -53933,8 +54385,48 @@ video {
     --transform-rotate: -45deg !important;
   }
 
+  .md\:-rotate-12 {
+    --transform-rotate: -12deg !important;
+  }
+
+  .md\:-rotate-6 {
+    --transform-rotate: -6deg !important;
+  }
+
+  .md\:-rotate-3 {
+    --transform-rotate: -3deg !important;
+  }
+
+  .md\:-rotate-2 {
+    --transform-rotate: -2deg !important;
+  }
+
+  .md\:-rotate-1 {
+    --transform-rotate: -1deg !important;
+  }
+
   .md\:hover\:rotate-0:hover {
     --transform-rotate: 0 !important;
+  }
+
+  .md\:hover\:rotate-1:hover {
+    --transform-rotate: 1deg !important;
+  }
+
+  .md\:hover\:rotate-2:hover {
+    --transform-rotate: 2deg !important;
+  }
+
+  .md\:hover\:rotate-3:hover {
+    --transform-rotate: 3deg !important;
+  }
+
+  .md\:hover\:rotate-6:hover {
+    --transform-rotate: 6deg !important;
+  }
+
+  .md\:hover\:rotate-12:hover {
+    --transform-rotate: 12deg !important;
   }
 
   .md\:hover\:rotate-45:hover {
@@ -53961,8 +54453,48 @@ video {
     --transform-rotate: -45deg !important;
   }
 
+  .md\:hover\:-rotate-12:hover {
+    --transform-rotate: -12deg !important;
+  }
+
+  .md\:hover\:-rotate-6:hover {
+    --transform-rotate: -6deg !important;
+  }
+
+  .md\:hover\:-rotate-3:hover {
+    --transform-rotate: -3deg !important;
+  }
+
+  .md\:hover\:-rotate-2:hover {
+    --transform-rotate: -2deg !important;
+  }
+
+  .md\:hover\:-rotate-1:hover {
+    --transform-rotate: -1deg !important;
+  }
+
   .md\:focus\:rotate-0:focus {
     --transform-rotate: 0 !important;
+  }
+
+  .md\:focus\:rotate-1:focus {
+    --transform-rotate: 1deg !important;
+  }
+
+  .md\:focus\:rotate-2:focus {
+    --transform-rotate: 2deg !important;
+  }
+
+  .md\:focus\:rotate-3:focus {
+    --transform-rotate: 3deg !important;
+  }
+
+  .md\:focus\:rotate-6:focus {
+    --transform-rotate: 6deg !important;
+  }
+
+  .md\:focus\:rotate-12:focus {
+    --transform-rotate: 12deg !important;
   }
 
   .md\:focus\:rotate-45:focus {
@@ -53987,6 +54519,26 @@ video {
 
   .md\:focus\:-rotate-45:focus {
     --transform-rotate: -45deg !important;
+  }
+
+  .md\:focus\:-rotate-12:focus {
+    --transform-rotate: -12deg !important;
+  }
+
+  .md\:focus\:-rotate-6:focus {
+    --transform-rotate: -6deg !important;
+  }
+
+  .md\:focus\:-rotate-3:focus {
+    --transform-rotate: -3deg !important;
+  }
+
+  .md\:focus\:-rotate-2:focus {
+    --transform-rotate: -2deg !important;
+  }
+
+  .md\:focus\:-rotate-1:focus {
+    --transform-rotate: -1deg !important;
   }
 
   .md\:translate-x-0 {
@@ -54977,6 +55529,14 @@ video {
     --transform-skew-x: 0 !important;
   }
 
+  .md\:skew-x-1 {
+    --transform-skew-x: 1deg !important;
+  }
+
+  .md\:skew-x-2 {
+    --transform-skew-x: 2deg !important;
+  }
+
   .md\:skew-x-3 {
     --transform-skew-x: 3deg !important;
   }
@@ -55001,8 +55561,24 @@ video {
     --transform-skew-x: -3deg !important;
   }
 
+  .md\:-skew-x-2 {
+    --transform-skew-x: -2deg !important;
+  }
+
+  .md\:-skew-x-1 {
+    --transform-skew-x: -1deg !important;
+  }
+
   .md\:skew-y-0 {
     --transform-skew-y: 0 !important;
+  }
+
+  .md\:skew-y-1 {
+    --transform-skew-y: 1deg !important;
+  }
+
+  .md\:skew-y-2 {
+    --transform-skew-y: 2deg !important;
   }
 
   .md\:skew-y-3 {
@@ -55029,8 +55605,24 @@ video {
     --transform-skew-y: -3deg !important;
   }
 
+  .md\:-skew-y-2 {
+    --transform-skew-y: -2deg !important;
+  }
+
+  .md\:-skew-y-1 {
+    --transform-skew-y: -1deg !important;
+  }
+
   .md\:hover\:skew-x-0:hover {
     --transform-skew-x: 0 !important;
+  }
+
+  .md\:hover\:skew-x-1:hover {
+    --transform-skew-x: 1deg !important;
+  }
+
+  .md\:hover\:skew-x-2:hover {
+    --transform-skew-x: 2deg !important;
   }
 
   .md\:hover\:skew-x-3:hover {
@@ -55057,8 +55649,24 @@ video {
     --transform-skew-x: -3deg !important;
   }
 
+  .md\:hover\:-skew-x-2:hover {
+    --transform-skew-x: -2deg !important;
+  }
+
+  .md\:hover\:-skew-x-1:hover {
+    --transform-skew-x: -1deg !important;
+  }
+
   .md\:hover\:skew-y-0:hover {
     --transform-skew-y: 0 !important;
+  }
+
+  .md\:hover\:skew-y-1:hover {
+    --transform-skew-y: 1deg !important;
+  }
+
+  .md\:hover\:skew-y-2:hover {
+    --transform-skew-y: 2deg !important;
   }
 
   .md\:hover\:skew-y-3:hover {
@@ -55085,8 +55693,24 @@ video {
     --transform-skew-y: -3deg !important;
   }
 
+  .md\:hover\:-skew-y-2:hover {
+    --transform-skew-y: -2deg !important;
+  }
+
+  .md\:hover\:-skew-y-1:hover {
+    --transform-skew-y: -1deg !important;
+  }
+
   .md\:focus\:skew-x-0:focus {
     --transform-skew-x: 0 !important;
+  }
+
+  .md\:focus\:skew-x-1:focus {
+    --transform-skew-x: 1deg !important;
+  }
+
+  .md\:focus\:skew-x-2:focus {
+    --transform-skew-x: 2deg !important;
   }
 
   .md\:focus\:skew-x-3:focus {
@@ -55113,8 +55737,24 @@ video {
     --transform-skew-x: -3deg !important;
   }
 
+  .md\:focus\:-skew-x-2:focus {
+    --transform-skew-x: -2deg !important;
+  }
+
+  .md\:focus\:-skew-x-1:focus {
+    --transform-skew-x: -1deg !important;
+  }
+
   .md\:focus\:skew-y-0:focus {
     --transform-skew-y: 0 !important;
+  }
+
+  .md\:focus\:skew-y-1:focus {
+    --transform-skew-y: 1deg !important;
+  }
+
+  .md\:focus\:skew-y-2:focus {
+    --transform-skew-y: 2deg !important;
   }
 
   .md\:focus\:skew-y-3:focus {
@@ -55139,6 +55779,14 @@ video {
 
   .md\:focus\:-skew-y-3:focus {
     --transform-skew-y: -3deg !important;
+  }
+
+  .md\:focus\:-skew-y-2:focus {
+    --transform-skew-y: -2deg !important;
+  }
+
+  .md\:focus\:-skew-y-1:focus {
+    --transform-skew-y: -1deg !important;
   }
 
   .md\:transition-none {
@@ -72132,6 +72780,26 @@ video {
     --transform-rotate: 0 !important;
   }
 
+  .lg\:rotate-1 {
+    --transform-rotate: 1deg !important;
+  }
+
+  .lg\:rotate-2 {
+    --transform-rotate: 2deg !important;
+  }
+
+  .lg\:rotate-3 {
+    --transform-rotate: 3deg !important;
+  }
+
+  .lg\:rotate-6 {
+    --transform-rotate: 6deg !important;
+  }
+
+  .lg\:rotate-12 {
+    --transform-rotate: 12deg !important;
+  }
+
   .lg\:rotate-45 {
     --transform-rotate: 45deg !important;
   }
@@ -72156,8 +72824,48 @@ video {
     --transform-rotate: -45deg !important;
   }
 
+  .lg\:-rotate-12 {
+    --transform-rotate: -12deg !important;
+  }
+
+  .lg\:-rotate-6 {
+    --transform-rotate: -6deg !important;
+  }
+
+  .lg\:-rotate-3 {
+    --transform-rotate: -3deg !important;
+  }
+
+  .lg\:-rotate-2 {
+    --transform-rotate: -2deg !important;
+  }
+
+  .lg\:-rotate-1 {
+    --transform-rotate: -1deg !important;
+  }
+
   .lg\:hover\:rotate-0:hover {
     --transform-rotate: 0 !important;
+  }
+
+  .lg\:hover\:rotate-1:hover {
+    --transform-rotate: 1deg !important;
+  }
+
+  .lg\:hover\:rotate-2:hover {
+    --transform-rotate: 2deg !important;
+  }
+
+  .lg\:hover\:rotate-3:hover {
+    --transform-rotate: 3deg !important;
+  }
+
+  .lg\:hover\:rotate-6:hover {
+    --transform-rotate: 6deg !important;
+  }
+
+  .lg\:hover\:rotate-12:hover {
+    --transform-rotate: 12deg !important;
   }
 
   .lg\:hover\:rotate-45:hover {
@@ -72184,8 +72892,48 @@ video {
     --transform-rotate: -45deg !important;
   }
 
+  .lg\:hover\:-rotate-12:hover {
+    --transform-rotate: -12deg !important;
+  }
+
+  .lg\:hover\:-rotate-6:hover {
+    --transform-rotate: -6deg !important;
+  }
+
+  .lg\:hover\:-rotate-3:hover {
+    --transform-rotate: -3deg !important;
+  }
+
+  .lg\:hover\:-rotate-2:hover {
+    --transform-rotate: -2deg !important;
+  }
+
+  .lg\:hover\:-rotate-1:hover {
+    --transform-rotate: -1deg !important;
+  }
+
   .lg\:focus\:rotate-0:focus {
     --transform-rotate: 0 !important;
+  }
+
+  .lg\:focus\:rotate-1:focus {
+    --transform-rotate: 1deg !important;
+  }
+
+  .lg\:focus\:rotate-2:focus {
+    --transform-rotate: 2deg !important;
+  }
+
+  .lg\:focus\:rotate-3:focus {
+    --transform-rotate: 3deg !important;
+  }
+
+  .lg\:focus\:rotate-6:focus {
+    --transform-rotate: 6deg !important;
+  }
+
+  .lg\:focus\:rotate-12:focus {
+    --transform-rotate: 12deg !important;
   }
 
   .lg\:focus\:rotate-45:focus {
@@ -72210,6 +72958,26 @@ video {
 
   .lg\:focus\:-rotate-45:focus {
     --transform-rotate: -45deg !important;
+  }
+
+  .lg\:focus\:-rotate-12:focus {
+    --transform-rotate: -12deg !important;
+  }
+
+  .lg\:focus\:-rotate-6:focus {
+    --transform-rotate: -6deg !important;
+  }
+
+  .lg\:focus\:-rotate-3:focus {
+    --transform-rotate: -3deg !important;
+  }
+
+  .lg\:focus\:-rotate-2:focus {
+    --transform-rotate: -2deg !important;
+  }
+
+  .lg\:focus\:-rotate-1:focus {
+    --transform-rotate: -1deg !important;
   }
 
   .lg\:translate-x-0 {
@@ -73200,6 +73968,14 @@ video {
     --transform-skew-x: 0 !important;
   }
 
+  .lg\:skew-x-1 {
+    --transform-skew-x: 1deg !important;
+  }
+
+  .lg\:skew-x-2 {
+    --transform-skew-x: 2deg !important;
+  }
+
   .lg\:skew-x-3 {
     --transform-skew-x: 3deg !important;
   }
@@ -73224,8 +74000,24 @@ video {
     --transform-skew-x: -3deg !important;
   }
 
+  .lg\:-skew-x-2 {
+    --transform-skew-x: -2deg !important;
+  }
+
+  .lg\:-skew-x-1 {
+    --transform-skew-x: -1deg !important;
+  }
+
   .lg\:skew-y-0 {
     --transform-skew-y: 0 !important;
+  }
+
+  .lg\:skew-y-1 {
+    --transform-skew-y: 1deg !important;
+  }
+
+  .lg\:skew-y-2 {
+    --transform-skew-y: 2deg !important;
   }
 
   .lg\:skew-y-3 {
@@ -73252,8 +74044,24 @@ video {
     --transform-skew-y: -3deg !important;
   }
 
+  .lg\:-skew-y-2 {
+    --transform-skew-y: -2deg !important;
+  }
+
+  .lg\:-skew-y-1 {
+    --transform-skew-y: -1deg !important;
+  }
+
   .lg\:hover\:skew-x-0:hover {
     --transform-skew-x: 0 !important;
+  }
+
+  .lg\:hover\:skew-x-1:hover {
+    --transform-skew-x: 1deg !important;
+  }
+
+  .lg\:hover\:skew-x-2:hover {
+    --transform-skew-x: 2deg !important;
   }
 
   .lg\:hover\:skew-x-3:hover {
@@ -73280,8 +74088,24 @@ video {
     --transform-skew-x: -3deg !important;
   }
 
+  .lg\:hover\:-skew-x-2:hover {
+    --transform-skew-x: -2deg !important;
+  }
+
+  .lg\:hover\:-skew-x-1:hover {
+    --transform-skew-x: -1deg !important;
+  }
+
   .lg\:hover\:skew-y-0:hover {
     --transform-skew-y: 0 !important;
+  }
+
+  .lg\:hover\:skew-y-1:hover {
+    --transform-skew-y: 1deg !important;
+  }
+
+  .lg\:hover\:skew-y-2:hover {
+    --transform-skew-y: 2deg !important;
   }
 
   .lg\:hover\:skew-y-3:hover {
@@ -73308,8 +74132,24 @@ video {
     --transform-skew-y: -3deg !important;
   }
 
+  .lg\:hover\:-skew-y-2:hover {
+    --transform-skew-y: -2deg !important;
+  }
+
+  .lg\:hover\:-skew-y-1:hover {
+    --transform-skew-y: -1deg !important;
+  }
+
   .lg\:focus\:skew-x-0:focus {
     --transform-skew-x: 0 !important;
+  }
+
+  .lg\:focus\:skew-x-1:focus {
+    --transform-skew-x: 1deg !important;
+  }
+
+  .lg\:focus\:skew-x-2:focus {
+    --transform-skew-x: 2deg !important;
   }
 
   .lg\:focus\:skew-x-3:focus {
@@ -73336,8 +74176,24 @@ video {
     --transform-skew-x: -3deg !important;
   }
 
+  .lg\:focus\:-skew-x-2:focus {
+    --transform-skew-x: -2deg !important;
+  }
+
+  .lg\:focus\:-skew-x-1:focus {
+    --transform-skew-x: -1deg !important;
+  }
+
   .lg\:focus\:skew-y-0:focus {
     --transform-skew-y: 0 !important;
+  }
+
+  .lg\:focus\:skew-y-1:focus {
+    --transform-skew-y: 1deg !important;
+  }
+
+  .lg\:focus\:skew-y-2:focus {
+    --transform-skew-y: 2deg !important;
   }
 
   .lg\:focus\:skew-y-3:focus {
@@ -73362,6 +74218,14 @@ video {
 
   .lg\:focus\:-skew-y-3:focus {
     --transform-skew-y: -3deg !important;
+  }
+
+  .lg\:focus\:-skew-y-2:focus {
+    --transform-skew-y: -2deg !important;
+  }
+
+  .lg\:focus\:-skew-y-1:focus {
+    --transform-skew-y: -1deg !important;
   }
 
   .lg\:transition-none {
@@ -90355,6 +91219,26 @@ video {
     --transform-rotate: 0 !important;
   }
 
+  .xl\:rotate-1 {
+    --transform-rotate: 1deg !important;
+  }
+
+  .xl\:rotate-2 {
+    --transform-rotate: 2deg !important;
+  }
+
+  .xl\:rotate-3 {
+    --transform-rotate: 3deg !important;
+  }
+
+  .xl\:rotate-6 {
+    --transform-rotate: 6deg !important;
+  }
+
+  .xl\:rotate-12 {
+    --transform-rotate: 12deg !important;
+  }
+
   .xl\:rotate-45 {
     --transform-rotate: 45deg !important;
   }
@@ -90379,8 +91263,48 @@ video {
     --transform-rotate: -45deg !important;
   }
 
+  .xl\:-rotate-12 {
+    --transform-rotate: -12deg !important;
+  }
+
+  .xl\:-rotate-6 {
+    --transform-rotate: -6deg !important;
+  }
+
+  .xl\:-rotate-3 {
+    --transform-rotate: -3deg !important;
+  }
+
+  .xl\:-rotate-2 {
+    --transform-rotate: -2deg !important;
+  }
+
+  .xl\:-rotate-1 {
+    --transform-rotate: -1deg !important;
+  }
+
   .xl\:hover\:rotate-0:hover {
     --transform-rotate: 0 !important;
+  }
+
+  .xl\:hover\:rotate-1:hover {
+    --transform-rotate: 1deg !important;
+  }
+
+  .xl\:hover\:rotate-2:hover {
+    --transform-rotate: 2deg !important;
+  }
+
+  .xl\:hover\:rotate-3:hover {
+    --transform-rotate: 3deg !important;
+  }
+
+  .xl\:hover\:rotate-6:hover {
+    --transform-rotate: 6deg !important;
+  }
+
+  .xl\:hover\:rotate-12:hover {
+    --transform-rotate: 12deg !important;
   }
 
   .xl\:hover\:rotate-45:hover {
@@ -90407,8 +91331,48 @@ video {
     --transform-rotate: -45deg !important;
   }
 
+  .xl\:hover\:-rotate-12:hover {
+    --transform-rotate: -12deg !important;
+  }
+
+  .xl\:hover\:-rotate-6:hover {
+    --transform-rotate: -6deg !important;
+  }
+
+  .xl\:hover\:-rotate-3:hover {
+    --transform-rotate: -3deg !important;
+  }
+
+  .xl\:hover\:-rotate-2:hover {
+    --transform-rotate: -2deg !important;
+  }
+
+  .xl\:hover\:-rotate-1:hover {
+    --transform-rotate: -1deg !important;
+  }
+
   .xl\:focus\:rotate-0:focus {
     --transform-rotate: 0 !important;
+  }
+
+  .xl\:focus\:rotate-1:focus {
+    --transform-rotate: 1deg !important;
+  }
+
+  .xl\:focus\:rotate-2:focus {
+    --transform-rotate: 2deg !important;
+  }
+
+  .xl\:focus\:rotate-3:focus {
+    --transform-rotate: 3deg !important;
+  }
+
+  .xl\:focus\:rotate-6:focus {
+    --transform-rotate: 6deg !important;
+  }
+
+  .xl\:focus\:rotate-12:focus {
+    --transform-rotate: 12deg !important;
   }
 
   .xl\:focus\:rotate-45:focus {
@@ -90433,6 +91397,26 @@ video {
 
   .xl\:focus\:-rotate-45:focus {
     --transform-rotate: -45deg !important;
+  }
+
+  .xl\:focus\:-rotate-12:focus {
+    --transform-rotate: -12deg !important;
+  }
+
+  .xl\:focus\:-rotate-6:focus {
+    --transform-rotate: -6deg !important;
+  }
+
+  .xl\:focus\:-rotate-3:focus {
+    --transform-rotate: -3deg !important;
+  }
+
+  .xl\:focus\:-rotate-2:focus {
+    --transform-rotate: -2deg !important;
+  }
+
+  .xl\:focus\:-rotate-1:focus {
+    --transform-rotate: -1deg !important;
   }
 
   .xl\:translate-x-0 {
@@ -91423,6 +92407,14 @@ video {
     --transform-skew-x: 0 !important;
   }
 
+  .xl\:skew-x-1 {
+    --transform-skew-x: 1deg !important;
+  }
+
+  .xl\:skew-x-2 {
+    --transform-skew-x: 2deg !important;
+  }
+
   .xl\:skew-x-3 {
     --transform-skew-x: 3deg !important;
   }
@@ -91447,8 +92439,24 @@ video {
     --transform-skew-x: -3deg !important;
   }
 
+  .xl\:-skew-x-2 {
+    --transform-skew-x: -2deg !important;
+  }
+
+  .xl\:-skew-x-1 {
+    --transform-skew-x: -1deg !important;
+  }
+
   .xl\:skew-y-0 {
     --transform-skew-y: 0 !important;
+  }
+
+  .xl\:skew-y-1 {
+    --transform-skew-y: 1deg !important;
+  }
+
+  .xl\:skew-y-2 {
+    --transform-skew-y: 2deg !important;
   }
 
   .xl\:skew-y-3 {
@@ -91475,8 +92483,24 @@ video {
     --transform-skew-y: -3deg !important;
   }
 
+  .xl\:-skew-y-2 {
+    --transform-skew-y: -2deg !important;
+  }
+
+  .xl\:-skew-y-1 {
+    --transform-skew-y: -1deg !important;
+  }
+
   .xl\:hover\:skew-x-0:hover {
     --transform-skew-x: 0 !important;
+  }
+
+  .xl\:hover\:skew-x-1:hover {
+    --transform-skew-x: 1deg !important;
+  }
+
+  .xl\:hover\:skew-x-2:hover {
+    --transform-skew-x: 2deg !important;
   }
 
   .xl\:hover\:skew-x-3:hover {
@@ -91503,8 +92527,24 @@ video {
     --transform-skew-x: -3deg !important;
   }
 
+  .xl\:hover\:-skew-x-2:hover {
+    --transform-skew-x: -2deg !important;
+  }
+
+  .xl\:hover\:-skew-x-1:hover {
+    --transform-skew-x: -1deg !important;
+  }
+
   .xl\:hover\:skew-y-0:hover {
     --transform-skew-y: 0 !important;
+  }
+
+  .xl\:hover\:skew-y-1:hover {
+    --transform-skew-y: 1deg !important;
+  }
+
+  .xl\:hover\:skew-y-2:hover {
+    --transform-skew-y: 2deg !important;
   }
 
   .xl\:hover\:skew-y-3:hover {
@@ -91531,8 +92571,24 @@ video {
     --transform-skew-y: -3deg !important;
   }
 
+  .xl\:hover\:-skew-y-2:hover {
+    --transform-skew-y: -2deg !important;
+  }
+
+  .xl\:hover\:-skew-y-1:hover {
+    --transform-skew-y: -1deg !important;
+  }
+
   .xl\:focus\:skew-x-0:focus {
     --transform-skew-x: 0 !important;
+  }
+
+  .xl\:focus\:skew-x-1:focus {
+    --transform-skew-x: 1deg !important;
+  }
+
+  .xl\:focus\:skew-x-2:focus {
+    --transform-skew-x: 2deg !important;
   }
 
   .xl\:focus\:skew-x-3:focus {
@@ -91559,8 +92615,24 @@ video {
     --transform-skew-x: -3deg !important;
   }
 
+  .xl\:focus\:-skew-x-2:focus {
+    --transform-skew-x: -2deg !important;
+  }
+
+  .xl\:focus\:-skew-x-1:focus {
+    --transform-skew-x: -1deg !important;
+  }
+
   .xl\:focus\:skew-y-0:focus {
     --transform-skew-y: 0 !important;
+  }
+
+  .xl\:focus\:skew-y-1:focus {
+    --transform-skew-y: 1deg !important;
+  }
+
+  .xl\:focus\:skew-y-2:focus {
+    --transform-skew-y: 2deg !important;
   }
 
   .xl\:focus\:skew-y-3:focus {
@@ -91585,6 +92657,14 @@ video {
 
   .xl\:focus\:-skew-y-3:focus {
     --transform-skew-y: -3deg !important;
+  }
+
+  .xl\:focus\:-skew-y-2:focus {
+    --transform-skew-y: -2deg !important;
+  }
+
+  .xl\:focus\:-skew-y-1:focus {
+    --transform-skew-y: -1deg !important;
   }
 
   .xl\:transition-none {
