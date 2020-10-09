@@ -24,6 +24,19 @@ function ensureIncludesDefault(variants) {
 
 const defaultVariantGenerators = config => ({
   default: generateVariantFunction(() => {}),
+  marker: generateVariantFunction(({ modifySelectors, separator }) => {
+    const parser = selectorParser(selectors => {
+      selectors.walkClasses(sel => {
+        sel.value = `marker${separator}${sel.value}`
+        sel.parent.insertBefore(
+          sel,
+          selectorParser().astSync(prefixSelector(config.prefix, '.marker'))
+        )
+        sel.parent.insertAfter(sel, selectorParser.pseudo({ value: ' > :not(template):before' }))
+      })
+    })
+    return modifySelectors(({ selector }) => parser.processSync(selector))
+  }),
   'motion-safe': generateVariantFunction(
     ({ container, separator, modifySelectors }) => {
       const modified = modifySelectors(({ selector }) => {

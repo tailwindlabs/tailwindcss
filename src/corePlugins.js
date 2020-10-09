@@ -109,6 +109,7 @@ import borderOpacity from './plugins/borderOpacity'
 import textOpacity from './plugins/textOpacity'
 import placeholderOpacity from './plugins/placeholderOpacity'
 import animation from './plugins/animation'
+import marker from './plugins/marker'
 
 import configurePlugins from './util/configurePlugins'
 
@@ -224,6 +225,7 @@ export const corePluginList = {
   transitionDuration,
   transitionDelay,
   animation,
+  marker,
 }
 
 export default function({ corePlugins: corePluginConfig }) {
