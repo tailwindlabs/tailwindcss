@@ -4773,6 +4773,18 @@ video {
   list-style-type: decimal;
 }
 
+.marker.marker\:list-none > :not(template):before {
+  list-style-type: none;
+}
+
+.marker.marker\:list-disc > :not(template):before {
+  list-style-type: disc;
+}
+
+.marker.marker\:list-decimal > :not(template):before {
+  list-style-type: decimal;
+}
+
 .m-0 {
   margin: 0;
 }
@@ -8871,6 +8883,382 @@ video {
   color: #702459;
 }
 
+.marker.marker\:text-transparent > :not(template):before {
+  color: transparent;
+}
+
+.marker.marker\:text-current > :not(template):before {
+  color: currentColor;
+}
+
+.marker.marker\:text-black > :not(template):before {
+  color: #000;
+}
+
+.marker.marker\:text-white > :not(template):before {
+  color: #fff;
+}
+
+.marker.marker\:text-gray-100 > :not(template):before {
+  color: #f7fafc;
+}
+
+.marker.marker\:text-gray-200 > :not(template):before {
+  color: #edf2f7;
+}
+
+.marker.marker\:text-gray-300 > :not(template):before {
+  color: #e2e8f0;
+}
+
+.marker.marker\:text-gray-400 > :not(template):before {
+  color: #cbd5e0;
+}
+
+.marker.marker\:text-gray-500 > :not(template):before {
+  color: #a0aec0;
+}
+
+.marker.marker\:text-gray-600 > :not(template):before {
+  color: #718096;
+}
+
+.marker.marker\:text-gray-700 > :not(template):before {
+  color: #4a5568;
+}
+
+.marker.marker\:text-gray-800 > :not(template):before {
+  color: #2d3748;
+}
+
+.marker.marker\:text-gray-900 > :not(template):before {
+  color: #1a202c;
+}
+
+.marker.marker\:text-red-100 > :not(template):before {
+  color: #fff5f5;
+}
+
+.marker.marker\:text-red-200 > :not(template):before {
+  color: #fed7d7;
+}
+
+.marker.marker\:text-red-300 > :not(template):before {
+  color: #feb2b2;
+}
+
+.marker.marker\:text-red-400 > :not(template):before {
+  color: #fc8181;
+}
+
+.marker.marker\:text-red-500 > :not(template):before {
+  color: #f56565;
+}
+
+.marker.marker\:text-red-600 > :not(template):before {
+  color: #e53e3e;
+}
+
+.marker.marker\:text-red-700 > :not(template):before {
+  color: #c53030;
+}
+
+.marker.marker\:text-red-800 > :not(template):before {
+  color: #9b2c2c;
+}
+
+.marker.marker\:text-red-900 > :not(template):before {
+  color: #742a2a;
+}
+
+.marker.marker\:text-orange-100 > :not(template):before {
+  color: #fffaf0;
+}
+
+.marker.marker\:text-orange-200 > :not(template):before {
+  color: #feebc8;
+}
+
+.marker.marker\:text-orange-300 > :not(template):before {
+  color: #fbd38d;
+}
+
+.marker.marker\:text-orange-400 > :not(template):before {
+  color: #f6ad55;
+}
+
+.marker.marker\:text-orange-500 > :not(template):before {
+  color: #ed8936;
+}
+
+.marker.marker\:text-orange-600 > :not(template):before {
+  color: #dd6b20;
+}
+
+.marker.marker\:text-orange-700 > :not(template):before {
+  color: #c05621;
+}
+
+.marker.marker\:text-orange-800 > :not(template):before {
+  color: #9c4221;
+}
+
+.marker.marker\:text-orange-900 > :not(template):before {
+  color: #7b341e;
+}
+
+.marker.marker\:text-yellow-100 > :not(template):before {
+  color: #fffff0;
+}
+
+.marker.marker\:text-yellow-200 > :not(template):before {
+  color: #fefcbf;
+}
+
+.marker.marker\:text-yellow-300 > :not(template):before {
+  color: #faf089;
+}
+
+.marker.marker\:text-yellow-400 > :not(template):before {
+  color: #f6e05e;
+}
+
+.marker.marker\:text-yellow-500 > :not(template):before {
+  color: #ecc94b;
+}
+
+.marker.marker\:text-yellow-600 > :not(template):before {
+  color: #d69e2e;
+}
+
+.marker.marker\:text-yellow-700 > :not(template):before {
+  color: #b7791f;
+}
+
+.marker.marker\:text-yellow-800 > :not(template):before {
+  color: #975a16;
+}
+
+.marker.marker\:text-yellow-900 > :not(template):before {
+  color: #744210;
+}
+
+.marker.marker\:text-green-100 > :not(template):before {
+  color: #f0fff4;
+}
+
+.marker.marker\:text-green-200 > :not(template):before {
+  color: #c6f6d5;
+}
+
+.marker.marker\:text-green-300 > :not(template):before {
+  color: #9ae6b4;
+}
+
+.marker.marker\:text-green-400 > :not(template):before {
+  color: #68d391;
+}
+
+.marker.marker\:text-green-500 > :not(template):before {
+  color: #48bb78;
+}
+
+.marker.marker\:text-green-600 > :not(template):before {
+  color: #38a169;
+}
+
+.marker.marker\:text-green-700 > :not(template):before {
+  color: #2f855a;
+}
+
+.marker.marker\:text-green-800 > :not(template):before {
+  color: #276749;
+}
+
+.marker.marker\:text-green-900 > :not(template):before {
+  color: #22543d;
+}
+
+.marker.marker\:text-teal-100 > :not(template):before {
+  color: #e6fffa;
+}
+
+.marker.marker\:text-teal-200 > :not(template):before {
+  color: #b2f5ea;
+}
+
+.marker.marker\:text-teal-300 > :not(template):before {
+  color: #81e6d9;
+}
+
+.marker.marker\:text-teal-400 > :not(template):before {
+  color: #4fd1c5;
+}
+
+.marker.marker\:text-teal-500 > :not(template):before {
+  color: #38b2ac;
+}
+
+.marker.marker\:text-teal-600 > :not(template):before {
+  color: #319795;
+}
+
+.marker.marker\:text-teal-700 > :not(template):before {
+  color: #2c7a7b;
+}
+
+.marker.marker\:text-teal-800 > :not(template):before {
+  color: #285e61;
+}
+
+.marker.marker\:text-teal-900 > :not(template):before {
+  color: #234e52;
+}
+
+.marker.marker\:text-blue-100 > :not(template):before {
+  color: #ebf8ff;
+}
+
+.marker.marker\:text-blue-200 > :not(template):before {
+  color: #bee3f8;
+}
+
+.marker.marker\:text-blue-300 > :not(template):before {
+  color: #90cdf4;
+}
+
+.marker.marker\:text-blue-400 > :not(template):before {
+  color: #63b3ed;
+}
+
+.marker.marker\:text-blue-500 > :not(template):before {
+  color: #4299e1;
+}
+
+.marker.marker\:text-blue-600 > :not(template):before {
+  color: #3182ce;
+}
+
+.marker.marker\:text-blue-700 > :not(template):before {
+  color: #2b6cb0;
+}
+
+.marker.marker\:text-blue-800 > :not(template):before {
+  color: #2c5282;
+}
+
+.marker.marker\:text-blue-900 > :not(template):before {
+  color: #2a4365;
+}
+
+.marker.marker\:text-indigo-100 > :not(template):before {
+  color: #ebf4ff;
+}
+
+.marker.marker\:text-indigo-200 > :not(template):before {
+  color: #c3dafe;
+}
+
+.marker.marker\:text-indigo-300 > :not(template):before {
+  color: #a3bffa;
+}
+
+.marker.marker\:text-indigo-400 > :not(template):before {
+  color: #7f9cf5;
+}
+
+.marker.marker\:text-indigo-500 > :not(template):before {
+  color: #667eea;
+}
+
+.marker.marker\:text-indigo-600 > :not(template):before {
+  color: #5a67d8;
+}
+
+.marker.marker\:text-indigo-700 > :not(template):before {
+  color: #4c51bf;
+}
+
+.marker.marker\:text-indigo-800 > :not(template):before {
+  color: #434190;
+}
+
+.marker.marker\:text-indigo-900 > :not(template):before {
+  color: #3c366b;
+}
+
+.marker.marker\:text-purple-100 > :not(template):before {
+  color: #faf5ff;
+}
+
+.marker.marker\:text-purple-200 > :not(template):before {
+  color: #e9d8fd;
+}
+
+.marker.marker\:text-purple-300 > :not(template):before {
+  color: #d6bcfa;
+}
+
+.marker.marker\:text-purple-400 > :not(template):before {
+  color: #b794f4;
+}
+
+.marker.marker\:text-purple-500 > :not(template):before {
+  color: #9f7aea;
+}
+
+.marker.marker\:text-purple-600 > :not(template):before {
+  color: #805ad5;
+}
+
+.marker.marker\:text-purple-700 > :not(template):before {
+  color: #6b46c1;
+}
+
+.marker.marker\:text-purple-800 > :not(template):before {
+  color: #553c9a;
+}
+
+.marker.marker\:text-purple-900 > :not(template):before {
+  color: #44337a;
+}
+
+.marker.marker\:text-pink-100 > :not(template):before {
+  color: #fff5f7;
+}
+
+.marker.marker\:text-pink-200 > :not(template):before {
+  color: #fed7e2;
+}
+
+.marker.marker\:text-pink-300 > :not(template):before {
+  color: #fbb6ce;
+}
+
+.marker.marker\:text-pink-400 > :not(template):before {
+  color: #f687b3;
+}
+
+.marker.marker\:text-pink-500 > :not(template):before {
+  color: #ed64a6;
+}
+
+.marker.marker\:text-pink-600 > :not(template):before {
+  color: #d53f8c;
+}
+
+.marker.marker\:text-pink-700 > :not(template):before {
+  color: #b83280;
+}
+
+.marker.marker\:text-pink-800 > :not(template):before {
+  color: #97266d;
+}
+
+.marker.marker\:text-pink-900 > :not(template):before {
+  color: #702459;
+}
+
 .italic {
   font-style: italic;
 }
@@ -11061,6 +11449,17 @@ video {
 
 .animate-bounce {
   animation: bounce 1s infinite;
+}
+
+.marker > :not(template) {
+  display: flex;
+  align-items: center;
+  list-style-position: inside;
+}
+
+.marker > :not(template):before {
+  content: "";
+  display: list-item;
 }
 
 .example {
@@ -15265,6 +15664,18 @@ video {
     list-style-type: decimal;
   }
 
+  .marker.sm\:marker\:list-none > :not(template):before {
+    list-style-type: none;
+  }
+
+  .marker.sm\:marker\:list-disc > :not(template):before {
+    list-style-type: disc;
+  }
+
+  .marker.sm\:marker\:list-decimal > :not(template):before {
+    list-style-type: decimal;
+  }
+
   .sm\:m-0 {
     margin: 0;
   }
@@ -19360,6 +19771,382 @@ video {
   }
 
   .sm\:focus\:text-pink-900:focus {
+    color: #702459;
+  }
+
+  .marker.sm\:marker\:text-transparent > :not(template):before {
+    color: transparent;
+  }
+
+  .marker.sm\:marker\:text-current > :not(template):before {
+    color: currentColor;
+  }
+
+  .marker.sm\:marker\:text-black > :not(template):before {
+    color: #000;
+  }
+
+  .marker.sm\:marker\:text-white > :not(template):before {
+    color: #fff;
+  }
+
+  .marker.sm\:marker\:text-gray-100 > :not(template):before {
+    color: #f7fafc;
+  }
+
+  .marker.sm\:marker\:text-gray-200 > :not(template):before {
+    color: #edf2f7;
+  }
+
+  .marker.sm\:marker\:text-gray-300 > :not(template):before {
+    color: #e2e8f0;
+  }
+
+  .marker.sm\:marker\:text-gray-400 > :not(template):before {
+    color: #cbd5e0;
+  }
+
+  .marker.sm\:marker\:text-gray-500 > :not(template):before {
+    color: #a0aec0;
+  }
+
+  .marker.sm\:marker\:text-gray-600 > :not(template):before {
+    color: #718096;
+  }
+
+  .marker.sm\:marker\:text-gray-700 > :not(template):before {
+    color: #4a5568;
+  }
+
+  .marker.sm\:marker\:text-gray-800 > :not(template):before {
+    color: #2d3748;
+  }
+
+  .marker.sm\:marker\:text-gray-900 > :not(template):before {
+    color: #1a202c;
+  }
+
+  .marker.sm\:marker\:text-red-100 > :not(template):before {
+    color: #fff5f5;
+  }
+
+  .marker.sm\:marker\:text-red-200 > :not(template):before {
+    color: #fed7d7;
+  }
+
+  .marker.sm\:marker\:text-red-300 > :not(template):before {
+    color: #feb2b2;
+  }
+
+  .marker.sm\:marker\:text-red-400 > :not(template):before {
+    color: #fc8181;
+  }
+
+  .marker.sm\:marker\:text-red-500 > :not(template):before {
+    color: #f56565;
+  }
+
+  .marker.sm\:marker\:text-red-600 > :not(template):before {
+    color: #e53e3e;
+  }
+
+  .marker.sm\:marker\:text-red-700 > :not(template):before {
+    color: #c53030;
+  }
+
+  .marker.sm\:marker\:text-red-800 > :not(template):before {
+    color: #9b2c2c;
+  }
+
+  .marker.sm\:marker\:text-red-900 > :not(template):before {
+    color: #742a2a;
+  }
+
+  .marker.sm\:marker\:text-orange-100 > :not(template):before {
+    color: #fffaf0;
+  }
+
+  .marker.sm\:marker\:text-orange-200 > :not(template):before {
+    color: #feebc8;
+  }
+
+  .marker.sm\:marker\:text-orange-300 > :not(template):before {
+    color: #fbd38d;
+  }
+
+  .marker.sm\:marker\:text-orange-400 > :not(template):before {
+    color: #f6ad55;
+  }
+
+  .marker.sm\:marker\:text-orange-500 > :not(template):before {
+    color: #ed8936;
+  }
+
+  .marker.sm\:marker\:text-orange-600 > :not(template):before {
+    color: #dd6b20;
+  }
+
+  .marker.sm\:marker\:text-orange-700 > :not(template):before {
+    color: #c05621;
+  }
+
+  .marker.sm\:marker\:text-orange-800 > :not(template):before {
+    color: #9c4221;
+  }
+
+  .marker.sm\:marker\:text-orange-900 > :not(template):before {
+    color: #7b341e;
+  }
+
+  .marker.sm\:marker\:text-yellow-100 > :not(template):before {
+    color: #fffff0;
+  }
+
+  .marker.sm\:marker\:text-yellow-200 > :not(template):before {
+    color: #fefcbf;
+  }
+
+  .marker.sm\:marker\:text-yellow-300 > :not(template):before {
+    color: #faf089;
+  }
+
+  .marker.sm\:marker\:text-yellow-400 > :not(template):before {
+    color: #f6e05e;
+  }
+
+  .marker.sm\:marker\:text-yellow-500 > :not(template):before {
+    color: #ecc94b;
+  }
+
+  .marker.sm\:marker\:text-yellow-600 > :not(template):before {
+    color: #d69e2e;
+  }
+
+  .marker.sm\:marker\:text-yellow-700 > :not(template):before {
+    color: #b7791f;
+  }
+
+  .marker.sm\:marker\:text-yellow-800 > :not(template):before {
+    color: #975a16;
+  }
+
+  .marker.sm\:marker\:text-yellow-900 > :not(template):before {
+    color: #744210;
+  }
+
+  .marker.sm\:marker\:text-green-100 > :not(template):before {
+    color: #f0fff4;
+  }
+
+  .marker.sm\:marker\:text-green-200 > :not(template):before {
+    color: #c6f6d5;
+  }
+
+  .marker.sm\:marker\:text-green-300 > :not(template):before {
+    color: #9ae6b4;
+  }
+
+  .marker.sm\:marker\:text-green-400 > :not(template):before {
+    color: #68d391;
+  }
+
+  .marker.sm\:marker\:text-green-500 > :not(template):before {
+    color: #48bb78;
+  }
+
+  .marker.sm\:marker\:text-green-600 > :not(template):before {
+    color: #38a169;
+  }
+
+  .marker.sm\:marker\:text-green-700 > :not(template):before {
+    color: #2f855a;
+  }
+
+  .marker.sm\:marker\:text-green-800 > :not(template):before {
+    color: #276749;
+  }
+
+  .marker.sm\:marker\:text-green-900 > :not(template):before {
+    color: #22543d;
+  }
+
+  .marker.sm\:marker\:text-teal-100 > :not(template):before {
+    color: #e6fffa;
+  }
+
+  .marker.sm\:marker\:text-teal-200 > :not(template):before {
+    color: #b2f5ea;
+  }
+
+  .marker.sm\:marker\:text-teal-300 > :not(template):before {
+    color: #81e6d9;
+  }
+
+  .marker.sm\:marker\:text-teal-400 > :not(template):before {
+    color: #4fd1c5;
+  }
+
+  .marker.sm\:marker\:text-teal-500 > :not(template):before {
+    color: #38b2ac;
+  }
+
+  .marker.sm\:marker\:text-teal-600 > :not(template):before {
+    color: #319795;
+  }
+
+  .marker.sm\:marker\:text-teal-700 > :not(template):before {
+    color: #2c7a7b;
+  }
+
+  .marker.sm\:marker\:text-teal-800 > :not(template):before {
+    color: #285e61;
+  }
+
+  .marker.sm\:marker\:text-teal-900 > :not(template):before {
+    color: #234e52;
+  }
+
+  .marker.sm\:marker\:text-blue-100 > :not(template):before {
+    color: #ebf8ff;
+  }
+
+  .marker.sm\:marker\:text-blue-200 > :not(template):before {
+    color: #bee3f8;
+  }
+
+  .marker.sm\:marker\:text-blue-300 > :not(template):before {
+    color: #90cdf4;
+  }
+
+  .marker.sm\:marker\:text-blue-400 > :not(template):before {
+    color: #63b3ed;
+  }
+
+  .marker.sm\:marker\:text-blue-500 > :not(template):before {
+    color: #4299e1;
+  }
+
+  .marker.sm\:marker\:text-blue-600 > :not(template):before {
+    color: #3182ce;
+  }
+
+  .marker.sm\:marker\:text-blue-700 > :not(template):before {
+    color: #2b6cb0;
+  }
+
+  .marker.sm\:marker\:text-blue-800 > :not(template):before {
+    color: #2c5282;
+  }
+
+  .marker.sm\:marker\:text-blue-900 > :not(template):before {
+    color: #2a4365;
+  }
+
+  .marker.sm\:marker\:text-indigo-100 > :not(template):before {
+    color: #ebf4ff;
+  }
+
+  .marker.sm\:marker\:text-indigo-200 > :not(template):before {
+    color: #c3dafe;
+  }
+
+  .marker.sm\:marker\:text-indigo-300 > :not(template):before {
+    color: #a3bffa;
+  }
+
+  .marker.sm\:marker\:text-indigo-400 > :not(template):before {
+    color: #7f9cf5;
+  }
+
+  .marker.sm\:marker\:text-indigo-500 > :not(template):before {
+    color: #667eea;
+  }
+
+  .marker.sm\:marker\:text-indigo-600 > :not(template):before {
+    color: #5a67d8;
+  }
+
+  .marker.sm\:marker\:text-indigo-700 > :not(template):before {
+    color: #4c51bf;
+  }
+
+  .marker.sm\:marker\:text-indigo-800 > :not(template):before {
+    color: #434190;
+  }
+
+  .marker.sm\:marker\:text-indigo-900 > :not(template):before {
+    color: #3c366b;
+  }
+
+  .marker.sm\:marker\:text-purple-100 > :not(template):before {
+    color: #faf5ff;
+  }
+
+  .marker.sm\:marker\:text-purple-200 > :not(template):before {
+    color: #e9d8fd;
+  }
+
+  .marker.sm\:marker\:text-purple-300 > :not(template):before {
+    color: #d6bcfa;
+  }
+
+  .marker.sm\:marker\:text-purple-400 > :not(template):before {
+    color: #b794f4;
+  }
+
+  .marker.sm\:marker\:text-purple-500 > :not(template):before {
+    color: #9f7aea;
+  }
+
+  .marker.sm\:marker\:text-purple-600 > :not(template):before {
+    color: #805ad5;
+  }
+
+  .marker.sm\:marker\:text-purple-700 > :not(template):before {
+    color: #6b46c1;
+  }
+
+  .marker.sm\:marker\:text-purple-800 > :not(template):before {
+    color: #553c9a;
+  }
+
+  .marker.sm\:marker\:text-purple-900 > :not(template):before {
+    color: #44337a;
+  }
+
+  .marker.sm\:marker\:text-pink-100 > :not(template):before {
+    color: #fff5f7;
+  }
+
+  .marker.sm\:marker\:text-pink-200 > :not(template):before {
+    color: #fed7e2;
+  }
+
+  .marker.sm\:marker\:text-pink-300 > :not(template):before {
+    color: #fbb6ce;
+  }
+
+  .marker.sm\:marker\:text-pink-400 > :not(template):before {
+    color: #f687b3;
+  }
+
+  .marker.sm\:marker\:text-pink-500 > :not(template):before {
+    color: #ed64a6;
+  }
+
+  .marker.sm\:marker\:text-pink-600 > :not(template):before {
+    color: #d53f8c;
+  }
+
+  .marker.sm\:marker\:text-pink-700 > :not(template):before {
+    color: #b83280;
+  }
+
+  .marker.sm\:marker\:text-pink-800 > :not(template):before {
+    color: #97266d;
+  }
+
+  .marker.sm\:marker\:text-pink-900 > :not(template):before {
     color: #702459;
   }
 
@@ -25727,6 +26514,18 @@ video {
     list-style-type: decimal;
   }
 
+  .marker.md\:marker\:list-none > :not(template):before {
+    list-style-type: none;
+  }
+
+  .marker.md\:marker\:list-disc > :not(template):before {
+    list-style-type: disc;
+  }
+
+  .marker.md\:marker\:list-decimal > :not(template):before {
+    list-style-type: decimal;
+  }
+
   .md\:m-0 {
     margin: 0;
   }
@@ -29822,6 +30621,382 @@ video {
   }
 
   .md\:focus\:text-pink-900:focus {
+    color: #702459;
+  }
+
+  .marker.md\:marker\:text-transparent > :not(template):before {
+    color: transparent;
+  }
+
+  .marker.md\:marker\:text-current > :not(template):before {
+    color: currentColor;
+  }
+
+  .marker.md\:marker\:text-black > :not(template):before {
+    color: #000;
+  }
+
+  .marker.md\:marker\:text-white > :not(template):before {
+    color: #fff;
+  }
+
+  .marker.md\:marker\:text-gray-100 > :not(template):before {
+    color: #f7fafc;
+  }
+
+  .marker.md\:marker\:text-gray-200 > :not(template):before {
+    color: #edf2f7;
+  }
+
+  .marker.md\:marker\:text-gray-300 > :not(template):before {
+    color: #e2e8f0;
+  }
+
+  .marker.md\:marker\:text-gray-400 > :not(template):before {
+    color: #cbd5e0;
+  }
+
+  .marker.md\:marker\:text-gray-500 > :not(template):before {
+    color: #a0aec0;
+  }
+
+  .marker.md\:marker\:text-gray-600 > :not(template):before {
+    color: #718096;
+  }
+
+  .marker.md\:marker\:text-gray-700 > :not(template):before {
+    color: #4a5568;
+  }
+
+  .marker.md\:marker\:text-gray-800 > :not(template):before {
+    color: #2d3748;
+  }
+
+  .marker.md\:marker\:text-gray-900 > :not(template):before {
+    color: #1a202c;
+  }
+
+  .marker.md\:marker\:text-red-100 > :not(template):before {
+    color: #fff5f5;
+  }
+
+  .marker.md\:marker\:text-red-200 > :not(template):before {
+    color: #fed7d7;
+  }
+
+  .marker.md\:marker\:text-red-300 > :not(template):before {
+    color: #feb2b2;
+  }
+
+  .marker.md\:marker\:text-red-400 > :not(template):before {
+    color: #fc8181;
+  }
+
+  .marker.md\:marker\:text-red-500 > :not(template):before {
+    color: #f56565;
+  }
+
+  .marker.md\:marker\:text-red-600 > :not(template):before {
+    color: #e53e3e;
+  }
+
+  .marker.md\:marker\:text-red-700 > :not(template):before {
+    color: #c53030;
+  }
+
+  .marker.md\:marker\:text-red-800 > :not(template):before {
+    color: #9b2c2c;
+  }
+
+  .marker.md\:marker\:text-red-900 > :not(template):before {
+    color: #742a2a;
+  }
+
+  .marker.md\:marker\:text-orange-100 > :not(template):before {
+    color: #fffaf0;
+  }
+
+  .marker.md\:marker\:text-orange-200 > :not(template):before {
+    color: #feebc8;
+  }
+
+  .marker.md\:marker\:text-orange-300 > :not(template):before {
+    color: #fbd38d;
+  }
+
+  .marker.md\:marker\:text-orange-400 > :not(template):before {
+    color: #f6ad55;
+  }
+
+  .marker.md\:marker\:text-orange-500 > :not(template):before {
+    color: #ed8936;
+  }
+
+  .marker.md\:marker\:text-orange-600 > :not(template):before {
+    color: #dd6b20;
+  }
+
+  .marker.md\:marker\:text-orange-700 > :not(template):before {
+    color: #c05621;
+  }
+
+  .marker.md\:marker\:text-orange-800 > :not(template):before {
+    color: #9c4221;
+  }
+
+  .marker.md\:marker\:text-orange-900 > :not(template):before {
+    color: #7b341e;
+  }
+
+  .marker.md\:marker\:text-yellow-100 > :not(template):before {
+    color: #fffff0;
+  }
+
+  .marker.md\:marker\:text-yellow-200 > :not(template):before {
+    color: #fefcbf;
+  }
+
+  .marker.md\:marker\:text-yellow-300 > :not(template):before {
+    color: #faf089;
+  }
+
+  .marker.md\:marker\:text-yellow-400 > :not(template):before {
+    color: #f6e05e;
+  }
+
+  .marker.md\:marker\:text-yellow-500 > :not(template):before {
+    color: #ecc94b;
+  }
+
+  .marker.md\:marker\:text-yellow-600 > :not(template):before {
+    color: #d69e2e;
+  }
+
+  .marker.md\:marker\:text-yellow-700 > :not(template):before {
+    color: #b7791f;
+  }
+
+  .marker.md\:marker\:text-yellow-800 > :not(template):before {
+    color: #975a16;
+  }
+
+  .marker.md\:marker\:text-yellow-900 > :not(template):before {
+    color: #744210;
+  }
+
+  .marker.md\:marker\:text-green-100 > :not(template):before {
+    color: #f0fff4;
+  }
+
+  .marker.md\:marker\:text-green-200 > :not(template):before {
+    color: #c6f6d5;
+  }
+
+  .marker.md\:marker\:text-green-300 > :not(template):before {
+    color: #9ae6b4;
+  }
+
+  .marker.md\:marker\:text-green-400 > :not(template):before {
+    color: #68d391;
+  }
+
+  .marker.md\:marker\:text-green-500 > :not(template):before {
+    color: #48bb78;
+  }
+
+  .marker.md\:marker\:text-green-600 > :not(template):before {
+    color: #38a169;
+  }
+
+  .marker.md\:marker\:text-green-700 > :not(template):before {
+    color: #2f855a;
+  }
+
+  .marker.md\:marker\:text-green-800 > :not(template):before {
+    color: #276749;
+  }
+
+  .marker.md\:marker\:text-green-900 > :not(template):before {
+    color: #22543d;
+  }
+
+  .marker.md\:marker\:text-teal-100 > :not(template):before {
+    color: #e6fffa;
+  }
+
+  .marker.md\:marker\:text-teal-200 > :not(template):before {
+    color: #b2f5ea;
+  }
+
+  .marker.md\:marker\:text-teal-300 > :not(template):before {
+    color: #81e6d9;
+  }
+
+  .marker.md\:marker\:text-teal-400 > :not(template):before {
+    color: #4fd1c5;
+  }
+
+  .marker.md\:marker\:text-teal-500 > :not(template):before {
+    color: #38b2ac;
+  }
+
+  .marker.md\:marker\:text-teal-600 > :not(template):before {
+    color: #319795;
+  }
+
+  .marker.md\:marker\:text-teal-700 > :not(template):before {
+    color: #2c7a7b;
+  }
+
+  .marker.md\:marker\:text-teal-800 > :not(template):before {
+    color: #285e61;
+  }
+
+  .marker.md\:marker\:text-teal-900 > :not(template):before {
+    color: #234e52;
+  }
+
+  .marker.md\:marker\:text-blue-100 > :not(template):before {
+    color: #ebf8ff;
+  }
+
+  .marker.md\:marker\:text-blue-200 > :not(template):before {
+    color: #bee3f8;
+  }
+
+  .marker.md\:marker\:text-blue-300 > :not(template):before {
+    color: #90cdf4;
+  }
+
+  .marker.md\:marker\:text-blue-400 > :not(template):before {
+    color: #63b3ed;
+  }
+
+  .marker.md\:marker\:text-blue-500 > :not(template):before {
+    color: #4299e1;
+  }
+
+  .marker.md\:marker\:text-blue-600 > :not(template):before {
+    color: #3182ce;
+  }
+
+  .marker.md\:marker\:text-blue-700 > :not(template):before {
+    color: #2b6cb0;
+  }
+
+  .marker.md\:marker\:text-blue-800 > :not(template):before {
+    color: #2c5282;
+  }
+
+  .marker.md\:marker\:text-blue-900 > :not(template):before {
+    color: #2a4365;
+  }
+
+  .marker.md\:marker\:text-indigo-100 > :not(template):before {
+    color: #ebf4ff;
+  }
+
+  .marker.md\:marker\:text-indigo-200 > :not(template):before {
+    color: #c3dafe;
+  }
+
+  .marker.md\:marker\:text-indigo-300 > :not(template):before {
+    color: #a3bffa;
+  }
+
+  .marker.md\:marker\:text-indigo-400 > :not(template):before {
+    color: #7f9cf5;
+  }
+
+  .marker.md\:marker\:text-indigo-500 > :not(template):before {
+    color: #667eea;
+  }
+
+  .marker.md\:marker\:text-indigo-600 > :not(template):before {
+    color: #5a67d8;
+  }
+
+  .marker.md\:marker\:text-indigo-700 > :not(template):before {
+    color: #4c51bf;
+  }
+
+  .marker.md\:marker\:text-indigo-800 > :not(template):before {
+    color: #434190;
+  }
+
+  .marker.md\:marker\:text-indigo-900 > :not(template):before {
+    color: #3c366b;
+  }
+
+  .marker.md\:marker\:text-purple-100 > :not(template):before {
+    color: #faf5ff;
+  }
+
+  .marker.md\:marker\:text-purple-200 > :not(template):before {
+    color: #e9d8fd;
+  }
+
+  .marker.md\:marker\:text-purple-300 > :not(template):before {
+    color: #d6bcfa;
+  }
+
+  .marker.md\:marker\:text-purple-400 > :not(template):before {
+    color: #b794f4;
+  }
+
+  .marker.md\:marker\:text-purple-500 > :not(template):before {
+    color: #9f7aea;
+  }
+
+  .marker.md\:marker\:text-purple-600 > :not(template):before {
+    color: #805ad5;
+  }
+
+  .marker.md\:marker\:text-purple-700 > :not(template):before {
+    color: #6b46c1;
+  }
+
+  .marker.md\:marker\:text-purple-800 > :not(template):before {
+    color: #553c9a;
+  }
+
+  .marker.md\:marker\:text-purple-900 > :not(template):before {
+    color: #44337a;
+  }
+
+  .marker.md\:marker\:text-pink-100 > :not(template):before {
+    color: #fff5f7;
+  }
+
+  .marker.md\:marker\:text-pink-200 > :not(template):before {
+    color: #fed7e2;
+  }
+
+  .marker.md\:marker\:text-pink-300 > :not(template):before {
+    color: #fbb6ce;
+  }
+
+  .marker.md\:marker\:text-pink-400 > :not(template):before {
+    color: #f687b3;
+  }
+
+  .marker.md\:marker\:text-pink-500 > :not(template):before {
+    color: #ed64a6;
+  }
+
+  .marker.md\:marker\:text-pink-600 > :not(template):before {
+    color: #d53f8c;
+  }
+
+  .marker.md\:marker\:text-pink-700 > :not(template):before {
+    color: #b83280;
+  }
+
+  .marker.md\:marker\:text-pink-800 > :not(template):before {
+    color: #97266d;
+  }
+
+  .marker.md\:marker\:text-pink-900 > :not(template):before {
     color: #702459;
   }
 
@@ -36189,6 +37364,18 @@ video {
     list-style-type: decimal;
   }
 
+  .marker.lg\:marker\:list-none > :not(template):before {
+    list-style-type: none;
+  }
+
+  .marker.lg\:marker\:list-disc > :not(template):before {
+    list-style-type: disc;
+  }
+
+  .marker.lg\:marker\:list-decimal > :not(template):before {
+    list-style-type: decimal;
+  }
+
   .lg\:m-0 {
     margin: 0;
   }
@@ -40284,6 +41471,382 @@ video {
   }
 
   .lg\:focus\:text-pink-900:focus {
+    color: #702459;
+  }
+
+  .marker.lg\:marker\:text-transparent > :not(template):before {
+    color: transparent;
+  }
+
+  .marker.lg\:marker\:text-current > :not(template):before {
+    color: currentColor;
+  }
+
+  .marker.lg\:marker\:text-black > :not(template):before {
+    color: #000;
+  }
+
+  .marker.lg\:marker\:text-white > :not(template):before {
+    color: #fff;
+  }
+
+  .marker.lg\:marker\:text-gray-100 > :not(template):before {
+    color: #f7fafc;
+  }
+
+  .marker.lg\:marker\:text-gray-200 > :not(template):before {
+    color: #edf2f7;
+  }
+
+  .marker.lg\:marker\:text-gray-300 > :not(template):before {
+    color: #e2e8f0;
+  }
+
+  .marker.lg\:marker\:text-gray-400 > :not(template):before {
+    color: #cbd5e0;
+  }
+
+  .marker.lg\:marker\:text-gray-500 > :not(template):before {
+    color: #a0aec0;
+  }
+
+  .marker.lg\:marker\:text-gray-600 > :not(template):before {
+    color: #718096;
+  }
+
+  .marker.lg\:marker\:text-gray-700 > :not(template):before {
+    color: #4a5568;
+  }
+
+  .marker.lg\:marker\:text-gray-800 > :not(template):before {
+    color: #2d3748;
+  }
+
+  .marker.lg\:marker\:text-gray-900 > :not(template):before {
+    color: #1a202c;
+  }
+
+  .marker.lg\:marker\:text-red-100 > :not(template):before {
+    color: #fff5f5;
+  }
+
+  .marker.lg\:marker\:text-red-200 > :not(template):before {
+    color: #fed7d7;
+  }
+
+  .marker.lg\:marker\:text-red-300 > :not(template):before {
+    color: #feb2b2;
+  }
+
+  .marker.lg\:marker\:text-red-400 > :not(template):before {
+    color: #fc8181;
+  }
+
+  .marker.lg\:marker\:text-red-500 > :not(template):before {
+    color: #f56565;
+  }
+
+  .marker.lg\:marker\:text-red-600 > :not(template):before {
+    color: #e53e3e;
+  }
+
+  .marker.lg\:marker\:text-red-700 > :not(template):before {
+    color: #c53030;
+  }
+
+  .marker.lg\:marker\:text-red-800 > :not(template):before {
+    color: #9b2c2c;
+  }
+
+  .marker.lg\:marker\:text-red-900 > :not(template):before {
+    color: #742a2a;
+  }
+
+  .marker.lg\:marker\:text-orange-100 > :not(template):before {
+    color: #fffaf0;
+  }
+
+  .marker.lg\:marker\:text-orange-200 > :not(template):before {
+    color: #feebc8;
+  }
+
+  .marker.lg\:marker\:text-orange-300 > :not(template):before {
+    color: #fbd38d;
+  }
+
+  .marker.lg\:marker\:text-orange-400 > :not(template):before {
+    color: #f6ad55;
+  }
+
+  .marker.lg\:marker\:text-orange-500 > :not(template):before {
+    color: #ed8936;
+  }
+
+  .marker.lg\:marker\:text-orange-600 > :not(template):before {
+    color: #dd6b20;
+  }
+
+  .marker.lg\:marker\:text-orange-700 > :not(template):before {
+    color: #c05621;
+  }
+
+  .marker.lg\:marker\:text-orange-800 > :not(template):before {
+    color: #9c4221;
+  }
+
+  .marker.lg\:marker\:text-orange-900 > :not(template):before {
+    color: #7b341e;
+  }
+
+  .marker.lg\:marker\:text-yellow-100 > :not(template):before {
+    color: #fffff0;
+  }
+
+  .marker.lg\:marker\:text-yellow-200 > :not(template):before {
+    color: #fefcbf;
+  }
+
+  .marker.lg\:marker\:text-yellow-300 > :not(template):before {
+    color: #faf089;
+  }
+
+  .marker.lg\:marker\:text-yellow-400 > :not(template):before {
+    color: #f6e05e;
+  }
+
+  .marker.lg\:marker\:text-yellow-500 > :not(template):before {
+    color: #ecc94b;
+  }
+
+  .marker.lg\:marker\:text-yellow-600 > :not(template):before {
+    color: #d69e2e;
+  }
+
+  .marker.lg\:marker\:text-yellow-700 > :not(template):before {
+    color: #b7791f;
+  }
+
+  .marker.lg\:marker\:text-yellow-800 > :not(template):before {
+    color: #975a16;
+  }
+
+  .marker.lg\:marker\:text-yellow-900 > :not(template):before {
+    color: #744210;
+  }
+
+  .marker.lg\:marker\:text-green-100 > :not(template):before {
+    color: #f0fff4;
+  }
+
+  .marker.lg\:marker\:text-green-200 > :not(template):before {
+    color: #c6f6d5;
+  }
+
+  .marker.lg\:marker\:text-green-300 > :not(template):before {
+    color: #9ae6b4;
+  }
+
+  .marker.lg\:marker\:text-green-400 > :not(template):before {
+    color: #68d391;
+  }
+
+  .marker.lg\:marker\:text-green-500 > :not(template):before {
+    color: #48bb78;
+  }
+
+  .marker.lg\:marker\:text-green-600 > :not(template):before {
+    color: #38a169;
+  }
+
+  .marker.lg\:marker\:text-green-700 > :not(template):before {
+    color: #2f855a;
+  }
+
+  .marker.lg\:marker\:text-green-800 > :not(template):before {
+    color: #276749;
+  }
+
+  .marker.lg\:marker\:text-green-900 > :not(template):before {
+    color: #22543d;
+  }
+
+  .marker.lg\:marker\:text-teal-100 > :not(template):before {
+    color: #e6fffa;
+  }
+
+  .marker.lg\:marker\:text-teal-200 > :not(template):before {
+    color: #b2f5ea;
+  }
+
+  .marker.lg\:marker\:text-teal-300 > :not(template):before {
+    color: #81e6d9;
+  }
+
+  .marker.lg\:marker\:text-teal-400 > :not(template):before {
+    color: #4fd1c5;
+  }
+
+  .marker.lg\:marker\:text-teal-500 > :not(template):before {
+    color: #38b2ac;
+  }
+
+  .marker.lg\:marker\:text-teal-600 > :not(template):before {
+    color: #319795;
+  }
+
+  .marker.lg\:marker\:text-teal-700 > :not(template):before {
+    color: #2c7a7b;
+  }
+
+  .marker.lg\:marker\:text-teal-800 > :not(template):before {
+    color: #285e61;
+  }
+
+  .marker.lg\:marker\:text-teal-900 > :not(template):before {
+    color: #234e52;
+  }
+
+  .marker.lg\:marker\:text-blue-100 > :not(template):before {
+    color: #ebf8ff;
+  }
+
+  .marker.lg\:marker\:text-blue-200 > :not(template):before {
+    color: #bee3f8;
+  }
+
+  .marker.lg\:marker\:text-blue-300 > :not(template):before {
+    color: #90cdf4;
+  }
+
+  .marker.lg\:marker\:text-blue-400 > :not(template):before {
+    color: #63b3ed;
+  }
+
+  .marker.lg\:marker\:text-blue-500 > :not(template):before {
+    color: #4299e1;
+  }
+
+  .marker.lg\:marker\:text-blue-600 > :not(template):before {
+    color: #3182ce;
+  }
+
+  .marker.lg\:marker\:text-blue-700 > :not(template):before {
+    color: #2b6cb0;
+  }
+
+  .marker.lg\:marker\:text-blue-800 > :not(template):before {
+    color: #2c5282;
+  }
+
+  .marker.lg\:marker\:text-blue-900 > :not(template):before {
+    color: #2a4365;
+  }
+
+  .marker.lg\:marker\:text-indigo-100 > :not(template):before {
+    color: #ebf4ff;
+  }
+
+  .marker.lg\:marker\:text-indigo-200 > :not(template):before {
+    color: #c3dafe;
+  }
+
+  .marker.lg\:marker\:text-indigo-300 > :not(template):before {
+    color: #a3bffa;
+  }
+
+  .marker.lg\:marker\:text-indigo-400 > :not(template):before {
+    color: #7f9cf5;
+  }
+
+  .marker.lg\:marker\:text-indigo-500 > :not(template):before {
+    color: #667eea;
+  }
+
+  .marker.lg\:marker\:text-indigo-600 > :not(template):before {
+    color: #5a67d8;
+  }
+
+  .marker.lg\:marker\:text-indigo-700 > :not(template):before {
+    color: #4c51bf;
+  }
+
+  .marker.lg\:marker\:text-indigo-800 > :not(template):before {
+    color: #434190;
+  }
+
+  .marker.lg\:marker\:text-indigo-900 > :not(template):before {
+    color: #3c366b;
+  }
+
+  .marker.lg\:marker\:text-purple-100 > :not(template):before {
+    color: #faf5ff;
+  }
+
+  .marker.lg\:marker\:text-purple-200 > :not(template):before {
+    color: #e9d8fd;
+  }
+
+  .marker.lg\:marker\:text-purple-300 > :not(template):before {
+    color: #d6bcfa;
+  }
+
+  .marker.lg\:marker\:text-purple-400 > :not(template):before {
+    color: #b794f4;
+  }
+
+  .marker.lg\:marker\:text-purple-500 > :not(template):before {
+    color: #9f7aea;
+  }
+
+  .marker.lg\:marker\:text-purple-600 > :not(template):before {
+    color: #805ad5;
+  }
+
+  .marker.lg\:marker\:text-purple-700 > :not(template):before {
+    color: #6b46c1;
+  }
+
+  .marker.lg\:marker\:text-purple-800 > :not(template):before {
+    color: #553c9a;
+  }
+
+  .marker.lg\:marker\:text-purple-900 > :not(template):before {
+    color: #44337a;
+  }
+
+  .marker.lg\:marker\:text-pink-100 > :not(template):before {
+    color: #fff5f7;
+  }
+
+  .marker.lg\:marker\:text-pink-200 > :not(template):before {
+    color: #fed7e2;
+  }
+
+  .marker.lg\:marker\:text-pink-300 > :not(template):before {
+    color: #fbb6ce;
+  }
+
+  .marker.lg\:marker\:text-pink-400 > :not(template):before {
+    color: #f687b3;
+  }
+
+  .marker.lg\:marker\:text-pink-500 > :not(template):before {
+    color: #ed64a6;
+  }
+
+  .marker.lg\:marker\:text-pink-600 > :not(template):before {
+    color: #d53f8c;
+  }
+
+  .marker.lg\:marker\:text-pink-700 > :not(template):before {
+    color: #b83280;
+  }
+
+  .marker.lg\:marker\:text-pink-800 > :not(template):before {
+    color: #97266d;
+  }
+
+  .marker.lg\:marker\:text-pink-900 > :not(template):before {
     color: #702459;
   }
 
@@ -46651,6 +48214,18 @@ video {
     list-style-type: decimal;
   }
 
+  .marker.xl\:marker\:list-none > :not(template):before {
+    list-style-type: none;
+  }
+
+  .marker.xl\:marker\:list-disc > :not(template):before {
+    list-style-type: disc;
+  }
+
+  .marker.xl\:marker\:list-decimal > :not(template):before {
+    list-style-type: decimal;
+  }
+
   .xl\:m-0 {
     margin: 0;
   }
@@ -50746,6 +52321,382 @@ video {
   }
 
   .xl\:focus\:text-pink-900:focus {
+    color: #702459;
+  }
+
+  .marker.xl\:marker\:text-transparent > :not(template):before {
+    color: transparent;
+  }
+
+  .marker.xl\:marker\:text-current > :not(template):before {
+    color: currentColor;
+  }
+
+  .marker.xl\:marker\:text-black > :not(template):before {
+    color: #000;
+  }
+
+  .marker.xl\:marker\:text-white > :not(template):before {
+    color: #fff;
+  }
+
+  .marker.xl\:marker\:text-gray-100 > :not(template):before {
+    color: #f7fafc;
+  }
+
+  .marker.xl\:marker\:text-gray-200 > :not(template):before {
+    color: #edf2f7;
+  }
+
+  .marker.xl\:marker\:text-gray-300 > :not(template):before {
+    color: #e2e8f0;
+  }
+
+  .marker.xl\:marker\:text-gray-400 > :not(template):before {
+    color: #cbd5e0;
+  }
+
+  .marker.xl\:marker\:text-gray-500 > :not(template):before {
+    color: #a0aec0;
+  }
+
+  .marker.xl\:marker\:text-gray-600 > :not(template):before {
+    color: #718096;
+  }
+
+  .marker.xl\:marker\:text-gray-700 > :not(template):before {
+    color: #4a5568;
+  }
+
+  .marker.xl\:marker\:text-gray-800 > :not(template):before {
+    color: #2d3748;
+  }
+
+  .marker.xl\:marker\:text-gray-900 > :not(template):before {
+    color: #1a202c;
+  }
+
+  .marker.xl\:marker\:text-red-100 > :not(template):before {
+    color: #fff5f5;
+  }
+
+  .marker.xl\:marker\:text-red-200 > :not(template):before {
+    color: #fed7d7;
+  }
+
+  .marker.xl\:marker\:text-red-300 > :not(template):before {
+    color: #feb2b2;
+  }
+
+  .marker.xl\:marker\:text-red-400 > :not(template):before {
+    color: #fc8181;
+  }
+
+  .marker.xl\:marker\:text-red-500 > :not(template):before {
+    color: #f56565;
+  }
+
+  .marker.xl\:marker\:text-red-600 > :not(template):before {
+    color: #e53e3e;
+  }
+
+  .marker.xl\:marker\:text-red-700 > :not(template):before {
+    color: #c53030;
+  }
+
+  .marker.xl\:marker\:text-red-800 > :not(template):before {
+    color: #9b2c2c;
+  }
+
+  .marker.xl\:marker\:text-red-900 > :not(template):before {
+    color: #742a2a;
+  }
+
+  .marker.xl\:marker\:text-orange-100 > :not(template):before {
+    color: #fffaf0;
+  }
+
+  .marker.xl\:marker\:text-orange-200 > :not(template):before {
+    color: #feebc8;
+  }
+
+  .marker.xl\:marker\:text-orange-300 > :not(template):before {
+    color: #fbd38d;
+  }
+
+  .marker.xl\:marker\:text-orange-400 > :not(template):before {
+    color: #f6ad55;
+  }
+
+  .marker.xl\:marker\:text-orange-500 > :not(template):before {
+    color: #ed8936;
+  }
+
+  .marker.xl\:marker\:text-orange-600 > :not(template):before {
+    color: #dd6b20;
+  }
+
+  .marker.xl\:marker\:text-orange-700 > :not(template):before {
+    color: #c05621;
+  }
+
+  .marker.xl\:marker\:text-orange-800 > :not(template):before {
+    color: #9c4221;
+  }
+
+  .marker.xl\:marker\:text-orange-900 > :not(template):before {
+    color: #7b341e;
+  }
+
+  .marker.xl\:marker\:text-yellow-100 > :not(template):before {
+    color: #fffff0;
+  }
+
+  .marker.xl\:marker\:text-yellow-200 > :not(template):before {
+    color: #fefcbf;
+  }
+
+  .marker.xl\:marker\:text-yellow-300 > :not(template):before {
+    color: #faf089;
+  }
+
+  .marker.xl\:marker\:text-yellow-400 > :not(template):before {
+    color: #f6e05e;
+  }
+
+  .marker.xl\:marker\:text-yellow-500 > :not(template):before {
+    color: #ecc94b;
+  }
+
+  .marker.xl\:marker\:text-yellow-600 > :not(template):before {
+    color: #d69e2e;
+  }
+
+  .marker.xl\:marker\:text-yellow-700 > :not(template):before {
+    color: #b7791f;
+  }
+
+  .marker.xl\:marker\:text-yellow-800 > :not(template):before {
+    color: #975a16;
+  }
+
+  .marker.xl\:marker\:text-yellow-900 > :not(template):before {
+    color: #744210;
+  }
+
+  .marker.xl\:marker\:text-green-100 > :not(template):before {
+    color: #f0fff4;
+  }
+
+  .marker.xl\:marker\:text-green-200 > :not(template):before {
+    color: #c6f6d5;
+  }
+
+  .marker.xl\:marker\:text-green-300 > :not(template):before {
+    color: #9ae6b4;
+  }
+
+  .marker.xl\:marker\:text-green-400 > :not(template):before {
+    color: #68d391;
+  }
+
+  .marker.xl\:marker\:text-green-500 > :not(template):before {
+    color: #48bb78;
+  }
+
+  .marker.xl\:marker\:text-green-600 > :not(template):before {
+    color: #38a169;
+  }
+
+  .marker.xl\:marker\:text-green-700 > :not(template):before {
+    color: #2f855a;
+  }
+
+  .marker.xl\:marker\:text-green-800 > :not(template):before {
+    color: #276749;
+  }
+
+  .marker.xl\:marker\:text-green-900 > :not(template):before {
+    color: #22543d;
+  }
+
+  .marker.xl\:marker\:text-teal-100 > :not(template):before {
+    color: #e6fffa;
+  }
+
+  .marker.xl\:marker\:text-teal-200 > :not(template):before {
+    color: #b2f5ea;
+  }
+
+  .marker.xl\:marker\:text-teal-300 > :not(template):before {
+    color: #81e6d9;
+  }
+
+  .marker.xl\:marker\:text-teal-400 > :not(template):before {
+    color: #4fd1c5;
+  }
+
+  .marker.xl\:marker\:text-teal-500 > :not(template):before {
+    color: #38b2ac;
+  }
+
+  .marker.xl\:marker\:text-teal-600 > :not(template):before {
+    color: #319795;
+  }
+
+  .marker.xl\:marker\:text-teal-700 > :not(template):before {
+    color: #2c7a7b;
+  }
+
+  .marker.xl\:marker\:text-teal-800 > :not(template):before {
+    color: #285e61;
+  }
+
+  .marker.xl\:marker\:text-teal-900 > :not(template):before {
+    color: #234e52;
+  }
+
+  .marker.xl\:marker\:text-blue-100 > :not(template):before {
+    color: #ebf8ff;
+  }
+
+  .marker.xl\:marker\:text-blue-200 > :not(template):before {
+    color: #bee3f8;
+  }
+
+  .marker.xl\:marker\:text-blue-300 > :not(template):before {
+    color: #90cdf4;
+  }
+
+  .marker.xl\:marker\:text-blue-400 > :not(template):before {
+    color: #63b3ed;
+  }
+
+  .marker.xl\:marker\:text-blue-500 > :not(template):before {
+    color: #4299e1;
+  }
+
+  .marker.xl\:marker\:text-blue-600 > :not(template):before {
+    color: #3182ce;
+  }
+
+  .marker.xl\:marker\:text-blue-700 > :not(template):before {
+    color: #2b6cb0;
+  }
+
+  .marker.xl\:marker\:text-blue-800 > :not(template):before {
+    color: #2c5282;
+  }
+
+  .marker.xl\:marker\:text-blue-900 > :not(template):before {
+    color: #2a4365;
+  }
+
+  .marker.xl\:marker\:text-indigo-100 > :not(template):before {
+    color: #ebf4ff;
+  }
+
+  .marker.xl\:marker\:text-indigo-200 > :not(template):before {
+    color: #c3dafe;
+  }
+
+  .marker.xl\:marker\:text-indigo-300 > :not(template):before {
+    color: #a3bffa;
+  }
+
+  .marker.xl\:marker\:text-indigo-400 > :not(template):before {
+    color: #7f9cf5;
+  }
+
+  .marker.xl\:marker\:text-indigo-500 > :not(template):before {
+    color: #667eea;
+  }
+
+  .marker.xl\:marker\:text-indigo-600 > :not(template):before {
+    color: #5a67d8;
+  }
+
+  .marker.xl\:marker\:text-indigo-700 > :not(template):before {
+    color: #4c51bf;
+  }
+
+  .marker.xl\:marker\:text-indigo-800 > :not(template):before {
+    color: #434190;
+  }
+
+  .marker.xl\:marker\:text-indigo-900 > :not(template):before {
+    color: #3c366b;
+  }
+
+  .marker.xl\:marker\:text-purple-100 > :not(template):before {
+    color: #faf5ff;
+  }
+
+  .marker.xl\:marker\:text-purple-200 > :not(template):before {
+    color: #e9d8fd;
+  }
+
+  .marker.xl\:marker\:text-purple-300 > :not(template):before {
+    color: #d6bcfa;
+  }
+
+  .marker.xl\:marker\:text-purple-400 > :not(template):before {
+    color: #b794f4;
+  }
+
+  .marker.xl\:marker\:text-purple-500 > :not(template):before {
+    color: #9f7aea;
+  }
+
+  .marker.xl\:marker\:text-purple-600 > :not(template):before {
+    color: #805ad5;
+  }
+
+  .marker.xl\:marker\:text-purple-700 > :not(template):before {
+    color: #6b46c1;
+  }
+
+  .marker.xl\:marker\:text-purple-800 > :not(template):before {
+    color: #553c9a;
+  }
+
+  .marker.xl\:marker\:text-purple-900 > :not(template):before {
+    color: #44337a;
+  }
+
+  .marker.xl\:marker\:text-pink-100 > :not(template):before {
+    color: #fff5f7;
+  }
+
+  .marker.xl\:marker\:text-pink-200 > :not(template):before {
+    color: #fed7e2;
+  }
+
+  .marker.xl\:marker\:text-pink-300 > :not(template):before {
+    color: #fbb6ce;
+  }
+
+  .marker.xl\:marker\:text-pink-400 > :not(template):before {
+    color: #f687b3;
+  }
+
+  .marker.xl\:marker\:text-pink-500 > :not(template):before {
+    color: #ed64a6;
+  }
+
+  .marker.xl\:marker\:text-pink-600 > :not(template):before {
+    color: #d53f8c;
+  }
+
+  .marker.xl\:marker\:text-pink-700 > :not(template):before {
+    color: #b83280;
+  }
+
+  .marker.xl\:marker\:text-pink-800 > :not(template):before {
+    color: #97266d;
+  }
+
+  .marker.xl\:marker\:text-pink-900 > :not(template):before {
     color: #702459;
   }
 

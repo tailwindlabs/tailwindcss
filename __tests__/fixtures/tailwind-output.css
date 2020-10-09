@@ -10493,6 +10493,18 @@ video {
   list-style-type: decimal;
 }
 
+.marker.marker\:list-none > :not(template):before {
+  list-style-type: none;
+}
+
+.marker.marker\:list-disc > :not(template):before {
+  list-style-type: disc;
+}
+
+.marker.marker\:list-decimal > :not(template):before {
+  list-style-type: decimal;
+}
+
 .m-0 {
   margin: 0;
 }
@@ -15647,6 +15659,566 @@ video {
   color: rgba(112, 36, 89, var(--text-opacity));
 }
 
+.marker.marker\:text-transparent > :not(template):before {
+  color: transparent;
+}
+
+.marker.marker\:text-current > :not(template):before {
+  color: currentColor;
+}
+
+.marker.marker\:text-black > :not(template):before {
+  --text-opacity: 1;
+  color: #000;
+  color: rgba(0, 0, 0, var(--text-opacity));
+}
+
+.marker.marker\:text-white > :not(template):before {
+  --text-opacity: 1;
+  color: #fff;
+  color: rgba(255, 255, 255, var(--text-opacity));
+}
+
+.marker.marker\:text-gray-100 > :not(template):before {
+  --text-opacity: 1;
+  color: #f7fafc;
+  color: rgba(247, 250, 252, var(--text-opacity));
+}
+
+.marker.marker\:text-gray-200 > :not(template):before {
+  --text-opacity: 1;
+  color: #edf2f7;
+  color: rgba(237, 242, 247, var(--text-opacity));
+}
+
+.marker.marker\:text-gray-300 > :not(template):before {
+  --text-opacity: 1;
+  color: #e2e8f0;
+  color: rgba(226, 232, 240, var(--text-opacity));
+}
+
+.marker.marker\:text-gray-400 > :not(template):before {
+  --text-opacity: 1;
+  color: #cbd5e0;
+  color: rgba(203, 213, 224, var(--text-opacity));
+}
+
+.marker.marker\:text-gray-500 > :not(template):before {
+  --text-opacity: 1;
+  color: #a0aec0;
+  color: rgba(160, 174, 192, var(--text-opacity));
+}
+
+.marker.marker\:text-gray-600 > :not(template):before {
+  --text-opacity: 1;
+  color: #718096;
+  color: rgba(113, 128, 150, var(--text-opacity));
+}
+
+.marker.marker\:text-gray-700 > :not(template):before {
+  --text-opacity: 1;
+  color: #4a5568;
+  color: rgba(74, 85, 104, var(--text-opacity));
+}
+
+.marker.marker\:text-gray-800 > :not(template):before {
+  --text-opacity: 1;
+  color: #2d3748;
+  color: rgba(45, 55, 72, var(--text-opacity));
+}
+
+.marker.marker\:text-gray-900 > :not(template):before {
+  --text-opacity: 1;
+  color: #1a202c;
+  color: rgba(26, 32, 44, var(--text-opacity));
+}
+
+.marker.marker\:text-red-100 > :not(template):before {
+  --text-opacity: 1;
+  color: #fff5f5;
+  color: rgba(255, 245, 245, var(--text-opacity));
+}
+
+.marker.marker\:text-red-200 > :not(template):before {
+  --text-opacity: 1;
+  color: #fed7d7;
+  color: rgba(254, 215, 215, var(--text-opacity));
+}
+
+.marker.marker\:text-red-300 > :not(template):before {
+  --text-opacity: 1;
+  color: #feb2b2;
+  color: rgba(254, 178, 178, var(--text-opacity));
+}
+
+.marker.marker\:text-red-400 > :not(template):before {
+  --text-opacity: 1;
+  color: #fc8181;
+  color: rgba(252, 129, 129, var(--text-opacity));
+}
+
+.marker.marker\:text-red-500 > :not(template):before {
+  --text-opacity: 1;
+  color: #f56565;
+  color: rgba(245, 101, 101, var(--text-opacity));
+}
+
+.marker.marker\:text-red-600 > :not(template):before {
+  --text-opacity: 1;
+  color: #e53e3e;
+  color: rgba(229, 62, 62, var(--text-opacity));
+}
+
+.marker.marker\:text-red-700 > :not(template):before {
+  --text-opacity: 1;
+  color: #c53030;
+  color: rgba(197, 48, 48, var(--text-opacity));
+}
+
+.marker.marker\:text-red-800 > :not(template):before {
+  --text-opacity: 1;
+  color: #9b2c2c;
+  color: rgba(155, 44, 44, var(--text-opacity));
+}
+
+.marker.marker\:text-red-900 > :not(template):before {
+  --text-opacity: 1;
+  color: #742a2a;
+  color: rgba(116, 42, 42, var(--text-opacity));
+}
+
+.marker.marker\:text-orange-100 > :not(template):before {
+  --text-opacity: 1;
+  color: #fffaf0;
+  color: rgba(255, 250, 240, var(--text-opacity));
+}
+
+.marker.marker\:text-orange-200 > :not(template):before {
+  --text-opacity: 1;
+  color: #feebc8;
+  color: rgba(254, 235, 200, var(--text-opacity));
+}
+
+.marker.marker\:text-orange-300 > :not(template):before {
+  --text-opacity: 1;
+  color: #fbd38d;
+  color: rgba(251, 211, 141, var(--text-opacity));
+}
+
+.marker.marker\:text-orange-400 > :not(template):before {
+  --text-opacity: 1;
+  color: #f6ad55;
+  color: rgba(246, 173, 85, var(--text-opacity));
+}
+
+.marker.marker\:text-orange-500 > :not(template):before {
+  --text-opacity: 1;
+  color: #ed8936;
+  color: rgba(237, 137, 54, var(--text-opacity));
+}
+
+.marker.marker\:text-orange-600 > :not(template):before {
+  --text-opacity: 1;
+  color: #dd6b20;
+  color: rgba(221, 107, 32, var(--text-opacity));
+}
+
+.marker.marker\:text-orange-700 > :not(template):before {
+  --text-opacity: 1;
+  color: #c05621;
+  color: rgba(192, 86, 33, var(--text-opacity));
+}
+
+.marker.marker\:text-orange-800 > :not(template):before {
+  --text-opacity: 1;
+  color: #9c4221;
+  color: rgba(156, 66, 33, var(--text-opacity));
+}
+
+.marker.marker\:text-orange-900 > :not(template):before {
+  --text-opacity: 1;
+  color: #7b341e;
+  color: rgba(123, 52, 30, var(--text-opacity));
+}
+
+.marker.marker\:text-yellow-100 > :not(template):before {
+  --text-opacity: 1;
+  color: #fffff0;
+  color: rgba(255, 255, 240, var(--text-opacity));
+}
+
+.marker.marker\:text-yellow-200 > :not(template):before {
+  --text-opacity: 1;
+  color: #fefcbf;
+  color: rgba(254, 252, 191, var(--text-opacity));
+}
+
+.marker.marker\:text-yellow-300 > :not(template):before {
+  --text-opacity: 1;
+  color: #faf089;
+  color: rgba(250, 240, 137, var(--text-opacity));
+}
+
+.marker.marker\:text-yellow-400 > :not(template):before {
+  --text-opacity: 1;
+  color: #f6e05e;
+  color: rgba(246, 224, 94, var(--text-opacity));
+}
+
+.marker.marker\:text-yellow-500 > :not(template):before {
+  --text-opacity: 1;
+  color: #ecc94b;
+  color: rgba(236, 201, 75, var(--text-opacity));
+}
+
+.marker.marker\:text-yellow-600 > :not(template):before {
+  --text-opacity: 1;
+  color: #d69e2e;
+  color: rgba(214, 158, 46, var(--text-opacity));
+}
+
+.marker.marker\:text-yellow-700 > :not(template):before {
+  --text-opacity: 1;
+  color: #b7791f;
+  color: rgba(183, 121, 31, var(--text-opacity));
+}
+
+.marker.marker\:text-yellow-800 > :not(template):before {
+  --text-opacity: 1;
+  color: #975a16;
+  color: rgba(151, 90, 22, var(--text-opacity));
+}
+
+.marker.marker\:text-yellow-900 > :not(template):before {
+  --text-opacity: 1;
+  color: #744210;
+  color: rgba(116, 66, 16, var(--text-opacity));
+}
+
+.marker.marker\:text-green-100 > :not(template):before {
+  --text-opacity: 1;
+  color: #f0fff4;
+  color: rgba(240, 255, 244, var(--text-opacity));
+}
+
+.marker.marker\:text-green-200 > :not(template):before {
+  --text-opacity: 1;
+  color: #c6f6d5;
+  color: rgba(198, 246, 213, var(--text-opacity));
+}
+
+.marker.marker\:text-green-300 > :not(template):before {
+  --text-opacity: 1;
+  color: #9ae6b4;
+  color: rgba(154, 230, 180, var(--text-opacity));
+}
+
+.marker.marker\:text-green-400 > :not(template):before {
+  --text-opacity: 1;
+  color: #68d391;
+  color: rgba(104, 211, 145, var(--text-opacity));
+}
+
+.marker.marker\:text-green-500 > :not(template):before {
+  --text-opacity: 1;
+  color: #48bb78;
+  color: rgba(72, 187, 120, var(--text-opacity));
+}
+
+.marker.marker\:text-green-600 > :not(template):before {
+  --text-opacity: 1;
+  color: #38a169;
+  color: rgba(56, 161, 105, var(--text-opacity));
+}
+
+.marker.marker\:text-green-700 > :not(template):before {
+  --text-opacity: 1;
+  color: #2f855a;
+  color: rgba(47, 133, 90, var(--text-opacity));
+}
+
+.marker.marker\:text-green-800 > :not(template):before {
+  --text-opacity: 1;
+  color: #276749;
+  color: rgba(39, 103, 73, var(--text-opacity));
+}
+
+.marker.marker\:text-green-900 > :not(template):before {
+  --text-opacity: 1;
+  color: #22543d;
+  color: rgba(34, 84, 61, var(--text-opacity));
+}
+
+.marker.marker\:text-teal-100 > :not(template):before {
+  --text-opacity: 1;
+  color: #e6fffa;
+  color: rgba(230, 255, 250, var(--text-opacity));
+}
+
+.marker.marker\:text-teal-200 > :not(template):before {
+  --text-opacity: 1;
+  color: #b2f5ea;
+  color: rgba(178, 245, 234, var(--text-opacity));
+}
+
+.marker.marker\:text-teal-300 > :not(template):before {
+  --text-opacity: 1;
+  color: #81e6d9;
+  color: rgba(129, 230, 217, var(--text-opacity));
+}
+
+.marker.marker\:text-teal-400 > :not(template):before {
+  --text-opacity: 1;
+  color: #4fd1c5;
+  color: rgba(79, 209, 197, var(--text-opacity));
+}
+
+.marker.marker\:text-teal-500 > :not(template):before {
+  --text-opacity: 1;
+  color: #38b2ac;
+  color: rgba(56, 178, 172, var(--text-opacity));
+}
+
+.marker.marker\:text-teal-600 > :not(template):before {
+  --text-opacity: 1;
+  color: #319795;
+  color: rgba(49, 151, 149, var(--text-opacity));
+}
+
+.marker.marker\:text-teal-700 > :not(template):before {
+  --text-opacity: 1;
+  color: #2c7a7b;
+  color: rgba(44, 122, 123, var(--text-opacity));
+}
+
+.marker.marker\:text-teal-800 > :not(template):before {
+  --text-opacity: 1;
+  color: #285e61;
+  color: rgba(40, 94, 97, var(--text-opacity));
+}
+
+.marker.marker\:text-teal-900 > :not(template):before {
+  --text-opacity: 1;
+  color: #234e52;
+  color: rgba(35, 78, 82, var(--text-opacity));
+}
+
+.marker.marker\:text-blue-100 > :not(template):before {
+  --text-opacity: 1;
+  color: #ebf8ff;
+  color: rgba(235, 248, 255, var(--text-opacity));
+}
+
+.marker.marker\:text-blue-200 > :not(template):before {
+  --text-opacity: 1;
+  color: #bee3f8;
+  color: rgba(190, 227, 248, var(--text-opacity));
+}
+
+.marker.marker\:text-blue-300 > :not(template):before {
+  --text-opacity: 1;
+  color: #90cdf4;
+  color: rgba(144, 205, 244, var(--text-opacity));
+}
+
+.marker.marker\:text-blue-400 > :not(template):before {
+  --text-opacity: 1;
+  color: #63b3ed;
+  color: rgba(99, 179, 237, var(--text-opacity));
+}
+
+.marker.marker\:text-blue-500 > :not(template):before {
+  --text-opacity: 1;
+  color: #4299e1;
+  color: rgba(66, 153, 225, var(--text-opacity));
+}
+
+.marker.marker\:text-blue-600 > :not(template):before {
+  --text-opacity: 1;
+  color: #3182ce;
+  color: rgba(49, 130, 206, var(--text-opacity));
+}
+
+.marker.marker\:text-blue-700 > :not(template):before {
+  --text-opacity: 1;
+  color: #2b6cb0;
+  color: rgba(43, 108, 176, var(--text-opacity));
+}
+
+.marker.marker\:text-blue-800 > :not(template):before {
+  --text-opacity: 1;
+  color: #2c5282;
+  color: rgba(44, 82, 130, var(--text-opacity));
+}
+
+.marker.marker\:text-blue-900 > :not(template):before {
+  --text-opacity: 1;
+  color: #2a4365;
+  color: rgba(42, 67, 101, var(--text-opacity));
+}
+
+.marker.marker\:text-indigo-100 > :not(template):before {
+  --text-opacity: 1;
+  color: #ebf4ff;
+  color: rgba(235, 244, 255, var(--text-opacity));
+}
+
+.marker.marker\:text-indigo-200 > :not(template):before {
+  --text-opacity: 1;
+  color: #c3dafe;
+  color: rgba(195, 218, 254, var(--text-opacity));
+}
+
+.marker.marker\:text-indigo-300 > :not(template):before {
+  --text-opacity: 1;
+  color: #a3bffa;
+  color: rgba(163, 191, 250, var(--text-opacity));
+}
+
+.marker.marker\:text-indigo-400 > :not(template):before {
+  --text-opacity: 1;
+  color: #7f9cf5;
+  color: rgba(127, 156, 245, var(--text-opacity));
+}
+
+.marker.marker\:text-indigo-500 > :not(template):before {
+  --text-opacity: 1;
+  color: #667eea;
+  color: rgba(102, 126, 234, var(--text-opacity));
+}
+
+.marker.marker\:text-indigo-600 > :not(template):before {
+  --text-opacity: 1;
+  color: #5a67d8;
+  color: rgba(90, 103, 216, var(--text-opacity));
+}
+
+.marker.marker\:text-indigo-700 > :not(template):before {
+  --text-opacity: 1;
+  color: #4c51bf;
+  color: rgba(76, 81, 191, var(--text-opacity));
+}
+
+.marker.marker\:text-indigo-800 > :not(template):before {
+  --text-opacity: 1;
+  color: #434190;
+  color: rgba(67, 65, 144, var(--text-opacity));
+}
+
+.marker.marker\:text-indigo-900 > :not(template):before {
+  --text-opacity: 1;
+  color: #3c366b;
+  color: rgba(60, 54, 107, var(--text-opacity));
+}
+
+.marker.marker\:text-purple-100 > :not(template):before {
+  --text-opacity: 1;
+  color: #faf5ff;
+  color: rgba(250, 245, 255, var(--text-opacity));
+}
+
+.marker.marker\:text-purple-200 > :not(template):before {
+  --text-opacity: 1;
+  color: #e9d8fd;
+  color: rgba(233, 216, 253, var(--text-opacity));
+}
+
+.marker.marker\:text-purple-300 > :not(template):before {
+  --text-opacity: 1;
+  color: #d6bcfa;
+  color: rgba(214, 188, 250, var(--text-opacity));
+}
+
+.marker.marker\:text-purple-400 > :not(template):before {
+  --text-opacity: 1;
+  color: #b794f4;
+  color: rgba(183, 148, 244, var(--text-opacity));
+}
+
+.marker.marker\:text-purple-500 > :not(template):before {
+  --text-opacity: 1;
+  color: #9f7aea;
+  color: rgba(159, 122, 234, var(--text-opacity));
+}
+
+.marker.marker\:text-purple-600 > :not(template):before {
+  --text-opacity: 1;
+  color: #805ad5;
+  color: rgba(128, 90, 213, var(--text-opacity));
+}
+
+.marker.marker\:text-purple-700 > :not(template):before {
+  --text-opacity: 1;
+  color: #6b46c1;
+  color: rgba(107, 70, 193, var(--text-opacity));
+}
+
+.marker.marker\:text-purple-800 > :not(template):before {
+  --text-opacity: 1;
+  color: #553c9a;
+  color: rgba(85, 60, 154, var(--text-opacity));
+}
+
+.marker.marker\:text-purple-900 > :not(template):before {
+  --text-opacity: 1;
+  color: #44337a;
+  color: rgba(68, 51, 122, var(--text-opacity));
+}
+
+.marker.marker\:text-pink-100 > :not(template):before {
+  --text-opacity: 1;
+  color: #fff5f7;
+  color: rgba(255, 245, 247, var(--text-opacity));
+}
+
+.marker.marker\:text-pink-200 > :not(template):before {
+  --text-opacity: 1;
+  color: #fed7e2;
+  color: rgba(254, 215, 226, var(--text-opacity));
+}
+
+.marker.marker\:text-pink-300 > :not(template):before {
+  --text-opacity: 1;
+  color: #fbb6ce;
+  color: rgba(251, 182, 206, var(--text-opacity));
+}
+
+.marker.marker\:text-pink-400 > :not(template):before {
+  --text-opacity: 1;
+  color: #f687b3;
+  color: rgba(246, 135, 179, var(--text-opacity));
+}
+
+.marker.marker\:text-pink-500 > :not(template):before {
+  --text-opacity: 1;
+  color: #ed64a6;
+  color: rgba(237, 100, 166, var(--text-opacity));
+}
+
+.marker.marker\:text-pink-600 > :not(template):before {
+  --text-opacity: 1;
+  color: #d53f8c;
+  color: rgba(213, 63, 140, var(--text-opacity));
+}
+
+.marker.marker\:text-pink-700 > :not(template):before {
+  --text-opacity: 1;
+  color: #b83280;
+  color: rgba(184, 50, 128, var(--text-opacity));
+}
+
+.marker.marker\:text-pink-800 > :not(template):before {
+  --text-opacity: 1;
+  color: #97266d;
+  color: rgba(151, 38, 109, var(--text-opacity));
+}
+
+.marker.marker\:text-pink-900 > :not(template):before {
+  --text-opacity: 1;
+  color: #702459;
+  color: rgba(112, 36, 89, var(--text-opacity));
+}
+
 .text-opacity-0 {
   --text-opacity: 0;
 }
@@ -15704,6 +16276,26 @@ video {
 }
 
 .focus\:text-opacity-100:focus {
+  --text-opacity: 1;
+}
+
+.marker.marker\:text-opacity-0 > :not(template):before {
+  --text-opacity: 0;
+}
+
+.marker.marker\:text-opacity-25 > :not(template):before {
+  --text-opacity: 0.25;
+}
+
+.marker.marker\:text-opacity-50 > :not(template):before {
+  --text-opacity: 0.5;
+}
+
+.marker.marker\:text-opacity-75 > :not(template):before {
+  --text-opacity: 0.75;
+}
+
+.marker.marker\:text-opacity-100 > :not(template):before {
   --text-opacity: 1;
 }
 
@@ -18822,6 +19414,17 @@ video {
 
 .animate-bounce {
   animation: bounce 1s infinite;
+}
+
+.marker > :not(template) {
+  display: flex;
+  align-items: center;
+  list-style-position: inside;
+}
+
+.marker > :not(template):before {
+  content: "";
+  display: list-item;
 }
 
 .example {
@@ -28746,6 +29349,18 @@ video {
     list-style-type: decimal;
   }
 
+  .marker.sm\:marker\:list-none > :not(template):before {
+    list-style-type: none;
+  }
+
+  .marker.sm\:marker\:list-disc > :not(template):before {
+    list-style-type: disc;
+  }
+
+  .marker.sm\:marker\:list-decimal > :not(template):before {
+    list-style-type: decimal;
+  }
+
   .sm\:m-0 {
     margin: 0;
   }
@@ -33900,6 +34515,566 @@ video {
     color: rgba(112, 36, 89, var(--text-opacity));
   }
 
+  .marker.sm\:marker\:text-transparent > :not(template):before {
+    color: transparent;
+  }
+
+  .marker.sm\:marker\:text-current > :not(template):before {
+    color: currentColor;
+  }
+
+  .marker.sm\:marker\:text-black > :not(template):before {
+    --text-opacity: 1;
+    color: #000;
+    color: rgba(0, 0, 0, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-white > :not(template):before {
+    --text-opacity: 1;
+    color: #fff;
+    color: rgba(255, 255, 255, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-gray-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #f7fafc;
+    color: rgba(247, 250, 252, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-gray-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #edf2f7;
+    color: rgba(237, 242, 247, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-gray-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #e2e8f0;
+    color: rgba(226, 232, 240, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-gray-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #cbd5e0;
+    color: rgba(203, 213, 224, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-gray-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #a0aec0;
+    color: rgba(160, 174, 192, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-gray-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #718096;
+    color: rgba(113, 128, 150, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-gray-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #4a5568;
+    color: rgba(74, 85, 104, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-gray-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #2d3748;
+    color: rgba(45, 55, 72, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-gray-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #1a202c;
+    color: rgba(26, 32, 44, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-red-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #fff5f5;
+    color: rgba(255, 245, 245, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-red-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #fed7d7;
+    color: rgba(254, 215, 215, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-red-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #feb2b2;
+    color: rgba(254, 178, 178, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-red-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #fc8181;
+    color: rgba(252, 129, 129, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-red-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #f56565;
+    color: rgba(245, 101, 101, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-red-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #e53e3e;
+    color: rgba(229, 62, 62, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-red-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #c53030;
+    color: rgba(197, 48, 48, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-red-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #9b2c2c;
+    color: rgba(155, 44, 44, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-red-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #742a2a;
+    color: rgba(116, 42, 42, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-orange-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #fffaf0;
+    color: rgba(255, 250, 240, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-orange-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #feebc8;
+    color: rgba(254, 235, 200, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-orange-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #fbd38d;
+    color: rgba(251, 211, 141, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-orange-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #f6ad55;
+    color: rgba(246, 173, 85, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-orange-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #ed8936;
+    color: rgba(237, 137, 54, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-orange-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #dd6b20;
+    color: rgba(221, 107, 32, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-orange-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #c05621;
+    color: rgba(192, 86, 33, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-orange-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #9c4221;
+    color: rgba(156, 66, 33, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-orange-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #7b341e;
+    color: rgba(123, 52, 30, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-yellow-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #fffff0;
+    color: rgba(255, 255, 240, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-yellow-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #fefcbf;
+    color: rgba(254, 252, 191, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-yellow-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #faf089;
+    color: rgba(250, 240, 137, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-yellow-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #f6e05e;
+    color: rgba(246, 224, 94, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-yellow-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #ecc94b;
+    color: rgba(236, 201, 75, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-yellow-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #d69e2e;
+    color: rgba(214, 158, 46, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-yellow-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #b7791f;
+    color: rgba(183, 121, 31, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-yellow-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #975a16;
+    color: rgba(151, 90, 22, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-yellow-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #744210;
+    color: rgba(116, 66, 16, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-green-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #f0fff4;
+    color: rgba(240, 255, 244, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-green-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #c6f6d5;
+    color: rgba(198, 246, 213, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-green-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #9ae6b4;
+    color: rgba(154, 230, 180, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-green-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #68d391;
+    color: rgba(104, 211, 145, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-green-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #48bb78;
+    color: rgba(72, 187, 120, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-green-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #38a169;
+    color: rgba(56, 161, 105, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-green-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #2f855a;
+    color: rgba(47, 133, 90, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-green-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #276749;
+    color: rgba(39, 103, 73, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-green-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #22543d;
+    color: rgba(34, 84, 61, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-teal-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #e6fffa;
+    color: rgba(230, 255, 250, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-teal-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #b2f5ea;
+    color: rgba(178, 245, 234, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-teal-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #81e6d9;
+    color: rgba(129, 230, 217, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-teal-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #4fd1c5;
+    color: rgba(79, 209, 197, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-teal-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #38b2ac;
+    color: rgba(56, 178, 172, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-teal-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #319795;
+    color: rgba(49, 151, 149, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-teal-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #2c7a7b;
+    color: rgba(44, 122, 123, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-teal-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #285e61;
+    color: rgba(40, 94, 97, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-teal-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #234e52;
+    color: rgba(35, 78, 82, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-blue-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #ebf8ff;
+    color: rgba(235, 248, 255, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-blue-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #bee3f8;
+    color: rgba(190, 227, 248, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-blue-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #90cdf4;
+    color: rgba(144, 205, 244, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-blue-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #63b3ed;
+    color: rgba(99, 179, 237, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-blue-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #4299e1;
+    color: rgba(66, 153, 225, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-blue-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #3182ce;
+    color: rgba(49, 130, 206, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-blue-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #2b6cb0;
+    color: rgba(43, 108, 176, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-blue-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #2c5282;
+    color: rgba(44, 82, 130, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-blue-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #2a4365;
+    color: rgba(42, 67, 101, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-indigo-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #ebf4ff;
+    color: rgba(235, 244, 255, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-indigo-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #c3dafe;
+    color: rgba(195, 218, 254, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-indigo-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #a3bffa;
+    color: rgba(163, 191, 250, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-indigo-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #7f9cf5;
+    color: rgba(127, 156, 245, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-indigo-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #667eea;
+    color: rgba(102, 126, 234, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-indigo-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #5a67d8;
+    color: rgba(90, 103, 216, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-indigo-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #4c51bf;
+    color: rgba(76, 81, 191, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-indigo-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #434190;
+    color: rgba(67, 65, 144, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-indigo-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #3c366b;
+    color: rgba(60, 54, 107, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-purple-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #faf5ff;
+    color: rgba(250, 245, 255, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-purple-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #e9d8fd;
+    color: rgba(233, 216, 253, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-purple-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #d6bcfa;
+    color: rgba(214, 188, 250, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-purple-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #b794f4;
+    color: rgba(183, 148, 244, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-purple-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #9f7aea;
+    color: rgba(159, 122, 234, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-purple-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #805ad5;
+    color: rgba(128, 90, 213, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-purple-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #6b46c1;
+    color: rgba(107, 70, 193, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-purple-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #553c9a;
+    color: rgba(85, 60, 154, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-purple-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #44337a;
+    color: rgba(68, 51, 122, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-pink-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #fff5f7;
+    color: rgba(255, 245, 247, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-pink-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #fed7e2;
+    color: rgba(254, 215, 226, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-pink-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #fbb6ce;
+    color: rgba(251, 182, 206, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-pink-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #f687b3;
+    color: rgba(246, 135, 179, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-pink-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #ed64a6;
+    color: rgba(237, 100, 166, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-pink-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #d53f8c;
+    color: rgba(213, 63, 140, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-pink-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #b83280;
+    color: rgba(184, 50, 128, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-pink-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #97266d;
+    color: rgba(151, 38, 109, var(--text-opacity));
+  }
+
+  .marker.sm\:marker\:text-pink-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #702459;
+    color: rgba(112, 36, 89, var(--text-opacity));
+  }
+
   .sm\:text-opacity-0 {
     --text-opacity: 0;
   }
@@ -33957,6 +35132,26 @@ video {
   }
 
   .sm\:focus\:text-opacity-100:focus {
+    --text-opacity: 1;
+  }
+
+  .marker.sm\:marker\:text-opacity-0 > :not(template):before {
+    --text-opacity: 0;
+  }
+
+  .marker.sm\:marker\:text-opacity-25 > :not(template):before {
+    --text-opacity: 0.25;
+  }
+
+  .marker.sm\:marker\:text-opacity-50 > :not(template):before {
+    --text-opacity: 0.5;
+  }
+
+  .marker.sm\:marker\:text-opacity-75 > :not(template):before {
+    --text-opacity: 0.75;
+  }
+
+  .marker.sm\:marker\:text-opacity-100 > :not(template):before {
     --text-opacity: 1;
   }
 
@@ -46969,6 +48164,18 @@ video {
     list-style-type: decimal;
   }
 
+  .marker.md\:marker\:list-none > :not(template):before {
+    list-style-type: none;
+  }
+
+  .marker.md\:marker\:list-disc > :not(template):before {
+    list-style-type: disc;
+  }
+
+  .marker.md\:marker\:list-decimal > :not(template):before {
+    list-style-type: decimal;
+  }
+
   .md\:m-0 {
     margin: 0;
   }
@@ -52123,6 +53330,566 @@ video {
     color: rgba(112, 36, 89, var(--text-opacity));
   }
 
+  .marker.md\:marker\:text-transparent > :not(template):before {
+    color: transparent;
+  }
+
+  .marker.md\:marker\:text-current > :not(template):before {
+    color: currentColor;
+  }
+
+  .marker.md\:marker\:text-black > :not(template):before {
+    --text-opacity: 1;
+    color: #000;
+    color: rgba(0, 0, 0, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-white > :not(template):before {
+    --text-opacity: 1;
+    color: #fff;
+    color: rgba(255, 255, 255, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-gray-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #f7fafc;
+    color: rgba(247, 250, 252, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-gray-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #edf2f7;
+    color: rgba(237, 242, 247, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-gray-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #e2e8f0;
+    color: rgba(226, 232, 240, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-gray-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #cbd5e0;
+    color: rgba(203, 213, 224, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-gray-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #a0aec0;
+    color: rgba(160, 174, 192, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-gray-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #718096;
+    color: rgba(113, 128, 150, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-gray-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #4a5568;
+    color: rgba(74, 85, 104, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-gray-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #2d3748;
+    color: rgba(45, 55, 72, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-gray-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #1a202c;
+    color: rgba(26, 32, 44, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-red-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #fff5f5;
+    color: rgba(255, 245, 245, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-red-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #fed7d7;
+    color: rgba(254, 215, 215, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-red-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #feb2b2;
+    color: rgba(254, 178, 178, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-red-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #fc8181;
+    color: rgba(252, 129, 129, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-red-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #f56565;
+    color: rgba(245, 101, 101, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-red-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #e53e3e;
+    color: rgba(229, 62, 62, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-red-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #c53030;
+    color: rgba(197, 48, 48, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-red-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #9b2c2c;
+    color: rgba(155, 44, 44, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-red-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #742a2a;
+    color: rgba(116, 42, 42, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-orange-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #fffaf0;
+    color: rgba(255, 250, 240, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-orange-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #feebc8;
+    color: rgba(254, 235, 200, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-orange-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #fbd38d;
+    color: rgba(251, 211, 141, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-orange-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #f6ad55;
+    color: rgba(246, 173, 85, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-orange-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #ed8936;
+    color: rgba(237, 137, 54, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-orange-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #dd6b20;
+    color: rgba(221, 107, 32, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-orange-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #c05621;
+    color: rgba(192, 86, 33, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-orange-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #9c4221;
+    color: rgba(156, 66, 33, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-orange-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #7b341e;
+    color: rgba(123, 52, 30, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-yellow-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #fffff0;
+    color: rgba(255, 255, 240, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-yellow-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #fefcbf;
+    color: rgba(254, 252, 191, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-yellow-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #faf089;
+    color: rgba(250, 240, 137, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-yellow-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #f6e05e;
+    color: rgba(246, 224, 94, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-yellow-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #ecc94b;
+    color: rgba(236, 201, 75, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-yellow-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #d69e2e;
+    color: rgba(214, 158, 46, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-yellow-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #b7791f;
+    color: rgba(183, 121, 31, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-yellow-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #975a16;
+    color: rgba(151, 90, 22, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-yellow-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #744210;
+    color: rgba(116, 66, 16, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-green-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #f0fff4;
+    color: rgba(240, 255, 244, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-green-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #c6f6d5;
+    color: rgba(198, 246, 213, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-green-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #9ae6b4;
+    color: rgba(154, 230, 180, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-green-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #68d391;
+    color: rgba(104, 211, 145, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-green-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #48bb78;
+    color: rgba(72, 187, 120, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-green-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #38a169;
+    color: rgba(56, 161, 105, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-green-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #2f855a;
+    color: rgba(47, 133, 90, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-green-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #276749;
+    color: rgba(39, 103, 73, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-green-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #22543d;
+    color: rgba(34, 84, 61, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-teal-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #e6fffa;
+    color: rgba(230, 255, 250, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-teal-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #b2f5ea;
+    color: rgba(178, 245, 234, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-teal-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #81e6d9;
+    color: rgba(129, 230, 217, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-teal-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #4fd1c5;
+    color: rgba(79, 209, 197, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-teal-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #38b2ac;
+    color: rgba(56, 178, 172, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-teal-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #319795;
+    color: rgba(49, 151, 149, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-teal-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #2c7a7b;
+    color: rgba(44, 122, 123, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-teal-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #285e61;
+    color: rgba(40, 94, 97, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-teal-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #234e52;
+    color: rgba(35, 78, 82, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-blue-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #ebf8ff;
+    color: rgba(235, 248, 255, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-blue-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #bee3f8;
+    color: rgba(190, 227, 248, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-blue-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #90cdf4;
+    color: rgba(144, 205, 244, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-blue-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #63b3ed;
+    color: rgba(99, 179, 237, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-blue-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #4299e1;
+    color: rgba(66, 153, 225, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-blue-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #3182ce;
+    color: rgba(49, 130, 206, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-blue-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #2b6cb0;
+    color: rgba(43, 108, 176, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-blue-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #2c5282;
+    color: rgba(44, 82, 130, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-blue-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #2a4365;
+    color: rgba(42, 67, 101, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-indigo-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #ebf4ff;
+    color: rgba(235, 244, 255, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-indigo-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #c3dafe;
+    color: rgba(195, 218, 254, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-indigo-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #a3bffa;
+    color: rgba(163, 191, 250, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-indigo-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #7f9cf5;
+    color: rgba(127, 156, 245, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-indigo-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #667eea;
+    color: rgba(102, 126, 234, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-indigo-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #5a67d8;
+    color: rgba(90, 103, 216, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-indigo-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #4c51bf;
+    color: rgba(76, 81, 191, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-indigo-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #434190;
+    color: rgba(67, 65, 144, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-indigo-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #3c366b;
+    color: rgba(60, 54, 107, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-purple-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #faf5ff;
+    color: rgba(250, 245, 255, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-purple-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #e9d8fd;
+    color: rgba(233, 216, 253, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-purple-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #d6bcfa;
+    color: rgba(214, 188, 250, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-purple-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #b794f4;
+    color: rgba(183, 148, 244, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-purple-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #9f7aea;
+    color: rgba(159, 122, 234, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-purple-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #805ad5;
+    color: rgba(128, 90, 213, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-purple-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #6b46c1;
+    color: rgba(107, 70, 193, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-purple-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #553c9a;
+    color: rgba(85, 60, 154, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-purple-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #44337a;
+    color: rgba(68, 51, 122, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-pink-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #fff5f7;
+    color: rgba(255, 245, 247, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-pink-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #fed7e2;
+    color: rgba(254, 215, 226, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-pink-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #fbb6ce;
+    color: rgba(251, 182, 206, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-pink-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #f687b3;
+    color: rgba(246, 135, 179, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-pink-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #ed64a6;
+    color: rgba(237, 100, 166, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-pink-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #d53f8c;
+    color: rgba(213, 63, 140, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-pink-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #b83280;
+    color: rgba(184, 50, 128, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-pink-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #97266d;
+    color: rgba(151, 38, 109, var(--text-opacity));
+  }
+
+  .marker.md\:marker\:text-pink-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #702459;
+    color: rgba(112, 36, 89, var(--text-opacity));
+  }
+
   .md\:text-opacity-0 {
     --text-opacity: 0;
   }
@@ -52180,6 +53947,26 @@ video {
   }
 
   .md\:focus\:text-opacity-100:focus {
+    --text-opacity: 1;
+  }
+
+  .marker.md\:marker\:text-opacity-0 > :not(template):before {
+    --text-opacity: 0;
+  }
+
+  .marker.md\:marker\:text-opacity-25 > :not(template):before {
+    --text-opacity: 0.25;
+  }
+
+  .marker.md\:marker\:text-opacity-50 > :not(template):before {
+    --text-opacity: 0.5;
+  }
+
+  .marker.md\:marker\:text-opacity-75 > :not(template):before {
+    --text-opacity: 0.75;
+  }
+
+  .marker.md\:marker\:text-opacity-100 > :not(template):before {
     --text-opacity: 1;
   }
 
@@ -65192,6 +66979,18 @@ video {
     list-style-type: decimal;
   }
 
+  .marker.lg\:marker\:list-none > :not(template):before {
+    list-style-type: none;
+  }
+
+  .marker.lg\:marker\:list-disc > :not(template):before {
+    list-style-type: disc;
+  }
+
+  .marker.lg\:marker\:list-decimal > :not(template):before {
+    list-style-type: decimal;
+  }
+
   .lg\:m-0 {
     margin: 0;
   }
@@ -70346,6 +72145,566 @@ video {
     color: rgba(112, 36, 89, var(--text-opacity));
   }
 
+  .marker.lg\:marker\:text-transparent > :not(template):before {
+    color: transparent;
+  }
+
+  .marker.lg\:marker\:text-current > :not(template):before {
+    color: currentColor;
+  }
+
+  .marker.lg\:marker\:text-black > :not(template):before {
+    --text-opacity: 1;
+    color: #000;
+    color: rgba(0, 0, 0, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-white > :not(template):before {
+    --text-opacity: 1;
+    color: #fff;
+    color: rgba(255, 255, 255, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-gray-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #f7fafc;
+    color: rgba(247, 250, 252, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-gray-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #edf2f7;
+    color: rgba(237, 242, 247, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-gray-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #e2e8f0;
+    color: rgba(226, 232, 240, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-gray-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #cbd5e0;
+    color: rgba(203, 213, 224, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-gray-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #a0aec0;
+    color: rgba(160, 174, 192, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-gray-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #718096;
+    color: rgba(113, 128, 150, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-gray-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #4a5568;
+    color: rgba(74, 85, 104, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-gray-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #2d3748;
+    color: rgba(45, 55, 72, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-gray-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #1a202c;
+    color: rgba(26, 32, 44, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-red-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #fff5f5;
+    color: rgba(255, 245, 245, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-red-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #fed7d7;
+    color: rgba(254, 215, 215, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-red-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #feb2b2;
+    color: rgba(254, 178, 178, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-red-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #fc8181;
+    color: rgba(252, 129, 129, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-red-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #f56565;
+    color: rgba(245, 101, 101, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-red-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #e53e3e;
+    color: rgba(229, 62, 62, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-red-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #c53030;
+    color: rgba(197, 48, 48, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-red-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #9b2c2c;
+    color: rgba(155, 44, 44, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-red-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #742a2a;
+    color: rgba(116, 42, 42, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-orange-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #fffaf0;
+    color: rgba(255, 250, 240, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-orange-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #feebc8;
+    color: rgba(254, 235, 200, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-orange-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #fbd38d;
+    color: rgba(251, 211, 141, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-orange-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #f6ad55;
+    color: rgba(246, 173, 85, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-orange-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #ed8936;
+    color: rgba(237, 137, 54, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-orange-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #dd6b20;
+    color: rgba(221, 107, 32, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-orange-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #c05621;
+    color: rgba(192, 86, 33, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-orange-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #9c4221;
+    color: rgba(156, 66, 33, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-orange-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #7b341e;
+    color: rgba(123, 52, 30, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-yellow-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #fffff0;
+    color: rgba(255, 255, 240, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-yellow-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #fefcbf;
+    color: rgba(254, 252, 191, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-yellow-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #faf089;
+    color: rgba(250, 240, 137, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-yellow-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #f6e05e;
+    color: rgba(246, 224, 94, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-yellow-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #ecc94b;
+    color: rgba(236, 201, 75, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-yellow-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #d69e2e;
+    color: rgba(214, 158, 46, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-yellow-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #b7791f;
+    color: rgba(183, 121, 31, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-yellow-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #975a16;
+    color: rgba(151, 90, 22, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-yellow-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #744210;
+    color: rgba(116, 66, 16, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-green-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #f0fff4;
+    color: rgba(240, 255, 244, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-green-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #c6f6d5;
+    color: rgba(198, 246, 213, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-green-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #9ae6b4;
+    color: rgba(154, 230, 180, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-green-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #68d391;
+    color: rgba(104, 211, 145, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-green-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #48bb78;
+    color: rgba(72, 187, 120, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-green-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #38a169;
+    color: rgba(56, 161, 105, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-green-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #2f855a;
+    color: rgba(47, 133, 90, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-green-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #276749;
+    color: rgba(39, 103, 73, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-green-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #22543d;
+    color: rgba(34, 84, 61, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-teal-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #e6fffa;
+    color: rgba(230, 255, 250, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-teal-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #b2f5ea;
+    color: rgba(178, 245, 234, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-teal-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #81e6d9;
+    color: rgba(129, 230, 217, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-teal-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #4fd1c5;
+    color: rgba(79, 209, 197, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-teal-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #38b2ac;
+    color: rgba(56, 178, 172, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-teal-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #319795;
+    color: rgba(49, 151, 149, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-teal-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #2c7a7b;
+    color: rgba(44, 122, 123, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-teal-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #285e61;
+    color: rgba(40, 94, 97, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-teal-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #234e52;
+    color: rgba(35, 78, 82, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-blue-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #ebf8ff;
+    color: rgba(235, 248, 255, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-blue-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #bee3f8;
+    color: rgba(190, 227, 248, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-blue-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #90cdf4;
+    color: rgba(144, 205, 244, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-blue-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #63b3ed;
+    color: rgba(99, 179, 237, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-blue-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #4299e1;
+    color: rgba(66, 153, 225, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-blue-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #3182ce;
+    color: rgba(49, 130, 206, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-blue-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #2b6cb0;
+    color: rgba(43, 108, 176, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-blue-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #2c5282;
+    color: rgba(44, 82, 130, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-blue-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #2a4365;
+    color: rgba(42, 67, 101, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-indigo-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #ebf4ff;
+    color: rgba(235, 244, 255, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-indigo-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #c3dafe;
+    color: rgba(195, 218, 254, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-indigo-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #a3bffa;
+    color: rgba(163, 191, 250, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-indigo-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #7f9cf5;
+    color: rgba(127, 156, 245, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-indigo-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #667eea;
+    color: rgba(102, 126, 234, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-indigo-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #5a67d8;
+    color: rgba(90, 103, 216, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-indigo-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #4c51bf;
+    color: rgba(76, 81, 191, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-indigo-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #434190;
+    color: rgba(67, 65, 144, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-indigo-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #3c366b;
+    color: rgba(60, 54, 107, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-purple-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #faf5ff;
+    color: rgba(250, 245, 255, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-purple-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #e9d8fd;
+    color: rgba(233, 216, 253, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-purple-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #d6bcfa;
+    color: rgba(214, 188, 250, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-purple-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #b794f4;
+    color: rgba(183, 148, 244, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-purple-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #9f7aea;
+    color: rgba(159, 122, 234, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-purple-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #805ad5;
+    color: rgba(128, 90, 213, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-purple-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #6b46c1;
+    color: rgba(107, 70, 193, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-purple-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #553c9a;
+    color: rgba(85, 60, 154, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-purple-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #44337a;
+    color: rgba(68, 51, 122, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-pink-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #fff5f7;
+    color: rgba(255, 245, 247, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-pink-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #fed7e2;
+    color: rgba(254, 215, 226, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-pink-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #fbb6ce;
+    color: rgba(251, 182, 206, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-pink-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #f687b3;
+    color: rgba(246, 135, 179, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-pink-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #ed64a6;
+    color: rgba(237, 100, 166, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-pink-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #d53f8c;
+    color: rgba(213, 63, 140, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-pink-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #b83280;
+    color: rgba(184, 50, 128, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-pink-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #97266d;
+    color: rgba(151, 38, 109, var(--text-opacity));
+  }
+
+  .marker.lg\:marker\:text-pink-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #702459;
+    color: rgba(112, 36, 89, var(--text-opacity));
+  }
+
   .lg\:text-opacity-0 {
     --text-opacity: 0;
   }
@@ -70403,6 +72762,26 @@ video {
   }
 
   .lg\:focus\:text-opacity-100:focus {
+    --text-opacity: 1;
+  }
+
+  .marker.lg\:marker\:text-opacity-0 > :not(template):before {
+    --text-opacity: 0;
+  }
+
+  .marker.lg\:marker\:text-opacity-25 > :not(template):before {
+    --text-opacity: 0.25;
+  }
+
+  .marker.lg\:marker\:text-opacity-50 > :not(template):before {
+    --text-opacity: 0.5;
+  }
+
+  .marker.lg\:marker\:text-opacity-75 > :not(template):before {
+    --text-opacity: 0.75;
+  }
+
+  .marker.lg\:marker\:text-opacity-100 > :not(template):before {
     --text-opacity: 1;
   }
 
@@ -83415,6 +85794,18 @@ video {
     list-style-type: decimal;
   }
 
+  .marker.xl\:marker\:list-none > :not(template):before {
+    list-style-type: none;
+  }
+
+  .marker.xl\:marker\:list-disc > :not(template):before {
+    list-style-type: disc;
+  }
+
+  .marker.xl\:marker\:list-decimal > :not(template):before {
+    list-style-type: decimal;
+  }
+
   .xl\:m-0 {
     margin: 0;
   }
@@ -88569,6 +90960,566 @@ video {
     color: rgba(112, 36, 89, var(--text-opacity));
   }
 
+  .marker.xl\:marker\:text-transparent > :not(template):before {
+    color: transparent;
+  }
+
+  .marker.xl\:marker\:text-current > :not(template):before {
+    color: currentColor;
+  }
+
+  .marker.xl\:marker\:text-black > :not(template):before {
+    --text-opacity: 1;
+    color: #000;
+    color: rgba(0, 0, 0, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-white > :not(template):before {
+    --text-opacity: 1;
+    color: #fff;
+    color: rgba(255, 255, 255, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-gray-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #f7fafc;
+    color: rgba(247, 250, 252, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-gray-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #edf2f7;
+    color: rgba(237, 242, 247, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-gray-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #e2e8f0;
+    color: rgba(226, 232, 240, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-gray-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #cbd5e0;
+    color: rgba(203, 213, 224, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-gray-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #a0aec0;
+    color: rgba(160, 174, 192, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-gray-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #718096;
+    color: rgba(113, 128, 150, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-gray-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #4a5568;
+    color: rgba(74, 85, 104, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-gray-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #2d3748;
+    color: rgba(45, 55, 72, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-gray-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #1a202c;
+    color: rgba(26, 32, 44, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-red-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #fff5f5;
+    color: rgba(255, 245, 245, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-red-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #fed7d7;
+    color: rgba(254, 215, 215, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-red-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #feb2b2;
+    color: rgba(254, 178, 178, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-red-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #fc8181;
+    color: rgba(252, 129, 129, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-red-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #f56565;
+    color: rgba(245, 101, 101, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-red-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #e53e3e;
+    color: rgba(229, 62, 62, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-red-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #c53030;
+    color: rgba(197, 48, 48, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-red-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #9b2c2c;
+    color: rgba(155, 44, 44, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-red-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #742a2a;
+    color: rgba(116, 42, 42, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-orange-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #fffaf0;
+    color: rgba(255, 250, 240, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-orange-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #feebc8;
+    color: rgba(254, 235, 200, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-orange-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #fbd38d;
+    color: rgba(251, 211, 141, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-orange-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #f6ad55;
+    color: rgba(246, 173, 85, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-orange-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #ed8936;
+    color: rgba(237, 137, 54, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-orange-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #dd6b20;
+    color: rgba(221, 107, 32, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-orange-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #c05621;
+    color: rgba(192, 86, 33, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-orange-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #9c4221;
+    color: rgba(156, 66, 33, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-orange-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #7b341e;
+    color: rgba(123, 52, 30, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-yellow-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #fffff0;
+    color: rgba(255, 255, 240, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-yellow-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #fefcbf;
+    color: rgba(254, 252, 191, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-yellow-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #faf089;
+    color: rgba(250, 240, 137, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-yellow-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #f6e05e;
+    color: rgba(246, 224, 94, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-yellow-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #ecc94b;
+    color: rgba(236, 201, 75, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-yellow-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #d69e2e;
+    color: rgba(214, 158, 46, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-yellow-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #b7791f;
+    color: rgba(183, 121, 31, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-yellow-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #975a16;
+    color: rgba(151, 90, 22, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-yellow-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #744210;
+    color: rgba(116, 66, 16, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-green-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #f0fff4;
+    color: rgba(240, 255, 244, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-green-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #c6f6d5;
+    color: rgba(198, 246, 213, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-green-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #9ae6b4;
+    color: rgba(154, 230, 180, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-green-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #68d391;
+    color: rgba(104, 211, 145, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-green-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #48bb78;
+    color: rgba(72, 187, 120, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-green-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #38a169;
+    color: rgba(56, 161, 105, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-green-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #2f855a;
+    color: rgba(47, 133, 90, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-green-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #276749;
+    color: rgba(39, 103, 73, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-green-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #22543d;
+    color: rgba(34, 84, 61, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-teal-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #e6fffa;
+    color: rgba(230, 255, 250, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-teal-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #b2f5ea;
+    color: rgba(178, 245, 234, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-teal-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #81e6d9;
+    color: rgba(129, 230, 217, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-teal-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #4fd1c5;
+    color: rgba(79, 209, 197, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-teal-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #38b2ac;
+    color: rgba(56, 178, 172, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-teal-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #319795;
+    color: rgba(49, 151, 149, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-teal-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #2c7a7b;
+    color: rgba(44, 122, 123, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-teal-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #285e61;
+    color: rgba(40, 94, 97, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-teal-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #234e52;
+    color: rgba(35, 78, 82, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-blue-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #ebf8ff;
+    color: rgba(235, 248, 255, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-blue-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #bee3f8;
+    color: rgba(190, 227, 248, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-blue-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #90cdf4;
+    color: rgba(144, 205, 244, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-blue-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #63b3ed;
+    color: rgba(99, 179, 237, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-blue-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #4299e1;
+    color: rgba(66, 153, 225, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-blue-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #3182ce;
+    color: rgba(49, 130, 206, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-blue-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #2b6cb0;
+    color: rgba(43, 108, 176, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-blue-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #2c5282;
+    color: rgba(44, 82, 130, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-blue-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #2a4365;
+    color: rgba(42, 67, 101, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-indigo-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #ebf4ff;
+    color: rgba(235, 244, 255, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-indigo-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #c3dafe;
+    color: rgba(195, 218, 254, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-indigo-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #a3bffa;
+    color: rgba(163, 191, 250, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-indigo-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #7f9cf5;
+    color: rgba(127, 156, 245, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-indigo-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #667eea;
+    color: rgba(102, 126, 234, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-indigo-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #5a67d8;
+    color: rgba(90, 103, 216, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-indigo-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #4c51bf;
+    color: rgba(76, 81, 191, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-indigo-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #434190;
+    color: rgba(67, 65, 144, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-indigo-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #3c366b;
+    color: rgba(60, 54, 107, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-purple-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #faf5ff;
+    color: rgba(250, 245, 255, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-purple-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #e9d8fd;
+    color: rgba(233, 216, 253, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-purple-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #d6bcfa;
+    color: rgba(214, 188, 250, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-purple-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #b794f4;
+    color: rgba(183, 148, 244, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-purple-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #9f7aea;
+    color: rgba(159, 122, 234, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-purple-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #805ad5;
+    color: rgba(128, 90, 213, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-purple-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #6b46c1;
+    color: rgba(107, 70, 193, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-purple-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #553c9a;
+    color: rgba(85, 60, 154, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-purple-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #44337a;
+    color: rgba(68, 51, 122, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-pink-100 > :not(template):before {
+    --text-opacity: 1;
+    color: #fff5f7;
+    color: rgba(255, 245, 247, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-pink-200 > :not(template):before {
+    --text-opacity: 1;
+    color: #fed7e2;
+    color: rgba(254, 215, 226, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-pink-300 > :not(template):before {
+    --text-opacity: 1;
+    color: #fbb6ce;
+    color: rgba(251, 182, 206, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-pink-400 > :not(template):before {
+    --text-opacity: 1;
+    color: #f687b3;
+    color: rgba(246, 135, 179, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-pink-500 > :not(template):before {
+    --text-opacity: 1;
+    color: #ed64a6;
+    color: rgba(237, 100, 166, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-pink-600 > :not(template):before {
+    --text-opacity: 1;
+    color: #d53f8c;
+    color: rgba(213, 63, 140, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-pink-700 > :not(template):before {
+    --text-opacity: 1;
+    color: #b83280;
+    color: rgba(184, 50, 128, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-pink-800 > :not(template):before {
+    --text-opacity: 1;
+    color: #97266d;
+    color: rgba(151, 38, 109, var(--text-opacity));
+  }
+
+  .marker.xl\:marker\:text-pink-900 > :not(template):before {
+    --text-opacity: 1;
+    color: #702459;
+    color: rgba(112, 36, 89, var(--text-opacity));
+  }
+
   .xl\:text-opacity-0 {
     --text-opacity: 0;
   }
@@ -88626,6 +91577,26 @@ video {
   }
 
   .xl\:focus\:text-opacity-100:focus {
+    --text-opacity: 1;
+  }
+
+  .marker.xl\:marker\:text-opacity-0 > :not(template):before {
+    --text-opacity: 0;
+  }
+
+  .marker.xl\:marker\:text-opacity-25 > :not(template):before {
+    --text-opacity: 0.25;
+  }
+
+  .marker.xl\:marker\:text-opacity-50 > :not(template):before {
+    --text-opacity: 0.5;
+  }
+
+  .marker.xl\:marker\:text-opacity-75 > :not(template):before {
+    --text-opacity: 0.75;
+  }
+
+  .marker.xl\:marker\:text-opacity-100 > :not(template):before {
     --text-opacity: 1;
   }
 
