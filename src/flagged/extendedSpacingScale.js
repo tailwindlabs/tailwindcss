@@ -74,15 +74,15 @@ export default {
     minWidth: {
       '0': '0',
       full: '100%',
-      'min-content': 'min-content',
-      'max-content': 'max-content',
+      min: 'min-content',
+      max: 'max-content',
     },
     width: theme => ({
       auto: 'auto',
       ...theme('spacing'),
       screen: '100vw',
-      'min-content': 'min-content',
-      'max-content': 'max-content',
+      min: 'min-content',
+      max: 'max-content',
     }),
     maxWidth: (theme, { breakpoints }) => ({
       none: 'none',
@@ -99,8 +99,8 @@ export default {
       '6xl': '72rem',
       '7xl': '80rem',
       full: '100%',
-      'min-content': 'min-content',
-      'max-content': 'max-content',
+      min: 'min-content',
+      max: 'max-content',
       ...breakpoints(theme('screens')),
     }),
     maxHeight: theme => ({
