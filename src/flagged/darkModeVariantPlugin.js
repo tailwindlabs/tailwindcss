@@ -4,6 +4,10 @@ export default function({ addVariant, config, postcss, prefix }) {
   addVariant(
     'dark',
     ({ container, separator, modifySelectors }) => {
+      if (config('dark') === false) {
+        return postcss.root()
+      }
+
       if (config('dark') === 'media') {
         const modified = modifySelectors(({ selector }) => {
           return buildSelectorVariant(selector, 'dark', separator, message => {

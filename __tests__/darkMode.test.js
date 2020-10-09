@@ -143,6 +143,29 @@ test('dark mode variants can be generated using the class strategy', () => {
   })
 })
 
+test('dark mode variants can be disabled', () => {
+  const input = `
+    @variants dark {
+      .text-red {
+        color: red;
+      }
+    }
+  `
+
+  const expected = `
+    .text-red {
+      color: red;
+    }
+  `
+
+  expect.assertions(2)
+
+  return run(input, { dark: false }).then(result => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('dark mode variants stack with other variants', () => {
   const input = `
     @variants responsive, dark, hover, focus {
