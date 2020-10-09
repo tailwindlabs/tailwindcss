@@ -16816,6 +16816,22 @@ video {
   grid-template-columns: none !important;
 }
 
+.auto-cols-auto {
+  grid-auto-columns: auto !important;
+}
+
+.auto-cols-min {
+  grid-auto-columns: min-content !important;
+}
+
+.auto-cols-max {
+  grid-auto-columns: max-content !important;
+}
+
+.auto-cols-fr {
+  grid-auto-columns: minmax(0, 1fr) !important;
+}
+
 .col-auto {
   grid-column: auto !important;
 }
@@ -17010,6 +17026,22 @@ video {
 
 .grid-rows-none {
   grid-template-rows: none !important;
+}
+
+.auto-rows-auto {
+  grid-auto-rows: auto !important;
+}
+
+.auto-rows-min {
+  grid-auto-rows: min-content !important;
+}
+
+.auto-rows-max {
+  grid-auto-rows: max-content !important;
+}
+
+.auto-rows-fr {
+  grid-auto-rows: minmax(0, 1fr) !important;
 }
 
 .row-auto {
