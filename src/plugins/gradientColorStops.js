@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
+import toColorValue from '../util/toColorValue'
 import { toRgba } from '../util/withAlphaVariable'
 
 export default function() {
@@ -12,14 +13,6 @@ export default function() {
 
     const utilities = _(colors)
       .map((value, modifier) => {
-        const getColorValue = color => {
-          if (_.isFunction(color)) {
-            return value({})
-          }
-
-          return color
-        }
-
         const transparentTo = (() => {
           if (_.isFunction(value)) {
             return value({ opacityValue: 0 })
@@ -37,21 +30,21 @@ export default function() {
           [
             `.${e(`from-${modifier}`)}`,
             {
-              '--gradient-from-color': getColorValue(value, 'from'),
+              '--gradient-from-color': toColorValue(value, 'from'),
               '--gradient-color-stops': `var(--gradient-from-color), var(--gradient-to-color, ${transparentTo})`,
             },
           ],
           [
             `.${e(`via-${modifier}`)}`,
             {
-              '--gradient-via-color': getColorValue(value, 'via'),
+              '--gradient-via-color': toColorValue(value, 'via'),
               '--gradient-color-stops': `var(--gradient-from-color), var(--gradient-via-color), var(--gradient-to-color, ${transparentTo})`,
             },
           ],
           [
             `.${e(`to-${modifier}`)}`,
             {
-              '--gradient-to-color': getColorValue(value, 'to'),
+              '--gradient-to-color': toColorValue(value, 'to'),
             },
           ],
         ]
