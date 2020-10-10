@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
+import toColorValue from '../util/toColorValue'
 import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function() {
@@ -8,7 +9,7 @@ export default function() {
 
     const getProperties = value => {
       if (target('placeholderColor') === 'ie11') {
-        return { color: value }
+        return { color: toColorValue(value) }
       }
 
       if (corePlugins('placeholderOpacity')) {
@@ -19,7 +20,7 @@ export default function() {
         })
       }
 
-      return { color: value }
+      return { color: toColorValue(value) }
     }
 
     const utilities = _.fromPairs(
