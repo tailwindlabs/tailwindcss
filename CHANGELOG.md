@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet!
 
+## [1.8.13] - 2020-10-09
+
+### Fixed
+
+- Support defining colors as closures even when opacity variables are not supported ([#2536](https://github.com/tailwindlabs/tailwindcss/pull/2515))
+
+## [1.8.12] - 2020-10-07
+
+### Fixed
+
+- Reset color opacity variable in utilities generated using closure colors ([#2515](https://github.com/tailwindlabs/tailwindcss/pull/2515))
+
 ## [1.8.11] - 2020-10-06
 
 - Make `tailwindcss.plugin` work in ESM environments for reasons
