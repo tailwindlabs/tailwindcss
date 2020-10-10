@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
 import withAlphaVariable from '../util/withAlphaVariable'
+import toColorValue from '../util/toColorValue'
 
 export default function() {
   return function({ addUtilities, e, theme, variants, target, corePlugins }) {
@@ -8,7 +9,7 @@ export default function() {
 
     const getProperties = value => {
       if (target('backgroundColor') === 'ie11') {
-        return { 'background-color': value }
+        return { 'background-color': toColorValue(value) }
       }
 
       if (corePlugins('backgroundOpacity')) {
@@ -19,7 +20,7 @@ export default function() {
         })
       }
 
-      return { 'background-color': value }
+      return { 'background-color': toColorValue(value) }
     }
 
     const utilities = _.fromPairs(

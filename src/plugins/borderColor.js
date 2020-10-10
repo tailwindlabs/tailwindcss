@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
+import toColorValue from '../util/toColorValue'
 import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function() {
@@ -8,7 +9,7 @@ export default function() {
 
     const getProperties = value => {
       if (target('borderColor') === 'ie11') {
-        return { 'border-color': value }
+        return { 'border-color': toColorValue(value) }
       }
 
       if (corePlugins('borderOpacity')) {
@@ -19,7 +20,7 @@ export default function() {
         })
       }
 
-      return { 'border-color': value }
+      return { 'border-color': toColorValue(value) }
     }
 
     const utilities = _.fromPairs(

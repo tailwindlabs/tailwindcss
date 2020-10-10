@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
+import toColorValue from '../util/toColorValue'
 
 export default function() {
   return function({ addUtilities, e, theme, variants }) {
@@ -7,7 +8,7 @@ export default function() {
 
     const utilities = _.fromPairs(
       _.map(colors, (value, modifier) => {
-        return [`.${e(`stroke-${modifier}`)}`, { stroke: value }]
+        return [`.${e(`stroke-${modifier}`)}`, { stroke: toColorValue(value) }]
       })
     )
 

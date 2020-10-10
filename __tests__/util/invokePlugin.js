@@ -28,6 +28,17 @@ export default function(plugin, config) {
     addUtilities(utilities, variants) {
       addedUtilities.push([utilities, variants])
     },
+    corePlugins(corePlugin) {
+      if (config.corePlugins === undefined) {
+        return false
+      }
+
+      if (Array.isArray(config.corePlugins)) {
+        return config.corePlugins.includes(corePlugin)
+      }
+
+      return config.corePlugins[corePlugin] !== false
+    },
   }
 
   plugin(pluginApi)
