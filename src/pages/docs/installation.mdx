@@ -67,6 +67,12 @@ module.exports = {
 }
 ```
 
+You can optionally include the `-p` flag to generate a basic `postcss.config.js` file at the same time:
+
+```bash
+npx tailwindcss init -p
+```
+
 Learn more about configuring Tailwind in the [configuration documentation](/docs/configuration).
 
 ## <Heading number="4">Process your CSS with Tailwind</Heading>
@@ -86,13 +92,6 @@ module.exports = {
     // ...
   ]
 }
-```
-
-#### <Heading badge="v1.7.4+">Generating a basic PostCSS config file</Heading>
-
-You can also generate a basic `postcss.config.js` file for your project using the Tailwind CLI utility:
-```bash
-npx tailwindcss init -p
 ```
 
 We've included more specific instructions for a few popular tools below, but for instructions on getting started with PostCSS in general, see the [PostCSS documentation](https://github.com/postcss/postcss#usage).
