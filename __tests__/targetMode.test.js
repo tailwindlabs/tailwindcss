@@ -64,22 +64,28 @@ test('plugins can request the target for a specific plugin key', () => {
   )
 
   expect(css(utilities)).toMatchCss(`
-    @variants {
-      .testA {
-        target: modern
+    @layer utilities {
+      @variants {
+        .testA {
+          target: modern
+        }
       }
     }
-    @variants {
-      .testB {
-        target: relaxed
+    @layer utilities {
+      @variants {
+        .testB {
+          target: relaxed
+        }
       }
     }
-    @variants {
-      .testC {
-        target: ie11
+    @layer utilities {
+      @variants {
+        .testC {
+          target: ie11
+        }
       }
     }
-    `)
+  `)
 })
 
 test('browserslist target is translated to a target preset', () => {
@@ -108,9 +114,11 @@ test('browserslist target is translated to a target preset', () => {
     )
 
     expect(css(utilities)).toMatchCss(`
-      @variants {
-        .test {
-          target: ie11
+      @layer utilities {
+        @variants {
+          .test {
+            target: ie11
+          }
         }
       }
     `)
@@ -165,21 +173,27 @@ test('browserslist target is translated to a target preset with overrides', () =
     )
 
     expect(css(utilities)).toMatchCss(`
-          @variants {
-            .testA {
-              target: modern
-            }
+      @layer utilities {
+        @variants {
+          .testA {
+            target: modern
           }
-          @variants {
-            .testB {
-              target: relaxed
-            }
+        }
+      }
+      @layer utilities {
+        @variants {
+          .testB {
+            target: relaxed
           }
+        }
+      }
+      @layer utilities {
           @variants {
-            .testC {
-              target: ie11
-            }
+          .testC {
+            target: ie11
           }
+        }
+      }
     `)
 
     return Promise.resolve()

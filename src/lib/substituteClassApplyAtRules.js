@@ -4,6 +4,9 @@ import escapeClassName from '../util/escapeClassName'
 import prefixSelector from '../util/prefixSelector'
 import increaseSpecificity from '../util/increaseSpecificity'
 
+import { flagEnabled } from '../featureFlags'
+import applyComplexClasses from '../flagged/applyComplexClasses'
+
 function buildClassTable(css) {
   const classTable = {}
 
@@ -53,10 +56,19 @@ function findClass(classToApply, classTable, onError) {
   return match.clone().nodes
 }
 
-export default function(config, generatedUtilities) {
+let shadowLookup = null
+
+export default function(config, getProcessedPlugins, configChanged) {
+  if (flagEnabled(config, 'applyComplexClasses')) {
+    return applyComplexClasses(config, getProcessedPlugins, configChanged)
+  }
+
   return function(css) {
     const classLookup = buildClassTable(css)
-    const shadowLookup = buildShadowTable(generatedUtilities)
+    shadowLookup =
+      configChanged || !shadowLookup
+        ? buildShadowTable(getProcessedPlugins().utilities)
+        : shadowLookup
 
     css.walkRules(rule => {
       rule.walkAtRules('apply', atRule => {

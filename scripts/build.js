@@ -3,29 +3,25 @@ import postcss from 'postcss'
 import tailwind from '..'
 import CleanCSS from 'clean-css'
 
-function buildDistFile(filename) {
+function buildDistFile(filename, config = {}, outFilename = filename) {
   return new Promise((resolve, reject) => {
     console.log(`Processing ./${filename}.css...`)
 
     fs.readFile(`./${filename}.css`, (err, css) => {
       if (err) throw err
 
-      return postcss([tailwind(), require('autoprefixer')])
+      return postcss([tailwind(config), require('autoprefixer')])
         .process(css, {
           from: `./${filename}.css`,
-          to: `./dist/${filename}.css`,
-          map: { inline: false },
+          to: `./dist/${outFilename}.css`,
         })
         .then(result => {
-          fs.writeFileSync(`./dist/${filename}.css`, result.css)
-          if (result.map) {
-            fs.writeFileSync(`./dist/${filename}.css.map`, result.map)
-          }
+          fs.writeFileSync(`./dist/${outFilename}.css`, result.css)
           return result
         })
         .then(result => {
           const minified = new CleanCSS().minify(result.css)
-          fs.writeFileSync(`./dist/${filename}.min.css`, minified.styles)
+          fs.writeFileSync(`./dist/${outFilename}.min.css`, minified.styles)
         })
         .then(resolve)
         .catch(error => {
@@ -43,6 +39,7 @@ Promise.all([
   buildDistFile('components'),
   buildDistFile('utilities'),
   buildDistFile('tailwind'),
+  buildDistFile('tailwind', { future: 'all', experimental: 'all' }, 'tailwind-experimental'),
 ]).then(() => {
   console.log('Finished Building Tailwind!')
 })

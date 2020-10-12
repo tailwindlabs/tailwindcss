@@ -41,6 +41,19 @@ export default function(
     })
 
     let includesScreensExplicitly = false
+    const layers = {
+      base: [],
+      components: [],
+      utilities: [],
+    }
+
+    css.walkAtRules('layer', atRule => {
+      if (!['base', 'components', 'utilities'].includes(atRule.params)) {
+        return
+      }
+
+      layers[atRule.params].push(atRule)
+    })
 
     css.walkAtRules('tailwind', atRule => {
       if (atRule.params === 'preflight') {
@@ -49,37 +62,27 @@ export default function(
       }
 
       if (atRule.params === 'base') {
-        atRule.before(updateSource(pluginBase, atRule.source))
-        atRule.remove()
+        atRule.after(layers.base)
+        atRule.after(updateSource(pluginBase, atRule.source))
       }
 
       if (atRule.params === 'components') {
-        atRule.before(postcss.comment({ text: 'tailwind start components' }))
-        atRule.before(updateSource(pluginComponents, atRule.source))
-        atRule.after(postcss.comment({ text: 'tailwind end components' }))
-        atRule.remove()
+        atRule.after(layers.components)
+        atRule.after(updateSource(pluginComponents, atRule.source))
       }
 
       if (atRule.params === 'utilities') {
-        atRule.before(postcss.comment({ text: 'tailwind start utilities' }))
-        atRule.before(updateSource(pluginUtilities, atRule.source))
-        atRule.after(postcss.comment({ text: 'tailwind end utilities' }))
-        atRule.remove()
+        atRule.after(layers.utilities)
+        atRule.after(updateSource(pluginUtilities, atRule.source))
       }
 
       if (atRule.params === 'screens') {
         includesScreensExplicitly = true
-        atRule.before(postcss.comment({ text: 'tailwind start screens' }))
-        atRule.after(postcss.comment({ text: 'tailwind end screens' }))
       }
     })
 
     if (!includesScreensExplicitly) {
-      css.append([
-        postcss.comment({ text: 'tailwind start screens' }),
-        postcss.atRule({ name: 'tailwind', params: 'screens' }),
-        postcss.comment({ text: 'tailwind end screens' }),
-      ])
+      css.append([postcss.atRule({ name: 'tailwind', params: 'screens' })])
     }
   }
 }

@@ -29,19 +29,31 @@ function buildError(root, theme, path) {
   return root.error(message)
 }
 
+const themeTransforms = {
+  fontSize(value) {
+    return Array.isArray(value) ? value[0] : value
+  },
+}
+
+function defaultTransform(value) {
+  return Array.isArray(value) ? value.join(', ') : value
+}
+
 export default function(config) {
   return root =>
     functions({
       functions: {
         theme: (path, ...defaultValue) => {
-          const unquotedPath = _.trim(path, `'"`)
+          const trimmedPath = _.trim(path, `'"`)
 
-          if (!defaultValue.length && !_.hasIn(config.theme, unquotedPath)) {
-            throw buildError(root, config.theme, unquotedPath)
+          if (!defaultValue.length && !_.hasIn(config.theme, trimmedPath)) {
+            throw buildError(root, config.theme, trimmedPath)
           }
 
-          return _.thru(_.get(config.theme, unquotedPath, defaultValue), value => {
-            return Array.isArray(value) ? value.join(', ') : value
+          return _.thru(_.get(config.theme, trimmedPath, defaultValue), value => {
+            const [themeSection] = trimmedPath.split('.')
+
+            return _.get(themeTransforms, themeSection, defaultTransform)(value)
           })
         },
       },

@@ -7,6 +7,8 @@ import map from 'lodash/map'
 import get from 'lodash/get'
 import toPath from 'lodash/toPath'
 import negateValue from './negateValue'
+import { corePluginList } from '../corePlugins'
+import configurePlugins from './configurePlugins'
 
 const configUtils = {
   negative(scale) {
@@ -83,7 +85,7 @@ function mergeExtensions({ extend, ...theme }) {
 }
 
 function resolveFunctionKeys(object) {
-  const resolveThemePath = (key, defaultValue) => {
+  const resolvePath = (key, defaultValue) => {
     const path = toPath(key)
 
     let index = 0
@@ -91,7 +93,7 @@ function resolveFunctionKeys(object) {
 
     while (val !== undefined && val !== null && index < path.length) {
       val = val[path[index++]]
-      val = isFunction(val) ? val(resolveThemePath, configUtils) : val
+      val = isFunction(val) ? val(resolvePath, configUtils) : val
     }
 
     return val === undefined ? defaultValue : val
@@ -100,7 +102,7 @@ function resolveFunctionKeys(object) {
   return Object.keys(object).reduce((resolved, key) => {
     return {
       ...resolved,
-      [key]: isFunction(object[key]) ? object[key](resolveThemePath, configUtils) : object[key],
+      [key]: isFunction(object[key]) ? object[key](resolvePath, configUtils) : object[key],
     }
   }, {})
 }
@@ -128,6 +130,76 @@ function extractPluginConfigs(configs) {
   return allConfigs
 }
 
+function resolveVariants([firstConfig, ...variantConfigs]) {
+  if (Array.isArray(firstConfig)) {
+    return firstConfig
+  }
+
+  return [firstConfig, ...variantConfigs].reverse().reduce((resolved, variants) => {
+    Object.entries(variants || {}).forEach(([plugin, pluginVariants]) => {
+      if (isFunction(pluginVariants)) {
+        resolved[plugin] = pluginVariants({
+          variants(path) {
+            return get(resolved, path, [])
+          },
+          before(toInsert, variant, existingPluginVariants = get(resolved, plugin, [])) {
+            if (variant === undefined) {
+              return [...toInsert, ...existingPluginVariants]
+            }
+
+            const index = existingPluginVariants.indexOf(variant)
+
+            if (index === -1) {
+              return [...existingPluginVariants, ...toInsert]
+            }
+
+            return [
+              ...existingPluginVariants.slice(0, index),
+              ...toInsert,
+              ...existingPluginVariants.slice(index),
+            ]
+          },
+          after(toInsert, variant, existingPluginVariants = get(resolved, plugin, [])) {
+            if (variant === undefined) {
+              return [...existingPluginVariants, ...toInsert]
+            }
+
+            const index = existingPluginVariants.indexOf(variant)
+
+            if (index === -1) {
+              return [...toInsert, ...existingPluginVariants]
+            }
+
+            return [
+              ...existingPluginVariants.slice(0, index + 1),
+              ...toInsert,
+              ...existingPluginVariants.slice(index + 1),
+            ]
+          },
+          without(toRemove, existingPluginVariants = get(resolved, plugin, [])) {
+            return existingPluginVariants.filter(v => !toRemove.includes(v))
+          },
+        })
+      } else {
+        resolved[plugin] = pluginVariants
+      }
+    })
+
+    return resolved
+  }, {})
+}
+
+function resolveCorePlugins(corePluginConfigs) {
+  const result = [...corePluginConfigs].reverse().reduce((resolved, corePluginConfig) => {
+    if (isFunction(corePluginConfig)) {
+      return corePluginConfig({ corePlugins: resolved })
+    }
+    return configurePlugins(corePluginConfig, resolved)
+  }, Object.keys(corePluginList))
+
+  return result
+}
+
 export default function resolveConfig(configs) {
   const allConfigs = extractPluginConfigs(configs)
 
@@ -136,11 +208,8 @@ export default function resolveConfig(configs) {
       theme: resolveFunctionKeys(
         mergeExtensions(mergeThemes(map(allConfigs, t => get(t, 'theme', {}))))
       ),
-      variants: (firstVariants => {
-        return Array.isArray(firstVariants)
-          ? firstVariants
-          : defaults({}, ...map(allConfigs, 'variants'))
-      })(defaults({}, ...map(allConfigs)).variants),
+      variants: resolveVariants(allConfigs.map(c => c.variants)),
+      corePlugins: resolveCorePlugins(allConfigs.map(c => c.corePlugins)),
     },
     ...allConfigs
   )

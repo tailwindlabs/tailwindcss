@@ -56,6 +56,9 @@ export default function() {
               '.inline-grid': {
                 display: 'inline-grid',
               },
+              '.contents': {
+                display: 'contents',
+              },
             }),
         '.hidden': {
           display: 'none',

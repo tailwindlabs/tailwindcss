@@ -52,6 +52,27 @@ it('generates the right CSS when using @import instead of @tailwind', () => {
     })
 })
 
+it('generates the right CSS when enabling flagged features', () => {
+  const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+  const input = fs.readFileSync(inputPath, 'utf8')
+
+  return postcss([
+    tailwind({
+      future: 'all',
+      experimental: 'all',
+    }),
+  ])
+    .process(input, { from: inputPath })
+    .then(result => {
+      const expected = fs.readFileSync(
+        path.resolve(`${__dirname}/fixtures/tailwind-output-flagged.css`),
+        'utf8'
+      )
+
+      expect(result.css).toBe(expected)
+    })
+})
+
 // TODO: Move to per plugin unit tests for this sort of thing
 it('generates the right CSS when color opacity plugins are disabled', () => {
   const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)

@@ -2,10 +2,12 @@
 
 👋 Hey, thanks for taking an interest in Tailwind!
 
-Please only open an issue here if you have a bug to report or a feature proposal you'd like to discuss.
+We don't accept issues that don't use our issue template.
 
-If you need help, have questions about best practices, or want to start a discussion about anything else related to Tailwind, open an issue on the `tailwindcss/discuss` repo instead:
+Please use this link to create your issue:
 
-https://github.com/tailwindcss/discuss/issues
+https://github.com/tailwindcss/tailwindcss/issues/new/choose
+
+Issues that don't follow our issue template will be closed, as it's just impossible to triage and resolve issues without some sort of system with the small team we have.
 
 -->

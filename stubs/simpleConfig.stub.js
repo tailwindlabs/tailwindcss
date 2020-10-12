@@ -1,4 +1,5 @@
 module.exports = {
+  future: {},
   purge: [],
   theme: {
     extend: {},

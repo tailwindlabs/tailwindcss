@@ -1,0 +1,61 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+
+.btn-1-xl {
+  @apply sm:space-x-0;
+  @apply xl:space-x-0;
+  @apply sm:space-x-1;
+  @apply xl:space-x-1;
+  @apply sm:space-y-0;
+  @apply xl:space-y-0;
+  @apply sm:space-y-1;
+  @apply xl:space-y-1;
+}
+.btn-2-xl {
+  @apply sm:space-x-0;
+  @apply xl:space-x-0;
+  @apply sm:space-x-1;
+  @apply xl:space-x-1;
+  @apply sm:space-y-0;
+  @apply xl:space-y-0;
+  @apply sm:space-y-1;
+  @apply xl:space-y-1;
+  @apply btn-1-xl;
+}
+.btn-3-xl {
+  @apply sm:space-x-0;
+  @apply xl:space-x-0;
+  @apply sm:space-x-1;
+  @apply xl:space-x-1;
+  @apply sm:space-y-0;
+  @apply xl:space-y-0;
+  @apply sm:space-y-1;
+  @apply xl:space-y-1;
+  @apply btn-2-xl;
+}
+.btn-4-xl {
+  @apply sm:space-x-0;
+  @apply xl:space-x-0;
+  @apply sm:space-x-1;
+  @apply xl:space-x-1;
+  @apply sm:space-y-0;
+  @apply xl:space-y-0;
+  @apply sm:space-y-1;
+  @apply xl:space-y-1;
+  @apply btn-3-xl;
+}
+.btn-5-xl {
+  @apply sm:space-x-0;
+  @apply xl:space-x-0;
+  @apply sm:space-x-1;
+  @apply xl:space-x-1;
+  @apply sm:space-y-0;
+  @apply xl:space-y-0;
+  @apply sm:space-y-1;
+  @apply xl:space-y-1;
+  @apply btn-4-xl;
+}

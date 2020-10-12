@@ -3,10 +3,14 @@ import container from './plugins/container'
 import space from './plugins/space'
 import divideWidth from './plugins/divideWidth'
 import divideColor from './plugins/divideColor'
+import divideStyle from './plugins/divideStyle'
 import accessibility from './plugins/accessibility'
 import appearance from './plugins/appearance'
 import backgroundAttachment from './plugins/backgroundAttachment'
+import backgroundClip from './plugins/backgroundClip'
 import backgroundColor from './plugins/backgroundColor'
+import backgroundImage from './plugins/backgroundImage'
+import gradientColorStops from './plugins/gradientColorStops'
 import backgroundPosition from './plugins/backgroundPosition'
 import backgroundRepeat from './plugins/backgroundRepeat'
 import backgroundSize from './plugins/backgroundSize'
@@ -20,10 +24,15 @@ import cursor from './plugins/cursor'
 import display from './plugins/display'
 import flexDirection from './plugins/flexDirection'
 import flexWrap from './plugins/flexWrap'
+import placeItems from './plugins/placeItems'
+import placeContent from './plugins/placeContent'
+import placeSelf from './plugins/placeSelf'
 import alignItems from './plugins/alignItems'
-import alignSelf from './plugins/alignSelf'
-import justifyContent from './plugins/justifyContent'
 import alignContent from './plugins/alignContent'
+import alignSelf from './plugins/alignSelf'
+import justifyItems from './plugins/justifyItems'
+import justifyContent from './plugins/justifyContent'
+import justifySelf from './plugins/justifySelf'
 import flex from './plugins/flex'
 import flexGrow from './plugins/flexGrow'
 import flexShrink from './plugins/flexShrink'
@@ -46,6 +55,7 @@ import objectPosition from './plugins/objectPosition'
 import opacity from './plugins/opacity'
 import outline from './plugins/outline'
 import overflow from './plugins/overflow'
+import overscrollBehavior from './plugins/overscrollBehavior'
 import padding from './plugins/padding'
 import placeholderColor from './plugins/placeholderColor'
 import pointerEvents from './plugins/pointerEvents'
@@ -64,6 +74,7 @@ import fontStyle from './plugins/fontStyle'
 import textTransform from './plugins/textTransform'
 import textDecoration from './plugins/textDecoration'
 import fontSmoothing from './plugins/fontSmoothing'
+import fontVariantNumeric from './plugins/fontVariantNumeric'
 import letterSpacing from './plugins/letterSpacing'
 import userSelect from './plugins/userSelect'
 import verticalAlign from './plugins/verticalAlign'
@@ -75,10 +86,12 @@ import zIndex from './plugins/zIndex'
 import gap from './plugins/gap'
 import gridAutoFlow from './plugins/gridAutoFlow'
 import gridTemplateColumns from './plugins/gridTemplateColumns'
+import gridAutoColumns from './plugins/gridAutoColumns'
 import gridColumn from './plugins/gridColumn'
 import gridColumnStart from './plugins/gridColumnStart'
 import gridColumnEnd from './plugins/gridColumnEnd'
 import gridTemplateRows from './plugins/gridTemplateRows'
+import gridAutoRows from './plugins/gridAutoRows'
 import gridRow from './plugins/gridRow'
 import gridRowStart from './plugins/gridRowStart'
 import gridRowEnd from './plugins/gridRowEnd'
@@ -97,109 +110,128 @@ import backgroundOpacity from './plugins/backgroundOpacity'
 import borderOpacity from './plugins/borderOpacity'
 import textOpacity from './plugins/textOpacity'
 import placeholderOpacity from './plugins/placeholderOpacity'
+import animation from './plugins/animation'
 
 import configurePlugins from './util/configurePlugins'
 
+export const corePluginList = {
+  preflight,
+  container,
+  space,
+  divideWidth,
+  divideColor,
+  divideStyle,
+  divideOpacity,
+  accessibility,
+  appearance,
+  backgroundAttachment,
+  backgroundClip,
+  backgroundColor,
+  backgroundImage,
+  gradientColorStops,
+  backgroundOpacity,
+  backgroundPosition,
+  backgroundRepeat,
+  backgroundSize,
+  borderCollapse,
+  borderColor,
+  borderOpacity,
+  borderRadius,
+  borderStyle,
+  borderWidth,
+  boxSizing,
+  cursor,
+  display,
+  flexDirection,
+  flexWrap,
+  placeItems,
+  placeContent,
+  placeSelf,
+  alignItems,
+  alignContent,
+  alignSelf,
+  justifyItems,
+  justifyContent,
+  justifySelf,
+  flex,
+  flexGrow,
+  flexShrink,
+  order,
+  float,
+  clear,
+  fontFamily,
+  fontWeight,
+  height,
+  fontSize,
+  lineHeight,
+  listStylePosition,
+  listStyleType,
+  margin,
+  maxHeight,
+  maxWidth,
+  minHeight,
+  minWidth,
+  objectFit,
+  objectPosition,
+  opacity,
+  outline,
+  overflow,
+  overscrollBehavior,
+  padding,
+  placeholderColor,
+  placeholderOpacity,
+  pointerEvents,
+  position,
+  inset,
+  resize,
+  boxShadow,
+  fill,
+  stroke,
+  strokeWidth,
+  tableLayout,
+  textAlign,
+  textColor,
+  textOpacity,
+  fontStyle,
+  textTransform,
+  textDecoration,
+  fontSmoothing,
+  fontVariantNumeric,
+  letterSpacing,
+  userSelect,
+  verticalAlign,
+  visibility,
+  whitespace,
+  wordBreak,
+  width,
+  zIndex,
+  gap,
+  gridAutoFlow,
+  gridTemplateColumns,
+  gridAutoColumns,
+  gridColumn,
+  gridColumnStart,
+  gridColumnEnd,
+  gridTemplateRows,
+  gridAutoRows,
+  gridRow,
+  gridRowStart,
+  gridRowEnd,
+  transform,
+  transformOrigin,
+  scale,
+  rotate,
+  translate,
+  skew,
+  transitionProperty,
+  transitionTimingFunction,
+  transitionDuration,
+  transitionDelay,
+  animation,
+}
+
 export default function({ corePlugins: corePluginConfig }) {
-  return configurePlugins(corePluginConfig, {
-    preflight,
-    container,
-    space,
-    divideWidth,
-    divideColor,
-    divideOpacity,
-    accessibility,
-    appearance,
-    backgroundAttachment,
-    backgroundColor,
-    backgroundOpacity,
-    backgroundPosition,
-    backgroundRepeat,
-    backgroundSize,
-    borderCollapse,
-    borderColor,
-    borderOpacity,
-    borderRadius,
-    borderStyle,
-    borderWidth,
-    boxSizing,
-    cursor,
-    display,
-    flexDirection,
-    flexWrap,
-    alignItems,
-    alignSelf,
-    justifyContent,
-    alignContent,
-    flex,
-    flexGrow,
-    flexShrink,
-    order,
-    float,
-    clear,
-    fontFamily,
-    fontWeight,
-    height,
-    fontSize,
-    lineHeight,
-    listStylePosition,
-    listStyleType,
-    margin,
-    maxHeight,
-    maxWidth,
-    minHeight,
-    minWidth,
-    objectFit,
-    objectPosition,
-    opacity,
-    outline,
-    overflow,
-    padding,
-    placeholderColor,
-    placeholderOpacity,
-    pointerEvents,
-    position,
-    inset,
-    resize,
-    boxShadow,
-    fill,
-    stroke,
-    strokeWidth,
-    tableLayout,
-    textAlign,
-    textColor,
-    textOpacity,
-    fontStyle,
-    textTransform,
-    textDecoration,
-    fontSmoothing,
-    letterSpacing,
-    userSelect,
-    verticalAlign,
-    visibility,
-    whitespace,
-    wordBreak,
-    width,
-    zIndex,
-    gap,
-    gridAutoFlow,
-    gridTemplateColumns,
-    gridColumn,
-    gridColumnStart,
-    gridColumnEnd,
-    gridTemplateRows,
-    gridRow,
-    gridRowStart,
-    gridRowEnd,
-    transform,
-    transformOrigin,
-    scale,
-    rotate,
-    translate,
-    skew,
-    transitionProperty,
-    transitionTimingFunction,
-    transitionDuration,
-    transitionDelay,
+  return configurePlugins(corePluginConfig, Object.keys(corePluginList)).map(pluginName => {
+    return corePluginList[pluginName]()
   })
 }

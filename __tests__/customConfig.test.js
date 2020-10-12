@@ -210,3 +210,107 @@ test('tailwind.config.js is picked up by default when passing an empty object', 
       })
   })
 })
+
+test('the default config can be overridden using the presets key', () => {
+  return postcss([
+    tailwind({
+      presets: [
+        {
+          theme: {
+            extend: {
+              colors: {
+                black: 'black',
+              },
+              backgroundColor: theme => theme('colors'),
+            },
+          },
+          corePlugins: ['backgroundColor'],
+        },
+      ],
+      theme: {
+        extend: { colors: { white: 'white' } },
+      },
+    }),
+  ])
+    .process(
+      `
+        @tailwind utilities
+      `,
+      { from: undefined }
+    )
+    .then(result => {
+      const expected = `
+        .bg-black {
+          background-color: black;
+        }
+        .bg-white {
+          background-color: white;
+        }
+      `
+
+      expect(result.css).toMatchCss(expected)
+    })
+})
+
+test('presets can have their own presets', () => {
+  return postcss([
+    tailwind({
+      presets: [
+        {
+          theme: {
+            colors: { red: '#dd0000' },
+          },
+        },
+        {
+          presets: [
+            {
+              theme: {
+                colors: {
+                  transparent: 'transparent',
+                  red: '#ff0000',
+                },
+              },
+            },
+          ],
+          theme: {
+            extend: {
+              colors: {
+                black: 'black',
+                red: '#ee0000',
+              },
+              backgroundColor: theme => theme('colors'),
+            },
+          },
+          corePlugins: ['backgroundColor'],
+        },
+      ],
+      theme: {
+        extend: { colors: { white: 'white' } },
+      },
+    }),
+  ])
+    .process(
+      `
+        @tailwind utilities
+      `,
+      { from: undefined }
+    )
+    .then(result => {
+      const expected = `
+        .bg-transparent {
+          background-color: transparent;
+        }
+        .bg-red {
+          background-color: #ee0000;
+        }
+        .bg-black {
+          background-color: black;
+        }
+        .bg-white {
+          background-color: white;
+        }
+      `
+
+      expect(result.css).toMatchCss(expected)
+    })
+})

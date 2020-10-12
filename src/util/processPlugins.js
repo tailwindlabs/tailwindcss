@@ -8,8 +8,7 @@ import generateVariantFunction from '../util/generateVariantFunction'
 import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
 import wrapWithVariants from '../util/wrapWithVariants'
-import increaseSpecificity from '../util/increaseSpecificity'
-import selectorParser from 'postcss-selector-parser'
+import cloneNodes from '../util/cloneNodes'
 
 function parseStyles(styles) {
   if (!Array.isArray(styles)) {
@@ -19,12 +18,17 @@ function parseStyles(styles) {
   return _.flatMap(styles, style => (style instanceof Node ? style : parseObjectStyles(style)))
 }
 
-function containsClass(value) {
-  return selectorParser(selectors => {
-    let classFound = false
-    selectors.walkClasses(() => (classFound = true))
-    return classFound
-  }).transformSync(value)
+function wrapWithLayer(rules, layer) {
+  return postcss
+    .atRule({
+      name: 'layer',
+      params: layer,
+    })
+    .append(cloneNodes(Array.isArray(rules) ? rules : [rules]))
+}
+
+function isKeyframeRule(rule) {
+  return rule.parent && rule.parent.type === 'atrule' && /keyframes$/.test(rule.parent.name)
 }
 
 export default function(plugins, config) {
@@ -36,7 +40,8 @@ export default function(plugins, config) {
   const applyConfiguredPrefix = selector => {
     return prefixSelector(config.prefix, selector)
   }
-  const getConfigValue = (path, defaultValue) => _.get(config, path, defaultValue)
+
+  const getConfigValue = (path, defaultValue) => (path ? _.get(config, path, defaultValue) : config)
   const browserslistTarget = browserslist().includes('ie 11') ? 'ie11' : 'relaxed'
 
   plugins.forEach(plugin => {
@@ -69,7 +74,7 @@ export default function(plugins, config) {
           return config.target === 'browserslist' ? browserslistTarget : config.target
         }
 
-        const [defaultTarget, targetOverrides] = getConfigValue('target')
+        const [defaultTarget, targetOverrides] = getConfigValue('target', 'relaxed')
 
         const target = _.get(targetOverrides, path, defaultTarget)
 
@@ -87,47 +92,46 @@ export default function(plugins, config) {
         const styles = postcss.root({ nodes: parseStyles(utilities) })
 
         styles.walkRules(rule => {
-          if (options.respectPrefix) {
+          if (options.respectPrefix && !isKeyframeRule(rule)) {
             rule.selector = applyConfiguredPrefix(rule.selector)
           }
 
-          if (options.respectImportant && _.get(config, 'important')) {
-            if (config.important === true) {
-              rule.walkDecls(decl => (decl.important = true))
-            } else if (typeof config.important === 'string') {
-              if (containsClass(config.important)) {
-                throw rule.error(
-                  `Classes are not allowed when using the \`important\` option with a string argument. Please use an ID instead.`
-                )
-              }
-
-              rule.selectors = rule.selectors.map(selector => {
-                return increaseSpecificity(config.important, selector)
-              })
+          if (options.respectImportant && config.important) {
+            rule.__tailwind = {
+              ...rule.__tailwind,
+              important: config.important,
             }
           }
         })
 
-        pluginUtilities.push(wrapWithVariants(styles.nodes, options.variants))
+        pluginUtilities.push(
+          wrapWithLayer(wrapWithVariants(styles.nodes, options.variants), 'utilities')
+        )
       },
       addComponents: (components, options) => {
-        options = Object.assign({ respectPrefix: true }, options)
+        const defaultOptions = { variants: [], respectPrefix: true }
+
+        options = Array.isArray(options)
+          ? Object.assign({}, defaultOptions, { variants: options })
+          : _.defaults(options, defaultOptions)
 
         const styles = postcss.root({ nodes: parseStyles(components) })
 
         styles.walkRules(rule => {
-          if (options.respectPrefix) {
+          if (options.respectPrefix && !isKeyframeRule(rule)) {
             rule.selector = applyConfiguredPrefix(rule.selector)
           }
         })
 
-        pluginComponents.push(...styles.nodes)
+        pluginComponents.push(
+          wrapWithLayer(wrapWithVariants(styles.nodes, options.variants), 'components')
+        )
       },
       addBase: baseStyles => {
-        pluginBaseStyles.push(...parseStyles(baseStyles))
+        pluginBaseStyles.push(wrapWithLayer(parseStyles(baseStyles), 'base'))
       },
-      addVariant: (name, generator) => {
-        pluginVariantGenerators[name] = generateVariantFunction(generator)
+      addVariant: (name, generator, options = {}) => {
+        pluginVariantGenerators[name] = generateVariantFunction(generator, options)
       },
     })
   })

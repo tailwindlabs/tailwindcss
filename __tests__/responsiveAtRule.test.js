@@ -17,20 +17,20 @@ test('it can generate responsive variants', () => {
   `
 
   const output = `
-      .banana { color: yellow; }
-      .chocolate { color: brown; }
-      @media (min-width: 500px) {
-        .sm\\:banana { color: yellow; }
-        .sm\\:chocolate { color: brown; }
-      }
-      @media (min-width: 750px) {
-        .md\\:banana { color: yellow; }
-        .md\\:chocolate { color: brown; }
-      }
-      @media (min-width: 1000px) {
-        .lg\\:banana { color: yellow; }
-        .lg\\:chocolate { color: brown; }
-      }
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    @media (min-width: 500px) {
+      .sm\\:banana { color: yellow; }
+      .sm\\:chocolate { color: brown; }
+    }
+    @media (min-width: 750px) {
+      .md\\:banana { color: yellow; }
+      .md\\:chocolate { color: brown; }
+    }
+    @media (min-width: 1000px) {
+      .lg\\:banana { color: yellow; }
+      .lg\\:chocolate { color: brown; }
+    }
   `
 
   return run(input, {
@@ -59,20 +59,20 @@ test('it can generate responsive variants with a custom separator', () => {
   `
 
   const output = `
-      .banana { color: yellow; }
-      .chocolate { color: brown; }
-      @media (min-width: 500px) {
-        .sm__banana { color: yellow; }
-        .sm__chocolate { color: brown; }
-      }
-      @media (min-width: 750px) {
-        .md__banana { color: yellow; }
-        .md__chocolate { color: brown; }
-      }
-      @media (min-width: 1000px) {
-        .lg__banana { color: yellow; }
-        .lg__chocolate { color: brown; }
-      }
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    @media (min-width: 500px) {
+      .sm__banana { color: yellow; }
+      .sm__chocolate { color: brown; }
+    }
+    @media (min-width: 750px) {
+      .md__banana { color: yellow; }
+      .md__chocolate { color: brown; }
+    }
+    @media (min-width: 1000px) {
+      .lg__banana { color: yellow; }
+      .lg__chocolate { color: brown; }
+    }
   `
 
   return run(input, {
@@ -95,26 +95,31 @@ test('it can generate responsive variants when classes have non-standard charact
     @responsive {
       .hover\\:banana { color: yellow; }
       .chocolate-2\\.5 { color: brown; }
+      .group:hover .group-hover\\:toast { color: black; }
     }
 
     @tailwind screens;
-  `
+    `
 
   const output = `
-      .hover\\:banana { color: yellow; }
-      .chocolate-2\\.5 { color: brown; }
-      @media (min-width: 500px) {
-        .sm\\:hover\\:banana { color: yellow; }
-        .sm\\:chocolate-2\\.5 { color: brown; }
+    .hover\\:banana { color: yellow; }
+    .chocolate-2\\.5 { color: brown; }
+    .group:hover .group-hover\\:toast { color: black; }
+    @media (min-width: 500px) {
+      .sm\\:hover\\:banana { color: yellow; }
+      .sm\\:chocolate-2\\.5 { color: brown; }
+      .group:hover .sm\\:group-hover\\:toast { color: black; }
       }
-      @media (min-width: 750px) {
-        .md\\:hover\\:banana { color: yellow; }
-        .md\\:chocolate-2\\.5 { color: brown; }
+    @media (min-width: 750px) {
+      .md\\:hover\\:banana { color: yellow; }
+      .md\\:chocolate-2\\.5 { color: brown; }
+      .group:hover .md\\:group-hover\\:toast { color: black; }
       }
-      @media (min-width: 1000px) {
-        .lg\\:hover\\:banana { color: yellow; }
-        .lg\\:chocolate-2\\.5 { color: brown; }
-      }
+    @media (min-width: 1000px) {
+      .lg\\:hover\\:banana { color: yellow; }
+      .lg\\:chocolate-2\\.5 { color: brown; }
+      .group:hover .lg\\:group-hover\\:toast { color: black; }
+    }
   `
 
   return run(input, {
@@ -148,21 +153,21 @@ test('responsive variants are grouped', () => {
   `
 
   const output = `
-      .banana { color: yellow; }
-      .apple { color: red; }
-      .chocolate { color: brown; }
-      @media (min-width: 500px) {
-        .sm\\:banana { color: yellow; }
-        .sm\\:chocolate { color: brown; }
-      }
-      @media (min-width: 750px) {
-        .md\\:banana { color: yellow; }
-        .md\\:chocolate { color: brown; }
-      }
-      @media (min-width: 1000px) {
-        .lg\\:banana { color: yellow; }
-        .lg\\:chocolate { color: brown; }
-      }
+    .banana { color: yellow; }
+    .apple { color: red; }
+    .chocolate { color: brown; }
+    @media (min-width: 500px) {
+      .sm\\:banana { color: yellow; }
+      .sm\\:chocolate { color: brown; }
+    }
+    @media (min-width: 750px) {
+      .md\\:banana { color: yellow; }
+      .md\\:chocolate { color: brown; }
+    }
+    @media (min-width: 1000px) {
+      .lg\\:banana { color: yellow; }
+      .lg\\:chocolate { color: brown; }
+    }
   `
 
   return run(input, {
@@ -324,16 +329,16 @@ test('screen prefix is only applied to the last class in a selector', () => {
   `
 
   const output = `
-      .banana li * .sandwich #foo > div { color: yellow; }
-      @media (min-width: 500px) {
-        .banana li * .sm\\:sandwich #foo > div { color: yellow; }
-      }
-      @media (min-width: 750px) {
-        .banana li * .md\\:sandwich #foo > div { color: yellow; }
-      }
-      @media (min-width: 1000px) {
-        .banana li * .lg\\:sandwich #foo > div { color: yellow; }
-      }
+    .banana li * .sandwich #foo > div { color: yellow; }
+    @media (min-width: 500px) {
+      .banana li * .sm\\:sandwich #foo > div { color: yellow; }
+    }
+    @media (min-width: 750px) {
+      .banana li * .md\\:sandwich #foo > div { color: yellow; }
+    }
+    @media (min-width: 1000px) {
+      .banana li * .lg\\:sandwich #foo > div { color: yellow; }
+    }
   `
 
   return run(input, {
@@ -361,16 +366,16 @@ test('responsive variants are generated for all selectors in a rule', () => {
   `
 
   const output = `
-      .foo, .bar { color: yellow; }
-      @media (min-width: 500px) {
-        .sm\\:foo, .sm\\:bar { color: yellow; }
-      }
-      @media (min-width: 750px) {
-        .md\\:foo, .md\\:bar { color: yellow; }
-      }
-      @media (min-width: 1000px) {
-        .lg\\:foo, .lg\\:bar { color: yellow; }
-      }
+    .foo, .bar { color: yellow; }
+    @media (min-width: 500px) {
+      .sm\\:foo, .sm\\:bar { color: yellow; }
+    }
+    @media (min-width: 750px) {
+      .md\\:foo, .md\\:bar { color: yellow; }
+    }
+    @media (min-width: 1000px) {
+      .lg\\:foo, .lg\\:bar { color: yellow; }
+    }
   `
 
   return run(input, {

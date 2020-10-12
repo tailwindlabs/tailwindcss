@@ -1,6 +1,7 @@
 const resolveConfigObjects = require('./lib/util/resolveConfig').default
-const defaultConfig = require('./stubs/defaultConfig.stub.js')
+const getAllConfigs = require('./lib/util/getAllConfigs').default
 
 module.exports = function resolveConfig(...configs) {
-  return resolveConfigObjects([...configs, defaultConfig])
+  const [, ...defaultConfigs] = getAllConfigs(configs[0])
+  return resolveConfigObjects([...configs, ...defaultConfigs])
 }

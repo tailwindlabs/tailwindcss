@@ -9,8 +9,8 @@ import registerConfigAsDependency from './lib/registerConfigAsDependency'
 import processTailwindFeatures from './processTailwindFeatures'
 import formatCSS from './lib/formatCSS'
 import resolveConfig from './util/resolveConfig'
+import getAllConfigs from './util/getAllConfigs'
 import { defaultConfigFile } from './constants'
-
 import defaultConfig from '../stubs/defaultConfig.stub.js'
 
 function resolveConfigPath(filePath) {
@@ -26,7 +26,7 @@ function resolveConfigPath(filePath) {
 
   // require('tailwindcss')({ config: { theme: ..., variants: ... } })
   if (_.isObject(filePath) && _.has(filePath, 'config') && _.isObject(filePath.config)) {
-    undefined
+    return undefined
   }
 
   // require('tailwindcss')('custom-config.js')
@@ -45,8 +45,8 @@ function resolveConfigPath(filePath) {
 }
 
 const getConfigFunction = config => () => {
-  if (_.isUndefined(config) && !_.isObject(config)) {
-    return resolveConfig([defaultConfig])
+  if (_.isUndefined(config)) {
+    return resolveConfig([...getAllConfigs(defaultConfig)])
   }
 
   // Skip this if Jest is running: https://github.com/facebook/jest/pull/9841#issuecomment-621417584
@@ -60,7 +60,7 @@ const getConfigFunction = config => () => {
 
   const configObject = _.isObject(config) ? _.get(config, 'config', config) : require(config)
 
-  return resolveConfig([configObject, defaultConfig])
+  return resolveConfig([...getAllConfigs(configObject)])
 }
 
 const plugin = postcss.plugin('tailwind', config => {

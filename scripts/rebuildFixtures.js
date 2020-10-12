@@ -57,6 +57,14 @@ Promise.all([
       },
     },
   }),
+  build({
+    from: '__tests__/fixtures/tailwind-input.css',
+    to: '__tests__/fixtures/tailwind-output-flagged.css',
+    config: {
+      future: 'all',
+      experimental: 'all',
+    },
+  }),
 ]).then(() => {
   console.log('\nFinished rebuilding fixtures.')
   console.log(

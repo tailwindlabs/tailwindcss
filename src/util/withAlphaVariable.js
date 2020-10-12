@@ -1,4 +1,5 @@
 import createColor from 'color'
+import _ from 'lodash'
 
 function hasAlpha(color) {
   return (
@@ -9,7 +10,7 @@ function hasAlpha(color) {
   )
 }
 
-function toRgba(color) {
+export function toRgba(color) {
   const [r, g, b, a] = createColor(color)
     .rgb()
     .array()
@@ -18,6 +19,13 @@ function toRgba(color) {
 }
 
 export default function withAlphaVariable({ color, property, variable }) {
+  if (_.isFunction(color)) {
+    return {
+      [variable]: '1',
+      [property]: color({ opacityVariable: variable }),
+    }
+  }
+
   try {
     const [r, g, b, a] = toRgba(color)
 

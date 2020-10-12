@@ -49,7 +49,11 @@ function mapMinWidthsToPadding(minWidths, screens, paddings) {
 
   _.each(minWidths, minWidth => {
     Object.keys(screens).forEach(screen => {
-      if (`${screens[screen]}` === `${minWidth}`) {
+      const screenMinWidth = _.isPlainObject(screens[screen])
+        ? screens[screen].min || screens[screen]['min-width']
+        : screens[screen]
+
+      if (`${screenMinWidth}` === `${minWidth}`) {
         mapping.push({
           screen,
           minWidth,
@@ -63,7 +67,7 @@ function mapMinWidthsToPadding(minWidths, screens, paddings) {
 }
 
 module.exports = function() {
-  return function({ addComponents, theme }) {
+  return function({ addComponents, theme, variants }) {
     const screens = theme('container.screens', theme('screens'))
     const minWidths = extractMinWidths(screens)
     const paddings = mapMinWidthsToPadding(minWidths, screens, theme('container.padding'))
@@ -96,15 +100,18 @@ module.exports = function() {
       })
       .value()
 
-    addComponents([
-      {
-        '.container': Object.assign(
-          { width: '100%' },
-          theme('container.center', false) ? { marginRight: 'auto', marginLeft: 'auto' } : {},
-          generatePaddingFor(0)
-        ),
-      },
-      ...atRules,
-    ])
+    addComponents(
+      [
+        {
+          '.container': Object.assign(
+            { width: '100%' },
+            theme('container.center', false) ? { marginRight: 'auto', marginLeft: 'auto' } : {},
+            generatePaddingFor(0)
+          ),
+        },
+        ...atRules,
+      ],
+      variants('container')
+    )
   }
 }

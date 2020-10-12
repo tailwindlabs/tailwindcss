@@ -51,6 +51,27 @@ test('it can generate disabled variants', () => {
   })
 })
 
+test('it can generate checked variants', () => {
+  const input = `
+    @variants checked {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .checked\\:banana:checked { color: yellow; }
+    .checked\\:chocolate:checked { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate active variants', () => {
   const input = `
     @variants active {
@@ -127,6 +148,195 @@ test('it can generate focus-within variants', () => {
     .chocolate { color: brown; }
     .focus-within\\:banana:focus-within { color: yellow; }
     .focus-within\\:chocolate:focus-within { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate focus-visible variants', () => {
+  const input = `
+    @variants focus-visible {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .focus-visible\\:banana:focus-visible { color: yellow; }
+    .focus-visible\\:chocolate:focus-visible { color: brown; }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate motion-reduce variants', () => {
+  const input = `
+    @variants motion-reduce {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    @media (prefers-reduced-motion: reduce) {
+      .motion-reduce\\:banana { color: yellow; }
+      .motion-reduce\\:chocolate { color: brown; }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate motion-safe variants', () => {
+  const input = `
+    @variants motion-safe {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    @media (prefers-reduced-motion: no-preference) {
+      .motion-safe\\:banana { color: yellow; }
+      .motion-safe\\:chocolate { color: brown; }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate motion-safe and motion-reduce variants', () => {
+  const input = `
+    @variants motion-safe, motion-reduce {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    @media (prefers-reduced-motion: no-preference) {
+      .motion-safe\\:banana { color: yellow; }
+      .motion-safe\\:chocolate { color: brown; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .motion-reduce\\:banana { color: yellow; }
+      .motion-reduce\\:chocolate { color: brown; }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('motion-reduce variants stack with basic variants', () => {
+  const input = `
+    @variants motion-reduce, hover, group-hover {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .hover\\:banana:hover { color: yellow; }
+    .hover\\:chocolate:hover { color: brown; }
+    .group:hover .group-hover\\:banana { color: yellow; }
+    .group:hover .group-hover\\:chocolate { color: brown; }
+    @media (prefers-reduced-motion: reduce) {
+      .motion-reduce\\:banana { color: yellow; }
+      .motion-reduce\\:chocolate { color: brown; }
+      .motion-reduce\\:hover\\:banana:hover { color: yellow; }
+      .motion-reduce\\:hover\\:chocolate:hover { color: brown; }
+      .group:hover .motion-reduce\\:group-hover\\:banana { color: yellow; }
+      .group:hover .motion-reduce\\:group-hover\\:chocolate { color: brown; }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('motion-safe variants stack with basic variants', () => {
+  const input = `
+    @variants motion-safe, hover, group-hover {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .hover\\:banana:hover { color: yellow; }
+    .hover\\:chocolate:hover { color: brown; }
+    .group:hover .group-hover\\:banana { color: yellow; }
+    .group:hover .group-hover\\:chocolate { color: brown; }
+    @media (prefers-reduced-motion: no-preference) {
+      .motion-safe\\:banana { color: yellow; }
+      .motion-safe\\:chocolate { color: brown; }
+      .motion-safe\\:hover\\:banana:hover { color: yellow; }
+      .motion-safe\\:hover\\:chocolate:hover { color: brown; }
+      .group:hover .motion-safe\\:group-hover\\:banana { color: yellow; }
+      .group:hover .motion-safe\\:group-hover\\:chocolate { color: brown; }
+    }
+  `
+
+  return run(input).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('motion-safe and motion-reduce variants stack with basic variants', () => {
+  const input = `
+    @variants motion-reduce, motion-safe, hover {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .hover\\:banana:hover { color: yellow; }
+    .hover\\:chocolate:hover { color: brown; }
+    @media (prefers-reduced-motion: reduce) {
+      .motion-reduce\\:banana { color: yellow; }
+      .motion-reduce\\:chocolate { color: brown; }
+      .motion-reduce\\:hover\\:banana:hover { color: yellow; }
+      .motion-reduce\\:hover\\:chocolate:hover { color: brown; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .motion-safe\\:banana { color: yellow; }
+      .motion-safe\\:chocolate { color: brown; }
+      .motion-safe\\:hover\\:banana:hover { color: yellow; }
+      .motion-safe\\:hover\\:chocolate:hover { color: brown; }
+    }
   `
 
   return run(input).then(result => {
@@ -415,7 +625,7 @@ test('variants are generated in the order specified', () => {
 
 test('the built-in variant pseudo-selectors are appended before any pseudo-elements', () => {
   const input = `
-    @variants hover, focus-within, focus, active, group-hover {
+    @variants hover, focus-within, focus-visible, focus, active, group-hover {
       .placeholder-yellow::placeholder { color: yellow; }
     }
   `
@@ -424,6 +634,7 @@ test('the built-in variant pseudo-selectors are appended before any pseudo-eleme
     .placeholder-yellow::placeholder { color: yellow; }
     .hover\\:placeholder-yellow:hover::placeholder { color: yellow; }
     .focus-within\\:placeholder-yellow:focus-within::placeholder { color: yellow; }
+    .focus-visible\\:placeholder-yellow:focus-visible::placeholder { color: yellow; }
     .focus\\:placeholder-yellow:focus::placeholder { color: yellow; }
     .active\\:placeholder-yellow:active::placeholder { color: yellow; }
     .group:hover .group-hover\\:placeholder-yellow::placeholder { color: yellow; }
@@ -624,7 +835,10 @@ test('plugin variants can wrap rules in another at-rule using the raw PostCSS AP
       ...config.plugins,
       function({ addVariant, e }) {
         addVariant('supports-grid', ({ container, separator }) => {
-          const supportsRule = postcss.atRule({ name: 'supports', params: '(display: grid)' })
+          const supportsRule = postcss.atRule({
+            name: 'supports',
+            params: '(display: grid)',
+          })
           supportsRule.nodes = container.nodes
           container.nodes = [supportsRule]
           supportsRule.walkRules(rule => {

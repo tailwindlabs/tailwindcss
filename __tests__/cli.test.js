@@ -4,12 +4,12 @@ import cli from '../src/cli/main'
 import * as constants from '../src/constants'
 import * as utils from '../src/cli/utils'
 import runInTempDirectory from '../jest/runInTempDirectory'
+import featureFlags from '../src/featureFlags'
 
 describe('cli', () => {
   const inputCssPath = path.resolve(__dirname, 'fixtures/tailwind-input.css')
   const customConfigPath = path.resolve(__dirname, 'fixtures/custom-config.js')
-  const defaultConfigFixture = utils.readFile(constants.defaultConfigStubFile)
-  const simpleConfigFixture = utils.readFile(constants.simpleConfigStubFile)
+  const defaultPostCssConfigFixture = utils.readFile(constants.defaultPostCssConfigStubFile)
 
   beforeEach(() => {
     console.log = jest.fn()
@@ -20,7 +20,18 @@ describe('cli', () => {
     it('creates a Tailwind config file', () => {
       return runInTempDirectory(() => {
         return cli(['init']).then(() => {
-          expect(utils.readFile(constants.defaultConfigFile)).toEqual(simpleConfigFixture)
+          expect(utils.exists(constants.defaultConfigFile)).toEqual(true)
+        })
+      })
+    })
+
+    it('creates a Tailwind config file and a postcss.config.js file', () => {
+      return runInTempDirectory(() => {
+        return cli(['init', '-p']).then(() => {
+          expect(utils.exists(constants.defaultConfigFile)).toEqual(true)
+          expect(utils.readFile(constants.defaultPostCssConfigFile)).toEqual(
+            defaultPostCssConfigFixture
+          )
         })
       })
     })
@@ -28,7 +39,7 @@ describe('cli', () => {
     it('creates a full Tailwind config file', () => {
       return runInTempDirectory(() => {
         return cli(['init', '--full']).then(() => {
-          expect(utils.readFile(constants.defaultConfigFile)).toEqual(defaultConfigFixture)
+          expect(utils.exists(constants.defaultConfigFile)).toEqual(true)
         })
       })
     })
@@ -43,9 +54,17 @@ describe('cli', () => {
   })
 
   describe('build', () => {
-    it('compiles CSS file', () => {
+    it('compiles CSS file using an input css file', () => {
       return cli(['build', inputCssPath]).then(() => {
         expect(process.stdout.write.mock.calls[0][0]).toContain('.example')
+      })
+    })
+
+    it('compiles CSS file without an input css file', () => {
+      return cli(['build']).then(() => {
+        expect(process.stdout.write.mock.calls[0][0]).toContain('normalize.css') // base
+        expect(process.stdout.write.mock.calls[0][0]).toContain('.container') // components
+        expect(process.stdout.write.mock.calls[0][0]).toContain('.mx-auto') // utilities
       })
     })
 
@@ -72,6 +91,16 @@ describe('cli', () => {
     it('compiles CSS file without autoprefixer', () => {
       return cli(['build', inputCssPath, '--no-autoprefixer']).then(() => {
         expect(process.stdout.write.mock.calls[0][0]).not.toContain('-ms-input-placeholder')
+      })
+    })
+
+    it('creates a Tailwind config file with future flags', () => {
+      return runInTempDirectory(() => {
+        return cli(['init']).then(() => {
+          featureFlags.future.forEach(flag => {
+            expect(utils.readFile(constants.defaultConfigFile)).toContain(`${flag}: true`)
+          })
+        })
       })
     })
   })
