@@ -69,6 +69,8 @@ const nav = {
     pages['grid-template-rows'],
     pages['grid-row'],
     pages['grid-auto-flow'],
+    pages['grid-auto-columns'],
+    pages['grid-auto-rows'],
     pages['gap'],
   ],
   'Box Alignment': [
