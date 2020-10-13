@@ -55,7 +55,7 @@ test('it creates background-image utilities in ie11 mode', () => {
   ])
 })
 
-test('it creates background-image utilities recusively', () => {
+test('it creates background-image utilities recursively', () => {
   const config = {
     target: 'relaxed',
     theme: {
