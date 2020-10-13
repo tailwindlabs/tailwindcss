@@ -7,7 +7,7 @@ import map from 'lodash/map'
 import get from 'lodash/get'
 import toPath from 'lodash/toPath'
 import negateValue from './negateValue'
-import { corePluginList } from '../corePlugins'
+import { corePluginList } from '../corePluginList'
 import configurePlugins from './configurePlugins'
 
 const configUtils = {
@@ -195,7 +195,7 @@ function resolveCorePlugins(corePluginConfigs) {
       return corePluginConfig({ corePlugins: resolved })
     }
     return configurePlugins(corePluginConfig, resolved)
-  }, Object.keys(corePluginList))
+  }, corePluginList)
 
   return result
 }

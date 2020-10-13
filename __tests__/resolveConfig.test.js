@@ -1,4 +1,4 @@
-import { corePluginList } from '../src/corePlugins'
+import { corePluginList } from '../src/corePluginList'
 import resolveConfig from '../src/util/resolveConfig'
 
 test('prefix key overrides default prefix', () => {
@@ -1821,7 +1821,7 @@ test('core plugin configuration builds on the default list when starting with an
     separator: ':',
     theme: {},
     variants: {},
-    corePlugins: Object.keys(corePluginList).filter(c => c !== 'display'),
+    corePlugins: corePluginList.filter(c => c !== 'display'),
   })
 })
 
