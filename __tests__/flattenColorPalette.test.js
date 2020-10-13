@@ -43,3 +43,43 @@ test('it flattens nested color objects', () => {
     'blue-3': 'rgb(0,0,100)',
   })
 })
+
+test('it recusively flattens nested color objects', () => {
+  expect(
+    flattenColorPalette({
+      brand: {
+        primary: {
+          default: 'rgb(100,0,0)',
+          50: 'rgba(100,0,0,.5)',
+        },
+      },
+      theme: {
+        default: {
+          background: {
+            default: 'rgb(0,0,0)',
+            50: 'rgba(0,0,0,.5)',
+          },
+        },
+        'not-default': {
+          background: {
+            default: 'rgb(255,255,255)',
+            50: 'rgba(255,255,255,.5)',
+            'keep-going': {
+              default: 'rgb(128,128,128)',
+              50: 'rgba(128,128,128,.5)',
+            },
+          },
+        },
+      },
+    })
+  ).toEqual({
+    'brand-primary': 'rgb(100,0,0)',
+    'brand-primary-50': 'rgba(100,0,0,.5)',
+    'theme-default-background': 'rgb(0,0,0)',
+    'theme-default-background-50': 'rgba(0,0,0,.5)',
+    'theme-not-default-background': 'rgb(255,255,255)',
+    'theme-not-default-background-50': 'rgba(255,255,255,.5)',
+    'theme-not-default-background-keep-going': 'rgb(128,128,128)',
+    'theme-not-default-background-keep-going-50': 'rgba(128,128,128,.5)',
+  })
+})
