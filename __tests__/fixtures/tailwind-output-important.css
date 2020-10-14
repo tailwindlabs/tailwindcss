@@ -16035,11 +16035,13 @@ video {
 }
 
 .break-normal {
+  word-wrap: normal !important;
   overflow-wrap: normal !important;
   word-break: normal !important;
 }
 
 .break-words {
+  word-wrap: break-word !important;
   overflow-wrap: break-word !important;
 }
 
@@ -34656,11 +34658,13 @@ video {
   }
 
   .sm\:break-normal {
+    word-wrap: normal !important;
     overflow-wrap: normal !important;
     word-break: normal !important;
   }
 
   .sm\:break-words {
+    word-wrap: break-word !important;
     overflow-wrap: break-word !important;
   }
 
@@ -53247,11 +53251,13 @@ video {
   }
 
   .md\:break-normal {
+    word-wrap: normal !important;
     overflow-wrap: normal !important;
     word-break: normal !important;
   }
 
   .md\:break-words {
+    word-wrap: break-word !important;
     overflow-wrap: break-word !important;
   }
 
@@ -71838,11 +71844,13 @@ video {
   }
 
   .lg\:break-normal {
+    word-wrap: normal !important;
     overflow-wrap: normal !important;
     word-break: normal !important;
   }
 
   .lg\:break-words {
+    word-wrap: break-word !important;
     overflow-wrap: break-word !important;
   }
 
@@ -90429,11 +90437,13 @@ video {
   }
 
   .xl\:break-normal {
+    word-wrap: normal !important;
     overflow-wrap: normal !important;
     word-break: normal !important;
   }
 
   .xl\:break-words {
+    word-wrap: break-word !important;
     overflow-wrap: break-word !important;
   }
 
