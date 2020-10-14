@@ -8,6 +8,7 @@ const featureFlags = {
     'purgeLayersByDefault',
     'defaultLineHeights',
     'standardFontWeights',
+    'moveTruncateToTextOverflow',
   ],
   experimental: [
     'uniformColorPalette',
