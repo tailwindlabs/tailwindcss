@@ -200,6 +200,14 @@ function resolveCorePlugins(corePluginConfigs) {
   return result
 }
 
+function resolvePluginLists(pluginLists) {
+  const result = [...pluginLists].reverse().reduce((resolved, pluginList) => {
+    return [...resolved, ...pluginList]
+  }, [])
+
+  return result
+}
+
 export default function resolveConfig(configs) {
   const allConfigs = extractPluginConfigs(configs)
 
@@ -210,6 +218,7 @@ export default function resolveConfig(configs) {
       ),
       variants: resolveVariants(allConfigs.map(c => c.variants)),
       corePlugins: resolveCorePlugins(allConfigs.map(c => c.corePlugins)),
+      plugins: resolvePluginLists(configs.map(c => get(c, 'plugins', []))),
     },
     ...allConfigs
   )

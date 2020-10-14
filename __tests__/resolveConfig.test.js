@@ -1856,3 +1856,33 @@ test('core plugin configurations stack', () => {
     corePlugins: ['float', 'padding', 'margin'],
   })
 })
+
+test('plugins are merged', () => {
+  const userConfig = {
+    plugins: ['3'],
+  }
+
+  const otherConfig = {
+    plugins: ['2'],
+  }
+
+  const defaultConfig = {
+    plugins: ['1'],
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {},
+  }
+
+  const result = resolveConfig([userConfig, otherConfig, defaultConfig])
+
+  expect(result).toMatchObject({
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {},
+    plugins: ['1', '2', '3'],
+  })
+})
