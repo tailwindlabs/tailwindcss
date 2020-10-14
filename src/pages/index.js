@@ -3,7 +3,7 @@ import { GradientLockup } from '@/components/GradientLockup'
 import { Tabs } from '@/components/Tabs'
 import { gradients } from '@/utils/gradients'
 import { Testimonials } from '@/components/Testimonials'
-import { BrowserWindow } from '@/components/BrowserWindow'
+import { Responsive } from '@/components/home/Responsive'
 import { DarkMode } from '@/components/home/DarkMode'
 import { Paragraph, Icon, Caption, BigText, Link } from '@/components/home/common'
 
@@ -234,40 +234,7 @@ export default function Home() {
             right={<CodeWindow className="bg-turquoise-500" />}
           />
         </section>
-        <section>
-          <div className="px-8 mb-20">
-            <Icon className={`${gradients.violet} mb-8`} />
-            <Caption as="h2" className="text-violet-600 mb-3">
-              Mobile-first
-            </Caption>
-            <BigText className="mb-8">Responsive everything.</BigText>
-            <Paragraph as="div" className="mb-6">
-              <p>
-                Wrestling with a bunch of complex media queries in your CSS sucks, so Tailwind lets
-                you build responsive designs right in your HTML instead.
-              </p>
-              <p>
-                Throw a screen size in front of literally any utility class and watch it magically
-                apply at a specific breakpoint.
-              </p>
-            </Paragraph>
-            <Link href="#" className="text-violet-600">
-              Learn more -&gt;
-            </Link>
-          </div>
-          <GradientLockup
-            color="violet"
-            rotate={2}
-            left={
-              <>
-                <div className="max-w-5xl mx-auto">
-                  <BrowserWindow />
-                </div>
-                <CodeWindow className="bg-indigo-500" height={396} />
-              </>
-            }
-          />
-        </section>
+        <Responsive />
         <section>
           <div className="px-8 mb-20">
             <Icon className={`${gradients.lightblue} mb-8`} />
