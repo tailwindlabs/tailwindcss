@@ -6,6 +6,8 @@ import { motion, useTransform, useMotionValue } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { ReactComponent as Icon } from '@/img/icons/home/mobile-first.svg'
 
+const MIN_WIDTH = 400
+
 const classNames = {
   sm: {
     container: 'grid grid-cols-1',
@@ -98,15 +100,15 @@ function BrowserWindow({ height = 385 }) {
   const x = useMotionValue(0)
   const constraintsRef = useRef()
   const [size, setSize] = useState('lg')
+  const constraintsWidth = useRef()
 
   useEffect(() => {
     return x.onChange((x) => {
-      // TODO
-      if (x < -200) {
+      if (x < -((constraintsWidth.current / 3) * 2)) {
         size !== 'sm' && setSize('sm')
-      } else if (x < -100) {
+      } else if (x < -(constraintsWidth.current / 3)) {
         size !== 'md' && setSize('md')
-      } else if (x >= -100) {
+      } else if (x >= -(constraintsWidth.current / 3)) {
         size !== 'lg' && setSize('lg')
       }
     })
@@ -147,8 +149,12 @@ function BrowserWindow({ height = 385 }) {
       </motion.div>
       <div
         ref={constraintsRef}
-        className="absolute bottom-0 left-1/2 pointer-events-none"
-        style={{ top: `${50 / 16}rem`, right: '-2.125rem' }}
+        className="absolute bottom-0 pointer-events-none"
+        style={{
+          top: `${50 / 16}rem`,
+          right: '-2.125rem',
+          width: `calc(100% - ${MIN_WIDTH}px + 2.125rem + 2.125rem - 2px)`,
+        }}
       >
         <motion.div
           drag="x"
@@ -158,6 +164,9 @@ function BrowserWindow({ height = 385 }) {
           dragConstraints={constraintsRef}
           className="absolute z-10 top-1/2 right-0 bg-indigo-900 rounded-full border-4 border-white shadow-lg flex items-center justify-center pointer-events-auto"
           style={{ x, width: '4.25rem', height: '4.25rem', marginTop: '-2.125rem' }}
+          onMeasureDragConstraints={({ left, right }) => {
+            constraintsWidth.current = right - left
+          }}
         >
           <svg width="40" height="40" fill="none">
             <path
