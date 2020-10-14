@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing!
+### Fixed
+
+- Merge plugins when merging config with preset ([#2561](https://github.com/tailwindlabs/tailwindcss/pulls/#2561)
+- Use `word-wrap` and `overflow-wrap` together, not one or the other since `word-wrap` is IE-only
 
 ## [1.9.1]
 
