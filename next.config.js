@@ -30,8 +30,22 @@ module.exports = withBundleAnalyzer({
   },
   webpack(config, options) {
     config.module.rules.push({
-      test: /\.(png|jpe?g|gif|svg|webp)$/i,
+      test: /\.(png|jpe?g|gif|webp)$/i,
       use: [
+        {
+          loader: 'file-loader',
+          options: {
+            publicPath: '/_next',
+            name: 'static/media/[name].[hash].[ext]',
+          },
+        },
+      ],
+    })
+
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: [
+        '@svgr/webpack',
         {
           loader: 'file-loader',
           options: {

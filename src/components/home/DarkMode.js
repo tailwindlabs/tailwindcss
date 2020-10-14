@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { Switch } from '@headlessui/react'
 import { motion } from 'framer-motion'
 import { gradients } from '@/utils/gradients'
-import { Paragraph, Icon, Caption, BigText, Link } from '@/components/home/common'
+import { Paragraph, IconContainer, Caption, BigText, Link } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
 import { CodeWindow } from '@/components/CodeWindow'
+import { ReactComponent as Icon } from '@/img/icons/home/dark-mode.svg'
 
 function DarkModeSwitch({ enabled, onChange }) {
   return (
@@ -63,7 +64,9 @@ export function DarkMode() {
   return (
     <section>
       <div className="px-8 mb-20">
-        <Icon className={`${gradients.green} mb-8`} />
+        <IconContainer className={`${gradients.green} mb-8`}>
+          <Icon />
+        </IconContainer>
         <Caption as="h2" className="text-green-600 mb-3">
           Dark mode
         </Caption>

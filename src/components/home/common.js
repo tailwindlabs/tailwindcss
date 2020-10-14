@@ -1,6 +1,9 @@
-export function Icon({ as: Component = 'div', color, className = '', ...props }) {
+export function IconContainer({ as: Component = 'div', color, className = '', ...props }) {
   return (
-    <Component className={`w-13 h-13 rounded-xl mb-8 bg-gradient-to-br ${className}`} {...props} />
+    <Component
+      className={`w-13 h-13 rounded-xl mb-8 bg-gradient-to-br flex items-center justify-center ${className}`}
+      {...props}
+    />
   )
 }
 

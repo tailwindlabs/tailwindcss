@@ -18,6 +18,7 @@
     "@next/mdx": "^9.4.4",
     "@reach/rect": "^0.10.5",
     "@sindresorhus/slugify": "^1.1.0",
+    "@svgr/webpack": "^5.4.0",
     "autoprefixer": "^9.8.5",
     "babel-plugin-preval": "^5.0.0",
     "brotli-size": "^4.0.0",

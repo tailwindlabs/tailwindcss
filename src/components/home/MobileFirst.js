@@ -1,9 +1,10 @@
-import { Icon, Caption, BigText, Paragraph, Link } from '@/components/home/common'
+import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
 import { gradients } from '@/utils/gradients'
 import { CodeWindow } from '@/components/CodeWindow'
 import { motion, useTransform, useMotionValue } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import { ReactComponent as Icon } from '@/img/icons/home/mobile-first.svg'
 
 const classNames = {
   sm: {
@@ -173,11 +174,13 @@ function BrowserWindow({ height = 385 }) {
   )
 }
 
-export function Responsive() {
+export function MobileFirst() {
   return (
     <section>
       <div className="px-8 mb-20">
-        <Icon className={`${gradients.violet} mb-8`} />
+        <IconContainer className={`${gradients.violet} mb-8`}>
+          <Icon />
+        </IconContainer>
         <Caption as="h2" className="text-violet-600 mb-3">
           Mobile-first
         </Caption>
