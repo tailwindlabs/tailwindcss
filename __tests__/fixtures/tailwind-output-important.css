@@ -15827,6 +15827,14 @@ video {
   --text-opacity: 1 !important;
 }
 
+.overflow-ellipsis {
+  text-overflow: ellipsis !important;
+}
+
+.overflow-clip {
+  text-overflow: clip !important;
+}
+
 .italic {
   font-style: italic !important;
 }
@@ -34450,6 +34458,14 @@ video {
     --text-opacity: 1 !important;
   }
 
+  .sm\:overflow-ellipsis {
+    text-overflow: ellipsis !important;
+  }
+
+  .sm\:overflow-clip {
+    text-overflow: clip !important;
+  }
+
   .sm\:italic {
     font-style: italic !important;
   }
@@ -53041,6 +53057,14 @@ video {
 
   .md\:focus\:text-opacity-100:focus {
     --text-opacity: 1 !important;
+  }
+
+  .md\:overflow-ellipsis {
+    text-overflow: ellipsis !important;
+  }
+
+  .md\:overflow-clip {
+    text-overflow: clip !important;
   }
 
   .md\:italic {
@@ -71636,6 +71660,14 @@ video {
     --text-opacity: 1 !important;
   }
 
+  .lg\:overflow-ellipsis {
+    text-overflow: ellipsis !important;
+  }
+
+  .lg\:overflow-clip {
+    text-overflow: clip !important;
+  }
+
   .lg\:italic {
     font-style: italic !important;
   }
@@ -90227,6 +90259,14 @@ video {
 
   .xl\:focus\:text-opacity-100:focus {
     --text-opacity: 1 !important;
+  }
+
+  .xl\:overflow-ellipsis {
+    text-overflow: ellipsis !important;
+  }
+
+  .xl\:overflow-clip {
+    text-overflow: clip !important;
   }
 
   .xl\:italic {

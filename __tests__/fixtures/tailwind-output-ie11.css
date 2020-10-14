@@ -8991,6 +8991,14 @@ video {
   color: #702459;
 }
 
+.overflow-ellipsis {
+  text-overflow: ellipsis;
+}
+
+.overflow-clip {
+  text-overflow: clip;
+}
+
 .italic {
   font-style: italic;
 }
@@ -19821,6 +19829,14 @@ video {
     color: #702459;
   }
 
+  .sm\:overflow-ellipsis {
+    text-overflow: ellipsis;
+  }
+
+  .sm\:overflow-clip {
+    text-overflow: clip;
+  }
+
   .sm\:italic {
     font-style: italic;
   }
@@ -30619,6 +30635,14 @@ video {
 
   .md\:focus\:text-pink-900:focus {
     color: #702459;
+  }
+
+  .md\:overflow-ellipsis {
+    text-overflow: ellipsis;
+  }
+
+  .md\:overflow-clip {
+    text-overflow: clip;
   }
 
   .md\:italic {
@@ -41421,6 +41445,14 @@ video {
     color: #702459;
   }
 
+  .lg\:overflow-ellipsis {
+    text-overflow: ellipsis;
+  }
+
+  .lg\:overflow-clip {
+    text-overflow: clip;
+  }
+
   .lg\:italic {
     font-style: italic;
   }
@@ -52219,6 +52251,14 @@ video {
 
   .xl\:focus\:text-pink-900:focus {
     color: #702459;
+  }
+
+  .xl\:overflow-ellipsis {
+    text-overflow: ellipsis;
+  }
+
+  .xl\:overflow-clip {
+    text-overflow: clip;
   }
 
   .xl\:italic {

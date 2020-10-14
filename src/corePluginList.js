@@ -76,6 +76,7 @@ export const corePluginList = [
   'textAlign',
   'textColor',
   'textOpacity',
+  'textOverflow',
   'fontStyle',
   'textTransform',
   'textDecoration',
