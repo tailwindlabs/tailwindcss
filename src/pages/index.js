@@ -4,44 +4,8 @@ import { Tabs } from '@/components/Tabs'
 import { gradients } from '@/utils/gradients'
 import { Testimonials } from '@/components/Testimonials'
 import { BrowserWindow } from '@/components/BrowserWindow'
-import { DarkModeSwitch } from '@/components/DarkModeSwitch'
-
-function Icon({ as: Component = 'div', color, className = '', ...props }) {
-  return (
-    <Component className={`w-13 h-13 rounded-xl mb-8 bg-gradient-to-br ${className}`} {...props} />
-  )
-}
-
-function Caption({ as: Component = 'p', className = '', ...props }) {
-  return (
-    <Component
-      className={`text-lg font-semibold tracking-tight leading-snug uppercase ${className}`}
-      {...props}
-    />
-  )
-}
-
-function BigText({ as: Component = 'p', className = '', ...props }) {
-  return (
-    <Component
-      className={`text-6xl leading-none font-extrabold text-black ${className}`}
-      {...props}
-    />
-  )
-}
-
-function Paragraph({ as: Component = 'p', className = '', ...props }) {
-  return (
-    <Component
-      className={`max-w-4xl text-2xl font-medium leading-10 space-y-6 ${className}`}
-      {...props}
-    />
-  )
-}
-
-function Link({ className = '', ...props }) {
-  return <a className={`inline-flex text-2xl leading-8 font-medium ${className}`} {...props} />
-}
+import { DarkMode } from '@/components/home/DarkMode'
+import { Paragraph, Icon, Caption, BigText, Link } from '@/components/home/common'
 
 export default function Home() {
   return (
@@ -381,40 +345,7 @@ export default function Home() {
             right={<CodeWindow className="bg-pink-600" />}
           />
         </section>
-        <section>
-          <div className="px-8 mb-20">
-            <Icon className={`${gradients.green} mb-8`} />
-            <Caption as="h2" className="text-green-600 mb-3">
-              Dark mode
-            </Caption>
-            <BigText className="mb-8">Now with Dark Mode.</BigText>
-            <Paragraph className="mb-6">
-              Don’t want to be one of those websites that blinds people when they open it on their
-              phone at 2am? Throw dark: in front of any color utility to apply it when dark mode is
-              active. Works for background colors, text colors, border colors, and even gradients
-              out-of-the-box — no configuration required.
-            </Paragraph>
-            <Link href="#" className="text-green-600">
-              Learn more -&gt;
-            </Link>
-          </div>
-          <GradientLockup
-            color="green"
-            rotate={-2}
-            header={
-              <div className="flex justify-center">
-                <DarkModeSwitch />
-              </div>
-            }
-            left={
-              <div
-                className="relative z-10 bg-white rounded-xl shadow-lg -mr-8"
-                style={{ height: 298 }}
-              />
-            }
-            right={<CodeWindow className="bg-green-500" />}
-          />
-        </section>
+        <DarkMode />
         <section>
           <div className="px-8 mb-20">
             <Icon className={`${gradients.pink} mb-8`} />

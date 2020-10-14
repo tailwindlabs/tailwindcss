@@ -4,7 +4,9 @@ module.exports = {
   purge: ['./src/**/*.{js,mdx}'],
   experimental: {
     extendedSpacingScale: true,
+    darkModeVariant: true,
   },
+  dark: 'class',
   theme: {
     screens: {
       sm: '576px',
@@ -315,10 +317,10 @@ module.exports = {
     },
   },
   variants: {
-    backgroundColor: ['responsive', 'odd', 'even', 'hover', 'focus'],
-    borderColor: ['responsive', 'hover', 'focus'],
+    backgroundColor: ['responsive', 'odd', 'even', 'hover', 'focus', 'dark'],
+    borderColor: ['responsive', 'hover', 'focus', 'dark'],
     borderWidth: ['responsive', 'first', 'last', 'hover', 'focus'],
-    textColor: ['responsive', 'group-focus', 'group-hover', 'hover', 'focus'],
+    textColor: ['responsive', 'group-focus', 'group-hover', 'hover', 'focus', 'dark'],
     opacity: ['responsive', 'hover', 'focus', 'disabled', 'group-hover'],
   },
 }
