@@ -1,11 +1,9 @@
-import { useIsHome } from '@/hooks/useIsHome'
 import { useState, useCallback, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { DocSearchModal, useDocSearchKeyboardEvents } from '@docsearch/react'
-import clsx from 'clsx'
 
 function Hit({ hit, children }) {
   return (
@@ -16,7 +14,6 @@ function Hit({ hit, children }) {
 }
 
 export function Search() {
-  const isHome = useIsHome()
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const searchButtonRef = useRef()
@@ -47,22 +44,37 @@ export function Search() {
   })
 
   return (
-    <div className="relative">
+    <>
       <Head>
         <link rel="preconnect" href="https://BH4D9OD16A-dsn.algolia.net" crossOrigin="true" />
       </Head>
       <button
+        type="button"
         ref={searchButtonRef}
         onClick={onOpen}
-        className={clsx(
-          'transition-colors duration-100 ease-in-out text-gray-600 py-2 pr-4 pl-10 block w-full appearance-none leading-normal border border-transparent rounded-lg focus:outline-none text-left select-none truncate',
-          {
-            'bg-white shadow-md': isHome,
-            'focus:bg-white focus:border-gray-300 bg-gray-200': !isHome,
-          }
-        )}
+        className="leading-6 font-medium flex items-center space-x-4"
       >
-        Search <span className="hidden sm:inline">the docs (Press "/" to focus)</span>
+        <svg width="24" height="24" fill="none" className="text-gray-400">
+          <path
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        <span>Quick search for anything</span>
+        <span className="text-gray-400 text-sm leading-5 py-0.5 px-1.5 border border-gray-300 rounded-md">
+          <span className="sr-only">Press </span>
+          <kbd className="font-sans">
+            <abbr title="Cmd" className="no-underline">
+              ⌘
+            </abbr>
+          </kbd>
+          <span className="sr-only"> and </span>
+          <kbd className="font-sans">K</kbd>
+          <span className="sr-only"> to search</span>
+        </span>
       </button>
       {isOpen &&
         createPortal(
@@ -99,15 +111,6 @@ export function Search() {
           />,
           document.body
         )}
-      <div className="pointer-events-none absolute inset-y-0 left-0 pl-4 flex items-center">
-        <svg
-          className="fill-current pointer-events-none text-gray-600 w-4 h-4"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-        >
-          <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" />
-        </svg>
-      </div>
-    </div>
+    </>
   )
 }

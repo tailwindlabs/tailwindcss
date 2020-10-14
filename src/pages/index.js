@@ -12,6 +12,7 @@ import { Customization } from '@/components/home/Customization'
 import { BrowserSupport } from '@/components/home/BrowserSupport'
 import { EditorTools } from '@/components/home/EditorTools'
 import { ReadyMadeComponents } from '@/components/home/ReadyMadeComponents'
+import { Search } from '@/components/Search'
 
 export default function Home() {
   return (
@@ -19,29 +20,7 @@ export default function Home() {
       <header className="relative z-10 max-w-screen-xl mx-auto">
         <div className="px-8">
           <div className="border-b border-gray-200 py-6 flex items-center justify-between mb-20">
-            <button type="button" className="leading-6 font-medium flex items-center space-x-4">
-              <svg width="24" height="24" fill="none" className="text-gray-400">
-                <path
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <span>Quick search for anything</span>
-              <span className="text-gray-400 text-sm leading-5 py-0.5 px-1.5 border border-gray-300 rounded-md">
-                <span className="sr-only">Press </span>
-                <kbd className="font-sans">
-                  <abbr title="Cmd" className="no-underline">
-                    ⌘
-                  </abbr>
-                </kbd>
-                <span className="sr-only"> and </span>
-                <kbd className="font-sans">K</kbd>
-                <span className="sr-only"> to search</span>
-              </span>
-            </button>
+            <Search />
             <a href="https://github.com/tailwindlabs/tailwindcss" className="text-gray-400">
               <span className="sr-only">Tailwind CSS on GitHub</span>
               <svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
