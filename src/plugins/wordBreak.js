@@ -1,5 +1,7 @@
+import { flagEnabled } from '../featureFlags'
+
 export default function() {
-  return function({ addUtilities, variants }) {
+  return function({ addUtilities, variants, config }) {
     addUtilities(
       {
         '.break-normal': {
@@ -15,11 +17,15 @@ export default function() {
         },
         '.break-all': { 'word-break': 'break-all' },
 
-        '.truncate': {
-          overflow: 'hidden',
-          'text-overflow': 'ellipsis',
-          'white-space': 'nowrap',
-        },
+        ...(!flagEnabled(config(), 'moveTruncateToTextOverflow')
+          ? {
+              '.truncate': {
+                overflow: 'hidden',
+                'text-overflow': 'ellipsis',
+                'white-space': 'nowrap',
+              },
+            }
+          : {}),
       },
       variants('wordBreak')
     )
