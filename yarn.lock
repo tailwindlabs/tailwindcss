@@ -3879,10 +3879,10 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
-framer-motion@^2.9.0:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-2.9.0.tgz#d0eeb60d24b247683b695036eb860028f17f8952"
-  integrity sha512-KicaG7JwUhVNKsSZS2smuoYJIXXcl0sYzn4u4FMsK4AUmO8XGVQOPEhqBYZxFs0+g0b790LxcN4GmeOMyJIv5Q==
+framer-motion@^2.9.1:
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-2.9.1.tgz#86713730e9503922eedcf5e1bb91a5acc30076f5"
+  integrity sha512-NjEF5u1FkCTS+zRsDWOPPCxWBUWk255WXy4d1FDCC3j6ETJzDXx0V/NUPvwhzyATHbahfX5JdsHWdRe1whNHJg==
   dependencies:
     framesync "^4.1.0"
     hey-listen "^1.0.8"
@@ -7506,10 +7506,10 @@ table@^5.2.3:
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
 
-tailwindcss@^1.8.10:
-  version "1.8.10"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.8.10.tgz#945ef151c401c04a1c95e6a6bc747387a8d1b9dc"
-  integrity sha512-7QkERG/cWCzsuMqHMwjOaLMVixOGLNBiXsrkssxlE1aWfkxVbGqiuMokR2162xRyaH2mBIHKxmlf1qb3DvIPqw==
+tailwindcss@^1.9.1:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-1.9.1.tgz#5cd83b7962c0e22d7608bc502daf4185962995fc"
+  integrity sha512-3faxlyPlcWN8AoNEIVQFNsDcrdXS/D9nOGtdknrXvZp4D4E3AGPO2KRPiGG69B2ZUO0V6RvYiW91L2/n9QnBxg==
   dependencies:
     "@fullhuman/postcss-purgecss" "^2.1.2"
     autoprefixer "^9.4.5"
