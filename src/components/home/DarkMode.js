@@ -58,7 +58,7 @@ function DarkModeSwitch({ enabled, onChange }) {
 }
 
 export function DarkMode() {
-  const [enabled, setEnabled] = useState(true)
+  const [enabled, setEnabled] = useState(false)
 
   return (
     <section>
