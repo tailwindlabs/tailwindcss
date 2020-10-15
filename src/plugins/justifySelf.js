@@ -1,9 +1,5 @@
 export default function() {
-  return function({ addUtilities, variants, target }) {
-    if (target('justifySelf') === 'ie11') {
-      return
-    }
-
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.justify-self-auto': {

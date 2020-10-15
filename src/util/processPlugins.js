@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import postcss from 'postcss'
-import browserslist from 'browserslist'
 import Node from 'postcss/lib/node'
 import isFunction from 'lodash/isFunction'
 import escapeClassName from '../util/escapeClassName'
@@ -42,7 +41,6 @@ export default function(plugins, config) {
   }
 
   const getConfigValue = (path, defaultValue) => (path ? _.get(config, path, defaultValue) : config)
-  const browserslistTarget = browserslist().includes('ie 11') ? 'ie11' : 'relaxed'
 
   plugins.forEach(plugin => {
     if (plugin.__isOptionsFunction) {
@@ -68,17 +66,6 @@ export default function(plugins, config) {
         }
 
         return getConfigValue(`variants.${path}`, defaultValue)
-      },
-      target: path => {
-        if (_.isString(config.target)) {
-          return config.target === 'browserslist' ? browserslistTarget : config.target
-        }
-
-        const [defaultTarget, targetOverrides] = getConfigValue('target', 'relaxed')
-
-        const target = _.get(targetOverrides, path, defaultTarget)
-
-        return target === 'browserslist' ? browserslistTarget : target
       },
       e: escapeClassName,
       prefix: applyConfiguredPrefix,

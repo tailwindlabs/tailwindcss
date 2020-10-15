@@ -1,5 +1,5 @@
 export default function() {
-  return function({ addUtilities, variants, target }) {
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.block': {
@@ -44,22 +44,18 @@ export default function() {
         '.table-row': {
           display: 'table-row',
         },
-        ...(target('display') === 'ie11'
-          ? {}
-          : {
-              '.flow-root': {
-                display: 'flow-root',
-              },
-              '.grid': {
-                display: 'grid',
-              },
-              '.inline-grid': {
-                display: 'inline-grid',
-              },
-              '.contents': {
-                display: 'contents',
-              },
-            }),
+        '.flow-root': {
+          display: 'flow-root',
+        },
+        '.grid': {
+          display: 'grid',
+        },
+        '.inline-grid': {
+          display: 'inline-grid',
+        },
+        '.contents': {
+          display: 'contents',
+        },
         '.hidden': {
           display: 'none',
         },
