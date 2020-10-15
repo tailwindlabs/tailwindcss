@@ -33,7 +33,12 @@ export function BuildAnything() {
             <Tabs tabs={['Simple', 'Playful', 'Elegant', 'Brutalist']} />
           </div>
         }
-        left={undefined}
+        left={
+          <div
+            className="relative z-10 bg-white rounded-xl shadow-lg -mr-8"
+            style={{ height: 256 }}
+          />
+        }
         right={<CodeWindow className="bg-pink-600" />}
       />
     </section>
