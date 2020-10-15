@@ -4,11 +4,7 @@ import toColorValue from '../util/toColorValue'
 import { toRgba } from '../util/withAlphaVariable'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants, target }) {
-    if (target('gradientColorStops') === 'ie11') {
-      return
-    }
-
+  return function({ addUtilities, e, theme, variants }) {
     const colors = flattenColorPalette(theme('gradientColorStops'))
 
     const utilities = _(colors)

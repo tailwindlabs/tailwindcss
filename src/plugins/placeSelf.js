@@ -1,9 +1,5 @@
 export default function() {
-  return function({ addUtilities, variants, target }) {
-    if (target('placeSelf') === 'ie11') {
-      return
-    }
-
+  return function({ addUtilities, variants }) {
     addUtilities(
       {
         '.place-self-auto': {

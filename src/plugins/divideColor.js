@@ -4,14 +4,10 @@ import toColorValue from '../util/toColorValue'
 import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants, target, corePlugins }) {
+  return function({ addUtilities, e, theme, variants, corePlugins }) {
     const colors = flattenColorPalette(theme('divideColor'))
 
     const getProperties = value => {
-      if (target('divideColor') === 'ie11') {
-        return { 'border-color': toColorValue(value) }
-      }
-
       if (corePlugins('divideOpacity')) {
         return withAlphaVariable({
           color: value,
