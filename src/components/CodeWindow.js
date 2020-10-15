@@ -1,35 +1,7 @@
-import moo from 'moo'
+import tokenize from '../macros/tokenize.macro'
+import { Code } from './Code'
 
-const colors = {
-  bracket: '#A1E8FF',
-  tagname: '#D58FFF',
-  attrname: '#4BD0FB',
-  equals: '#A1E8FF',
-  attrvalue: '#A2F679',
-  slash: '#D58FFF',
-}
-
-let lexer = moo.states({
-  main: {
-    bracket: { match: '<', push: 'tag' },
-    default: { match: /[^<]+/, lineBreaks: true },
-  },
-  tag: {
-    tagname: /\w+/,
-    whitespace: { match: /\s+/, lineBreaks: true, next: 'attributes' },
-    slash: '/',
-    bracket: { match: '>', pop: 1 },
-  },
-  attributes: {
-    attrname: /[a-zA-Z0-9-]+/,
-    equals: '=',
-    bracket: { match: '>', pop: 1 },
-    attrvalue: { match: /"[^"]+"/, lineBreaks: true },
-    whitespace: { match: /\s+/, lineBreaks: true },
-  },
-})
-
-const defaultCode = `<div class="flex pa-2 bg-white rounded-lg shadow">
+const { tokens } = tokenize.html(`<div class="flex pa-2 bg-white rounded-lg shadow">
   <div class="w-32 rounded-md overflow-hidden">
     <img src="avatar.jpg" class="h-full object-fit">
   </div>
@@ -47,12 +19,9 @@ const defaultCode = `<div class="flex pa-2 bg-white rounded-lg shadow">
         rounded-md p-1">View Tweet</a>
     </div>
   </div>
-</div>`
+</div>`)
 
-export function CodeWindow({ className = '', height = 576, code = defaultCode }) {
-  lexer.reset(code)
-  const tokens = Array.from(lexer)
-
+export function CodeWindow({ codeProps = { tokens }, className = '', height = 576 }) {
   return (
     <div
       className={`relative overflow-hidden rounded-xl shadow-2xl flex ${className}`}
@@ -72,15 +41,7 @@ export function CodeWindow({ className = '', height = 576, code = defaultCode })
             className="flex-auto relative block text-sm text-white pt-4 pb-4 pr-4"
             style={{ lineHeight: 18 / 14, paddingLeft: '4.125rem' }}
           >
-            {tokens.map((token, j) =>
-              token.type === 'default' || token.type === 'whitespace' ? (
-                token.text
-              ) : (
-                <span key={j} style={{ color: colors[token.type] }}>
-                  {token.text}
-                </span>
-              )
-            )}
+            <Code {...codeProps} />
             <div
               className="absolute top-0 bottom-0 left-0 bg-black bg-opacity-25"
               style={{ width: 50 }}

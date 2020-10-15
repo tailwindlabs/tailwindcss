@@ -34,7 +34,6 @@
     "gsap": "^3.4.2",
     "gzip-size": "^5.1.1",
     "minimatch": "^3.0.4",
-    "moo": "^0.5.1",
     "next": "^9.5.1",
     "postcss-nested": "^4.2.3",
     "prismjs": "^1.20.0",
