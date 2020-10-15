@@ -34,7 +34,7 @@ export default function() {
 
     const utilities = _.flatMap(generators, generator => {
       return _.flatMap(theme('borderRadius'), (value, modifier) => {
-        return generator(value, modifier === 'default' ? '' : `-${modifier}`)
+        return generator(value, modifier === 'DEFAULT' ? '' : `-${modifier}`)
       })
     })
 

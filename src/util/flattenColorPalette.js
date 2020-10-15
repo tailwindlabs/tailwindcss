@@ -8,7 +8,7 @@ export default function flattenColorPalette(colors) {
       }
 
       return _.map(color, (value, key) => {
-        const suffix = key === 'default' ? '' : `-${key}`
+        const suffix = key === 'DEFAULT' ? '' : `-${key}`
         return [`${name}${suffix}`, value]
       })
     })

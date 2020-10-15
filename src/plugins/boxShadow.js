@@ -6,7 +6,7 @@ export default function() {
     const utilities = _.fromPairs(
       _.map(theme('boxShadow'), (value, modifier) => {
         const className =
-          modifier === 'default' ? 'shadow' : `${e(prefixNegativeModifiers('shadow', modifier))}`
+          modifier === 'DEFAULT' ? 'shadow' : `${e(prefixNegativeModifiers('shadow', modifier))}`
         return [
           `.${className}`,
           {

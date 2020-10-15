@@ -5,7 +5,7 @@ export default function() {
     addUtilities(
       _.fromPairs(
         _.map(theme('flexGrow'), (value, modifier) => {
-          const className = modifier === 'default' ? 'flex-grow' : `flex-grow-${modifier}`
+          const className = modifier === 'DEFAULT' ? 'flex-grow' : `flex-grow-${modifier}`
           return [
             `.${e(className)}`,
             {

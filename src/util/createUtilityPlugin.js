@@ -4,7 +4,7 @@ import toPairs from 'lodash/toPairs'
 import castArray from 'lodash/castArray'
 
 function className(classPrefix, key) {
-  if (key === 'default') {
+  if (key === 'DEFAULT') {
     return classPrefix
   }
 

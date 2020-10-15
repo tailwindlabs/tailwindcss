@@ -30,7 +30,7 @@ function mapMinWidthsToPadding(minWidths, screens, paddings) {
   if (!_.isObject(paddings)) {
     return [
       {
-        screen: 'default',
+        screen: 'DEFAULT',
         minWidth: 0,
         padding: paddings,
       },
@@ -39,11 +39,11 @@ function mapMinWidthsToPadding(minWidths, screens, paddings) {
 
   const mapping = []
 
-  if (paddings.default) {
+  if (paddings.DEFAULT) {
     mapping.push({
-      screen: 'default',
+      screen: 'DEFAULT',
       minWidth: 0,
-      padding: paddings.default,
+      padding: paddings.DEFAULT,
     })
   }
 
