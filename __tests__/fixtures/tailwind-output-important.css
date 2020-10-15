@@ -11344,14 +11344,6 @@ video {
   overflow-y: scroll !important;
 }
 
-.scrolling-touch {
-  -webkit-overflow-scrolling: touch !important;
-}
-
-.scrolling-auto {
-  -webkit-overflow-scrolling: auto !important;
-}
-
 .overscroll-auto {
   overscroll-behavior: auto !important;
 }
@@ -28871,14 +28863,6 @@ video {
     overflow-y: scroll !important;
   }
 
-  .sm\:scrolling-touch {
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  .sm\:scrolling-auto {
-    -webkit-overflow-scrolling: auto !important;
-  }
-
   .sm\:overscroll-auto {
     overscroll-behavior: auto !important;
   }
@@ -46366,14 +46350,6 @@ video {
 
   .md\:overflow-y-scroll {
     overflow-y: scroll !important;
-  }
-
-  .md\:scrolling-touch {
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  .md\:scrolling-auto {
-    -webkit-overflow-scrolling: auto !important;
   }
 
   .md\:overscroll-auto {
@@ -63865,14 +63841,6 @@ video {
     overflow-y: scroll !important;
   }
 
-  .lg\:scrolling-touch {
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  .lg\:scrolling-auto {
-    -webkit-overflow-scrolling: auto !important;
-  }
-
   .lg\:overscroll-auto {
     overscroll-behavior: auto !important;
   }
@@ -81360,14 +81328,6 @@ video {
 
   .xl\:overflow-y-scroll {
     overflow-y: scroll !important;
-  }
-
-  .xl\:scrolling-touch {
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  .xl\:scrolling-auto {
-    -webkit-overflow-scrolling: auto !important;
   }
 
   .xl\:overscroll-auto {
