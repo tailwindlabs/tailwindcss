@@ -10560,14 +10560,6 @@ video {
   overflow-y: scroll;
 }
 
-.scrolling-touch {
-  -webkit-overflow-scrolling: touch;
-}
-
-.scrolling-auto {
-  -webkit-overflow-scrolling: auto;
-}
-
 .overscroll-auto {
   overscroll-behavior: auto;
 }
@@ -26743,14 +26735,6 @@ video {
     overflow-y: scroll;
   }
 
-  .sm\:scrolling-touch {
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .sm\:scrolling-auto {
-    -webkit-overflow-scrolling: auto;
-  }
-
   .sm\:overscroll-auto {
     overscroll-behavior: auto;
   }
@@ -42894,14 +42878,6 @@ video {
 
   .md\:overflow-y-scroll {
     overflow-y: scroll;
-  }
-
-  .md\:scrolling-touch {
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .md\:scrolling-auto {
-    -webkit-overflow-scrolling: auto;
   }
 
   .md\:overscroll-auto {
@@ -59049,14 +59025,6 @@ video {
     overflow-y: scroll;
   }
 
-  .lg\:scrolling-touch {
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .lg\:scrolling-auto {
-    -webkit-overflow-scrolling: auto;
-  }
-
   .lg\:overscroll-auto {
     overscroll-behavior: auto;
   }
@@ -75200,14 +75168,6 @@ video {
 
   .xl\:overflow-y-scroll {
     overflow-y: scroll;
-  }
-
-  .xl\:scrolling-touch {
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .xl\:scrolling-auto {
-    -webkit-overflow-scrolling: auto;
   }
 
   .xl\:overscroll-auto {
