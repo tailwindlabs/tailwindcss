@@ -40,6 +40,7 @@
     "prismjs": "^1.20.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "react-intersection-observer": "^8.29.0",
     "redent": "^3.0.0",
     "simple-functional-loader": "^1.2.1",
     "stringify-object": "^3.3.0",
