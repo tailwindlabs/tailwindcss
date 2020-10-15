@@ -110,6 +110,61 @@ test('an unquoted list is valid as a default value', () => {
   })
 })
 
+test('A missing root theme value throws', () => {
+  const input = `
+    .heading { color: theme('colours.gray.100'); }
+  `
+
+  return expect(
+    run(input, {
+      theme: {
+        colors: {
+          yellow: '#f7cc50',
+        },
+      },
+    })
+  ).rejects.toThrowError(
+    '"colours.gray.100" does not exist in your tailwind theme.\nValid keys for "theme" are: "colors"'
+  )
+})
+
+test('A missing nested theme property throws', () => {
+  const input = `
+    .heading { color: theme('colors.red'); }
+  `
+
+  return expect(
+    run(input, {
+      theme: {
+        colors: {
+          blue: 'blue',
+          yellow: '#f7cc50',
+        },
+      },
+    })
+  ).rejects.toThrowError(
+    '"colors.red" does not exist in your tailwind theme.\nValid keys for "colors" are: "blue", "yellow"'
+  )
+})
+
+test('A path through a non-object throws', () => {
+  const input = `
+    .heading { color: theme('colors.yellow.100'); }
+  `
+
+  return expect(
+    run(input, {
+      theme: {
+        colors: {
+          yellow: '#f7cc50',
+        },
+      },
+    })
+  ).rejects.toThrowError(
+    '"colors.yellow.100" does not exist in your tailwind theme.\n"colors.yellow" exists but is not an object'
+  )
+})
+
 test('array values are joined by default', () => {
   const input = `
     .heading { font-family: theme('fontFamily.sans'); }
