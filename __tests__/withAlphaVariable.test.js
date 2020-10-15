@@ -5,7 +5,7 @@ test('it adds the right custom property', () => {
     withAlphaVariable({ color: '#ff0000', property: 'color', variable: '--text-opacity' })
   ).toEqual({
     '--text-opacity': '1',
-    color: ['#ff0000', 'rgba(255, 0, 0, var(--text-opacity))'],
+    color: 'rgba(255, 0, 0, var(--text-opacity))',
   })
 })
 
