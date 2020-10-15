@@ -1,11 +1,15 @@
+import { useState } from 'react'
 import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
 import { Tabs } from '@/components/Tabs'
 import { CodeWindow } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import { ReactComponent as Icon } from '@/img/icons/home/build-anything.svg'
+import { HtmlZenGarden } from '@/components/HtmlZenGarden'
 
 export function BuildAnything() {
+  const [theme, setTheme] = useState('simple')
+
   return (
     <section>
       <div className="px-8 mb-20">
@@ -30,15 +34,19 @@ export function BuildAnything() {
         rotate={-2}
         header={
           <div className="-ml-4">
-            <Tabs tabs={['Simple', 'Playful', 'Elegant', 'Brutalist']} />
+            <Tabs
+              tabs={{
+                simple: 'Simple',
+                playful: 'Playful',
+                elegant: 'Elegant',
+                brutalist: 'Brutalist',
+              }}
+              selected={theme}
+              onChange={setTheme}
+            />
           </div>
         }
-        left={
-          <div
-            className="relative z-10 bg-white rounded-xl shadow-lg -mr-8"
-            style={{ height: 256 }}
-          />
-        }
+        left={<HtmlZenGarden theme={theme} />}
         right={<CodeWindow className="bg-pink-600" />}
       />
     </section>

@@ -1,18 +1,19 @@
-import { useState } from 'react'
 import { motion, AnimateSharedLayout } from 'framer-motion'
 
-export function Tabs({ tabs }) {
-  const [selected, setSelected] = useState(tabs[0])
-
+export function Tabs({
+  tabs,
+  selected = Array.isArray(tabs) ? tabs[0] : Object.keys(tabs)[0],
+  onChange = () => {},
+}) {
   return (
     <AnimateSharedLayout>
       <ul className="flex space-x-6">
-        {tabs.map((tab) => (
+        {(Array.isArray(tabs) ? tabs : Object.keys(tabs)).map((tab) => (
           <Item
             key={tab}
-            tab={tab}
+            tab={Array.isArray(tabs) ? tab : tabs[tab]}
             isSelected={selected === tab}
-            onClick={() => setSelected(tab)}
+            onClick={() => onChange(tab)}
           />
         ))}
       </ul>

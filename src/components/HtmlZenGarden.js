@@ -1,19 +1,6 @@
-import { useEffect, useState } from 'react'
 import { AnimateSharedLayout, motion } from 'framer-motion'
 
-export function HtmlZenGarden() {
-  const [theme, setTheme] = useState('simple')
-
-  useEffect(() => {
-    function onClick() {
-      setTheme((t) => (t === 'simple' ? 'playful' : 'simple'))
-    }
-    window.addEventListener('click', onClick)
-    return () => {
-      window.removeEventListener('click', onClick)
-    }
-  }, [])
-
+export function HtmlZenGarden({ theme }) {
   return (
     <AnimateSharedLayout>
       <motion.div layout className="relative z-10 rounded-xl shadow-lg -mr-8 flex leading-none">

@@ -6,6 +6,9 @@ import { ReactComponent as Icon } from '@/img/icons/home/performance.svg'
 import { useEffect, useRef } from 'react'
 import { motion, animate, useMotionValue, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import tokenize from '../../macros/tokenize.macro'
+import { addClassTokens } from '@/utils/addClassTokens'
+import { Token } from '@/components/Code'
 
 const BASE_RANGE = [0, 5000]
 
@@ -25,6 +28,36 @@ function Counter({ from, to, round = 0, progress }) {
 
   return <span ref={ref}>{formatNumber(value.get())}</span>
 }
+
+const { tokens, code } = tokenize.html(`<div class="flex pa-2 bg-white rounded-lg shadow">
+  <div class="w-32 rounded-md overflow-hidden">
+    <img src="avatar.jpg" class="h-full object-fit">
+  </div>
+  <div class="flex flex-col">
+    <p class="font-bold text-lg">"If I had to recommend a way of
+      getting into programming today, it would be HTML + CSS
+      with @tailwindcss."
+    </p>
+    <div class="flex space-between">
+      <div>
+        <h2 class="font-semibold">Guillermo Rauch</h2>
+        <small class="text-sm text-gray-500">CEO Vercel</small>
+      </div>
+      <a href="https://twitter.com/rauchg" class="text-blue-500
+        rounded-md p-1">View Tweet</a>
+    </div>
+  </div>
+</div>`)
+
+const classes = code
+  .match(/class="[^"]+"/g)
+  .map((attr) => attr.substring(7, attr.length - 1).split(/\s+/))
+  .flat()
+  .filter((v, i, a) => a.indexOf(v) === i)
+
+const unusedClasses = Array.from({ length: 45 }).map(() => makeClass())
+
+const allClassesShuffled = shuffle([...classes, ...unusedClasses])
 
 export function Performance() {
   const progress = useMotionValue(0)
@@ -141,16 +174,142 @@ export function Performance() {
                 </div>
               </dl>
             </div>
-            <div
-              className="relative bg-teal-700 rounded-b-xl overflow-hidden"
-              style={{ height: 250 }}
-            >
+            <div className="relative bg-teal-700 rounded-b-xl overflow-hidden p-4">
               <div className="bg-black bg-opacity-75 absolute inset-0" />
+              <div
+                className="relative font-mono text-sm text-teal-200"
+                style={{ lineHeight: 18 / 14 }}
+              >
+                {allClassesShuffled.map((c) =>
+                  classes.includes(c) ? (
+                    <>
+                      <motion.span
+                        animate={
+                          inView
+                            ? {
+                                backgroundColor: [
+                                  null,
+                                  'rgba(134, 239, 172, 0.25)',
+                                  'rgba(134, 239, 172, 0)',
+                                ],
+                              }
+                            : undefined
+                        }
+                        initial={{
+                          backgroundColor: 'rgba(134, 239, 172, 0)',
+                          borderRadius: 3,
+                          padding: '1px 3px',
+                          margin: '0 -3px',
+                        }}
+                        transition={{ delay: (5 / classes.length) * classes.indexOf(c) }}
+                      >
+                        {c}
+                      </motion.span>{' '}
+                    </>
+                  ) : (
+                    <>
+                      <motion.span
+                        animate={
+                          inView
+                            ? {
+                                color: '#134E4A',
+                              }
+                            : undefined
+                        }
+                        initial={{ color: '#99f6e4' }}
+                        transition={{
+                          delay: (5 / unusedClasses.length) * unusedClasses.indexOf(c),
+                        }}
+                      >
+                        {c}
+                      </motion.span>{' '}
+                    </>
+                  )
+                )}
+              </div>
             </div>
           </div>
         }
-        right={<CodeWindow className="bg-turquoise-500" />}
+        right={
+          <CodeWindow
+            className="bg-turquoise-500"
+            codeProps={{
+              tokens,
+              tokenComponent: PerformanceToken,
+              tokenProps: { inView },
+              transformTokens: addClassTokens,
+            }}
+          />
+        }
       />
     </section>
   )
+}
+
+function PerformanceToken({ token, parentTypes, inView, children }) {
+  if (token[0] === 'class') {
+    return (
+      <motion.span
+        animate={
+          inView
+            ? { backgroundColor: [null, 'rgba(134, 239, 172, 0.25)', 'rgba(134, 239, 172, 0)'] }
+            : undefined
+        }
+        initial={{ backgroundColor: 'rgba(134, 239, 172, 0)' }}
+        transition={{ delay: (5 / classes.length) * classes.indexOf(token[1]) }}
+        style={{ borderRadius: 3, padding: '1px 3px', margin: '0 -3px' }}
+      >
+        {children}
+      </motion.span>
+    )
+  }
+
+  return (
+    <Token token={token} parentTypes={parentTypes}>
+      {children}
+    </Token>
+  )
+}
+
+// https://stackoverflow.com/a/1349426
+function makeClass() {
+  let result = ''
+  const characters = 'abcdefghijklmnopqrstuvwxyz0123456789'
+  const charactersLength = characters.length
+  const firstLength = randomIntFromInterval(2, 7)
+  const secondLength = randomIntFromInterval(3, 8)
+  for (let i = 0; i < firstLength; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+  }
+  result += '-'
+  for (let i = 0; i < secondLength; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+  }
+  return result
+}
+
+// https://stackoverflow.com/a/7228322
+function randomIntFromInterval(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+// https://stackoverflow.com/a/2450976
+function shuffle(array) {
+  var currentIndex = array.length,
+    temporaryValue,
+    randomIndex
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex)
+    currentIndex -= 1
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex]
+    array[currentIndex] = array[randomIndex]
+    array[randomIndex] = temporaryValue
+  }
+
+  return array
 }
