@@ -5,7 +5,7 @@ export default function() {
     addUtilities(
       _.fromPairs(
         _.map(theme('flexShrink'), (value, modifier) => {
-          const className = modifier === 'default' ? 'flex-shrink' : `flex-shrink-${modifier}`
+          const className = modifier === 'DEFAULT' ? 'flex-shrink' : `flex-shrink-${modifier}`
           return [
             `.${e(className)}`,
             {

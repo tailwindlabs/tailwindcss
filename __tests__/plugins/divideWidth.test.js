@@ -5,7 +5,7 @@ test('generating divide width utilities', () => {
   const config = {
     theme: {
       divideWidth: {
-        default: '1px',
+        DEFAULT: '1px',
         '0': '0',
         '2': '2px',
         '4': '4px',
