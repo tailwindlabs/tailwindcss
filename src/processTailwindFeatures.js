@@ -19,6 +19,7 @@ import { issueFlagNotices, flagEnabled } from './featureFlags.js'
 import darkModeVariantPlugin from './flagged/darkModeVariantPlugin'
 
 import hash from 'object-hash'
+import log from './util/log'
 
 let previousConfig = null
 let processedPlugins = null
@@ -31,6 +32,13 @@ export default function(getConfig) {
     previousConfig = config
 
     if (configChanged) {
+      if (config.target) {
+        log.warn([
+          'The `target` feature has been removed in Tailwind CSS v2.0.',
+          'Please remove this option from your config file to silence this warning.',
+        ])
+      }
+
       issueFlagNotices(config)
 
       processedPlugins = processPlugins(
