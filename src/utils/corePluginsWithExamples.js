@@ -9,7 +9,8 @@ const plugins = [
   'container',
   ...glob
     .sync('node_modules/tailwindcss/lib/plugins/*.js')
-    .map((filename) => path.basename(filename, '.js')),
+    .map((filename) => path.basename(filename, '.js'))
+    .filter((name) => name !== 'index'),
 ].filter((x, i, a) => a.indexOf(x) === i)
 
 module.exports.corePluginsWithExamples = plugins.map((plugin) => {
