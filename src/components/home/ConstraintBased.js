@@ -79,7 +79,7 @@ export function ConstraintBased() {
                     className="w-full font-mono text-xs leading-5 text-gray-600 space-y-4"
                   >
                     {[64, 56, 48, 40, 32, 24, 20, 16, 12, 10].map((key, i) => (
-                      <li className="flex items-center">
+                      <li key={key} className="flex items-center">
                         <motion.span
                           className="flex-none w-11"
                           initial={{ opacity: 0 }}
