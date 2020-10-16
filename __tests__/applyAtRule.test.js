@@ -97,6 +97,13 @@ test('it fails if the class does not exist', () => {
   })
 })
 
+test.only('it suggests a related class with a "Did you mean?" message', () => {
+  return run('body { @apply anti-aliased; }').catch(e => {
+    expect(e.message).toContain('Did you mean .antialiased?')
+    expect(e).toMatchObject({ name: 'CssSyntaxError' })
+  })
+})
+
 test('applying classes that are defined in a media query is not supported', () => {
   const input = `
     @media (min-width: 300px) {

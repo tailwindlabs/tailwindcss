@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import postcss from 'postcss'
+import didYouMean from 'didyoumean'
 import escapeClassName from '../util/escapeClassName'
 import prefixSelector from '../util/prefixSelector'
 import increaseSpecificity from '../util/increaseSpecificity'
@@ -65,6 +66,7 @@ export default function (config, getProcessedPlugins, configChanged) {
 
   return function (css) {
     const classLookup = buildClassTable(css)
+
     shadowLookup =
       configChanged || !shadowLookup
         ? buildShadowTable(getProcessedPlugins().utilities)
@@ -131,8 +133,11 @@ export default function (config, getProcessedPlugins, configChanged) {
                   )
                 },
                 () => {
+                  const suggestedClass = didYouMean(classToApply, Object.keys(shadowLookup))
+                  const suggestionMessage = suggestedClass ? `Did you mean ${suggestedClass}?` : ''
+
                   // prettier-ignore
-                  throw onError(`\`@apply\` cannot be used with \`${classToApply}\` because \`${classToApply}\` either cannot be found, or its actual definition includes a pseudo-selector like :hover, :active, etc. If you're sure that \`${classToApply}\` exists, make sure that any \`@import\` statements are being properly processed *before* Tailwind CSS sees your CSS, as \`@apply\` can only be used for classes in the same CSS tree.`)
+                  throw onError(`\`@apply\` cannot be used with \`${classToApply}\` because \`${classToApply}\` either cannot be found, or its actual definition includes a pseudo-selector like :hover, :active, etc. If you're sure that \`${classToApply}\` exists, make sure that any \`@import\` statements are being properly processed *before* Tailwind CSS sees your CSS, as \`@apply\` can only be used for classes in the same CSS tree. ${suggestionMessage}`)
                 },
               ],
               (classDecls, candidate) => (!_.isEmpty(classDecls) ? classDecls : candidate()),
