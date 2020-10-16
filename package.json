@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^2.1.2",
-    "autoprefixer": "^9.4.5",
+    "autoprefixer": "^9.8.6",
     "bytes": "^3.0.0",
     "chalk": "^3.0.0 || ^4.0.0",
     "color": "^3.1.2",
