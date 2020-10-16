@@ -4,7 +4,7 @@ import nameClass from '../util/nameClass'
 import toColorValue from '../util/toColorValue'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants }) {
+  return function({ addUtilities, theme, variants }) {
     const colors = flattenColorPalette(theme('fill'))
 
     const utilities = _.fromPairs(
