@@ -1,8 +1,8 @@
 import fs from 'fs'
 import postcss from 'postcss'
 
-export default function() {
-  return function({ addBase }) {
+export default function () {
+  return function ({ addBase }) {
     const normalizeStyles = postcss.parse(
       fs.readFileSync(require.resolve('modern-normalize'), 'utf8')
     )

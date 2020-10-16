@@ -25,8 +25,8 @@ let previousConfig = null
 let processedPlugins = null
 let getProcessedPlugins = null
 
-export default function(getConfig) {
-  return function(css) {
+export default function (getConfig) {
+  return function (css) {
     const config = getConfig()
     const configChanged = hash(previousConfig) !== hash(config)
     previousConfig = config
@@ -50,7 +50,7 @@ export default function(getConfig) {
         config
       )
 
-      getProcessedPlugins = function() {
+      getProcessedPlugins = function () {
         return {
           ...processedPlugins,
           base: cloneNodes(processedPlugins.base),

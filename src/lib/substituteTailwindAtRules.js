@@ -7,11 +7,11 @@ function updateSource(nodes, source) {
   })
 }
 
-export default function(
+export default function (
   _config,
   { base: pluginBase, components: pluginComponents, utilities: pluginUtilities }
 ) {
-  return function(css) {
+  return function (css) {
     css.walkAtRules('import', atRule => {
       if (atRule.params === '"tailwindcss/base"' || atRule.params === "'tailwindcss/base'") {
         atRule.name = 'tailwind'

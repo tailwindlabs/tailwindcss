@@ -66,8 +66,8 @@ function mapMinWidthsToPadding(minWidths, screens, paddings) {
   return mapping
 }
 
-module.exports = function() {
-  return function({ addComponents, theme, variants }) {
+module.exports = function () {
+  return function ({ addComponents, theme, variants }) {
     const screens = theme('container.screens', theme('screens'))
     const minWidths = extractMinWidths(screens)
     const paddings = mapMinWidthsToPadding(minWidths, screens, theme('container.padding'))

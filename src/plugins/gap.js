@@ -1,8 +1,8 @@
 import createUtilityPlugin from '../util/createUtilityPlugin'
 import { flagEnabled } from '../featureFlags'
 
-export default function() {
-  return function({ config, ...args }) {
+export default function () {
+  return function ({ config, ...args }) {
     if (flagEnabled(config(), 'removeDeprecatedGapUtilities')) {
       createUtilityPlugin('gap', [
         ['gap', ['gridGap', 'gap']],

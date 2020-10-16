@@ -1,4 +1,4 @@
-export default function(pluginConfig, plugins) {
+export default function (pluginConfig, plugins) {
   if (pluginConfig === undefined) {
     return plugins
   }

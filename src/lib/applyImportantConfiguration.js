@@ -1,5 +1,5 @@
 export default function applyImportantConfiguration(_config) {
-  return function(css) {
+  return function (css) {
     css.walkRules(rule => {
       const important = rule.__tailwind ? rule.__tailwind.important : false
 

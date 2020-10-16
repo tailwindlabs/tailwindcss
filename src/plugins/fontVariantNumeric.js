@@ -1,5 +1,5 @@
-export default function() {
-  return function({ addUtilities, variants }) {
+export default function () {
+  return function ({ addUtilities, variants }) {
     addUtilities(
       {
         '.ordinal, .slashed-zero, .lining-nums, .oldstyle-nums, .proportional-nums, .tabular-nums, .diagonal-fractions, .stacked-fractions': {

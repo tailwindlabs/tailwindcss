@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import nameClass from '../util/nameClass'
 
-export default function() {
-  return function({ addUtilities, theme, variants }) {
+export default function () {
+  return function ({ addUtilities, theme, variants }) {
     const keyframesConfig = theme('keyframes')
     const keyframesStyles = _.fromPairs(
       _.toPairs(keyframesConfig).map(([name, keyframes]) => {

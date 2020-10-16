@@ -1,6 +1,6 @@
 import buildSelectorVariant from '../util/buildSelectorVariant'
 
-export default function({ addVariant, config, postcss, prefix }) {
+export default function ({ addVariant, config, postcss, prefix }) {
   addVariant(
     'dark',
     ({ container, separator, modifySelectors }) => {

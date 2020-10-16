@@ -11,9 +11,7 @@ function hasAlpha(color) {
 }
 
 export function toRgba(color) {
-  const [r, g, b, a] = createColor(color)
-    .rgb()
-    .array()
+  const [r, g, b, a] = createColor(color).rgb().array()
 
   return [r, g, b, a === undefined && hasAlpha(color) ? 1 : a]
 }

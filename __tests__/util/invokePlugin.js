@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import escapeClassName from '../../src/util/escapeClassName'
 
-export default function(plugin, config) {
+export default function (plugin, config) {
   const addedUtilities = []
 
   const getConfigValue = (path, defaultValue) => _.get(config, path, defaultValue)

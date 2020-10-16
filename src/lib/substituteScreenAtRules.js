@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import buildMediaQuery from '../util/buildMediaQuery'
 
-export default function({ theme }) {
-  return function(css) {
+export default function ({ theme }) {
+  return function (css) {
     css.walkAtRules('screen', atRule => {
       const screen = atRule.params
 

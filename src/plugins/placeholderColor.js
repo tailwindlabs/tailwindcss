@@ -4,8 +4,8 @@ import nameClass from '../util/nameClass'
 import toColorValue from '../util/toColorValue'
 import withAlphaVariable from '../util/withAlphaVariable'
 
-export default function() {
-  return function({ addUtilities, theme, variants, corePlugins }) {
+export default function () {
+  return function ({ addUtilities, theme, variants, corePlugins }) {
     const colors = flattenColorPalette(theme('placeholderColor'))
 
     const getProperties = value => {

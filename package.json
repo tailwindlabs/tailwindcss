@@ -45,7 +45,7 @@
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.0.1",
     "jest": "^26.5.3",
-    "prettier": "^1.7.4",
+    "prettier": "^2.1.2",
     "rimraf": "^3.0.0"
   },
   "dependencies": {

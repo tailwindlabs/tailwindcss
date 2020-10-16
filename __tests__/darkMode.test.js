@@ -43,9 +43,9 @@ test('user-defined dark mode variants do not stack when the dark mode experiment
     }
   `
 
-  const userPlugin = createPlugin(function({ addVariant }) {
-    addVariant('dark', function({ modifySelectors }) {
-      modifySelectors(function({ className }) {
+  const userPlugin = createPlugin(function ({ addVariant }) {
+    addVariant('dark', function ({ modifySelectors }) {
+      modifySelectors(function ({ className }) {
         return `.custom-dark .custom-dark\\:${className}`
       })
     })

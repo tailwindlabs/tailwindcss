@@ -1,6 +1,6 @@
 import createUtilityPlugin from '../util/createUtilityPlugin'
 
-export default function() {
+export default function () {
   return createUtilityPlugin('scale', [
     ['scale', ['--transform-scale-x', '--transform-scale-y']],
     ['scale-x', ['--transform-scale-x']],

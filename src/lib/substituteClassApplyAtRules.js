@@ -58,12 +58,12 @@ function findClass(classToApply, classTable, onError) {
 
 let shadowLookup = null
 
-export default function(config, getProcessedPlugins, configChanged) {
+export default function (config, getProcessedPlugins, configChanged) {
   if (flagEnabled(config, 'applyComplexClasses')) {
     return applyComplexClasses(config, getProcessedPlugins, configChanged)
   }
 
-  return function(css) {
+  return function (css) {
     const classLookup = buildClassTable(css)
     shadowLookup =
       configChanged || !shadowLookup

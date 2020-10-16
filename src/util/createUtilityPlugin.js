@@ -5,7 +5,7 @@ import castArray from 'lodash/castArray'
 import nameClass from './nameClass'
 
 export default function createUtilityPlugin(themeKey, utilityVariations) {
-  return function({ addUtilities, variants, theme }) {
+  return function ({ addUtilities, variants, theme }) {
     const utilities = utilityVariations.map(
       ([classPrefix, properties, transformValue = identity]) => {
         return fromPairs(

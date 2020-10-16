@@ -48,7 +48,7 @@ export default function purgeUnusedUtilities(config, configChanged) {
   }
 
   return postcss([
-    function(css) {
+    function (css) {
       const mode = _.get(
         config,
         'purge.mode',

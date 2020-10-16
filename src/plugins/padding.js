@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import nameClass from '../util/nameClass'
 
-export default function() {
-  return function({ addUtilities, theme, variants }) {
+export default function () {
+  return function ({ addUtilities, theme, variants }) {
     const generators = [
       (size, modifier) => ({
         [nameClass('p', modifier)]: { padding: `${size}` },

@@ -15,8 +15,8 @@ function layerNodes(nodes) {
   return isLayer(nodes) ? nodes[0].nodes : nodes
 }
 
-export default function(config) {
-  return function(css) {
+export default function (config) {
+  return function (css) {
     // Wrap any `responsive` rules with a copy of their parent `layer` to
     // ensure the layer isn't lost when copying to the `screens` location.
     css.walkAtRules('layer', layerAtRule => {

@@ -70,7 +70,7 @@ test('layers are grouped and inserted at the matching @tailwind rule', () => {
 
   return run(input, {
     plugins: [
-      function({ addBase, addComponents, addUtilities }) {
+      function ({ addBase, addComponents, addUtilities }) {
         addBase({
           body: {
             margin: 0,

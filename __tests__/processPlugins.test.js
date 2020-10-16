@@ -19,7 +19,7 @@ function makeConfig(overrides) {
 test('plugins can create utilities with object syntax', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      function ({ addUtilities }) {
         addUtilities({
           '.object-fill': {
             'object-fit': 'fill',
@@ -57,7 +57,7 @@ test('plugins can create utilities with object syntax', () => {
 test('plugins can create utilities with arrays of objects', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      function ({ addUtilities }) {
         addUtilities([
           {
             '.object-fill': {
@@ -101,7 +101,7 @@ test('plugins can create utilities with arrays of objects', () => {
 test('plugins can create utilities with raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities, postcss }) {
+      function ({ addUtilities, postcss }) {
         addUtilities([
           postcss.rule({ selector: '.object-fill' }).append([
             postcss.decl({
@@ -148,7 +148,7 @@ test('plugins can create utilities with raw PostCSS nodes', () => {
 test('plugins can create utilities with mixed object styles and PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities, postcss }) {
+      function ({ addUtilities, postcss }) {
         addUtilities([
           {
             '.object-fill': {
@@ -194,7 +194,7 @@ test('plugins can create utilities with mixed object styles and PostCSS nodes', 
 test('plugins can create utilities with variants', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      function ({ addUtilities }) {
         addUtilities(
           {
             '.object-fill': {
@@ -235,7 +235,7 @@ test('plugins can create utilities with variants', () => {
 test('plugins can create components with object syntax', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents }) {
+      function ({ addComponents }) {
         addComponents({
           '.btn-blue': {
             backgroundColor: 'blue',
@@ -273,7 +273,7 @@ test('plugins can create components with object syntax', () => {
 test('plugins can add base styles with object syntax', () => {
   const { base } = processPlugins(
     [
-      function({ addBase }) {
+      function ({ addBase }) {
         addBase({
           img: {
             maxWidth: '100%',
@@ -302,7 +302,7 @@ test('plugins can add base styles with object syntax', () => {
 test('plugins can add base styles with raw PostCSS nodes', () => {
   const { base } = processPlugins(
     [
-      function({ addBase, postcss }) {
+      function ({ addBase, postcss }) {
         addBase([
           postcss.rule({ selector: 'img' }).append([
             postcss.decl({
@@ -337,7 +337,7 @@ test('plugins can add base styles with raw PostCSS nodes', () => {
 test('plugins can create components with raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents, postcss }) {
+      function ({ addComponents, postcss }) {
         addComponents([
           postcss.rule({ selector: '.btn-blue' }).append([
             postcss.decl({
@@ -390,7 +390,7 @@ test('plugins can create components with raw PostCSS nodes', () => {
 test('plugins can create components with mixed object styles and raw PostCSS nodes', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents, postcss }) {
+      function ({ addComponents, postcss }) {
         addComponents([
           postcss.rule({ selector: '.btn-blue' }).append([
             postcss.decl({
@@ -442,7 +442,7 @@ test('plugins can create components with mixed object styles and raw PostCSS nod
 test('plugins can create components with media queries with object syntax', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents }) {
+      function ({ addComponents }) {
         addComponents({
           '.container': {
             width: '100%',
@@ -498,7 +498,7 @@ test('plugins can create components with media queries with object syntax', () =
 test('media queries can be defined multiple times using objects-in-array syntax', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents }) {
+      function ({ addComponents }) {
         addComponents([
           {
             '.container': {
@@ -556,7 +556,7 @@ test('media queries can be defined multiple times using objects-in-array syntax'
 test('plugins can create nested rules', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents }) {
+      function ({ addComponents }) {
         addComponents({
           '.btn-blue': {
             backgroundColor: 'blue',
@@ -616,7 +616,7 @@ test('plugins can create nested rules', () => {
 test('plugins can create rules with escaped selectors', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ e, addUtilities }) {
+      function ({ e, addUtilities }) {
         addUtilities({
           [`.${e('top-1/4')}`]: {
             top: '25%',
@@ -642,7 +642,7 @@ test('plugins can create rules with escaped selectors', () => {
 test('plugins can access the current config', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents, config }) {
+      function ({ addComponents, config }) {
         const containerClasses = [
           {
             '.container': {
@@ -706,7 +706,7 @@ test('plugins can access the current config', () => {
 test('plugins can access the variants config directly', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities, variants }) {
+      function ({ addUtilities, variants }) {
         addUtilities(
           {
             '.object-fill': {
@@ -751,7 +751,7 @@ test('plugins can access the variants config directly', () => {
 test('plugins apply all global variants when variants are configured globally', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities, variants }) {
+      function ({ addUtilities, variants }) {
         addUtilities(
           {
             '.object-fill': {
@@ -797,7 +797,7 @@ test('plugins apply all global variants when variants are configured globally', 
 test('plugins can check if corePlugins are enabled', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities, corePlugins }) {
+      function ({ addUtilities, corePlugins }) {
         addUtilities({
           '.test': {
             'text-color': corePlugins('textColor') ? 'true' : 'false',
@@ -827,7 +827,7 @@ test('plugins can check if corePlugins are enabled', () => {
 test('plugins can check if corePlugins are enabled when using array white-listing', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities, corePlugins }) {
+      function ({ addUtilities, corePlugins }) {
         addUtilities({
           '.test': {
             'text-color': corePlugins('textColor') ? 'true' : 'false',
@@ -857,7 +857,7 @@ test('plugins can check if corePlugins are enabled when using array white-listin
 test('plugins can provide fallbacks to keys missing from the config', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addComponents, config }) {
+      function ({ addComponents, config }) {
         addComponents({
           '.btn': {
             borderRadius: config('borderRadius.default', '.25rem'),
@@ -890,7 +890,7 @@ test('plugins can provide fallbacks to keys missing from the config', () => {
 test('variants are optional when adding utilities', () => {
   const { utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      function ({ addUtilities }) {
         addUtilities({
           '.border-collapse': {
             'border-collapse': 'collapse',
@@ -915,7 +915,7 @@ test('variants are optional when adding utilities', () => {
 test('plugins can add multiple sets of utilities and components', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities, addComponents }) {
+      function ({ addUtilities, addComponents }) {
         addComponents({
           '.card': {
             padding: '1rem',
@@ -989,7 +989,7 @@ test('plugins respect prefix and important options by default when adding utilit
       important: true,
       corePlugins: [],
       plugins: [
-        function({ addUtilities }) {
+        function ({ addUtilities }) {
           addUtilities({
             '.rotate-90': {
               transform: 'rotate(90deg)',
@@ -1023,7 +1023,7 @@ test('when important is a selector it is used to scope utilities instead of addi
       important: '#app',
       corePlugins: [],
       plugins: [
-        function({ addUtilities }) {
+        function ({ addUtilities }) {
           addUtilities({
             '.rotate-90': {
               transform: 'rotate(90deg)',
@@ -1056,7 +1056,7 @@ test('when important is a selector it scopes all selectors in a rule, even thoug
       important: '#app',
       corePlugins: [],
       plugins: [
-        function({ addUtilities }) {
+        function ({ addUtilities }) {
           addUtilities({
             '.rotate-90, .rotate-1\\/4': {
               transform: 'rotate(90deg)',
@@ -1089,7 +1089,7 @@ test('important utilities are not made double important when important option is
       important: true,
       corePlugins: [],
       plugins: [
-        function({ addUtilities }) {
+        function ({ addUtilities }) {
           addUtilities({
             '.rotate-90': {
               transform: 'rotate(90deg) !important',
@@ -1119,7 +1119,7 @@ test('important utilities are not made double important when important option is
 test("component declarations respect the 'prefix' option by default", () => {
   const { components } = processPlugins(
     [
-      function({ addComponents }) {
+      function ({ addComponents }) {
         addComponents({
           '.btn-blue': {
             backgroundColor: 'blue',
@@ -1146,7 +1146,7 @@ test("component declarations respect the 'prefix' option by default", () => {
 test('all selectors in a rule are prefixed', () => {
   const { utilities, components } = processPlugins(
     [
-      function({ addUtilities, addComponents }) {
+      function ({ addUtilities, addComponents }) {
         addUtilities({
           '.rotate-90, .rotate-1\\/4': {
             transform: 'rotate(90deg)',
@@ -1188,7 +1188,7 @@ test('all selectors in a rule are prefixed', () => {
 test("component declarations can optionally ignore 'prefix' option", () => {
   const { components } = processPlugins(
     [
-      function({ addComponents }) {
+      function ({ addComponents }) {
         addComponents(
           {
             '.btn-blue': {
@@ -1218,7 +1218,7 @@ test("component declarations can optionally ignore 'prefix' option", () => {
 test('plugins can create components with variants', () => {
   const { components } = processPlugins(
     [
-      function({ addComponents }) {
+      function ({ addComponents }) {
         addComponents(
           {
             '.btn-blue': {
@@ -1246,7 +1246,7 @@ test('plugins can create components with variants', () => {
 test('plugins can use the array shorthand to add variants to components', () => {
   const { components } = processPlugins(
     [
-      function({ addComponents }) {
+      function ({ addComponents }) {
         addComponents(
           {
             '.btn-blue': {
@@ -1274,7 +1274,7 @@ test('plugins can use the array shorthand to add variants to components', () => 
 test('components that add variants manually do not add an extra variants wrapper', () => {
   const { components } = processPlugins(
     [
-      function({ addComponents }) {
+      function ({ addComponents }) {
         addComponents({
           '@variants responsive': {
             '.btn-blue': {
@@ -1301,7 +1301,7 @@ test('components that add variants manually do not add an extra variants wrapper
 test("component declarations are not affected by the 'important' option", () => {
   const { components } = processPlugins(
     [
-      function({ addComponents }) {
+      function ({ addComponents }) {
         addComponents({
           '.btn-blue': {
             backgroundColor: 'blue',
@@ -1328,7 +1328,7 @@ test("component declarations are not affected by the 'important' option", () => 
 test("plugins can apply the user's chosen prefix to components manually", () => {
   const { components } = processPlugins(
     [
-      function({ addComponents, prefix }) {
+      function ({ addComponents, prefix }) {
         addComponents(
           {
             [prefix('.btn-blue')]: {
@@ -1361,7 +1361,7 @@ test('prefix can optionally be ignored for utilities', () => {
       prefix: 'tw-',
       corePlugins: [],
       plugins: [
-        function({ addUtilities }) {
+        function ({ addUtilities }) {
           addUtilities(
             {
               '.rotate-90': {
@@ -1399,7 +1399,7 @@ test('important can optionally be ignored for utilities', () => {
       important: true,
       corePlugins: [],
       plugins: [
-        function({ addUtilities }) {
+        function ({ addUtilities }) {
           addUtilities(
             {
               '.rotate-90': {
@@ -1434,7 +1434,7 @@ test('important can optionally be ignored for utilities', () => {
 test('variants can still be specified when ignoring prefix and important options', () => {
   const { utilities } = processPlugins(
     [
-      function({ addUtilities }) {
+      function ({ addUtilities }) {
         addUtilities(
           {
             '.rotate-90': {
@@ -1469,7 +1469,7 @@ test('variants can still be specified when ignoring prefix and important options
 test('prefix will prefix all classes in a selector', () => {
   const { components } = processPlugins(
     [
-      function({ addComponents, prefix }) {
+      function ({ addComponents, prefix }) {
         addComponents(
           {
             [prefix('.btn-blue .w-1\\/4 > h1.text-xl + a .bar')]: {
@@ -1583,7 +1583,7 @@ test('plugins can provide a config but no handler', () => {
 
 test('plugins can be created using the `createPlugin` function', () => {
   const plugin = createPlugin(
-    function({ addUtilities, theme, variants }) {
+    function ({ addUtilities, theme, variants }) {
       const utilities = _.fromPairs(
         _.toPairs(theme('testPlugin')).map(([k, v]) => [`.test-${k}`, { testProperty: v }])
       )
@@ -1672,8 +1672,8 @@ test('plugins can be created using the `createPlugin` function', () => {
 
 test('plugins with extra options can be created using the `createPlugin.withOptions` function', () => {
   const plugin = createPlugin.withOptions(
-    function({ className }) {
-      return function({ addUtilities, theme, variants }) {
+    function ({ className }) {
+      return function ({ addUtilities, theme, variants }) {
         const utilities = _.fromPairs(
           _.toPairs(theme('testPlugin')).map(([k, v]) => [
             `.${className}-${k}`,
@@ -1684,7 +1684,7 @@ test('plugins with extra options can be created using the `createPlugin.withOpti
         addUtilities(utilities, variants('testPlugin'))
       }
     },
-    function() {
+    function () {
       return {
         theme: {
           testPlugin: {
@@ -1768,8 +1768,8 @@ test('plugins with extra options can be created using the `createPlugin.withOpti
 
 test('plugins created using `createPlugin.withOptions` do not need to be invoked if the user wants to use the default options', () => {
   const plugin = createPlugin.withOptions(
-    function({ className } = { className: 'banana' }) {
-      return function({ addUtilities, theme, variants }) {
+    function ({ className } = { className: 'banana' }) {
+      return function ({ addUtilities, theme, variants }) {
         const utilities = _.fromPairs(
           _.toPairs(theme('testPlugin')).map(([k, v]) => [
             `.${className}-${k}`,
@@ -1780,7 +1780,7 @@ test('plugins created using `createPlugin.withOptions` do not need to be invoked
         addUtilities(utilities, variants('testPlugin'))
       }
     },
-    function() {
+    function () {
       return {
         theme: {
           testPlugin: {
@@ -1863,8 +1863,8 @@ test('plugins created using `createPlugin.withOptions` do not need to be invoked
 })
 
 test('the configFunction parameter is optional when using the `createPlugin.withOptions` function', () => {
-  const plugin = createPlugin.withOptions(function({ className }) {
-    return function({ addUtilities, theme, variants }) {
+  const plugin = createPlugin.withOptions(function ({ className }) {
+    return function ({ addUtilities, theme, variants }) {
       const utilities = _.fromPairs(
         _.toPairs(theme('testPlugin')).map(([k, v]) => [`.${className}-${k}`, { testProperty: v }])
       )
@@ -1948,7 +1948,7 @@ test('the configFunction parameter is optional when using the `createPlugin.with
 })
 
 test('plugins can extend variants', () => {
-  const plugin = createPlugin(function() {}, {
+  const plugin = createPlugin(function () {}, {
     variants: {
       opacity: ({ before }) => before(['active'], 'focus'),
     },
@@ -2007,7 +2007,7 @@ test('plugins can extend variants', () => {
 test('keyframes are not escaped', () => {
   const { components, utilities } = processPlugins(
     [
-      function({ addUtilities, addComponents }) {
+      function ({ addUtilities, addComponents }) {
         addComponents({
           '@keyframes foo': {
             '25.001%': {

@@ -611,7 +611,7 @@ test(
           content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
         },
       }),
-      function(css) {
+      function (css) {
         // Remove any comments to avoid accidentally asserting against them
         // instead of against real CSS rules.
         css.walkComments(c => c.remove())

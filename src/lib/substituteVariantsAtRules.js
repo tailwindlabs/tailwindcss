@@ -114,8 +114,8 @@ function prependStackableVariants(atRule, variants, stackableVariants) {
   return variants
 }
 
-export default function(config, { variantGenerators: pluginVariantGenerators }) {
-  return function(css) {
+export default function (config, { variantGenerators: pluginVariantGenerators }) {
+  return function (css) {
     const variantGenerators = {
       ...defaultVariantGenerators(config),
       ...pluginVariantGenerators,

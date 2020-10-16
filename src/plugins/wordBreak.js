@@ -1,7 +1,7 @@
 import { flagEnabled } from '../featureFlags'
 
-export default function() {
-  return function({ addUtilities, variants, config }) {
+export default function () {
+  return function ({ addUtilities, variants, config }) {
     addUtilities(
       {
         '.break-normal': {

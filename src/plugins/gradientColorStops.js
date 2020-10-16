@@ -4,8 +4,8 @@ import nameClass from '../util/nameClass'
 import toColorValue from '../util/toColorValue'
 import { toRgba } from '../util/withAlphaVariable'
 
-export default function() {
-  return function({ addUtilities, theme, variants }) {
+export default function () {
+  return function ({ addUtilities, theme, variants }) {
     const colors = flattenColorPalette(theme('gradientColorStops'))
 
     const utilities = _(colors)

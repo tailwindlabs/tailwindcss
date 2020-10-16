@@ -11,7 +11,7 @@ function defaultTransform(value) {
   return Array.isArray(value) ? value.join(', ') : value
 }
 
-export default function(config) {
+export default function (config) {
   return functions({
     functions: {
       theme: (path, ...defaultValue) => {
