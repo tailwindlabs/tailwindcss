@@ -19,11 +19,11 @@ function generatePseudoClassVariant(pseudoClass, selectorPrefix = pseudoClass) {
 }
 
 function ensureIncludesDefault(variants) {
-  return variants.includes('default') ? variants : ['default', ...variants]
+  return variants.includes('DEFAULT') ? variants : ['DEFAULT', ...variants]
 }
 
 const defaultVariantGenerators = config => ({
-  default: generateVariantFunction(() => {}),
+  DEFAULT: generateVariantFunction(() => {}),
   'motion-safe': generateVariantFunction(
     ({ container, separator, modifySelectors }) => {
       const modified = modifySelectors(({ selector }) => {

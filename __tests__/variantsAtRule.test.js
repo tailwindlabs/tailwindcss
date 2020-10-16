@@ -648,7 +648,7 @@ test('the built-in variant pseudo-selectors are appended before any pseudo-eleme
 
 test('the default variant can be generated in a specified position', () => {
   const input = `
-    @variants focus, active, default, hover {
+    @variants focus, active, DEFAULT, hover {
       .banana { color: yellow; }
       .chocolate { color: brown; }
     }
