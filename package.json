@@ -55,7 +55,7 @@
     "chalk": "^3.0.0 || ^4.0.0",
     "color": "^3.1.2",
     "detective": "^5.2.0",
-    "fs-extra": "^8.0.0",
+    "fs-extra": "^9.0.1",
     "html-tags": "^3.1.0",
     "lodash": "^4.17.20",
     "modern-normalize": "^1.0.0",
