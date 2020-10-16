@@ -2,7 +2,6 @@ import path from 'path'
 import fs from 'fs'
 
 import _ from 'lodash'
-import postcss from 'postcss'
 
 import getModuleDependencies from './lib/getModuleDependencies'
 import registerConfigAsDependency from './lib/registerConfigAsDependency'
@@ -63,7 +62,7 @@ const getConfigFunction = (config) => () => {
   return resolveConfig([...getAllConfigs(configObject)])
 }
 
-const plugin = postcss.plugin('tailwind', (config) => {
+module.exports = function (config) {
   const plugins = []
   const resolvedConfigPath = resolveConfigPath(config)
 
@@ -71,11 +70,14 @@ const plugin = postcss.plugin('tailwind', (config) => {
     plugins.push(registerConfigAsDependency(resolvedConfigPath))
   }
 
-  return postcss([
-    ...plugins,
-    processTailwindFeatures(getConfigFunction(resolvedConfigPath || config)),
-    formatCSS,
-  ])
-})
+  return {
+    postcssPlugin: 'tailwindcss',
+    plugins: [
+      ...plugins,
+      processTailwindFeatures(getConfigFunction(resolvedConfigPath || config)),
+      formatCSS,
+    ],
+  }
+}
 
-module.exports = plugin
+module.exports.postcss = true
