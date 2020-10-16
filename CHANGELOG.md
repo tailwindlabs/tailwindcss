@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Change special use of 'default' in config to 'DEFAULT' ([#2580](https://github.com/tailwindlabs/tailwindcss/pull/2580))
 - Drop support for Node 8 and 10 ([#2582](https://github.com/tailwindlabs/tailwindcss/pull/2582))
 - Modernize default system font stacks ([#1711](https://github.com/tailwindlabs/tailwindcss/pull/1711))
+- Upgrade to PurgeCSS 3.0
 
 ## [1.9.2]
 
