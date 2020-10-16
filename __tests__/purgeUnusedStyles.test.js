@@ -583,7 +583,7 @@ test(
           enabled: true,
           options: {
             content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
-            whitelist: ['md:bg-green-500'],
+            safelist: ['md:bg-green-500'],
           },
         },
       }),
