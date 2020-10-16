@@ -97,7 +97,7 @@ test('it fails if the class does not exist', () => {
   })
 })
 
-test.only('it suggests a related class with a "Did you mean?" message', () => {
+test('it suggests a related class with a "Did you mean?" message', () => {
   return run('body { @apply anti-aliased; }').catch(e => {
     expect(e.message).toContain('Did you mean .antialiased?')
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
