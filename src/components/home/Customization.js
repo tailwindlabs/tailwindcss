@@ -4,8 +4,40 @@ import { Tabs } from '@/components/Tabs'
 import { CodeWindow } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import { ReactComponent as Icon } from '@/img/icons/home/customization.svg'
+import { useState } from 'react'
+import { siteConfig } from '@/utils/siteConfig'
+import { AnimatePresence, motion } from 'framer-motion'
+
+const themes = {
+  simple: {
+    font: 'Inter',
+    primaryColor: 'indigo',
+    secondaryColorTitle: 'bg-gray-{50-900}',
+    secondaryColor: 'gray',
+  },
+  playful: {
+    font: 'Poppins',
+    primaryColor: 'purple',
+    secondaryColorTitle: 'bg-secondary-{50-900}',
+    secondaryColor: 'pink',
+  },
+  elegant: {
+    font: 'Tenor Sans',
+    primaryColor: 'gray',
+    secondaryColorTitle: 'bg-accent-{50-900}',
+    secondaryColor: 'amber',
+  },
+  brutalist: {
+    font: 'Roboto Mono',
+    primaryColor: 'lime',
+    secondaryColorTitle: 'bg-gray-{50-900}',
+    secondaryColor: 'gray',
+  },
+}
 
 export function Customization() {
+  const [theme, setTheme] = useState('simple')
+
   return (
     <section>
       <div className="px-8 mb-20">
@@ -36,14 +68,122 @@ export function Customization() {
         rotate={-1}
         header={
           <div className="-ml-4">
-            <Tabs tabs={['Simple', 'Playful', 'Elegant', 'Brutalist']} />
+            <Tabs
+              tabs={{
+                simple: 'Simple',
+                playful: 'Playful',
+                elegant: 'Elegant',
+                brutalist: 'Brutalist',
+              }}
+              selected={theme}
+              onChange={setTheme}
+            />
           </div>
         }
         left={
           <div
-            className="relative z-10 bg-white rounded-xl shadow-lg -mr-8"
+            className="relative z-10 rounded-xl shadow-lg -mr-8 divide-y-2 divide-rose-100 flex flex-col"
             style={{ height: 374 }}
-          />
+          >
+            <section className="flex">
+              <h3 className="flex-none w-48 bg-rose-50 rounded-tl-xl text-lg leading-6 font-semibold text-rose-800 p-8">
+                Typography
+              </h3>
+              <dl className="flex-auto bg-white rounded-tr-xl p-6 space-y-6">
+                <div className="space-y-1">
+                  <dt className="font-mono text-xs leading-4">font-display</dt>
+                  <AnimatePresence initial={false} exitBeforeEnter>
+                    <motion.dd
+                      key={theme}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="text-2xl leading-7 font-semibold text-black"
+                    >
+                      {themes[theme].font}
+                    </motion.dd>
+                  </AnimatePresence>
+                </div>
+                <div className="space-y-1">
+                  <dt className="font-mono text-xs leading-4">font-body</dt>
+                  <AnimatePresence initial={false} exitBeforeEnter>
+                    <motion.dd
+                      key={theme}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="text-sm leading-5 text-gray-600"
+                    >
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mi ultrices non
+                      pharetra, eros enim. Habitant suspendisse ultricies.
+                    </motion.dd>
+                  </AnimatePresence>
+                </div>
+              </dl>
+            </section>
+            <section className="flex overflow-hidden">
+              <h3 className="flex-none w-48 bg-rose-50 rounded-bl-xl text-lg leading-6 font-semibold text-rose-800 p-8">
+                Color
+              </h3>
+              <div className="relative flex-auto bg-white rounded-br-xl overflow-hidden">
+                <dl className="p-6 space-y-6">
+                  <div className="space-y-2">
+                    <dt className="font-mono text-xs leading-4">{'bg-primary-{50-900}'}</dt>
+                    <dd>
+                      <ul className="flex -space-x-1">
+                        {[50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map((key, i, colors) => (
+                          <motion.li
+                            key={key}
+                            className="w-8 h-8 rounded-full"
+                            initial={false}
+                            animate={{
+                              backgroundColor:
+                                siteConfig.theme.colors[themes[theme].primaryColor][key],
+                            }}
+                            style={{
+                              zIndex: colors.length - i,
+                            }}
+                          />
+                        ))}
+                      </ul>
+                    </dd>
+                  </div>
+                  <div className="space-y-2">
+                    <AnimatePresence initial={false} exitBeforeEnter>
+                      <motion.dt
+                        key={theme}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="font-mono text-xs leading-4"
+                      >
+                        {themes[theme].secondaryColorTitle}
+                      </motion.dt>
+                    </AnimatePresence>
+                    <dd>
+                      <ul className="flex -space-x-1">
+                        {[50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map((key, i, colors) => (
+                          <motion.li
+                            key={key}
+                            className="w-8 h-8 rounded-full"
+                            initial={false}
+                            animate={{
+                              backgroundColor:
+                                siteConfig.theme.colors[themes[theme].secondaryColor][key],
+                            }}
+                            style={{
+                              zIndex: colors.length - i,
+                            }}
+                          />
+                        ))}
+                      </ul>
+                    </dd>
+                  </div>
+                </dl>
+                <div className="absolute z-10 bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white pointer-events-none" />
+              </div>
+            </section>
+          </div>
         }
         right={<CodeWindow className="bg-rose-500" />}
       />
