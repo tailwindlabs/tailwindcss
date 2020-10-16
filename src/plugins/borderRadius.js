@@ -1,40 +1,41 @@
 import _ from 'lodash'
+import nameClass from '../util/nameClass'
 
 export default function() {
   return function({ addUtilities, e, theme, variants }) {
     const generators = [
       (value, modifier) => ({
-        [`.${e(`rounded${modifier}`)}`]: { borderRadius: `${value}` },
+        [nameClass('rounded', modifier)]: { borderRadius: `${value}` },
       }),
       (value, modifier) => ({
-        [`.${e(`rounded-t${modifier}`)}`]: {
+        [nameClass('rounded-t', modifier)]: {
           borderTopLeftRadius: `${value}`,
           borderTopRightRadius: `${value}`,
         },
-        [`.${e(`rounded-r${modifier}`)}`]: {
+        [nameClass('rounded-r', modifier)]: {
           borderTopRightRadius: `${value}`,
           borderBottomRightRadius: `${value}`,
         },
-        [`.${e(`rounded-b${modifier}`)}`]: {
+        [nameClass('rounded-b', modifier)]: {
           borderBottomRightRadius: `${value}`,
           borderBottomLeftRadius: `${value}`,
         },
-        [`.${e(`rounded-l${modifier}`)}`]: {
+        [nameClass('rounded-l', modifier)]: {
           borderTopLeftRadius: `${value}`,
           borderBottomLeftRadius: `${value}`,
         },
       }),
       (value, modifier) => ({
-        [`.${e(`rounded-tl${modifier}`)}`]: { borderTopLeftRadius: `${value}` },
-        [`.${e(`rounded-tr${modifier}`)}`]: { borderTopRightRadius: `${value}` },
-        [`.${e(`rounded-br${modifier}`)}`]: { borderBottomRightRadius: `${value}` },
-        [`.${e(`rounded-bl${modifier}`)}`]: { borderBottomLeftRadius: `${value}` },
+        [nameClass('rounded-tl', modifier)]: { borderTopLeftRadius: `${value}` },
+        [nameClass('rounded-tr', modifier)]: { borderTopRightRadius: `${value}` },
+        [nameClass('rounded-br', modifier)]: { borderBottomRightRadius: `${value}` },
+        [nameClass('rounded-bl', modifier)]: { borderBottomLeftRadius: `${value}` },
       }),
     ]
 
     const utilities = _.flatMap(generators, generator => {
       return _.flatMap(theme('borderRadius'), (value, modifier) => {
-        return generator(value, modifier === 'DEFAULT' ? '' : `-${modifier}`)
+        return generator(value, modifier)
       })
     })
 

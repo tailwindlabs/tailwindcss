@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
+import nameClass from '../util/nameClass'
 import toColorValue from '../util/toColorValue'
 import withAlphaVariable from '../util/withAlphaVariable'
 
@@ -22,7 +23,7 @@ export default function() {
     const utilities = _.fromPairs(
       _.map(_.omit(colors, 'DEFAULT'), (value, modifier) => {
         return [
-          `.${e(`divide-${modifier}`)} > :not(template) ~ :not(template)`,
+          `${nameClass('divide', modifier)} > :not(template) ~ :not(template)`,
           getProperties(value),
         ]
       })

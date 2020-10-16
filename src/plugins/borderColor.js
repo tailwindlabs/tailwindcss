@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
+import nameClass from '../util/nameClass'
 import toColorValue from '../util/toColorValue'
 import withAlphaVariable from '../util/withAlphaVariable'
 
@@ -21,7 +22,7 @@ export default function() {
 
     const utilities = _.fromPairs(
       _.map(_.omit(colors, 'DEFAULT'), (value, modifier) => {
-        return [`.${e(`border-${modifier}`)}`, getProperties(value)]
+        return [nameClass('border', modifier), getProperties(value)]
       })
     )
 

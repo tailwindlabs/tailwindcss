@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
+import nameClass from '../util/nameClass'
 import toColorValue from '../util/toColorValue'
 
 export default function() {
@@ -8,7 +9,7 @@ export default function() {
 
     const utilities = _.fromPairs(
       _.map(colors, (value, modifier) => {
-        return [`.${e(`fill-${modifier}`)}`, { fill: toColorValue(value) }]
+        return [nameClass('fill', modifier), { fill: toColorValue(value) }]
       })
     )
 

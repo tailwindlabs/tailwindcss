@@ -1,18 +1,5 @@
-import _ from 'lodash'
+import createUtilityPlugin from '../util/createUtilityPlugin'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants }) {
-    const utilities = _.fromPairs(
-      _.map(theme('opacity'), (value, modifier) => {
-        return [
-          `.${e(`opacity-${modifier}`)}`,
-          {
-            opacity: value,
-          },
-        ]
-      })
-    )
-
-    addUtilities(utilities, variants('opacity'))
-  }
+  return createUtilityPlugin('opacity', [['opacity', ['opacity']]])
 }

@@ -1,11 +1,12 @@
 import _ from 'lodash'
+import nameClass from '../util/nameClass'
 
 export default function() {
   return function({ addUtilities, e, theme, variants }) {
     const utilities = _.fromPairs(
       _.map(theme('divideOpacity'), (value, modifier) => {
         return [
-          `.${e(`divide-opacity-${modifier}`)} > :not(template) ~ :not(template)`,
+          `${nameClass('divide-opacity', modifier)} > :not(template) ~ :not(template)`,
           {
             '--divide-opacity': value,
           },

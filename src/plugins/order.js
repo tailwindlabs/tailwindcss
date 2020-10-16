@@ -1,18 +1,5 @@
-import _ from 'lodash'
+import createUtilityPlugin from '../util/createUtilityPlugin'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants }) {
-    const utilities = _.fromPairs(
-      _.map(theme('order'), (value, modifier) => {
-        return [
-          `.${e(`order-${modifier}`)}`,
-          {
-            order: value,
-          },
-        ]
-      })
-    )
-
-    addUtilities(utilities, variants('order'))
-  }
+  return createUtilityPlugin('order', [['order', ['order']]])
 }

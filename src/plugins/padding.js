@@ -1,20 +1,21 @@
 import _ from 'lodash'
+import nameClass from '../util/nameClass'
 
 export default function() {
   return function({ addUtilities, e, theme, variants }) {
     const generators = [
       (size, modifier) => ({
-        [`.${e(`p-${modifier}`)}`]: { padding: `${size}` },
+        [nameClass('p', modifier)]: { padding: `${size}` },
       }),
       (size, modifier) => ({
-        [`.${e(`py-${modifier}`)}`]: { 'padding-top': `${size}`, 'padding-bottom': `${size}` },
-        [`.${e(`px-${modifier}`)}`]: { 'padding-left': `${size}`, 'padding-right': `${size}` },
+        [nameClass('py', modifier)]: { 'padding-top': `${size}`, 'padding-bottom': `${size}` },
+        [nameClass('px', modifier)]: { 'padding-left': `${size}`, 'padding-right': `${size}` },
       }),
       (size, modifier) => ({
-        [`.${e(`pt-${modifier}`)}`]: { 'padding-top': `${size}` },
-        [`.${e(`pr-${modifier}`)}`]: { 'padding-right': `${size}` },
-        [`.${e(`pb-${modifier}`)}`]: { 'padding-bottom': `${size}` },
-        [`.${e(`pl-${modifier}`)}`]: { 'padding-left': `${size}` },
+        [nameClass('pt', modifier)]: { 'padding-top': `${size}` },
+        [nameClass('pr', modifier)]: { 'padding-right': `${size}` },
+        [nameClass('pb', modifier)]: { 'padding-bottom': `${size}` },
+        [nameClass('pl', modifier)]: { 'padding-left': `${size}` },
       }),
     ]
 

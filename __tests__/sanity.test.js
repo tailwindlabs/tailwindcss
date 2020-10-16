@@ -4,7 +4,7 @@ import postcss from 'postcss'
 import tailwind from '../src/index'
 import config from '../stubs/defaultConfig.stub.js'
 
-it('generates the right CSS', () => {
+it('generates the right CSS using the default settings', () => {
   const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
   const input = fs.readFileSync(inputPath, 'utf8')
 
