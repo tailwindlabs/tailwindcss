@@ -45,7 +45,7 @@ export default function Home() {
               fill="#000"
             />
           </svg>
-          <h1 className="text-7xl leading-none font-extrabold text-black mt-14 mb-10">
+          <h1 className="text-7xl leading-none font-extrabold tracking-tight text-black mt-14 mb-10">
             Rapidly build modern websites without ever leaving your HTML.
           </h1>
           <p className="max-w-screen-lg text-2xl leading-10 font-medium mb-11">
