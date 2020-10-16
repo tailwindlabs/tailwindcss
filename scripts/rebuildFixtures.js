@@ -13,12 +13,12 @@ function build({ from, to, config }) {
         .process(css, {
           from: undefined,
         })
-        .then(result => {
+        .then((result) => {
           fs.writeFileSync(`./${to}`, result.css)
           return result
         })
         .then(resolve)
-        .catch(error => {
+        .catch((error) => {
           console.log(error)
           reject()
         })

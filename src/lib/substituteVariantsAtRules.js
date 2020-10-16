@@ -7,8 +7,8 @@ import buildSelectorVariant from '../util/buildSelectorVariant'
 
 function generatePseudoClassVariant(pseudoClass, selectorPrefix = pseudoClass) {
   return generateVariantFunction(({ modifySelectors, separator }) => {
-    const parser = selectorParser(selectors => {
-      selectors.walkClasses(sel => {
+    const parser = selectorParser((selectors) => {
+      selectors.walkClasses((sel) => {
         sel.value = `${selectorPrefix}${separator}${sel.value}`
         sel.parent.insertAfter(sel, selectorParser.pseudo({ value: `:${pseudoClass}` }))
       })
@@ -22,12 +22,12 @@ function ensureIncludesDefault(variants) {
   return variants.includes('DEFAULT') ? variants : ['DEFAULT', ...variants]
 }
 
-const defaultVariantGenerators = config => ({
+const defaultVariantGenerators = (config) => ({
   DEFAULT: generateVariantFunction(() => {}),
   'motion-safe': generateVariantFunction(
     ({ container, separator, modifySelectors }) => {
       const modified = modifySelectors(({ selector }) => {
-        return buildSelectorVariant(selector, 'motion-safe', separator, message => {
+        return buildSelectorVariant(selector, 'motion-safe', separator, (message) => {
           throw container.error(message)
         })
       })
@@ -43,7 +43,7 @@ const defaultVariantGenerators = config => ({
   'motion-reduce': generateVariantFunction(
     ({ container, separator, modifySelectors }) => {
       const modified = modifySelectors(({ selector }) => {
-        return buildSelectorVariant(selector, 'motion-reduce', separator, message => {
+        return buildSelectorVariant(selector, 'motion-reduce', separator, (message) => {
           throw container.error(message)
         })
       })
@@ -57,8 +57,8 @@ const defaultVariantGenerators = config => ({
     { unstable_stack: true }
   ),
   'group-hover': generateVariantFunction(({ modifySelectors, separator }) => {
-    const parser = selectorParser(selectors => {
-      selectors.walkClasses(sel => {
+    const parser = selectorParser((selectors) => {
+      selectors.walkClasses((sel) => {
         sel.value = `group-hover${separator}${sel.value}`
         sel.parent.insertBefore(
           sel,
@@ -69,8 +69,8 @@ const defaultVariantGenerators = config => ({
     return modifySelectors(({ selector }) => parser.processSync(selector))
   }),
   'group-focus': generateVariantFunction(({ modifySelectors, separator }) => {
-    const parser = selectorParser(selectors => {
-      selectors.walkClasses(sel => {
+    const parser = selectorParser((selectors) => {
+      selectors.walkClasses((sel) => {
         sel.value = `group-focus${separator}${sel.value}`
         sel.parent.insertBefore(
           sel,
@@ -95,17 +95,17 @@ const defaultVariantGenerators = config => ({
 })
 
 function prependStackableVariants(atRule, variants, stackableVariants) {
-  if (!_.some(variants, v => stackableVariants.includes(v))) {
+  if (!_.some(variants, (v) => stackableVariants.includes(v))) {
     return variants
   }
 
-  if (_.every(variants, v => stackableVariants.includes(v))) {
+  if (_.every(variants, (v) => stackableVariants.includes(v))) {
     return variants
   }
 
   const variantsParent = postcss.atRule({
     name: 'variants',
-    params: variants.filter(v => stackableVariants.includes(v)).join(', '),
+    params: variants.filter((v) => stackableVariants.includes(v)).join(', '),
   })
   atRule.before(variantsParent)
   variantsParent.append(atRule)
@@ -129,10 +129,10 @@ export default function (config, { variantGenerators: pluginVariantGenerators })
 
     do {
       variantsFound = false
-      css.walkAtRules('variants', atRule => {
+      css.walkAtRules('variants', (atRule) => {
         variantsFound = true
 
-        let variants = postcss.list.comma(atRule.params).filter(variant => variant !== '')
+        let variants = postcss.list.comma(atRule.params).filter((variant) => variant !== '')
 
         if (variants.includes('responsive')) {
           const responsiveParent = postcss.atRule({ name: 'responsive' })
@@ -142,7 +142,7 @@ export default function (config, { variantGenerators: pluginVariantGenerators })
 
         const remainingVariants = prependStackableVariants(atRule, variants, stackableVariants)
 
-        _.forEach(_.without(ensureIncludesDefault(remainingVariants), 'responsive'), variant => {
+        _.forEach(_.without(ensureIncludesDefault(remainingVariants), 'responsive'), (variant) => {
           if (!variantGenerators[variant]) {
             throw new Error(
               `Your config mentions the "${variant}" variant, but "${variant}" doesn't appear to be a variant. Did you forget or misconfigure a plugin that supplies that variant?`

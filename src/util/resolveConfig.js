@@ -13,7 +13,7 @@ import configurePlugins from './configurePlugins'
 const configUtils = {
   negative(scale) {
     return Object.keys(scale)
-      .filter(key => scale[key] !== '0')
+      .filter((key) => scale[key] !== '0')
       .reduce(
         (negativeScale, key) => ({
           ...negativeScale,
@@ -24,7 +24,7 @@ const configUtils = {
   },
   breakpoints(screens) {
     return Object.keys(screens)
-      .filter(key => typeof screens[key] === 'string')
+      .filter((key) => typeof screens[key] === 'string')
       .reduce(
         (breakpoints, key) => ({
           ...breakpoints,
@@ -79,7 +79,7 @@ function mergeExtensions({ extend, ...theme }) {
 
     return (resolveThemePath, utils) => ({
       ...value(themeValue, resolveThemePath, utils),
-      ...Object.assign({}, ...extensions.map(e => value(e, resolveThemePath, utils))),
+      ...Object.assign({}, ...extensions.map((e) => value(e, resolveThemePath, utils))),
     })
   })
 }
@@ -110,7 +110,7 @@ function resolveFunctionKeys(object) {
 function extractPluginConfigs(configs) {
   let allConfigs = []
 
-  configs.forEach(config => {
+  configs.forEach((config) => {
     allConfigs = [...allConfigs, config]
 
     const plugins = get(config, 'plugins', [])
@@ -119,7 +119,7 @@ function extractPluginConfigs(configs) {
       return
     }
 
-    plugins.forEach(plugin => {
+    plugins.forEach((plugin) => {
       if (plugin.__isOptionsFunction) {
         plugin = plugin()
       }
@@ -177,7 +177,7 @@ function resolveVariants([firstConfig, ...variantConfigs]) {
             ]
           },
           without(toRemove, existingPluginVariants = get(resolved, plugin, [])) {
-            return existingPluginVariants.filter(v => !toRemove.includes(v))
+            return existingPluginVariants.filter((v) => !toRemove.includes(v))
           },
         })
       } else {
@@ -214,11 +214,11 @@ export default function resolveConfig(configs) {
   return defaults(
     {
       theme: resolveFunctionKeys(
-        mergeExtensions(mergeThemes(map(allConfigs, t => get(t, 'theme', {}))))
+        mergeExtensions(mergeThemes(map(allConfigs, (t) => get(t, 'theme', {}))))
       ),
-      variants: resolveVariants(allConfigs.map(c => c.variants)),
-      corePlugins: resolveCorePlugins(allConfigs.map(c => c.corePlugins)),
-      plugins: resolvePluginLists(configs.map(c => get(c, 'plugins', []))),
+      variants: resolveVariants(allConfigs.map((c) => c.variants)),
+      corePlugins: resolveCorePlugins(allConfigs.map((c) => c.corePlugins)),
+      plugins: resolvePluginLists(configs.map((c) => get(c, 'plugins', []))),
     },
     ...allConfigs
   )

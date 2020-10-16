@@ -86,7 +86,7 @@ test('layers are grouped and inserted at the matching @tailwind rule', () => {
         })
       },
     ],
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })

@@ -55,7 +55,7 @@ test('user-defined dark mode variants do not stack when the dark mode experiment
 
   return postcss([tailwind({ experimental: { darkModeVariant: false }, plugins: [userPlugin] })])
     .process(input, { from: undefined })
-    .then(result => {
+    .then((result) => {
       expect(result.css).toMatchCss(expected)
       expect(result.warnings().length).toBe(0)
     })
@@ -83,7 +83,7 @@ test('generating dark mode variants uses the media strategy by default', () => {
 
   expect.assertions(2)
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
@@ -111,7 +111,7 @@ test('dark mode variants can be generated even when the user has their own plugi
 
   expect.assertions(2)
 
-  return run(input, { plugins: [] }).then(result => {
+  return run(input, { plugins: [] }).then((result) => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
@@ -137,7 +137,7 @@ test('dark mode variants can be generated using the class strategy', () => {
 
   expect.assertions(2)
 
-  return run(input, { dark: 'class' }).then(result => {
+  return run(input, { dark: 'class' }).then((result) => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
@@ -160,7 +160,7 @@ test('dark mode variants can be disabled', () => {
 
   expect.assertions(2)
 
-  return run(input, { dark: false }).then(result => {
+  return run(input, { dark: false }).then((result) => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
@@ -244,7 +244,7 @@ test('dark mode variants stack with other variants', () => {
 
   expect.assertions(2)
 
-  return run(input, { theme: { screens: { sm: '500px', lg: '800px' } } }).then(result => {
+  return run(input, { theme: { screens: { sm: '500px', lg: '800px' } } }).then((result) => {
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
@@ -341,7 +341,7 @@ test('dark mode variants stack with other variants when using the class strategy
   expect.assertions(2)
 
   return run(input, { dark: 'class', theme: { screens: { sm: '500px', lg: '800px' } } }).then(
-    result => {
+    (result) => {
       expect(result.css).toMatchCss(expected)
       expect(result.warnings().length).toBe(0)
     }

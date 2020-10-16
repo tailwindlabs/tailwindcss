@@ -19,9 +19,9 @@ export default function (config) {
   return function (css) {
     // Wrap any `responsive` rules with a copy of their parent `layer` to
     // ensure the layer isn't lost when copying to the `screens` location.
-    css.walkAtRules('layer', layerAtRule => {
+    css.walkAtRules('layer', (layerAtRule) => {
       const layer = layerAtRule.params
-      layerAtRule.walkAtRules('responsive', responsiveAtRule => {
+      layerAtRule.walkAtRules('responsive', (responsiveAtRule) => {
         const nestedlayerAtRule = postcss.atRule({
           name: 'layer',
           params: layer,
@@ -39,7 +39,7 @@ export default function (config) {
     const responsiveRules = postcss.root()
     const finalRules = []
 
-    css.walkAtRules('responsive', atRule => {
+    css.walkAtRules('responsive', (atRule) => {
       const nodes = atRule.nodes
       responsiveRules.append(...cloneNodes(nodes))
 
@@ -55,17 +55,17 @@ export default function (config) {
       atRule.remove()
     })
 
-    _.keys(screens).forEach(screen => {
+    _.keys(screens).forEach((screen) => {
       const mediaQuery = postcss.atRule({
         name: 'media',
         params: buildMediaQuery(screens[screen]),
       })
 
       mediaQuery.append(
-        _.tap(responsiveRules.clone(), clonedRoot => {
-          clonedRoot.walkRules(rule => {
-            rule.selectors = _.map(rule.selectors, selector =>
-              buildSelectorVariant(selector, screen, separator, message => {
+        _.tap(responsiveRules.clone(), (clonedRoot) => {
+          clonedRoot.walkRules((rule) => {
+            rule.selectors = _.map(rule.selectors, (selector) =>
+              buildSelectorVariant(selector, screen, separator, (message) => {
                 throw rule.error(message)
               })
             )
@@ -76,9 +76,9 @@ export default function (config) {
       finalRules.push(mediaQuery)
     })
 
-    const hasScreenRules = finalRules.some(i => i.nodes.length !== 0)
+    const hasScreenRules = finalRules.some((i) => i.nodes.length !== 0)
 
-    css.walkAtRules('tailwind', atRule => {
+    css.walkAtRules('tailwind', (atRule) => {
       if (atRule.params !== 'screens') {
         return
       }

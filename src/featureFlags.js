@@ -38,7 +38,7 @@ function experimentalFlagsEnabled(config) {
   }
 
   return Object.keys(_.get(config, 'experimental', {})).filter(
-    flag => featureFlags.experimental.includes(flag) && config.experimental[flag]
+    (flag) => featureFlags.experimental.includes(flag) && config.experimental[flag]
   )
 }
 
@@ -49,7 +49,7 @@ export function issueFlagNotices(config) {
 
   if (experimentalFlagsEnabled(config).length > 0) {
     const changes = experimentalFlagsEnabled(config)
-      .map(s => chalk.yellow(s))
+      .map((s) => chalk.yellow(s))
       .join(', ')
 
     log.warn([

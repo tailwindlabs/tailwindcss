@@ -10,7 +10,7 @@ import applyComplexClasses from '../flagged/applyComplexClasses'
 function buildClassTable(css) {
   const classTable = {}
 
-  css.walkRules(rule => {
+  css.walkRules((rule) => {
     if (!_.has(classTable, rule.selector)) {
       classTable[rule.selector] = []
     }
@@ -23,7 +23,7 @@ function buildClassTable(css) {
 function buildShadowTable(generatedUtilities) {
   const utilities = postcss.root()
 
-  postcss.root({ nodes: generatedUtilities }).walkAtRules('variants', atRule => {
+  postcss.root({ nodes: generatedUtilities }).walkAtRules('variants', (atRule) => {
     utilities.append(atRule.clone().nodes)
   })
 
@@ -70,8 +70,8 @@ export default function (config, getProcessedPlugins, configChanged) {
         ? buildShadowTable(getProcessedPlugins().utilities)
         : shadowLookup
 
-    css.walkRules(rule => {
-      rule.walkAtRules('apply', atRule => {
+    css.walkRules((rule) => {
+      rule.walkAtRules('apply', (atRule) => {
         const classesAndProperties = postcss.list.space(atRule.params)
 
         /*
@@ -81,15 +81,15 @@ export default function (config, getProcessedPlugins, configChanged) {
          * These are deprecated in CSSNext but still playing it safe for now.
          * We might consider renaming this at-rule.
          */
-        const [customProperties, classes] = _.partition(classesAndProperties, classOrProperty => {
+        const [customProperties, classes] = _.partition(classesAndProperties, (classOrProperty) => {
           return _.startsWith(classOrProperty, '--')
         })
 
         const decls = _(classes)
-          .reject(cssClass => cssClass === '!important')
-          .flatMap(cssClass => {
+          .reject((cssClass) => cssClass === '!important')
+          .flatMap((cssClass) => {
             const classToApply = normalizeClassName(cssClass)
-            const onError = message => {
+            const onError = (message) => {
               return atRule.error(message)
             }
 
@@ -141,8 +141,8 @@ export default function (config, getProcessedPlugins, configChanged) {
           })
           .value()
 
-        _.tap(_.last(classesAndProperties) === '!important', important => {
-          decls.forEach(decl => (decl.important = important))
+        _.tap(_.last(classesAndProperties) === '!important', (important) => {
+          decls.forEach((decl) => (decl.important = important))
         })
 
         atRule.before(decls)

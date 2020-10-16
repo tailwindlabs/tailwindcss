@@ -5,7 +5,7 @@ export default function (pluginConfig, plugins) {
 
   const pluginNames = Array.isArray(pluginConfig)
     ? pluginConfig
-    : plugins.filter(pluginName => {
+    : plugins.filter((pluginName) => {
         return pluginConfig !== false && pluginConfig[pluginName] !== false
       })
 

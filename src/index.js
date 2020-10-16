@@ -44,7 +44,7 @@ function resolveConfigPath(filePath) {
   }
 }
 
-const getConfigFunction = config => () => {
+const getConfigFunction = (config) => () => {
   if (_.isUndefined(config)) {
     return resolveConfig([...getAllConfigs(defaultConfig)])
   }
@@ -52,7 +52,7 @@ const getConfigFunction = config => () => {
   // Skip this if Jest is running: https://github.com/facebook/jest/pull/9841#issuecomment-621417584
   if (process.env.JEST_WORKER_ID === undefined) {
     if (!_.isObject(config)) {
-      getModuleDependencies(config).forEach(mdl => {
+      getModuleDependencies(config).forEach((mdl) => {
         delete require.cache[require.resolve(mdl.file)]
       })
     }
@@ -63,7 +63,7 @@ const getConfigFunction = config => () => {
   return resolveConfig([...getAllConfigs(configObject)])
 }
 
-const plugin = postcss.plugin('tailwind', config => {
+const plugin = postcss.plugin('tailwind', (config) => {
   const plugins = []
   const resolvedConfigPath = resolveConfigPath(config)
 

@@ -10,7 +10,7 @@ export default function buildMediaQuery(screens) {
   }
 
   return _(screens)
-    .map(screen => {
+    .map((screen) => {
       if (_.has(screen, 'raw')) {
         return screen.raw
       }

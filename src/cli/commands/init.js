@@ -32,7 +32,7 @@ export const optionMap = {
  * @return {Promise}
  */
 export function run(cliParams, cliOptions) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     utils.header()
 
     const full = cliOptions.full

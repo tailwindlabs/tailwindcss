@@ -7,7 +7,7 @@ export default function (configFile) {
   }
 
   return function (css, opts) {
-    getModuleDependencies(configFile).forEach(mdl => {
+    getModuleDependencies(configFile).forEach((mdl) => {
       opts.messages.push({
         type: 'dependency',
         parent: css.source.input.file,

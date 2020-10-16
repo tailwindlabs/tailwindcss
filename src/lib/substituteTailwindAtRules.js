@@ -2,8 +2,8 @@ import _ from 'lodash'
 import postcss from 'postcss'
 
 function updateSource(nodes, source) {
-  return _.tap(Array.isArray(nodes) ? postcss.root({ nodes }) : nodes, tree => {
-    tree.walk(node => (node.source = source))
+  return _.tap(Array.isArray(nodes) ? postcss.root({ nodes }) : nodes, (tree) => {
+    tree.walk((node) => (node.source = source))
   })
 }
 
@@ -12,7 +12,7 @@ export default function (
   { base: pluginBase, components: pluginComponents, utilities: pluginUtilities }
 ) {
   return function (css) {
-    css.walkAtRules('import', atRule => {
+    css.walkAtRules('import', (atRule) => {
       if (atRule.params === '"tailwindcss/base"' || atRule.params === "'tailwindcss/base'") {
         atRule.name = 'tailwind'
         atRule.params = 'base'
@@ -47,7 +47,7 @@ export default function (
       utilities: [],
     }
 
-    css.walkAtRules('layer', atRule => {
+    css.walkAtRules('layer', (atRule) => {
       if (!['base', 'components', 'utilities'].includes(atRule.params)) {
         return
       }
@@ -55,7 +55,7 @@ export default function (
       layers[atRule.params].push(atRule)
     })
 
-    css.walkAtRules('tailwind', atRule => {
+    css.walkAtRules('tailwind', (atRule) => {
       if (atRule.params === 'preflight') {
         // prettier-ignore
         throw atRule.error("`@tailwind preflight` is not a valid at-rule in Tailwind v1.0, use `@tailwind base` instead.", { word: 'preflight' })

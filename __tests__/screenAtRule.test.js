@@ -40,7 +40,7 @@ test('it can generate media queries from configured screen sizes', () => {
       },
     },
     separator: ':',
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })

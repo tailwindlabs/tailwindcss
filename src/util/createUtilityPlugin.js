@@ -12,7 +12,7 @@ export default function createUtilityPlugin(themeKey, utilityVariations) {
           toPairs(theme(themeKey)).map(([key, value]) => {
             return [
               nameClass(classPrefix, key),
-              fromPairs(castArray(properties).map(property => [property, transformValue(value)])),
+              fromPairs(castArray(properties).map((property) => [property, transformValue(value)])),
             ]
           })
         )

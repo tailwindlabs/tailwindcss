@@ -10,7 +10,7 @@ it('generates the right CSS using the default settings', () => {
 
   return postcss([tailwind()])
     .process(input, { from: inputPath })
-    .then(result => {
+    .then((result) => {
       const expected = fs.readFileSync(
         path.resolve(`${__dirname}/fixtures/tailwind-output.css`),
         'utf8'
@@ -26,7 +26,7 @@ it('generates the right CSS when "important" is enabled', () => {
 
   return postcss([tailwind({ ...config, important: true })])
     .process(input, { from: inputPath })
-    .then(result => {
+    .then((result) => {
       const expected = fs.readFileSync(
         path.resolve(`${__dirname}/fixtures/tailwind-output-important.css`),
         'utf8'
@@ -42,7 +42,7 @@ it('generates the right CSS when using @import instead of @tailwind', () => {
 
   return postcss([tailwind()])
     .process(input, { from: inputPath })
-    .then(result => {
+    .then((result) => {
       const expected = fs.readFileSync(
         path.resolve(`${__dirname}/fixtures/tailwind-output.css`),
         'utf8'
@@ -63,7 +63,7 @@ it('generates the right CSS when enabling flagged features', () => {
     }),
   ])
     .process(input, { from: inputPath })
-    .then(result => {
+    .then((result) => {
       const expected = fs.readFileSync(
         path.resolve(`${__dirname}/fixtures/tailwind-output-flagged.css`),
         'utf8'
@@ -91,7 +91,7 @@ it('generates the right CSS when color opacity plugins are disabled', () => {
     }),
   ])
     .process(input, { from: inputPath })
-    .then(result => {
+    .then((result) => {
       const expected = fs.readFileSync(
         path.resolve(`${__dirname}/fixtures/tailwind-output-no-color-opacity.css`),
         'utf8'
@@ -104,7 +104,7 @@ it('generates the right CSS when color opacity plugins are disabled', () => {
 it('does not add any CSS if no Tailwind features are used', () => {
   return postcss([tailwind()])
     .process('.foo { color: blue; }', { from: undefined })
-    .then(result => {
+    .then((result) => {
       expect(result.css).toMatchCss('.foo { color: blue; }')
     })
 })
@@ -117,7 +117,7 @@ it('generates the right CSS with implicit screen utilities', () => {
 
   return postcss([tailwind()])
     .process(input, { from: inputPath })
-    .then(result => {
+    .then((result) => {
       const expected = fs.readFileSync(
         path.resolve(`${__dirname}/fixtures/tailwind-output-with-explicit-screen-utilities.css`),
         'utf8'
@@ -133,7 +133,7 @@ it('generates the right CSS when "important" is enabled', () => {
 
   return postcss([tailwind({ ...config, important: true })])
     .process(input, { from: inputPath })
-    .then(result => {
+    .then((result) => {
       const expected = fs.readFileSync(
         path.resolve(`${__dirname}/fixtures/tailwind-output-important.css`),
         'utf8'

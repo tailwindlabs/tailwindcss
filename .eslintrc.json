@@ -22,8 +22,7 @@
         "useTabs": false,
         "trailingComma": "es5",
         "bracketSpacing": true,
-        "parser": "flow",
-        "arrowParens": "avoid"
+        "parser": "flow"
       }
     ]
   }
