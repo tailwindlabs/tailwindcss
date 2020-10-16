@@ -42,7 +42,7 @@
     "clean-css": "^4.1.9",
     "eslint": "^7.5.0",
     "eslint-config-postcss": "^2.0.2",
-    "eslint-config-prettier": "^6.0.0",
+    "eslint-config-prettier": "^6.12.0",
     "eslint-plugin-prettier": "^3.0.1",
     "jest": "^26.5.2",
     "prettier": "^2.1.2",
