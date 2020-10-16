@@ -65,7 +65,6 @@ export default function (config, getProcessedPlugins, configChanged) {
 
   return function (css) {
     const classLookup = buildClassTable(css)
-
     shadowLookup =
       configChanged || !shadowLookup
         ? buildShadowTable(getProcessedPlugins().utilities)
