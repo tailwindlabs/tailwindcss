@@ -51,7 +51,7 @@ export function ConstraintBased() {
         left={
           <div className="relative z-10 rounded-xl shadow-lg flex lg:-mr-8" style={{ height: 370 }}>
             <h3 className="flex-none w-48 bg-purple-50 rounded-l-xl text-lg leading-6 font-semibold text-purple-800 p-8">
-              <AnimatePresence exitBeforeEnter>
+              <AnimatePresence initial={false} exitBeforeEnter>
                 <motion.span
                   key={tab}
                   initial={{ opacity: 0 }}
@@ -71,7 +71,7 @@ export function ConstraintBased() {
             </h3>
 
             <div className="relative flex-auto bg-white rounded-r-xl p-8 overflow-hidden flex">
-              <AnimatePresence exitBeforeEnter>
+              <AnimatePresence initial={false} exitBeforeEnter>
                 {tab === 'sizing' && (
                   <motion.ul
                     key="sizing"
