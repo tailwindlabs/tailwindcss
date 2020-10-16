@@ -1,7 +1,8 @@
 import _ from 'lodash'
+import nameClass from '../util/nameClass'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants }) {
+  return function({ addUtilities, theme, variants }) {
     const keyframesConfig = theme('keyframes')
     const keyframesStyles = _.fromPairs(
       _.toPairs(keyframesConfig).map(([name, keyframes]) => {
@@ -14,7 +15,7 @@ export default function() {
     const utilities = _.fromPairs(
       _.toPairs(animationConfig).map(([suffix, animation]) => {
         return [
-          `.${e(`animate-${suffix}`)}`,
+          nameClass('animate', suffix),
           {
             animation,
           },
