@@ -3,7 +3,7 @@ import { GradientLockup } from '@/components/GradientLockup'
 import { CodeWindow } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import { ReactComponent as Icon } from '@/img/icons/home/performance.svg'
-import { useEffect, useRef } from 'react'
+import { Fragment, useEffect, useRef } from 'react'
 import { motion, animate, useMotionValue, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import tokenize from '../../macros/tokenize.macro'
@@ -180,9 +180,9 @@ export function Performance() {
                 className="relative font-mono text-sm text-teal-200"
                 style={{ lineHeight: 18 / 14 }}
               >
-                {allClassesShuffled.map((c) =>
+                {allClassesShuffled.map((c, i) =>
                   classes.includes(c) ? (
-                    <>
+                    <Fragment key={i}>
                       <motion.span
                         animate={
                           inView
@@ -205,9 +205,9 @@ export function Performance() {
                       >
                         {c}
                       </motion.span>{' '}
-                    </>
+                    </Fragment>
                   ) : (
-                    <>
+                    <Fragment key={i}>
                       <motion.span
                         animate={
                           inView
@@ -223,7 +223,7 @@ export function Performance() {
                       >
                         {c}
                       </motion.span>{' '}
-                    </>
+                    </Fragment>
                   )
                 )}
               </div>
