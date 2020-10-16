@@ -2284,11 +2284,6 @@ escodegen@^1.14.1:
   optionalDependencies:
     source-map "~0.6.1"
 
-eslint-config-postcss@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/eslint-config-postcss/-/eslint-config-postcss-2.0.2.tgz#cae1c6093ced7850894a5b85fbe1d1e232b72afb"
-  integrity sha1-yuHGCTzteFCJSluF++HR4jK3Kvs=
-
 eslint-config-prettier@^6.12.0:
   version "6.12.0"
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-6.12.0.tgz#9eb2bccff727db1c52104f0b49e87ea46605a0d2"
