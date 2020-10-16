@@ -5,7 +5,7 @@ import toColorValue from '../util/toColorValue'
 import { toRgba } from '../util/withAlphaVariable'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants }) {
+  return function({ addUtilities, theme, variants }) {
     const colors = flattenColorPalette(theme('gradientColorStops'))
 
     const utilities = _(colors)
