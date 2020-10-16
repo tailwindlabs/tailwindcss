@@ -126,7 +126,7 @@ export function Testimonials() {
   return (
     <div className="relative">
       <div
-        className="absolute right-0 bottom-1/2 left-0 bg-gradient-to-t from-gray-100 to-transparent"
+        className="absolute right-0 bottom-1/2 left-0 bg-gradient-to-t from-gray-100"
         style={{ height: 607, maxHeight: '50vh' }}
       />
       <div className="flex overflow-hidden -my-8">

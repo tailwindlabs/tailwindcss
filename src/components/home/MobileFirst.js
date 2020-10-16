@@ -11,8 +11,7 @@ const MIN_WIDTH = 400
 const classNames = {
   sm: {
     container: 'grid grid-cols-1',
-    header:
-      'relative z-10 col-start-1 row-start-1 px-4 pt-40 pb-2 bg-gradient-to-t from-black to-transparent',
+    header: 'relative z-10 col-start-1 row-start-1 px-4 pt-40 pb-2 bg-gradient-to-t from-black',
     preheading: 'text-sm leading-5 font-medium text-white',
     heading: 'text-xl leading-9 font-semibold text-white',
     metaContainer: 'col-start-1 row-start-2 px-4',
