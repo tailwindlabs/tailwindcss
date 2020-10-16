@@ -1,13 +1,13 @@
 import _ from 'lodash'
+import nameClass from '../util/nameClass'
 
 export default function() {
   return function({ addUtilities, e, theme, variants }) {
     addUtilities(
       _.fromPairs(
         _.map(theme('flexShrink'), (value, modifier) => {
-          const className = modifier === 'DEFAULT' ? 'flex-shrink' : `flex-shrink-${modifier}`
           return [
-            `.${e(className)}`,
+            nameClass('flex-shrink', modifier),
             {
               'flex-shrink': value,
             },

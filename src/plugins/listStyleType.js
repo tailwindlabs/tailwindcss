@@ -1,18 +1,5 @@
-import _ from 'lodash'
+import createUtilityPlugin from '../util/createUtilityPlugin'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants }) {
-    const utilities = _.fromPairs(
-      _.map(theme('listStyleType'), (value, modifier) => {
-        return [
-          `.${e(`list-${modifier}`)}`,
-          {
-            'list-style-type': value,
-          },
-        ]
-      })
-    )
-
-    addUtilities(utilities, variants('listStyleType'))
-  }
+  return createUtilityPlugin('listStyleType', [['list', ['listStyleType']]])
 }

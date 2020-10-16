@@ -1,18 +1,13 @@
-import _ from 'lodash'
+import createUtilityPlugin from '../util/createUtilityPlugin'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants }) {
-    const utilities = _.fromPairs(
-      _.map(theme('fontFamily'), (value, modifier) => {
-        return [
-          `.${e(`font-${modifier}`)}`,
-          {
-            'font-family': Array.isArray(value) ? value.join(', ') : value,
-          },
-        ]
-      })
-    )
-
-    addUtilities(utilities, variants('fontFamily'))
-  }
+  return createUtilityPlugin('fontFamily', [
+    [
+      'font',
+      ['fontFamily'],
+      value => {
+        return Array.isArray(value) ? value.join(', ') : value
+      },
+    ],
+  ])
 }

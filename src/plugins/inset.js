@@ -1,11 +1,11 @@
 import _ from 'lodash'
-import prefixNegativeModifiers from '../util/prefixNegativeModifiers'
+import nameClass from '../util/nameClass'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants }) {
+  return function({ addUtilities, theme, variants }) {
     const generators = [
       (size, modifier) => ({
-        [`.${e(prefixNegativeModifiers('inset', modifier))}`]: {
+        [nameClass('inset', modifier)]: {
           top: `${size}`,
           right: `${size}`,
           bottom: `${size}`,
@@ -13,20 +13,20 @@ export default function() {
         },
       }),
       (size, modifier) => ({
-        [`.${e(prefixNegativeModifiers('inset-y', modifier))}`]: {
+        [nameClass('inset-y', modifier)]: {
           top: `${size}`,
           bottom: `${size}`,
         },
-        [`.${e(prefixNegativeModifiers('inset-x', modifier))}`]: {
+        [nameClass('inset-x', modifier)]: {
           right: `${size}`,
           left: `${size}`,
         },
       }),
       (size, modifier) => ({
-        [`.${e(prefixNegativeModifiers('top', modifier))}`]: { top: `${size}` },
-        [`.${e(prefixNegativeModifiers('right', modifier))}`]: { right: `${size}` },
-        [`.${e(prefixNegativeModifiers('bottom', modifier))}`]: { bottom: `${size}` },
-        [`.${e(prefixNegativeModifiers('left', modifier))}`]: { left: `${size}` },
+        [nameClass('top', modifier)]: { top: `${size}` },
+        [nameClass('right', modifier)]: { right: `${size}` },
+        [nameClass('bottom', modifier)]: { bottom: `${size}` },
+        [nameClass('left', modifier)]: { left: `${size}` },
       }),
     ]
 

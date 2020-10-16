@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import nameClass from '../util/nameClass'
 
 export default function() {
   return function({ addUtilities, e, theme, variants }) {
@@ -12,7 +13,7 @@ export default function() {
             }
 
         return [
-          `.${e(`text-${modifier}`)}`,
+          nameClass('text', modifier),
           {
             'font-size': fontSize,
             ...(lineHeight === undefined

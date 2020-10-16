@@ -1,22 +1,23 @@
 import _ from 'lodash'
+import nameClass from '../util/nameClass'
 
 export default function() {
   return function({ addUtilities, e, theme, variants }) {
     const generators = [
       (value, modifier) => ({
-        [`.${e(`border${modifier}`)}`]: { borderWidth: `${value}` },
+        [nameClass('border', modifier)]: { borderWidth: `${value}` },
       }),
       (value, modifier) => ({
-        [`.${e(`border-t${modifier}`)}`]: { borderTopWidth: `${value}` },
-        [`.${e(`border-r${modifier}`)}`]: { borderRightWidth: `${value}` },
-        [`.${e(`border-b${modifier}`)}`]: { borderBottomWidth: `${value}` },
-        [`.${e(`border-l${modifier}`)}`]: { borderLeftWidth: `${value}` },
+        [nameClass('border-t', modifier)]: { borderTopWidth: `${value}` },
+        [nameClass('border-r', modifier)]: { borderRightWidth: `${value}` },
+        [nameClass('border-b', modifier)]: { borderBottomWidth: `${value}` },
+        [nameClass('border-l', modifier)]: { borderLeftWidth: `${value}` },
       }),
     ]
 
     const utilities = _.flatMap(generators, generator => {
       return _.flatMap(theme('borderWidth'), (value, modifier) => {
-        return generator(value, modifier === 'DEFAULT' ? '' : `-${modifier}`)
+        return generator(value, modifier)
       })
     })
 

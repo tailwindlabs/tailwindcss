@@ -1,17 +1,18 @@
 import _ from 'lodash'
+import nameClass from '../util/nameClass'
 
 export default function() {
-  return function({ addUtilities, e, theme, variants }) {
+  return function({ addUtilities, theme, variants }) {
     const generators = [
       (size, modifier) => ({
-        [`.${e(`divide-y${modifier}`)} > :not(template) ~ :not(template)`]: {
+        [`${nameClass('divide-y', modifier)} > :not(template) ~ :not(template)`]: {
           '--divide-y-reverse': '0',
           'border-top-width': `calc(${
             size === '0' ? '0px' : size
           } * calc(1 - var(--divide-y-reverse)))`,
           'border-bottom-width': `calc(${size === '0' ? '0px' : size} * var(--divide-y-reverse))`,
         },
-        [`.${e(`divide-x${modifier}`)} > :not(template) ~ :not(template)`]: {
+        [`${nameClass('divide-x', modifier)} > :not(template) ~ :not(template)`]: {
           '--divide-x-reverse': '0',
           'border-right-width': `calc(${size === '0' ? '0px' : size} * var(--divide-x-reverse))`,
           'border-left-width': `calc(${
@@ -24,7 +25,7 @@ export default function() {
     const utilities = _.flatMap(generators, generator => {
       return [
         ..._.flatMap(theme('divideWidth'), (value, modifier) => {
-          return generator(value, modifier === 'DEFAULT' ? '' : `-${modifier}`)
+          return generator(value, modifier)
         }),
         {
           '.divide-y-reverse > :not(template) ~ :not(template)': {
