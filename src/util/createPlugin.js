@@ -5,8 +5,8 @@ function createPlugin(plugin, config) {
   }
 }
 
-createPlugin.withOptions = function(pluginFunction, configFunction = () => ({})) {
-  const optionsFunction = function(options) {
+createPlugin.withOptions = function (pluginFunction, configFunction = () => ({})) {
+  const optionsFunction = function (options) {
     return {
       handler: pluginFunction(options),
       config: configFunction(options),

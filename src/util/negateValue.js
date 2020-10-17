@@ -1,6 +1,6 @@
 import reduceCalc from 'reduce-css-calc'
 
-export default function(value) {
+export default function (value) {
   try {
     return reduceCalc(`calc(${value} * -1)`)
   } catch (e) {

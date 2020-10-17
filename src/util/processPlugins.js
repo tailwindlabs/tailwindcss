@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import postcss from 'postcss'
-import browserslist from 'browserslist'
 import Node from 'postcss/lib/node'
 import isFunction from 'lodash/isFunction'
 import escapeClassName from '../util/escapeClassName'
@@ -15,7 +14,7 @@ function parseStyles(styles) {
     return parseStyles([styles])
   }
 
-  return _.flatMap(styles, style => (style instanceof Node ? style : parseObjectStyles(style)))
+  return _.flatMap(styles, (style) => (style instanceof Node ? style : parseObjectStyles(style)))
 }
 
 function wrapWithLayer(rules, layer) {
@@ -31,20 +30,19 @@ function isKeyframeRule(rule) {
   return rule.parent && rule.parent.type === 'atrule' && /keyframes$/.test(rule.parent.name)
 }
 
-export default function(plugins, config) {
+export default function (plugins, config) {
   const pluginBaseStyles = []
   const pluginComponents = []
   const pluginUtilities = []
   const pluginVariantGenerators = {}
 
-  const applyConfiguredPrefix = selector => {
+  const applyConfiguredPrefix = (selector) => {
     return prefixSelector(config.prefix, selector)
   }
 
   const getConfigValue = (path, defaultValue) => (path ? _.get(config, path, defaultValue) : config)
-  const browserslistTarget = browserslist().includes('ie 11') ? 'ie11' : 'relaxed'
 
-  plugins.forEach(plugin => {
+  plugins.forEach((plugin) => {
     if (plugin.__isOptionsFunction) {
       plugin = plugin()
     }
@@ -55,7 +53,7 @@ export default function(plugins, config) {
       postcss,
       config: getConfigValue,
       theme: (path, defaultValue) => getConfigValue(`theme.${path}`, defaultValue),
-      corePlugins: path => {
+      corePlugins: (path) => {
         if (Array.isArray(config.corePlugins)) {
           return config.corePlugins.includes(path)
         }
@@ -69,17 +67,6 @@ export default function(plugins, config) {
 
         return getConfigValue(`variants.${path}`, defaultValue)
       },
-      target: path => {
-        if (_.isString(config.target)) {
-          return config.target === 'browserslist' ? browserslistTarget : config.target
-        }
-
-        const [defaultTarget, targetOverrides] = getConfigValue('target', 'relaxed')
-
-        const target = _.get(targetOverrides, path, defaultTarget)
-
-        return target === 'browserslist' ? browserslistTarget : target
-      },
       e: escapeClassName,
       prefix: applyConfiguredPrefix,
       addUtilities: (utilities, options) => {
@@ -91,7 +78,7 @@ export default function(plugins, config) {
 
         const styles = postcss.root({ nodes: parseStyles(utilities) })
 
-        styles.walkRules(rule => {
+        styles.walkRules((rule) => {
           if (options.respectPrefix && !isKeyframeRule(rule)) {
             rule.selector = applyConfiguredPrefix(rule.selector)
           }
@@ -117,7 +104,7 @@ export default function(plugins, config) {
 
         const styles = postcss.root({ nodes: parseStyles(components) })
 
-        styles.walkRules(rule => {
+        styles.walkRules((rule) => {
           if (options.respectPrefix && !isKeyframeRule(rule)) {
             rule.selector = applyConfiguredPrefix(rule.selector)
           }
@@ -127,7 +114,7 @@ export default function(plugins, config) {
           wrapWithLayer(wrapWithVariants(styles.nodes, options.variants), 'components')
         )
       },
-      addBase: baseStyles => {
+      addBase: (baseStyles) => {
         pluginBaseStyles.push(wrapWithLayer(parseStyles(baseStyles), 'base'))
       },
       addVariant: (name, generator, options = {}) => {

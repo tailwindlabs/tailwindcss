@@ -42,7 +42,7 @@ test('it can generate responsive variants', () => {
       },
     },
     separator: ':',
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -84,7 +84,7 @@ test('it can generate responsive variants with a custom separator', () => {
       },
     },
     separator: '__',
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -131,7 +131,7 @@ test('it can generate responsive variants when classes have non-standard charact
       },
     },
     separator: ':',
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -179,7 +179,7 @@ test('responsive variants are grouped', () => {
       },
     },
     separator: ':',
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -242,7 +242,7 @@ test('it can generate responsive variants for nested at-rules', () => {
       },
     },
     separator: ':',
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -313,7 +313,7 @@ test('it can generate responsive variants for deeply nested at-rules', () => {
       },
     },
     separator: ':',
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -350,7 +350,7 @@ test('screen prefix is only applied to the last class in a selector', () => {
       },
     },
     separator: ':',
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -387,7 +387,7 @@ test('responsive variants are generated for all selectors in a rule', () => {
       },
     },
     separator: ':',
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -411,7 +411,7 @@ test('selectors with no classes cannot be made responsive', () => {
       },
     },
     separator: ':',
-  }).catch(e => {
+  }).catch((e) => {
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
   })
 })
@@ -434,7 +434,7 @@ test('all selectors in a rule must contain classes', () => {
       },
     },
     separator: ':',
-  }).catch(e => {
+  }).catch((e) => {
     expect(e).toMatchObject({ name: 'CssSyntaxError' })
   })
 })

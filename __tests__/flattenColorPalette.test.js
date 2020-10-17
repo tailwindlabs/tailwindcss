@@ -44,7 +44,7 @@ test('it flattens nested color objects', () => {
   })
 })
 
-test('it recusively flattens nested color objects', () => {
+test('it recursively flattens nested color objects', () => {
   expect(
     flattenColorPalette({
       brand: {

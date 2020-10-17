@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import escapeClassName from '../../src/util/escapeClassName'
 
-export default function(plugin, config) {
+export default function (plugin, config) {
   const addedUtilities = []
 
   const getConfigValue = (path, defaultValue) => _.get(config, path, defaultValue)
@@ -15,15 +15,6 @@ export default function(plugin, config) {
       }
 
       return getConfigValue(`variants.${path}`, defaultValue)
-    },
-    target: path => {
-      if (_.isString(config.target)) {
-        return config.target
-      }
-
-      const [defaultTarget, targetOverrides] = getConfigValue('target')
-
-      return _.get(targetOverrides, path, defaultTarget)
     },
     addUtilities(utilities, variants) {
       addedUtilities.push([utilities, variants])

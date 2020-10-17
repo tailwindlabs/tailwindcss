@@ -1,6 +1,6 @@
 import buildSelectorVariant from '../util/buildSelectorVariant'
 
-export default function({ addVariant, config, postcss, prefix }) {
+export default function ({ addVariant, config, postcss, prefix }) {
   addVariant(
     'dark',
     ({ container, separator, modifySelectors }) => {
@@ -10,7 +10,7 @@ export default function({ addVariant, config, postcss, prefix }) {
 
       if (config('dark') === 'media') {
         const modified = modifySelectors(({ selector }) => {
-          return buildSelectorVariant(selector, 'dark', separator, message => {
+          return buildSelectorVariant(selector, 'dark', separator, (message) => {
             throw container.error(message)
           })
         })
@@ -25,13 +25,13 @@ export default function({ addVariant, config, postcss, prefix }) {
 
       if (config('dark') === 'class') {
         const modified = modifySelectors(({ selector }) => {
-          return buildSelectorVariant(selector, 'dark', separator, message => {
+          return buildSelectorVariant(selector, 'dark', separator, (message) => {
             throw container.error(message)
           })
         })
 
-        modified.walkRules(rule => {
-          rule.selectors = rule.selectors.map(selector => {
+        modified.walkRules((rule) => {
+          rule.selectors = rule.selectors.map((selector) => {
             return `${prefix('.dark')} ${selector}`
           })
         })
