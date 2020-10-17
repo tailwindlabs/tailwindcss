@@ -8,7 +8,7 @@ test('it flattens nested color objects', () => {
         25: 'rgba(255,255,255,.25)',
         50: 'rgba(255,255,255,.5)',
         75: 'rgba(255,255,255,.75)',
-        default: '#fff',
+        DEFAULT: '#fff',
       },
       red: {
         1: 'rgb(33,0,0)',

@@ -2,7 +2,6 @@ import path from 'path'
 import fs from 'fs'
 
 import _ from 'lodash'
-import postcss from 'postcss'
 
 import getModuleDependencies from './lib/getModuleDependencies'
 import registerConfigAsDependency from './lib/registerConfigAsDependency'
@@ -44,7 +43,7 @@ function resolveConfigPath(filePath) {
   }
 }
 
-const getConfigFunction = config => () => {
+const getConfigFunction = (config) => () => {
   if (_.isUndefined(config)) {
     return resolveConfig([...getAllConfigs(defaultConfig)])
   }
@@ -52,7 +51,7 @@ const getConfigFunction = config => () => {
   // Skip this if Jest is running: https://github.com/facebook/jest/pull/9841#issuecomment-621417584
   if (process.env.JEST_WORKER_ID === undefined) {
     if (!_.isObject(config)) {
-      getModuleDependencies(config).forEach(mdl => {
+      getModuleDependencies(config).forEach((mdl) => {
         delete require.cache[require.resolve(mdl.file)]
       })
     }
@@ -63,7 +62,7 @@ const getConfigFunction = config => () => {
   return resolveConfig([...getAllConfigs(configObject)])
 }
 
-const plugin = postcss.plugin('tailwind', config => {
+module.exports = function (config) {
   const plugins = []
   const resolvedConfigPath = resolveConfigPath(config)
 
@@ -71,11 +70,14 @@ const plugin = postcss.plugin('tailwind', config => {
     plugins.push(registerConfigAsDependency(resolvedConfigPath))
   }
 
-  return postcss([
-    ...plugins,
-    processTailwindFeatures(getConfigFunction(resolvedConfigPath || config)),
-    formatCSS,
-  ])
-})
+  return {
+    postcssPlugin: 'tailwindcss',
+    plugins: [
+      ...plugins,
+      processTailwindFeatures(getConfigFunction(resolvedConfigPath || config)),
+      formatCSS,
+    ],
+  }
+}
 
-module.exports = plugin
+module.exports.postcss = true

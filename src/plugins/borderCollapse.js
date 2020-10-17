@@ -1,5 +1,5 @@
-export default function() {
-  return function({ addUtilities, variants }) {
+export default function () {
+  return function ({ addUtilities, variants }) {
     addUtilities(
       {
         '.border-collapse': { 'border-collapse': 'collapse' },

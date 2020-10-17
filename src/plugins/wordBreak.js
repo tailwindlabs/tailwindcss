@@ -1,19 +1,27 @@
-export default function() {
-  return function({ addUtilities, variants }) {
+import { flagEnabled } from '../featureFlags'
+
+export default function () {
+  return function ({ addUtilities, variants, config }) {
     addUtilities(
       {
         '.break-normal': {
           'overflow-wrap': 'normal',
           'word-break': 'normal',
         },
-        '.break-words': { 'overflow-wrap': 'break-word' },
+        '.break-words': {
+          'overflow-wrap': 'break-word',
+        },
         '.break-all': { 'word-break': 'break-all' },
 
-        '.truncate': {
-          overflow: 'hidden',
-          'text-overflow': 'ellipsis',
-          'white-space': 'nowrap',
-        },
+        ...(!flagEnabled(config(), 'moveTruncateToTextOverflow')
+          ? {
+              '.truncate': {
+                overflow: 'hidden',
+                'text-overflow': 'ellipsis',
+                'white-space': 'nowrap',
+              },
+            }
+          : {}),
       },
       variants('wordBreak')
     )

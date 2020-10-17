@@ -1,9 +1,5 @@
-export default function() {
-  return function({ addUtilities, variants, target }) {
-    if (target('objectFit') === 'ie11') {
-      return
-    }
-
+export default function () {
+  return function ({ addUtilities, variants }) {
     addUtilities(
       {
         '.object-contain': { 'object-fit': 'contain' },

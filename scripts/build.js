@@ -15,16 +15,16 @@ function buildDistFile(filename, config = {}, outFilename = filename) {
           from: `./${filename}.css`,
           to: `./dist/${outFilename}.css`,
         })
-        .then(result => {
+        .then((result) => {
           fs.writeFileSync(`./dist/${outFilename}.css`, result.css)
           return result
         })
-        .then(result => {
+        .then((result) => {
           const minified = new CleanCSS().minify(result.css)
           fs.writeFileSync(`./dist/${outFilename}.min.css`, minified.styles)
         })
         .then(resolve)
-        .catch(error => {
+        .catch((error) => {
           console.log(error)
           reject()
         })

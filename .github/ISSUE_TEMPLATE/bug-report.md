@@ -19,7 +19,10 @@ assignees: ''
 
 <!--
 
-  Please provide a link to a GitHub repository that reliably reproduces the issue
-  with the least amount of extraneous code possible.
+  Please create a reproduction on https://play.tailwindcss.com or link to a GitHub
+  repository that reliably reproduces the issue with the least amount of extraneous
+  code possible.
+  
+  We can't help you without a reproduction.
 
 -->
