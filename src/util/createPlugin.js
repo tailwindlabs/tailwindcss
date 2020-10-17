@@ -15,6 +15,11 @@ createPlugin.withOptions = function (pluginFunction, configFunction = () => ({})
 
   optionsFunction.__isOptionsFunction = true
 
+  // Expose plugin dependencies so that `object-hash` returns a different
+  // value if anything here changes, to ensure a rebuild is triggered.
+  optionsFunction.__pluginFunction = pluginFunction
+  optionsFunction.__configFunction = configFunction
+
   return optionsFunction
 }
 
