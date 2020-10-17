@@ -8,7 +8,7 @@ test('it flattens nested color objects', () => {
         25: 'rgba(255,255,255,.25)',
         50: 'rgba(255,255,255,.5)',
         75: 'rgba(255,255,255,.75)',
-        default: '#fff',
+        DEFAULT: '#fff',
       },
       red: {
         1: 'rgb(33,0,0)',
@@ -49,23 +49,23 @@ test('it recusively flattens nested color objects', () => {
     flattenColorPalette({
       brand: {
         primary: {
-          default: 'rgb(100,0,0)',
+          DEFAULT: 'rgb(100,0,0)',
           50: 'rgba(100,0,0,.5)',
         },
       },
       theme: {
         default: {
           background: {
-            default: 'rgb(0,0,0)',
+            DEFAULT: 'rgb(0,0,0)',
             50: 'rgba(0,0,0,.5)',
           },
         },
         'not-default': {
           background: {
-            default: 'rgb(255,255,255)',
+            DEFAULT: 'rgb(255,255,255)',
             50: 'rgba(255,255,255,.5)',
             'keep-going': {
-              default: 'rgb(128,128,128)',
+              DEFAULT: 'rgb(128,128,128)',
               50: 'rgba(128,128,128,.5)',
             },
           },

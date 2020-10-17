@@ -63,16 +63,16 @@ test('it creates background-image utilities recusively', () => {
         theme: {
           default: {
             background: {
-              default: 'url("./theme-default-background.png")',
+              DEFAULT: 'url("./theme-default-background.png")',
               alt: 'url("./theme-default-background-alt.png")',
             },
           },
           'not-default': {
             background: {
-              default: 'url("./theme-not-default-background.png")',
+              DEFAULT: 'url("./theme-not-default-background.png")',
               alt: 'url("./theme-not-default-background-alt.png")',
               'keep-going': {
-                default: 'url("./theme-not-default-background-keep-going.png")',
+                DEFAULT: 'url("./theme-not-default-background-keep-going.png")',
                 alt: 'url("./theme-not-default-background-keep-going-alt.png")',
               },
             },
