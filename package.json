@@ -65,7 +65,7 @@
     "node-emoji": "^1.8.1",
     "object-hash": "^2.0.3",
     "postcss-functions": "^3.0.0",
-    "postcss-js": "^2.0.0",
+    "postcss-js": "^3.0.1",
     "postcss-nested": "^4.1.1",
     "postcss-selector-parser": "^6.0.4",
     "postcss-value-parser": "^4.1.0",
