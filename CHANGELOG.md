@@ -10,10 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added `overflow-ellipsis` and `overflow-clip` utilities ([#1289](https://github.com/tailwindlabs/tailwindcss/pull/1289))
-- Move `truncate` class to `textOverflow` core plugin ([#2562](https://github.com/tailwindlabs/tailwindcss/pull/2562))
 
 ### Changed
 
+- Move `truncate` class to `textOverflow` core plugin ([#2562](https://github.com/tailwindlabs/tailwindcss/pull/2562))
 - Removed `target` feature and dropped any compatibility with IE 11 ([#2571](https://github.com/tailwindlabs/tailwindcss/pull/2571))
 - Switch `normalize.css` to `modern-normalize` ([#2572](https://github.com/tailwindlabs/tailwindcss/pull/2572))
 - Remove `scrolling-touch` and `scrolling-auto` utilities ([#2573](https://github.com/tailwindlabs/tailwindcss/pull/2573))
@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modernize default system font stacks ([#1711](https://github.com/tailwindlabs/tailwindcss/pull/1711))
 - Upgrade to PurgeCSS 3.0
 - Upgrade to PostCSS 8.0
+- Use logical properties for `space` and `divide` utilities ([#1883](https://github.com/tailwindlabs/tailwindcss/pull/1883))
 
 ## [1.9.4]
 
