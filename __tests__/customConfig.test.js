@@ -17,7 +17,7 @@ test('it uses the values from the custom config file', () => {
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         .foo {
           color: blue;
@@ -52,7 +52,7 @@ test('custom config can be passed as an object', () => {
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         .foo {
           color: blue;
@@ -80,7 +80,7 @@ test('custom config path can be passed using `config` property in an object', ()
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         .foo {
           color: blue;
@@ -117,7 +117,7 @@ test('custom config can be passed under the `config` property', () => {
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         .foo {
           color: blue;
@@ -157,7 +157,7 @@ test('tailwind.config.js is picked up by default', () => {
         `,
         { from: undefined }
       )
-      .then(result => {
+      .then((result) => {
         expect(result.css).toMatchCss(`
           .foo {
             color: blue;
@@ -196,7 +196,7 @@ test('tailwind.config.js is picked up by default when passing an empty object', 
         `,
         { from: undefined }
       )
-      .then(result => {
+      .then((result) => {
         expect(result.css).toMatchCss(`
           .foo {
             color: blue;
@@ -221,7 +221,7 @@ test('the default config can be overridden using the presets key', () => {
               colors: {
                 black: 'black',
               },
-              backgroundColor: theme => theme('colors'),
+              backgroundColor: (theme) => theme('colors'),
             },
           },
           corePlugins: ['backgroundColor'],
@@ -238,7 +238,7 @@ test('the default config can be overridden using the presets key', () => {
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         .bg-black {
           background-color: black;
@@ -278,7 +278,7 @@ test('presets can have their own presets', () => {
                 black: 'black',
                 red: '#ee0000',
               },
-              backgroundColor: theme => theme('colors'),
+              backgroundColor: (theme) => theme('colors'),
             },
           },
           corePlugins: ['backgroundColor'],
@@ -295,7 +295,7 @@ test('presets can have their own presets', () => {
       `,
       { from: undefined }
     )
-    .then(result => {
+    .then((result) => {
       const expected = `
         .bg-transparent {
           background-color: transparent;

@@ -20,7 +20,7 @@ function buildError(root, theme, path) {
 
   if (typeof closestValue === 'object') {
     message += `Valid keys for "${closestPath}" are: ${Object.keys(closestValue)
-      .map(k => `"${k}"`)
+      .map((k) => `"${k}"`)
       .join(', ')}`
   } else {
     message += `"${closestPath}" exists but is not an object.`
@@ -39,8 +39,8 @@ function defaultTransform(value) {
   return Array.isArray(value) ? value.join(', ') : value
 }
 
-export default function(config) {
-  return root =>
+export default function (config) {
+  return (root) =>
     functions({
       functions: {
         theme: (path, ...defaultValue) => {
@@ -50,7 +50,7 @@ export default function(config) {
             throw buildError(root, config.theme, trimmedPath)
           }
 
-          return _.thru(_.get(config.theme, trimmedPath, defaultValue), value => {
+          return _.thru(_.get(config.theme, trimmedPath, defaultValue), (value) => {
             const [themeSection] = trimmedPath.split('.')
 
             return _.get(themeTransforms, themeSection, defaultTransform)(value)

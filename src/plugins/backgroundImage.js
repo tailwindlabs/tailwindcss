@@ -1,16 +1,12 @@
 import _ from 'lodash'
-import usesCustomProperties from '../util/usesCustomProperties'
+import nameClass from '../util/nameClass'
 
-export default function() {
-  return function({ addUtilities, e, theme, variants, target }) {
+export default function () {
+  return function ({ addUtilities, theme, variants }) {
     const utilities = _.fromPairs(
       _.map(theme('backgroundImage'), (value, modifier) => {
-        if (target('backgroundImage') === 'ie11' && usesCustomProperties(value)) {
-          return []
-        }
-
         return [
-          `.${e(`bg-${modifier}`)}`,
+          nameClass('bg', modifier),
           {
             'background-image': value,
           },

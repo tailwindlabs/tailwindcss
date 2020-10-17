@@ -1,3 +1,3 @@
-export default function(importantVal, selector) {
+export default function (importantVal, selector) {
   return `${importantVal} ${selector}`
 }

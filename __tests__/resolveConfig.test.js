@@ -427,8 +427,8 @@ test('functions in the default theme section are lazily evaluated', () => {
         magenta: 'magenta',
         yellow: 'yellow',
       },
-      backgroundColors: theme => theme('colors'),
-      textColors: theme => theme('colors'),
+      backgroundColors: (theme) => theme('colors'),
+      textColors: (theme) => theme('colors'),
     },
     variants: {
       backgroundColors: ['responsive', 'hover', 'focus'],
@@ -474,11 +474,11 @@ test('functions in the user theme section are lazily evaluated', () => {
         green: 'green',
         blue: 'blue',
       },
-      backgroundColors: theme => ({
+      backgroundColors: (theme) => ({
         ...theme('colors'),
         customBackground: '#bada55',
       }),
-      textColors: theme => ({
+      textColors: (theme) => ({
         ...theme('colors'),
         customText: '#facade',
       }),
@@ -566,7 +566,7 @@ test('theme values in the extend section extend the existing theme', () => {
         '50': '.5',
         '100': '1',
       },
-      backgroundColors: theme => theme('colors'),
+      backgroundColors: (theme) => theme('colors'),
     },
     variants: {
       backgroundColors: ['responsive', 'hover', 'focus'],
@@ -615,7 +615,7 @@ test('theme values in the extend section extend the user theme', () => {
         '20': '.2',
         '40': '.4',
       },
-      height: theme => theme('width'),
+      height: (theme) => theme('width'),
       extend: {
         opacity: {
           '60': '.6',
@@ -723,7 +723,7 @@ test('theme values in the extend section can extend values that are depended on 
         magenta: 'magenta',
         yellow: 'yellow',
       },
-      backgroundColors: theme => theme('colors'),
+      backgroundColors: (theme) => theme('colors'),
     },
     variants: {
       backgroundColors: ['responsive', 'hover', 'focus'],
@@ -828,7 +828,7 @@ test('the theme function can use a default value if the key is missing', () => {
         magenta: 'magenta',
         yellow: 'yellow',
       },
-      borderColor: theme => ({
+      borderColor: (theme) => ({
         default: theme('colors.gray', 'currentColor'),
         ...theme('colors'),
       }),
@@ -866,15 +866,15 @@ test('the theme function can use a default value if the key is missing', () => {
 test('the theme function can resolve function values', () => {
   const userConfig = {
     theme: {
-      textColor: theme => ({
+      textColor: (theme) => ({
         lime: 'lime',
         ...theme('colors'),
       }),
-      backgroundColor: theme => ({
+      backgroundColor: (theme) => ({
         orange: 'orange',
         ...theme('textColor'),
       }),
-      borderColor: theme => theme('backgroundColor'),
+      borderColor: (theme) => theme('backgroundColor'),
     },
   }
 
@@ -938,7 +938,7 @@ test('the theme function can resolve function values', () => {
 test('the theme function can resolve deep function values', () => {
   const userConfig = {
     theme: {
-      minWidth: theme => ({
+      minWidth: (theme) => ({
         '1/3': theme('width.1/3'),
       }),
     },
@@ -952,7 +952,7 @@ test('the theme function can resolve deep function values', () => {
       spacing: {
         '0': '0',
       },
-      width: theme => ({
+      width: (theme) => ({
         ...theme('spacing'),
         '1/3': '33.33333%',
       }),
@@ -1000,7 +1000,7 @@ test('theme values in the extend section are lazily evaluated', () => {
         colors: {
           orange: 'orange',
         },
-        borderColor: theme => ({
+        borderColor: (theme) => ({
           foo: theme('colors.orange'),
           bar: theme('colors.red'),
         }),
@@ -1018,7 +1018,7 @@ test('theme values in the extend section are lazily evaluated', () => {
         magenta: 'magenta',
         yellow: 'yellow',
       },
-      borderColor: theme => ({
+      borderColor: (theme) => ({
         default: theme('colors.yellow', 'currentColor'),
         ...theme('colors'),
       }),
@@ -1060,7 +1060,7 @@ test('theme values in the extend section are lazily evaluated', () => {
 test('lazily evaluated values have access to the config utils', () => {
   const userConfig = {
     theme: {
-      inset: theme => theme('margin'),
+      inset: (theme) => theme('margin'),
       shift: (theme, { negative }) => ({
         ...theme('spacing'),
         ...negative(theme('spacing')),
@@ -1296,7 +1296,7 @@ test('more than two config objects can be resolved', () => {
         backgroundColor: {
           customBackgroundTwo: '#facade',
         },
-        textDecorationColor: theme => theme('colors'),
+        textDecorationColor: (theme) => theme('colors'),
       },
     },
   }
@@ -1335,7 +1335,7 @@ test('more than two config objects can be resolved', () => {
       colors: {
         blue: 'blue',
       },
-      backgroundColor: theme => theme('colors'),
+      backgroundColor: (theme) => theme('colors'),
     },
     variants: {
       backgroundColor: ['responsive', 'hover', 'focus'],
@@ -1821,7 +1821,7 @@ test('core plugin configuration builds on the default list when starting with an
     separator: ':',
     theme: {},
     variants: {},
-    corePlugins: corePluginList.filter(c => c !== 'display'),
+    corePlugins: corePluginList.filter((c) => c !== 'display'),
   })
 })
 

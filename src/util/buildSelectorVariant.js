@@ -4,8 +4,8 @@ import { useMemo } from './useMemo'
 
 const buildSelectorVariant = useMemo(
   (selector, variantName, separator, onError = () => {}) => {
-    return parser(selectors => {
-      tap(selectors.first.filter(({ type }) => type === 'class').pop(), classSelector => {
+    return parser((selectors) => {
+      tap(selectors.first.filter(({ type }) => type === 'class').pop(), (classSelector) => {
         if (classSelector === undefined) {
           onError('Variant cannot be generated because selector contains no classes.')
           return
