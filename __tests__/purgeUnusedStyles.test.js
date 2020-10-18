@@ -389,30 +389,6 @@ test('you can purge just base and component layers (but why)', () => {
   )
 })
 
-test('does not purge components when mode is conservative', () => {
-  return inProduction(
-    suppressConsoleLogs(() => {
-      const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
-      const input = fs.readFileSync(inputPath, 'utf8')
-
-      return postcss([
-        tailwind({
-          ...config,
-          purge: {
-            mode: 'conservative',
-            content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
-          },
-        }),
-      ])
-        .process(input, { from: inputPath })
-        .then((result) => {
-          expect(result.css).toContain('.container')
-          assertPurged(result)
-        })
-    })
-  )
-})
-
 test('extra purgecss control comments can be added manually', () => {
   return inProduction(
     suppressConsoleLogs(() => {
@@ -631,52 +607,6 @@ test(
       })
   })
 )
-
-test('the `conservative` mode can be set explicitly', () => {
-  return inProduction(
-    suppressConsoleLogs(() => {
-      const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
-      const input = fs.readFileSync(inputPath, 'utf8')
-
-      return postcss([
-        tailwind({
-          ...config,
-          purge: {
-            mode: 'conservative',
-            content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
-          },
-        }),
-      ])
-        .process(input, { from: inputPath })
-        .then((result) => {
-          expect(result.css).not.toContain('.bg-red-600')
-          expect(result.css).not.toContain('.w-1\\/3')
-          expect(result.css).not.toContain('.flex')
-          expect(result.css).not.toContain('.font-sans')
-          expect(result.css).not.toContain('.text-right')
-          expect(result.css).not.toContain('.px-4')
-          expect(result.css).not.toContain('.h-full')
-
-          expect(result.css).toContain('.bg-red-500')
-          expect(result.css).toContain('.md\\:bg-blue-300')
-          expect(result.css).toContain('.w-1\\/2')
-          expect(result.css).toContain('.block')
-          expect(result.css).toContain('.md\\:flow-root')
-          expect(result.css).toContain('.h-screen')
-          expect(result.css).toContain('.min-h-\\(screen-4\\)')
-          expect(result.css).toContain('.bg-black\\!')
-          expect(result.css).toContain('.font-\\%\\#\\$\\@')
-          expect(result.css).toContain('.w-\\(1\\/2\\+8\\)')
-          expect(result.css).toContain('.inline-grid')
-          expect(result.css).toContain('.grid-cols-3')
-          expect(result.css).toContain('.px-1\\.5')
-          expect(result.css).toContain('.col-span-2')
-          expect(result.css).toContain('.col-span-1')
-          expect(result.css).toContain('.text-center')
-        })
-    })
-  )
-})
 
 test('element selectors are preserved by default', () => {
   return inProduction(
