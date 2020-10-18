@@ -14674,6 +14674,12 @@ video {
   --text-opacity: 1 !important;
 }
 
+.truncate {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
 .overflow-ellipsis {
   text-overflow: ellipsis !important;
 }
@@ -14900,12 +14906,6 @@ video {
 
 .break-all {
   word-break: break-all !important;
-}
-
-.truncate {
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
 }
 
 .w-0 {
@@ -32022,6 +32022,12 @@ video {
     --text-opacity: 1 !important;
   }
 
+  .sm\:truncate {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
   .sm\:overflow-ellipsis {
     text-overflow: ellipsis !important;
   }
@@ -32248,12 +32254,6 @@ video {
 
   .sm\:break-all {
     word-break: break-all !important;
-  }
-
-  .sm\:truncate {
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
   }
 
   .sm\:w-0 {
@@ -49340,6 +49340,12 @@ video {
     --text-opacity: 1 !important;
   }
 
+  .md\:truncate {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
   .md\:overflow-ellipsis {
     text-overflow: ellipsis !important;
   }
@@ -49566,12 +49572,6 @@ video {
 
   .md\:break-all {
     word-break: break-all !important;
-  }
-
-  .md\:truncate {
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
   }
 
   .md\:w-0 {
@@ -66658,6 +66658,12 @@ video {
     --text-opacity: 1 !important;
   }
 
+  .lg\:truncate {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
   .lg\:overflow-ellipsis {
     text-overflow: ellipsis !important;
   }
@@ -66884,12 +66890,6 @@ video {
 
   .lg\:break-all {
     word-break: break-all !important;
-  }
-
-  .lg\:truncate {
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
   }
 
   .lg\:w-0 {
@@ -83976,6 +83976,12 @@ video {
     --text-opacity: 1 !important;
   }
 
+  .xl\:truncate {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
   .xl\:overflow-ellipsis {
     text-overflow: ellipsis !important;
   }
@@ -84202,12 +84208,6 @@ video {
 
   .xl\:break-all {
     word-break: break-all !important;
-  }
-
-  .xl\:truncate {
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
   }
 
   .xl\:w-0 {
