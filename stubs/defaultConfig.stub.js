@@ -284,8 +284,8 @@ module.exports = {
       '6xl': ['4rem', { lineHeight: '1' }],
     },
     fontWeight: {
-      hairline: '100',
-      thin: '200',
+      thin: '100',
+      extralight: '200',
       light: '300',
       normal: '400',
       medium: '500',
