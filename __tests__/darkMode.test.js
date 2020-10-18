@@ -3,26 +3,10 @@ import tailwind from '../src/index'
 import createPlugin from '../src/util/createPlugin'
 
 function run(input, config = {}) {
-  return postcss([tailwind({ experimental: { darkModeVariant: true }, ...config })]).process(
-    input,
-    { from: undefined }
-  )
+  return postcss([tailwind(config)]).process(input, { from: undefined })
 }
 
-test('dark mode variants cannot be generated without enabling the dark mode experiment', () => {
-  const input = `
-    @variants dark {
-      .text-red {
-        color: red;
-      }
-    }
-  `
-
-  expect.assertions(1)
-  return expect(run(input, { experimental: {} })).rejects.toThrow()
-})
-
-test('user-defined dark mode variants do not stack when the dark mode experiment is disabled', () => {
+test('user-defined dark mode variants do not stack', () => {
   const input = `
     @variants dark, hover {
       .text-red {
@@ -53,7 +37,7 @@ test('user-defined dark mode variants do not stack when the dark mode experiment
 
   expect.assertions(2)
 
-  return postcss([tailwind({ experimental: { darkModeVariant: false }, plugins: [userPlugin] })])
+  return postcss([tailwind({ plugins: [userPlugin] })])
     .process(input, { from: undefined })
     .then((result) => {
       expect(result.css).toMatchCss(expected)
