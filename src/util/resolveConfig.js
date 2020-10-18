@@ -220,6 +220,11 @@ export default function resolveConfig(configs) {
       corePlugins: resolveCorePlugins(allConfigs.map((c) => c.corePlugins)),
       plugins: resolvePluginLists(configs.map((c) => get(c, 'plugins', []))),
     },
-    ...allConfigs
+    ...allConfigs,
+    {
+      prefix: '',
+      important: false,
+      separator: ':',
+    }
   )
 }
