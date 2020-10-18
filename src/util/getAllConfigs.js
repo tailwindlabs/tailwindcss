@@ -1,6 +1,5 @@
 import defaultConfig from '../../stubs/defaultConfig.stub.js'
 import { flagEnabled } from '../featureFlags'
-import uniformColorPalette from '../flagged/uniformColorPalette.js'
 import extendedSpacingScale from '../flagged/extendedSpacingScale.js'
 import extendedFontSizeScale from '../flagged/extendedFontSizeScale.js'
 import additionalBreakpoint from '../flagged/additionalBreakpoint'
@@ -12,7 +11,6 @@ export default function getAllConfigs(config, defaultPresets = [defaultConfig]) 
   })
 
   const features = {
-    uniformColorPalette,
     extendedSpacingScale,
     extendedFontSizeScale,
     additionalBreakpoint,
