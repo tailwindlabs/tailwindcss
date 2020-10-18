@@ -273,7 +273,7 @@ function processApplyAtRules(css, lookupTree, config) {
 
 let defaultTailwindTree = null
 
-export default function applyComplexClasses(config, getProcessedPlugins, configChanged) {
+export default function substituteClassApplyAtRules(config, getProcessedPlugins, configChanged) {
   return function (css) {
     // We can stop already when we don't have any @apply rules. Vue users: you're welcome!
     if (!hasAtRule(css, 'apply')) {
