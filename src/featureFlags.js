@@ -8,7 +8,6 @@ const featureFlags = {
     'uniformColorPalette',
     'extendedSpacingScale',
     'extendedFontSizeScale',
-    'darkModeVariant',
     'additionalBreakpoint',
   ],
 }
