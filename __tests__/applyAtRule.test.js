@@ -4,9 +4,7 @@ import defaultConfig from '../stubs/defaultConfig.stub.js'
 import tailwind from '../src/index'
 
 function run(input, config = {}) {
-  return postcss([
-    tailwind({ experimental: { applyComplexClasses: true }, ...config }),
-  ]).process(input, { from: undefined })
+  return postcss([tailwind(config)]).process(input, { from: undefined })
 }
 
 test('it copies class declarations into itself', () => {
