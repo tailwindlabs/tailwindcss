@@ -5,10 +5,10 @@ test('generating space utilities', () => {
   const config = {
     theme: {
       space: {
-        '0': '0',
-        '1': '1px',
-        '2': '2px',
-        '4': '4px',
+        0: '0',
+        1: '1px',
+        2: '2px',
+        4: '4px',
         '-2': '-2px',
         '-1': '-1px',
       },

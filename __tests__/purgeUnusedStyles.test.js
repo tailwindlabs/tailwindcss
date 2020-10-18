@@ -45,7 +45,7 @@ const config = {
         'black!': '#000',
       },
       spacing: {
-        '1.5': '0.375rem',
+        1.5: '0.375rem',
         '(1/2+8)': 'calc(50% + 2rem)',
       },
       minHeight: {

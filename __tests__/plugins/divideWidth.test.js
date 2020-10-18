@@ -6,9 +6,9 @@ test('generating divide width utilities', () => {
     theme: {
       divideWidth: {
         DEFAULT: '1px',
-        '0': '0',
-        '2': '2px',
-        '4': '4px',
+        0: '0',
+        2: '2px',
+        4: '4px',
       },
     },
     variants: {
