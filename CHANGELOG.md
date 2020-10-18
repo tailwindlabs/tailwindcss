@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added `overflow-ellipsis` and `overflow-clip` utilities ([#1289](https://github.com/tailwindlabs/tailwindcss/pull/1289))
+- Add `transform-gpu` to force hardware acceleration on transforms when beneficial ([#1380](https://github.com/tailwindlabs/tailwindcss/pull/1380))
+- Promote all previous experimental/future features to stable/default ([#2609](https://github.com/tailwindlabs/tailwindcss/pull/2609))
+- Extend default grid to 16 columns, include fractional sizes in 16ths in spacing scale *(useful for 16x9 aspect ratio situations)* ([559bf9589](https://github.com/tailwindlabs/tailwindcss/pull/2609/commits/559bf9589821ccf0773d4d727a6523028736ad91#diff-d65cc1efb133c1202d14550da74ce17790b33ca9c27dec2a4ce64603d606dca0))
 
 ### Changed
 
