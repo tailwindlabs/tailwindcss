@@ -89,6 +89,7 @@
     ]
   },
   "jest": {
+    "testTimeout": 30000,
     "setupFilesAfterEnv": [
       "<rootDir>/jest/customMatchers.js"
     ],
