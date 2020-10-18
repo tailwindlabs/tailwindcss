@@ -10,6 +10,7 @@ describe('cli', () => {
   const customConfigPath = path.resolve(__dirname, 'fixtures/custom-config.js')
   const defaultConfigFixture = utils.readFile(constants.defaultConfigStubFile)
   const simpleConfigFixture = utils.readFile(constants.simpleConfigStubFile)
+  const defaultPostCssConfigFixture = utils.readFile(constants.defaultPostCssConfigStubFile)
 
   beforeEach(() => {
     console.log = jest.fn()
@@ -21,6 +22,17 @@ describe('cli', () => {
       return runInTempDirectory(() => {
         return cli(['init']).then(() => {
           expect(utils.readFile(constants.defaultConfigFile)).toEqual(simpleConfigFixture)
+        })
+      })
+    })
+
+    it('creates a Tailwind config file and a postcss.config.js file', () => {
+      return runInTempDirectory(() => {
+        return cli(['init', '-p']).then(() => {
+          expect(utils.readFile(constants.defaultConfigFile)).toEqual(simpleConfigFixture)
+          expect(utils.readFile(constants.defaultPostCssConfigFile)).toEqual(
+            defaultPostCssConfigFixture
+          )
         })
       })
     })
@@ -43,9 +55,17 @@ describe('cli', () => {
   })
 
   describe('build', () => {
-    it('compiles CSS file', () => {
+    it('compiles CSS file using an input css file', () => {
       return cli(['build', inputCssPath]).then(() => {
         expect(process.stdout.write.mock.calls[0][0]).toContain('.example')
+      })
+    })
+
+    it('compiles CSS file without an input css file', () => {
+      return cli(['build']).then(() => {
+        expect(process.stdout.write.mock.calls[0][0]).toContain('normalize.css') // base
+        expect(process.stdout.write.mock.calls[0][0]).toContain('.container') // components
+        expect(process.stdout.write.mock.calls[0][0]).toContain('.mx-auto') // utilities
       })
     })
 

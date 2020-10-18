@@ -1,5 +1,5 @@
-export default function() {
-  return function({ addUtilities, variants }) {
+export default function () {
+  return function ({ addUtilities, variants }) {
     addUtilities(
       {
         '.block': {
@@ -16,9 +16,6 @@ export default function() {
         },
         '.inline-flex': {
           display: 'inline-flex',
-        },
-        '.grid': {
-          display: 'grid',
         },
         '.table': {
           display: 'table',
@@ -46,6 +43,18 @@ export default function() {
         },
         '.table-row': {
           display: 'table-row',
+        },
+        '.flow-root': {
+          display: 'flow-root',
+        },
+        '.grid': {
+          display: 'grid',
+        },
+        '.inline-grid': {
+          display: 'inline-grid',
+        },
+        '.contents': {
+          display: 'contents',
         },
         '.hidden': {
           display: 'none',

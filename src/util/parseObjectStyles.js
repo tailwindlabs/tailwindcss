@@ -8,7 +8,7 @@ export default function parseObjectStyles(styles) {
     return parseObjectStyles([styles])
   }
 
-  return _.flatMap(styles, style => {
+  return _.flatMap(styles, (style) => {
     return postcss([
       postcssNested({
         bubble: ['screen'],

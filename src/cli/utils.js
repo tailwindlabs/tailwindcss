@@ -12,7 +12,7 @@ import packageJson from '../../package.json'
  * @return {string[]}
  */
 export function parseCliParams(cliArgs) {
-  const firstOptionIndex = cliArgs.findIndex(cliArg => cliArg.startsWith('-'))
+  const firstOptionIndex = cliArgs.findIndex((cliArg) => cliArg.startsWith('-'))
 
   return firstOptionIndex > -1 ? cliArgs.slice(0, firstOptionIndex) : cliArgs
 }
@@ -28,9 +28,9 @@ export function parseCliOptions(cliArgs, optionMap = {}) {
   let options = {}
   let currentOption = []
 
-  cliArgs.forEach(cliArg => {
+  cliArgs.forEach((cliArg) => {
     const option = cliArg.startsWith('-') && trimStart(cliArg, '-').toLowerCase()
-    const resolvedOption = findKey(optionMap, aliases => aliases.includes(option))
+    const resolvedOption = findKey(optionMap, (aliases) => aliases.includes(option))
 
     if (resolvedOption) {
       currentOption = options[resolvedOption] || (options[resolvedOption] = [])

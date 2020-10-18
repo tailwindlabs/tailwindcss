@@ -1,3 +1,4 @@
+import { corePluginList } from '../src/corePluginList'
 import resolveConfig from '../src/util/resolveConfig'
 
 test('prefix key overrides default prefix', () => {
@@ -23,7 +24,7 @@ test('prefix key overrides default prefix', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: 'tw-',
     important: false,
     separator: ':',
@@ -63,7 +64,7 @@ test('important key overrides default important', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '',
     important: true,
     separator: ':',
@@ -103,7 +104,7 @@ test('important (selector) key overrides default important', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '',
     important: '#app',
     separator: ':',
@@ -143,7 +144,7 @@ test('separator key overrides default separator', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '',
     important: false,
     separator: '__',
@@ -200,7 +201,7 @@ test('theme key is merged instead of replaced', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -269,7 +270,7 @@ test('variants key is merged instead of replaced', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -339,7 +340,7 @@ test('a global variants list replaces the default', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -387,7 +388,7 @@ test('missing top level keys are pulled from the default config', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -426,8 +427,8 @@ test('functions in the default theme section are lazily evaluated', () => {
         magenta: 'magenta',
         yellow: 'yellow',
       },
-      backgroundColors: theme => theme('colors'),
-      textColors: theme => theme('colors'),
+      backgroundColors: (theme) => theme('colors'),
+      textColors: (theme) => theme('colors'),
     },
     variants: {
       backgroundColors: ['responsive', 'hover', 'focus'],
@@ -437,7 +438,7 @@ test('functions in the default theme section are lazily evaluated', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -473,11 +474,11 @@ test('functions in the user theme section are lazily evaluated', () => {
         green: 'green',
         blue: 'blue',
       },
-      backgroundColors: theme => ({
+      backgroundColors: (theme) => ({
         ...theme('colors'),
         customBackground: '#bada55',
       }),
-      textColors: theme => ({
+      textColors: (theme) => ({
         ...theme('colors'),
         customText: '#facade',
       }),
@@ -505,7 +506,7 @@ test('functions in the user theme section are lazily evaluated', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -565,7 +566,7 @@ test('theme values in the extend section extend the existing theme', () => {
         '50': '.5',
         '100': '1',
       },
-      backgroundColors: theme => theme('colors'),
+      backgroundColors: (theme) => theme('colors'),
     },
     variants: {
       backgroundColors: ['responsive', 'hover', 'focus'],
@@ -575,7 +576,7 @@ test('theme values in the extend section extend the existing theme', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -614,7 +615,7 @@ test('theme values in the extend section extend the user theme', () => {
         '20': '.2',
         '40': '.4',
       },
-      height: theme => theme('width'),
+      height: (theme) => theme('width'),
       extend: {
         opacity: {
           '60': '.6',
@@ -659,7 +660,7 @@ test('theme values in the extend section extend the user theme', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -722,7 +723,7 @@ test('theme values in the extend section can extend values that are depended on 
         magenta: 'magenta',
         yellow: 'yellow',
       },
-      backgroundColors: theme => theme('colors'),
+      backgroundColors: (theme) => theme('colors'),
     },
     variants: {
       backgroundColors: ['responsive', 'hover', 'focus'],
@@ -731,7 +732,7 @@ test('theme values in the extend section can extend values that are depended on 
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -789,7 +790,7 @@ test('theme values in the extend section are not deeply merged', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -827,7 +828,7 @@ test('the theme function can use a default value if the key is missing', () => {
         magenta: 'magenta',
         yellow: 'yellow',
       },
-      borderColor: theme => ({
+      borderColor: (theme) => ({
         default: theme('colors.gray', 'currentColor'),
         ...theme('colors'),
       }),
@@ -839,7 +840,7 @@ test('the theme function can use a default value if the key is missing', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -865,15 +866,15 @@ test('the theme function can use a default value if the key is missing', () => {
 test('the theme function can resolve function values', () => {
   const userConfig = {
     theme: {
-      textColor: theme => ({
+      textColor: (theme) => ({
         lime: 'lime',
         ...theme('colors'),
       }),
-      backgroundColor: theme => ({
+      backgroundColor: (theme) => ({
         orange: 'orange',
         ...theme('textColor'),
       }),
-      borderColor: theme => theme('backgroundColor'),
+      borderColor: (theme) => theme('backgroundColor'),
     },
   }
 
@@ -896,7 +897,7 @@ test('the theme function can resolve function values', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -937,7 +938,7 @@ test('the theme function can resolve function values', () => {
 test('the theme function can resolve deep function values', () => {
   const userConfig = {
     theme: {
-      minWidth: theme => ({
+      minWidth: (theme) => ({
         '1/3': theme('width.1/3'),
       }),
     },
@@ -951,7 +952,7 @@ test('the theme function can resolve deep function values', () => {
       spacing: {
         '0': '0',
       },
-      width: theme => ({
+      width: (theme) => ({
         ...theme('spacing'),
         '1/3': '33.33333%',
       }),
@@ -964,7 +965,7 @@ test('the theme function can resolve deep function values', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -999,7 +1000,7 @@ test('theme values in the extend section are lazily evaluated', () => {
         colors: {
           orange: 'orange',
         },
-        borderColor: theme => ({
+        borderColor: (theme) => ({
           foo: theme('colors.orange'),
           bar: theme('colors.red'),
         }),
@@ -1017,7 +1018,7 @@ test('theme values in the extend section are lazily evaluated', () => {
         magenta: 'magenta',
         yellow: 'yellow',
       },
-      borderColor: theme => ({
+      borderColor: (theme) => ({
         default: theme('colors.yellow', 'currentColor'),
         ...theme('colors'),
       }),
@@ -1029,7 +1030,7 @@ test('theme values in the extend section are lazily evaluated', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -1059,7 +1060,7 @@ test('theme values in the extend section are lazily evaluated', () => {
 test('lazily evaluated values have access to the config utils', () => {
   const userConfig = {
     theme: {
-      inset: theme => theme('margin'),
+      inset: (theme) => theme('margin'),
       shift: (theme, { negative }) => ({
         ...theme('spacing'),
         ...negative(theme('spacing')),
@@ -1094,7 +1095,7 @@ test('lazily evaluated values have access to the config utils', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -1225,7 +1226,7 @@ test('custom properties are multiplied by -1 for negative values', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -1295,7 +1296,7 @@ test('more than two config objects can be resolved', () => {
         backgroundColor: {
           customBackgroundTwo: '#facade',
         },
-        textDecorationColor: theme => theme('colors'),
+        textDecorationColor: (theme) => theme('colors'),
       },
     },
   }
@@ -1334,7 +1335,7 @@ test('more than two config objects can be resolved', () => {
       colors: {
         blue: 'blue',
       },
-      backgroundColor: theme => theme('colors'),
+      backgroundColor: (theme) => theme('colors'),
     },
     variants: {
       backgroundColor: ['responsive', 'hover', 'focus'],
@@ -1343,7 +1344,7 @@ test('more than two config objects can be resolved', () => {
 
   const result = resolveConfig([firstConfig, secondConfig, thirdConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '-',
     important: false,
     separator: ':',
@@ -1414,7 +1415,7 @@ test('plugin config modifications are applied', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: 'tw-',
     important: false,
     separator: ':',
@@ -1462,7 +1463,7 @@ test('user config takes precedence over plugin config modifications', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: 'user-',
     important: false,
     separator: ':',
@@ -1522,7 +1523,7 @@ test('plugin config can register plugins that also have config', () => {
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: 'tw-',
     important: true,
     separator: '__',
@@ -1577,7 +1578,7 @@ test('plugin configs take precedence over plugin configs registered by that plug
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: 'outer-',
     important: false,
     separator: ':',
@@ -1642,7 +1643,7 @@ test('plugin theme extensions are added even if user overrides top-level theme c
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '',
     important: false,
     separator: ':',
@@ -1713,7 +1714,7 @@ test('user theme extensions take precedence over plugin theme extensions with th
 
   const result = resolveConfig([userConfig, defaultConfig])
 
-  expect(result).toEqual({
+  expect(result).toMatchObject({
     prefix: '',
     important: false,
     separator: ':',
@@ -1734,5 +1735,154 @@ test('user theme extensions take precedence over plugin theme extensions with th
       borderColors: ['responsive', 'hover', 'focus'],
     },
     plugins: userConfig.plugins,
+  })
+})
+
+test('variants can be defined as a function', () => {
+  const userConfig = {
+    variants: {
+      backgroundColor: ({ variants }) => [...variants('backgroundColor'), 'disabled'],
+      padding: ({ before }) => before(['active']),
+      float: ({ before }) => before(['disabled'], 'focus'),
+      margin: ({ before }) => before(['hover'], 'focus'),
+      borderWidth: ({ after }) => after(['active']),
+      backgroundImage: ({ after }) => after(['disabled'], 'hover'),
+      opacity: ({ after }) => after(['hover'], 'focus'),
+      rotate: ({ without }) => without(['hover']),
+      cursor: ({ before, after, without }) =>
+        without(['responsive'], before(['checked'], 'hover', after(['hover'], 'focus'))),
+    },
+  }
+
+  const otherConfig = {
+    variants: {
+      backgroundColor: ({ variants }) => [...variants('backgroundColor'), 'active'],
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {
+      backgroundColor: ['responsive', 'hover', 'focus'],
+      padding: ['responsive', 'focus'],
+      float: ['responsive', 'hover', 'focus'],
+      margin: ['responsive'],
+      borderWidth: ['responsive', 'focus'],
+      backgroundImage: ['responsive', 'hover', 'focus'],
+      opacity: ['responsive'],
+      rotate: ['responsive', 'hover', 'focus'],
+      cursor: ['responsive', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, otherConfig, defaultConfig])
+
+  expect(result).toMatchObject({
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {
+      backgroundColor: ['responsive', 'hover', 'focus', 'active', 'disabled'],
+      padding: ['active', 'responsive', 'focus'],
+      float: ['responsive', 'hover', 'disabled', 'focus'],
+      margin: ['responsive', 'hover'],
+      borderWidth: ['responsive', 'focus', 'active'],
+      backgroundImage: ['responsive', 'hover', 'disabled', 'focus'],
+      opacity: ['hover', 'responsive'],
+      rotate: ['responsive', 'focus'],
+      cursor: ['focus', 'checked', 'hover'],
+    },
+  })
+})
+
+test('core plugin configuration builds on the default list when starting with an empty object', () => {
+  const userConfig = {
+    corePlugins: { display: false },
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {},
+    corePlugins: {},
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toMatchObject({
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {},
+    corePlugins: corePluginList.filter((c) => c !== 'display'),
+  })
+})
+
+test('core plugin configurations stack', () => {
+  const userConfig = {
+    corePlugins: { display: false },
+  }
+
+  const otherConfig = {
+    corePlugins: ({ corePlugins }) => {
+      return [...corePlugins, 'margin']
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {},
+    corePlugins: ['float', 'display', 'padding'],
+  }
+
+  const result = resolveConfig([userConfig, otherConfig, defaultConfig])
+
+  expect(result).toMatchObject({
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {},
+    corePlugins: ['float', 'padding', 'margin'],
+  })
+})
+
+test('plugins are merged', () => {
+  const userConfig = {
+    plugins: ['3'],
+  }
+
+  const otherConfig = {
+    plugins: ['2'],
+  }
+
+  const defaultConfig = {
+    plugins: ['1'],
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {},
+  }
+
+  const result = resolveConfig([userConfig, otherConfig, defaultConfig])
+
+  expect(result).toMatchObject({
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {},
+    plugins: ['1', '2', '3'],
   })
 })

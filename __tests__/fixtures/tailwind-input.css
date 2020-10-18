@@ -6,7 +6,7 @@
 
 @responsive {
   .example {
-    @apply .font-bold;
+    @apply font-bold;
     color: theme('colors.red.500');
   }
 }
