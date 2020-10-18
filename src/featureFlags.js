@@ -4,7 +4,7 @@ import log from './util/log'
 
 const featureFlags = {
   future: [],
-  experimental: ['extendedSpacingScale', 'extendedFontSizeScale', 'additionalBreakpoint'],
+  experimental: ['extendedFontSizeScale', 'additionalBreakpoint'],
 }
 
 export function flagEnabled(config, flag) {
