@@ -13330,6 +13330,12 @@ video {
   color: #702459;
 }
 
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .overflow-ellipsis {
   text-overflow: ellipsis;
 }
@@ -13556,12 +13562,6 @@ video {
 
 .break-all {
   word-break: break-all;
-}
-
-.truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .w-0 {
@@ -29334,6 +29334,12 @@ video {
     color: #702459;
   }
 
+  .sm\:truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .sm\:overflow-ellipsis {
     text-overflow: ellipsis;
   }
@@ -29560,12 +29566,6 @@ video {
 
   .sm\:break-all {
     word-break: break-all;
-  }
-
-  .sm\:truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .sm\:w-0 {
@@ -45308,6 +45308,12 @@ video {
     color: #702459;
   }
 
+  .md\:truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .md\:overflow-ellipsis {
     text-overflow: ellipsis;
   }
@@ -45534,12 +45540,6 @@ video {
 
   .md\:break-all {
     word-break: break-all;
-  }
-
-  .md\:truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .md\:w-0 {
@@ -61282,6 +61282,12 @@ video {
     color: #702459;
   }
 
+  .lg\:truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .lg\:overflow-ellipsis {
     text-overflow: ellipsis;
   }
@@ -61508,12 +61514,6 @@ video {
 
   .lg\:break-all {
     word-break: break-all;
-  }
-
-  .lg\:truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .lg\:w-0 {
@@ -77256,6 +77256,12 @@ video {
     color: #702459;
   }
 
+  .xl\:truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .xl\:overflow-ellipsis {
     text-overflow: ellipsis;
   }
@@ -77482,12 +77488,6 @@ video {
 
   .xl\:break-all {
     word-break: break-all;
-  }
-
-  .xl\:truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .xl\:w-0 {
