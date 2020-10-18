@@ -1,10 +1,12 @@
 import postcss from 'postcss'
 import plugin from '../src/lib/substituteVariantsAtRules'
 import processPlugins from '../src/util/processPlugins'
+import resolveConfig from '../src/util/resolveConfig'
 import config from '../stubs/defaultConfig.stub.js'
 
 function run(input, opts = config) {
-  return postcss([plugin(opts, processPlugins(opts.plugins, opts))]).process(input, {
+  const resolved = resolveConfig([opts])
+  return postcss([plugin(resolved, processPlugins(resolved.plugins, resolved))]).process(input, {
     from: undefined,
   })
 }

@@ -58,6 +58,8 @@ const config = {
   },
 }
 
+delete config.presets
+
 function assertPurged(result) {
   expect(result.css).not.toContain('.bg-red-600')
   expect(result.css).not.toContain('.w-1\\/3')
