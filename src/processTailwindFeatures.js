@@ -14,7 +14,7 @@ import purgeUnusedStyles from './lib/purgeUnusedStyles'
 import corePlugins from './corePlugins'
 import processPlugins from './util/processPlugins'
 import cloneNodes from './util/cloneNodes'
-import { issueFlagNotices, flagEnabled } from './featureFlags.js'
+import { issueFlagNotices } from './featureFlags.js'
 
 import hash from 'object-hash'
 import log from './util/log'
