@@ -1,4 +1,3 @@
-import { readFileSync } from 'fs-extra'
 import * as constants from '../../constants'
 import * as colors from '../colors'
 import * as emoji from '../emoji'
