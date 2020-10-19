@@ -1,16 +1,7 @@
 import _ from 'lodash'
 import functions from 'postcss-functions'
 import didYouMean from 'didyoumean'
-
-const themeTransforms = {
-  fontSize(value) {
-    return Array.isArray(value) ? value[0] : value
-  },
-}
-
-function defaultTransform(value) {
-  return Array.isArray(value) ? value.join(', ') : value
-}
+import transformThemeValue from '../util/transformThemeValue'
 
 function findClosestExistingPath(theme, path) {
   const parts = _.toPath(path)
@@ -113,7 +104,7 @@ function validatePath(config, path, defaultValue) {
 
   return {
     isValid: true,
-    value: _.get(themeTransforms, themeSection, defaultTransform)(value),
+    value: transformThemeValue(themeSection)(value),
   }
 }
 
@@ -122,13 +113,17 @@ export default function (config) {
     functions({
       functions: {
         theme: (path, ...defaultValue) => {
-          return _.thru(
-            validatePath(config, path, defaultValue.length ? defaultValue : undefined),
-            ({ isValid, value, error }) => {
-              if (isValid) return value
-              throw root.error(error)
-            }
+          const { isValid, value, error } = validatePath(
+            config,
+            path,
+            defaultValue.length ? defaultValue : undefined
           )
+
+          if (!isValid) {
+            throw root.error(error)
+          }
+
+          return value
         },
       },
     })(root)

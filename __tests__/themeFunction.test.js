@@ -70,7 +70,7 @@ test('a default value can be provided', () => {
 
 test('quotes are preserved around default values', () => {
   const input = `
-    .heading { font-family: theme('fonts.sans', "Helvetica Neue"); }
+    .heading { font-family: theme('fontFamily.sans', "Helvetica Neue"); }
   `
 
   const output = `
@@ -79,7 +79,7 @@ test('quotes are preserved around default values', () => {
 
   return run(input, {
     theme: {
-      fonts: {
+      fontFamily: {
         serif: 'Constantia',
       },
     },
@@ -91,7 +91,7 @@ test('quotes are preserved around default values', () => {
 
 test('an unquoted list is valid as a default value', () => {
   const input = `
-    .heading { font-family: theme('fonts.sans', Helvetica, Arial, sans-serif); }
+    .heading { font-family: theme('fontFamily.sans', Helvetica, Arial, sans-serif); }
   `
 
   const output = `
@@ -100,7 +100,7 @@ test('an unquoted list is valid as a default value', () => {
 
   return run(input, {
     theme: {
-      fonts: {
+      fontFamily: {
         serif: 'Constantia',
       },
     },
@@ -271,7 +271,112 @@ test('font sizes are retrieved without default line-heights or letter-spacing', 
       },
     },
   }).then((result) => {
-    expect(result.css).toEqual(output)
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('outlines are retrieved without default outline-offset', () => {
+  const input = `
+    .element { outline: theme('outline.black'); }
+  `
+
+  const output = `
+    .element { outline: 2px dotted black; }
+  `
+
+  return run(input, {
+    theme: {
+      outline: {
+        black: ['2px dotted black', '4px'],
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('font-family values are joined when an array', () => {
+  const input = `
+    .element { font-family: theme('fontFamily.sans'); }
+  `
+
+  const output = `
+    .element { font-family: Helvetica, Arial, sans-serif; }
+  `
+
+  return run(input, {
+    theme: {
+      fontFamily: {
+        sans: ['Helvetica', 'Arial', 'sans-serif'],
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('box-shadow values are joined when an array', () => {
+  const input = `
+    .element { box-shadow: theme('boxShadow.wtf'); }
+  `
+
+  const output = `
+    .element { box-shadow: 0 0 2px black, 1px 2px 3px white; }
+  `
+
+  return run(input, {
+    theme: {
+      boxShadow: {
+        wtf: ['0 0 2px black', '1px 2px 3px white'],
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('transition-property values are joined when an array', () => {
+  const input = `
+    .element { transition-property: theme('transitionProperty.colors'); }
+  `
+
+  const output = `
+    .element { transition-property: color, fill; }
+  `
+
+  return run(input, {
+    theme: {
+      transitionProperty: {
+        colors: ['color', 'fill'],
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('transition-duration values are joined when an array', () => {
+  const input = `
+    .element { transition-duration: theme('transitionDuration.lol'); }
+  `
+
+  const output = `
+    .element { transition-duration: 1s, 2s; }
+  `
+
+  return run(input, {
+    theme: {
+      transitionDuration: {
+        lol: ['1s', '2s'],
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
 })

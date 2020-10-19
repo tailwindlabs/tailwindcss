@@ -8,6 +8,7 @@ import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
 import wrapWithVariants from '../util/wrapWithVariants'
 import cloneNodes from '../util/cloneNodes'
+import transformThemeValue from './transformThemeValue'
 
 function parseStyles(styles) {
   if (!Array.isArray(styles)) {
@@ -52,7 +53,12 @@ export default function (plugins, config) {
     handler({
       postcss,
       config: getConfigValue,
-      theme: (path, defaultValue) => getConfigValue(`theme.${path}`, defaultValue),
+      theme: (path, defaultValue) => {
+        const [pathRoot, ...subPaths] = _.toPath(path)
+        const value = getConfigValue(['theme', pathRoot, ...subPaths], defaultValue)
+
+        return transformThemeValue(pathRoot)(value)
+      },
       corePlugins: (path) => {
         if (Array.isArray(config.corePlugins)) {
           return config.corePlugins.includes(path)

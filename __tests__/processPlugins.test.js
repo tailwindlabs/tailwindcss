@@ -2050,3 +2050,375 @@ test('keyframes are not escaped', () => {
     }
   `)
 })
+
+test('font sizes are retrieved without default line-heights or letter-spacing using theme function', () => {
+  const { components } = processPlugins(
+    [
+      function ({ addComponents, theme }) {
+        addComponents({
+          '.foo': {
+            fontSize: theme('fontSize.sm'),
+          },
+        })
+      },
+    ],
+    makeConfig({
+      theme: {
+        fontSize: {
+          sm: ['14px', '20px'],
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants {
+        .foo {
+          font-size: 14px;
+        }
+      }
+    }
+  `)
+})
+
+test('outlines are retrieved without outline-offset using theme function', () => {
+  const { components } = processPlugins(
+    [
+      function ({ addComponents, theme }) {
+        addComponents({
+          '.foo': {
+            outline: theme('outline.black'),
+          },
+        })
+      },
+    ],
+    makeConfig({
+      theme: {
+        outline: {
+          black: ['2px dotted black', '4px'],
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants {
+        .foo {
+          outline: 2px dotted black;
+        }
+      }
+    }
+  `)
+})
+
+test('box-shadow values are joined when retrieved using the theme function', () => {
+  const { components } = processPlugins(
+    [
+      function ({ addComponents, theme }) {
+        addComponents({
+          '.foo': {
+            boxShadow: theme('boxShadow.lol'),
+          },
+        })
+      },
+    ],
+    makeConfig({
+      theme: {
+        boxShadow: {
+          lol: ['width', 'height'],
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants {
+        .foo {
+          box-shadow: width, height;
+        }
+      }
+    }
+  `)
+})
+
+test('transition-property values are joined when retrieved using the theme function', () => {
+  const { components } = processPlugins(
+    [
+      function ({ addComponents, theme }) {
+        addComponents({
+          '.foo': {
+            transitionProperty: theme('transitionProperty.lol'),
+          },
+        })
+      },
+    ],
+    makeConfig({
+      theme: {
+        transitionProperty: {
+          lol: ['width', 'height'],
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants {
+        .foo {
+          transition-property: width, height;
+        }
+      }
+    }
+  `)
+})
+
+test('transition-duration values are joined when retrieved using the theme function', () => {
+  const { components } = processPlugins(
+    [
+      function ({ addComponents, theme }) {
+        addComponents({
+          '.foo': {
+            transitionDuration: theme('transitionDuration.lol'),
+          },
+        })
+      },
+    ],
+    makeConfig({
+      theme: {
+        transitionDuration: {
+          lol: ['width', 'height'],
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants {
+        .foo {
+          transition-duration: width, height;
+        }
+      }
+    }
+  `)
+})
+
+test('transition-delay values are joined when retrieved using the theme function', () => {
+  const { components } = processPlugins(
+    [
+      function ({ addComponents, theme }) {
+        addComponents({
+          '.foo': {
+            transitionDelay: theme('transitionDelay.lol'),
+          },
+        })
+      },
+    ],
+    makeConfig({
+      theme: {
+        transitionDelay: {
+          lol: ['width', 'height'],
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants {
+        .foo {
+          transition-delay: width, height;
+        }
+      }
+    }
+  `)
+})
+
+test('transition-timing-function values are joined when retrieved using the theme function', () => {
+  const { components } = processPlugins(
+    [
+      function ({ addComponents, theme }) {
+        addComponents({
+          '.foo': {
+            transitionTimingFunction: theme('transitionTimingFunction.lol'),
+          },
+        })
+      },
+    ],
+    makeConfig({
+      theme: {
+        transitionTimingFunction: {
+          lol: ['width', 'height'],
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants {
+        .foo {
+          transition-timing-function: width, height;
+        }
+      }
+    }
+  `)
+})
+
+test('background-image values are joined when retrieved using the theme function', () => {
+  const { components } = processPlugins(
+    [
+      function ({ addComponents, theme }) {
+        addComponents({
+          '.foo': {
+            backgroundImage: theme('backgroundImage.lol'),
+          },
+        })
+      },
+    ],
+    makeConfig({
+      theme: {
+        backgroundImage: {
+          lol: ['width', 'height'],
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants {
+        .foo {
+          background-image: width, height;
+        }
+      }
+    }
+  `)
+})
+
+test('background-size values are joined when retrieved using the theme function', () => {
+  const { components } = processPlugins(
+    [
+      function ({ addComponents, theme }) {
+        addComponents({
+          '.foo': {
+            backgroundSize: theme('backgroundSize.lol'),
+          },
+        })
+      },
+    ],
+    makeConfig({
+      theme: {
+        backgroundSize: {
+          lol: ['width', 'height'],
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants {
+        .foo {
+          background-size: width, height;
+        }
+      }
+    }
+  `)
+})
+
+test('background-color values are joined when retrieved using the theme function', () => {
+  const { components } = processPlugins(
+    [
+      function ({ addComponents, theme }) {
+        addComponents({
+          '.foo': {
+            backgroundColor: theme('backgroundColor.lol'),
+          },
+        })
+      },
+    ],
+    makeConfig({
+      theme: {
+        backgroundColor: {
+          lol: ['width', 'height'],
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants {
+        .foo {
+          background-color: width, height;
+        }
+      }
+    }
+  `)
+})
+
+test('cursor values are joined when retrieved using the theme function', () => {
+  const { components } = processPlugins(
+    [
+      function ({ addComponents, theme }) {
+        addComponents({
+          '.foo': {
+            cursor: theme('cursor.lol'),
+          },
+        })
+      },
+    ],
+    makeConfig({
+      theme: {
+        cursor: {
+          lol: ['width', 'height'],
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants {
+        .foo {
+          cursor: width, height;
+        }
+      }
+    }
+  `)
+})
+
+test('animation values are joined when retrieved using the theme function', () => {
+  const { components } = processPlugins(
+    [
+      function ({ addComponents, theme }) {
+        addComponents({
+          '.foo': {
+            animation: theme('animation.lol'),
+          },
+        })
+      },
+    ],
+    makeConfig({
+      theme: {
+        animation: {
+          lol: ['width', 'height'],
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants {
+        .foo {
+          animation: width, height;
+        }
+      }
+    }
+  `)
+})
