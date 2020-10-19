@@ -110,6 +110,127 @@ test('an unquoted list is valid as a default value', () => {
   })
 })
 
+test('a missing root theme value throws', () => {
+  const input = `
+    .heading { color: theme('colours.gray.100'); }
+  `
+
+  return expect(
+    run(input, {
+      theme: {
+        colors: {
+          yellow: '#f7cc50',
+        },
+      },
+    })
+  ).rejects.toThrowError(
+    `'colours.gray.100' does not exist in your theme config. Your theme has the following top-level keys: 'colors'`
+  )
+})
+
+test('a missing nested theme property throws', () => {
+  const input = `
+    .heading { color: theme('colors.red'); }
+  `
+
+  return expect(
+    run(input, {
+      theme: {
+        colors: {
+          blue: 'blue',
+          yellow: '#f7cc50',
+        },
+      },
+    })
+  ).rejects.toThrowError(
+    `'colors.red' does not exist in your theme config. 'colors' has the following valid keys: 'blue', 'yellow'`
+  )
+})
+
+test('a missing nested theme property with a close alternative throws with a suggestion', () => {
+  const input = `
+    .heading { color: theme('colors.yellw'); }
+  `
+
+  return expect(
+    run(input, {
+      theme: {
+        colors: {
+          yellow: '#f7cc50',
+        },
+      },
+    })
+  ).rejects.toThrowError(
+    `'colors.yellw' does not exist in your theme config. Did you mean 'colors.yellow'?`
+  )
+})
+
+test('a path through a non-object throws', () => {
+  const input = `
+    .heading { color: theme('colors.yellow.100'); }
+  `
+
+  return expect(
+    run(input, {
+      theme: {
+        colors: {
+          yellow: '#f7cc50',
+        },
+      },
+    })
+  ).rejects.toThrowError(
+    `'colors.yellow.100' does not exist in your theme config. 'colors.yellow' is not an object.`
+  )
+})
+
+test('a path which exists but is not a string throws', () => {
+  const input = `
+    .heading { color: theme('colors.yellow'); }
+  `
+
+  return expect(
+    run(input, {
+      theme: {
+        colors: {
+          yellow: Symbol(),
+        },
+      },
+    })
+  ).rejects.toThrowError(`'colors.yellow' was found but does not resolve to a string.`)
+})
+
+test('a path which exists but is invalid throws', () => {
+  const input = `
+    .heading { color: theme('colors'); }
+  `
+
+  return expect(
+    run(input, {
+      theme: {
+        colors: {},
+      },
+    })
+  ).rejects.toThrowError(`'colors' was found but does not resolve to a string.`)
+})
+
+test('a path which is an object throws with a suggested key', () => {
+  const input = `
+    .heading { color: theme('colors'); }
+  `
+
+  return expect(
+    run(input, {
+      theme: {
+        colors: {
+          yellow: '#f7cc50',
+        },
+      },
+    })
+  ).rejects.toThrowError(
+    `'colors' was found but does not resolve to a string. Did you mean something like 'colors.yellow'?`
+  )
+})
+
 test('array values are joined by default', () => {
   const input = `
     .heading { font-family: theme('fontFamily.sans'); }
