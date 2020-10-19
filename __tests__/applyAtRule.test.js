@@ -887,6 +887,50 @@ describe('using apply with the prefix option', () => {
     })
   })
 
+  test('a "Did You Mean" suggestion is recommended if a similar class can be identified.', () => {
+    const input = `
+        .foo { @apply anti-aliased; }
+      `
+
+    const config = resolveConfig([
+      {
+        ...defaultConfig,
+      },
+    ])
+
+    expect.assertions(1)
+
+    return run(input, config).catch((e) => {
+      expect(e).toMatchObject({
+        name: 'CssSyntaxError',
+        reason:
+          "The `anti-aliased` class does not exist, but `antialiased` does. If you're sure that `anti-aliased` exists, make sure that any `@import` statements are being properly processed before Tailwind CSS sees your CSS, as `@apply` can only be used for classes in the same CSS tree.",
+      })
+    })
+  })
+
+  test('a "Did You Mean" suggestion is omitted if a similar class cannot be identified.', () => {
+    const input = `
+        .foo { @apply anteater; }
+      `
+
+    const config = resolveConfig([
+      {
+        ...defaultConfig,
+      },
+    ])
+
+    expect.assertions(1)
+
+    return run(input, config).catch((e) => {
+      expect(e).toMatchObject({
+        name: 'CssSyntaxError',
+        reason:
+          "The `anteater` class does not exist. If you're sure that `anteater` exists, make sure that any `@import` statements are being properly processed before Tailwind CSS sees your CSS, as `@apply` can only be used for classes in the same CSS tree.",
+      })
+    })
+  })
+
   test('you can apply classes with important and a prefix enabled', () => {
     const input = `
       .foo { @apply tw-mt-4; }
