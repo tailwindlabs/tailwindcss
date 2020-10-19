@@ -34,6 +34,7 @@ export function Code({
           tokens={t[1]}
           parentTypes={parentTypes}
           tokenComponent={TokenComponent}
+          tokenProps={tokenProps}
           transformTokens={transformTokens}
         />
       )

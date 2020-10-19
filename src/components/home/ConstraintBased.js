@@ -7,6 +7,130 @@ import { ReactComponent as Icon } from '@/img/icons/home/constraint-based.svg'
 import { siteConfig } from '@/utils/siteConfig'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
+import tokenize from '../../macros/tokenize.macro'
+
+const tokens = {
+  sizing: tokenize.html(`<ul class="space-y-4">
+  <li>
+    w-64
+    <div class="w-64 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+  </li>
+  <li>
+    w-56
+    <div class="w-56 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+  </li>
+  <li>
+    w-48
+    <div class="w-48 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+  </li>
+  <li>
+    w-40
+    <div class="w-40 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+  </li>
+  <li>
+    w-32
+    <div class="w-32 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+  </li>
+  <li>
+    w-24
+    <div class="w-24 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+  </li>
+  <li>
+    w-20
+    <div class="w-20 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+  </li>
+  <li>
+    w-16
+    <div class="w-16 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+  </li>
+  <li>
+    w-12
+    <div class="w-12 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+  </li>
+  <li>
+    w-10
+    <div class="w-10 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+  </li>
+</ul>`).tokens,
+  color: tokenize.html(`<ul class="space-y-2">
+  <li>
+    <ul class="-space-x-1">
+      <li class="bg-red-900 w-8 h-8 rounded-full"></li>
+      <li class="bg-red-800 w-8 h-8 rounded-full"></li>
+      <li class="bg-red-700 w-8 h-8 rounded-full"></li>
+      <li class="bg-red-600 w-8 h-8 rounded-full"></li>
+      <li class="bg-red-500 w-8 h-8 rounded-full"></li>
+      <li class="bg-red-400 w-8 h-8 rounded-full"></li>
+      <li class="bg-red-300 w-8 h-8 rounded-full"></li>
+      <li class="bg-red-200 w-8 h-8 rounded-full"></li>
+      <li class="bg-red-100 w-8 h-8 rounded-full"></li>
+      <li class="bg-red-50  w-8 h-8 rounded-full"></li>
+    </ul>
+  </li>
+  <li>
+    <ul class="-space-x-1">
+      <li class="bg-orange-900 w-8 h-8 rounded-full"></li>
+      <li class="bg-orange-800 w-8 h-8 rounded-full"></li>
+      <li class="bg-orange-700 w-8 h-8 rounded-full"></li>
+      <li class="bg-orange-600 w-8 h-8 rounded-full"></li>
+      <li class="bg-orange-500 w-8 h-8 rounded-full"></li>
+      <li class="bg-orange-400 w-8 h-8 rounded-full"></li>
+      <li class="bg-orange-300 w-8 h-8 rounded-full"></li>
+      <li class="bg-orange-200 w-8 h-8 rounded-full"></li>
+      <li class="bg-orange-100 w-8 h-8 rounded-full"></li>
+      <li class="bg-orange-50  w-8 h-8 rounded-full"></li>
+    </ul>
+  </li>
+  <li>
+    <ul class="-space-x-1">
+      <li class="bg-yellow-900 w-8 h-8 rounded-full"></li>
+      <li class="bg-yellow-800 w-8 h-8 rounded-full"></li>
+      <li class="bg-yellow-700 w-8 h-8 rounded-full"></li>
+      <li class="bg-yellow-600 w-8 h-8 rounded-full"></li>
+      <li class="bg-yellow-500 w-8 h-8 rounded-full"></li>
+      <li class="bg-yellow-400 w-8 h-8 rounded-full"></li>
+      <li class="bg-yellow-300 w-8 h-8 rounded-full"></li>
+      <li class="bg-yellow-200 w-8 h-8 rounded-full"></li>
+      <li class="bg-yellow-100 w-8 h-8 rounded-full"></li>
+      <li class="bg-yellow-50  w-8 h-8 rounded-full"></li>
+    </ul>
+  </li>
+</ul>`).tokens,
+  typography: tokenize.html(`<ul class="space-y-6">
+  <li>
+    font-sans
+    <p class="font-sans">
+      ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>
+      abcdefghijklmnopqrstuvwxyz<br>
+      1234567890
+    </p>
+  </li>
+  <li>
+    font-serif
+    <p class="font-serif">
+      ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>
+      abcdefghijklmnopqrstuvwxyz<br>
+      1234567890
+    </p>
+  </li>
+  <li>
+    font-mono
+    <p class="font-mono">
+      ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>
+      abcdefghijklmnopqrstuvwxyz<br>
+      1234567890
+    </p>
+  </li>
+</ul>`).tokens,
+  shadows: tokenize.html(`<ul class="space-y-4">
+  <li class="shadow-sm  bg-white h-8 rounded-lg"></li>
+  <li class="shadow     bg-white h-8 rounded-lg"></li>
+  <li class="shadow-md  bg-white h-8 rounded-lg"></li>
+  <li class="shadow-lg  bg-white h-8 rounded-lg"></li>
+  <li class="shadow-xl  bg-white h-8 rounded-lg"></li>
+  <li class="shadow-2xl bg-white h-8 rounded-lg"></li>
+</ul>`).tokens,
+}
 
 export function ConstraintBased() {
   const [tab, setTab] = useState('sizing')
@@ -197,7 +321,17 @@ export function ConstraintBased() {
         }
         right={
           <CodeWindow className="bg-pink-600">
-            <CodeWindow.Code />
+            <AnimatePresence initial={false} exitBeforeEnter>
+              <motion.div
+                key={tab}
+                className="w-full flex-auto flex overflow-auto"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <CodeWindow.Code tokens={tokens[tab]} />
+              </motion.div>
+            </AnimatePresence>
           </CodeWindow>
         }
       />
