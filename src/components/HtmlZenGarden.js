@@ -1,4 +1,9 @@
 import { AnimateSharedLayout, motion } from 'framer-motion'
+import { font as poppinsRegular } from '../fonts/generated/Poppins-Regular.module.css'
+import { font as poppinsSemiBold } from '../fonts/generated/Poppins-SemiBold.module.css'
+import { font as poppinsBold } from '../fonts/generated/Poppins-Bold.module.css'
+import { font as poppinsMedium } from '../fonts/generated/Poppins-Medium.module.css'
+import { font as tenorSansRegular } from '../fonts/generated/TenorSans-Regular.module.css'
 
 function fit(
   parentWidth,
@@ -177,7 +182,7 @@ export function HtmlZenGarden({ theme }) {
               </motion.h2>
               <motion.h2
                 layout
-                className={`inline-flex text-black text-base leading-6 font-semibold ${
+                className={`inline-flex text-black text-base leading-6 font-semibold ${poppinsSemiBold} ${
                   theme === 'playful' ? '' : 'absolute bottom-0 left-0'
                 }`}
                 animate={{ opacity: theme === 'playful' ? 1 : 0 }}
@@ -186,7 +191,7 @@ export function HtmlZenGarden({ theme }) {
               </motion.h2>
               <motion.h2
                 layout
-                className={`inline-flex text-black text-3xl leading-9 ${
+                className={`inline-flex text-black text-3xl leading-9 ${tenorSansRegular} ${
                   theme === 'elegant' ? '' : 'absolute bottom-0 left-0'
                 }`}
                 animate={{ opacity: theme === 'elegant' ? 1 : 0 }}
@@ -205,7 +210,7 @@ export function HtmlZenGarden({ theme }) {
                 $110.00
               </motion.div>
               <motion.div
-                className={`inline-flex text-4xl font-bold text-purple-600 ${
+                className={`inline-flex text-4xl font-bold text-purple-600 ${poppinsBold} ${
                   theme === 'playful' ? '' : 'absolute bottom-0 left-0'
                 }`}
                 layout
@@ -214,7 +219,7 @@ export function HtmlZenGarden({ theme }) {
                 $39.00
               </motion.div>
               <motion.div
-                className={`inline-flex text-lg leading-6 text-black ${
+                className={`inline-flex text-lg leading-6 text-black ${tenorSansRegular} ${
                   theme === 'elegant' ? '' : 'absolute bottom-0 left-0'
                 }`}
                 layout
@@ -236,7 +241,7 @@ export function HtmlZenGarden({ theme }) {
               <motion.div
                 layout
                 animate={{ opacity: theme === 'playful' ? 1 : 0 }}
-                className={`inline-flex text-sm leading-5 font-medium text-gray-400 ${
+                className={`inline-flex text-sm leading-5 font-medium text-gray-400 ${poppinsMedium} ${
                   theme === 'playful' ? '' : 'absolute bottom-0 left-0'
                 }`}
               >
@@ -245,7 +250,7 @@ export function HtmlZenGarden({ theme }) {
               <motion.div
                 layout
                 animate={{ opacity: theme === 'elegant' ? 1 : 0 }}
-                className={`inline-flex text-sm leading-5 text-gray-500 ${
+                className={`inline-flex text-sm leading-5 text-gray-500 ${tenorSansRegular} ${
                   theme === 'elegant' ? '' : 'absolute bottom-0 left-0'
                 }`}
               >

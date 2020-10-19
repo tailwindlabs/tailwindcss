@@ -7,28 +7,38 @@ import { ReactComponent as Icon } from '@/img/icons/home/customization.svg'
 import { useState } from 'react'
 import { siteConfig } from '@/utils/siteConfig'
 import { AnimatePresence, motion } from 'framer-motion'
+import { font as poppinsRegular } from '../../fonts/generated/Poppins-Regular.module.css'
+import { font as poppinsExtraBold } from '../../fonts/generated/Poppins-ExtraBold.module.css'
+import { font as tenorSansRegular } from '../../fonts/generated/TenorSans-Regular.module.css'
+import { font as robotoMonoRegular } from '../../fonts/generated/RobotoMono-Regular.module.css'
 
 const themes = {
   simple: {
     font: 'Inter',
+    classNameDisplay: 'font-semibold',
     primaryColor: 'indigo',
     secondaryColorTitle: 'bg-gray-{50-900}',
     secondaryColor: 'gray',
   },
   playful: {
     font: 'Poppins',
+    classNameDisplay: poppinsExtraBold,
+    classNameBody: `${poppinsRegular} text-sm leading-5`,
     primaryColor: 'purple',
     secondaryColorTitle: 'bg-secondary-{50-900}',
     secondaryColor: 'pink',
   },
   elegant: {
     font: 'Tenor Sans',
+    classNameDisplay: tenorSansRegular,
     primaryColor: 'gray',
     secondaryColorTitle: 'bg-accent-{50-900}',
     secondaryColor: 'amber',
   },
   brutalist: {
     font: 'Roboto Mono',
+    classNameDisplay: robotoMonoRegular,
+    classNameBody: `${robotoMonoRegular} text-xs leading-5`,
     primaryColor: 'lime',
     secondaryColorTitle: 'bg-gray-{50-900}',
     secondaryColor: 'gray',
@@ -98,7 +108,9 @@ export function Customization() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className="text-2xl leading-7 font-semibold text-black"
+                      className={`text-2xl leading-7 text-black ${
+                        themes[theme].classNameDisplay || ''
+                      }`}
                     >
                       {themes[theme].font}
                     </motion.dd>
@@ -112,7 +124,9 @@ export function Customization() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className="text-sm leading-5 text-gray-600"
+                      className={`text-gray-600 ${
+                        themes[theme].classNameBody || 'text-sm leading-5'
+                      }`}
                     >
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mi ultrices non
                       pharetra, eros enim. Habitant suspendisse ultricies.
