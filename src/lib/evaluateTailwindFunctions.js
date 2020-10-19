@@ -5,6 +5,9 @@ const themeTransforms = {
   fontSize(value) {
     return Array.isArray(value) ? value[0] : value
   },
+  outline(value) {
+    return Array.isArray(value) ? value[0] : value
+  },
 }
 
 function defaultTransform(value) {

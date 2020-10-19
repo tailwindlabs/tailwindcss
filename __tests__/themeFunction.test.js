@@ -154,3 +154,24 @@ test('font sizes are retrieved without default line-heights or letter-spacing', 
     expect(result.warnings().length).toBe(0)
   })
 })
+
+test('outlines are retrieved without default outline-offset', () => {
+  const input = `
+    .element { outline: theme('outline.black'); }
+  `
+
+  const output = `
+    .element { outline: 2px dotted black; }
+  `
+
+  return run(input, {
+    theme: {
+      outline: {
+        black: ['2px dotted black', '4px'],
+      },
+    },
+  }).then(result => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})

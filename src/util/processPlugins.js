@@ -54,7 +54,16 @@ export default function(plugins, config) {
     handler({
       postcss,
       config: getConfigValue,
-      theme: (path, defaultValue) => getConfigValue(`theme.${path}`, defaultValue),
+      theme: (path, defaultValue) => {
+        const value = getConfigValue(`theme.${path}`, defaultValue)
+        const [rootPath] = _.toPath(path)
+
+        if (['fontSize', 'outline'].includes(rootPath)) {
+          return Array.isArray(value) ? value[0] : value
+        }
+
+        return value
+      },
       corePlugins: path => {
         if (Array.isArray(config.corePlugins)) {
           return config.corePlugins.includes(path)

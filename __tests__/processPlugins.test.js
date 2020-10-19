@@ -2050,3 +2050,65 @@ test('keyframes are not escaped', () => {
     }
   `)
 })
+
+test('font sizes are retrieved without default line-heights or letter-spacing using theme function', () => {
+  const { components } = processPlugins(
+    [
+      function({ addComponents, theme }) {
+        addComponents({
+          '.foo': {
+            fontSize: theme('fontSize.sm'),
+          },
+        })
+      },
+    ],
+    makeConfig({
+      theme: {
+        fontSize: {
+          sm: ['14px', '20px'],
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants {
+        .foo {
+          font-size: 14px;
+        }
+      }
+    }
+  `)
+})
+
+test('outlines are retrieved without outline-offset using theme function', () => {
+  const { components } = processPlugins(
+    [
+      function({ addComponents, theme }) {
+        addComponents({
+          '.foo': {
+            outline: theme('outline.black'),
+          },
+        })
+      },
+    ],
+    makeConfig({
+      theme: {
+        outline: {
+          black: ['2px dotted black', '4px'],
+        },
+      },
+    })
+  )
+
+  expect(css(components)).toMatchCss(`
+    @layer components {
+      @variants {
+        .foo {
+          outline: 2px dotted black;
+        }
+      }
+    }
+  `)
+})
