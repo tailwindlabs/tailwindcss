@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `transform-gpu` to force hardware acceleration on transforms when beneficial ([#1380](https://github.com/tailwindlabs/tailwindcss/pull/1380))
 - Promote all previous experimental/future features to stable/default ([#2609](https://github.com/tailwindlabs/tailwindcss/pull/2609))
 - Extend default grid to 16 columns, include fractional sizes in 16ths in spacing scale *(useful for 16x9 aspect ratio situations)* ([559bf9589](https://github.com/tailwindlabs/tailwindcss/pull/2609/commits/559bf9589821ccf0773d4d727a6523028736ad91#diff-d65cc1efb133c1202d14550da74ce17790b33ca9c27dec2a4ce64603d606dca0))
+- Support defining theme values using arrays wherever it makes sense (box-shadow, transition-property, etc.) ([e13f083c4](https://github.com/tailwindlabs/tailwindcss/commit/e13f083c4bc48bf9870d27c966136a9584943127))
 
 ### Changed
 
@@ -27,6 +28,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade to PostCSS 8.0
 - Use logical properties for `space` and `divide` utilities ([#1883](https://github.com/tailwindlabs/tailwindcss/pull/1883))
 - Support defining theme keys as arrays wherever it makes sense, and make accessing using `theme` retrieve the expected resolved value ([e13f083c4](https://github.com/tailwindlabs/tailwindcss/commit/e13f083c4bc48bf9870d27c966136a9584943127))
+
+## [1.9.5]
+
+### Fixed
+
+-  Fix issue where using `theme` with default line-heights did not resolve correctly
 
 ## [1.9.4]
 
@@ -1013,7 +1020,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.4...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.5...HEAD
+[1.9.5]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.3...v1.9.5
 [1.9.4]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.3...v1.9.4
 [1.9.3]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.2...v1.9.3
 [1.9.2]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.1...v1.9.2
