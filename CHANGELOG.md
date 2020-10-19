@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade to PostCSS 8.0
 - Use logical properties for `space` and `divide` utilities ([#1883](https://github.com/tailwindlabs/tailwindcss/pull/1883))
 - Support defining theme keys as arrays wherever it makes sense, and make accessing using `theme` retrieve the expected resolved value ([e13f083c4](https://github.com/tailwindlabs/tailwindcss/commit/e13f083c4bc48bf9870d27c966136a9584943127))
+- Adjust default font-size scale to include 60px and 72px instead of 64px and 80px ([#2619](https://github.com/tailwindlabs/tailwindcss/pull/2619))
 
 ## [1.9.5]
 
