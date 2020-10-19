@@ -167,14 +167,15 @@ function makeExtractUtilityRules(css, lookupTree, config) {
       if (utilityMap[utilityName] === undefined) {
         // Look for prefixed utility in case the user has goofed
         const prefixedUtility = prefixSelector(config.prefix, `.${utilityName}`).slice(1)
-        const suggestedClass = didYouMean(utilityName, Object.keys(utilityMap))
-        const suggestionMessage = suggestedClass ? `, but \`${suggestedClass}\` does` : ''
 
         if (utilityMap[prefixedUtility] !== undefined) {
           throw rule.error(
             `The \`${utilityName}\` class does not exist, but \`${prefixedUtility}\` does. Did you forget the prefix?`
           )
         }
+
+        const suggestedClass = didYouMean(utilityName, Object.keys(utilityMap))
+        const suggestionMessage = suggestedClass ? `, but \`${suggestedClass}\` does` : ''
 
         throw rule.error(
           `The \`${utilityName}\` class does not exist${suggestionMessage}. If you're sure that \`${utilityName}\` exists, make sure that any \`@import\` statements are being properly processed before Tailwind CSS sees your CSS, as \`@apply\` can only be used for classes in the same CSS tree.`,
