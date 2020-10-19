@@ -29,7 +29,11 @@ export function EditorTools() {
       <GradientLockup
         color="lightblue"
         rotate={2}
-        left={<CodeWindow className="bg-lightBlue-500" height={625} />}
+        left={
+          <CodeWindow className="bg-lightBlue-500" height={625}>
+            <CodeWindow.Code />
+          </CodeWindow>
+        }
       />
     </section>
   )

@@ -231,15 +231,14 @@ export function Performance() {
           </div>
         }
         right={
-          <CodeWindow
-            className="bg-turquoise-500"
-            codeProps={{
-              tokens,
-              tokenComponent: PerformanceToken,
-              tokenProps: { inView },
-              transformTokens: addClassTokens,
-            }}
-          />
+          <CodeWindow className="bg-turquoise-500">
+            <CodeWindow.Code
+              tokens={tokens}
+              tokenComponent={PerformanceToken}
+              tokenProps={{ inView }}
+              transformTokens={addClassTokens}
+            />
+          </CodeWindow>
         }
       />
     </section>

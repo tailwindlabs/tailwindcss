@@ -215,7 +215,9 @@ export function MobileFirst() {
             <div className="max-w-5xl mx-auto">
               <BrowserWindow />
             </div>
-            <CodeWindow className="bg-indigo-500" height={396} />
+            <CodeWindow className="bg-indigo-500" height={396}>
+              <CodeWindow.Code />
+            </CodeWindow>
           </>
         }
       />

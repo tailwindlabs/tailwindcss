@@ -2,6 +2,9 @@ import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/h
 import { GradientLockup } from '@/components/GradientLockup'
 import { CodeWindow } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
+import tokenize from '../../macros/tokenize.macro'
+import { createContext, useContext, useState } from 'react'
+import { Token } from '@/components/Code'
 
 const recipes = [
   {
@@ -29,6 +32,83 @@ const recipes = [
     author: 'Lily Ford',
   },
 ]
+
+const tabs = {
+  'image.js': tokenize.jsx(
+    `import Rating from './rating.js'\n\nfunction Image() {\n  return <Rating />\n}`
+  ).tokens,
+  'rating.js': tokenize.jsx('function Rating() {\n  return <div></div>\n}').tokens,
+}
+
+const EditorContext = createContext()
+
+function EditorToken(props) {
+  const { setActiveTab } = useContext(EditorContext)
+  const { token } = props
+
+  if (token[0] === 'string' && /^(['"`])\.\/.*?\.js\1$/.test(token[1])) {
+    const tab = token[1].substr(3, token[1].length - 4)
+    return (
+      <Token {...props}>
+        {token[1].substr(0, 1)}
+        <button type="button" className="underline" onClick={() => setActiveTab(tab)}>
+          ./{tab}
+        </button>
+        {token[1].substr(0, 1)}
+      </Token>
+    )
+  }
+
+  return <Token {...props} />
+}
+
+function ComponentExample() {
+  const [activeTab, setActiveTab] = useState('image.js')
+
+  return (
+    <CodeWindow className="bg-orange-500">
+      <ul className="flex text-sm leading-5 bg-orange-900 bg-opacity-20 text-orange-300">
+        {Object.keys(tabs).map((tab) => (
+          <li key={tab}>
+            <button
+              type="button"
+              className={`border border-transparent py-2 px-4 font-medium ${
+                tab === activeTab ? 'bg-white bg-opacity-10 text-orange-200' : ''
+              }`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab}
+            </button>
+          </li>
+        ))}
+      </ul>
+      <EditorContext.Provider value={{ setActiveTab }}>
+        <CodeWindow.Code tokens={tabs[activeTab]} tokenComponent={EditorToken} />
+      </EditorContext.Provider>
+    </CodeWindow>
+  )
+}
+
+const css = tokenize.css('.btn {\n  @apply font-bold;\n}').tokens
+
+function ApplyExample() {
+  return (
+    <CodeWindow className="bg-pink-600">
+      <div className="flex text-sm leading-5 bg-pink-900 bg-opacity-20 text-pink-200">
+        <h3 className="border border-transparent py-2 px-4 font-medium bg-white bg-opacity-10">
+          styles.css
+        </h3>
+      </div>
+      <CodeWindow.Code tokens={css} />
+      <div className="flex text-sm leading-5 bg-pink-900 bg-opacity-20 text-pink-200">
+        <h3 className="border border-transparent py-2 px-4 font-medium bg-white bg-opacity-10">
+          index.html
+        </h3>
+      </div>
+      <CodeWindow.Code tokens={css} />
+    </CodeWindow>
+  )
+}
 
 export function ComponentDriven() {
   return (
@@ -116,7 +196,7 @@ export function ComponentDriven() {
             ))}
           </div>
         }
-        right={<CodeWindow className="bg-orange-500" />}
+        right={<ComponentExample />}
       />
       <div className="px-8 mt-32 mb-8">
         <Paragraph className="mb-6">
@@ -192,7 +272,7 @@ export function ComponentDriven() {
             </article>
           </div>
         }
-        right={<CodeWindow className="bg-pink-600" />}
+        right={<ApplyExample />}
       />
     </section>
   )

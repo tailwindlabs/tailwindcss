@@ -46,7 +46,11 @@ export function BuildAnything() {
           </div>
         }
         left={<HtmlZenGarden theme={theme} />}
-        right={<CodeWindow className="bg-pink-600" />}
+        right={
+          <CodeWindow className="bg-pink-600">
+            <CodeWindow.Code />
+          </CodeWindow>
+        }
       />
     </section>
   )

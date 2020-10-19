@@ -110,7 +110,11 @@ export function StateVariants() {
             </section>
           </div>
         }
-        right={<CodeWindow className="bg-lightBlue-500" />}
+        right={
+          <CodeWindow className="bg-lightBlue-500">
+            <CodeWindow.Code />
+          </CodeWindow>
+        }
       />
     </section>
   )

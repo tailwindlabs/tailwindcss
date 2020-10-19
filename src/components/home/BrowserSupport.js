@@ -56,7 +56,11 @@ export function BrowserSupport() {
             <div className="bg-white rounded-xl shadow-lg flex items-center justify-center">5</div>
           </div>
         }
-        right={<CodeWindow className="bg-fuchsia-500" />}
+        right={
+          <CodeWindow className="bg-fuchsia-500">
+            <CodeWindow.Code />
+          </CodeWindow>
+        }
       />
     </section>
   )

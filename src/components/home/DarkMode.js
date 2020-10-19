@@ -207,15 +207,14 @@ export function DarkMode() {
           />
         }
         right={
-          <CodeWindow
-            className="bg-green-500"
-            codeProps={{
-              tokens,
-              tokenComponent: DarkModeToken,
-              tokenProps: { enabled },
-              transformTokens: addClassTokens,
-            }}
-          />
+          <CodeWindow className="bg-green-500">
+            <CodeWindow.Code
+              tokens={tokens}
+              tokenComponent={DarkModeToken}
+              tokenProps={{ enabled }}
+              transformTokens={addClassTokens}
+            />
+          </CodeWindow>
         }
       />
     </section>

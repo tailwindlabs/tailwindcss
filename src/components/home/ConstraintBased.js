@@ -194,7 +194,11 @@ export function ConstraintBased() {
             </div>
           </div>
         }
-        right={<CodeWindow className="bg-pink-600" />}
+        right={
+          <CodeWindow className="bg-pink-600">
+            <CodeWindow.Code />
+          </CodeWindow>
+        }
       />
     </section>
   )

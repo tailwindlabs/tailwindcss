@@ -185,7 +185,11 @@ export function Customization() {
             </section>
           </div>
         }
-        right={<CodeWindow className="bg-rose-500" />}
+        right={
+          <CodeWindow className="bg-rose-500">
+            <CodeWindow.Code />
+          </CodeWindow>
+        }
       />
     </section>
   )

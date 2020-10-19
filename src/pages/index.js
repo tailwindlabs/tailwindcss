@@ -81,7 +81,11 @@ export default function Home() {
               style={{ height: 304 }}
             />
           }
-          right={<CodeWindow className="bg-lightBlue-500" />}
+          right={
+            <CodeWindow className="bg-lightBlue-500">
+              <CodeWindow.Code />
+            </CodeWindow>
+          }
         />
       </header>
       <Testimonials />
