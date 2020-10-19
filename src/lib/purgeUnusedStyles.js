@@ -3,7 +3,6 @@ import postcss from 'postcss'
 import purgecss from '@fullhuman/postcss-purgecss'
 import log from '../util/log'
 import htmlTags from 'html-tags'
-import { flagEnabled } from '../featureFlags'
 
 function removeTailwindMarkers(css) {
   css.walkAtRules('tailwind', (rule) => rule.remove())
@@ -49,13 +48,9 @@ export default function purgeUnusedUtilities(config, configChanged) {
 
   return postcss([
     function (css) {
-      const mode = _.get(
-        config,
-        'purge.mode',
-        flagEnabled(config, 'purgeLayersByDefault') ? 'layers' : 'conservative'
-      )
+      const mode = _.get(config, 'purge.mode', 'layers')
 
-      if (!['all', 'layers', 'conservative'].includes(mode)) {
+      if (!['all', 'layers'].includes(mode)) {
         throw new Error('Purge `mode` must be one of `layers` or `all`.')
       }
 
@@ -63,19 +58,7 @@ export default function purgeUnusedUtilities(config, configChanged) {
         return
       }
 
-      if (mode === 'conservative') {
-        if (configChanged) {
-          log.warn([
-            'The `conservative` purge mode will be removed in Tailwind 2.0.',
-            'Please switch to the new `layers` mode instead.',
-          ])
-        }
-      }
-
-      const layers =
-        mode === 'conservative'
-          ? ['utilities']
-          : _.get(config, 'purge.layers', ['base', 'components', 'utilities'])
+      const layers = _.get(config, 'purge.layers', ['base', 'components', 'utilities'])
 
       css.walkComments((comment) => {
         switch (comment.text.trim()) {

@@ -9,7 +9,7 @@ test('letter spacing can use negative prefix syntax', () => {
     theme: {
       letterSpacing: {
         '-1': '-0.025em',
-        '1': '0.025em',
+        1: '0.025em',
       },
     },
     variants: {

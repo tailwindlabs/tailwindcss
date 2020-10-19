@@ -867,10 +867,10 @@ test('plugins can provide fallbacks to keys missing from the config', () => {
     ],
     makeConfig({
       borderRadius: {
-        '1': '1px',
-        '2': '2px',
-        '4': '4px',
-        '8': '8px',
+        1: '1px',
+        2: '2px',
+        4: '4px',
+        8: '8px',
       },
     })
   )
@@ -1957,7 +1957,7 @@ test('plugins can extend variants', () => {
   return _postcss([
     tailwind({
       theme: {
-        opacity: { '0': '0', '100': '1' },
+        opacity: { 0: '0', 100: '1' },
       },
       corePlugins: ['opacity'],
       variants: { opacity: ({ without }) => without(['responsive']) },

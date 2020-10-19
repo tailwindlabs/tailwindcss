@@ -19,7 +19,7 @@ test('opacity variables are given to colors defined as closures', () => {
           },
         },
         opacity: {
-          '50': '0.5',
+          50: '0.5',
         },
       },
       variants: {

@@ -3,21 +3,8 @@ import chalk from 'chalk'
 import log from './util/log'
 
 const featureFlags = {
-  future: [
-    'removeDeprecatedGapUtilities',
-    'purgeLayersByDefault',
-    'defaultLineHeights',
-    'standardFontWeights',
-    'moveTruncateToTextOverflow',
-  ],
-  experimental: [
-    'uniformColorPalette',
-    'extendedSpacingScale',
-    'extendedFontSizeScale',
-    'applyComplexClasses',
-    'darkModeVariant',
-    'additionalBreakpoint',
-  ],
+  future: [],
+  experimental: ['additionalBreakpoint'],
 }
 
 export function flagEnabled(config, flag) {

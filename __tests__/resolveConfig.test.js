@@ -541,8 +541,8 @@ test('theme values in the extend section extend the existing theme', () => {
     theme: {
       extend: {
         opacity: {
-          '25': '25',
-          '75': '.75',
+          25: '25',
+          75: '.75',
         },
         backgroundColors: {
           customBackground: '#bada55',
@@ -562,9 +562,9 @@ test('theme values in the extend section extend the existing theme', () => {
         yellow: 'yellow',
       },
       opacity: {
-        '0': '0',
-        '50': '.5',
-        '100': '1',
+        0: '0',
+        50: '.5',
+        100: '1',
       },
       backgroundColors: (theme) => theme('colors'),
     },
@@ -587,11 +587,11 @@ test('theme values in the extend section extend the existing theme', () => {
         yellow: 'yellow',
       },
       opacity: {
-        '0': '0',
-        '50': '.5',
-        '100': '1',
-        '25': '25',
-        '75': '.75',
+        0: '0',
+        50: '.5',
+        100: '1',
+        25: '25',
+        75: '.75',
       },
       backgroundColors: {
         cyan: 'cyan',
@@ -611,16 +611,16 @@ test('theme values in the extend section extend the user theme', () => {
   const userConfig = {
     theme: {
       opacity: {
-        '0': '0',
-        '20': '.2',
-        '40': '.4',
+        0: '0',
+        20: '.2',
+        40: '.4',
       },
       height: (theme) => theme('width'),
       extend: {
         opacity: {
-          '60': '.6',
-          '80': '.8',
-          '100': '1',
+          60: '.6',
+          80: '.8',
+          100: '1',
         },
         height: {
           customHeight: '500vh',
@@ -635,20 +635,20 @@ test('theme values in the extend section extend the user theme', () => {
     separator: ':',
     theme: {
       opacity: {
-        '0': '0',
-        '50': '.5',
-        '100': '1',
+        0: '0',
+        50: '.5',
+        100: '1',
       },
       height: {
-        '0': 0,
+        0: 0,
         full: '100%',
       },
       width: {
-        '0': 0,
-        '1': '.25rem',
-        '2': '.5rem',
-        '3': '.75rem',
-        '4': '1rem',
+        0: 0,
+        1: '.25rem',
+        2: '.5rem',
+        3: '.75rem',
+        4: '1rem',
       },
     },
     variants: {
@@ -666,27 +666,27 @@ test('theme values in the extend section extend the user theme', () => {
     separator: ':',
     theme: {
       opacity: {
-        '0': '0',
-        '20': '.2',
-        '40': '.4',
-        '60': '.6',
-        '80': '.8',
-        '100': '1',
+        0: '0',
+        20: '.2',
+        40: '.4',
+        60: '.6',
+        80: '.8',
+        100: '1',
       },
       height: {
-        '0': 0,
-        '1': '.25rem',
-        '2': '.5rem',
-        '3': '.75rem',
-        '4': '1rem',
+        0: 0,
+        1: '.25rem',
+        2: '.5rem',
+        3: '.75rem',
+        4: '1rem',
         customHeight: '500vh',
       },
       width: {
-        '0': 0,
-        '1': '.25rem',
-        '2': '.5rem',
-        '3': '.75rem',
-        '4': '1rem',
+        0: 0,
+        1: '.25rem',
+        2: '.5rem',
+        3: '.75rem',
+        4: '1rem',
       },
     },
     variants: {
@@ -950,7 +950,7 @@ test('the theme function can resolve deep function values', () => {
     separator: ':',
     theme: {
       spacing: {
-        '0': '0',
+        0: '0',
       },
       width: (theme) => ({
         ...theme('spacing'),
@@ -971,10 +971,10 @@ test('the theme function can resolve deep function values', () => {
     separator: ':',
     theme: {
       spacing: {
-        '0': '0',
+        0: '0',
       },
       width: {
-        '0': '0',
+        0: '0',
         '1/3': '33.33333%',
       },
       minWidth: {
@@ -1080,10 +1080,10 @@ test('lazily evaluated values have access to the config utils', () => {
     separator: ':',
     theme: {
       spacing: {
-        '1': '1px',
-        '2': '2px',
-        '3': '3px',
-        '4': '4px',
+        1: '1px',
+        2: '2px',
+        3: '3px',
+        4: '4px',
       },
       margin: (theme, { negative }) => ({
         ...theme('spacing'),
@@ -1101,50 +1101,50 @@ test('lazily evaluated values have access to the config utils', () => {
     separator: ':',
     theme: {
       spacing: {
-        '1': '1px',
-        '2': '2px',
-        '3': '3px',
-        '4': '4px',
+        1: '1px',
+        2: '2px',
+        3: '3px',
+        4: '4px',
       },
       inset: {
         '-1': '-1px',
         '-2': '-2px',
         '-3': '-3px',
         '-4': '-4px',
-        '1': '1px',
-        '2': '2px',
-        '3': '3px',
-        '4': '4px',
+        1: '1px',
+        2: '2px',
+        3: '3px',
+        4: '4px',
       },
       margin: {
         '-1': '-1px',
         '-2': '-2px',
         '-3': '-3px',
         '-4': '-4px',
-        '1': '1px',
-        '2': '2px',
-        '3': '3px',
-        '4': '4px',
+        1: '1px',
+        2: '2px',
+        3: '3px',
+        4: '4px',
       },
       shift: {
         '-1': '-1px',
         '-2': '-2px',
         '-3': '-3px',
         '-4': '-4px',
-        '1': '1px',
-        '2': '2px',
-        '3': '3px',
-        '4': '4px',
+        1: '1px',
+        2: '2px',
+        3: '3px',
+        4: '4px',
       },
       nudge: {
         '-1': '-1px',
         '-2': '-2px',
         '-3': '-3px',
         '-4': '-4px',
-        '1': '1px',
-        '2': '2px',
-        '3': '3px',
-        '4': '4px',
+        1: '1px',
+        2: '2px',
+        3: '3px',
+        4: '4px',
       },
     },
     variants: {},
@@ -1201,10 +1201,10 @@ test('custom properties are multiplied by -1 for negative values', () => {
   const userConfig = {
     theme: {
       spacing: {
-        '1': '1px',
-        '2': '2px',
-        '3': '3px',
-        '4': '4px',
+        1: '1px',
+        2: '2px',
+        3: '3px',
+        4: '4px',
         foo: 'var(--foo)',
         bar: 'var(--bar, 500px)',
         baz: 'calc(50% - 10px)',
@@ -1232,19 +1232,19 @@ test('custom properties are multiplied by -1 for negative values', () => {
     separator: ':',
     theme: {
       spacing: {
-        '1': '1px',
-        '2': '2px',
-        '3': '3px',
-        '4': '4px',
+        1: '1px',
+        2: '2px',
+        3: '3px',
+        4: '4px',
         foo: 'var(--foo)',
         bar: 'var(--bar, 500px)',
         baz: 'calc(50% - 10px)',
       },
       margin: {
-        '1': '1px',
-        '2': '2px',
-        '3': '3px',
-        '4': '4px',
+        1: '1px',
+        2: '2px',
+        3: '3px',
+        4: '4px',
         foo: 'var(--foo)',
         bar: 'var(--bar, 500px)',
         baz: 'calc(50% - 10px)',
