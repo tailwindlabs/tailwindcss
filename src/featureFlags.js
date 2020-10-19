@@ -4,7 +4,7 @@ import log from './util/log'
 
 const featureFlags = {
   future: [],
-  experimental: ['additionalBreakpoint'],
+  experimental: [],
 }
 
 export function flagEnabled(config, flag) {
