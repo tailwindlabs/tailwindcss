@@ -42,6 +42,7 @@ export function BuildAnything() {
               }}
               selected={theme}
               onChange={setTheme}
+              className="justify-center lg:justify-start"
             />
           </div>
         }

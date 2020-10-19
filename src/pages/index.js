@@ -45,10 +45,10 @@ export default function Home() {
               fill="#000"
             />
           </svg>
-          <h1 className="text-7xl leading-none font-extrabold tracking-tight text-black mt-14 mb-10">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl leading-none font-extrabold tracking-tight text-black mt-14 mb-10">
             Rapidly build modern websites without ever leaving your HTML.
           </h1>
-          <p className="max-w-screen-lg text-2xl leading-10 font-medium mb-11">
+          <p className="max-w-screen-lg text-lg leading-7 sm:text-2xl sm:leading-10 font-medium mb-11">
             A utility-first CSS framework packed with classes like flex, pt-4, text-center and
             rotate-90 that can be composed to build any design, directly in your markup.
           </p>
@@ -77,7 +77,7 @@ export default function Home() {
           rotate={-2}
           left={
             <div
-              className="relative z-10 bg-white rounded-xl shadow-lg -mr-8"
+              className="relative z-10 bg-white rounded-xl shadow-lg lg:-mr-8"
               style={{ height: 304 }}
             />
           }

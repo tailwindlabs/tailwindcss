@@ -198,7 +198,7 @@ export function DarkMode() {
         }
         left={
           <div
-            className={`relative z-10 rounded-xl shadow-lg -mr-8 ${enabled ? 'dark' : ''}`}
+            className={`relative z-10 rounded-xl shadow-lg lg:-mr-8 ${enabled ? 'dark' : ''}`}
             dangerouslySetInnerHTML={{
               __html: code
                 .replace(/light:/g, '')

@@ -39,12 +39,15 @@ export function BrowserSupport() {
         rotate={-2}
         header={
           <div className="-ml-4">
-            <Tabs tabs={['Modern Browsers', 'IE11', 'IE9']} />
+            <Tabs
+              tabs={['Modern Browsers', 'IE11', 'IE9']}
+              className="justify-center lg:justify-start"
+            />
           </div>
         }
         left={
           <div
-            className="relative z-10 mr-6 grid grid-cols-3 grid-rows-2 gap-4 text-4xl font-black text-purple-300"
+            className="relative z-10 lg:mr-6 grid grid-cols-3 grid-rows-2 gap-4 text-4xl font-black text-purple-300"
             style={{ height: 336 }}
           >
             <div className="bg-white rounded-xl shadow-lg flex items-center justify-center">1</div>

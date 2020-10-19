@@ -96,7 +96,7 @@ export function Performance() {
         color="teal"
         rotate={1}
         left={
-          <div ref={ref} className="relative z-10 rounded-xl shadow-lg -mr-8 tabular-nums">
+          <div ref={ref} className="relative z-10 rounded-xl shadow-lg lg:-mr-8 tabular-nums">
             <div className="bg-white rounded-t-xl">
               <div className="absolute top-6 left-6 w-15 h-15 bg-green-500 rounded-full flex items-center justify-center">
                 <svg width="32" height="32" fill="none">

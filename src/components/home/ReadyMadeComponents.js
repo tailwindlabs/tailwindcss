@@ -25,7 +25,6 @@ export function ReadyMadeComponents() {
         </Link>
       </div>
       <GradientLockup
-        fullWidth
         color="violet"
         rotate={-2}
         left={<img src={require('@/img/tailwindui.webp').default} alt="" />}

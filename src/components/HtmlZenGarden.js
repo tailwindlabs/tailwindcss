@@ -137,7 +137,7 @@ export function HtmlZenGarden({ theme }) {
     <AnimateSharedLayout>
       <motion.div
         layout
-        className="relative z-10 shadow-lg -mr-8 flex leading-none"
+        className="relative z-10 shadow-lg lg:-mr-8 flex leading-none"
         initial={false}
         animate={{ borderRadius: themes[theme].wrapper.borderRadius }}
       >

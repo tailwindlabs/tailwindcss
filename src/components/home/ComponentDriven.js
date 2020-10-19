@@ -132,7 +132,7 @@ export function ComponentDriven() {
         color="amber"
         rotate={-2}
         left={
-          <div className="relative z-10 bg-white rounded-xl shadow-lg -mr-8 divide-y divide-gray-100">
+          <div className="relative z-10 bg-white rounded-xl shadow-lg lg:-mr-8 divide-y divide-gray-100">
             <nav className="p-4 text-sm leading-5 font-medium">
               <ul className="flex space-x-2">
                 <li>
@@ -212,7 +212,7 @@ export function ComponentDriven() {
         color="orange"
         rotate={1}
         left={
-          <div className="relative z-10 bg-white rounded-xl shadow-lg mr-4">
+          <div className="relative z-10 bg-white rounded-xl shadow-lg lg:mr-4">
             <article className="text-gray-600 leading-6">
               <h2 className="opacity-25 text-2xl leading-8 font-semibold text-black p-6 pb-1">
                 Weekly one-on-one

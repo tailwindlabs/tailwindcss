@@ -24,7 +24,7 @@ const { tokens: defaultTokens } = tokenize.html(`<div class="flex pa-2 bg-white 
 export function CodeWindow({ children, className = '', height = 576 }) {
   return (
     <div
-      className={`relative overflow-hidden rounded-xl shadow-2xl flex ${className}`}
+      className={`relative overflow-hidden md:rounded-xl shadow-2xl flex ${className}`}
       style={{ height }}
     >
       <div className="absolute inset-0 bg-black bg-opacity-75" />

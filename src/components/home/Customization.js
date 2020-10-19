@@ -87,12 +87,13 @@ export function Customization() {
               }}
               selected={theme}
               onChange={setTheme}
+              className="justify-center lg:justify-start"
             />
           </div>
         }
         left={
           <div
-            className="relative z-10 rounded-xl shadow-lg -mr-8 divide-y-2 divide-rose-100 flex flex-col"
+            className="relative z-10 rounded-xl shadow-lg lg:-mr-8 divide-y-2 divide-rose-100 flex flex-col"
             style={{ height: 374 }}
           >
             <section className="flex">

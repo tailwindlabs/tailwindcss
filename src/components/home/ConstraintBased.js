@@ -45,6 +45,7 @@ export function ConstraintBased() {
               }}
               selected={tab}
               onChange={setTab}
+              className="justify-center lg:justify-start"
             />
           </div>
         }
