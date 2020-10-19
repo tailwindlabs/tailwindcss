@@ -51,7 +51,7 @@ function stop(...msgs) {
  * @return {Promise}
  */
 function buildToStdout(compileOptions) {
-  return compile(compileOptions).then(result => process.stdout.write(result.css))
+  return compile(compileOptions).then((result) => process.stdout.write(result.css))
 }
 
 /**
@@ -74,7 +74,7 @@ function buildToFile(compileOptions, startTime) {
       : ['Building from default CSS...', colors.info('(No input file provided)')])
   )
 
-  return compile(compileOptions).then(result => {
+  return compile(compileOptions).then((result) => {
     utils.writeFile(compileOptions.outputFile, result.css)
 
     const prettyTime = prettyHrtime(process.hrtime(startTime))

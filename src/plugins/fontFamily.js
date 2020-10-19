@@ -5,7 +5,7 @@ export default function () {
     [
       'font',
       ['fontFamily'],
-      value => {
+      (value) => {
         return Array.isArray(value) ? value.join(', ') : value
       },
     ],

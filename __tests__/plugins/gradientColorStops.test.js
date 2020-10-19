@@ -19,7 +19,7 @@ test('opacity variables are given to colors defined as closures', () => {
           },
         },
         opacity: {
-          '50': '0.5',
+          50: '0.5',
         },
       },
       variants: {
@@ -31,7 +31,7 @@ test('opacity variables are given to colors defined as closures', () => {
     }),
   ])
     .process('@tailwind utilities', { from: undefined })
-    .then(result => {
+    .then((result) => {
       const expected = `
         .text-primary {
           --text-opacity: 1;

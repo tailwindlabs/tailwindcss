@@ -33,7 +33,7 @@ export default function () {
       }),
     ]
 
-    const utilities = _.flatMap(generators, generator => {
+    const utilities = _.flatMap(generators, (generator) => {
       return _.flatMap(theme('borderRadius'), (value, modifier) => {
         return generator(value, modifier)
       })

@@ -8,7 +8,7 @@ export default function () {
   return function ({ addUtilities, theme, variants, corePlugins }) {
     const colors = flattenColorPalette(theme('borderColor'))
 
-    const getProperties = value => {
+    const getProperties = (value) => {
       if (corePlugins('borderOpacity')) {
         return withAlphaVariable({
           color: value,

@@ -10,15 +10,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added `overflow-ellipsis` and `overflow-clip` utilities ([#1289](https://github.com/tailwindlabs/tailwindcss/pull/1289))
-- Move `truncate` class to `textOverflow` core plugin ([#2562](https://github.com/tailwindlabs/tailwindcss/pull/2562))
+- Add `transform-gpu` to force hardware acceleration on transforms when beneficial ([#1380](https://github.com/tailwindlabs/tailwindcss/pull/1380))
+- Promote all previous experimental/future features to stable/default ([#2609](https://github.com/tailwindlabs/tailwindcss/pull/2609))
+- Extend default grid to 16 columns, include fractional sizes in 16ths in spacing scale *(useful for 16x9 aspect ratio situations)* ([559bf9589](https://github.com/tailwindlabs/tailwindcss/pull/2609/commits/559bf9589821ccf0773d4d727a6523028736ad91#diff-d65cc1efb133c1202d14550da74ce17790b33ca9c27dec2a4ce64603d606dca0))
 
 ### Changed
 
+- Move `truncate` class to `textOverflow` core plugin ([#2562](https://github.com/tailwindlabs/tailwindcss/pull/2562))
 - Removed `target` feature and dropped any compatibility with IE 11 ([#2571](https://github.com/tailwindlabs/tailwindcss/pull/2571))
 - Switch `normalize.css` to `modern-normalize` ([#2572](https://github.com/tailwindlabs/tailwindcss/pull/2572))
 - Remove `scrolling-touch` and `scrolling-auto` utilities ([#2573](https://github.com/tailwindlabs/tailwindcss/pull/2573))
 - Change special use of 'default' in config to 'DEFAULT' ([#2580](https://github.com/tailwindlabs/tailwindcss/pull/2580))
 - Drop support for Node 8 and 10 ([#2582](https://github.com/tailwindlabs/tailwindcss/pull/2582))
+- Modernize default system font stacks ([#1711](https://github.com/tailwindlabs/tailwindcss/pull/1711))
+- Upgrade to PurgeCSS 3.0
+- Upgrade to PostCSS 8.0
+- Use logical properties for `space` and `divide` utilities ([#1883](https://github.com/tailwindlabs/tailwindcss/pull/1883))
+
+## [1.9.4]
+
+### Fixed
+
+- Fix issue changing plugins defined using the `withOptions` API would not trigger rebuilds in watch processes
+
+## [1.9.3]
+
+### Fixed
+
+- Fix issue where `tailwindcss init --full` scaffolded a corrupt config file (https://github.com/tailwindlabs/tailwindcss/issues/2556)
+
+### Changed
+
+- Remove console warnings about upcoming breaking changes
 
 ## [1.9.2]
 
@@ -989,7 +1012,9 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.2...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.4...HEAD
+[1.9.4]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.3...v1.9.4
+[1.9.3]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.2...v1.9.3
 [1.9.2]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.1...v1.9.2
 [1.9.1]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.0...v1.9.1
 [1.9.0]: https://github.com/tailwindlabs/tailwindcss/compare/v1.8.13...v1.9.0

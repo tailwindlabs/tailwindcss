@@ -8,7 +8,7 @@ export default function () {
   return function ({ addUtilities, theme, variants, corePlugins }) {
     const colors = flattenColorPalette(theme('divideColor'))
 
-    const getProperties = value => {
+    const getProperties = (value) => {
       if (corePlugins('divideOpacity')) {
         return withAlphaVariable({
           color: value,

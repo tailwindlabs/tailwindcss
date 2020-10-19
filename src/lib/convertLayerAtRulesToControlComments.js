@@ -2,7 +2,7 @@ import postcss from 'postcss'
 
 export default function convertLayerAtRulesToControlComments() {
   return function (css) {
-    css.walkAtRules('layer', atRule => {
+    css.walkAtRules('layer', (atRule) => {
       const layer = atRule.params
 
       if (!['base', 'components', 'utilities'].includes(layer)) {

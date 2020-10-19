@@ -25,7 +25,7 @@ export default function () {
       }),
     ]
 
-    const utilities = _.flatMap(generators, generator => {
+    const utilities = _.flatMap(generators, (generator) => {
       return _.flatMap(theme('margin'), generator)
     })
 

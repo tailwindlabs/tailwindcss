@@ -8,7 +8,7 @@ export default function () {
   return function ({ addUtilities, theme, variants, corePlugins }) {
     const colors = flattenColorPalette(theme('textColor'))
 
-    const getProperties = value => {
+    const getProperties = (value) => {
       if (corePlugins('textOpacity')) {
         return withAlphaVariable({
           color: value,

@@ -1,6 +1,6 @@
 export default function applyImportantConfiguration(_config) {
   return function (css) {
-    css.walkRules(rule => {
+    css.walkRules((rule) => {
       const important = rule.__tailwind ? rule.__tailwind.important : false
 
       if (!important) {
@@ -8,11 +8,11 @@ export default function applyImportantConfiguration(_config) {
       }
 
       if (typeof important === 'string') {
-        rule.selectors = rule.selectors.map(selector => {
+        rule.selectors = rule.selectors.map((selector) => {
           return `${rule.__tailwind.important} ${selector}`
         })
       } else {
-        rule.walkDecls(decl => (decl.important = true))
+        rule.walkDecls((decl) => (decl.important = true))
       }
     })
   }

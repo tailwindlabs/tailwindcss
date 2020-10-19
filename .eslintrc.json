@@ -6,7 +6,7 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "extends": ["eslint-config-postcss", "prettier"],
+  "extends": ["prettier"],
   "plugins": ["prettier"],
   "rules": {
     "camelcase": ["error", { "allow": ["^unstable_"] }],
@@ -22,8 +22,7 @@
         "useTabs": false,
         "trailingComma": "es5",
         "bracketSpacing": true,
-        "parser": "flow",
-        "arrowParens": "avoid"
+        "parser": "flow"
       }
     ]
   }

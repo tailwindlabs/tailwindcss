@@ -10,8 +10,8 @@ test('z index can use negative prefix syntax', () => {
       zIndex: {
         '-20': '-20',
         '-10': '-10',
-        '10': '10',
-        '20': '20',
+        10: '10',
+        20: '20',
       },
     },
     variants: {

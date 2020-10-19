@@ -21,7 +21,7 @@ function suppressConsoleLogs(cb, type = 'warn') {
 function extractRules(root) {
   let rules = []
 
-  root.walkRules(r => {
+  root.walkRules((r) => {
     rules = rules.concat(r.selectors)
   })
 
@@ -45,7 +45,7 @@ const config = {
         'black!': '#000',
       },
       spacing: {
-        '1.5': '0.375rem',
+        1.5: '0.375rem',
         '(1/2+8)': 'calc(50% + 2rem)',
       },
       minHeight: {
@@ -57,6 +57,8 @@ const config = {
     },
   },
 }
+
+delete config.presets
 
 function assertPurged(result) {
   expect(result.css).not.toContain('.bg-red-600')
@@ -106,7 +108,7 @@ test('purges unused classes', () => {
         }),
       ])
         .process(input, { from: inputPath })
-        .then(result => {
+        .then((result) => {
           assertPurged(result)
         })
     })
@@ -137,7 +139,7 @@ test('custom css is not purged by default', () => {
       `,
           { from: null }
         )
-        .then(result => {
+        .then((result) => {
           const rules = extractRules(result.root)
           assertPurged(result)
           expect(rules).toContain('.example')
@@ -172,7 +174,7 @@ test('custom css that uses @responsive is not purged by default', () => {
       `,
           { from: null }
         )
-        .then(result => {
+        .then((result) => {
           const rules = extractRules(result.root)
           assertPurged(result)
           expect(rules).toContain('.example')
@@ -210,7 +212,7 @@ test('custom css in a layer is purged by default when using layers mode', () => 
         `,
           { from: null }
         )
-        .then(result => {
+        .then((result) => {
           const rules = extractRules(result.root)
           assertPurged(result)
           expect(rules).not.toContain('.example')
@@ -250,7 +252,7 @@ test('custom css in a layer in a @responsive at-rule is purged by default', () =
       `,
           { from: null }
         )
-        .then(result => {
+        .then((result) => {
           const rules = extractRules(result.root)
           assertPurged(result)
           expect(rules).not.toContain('.example')
@@ -273,7 +275,7 @@ test('purges unused classes with important string', () => {
         }),
       ])
         .process(input, { from: inputPath })
-        .then(result => {
+        .then((result) => {
           assertPurged(result)
         })
     })
@@ -317,7 +319,7 @@ test('components are purged by default in layers mode', () => {
         }),
       ])
         .process(input, { from: inputPath })
-        .then(result => {
+        .then((result) => {
           expect(result.css).not.toContain('.container')
           assertPurged(result)
         })
@@ -345,7 +347,7 @@ test('you can specify which layers to purge', () => {
         }),
       ])
         .process(input, { from: inputPath })
-        .then(result => {
+        .then((result) => {
           const rules = extractRules(result.root)
           expect(rules).toContain('optgroup')
           expect(rules).toContain('.container')
@@ -375,37 +377,13 @@ test('you can purge just base and component layers (but why)', () => {
         }),
       ])
         .process(input, { from: inputPath })
-        .then(result => {
+        .then((result) => {
           const rules = extractRules(result.root)
           expect(rules).not.toContain('[type="checkbox"]')
           expect(rules).not.toContain('.container')
           expect(rules).toContain('.float-left')
           expect(rules).toContain('.md\\:bg-red-500')
           expect(rules).toContain('.lg\\:appearance-none')
-        })
-    })
-  )
-})
-
-test('does not purge components when mode is conservative', () => {
-  return inProduction(
-    suppressConsoleLogs(() => {
-      const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
-      const input = fs.readFileSync(inputPath, 'utf8')
-
-      return postcss([
-        tailwind({
-          ...config,
-          purge: {
-            mode: 'conservative',
-            content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
-          },
-        }),
-      ])
-        .process(input, { from: inputPath })
-        .then(result => {
-          expect(result.css).toContain('.container')
-          assertPurged(result)
         })
     })
   )
@@ -437,7 +415,7 @@ test('extra purgecss control comments can be added manually', () => {
         }),
       ])
         .process(input, { from: null })
-        .then(result => {
+        .then((result) => {
           const rules = extractRules(result.root)
 
           expect(rules).toContain('.btn')
@@ -461,7 +439,7 @@ test(
       }),
     ])
       .process(input, { from: inputPath })
-      .then(result => {
+      .then((result) => {
         const expected = fs.readFileSync(
           path.resolve(`${__dirname}/fixtures/tailwind-output.css`),
           'utf8'
@@ -487,7 +465,7 @@ test('does not purge if the array is empty', () => {
         }),
       ])
         .process(input, { from: inputPath })
-        .then(result => {
+        .then((result) => {
           process.env.NODE_ENV = OLD_NODE_ENV
           const expected = fs.readFileSync(
             path.resolve(`${__dirname}/fixtures/tailwind-output.css`),
@@ -513,7 +491,7 @@ test('does not purge if explicitly disabled', () => {
         }),
       ])
         .process(input, { from: inputPath })
-        .then(result => {
+        .then((result) => {
           const expected = fs.readFileSync(
             path.resolve(`${__dirname}/fixtures/tailwind-output.css`),
             'utf8'
@@ -538,7 +516,7 @@ test('does not purge if purge is simply false', () => {
         }),
       ])
         .process(input, { from: inputPath })
-        .then(result => {
+        .then((result) => {
           const expected = fs.readFileSync(
             path.resolve(`${__dirname}/fixtures/tailwind-output.css`),
             'utf8'
@@ -563,7 +541,7 @@ test('purges outside of production if explicitly enabled', () => {
         }),
       ])
         .process(input, { from: inputPath })
-        .then(result => {
+        .then((result) => {
           assertPurged(result)
         })
     })
@@ -583,13 +561,13 @@ test(
           enabled: true,
           options: {
             content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
-            whitelist: ['md:bg-green-500'],
+            safelist: ['md:bg-green-500'],
           },
         },
       }),
     ])
       .process(input, { from: inputPath })
-      .then(result => {
+      .then((result) => {
         expect(result.css).toContain('.md\\:bg-green-500')
         assertPurged(result)
       })
@@ -614,11 +592,11 @@ test(
       function (css) {
         // Remove any comments to avoid accidentally asserting against them
         // instead of against real CSS rules.
-        css.walkComments(c => c.remove())
+        css.walkComments((c) => c.remove())
       },
     ])
       .process(input, { from: inputPath })
-      .then(result => {
+      .then((result) => {
         expect(result.css).toContain('html')
         expect(result.css).toContain('body')
         expect(result.css).toContain('samp')
@@ -629,52 +607,6 @@ test(
       })
   })
 )
-
-test('the `conservative` mode can be set explicitly', () => {
-  return inProduction(
-    suppressConsoleLogs(() => {
-      const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
-      const input = fs.readFileSync(inputPath, 'utf8')
-
-      return postcss([
-        tailwind({
-          ...config,
-          purge: {
-            mode: 'conservative',
-            content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
-          },
-        }),
-      ])
-        .process(input, { from: inputPath })
-        .then(result => {
-          expect(result.css).not.toContain('.bg-red-600')
-          expect(result.css).not.toContain('.w-1\\/3')
-          expect(result.css).not.toContain('.flex')
-          expect(result.css).not.toContain('.font-sans')
-          expect(result.css).not.toContain('.text-right')
-          expect(result.css).not.toContain('.px-4')
-          expect(result.css).not.toContain('.h-full')
-
-          expect(result.css).toContain('.bg-red-500')
-          expect(result.css).toContain('.md\\:bg-blue-300')
-          expect(result.css).toContain('.w-1\\/2')
-          expect(result.css).toContain('.block')
-          expect(result.css).toContain('.md\\:flow-root')
-          expect(result.css).toContain('.h-screen')
-          expect(result.css).toContain('.min-h-\\(screen-4\\)')
-          expect(result.css).toContain('.bg-black\\!')
-          expect(result.css).toContain('.font-\\%\\#\\$\\@')
-          expect(result.css).toContain('.w-\\(1\\/2\\+8\\)')
-          expect(result.css).toContain('.inline-grid')
-          expect(result.css).toContain('.grid-cols-3')
-          expect(result.css).toContain('.px-1\\.5')
-          expect(result.css).toContain('.col-span-2')
-          expect(result.css).toContain('.col-span-1')
-          expect(result.css).toContain('.text-center')
-        })
-    })
-  )
-})
 
 test('element selectors are preserved by default', () => {
   return inProduction(
@@ -692,7 +624,7 @@ test('element selectors are preserved by default', () => {
         }),
       ])
         .process(input, { from: inputPath })
-        .then(result => {
+        .then((result) => {
           const rules = extractRules(result.root)
           ;[
             'a',
@@ -718,7 +650,7 @@ test('element selectors are preserved by default', () => {
             'sup',
             'table',
             'ul',
-          ].forEach(e => expect(rules).toContain(e))
+          ].forEach((e) => expect(rules).toContain(e))
 
           assertPurged(result)
         })
@@ -743,7 +675,7 @@ test('preserving element selectors can be disabled', () => {
         }),
       ])
         .process(input, { from: inputPath })
-        .then(result => {
+        .then((result) => {
           const rules = extractRules(result.root)
 
           ;[
@@ -768,7 +700,7 @@ test('preserving element selectors can be disabled', () => {
             'sup',
             'table',
             'ul',
-          ].forEach(e => expect(rules).not.toContain(e))
+          ].forEach((e) => expect(rules).not.toContain(e))
 
           assertPurged(result)
         })

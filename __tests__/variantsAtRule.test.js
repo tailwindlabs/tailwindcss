@@ -1,10 +1,12 @@
 import postcss from 'postcss'
 import plugin from '../src/lib/substituteVariantsAtRules'
 import processPlugins from '../src/util/processPlugins'
+import resolveConfig from '../src/util/resolveConfig'
 import config from '../stubs/defaultConfig.stub.js'
 
 function run(input, opts = config) {
-  return postcss([plugin(opts, processPlugins(opts.plugins, opts))]).process(input, {
+  const resolved = resolveConfig([opts])
+  return postcss([plugin(resolved, processPlugins(resolved.plugins, resolved))]).process(input, {
     from: undefined,
   })
 }
@@ -24,7 +26,7 @@ test('it can generate hover variants', () => {
     .hover\\:chocolate:hover { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -45,7 +47,7 @@ test('it can generate disabled variants', () => {
     .disabled\\:chocolate:disabled { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -66,7 +68,7 @@ test('it can generate checked variants', () => {
     .checked\\:chocolate:checked { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -87,7 +89,7 @@ test('it can generate active variants', () => {
     .active\\:chocolate:active { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -108,7 +110,7 @@ test('it can generate visited variants', () => {
     .visited\\:chocolate:visited { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -129,7 +131,7 @@ test('it can generate focus variants', () => {
     .focus\\:chocolate:focus { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -150,7 +152,7 @@ test('it can generate focus-within variants', () => {
     .focus-within\\:chocolate:focus-within { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -171,7 +173,7 @@ test('it can generate focus-visible variants', () => {
     .focus-visible\\:chocolate:focus-visible { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -194,7 +196,7 @@ test('it can generate motion-reduce variants', () => {
     }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -217,7 +219,7 @@ test('it can generate motion-safe variants', () => {
     }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -244,7 +246,7 @@ test('it can generate motion-safe and motion-reduce variants', () => {
     }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -275,7 +277,7 @@ test('motion-reduce variants stack with basic variants', () => {
     }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -306,7 +308,7 @@ test('motion-safe variants stack with basic variants', () => {
     }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -339,7 +341,7 @@ test('motion-safe and motion-reduce variants stack with basic variants', () => {
     }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -360,7 +362,7 @@ test('it can generate first-child variants', () => {
     .first\\:chocolate:first-child { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -381,7 +383,7 @@ test('it can generate odd variants', () => {
     .odd\\:chocolate:nth-child(odd) { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -402,7 +404,7 @@ test('it can generate last-child variants', () => {
     .last\\:chocolate:last-child { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -423,7 +425,7 @@ test('it can generate even variants', () => {
     .even\\:chocolate:nth-child(even) { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -444,7 +446,7 @@ test('it can generate group-hover variants', () => {
     .group:hover .group-hover\\:chocolate { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -468,7 +470,7 @@ test('group-hover variants respect any configured prefix', () => {
   return run(input, {
     ...config,
     prefix: 'tw-',
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -489,7 +491,7 @@ test('it can generate group-focus variants', () => {
     .group:focus .group-focus\\:chocolate { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -513,7 +515,7 @@ test('group-focus variants respect any configured prefix', () => {
   return run(input, {
     ...config,
     prefix: 'tw-',
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -540,7 +542,7 @@ test('it can generate hover, active and focus variants', () => {
     .active\\:chocolate:active { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -565,7 +567,7 @@ test('it can generate hover, active and focus variants for multiple classes in o
     .active\\:chocolate:active, .active\\:coconut:active { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -590,7 +592,7 @@ test('it wraps the output in a responsive at-rule if responsive is included as a
     }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -617,7 +619,7 @@ test('variants are generated in the order specified', () => {
 
   return run(input, {
     ...config,
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -640,7 +642,7 @@ test('the built-in variant pseudo-selectors are appended before any pseudo-eleme
     .group:hover .group-hover\\:placeholder-yellow::placeholder { color: yellow; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -667,7 +669,7 @@ test('the default variant can be generated in a specified position', () => {
 
   return run(input, {
     ...config,
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -704,7 +706,7 @@ test('nested rules are not modified', () => {
 
   return run(input, {
     ...config,
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -731,16 +733,16 @@ test('plugin variants can modify rules using the raw PostCSS API', () => {
       ...config.plugins,
       function ({ addVariant }) {
         addVariant('important', ({ container }) => {
-          container.walkRules(rule => {
+          container.walkRules((rule) => {
             rule.selector = `.\\!${rule.selector.slice(1)}`
-            rule.walkDecls(decl => {
+            rule.walkDecls((decl) => {
               decl.important = true
             })
           })
         })
       },
     ],
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -773,7 +775,7 @@ test('plugin variants can modify selectors with a simplified API', () => {
         })
       },
     ],
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -806,7 +808,7 @@ test('plugin variants that use modify selectors need to manually escape the clas
         })
       },
     ],
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -841,13 +843,13 @@ test('plugin variants can wrap rules in another at-rule using the raw PostCSS AP
           })
           supportsRule.nodes = container.nodes
           container.nodes = [supportsRule]
-          supportsRule.walkRules(rule => {
+          supportsRule.walkRules((rule) => {
             rule.selector = `.${e(`supports-grid${separator}${rule.selector.slice(1)}`)}`
           })
         })
       },
     ],
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })

@@ -5,7 +5,7 @@ test('it prefixes classes with the provided prefix', () => {
 })
 
 test('it handles a function as the prefix', () => {
-  const prefixFunc = selector => {
+  const prefixFunc = (selector) => {
     return selector === '.foo' ? 'tw-' : ''
   }
 
