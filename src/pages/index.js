@@ -1,5 +1,3 @@
-import { CodeWindow } from '@/components/CodeWindow'
-import { GradientLockup } from '@/components/GradientLockup'
 import { Testimonials } from '@/components/Testimonials'
 import { DarkMode } from '@/components/home/DarkMode'
 import { ConstraintBased } from '@/components/home/ConstraintBased'
@@ -13,6 +11,7 @@ import { BrowserSupport } from '@/components/home/BrowserSupport'
 import { EditorTools } from '@/components/home/EditorTools'
 import { ReadyMadeComponents } from '@/components/home/ReadyMadeComponents'
 import { Search } from '@/components/Search'
+import { Hero } from '@/components/home/Hero'
 
 export default function Home() {
   return (
@@ -72,21 +71,7 @@ export default function Home() {
             </button>
           </div>
         </div>
-        <GradientLockup
-          color="lightblue"
-          rotate={-2}
-          left={
-            <div
-              className="relative z-10 bg-white rounded-xl shadow-lg lg:-mr-8"
-              style={{ height: 304 }}
-            />
-          }
-          right={
-            <CodeWindow className="bg-lightBlue-500">
-              <CodeWindow.Code />
-            </CodeWindow>
-          }
-        />
+        <Hero />
       </header>
       <Testimonials />
       <div className="max-w-screen-xl mx-auto space-y-44">
