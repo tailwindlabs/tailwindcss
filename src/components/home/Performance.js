@@ -78,7 +78,7 @@ export function Performance() {
 
   return (
     <section>
-      <div className="px-8 mb-20">
+      <div className="px-4 sm:px-6 md:px-8 mb-20">
         <IconContainer className={`${gradients.teal} mb-8`}>
           <Icon />
         </IconContainer>
@@ -98,9 +98,13 @@ export function Performance() {
       <GradientLockup
         color="teal"
         rotate={1}
+        pin="right"
         left={
-          <div ref={ref} className="relative z-10 rounded-xl shadow-lg lg:-mr-8 tabular-nums">
-            <div className="bg-white rounded-t-xl">
+          <div
+            ref={ref}
+            className="relative z-10 rounded-tl-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8 tabular-nums"
+          >
+            <div className="bg-white rounded-tl-xl sm:rounded-t-xl">
               <div className="absolute top-6 left-6 w-15 h-15 bg-green-500 rounded-full flex items-center justify-center">
                 <svg width="32" height="32" fill="none">
                   <path
@@ -177,7 +181,7 @@ export function Performance() {
                 </div>
               </dl>
             </div>
-            <div className="relative bg-teal-700 rounded-b-xl overflow-hidden p-4">
+            <div className="relative bg-teal-700 lg:rounded-b-xl overflow-hidden p-4">
               <div className="bg-black bg-opacity-75 absolute inset-0" />
               <div
                 className="relative font-mono text-sm text-teal-200"

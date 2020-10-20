@@ -12,7 +12,7 @@ export function BuildAnything() {
 
   return (
     <section>
-      <div className="px-8 mb-20">
+      <div className="px-4 sm:px-6 md:px-8 mb-20">
         <IconContainer className={`${gradients.orange} mb-8`}>
           <Icon />
         </IconContainer>
@@ -32,6 +32,7 @@ export function BuildAnything() {
       <GradientLockup
         color="orange"
         rotate={-2}
+        pin="right"
         header={
           <div className="-ml-4">
             <Tabs
@@ -42,7 +43,7 @@ export function BuildAnything() {
               }}
               selected={theme}
               onChange={setTheme}
-              className="justify-center lg:justify-start"
+              className="justify-center xl:justify-start"
             />
           </div>
         }

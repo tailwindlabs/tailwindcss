@@ -50,7 +50,7 @@ export function Customization() {
 
   return (
     <section>
-      <div className="px-8 mb-20">
+      <div className="px-4 sm:px-6 md:px-8 mb-20">
         <IconContainer className={`${gradients.pink} mb-8`}>
           <Icon />
         </IconContainer>
@@ -84,20 +84,25 @@ export function Customization() {
                 playful: 'Playful',
                 elegant: 'Elegant',
                 brutalist: 'Brutalist',
+                brutalist2: 'Brutalist',
+                brutalist3: 'Brutalist',
+                brutalist4: 'Brutalist',
+                brutalist5: 'Brutalist',
+                brutalist6: 'Brutalist',
               }}
               selected={theme}
               onChange={setTheme}
-              className="justify-center lg:justify-start"
+              className="justify-center xl:justify-start"
             />
           </div>
         }
         left={
           <div
-            className="relative z-10 rounded-xl shadow-lg lg:-mr-8 divide-y-2 divide-rose-100 flex flex-col"
+            className="relative z-10 rounded-tr-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8 divide-y-2 divide-rose-100 flex flex-col"
             style={{ height: 374 }}
           >
             <section className="flex">
-              <h3 className="flex-none w-48 bg-rose-50 rounded-tl-xl text-lg leading-6 font-semibold text-rose-800 p-8">
+              <h3 className="flex-none w-48 bg-rose-50 sm:rounded-tl-xl text-lg leading-6 font-semibold text-rose-800 p-8">
                 Typography
               </h3>
               <dl className="flex-auto bg-white rounded-tr-xl p-6 space-y-6">
@@ -137,10 +142,10 @@ export function Customization() {
               </dl>
             </section>
             <section className="flex overflow-hidden">
-              <h3 className="flex-none w-48 bg-rose-50 rounded-bl-xl text-lg leading-6 font-semibold text-rose-800 p-8">
+              <h3 className="flex-none w-48 bg-rose-50 lg:rounded-bl-xl text-lg leading-6 font-semibold text-rose-800 p-8">
                 Color
               </h3>
-              <div className="relative flex-auto bg-white rounded-br-xl overflow-hidden">
+              <div className="relative flex-auto bg-white lg:rounded-br-xl overflow-hidden">
                 <dl className="p-6 space-y-6">
                   <div className="space-y-2">
                     <dt className="font-mono text-xs leading-4">{'bg-primary-{50-900}'}</dt>

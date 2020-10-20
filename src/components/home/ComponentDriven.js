@@ -113,7 +113,7 @@ function ApplyExample() {
 export function ComponentDriven() {
   return (
     <section>
-      <div className="px-8 mb-20">
+      <div className="px-4 sm:px-6 md:px-8 mb-20">
         <IconContainer className={`${gradients.amber} mb-8`} />
         <Caption as="h2" className="text-amber-500 mb-3">
           Component-driven
@@ -131,8 +131,9 @@ export function ComponentDriven() {
       <GradientLockup
         color="amber"
         rotate={-2}
+        pin="right"
         left={
-          <div className="relative z-10 bg-white rounded-xl shadow-lg lg:-mr-8 divide-y divide-gray-100">
+          <div className="relative z-10 bg-white rounded-tl-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8 divide-y divide-gray-100">
             <nav className="p-4 text-sm leading-5 font-medium">
               <ul className="flex space-x-2">
                 <li>
@@ -198,7 +199,7 @@ export function ComponentDriven() {
         }
         right={<ComponentExample />}
       />
-      <div className="px-8 mt-32 mb-8">
+      <div className="px-4 sm:px-6 md:px-8 mt-32 mb-8">
         <Paragraph className="mb-6">
           Not into component frameworks and like to keep it old school? Use Tailwind's @apply
           directive to extract repeated utility patterns into custom CSS classes just by copying and
@@ -212,7 +213,7 @@ export function ComponentDriven() {
         color="orange"
         rotate={1}
         left={
-          <div className="relative z-10 bg-white rounded-xl shadow-lg lg:mr-4">
+          <div className="relative z-10 bg-white rounded-tr-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:mr-4">
             <article className="text-gray-600 leading-6">
               <h2 className="opacity-25 text-2xl leading-8 font-semibold text-black p-6 pb-1">
                 Weekly one-on-one

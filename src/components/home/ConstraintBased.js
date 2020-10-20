@@ -137,7 +137,7 @@ export function ConstraintBased() {
 
   return (
     <section>
-      <div className="px-8 mb-20">
+      <div className="px-4 sm:px-6 md:px-8 mb-20">
         <IconContainer className={`${gradients.purple} mb-8`}>
           <Icon />
         </IconContainer>
@@ -169,13 +169,16 @@ export function ConstraintBased() {
               }}
               selected={tab}
               onChange={setTab}
-              className="justify-center lg:justify-start"
+              className="justify-center xl:justify-start"
             />
           </div>
         }
         left={
-          <div className="relative z-10 rounded-xl shadow-lg flex lg:-mr-8" style={{ height: 370 }}>
-            <h3 className="flex-none w-48 bg-purple-50 rounded-l-xl text-lg leading-6 font-semibold text-purple-800 p-8">
+          <div
+            className="relative z-10 rounded-tr-xl sm:rounded-t-xl lg:rounded-xl shadow-lg flex lg:-mr-8"
+            style={{ height: 370 }}
+          >
+            <h3 className="flex-none w-48 bg-purple-50 sm:rounded-tl-xl lg:rounded-l-xl text-lg leading-6 font-semibold text-purple-800 p-8">
               <AnimatePresence initial={false} exitBeforeEnter>
                 <motion.span
                   key={tab}
@@ -195,7 +198,7 @@ export function ConstraintBased() {
               </AnimatePresence>
             </h3>
 
-            <div className="relative flex-auto bg-white rounded-r-xl p-8 overflow-hidden flex">
+            <div className="relative flex-auto bg-white rounded-tr-xl sm:rounded-tr-xl lg:rounded-r-xl p-8 overflow-hidden flex">
               <AnimatePresence initial={false} exitBeforeEnter>
                 {tab === 'sizing' && (
                   <motion.ul

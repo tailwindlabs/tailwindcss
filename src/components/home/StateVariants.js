@@ -7,7 +7,7 @@ import { ReactComponent as Icon } from '@/img/icons/home/state-variants.svg'
 export function StateVariants() {
   return (
     <section>
-      <div className="px-8 mb-20">
+      <div className="px-4 sm:px-6 md:px-8 mb-20">
         <IconContainer className={`${gradients.lightblue} mb-8`}>
           <Icon />
         </IconContainer>
@@ -28,7 +28,7 @@ export function StateVariants() {
         color="lightblue"
         rotate={1}
         left={
-          <div className="relative z-10 bg-white rounded-xl shadow-lg lg:-mr-8">
+          <div className="relative z-10 bg-white rounded-tr-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8">
             <section className="px-6 pt-4 pb-6 space-y-4">
               <header className="flex items-center justify-between">
                 <h2 className="text-lg leading-6 font-medium text-black">Projects</h2>

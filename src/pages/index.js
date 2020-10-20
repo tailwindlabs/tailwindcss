@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <div className="space-y-44 overflow-hidden">
       <header className="relative z-10 max-w-screen-xl mx-auto">
-        <div className="px-8">
+        <div className="px-4 sm:px-6 md:px-8">
           <div className="border-b border-gray-200 py-6 flex items-center justify-between mb-20">
             <Search />
             <a href="https://github.com/tailwindlabs/tailwindcss" className="text-gray-400">

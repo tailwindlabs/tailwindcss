@@ -8,7 +8,7 @@ import { ReactComponent as Icon } from '@/img/icons/home/browser-support.svg'
 export function BrowserSupport() {
   return (
     <section>
-      <div className="px-8 mb-20">
+      <div className="px-4 sm:px-6 md:px-8 mb-20">
         <IconContainer className={`${gradients.purple} mb-8`}>
           <Icon />
         </IconContainer>
@@ -41,7 +41,7 @@ export function BrowserSupport() {
           <div className="-ml-4">
             <Tabs
               tabs={['Modern Browsers', 'IE11', 'IE9']}
-              className="justify-center lg:justify-start"
+              className="justify-center xl:justify-start"
             />
           </div>
         }

@@ -11,7 +11,7 @@ import tokenize from '../../macros/tokenize.macro'
 import { Token } from '@/components/Code'
 
 const { code, tokens } = tokenize.html(
-  `<div class="light:bg-white rounded-t-xl p-8 space-y-8 dark:bg-gray-800">
+  `<div class="light:bg-white rounded-tl-xl sm:rounded-t-xl p-8 space-y-8 dark:bg-gray-800">
   <div class="flex items-center space-x-5">
     <img
       src="https://unsplash.it/160/160?random"
@@ -48,7 +48,7 @@ const { code, tokens } = tokenize.html(
     </div>
   </div>
 </div>
-<div class="rounded-b-xl bg-gray-50 text-black py-4 px-3 grid grid-cols-7 items-center dark:bg-gray-900 dark:text-white">
+<div class="lg:rounded-b-xl bg-gray-50 text-black py-4 px-3 grid grid-cols-7 items-center dark:bg-gray-900 dark:text-white">
   <button type="button" class="mx-auto">
     <svg width="24" height="24" fill="none">
       <path
@@ -170,7 +170,7 @@ export function DarkMode() {
 
   return (
     <section>
-      <div className="px-8 mb-20">
+      <div className="px-4 sm:px-6 md:px-8 mb-20">
         <IconContainer className={`${gradients.green} mb-8`}>
           <Icon />
         </IconContainer>
@@ -191,6 +191,7 @@ export function DarkMode() {
       <GradientLockup
         color="green"
         rotate={-2}
+        pin="right"
         header={
           <div className="flex justify-center">
             <DarkModeSwitch enabled={enabled} onChange={setEnabled} />
@@ -198,7 +199,9 @@ export function DarkMode() {
         }
         left={
           <div
-            className={`relative z-10 rounded-xl shadow-lg lg:-mr-8 ${enabled ? 'dark' : ''}`}
+            className={`relative z-10 rounded-tl-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8 ${
+              enabled ? 'dark' : ''
+            }`}
             dangerouslySetInnerHTML={{
               __html: code
                 .replace(/light:/g, '')
