@@ -54,13 +54,13 @@ export default function Home() {
           <div className="flex space-x-4 mb-8">
             <a
               href="#"
-              className="bg-black text-white text-lg leading-6 font-semibold py-3 px-6 border border-transparent rounded-lg"
+              className="bg-black text-white text-lg leading-6 font-semibold py-3 px-6 border border-transparent rounded-xl"
             >
               Get started
             </a>
             <button
               type="button"
-              className="bg-gray-100 text-black font-mono leading-6 py-3 px-6 border border-transparent rounded-lg flex items-center space-x-4"
+              className="bg-gray-50 text-black font-mono leading-6 py-3 px-6 border border-gray-200 rounded-xl flex items-center space-x-4"
             >
               <span>
                 <span className="text-gray-500">$</span> npm install tailwindcss
