@@ -5,6 +5,7 @@ import { CodeWindow } from '@/components/CodeWindow'
 import { motion, useTransform, useMotionValue } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { ReactComponent as Icon } from '@/img/icons/home/mobile-first.svg'
+import styles from './MobileFirst.module.css'
 
 const MIN_WIDTH = 400
 
@@ -215,7 +216,7 @@ export function MobileFirst() {
             <div className="max-w-5xl mx-auto">
               <BrowserWindow />
             </div>
-            <CodeWindow className="bg-indigo-500" height={396}>
+            <CodeWindow className={`bg-indigo-500 ${styles.code}`}>
               <CodeWindow.Code />
             </CodeWindow>
           </>

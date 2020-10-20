@@ -1,0 +1,9 @@
+.root {
+  max-height: 36rem;
+}
+
+@screen lg {
+  .root {
+    height: 36rem;
+  }
+}

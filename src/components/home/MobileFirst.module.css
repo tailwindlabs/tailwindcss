@@ -1,0 +1,9 @@
+.code {
+  max-height: 24.75rem;
+}
+
+@screen lg {
+  .code {
+    height: 24.75rem;
+  }
+}

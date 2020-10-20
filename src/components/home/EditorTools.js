@@ -2,6 +2,7 @@ import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/h
 import { GradientLockup } from '@/components/GradientLockup'
 import { CodeWindow } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
+import styles from './EditorTools.module.css'
 
 export function EditorTools() {
   return (
@@ -30,7 +31,7 @@ export function EditorTools() {
         color="lightblue"
         rotate={2}
         left={
-          <CodeWindow className="bg-lightBlue-500" height={625}>
+          <CodeWindow className={`bg-lightBlue-500 ${styles.code}`}>
             <CodeWindow.Code />
           </CodeWindow>
         }

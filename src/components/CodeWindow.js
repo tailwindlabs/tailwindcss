@@ -1,5 +1,6 @@
 import tokenize from '../macros/tokenize.macro'
 import { Code } from './Code'
+import styles from './CodeWindow.module.css'
 
 const { tokens: defaultTokens } = tokenize.html(`<div class="flex pa-2 bg-white rounded-lg shadow">
   <div class="w-32 rounded-md overflow-hidden">
@@ -21,11 +22,10 @@ const { tokens: defaultTokens } = tokenize.html(`<div class="flex pa-2 bg-white 
   </div>
 </div>`)
 
-export function CodeWindow({ children, className = '', height = 576 }) {
+export function CodeWindow({ children, className = '' }) {
   return (
     <div
-      className={`relative overflow-hidden md:rounded-xl shadow-2xl flex ${className}`}
-      style={{ height }}
+      className={`relative overflow-hidden md:rounded-xl shadow-2xl flex ${styles.root} ${className}`}
     >
       <div className="absolute inset-0 bg-black bg-opacity-75" />
       <div className="relative w-full flex flex-col">
