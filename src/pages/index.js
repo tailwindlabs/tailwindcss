@@ -51,16 +51,16 @@ export default function Home() {
             A utility-first CSS framework packed with classes like flex, pt-4, text-center and
             rotate-90 that can be composed to build any design, directly in your markup.
           </p>
-          <div className="flex space-x-4 mb-8">
+          <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4 mb-8 text-center">
             <a
               href="#"
-              className="bg-black text-white text-lg leading-6 font-semibold py-3 px-6 border border-transparent rounded-xl"
+              className="w-full sm:w-auto flex-none bg-black text-white text-lg leading-6 font-semibold py-3 px-6 border border-transparent rounded-xl"
             >
               Get started
             </a>
             <button
               type="button"
-              className="bg-gray-50 text-gray-400 font-mono leading-6 py-3 px-6 border border-gray-200 rounded-xl flex items-center space-x-4"
+              className="w-full sm:w-auto flex-none bg-gray-50 text-gray-400 font-mono leading-6 py-3 px-6 border border-gray-200 rounded-xl flex items-center justify-center space-x-4"
             >
               <span className="text-black">
                 <span className="text-gray-500">$</span> npm install tailwindcss
