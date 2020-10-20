@@ -8,6 +8,7 @@ import { siteConfig } from '@/utils/siteConfig'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import tokenize from '../../macros/tokenize.macro'
+import styles from './ConstraintBased.module.css'
 
 const tokens = {
   sizing: tokenize.html(`<ul class="space-y-4">
@@ -175,10 +176,9 @@ export function ConstraintBased() {
         }
         left={
           <div
-            className="relative z-10 rounded-tr-xl sm:rounded-t-xl lg:rounded-xl shadow-lg flex lg:-mr-8"
-            style={{ height: 370 }}
+            className={`relative z-10 rounded-tr-xl sm:rounded-t-xl lg:rounded-xl shadow-lg flex flex-col sm:flex-row lg:flex-col xl:flex-row lg:-mr-8 ${styles.container}`}
           >
-            <h3 className="flex-none w-48 bg-purple-50 sm:rounded-tl-xl lg:rounded-l-xl text-lg leading-6 font-semibold text-purple-800 p-8">
+            <h3 className="flex-none w-full sm:w-48 lg:w-full xl:w-48 bg-purple-50 rounded-tr-xl sm:rounded-tr-none sm:rounded-tl-xl lg:rounded-t-xl xl:rounded-tr-none xl:rounded-l-xl text-lg leading-6 font-semibold text-purple-800 p-6 sm:p-8 lg:p-6 xl:p-8">
               <AnimatePresence initial={false} exitBeforeEnter>
                 <motion.span
                   key={tab}
@@ -198,7 +198,7 @@ export function ConstraintBased() {
               </AnimatePresence>
             </h3>
 
-            <div className="relative flex-auto bg-white rounded-tr-xl sm:rounded-tr-xl lg:rounded-r-xl p-8 overflow-hidden flex">
+            <div className="relative flex-auto bg-white sm:rounded-tr-xl lg:rounded-b-xl lg:rounded-tr-none xl:rounded-bl-none xl:rounded-r-xl overflow-hidden flex p-6 sm:p-8 lg:p-6 xl:p-8">
               <AnimatePresence initial={false} exitBeforeEnter>
                 {tab === 'sizing' && (
                   <motion.ul

@@ -1,0 +1,15 @@
+.container {
+  height: 370px;
+}
+
+@screen lg {
+  .container {
+    height: 435px;
+  }
+}
+
+@screen xl {
+  .container {
+    height: 370px;
+  }
+}
