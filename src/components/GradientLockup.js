@@ -9,7 +9,7 @@ const rotation = {
 
 export function GradientLockup({ header, left, right, color, rotate }) {
   return (
-    <div className="grid overflow-hidden py-18 -my-18 gradient-lockup">
+    <div className="grid gradient-lockup">
       <div
         className={`col-start-2 col-end-3 lg:col-start-1 lg:col-end-5 ${
           left && right ? 'row-start-2 row-end-4' : 'row-start-2 row-end-5'
