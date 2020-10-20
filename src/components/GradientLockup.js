@@ -23,7 +23,7 @@ export function GradientLockup({ header, left, right, color, rotate, pin = 'left
         />
       </div>
       {header && (
-        <div className="relative col-start-1 col-end-4 px-8 lg:px-0 lg:col-start-2 lg:col-end-4 xl:col-end-3 row-start-1 row-end-2 xl:row-end-3 pb-8 lg:pb-11 xl:pb-0">
+        <div className="relative col-start-1 col-end-4 px-4 sm:px-6 md:px-8 lg:px-0 lg:col-start-2 lg:col-end-4 xl:col-end-3 row-start-1 row-end-2 xl:row-end-3 pb-8 lg:pb-11 xl:pb-0">
           {header}
         </div>
       )}

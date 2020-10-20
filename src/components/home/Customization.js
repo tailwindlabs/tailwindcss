@@ -77,22 +77,17 @@ export function Customization() {
         color="pink"
         rotate={-1}
         header={
-          <div className="-ml-4">
+          <div className="flex overflow-auto -mx-4 sm:-mx-6 md:-mx-8 xl:-ml-4 xl:mr-0">
             <Tabs
               tabs={{
                 simple: 'Simple',
                 playful: 'Playful',
                 elegant: 'Elegant',
                 brutalist: 'Brutalist',
-                brutalist2: 'Brutalist',
-                brutalist3: 'Brutalist',
-                brutalist4: 'Brutalist',
-                brutalist5: 'Brutalist',
-                brutalist6: 'Brutalist',
               }}
               selected={theme}
               onChange={setTheme}
-              className="justify-center xl:justify-start"
+              className="mx-auto xl:mx-0 px-4 sm:px-6 md:px-8 xl:px-0"
             />
           </div>
         }
