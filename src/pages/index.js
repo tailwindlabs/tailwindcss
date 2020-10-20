@@ -60,9 +60,9 @@ export default function Home() {
             </a>
             <button
               type="button"
-              className="bg-gray-50 text-black font-mono leading-6 py-3 px-6 border border-gray-200 rounded-xl flex items-center space-x-4"
+              className="bg-gray-50 text-gray-400 font-mono leading-6 py-3 px-6 border border-gray-200 rounded-xl flex items-center space-x-4"
             >
-              <span>
+              <span className="text-black">
                 <span className="text-gray-500">$</span> npm install tailwindcss
               </span>
               <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth={1.5}>
