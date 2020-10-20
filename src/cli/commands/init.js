@@ -42,8 +42,11 @@ export function run(cliParams, cliOptions) {
     utils.exists(file) && utils.die(colors.file(simplePath), 'already exists.')
 
     const stubFile = full ? constants.defaultConfigStubFile : constants.simpleConfigStubFile
+    const stubFileContents = utils
+      .readFile(stubFile, 'utf-8')
+      .replace('../colors', 'tailwindcss/colors')
 
-    utils.copyFile(stubFile, file)
+    utils.writeFile(file, stubFileContents)
 
     utils.log()
     utils.log(emoji.yes, 'Created Tailwind config file:', colors.file(simplePath))

@@ -40,7 +40,9 @@ describe('cli', () => {
     it('creates a full Tailwind config file', () => {
       return runInTempDirectory(() => {
         return cli(['init', '--full']).then(() => {
-          expect(utils.readFile(constants.defaultConfigFile)).toEqual(defaultConfigFixture)
+          expect(utils.readFile(constants.defaultConfigFile)).toEqual(
+            defaultConfigFixture.replace('../colors', 'tailwindcss/colors')
+          )
         })
       })
     })
