@@ -29,7 +29,8 @@ function Counter({ from, to, round = 0, progress }) {
   return <span ref={ref}>{formatNumber(value.get())}</span>
 }
 
-const { tokens, code } = tokenize.html(`<div class="flex pa-2 bg-white rounded-lg shadow">
+const { tokens, code } = tokenize.html(
+  `<div class="flex pa-2 bg-white rounded-lg shadow">
   <div class="w-32 rounded-md overflow-hidden">
     <img src="avatar.jpg" class="h-full object-fit">
   </div>
@@ -47,7 +48,9 @@ const { tokens, code } = tokenize.html(`<div class="flex pa-2 bg-white rounded-l
         rounded-md p-1">View Tweet</a>
     </div>
   </div>
-</div>`)
+</div>`,
+  true
+)
 
 const classes = code
   .match(/class="[^"]+"/g)

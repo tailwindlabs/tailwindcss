@@ -10,10 +10,8 @@ import { addClassTokens } from '@/utils/addClassTokens'
 import tokenize from '../../macros/tokenize.macro'
 import { Token } from '@/components/Code'
 
-const {
-  code,
-  tokens,
-} = tokenize.html(`<div class="light:bg-white rounded-t-xl p-8 space-y-8 dark:bg-gray-800">
+const { code, tokens } = tokenize.html(
+  `<div class="light:bg-white rounded-t-xl p-8 space-y-8 dark:bg-gray-800">
   <div class="flex items-center space-x-5">
     <img
       src="https://unsplash.it/160/160?random"
@@ -112,7 +110,9 @@ const {
   >
     1.0x
   </button>
-</div>`)
+</div>`,
+  true
+)
 
 function DarkModeSwitch({ enabled, onChange }) {
   return (
