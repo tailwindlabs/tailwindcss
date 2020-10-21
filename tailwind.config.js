@@ -55,6 +55,15 @@ module.exports = {
       boxShadow: {
         px: '0 0 0 1px rgba(0, 0, 0, 0.5)',
       },
+      keyframes: {
+        'flash-code': {
+          '0%': { backgroundColor: 'rgba(134, 239, 172, 0.25)' },
+          '100%': { backgroundColor: 'transparent' },
+        },
+      },
+      animation: {
+        'flash-code': 'flash-code 1s forwards',
+      },
     },
     colors: {
       transparent: 'transparent',

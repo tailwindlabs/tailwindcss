@@ -9,6 +9,8 @@ import { useInView } from 'react-intersection-observer'
 import tokenize from '../../macros/tokenize.macro'
 import { addClassTokens } from '@/utils/addClassTokens'
 import { Token } from '@/components/Code'
+import { shuffle } from '@/utils/shuffle'
+import { randomIntFromInterval } from '@/utils/randomIntFromInterval'
 
 const BASE_RANGE = [0, 5000]
 
@@ -292,30 +294,4 @@ function makeClass() {
     result += characters.charAt(Math.floor(Math.random() * charactersLength))
   }
   return result
-}
-
-// https://stackoverflow.com/a/7228322
-function randomIntFromInterval(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
-// https://stackoverflow.com/a/2450976
-function shuffle(array) {
-  var currentIndex = array.length,
-    temporaryValue,
-    randomIndex
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex)
-    currentIndex -= 1
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex]
-    array[currentIndex] = array[randomIndex]
-    array[randomIndex] = temporaryValue
-  }
-
-  return array
 }
