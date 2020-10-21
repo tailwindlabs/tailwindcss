@@ -29,6 +29,7 @@ module.exports = {
       // next
       spacing: {
         18: '4.5rem',
+        '23px': '1.4375rem',
       },
       fontSize: {
         '7xl': '4.5rem',

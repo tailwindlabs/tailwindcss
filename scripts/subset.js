@@ -21,7 +21,6 @@ const subsets = {
   'TenorSans-Regular': ['Fancy Suit Jacket', '$600.00', 'In stock', 'Tenor Sans'],
 
   'RobotoMono-Regular': [
-    'XS',
     'S',
     'M',
     'L',
@@ -32,7 +31,7 @@ const subsets = {
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mi ultrices non pharetra, eros enim. Habitant suspendisse ultricies.',
   ],
   'RobotoMono-Medium': ['In stock'],
-  'RobotoMono-Bold': ['Retro Shoe', '$89.00', 'BUY NOW', 'ADD TO BAG'],
+  'RobotoMono-Bold': ['Retro Shoe', '$89.00', 'XS', 'BUY NOW', 'ADD TO BAG'],
 }
 
 Promise.all(

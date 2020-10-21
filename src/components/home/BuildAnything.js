@@ -40,6 +40,7 @@ export function BuildAnything() {
                 simple: 'Simple',
                 playful: 'Playful',
                 elegant: 'Elegant',
+                brutalist: 'Brutalist',
               }}
               selected={theme}
               onChange={setTheme}
