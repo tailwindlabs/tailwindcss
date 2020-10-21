@@ -28,7 +28,7 @@ function Item({ tab, isSelected, onClick }) {
       {isSelected && (
         <motion.div
           layoutId="highlight"
-          style={{ borderRadius: 18 }}
+          style={{ borderRadius: typeof tab === 'string' ? 18 : 12 }}
           className="absolute inset-0 bg-gray-100"
         />
       )}

@@ -6,11 +6,8 @@ const colors = {
 }
 
 export function Token({ token, parentTypes, children }) {
-  return (
-    <span className={colors[[...parentTypes, token[0]].join('.')] || colors[token[0]]}>
-      {children}
-    </span>
-  )
+  const className = colors[[...parentTypes, token[0]].join('.')] || colors[token[0]]
+  return className ? <span className={className}>{children}</span> : children
 }
 
 export function Code({
@@ -41,7 +38,14 @@ export function Code({
     }
 
     return (
-      <TokenComponent key={i} token={t} parentTypes={parentTypes} {...tokenProps}>
+      <TokenComponent
+        key={i}
+        token={t}
+        tokenIndex={i}
+        tokens={tokensArr}
+        parentTypes={parentTypes}
+        {...tokenProps}
+      >
         <Code
           tokens={t[1]}
           parentTypes={[...parentTypes, t[0]]}

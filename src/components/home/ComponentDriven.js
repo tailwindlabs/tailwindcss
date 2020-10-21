@@ -3,9 +3,13 @@ import { GradientLockup } from '@/components/GradientLockup'
 import { CodeWindow } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import tokenize from '../../macros/tokenize.macro'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { Token } from '@/components/Code'
 import { ReactComponent as Icon } from '@/img/icons/home/component-driven.svg'
+import { Tabs } from '@/components/Tabs'
+import { ReactComponent as ReactLogo } from '@/img/icons/react.svg'
+import { ReactComponent as VueLogo } from '@/img/icons/vue.svg'
+import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion'
 
 const recipes = [
   {
@@ -38,17 +42,122 @@ const recipes = [
 ]
 
 const tabs = {
-  'image.js': tokenize.jsx(
-    `import Rating from './rating.js'\n\nfunction Image() {\n  return <Rating />\n}`
-  ).tokens,
-  'rating.js': tokenize.jsx('function Rating() {\n  return <div></div>\n}').tokens,
+  react: {
+    'Recipes.js': tokenize.jsx(
+      `import Nav from './Nav.js'
+import NavItem from './NavItem.js'
+import List from './List.js'
+import ListItem from './ListItem.js'
+
+export default function Recipes({ recipes }) {
+  return (
+    <main className="divide-y divide-gray-100">
+      <Nav>
+        <NavItem href="/featured" isActive>Featured</NavItem>
+        <NavItem href="/popular">Popular</NavItem>
+        <NavItem href="/recent">Recent</NavItem>
+      </Nav>
+      <List>
+        {recipes.map((recipe) => (
+          <ListItem key={recipe.id} {...recipe} />
+        )}
+      </List>
+    </main>
+  )
+}`
+    ).tokens,
+    'Nav.js': tokenize.jsx(`export default function Nav({ children }) {
+  return (
+    <nav className="p-4">
+      <ul className="flex space-x-2">
+        {children}
+      </ul>
+    </nav>
+  )
+}`).tokens,
+    'NavItem.js': tokenize.jsx(`export default function NavItem({ href, isActive, children }) {
+  return (
+    <li>
+      <a
+        href={href}
+        className={\`block px-4 py-2 rounded-md \${isActive ? 'bg-amber-100 text-amber-700' : ''}\`}
+      >
+        {children}
+      </a>
+    </li>
+  )
+}`).tokens,
+    'List.js': tokenize.jsx(`export default function List({ children }) {
+  return (
+    <ul className="divide-y divide-gray-100">
+      {children}
+    </ul>
+  )
+}`).tokens,
+    'ListItem.js': tokenize.jsx(`export default function Item({ title, image }) {
+  return (
+    <article className="p-4 flex space-x-4">
+      <img src={image} alt="" className="flex-none w-18 h-18 rounded-lg object-cover" />
+      <div className="flex-auto">
+        <h2 className="text-lg leading-7 font-semibold text-black mb-0.5">
+          {title}
+        </h2>
+      </div>
+    </article>
+  )
+}`).tokens,
+  },
+  vue: {
+    'Recipes.vue': tokenize.html('<template></template>').tokens,
+  },
 }
 
 const EditorContext = createContext()
 
+function ComponentLink({ onClick, children }) {
+  const [active, setActive] = useState(false)
+
+  useEffect(() => {
+    function onKey(e) {
+      const modifier = e.ctrlKey || e.shiftKey || e.altKey || e.metaKey
+      if (!active && modifier) {
+        setActive(true)
+      } else if (active && !modifier) {
+        setActive(false)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    window.addEventListener('keyup', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      window.removeEventListener('keyup', onKey)
+    }
+  }, [active])
+
+  return active ? (
+    <button type="button" className="hover:underline" onClick={onClick}>
+      {children}
+    </button>
+  ) : (
+    children
+  )
+}
+
 function EditorToken(props) {
   const { setActiveTab } = useContext(EditorContext)
-  const { token } = props
+  const { token, tokens, tokenIndex } = props
+
+  if (
+    token[0] === 'class-name' &&
+    tokens[tokenIndex - 1][0] === 'punctuation' &&
+    (tokens[tokenIndex - 1][1] === '<' || tokens[tokenIndex - 1][1] === '</')
+  ) {
+    return (
+      <Token {...props}>
+        <ComponentLink onClick={() => setActiveTab(`${token[1]}.js`)}>{token[1]}</ComponentLink>
+      </Token>
+    )
+  }
 
   if (token[0] === 'string' && /^(['"`])\.\/.*?\.js\1$/.test(token[1])) {
     const tab = token[1].substr(3, token[1].length - 4)
@@ -66,28 +175,59 @@ function EditorToken(props) {
   return <Token {...props} />
 }
 
-function ComponentExample() {
-  const [activeTab, setActiveTab] = useState('image.js')
+function ComponentExample({ framework }) {
+  const [activeTab, setActiveTab] = useState(0)
+
+  useEffect(() => {
+    setActiveTab(0)
+  }, [framework])
 
   return (
     <CodeWindow className="bg-orange-500">
-      <ul className="flex text-sm leading-5 bg-orange-900 bg-opacity-20 text-orange-300">
-        {Object.keys(tabs).map((tab) => (
-          <li key={tab}>
-            <button
-              type="button"
-              className={`border border-transparent py-2 px-4 font-medium ${
-                tab === activeTab ? 'bg-white bg-opacity-10 text-orange-200' : ''
-              }`}
-              onClick={() => setActiveTab(tab)}
-            >
-              {tab}
-            </button>
-          </li>
-        ))}
-      </ul>
-      <EditorContext.Provider value={{ setActiveTab }}>
-        <CodeWindow.Code tokens={tabs[activeTab]} tokenComponent={EditorToken} />
+      <AnimateSharedLayout>
+        <AnimatePresence initial={false} exitBeforeEnter>
+          <ul
+            key={framework}
+            className="flex text-sm leading-5 bg-orange-900 bg-opacity-20 text-orange-300"
+          >
+            {Object.keys(tabs[framework]).map((tab, tabIndex) => (
+              <li key={tab}>
+                <button
+                  type="button"
+                  className={`relative border border-transparent py-2 px-4 font-medium focus:outline-none hover:text-orange-200 ${
+                    tabIndex === activeTab ? 'text-orange-200' : ''
+                  }`}
+                  onClick={() => setActiveTab(tabIndex)}
+                >
+                  {tabIndex === activeTab && (
+                    <motion.div
+                      layout
+                      layoutId="activeTab"
+                      className="absolute -inset-px bg-white bg-opacity-10"
+                    />
+                  )}
+                  <motion.span
+                    key={framework + tabIndex}
+                    className="relative"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    {tab}
+                  </motion.span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </AnimatePresence>
+      </AnimateSharedLayout>
+      <EditorContext.Provider
+        value={{ setActiveTab: (name) => setActiveTab(Object.keys(tabs[framework]).indexOf(name)) }}
+      >
+        <CodeWindow.Code
+          tokens={tabs[framework][Object.keys(tabs[framework])[activeTab]]}
+          tokenComponent={EditorToken}
+        />
       </EditorContext.Provider>
     </CodeWindow>
   )
@@ -115,6 +255,8 @@ function ApplyExample() {
 }
 
 export function ComponentDriven() {
+  const [framework, setFramework] = useState('react')
+
   return (
     <section>
       <div className="px-4 sm:px-6 md:px-8 mb-20">
@@ -138,6 +280,29 @@ export function ComponentDriven() {
         color="amber"
         rotate={-2}
         pin="right"
+        header={
+          <div className="flex overflow-auto -mx-4 sm:-mx-6 md:-mx-8 xl:-ml-4 xl:mr-0">
+            <Tabs
+              tabs={{
+                react: (
+                  <div className="flex flex-col items-center py-1">
+                    <ReactLogo className="mb-2" />
+                    React
+                  </div>
+                ),
+                vue: (
+                  <div className="flex flex-col items-center py-1">
+                    <VueLogo className="mb-2" />
+                    Vue
+                  </div>
+                ),
+              }}
+              selected={framework}
+              onChange={setFramework}
+              className="mx-auto xl:mx-0 px-4 sm:px-6 md:px-8 xl:px-0"
+            />
+          </div>
+        }
         left={
           <div className="relative z-10 bg-white rounded-tl-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8 divide-y divide-gray-100">
             <nav className="p-4 text-sm leading-5 font-medium">
@@ -204,7 +369,7 @@ export function ComponentDriven() {
             ))}
           </div>
         }
-        right={<ComponentExample />}
+        right={<ComponentExample framework={framework} />}
       />
       <div className="px-4 sm:px-6 md:px-8 mt-32 mb-8">
         <Paragraph className="mb-6">
