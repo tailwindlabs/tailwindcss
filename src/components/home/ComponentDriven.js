@@ -15,6 +15,7 @@ const recipes = [
     difficulty: 'Easy',
     servings: 4,
     author: 'Hank Douglas',
+    image: require('@/img/jucy-beef-burger.jpg').default,
   },
   {
     title: 'Southern Fried Chicken Sandwich',
@@ -23,6 +24,7 @@ const recipes = [
     difficulty: 'Intermediate',
     servings: 4,
     author: 'Nicholas Denver',
+    image: require('@/img/chicken-sandwich.jpg').default,
   },
   {
     title: 'Lily’s Healthy Beef Burger',
@@ -31,6 +33,7 @@ const recipes = [
     difficulty: 'Easy',
     servings: 6,
     author: 'Lily Ford',
+    image: require('@/img/healthy-beef-burger.jpg').default,
   },
 ]
 
@@ -156,14 +159,15 @@ export function ComponentDriven() {
                 </li>
               </ul>
             </nav>
-            {recipes.map(({ title, rating, time, difficulty, servings, author }, i) => (
+            {recipes.map(({ title, rating, time, difficulty, servings, author, image }, i) => (
               <article key={i} className="flex p-4 space-x-4">
                 <img
-                  src={`https://unsplash.it/144/144?random&amp;i=${i}`}
+                  src={image}
+                  loading="lazy"
                   alt=""
                   width="144"
                   height="144"
-                  className="flex-none w-18 h-18 rounded-lg"
+                  className="flex-none w-18 h-18 rounded-lg object-cover"
                 />
                 <div className="relative flex-auto pr-20">
                   <h2 className="text-lg leading-7 font-semibold text-black mb-0.5">{title}</h2>

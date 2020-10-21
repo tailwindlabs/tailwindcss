@@ -14,7 +14,7 @@ const { code, tokens } = tokenize.html(
   `<div class="(light)bg-white rounded-tl-xl sm:rounded-t-xl p-8 space-y-8 dark:bg-gray-800">
   <div class="flex items-center space-x-5">
     <img
-      src="https://unsplash.it/160/160?random"
+      src="/full-stack-radio.png"
       alt=""
       width="160"
       height="160"
@@ -205,7 +205,11 @@ export function DarkMode() {
             dangerouslySetInnerHTML={{
               __html: code
                 .replace(/\(light\)/g, '')
-                .replace(/dark:/g, 'transition-colors duration-500 dark:'),
+                .replace(/dark:/g, 'transition-colors duration-500 dark:')
+                .replace(
+                  'src="/full-stack-radio.png"',
+                  `src="${require('@/img/full-stack-radio.png').default}" loading="lazy"`
+                ),
             }}
           />
         }
