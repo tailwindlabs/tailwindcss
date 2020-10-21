@@ -5,6 +5,7 @@ import { gradients } from '@/utils/gradients'
 import tokenize from '../../macros/tokenize.macro'
 import { createContext, useContext, useState } from 'react'
 import { Token } from '@/components/Code'
+import { ReactComponent as Icon } from '@/img/icons/home/component-driven.svg'
 
 const recipes = [
   {
@@ -114,7 +115,9 @@ export function ComponentDriven() {
   return (
     <section>
       <div className="px-4 sm:px-6 md:px-8 mb-20">
-        <IconContainer className={`${gradients.amber} mb-8`} />
+        <IconContainer className={`${gradients.amber} mb-8`}>
+          <Icon className="mt-px overflow-visible" />
+        </IconContainer>
         <Caption as="h2" className="text-amber-500 mb-3">
           Component-driven
         </Caption>
