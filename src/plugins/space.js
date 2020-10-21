@@ -7,12 +7,12 @@ export default function () {
       (_size, modifier) => {
         const size = _size === '0' ? '0px' : _size
         return {
-          [`${nameClass('space-y', modifier)} > :not(template) ~ :not(template)`]: {
+          [`${nameClass('space-y', modifier)} > :not([hidden]) ~ :not([hidden])`]: {
             '--space-y-reverse': '0',
             'margin-top': `calc(${size} * calc(1 - var(--space-y-reverse)))`,
             'margin-bottom': `calc(${size} * var(--space-y-reverse))`,
           },
-          [`${nameClass('space-x', modifier)} > :not(template) ~ :not(template)`]: {
+          [`${nameClass('space-x', modifier)} > :not([hidden]) ~ :not([hidden])`]: {
             '--space-x-reverse': '0',
             'margin-inline-end': `calc(${size} * var(--space-x-reverse))`,
             'margin-inline-start': `calc(${size} * calc(1 - var(--space-x-reverse)))`,
@@ -25,10 +25,10 @@ export default function () {
       return [
         ..._.flatMap(theme('space'), generator),
         {
-          '.space-y-reverse > :not(template) ~ :not(template)': {
+          '.space-y-reverse > :not([hidden]) ~ :not([hidden])': {
             '--space-y-reverse': '1',
           },
-          '.space-x-reverse > :not(template) ~ :not(template)': {
+          '.space-x-reverse > :not([hidden]) ~ :not([hidden])': {
             '--space-x-reverse': '1',
           },
         },
