@@ -568,8 +568,8 @@ video {
 
 .space-x-0 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(0px * var(--space-x-reverse));
-  margin-inline-start: calc(0px * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(0px * var(--space-x-reverse));
+  margin-left: calc(0px * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -580,8 +580,8 @@ video {
 
 .space-x-1 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(0.25rem * var(--space-x-reverse));
-  margin-inline-start: calc(0.25rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(0.25rem * var(--space-x-reverse));
+  margin-left: calc(0.25rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -592,8 +592,8 @@ video {
 
 .space-x-2 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(0.5rem * var(--space-x-reverse));
-  margin-inline-start: calc(0.5rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(0.5rem * var(--space-x-reverse));
+  margin-left: calc(0.5rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-3 > :not([hidden]) ~ :not([hidden]) {
@@ -604,8 +604,8 @@ video {
 
 .space-x-3 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(0.75rem * var(--space-x-reverse));
-  margin-inline-start: calc(0.75rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(0.75rem * var(--space-x-reverse));
+  margin-left: calc(0.75rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -616,8 +616,8 @@ video {
 
 .space-x-4 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(1rem * var(--space-x-reverse));
-  margin-inline-start: calc(1rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(1rem * var(--space-x-reverse));
+  margin-left: calc(1rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-5 > :not([hidden]) ~ :not([hidden]) {
@@ -628,8 +628,8 @@ video {
 
 .space-x-5 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(1.25rem * var(--space-x-reverse));
-  margin-inline-start: calc(1.25rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(1.25rem * var(--space-x-reverse));
+  margin-left: calc(1.25rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-6 > :not([hidden]) ~ :not([hidden]) {
@@ -640,8 +640,8 @@ video {
 
 .space-x-6 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(1.5rem * var(--space-x-reverse));
-  margin-inline-start: calc(1.5rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(1.5rem * var(--space-x-reverse));
+  margin-left: calc(1.5rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-7 > :not([hidden]) ~ :not([hidden]) {
@@ -652,8 +652,8 @@ video {
 
 .space-x-7 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(1.75rem * var(--space-x-reverse));
-  margin-inline-start: calc(1.75rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(1.75rem * var(--space-x-reverse));
+  margin-left: calc(1.75rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -664,8 +664,8 @@ video {
 
 .space-x-8 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(2rem * var(--space-x-reverse));
-  margin-inline-start: calc(2rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(2rem * var(--space-x-reverse));
+  margin-left: calc(2rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-9 > :not([hidden]) ~ :not([hidden]) {
@@ -676,8 +676,8 @@ video {
 
 .space-x-9 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(2.25rem * var(--space-x-reverse));
-  margin-inline-start: calc(2.25rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(2.25rem * var(--space-x-reverse));
+  margin-left: calc(2.25rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-10 > :not([hidden]) ~ :not([hidden]) {
@@ -688,8 +688,8 @@ video {
 
 .space-x-10 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(2.5rem * var(--space-x-reverse));
-  margin-inline-start: calc(2.5rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(2.5rem * var(--space-x-reverse));
+  margin-left: calc(2.5rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-12 > :not([hidden]) ~ :not([hidden]) {
@@ -700,8 +700,8 @@ video {
 
 .space-x-12 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(3rem * var(--space-x-reverse));
-  margin-inline-start: calc(3rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(3rem * var(--space-x-reverse));
+  margin-left: calc(3rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-14 > :not([hidden]) ~ :not([hidden]) {
@@ -712,8 +712,8 @@ video {
 
 .space-x-14 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(3.5rem * var(--space-x-reverse));
-  margin-inline-start: calc(3.5rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(3.5rem * var(--space-x-reverse));
+  margin-left: calc(3.5rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-16 > :not([hidden]) ~ :not([hidden]) {
@@ -724,8 +724,8 @@ video {
 
 .space-x-16 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(4rem * var(--space-x-reverse));
-  margin-inline-start: calc(4rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(4rem * var(--space-x-reverse));
+  margin-left: calc(4rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-20 > :not([hidden]) ~ :not([hidden]) {
@@ -736,8 +736,8 @@ video {
 
 .space-x-20 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(5rem * var(--space-x-reverse));
-  margin-inline-start: calc(5rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(5rem * var(--space-x-reverse));
+  margin-left: calc(5rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-24 > :not([hidden]) ~ :not([hidden]) {
@@ -748,8 +748,8 @@ video {
 
 .space-x-24 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(6rem * var(--space-x-reverse));
-  margin-inline-start: calc(6rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(6rem * var(--space-x-reverse));
+  margin-left: calc(6rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-28 > :not([hidden]) ~ :not([hidden]) {
@@ -760,8 +760,8 @@ video {
 
 .space-x-28 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(7rem * var(--space-x-reverse));
-  margin-inline-start: calc(7rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(7rem * var(--space-x-reverse));
+  margin-left: calc(7rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-32 > :not([hidden]) ~ :not([hidden]) {
@@ -772,8 +772,8 @@ video {
 
 .space-x-32 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(8rem * var(--space-x-reverse));
-  margin-inline-start: calc(8rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(8rem * var(--space-x-reverse));
+  margin-left: calc(8rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-36 > :not([hidden]) ~ :not([hidden]) {
@@ -784,8 +784,8 @@ video {
 
 .space-x-36 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(9rem * var(--space-x-reverse));
-  margin-inline-start: calc(9rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(9rem * var(--space-x-reverse));
+  margin-left: calc(9rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-40 > :not([hidden]) ~ :not([hidden]) {
@@ -796,8 +796,8 @@ video {
 
 .space-x-40 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(10rem * var(--space-x-reverse));
-  margin-inline-start: calc(10rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(10rem * var(--space-x-reverse));
+  margin-left: calc(10rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-44 > :not([hidden]) ~ :not([hidden]) {
@@ -808,8 +808,8 @@ video {
 
 .space-x-44 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(11rem * var(--space-x-reverse));
-  margin-inline-start: calc(11rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(11rem * var(--space-x-reverse));
+  margin-left: calc(11rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-48 > :not([hidden]) ~ :not([hidden]) {
@@ -820,8 +820,8 @@ video {
 
 .space-x-48 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(12rem * var(--space-x-reverse));
-  margin-inline-start: calc(12rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(12rem * var(--space-x-reverse));
+  margin-left: calc(12rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-52 > :not([hidden]) ~ :not([hidden]) {
@@ -832,8 +832,8 @@ video {
 
 .space-x-52 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(13rem * var(--space-x-reverse));
-  margin-inline-start: calc(13rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(13rem * var(--space-x-reverse));
+  margin-left: calc(13rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-56 > :not([hidden]) ~ :not([hidden]) {
@@ -844,8 +844,8 @@ video {
 
 .space-x-56 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(14rem * var(--space-x-reverse));
-  margin-inline-start: calc(14rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(14rem * var(--space-x-reverse));
+  margin-left: calc(14rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-60 > :not([hidden]) ~ :not([hidden]) {
@@ -856,8 +856,8 @@ video {
 
 .space-x-60 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(15rem * var(--space-x-reverse));
-  margin-inline-start: calc(15rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(15rem * var(--space-x-reverse));
+  margin-left: calc(15rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-64 > :not([hidden]) ~ :not([hidden]) {
@@ -868,8 +868,8 @@ video {
 
 .space-x-64 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(16rem * var(--space-x-reverse));
-  margin-inline-start: calc(16rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(16rem * var(--space-x-reverse));
+  margin-left: calc(16rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-72 > :not([hidden]) ~ :not([hidden]) {
@@ -880,8 +880,8 @@ video {
 
 .space-x-72 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(18rem * var(--space-x-reverse));
-  margin-inline-start: calc(18rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(18rem * var(--space-x-reverse));
+  margin-left: calc(18rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-80 > :not([hidden]) ~ :not([hidden]) {
@@ -892,8 +892,8 @@ video {
 
 .space-x-80 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(20rem * var(--space-x-reverse));
-  margin-inline-start: calc(20rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(20rem * var(--space-x-reverse));
+  margin-left: calc(20rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-96 > :not([hidden]) ~ :not([hidden]) {
@@ -904,8 +904,8 @@ video {
 
 .space-x-96 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(24rem * var(--space-x-reverse));
-  margin-inline-start: calc(24rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(24rem * var(--space-x-reverse));
+  margin-left: calc(24rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-px > :not([hidden]) ~ :not([hidden]) {
@@ -916,8 +916,8 @@ video {
 
 .space-x-px > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(1px * var(--space-x-reverse));
-  margin-inline-start: calc(1px * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(1px * var(--space-x-reverse));
+  margin-left: calc(1px * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-0\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -928,8 +928,8 @@ video {
 
 .space-x-0\.5 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(0.125rem * var(--space-x-reverse));
-  margin-inline-start: calc(0.125rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(0.125rem * var(--space-x-reverse));
+  margin-left: calc(0.125rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -940,8 +940,8 @@ video {
 
 .space-x-1\.5 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(0.375rem * var(--space-x-reverse));
-  margin-inline-start: calc(0.375rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(0.375rem * var(--space-x-reverse));
+  margin-left: calc(0.375rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-2\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -952,8 +952,8 @@ video {
 
 .space-x-2\.5 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(0.625rem * var(--space-x-reverse));
-  margin-inline-start: calc(0.625rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(0.625rem * var(--space-x-reverse));
+  margin-left: calc(0.625rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-3\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -964,8 +964,8 @@ video {
 
 .space-x-3\.5 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(0.875rem * var(--space-x-reverse));
-  margin-inline-start: calc(0.875rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(0.875rem * var(--space-x-reverse));
+  margin-left: calc(0.875rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -976,8 +976,8 @@ video {
 
 .-space-x-1 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-0.25rem * var(--space-x-reverse));
-  margin-inline-start: calc(-0.25rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-0.25rem * var(--space-x-reverse));
+  margin-left: calc(-0.25rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -988,8 +988,8 @@ video {
 
 .-space-x-2 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-0.5rem * var(--space-x-reverse));
-  margin-inline-start: calc(-0.5rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-0.5rem * var(--space-x-reverse));
+  margin-left: calc(-0.5rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-3 > :not([hidden]) ~ :not([hidden]) {
@@ -1000,8 +1000,8 @@ video {
 
 .-space-x-3 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-0.75rem * var(--space-x-reverse));
-  margin-inline-start: calc(-0.75rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-0.75rem * var(--space-x-reverse));
+  margin-left: calc(-0.75rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -1012,8 +1012,8 @@ video {
 
 .-space-x-4 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-1rem * var(--space-x-reverse));
-  margin-inline-start: calc(-1rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-1rem * var(--space-x-reverse));
+  margin-left: calc(-1rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-5 > :not([hidden]) ~ :not([hidden]) {
@@ -1024,8 +1024,8 @@ video {
 
 .-space-x-5 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-1.25rem * var(--space-x-reverse));
-  margin-inline-start: calc(-1.25rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-1.25rem * var(--space-x-reverse));
+  margin-left: calc(-1.25rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-6 > :not([hidden]) ~ :not([hidden]) {
@@ -1036,8 +1036,8 @@ video {
 
 .-space-x-6 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-1.5rem * var(--space-x-reverse));
-  margin-inline-start: calc(-1.5rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-1.5rem * var(--space-x-reverse));
+  margin-left: calc(-1.5rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-7 > :not([hidden]) ~ :not([hidden]) {
@@ -1048,8 +1048,8 @@ video {
 
 .-space-x-7 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-1.75rem * var(--space-x-reverse));
-  margin-inline-start: calc(-1.75rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-1.75rem * var(--space-x-reverse));
+  margin-left: calc(-1.75rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -1060,8 +1060,8 @@ video {
 
 .-space-x-8 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-2rem * var(--space-x-reverse));
-  margin-inline-start: calc(-2rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-2rem * var(--space-x-reverse));
+  margin-left: calc(-2rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-9 > :not([hidden]) ~ :not([hidden]) {
@@ -1072,8 +1072,8 @@ video {
 
 .-space-x-9 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-2.25rem * var(--space-x-reverse));
-  margin-inline-start: calc(-2.25rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-2.25rem * var(--space-x-reverse));
+  margin-left: calc(-2.25rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-10 > :not([hidden]) ~ :not([hidden]) {
@@ -1084,8 +1084,8 @@ video {
 
 .-space-x-10 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-2.5rem * var(--space-x-reverse));
-  margin-inline-start: calc(-2.5rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-2.5rem * var(--space-x-reverse));
+  margin-left: calc(-2.5rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-12 > :not([hidden]) ~ :not([hidden]) {
@@ -1096,8 +1096,8 @@ video {
 
 .-space-x-12 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-3rem * var(--space-x-reverse));
-  margin-inline-start: calc(-3rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-3rem * var(--space-x-reverse));
+  margin-left: calc(-3rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-14 > :not([hidden]) ~ :not([hidden]) {
@@ -1108,8 +1108,8 @@ video {
 
 .-space-x-14 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-3.5rem * var(--space-x-reverse));
-  margin-inline-start: calc(-3.5rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-3.5rem * var(--space-x-reverse));
+  margin-left: calc(-3.5rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-16 > :not([hidden]) ~ :not([hidden]) {
@@ -1120,8 +1120,8 @@ video {
 
 .-space-x-16 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-4rem * var(--space-x-reverse));
-  margin-inline-start: calc(-4rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-4rem * var(--space-x-reverse));
+  margin-left: calc(-4rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-20 > :not([hidden]) ~ :not([hidden]) {
@@ -1132,8 +1132,8 @@ video {
 
 .-space-x-20 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-5rem * var(--space-x-reverse));
-  margin-inline-start: calc(-5rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-5rem * var(--space-x-reverse));
+  margin-left: calc(-5rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-24 > :not([hidden]) ~ :not([hidden]) {
@@ -1144,8 +1144,8 @@ video {
 
 .-space-x-24 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-6rem * var(--space-x-reverse));
-  margin-inline-start: calc(-6rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-6rem * var(--space-x-reverse));
+  margin-left: calc(-6rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-28 > :not([hidden]) ~ :not([hidden]) {
@@ -1156,8 +1156,8 @@ video {
 
 .-space-x-28 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-7rem * var(--space-x-reverse));
-  margin-inline-start: calc(-7rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-7rem * var(--space-x-reverse));
+  margin-left: calc(-7rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-32 > :not([hidden]) ~ :not([hidden]) {
@@ -1168,8 +1168,8 @@ video {
 
 .-space-x-32 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-8rem * var(--space-x-reverse));
-  margin-inline-start: calc(-8rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-8rem * var(--space-x-reverse));
+  margin-left: calc(-8rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-36 > :not([hidden]) ~ :not([hidden]) {
@@ -1180,8 +1180,8 @@ video {
 
 .-space-x-36 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-9rem * var(--space-x-reverse));
-  margin-inline-start: calc(-9rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-9rem * var(--space-x-reverse));
+  margin-left: calc(-9rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-40 > :not([hidden]) ~ :not([hidden]) {
@@ -1192,8 +1192,8 @@ video {
 
 .-space-x-40 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-10rem * var(--space-x-reverse));
-  margin-inline-start: calc(-10rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-10rem * var(--space-x-reverse));
+  margin-left: calc(-10rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-44 > :not([hidden]) ~ :not([hidden]) {
@@ -1204,8 +1204,8 @@ video {
 
 .-space-x-44 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-11rem * var(--space-x-reverse));
-  margin-inline-start: calc(-11rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-11rem * var(--space-x-reverse));
+  margin-left: calc(-11rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-48 > :not([hidden]) ~ :not([hidden]) {
@@ -1216,8 +1216,8 @@ video {
 
 .-space-x-48 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-12rem * var(--space-x-reverse));
-  margin-inline-start: calc(-12rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-12rem * var(--space-x-reverse));
+  margin-left: calc(-12rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-52 > :not([hidden]) ~ :not([hidden]) {
@@ -1228,8 +1228,8 @@ video {
 
 .-space-x-52 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-13rem * var(--space-x-reverse));
-  margin-inline-start: calc(-13rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-13rem * var(--space-x-reverse));
+  margin-left: calc(-13rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-56 > :not([hidden]) ~ :not([hidden]) {
@@ -1240,8 +1240,8 @@ video {
 
 .-space-x-56 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-14rem * var(--space-x-reverse));
-  margin-inline-start: calc(-14rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-14rem * var(--space-x-reverse));
+  margin-left: calc(-14rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-60 > :not([hidden]) ~ :not([hidden]) {
@@ -1252,8 +1252,8 @@ video {
 
 .-space-x-60 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-15rem * var(--space-x-reverse));
-  margin-inline-start: calc(-15rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-15rem * var(--space-x-reverse));
+  margin-left: calc(-15rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-64 > :not([hidden]) ~ :not([hidden]) {
@@ -1264,8 +1264,8 @@ video {
 
 .-space-x-64 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-16rem * var(--space-x-reverse));
-  margin-inline-start: calc(-16rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-16rem * var(--space-x-reverse));
+  margin-left: calc(-16rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-72 > :not([hidden]) ~ :not([hidden]) {
@@ -1276,8 +1276,8 @@ video {
 
 .-space-x-72 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-18rem * var(--space-x-reverse));
-  margin-inline-start: calc(-18rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-18rem * var(--space-x-reverse));
+  margin-left: calc(-18rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-80 > :not([hidden]) ~ :not([hidden]) {
@@ -1288,8 +1288,8 @@ video {
 
 .-space-x-80 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-20rem * var(--space-x-reverse));
-  margin-inline-start: calc(-20rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-20rem * var(--space-x-reverse));
+  margin-left: calc(-20rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-96 > :not([hidden]) ~ :not([hidden]) {
@@ -1300,8 +1300,8 @@ video {
 
 .-space-x-96 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-24rem * var(--space-x-reverse));
-  margin-inline-start: calc(-24rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-24rem * var(--space-x-reverse));
+  margin-left: calc(-24rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-px > :not([hidden]) ~ :not([hidden]) {
@@ -1312,8 +1312,8 @@ video {
 
 .-space-x-px > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-1px * var(--space-x-reverse));
-  margin-inline-start: calc(-1px * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-1px * var(--space-x-reverse));
+  margin-left: calc(-1px * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-0\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -1324,8 +1324,8 @@ video {
 
 .-space-x-0\.5 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-0.125rem * var(--space-x-reverse));
-  margin-inline-start: calc(-0.125rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-0.125rem * var(--space-x-reverse));
+  margin-left: calc(-0.125rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -1336,8 +1336,8 @@ video {
 
 .-space-x-1\.5 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-0.375rem * var(--space-x-reverse));
-  margin-inline-start: calc(-0.375rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-0.375rem * var(--space-x-reverse));
+  margin-left: calc(-0.375rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-2\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -1348,8 +1348,8 @@ video {
 
 .-space-x-2\.5 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-0.625rem * var(--space-x-reverse));
-  margin-inline-start: calc(-0.625rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-0.625rem * var(--space-x-reverse));
+  margin-left: calc(-0.625rem * calc(1 - var(--space-x-reverse)));
 }
 
 .-space-y-3\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -1360,8 +1360,8 @@ video {
 
 .-space-x-3\.5 > :not([hidden]) ~ :not([hidden]) {
   --space-x-reverse: 0;
-  margin-inline-end: calc(-0.875rem * var(--space-x-reverse));
-  margin-inline-start: calc(-0.875rem * calc(1 - var(--space-x-reverse)));
+  margin-right: calc(-0.875rem * var(--space-x-reverse));
+  margin-left: calc(-0.875rem * calc(1 - var(--space-x-reverse)));
 }
 
 .space-y-reverse > :not([hidden]) ~ :not([hidden]) {
@@ -1380,8 +1380,8 @@ video {
 
 .divide-x-0 > :not([hidden]) ~ :not([hidden]) {
   --divide-x-reverse: 0;
-  border-inline-end-width: calc(0px * var(--divide-x-reverse));
-  border-inline-start-width: calc(0px * calc(1 - var(--divide-x-reverse)));
+  border-right-width: calc(0px * var(--divide-x-reverse));
+  border-left-width: calc(0px * calc(1 - var(--divide-x-reverse)));
 }
 
 .divide-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -1392,8 +1392,8 @@ video {
 
 .divide-x-2 > :not([hidden]) ~ :not([hidden]) {
   --divide-x-reverse: 0;
-  border-inline-end-width: calc(2px * var(--divide-x-reverse));
-  border-inline-start-width: calc(2px * calc(1 - var(--divide-x-reverse)));
+  border-right-width: calc(2px * var(--divide-x-reverse));
+  border-left-width: calc(2px * calc(1 - var(--divide-x-reverse)));
 }
 
 .divide-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -1404,8 +1404,8 @@ video {
 
 .divide-x-4 > :not([hidden]) ~ :not([hidden]) {
   --divide-x-reverse: 0;
-  border-inline-end-width: calc(4px * var(--divide-x-reverse));
-  border-inline-start-width: calc(4px * calc(1 - var(--divide-x-reverse)));
+  border-right-width: calc(4px * var(--divide-x-reverse));
+  border-left-width: calc(4px * calc(1 - var(--divide-x-reverse)));
 }
 
 .divide-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -1416,8 +1416,8 @@ video {
 
 .divide-x-8 > :not([hidden]) ~ :not([hidden]) {
   --divide-x-reverse: 0;
-  border-inline-end-width: calc(8px * var(--divide-x-reverse));
-  border-inline-start-width: calc(8px * calc(1 - var(--divide-x-reverse)));
+  border-right-width: calc(8px * var(--divide-x-reverse));
+  border-left-width: calc(8px * calc(1 - var(--divide-x-reverse)));
 }
 
 .divide-y > :not([hidden]) ~ :not([hidden]) {
@@ -1428,8 +1428,8 @@ video {
 
 .divide-x > :not([hidden]) ~ :not([hidden]) {
   --divide-x-reverse: 0;
-  border-inline-end-width: calc(1px * var(--divide-x-reverse));
-  border-inline-start-width: calc(1px * calc(1 - var(--divide-x-reverse)));
+  border-right-width: calc(1px * var(--divide-x-reverse));
+  border-left-width: calc(1px * calc(1 - var(--divide-x-reverse)));
 }
 
 .divide-y-reverse > :not([hidden]) ~ :not([hidden]) {
@@ -23544,8 +23544,8 @@ video {
 
   .sm\:space-x-0 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0px * var(--space-x-reverse));
-    margin-inline-start: calc(0px * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0px * var(--space-x-reverse));
+    margin-left: calc(0px * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -23556,8 +23556,8 @@ video {
 
   .sm\:space-x-1 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.25rem * var(--space-x-reverse));
+    margin-left: calc(0.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -23568,8 +23568,8 @@ video {
 
   .sm\:space-x-2 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.5rem * var(--space-x-reverse));
+    margin-left: calc(0.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-3 > :not([hidden]) ~ :not([hidden]) {
@@ -23580,8 +23580,8 @@ video {
 
   .sm\:space-x-3 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.75rem * var(--space-x-reverse));
+    margin-left: calc(0.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -23592,8 +23592,8 @@ video {
 
   .sm\:space-x-4 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1rem * var(--space-x-reverse));
-    margin-inline-start: calc(1rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1rem * var(--space-x-reverse));
+    margin-left: calc(1rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-5 > :not([hidden]) ~ :not([hidden]) {
@@ -23604,8 +23604,8 @@ video {
 
   .sm\:space-x-5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(1.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1.25rem * var(--space-x-reverse));
+    margin-left: calc(1.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-6 > :not([hidden]) ~ :not([hidden]) {
@@ -23616,8 +23616,8 @@ video {
 
   .sm\:space-x-6 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(1.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1.5rem * var(--space-x-reverse));
+    margin-left: calc(1.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-7 > :not([hidden]) ~ :not([hidden]) {
@@ -23628,8 +23628,8 @@ video {
 
   .sm\:space-x-7 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(1.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1.75rem * var(--space-x-reverse));
+    margin-left: calc(1.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -23640,8 +23640,8 @@ video {
 
   .sm\:space-x-8 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(2rem * var(--space-x-reverse));
-    margin-inline-start: calc(2rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(2rem * var(--space-x-reverse));
+    margin-left: calc(2rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-9 > :not([hidden]) ~ :not([hidden]) {
@@ -23652,8 +23652,8 @@ video {
 
   .sm\:space-x-9 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(2.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(2.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(2.25rem * var(--space-x-reverse));
+    margin-left: calc(2.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-10 > :not([hidden]) ~ :not([hidden]) {
@@ -23664,8 +23664,8 @@ video {
 
   .sm\:space-x-10 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(2.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(2.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(2.5rem * var(--space-x-reverse));
+    margin-left: calc(2.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-12 > :not([hidden]) ~ :not([hidden]) {
@@ -23676,8 +23676,8 @@ video {
 
   .sm\:space-x-12 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(3rem * var(--space-x-reverse));
-    margin-inline-start: calc(3rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(3rem * var(--space-x-reverse));
+    margin-left: calc(3rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-14 > :not([hidden]) ~ :not([hidden]) {
@@ -23688,8 +23688,8 @@ video {
 
   .sm\:space-x-14 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(3.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(3.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(3.5rem * var(--space-x-reverse));
+    margin-left: calc(3.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-16 > :not([hidden]) ~ :not([hidden]) {
@@ -23700,8 +23700,8 @@ video {
 
   .sm\:space-x-16 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(4rem * var(--space-x-reverse));
-    margin-inline-start: calc(4rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(4rem * var(--space-x-reverse));
+    margin-left: calc(4rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-20 > :not([hidden]) ~ :not([hidden]) {
@@ -23712,8 +23712,8 @@ video {
 
   .sm\:space-x-20 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(5rem * var(--space-x-reverse));
-    margin-inline-start: calc(5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(5rem * var(--space-x-reverse));
+    margin-left: calc(5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-24 > :not([hidden]) ~ :not([hidden]) {
@@ -23724,8 +23724,8 @@ video {
 
   .sm\:space-x-24 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(6rem * var(--space-x-reverse));
-    margin-inline-start: calc(6rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(6rem * var(--space-x-reverse));
+    margin-left: calc(6rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-28 > :not([hidden]) ~ :not([hidden]) {
@@ -23736,8 +23736,8 @@ video {
 
   .sm\:space-x-28 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(7rem * var(--space-x-reverse));
-    margin-inline-start: calc(7rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(7rem * var(--space-x-reverse));
+    margin-left: calc(7rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-32 > :not([hidden]) ~ :not([hidden]) {
@@ -23748,8 +23748,8 @@ video {
 
   .sm\:space-x-32 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(8rem * var(--space-x-reverse));
-    margin-inline-start: calc(8rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(8rem * var(--space-x-reverse));
+    margin-left: calc(8rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-36 > :not([hidden]) ~ :not([hidden]) {
@@ -23760,8 +23760,8 @@ video {
 
   .sm\:space-x-36 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(9rem * var(--space-x-reverse));
-    margin-inline-start: calc(9rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(9rem * var(--space-x-reverse));
+    margin-left: calc(9rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-40 > :not([hidden]) ~ :not([hidden]) {
@@ -23772,8 +23772,8 @@ video {
 
   .sm\:space-x-40 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(10rem * var(--space-x-reverse));
-    margin-inline-start: calc(10rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(10rem * var(--space-x-reverse));
+    margin-left: calc(10rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-44 > :not([hidden]) ~ :not([hidden]) {
@@ -23784,8 +23784,8 @@ video {
 
   .sm\:space-x-44 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(11rem * var(--space-x-reverse));
-    margin-inline-start: calc(11rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(11rem * var(--space-x-reverse));
+    margin-left: calc(11rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-48 > :not([hidden]) ~ :not([hidden]) {
@@ -23796,8 +23796,8 @@ video {
 
   .sm\:space-x-48 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(12rem * var(--space-x-reverse));
-    margin-inline-start: calc(12rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(12rem * var(--space-x-reverse));
+    margin-left: calc(12rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-52 > :not([hidden]) ~ :not([hidden]) {
@@ -23808,8 +23808,8 @@ video {
 
   .sm\:space-x-52 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(13rem * var(--space-x-reverse));
-    margin-inline-start: calc(13rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(13rem * var(--space-x-reverse));
+    margin-left: calc(13rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-56 > :not([hidden]) ~ :not([hidden]) {
@@ -23820,8 +23820,8 @@ video {
 
   .sm\:space-x-56 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(14rem * var(--space-x-reverse));
-    margin-inline-start: calc(14rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(14rem * var(--space-x-reverse));
+    margin-left: calc(14rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-60 > :not([hidden]) ~ :not([hidden]) {
@@ -23832,8 +23832,8 @@ video {
 
   .sm\:space-x-60 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(15rem * var(--space-x-reverse));
-    margin-inline-start: calc(15rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(15rem * var(--space-x-reverse));
+    margin-left: calc(15rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-64 > :not([hidden]) ~ :not([hidden]) {
@@ -23844,8 +23844,8 @@ video {
 
   .sm\:space-x-64 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(16rem * var(--space-x-reverse));
-    margin-inline-start: calc(16rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(16rem * var(--space-x-reverse));
+    margin-left: calc(16rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-72 > :not([hidden]) ~ :not([hidden]) {
@@ -23856,8 +23856,8 @@ video {
 
   .sm\:space-x-72 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(18rem * var(--space-x-reverse));
-    margin-inline-start: calc(18rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(18rem * var(--space-x-reverse));
+    margin-left: calc(18rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-80 > :not([hidden]) ~ :not([hidden]) {
@@ -23868,8 +23868,8 @@ video {
 
   .sm\:space-x-80 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(20rem * var(--space-x-reverse));
-    margin-inline-start: calc(20rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(20rem * var(--space-x-reverse));
+    margin-left: calc(20rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-96 > :not([hidden]) ~ :not([hidden]) {
@@ -23880,8 +23880,8 @@ video {
 
   .sm\:space-x-96 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(24rem * var(--space-x-reverse));
-    margin-inline-start: calc(24rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(24rem * var(--space-x-reverse));
+    margin-left: calc(24rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-px > :not([hidden]) ~ :not([hidden]) {
@@ -23892,8 +23892,8 @@ video {
 
   .sm\:space-x-px > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1px * var(--space-x-reverse));
-    margin-inline-start: calc(1px * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1px * var(--space-x-reverse));
+    margin-left: calc(1px * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-0\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -23904,8 +23904,8 @@ video {
 
   .sm\:space-x-0\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.125rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.125rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.125rem * var(--space-x-reverse));
+    margin-left: calc(0.125rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -23916,8 +23916,8 @@ video {
 
   .sm\:space-x-1\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.375rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.375rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.375rem * var(--space-x-reverse));
+    margin-left: calc(0.375rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-2\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -23928,8 +23928,8 @@ video {
 
   .sm\:space-x-2\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.625rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.625rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.625rem * var(--space-x-reverse));
+    margin-left: calc(0.625rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-3\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -23940,8 +23940,8 @@ video {
 
   .sm\:space-x-3\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.875rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.875rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.875rem * var(--space-x-reverse));
+    margin-left: calc(0.875rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -23952,8 +23952,8 @@ video {
 
   .sm\:-space-x-1 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.25rem * var(--space-x-reverse));
+    margin-left: calc(-0.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -23964,8 +23964,8 @@ video {
 
   .sm\:-space-x-2 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.5rem * var(--space-x-reverse));
+    margin-left: calc(-0.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-3 > :not([hidden]) ~ :not([hidden]) {
@@ -23976,8 +23976,8 @@ video {
 
   .sm\:-space-x-3 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.75rem * var(--space-x-reverse));
+    margin-left: calc(-0.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -23988,8 +23988,8 @@ video {
 
   .sm\:-space-x-4 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1rem * var(--space-x-reverse));
+    margin-left: calc(-1rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-5 > :not([hidden]) ~ :not([hidden]) {
@@ -24000,8 +24000,8 @@ video {
 
   .sm\:-space-x-5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1.25rem * var(--space-x-reverse));
+    margin-left: calc(-1.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-6 > :not([hidden]) ~ :not([hidden]) {
@@ -24012,8 +24012,8 @@ video {
 
   .sm\:-space-x-6 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1.5rem * var(--space-x-reverse));
+    margin-left: calc(-1.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-7 > :not([hidden]) ~ :not([hidden]) {
@@ -24024,8 +24024,8 @@ video {
 
   .sm\:-space-x-7 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1.75rem * var(--space-x-reverse));
+    margin-left: calc(-1.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -24036,8 +24036,8 @@ video {
 
   .sm\:-space-x-8 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-2rem * var(--space-x-reverse));
-    margin-inline-start: calc(-2rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-2rem * var(--space-x-reverse));
+    margin-left: calc(-2rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-9 > :not([hidden]) ~ :not([hidden]) {
@@ -24048,8 +24048,8 @@ video {
 
   .sm\:-space-x-9 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-2.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(-2.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-2.25rem * var(--space-x-reverse));
+    margin-left: calc(-2.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-10 > :not([hidden]) ~ :not([hidden]) {
@@ -24060,8 +24060,8 @@ video {
 
   .sm\:-space-x-10 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-2.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-2.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-2.5rem * var(--space-x-reverse));
+    margin-left: calc(-2.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-12 > :not([hidden]) ~ :not([hidden]) {
@@ -24072,8 +24072,8 @@ video {
 
   .sm\:-space-x-12 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-3rem * var(--space-x-reverse));
-    margin-inline-start: calc(-3rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-3rem * var(--space-x-reverse));
+    margin-left: calc(-3rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-14 > :not([hidden]) ~ :not([hidden]) {
@@ -24084,8 +24084,8 @@ video {
 
   .sm\:-space-x-14 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-3.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-3.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-3.5rem * var(--space-x-reverse));
+    margin-left: calc(-3.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-16 > :not([hidden]) ~ :not([hidden]) {
@@ -24096,8 +24096,8 @@ video {
 
   .sm\:-space-x-16 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-4rem * var(--space-x-reverse));
-    margin-inline-start: calc(-4rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-4rem * var(--space-x-reverse));
+    margin-left: calc(-4rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-20 > :not([hidden]) ~ :not([hidden]) {
@@ -24108,8 +24108,8 @@ video {
 
   .sm\:-space-x-20 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-5rem * var(--space-x-reverse));
+    margin-left: calc(-5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-24 > :not([hidden]) ~ :not([hidden]) {
@@ -24120,8 +24120,8 @@ video {
 
   .sm\:-space-x-24 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-6rem * var(--space-x-reverse));
-    margin-inline-start: calc(-6rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-6rem * var(--space-x-reverse));
+    margin-left: calc(-6rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-28 > :not([hidden]) ~ :not([hidden]) {
@@ -24132,8 +24132,8 @@ video {
 
   .sm\:-space-x-28 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-7rem * var(--space-x-reverse));
-    margin-inline-start: calc(-7rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-7rem * var(--space-x-reverse));
+    margin-left: calc(-7rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-32 > :not([hidden]) ~ :not([hidden]) {
@@ -24144,8 +24144,8 @@ video {
 
   .sm\:-space-x-32 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-8rem * var(--space-x-reverse));
-    margin-inline-start: calc(-8rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-8rem * var(--space-x-reverse));
+    margin-left: calc(-8rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-36 > :not([hidden]) ~ :not([hidden]) {
@@ -24156,8 +24156,8 @@ video {
 
   .sm\:-space-x-36 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-9rem * var(--space-x-reverse));
-    margin-inline-start: calc(-9rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-9rem * var(--space-x-reverse));
+    margin-left: calc(-9rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-40 > :not([hidden]) ~ :not([hidden]) {
@@ -24168,8 +24168,8 @@ video {
 
   .sm\:-space-x-40 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-10rem * var(--space-x-reverse));
-    margin-inline-start: calc(-10rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-10rem * var(--space-x-reverse));
+    margin-left: calc(-10rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-44 > :not([hidden]) ~ :not([hidden]) {
@@ -24180,8 +24180,8 @@ video {
 
   .sm\:-space-x-44 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-11rem * var(--space-x-reverse));
-    margin-inline-start: calc(-11rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-11rem * var(--space-x-reverse));
+    margin-left: calc(-11rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-48 > :not([hidden]) ~ :not([hidden]) {
@@ -24192,8 +24192,8 @@ video {
 
   .sm\:-space-x-48 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-12rem * var(--space-x-reverse));
-    margin-inline-start: calc(-12rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-12rem * var(--space-x-reverse));
+    margin-left: calc(-12rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-52 > :not([hidden]) ~ :not([hidden]) {
@@ -24204,8 +24204,8 @@ video {
 
   .sm\:-space-x-52 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-13rem * var(--space-x-reverse));
-    margin-inline-start: calc(-13rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-13rem * var(--space-x-reverse));
+    margin-left: calc(-13rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-56 > :not([hidden]) ~ :not([hidden]) {
@@ -24216,8 +24216,8 @@ video {
 
   .sm\:-space-x-56 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-14rem * var(--space-x-reverse));
-    margin-inline-start: calc(-14rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-14rem * var(--space-x-reverse));
+    margin-left: calc(-14rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-60 > :not([hidden]) ~ :not([hidden]) {
@@ -24228,8 +24228,8 @@ video {
 
   .sm\:-space-x-60 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-15rem * var(--space-x-reverse));
-    margin-inline-start: calc(-15rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-15rem * var(--space-x-reverse));
+    margin-left: calc(-15rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-64 > :not([hidden]) ~ :not([hidden]) {
@@ -24240,8 +24240,8 @@ video {
 
   .sm\:-space-x-64 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-16rem * var(--space-x-reverse));
-    margin-inline-start: calc(-16rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-16rem * var(--space-x-reverse));
+    margin-left: calc(-16rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-72 > :not([hidden]) ~ :not([hidden]) {
@@ -24252,8 +24252,8 @@ video {
 
   .sm\:-space-x-72 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-18rem * var(--space-x-reverse));
-    margin-inline-start: calc(-18rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-18rem * var(--space-x-reverse));
+    margin-left: calc(-18rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-80 > :not([hidden]) ~ :not([hidden]) {
@@ -24264,8 +24264,8 @@ video {
 
   .sm\:-space-x-80 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-20rem * var(--space-x-reverse));
-    margin-inline-start: calc(-20rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-20rem * var(--space-x-reverse));
+    margin-left: calc(-20rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-96 > :not([hidden]) ~ :not([hidden]) {
@@ -24276,8 +24276,8 @@ video {
 
   .sm\:-space-x-96 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-24rem * var(--space-x-reverse));
-    margin-inline-start: calc(-24rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-24rem * var(--space-x-reverse));
+    margin-left: calc(-24rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-px > :not([hidden]) ~ :not([hidden]) {
@@ -24288,8 +24288,8 @@ video {
 
   .sm\:-space-x-px > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1px * var(--space-x-reverse));
-    margin-inline-start: calc(-1px * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1px * var(--space-x-reverse));
+    margin-left: calc(-1px * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-0\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -24300,8 +24300,8 @@ video {
 
   .sm\:-space-x-0\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.125rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.125rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.125rem * var(--space-x-reverse));
+    margin-left: calc(-0.125rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -24312,8 +24312,8 @@ video {
 
   .sm\:-space-x-1\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.375rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.375rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.375rem * var(--space-x-reverse));
+    margin-left: calc(-0.375rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-2\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -24324,8 +24324,8 @@ video {
 
   .sm\:-space-x-2\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.625rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.625rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.625rem * var(--space-x-reverse));
+    margin-left: calc(-0.625rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:-space-y-3\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -24336,8 +24336,8 @@ video {
 
   .sm\:-space-x-3\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.875rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.875rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.875rem * var(--space-x-reverse));
+    margin-left: calc(-0.875rem * calc(1 - var(--space-x-reverse)));
   }
 
   .sm\:space-y-reverse > :not([hidden]) ~ :not([hidden]) {
@@ -24356,8 +24356,8 @@ video {
 
   .sm\:divide-x-0 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(0px * var(--divide-x-reverse));
-    border-inline-start-width: calc(0px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(0px * var(--divide-x-reverse));
+    border-left-width: calc(0px * calc(1 - var(--divide-x-reverse)));
   }
 
   .sm\:divide-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -24368,8 +24368,8 @@ video {
 
   .sm\:divide-x-2 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(2px * var(--divide-x-reverse));
-    border-inline-start-width: calc(2px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(2px * var(--divide-x-reverse));
+    border-left-width: calc(2px * calc(1 - var(--divide-x-reverse)));
   }
 
   .sm\:divide-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -24380,8 +24380,8 @@ video {
 
   .sm\:divide-x-4 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(4px * var(--divide-x-reverse));
-    border-inline-start-width: calc(4px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(4px * var(--divide-x-reverse));
+    border-left-width: calc(4px * calc(1 - var(--divide-x-reverse)));
   }
 
   .sm\:divide-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -24392,8 +24392,8 @@ video {
 
   .sm\:divide-x-8 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(8px * var(--divide-x-reverse));
-    border-inline-start-width: calc(8px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(8px * var(--divide-x-reverse));
+    border-left-width: calc(8px * calc(1 - var(--divide-x-reverse)));
   }
 
   .sm\:divide-y > :not([hidden]) ~ :not([hidden]) {
@@ -24404,8 +24404,8 @@ video {
 
   .sm\:divide-x > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(1px * var(--divide-x-reverse));
-    border-inline-start-width: calc(1px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(1px * var(--divide-x-reverse));
+    border-left-width: calc(1px * calc(1 - var(--divide-x-reverse)));
   }
 
   .sm\:divide-y-reverse > :not([hidden]) ~ :not([hidden]) {
@@ -46490,8 +46490,8 @@ video {
 
   .md\:space-x-0 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0px * var(--space-x-reverse));
-    margin-inline-start: calc(0px * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0px * var(--space-x-reverse));
+    margin-left: calc(0px * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -46502,8 +46502,8 @@ video {
 
   .md\:space-x-1 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.25rem * var(--space-x-reverse));
+    margin-left: calc(0.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -46514,8 +46514,8 @@ video {
 
   .md\:space-x-2 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.5rem * var(--space-x-reverse));
+    margin-left: calc(0.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-3 > :not([hidden]) ~ :not([hidden]) {
@@ -46526,8 +46526,8 @@ video {
 
   .md\:space-x-3 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.75rem * var(--space-x-reverse));
+    margin-left: calc(0.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -46538,8 +46538,8 @@ video {
 
   .md\:space-x-4 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1rem * var(--space-x-reverse));
-    margin-inline-start: calc(1rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1rem * var(--space-x-reverse));
+    margin-left: calc(1rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-5 > :not([hidden]) ~ :not([hidden]) {
@@ -46550,8 +46550,8 @@ video {
 
   .md\:space-x-5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(1.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1.25rem * var(--space-x-reverse));
+    margin-left: calc(1.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-6 > :not([hidden]) ~ :not([hidden]) {
@@ -46562,8 +46562,8 @@ video {
 
   .md\:space-x-6 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(1.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1.5rem * var(--space-x-reverse));
+    margin-left: calc(1.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-7 > :not([hidden]) ~ :not([hidden]) {
@@ -46574,8 +46574,8 @@ video {
 
   .md\:space-x-7 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(1.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1.75rem * var(--space-x-reverse));
+    margin-left: calc(1.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -46586,8 +46586,8 @@ video {
 
   .md\:space-x-8 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(2rem * var(--space-x-reverse));
-    margin-inline-start: calc(2rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(2rem * var(--space-x-reverse));
+    margin-left: calc(2rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-9 > :not([hidden]) ~ :not([hidden]) {
@@ -46598,8 +46598,8 @@ video {
 
   .md\:space-x-9 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(2.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(2.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(2.25rem * var(--space-x-reverse));
+    margin-left: calc(2.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-10 > :not([hidden]) ~ :not([hidden]) {
@@ -46610,8 +46610,8 @@ video {
 
   .md\:space-x-10 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(2.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(2.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(2.5rem * var(--space-x-reverse));
+    margin-left: calc(2.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-12 > :not([hidden]) ~ :not([hidden]) {
@@ -46622,8 +46622,8 @@ video {
 
   .md\:space-x-12 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(3rem * var(--space-x-reverse));
-    margin-inline-start: calc(3rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(3rem * var(--space-x-reverse));
+    margin-left: calc(3rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-14 > :not([hidden]) ~ :not([hidden]) {
@@ -46634,8 +46634,8 @@ video {
 
   .md\:space-x-14 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(3.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(3.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(3.5rem * var(--space-x-reverse));
+    margin-left: calc(3.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-16 > :not([hidden]) ~ :not([hidden]) {
@@ -46646,8 +46646,8 @@ video {
 
   .md\:space-x-16 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(4rem * var(--space-x-reverse));
-    margin-inline-start: calc(4rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(4rem * var(--space-x-reverse));
+    margin-left: calc(4rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-20 > :not([hidden]) ~ :not([hidden]) {
@@ -46658,8 +46658,8 @@ video {
 
   .md\:space-x-20 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(5rem * var(--space-x-reverse));
-    margin-inline-start: calc(5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(5rem * var(--space-x-reverse));
+    margin-left: calc(5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-24 > :not([hidden]) ~ :not([hidden]) {
@@ -46670,8 +46670,8 @@ video {
 
   .md\:space-x-24 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(6rem * var(--space-x-reverse));
-    margin-inline-start: calc(6rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(6rem * var(--space-x-reverse));
+    margin-left: calc(6rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-28 > :not([hidden]) ~ :not([hidden]) {
@@ -46682,8 +46682,8 @@ video {
 
   .md\:space-x-28 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(7rem * var(--space-x-reverse));
-    margin-inline-start: calc(7rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(7rem * var(--space-x-reverse));
+    margin-left: calc(7rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-32 > :not([hidden]) ~ :not([hidden]) {
@@ -46694,8 +46694,8 @@ video {
 
   .md\:space-x-32 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(8rem * var(--space-x-reverse));
-    margin-inline-start: calc(8rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(8rem * var(--space-x-reverse));
+    margin-left: calc(8rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-36 > :not([hidden]) ~ :not([hidden]) {
@@ -46706,8 +46706,8 @@ video {
 
   .md\:space-x-36 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(9rem * var(--space-x-reverse));
-    margin-inline-start: calc(9rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(9rem * var(--space-x-reverse));
+    margin-left: calc(9rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-40 > :not([hidden]) ~ :not([hidden]) {
@@ -46718,8 +46718,8 @@ video {
 
   .md\:space-x-40 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(10rem * var(--space-x-reverse));
-    margin-inline-start: calc(10rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(10rem * var(--space-x-reverse));
+    margin-left: calc(10rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-44 > :not([hidden]) ~ :not([hidden]) {
@@ -46730,8 +46730,8 @@ video {
 
   .md\:space-x-44 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(11rem * var(--space-x-reverse));
-    margin-inline-start: calc(11rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(11rem * var(--space-x-reverse));
+    margin-left: calc(11rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-48 > :not([hidden]) ~ :not([hidden]) {
@@ -46742,8 +46742,8 @@ video {
 
   .md\:space-x-48 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(12rem * var(--space-x-reverse));
-    margin-inline-start: calc(12rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(12rem * var(--space-x-reverse));
+    margin-left: calc(12rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-52 > :not([hidden]) ~ :not([hidden]) {
@@ -46754,8 +46754,8 @@ video {
 
   .md\:space-x-52 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(13rem * var(--space-x-reverse));
-    margin-inline-start: calc(13rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(13rem * var(--space-x-reverse));
+    margin-left: calc(13rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-56 > :not([hidden]) ~ :not([hidden]) {
@@ -46766,8 +46766,8 @@ video {
 
   .md\:space-x-56 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(14rem * var(--space-x-reverse));
-    margin-inline-start: calc(14rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(14rem * var(--space-x-reverse));
+    margin-left: calc(14rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-60 > :not([hidden]) ~ :not([hidden]) {
@@ -46778,8 +46778,8 @@ video {
 
   .md\:space-x-60 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(15rem * var(--space-x-reverse));
-    margin-inline-start: calc(15rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(15rem * var(--space-x-reverse));
+    margin-left: calc(15rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-64 > :not([hidden]) ~ :not([hidden]) {
@@ -46790,8 +46790,8 @@ video {
 
   .md\:space-x-64 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(16rem * var(--space-x-reverse));
-    margin-inline-start: calc(16rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(16rem * var(--space-x-reverse));
+    margin-left: calc(16rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-72 > :not([hidden]) ~ :not([hidden]) {
@@ -46802,8 +46802,8 @@ video {
 
   .md\:space-x-72 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(18rem * var(--space-x-reverse));
-    margin-inline-start: calc(18rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(18rem * var(--space-x-reverse));
+    margin-left: calc(18rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-80 > :not([hidden]) ~ :not([hidden]) {
@@ -46814,8 +46814,8 @@ video {
 
   .md\:space-x-80 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(20rem * var(--space-x-reverse));
-    margin-inline-start: calc(20rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(20rem * var(--space-x-reverse));
+    margin-left: calc(20rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-96 > :not([hidden]) ~ :not([hidden]) {
@@ -46826,8 +46826,8 @@ video {
 
   .md\:space-x-96 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(24rem * var(--space-x-reverse));
-    margin-inline-start: calc(24rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(24rem * var(--space-x-reverse));
+    margin-left: calc(24rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-px > :not([hidden]) ~ :not([hidden]) {
@@ -46838,8 +46838,8 @@ video {
 
   .md\:space-x-px > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1px * var(--space-x-reverse));
-    margin-inline-start: calc(1px * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1px * var(--space-x-reverse));
+    margin-left: calc(1px * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-0\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -46850,8 +46850,8 @@ video {
 
   .md\:space-x-0\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.125rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.125rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.125rem * var(--space-x-reverse));
+    margin-left: calc(0.125rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -46862,8 +46862,8 @@ video {
 
   .md\:space-x-1\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.375rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.375rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.375rem * var(--space-x-reverse));
+    margin-left: calc(0.375rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-2\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -46874,8 +46874,8 @@ video {
 
   .md\:space-x-2\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.625rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.625rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.625rem * var(--space-x-reverse));
+    margin-left: calc(0.625rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-3\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -46886,8 +46886,8 @@ video {
 
   .md\:space-x-3\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.875rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.875rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.875rem * var(--space-x-reverse));
+    margin-left: calc(0.875rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -46898,8 +46898,8 @@ video {
 
   .md\:-space-x-1 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.25rem * var(--space-x-reverse));
+    margin-left: calc(-0.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -46910,8 +46910,8 @@ video {
 
   .md\:-space-x-2 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.5rem * var(--space-x-reverse));
+    margin-left: calc(-0.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-3 > :not([hidden]) ~ :not([hidden]) {
@@ -46922,8 +46922,8 @@ video {
 
   .md\:-space-x-3 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.75rem * var(--space-x-reverse));
+    margin-left: calc(-0.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -46934,8 +46934,8 @@ video {
 
   .md\:-space-x-4 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1rem * var(--space-x-reverse));
+    margin-left: calc(-1rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-5 > :not([hidden]) ~ :not([hidden]) {
@@ -46946,8 +46946,8 @@ video {
 
   .md\:-space-x-5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1.25rem * var(--space-x-reverse));
+    margin-left: calc(-1.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-6 > :not([hidden]) ~ :not([hidden]) {
@@ -46958,8 +46958,8 @@ video {
 
   .md\:-space-x-6 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1.5rem * var(--space-x-reverse));
+    margin-left: calc(-1.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-7 > :not([hidden]) ~ :not([hidden]) {
@@ -46970,8 +46970,8 @@ video {
 
   .md\:-space-x-7 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1.75rem * var(--space-x-reverse));
+    margin-left: calc(-1.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -46982,8 +46982,8 @@ video {
 
   .md\:-space-x-8 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-2rem * var(--space-x-reverse));
-    margin-inline-start: calc(-2rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-2rem * var(--space-x-reverse));
+    margin-left: calc(-2rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-9 > :not([hidden]) ~ :not([hidden]) {
@@ -46994,8 +46994,8 @@ video {
 
   .md\:-space-x-9 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-2.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(-2.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-2.25rem * var(--space-x-reverse));
+    margin-left: calc(-2.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-10 > :not([hidden]) ~ :not([hidden]) {
@@ -47006,8 +47006,8 @@ video {
 
   .md\:-space-x-10 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-2.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-2.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-2.5rem * var(--space-x-reverse));
+    margin-left: calc(-2.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-12 > :not([hidden]) ~ :not([hidden]) {
@@ -47018,8 +47018,8 @@ video {
 
   .md\:-space-x-12 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-3rem * var(--space-x-reverse));
-    margin-inline-start: calc(-3rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-3rem * var(--space-x-reverse));
+    margin-left: calc(-3rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-14 > :not([hidden]) ~ :not([hidden]) {
@@ -47030,8 +47030,8 @@ video {
 
   .md\:-space-x-14 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-3.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-3.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-3.5rem * var(--space-x-reverse));
+    margin-left: calc(-3.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-16 > :not([hidden]) ~ :not([hidden]) {
@@ -47042,8 +47042,8 @@ video {
 
   .md\:-space-x-16 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-4rem * var(--space-x-reverse));
-    margin-inline-start: calc(-4rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-4rem * var(--space-x-reverse));
+    margin-left: calc(-4rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-20 > :not([hidden]) ~ :not([hidden]) {
@@ -47054,8 +47054,8 @@ video {
 
   .md\:-space-x-20 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-5rem * var(--space-x-reverse));
+    margin-left: calc(-5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-24 > :not([hidden]) ~ :not([hidden]) {
@@ -47066,8 +47066,8 @@ video {
 
   .md\:-space-x-24 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-6rem * var(--space-x-reverse));
-    margin-inline-start: calc(-6rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-6rem * var(--space-x-reverse));
+    margin-left: calc(-6rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-28 > :not([hidden]) ~ :not([hidden]) {
@@ -47078,8 +47078,8 @@ video {
 
   .md\:-space-x-28 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-7rem * var(--space-x-reverse));
-    margin-inline-start: calc(-7rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-7rem * var(--space-x-reverse));
+    margin-left: calc(-7rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-32 > :not([hidden]) ~ :not([hidden]) {
@@ -47090,8 +47090,8 @@ video {
 
   .md\:-space-x-32 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-8rem * var(--space-x-reverse));
-    margin-inline-start: calc(-8rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-8rem * var(--space-x-reverse));
+    margin-left: calc(-8rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-36 > :not([hidden]) ~ :not([hidden]) {
@@ -47102,8 +47102,8 @@ video {
 
   .md\:-space-x-36 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-9rem * var(--space-x-reverse));
-    margin-inline-start: calc(-9rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-9rem * var(--space-x-reverse));
+    margin-left: calc(-9rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-40 > :not([hidden]) ~ :not([hidden]) {
@@ -47114,8 +47114,8 @@ video {
 
   .md\:-space-x-40 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-10rem * var(--space-x-reverse));
-    margin-inline-start: calc(-10rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-10rem * var(--space-x-reverse));
+    margin-left: calc(-10rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-44 > :not([hidden]) ~ :not([hidden]) {
@@ -47126,8 +47126,8 @@ video {
 
   .md\:-space-x-44 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-11rem * var(--space-x-reverse));
-    margin-inline-start: calc(-11rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-11rem * var(--space-x-reverse));
+    margin-left: calc(-11rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-48 > :not([hidden]) ~ :not([hidden]) {
@@ -47138,8 +47138,8 @@ video {
 
   .md\:-space-x-48 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-12rem * var(--space-x-reverse));
-    margin-inline-start: calc(-12rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-12rem * var(--space-x-reverse));
+    margin-left: calc(-12rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-52 > :not([hidden]) ~ :not([hidden]) {
@@ -47150,8 +47150,8 @@ video {
 
   .md\:-space-x-52 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-13rem * var(--space-x-reverse));
-    margin-inline-start: calc(-13rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-13rem * var(--space-x-reverse));
+    margin-left: calc(-13rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-56 > :not([hidden]) ~ :not([hidden]) {
@@ -47162,8 +47162,8 @@ video {
 
   .md\:-space-x-56 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-14rem * var(--space-x-reverse));
-    margin-inline-start: calc(-14rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-14rem * var(--space-x-reverse));
+    margin-left: calc(-14rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-60 > :not([hidden]) ~ :not([hidden]) {
@@ -47174,8 +47174,8 @@ video {
 
   .md\:-space-x-60 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-15rem * var(--space-x-reverse));
-    margin-inline-start: calc(-15rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-15rem * var(--space-x-reverse));
+    margin-left: calc(-15rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-64 > :not([hidden]) ~ :not([hidden]) {
@@ -47186,8 +47186,8 @@ video {
 
   .md\:-space-x-64 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-16rem * var(--space-x-reverse));
-    margin-inline-start: calc(-16rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-16rem * var(--space-x-reverse));
+    margin-left: calc(-16rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-72 > :not([hidden]) ~ :not([hidden]) {
@@ -47198,8 +47198,8 @@ video {
 
   .md\:-space-x-72 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-18rem * var(--space-x-reverse));
-    margin-inline-start: calc(-18rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-18rem * var(--space-x-reverse));
+    margin-left: calc(-18rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-80 > :not([hidden]) ~ :not([hidden]) {
@@ -47210,8 +47210,8 @@ video {
 
   .md\:-space-x-80 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-20rem * var(--space-x-reverse));
-    margin-inline-start: calc(-20rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-20rem * var(--space-x-reverse));
+    margin-left: calc(-20rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-96 > :not([hidden]) ~ :not([hidden]) {
@@ -47222,8 +47222,8 @@ video {
 
   .md\:-space-x-96 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-24rem * var(--space-x-reverse));
-    margin-inline-start: calc(-24rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-24rem * var(--space-x-reverse));
+    margin-left: calc(-24rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-px > :not([hidden]) ~ :not([hidden]) {
@@ -47234,8 +47234,8 @@ video {
 
   .md\:-space-x-px > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1px * var(--space-x-reverse));
-    margin-inline-start: calc(-1px * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1px * var(--space-x-reverse));
+    margin-left: calc(-1px * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-0\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -47246,8 +47246,8 @@ video {
 
   .md\:-space-x-0\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.125rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.125rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.125rem * var(--space-x-reverse));
+    margin-left: calc(-0.125rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -47258,8 +47258,8 @@ video {
 
   .md\:-space-x-1\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.375rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.375rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.375rem * var(--space-x-reverse));
+    margin-left: calc(-0.375rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-2\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -47270,8 +47270,8 @@ video {
 
   .md\:-space-x-2\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.625rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.625rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.625rem * var(--space-x-reverse));
+    margin-left: calc(-0.625rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:-space-y-3\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -47282,8 +47282,8 @@ video {
 
   .md\:-space-x-3\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.875rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.875rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.875rem * var(--space-x-reverse));
+    margin-left: calc(-0.875rem * calc(1 - var(--space-x-reverse)));
   }
 
   .md\:space-y-reverse > :not([hidden]) ~ :not([hidden]) {
@@ -47302,8 +47302,8 @@ video {
 
   .md\:divide-x-0 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(0px * var(--divide-x-reverse));
-    border-inline-start-width: calc(0px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(0px * var(--divide-x-reverse));
+    border-left-width: calc(0px * calc(1 - var(--divide-x-reverse)));
   }
 
   .md\:divide-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -47314,8 +47314,8 @@ video {
 
   .md\:divide-x-2 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(2px * var(--divide-x-reverse));
-    border-inline-start-width: calc(2px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(2px * var(--divide-x-reverse));
+    border-left-width: calc(2px * calc(1 - var(--divide-x-reverse)));
   }
 
   .md\:divide-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -47326,8 +47326,8 @@ video {
 
   .md\:divide-x-4 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(4px * var(--divide-x-reverse));
-    border-inline-start-width: calc(4px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(4px * var(--divide-x-reverse));
+    border-left-width: calc(4px * calc(1 - var(--divide-x-reverse)));
   }
 
   .md\:divide-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -47338,8 +47338,8 @@ video {
 
   .md\:divide-x-8 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(8px * var(--divide-x-reverse));
-    border-inline-start-width: calc(8px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(8px * var(--divide-x-reverse));
+    border-left-width: calc(8px * calc(1 - var(--divide-x-reverse)));
   }
 
   .md\:divide-y > :not([hidden]) ~ :not([hidden]) {
@@ -47350,8 +47350,8 @@ video {
 
   .md\:divide-x > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(1px * var(--divide-x-reverse));
-    border-inline-start-width: calc(1px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(1px * var(--divide-x-reverse));
+    border-left-width: calc(1px * calc(1 - var(--divide-x-reverse)));
   }
 
   .md\:divide-y-reverse > :not([hidden]) ~ :not([hidden]) {
@@ -69436,8 +69436,8 @@ video {
 
   .lg\:space-x-0 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0px * var(--space-x-reverse));
-    margin-inline-start: calc(0px * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0px * var(--space-x-reverse));
+    margin-left: calc(0px * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -69448,8 +69448,8 @@ video {
 
   .lg\:space-x-1 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.25rem * var(--space-x-reverse));
+    margin-left: calc(0.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -69460,8 +69460,8 @@ video {
 
   .lg\:space-x-2 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.5rem * var(--space-x-reverse));
+    margin-left: calc(0.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-3 > :not([hidden]) ~ :not([hidden]) {
@@ -69472,8 +69472,8 @@ video {
 
   .lg\:space-x-3 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.75rem * var(--space-x-reverse));
+    margin-left: calc(0.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -69484,8 +69484,8 @@ video {
 
   .lg\:space-x-4 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1rem * var(--space-x-reverse));
-    margin-inline-start: calc(1rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1rem * var(--space-x-reverse));
+    margin-left: calc(1rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-5 > :not([hidden]) ~ :not([hidden]) {
@@ -69496,8 +69496,8 @@ video {
 
   .lg\:space-x-5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(1.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1.25rem * var(--space-x-reverse));
+    margin-left: calc(1.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-6 > :not([hidden]) ~ :not([hidden]) {
@@ -69508,8 +69508,8 @@ video {
 
   .lg\:space-x-6 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(1.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1.5rem * var(--space-x-reverse));
+    margin-left: calc(1.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-7 > :not([hidden]) ~ :not([hidden]) {
@@ -69520,8 +69520,8 @@ video {
 
   .lg\:space-x-7 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(1.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1.75rem * var(--space-x-reverse));
+    margin-left: calc(1.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -69532,8 +69532,8 @@ video {
 
   .lg\:space-x-8 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(2rem * var(--space-x-reverse));
-    margin-inline-start: calc(2rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(2rem * var(--space-x-reverse));
+    margin-left: calc(2rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-9 > :not([hidden]) ~ :not([hidden]) {
@@ -69544,8 +69544,8 @@ video {
 
   .lg\:space-x-9 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(2.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(2.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(2.25rem * var(--space-x-reverse));
+    margin-left: calc(2.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-10 > :not([hidden]) ~ :not([hidden]) {
@@ -69556,8 +69556,8 @@ video {
 
   .lg\:space-x-10 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(2.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(2.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(2.5rem * var(--space-x-reverse));
+    margin-left: calc(2.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-12 > :not([hidden]) ~ :not([hidden]) {
@@ -69568,8 +69568,8 @@ video {
 
   .lg\:space-x-12 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(3rem * var(--space-x-reverse));
-    margin-inline-start: calc(3rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(3rem * var(--space-x-reverse));
+    margin-left: calc(3rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-14 > :not([hidden]) ~ :not([hidden]) {
@@ -69580,8 +69580,8 @@ video {
 
   .lg\:space-x-14 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(3.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(3.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(3.5rem * var(--space-x-reverse));
+    margin-left: calc(3.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-16 > :not([hidden]) ~ :not([hidden]) {
@@ -69592,8 +69592,8 @@ video {
 
   .lg\:space-x-16 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(4rem * var(--space-x-reverse));
-    margin-inline-start: calc(4rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(4rem * var(--space-x-reverse));
+    margin-left: calc(4rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-20 > :not([hidden]) ~ :not([hidden]) {
@@ -69604,8 +69604,8 @@ video {
 
   .lg\:space-x-20 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(5rem * var(--space-x-reverse));
-    margin-inline-start: calc(5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(5rem * var(--space-x-reverse));
+    margin-left: calc(5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-24 > :not([hidden]) ~ :not([hidden]) {
@@ -69616,8 +69616,8 @@ video {
 
   .lg\:space-x-24 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(6rem * var(--space-x-reverse));
-    margin-inline-start: calc(6rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(6rem * var(--space-x-reverse));
+    margin-left: calc(6rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-28 > :not([hidden]) ~ :not([hidden]) {
@@ -69628,8 +69628,8 @@ video {
 
   .lg\:space-x-28 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(7rem * var(--space-x-reverse));
-    margin-inline-start: calc(7rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(7rem * var(--space-x-reverse));
+    margin-left: calc(7rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-32 > :not([hidden]) ~ :not([hidden]) {
@@ -69640,8 +69640,8 @@ video {
 
   .lg\:space-x-32 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(8rem * var(--space-x-reverse));
-    margin-inline-start: calc(8rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(8rem * var(--space-x-reverse));
+    margin-left: calc(8rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-36 > :not([hidden]) ~ :not([hidden]) {
@@ -69652,8 +69652,8 @@ video {
 
   .lg\:space-x-36 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(9rem * var(--space-x-reverse));
-    margin-inline-start: calc(9rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(9rem * var(--space-x-reverse));
+    margin-left: calc(9rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-40 > :not([hidden]) ~ :not([hidden]) {
@@ -69664,8 +69664,8 @@ video {
 
   .lg\:space-x-40 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(10rem * var(--space-x-reverse));
-    margin-inline-start: calc(10rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(10rem * var(--space-x-reverse));
+    margin-left: calc(10rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-44 > :not([hidden]) ~ :not([hidden]) {
@@ -69676,8 +69676,8 @@ video {
 
   .lg\:space-x-44 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(11rem * var(--space-x-reverse));
-    margin-inline-start: calc(11rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(11rem * var(--space-x-reverse));
+    margin-left: calc(11rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-48 > :not([hidden]) ~ :not([hidden]) {
@@ -69688,8 +69688,8 @@ video {
 
   .lg\:space-x-48 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(12rem * var(--space-x-reverse));
-    margin-inline-start: calc(12rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(12rem * var(--space-x-reverse));
+    margin-left: calc(12rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-52 > :not([hidden]) ~ :not([hidden]) {
@@ -69700,8 +69700,8 @@ video {
 
   .lg\:space-x-52 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(13rem * var(--space-x-reverse));
-    margin-inline-start: calc(13rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(13rem * var(--space-x-reverse));
+    margin-left: calc(13rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-56 > :not([hidden]) ~ :not([hidden]) {
@@ -69712,8 +69712,8 @@ video {
 
   .lg\:space-x-56 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(14rem * var(--space-x-reverse));
-    margin-inline-start: calc(14rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(14rem * var(--space-x-reverse));
+    margin-left: calc(14rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-60 > :not([hidden]) ~ :not([hidden]) {
@@ -69724,8 +69724,8 @@ video {
 
   .lg\:space-x-60 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(15rem * var(--space-x-reverse));
-    margin-inline-start: calc(15rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(15rem * var(--space-x-reverse));
+    margin-left: calc(15rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-64 > :not([hidden]) ~ :not([hidden]) {
@@ -69736,8 +69736,8 @@ video {
 
   .lg\:space-x-64 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(16rem * var(--space-x-reverse));
-    margin-inline-start: calc(16rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(16rem * var(--space-x-reverse));
+    margin-left: calc(16rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-72 > :not([hidden]) ~ :not([hidden]) {
@@ -69748,8 +69748,8 @@ video {
 
   .lg\:space-x-72 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(18rem * var(--space-x-reverse));
-    margin-inline-start: calc(18rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(18rem * var(--space-x-reverse));
+    margin-left: calc(18rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-80 > :not([hidden]) ~ :not([hidden]) {
@@ -69760,8 +69760,8 @@ video {
 
   .lg\:space-x-80 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(20rem * var(--space-x-reverse));
-    margin-inline-start: calc(20rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(20rem * var(--space-x-reverse));
+    margin-left: calc(20rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-96 > :not([hidden]) ~ :not([hidden]) {
@@ -69772,8 +69772,8 @@ video {
 
   .lg\:space-x-96 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(24rem * var(--space-x-reverse));
-    margin-inline-start: calc(24rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(24rem * var(--space-x-reverse));
+    margin-left: calc(24rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-px > :not([hidden]) ~ :not([hidden]) {
@@ -69784,8 +69784,8 @@ video {
 
   .lg\:space-x-px > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1px * var(--space-x-reverse));
-    margin-inline-start: calc(1px * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1px * var(--space-x-reverse));
+    margin-left: calc(1px * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-0\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -69796,8 +69796,8 @@ video {
 
   .lg\:space-x-0\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.125rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.125rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.125rem * var(--space-x-reverse));
+    margin-left: calc(0.125rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -69808,8 +69808,8 @@ video {
 
   .lg\:space-x-1\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.375rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.375rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.375rem * var(--space-x-reverse));
+    margin-left: calc(0.375rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-2\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -69820,8 +69820,8 @@ video {
 
   .lg\:space-x-2\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.625rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.625rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.625rem * var(--space-x-reverse));
+    margin-left: calc(0.625rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-3\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -69832,8 +69832,8 @@ video {
 
   .lg\:space-x-3\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.875rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.875rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.875rem * var(--space-x-reverse));
+    margin-left: calc(0.875rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -69844,8 +69844,8 @@ video {
 
   .lg\:-space-x-1 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.25rem * var(--space-x-reverse));
+    margin-left: calc(-0.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -69856,8 +69856,8 @@ video {
 
   .lg\:-space-x-2 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.5rem * var(--space-x-reverse));
+    margin-left: calc(-0.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-3 > :not([hidden]) ~ :not([hidden]) {
@@ -69868,8 +69868,8 @@ video {
 
   .lg\:-space-x-3 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.75rem * var(--space-x-reverse));
+    margin-left: calc(-0.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -69880,8 +69880,8 @@ video {
 
   .lg\:-space-x-4 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1rem * var(--space-x-reverse));
+    margin-left: calc(-1rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-5 > :not([hidden]) ~ :not([hidden]) {
@@ -69892,8 +69892,8 @@ video {
 
   .lg\:-space-x-5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1.25rem * var(--space-x-reverse));
+    margin-left: calc(-1.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-6 > :not([hidden]) ~ :not([hidden]) {
@@ -69904,8 +69904,8 @@ video {
 
   .lg\:-space-x-6 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1.5rem * var(--space-x-reverse));
+    margin-left: calc(-1.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-7 > :not([hidden]) ~ :not([hidden]) {
@@ -69916,8 +69916,8 @@ video {
 
   .lg\:-space-x-7 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1.75rem * var(--space-x-reverse));
+    margin-left: calc(-1.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -69928,8 +69928,8 @@ video {
 
   .lg\:-space-x-8 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-2rem * var(--space-x-reverse));
-    margin-inline-start: calc(-2rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-2rem * var(--space-x-reverse));
+    margin-left: calc(-2rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-9 > :not([hidden]) ~ :not([hidden]) {
@@ -69940,8 +69940,8 @@ video {
 
   .lg\:-space-x-9 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-2.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(-2.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-2.25rem * var(--space-x-reverse));
+    margin-left: calc(-2.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-10 > :not([hidden]) ~ :not([hidden]) {
@@ -69952,8 +69952,8 @@ video {
 
   .lg\:-space-x-10 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-2.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-2.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-2.5rem * var(--space-x-reverse));
+    margin-left: calc(-2.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-12 > :not([hidden]) ~ :not([hidden]) {
@@ -69964,8 +69964,8 @@ video {
 
   .lg\:-space-x-12 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-3rem * var(--space-x-reverse));
-    margin-inline-start: calc(-3rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-3rem * var(--space-x-reverse));
+    margin-left: calc(-3rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-14 > :not([hidden]) ~ :not([hidden]) {
@@ -69976,8 +69976,8 @@ video {
 
   .lg\:-space-x-14 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-3.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-3.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-3.5rem * var(--space-x-reverse));
+    margin-left: calc(-3.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-16 > :not([hidden]) ~ :not([hidden]) {
@@ -69988,8 +69988,8 @@ video {
 
   .lg\:-space-x-16 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-4rem * var(--space-x-reverse));
-    margin-inline-start: calc(-4rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-4rem * var(--space-x-reverse));
+    margin-left: calc(-4rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-20 > :not([hidden]) ~ :not([hidden]) {
@@ -70000,8 +70000,8 @@ video {
 
   .lg\:-space-x-20 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-5rem * var(--space-x-reverse));
+    margin-left: calc(-5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-24 > :not([hidden]) ~ :not([hidden]) {
@@ -70012,8 +70012,8 @@ video {
 
   .lg\:-space-x-24 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-6rem * var(--space-x-reverse));
-    margin-inline-start: calc(-6rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-6rem * var(--space-x-reverse));
+    margin-left: calc(-6rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-28 > :not([hidden]) ~ :not([hidden]) {
@@ -70024,8 +70024,8 @@ video {
 
   .lg\:-space-x-28 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-7rem * var(--space-x-reverse));
-    margin-inline-start: calc(-7rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-7rem * var(--space-x-reverse));
+    margin-left: calc(-7rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-32 > :not([hidden]) ~ :not([hidden]) {
@@ -70036,8 +70036,8 @@ video {
 
   .lg\:-space-x-32 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-8rem * var(--space-x-reverse));
-    margin-inline-start: calc(-8rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-8rem * var(--space-x-reverse));
+    margin-left: calc(-8rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-36 > :not([hidden]) ~ :not([hidden]) {
@@ -70048,8 +70048,8 @@ video {
 
   .lg\:-space-x-36 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-9rem * var(--space-x-reverse));
-    margin-inline-start: calc(-9rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-9rem * var(--space-x-reverse));
+    margin-left: calc(-9rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-40 > :not([hidden]) ~ :not([hidden]) {
@@ -70060,8 +70060,8 @@ video {
 
   .lg\:-space-x-40 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-10rem * var(--space-x-reverse));
-    margin-inline-start: calc(-10rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-10rem * var(--space-x-reverse));
+    margin-left: calc(-10rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-44 > :not([hidden]) ~ :not([hidden]) {
@@ -70072,8 +70072,8 @@ video {
 
   .lg\:-space-x-44 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-11rem * var(--space-x-reverse));
-    margin-inline-start: calc(-11rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-11rem * var(--space-x-reverse));
+    margin-left: calc(-11rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-48 > :not([hidden]) ~ :not([hidden]) {
@@ -70084,8 +70084,8 @@ video {
 
   .lg\:-space-x-48 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-12rem * var(--space-x-reverse));
-    margin-inline-start: calc(-12rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-12rem * var(--space-x-reverse));
+    margin-left: calc(-12rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-52 > :not([hidden]) ~ :not([hidden]) {
@@ -70096,8 +70096,8 @@ video {
 
   .lg\:-space-x-52 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-13rem * var(--space-x-reverse));
-    margin-inline-start: calc(-13rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-13rem * var(--space-x-reverse));
+    margin-left: calc(-13rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-56 > :not([hidden]) ~ :not([hidden]) {
@@ -70108,8 +70108,8 @@ video {
 
   .lg\:-space-x-56 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-14rem * var(--space-x-reverse));
-    margin-inline-start: calc(-14rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-14rem * var(--space-x-reverse));
+    margin-left: calc(-14rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-60 > :not([hidden]) ~ :not([hidden]) {
@@ -70120,8 +70120,8 @@ video {
 
   .lg\:-space-x-60 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-15rem * var(--space-x-reverse));
-    margin-inline-start: calc(-15rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-15rem * var(--space-x-reverse));
+    margin-left: calc(-15rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-64 > :not([hidden]) ~ :not([hidden]) {
@@ -70132,8 +70132,8 @@ video {
 
   .lg\:-space-x-64 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-16rem * var(--space-x-reverse));
-    margin-inline-start: calc(-16rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-16rem * var(--space-x-reverse));
+    margin-left: calc(-16rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-72 > :not([hidden]) ~ :not([hidden]) {
@@ -70144,8 +70144,8 @@ video {
 
   .lg\:-space-x-72 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-18rem * var(--space-x-reverse));
-    margin-inline-start: calc(-18rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-18rem * var(--space-x-reverse));
+    margin-left: calc(-18rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-80 > :not([hidden]) ~ :not([hidden]) {
@@ -70156,8 +70156,8 @@ video {
 
   .lg\:-space-x-80 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-20rem * var(--space-x-reverse));
-    margin-inline-start: calc(-20rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-20rem * var(--space-x-reverse));
+    margin-left: calc(-20rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-96 > :not([hidden]) ~ :not([hidden]) {
@@ -70168,8 +70168,8 @@ video {
 
   .lg\:-space-x-96 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-24rem * var(--space-x-reverse));
-    margin-inline-start: calc(-24rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-24rem * var(--space-x-reverse));
+    margin-left: calc(-24rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-px > :not([hidden]) ~ :not([hidden]) {
@@ -70180,8 +70180,8 @@ video {
 
   .lg\:-space-x-px > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1px * var(--space-x-reverse));
-    margin-inline-start: calc(-1px * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1px * var(--space-x-reverse));
+    margin-left: calc(-1px * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-0\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -70192,8 +70192,8 @@ video {
 
   .lg\:-space-x-0\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.125rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.125rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.125rem * var(--space-x-reverse));
+    margin-left: calc(-0.125rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -70204,8 +70204,8 @@ video {
 
   .lg\:-space-x-1\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.375rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.375rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.375rem * var(--space-x-reverse));
+    margin-left: calc(-0.375rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-2\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -70216,8 +70216,8 @@ video {
 
   .lg\:-space-x-2\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.625rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.625rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.625rem * var(--space-x-reverse));
+    margin-left: calc(-0.625rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:-space-y-3\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -70228,8 +70228,8 @@ video {
 
   .lg\:-space-x-3\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.875rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.875rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.875rem * var(--space-x-reverse));
+    margin-left: calc(-0.875rem * calc(1 - var(--space-x-reverse)));
   }
 
   .lg\:space-y-reverse > :not([hidden]) ~ :not([hidden]) {
@@ -70248,8 +70248,8 @@ video {
 
   .lg\:divide-x-0 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(0px * var(--divide-x-reverse));
-    border-inline-start-width: calc(0px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(0px * var(--divide-x-reverse));
+    border-left-width: calc(0px * calc(1 - var(--divide-x-reverse)));
   }
 
   .lg\:divide-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -70260,8 +70260,8 @@ video {
 
   .lg\:divide-x-2 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(2px * var(--divide-x-reverse));
-    border-inline-start-width: calc(2px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(2px * var(--divide-x-reverse));
+    border-left-width: calc(2px * calc(1 - var(--divide-x-reverse)));
   }
 
   .lg\:divide-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -70272,8 +70272,8 @@ video {
 
   .lg\:divide-x-4 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(4px * var(--divide-x-reverse));
-    border-inline-start-width: calc(4px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(4px * var(--divide-x-reverse));
+    border-left-width: calc(4px * calc(1 - var(--divide-x-reverse)));
   }
 
   .lg\:divide-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -70284,8 +70284,8 @@ video {
 
   .lg\:divide-x-8 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(8px * var(--divide-x-reverse));
-    border-inline-start-width: calc(8px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(8px * var(--divide-x-reverse));
+    border-left-width: calc(8px * calc(1 - var(--divide-x-reverse)));
   }
 
   .lg\:divide-y > :not([hidden]) ~ :not([hidden]) {
@@ -70296,8 +70296,8 @@ video {
 
   .lg\:divide-x > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(1px * var(--divide-x-reverse));
-    border-inline-start-width: calc(1px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(1px * var(--divide-x-reverse));
+    border-left-width: calc(1px * calc(1 - var(--divide-x-reverse)));
   }
 
   .lg\:divide-y-reverse > :not([hidden]) ~ :not([hidden]) {
@@ -92382,8 +92382,8 @@ video {
 
   .xl\:space-x-0 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0px * var(--space-x-reverse));
-    margin-inline-start: calc(0px * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0px * var(--space-x-reverse));
+    margin-left: calc(0px * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -92394,8 +92394,8 @@ video {
 
   .xl\:space-x-1 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.25rem * var(--space-x-reverse));
+    margin-left: calc(0.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -92406,8 +92406,8 @@ video {
 
   .xl\:space-x-2 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.5rem * var(--space-x-reverse));
+    margin-left: calc(0.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-3 > :not([hidden]) ~ :not([hidden]) {
@@ -92418,8 +92418,8 @@ video {
 
   .xl\:space-x-3 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.75rem * var(--space-x-reverse));
+    margin-left: calc(0.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -92430,8 +92430,8 @@ video {
 
   .xl\:space-x-4 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1rem * var(--space-x-reverse));
-    margin-inline-start: calc(1rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1rem * var(--space-x-reverse));
+    margin-left: calc(1rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-5 > :not([hidden]) ~ :not([hidden]) {
@@ -92442,8 +92442,8 @@ video {
 
   .xl\:space-x-5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(1.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1.25rem * var(--space-x-reverse));
+    margin-left: calc(1.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-6 > :not([hidden]) ~ :not([hidden]) {
@@ -92454,8 +92454,8 @@ video {
 
   .xl\:space-x-6 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(1.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1.5rem * var(--space-x-reverse));
+    margin-left: calc(1.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-7 > :not([hidden]) ~ :not([hidden]) {
@@ -92466,8 +92466,8 @@ video {
 
   .xl\:space-x-7 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(1.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1.75rem * var(--space-x-reverse));
+    margin-left: calc(1.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -92478,8 +92478,8 @@ video {
 
   .xl\:space-x-8 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(2rem * var(--space-x-reverse));
-    margin-inline-start: calc(2rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(2rem * var(--space-x-reverse));
+    margin-left: calc(2rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-9 > :not([hidden]) ~ :not([hidden]) {
@@ -92490,8 +92490,8 @@ video {
 
   .xl\:space-x-9 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(2.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(2.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(2.25rem * var(--space-x-reverse));
+    margin-left: calc(2.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-10 > :not([hidden]) ~ :not([hidden]) {
@@ -92502,8 +92502,8 @@ video {
 
   .xl\:space-x-10 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(2.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(2.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(2.5rem * var(--space-x-reverse));
+    margin-left: calc(2.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-12 > :not([hidden]) ~ :not([hidden]) {
@@ -92514,8 +92514,8 @@ video {
 
   .xl\:space-x-12 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(3rem * var(--space-x-reverse));
-    margin-inline-start: calc(3rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(3rem * var(--space-x-reverse));
+    margin-left: calc(3rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-14 > :not([hidden]) ~ :not([hidden]) {
@@ -92526,8 +92526,8 @@ video {
 
   .xl\:space-x-14 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(3.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(3.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(3.5rem * var(--space-x-reverse));
+    margin-left: calc(3.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-16 > :not([hidden]) ~ :not([hidden]) {
@@ -92538,8 +92538,8 @@ video {
 
   .xl\:space-x-16 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(4rem * var(--space-x-reverse));
-    margin-inline-start: calc(4rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(4rem * var(--space-x-reverse));
+    margin-left: calc(4rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-20 > :not([hidden]) ~ :not([hidden]) {
@@ -92550,8 +92550,8 @@ video {
 
   .xl\:space-x-20 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(5rem * var(--space-x-reverse));
-    margin-inline-start: calc(5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(5rem * var(--space-x-reverse));
+    margin-left: calc(5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-24 > :not([hidden]) ~ :not([hidden]) {
@@ -92562,8 +92562,8 @@ video {
 
   .xl\:space-x-24 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(6rem * var(--space-x-reverse));
-    margin-inline-start: calc(6rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(6rem * var(--space-x-reverse));
+    margin-left: calc(6rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-28 > :not([hidden]) ~ :not([hidden]) {
@@ -92574,8 +92574,8 @@ video {
 
   .xl\:space-x-28 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(7rem * var(--space-x-reverse));
-    margin-inline-start: calc(7rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(7rem * var(--space-x-reverse));
+    margin-left: calc(7rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-32 > :not([hidden]) ~ :not([hidden]) {
@@ -92586,8 +92586,8 @@ video {
 
   .xl\:space-x-32 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(8rem * var(--space-x-reverse));
-    margin-inline-start: calc(8rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(8rem * var(--space-x-reverse));
+    margin-left: calc(8rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-36 > :not([hidden]) ~ :not([hidden]) {
@@ -92598,8 +92598,8 @@ video {
 
   .xl\:space-x-36 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(9rem * var(--space-x-reverse));
-    margin-inline-start: calc(9rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(9rem * var(--space-x-reverse));
+    margin-left: calc(9rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-40 > :not([hidden]) ~ :not([hidden]) {
@@ -92610,8 +92610,8 @@ video {
 
   .xl\:space-x-40 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(10rem * var(--space-x-reverse));
-    margin-inline-start: calc(10rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(10rem * var(--space-x-reverse));
+    margin-left: calc(10rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-44 > :not([hidden]) ~ :not([hidden]) {
@@ -92622,8 +92622,8 @@ video {
 
   .xl\:space-x-44 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(11rem * var(--space-x-reverse));
-    margin-inline-start: calc(11rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(11rem * var(--space-x-reverse));
+    margin-left: calc(11rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-48 > :not([hidden]) ~ :not([hidden]) {
@@ -92634,8 +92634,8 @@ video {
 
   .xl\:space-x-48 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(12rem * var(--space-x-reverse));
-    margin-inline-start: calc(12rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(12rem * var(--space-x-reverse));
+    margin-left: calc(12rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-52 > :not([hidden]) ~ :not([hidden]) {
@@ -92646,8 +92646,8 @@ video {
 
   .xl\:space-x-52 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(13rem * var(--space-x-reverse));
-    margin-inline-start: calc(13rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(13rem * var(--space-x-reverse));
+    margin-left: calc(13rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-56 > :not([hidden]) ~ :not([hidden]) {
@@ -92658,8 +92658,8 @@ video {
 
   .xl\:space-x-56 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(14rem * var(--space-x-reverse));
-    margin-inline-start: calc(14rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(14rem * var(--space-x-reverse));
+    margin-left: calc(14rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-60 > :not([hidden]) ~ :not([hidden]) {
@@ -92670,8 +92670,8 @@ video {
 
   .xl\:space-x-60 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(15rem * var(--space-x-reverse));
-    margin-inline-start: calc(15rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(15rem * var(--space-x-reverse));
+    margin-left: calc(15rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-64 > :not([hidden]) ~ :not([hidden]) {
@@ -92682,8 +92682,8 @@ video {
 
   .xl\:space-x-64 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(16rem * var(--space-x-reverse));
-    margin-inline-start: calc(16rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(16rem * var(--space-x-reverse));
+    margin-left: calc(16rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-72 > :not([hidden]) ~ :not([hidden]) {
@@ -92694,8 +92694,8 @@ video {
 
   .xl\:space-x-72 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(18rem * var(--space-x-reverse));
-    margin-inline-start: calc(18rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(18rem * var(--space-x-reverse));
+    margin-left: calc(18rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-80 > :not([hidden]) ~ :not([hidden]) {
@@ -92706,8 +92706,8 @@ video {
 
   .xl\:space-x-80 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(20rem * var(--space-x-reverse));
-    margin-inline-start: calc(20rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(20rem * var(--space-x-reverse));
+    margin-left: calc(20rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-96 > :not([hidden]) ~ :not([hidden]) {
@@ -92718,8 +92718,8 @@ video {
 
   .xl\:space-x-96 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(24rem * var(--space-x-reverse));
-    margin-inline-start: calc(24rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(24rem * var(--space-x-reverse));
+    margin-left: calc(24rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-px > :not([hidden]) ~ :not([hidden]) {
@@ -92730,8 +92730,8 @@ video {
 
   .xl\:space-x-px > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1px * var(--space-x-reverse));
-    margin-inline-start: calc(1px * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1px * var(--space-x-reverse));
+    margin-left: calc(1px * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-0\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -92742,8 +92742,8 @@ video {
 
   .xl\:space-x-0\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.125rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.125rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.125rem * var(--space-x-reverse));
+    margin-left: calc(0.125rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -92754,8 +92754,8 @@ video {
 
   .xl\:space-x-1\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.375rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.375rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.375rem * var(--space-x-reverse));
+    margin-left: calc(0.375rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-2\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -92766,8 +92766,8 @@ video {
 
   .xl\:space-x-2\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.625rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.625rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.625rem * var(--space-x-reverse));
+    margin-left: calc(0.625rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-3\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -92778,8 +92778,8 @@ video {
 
   .xl\:space-x-3\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.875rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.875rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.875rem * var(--space-x-reverse));
+    margin-left: calc(0.875rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -92790,8 +92790,8 @@ video {
 
   .xl\:-space-x-1 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.25rem * var(--space-x-reverse));
+    margin-left: calc(-0.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -92802,8 +92802,8 @@ video {
 
   .xl\:-space-x-2 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.5rem * var(--space-x-reverse));
+    margin-left: calc(-0.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-3 > :not([hidden]) ~ :not([hidden]) {
@@ -92814,8 +92814,8 @@ video {
 
   .xl\:-space-x-3 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.75rem * var(--space-x-reverse));
+    margin-left: calc(-0.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -92826,8 +92826,8 @@ video {
 
   .xl\:-space-x-4 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1rem * var(--space-x-reverse));
+    margin-left: calc(-1rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-5 > :not([hidden]) ~ :not([hidden]) {
@@ -92838,8 +92838,8 @@ video {
 
   .xl\:-space-x-5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1.25rem * var(--space-x-reverse));
+    margin-left: calc(-1.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-6 > :not([hidden]) ~ :not([hidden]) {
@@ -92850,8 +92850,8 @@ video {
 
   .xl\:-space-x-6 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1.5rem * var(--space-x-reverse));
+    margin-left: calc(-1.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-7 > :not([hidden]) ~ :not([hidden]) {
@@ -92862,8 +92862,8 @@ video {
 
   .xl\:-space-x-7 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1.75rem * var(--space-x-reverse));
+    margin-left: calc(-1.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -92874,8 +92874,8 @@ video {
 
   .xl\:-space-x-8 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-2rem * var(--space-x-reverse));
-    margin-inline-start: calc(-2rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-2rem * var(--space-x-reverse));
+    margin-left: calc(-2rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-9 > :not([hidden]) ~ :not([hidden]) {
@@ -92886,8 +92886,8 @@ video {
 
   .xl\:-space-x-9 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-2.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(-2.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-2.25rem * var(--space-x-reverse));
+    margin-left: calc(-2.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-10 > :not([hidden]) ~ :not([hidden]) {
@@ -92898,8 +92898,8 @@ video {
 
   .xl\:-space-x-10 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-2.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-2.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-2.5rem * var(--space-x-reverse));
+    margin-left: calc(-2.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-12 > :not([hidden]) ~ :not([hidden]) {
@@ -92910,8 +92910,8 @@ video {
 
   .xl\:-space-x-12 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-3rem * var(--space-x-reverse));
-    margin-inline-start: calc(-3rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-3rem * var(--space-x-reverse));
+    margin-left: calc(-3rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-14 > :not([hidden]) ~ :not([hidden]) {
@@ -92922,8 +92922,8 @@ video {
 
   .xl\:-space-x-14 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-3.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-3.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-3.5rem * var(--space-x-reverse));
+    margin-left: calc(-3.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-16 > :not([hidden]) ~ :not([hidden]) {
@@ -92934,8 +92934,8 @@ video {
 
   .xl\:-space-x-16 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-4rem * var(--space-x-reverse));
-    margin-inline-start: calc(-4rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-4rem * var(--space-x-reverse));
+    margin-left: calc(-4rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-20 > :not([hidden]) ~ :not([hidden]) {
@@ -92946,8 +92946,8 @@ video {
 
   .xl\:-space-x-20 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-5rem * var(--space-x-reverse));
+    margin-left: calc(-5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-24 > :not([hidden]) ~ :not([hidden]) {
@@ -92958,8 +92958,8 @@ video {
 
   .xl\:-space-x-24 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-6rem * var(--space-x-reverse));
-    margin-inline-start: calc(-6rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-6rem * var(--space-x-reverse));
+    margin-left: calc(-6rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-28 > :not([hidden]) ~ :not([hidden]) {
@@ -92970,8 +92970,8 @@ video {
 
   .xl\:-space-x-28 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-7rem * var(--space-x-reverse));
-    margin-inline-start: calc(-7rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-7rem * var(--space-x-reverse));
+    margin-left: calc(-7rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-32 > :not([hidden]) ~ :not([hidden]) {
@@ -92982,8 +92982,8 @@ video {
 
   .xl\:-space-x-32 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-8rem * var(--space-x-reverse));
-    margin-inline-start: calc(-8rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-8rem * var(--space-x-reverse));
+    margin-left: calc(-8rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-36 > :not([hidden]) ~ :not([hidden]) {
@@ -92994,8 +92994,8 @@ video {
 
   .xl\:-space-x-36 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-9rem * var(--space-x-reverse));
-    margin-inline-start: calc(-9rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-9rem * var(--space-x-reverse));
+    margin-left: calc(-9rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-40 > :not([hidden]) ~ :not([hidden]) {
@@ -93006,8 +93006,8 @@ video {
 
   .xl\:-space-x-40 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-10rem * var(--space-x-reverse));
-    margin-inline-start: calc(-10rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-10rem * var(--space-x-reverse));
+    margin-left: calc(-10rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-44 > :not([hidden]) ~ :not([hidden]) {
@@ -93018,8 +93018,8 @@ video {
 
   .xl\:-space-x-44 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-11rem * var(--space-x-reverse));
-    margin-inline-start: calc(-11rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-11rem * var(--space-x-reverse));
+    margin-left: calc(-11rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-48 > :not([hidden]) ~ :not([hidden]) {
@@ -93030,8 +93030,8 @@ video {
 
   .xl\:-space-x-48 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-12rem * var(--space-x-reverse));
-    margin-inline-start: calc(-12rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-12rem * var(--space-x-reverse));
+    margin-left: calc(-12rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-52 > :not([hidden]) ~ :not([hidden]) {
@@ -93042,8 +93042,8 @@ video {
 
   .xl\:-space-x-52 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-13rem * var(--space-x-reverse));
-    margin-inline-start: calc(-13rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-13rem * var(--space-x-reverse));
+    margin-left: calc(-13rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-56 > :not([hidden]) ~ :not([hidden]) {
@@ -93054,8 +93054,8 @@ video {
 
   .xl\:-space-x-56 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-14rem * var(--space-x-reverse));
-    margin-inline-start: calc(-14rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-14rem * var(--space-x-reverse));
+    margin-left: calc(-14rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-60 > :not([hidden]) ~ :not([hidden]) {
@@ -93066,8 +93066,8 @@ video {
 
   .xl\:-space-x-60 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-15rem * var(--space-x-reverse));
-    margin-inline-start: calc(-15rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-15rem * var(--space-x-reverse));
+    margin-left: calc(-15rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-64 > :not([hidden]) ~ :not([hidden]) {
@@ -93078,8 +93078,8 @@ video {
 
   .xl\:-space-x-64 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-16rem * var(--space-x-reverse));
-    margin-inline-start: calc(-16rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-16rem * var(--space-x-reverse));
+    margin-left: calc(-16rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-72 > :not([hidden]) ~ :not([hidden]) {
@@ -93090,8 +93090,8 @@ video {
 
   .xl\:-space-x-72 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-18rem * var(--space-x-reverse));
-    margin-inline-start: calc(-18rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-18rem * var(--space-x-reverse));
+    margin-left: calc(-18rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-80 > :not([hidden]) ~ :not([hidden]) {
@@ -93102,8 +93102,8 @@ video {
 
   .xl\:-space-x-80 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-20rem * var(--space-x-reverse));
-    margin-inline-start: calc(-20rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-20rem * var(--space-x-reverse));
+    margin-left: calc(-20rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-96 > :not([hidden]) ~ :not([hidden]) {
@@ -93114,8 +93114,8 @@ video {
 
   .xl\:-space-x-96 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-24rem * var(--space-x-reverse));
-    margin-inline-start: calc(-24rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-24rem * var(--space-x-reverse));
+    margin-left: calc(-24rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-px > :not([hidden]) ~ :not([hidden]) {
@@ -93126,8 +93126,8 @@ video {
 
   .xl\:-space-x-px > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1px * var(--space-x-reverse));
-    margin-inline-start: calc(-1px * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1px * var(--space-x-reverse));
+    margin-left: calc(-1px * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-0\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -93138,8 +93138,8 @@ video {
 
   .xl\:-space-x-0\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.125rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.125rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.125rem * var(--space-x-reverse));
+    margin-left: calc(-0.125rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -93150,8 +93150,8 @@ video {
 
   .xl\:-space-x-1\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.375rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.375rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.375rem * var(--space-x-reverse));
+    margin-left: calc(-0.375rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-2\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -93162,8 +93162,8 @@ video {
 
   .xl\:-space-x-2\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.625rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.625rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.625rem * var(--space-x-reverse));
+    margin-left: calc(-0.625rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:-space-y-3\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -93174,8 +93174,8 @@ video {
 
   .xl\:-space-x-3\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.875rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.875rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.875rem * var(--space-x-reverse));
+    margin-left: calc(-0.875rem * calc(1 - var(--space-x-reverse)));
   }
 
   .xl\:space-y-reverse > :not([hidden]) ~ :not([hidden]) {
@@ -93194,8 +93194,8 @@ video {
 
   .xl\:divide-x-0 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(0px * var(--divide-x-reverse));
-    border-inline-start-width: calc(0px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(0px * var(--divide-x-reverse));
+    border-left-width: calc(0px * calc(1 - var(--divide-x-reverse)));
   }
 
   .xl\:divide-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -93206,8 +93206,8 @@ video {
 
   .xl\:divide-x-2 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(2px * var(--divide-x-reverse));
-    border-inline-start-width: calc(2px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(2px * var(--divide-x-reverse));
+    border-left-width: calc(2px * calc(1 - var(--divide-x-reverse)));
   }
 
   .xl\:divide-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -93218,8 +93218,8 @@ video {
 
   .xl\:divide-x-4 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(4px * var(--divide-x-reverse));
-    border-inline-start-width: calc(4px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(4px * var(--divide-x-reverse));
+    border-left-width: calc(4px * calc(1 - var(--divide-x-reverse)));
   }
 
   .xl\:divide-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -93230,8 +93230,8 @@ video {
 
   .xl\:divide-x-8 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(8px * var(--divide-x-reverse));
-    border-inline-start-width: calc(8px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(8px * var(--divide-x-reverse));
+    border-left-width: calc(8px * calc(1 - var(--divide-x-reverse)));
   }
 
   .xl\:divide-y > :not([hidden]) ~ :not([hidden]) {
@@ -93242,8 +93242,8 @@ video {
 
   .xl\:divide-x > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(1px * var(--divide-x-reverse));
-    border-inline-start-width: calc(1px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(1px * var(--divide-x-reverse));
+    border-left-width: calc(1px * calc(1 - var(--divide-x-reverse)));
   }
 
   .xl\:divide-y-reverse > :not([hidden]) ~ :not([hidden]) {
@@ -115328,8 +115328,8 @@ video {
 
   .\32xl\:space-x-0 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0px * var(--space-x-reverse));
-    margin-inline-start: calc(0px * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0px * var(--space-x-reverse));
+    margin-left: calc(0px * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -115340,8 +115340,8 @@ video {
 
   .\32xl\:space-x-1 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.25rem * var(--space-x-reverse));
+    margin-left: calc(0.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -115352,8 +115352,8 @@ video {
 
   .\32xl\:space-x-2 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.5rem * var(--space-x-reverse));
+    margin-left: calc(0.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-3 > :not([hidden]) ~ :not([hidden]) {
@@ -115364,8 +115364,8 @@ video {
 
   .\32xl\:space-x-3 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.75rem * var(--space-x-reverse));
+    margin-left: calc(0.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -115376,8 +115376,8 @@ video {
 
   .\32xl\:space-x-4 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1rem * var(--space-x-reverse));
-    margin-inline-start: calc(1rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1rem * var(--space-x-reverse));
+    margin-left: calc(1rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-5 > :not([hidden]) ~ :not([hidden]) {
@@ -115388,8 +115388,8 @@ video {
 
   .\32xl\:space-x-5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(1.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1.25rem * var(--space-x-reverse));
+    margin-left: calc(1.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-6 > :not([hidden]) ~ :not([hidden]) {
@@ -115400,8 +115400,8 @@ video {
 
   .\32xl\:space-x-6 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(1.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1.5rem * var(--space-x-reverse));
+    margin-left: calc(1.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-7 > :not([hidden]) ~ :not([hidden]) {
@@ -115412,8 +115412,8 @@ video {
 
   .\32xl\:space-x-7 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(1.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1.75rem * var(--space-x-reverse));
+    margin-left: calc(1.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -115424,8 +115424,8 @@ video {
 
   .\32xl\:space-x-8 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(2rem * var(--space-x-reverse));
-    margin-inline-start: calc(2rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(2rem * var(--space-x-reverse));
+    margin-left: calc(2rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-9 > :not([hidden]) ~ :not([hidden]) {
@@ -115436,8 +115436,8 @@ video {
 
   .\32xl\:space-x-9 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(2.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(2.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(2.25rem * var(--space-x-reverse));
+    margin-left: calc(2.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-10 > :not([hidden]) ~ :not([hidden]) {
@@ -115448,8 +115448,8 @@ video {
 
   .\32xl\:space-x-10 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(2.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(2.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(2.5rem * var(--space-x-reverse));
+    margin-left: calc(2.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-12 > :not([hidden]) ~ :not([hidden]) {
@@ -115460,8 +115460,8 @@ video {
 
   .\32xl\:space-x-12 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(3rem * var(--space-x-reverse));
-    margin-inline-start: calc(3rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(3rem * var(--space-x-reverse));
+    margin-left: calc(3rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-14 > :not([hidden]) ~ :not([hidden]) {
@@ -115472,8 +115472,8 @@ video {
 
   .\32xl\:space-x-14 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(3.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(3.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(3.5rem * var(--space-x-reverse));
+    margin-left: calc(3.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-16 > :not([hidden]) ~ :not([hidden]) {
@@ -115484,8 +115484,8 @@ video {
 
   .\32xl\:space-x-16 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(4rem * var(--space-x-reverse));
-    margin-inline-start: calc(4rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(4rem * var(--space-x-reverse));
+    margin-left: calc(4rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-20 > :not([hidden]) ~ :not([hidden]) {
@@ -115496,8 +115496,8 @@ video {
 
   .\32xl\:space-x-20 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(5rem * var(--space-x-reverse));
-    margin-inline-start: calc(5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(5rem * var(--space-x-reverse));
+    margin-left: calc(5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-24 > :not([hidden]) ~ :not([hidden]) {
@@ -115508,8 +115508,8 @@ video {
 
   .\32xl\:space-x-24 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(6rem * var(--space-x-reverse));
-    margin-inline-start: calc(6rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(6rem * var(--space-x-reverse));
+    margin-left: calc(6rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-28 > :not([hidden]) ~ :not([hidden]) {
@@ -115520,8 +115520,8 @@ video {
 
   .\32xl\:space-x-28 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(7rem * var(--space-x-reverse));
-    margin-inline-start: calc(7rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(7rem * var(--space-x-reverse));
+    margin-left: calc(7rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-32 > :not([hidden]) ~ :not([hidden]) {
@@ -115532,8 +115532,8 @@ video {
 
   .\32xl\:space-x-32 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(8rem * var(--space-x-reverse));
-    margin-inline-start: calc(8rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(8rem * var(--space-x-reverse));
+    margin-left: calc(8rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-36 > :not([hidden]) ~ :not([hidden]) {
@@ -115544,8 +115544,8 @@ video {
 
   .\32xl\:space-x-36 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(9rem * var(--space-x-reverse));
-    margin-inline-start: calc(9rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(9rem * var(--space-x-reverse));
+    margin-left: calc(9rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-40 > :not([hidden]) ~ :not([hidden]) {
@@ -115556,8 +115556,8 @@ video {
 
   .\32xl\:space-x-40 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(10rem * var(--space-x-reverse));
-    margin-inline-start: calc(10rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(10rem * var(--space-x-reverse));
+    margin-left: calc(10rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-44 > :not([hidden]) ~ :not([hidden]) {
@@ -115568,8 +115568,8 @@ video {
 
   .\32xl\:space-x-44 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(11rem * var(--space-x-reverse));
-    margin-inline-start: calc(11rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(11rem * var(--space-x-reverse));
+    margin-left: calc(11rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-48 > :not([hidden]) ~ :not([hidden]) {
@@ -115580,8 +115580,8 @@ video {
 
   .\32xl\:space-x-48 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(12rem * var(--space-x-reverse));
-    margin-inline-start: calc(12rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(12rem * var(--space-x-reverse));
+    margin-left: calc(12rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-52 > :not([hidden]) ~ :not([hidden]) {
@@ -115592,8 +115592,8 @@ video {
 
   .\32xl\:space-x-52 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(13rem * var(--space-x-reverse));
-    margin-inline-start: calc(13rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(13rem * var(--space-x-reverse));
+    margin-left: calc(13rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-56 > :not([hidden]) ~ :not([hidden]) {
@@ -115604,8 +115604,8 @@ video {
 
   .\32xl\:space-x-56 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(14rem * var(--space-x-reverse));
-    margin-inline-start: calc(14rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(14rem * var(--space-x-reverse));
+    margin-left: calc(14rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-60 > :not([hidden]) ~ :not([hidden]) {
@@ -115616,8 +115616,8 @@ video {
 
   .\32xl\:space-x-60 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(15rem * var(--space-x-reverse));
-    margin-inline-start: calc(15rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(15rem * var(--space-x-reverse));
+    margin-left: calc(15rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-64 > :not([hidden]) ~ :not([hidden]) {
@@ -115628,8 +115628,8 @@ video {
 
   .\32xl\:space-x-64 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(16rem * var(--space-x-reverse));
-    margin-inline-start: calc(16rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(16rem * var(--space-x-reverse));
+    margin-left: calc(16rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-72 > :not([hidden]) ~ :not([hidden]) {
@@ -115640,8 +115640,8 @@ video {
 
   .\32xl\:space-x-72 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(18rem * var(--space-x-reverse));
-    margin-inline-start: calc(18rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(18rem * var(--space-x-reverse));
+    margin-left: calc(18rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-80 > :not([hidden]) ~ :not([hidden]) {
@@ -115652,8 +115652,8 @@ video {
 
   .\32xl\:space-x-80 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(20rem * var(--space-x-reverse));
-    margin-inline-start: calc(20rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(20rem * var(--space-x-reverse));
+    margin-left: calc(20rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-96 > :not([hidden]) ~ :not([hidden]) {
@@ -115664,8 +115664,8 @@ video {
 
   .\32xl\:space-x-96 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(24rem * var(--space-x-reverse));
-    margin-inline-start: calc(24rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(24rem * var(--space-x-reverse));
+    margin-left: calc(24rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-px > :not([hidden]) ~ :not([hidden]) {
@@ -115676,8 +115676,8 @@ video {
 
   .\32xl\:space-x-px > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(1px * var(--space-x-reverse));
-    margin-inline-start: calc(1px * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(1px * var(--space-x-reverse));
+    margin-left: calc(1px * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-0\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -115688,8 +115688,8 @@ video {
 
   .\32xl\:space-x-0\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.125rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.125rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.125rem * var(--space-x-reverse));
+    margin-left: calc(0.125rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -115700,8 +115700,8 @@ video {
 
   .\32xl\:space-x-1\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.375rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.375rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.375rem * var(--space-x-reverse));
+    margin-left: calc(0.375rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-2\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -115712,8 +115712,8 @@ video {
 
   .\32xl\:space-x-2\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.625rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.625rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.625rem * var(--space-x-reverse));
+    margin-left: calc(0.625rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-3\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -115724,8 +115724,8 @@ video {
 
   .\32xl\:space-x-3\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(0.875rem * var(--space-x-reverse));
-    margin-inline-start: calc(0.875rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(0.875rem * var(--space-x-reverse));
+    margin-left: calc(0.875rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -115736,8 +115736,8 @@ video {
 
   .\32xl\:-space-x-1 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.25rem * var(--space-x-reverse));
+    margin-left: calc(-0.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -115748,8 +115748,8 @@ video {
 
   .\32xl\:-space-x-2 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.5rem * var(--space-x-reverse));
+    margin-left: calc(-0.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-3 > :not([hidden]) ~ :not([hidden]) {
@@ -115760,8 +115760,8 @@ video {
 
   .\32xl\:-space-x-3 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.75rem * var(--space-x-reverse));
+    margin-left: calc(-0.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -115772,8 +115772,8 @@ video {
 
   .\32xl\:-space-x-4 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1rem * var(--space-x-reverse));
+    margin-left: calc(-1rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-5 > :not([hidden]) ~ :not([hidden]) {
@@ -115784,8 +115784,8 @@ video {
 
   .\32xl\:-space-x-5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1.25rem * var(--space-x-reverse));
+    margin-left: calc(-1.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-6 > :not([hidden]) ~ :not([hidden]) {
@@ -115796,8 +115796,8 @@ video {
 
   .\32xl\:-space-x-6 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1.5rem * var(--space-x-reverse));
+    margin-left: calc(-1.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-7 > :not([hidden]) ~ :not([hidden]) {
@@ -115808,8 +115808,8 @@ video {
 
   .\32xl\:-space-x-7 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1.75rem * var(--space-x-reverse));
-    margin-inline-start: calc(-1.75rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1.75rem * var(--space-x-reverse));
+    margin-left: calc(-1.75rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -115820,8 +115820,8 @@ video {
 
   .\32xl\:-space-x-8 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-2rem * var(--space-x-reverse));
-    margin-inline-start: calc(-2rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-2rem * var(--space-x-reverse));
+    margin-left: calc(-2rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-9 > :not([hidden]) ~ :not([hidden]) {
@@ -115832,8 +115832,8 @@ video {
 
   .\32xl\:-space-x-9 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-2.25rem * var(--space-x-reverse));
-    margin-inline-start: calc(-2.25rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-2.25rem * var(--space-x-reverse));
+    margin-left: calc(-2.25rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-10 > :not([hidden]) ~ :not([hidden]) {
@@ -115844,8 +115844,8 @@ video {
 
   .\32xl\:-space-x-10 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-2.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-2.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-2.5rem * var(--space-x-reverse));
+    margin-left: calc(-2.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-12 > :not([hidden]) ~ :not([hidden]) {
@@ -115856,8 +115856,8 @@ video {
 
   .\32xl\:-space-x-12 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-3rem * var(--space-x-reverse));
-    margin-inline-start: calc(-3rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-3rem * var(--space-x-reverse));
+    margin-left: calc(-3rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-14 > :not([hidden]) ~ :not([hidden]) {
@@ -115868,8 +115868,8 @@ video {
 
   .\32xl\:-space-x-14 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-3.5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-3.5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-3.5rem * var(--space-x-reverse));
+    margin-left: calc(-3.5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-16 > :not([hidden]) ~ :not([hidden]) {
@@ -115880,8 +115880,8 @@ video {
 
   .\32xl\:-space-x-16 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-4rem * var(--space-x-reverse));
-    margin-inline-start: calc(-4rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-4rem * var(--space-x-reverse));
+    margin-left: calc(-4rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-20 > :not([hidden]) ~ :not([hidden]) {
@@ -115892,8 +115892,8 @@ video {
 
   .\32xl\:-space-x-20 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-5rem * var(--space-x-reverse));
-    margin-inline-start: calc(-5rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-5rem * var(--space-x-reverse));
+    margin-left: calc(-5rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-24 > :not([hidden]) ~ :not([hidden]) {
@@ -115904,8 +115904,8 @@ video {
 
   .\32xl\:-space-x-24 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-6rem * var(--space-x-reverse));
-    margin-inline-start: calc(-6rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-6rem * var(--space-x-reverse));
+    margin-left: calc(-6rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-28 > :not([hidden]) ~ :not([hidden]) {
@@ -115916,8 +115916,8 @@ video {
 
   .\32xl\:-space-x-28 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-7rem * var(--space-x-reverse));
-    margin-inline-start: calc(-7rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-7rem * var(--space-x-reverse));
+    margin-left: calc(-7rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-32 > :not([hidden]) ~ :not([hidden]) {
@@ -115928,8 +115928,8 @@ video {
 
   .\32xl\:-space-x-32 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-8rem * var(--space-x-reverse));
-    margin-inline-start: calc(-8rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-8rem * var(--space-x-reverse));
+    margin-left: calc(-8rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-36 > :not([hidden]) ~ :not([hidden]) {
@@ -115940,8 +115940,8 @@ video {
 
   .\32xl\:-space-x-36 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-9rem * var(--space-x-reverse));
-    margin-inline-start: calc(-9rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-9rem * var(--space-x-reverse));
+    margin-left: calc(-9rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-40 > :not([hidden]) ~ :not([hidden]) {
@@ -115952,8 +115952,8 @@ video {
 
   .\32xl\:-space-x-40 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-10rem * var(--space-x-reverse));
-    margin-inline-start: calc(-10rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-10rem * var(--space-x-reverse));
+    margin-left: calc(-10rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-44 > :not([hidden]) ~ :not([hidden]) {
@@ -115964,8 +115964,8 @@ video {
 
   .\32xl\:-space-x-44 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-11rem * var(--space-x-reverse));
-    margin-inline-start: calc(-11rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-11rem * var(--space-x-reverse));
+    margin-left: calc(-11rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-48 > :not([hidden]) ~ :not([hidden]) {
@@ -115976,8 +115976,8 @@ video {
 
   .\32xl\:-space-x-48 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-12rem * var(--space-x-reverse));
-    margin-inline-start: calc(-12rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-12rem * var(--space-x-reverse));
+    margin-left: calc(-12rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-52 > :not([hidden]) ~ :not([hidden]) {
@@ -115988,8 +115988,8 @@ video {
 
   .\32xl\:-space-x-52 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-13rem * var(--space-x-reverse));
-    margin-inline-start: calc(-13rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-13rem * var(--space-x-reverse));
+    margin-left: calc(-13rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-56 > :not([hidden]) ~ :not([hidden]) {
@@ -116000,8 +116000,8 @@ video {
 
   .\32xl\:-space-x-56 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-14rem * var(--space-x-reverse));
-    margin-inline-start: calc(-14rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-14rem * var(--space-x-reverse));
+    margin-left: calc(-14rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-60 > :not([hidden]) ~ :not([hidden]) {
@@ -116012,8 +116012,8 @@ video {
 
   .\32xl\:-space-x-60 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-15rem * var(--space-x-reverse));
-    margin-inline-start: calc(-15rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-15rem * var(--space-x-reverse));
+    margin-left: calc(-15rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-64 > :not([hidden]) ~ :not([hidden]) {
@@ -116024,8 +116024,8 @@ video {
 
   .\32xl\:-space-x-64 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-16rem * var(--space-x-reverse));
-    margin-inline-start: calc(-16rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-16rem * var(--space-x-reverse));
+    margin-left: calc(-16rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-72 > :not([hidden]) ~ :not([hidden]) {
@@ -116036,8 +116036,8 @@ video {
 
   .\32xl\:-space-x-72 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-18rem * var(--space-x-reverse));
-    margin-inline-start: calc(-18rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-18rem * var(--space-x-reverse));
+    margin-left: calc(-18rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-80 > :not([hidden]) ~ :not([hidden]) {
@@ -116048,8 +116048,8 @@ video {
 
   .\32xl\:-space-x-80 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-20rem * var(--space-x-reverse));
-    margin-inline-start: calc(-20rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-20rem * var(--space-x-reverse));
+    margin-left: calc(-20rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-96 > :not([hidden]) ~ :not([hidden]) {
@@ -116060,8 +116060,8 @@ video {
 
   .\32xl\:-space-x-96 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-24rem * var(--space-x-reverse));
-    margin-inline-start: calc(-24rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-24rem * var(--space-x-reverse));
+    margin-left: calc(-24rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-px > :not([hidden]) ~ :not([hidden]) {
@@ -116072,8 +116072,8 @@ video {
 
   .\32xl\:-space-x-px > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-1px * var(--space-x-reverse));
-    margin-inline-start: calc(-1px * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-1px * var(--space-x-reverse));
+    margin-left: calc(-1px * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-0\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -116084,8 +116084,8 @@ video {
 
   .\32xl\:-space-x-0\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.125rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.125rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.125rem * var(--space-x-reverse));
+    margin-left: calc(-0.125rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -116096,8 +116096,8 @@ video {
 
   .\32xl\:-space-x-1\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.375rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.375rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.375rem * var(--space-x-reverse));
+    margin-left: calc(-0.375rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-2\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -116108,8 +116108,8 @@ video {
 
   .\32xl\:-space-x-2\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.625rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.625rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.625rem * var(--space-x-reverse));
+    margin-left: calc(-0.625rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:-space-y-3\.5 > :not([hidden]) ~ :not([hidden]) {
@@ -116120,8 +116120,8 @@ video {
 
   .\32xl\:-space-x-3\.5 > :not([hidden]) ~ :not([hidden]) {
     --space-x-reverse: 0;
-    margin-inline-end: calc(-0.875rem * var(--space-x-reverse));
-    margin-inline-start: calc(-0.875rem * calc(1 - var(--space-x-reverse)));
+    margin-right: calc(-0.875rem * var(--space-x-reverse));
+    margin-left: calc(-0.875rem * calc(1 - var(--space-x-reverse)));
   }
 
   .\32xl\:space-y-reverse > :not([hidden]) ~ :not([hidden]) {
@@ -116140,8 +116140,8 @@ video {
 
   .\32xl\:divide-x-0 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(0px * var(--divide-x-reverse));
-    border-inline-start-width: calc(0px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(0px * var(--divide-x-reverse));
+    border-left-width: calc(0px * calc(1 - var(--divide-x-reverse)));
   }
 
   .\32xl\:divide-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -116152,8 +116152,8 @@ video {
 
   .\32xl\:divide-x-2 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(2px * var(--divide-x-reverse));
-    border-inline-start-width: calc(2px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(2px * var(--divide-x-reverse));
+    border-left-width: calc(2px * calc(1 - var(--divide-x-reverse)));
   }
 
   .\32xl\:divide-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -116164,8 +116164,8 @@ video {
 
   .\32xl\:divide-x-4 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(4px * var(--divide-x-reverse));
-    border-inline-start-width: calc(4px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(4px * var(--divide-x-reverse));
+    border-left-width: calc(4px * calc(1 - var(--divide-x-reverse)));
   }
 
   .\32xl\:divide-y-8 > :not([hidden]) ~ :not([hidden]) {
@@ -116176,8 +116176,8 @@ video {
 
   .\32xl\:divide-x-8 > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(8px * var(--divide-x-reverse));
-    border-inline-start-width: calc(8px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(8px * var(--divide-x-reverse));
+    border-left-width: calc(8px * calc(1 - var(--divide-x-reverse)));
   }
 
   .\32xl\:divide-y > :not([hidden]) ~ :not([hidden]) {
@@ -116188,8 +116188,8 @@ video {
 
   .\32xl\:divide-x > :not([hidden]) ~ :not([hidden]) {
     --divide-x-reverse: 0;
-    border-inline-end-width: calc(1px * var(--divide-x-reverse));
-    border-inline-start-width: calc(1px * calc(1 - var(--divide-x-reverse)));
+    border-right-width: calc(1px * var(--divide-x-reverse));
+    border-left-width: calc(1px * calc(1 - var(--divide-x-reverse)));
   }
 
   .\32xl\:divide-y-reverse > :not([hidden]) ~ :not([hidden]) {

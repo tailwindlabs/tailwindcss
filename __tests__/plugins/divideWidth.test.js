@@ -28,8 +28,8 @@ test('generating divide width utilities', () => {
         },
         '.divide-x > :not([hidden]) ~ :not([hidden])': {
           '--divide-x-reverse': '0',
-          'border-inline-end-width': 'calc(1px * var(--divide-x-reverse))',
-          'border-inline-start-width': 'calc(1px * calc(1 - var(--divide-x-reverse)))',
+          'border-right-width': 'calc(1px * var(--divide-x-reverse))',
+          'border-left-width': 'calc(1px * calc(1 - var(--divide-x-reverse)))',
         },
         '.divide-y-0 > :not([hidden]) ~ :not([hidden])': {
           '--divide-y-reverse': '0',
@@ -38,8 +38,8 @@ test('generating divide width utilities', () => {
         },
         '.divide-x-0 > :not([hidden]) ~ :not([hidden])': {
           '--divide-x-reverse': '0',
-          'border-inline-end-width': 'calc(0px * var(--divide-x-reverse))',
-          'border-inline-start-width': 'calc(0px * calc(1 - var(--divide-x-reverse)))',
+          'border-right-width': 'calc(0px * var(--divide-x-reverse))',
+          'border-left-width': 'calc(0px * calc(1 - var(--divide-x-reverse)))',
         },
         '.divide-y-2 > :not([hidden]) ~ :not([hidden])': {
           '--divide-y-reverse': '0',
@@ -48,8 +48,8 @@ test('generating divide width utilities', () => {
         },
         '.divide-x-2 > :not([hidden]) ~ :not([hidden])': {
           '--divide-x-reverse': '0',
-          'border-inline-end-width': 'calc(2px * var(--divide-x-reverse))',
-          'border-inline-start-width': 'calc(2px * calc(1 - var(--divide-x-reverse)))',
+          'border-right-width': 'calc(2px * var(--divide-x-reverse))',
+          'border-left-width': 'calc(2px * calc(1 - var(--divide-x-reverse)))',
         },
         '.divide-y-4 > :not([hidden]) ~ :not([hidden])': {
           '--divide-y-reverse': '0',
@@ -58,8 +58,8 @@ test('generating divide width utilities', () => {
         },
         '.divide-x-4 > :not([hidden]) ~ :not([hidden])': {
           '--divide-x-reverse': '0',
-          'border-inline-end-width': 'calc(4px * var(--divide-x-reverse))',
-          'border-inline-start-width': 'calc(4px * calc(1 - var(--divide-x-reverse)))',
+          'border-right-width': 'calc(4px * var(--divide-x-reverse))',
+          'border-left-width': 'calc(4px * calc(1 - var(--divide-x-reverse)))',
         },
         '.divide-y-reverse > :not([hidden]) ~ :not([hidden])': {
           '--divide-y-reverse': '1',

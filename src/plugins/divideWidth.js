@@ -14,8 +14,8 @@ export default function () {
           },
           [`${nameClass('divide-x', modifier)} > :not([hidden]) ~ :not([hidden])`]: {
             '--divide-x-reverse': '0',
-            'border-inline-end-width': `calc(${size} * var(--divide-x-reverse))`,
-            'border-inline-start-width': `calc(${size} * calc(1 - var(--divide-x-reverse)))`,
+            'border-right-width': `calc(${size} * var(--divide-x-reverse))`,
+            'border-left-width': `calc(${size} * calc(1 - var(--divide-x-reverse)))`,
           },
         }
       },
