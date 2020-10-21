@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added dark mode support ([#2279](https://github.com/tailwindlabs/tailwindcss/pull/2279), [#2631](https://github.com/tailwindlabs/tailwindcss/pull/2631))
 - Added `overflow-ellipsis` and `overflow-clip` utilities ([#1289](https://github.com/tailwindlabs/tailwindcss/pull/1289))
 - Add `transform-gpu` to force hardware acceleration on transforms when beneficial ([#1380](https://github.com/tailwindlabs/tailwindcss/pull/1380))
 - Extended spacing scale ([#2630](https://github.com/tailwindlabs/tailwindcss/pull/2630))
