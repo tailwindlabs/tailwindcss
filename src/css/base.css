@@ -54,3 +54,7 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+abbr[title] {
+  text-decoration: none;
+}
