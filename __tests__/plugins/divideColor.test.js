@@ -18,7 +18,7 @@ test('defining color as a function', () => {
   expect(utilities).toEqual([
     [
       {
-        '.divide-black > :not(template) ~ :not(template)': {
+        '.divide-black > :not([hidden]) ~ :not([hidden])': {
           'border-color': 'black',
         },
       },
