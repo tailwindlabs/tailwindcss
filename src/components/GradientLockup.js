@@ -1,4 +1,5 @@
 import { gradients } from '@/utils/gradients'
+import styles from './GradientLockup.module.css'
 
 const rotation = {
   '-1': '-rotate-1',
@@ -9,7 +10,7 @@ const rotation = {
 
 export function GradientLockup({ header, left, right, color, rotate, pin = 'left' }) {
   return (
-    <div className="grid gradient-lockup">
+    <div className={`grid ${styles.root}`}>
       <div
         className={`col-start-2 col-end-3 lg:col-start-1 lg:col-end-5 ${
           left && right ? 'row-start-2 row-end-4' : 'row-start-2 row-end-5'
