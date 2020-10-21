@@ -54,6 +54,13 @@ const classNames = {
   },
 }
 
+const images = {
+  '/kevin-francis.jpg': require('@/img/kevin-francis.jpg').default,
+  '/beach-house.jpg': require('@/img/beach-house.jpg').default,
+  '/beach-house-view.jpg': require('@/img/beach-house-view.jpg').default,
+  '/beach-house-interior.jpg': require('@/img/beach-house-interior.jpg').default,
+}
+
 const html = `
 <div class="{container}">
   <div class="{header}">
@@ -75,7 +82,7 @@ const html = `
   </div>
   <div class="{footerContainer}">
     <p class="flex items-center text-black text-sm leading-5 font-medium">
-      <img src="https://unsplash.it/48/48?random" alt="" class="w-6 h-6 rounded-full mr-2">
+      <img src="/kevin-francis.jpg" alt="" class="w-6 h-6 rounded-full mr-2">
       Hosted by Kevin Francis
     </p>
     <button type="button" class="bg-violet-100 text-violet-700 text-base leading-6 font-semibold px-6 py-2 rounded-lg">Check availability</button>
@@ -83,13 +90,13 @@ const html = `
   <div class="{imgContainer}">
     <div class="w-full grid grid-cols-3 grid-rows-2 gap-2">
       <div class="{imgLgContainer}">
-        <img src="https://unsplash.it/200/200?random&amp;i=0" alt="" class="{imgLg}" />
+        <img src="/beach-house.jpg" alt="" class="{imgLg}" />
       </div>
       <div class="{imgSmContainer}">
-        <img src="https://unsplash.it/200/200?random&amp;i=1" alt="" class="absolute inset-0 w-full h-full object-cover rounded-lg" />
+        <img src="/beach-house-interior.jpg" alt="" class="absolute inset-0 w-full h-full object-cover rounded-lg" />
       </div>
       <div class="{imgSmContainer}">
-        <img src="https://unsplash.it/200/200?random&amp;i=2" alt="" class="absolute inset-0 w-full h-full object-cover rounded-lg" />
+        <img src="/beach-house-view.jpg" alt="" class="absolute inset-0 w-full h-full object-cover rounded-lg" />
       </div>
     </div>
   </div>
@@ -140,9 +147,9 @@ function BrowserWindow({ height = 385 }) {
             className="overflow-auto"
             style={{ height }}
             dangerouslySetInnerHTML={{
-              __html: html.replace(/\{([^}]+)\}/g, (_m, name) => {
-                return classNames[size][name]
-              }),
+              __html: html
+                .replace(/\{([^}]+)\}/g, (_, name) => classNames[size][name])
+                .replace(/src="([^"]+)"/g, (_, src) => `src="${images[src]}" loading="lazy"`),
             }}
           ></div>
         </div>
