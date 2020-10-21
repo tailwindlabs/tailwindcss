@@ -51,12 +51,19 @@ module.exports = {
         10: '0.1',
         20: '0.2',
       },
+      boxShadow: {
+        px: '0 0 0 1px rgba(0, 0, 0, 0.5)',
+      },
     },
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
       black: '#000',
       white: '#fff',
+      'code-punctuation': '#A1E8FF',
+      'code-tag': '#D58FFF',
+      'code-attr-name': '#4BD0FB',
+      'code-attr-value': '#A2F679',
       rose: {
         50: '#fff1f2',
         100: '#ffe4e6',

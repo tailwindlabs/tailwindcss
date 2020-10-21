@@ -1,9 +1,3 @@
 .code {
-  max-height: 39.0625rem;
-}
-
-@screen lg {
-  .code {
-    height: 39.0625rem;
-  }
+  height: 39.0625rem;
 }

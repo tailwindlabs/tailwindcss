@@ -1,13 +1,13 @@
 const colors = {
-  punctuation: '#A1E8FF',
-  tag: '#D58FFF',
-  'attr-name': '#4BD0FB',
-  'attr-value': '#A2F679',
+  punctuation: 'text-code-punctuation',
+  tag: 'text-code-tag',
+  'attr-name': 'text-code-attr-name',
+  'attr-value': 'text-code-attr-value',
 }
 
 export function Token({ token, parentTypes, children }) {
   return (
-    <span style={{ color: colors[[...parentTypes, token[0]].join('.')] || colors[token[0]] }}>
+    <span className={colors[[...parentTypes, token[0]].join('.')] || colors[token[0]]}>
       {children}
     </span>
   )

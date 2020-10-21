@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import tokenize from '../macros/tokenize.macro'
 import { Code } from './Code'
 import styles from './CodeWindow.module.css'
@@ -44,8 +45,8 @@ export function CodeWindow({ children, className = '' }) {
   )
 }
 
-CodeWindow.Code = ({ tokens = defaultTokens, ...props }) => (
-  <pre className="w-full relative overflow-auto flex-auto flex flex-col">
+CodeWindow.Code = forwardRef(({ tokens = defaultTokens, ...props }, ref) => (
+  <pre ref={ref} className="w-full relative overflow-auto flex-auto flex flex-col">
     <code
       className="flex-auto relative block text-sm text-white pt-4 pb-4 pr-4"
       style={{ lineHeight: 18 / 14, paddingLeft: '4.125rem' }}
@@ -57,4 +58,4 @@ CodeWindow.Code = ({ tokens = defaultTokens, ...props }) => (
       />
     </code>
   </pre>
-)
+))
