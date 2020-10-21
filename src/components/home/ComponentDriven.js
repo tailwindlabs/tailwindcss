@@ -119,7 +119,7 @@ export function ComponentDriven() {
     <section>
       <div className="px-4 sm:px-6 md:px-8 mb-20">
         <IconContainer className={`${gradients.amber} mb-8`}>
-          <Icon className="mt-px overflow-visible" />
+          <Icon />
         </IconContainer>
         <Caption as="h2" className="text-amber-500 mb-3">
           Component-driven
