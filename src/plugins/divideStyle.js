@@ -2,19 +2,19 @@ export default function () {
   return function ({ addUtilities, variants }) {
     addUtilities(
       {
-        '.divide-solid > :not(template) ~ :not(template)': {
+        '.divide-solid > :not([hidden]) ~ :not([hidden])': {
           'border-style': 'solid',
         },
-        '.divide-dashed > :not(template) ~ :not(template)': {
+        '.divide-dashed > :not([hidden]) ~ :not([hidden])': {
           'border-style': 'dashed',
         },
-        '.divide-dotted > :not(template) ~ :not(template)': {
+        '.divide-dotted > :not([hidden]) ~ :not([hidden])': {
           'border-style': 'dotted',
         },
-        '.divide-double > :not(template) ~ :not(template)': {
+        '.divide-double > :not([hidden]) ~ :not([hidden])': {
           'border-style': 'double',
         },
-        '.divide-none > :not(template) ~ :not(template)': {
+        '.divide-none > :not([hidden]) ~ :not([hidden])': {
           'border-style': 'none',
         },
       },
