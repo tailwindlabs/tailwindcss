@@ -30,8 +30,8 @@ test('generating space utilities', () => {
         },
         '.space-x-0 > :not([hidden]) ~ :not([hidden])': {
           '--space-x-reverse': '0',
-          'margin-inline-end': 'calc(0px * var(--space-x-reverse))',
-          'margin-inline-start': 'calc(0px * calc(1 - var(--space-x-reverse)))',
+          'margin-right': 'calc(0px * var(--space-x-reverse))',
+          'margin-left': 'calc(0px * calc(1 - var(--space-x-reverse)))',
         },
         '.space-y-1 > :not([hidden]) ~ :not([hidden])': {
           '--space-y-reverse': '0',
@@ -40,8 +40,8 @@ test('generating space utilities', () => {
         },
         '.space-x-1 > :not([hidden]) ~ :not([hidden])': {
           '--space-x-reverse': '0',
-          'margin-inline-end': 'calc(1px * var(--space-x-reverse))',
-          'margin-inline-start': 'calc(1px * calc(1 - var(--space-x-reverse)))',
+          'margin-right': 'calc(1px * var(--space-x-reverse))',
+          'margin-left': 'calc(1px * calc(1 - var(--space-x-reverse)))',
         },
         '.space-y-2 > :not([hidden]) ~ :not([hidden])': {
           '--space-y-reverse': '0',
@@ -50,8 +50,8 @@ test('generating space utilities', () => {
         },
         '.space-x-2 > :not([hidden]) ~ :not([hidden])': {
           '--space-x-reverse': '0',
-          'margin-inline-end': 'calc(2px * var(--space-x-reverse))',
-          'margin-inline-start': 'calc(2px * calc(1 - var(--space-x-reverse)))',
+          'margin-right': 'calc(2px * var(--space-x-reverse))',
+          'margin-left': 'calc(2px * calc(1 - var(--space-x-reverse)))',
         },
         '.space-y-4 > :not([hidden]) ~ :not([hidden])': {
           '--space-y-reverse': '0',
@@ -60,8 +60,8 @@ test('generating space utilities', () => {
         },
         '.space-x-4 > :not([hidden]) ~ :not([hidden])': {
           '--space-x-reverse': '0',
-          'margin-inline-end': 'calc(4px * var(--space-x-reverse))',
-          'margin-inline-start': 'calc(4px * calc(1 - var(--space-x-reverse)))',
+          'margin-right': 'calc(4px * var(--space-x-reverse))',
+          'margin-left': 'calc(4px * calc(1 - var(--space-x-reverse)))',
         },
         '.-space-y-2 > :not([hidden]) ~ :not([hidden])': {
           '--space-y-reverse': '0',
@@ -70,8 +70,8 @@ test('generating space utilities', () => {
         },
         '.-space-x-2 > :not([hidden]) ~ :not([hidden])': {
           '--space-x-reverse': '0',
-          'margin-inline-end': 'calc(-2px * var(--space-x-reverse))',
-          'margin-inline-start': 'calc(-2px * calc(1 - var(--space-x-reverse)))',
+          'margin-right': 'calc(-2px * var(--space-x-reverse))',
+          'margin-left': 'calc(-2px * calc(1 - var(--space-x-reverse)))',
         },
         '.-space-y-1 > :not([hidden]) ~ :not([hidden])': {
           '--space-y-reverse': '0',
@@ -80,8 +80,8 @@ test('generating space utilities', () => {
         },
         '.-space-x-1 > :not([hidden]) ~ :not([hidden])': {
           '--space-x-reverse': '0',
-          'margin-inline-end': 'calc(-1px * var(--space-x-reverse))',
-          'margin-inline-start': 'calc(-1px * calc(1 - var(--space-x-reverse)))',
+          'margin-right': 'calc(-1px * var(--space-x-reverse))',
+          'margin-left': 'calc(-1px * calc(1 - var(--space-x-reverse)))',
         },
         '.space-y-reverse > :not([hidden]) ~ :not([hidden])': {
           '--space-y-reverse': '1',

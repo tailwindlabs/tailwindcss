@@ -14,8 +14,8 @@ export default function () {
           },
           [`${nameClass('space-x', modifier)} > :not([hidden]) ~ :not([hidden])`]: {
             '--space-x-reverse': '0',
-            'margin-inline-end': `calc(${size} * var(--space-x-reverse))`,
-            'margin-inline-start': `calc(${size} * calc(1 - var(--space-x-reverse)))`,
+            'margin-right': `calc(${size} * var(--space-x-reverse))`,
+            'margin-left': `calc(${size} * calc(1 - var(--space-x-reverse)))`,
           },
         }
       },
