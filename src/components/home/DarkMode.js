@@ -11,7 +11,7 @@ import tokenize from '../../macros/tokenize.macro'
 import { Token } from '@/components/Code'
 
 const { code, tokens } = tokenize.html(
-  `<div class="light:bg-white rounded-tl-xl sm:rounded-t-xl p-8 space-y-8 dark:bg-gray-800">
+  `<div class="(light)bg-white rounded-tl-xl sm:rounded-t-xl p-8 space-y-8 dark:bg-gray-800">
   <div class="flex items-center space-x-5">
     <img
       src="https://unsplash.it/160/160?random"
@@ -21,21 +21,21 @@ const { code, tokens } = tokenize.html(
       class="flex-none w-20 h-20 rounded-lg"
     />
     <div class="flex-auto space-y-0.5">
-      <p class="text-base leading-6 font-semibold uppercase light:text-lime-600 dark:text-lime-400">
+      <p class="text-base leading-6 font-semibold uppercase (light)text-lime-600 dark:text-lime-400">
         <abbr title="Episode">Ep.</abbr> 145
       </p>
-      <h2 class="text-xl leading-7 font-semibold light:text-black dark:text-white">
+      <h2 class="text-xl leading-7 font-semibold (light)text-black dark:text-white">
         Statamic 3.0 and Tailwind CSS 2.0
       </h2>
-      <p class="text-lg leading-6 font-medium light:text-gray-500 dark:text-gray-400">
+      <p class="text-lg leading-6 font-medium (light)text-gray-500 dark:text-gray-400">
         Full Stack Radio
       </p>
     </div>
   </div>
   <div class="space-y-2">
-    <div class="light:bg-gray-200 rounded-full overflow-hidden dark:bg-black">
+    <div class="(light)bg-gray-200 rounded-full overflow-hidden dark:bg-black">
       <div
-        class="light:bg-lime-500 w-1/2 h-1.5 dark:bg-lime-400"
+        class="(light)bg-lime-500 w-1/2 h-1.5 dark:bg-lime-400"
         role="progressbar"
         aria-valuenow="1456"
         aria-valuemin="0"
@@ -204,7 +204,7 @@ export function DarkMode() {
             }`}
             dangerouslySetInnerHTML={{
               __html: code
-                .replace(/light:/g, '')
+                .replace(/\(light\)/g, '')
                 .replace(/dark:/g, 'transition-colors duration-500 dark:'),
             }}
           />
@@ -241,10 +241,10 @@ function DarkModeToken({ token, parentTypes, enabled, children }) {
         </span>
       )
     }
-    if (token[1].startsWith('light:')) {
+    if (token[1].startsWith('(light)')) {
       return (
         <span className="transition-opacity duration-500" style={{ opacity: enabled ? 0.5 : 1 }}>
-          {token[1].replace(/^light:/, '')}
+          {token[1].replace(/^\(light\)/, '')}
         </span>
       )
     }
