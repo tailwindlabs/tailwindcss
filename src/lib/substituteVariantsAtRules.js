@@ -61,7 +61,7 @@ const defaultVariantGenerators = (config) => ({
         return modified
       }
 
-      throw new Error("The `dark` config option must be either 'media' or 'class'.")
+      throw new Error("The `darkMode` config option must be either 'media' or 'class'.")
     },
     { unstable_stack: true }
   ),
