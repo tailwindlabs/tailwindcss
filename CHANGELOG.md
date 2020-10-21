@@ -11,12 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added `overflow-ellipsis` and `overflow-clip` utilities ([#1289](https://github.com/tailwindlabs/tailwindcss/pull/1289))
 - Add `transform-gpu` to force hardware acceleration on transforms when beneficial ([#1380](https://github.com/tailwindlabs/tailwindcss/pull/1380))
-- Promote all previous experimental/future features to stable/default ([#2609](https://github.com/tailwindlabs/tailwindcss/pull/2609))
-- Extend default grid to 16 columns, include fractional sizes in 16ths in spacing scale *(useful for 16x9 aspect ratio situations)* ([559bf9589](https://github.com/tailwindlabs/tailwindcss/pull/2609/commits/559bf9589821ccf0773d4d727a6523028736ad91#diff-d65cc1efb133c1202d14550da74ce17790b33ca9c27dec2a4ce64603d606dca0))
+- Extended spacing scale ([#2630](https://github.com/tailwindlabs/tailwindcss/pull/2630))
+- Add spacing scale to `inset` plugin ([#2630](https://github.com/tailwindlabs/tailwindcss/pull/2630))
+- Enable useful relative sizes for more plugins ([#2630](https://github.com/tailwindlabs/tailwindcss/pull/2630))
+- Extend font size scale ([#2609](https://github.com/tailwindlabs/tailwindcss/pull/2609), [#2619](https://github.com/tailwindlabs/tailwindcss/pull/2619))
+- Support using `@apply` with complex classes ([#2159](https://github.com/tailwindlabs/tailwindcss/pull/2159))
+- Add new `2xl` breakpoint ([#2609](https://github.com/tailwindlabs/tailwindcss/pull/2609))
+- Add default line-height values for font-size utilities ([#2609](https://github.com/tailwindlabs/tailwindcss/pull/2609))
 - Support defining theme values using arrays wherever it makes sense (box-shadow, transition-property, etc.) ([e13f083c4](https://github.com/tailwindlabs/tailwindcss/commit/e13f083c4bc48bf9870d27c966136a9584943127))
+- Enable `group-hover` for color utilities by default ([28985b6](https://github.com/tailwindlabs/tailwindcss/commit/28985b6cd592e72d4849fdb9ce97eb045744e09c))
+- Enable `focus` for z-index utilities by default ([ae5b3d3](https://github.com/tailwindlabs/tailwindcss/commit/ae5b3d312d5000ae9c2065001f3df7add72dc365))
 
 ### Changed
 
+- New `@apply` implementation, slight backwards incompatibilities with previous behavior ([#2159](https://github.com/tailwindlabs/tailwindcss/pull/2159))
 - Move `truncate` class to `textOverflow` core plugin ([#2562](https://github.com/tailwindlabs/tailwindcss/pull/2562))
 - Removed `target` feature and dropped any compatibility with IE 11 ([#2571](https://github.com/tailwindlabs/tailwindcss/pull/2571))
 - Switch `normalize.css` to `modern-normalize` ([#2572](https://github.com/tailwindlabs/tailwindcss/pull/2572))
@@ -25,10 +33,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Drop support for Node 8 and 10 ([#2582](https://github.com/tailwindlabs/tailwindcss/pull/2582))
 - Modernize default system font stacks ([#1711](https://github.com/tailwindlabs/tailwindcss/pull/1711))
 - Upgrade to PurgeCSS 3.0
-- Upgrade to PostCSS 8.0
+- ~~Upgrade to PostCSS 8.0~~ Reverted for now
 - Use logical properties for `space` and `divide` utilities ([#1883](https://github.com/tailwindlabs/tailwindcss/pull/1883))
-- Support defining theme keys as arrays wherever it makes sense, and make accessing using `theme` retrieve the expected resolved value ([e13f083c4](https://github.com/tailwindlabs/tailwindcss/commit/e13f083c4bc48bf9870d27c966136a9584943127))
-- Adjust default font-size scale to include 60px and 72px instead of 64px and 80px ([#2619](https://github.com/tailwindlabs/tailwindcss/pull/2619))
+- Make `theme` retrieve the expected resolved value when theme value is complex ([e13f083c4](https://github.com/tailwindlabs/tailwindcss/commit/e13f083c4bc48bf9870d27c966136a9584943127))
+- Adjust default font-size scale to include 60px instead of 64px ([#2619](https://github.com/tailwindlabs/tailwindcss/pull/2619))
 
 ## [1.9.5]
 
