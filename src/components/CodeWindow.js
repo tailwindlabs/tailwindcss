@@ -48,8 +48,8 @@ export function CodeWindow({ children, className = '' }) {
 CodeWindow.Code = forwardRef(({ tokens = defaultTokens, ...props }, ref) => (
   <pre ref={ref} className="w-full relative overflow-auto flex-auto flex flex-col">
     <code
-      className="flex-auto relative block text-sm text-white pt-4 pb-4 pr-4"
-      style={{ lineHeight: 18 / 14, paddingLeft: '4.125rem' }}
+      className="flex-auto relative block text-sm leading-5 text-white pt-4 pb-4 pr-4"
+      style={{ paddingLeft: '4.125rem' }}
     >
       <Code tokens={tokens} {...props} />
       <div
