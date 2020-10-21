@@ -398,7 +398,7 @@ html {
   box-sizing: border-box; /* 1 */
   border-width: 0; /* 2 */
   border-style: solid; /* 2 */
-  border-color: #d4d4d8; /* 2 */
+  border-color: #e4e4e7; /* 2 */
 }
 
 /*
@@ -429,7 +429,7 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
-  color: #a0aec0;
+  color: #a1a1aa;
 }
 
 button,
