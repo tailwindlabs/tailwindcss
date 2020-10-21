@@ -1980,6 +1980,12 @@ test('plugins can extend variants', () => {
         .opacity-100 {
           opacity: 1
         }
+        .group:hover .group-hover\\:opacity-0 {
+          opacity: 0
+        }
+        .group:hover .group-hover\\:opacity-100 {
+          opacity: 1
+        }
         .hover\\:opacity-0:hover {
           opacity: 0
         }
