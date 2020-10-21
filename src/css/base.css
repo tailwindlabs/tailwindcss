@@ -42,14 +42,6 @@
   --color-code-white: #fff;
 }
 
-html {
-  font-size: 14px;
-
-  @media (min-width: 420px) {
-    font-size: 16px;
-  }
-}
-
 a {
   color: inherit;
   text-decoration: none;
