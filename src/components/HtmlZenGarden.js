@@ -55,12 +55,12 @@ const themes = {
       borderRadius: 6,
       primary: {
         backgroundColor: '#000',
-        color: '#fff',
+        text: 'text-white font-medium',
       },
       secondary: {
         backgroundColor: '#fff',
         borderColor: '#d4d4d8',
-        color: '#000',
+        text: 'text-black font-medium',
       },
       like: {
         color: '#a1a1aa',
@@ -100,11 +100,11 @@ const themes = {
       borderRadius: 19,
       primary: {
         backgroundColor: '#7e22ce',
-        color: '#fff',
+        text: `text-white ${poppinsSemiBold}`,
       },
       secondary: {
         backgroundColor: '#faf5ff',
-        color: '#7e22ce',
+        text: `text-purple-700 ${poppinsSemiBold}`,
       },
       like: {
         color: '#9333ea',
@@ -142,12 +142,12 @@ const themes = {
       borderRadius: 0,
       primary: {
         backgroundColor: '#000',
-        color: '#fff',
+        text: 'text-white font-semibold tracking-wide uppercase',
       },
       secondary: {
         backgroundColor: '#fff',
-        color: '#000',
         borderColor: '#e4e4e7',
+        text: 'text-black font-semibold tracking-wide uppercase',
       },
       like: {
         color: '#18181b',
@@ -187,13 +187,13 @@ const themes = {
       borderRadius: 0,
       primary: {
         backgroundColor: '#bef264',
-        color: '#000',
         borderColor: '#000',
+        text: `text-black tracking-wide uppercase ${robotoMonoBold}`,
       },
       secondary: {
         backgroundColor: '#fff',
-        color: '#000',
         borderColor: '#000',
+        text: `text-black tracking-wide uppercase ${robotoMonoBold}`,
       },
       like: {
         className: 'justify-end -ml-2.5',
@@ -499,7 +499,7 @@ export function HtmlZenGarden({ theme }) {
                 />
                 <motion.div
                   layout
-                  className={`relative text-sm leading-5 font-medium flex items-center justify-center border`}
+                  className="relative text-sm leading-5 border"
                   style={{ height: themes[theme].button.height }}
                   initial={false}
                   animate={{
@@ -507,11 +507,19 @@ export function HtmlZenGarden({ theme }) {
                     borderColor:
                       themes[theme].button.primary.borderColor ||
                       themes[theme].button.primary.backgroundColor,
-                    color: themes[theme].button.primary.color,
                     borderRadius: themes[theme].button.borderRadius,
                   }}
                 >
-                  <motion.span layout>Buy now</motion.span>
+                  {Object.keys(themes).map((name) => (
+                    <motion.span
+                      key={name}
+                      className={`absolute inset-0 flex items-center justify-center ${themes[name].button.primary.text}`}
+                      initial={false}
+                      animate={{ opacity: theme === name ? 1 : 0 }}
+                    >
+                      <motion.span layout>Buy now</motion.span>
+                    </motion.span>
+                  ))}
                 </motion.div>
               </div>
               <div className="relative">
@@ -527,7 +535,7 @@ export function HtmlZenGarden({ theme }) {
                 />
                 <motion.div
                   layout
-                  className={`relative text-sm leading-5 font-medium flex items-center justify-center border`}
+                  className={`relative text-sm leading-5 border`}
                   style={{ height: themes[theme].button.height }}
                   initial={false}
                   animate={{
@@ -535,11 +543,19 @@ export function HtmlZenGarden({ theme }) {
                     borderColor:
                       themes[theme].button.secondary.borderColor ||
                       themes[theme].button.secondary.backgroundColor,
-                    color: themes[theme].button.secondary.color,
                     borderRadius: themes[theme].button.borderRadius,
                   }}
                 >
-                  <motion.span layout>Add to bag</motion.span>
+                  {Object.keys(themes).map((name) => (
+                    <motion.span
+                      key={name}
+                      className={`absolute inset-0 flex items-center justify-center ${themes[name].button.secondary.text}`}
+                      initial={false}
+                      animate={{ opacity: theme === name ? 1 : 0 }}
+                    >
+                      <motion.span layout>Add to bag</motion.span>
+                    </motion.span>
+                  ))}
                 </motion.div>
               </div>
               <motion.div
