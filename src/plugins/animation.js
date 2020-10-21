@@ -18,7 +18,7 @@ export default function () {
       _.mapKeys(animationConfig, (_animation, suffix) => nameClass('animate', suffix)),
       (animation) => {
         const { name } = parseAnimationValue(animation)
-        if (name === undefined) return { animation }
+        if (name === undefined || keyframesConfig[name] === undefined) return { animation }
         return { animation: animation.replace(name, prefixName(name)) }
       }
     )
