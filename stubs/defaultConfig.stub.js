@@ -3,6 +3,7 @@ const colors = require('../colors')
 module.exports = {
   purge: [],
   presets: [],
+  darkMode: false,
   theme: {
     screens: {
       sm: '640px',

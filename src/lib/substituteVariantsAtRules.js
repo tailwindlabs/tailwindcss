@@ -26,11 +26,11 @@ const defaultVariantGenerators = (config) => ({
   DEFAULT: generateVariantFunction(() => {}),
   dark: generateVariantFunction(
     ({ container, separator, modifySelectors }) => {
-      if (config.dark === false) {
+      if (config.darkMode === false) {
         return postcss.root()
       }
 
-      if (config.dark === 'media') {
+      if (config.darkMode === 'media') {
         const modified = modifySelectors(({ selector }) => {
           return buildSelectorVariant(selector, 'dark', separator, (message) => {
             throw container.error(message)
@@ -45,7 +45,7 @@ const defaultVariantGenerators = (config) => ({
         return container
       }
 
-      if (config.dark === 'class') {
+      if (config.darkMode === 'class') {
         const modified = modifySelectors(({ selector }) => {
           return buildSelectorVariant(selector, 'dark', separator, (message) => {
             throw container.error(message)

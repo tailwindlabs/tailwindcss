@@ -222,7 +222,7 @@ export default function resolveConfig(configs) {
     },
     ...allConfigs,
     {
-      dark: 'media',
+      darkMode: false,
       prefix: '',
       important: false,
       separator: ':',
