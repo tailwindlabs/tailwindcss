@@ -73,7 +73,9 @@
     "resolve": "^1.14.2"
   },
   "browserslist": [
-    "> 1%"
+    "> 1%",
+    "not ie 11",
+    "not op_mini all"
   ],
   "babel": {
     "presets": [
