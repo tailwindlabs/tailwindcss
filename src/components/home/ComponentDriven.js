@@ -3,7 +3,7 @@ import { GradientLockup } from '@/components/GradientLockup'
 import { CodeWindow } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import tokenize from '../../macros/tokenize.macro'
-import { createContext, useContext, useEffect, useLayoutEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { Token } from '@/components/Code'
 import { ReactComponent as Icon } from '@/img/icons/home/component-driven.svg'
 import { Tabs } from '@/components/Tabs'
@@ -116,8 +116,6 @@ export default function Recipes({ recipes }) {
   },
 }
 
-const EditorContext = createContext()
-
 function ComponentLink({ onClick, children }) {
   const [active, setActive] = useState(false)
 
@@ -148,8 +146,7 @@ function ComponentLink({ onClick, children }) {
 }
 
 function EditorToken(props) {
-  const { setActiveTab } = useContext(EditorContext)
-  const { token, tokens, tokenIndex } = props
+  const { token, tokens, tokenIndex, setActiveTab } = props
 
   if (
     token[0] === 'class-name' &&
@@ -242,15 +239,13 @@ function ComponentExample({ framework }) {
           </TabBar>
         </AnimatePresence>
       </div>
-
-      <EditorContext.Provider
-        value={{ setActiveTab: (name) => setActiveTab(Object.keys(tabs[framework]).indexOf(name)) }}
-      >
-        <CodeWindow.Code
-          tokens={tabs[framework][Object.keys(tabs[framework])[activeTab]]}
-          tokenComponent={EditorToken}
-        />
-      </EditorContext.Provider>
+      <CodeWindow.Code
+        tokens={tabs[framework][Object.keys(tabs[framework])[activeTab]]}
+        tokenComponent={EditorToken}
+        tokenProps={{
+          setActiveTab: (name) => setActiveTab(Object.keys(tabs[framework]).indexOf(name)),
+        }}
+      />
     </CodeWindow>
   )
 }
