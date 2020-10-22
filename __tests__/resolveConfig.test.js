@@ -1738,6 +1738,47 @@ test('user theme extensions take precedence over plugin theme extensions with th
   })
 })
 
+test('variants can be extended', () => {
+  const userConfig = {
+    variants: {
+      borderColor: ({ after }) => after(['group-focus'], 'hover'),
+      extend: {
+        backgroundColor: ['active', 'disabled', 'group-hover'],
+      },
+    },
+  }
+
+  const otherConfig = {
+    variants: {
+      extend: {
+        textColor: ['hover', 'focus-within'],
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {
+      borderColor: ['hover', 'focus'],
+      backgroundColor: ['responsive', 'hover', 'focus'],
+      textColor: ['responsive', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, otherConfig, defaultConfig])
+
+  expect(result).toMatchObject({
+    variants: {
+      borderColor: ['hover', 'group-focus', 'focus'],
+      backgroundColor: ['responsive', 'group-hover', 'hover', 'focus', 'active', 'disabled'],
+      textColor: ['responsive', 'focus-within', 'hover', 'focus'],
+    },
+  })
+})
+
 test('variants can be defined as a function', () => {
   const userConfig = {
     variants: {
