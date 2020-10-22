@@ -3,13 +3,13 @@ import { GradientLockup } from '@/components/GradientLockup'
 import { CodeWindow } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import tokenize from '../../macros/tokenize.macro'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useLayoutEffect, useState } from 'react'
 import { Token } from '@/components/Code'
 import { ReactComponent as Icon } from '@/img/icons/home/component-driven.svg'
 import { Tabs } from '@/components/Tabs'
 import { ReactComponent as ReactLogo } from '@/img/icons/react.svg'
 import { ReactComponent as VueLogo } from '@/img/icons/vue.svg'
-import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion'
+import { AnimatePresence, AnimateSharedLayout, motion, useIsPresent } from 'framer-motion'
 
 const recipes = [
   {
@@ -109,6 +109,10 @@ export default function Recipes({ recipes }) {
   },
   vue: {
     'Recipes.vue': tokenize.html('<template></template>').tokens,
+    'Nav.vue': tokenize.html('<template></template>').tokens,
+    'NavItem.vue': tokenize.html('<template></template>').tokens,
+    'List.vue': tokenize.html('<template></template>').tokens,
+    'ListItem.vue': tokenize.html('<template></template>').tokens,
   },
 }
 
@@ -175,52 +179,70 @@ function EditorToken(props) {
   return <Token {...props} />
 }
 
+function TabBar({ children }) {
+  const isPresent = useIsPresent()
+  return (
+    <motion.ul
+      initial={{ y: '100%' }}
+      animate={{ y: '0%' }}
+      exit={{ y: '-100%' }}
+      transition={{ type: 'spring', mass: 0.4 }}
+      className={`${
+        isPresent ? '' : 'absolute top-0 left-0 w-full'
+      } flex text-sm leading-5 text-orange-300 overflow-hidden`}
+    >
+      {children}
+    </motion.ul>
+  )
+}
+
 function ComponentExample({ framework }) {
   const [activeTab, setActiveTab] = useState(0)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setActiveTab(0)
   }, [framework])
 
   return (
     <CodeWindow className="bg-orange-500">
-      <AnimateSharedLayout>
-        <AnimatePresence initial={false} exitBeforeEnter>
-          <ul
-            key={framework}
-            className="flex text-sm leading-5 bg-orange-900 bg-opacity-20 text-orange-300"
+      <div className="relative bg-orange-900 bg-opacity-20 overflow-hidden">
+        <AnimateSharedLayout>
+          <div
+            aria-hidden="true"
+            className="absolute top-0 left-0 flex text-sm leading-5 font-medium text-transparent pointer-events-none select-none"
           >
+            {Object.keys(tabs[framework]).map((tab, tabIndex) => (
+              <div className="relative py-2 px-4 border border-transparent">
+                {tabIndex === activeTab && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute -inset-px bg-white bg-opacity-10"
+                  />
+                )}
+                {tab}
+              </div>
+            ))}
+          </div>
+        </AnimateSharedLayout>
+        <AnimatePresence initial={false}>
+          <TabBar key={framework}>
             {Object.keys(tabs[framework]).map((tab, tabIndex) => (
               <li key={tab}>
                 <button
                   type="button"
-                  className={`relative border border-transparent py-2 px-4 font-medium focus:outline-none hover:text-orange-200 ${
+                  className={`border border-transparent py-2 px-4 font-medium focus:outline-none hover:text-orange-200 ${
                     tabIndex === activeTab ? 'text-orange-200' : ''
                   }`}
                   onClick={() => setActiveTab(tabIndex)}
                 >
-                  {tabIndex === activeTab && (
-                    <motion.div
-                      layout
-                      layoutId="activeTab"
-                      className="absolute -inset-px bg-white bg-opacity-10"
-                    />
-                  )}
-                  <motion.span
-                    key={framework + tabIndex}
-                    className="relative"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  >
-                    {tab}
-                  </motion.span>
+                  {tab}
                 </button>
               </li>
             ))}
-          </ul>
+          </TabBar>
         </AnimatePresence>
-      </AnimateSharedLayout>
+      </div>
+
       <EditorContext.Provider
         value={{ setActiveTab: (name) => setActiveTab(Object.keys(tabs[framework]).indexOf(name)) }}
       >
