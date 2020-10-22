@@ -4,6 +4,7 @@ import { Tabs } from '@/components/Tabs'
 import { CodeWindow } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import { ReactComponent as Icon } from '@/img/icons/home/constraint-based.svg'
+import { ReactComponent as ArrowIcon } from '@/img/icons/arrow.svg'
 import { siteConfig } from '@/utils/siteConfig'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
@@ -101,35 +102,47 @@ const tokens = {
   <li>
     font-sans
     <p class="font-sans">
-      ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>
-      abcdefghijklmnopqrstuvwxyz<br>
+      ABCDEFGHIJKLMNOPQRSTUVWXYZ
+      abcdefghijklmnopqrstuvwxyz
       1234567890
     </p>
   </li>
   <li>
     font-serif
     <p class="font-serif">
-      ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>
-      abcdefghijklmnopqrstuvwxyz<br>
+      ABCDEFGHIJKLMNOPQRSTUVWXYZ
+      abcdefghijklmnopqrstuvwxyz
       1234567890
     </p>
   </li>
   <li>
     font-mono
     <p class="font-mono">
-      ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>
-      abcdefghijklmnopqrstuvwxyz<br>
+      ABCDEFGHIJKLMNOPQRSTUVWXYZ
+      abcdefghijklmnopqrstuvwxyz
       1234567890
     </p>
   </li>
 </ul>`).tokens,
-  shadows: tokenize.html(`<ul class="space-y-4">
-  <li class="shadow-sm  bg-white h-8 rounded-lg"></li>
-  <li class="shadow     bg-white h-8 rounded-lg"></li>
-  <li class="shadow-md  bg-white h-8 rounded-lg"></li>
-  <li class="shadow-lg  bg-white h-8 rounded-lg"></li>
-  <li class="shadow-xl  bg-white h-8 rounded-lg"></li>
-  <li class="shadow-2xl bg-white h-8 rounded-lg"></li>
+  shadows: tokenize.html(`<ul class="grid grid-cols-2 gap-4">
+  <li>
+    <div class="shadow-sm bg-white rounded-lg h-18"></div>
+  </li>
+  <li>
+    <div class="shadow bg-white rounded-lg h-18"></div>
+  </li>
+  <li>
+    <div class="shadow-md bg-white rounded-lg h-18"></div>
+  </li>
+  <li>
+    <div class="shadow-lg bg-white rounded-lg h-18"></div>
+  </li>
+  <li>
+    <div class="shadow-xl bg-white rounded-lg h-18"></div>
+  </li>
+  <li>
+    <div class="shadow-2xl bg-white rounded-lg h-18"></div>
+  </li>
 </ul>`).tokens,
 }
 
@@ -198,13 +211,13 @@ export function ConstraintBased() {
               </AnimatePresence>
             </h3>
 
-            <div className="relative flex-auto bg-white sm:rounded-tr-xl lg:rounded-b-xl lg:rounded-tr-none xl:rounded-bl-none xl:rounded-r-xl overflow-hidden flex p-6 sm:p-8 lg:p-6 xl:p-8">
+            <div className="relative flex-auto bg-white sm:rounded-tr-xl lg:rounded-b-xl lg:rounded-tr-none xl:rounded-bl-none xl:rounded-r-xl overflow-hidden">
               <AnimatePresence initial={false} exitBeforeEnter>
                 {tab === 'sizing' && (
                   <motion.ul
                     key="sizing"
                     exit={{ opacity: 0 }}
-                    className="w-full font-mono text-xs leading-5 text-gray-600 space-y-4"
+                    className="w-full font-mono text-xs leading-5 text-gray-600 space-y-4 p-6 sm:p-8 lg:p-6 xl:p-8"
                   >
                     {[64, 56, 48, 40, 32, 24, 20, 16, 12, 10].map((key, i) => (
                       <li key={key} className="flex items-center">
@@ -228,32 +241,36 @@ export function ConstraintBased() {
                   </motion.ul>
                 )}
                 {tab === 'color' && (
-                  <motion.ul key="color" exit={{ opacity: 0 }} className="w-full space-y-2">
-                    {[
-                      'red',
-                      'orange',
-                      'yellow',
-                      'lime',
-                      'emerald',
-                      'cyan',
-                      'lightBlue',
-                      'blue',
-                      'violet',
-                    ].map((color, i) => (
+                  <motion.ul
+                    key="color"
+                    exit={{ opacity: 0 }}
+                    className="w-full space-y-4 font-mono text-xs leading-4 p-6"
+                  >
+                    {['red', 'yellow', 'green', 'blue', 'purple', 'pink'].map((color, i) => (
                       <li key={color}>
-                        <ul className="flex flex-row-reverse justify-center -space-x-1 space-x-reverse">
+                        <motion.h4
+                          className="grid items-center"
+                          style={{ gridTemplateColumns: '1fr auto 1fr' }}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{
+                            delay: i * 0.1,
+                          }}
+                        >
+                          {`bg-${color}-50`}
+                          <ArrowIcon />
+                          <span className="text-right">{`bg-${color}-900`}</span>
+                        </motion.h4>
+                        <ul className="flex-none w-full flex rounded-lg overflow-hidden mt-1">
                           {Object.keys(siteConfig.theme.colors[color]).map((key, j) => (
                             <motion.li
                               key={key}
-                              className="w-8 h-8 rounded-full"
+                              className="h-7 flex-auto"
                               style={{ background: siteConfig.theme.colors[color][key], zIndex: j }}
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
                               transition={{
-                                delay:
-                                  i * 0.05 +
-                                  (Object.keys(siteConfig.theme.colors[color]).length - 1 - j) *
-                                    0.05,
+                                delay: i * 0.1 + j * 0.05,
                               }}
                             />
                           ))}
@@ -263,32 +280,27 @@ export function ConstraintBased() {
                   </motion.ul>
                 )}
                 {tab === 'typography' && (
-                  <motion.ul key="typography" exit={{ opacity: 0 }} className="w-full space-y-6">
+                  <motion.ul
+                    key="typography"
+                    exit={{ opacity: 0 }}
+                    className="w-full space-y-6 p-6 sm:p-8 lg:p-6 xl:p-8"
+                  >
                     {['font-sans', 'font-serif', 'font-mono'].map((style, i) => (
-                      <li key={style}>
-                        <motion.h4
-                          className="font-mono text-xs leading-5 text-gray-600"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: i * 0.2 }}
-                          data-delay={i * 0.2}
-                        >
-                          {style}
-                        </motion.h4>
-                        <motion.p
-                          className={`text-lg leading-6 text-purple-900 ${style}`}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: i * 0.2 + 0.1 }}
-                          data-delay={i * 0.2 + 0.1}
-                        >
+                      <motion.li
+                        key={style}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: i * 0.1 }}
+                      >
+                        <h4 className="font-mono text-xs leading-5 text-gray-600">{style}</h4>
+                        <p className={`text-lg leading-6 text-purple-900 ${style}`}>
                           ABCDEFGHIJKLMNOPQRSTUVWXYZ
                           <br />
                           abcdefghijklmnopqrstuvwxyz
                           <br />
                           1234567890
-                        </motion.p>
-                      </li>
+                        </p>
+                      </motion.li>
                     ))}
                   </motion.ul>
                 )}
@@ -296,23 +308,27 @@ export function ConstraintBased() {
                   <motion.div
                     key="shadows"
                     exit={{ opacity: 0 }}
-                    className="relative w-full flex-auto -m-4 flex"
+                    className="w-full flex-auto flex p-6 font-mono text-xs leading-4"
                   >
                     <motion.div
-                      className="absolute inset-0 bg-gray-50 rounded-md"
+                      className="absolute z-10 inset-2 bg-gray-50 rounded-lg"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                     />
-                    <ul className="relative w-full flex-none p-8 flex flex-col justify-between">
+                    <ul className="relative z-20 w-full flex-none grid grid-cols-2 gap-4">
                       {['sm', 'default', 'md', 'lg', 'xl', '2xl'].map((shadow, i) => (
                         <motion.li
                           key={shadow}
-                          className="bg-white rounded-lg h-8"
-                          style={{ boxShadow: siteConfig.theme.boxShadow[shadow] }}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: i * 0.1 }}
-                        />
+                        >
+                          <div>{`shadow${shadow === 'default' ? '' : `-${shadow}`}`}</div>
+                          <div
+                            className="bg-white rounded-lg h-18 mt-1"
+                            style={{ boxShadow: siteConfig.theme.boxShadow[shadow] }}
+                          />
+                        </motion.li>
                       ))}
                     </ul>
                   </motion.div>
