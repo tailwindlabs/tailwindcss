@@ -57,7 +57,7 @@ export function StateVariants() {
   return (
     <section>
       <div className="px-4 sm:px-6 md:px-8 mb-20">
-        <IconContainer className={`${gradients.lightblue} mb-8`}>
+        <IconContainer className={`${gradients.lightblue[0]} mb-8`}>
           <Icon />
         </IconContainer>
         <Caption as="h2" className="text-lightBlue-500 mb-3">

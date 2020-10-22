@@ -194,7 +194,7 @@ export function MobileFirst() {
   return (
     <section>
       <div className="px-4 sm:px-6 md:px-8 mb-20">
-        <IconContainer className={`${gradients.violet} mb-8`}>
+        <IconContainer className={`${gradients.violet[0]} mb-8`}>
           <Icon />
         </IconContainer>
         <Caption as="h2" className="text-violet-600 mb-3">

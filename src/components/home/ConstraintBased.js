@@ -152,7 +152,7 @@ export function ConstraintBased() {
   return (
     <section>
       <div className="px-4 sm:px-6 md:px-8 mb-20">
-        <IconContainer className={`${gradients.purple} mb-8`}>
+        <IconContainer className={`${gradients.purple[0]} mb-8`}>
           <Icon />
         </IconContainer>
         <Caption as="h2" className="text-purple-600 mb-3">
@@ -230,7 +230,7 @@ export function ConstraintBased() {
                           w-{key}
                         </motion.span>
                         <motion.span
-                          className={`flex-none h-3 origin-left bg-gradient-to-br ${gradients.purple}`}
+                          className={`flex-none h-3 origin-left bg-gradient-to-br ${gradients.purple[0]}`}
                           style={{ width: siteConfig.theme.width[key] }}
                           initial={{ scaleX: 0 }}
                           animate={{ scaleX: 1 }}

@@ -1,4 +1,5 @@
 import { gradients } from '@/utils/gradients'
+import { motion } from 'framer-motion'
 import styles from './GradientLockup.module.css'
 
 const rotation = {
@@ -8,7 +9,15 @@ const rotation = {
   2: 'rotate-1 sm:rotate-2',
 }
 
-export function GradientLockup({ header, left, right, color, rotate, pin = 'left' }) {
+export function GradientLockup({
+  header,
+  left,
+  right,
+  color,
+  rotate,
+  pin = 'left',
+  gradientProps = {},
+}) {
   return (
     <div className={`grid ${styles.root}`}>
       <div
@@ -19,8 +28,9 @@ export function GradientLockup({ header, left, right, color, rotate, pin = 'left
         }`}
       >
         <div className="bg-gray-100 w-full flex-none rounded-2xl" />
-        <div
-          className={`w-full flex-none -ml-full rounded-2xl transform shadow-lg bg-gradient-to-br ${gradients[color]} ${rotation[rotate]}`}
+        <motion.div
+          className={`w-full flex-none -ml-full rounded-2xl transform shadow-lg bg-gradient-to-br ${gradients[color][0]} ${rotation[rotate]}`}
+          {...gradientProps}
         />
       </div>
       {header && (

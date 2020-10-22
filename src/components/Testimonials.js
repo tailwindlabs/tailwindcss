@@ -3,10 +3,10 @@ import { motion, useTransform, animate, useMotionValue } from 'framer-motion'
 import { gradients } from '@/utils/gradients'
 
 const colors = {
-  teal: [gradients.teal, 'text-teal-100', 'text-green-200'],
-  pink: [gradients.pink, 'text-rose-100', 'text-rose-200'],
-  violet: [gradients.violet, 'text-purple-100', 'text-purple-200'],
-  amber: [gradients.amber, 'text-orange-100', 'text-orange-100'],
+  teal: [gradients.teal[0], 'text-teal-100', 'text-green-200'],
+  pink: [gradients.pink[0], 'text-rose-100', 'text-rose-200'],
+  violet: [gradients.violet[0], 'text-purple-100', 'text-purple-200'],
+  amber: [gradients.amber[0], 'text-orange-100', 'text-orange-100'],
 }
 
 const testimonials = [

@@ -4,12 +4,17 @@ import { Tabs } from '@/components/Tabs'
 import { CodeWindow } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import { ReactComponent as Icon } from '@/img/icons/home/browser-support.svg'
+import { useState } from 'react'
+import { AnimatePresence, AnimateSharedLayout, motion, useInvertedScale } from 'framer-motion'
 
 export function BrowserSupport() {
+  const [feature, setFeature] = useState('grid')
+  const [selectedGradient, setSelectedGradient] = useState(gradients.purple)
+
   return (
     <section>
       <div className="px-4 sm:px-6 md:px-8 mb-20">
-        <IconContainer className={`${gradients.purple} mb-8`}>
+        <IconContainer className={`${gradients.purple[0]} mb-8`}>
           <Icon />
         </IconContainer>
         <Caption as="h2" className="text-purple-600 mb-3">
@@ -37,26 +42,159 @@ export function BrowserSupport() {
       <GradientLockup
         color="purple"
         rotate={-2}
+        gradientProps={{
+          initial: false,
+          animate: {
+            backgroundImage: `linear-gradient(to bottom right, ${selectedGradient[1]}, ${selectedGradient[2]})`,
+          },
+        }}
         header={
           <div className="flex overflow-auto -mx-4 sm:-mx-6 md:-mx-8 xl:-ml-4 xl:mr-0">
             <Tabs
-              tabs={['Modern Browsers', 'IE11', 'IE9']}
+              tabs={{ grid: 'CSS Grid', transforms: 'Transforms', gradients: 'Gradients' }}
+              selected={feature}
+              onChange={setFeature}
               className="mx-auto xl:mx-0 px-4 sm:px-6 md:px-8 xl:px-0"
             />
           </div>
         }
         left={
-          <div
-            className="relative z-10 lg:mr-6 grid grid-cols-3 grid-rows-2 gap-4 text-4xl font-black text-purple-300"
-            style={{ height: 336 }}
-          >
-            <div className="bg-white rounded-xl shadow-lg flex items-center justify-center">1</div>
-            <div className="bg-white rounded-xl shadow-lg col-span-2 flex items-center justify-center">
-              2
-            </div>
-            <div className="bg-white rounded-xl shadow-lg flex items-center justify-center">3</div>
-            <div className="bg-white rounded-xl shadow-lg flex items-center justify-center">4</div>
-            <div className="bg-white rounded-xl shadow-lg flex items-center justify-center">5</div>
+          <div className="flex lg:mr-6 text-4xl font-black text-purple-300" style={{ height: 336 }}>
+            <AnimatePresence initial={false} exitBeforeEnter>
+              {feature === 'grid' || feature === 'transforms' ? (
+                <div key="blocks" className="w-full flex-none grid grid-cols-3 grid-rows-2 gap-4">
+                  <motion.div
+                    initial={
+                      feature === 'transforms'
+                        ? { opacity: 0, scaleX: 1.156, scaleY: 1.156, rotate: -7, x: -50, y: -50 }
+                        : { opacity: 0, x: -50, y: -50 }
+                    }
+                    animate={
+                      feature === 'transforms'
+                        ? { opacity: 1, scaleX: 1.156, scaleY: 1.156, rotate: -7, x: 0, y: 0 }
+                        : { opacity: 1, scaleX: 1, scaleY: 1, rotate: 0, x: 0, y: 0 }
+                    }
+                    exit={{
+                      opacity: 0,
+                      // transition: { duration: 0.3 },
+                      // ...(feature === 'transforms' ? {} : { x: -50, y: -50 }),
+                    }}
+                    className="bg-white rounded-xl shadow-lg flex items-center justify-center"
+                  >
+                    <InverseScale>1</InverseScale>
+                  </motion.div>
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      ...(feature === 'transforms'
+                        ? { scaleX: 0.8375, scaleY: 0.8375, rotate: 8.6, y: 58 + 50, x: 7 + 50 }
+                        : { scaleX: 1, scaleY: 1, rotate: 0, y: 50, x: 50 }),
+                    }}
+                    animate={
+                      feature === 'transforms'
+                        ? { opacity: 1, scaleX: 0.8375, scaleY: 0.8375, rotate: 8.6, y: 58, x: 7 }
+                        : { opacity: 1, scaleX: 1, scaleY: 1, rotate: 0, y: 0, x: 0 }
+                    }
+                    exit={{ opacity: 0 }}
+                    className="bg-white rounded-xl shadow-lg col-span-2 flex items-center justify-center col-start-3 col-end-4 row-start-2 row-end-3"
+                  >
+                    <InverseScale>2</InverseScale>
+                  </motion.div>
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      ...(feature === 'transforms'
+                        ? { scaleX: 1.475, x: -50, y: 44 + 50 }
+                        : { scaleX: 1, x: -50, y: 50 }),
+                    }}
+                    animate={
+                      feature === 'transforms'
+                        ? { opacity: 1, scaleX: 1.475, x: 0, y: 44 }
+                        : { opacity: 1, scaleX: 1, x: 0, y: 0 }
+                    }
+                    exit={{ opacity: 0 }}
+                    className="bg-white rounded-xl shadow-lg flex items-center justify-center origin-right"
+                  >
+                    <InverseScale>3</InverseScale>
+                  </motion.div>
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      ...(feature === 'transforms' ? { x: 0, y: 105 + 50 } : { x: 0, y: 50 }),
+                    }}
+                    animate={
+                      feature === 'transforms'
+                        ? { opacity: 1, x: 0, y: 105 }
+                        : { opacity: 1, x: 0, y: 0 }
+                    }
+                    exit={{ opacity: 0 }}
+                    className="bg-white rounded-xl shadow-lg flex items-center justify-center"
+                  >
+                    <InverseScale>4</InverseScale>
+                  </motion.div>
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      ...(feature === 'transforms'
+                        ? { x: 87 + 50, y: 15 - 50 }
+                        : { x: 50, y: -50 }),
+                    }}
+                    animate={
+                      feature === 'transforms'
+                        ? { opacity: 1, x: 87, y: 15 }
+                        : { opacity: 1, x: 0, y: 0 }
+                    }
+                    exit={{ opacity: 0 }}
+                    className="bg-white rounded-xl shadow-lg flex items-center justify-center col-start-2 col-end-4 row-start-1 row-end-2"
+                  >
+                    <InverseScale>5</InverseScale>
+                  </motion.div>
+                </div>
+              ) : (
+                <AnimateSharedLayout>
+                  <motion.ul
+                    key="gradients"
+                    className="self-center bg-white shadow-lg rounded-3xl w-full p-2 grid grid-cols-6"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    {[
+                      gradients.purple,
+                      gradients.blue,
+                      gradients.lightblue,
+                      gradients.teal,
+                      gradients.amber,
+                      gradients.pink,
+                    ].map((gradient, i) => (
+                      <motion.li
+                        key={gradient}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.06 * i }}
+                      >
+                        <button
+                          type="button"
+                          className="relative flex w-full pt-full rounded-full focus:outline-none"
+                          onClick={() => setSelectedGradient(gradient)}
+                        >
+                          <span className="sr-only"></span>
+                          {selectedGradient === gradient && (
+                            <motion.div
+                              layoutId="highlight"
+                              className="absolute inset-0 rounded-full bg-gray-200"
+                            />
+                          )}
+                          <div
+                            className={`absolute z-10 inset-2 rounded-full bg-gradient-to-br ${gradient[0]}`}
+                          />
+                        </button>
+                      </motion.li>
+                    ))}
+                  </motion.ul>
+                </AnimateSharedLayout>
+              )}
+            </AnimatePresence>
           </div>
         }
         right={
@@ -67,4 +205,9 @@ export function BrowserSupport() {
       />
     </section>
   )
+}
+
+function InverseScale({ children }) {
+  const { scaleX, scaleY } = useInvertedScale()
+  return <motion.div style={{ scaleX, scaleY }}>{children}</motion.div>
 }

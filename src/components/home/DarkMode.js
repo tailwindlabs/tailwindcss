@@ -171,7 +171,7 @@ export function DarkMode() {
   return (
     <section>
       <div className="px-4 sm:px-6 md:px-8 mb-20">
-        <IconContainer className={`${gradients.green} mb-8`}>
+        <IconContainer className={`${gradients.green[0]} mb-8`}>
           <Icon />
         </IconContainer>
         <Caption as="h2" className="text-green-600 mb-3">

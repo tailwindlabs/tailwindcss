@@ -37,7 +37,7 @@ export function BuildAnything() {
   return (
     <section>
       <div className="px-4 sm:px-6 md:px-8 mb-20">
-        <IconContainer className={`${gradients.orange} mb-8`}>
+        <IconContainer className={`${gradients.orange[0]} mb-8`}>
           <Icon />
         </IconContainer>
         <Caption as="h2" className="text-orange-600 mb-3">
