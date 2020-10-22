@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Color palette has been completely redesigned from scratch, `indigo`, `orange`, and `teal` are now disabled by default. Note that the new colors are _not_ a drop-in replacement for the old ones. Don't bother upgrading colors on existing sites, it's a bad idea, the old palette is good too. ([#2623](https://github.com/tailwindlabs/tailwindcss/pull/2623))
 - New `@apply` implementation, slight backwards incompatibilities with previous behavior ([#2159](https://github.com/tailwindlabs/tailwindcss/pull/2159))
 - Move `truncate` class to `textOverflow` core plugin ([#2562](https://github.com/tailwindlabs/tailwindcss/pull/2562))
 - Removed `target` feature and dropped any compatibility with IE 11 ([#2571](https://github.com/tailwindlabs/tailwindcss/pull/2571))
