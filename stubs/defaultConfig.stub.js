@@ -4,6 +4,7 @@ module.exports = {
   purge: [],
   presets: [],
   darkMode: false,
+  separator: ':',
   theme: {
     screens: {
       sm: '640px',
