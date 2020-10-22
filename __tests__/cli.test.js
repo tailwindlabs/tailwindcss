@@ -87,13 +87,13 @@ describe('cli', () => {
 
     it('compiles CSS file with autoprefixer', () => {
       return cli(['build', inputCssPath]).then(() => {
-        expect(process.stdout.write.mock.calls[0][0]).toContain('-ms-input-placeholder')
+        expect(process.stdout.write.mock.calls[0][0]).toContain('-webkit-max-content')
       })
     })
 
     it('compiles CSS file without autoprefixer', () => {
       return cli(['build', inputCssPath, '--no-autoprefixer']).then(() => {
-        expect(process.stdout.write.mock.calls[0][0]).not.toContain('-ms-input-placeholder')
+        expect(process.stdout.write.mock.calls[0][0]).not.toContain('-webkit-max-content')
       })
     })
   })
