@@ -294,6 +294,7 @@ module.exports = {
       full: '100%',
       min: 'min-content',
       max: 'max-content',
+      prose: '65ch',
       ...breakpoints(theme('screens')),
     }),
     minHeight: {
