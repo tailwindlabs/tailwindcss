@@ -343,7 +343,7 @@ export function ConstraintBased() {
             <AnimatePresence initial={false} exitBeforeEnter>
               <motion.div
                 key={tab}
-                className="w-full flex-auto flex overflow-auto"
+                className="w-full flex-auto flex min-h-0"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
