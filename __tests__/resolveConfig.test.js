@@ -1779,6 +1779,92 @@ test('variants can be extended', () => {
   })
 })
 
+test('variant sort order can be customized', () => {
+  const userConfig = {
+    variantOrder: [
+      'disabled',
+      'focus',
+      'group-hover',
+      'focus-within',
+      'active',
+      'hover',
+      'responsive',
+    ],
+    variants: {
+      borderColor: ({ after }) => after(['group-focus'], 'hover'),
+      extend: {
+        backgroundColor: ['active', 'disabled', 'group-hover'],
+      },
+    },
+  }
+
+  const otherConfig = {
+    variants: {
+      extend: {
+        textColor: ['hover', 'focus-within'],
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {
+      borderColor: ['hover', 'focus'],
+      backgroundColor: ['responsive', 'hover', 'focus'],
+      textColor: ['responsive', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, otherConfig, defaultConfig])
+
+  expect(result).toMatchObject({
+    variants: {
+      borderColor: ['hover', 'group-focus', 'focus'],
+      backgroundColor: ['disabled', 'focus', 'group-hover', 'active', 'hover', 'responsive'],
+      textColor: ['focus', 'focus-within', 'hover', 'responsive'],
+    },
+  })
+})
+
+test('custom variants go to the beginning by default when sort is applied', () => {
+  const userConfig = {
+    variants: {
+      extend: {
+        backgroundColor: ['active', 'custom-variant-1', 'group-hover', 'custom-variant-2'],
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {
+      backgroundColor: ['responsive', 'hover', 'focus'],
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toMatchObject({
+    variants: {
+      backgroundColor: [
+        'responsive',
+        'custom-variant-1',
+        'custom-variant-2',
+        'group-hover',
+        'hover',
+        'focus',
+        'active',
+      ],
+    },
+  })
+})
+
 test('variants can be defined as a function', () => {
   const userConfig = {
     variants: {

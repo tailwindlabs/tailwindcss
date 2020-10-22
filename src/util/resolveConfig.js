@@ -10,6 +10,7 @@ import toPath from 'lodash/toPath'
 import negateValue from './negateValue'
 import { corePluginList } from '../corePluginList'
 import configurePlugins from './configurePlugins'
+import defaultConfig from '../../stubs/defaultConfig.stub'
 
 const configUtils = {
   negative(scale) {
@@ -189,27 +190,6 @@ function mergeVariants(variants) {
   }
 }
 
-const defaultVariantSortOrder = [
-  'DEFAULT',
-  'dark',
-  'motion-safe',
-  'motion-reduce',
-  'first',
-  'last',
-  'odd',
-  'even',
-  'visited',
-  'checked',
-  'group-hover',
-  'group-focus',
-  'focus-within',
-  'hover',
-  'focus',
-  'focus-visible',
-  'active',
-  'disabled',
-]
-
 function mergeVariantExtensions({ extend, ...variants }, variantOrder) {
   return mergeWith(variants, extend, (variantsValue, extensions) => {
     const merged = uniq([...variantsValue, ...extensions].flat())
@@ -261,26 +241,7 @@ export default function resolveConfig(configs) {
       prefix: '',
       important: false,
       separator: ':',
-      variantOrder: [
-        'DEFAULT',
-        'dark',
-        'motion-safe',
-        'motion-reduce',
-        'first',
-        'last',
-        'odd',
-        'even',
-        'visited',
-        'checked',
-        'group-hover',
-        'group-focus',
-        'focus-within',
-        'hover',
-        'focus',
-        'focus-visible',
-        'active',
-        'disabled',
-      ],
+      variantOrder: defaultConfig.variantOrder,
     },
   ]
   const { variantOrder } = allConfigs.find((c) => c.variantOrder)
