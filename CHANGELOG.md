@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet!
 
+## [1.9.6]
+
+### Changed
+
+- The `presets` feature had unexpected behavior where a preset config without its own `presets` key would not extend the default config. ([#2662](https://github.com/tailwindlabs/tailwindcss/pull/2662))
+
+  If you were depending on this unexpected behavior, just add `presets: []` to your own preset to exclude the default configuration.
+
 ## [1.9.5]
 
 ### Fixed
@@ -1000,8 +1008,9 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.5...HEAD
-[1.9.5]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.3...v1.9.5
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.6...HEAD
+[1.9.6]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.5...v1.9.6
+[1.9.5]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.4...v1.9.5
 [1.9.4]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.3...v1.9.4
 [1.9.3]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.2...v1.9.3
 [1.9.2]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.1...v1.9.2
