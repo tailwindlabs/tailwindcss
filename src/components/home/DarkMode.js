@@ -11,8 +11,8 @@ import tokenize from '../../macros/tokenize.macro'
 import { Token } from '@/components/Code'
 
 const { code, tokens } = tokenize.html(
-  `<div class="(light)bg-white rounded-tl-xl sm:rounded-t-xl p-8 space-y-8 dark:bg-gray-800">
-  <div class="flex items-center space-x-5">
+  `<div class="(light)bg-white rounded-tl-xl sm:rounded-t-xl p-4 pb-6 sm:p-8 lg:p-4 lg:pb-6 xl:p-8 space-y-6 sm:space-y-8 lg:space-y-6 xl:space-y-8 dark:bg-gray-800">
+  <div class="flex items-center space-x-3.5 sm:space-x-5 lg:space-x-3.5 xl:space-x-5">
     <img
       src="/full-stack-radio.png"
       alt=""
@@ -20,14 +20,14 @@ const { code, tokens } = tokenize.html(
       height="160"
       class="flex-none w-20 h-20 rounded-lg"
     />
-    <div class="flex-auto space-y-0.5">
-      <p class="text-base leading-6 font-semibold uppercase (light)text-lime-600 dark:text-lime-400">
+    <div class="min-w-0 flex-auto space-y-0.5">
+      <p class="text-sm leading-5 sm:text-base sm:leading-6 lg:text-sm lg:leading-5 xl:text-base xl:leading-6 font-semibold uppercase (light)text-lime-600 dark:text-lime-400">
         <abbr title="Episode">Ep.</abbr> 145
       </p>
-      <h2 class="text-xl leading-7 font-semibold (light)text-black dark:text-white">
+      <h2 class="text-base leading-6 sm:text-xl sm:leading-7 lg:text-base lg:leading-6 xl:text-xl xl:leading-7 font-semibold truncate (light)text-black dark:text-white">
         Statamic 3.0 and Tailwind CSS 2.0
       </h2>
-      <p class="text-lg leading-6 font-medium (light)text-gray-500 dark:text-gray-400">
+      <p class="text-base sm:text-lg lg:text-base xl:text-lg leading-6 font-medium (light)text-gray-500 dark:text-gray-400">
         Full Stack Radio
       </p>
     </div>
@@ -48,7 +48,7 @@ const { code, tokens } = tokenize.html(
     </div>
   </div>
 </div>
-<div class="lg:rounded-b-xl bg-gray-50 text-black py-4 px-3 grid grid-cols-7 items-center dark:bg-gray-900 dark:text-white">
+<div class="lg:rounded-b-xl bg-gray-50 text-black py-4 px-1 sm:px-3 lg:px-1 xl:px-3 grid grid-cols-5 sm:grid-cols-7 lg:grid-cols-5 xl:grid-cols-7 items-center dark:bg-gray-900 dark:text-white">
   <button type="button" class="mx-auto">
     <svg width="24" height="24" fill="none">
       <path
@@ -59,7 +59,7 @@ const { code, tokens } = tokenize.html(
       />
     </svg>
   </button>
-  <button type="button" class="mx-auto">
+  <button type="button" class="hidden sm:block lg:hidden xl:block mx-auto">
     <svg width="17" height="18">
       <path d="M0 0h2v18H0V0zM4 9l13-9v18L4 9z" fill="currentColor" />
     </svg>
@@ -98,7 +98,7 @@ const { code, tokens } = tokenize.html(
       <path d="M17 0l8 6-8 6V0z" fill="currentColor" />
     </svg>
   </button>
-  <button type="button" class="mx-auto">
+  <button type="button" class="hidden sm:block lg:hidden xl:block mx-auto">
     <svg width="17" height="18" viewBox="0 0 17 18" fill="none">
       <path d="M17 0H15V18H17V0Z" fill="currentColor" />
       <path d="M13 9L0 0V18L13 9Z" fill="currentColor" />

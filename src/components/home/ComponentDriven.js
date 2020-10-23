@@ -351,10 +351,12 @@ export function ComponentDriven() {
                   height="144"
                   className="flex-none w-18 h-18 rounded-lg object-cover"
                 />
-                <div className="relative flex-auto pr-20">
-                  <h2 className="text-lg leading-7 font-semibold text-black mb-0.5">{title}</h2>
+                <div className="min-w-0 relative flex-auto sm:pr-20 lg:pr-0 xl:pr-20">
+                  <h2 className="text-base leading-6 sm:text-lg sm:leading-7 lg:text-base lg:leading-6 xl:text-lg xl:leading-7 font-semibold text-black mb-0.5 truncate">
+                    {title}
+                  </h2>
                   <dl className="flex flex-wrap text-sm leading-5 font-medium whitespace-pre">
-                    <div className="absolute top-0 right-0 rounded-full bg-amber-50 text-amber-900 px-2 py-0.5 flex items-center space-x-1">
+                    <div className="absolute top-0 right-0 rounded-full bg-amber-50 text-amber-900 px-2 py-0.5 hidden sm:flex lg:hidden xl:flex items-center space-x-1">
                       <dt className="text-amber-500">
                         <span className="sr-only">Rating</span>
                         <svg width="16" height="20" fill="currentColor">
@@ -402,7 +404,7 @@ export function ComponentDriven() {
         color="orange"
         rotate={1}
         left={
-          <div className="relative z-10 bg-white rounded-tr-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:mr-4">
+          <div className="relative z-10 bg-white rounded-tr-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8 xl:mr-4">
             <article className="text-gray-600 leading-6">
               <h2 className="opacity-25 text-2xl leading-8 font-semibold text-black p-6 pb-1">
                 Weekly one-on-one

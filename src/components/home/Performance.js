@@ -131,7 +131,7 @@ export function Performance() {
                   <dd className="flex-auto">
                     <Counter from={0} to={20144} progress={progress} /> unused classes
                   </dd>
-                  <dd className="text-rose-700 flex items-center">
+                  <dd className="text-rose-700 hidden sm:flex lg:hidden xl:flex items-center">
                     <span>
                       -<Counter from={0} to={160215} progress={progress} /> lines
                     </span>
@@ -183,7 +183,10 @@ export function Performance() {
                 </div>
               </dl>
             </div>
-            <div className="relative bg-teal-700 lg:rounded-b-xl overflow-hidden p-4">
+            <div
+              className="relative bg-teal-700 lg:rounded-b-xl overflow-hidden p-4"
+              style={{ maxHeight: 251 }}
+            >
               <div className="bg-black bg-opacity-75 absolute inset-0" />
               <div
                 className="relative font-mono text-sm text-teal-200"

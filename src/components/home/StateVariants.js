@@ -78,7 +78,7 @@ export function StateVariants() {
         rotate={1}
         left={
           <div className="relative z-10 bg-white rounded-tr-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8">
-            <section className="px-6 pt-4 pb-6 space-y-4">
+            <section className="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-4 sm:pb-6 lg:pb-4 xl:pb-6 space-y-4">
               <header className="flex items-center justify-between">
                 <h2 className="text-lg leading-6 font-medium text-black">Projects</h2>
                 <button
@@ -117,7 +117,7 @@ export function StateVariants() {
                   className="w-full text-sm leading-5 text-black placeholder-gray-500 border border-gray-200 rounded-md py-2 pl-10 focus:border-lightBlue-300 focus:outline-none"
                 />
               </form>
-              <ul className="grid grid-cols-2 gap-4">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
                 {Array.from({ length: 3 }).map((_, i) => (
                   <li key={i}>
                     <a
@@ -126,32 +126,39 @@ export function StateVariants() {
                       onMouseEnter={() => setStates([...states, 'item-hover'])}
                       onMouseLeave={() => setStates(states.filter((x) => x !== 'item-hover'))}
                     >
-                      <h3 className="leading-6 font-medium text-black group-hover:text-white">
-                        API Integration
-                      </h3>
-                      <dl>
-                        <dt className="sr-only">Category</dt>
-                        <dd className="text-sm leading-5 font-medium group-hover:text-lightBlue-200 mb-4">
-                          Engineering
-                        </dd>
-                        <dt className="sr-only">Users</dt>
-                        <dd className="flex -space-x-2">
-                          {Array.from({ length: 5 }).map((_, j) => (
-                            <img
-                              key={j}
-                              src={`https://unsplash.it/48/48?random&amp;i=${i}&j=${j}`}
-                              alt=""
-                              width="48"
-                              height="48"
-                              className="w-7 h-7 rounded-full border-2 border-white"
-                            />
-                          ))}
-                        </dd>
+                      <dl className="grid sm:block lg:grid xl:block grid-cols-2 grid-rows-2 items-center">
+                        <div>
+                          <dt className="sr-only">Title</dt>
+                          <dd className="leading-6 font-medium text-black group-hover:text-white">
+                            API Integration
+                          </dd>
+                        </div>
+                        <div>
+                          <dt className="sr-only">Category</dt>
+                          <dd className="text-sm leading-5 font-medium group-hover:text-lightBlue-200 sm:mb-4 lg:mb-0 xl:mb-4">
+                            Engineering
+                          </dd>
+                        </div>
+                        <div className="col-start-2 row-start-1 row-end-3">
+                          <dt className="sr-only">Users</dt>
+                          <dd className="flex justify-end sm:justify-start lg:justify-end xl:justify-start -space-x-2">
+                            {Array.from({ length: 5 }).map((_, j) => (
+                              <img
+                                key={j}
+                                src={`https://unsplash.it/48/48?random&amp;i=${i}&j=${j}`}
+                                alt=""
+                                width="48"
+                                height="48"
+                                className="w-7 h-7 rounded-full border-2 border-white"
+                              />
+                            ))}
+                          </dd>
+                        </div>
                       </dl>
                     </a>
                   </li>
                 ))}
-                <li className="flex">
+                <li className="hidden sm:flex lg:hidden xl:flex">
                   <a
                     href="#"
                     className="w-full flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium"

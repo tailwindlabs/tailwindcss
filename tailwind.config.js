@@ -31,6 +31,9 @@ module.exports = {
         18: '4.5rem',
         '23px': '1.4375rem',
       },
+      maxWidth: {
+        '4.5xl': '60rem',
+      },
       fontSize: {
         '7xl': '4.5rem',
       },

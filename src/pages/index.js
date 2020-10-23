@@ -28,7 +28,7 @@ const footerNav = {
 export default function Home() {
   return (
     <div className="space-y-44 overflow-hidden b">
-      <header className="relative z-10 max-w-screen-xl mx-auto">
+      <header className="relative z-10 max-w-screen-lg xl:max-w-screen-xl mx-auto">
         <div className="px-4 sm:px-6 md:px-8">
           <div className="border-b border-gray-200 py-6 flex items-center justify-between mb-20">
             <Search />
@@ -86,7 +86,7 @@ export default function Home() {
         <Hero />
       </header>
       <Testimonials />
-      <div className="max-w-screen-xl mx-auto space-y-44">
+      <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto space-y-44">
         <ConstraintBased />
         <BuildAnything />
         <Performance />
@@ -100,7 +100,7 @@ export default function Home() {
         <ReadyMadeComponents />
       </div>
       <footer className="bg-gray-50 pt-32 pb-40">
-        <div className="max-w-screen-xl mx-auto divide-y divide-gray-200 px-4 sm:px-6 md:px-8">
+        <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto divide-y divide-gray-200 px-4 sm:px-6 md:px-8">
           <ul className="text-sm leading-5 font-medium pb-1" style={{ columns: 4 }}>
             {Object.keys(footerNav).map((section) => (
               <li key={section} className="mb-15 inline-block w-full space-y-5">
