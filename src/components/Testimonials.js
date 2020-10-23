@@ -66,7 +66,7 @@ const testimonials = [
   },
 ]
 
-function Testimonial({ testimonial, color, base, index, total }) {
+function Testimonial({ testimonial, base, index, total }) {
   const x = useTransform(
     base,
     [0, (100 / total) * (index + 1), (100 / total) * (index + 1), 100],
@@ -74,9 +74,9 @@ function Testimonial({ testimonial, color, base, index, total }) {
   )
 
   return (
-    <motion.li className="px-4 flex-none" style={{ x }}>
-      <blockquote className="shadow-lg rounded-xl flex-none" style={{ width: '36rem' }}>
-        <div className="rounded-t-xl bg-white p-10 text-xl leading-8 font-semibold text-black">
+    <motion.li className="px-3 md:px-4 flex-none" style={{ x }}>
+      <blockquote className="shadow-lg rounded-xl flex-none w-80 md:w-xl">
+        <div className="rounded-t-xl bg-white px-6 py-8 md:p-10 text-lg md:text-xl leading-8 font-semibold text-black">
           <svg
             width="45"
             height="36"
@@ -91,7 +91,7 @@ function Testimonial({ testimonial, color, base, index, total }) {
           )}
         </div>
         <footer
-          className={`flex items-center space-x-4 px-10 py-6 bg-gradient-to-br rounded-b-xl leading-6 font-semibold text-white ${
+          className={`flex items-center space-x-4 p-6 md:px-10 md:py-6 bg-gradient-to-br rounded-b-xl leading-6 font-semibold text-white ${
             colors[testimonial.color][0]
           }`}
         >
