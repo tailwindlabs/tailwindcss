@@ -195,7 +195,7 @@ function BrowserWindow({ height = 385 }) {
           className="absolute z-10 top-1/2 right-0 bg-indigo-900 rounded-full border-4 border-white shadow-lg flex items-center justify-center pointer-events-auto"
           style={{
             x,
-            width: `${HANDLE_RADIUS}rem`,
+            width: `${HANDLE_RADIUS * 2}rem`,
             height: `${HANDLE_RADIUS * 2}rem`,
             marginTop: `-${HANDLE_RADIUS}rem`,
           }}
