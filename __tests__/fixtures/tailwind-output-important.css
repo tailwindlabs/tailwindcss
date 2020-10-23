@@ -19230,7 +19230,7 @@ video {
   white-space: normal !important;
 }
 
-.whitespace-no-wrap {
+.whitespace-nowrap {
   white-space: nowrap !important;
 }
 
@@ -42210,7 +42210,7 @@ video {
     white-space: normal !important;
   }
 
-  .sm\:whitespace-no-wrap {
+  .sm\:whitespace-nowrap {
     white-space: nowrap !important;
   }
 
@@ -65160,7 +65160,7 @@ video {
     white-space: normal !important;
   }
 
-  .md\:whitespace-no-wrap {
+  .md\:whitespace-nowrap {
     white-space: nowrap !important;
   }
 
@@ -88110,7 +88110,7 @@ video {
     white-space: normal !important;
   }
 
-  .lg\:whitespace-no-wrap {
+  .lg\:whitespace-nowrap {
     white-space: nowrap !important;
   }
 
@@ -111060,7 +111060,7 @@ video {
     white-space: normal !important;
   }
 
-  .xl\:whitespace-no-wrap {
+  .xl\:whitespace-nowrap {
     white-space: nowrap !important;
   }
 
@@ -134010,7 +134010,7 @@ video {
     white-space: normal !important;
   }
 
-  .\32xl\:whitespace-no-wrap {
+  .\32xl\:whitespace-nowrap {
     white-space: nowrap !important;
   }
 
