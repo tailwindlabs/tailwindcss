@@ -1,4 +1,4 @@
-import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/home/common'
+import { IconContainer, Caption, BigText, Paragraph, Link, Widont } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
 import { Tabs } from '@/components/Tabs'
 import { CodeWindow } from '@/components/CodeWindow'
@@ -62,7 +62,7 @@ export function BrowserSupport() {
           Browser support
         </Caption>
         <BigText className="mb-8">
-          Go bleeding edge or support ancient browsers, it’s your decision.
+          <Widont>Go bleeding edge or support ancient browsers, it’s your decision.</Widont>
         </BigText>
         <Paragraph as="div" className="mb-6">
           <p>

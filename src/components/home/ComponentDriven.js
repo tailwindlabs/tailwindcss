@@ -1,4 +1,4 @@
-import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/home/common'
+import { IconContainer, Caption, BigText, Paragraph, Link, Widont } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
 import { CodeWindow } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
@@ -283,7 +283,9 @@ export function ComponentDriven() {
         <Caption as="h2" className="text-amber-500 mb-3">
           Component-driven
         </Caption>
-        <BigText className="mb-8">Worried about duplication? Don’t be.</BigText>
+        <BigText className="mb-8">
+          <Widont>Worried about duplication? Don’t be.</Widont>
+        </BigText>
         <Paragraph className="mb-6">
           If you're repeating the same utilities over and over and over again, all you have to do is
           extract them into a component or template partial and boom — you've got a single source of

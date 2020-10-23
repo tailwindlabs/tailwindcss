@@ -12,7 +12,7 @@ import { EditorTools } from '@/components/home/EditorTools'
 import { ReadyMadeComponents } from '@/components/home/ReadyMadeComponents'
 import { Search } from '@/components/Search'
 import { Hero } from '@/components/home/Hero'
-import { BigText, Link, Paragraph } from '@/components/home/common'
+import { BigText, Link, Paragraph, Widont } from '@/components/home/common'
 
 const footerNav = {
   'Getting started': {
@@ -89,7 +89,7 @@ export default function Home() {
       <section className="relative z-10 text-center max-w-screen-lg xl:max-w-screen-xl mx-auto">
         <div className="px-4 sm:px-6 md:px-8">
           <BigText as="h2" className="mb-8">
-            “Best practices” don’t actually work.
+            <Widont>“Best practices” don’t actually work.</Widont>
           </BigText>
           <Paragraph className="mx-auto mb-6">
             I've written a few thousand words on why traditional "semantic class names" are the

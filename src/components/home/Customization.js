@@ -1,4 +1,4 @@
-import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/home/common'
+import { IconContainer, Caption, BigText, Paragraph, Link, Widont } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
 import { Tabs } from '@/components/Tabs'
 import { CodeWindow } from '@/components/CodeWindow'
@@ -57,7 +57,9 @@ export function Customization() {
         <Caption as="h2" className="text-rose-400 mb-3">
           Customization
         </Caption>
-        <BigText className="mb-8">Extend it, tweak it, change it.</BigText>
+        <BigText className="mb-8">
+          <Widont>Extend it, tweak it, change it.</Widont>
+        </BigText>
         <Paragraph as="div" className="mb-6">
           <p>
             Tailwind includes an expertly crafted set of defaults out-of-the-box, but literally

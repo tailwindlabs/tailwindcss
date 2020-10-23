@@ -1,4 +1,4 @@
-import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/home/common'
+import { IconContainer, Caption, BigText, Paragraph, Link, Widont } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
 import { Tabs } from '@/components/Tabs'
 import { CodeWindow } from '@/components/CodeWindow'
@@ -158,7 +158,9 @@ export function ConstraintBased() {
         <Caption as="h2" className="text-purple-600 mb-3">
           Constraint-based
         </Caption>
-        <BigText className="mb-8">An API for your design system.</BigText>
+        <BigText className="mb-8">
+          <Widont>An API for your design system.</Widont>
+        </BigText>
         <Paragraph className="mb-6">
           Utility classes help you work within the constraints of a system instead of littering your
           stylesheets with arbitrary values. They make it easy to be consistent with color choices,

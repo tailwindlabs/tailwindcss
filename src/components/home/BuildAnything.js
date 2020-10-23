@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/home/common'
+import { IconContainer, Caption, BigText, Paragraph, Link, Widont } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
 import { Tabs } from '@/components/Tabs'
 import { CodeWindow } from '@/components/CodeWindow'
@@ -43,7 +43,9 @@ export function BuildAnything() {
         <Caption as="h2" className="text-orange-600 mb-3">
           Build anything
         </Caption>
-        <BigText className="mb-8">Build whatever you want, seriously.</BigText>
+        <BigText className="mb-8">
+          <Widont>Build whatever you want, seriously.</Widont>
+        </BigText>
         <Paragraph className="mb-6">
           Because Tailwind is so low-level, it never encourages you to design the same site twice.
           Even with the same color palette and sizing scale, it's easy to build the same component

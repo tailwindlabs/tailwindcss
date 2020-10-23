@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Switch } from '@headlessui/react'
 import { motion } from 'framer-motion'
 import { gradients } from '@/utils/gradients'
-import { Paragraph, IconContainer, Caption, BigText, Link } from '@/components/home/common'
+import { Paragraph, IconContainer, Caption, BigText, Link, Widont } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
 import { CodeWindow } from '@/components/CodeWindow'
 import { ReactComponent as Icon } from '@/img/icons/home/dark-mode.svg'
@@ -177,7 +177,9 @@ export function DarkMode() {
         <Caption as="h2" className="text-green-600 mb-3">
           Dark mode
         </Caption>
-        <BigText className="mb-8">Now with Dark Mode.</BigText>
+        <BigText className="mb-8">
+          <Widont>Now with Dark Mode.</Widont>
+        </BigText>
         <Paragraph className="mb-6">
           Don’t want to be one of those websites that blinds people when they open it on their phone
           at 2am? Throw dark: in front of any color utility to apply it when dark mode is active.

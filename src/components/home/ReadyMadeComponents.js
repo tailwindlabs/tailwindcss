@@ -1,4 +1,4 @@
-import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/home/common'
+import { IconContainer, Caption, BigText, Paragraph, Link, Widont } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
 import { gradients } from '@/utils/gradients'
 import { ReactComponent as Icon } from '@/img/icons/home/ready-made-components.svg'
@@ -29,7 +29,9 @@ export function ReadyMadeComponents() {
         <Caption as="h2" className="text-violet-600 mb-3">
           Ready-made components
         </Caption>
-        <BigText className="mb-8">Move even faster with Tailwind UI.</BigText>
+        <BigText className="mb-8">
+          <Widont>Move even faster with Tailwind UI.</Widont>
+        </BigText>
         <Paragraph className="mb-6">
           Tailwind UI is a collection of beautiful, fully responsive UI components, designed and
           developed by us, the creators of Tailwind CSS. It's got hundreds of ready-to-use examples
