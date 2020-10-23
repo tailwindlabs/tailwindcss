@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `space` and `divide` utilities ignore elements with `[hidden]` now instead of only ignoring `template` elements ([#2642](https://github.com/tailwindlabs/tailwindcss/pull/2642))
 - Set default font on `body`, not just `html` ([#2643](https://github.com/tailwindlabs/tailwindcss/pull/2643))
 - Automatically prefix keyframes and animation names when a prefix is configured ([#2621](https://github.com/tailwindlabs/tailwindcss/pull/2621), [#2641](https://github.com/tailwindlabs/tailwindcss/pull/2641))
+- Rename `whitespace-no-wrap` to `whitespace-nowrap` ([#2664](https://github.com/tailwindlabs/tailwindcss/pull/2664))
 
 ## [1.9.6]
 
