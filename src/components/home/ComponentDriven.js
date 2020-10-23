@@ -209,7 +209,7 @@ function ComponentExample({ framework }) {
             className="absolute top-0 left-0 flex text-sm leading-5 font-medium text-transparent pointer-events-none select-none"
           >
             {Object.keys(tabs[framework]).map((tab, tabIndex) => (
-              <div key={tab} className="relative py-2 px-4 border border-transparent">
+              <div key={tabIndex} className="relative py-2 px-4 border border-transparent">
                 {tabIndex === activeTab && (
                   <motion.div
                     layoutId="activeTab"
