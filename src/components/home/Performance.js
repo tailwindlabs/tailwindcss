@@ -107,19 +107,47 @@ export function Performance() {
             className="relative z-10 rounded-tl-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8 tabular-nums"
           >
             <div className="bg-white rounded-tl-xl sm:rounded-t-xl">
-              <div className="absolute top-6 left-6 w-15 h-15 bg-green-500 rounded-full flex items-center justify-center">
-                <svg width="32" height="32" fill="none">
-                  <path
-                    d="M6.668 17.333l5.333 5.334L25.335 9.333"
-                    stroke="#fff"
+              <div className="absolute top-6 left-6 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                <svg
+                  viewBox="0 0 64 64"
+                  className="absolute inset-0 w-full h-full text-green-400"
+                  transform="rotate(90) scale(1 -1)"
+                >
+                  <motion.path
+                    d="M6,32a26,26 0 1,0 52,0a26,26 0 1,0 -52,0"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeDasharray="0 1"
+                    initial={{ pathLength: 0, strokeWidth: 6 }}
+                    animate={inView ? { pathLength: 1, strokeWidth: 12 } : undefined}
+                    transition={{
+                      pathLength: { duration: 5 },
+                      strokeWidth: { delay: 4.6, duration: 0.25 },
+                    }}
+                  />
+                </svg>
+                <div className="relative bg-white rounded-full w-10 h-10 shadow-sm" />
+                <svg viewBox="0 0 64 64" className="absolute inset-0 w-full h-full">
+                  <motion.path
+                    d="M22.668 33.333l5.333 5.334 13.334-13.334"
+                    fill="none"
+                    stroke="#22C55E"
                     strokeWidth="3"
                     strokeLinecap="round"
                     strokeLinejoin="round"
+                    strokeDasharray="0 1"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={inView ? { pathLength: 1, opacity: 1 } : undefined}
+                    transition={{
+                      pathLength: { delay: 4.5, duration: 0.3 },
+                      opacity: { delay: 4.5, duration: 0 },
+                    }}
                   />
                 </svg>
               </div>
               <dl className="p-6 pb-0">
-                <div className="flex-none w-full pl-15">
+                <div className="flex-none w-full pl-15 py-0.5">
                   <dt className="ml-4 text-sm leading-5 font-medium">Production build</dt>
                   <dd className="ml-4 text-4xl leading-10 font-extrabold text-black">
                     <Counter from={2413.4} to={8.7} round={1} progress={progress} />
