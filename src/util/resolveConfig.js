@@ -5,10 +5,12 @@ import isUndefined from 'lodash/isUndefined'
 import defaults from 'lodash/defaults'
 import map from 'lodash/map'
 import get from 'lodash/get'
+import uniq from 'lodash/uniq'
 import toPath from 'lodash/toPath'
 import negateValue from './negateValue'
 import { corePluginList } from '../corePluginList'
 import configurePlugins from './configurePlugins'
+import defaultConfig from '../../stubs/defaultConfig.stub'
 
 const configUtils = {
   negative(scale) {
@@ -39,31 +41,29 @@ function value(valueToResolve, ...args) {
   return isFunction(valueToResolve) ? valueToResolve(...args) : valueToResolve
 }
 
-function mergeThemes(themes) {
-  const theme = (({ extend: _, ...t }) => t)(
-    themes.reduce((merged, t) => {
-      return defaults(merged, t)
-    }, {})
-  )
+function collectExtends(items) {
+  return items.reduce((merged, { extend }) => {
+    return mergeWith(merged, extend, (mergedValue, extendValue) => {
+      if (isUndefined(mergedValue)) {
+        return [extendValue]
+      }
 
+      if (Array.isArray(mergedValue)) {
+        return [extendValue, ...mergedValue]
+      }
+
+      return [extendValue, mergedValue]
+    })
+  }, {})
+}
+
+function mergeThemes(themes) {
   return {
-    ...theme,
+    ...themes.reduce((merged, theme) => defaults(merged, theme), {}),
 
     // In order to resolve n config objects, we combine all of their `extend` properties
     // into arrays instead of objects so they aren't overridden.
-    extend: themes.reduce((merged, { extend }) => {
-      return mergeWith(merged, extend, (mergedValue, extendValue) => {
-        if (isUndefined(mergedValue)) {
-          return [extendValue]
-        }
-
-        if (Array.isArray(mergedValue)) {
-          return [extendValue, ...mergedValue]
-        }
-
-        return [extendValue, mergedValue]
-      })
-    }, {}),
+    extend: collectExtends(themes),
   }
 }
 
@@ -130,12 +130,8 @@ function extractPluginConfigs(configs) {
   return allConfigs
 }
 
-function resolveVariants([firstConfig, ...variantConfigs]) {
-  if (Array.isArray(firstConfig)) {
-    return firstConfig
-  }
-
-  return [firstConfig, ...variantConfigs].reverse().reduce((resolved, variants) => {
+function mergeVariants(variants) {
+  const mergedVariants = variants.reduce((resolved, variants) => {
     Object.entries(variants || {}).forEach(([plugin, pluginVariants]) => {
       if (isFunction(pluginVariants)) {
         resolved[plugin] = pluginVariants({
@@ -187,10 +183,39 @@ function resolveVariants([firstConfig, ...variantConfigs]) {
 
     return resolved
   }, {})
+
+  return {
+    ...mergedVariants,
+    extend: collectExtends(variants),
+  }
+}
+
+function mergeVariantExtensions({ extend, ...variants }, variantOrder) {
+  return mergeWith(variants, extend, (variantsValue, extensions) => {
+    const merged = uniq([...variantsValue, ...extensions].flat())
+
+    if (extensions.flat().length === 0) {
+      return merged
+    }
+
+    return merged.sort((a, z) => variantOrder.indexOf(a) - variantOrder.indexOf(z))
+  })
+}
+
+function resolveVariants([firstConfig, ...variantConfigs], variantOrder) {
+  // Global variants configuration like `variants: ['hover', 'focus']`
+  if (Array.isArray(firstConfig)) {
+    return firstConfig
+  }
+
+  return mergeVariantExtensions(
+    mergeVariants([firstConfig, ...variantConfigs].reverse()),
+    variantOrder
+  )
 }
 
 function resolveCorePlugins(corePluginConfigs) {
-  const result = [...corePluginConfigs].reverse().reduce((resolved, corePluginConfig) => {
+  const result = [...corePluginConfigs].reduceRight((resolved, corePluginConfig) => {
     if (isFunction(corePluginConfig)) {
       return corePluginConfig({ corePlugins: resolved })
     }
@@ -201,7 +226,7 @@ function resolveCorePlugins(corePluginConfigs) {
 }
 
 function resolvePluginLists(pluginLists) {
-  const result = [...pluginLists].reverse().reduce((resolved, pluginList) => {
+  const result = [...pluginLists].reduceRight((resolved, pluginList) => {
     return [...resolved, ...pluginList]
   }, [])
 
@@ -209,23 +234,30 @@ function resolvePluginLists(pluginLists) {
 }
 
 export default function resolveConfig(configs) {
-  const allConfigs = extractPluginConfigs(configs)
+  const allConfigs = [
+    ...extractPluginConfigs(configs),
+    {
+      darkMode: false,
+      prefix: '',
+      important: false,
+      separator: ':',
+      variantOrder: defaultConfig.variantOrder,
+    },
+  ]
+  const { variantOrder } = allConfigs.find((c) => c.variantOrder)
 
   return defaults(
     {
       theme: resolveFunctionKeys(
         mergeExtensions(mergeThemes(map(allConfigs, (t) => get(t, 'theme', {}))))
       ),
-      variants: resolveVariants(allConfigs.map((c) => c.variants)),
+      variants: resolveVariants(
+        allConfigs.map((c) => get(c, 'variants', {})),
+        variantOrder
+      ),
       corePlugins: resolveCorePlugins(allConfigs.map((c) => c.corePlugins)),
       plugins: resolvePluginLists(configs.map((c) => get(c, 'plugins', []))),
     },
-    ...allConfigs,
-    {
-      darkMode: false,
-      prefix: '',
-      important: false,
-      separator: ':',
-    }
+    ...allConfigs
   )
 }
