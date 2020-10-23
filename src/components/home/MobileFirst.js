@@ -107,19 +107,33 @@ function BrowserWindow({ height = 385 }) {
   const x = useMotionValue(0)
   const constraintsRef = useRef()
   const [size, setSize] = useState('lg')
-  const constraintsWidth = useRef()
+  const [constraintsWidth, setConstraintsWidth] = useState()
 
   useEffect(() => {
-    return x.onChange((x) => {
-      if (x < -((constraintsWidth.current / 3) * 2)) {
-        size !== 'sm' && setSize('sm')
-      } else if (x < -(constraintsWidth.current / 3)) {
-        size !== 'md' && setSize('md')
-      } else if (x >= -(constraintsWidth.current / 3)) {
-        size !== 'lg' && setSize('lg')
+    if (!constraintsWidth) return
+
+    function updateSize(x) {
+      if (constraintsWidth >= 500) {
+        if (x < -((constraintsWidth / 3) * 2)) {
+          size !== 'sm' && setSize('sm')
+        } else if (x < -(constraintsWidth / 3)) {
+          size !== 'md' && setSize('md')
+        } else if (x >= -(constraintsWidth / 3)) {
+          size !== 'lg' && setSize('lg')
+        }
+      } else {
+        if (x < -(constraintsWidth / 2)) {
+          size !== 'sm' && setSize('sm')
+        } else {
+          size !== 'md' && setSize('md')
+        }
       }
-    })
-  }, [x, size])
+    }
+
+    updateSize(x.get())
+
+    return x.onChange(updateSize)
+  }, [x, size, constraintsWidth])
 
   return (
     <div className="relative">
@@ -128,7 +142,7 @@ function BrowserWindow({ height = 385 }) {
         style={{ marginRight: useTransform(x, (x) => -x) }}
       >
         <div
-          className="py-2 grid items-center px-4 rounded-t-xl bg-gradient-to-b from-gray-50 to-gray-100"
+          className="py-2 grid items-center gap-6 px-4 rounded-t-xl bg-gradient-to-b from-gray-50 to-gray-100"
           style={{ gridTemplateColumns: '1fr minmax(min-content, 640px) 1fr' }}
         >
           <div className="flex space-x-1.5">
@@ -172,7 +186,7 @@ function BrowserWindow({ height = 385 }) {
           className="absolute z-10 top-1/2 right-0 bg-indigo-900 rounded-full border-4 border-white shadow-lg flex items-center justify-center pointer-events-auto"
           style={{ x, width: '4.25rem', height: '4.25rem', marginTop: '-2.125rem' }}
           onMeasureDragConstraints={({ left, right }) => {
-            constraintsWidth.current = right - left
+            setConstraintsWidth(right - left)
           }}
         >
           <svg width="40" height="40" fill="none">
