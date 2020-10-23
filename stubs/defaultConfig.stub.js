@@ -21,11 +21,17 @@ module.exports = {
 
       gray: colors.gray,
       red: colors.red,
+      rose: colors.rose,
       yellow: colors.amber,
       green: colors.emerald,
+      lime: colors.lime,
       blue: colors.blue,
+      cyan: colors.cyan,
+      teal: colors.teal,
       purple: colors.violet,
+      indigo: colors.indigo,
       pink: colors.pink,
+      fuchsia: colors.fuchsia,
     },
     spacing: {
       px: '1px',
