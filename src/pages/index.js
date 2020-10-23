@@ -12,6 +12,7 @@ import { EditorTools } from '@/components/home/EditorTools'
 import { ReadyMadeComponents } from '@/components/home/ReadyMadeComponents'
 import { Search } from '@/components/Search'
 import { Hero } from '@/components/home/Hero'
+import { BigText, Link, Paragraph } from '@/components/home/common'
 
 const footerNav = {
   'Getting started': {
@@ -85,6 +86,22 @@ export default function Home() {
         </div>
         <Hero />
       </header>
+      <section className="relative z-10 text-center max-w-screen-lg xl:max-w-screen-xl mx-auto">
+        <div className="px-4 sm:px-6 md:px-8">
+          <BigText as="h2" className="mb-8">
+            “Best practices” don’t actually work.
+          </BigText>
+          <Paragraph className="mx-auto mb-6">
+            I've written a few thousand words on why traditional "semantic class names" are the
+            reason CSS is hard to maintain, but the truth is you're never going to believe me until
+            you actually try it. If you can suppress the initial gag reflex long enough to give it a
+            chance, I promise you're in for a good time.
+          </Paragraph>
+          <Link href="#" className="text-lightBlue-500">
+            Read our pitch for utility-first CSS -&gt;
+          </Link>
+        </div>
+      </section>
       <Testimonials />
       <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto space-y-44">
         <ConstraintBased />
