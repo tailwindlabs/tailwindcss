@@ -45,40 +45,44 @@ export function CodeWindow({ children, className = '' }) {
   )
 }
 
-CodeWindow.Code = forwardRef(({ tokens = defaultTokens, ...props }, ref) => {
-  const lineNumbers = useMemo(() => {
-    const t = tokens.flat(Infinity)
-    let line = 2
-    let str = '1\n'
-    for (let i = 0; i < t.length; i++) {
-      if (typeof t[i] === 'string') {
-        const newLineChars = t[i].match(/\n/g)
-        if (newLineChars !== null) {
-          for (let j = 0; j < newLineChars.length; j++) {
-            str += `${line++}\n`
+CodeWindow.Code = forwardRef(
+  ({ tokens = defaultTokens, lineNumbersBackground = true, ...props }, ref) => {
+    const lineNumbers = useMemo(() => {
+      const t = tokens.flat(Infinity)
+      let line = 2
+      let str = '1\n'
+      for (let i = 0; i < t.length; i++) {
+        if (typeof t[i] === 'string') {
+          const newLineChars = t[i].match(/\n/g)
+          if (newLineChars !== null) {
+            for (let j = 0; j < newLineChars.length; j++) {
+              str += `${line++}\n`
+            }
           }
         }
       }
-    }
-    return str
-  }, [tokens])
+      return str
+    }, [tokens])
 
-  return (
-    <div className="w-full flex-auto flex min-h-0 overflow-auto">
-      <div ref={ref} className="w-full relative flex-auto">
-        <pre className="flex min-h-full">
-          <div
-            aria-hidden="true"
-            className="bg-black bg-opacity-25 text-white text-opacity-50 flex-none text-sm leading-5 py-4 pr-4 text-right select-none"
-            style={{ width: 50 }}
-          >
-            {lineNumbers}
-          </div>
-          <code className="flex-auto relative block text-sm leading-5 text-white pt-4 pb-4 px-4 overflow-auto">
-            <Code tokens={tokens} {...props} />
-          </code>
-        </pre>
+    return (
+      <div className="w-full flex-auto flex min-h-0 overflow-auto">
+        <div ref={ref} className="w-full relative flex-auto">
+          <pre className="flex min-h-full">
+            <div
+              aria-hidden="true"
+              className={`text-white text-opacity-50 flex-none text-sm leading-5 py-4 pr-4 text-right select-none ${
+                lineNumbersBackground ? 'bg-black bg-opacity-25' : ''
+              }`}
+              style={{ width: 50 }}
+            >
+              {lineNumbers}
+            </div>
+            <code className="flex-auto relative block text-sm leading-5 text-white pt-4 pb-4 px-4 overflow-auto">
+              <Code tokens={tokens} {...props} />
+            </code>
+          </pre>
+        </div>
       </div>
-    </div>
-  )
-})
+    )
+  }
+)

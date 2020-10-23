@@ -110,6 +110,7 @@ function CompletionDemo() {
       tokens={tokenize.html('<div class="__CLASS__"></div>').tokens}
       tokenComponent={EditorToolsToken}
       tokenProps={{ stage, typed, setTyped, selectedCompletionIndex }}
+      lineNumbersBackground={false}
     />
   )
 }
