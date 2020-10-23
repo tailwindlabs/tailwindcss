@@ -92,7 +92,7 @@ function assertPurged(result) {
   expect(result.css).toContain('.font-mono')
   expect(result.css).toContain('.col-span-4')
   expect(result.css).toContain('.tracking-tight')
-  expect(result.css).toContain('.whitespace-no-wrap')
+  expect(result.css).toContain('.whitespace-nowrap')
 }
 
 test('purges unused classes', () => {
