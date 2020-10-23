@@ -289,7 +289,7 @@ test('the default config can be removed by using an empty presets key in a prese
       `,
       { from: undefined }
     )
-    .then((result) => {
+    .then(result => {
       const expected = `
         .min-h-24 {
           min-height: 24px;
