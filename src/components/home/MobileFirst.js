@@ -8,6 +8,7 @@ import { ReactComponent as Icon } from '@/img/icons/home/mobile-first.svg'
 import styles from './MobileFirst.module.css'
 
 const MIN_WIDTH = 400
+const HANDLE_RADIUS = 2.125
 
 const classNames = {
   sm: {
@@ -112,7 +113,8 @@ function BrowserWindow({ height = 385 }) {
   useLayoutEffect(() => {
     setConstraintsWidth(
       constraintsRef.current.offsetWidth -
-        parseInt(window.getComputedStyle(document.documentElement).fontSize, 10) * 4.25
+        parseInt(window.getComputedStyle(document.documentElement).fontSize, 10) *
+          (HANDLE_RADIUS * 2)
     )
   }, [])
 
@@ -180,8 +182,8 @@ function BrowserWindow({ height = 385 }) {
         className="absolute bottom-0 pointer-events-none"
         style={{
           top: `${50 / 16}rem`,
-          right: '-2.125rem',
-          width: `calc(100% - ${MIN_WIDTH}px + 2.125rem + 2.125rem - 2px)`,
+          right: `-${HANDLE_RADIUS}rem`,
+          width: `calc(100% - ${MIN_WIDTH}px + ${HANDLE_RADIUS}rem + ${HANDLE_RADIUS}rem - 2px)`,
         }}
       >
         <motion.div
@@ -191,7 +193,12 @@ function BrowserWindow({ height = 385 }) {
           dragElastic={0.08}
           dragConstraints={constraintsRef}
           className="absolute z-10 top-1/2 right-0 bg-indigo-900 rounded-full border-4 border-white shadow-lg flex items-center justify-center pointer-events-auto"
-          style={{ x, width: '4.25rem', height: '4.25rem', marginTop: '-2.125rem' }}
+          style={{
+            x,
+            width: `${HANDLE_RADIUS}rem`,
+            height: `${HANDLE_RADIUS * 2}rem`,
+            marginTop: `-${HANDLE_RADIUS}rem`,
+          }}
           onMeasureDragConstraints={({ left, right }) => {
             setConstraintsWidth(right - left)
           }}
