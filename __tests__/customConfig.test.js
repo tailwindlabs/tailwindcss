@@ -218,17 +218,17 @@ test('the default config can be overridden using the presets key', () => {
         {
           theme: {
             extend: {
-              colors: {
-                black: 'black',
+              minHeight: {
+                24: '24px',
               },
-              backgroundColor: (theme) => theme('colors'),
             },
           },
-          corePlugins: ['backgroundColor'],
+          corePlugins: ['minHeight'],
+          variants: { minHeight: [] },
         },
       ],
       theme: {
-        extend: { colors: { white: 'white' } },
+        extend: { minHeight: { 48: '48px' } },
       },
     }),
   ])
@@ -240,11 +240,62 @@ test('the default config can be overridden using the presets key', () => {
     )
     .then((result) => {
       const expected = `
-        .bg-black {
-          background-color: black;
+        .min-h-0 {
+          min-height: 0;
         }
-        .bg-white {
-          background-color: white;
+        .min-h-24 {
+          min-height: 24px;
+        }
+        .min-h-48 {
+          min-height: 48px;
+        }
+        .min-h-full {
+          min-height: 100%;
+        }
+        .min-h-screen {
+          min-height: 100vh;
+        }
+      `
+
+      expect(result.css).toMatchCss(expected)
+    })
+})
+
+test('the default config can be removed by using an empty presets key in a preset', () => {
+  return postcss([
+    tailwind({
+      presets: [
+        {
+          presets: [],
+          theme: {
+            extend: {
+              minHeight: {
+                24: '24px',
+              },
+            },
+          },
+          corePlugins: ['minHeight'],
+          variants: { minHeight: [] },
+        },
+      ],
+      theme: {
+        extend: { minHeight: { 48: '48px' } },
+      },
+    }),
+  ])
+    .process(
+      `
+        @tailwind utilities
+      `,
+      { from: undefined }
+    )
+    .then((result) => {
+      const expected = `
+        .min-h-24 {
+          min-height: 24px;
+        }
+        .min-h-48 {
+          min-height: 48px;
         }
       `
 
@@ -257,6 +308,7 @@ test('presets can have their own presets', () => {
     tailwind({
       presets: [
         {
+          presets: [],
           theme: {
             colors: { red: '#dd0000' },
           },
@@ -264,6 +316,7 @@ test('presets can have their own presets', () => {
         {
           presets: [
             {
+              presets: [],
               theme: {
                 colors: {
                   transparent: 'transparent',
