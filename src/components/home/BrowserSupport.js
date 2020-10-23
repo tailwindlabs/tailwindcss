@@ -12,7 +12,7 @@ export function BrowserSupport() {
   const [selectedGradient, setSelectedGradient] = useState(gradients.purple)
 
   return (
-    <section>
+    <section id="browser-support">
       <div className="px-4 sm:px-6 md:px-8 mb-20">
         <IconContainer className={`${gradients.purple[0]} mb-8`}>
           <Icon />

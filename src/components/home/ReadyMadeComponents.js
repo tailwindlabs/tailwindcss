@@ -21,7 +21,7 @@ function AnimatedImage({ initial = {}, ...props }) {
 
 export function ReadyMadeComponents() {
   return (
-    <section>
+    <section id="ready-made-components">
       <div className="px-4 sm:px-6 md:px-8 mb-20">
         <IconContainer className={`${gradients.violet[0]} mb-8`}>
           <Icon />

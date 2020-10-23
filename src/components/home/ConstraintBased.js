@@ -150,7 +150,7 @@ export function ConstraintBased() {
   const [tab, setTab] = useState('sizing')
 
   return (
-    <section>
+    <section id="constraint-based">
       <div className="px-4 sm:px-6 md:px-8 mb-20">
         <IconContainer className={`${gradients.purple[0]} mb-8`}>
           <Icon />

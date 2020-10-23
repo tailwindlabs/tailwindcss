@@ -79,7 +79,7 @@ export function Performance() {
   }, [inView])
 
   return (
-    <section>
+    <section id="performance">
       <div className="px-4 sm:px-6 md:px-8 mb-20">
         <IconContainer className={`${gradients.teal[0]} mb-8`}>
           <Icon />

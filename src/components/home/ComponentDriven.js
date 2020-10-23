@@ -275,7 +275,7 @@ export function ComponentDriven() {
   const [framework, setFramework] = useState('react')
 
   return (
-    <section>
+    <section id="component-driven">
       <div className="px-4 sm:px-6 md:px-8 mb-20">
         <IconContainer className={`${gradients.amber[0]} mb-8`}>
           <Icon />

@@ -169,7 +169,7 @@ export function DarkMode() {
   const [enabled, setEnabled] = useState(false)
 
   return (
-    <section>
+    <section id="dark-mode">
       <div className="px-4 sm:px-6 md:px-8 mb-20">
         <IconContainer className={`${gradients.green[0]} mb-8`}>
           <Icon />
