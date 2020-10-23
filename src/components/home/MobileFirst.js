@@ -3,7 +3,7 @@ import { GradientLockup } from '@/components/GradientLockup'
 import { gradients } from '@/utils/gradients'
 import { CodeWindow } from '@/components/CodeWindow'
 import { motion, useTransform, useMotionValue } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ReactComponent as Icon } from '@/img/icons/home/mobile-first.svg'
 import styles from './MobileFirst.module.css'
 
@@ -108,6 +108,13 @@ function BrowserWindow({ height = 385 }) {
   const constraintsRef = useRef()
   const [size, setSize] = useState('lg')
   const [constraintsWidth, setConstraintsWidth] = useState()
+
+  useLayoutEffect(() => {
+    setConstraintsWidth(
+      constraintsRef.current.offsetWidth -
+        parseInt(window.getComputedStyle(document.documentElement).fontSize, 10) * 4.25
+    )
+  }, [])
 
   useEffect(() => {
     if (!constraintsWidth) return
