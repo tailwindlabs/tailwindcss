@@ -9158,7 +9158,7 @@ video {
   flex-wrap: wrap-reverse !important;
 }
 
-.flex-no-wrap {
+.flex-nowrap {
   flex-wrap: nowrap !important;
 }
 
@@ -32138,7 +32138,7 @@ video {
     flex-wrap: wrap-reverse !important;
   }
 
-  .sm\:flex-no-wrap {
+  .sm\:flex-nowrap {
     flex-wrap: nowrap !important;
   }
 
@@ -55088,7 +55088,7 @@ video {
     flex-wrap: wrap-reverse !important;
   }
 
-  .md\:flex-no-wrap {
+  .md\:flex-nowrap {
     flex-wrap: nowrap !important;
   }
 
@@ -78038,7 +78038,7 @@ video {
     flex-wrap: wrap-reverse !important;
   }
 
-  .lg\:flex-no-wrap {
+  .lg\:flex-nowrap {
     flex-wrap: nowrap !important;
   }
 
@@ -100988,7 +100988,7 @@ video {
     flex-wrap: wrap-reverse !important;
   }
 
-  .xl\:flex-no-wrap {
+  .xl\:flex-nowrap {
     flex-wrap: nowrap !important;
   }
 
@@ -123938,7 +123938,7 @@ video {
     flex-wrap: wrap-reverse !important;
   }
 
-  .\32xl\:flex-no-wrap {
+  .\32xl\:flex-nowrap {
     flex-wrap: nowrap !important;
   }
 
