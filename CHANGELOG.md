@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enable `group-hover` for color utilities by default ([28985b6](https://github.com/tailwindlabs/tailwindcss/commit/28985b6cd592e72d4849fdb9ce97eb045744e09c))
 - Enable `focus` for z-index utilities by default ([ae5b3d3](https://github.com/tailwindlabs/tailwindcss/commit/ae5b3d312d5000ae9c2065001f3df7add72dc365))
 - Support `extend` in `variants` configuration ([#2651](https://github.com/tailwindlabs/tailwindcss/pull/2651))
+- Add `max-w-prose` class by default ([#2574](https://github.com/tailwindlabs/tailwindcss/pull/2574))
 
 ### Changed
 
