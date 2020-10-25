@@ -1,19 +1,12 @@
-import _ from 'lodash'
+const flattenColorPalette = (colors) =>
+  Object.assign(
+    ...Object.entries(colors).flatMap(([color, values]) =>
+      typeof values == 'object'
+        ? Object.entries(flattenColorPalette(values)).map(([number, hex]) => ({
+            [color + (number === 'DEFAULT' ? '' : `-${number}`)]: hex,
+          }))
+        : [{ [`${color}`]: values }]
+    )
+  )
 
-export default function flattenColorPalette(colors) {
-  const result = _(colors)
-    .flatMap((color, name) => {
-      if (_.isFunction(color) || !_.isObject(color)) {
-        return [[name, color]]
-      }
-
-      return _.map(flattenColorPalette(color), (value, key) => {
-        const suffix = key === 'DEFAULT' ? '' : `-${key}`
-        return [`${name}${suffix}`, value]
-      })
-    })
-    .fromPairs()
-    .value()
-
-  return result
-}
+export default flattenColorPalette
