@@ -43,3 +43,35 @@ test('it flattens nested color objects', () => {
     'blue-3': 'rgb(0,0,100)',
   })
 })
+
+test('it flattens deeply nested color objects', () => {
+  expect(
+    flattenColorPalette({
+      primary: 'purple',
+      secondary: {
+        DEFAULT: 'blue',
+        hover: 'cyan',
+        focus: 'red',
+      },
+      button: {
+        primary: {
+          DEFAULT: 'magenta',
+          hover: 'green',
+          focus: {
+            DEFAULT: 'yellow',
+            variant: 'orange',
+          },
+        },
+      },
+    })
+  ).toEqual({
+    primary: 'purple',
+    secondary: 'blue',
+    'secondary-hover': 'cyan',
+    'secondary-focus': 'red',
+    'button-primary': 'magenta',
+    'button-primary-hover': 'green',
+    'button-primary-focus': 'yellow',
+    'button-primary-focus-variant': 'orange',
+  })
+})
