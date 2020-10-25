@@ -1,4 +1,5 @@
 /node_modules
+/coverage
 /lib
 /example
 tailwind.config.js
