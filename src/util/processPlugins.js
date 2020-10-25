@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import postcss from 'postcss'
-import browserslist from 'browserslist'
 import Node from 'postcss/lib/node'
 import isFunction from 'lodash/isFunction'
 import escapeClassName from '../util/escapeClassName'
@@ -8,38 +7,43 @@ import generateVariantFunction from '../util/generateVariantFunction'
 import parseObjectStyles from '../util/parseObjectStyles'
 import prefixSelector from '../util/prefixSelector'
 import wrapWithVariants from '../util/wrapWithVariants'
-import increaseSpecificity from '../util/increaseSpecificity'
-import selectorParser from 'postcss-selector-parser'
+import cloneNodes from '../util/cloneNodes'
+import transformThemeValue from './transformThemeValue'
 
 function parseStyles(styles) {
   if (!Array.isArray(styles)) {
     return parseStyles([styles])
   }
 
-  return _.flatMap(styles, style => (style instanceof Node ? style : parseObjectStyles(style)))
+  return _.flatMap(styles, (style) => (style instanceof Node ? style : parseObjectStyles(style)))
 }
 
-function containsClass(value) {
-  return selectorParser(selectors => {
-    let classFound = false
-    selectors.walkClasses(() => (classFound = true))
-    return classFound
-  }).transformSync(value)
+function wrapWithLayer(rules, layer) {
+  return postcss
+    .atRule({
+      name: 'layer',
+      params: layer,
+    })
+    .append(cloneNodes(Array.isArray(rules) ? rules : [rules]))
 }
 
-export default function(plugins, config) {
+function isKeyframeRule(rule) {
+  return rule.parent && rule.parent.type === 'atrule' && /keyframes$/.test(rule.parent.name)
+}
+
+export default function (plugins, config) {
   const pluginBaseStyles = []
   const pluginComponents = []
   const pluginUtilities = []
   const pluginVariantGenerators = {}
 
-  const applyConfiguredPrefix = selector => {
+  const applyConfiguredPrefix = (selector) => {
     return prefixSelector(config.prefix, selector)
   }
-  const getConfigValue = (path, defaultValue) => _.get(config, path, defaultValue)
-  const browserslistTarget = browserslist().includes('ie 11') ? 'ie11' : 'relaxed'
 
-  plugins.forEach(plugin => {
+  const getConfigValue = (path, defaultValue) => (path ? _.get(config, path, defaultValue) : config)
+
+  plugins.forEach((plugin) => {
     if (plugin.__isOptionsFunction) {
       plugin = plugin()
     }
@@ -49,8 +53,13 @@ export default function(plugins, config) {
     handler({
       postcss,
       config: getConfigValue,
-      theme: (path, defaultValue) => getConfigValue(`theme.${path}`, defaultValue),
-      corePlugins: path => {
+      theme: (path, defaultValue) => {
+        const [pathRoot, ...subPaths] = _.toPath(path)
+        const value = getConfigValue(['theme', pathRoot, ...subPaths], defaultValue)
+
+        return transformThemeValue(pathRoot)(value)
+      },
+      corePlugins: (path) => {
         if (Array.isArray(config.corePlugins)) {
           return config.corePlugins.includes(path)
         }
@@ -64,17 +73,6 @@ export default function(plugins, config) {
 
         return getConfigValue(`variants.${path}`, defaultValue)
       },
-      target: path => {
-        if (_.isString(config.target)) {
-          return config.target === 'browserslist' ? browserslistTarget : config.target
-        }
-
-        const [defaultTarget, targetOverrides] = getConfigValue('target')
-
-        const target = _.get(targetOverrides, path, defaultTarget)
-
-        return target === 'browserslist' ? browserslistTarget : target
-      },
       e: escapeClassName,
       prefix: applyConfiguredPrefix,
       addUtilities: (utilities, options) => {
@@ -86,48 +84,47 @@ export default function(plugins, config) {
 
         const styles = postcss.root({ nodes: parseStyles(utilities) })
 
-        styles.walkRules(rule => {
-          if (options.respectPrefix) {
+        styles.walkRules((rule) => {
+          if (options.respectPrefix && !isKeyframeRule(rule)) {
             rule.selector = applyConfiguredPrefix(rule.selector)
           }
 
-          if (options.respectImportant && _.get(config, 'important')) {
-            if (config.important === true) {
-              rule.walkDecls(decl => (decl.important = true))
-            } else if (typeof config.important === 'string') {
-              if (containsClass(config.important)) {
-                throw rule.error(
-                  `Classes are not allowed when using the \`important\` option with a string argument. Please use an ID instead.`
-                )
-              }
-
-              rule.selectors = rule.selectors.map(selector => {
-                return increaseSpecificity(config.important, selector)
-              })
+          if (options.respectImportant && config.important) {
+            rule.__tailwind = {
+              ...rule.__tailwind,
+              important: config.important,
             }
           }
         })
 
-        pluginUtilities.push(wrapWithVariants(styles.nodes, options.variants))
+        pluginUtilities.push(
+          wrapWithLayer(wrapWithVariants(styles.nodes, options.variants), 'utilities')
+        )
       },
       addComponents: (components, options) => {
-        options = Object.assign({ respectPrefix: true }, options)
+        const defaultOptions = { variants: [], respectPrefix: true }
+
+        options = Array.isArray(options)
+          ? Object.assign({}, defaultOptions, { variants: options })
+          : _.defaults(options, defaultOptions)
 
         const styles = postcss.root({ nodes: parseStyles(components) })
 
-        styles.walkRules(rule => {
-          if (options.respectPrefix) {
+        styles.walkRules((rule) => {
+          if (options.respectPrefix && !isKeyframeRule(rule)) {
             rule.selector = applyConfiguredPrefix(rule.selector)
           }
         })
 
-        pluginComponents.push(...styles.nodes)
+        pluginComponents.push(
+          wrapWithLayer(wrapWithVariants(styles.nodes, options.variants), 'components')
+        )
       },
-      addBase: baseStyles => {
-        pluginBaseStyles.push(...parseStyles(baseStyles))
+      addBase: (baseStyles) => {
+        pluginBaseStyles.push(wrapWithLayer(parseStyles(baseStyles), 'base'))
       },
-      addVariant: (name, generator) => {
-        pluginVariantGenerators[name] = generateVariantFunction(generator)
+      addVariant: (name, generator, options = {}) => {
+        pluginVariantGenerators[name] = generateVariantFunction(generator, options)
       },
     })
   })

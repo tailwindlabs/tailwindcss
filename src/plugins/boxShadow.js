@@ -1,14 +1,12 @@
 import _ from 'lodash'
-import prefixNegativeModifiers from '../util/prefixNegativeModifiers'
+import nameClass from '../util/nameClass'
 
-export default function() {
-  return function({ addUtilities, e, theme, variants }) {
+export default function () {
+  return function ({ addUtilities, theme, variants }) {
     const utilities = _.fromPairs(
       _.map(theme('boxShadow'), (value, modifier) => {
-        const className =
-          modifier === 'default' ? 'shadow' : `${e(prefixNegativeModifiers('shadow', modifier))}`
         return [
-          `.${className}`,
+          nameClass('shadow', modifier),
           {
             'box-shadow': value,
           },

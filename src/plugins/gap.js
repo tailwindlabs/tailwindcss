@@ -1,15 +1,9 @@
 import createUtilityPlugin from '../util/createUtilityPlugin'
 
-export default function() {
-  return function({ target, ...args }) {
-    if (target('gap') === 'ie11') {
-      return
-    }
-
-    createUtilityPlugin('gap', [
-      ['gap', ['gridGap', 'gap']],
-      ['col-gap', ['gridColumnGap', 'columnGap']],
-      ['row-gap', ['gridRowGap', 'rowGap']],
-    ])({ target, ...args })
-  }
+export default function () {
+  return createUtilityPlugin('gap', [
+    ['gap', ['gridGap', 'gap']],
+    ['gap-x', ['gridColumnGap', 'columnGap']],
+    ['gap-y', ['gridRowGap', 'rowGap']],
+  ])
 }

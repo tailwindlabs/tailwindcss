@@ -1,37 +1,30 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
+import nameClass from '../util/nameClass'
+import toColorValue from '../util/toColorValue'
 import withAlphaVariable from '../util/withAlphaVariable'
 
-export default function() {
-  return function({ addUtilities, e, theme, variants, target, corePlugins }) {
+export default function () {
+  return function ({ addUtilities, theme, variants, corePlugins }) {
     const colors = flattenColorPalette(theme('divideColor'))
 
-    if (target('divideColor') === 'ie11') {
-      const utilities = _.fromPairs(
-        _.map(_.omit(colors, 'default'), (value, modifier) => {
-          return [
-            `.${e(`divide-${modifier}`)} > :not(template) ~ :not(template)`,
-            { 'border-color': value },
-          ]
+    const getProperties = (value) => {
+      if (corePlugins('divideOpacity')) {
+        return withAlphaVariable({
+          color: value,
+          property: 'border-color',
+          variable: '--divide-opacity',
         })
-      )
+      }
 
-      addUtilities(utilities, variants('divideColor'))
-
-      return
+      return { 'border-color': toColorValue(value) }
     }
 
     const utilities = _.fromPairs(
-      _.map(_.omit(colors, 'default'), (value, modifier) => {
+      _.map(_.omit(colors, 'DEFAULT'), (value, modifier) => {
         return [
-          `.${e(`divide-${modifier}`)} > :not(template) ~ :not(template)`,
-          corePlugins('divideOpacity')
-            ? withAlphaVariable({
-                color: value,
-                property: 'border-color',
-                variable: '--divide-opacity',
-              })
-            : { 'border-color': value },
+          `${nameClass('divide', modifier)} > :not([hidden]) ~ :not([hidden])`,
+          getProperties(value),
         ]
       })
     )

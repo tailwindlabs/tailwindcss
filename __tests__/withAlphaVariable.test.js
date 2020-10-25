@@ -5,7 +5,7 @@ test('it adds the right custom property', () => {
     withAlphaVariable({ color: '#ff0000', property: 'color', variable: '--text-opacity' })
   ).toEqual({
     '--text-opacity': '1',
-    color: ['#ff0000', 'rgba(255, 0, 0, var(--text-opacity))'],
+    color: 'rgba(255, 0, 0, var(--text-opacity))',
   })
 })
 
@@ -93,5 +93,18 @@ test('it ignores colors that already have an alpha channel', () => {
     })
   ).toEqual({
     'background-color': 'hsla(240, 100%, 50%, 0.5)',
+  })
+})
+
+test('it allows a closure to be passed', () => {
+  expect(
+    withAlphaVariable({
+      color: ({ opacityVariable }) => `rgba(0, 0, 0, var(${opacityVariable}))`,
+      property: 'background-color',
+      variable: '--bg-opacity',
+    })
+  ).toEqual({
+    '--bg-opacity': '1',
+    'background-color': 'rgba(0, 0, 0, var(--bg-opacity))',
   })
 })

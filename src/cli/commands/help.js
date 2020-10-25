@@ -21,7 +21,7 @@ export function forApp() {
   utils.log('  ', colors.bold(constants.cli + ' <command> [options]'))
   utils.log()
   utils.log('Commands:')
-  forEach(commands, command => {
+  forEach(commands, (command) => {
     utils.log('  ', colors.bold(padEnd(command.usage, pad)), command.description)
   })
 }
@@ -44,7 +44,7 @@ export function forCommand(command) {
 
     utils.log()
     utils.log('Options:')
-    forEach(command.options, option => {
+    forEach(command.options, (option) => {
       utils.log('  ', colors.bold(padEnd(option.usage, pad)), option.description)
     })
   }
@@ -68,7 +68,7 @@ export function invalidCommand(commandName) {
  * @return {Promise}
  */
 export function run(cliParams) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     utils.header()
 
     const commandName = cliParams[0]

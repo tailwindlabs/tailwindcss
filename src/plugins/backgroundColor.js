@@ -1,33 +1,28 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
 import withAlphaVariable from '../util/withAlphaVariable'
+import toColorValue from '../util/toColorValue'
+import nameClass from '../util/nameClass'
 
-export default function() {
-  return function({ addUtilities, e, theme, variants, target, corePlugins }) {
-    if (target('backgroundColor') === 'ie11') {
-      const utilities = _.fromPairs(
-        _.map(flattenColorPalette(theme('backgroundColor')), (value, modifier) => {
-          return [`.${e(`bg-${modifier}`)}`, { 'background-color': value }]
+export default function () {
+  return function ({ addUtilities, theme, variants, corePlugins }) {
+    const colors = flattenColorPalette(theme('backgroundColor'))
+
+    const getProperties = (value) => {
+      if (corePlugins('backgroundOpacity')) {
+        return withAlphaVariable({
+          color: value,
+          property: 'background-color',
+          variable: '--bg-opacity',
         })
-      )
+      }
 
-      addUtilities(utilities, variants('backgroundColor'))
-
-      return
+      return { 'background-color': toColorValue(value) }
     }
 
     const utilities = _.fromPairs(
-      _.map(flattenColorPalette(theme('backgroundColor')), (value, modifier) => {
-        return [
-          `.${e(`bg-${modifier}`)}`,
-          corePlugins('backgroundOpacity')
-            ? withAlphaVariable({
-                color: value,
-                property: 'background-color',
-                variable: '--bg-opacity',
-              })
-            : { 'background-color': value },
-        ]
+      _.map(colors, (value, modifier) => {
+        return [nameClass('bg', modifier), getProperties(value)]
       })
     )
 

@@ -1,5 +1,5 @@
-export default function() {
-  return function({ addUtilities, variants }) {
+export default function () {
+  return function ({ addUtilities, variants }) {
     addUtilities(
       {
         '.content-center': {
@@ -16,6 +16,9 @@ export default function() {
         },
         '.content-around': {
           'align-content': 'space-around',
+        },
+        '.content-evenly': {
+          'align-content': 'space-evenly',
         },
       },
       variants('alignContent')

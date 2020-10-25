@@ -1,59 +1,36 @@
 import _ from 'lodash'
+import nameClass from '../util/nameClass'
 
-export default function() {
-  return function({ addUtilities, e, theme, variants, target }) {
-    if (target('divideWidth') === 'ie11') {
-      const generators = [
-        (size, modifier) => ({
-          [`.${e(`divide-y${modifier}`)} > :not(template) ~ :not(template)`]: {
-            'border-top-width': size,
-          },
-          [`.${e(`divide-x${modifier}`)} > :not(template) ~ :not(template)`]: {
-            'border-left-width': size,
-          },
-        }),
-      ]
-
-      const utilities = _.flatMap(generators, generator => {
-        return _.flatMap(theme('divideWidth'), (value, modifier) => {
-          return generator(value, modifier === 'default' ? '' : `-${modifier}`)
-        })
-      })
-
-      addUtilities(utilities, variants('divideWidth'))
-
-      return
-    }
-
+export default function () {
+  return function ({ addUtilities, theme, variants }) {
     const generators = [
-      (size, modifier) => ({
-        [`.${e(`divide-y${modifier}`)} > :not(template) ~ :not(template)`]: {
-          '--divide-y-reverse': '0',
-          'border-top-width': `calc(${
-            size === '0' ? '0px' : size
-          } * calc(1 - var(--divide-y-reverse)))`,
-          'border-bottom-width': `calc(${size === '0' ? '0px' : size} * var(--divide-y-reverse))`,
-        },
-        [`.${e(`divide-x${modifier}`)} > :not(template) ~ :not(template)`]: {
-          '--divide-x-reverse': '0',
-          'border-right-width': `calc(${size === '0' ? '0px' : size} * var(--divide-x-reverse))`,
-          'border-left-width': `calc(${
-            size === '0' ? '0px' : size
-          } * calc(1 - var(--divide-x-reverse)))`,
-        },
-      }),
+      (_size, modifier) => {
+        const size = _size === '0' ? '0px' : _size
+        return {
+          [`${nameClass('divide-y', modifier)} > :not([hidden]) ~ :not([hidden])`]: {
+            '--divide-y-reverse': '0',
+            'border-top-width': `calc(${size} * calc(1 - var(--divide-y-reverse)))`,
+            'border-bottom-width': `calc(${size} * var(--divide-y-reverse))`,
+          },
+          [`${nameClass('divide-x', modifier)} > :not([hidden]) ~ :not([hidden])`]: {
+            '--divide-x-reverse': '0',
+            'border-right-width': `calc(${size} * var(--divide-x-reverse))`,
+            'border-left-width': `calc(${size} * calc(1 - var(--divide-x-reverse)))`,
+          },
+        }
+      },
     ]
 
-    const utilities = _.flatMap(generators, generator => {
+    const utilities = _.flatMap(generators, (generator) => {
       return [
         ..._.flatMap(theme('divideWidth'), (value, modifier) => {
-          return generator(value, modifier === 'default' ? '' : `-${modifier}`)
+          return generator(value, modifier)
         }),
         {
-          '.divide-y-reverse > :not(template) ~ :not(template)': {
+          '.divide-y-reverse > :not([hidden]) ~ :not([hidden])': {
             '--divide-y-reverse': '1',
           },
-          '.divide-x-reverse > :not(template) ~ :not(template)': {
+          '.divide-x-reverse > :not([hidden]) ~ :not([hidden])': {
             '--divide-x-reverse': '1',
           },
         },

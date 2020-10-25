@@ -10,8 +10,8 @@ test('z index can use negative prefix syntax', () => {
       zIndex: {
         '-20': '-20',
         '-10': '-10',
-        '10': '10',
-        '20': '20',
+        10: '10',
+        20: '20',
       },
     },
     variants: {
@@ -43,12 +43,14 @@ test('z index can use negative prefix syntax', () => {
 
   expect(addedUtilities).toEqual([
     {
-      utilities: {
-        '.-z-20': { 'z-index': '-20' },
-        '.-z-10': { 'z-index': '-10' },
-        '.z-10': { 'z-index': '10' },
-        '.z-20': { 'z-index': '20' },
-      },
+      utilities: [
+        {
+          '.-z-20': { zIndex: '-20' },
+          '.-z-10': { zIndex: '-10' },
+          '.z-10': { zIndex: '10' },
+          '.z-20': { zIndex: '20' },
+        },
+      ],
       variants: ['responsive'],
     },
   ])

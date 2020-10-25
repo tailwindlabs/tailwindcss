@@ -1,10 +1,12 @@
 import postcss from 'postcss'
 import plugin from '../src/lib/substituteVariantsAtRules'
 import processPlugins from '../src/util/processPlugins'
+import resolveConfig from '../src/util/resolveConfig'
 import config from '../stubs/defaultConfig.stub.js'
 
 function run(input, opts = config) {
-  return postcss([plugin(opts, processPlugins(opts.plugins, opts))]).process(input, {
+  const resolved = resolveConfig([opts])
+  return postcss([plugin(resolved, processPlugins(resolved.plugins, resolved))]).process(input, {
     from: undefined,
   })
 }
@@ -24,7 +26,7 @@ test('it can generate hover variants', () => {
     .hover\\:chocolate:hover { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -45,7 +47,28 @@ test('it can generate disabled variants', () => {
     .disabled\\:chocolate:disabled { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate checked variants', () => {
+  const input = `
+    @variants checked {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .checked\\:banana:checked { color: yellow; }
+    .checked\\:chocolate:checked { color: brown; }
+  `
+
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -66,7 +89,7 @@ test('it can generate active variants', () => {
     .active\\:chocolate:active { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -87,7 +110,7 @@ test('it can generate visited variants', () => {
     .visited\\:chocolate:visited { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -108,7 +131,7 @@ test('it can generate focus variants', () => {
     .focus\\:chocolate:focus { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -129,7 +152,196 @@ test('it can generate focus-within variants', () => {
     .focus-within\\:chocolate:focus-within { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate focus-visible variants', () => {
+  const input = `
+    @variants focus-visible {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .focus-visible\\:banana:focus-visible { color: yellow; }
+    .focus-visible\\:chocolate:focus-visible { color: brown; }
+  `
+
+  return run(input).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate motion-reduce variants', () => {
+  const input = `
+    @variants motion-reduce {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    @media (prefers-reduced-motion: reduce) {
+      .motion-reduce\\:banana { color: yellow; }
+      .motion-reduce\\:chocolate { color: brown; }
+    }
+  `
+
+  return run(input).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate motion-safe variants', () => {
+  const input = `
+    @variants motion-safe {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    @media (prefers-reduced-motion: no-preference) {
+      .motion-safe\\:banana { color: yellow; }
+      .motion-safe\\:chocolate { color: brown; }
+    }
+  `
+
+  return run(input).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('it can generate motion-safe and motion-reduce variants', () => {
+  const input = `
+    @variants motion-safe, motion-reduce {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    @media (prefers-reduced-motion: no-preference) {
+      .motion-safe\\:banana { color: yellow; }
+      .motion-safe\\:chocolate { color: brown; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .motion-reduce\\:banana { color: yellow; }
+      .motion-reduce\\:chocolate { color: brown; }
+    }
+  `
+
+  return run(input).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('motion-reduce variants stack with basic variants', () => {
+  const input = `
+    @variants motion-reduce, hover, group-hover {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .hover\\:banana:hover { color: yellow; }
+    .hover\\:chocolate:hover { color: brown; }
+    .group:hover .group-hover\\:banana { color: yellow; }
+    .group:hover .group-hover\\:chocolate { color: brown; }
+    @media (prefers-reduced-motion: reduce) {
+      .motion-reduce\\:banana { color: yellow; }
+      .motion-reduce\\:chocolate { color: brown; }
+      .motion-reduce\\:hover\\:banana:hover { color: yellow; }
+      .motion-reduce\\:hover\\:chocolate:hover { color: brown; }
+      .group:hover .motion-reduce\\:group-hover\\:banana { color: yellow; }
+      .group:hover .motion-reduce\\:group-hover\\:chocolate { color: brown; }
+    }
+  `
+
+  return run(input).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('motion-safe variants stack with basic variants', () => {
+  const input = `
+    @variants motion-safe, hover, group-hover {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .hover\\:banana:hover { color: yellow; }
+    .hover\\:chocolate:hover { color: brown; }
+    .group:hover .group-hover\\:banana { color: yellow; }
+    .group:hover .group-hover\\:chocolate { color: brown; }
+    @media (prefers-reduced-motion: no-preference) {
+      .motion-safe\\:banana { color: yellow; }
+      .motion-safe\\:chocolate { color: brown; }
+      .motion-safe\\:hover\\:banana:hover { color: yellow; }
+      .motion-safe\\:hover\\:chocolate:hover { color: brown; }
+      .group:hover .motion-safe\\:group-hover\\:banana { color: yellow; }
+      .group:hover .motion-safe\\:group-hover\\:chocolate { color: brown; }
+    }
+  `
+
+  return run(input).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('motion-safe and motion-reduce variants stack with basic variants', () => {
+  const input = `
+    @variants motion-reduce, motion-safe, hover {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .hover\\:banana:hover { color: yellow; }
+    .hover\\:chocolate:hover { color: brown; }
+    @media (prefers-reduced-motion: reduce) {
+      .motion-reduce\\:banana { color: yellow; }
+      .motion-reduce\\:chocolate { color: brown; }
+      .motion-reduce\\:hover\\:banana:hover { color: yellow; }
+      .motion-reduce\\:hover\\:chocolate:hover { color: brown; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .motion-safe\\:banana { color: yellow; }
+      .motion-safe\\:chocolate { color: brown; }
+      .motion-safe\\:hover\\:banana:hover { color: yellow; }
+      .motion-safe\\:hover\\:chocolate:hover { color: brown; }
+    }
+  `
+
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -150,7 +362,7 @@ test('it can generate first-child variants', () => {
     .first\\:chocolate:first-child { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -171,7 +383,7 @@ test('it can generate odd variants', () => {
     .odd\\:chocolate:nth-child(odd) { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -192,7 +404,7 @@ test('it can generate last-child variants', () => {
     .last\\:chocolate:last-child { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -213,7 +425,7 @@ test('it can generate even variants', () => {
     .even\\:chocolate:nth-child(even) { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -234,7 +446,7 @@ test('it can generate group-hover variants', () => {
     .group:hover .group-hover\\:chocolate { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -258,7 +470,7 @@ test('group-hover variants respect any configured prefix', () => {
   return run(input, {
     ...config,
     prefix: 'tw-',
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -279,7 +491,7 @@ test('it can generate group-focus variants', () => {
     .group:focus .group-focus\\:chocolate { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -303,7 +515,7 @@ test('group-focus variants respect any configured prefix', () => {
   return run(input, {
     ...config,
     prefix: 'tw-',
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -330,7 +542,7 @@ test('it can generate hover, active and focus variants', () => {
     .active\\:chocolate:active { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -355,7 +567,7 @@ test('it can generate hover, active and focus variants for multiple classes in o
     .active\\:chocolate:active, .active\\:coconut:active { color: brown; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -380,7 +592,7 @@ test('it wraps the output in a responsive at-rule if responsive is included as a
     }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -407,7 +619,7 @@ test('variants are generated in the order specified', () => {
 
   return run(input, {
     ...config,
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -415,7 +627,7 @@ test('variants are generated in the order specified', () => {
 
 test('the built-in variant pseudo-selectors are appended before any pseudo-elements', () => {
   const input = `
-    @variants hover, focus-within, focus, active, group-hover {
+    @variants hover, focus-within, focus-visible, focus, active, group-hover {
       .placeholder-yellow::placeholder { color: yellow; }
     }
   `
@@ -424,12 +636,13 @@ test('the built-in variant pseudo-selectors are appended before any pseudo-eleme
     .placeholder-yellow::placeholder { color: yellow; }
     .hover\\:placeholder-yellow:hover::placeholder { color: yellow; }
     .focus-within\\:placeholder-yellow:focus-within::placeholder { color: yellow; }
+    .focus-visible\\:placeholder-yellow:focus-visible::placeholder { color: yellow; }
     .focus\\:placeholder-yellow:focus::placeholder { color: yellow; }
     .active\\:placeholder-yellow:active::placeholder { color: yellow; }
     .group:hover .group-hover\\:placeholder-yellow::placeholder { color: yellow; }
   `
 
-  return run(input).then(result => {
+  return run(input).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -437,7 +650,7 @@ test('the built-in variant pseudo-selectors are appended before any pseudo-eleme
 
 test('the default variant can be generated in a specified position', () => {
   const input = `
-    @variants focus, active, default, hover {
+    @variants focus, active, DEFAULT, hover {
       .banana { color: yellow; }
       .chocolate { color: brown; }
     }
@@ -456,7 +669,7 @@ test('the default variant can be generated in a specified position', () => {
 
   return run(input, {
     ...config,
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -493,7 +706,7 @@ test('nested rules are not modified', () => {
 
   return run(input, {
     ...config,
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -518,18 +731,18 @@ test('plugin variants can modify rules using the raw PostCSS API', () => {
     ...config,
     plugins: [
       ...config.plugins,
-      function({ addVariant }) {
+      function ({ addVariant }) {
         addVariant('important', ({ container }) => {
-          container.walkRules(rule => {
+          container.walkRules((rule) => {
             rule.selector = `.\\!${rule.selector.slice(1)}`
-            rule.walkDecls(decl => {
+            rule.walkDecls((decl) => {
               decl.important = true
             })
           })
         })
       },
     ],
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -554,7 +767,7 @@ test('plugin variants can modify selectors with a simplified API', () => {
     ...config,
     plugins: [
       ...config.plugins,
-      function({ addVariant, e }) {
+      function ({ addVariant, e }) {
         addVariant('first-child', ({ modifySelectors, separator }) => {
           modifySelectors(({ className }) => {
             return `.${e(`first-child${separator}${className}`)}:first-child`
@@ -562,7 +775,7 @@ test('plugin variants can modify selectors with a simplified API', () => {
         })
       },
     ],
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -587,7 +800,7 @@ test('plugin variants that use modify selectors need to manually escape the clas
     ...config,
     plugins: [
       ...config.plugins,
-      function({ addVariant, e }) {
+      function ({ addVariant, e }) {
         addVariant('first-child', ({ modifySelectors, separator }) => {
           modifySelectors(({ className }) => {
             return `.${e(`first-child${separator}${className}`)}:first-child`
@@ -595,7 +808,7 @@ test('plugin variants that use modify selectors need to manually escape the clas
         })
       },
     ],
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })
@@ -622,18 +835,21 @@ test('plugin variants can wrap rules in another at-rule using the raw PostCSS AP
     ...config,
     plugins: [
       ...config.plugins,
-      function({ addVariant, e }) {
+      function ({ addVariant, e }) {
         addVariant('supports-grid', ({ container, separator }) => {
-          const supportsRule = postcss.atRule({ name: 'supports', params: '(display: grid)' })
+          const supportsRule = postcss.atRule({
+            name: 'supports',
+            params: '(display: grid)',
+          })
           supportsRule.nodes = container.nodes
           container.nodes = [supportsRule]
-          supportsRule.walkRules(rule => {
+          supportsRule.walkRules((rule) => {
             rule.selector = `.${e(`supports-grid${separator}${rule.selector.slice(1)}`)}`
           })
         })
       },
     ],
-  }).then(result => {
+  }).then((result) => {
     expect(result.css).toMatchCss(output)
     expect(result.warnings().length).toBe(0)
   })

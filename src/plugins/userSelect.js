@@ -1,5 +1,5 @@
-export default function() {
-  return function({ addUtilities, variants }) {
+export default function () {
+  return function ({ addUtilities, variants }) {
     addUtilities(
       {
         '.select-none': { 'user-select': 'none' },

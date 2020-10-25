@@ -13,12 +13,12 @@ function build({ from, to, config }) {
         .process(css, {
           from: undefined,
         })
-        .then(result => {
+        .then((result) => {
           fs.writeFileSync(`./${to}`, result.css)
           return result
         })
         .then(resolve)
-        .catch(error => {
+        .catch((error) => {
           console.log(error)
           reject()
         })
@@ -41,11 +41,6 @@ Promise.all([
   }),
   build({
     from: '__tests__/fixtures/tailwind-input.css',
-    to: '__tests__/fixtures/tailwind-output-ie11.css',
-    config: { target: 'ie11' },
-  }),
-  build({
-    from: '__tests__/fixtures/tailwind-input.css',
     to: '__tests__/fixtures/tailwind-output-no-color-opacity.css',
     config: {
       corePlugins: {
@@ -55,6 +50,14 @@ Promise.all([
         placeholderOpacity: false,
         divideOpacity: false,
       },
+    },
+  }),
+  build({
+    from: '__tests__/fixtures/tailwind-input.css',
+    to: '__tests__/fixtures/tailwind-output-flagged.css',
+    config: {
+      future: 'all',
+      experimental: 'all',
     },
   }),
 ]).then(() => {

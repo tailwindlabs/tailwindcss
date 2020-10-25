@@ -1,29 +1,28 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
+import nameClass from '../util/nameClass'
+import toColorValue from '../util/toColorValue'
 import withAlphaVariable from '../util/withAlphaVariable'
 
-export default function() {
-  return function({ addUtilities, e, theme, variants, target, corePlugins }) {
-    if (target('textColor') === 'ie11') {
-      const utilities = _.fromPairs(
-        _.map(flattenColorPalette(theme('textColor')), (value, modifier) => {
-          return [`.${e(`text-${modifier}`)}`, { color: value }]
+export default function () {
+  return function ({ addUtilities, theme, variants, corePlugins }) {
+    const colors = flattenColorPalette(theme('textColor'))
+
+    const getProperties = (value) => {
+      if (corePlugins('textOpacity')) {
+        return withAlphaVariable({
+          color: value,
+          property: 'color',
+          variable: '--text-opacity',
         })
-      )
+      }
 
-      addUtilities(utilities, variants('textColor'))
-
-      return
+      return { color: toColorValue(value) }
     }
 
     const utilities = _.fromPairs(
-      _.map(flattenColorPalette(theme('textColor')), (value, modifier) => {
-        return [
-          `.${e(`text-${modifier}`)}`,
-          corePlugins('textOpacity')
-            ? withAlphaVariable({ color: value, property: 'color', variable: '--text-opacity' })
-            : { color: value },
-        ]
+      _.map(colors, (value, modifier) => {
+        return [nameClass('text', modifier), getProperties(value)]
       })
     )
 

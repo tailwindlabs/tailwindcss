@@ -9,7 +9,7 @@ test('letter spacing can use negative prefix syntax', () => {
     theme: {
       letterSpacing: {
         '-1': '-0.025em',
-        '1': '0.025em',
+        1: '0.025em',
       },
     },
     variants: {
@@ -41,10 +41,12 @@ test('letter spacing can use negative prefix syntax', () => {
 
   expect(addedUtilities).toEqual([
     {
-      utilities: {
-        '.-tracking-1': { 'letter-spacing': '-0.025em' },
-        '.tracking-1': { 'letter-spacing': '0.025em' },
-      },
+      utilities: [
+        {
+          '.-tracking-1': { letterSpacing: '-0.025em' },
+          '.tracking-1': { letterSpacing: '0.025em' },
+        },
+      ],
       variants: ['responsive'],
     },
   ])
