@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support flattening deeply nested color objects ([#2148](https://github.com/tailwindlabs/tailwindcss/pull/2148))
 - Support defining presets as functions ([#2680](https://github.com/tailwindlabs/tailwindcss/pull/2680))
 
+### Changed
+
+- Merge `extend` objects deeply by default ([#2679](https://github.com/tailwindlabs/tailwindcss/pull/2679))
+
 ## [2.0.0-alpha.2] - 2020-10-25
 
 ### Added
