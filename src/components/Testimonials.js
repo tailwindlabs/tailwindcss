@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { motion, useTransform, animate, useMotionValue } from 'framer-motion'
 import { gradients } from '@/utils/gradients'
+import { useInView } from 'react-intersection-observer'
 
 const colors = {
   teal: [gradients.teal[0], 'text-teal-100', 'text-green-200'],
@@ -111,8 +112,11 @@ function Testimonial({ testimonial, base, index, total }) {
 
 export function Testimonials() {
   const x = useMotionValue(0)
+  const { inView, ref: inViewRef } = useInView({ threshold: 0, rootMargin: '100px' })
 
   useEffect(() => {
+    if (!inView) return
+
     const controls = animate(x, 100, {
       type: 'tween',
       duration: 40,
@@ -121,10 +125,10 @@ export function Testimonials() {
     })
 
     return controls.stop
-  })
+  }, [inView, x])
 
   return (
-    <div className="relative">
+    <div ref={inViewRef} className="relative">
       <div
         className="absolute right-0 bottom-1/2 left-0 bg-gradient-to-t from-gray-100"
         style={{ height: 607, maxHeight: '50vh' }}
