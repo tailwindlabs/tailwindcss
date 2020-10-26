@@ -229,6 +229,55 @@ test('theme key is merged instead of replaced', () => {
   })
 })
 
+test('theme key is deeply merged instead of replaced', () => {
+  const userConfig = {
+    theme: {
+      extend: {
+        colors: {
+          grey: {
+            darker: '#606f7b',
+            dark: '#8795a1',
+          },
+        },
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        grey: {
+          grey: '#b8c2cc',
+          light: '#dae1e7',
+          lighter: '#f1f5f8',
+        },
+      },
+    },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toMatchObject({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      colors: {
+        grey: {
+          darker: '#606f7b',
+          dark: '#8795a1',
+          grey: '#b8c2cc',
+          light: '#dae1e7',
+          lighter: '#f1f5f8',
+        },
+      },
+    },
+  })
+})
+
 test('variants key is merged instead of replaced', () => {
   const userConfig = {
     variants: {
@@ -1775,6 +1824,70 @@ test('variants can be extended', () => {
       borderColor: ['hover', 'group-focus', 'focus'],
       backgroundColor: ['responsive', 'group-hover', 'hover', 'focus', 'active', 'disabled'],
       textColor: ['responsive', 'focus-within', 'hover', 'focus'],
+    },
+  })
+})
+
+test('extensions are applied in the right order', () => {
+  const userConfig = {
+    theme: {
+      extend: {
+        colors: {
+          grey: {
+            light: '#eee',
+          },
+        },
+      },
+    },
+  }
+
+  const otherConfig = {
+    theme: {
+      extend: {
+        colors: {
+          grey: {
+            light: '#ddd',
+            darker: '#111',
+          },
+        },
+      },
+    },
+  }
+
+  const anotherConfig = {
+    theme: {
+      extend: {
+        colors: {
+          grey: {
+            darker: '#222',
+          },
+        },
+      },
+    },
+  }
+
+  const defaultConfig = {
+    theme: {
+      colors: {
+        grey: {
+          light: '#ccc',
+          dark: '#333',
+        },
+      },
+    },
+  }
+
+  const result = resolveConfig([userConfig, otherConfig, anotherConfig, defaultConfig])
+
+  expect(result).toMatchObject({
+    theme: {
+      colors: {
+        grey: {
+          light: '#eee',
+          dark: '#333',
+          darker: '#111',
+        },
+      },
     },
   })
 })

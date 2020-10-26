@@ -67,20 +67,23 @@ function mergeThemes(themes) {
   }
 }
 
+function mergeExtensionCustomizer(_merged, value) {
+  if (Array.isArray(value)) return value
+}
+
 function mergeExtensions({ extend, ...theme }) {
   return mergeWith(theme, extend, (themeValue, extensions) => {
     // The `extend` property is an array, so we need to check if it contains any functions
     if (!isFunction(themeValue) && !some(extensions, isFunction)) {
-      return {
-        ...themeValue,
-        ...Object.assign({}, ...extensions),
-      }
+      return mergeWith({}, themeValue, ...extensions, mergeExtensionCustomizer)
     }
 
-    return (resolveThemePath, utils) => ({
-      ...value(themeValue, resolveThemePath, utils),
-      ...Object.assign({}, ...extensions.map((e) => value(e, resolveThemePath, utils))),
-    })
+    return (resolveThemePath, utils) =>
+      mergeWith(
+        {},
+        ...[themeValue, ...extensions].map((e) => value(e, resolveThemePath, utils)),
+        mergeExtensionCustomizer
+      )
   })
 }
 
