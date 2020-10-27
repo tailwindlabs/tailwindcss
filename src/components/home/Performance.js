@@ -51,18 +51,32 @@ const { tokens, code } = tokenize.html(
     </div>
   </div>
 </div>`,
-  true
+  true,
+  (code) => {
+    let index = 0
+    return code.replace(/class="([^"]+)"/g, (m, classList) => {
+      return `class="${classList
+        .split(' ')
+        .map((x) => (x ? `${index++}-${x}` : ''))
+        .join(' ')}"`
+    })
+  }
 )
 
 const classes = code
   .match(/class="[^"]+"/g)
   .map((attr) => attr.substring(7, attr.length - 1).split(/\s+/))
   .flat()
-  .filter((v, i, a) => a.indexOf(v) === i)
 
 const unusedClasses = Array.from({ length: 45 }).map(() => makeClass())
 
-const allClassesShuffled = shuffle([...classes, ...unusedClasses])
+const allClassesShuffled = shuffle([
+  ...classes.filter(
+    (v, i, a) =>
+      a.findIndex((v1) => v1.substr(v1.indexOf('-') + 1) === v.substr(v.indexOf('-') + 1)) === i
+  ),
+  ...unusedClasses,
+])
 
 export function Performance() {
   const progress = useMotionValue(0)
@@ -244,7 +258,7 @@ export function Performance() {
                         }}
                         transition={{ delay: (5 / classes.length) * classes.indexOf(c) }}
                       >
-                        {c}
+                        {c.substr(c.indexOf('-') + 1)}
                       </motion.span>{' '}
                     </Fragment>
                   ) : (
@@ -299,7 +313,7 @@ function PerformanceToken({ token, parentTypes, inView, children }) {
         transition={{ delay: (5 / classes.length) * classes.indexOf(token[1]) }}
         style={{ borderRadius: 3, padding: '1px 3px', margin: '0 -3px' }}
       >
-        {children}
+        {token[1].substr(token[1].indexOf('-') + 1)}
       </motion.span>
     )
   }
