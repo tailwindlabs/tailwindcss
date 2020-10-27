@@ -29,6 +29,7 @@ module.exports = {
       // next
       spacing: {
         18: '4.5rem',
+        '15px': '0.9375rem',
         '23px': '1.4375rem',
       },
       width: {

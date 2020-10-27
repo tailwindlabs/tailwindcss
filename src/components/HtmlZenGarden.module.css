@@ -1,0 +1,21 @@
+.placeholder {
+  height: 498px;
+}
+
+@screen sm {
+  .placeholder {
+    height: 256px;
+  }
+}
+
+@screen lg {
+  .placeholder {
+    height: 448px;
+  }
+}
+
+@screen xl {
+  .placeholder {
+    height: 256px;
+  }
+}
