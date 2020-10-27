@@ -2,25 +2,59 @@ import { CodeWindow } from '@/components/CodeWindow'
 import { GradientLockup } from '@/components/GradientLockup'
 import tokenize from '../../macros/tokenize.macro'
 import { Token } from '@/components/Code'
-import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { AnimateSharedLayout, motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 
-const { tokens } = tokenize.html('<div class="bg-red-500 rounded-xl ml-16"></div>')
+const CHAR_DELAY = 50
+const GROUP_DELAY = 1000
+
+const { tokens } = tokenize.html(`<div class="md:flex bg-white rounded-lg p-6">
+  <img class="h-16 w-16 md:h-24 md:w-24 rounded-full mx-auto md:mx-0 md:mr-6" src="avatar.jpg">
+  <div class="text-center md:text-left">
+    <h2 class="text-lg">Erin Lindford</h2>
+    <div class="text-purple-500">Product Engineer</div>
+    <div class="text-gray-600">erinlindford@example.com</div>
+    <div class="text-gray-600">(555) 765-4321</div>
+  </div>
+</div>`)
 
 const ranges = [
-  { start: 12, end: 22 },
-  { start: 22, end: 33 },
-  { start: 33, end: 39 },
+  { start: 39, end: 43 },
+  { start: 85, end: 98 },
+  { start: 98, end: 106 },
+  { start: 190, end: 206 },
+  { start: 234, end: 258 },
+  [
+    { start: 290, end: 312 },
+    { start: 352, end: 374 },
+  ],
+  { start: 148, end: 167 },
+  { start: 180, end: 181, immediate: true },
+  { start: 12, end: 20 },
+  { start: 106, end: 114 },
+  { start: 167, end: 180 },
+  { start: 114, end: 122 },
+  { start: 69, end: 85 },
 ]
 
 function getRangeIndex(index, ranges) {
   for (let i = 0; i < ranges.length; i++) {
-    const range = ranges[i]
-    if (index >= range.start && index < range.end) {
-      return [i, index - range.start, index === range.end - 1]
+    const rangeArr = Array.isArray(ranges[i]) ? ranges[i] : [ranges[i]]
+    for (let j = 0; j < rangeArr.length; j++) {
+      if (index >= rangeArr[j].start && index < rangeArr[j].end) {
+        return [i, index - rangeArr[j].start, index === rangeArr[j].end - 1]
+      }
     }
   }
   return [-1]
+}
+
+function Words({ children }) {
+  return children.split(' ').map((word, i) => (
+    <motion.span key={i} layout className="inline-flex whitespace-pre">
+      {word}{' '}
+    </motion.span>
+  ))
 }
 
 function augment(tokens, index = 0) {
@@ -76,29 +110,78 @@ function augment(tokens, index = 0) {
 augment(tokens)
 
 export function Hero() {
-  const [lastCompletedGroup, setLastCompletedGroup] = useState(-1)
-  const [currentGroup, setCurrentGroup] = useState(0)
+  const [step, setStep] = useState(-1)
+  const [state, setState] = useState({ group: 0, char: 0 })
 
   return (
     <GradientLockup
       color="lightblue"
       rotate={-2}
       left={
-        <div
-          className="relative z-10 bg-white rounded-xl shadow-lg lg:-mr-8 p-8"
-          style={{ height: 304 }}
-        >
+        <AnimateSharedLayout>
           <motion.div
             layout
-            className="w-20 h-20"
-            initial={{ backgroundColor: '#fff', borderRadius: 0 }}
-            animate={{
-              ...(lastCompletedGroup >= 0 ? { backgroundColor: '#ef4444' } : {}),
-              ...(lastCompletedGroup >= 1 ? { borderRadius: 12 } : {}),
-            }}
-            style={{ marginLeft: lastCompletedGroup >= 2 ? 64 : 0 }}
-          />
-        </div>
+            className={`relative z-10 bg-white rounded-xl shadow-lg lg:-mr-8 text-black ${
+              step >= 8 ? 'text-center' : ''
+            } ${step >= 9 ? 'flex items-start' : ''}`}
+            initial={false}
+            animate={{ ...(step >= 0 ? { padding: 24 } : { padding: 0 }) }}
+          >
+            <motion.img
+              layout
+              src="https://unsplash.it/256/256?random"
+              alt=""
+              width="128"
+              height="128"
+              initial={false}
+              animate={{
+                ...(step >= 1 ? { borderRadius: 64 } : { borderRadius: 0 }),
+              }}
+              className={`mb-6 ${step >= 2 ? 'mx-auto' : ''}`}
+            />
+            <motion.div layout>
+              <motion.div
+                layout
+                className="mb-4"
+                initial={false}
+                animate={{
+                  ...(step >= 3 ? { fontWeight: 600 } : { fontWeight: 400 }),
+                }}
+              >
+                <Words>
+                  “If I had to recommend a way of getting into programming today, it would be HTML +
+                  CSS with Tailwind CSS.”
+                </Words>
+              </motion.div>
+              <motion.div
+                className={`flex flex-col ${step >= 8 ? 'items-center' : 'items-start'}`}
+                initial={false}
+                animate={{
+                  ...(step >= 4 ? { fontWeight: 500 } : { fontWeight: 400 }),
+                }}
+              >
+                <motion.p
+                  layout
+                  initial={false}
+                  animate={{
+                    ...(step >= 5 ? { color: '#0891b2' } : { color: '#000' }),
+                  }}
+                >
+                  Guillermo Rauch
+                </motion.p>
+                <motion.p
+                  layout
+                  initial={false}
+                  animate={{
+                    ...(step >= 6 ? { color: '#71717a' } : { color: '#000' }),
+                  }}
+                >
+                  CEO, Vercel
+                </motion.p>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        </AnimateSharedLayout>
       }
       right={
         <CodeWindow className="bg-lightBlue-500">
@@ -106,12 +189,19 @@ export function Hero() {
             tokens={tokens}
             tokenComponent={HeroToken}
             tokenProps={{
-              currentGroup,
+              currentGroup: state.group,
+              currentChar: state.char,
+              onCharComplete(charIndex) {
+                setState((state) => ({ ...state, char: charIndex + 1 }))
+              },
               onGroupComplete(groupIndex) {
-                setLastCompletedGroup(groupIndex)
+                setStep(groupIndex)
+                if (ranges[groupIndex + 1] && ranges[groupIndex + 1].immediate) {
+                  setState({ char: 0, group: groupIndex + 1 })
+                }
                 window.setTimeout(() => {
-                  setCurrentGroup(groupIndex + 1)
-                }, 1000)
+                  setState({ char: 0, group: groupIndex + 1 })
+                }, GROUP_DELAY)
               },
             }}
           />
@@ -121,20 +211,47 @@ export function Hero() {
   )
 }
 
-function HeroToken({ currentGroup, onGroupComplete, ...props }) {
+function AnimatedToken({ current, onComplete, children }) {
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    if (visible) {
+      onComplete()
+    }
+  }, [visible])
+
+  useEffect(() => {
+    if (current) {
+      window.setTimeout(() => {
+        setVisible(true)
+      }, CHAR_DELAY)
+    }
+  }, [current])
+
+  return (
+    <>
+      <span style={{ display: visible ? 'inline' : 'none' }}>{children}</span>
+      {current && <span className="border -mx-px" style={{ height: '1.125rem' }} />}
+    </>
+  )
+}
+
+function HeroToken({ currentChar, onCharComplete, currentGroup, onGroupComplete, ...props }) {
   const { token } = props
 
   if (token[0].startsWith('char:')) {
     const [, groupIndex, indexInGroup] = token[0].split(':').map((x) => parseInt(x, 10))
 
     return (
-      <motion.span
-        style={{ display: 'none' }}
-        animate={currentGroup >= groupIndex ? { display: 'inline' } : {}}
-        transition={{ delay: indexInGroup * 0.1 }}
-        onAnimationComplete={
-          token[0].endsWith(':last') ? () => onGroupComplete(groupIndex) : undefined
-        }
+      <AnimatedToken
+        current={currentGroup === groupIndex && currentChar === indexInGroup}
+        onComplete={() => {
+          if (token[0].endsWith(':last')) {
+            onGroupComplete(groupIndex)
+          } else {
+            onCharComplete(indexInGroup)
+          }
+        }}
         {...props}
       />
     )
