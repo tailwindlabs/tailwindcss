@@ -8,7 +8,7 @@ export default function () {
         '.flex-wrap-reverse': {
           'flex-wrap': 'wrap-reverse',
         },
-        '.flex-no-wrap': {
+        '.flex-nowrap': {
           'flex-wrap': 'nowrap',
         },
       },
