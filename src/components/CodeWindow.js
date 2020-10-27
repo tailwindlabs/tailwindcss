@@ -67,17 +67,17 @@ CodeWindow.Code = forwardRef(
     return (
       <div className="w-full flex-auto flex min-h-0 overflow-auto">
         <div ref={ref} className="w-full relative flex-auto">
-          <pre className="flex min-h-full">
+          <pre className="flex min-h-full text-xs leading-4 md:text-sm md:leading-5">
             <div
               aria-hidden="true"
-              className={`text-white text-opacity-50 flex-none text-sm leading-5 py-4 pr-4 text-right select-none ${
+              className={`hidden md:block text-white text-opacity-50 flex-none py-4 pr-4 text-right select-none ${
                 lineNumbersBackground ? 'bg-black bg-opacity-25' : ''
               }`}
               style={{ width: 50 }}
             >
               {lineNumbers}
             </div>
-            <code className="flex-auto relative block text-sm leading-5 text-white pt-4 pb-4 px-4 overflow-auto">
+            <code className="flex-auto relative block text-white pt-4 pb-4 px-4 overflow-auto">
               <Code tokens={tokens} {...props} />
             </code>
           </pre>
