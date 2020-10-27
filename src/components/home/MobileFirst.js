@@ -6,55 +6,10 @@ import { motion, useTransform, useMotionValue } from 'framer-motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ReactComponent as Icon } from '@/img/icons/home/mobile-first.svg'
 import styles from './MobileFirst.module.css'
+import tokenize from '../../macros/tokenize.macro'
 
 const MIN_WIDTH = 400
 const HANDLE_RADIUS = 2.125
-
-const classNames = {
-  sm: {
-    container: 'grid grid-cols-1',
-    header: 'relative z-10 col-start-1 row-start-1 px-4 pt-40 pb-2 bg-gradient-to-t from-black',
-    preheading: 'text-sm leading-5 font-medium text-white',
-    heading: 'text-xl leading-9 font-semibold text-white',
-    metaContainer: 'col-start-1 row-start-2 px-4',
-    meta: 'flex items-center text-sm leading-5 font-medium my-5',
-    hr: 'w-16 border-gray-300 hidden',
-    footerContainer: 'col-start-1 row-start-3 space-y-3 px-4',
-    imgContainer: 'col-start-1 row-start-1 flex',
-    imgLgContainer: 'relative col-span-3 row-span-2',
-    imgLg: 'absolute inset-0 w-full h-full object-cover',
-    imgSmContainer: 'relative hidden',
-  },
-  md: {
-    container: 'grid grid-cols-2 px-8 py-16 gap-x-8',
-    header: 'relative z-10 col-start-1 row-start-1',
-    preheading: 'text-sm leading-5 font-medium mb-1 text-gray-500',
-    heading: 'text-2xl leading-9 font-semibold text-black',
-    metaContainer: 'col-start-1 row-start-2 pb-16',
-    meta: 'flex items-center text-sm leading-5 font-medium mt-2 mb-4',
-    ratingCount: 'hidden',
-    hr: 'w-16 border-gray-300 block',
-    footerContainer: 'col-start-1 row-start-3 space-y-3',
-    imgContainer: 'col-start-2 row-start-1 row-span-3 flex',
-    imgLgContainer: 'relative col-span-3 row-span-2',
-    imgLg: 'absolute inset-0 w-full h-full object-cover rounded-lg',
-    imgSmContainer: 'relative hidden',
-  },
-  lg: {
-    container: 'grid grid-cols-2 px-8 py-16 gap-x-8',
-    header: 'relative z-10 col-start-1 row-start-1',
-    preheading: 'text-sm leading-5 font-medium mb-1 text-gray-500',
-    heading: 'text-3xl leading-9 font-semibold text-black',
-    metaContainer: 'col-start-1 row-start-2 pb-16',
-    meta: 'flex items-center text-sm leading-5 font-medium mt-2 mb-4',
-    hr: 'w-16 border-gray-300 block',
-    footerContainer: 'col-start-1 row-start-3 space-y-3',
-    imgContainer: 'col-start-2 row-start-1 row-span-3 flex',
-    imgLgContainer: 'relative col-span-2 row-span-2',
-    imgLg: 'absolute inset-0 w-full h-full object-cover rounded-lg',
-    imgSmContainer: 'relative block',
-  },
-}
 
 const images = {
   '/kevin-francis.jpg': require('@/img/kevin-francis.jpg').default,
@@ -63,8 +18,8 @@ const images = {
   '/beach-house-interior.jpg': require('@/img/beach-house-interior.jpg').default,
 }
 
-const html = `
-<div class="{container}">
+const { code: html, tokens, classNames } = tokenize.html(
+  `<div class="{container}">
   <div class="{header}">
     <p class="{preheading}">Entire house</p>
     <h2 class="{heading}">Beach House in Collingwood</h2>
@@ -104,7 +59,70 @@ const html = `
     </div>
   </div>
 </div>
-`
+`,
+  'original',
+  (code, { classNames }) =>
+    code.replace(/\{([^}]+)\}/g, (m, key) => {
+      const sm = classNames.sm[key].split(' ').filter(Boolean)
+      const md = classNames.md[key].split(' ').filter(Boolean)
+      const lg = classNames.lg[key].split(' ').filter(Boolean)
+
+      return [
+        ...sm,
+        ...md.filter((c) => !sm.includes(c)).map((c) => `sm:${c}`),
+        ...lg.filter((c) => !md.includes(c)).map((c) => `md:${c}`),
+      ].join(' ')
+    }),
+  {
+    classNames: {
+      sm: {
+        container: 'grid grid-cols-1',
+        header: 'relative z-10 col-start-1 row-start-1 px-4 pt-40 pb-2 bg-gradient-to-t from-black',
+        preheading: 'text-sm leading-5 font-medium text-white',
+        heading: 'text-xl leading-9 font-semibold text-white',
+        metaContainer: 'col-start-1 row-start-2 px-4',
+        meta: 'flex items-center text-sm leading-5 font-medium my-5',
+        ratingCount: '',
+        hr: 'w-16 border-gray-300 hidden',
+        footerContainer: 'col-start-1 row-start-3 space-y-3 px-4',
+        imgContainer: 'col-start-1 row-start-1 flex',
+        imgLgContainer: 'relative col-span-3 row-span-2',
+        imgLg: 'absolute inset-0 w-full h-full object-cover',
+        imgSmContainer: 'relative hidden',
+      },
+      md: {
+        container: 'grid grid-cols-2 px-8 py-16 gap-x-8',
+        header: 'relative z-10 col-start-1 row-start-1 bg-none',
+        preheading: 'text-sm leading-5 font-medium mb-1 text-gray-500',
+        heading: 'text-2xl leading-9 font-semibold text-black',
+        metaContainer: 'col-start-1 row-start-2 pb-16',
+        meta: 'flex items-center text-sm leading-5 font-medium mt-2 mb-4',
+        ratingCount: 'hidden',
+        hr: 'w-16 border-gray-300 block',
+        footerContainer: 'col-start-1 row-start-3 space-y-3',
+        imgContainer: 'col-start-2 row-start-1 row-span-3 flex',
+        imgLgContainer: 'relative col-span-3 row-span-2',
+        imgLg: 'absolute inset-0 w-full h-full object-cover rounded-lg',
+        imgSmContainer: 'relative hidden',
+      },
+      lg: {
+        container: 'grid grid-cols-2 px-8 py-16 gap-x-8',
+        header: 'relative z-10 col-start-1 row-start-1 bg-none',
+        preheading: 'text-sm leading-5 font-medium mb-1 text-gray-500',
+        heading: 'text-3xl leading-9 font-semibold text-black',
+        metaContainer: 'col-start-1 row-start-2 pb-16',
+        meta: 'flex items-center text-sm leading-5 font-medium mt-2 mb-4',
+        ratingCount: 'inline',
+        hr: 'w-16 border-gray-300 block',
+        footerContainer: 'col-start-1 row-start-3 space-y-3',
+        imgContainer: 'col-start-2 row-start-1 row-span-3 flex',
+        imgLgContainer: 'relative col-span-2 row-span-2',
+        imgLg: 'absolute inset-0 w-full h-full object-cover rounded-lg',
+        imgSmContainer: 'relative block',
+      },
+    },
+  }
+)
 
 function BrowserWindow({ height = 385 }) {
   const x = useMotionValue(0)
@@ -254,7 +272,7 @@ export function MobileFirst() {
               <BrowserWindow />
             </div>
             <CodeWindow className={`bg-indigo-500 ${styles.code}`}>
-              <CodeWindow.Code />
+              <CodeWindow.Code tokens={tokens} />
             </CodeWindow>
           </>
         }

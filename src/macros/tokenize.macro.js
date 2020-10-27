@@ -15,21 +15,36 @@ function tokenizeMacro({ references, babel: { types: t } }) {
     const lang = path.parentPath.node.property.name
 
     const codeNode = path.parentPath.parentPath.node.arguments[0]
-    let code = t.isTemplateLiteral(codeNode) ? codeNode.quasis[0].value.cooked : codeNode.value
+    const originalCode = t.isTemplateLiteral(codeNode)
+      ? codeNode.quasis[0].value.cooked
+      : codeNode.value
 
     const returnCodeNode = path.parentPath.parentPath.node.arguments[1]
-    const returnCode = returnCodeNode && returnCodeNode.value === true
+    const returnCode = returnCodeNode && returnCodeNode.value
+
+    const argsNode = path.parentPath.parentPath.node.arguments[3]
+    let args = {}
+    if (argsNode) {
+      eval('args = ' + generate(argsNode).code)
+    }
 
     const codeTransformerNode = path.parentPath.parentPath.node.arguments[2]
+    let code = originalCode
     if (codeTransformerNode) {
       const codeTransformer = eval(generate(codeTransformerNode).code)
-      code = codeTransformer(code)
+      code = codeTransformer(code, args)
     }
 
     const tokens = Prism.tokenize(code, Prism.languages[lang]).map(simplify)
 
     path.parentPath.parentPath.replaceWith(
-      parseExpression(JSON.stringify({ tokens, ...(returnCode ? { code } : {}) }))
+      parseExpression(
+        JSON.stringify({
+          tokens,
+          ...(returnCode ? { code: returnCode === 'original' ? originalCode : code } : {}),
+          ...args,
+        })
+      )
     )
   })
 }
