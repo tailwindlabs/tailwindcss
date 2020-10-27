@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Merge `extend` objects deeply by default ([#2679](https://github.com/tailwindlabs/tailwindcss/pull/2679))
+- Rename `flex-no-wrap` to `flex-nowrap` ([#2676](https://github.com/tailwindlabs/tailwindcss/pull/2676))
 
 ## [2.0.0-alpha.2] - 2020-10-25
 
