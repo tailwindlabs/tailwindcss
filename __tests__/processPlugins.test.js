@@ -1766,6 +1766,55 @@ test('plugins with extra options can be created using the `createPlugin.withOpti
     })
 })
 
+test('plugins should cache correctly', () => {
+  const plugin = createPlugin.withOptions(
+    ({ className = 'banana' } = {}) => ({ addComponents, variants }) => {
+      addComponents({ [`.${className}`]: { position: 'absolute' } }, variants('testPlugin'))
+    },
+    () => ({ variants: { testPlugin: ['responsive'] } })
+  )
+
+  function run(options = {}) {
+    return _postcss([
+      tailwind({
+        corePlugins: [],
+        theme: { screens: { sm: '400px' } },
+        plugins: [plugin(options)],
+      }),
+    ]).process(`@tailwind base; @tailwind components; @tailwind utilities;`, {
+      from: undefined,
+    })
+  }
+
+  return Promise.all([run(), run({ className: 'apple' })]).then(([result1, result2]) => {
+    const expected1 = `
+      .banana {
+        position: absolute;
+      }
+
+      @media (min-width: 400px) {
+        .sm\\:banana {
+          position: absolute;
+        }
+      }
+    `
+
+    const expected2 = `
+      .apple {
+        position: absolute;
+      }
+
+      @media (min-width: 400px) {
+        .sm\\:apple {
+          position: absolute;
+        }
+      }
+    `
+    expect(result1.css).toMatchCss(expected1)
+    expect(result2.css).toMatchCss(expected2)
+  })
+})
+
 test('plugins created using `createPlugin.withOptions` do not need to be invoked if the user wants to use the default options', () => {
   const plugin = createPlugin.withOptions(
     function ({ className } = { className: 'banana' }) {
