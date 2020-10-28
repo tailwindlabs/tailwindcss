@@ -810,7 +810,7 @@ test('theme values in the extend section can extend values that are depended on 
   })
 })
 
-test('theme values in the extend section are not deeply merged', () => {
+test('theme values in the extend section are not deeply merged when they are simple arrays', () => {
   const userConfig = {
     theme: {
       extend: {
@@ -853,6 +853,76 @@ test('theme values in the extend section are not deeply merged', () => {
     variants: {
       fonts: ['responsive'],
     },
+  })
+})
+
+test('theme values in the extend section are deeply merged, when they are arrays of objects', () => {
+  const userConfig = {
+    theme: {
+      extend: {
+        typography: {
+          ArrayArray: {
+            css: [{ a: { backgroundColor: 'red' } }, { a: { color: 'green' } }],
+          },
+          ObjectArray: {
+            css: { a: { backgroundColor: 'red' } },
+          },
+          ArrayObject: {
+            css: [{ a: { backgroundColor: 'red' } }, { a: { color: 'green' } }],
+          },
+        },
+      },
+    },
+  }
+
+  const defaultConfig = {
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      typography: {
+        ArrayArray: {
+          css: [{ a: { underline: 'none' } }],
+        },
+        ObjectArray: {
+          css: [{ a: { underline: 'none' } }],
+        },
+        ArrayObject: {
+          css: { a: { underline: 'none' } },
+        },
+      },
+    },
+    variants: {},
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+
+  expect(result).toMatchObject({
+    prefix: '-',
+    important: false,
+    separator: ':',
+    theme: {
+      typography: {
+        ArrayArray: {
+          css: [
+            { a: { underline: 'none' } },
+            { a: { backgroundColor: 'red' } },
+            { a: { color: 'green' } },
+          ],
+        },
+        ObjectArray: {
+          css: [{ a: { underline: 'none' } }, { a: { backgroundColor: 'red' } }],
+        },
+        ArrayObject: {
+          css: [
+            { a: { underline: 'none' } },
+            { a: { backgroundColor: 'red' } },
+            { a: { color: 'green' } },
+          ],
+        },
+      },
+    },
+    variants: {},
   })
 })
 
