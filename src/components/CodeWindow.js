@@ -46,11 +46,14 @@ export function CodeWindow({ children, className = '' }) {
 }
 
 CodeWindow.Code = forwardRef(
-  ({ tokens = defaultTokens, lineNumbersBackground = true, ...props }, ref) => {
+  (
+    { tokens = defaultTokens, initialLineNumber = 1, lineNumbersBackground = true, ...props },
+    ref
+  ) => {
     const lineNumbers = useMemo(() => {
       const t = tokens.flat(Infinity)
-      let line = 2
-      let str = '1\n'
+      let line = initialLineNumber + 1
+      let str = `${initialLineNumber}\n`
       for (let i = 0; i < t.length; i++) {
         if (typeof t[i] === 'string') {
           const newLineChars = t[i].match(/\n/g)

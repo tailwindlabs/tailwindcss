@@ -250,7 +250,25 @@ function ComponentExample({ framework }) {
   )
 }
 
-const css = tokenize.css('.btn {\n  @apply font-bold;\n}').tokens
+const css = tokenize.css(`.btn {
+  @apply text-base leading-6 font-medium rounded-lg py-3;
+}
+
+.btn--primary {
+  @apply bg-rose-500 text-white;
+}
+
+.btn--secondary {
+  @apply bg-gray-100 text-black;
+}
+`).tokens
+
+const html = tokenize.html(`  <footer class="grid grid-cols-2 gap-6">
+    <button class="btn btn--secondary">Decline</button>
+    <button class="btn btn--primary">Accept</button>
+  </footer>
+</article>
+`).tokens
 
 function ApplyExample() {
   return (
@@ -260,13 +278,15 @@ function ApplyExample() {
           styles.css
         </h3>
       </div>
-      <CodeWindow.Code tokens={css} />
+      <div className="flex-none">
+        <CodeWindow.Code tokens={css} />
+      </div>
       <div className="flex text-sm leading-5 bg-pink-900 bg-opacity-20 text-pink-200">
         <h3 className="border border-transparent py-2 px-4 font-medium bg-white bg-opacity-10">
           index.html
         </h3>
       </div>
-      <CodeWindow.Code tokens={css} />
+      <CodeWindow.Code tokens={html} initialLineNumber={31} />
     </CodeWindow>
   )
 }
