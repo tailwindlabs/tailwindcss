@@ -364,7 +364,7 @@ export function ComponentDriven() {
               </ul>
             </nav>
             {recipes.map(({ title, rating, time, difficulty, servings, author, image }, i) => (
-              <article key={i} className="flex p-4 space-x-4">
+              <article key={i} className={`${i === 0 ? 'flex' : 'hidden sm:flex'} p-4 space-x-4`}>
                 <img
                   src={image}
                   loading="lazy"
