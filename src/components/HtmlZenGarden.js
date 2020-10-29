@@ -59,6 +59,9 @@ const themes = {
         return col ? 192 : 256
       },
       borderRadius: 0,
+      src: require('@/img/classic-utility-jacket.jpg').default,
+      originalWidth: 1200,
+      originalHeight: 1600,
     },
     contentContainer: ['pt-6 pb-4 px-4', 'pt-6 pb-4 px-4', 'p-6'],
     header: ['-mt-6 py-6', '-mt-6 py-6', '-mt-6 pt-6 pb-4'],
@@ -120,6 +123,9 @@ const themes = {
         return col ? 168 : 238
       },
       borderRadius: 8,
+      src: require('@/img/kids-jumper.jpg').default,
+      originalWidth: 1200,
+      originalHeight: 1700,
     },
     contentContainer: ['', '', 'pl-6'],
     header: ['pt-6 pb-5', 'pt-6 pb-5', '-mt-6 py-6'],
@@ -179,6 +185,9 @@ const themes = {
         return col ? 188 : 305
       },
       borderRadius: 0,
+      src: require('@/img/fancy-suit-jacket.jpg').default,
+      originalWidth: 1200,
+      originalHeight: 2128,
     },
     contentContainer: [
       'px-6 pt-0 pb-3 -mx-1 -mb-1',
@@ -244,6 +253,9 @@ const themes = {
         return col ? 160 : 248
       },
       borderRadius: 0,
+      src: require('@/img/retro-shoe.jpg').default,
+      originalWidth: 1200,
+      originalHeight: 1772,
     },
     contentContainer: ['', '', 'pl-8'],
     header: ['py-4', 'py-4', '-mt-6 py-6'],
@@ -388,14 +400,14 @@ export function HtmlZenGarden({ theme }) {
                   <motion.img
                     layout
                     key={name}
-                    src={`https://unsplash.it/300/400?random&amp;i=${i}`}
+                    src={themes[name].image.src}
                     alt=""
                     className="absolute max-w-none"
                     style={fit(
                       themes[theme].image.width({ containerWidth, col }),
                       themes[theme].image.height({ containerWidth, col }),
-                      300,
-                      400
+                      themes[name].image.originalWidth,
+                      themes[name].image.originalHeight
                     )}
                     initial={i === 0 ? 'visible' : 'hidden'}
                     animate={theme === name ? 'visible' : prevTheme === name ? 'prev' : 'hidden'}
