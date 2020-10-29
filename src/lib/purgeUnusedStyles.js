@@ -22,6 +22,17 @@ function removeTailwindMarkers(css) {
   })
 }
 
+export function tailwindExtractor(content) {
+  // Capture as liberally as possible, including things like `h-(screen-1.5)`
+  const broadMatches = content.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || []
+  const broadMatchesWithoutTrailingSlash = broadMatches.map((match) => _.trimEnd(match, '\\'))
+
+  // Capture classes within other delimiters like .block(class="w-1/2") in Pug
+  const innerMatches = content.match(/[^<>"'`\s.(){}[\]#=%]*[^<>"'`\s.(){}[\]#=%:]/g) || []
+
+  return broadMatches.concat(broadMatchesWithoutTrailingSlash).concat(innerMatches)
+}
+
 export default function purgeUnusedUtilities(config, configChanged) {
   const purgeEnabled = _.get(
     config,
@@ -45,6 +56,8 @@ export default function purgeUnusedUtilities(config, configChanged) {
 
     return removeTailwindMarkers
   }
+
+  const { defaultExtractor, ...purgeOptions } = config.purge.options || {}
 
   return postcss([
     function (css) {
@@ -93,22 +106,16 @@ export default function purgeUnusedUtilities(config, configChanged) {
     purgecss({
       content: Array.isArray(config.purge) ? config.purge : config.purge.content,
       defaultExtractor: (content) => {
-        // Capture as liberally as possible, including things like `h-(screen-1.5)`
-        const broadMatches = content.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || []
-        const broadMatchesWithoutTrailingSlash = broadMatches.map((match) => _.trimEnd(match, '\\'))
-
-        // Capture classes within other delimiters like .block(class="w-1/2") in Pug
-        const innerMatches = content.match(/[^<>"'`\s.(){}[\]#=%]*[^<>"'`\s.(){}[\]#=%:]/g) || []
-
-        const matches = broadMatches.concat(broadMatchesWithoutTrailingSlash).concat(innerMatches)
+        const extractor = defaultExtractor || tailwindExtractor
+        const preserved = [...extractor(content)]
 
         if (_.get(config, 'purge.preserveHtmlElements', true)) {
-          return [...htmlTags].concat(matches)
-        } else {
-          return matches
+          preserved.push(...htmlTags)
         }
+
+        return preserved
       },
-      ...config.purge.options,
+      ...purgeOptions,
     }),
   ])
 }

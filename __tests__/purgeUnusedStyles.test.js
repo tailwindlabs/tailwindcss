@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import postcss from 'postcss'
 import tailwind from '../src/index'
+import { tailwindExtractor } from '../src/lib/purgeUnusedStyles'
 import defaultConfig from '../stubs/defaultConfig.stub.js'
 
 function suppressConsoleLogs(cb, type = 'warn') {
@@ -672,7 +673,7 @@ test('element selectors are preserved even when defaultExtractor is overridden',
             mode: 'all',
             preserveHtmlElements: true,
             options: {
-              defaultExtractor: (_content) => [],
+              defaultExtractor: tailwindExtractor,
             },
           },
         }),
