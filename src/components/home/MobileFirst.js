@@ -268,7 +268,7 @@ export function MobileFirst() {
         rotate={2}
         left={
           <>
-            <div className="px-2 lg:px-0 lg:max-w-3xl xl:max-w-5xl mx-auto">
+            <div className="hidden md:block px-2 lg:px-0 lg:max-w-3xl xl:max-w-5xl mx-auto">
               <BrowserWindow />
             </div>
             <CodeWindow className={`bg-indigo-500 ${styles.code}`}>
