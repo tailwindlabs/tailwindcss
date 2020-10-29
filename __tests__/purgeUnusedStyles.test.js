@@ -658,6 +658,60 @@ test('element selectors are preserved by default', () => {
   )
 })
 
+test('element selectors are preserved even when defaultExtractor is overridden', () => {
+  return inProduction(
+    suppressConsoleLogs(() => {
+      const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+      const input = fs.readFileSync(inputPath, 'utf8')
+
+      return postcss([
+        tailwind({
+          ...config,
+          purge: {
+            content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
+            mode: 'all',
+            preserveHtmlElements: true,
+            options: {
+              defaultExtractor: (_content) => [],
+            },
+          },
+        }),
+      ])
+        .process(input, { from: inputPath })
+        .then((result) => {
+          const rules = extractRules(result.root)
+          ;[
+            'a',
+            'blockquote',
+            'body',
+            'code',
+            'fieldset',
+            'figure',
+            'h1',
+            'h2',
+            'h3',
+            'h4',
+            'h5',
+            'h6',
+            'hr',
+            'html',
+            'img',
+            'kbd',
+            'ol',
+            'p',
+            'pre',
+            'strong',
+            'sup',
+            'table',
+            'ul',
+          ].forEach((e) => expect(rules).toContain(e))
+
+          assertPurged(result)
+        })
+    })
+  )
+})
+
 test('preserving element selectors can be disabled', () => {
   return inProduction(
     suppressConsoleLogs(() => {
