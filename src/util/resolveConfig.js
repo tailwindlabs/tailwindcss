@@ -7,6 +7,8 @@ import map from 'lodash/map'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import toPath from 'lodash/toPath'
+import head from 'lodash/head'
+import isPlainObject from 'lodash/isPlainObject'
 import negateValue from './negateValue'
 import { corePluginList } from '../corePluginList'
 import configurePlugins from './configurePlugins'
@@ -67,8 +69,24 @@ function mergeThemes(themes) {
   }
 }
 
-function mergeExtensionCustomizer(_merged, value) {
-  if (Array.isArray(value)) return value
+function mergeExtensionCustomizer(merged, value) {
+  // When we have an array of objects, we do want to merge it
+  if (Array.isArray(merged) && isPlainObject(head(merged))) {
+    return merged.concat(value)
+  }
+
+  // When the incoming value is an array, and the existing config is an object, prepend the existing object
+  if (Array.isArray(value) && isPlainObject(head(value)) && isPlainObject(merged)) {
+    return [merged, ...value]
+  }
+
+  // Override arrays (for example for font-families, box-shadows, ...)
+  if (Array.isArray(value)) {
+    return value
+  }
+
+  // Execute default behaviour
+  return undefined
 }
 
 function mergeExtensions({ extend, ...theme }) {
