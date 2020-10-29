@@ -81,6 +81,7 @@ module.exports = {
       'code-tag': '#D58FFF',
       'code-attr-name': '#4BD0FB',
       'code-attr-value': '#A2F679',
+      'code-string': '#A2F679',
       rose: {
         50: '#fff1f2',
         100: '#ffe4e6',

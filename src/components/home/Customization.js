@@ -4,7 +4,7 @@ import { Tabs } from '@/components/Tabs'
 import { CodeWindow } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import { ReactComponent as Icon } from '@/img/icons/home/customization.svg'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { siteConfig } from '@/utils/siteConfig'
 import { AnimatePresence, motion } from 'framer-motion'
 import { font as poppinsRegular } from '../../fonts/generated/Poppins-Regular.module.css'
@@ -12,39 +12,93 @@ import { font as poppinsExtraBold } from '../../fonts/generated/Poppins-ExtraBol
 import { font as tenorSansRegular } from '../../fonts/generated/TenorSans-Regular.module.css'
 import { font as robotoMonoRegular } from '../../fonts/generated/RobotoMono-Regular.module.css'
 import styles from './Customization.module.css'
+import tokenize from '../../macros/tokenize.macro'
+import { Token } from '../Code'
 
 const themes = {
   simple: {
     font: 'Inter',
+    fontStacks: [
+      ['Inter', 'system-ui', 'sans-serif'],
+      ['Inter', 'system-ui', 'sans-serif'],
+    ],
     classNameDisplay: 'font-semibold',
     primaryColor: 'indigo',
-    secondaryColorTitle: 'bg-gray-{50-900}',
+    secondaryColorName: 'gray',
     secondaryColor: 'gray',
   },
   playful: {
     font: 'Poppins',
+    fontStacks: [
+      ['Poppins', 'system-ui', 'sans-serif'],
+      ['Poppins', 'system-ui', 'sans-serif'],
+    ],
     classNameDisplay: poppinsExtraBold,
     classNameBody: `${poppinsRegular} text-sm leading-5`,
     primaryColor: 'purple',
-    secondaryColorTitle: 'bg-secondary-{50-900}',
+    secondaryColorName: 'secondary',
     secondaryColor: 'pink',
   },
   elegant: {
     font: 'Tenor Sans',
+    fontStacks: [
+      ['Tenor Sans', 'Georgia', 'serif'],
+      ['Inter', 'system-ui', 'sans-serif'],
+    ],
     classNameDisplay: tenorSansRegular,
     primaryColor: 'gray',
-    secondaryColorTitle: 'bg-accent-{50-900}',
+    secondaryColorName: 'accent',
     secondaryColor: 'amber',
   },
   brutalist: {
     font: 'Roboto Mono',
+    fontStacks: [
+      ['Roboto Mono', 'Menlo', 'monospace'],
+      ['Roboto Mono', 'Menlo', 'monospace'],
+    ],
     classNameDisplay: robotoMonoRegular,
     classNameBody: `${robotoMonoRegular} text-xs leading-5`,
     primaryColor: 'lime',
-    secondaryColorTitle: 'bg-gray-{50-900}',
+    secondaryColorName: 'gray',
     secondaryColor: 'gray',
   },
 }
+
+const { tokens } = tokenize.javascript(`module.exports = {
+  theme: {
+    fontFamily: {
+      display: ['font-0-0', 'font-0-1', 'font-0-2'],
+      body: ['font-1-0', 'font-1-1', 'font-1-2'],
+    },
+    colors: {
+      primary: {
+        50: 'color-primary-50',
+        100: 'color-primary-100',
+        200: 'color-primary-200',
+        300: 'color-primary-300',
+        400: 'color-primary-400',
+        500: 'color-primary-500',
+        600: 'color-primary-600',
+        700: 'color-primary-700',
+        800: 'color-primary-800',
+        900: 'color-primary-900',
+      },
+      __SECONDARY_COLOR__: {
+        50: 'color-secondary-50',
+        100: 'color-secondary-100',
+        200: 'color-secondary-200',
+        300: 'color-secondary-300',
+        400: 'color-secondary-400',
+        500: 'color-secondary-500',
+        600: 'color-secondary-600',
+        700: 'color-secondary-700',
+        800: 'color-secondary-800',
+        900: 'color-secondary-900',
+      },
+    },
+  },
+}
+`)
 
 export function Customization() {
   const [theme, setTheme] = useState('simple')
@@ -174,7 +228,9 @@ export function Customization() {
                         exit={{ opacity: 0 }}
                         className="font-mono text-xs leading-4"
                       >
-                        {themes[theme].secondaryColorTitle}
+                        {'bg-'}
+                        {themes[theme].secondaryColorName}
+                        {'-{50-900}'}
                       </motion.dt>
                     </AnimatePresence>
                     <dd>
@@ -204,10 +260,96 @@ export function Customization() {
         }
         right={
           <CodeWindow className="bg-rose-500">
-            <CodeWindow.Code />
+            <CodeWindow.Code
+              tokens={tokens}
+              tokenComponent={CustomizationToken}
+              tokenProps={{ theme }}
+              transformTokens={(token) => {
+                if (typeof token === 'string' && token.includes('__SECONDARY_COLOR__')) {
+                  return ['__SECONDARY_COLOR__', token]
+                }
+                return token
+              }}
+            />
           </CodeWindow>
         }
       />
     </section>
   )
+}
+
+function CustomizationToken({ theme, ...props }) {
+  const { token } = props
+  const initial = useRef(true)
+
+  useEffect(() => {
+    initial.current = false
+  }, [])
+
+  if (token[0] === 'string' && token[1].startsWith("'font-")) {
+    let [i, j] = token[1].match(/[0-9]+/g).map((x) => parseInt(x, 10))
+
+    return (
+      <span className="text-code-string">
+        '
+        <span
+          className={initial.current ? '' : 'animate-flash-code'}
+          key={themes[theme].fontStacks[i][j]}
+          style={{
+            borderRadius: 3,
+            padding: '1px 3px',
+            margin: '0 -3px',
+          }}
+        >
+          {themes[theme].fontStacks[i][j]}
+        </span>
+        '
+      </span>
+    )
+  }
+
+  if (token[0] === 'string' && token[1].startsWith("'color-")) {
+    const [, name, shade] = token[1].substr(1, token[1].length - 2).split('-')
+    const color = siteConfig.theme.colors[themes[theme][`${name}Color`]][shade]
+
+    return (
+      <span className="text-code-string">
+        '
+        <span
+          className={initial.current ? '' : 'animate-flash-code'}
+          key={color}
+          style={{
+            borderRadius: 3,
+            padding: '1px 3px',
+            margin: '0 -3px',
+          }}
+        >
+          {color}
+        </span>
+        '
+      </span>
+    )
+  }
+
+  if (token[0] === '__SECONDARY_COLOR__') {
+    return token[1].split('__SECONDARY_COLOR__').map((part, i) =>
+      i % 2 === 0 ? (
+        part
+      ) : (
+        <span
+          className={initial.current ? '' : 'animate-flash-code'}
+          key={themes[theme].secondaryColorName}
+          style={{
+            borderRadius: 3,
+            padding: '1px 3px',
+            margin: '0 -3px',
+          }}
+        >
+          {themes[theme].secondaryColorName}
+        </span>
+      )
+    )
+  }
+
+  return <Token {...props} />
 }
