@@ -249,35 +249,30 @@ export function ConstraintBased() {
                     className="w-full space-y-4 font-mono text-xs leading-4 p-6"
                   >
                     {['red', 'yellow', 'green', 'blue', 'purple', 'pink'].map((color, i) => (
-                      <li key={color}>
-                        <motion.h4
+                      <motion.li
+                        key={color}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: i * 0.1 }}
+                      >
+                        <h4
                           className="grid items-center"
                           style={{ gridTemplateColumns: '1fr auto 1fr' }}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{
-                            delay: i * 0.1,
-                          }}
                         >
                           {`bg-${color}-50`}
                           <ArrowIcon />
                           <span className="text-right">{`bg-${color}-900`}</span>
-                        </motion.h4>
+                        </h4>
                         <ul className="flex-none w-full flex rounded-lg overflow-hidden mt-1">
                           {Object.keys(siteConfig.theme.colors[color]).map((key, j) => (
-                            <motion.li
+                            <li
                               key={key}
                               className="h-7 flex-auto"
                               style={{ background: siteConfig.theme.colors[color][key], zIndex: j }}
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              transition={{
-                                delay: i * 0.1 + j * 0.05,
-                              }}
                             />
                           ))}
                         </ul>
-                      </li>
+                      </motion.li>
                     ))}
                   </motion.ul>
                 )}
@@ -323,7 +318,7 @@ export function ConstraintBased() {
                           key={shadow}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
-                          transition={{ delay: i * 0.1 }}
+                          transition={{ delay: [0.1, 0.1, 0.2, 0.2, 0.3, 0.3][i] }}
                         >
                           <div>{`shadow${shadow === 'default' ? '' : `-${shadow}`}`}</div>
                           <div
