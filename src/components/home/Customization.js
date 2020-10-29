@@ -109,7 +109,7 @@ export function Customization() {
         <IconContainer className={`${gradients.pink[0]} mb-8`}>
           <Icon />
         </IconContainer>
-        <Caption as="h2" className="text-rose-400 mb-3">
+        <Caption as="h2" className="text-rose-600 mb-3">
           Customization
         </Caption>
         <BigText className="mb-8">
@@ -126,7 +126,7 @@ export function Customization() {
             transform it into your own custom CSS framework.
           </p>
         </Paragraph>
-        <Link href="#" className="text-rose-400">
+        <Link href="#" className="text-rose-600">
           Learn more -&gt;
         </Link>
       </div>
