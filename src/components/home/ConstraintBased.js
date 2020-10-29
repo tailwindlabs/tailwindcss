@@ -1,7 +1,7 @@
 import { IconContainer, Caption, BigText, Paragraph, Link, Widont } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
 import { Tabs } from '@/components/Tabs'
-import { CodeWindow } from '@/components/CodeWindow'
+import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import { ReactComponent as Icon } from '@/img/icons/home/constraint-based.svg'
 import { ReactComponent as ArrowIcon } from '@/img/icons/arrow.svg'
@@ -14,136 +14,165 @@ import styles from './ConstraintBased.module.css'
 const tokens = {
   sizing: tokenize.html(`<ul class="space-y-4">
   <li>
-    w-64
-    <div class="w-64 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+    <div class="[w-64] h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
   </li>
   <li>
-    w-56
-    <div class="w-56 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+    <div class="[w-56] h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
   </li>
   <li>
-    w-48
-    <div class="w-48 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+    <div class="[w-48] h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
   </li>
   <li>
-    w-40
-    <div class="w-40 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+    <div class="[w-40] h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
   </li>
   <li>
-    w-32
-    <div class="w-32 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+    <div class="[w-32] h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
   </li>
   <li>
-    w-24
-    <div class="w-24 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+    <div class="[w-24] h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
   </li>
   <li>
-    w-20
-    <div class="w-20 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+    <div class="[w-20] h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
   </li>
   <li>
-    w-16
-    <div class="w-16 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+    <div class="[w-16] h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
   </li>
   <li>
-    w-12
-    <div class="w-12 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+    <div class="[w-12] h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
   </li>
   <li>
-    w-10
-    <div class="w-10 h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+    <div class="[w-10] h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
   </li>
-</ul>`).tokens,
+</ul>`).lines,
   color: tokenize.html(`<ul class="space-y-2">
   <li>
-    <ul class="-space-x-1">
-      <li class="bg-red-900 w-8 h-8 rounded-full"></li>
-      <li class="bg-red-800 w-8 h-8 rounded-full"></li>
-      <li class="bg-red-700 w-8 h-8 rounded-full"></li>
-      <li class="bg-red-600 w-8 h-8 rounded-full"></li>
-      <li class="bg-red-500 w-8 h-8 rounded-full"></li>
-      <li class="bg-red-400 w-8 h-8 rounded-full"></li>
-      <li class="bg-red-300 w-8 h-8 rounded-full"></li>
-      <li class="bg-red-200 w-8 h-8 rounded-full"></li>
-      <li class="bg-red-100 w-8 h-8 rounded-full"></li>
-      <li class="bg-red-50  w-8 h-8 rounded-full"></li>
+    <ul class="grid grid-cols-10 h-7">
+      <li class="[bg-red-50]"></li>
+      <li class="[bg-red-100]"></li>
+      <li class="[bg-red-200]"></li>
+      <li class="[bg-red-300]"></li>
+      <li class="[bg-red-400]"></li>
+      <li class="[bg-red-500]"></li>
+      <li class="[bg-red-600]"></li>
+      <li class="[bg-red-700]"></li>
+      <li class="[bg-red-800]"></li>
+      <li class="[bg-red-900]"></li>
     </ul>
   </li>
   <li>
-    <ul class="-space-x-1">
-      <li class="bg-orange-900 w-8 h-8 rounded-full"></li>
-      <li class="bg-orange-800 w-8 h-8 rounded-full"></li>
-      <li class="bg-orange-700 w-8 h-8 rounded-full"></li>
-      <li class="bg-orange-600 w-8 h-8 rounded-full"></li>
-      <li class="bg-orange-500 w-8 h-8 rounded-full"></li>
-      <li class="bg-orange-400 w-8 h-8 rounded-full"></li>
-      <li class="bg-orange-300 w-8 h-8 rounded-full"></li>
-      <li class="bg-orange-200 w-8 h-8 rounded-full"></li>
-      <li class="bg-orange-100 w-8 h-8 rounded-full"></li>
-      <li class="bg-orange-50  w-8 h-8 rounded-full"></li>
+    <ul class="grid grid-cols-10 h-7">
+      <li class="[bg-yellow-50]"></li>
+      <li class="[bg-yellow-100]"></li>
+      <li class="[bg-yellow-200]"></li>
+      <li class="[bg-yellow-300]"></li>
+      <li class="[bg-yellow-400]"></li>
+      <li class="[bg-yellow-500]"></li>
+      <li class="[bg-yellow-600]"></li>
+      <li class="[bg-yellow-700]"></li>
+      <li class="[bg-yellow-800]"></li>
+      <li class="[bg-yellow-900]"></li>
     </ul>
   </li>
   <li>
-    <ul class="-space-x-1">
-      <li class="bg-yellow-900 w-8 h-8 rounded-full"></li>
-      <li class="bg-yellow-800 w-8 h-8 rounded-full"></li>
-      <li class="bg-yellow-700 w-8 h-8 rounded-full"></li>
-      <li class="bg-yellow-600 w-8 h-8 rounded-full"></li>
-      <li class="bg-yellow-500 w-8 h-8 rounded-full"></li>
-      <li class="bg-yellow-400 w-8 h-8 rounded-full"></li>
-      <li class="bg-yellow-300 w-8 h-8 rounded-full"></li>
-      <li class="bg-yellow-200 w-8 h-8 rounded-full"></li>
-      <li class="bg-yellow-100 w-8 h-8 rounded-full"></li>
-      <li class="bg-yellow-50  w-8 h-8 rounded-full"></li>
+    <ul class="grid grid-cols-10 h-7">
+      <li class="[bg-green-50]"></li>
+      <li class="[bg-green-100]"></li>
+      <li class="[bg-green-200]"></li>
+      <li class="[bg-green-300]"></li>
+      <li class="[bg-green-400]"></li>
+      <li class="[bg-green-500]"></li>
+      <li class="[bg-green-600]"></li>
+      <li class="[bg-green-700]"></li>
+      <li class="[bg-green-800]"></li>
+      <li class="[bg-green-900]"></li>
     </ul>
   </li>
-</ul>`).tokens,
+  <li>
+    <ul class="grid grid-cols-10 h-7">
+      <li class="[bg-blue-50]"></li>
+      <li class="[bg-blue-100]"></li>
+      <li class="[bg-blue-200]"></li>
+      <li class="[bg-blue-300]"></li>
+      <li class="[bg-blue-400]"></li>
+      <li class="[bg-blue-500]"></li>
+      <li class="[bg-blue-600]"></li>
+      <li class="[bg-blue-700]"></li>
+      <li class="[bg-blue-800]"></li>
+      <li class="[bg-blue-900]"></li>
+    </ul>
+  </li>
+  <li>
+    <ul class="grid grid-cols-10 h-7">
+      <li class="[bg-purple-50]"></li>
+      <li class="[bg-purple-100]"></li>
+      <li class="[bg-purple-200]"></li>
+      <li class="[bg-purple-300]"></li>
+      <li class="[bg-purple-400]"></li>
+      <li class="[bg-purple-500]"></li>
+      <li class="[bg-purple-600]"></li>
+      <li class="[bg-purple-700]"></li>
+      <li class="[bg-purple-800]"></li>
+      <li class="[bg-purple-900]"></li>
+    </ul>
+  </li>
+  <li>
+    <ul class="grid grid-cols-10 h-7">
+      <li class="[bg-pink-50]"></li>
+      <li class="[bg-pink-100]"></li>
+      <li class="[bg-pink-200]"></li>
+      <li class="[bg-pink-300]"></li>
+      <li class="[bg-pink-400]"></li>
+      <li class="[bg-pink-500]"></li>
+      <li class="[bg-pink-600]"></li>
+      <li class="[bg-pink-700]"></li>
+      <li class="[bg-pink-800]"></li>
+      <li class="[bg-pink-900]"></li>
+    </ul>
+  </li>
+</ul>`).lines,
   typography: tokenize.html(`<ul class="space-y-6">
   <li>
-    font-sans
-    <p class="font-sans">
+    <p class="[font-sans]">
       ABCDEFGHIJKLMNOPQRSTUVWXYZ
       abcdefghijklmnopqrstuvwxyz
       1234567890
     </p>
   </li>
   <li>
-    font-serif
-    <p class="font-serif">
+    <p class="[font-serif]">
       ABCDEFGHIJKLMNOPQRSTUVWXYZ
       abcdefghijklmnopqrstuvwxyz
       1234567890
     </p>
   </li>
   <li>
-    font-mono
-    <p class="font-mono">
+    <p class="[font-mono]">
       ABCDEFGHIJKLMNOPQRSTUVWXYZ
       abcdefghijklmnopqrstuvwxyz
       1234567890
     </p>
   </li>
-</ul>`).tokens,
+</ul>`).lines,
   shadows: tokenize.html(`<ul class="grid grid-cols-2 gap-4">
   <li>
-    <div class="shadow-sm bg-white rounded-lg h-18"></div>
+    <div class="[shadow-sm] bg-white rounded-lg h-18"></div>
   </li>
   <li>
-    <div class="shadow bg-white rounded-lg h-18"></div>
+    <div class="[shadow] bg-white rounded-lg h-18"></div>
   </li>
   <li>
-    <div class="shadow-md bg-white rounded-lg h-18"></div>
+    <div class="[shadow-md] bg-white rounded-lg h-18"></div>
   </li>
   <li>
-    <div class="shadow-lg bg-white rounded-lg h-18"></div>
+    <div class="[shadow-lg] bg-white rounded-lg h-18"></div>
   </li>
   <li>
-    <div class="shadow-xl bg-white rounded-lg h-18"></div>
+    <div class="[shadow-xl] bg-white rounded-lg h-18"></div>
   </li>
   <li>
-    <div class="shadow-2xl bg-white rounded-lg h-18"></div>
+    <div class="[shadow-2xl] bg-white rounded-lg h-18"></div>
   </li>
-</ul>`).tokens,
+</ul>`).lines,
 }
 
 export function ConstraintBased() {
@@ -345,7 +374,41 @@ export function ConstraintBased() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <CodeWindow.Code tokens={tokens[tab]} />
+                <CodeWindow.Code2 lines={tokens[tab].length}>
+                  {tokens[tab].map((tokens, lineIndex) => (
+                    <div key={lineIndex}>
+                      {tokens.map((token, tokenIndex) => {
+                        if (token.types[token.types.length - 1] === 'attr-value') {
+                          return (
+                            <span key={tokenIndex} className={getClassNameForToken(token)}>
+                              {token.content.split(/\[([^\]]+)\]/).map((part, i) =>
+                                i % 2 === 0 ? (
+                                  part
+                                ) : (
+                                  <span
+                                    style={{
+                                      background: 'rgba(134, 239, 172, 0.25)',
+                                      borderRadius: 3,
+                                      padding: '1px 3px',
+                                      margin: '0 -3px',
+                                    }}
+                                  >
+                                    {part}
+                                  </span>
+                                )
+                              )}
+                            </span>
+                          )
+                        }
+                        return (
+                          <span key={tokenIndex} className={getClassNameForToken(token)}>
+                            {token.content}
+                          </span>
+                        )
+                      })}
+                    </div>
+                  ))}
+                </CodeWindow.Code2>
               </motion.div>
             </AnimatePresence>
           </CodeWindow>
