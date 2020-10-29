@@ -13,11 +13,12 @@ export function BrowserSupport() {
   const [selectedGradient, setSelectedGradient] = useState(gradients.purple)
   const prevFeature = usePrevious(feature)
 
-  const augment = (style, x, y) => {
+  const augment = (style, x, y, rotate = false) => {
     let augmented = {}
     for (let k in style) {
       if (k === 'x') augmented[k] = [style[k] + 50 * x, style[k]]
       else if (k === 'y') augmented[k] = [style[k] + 50 * y, style[k]]
+      else if (k === 'rotate' && rotate) augmented[k] = [style[k] + 10 * x, style[k]]
       else augmented[k] = [style[k], style[k]]
     }
     return augmented
@@ -26,7 +27,7 @@ export function BrowserSupport() {
   const animate = (transforms, grid, x, y) => {
     if (feature === 'transforms') {
       return {
-        animate: prevFeature === 'gradients' ? augment(transforms, x, y) : transforms,
+        animate: prevFeature === 'gradients' ? augment(transforms, x, y, true) : transforms,
         transition:
           prevFeature === 'gradients' ? { delay: 0.3, duration: 0.25, ease: [0, 0, 0.2, 1] } : {},
       }
@@ -46,7 +47,12 @@ export function BrowserSupport() {
     }
     if (feature === 'gradients' && prevFeature === 'transforms') {
       return {
-        animate: { ...transforms, x: transforms.x + 50 * x, y: transforms.y + 50 * y },
+        animate: {
+          ...transforms,
+          x: transforms.x + 50 * x,
+          y: transforms.y + 50 * y,
+          rotate: (transforms.rotate || 0) + 10 * x,
+        },
         transition: { duration: 0.25, ease: [0, 0, 0.2, 1] },
       }
     }
@@ -148,7 +154,12 @@ export function BrowserSupport() {
               <motion.div
                 className="relative origin-right"
                 initial={false}
-                {...animate({ scaleX: 1.475, x: 0, y: 44 }, { scaleX: 1, x: 0, y: 0 }, -1, 1)}
+                {...animate(
+                  { scaleX: 1.475, x: 0, y: 44, rotate: 0 },
+                  { scaleX: 1, x: 0, y: 0, rotate: 0 },
+                  -1,
+                  1
+                )}
               >
                 <div className="pt-full bg-white rounded-xl shadow-lg flex items-center justify-center" />
                 <Number>3</Number>
@@ -156,7 +167,7 @@ export function BrowserSupport() {
               <motion.div
                 className="relative"
                 initial={false}
-                {...animate({ x: 0, y: 105 }, { x: 0, y: 0 }, 0, 1)}
+                {...animate({ x: 0, y: 105, rotate: 0 }, { x: 0, y: 0, rotate: 0 }, 0, 1)}
               >
                 <div className="pt-full bg-white rounded-xl shadow-lg flex items-center justify-center" />
                 <Number>4</Number>
@@ -164,7 +175,12 @@ export function BrowserSupport() {
               <motion.div
                 className="relative bg-white rounded-xl shadow-lg flex items-center justify-center col-start-2 col-end-4 row-start-1 row-end-2"
                 initial={false}
-                {...animate({ opacity: 1, x: 87, y: 15 }, { opacity: 1, x: 0, y: 0 }, 1, -1)}
+                {...animate(
+                  { opacity: 1, x: 87, y: 15, rotate: 0 },
+                  { opacity: 1, x: 0, y: 0, rotate: 0 },
+                  1,
+                  -1
+                )}
               >
                 <Number>5</Number>
               </motion.div>
