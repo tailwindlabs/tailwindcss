@@ -88,7 +88,7 @@ const themes = {
         font: 'font-medium',
         size: 38,
         borderRadius: 8,
-        color: 'rgba(0, 0, 0, 0.5)',
+        color: '#71717a',
         activeBackgroundColor: '#f4f4f5',
         activeColor: '#000',
       },
