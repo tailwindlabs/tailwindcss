@@ -11,6 +11,7 @@ import { font as poppinsRegular } from '../../fonts/generated/Poppins-Regular.mo
 import { font as poppinsExtraBold } from '../../fonts/generated/Poppins-ExtraBold.module.css'
 import { font as tenorSansRegular } from '../../fonts/generated/TenorSans-Regular.module.css'
 import { font as robotoMonoRegular } from '../../fonts/generated/RobotoMono-Regular.module.css'
+import styles from './Customization.module.css'
 
 const themes = {
   simple: {
@@ -95,8 +96,7 @@ export function Customization() {
         }
         left={
           <div
-            className="relative z-10 rounded-tr-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8 sm:divide-y-2 lg:divide-y-0 xl:divide-y-2 divide-rose-100 flex flex-col"
-            style={{ height: 374 }}
+            className={`${styles.card} relative z-10 rounded-tr-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8 sm:divide-y-2 lg:divide-y-0 xl:divide-y-2 divide-rose-100 flex flex-col`}
           >
             <section className="flex flex-col sm:flex-row lg:flex-col xl:flex-row">
               <h3 className="flex-none w-full sm:w-48 lg:w-full xl:w-48 bg-rose-50 rounded-tr-xl sm:rounded-tr-none sm:rounded-tl-xl lg:rounded-tr-xl xl:rounded-tr-none text-lg leading-6 font-semibold text-rose-800 px-4 py-3 sm:p-8 lg:px-4 lg:py-3 xl:p-8">
@@ -197,7 +197,7 @@ export function Customization() {
                     </dd>
                   </div>
                 </dl>
-                <div className="absolute z-10 bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white pointer-events-none" />
+                <div className="hidden sm:block absolute z-10 bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white pointer-events-none" />
               </div>
             </section>
           </div>

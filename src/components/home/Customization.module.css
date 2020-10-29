@@ -1,0 +1,17 @@
+@screen sm {
+  .card {
+    height: 23.375rem;
+  }
+}
+
+@screen lg {
+  .card {
+    height: 27.5rem;
+  }
+}
+
+@screen xl {
+  .card {
+    height: 23.375rem;
+  }
+}
