@@ -77,9 +77,9 @@ const { code: html, tokens, classNames } = tokenize.html(
     classNames: {
       sm: {
         container: 'grid grid-cols-1',
-        header: 'relative z-10 col-start-1 row-start-1 px-4 pt-40 pb-2 bg-gradient-to-t from-black',
+        header: 'relative z-10 col-start-1 row-start-1 px-4 pt-40 pb-3 bg-gradient-to-t from-black',
         preheading: 'text-sm leading-5 font-medium text-white',
-        heading: 'text-xl leading-9 font-semibold text-white',
+        heading: 'text-xl leading-7 font-semibold text-white',
         metaContainer: 'col-start-1 row-start-2 px-4',
         meta: 'flex items-center text-sm leading-5 font-medium my-5',
         ratingCount: '',
@@ -91,10 +91,10 @@ const { code: html, tokens, classNames } = tokenize.html(
         imgSmContainer: 'relative hidden',
       },
       md: {
-        container: 'grid grid-cols-2 px-8 py-16 gap-x-8',
+        container: 'grid grid-cols-2 px-8 py-12 gap-x-8',
         header: 'relative z-10 col-start-1 row-start-1 bg-none',
         preheading: 'text-sm leading-5 font-medium mb-1 text-gray-500',
-        heading: 'text-2xl leading-9 font-semibold text-black',
+        heading: 'text-2xl leading-7 font-semibold text-black',
         metaContainer: 'col-start-1 row-start-2 pb-16',
         meta: 'flex items-center text-sm leading-5 font-medium mt-2 mb-4',
         ratingCount: 'hidden',
@@ -109,7 +109,7 @@ const { code: html, tokens, classNames } = tokenize.html(
         container: 'grid grid-cols-2 px-8 py-16 gap-x-8',
         header: 'relative z-10 col-start-1 row-start-1 bg-none',
         preheading: 'text-sm leading-5 font-medium mb-1 text-gray-500',
-        heading: 'text-3xl leading-9 font-semibold text-black',
+        heading: 'text-3xl leading-7 font-semibold text-black',
         metaContainer: 'col-start-1 row-start-2 pb-16',
         meta: 'flex items-center text-sm leading-5 font-medium mt-2 mb-4',
         ratingCount: 'inline',
@@ -167,34 +167,36 @@ function BrowserWindow({ height = 385 }) {
   return (
     <div className="relative">
       <motion.div
-        className="shadow-lg rounded-t-xl border border-black border-opacity-5"
+        className="shadow-lg rounded-xl"
         style={{ marginRight: useTransform(x, (x) => -x) }}
       >
-        <div
-          className="py-2 grid items-center gap-6 px-4 rounded-t-xl bg-gradient-to-b from-gray-50 to-gray-100"
-          style={{ gridTemplateColumns: '1fr minmax(min-content, 640px) 1fr' }}
-        >
-          <div className="flex space-x-1.5">
-            <div className="w-3 h-3 rounded-full bg-gray-300" />
-            <div className="w-3 h-3 rounded-full bg-gray-300" />
-            <div className="w-3 h-3 rounded-full bg-gray-300" />
-          </div>
-          <div className="border border-black border-opacity-5 rounded-md overflow-hidden shadow-sm">
-            <div className="bg-gradient-to-b from-white to-gray-50 text-sm leading-5 py-1.5 text-center">
-              workcation.com
+        <div className="shadow-xs rounded-xl">
+          <div
+            className="py-2 grid items-center gap-6 px-4 rounded-t-xl bg-gradient-to-b from-gray-50 to-gray-100"
+            style={{ gridTemplateColumns: '1fr minmax(min-content, 640px) 1fr' }}
+          >
+            <div className="flex space-x-1.5">
+              <div className="w-3 h-3 rounded-full bg-gray-300" />
+              <div className="w-3 h-3 rounded-full bg-gray-300" />
+              <div className="w-3 h-3 rounded-full bg-gray-300" />
+            </div>
+            <div className="border border-black border-opacity-5 rounded-md overflow-hidden shadow-sm">
+              <div className="bg-gradient-to-b from-white to-gray-50 text-sm leading-5 py-1.5 text-center">
+                workcation.com
+              </div>
             </div>
           </div>
-        </div>
-        <div className="relative bg-white border-t border-gray-200">
-          <div
-            className="overflow-auto"
-            style={{ height }}
-            dangerouslySetInnerHTML={{
-              __html: html
-                .replace(/\{([^}]+)\}/g, (_, name) => classNames[size][name] || '')
-                .replace(/src="([^"]+)"/g, (_, src) => `src="${images[src]}" loading="lazy"`),
-            }}
-          ></div>
+          <div className="relative bg-white border-t border-gray-200 rounded-b-xl pb-8 -mb-8">
+            <div
+              className="overflow-auto"
+              style={{ height }}
+              dangerouslySetInnerHTML={{
+                __html: html
+                  .replace(/\{([^}]+)\}/g, (_, name) => classNames[size][name] || '')
+                  .replace(/src="([^"]+)"/g, (_, src) => `src="${images[src]}" loading="lazy"`),
+              }}
+            ></div>
+          </div>
         </div>
       </motion.div>
       <div
