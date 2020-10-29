@@ -1,12 +1,13 @@
 import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
 import { gradients } from '@/utils/gradients'
-import { CodeWindow } from '@/components/CodeWindow'
+import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { motion, useTransform, useMotionValue } from 'framer-motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ReactComponent as Icon } from '@/img/icons/home/mobile-first.svg'
 import styles from './MobileFirst.module.css'
 import tokenize from '../../macros/tokenize.macro'
+import { addClassTokens2 } from '@/utils/addClassTokens'
 
 const MIN_WIDTH = 400
 const HANDLE_RADIUS = 2.125
@@ -18,7 +19,7 @@ const images = {
   '/beach-house-interior.jpg': require('@/img/beach-house-interior.jpg').default,
 }
 
-const { code: html, tokens, classNames } = tokenize.html(
+const { code: html, lines, classNames } = tokenize.html(
   `<div class="{container}">
   <div class="{header}">
     <p class="{preheading}">Entire house</p>
@@ -109,7 +110,7 @@ const { code: html, tokens, classNames } = tokenize.html(
         container: 'grid grid-cols-2 px-8 py-16 gap-x-8',
         header: 'relative z-10 col-start-1 row-start-1 bg-none',
         preheading: 'text-sm leading-5 font-medium mb-1 text-gray-500',
-        heading: 'text-3xl leading-7 font-semibold text-black',
+        heading: 'text-3xl leading-9 font-semibold text-black',
         metaContainer: 'col-start-1 row-start-2 pb-16',
         meta: 'flex items-center text-sm leading-5 font-medium mt-2 mb-4',
         ratingCount: 'inline',
@@ -124,10 +125,11 @@ const { code: html, tokens, classNames } = tokenize.html(
   }
 )
 
-function BrowserWindow({ height = 385 }) {
+addClassTokens2(lines)
+
+function BrowserWindow({ size, onChange, height = 385 }) {
   const x = useMotionValue(0)
   const constraintsRef = useRef()
-  const [size, setSize] = useState('lg')
   const [constraintsWidth, setConstraintsWidth] = useState()
 
   useLayoutEffect(() => {
@@ -144,17 +146,17 @@ function BrowserWindow({ height = 385 }) {
     function updateSize(x) {
       if (constraintsWidth >= 500) {
         if (x < -((constraintsWidth / 3) * 2)) {
-          size !== 'sm' && setSize('sm')
+          size !== 'sm' && onChange('sm')
         } else if (x < -(constraintsWidth / 3)) {
-          size !== 'md' && setSize('md')
+          size !== 'md' && onChange('md')
         } else if (x >= -(constraintsWidth / 3)) {
-          size !== 'lg' && setSize('lg')
+          size !== 'lg' && onChange('lg')
         }
       } else {
         if (x < -(constraintsWidth / 2)) {
-          size !== 'sm' && setSize('sm')
+          size !== 'sm' && onChange('sm')
         } else {
-          size !== 'md' && setSize('md')
+          size !== 'md' && onChange('md')
         }
       }
     }
@@ -241,6 +243,8 @@ function BrowserWindow({ height = 385 }) {
 }
 
 export function MobileFirst() {
+  const [size, setSize] = useState('lg')
+
   return (
     <section id="mobile-first">
       <div className="px-4 sm:px-6 md:px-8 mb-20">
@@ -271,10 +275,48 @@ export function MobileFirst() {
         left={
           <>
             <div className="hidden md:block px-2 lg:px-0 lg:max-w-3xl xl:max-w-5xl mx-auto">
-              <BrowserWindow />
+              <BrowserWindow size={size} onChange={setSize} />
             </div>
             <CodeWindow className={`bg-indigo-500 ${styles.code}`}>
-              <CodeWindow.Code tokens={tokens} />
+              <CodeWindow.Code2 lines={lines.length}>
+                {lines.map((tokens, lineIndex) => (
+                  <div key={lineIndex}>
+                    {tokens.map((token, tokenIndex) => {
+                      if (
+                        token.types[token.types.length - 1] === 'class' &&
+                        (token.content.startsWith('sm:') || token.content.startsWith('md:'))
+                      ) {
+                        const faded =
+                          size === 'sm' || (size !== 'lg' && token.content.startsWith('md:'))
+                        const highlighted =
+                          (size === 'md' && token.content.startsWith('sm:')) ||
+                          (size === 'lg' && token.content.startsWith('md:'))
+
+                        return (
+                          <span
+                            key={tokenIndex}
+                            className={`${getClassNameForToken(token)} transition duration-500`}
+                            style={{
+                              background: highlighted ? 'rgba(134, 239, 172, 0.25)' : '',
+                              borderRadius: 3,
+                              padding: '1px 3px',
+                              margin: '0 -3px',
+                              opacity: faded ? 0.5 : 1,
+                            }}
+                          >
+                            {token.content}
+                          </span>
+                        )
+                      }
+                      return (
+                        <span key={tokenIndex} className={getClassNameForToken(token)}>
+                          {token.content}
+                        </span>
+                      )
+                    })}
+                  </div>
+                ))}
+              </CodeWindow.Code2>
             </CodeWindow>
           </>
         }

@@ -17,3 +17,26 @@ export function addClassTokens(token, tokensArr, index) {
   }
   return token
 }
+
+export function addClassTokens2(lines) {
+  for (let i = 0; i < lines.length; i++) {
+    for (let j = 0; j < lines[i].length; j++) {
+      if (
+        lines[i][j - 3] &&
+        lines[i][j - 3].content === 'class' &&
+        lines[i][j - 3].types[lines[i][j - 3].types.length - 1] === 'attr-name'
+      ) {
+        lines[i].splice(
+          j,
+          1,
+          ...lines[i][j].content.split(/(\s+)/).map((part, partIndex) => {
+            if (partIndex % 2 === 0) {
+              return { content: part, types: [...lines[i][j].types, 'class'] }
+            }
+            return { content: part, types: ['plain'] }
+          })
+        )
+      }
+    }
+  }
+}

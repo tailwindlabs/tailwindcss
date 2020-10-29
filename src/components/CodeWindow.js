@@ -89,3 +89,47 @@ CodeWindow.Code = forwardRef(
     )
   }
 )
+
+const themeDict = {
+  punctuation: 'text-code-punctuation',
+  tag: 'text-code-tag',
+  'attr-name': 'text-code-attr-name',
+  'attr-value': 'text-code-attr-value',
+  class: 'text-code-attr-value',
+}
+
+export function getClassNameForToken({ types, empty }) {
+  const typesSize = types.length
+  if (typesSize === 1 && types[0] === 'plain') {
+    return empty ? 'inline-block' : undefined
+  }
+  const className = (
+    (themeDict[types[typesSize - 1]] || '') + (empty ? ' inline-block' : '')
+  ).trim()
+  return className === '' ? undefined : className
+}
+
+CodeWindow.Code2 = forwardRef(({ lines = 0, lineNumbersBackground = true, children }, ref) => {
+  return (
+    <div ref={ref} className="w-full flex-auto flex min-h-0 overflow-auto">
+      <div className="w-full relative flex-auto">
+        <pre className="flex min-h-full text-xs leading-4 md:text-sm md:leading-5">
+          <div
+            aria-hidden="true"
+            className={`hidden md:block text-white text-opacity-50 flex-none py-4 pr-4 text-right select-none ${
+              lineNumbersBackground ? 'bg-black bg-opacity-25' : ''
+            }`}
+            style={{ width: 50 }}
+          >
+            {Array.from({ length: lines })
+              .map((_, i) => i + 1)
+              .join('\n')}
+          </div>
+          <code className="flex-auto relative block text-white pt-4 pb-4 px-4 overflow-auto">
+            {children}
+          </code>
+        </pre>
+      </div>
+    </div>
+  )
+})
