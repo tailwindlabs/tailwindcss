@@ -2,7 +2,6 @@ import prettier from 'prettier'
 import diff from 'jest-diff'
 
 function format(input) {
-  return input
   return prettier.format(input, {
     parser: 'css',
     printWidth: 100,
