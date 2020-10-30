@@ -11,7 +11,6 @@ import resolveConfig from './util/resolveConfig'
 import getAllConfigs from './util/getAllConfigs'
 import { defaultConfigFile } from './constants'
 import defaultConfig from '../stubs/defaultConfig.stub.js'
-import postcss from 'postcss'
 
 function resolveConfigPath(filePath) {
   // require('tailwindcss')({ theme: ..., variants: ... })
@@ -63,7 +62,7 @@ const getConfigFunction = (config) => () => {
   return resolveConfig([...getAllConfigs(configObject)])
 }
 
-const plugin = postcss.plugin('tailwind', (config) => {
+module.exports = function (config) {
   const plugins = []
   const resolvedConfigPath = resolveConfigPath(config)
 
@@ -71,33 +70,14 @@ const plugin = postcss.plugin('tailwind', (config) => {
     plugins.push(registerConfigAsDependency(resolvedConfigPath))
   }
 
-  return postcss([
-    ...plugins,
-    processTailwindFeatures(getConfigFunction(resolvedConfigPath || config)),
-    formatCSS,
-  ])
-})
+  return {
+    postcssPlugin: 'tailwindcss',
+    plugins: [
+      ...plugins,
+      processTailwindFeatures(getConfigFunction(resolvedConfigPath || config)),
+      formatCSS,
+    ],
+  }
+}
 
-module.exports = plugin
-
-// PostCSS 8
-// module.exports = function (config) {
-//   console.log(arguments)
-//   const plugins = []
-//   const resolvedConfigPath = resolveConfigPath(config)
-
-//   if (!_.isUndefined(resolvedConfigPath)) {
-//     plugins.push(registerConfigAsDependency(resolvedConfigPath))
-//   }
-
-//   return {
-//     postcssPlugin: 'tailwindcss',
-//     plugins: [
-//       ...plugins,
-//       processTailwindFeatures(getConfigFunction(resolvedConfigPath || config)),
-//       formatCSS,
-//     ],
-//   }
-// }
-
-// module.exports.postcss = true
+module.exports.postcss = true
