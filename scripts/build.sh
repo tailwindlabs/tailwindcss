@@ -4,7 +4,7 @@
 FILES=$(find ./src -regex ".*\.js")
 
 # Compile with esbuild
-esbuild $FILES --minify --outdir=lib --platform=node --format=cjs --target=node12
+esbuild $FILES --minify --outdir=lib --platform=node --format=cjs --target=node12.13.0
 
 # A bit annoying, but let's copy the css file that we require
 mkdir -p ./lib/plugins/css
