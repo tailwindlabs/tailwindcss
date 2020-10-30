@@ -52,7 +52,11 @@ const getConfigFunction = (config) => () => {
   if (process.env.JEST_WORKER_ID === undefined) {
     if (!_.isObject(config)) {
       getModuleDependencies(config).forEach((mdl) => {
-        delete require.cache[require.resolve(mdl.file)]
+        try {
+          delete require.cache[require.resolve(mdl.file)]
+        } catch (e) {
+          throw e
+        }
       })
     }
   }
