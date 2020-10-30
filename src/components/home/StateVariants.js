@@ -1,19 +1,21 @@
 import { IconContainer, Caption, BigText, Paragraph, Link, Widont } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
-import { CodeWindow } from '@/components/CodeWindow'
+import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import { ReactComponent as Icon } from '@/img/icons/home/state-variants.svg'
 import tokenize from '../../macros/tokenize.macro'
-import { Token } from '../Code'
-import { addClassTokens } from '@/utils/addClassTokens'
-import { useState } from 'react'
+import { addClassTokens2 } from '@/utils/addClassTokens'
+import { useEffect, useRef, useState } from 'react'
+import { usePrevious } from '@/hooks/usePrevious'
 
-const { tokens } = tokenize.html(`<section class="px-6 pt-4 pb-6 space-y-4">
+const {
+  lines,
+} = tokenize.html(`<section class="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-4 sm:pb-6 lg:pb-4 xl:pb-6 space-y-4">
   <header class="flex items-center justify-between">
     <h2 class="text-lg leading-6 font-medium text-black">Projects</h2>
-    <button type="button" class="flex items-center rounded-md bg-lightBlue-100 text-lightBlue-500 text-sm leading-5 font-medium px-4 py-2">
-      <svg width="12" height="20" fill="currentColor" class="mr-2">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M6 5a1 1 0 011 1v3h3a1 1 0 110 2H7v3a1 1 0 11-2 0v-3H2a1 1 0 110-2h3V6a1 1 0 011-1z" />
+    <button class="(new-btn-hover)hover:bg-lightBlue-200 (new-btn-hover)hover:text-lightBlue-800 group flex items-center rounded-md bg-lightBlue-100 text-lightBlue-600 text-sm leading-5 font-medium px-4 py-2">
+      <svg class="(new-btn-hover)group-hover:text-lightBlue-600 text-lightBlue-500 mr-2" width="12" height="20" fill="currentColor">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M6 5a1 1 0 011 1v3h3a1 1 0 110 2H7v3a1 1 0 11-2 0v-3H2a1 1 0 110-2h3V6a1 1 0 011-1z"/>
       </svg>
       New
     </button>
@@ -24,26 +26,33 @@ const { tokens } = tokenize.html(`<section class="px-6 pt-4 pb-6 space-y-4">
     </svg>
     <input class="(input-focus)focus:border-lightBlue-300 (input-focus)focus:outline-none w-full text-sm leading-5 text-black placeholder-gray-500 border border-gray-200 rounded-md py-2 pl-10" type="text" aria-label="Filter projects" placeholder="Filter projects" />
   </form>
-  <ul class="grid grid-cols-2 gap-4">
+  <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
     <li x-for="item in items">
       <a href="#" class="(item-hover)hover:bg-lightBlue-500 (item-hover)hover:border-transparent (item-hover)hover:shadow-lg group block rounded-lg p-4 border border-gray-200">
-        <h3 class="(item-hover)group-hover:text-white leading-6 font-medium text-black">
-          {item.title}
-        </h3>
-        <dl>
-          <dt class="sr-only">Category</dt>
-          <dd class="(item-hover)group-hover:text-lightBlue-200 text-sm leading-5 font-medium mb-4">
-            {item.category}
-          </dd>
-          <dt class="sr-only">Users</dt>
-          <dd class="flex -space-x-2">
-            <img x-for="user in item.users" :src="user.avatar" :alt="user.name" width="48" height="48" class="w-7 h-7 rounded-full border-2 border-white">
-          </dd>
+        <dl class="grid sm:block lg:grid xl:block grid-cols-2 grid-rows-2 items-center">
+          <div>
+            <dt class="sr-only">Title</dt>
+            <dd class="(item-hover)group-hover:text-white leading-6 font-medium text-black">
+              {item.title}
+            </dd>
+          </div>
+          <div>
+            <dt class="sr-only">Category</dt>
+            <dd class="(item-hover)group-hover:text-lightBlue-200 text-sm leading-5 font-medium sm:mb-4 lg:mb-0 xl:mb-4">
+              {item.category}
+            </dd>
+          </div>
+          <div class="col-start-2 row-start-1 row-end-3">
+            <dt class="sr-only">Users</dt>
+            <dd class="flex justify-end sm:justify-start lg:justify-end xl:justify-start -space-x-2">
+              <img x-for="user in item.users" :src="user.avatar" :alt="user.name" width="48" height="48" class="w-7 h-7 rounded-full border-2 border-white" />
+            </dd>
+          </div>
         </dl>
       </a>
     </li>
-    <li class="flex">
-      <a href="#" class="w-full flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium">
+    <li class="(new-hover)hover:shadow-lg flex rounded-lg">
+      <a href="#" class="(new-hover)hover:border-transparent (new-hover)hover:shadow-xs w-full flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium py-4">
         New Project
       </a>
     </li>
@@ -51,8 +60,45 @@ const { tokens } = tokenize.html(`<section class="px-6 pt-4 pb-6 space-y-4">
 </section>
 `)
 
+addClassTokens2(lines)
+
+const lineRanges = {
+  'new-btn-hover': [3, 8],
+  'input-focus': [14, 14],
+  'item-hover': [18, 39],
+  'new-hover': [41, 45],
+}
+
 export function StateVariants() {
   const [states, setStates] = useState([])
+  const prevStates = usePrevious(states)
+  const codeContainerRef = useRef()
+  const linesContainerRef = useRef()
+
+  function scrollTo(rangeOrRanges) {
+    const ranges = Array.isArray(rangeOrRanges) ? rangeOrRanges : [rangeOrRanges]
+    if (ranges.length === 0) return
+    const linesSorted = ranges.flat().sort((a, b) => a - b)
+    const minLine = linesSorted[0]
+    const maxLine = linesSorted[linesSorted.length - 1]
+    const $lines = linesContainerRef.current.children
+    const containerHeight = codeContainerRef.current.offsetHeight
+    const top = $lines[minLine].offsetTop
+    const height = $lines[maxLine].offsetTop + $lines[maxLine].offsetHeight - top
+
+    codeContainerRef.current.scrollTo({
+      top: top - containerHeight / 2 + height / 2,
+      behavior: 'smooth',
+    })
+  }
+
+  useEffect(() => {
+    if (prevStates && prevStates.length > states.length) {
+      scrollTo(states.map((state) => lineRanges[state]))
+    } else if (states.length) {
+      scrollTo(lineRanges[states[states.length - 1]])
+    }
+  }, [states, prevStates])
 
   return (
     <section id="state-variants">
@@ -85,9 +131,20 @@ export function StateVariants() {
                 <h2 className="text-lg leading-6 font-medium text-black">Projects</h2>
                 <button
                   type="button"
-                  className="flex items-center rounded-md bg-lightBlue-100 text-lightBlue-500 text-sm leading-5 font-medium px-4 py-2"
+                  className="hover:bg-lightBlue-200 hover:text-lightBlue-800 group flex items-center rounded-md bg-lightBlue-100 text-lightBlue-600 text-sm leading-5 font-medium px-4 py-2"
+                  onMouseEnter={() => {
+                    setStates((states) => [...states, 'new-btn-hover'])
+                  }}
+                  onMouseLeave={() => {
+                    setStates((states) => states.filter((x) => x !== 'new-btn-hover'))
+                  }}
                 >
-                  <svg width="12" height="20" fill="currentColor" className="mr-2">
+                  <svg
+                    width="12"
+                    height="20"
+                    fill="currentColor"
+                    className="group-hover:text-lightBlue-600 text-lightBlue-500 mr-2"
+                  >
                     <path
                       fillRule="evenodd"
                       clipRule="evenodd"
@@ -111,8 +168,13 @@ export function StateVariants() {
                   />
                 </svg>
                 <input
-                  onFocus={() => setStates([...states, 'input-focus'])}
-                  onBlur={() => setStates(states.filter((x) => x !== 'input-focus'))}
+                  onFocus={() => {
+                    setStates((states) => [...states, 'input-focus'])
+                  }}
+                  onBlur={() => {
+                    setStates((states) => states.filter((x) => x !== 'input-focus'))
+                    // resetScroll()
+                  }}
                   type="text"
                   aria-label="Filter projects"
                   placeholder="Filter projects"
@@ -120,13 +182,20 @@ export function StateVariants() {
                 />
               </form>
               <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <li key={i}>
+                {Array.from({ length: 3 }).map((_, i, a) => (
+                  <li
+                    key={i}
+                    className={i === a.length - 1 ? 'hidden sm:block lg:hidden xl:block' : ''}
+                  >
                     <a
                       href="#"
                       className="group block rounded-lg p-4 border border-gray-200 hover:bg-lightBlue-500 hover:border-transparent hover:shadow-lg"
-                      onMouseEnter={() => setStates([...states, 'item-hover'])}
-                      onMouseLeave={() => setStates(states.filter((x) => x !== 'item-hover'))}
+                      onMouseEnter={() => {
+                        setStates((states) => [...states, 'item-hover'])
+                      }}
+                      onMouseLeave={() => {
+                        setStates((states) => states.filter((x) => x !== 'item-hover'))
+                      }}
                     >
                       <dl className="grid sm:block lg:grid xl:block grid-cols-2 grid-rows-2 items-center">
                         <div>
@@ -160,10 +229,16 @@ export function StateVariants() {
                     </a>
                   </li>
                 ))}
-                <li className="hidden sm:flex lg:hidden xl:flex">
+                <li className="hover:shadow-lg flex rounded-lg">
                   <a
                     href="#"
-                    className="w-full flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium"
+                    className="hover:border-transparent hover:shadow-xs w-full flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium py-4"
+                    onMouseEnter={() => {
+                      setStates((states) => [...states, 'new-hover'])
+                    }}
+                    onMouseLeave={() => {
+                      setStates((states) => states.filter((x) => x !== 'new-hover'))
+                    }}
                   >
                     New Project
                   </a>
@@ -174,38 +249,64 @@ export function StateVariants() {
         }
         right={
           <CodeWindow className="bg-lightBlue-500">
-            <CodeWindow.Code
-              tokens={tokens}
-              tokenComponent={StateVariantsToken}
-              transformTokens={addClassTokens}
-              tokenProps={{ states }}
-            />
+            <CodeWindow.Code2 ref={codeContainerRef} lines={lines.length}>
+              <div ref={linesContainerRef} className={states.length > 0 ? 'mono' : ''}>
+                {lines.map((tokens, lineIndex) => (
+                  <div
+                    key={lineIndex}
+                    className={
+                      (states.includes('new-btn-hover') &&
+                        lineIndex >= lineRanges['new-btn-hover'][0] &&
+                        lineIndex <= lineRanges['new-btn-hover'][1]) ||
+                      (states.includes('input-focus') &&
+                        lineIndex >= lineRanges['input-focus'][0] &&
+                        lineIndex <= lineRanges['input-focus'][1]) ||
+                      (states.includes('item-hover') &&
+                        lineIndex >= lineRanges['item-hover'][0] &&
+                        lineIndex <= lineRanges['item-hover'][1]) ||
+                      (states.includes('new-hover') &&
+                        lineIndex >= lineRanges['new-hover'][0] &&
+                        lineIndex <= lineRanges['new-hover'][1])
+                        ? 'not-mono'
+                        : ''
+                    }
+                  >
+                    {tokens.map((token, tokenIndex) => {
+                      if (
+                        token.types[token.types.length - 1] === 'class' &&
+                        token.content.startsWith('(')
+                      ) {
+                        const [, state] = token.content.match(/^\(([^)]+)\)/)
+                        return (
+                          <span
+                            key={tokenIndex}
+                            className={`transition-colors duration-500 ${getClassNameForToken(
+                              token
+                            )}`}
+                            style={{
+                              background: states.includes(state) ? 'rgba(134, 239, 172, 0.25)' : '',
+                              borderRadius: 3,
+                              padding: '1px 3px',
+                              margin: '0 -3px',
+                            }}
+                          >
+                            {token.content.substr(token.content.indexOf(')') + 1)}
+                          </span>
+                        )
+                      }
+                      return (
+                        <span key={tokenIndex} className={getClassNameForToken(token)}>
+                          {token.content}
+                        </span>
+                      )
+                    })}
+                  </div>
+                ))}
+              </div>
+            </CodeWindow.Code2>
           </CodeWindow>
         }
       />
     </section>
   )
-}
-
-function StateVariantsToken(props) {
-  const { token, states } = props
-
-  if (token[0] === 'class' && token[1].startsWith('(')) {
-    const [, state] = token[1].match(/^\(([^)]+)\)/)
-    return (
-      <span
-        className="transition-colors duration-500"
-        style={{
-          background: states.includes(state) ? 'rgba(134, 239, 172, 0.25)' : '',
-          borderRadius: 3,
-          padding: '1px 3px',
-          margin: '0 -3px',
-        }}
-      >
-        {token[1].substr(token[1].indexOf(')') + 1)}
-      </span>
-    )
-  }
-
-  return <Token {...props} />
 }
