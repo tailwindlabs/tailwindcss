@@ -41,7 +41,7 @@
     "babel-jest": "^26.5.2",
     "clean-css": "^4.1.9",
     "eslint": "^7.10.0",
-    "eslint-config-prettier": "^6.13.0",
+    "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.5.2",
     "postcss": "^8.1.4",
