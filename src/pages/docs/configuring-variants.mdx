@@ -113,7 +113,7 @@ module.exports = {
   variants: {
     // Defaults are ['responsive', 'hover', 'focus']
     backgroundColor: ({ after }) => after(['active']),
-    // Output: [responsive', 'hover', 'focus', 'active']
+    // Output: ['responsive', 'hover', 'focus', 'active']
   },
 }
 ```
@@ -141,7 +141,7 @@ module.exports = {
   variants: {
     // Defaults are ['responsive', 'hover', 'focus']
     backgroundColor: ({ without }) => without(['focus']),
-    // Output: [responsive', 'hover']
+    // Output: ['responsive', 'hover']
   },
 }
 ```
@@ -156,7 +156,7 @@ module.exports = {
   variants: {
     // Defaults are ['responsive', 'hover', 'focus']
     backgroundColor: ({ variants }) => [...variants('backgroundColor'), 'active'],
-    // Output: [responsive', 'hover', 'focus', 'active']
+    // Output: ['responsive', 'hover', 'focus', 'active']
   },
 }
 ```
