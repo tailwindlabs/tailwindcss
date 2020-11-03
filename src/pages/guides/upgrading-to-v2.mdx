@@ -1,0 +1,69 @@
+---
+title: "Upgrading to v2.0"
+description: "Tailwind CSS brand assets and usage guidelines."
+---
+
+export const Layout = require('@/layouts/ContentsLayout').ContentsLayoutOuter
+export default require('@/layouts/BasicLayout').BasicLayout
+
+
+## Changelog
+
+### New features
+
+- Dark mode ([#2279](https://github.com/tailwindlabs/tailwindcss/pull/2279), [#2631](https://github.com/tailwindlabs/tailwindcss/pull/2631))
+- All-new color palette ([#2623](https://github.com/tailwindlabs/tailwindcss/pull/2623))
+- Extended typography scale ([#2609](https://github.com/tailwindlabs/tailwindcss/pull/2609), [#2619](https://github.com/tailwindlabs/tailwindcss/pull/2619))
+- Extended spacing scale ([#2630](https://github.com/tailwindlabs/tailwindcss/pull/2630), [#2630](https://github.com/tailwindlabs/tailwindcss/pull/2630))
+- Default line-heights for font-size utilities ([#2609](https://github.com/tailwindlabs/tailwindcss/pull/2609))
+- New `2xl` breakpoint ([#2609](https://github.com/tailwindlabs/tailwindcss/pull/2609))
+- `@apply` anything ([#2159](https://github.com/tailwindlabs/tailwindcss/pull/2159))
+- Extend variants ([#2679](https://github.com/tailwindlabs/tailwindcss/pull/2679))
+- New `textOverflow` utilities ([#1289](https://github.com/tailwindlabs/tailwindcss/pull/1289))
+- New `transform-gpu` utility ([#1380](https://github.com/tailwindlabs/tailwindcss/pull/1380))
+- Enable `group-hover` by default ([28985b6](https://github.com/tailwindlabs/tailwindcss/commit/28985b6cd592e72d4849fdb9ce97eb045744e09c))
+- Add `max-w-prose` utility ([#2574](https://github.com/tailwindlabs/tailwindcss/pull/2574))
+- Support defining presets as functions ([#2680](https://github.com/tailwindlabs/tailwindcss/pull/2680))
+- Support flattening deeply nested color objects ([#2148](https://github.com/tailwindlabs/tailwindcss/pull/2148))
+- Merge `extend` objects deeply by default instead of shallowly ([#2679](https://github.com/tailwindlabs/tailwindcss/pull/2679), [#2700](https://github.com/tailwindlabs/tailwindcss/pull/2700))
+- Modernize default system font stacks ([#1711](https://github.com/tailwindlabs/tailwindcss/pull/1711))
+- Support defining theme values using arrays wherever it makes sense (box-shadow, transition-property, etc.) ([e13f083](https://github.com/tailwindlabs/tailwindcss/commit/e13f083c4bc48bf9870d27c966136a9584943127))
+
+### Changes
+
+- Drop support for Node 8 and 10 ([#2582](https://github.com/tailwindlabs/tailwindcss/pull/2582))
+- Remove `target` feature and IE 11 support ([#2571](https://github.com/tailwindlabs/tailwindcss/pull/2571))
+- Replaced old default color palette ([#2623](https://github.com/tailwindlabs/tailwindcss/pull/2623))
+- Purge layers by default ([#2288](https://github.com/tailwindlabs/tailwindcss/pull/2288))
+- Move `truncate` class to `textOverflow` core plugin ([#2562](https://github.com/tailwindlabs/tailwindcss/pull/2562))
+- Switch `normalize.css` to `modern-normalize` ([#2572](https://github.com/tailwindlabs/tailwindcss/pull/2572))
+- Remove `scrolling-touch` and `scrolling-auto` utilities ([#2573](https://github.com/tailwindlabs/tailwindcss/pull/2573))
+- Change `default` to `DEFAULT` for special cases in config ([#2580](https://github.com/tailwindlabs/tailwindcss/pull/2580))
+- Make `theme` retrieve values more intelligently ([e13f083c4](https://github.com/tailwindlabs/tailwindcss/commit/e13f083c4bc48bf9870d27c966136a9584943127))
+- Change `text-6xl` to 60px instead of 64px ([#2619](https://github.com/tailwindlabs/tailwindcss/pull/2619))
+- Rename `whitespace-no-wrap` to `whitespace-nowrap` ([#2664](https://github.com/tailwindlabs/tailwindcss/pull/2664))
+- Rename `flex-no-wrap` to `flex-nowrap` ([#2676](https://github.com/tailwindlabs/tailwindcss/pull/2676))
+- Rename `col-gap` and `row-gap` to `gap-x` and `gap-y` ([#2137](https://github.com/tailwindlabs/tailwindcss/pull/2137))
+- Merge `extend` objects deeply by default instead of shallowly ([#2679](https://github.com/tailwindlabs/tailwindcss/pull/2679))
+- Respect `preserveHtmlElements` option even when using custom extractor ([#2704](https://github.com/tailwindlabs/tailwindcss/pull/2704))
+- Automatically prefix keyframes and animation names when a prefix is configured ([#2621](https://github.com/tailwindlabs/tailwindcss/pull/2621), [#2641](https://github.com/tailwindlabs/tailwindcss/pull/2641))
+
+---
+
+## Upgrading
+
+- Update your build environment to a modern version of Node
+- Tell any customers who use IE11 to get with the times
+- Don't depend on default colors
+- Override the `fontSize` config or add line-height utilities to your templates to override the new default line-height values per font-size
+- Add any extra variants you need for `truncate` to the `textOverflow` plugin
+- Remove `scrolling-touch` and `scrolling-auto` from your HTML, they don't do anything
+- Rename `whitespace-no-wrap`, `flex-no-wrap`, and `col/row-gap` utilities
+- Update use of `theme` to be less data structure aware
+- Add `hidden` to any `template` elements that are within `space` or `divide` blocks
+- Disable `preserveHtmlElements` if you're using a custom extractor and don't want it respected
+- Keyframes are prefixed automatically if you have a prefix in your config, make sure any custom CSS referencing those keyframe names accounts for this
+- If you were relying on `extends` only merging shallowly, you will have to move those customizations out of `extends`
+- Talk about upgrading custom forms and typography plugins?
+
+
