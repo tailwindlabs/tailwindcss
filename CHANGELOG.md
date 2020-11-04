@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Respect `preserveHtmlElements` option even when using custom PurgeCSS extractor ([#2704](https://github.com/tailwindlabs/tailwindcss/pull/2704))
+- Set font-family and line-height to `inherit` on `body` to behave more like v1.x ([#2729](https://github.com/tailwindlabs/tailwindcss/pull/2729))
 
 ## [2.0.0-alpha.5] - 2020-10-30
 
