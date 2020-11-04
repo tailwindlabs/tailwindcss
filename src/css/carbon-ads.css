@@ -11,5 +11,5 @@
   @apply text-sm text-gray-800 leading-tight mb-2;
 }
 .carbon-poweredby {
-  @apply text-xs .text-gray-500;
+  @apply text-xs text-gray-500;
 }

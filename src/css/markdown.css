@@ -78,7 +78,7 @@
     @apply text-sm;
     @apply px-1;
     @apply leading-none;
-    @apply whitespace-no-wrap;
+    @apply whitespace-nowrap;
     @apply text-purple-600;
     @apply font-mono;
     @apply align-baseline;
@@ -181,7 +181,7 @@
     @apply mt-6;
   }
 
-  > ul:not(.list-none) {
+  > ul { /* TODO: Find a way to re-add the :not(.list-none). Is this even necessary? Currently got a "You cannot `@apply` the `list-none` utility here because it creates a circular dependency." */
     @apply pl-0 list-none;
     li {
       @apply relative pl-5;
