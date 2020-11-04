@@ -1,14 +1,14 @@
 import { IconContainer, Caption, BigText, Paragraph, Link, Widont } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
-import { CodeWindow } from '@/components/CodeWindow'
+import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import tokenize from '../../macros/tokenize.macro'
-import { useEffect, useLayoutEffect, useState } from 'react'
-import { Token } from '@/components/Code'
+import { Fragment, useEffect, useLayoutEffect, useState } from 'react'
 import { ReactComponent as Icon } from '@/img/icons/home/component-driven.svg'
 import { Tabs } from '@/components/Tabs'
 import { ReactComponent as ReactLogo } from '@/img/icons/react.svg'
 import { ReactComponent as VueLogo } from '@/img/icons/vue.svg'
+import { ReactComponent as LaravelLogo } from '@/img/icons/laravel.svg'
 import { AnimatePresence, AnimateSharedLayout, motion, useIsPresent } from 'framer-motion'
 
 const recipes = [
@@ -51,7 +51,7 @@ import ListItem from './ListItem.js'
 
 export default function Recipes({ recipes }) {
   return (
-    <main className="divide-y divide-gray-100">
+    <div className="divide-y divide-gray-100">
       <Nav>
         <NavItem href="/featured" isActive>Featured</NavItem>
         <NavItem href="/popular">Popular</NavItem>
@@ -59,13 +59,14 @@ export default function Recipes({ recipes }) {
       </Nav>
       <List>
         {recipes.map((recipe) => (
-          <ListItem key={recipe.id} {...recipe} />
+          <ListItem key={recipe.id} recipe={recipe} />
         )}
       </List>
-    </main>
+    </div>
   )
-}`
-    ).tokens,
+}
+`
+    ).lines,
     'Nav.js': tokenize.jsx(`export default function Nav({ children }) {
   return (
     <nav className="p-4">
@@ -74,7 +75,8 @@ export default function Recipes({ recipes }) {
       </ul>
     </nav>
   )
-}`).tokens,
+}
+`).lines,
     'NavItem.js': tokenize.jsx(`export default function NavItem({ href, isActive, children }) {
   return (
     <li>
@@ -86,33 +88,245 @@ export default function Recipes({ recipes }) {
       </a>
     </li>
   )
-}`).tokens,
+}
+`).lines,
     'List.js': tokenize.jsx(`export default function List({ children }) {
   return (
     <ul className="divide-y divide-gray-100">
       {children}
     </ul>
   )
-}`).tokens,
-    'ListItem.js': tokenize.jsx(`export default function Item({ title, image }) {
+}
+`).lines,
+    'ListItem.js': tokenize.jsx(`export default function ListItem({ recipe }) {
   return (
     <article className="p-4 flex space-x-4">
-      <img src={image} alt="" className="flex-none w-18 h-18 rounded-lg object-cover" />
-      <div className="flex-auto">
+      <img src={recipe.image} alt="" className="flex-none w-18 h-18 rounded-lg object-cover" width="144" height="144" />
+      <div className="min-w-0 relative flex-auto sm:pr-20 lg:pr-0 xl:pr-20">
         <h2 className="text-lg leading-7 font-semibold text-black mb-0.5">
-          {title}
+          {recipe.title}
         </h2>
+        <dl className="flex flex-wrap text-sm leading-5 font-medium whitespace-pre">
+          <div>
+            <dt className="sr-only">Time</dt>
+            <dd>
+              <abbr title={\`\${recipe.time} minutes\`}>{recipe.time}m</abbr>
+            </dd>
+          </div>
+          <div>
+            <dt className="sr-only">Difficulty</dt>
+            <dd> · {recipe.difficulty}</dd>
+          </div>
+          <div>
+            <dt className="sr-only">Servings</dt>
+            <dd> · {recipe.servings} servings</dd>
+          </div>
+          <div className="flex-none w-full mt-0.5 font-normal">
+            <dt className="inline">By</dt>{' '}
+            <dd className="inline text-black">{recipe.author}</dd>
+          </div>
+          <div class="absolute top-0 right-0 rounded-full bg-amber-50 text-amber-900 px-2 py-0.5 hidden sm:flex lg:hidden xl:flex items-center space-x-1">
+            <dt className="text-amber-500">
+              <span className="sr-only">Rating</span>
+              <svg width="16" height="20" fill="currentColor">
+                <path d="M7.05 3.691c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.372 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.539 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.783.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.363-1.118L.98 9.483c-.784-.57-.381-1.81.587-1.81H5.03a1 1 0 00.95-.69L7.05 3.69z" />
+              </svg>
+            </dt>
+            <dd>{recipe.rating}</dd>
+          </div>
+        </dl>
       </div>
     </article>
   )
-}`).tokens,
+}
+`).lines,
   },
   vue: {
-    'Recipes.vue': tokenize.html('<template></template>').tokens,
-    'Nav.vue': tokenize.html('<template></template>').tokens,
-    'NavItem.vue': tokenize.html('<template></template>').tokens,
-    'List.vue': tokenize.html('<template></template>').tokens,
-    'ListItem.vue': tokenize.html('<template></template>').tokens,
+    'Recipes.vue': tokenize.html(`<template>
+  <div class="divide-y divide-gray-100">
+    <Nav>
+      <NavItem href="/featured" isActive>Featured</NavItem>
+      <NavItem href="/popular">Popular</NavItem>
+      <NavItem href="/recent">Recent</NavItem>
+    </Nav>
+    <List>
+      <ListItem v-for="recipe in recipes" :key="recipe.id" :recipe="recipe" />
+    </List>
+  </div>
+</template>
+
+<script>
+import Nav from './Nav.vue'
+import NavItem from './NavItem.vue'
+import List from './List.vue'
+import ListItem from './ListItem.vue'
+
+export default {
+  props: ['recipes'],
+  components: {
+    Nav,
+    NavItem,
+    List,
+    ListItem,
+  },
+}
+</script>
+`).lines,
+    'Nav.vue': tokenize.html(`<template>
+  <nav class="p-4">
+    <ul class="flex space-x-2">
+      <slot></slot>
+    </ul>
+  </nav>
+</template>
+`).lines,
+    'NavItem.vue': tokenize.html(`<template>
+  <li>
+    <a
+      :href="href"
+      :class="['block px-4 py-2 rounded-md', { 'bg-amber-100 text-amber-700': isActive }]"
+    >
+      <slot></slot>
+    </a>
+  </li>
+</template>
+
+<script>
+export default {
+  props: {
+    href: {
+      type: String,
+      required: true,
+    },
+    isActive: Boolean,
+  },
+}
+</script>
+`).lines,
+    'List.vue': tokenize.html(`<template>
+  <ul class="divide-y divide-gray-100">
+    <slot></slot>
+  </ul>
+</template>
+`).lines,
+    'ListItem.vue': tokenize.html(`<template>
+  <article class="p-4 flex space-x-4">
+    <img :src="recipe.image" alt="" class="flex-none w-18 h-18 rounded-lg object-cover" width="144" height="144" />
+    <div class="min-w-0 relative flex-auto sm:pr-20 lg:pr-0 xl:pr-20">
+      <h2 class="text-lg leading-7 font-semibold text-black mb-0.5">
+        {{ recipe.title }}
+      </h2>
+      <dl class="flex flex-wrap text-sm leading-5 font-medium whitespace-pre">
+        <div>
+          <dt class="sr-only">Time</dt>
+          <dd>
+            <abbr :title="\`\${recipe.time} minutes\`">{{ recipe.time }}m</abbr>
+          </dd>
+        </div>
+        <div>
+          <dt class="sr-only">Difficulty</dt>
+          <dd> · {{ recipe.difficulty }}</dd>
+        </div>
+        <div>
+          <dt class="sr-only">Servings</dt>
+          <dd> · {{ recipe.servings }} servings</dd>
+        </div>
+        <div class="flex-none w-full mt-0.5 font-normal">
+          <dt class="inline">By</dt>
+          <dd class="inline text-black">{{ recipe.author }}</dd>
+        </div>
+        <div class="absolute top-0 right-0 rounded-full bg-amber-50 text-amber-900 px-2 py-0.5 hidden sm:flex lg:hidden xl:flex items-center space-x-1">
+          <dt class="text-amber-500">
+            <span class="sr-only">Rating</span>
+            <svg width="16" height="20" fill="currentColor">
+              <path d="M7.05 3.691c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.372 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.539 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.783.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.363-1.118L.98 9.483c-.784-.57-.381-1.81.587-1.81H5.03a1 1 0 00.95-.69L7.05 3.69z" />
+            </svg>
+          </dt>
+          <dd>{{ recipe.rating }}</dd>
+        </div>
+      </dl>
+    </div>
+  </article>
+</template>
+
+<script>
+export default {
+  props: ['recipe'],
+}
+</script>
+`).lines,
+  },
+  blade: {
+    'recipes.blade.php': tokenize.html(`<div class="divide-y divide-gray-100">
+  <x-nav>
+    <x-nav-item href="/featured" :isActive="true">Featured</x-nav-item>
+    <x-nav-item href="/popular">Popular</x-nav-item>
+    <x-nav-item href="/recent">Recent</x-nav-item>
+  </x-nav>
+  <x-list>
+    @foreach ($recipes as $recipe)
+      <x-list-item :recipe="$recipe" />
+    @endforeach
+  </x-list>
+</div>
+`).lines,
+    'nav.blade.php': tokenize.html(`<nav class="p-4">
+  <ul class="flex space-x-2">
+    {{ $slot }}
+  </ul>
+</nav>
+`).lines,
+    'nav-item.blade.php': tokenize.html(`<li>
+  <a
+    href="{{ $href }}"
+    class="block px-4 py-2 rounded-md {{ $isActive ? 'bg-amber-100 text-amber-700' : '' }}"
+  >
+    {{ $slot }}
+  </a>
+</li>
+`).lines,
+    'list.blade.php': tokenize.html(`<ul class="divide-y divide-gray-100">
+  {{ $slot }}
+</ul>
+`).lines,
+    'list-item.blade.php': tokenize.html(`<article class="p-4 flex space-x-4">
+  <img src="{{ $recipe->image }}" alt="" class="flex-none w-18 h-18 rounded-lg object-cover" width="144" height="144" />
+  <div class="min-w-0 relative flex-auto sm:pr-20 lg:pr-0 xl:pr-20">
+    <h2 class="text-lg leading-7 font-semibold text-black mb-0.5">
+      {{ $recipe->title }}
+    </h2>
+    <dl class="flex flex-wrap text-sm leading-5 font-medium whitespace-pre">
+      <div>
+        <dt class="sr-only">Time</dt>
+        <dd>
+          <abbr title="{{ $recipe->time }} minutes">{{ $recipe->time }}m</abbr>
+        </dd>
+      </div>
+      <div>
+        <dt class="sr-only">Difficulty</dt>
+        <dd> · {{ $recipe->difficulty }}</dd>
+      </div>
+      <div>
+        <dt class="sr-only">Servings</dt>
+        <dd> · {{ $recipe->servings }} servings</dd>
+      </div>
+      <div class="flex-none w-full mt-0.5 font-normal">
+        <dt class="inline">By</dt>
+        <dd class="inline text-black">{{ $recipe->author }}</dd>
+      </div>
+      <div class="absolute top-0 right-0 rounded-full bg-amber-50 text-amber-900 px-2 py-0.5 hidden sm:flex lg:hidden xl:flex items-center space-x-1">
+        <dt class="text-amber-500">
+          <span class="sr-only">Rating</span>
+          <svg width="16" height="20" fill="currentColor">
+            <path d="M7.05 3.691c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.372 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.539 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.783.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.363-1.118L.98 9.483c-.784-.57-.381-1.81.587-1.81H5.03a1 1 0 00.95-.69L7.05 3.69z" />
+          </svg>
+        </dt>
+        <dd>{{ $recipe->rating }}</dd>
+      </div>
+    </dl>
+  </div>
+</article>
+`).lines,
   },
 }
 
@@ -145,37 +359,6 @@ function ComponentLink({ onClick, children }) {
   )
 }
 
-function EditorToken(props) {
-  const { token, tokens, tokenIndex, setActiveTab } = props
-
-  if (
-    token[0] === 'class-name' &&
-    tokens[tokenIndex - 1][0] === 'punctuation' &&
-    (tokens[tokenIndex - 1][1] === '<' || tokens[tokenIndex - 1][1] === '</')
-  ) {
-    return (
-      <Token {...props}>
-        <ComponentLink onClick={() => setActiveTab(`${token[1]}.js`)}>{token[1]}</ComponentLink>
-      </Token>
-    )
-  }
-
-  if (token[0] === 'string' && /^(['"`])\.\/.*?\.js\1$/.test(token[1])) {
-    const tab = token[1].substr(3, token[1].length - 4)
-    return (
-      <Token {...props}>
-        {token[1].substr(0, 1)}
-        <button type="button" className="underline" onClick={() => setActiveTab(tab)}>
-          ./{tab}
-        </button>
-        {token[1].substr(0, 1)}
-      </Token>
-    )
-  }
-
-  return <Token {...props} />
-}
-
 function TabBar({ children }) {
   const isPresent = useIsPresent()
   return (
@@ -186,7 +369,7 @@ function TabBar({ children }) {
       transition={{ type: 'spring', mass: 0.4 }}
       className={`${
         isPresent ? '' : 'absolute top-0 left-0 w-full'
-      } flex text-sm leading-5 text-orange-300 overflow-hidden`}
+      } flex text-sm leading-5 text-orange-300`}
     >
       {children}
     </motion.ul>
@@ -195,6 +378,7 @@ function TabBar({ children }) {
 
 function ComponentExample({ framework }) {
   const [activeTab, setActiveTab] = useState(0)
+  const lines = tabs[framework][Object.keys(tabs[framework])[activeTab]]
 
   useLayoutEffect(() => {
     setActiveTab(0)
@@ -202,14 +386,17 @@ function ComponentExample({ framework }) {
 
   return (
     <CodeWindow className="bg-orange-500">
-      <div className="relative bg-orange-900 bg-opacity-20 overflow-hidden">
+      <div className="flex-none relative bg-orange-900 bg-opacity-20 overflow-auto whitespace-no-wrap">
         <AnimateSharedLayout>
           <div
             aria-hidden="true"
             className="absolute top-0 left-0 flex text-sm leading-5 font-medium text-transparent pointer-events-none select-none"
           >
             {Object.keys(tabs[framework]).map((tab, tabIndex) => (
-              <div key={tabIndex} className="relative py-2 px-4 border border-transparent">
+              <div
+                key={tabIndex}
+                className="flex-none relative py-2 px-4 border border-transparent"
+              >
                 {tabIndex === activeTab && (
                   <motion.div
                     layoutId="activeTab"
@@ -224,7 +411,7 @@ function ComponentExample({ framework }) {
         <AnimatePresence initial={false}>
           <TabBar key={framework}>
             {Object.keys(tabs[framework]).map((tab, tabIndex) => (
-              <li key={tab}>
+              <li key={tab} className="flex-none">
                 <button
                   type="button"
                   className={`border border-transparent py-2 px-4 font-medium focus:outline-none hover:text-orange-200 ${
@@ -239,13 +426,76 @@ function ComponentExample({ framework }) {
           </TabBar>
         </AnimatePresence>
       </div>
-      <CodeWindow.Code
-        tokens={tabs[framework][Object.keys(tabs[framework])[activeTab]]}
-        tokenComponent={EditorToken}
-        tokenProps={{
-          setActiveTab: (name) => setActiveTab(Object.keys(tabs[framework]).indexOf(name)),
-        }}
-      />
+      <AnimatePresence initial={false} exitBeforeEnter>
+        <motion.div
+          key={framework + activeTab}
+          className="w-full flex-auto flex min-h-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <CodeWindow.Code2 lines={lines.length}>
+            {lines.map((tokens, lineIndex) => (
+              <Fragment key={framework + activeTab + lineIndex}>
+                {tokens.map((token, tokenIndex) => {
+                  if (
+                    (token.types[token.types.length - 1] === 'class-name' ||
+                      (token.types[token.types.length - 1] === 'tag' &&
+                        /^([A-Z]|x-)/.test(token.content))) &&
+                    tokens[tokenIndex - 1]?.types[tokens[tokenIndex - 1].types.length - 1] ===
+                      'punctuation' &&
+                    (tokens[tokenIndex - 1]?.content === '<' ||
+                      tokens[tokenIndex - 1].content === '</')
+                  ) {
+                    return (
+                      <span key={tokenIndex} className={getClassNameForToken(token)}>
+                        <ComponentLink
+                          onClick={() =>
+                            setActiveTab(
+                              Object.keys(tabs[framework]).findIndex((x) =>
+                                x.startsWith(`${token.content.replace(/^x-/, '')}.`)
+                              )
+                            )
+                          }
+                        >
+                          {token.content}
+                        </ComponentLink>
+                      </span>
+                    )
+                  }
+
+                  if (
+                    token.types[token.types.length - 1] === 'string' &&
+                    /^(['"`])\.\/.*?\.(js|vue)\1$/.test(token.content)
+                  ) {
+                    const tab = token.content.substr(3, token.content.length - 4)
+                    return (
+                      <span key={tokenIndex} className={getClassNameForToken(token)}>
+                        {token.content.substr(0, 1)}
+                        <button
+                          type="button"
+                          className="underline"
+                          onClick={() => setActiveTab(Object.keys(tabs[framework]).indexOf(tab))}
+                        >
+                          ./{tab}
+                        </button>
+                        {token.content.substr(0, 1)}
+                      </span>
+                    )
+                  }
+
+                  return (
+                    <span key={tokenIndex} className={getClassNameForToken(token)}>
+                      {token.content}
+                    </span>
+                  )
+                })}
+                {'\n'}
+              </Fragment>
+            ))}
+          </CodeWindow.Code2>
+        </motion.div>
+      </AnimatePresence>
     </CodeWindow>
   )
 }
@@ -333,6 +583,12 @@ export function ComponentDriven() {
                   <div className="flex flex-col items-center py-1">
                     <VueLogo className="mb-2" />
                     Vue
+                  </div>
+                ),
+                blade: (
+                  <div className="flex flex-col items-center py-1">
+                    <LaravelLogo className="mb-2" />
+                    Blade
                   </div>
                 ),
               }}

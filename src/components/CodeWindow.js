@@ -1,4 +1,4 @@
-import { forwardRef, useMemo } from 'react'
+import { forwardRef, Fragment, useMemo } from 'react'
 import tokenize from '../macros/tokenize.macro'
 import { Code } from './Code'
 import styles from './CodeWindow.module.css'
@@ -121,9 +121,16 @@ CodeWindow.Code2 = forwardRef(({ lines = 0, lineNumbersBackground = true, childr
             }`}
             style={{ width: 50 }}
           >
-            {Array.from({ length: lines })
-              .map((_, i) => i + 1)
-              .join('\n')}
+            {Array.from({ length: lines }).map((_, i) =>
+              i === 0 ? (
+                i + 1
+              ) : (
+                <Fragment key={i + 1}>
+                  <br />
+                  {i + 1}
+                </Fragment>
+              )
+            )}
           </div>
           <code className="flex-auto relative block text-white pt-4 pb-4 px-4 overflow-auto">
             {children}
