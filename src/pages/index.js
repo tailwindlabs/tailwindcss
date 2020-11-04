@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <div className="space-y-44 overflow-hidden b">
       <header className="relative z-10 max-w-screen-lg xl:max-w-screen-xl mx-auto">
-        <div className="px-4 sm:px-6 md:px-8">
+        <div className="px-4 sm:px-6 md:px-8 mb-20 xl:mb-8">
           <div className="border-b border-gray-200 py-6 flex items-center justify-between mb-20">
             <Search />
             <a href="https://github.com/tailwindlabs/tailwindcss" className="text-gray-400">
@@ -64,7 +64,7 @@ export default function Home() {
             A utility-first CSS framework packed with classes like flex, pt-4, text-center and
             rotate-90 that can be composed to build any design, directly in your markup.
           </p>
-          <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4 mb-8 text-center">
+          <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4 text-center">
             <a
               href="#"
               className="w-full sm:w-auto flex-none bg-black text-white text-lg leading-6 font-semibold py-3 px-6 border border-transparent rounded-xl"
