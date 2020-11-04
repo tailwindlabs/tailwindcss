@@ -386,6 +386,7 @@ export function ConstraintBased() {
                                   part
                                 ) : (
                                   <span
+                                    key={i}
                                     style={{
                                       background: 'rgba(134, 239, 172, 0.25)',
                                       borderRadius: 3,
