@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [2.0.0-alpha.6] - 2020-11-04
+
 ### Changed
 
 - Respect `preserveHtmlElements` option even when using custom PurgeCSS extractor ([#2704](https://github.com/tailwindlabs/tailwindcss/pull/2704))
@@ -1085,7 +1089,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.5...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.6...HEAD
+[2.0.0-alpha.6]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.4...v2.0.0-alpha.6
 [2.0.0-alpha.5]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.4...v2.0.0-alpha.5
 [2.0.0-alpha.4]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.3...v2.0.0-alpha.4
 [2.0.0-alpha.3]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.2...v2.0.0-alpha.3
