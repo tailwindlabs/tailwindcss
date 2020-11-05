@@ -501,7 +501,7 @@ function ComponentExample({ framework }) {
 }
 
 const css = tokenize.css(`.btn {
-  @apply text-base leading-6 font-medium rounded-lg py-3;
+  @apply text-base leading-6 font-medium rounded-lg p-3;
 }
 
 .btn--primary {
@@ -513,7 +513,7 @@ const css = tokenize.css(`.btn {
 }
 `).tokens
 
-const html = tokenize.html(`  <footer class="grid grid-cols-2 gap-6">
+const html = tokenize.html(`  <footer class="grid grid-cols-2 gap-x-6">
     <button class="btn btn--secondary">Decline</button>
     <button class="btn btn--primary">Accept</button>
   </footer>
