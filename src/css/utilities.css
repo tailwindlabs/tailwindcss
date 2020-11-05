@@ -128,3 +128,7 @@
   padding: 0.0625rem 0.1875rem;
   margin: 0 -0.1875rem;
 }
+
+body.cursor-ew-resize * {
+  cursor: ew-resize !important;
+}

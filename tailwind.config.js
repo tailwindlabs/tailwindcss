@@ -72,6 +72,9 @@ module.exports = {
         'flash-code': 'flash-code 1s forwards',
         'flash-code-slow': 'flash-code 2s forwards',
       },
+      cursor: {
+        'ew-resize': 'ew-resize',
+      },
     },
     colors: {
       transparent: 'transparent',
