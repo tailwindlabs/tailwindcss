@@ -25,7 +25,7 @@ const problems = [
 
 const completions = [
   //
-  ['sm:'],
+  ['sm:', '@media (min-width: 640px)'],
   ['md:'],
   ['lg:'],
   ['xl:'],
@@ -38,29 +38,49 @@ const completions = [
   ['space-y-1'],
   ['space-x-1'],
   //
-  ['bg-fixed'],
+  ['bg-fixed', 'background-position: fixed;'],
   ['bg-local'],
   ['bg-scroll'],
   ['bg-clip-border'],
   ['bg-clip-padding'],
   ['bg-clip-content'],
   ['bg-clip-text'],
-  ['bg-transparent'],
+  ['bg-transparent', 'background-color: transparent;'],
   ['bg-current'],
   ['bg-black', '#000'],
   ['bg-white', '#fff'],
   ['bg-gray-50', siteConfig.theme.colors.gray[50]],
   //
-  ['bg-teal-50', siteConfig.theme.colors.teal[50]],
-  ['bg-teal-100', siteConfig.theme.colors.teal[100]],
-  ['bg-teal-200', siteConfig.theme.colors.teal[200]],
-  ['bg-teal-300', siteConfig.theme.colors.teal[300]],
-  ['bg-teal-400', siteConfig.theme.colors.teal[400]],
-  ['bg-teal-500', siteConfig.theme.colors.teal[500]],
-  ['bg-teal-600', siteConfig.theme.colors.teal[600]],
-  ['bg-teal-700', siteConfig.theme.colors.teal[700]],
-  ['bg-teal-800', siteConfig.theme.colors.teal[800]],
-  ['bg-teal-900', siteConfig.theme.colors.teal[900]],
+  [
+    'bg-teal-50',
+    `background-color: ${siteConfig.theme.colors.teal[50]};`,
+    siteConfig.theme.colors.teal[50],
+  ],
+  [
+    'bg-teal-100',
+    `background-color: ${siteConfig.theme.colors.teal[100]};`,
+    siteConfig.theme.colors.teal[100],
+  ],
+  [
+    'bg-teal-200',
+    `background-color: ${siteConfig.theme.colors.teal[200]};`,
+    siteConfig.theme.colors.teal[200],
+  ],
+  [
+    'bg-teal-300',
+    `background-color: ${siteConfig.theme.colors.teal[300]};`,
+    siteConfig.theme.colors.teal[300],
+  ],
+  [
+    'bg-teal-400',
+    `background-color: ${siteConfig.theme.colors.teal[400]};`,
+    siteConfig.theme.colors.teal[400],
+  ],
+  ['bg-teal-500', undefined, siteConfig.theme.colors.teal[500]],
+  ['bg-teal-600', undefined, siteConfig.theme.colors.teal[600]],
+  ['bg-teal-700', undefined, siteConfig.theme.colors.teal[700]],
+  ['bg-teal-800', undefined, siteConfig.theme.colors.teal[800]],
+  ['bg-teal-900', undefined, siteConfig.theme.colors.teal[900]],
   ['bg-top'],
 ]
 
@@ -279,10 +299,10 @@ function EditorToolsToken(props) {
                         }`}
                       >
                         <span className="w-4 flex-none flex justify-center">
-                          {completion[1] ? (
+                          {completion[2] ? (
                             <span
                               className="flex-none w-3 h-3 rounded-sm shadow-px"
-                              style={{ background: completion[1] }}
+                              style={{ background: completion[2] }}
                             />
                           ) : (
                             <svg width="16" height="10" fill="none">
@@ -291,7 +311,7 @@ function EditorToolsToken(props) {
                             </svg>
                           )}
                         </span>
-                        <span className="flex-auto">
+                        <span className="flex-none">
                           {completion[0].split(new RegExp(`(^${typed.trim()})`)).map((part, j) =>
                             part ? (
                               j % 2 === 0 ? (
@@ -304,6 +324,11 @@ function EditorToolsToken(props) {
                             ) : null
                           )}
                         </span>
+                        {i === selectedCompletionIndex && completion[1] ? (
+                          <span className="flex-auto text-right text-gray-500 truncate pl-4">
+                            {completion[1]}
+                          </span>
+                        ) : null}
                       </li>
                     ))}
                 </ul>
