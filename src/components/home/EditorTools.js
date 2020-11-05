@@ -265,7 +265,7 @@ function EditorToolsToken(props) {
                     .slice(0, 12)
                     .map((completion, i) => (
                       <li
-                        key={i}
+                        key={completion[0]}
                         className={`pl-2.5 pr-3 flex items-center space-x-1.5 ${
                           i === selectedCompletionIndex ? 'bg-white bg-opacity-10' : ''
                         }`}
