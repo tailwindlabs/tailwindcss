@@ -1,16 +1,16 @@
 import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
-import { CodeWindow } from '@/components/CodeWindow'
+import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import { ReactComponent as Icon } from '@/img/icons/home/performance.svg'
 import { Fragment, useEffect, useRef } from 'react'
 import { motion, animate, useMotionValue, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import tokenize from '../../macros/tokenize.macro'
-import { addClassTokens } from '@/utils/addClassTokens'
-import { Token } from '@/components/Code'
-import { shuffle } from '@/utils/shuffle'
+import { addClassTokens2 } from '@/utils/addClassTokens'
+import shuffleSeed from 'shuffle-seed'
 import { randomIntFromInterval } from '@/utils/randomIntFromInterval'
+import clsx from 'clsx'
 
 const BASE_RANGE = [0, 5000]
 
@@ -31,52 +31,41 @@ function Counter({ from, to, round = 0, progress }) {
   return <span ref={ref}>{formatNumber(value.get())}</span>
 }
 
-const { tokens, code } = tokenize.html(
-  `<div class="flex pa-2 bg-white rounded-lg shadow">
-  <div class="w-32 rounded-md overflow-hidden">
-    <img src="avatar.jpg" class="h-full object-fit">
-  </div>
-  <div class="flex flex-col">
-    <p class="font-bold text-lg">"If I had to recommend a way of
-      getting into programming today, it would be HTML + CSS
-      with @tailwindcss."
+const { lines, code } = tokenize.html(
+  `<div class="md:flex bg-gray-100 rounded-xl p-8 md:p-0">
+  <img class="w-32 h-32 md:w-48 md:h-auto rounded-full mx-auto md:rounded-none" src="https://unsplash.it/200/200?random" alt="" />
+  <blockquote class="mt-6 text-center md:p-8">
+    <p class="text-lg leading-7 mb-4 font-semibold">
+      “Tailwind CSS is the only framework that I've seen scale
+      on large teams. It’s easy to customize, adapts to any design,
+      and the build size is tiny.”
     </p>
-    <div class="flex space-between">
-      <div>
-        <h2 class="font-semibold">Guillermo Rauch</h2>
-        <small class="text-sm text-gray-500">CEO Vercel</small>
-      </div>
-      <a href="https://twitter.com/rauchg" class="text-blue-500
-        rounded-md p-1">View Tweet</a>
-    </div>
-  </div>
-</div>`,
-  true,
-  (code) => {
-    let index = 0
-    return code.replace(/class="([^"]+)"/g, (m, classList) => {
-      return `class="${classList
-        .split(' ')
-        .map((x) => (x ? `${index++}-${x}` : ''))
-        .join(' ')}"`
-    })
-  }
+    <cite class="not-italic font-medium">
+      <span class="text-cyan-600">Sarah Dayan</span><br />
+      <span class="text-gray-500">Staff Engineer, Algolia</span>
+    </cite>
+  </blockquote>
+</div>
+`,
+  true
 )
 
-const classes = code
-  .match(/class="[^"]+"/g)
-  .map((attr) => attr.substring(7, attr.length - 1).split(/\s+/))
-  .flat()
+addClassTokens2(lines)
 
-const unusedClasses = Array.from({ length: 45 }).map(() => makeClass())
+const classPercentage = 0.5
+const classes = shuffleSeed
+  .shuffle(
+    code
+      .match(/class="[^"]+"/g)
+      .map((attr) => attr.substring(7, attr.length - 1).split(/\s+/))
+      .flat(),
+    3
+  )
+  .filter((_, i, a) => i < a.length * classPercentage)
 
-const allClassesShuffled = shuffle([
-  ...classes.filter(
-    (v, i, a) =>
-      a.findIndex((v1) => v1.substr(v1.indexOf('-') + 1) === v.substr(v.indexOf('-') + 1)) === i
-  ),
-  ...unusedClasses,
-])
+const unusedClasses = Array.from({ length: 50 }).map(() => makeClass())
+
+const allClassesShuffled = shuffleSeed.shuffle([...classes, ...unusedClasses], 5)
 
 export function Performance() {
   const progress = useMotionValue(0)
@@ -238,90 +227,85 @@ export function Performance() {
                 {allClassesShuffled.map((c, i) =>
                   classes.includes(c) ? (
                     <Fragment key={i}>
-                      <motion.span
-                        animate={
-                          inView
-                            ? {
-                                backgroundColor: [
-                                  null,
-                                  'rgba(134, 239, 172, 0.25)',
-                                  'rgba(134, 239, 172, 0)',
-                                ],
-                              }
-                            : undefined
-                        }
-                        initial={{
-                          backgroundColor: 'rgba(134, 239, 172, 0)',
-                          borderRadius: 3,
-                          padding: '1px 3px',
-                          margin: '0 -3px',
-                        }}
-                        transition={{ delay: (5 / classes.length) * classes.indexOf(c) }}
+                      <span
+                        className={clsx('code-highlight whitespace-no-wrap', {
+                          'animate-flash-code-slow': inView,
+                        })}
+                        style={{ animationDelay: `${(5 / classes.length) * classes.indexOf(c)}s` }}
                       >
-                        {c.substr(c.indexOf('-') + 1)}
-                      </motion.span>{' '}
+                        {c}
+                      </span>{' '}
                     </Fragment>
                   ) : (
                     <Fragment key={i}>
-                      <motion.span
-                        animate={
-                          inView
-                            ? {
-                                color: '#134E4A',
-                              }
-                            : undefined
-                        }
-                        initial={{ color: '#99f6e4' }}
-                        transition={{
-                          delay: (5 / unusedClasses.length) * unusedClasses.indexOf(c),
+                      <span
+                        className={clsx('transition-colors duration-500 whitespace-no-wrap', {
+                          'text-teal-200': !inView,
+                          'text-teal-900': inView,
+                        })}
+                        style={{
+                          transitionDelay: `${
+                            (5 / unusedClasses.length) * unusedClasses.indexOf(c)
+                          }s`,
                         }}
                       >
                         {c}
-                      </motion.span>{' '}
+                      </span>{' '}
                     </Fragment>
                   )
                 )}
               </div>
+              <div
+                className="absolute inset-x-0 bottom-0 h-16"
+                style={{
+                  backgroundImage:
+                    'linear-gradient(to top, rgba(4, 30, 28, 1), rgba(4, 30, 28, 0))',
+                }}
+              />
             </div>
           </div>
         }
         right={
           <CodeWindow className="bg-turquoise-500">
-            <CodeWindow.Code
-              tokens={tokens}
-              tokenComponent={PerformanceToken}
-              tokenProps={{ inView }}
-              transformTokens={addClassTokens}
-            />
+            <CodeWindow.Code2 lines={lines.length}>
+              {lines.map((tokens, lineIndex) => (
+                <Fragment key={lineIndex}>
+                  {tokens.map((token, tokenIndex) => {
+                    if (
+                      token.types[token.types.length - 1] === 'class' &&
+                      classes.includes(token.content)
+                    ) {
+                      return (
+                        <span
+                          key={tokenIndex}
+                          className={clsx('code-highlight', getClassNameForToken(token), {
+                            'animate-flash-code-slow': inView,
+                          })}
+                          style={{
+                            animationDelay: `${
+                              (5 / classes.length) * classes.indexOf(token.content)
+                            }s`,
+                          }}
+                        >
+                          {token.content}
+                        </span>
+                      )
+                    }
+
+                    return (
+                      <span key={tokenIndex} className={getClassNameForToken(token)}>
+                        {token.content}
+                      </span>
+                    )
+                  })}
+                  {'\n'}
+                </Fragment>
+              ))}
+            </CodeWindow.Code2>
           </CodeWindow>
         }
       />
     </section>
-  )
-}
-
-function PerformanceToken({ token, parentTypes, inView, children }) {
-  if (token[0] === 'class') {
-    return (
-      <motion.span
-        className="code-highlight"
-        animate={
-          inView
-            ? { backgroundColor: [null, 'rgba(134, 239, 172, 0.25)', 'rgba(134, 239, 172, 0)'] }
-            : undefined
-        }
-        initial={{ backgroundColor: 'rgba(134, 239, 172, 0)' }}
-        transition={{ delay: (5 / classes.length) * classes.indexOf(token[1]) }}
-      >
-        {token[1].substr(token[1].indexOf('-') + 1)}
-      </motion.span>
-    )
-  }
-
-  return (
-    <Token token={token} parentTypes={parentTypes}>
-      {children}
-    </Token>
   )
 }
 

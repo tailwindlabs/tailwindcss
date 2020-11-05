@@ -43,6 +43,7 @@
     "react-dom": "16.13.1",
     "react-intersection-observer": "^8.29.0",
     "redent": "^3.0.0",
+    "shuffle-seed": "^1.1.6",
     "simple-functional-loader": "^1.2.1",
     "stringify-object": "^3.3.0",
     "tailwindcss": "^1.9.1",

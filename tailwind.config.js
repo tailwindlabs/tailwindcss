@@ -70,6 +70,7 @@ module.exports = {
       },
       animation: {
         'flash-code': 'flash-code 1s forwards',
+        'flash-code-slow': 'flash-code 2s forwards',
       },
     },
     colors: {
