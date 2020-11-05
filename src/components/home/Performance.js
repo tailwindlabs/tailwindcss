@@ -304,6 +304,7 @@ function PerformanceToken({ token, parentTypes, inView, children }) {
   if (token[0] === 'class') {
     return (
       <motion.span
+        className="code-highlight"
         animate={
           inView
             ? { backgroundColor: [null, 'rgba(134, 239, 172, 0.25)', 'rgba(134, 239, 172, 0)'] }
@@ -311,7 +312,6 @@ function PerformanceToken({ token, parentTypes, inView, children }) {
         }
         initial={{ backgroundColor: 'rgba(134, 239, 172, 0)' }}
         transition={{ delay: (5 / classes.length) * classes.indexOf(token[1]) }}
-        style={{ borderRadius: 3, padding: '1px 3px', margin: '0 -3px' }}
       >
         {token[1].substr(token[1].indexOf('-') + 1)}
       </motion.span>

@@ -381,7 +381,7 @@ function AnimatedToken({ current, onComplete, children }) {
 
   return (
     <>
-      <span style={{ display: visible ? 'inline' : 'none' }}>{children}</span>
+      <span className={visible ? undefined : 'hidden'}>{children}</span>
       {current && <span className="border -mx-px" style={{ height: '1.125rem' }} />}
     </>
   )

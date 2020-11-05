@@ -8,6 +8,7 @@ import { ReactComponent as Icon } from '@/img/icons/home/mobile-first.svg'
 import styles from './MobileFirst.module.css'
 import tokenize from '../../macros/tokenize.macro'
 import { addClassTokens2 } from '@/utils/addClassTokens'
+import clsx from 'clsx'
 
 const MIN_WIDTH = 400
 const HANDLE_RADIUS = 2.125
@@ -295,14 +296,11 @@ export function MobileFirst() {
                         return (
                           <span
                             key={tokenIndex}
-                            className={`${getClassNameForToken(token)} transition duration-500`}
-                            style={{
-                              background: highlighted ? 'rgba(134, 239, 172, 0.25)' : '',
-                              borderRadius: 3,
-                              padding: '1px 3px',
-                              margin: '0 -3px',
-                              opacity: faded ? 0.5 : 1,
-                            }}
+                            className={clsx(
+                              'code-highlight transition duration-500',
+                              getClassNameForToken(token),
+                              { 'opacity-50': faded, 'bg-code-highlight': highlighted }
+                            )}
                           >
                             {token.content}
                           </span>

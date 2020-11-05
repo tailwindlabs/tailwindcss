@@ -122,3 +122,9 @@
 .after\:hash::after {
   content: '#';
 }
+
+.code-highlight {
+  border-radius: 0.1875rem;
+  padding: 0.0625rem 0.1875rem;
+  margin: 0 -0.1875rem;
+}

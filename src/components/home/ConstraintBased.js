@@ -385,15 +385,7 @@ export function ConstraintBased() {
                                 i % 2 === 0 ? (
                                   part
                                 ) : (
-                                  <span
-                                    key={i}
-                                    style={{
-                                      background: 'rgba(134, 239, 172, 0.25)',
-                                      borderRadius: 3,
-                                      padding: '1px 3px',
-                                      margin: '0 -3px',
-                                    }}
-                                  >
+                                  <span key={i} className="code-highlight bg-code-highlight">
                                     {part}
                                   </span>
                                 )

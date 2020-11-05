@@ -7,6 +7,7 @@ import tokenize from '../../macros/tokenize.macro'
 import { addClassTokens2 } from '@/utils/addClassTokens'
 import { useEffect, useRef, useState } from 'react'
 import { usePrevious } from '@/hooks/usePrevious'
+import clsx from 'clsx'
 
 const {
   lines,
@@ -280,15 +281,11 @@ export function StateVariants() {
                         return (
                           <span
                             key={tokenIndex}
-                            className={`transition-colors duration-500 ${getClassNameForToken(
-                              token
-                            )}`}
-                            style={{
-                              background: states.includes(state) ? 'rgba(134, 239, 172, 0.25)' : '',
-                              borderRadius: 3,
-                              padding: '1px 3px',
-                              margin: '0 -3px',
-                            }}
+                            className={clsx(
+                              'code-highlight transition-colors duration-500',
+                              getClassNameForToken(token),
+                              { 'bg-code-highlight': states.includes(state) }
+                            )}
                           >
                             {token.content.substr(token.content.indexOf(')') + 1)}
                           </span>

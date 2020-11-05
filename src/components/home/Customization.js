@@ -14,6 +14,7 @@ import { font as robotoMonoRegular } from '../../fonts/generated/RobotoMono-Regu
 import styles from './Customization.module.css'
 import tokenize from '../../macros/tokenize.macro'
 import { Token } from '../Code'
+import clsx from 'clsx'
 
 const themes = {
   simple: {
@@ -293,13 +294,8 @@ function CustomizationToken({ theme, ...props }) {
       <span className="text-code-string">
         '
         <span
-          className={initial.current ? '' : 'animate-flash-code'}
+          className={clsx('code-highlight', { 'animate-flash-code': !initial.current })}
           key={themes[theme].fontStacks[i][j]}
-          style={{
-            borderRadius: 3,
-            padding: '1px 3px',
-            margin: '0 -3px',
-          }}
         >
           {themes[theme].fontStacks[i][j]}
         </span>
@@ -316,13 +312,8 @@ function CustomizationToken({ theme, ...props }) {
       <span className="text-code-string">
         '
         <span
-          className={initial.current ? '' : 'animate-flash-code'}
+          className={clsx('code-highlight', { 'animate-flash-code': !initial.current })}
           key={color}
-          style={{
-            borderRadius: 3,
-            padding: '1px 3px',
-            margin: '0 -3px',
-          }}
         >
           {color}
         </span>
@@ -337,13 +328,8 @@ function CustomizationToken({ theme, ...props }) {
         part
       ) : (
         <span
-          className={initial.current ? '' : 'animate-flash-code'}
+          className={clsx('code-highlight', { 'animate-flash-code': !initial.current })}
           key={themes[theme].secondaryColorName}
-          style={{
-            borderRadius: 3,
-            padding: '1px 3px',
-            margin: '0 -3px',
-          }}
         >
           {themes[theme].secondaryColorName}
         </span>

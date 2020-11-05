@@ -9,6 +9,7 @@ import { ReactComponent as Icon } from '@/img/icons/home/dark-mode.svg'
 import { addClassTokens } from '@/utils/addClassTokens'
 import tokenize from '../../macros/tokenize.macro'
 import { Token } from '@/components/Code'
+import clsx from 'clsx'
 
 const { code, tokens } = tokenize.html(
   `<div class="(light)bg-white dark:bg-gray-800 rounded-tl-xl sm:rounded-t-xl p-4 pb-6 sm:p-8 lg:p-4 lg:pb-6 xl:p-8 space-y-6 sm:space-y-8 lg:space-y-6 xl:space-y-8">
@@ -201,13 +202,9 @@ function DarkModeToken({ token, parentTypes, enabled, children }) {
     if (token[1].startsWith('dark:')) {
       return (
         <span
-          className="transition-colors duration-500"
-          style={{
-            background: enabled ? 'rgba(134, 239, 172, 0.25)' : '',
-            borderRadius: 3,
-            padding: '1px 3px',
-            margin: '0 -3px',
-          }}
+          className={clsx('code-highlight transition-colors duration-500', {
+            'bg-code-highlight': enabled,
+          })}
         >
           {children}
         </span>
@@ -215,7 +212,7 @@ function DarkModeToken({ token, parentTypes, enabled, children }) {
     }
     if (token[1].startsWith('(light)')) {
       return (
-        <span className="transition-opacity duration-500" style={{ opacity: enabled ? 0.5 : 1 }}>
+        <span className={clsx('transition-opacity duration-500', { 'opacity-50': enabled })}>
           {token[1].replace(/^\(light\)/, '')}
         </span>
       )

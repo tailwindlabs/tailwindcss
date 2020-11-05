@@ -82,6 +82,7 @@ module.exports = {
       'code-attr-name': '#4BD0FB',
       'code-attr-value': '#A2F679',
       'code-string': '#A2F679',
+      'code-highlight': 'rgba(134, 239, 172, 0.25)',
       rose: {
         50: '#fff1f2',
         100: '#ffe4e6',
