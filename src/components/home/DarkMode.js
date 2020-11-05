@@ -100,17 +100,27 @@ function DarkModeSwitch({ enabled, onChange }) {
             y2="30"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor={enabled ? '#d4d4d8' : '#FACC15'} />
-            <stop offset="1" stopColor={enabled ? '#d4d4d8' : '#FA9D16'} />
+            <stop
+              className="transition-all duration-200"
+              stopColor={enabled ? '#d4d4d8' : '#FACC15'}
+            />
+            <stop
+              className="transition-all duration-200"
+              offset="1"
+              stopColor={enabled ? '#d4d4d8' : '#FA9D16'}
+            />
           </linearGradient>
         </defs>
       </svg>
       <Switch
         checked={enabled}
         onChange={onChange}
-        className={`inline-flex items-center px-0.5 rounded-full w-18 h-9 ${
-          enabled ? 'justify-end' : ''
-        }`}
+        className={clsx(
+          'inline-flex items-center px-0.5 rounded-full w-18 h-9 transition-colors duration-200',
+          {
+            'justify-end': enabled,
+          }
+        )}
         style={{ backgroundColor: enabled ? '#000' : '#60D360' }}
       >
         <span className="sr-only">Enable dark mode</span>
@@ -120,12 +130,19 @@ function DarkModeSwitch({ enabled, onChange }) {
           style={{ boxShadow: '0 2px 5px rgba(0, 0, 0, 0.05), 0 1px 1px rgba(0, 0, 0, 0.1)' }}
         />
       </Switch>
-      <svg width="24" height="24" fill="none">
+      <svg
+        width="24"
+        height="24"
+        fill="currentColor"
+        className={clsx('transition-colors duration-200', {
+          'text-black': enabled,
+          'text-gray-300': !enabled,
+        })}
+      >
         <path
           fillRule="evenodd"
           clipRule="evenodd"
           d="M9.353 2.939a1 1 0 01.22 1.08 8 8 0 0010.408 10.408 1 1 0 011.301 1.3A10.003 10.003 0 0112 22C6.477 22 2 17.523 2 12c0-4.207 2.598-7.805 6.273-9.282a1 1 0 011.08.22z"
-          fill={enabled ? '#000' : '#d4d4d8'}
         />
       </svg>
     </div>
