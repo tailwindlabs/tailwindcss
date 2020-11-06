@@ -1,12 +1,11 @@
 import { IconContainer, Caption, BigText, Paragraph, Link } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
-import { CodeWindow } from '@/components/CodeWindow'
+import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import styles from './EditorTools.module.css'
 import tokenize from '../../macros/tokenize.macro'
-import { Token } from '../Code'
 import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { ReactComponent as Icon } from '@/img/icons/home/editor-tools.svg'
 import { useInView } from 'react-intersection-observer'
 import { siteConfig } from '@/utils/siteConfig'
@@ -84,11 +83,37 @@ const completions = [
   ['bg-top'],
 ]
 
+const { lines } = tokenize.html('<div class="__CLASS__"></div>')
+
 function CompletionDemo() {
+  const { ref, inView } = useInView({ threshold: 0.5, triggerOnce: true })
+
+  return (
+    <CodeWindow.Code2 ref={ref} lines={lines.length} lineNumbersBackground={false} overflow={false}>
+      {lines.map((tokens, lineIndex) => (
+        <Fragment key={lineIndex}>
+          {tokens.map((token, tokenIndex) => {
+            if (token.content === '__CLASS__') {
+              return <Completion key={tokenIndex} inView={inView} />
+            }
+
+            return (
+              <span key={tokenIndex} className={getClassNameForToken(token)}>
+                {token.content}
+              </span>
+            )
+          })}
+          {'\n'}
+        </Fragment>
+      ))}
+    </CodeWindow.Code2>
+  )
+}
+
+function Completion({ inView }) {
   const [typed, setTyped] = useState('')
   const [selectedCompletionIndex, setSelectedCompletionIndex] = useState(0)
   const [stage, setStage] = useState(-1)
-  const { ref, inView } = useInView({ threshold: 0.5, triggerOnce: true })
 
   useEffect(() => {
     if (inView) {
@@ -116,6 +141,14 @@ function CompletionDemo() {
   useEffect(() => {
     if (stage === 1) {
       window.setTimeout(() => {
+        setStage(2)
+      }, 2000)
+    } else if (stage === 2 || stage === 3 || stage === 4 || stage === 5) {
+      window.setTimeout(() => {
+        setStage(stage + 1)
+      }, 300)
+    } else if (stage === 6) {
+      window.setTimeout(() => {
         setStage(-1)
       }, 2000)
       window.setTimeout(() => {
@@ -125,13 +158,116 @@ function CompletionDemo() {
   }, [stage])
 
   return (
-    <CodeWindow.Code
-      ref={ref}
-      tokens={tokenize.html('<div class="__CLASS__"></div>').tokens}
-      tokenComponent={EditorToolsToken}
-      tokenProps={{ stage, typed, setTyped, selectedCompletionIndex }}
-      lineNumbersBackground={false}
-    />
+    <span className="text-code-attr-value">
+      <span
+        className="inline-flex bg-repeat-x bg-left-bottom"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%206%203'%20enable-background%3D'new%200%200%206%203'%20height%3D'3'%20width%3D'6'%3E%3Cg%20fill%3D'%23fbbf24'%3E%3Cpolygon%20points%3D'5.5%2C0%202.5%2C3%201.1%2C3%204.1%2C0'%2F%3E%3Cpolygon%20points%3D'4%2C0%206%2C2%206%2C0.6%205.4%2C0'%2F%3E%3Cpolygon%20points%3D'0%2C2%201%2C3%202.4%2C3%200%2C0.6'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E")`,
+        }}
+      >
+        flex
+      </span>
+      {stage >= 0 &&
+        stage < 2 &&
+        ' bg-t'.split('').map((char, i) => (
+          <motion.span
+            key={i}
+            initial={{ display: 'none' }}
+            animate={{ display: 'inline' }}
+            transition={{ delay: (i + 1) * 0.3 }}
+            onAnimationComplete={() => setTyped(typed + char)}
+          >
+            {char}
+          </motion.span>
+        ))}
+      {stage === 1 && 'eal-400'}
+      {(stage < 2 || stage === 6) && <span className="border -mx-px h-5" />}
+      {stage >= 2 && stage <= 5 && (
+        <Fragment key={stage}>
+          {stage < 5 && ' '}
+          {stage >= 4 && <span className="relative border -mx-px h-5" />}
+          {stage === 5 && (
+            <span className="inline-flex" style={{ background: 'rgba(81, 92, 126, 0.4)' }}>
+              &nbsp;
+            </span>
+          )}
+          <span
+            className="inline-flex"
+            style={{ background: stage >= 4 ? 'rgba(81, 92, 126, 0.4)' : undefined }}
+          >
+            bg-
+          </span>
+          {stage === 3 && <span className="relative border -mx-px h-5" />}
+          <span
+            className="inline-flex"
+            style={{ background: stage >= 3 ? 'rgba(81, 92, 126, 0.4)' : undefined }}
+          >
+            teal-
+          </span>
+          {stage === 2 && <span className="relative border -mx-px h-5" />}
+          <span
+            className="inline-flex"
+            style={{ background: stage >= 2 ? 'rgba(81, 92, 126, 0.4)' : undefined }}
+          >
+            400
+          </span>
+        </Fragment>
+      )}
+      {typed && (
+        <span className="relative">
+          <div className="absolute top-full left-full m-0.5 -ml-16 sm:ml-0.5 rounded-md shadow-xl">
+            <div className="relative w-96 bg-lightBlue-800 border border-black overflow-hidden rounded-md">
+              <div className="bg-black bg-opacity-75 absolute inset-0" />
+              <ul className="relative leading-5 text-white py-2">
+                {completions
+                  .filter((completion) => completion[0].startsWith(typed.trim()))
+                  .slice(0, 12)
+                  .map((completion, i) => (
+                    <li
+                      key={completion[0]}
+                      className={`pl-2.5 pr-3 flex items-center space-x-1.5 ${
+                        i === selectedCompletionIndex ? 'bg-white bg-opacity-10' : ''
+                      }`}
+                    >
+                      <span className="w-4 flex-none flex justify-center">
+                        {completion[2] ? (
+                          <span
+                            className="flex-none w-3 h-3 rounded-sm shadow-px"
+                            style={{ background: completion[2] }}
+                          />
+                        ) : (
+                          <svg width="16" height="10" fill="none">
+                            <rect x=".5" y=".5" width="15" height="9" rx="1.5" stroke="#9FA6B2" />
+                            <path fill="#9FA6B2" d="M4 3h8v1H4zM4 6h8v1H4z" />
+                          </svg>
+                        )}
+                      </span>
+                      <span className="flex-none">
+                        {completion[0].split(new RegExp(`(^${typed.trim()})`)).map((part, j) =>
+                          part ? (
+                            j % 2 === 0 ? (
+                              part
+                            ) : (
+                              <span key={j} className="text-teal-300">
+                                {part}
+                              </span>
+                            )
+                          ) : null
+                        )}
+                      </span>
+                      {i === selectedCompletionIndex && completion[1] ? (
+                        <span className="hidden sm:block flex-auto text-right text-gray-500 truncate pl-4">
+                          {completion[1]}
+                        </span>
+                      ) : null}
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          </div>
+        </span>
+      )}
+    </span>
   )
 }
 
@@ -213,13 +349,13 @@ export function EditorTools() {
                   />
                 </svg>
               </div>
-              <div className="flex-auto flex flex-col">
+              <div className="flex-auto flex flex-col min-w-0">
                 <CompletionDemo />
                 <div className="border-t border-white border-opacity-10 font-mono text-xs text-white p-4 space-y-2">
                   <h3 className="leading-4">Problems</h3>
                   <ul className="leading-5">
                     {problems.map((problem, i) => (
-                      <li key={i} className="flex space-x-1">
+                      <li key={i} className="flex min-w-0">
                         <svg width="20" height="20" fill="none" className="flex-none text-red-400">
                           <circle
                             cx="10"
@@ -235,11 +371,8 @@ export function EditorTools() {
                             strokeLinecap="round"
                           />
                         </svg>
-                        <div className="flex-auto opacity-75 flex">
-                          <p>
-                            {problem[0]} <span className="opacity-50">{problem[1]}</span>
-                          </p>
-                        </div>
+                        <p className="truncate ml-1">{problem[0]}</p>
+                        <p className="hidden sm:block flex-none opacity-50">&nbsp;{problem[1]}</p>
                       </li>
                     ))}
                   </ul>
@@ -251,95 +384,4 @@ export function EditorTools() {
       />
     </section>
   )
-}
-
-function EditorToolsToken(props) {
-  const { token, stage, typed, setTyped, selectedCompletionIndex } = props
-
-  if (token[0] === 'attr-value' && token[1].includes('__CLASS__')) {
-    return (
-      <span className="text-code-attr-value">
-        <span className="text-code-punctuation">="</span>
-        <span
-          className="inline-flex bg-repeat-x bg-left-bottom"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%206%203'%20enable-background%3D'new%200%200%206%203'%20height%3D'3'%20width%3D'6'%3E%3Cg%20fill%3D'%23fbbf24'%3E%3Cpolygon%20points%3D'5.5%2C0%202.5%2C3%201.1%2C3%204.1%2C0'%2F%3E%3Cpolygon%20points%3D'4%2C0%206%2C2%206%2C0.6%205.4%2C0'%2F%3E%3Cpolygon%20points%3D'0%2C2%201%2C3%202.4%2C3%200%2C0.6'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E")`,
-          }}
-        >
-          flex
-        </span>
-        {stage >= 0 &&
-          ' bg-t'.split('').map((char, i) => (
-            <motion.span
-              key={i}
-              initial={{ display: 'none' }}
-              animate={{ display: 'inline' }}
-              transition={{ delay: (i + 1) * 0.3 }}
-              onAnimationComplete={() => setTyped(typed + char)}
-            >
-              {char}
-            </motion.span>
-          ))}
-        {stage >= 1 && 'eal-400'}
-        <span className="border -mx-px" style={{ height: '1.125rem' }} />
-        {typed && (
-          <span className="relative">
-            <div className="absolute top-full left-full m-0.5 rounded-md shadow-xl">
-              <div className="relative w-96 bg-lightBlue-800 border border-black overflow-hidden rounded-md">
-                <div className="bg-black bg-opacity-75 absolute inset-0" />
-                <ul className="relative leading-5 text-white py-2">
-                  {completions
-                    .filter((completion) => completion[0].startsWith(typed.trim()))
-                    .slice(0, 12)
-                    .map((completion, i) => (
-                      <li
-                        key={completion[0]}
-                        className={`pl-2.5 pr-3 flex items-center space-x-1.5 ${
-                          i === selectedCompletionIndex ? 'bg-white bg-opacity-10' : ''
-                        }`}
-                      >
-                        <span className="w-4 flex-none flex justify-center">
-                          {completion[2] ? (
-                            <span
-                              className="flex-none w-3 h-3 rounded-sm shadow-px"
-                              style={{ background: completion[2] }}
-                            />
-                          ) : (
-                            <svg width="16" height="10" fill="none">
-                              <rect x=".5" y=".5" width="15" height="9" rx="1.5" stroke="#9FA6B2" />
-                              <path fill="#9FA6B2" d="M4 3h8v1H4zM4 6h8v1H4z" />
-                            </svg>
-                          )}
-                        </span>
-                        <span className="flex-none">
-                          {completion[0].split(new RegExp(`(^${typed.trim()})`)).map((part, j) =>
-                            part ? (
-                              j % 2 === 0 ? (
-                                part
-                              ) : (
-                                <span key={j} className="text-teal-300">
-                                  {part}
-                                </span>
-                              )
-                            ) : null
-                          )}
-                        </span>
-                        {i === selectedCompletionIndex && completion[1] ? (
-                          <span className="flex-auto text-right text-gray-500 truncate pl-4">
-                            {completion[1]}
-                          </span>
-                        ) : null}
-                      </li>
-                    ))}
-                </ul>
-              </div>
-            </div>
-          </span>
-        )}
-        "
-      </span>
-    )
-  }
-
-  return <Token {...props} />
 }

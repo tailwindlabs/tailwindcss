@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { forwardRef, Fragment, useMemo } from 'react'
 import tokenize from '../macros/tokenize.macro'
 import { Code } from './Code'
@@ -109,34 +110,43 @@ export function getClassNameForToken({ types, empty }) {
   return className === '' ? undefined : className
 }
 
-CodeWindow.Code2 = forwardRef(({ lines = 0, lineNumbersBackground = true, children }, ref) => {
-  return (
-    <div ref={ref} className="w-full flex-auto flex min-h-0 overflow-auto">
-      <div className="w-full relative flex-auto">
-        <pre className="flex min-h-full text-xs leading-4 md:text-sm md:leading-5">
-          <div
-            aria-hidden="true"
-            className={`hidden md:block text-white text-opacity-50 flex-none py-4 pr-4 text-right select-none ${
-              lineNumbersBackground ? 'bg-black bg-opacity-25' : ''
-            }`}
-            style={{ width: 50 }}
-          >
-            {Array.from({ length: lines }).map((_, i) =>
-              i === 0 ? (
-                i + 1
-              ) : (
-                <Fragment key={i + 1}>
-                  <br />
-                  {i + 1}
-                </Fragment>
-              )
-            )}
-          </div>
-          <code className="flex-auto relative block text-white pt-4 pb-4 px-4 overflow-auto">
-            {children}
-          </code>
-        </pre>
+CodeWindow.Code2 = forwardRef(
+  ({ lines = 0, lineNumbersBackground = true, overflow = true, children }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={clsx('w-full flex-auto flex min-h-0', { 'overflow-auto': overflow })}
+      >
+        <div className="w-full relative flex-auto">
+          <pre className="flex min-h-full text-xs leading-4 md:text-sm md:leading-5">
+            <div
+              aria-hidden="true"
+              className={`hidden md:block text-white text-opacity-50 flex-none py-4 pr-4 text-right select-none ${
+                lineNumbersBackground ? 'bg-black bg-opacity-25' : ''
+              }`}
+              style={{ width: 50 }}
+            >
+              {Array.from({ length: lines }).map((_, i) =>
+                i === 0 ? (
+                  i + 1
+                ) : (
+                  <Fragment key={i + 1}>
+                    <br />
+                    {i + 1}
+                  </Fragment>
+                )
+              )}
+            </div>
+            <code
+              className={clsx('flex-auto relative block text-white pt-4 pb-4 px-4', {
+                'overflow-auto': overflow,
+              })}
+            >
+              {children}
+            </code>
+          </pre>
+        </div>
       </div>
-    </div>
-  )
-})
+    )
+  }
+)
