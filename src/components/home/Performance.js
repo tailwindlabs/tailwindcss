@@ -8,7 +8,7 @@ import { motion, animate, useMotionValue, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import tokenize from '../../macros/tokenize.macro'
 import { addClassTokens2 } from '@/utils/addClassTokens'
-import shuffleSeed from 'shuffle-seed'
+import shuffleSeed from '@/utils/shuffleSeed'
 import { randomIntFromInterval } from '@/utils/randomIntFromInterval'
 import clsx from 'clsx'
 
