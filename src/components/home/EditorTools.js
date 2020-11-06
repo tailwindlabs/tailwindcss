@@ -83,13 +83,43 @@ const completions = [
   ['bg-top'],
 ]
 
-const { lines } = tokenize.html('<div class="__CLASS__"></div>')
+const {
+  lines,
+} = tokenize.html(`<div class="w-full flex items-center justify-between p-6 space-x-6">
+  <div class="flex-1 truncate">
+    <div class="flex items-center space-x-3">
+      <h3 class="text-gray-900 text-sm leading-5 font-medium truncate">Jane Cooper</h3>
+      <span class="__CLASS__">Admin</span>
+    </div>
+    <p class="mt-1 text-gray-500 text-sm leading-5 truncate">Regional Paradigm Technician</p>
+  </div>
+  <img class="w-10 h-10 bg-gray-300 rounded-full flex-shrink-0" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=4&amp;w=256&amp;h=256&amp;q=60" alt="">
+</div>
+<div class="border-t border-gray-200">
+  <div class="-mt-px flex">
+    <div class="w-0 flex-1 flex border-r border-gray-200">
+      <a href="#" class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
+        <svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+          <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+        </svg>
+        <span class="ml-3">Email</span>
+      </a>
+    </div>
+  </div>
+</div>`)
 
 function CompletionDemo() {
   const { ref, inView } = useInView({ threshold: 0.5, triggerOnce: true })
 
   return (
-    <CodeWindow.Code2 ref={ref} lines={lines.length} lineNumbersBackground={false} overflow={false}>
+    <CodeWindow.Code2
+      ref={ref}
+      lines={lines.length}
+      lineNumbersBackground={false}
+      overflow={false}
+      className="overflow-hidden"
+    >
       {lines.map((tokens, lineIndex) => (
         <Fragment key={lineIndex}>
           {tokens.map((token, tokenIndex) => {
@@ -165,7 +195,7 @@ function Completion({ inView }) {
           backgroundImage: `url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%206%203'%20enable-background%3D'new%200%200%206%203'%20height%3D'3'%20width%3D'6'%3E%3Cg%20fill%3D'%23fbbf24'%3E%3Cpolygon%20points%3D'5.5%2C0%202.5%2C3%201.1%2C3%204.1%2C0'%2F%3E%3Cpolygon%20points%3D'4%2C0%206%2C2%206%2C0.6%205.4%2C0'%2F%3E%3Cpolygon%20points%3D'0%2C2%201%2C3%202.4%2C3%200%2C0.6'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E")`,
         }}
       >
-        flex
+        text-teal-600
       </span>
       {stage >= 0 &&
         stage < 2 &&
@@ -301,7 +331,7 @@ export function EditorTools() {
         rotate={2}
         left={
           <CodeWindow className={`bg-lightBlue-500 ${styles.code}`}>
-            <div className="flex-auto flex">
+            <div className="flex-auto flex min-h-0">
               <div className="flex-none w-14 bg-white bg-opacity-10 flex flex-col items-center justify-between pt-3.5 pb-4">
                 <svg width="24" height="216" fill="none">
                   <path
