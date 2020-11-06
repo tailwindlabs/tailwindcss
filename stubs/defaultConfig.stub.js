@@ -19,11 +19,12 @@ module.exports = {
       black: '#000',
       white: '#fff',
 
-      gray: colors.gray,
+      gray: colors.coolGray,
       red: colors.red,
       yellow: colors.amber,
       green: colors.emerald,
       blue: colors.blue,
+      indigo: colors.indigo,
       purple: colors.violet,
       pink: colors.pink,
     },
