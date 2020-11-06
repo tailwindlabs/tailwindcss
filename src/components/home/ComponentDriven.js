@@ -10,6 +10,8 @@ import { ReactComponent as ReactLogo } from '@/img/icons/react.svg'
 import { ReactComponent as VueLogo } from '@/img/icons/vue.svg'
 import { ReactComponent as LaravelLogo } from '@/img/icons/laravel.svg'
 import { AnimatePresence, AnimateSharedLayout, motion, useIsPresent } from 'framer-motion'
+import clsx from 'clsx'
+import { useInView } from 'react-intersection-observer'
 
 const recipes = [
   {
@@ -513,14 +515,17 @@ const css = tokenize.css(`.btn {
 }
 `).tokens
 
-const html = tokenize.html(`  <footer class="grid grid-cols-2 gap-x-6">
+const html = tokenize.html(`      </dd>
+    </div>
+  </dl>
+  <footer class="grid grid-cols-2 gap-x-6">
     <button class="btn btn--secondary">Decline</button>
     <button class="btn btn--primary">Accept</button>
   </footer>
 </article>
-`).tokens
+`).lines
 
-function ApplyExample() {
+function ApplyExample({ inView }) {
   return (
     <CodeWindow className="bg-pink-600">
       <div className="flex text-sm leading-5 bg-pink-900 bg-opacity-20 text-pink-200">
@@ -536,8 +541,116 @@ function ApplyExample() {
           index.html
         </h3>
       </div>
-      <CodeWindow.Code tokens={html} initialLineNumber={31} />
+      <div className="overflow-hidden">
+        <CodeWindow.Code2 lines={html.length} initialLineNumber={31} overflow="x" className="-mt-6">
+          <div className={inView ? 'mono' : undefined}>
+            {html.map((tokens, lineIndex) => (
+              <div
+                key={lineIndex}
+                className={lineIndex >= 4 && lineIndex <= 5 ? 'not-mono' : undefined}
+              >
+                {tokens.map((token, tokenIndex) => {
+                  return (
+                    <span
+                      key={tokenIndex}
+                      className={clsx(getClassNameForToken(token), 'delay-500')}
+                    >
+                      {token.content}
+                    </span>
+                  )
+                })}
+              </div>
+            ))}
+          </div>
+        </CodeWindow.Code2>
+      </div>
     </CodeWindow>
+  )
+}
+
+function AtApplySection() {
+  const { inView, ref } = useInView({ threshold: 0.5, triggerOnce: false })
+
+  return (
+    <GradientLockup
+      color="orange"
+      rotate={1}
+      left={
+        <div
+          ref={ref}
+          className="relative z-10 bg-white rounded-tr-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8 xl:mr-4"
+        >
+          <article className="text-gray-600 leading-6">
+            <h2
+              className={clsx(
+                'transition-opacity duration-1000 delay-500 text-2xl leading-8 font-semibold text-black p-6 pb-1',
+                { 'opacity-25': inView }
+              )}
+            >
+              Weekly one-on-one
+            </h2>
+            <dl
+              className={clsx(
+                'transition-opacity duration-1000 delay-500 flex flex-wrap divide-y divide-gray-200 border-b border-gray-200',
+                { 'opacity-25': inView }
+              )}
+            >
+              <div className="px-6 pb-6">
+                <dt className="sr-only">Date and time</dt>
+                <dd>
+                  <time dateTime="2020-11-15T10:00:00-05:00">Thu Nov 15, 2020 10:00am</time> -{' '}
+                  <time dateTime="2020-11-15T11:00:00-05:00">11:00am EST</time>
+                </dd>
+              </div>
+              <div className="w-full flex-none flex items-center px-6 py-4">
+                <dt className="w-1/3 flex-none uppercase text-sm leading-5 font-semibold tracking-wide">
+                  Location
+                </dt>
+                <dd className="text-black">
+                  Kitchener, <abbr title="Ontario">ON</abbr>
+                </dd>
+              </div>
+              <div className="w-full flex-none flex items-center px-6 py-4">
+                <dt className="w-1/3 flex-none uppercase text-sm leading-5 font-semibold tracking-wide">
+                  Description
+                </dt>
+                <dd className="italic">No meeting description</dd>
+              </div>
+              <div className="w-full flex-none flex items-center px-6 py-4">
+                <dt className="w-1/3 flex-none uppercase text-sm leading-5 font-semibold tracking-wide">
+                  Attendees
+                </dt>
+                <dd className="font-medium text-gray-700 bg-gray-100 rounded-full py-1 pl-2 pr-4 flex items-center">
+                  <svg width="20" height="20" fill="currentColor" className="text-gray-500 mr-2">
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    />
+                  </svg>
+                  Andrew Parsons
+                </dd>
+              </div>
+            </dl>
+            <div className="grid grid-cols-2 gap-x-6 px-6 py-4">
+              <button
+                type="button"
+                className="text-base leading-6 font-medium rounded-lg bg-gray-100 text-black py-3"
+              >
+                Decline
+              </button>
+              <button
+                type="button"
+                className="text-base leading-6 font-medium rounded-lg bg-rose-500 text-white py-3"
+              >
+                Accept
+              </button>
+            </div>
+          </article>
+        </div>
+      }
+      right={<ApplyExample inView={inView} />}
+    />
   )
 }
 
@@ -678,72 +791,7 @@ export function ComponentDriven() {
           Learn more -&gt;
         </Link>
       </div>
-      <GradientLockup
-        color="orange"
-        rotate={1}
-        left={
-          <div className="relative z-10 bg-white rounded-tr-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8 xl:mr-4">
-            <article className="text-gray-600 leading-6">
-              <h2 className="opacity-25 text-2xl leading-8 font-semibold text-black p-6 pb-1">
-                Weekly one-on-one
-              </h2>
-              <dl className="opacity-25 flex flex-wrap divide-y divide-gray-200 border-b border-gray-200">
-                <div className="px-6 pb-6">
-                  <dt className="sr-only">Date and time</dt>
-                  <dd>
-                    <time dateTime="2020-11-15T10:00:00-05:00">Thu Nov 15, 2020 10:00am</time> -{' '}
-                    <time dateTime="2020-11-15T11:00:00-05:00">11:00am EST</time>
-                  </dd>
-                </div>
-                <div className="w-full flex-none flex items-center px-6 py-4">
-                  <dt className="w-1/3 flex-none uppercase text-sm leading-5 font-semibold">
-                    Location
-                  </dt>
-                  <dd className="text-black">
-                    Kitchener, <abbr title="Ontario">ON</abbr>
-                  </dd>
-                </div>
-                <div className="w-full flex-none flex items-center px-6 py-4">
-                  <dt className="w-1/3 flex-none uppercase text-sm leading-5 font-semibold">
-                    Description
-                  </dt>
-                  <dd className="italic">No meeting description</dd>
-                </div>
-                <div className="w-full flex-none flex items-center px-6 py-4">
-                  <dt className="w-1/3 flex-none uppercase text-sm leading-5 font-semibold">
-                    Attendees
-                  </dt>
-                  <dd className="font-medium text-gray-700 bg-gray-100 rounded-full py-1 pl-2 pr-4 flex items-center">
-                    <svg width="20" height="20" fill="currentColor" className="text-gray-500 mr-2">
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      />
-                    </svg>
-                    Andrew Parsons
-                  </dd>
-                </div>
-              </dl>
-              <div className="grid grid-cols-2 gap-x-6 px-6 py-4">
-                <button
-                  type="button"
-                  className="text-base leading-6 font-medium rounded-lg bg-gray-100 text-black py-3"
-                >
-                  Decline
-                </button>
-                <button
-                  type="button"
-                  className="text-base leading-6 font-medium rounded-lg bg-rose-500 text-white py-3"
-                >
-                  Accept
-                </button>
-              </div>
-            </article>
-          </div>
-        }
-        right={<ApplyExample />}
-      />
+      <AtApplySection />
     </section>
   )
 }

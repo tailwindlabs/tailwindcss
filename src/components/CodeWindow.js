@@ -111,11 +111,23 @@ export function getClassNameForToken({ types, empty }) {
 }
 
 CodeWindow.Code2 = forwardRef(
-  ({ lines = 0, lineNumbersBackground = true, overflow = true, children }, ref) => {
+  (
+    {
+      lines = 0,
+      initialLineNumber = 1,
+      lineNumbersBackground = true,
+      overflow = true,
+      className,
+      children,
+    },
+    ref
+  ) => {
     return (
       <div
         ref={ref}
-        className={clsx('w-full flex-auto flex min-h-0', { 'overflow-auto': overflow })}
+        className={clsx(className, 'w-full flex-auto flex min-h-0', {
+          'overflow-auto': overflow === true || overflow === 'y',
+        })}
       >
         <div className="w-full relative flex-auto">
           <pre className="flex min-h-full text-xs leading-4 md:text-sm md:leading-5">
@@ -128,18 +140,18 @@ CodeWindow.Code2 = forwardRef(
             >
               {Array.from({ length: lines }).map((_, i) =>
                 i === 0 ? (
-                  i + 1
+                  i + initialLineNumber
                 ) : (
-                  <Fragment key={i + 1}>
+                  <Fragment key={i + initialLineNumber}>
                     <br />
-                    {i + 1}
+                    {i + initialLineNumber}
                   </Fragment>
                 )
               )}
             </div>
             <code
               className={clsx('flex-auto relative block text-white pt-4 pb-4 px-4', {
-                'overflow-auto': overflow,
+                'overflow-auto': overflow === true || overflow === 'x',
               })}
             >
               {children}

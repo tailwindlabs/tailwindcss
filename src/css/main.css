@@ -11,10 +11,10 @@
 @import 'utilities.css';
 
 .mono > div:not(.not-mono) > span {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.25);
 }
 
-code span {
+.mono > div > span {
   transition-duration: 0.5s;
   transition-property: background-color, border-color, color, fill, stroke;
 }
