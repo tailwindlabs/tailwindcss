@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Added
+
+- Add `11` to spacing scale ([7f05204](https://github.com/tailwindlabs/tailwindcss/commit/7f05204ce7a5581b6845591448265c3c21afde86))
+- Add percentage-based height values ([5259560](https://github.com/tailwindlabs/tailwindcss/commit/525956065272dc53e8f8395f55f9ad13077a38d1))
+- Add indigo to the color palette by default ([700866c](https://github.com/tailwindlabs/tailwindcss/commit/700866ce5e0c0b8d140be161c4d07fc6f31242bc))
+
+### Changed
+
+- Use `coolGray` as the default gray ([700866c](https://github.com/tailwindlabs/tailwindcss/commit/700866ce5e0c0b8d140be161c4d07fc6f31242bc))
 
 ## [2.0.0-alpha.7] - 2020-11-05
 
