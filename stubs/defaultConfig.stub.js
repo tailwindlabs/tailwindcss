@@ -96,8 +96,15 @@ module.exports = {
       'right-top': 'right top',
       top: 'top',
     },
-    backgroundSize: { auto: 'auto', cover: 'cover', contain: 'contain' },
-    borderColor: (theme) => ({ ...theme('colors'), DEFAULT: theme('colors.gray.200', 'currentColor') }),
+    backgroundSize: {
+      auto: 'auto',
+      cover: 'cover',
+      contain: 'contain',
+    },
+    borderColor: (theme) => ({
+      ...theme('colors'),
+      DEFAULT: theme('colors.gray.200', 'currentColor'),
+    }),
     borderOpacity: (theme) => theme('opacity'),
     borderRadius: {
       none: '0',
@@ -110,7 +117,13 @@ module.exports = {
       '3xl': '1.5rem',
       full: '9999px',
     },
-    borderWidth: { DEFAULT: '1px', 0: '0', 2: '2px', 4: '4px', 8: '8px' },
+    borderWidth: {
+      DEFAULT: '1px',
+      0: '0',
+      2: '2px',
+      4: '4px',
+      8: '8px',
+    },
     boxShadow: {
       xs: '0 0 0 1px rgba(0, 0, 0, 0.05)',
       sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
@@ -137,9 +150,20 @@ module.exports = {
     divideOpacity: (theme) => theme('borderOpacity'),
     divideWidth: (theme) => theme('borderWidth'),
     fill: { current: 'currentColor' },
-    flex: { 1: '1 1 0%', auto: '1 1 auto', initial: '0 1 auto', none: 'none' },
-    flexGrow: { 0: '0', DEFAULT: '1' },
-    flexShrink: { 0: '0', DEFAULT: '1' },
+    flex: {
+      1: '1 1 0%',
+      auto: '1 1 auto',
+      initial: '0 1 auto',
+      none: 'none',
+    },
+    flexGrow: {
+      0: '0',
+      DEFAULT: '1',
+    },
+    flexShrink: {
+      0: '0',
+      DEFAULT: '1',
+    },
     fontFamily: {
       sans: [
         'ui-sans-serif',
@@ -197,8 +221,18 @@ module.exports = {
     },
     gap: (theme) => theme('spacing'),
     gradientColorStops: (theme) => theme('colors'),
-    gridAutoColumns: { auto: 'auto', min: 'min-content', max: 'max-content', fr: 'minmax(0, 1fr)' },
-    gridAutoRows: { auto: 'auto', min: 'min-content', max: 'max-content', fr: 'minmax(0, 1fr)' },
+    gridAutoColumns: {
+      auto: 'auto',
+      min: 'min-content',
+      max: 'max-content',
+      fr: 'minmax(0, 1fr)',
+    },
+    gridAutoRows: {
+      auto: 'auto',
+      min: 'min-content',
+      max: 'max-content',
+      fr: 'minmax(0, 1fr)',
+    },
     gridColumn: {
       auto: 'auto',
       'span-1': 'span 1 / span 1',
@@ -257,8 +291,26 @@ module.exports = {
       'span-6': 'span 6 / span 6',
       'span-full': '1 / -1',
     },
-    gridRowStart: { auto: 'auto', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7' },
-    gridRowEnd: { auto: 'auto', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7' },
+    gridRowStart: {
+      auto: 'auto',
+      1: '1',
+      2: '2',
+      3: '3',
+      4: '4',
+      5: '5',
+      6: '6',
+      7: '7',
+    },
+    gridRowEnd: {
+      auto: 'auto',
+      1: '1',
+      2: '2',
+      3: '3',
+      4: '4',
+      5: '5',
+      6: '6',
+      7: '7',
+    },
     transformOrigin: {
       center: 'center',
       top: 'top',
@@ -335,12 +387,31 @@ module.exports = {
       '-full': '-100%',
     }),
     keyframes: {
-      spin: { to: { transform: 'rotate(360deg)' } },
-      ping: { '75%, 100%': { transform: 'scale(2)', opacity: '0' } },
-      pulse: { '50%': { opacity: '.5' } },
+      spin: {
+        to: {
+          transform: 'rotate(360deg)',
+        },
+      },
+      ping: {
+        '75%, 100%': {
+          transform: 'scale(2)',
+          opacity: '0',
+        },
+      },
+      pulse: {
+        '50%': {
+          opacity: '.5',
+        },
+      },
       bounce: {
-        '0%, 100%': { transform: 'translateY(-25%)', animationTimingFunction: 'cubic-bezier(0.8,0,1,1)' },
-        '50%': { transform: 'none', animationTimingFunction: 'cubic-bezier(0,0,0.2,1)' },
+        '0%, 100%': {
+          transform: 'translateY(-25%)',
+          animationTimingFunction: 'cubic-bezier(0.8,0,1,1)',
+        },
+        '50%': {
+          transform: 'none',
+          animationTimingFunction: 'cubic-bezier(0,0,0.2,1)',
+        },
       },
     },
     letterSpacing: {
@@ -367,9 +438,21 @@ module.exports = {
       9: '2.25rem',
       10: '2.5rem',
     },
-    listStyleType: { none: 'none', disc: 'disc', decimal: 'decimal' },
-    margin: (theme, { negative }) => ({ auto: 'auto', ...theme('spacing'), ...negative(theme('spacing')) }),
-    maxHeight: (theme) => ({ ...theme('spacing'), full: '100%', screen: '100vh' }),
+    listStyleType: {
+      none: 'none',
+      disc: 'disc',
+      decimal: 'decimal',
+    },
+    margin: (theme, { negative }) => ({
+      auto: 'auto',
+      ...theme('spacing'),
+      ...negative(theme('spacing')),
+    }),
+    maxHeight: (theme) => ({
+      ...theme('spacing'),
+      full: '100%',
+      screen: '100vh',
+    }),
     maxWidth: (theme, { breakpoints }) => ({
       none: 'none',
       0: '0rem',
@@ -390,8 +473,17 @@ module.exports = {
       prose: '65ch',
       ...breakpoints(theme('screens')),
     }),
-    minHeight: { 0: '0', full: '100%', screen: '100vh' },
-    minWidth: { 0: '0', full: '100%', min: 'min-content', max: 'max-content' },
+    minHeight: {
+      0: '0',
+      full: '100%',
+      screen: '100vh',
+    },
+    minWidth: {
+      0: '0',
+      full: '100%',
+      min: 'min-content',
+      max: 'max-content',
+    },
     objectPosition: {
       bottom: 'bottom',
       center: 'center',
@@ -487,9 +579,18 @@ module.exports = {
       6: '6deg',
       12: '12deg',
     },
-    space: (theme, { negative }) => ({ ...theme('spacing'), ...negative(theme('spacing')) }),
-    stroke: { current: 'currentColor' },
-    strokeWidth: { 0: '0', 1: '1', 2: '2' },
+    space: (theme, { negative }) => ({
+      ...theme('spacing'),
+      ...negative(theme('spacing')),
+    }),
+    stroke: {
+      current: 'currentColor',
+    },
+    strokeWidth: {
+      0: '0',
+      1: '1',
+      2: '2',
+    },
     textColor: (theme) => theme('colors'),
     textOpacity: (theme) => theme('opacity'),
     transitionDuration: {
@@ -579,7 +680,15 @@ module.exports = {
       min: 'min-content',
       max: 'max-content',
     }),
-    zIndex: { auto: 'auto', 0: '0', 10: '10', 20: '20', 30: '30', 40: '40', 50: '50' },
+    zIndex: {
+      auto: 'auto',
+      0: '0',
+      10: '10',
+      20: '20',
+      30: '30',
+      40: '40',
+      50: '50',
+    },
   },
   variantOrder: [
     'first',
