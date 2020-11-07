@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Added
+
+- Added `shadow-solid` utility, a 2px solid shadow that uses the current text color ([369cfae](https://github.com/tailwindlabs/tailwindcss/commit/369cfae2905a577033529c46a5e8ca58c69f5623))
+-
+### Changed
+
+- Update `shadow-outline` to use the new blue ([b078238](https://github.com/tailwindlabs/tailwindcss/commit/b0782385c9832d35a10929b38b4fcaf27e055d6b))
 
 ## [2.0.0-alpha.8] - 2020-11-06
 
