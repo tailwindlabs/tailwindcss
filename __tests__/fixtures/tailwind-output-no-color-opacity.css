@@ -16971,6 +16971,10 @@ video {
   box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
 }
 
+.shadow-solid {
+  box-shadow: 0 0 0 2px currentColor;
+}
+
 .shadow-none {
   box-shadow: none;
 }
@@ -17011,6 +17015,10 @@ video {
   box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
 }
 
+.hover\:shadow-solid:hover {
+  box-shadow: 0 0 0 2px currentColor;
+}
+
 .hover\:shadow-none:hover {
   box-shadow: none;
 }
@@ -17049,6 +17057,10 @@ video {
 
 .focus\:shadow-outline:focus {
   box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
+}
+
+.focus\:shadow-solid:focus {
+  box-shadow: 0 0 0 2px currentColor;
 }
 
 .focus\:shadow-none:focus {
@@ -39426,6 +39438,10 @@ video {
     box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
   }
 
+  .sm\:shadow-solid {
+    box-shadow: 0 0 0 2px currentColor;
+  }
+
   .sm\:shadow-none {
     box-shadow: none;
   }
@@ -39466,6 +39482,10 @@ video {
     box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
   }
 
+  .sm\:hover\:shadow-solid:hover {
+    box-shadow: 0 0 0 2px currentColor;
+  }
+
   .sm\:hover\:shadow-none:hover {
     box-shadow: none;
   }
@@ -39504,6 +39524,10 @@ video {
 
   .sm\:focus\:shadow-outline:focus {
     box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
+  }
+
+  .sm\:focus\:shadow-solid:focus {
+    box-shadow: 0 0 0 2px currentColor;
   }
 
   .sm\:focus\:shadow-none:focus {
@@ -61851,6 +61875,10 @@ video {
     box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
   }
 
+  .md\:shadow-solid {
+    box-shadow: 0 0 0 2px currentColor;
+  }
+
   .md\:shadow-none {
     box-shadow: none;
   }
@@ -61891,6 +61919,10 @@ video {
     box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
   }
 
+  .md\:hover\:shadow-solid:hover {
+    box-shadow: 0 0 0 2px currentColor;
+  }
+
   .md\:hover\:shadow-none:hover {
     box-shadow: none;
   }
@@ -61929,6 +61961,10 @@ video {
 
   .md\:focus\:shadow-outline:focus {
     box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
+  }
+
+  .md\:focus\:shadow-solid:focus {
+    box-shadow: 0 0 0 2px currentColor;
   }
 
   .md\:focus\:shadow-none:focus {
@@ -84276,6 +84312,10 @@ video {
     box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
   }
 
+  .lg\:shadow-solid {
+    box-shadow: 0 0 0 2px currentColor;
+  }
+
   .lg\:shadow-none {
     box-shadow: none;
   }
@@ -84316,6 +84356,10 @@ video {
     box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
   }
 
+  .lg\:hover\:shadow-solid:hover {
+    box-shadow: 0 0 0 2px currentColor;
+  }
+
   .lg\:hover\:shadow-none:hover {
     box-shadow: none;
   }
@@ -84354,6 +84398,10 @@ video {
 
   .lg\:focus\:shadow-outline:focus {
     box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
+  }
+
+  .lg\:focus\:shadow-solid:focus {
+    box-shadow: 0 0 0 2px currentColor;
   }
 
   .lg\:focus\:shadow-none:focus {
@@ -106701,6 +106749,10 @@ video {
     box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
   }
 
+  .xl\:shadow-solid {
+    box-shadow: 0 0 0 2px currentColor;
+  }
+
   .xl\:shadow-none {
     box-shadow: none;
   }
@@ -106741,6 +106793,10 @@ video {
     box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
   }
 
+  .xl\:hover\:shadow-solid:hover {
+    box-shadow: 0 0 0 2px currentColor;
+  }
+
   .xl\:hover\:shadow-none:hover {
     box-shadow: none;
   }
@@ -106779,6 +106835,10 @@ video {
 
   .xl\:focus\:shadow-outline:focus {
     box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
+  }
+
+  .xl\:focus\:shadow-solid:focus {
+    box-shadow: 0 0 0 2px currentColor;
   }
 
   .xl\:focus\:shadow-none:focus {
@@ -129126,6 +129186,10 @@ video {
     box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
   }
 
+  .\32xl\:shadow-solid {
+    box-shadow: 0 0 0 2px currentColor;
+  }
+
   .\32xl\:shadow-none {
     box-shadow: none;
   }
@@ -129166,6 +129230,10 @@ video {
     box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
   }
 
+  .\32xl\:hover\:shadow-solid:hover {
+    box-shadow: 0 0 0 2px currentColor;
+  }
+
   .\32xl\:hover\:shadow-none:hover {
     box-shadow: none;
   }
@@ -129204,6 +129272,10 @@ video {
 
   .\32xl\:focus\:shadow-outline:focus {
     box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
+  }
+
+  .\32xl\:focus\:shadow-solid:focus {
+    box-shadow: 0 0 0 2px currentColor;
   }
 
   .\32xl\:focus\:shadow-none:focus {
