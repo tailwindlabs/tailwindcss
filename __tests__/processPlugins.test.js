@@ -2035,6 +2035,12 @@ test('plugins can extend variants', () => {
         .group:hover .group-hover\\:opacity-100 {
           opacity: 1
         }
+        .focus-within\\:opacity-0:focus-within {
+          opacity: 0
+        }
+        .focus-within\\:opacity-100:focus-within {
+          opacity: 1
+        }
         .hover\\:opacity-0:hover {
           opacity: 0
         }
