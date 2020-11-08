@@ -25,6 +25,7 @@ const nav = {
     pages['utility-first'],
     pages['responsive-design'],
     pages['pseudo-class-variants'],
+    pages['dark-mode'],
     pages['adding-base-styles'],
     pages['extracting-components'],
     pages['adding-new-utilities'],
