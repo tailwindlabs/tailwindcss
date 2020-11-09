@@ -13,6 +13,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import debounce from 'debounce'
 import dlv from 'dlv'
 import { fit } from '@/utils/fit'
+import clsx from 'clsx'
 
 const themes = {
   simple: {
@@ -435,7 +436,7 @@ export function HtmlZenGarden({ theme }) {
                       initial={false}
                       animate={{ opacity: theme === 'simple' ? 1 : 0 }}
                     >
-                      Classic Utility Jacket
+                      <span className="hidden sm:inline">Classic </span>Utility Jacket
                     </motion.h2>
                     <motion.h2
                       layout
@@ -564,7 +565,10 @@ export function HtmlZenGarden({ theme }) {
                     {['XS', 'S', 'M', 'L', 'XL'].map((size) => (
                       <motion.li
                         key={size}
-                        className="relative flex-none flex items-center justify-center border-2"
+                        className={clsx('relative flex-none items-center justify-center border-2', {
+                          'hidden sm:flex': size === 'S' || size === 'XL',
+                          flex: size !== 'S' && size !== 'XL',
+                        })}
                         style={{
                           width: themes[theme].size.button.size,
                           height: themes[theme].size.button.size,
@@ -605,7 +609,13 @@ export function HtmlZenGarden({ theme }) {
                             {size === 'XS' && name === 'brutalist' ? (
                               <>
                                 <span className="absolute w-6 h-1 bg-lime-300 left-1/2 -ml-3 bottom-2.5" />
-                                <span className="relative">{size}</span>
+                                <span className="relative hidden sm:inline">XS</span>
+                                <span className="relative sm:hidden">S</span>
+                              </>
+                            ) : size === 'XS' ? (
+                              <>
+                                <span className="hidden sm:inline">XS</span>
+                                <span className="sm:hidden">S</span>
                               </>
                             ) : (
                               size
@@ -765,7 +775,8 @@ export function HtmlZenGarden({ theme }) {
                       initial={false}
                       animate={{ opacity: theme === name ? 1 : 0 }}
                     >
-                      Free shipping on all continental US orders.
+                      Free shipping on all<span className="hidden sm:inline"> continental US</span>{' '}
+                      orders.
                     </motion.p>
                   ))}
                 </div>
