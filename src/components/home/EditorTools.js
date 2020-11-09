@@ -11,15 +11,8 @@ import { useInView } from 'react-intersection-observer'
 import { siteConfig } from '@/utils/siteConfig'
 
 const problems = [
-  [
-    "'colors.red.50' does not exist in your theme config. Did you mean 'colors.red.500'?",
-    'invaidConfigPath [4, 17]',
-  ],
-  [
-    "'colors.red.50' does not exist in your theme config. Did you mean 'colors.red.500'?",
-    'invaidConfigPath [4, 17]',
-  ],
-  ["The screen 'small' does not exist in your config. Did you mean 'sm'?", 'invalidScreen [8, 9]'],
+  ["'flex' applies the same CSS property as 'block'.", 'cssConflict [1, 20]'],
+  ["'block' applies the same CSS property as 'flex'.", 'cssConflict [1, 54]'],
 ]
 
 const completions = [
@@ -83,13 +76,11 @@ const completions = [
   ['bg-top'],
 ]
 
-const {
-  lines,
-} = tokenize.html(`<div class="w-full flex items-center justify-between p-6 space-x-6">
+const { lines } = tokenize.html(`<div class="__CONFLICT__">
   <div class="flex-1 truncate">
     <div class="flex items-center space-x-3">
       <h3 class="text-gray-900 text-sm leading-5 font-medium truncate">Jane Cooper</h3>
-      <span class="__CLASS__">Admin</span>
+      <span class="__COMPLETION__">Admin</span>
     </div>
     <p class="mt-1 text-gray-500 text-sm leading-5 truncate">Regional Paradigm Technician</p>
   </div>
@@ -123,7 +114,19 @@ function CompletionDemo() {
       {lines.map((tokens, lineIndex) => (
         <Fragment key={lineIndex}>
           {tokens.map((token, tokenIndex) => {
-            if (token.content === '__CLASS__') {
+            if (token.content === '__CONFLICT__') {
+              return (
+                <span key={tokenIndex} className={getClassNameForToken(token)}>
+                  w-full{' '}
+                  <span className="inline-flex bg-squiggle bg-repeat-x bg-left-bottom">flex</span>{' '}
+                  items-center justify-between{' '}
+                  <span className="inline-flex bg-squiggle bg-repeat-x bg-left-bottom">block</span>{' '}
+                  p-6 space-x-6
+                </span>
+              )
+            }
+
+            if (token.content === '__COMPLETION__') {
               return <Completion key={tokenIndex} inView={inView} />
             }
 
@@ -189,14 +192,7 @@ function Completion({ inView }) {
 
   return (
     <span className="text-code-attr-value">
-      <span
-        className="inline-flex bg-repeat-x bg-left-bottom"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%206%203'%20enable-background%3D'new%200%200%206%203'%20height%3D'3'%20width%3D'6'%3E%3Cg%20fill%3D'%23fbbf24'%3E%3Cpolygon%20points%3D'5.5%2C0%202.5%2C3%201.1%2C3%204.1%2C0'%2F%3E%3Cpolygon%20points%3D'4%2C0%206%2C2%206%2C0.6%205.4%2C0'%2F%3E%3Cpolygon%20points%3D'0%2C2%201%2C3%202.4%2C3%200%2C0.6'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E")`,
-        }}
-      >
-        text-teal-600
-      </span>
+      text-teal-600
       {stage >= 0 &&
         stage < 2 &&
         ' bg-t'.split('').map((char, i) => (
@@ -386,19 +382,19 @@ export function EditorTools() {
                   <ul className="leading-5">
                     {problems.map((problem, i) => (
                       <li key={i} className="flex min-w-0">
-                        <svg width="20" height="20" fill="none" className="flex-none text-red-400">
-                          <circle
-                            cx="10"
-                            cy="10"
-                            r="6.25"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                          />
+                        <svg
+                          width="20"
+                          height="20"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          className="flex-none text-amber-400"
+                        >
                           <path
-                            d="M8 12l4-4M8 8l4 4"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
                             strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="1.5"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
                           />
                         </svg>
                         <p className="truncate ml-1">{problem[0]}</p>
