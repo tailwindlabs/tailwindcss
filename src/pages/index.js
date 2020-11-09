@@ -31,7 +31,7 @@ export default function Home() {
     <div className="space-y-44 overflow-hidden b">
       <header className="relative z-10 max-w-screen-lg xl:max-w-screen-xl mx-auto">
         <div className="px-4 sm:px-6 md:px-8 mb-20 xl:mb-8">
-          <div className="border-b border-gray-200 py-6 flex items-center justify-between mb-20">
+          <div className="border-b border-gray-200 py-6 flex items-center justify-between mb-20 -mx-4 px-4 sm:mx-0 sm:px-0">
             <Search />
             <a href="https://github.com/tailwindlabs/tailwindcss" className="text-gray-400">
               <span className="sr-only">Tailwind CSS on GitHub</span>
@@ -43,7 +43,7 @@ export default function Home() {
               </svg>
             </a>
           </div>
-          <svg width="247" height="31">
+          <svg viewBox="0 0 247 31" className="w-auto h-7 sm:h-8">
             <path
               fillRule="evenodd"
               clipRule="evenodd"

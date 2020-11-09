@@ -64,7 +64,7 @@ export function Search() {
           />
         </svg>
         <span>Quick search for anything</span>
-        <span className="text-gray-400 text-sm leading-5 py-0.5 px-1.5 border border-gray-300 rounded-md">
+        <span className="hidden sm:block text-gray-400 text-sm leading-5 py-0.5 px-1.5 border border-gray-300 rounded-md">
           <span className="sr-only">Press </span>
           <kbd className="font-sans">
             <abbr title="Cmd" className="no-underline">
