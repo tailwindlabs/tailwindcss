@@ -222,6 +222,7 @@ export function StateVariants() {
                                 width="48"
                                 height="48"
                                 className="w-7 h-7 rounded-full bg-gray-100 border-2 border-white"
+                                loading="lazy"
                               />
                             ))}
                           </dd>
