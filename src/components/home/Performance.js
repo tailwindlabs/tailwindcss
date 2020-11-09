@@ -9,9 +9,9 @@ import { useInView } from 'react-intersection-observer'
 import tokenize from '../../macros/tokenize.macro'
 import { addClassTokens2 } from '@/utils/addClassTokens'
 import shuffleSeed from '@/utils/shuffleSeed'
-import { randomIntFromInterval } from '@/utils/randomIntFromInterval'
 import clsx from 'clsx'
 
+const DURATION = 6.5
 const BASE_RANGE = [0, 5000]
 
 function Counter({ from, to, round = 0, progress }) {
@@ -32,19 +32,35 @@ function Counter({ from, to, round = 0, progress }) {
 }
 
 const { lines, code } = tokenize.html(
-  `<div class="md:flex bg-gray-100 rounded-xl p-8 md:p-0">
-  <img class="w-32 h-32 md:w-48 md:h-auto rounded-full mx-auto md:rounded-none" src="https://unsplash.it/200/200?random" alt="" />
-  <blockquote class="mt-6 text-center md:p-8">
-    <p class="text-lg leading-7 mb-4 font-semibold">
-      “Tailwind CSS is the only framework that I've seen scale
-      on large teams. It’s easy to customize, adapts to any design,
-      and the build size is tiny.”
-    </p>
-    <cite class="not-italic font-medium">
-      <span class="text-cyan-600">Sarah Dayan</span><br />
-      <span class="text-gray-500">Staff Engineer, Algolia</span>
-    </cite>
-  </blockquote>
+  `<div class="fixed inset-0 flex items-end justify-center px-4 py-6 pointer-events-none sm:p-6 sm:items-start sm:justify-end">
+  <div class="max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto">
+    <div class="rounded-lg shadow-xs overflow-hidden">
+      <div class="p-4">
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="ml-3 w-0 flex-1 pt-0.5">
+            <p class="text-sm leading-5 font-medium text-gray-900">
+              Successfully saved!
+            </p>
+            <p class="mt-1 text-sm leading-5 text-gray-500">
+              Anyone with a link can now view this file.
+            </p>
+          </div>
+          <div class="ml-4 flex-shrink-0 flex">
+            <button class="inline-flex text-gray-400 focus:outline-none focus:text-gray-500 transition ease-in-out duration-150">
+              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `,
   true
@@ -52,20 +68,21 @@ const { lines, code } = tokenize.html(
 
 addClassTokens2(lines)
 
-const classPercentage = 0.5
-const classes = shuffleSeed
-  .shuffle(
-    code
-      .match(/class="[^"]+"/g)
-      .map((attr) => attr.substring(7, attr.length - 1).split(/\s+/))
-      .flat(),
-    3
-  )
-  .filter((_, i, a) => i < a.length * classPercentage)
+const allClasses = 'fixed flex-col rounded-sm shadow px-4 justify-content text-center flex-shrink-0 md:text-left h-16 w-16 md:h-24 md:w-24 rounded-full mx-auto text-lg text-purple-500 md:text-left text-gray-600 text-green-400 text-blue-500 rounded-pill p-4 max-w-screen-xl mt-5 leading-7 whitespace-no-wrap sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none flex-1 xl:mx-0 xl:grid-cols-4 border border-gray-200 text-4xl leading-5 leading-10 font-extrabold  leading-5 h-5 w-5 text-green-500 text-5xl leading-none font-extrabold text-white tracking-tight border-t text-sm border-indigo-600 py-4 font-medium px-4 flex items-center space-x-3 text-base leading-6 text-white absolute right-full ml-4 bottom-0 transform -translate-x-1/2 py-3 px-4 w-full duration-150 h-full transition py-0 pl-4 pr-8 border-transparent bg-transparent text-gray-500 px-5 py-3 appearance-none underline bg-indigo-700 min-w-full divide-y divide-gray-200 items-baseline text-indigo-600 hover:text-indigo-500'.split(
+  ' '
+)
 
-const unusedClasses = Array.from({ length: 50 }).map(() => makeClass())
+const usedClasses = shuffleSeed.shuffle(
+  'fixed px-4 flex-shrink-0 text-green-400 p-4 flex-1 leading-5 text-sm font-medium ml-4 transition'.split(
+    ' '
+  ),
+  1
+)
 
-const allClassesShuffled = shuffleSeed.shuffle([...classes, ...unusedClasses], 5)
+const unusedClasses = shuffleSeed.shuffle(
+  allClasses.filter((c) => !usedClasses.includes(c)),
+  1
+)
 
 export function Performance() {
   const progress = useMotionValue(0)
@@ -126,8 +143,7 @@ export function Performance() {
                     initial={{ pathLength: 0, strokeWidth: 6 }}
                     animate={inView ? { pathLength: 1, strokeWidth: 12 } : undefined}
                     transition={{
-                      pathLength: { duration: 5 },
-                      strokeWidth: { delay: 4.6, duration: 0.25 },
+                      duration: DURATION,
                     }}
                   />
                 </svg>
@@ -144,8 +160,8 @@ export function Performance() {
                     initial={{ pathLength: 0, opacity: 0 }}
                     animate={inView ? { pathLength: 1, opacity: 1 } : undefined}
                     transition={{
-                      pathLength: { delay: 4.5, duration: 0.3 },
-                      opacity: { delay: 4.5, duration: 0 },
+                      pathLength: { delay: DURATION - 0.5, duration: 0.3 },
+                      opacity: { delay: DURATION - 0.5, duration: 0 },
                     }}
                   />
                 </svg>
@@ -224,14 +240,18 @@ export function Performance() {
                 className="relative font-mono text-sm text-teal-200"
                 style={{ lineHeight: 18 / 14 }}
               >
-                {allClassesShuffled.map((c, i) =>
-                  classes.includes(c) ? (
+                {allClasses.map((c, i) =>
+                  usedClasses.includes(c) ? (
                     <Fragment key={i}>
                       <span
                         className={clsx('code-highlight whitespace-no-wrap', {
                           'animate-flash-code-slow': inView,
                         })}
-                        style={{ animationDelay: `${(5 / classes.length) * classes.indexOf(c)}s` }}
+                        style={{
+                          animationDelay: `${
+                            (DURATION / usedClasses.length) * usedClasses.indexOf(c)
+                          }s`,
+                        }}
                       >
                         {c}
                       </span>{' '}
@@ -245,7 +265,7 @@ export function Performance() {
                         })}
                         style={{
                           transitionDelay: `${
-                            (5 / unusedClasses.length) * unusedClasses.indexOf(c)
+                            (DURATION / unusedClasses.length) * unusedClasses.indexOf(c)
                           }s`,
                         }}
                       >
@@ -273,7 +293,7 @@ export function Performance() {
                   {tokens.map((token, tokenIndex) => {
                     if (
                       token.types[token.types.length - 1] === 'class' &&
-                      classes.includes(token.content)
+                      usedClasses.includes(token.content)
                     ) {
                       return (
                         <span
@@ -283,7 +303,7 @@ export function Performance() {
                           })}
                           style={{
                             animationDelay: `${
-                              (5 / classes.length) * classes.indexOf(token.content)
+                              (DURATION / usedClasses.length) * usedClasses.indexOf(token.content)
                             }s`,
                           }}
                         >
@@ -307,21 +327,4 @@ export function Performance() {
       />
     </section>
   )
-}
-
-// https://stackoverflow.com/a/1349426
-function makeClass() {
-  let result = ''
-  const characters = 'abcdefghijklmnopqrstuvwxyz0123456789'
-  const charactersLength = characters.length
-  const firstLength = randomIntFromInterval(2, 7)
-  const secondLength = randomIntFromInterval(3, 8)
-  for (let i = 0; i < firstLength; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
-  }
-  result += '-'
-  for (let i = 0; i < secondLength; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
-  }
-  return result
 }
