@@ -12,7 +12,7 @@ export function Tabs({
   return (
     <AnimateSharedLayout>
       <ul
-        className={clsx(className, {
+        className={clsx('whitespace-no-wrap', className, {
           flex: !grid,
           'space-x-2 sm:space-x-6': spacing === 'normal' && !grid,
           'space-x-2 sm:space-x-12': spacing === 'loose' && !grid,
