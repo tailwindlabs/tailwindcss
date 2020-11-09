@@ -46,7 +46,7 @@ const {
           <div class="col-start-2 row-start-1 row-end-3">
             <dt class="sr-only">Users</dt>
             <dd class="flex justify-end sm:justify-start lg:justify-end xl:justify-start -space-x-2">
-              <img x-for="user in item.users" :src="user.avatar" :alt="user.name" width="48" height="48" class="w-7 h-7 rounded-full border-2 border-white" />
+              <img x-for="user in item.users" :src="user.avatar" :alt="user.name" width="48" height="48" class="w-7 h-7 rounded-full bg-gray-100 border-2 border-white" />
             </dd>
           </div>
         </dl>
@@ -221,7 +221,7 @@ export function StateVariants() {
                                 alt=""
                                 width="48"
                                 height="48"
-                                className="w-7 h-7 rounded-full border-2 border-white"
+                                className="w-7 h-7 rounded-full bg-gray-100 border-2 border-white"
                               />
                             ))}
                           </dd>

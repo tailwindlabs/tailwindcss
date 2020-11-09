@@ -42,7 +42,7 @@ const { code: html, lines, classNames } = tokenize.html(
   </div>
   <div class="{footerContainer}">
     <p class="flex items-center text-black text-sm leading-5 font-medium">
-      <img src="/kevin-francis.jpg" alt="" class="w-6 h-6 rounded-full mr-2">
+      <img src="/kevin-francis.jpg" alt="" class="w-6 h-6 rounded-full mr-2 bg-gray-100">
       Hosted by Kevin Francis
     </p>
     <button type="button" class="bg-violet-100 text-violet-700 text-base leading-6 font-semibold px-6 py-2 rounded-lg">Check availability</button>
@@ -53,10 +53,10 @@ const { code: html, lines, classNames } = tokenize.html(
         <img src="/beach-house.jpg" alt="" class="{imgLg}" />
       </div>
       <div class="{imgSmContainer}">
-        <img src="/beach-house-interior.jpg" alt="" class="absolute inset-0 w-full h-full object-cover rounded-lg" />
+        <img src="/beach-house-interior.jpg" alt="" class="absolute inset-0 w-full h-full object-cover rounded-lg bg-gray-100" />
       </div>
       <div class="{imgSmContainer}">
-        <img src="/beach-house-view.jpg" alt="" class="absolute inset-0 w-full h-full object-cover rounded-lg" />
+        <img src="/beach-house-view.jpg" alt="" class="absolute inset-0 w-full h-full object-cover rounded-lg bg-gray-100" />
       </div>
     </div>
   </div>
@@ -89,7 +89,7 @@ const { code: html, lines, classNames } = tokenize.html(
         footerContainer: 'col-start-1 row-start-3 space-y-3 px-4',
         imgContainer: 'col-start-1 row-start-1 flex',
         imgLgContainer: 'relative col-span-3 row-span-2',
-        imgLg: 'absolute inset-0 w-full h-full object-cover',
+        imgLg: 'absolute inset-0 w-full h-full object-cover bg-gray-100',
         imgSmContainer: 'relative hidden',
       },
       md: {
@@ -104,7 +104,7 @@ const { code: html, lines, classNames } = tokenize.html(
         footerContainer: 'col-start-1 row-start-3 space-y-3',
         imgContainer: 'col-start-2 row-start-1 row-span-3 flex',
         imgLgContainer: 'relative col-span-3 row-span-2',
-        imgLg: 'absolute inset-0 w-full h-full object-cover rounded-lg',
+        imgLg: 'absolute inset-0 w-full h-full object-cover rounded-lg bg-gray-100',
         imgSmContainer: 'relative hidden',
       },
       lg: {
@@ -119,7 +119,7 @@ const { code: html, lines, classNames } = tokenize.html(
         footerContainer: 'col-start-1 row-start-3 space-y-3',
         imgContainer: 'col-start-2 row-start-1 row-span-3 flex',
         imgLgContainer: 'relative col-span-2 row-span-2',
-        imgLg: 'absolute inset-0 w-full h-full object-cover rounded-lg',
+        imgLg: 'absolute inset-0 w-full h-full object-cover rounded-lg bg-gray-100',
         imgSmContainer: 'relative block',
       },
     },

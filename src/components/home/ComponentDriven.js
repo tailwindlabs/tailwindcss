@@ -103,7 +103,7 @@ export default function Recipes({ recipes }) {
     'ListItem.js': tokenize.jsx(`export default function ListItem({ recipe }) {
   return (
     <article className="p-4 flex space-x-4">
-      <img src={recipe.image} alt="" className="flex-none w-18 h-18 rounded-lg object-cover" width="144" height="144" />
+      <img src={recipe.image} alt="" className="flex-none w-18 h-18 rounded-lg object-cover bg-gray-100" width="144" height="144" />
       <div className="min-w-0 relative flex-auto sm:pr-20 lg:pr-0 xl:pr-20">
         <h2 className="text-lg leading-7 font-semibold text-black mb-0.5">
           {recipe.title}
@@ -752,7 +752,7 @@ export function ComponentDriven() {
                   alt=""
                   width="144"
                   height="144"
-                  className="flex-none w-18 h-18 rounded-lg object-cover"
+                  className="flex-none w-18 h-18 rounded-lg object-cover bg-gray-100"
                 />
                 <div className="min-w-0 relative flex-auto sm:pr-20 lg:pr-0 xl:pr-20">
                   <h2 className="text-base leading-6 sm:text-lg sm:leading-7 lg:text-base lg:leading-6 xl:text-lg xl:leading-7 font-semibold text-black mb-0.5 truncate">
