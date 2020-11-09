@@ -76,6 +76,9 @@ module.exports = {
         grab: 'grab',
         grabbing: 'grabbing',
       },
+      transitionDuration: {
+        1500: '1.5s',
+      },
     },
     colors: {
       transparent: 'transparent',

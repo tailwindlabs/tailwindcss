@@ -554,6 +554,7 @@ function ApplyExample({ inView }) {
                     <span
                       key={tokenIndex}
                       className={clsx(getClassNameForToken(token), 'delay-500')}
+                      style={{ transitionDuration: '1.5s' }}
                     >
                       {token.content}
                     </span>
@@ -569,7 +570,7 @@ function ApplyExample({ inView }) {
 }
 
 function AtApplySection() {
-  const { inView, ref } = useInView({ threshold: 0.5, triggerOnce: false })
+  const { inView, ref } = useInView({ threshold: 0.5, triggerOnce: true })
 
   return (
     <GradientLockup
@@ -583,7 +584,7 @@ function AtApplySection() {
           <article className="text-gray-600 leading-6">
             <h2
               className={clsx(
-                'transition-opacity duration-1000 delay-500 text-2xl leading-8 font-semibold text-black p-6 pb-1',
+                'transition-opacity duration-1500 delay-500 text-2xl leading-8 font-semibold text-black p-6 pb-1',
                 { 'opacity-25': inView }
               )}
             >
@@ -591,7 +592,7 @@ function AtApplySection() {
             </h2>
             <dl
               className={clsx(
-                'transition-opacity duration-1000 delay-500 flex flex-wrap divide-y divide-gray-200 border-b border-gray-200',
+                'transition-opacity duration-1500 delay-500 flex flex-wrap divide-y divide-gray-200 border-b border-gray-200',
                 { 'opacity-25': inView }
               )}
             >
