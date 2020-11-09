@@ -125,7 +125,6 @@ module.exports = {
       8: '8px',
     },
     boxShadow: {
-      xs: '0 0 0 1px rgba(0, 0, 0, 0.05)',
       sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
       DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
       md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
@@ -133,8 +132,6 @@ module.exports = {
       xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
       '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
       inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
-      outline: '0 0 0 3px rgba(147, 197, 253, 0.5)',
-      solid: '0 0 0 2px currentColor',
       none: 'none',
     },
     container: {},
@@ -498,6 +495,7 @@ module.exports = {
     },
     opacity: {
       0: '0',
+      5: '0.05',
       10: '0.1',
       20: '0.2',
       25: '0.25',
@@ -509,6 +507,7 @@ module.exports = {
       75: '0.75',
       80: '0.8',
       90: '0.9',
+      95: '0.95',
       100: '1',
     },
     order: {
