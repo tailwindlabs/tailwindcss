@@ -584,7 +584,7 @@ function AtApplySection() {
           <article className="text-gray-600 leading-6">
             <h2
               className={clsx(
-                'transition-opacity duration-1500 delay-500 text-2xl leading-8 font-semibold text-black p-6 pb-1',
+                'transition-opacity duration-1500 delay-500 text-xl leading-7 sm:text-2xl sm:leading-8 font-semibold text-black px-4 py-6 sm:px-6 pb-1',
                 { 'opacity-25': inView }
               )}
             >
@@ -596,33 +596,42 @@ function AtApplySection() {
                 { 'opacity-25': inView }
               )}
             >
-              <div className="px-6 pb-6">
+              <div className="px-4 sm:px-6 pb-6">
                 <dt className="sr-only">Date and time</dt>
-                <dd>
+                <dd className="text-sm leading-5 sm:text-base sm:leading-6">
                   <time dateTime="2020-11-15T10:00:00-05:00">Thu Nov 15, 2020 10:00am</time> -{' '}
-                  <time dateTime="2020-11-15T11:00:00-05:00">11:00am EST</time>
+                  <time dateTime="2020-11-15T11:00:00-05:00">
+                    11:00am<span className="sr-only sm:not-sr-only"> EST</span>
+                  </time>
                 </dd>
               </div>
-              <div className="w-full flex-none flex items-center px-6 py-4">
-                <dt className="w-1/3 flex-none uppercase text-sm leading-5 font-semibold tracking-wide">
+              <div className="w-full flex-none flex items-baseline px-4 sm:px-6 py-4">
+                <dt className="w-2/5 sm:w-1/3 flex-none uppercase text-xs leading-4 sm:text-sm sm:leading-5 font-semibold tracking-wide">
                   Location
                 </dt>
-                <dd className="text-black">
+                <dd className="text-black text-sm leading-5 sm:text-base sm:leading-6">
                   Kitchener, <abbr title="Ontario">ON</abbr>
                 </dd>
               </div>
-              <div className="w-full flex-none flex items-center px-6 py-4">
-                <dt className="w-1/3 flex-none uppercase text-sm leading-5 font-semibold tracking-wide">
+              <div className="w-full flex-none flex items-baseline px-4 sm:px-6 py-4">
+                <dt className="w-2/5 sm:w-1/3 flex-none uppercase text-xs leading-4 sm:text-sm sm:leading-5 font-semibold tracking-wide">
                   Description
                 </dt>
-                <dd className="italic">No meeting description</dd>
+                <dd className="italic text-sm leading-5 sm:text-base sm:leading-6">
+                  No meeting description
+                </dd>
               </div>
-              <div className="w-full flex-none flex items-center px-6 py-4">
-                <dt className="w-1/3 flex-none uppercase text-sm leading-5 font-semibold tracking-wide">
+              <div className="w-full flex-none flex items-center px-4 sm:px-6 py-4">
+                <dt className="w-2/5 sm:w-1/3 flex-none uppercase text-xs leading-4 sm:text-sm sm:leading-5 font-semibold tracking-wide">
                   Attendees
                 </dt>
-                <dd className="font-medium text-gray-700 bg-gray-100 rounded-full py-1 pl-2 pr-4 flex items-center">
-                  <svg width="20" height="20" fill="currentColor" className="text-gray-500 mr-2">
+                <dd className="text-sm leading-5 sm:text-base sm:leading-6 font-medium text-gray-700 bg-gray-100 rounded-full py-1 pl-2 pr-4 flex items-center">
+                  <svg
+                    width="20"
+                    height="20"
+                    fill="currentColor"
+                    className="hidden sm:block text-gray-500 mr-2"
+                  >
                     <path
                       fillRule="evenodd"
                       clipRule="evenodd"
@@ -633,7 +642,7 @@ function AtApplySection() {
                 </dd>
               </div>
             </dl>
-            <div className="grid grid-cols-2 gap-x-6 px-6 py-4">
+            <div className="grid grid-cols-2 gap-x-4 sm:gap-x-6 px-4 sm:px-6 py-4">
               <button
                 type="button"
                 className="text-base leading-6 font-medium rounded-lg bg-gray-100 text-black py-3"
