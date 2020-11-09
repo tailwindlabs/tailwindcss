@@ -12,6 +12,20 @@ We don't take breaking changes lightly and have worked hard to make sure the upg
 
 ----
 
+## Install Tailwind CSS v2.0 and PostCSS 8
+
+Tailwind CSS v2.0 has been updated for the latest PostCSS release which requires installing `postcss` as a peer dependency alongside Tailwind itself.
+
+Update Tailwind and install PostCSS using npm or Yarn:
+
+```sh
+# Using npm
+npm install tailwindcss postcss
+
+# Using Yarn
+yarn add tailwindcss postcss
+```
+
 ## Support for IE 11 has been dropped
 
 Prior to v2.0, we tried our best to make sure features we included in Tailwind worked in IE 11 whenever possible. This added considerable maintenance burden as well as increased build sizes (even when purging unused styles), so we have decided to drop support for IE 11 as of v2.0.
@@ -43,7 +57,7 @@ Updating `whitespace-no-wrap` and `flex-no-wrap` is just a direct replacement, a
 
 The default color palette has changed considerably in Tailwind CSS v2.0 and is not designed to be a drop-in replacement for the color palette that was included in v1.
 
-If you are implicitly relying on the default color palette, you should configure your color palette explicitly to override the new default palette with the colors your site is already using.
+If you're using the default color palette, you should configure it explicitly to override the new default palette with the colors your site is already using.
 
 Here is an example `tailwind.config.js` file that includes the default colors from v1:
 
@@ -212,11 +226,58 @@ Alternatively, you can go through your HTML and explicitly add a `leading` utili
 + <p class="text-lg leading-normal">...</p>
 ```
 
+## Update `default` theme keys to `DEFAULT`
+
+In Tailwind CSS v1.x, the `default` keyword in various `theme` sections of the `tailwind.config.js` section sometimes meant "don't add a suffix to the class name".
+
+For example, this configuration:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    borderRadius: {
+      none: '0',
+      sm: '0.125rem',
+      default: '0.25rem',
+      md: '0.375rem',
+      lg: '0.5rem',
+    },
+  }
+}
+```
+
+...would generated a `rounded` class with a `border-radius` of `0.25rem`, _not_ a `rounded-default` class.
+
+In Tailwind CSS v2.0, we've updated all special usage of `default` to uppercase `DEFAULT` instead:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    borderRadius: {
+      none: '0',
+      sm: '0.125rem',
+      DEFAULT: '0.25rem',
+      md: '0.375rem',
+      lg: '0.5rem',
+    },
+  }
+}
+```
+
+Lowercase `default` will be treated like any other string, so a `default` value under `borderRadius` _will_ generate a `rounded-default` class in Tailwind CSS v.2.0.
+
+You should update all usage of `default` in your config file to `DEFAULT`, _except_ where you actually want to generate a `{utility}-default` class, like for `cursor-default`.
+
+Reference [the complete default configuration](https://github.com/tailwindlabs/tailwindcss/blob/master/stubs/defaultConfig.stub.js) to see where we now use `DEFAULT` and where we still use `default` if you are unclear about what changes you need to make to your own configuration.
+
 ## Move deliberately shallow `extends` overrides to top-level
 
 In Tailwind CSS v1.0, theme changes under `extends` were merged shallowly. So this configuration would override _all_ of the purple colors:
 
 ```js
+// tailwind.config.js
 module.exports = {
   theme: {
     extends: {

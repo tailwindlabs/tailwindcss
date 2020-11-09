@@ -65,21 +65,20 @@ export function BrowserSupport() {
           <Icon />
         </IconContainer>
         <Caption as="h2" className="text-purple-600 mb-3">
-          Browser support
+          Modern features
         </Caption>
         <BigText className="mb-8">
-          <Widont>Go bleeding edge or support ancient browsers, it’s your decision.</Widont>
+          <Widont>Cutting-edge is our comfort zone.</Widont>
         </BigText>
         <Paragraph as="div" className="mb-6">
           <p>
-            Tailwind includes utilities for all the latest modern browser features, but because it's
-            so low-level, you're not forced to use them. Need to support IE11? Build your grids with
-            Flexbox instead of CSS Grid. Stuck with IE9? Build them with floats! (And wow I'm so
-            sorry.)
+            Tailwind is unapologetically modern, and takes advantage of all the latest and greatest
+            CSS features to make the developer experience as enjoyable as possible.
           </p>
           <p>
-            Use the target option to play it really safe and automatically disable CSS features that
-            aren't supported by the browsers you need to support, so there’s no accidents.
+            We've got first-class CSS grid support, composable transforms and gradients powered by
+            CSS variables, support for modern state selectors like <code>:focus-visible</code>, and
+            tons more.
           </p>
         </Paragraph>
         <Link href="#" className="text-purple-600">
