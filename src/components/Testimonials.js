@@ -4,14 +4,14 @@ import { gradients } from '@/utils/gradients'
 import { useInView } from 'react-intersection-observer'
 
 const colors = {
-  lightblue: [gradients.lightblue[0], 'text-cyan-100', 'text-cyan-100'],
-  purple: [gradients.purple[0], 'text-fuchsia-100', 'text-fuchsia-100'],
-  orange: [gradients.orange[0], 'text-orange-100', 'text-orange-100'],
-  teal: [gradients.teal[0], 'text-green-100', 'text-green-100'],
-  violet: [gradients.violet[0], 'text-purple-100', 'text-purple-100'],
-  amber: [gradients.amber[0], 'text-orange-100', 'text-orange-100'],
-  pink: [gradients.pink[0], 'text-rose-100', 'text-rose-100'],
-  blue: [gradients.blue[0], 'text-lightBlue-100', 'text-lightBlue-100'],
+  lightblue: [gradients.lightblue[0], 'text-cyan-100', 'bg-cyan-100'],
+  purple: [gradients.purple[0], 'text-fuchsia-100', 'bg-fuchsia-100'],
+  orange: [gradients.orange[0], 'text-orange-100', 'bg-orange-100'],
+  teal: [gradients.teal[0], 'text-green-100', 'bg-green-100'],
+  violet: [gradients.violet[0], 'text-purple-100', 'bg-purple-100'],
+  amber: [gradients.amber[0], 'text-orange-100', 'bg-orange-100'],
+  pink: [gradients.pink[0], 'text-rose-100', 'bg-rose-100'],
+  blue: [gradients.blue[0], 'text-lightBlue-100', 'bg-lightBlue-100'],
 }
 
 const rotation = [-2, 1, -1, 2, -1, 1]
@@ -111,13 +111,18 @@ function Testimonial({ testimonial, base, index, total }) {
           className={`flex items-center space-x-4 p-6 md:px-10 md:py-6 bg-gradient-to-br rounded-b-xl leading-6 font-semibold text-white ${color[0]}`}
         >
           <div className="flex-none w-14 h-14 bg-white rounded-full flex items-center justify-center">
-            <img src={testimonial.author.avatar} alt="" className="w-12 h-12 rounded-full" />
+            <img
+              src={testimonial.author.avatar}
+              alt=""
+              className={`w-12 h-12 rounded-full ${color[2]}`}
+              loading="lazy"
+            />
           </div>
           <cite className="not-italic flex-auto flex items-center justify-between">
             <span>
               {testimonial.author.name}
               <br />
-              <span className={color[2]}>{testimonial.author.role}</span>
+              <span className={color[1]}>{testimonial.author.role}</span>
             </span>
             {testimonial.tweetUrl && (
               <a
