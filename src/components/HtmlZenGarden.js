@@ -436,7 +436,8 @@ export function HtmlZenGarden({ theme }) {
                       initial={false}
                       animate={{ opacity: theme === 'simple' ? 1 : 0 }}
                     >
-                      <span className="hidden sm:inline">Classic </span>Utility Jacket
+                      <span className="hidden sm:inline whitespace-pre">Classic </span>Utility
+                      Jacket
                     </motion.h2>
                     <motion.h2
                       layout
