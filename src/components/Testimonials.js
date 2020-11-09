@@ -23,7 +23,7 @@ const testimonials = [
     author: {
       name: 'Ryan Florence',
       role: 'Remix & React Training',
-      avatar: 'https://pbs.twimg.com/profile_images/1257111841508974592/2_rEXazl_400x400.jpg',
+      avatar: require('@/img/avatars/ryan-florence.jpg').default,
     },
   },
   {
@@ -33,7 +33,7 @@ const testimonials = [
     author: {
       name: 'Guillermo Rauch',
       role: 'Vercel',
-      avatar: 'https://pbs.twimg.com/profile_images/1029230542716264448/LgLb--Of_400x400.jpg',
+      avatar: require('@/img/avatars/guillermo-rauch.jpg').default,
     },
   },
   {
@@ -42,7 +42,7 @@ const testimonials = [
     author: {
       name: 'Ryan Singer',
       role: 'Basecamp',
-      avatar: 'https://pbs.twimg.com/profile_images/1281306762075725824/O0WYHw22_400x400.jpg',
+      avatar: require('@/img/avatars/ryan-singer.jpg').default,
     },
   },
   {
@@ -51,7 +51,7 @@ const testimonials = [
     author: {
       name: 'Ken Wheeler',
       role: '',
-      avatar: 'https://pbs.twimg.com/profile_images/1302002290967097346/qAqo16iu_400x400.jpg',
+      avatar: require('@/img/avatars/ken-wheeler.jpg').default,
     },
   },
   {
@@ -61,7 +61,7 @@ const testimonials = [
     author: {
       name: 'Jon Bloomer',
       role: '',
-      avatar: 'https://pbs.twimg.com/profile_images/1298408572166930432/QJddzp2w_400x400.jpg',
+      avatar: require('@/img/avatars/jon-bloomer.jpg').default,
     },
   },
   {
@@ -70,7 +70,7 @@ const testimonials = [
     author: {
       name: 'Andrew Gilliland',
       role: '',
-      avatar: 'https://pbs.twimg.com/profile_images/1288291827687346183/3557xYWU_400x400.jpg',
+      avatar: require('@/img/avatars/andrew-gilliland.jpg').default,
     },
   },
 ]
