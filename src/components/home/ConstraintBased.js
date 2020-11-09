@@ -222,7 +222,7 @@ export function ConstraintBased() {
           <div
             className={`relative z-10 rounded-tr-xl sm:rounded-t-xl lg:rounded-xl shadow-lg flex flex-col sm:flex-row lg:flex-col xl:flex-row lg:-mr-8 ${styles.container}`}
           >
-            <h3 className="flex-none w-full sm:w-48 lg:w-full xl:w-48 bg-purple-50 rounded-tr-xl sm:rounded-tr-none sm:rounded-tl-xl lg:rounded-t-xl xl:rounded-tr-none xl:rounded-l-xl text-lg leading-6 font-semibold text-purple-800 p-6 sm:p-8 lg:p-6 xl:p-8">
+            <h3 className="flex-none w-full sm:w-48 lg:w-full xl:w-48 bg-purple-50 rounded-tr-xl sm:rounded-tr-none sm:rounded-tl-xl lg:rounded-t-xl xl:rounded-tr-none xl:rounded-l-xl text-lg leading-6 font-semibold text-purple-800 px-4 py-6 sm:p-8 lg:p-6 xl:p-8">
               <AnimatePresence initial={false} exitBeforeEnter>
                 <motion.span
                   key={tab}
@@ -248,12 +248,12 @@ export function ConstraintBased() {
                   <motion.ul
                     key="sizing"
                     exit={{ opacity: 0 }}
-                    className="w-full font-mono text-xs leading-5 text-gray-600 space-y-4 p-6 sm:p-8 lg:p-6 xl:p-8"
+                    className="w-full font-mono text-xs leading-5 text-gray-600 space-y-4 px-4 py-6 sm:p-8 lg:p-6 xl:p-8"
                   >
                     {[64, 56, 48, 40, 32, 24, 20, 16, 12, 10].map((key, i) => (
-                      <li key={key} className="flex items-center">
+                      <li key={key} className="flex items-center flex-wrap sm:flex-no-wrap">
                         <motion.span
-                          className="flex-none w-11"
+                          className="flex-none w-full sm:w-11"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: i * 0.1 }}
@@ -275,7 +275,7 @@ export function ConstraintBased() {
                   <motion.ul
                     key="color"
                     exit={{ opacity: 0 }}
-                    className="w-full space-y-4 font-mono text-xs leading-4 p-6"
+                    className="w-full space-y-4 font-mono text-xs leading-4 px-4 py-6 sm:p-8 lg:p-6 xl:p-8"
                   >
                     {['red', 'yellow', 'green', 'blue', 'purple', 'pink'].map((color, i) => (
                       <motion.li
@@ -309,7 +309,7 @@ export function ConstraintBased() {
                   <motion.ul
                     key="typography"
                     exit={{ opacity: 0 }}
-                    className="w-full space-y-6 p-6 sm:p-8 lg:p-6 xl:p-8"
+                    className="w-full space-y-6 px-4 py-6 sm:p-8 lg:p-6 xl:p-8"
                   >
                     {['font-sans', 'font-serif', 'font-mono'].map((style, i) => (
                       <motion.li
@@ -319,7 +319,9 @@ export function ConstraintBased() {
                         transition={{ delay: i * 0.1 }}
                       >
                         <h4 className="font-mono text-xs leading-5 text-gray-600">{style}</h4>
-                        <p className={`text-lg leading-6 text-purple-900 ${style}`}>
+                        <p
+                          className={`text-sm leading-5 sm:text-lg sm:leading-6 text-purple-900 ${style}`}
+                        >
                           ABCDEFGHIJKLMNOPQRSTUVWXYZ
                           <br />
                           abcdefghijklmnopqrstuvwxyz
@@ -334,7 +336,7 @@ export function ConstraintBased() {
                   <motion.div
                     key="shadows"
                     exit={{ opacity: 0 }}
-                    className="w-full flex-auto flex p-6 font-mono text-xs leading-4"
+                    className="w-full flex-auto flex font-mono text-xs leading-4 px-4 py-6 sm:p-8 lg:p-6 xl:p-8"
                   >
                     <motion.div
                       className="absolute z-10 inset-2 bg-gray-50 rounded-lg"
