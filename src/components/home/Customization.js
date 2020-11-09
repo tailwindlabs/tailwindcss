@@ -154,7 +154,7 @@ export function Customization() {
             className={`${styles.card} relative z-10 rounded-tr-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8 sm:divide-y-2 lg:divide-y-0 xl:divide-y-2 divide-rose-100 flex flex-col`}
           >
             <section className="flex flex-col sm:flex-row lg:flex-col xl:flex-row">
-              <h3 className="flex-none w-full sm:w-48 lg:w-full xl:w-48 bg-rose-50 rounded-tr-xl sm:rounded-tr-none sm:rounded-tl-xl lg:rounded-tr-xl xl:rounded-tr-none text-lg leading-6 font-semibold text-rose-800 px-4 py-3 sm:p-8 lg:px-4 lg:py-3 xl:p-8">
+              <h3 className="flex-none w-full sm:w-48 lg:w-full xl:w-48 bg-rose-50 rounded-tr-xl sm:rounded-tr-none sm:rounded-tl-xl lg:rounded-tr-xl xl:rounded-tr-none text-lg leading-6 font-semibold text-rose-800 px-4 py-3 sm:p-8 lg:px-6 lg:py-4 xl:p-8">
                 Typography
               </h3>
               <dl className="flex-auto bg-white sm:rounded-tr-xl lg:rounded-tr-none xl:rounded-tr-xl px-4 py-6 sm:p-6 lg:px-4 lg:py-6 xl:p-6 space-y-6">
