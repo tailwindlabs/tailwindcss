@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet!
 
+## [2.0.0-alpha.10] - 2020-11-09
+
+### Added
+
+- Added new `ring` utilities ([#2747](https://github.com/tailwindlabs/tailwindcss/pull/2747))
+- Added `5` and `95` to opacity scale ([#2747](https://github.com/tailwindlabs/tailwindcss/pull/2747))
+
+### Changed
+
+- Removed `shadow-outline`, `shadow-solid`, and `shadow-xs` in favor of new `ring` API ([#2747](https://github.com/tailwindlabs/tailwindcss/pull/2747))
+
 ## [2.0.0-alpha.9] - 2020-11-07
 
 ### Added
@@ -1118,7 +1129,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.9...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.10...HEAD
+[2.0.0-alpha.10]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.9...v2.0.0-alpha.10
 [2.0.0-alpha.9]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.8...v2.0.0-alpha.9
 [2.0.0-alpha.8]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.7...v2.0.0-alpha.8
 [2.0.0-alpha.7]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.6...v2.0.0-alpha.7
