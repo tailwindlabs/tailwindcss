@@ -217,7 +217,7 @@ function BrowserWindow({ size, onChange, height = 385 }) {
           dragMomentum={false}
           dragElastic={0.08}
           dragConstraints={constraintsRef}
-          className="absolute z-10 top-1/2 right-0 bg-indigo-900 rounded-full border-4 border-white shadow-lg flex items-center justify-center pointer-events-auto cursor-ew-resize"
+          className="absolute z-10 top-1/2 right-0 bg-indigo-900 rounded-full border-4 border-white shadow-lg flex items-center justify-center pointer-events-auto cursor-grab active:cursor-grabbing"
           style={{
             x,
             width: `${HANDLE_RADIUS * 2}rem`,
@@ -227,8 +227,8 @@ function BrowserWindow({ size, onChange, height = 385 }) {
           onMeasureDragConstraints={({ left, right }) => {
             setConstraintsWidth(right - left)
           }}
-          onDragStart={() => document.body.classList.add('cursor-ew-resize')}
-          onDragEnd={() => document.body.classList.remove('cursor-ew-resize')}
+          onDragStart={() => document.body.classList.add('cursor-grabbing')}
+          onDragEnd={() => document.body.classList.remove('cursor-grabbing')}
         >
           <svg width="40" height="40" fill="none">
             <path

@@ -73,7 +73,8 @@ module.exports = {
         'flash-code-slow': 'flash-code 2s forwards',
       },
       cursor: {
-        'ew-resize': 'ew-resize',
+        grab: 'grab',
+        grabbing: 'grabbing',
       },
     },
     colors: {
@@ -347,5 +348,6 @@ module.exports = {
     borderWidth: ['responsive', 'first', 'last', 'hover', 'focus'],
     textColor: ['responsive', 'group-focus', 'group-hover', 'hover', 'focus', 'dark'],
     opacity: ['responsive', 'hover', 'focus', 'disabled', 'group-hover'],
+    cursor: ({ variants }) => [...variants('cursor'), 'active'],
   },
 }
