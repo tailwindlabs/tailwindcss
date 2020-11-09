@@ -157,7 +157,7 @@ export function Customization() {
               <h3 className="flex-none w-full sm:w-48 lg:w-full xl:w-48 bg-rose-50 rounded-tr-xl sm:rounded-tr-none sm:rounded-tl-xl lg:rounded-tr-xl xl:rounded-tr-none text-lg leading-6 font-semibold text-rose-800 px-4 py-3 sm:p-8 lg:px-6 lg:py-4 xl:p-8">
                 Typography
               </h3>
-              <dl className="flex-auto bg-white sm:rounded-tr-xl lg:rounded-tr-none xl:rounded-tr-xl px-4 py-6 sm:p-6 lg:px-4 lg:py-6 xl:p-6 space-y-6">
+              <dl className="flex-auto bg-white sm:rounded-tr-xl lg:rounded-tr-none xl:rounded-tr-xl px-4 py-6 sm:p-6 space-y-6">
                 <div className="space-y-1">
                   <dt className="font-mono text-xs leading-4">font-display</dt>
                   <AnimatePresence initial={false} exitBeforeEnter>
@@ -194,11 +194,11 @@ export function Customization() {
               </dl>
             </section>
             <section className="flex flex-col sm:flex-row lg:flex-col xl:flex-row overflow-hidden">
-              <h3 className="flex-none w-full sm:w-48 lg:w-full xl:w-48 bg-rose-50 xl:rounded-bl-xl text-lg leading-6 font-semibold text-rose-800 px-4 py-3 sm:p-8 lg:px-4 lg:py-3 xl:p-8">
+              <h3 className="flex-none w-full sm:w-48 lg:w-full xl:w-48 bg-rose-50 xl:rounded-bl-xl text-lg leading-6 font-semibold text-rose-800 px-4 py-3 sm:p-8 lg:px-6 lg:py-4 xl:p-8">
                 Color
               </h3>
               <div className="relative flex-auto bg-white lg:rounded-b-xl xl:rounded-bl-none overflow-hidden">
-                <dl className="px-4 py-6 sm:p-6 lg:px-4 lg:py-6 xl:p-6 space-y-6">
+                <dl className="px-4 py-6 sm:p-6 space-y-6">
                   <div className="space-y-2">
                     <dt className="font-mono text-xs leading-4">{'bg-primary-{50-900}'}</dt>
                     <dd>
