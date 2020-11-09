@@ -24,7 +24,7 @@ const { tokens: defaultTokens } = tokenize.html(`<div class="flex pa-2 bg-white 
   </div>
 </div>`)
 
-export function CodeWindow({ children, className = '' }) {
+export function CodeWindow({ children, lineNumbersBackground = true, className = '' }) {
   return (
     <div
       className={`relative overflow-hidden md:rounded-xl shadow-2xl flex ${styles.root} ${className}`}
@@ -38,7 +38,13 @@ export function CodeWindow({ children, className = '' }) {
             <div className="w-3 h-3 border-2 rounded-full border-green-400" />
           </div>
         </div>
-        <div className="border-t border-white border-opacity-10 min-h-0 flex-auto flex flex-col">
+        <div className="relative border-t border-white border-opacity-10 min-h-0 flex-auto flex flex-col">
+          {lineNumbersBackground && (
+            <div
+              className="hidden md:block absolute inset-y-0 left-0 bg-black bg-opacity-25"
+              style={{ width: 50 }}
+            />
+          )}
           {children}
         </div>
       </div>
@@ -46,50 +52,43 @@ export function CodeWindow({ children, className = '' }) {
   )
 }
 
-CodeWindow.Code = forwardRef(
-  (
-    { tokens = defaultTokens, initialLineNumber = 1, lineNumbersBackground = true, ...props },
-    ref
-  ) => {
-    const lineNumbers = useMemo(() => {
-      const t = tokens.flat(Infinity)
-      let line = initialLineNumber + 1
-      let str = `${initialLineNumber}\n`
-      for (let i = 0; i < t.length; i++) {
-        if (typeof t[i] === 'string') {
-          const newLineChars = t[i].match(/\n/g)
-          if (newLineChars !== null) {
-            for (let j = 0; j < newLineChars.length; j++) {
-              str += `${line++}\n`
-            }
+CodeWindow.Code = forwardRef(({ tokens = defaultTokens, initialLineNumber = 1, ...props }, ref) => {
+  const lineNumbers = useMemo(() => {
+    const t = tokens.flat(Infinity)
+    let line = initialLineNumber + 1
+    let str = `${initialLineNumber}\n`
+    for (let i = 0; i < t.length; i++) {
+      if (typeof t[i] === 'string') {
+        const newLineChars = t[i].match(/\n/g)
+        if (newLineChars !== null) {
+          for (let j = 0; j < newLineChars.length; j++) {
+            str += `${line++}\n`
           }
         }
       }
-      return str
-    }, [tokens])
+    }
+    return str
+  }, [tokens])
 
-    return (
-      <div className="w-full flex-auto flex min-h-0 overflow-auto">
-        <div ref={ref} className="w-full relative flex-auto">
-          <pre className="flex min-h-full text-xs leading-4 md:text-sm md:leading-5">
-            <div
-              aria-hidden="true"
-              className={`hidden md:block text-white text-opacity-50 flex-none py-4 pr-4 text-right select-none ${
-                lineNumbersBackground ? 'bg-black bg-opacity-25' : ''
-              }`}
-              style={{ width: 50 }}
-            >
-              {lineNumbers}
-            </div>
-            <code className="flex-auto relative block text-white pt-4 pb-4 px-4 overflow-auto">
-              <Code tokens={tokens} {...props} />
-            </code>
-          </pre>
-        </div>
+  return (
+    <div className="w-full flex-auto flex min-h-0 overflow-auto">
+      <div ref={ref} className="w-full relative flex-auto">
+        <pre className="flex min-h-full text-xs leading-4 md:text-sm md:leading-5">
+          <div
+            aria-hidden="true"
+            className="hidden md:block text-white text-opacity-50 flex-none py-4 pr-4 text-right select-none"
+            style={{ width: 50 }}
+          >
+            {lineNumbers}
+          </div>
+          <code className="flex-auto relative block text-white pt-4 pb-4 px-4 overflow-auto">
+            <Code tokens={tokens} {...props} />
+          </code>
+        </pre>
       </div>
-    )
-  }
-)
+    </div>
+  )
+})
 
 const themeDict = {
   punctuation: 'text-code-punctuation',
@@ -111,17 +110,7 @@ export function getClassNameForToken({ types, empty }) {
 }
 
 CodeWindow.Code2 = forwardRef(
-  (
-    {
-      lines = 0,
-      initialLineNumber = 1,
-      lineNumbersBackground = true,
-      overflow = true,
-      className,
-      children,
-    },
-    ref
-  ) => {
+  ({ lines = 0, initialLineNumber = 1, overflow = true, className, children }, ref) => {
     return (
       <div
         ref={ref}
@@ -133,9 +122,7 @@ CodeWindow.Code2 = forwardRef(
           <pre className="flex min-h-full text-xs leading-4 md:text-sm md:leading-5">
             <div
               aria-hidden="true"
-              className={`hidden md:block text-white text-opacity-50 flex-none py-4 pr-4 text-right select-none ${
-                lineNumbersBackground ? 'bg-black bg-opacity-25' : ''
-              }`}
+              className="hidden md:block text-white text-opacity-50 flex-none py-4 pr-4 text-right select-none"
               style={{ width: 50 }}
             >
               {Array.from({ length: lines }).map((_, i) =>

@@ -104,13 +104,7 @@ function CompletionDemo() {
   const { ref, inView } = useInView({ threshold: 0.5, triggerOnce: true })
 
   return (
-    <CodeWindow.Code2
-      ref={ref}
-      lines={lines.length}
-      lineNumbersBackground={false}
-      overflow={false}
-      className="overflow-hidden"
-    >
+    <CodeWindow.Code2 ref={ref} lines={lines.length} overflow={false} className="overflow-hidden">
       {lines.map((tokens, lineIndex) => (
         <Fragment key={lineIndex}>
           {tokens.map((token, tokenIndex) => {
@@ -326,7 +320,7 @@ export function EditorTools() {
         color="lightblue"
         rotate={2}
         left={
-          <CodeWindow className={`bg-lightBlue-500 ${styles.code}`}>
+          <CodeWindow className={`bg-lightBlue-500 ${styles.code}`} lineNumbersBackground={false}>
             <div className="flex-auto flex min-h-0">
               <div className="flex-none w-14 bg-white bg-opacity-10 flex flex-col items-center justify-between pt-3.5 pb-4">
                 <svg width="24" height="216" fill="none">
