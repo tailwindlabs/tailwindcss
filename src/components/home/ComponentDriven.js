@@ -706,6 +706,8 @@ export function ComponentDriven() {
                   </div>
                 ),
               }}
+              grid={true}
+              spacing="loose"
               selected={framework}
               onChange={setFramework}
               className="mx-auto xl:mx-0 px-4 sm:px-6 md:px-8 xl:px-0"
