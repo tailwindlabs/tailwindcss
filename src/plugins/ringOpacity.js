@@ -4,17 +4,15 @@ import nameClass from '../util/nameClass'
 export default function () {
   return function ({ addUtilities, theme, variants }) {
     const utilities = _.fromPairs(
-      _.map(theme('boxShadow'), (value, modifier) => {
+      _.map(_.omit(theme('ringOpacity'), 'DEFAULT'), (value, modifier) => {
         return [
-          nameClass('shadow', modifier),
+          nameClass('ring-opacity', modifier),
           {
-            '--box-shadow': value,
-            'box-shadow': 'var(--box-shadow)',
+            '--ring-opacity': value,
           },
         ]
       })
     )
-
-    addUtilities(utilities, variants('boxShadow'))
+    addUtilities(utilities, variants('ringOpacity'))
   }
 }

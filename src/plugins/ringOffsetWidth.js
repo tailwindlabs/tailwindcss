@@ -4,17 +4,15 @@ import nameClass from '../util/nameClass'
 export default function () {
   return function ({ addUtilities, theme, variants }) {
     const utilities = _.fromPairs(
-      _.map(theme('boxShadow'), (value, modifier) => {
+      _.map(theme('ringOffsetWidth'), (value, modifier) => {
         return [
-          nameClass('shadow', modifier),
+          nameClass('ring-offset', modifier),
           {
-            '--box-shadow': value,
-            'box-shadow': 'var(--box-shadow)',
+            '--ring-offset-width': value,
           },
         ]
       })
     )
-
-    addUtilities(utilities, variants('boxShadow'))
+    addUtilities(utilities, variants('ringOffsetWidth'))
   }
 }
