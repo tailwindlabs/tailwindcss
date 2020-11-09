@@ -127,7 +127,7 @@ export function Performance() {
             className="relative z-10 rounded-tl-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8 tabular-nums"
           >
             <div className="bg-white rounded-tl-xl sm:rounded-t-xl">
-              <div className="absolute top-6 left-6 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+              <div className="absolute top-4 left-4 sm:top-6 sm:left-6 w-15 h-15 sm:w-16 sm:h-16 bg-green-100 rounded-full flex items-center justify-center">
                 <svg
                   viewBox="0 0 64 64"
                   className="absolute inset-0 w-full h-full text-green-400"
@@ -165,15 +165,15 @@ export function Performance() {
                   />
                 </svg>
               </div>
-              <dl className="p-6 pb-0">
+              <dl className="p-4 pb-0 sm:p-6 sm:pb-0">
                 <div className="flex-none w-full pl-15 py-0.5">
                   <dt className="ml-4 text-sm leading-5 font-medium">Production build</dt>
-                  <dd className="ml-4 text-4xl leading-10 font-extrabold text-black">
+                  <dd className="ml-4 text-3xl leading-9 sm:text-4xl sm:leading-10 font-extrabold text-black">
                     <Counter from={2413.4} to={8.7} round={1} progress={progress} />
                     KB
                   </dd>
                 </div>
-                <div className="flex items-center border-t border-gray-100 -mx-6 mt-6 px-6 py-3 font-mono text-xs leading-5">
+                <div className="flex items-center border-t border-gray-100 -mx-4 sm:-mx-6 mt-4 sm:mt-6 px-4 sm:px-6 py-3 font-mono text-xs leading-5">
                   <dt className="whitespace-pre">Purged </dt>
                   <dd className="flex-auto">
                     <Counter from={0} to={20144} progress={progress} /> unused classes
@@ -235,10 +235,7 @@ export function Performance() {
               style={{ maxHeight: 251 }}
             >
               <div className="bg-black bg-opacity-75 absolute inset-0" />
-              <div
-                className="relative font-mono text-sm text-teal-200"
-                style={{ lineHeight: 18 / 14 }}
-              >
+              <div className="relative font-mono text-xs leading-4 sm:text-sm sm:leading-5 text-teal-200">
                 {allClasses.map((c, i) =>
                   usedClasses.includes(c) ? (
                     <Fragment key={i}>
