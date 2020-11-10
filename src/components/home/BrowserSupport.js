@@ -1,16 +1,73 @@
 import { IconContainer, Caption, BigText, Paragraph, Link, Widont } from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
 import { Tabs } from '@/components/Tabs'
-import { CodeWindow } from '@/components/CodeWindow'
-import { gradients } from '@/utils/gradients'
+import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
+import { gradients as allGradients } from '@/utils/gradients'
 import { ReactComponent as Icon } from '@/img/icons/home/browser-support.svg'
-import { useState } from 'react'
-import { AnimateSharedLayout, motion, useInvertedScale } from 'framer-motion'
+import { Fragment, useState } from 'react'
+import { AnimatePresence, motion, useInvertedScale } from 'framer-motion'
 import { usePrevious } from '@/hooks/usePrevious'
+import tokenize from '../../macros/tokenize.macro'
+import clsx from 'clsx'
+
+const gradients = [
+  allGradients.purple,
+  allGradients.blue,
+  allGradients.lightblue,
+  allGradients.teal,
+  allGradients.amber,
+  allGradients.pink,
+]
+
+const lines = {
+  grid: tokenize.html(`<div class="grid grid-flow-col grid-rows-2 grid-cols-3 gap-4 lorem ipsum dolor sit amet">
+  <div>
+    1
+  </div>
+  <div class="col-start-3">
+    2
+  </div>
+  <div>
+    3
+  </div>
+  <div>
+    4
+  </div>
+  <div class="row-start-1 col-start-2 col-span-2">
+    5
+  </div>
+</div>
+`).lines,
+  transforms: tokenize.html(`<div>
+  <div class="transform scale-110 -rotate-6">
+    1
+  </div>
+  <div class="transform scale-75 rotate-6 translate-x-2 translate-y-15">
+    2
+  </div>
+  <div class="transform scale-150 translate-y-11">
+    3
+  </div>
+  <div class="transform translate-y-24">
+    4
+  </div>
+  <div class="transform translate-x-20 translate-y-4">
+    5
+  </div>
+</div>
+`).lines,
+  gradients: tokenize.html(`<div class="bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+<div class="bg-gradient-to-br from-lightBlue-400 to-indigo-500"></div>
+<div class="bg-gradient-to-br from-turquoise-400 to-lightBlue-500"></div>
+<div class="bg-gradient-to-br from-green-400 to-turquoise-500"></div>
+<div class="bg-gradient-to-br from-yellow-400 to-orange-500"></div>
+<div class="bg-gradient-to-br from-pink-500 to-rose-500"></div>
+`).lines,
+}
 
 export function BrowserSupport() {
   const [feature, setFeature] = useState('grid')
-  const [selectedGradient, setSelectedGradient] = useState(gradients.purple)
+  const [selectedGradient, setSelectedGradient] = useState(gradients[0])
   const prevFeature = usePrevious(feature)
 
   const augment = (style, x, y, rotate = false) => {
@@ -61,7 +118,7 @@ export function BrowserSupport() {
   return (
     <section id="browser-support">
       <div className="px-4 sm:px-6 md:px-8 mb-20">
-        <IconContainer className={`${gradients.purple[0]} mb-8`}>
+        <IconContainer className={`${allGradients.purple[0]} mb-8`}>
           <Icon />
         </IconContainer>
         <Caption as="h2" className="text-purple-600 mb-3">
@@ -122,7 +179,7 @@ export function BrowserSupport() {
                 className="relative"
                 initial={false}
                 {...animate(
-                  { scaleX: 1.156, scaleY: 1.156, rotate: -7, x: 0, y: 0 },
+                  { scaleX: 1.1, scaleY: 1.1, rotate: -6, x: 0, y: 0 },
                   { scaleX: 1, scaleY: 1, rotate: 0, x: 0, y: 0 },
                   -1,
                   -1
@@ -136,11 +193,11 @@ export function BrowserSupport() {
                 initial={false}
                 {...animate(
                   {
-                    scaleX: 0.8375,
-                    scaleY: 0.8375,
-                    rotate: 8.6,
-                    y: 58,
-                    x: 7,
+                    scaleX: 0.75,
+                    scaleY: 0.75,
+                    rotate: 6,
+                    y: 60,
+                    x: 8,
                   },
                   { scaleX: 1, scaleY: 1, rotate: 0, y: 0, x: 0 },
                   1,
@@ -154,7 +211,7 @@ export function BrowserSupport() {
                 className="relative origin-right"
                 initial={false}
                 {...animate(
-                  { scaleX: 1.475, x: 0, y: 44, rotate: 0 },
+                  { scaleX: 1.5, x: 0, y: 44, rotate: 0 },
                   { scaleX: 1, x: 0, y: 0, rotate: 0 },
                   -1,
                   1
@@ -166,7 +223,7 @@ export function BrowserSupport() {
               <motion.div
                 className="relative"
                 initial={false}
-                {...animate({ x: 0, y: 105, rotate: 0 }, { x: 0, y: 0, rotate: 0 }, 0, 1)}
+                {...animate({ x: 0, y: 96, rotate: 0 }, { x: 0, y: 0, rotate: 0 }, 0, 1)}
               >
                 <div className="pt-full bg-white rounded-xl shadow-lg flex items-center justify-center" />
                 <Number>4</Number>
@@ -175,7 +232,7 @@ export function BrowserSupport() {
                 className="relative bg-white rounded-xl shadow-lg flex items-center justify-center col-start-2 col-end-4 row-start-1 row-end-2"
                 initial={false}
                 {...animate(
-                  { opacity: 1, x: 87, y: 15, rotate: 0 },
+                  { opacity: 1, x: 80, y: 16, rotate: 0 },
                   { opacity: 1, x: 0, y: 0, rotate: 0 },
                   1,
                   -1
@@ -185,59 +242,134 @@ export function BrowserSupport() {
               </motion.div>
             </motion.div>
 
-            <AnimateSharedLayout>
-              <motion.ul
-                key="gradients"
-                className={`self-center bg-white shadow-lg rounded-3xl w-full flex-none -ml-full p-2 grid grid-cols-6 ${
-                  feature === 'gradients' ? '' : 'pointer-events-none'
-                }`}
-                initial={false}
-                animate={{ opacity: feature === 'gradients' ? 1 : 0 }}
-                transition={{ duration: 0.3, delay: feature === 'gradients' ? 0.3 : 0 }}
-              >
-                {[
-                  gradients.purple,
-                  gradients.blue,
-                  gradients.lightblue,
-                  gradients.teal,
-                  gradients.amber,
-                  gradients.pink,
-                ].map((gradient, i) => (
-                  <motion.li
-                    key={gradient}
-                    initial={false}
-                    animate={feature === 'gradients' ? { opacity: [0, 1] } : { opacity: 0 }}
-                    transition={{ delay: feature === 'gradients' ? 0.3 + 0.06 * i : 0 }}
+            <motion.ul
+              key="gradients"
+              className={`self-center bg-white shadow-lg rounded-3xl w-full flex-none -ml-full p-2 grid grid-cols-6 ${
+                feature === 'gradients' ? '' : 'pointer-events-none'
+              }`}
+              initial={false}
+              animate={{ opacity: feature === 'gradients' ? 1 : 0 }}
+              transition={{ duration: 0.3, delay: feature === 'gradients' ? 0.3 : 0 }}
+            >
+              {gradients.map((gradient, i) => (
+                <motion.li
+                  key={gradient}
+                  initial={false}
+                  animate={feature === 'gradients' ? { opacity: [0, 1] } : { opacity: 0 }}
+                  transition={{ delay: feature === 'gradients' ? 0.3 + 0.06 * i : 0 }}
+                >
+                  <button
+                    type="button"
+                    className="relative flex w-full pt-full rounded-full focus:outline-none"
+                    onClick={() => setSelectedGradient(gradient)}
                   >
-                    <button
-                      type="button"
-                      className="relative flex w-full pt-full rounded-full focus:outline-none"
-                      onClick={() => setSelectedGradient(gradient)}
-                    >
-                      <span className="sr-only"></span>
-                      {selectedGradient === gradient && (
-                        <motion.div
-                          layoutId="highlight"
-                          className="absolute inset-0 rounded-full bg-gray-200"
-                        />
+                    <span className="sr-only"></span>
+                    <div
+                      className={clsx(
+                        'absolute inset-0 rounded-full bg-gray-200 transition-transform duration-500 transform',
+                        {
+                          'scale-80': selectedGradient !== gradient,
+                        }
                       )}
-                      <div
-                        className={`absolute z-10 inset-1 sm:inset-2 lg:inset-1 xl:inset-2 rounded-full bg-gradient-to-br ${gradient[0]}`}
-                      />
-                    </button>
-                  </motion.li>
-                ))}
-              </motion.ul>
-            </AnimateSharedLayout>
+                    />
+                    <div
+                      className={`absolute z-10 inset-1 sm:inset-2 lg:inset-1 xl:inset-2 rounded-full bg-gradient-to-br ${gradient[0]}`}
+                    />
+                  </button>
+                </motion.li>
+              ))}
+            </motion.ul>
           </div>
         }
         right={
           <CodeWindow className="bg-fuchsia-500">
-            <CodeWindow.Code />
+            <AnimatePresence initial={false} exitBeforeEnter>
+              <motion.div
+                key={feature}
+                className="w-full flex-auto flex min-h-0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <CodeWindow.Code2
+                  lines={
+                    feature === 'gradients' ? lines[feature].length + 10 : lines[feature].length
+                  }
+                >
+                  {feature === 'gradients' ? (
+                    <GradientsCode lines={lines.gradients} selectedGradient={selectedGradient} />
+                  ) : (
+                    lines[feature].map((tokens, lineIndex) => (
+                      <Fragment key={lineIndex}>
+                        {tokens.map((token, tokenIndex) => (
+                          <span key={tokenIndex} className={getClassNameForToken(token)}>
+                            {token.content}
+                          </span>
+                        ))}
+                        {'\n'}
+                      </Fragment>
+                    ))
+                  )}
+                </CodeWindow.Code2>
+              </motion.div>
+            </AnimatePresence>
           </CodeWindow>
         }
       />
     </section>
+  )
+}
+
+function GradientsCode({ lines, selectedGradient }) {
+  const activeIndex = Object.keys(gradients).findIndex((k) => gradients[k] === selectedGradient)
+
+  return (
+    <div className="mono flex flex-col items-start">
+      {lines.map((tokens, lineIndex) => {
+        const isComment = lineIndex < lines.length - 1 && lineIndex !== activeIndex
+
+        return (
+          <Fragment key={lineIndex}>
+            {lineIndex !== 0 && lineIndex !== lines.length - 1 && (
+              <div
+                className="transition-transform duration-500"
+                style={{ transform: `translateY(${lineIndex <= activeIndex ? '-100%' : '0'})` }}
+              >
+                <span>{'<!--'}</span>
+              </div>
+            )}
+            <div
+              className={clsx('transition-transform duration-500', { 'not-mono': !isComment })}
+              style={{
+                transform: `translateY(${
+                  lineIndex === activeIndex && lineIndex !== 0
+                    ? '100%'
+                    : activeIndex > lineIndex && lineIndex !== 0
+                    ? '200%'
+                    : activeIndex > lineIndex
+                    ? '100%'
+                    : '0'
+                })`,
+              }}
+            >
+              {tokens.map((token, tokenIndex) => (
+                <span key={tokenIndex} className={getClassNameForToken(token)}>
+                  {token.content}
+                </span>
+              ))}
+            </div>
+            {lineIndex !== 0 && lineIndex !== lines.length - 1 && (
+              <div
+                className="transition-transform duration-500"
+                style={{ transform: `translateY(${lineIndex <= activeIndex ? '-100%' : '0'})` }}
+              >
+                <span>{'-->'}</span>
+              </div>
+            )}
+          </Fragment>
+        )
+      })}
+    </div>
   )
 }
 
