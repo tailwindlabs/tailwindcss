@@ -77,7 +77,7 @@ const themes = {
     },
     smallprint: {
       container: 'mt-4',
-      inner: 'text-sm leading-5',
+      inner: 'text-sm',
     },
   },
   playful: {
@@ -103,7 +103,7 @@ const themes = {
     },
     contentContainer: ['', '', 'pl-6'],
     header: ['pt-6 pb-5', 'pt-6 pb-5', '-mt-6 py-6'],
-    heading: 'w-full flex-none mb-1.5',
+    heading: 'w-full flex-none mb-2.5',
     stock: 'ml-3',
     button: {
       grid: ['1fr auto', '1fr 1fr auto', '1fr 1fr auto'],
@@ -140,7 +140,7 @@ const themes = {
         color: '#71717a',
       },
     },
-    smallprint: { container: 'mt-4', inner: `text-sm leading-5 ${poppinsRegular}` },
+    smallprint: { container: ['mt-4 mb-0.5', 'mt-4', 'mt-4'], inner: `text-sm ${poppinsRegular}` },
   },
   elegant: {
     wrapper: { borderRadius: 0 },
@@ -430,7 +430,7 @@ export function HtmlZenGarden({ theme }) {
                   <div className={`relative ${themes[theme].heading}`}>
                     <motion.h2
                       layout
-                      className={`inline-flex text-black text-xl leading-7 font-semibold ${
+                      className={`inline-flex text-black text-xl font-semibold ${
                         theme === 'simple' ? '' : 'absolute bottom-0 left-0'
                       }`}
                       initial={false}
@@ -441,7 +441,7 @@ export function HtmlZenGarden({ theme }) {
                     </motion.h2>
                     <motion.h2
                       layout
-                      className={`inline-flex text-black text-base leading-6 font-semibold ${poppinsSemiBold} ${
+                      className={`inline-flex text-black text-base font-semibold ${poppinsSemiBold} ${
                         theme === 'playful' ? '' : 'absolute bottom-0 left-0'
                       }`}
                       initial={false}
@@ -452,7 +452,7 @@ export function HtmlZenGarden({ theme }) {
                     <motion.h2
                       layout
                       className={`inline-flex text-black ${
-                        col ? 'text-2xl leading-8' : 'text-3xl leading-9'
+                        col ? 'text-2xl' : 'text-3xl'
                       } ${tenorSansRegular} ${
                         theme === 'elegant' ? '' : 'absolute bottom-0 left-0'
                       }`}
@@ -474,7 +474,7 @@ export function HtmlZenGarden({ theme }) {
                   </div>
                   <div className="relative">
                     <motion.div
-                      className={`inline-flex text-xl leading-7 font-semibold ${
+                      className={`inline-flex text-xl font-semibold ${
                         theme === 'simple' ? '' : 'absolute bottom-0 left-0'
                       }`}
                       layout
@@ -484,7 +484,7 @@ export function HtmlZenGarden({ theme }) {
                       $110.00
                     </motion.div>
                     <motion.div
-                      className={`inline-flex text-4xl font-bold text-purple-600 ${poppinsBold} ${
+                      className={`inline-flex text-4xl leading-7 font-bold text-purple-600 ${poppinsBold} ${
                         theme === 'playful' ? '' : 'absolute bottom-0 left-0'
                       }`}
                       layout
@@ -519,7 +519,7 @@ export function HtmlZenGarden({ theme }) {
                       layout
                       initial={false}
                       animate={{ opacity: theme === 'simple' ? 1 : 0 }}
-                      className={`inline-flex text-sm leading-5 font-medium text-gray-500 ${
+                      className={`inline-flex text-sm font-medium text-gray-500 ${
                         theme === 'simple' ? '' : 'absolute bottom-0 left-0'
                       }`}
                     >
@@ -529,7 +529,7 @@ export function HtmlZenGarden({ theme }) {
                       layout
                       initial={false}
                       animate={{ opacity: theme === 'playful' ? 1 : 0 }}
-                      className={`inline-flex text-sm leading-5 font-medium text-gray-400 ${poppinsMedium} ${
+                      className={`inline-flex text-sm font-medium text-gray-400 ${poppinsMedium} ${
                         theme === 'playful' ? '' : 'absolute bottom-0 left-0'
                       }`}
                     >
@@ -539,7 +539,7 @@ export function HtmlZenGarden({ theme }) {
                       layout
                       initial={false}
                       animate={{ opacity: theme === 'elegant' ? 1 : 0 }}
-                      className={`inline-flex text-sm leading-5 text-gray-500 ${tenorSansRegular} ${
+                      className={`inline-flex text-sm text-gray-500 ${tenorSansRegular} ${
                         theme === 'elegant' ? '' : 'absolute bottom-0 left-0'
                       }`}
                     >
@@ -549,7 +549,7 @@ export function HtmlZenGarden({ theme }) {
                       layout
                       initial={false}
                       animate={{ opacity: theme === 'brutalist' ? 1 : 0 }}
-                      className={`inline-flex text-sm leading-5 text-lime-300 ${robotoMonoMedium} ${
+                      className={`inline-flex text-sm text-lime-300 ${robotoMonoMedium} ${
                         theme === 'brutalist' ? '' : 'absolute bottom-0 left-0'
                       }`}
                     >
@@ -627,7 +627,7 @@ export function HtmlZenGarden({ theme }) {
                     ))}
                   </motion.ul>
                   <div
-                    className={`relative whitespace-no-wrap ${
+                    className={`relative whitespace-nowrap ${
                       themes[theme].size.guide.container || ''
                     }`}
                   >
@@ -668,7 +668,7 @@ export function HtmlZenGarden({ theme }) {
                     />
                     <motion.div
                       layout
-                      className="relative text-sm leading-5 border"
+                      className="relative text-sm border"
                       style={{ height: getThemeValue('button.height') }}
                       initial={false}
                       animate={{
@@ -706,7 +706,7 @@ export function HtmlZenGarden({ theme }) {
                     />
                     <motion.div
                       layout
-                      className={`relative text-sm leading-5 border`}
+                      className={`relative text-sm border`}
                       style={{ height: getThemeValue('button.height') }}
                       initial={false}
                       animate={{

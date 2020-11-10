@@ -5,7 +5,7 @@ import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import { ReactComponent as Icon } from '@/img/icons/home/constraint-based.svg'
 import { ReactComponent as ArrowIcon } from '@/img/icons/arrow.svg'
-import { siteConfig } from '@/utils/siteConfig'
+import { defaultConfig } from '@/utils/defaultConfig'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import tokenize from '../../macros/tokenize.macro'
@@ -251,7 +251,7 @@ export function ConstraintBased() {
                     className="w-full font-mono text-xs leading-5 text-gray-600 space-y-4 px-4 py-6 sm:p-8 lg:p-6 xl:p-8"
                   >
                     {[64, 56, 48, 40, 32, 24, 20, 16, 12, 10].map((key, i) => (
-                      <li key={key} className="flex items-center flex-wrap sm:flex-no-wrap">
+                      <li key={key} className="flex items-center flex-wrap sm:flex-nowrap">
                         <motion.span
                           className="flex-none w-full sm:w-11"
                           initial={{ opacity: 0 }}
@@ -262,7 +262,7 @@ export function ConstraintBased() {
                         </motion.span>
                         <motion.span
                           className={`flex-none h-3 origin-left bg-gradient-to-br ${gradients.purple[0]}`}
-                          style={{ width: siteConfig.theme.width[key] }}
+                          style={{ width: defaultConfig.theme.width[key] }}
                           initial={{ scaleX: 0 }}
                           animate={{ scaleX: 1 }}
                           transition={{ delay: i * 0.1, damping: 100 }}
@@ -275,7 +275,7 @@ export function ConstraintBased() {
                   <motion.ul
                     key="color"
                     exit={{ opacity: 0 }}
-                    className="w-full space-y-4 font-mono text-xs leading-4 px-4 py-6 sm:p-8 lg:p-6 xl:p-8"
+                    className="w-full space-y-4 font-mono text-xs px-4 py-6 sm:p-8 lg:p-6 xl:p-8"
                   >
                     {['red', 'yellow', 'green', 'blue', 'purple', 'pink'].map((color, i) => (
                       <motion.li
@@ -293,11 +293,14 @@ export function ConstraintBased() {
                           <span className="text-right">{`bg-${color}-900`}</span>
                         </h4>
                         <ul className="flex-none w-full flex rounded-lg overflow-hidden mt-1">
-                          {Object.keys(siteConfig.theme.colors[color]).map((key, j) => (
+                          {Object.keys(defaultConfig.theme.colors[color]).map((key, j) => (
                             <li
                               key={key}
                               className="h-7 flex-auto"
-                              style={{ background: siteConfig.theme.colors[color][key], zIndex: j }}
+                              style={{
+                                background: defaultConfig.theme.colors[color][key],
+                                zIndex: j,
+                              }}
                             />
                           ))}
                         </ul>
@@ -319,9 +322,7 @@ export function ConstraintBased() {
                         transition={{ delay: i * 0.1 }}
                       >
                         <h4 className="font-mono text-xs leading-5 text-gray-600">{style}</h4>
-                        <p
-                          className={`text-sm leading-5 sm:text-lg sm:leading-6 text-purple-900 ${style}`}
-                        >
+                        <p className={`text-sm sm:text-lg sm:leading-6 text-purple-900 ${style}`}>
                           ABCDEFGHIJKLMNOPQRSTUVWXYZ
                           <br />
                           abcdefghijklmnopqrstuvwxyz
@@ -336,7 +337,7 @@ export function ConstraintBased() {
                   <motion.div
                     key="shadows"
                     exit={{ opacity: 0 }}
-                    className="w-full flex-auto flex font-mono text-xs leading-4 px-4 py-6 sm:p-8 lg:p-6 xl:p-8"
+                    className="w-full flex-auto flex font-mono text-xs px-4 py-6 sm:p-8 lg:p-6 xl:p-8"
                   >
                     <motion.div
                       className="absolute z-10 inset-2 bg-gray-50 rounded-lg"
@@ -354,7 +355,7 @@ export function ConstraintBased() {
                           <div>{`shadow${shadow === 'default' ? '' : `-${shadow}`}`}</div>
                           <div
                             className="bg-white rounded-lg h-18 mt-1"
-                            style={{ boxShadow: siteConfig.theme.boxShadow[shadow] }}
+                            style={{ boxShadow: defaultConfig.theme.boxShadow[shadow] }}
                           />
                         </motion.li>
                       ))}

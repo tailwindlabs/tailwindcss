@@ -12,7 +12,7 @@ export function Tabs({
   return (
     <AnimateSharedLayout>
       <ul
-        className={clsx('whitespace-no-wrap', className, {
+        className={clsx('whitespace-nowrap', className, {
           flex: !grid,
           'space-x-2 sm:space-x-6': spacing === 'normal' && !grid,
           'space-x-2 sm:space-x-12': spacing === 'loose' && !grid,
@@ -57,7 +57,7 @@ function Item({ tab, isSelected, onClick }) {
         type="button"
         onClick={onClick}
         className={clsx(
-          'block w-full relative z-10 px-4 py-1 leading-6 sm:text-xl sm:leading-7 font-semibold focus:outline-none transition-colors duration-300',
+          'block w-full relative z-10 px-4 py-1 leading-6 sm:text-xl font-semibold focus:outline-none transition-colors duration-300',
           { 'text-black': isSelected, 'text-gray-400': !isSelected }
         )}
       >

@@ -5,7 +5,7 @@ import { CodeWindow } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import { ReactComponent as Icon } from '@/img/icons/home/customization.svg'
 import { useEffect, useRef, useState } from 'react'
-import { siteConfig } from '@/utils/siteConfig'
+import { defaultConfig } from '@/utils/defaultConfig'
 import { AnimatePresence, motion } from 'framer-motion'
 import { font as poppinsRegular } from '../../fonts/generated/Poppins-Regular.module.css'
 import { font as poppinsExtraBold } from '../../fonts/generated/Poppins-ExtraBold.module.css'
@@ -35,7 +35,7 @@ const themes = {
       ['Poppins', 'system-ui', 'sans-serif'],
     ],
     classNameDisplay: poppinsExtraBold,
-    classNameBody: `${poppinsRegular} text-sm leading-5`,
+    classNameBody: `${poppinsRegular} text-sm`,
     primaryColor: 'purple',
     secondaryColorName: 'secondary',
     secondaryColor: 'pink',
@@ -159,7 +159,7 @@ export function Customization() {
               </h3>
               <dl className="flex-auto bg-white sm:rounded-tr-xl lg:rounded-tr-none xl:rounded-tr-xl px-4 py-6 sm:p-6 space-y-6">
                 <div className="space-y-1">
-                  <dt className="font-mono text-xs leading-4">font-display</dt>
+                  <dt className="font-mono text-xs">font-display</dt>
                   <AnimatePresence initial={false} exitBeforeEnter>
                     <motion.dd
                       key={theme}
@@ -175,16 +175,14 @@ export function Customization() {
                   </AnimatePresence>
                 </div>
                 <div className="space-y-1">
-                  <dt className="font-mono text-xs leading-4">font-body</dt>
+                  <dt className="font-mono text-xs">font-body</dt>
                   <AnimatePresence initial={false} exitBeforeEnter>
                     <motion.dd
                       key={theme}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className={`text-gray-600 ${
-                        themes[theme].classNameBody || 'text-sm leading-5'
-                      }`}
+                      className={`text-gray-600 ${themes[theme].classNameBody || 'text-sm'}`}
                     >
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mi ultrices non
                       pharetra, eros enim. Habitant suspendisse ultricies.
@@ -200,7 +198,7 @@ export function Customization() {
               <div className="relative flex-auto bg-white lg:rounded-b-xl xl:rounded-bl-none overflow-hidden">
                 <dl className="px-4 py-6 sm:p-6 space-y-6">
                   <div className="space-y-2">
-                    <dt className="font-mono text-xs leading-4">{'bg-primary-{50-900}'}</dt>
+                    <dt className="font-mono text-xs">{'bg-primary-{50-900}'}</dt>
                     <dd>
                       <ul className="flex -space-x-1">
                         {[50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map((key, i, colors) => (
@@ -210,7 +208,7 @@ export function Customization() {
                             initial={false}
                             animate={{
                               backgroundColor:
-                                siteConfig.theme.colors[themes[theme].primaryColor][key],
+                                defaultConfig.theme.colors[themes[theme].primaryColor][key],
                             }}
                             style={{
                               zIndex: colors.length - i,
@@ -227,7 +225,7 @@ export function Customization() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="font-mono text-xs leading-4"
+                        className="font-mono text-xs"
                       >
                         {'bg-'}
                         {themes[theme].secondaryColorName}
@@ -243,7 +241,7 @@ export function Customization() {
                             initial={false}
                             animate={{
                               backgroundColor:
-                                siteConfig.theme.colors[themes[theme].secondaryColor][key],
+                                defaultConfig.theme.colors[themes[theme].secondaryColor][key],
                             }}
                             style={{
                               zIndex: colors.length - i,
@@ -306,7 +304,7 @@ function CustomizationToken({ theme, ...props }) {
 
   if (token[0] === 'string' && token[1].startsWith("'color-")) {
     const [, name, shade] = token[1].substr(1, token[1].length - 2).split('-')
-    const color = siteConfig.theme.colors[themes[theme][`${name}Color`]][shade]
+    const color = defaultConfig.theme.colors[themes[theme][`${name}Color`]][shade]
 
     return (
       <span className="text-code-string">

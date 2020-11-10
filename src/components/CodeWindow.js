@@ -73,7 +73,7 @@ CodeWindow.Code = forwardRef(({ tokens = defaultTokens, initialLineNumber = 1, .
   return (
     <div className="w-full flex-auto flex min-h-0 overflow-auto">
       <div ref={ref} className="w-full relative flex-auto">
-        <pre className="flex min-h-full text-xs leading-4 md:text-sm md:leading-5">
+        <pre className="flex min-h-full text-xs md:text-sm">
           <div
             aria-hidden="true"
             className="hidden md:block text-white text-opacity-50 flex-none py-4 pr-4 text-right select-none"
@@ -119,7 +119,7 @@ CodeWindow.Code2 = forwardRef(
         })}
       >
         <div className="w-full relative flex-auto">
-          <pre className="flex min-h-full text-xs leading-4 md:text-sm md:leading-5">
+          <pre className="flex min-h-full text-xs md:text-sm">
             <div
               aria-hidden="true"
               className="hidden md:block text-white text-opacity-50 flex-none py-4 pr-4 text-right select-none"

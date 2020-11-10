@@ -109,7 +109,7 @@ export default function Home() {
           <h1 className="text-4xl sm:text-6xl lg:text-7xl leading-none font-extrabold tracking-tight text-black mt-14 mb-10">
             Rapidly build modern websites without ever leaving your HTML.
           </h1>
-          <p className="max-w-screen-lg text-lg leading-7 sm:text-2xl sm:leading-10 font-medium mb-11">
+          <p className="max-w-screen-lg text-lg sm:text-2xl sm:leading-10 font-medium mb-11">
             A utility-first CSS framework packed with classes like flex, pt-4, text-center and
             rotate-90 that can be composed to build any design, directly in your markup.
           </p>
@@ -136,7 +136,7 @@ export default function Home() {
             you actually try it. If you can suppress the initial gag reflex long enough to give it a
             chance, I promise you're in for a good time.
           </Paragraph>
-          <Link href="#" className="text-lightBlue-500">
+          <Link href="#" className="text-light-blue-500">
             Read our pitch for utility-first CSS -&gt;
           </Link>
         </div>
@@ -157,10 +157,10 @@ export default function Home() {
       </div>
       <footer className="bg-gray-50 pt-32 pb-40">
         <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto divide-y divide-gray-200 px-4 sm:px-6 md:px-8">
-          <ul className="text-sm leading-5 font-medium pb-1" style={{ columns: 4 }}>
+          <ul className="text-sm font-medium pb-1" style={{ columns: 4 }}>
             {Object.keys(footerNav).map((section) => (
               <li key={section} className="mb-15 inline-block w-full space-y-5">
-                <h2 className="text-xs leading-4 font-semibold tracking-wide text-gray-900 uppercase">
+                <h2 className="text-xs font-semibold tracking-wide text-gray-900 uppercase">
                   {section}
                 </h2>
                 <ul className="space-y-4">

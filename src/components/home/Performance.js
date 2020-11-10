@@ -43,10 +43,10 @@ const { lines } = tokenize.html(
             </svg>
           </div>
           <div class="ml-3 w-0 flex-1 pt-0.5">
-            <p class="text-sm leading-5 font-medium text-gray-900">
+            <p class="text-sm font-medium text-gray-900">
               Successfully saved!
             </p>
-            <p class="mt-1 text-sm leading-5 text-gray-500">
+            <p class="mt-1 text-sm text-gray-500">
               Anyone with a link can now view this file.
             </p>
           </div>
@@ -67,7 +67,7 @@ const { lines } = tokenize.html(
 
 addClassTokens2(lines)
 
-const allClasses = 'fixed flex-col rounded-sm shadow px-4 justify-content text-center flex-shrink-0 md:text-left h-16 w-16 md:h-24 md:w-24 rounded-full mx-auto text-lg text-purple-500 md:text-left text-gray-600 text-green-400 text-blue-500 rounded-pill p-4 max-w-screen-xl mt-5 leading-7 whitespace-no-wrap sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none flex-1 xl:mx-0 xl:grid-cols-4 border border-gray-200 text-4xl leading-6 leading-10 font-extrabold  leading-5 h-5 w-5 text-green-500 text-5xl leading-none font-extrabold text-white tracking-tight border-t text-sm border-indigo-600 py-4 font-medium px-5 flex items-center space-x-3 text-base leading-6 text-white absolute right-full ml-4 bottom-0 transform -translate-x-1/2 py-3 mx-4 w-full duration-150 h-full transition py-0 pl-4 pr-8 border-transparent bg-transparent text-gray-500 px-5 py-3 appearance-none underline bg-indigo-700 min-w-full divide-y divide-gray-200 items-baseline text-indigo-600 hover:text-indigo-500'.split(
+const allClasses = 'fixed flex-col rounded-sm shadow px-4 justify-content text-center flex-shrink-0 md:text-left h-16 w-16 md:h-24 md:w-24 rounded-full mx-auto text-lg text-purple-500 md:text-left text-gray-600 text-green-400 text-blue-500 rounded-pill p-4 max-w-screen-xl mt-5 leading-7 whitespace-nowrap sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none flex-1 xl:mx-0 xl:grid-cols-4 border border-gray-200 text-4xl leading-6 leading-10 font-extrabold  leading-5 h-5 w-5 text-green-500 text-5xl leading-none font-extrabold text-white tracking-tight border-t text-sm border-indigo-600 py-4 font-medium px-5 flex items-center space-x-3 text-base leading-6 text-white absolute right-full ml-4 bottom-0 transform -translate-x-1/2 py-3 mx-4 w-full duration-150 h-full transition py-0 pl-4 pr-8 border-transparent bg-transparent text-gray-500 px-5 py-3 appearance-none underline bg-indigo-700 min-w-full divide-y divide-gray-200 items-baseline text-indigo-600 hover:text-indigo-500'.split(
   ' '
 )
 
@@ -127,7 +127,7 @@ export function Performance() {
             className="relative z-10 rounded-tl-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8 tabular-nums"
           >
             <div className="bg-white rounded-tl-xl sm:rounded-t-xl">
-              <div className="absolute top-4 left-4 sm:top-6 sm:left-6 w-15 h-15 sm:w-16 sm:h-16 bg-green-100 rounded-full flex items-center justify-center">
+              <div className="absolute top-4 left-4 sm:top-6 sm:left-6 w-14 h-14 sm:w-16 sm:h-16 bg-green-100 rounded-full flex items-center justify-center">
                 <svg
                   viewBox="0 0 64 64"
                   className="absolute inset-0 w-full h-full text-green-400"
@@ -166,9 +166,9 @@ export function Performance() {
                 </svg>
               </div>
               <dl className="p-4 pb-0 sm:p-6 sm:pb-0">
-                <div className="flex-none w-full pl-15 py-0.5">
-                  <dt className="ml-4 text-sm leading-5 font-medium">Production build</dt>
-                  <dd className="ml-4 text-3xl leading-9 sm:text-4xl sm:leading-10 font-extrabold text-black">
+                <div className="flex-none w-full pl-18 sm:pl-20 sm:py-0.5">
+                  <dt className="text-sm font-medium">Production build</dt>
+                  <dd className="text-3xl sm:text-4xl font-extrabold text-black">
                     <Counter from={2413.4} to={8.7} round={1} progress={progress} />
                     KB
                   </dd>
@@ -235,12 +235,12 @@ export function Performance() {
               style={{ maxHeight: 251 }}
             >
               <div className="bg-black bg-opacity-75 absolute inset-0" />
-              <div className="relative font-mono text-xs leading-4 sm:text-sm sm:leading-5 text-teal-200">
+              <div className="relative font-mono text-xs sm:text-sm text-teal-200">
                 {allClasses.map((c, i) =>
                   usedClasses.includes(c) ? (
                     <Fragment key={i}>
                       <span
-                        className={clsx('code-highlight whitespace-no-wrap', {
+                        className={clsx('code-highlight whitespace-nowrap', {
                           'animate-flash-code-slow': inView,
                         })}
                         style={{
@@ -255,7 +255,7 @@ export function Performance() {
                   ) : (
                     <Fragment key={i}>
                       <span
-                        className={clsx('transition-colors duration-500 whitespace-no-wrap', {
+                        className={clsx('transition-colors duration-500 whitespace-nowrap', {
                           'text-teal-200': !inView,
                           'text-teal-900': inView,
                         })}
@@ -282,7 +282,7 @@ export function Performance() {
           </div>
         }
         right={
-          <CodeWindow className="bg-turquoise-500">
+          <CodeWindow className="bg-cyan-500">
             <CodeWindow.Code2 lines={lines.length}>
               {lines.map((tokens, lineIndex) => (
                 <Fragment key={lineIndex}>

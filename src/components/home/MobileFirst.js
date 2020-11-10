@@ -35,17 +35,17 @@ const { code: html, lines, classNames } = tokenize.html(
         <span class="text-black">4.94</span>
         <span class="{ratingCount}">(128)</span>
       </div>
-      <div class="text-base leading-6 font-normal mx-2">·</div>
+      <div class="text-base font-normal mx-2">·</div>
       <div>Collingwood, Ontario</div>
     </div>
     <hr class="{hr}">
   </div>
   <div class="{footerContainer}">
-    <p class="flex items-center text-black text-sm leading-5 font-medium">
+    <p class="flex items-center text-black text-sm font-medium">
       <img src="/kevin-francis.jpg" alt="" class="w-6 h-6 rounded-full mr-2 bg-gray-100">
       Hosted by Kevin Francis
     </p>
-    <button type="button" class="bg-violet-100 text-violet-700 text-base leading-6 font-semibold px-6 py-2 rounded-lg">Check availability</button>
+    <button type="button" class="bg-violet-100 text-violet-700 text-base font-semibold px-6 py-2 rounded-lg">Check availability</button>
   </div>
   <div class="{imgContainer}">
     <div class="w-full grid grid-cols-3 grid-rows-2 gap-2">
@@ -80,10 +80,10 @@ const { code: html, lines, classNames } = tokenize.html(
       sm: {
         container: 'grid grid-cols-1',
         header: 'relative z-10 col-start-1 row-start-1 px-4 pt-40 pb-3 bg-gradient-to-t from-black',
-        preheading: 'text-sm leading-5 font-medium text-white',
-        heading: 'text-xl leading-7 font-semibold text-white',
+        preheading: 'text-sm font-medium text-white',
+        heading: 'text-xl font-semibold text-white',
         metaContainer: 'col-start-1 row-start-2 px-4',
-        meta: 'flex items-center text-sm leading-5 font-medium my-5',
+        meta: 'flex items-center text-sm font-medium my-5',
         ratingCount: '',
         hr: 'w-16 border-gray-300 hidden',
         footerContainer: 'col-start-1 row-start-3 space-y-3 px-4',
@@ -95,10 +95,10 @@ const { code: html, lines, classNames } = tokenize.html(
       md: {
         container: 'grid grid-cols-2 px-8 py-12 gap-x-8',
         header: 'relative z-10 col-start-1 row-start-1 bg-none',
-        preheading: 'text-sm leading-5 font-medium mb-1 text-gray-500',
+        preheading: 'text-sm font-medium mb-1 text-gray-500',
         heading: 'text-2xl leading-7 font-semibold text-black',
         metaContainer: 'col-start-1 row-start-2 pb-16',
-        meta: 'flex items-center text-sm leading-5 font-medium mt-2 mb-4',
+        meta: 'flex items-center text-sm font-medium mt-2 mb-4',
         ratingCount: 'hidden',
         hr: 'w-16 border-gray-300 block',
         footerContainer: 'col-start-1 row-start-3 space-y-3',
@@ -110,10 +110,10 @@ const { code: html, lines, classNames } = tokenize.html(
       lg: {
         container: 'grid grid-cols-2 px-8 py-16 gap-x-8',
         header: 'relative z-10 col-start-1 row-start-1 bg-none',
-        preheading: 'text-sm leading-5 font-medium mb-1 text-gray-500',
-        heading: 'text-3xl leading-9 font-semibold text-black',
+        preheading: 'text-sm font-medium mb-1 text-gray-500',
+        heading: 'text-3xl font-semibold text-black',
         metaContainer: 'col-start-1 row-start-2 pb-16',
-        meta: 'flex items-center text-sm leading-5 font-medium mt-2 mb-4',
+        meta: 'flex items-center text-sm font-medium mt-2 mb-4',
         ratingCount: 'inline',
         hr: 'w-16 border-gray-300 block',
         footerContainer: 'col-start-1 row-start-3 space-y-3',
@@ -184,7 +184,7 @@ function BrowserWindow({ size, onChange, height = 385 }) {
               <div className="w-3 h-3 rounded-full bg-gray-300" />
             </div>
             <div className="border border-black border-opacity-5 rounded-md overflow-hidden shadow-sm">
-              <div className="bg-gradient-to-b from-white to-gray-50 text-sm leading-5 py-1.5 text-center">
+              <div className="bg-gradient-to-b from-white to-gray-50 text-sm py-1.5 text-center">
                 workcation.com
               </div>
             </div>

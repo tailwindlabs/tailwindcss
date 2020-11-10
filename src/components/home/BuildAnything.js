@@ -60,9 +60,9 @@ const code = {
   </div>
   <div class="flex-auto p-6">
     <div class="flex flex-wrap">
-      <h1 class="flex-auto text-xl leading-7 font-semibold">Classic Utility Jacket</h1>
-      <div class="text-xl leading-7 font-semibold text-gray-500">$110.00</div>
-      <div class="w-full flex-none text-sm leading-5 font-medium text-gray-500 mt-2">In stock</div>
+      <h1 class="flex-auto text-xl font-semibold">Classic Utility Jacket</h1>
+      <div class="text-xl font-semibold text-gray-500">$110.00</div>
+      <div class="w-full flex-none text-sm font-medium text-gray-500 mt-2">In stock</div>
     </div>
     <div class="flex items-baseline mt-4 mb-6">
       <div class="space-x-2 flex">
@@ -72,9 +72,9 @@ const code = {
         <div class="w-9 h-9 flex items-center justify-center">L</div>
         <div class="w-9 h-9 flex items-center justify-center">XL</div>
       </div>
-      <div class="ml-auto text-sm leading-5 text-gray-500 underline">Size Guide</div>
+      <div class="ml-auto text-sm text-gray-500 underline">Size Guide</div>
     </div>
-    <div class="flex space-x-3 mb-4 text-sm leading-5 font-medium">
+    <div class="flex space-x-3 mb-4 text-sm font-medium">
       <div class="flex-auto flex space-x-3">
         <div class="w-1/2 flex items-center justify-center rounded-md bg-black text-white">Buy now</div>
         <div class="w-1/2 flex items-center justify-center rounded-md border border-gray-300">Add to bag</div>
@@ -85,7 +85,7 @@ const code = {
         </svg>
       </div>
     </div>
-    <div class="text-sm leading-5 text-gray-500">Free shipping on all continental US orders.</div>
+    <div class="text-sm text-gray-500">Free shipping on all continental US orders.</div>
   </div>
 </div>`,
   playful: `<div class="flex p-6">
@@ -96,19 +96,19 @@ const code = {
     <div class="flex flex-wrap items-baseline">
       <h1 class="w-full flex-none font-semibold mb-2.5">Kids Jumper</h1>
       <div class="text-4xl leading-7 font-bold text-purple-600">$39.00</div>
-      <div class="text-sm leading-5 font-medium text-gray-400 ml-3">In stock</div>
+      <div class="text-sm font-medium text-gray-400 ml-3">In stock</div>
     </div>
     <div class="flex items-baseline my-8">
-      <div class="space-x-2 flex text-sm leading-5 font-medium">
+      <div class="space-x-2 flex text-sm font-medium">
         <div class="w-9 h-9 flex items-center justify-center rounded-full bg-purple-700 text-white">XS</div>
         <div class="w-9 h-9 flex items-center justify-center rounded-full border-2 border-gray-200">S</div>
         <div class="w-9 h-9 flex items-center justify-center rounded-full border-2 border-gray-200">M</div>
         <div class="w-9 h-9 flex items-center justify-center rounded-full border-2 border-gray-200">L</div>
         <div class="w-9 h-9 flex items-center justify-center rounded-full border-2 border-gray-200">XL</div>
       </div>
-      <div class="ml-3 text-sm leading-5 text-gray-500 underline">Size Guide</div>
+      <div class="ml-3 text-sm text-gray-500 underline">Size Guide</div>
     </div>
-    <div class="flex space-x-3 mb-4 text-sm leading-5 font-semibold">
+    <div class="flex space-x-3 mb-4 text-sm font-semibold">
       <div class="flex-auto flex space-x-3">
         <div class="w-1/2 flex items-center justify-center rounded-full bg-purple-700 text-white">Buy now</div>
         <div class="w-1/2 flex items-center justify-center rounded-full bg-purple-50 text-purple-700">Add to bag</div>
@@ -119,7 +119,7 @@ const code = {
         </svg>
       </div>
     </div>
-    <div class="text-sm leading-5 text-gray-500">Free shipping on all continental US orders.</div>
+    <div class="text-sm text-gray-500">Free shipping on all continental US orders.</div>
   </div>
 </div>`,
   elegant: `<div class="flex p-1">
@@ -128,21 +128,21 @@ const code = {
   </div>
   <div class="flex-auto py-7 px-8">
     <div class="flex flex-wrap items-baseline">
-      <h1 class="w-full flex-none text-3xl leading-9 text-black mb-1.5">Fancy Suit Jacket</h1>
+      <h1 class="w-full flex-none text-3xl text-black mb-1.5">Fancy Suit Jacket</h1>
       <div class="text-lg leading-6 text-black">$600.00</div>
-      <div class="text-sm leading-5 text-gray-500 ml-3">In stock</div>
+      <div class="text-sm text-gray-500 ml-3">In stock</div>
     </div>
     <div class="flex items-baseline mt-9 py-4 border-t border-gray-100">
-      <div class="space-x-2 flex text-sm leading-5 font-light text-black">
+      <div class="space-x-2 flex text-sm font-light text-black">
         <div class="w-9 h-9 flex items-center justify-center rounded-full bg-black text-white">XS</div>
         <div class="w-9 h-9 flex items-center justify-center rounded-full">S</div>
         <div class="w-9 h-9 flex items-center justify-center rounded-full">M</div>
         <div class="w-9 h-9 flex items-center justify-center rounded-full">L</div>
         <div class="w-9 h-9 flex items-center justify-center rounded-full">XL</div>
       </div>
-      <div class="ml-auto text-sm leading-5 font-light text-gray-500">Size Guide</div>
+      <div class="ml-auto text-sm font-light text-gray-500">Size Guide</div>
     </div>
-    <div class="flex space-x-3 mb-3 text-sm leading-5 font-semibold uppercase">
+    <div class="flex space-x-3 mb-3 text-sm font-semibold uppercase">
       <div class="flex-auto flex space-x-3">
         <div class="w-1/2 flex items-center justify-center bg-black text-white">Buy now</div>
         <div class="w-1/2 flex items-center justify-center border border-gray-200">Add to bag</div>
@@ -153,7 +153,7 @@ const code = {
         </svg>
       </div>
     </div>
-    <div class="text-sm leading-5 text-gray-500">Free shipping on all continental US orders.</div>
+    <div class="text-sm text-gray-500">Free shipping on all continental US orders.</div>
   </div>
 </div>`,
   brutalist: `<div class="flex p-6 font-mono">
@@ -164,7 +164,7 @@ const code = {
     <div class="flex flex-wrap items-baseline pl-52 -mt-6 -mr-6 -ml-52 py-6 pr-6 bg-black text-white">
       <h1 class="w-full flex-none text-2xl leading-7 mb-2 font-bold">Retro Shoe</h1>
       <div class="text-2xl leading-7 font-bold">$110.00</div>
-      <div class="text-sm leading-5 font-medium ml-3">In stock</div>
+      <div class="text-sm font-medium ml-3">In stock</div>
     </div>
     <div class="flex items-baseline py-8">
       <div class="space-x-3.5 flex text-center text-sm leading-none font-bold text-gray-500">
@@ -176,7 +176,7 @@ const code = {
       </div>
       <div class="ml-auto text-xs underline">Size Guide</div>
     </div>
-    <div class="flex space-x-3 text-sm leading-5 font-bold uppercase mb-4">
+    <div class="flex space-x-3 text-sm font-bold uppercase mb-4">
       <div class="flex-auto flex space-x-3">
         <div class="w-1/2 flex items-center justify-center bg-lime-300 text-black border border-black shadow-offset-black">Buy now</div>
         <div class="w-1/2 flex items-center justify-center border border-black shadow-offset-black">Add to bag</div>

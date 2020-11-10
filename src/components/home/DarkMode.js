@@ -16,13 +16,13 @@ const { code, tokens } = tokenize.html(
   <div class="flex items-center space-x-3.5 sm:space-x-5 lg:space-x-3.5 xl:space-x-5">
     <img src="/full-stack-radio.png" alt="" width="160" height="160" class="flex-none w-20 h-20 rounded-lg bg-gray-100" />
     <div class="min-w-0 flex-auto space-y-0.5">
-      <p class="(light)text-lime-600 dark:text-lime-400 text-sm leading-5 sm:text-base sm:leading-6 lg:text-sm lg:leading-5 xl:text-base xl:leading-6 font-semibold uppercase">
+      <p class="(light)text-lime-600 dark:text-lime-400 text-sm sm:text-base lg:text-sm xl:text-base font-semibold uppercase">
         <abbr title="Episode">Ep.</abbr> 145
       </p>
-      <h2 class="(light)text-black dark:text-white text-base leading-6 sm:text-xl sm:leading-7 lg:text-base lg:leading-6 xl:text-xl xl:leading-7 font-semibold truncate">
+      <h2 class="(light)text-black dark:text-white text-base sm:text-xl lg:text-base xl:text-xl font-semibold truncate">
         Statamic 3.0 and Tailwind CSS 2.0
       </h2>
-      <p class="(light)text-gray-500 dark:text-gray-400 text-base sm:text-lg lg:text-base xl:text-lg leading-6 font-medium">
+      <p class="(light)text-gray-500 dark:text-gray-400 text-base sm:text-lg lg:text-base xl:text-lg font-medium">
         Full Stack Radio
       </p>
     </div>
@@ -31,7 +31,7 @@ const { code, tokens } = tokenize.html(
     <div class="(light)bg-gray-200 dark:bg-black rounded-full overflow-hidden">
       <div class="(light)bg-lime-500 dark:bg-lime-400 w-1/2 h-1.5" role="progressbar" aria-valuenow="1456" aria-valuemin="0" aria-valuemax="4550"></div>
     </div>
-    <div class="(light)text-gray-500 dark:text-gray-400 flex justify-between text-sm leading-5 font-medium tabular-nums">
+    <div class="(light)text-gray-500 dark:text-gray-400 flex justify-between text-sm font-medium tabular-nums">
       <div>24:16</div>
       <div>75:50</div>
     </div>
@@ -74,7 +74,7 @@ const { code, tokens } = tokenize.html(
       <path d="M13 9L0 0V18L13 9Z" fill="currentColor" />
     </svg>
   </button>
-  <button type="button" class="mx-auto border border-gray-300 rounded-md text-sm leading-5 font-medium py-0.5 px-2 text-gray-500 dark:border-gray-600 dark:text-gray-400">
+  <button type="button" class="mx-auto border border-gray-300 rounded-md text-sm font-medium py-0.5 px-2 text-gray-500 dark:border-gray-600 dark:text-gray-400">
     1.0x
   </button>
 </div>`,

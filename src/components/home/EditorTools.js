@@ -8,7 +8,7 @@ import { motion } from 'framer-motion'
 import { Fragment, useEffect, useState } from 'react'
 import { ReactComponent as Icon } from '@/img/icons/home/editor-tools.svg'
 import { useInView } from 'react-intersection-observer'
-import { siteConfig } from '@/utils/siteConfig'
+import colors from 'tailwindcss/colors'
 import dlv from 'dlv'
 
 const problems = [
@@ -42,55 +42,35 @@ const completions = [
   ['bg-current'],
   ['bg-black', '#000'],
   ['bg-white', '#fff'],
-  ['bg-gray-50', siteConfig.theme.colors.gray[50]],
+  ['bg-gray-50', colors.gray[50]],
   //
-  [
-    'bg-teal-50',
-    `background-color: ${siteConfig.theme.colors.teal[50]};`,
-    siteConfig.theme.colors.teal[50],
-  ],
-  [
-    'bg-teal-100',
-    `background-color: ${siteConfig.theme.colors.teal[100]};`,
-    siteConfig.theme.colors.teal[100],
-  ],
-  [
-    'bg-teal-200',
-    `background-color: ${siteConfig.theme.colors.teal[200]};`,
-    siteConfig.theme.colors.teal[200],
-  ],
-  [
-    'bg-teal-300',
-    `background-color: ${siteConfig.theme.colors.teal[300]};`,
-    siteConfig.theme.colors.teal[300],
-  ],
-  [
-    'bg-teal-400',
-    `background-color: ${siteConfig.theme.colors.teal[400]};`,
-    siteConfig.theme.colors.teal[400],
-  ],
-  ['bg-teal-500', undefined, siteConfig.theme.colors.teal[500]],
-  ['bg-teal-600', undefined, siteConfig.theme.colors.teal[600]],
-  ['bg-teal-700', undefined, siteConfig.theme.colors.teal[700]],
-  ['bg-teal-800', undefined, siteConfig.theme.colors.teal[800]],
-  ['bg-teal-900', undefined, siteConfig.theme.colors.teal[900]],
+  ['bg-teal-50', `background-color: ${colors.teal[50]};`, colors.teal[50]],
+  ['bg-teal-100', `background-color: ${colors.teal[100]};`, colors.teal[100]],
+  ['bg-teal-200', `background-color: ${colors.teal[200]};`, colors.teal[200]],
+  ['bg-teal-300', `background-color: ${colors.teal[300]};`, colors.teal[300]],
+  ['bg-teal-400', `background-color: ${colors.teal[400]};`, colors.teal[400]],
+  ['bg-teal-500', undefined, colors.teal[500]],
+  ['bg-teal-600', undefined, colors.teal[600]],
+  ['bg-teal-700', undefined, colors.teal[700]],
+  ['bg-teal-800', undefined, colors.teal[800]],
+  ['bg-teal-900', undefined, colors.teal[900]],
   ['bg-top'],
 ]
 
 const { lines } = tokenize.html(`<div class="__CONFLICT__">
   <div class="flex-1 truncate">
     <div class="flex items-center space-x-3">
-      <h3 class="text-gray-900 text-sm leading-5 font-medium truncate">Jane Cooper</h3>
+      <h3 class="text-gray-900 text-sm font-medium truncate">Jane Cooper</h3>
       <span class="__COMPLETION__">Admin</span>
     </div>
-    <p class="mt-1 text-gray-500 text-sm leading-5 truncate">Regional Paradigm Technician</p>
+    <p class="mt-1 text-gray-500 text-sm truncate">Regional Paradigm Technician</p>
   </div>
   <img class="w-10 h-10 bg-gray-300 rounded-full flex-shrink-0" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=4&amp;w=256&amp;h=256&amp;q=60" alt="">
 </div>
 <div class="border-t border-gray-200">
   <div class="-mt-px flex">
     <div class="w-0 flex-1 flex border-r border-gray-200">
-      <a href="#" class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
+      <a href="#" class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
         <svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
           <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
           <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
@@ -134,10 +114,7 @@ function CompletionDemo() {
                   {token.content.split(' ').map((c, i) => {
                     const space = i === 0 ? '' : ' '
                     if (/^(bg|text|border)-/.test(c)) {
-                      const color = dlv(
-                        siteConfig.theme.colors,
-                        c.replace(/^(bg|text|border)-/, '').split('-')
-                      )
+                      const color = dlv(colors, c.replace(/^(bg|text|border)-/, '').split('-'))
                       if (color) {
                         return (
                           <>
@@ -269,7 +246,7 @@ function Completion({ inView }) {
       {typed && (
         <span className="relative z-10">
           <div className="absolute top-full left-full m-0.5 -ml-16 sm:ml-0.5 rounded-md shadow-xl">
-            <div className="relative w-96 bg-lightBlue-800 border border-black overflow-hidden rounded-md">
+            <div className="relative w-96 bg-light-blue-800 border border-black overflow-hidden rounded-md">
               <div className="bg-black bg-opacity-75 absolute inset-0" />
               <ul className="relative leading-5 text-white py-2">
                 {completions
@@ -331,7 +308,7 @@ export function EditorTools() {
         <IconContainer className={`${gradients.lightblue[0]} mb-8`}>
           <Icon />
         </IconContainer>
-        <Caption as="h2" className="text-lightBlue-600 mb-3">
+        <Caption as="h2" className="text-light-blue-600 mb-3">
           Editor tools
         </Caption>
         <BigText className="mb-8">World-class IDE integration.</BigText>
@@ -345,7 +322,7 @@ export function EditorTools() {
             within your editor and with no configuration required.
           </p>
         </Paragraph>
-        <Link href="#" className="text-lightBlue-600">
+        <Link href="#" className="text-light-blue-600">
           Learn more -&gt;
         </Link>
       </div>
@@ -353,7 +330,7 @@ export function EditorTools() {
         color="lightblue"
         rotate={2}
         left={
-          <CodeWindow className={`bg-lightBlue-500 ${styles.code}`} lineNumbersBackground={false}>
+          <CodeWindow className={`bg-light-blue-500 ${styles.code}`} lineNumbersBackground={false}>
             <div className="flex-auto flex min-h-0">
               <div className="flex-none w-14 bg-white bg-opacity-10 flex flex-col items-center justify-between pt-3.5 pb-4">
                 <svg width="24" height="216" fill="none">
@@ -405,7 +382,7 @@ export function EditorTools() {
               <div className="flex-auto flex flex-col min-w-0">
                 <CompletionDemo />
                 <div className="border-t border-white border-opacity-10 font-mono text-xs text-white p-4 space-y-2">
-                  <h3 className="leading-4">Problems</h3>
+                  <h3>Problems</h3>
                   <ul className="leading-5">
                     {problems.map((problem, i) => (
                       <li key={i} className="flex min-w-0">

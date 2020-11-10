@@ -17,7 +17,7 @@ const { tokens, code } = tokenize.html(
   `<div class="md:flex bg-gray-100 rounded-xl p-8">
   <img class="w-32 h-32 md:w-48 md:h-auto md:rounded-none mb-6 md:-m-8 md:mr-8 rounded-full mx-auto" src="https://unsplash.it/200/200?random" alt="" />
   <blockquote class="text-center">
-    <p class="mb-4 text-lg leading-7 font-semibold">
+    <p class="mb-4 text-lg font-semibold">
       “Tailwind CSS is the only framework that I've seen scale
       on large teams. It’s easy to customize, adapts to any design,
       and the build size is tiny.”
@@ -68,7 +68,7 @@ function Words({ children, bolder = false, layout, transition }) {
     <motion.span
       key={i}
       layout={layout}
-      className="relative inline-flex whitespace-pre text-lg leading-7"
+      className="relative inline-flex whitespace-pre text-lg"
       transition={transition}
     >
       {bolder ? (
@@ -325,7 +325,7 @@ export function Hero() {
         </div>
       }
       right={
-        <CodeWindow className="bg-lightBlue-500">
+        <CodeWindow className="bg-light-blue-500">
           <CodeWindow.Code
             tokens={tokens}
             tokenComponent={HeroToken}
@@ -419,8 +419,8 @@ function Layout({ left, right, pin = 'left' }) {
           pin === 'left' ? '-ml-8 pr-4 sm:ml-0 sm:pr-0' : '-mr-8 pl-4 sm:mr-0 sm:pl-0'
         }`}
       >
-        <div className="bg-gray-100 w-full flex-none rounded-2xl" />
-        <div className="w-full flex-none -ml-full rounded-2xl transform shadow-lg bg-gradient-to-br from-turquoise-400 to-lightBlue-500 -rotate-1 sm:-rotate-2" />
+        <div className="bg-gray-100 w-full flex-none rounded-3xl" />
+        <div className="w-full flex-none -ml-full rounded-3xl transform shadow-lg bg-gradient-to-br from-cyan-400 to-light-blue-500 -rotate-1 sm:-rotate-2" />
       </div>
       <div
         className={`relative col-start-1 col-end-2 sm:col-start-2 sm:col-end-3 lg:col-start-1 lg:col-span-full xl:col-start-2 xl:col-end-3 row-start-2 row-end-3 xl:row-start-3 xl:row-end-4 self-center ${

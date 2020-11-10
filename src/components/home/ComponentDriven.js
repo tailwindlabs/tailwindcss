@@ -105,10 +105,10 @@ export default function Recipes({ recipes }) {
     <article className="p-4 flex space-x-4">
       <img src={recipe.image} alt="" className="flex-none w-18 h-18 rounded-lg object-cover bg-gray-100" width="144" height="144" />
       <div className="min-w-0 relative flex-auto sm:pr-20 lg:pr-0 xl:pr-20">
-        <h2 className="text-lg leading-7 font-semibold text-black mb-0.5">
+        <h2 className="text-lg font-semibold text-black mb-0.5">
           {recipe.title}
         </h2>
-        <dl className="flex flex-wrap text-sm leading-5 font-medium whitespace-pre">
+        <dl className="flex flex-wrap text-sm font-medium whitespace-pre">
           <div>
             <dt className="sr-only">Time</dt>
             <dd>
@@ -215,10 +215,10 @@ export default {
   <article class="p-4 flex space-x-4">
     <img :src="recipe.image" alt="" class="flex-none w-18 h-18 rounded-lg object-cover" width="144" height="144" />
     <div class="min-w-0 relative flex-auto sm:pr-20 lg:pr-0 xl:pr-20">
-      <h2 class="text-lg leading-7 font-semibold text-black mb-0.5">
+      <h2 class="text-lg font-semibold text-black mb-0.5">
         {{ recipe.title }}
       </h2>
-      <dl class="flex flex-wrap text-sm leading-5 font-medium whitespace-pre">
+      <dl class="flex flex-wrap text-sm font-medium whitespace-pre">
         <div>
           <dt class="sr-only">Time</dt>
           <dd>
@@ -294,10 +294,10 @@ export default {
     'list-item.blade.php': tokenize.html(`<article class="p-4 flex space-x-4">
   <img src="{{ $recipe->image }}" alt="" class="flex-none w-18 h-18 rounded-lg object-cover" width="144" height="144" />
   <div class="min-w-0 relative flex-auto sm:pr-20 lg:pr-0 xl:pr-20">
-    <h2 class="text-lg leading-7 font-semibold text-black mb-0.5">
+    <h2 class="text-lg font-semibold text-black mb-0.5">
       {{ $recipe->title }}
     </h2>
-    <dl class="flex flex-wrap text-sm leading-5 font-medium whitespace-pre">
+    <dl class="flex flex-wrap text-sm font-medium whitespace-pre">
       <div>
         <dt class="sr-only">Time</dt>
         <dd>
@@ -369,9 +369,7 @@ function TabBar({ children }) {
       animate={{ y: '0%' }}
       exit={{ y: '-100%' }}
       transition={{ type: 'spring', mass: 0.4 }}
-      className={`${
-        isPresent ? '' : 'absolute top-0 left-0 w-full'
-      } flex text-sm leading-5 text-orange-300`}
+      className={`${isPresent ? '' : 'absolute top-0 left-0 w-full'} flex text-sm text-orange-300`}
     >
       {children}
     </motion.ul>
@@ -388,11 +386,11 @@ function ComponentExample({ framework }) {
 
   return (
     <CodeWindow className="bg-orange-500">
-      <div className="flex-none relative bg-orange-1000 overflow-auto whitespace-no-wrap">
+      <div className="flex-none relative bg-orange-1000 overflow-auto whitespace-nowrap">
         <AnimateSharedLayout>
           <div
             aria-hidden="true"
-            className="absolute top-0 left-0 flex text-sm leading-5 font-medium text-transparent pointer-events-none select-none"
+            className="absolute top-0 left-0 flex text-sm font-medium text-transparent pointer-events-none select-none"
           >
             {Object.keys(tabs[framework]).map((tab, tabIndex) => (
               <div
@@ -503,7 +501,7 @@ function ComponentExample({ framework }) {
 }
 
 const css = tokenize.css(`.btn {
-  @apply text-base leading-6 font-medium rounded-lg p-3;
+  @apply text-base font-medium rounded-lg p-3;
 }
 
 .btn--primary {
@@ -528,7 +526,7 @@ const html = tokenize.html(`      </dd>
 function ApplyExample({ inView }) {
   return (
     <CodeWindow className="bg-pink-600">
-      <div className="relative flex text-sm leading-5 bg-pink-1000 text-pink-200">
+      <div className="relative flex text-sm bg-pink-1000 text-pink-200">
         <h3 className="border border-transparent py-2 px-4 font-medium bg-white bg-opacity-10">
           styles.css
         </h3>
@@ -536,7 +534,7 @@ function ApplyExample({ inView }) {
       <div className="flex-none">
         <CodeWindow.Code tokens={css} />
       </div>
-      <div className="relative flex text-sm leading-5 bg-pink-1000 text-pink-200">
+      <div className="relative flex text-sm bg-pink-1000 text-pink-200">
         <h3 className="border border-transparent py-2 px-4 font-medium bg-white bg-opacity-10">
           index.html
         </h3>
@@ -584,7 +582,7 @@ function AtApplySection() {
           <article className="text-gray-600 leading-6">
             <h2
               className={clsx(
-                'transition-opacity duration-1500 delay-500 text-xl leading-7 sm:text-2xl sm:leading-8 font-semibold text-black px-4 py-6 sm:px-6 pb-1',
+                'transition-opacity duration-1500 delay-500 text-xl sm:text-2xl font-semibold text-black px-4 py-6 sm:px-6 pb-1',
                 { 'opacity-25': inView }
               )}
             >
@@ -598,7 +596,7 @@ function AtApplySection() {
             >
               <div className="px-4 sm:px-6 pb-6">
                 <dt className="sr-only">Date and time</dt>
-                <dd className="text-sm leading-5 sm:text-base sm:leading-6">
+                <dd className="text-sm sm:text-base">
                   <time dateTime="2020-11-15T10:00:00-05:00">Thu Nov 15, 2020 10:00am</time> -{' '}
                   <time dateTime="2020-11-15T11:00:00-05:00">
                     11:00am<span className="sr-only sm:not-sr-only"> EST</span>
@@ -606,26 +604,24 @@ function AtApplySection() {
                 </dd>
               </div>
               <div className="w-full flex-none flex items-baseline px-4 sm:px-6 py-4">
-                <dt className="w-2/5 sm:w-1/3 flex-none uppercase text-xs leading-4 sm:text-sm sm:leading-5 font-semibold tracking-wide">
+                <dt className="w-2/5 sm:w-1/3 flex-none uppercase text-xs sm:text-sm font-semibold tracking-wide">
                   Location
                 </dt>
-                <dd className="text-black text-sm leading-5 sm:text-base sm:leading-6">
+                <dd className="text-black text-sm sm:text-base">
                   Kitchener, <abbr title="Ontario">ON</abbr>
                 </dd>
               </div>
               <div className="w-full flex-none flex items-baseline px-4 sm:px-6 py-4">
-                <dt className="w-2/5 sm:w-1/3 flex-none uppercase text-xs leading-4 sm:text-sm sm:leading-5 font-semibold tracking-wide">
+                <dt className="w-2/5 sm:w-1/3 flex-none uppercase text-xs sm:text-sm font-semibold tracking-wide">
                   Description
                 </dt>
-                <dd className="italic text-sm leading-5 sm:text-base sm:leading-6">
-                  No meeting description
-                </dd>
+                <dd className="italic text-sm sm:text-base">No meeting description</dd>
               </div>
               <div className="w-full flex-none flex items-center px-4 sm:px-6 py-4">
-                <dt className="w-2/5 sm:w-1/3 flex-none uppercase text-xs leading-4 sm:text-sm sm:leading-5 font-semibold tracking-wide">
+                <dt className="w-2/5 sm:w-1/3 flex-none uppercase text-xs sm:text-sm font-semibold tracking-wide">
                   Attendees
                 </dt>
-                <dd className="text-sm leading-5 sm:text-base sm:leading-6 font-medium text-gray-700 bg-gray-100 rounded-full py-1 pl-2 pr-4 flex items-center">
+                <dd className="text-sm sm:text-base font-medium text-gray-700 bg-gray-100 rounded-full py-1 pl-2 pr-4 flex items-center">
                   <svg
                     width="20"
                     height="20"
@@ -645,13 +641,13 @@ function AtApplySection() {
             <div className="grid grid-cols-2 gap-x-4 sm:gap-x-6 px-4 sm:px-6 py-4">
               <button
                 type="button"
-                className="text-base leading-6 font-medium rounded-lg bg-gray-100 text-black py-3"
+                className="text-base font-medium rounded-lg bg-gray-100 text-black py-3"
               >
                 Decline
               </button>
               <button
                 type="button"
-                className="text-base leading-6 font-medium rounded-lg bg-rose-500 text-white py-3"
+                className="text-base font-medium rounded-lg bg-rose-500 text-white py-3"
               >
                 Accept
               </button>
@@ -725,7 +721,7 @@ export function ComponentDriven() {
         }
         left={
           <div className="relative z-10 bg-white rounded-tl-xl sm:rounded-t-xl lg:rounded-xl shadow-lg lg:-mr-8 divide-y divide-gray-100">
-            <nav className="p-4 text-sm leading-5 font-medium">
+            <nav className="p-4 text-sm font-medium">
               <ul className="flex space-x-2">
                 <li>
                   <a href="#" className="block px-4 py-2 rounded-md bg-amber-100 text-amber-700">
@@ -755,10 +751,10 @@ export function ComponentDriven() {
                   className="flex-none w-18 h-18 rounded-lg object-cover bg-gray-100"
                 />
                 <div className="min-w-0 relative flex-auto sm:pr-20 lg:pr-0 xl:pr-20">
-                  <h2 className="text-base leading-6 sm:text-lg sm:leading-7 lg:text-base lg:leading-6 xl:text-lg xl:leading-7 font-semibold text-black mb-0.5 truncate">
+                  <h2 className="text-base sm:text-lg lg:text-base xl:text-lg font-semibold text-black mb-0.5 truncate">
                     {title}
                   </h2>
-                  <dl className="flex flex-wrap text-sm leading-5 font-medium whitespace-pre">
+                  <dl className="flex flex-wrap text-sm font-medium whitespace-pre">
                     <div className="absolute top-0 right-0 rounded-full bg-amber-50 text-amber-900 px-2 py-0.5 hidden sm:flex lg:hidden xl:flex items-center space-x-1">
                       <dt className="text-amber-500">
                         <span className="sr-only">Rating</span>

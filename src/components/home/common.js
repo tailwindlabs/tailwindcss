@@ -10,7 +10,7 @@ export function IconContainer({ as: Component = 'div', color, className = '', ..
 export function Caption({ as: Component = 'p', className = '', ...props }) {
   return (
     <Component
-      className={`sm:text-lg font-semibold tracking-wide leading-6 sm:leading-snug uppercase ${className}`}
+      className={`sm:text-lg sm:leading-snug font-semibold tracking-wide uppercase ${className}`}
       {...props}
     />
   )
@@ -28,19 +28,14 @@ export function BigText({ as: Component = 'p', className = '', ...props }) {
 export function Paragraph({ as: Component = 'p', className = '', ...props }) {
   return (
     <Component
-      className={`max-w-4xl text-lg sm:text-2xl font-medium leading-7 sm:leading-10 space-y-6 ${className}`}
+      className={`max-w-4xl text-lg sm:text-2xl font-medium sm:leading-10 space-y-6 ${className}`}
       {...props}
     />
   )
 }
 
 export function Link({ className = '', ...props }) {
-  return (
-    <a
-      className={`inline-flex text-lg leading-7 sm:text-2xl sm:leading-8 font-medium ${className}`}
-      {...props}
-    />
-  )
+  return <a className={`inline-flex text-lg sm:text-2xl font-medium ${className}`} {...props} />
 }
 
 export function Widont({ children }) {

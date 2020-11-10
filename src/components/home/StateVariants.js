@@ -14,8 +14,8 @@ const {
 } = tokenize.html(`<section class="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-4 sm:pb-6 lg:pb-4 xl:pb-6 space-y-4">
   <header class="flex items-center justify-between">
     <h2 class="text-lg leading-6 font-medium text-black">Projects</h2>
-    <button class="(new-btn-hover)hover:bg-lightBlue-200 (new-btn-hover)hover:text-lightBlue-800 group flex items-center rounded-md bg-lightBlue-100 text-lightBlue-600 text-sm leading-5 font-medium px-4 py-2">
-      <svg class="(new-btn-hover)group-hover:text-lightBlue-600 text-lightBlue-500 mr-2" width="12" height="20" fill="currentColor">
+    <button class="(new-btn-hover)hover:bg-light-blue-200 (new-btn-hover)hover:text-light-blue-800 group flex items-center rounded-md bg-light-blue-100 text-light-blue-600 text-sm font-medium px-4 py-2">
+      <svg class="(new-btn-hover)group-hover:text-light-blue-600 text-light-blue-500 mr-2" width="12" height="20" fill="currentColor">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M6 5a1 1 0 011 1v3h3a1 1 0 110 2H7v3a1 1 0 11-2 0v-3H2a1 1 0 110-2h3V6a1 1 0 011-1z"/>
       </svg>
       New
@@ -25,11 +25,11 @@ const {
     <svg width="20" height="20" fill="currentColor" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
       <path fill-rule="evenodd" clip-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" />
     </svg>
-    <input class="(input-focus)focus:border-lightBlue-300 (input-focus)focus:outline-none w-full text-sm leading-5 text-black placeholder-gray-500 border border-gray-200 rounded-md py-2 pl-10" type="text" aria-label="Filter projects" placeholder="Filter projects" />
+    <input class="(input-focus)focus:border-light-blue-300 (input-focus)focus:outline-none w-full text-sm text-black placeholder-gray-500 border border-gray-200 rounded-md py-2 pl-10" type="text" aria-label="Filter projects" placeholder="Filter projects" />
   </form>
   <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
     <li x-for="item in items">
-      <a href="#" class="(item-hover)hover:bg-lightBlue-500 (item-hover)hover:border-transparent (item-hover)hover:shadow-lg group block rounded-lg p-4 border border-gray-200">
+      <a href="#" class="(item-hover)hover:bg-light-blue-500 (item-hover)hover:border-transparent (item-hover)hover:shadow-lg group block rounded-lg p-4 border border-gray-200">
         <dl class="grid sm:block lg:grid xl:block grid-cols-2 grid-rows-2 items-center">
           <div>
             <dt class="sr-only">Title</dt>
@@ -39,7 +39,7 @@ const {
           </div>
           <div>
             <dt class="sr-only">Category</dt>
-            <dd class="(item-hover)group-hover:text-lightBlue-200 text-sm leading-5 font-medium sm:mb-4 lg:mb-0 xl:mb-4">
+            <dd class="(item-hover)group-hover:text-light-blue-200 text-sm font-medium sm:mb-4 lg:mb-0 xl:mb-4">
               {item.category}
             </dd>
           </div>
@@ -107,7 +107,7 @@ export function StateVariants() {
         <IconContainer className={`${gradients.lightblue[0]} mb-8`}>
           <Icon />
         </IconContainer>
-        <Caption as="h2" className="text-lightBlue-500 mb-3">
+        <Caption as="h2" className="text-light-blue-500 mb-3">
           State variants
         </Caption>
         <BigText className="mb-8">
@@ -118,7 +118,7 @@ export function StateVariants() {
           add. Works for focus, active, disabled, focus-within, focus-visible, and even fancy states
           we invented ourselves like group-hover.
         </Paragraph>
-        <Link href="#" className="text-lightBlue-500">
+        <Link href="#" className="text-light-blue-500">
           Learn more -&gt;
         </Link>
       </div>
@@ -132,7 +132,7 @@ export function StateVariants() {
                 <h2 className="text-lg leading-6 font-medium text-black">Projects</h2>
                 <button
                   type="button"
-                  className="hover:bg-lightBlue-200 hover:text-lightBlue-800 group flex items-center rounded-md bg-lightBlue-100 text-lightBlue-600 text-sm leading-5 font-medium px-4 py-2"
+                  className="hover:bg-light-blue-200 hover:text-light-blue-800 group flex items-center rounded-md bg-light-blue-100 text-light-blue-600 text-sm font-medium px-4 py-2"
                   onMouseEnter={() => {
                     setStates((states) => [...states, 'new-btn-hover'])
                   }}
@@ -144,7 +144,7 @@ export function StateVariants() {
                     width="12"
                     height="20"
                     fill="currentColor"
-                    className="group-hover:text-lightBlue-600 text-lightBlue-500 mr-2"
+                    className="group-hover:text-light-blue-600 text-light-blue-500 mr-2"
                   >
                     <path
                       fillRule="evenodd"
@@ -179,7 +179,7 @@ export function StateVariants() {
                   type="text"
                   aria-label="Filter projects"
                   placeholder="Filter projects"
-                  className="w-full text-sm leading-5 text-black placeholder-gray-500 border border-gray-200 rounded-md py-2 pl-10 focus:border-lightBlue-300 focus:outline-none"
+                  className="w-full text-sm text-black placeholder-gray-500 border border-gray-200 rounded-md py-2 pl-10 focus:border-light-blue-300 focus:outline-none"
                 />
               </form>
               <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
@@ -190,7 +190,7 @@ export function StateVariants() {
                   >
                     <a
                       href="#"
-                      className="group block rounded-lg p-4 border border-gray-200 hover:bg-lightBlue-500 hover:border-transparent hover:shadow-lg"
+                      className="group block rounded-lg p-4 border border-gray-200 hover:bg-light-blue-500 hover:border-transparent hover:shadow-lg"
                       onMouseEnter={() => {
                         setStates((states) => [...states, 'item-hover'])
                       }}
@@ -207,7 +207,7 @@ export function StateVariants() {
                         </div>
                         <div>
                           <dt className="sr-only">Category</dt>
-                          <dd className="text-sm leading-5 font-medium group-hover:text-lightBlue-200 sm:mb-4 lg:mb-0 xl:mb-4">
+                          <dd className="text-sm font-medium group-hover:text-light-blue-200 sm:mb-4 lg:mb-0 xl:mb-4">
                             Engineering
                           </dd>
                         </div>
@@ -250,7 +250,7 @@ export function StateVariants() {
           </div>
         }
         right={
-          <CodeWindow className="bg-lightBlue-500">
+          <CodeWindow className="bg-light-blue-500">
             <CodeWindow.Code2 ref={codeContainerRef} lines={lines.length}>
               <div ref={linesContainerRef} className={states.length > 0 ? 'mono' : ''}>
                 {lines.map((tokens, lineIndex) => (

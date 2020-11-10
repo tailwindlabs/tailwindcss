@@ -57,9 +57,9 @@ const lines = {
 </div>
 `).lines,
   gradients: tokenize.html(`<div class="bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
-<div class="bg-gradient-to-br from-lightBlue-400 to-indigo-500"></div>
-<div class="bg-gradient-to-br from-turquoise-400 to-lightBlue-500"></div>
-<div class="bg-gradient-to-br from-green-400 to-turquoise-500"></div>
+<div class="bg-gradient-to-br from-light-blue-400 to-indigo-500"></div>
+<div class="bg-gradient-to-br from-cyan-400 to-light-blue-500"></div>
+<div class="bg-gradient-to-br from-green-400 to-cyan-500"></div>
 <div class="bg-gradient-to-br from-yellow-400 to-orange-500"></div>
 <div class="bg-gradient-to-br from-pink-500 to-rose-500"></div>
 `).lines,
@@ -162,7 +162,7 @@ export function ModernFeatures() {
           </div>
         }
         left={
-          <div className="flex pl-4 pb-6 sm:pl-0 lg:pb-0 lg:mr-6 text-4xl leading-10 font-black text-purple-300">
+          <div className="flex pl-4 pb-6 sm:pl-0 lg:pb-0 lg:mr-6 text-4xl font-black text-purple-300">
             <motion.div
               key="blocks"
               initial={false}

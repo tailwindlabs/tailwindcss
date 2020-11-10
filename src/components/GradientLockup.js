@@ -27,9 +27,9 @@ export function GradientLockup({
           pin === 'left' ? '-ml-8 pr-4 sm:ml-0 sm:pr-0' : '-mr-8 pl-4 sm:mr-0 sm:pl-0'
         }`}
       >
-        <div className="bg-gray-100 w-full flex-none rounded-2xl" />
+        <div className="bg-gray-100 w-full flex-none rounded-3xl" />
         <motion.div
-          className={`w-full flex-none -ml-full rounded-2xl transform shadow-lg bg-gradient-to-br ${gradients[color][0]} ${rotation[rotate]}`}
+          className={`w-full flex-none -ml-full rounded-3xl transform shadow-lg bg-gradient-to-br ${gradients[color][0]} ${rotation[rotate]}`}
           {...gradientProps}
         />
       </div>
