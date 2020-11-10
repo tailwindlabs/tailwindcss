@@ -16,7 +16,7 @@ export function toRgba(color) {
   return [r, g, b, a === undefined && hasAlpha(color) ? 1 : a]
 }
 
-export default function withAlphaVariable({ color, property, variable }) {
+export default function withAlphaVariable({ color, property, variable, ownProperty }) {
   if (_.isFunction(color)) {
     return {
       [variable]: '1',
@@ -35,6 +35,7 @@ export default function withAlphaVariable({ color, property, variable }) {
 
     return {
       [variable]: '1',
+      [ownProperty]: `rgba(${r}, ${g}, ${b}, var(${variable}))`,
       [property]: `rgba(${r}, ${g}, ${b}, var(${variable}))`,
     }
   } catch (error) {
