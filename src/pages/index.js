@@ -7,7 +7,7 @@ import { MobileFirst } from '@/components/home/MobileFirst'
 import { StateVariants } from '@/components/home/StateVariants'
 import { ComponentDriven } from '@/components/home/ComponentDriven'
 import { Customization } from '@/components/home/Customization'
-import { BrowserSupport } from '@/components/home/BrowserSupport'
+import { ModernFeatures } from '@/components/home/ModernFeatures'
 import { EditorTools } from '@/components/home/EditorTools'
 import { ReadyMadeComponents } from '@/components/home/ReadyMadeComponents'
 import { Search } from '@/components/Search'
@@ -151,7 +151,7 @@ export default function Home() {
         <ComponentDriven />
         <DarkMode />
         <Customization />
-        <BrowserSupport />
+        <ModernFeatures />
         <EditorTools />
         <ReadyMadeComponents />
       </div>

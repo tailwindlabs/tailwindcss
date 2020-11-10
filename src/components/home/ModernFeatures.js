@@ -65,7 +65,7 @@ const lines = {
 `).lines,
 }
 
-export function BrowserSupport() {
+export function ModernFeatures() {
   const [feature, setFeature] = useState('grid')
   const [selectedGradient, setSelectedGradient] = useState(gradients[0])
   const prevFeature = usePrevious(feature)
@@ -116,7 +116,7 @@ export function BrowserSupport() {
   }
 
   return (
-    <section id="browser-support">
+    <section id="modern-features">
       <div className="px-4 sm:px-6 md:px-8 mb-20">
         <IconContainer className={`${allGradients.purple[0]} mb-8`}>
           <Icon />
