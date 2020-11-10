@@ -2275,6 +2275,19 @@ autoprefixer@^10.0.1:
     num2fraction "^1.2.2"
     postcss-value-parser "^4.1.0"
 
+autoprefixer@^9.8.6:
+  version "9.8.6"
+  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-9.8.6.tgz#3b73594ca1bf9266320c5acf1588d74dea74210f"
+  integrity sha512-XrvP4VVHdRBCdX1S3WXVD8+RyG9qeb1D5Sn1DeLiG2xfSpzellk5k54xbUERJ3M5DggQxes39UGOTP8CFrEGbg==
+  dependencies:
+    browserslist "^4.12.0"
+    caniuse-lite "^1.0.30001109"
+    colorette "^1.2.1"
+    normalize-range "^0.1.2"
+    num2fraction "^1.2.2"
+    postcss "^7.0.32"
+    postcss-value-parser "^4.1.0"
+
 axe-core@^3.5.4:
   version "3.5.5"
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-3.5.5.tgz"
@@ -2712,6 +2725,11 @@ caniuse-lite@^1.0.30001093:
   version "1.0.30001104"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001104.tgz"
   integrity sha512-pkpCg7dmI/a7WcqM2yfdOiT4Xx5tzyoHAXWsX5/HxZ3TemwDZs0QXdqbE0UPLPVy/7BeK7693YfzfRYfu1YVpg==
+
+caniuse-lite@^1.0.30001109:
+  version "1.0.30001157"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001157.tgz#2d11aaeb239b340bc1aa730eca18a37fdb07a9ab"
+  integrity sha512-gOerH9Wz2IRZ2ZPdMfBvyOi3cjaz4O4dgNwPGzx8EhqAs4+2IL/O+fJsbt+znSigujoZG8bVcIAUM/I/E5K3MA==
 
 caniuse-lite@^1.0.30001113, caniuse-lite@^1.0.30001137, caniuse-lite@^1.0.30001154:
   version "1.0.30001154"
@@ -6450,13 +6468,13 @@ postcss-functions@^3.0.0:
     postcss "^6.0.9"
     postcss-value-parser "^3.3.0"
 
-postcss-js@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/postcss-js/-/postcss-js-3.0.1.tgz#e467efdce80ca02e072c60b42e0b35ad2f950a94"
-  integrity sha512-m1DgECmEbOK9JhGkdctaP9ZRVheJuEnkk2eb/d3K+5uN10C3S004Ng6Hat4Aha7PsLt824x0xwrT7rVwGRVLHg==
+postcss-js@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/postcss-js/-/postcss-js-2.0.3.tgz#a96f0f23ff3d08cec7dc5b11bf11c5f8077cdab9"
+  integrity sha512-zS59pAk3deu6dVHyrGqmC3oDXBdNdajk4k1RyxeVXCrcEDBUBHoIhE4QTsmhxgzXxsaqFDAkUZfmMa5f/N/79w==
   dependencies:
     camelcase-css "^2.0.1"
-    postcss "^8.1.0"
+    postcss "^7.0.18"
 
 postcss-modules-extract-imports@^2.0.0:
   version "2.0.0"
@@ -6498,13 +6516,6 @@ postcss-nested@^4.2.3:
   dependencies:
     postcss "^7.0.32"
     postcss-selector-parser "^6.0.2"
-
-postcss-nested@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/postcss-nested/-/postcss-nested-5.0.1.tgz#e7a77f7a806a09c8de0f2c163d8e3d09f00f3139"
-  integrity sha512-ZHNSAoHrMtbEzjq+Qs4R0gHijpXc6F1YUv4TGmGaz7rtfMvVJBbu5hMOH+CrhEaljQpEmx5N/P8i1pXTkbVAmg==
-  dependencies:
-    postcss-selector-parser "^6.0.4"
 
 postcss-safe-parser@4.0.2:
   version "4.0.2"
@@ -6579,7 +6590,16 @@ postcss@^6.0.9:
     source-map "^0.6.1"
     supports-color "^5.4.0"
 
-postcss@^8.1.0, postcss@^8.1.4:
+postcss@^7, postcss@^7.0.18:
+  version "7.0.35"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.35.tgz#d2be00b998f7f211d8a276974079f2e92b970e24"
+  integrity sha512-3QT8bBJeX/S5zKTTjTCIjRF3If4avAT6kqxcASlTWEtAFCb9NH0OUxNDfgZSWdP5fJnBYCMEWkIFfWeugjzYMg==
+  dependencies:
+    chalk "^2.4.2"
+    source-map "^0.6.1"
+    supports-color "^6.1.0"
+
+postcss@^8.1.4:
   version "8.1.4"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.1.4.tgz#356dfef367a70f3d04347f74560c85846e20e4c1"
   integrity sha512-LfqcwgMq9LOd8pX7K2+r2HPitlIGC5p6PoZhVELlqhh2YGDVcXKpkCseqan73Hrdik6nBd2OvoDPUaP/oMj9hQ==
@@ -7894,13 +7914,13 @@ table@^5.2.3:
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
 
-tailwindcss@^2.0.0-alpha.5:
-  version "2.0.0-alpha.5"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-2.0.0-alpha.5.tgz#c9208b382ceab8177038c874b7275c88f462cd19"
-  integrity sha512-eOlSeLoYZ2alxWImAL+EDymtep/P0ZlYZF/K2EVc2dKWQNAPu6cgOn82OKj7tTXqSyBeEcKcOF3VPlnrgL/6SQ==
+tailwindcss@^2.0.0-alpha.11:
+  version "2.0.0-alpha.11"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-2.0.0-alpha.11.tgz#00301f6c741b550c4d60e3ad095e96c0e981dea7"
+  integrity sha512-x40VHcoWpQuVMbK+BX3L/E4jsBIk+Y3z7d74TS8xbEmXCvSZ1eBIXDPtFTi3mKRBlQ1DkoqVPS8lQ5KTbNYFCg==
   dependencies:
     "@fullhuman/postcss-purgecss" "^3.0.0"
-    autoprefixer "^10.0.1"
+    autoprefixer "^9.8.6"
     bytes "^3.0.0"
     chalk "^4.1.0"
     color "^3.1.3"
@@ -7912,9 +7932,10 @@ tailwindcss@^2.0.0-alpha.5:
     modern-normalize "^1.0.0"
     node-emoji "^1.8.1"
     object-hash "^2.0.3"
+    postcss "^7"
     postcss-functions "^3.0.0"
-    postcss-js "^3.0.1"
-    postcss-nested "^5.0.1"
+    postcss-js "^2.0.3"
+    postcss-nested "^4.2.3"
     postcss-selector-parser "^6.0.4"
     postcss-value-parser "^4.1.0"
     pretty-hrtime "^1.0.3"
