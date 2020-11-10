@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 - Nothing yet!
+-
+## [2.0.0-alpha.12] - 2020-11-10
+
+### Fixed
+
+- Prevent `boxShadow` utilities from overriding ring shadows added by components like in the custom forms plugin ([c3dd3b6](https://github.com/tailwindlabs/tailwindcss/commit/c3dd3b68454ad418833a9edf7f3409cad66fb5b0))
 
 ## [2.0.0-alpha.11] - 2020-11-09
 
@@ -1135,7 +1141,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.11...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.12...HEAD
+[2.0.0-alpha.12]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.11...v2.0.0-alpha.12
 [2.0.0-alpha.11]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.10...v2.0.0-alpha.11
 [2.0.0-alpha.10]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.9...v2.0.0-alpha.10
 [2.0.0-alpha.9]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.8...v2.0.0-alpha.9
