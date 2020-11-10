@@ -21,11 +21,11 @@ export default function () {
         return [
           nameClass('ring', modifier),
           {
-            '--ring-width': value,
-            '--ring-color-default': ringColorDefault,
+            '--ring-offset-shadow': `0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff)`,
+            '--ring-shadow': `0 0 0 calc(${value} + var(--ring-offset-width, 0px)) var(--ring-color, ${ringColorDefault})`,
             'box-shadow': [
-              `0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff)`,
-              `0 0 0 calc(var(--ring-width) + var(--ring-offset-width, 0px)) var(--ring-color, var(--ring-color-default))`,
+              `var(--ring-offset-shadow)`,
+              `var(--ring-shadow)`,
               `var(--box-shadow, 0 0 #0000)`,
             ].join(', '),
           },
