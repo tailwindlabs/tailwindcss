@@ -272,7 +272,7 @@ export function Performance() {
                 )}
               </div>
               <div
-                className="absolute inset-x-0 bottom-0 h-16"
+                className="absolute inset-x-0 bottom-0 h-16 pointer-events-none"
                 style={{
                   backgroundImage:
                     'linear-gradient(to top, rgba(4, 30, 28, 1), rgba(4, 30, 28, 0))',
