@@ -17758,7 +17758,7 @@ video {
 }
 
 .shadow-none {
-  --box-shadow: none;
+  --box-shadow: 0 0 #0000;
   box-shadow: var(--box-shadow);
 }
 
@@ -17798,7 +17798,7 @@ video {
 }
 
 .focus-within\:shadow-none:focus-within {
-  --box-shadow: none;
+  --box-shadow: 0 0 #0000;
   box-shadow: var(--box-shadow);
 }
 
@@ -17838,7 +17838,7 @@ video {
 }
 
 .hover\:shadow-none:hover {
-  --box-shadow: none;
+  --box-shadow: 0 0 #0000;
   box-shadow: var(--box-shadow);
 }
 
@@ -17878,7 +17878,7 @@ video {
 }
 
 .focus\:shadow-none:focus {
-  --box-shadow: none;
+  --box-shadow: 0 0 #0000;
   box-shadow: var(--box-shadow);
 }
 
@@ -42311,7 +42311,7 @@ video {
   }
 
   .sm\:shadow-none {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -42351,7 +42351,7 @@ video {
   }
 
   .sm\:focus-within\:shadow-none:focus-within {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -42391,7 +42391,7 @@ video {
   }
 
   .sm\:hover\:shadow-none:hover {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -42431,7 +42431,7 @@ video {
   }
 
   .sm\:focus\:shadow-none:focus {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -66834,7 +66834,7 @@ video {
   }
 
   .md\:shadow-none {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -66874,7 +66874,7 @@ video {
   }
 
   .md\:focus-within\:shadow-none:focus-within {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -66914,7 +66914,7 @@ video {
   }
 
   .md\:hover\:shadow-none:hover {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -66954,7 +66954,7 @@ video {
   }
 
   .md\:focus\:shadow-none:focus {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -91357,7 +91357,7 @@ video {
   }
 
   .lg\:shadow-none {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -91397,7 +91397,7 @@ video {
   }
 
   .lg\:focus-within\:shadow-none:focus-within {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -91437,7 +91437,7 @@ video {
   }
 
   .lg\:hover\:shadow-none:hover {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -91477,7 +91477,7 @@ video {
   }
 
   .lg\:focus\:shadow-none:focus {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -115880,7 +115880,7 @@ video {
   }
 
   .xl\:shadow-none {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -115920,7 +115920,7 @@ video {
   }
 
   .xl\:focus-within\:shadow-none:focus-within {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -115960,7 +115960,7 @@ video {
   }
 
   .xl\:hover\:shadow-none:hover {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -116000,7 +116000,7 @@ video {
   }
 
   .xl\:focus\:shadow-none:focus {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -140403,7 +140403,7 @@ video {
   }
 
   .\32xl\:shadow-none {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -140443,7 +140443,7 @@ video {
   }
 
   .\32xl\:focus-within\:shadow-none:focus-within {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -140483,7 +140483,7 @@ video {
   }
 
   .\32xl\:hover\:shadow-none:hover {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 
@@ -140523,7 +140523,7 @@ video {
   }
 
   .\32xl\:focus\:shadow-none:focus {
-    --box-shadow: none;
+    --box-shadow: 0 0 #0000;
     box-shadow: var(--box-shadow);
   }
 

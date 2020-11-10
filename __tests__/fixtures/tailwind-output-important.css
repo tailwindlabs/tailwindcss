@@ -19604,7 +19604,7 @@ video {
 }
 
 .shadow-none {
-  --box-shadow: none !important;
+  --box-shadow: 0 0 #0000 !important;
   box-shadow: var(--box-shadow) !important;
 }
 
@@ -19644,7 +19644,7 @@ video {
 }
 
 .focus-within\:shadow-none:focus-within {
-  --box-shadow: none !important;
+  --box-shadow: 0 0 #0000 !important;
   box-shadow: var(--box-shadow) !important;
 }
 
@@ -19684,7 +19684,7 @@ video {
 }
 
 .hover\:shadow-none:hover {
-  --box-shadow: none !important;
+  --box-shadow: 0 0 #0000 !important;
   box-shadow: var(--box-shadow) !important;
 }
 
@@ -19724,7 +19724,7 @@ video {
 }
 
 .focus\:shadow-none:focus {
-  --box-shadow: none !important;
+  --box-shadow: 0 0 #0000 !important;
   box-shadow: var(--box-shadow) !important;
 }
 
@@ -46713,7 +46713,7 @@ video {
   }
 
   .sm\:shadow-none {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -46753,7 +46753,7 @@ video {
   }
 
   .sm\:focus-within\:shadow-none:focus-within {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -46793,7 +46793,7 @@ video {
   }
 
   .sm\:hover\:shadow-none:hover {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -46833,7 +46833,7 @@ video {
   }
 
   .sm\:focus\:shadow-none:focus {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -73792,7 +73792,7 @@ video {
   }
 
   .md\:shadow-none {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -73832,7 +73832,7 @@ video {
   }
 
   .md\:focus-within\:shadow-none:focus-within {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -73872,7 +73872,7 @@ video {
   }
 
   .md\:hover\:shadow-none:hover {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -73912,7 +73912,7 @@ video {
   }
 
   .md\:focus\:shadow-none:focus {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -100871,7 +100871,7 @@ video {
   }
 
   .lg\:shadow-none {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -100911,7 +100911,7 @@ video {
   }
 
   .lg\:focus-within\:shadow-none:focus-within {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -100951,7 +100951,7 @@ video {
   }
 
   .lg\:hover\:shadow-none:hover {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -100991,7 +100991,7 @@ video {
   }
 
   .lg\:focus\:shadow-none:focus {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -127950,7 +127950,7 @@ video {
   }
 
   .xl\:shadow-none {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -127990,7 +127990,7 @@ video {
   }
 
   .xl\:focus-within\:shadow-none:focus-within {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -128030,7 +128030,7 @@ video {
   }
 
   .xl\:hover\:shadow-none:hover {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -128070,7 +128070,7 @@ video {
   }
 
   .xl\:focus\:shadow-none:focus {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -155029,7 +155029,7 @@ video {
   }
 
   .\32xl\:shadow-none {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -155069,7 +155069,7 @@ video {
   }
 
   .\32xl\:focus-within\:shadow-none:focus-within {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -155109,7 +155109,7 @@ video {
   }
 
   .\32xl\:hover\:shadow-none:hover {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
@@ -155149,7 +155149,7 @@ video {
   }
 
   .\32xl\:focus\:shadow-none:focus {
-    --box-shadow: none !important;
+    --box-shadow: 0 0 #0000 !important;
     box-shadow: var(--box-shadow) !important;
   }
 
