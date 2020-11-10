@@ -20,7 +20,7 @@ const gradients = [
 ]
 
 const lines = {
-  grid: tokenize.html(`<div class="grid grid-flow-col grid-rows-2 grid-cols-3 gap-4 lorem ipsum dolor sit amet">
+  grid: tokenize.html(`<div class="grid grid-flow-col grid-rows-2 grid-cols-3 gap-4">
   <div>
     1
   </div>
