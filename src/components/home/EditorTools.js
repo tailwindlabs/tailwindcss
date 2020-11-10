@@ -9,6 +9,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { ReactComponent as Icon } from '@/img/icons/home/editor-tools.svg'
 import { useInView } from 'react-intersection-observer'
 import { siteConfig } from '@/utils/siteConfig'
+import dlv from 'dlv'
 
 const problems = [
   ["'flex' applies the same CSS property as 'block'.", 'cssConflict [1, 20]'],
@@ -124,6 +125,38 @@ function CompletionDemo() {
               return <Completion key={tokenIndex} inView={inView} />
             }
 
+            if (
+              token.types[token.types.length - 1] === 'attr-value' &&
+              tokens[tokenIndex - 3].content === 'class'
+            ) {
+              return (
+                <span key={tokenIndex} className={getClassNameForToken(token)}>
+                  {token.content.split(' ').map((c, i) => {
+                    const space = i === 0 ? '' : ' '
+                    if (/^(bg|text|border)-/.test(c)) {
+                      const color = dlv(
+                        siteConfig.theme.colors,
+                        c.replace(/^(bg|text|border)-/, '').split('-')
+                      )
+                      if (color) {
+                        return (
+                          <>
+                            {space}
+                            <span
+                              className="inline-flex w-2.5 h-2.5 md:w-3 md:h-3 rounded-sm shadow-px relative top-px mr-0.5 md:mr-1"
+                              style={{ background: color }}
+                            />
+                            {c}
+                          </>
+                        )
+                      }
+                    }
+                    return space + c
+                  })}
+                </span>
+              )
+            }
+
             return (
               <span key={tokenIndex} className={getClassNameForToken(token)}>
                 {token.content}
@@ -234,7 +267,7 @@ function Completion({ inView }) {
         </Fragment>
       )}
       {typed && (
-        <span className="relative">
+        <span className="relative z-10">
           <div className="absolute top-full left-full m-0.5 -ml-16 sm:ml-0.5 rounded-md shadow-xl">
             <div className="relative w-96 bg-lightBlue-800 border border-black overflow-hidden rounded-md">
               <div className="bg-black bg-opacity-75 absolute inset-0" />
