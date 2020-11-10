@@ -388,7 +388,7 @@ function ComponentExample({ framework }) {
 
   return (
     <CodeWindow className="bg-orange-500">
-      <div className="flex-none relative bg-orange-900 bg-opacity-20 overflow-auto whitespace-no-wrap">
+      <div className="flex-none relative bg-orange-1000 overflow-auto whitespace-no-wrap">
         <AnimateSharedLayout>
           <div
             aria-hidden="true"
@@ -528,7 +528,7 @@ const html = tokenize.html(`      </dd>
 function ApplyExample({ inView }) {
   return (
     <CodeWindow className="bg-pink-600">
-      <div className="flex text-sm leading-5 bg-pink-900 bg-opacity-20 text-pink-200">
+      <div className="relative flex text-sm leading-5 bg-pink-1000 text-pink-200">
         <h3 className="border border-transparent py-2 px-4 font-medium bg-white bg-opacity-10">
           styles.css
         </h3>
@@ -536,7 +536,7 @@ function ApplyExample({ inView }) {
       <div className="flex-none">
         <CodeWindow.Code tokens={css} />
       </div>
-      <div className="flex text-sm leading-5 bg-pink-900 bg-opacity-20 text-pink-200">
+      <div className="relative flex text-sm leading-5 bg-pink-1000 text-pink-200">
         <h3 className="border border-transparent py-2 px-4 font-medium bg-white bg-opacity-10">
           index.html
         </h3>
