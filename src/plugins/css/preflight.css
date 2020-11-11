@@ -8,20 +8,29 @@
  * Removes the default spacing and border for appropriate elements.
  */
 
-blockquote,
-dl,
-dd,
+p,
 h1,
 h2,
 h3,
 h4,
 h5,
 h6,
-hr,
+blockquote,
+dl,
+dd,
 figure,
-p,
-pre {
+pre,
+hr,
+fieldset,
+ol,
+ul {
   margin: 0;
+}
+
+fieldset,
+ol,
+ul {
+  padding: 0;
 }
 
 button {
@@ -39,16 +48,9 @@ button:focus {
   outline: 5px auto -webkit-focus-ring-color;
 }
 
-fieldset {
-  margin: 0;
-  padding: 0;
-}
-
 ol,
 ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  list-style: none; /* Sets `list-style-type` */
 }
 
 /**
