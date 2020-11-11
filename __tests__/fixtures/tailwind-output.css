@@ -11487,78 +11487,6 @@ video {
   font-weight: 900;
 }
 
-.hover\:font-thin:hover {
-  font-weight: 100;
-}
-
-.hover\:font-extralight:hover {
-  font-weight: 200;
-}
-
-.hover\:font-light:hover {
-  font-weight: 300;
-}
-
-.hover\:font-normal:hover {
-  font-weight: 400;
-}
-
-.hover\:font-medium:hover {
-  font-weight: 500;
-}
-
-.hover\:font-semibold:hover {
-  font-weight: 600;
-}
-
-.hover\:font-bold:hover {
-  font-weight: 700;
-}
-
-.hover\:font-extrabold:hover {
-  font-weight: 800;
-}
-
-.hover\:font-black:hover {
-  font-weight: 900;
-}
-
-.focus\:font-thin:focus {
-  font-weight: 100;
-}
-
-.focus\:font-extralight:focus {
-  font-weight: 200;
-}
-
-.focus\:font-light:focus {
-  font-weight: 300;
-}
-
-.focus\:font-normal:focus {
-  font-weight: 400;
-}
-
-.focus\:font-medium:focus {
-  font-weight: 500;
-}
-
-.focus\:font-semibold:focus {
-  font-weight: 600;
-}
-
-.focus\:font-bold:focus {
-  font-weight: 700;
-}
-
-.focus\:font-extrabold:focus {
-  font-weight: 800;
-}
-
-.focus\:font-black:focus {
-  font-weight: 900;
-}
-
 .h-0 {
   height: 0;
 }
@@ -14643,6 +14571,21 @@ video {
 }
 
 .outline-black {
+  outline: 2px dotted black;
+  outline-offset: 2px;
+}
+
+.focus-within\:outline-none:focus-within {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.focus-within\:outline-white:focus-within {
+  outline: 2px dotted white;
+  outline-offset: 2px;
+}
+
+.focus-within\:outline-black:focus-within {
   outline: 2px dotted black;
   outline-offset: 2px;
 }
@@ -19608,6 +19551,46 @@ video {
   box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
 }
 
+.group:hover .group-hover\:shadow-sm {
+  --box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+}
+
+.group:hover .group-hover\:shadow {
+  --box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+}
+
+.group:hover .group-hover\:shadow-md {
+  --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+}
+
+.group:hover .group-hover\:shadow-lg {
+  --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+}
+
+.group:hover .group-hover\:shadow-xl {
+  --box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+}
+
+.group:hover .group-hover\:shadow-2xl {
+  --box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+}
+
+.group:hover .group-hover\:shadow-inner {
+  --box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+}
+
+.group:hover .group-hover\:shadow-none {
+  --box-shadow: 0 0 #0000;
+  box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+}
+
 .focus-within\:shadow-sm:focus-within {
   --box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
@@ -19759,6 +19742,42 @@ video {
 }
 
 .ring {
+  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+  --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+  box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+}
+
+.focus-within\:ring-0:focus-within {
+  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+  --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+  box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+}
+
+.focus-within\:ring-1:focus-within {
+  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+  --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+  box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+}
+
+.focus-within\:ring-2:focus-within {
+  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+  --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+  box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+}
+
+.focus-within\:ring-4:focus-within {
+  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+  --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+  box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+}
+
+.focus-within\:ring-8:focus-within {
+  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+  --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+  box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+}
+
+.focus-within\:ring:focus-within {
   --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
   --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
@@ -23116,6 +23135,30 @@ video {
 }
 
 .no-underline {
+  text-decoration: none;
+}
+
+.group:hover .group-hover\:underline {
+  text-decoration: underline;
+}
+
+.group:hover .group-hover\:line-through {
+  text-decoration: line-through;
+}
+
+.group:hover .group-hover\:no-underline {
+  text-decoration: none;
+}
+
+.focus-within\:underline:focus-within {
+  text-decoration: underline;
+}
+
+.focus-within\:line-through:focus-within {
+  text-decoration: line-through;
+}
+
+.focus-within\:no-underline:focus-within {
   text-decoration: none;
 }
 
@@ -38608,78 +38651,6 @@ video {
     font-weight: 900;
   }
 
-  .sm\:hover\:font-thin:hover {
-    font-weight: 100;
-  }
-
-  .sm\:hover\:font-extralight:hover {
-    font-weight: 200;
-  }
-
-  .sm\:hover\:font-light:hover {
-    font-weight: 300;
-  }
-
-  .sm\:hover\:font-normal:hover {
-    font-weight: 400;
-  }
-
-  .sm\:hover\:font-medium:hover {
-    font-weight: 500;
-  }
-
-  .sm\:hover\:font-semibold:hover {
-    font-weight: 600;
-  }
-
-  .sm\:hover\:font-bold:hover {
-    font-weight: 700;
-  }
-
-  .sm\:hover\:font-extrabold:hover {
-    font-weight: 800;
-  }
-
-  .sm\:hover\:font-black:hover {
-    font-weight: 900;
-  }
-
-  .sm\:focus\:font-thin:focus {
-    font-weight: 100;
-  }
-
-  .sm\:focus\:font-extralight:focus {
-    font-weight: 200;
-  }
-
-  .sm\:focus\:font-light:focus {
-    font-weight: 300;
-  }
-
-  .sm\:focus\:font-normal:focus {
-    font-weight: 400;
-  }
-
-  .sm\:focus\:font-medium:focus {
-    font-weight: 500;
-  }
-
-  .sm\:focus\:font-semibold:focus {
-    font-weight: 600;
-  }
-
-  .sm\:focus\:font-bold:focus {
-    font-weight: 700;
-  }
-
-  .sm\:focus\:font-extrabold:focus {
-    font-weight: 800;
-  }
-
-  .sm\:focus\:font-black:focus {
-    font-weight: 900;
-  }
-
   .sm\:h-0 {
     height: 0;
   }
@@ -41764,6 +41735,21 @@ video {
   }
 
   .sm\:outline-black {
+    outline: 2px dotted black;
+    outline-offset: 2px;
+  }
+
+  .sm\:focus-within\:outline-none:focus-within {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  .sm\:focus-within\:outline-white:focus-within {
+    outline: 2px dotted white;
+    outline-offset: 2px;
+  }
+
+  .sm\:focus-within\:outline-black:focus-within {
     outline: 2px dotted black;
     outline-offset: 2px;
   }
@@ -46729,6 +46715,46 @@ video {
     box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
   }
 
+  .group:hover .sm\:group-hover\:shadow-sm {
+    --box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .sm\:group-hover\:shadow {
+    --box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .sm\:group-hover\:shadow-md {
+    --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .sm\:group-hover\:shadow-lg {
+    --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .sm\:group-hover\:shadow-xl {
+    --box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .sm\:group-hover\:shadow-2xl {
+    --box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .sm\:group-hover\:shadow-inner {
+    --box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .sm\:group-hover\:shadow-none {
+    --box-shadow: 0 0 #0000;
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
   .sm\:focus-within\:shadow-sm:focus-within {
     --box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
@@ -46880,6 +46906,42 @@ video {
   }
 
   .sm\:ring {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .sm\:focus-within\:ring-0:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .sm\:focus-within\:ring-1:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .sm\:focus-within\:ring-2:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .sm\:focus-within\:ring-4:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .sm\:focus-within\:ring-8:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .sm\:focus-within\:ring:focus-within {
     --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
     --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
@@ -50237,6 +50299,30 @@ video {
   }
 
   .sm\:no-underline {
+    text-decoration: none;
+  }
+
+  .group:hover .sm\:group-hover\:underline {
+    text-decoration: underline;
+  }
+
+  .group:hover .sm\:group-hover\:line-through {
+    text-decoration: line-through;
+  }
+
+  .group:hover .sm\:group-hover\:no-underline {
+    text-decoration: none;
+  }
+
+  .sm\:focus-within\:underline:focus-within {
+    text-decoration: underline;
+  }
+
+  .sm\:focus-within\:line-through:focus-within {
+    text-decoration: line-through;
+  }
+
+  .sm\:focus-within\:no-underline:focus-within {
     text-decoration: none;
   }
 
@@ -65699,78 +65785,6 @@ video {
     font-weight: 900;
   }
 
-  .md\:hover\:font-thin:hover {
-    font-weight: 100;
-  }
-
-  .md\:hover\:font-extralight:hover {
-    font-weight: 200;
-  }
-
-  .md\:hover\:font-light:hover {
-    font-weight: 300;
-  }
-
-  .md\:hover\:font-normal:hover {
-    font-weight: 400;
-  }
-
-  .md\:hover\:font-medium:hover {
-    font-weight: 500;
-  }
-
-  .md\:hover\:font-semibold:hover {
-    font-weight: 600;
-  }
-
-  .md\:hover\:font-bold:hover {
-    font-weight: 700;
-  }
-
-  .md\:hover\:font-extrabold:hover {
-    font-weight: 800;
-  }
-
-  .md\:hover\:font-black:hover {
-    font-weight: 900;
-  }
-
-  .md\:focus\:font-thin:focus {
-    font-weight: 100;
-  }
-
-  .md\:focus\:font-extralight:focus {
-    font-weight: 200;
-  }
-
-  .md\:focus\:font-light:focus {
-    font-weight: 300;
-  }
-
-  .md\:focus\:font-normal:focus {
-    font-weight: 400;
-  }
-
-  .md\:focus\:font-medium:focus {
-    font-weight: 500;
-  }
-
-  .md\:focus\:font-semibold:focus {
-    font-weight: 600;
-  }
-
-  .md\:focus\:font-bold:focus {
-    font-weight: 700;
-  }
-
-  .md\:focus\:font-extrabold:focus {
-    font-weight: 800;
-  }
-
-  .md\:focus\:font-black:focus {
-    font-weight: 900;
-  }
-
   .md\:h-0 {
     height: 0;
   }
@@ -68855,6 +68869,21 @@ video {
   }
 
   .md\:outline-black {
+    outline: 2px dotted black;
+    outline-offset: 2px;
+  }
+
+  .md\:focus-within\:outline-none:focus-within {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  .md\:focus-within\:outline-white:focus-within {
+    outline: 2px dotted white;
+    outline-offset: 2px;
+  }
+
+  .md\:focus-within\:outline-black:focus-within {
     outline: 2px dotted black;
     outline-offset: 2px;
   }
@@ -73820,6 +73849,46 @@ video {
     box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
   }
 
+  .group:hover .md\:group-hover\:shadow-sm {
+    --box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .md\:group-hover\:shadow {
+    --box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .md\:group-hover\:shadow-md {
+    --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .md\:group-hover\:shadow-lg {
+    --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .md\:group-hover\:shadow-xl {
+    --box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .md\:group-hover\:shadow-2xl {
+    --box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .md\:group-hover\:shadow-inner {
+    --box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .md\:group-hover\:shadow-none {
+    --box-shadow: 0 0 #0000;
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
   .md\:focus-within\:shadow-sm:focus-within {
     --box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
@@ -73971,6 +74040,42 @@ video {
   }
 
   .md\:ring {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .md\:focus-within\:ring-0:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .md\:focus-within\:ring-1:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .md\:focus-within\:ring-2:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .md\:focus-within\:ring-4:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .md\:focus-within\:ring-8:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .md\:focus-within\:ring:focus-within {
     --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
     --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
@@ -77328,6 +77433,30 @@ video {
   }
 
   .md\:no-underline {
+    text-decoration: none;
+  }
+
+  .group:hover .md\:group-hover\:underline {
+    text-decoration: underline;
+  }
+
+  .group:hover .md\:group-hover\:line-through {
+    text-decoration: line-through;
+  }
+
+  .group:hover .md\:group-hover\:no-underline {
+    text-decoration: none;
+  }
+
+  .md\:focus-within\:underline:focus-within {
+    text-decoration: underline;
+  }
+
+  .md\:focus-within\:line-through:focus-within {
+    text-decoration: line-through;
+  }
+
+  .md\:focus-within\:no-underline:focus-within {
     text-decoration: none;
   }
 
@@ -92790,78 +92919,6 @@ video {
     font-weight: 900;
   }
 
-  .lg\:hover\:font-thin:hover {
-    font-weight: 100;
-  }
-
-  .lg\:hover\:font-extralight:hover {
-    font-weight: 200;
-  }
-
-  .lg\:hover\:font-light:hover {
-    font-weight: 300;
-  }
-
-  .lg\:hover\:font-normal:hover {
-    font-weight: 400;
-  }
-
-  .lg\:hover\:font-medium:hover {
-    font-weight: 500;
-  }
-
-  .lg\:hover\:font-semibold:hover {
-    font-weight: 600;
-  }
-
-  .lg\:hover\:font-bold:hover {
-    font-weight: 700;
-  }
-
-  .lg\:hover\:font-extrabold:hover {
-    font-weight: 800;
-  }
-
-  .lg\:hover\:font-black:hover {
-    font-weight: 900;
-  }
-
-  .lg\:focus\:font-thin:focus {
-    font-weight: 100;
-  }
-
-  .lg\:focus\:font-extralight:focus {
-    font-weight: 200;
-  }
-
-  .lg\:focus\:font-light:focus {
-    font-weight: 300;
-  }
-
-  .lg\:focus\:font-normal:focus {
-    font-weight: 400;
-  }
-
-  .lg\:focus\:font-medium:focus {
-    font-weight: 500;
-  }
-
-  .lg\:focus\:font-semibold:focus {
-    font-weight: 600;
-  }
-
-  .lg\:focus\:font-bold:focus {
-    font-weight: 700;
-  }
-
-  .lg\:focus\:font-extrabold:focus {
-    font-weight: 800;
-  }
-
-  .lg\:focus\:font-black:focus {
-    font-weight: 900;
-  }
-
   .lg\:h-0 {
     height: 0;
   }
@@ -95946,6 +96003,21 @@ video {
   }
 
   .lg\:outline-black {
+    outline: 2px dotted black;
+    outline-offset: 2px;
+  }
+
+  .lg\:focus-within\:outline-none:focus-within {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  .lg\:focus-within\:outline-white:focus-within {
+    outline: 2px dotted white;
+    outline-offset: 2px;
+  }
+
+  .lg\:focus-within\:outline-black:focus-within {
     outline: 2px dotted black;
     outline-offset: 2px;
   }
@@ -100911,6 +100983,46 @@ video {
     box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
   }
 
+  .group:hover .lg\:group-hover\:shadow-sm {
+    --box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .lg\:group-hover\:shadow {
+    --box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .lg\:group-hover\:shadow-md {
+    --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .lg\:group-hover\:shadow-lg {
+    --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .lg\:group-hover\:shadow-xl {
+    --box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .lg\:group-hover\:shadow-2xl {
+    --box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .lg\:group-hover\:shadow-inner {
+    --box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .lg\:group-hover\:shadow-none {
+    --box-shadow: 0 0 #0000;
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
   .lg\:focus-within\:shadow-sm:focus-within {
     --box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
@@ -101062,6 +101174,42 @@ video {
   }
 
   .lg\:ring {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .lg\:focus-within\:ring-0:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .lg\:focus-within\:ring-1:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .lg\:focus-within\:ring-2:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .lg\:focus-within\:ring-4:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .lg\:focus-within\:ring-8:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .lg\:focus-within\:ring:focus-within {
     --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
     --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
@@ -104419,6 +104567,30 @@ video {
   }
 
   .lg\:no-underline {
+    text-decoration: none;
+  }
+
+  .group:hover .lg\:group-hover\:underline {
+    text-decoration: underline;
+  }
+
+  .group:hover .lg\:group-hover\:line-through {
+    text-decoration: line-through;
+  }
+
+  .group:hover .lg\:group-hover\:no-underline {
+    text-decoration: none;
+  }
+
+  .lg\:focus-within\:underline:focus-within {
+    text-decoration: underline;
+  }
+
+  .lg\:focus-within\:line-through:focus-within {
+    text-decoration: line-through;
+  }
+
+  .lg\:focus-within\:no-underline:focus-within {
     text-decoration: none;
   }
 
@@ -119881,78 +120053,6 @@ video {
     font-weight: 900;
   }
 
-  .xl\:hover\:font-thin:hover {
-    font-weight: 100;
-  }
-
-  .xl\:hover\:font-extralight:hover {
-    font-weight: 200;
-  }
-
-  .xl\:hover\:font-light:hover {
-    font-weight: 300;
-  }
-
-  .xl\:hover\:font-normal:hover {
-    font-weight: 400;
-  }
-
-  .xl\:hover\:font-medium:hover {
-    font-weight: 500;
-  }
-
-  .xl\:hover\:font-semibold:hover {
-    font-weight: 600;
-  }
-
-  .xl\:hover\:font-bold:hover {
-    font-weight: 700;
-  }
-
-  .xl\:hover\:font-extrabold:hover {
-    font-weight: 800;
-  }
-
-  .xl\:hover\:font-black:hover {
-    font-weight: 900;
-  }
-
-  .xl\:focus\:font-thin:focus {
-    font-weight: 100;
-  }
-
-  .xl\:focus\:font-extralight:focus {
-    font-weight: 200;
-  }
-
-  .xl\:focus\:font-light:focus {
-    font-weight: 300;
-  }
-
-  .xl\:focus\:font-normal:focus {
-    font-weight: 400;
-  }
-
-  .xl\:focus\:font-medium:focus {
-    font-weight: 500;
-  }
-
-  .xl\:focus\:font-semibold:focus {
-    font-weight: 600;
-  }
-
-  .xl\:focus\:font-bold:focus {
-    font-weight: 700;
-  }
-
-  .xl\:focus\:font-extrabold:focus {
-    font-weight: 800;
-  }
-
-  .xl\:focus\:font-black:focus {
-    font-weight: 900;
-  }
-
   .xl\:h-0 {
     height: 0;
   }
@@ -123037,6 +123137,21 @@ video {
   }
 
   .xl\:outline-black {
+    outline: 2px dotted black;
+    outline-offset: 2px;
+  }
+
+  .xl\:focus-within\:outline-none:focus-within {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  .xl\:focus-within\:outline-white:focus-within {
+    outline: 2px dotted white;
+    outline-offset: 2px;
+  }
+
+  .xl\:focus-within\:outline-black:focus-within {
     outline: 2px dotted black;
     outline-offset: 2px;
   }
@@ -128002,6 +128117,46 @@ video {
     box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
   }
 
+  .group:hover .xl\:group-hover\:shadow-sm {
+    --box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .xl\:group-hover\:shadow {
+    --box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .xl\:group-hover\:shadow-md {
+    --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .xl\:group-hover\:shadow-lg {
+    --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .xl\:group-hover\:shadow-xl {
+    --box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .xl\:group-hover\:shadow-2xl {
+    --box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .xl\:group-hover\:shadow-inner {
+    --box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .xl\:group-hover\:shadow-none {
+    --box-shadow: 0 0 #0000;
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
   .xl\:focus-within\:shadow-sm:focus-within {
     --box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
@@ -128153,6 +128308,42 @@ video {
   }
 
   .xl\:ring {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .xl\:focus-within\:ring-0:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .xl\:focus-within\:ring-1:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .xl\:focus-within\:ring-2:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .xl\:focus-within\:ring-4:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .xl\:focus-within\:ring-8:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .xl\:focus-within\:ring:focus-within {
     --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
     --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
@@ -131510,6 +131701,30 @@ video {
   }
 
   .xl\:no-underline {
+    text-decoration: none;
+  }
+
+  .group:hover .xl\:group-hover\:underline {
+    text-decoration: underline;
+  }
+
+  .group:hover .xl\:group-hover\:line-through {
+    text-decoration: line-through;
+  }
+
+  .group:hover .xl\:group-hover\:no-underline {
+    text-decoration: none;
+  }
+
+  .xl\:focus-within\:underline:focus-within {
+    text-decoration: underline;
+  }
+
+  .xl\:focus-within\:line-through:focus-within {
+    text-decoration: line-through;
+  }
+
+  .xl\:focus-within\:no-underline:focus-within {
     text-decoration: none;
   }
 
@@ -146972,78 +147187,6 @@ video {
     font-weight: 900;
   }
 
-  .\32xl\:hover\:font-thin:hover {
-    font-weight: 100;
-  }
-
-  .\32xl\:hover\:font-extralight:hover {
-    font-weight: 200;
-  }
-
-  .\32xl\:hover\:font-light:hover {
-    font-weight: 300;
-  }
-
-  .\32xl\:hover\:font-normal:hover {
-    font-weight: 400;
-  }
-
-  .\32xl\:hover\:font-medium:hover {
-    font-weight: 500;
-  }
-
-  .\32xl\:hover\:font-semibold:hover {
-    font-weight: 600;
-  }
-
-  .\32xl\:hover\:font-bold:hover {
-    font-weight: 700;
-  }
-
-  .\32xl\:hover\:font-extrabold:hover {
-    font-weight: 800;
-  }
-
-  .\32xl\:hover\:font-black:hover {
-    font-weight: 900;
-  }
-
-  .\32xl\:focus\:font-thin:focus {
-    font-weight: 100;
-  }
-
-  .\32xl\:focus\:font-extralight:focus {
-    font-weight: 200;
-  }
-
-  .\32xl\:focus\:font-light:focus {
-    font-weight: 300;
-  }
-
-  .\32xl\:focus\:font-normal:focus {
-    font-weight: 400;
-  }
-
-  .\32xl\:focus\:font-medium:focus {
-    font-weight: 500;
-  }
-
-  .\32xl\:focus\:font-semibold:focus {
-    font-weight: 600;
-  }
-
-  .\32xl\:focus\:font-bold:focus {
-    font-weight: 700;
-  }
-
-  .\32xl\:focus\:font-extrabold:focus {
-    font-weight: 800;
-  }
-
-  .\32xl\:focus\:font-black:focus {
-    font-weight: 900;
-  }
-
   .\32xl\:h-0 {
     height: 0;
   }
@@ -150128,6 +150271,21 @@ video {
   }
 
   .\32xl\:outline-black {
+    outline: 2px dotted black;
+    outline-offset: 2px;
+  }
+
+  .\32xl\:focus-within\:outline-none:focus-within {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  .\32xl\:focus-within\:outline-white:focus-within {
+    outline: 2px dotted white;
+    outline-offset: 2px;
+  }
+
+  .\32xl\:focus-within\:outline-black:focus-within {
     outline: 2px dotted black;
     outline-offset: 2px;
   }
@@ -155093,6 +155251,46 @@ video {
     box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
   }
 
+  .group:hover .\32xl\:group-hover\:shadow-sm {
+    --box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .\32xl\:group-hover\:shadow {
+    --box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .\32xl\:group-hover\:shadow-md {
+    --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .\32xl\:group-hover\:shadow-lg {
+    --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .\32xl\:group-hover\:shadow-xl {
+    --box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .\32xl\:group-hover\:shadow-2xl {
+    --box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .\32xl\:group-hover\:shadow-inner {
+    --box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
+  .group:hover .\32xl\:group-hover\:shadow-none {
+    --box-shadow: 0 0 #0000;
+    box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
+  }
+
   .\32xl\:focus-within\:shadow-sm:focus-within {
     --box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     box-shadow: var(--ring-offset-shadow, 0 0 #0000), var(--ring-shadow, 0 0 #0000), var(--box-shadow);
@@ -155244,6 +155442,42 @@ video {
   }
 
   .\32xl\:ring {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .\32xl\:focus-within\:ring-0:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .\32xl\:focus-within\:ring-1:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .\32xl\:focus-within\:ring-2:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .\32xl\:focus-within\:ring-4:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .\32xl\:focus-within\:ring-8:focus-within {
+    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
+    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
+    box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
+  }
+
+  .\32xl\:focus-within\:ring:focus-within {
     --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff);
     --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5));
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000);
@@ -158601,6 +158835,30 @@ video {
   }
 
   .\32xl\:no-underline {
+    text-decoration: none;
+  }
+
+  .group:hover .\32xl\:group-hover\:underline {
+    text-decoration: underline;
+  }
+
+  .group:hover .\32xl\:group-hover\:line-through {
+    text-decoration: line-through;
+  }
+
+  .group:hover .\32xl\:group-hover\:no-underline {
+    text-decoration: none;
+  }
+
+  .\32xl\:focus-within\:underline:focus-within {
+    text-decoration: underline;
+  }
+
+  .\32xl\:focus-within\:line-through:focus-within {
+    text-decoration: line-through;
+  }
+
+  .\32xl\:focus-within\:no-underline:focus-within {
     text-decoration: none;
   }
 
