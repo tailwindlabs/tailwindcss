@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [2.0.0-alpha.14] - 2020-11-11
+
 ### Added
 
 - Enable `focus-within` for `outline` utilities by default ([f6923b1](https://github.com/tailwindlabs/tailwindcss/commit/f6923b1))
@@ -1156,7 +1160,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.13...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.14...HEAD
+[2.0.0-alpha.14]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.13...v2.0.0-alpha.14
 [2.0.0-alpha.13]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.12...v2.0.0-alpha.13
 [2.0.0-alpha.12]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.11...v2.0.0-alpha.12
 [2.0.0-alpha.11]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.10...v2.0.0-alpha.11
