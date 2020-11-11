@@ -30,10 +30,10 @@ function TableOfContents({ tableOfContents, currentSection }) {
 
   return (
     <>
-      <h5 className="text-gray-500 uppercase tracking-wide font-bold text-sm lg:text-xs">
+      <h5 className="text-gray-900 uppercase tracking-wide font-semibold mb-3 text-sm lg:text-xs">
         On this page
       </h5>
-      <ul className="mt-4 overflow-x-hidden">
+      <ul className="overflow-x-hidden text-gray-500 font-medium">
         {tableOfContents.map((section) => {
           let sectionIsActive =
             currentSection === section.slug ||
@@ -41,15 +41,14 @@ function TableOfContents({ tableOfContents, currentSection }) {
 
           return (
             <Fragment key={section.slug}>
-              <li className={clsx({ 'mb-4 lg:mb-2': isMainNav, 'mb-2': !isMainNav })}>
+              <li>
                 <a
                   href={`#${section.slug}`}
                   onClick={closeNav}
                   className={clsx(
-                    'block transition-fast hover:translate-r-2px hover:text-gray-900 font-medium',
+                    'block transform transition duration-200 py-2 hover:translate-x-0.5 hover:text-gray-900',
                     {
-                      'translate-r-2px text-gray-900': sectionIsActive,
-                      'text-gray-600': !sectionIsActive,
+                      'translate-x-0.5 text-gray-900': sectionIsActive,
                     }
                   )}
                 >
@@ -62,8 +61,8 @@ function TableOfContents({ tableOfContents, currentSection }) {
                 return (
                   <li
                     className={clsx({
-                      'mb-4 ml-4 lg:mb-2 lg:ml-2': isMainNav,
-                      'mb-2 ml-2': !isMainNav,
+                      'ml-4': isMainNav,
+                      'ml-2': !isMainNav,
                     })}
                     key={subsection.slug}
                   >
@@ -71,7 +70,7 @@ function TableOfContents({ tableOfContents, currentSection }) {
                       href={`#${subsection.slug}`}
                       onClick={closeNav}
                       className={clsx(
-                        'block transition-fast hover:translate-r-2px hover:text-gray-900 font-medium',
+                        'block py-2 transition-fast hover:translate-r-2px hover:text-gray-900 font-medium',
                         {
                           'translate-r-2px text-gray-900': subsectionIsActive,
                           'text-gray-600': !subsectionIsActive,
@@ -179,19 +178,19 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
         'pt-24 lg:pt-28': !isHome,
       })}
     >
-      <PageHeader
-        title={meta.title}
-        description={meta.description}
-        badge={{ key: 'Tailwind CSS version', value: meta.featureVersion }}
-        border={!classes && meta.headerSeparator !== false}
-      />
       <div className="flex">
-        <div className="markdown px-6 xl:px-12 w-full max-w-3xl mx-auto lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4">
+        <div className="flex-auto px-6 xl:px-8">
+          <PageHeader
+            title={meta.title}
+            description={meta.description}
+            badge={{ key: 'Tailwind CSS version', value: meta.featureVersion }}
+            border={!classes && meta.headerSeparator !== false}
+          />
           <ContentsContext.Provider value={{ registerHeading, unregisterHeading }}>
             {classes && (
               <ClassTable {...(isValidElement(classes) ? { custom: classes } : classes)} />
             )}
-            {children}
+            <div className="prose">{children}</div>
           </ContentsContext.Provider>
           {(prev || next) && (
             <>
@@ -215,7 +214,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
             </>
           )}
         </div>
-        <div className="hidden xl:text-sm xl:block xl:w-1/4 xl:px-6">
+        <div className="hidden xl:text-sm xl:block flex-none w-64 pl-8 pr-12">
           <div
             className={clsx(
               'flex flex-col justify-between overflow-y-auto sticky max-h-(screen-16) pt-12 pb-4 -mt-12',

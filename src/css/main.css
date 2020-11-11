@@ -8,6 +8,7 @@
 @import 'markdown.css';
 /*! purgecss end ignore */
 
+@import 'tailwindcss/components';
 @import 'utilities.css';
 
 .mono > div:not(.not-mono) > span {

@@ -1667,6 +1667,11 @@
     "@svgr/plugin-svgo" "^5.4.0"
     loader-utils "^2.0.0"
 
+"@tailwindcss/typography@^0.0.0-caa70b6":
+  version "0.0.0-caa70b6"
+  resolved "https://registry.yarnpkg.com/@tailwindcss/typography/-/typography-0.0.0-caa70b6.tgz#43397634883223a6c006b11c02153ac7fd003204"
+  integrity sha512-BQAxkZGfpiRql5XMYh0Cyvu0/8K/o1l89vwAQ+N2dluwB7vUgVp2YBedbHPtEXeggSN+KxaFNHFFsDn+J6FHWw==
+
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz"

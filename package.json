@@ -19,6 +19,7 @@
     "@reach/rect": "^0.10.5",
     "@sindresorhus/slugify": "^1.1.0",
     "@svgr/webpack": "^5.4.0",
+    "@tailwindcss/typography": "^0.0.0-caa70b6",
     "autoprefixer": "^10.0.1",
     "babel-plugin-preval": "^5.0.0",
     "brotli-size": "^4.0.0",

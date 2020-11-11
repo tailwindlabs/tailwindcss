@@ -47,6 +47,40 @@ module.exports = {
       },
     },
     extend: {
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            maxWidth: 'none',
+            a: {
+              color: theme('colors.cyan.700'),
+              fontWeight: theme('fontWeight.medium'),
+              textDecoration: 'none',
+              boxShadow: 'inset 0 -0.125em 0 0 #fff, inset 0 -0.375em 0 0 rgba(165, 243, 252, 0.4)',
+            },
+            'a code': {
+              color: 'inherit',
+              fontWeight: 'inherit',
+            },
+            strong: {
+              fontWeight: theme('fontWeight.medium'),
+            },
+            code: {
+              fontWeight: 'inherit',
+              color: theme('colors.violet.600'),
+            },
+            'code::before': {
+              content: 'none',
+            },
+            'code::after': {
+              content: 'none',
+            },
+            pre: {
+              backgroundColor: theme('colors.gray.800'),
+              borderRadius: theme('borderRadius.xl'),
+            },
+          },
+        },
+      }),
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
         source: ['Source Sans Pro', ...defaultTheme.fontFamily.sans],
@@ -64,6 +98,7 @@ module.exports = {
       },
       maxWidth: {
         '4.5xl': '60rem',
+        '8xl': '90rem',
       },
       boxShadow: {
         px: '0 0 0 1px rgba(0, 0, 0, 0.5)',
@@ -102,4 +137,5 @@ module.exports = {
       textColor: ['group-focus'],
     },
   },
+  plugins: [require('@tailwindcss/typography')],
 }
