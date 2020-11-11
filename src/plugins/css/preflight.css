@@ -1,5 +1,6 @@
 /**
  * Manually forked from SUIT CSS Base: https://github.com/suitcss/base
+ * Modern reset styles inspired by: https://github.com/kripod/css-homogenizer
  * A thin layer on top of normalize.css that provides a starting point more
  * suitable for web applications.
  */
@@ -27,10 +28,18 @@ ul {
   margin: 0;
 }
 
+th,
+td,
+legend,
 fieldset,
 ol,
 ul {
   padding: 0;
+}
+
+fieldset,
+iframe {
+  border: 0;
 }
 
 button {
@@ -152,7 +161,12 @@ button,
 }
 
 table {
+  border-spacing: 0;
   border-collapse: collapse;
+}
+
+th {
+  text-align: inherit;
 }
 
 h1,
@@ -160,9 +174,10 @@ h2,
 h3,
 h4,
 h5,
-h6 {
-  font-size: inherit;
-  font-weight: inherit;
+h6,
+th,
+address {
+  font: inherit; /* Sets `font-size`, `font-weight` and `font-style` */
 }
 
 /**
