@@ -12,7 +12,6 @@ import { useIsHome } from '@/hooks/useIsHome'
 import { usePrevNext } from '@/hooks/usePrevNext'
 import Link from 'next/link'
 import { SidebarLayout, SidebarContext } from '@/layouts/SidebarLayout'
-import { Ad } from '@/components/Ad'
 import { PageHeader } from '@/components/PageHeader'
 import clsx from 'clsx'
 
@@ -46,9 +45,9 @@ function TableOfContents({ tableOfContents, currentSection }) {
                   href={`#${section.slug}`}
                   onClick={closeNav}
                   className={clsx(
-                    'block transform transition duration-200 py-2 hover:translate-x-0.5 hover:text-gray-900',
+                    'block transform transition-colors duration-200 py-2 hover:text-gray-900',
                     {
-                      'translate-x-0.5 text-gray-900': sectionIsActive,
+                      'text-gray-900': sectionIsActive,
                     }
                   )}
                 >
@@ -70,10 +69,9 @@ function TableOfContents({ tableOfContents, currentSection }) {
                       href={`#${subsection.slug}`}
                       onClick={closeNav}
                       className={clsx(
-                        'block py-2 transition-fast hover:translate-r-2px hover:text-gray-900 font-medium',
+                        'block py-2 transition-colors duration-200 hover:text-gray-900 font-medium',
                         {
-                          'translate-r-2px text-gray-900': subsectionIsActive,
-                          'text-gray-600': !subsectionIsActive,
+                          'text-gray-900': subsectionIsActive,
                         }
                       )}
                     >
@@ -171,13 +169,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
   let { prev, next } = usePrevNext()
 
   return (
-    <div
-      id={meta.containerId}
-      className={clsx('pb-16 w-full', {
-        'pt-12': isHome,
-        'pt-24 lg:pt-28': !isHome,
-      })}
-    >
+    <div id={meta.containerId} className="pt-10 pb-16 w-full">
       <div className="flex">
         <div className="flex-auto px-6 xl:px-8">
           <PageHeader
@@ -190,7 +182,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
             {classes && (
               <ClassTable {...(isValidElement(classes) ? { custom: classes } : classes)} />
             )}
-            <div className="prose">{children}</div>
+            {children}
           </ContentsContext.Provider>
           {(prev || next) && (
             <>
@@ -215,21 +207,12 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
           )}
         </div>
         <div className="hidden xl:text-sm xl:block flex-none w-64 pl-8 pr-12">
-          <div
-            className={clsx(
-              'flex flex-col justify-between overflow-y-auto sticky max-h-(screen-16) pt-12 pb-4 -mt-12',
-              {
-                'top-0': isHome,
-                'top-16': !isHome,
-              }
-            )}
-          >
+          <div className="flex flex-col justify-between overflow-y-auto sticky max-h-(screen-18) -mt-10 pt-10 pb-4 top-18">
             {toc.length > 0 && (
               <div className="mb-8">
                 <TableOfContents tableOfContents={toc} currentSection={currentSection} />
               </div>
             )}
-            <Ad />
           </div>
         </div>
       </div>

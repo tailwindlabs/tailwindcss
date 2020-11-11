@@ -51,6 +51,22 @@ module.exports = {
         DEFAULT: {
           css: {
             maxWidth: 'none',
+            '> :first-child': { marginTop: '-' },
+            '> :last-child': { marginBottom: '-' },
+            'h2, h3': {
+              'scroll-margin-block': `${(70 + 40) / 16}rem`,
+            },
+            'ul > li': {
+              paddingLeft: '1.5em',
+            },
+            'ul > li::before': {
+              width: '0.75em',
+              height: '0.125em',
+              top: 'calc(0.875em - 0.0625em)',
+              left: 0,
+              borderRadius: 0,
+              backgroundColor: theme('colors.gray.300'),
+            },
             a: {
               color: theme('colors.cyan.700'),
               fontWeight: theme('fontWeight.medium'),
@@ -100,6 +116,10 @@ module.exports = {
         '4.5xl': '60rem',
         '8xl': '90rem',
       },
+      maxHeight: (theme) => ({
+        sm: '30rem',
+        '(screen-18)': `calc(100vh - ${theme('spacing.18')})`,
+      }),
       boxShadow: {
         px: '0 0 0 1px rgba(0, 0, 0, 0.5)',
       },

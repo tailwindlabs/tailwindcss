@@ -68,7 +68,8 @@ module.exports = withBundleAnalyzer({
           options: {
             remarkPlugins: [
               withCodeSamples,
-              /*withProse,*/ withTableOfContents,
+              withProse,
+              withTableOfContents,
               withSyntaxHighlighting,
               withNextLinks,
             ],

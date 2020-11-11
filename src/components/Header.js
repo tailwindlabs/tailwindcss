@@ -1,102 +1,47 @@
-import { useIsHome } from '@/hooks/useIsHome'
 import Link from 'next/link'
 import { VersionSwitcher } from '@/components/VersionSwitcher'
 import { Search } from '@/components/Search'
-import dynamic from 'next/dynamic'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
-
-const WorkflowAnimation = dynamic(() =>
-  import('@/components/WorkflowAnimation').then((mod) => mod.WorkflowAnimation)
-)
+import { Logo } from '@/components/Logo'
 
 export function Header({ navIsOpen, onNavToggle }) {
-  let isHome = useIsHome()
-
-  if (isHome) {
-    return (
-      <div id="header">
-        <div className="bg-gray-100 pt-24 lg:pt-0">
-          <div className="fixed z-100 bg-gray-100 inset-x-0 top-0 border-b-2 border-gray-200 lg:border-b-0 lg:static flex items-center">
-            <div className="w-full max-w-screen-xl relative mx-auto px-6">
-              <div className="lg:border-b-2 lg:border-gray-200 h-24 flex flex-col justify-center">
-                <HeaderInner navIsOpen={navIsOpen} onNavToggle={onNavToggle} />
-              </div>
-            </div>
-          </div>
-          <div className="w-full max-w-screen-xl relative mx-auto px-6 pt-16 pb-40 md:pb-24">
-            <div className="xl:flex -mx-6">
-              <div className="px-6 text-left md:text-center xl:text-left max-w-2xl md:max-w-3xl mx-auto">
-                <h1 className="text-3xl tracking-tight sm:text-4xl md:text-5xl xl:text-4xl font-medium leading-tight">
-                  A utility-first CSS framework for{' '}
-                  <span className="sm:block text-teal-500 font-medium">
-                    rapidly building custom designs.
-                  </span>
-                </h1>
-                <p className="mt-6 leading-relaxed sm:text-lg md:text-xl xl:text-lg text-gray-600">
-                  Tailwind CSS is a highly customizable, low-level CSS framework that gives you all
-                  of the building blocks you need to build bespoke designs without any annoying
-                  opinionated styles you have to fight to override.
-                </p>
-                <div className="flex mt-6 justify-start md:justify-center xl:justify-start">
-                  <Link href="/docs/installation">
-                    <a className="rounded-lg px-4 md:px-5 xl:px-4 py-3 md:py-4 xl:py-3 bg-teal-500 hover:bg-teal-600 md:text-lg xl:text-base text-white font-semibold leading-tight shadow-md">
-                      Get Started
-                    </a>
-                  </Link>
-                  <a
-                    href="#what-is-tailwind"
-                    className="ml-4 rounded-lg px-4 md:px-5 xl:px-4 py-3 md:py-4 xl:py-3 bg-white hover:bg-gray-200 md:text-lg xl:text-base text-gray-800 font-semibold leading-tight shadow-md"
-                  >
-                    Why Tailwind?
-                  </a>
-                </div>
-              </div>
-              <div className="mt-12 xl:mt-0 px-6 flex-shrink-0 hidden md:block">
-                <div className="mx-auto" style={{ width: '40rem', height: '30rem' }}>
-                  <div className="flex flex-col p-2">
-                    <WorkflowAnimation />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="bg-wave bg-center bg-repeat-x -mb-8 md:hidden"
-          style={{
-            height: `${190 * 0.75}px`,
-            marginTop: `-${190 * 0.75}px`,
-            backgroundSize: `${1440 * 0.75}px ${190 * 0.75}px`,
-          }}
-        />
-        <div
-          className="bg-wave bg-center bg-repeat-x -mb-8 hidden md:block"
-          style={{
-            height: '190px',
-            marginTop: '-190px',
-            backgroundSize: '1440px 190px',
-          }}
-        />
-      </div>
-    )
-  }
-
   return (
-    <div>
-      <div id="header">
-        <div className="flex bg-white border-b border-gray-200 fixed top-0 inset-x-0 z-100 h-16 items-center">
-          <div className="w-full max-w-screen-xl relative mx-auto px-6">
-            <HeaderInner navIsOpen={navIsOpen} onNavToggle={onNavToggle} />
-          </div>
+    <div className="sticky top-0 z-50 w-full max-w-8xl mx-auto bg-white flex-none flex items-center">
+      <div className="flex-none w-72 pl-8">
+        <Logo className="w-auto h-6" />
+      </div>
+      <div className="flex-auto ml-8 border-b border-gray-200 h-18 flex items-center justify-between">
+        <Search />
+        <div className="flex items-center space-x-6">
+          <VersionSwitcher />
+          <a href="https://github.com/tailwindlabs/tailwindcss" className="text-gray-400">
+            <span className="sr-only">Tailwind CSS on GitHub</span>
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+              <path
+                fillRule="evenodd"
+                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
+              />
+            </svg>
+          </a>
         </div>
       </div>
     </div>
   )
+  // return (
+  //   <div>
+  //     <div id="header">
+  //       <div className="flex bg-white border-b border-gray-200 fixed top-0 inset-x-0 z-100 h-16 items-center">
+  //         <div className="w-full max-w-screen-xl relative mx-auto px-6">
+  //           <HeaderInner navIsOpen={navIsOpen} onNavToggle={onNavToggle} />
+  //         </div>
+  //       </div>
+  //     </div>
+  //   </div>
+  // )
 }
 
 function HeaderInner({ navIsOpen, onNavToggle }) {
-  let isHome = useIsHome()
   let router = useRouter()
 
   return (
@@ -112,10 +57,7 @@ function HeaderInner({ navIsOpen, onNavToggle }) {
               }}
             >
               <svg
-                className={clsx('w-auto hidden md:block', {
-                  'h-12': isHome,
-                  'h-10': !isHome,
-                })}
+                className="w-auto hidden md:block h-10"
                 viewBox="0 0 273 64"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"

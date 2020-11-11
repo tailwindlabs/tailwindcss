@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { usePrevNext } from '@/hooks/usePrevNext'
-import { Ad } from '@/components/Ad'
 import { PageHeader } from '@/components/PageHeader'
 
 export function VideoLayout({ children, meta }) {
@@ -72,11 +71,6 @@ export function VideoLayout({ children, meta }) {
               for intelligent auto-completion in VS Code
             </li>
           </ul>
-        </div>
-        <div className="hidden xl:text-sm xl:block xl:w-1/4 xl:px-6">
-          <div className="flex flex-col justify-between overflow-y-auto sticky top-16 max-h-(screen-16) pt-12 pb-4">
-            <Ad />
-          </div>
         </div>
       </div>
     </div>

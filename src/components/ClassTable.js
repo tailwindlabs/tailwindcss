@@ -35,7 +35,6 @@ function getUtilities(plugin) {
     theme: (path, defaultValue) => dlv(defaultConfig.theme, path, defaultValue),
     variants: () => [],
     e: (x) => x.replace(/([:.])/g, '\\$1'),
-    target: () => 'modern',
     corePlugins: () => true,
   })
   return utilities
@@ -79,7 +78,7 @@ export const ClassTable = memo(
     })
 
     return (
-      <div className="mt-0 border-t border-b border-gray-300 overflow-hidden relative">
+      <div className="mt-3 border-b border-gray-200 overflow-hidden relative">
         <Heading
           level={2}
           id="class-reference"
@@ -99,20 +98,22 @@ export const ClassTable = memo(
             <table className="w-full text-left table-collapse">
               <thead>
                 <tr>
-                  <th className="z-20 sticky top-0 text-sm font-semibold text-gray-700 bg-gray-100 p-0">
-                    <div className="p-2 border-b border-gray-300">Class</div>
+                  <th className="z-20 sticky top-0 text-sm font-semibold text-gray-600 bg-white p-0">
+                    <div className="pb-2 border-b border-gray-200">Class</div>
                   </th>
                   <th
                     className={clsx(
-                      'z-20 sticky top-0 text-sm font-semibold text-gray-700 bg-gray-100 p-0',
-                      { 'hidden sm:table-cell': preview }
+                      'z-20 sticky top-0 text-sm font-semibold text-gray-600 bg-white p-0',
+                      {
+                        'hidden sm:table-cell': preview,
+                      }
                     )}
                   >
-                    <div className="p-2 border-b border-gray-300">Properties</div>
+                    <div className="pb-2 border-b border-gray-200">Properties</div>
                   </th>
                   {preview && (
-                    <th className="z-20 sticky top-0 text-sm font-semibold text-gray-700 bg-gray-100 p-0">
-                      <div className="p-2 border-b border-gray-300">
+                    <th className="z-20 sticky top-0 text-sm font-semibold text-gray-600 bg-white p-0">
+                      <div className="pb-2 border-b border-gray-200">
                         <span className="sr-only">Preview</span>&nbsp;
                       </div>
                     </th>
@@ -128,7 +129,7 @@ export const ClassTable = memo(
                     <tr key={utility}>
                       <td
                         className={clsx(
-                          'p-2 font-mono text-xs text-purple-700 whitespace-no-wrap',
+                          'py-2 font-mono text-xs text-violet-600 whitespace-nowrap',
                           {
                             'border-t border-gray-200': i !== 0,
                           }
@@ -137,10 +138,13 @@ export const ClassTable = memo(
                         {transformSelector(selector)}
                       </td>
                       <td
-                        className={clsx('p-2 font-mono text-xs text-blue-700 whitespace-pre', {
-                          'border-t border-gray-200': i !== 0,
-                          'hidden sm:table-cell': preview,
-                        })}
+                        className={clsx(
+                          'py-2 font-mono text-xs text-light-blue-600 whitespace-pre',
+                          {
+                            'border-t border-gray-200': i !== 0,
+                            'hidden sm:table-cell': preview,
+                          }
+                        )}
                       >
                         {stringifyProperties(transformProperties({ selector, properties }), {
                           filter: filterProperties,

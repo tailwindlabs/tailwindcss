@@ -1,14 +1,5 @@
 @tailwind utilities;
 
-@variants responsive, hover {
-  .translate-r-2px {
-    transform: translateX(2px) !important;
-  }
-  .transition-fast {
-    transition: all 0.2s ease !important;
-  }
-}
-
 .scrollbar-none {
   scrollbar-width: none;
   &::-webkit-scrollbar {
@@ -37,8 +28,8 @@
     .sticky\?lg\:h-screen {
       height: 100vh !important;
     }
-    .sticky\?lg\:h-\(screen-16\) {
-      height: calc(100vh - 4rem) !important;
+    .sticky\?lg\:h-\(screen-18\) {
+      height: calc(100vh - theme('spacing.18'));
     }
   }
 }

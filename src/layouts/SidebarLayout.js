@@ -52,13 +52,7 @@ function Nav({ nav, children, fallbackHref }) {
     <nav
       id="nav"
       ref={scrollRef}
-      className={clsx(
-        'px-6 pt-6 overflow-y-auto font-medium text-base lg:text-sm lg:py-12 lg:pl-5 lg:pr-5',
-        {
-          'sticky?lg:h-screen': isHome,
-          'sticky?lg:h-(screen-16)': !isHome,
-        }
-      )}
+      className="px-6 pt-6 overflow-y-auto font-medium text-base lg:text-sm lg:py-10 lg:px-5 sticky?lg:h-(screen-18)"
     >
       <div className="relative -mx-2 w-24 mb-8 lg:hidden">
         <VersionSwitcher />
@@ -287,22 +281,9 @@ export function SidebarLayout({ children, navIsOpen, setNavIsOpen, nav, sidebar,
           >
             <div
               id="navWrapper"
-              className={clsx(
-                'h-full overflow-y-auto scrolling-touch lg:h-auto lg:block lg:relative lg:sticky lg:bg-transparent overflow-hidden',
-                {
-                  'lg:top-0 bg-gray-100': isHome,
-                  'lg:top-16 bg-white': !isHome,
-                }
-              )}
+              className="h-full overflow-y-auto scrolling-touch lg:h-auto lg:block lg:relative lg:sticky lg:bg-transparent overflow-hidden lg:top-18 bg-white"
             >
-              {isHome && (
-                <div
-                  className="hidden lg:block h-16 pointer-events-none absolute inset-x-0 z-10"
-                  style={{
-                    backgroundImage: 'linear-gradient(rgba(255,255,255,1), rgba(255,255,255,0))',
-                  }}
-                />
-              )}
+              <div className="hidden lg:block h-12 pointer-events-none absolute inset-x-0 z-10 bg-gradient-to-b from-white" />
               <Nav nav={nav} fallbackHref={fallbackHref}>
                 {sidebar}
               </Nav>
