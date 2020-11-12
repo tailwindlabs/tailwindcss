@@ -291,15 +291,14 @@ export function SidebarLayout({ children, navIsOpen, setNavIsOpen, nav, sidebar,
           </div>
           <div
             id="content-wrapper"
-            className={clsx('min-h-screen flex-auto lg:static lg:max-h-full lg:overflow-visible', {
-              'overflow-hidden max-h-screen fixed': navIsOpen,
-            })}
+            className={clsx(
+              'min-h-screen min-w-0 flex-auto lg:static lg:max-h-full lg:overflow-visible',
+              {
+                'overflow-hidden max-h-screen fixed': navIsOpen,
+              }
+            )}
           >
-            <div id="content">
-              <div id="app" className="flex">
-                {children}
-              </div>
-            </div>
+            {children}
           </div>
         </div>
       </div>

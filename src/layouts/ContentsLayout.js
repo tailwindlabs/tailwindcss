@@ -8,7 +8,6 @@ import {
   useContext,
 } from 'react'
 import { ClassTable } from '@/components/ClassTable'
-import { useIsHome } from '@/hooks/useIsHome'
 import { usePrevNext } from '@/hooks/usePrevNext'
 import Link from 'next/link'
 import { SidebarLayout, SidebarContext } from '@/layouts/SidebarLayout'
@@ -165,55 +164,50 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
   ]
 
   const { currentSection, registerHeading, unregisterHeading } = useTableOfContents(toc)
-  let isHome = useIsHome()
   let { prev, next } = usePrevNext()
 
   return (
-    <div id={meta.containerId} className="pt-10 pb-16 w-full">
-      <div className="flex">
-        <div className="flex-auto px-6 xl:px-8">
-          <PageHeader
-            title={meta.title}
-            description={meta.description}
-            badge={{ key: 'Tailwind CSS version', value: meta.featureVersion }}
-            border={!classes && meta.headerSeparator !== false}
-          />
-          <ContentsContext.Provider value={{ registerHeading, unregisterHeading }}>
-            {classes && (
-              <ClassTable {...(isValidElement(classes) ? { custom: classes } : classes)} />
-            )}
-            {children}
-          </ContentsContext.Provider>
-          {(prev || next) && (
-            <>
-              <hr />
-              <div className="-mt-6 flex justify-between">
-                {prev && (
-                  <Link href={prev.href}>
-                    <a className="font-medium text-blue-500 underline hover:text-blue-700">
-                      ← {prev.shortTitle || prev.title}
-                    </a>
-                  </Link>
-                )}
-                {next && (
-                  <Link href={next.href}>
-                    <a className="font-medium text-blue-500 underline hover:text-blue-700">
-                      {next.shortTitle || next.title} →
-                    </a>
-                  </Link>
-                )}
-              </div>
-            </>
+    <div id={meta.containerId} className="pt-10 pb-16 w-full flex">
+      <div className="min-w-0 flex-auto px-6 xl:px-8">
+        <PageHeader
+          title={meta.title}
+          description={meta.description}
+          badge={{ key: 'Tailwind CSS version', value: meta.featureVersion }}
+          border={!classes && meta.headerSeparator !== false}
+        />
+        <ContentsContext.Provider value={{ registerHeading, unregisterHeading }}>
+          {classes && <ClassTable {...(isValidElement(classes) ? { custom: classes } : classes)} />}
+          {children}
+        </ContentsContext.Provider>
+        {(prev || next) && (
+          <>
+            <hr />
+            <div className="-mt-6 flex justify-between">
+              {prev && (
+                <Link href={prev.href}>
+                  <a className="font-medium text-blue-500 underline hover:text-blue-700">
+                    ← {prev.shortTitle || prev.title}
+                  </a>
+                </Link>
+              )}
+              {next && (
+                <Link href={next.href}>
+                  <a className="font-medium text-blue-500 underline hover:text-blue-700">
+                    {next.shortTitle || next.title} →
+                  </a>
+                </Link>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+      <div className="hidden xl:text-sm xl:block flex-none w-64 pl-8 pr-12">
+        <div className="flex flex-col justify-between overflow-y-auto sticky max-h-(screen-18) -mt-10 pt-10 pb-4 top-18">
+          {toc.length > 0 && (
+            <div className="mb-8">
+              <TableOfContents tableOfContents={toc} currentSection={currentSection} />
+            </div>
           )}
-        </div>
-        <div className="hidden xl:text-sm xl:block flex-none w-64 pl-8 pr-12">
-          <div className="flex flex-col justify-between overflow-y-auto sticky max-h-(screen-18) -mt-10 pt-10 pb-4 top-18">
-            {toc.length > 0 && (
-              <div className="mb-8">
-                <TableOfContents tableOfContents={toc} currentSection={currentSection} />
-              </div>
-            )}
-          </div>
         </div>
       </div>
     </div>
