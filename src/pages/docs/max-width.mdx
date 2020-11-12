@@ -26,6 +26,24 @@ Set the maximum width of an element using the `max-w-{size}` utilities.
 </div>
 ```
 
+## Prose
+
+We added a new max-width by default called `max-w-prose`. If you are familiar with the [typography plugin](https://github.com/tailwindlabs/tailwindcss-typography) you might recognize this one. The idea behind this class is that it allows you to have an optimal reading width.
+
+```html
+<template preview>
+  <div class="max-w-prose text-sm p-6">
+    <p class="font-bold">Why do you never see elephants hiding in trees?</p>
+    <p>Because they're so good at it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.</p>
+  </div>
+</template>
+
+<div class="max-w-prose ...">
+  <p class="font-bold">Why do you never see elephants hiding in trees?</p>
+  <p>Because they're so good at it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.</p>
+</div>
+```
+
 ---
 
 ## Responsive

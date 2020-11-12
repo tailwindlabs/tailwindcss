@@ -140,21 +140,19 @@ module.exports = {
 }
 ```
 
-Note that the `mode` must be set to `layers` for this option to be respected.
-
 ### Removing all unused styles
 
 By default, Tailwind will only remove unused classes that it generates itself. It will _not_ remove unused styles from third-party CSS you pull in to your project, like a datepicker library you pull in for example.
 
 This is to avoid accidentally removing styles that you might need but are not directly referenced in your templates, like classes that are only referenced deep in your `node_modules` folder that are part of some other dependency.
 
-If you really want to remove _all_ unused styles, use the `mode: 'all'` option and **be very careful** to provide the paths to _all_ files that might reference any classes or HTML elements:
+If you really want to remove _all_ unused styles, use the `preserveHtmlElements: false` option and **be very careful** to provide the paths to _all_ files that might reference any classes or HTML elements:
 
 ```js
 // tailwind.config.js
 module.exports = {
   purge: {
-    mode: 'all',
+    preserveHtmlElements: false,
     content: [
       './src/**/*.js',
       './node_modules/pikaday/pikaday.js',

@@ -22,45 +22,47 @@ Control the font size of an element using the `.text-{size}` utilities.
 
 ```html
 <template preview>
-  <div class="mb-6">
-    <p class="text-sm text-gray-600">.text-xs</p>
-    <p class="text-xs truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div class="mb-6">
-    <p class="text-sm text-gray-600">.text-sm</p>
-    <p class="text-sm truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div class="mb-6">
-    <p class="text-sm text-gray-600">.text-base</p>
-    <p class="text-base truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div class="mb-6">
-    <p class="text-sm text-gray-600">.text-lg</p>
-    <p class="text-lg truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div class="mb-6">
-    <p class="text-sm text-gray-600">.text-xl</p>
-    <p class="text-xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div class="mb-6">
-    <p class="text-sm text-gray-600">.text-2xl</p>
-    <p class="text-2xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div class="mb-6">
-    <p class="text-sm text-gray-600">.text-3xl</p>
-    <p class="text-3xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div class="mb-6">
-    <p class="text-sm text-gray-600">.text-4xl</p>
-    <p class="text-4xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div>
-    <p class="text-sm text-gray-600">.text-5xl</p>
-    <p class="text-5xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div>
-    <p class="text-sm text-gray-600">.text-6xl</p>
-    <p class="text-6xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  <div class="space-y-6">
+    <div>
+      <p class="text-sm text-gray-600">.text-xs</p>
+      <p class="text-xs truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+    </div>
+    <div>
+      <p class="text-sm text-gray-600">.text-sm</p>
+      <p class="text-sm truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+    </div>
+    <div>
+      <p class="text-sm text-gray-600">.text-base</p>
+      <p class="text-base truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+    </div>
+    <div>
+      <p class="text-sm text-gray-600">.text-lg</p>
+      <p class="text-lg truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+    </div>
+    <div>
+      <p class="text-sm text-gray-600">.text-xl</p>
+      <p class="text-xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+    </div>
+    <div>
+      <p class="text-sm text-gray-600">.text-2xl</p>
+      <p class="text-2xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+    </div>
+    <div>
+      <p class="text-sm text-gray-600">.text-3xl</p>
+      <p class="text-3xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+    </div>
+    <div>
+      <p class="text-sm text-gray-600">.text-4xl</p>
+      <p class="text-4xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+    </div>
+    <div>
+      <p class="text-sm text-gray-600">.text-5xl</p>
+      <p class="text-5xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+    </div>
+    <div>
+      <p class="text-sm text-gray-600">.text-6xl</p>
+      <p class="text-6xl truncate text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+    </div>
   </div>
 </template>
 
@@ -138,7 +140,7 @@ module.exports = {
 }
 ```
 
-We don't do this out-of-the-box for backwards compatibility reasons, but it can be a very convenient customization to make in your own projects.
+We already provide default line heights for each `.text-{size}` class.
 
 ### <Heading badge="v1.7.0+">Providing a default letter-spacing</Heading>
 

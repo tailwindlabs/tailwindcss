@@ -17,11 +17,11 @@ export const classes = { plugin }
 
 ## Don't wrap
 
-Use `.flex-no-wrap` to prevent flex items from wrapping, causing inflexible items to overflow the container if necessary:
+Use `.flex-nowrap` to prevent flex items from wrapping, causing inflexible items to overflow the container if necessary:
 
 ```html
 <template preview>
-  <div class="flex flex-no-wrap bg-gray-200">
+  <div class="flex flex-nowrap bg-gray-200">
     <div class="w-2/5 flex-none p-2">
       <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
     </div>
@@ -82,7 +82,7 @@ To control how flex items wrap at a specific breakpoint, add a `{screen}:` prefi
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 <ResponsiveCodeSample
-  classNames={['flex-no-wrap', 'flex-wrap', 'flex-wrap-reverse', 'flex-no-wrap', 'flex-wrap']}
+  classNames={['flex-nowrap', 'flex-wrap', 'flex-wrap-reverse', 'flex-nowrap', 'flex-wrap']}
   snippet={(classNames) => `
     <div class="${classNames} ...">
       <!-- ... -->

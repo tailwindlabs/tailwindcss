@@ -14,6 +14,7 @@ By default, Tailwind will look for an optional `tailwind.config.js` file at the 
 
 module.exports = {
   important: true,
+  presets: [],
   theme: {
     fontFamily: {
       display: ['Gilroy', 'sans-serif'],
@@ -60,6 +61,23 @@ module.exports = {
 }
 ```
 
+Presets can also be defined as a function so that you can passthrough configuration if your preset requires that.
+
+```js
+module.exports = {
+  // ...
+  presets: [
+    // Require it with no options
+    require('@acmecorp/tailwind-base'),
+
+    // Invoke it and pass options to your own options API
+    require('@acmecorp/tailwind-base')({
+      colorPalette: 'legacy',
+    })
+  ]
+}
+```
+
 ### Using a different file name
 
 To use a name other than `tailwind.config.js`, pass it as an argument on the command-line:
@@ -91,6 +109,20 @@ npx tailwindcss init --full
 
 You'll get a file that matches the [default configuration file](https://github.com/tailwindlabs/tailwindcss/blob/v1/stubs/defaultConfig.stub.js) Tailwind uses internally.
 
+## Presets
+
+The `presets` section is where you can include other configurations, this is useful if you have some configuration abstracted for your company. We have a [YouTube video](https://www.youtube.com/watch?v=AaZhspn7-MM) on this very subject.
+
+The presets can be an array, if you don't have any presets defined, then you will inherit the default theme. If you have one or more presets defined then the default configuration will not be included. Each preset can also have its own presets.
+
+
+```js
+// tailwind.config.js
+module.exports = {
+  presets: []
+}
+```
+
 ## Theme
 
 The `theme` section is where you define your color palette, font stacks, type scale, border sizes, breakpoints — anything related to the visual design of your site.
@@ -104,13 +136,14 @@ module.exports = {
       md: '768px',
       lg: '1024px',
       xl: '1280px',
+      '2xl': '1536px',
     },
     fontFamily: {
       display: ['Gilroy', 'sans-serif'],
       body: ['Graphik', 'sans-serif'],
     },
     borderWidth: {
-      default: '1px',
+      DEFAULT: '1px',
       '0': '0',
       '2': '2px',
       '4': '4px',

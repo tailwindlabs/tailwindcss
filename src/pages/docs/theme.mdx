@@ -18,13 +18,14 @@ module.exports = {
       md: '768px',
       lg: '1024px',
       xl: '1280px',
+      '2xl': '1536px',
     },
     fontFamily: {
       display: ['Gilroy', 'sans-serif'],
       body: ['Graphik', 'sans-serif'],
     },
     borderWidth: {
-      default: '1px',
+      DEFAULT: '1px',
       '0': '0',
       '2': '2px',
       '4': '4px',
@@ -63,6 +64,7 @@ module.exports = {
       'md': '768px',
       'lg': '1024px',
       'xl': '1280px',
+      '2xl': '1536px',
     }
   }
 }
@@ -147,7 +149,7 @@ module.exports = {
     borderRadius: {
       'none': '0',
       'sm': '.125rem',
-      default: '.25rem',
+      DEFAULT: '.25rem',
       'lg': '.5rem',
       'full': '9999px',
     },
@@ -215,7 +217,7 @@ module.exports = {
     extend: {
       // Adds a new breakpoint in addition to the default breakpoints
       screens: {
-        '2xl': '1440px',
+        '3xl': '1600px',
       }
     }
   }
@@ -238,7 +240,7 @@ module.exports = {
     },
     extend: {
       screens: {
-        '2xl': '1440px',
+        '3xl': '1600px',
       }
     }
   }
@@ -289,6 +291,10 @@ module.exports = {
 }
 ```
 
+When you use the `extend` keyword then all the objects underneath will be deeply merged. Arrays are an exception to this rule. If you want to define a new font family with a set of fonts, you can safely use an array. If you do want to append to an existing font family, then you can spread the items from the default config.
+
+There is an exception to this. If your array has objects in it, then we will merge the arrays together. This is useful for plugin authors if they accept arrays of objects where the keys of each object could collide.
+
 ### Disabling an entire core plugin
 
 If you don't want to generate any classes for a certain core plugin, it's better to set that plugin to false in your `corePlugins` configuration than to provide an empty object for that key in your `theme` configuration.
@@ -316,6 +322,41 @@ module.exports = {
 ```
 
 The end result is the same, but since many core plugins expose no configuration they can only be disabled using `corePlugins` anyways, so it's better to be consistent.
+
+### Special theme values
+
+Sometimes values are implemented as arrays (for example in the case of `fontFamily`). Sometimes there are complex values like `fontSize` which looks like a tuple:
+
+```js
+// tailwind.config.js
+module.exports = {
+  fontSize: {
+    large: ['12rem', '24rem']
+  }
+}
+```
+
+In this case, when you use the `theme('fontSize.large')` function you will receive the first value (`12rem`) instead of the tuple. If you do want to get the original value, then you have to use the `config()` function instead.
+
+The following plugins will return the first value of the tuple, if the configuration value is defined as a tuple.
+
+- `fontSize`
+- `outline`
+
+The following plugins will return the value as a comma separated string, if it is defined as an array.
+
+- `fontFamily`
+- `boxShadow`
+- `transitionProperty`
+- `transitionDuration`
+- `transitionDelay`
+- `transitionTimingFunction`
+- `backgroundImage`
+- `backgroundSize`
+- `backgroundColor`
+- `cursor`
+- `animation`
+
 
 ### Adding your own keys
 

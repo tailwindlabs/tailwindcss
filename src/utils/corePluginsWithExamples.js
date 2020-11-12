@@ -29,7 +29,6 @@ module.exports.corePluginsWithExamples = plugins.map((plugin) => {
     theme: (path, defaultValue) => dlv(defaultConfig.theme, path, defaultValue),
     variants: () => [],
     e: (x) => x.replace(/([:.])/g, '\\$1'),
-    target: () => 'modern',
     corePlugins: () => true,
     prefix: (x) => x,
   })

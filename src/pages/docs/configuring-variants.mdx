@@ -29,6 +29,7 @@ module.exports = {
 
 Each property is a core plugin name pointing to an array of variants to generate for that plugin. The following variants are supported out of the box:
 - `'responsive'`
+- `'dark'`
 - `'group-hover'`
 - `'focus-within'`
 - `'first'`
@@ -61,126 +62,21 @@ When overriding the default variants, make sure you always specify _all_ the var
 
 ## Extending default variants
 
-If you'd like to enable extra variants for a plugin in addition to the defaults, you can configure your variants using a function instead of an array:
+If you'd like to enable extra variants for a plugin in addition to the defaults, you can configure your variants using the `extend` keyword, similar to how you can use extend inside of the `theme` section:
 
 ```js
 // tailwind.config.js
 module.exports = {
   variants: {
     // The 'active' variant will be generated in addition to the defaults
-    backgroundColor: ({ after }) => after(['active']),
+    extend: {
+      backgroundColor: ['active']
+    }
   },
 }
 ```
 
-Because [the order of variants is important](/docs/configuring-variants#ordering-variants), we provide a few helper functions as arguments that make it easy to add new variants in the right place.
-
-### before
-
-The `before` helper lets you add new variants to the beginning of a plugin's default variant list.
-
-```js
-// tailwind.config.js
-module.exports = {
-  variants: {
-    // Defaults are ['responsive', 'hover', 'focus']
-    backgroundColor: ({ before }) => before(['active']),
-    // Output: ['active', 'responsive', 'hover', 'focus']
-  },
-}
-```
-
-If you'd like to add new variants before a _specific_ variant in the list, pass that as the second argument:
-
-```js
-// tailwind.config.js
-module.exports = {
-  variants: {
-    // Defaults are ['responsive', 'hover', 'focus']
-    backgroundColor: ({ before }) => before(['active'], 'focus'),
-    // Output: ['responsive', 'hover', 'active', 'focus']
-  },
-}
-```
-
-### after
-
-The `after` helper lets you add new variants to the end of a plugin's default variant list.
-
-```js
-// tailwind.config.js
-module.exports = {
-  variants: {
-    // Defaults are ['responsive', 'hover', 'focus']
-    backgroundColor: ({ after }) => after(['active']),
-    // Output: ['responsive', 'hover', 'focus', 'active']
-  },
-}
-```
-
-If you'd like to add new variants after a _specific_ variant in the list, pass that as the second argument:
-
-```js
-// tailwind.config.js
-module.exports = {
-  variants: {
-    // Defaults are ['responsive', 'hover', 'focus']
-    backgroundColor: ({ after }) => after(['active'], 'hover'),
-    // Output: ['responsive', 'hover', 'active', 'focus']
-  },
-}
-```
-
-### without
-
-The `without` helper lets you disable a variant that is enabled by default.
-
-```js
-// tailwind.config.js
-module.exports = {
-  variants: {
-    // Defaults are ['responsive', 'hover', 'focus']
-    backgroundColor: ({ without }) => without(['focus']),
-    // Output: ['responsive', 'hover']
-  },
-}
-```
-
-### variants
-
-The `variants` helper lets you retrieve the variants for a specific plugin to read from directly.
-
-```js
-// tailwind.config.js
-module.exports = {
-  variants: {
-    // Defaults are ['responsive', 'hover', 'focus']
-    backgroundColor: ({ variants }) => [...variants('backgroundColor'), 'active'],
-    // Output: ['responsive', 'hover', 'focus', 'active']
-  },
-}
-```
-
-This is an escape hatch and you probably won't ever need it. Stick to `before`, `after`, and `without` — they will handle everything you actually need.
-
-### Composing multiple helpers
-
-Each helper can optionally take a list of variants as the final argument, and if provided, will apply against that list instead of the default variant list for the current plugin.
-
-This makes it possible to compose them together and add variants both before and after, or add a variant before another variant while removing another variant, etc.
-
-```js
-// tailwind.config.js
-module.exports = {
-  variants: {
-    // Defaults are ['responsive', 'hover', 'focus']
-    backgroundColor: ({ before, after, without }) => without(['focus'], before(['active'], 'hover', after(['focus-within'], 'responsive'))),
-    // Output: [responsive', 'focus-within', 'active', 'hover']
-  },
-}
-```
-
-This looks complex and you probably won't need to do this often, but the power is there if you need it.
+Because [the order of variants is important](/docs/configuring-variants#ordering-variants), we provided a `variantOrder` key in the config section that makes it easy to add new variants in the right place. You can also order them yourself inside the `variants` section directly.
 
 ---
 
@@ -240,6 +136,50 @@ Generally, we recommend the following order for the built-in variants, although 
 
 ```js
 ['responsive', 'group-hover', 'group-focus', 'focus-within', 'first', 'last', 'odd', 'even', 'hover', 'focus', 'active', 'visited', 'disabled']
+```
+
+It's also important to note that we have a default `variantOrder` config in case you are extending variants. If you want to change the order for your extended variants you have 2 options:
+
+The first option is to update the `variantOrder`.
+
+```diff
+// tailwind.config.js
+module.exports = {
+  variantOrder: [
+    'first',
+    'last',
+-   'odd',
+-   'even',
+    'visited',
+    'checked',
+    'group-hover',
+    'group-focus',
+    'focus-within',
+    'hover',
+    'focus',
+    'focus-visible',
+    'active',
++   'odd',
++   'even',
+    'disabled',
+  ],
+}
+```
+
+The second option is to change the order by explictly setting all the variants for a certain plugin, instead of extending the variants for that plugin.
+
+```diff
+// tailwind.config.js
+module.exports = {
+  variants: {
+    // ...
++   backgroundColor: ['responsive', 'active', 'group-hover', 'hover', 'focus'],
+    extend: {
+      // ...
+-     backgroundColor: ['active']
+    }
+  }
+}
 ```
 
 ### The responsive variant

@@ -38,7 +38,7 @@ module.exports = {
     colors: {
       indigo: {
         lighter: '#b3bcf5',
-        default: '#5c6ac4',
+        DEFAULT: '#5c6ac4',
         dark: '#202e78',
       }
     }
@@ -46,9 +46,28 @@ module.exports = {
 }
 ```
 
-Like many other places in Tailwind, the `default` key is special and means "no modifier", so this configuration would generate classes like `.text-indigo-lighter`, `.text-indigo`, and `.text-indigo-dark`.
+Since version v2.x you can also have a deeply nested object, the colors will be fattened.
 
-Note that you need to use dot notation to access nested colors when using the `theme()` function — the colors are only converted to dash-case for the actual CSS class names. The `default` key also needs to be specified when accessed via the `theme()` function: `theme('colors.indigo.default')`.
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    colors: {
+      primary: {
+        indigo: {
+          lighter: '#b3bcf5', // text-primary-indigo-lighter, ...
+          DEFAULT: '#5c6ac4', // text-primary-indigo, ...
+          dark: '#202e78',    // text-primary-indigo-dark, ...
+        }
+      }
+    }
+  }
+}
+```
+
+Like many other places in Tailwind, the `DEFAULT` key is special and means "no modifier", so this configuration would generate classes like `.text-indigo-lighter`, `.text-indigo`, and `.text-indigo-dark`.
+
+Note that you need to use dot notation to access nested colors when using the `theme()` function — the colors are only converted to dash-case for the actual CSS class names. The `DEFAULT` key also needs to be specified when accessed via the `theme()` function: `theme('colors.indigo.default')`.
 
 <TipBad>Don't use the dash syntax to access nested color values with theme()</TipBad>
 
@@ -290,10 +309,8 @@ Tailwind includes a generous palette of great-looking, well-balanced colors that
     ['Black & White', { Black: '#000000', White: '#FFFFFF' }],
     'gray',
     'red',
-    'orange',
     'yellow',
     'green',
-    'teal',
     'blue',
     'indigo',
     'purple',

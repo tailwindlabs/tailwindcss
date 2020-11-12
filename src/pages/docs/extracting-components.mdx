@@ -152,10 +152,7 @@ Here's what a `.btn-blue` class might look like using `@apply` to compose it fro
 
 <style>
 .btn-blue {
-  @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
-}
-.btn-blue:hover {
-  @apply bg-blue-700;
+  @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
 }
 </style>
 ```
@@ -171,10 +168,7 @@ To avoid unintended specificity issues, we recommend wrapping your custom compon
 
 @layer components {
   .btn-blue {
-    @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
-  }
-  .btn-blue:hover {
-    @apply bg-blue-700;
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
   }
 }
 ```
@@ -212,17 +206,11 @@ It might be tempting to implement component classes for these buttons like this:
 ```css
 @layer components {
   .btn-blue {
-    @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
-  }
-  .btn-blue:hover {
-    @apply bg-blue-700;
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
   }
 
   .btn-gray {
-    @apply bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded;
-  }
-  .btn-gray:hover {
-    @apply bg-gray-500;
+    @apply bg-gray-400 hover:bg-gray-500 text-gray-800 font-bold py-2 px-4 rounded;
   }
 }
 ```
@@ -240,17 +228,11 @@ A better approach is to extract the parts that are the same into a separate clas
   }
 
   .btn-blue {
-    @apply bg-blue-500 text-white;
-  }
-  .btn-blue:hover {
-    @apply bg-blue-700;
+    @apply bg-blue-500 hover:bg-blue-700 text-white;
   }
 
   .btn-gray {
-    @apply bg-gray-400 text-gray-800;
-  }
-  .btn-gray:hover {
-    @apply bg-gray-500;
+    @apply bg-gray-400 hover:bg-gray-500 text-gray-800;
   }
 }
 ```

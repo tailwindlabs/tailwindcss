@@ -19,7 +19,7 @@ export const classes = {
   filterProperties: (prop, value) => !prop.includes('--') && !value.includes('--'),
   preview: (css, { className }) => (
     <td
-      className={`w-16 font-medium text-base whitespace-no-wrap ${className}`}
+      className={`w-16 font-medium text-base whitespace-nowrap ${className}`}
       style={{
         color: Array.isArray(css['color']) ? css['color'][0] : css['color'],
       }}

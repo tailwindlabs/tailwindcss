@@ -1,65 +1,65 @@
 ---
-title: "Word Break"
-description: "Utilities for controlling word breaks in an element."
+title: "Text Overflow"
+description: "Utilities for controlling text overflow in an element."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/wordBreak'
+import plugin from 'tailwindcss/lib/plugins/textOverflow'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
 import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
-## Normal
+## Truncate
 
-Use `.break-normal` to only add line breaks at normal word break points.
+Use `.truncate` to truncate overflowing text with an ellipsis (<code>…</code>) if needed.
 
 ```html
 <template preview>
-  <p class="break-normal max-w-xs p-2 bg-gray-200 mx-auto">
+  <p class="max-w-xs p-2 mx-auto truncate bg-gray-200">
   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
   </p>
 </template>
 
-<p class="break-normal ...">...</p>
+<p class="truncate ...">...</p>
 ```
 
-## Break Words
+## Overflow Ellipsis
 
-Use `.break-words` to add line breaks mid-word if needed.
+Use `.overflow-ellipsis` to truncate overflowing text with an ellipsis (<code>…</code>) if needed.
 
 ```html
 <template preview>
-  <p class="break-words max-w-xs p-2 bg-gray-200 mx-auto">
+  <p class="max-w-xs p-2 mx-auto bg-gray-200 overflow-ellipsis">
   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
   </p>
 </template>
 
-<p class="break-words ...">...</p>
+<p class="overflow-ellipsis ...">...</p>
 ```
 
-## Break All
+## Overflow Clip
 
-Use `.break-all` to add line breaks whenever necessary, without trying to preserve whole words.
+Use `.overflow-clip` to truncate the text at the limit of the content area.
 
 ```html
 <template preview>
-  <p class="break-all max-w-xs p-2 bg-gray-200 mx-auto">
+  <p class="max-w-xs p-2 mx-auto bg-gray-200 overflow-clip">
   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
   </p>
 </template>
 
-<p class="break-all ...">...</p>
+<p class="overflow-clip ...">...</p>
 ```
 
 ## Responsive
 
-To control the word breaks in an element only at a specific breakpoint, add a `{screen}:` prefix to any existing word break utility. For example, adding the class `md:break-all` to an element would apply the `break-all` utility at medium screen sizes and above.
+To control the text overflow in an element only at a specific breakpoint, add a `{screen}:` prefix to any existing text overflow utility. For example, adding the class `md:truncate` to an element would apply the `truncate` utility at medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 <ResponsiveCodeSample
-  classNames={['break-normal', 'break-words', 'break-all', 'break-normal']}
+  classNames={['truncate', 'overflow-ellipsis', 'overflow-clip']}
   snippet={(classNames) => `
     <p class="${classNames} ...">
       ...
@@ -76,8 +76,8 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Responsive and pseudo-class variants
 
-<Variants plugin="wordBreak" />
+<Variants plugin="textOverflow" />
 
 ### Disabling
 
-<Disabling plugin="wordBreak" />
+<Disabling plugin="textOverflow" />

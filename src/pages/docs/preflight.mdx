@@ -8,7 +8,7 @@ import { ConfigSample } from '@/components/ConfigSample'
 
 ## <Heading hidden>Overview</Heading>
 
-Built on top of [normalize.css](https://github.com/necolas/normalize.css/), Preflight is a set of base styles for Tailwind projects that are designed to smooth over cross-browser inconsistencies and make it easier for you to work within the constraints of your design system.
+Built on top of [modern-normalize](https://github.com/sindresorhus/modern-normalize), Preflight is a set of base styles for Tailwind projects that are designed to smooth over cross-browser inconsistencies and make it easier for you to work within the constraints of your design system.
 
 Tailwind automatically injects these styles when you include `@tailwind base` in your CSS:
 
@@ -40,6 +40,7 @@ h3,
 h4,
 h5,
 h6,
+hr,
 figure,
 p,
 pre {
@@ -141,8 +142,8 @@ In order to make it easy to add a border by simply adding the `border` class, Ta
 
 ```css
 *,
-*::before,
-*::after {
+::before,
+::after {
   border-width: 0;
   border-style: solid;
   border-color: theme('borderColor.default', currentColor);
@@ -158,6 +159,21 @@ When you run into situations like this, you can work around them by overriding t
 ```css
 .google-map * {
   border-style: none;
+}
+```
+
+---
+
+## Buttons have a default outline
+
+To ensure that we provide accessible styles out of the box, we made sure
+that buttons have a default outline. You can of course override this by
+applying `focus:outline-shadow` or similar utilities to your buttons.
+
+```css
+button:focus {
+  outline: 1px dotted;
+  outline: 5px auto -webkit-focus-ring-color;
 }
 ```
 

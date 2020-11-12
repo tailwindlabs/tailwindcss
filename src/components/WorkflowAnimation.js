@@ -396,7 +396,7 @@ export function WorkflowAnimation() {
             <span className="ml-2 h-3 w-3 bg-orange-300 rounded-full" />
             <span className="ml-2 h-3 w-3 bg-green-500 rounded-full" />
           </div>
-          <div className="whitespace-no-wrap">
+          <div className="whitespace-nowrap">
             <div className="inline-block text-gray-600">1&nbsp;&nbsp;</div>
             <div className="inline-block text-code-blue">&lt;</div>
             <div className="inline-block text-code-red">div&nbsp;</div>
@@ -425,7 +425,7 @@ export function WorkflowAnimation() {
             />
             <div className="inline-block text-code-blue">"&gt;</div>
           </div>
-          <div className="whitespace-no-wrap">
+          <div className="whitespace-nowrap">
             <div className="inline-block text-gray-600">2&nbsp;&nbsp;</div>
             <div className="inline-block text-code-blue">&nbsp;&nbsp;&lt;</div>
             <div className="inline-block text-code-red">img&nbsp;</div>
@@ -700,7 +700,7 @@ export function WorkflowAnimation() {
             <div className="inline-block text-code-red">div</div>
             <div className="inline-block text-code-blue">&gt;</div>
           </div>
-          <div className="whitespace-no-wrap">
+          <div className="whitespace-nowrap">
             <div className="inline-block text-gray-600">6&nbsp;&nbsp;</div>
             <div className="inline-block text-code-blue">&nbsp;&nbsp;&nbsp;&nbsp;&lt;</div>
             <div className="inline-block text-code-red">div</div>
@@ -781,7 +781,7 @@ export function WorkflowAnimation() {
             <div className="inline-block text-code-red">div</div>
             <div className="inline-block text-code-blue">&gt;</div>
           </div>
-          <div className="whitespace-no-wrap">
+          <div className="whitespace-nowrap">
             <div className="inline-block text-gray-600">7&nbsp;&nbsp;</div>
             <div className="inline-block text-code-blue">&nbsp;&nbsp;&nbsp;&nbsp;&lt;</div>
             <div className="inline-block text-code-red">div</div>

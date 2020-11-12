@@ -1,14 +1,14 @@
 ---
-title: "Box Shadow"
-description: "Utilities for controlling the box shadow of an element."
+title: "Ring Color"
+description: "Utilities for controlling the focus ring color."
 features:
   responsive: true
   customizable: true
   hover: false
-  focus: false
+  focus: true
 ---
 
-import plugin from 'tailwindcss/lib/plugins/boxShadow'
+import plugin from 'tailwindcss/lib/plugins/ringColor'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
 import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
@@ -154,8 +154,8 @@ If a `default` shadow is provided, it will be used for the non-suffixed `.shadow
 
 ### Responsive and pseudo-class variants
 
-<Variants plugin="boxShadow" />
+<Variants plugin="ringColor" />
 
 ### Disabling
 
-<Disabling plugin="boxShadow" />
+<Disabling plugin="ringColor" />

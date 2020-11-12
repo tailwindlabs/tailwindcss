@@ -26,11 +26,11 @@ Use `.whitespace-normal` to cause text to wrap normally within an element. Newli
 
 ## No Wrap
 
-Use `.whitespace-no-wrap` to prevent text from wrapping within an element. Newlines and spaces will be collapsed.
+Use `.whitespace-nowrap` to prevent text from wrapping within an element. Newlines and spaces will be collapsed.
 
 ```html
 <template preview>
-  <div class="whitespace-no-wrap overflow-x-auto">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis quidem itaque beatae, rem tenetur quia iure,
+  <div class="whitespace-nowrap overflow-x-auto">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis quidem itaque beatae, rem tenetur quia iure,
       eum natus enim maxime
       laudantium quibusdam illo nihil,
 
@@ -87,7 +87,7 @@ To control the whitespace property of an element only at a specific breakpoint, 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 <ResponsiveCodeSample
-  classNames={['whitespace-normal', 'whitespace-no-wrap', 'whitespace-pre', 'whitespace-pre-line', 'whitespace-pre-wrap']}
+  classNames={['whitespace-normal', 'whitespace-nowrap', 'whitespace-pre', 'whitespace-pre-line', 'whitespace-pre-wrap']}
   snippet={(classNames) => `
     <div class="${classNames} ...">...</div>
   `}

@@ -51,10 +51,7 @@ This is useful when you find a common utility pattern in your HTML that you'd li
   @apply font-bold py-2 px-4 rounded;
 }
 .btn-blue {
-  @apply bg-blue-500 text-white;
-}
-.btn-blue:hover {
-  @apply bg-blue-700;
+  @apply bg-blue-500 hover:bg-blue-700 text-white;
 }
 ```
 
@@ -128,27 +125,14 @@ Note that if you're using Sass/SCSS, you'll need to use Sass' interpolation feat
 }
 ```
 
-It's important to understand that `@apply` **will not work** for inlining pseudo-class or responsive variants of another utility. Instead, apply the plain version of that utility into the appropriate pseudo-selector or a new media query:
+`@apply` did not work with pseudo-class or responsive variants of another utility. Howerve since v2.x we made this behaviour work as expected.
 
 ```css
-/* Won't work: */
+/* This now works as expted: */
 .btn {
   @apply block bg-red-500;
   @apply hover:bg-blue-500;
   @apply md:inline-block;
-}
-
-/* Do this instead: */
-.btn {
-  @apply block bg-red-500;
-}
-.btn:hover {
-  @apply bg-blue-500;
-}
-@screen md {
-  .btn {
-    @apply inline-block;
-  }
 }
 ```
 
@@ -186,10 +170,7 @@ Use the `@layer` directive to tell Tailwind which "bucket" a set of custom style
 
 @layer components {
   .btn-blue {
-    @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
-  }
-  .btn-blue:hover {
-    @apply bg-blue-700;
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
   }
 }
 

@@ -27,6 +27,9 @@ module.exports = {
 
       'xl': '1280px',
       // => @media (min-width: 1280px) { ... }
+
+      '2xl': '1536px',
+      // => @media (min-width: 1536px) { ... }
     }
   }
 }
@@ -81,6 +84,9 @@ If you want to work with max-width breakpoints instead of min-width, you can spe
 module.exports = {
   theme: {
     screens: {
+      '2xl': {'max': '1535px'},
+      // => @media (max-width: 1535px) { ... }
+
       'xl': {'max': '1279px'},
       // => @media (max-width: 1279px) { ... }
 
@@ -107,7 +113,8 @@ module.exports = {
       'sm': {'min': '640px', 'max': '767px'},
       'md': {'min': '768px', 'max': '1023px'},
       'lg': {'min': '1024px', 'max': '1279px'},
-      'xl': {'min': '1280px'},
+      'xl': {'min': '1280px', 'max': '1535px'},
+      '2xl': {'min': '1536px'},
     },
   }
 }

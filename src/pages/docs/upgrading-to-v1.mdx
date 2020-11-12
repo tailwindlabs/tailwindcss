@@ -531,9 +531,9 @@ Next, update any sections that were referencing the `colors` variable using the 
 -     textColor: colors,
 +     textColor: theme => theme('colors'),
       // ...
--     borderColor: global.Object.assign({ default: colors['grey-light'] }, colors),
+-     borderColor: global.Object.assign({ DEFAULT: colors['grey-light'] }, colors),
 +     borderColor: theme => ({
-+       default: theme('colors.grey-light'),
++       DEFAULT: theme('colors.grey-light'),
 +       ...theme('colors'),
 +     }),
       // ...

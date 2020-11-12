@@ -112,6 +112,7 @@ const nav = {
     pages['text-opacity'],
     pages['text-decoration'],
     pages['text-transform'],
+    pages['text-overflow'],
     pages['vertical-align'],
     pages['whitespace'],
     pages['word-break'],
@@ -147,11 +148,19 @@ const nav = {
     pages['transition-delay'],
     pages['animation'],
   ],
+  'Focus Rings': [
+    pages['ring-color'],
+    pages['ring-width'],
+    pages['ring-opacity'],
+    pages['ring-offset-color'],
+    pages['ring-offset-width'],
+  ],
   Transforms: [
     pages['scale'],
     pages['rotate'],
     pages['translate'],
     pages['skew'],
+    pages['transform'],
     pages['transform-origin'],
   ],
   Interactivity: [
