@@ -1,8 +1,9 @@
-const proseComponents = ['Heading', 'Variants', 'Disabling', 'table']
+const proseComponents = ['Heading', 'Variants', 'Disabling']
 
 const isJsNode = (node) => {
   return (
     ['jsx', 'import', 'export'].includes(node.type) &&
+    !/^<[a-z]+(>|\s)/.test(node.value) &&
     !new RegExp(`^<(${proseComponents.join('|')})(>|\\s)`).test(node.value)
   )
 }
