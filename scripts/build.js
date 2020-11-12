@@ -39,6 +39,7 @@ Promise.all([
   buildDistFile('components'),
   buildDistFile('utilities'),
   buildDistFile('tailwind'),
+  buildDistFile('tailwind', { darkMode: 'class' }, 'tailwind-dark'),
   buildDistFile('tailwind', { future: 'all', experimental: 'all' }, 'tailwind-experimental'),
 ]).then(() => {
   console.log('Finished Building Tailwind!')
