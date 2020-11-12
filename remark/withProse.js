@@ -1,4 +1,4 @@
-const proseComponents = ['Heading', 'Variants', 'Disabling']
+const proseComponents = ['Heading', 'Variants', 'Disabling', 'table']
 
 const isJsNode = (node) => {
   return (
