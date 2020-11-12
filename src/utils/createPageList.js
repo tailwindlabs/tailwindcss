@@ -5,7 +5,7 @@ export function createPageList(files, base) {
     let slug = cur.fileName.substr(2).replace(/\.mdx$/, '')
     return {
       ...acc,
-      [slug]: { ...cur.module.meta, href: `/${base}/${slug}` },
+      [slug]: { ...cur.module.default, href: `/${base}/${slug}` },
     }
   }, {})
 }
