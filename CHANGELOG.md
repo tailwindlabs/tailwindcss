@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet!
 
+## [2.0.0-alpha.16] - 2020-11-12
+
+### Added
+
+- Enable `focus`, `focus-within`, and `dark` variants (when enabled) for all ring utilities by default ([e0788ef](https://github.com/tailwindlabs/tailwindcss/commit/879f088))
+
 ## [2.0.0-alpha.15] - 2020-11-11
 
 ### Added
@@ -1170,7 +1176,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.15...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.16...HEAD
+[2.0.0-alpha.16]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.15...v2.0.0-alpha.16
 [2.0.0-alpha.15]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.14...v2.0.0-alpha.15
 [2.0.0-alpha.14]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.13...v2.0.0-alpha.14
 [2.0.0-alpha.13]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.12...v2.0.0-alpha.13
