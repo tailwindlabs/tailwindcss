@@ -21,8 +21,12 @@ export default function () {
         return [
           nameClass('ring', modifier),
           {
-            '--ring-offset-shadow': `0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff)`,
-            '--ring-shadow': `0 0 0 calc(${value} + var(--ring-offset-width, 0px)) var(--ring-color, ${ringColorDefault})`,
+            '--ring-inset': 'var(--tailwind-empty,/*!*/ /*!*/)',
+            '--ring-offset-width': '0px',
+            '--ring-offset-color': '#fff',
+            '--ring-color': ringColorDefault,
+            '--ring-offset-shadow': `var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color)`,
+            '--ring-shadow': `var(--ring-inset) 0 0 0 calc(${value} + var(--ring-offset-width)) var(--ring-color)`,
             'box-shadow': [
               `var(--ring-offset-shadow)`,
               `var(--ring-shadow)`,
@@ -32,6 +36,16 @@ export default function () {
         ]
       })
     )
-    addUtilities(utilities, variants('ringWidth'))
+    addUtilities(
+      [
+        utilities,
+        {
+          '.ring-inset': {
+            '--ring-inset': 'inset',
+          },
+        },
+      ],
+      variants('ringWidth')
+    )
   }
 }

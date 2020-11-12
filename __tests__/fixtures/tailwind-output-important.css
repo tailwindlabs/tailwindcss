@@ -19712,111 +19712,195 @@ video {
 }
 
 .ring-0 {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
 .ring-1 {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
 .ring-2 {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
 .ring-4 {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
 .ring-8 {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
 .ring {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
+.ring-inset {
+  --ring-inset: inset !important;
+}
+
 .focus-within\:ring-0:focus-within {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
 .focus-within\:ring-1:focus-within {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
 .focus-within\:ring-2:focus-within {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
 .focus-within\:ring-4:focus-within {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
 .focus-within\:ring-8:focus-within {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
 .focus-within\:ring:focus-within {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
+.focus-within\:ring-inset:focus-within {
+  --ring-inset: inset !important;
+}
+
 .focus\:ring-0:focus {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
 .focus\:ring-1:focus {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
 .focus\:ring-2:focus {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
 .focus\:ring-4:focus {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
 .focus\:ring-8:focus {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
 }
 
 .focus\:ring:focus {
-  --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-  --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+  --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+  --ring-offset-width: 0px !important;
+  --ring-offset-color: #fff !important;
+  --ring-color: rgba(59, 130, 246, 0.5) !important;
+  --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+  --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
   box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
+}
+
+.focus\:ring-inset:focus {
+  --ring-inset: inset !important;
 }
 
 .ring-offset-transparent {
@@ -46876,111 +46960,195 @@ video {
   }
 
   .sm\:ring-0 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .sm\:ring-1 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .sm\:ring-2 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .sm\:ring-4 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .sm\:ring-8 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .sm\:ring {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
+  .sm\:ring-inset {
+    --ring-inset: inset !important;
+  }
+
   .sm\:focus-within\:ring-0:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .sm\:focus-within\:ring-1:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .sm\:focus-within\:ring-2:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .sm\:focus-within\:ring-4:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .sm\:focus-within\:ring-8:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .sm\:focus-within\:ring:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
+  .sm\:focus-within\:ring-inset:focus-within {
+    --ring-inset: inset !important;
+  }
+
   .sm\:focus\:ring-0:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .sm\:focus\:ring-1:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .sm\:focus\:ring-2:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .sm\:focus\:ring-4:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .sm\:focus\:ring-8:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .sm\:focus\:ring:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
+  }
+
+  .sm\:focus\:ring-inset:focus {
+    --ring-inset: inset !important;
   }
 
   .sm\:ring-offset-transparent {
@@ -74010,111 +74178,195 @@ video {
   }
 
   .md\:ring-0 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .md\:ring-1 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .md\:ring-2 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .md\:ring-4 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .md\:ring-8 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .md\:ring {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
+  .md\:ring-inset {
+    --ring-inset: inset !important;
+  }
+
   .md\:focus-within\:ring-0:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .md\:focus-within\:ring-1:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .md\:focus-within\:ring-2:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .md\:focus-within\:ring-4:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .md\:focus-within\:ring-8:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .md\:focus-within\:ring:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
+  .md\:focus-within\:ring-inset:focus-within {
+    --ring-inset: inset !important;
+  }
+
   .md\:focus\:ring-0:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .md\:focus\:ring-1:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .md\:focus\:ring-2:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .md\:focus\:ring-4:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .md\:focus\:ring-8:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .md\:focus\:ring:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
+  }
+
+  .md\:focus\:ring-inset:focus {
+    --ring-inset: inset !important;
   }
 
   .md\:ring-offset-transparent {
@@ -101144,111 +101396,195 @@ video {
   }
 
   .lg\:ring-0 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .lg\:ring-1 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .lg\:ring-2 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .lg\:ring-4 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .lg\:ring-8 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .lg\:ring {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
+  .lg\:ring-inset {
+    --ring-inset: inset !important;
+  }
+
   .lg\:focus-within\:ring-0:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .lg\:focus-within\:ring-1:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .lg\:focus-within\:ring-2:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .lg\:focus-within\:ring-4:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .lg\:focus-within\:ring-8:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .lg\:focus-within\:ring:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
+  .lg\:focus-within\:ring-inset:focus-within {
+    --ring-inset: inset !important;
+  }
+
   .lg\:focus\:ring-0:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .lg\:focus\:ring-1:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .lg\:focus\:ring-2:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .lg\:focus\:ring-4:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .lg\:focus\:ring-8:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .lg\:focus\:ring:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
+  }
+
+  .lg\:focus\:ring-inset:focus {
+    --ring-inset: inset !important;
   }
 
   .lg\:ring-offset-transparent {
@@ -128278,111 +128614,195 @@ video {
   }
 
   .xl\:ring-0 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .xl\:ring-1 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .xl\:ring-2 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .xl\:ring-4 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .xl\:ring-8 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .xl\:ring {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
+  .xl\:ring-inset {
+    --ring-inset: inset !important;
+  }
+
   .xl\:focus-within\:ring-0:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .xl\:focus-within\:ring-1:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .xl\:focus-within\:ring-2:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .xl\:focus-within\:ring-4:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .xl\:focus-within\:ring-8:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .xl\:focus-within\:ring:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
+  .xl\:focus-within\:ring-inset:focus-within {
+    --ring-inset: inset !important;
+  }
+
   .xl\:focus\:ring-0:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .xl\:focus\:ring-1:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .xl\:focus\:ring-2:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .xl\:focus\:ring-4:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .xl\:focus\:ring-8:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .xl\:focus\:ring:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
+  }
+
+  .xl\:focus\:ring-inset:focus {
+    --ring-inset: inset !important;
   }
 
   .xl\:ring-offset-transparent {
@@ -155412,111 +155832,195 @@ video {
   }
 
   .\32xl\:ring-0 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .\32xl\:ring-1 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .\32xl\:ring-2 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .\32xl\:ring-4 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .\32xl\:ring-8 {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .\32xl\:ring {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
+  .\32xl\:ring-inset {
+    --ring-inset: inset !important;
+  }
+
   .\32xl\:focus-within\:ring-0:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .\32xl\:focus-within\:ring-1:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .\32xl\:focus-within\:ring-2:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .\32xl\:focus-within\:ring-4:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .\32xl\:focus-within\:ring-8:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .\32xl\:focus-within\:ring:focus-within {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
+  .\32xl\:focus-within\:ring-inset:focus-within {
+    --ring-inset: inset !important;
+  }
+
   .\32xl\:focus\:ring-0:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(0 + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(0 + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .\32xl\:focus\:ring-1:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(1px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(1px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .\32xl\:focus\:ring-2:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(2px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(2px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .\32xl\:focus\:ring-4:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(4px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(4px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .\32xl\:focus\:ring-8:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(8px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(8px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
   }
 
   .\32xl\:focus\:ring:focus {
-    --ring-offset-shadow: 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, #fff) !important;
-    --ring-shadow: 0 0 0 calc(3px + var(--ring-offset-width, 0px)) var(--ring-color, rgba(59, 130, 246, 0.5)) !important;
+    --ring-inset: var(--tailwind-empty,/*!*/ /*!*/) !important;
+    --ring-offset-width: 0px !important;
+    --ring-offset-color: #fff !important;
+    --ring-color: rgba(59, 130, 246, 0.5) !important;
+    --ring-offset-shadow: var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color) !important;
+    --ring-shadow: var(--ring-inset) 0 0 0 calc(3px + var(--ring-offset-width)) var(--ring-color) !important;
     box-shadow: var(--ring-offset-shadow), var(--ring-shadow), var(--box-shadow, 0 0 #0000) !important;
+  }
+
+  .\32xl\:focus\:ring-inset:focus {
+    --ring-inset: inset !important;
   }
 
   .\32xl\:ring-offset-transparent {
