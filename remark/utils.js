@@ -1,3 +1,8 @@
+const Prism = require('prismjs')
+const loadLanguages = require('prismjs/components/')
+loadLanguages()
+require('./prism-diff-highlight')(Prism)
+
 module.exports.addImport = function addImport(tree, mod, name) {
   tree.children.unshift({
     type: 'import',
@@ -19,4 +24,17 @@ module.exports.addExport = function addExport(tree, name, value) {
     type: 'export',
     value: `export const ${name} = ${JSON.stringify(value)}`,
   })
+}
+
+module.exports.highlightCode = function highlightCode(code, language) {
+  const highlighted = Prism.languages[language]
+    ? Prism.highlight(code, Prism.languages[language], language)
+    : code
+
+  return language === 'html'
+    ? highlighted.replace(
+        /\*\*([^\]]+)\*\*/g,
+        (_, text) => `<span class="code-highlight bg-code-highlight">${text}</span>`
+      )
+    : highlighted
 }

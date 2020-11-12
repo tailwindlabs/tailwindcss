@@ -1,8 +1,5 @@
 const visit = require('unist-util-visit')
-const Prism = require('prismjs')
-const loadLanguages = require('prismjs/components/')
-loadLanguages()
-require('./prism-diff-highlight')(Prism)
+const { highlightCode } = require('./utils')
 
 const colors = {
   amber: 'bg-amber-500',
@@ -25,9 +22,7 @@ module.exports.withSyntaxHighlighting = () => {
             colors[node.meta] ? 'bg-black bg-opacity-75' : ''
           }">`,
           `<code class="language-${node.lang}">`,
-          Prism.languages[node.lang]
-            ? Prism.highlight(node.value, Prism.languages[node.lang], node.lang)
-            : node.value,
+          highlightCode(node.value, node.lang),
           '</code>',
           '</pre>',
           '</div>',
