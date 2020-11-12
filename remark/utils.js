@@ -33,7 +33,7 @@ module.exports.highlightCode = function highlightCode(code, language) {
 
   return language === 'html'
     ? highlighted.replace(
-        /\*\*([^\]]+)\*\*/g,
+        /\*\*(.*?)\*\*/g,
         (_, text) => `<span class="code-highlight bg-code-highlight">${text}</span>`
       )
     : highlighted
