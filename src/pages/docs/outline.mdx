@@ -6,32 +6,84 @@ description: "Utilities for controlling an element's outline."
 import plugin from 'tailwindcss/lib/plugins/outline'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
+import { Heading } from '@/components/Heading'
 
 export const classes = { plugin }
 
-## Usage
+## Remove outlines
 
-Use `.outline-none` to remove browser specific outlining of focused elements.
+Use `outline-none` to hide the default browser outline on focused elements.
 
 It is highly recommended to apply your own focus styling for accessibility when using this utility.
 
 ```html
-<template preview class="text-center bg-gray-200 p-4">
-  <input type="text" class="px-2 m-2" placeholder="Focus me" />
-  <input type="text" class="px-2 m-2 outline-none" placeholder="Focus me (no outline)" />
-  <input type="text" class="px-2 m-2 outline-none focus:shadow-outline focus:bg-blue-100" placeholder="Focus me (custom)" />
+<template preview class="flex space-x-6 justify-center bg-white p-4">
+  <input type="text" class="px-3 py-2 border rounded" placeholder="Default focus style" />
+  <input type="text" class="px-3 py-2 border rounded focus:outline-none focus:shadow-outline focus:border-blue-400" placeholder="Custom focus style" />
 </template>
 
 <input type="text"
-  placeholder="Focus me (no outline)"
-  class="outline-none ..." />
+  placeholder="Default focus style"
+  class="..." />
 
 <input type="text"
-  placeholder="Focus me (custom)"
-  class="outline-none focus:shadow-outline focus:bg-blue-100 ..." />
+  placeholder="Custom focus style"
+  class="focus:outline-none focus:shadow-outline focus:border-blue-300 ..." />
+```
+
+The `outline-none` utility is implemented using a transparent outline under the hood to ensure elements are still visibly focused to [Windows high contrast mode](https://blogs.windows.com/msedgedev/2020/09/17/styling-for-windows-high-contrast-with-new-standards-for-forced-colors/) users.
+
+## <Heading badge="v1.9.0+">Dotted outlines</Heading>
+
+Use the `outline-white` and `outline-black` utilities to add a 2px dotted border around an element with a 2px offset. These are useful as an accessible general purpose custom focus style if you don't want to design your own.
+
+```html
+<template preview class="flex">
+  <div class="min-w-0 flex-1 bg-white p-6 flex items-center justify-center">
+    <button type="button" class="px-4 py-2 rounded font-medium bg-blue-600 text-white focus:outline-black">Button A</button>
+  </div>
+  <div class="min-w-0 flex-1 bg-blue-700 p-6 flex items-center justify-center">
+    <button type="button" class="px-4 py-2 rounded font-medium bg-white text-gray-900 focus:outline-white">Button B</button>
+  </div>
+</template>
+
+<button class="focus:outline-black ...">Button A</button>
+<button class="focus:outline-white ...">Button B</button>
 ```
 
 ## Customizing
+
+### <Heading badge="v1.9.0+">Outlines</Heading>
+
+By default Tailwind provides three outline utilities. You can customize these by editing the `theme.outline` section of your `tailwind.config.js` file.
+
+```js
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
+        outline: {
+          blue: '2px solid #0000ff',
+        }
+      }
+    }
+  }
+```
+
+You can also provide an `outline-offset` value for any custom outline utilities using a tuple of the form `[outline, outlineOffset]`:
+
+```js
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
+        outline: {
+          blue: ['2px solid #0000ff', '1px'],
+        }
+      }
+    }
+  }
+```
 
 ### Responsive and pseudo-class variants
 

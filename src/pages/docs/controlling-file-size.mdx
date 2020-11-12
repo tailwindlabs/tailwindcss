@@ -240,7 +240,7 @@ module.exports = {
 
 Note that in this example, **we're only enabling PurgeCSS in production**. We recommend configuring PurgeCSS this way because it can be slow to run, and during development it's nice to have every class available so you don't need to wait for a rebuild every time you change some HTML.
 
-Finally, we recommend only applying PurgeCSS to Tailwind's utility classes, and not to [base styles](/docs/adding-base-styles) or [component classes](/docs/extracting-components#extracting-css-components-with-apply). The easiest way to do this is to use PurgeCSS's [whitelisting](https://purgecss.com/whitelisting.html) feature to disable PurgeCSS for non-utility classes:
+Finally, we recommend only applying PurgeCSS to Tailwind's utility classes, and not to [base styles](/docs/adding-base-styles) or [component classes](/docs/extracting-components#extracting-css-components-with-apply). The easiest way to do this is to use PurgeCSS's [whitelisting](https://github.com/FullHuman/purgecss/blob/5314e41edf328e2ad2639549e1587b82a964a42e/docs/whitelisting.md) feature to disable PurgeCSS for non-utility classes:
 
 ```css
 /* purgecss start ignore */
