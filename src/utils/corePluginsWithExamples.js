@@ -31,6 +31,7 @@ module.exports.corePluginsWithExamples = plugins.map((plugin) => {
     e: (x) => x.replace(/([:.])/g, '\\$1'),
     target: () => 'modern',
     corePlugins: () => true,
+    prefix: (x) => x,
   })
   return {
     plugin,
