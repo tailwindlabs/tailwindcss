@@ -91,8 +91,10 @@ module.exports = {
               content: 'none',
             },
             pre: {
-              backgroundColor: theme('colors.gray.800'),
-              borderRadius: theme('borderRadius.xl'),
+              backgroundColor: '-',
+              borderRadius: 0,
+              marginTop: 0,
+              marginBottom: 0,
             },
           },
         },

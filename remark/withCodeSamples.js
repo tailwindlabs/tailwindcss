@@ -28,6 +28,10 @@ module.exports = () => {
       if (!snippet) snippet = previewCode
 
       snippet = Prism.highlight(redent(snippet).trim(), Prism.languages.html, 'html')
+      snippet = snippet.replace(
+        /\[([^\]]+)\]/g,
+        (_, text) => `<span class="code-highlight bg-code-highlight">${text}</span>`
+      )
 
       node.type = 'jsx'
       node.value = `
@@ -35,6 +39,7 @@ module.exports = () => {
           preview={${JSON.stringify(previewCode)}}
           snippet={${JSON.stringify(snippet)}}
           previewClassName={${JSON.stringify(previewClassName)}}
+          color={${JSON.stringify(node.meta ? node.meta : undefined)}}
         />
       `.trim()
 
