@@ -6,7 +6,7 @@ description: "Tailwind CSS brand assets and usage guidelines."
 export const Layout = require('@/layouts/ContentsLayout').ContentsLayoutOuter
 export default require('@/layouts/BasicLayout').BasicLayout
 
-Tailwind CSS v2.0 is the first new major version since v1.0 was released in May 2019, and as such it includes a small number of breaking changes.
+Tailwind CSS v2.0 is the first new major version since v1.0 was released in May 2019, and as such it includes a handful of small breaking changes.
 
 We don't take breaking changes lightly and have worked hard to make sure the upgrade path is as simple as possible. For most projects, upgrading should take less than 30 minutes.
 
@@ -50,6 +50,41 @@ A small number of utilities have been renamed in v2.0:
 You should be able to globally find and replace these classes throughout your entire project very safely, as they are very distinct strings.
 
 Updating `whitespace-no-wrap` and `flex-no-wrap` is just a direct replacement, and for the gap utilities we recommend replacing `col-gap-` with `gap-x-` and `row-gap-` with `gap-y-` to handle all sizes at once.
+
+## Replace 'shadow-outline' and 'shadow-xs' with ring utilities
+
+Tailwind CSS v2.0 introduces a new set of `ring` utilities that let you add outline shadows/focus rings in a way that automatically composes with Tailwind's other box-shadow utilities.
+
+These are a much better and more powerful alternative to the `shadow-outline` and `shadow-xs` classes, so we've removed those classes.
+
+Replace `shadow-outline` with `ring`:
+
+```diff
+- <div class="... focus:shadow-outline">
++ <div class="... focus:ring">
+```
+
+Replace `shadow-xs` with `ring-1 ring-black ring-opacity-5`:
+
+```diff
+- <div class="... shadow-xs">
++ <div class="... ring-1 ring-black ring-opacity-5">
+```
+
+Alternatively, you can also add `shadow-outline` and `shadow-xs` back to your config file and leave your HTML untouched:
+
+```js
+module.exports = {
+  theme: {
+    extend: {
+      boxShadow: {
+        xs: '0 0 0 1px rgba(0, 0, 0, 0.05)',
+        outline: '0 0 0 3px rgba(66, 153, 225, 0.5)',
+      }
+    }
+  }
+}
+```
 
 ## Configure your color palette explicitly
 
@@ -226,7 +261,7 @@ Alternatively, you can go through your HTML and explicitly add a `leading` utili
 + <p class="text-lg leading-normal">...</p>
 ```
 
-## Update `default` theme keys to `DEFAULT`
+## Update 'default' theme keys to 'DEFAULT'
 
 In Tailwind CSS v1.x, the `default` keyword in various `theme` sections of the `tailwind.config.js` section sometimes meant "don't add a suffix to the class name".
 
@@ -369,7 +404,7 @@ If you were depending on the old behavior, you may see some differences in how y
 
 This is unlikely to affect almost anyone who wasn't going out their way to do something weird.
 
-## Add your configured prefix to any `@apply` statements
+## Add your configured prefix to any @apply statements
 
 In Tailwind CSS v1.0, you could `@apply` unprefixed utilities even if you had configured a prefix.
 
@@ -381,7 +416,7 @@ This is no longer supported in v2.0, so if you have a prefix (like `tw-`) config
 }
 ```
 
-## Removing leading `.` from `@apply` statements
+## Remove leading '.' from @apply statements
 
 We used to support writing `@apply` statements with an optional leading `.` character:
 
@@ -399,7 +434,7 @@ We don't support this anymore, so update any `@apply` statements and remove the 
 }
 ```
 
-## Enable any `truncate` variants under `textOverflow`
+## Enable any 'truncate' variants under 'textOverflow'
 
 The `truncate` utility is now part of the `textOverflow` core plugin, so if you had enabled any extra variants (like `group-hover`) for the `wordBreak` plugin in order to use them with the `truncate` class, you'll want to enable them for `textOverflow` now as well or instead:
 
@@ -413,7 +448,7 @@ The `truncate` utility is now part of the `textOverflow` core plugin, so if you 
   }
 ```
 
-## `scrolling-touch` and `scrolling-auto` have been removed
+## The 'scrolling-touch' and 'scrolling-auto' utilities have been removed
 
 Since iOS 13 stopped supporting the `-webkit-overflow-scrolling` property, we've removed these two utilities from v2.0.
 
@@ -436,7 +471,7 @@ If you still need them because you are building something for older iOS versions
 }
 ```
 
-## Update `theme` function references that read from arrays
+## Update 'theme' function references that read from arrays
 
 The `theme` function (in CSS, the `tailwind.config.js` file, and in the plugin API) is more intelligent in v2.0 and no longer requires you to manually join arrays or access the first index explicitly.
 
@@ -471,7 +506,7 @@ module.exports = {
 
 If for whatever reason you want to access the raw data structure, you can use the `config` function instead.
 
-## Add `hidden` to any `template` tags within `space` or `divide` elements
+## Add 'hidden' to any 'template' tags within 'space' or 'divide' elements
 
 We used to have a special rule for ignoring `template` elements when using the `space-x/y` and `divide-x/y` utilities, mostly to make life easier for Alpine.js users.
 
@@ -488,7 +523,7 @@ To update your code for this change, just add `hidden` to your `template` tags:
   </div>
 ```
 
-## Update purge `options` to match PurgeCSS 3.0
+## Update purge 'options' to match PurgeCSS 3.0
 
 Internally we've upgraded to [PurgeCSS 3.0](https://github.com/FullHuman/purgecss/releases/tag/v3.0.0), so any raw options you were passing into PurgeCSS through the `options` key need to be updated to match the options exposed in PurgeCSS 3.0.
 
@@ -511,7 +546,7 @@ For example, if you were using `whitelist`, you'll want to update this to `safel
 
 If you weren't using the `options` key, you don't need to do anything.
 
-## Disable `preserveHtmlElements` if using a custom PurgeCSS extractor
+## Disable 'preserveHtmlElements' if using a custom PurgeCSS extractor
 
 In v1.0, Tailwind ignored the `preserveHtmlElements` option if you were using a custom extractor. This option is now properly respected in v2.0, so if you want to disable it you'll need to do so explicitly:
 
@@ -546,67 +581,3 @@ If you are referencing any configured keyframes in custom CSS, you'll want to ma
 ```
 
 This only matters if you've configured a prefix _and_ you're referencing configured keyframes in custom CSS files. If this affects more than two people on the entire planet I will be absolutely amazed.
-
-## Upgrading
-
-<!-- - Update your build environment to a modern version of Node -->
-<!-- - Tell any customers who use IE11 to get with the times -->
-<!-- - Don't depend on default colors -->
-<!-- - `@apply` is based on CSS order, not class list order -->
-<!-- - You can't use `@apply` without a prefix if you have configured a prefix -->
-<!-- - Override the `fontSize` config or add line-height utilities to your templates to override the new default line-height values per font-size -->
-<!-- - Add any extra variants you need for `truncate` to the `textOverflow` plugin -->
-<!-- - Remove `scrolling-touch` and `scrolling-auto` from your HTML, they don't do anything -->
-<!-- - Rename `whitespace-no-wrap`, `flex-no-wrap`, and `col/row-gap` utilities -->
-<!-- - Update use of `theme` to be less data structure aware -->
-<!-- - Add `hidden` to any `template` elements that are within `space` or `divide` blocks -->
-<!-- - Disable `preserveHtmlElements` if you're using a custom extractor and don't want it respected -->
-<!-- - Keyframes are prefixed automatically if you have a prefix in your config, make sure any custom CSS referencing those keyframe names accounts for this -->
-<!-- - If you were relying on `extends` only merging shallowly, you will have to move those customizations out of `extends` -->
-- Talk about upgrading custom forms and typography plugins?
-
-
----
-
-## Changelog
-
-### New features
-
-- Dark mode ([#2279](https://github.com/tailwindlabs/tailwindcss/pull/2279), [#2631](https://github.com/tailwindlabs/tailwindcss/pull/2631))
-- All-new color palette ([#2623](https://github.com/tailwindlabs/tailwindcss/pull/2623))
-- Extended typography scale ([#2609](https://github.com/tailwindlabs/tailwindcss/pull/2609), [#2619](https://github.com/tailwindlabs/tailwindcss/pull/2619))
-- Extended spacing scale ([#2630](https://github.com/tailwindlabs/tailwindcss/pull/2630), [#2630](https://github.com/tailwindlabs/tailwindcss/pull/2630))
-- Default line-heights for font-size utilities ([#2609](https://github.com/tailwindlabs/tailwindcss/pull/2609))
-- New `2xl` breakpoint ([#2609](https://github.com/tailwindlabs/tailwindcss/pull/2609))
-- `@apply` anything ([#2159](https://github.com/tailwindlabs/tailwindcss/pull/2159))
-- Extend variants ([#2679](https://github.com/tailwindlabs/tailwindcss/pull/2679))
-- New `textOverflow` utilities ([#1289](https://github.com/tailwindlabs/tailwindcss/pull/1289))
-- New `transform-gpu` utility ([#1380](https://github.com/tailwindlabs/tailwindcss/pull/1380))
-- Enable `group-hover` by default ([28985b6](https://github.com/tailwindlabs/tailwindcss/commit/28985b6cd592e72d4849fdb9ce97eb045744e09c))
-- Add `max-w-prose` utility ([#2574](https://github.com/tailwindlabs/tailwindcss/pull/2574))
-- Support defining presets as functions ([#2680](https://github.com/tailwindlabs/tailwindcss/pull/2680))
-- Support flattening deeply nested color objects ([#2148](https://github.com/tailwindlabs/tailwindcss/pull/2148))
-- Merge `extend` objects deeply by default instead of shallowly ([#2679](https://github.com/tailwindlabs/tailwindcss/pull/2679), [#2700](https://github.com/tailwindlabs/tailwindcss/pull/2700))
-- Modernize default system font stacks ([#1711](https://github.com/tailwindlabs/tailwindcss/pull/1711))
-- Support defining theme values using arrays wherever it makes sense (box-shadow, transition-property, etc.) ([e13f083](https://github.com/tailwindlabs/tailwindcss/commit/e13f083c4bc48bf9870d27c966136a9584943127))
-
-### Changes
-
-- Drop support for Node 8 and 10 ([#2582](https://github.com/tailwindlabs/tailwindcss/pull/2582))
-- Remove `target` feature and IE 11 support ([#2571](https://github.com/tailwindlabs/tailwindcss/pull/2571))
-- Replaced old default color palette ([#2623](https://github.com/tailwindlabs/tailwindcss/pull/2623))
-- Purge layers by default ([#2288](https://github.com/tailwindlabs/tailwindcss/pull/2288))
-- Move `truncate` class to `textOverflow` core plugin ([#2562](https://github.com/tailwindlabs/tailwindcss/pull/2562))
-- Switch `normalize.css` to `modern-normalize` ([#2572](https://github.com/tailwindlabs/tailwindcss/pull/2572))
-- Remove `scrolling-touch` and `scrolling-auto` utilities ([#2573](https://github.com/tailwindlabs/tailwindcss/pull/2573))
-- Change `default` to `DEFAULT` for special cases in config ([#2580](https://github.com/tailwindlabs/tailwindcss/pull/2580))
-- Make `theme` retrieve values more intelligently ([e13f083c4](https://github.com/tailwindlabs/tailwindcss/commit/e13f083c4bc48bf9870d27c966136a9584943127))
-- Change `text-6xl` to 60px instead of 64px ([#2619](https://github.com/tailwindlabs/tailwindcss/pull/2619))
-- Rename `whitespace-no-wrap` to `whitespace-nowrap` ([#2664](https://github.com/tailwindlabs/tailwindcss/pull/2664))
-- Rename `flex-no-wrap` to `flex-nowrap` ([#2676](https://github.com/tailwindlabs/tailwindcss/pull/2676))
-- Rename `col-gap` and `row-gap` to `gap-x` and `gap-y` ([#2137](https://github.com/tailwindlabs/tailwindcss/pull/2137))
-- Merge `extend` objects deeply by default instead of shallowly ([#2679](https://github.com/tailwindlabs/tailwindcss/pull/2679))
-- Respect `preserveHtmlElements` option even when using custom extractor ([#2704](https://github.com/tailwindlabs/tailwindcss/pull/2704))
-- Automatically prefix keyframes and animation names when a prefix is configured ([#2621](https://github.com/tailwindlabs/tailwindcss/pull/2621), [#2641](https://github.com/tailwindlabs/tailwindcss/pull/2641))
-
----

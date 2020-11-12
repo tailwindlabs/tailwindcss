@@ -74,6 +74,11 @@
       "source": "/components/grids",
       "destination": "/components/flexbox-grids",
       "permanent": false
+    },
+    {
+      "source": "/docs/controlling-file-size",
+      "destination": "/docs/optimizing-for-production",
+      "permanent": false
     }
   ]
 }
