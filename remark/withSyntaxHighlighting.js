@@ -5,6 +5,12 @@ loadLanguages()
 require('./prism-diff-highlight')(Prism)
 
 const colors = {
+  amber: 'bg-amber-500',
+  emerald: 'bg-emerald-500',
+  fuchsia: 'bg-fuchsia-400',
+  indigo: 'bg-indigo-400',
+  lightBlue: 'bg-light-blue-500',
+  purple: 'bg-purple-400',
   rose: 'bg-rose-400',
 }
 

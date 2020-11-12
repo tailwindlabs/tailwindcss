@@ -1,18 +1,24 @@
 import clsx from 'clsx'
 
 const codeBackground = {
-  rose: 'bg-rose-400',
+  amber: 'bg-amber-500',
   emerald: 'bg-emerald-500',
-  indigo: 'bg-indigo-400',
   fuchsia: 'bg-fuchsia-400',
+  indigo: 'bg-indigo-400',
+  lightBlue: 'bg-light-blue-500',
+  purple: 'bg-purple-400',
+  rose: 'bg-rose-400',
 }
 
 const previewBackground = {
-  gray: 'bg-gradient-to-r from-gray-50 to-gray-100',
-  rose: 'bg-gradient-to-r from-rose-50 to-rose-100',
+  amber: 'bg-gradient-to-r from-amber-100 to-amber-200',
   emerald: 'bg-gradient-to-r from-emerald-50 to-teal-100',
-  indigo: 'bg-gradient-to-r from-indigo-50 to-indigo-100',
   fuchsia: 'bg-gradient-to-r from-fuchsia-50 to-fuchsia-100',
+  gray: 'bg-gradient-to-r from-gray-50 to-gray-100',
+  indigo: 'bg-gradient-to-r from-indigo-50 to-indigo-100',
+  lightBlue: 'bg-gradient-to-r from-light-blue-100 to-light-blue-200',
+  purple: 'bg-gradient-to-r from-purple-50 to-purple-100',
+  rose: 'bg-gradient-to-r from-rose-50 to-rose-100',
 }
 
 export function CodeSample({ preview, snippet, previewClassName, color = 'gray' }) {
