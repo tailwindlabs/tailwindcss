@@ -17,19 +17,19 @@ export const classes = {
 
 Use the `row-span-{n}` utilities to make an element span _n_ rows.
 
-```html
-<template preview class="bg-white p-8">
+```html fuchsia
+<template preview>
   <div class="h-64 grid grid-rows-3 grid-flow-col gap-4">
-    <div class="row-span-3 bg-gray-500"></div>
-    <div class="row-span-1 col-span-2 bg-gray-300"></div>
-    <div class="row-span-2 col-span-2 bg-gray-300"></div>
+    <div class="row-span-3 bg-fuchsia-500 rounded-md flex justify-center items-center text-white text-2xl font-extrabold">1</div>
+    <div class="row-span-1 col-span-2 bg-fuchsia-400 rounded-md flex justify-center items-center text-white text-2xl font-extrabold">2</div>
+    <div class="row-span-2 col-span-2 bg-fuchsia-400 rounded-md flex justify-center items-center text-white text-2xl font-extrabold">3</div>
   </div>
 </template>
 
 <div class="grid grid-rows-3 grid-flow-col gap-4">
-  <div class="row-span-3 ..."></div>
-  <div class="row-span-1 col-span-2 ..."></div>
-  <div class="row-span-2 col-span-2 ..."></div>
+  <div class="**row-span-3** ...">1</div>
+  <div class="**row-span-1** col-span-2 ...">2</div>
+  <div class="**row-span-2** col-span-2 ...">3<div>
 </div>
 ```
 
@@ -39,19 +39,19 @@ Use the `row-start-{n}` and `row-end-{n}` utilities to make an element start or 
 
 Note that CSS grid lines start at 1, not 0, so a full-height element in a 3-row grid would start at line 1 and end at line 4.
 
-```html
-<template preview class="bg-white p-8">
+```html lightBlue
+<template preview>
   <div class="h-64 grid grid-rows-3 grid-flow-col gap-4">
-    <div class="row-start-2 row-span-2 bg-gray-500"></div>
-    <div class="row-end-3 row-span-2 bg-gray-300"></div>
-    <div class="row-start-1 row-end-4 bg-gray-500"></div>
+    <div class="row-start-2 row-span-2 bg-light-blue-500 rounded-md flex justify-center items-center text-white text-2xl font-extrabold">1</div>
+    <div class="row-end-3 row-span-2 bg-light-blue-400 rounded-md flex justify-center items-center text-white text-2xl font-extrabold">2</div>
+    <div class="row-start-1 row-end-4 bg-light-blue-500 rounded-md flex justify-center items-center text-white text-2xl font-extrabold">3</div>
   </div>
 </template>
 
 <div class="grid grid-rows-3 grid-flow-col gap-4">
-  <div class="row-start-2 row-span-2 ..."></div>
-  <div class="row-end-3 row-span-2 ..."></div>
-  <div class="row-start-1 row-end-4 ..."></div>
+  <div class="**row-start-2** row-span-2 ...">1</div>
+  <div class="**row-end-3** row-span-2 ...">2</div>
+  <div class="**row-start-1** row-end-4 ...">3</div>
 </div>
 ```
 

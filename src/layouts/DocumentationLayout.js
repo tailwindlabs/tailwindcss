@@ -14,10 +14,9 @@ const nav = {
   'Getting started': [
     pages['installation'],
     pages['release-notes'],
-    pages['upcoming-changes'],
-    pages['upgrading-to-v1'],
+    pages['upgrading-to-v2'],
     pages['using-with-preprocessors'],
-    pages['controlling-file-size'],
+    pages['optimizing-for-production'],
     pages['browser-support'],
     pages['intellisense'],
   ],

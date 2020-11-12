@@ -1,6 +1,6 @@
 ---
-title: Controlling File Size
-description: Strategies for keeping your generated CSS small and performant.
+title: Optimizing for Production
+description: Removing unused CSS from your production builds for maximum performance.
 ---
 
 import { Heading } from '@/components/Heading'
@@ -34,6 +34,8 @@ This might sound enormous but **the development build is large by design**.
 
 To make the development experience as productive as possible, Tailwind generates thousands of utility classes for you, most of which you probably won't actually use.
 
+Think of Tailwind like a giant box of LEGO — you dump it all out on the floor and build what you want to build, then when you're done you put all the pieces you didn't use back into the box.
+
 For example, Tailwind generates margin utilities for every size in your spacing scale, for every side of an element you might want to apply margin to, at every breakpoint you are using in your project. This leads to hundreds of different combinations that are all important to have available, but not all likely to be needed.
 
 **When building for production, you should always use Tailwind's `purge` option to tree-shake unused styles and optimize your final build size.** When removing unused styles with Tailwind, it's very hard to end up with more than 10kb of compressed CSS.
@@ -48,18 +50,53 @@ Before getting started with the `purge` feature, it's important to understand ho
 /[^<>"'`\s]*[^<>"'`\s:]/g
 ```
 
+This basically matches any string separated by spaces, quotes or angle brackets, including HTML tags, attributes, classes, and even the actual written content in your markup.
+
+```html
+<template preview>
+<div class="md:flex">
+  <div class="md:flex-shrink-0">
+    <img class="rounded-lg md:w-56" src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=448&q=80" width="448" height="299" alt="Woman paying for a purchase">
+  </div>
+  <div class="mt-4 md:mt-0 md:ml-6">
+    <div class="uppercase tracking-wide text-sm text-indigo-600 font-bold">Marketing</div>
+    <a href="#" class="block mt-1 text-lg leading-tight font-semibold text-gray-900 hover:underline">Finding customers for your new business</a>
+    <p class="mt-2 text-gray-600">Getting a new business off the ground is a lot of hard work. Here are five ideas you can use to find your first customers.</p>
+  </div>
+</div>
+</template>
+
+<**div** **class**="**md:flex**">
+  <**div** **class**="**md:flex-shrink-0**">
+    <**img** **class**="**rounded-lg** **md:w-56**" **src**="**/img/shopping.jpg**" **alt**="**Woman** **paying** **for** **a** **purchase**">
+  </**div**>
+  <**div** **class**="**mt-4** **md:mt-0** **md:ml-6**">
+    <**div** **class**="**uppercase** **tracking-wide** **text-sm** **text-indigo-600** **font-bold**">
+      **Marketing**
+    </**div**>
+    <**a** **href**="**/get-started**" **class**="**block** **mt-1** **text-lg** **leading-tight** **font-semibold** **text-gray-900** **hover:underline**">
+      **Finding** **customers** **for** **your** **new** **business**
+    </**a**>
+    <**p** **class**="**mt-2** **text-gray-600**">
+      **Getting** **a** **new** **business** **off** **the** **ground** **is** **a** **lot** **of** **hard** **work.**
+      **Here** **are** **five** **ideas** **you** **can** **use** **to** **find** **your** **first** **customers.**
+    </**p**>
+  </**div**>
+</**div**>
+```
+
 That means that **it is important to avoid dynamically creating class strings in your templates with string concatenation**, otherwise PurgeCSS won't know to preserve those classes.
 
 <TipBad>Don't use string concatenation to create class names</TipBad>
 
 ```html mt-4
-<div :class="text-{{ error ? 'red' : 'green' }}-600"></div>
+<div class="**text-{{**  **error**  **?**  '**red**'  **:**  '**green**'  **}}-600**"></div>
 ```
 
 <TipGood>Do dynamically select a complete class name</TipGood>
 
 ```html mt-4
-<div :class="{{ error ? 'text-red-600' : 'text-green-600' }}"></div>
+<div class="**{{**  **error**  **?**  '**text-red-600**'  **:**  '**text-green-600**'  **}}**"></div>
 ```
 
 As long as a class name appears in your template _in its entirety_, PurgeCSS will not remove it.
@@ -127,7 +164,7 @@ We generally do not recommend this and believe that the risks outweigh the benef
 
 ### Purging specific layers
 
-By default, Tailwind will purge styles in all of the `base`, `components`, and `utilities` layers. If you'd like to change this, use the `layers` option:
+By default, Tailwind will purge all styles in the `base`, `components`, and `utilities` layers. If you'd like to change this, use the `layers` option to manually specify the layers you'd like to purge:
 
 ```js
 // tailwind.config.js
@@ -142,20 +179,38 @@ module.exports = {
 
 ### Removing all unused styles
 
-By default, Tailwind will only remove unused classes that it generates itself. It will _not_ remove unused styles from third-party CSS you pull in to your project, like a datepicker library you pull in for example.
+By default, Tailwind will only remove unused classes that it generates itself, or has been explicitly wrapped in a `@layer` directive. It will _not_ remove unused styles from third-party CSS you pull in to your project, like a datepicker library you pull in for example.
+
+```css
+/* These styles will all be purged */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* These styles will be purged */
+@layer components {
+  .btn { /* ... */ }
+}
+
+/* These styles will not be purged */
+.flatpickr-innerContainer { /* ... */ }
+.flatpickr-weekdayContainer { /* ... */ }
+.flatpickr-weekday { /* ... */ }
+```
 
 This is to avoid accidentally removing styles that you might need but are not directly referenced in your templates, like classes that are only referenced deep in your `node_modules` folder that are part of some other dependency.
 
-If you really want to remove _all_ unused styles, use the `preserveHtmlElements: false` option and **be very careful** to provide the paths to _all_ files that might reference any classes or HTML elements:
+If you really want to remove _all_ unused styles, set `mode: 'all'` and `preserveHtmlElements: false` and **be very careful** to provide the paths to _all_ files that might reference any classes or HTML elements:
 
 ```js
 // tailwind.config.js
 module.exports = {
   purge: {
+    mode: 'all',
     preserveHtmlElements: false,
     content: [
       './src/**/*.js',
-      './node_modules/pikaday/pikaday.js',
+      './node_modules/flatpickr/**/*.js',
     ],
   },
   // ...
@@ -176,7 +231,7 @@ module.exports = {
 
     // These options are passed through directly to PurgeCSS
     options: {
-      whitelist: ['bg-red-500', 'px-4'],
+      safelist: ['bg-red-500', 'px-4'],
     }
   },
   // ...
@@ -184,102 +239,6 @@ module.exports = {
 ```
 
 A list of available options can be found in the [PurgeCSS documentation](https://purgecss.com/configuration.html#options).
-
-## Setting up PurgeCSS manually
-
-Under the hood, Tailwind's `purge` feature is powered by a fantastic library called [PurgeCSS](https://purgecss.com/).
-
-If you're using a version of Tailwind older than v1.4.0 and need to setup PurgeCSS manually, start by installing `@fullhuman/postcss-purgecss`:
-
-```bash
-# Using npm
-npm install @fullhuman/postcss-purgecss --save-dev
-
-# Using yarn
-yarn add @fullhuman/postcss-purgecss -D
-```
-
-Next, add it as the last plugin in your `postcss.config.js` file:
-
-```js
-// postcss.config.js
-const purgecss = require('@fullhuman/postcss-purgecss')({
-
-  // Specify the paths to all of the template files in your project
-  content: [
-    './src/**/*.html',
-    './src/**/*.vue',
-    './src/**/*.jsx',
-    // etc.
-  ],
-
-  // This is the function used to extract class names from your templates
-  defaultExtractor: content => {
-    // Capture as liberally as possible, including things like `h-(screen-1.5)`
-    const broadMatches = content.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || []
-
-    // Capture classes within other delimiters like .block(class="w-1/2") in Pug
-    const innerMatches = content.match(/[^<>"'`\s.()]*[^<>"'`\s.():]/g) || []
-
-    return broadMatches.concat(innerMatches)
-  }
-})
-
-module.exports = {
-  plugins: [
-    require('tailwindcss'),
-    require('autoprefixer'),
-    ...process.env.NODE_ENV === 'production'
-      ? [purgecss]
-      : []
-  ]
-}
-```
-
-Note that in this example, **we're only enabling PurgeCSS in production**. We recommend configuring PurgeCSS this way because it can be slow to run, and during development it's nice to have every class available so you don't need to wait for a rebuild every time you change some HTML.
-
-Finally, we recommend only applying PurgeCSS to Tailwind's utility classes, and not to [base styles](/docs/adding-base-styles) or [component classes](/docs/extracting-components#extracting-css-components-with-apply). The easiest way to do this is to use PurgeCSS's [whitelisting](https://github.com/FullHuman/purgecss/blob/5314e41edf328e2ad2639549e1587b82a964a42e/docs/whitelisting.md) feature to disable PurgeCSS for non-utility classes:
-
-```css
-/* purgecss start ignore */
-@tailwind base;
-@tailwind components;
-/* purgecss end ignore */
-
-@tailwind utilities;
-```
-
-This will ensure you don't accidentally purge important base styles when working with frameworks like Next.js, Nuxt, vue-cli, create-react-app, and others that hide their base HTML template somewhere in your `node_modules` directory.
-
-### Understanding the regex
-
-The `/[\w-/:]+(?<!:)/g` regular expression we recommend as a starting point matches all of the non-standard characters Tailwind uses by default, like `:` and `/`.
-
-It also uses a negative lookbehind to make sure that if a string ends in `:`, the `:` is not considered part of the string. This is to ensure compatibility with the class object syntax supported by Vue and the [Classnames](https://github.com/JedWatson/classnames) library for React:
-
-```html
-<!-- Match `hidden`, not `hidden:` -->
-<div :class="{ hidden: !isOpen, ... }"><!-- ... --></div>
-```
-
-It's important to note that because of the negative lookbehind in this regex, it's only compatible with Node.js 9.11.2 and above. If you need to use an older version of Node.js to build your assets, you can use this regular expression instead:
-
-
-```diff
-- /[\w-/:]+(?<!:)/g
-+ /[\w-/:]*[\w-/]/g
-```
-
-### Customizing the regex
-
-If you're using any other special characters in your class names, make sure to update the regular expression to include those as well.
-
-For example, if you have customized Tailwind to create classes like `w-50%`, you'll want to add `%` to the regular expression:
-
-```diff
-- /[\w-/:]+(?<!:)/g
-+ /[\w-/:%]+(?<!:)/g
-```
 
 ---
 
@@ -297,7 +256,7 @@ Here are a few strategies you can use to keep your generated CSS small and perfo
 
 ### Limiting your color palette
 
-The default theme includes a whopping [93 colors](/docs/customizing-colors) used for backgrounds, borders, text, and placeholders, all of which also have `hover:` and `focus` variants, as well as responsive variants at the five default screen sizes.
+The default theme includes a whopping [84 colors](/docs/customizing-colors) used for backgrounds, borders, text, and placeholders, all of which also have `hover:` and `focus:` variants, as well as responsive variants at the six default screen sizes.
 
 By default, there are _thousands_ of classes generated to accommodate these colors, and it makes up close to half of the final build size.
 
@@ -317,7 +276,7 @@ Here's how using a smaller color palette affects the final size:
   </thead>
   <tbody>
     <tr>
-      <td>93 <em>(default)</em></td>
+      <td>84 <em>(default)</em></td>
       <td>{stats.default.original}</td>
       <td>{stats.default.minified}</td>
       <td>{stats.default.gzipped}</td>
@@ -358,7 +317,7 @@ Here's how defining fewer screens affects the output:
   </thead>
   <tbody>
     <tr>
-      <td>4 <em>(default)</em></td>
+      <td>5 <em>(default)</em></td>
       <td>{stats.default.original}</td>
       <td>{stats.default.minified}</td>
       <td>{stats.default.gzipped}</td>
@@ -388,9 +347,9 @@ Here's how defining fewer screens affects the output:
   </tbody>
 </table>
 
-<p>If you only need 3 screen sizes and 35 colors, you're down to {stats['35-colors-3-screens'].gzipped} after gzip <em>({stats['35-colors-3-screens'].brotlified} after Brotli!)</em> without changing anything else.</p>
+<p>If you only need 3 screen sizes and 35 colors, you're down to {stats['35-colors-3-screens'].brotlified} compressed without changing anything else.</p>
 
-### Disabling unused utilities and variants
+### Disabling unused core plugins and variants
 
 If you don't expect to need a certain utility plugin in your project at all, you can disable it completely by setting it to `false` in the `corePlugins` section of your config file:
 
@@ -404,7 +363,7 @@ module.exports = {
 }
 ```
 
-If you need a utility but don't need the responsive versions, set its variants to an empty array to generate 80% fewer classes:
+If you need a utility but don't need the responsive versions, set its variants to an empty array to generate 83% fewer classes:
 
 ```js
 module.exports = {
