@@ -18,23 +18,27 @@ export const classes = {
 
 Use the `col-span-{n}` utilities to make an element span _n_ columns.
 
-```html
+```html purple
 <template preview class="bg-white p-8">
   <div class="grid grid-cols-3 gap-4">
-    <div class="col-span-3 bg-gray-300 h-12 flex items-center justify-center"></div>
-    <div class="col-span-2 bg-gray-500 h-12 flex items-center justify-center"></div>
-    <div class="col-span-1 bg-gray-300 h-12 flex items-center justify-center"></div>
-    <div class="col-span-1 bg-gray-300 h-12 flex items-center justify-center"></div>
-    <div class="col-span-2 bg-gray-500 h-12 flex items-center justify-center"></div>
+    <div class="bg-purple-300 h-12 rounded-md flex justify-center items-center text-white text-2xl font-extrabold">1</div>
+    <div class="bg-purple-300 h-12 rounded-md flex justify-center items-center text-white text-2xl font-extrabold">2</div>
+    <div class="bg-purple-300 h-12 rounded-md flex justify-center items-center text-white text-2xl font-extrabold">3</div>
+    <div class="col-span-2 bg-purple-500 h-12 rounded-md flex justify-center items-center text-white text-2xl font-extrabold">4</div>
+    <div class=" bg-purple-300 h-12 rounded-md flex justify-center items-center text-white text-2xl font-extrabold">5</div>
+    <div class=" bg-purple-300 h-12 rounded-md flex justify-center items-center text-white text-2xl font-extrabold">6</div>
+    <div class="col-span-2 bg-purple-500 h-12 rounded-md flex justify-center items-center text-white text-2xl font-extrabold">7</div>
   </div>
 </template>
 
 <div class="grid grid-cols-3 gap-4">
-  <div class="col-span-3 ..."></div>
-  <div class="col-span-2 ..."></div>
-  <div class="col-span-1 ..."></div>
-  <div class="col-span-1 ..."></div>
-  <div class="col-span-2 ..."></div>
+   <div class="...">1</div>
+   <div class="...">2</div>
+   <div class="...">3</div>
+  <div class="**col-span-2** ...">4</div>
+  <div class="...">5</div>
+  <div class="...">6</div>
+  <div class="**col-span-2** ...">7</div>
 </div>
 ```
 
@@ -44,21 +48,21 @@ Use the `col-start-{n}` and `col-end-{n}` utilities to make an element start or 
 
 Note that CSS grid lines start at 1, not 0, so a full-width element in a 6-column grid would start at line 1 and end at line 7.
 
-```html
+```html amber
 <template preview class="bg-white p-8">
   <div class="grid grid-cols-6 gap-4">
-    <div class="col-start-2 col-span-4 bg-gray-300 h-12 flex items-center justify-center"></div>
-    <div class="col-start-1 col-end-3 bg-gray-500 h-12 flex items-center justify-center"></div>
-    <div class="col-end-7 col-span-2 bg-gray-500 h-12 flex items-center justify-center"></div>
-    <div class="col-start-1 col-end-7 bg-gray-300 h-12 flex items-center justify-center"></div>
+    <div class="col-start-2 col-span-4 bg-amber-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">1</div>
+    <div class="col-start-1 col-end-3 bg-amber-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">2</div>
+    <div class="col-end-7 col-span-2 bg-amber-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">3</div>
+    <div class="col-start-1 col-end-7 bg-amber-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">4</div>
   </div>
 </template>
 
 <div class="grid grid-cols-6 gap-4">
-  <div class="col-start-2 col-span-4 ..."></div>
-  <div class="col-start-1 col-end-3 ..."></div>
-  <div class="col-end-7 col-span-2 ..."></div>
-  <div class="col-start-1 col-end-7 ..."></div>
+  <div class="**col-start-2** col-span-4 ...">1</div>
+  <div class="**col-start-1 col-end-3** ...">2</div>
+  <div class="**col-end-7 col-span-2** ...">3</div>
+  <div class="**col-start-1 col-end-7** ...">4</div>
 </div>
 ```
 
@@ -68,30 +72,9 @@ To control the column placement of an element at a specific breakpoint, add a `{
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={[
-    ['col-span-6', 'col-span-4', 'col-span-3', 'col-span-5', 'col-span-2'],
-    ['col-span-3', 'col-span-2', 'col-span-3', 'col-span-1', 'col-span-4'],
-    ['col-span-3', 'col-span-2', 'col-span-3', 'col-span-4', 'col-span-2'],
-    ['col-span-6', 'col-span-4', 'col-span-3', 'col-span-2', 'col-span-4'],
-  ]}
-  snippet={(classNames) => `
-    <div class="grid grid-cols-6 gap-4">
-      <div class="${classNames[0]}..."></div>
-      <div class="${classNames[1]}..."></div>
-      <div class="${classNames[2]}..."></div>
-      <div class="${classNames[3]}..."></div>
-    </div>
-  `}
-  preview={(className) => (
-    <div className="grid grid-cols-6 gap-4">
-      <div className={`bg-gray-500 h-12 flex items-center justify-center ${className[0]}`}></div>
-      <div className={`bg-gray-300 h-12 flex items-center justify-center ${className[1]}`}></div>
-      <div className={`bg-gray-300 h-12 flex items-center justify-center ${className[2]}`}></div>
-      <div className={`bg-gray-500 h-12 flex items-center justify-center ${className[3]}`}></div>
-    </div>
-  )}
-/>
+```html
+  <div class="col-span-2 **md:col-span-6**"></div>
+```
 
 ## Customizing
 
