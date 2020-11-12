@@ -1,7 +1,8 @@
 import { tailwindVersion } from '@/utils/tailwindVersion'
+import clsx from 'clsx'
 import { useRef } from 'react'
 
-export function VersionSwitcher() {
+export function VersionSwitcher({ className }) {
   let selectRef = useRef()
 
   function submit(e) {
@@ -12,12 +13,12 @@ export function VersionSwitcher() {
   }
 
   return (
-    <form onSubmit={submit} className="relative">
+    <form onSubmit={submit} className={clsx('relative', className)}>
       <label>
         <span className="sr-only">Tailwind CSS Version</span>
         <select
           ref={selectRef}
-          className="appearance-none block bg-transparent pl-2 pr-7 py-1 text-gray-500 font-medium text-sm focus:outline-none focus:text-gray-800"
+          className="appearance-none block bg-transparent pr-7 py-1 text-gray-500 font-medium text-sm focus:outline-none focus:text-gray-800"
           onChange={submit}
         >
           <option value="v2">v{tailwindVersion}</option>

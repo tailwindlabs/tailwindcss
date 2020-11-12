@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { VersionSwitcher } from '@/components/VersionSwitcher'
-import { useIsHome } from '@/hooks/useIsHome'
 import { createContext, forwardRef, useRef } from 'react'
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
 import clsx from 'clsx'
@@ -35,7 +34,6 @@ const NavItem = forwardRef(({ href, children, isActive, isPublished, fallbackHre
 
 function Nav({ nav, children, fallbackHref }) {
   const router = useRouter()
-  const isHome = useIsHome()
   const activeItemRef = useRef()
   const scrollRef = useRef()
 
@@ -52,15 +50,10 @@ function Nav({ nav, children, fallbackHref }) {
     <nav
       id="nav"
       ref={scrollRef}
-      className="px-6 pt-6 overflow-y-auto font-medium text-base lg:text-sm lg:py-10 lg:px-5 sticky?lg:h-(screen-18)"
+      className="px-1 pt-6 overflow-y-auto font-medium text-base sm:px-3 md:px-5 lg:text-sm lg:py-10 sticky?lg:h-(screen-18)"
     >
-      <div className="relative -mx-2 w-24 mb-8 lg:hidden">
+      <div className="relative flex mb-8 px-3 lg:hidden">
         <VersionSwitcher />
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
-          <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
-            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-          </svg>
-        </div>
       </div>
       <TopLevelNav />
       {children}
@@ -262,8 +255,6 @@ function TopLevelNav() {
 }
 
 export function SidebarLayout({ children, navIsOpen, setNavIsOpen, nav, sidebar, fallbackHref }) {
-  let isHome = useIsHome()
-
   return (
     <SidebarContext.Provider value={{ nav, navIsOpen, setNavIsOpen }}>
       <div className="w-full max-w-8xl mx-auto">
@@ -271,17 +262,15 @@ export function SidebarLayout({ children, navIsOpen, setNavIsOpen, nav, sidebar,
           <div
             id="sidebar"
             className={clsx(
-              'fixed inset-0 flex-none h-full bg-white z-90 w-full border-b -mb-16 lg:-mb-0 lg:static lg:h-auto lg:overflow-y-visible lg:border-b-0 lg:pt-0 lg:w-1/4 lg:block lg:border-0 xl:w-72',
+              'fixed z-40 inset-0 flex-none h-full bg-black bg-opacity-25 w-full lg:bg-white lg:static lg:h-auto lg:overflow-y-visible lg:pt-0 lg:w-72 lg:block',
               {
                 hidden: !navIsOpen,
-                'pt-24': isHome,
-                'pt-16': !isHome,
               }
             )}
           >
             <div
               id="navWrapper"
-              className="h-full overflow-y-auto scrolling-touch lg:h-auto lg:block lg:relative lg:sticky lg:bg-transparent overflow-hidden lg:top-18 bg-white"
+              className="h-full overflow-y-auto scrolling-touch lg:h-auto lg:block lg:relative lg:sticky lg:bg-transparent overflow-hidden lg:top-18 bg-white mr-24 lg:mr-0"
             >
               <div className="hidden lg:block h-12 pointer-events-none absolute inset-x-0 z-10 bg-gradient-to-b from-white" />
               <Nav nav={nav} fallbackHref={fallbackHref}>
@@ -292,7 +281,7 @@ export function SidebarLayout({ children, navIsOpen, setNavIsOpen, nav, sidebar,
           <div
             id="content-wrapper"
             className={clsx(
-              'min-h-screen min-w-0 flex-auto lg:static lg:max-h-full lg:overflow-visible',
+              'min-h-screen min-w-0 w-full flex-auto lg:static lg:max-h-full lg:overflow-visible',
               {
                 'overflow-hidden max-h-screen fixed': navIsOpen,
               }
