@@ -61,7 +61,13 @@ module.exports = withBundleAnalyzer({
       use: [
         options.defaultLoaders.babel,
         createLoader(function (source) {
-          return source + `\nMDXContent.layoutProps = layoutProps\n`
+          if (source.includes('/*START_META*/')) {
+            const [meta] = source.match(/\/\*START_META\*\/(.*?)\/\*END_META\*\//s)
+            return 'export default ' + meta
+          }
+          return (
+            source.replace(/export const/gs, 'const') + `\nMDXContent.layoutProps = layoutProps\n`
+          )
         }),
         {
           loader: '@mdx-js/loader',
@@ -116,7 +122,9 @@ module.exports = withBundleAnalyzer({
           return [
             ...(typeof fields === 'undefined' ? extra : []),
             typeof fields === 'undefined' ? body : '',
-            `export const meta = ${JSON.stringify(meta)}`,
+            typeof fields === 'undefined'
+              ? `export const meta = ${JSON.stringify(meta)}`
+              : `export const meta = /*START_META*/${JSON.stringify(meta || {})}/*END_META*/`,
           ].join('\n\n')
         }),
       ],
