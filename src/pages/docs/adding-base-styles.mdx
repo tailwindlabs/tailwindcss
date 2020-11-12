@@ -48,7 +48,7 @@ If you want to apply some base styles to specific elements, the easiest way is t
 
 By using the `@layer` directive, Tailwind will automatically move those styles to the same place as `@tailwind base` to avoid unintended specificity issues.
 
-Using the `@layer` directive will also instruct Tailwind to consider those styles for purging when purging the `base` layer. Read our [Controlling File Size](/docs/controlling-file-size) documentation for more details.
+Using the `@layer` directive will also instruct Tailwind to consider those styles for purging when purging the `base` layer. Read our [Optimizing for Production](/docs/optimizing-for-production) documentation for more details.
 
 It's a good idea to use [@apply](/docs/functions-and-directives#apply) or [theme()](/docs/functions-and-directives#theme) to define these styles to avoid introducing new magic values or accidentally deviating from your design system.
 

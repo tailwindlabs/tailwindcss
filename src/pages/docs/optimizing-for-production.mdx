@@ -66,23 +66,23 @@ This basically matches any string separated by spaces, quotes or angle brackets,
 </div>
 </template>
 
-<[div] [class]="[md:flex]">
-  <[div] [class]="[md:flex-shrink-0]">
-    <[img] [class]="[rounded-lg] [md:w-56]" [src]="[/img/shopping.jpg]" [alt]="[Woman] [paying] [for] [a] [purchase]">
-  </[div]>
-  <[div] [class]="[mt-4] [md:mt-0] [md:ml-6]">
-    <[div] [class]="[uppercase] [tracking-wide] [text-sm] [text-indigo-600] [font-bold]">
-      [Marketing]
-    </[div]>
-    <[a] [href]="[/get-started]" [class]="[block] [mt-1] [text-lg] [leading-tight] [font-semibold] [text-gray-900] [hover:underline]">
-      [Finding] [customers] [for] [your] [new] [business]
-    </[a]>
-    <[p] [class]="[mt-2] [text-gray-600]">
-      [Getting] [a] [new] [business] [off] [the] [ground] [is] [a] [lot] [of] [hard] [work.]
-      [Here] [are] [five] [ideas] [you] [can] [use] [to] [find] [your] [first] [customers.]
-    </[p]>
-  </[div]>
-</[div]>
+<**div** **class**="**md:flex**">
+  <**div** **class**="**md:flex-shrink-0**">
+    <**img** **class**="**rounded-lg** **md:w-56**" **src**="**/img/shopping.jpg**" **alt**="**Woman** **paying** **for** **a** **purchase**">
+  </**div**>
+  <**div** **class**="**mt-4** **md:mt-0** **md:ml-6**">
+    <**div** **class**="**uppercase** **tracking-wide** **text-sm** **text-indigo-600** **font-bold**">
+      **Marketing**
+    </**div**>
+    <**a** **href**="**/get-started**" **class**="**block** **mt-1** **text-lg** **leading-tight** **font-semibold** **text-gray-900** **hover:underline**">
+      **Finding** **customers** **for** **your** **new** **business**
+    </**a**>
+    <**p** **class**="**mt-2** **text-gray-600**">
+      **Getting** **a** **new** **business** **off** **the** **ground** **is** **a** **lot** **of** **hard** **work.**
+      **Here** **are** **five** **ideas** **you** **can** **use** **to** **find** **your** **first** **customers.**
+    </**p**>
+  </**div**>
+</**div**>
 ```
 
 That means that **it is important to avoid dynamically creating class strings in your templates with string concatenation**, otherwise PurgeCSS won't know to preserve those classes.
@@ -90,15 +90,13 @@ That means that **it is important to avoid dynamically creating class strings in
 <TipBad>Don't use string concatenation to create class names</TipBad>
 
 ```html mt-4
-<template preview></template>
-<div class="[text-{{]  [error]  [?]  '[red]'  [:]  '[green]'  [}}-600]"></div>
+<div class="**text-{{**  **error**  **?**  '**red**'  **:**  '**green**'  **}}-600**"></div>
 ```
 
 <TipGood>Do dynamically select a complete class name</TipGood>
 
 ```html mt-4
-<template preview></template>
-<div class="[{{]  [error]  [?]  '[text-red-600]'  [:]  '[text-green-600]'  [}}]"></div>
+<div class="**{{**  **error**  **?**  '**text-red-600**'  **:**  '**text-green-600**'  **}}**"></div>
 ```
 
 As long as a class name appears in your template _in its entirety_, PurgeCSS will not remove it.
