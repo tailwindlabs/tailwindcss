@@ -201,7 +201,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
           </>
         )}
       </div>
-      <div className="hidden xl:text-sm xl:block flex-none w-64 pl-8 pr-12 mr-8">
+      <div className="hidden xl:text-sm xl:block flex-none w-64 pl-8 mr-8">
         <div className="flex flex-col justify-between overflow-y-auto sticky max-h-(screen-18) -mt-10 pt-10 pb-4 top-18">
           {toc.length > 0 && (
             <div className="mb-8">
