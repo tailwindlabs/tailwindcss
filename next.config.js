@@ -28,6 +28,9 @@ module.exports = withBundleAnalyzer({
   experimental: {
     modern: true,
   },
+  async redirects() {
+    return require('./redirects.json')
+  },
   webpack(config, options) {
     config.module.rules.push({
       test: /\.(png|jpe?g|gif|webp)$/i,
