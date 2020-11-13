@@ -2,7 +2,10 @@ export function Community() {
   return (
     <ul className="grid sm:grid-cols-2 gap-8">
       <li>
-        <a href="#" className="flex items-start space-x-4">
+        <a
+          href="https://github.com/tailwindlabs/tailwindcss/discussions"
+          className="flex items-start space-x-4"
+        >
           <svg fill="currentColor" className="flex-none text-gray-900 w-12 h-12">
             <rect width="48" height="48" rx="12" />
             <path
@@ -17,7 +20,7 @@ export function Community() {
         </a>
       </li>
       <li>
-        <a href="#" className="flex items-start space-x-4">
+        <a href="/discord" className="flex items-start space-x-4">
           <svg fill="currentColor" className="flex-none text-indigo-400 w-12 h-12">
             <rect width="48" height="48" rx="12" />
             <path
@@ -36,7 +39,7 @@ export function Community() {
         </a>
       </li>
       <li>
-        <a href="#" className="flex items-start space-x-4">
+        <a href="https://twitter.com/tailwindcss" className="flex items-start space-x-4">
           <svg fill="currentColor" className="flex-none text-light-blue-400 w-12 h-12">
             <rect width="48" height="48" rx="12" />
             <path
@@ -51,7 +54,7 @@ export function Community() {
         </a>
       </li>
       <li>
-        <a href="#" className="flex items-start space-x-4">
+        <a href="https://www.youtube.com/tailwindlabs" className="flex items-start space-x-4">
           <svg fill="currentColor" className="flex-none text-red-500 w-12 h-12">
             <rect width="48" height="48" rx="12" />
             <path
