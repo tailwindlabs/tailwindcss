@@ -7,36 +7,37 @@ description: Customizing the default theme for your project.
 import { TipGood, TipBad } from '@/components/Tip'
 import { ThemeReference } from '@/components/ThemeReference'
 
-The `theme` section of your `tailwind.config.js` file is where you define your project's color palette, type scale, font stacks, breakpoints, border radius values, and more.
+The `theme` section of your `tailwind.config.js` file is where you define your project's color palette, type scale, fonts, breakpoints, border radius values, and more.
 
 ```js
 // tailwind.config.js
+const colors = require('tailwindcss/colors')
+
 module.exports = {
   theme: {
     screens: {
-      sm: '640px',
+      sm: '480px',
       md: '768px',
-      lg: '1024px',
-      xl: '1280px',
-      '2xl': '1536px',
+      lg: '976px',
+      xl: '1440px',
+    },
+    colors: {
+      gray: colors.coolGray,
+      blue: colors.lightBlue,
+      red: colors.rose,
+      pink: colors.fuchsia,
     },
     fontFamily: {
-      display: ['Gilroy', 'sans-serif'],
-      body: ['Graphik', 'sans-serif'],
-    },
-    borderWidth: {
-      DEFAULT: '1px',
-      '0': '0',
-      '2': '2px',
-      '4': '4px',
+      sans: ['Graphik', 'sans-serif'],
+      serif: ['Merriweather', 'serif'],
     },
     extend: {
-      colors: {
-        cyan: '#9cdbff',
-      },
       spacing: {
-        '96': '24rem',
         '128': '32rem',
+        '144': '36rem',
+      },
+      borderRadius: {
+        '4xl': '2rem',
       }
     }
   }
@@ -44,6 +45,8 @@ module.exports = {
 ```
 
 We provide a sensible [default theme](https://github.com/tailwindlabs/tailwindcss/blob/v1/stubs/defaultConfig.stub.js#L5) with a very generous set of values to get you started, but don't be afraid to change it or extend; you're encouraged to customize it as much as you need to fit the goals of your design.
+
+---
 
 ## Theme structure
 
@@ -96,7 +99,7 @@ module.exports = {
 }
 ```
 
-By default, these colors are inherited by the `backgroundColor`, `textColor`, and `borderColor` core plugins.
+By default, these colors are inherited by all color-related core plugins, like `backgroundColor`, `borderColor`, `textColor`, and others.
 
 To learn more, see the [color customization documentation](/docs/colors).
 
@@ -110,30 +113,46 @@ module.exports = {
   theme: {
     spacing: {
       px: '1px',
-      '0': '0',
-      '1': '0.25rem',
-      '2': '0.5rem',
-      '3': '0.75rem',
-      '4': '1rem',
-      '5': '1.25rem',
-      '6': '1.5rem',
-      '8': '2rem',
-      '10': '2.5rem',
-      '12': '3rem',
-      '16': '4rem',
-      '20': '5rem',
-      '24': '6rem',
-      '32': '8rem',
-      '40': '10rem',
-      '48': '12rem',
-      '56': '14rem',
-      '64': '16rem',
-    }
+      0: '0',
+      0.5: '0.125rem',
+      1: '0.25rem',
+      1.5: '0.375rem',
+      2: '0.5rem',
+      2.5: '0.625rem',
+      3: '0.75rem',
+      3.5: '0.875rem',
+      4: '1rem',
+      5: '1.25rem',
+      6: '1.5rem',
+      7: '1.75rem',
+      8: '2rem',
+      9: '2.25rem',
+      10: '2.5rem',
+      11: '2.75rem',
+      12: '3rem',
+      14: '3.5rem',
+      16: '4rem',
+      20: '5rem',
+      24: '6rem',
+      28: '7rem',
+      32: '8rem',
+      36: '9rem',
+      40: '10rem',
+      44: '11rem',
+      48: '12rem',
+      52: '13rem',
+      56: '14rem',
+      60: '15rem',
+      64: '16rem',
+      72: '18rem',
+      80: '20rem',
+      96: '24rem',
+    },
   }
 }
 ```
 
-By default, these values are inherited by the `padding`, `margin`, `negativeMargin`, `width`, and `height` core plugins.
+By default, these values are inherited by the `padding`, `margin`, `width`, `height`, `maxHeight`, `gap`, `inset`, `space`, and `translate` core plugins.
 
 To learn more, see the [spacing customization documentation](/docs/customizing-spacing).
 
@@ -169,7 +188,7 @@ The example `borderRadius` configuration above would generate the following CSS 
 .rounded-full { border-radius: 9999px }
 ```
 
-You'll notice that using a key of `default` in the theme configuration created the class `rounded` with no suffix. This is a common convention in Tailwind supported by many (although not all) of the core plugins.
+You'll notice that using a key of `DEFAULT` in the theme configuration created the class `rounded` with no suffix. This is a common convention in Tailwind and is supported by all core plugins.
 
 To learn more about customizing a specific core plugin, visit the documentation for that plugin.
 
@@ -179,9 +198,29 @@ For a complete reference of available theme properties and their default values,
 
 Out of the box, your project will automatically inherit the values from [the default theme configuration](https://github.com/tailwindlabs/tailwindcss/blob/v1/stubs/defaultConfig.stub.js#L5). If you would like to customize the default theme, you have a few different options depending on your goals.
 
+### Extending the default theme
+
+If you'd like to preserve the default values for a theme option but also add new values, add your extensions under the `extend` key in the `theme` section of your configuration file.
+
+For example, if you wanted to add an extra breakpoint but preserve the existing ones, you could extend the `screens` property:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      // Adds a new breakpoint in addition to the default breakpoints
+      screens: {
+        '3xl': '1600px',
+      }
+    }
+  }
+}
+```
+
 ### Overriding the default theme
 
-To override an option in the default theme, create a `theme` section in your `tailwind.config.js` file and add the key you'd like to override.
+To override an option in the default theme, add your overrides directly under the `theme` section of your `tailwind.config.js`:
 
 ```js
 // tailwind.config.js
@@ -202,27 +241,7 @@ module.exports = {
 
 This will completely replace Tailwind's default configuration for that key, so in the example above none of the default opacity utilities would be generated.
 
-Any keys you **do not** provide will be inherited from the default theme, so in the above example, the default theme configuration for things like colors, spacing, border radius, background position, etc. would be preserved.
-
-### Extending the default theme
-
-If you'd like to preserve the default values for a theme option but also add new values, add your extensions under the `theme.extend` key.
-
-For example, if you wanted to add an extra breakpoint but preserve the existing ones, you could extend the `screens` property:
-
-```js
-// tailwind.config.js
-module.exports = {
-  theme: {
-    extend: {
-      // Adds a new breakpoint in addition to the default breakpoints
-      screens: {
-        '3xl': '1600px',
-      }
-    }
-  }
-}
-```
+Any keys you **do not** provide will be inherited from the default theme, so in the above example, the default theme configuration for things like colors, spacing, border-radius, background-position, etc. would be preserved.
 
 You can of course both override some parts of the default theme and extend other parts of the default theme within the same configuration:
 
@@ -291,10 +310,6 @@ module.exports = {
 }
 ```
 
-When you use the `extend` keyword then all the objects underneath will be deeply merged. Arrays are an exception to this rule. If you want to define a new font family with a set of fonts, you can safely use an array. If you do want to append to an existing font family, then you can spread the items from the default config.
-
-There is an exception to this. If your array has objects in it, then we will merge the arrays together. This is useful for plugin authors if they accept arrays of objects where the keys of each object could collide.
-
 ### Disabling an entire core plugin
 
 If you don't want to generate any classes for a certain core plugin, it's better to set that plugin to false in your `corePlugins` configuration than to provide an empty object for that key in your `theme` configuration.
@@ -323,41 +338,6 @@ module.exports = {
 
 The end result is the same, but since many core plugins expose no configuration they can only be disabled using `corePlugins` anyways, so it's better to be consistent.
 
-### Special theme values
-
-Sometimes values are implemented as arrays (for example in the case of `fontFamily`). Sometimes there are complex values like `fontSize` which looks like a tuple:
-
-```js
-// tailwind.config.js
-module.exports = {
-  fontSize: {
-    large: ['12rem', '24rem']
-  }
-}
-```
-
-In this case, when you use the `theme('fontSize.large')` function you will receive the first value (`12rem`) instead of the tuple. If you do want to get the original value, then you have to use the `config()` function instead.
-
-The following plugins will return the first value of the tuple, if the configuration value is defined as a tuple.
-
-- `fontSize`
-- `outline`
-
-The following plugins will return the value as a comma separated string, if it is defined as an array.
-
-- `fontFamily`
-- `boxShadow`
-- `transitionProperty`
-- `transitionDuration`
-- `transitionDelay`
-- `transitionTimingFunction`
-- `backgroundImage`
-- `backgroundSize`
-- `backgroundColor`
-- `cursor`
-- `animation`
-
-
 ### Adding your own keys
 
 There are a number of situations where it can be useful to add your own keys to the `theme` object.
@@ -385,20 +365,21 @@ module.exports = {
 }
 ```
 
-Another example is adding a new key to reference inside a custom plugin. For example, if you've written a `gradients` plugin for your project, you might add a `gradients` key to your `theme` object that the plugin references:
+Another example is adding a new key to reference inside a custom plugin. For example, if you've written a `filters` plugin for your project, you might add a `filters` key to your `theme` object that the plugin references:
 
 ```js
 // tailwind.config.js
 module.exports = {
   theme: {
-    gradients: theme => ({
-      'blue-green': [theme('colors.blue.500'), theme('colors.green.500')],
-      'purple-blue': [theme('colors.purple.500'), theme('colors.blue.500')],
-      // ...
-    })
+    filters: {
+      none: 'none',
+      grayscale: 'grayscale(1)',
+      invert: 'invert(1)',
+      sepia: 'sepia(1)',
+    }
   },
   plugins: [
-    require('./plugins/gradients')
+    require('./plugins/filters')
   ],
 }
 ```
