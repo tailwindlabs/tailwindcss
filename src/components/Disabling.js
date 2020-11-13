@@ -7,7 +7,7 @@ export function Disabling({ plugin, name }) {
   name = name || plugin.replace(/([a-z])([A-Z])/g, (m, p1, p2) => `${p1} ${p2.toLowerCase()}`)
 
   return (
-    <>
+    <div className="prose">
       <p>
         If you don't plan to use the {name} utilities in your project, you can disable them entirely
         by setting the{' '}
@@ -25,6 +25,6 @@ export function Disabling({ plugin, name }) {
         before="// ..."
         add={plugins.reduce((acc, cur) => ({ ...acc, [cur]: false }), {})}
       />
-    </>
+    </div>
   )
 }

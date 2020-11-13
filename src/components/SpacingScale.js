@@ -12,29 +12,31 @@ const scale = Object.keys(defaultConfig.theme.spacing)
 
 export function SpacingScale() {
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Size</th>
-          <th>Pixels</th>
-          <th className="hidden sm:table-cell">
-            <span className="sr-only">Preview</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {scale.map(({ name, size, pixels }) => (
-          <tr key={name}>
-            <td>{name}</td>
-            <td>{size}</td>
-            <td>{pixels}px</td>
-            <td className="hidden sm:table-cell">
-              <div className="h-4 bg-gray-400" style={{ width: size }} />
-            </td>
+    <div className="prose">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Pixels</th>
+            <th className="hidden sm:table-cell">
+              <span className="sr-only">Preview</span>
+            </th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {scale.map(({ name, size, pixels }) => (
+            <tr key={name}>
+              <td>{name}</td>
+              <td>{size}</td>
+              <td>{pixels}px</td>
+              <td className="hidden sm:table-cell">
+                <div className="h-4 bg-gray-400" style={{ width: size }} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }

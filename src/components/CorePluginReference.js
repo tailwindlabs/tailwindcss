@@ -16,35 +16,42 @@ const descriptions = {
 
 export function CorePluginReference() {
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Core Plugin</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        {corePluginsWithExamples.map(({ plugin, example }) => (
-          <tr key={plugin}>
-            <td>
-              <code>{plugin}</code>
-            </td>
-            <td>
-              {descriptions[plugin]
-                ?.split(/`([^`]+)`/)
-                .map((segment, i) => (i % 2 === 0 ? segment : <code key={i}>{segment}</code>)) || (
-                <>
-                  The{' '}
-                  <code>
-                    {plugin.replace(/([a-z])([A-Z])/g, (_m, p1, p2) => `${p1}-${p2.toLowerCase()}`)}
-                  </code>{' '}
-                  utilities like <code>{example}</code>
-                </>
-              )}
-            </td>
+    <div className="prose">
+      <table>
+        <thead>
+          <tr>
+            <th>Core Plugin</th>
+            <th>Description</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {corePluginsWithExamples.map(({ plugin, example }) => (
+            <tr key={plugin}>
+              <td>
+                <code>{plugin}</code>
+              </td>
+              <td>
+                {descriptions[plugin]
+                  ?.split(/`([^`]+)`/)
+                  .map((segment, i) =>
+                    i % 2 === 0 ? segment : <code key={i}>{segment}</code>
+                  ) || (
+                  <>
+                    The{' '}
+                    <code>
+                      {plugin.replace(
+                        /([a-z])([A-Z])/g,
+                        (_m, p1, p2) => `${p1}-${p2.toLowerCase()}`
+                      )}
+                    </code>{' '}
+                    utilities like <code>{example}</code>
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }

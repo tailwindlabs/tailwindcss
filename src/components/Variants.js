@@ -10,7 +10,7 @@ export function Variants({ plugin, name }) {
     .slice(0, 2)
 
   return (
-    <>
+    <div className="prose">
       <p>
         By default, {variants.length ? `only ${joinWithAnd(variants)}` : 'no'} variants are
         generated for {name} utilities.
@@ -30,6 +30,6 @@ export function Variants({ plugin, name }) {
         remove={{ [plugin]: variants }}
         add={{ [plugin]: [...variants, ...extraVariants] }}
       />
-    </>
+    </div>
   )
 }
