@@ -11,12 +11,6 @@ import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = {
   plugin,
-  transformValue: (value) => {
-    if (value.includes('calc(')) {
-      return value.match(/calc\(([^ ]+) /)[1].replace(/^0px$/, '0')
-    }
-    return value
-  },
   transformSelector: (selector) => (
     <>
       {selector.split('>').shift().trim()} <span className="ml-1 text-purple-300">> * + *</span>
