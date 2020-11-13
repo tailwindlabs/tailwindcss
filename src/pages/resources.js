@@ -65,7 +65,9 @@ export default function Resources() {
       </div>
       <div className="grid sm:grid-cols-3 gap-8 pb-10 border-b border-gray-200">
         <section>
-          <h2 className="text-xl text-gray-900 font-bold mb-4">JavaScript</h2>
+          <h2 className="text-xl text-gray-900 font-bold mb-4">
+            JavaScript<span className="sr-only">: Headless UI</span>
+          </h2>
           <div className="h-48 rounded-3xl bg-gray-900 mb-6"></div>
           <p>
             Completely unstyled, fully accessible UI components, designed to integrate beautifully
@@ -73,14 +75,18 @@ export default function Resources() {
           </p>
         </section>
         <section>
-          <h2 className="text-xl text-gray-900 font-bold mb-4">Icons</h2>
+          <h2 className="text-xl text-gray-900 font-bold mb-4">
+            Icons<span className="sr-only">: Heroicons</span>
+          </h2>
           <div className="h-48 rounded-3xl bg-gray-900 mb-6"></div>
           <p>
             A set of free MIT-licensed high-quality SVG icons for you to use in your web projects.
           </p>
         </section>
         <section>
-          <h2 className="text-xl text-gray-900 font-bold mb-4">Patterns</h2>
+          <h2 className="text-xl text-gray-900 font-bold mb-4">
+            Patterns<span className="sr-only">: Heropatterns</span>
+          </h2>
           <div className="h-48 rounded-3xl bg-gray-900 mb-6"></div>
           <p>
             A set of free MIT-licensed high-quality SVG patterns for you to use in your web
