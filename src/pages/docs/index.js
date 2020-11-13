@@ -107,7 +107,7 @@ export default function DocsLandingPage() {
         <div className="w-1/3 flex-none px-4 flex">
           <div className="relative text-white overflow-hidden rounded-3xl flex">
             <div className={`flex flex-col bg-gradient-to-br ${gradients.amber[0]}`}>
-              <div className="relative z-10 p-8 pb-0">
+              <div className="relative z-10 p-8">
                 <h2 className="text-xl font-semibold mb-2 text-shadow">Watch the screencasts</h2>
                 <p className="font-medium text-amber-100 text-shadow mb-4">
                   Build something with Tailwind in our online playground.
@@ -118,12 +118,16 @@ export default function DocsLandingPage() {
                   </a>
                 </Link>
               </div>
-              <div className="relative mt-auto" style={{ paddingTop: `${(180 / 309) * 100}%` }}>
-                <div
-                  className="absolute bottom-0 left-0 w-full"
-                  style={{ paddingTop: `${(238 / 341) * 100}%` }}
-                >
-                  <ScreencastsImage className="absolute inset-0 w-full h-full overflow-visible" />
+              <div className="pl-8 mt-auto">
+                <div className="relative" style={{ paddingTop: `${(180 / 309) * 100}%` }}>
+                  <div className="absolute bottom-0 -left-8 right-0">
+                    <div
+                      className="absolute bottom-0 left-0 w-full"
+                      style={{ paddingTop: `${(238 / 341) * 100}%` }}
+                    >
+                      <ScreencastsImage className="absolute inset-0 w-full h-full overflow-visible" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
