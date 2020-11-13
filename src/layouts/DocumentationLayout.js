@@ -23,7 +23,7 @@ const nav = {
   'Core Concepts': [
     pages['utility-first'],
     pages['responsive-design'],
-    pages['pseudo-class-variants'],
+    pages['hover-focus-and-other-states'],
     pages['dark-mode'],
     pages['adding-base-styles'],
     pages['extracting-components'],
