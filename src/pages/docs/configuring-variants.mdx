@@ -10,57 +10,54 @@ import { TipGood, TipBad } from '@/components/Tip'
 
 ## <Heading hidden>Overview</Heading>
 
-The `variants` section of your `tailwind.config.js` file is where you control which core utility plugins should have [responsive variants](/docs/responsive-design) and [state variants](/docs/hover-focus-and-other-states) generated.
+The `variants` section of your `tailwind.config.js` file is where you control which core plugins should have [responsive variants](/docs/responsive-design), [dark mode variants](/docs/dark-mode) and [state variants](/docs/hover-focus-and-other-states) generated.
 
 ```js
 // tailwind.config.js
 module.exports = {
   variants: {
-    appearance: ['responsive'],
-    // ...
-    borderColor: ['responsive', 'hover', 'focus'],
-    // ...
-    outline: ['responsive', 'focus'],
-    // ...
-    zIndex: ['responsive'],
+    extend: {
+      backgroundColor: ['active'],
+      // ...
+      borderColor: ['focus-visible', 'first'],
+      // ...
+      textColor: ['visited'],
+    }
   },
 }
 ```
 
-Each property is a core plugin name pointing to an array of variants to generate for that plugin. The following variants are supported out of the box:
-- `'responsive'`
-- `'dark'`
-- `'group-hover'`
-- `'focus-within'`
-- `'first'`
-- `'last'`
-- `'odd'`
-- `'even'`
-- `'hover'`
-- `'focus'`
-- `'active'`
-- `'visited'`
-- `'disabled'`
-- `'motion-safe'`
-- `'motion-reduce'`
+Each property is a core plugin name pointing to an array of variants to generate for that plugin.
 
-## Overriding default variants
+The following variants are supported out of the box:
 
-Any variants you specify will **override* the default variants for that plugin.
+| Variant | Description |
+| --- | --- |
+| `responsive` | Responsive variants like `sm`, `md`, `lg`, and `xl`. |
+| `dark` | Targets dark mode. |
+| `motion-safe` | Targets the `prefers-reduced-motion: no-preference` media query. |
+| `motion-reduce` | Targets the `prefers-reduced-motion: reduce` media query. |
+| `first` | Targets the `first-child` pseudo-class. |
+| `last` | Targets the `last-child` pseudo-class.  |
+| `odd` | Targets the `odd-child` pseudo-class.  |
+| `even` | Targets the `even-child` pseudo-class.  |
+| `visited` | Targets the `visited` pseudo-class.  |
+| `checked` | Targets the `checked` pseudo-class.  |
+| `group-hover` | Targets an element when a marked parent matches the `hover` pseudo-class. |
+| `group-focus` | Targets an element when a marked parent matches the `focus` pseudo-class. |
+| `focus-within` | Targets the `focus-within` pseudo-class. |
+| `hover` | Targets the `hover` pseudo-class. |
+| `focus` | Targets the `focus` pseudo-class. |
+| `focus-visible` | Targets the `focus-visible` pseudo-class. |
+| `active` | Targets the `active` pseudo-class. |
+| `disabled` | Targets the `disabled` pseudo-class. |
 
-```js
-// tailwind.config.js
-module.exports = {
-  variants: {
-    // Only 'active' variants will be generated
-    backgroundColor: ['active'],
-  },
-}
-```
+For more information about how variants work, read our documentation on [hover, focus and other states](/docs/hover-focus-and-other-states).
 
-When overriding the default variants, make sure you always specify _all_ the variants you'd like to enable, not just the new ones you'd like to add.
+---
 
-## Extending default variants
+
+## Enabling extra variants
 
 If you'd like to enable extra variants for a plugin in addition to the defaults, you can configure your variants using the `extend` keyword, similar to how you can use extend inside of the `theme` section:
 
@@ -76,7 +73,25 @@ module.exports = {
 }
 ```
 
-Because [the order of variants is important](/docs/configuring-variants#ordering-variants), we provided a `variantOrder` key in the config section that makes it easy to add new variants in the right place. You can also order them yourself inside the `variants` section directly.
+Because [the order of variants is important](/docs/configuring-variants#ordering-variants), any variants added under the `extend` key are automatically ordered for you using a sensible default variant order. You can customize this order using the `variantOrder` key if necessary.
+
+---
+
+## Overriding default variants
+
+Any variants configured directly under the `variants` key will **override** the default variants for that plugin.
+
+```js
+// tailwind.config.js
+module.exports = {
+  variants: {
+    // Only 'active' variants will be generated
+    backgroundColor: ['active'],
+  },
+}
+```
+
+When overriding the default variants, make sure you always specify _all_ the variants you'd like to enable, not just the new ones you'd like to add.
 
 ---
 
