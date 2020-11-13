@@ -1,5 +1,4 @@
 [
-  { "source": "/docs", "destination": "/docs/installation", "permanent": false },
   { "source": "/docs/what-is-tailwind", "destination": "/", "permanent": false },
   { "source": "/docs/flexbox-display", "destination": "/docs/display", "permanent": false },
   { "source": "/docs/spacing", "destination": "/docs/padding", "permanent": false },
