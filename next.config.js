@@ -32,6 +32,10 @@ module.exports = withBundleAnalyzer({
     return require('./redirects.json')
   },
   webpack(config, options) {
+    if (!options.dev) {
+      options.defaultLoaders.babel.options.cache = false
+    }
+
     config.module.rules.push({
       test: /\.(png|jpe?g|gif|webp)$/i,
       use: [
