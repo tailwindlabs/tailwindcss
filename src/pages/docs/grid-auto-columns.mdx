@@ -16,7 +16,7 @@ export const classes = { plugin }
 Use the `auto-cols-{size}` utilities to control the size implicitly-created grid columns.
 
 ```html
-<div class="grid grid-flow-col auto-cols-max">
+<div class="grid grid-flow-col **auto-cols-max**">
   <div>1</div>
   <div>2</div>
   <div>3</div>
@@ -28,7 +28,7 @@ Use the `auto-cols-{size}` utilities to control the size implicitly-created grid
 To control the grid-auto-columns property at a specific breakpoint, add a `{screen}:` prefix to any existing grid-auto-columns utility. For example, use `md:auto-cols-min` to apply the `auto-cols-min` utility at only medium screen sizes and above.
 
 ```html
-<div class="grid grid-flow-col auto-cols-max md:auto-cols-min">
+<div class="grid grid-flow-col auto-cols-max **md:auto-cols-min**">
   <div>1</div>
   <div>2</div>
   <div>3</div>

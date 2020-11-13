@@ -15,22 +15,22 @@ export const classes = { plugin }
 
 Use the `grid-flow-{keyword}` utilities to control how the auto-placement algorithm works for a grid layout.
 
-```html
+```html purple
 <template preview class="bg-white p-8">
   <div class="grid grid-cols-3 grid-rows-3 grid-flow-col gap-4">
-    <div class="bg-gray-300 h-12 flex items-center justify-center">1</div>
-    <div class="bg-gray-500 h-12 flex items-center justify-center">2</div>
-    <div class="bg-gray-300 h-12 flex items-center justify-center">3</div>
-    <div class="bg-gray-500 h-12 flex items-center justify-center">4</div>
-    <div class="bg-gray-300 h-12 flex items-center justify-center">5</div>
-    <div class="bg-gray-500 h-12 flex items-center justify-center">6</div>
-    <div class="bg-gray-300 h-12 flex items-center justify-center">7</div>
-    <div class="bg-gray-500 h-12 flex items-center justify-center">8</div>
-    <div class="bg-gray-300 h-12 flex items-center justify-center">9</div>
+    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">1</div>
+    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">2</div>
+    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">3</div>
+    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">4</div>
+    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">5</div>
+    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">6</div>
+    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">7</div>
+    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">8</div>
+    <div class="bg-purple-500 rounded-md h-12 flex items-center justify-center text-white text-2xl font-extrabold">9</div>
   </div>
 </template>
 
-<div class="grid grid-flow-col grid-cols-3 grid-rows-3 gap-4">
+<div class="grid **grid-flow-col** grid-cols-3 grid-rows-3 gap-4">
   <div>1</div>
   <!-- ... -->
   <div>9</div>
@@ -42,7 +42,7 @@ Use the `grid-flow-{keyword}` utilities to control how the auto-placement algori
 To control the grid-auto-flow property at a specific breakpoint, add a `{screen}:` prefix to any existing grid-auto-flow utility. For example, use `md:grid-flow-col` to apply the `grid-flow-col` utility at only medium screen sizes and above.
 
 ```html
-<div class="grid grid-flow-col sm:grid-flow-row md:grid-flow-col-dense lg:grid-flow-row-dense xl:grid-flow-col ...">
+<div class="grid grid-flow-col **md:grid-flow-col** ...">
   <div>1</div>
   <!-- ... -->
   <div>9</div>
