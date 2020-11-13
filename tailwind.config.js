@@ -73,7 +73,7 @@ module.exports = {
               color: theme('colors.cyan.700'),
               fontWeight: theme('fontWeight.medium'),
               textDecoration: 'none',
-              boxShadow: 'inset 0 -0.125em 0 0 #fff, inset 0 -0.375em 0 0 rgba(165, 243, 252, 0.4)',
+              boxShadow: theme('boxShadow.link'),
             },
             'a code': {
               color: 'inherit',
@@ -127,6 +127,7 @@ module.exports = {
       }),
       boxShadow: {
         px: '0 0 0 1px rgba(0, 0, 0, 0.5)',
+        link: 'inset 0 -0.125em 0 0 #fff, inset 0 -0.375em 0 0 rgba(165, 243, 252, 0.4)',
       },
       keyframes: {
         'flash-code': {
