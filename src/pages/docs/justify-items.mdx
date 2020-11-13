@@ -15,85 +15,135 @@ export const classes = { plugin }
 
 Use `justify-items-auto` to justify grid items automatically on their inline axis:
 
-```html
-<template preview>
-  <div class="grid grid-cols-3 gap-4 justify-items-auto h-48">
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">1</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">2</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">3</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">4</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">5</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">6</div>
+```html emerald
+<template preview class="p-4">
+  <div class="grid grid-cols-3 gap-4 justify-items-auto h-32">
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-emerald-500 flex justify-center items-center">1</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-emerald-500 flex justify-center items-center">2</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-emerald-500 flex justify-center items-center">3</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-emerald-500 flex justify-center items-center">4</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-emerald-500 flex justify-center items-center">5</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-emerald-500 flex justify-center items-center">6</div>
   </div>
 </template>
+
+<div class="grid **justify-items-auto** ...">
+  <div>1</div>
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5</div>
+  <div>6</div>
+</div>
 ```
 
 ## Start
 
 Use `justify-items-start` to justify grid items against the start of their inline axis:
 
-```html
-<template preview>
-  <div class="grid grid-cols-3 gap-4 justify-items-start h-48">
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">1</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">2</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">3</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">4</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">5</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">6</div>
+```html indigo
+<template preview class="p-4">
+  <div class="grid grid-cols-3 gap-4 justify-items-start h-32">
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-indigo-500 flex justify-center items-center w-16">1</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-indigo-500 flex justify-center items-center w-16">2</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-indigo-500 flex justify-center items-center w-16">3</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-indigo-500 flex justify-center items-center w-16">4</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-indigo-500 flex justify-center items-center w-16">5</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-indigo-500 flex justify-center items-center w-16">6</div>
   </div>
 </template>
+
+<div class="grid **justify-items-start** ...">
+  <div>1</div>
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5</div>
+  <div>6</div>
+</div>
 ```
 
 ## End
 
 Use `justify-items-end` to justify grid items against the end of their inline axis:
 
-```html
-<template preview>
-  <div class="grid grid-cols-3 gap-4 justify-items-end h-48">
-      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">1</div>
-      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">2</div>
-      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">3</div>
-      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">4</div>
-      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">5</div>
-      <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">6</div>
-    </div>
+```html lightBlue
+<template preview class="p-4">
+  <div class="grid grid-cols-3 gap-4 justify-items-end h-32">
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-light-blue-500 flex justify-center items-center w-16">1</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-light-blue-500 flex justify-center items-center w-16">2</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-light-blue-500 flex justify-center items-center w-16">3</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-light-blue-500 flex justify-center items-center w-16">4</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-light-blue-500 flex justify-center items-center w-16">5</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-light-blue-500 flex justify-center items-center w-16">6</div>
+  </div>
 </template>
+
+<div class="grid **justify-items-end** ...">
+  <div>1</div>
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5</div>
+  <div>6</div>
+</div>
 ```
 
 ## Center
 
 Use `justify-items-center` to justify grid items along their inline axis:
 
-```html
-<template preview>
-  <div class="grid grid-cols-3 gap-4 justify-items-center h-48">
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">1</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">2</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">3</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">4</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">5</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">6</div>
+```html amber
+<template preview class="p-4">
+  <div class="grid grid-cols-3 gap-4 justify-items-center h-32">
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-amber-500 flex justify-center items-center w-16">1</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-amber-500 flex justify-center items-center w-16">2</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-amber-500 flex justify-center items-center w-16">3</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-amber-500 flex justify-center items-center w-16">4</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-amber-500 flex justify-center items-center w-16">5</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-amber-500 flex justify-center items-center w-16">6</div>
   </div>
 </template>
+
+<div class="grid **justify-items-center** ...">
+  <div>1</div>
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5</div>
+  <div>6</div>
+</div>
 ```
 
 ## Stretch
 
 Use `justify-items-stretch` to stretch items along their inline axis:
 
-```html
-<template preview>
-  <div class="grid grid-cols-3 gap-4 justify-items-stretch h-48">
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">1</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">2</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">3</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">4</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">5</div>
-    <div class="text-gray-700 bg-gray-400 flex justify-center items-center px-4 py-2">6</div>
+```html fuchsia
+<template preview class="p-4">
+  <div class="grid grid-cols-3 gap-4 justify-items-stretch h-32">
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-fuchsia-500 flex justify-center items-center">1</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-fuchsia-500 flex justify-center items-center">2</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-fuchsia-500 flex justify-center items-center">3</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-fuchsia-500 flex justify-center items-center">4</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-fuchsia-500 flex justify-center items-center">5</div>
+    <div class="text-white text-2xl font-extrabold rounded-lg bg-fuchsia-500 flex justify-center items-center">6</div>
   </div>
 </template>
+
+<div class="grid **justify-items-stretch** ...">
+  <div>1</div>
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5</div>
+  <div>6</div>
+</div>
 ```
 
 ## Responsive
