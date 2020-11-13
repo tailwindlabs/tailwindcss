@@ -14,84 +14,120 @@ export const classes = { plugin }
 
 Use `justify-start` to justify items against the start of the container's main axis:
 
-```html
-<template preview>
-  <div class="flex justify-start bg-gray-200">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+```html fuchsia
+<template preview class="p-4">
+  <div class="flex justify-start -m-2">
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-fuchsia-500 m-2">1</div>
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-fuchsia-500 m-2">2</div>
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-fuchsia-500 m-2">3</div>
   </div>
 </template>
+
+<div class="flex **justify-start** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Center
 
 Use `justify-center` to justify items along the center of the container's main axis:
 
-```html
-<template preview>
-  <div class="flex justify-center bg-gray-200">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+```html indigo
+<template preview class="p-4">
+  <div class="flex justify-center -m-2">
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-indigo-500 m-2">1</div>
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-indigo-500 m-2">2</div>
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-indigo-500 m-2">3</div>
   </div>
 </template>
+
+<div class="flex **justify-center** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## End
 
 Use `justify-end` to justify items against the end of the container's main axis:
 
-```html
-<template preview>
-  <div class="flex justify-end bg-gray-200">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+```html lightBlue
+<template preview class="p-4">
+  <div class="flex justify-end -m-2">
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-light-blue-500 m-2">1</div>
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-light-blue-500 m-2">2</div>
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-light-blue-500 m-2">3</div>
   </div>
 </template>
+
+<div class="flex **justify-end** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Space between
 
 Use `justify-between` to justify items along the container's main axis such that there is an equal amount of space between each item:
 
-```html
-<template preview>
-  <div class="flex justify-between bg-gray-200">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+```html emerald
+<template preview class="p-4">
+  <div class="flex justify-between -m-2">
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-emerald-500 m-2">1</div>
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-emerald-500 m-2">2</div>
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-emerald-500 m-2">3</div>
   </div>
 </template>
+
+<div class="flex **justify-between** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Space around
 
 Use `justify-around` to justify items along the container's main axis such that there is an equal amount of space on each side of each item:
 
-```html
-<template preview>
-  <div class="flex justify-around bg-gray-200">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+```html purple
+<template preview class="p-4">
+  <div class="flex justify-around -m-2">
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-purple-500 m-2">1</div>
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-purple-500 m-2">2</div>
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-purple-500 m-2">3</div>
   </div>
 </template>
+
+<div class="flex **justify-around** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Space evenly
 
 Use `justify-evenly` to justify items along the container's main axis such that there is an equal amount of space around each item, but also accounting for the doubling of space you would normally see between each item when using `justify-around`:
 
-```html
-<template preview>
-  <div class="flex justify-evenly bg-gray-200">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+```html amber
+<template preview class="p-4">
+  <div class="flex justify-evenly -m-2">
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-amber-500 m-2">1</div>
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-amber-500 m-2">2</div>
+    <div class="w-16 h-16 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-amber-500 m-2">3</div>
   </div>
 </template>
+
+<div class="flex **justify-evenly** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Responsive
@@ -100,21 +136,11 @@ To justify flex items at a specific breakpoint, add a `{screen}:` prefix to any 
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['justify-start', 'justify-center', 'justify-end', 'justify-between', 'justify-around']}
-  snippet={(classNames) => `
-    <div class="${classNames} ...">
-      <!-- ... -->
-    </div>
-  `}
-  preview={(className) => (
-    <div className={`flex bg-gray-200 ${className}`}>
-      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-    </div>
-  )}
-/>
+```html
+<div class="justify-start **md:justify-between** ...">
+  <!-- ... -->
+</div>
+```
 
 ## Customizing
 

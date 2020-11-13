@@ -17,30 +17,30 @@ export const classes = { plugin }
 
 ## Visible
 
-Use `.overflow-visible` to prevent content within an element from being clipped. Note that any content that overflows the bounds of the element will then be visible.
+Use `overflow-visible` to prevent content within an element from being clipped. Note that any content that overflows the bounds of the element will then be visible.
 
 ```html lightBlue
 <template preview>
   <div class="h-32 overflow-hidden">
-    <div class="overflow-visible h-24 px-6 py-2 rounded-md border-4 border-light-blue-500">
-      <p class="md:w-2/3 lg:w-1/2 font-flow leading-5 text-light-blue-900">
+    <div class="overflow-visible h-24 px-6 py-2 rounded-md bg-light-blue-500 bg-opacity-25">
+      <p class="md:w-2/3 lg:w-1/2 font-flow leading-5 text-light-blue-700">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eleifend rutrum auctor. Phasellus convallis sagittis augue ut ornare. Vestibulum et gravida lectus, sed ultrices sapien. Nullam aliquet elit dui, vitae hendrerit lectus volutpat eget
       </p>
     </div>
   </div>
 </template>
 
-<div class="**overflow-visible** h-24 ...">Lorem ipsum dolor sit amet...</div>
+<div class="**overflow-visible** h-24 h- ...">Lorem ipsum dolor sit amet...</div>
 ```
 
 ## Auto
 
-Use `.overflow-auto` to add scrollbars to an element in the event that its content overflows the bounds of that element. Unlike `.overflow-scroll`, which always shows scrollbars, this utility will only show them if scrolling is necessary.
+Use `overflow-auto` to add scrollbars to an element in the event that its content overflows the bounds of that element. Unlike `.overflow-scroll`, which always shows scrollbars, this utility will only show them if scrolling is necessary.
 
 ```html rose
 <template preview>
-  <div class="overflow-auto h-32 rounded-md border-4 border-rose-500">
-    <p class="font-flow leading-5 text-rose-900 px-6 py-4">
+  <div class="overflow-auto h-32 rounded-md bg-rose-500 bg-opacity-25">
+    <p class="font-flow leading-5 text-rose-700 px-6 py-4">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eleifend rutrum auctor. Phasellus convallis sagittis augue ut ornare. Vestibulum et gravida lectus, sed ultrices sapien. Nullam aliquet elit dui, vitae hendrerit lectus volutpat eget. In porttitor tincidunt egestas. Pellentesque laoreet ligula at est vulputate facilisis. Etiam tristique justo ut odio placerat ornare. Cras bibendum, orci at ornare tincidunt, lacus nunc gravida enim, sit amet euismod nunc lectus in lectus. Ut dictum nulla et arcu aliquet ornare. Aliquam et dapibus lectus. Aenean mattis elit mi, sed ultricies augue consectetur id. Sed id magna malesuada, luctus urna a, bibendum tortor. Cras cursus cursus ex. Nulla fringilla elit vitae imperdiet scelerisque. Donec ac sem eu diam convallis mollis a sed leo. Proin congue augue turpis, eget rutrum dolor ultricies non. Nulla blandit venenatis dapibus. Sed tincidunt mollis elit, quis suscipit nibh eleifend quis. Donec ex lorem, auctor eu rutrum in, blandit id dolor. Nulla molestie arcu turpis. In id felis vulputate, tempor massa eget, malesuada mauris. Quisque fringilla consequat metus, luctus scelerisque leo fringilla vel.
     </p>
   </div>
@@ -51,7 +51,7 @@ Use `.overflow-auto` to add scrollbars to an element in the event that its conte
 
 ## Hidden
 
-Use `.overflow-hidden` to clip any content within an element that overflows the bounds of that element.
+Use `overflow-hidden` to clip any content within an element that overflows the bounds of that element.
 
 ```html
 <template preview>
@@ -65,7 +65,7 @@ Use `.overflow-hidden` to clip any content within an element that overflows the 
 
 ## Scroll horizontally if needed
 
-Use `.overflow-x-auto` to allow horizontal scrolling if needed.
+Use `overflow-x-auto` to allow horizontal scrolling if needed.
 
 ```html
 <template preview>
@@ -79,7 +79,7 @@ Use `.overflow-x-auto` to allow horizontal scrolling if needed.
 
 ## Scroll vertically if needed
 
-Use `.overflow-y-auto` to allow vertical scrolling if needed.
+Use `overflow-y-auto` to allow vertical scrolling if needed.
 
 ```html
 <template preview>
@@ -93,7 +93,7 @@ Use `.overflow-y-auto` to allow vertical scrolling if needed.
 
 ## Scroll horizontally always
 
-Use `.overflow-x-scroll` to allow horizontal scrolling and always show scrollbars unless always-visible scrollbars are disabled by the operating system.
+Use `overflow-x-scroll` to allow horizontal scrolling and always show scrollbars unless always-visible scrollbars are disabled by the operating system.
 
 ```html
 <template preview>
@@ -107,7 +107,7 @@ Use `.overflow-x-scroll` to allow horizontal scrolling and always show scrollbar
 
 ## Scroll vertically always
 
-Use `.overflow-y-scroll` to allow vertical scrolling and always show scrollbars unless always-visible scrollbars are disabled by the operating system.
+Use `overflow-y-scroll` to allow vertical scrolling and always show scrollbars unless always-visible scrollbars are disabled by the operating system.
 
 ```html
 <template preview>
@@ -121,7 +121,7 @@ Use `.overflow-y-scroll` to allow vertical scrolling and always show scrollbars 
 
 ## Scroll in all directions
 
-Use `.overflow-scroll` to add scrollbars to an element. Unlike `.overflow-auto`, which only shows scrollbars if they are necessary, this utility always shows them. Note that some operating systems (like macOS) hide unnecessary scrollbars regardless of this setting.
+Use `overflow-scroll` to add scrollbars to an element. Unlike `.overflow-auto`, which only shows scrollbars if they are necessary, this utility always shows them. Note that some operating systems (like macOS) hide unnecessary scrollbars regardless of this setting.
 
 ```html
 <template preview>
