@@ -99,6 +99,27 @@ module.exports = {
               marginTop: 0,
               marginBottom: 0,
             },
+            table: {
+              fontSize: theme('fontSize.sm')[0],
+              lineHeight: theme('fontSize.sm')[1].lineHeight,
+            },
+            thead: {
+              color: theme('colors.gray.600'),
+              borderBottomColor: theme('colors.gray.200'),
+            },
+            'thead th': {
+              paddingTop: 0,
+              fontWeight: theme('fontWeight.semibold'),
+            },
+            'tbody tr': {
+              borderBottomColor: theme('colors.gray.200'),
+            },
+            'tbody tr:last-child': {
+              borderBottomWidth: '1px',
+            },
+            'tbody code': {
+              fontSize: theme('fontSize.xs')[0],
+            },
           },
         },
       }),

@@ -99,7 +99,7 @@ export const ClassTable = memo(
               <thead>
                 <tr>
                   <th className="z-20 sticky top-0 text-sm font-semibold text-gray-600 bg-white p-0">
-                    <div className="pb-2 border-b border-gray-200">Class</div>
+                    <div className="pb-2 pr-2 border-b border-gray-200">Class</div>
                   </th>
                   <th
                     className={clsx(
@@ -109,11 +109,15 @@ export const ClassTable = memo(
                       }
                     )}
                   >
-                    <div className="pb-2 border-b border-gray-200">Properties</div>
+                    <div
+                      className={clsx('pb-2 pl-2 border-b border-gray-200', { 'pr-2': preview })}
+                    >
+                      Properties
+                    </div>
                   </th>
                   {preview && (
                     <th className="z-20 sticky top-0 text-sm font-semibold text-gray-600 bg-white p-0">
-                      <div className="pb-2 border-b border-gray-200">
+                      <div className="pb-2 pl-2 border-b border-gray-200">
                         <span className="sr-only">Preview</span>&nbsp;
                       </div>
                     </th>
@@ -129,7 +133,7 @@ export const ClassTable = memo(
                     <tr key={utility}>
                       <td
                         className={clsx(
-                          'py-2 font-mono text-xs text-violet-600 whitespace-nowrap',
+                          'py-2 pr-2 font-mono text-xs text-violet-600 whitespace-nowrap',
                           {
                             'border-t border-gray-200': i !== 0,
                           }
@@ -139,10 +143,10 @@ export const ClassTable = memo(
                       </td>
                       <td
                         className={clsx(
-                          'py-2 font-mono text-xs text-light-blue-600 whitespace-pre',
+                          'py-2 pl-2 font-mono text-xs text-light-blue-600 whitespace-pre',
                           {
                             'border-t border-gray-200': i !== 0,
-                            'hidden sm:table-cell': preview,
+                            'hidden sm:table-cell sm:pr-2': preview,
                           }
                         )}
                       >
