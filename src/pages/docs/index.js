@@ -11,19 +11,34 @@ const whatsNew = [
   {
     title: 'Focus Ring Utilities',
     version: '2.0+',
+    image: require('@/img/docs/focus-ring.svg').ReactComponent,
   },
-  { title: 'Dark Mode', version: '2.0+' },
-  { title: 'Extended Color Palette', version: '2.0+' },
-  { title: 'Extend Variants', version: '2.0+' },
+  {
+    title: 'Dark Mode',
+    version: '2.0+',
+    image: require('@/img/docs/dark-mode.svg').ReactComponent,
+  },
+  {
+    title: 'Extended Color Palette',
+    version: '2.0+',
+    image: require('@/img/docs/color-palette.svg').ReactComponent,
+  },
+  {
+    title: 'Extend Variants',
+    version: '2.0+',
+    image: require('@/img/docs/extend-variants.svg').ReactComponent,
+  },
   {
     title: 'Extra Wide Breakpoint',
     version: '2.0+',
+    image: require('@/img/docs/breakpoint.svg').ReactComponent,
   },
-  { title: 'Sharable Presets' },
+  { title: 'Sharable Presets', image: require('@/img/docs/sharable-presets.svg').ReactComponent },
   {
     title: 'Gradients',
+    image: require('@/img/docs/gradients.svg').ReactComponent,
   },
-  { title: 'Animations' },
+  { title: 'Animations', image: require('@/img/docs/animations.svg').ReactComponent },
 ]
 
 const latestUpdates = [
@@ -143,7 +158,8 @@ export default function DocsLandingPage() {
           {whatsNew.map((item) => (
             <li key={item.title} className="flex">
               <Link href="/">
-                <a className="relative rounded-xl border border-black border-opacity-5 shadow-sm flex justify-center w-full pt-8 pb-6 px-6">
+                <a className="relative rounded-xl border border-black border-opacity-5 shadow-sm w-full pt-8 pb-6 px-6">
+                  {item.image && <item.image className="mx-auto mb-3" />}
                   {item.title}
                   {item.version && (
                     <span className="absolute top-2 right-2 bg-fuchsia-100 text-fuchsia-600 rounded-full text-xs py-0.5 px-2">
