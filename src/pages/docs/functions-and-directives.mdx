@@ -55,22 +55,51 @@ This is useful when you find a common utility pattern in your HTML that you'd li
 }
 ```
 
-Rules can be listed on a single line or with multiple calls to `@apply`:
+Note that classes are applied based on their location in your original CSS, not based on the order you list them after the `@apply` directive. This is to ensure that the behavior you get when extracting a list of classes with `@apply` matches how those classes behave when listed directly in your HTML.
 
 ```css
+/* Input */
 .btn {
-  @apply font-bold;
-  @apply py-2;
-  @apply px-4;
-  @apply rounded;
+  @apply py-2 p-4;
+}
+
+/* Output */
+.btn {
+  padding: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 ```
 
-You can mix `@apply` declarations with normal CSS declarations too of course:
+If you want fine-grained control over the order in which classes are applied, use multiple `@apply` statements:
 
 ```css
-.btn:hover {
-  @apply bg-blue-700;
+/* Input */
+.btn {
+  @apply py-2;
+  @apply p-4;
+}
+
+/* Output */
+.btn {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding: 1rem;
+}
+```
+
+You can also mix `@apply` declarations with normal CSS declarations:
+
+```css
+/* Input */
+.btn {
+  transform: translateY(-1px);
+  @apply bg-black;
+}
+
+/* Output */
+.btn {
+  background-color: #000;
   transform: translateY(-1px);
 }
 ```
@@ -125,34 +154,11 @@ Note that if you're using Sass/SCSS, you'll need to use Sass' interpolation feat
 }
 ```
 
-`@apply` did not work with pseudo-class or responsive variants of another utility. Howerve since v2.x we made this behaviour work as expected.
-
-```css
-/* This now works as expted: */
-.btn {
-  @apply block bg-red-500;
-  @apply hover:bg-blue-500;
-  @apply md:inline-block;
-}
-```
-
-If you've [configured a prefix](/docs/configuration#prefix) for your utilities, you can optionally omit the prefix when using `@apply` if you prefer a terser syntax:
-
-```css
-/* Both of these will work */
-.btn {
-  @apply tw-font-bold tw-py-2 tw-px-4 tw-rounded;
-}
-.btn {
-  @apply font-bold py-2 px-4 rounded;
-}
-```
-
 ---
 
 ## @layer
 
-Use the `@layer` directive to tell Tailwind which "bucket" a set of custom styles belong in. Valid layers are a `base`, `components`, and `utilities`.
+Use the `@layer` directive to tell Tailwind which "bucket" a set of custom styles belong to. Valid layers are a `base`, `components`, and `utilities`.
 
 ```css
 @tailwind base;
@@ -188,7 +194,7 @@ Use the `@layer` directive to tell Tailwind which "bucket" a set of custom style
 
 Tailwind will automatically move any CSS within a `@layer` directive to the same place as the corresponding `@tailwind` rule, so you don't have to worry as much about authoring your CSS in a specific order to avoid specificity issues.
 
-Wrapping any custom CSS in a `@layer` directive also tells Tailwind to consider those styles for purging when purging that layer. Read our [Optimizing for Production](/docs/optimizing-for-production) documentation for more details.
+Wrapping any custom CSS in a `@layer` directive also tells Tailwind to consider those styles for purging when purging that layer. Read our [documentation on optimizing for production](/docs/optimizing-for-production) for more details.
 
 ---
 
@@ -273,6 +279,8 @@ You can generate responsive variants of your own classes by wrapping their defin
 }
 ```
 
+This is a shortcut for writing out `@variants responsive { ... }` which works as well.
+
 Using the default breakpoints, this would generate these classes:
 
 ```css
@@ -351,7 +359,15 @@ This can be a useful alternative to `@apply` when you want to reference a value 
 }
 ```
 
-Since Tailwind uses the [nested object syntax](/docs/colors#nested-object-syntax) to define its default color palette, make sure to use dot notation to access the nested colors.
+If you need to access a value that contains a dot (like the `2.5` value in the spacing scale), you can use square bracket notation:
+
+```css
+.content-area {
+  height: calc(100vh - theme('spacing[2.5]'));
+}
+```
+
+Since Tailwind uses a [nested object syntax](/docs/colors#nested-object-syntax) to define its default color palette, make sure to use dot notation to access the nested colors.
 
 <TipBad>Don't use the dash syntax when accessing nested color values</TipBad>
 
