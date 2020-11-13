@@ -143,7 +143,7 @@ function TopLevelNav() {
   return (
     <div className="mb-10 space-y-4">
       <TopLevelLink
-        href="/docs/installation"
+        href="/docs"
         isActive={current === '' || current === 'docs'}
         color="pink"
         icon={
