@@ -107,7 +107,7 @@ In the example above, we've used:
 - The [margin](/docs/margin) and [padding](/docs/padding) utilities (`ml-6` and `pt-1`) to position the card text
 - The [font size](/docs/font-size), [text color](/docs/text-color), and [line-height](/docs/line-height) utilities (`text-xl`, `text-gray-900`, `leading-tight`, etc.) to style the card text
 
-...allowing us to implement a completely custom component design, without writing a single line of custom CSS.
+This approach allows us to implement a completely custom component design without writing a single line of custom CSS.
 
 Now I know what you're thinking, _"this is an atrocity, what a horrible mess!"_ and you're right, it's kind of ugly. In fact it's just about impossible to think this is a good idea the first time you see it — **you have to actually try it**.
 
@@ -129,7 +129,7 @@ But using utility classes has a few important advantages over inline styles:
 
 - **Designing with constraints**. Using inline styles, every value is a magic number. With utilities, you're choosing styles from a predefined [design system](/docs/theme), which makes it much easier to build visually consistent UIs.
 - **Responsive design**. You can't use media queries in inline styles, but you can use Tailwind's [responsive utilities](/docs/responsive-design) to build fully responsive interfaces easily.
-- **Pseudo-classes**. Inline styles can't target states like hover or focus, but Tailwind's [pseudo-class variants](/docs/pseudo-class-variants) make it easy to style those states with utility classes.
+- **Hover, focus, and other states**. Inline styles can't target states like hover or focus, but Tailwind's [state variants](/docs/pseudo-class-variants) make it easy to style those states with utility classes.
 
 This component is fully responsive and includes a button with hover styles, and is built entirely with utility classes:
 
@@ -139,10 +139,14 @@ This component is fully responsive and includes a button with hover styles, and 
     <div class="sm:flex sm:items-center px-6 py-4">
       <img class="block mx-auto sm:mx-0 sm:flex-shrink-0 h-16 sm:h-24 rounded-full" src="/img/erin-lindford.jpg" alt="Woman's Face">
       <div class="mt-4 sm:mt-0 sm:ml-4 text-center sm:text-left">
-        <p class="text-xl leading-tight">Erin Lindford</p>
-        <p class="text-sm leading-tight text-gray-600">Product Engineer</p>
+        <p class="text-gray-900 font-bold text-xl leading-tight">
+          Erin Lindford
+        </p>
+        <p class="text-sm leading-tight text-gray-600">
+          Product Engineer
+        </p>
         <div class="mt-4">
-          <button class="text-purple-500 hover:text-white hover:bg-purple-500 border border-purple-500 text-xs font-semibold rounded-full px-4 py-1 leading-normal">Message</button>
+          <button class="text-purple-700 hover:text-white hover:bg-purple-600 border border-purple-600 text-xs font-semibold rounded-full px-4 py-1 leading-normal">Message</button>
         </div>
       </div>
     </div>
@@ -156,7 +160,18 @@ This component is fully responsive and includes a button with hover styles, and 
 
 The biggest maintainability concern when using a utility-first approach is managing commonly repeated utility combinations.
 
-This is easily solved by [extracting components](/docs/extracting-components), either as template partials/JavaScript components, or using Tailwind's `@apply` feature to create abstractions around common utility patterns.
+This is easily solved by [extracting components](/docs/extracting-components), usually as template partials or components.
+
+```html
+<!-- PrimaryButton.vue -->
+<template>
+  <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    <slot/>
+  </button>
+</template>
+```
+
+You can also use Tailwind's `@apply` feature to create CSS abstractions around common utility patterns.
 
 ```html
 <template preview class="p-4 text-center">
