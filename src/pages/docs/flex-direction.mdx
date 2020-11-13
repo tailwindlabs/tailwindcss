@@ -19,56 +19,80 @@ export const classes = { plugin }
 
 Use `.flex-row` to position flex items horizontally in the same direction as text:
 
-```html
+```html amber
 <template preview>
-  <div class="flex flex-row bg-gray-200">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex flex-row space-x-4">
+    <div class="w-16 h-16 rounded-md bg-amber-500 text-white flex items-center justify-center text-2xl font-extrabold">1</div>
+    <div class="w-16 h-16 rounded-md bg-amber-500 text-white flex items-center justify-center text-2xl font-extrabold">2</div>
+    <div class="w-16 h-16 rounded-md bg-amber-500 text-white flex items-center justify-center text-2xl font-extrabold">3</div>
   </div>
 </template>
+
+<div class="flex **flex-row** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Row reversed
 
 Use `.flex-row-reverse` to position flex items horizontally in the opposite direction:
 
-```html
+```html lightBlue
 <template preview>
-  <div class="flex flex-row-reverse bg-gray-200">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex flex-row-reverse space-x-reverse space-x-4">
+    <div class="w-16 h-16 rounded-md bg-light-blue-500 text-white flex items-center justify-center text-2xl font-extrabold">1</div>
+    <div class="w-16 h-16 rounded-md bg-light-blue-500 text-white flex items-center justify-center text-2xl font-extrabold">2</div>
+    <div class="w-16 h-16 rounded-md bg-light-blue-500 text-white flex items-center justify-center text-2xl font-extrabold">3</div>
   </div>
 </template>
+
+<div class="flex **flex-row-reverse** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Column
 
 Use `.flex-col` to position flex items vertically:
 
-```html
+```html emerald
 <template preview>
-  <div class="flex flex-col bg-gray-200">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex flex-col space-y-4">
+    <div class="h-16 rounded-md bg-emerald-500 text-white flex items-center justify-center text-2xl font-extrabold">1</div>
+    <div class="h-16 rounded-md bg-emerald-500 text-white flex items-center justify-center text-2xl font-extrabold">2</div>
+    <div class="h-16 rounded-md bg-emerald-500 text-white flex items-center justify-center text-2xl font-extrabold">3</div>
   </div>
 </template>
+
+<div class="flex **flex-col** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Column reversed
 
 Use `.flex-col-reverse` to position flex items vertically in the opposite direction:
 
-```html
+```html rose
 <template preview>
-  <div class="flex flex-col-reverse bg-gray-200">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex flex-col-reverse space-y-reverse space-y-4">
+    <div class="h-16 rounded-md bg-rose-500 text-white flex items-center justify-center text-2xl font-extrabold">1</div>
+    <div class="h-16 rounded-md bg-rose-500 text-white flex items-center justify-center text-2xl font-extrabold">2</div>
+    <div class="h-16 rounded-md bg-rose-500 text-white flex items-center justify-center text-2xl font-extrabold">3</div>
   </div>
 </template>
+
+<div class="flex **flex-col-reverse** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Responsive
@@ -77,21 +101,12 @@ To apply a flex direction utility only at a specific breakpoint, add a `{screen}
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['flex-row', 'flex-col', 'flex-row-reverse', 'flex-col-reverse', 'flex-row']}
-  snippet={(classNames) => `
-    <div class="${classNames} ...">
-      <!-- ... -->
-    </div>
-  `}
-  preview={(className) => (
-    <div className={`flex bg-gray-200 ${className}`}>
-      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-    </div>
-  )}
-/>
+
+```html
+  <div class="flex flex-col **md:flex-row** ...">
+    <!-- ... -->
+  </div>
+```
 
 ## Customizing
 
