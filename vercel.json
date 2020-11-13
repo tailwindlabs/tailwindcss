@@ -79,6 +79,11 @@
       "source": "/docs/controlling-file-size",
       "destination": "/docs/optimizing-for-production",
       "permanent": false
+    },
+    {
+      "source": "/docs/pseudo-class-variants",
+      "destination": "/docs/hover-focus-and-other-states",
+      "permanent": false
     }
   ]
 }

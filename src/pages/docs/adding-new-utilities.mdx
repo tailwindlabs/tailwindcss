@@ -70,9 +70,9 @@ Tailwind will automatically generate prefixed versions of each custom utility th
 
 Learn more about responsive utilities in the [responsive design documentation](/docs/responsive-design).
 
-### Generating pseudo-class variants
+### Generating state variants
 
-If you'd like to create [pseudo-class variants](/docs/pseudo-class-variants) of your own utilities, wrap your utilities in the `@variants` directive:
+If you'd like to create [state variants](/docs/hover-focus-and-other-states) for your own utilities, wrap your utilities in the `@variants` directive:
 
 ```css
 @tailwind base;
@@ -117,7 +117,7 @@ Pseudo-class variants are generated in the same order you list them in the `@var
 }
 ```
 
-If you'd like to generate both responsive _and_ pseudo-class variants of your custom utilities, wrap `@variants` with `@responsive`:
+If you'd like to generate both responsive _and_ state variants of your custom utilities, wrap `@variants` with `@responsive`:
 
 ```css
 @tailwind base;
@@ -138,7 +138,7 @@ If you'd like to generate both responsive _and_ pseudo-class variants of your cu
 }
 ```
 
-Learn more about pseudo-class variants utilities in the [pseudo-class variant documentation](/docs/pseudo-class-variants).
+Learn more about state variants in the [state variants documentation](/docs/hover-focus-and-other-states).
 
 ---
 
