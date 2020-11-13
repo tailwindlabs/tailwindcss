@@ -35,11 +35,11 @@ The easiest way to add your own utilities to Tailwind is to simply add them to y
 
 By using the `@layer` directive, Tailwind will automatically move those styles to the same place as `@tailwind utilities` to avoid unintended specificity issues.
 
-Using the `@layer` directive will also instruct Tailwind to consider those styles for purging when purging the `utilities` layer. Read our [Optimizing for Production](/docs/optimizing-for-production) documentation for more details.
+Using the `@layer` directive will also instruct Tailwind to consider those styles for purging when purging the `utilities` layer. Read our [documentation on optimizing for production](/docs/optimizing-for-production) for more details.
 
 ### Generating responsive variants
 
-If you'd like to create [responsive variants](/docs/responsive-design) of your own utilities based on the breakpoints defined in your `tailwind.config.js` file, wrap your utilities in the `@responsive` directive:
+If you'd like to generate [responsive variants](/docs/responsive-design) of your own utilities based on the breakpoints defined in your `tailwind.config.js` file, wrap your utilities in the `@variants` directive and add `responsive` to the list of variants:
 
 ```css
 @tailwind base;
@@ -47,7 +47,7 @@ If you'd like to create [responsive variants](/docs/responsive-design) of your o
 @tailwind utilities;
 
 @layer utilities {
-  @responsive {
+  @variants responsive {
     .scroll-snap-none {
       scroll-snap-type: none;
     }
@@ -65,14 +65,53 @@ Tailwind will automatically generate prefixed versions of each custom utility th
 
 ```html
 <!-- Use `scroll-snap-type: none` by default, then use `scroll-snap-type: x` on medium screens and up -->
-<div class="scroll-snap-none md:scroll-snap-x"></div>
+<div class="scroll-snap-none **md:scroll-snap-x**"></div>
+```
+
+Learn more about responsive utilities in the [responsive design documentation](/docs/responsive-design).
+
+### Generating dark mode variants
+
+If you'd like to generate [dark mode variants](/docs/dark-mode) of your own utilities, first make sure `darkMode` is set to either `media` or `class` in your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  darkMode: 'media'
+  // ...
+}
+```
+
+Next, wrap your utilities in the `@variants` directive and add `dark` to the list of variants:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  @variants dark {
+    .filter-none {
+      filter: none;
+    }
+    .filter-grayscale {
+      filter: grayscale(100%);
+    }
+  }
+}
+```
+
+Tailwind will automatically generate prefixed versions of each custom utility that you can use to conditionally apply those styles at different states:
+
+```html
+<div class="filter-grayscale **dark:filter-none**"></div>
 ```
 
 Learn more about responsive utilities in the [responsive design documentation](/docs/responsive-design).
 
 ### Generating state variants
 
-If you'd like to create [state variants](/docs/hover-focus-and-other-states) for your own utilities, wrap your utilities in the `@variants` directive:
+If you'd like to create [state variants](/docs/hover-focus-and-other-states) for your own utilities, wrap your utilities in the `@variants` directive and list the variants you'd like to enable:
 
 ```css
 @tailwind base;
@@ -94,10 +133,10 @@ If you'd like to create [state variants](/docs/hover-focus-and-other-states) for
 Tailwind will automatically generate prefixed versions of each custom utility that you can use to conditionally apply those styles at different states:
 
 ```html
-<div class="filter-grayscale hover:filter-none"></div>
+<div class="filter-grayscale **hover:filter-none**"></div>
 ```
 
-Pseudo-class variants are generated in the same order you list them in the `@variants` directive, so if you'd like one pseudo-class to take precedence over another, make sure you list that one last:
+State variants are generated in the same order you list them in the `@variants` directive, so if you'd like one variant to take precedence over another, make sure you list that one last:
 
 ```css
 /* Focus will take precedence over hover */
@@ -114,27 +153,6 @@ Pseudo-class variants are generated in the same order you list them in the `@var
     filter: grayscale(100%);
   }
   /* ... */
-}
-```
-
-If you'd like to generate both responsive _and_ state variants of your custom utilities, wrap `@variants` with `@responsive`:
-
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer utilities {
-  @responsive {
-    @variants hover, focus {
-      .filter-none {
-        filter: none;
-      }
-      .filter-grayscale {
-        filter: grayscale(100%);
-      }
-    }
-  }
 }
 ```
 
