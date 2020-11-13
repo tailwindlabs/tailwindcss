@@ -10,35 +10,14 @@ import { Disabling } from '@/components/Disabling'
 
 export const classes = { plugin }
 
-## Gap
+## Usage
 
-Use `gap-{size}` to change the gutter size in grid layouts.
+Use `gap-{size}` to change the gap between both rows and columns in grid layouts.
 
 ```html indigo
-<template preview>
+<template preview class="p-6">
   <div>
-    <div class="mb-1 text-sm text-gray-600">gap-1</div>
-    <div class="grid grid-cols-2 gap-1">
-      <div class="h-16 rounded-md text-center bg-indigo-500"></div>
-      <div class="h-16 rounded-md text-center bg-indigo-500"></div>
-      <div class="h-16 rounded-md text-center bg-indigo-500"></div>
-      <div class="h-16 rounded-md text-center bg-indigo-500"></div>
-    </div>
-  </div>
-
-  <div class="mt-8">
-    <div class="mb-1 text-sm text-gray-600">gap-2</div>
-    <div class="grid grid-cols-2 gap-2">
-      <div class="h-16 rounded-md text-center bg-indigo-500"></div>
-      <div class="h-16 rounded-md text-center bg-indigo-500"></div>
-      <div class="h-16 rounded-md text-center bg-indigo-500"></div>
-      <div class="h-16 rounded-md text-center bg-indigo-500"></div>
-    </div>
-  </div>
-
-  <div class="mt-8">
-    <div class="mb-1 text-sm text-gray-600">gap-6</div>
-    <div class="grid grid-cols-2 gap-6">
+    <div class="grid grid-cols-2 gap-4">
       <div class="h-16 rounded-md text-center bg-indigo-500"></div>
       <div class="h-16 rounded-md text-center bg-indigo-500"></div>
       <div class="h-16 rounded-md text-center bg-indigo-500"></div>
@@ -47,99 +26,22 @@ Use `gap-{size}` to change the gutter size in grid layouts.
   </div>
 </template>
 
-<div class="grid **gap-1** grid-cols-2">
-  <!-- ... -->
-</div>
-
-<div class="grid **gap-2** grid-cols-2">
-  <!-- ... -->
-</div>
-
-<div class="grid **gap-6** grid-cols-2">
-  <!-- ... -->
+<div class="grid **gap-4** grid-cols-2">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
 </div>
 ```
 
-## Row Gap
-
-Use `gap-y-{size}` to change the gutter size between rows in grid layouts.
-
-```html emerald
-<template preview>
-  <div>
-    <div class="mb-1 text-sm text-gray-600">gap-y-1</div>
-    <div class="grid grid-cols-2 gap-y-1">
-      <div class="h-16 rounded-md text-center bg-emerald-500"></div>
-      <div class="h-16 rounded-md text-center bg-emerald-500"></div>
-      <div class="h-16 rounded-md text-center bg-emerald-500"></div>
-      <div class="h-16 rounded-md text-center bg-emerald-500"></div>
-  </div>
-
-  <div class="mt-8">
-    <div class="mb-1 text-sm text-gray-600">gap-y-2</div>
-    <div class="grid grid-cols-2 gap-y-2">
-      <div class="h-16 rounded-md text-center bg-emerald-500"></div>
-      <div class="h-16 rounded-md text-center bg-emerald-500"></div>
-      <div class="h-16 rounded-md text-center bg-emerald-500"></div>
-      <div class="h-16 rounded-md text-center bg-emerald-500"></div>
-    </div>
-  </div>
-
-  <div class="mt-8">
-    <div class="mb-1 text-sm text-gray-600">gap-y-6</div>
-    <div class="grid grid-cols-2 gap-y-6">
-      <div class="h-16 rounded-md text-center bg-emerald-500"></div>
-      <div class="h-16 rounded-md text-center bg-emerald-500"></div>
-      <div class="h-16 rounded-md text-center bg-emerald-500"></div>
-      <div class="h-16 rounded-md text-center bg-emerald-500"></div>
-    </div>
-  </div>
-</template>
-
-<div class="grid **gap-y-1** grid-cols-2">
-  <!-- ... -->
-</div>
-
-<div class="grid **gap-y-2** grid-cols-2">
-  <!-- ... -->
-</div>
-
-<div class="grid **gap-y-6** grid-cols-2">
-  <!-- ... -->
-</div>
-```
-
-Note that prior to Tailwind v1.7.0, these utilities were named `.row-gap-{size}`. For more information, see the [upcoming changes guide](/docs/upcoming-changes).
-
-## Column Gap
-
-Use `gap-x-{size}` to change the gutter size between columns in grid layouts.
+Use `gap-x-{size}` and `gap-y-{size}` to change the gap between rows and columns independently.
 
 ```html rose
-<template preview>
+<template preview class="p-6">
   <div>
-    <div class="mb-1 text-sm text-gray-600">gap-x-1</div>
-    <div class="grid grid-cols-2 gap-x-1">
+    <div class="grid grid-cols-3 gap-x-8 gap-y-4">
       <div class="h-16 rounded-md text-center bg-rose-500"></div>
       <div class="h-16 rounded-md text-center bg-rose-500"></div>
-      <div class="h-16 rounded-md text-center bg-rose-500"></div>
-      <div class="h-16 rounded-md text-center bg-rose-500"></div>
-    </div>
-  </div>
-
-  <div class="mt-8">
-    <div class="mb-1 text-sm text-gray-600">gap-x-2</div>
-    <div class="grid grid-cols-2 gap-x-2">
-      <div class="h-16 rounded-md text-center bg-rose-500"></div>
-      <div class="h-16 rounded-md text-center bg-rose-500"></div>
-      <div class="h-16 rounded-md text-center bg-rose-500"></div>
-      <div class="h-16 rounded-md text-center bg-rose-500"></div>
-    </div>
-  </div>
-
-  <div class="mt-8">
-    <div class="mb-1 text-sm text-gray-600">gap-x-6</div>
-    <div class="grid grid-cols-2 gap-x-6">
       <div class="h-16 rounded-md text-center bg-rose-500"></div>
       <div class="h-16 rounded-md text-center bg-rose-500"></div>
       <div class="h-16 rounded-md text-center bg-rose-500"></div>
@@ -148,20 +50,15 @@ Use `gap-x-{size}` to change the gutter size between columns in grid layouts.
   </div>
 </template>
 
-<div class="grid **gap-x-1** grid-cols-2">
-  <!-- ... -->
-</div>
-
-<div class="grid **gap-x-2** grid-cols-2">
-  <!-- ... -->
-</div>
-
-<div class="grid **gap-x-6** grid-cols-2">
-  <!-- ... -->
+<div class="grid **gap-x-8** **gap-y-4** grid-cols-2">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5</div>
+  <div>6</div>
 </div>
 ```
-
-Note that prior to Tailwind v1.7.0, these utilities were named `.col-gap-{size}`. For more information, see the [upcoming changes guide](/docs/upcoming-changes).
 
 ## Responsive
 
