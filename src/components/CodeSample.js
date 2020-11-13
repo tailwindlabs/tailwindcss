@@ -41,7 +41,7 @@ export function CodeSample({ preview, snippet, previewClassName, color = 'gray' 
         })}
       >
         <pre
-          className={clsx('scrollbar-none p-6 text-sm leading-snug language-html', {
+          className={clsx('scrollbar-none overflow-x-auto p-6 text-sm leading-snug language-html', {
             'bg-black bg-opacity-75': codeBackground[color],
           })}
         >
