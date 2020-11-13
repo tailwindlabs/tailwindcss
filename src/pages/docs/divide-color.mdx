@@ -25,8 +25,8 @@ export const classes = {
           className="flex-1 border-t"
           style={{
             borderColor: Array.isArray(css['border-color'])
-              ? css['border-color'][0]
-              : css['border-color'],
+              ? css['border-color'][0].replace('var(--divide-opacity)', '1')
+              : css['border-color'].replace('var(--divide-opacity)', '1'),
           }}
         />
       </div>
