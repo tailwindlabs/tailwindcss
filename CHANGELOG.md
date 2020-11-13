@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet!
 
+## [2.0.0-alpha.17] - 2020-11-13
+
+### Changed
+
+- Remove `grid-gap` fallbacks needed for old versions of Safari ([5ec45fa](https://github.com/tailwindlabs/tailwindcss/commit/5ec45fa))
+
 ## [2.0.0-alpha.16] - 2020-11-12
 
 ### Added
@@ -1176,7 +1182,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.16...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.17...HEAD
+[2.0.0-alpha.17]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.16...v2.0.0-alpha.17
 [2.0.0-alpha.16]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.15...v2.0.0-alpha.16
 [2.0.0-alpha.15]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.14...v2.0.0-alpha.15
 [2.0.0-alpha.14]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.13...v2.0.0-alpha.14
