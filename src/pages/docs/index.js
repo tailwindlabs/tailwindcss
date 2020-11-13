@@ -86,7 +86,7 @@ export default function DocsLandingPage() {
             <div className={`flex flex-col bg-gradient-to-br ${gradients.pink[0]}`}>
               <div className="relative z-10 p-8">
                 <h2 className="text-xl font-semibold mb-2 text-shadow">Try it in the browser</h2>
-                <p className="font-medium text-violet-100 text-shadow mb-4">
+                <p className="font-medium text-rose-100 text-shadow mb-4">
                   Build something with Tailwind in our online playground.
                 </p>
                 <Link href="/">
@@ -135,7 +135,7 @@ export default function DocsLandingPage() {
         <h2 className="text-3xl tracking-tight font-extrabold text-gray-900 mt-16 mb-8">
           What’s new in Tailwind
         </h2>
-        <ul className="grid grid-cols-4 gap-8 font-semibold text-gray-900">
+        <ul className="grid grid-cols-4 gap-8 font-semibold text-gray-900 text-center">
           {whatsNew.map((item) => (
             <li key={item.title} className="flex">
               <Link href="/">
