@@ -17,10 +17,10 @@ const { code, tokens } = tokenize.html(
     <img src="/full-stack-radio.png" alt="" width="160" height="160" class="flex-none w-20 h-20 rounded-lg bg-gray-100" />
     <div class="min-w-0 flex-auto space-y-0.5">
       <p class="(light)text-lime-600 dark:text-lime-400 text-sm sm:text-base lg:text-sm xl:text-base font-semibold uppercase">
-        <abbr title="Episode">Ep.</abbr> 145
+        <abbr title="Episode">Ep.</abbr> 128
       </p>
       <h2 class="(light)text-black dark:text-white text-base sm:text-xl lg:text-base xl:text-xl font-semibold truncate">
-        Statamic 3.0 and Tailwind CSS 2.0
+        Scaling CSS at Heroku with Utility Classes
       </h2>
       <p class="(light)text-gray-500 dark:text-gray-400 text-base sm:text-lg lg:text-base xl:text-lg font-medium">
         Full Stack Radio
