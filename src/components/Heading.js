@@ -42,8 +42,8 @@ export function Heading({
         // eslint-disable-next-line
         <a
           href={`#${id}`}
-          className="absolute text-gray-500 no-underline after:hash opacity-0 group-hover:opacity-100"
-          style={{ marginLeft: '-1em', paddingRight: '0.5em' }}
+          className="absolute after:hash opacity-0 group-hover:opacity-100"
+          style={{ marginLeft: '-1em', paddingRight: '0.5em', boxShadow: 'none', color: '#a1a1aa' }}
           aria-label="Anchor"
         />
       )}
