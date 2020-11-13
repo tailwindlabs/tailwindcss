@@ -19,22 +19,22 @@ export const classes = { plugin }
 
 Control the stack order (or three-dimensional positioning) of an element in Tailwind, regardless of order it has been displayed, using the `.z-{index}` utilities.
 
-```html
-<template preview>
-  <div class="relative h-32 text-center">
-    <div class="z-40 absolute w-24 h-24 ml-0 mt-0 bg-gray-400 flex justify-center items-center">z-40</div>
-    <div class="z-30 absolute w-24 h-24 ml-2 mt-2 bg-gray-500 flex justify-center items-center">z-30</div>
-    <div class="z-20 absolute w-24 h-24 ml-4 mt-4 bg-gray-600 flex justify-center items-center">z-20</div>
-    <div class="z-10 absolute w-24 h-24 ml-6 mt-6 bg-gray-700 flex justify-center items-center">z-10</div>
-    <div class="z-0 absolute w-24 h-24 ml-8 mt-8 bg-gray-800 flex justify-center items-center">z-0</div>
+```html fuchsia
+<template preview class="p-4">
+  <div class="relative h-28 text-center">
+    <div class="z-40 absolute w-20 h-20 ml-0 mt-0 bg-fuchsia-500 border-r border-opacity-50 border-fuchsia-600 rounded-md shadow-md flex justify-center items-center text-white text-2xl font-extrabold">5</div>
+    <div class="z-30 absolute w-20 h-20 ml-12 mt-2 bg-fuchsia-500 border-r border-opacity-50 border-fuchsia-600 rounded-md shadow-md flex justify-center items-center text-white text-2xl font-extrabold">4</div>
+    <div class="z-20 absolute w-20 h-20 ml-24 mt-4 bg-fuchsia-500 border-r border-opacity-50 border-fuchsia-600 rounded-md shadow-md flex justify-center items-center text-white text-2xl font-extrabold">3</div>
+    <div class="z-10 absolute w-20 h-20 ml-36 mt-6 bg-fuchsia-500 border-r border-opacity-50 border-fuchsia-600 rounded-md shadow-md flex justify-center items-center text-white text-2xl font-extrabold">2</div>
+    <div class="z-0 absolute w-20 h-20 ml-48 mt-8 bg-fuchsia-500 rounded-md shadow-md flex justify-center items-center text-white text-2xl font-extrabold">1</div>
   </div>
 </template>
 
-<div class="z-40 ml-0 mt-0 bg-gray-400">z-40</div>
-<div class="z-30 ml-2 mt-2 bg-gray-500">z-30</div>
-<div class="z-20 ml-4 mt-4 bg-gray-600">z-20</div>
-<div class="z-10 ml-6 mt-6 bg-gray-700">z-10</div>
-<div class="z-0 ml-8 mt-8 bg-gray-800">z-0</div>
+<div class="**z-40** ...">5</div>
+<div class="**z-30** ...">4</div>
+<div class="**z-20** ...">3</div>
+<div class="**z-10** ...">2</div>
+<div class="**z-0** ...">1</div>
 ```
 
 ## Responsive
@@ -43,27 +43,11 @@ To control the z-index of an element at a specific breakpoint, add a `{screen}:`
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['z-0', 'z-10', 'z-20', 'z-30', 'z-40']}
-  snippet={(classNames) => `
-    <div class="${classNames} bg-yellow-400">yellow</div>
-    <div class="z-40 ml-4 mt-0 bg-gray-400">z-40</div>
-    <div class="z-30 ml-6 mt-2 bg-gray-500">z-30</div>
-    <div class="z-20 ml-8 mt-4 bg-gray-600">z-20</div>
-    <div class="z-10 ml-10 mt-6 bg-gray-700">z-10</div>
-    <div class="z-0 ml-12 mt-8 bg-gray-800">z-0</div>
-  `}
-  preview={(className) => (
-    <div className="relative w-full h-32 text-center">
-      <div className={`${className} absolute w-full h-12 mt-12 bg-yellow-400 flex justify-center items-center`}>yellow</div>
-      <div className="z-40 absolute w-24 h-24 ml-4 mt-0 bg-gray-400 flex justify-center items-center">z-40</div>
-      <div className="z-30 absolute w-24 h-24 ml-6 mt-2 bg-gray-500 flex justify-center items-center">z-30</div>
-      <div className="z-20 absolute w-24 h-24 ml-8 mt-4 bg-gray-600 flex justify-center items-center">z-20</div>
-      <div className="z-10 absolute w-24 h-24 ml-10 mt-6 bg-gray-700 flex justify-center items-center">z-10</div>
-      <div className="z-0 absolute w-24 h-24 ml-12 mt-8 bg-gray-800 flex justify-center items-center">z-0</div>
-    </div>
-  )}
-/>
+```html
+<div class="z-0 **md:z-50** ...">
+  <!-- ... -->
+</div>
+```
 
 ## Customizing
 
