@@ -5,7 +5,7 @@ description: Best practices for adding your own global base styles on top of Tai
 
 Base (or global) styles are the styles at the beginning of a stylesheet that set useful defaults for basic HTML elements like `<a>` tags, headings, etc. or apply opinionated resets like the popular [box-sizing reset](https://www.paulirish.com/2012/box-sizing-border-box-ftw/).
 
-Tailwind includes a useful set of base styles out of the box that we call [Preflight](/docs/preflight), which is really just [normalize.css](https://github.com/necolas/normalize.css/) plus a thin layer of additional more opinionated styles.
+Tailwind includes a useful set of base styles out of the box that we call [Preflight](/docs/preflight), which is really just [modern-normalize](https://github.com/sindresorhus/modern-normalize) plus a thin layer of additional more opinionated styles.
 
 Preflight is a great starting point for most projects, but if you'd ever like to add your own additional base styles, here are some recommendations for doing it idiomatically.
 
@@ -17,7 +17,7 @@ If you just want to apply some global styling to the `html` or `body` elements, 
 
 ```html
 <!doctype html>
-<html lang="en" class="text-gray-900 antialiased leading-tight">
+<html lang="en" class="text-gray-900 leading-tight">
   <!-- ... -->
   <body class="min-h-screen bg-gray-100">
     <!-- ... -->
@@ -48,13 +48,13 @@ If you want to apply some base styles to specific elements, the easiest way is t
 
 By using the `@layer` directive, Tailwind will automatically move those styles to the same place as `@tailwind base` to avoid unintended specificity issues.
 
-Using the `@layer` directive will also instruct Tailwind to consider those styles for purging when purging the `base` layer. Read our [Optimizing for Production](/docs/optimizing-for-production) documentation for more details.
+Using the `@layer` directive will also instruct Tailwind to consider those styles for purging when purging the `base` layer. Read our [documentation on optimizing for production](/docs/optimizing-for-production) for more details.
 
-It's a good idea to use [@apply](/docs/functions-and-directives#apply) or [theme()](/docs/functions-and-directives#theme) to define these styles to avoid introducing new magic values or accidentally deviating from your design system.
+It's a good idea to use [@apply](/docs/functions-and-directives#apply) or [theme()](/docs/functions-and-directives#theme) to define these styles to avoid accidentally deviating from your design system.
 
 ### @font-face rules
 
-You can use the same approach to add your `@font-face` rules for any custom fonts you are using:
+You can use the same approach to add your `@font-face` rules for any custom fonts you're using:
 
 ```css
 @tailwind base;
@@ -98,13 +98,4 @@ module.exports = {
 }
 ```
 
-Any styles you added using `addBase` will automatically be included in your `@tailwind base` styles.
-
-### When to use a plugin
-
-In general, it's simpler to add base styles to your project in CSS than it is to write a plugin.
-
-You should prefer a plugin if:
-
-- You want to publish your base styles publicly and make them easy for other users to install.
-- You want to re-use your base styles across multiple projects in your company and prefer sharing JS dependencies instead of CSS dependencies.
+Any styles added using `addBase` will inserted into the `base` layer alongside Tailwind's other base styles.

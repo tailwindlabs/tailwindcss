@@ -10,12 +10,12 @@ Now that dark mode is a first-class feature of many operating systems, it's beco
 To make this as easy as possible, Tailwind includes a `dark` variant that lets you style your site differently when dark mode is enabled:
 
 ```html
-<div class="bg-white dark:bg-gray-900">
-  <h1 class="text-gray-900 dark:text-white">
+<div class="bg-white **dark:bg-gray-900**">
+  <h1 class="text-gray-900 **dark:text-white**">
     My headline
   </h1>
-  <hr class="border-gray-300 dark:border-gray-600">
-  <p class="text-gray-700 dark:text-gray-300">
+  <hr class="border-gray-300 **dark:border-gray-600**">
+  <p class="text-gray-700 **dark:text-gray-300**">
     Ratione praesentium numquam. Laudantium porro deserunt assumenda labore in et architecto sit minus. Et expedita eum rerum recusandae. Vel assumenda iste officiis modi ut. Doloremque repudiandae perspiciatis qui natus officiis qui suscipit et dolores. Odit sit cumque sit excepturi iusto ut ipsa impedit.
   </p>
 </div>
@@ -73,7 +73,7 @@ By default, the `dark` variant is enabled for `backgroundColor`, `borderColor`, 
 
 ---
 
-## Manually toggling
+## Toggling dark mode manually
 
 If you want to support toggling dark mode manually instead of relying on the operating system preference, use the `class` strategy instead of the `media` strategy:
 
@@ -88,19 +88,21 @@ module.exports = {
 Now instead of `dark:{class}` classes being applied based on `prefers-color-scheme`, they will be applied whenever `dark` class is present earlier in the HTML tree.
 
 ```html
+<!-- Dark mode not enabled -->
 <html>
 <body>
   <!-- Will be white -->
-  <div class="bg-white dark:bg-black">
+  <div class="**bg-white** dark:bg-black">
     <!-- ... -->
   </div>
 </body>
 </html>
 
-<html class="dark">
+<!-- Dark mode enabled -->
+<html class="**dark**">
 <body>
   <!-- Will be black -->
-  <div class="bg-white dark:bg-black">
+  <div class="bg-white **dark:bg-black**">
     <!-- ... -->
   </div>
 </body>
