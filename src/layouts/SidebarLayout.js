@@ -108,7 +108,6 @@ const TopLevelAnchor = forwardRef(
           'flex items-center px-3 hover:text-gray-900 transition-colors duration-200',
           className,
           {
-            'text-gray-700': !isActive,
             'text-gray-900': isActive,
           }
         )}
@@ -179,35 +178,26 @@ function TopLevelNav() {
         Components
       </TopLevelLink>
       <TopLevelLink
-        href="/guides"
-        isActive={current === 'guides'}
+        href="https://play.tailwindcss.com"
         color="amber"
         icon={
           <>
-            <rect x="6" y="6" width="12" height="12" rx="2" fill="#FCD34D" />
-            <path d="M9 6h6v9l-3-2-3 2V6z" fill="#FFFBEB" />
-          </>
-        }
-      >
-        Guides
-      </TopLevelLink>
-      <TopLevelLink
-        href="/resources"
-        isActive={current === 'resources'}
-        color="blue"
-        icon={
-          <>
-            <path d="M17 13a1 1 0 011 1v3a1 1 0 01-1 1H8.5a2.5 2.5 0 010-5H17z" fill="#93C5FD" />
             <path
-              d="M12.743 7.722a1 1 0 011.414 0l2.122 2.121a1 1 0 010 1.414l-6.01 6.01a2.5 2.5 0 11-3.536-3.536l6.01-6.01z"
-              fill="#BFDBFE"
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M13.196 6.02a1 1 0 01.785 1.176l-2 10a1 1 0 01-1.961-.392l2-10a1 1 0 011.176-.784z"
+              fill="#FDE68A"
             />
-            <path d="M6 7a1 1 0 011-1h3a1 1 0 011 1v8.5a2.5 2.5 0 01-5 0V7z" fill="#EFF6FF" />
-            <path d="M9.5 15.5a1 1 0 11-2 0 1 1 0 012 0z" fill="#60A5FA" />
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M15.293 9.293a1 1 0 011.414 0l2 2a1 1 0 010 1.414l-2 2a1 1 0 01-1.414-1.414L16.586 12l-1.293-1.293a1 1 0 010-1.414zM8.707 9.293a1 1 0 010 1.414L7.414 12l1.293 1.293a1 1 0 11-1.414 1.414l-2-2a1 1 0 010-1.414l2-2a1 1 0 011.414 0z"
+              fill="#FDF4FF"
+            />
           </>
         }
       >
-        Resources
+        Playground
       </TopLevelLink>
       <TopLevelLink
         href="https://blog.tailwindcss.com"
@@ -229,26 +219,46 @@ function TopLevelNav() {
         News
       </TopLevelLink>
       <TopLevelLink
-        href="https://play.tailwindcss.com"
+        href="/resources"
+        isActive={current === 'resources'}
+        color="blue"
+        icon={
+          <>
+            <path d="M17 13a1 1 0 011 1v3a1 1 0 01-1 1H8.5a2.5 2.5 0 010-5H17z" fill="#93C5FD" />
+            <path
+              d="M12.743 7.722a1 1 0 011.414 0l2.122 2.121a1 1 0 010 1.414l-6.01 6.01a2.5 2.5 0 11-3.536-3.536l6.01-6.01z"
+              fill="#BFDBFE"
+            />
+            <path d="M6 7a1 1 0 011-1h3a1 1 0 011 1v8.5a2.5 2.5 0 01-5 0V7z" fill="#EFF6FF" />
+            <path d="M9.5 15.5a1 1 0 11-2 0 1 1 0 012 0z" fill="#60A5FA" />
+          </>
+        }
+      >
+        Resources
+      </TopLevelLink>
+      <TopLevelLink
+        href="https://www.youtube.com/tailwindlabs"
         color="purple"
         icon={
           <>
+            <rect x="6" y="6" width="12" height="12" rx="2" fill="#E9D5FF" />
             <path
               fillRule="evenodd"
               clipRule="evenodd"
-              d="M13.196 6.02a1 1 0 01.785 1.176l-2 10a1 1 0 01-1.961-.392l2-10a1 1 0 011.176-.784z"
-              fill="#F5D0FE"
+              d="M11.276 12.053a.5.5 0 01.524.047l2 1.5a.5.5 0 010 .8l-2 1.5a.5.5 0 01-.8-.4v-3a.5.5 0 01.276-.447z"
+              fill="#A855F7"
             />
+            <path d="M6.004 8a2 2 0 012-2h8a2 2 0 012 2v2h-12V8z" fill="#C084FC" />
             <path
               fillRule="evenodd"
               clipRule="evenodd"
-              d="M15.293 9.293a1 1 0 011.414 0l2 2a1 1 0 010 1.414l-2 2a1 1 0 01-1.414-1.414L16.586 12l-1.293-1.293a1 1 0 010-1.414zM8.707 9.293a1 1 0 010 1.414L7.414 12l1.293 1.293a1 1 0 11-1.414 1.414l-2-2a1 1 0 010-1.414l2-2a1 1 0 011.414 0z"
-              fill="#FDF4FF"
+              d="M7.142 6.192a2.005 2.005 0 00-1.064 1.247L7.998 10h2L7.143 6.192zM11.998 10h2l-3-4h-2l3 4zm1-4l3 4h2l-3-4h-2zm4.588.784l.027.035a2.251 2.251 0 00-.027-.035z"
+              fill="#FAF5FF"
             />
           </>
         }
       >
-        Playground
+        Screencasts
       </TopLevelLink>
     </div>
   )
