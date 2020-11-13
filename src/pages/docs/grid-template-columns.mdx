@@ -15,22 +15,22 @@ export const classes = { plugin }
 
 Use the `grid-cols-{n}` utilities to create grids with _n_ equally sized columns.
 
-```html
+```html fuchsia
 <template preview class="bg-white p-8">
   <div class="grid grid-cols-3 gap-4">
-    <div class="bg-gray-300 h-12 flex items-center justify-center">1</div>
-    <div class="bg-gray-500 h-12 flex items-center justify-center">2</div>
-    <div class="bg-gray-300 h-12 flex items-center justify-center">3</div>
-    <div class="bg-gray-500 h-12 flex items-center justify-center">4</div>
-    <div class="bg-gray-300 h-12 flex items-center justify-center">5</div>
-    <div class="bg-gray-500 h-12 flex items-center justify-center">6</div>
-    <div class="bg-gray-300 h-12 flex items-center justify-center">7</div>
-    <div class="bg-gray-500 h-12 flex items-center justify-center">8</div>
-    <div class="bg-gray-300 h-12 flex items-center justify-center">9</div>
+    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">1</div>
+    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">2</div>
+    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">3</div>
+    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">4</div>
+    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">5</div>
+    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">6</div>
+    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">7</div>
+    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">8</div>
+    <div class="bg-fuchsia-500 h-12 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">9</div>
   </div>
 </template>
 
-<div class="grid grid-cols-3 gap-4">
+<div class="grid **grid-cols-3** gap-4">
   <div>1</div>
   <!-- ... -->
   <div>9</div>
@@ -43,31 +43,11 @@ To control the columns of a grid at a specific breakpoint, add a `{screen}:` pre
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4', 'grid-cols-6']}
-  snippet={(classNames) => `
-    <div class="grid ${classNames}">
-      <!-- ... -->
-    </div>
-  `}
-  previewClassName="p-8"
-  preview={(className) => (
-    <div className={`grid gap-4 ${className}`}>
-      <div className="bg-gray-300 h-12"></div>
-      <div className="bg-gray-500 h-12"></div>
-      <div className="bg-gray-300 h-12"></div>
-      <div className="bg-gray-500 h-12"></div>
-      <div className="bg-gray-300 h-12"></div>
-      <div className="bg-gray-500 h-12"></div>
-      <div className="bg-gray-300 h-12"></div>
-      <div className="bg-gray-500 h-12"></div>
-      <div className="bg-gray-300 h-12"></div>
-      <div className="bg-gray-500 h-12"></div>
-      <div className="bg-gray-300 h-12"></div>
-      <div className="bg-gray-500 h-12"></div>
-    </div>
-  )}
-/>
+```html
+<div class="grid grid-cols-1 **md:grid-cols-6**">
+  <!-- ... -->
+</div>
+```
 
 ## Customizing
 

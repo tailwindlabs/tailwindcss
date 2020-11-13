@@ -15,22 +15,22 @@ export const classes = { plugin }
 
 Use the `grid-rows-{n}` utilities to create grids with _n_ equally sized rows.
 
-```html
+```html lightBlue
 <template preview class="bg-white p-8">
   <div class="h-64 grid grid-rows-3 grid-flow-col gap-4">
-    <div class="bg-gray-300 flex items-center justify-center">1</div>
-    <div class="bg-gray-500 flex items-center justify-center">2</div>
-    <div class="bg-gray-300 flex items-center justify-center">3</div>
-    <div class="bg-gray-500 flex items-center justify-center">4</div>
-    <div class="bg-gray-300 flex items-center justify-center">5</div>
-    <div class="bg-gray-500 flex items-center justify-center">6</div>
-    <div class="bg-gray-300 flex items-center justify-center">7</div>
-    <div class="bg-gray-500 flex items-center justify-center">8</div>
-    <div class="bg-gray-300 flex items-center justify-center">9</div>
+    <div class="bg-light-blue-500 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">1</div>
+    <div class="bg-light-blue-500 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">2</div>
+    <div class="bg-light-blue-500 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">3</div>
+    <div class="bg-light-blue-500 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">4</div>
+    <div class="bg-light-blue-500 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">5</div>
+    <div class="bg-light-blue-500 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">6</div>
+    <div class="bg-light-blue-500 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">7</div>
+    <div class="bg-light-blue-500 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">8</div>
+    <div class="bg-light-blue-500 rounded-md flex items-center justify-center text-white text-2xl font-extrabold">9</div>
   </div>
 </template>
 
-<div class="h-64 grid grid-rows-3 grid-flow-col gap-4">
+<div class="h-64 grid **grid-rows-3** grid-flow-col gap-4">
   <div>1</div>
   <!-- ... -->
   <div>9</div>
@@ -43,28 +43,11 @@ To control the rows of a grid at a specific breakpoint, add a `{screen}:` prefix
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['grid-rows-2', 'grid-rows-3', 'grid-rows-4', 'grid-rows-5', 'grid-rows-6']}
-  snippet={(classNames) => `
-    <div class="grid grid-flow-col ${classNames} ...">
-      <!-- ... -->
-    </div>
-  `}
-  previewClassName="p-8"
-  preview={(className) => (
-    <div className={`h-64 grid grid-flow-col gap-4 ${className}`}>
-      <div className="bg-gray-300 flex items-center justify-center">1</div>
-      <div className="bg-gray-500 flex items-center justify-center">2</div>
-      <div className="bg-gray-300 flex items-center justify-center">3</div>
-      <div className="bg-gray-500 flex items-center justify-center">4</div>
-      <div className="bg-gray-300 flex items-center justify-center">5</div>
-      <div className="bg-gray-500 flex items-center justify-center">6</div>
-      <div className="bg-gray-300 flex items-center justify-center">7</div>
-      <div className="bg-gray-500 flex items-center justify-center">8</div>
-      <div className="bg-gray-300 flex items-center justify-center">9</div>
-    </div>
-  )}
-/>
+```html
+<div class="grid grid-rows-2 **md:grid-rows-6** ...">
+  <!-- ... -->
+</div>
+```
 
 ## Customizing
 

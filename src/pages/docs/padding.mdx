@@ -47,10 +47,10 @@ For example, `pt-6` would add `1.5rem` of padding to the top of an element, `pr-
   </div>
 </template>
 
-<div class="[pt-6] ...">pt-6</div>
-<div class="[pr-4] ...">pr-4</div>
-<div class="[pb-8] ...">pb-8</div>
-<div class="[pl-2] ...">pl-2</div>
+<div class="**pt-6** ...">pt-6</div>
+<div class="**pr-4** ...">pr-4</div>
+<div class="**pb-8** ...">pb-8</div>
+<div class="**pl-2** ...">pl-2</div>
 ```
 
 ## Add horizontal padding
@@ -66,7 +66,7 @@ Control the horizontal padding of an element using the `px-{size}` utilities.
   </div>
 </template>
 
-<div class="[px-8] ...">px-8</div>
+<div class="**px-8** ...">px-8</div>
 ```
 
 ## Add vertical padding
@@ -82,7 +82,7 @@ Control the vertical padding of an element using the `py-{size}` utilities.
   </div>
 </template>
 
-<div class="[py-8] ...">py-8</div>
+<div class="**py-8** ...">py-8</div>
 ```
 
 ## Add padding to all sides
@@ -98,7 +98,7 @@ Control the padding on all sides of an element using the `p-{size}` utilities.
   </div>
 </template>
 
-<div class="[p-8] ...">p-8</div>
+<div class="**p-8** ...">p-8</div>
 ```
 
 ---
@@ -109,20 +109,11 @@ To control the padding of an element at a specific breakpoint, add a `{screen}:`
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['pt-8', '(pt-8) pr-6', '(pt-8 pr-6) pb-4', '(pt-8 pr-6 pb-4) pl-2', 'p-0']}
-  snippet={(classNames) => `
-    <div class="${classNames} ...">
-      <span class="bg-yellow-200">Target</span>
-    </div>
-  `}
-  previewClassName="text-center p-4"
-  preview={(className) => (
-    <div className={`inline-block bg-gray-400 ${className}`}>
-      <div className="bg-yellow-200">Target</div>
-    </div>
-  )}
-/>
+```html
+<div class="**md:py-8** ...">
+  <!-- ... -->
+</div>
+```
 
 ---
 

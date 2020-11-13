@@ -17,62 +17,62 @@ export const classes = { plugin }
 
 ## Don't wrap
 
-Use `.flex-nowrap` to prevent flex items from wrapping, causing inflexible items to overflow the container if necessary:
+Use `flex-nowrap` to prevent flex items from wrapping, causing inflexible items to overflow the container if necessary:
 
-```html
+```html emerald
 <template preview>
-  <div class="flex flex-nowrap bg-gray-200">
-    <div class="w-2/5 flex-none p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
-    </div>
-    <div class="w-2/5 flex-none p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
-    </div>
-    <div class="w-2/5 flex-none p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
-    </div>
+  <div class="flex flex-nowrap space-x-4">
+    <div class="h-12 w-2/5 rounded-md text-white flex-none bg-emerald-500 flex items-center justify-center text-2xl font-semibold ">1</div>
+    <div class="h-12 w-2/5 rounded-md text-white flex-none bg-emerald-500 flex items-center justify-center text-2xl font-semibold ">2</div>
+    <div class="h-12 w-2/5 rounded-md text-white flex-none bg-emerald-500 flex items-center justify-center text-2xl font-semibold ">3</div>
   </div>
 </template>
+
+<div class="flex **flex-nowrap**">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Wrap normally
 
-Use `.flex-wrap` to allow flex items to wrap:
+Use `flex-wrap` to allow flex items to wrap:
 
-```html
+```html lightBlue
 <template preview>
-  <div class="flex flex-wrap bg-gray-200">
-    <div class="w-2/5 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
-    </div>
-    <div class="w-2/5 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
-    </div>
-    <div class="w-2/5 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
-    </div>
+  <div class="flex flex-wrap -m-2">
+    <div class="h-12 m-2 w-2/5 rounded-md text-white bg-light-blue-500 flex items-center justify-center text-2xl font-semibold ">1</div>
+    <div class="h-12 m-2 w-2/5 rounded-md text-white bg-light-blue-500 flex items-center justify-center text-2xl font-semibold ">2</div>
+    <div class="h-12 m-2 w-2/5 rounded-md text-white bg-light-blue-500 flex items-center justify-center text-2xl font-semibold ">3</div>
   </div>
 </template>
+
+<div class="flex **flex-wrap**">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Wrap reversed
 
-Use `.flex-wrap-reverse` to wrap flex items in the reverse direction:
+Use `flex-wrap-reverse` to wrap flex items in the reverse direction:
 
-```html
+```html purple
 <template preview>
-  <div class="flex flex-wrap-reverse bg-gray-200">
-    <div class="w-2/5 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
-    </div>
-    <div class="w-2/5 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
-    </div>
-    <div class="w-2/5 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
-    </div>
+  <div class="flex flex-wrap-reverse -m-2">
+    <div class="h-12 m-2 w-2/5 rounded-md text-white bg-purple-500 flex items-center justify-center text-2xl font-semibold ">1</div>
+    <div class="h-12 m-2 w-2/5 rounded-md text-white bg-purple-500 flex items-center justify-center text-2xl font-semibold ">2</div>
+    <div class="h-12 m-2 w-2/5 rounded-md text-white bg-purple-500 flex items-center justify-center text-2xl font-semibold ">3</div>
   </div>
 </template>
+
+<div class="flex **flex-wrap-reverse**">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Responsive
@@ -81,27 +81,11 @@ To control how flex items wrap at a specific breakpoint, add a `{screen}:` prefi
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['flex-nowrap', 'flex-wrap', 'flex-wrap-reverse', 'flex-nowrap', 'flex-wrap']}
-  snippet={(classNames) => `
-    <div class="${classNames} ...">
-      <!-- ... -->
-    </div>
-  `}
-  preview={(className) => (
-    <div className={`flex bg-gray-200 ${className}`}>
-      <div className="w-2/5 flex-none p-2">
-        <div className="text-gray-700 text-center bg-gray-400 p-2">1</div>
-      </div>
-      <div className="w-2/5 flex-none p-2">
-        <div className="text-gray-700 text-center bg-gray-400 p-2">2</div>
-      </div>
-      <div className="w-2/5 flex-none p-2">
-        <div className="text-gray-700 text-center bg-gray-400 p-2">3</div>
-      </div>
-    </div>
-  )}
-/>
+```html
+<div class="flex flex-wrap **md:flex-wrap-reverse** ...">
+  <!-- ... -->
+</div>
+```
 
 ## Customizing
 

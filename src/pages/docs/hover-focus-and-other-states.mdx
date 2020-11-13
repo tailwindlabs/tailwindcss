@@ -7,10 +7,11 @@ import { Heading } from '@/components/Heading'
 import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 import { TipCompat } from '@/components/Tip'
 import { DefaultVariantsConfig } from '@/components/DefaultVariantsConfig'
+import { VariantEnabledList } from '@/components/VariantEnabledList'
 
 ## <Heading hidden>Overview</Heading>
 
-Similar to how Tailwind handles [responsive design](/docs/responsive-design), styling elements on hover, focus, and more can be accomplished by prefixing utilities with the appropriate pseudo-class.
+Similar to how Tailwind handles [responsive design](/docs/responsive-design), styling elements on hover, focus, and more can be accomplished by prefixing utilities with the appropriate state variant.
 
 ```html
 <template preview>
@@ -30,11 +31,11 @@ Similar to how Tailwind handles [responsive design](/docs/responsive-design), st
 </form>
 ```
 
-**Not all pseudo-class variants are enabled for all utilities by default due to file-size considerations**, but we've tried our best to enable the most commonly used combinations out of the box.
+**Not all state variants are enabled for all utilities by default due to file-size considerations**, but we've tried our best to enable the most commonly used combinations out of the box.
 
 For a complete list of which variants are enabled by default, see the [reference table](#default-variants-reference) at the end of this page.
 
-If you need to target a pseudo-class that Tailwind doesn't support, you can extend the supported variants by [writing a variant plugin](#creating-custom-variants).
+If you need to target a state that Tailwind doesn't support, you can extend the supported variants by [writing a variant plugin](#creating-custom-variants).
 
 ---
 
@@ -54,14 +55,20 @@ Add the `hover:` prefix to only apply a utility on hover.
 </button>
 ```
 
-You can control whether `hover` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+<div>
+  <VariantEnabledList variant="hover"/>
+</div>
+
+You can control whether `hover` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    backgroundColor: ['responsive', 'hover', 'focus'],
+    extend: {
+      padding: ['hover'],
+    }
   },
 }
 ```
@@ -80,14 +87,20 @@ Add the `focus:` prefix to only apply a utility on focus.
 <input class="bg-gray-200 focus:bg-white border-transparent focus:border-blue-400 ..." placeholder="Focus me">
 ```
 
-You can control whether `focus` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+<div>
+  <VariantEnabledList variant="focus"/>
+</div>
+
+You can control whether `focus` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    backgroundColor: ['responsive', 'hover', 'focus'],
+    extend: {
+      maxHeight: ['focus'],
+    }
   },
 }
 ```
@@ -108,14 +121,20 @@ Add the `active:` prefix to only apply a utility when an element is active.
 </button>
 ```
 
-You can control whether `active` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+<div>
+  <VariantEnabledList variant="active"/>
+</div>
+
+You can control whether `active` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    backgroundColor: ['responsive', 'hover', 'focus', 'active'],
+    extend: {
+      backgroundColor: ['active'],
+    }
   },
 }
 ```
@@ -138,19 +157,25 @@ If you need to style a child element when hovering over a specific parent elemen
 </div>
 ```
 
-You can control whether `group-hover` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+<div>
+  <VariantEnabledList variant="group-hover"/>
+</div>
+
+You can control whether `group-hover` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    textColor: ['responsive', 'hover', 'focus', 'group-hover'],
+    extend: {
+      divideColor: ['group-hover'],
+    }
   },
 }
 ```
 
-## <Heading badge="v1.3.0+">Group-focus</Heading>
+## Group-focus
 
 The `group-focus` variant works just like [`group-hover`](#group-hover) except for focus:
 
@@ -170,23 +195,25 @@ The `group-focus` variant works just like [`group-hover`](#group-hover) except f
 </button>
 ```
 
-You can control whether `group-focus` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+<div>
+  <VariantEnabledList variant="group-focus"/>
+</div>
+
+You can control whether `group-focus` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    textColor: ['responsive', 'hover', 'focus', 'group-focus'],
+    extend: {
+      backgroundColor: ['group-focus'],
+    }
   },
 }
 ```
 
-
-
 ## Focus-within
-
-<TipCompat>Note that focus-within is not supported in IE or Edge &lt; 79.</TipCompat>
 
 Add the `focus-within:` prefix to only apply a utility when a child element has focus.
 
@@ -210,21 +237,27 @@ Add the `focus-within:` prefix to only apply a utility when a child element has 
 </form>
 ```
 
-You can control whether `focus-within` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+<div>
+  <VariantEnabledList variant="focus-within"/>
+</div>
+
+You can control whether `focus-within` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    borderColor: ['responsive', 'hover', 'focus', 'focus-within'],
+    extend: {
+      scale: ['focus-within'],
+    }
   },
 }
 ```
 
-## <Heading badge="v1.5.0+">Focus-visible</Heading>
+## Focus-visible
 
-<TipCompat>Note that focus-visible currently requires a polyfill for sufficient browser support.</TipCompat>
+<TipCompat>Note that focus-visible currently requires JS and PostCSS polyfills for sufficient browser support.</TipCompat>
 
 Add the `focus-visible:` prefix to only apply a utility when an element has focus but only if the user is using the keyboard.
 
@@ -254,7 +287,7 @@ Add the `focus-visible:` prefix to only apply a utility when an element has focu
 </ul>
 ```
 
-Note that currently only [Firefox and Chrome](https://caniuse.com/?search=focus-visible) support `focus-visible` natively, so for sufficient browser support you should install and configure both the [focus-visible JS polyfill](https://github.com/WICG/focus-visible) and the [focus-visible PostCSS polyfill](https://github.com/csstools/postcss-focus-visible). Make sure to include the PostCSS plugin _after_ Tailwind in your list of PostCSS plugins:
+Note that currently only [Chrome, Edge, and Firefox](https://caniuse.com/?search=focus-visible) support `focus-visible` natively, so for sufficient browser support you should install and configure both the [focus-visible JS polyfill](https://github.com/WICG/focus-visible) and the [focus-visible PostCSS polyfill](https://github.com/csstools/postcss-focus-visible). Make sure to include the PostCSS plugin _after_ Tailwind in your list of PostCSS plugins:
 
 ```js
 // postcss.config.js
@@ -267,19 +300,25 @@ module.exports = {
 }
 ```
 
-You can control whether `focus-visible` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+<div>
+  <VariantEnabledList variant="focus-visible"/>
+</div>
+
+You can control whether `focus-visible` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    textDecoration: ['responsive', 'hover', 'focus', 'focus-visible'],
+    extend: {
+      textDecoration: ['focus-visible'],
+    }
   },
 }
 ```
 
-## <Heading badge="v1.6.0+">Motion-safe</Heading>
+## Motion-safe
 
 Add the `motion-safe:` prefix to only apply a utility when the `prefers-reduced-motion` media feature matches `no-preference`.
 
@@ -305,19 +344,25 @@ Note that unlike most other variants, `motion-safe` can be combined with both re
 </div>
 ```
 
-You can control whether `motion-safe` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+<div>
+  <VariantEnabledList variant="motion-safe"/>
+</div>
+
+You can control whether `motion-safe` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    translate: ['responsive', 'hover', 'focus', 'motion-safe'],
+    extend: {
+      translate: ['motion-safe'],
+    }
   },
 }
 ```
 
-## <Heading badge="v1.6.0+">Motion-reduce</Heading>
+## Motion-reduce
 
 Add the `motion-reduce:` prefix to only apply a utility when the `prefers-reduced-motion` media feature matches `reduce`.
 
@@ -343,19 +388,25 @@ Note that unlike most other variants, `motion-reduce` can be combined with both 
 </div>
 ```
 
-You can control whether `motion-reduce` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+<div>
+  <VariantEnabledList variant="motion-reduce"/>
+</div>
+
+You can control whether `motion-reduce` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    translate: ['responsive', 'hover', 'focus', 'motion-reduce'],
+    extend: {
+      translate: ['motion-reduce'],
+    }
   },
 }
 ```
 
-## <Heading badge="v1.1.0+">Disabled</Heading>
+## Disabled
 
 Add the `disabled:` prefix to only apply a utility when an element is disabled.
 
@@ -378,19 +429,25 @@ Add the `disabled:` prefix to only apply a utility when an element is disabled.
 </button>
 ```
 
-You can control whether `disabled` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+<div>
+  <VariantEnabledList variant="disabled"/>
+</div>
+
+You can control whether `disabled` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    opacity: ['responsive', 'hover', 'focus', 'disabled'],
+    extend: {
+      opacity: ['disabled'],
+    }
   },
 }
 ```
 
-## <Heading badge="v1.1.0+">Visited</Heading>
+## Visited
 
 Add the `visited:` prefix to only apply a utility when a link has been visited.
 
@@ -403,19 +460,25 @@ Add the `visited:` prefix to only apply a utility when a link has been visited.
 <a href="#" class="text-blue-600 visited:text-purple-600 ...">Link</a>
 ```
 
-You can control whether `visited` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+<div>
+  <VariantEnabledList variant="visited"/>
+</div>
+
+You can control whether `visited` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    textColor: ['responsive', 'hover', 'focus', 'visited'],
+    extend: {
+      textColor: ['visited'],
+    }
   },
 }
 ```
 
-## <Heading badge="v1.5.0+">Checked</Heading>
+## Checked
 
 Add the `checked:` prefix to only apply a utility when a radio or checkbox is currently checked.
 
@@ -440,19 +503,25 @@ Add the `checked:` prefix to only apply a utility when a radio or checkbox is cu
 <input type="radio" class="appearance-none checked:bg-gray-900 checked:border-transparent ...">
 ```
 
-You can control whether `checked` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+<div>
+  <VariantEnabledList variant="checked"/>
+</div>
+
+You can control whether `checked` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    backgroundColor: ['responsive', 'hover', 'focus', 'checked'],
+    extend: {
+      backgroundColor: ['checked'],
+    }
   },
 }
 ```
 
-## <Heading badge="v1.1.0+">First-child</Heading>
+## First-child
 
 Add the `first:` prefix to only apply a utility when it is the first-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
 
@@ -474,19 +543,25 @@ Add the `first:` prefix to only apply a utility when it is the first-child of it
 
 It's important to note that you should add any `first:` utilities to the child element, not the parent element.
 
-You can control whether `first` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+<div>
+  <VariantEnabledList variant="first-child"/>
+</div>
+
+You can control whether `first` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    borderWidth: ['responsive', 'first', 'hover', 'focus'],
+    extend: {
+      borderWidth: ['first'],
+    }
   },
 }
 ```
 
-## <Heading badge="v1.1.0+">Last-child</Heading>
+## Last-child
 
 Add the `last:` prefix to only apply a utility when it is the last-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
 
@@ -508,19 +583,25 @@ Add the `last:` prefix to only apply a utility when it is the last-child of its 
 
 It's important to note that you should add any `last:` utilities to the child element, not the parent element.
 
-You can control whether `last` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+<div>
+  <VariantEnabledList variant="last-child"/>
+</div>
+
+You can control whether `last` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    borderWidth: ['responsive', 'last', 'hover', 'focus'],
+    extend: {
+      borderWidth: ['last'],
+    }
   },
 }
 ```
 
-## <Heading badge="v1.1.0+">Odd-child</Heading>
+## Odd-child
 
 Add the `odd:` prefix to only apply a utility when it is an odd-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
 
@@ -542,19 +623,25 @@ Add the `odd:` prefix to only apply a utility when it is an odd-child of its par
 
 It's important to note that you should add any `odd:` utilities to the child element, not the parent element.
 
-You can control whether `odd` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+<div>
+  <VariantEnabledList variant="odd-child"/>
+</div>
+
+You can control whether `odd` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    backgroundColor: ['responsive', 'odd', 'hover', 'focus'],
+    extend: {
+      backgroundColor: ['odd'],
+    }
   },
 }
 ```
 
-## <Heading badge="v1.1.0+">Even-child</Heading>
+## Even-child
 
 Add the `even:` prefix to only apply a utility when it is an even-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
 
@@ -576,14 +663,20 @@ Add the `even:` prefix to only apply a utility when it is an even-child of its p
 
 It's important to note that you should add any `even:` utilities to the child element, not the parent element.
 
-You can control whether `even` variants are enabled for a utility in the `variants` section of your `tailwind.config.js` file:
+<div>
+  <VariantEnabledList variant="even-child"/>
+</div>
+
+You can control whether `even` variants are enabled for a plugin in the `variants` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
 module.exports = {
   // ...
   variants: {
-    backgroundColor: ['responsive', 'even', 'hover', 'focus'],
+    extend: {
+      backgroundColor: ['even'],
+    }
   },
 }
 ```
@@ -592,24 +685,21 @@ module.exports = {
 
 ## Combining with responsive prefixes
 
-Pseudo-class variants are also responsive, meaning you can do things like change an element's hover style at different breakpoints for example.
+State variants are also responsive, meaning you can do things like change an element's hover style at different breakpoints for example.
 
-To apply a pseudo-class variant at a specific breakpoint, add the responsive prefix first, before the pseudo-class prefix:
+To apply a state variant at a specific breakpoint, add the responsive prefix first, before the state prefix:
 
-<ResponsiveCodeSample
-  classNames={['bg-orange-500 hover:bg-orange-600', 'bg-green-500 hover:bg-green-600', 'bg-red-500 hover:bg-red-600', 'bg-indigo-500 hover:bg-indigo-600', 'bg-pink-500 hover:bg-pink-600']}
-  preview={(className) => (
-    <div className="text-center">
-      <button className={`px-4 py-2 rounded text-white font-bold ${className}`}>Button</button>
-    </div>
-  )}
-/>
+```html
+<button class="... hover:bg-green-500 **sm:hover:bg-blue-500**">
+  <!-- ... -->
+</button>
+```
 
 ---
 
-## Generative variants for custom utilities
+## Generating variants for custom utilities
 
-You can generate pseudo-class variants for your own custom utilities by wrapping them with the `@variants` directive in your CSS:
+You can generate state variants for your own custom CSS classes by wrapping them with the `@variants` directive:
 
 ```css
 /* Input: */
@@ -641,9 +731,9 @@ For more information, see the [@variants directive documentation](/docs/function
 
 ## Creating custom variants
 
-You can create your own variants for any pseudo-classes Tailwind doesn't include by default by writing a custom variant plugin.
+You can create your own variants for any states Tailwind doesn't support by default by writing a custom variant plugin.
 
-For example, this simple plugin adds support for the `disabled` pseudo-class variant:
+For example, this simple plugin adds support for the `required` pseudo-class variant:
 
 ```js
 // tailwind.config.js
@@ -652,9 +742,9 @@ const plugin = require('tailwindcss/plugin')
 module.exports = {
   plugins: [
     plugin(function({ addVariant, e }) {
-      addVariant('disabled', ({ modifySelectors, separator }) => {
+      addVariant('required', ({ modifySelectors, separator }) => {
         modifySelectors(({ className }) => {
-          return `.${e(`disabled${separator}${className}`)}:disabled`
+          return `.${e(`required${separator}${className}`)}:required`
         })
       })
     })
@@ -672,4 +762,6 @@ Due to file-size considerations, Tailwind does not include all variants for all 
 
 To configure which variants are enabled for your project, see the [configuring variants documentation](/docs/configuring-variants).
 
-<DefaultVariantsConfig />
+<div>
+  <DefaultVariantsConfig />
+</div>

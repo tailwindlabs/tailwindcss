@@ -18,7 +18,7 @@ export const classes = { plugin }
 
 ## Static
 
-Use `.static` to position an element according to the normal flow of the document.
+Use `static` to position an element according to the normal flow of the document.
 
 Any offsets will be ignored and the element will not act as a position reference for absolutely positioned children.
 
@@ -44,7 +44,7 @@ Any offsets will be ignored and the element will not act as a position reference
 
 ## Relative
 
-Use `.relative` to position an element according to the normal flow of the document.
+Use `relative` to position an element according to the normal flow of the document.
 
 Offsets are calculated relative to the element's normal position and the element *will* act as a position reference for absolutely positioned children.
 
@@ -70,7 +70,7 @@ Offsets are calculated relative to the element's normal position and the element
 
 ## Absolute
 
-Use `.absolute` to position an element *outside* of the normal flow of the document, causing neighboring elements to act as if the element doesn't exist.
+Use `absolute` to position an element *outside* of the normal flow of the document, causing neighboring elements to act as if the element doesn't exist.
 
 Offsets are calculated relative to the nearest parent that has a position other than `static`, and the element *will* act as a position reference for other absolutely positioned children.
 
@@ -121,7 +121,7 @@ Offsets are calculated relative to the nearest parent that has a position other 
 
 ## Fixed
 
-Use `.fixed` to position an element relative to the browser window.
+Use `fixed` to position an element relative to the browser window.
 
 Offsets are calculated relative to the viewport and the element *will* act as a position reference for absolutely positioned children.
 
@@ -179,7 +179,7 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
 
 <TipCompat>Note that sticky positioning is not supported in IE11.</TipCompat>
 
-Use `.sticky` to position an element as `relative` until it crosses a specified threshold, then treat it as fixed until its parent is off screen.
+Use `sticky` to position an element as `relative` until it crosses a specified threshold, then treat it as fixed until its parent is off screen.
 
 Offsets are calculated relative to the element's normal position and the element *will* act as a position reference for absolutely positioned children.
 

@@ -14,130 +14,170 @@ export const classes = { plugin }
 
 Use `content-start` to pack rows in a container against the start of the cross axis:
 
-```html
-<template preview>
-  <div class="flex content-start flex-wrap bg-gray-200 h-48">
+```html rose
+<template preview class="p-4">
+  <div class="flex content-start flex-wrap h-48">
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-rose-500">1</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-rose-500">2</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-rose-500">3</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-rose-500">4</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">5</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-rose-500">5</div>
     </div>
   </div>
 </template>
+
+<div class="flex **content-start** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5</div>
+</div>
 ```
 
 ## Center
 
 Use `content-center` to pack rows in a container in the center of the cross axis:
 
-```html
-<template preview>
-  <div class="flex content-center flex-wrap bg-gray-200 h-48">
+```html indigo
+<template preview class="p-4">
+  <div class="flex content-center flex-wrap h-48">
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-indigo-500">1</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-indigo-500">2</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-indigo-500">3</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-indigo-500">4</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">5</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-indigo-500">5</div>
     </div>
   </div>
 </template>
+
+<div class="flex **content-center** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5</div>
+</div>
 ```
 
 ## End
 
 Use `content-end` to pack rows in a container against the end of the cross axis:
 
-```html
-<template preview>
-  <div class="flex content-end flex-wrap bg-gray-200 h-48">
+```html emerald
+<template preview class="p-4">
+  <div class="flex content-end flex-wrap h-48">
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-emerald-500">1</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-emerald-500">2</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-emerald-500">3</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-emerald-500">4</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">5</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-emerald-500">5</div>
     </div>
   </div>
 </template>
+
+<div class="flex **content-end** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5</div>
+</div>
 ```
 
 ## Space between
 
 Use `content-between` to distribute rows in a container such that there is an equal amount of space between each line:
 
-```html
-<template preview>
-  <div class="flex content-between flex-wrap bg-gray-200 h-48">
+```html amber
+<template preview class="p-4">
+  <div class="flex content-between flex-wrap h-48">
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-amber-500">1</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-amber-500">2</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-amber-500">3</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-amber-500">4</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">5</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-amber-500">5</div>
     </div>
   </div>
 </template>
+
+<div class="flex **content-between** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5</div>
+</div>
 ```
 
 ## Space around
 
 Use `content-around` to distribute rows in a container such that there is an equal amount of space around each line:
 
-```html
-<template preview>
-  <div class="flex content-around flex-wrap bg-gray-200 h-48">
+```html lightBlue
+<template preview class="p-4">
+  <div class="flex content-around flex-wrap h-48">
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">1</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-light-blue-500">1</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">2</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-light-blue-500">2</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">3</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-light-blue-500">3</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">4</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-light-blue-500">4</div>
     </div>
     <div class="w-1/3 p-2">
-      <div class="text-gray-700 text-center bg-gray-400 p-2">5</div>
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-light-blue-500">5</div>
     </div>
   </div>
 </template>
+
+<div class="flex **content-around** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5</div>
+</div>
 ```
 
 ## Responsive
@@ -146,33 +186,11 @@ To control the alignment of flex content at a specific breakpoint, add a `{scree
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['content-start', 'content-end', 'content-center', 'content-between', 'content-around']}
-  snippet={(classNames) => `
-    <div class="${classNames} ...">
-      <!-- ... -->
-    </div>
-  `}
-  preview={(className) => (
-    <div className={`flex flex-wrap bg-gray-200 h-48 ${className}`}>
-      <div className="w-1/3 p-2">
-        <div className="text-gray-700 text-center bg-gray-400 p-2">1</div>
-      </div>
-      <div className="w-1/3 p-2">
-        <div className="text-gray-700 text-center bg-gray-400 p-2">2</div>
-      </div>
-      <div className="w-1/3 p-2">
-        <div className="text-gray-700 text-center bg-gray-400 p-2">3</div>
-      </div>
-      <div className="w-1/3 p-2">
-        <div className="text-gray-700 text-center bg-gray-400 p-2">4</div>
-      </div>
-      <div className="w-1/3 p-2">
-        <div className="text-gray-700 text-center bg-gray-400 p-2">5</div>
-      </div>
-    </div>
-  )}
-/>
+```html
+<div class="content-start **md:content-around** ...">
+  <!-- ... -->
+</div>
+```
 
 ## Customizing
 
