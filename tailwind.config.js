@@ -53,6 +53,7 @@ module.exports = {
         DEFAULT: {
           css: {
             maxWidth: 'none',
+            color: theme('colors.gray.500'),
             '> :first-child': { marginTop: '-' },
             '> :last-child': { marginBottom: '-' },
             'h2, h3': {
