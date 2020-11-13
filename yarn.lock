@@ -8014,6 +8014,11 @@ tiny-emitter@^2.0.0:
   resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.1.0.tgz"
   integrity sha512-NB6Dk1A9xgQPMoGqC5CVXn123gWyte215ONT5Pp5a0yt4nlEoO1ZWeCwpncaekPHXO60i47ihFnZPiRPjRMq4Q==
 
+tinytime@^0.2.6:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/tinytime/-/tinytime-0.2.6.tgz#3d68b8eda06fd2a0d650f9206c57e4e44280bfa7"
+  integrity sha512-FdiVbzssIGxpi9tuDWcMnDb4dUeoYIA4rpsdx1wVzvCaGMk5pt4WyFg2G+MFZ08HGyWB/CM/ajQfLKp6CYiD3w==
+
 tmp@^0.0.33:
   version "0.0.33"
   resolved "https://registry.yarnpkg.com/tmp/-/tmp-0.0.33.tgz"
