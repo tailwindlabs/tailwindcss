@@ -14,70 +14,100 @@ export const classes = { plugin }
 
 Use `items-stretch` to stretch items to fill the container's cross axis:
 
-```html
-<template preview>
-  <div class="flex items-stretch bg-gray-200 h-24">
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+```html lightBlue
+<template preview class="p-4">
+  <div class="flex items-stretch h-32 -m-2">
+    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">1</div>
+    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">2</div>
+    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">3</div>
   </div>
 </template>
+
+<div class="flex **items-stretch** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Start
 
 Use `items-start` to align items to the start of the container's cross axis:
 
-```html
-<template preview>
-  <div class="flex items-start bg-gray-200 h-24">
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+```html fuchsia
+<template preview class="p-4">
+  <div class="flex items-start h-32 -m-2">
+    <div class="flex-1 h-12 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">1</div>
+    <div class="flex-1 h-12 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">2</div>
+    <div class="flex-1 h-12 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">3</div>
   </div>
 </template>
+
+<div class="flex **items-start** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Center
 
 Use `items-center` to align items along the center of the container's cross axis:
 
-```html
-<template preview>
-  <div class="flex items-center bg-gray-200 h-24">
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+```html rose
+<template preview class="p-4">
+  <div class="flex items-center h-32 -m-2">
+    <div class="flex-1 h-12 rounded-md bg-rose-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">1</div>
+    <div class="flex-1 h-12 rounded-md bg-rose-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">2</div>
+    <div class="flex-1 h-12 rounded-md bg-rose-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">3</div>
   </div>
 </template>
+
+<div class="flex **items-center** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## End
 
 Use `items-end` to align items to the end of the container's cross axis:
 
-```html
-<template preview>
-  <div class="flex items-end bg-gray-200 h-24">
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+```html purple
+<template preview class="p-4">
+  <div class="flex items-end h-32 -m-2">
+    <div class="flex-1 h-12 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">1</div>
+    <div class="flex-1 h-12 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">2</div>
+    <div class="flex-1 h-12 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">3</div>
   </div>
 </template>
+
+<div class="flex **items-end** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Baseline
 
 Use `items-baseline` to align items along the container's cross axis such that all of their baselines align:
 
-```html
-<template preview>
-  <div class="flex items-baseline bg-gray-200 h-24">
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2 text-base">1</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2 text-2xl">2</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2 text-lg">3</div>
+```html emerald
+<template preview class="p-4">
+  <div class="flex items-baseline h-32 -m-2">
+    <div class="flex-1 rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">1</div>
+    <div class="flex-1 rounded-md bg-emerald-500 text-white text-6xl font-extrabold flex items-center justify-center m-2">2</div>
+    <div class="flex-1 rounded-md bg-emerald-500 text-white text-4xl font-extrabold flex items-center justify-center m-2">3</div>
   </div>
 </template>
+
+<div class="flex **items-baseline** ...">
+  <div class="text-2xl ...">1</div>
+  <div class="text-6xl ...">2</div>
+  <div class="text-4xl ...">3</div>
+</div>
 ```
 
 ## Responsive
@@ -86,21 +116,11 @@ To control the alignment of flex items at a specific breakpoint, add a `{screen}
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['items-stretch', 'items-start', 'items-center', 'items-end', 'items-baseline']}
-  snippet={(classNames) => `
-    <div class="${classNames} ...">
-      <!-- ... -->
-    </div>
-  `}
-  preview={(className) => (
-    <div className={`flex bg-gray-200 h-24 ${className}`}>
-      <div className="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2 text-base">1</div>
-      <div className="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2 text-2xl">2</div>
-      <div className="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2 text-lg">3</div>
-    </div>
-  )}
-/>
+```html
+<div class="items-stretch **md:items-center** ...">
+  <!-- ... -->
+</div>
+```
 
 ## Customizing
 
