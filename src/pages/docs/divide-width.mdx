@@ -11,10 +11,6 @@ import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = {
   plugin,
-  filterProperties: (prop, value, properties) => {
-    if (Object.keys(properties).length === 1) return true
-    return !prop.includes('--') && !prop.includes('bottom') && !prop.includes('right')
-  },
   transformValue: (value) => {
     if (value.includes('calc(')) {
       return value.match(/calc\(([^ ]+) /)[1].replace(/^0px$/, '0')

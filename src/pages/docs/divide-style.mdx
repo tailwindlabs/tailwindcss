@@ -12,7 +12,6 @@ import { Heading } from '@/components/Heading'
 
 export const classes = {
   plugin,
-  filterProperties: (prop, value) => !prop.includes('--') && !value.includes('--'),
   transformSelector: (selector) => (
     <>
       {selector.split('>').shift().trim()} <span className="ml-1 text-purple-300">> * + *</span>

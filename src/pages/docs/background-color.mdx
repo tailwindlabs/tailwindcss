@@ -16,7 +16,6 @@ import { Disabling } from '@/components/Disabling'
 
 export const classes = {
   plugin,
-  filterProperties: (prop, value) => prop.indexOf('--') === -1 && value.indexOf('--') === -1,
   preview: (css) => (
     <td
       className={`w-24 ${css['background-color'] === 'transparent' ? 'bg-checkered' : ''}`}

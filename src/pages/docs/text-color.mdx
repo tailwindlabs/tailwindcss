@@ -16,7 +16,6 @@ import { Heading } from '@/components/Heading'
 
 export const classes = {
   plugin,
-  filterProperties: (prop, value) => !prop.includes('--') && !value.includes('--'),
   preview: (css, { className }) => (
     <td
       className={`w-16 font-medium text-base whitespace-nowrap ${className}`}
