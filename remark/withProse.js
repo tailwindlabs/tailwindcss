@@ -1,4 +1,4 @@
-const proseComponents = ['Heading', 'Variants', 'Disabling']
+const proseComponents = ['Heading', 'Variants', 'Disabling', 'DefaultVariantsConfig']
 
 const isJsNode = (node) => {
   return (
