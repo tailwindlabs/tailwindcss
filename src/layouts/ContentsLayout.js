@@ -170,7 +170,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
 
   return (
     <div id={meta.containerId} className="pt-10 pb-16 w-full flex">
-      <div className="min-w-0 flex-auto px-4 sm:px-6 md:px-8">
+      <div className="min-w-0 flex-auto px-4 sm:px-6 xl:px-8">
         <PageHeader
           title={meta.title}
           description={meta.description}
