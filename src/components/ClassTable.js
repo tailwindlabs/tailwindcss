@@ -78,7 +78,7 @@ export const ClassTable = memo(
     })
 
     return (
-      <div className="mt-3 border-b border-gray-200 overflow-hidden relative">
+      <div className="border-b border-gray-200 overflow-hidden relative">
         <Heading
           level={2}
           id="class-reference"

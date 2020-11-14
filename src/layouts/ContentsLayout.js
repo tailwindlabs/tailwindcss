@@ -178,8 +178,12 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
           border={!classes && meta.headerSeparator !== false}
         />
         <ContentsContext.Provider value={{ registerHeading, unregisterHeading }}>
-          {classes && <ClassTable {...(isValidElement(classes) ? { custom: classes } : classes)} />}
-          <div>{children}</div>
+          <div>
+            {classes && (
+              <ClassTable {...(isValidElement(classes) ? { custom: classes } : classes)} />
+            )}
+            {children}
+          </div>
         </ContentsContext.Provider>
         {(prev || next) && (
           <>
