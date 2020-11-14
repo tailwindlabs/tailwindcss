@@ -10,7 +10,7 @@ import { TipGood, TipBad } from '@/components/Tip'
 
 Plugins let you register new styles for Tailwind to inject into the user's stylesheet using JavaScript instead of CSS.
 
-To get started with your first plugin, import Tailwind's `plugin` function from `tailwindcss/plugin`, and call it with an anonymous function as the first argument in the `plugins` list in your config file:
+To get started with your first plugin, import Tailwind's `plugin` function from `tailwindcss/plugin`. Then inside your `plugins` array, and call it with an anonymous function as the first argument.
 
 ```js
 // tailwind.config.js
@@ -42,7 +42,7 @@ Plugin functions receive a single object argument that can be [destructured](htt
 
 ## Adding utilities
 
-The `addUtilities` function allows you to register new styles to be output (along with the built-in utilities) at the `@tailwind utilities` directive.
+The `addUtilities` function allows you to register new styles in Tailwind's `utilities` layer.
 
 Plugin utilities are output in the order they are registered, *after* built-in utilities, so if a plugin targets any of the same properties as a built-in utility, the plugin utility will take precedence.
 
@@ -186,7 +186,7 @@ module.exports = {
 
 ## Adding components
 
-The `addComponents` function allows you to register new styles to be output at the `@tailwind components` directive.
+The `addComponents` function allows you to register new styles in Tailwind's `components` layer.
 
 Use it to add more opinionated, complex classes like buttons, form controls, alerts, etc; the sort of pre-built components you often see in other frameworks that you might need to override with utility classes.
 
@@ -411,7 +411,7 @@ module.exports = {
 
 ## Adding base styles
 
-The `addBase` function allows you to register new styles to be output at the `@tailwind base` directive.
+The `addBase` function allows you to register new styles in Tailwind's `base` layer.
 
 Use it to add things like base typography styles, opinionated global resets, or `@font-face` rules.
 
