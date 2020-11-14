@@ -11,7 +11,6 @@ features:
 import plugin from 'tailwindcss/lib/plugins/backgroundRepeat'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -73,20 +72,9 @@ To control the repetition of an element's background image at a specific breakpo
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['bg-repeat', 'bg-no-repeat', 'bg-repeat-x', 'bg-repeat-y', 'bg-no-repeat']}
-  snippet={(classNames) => `
-    <div class="${classNames} ..." style="background-image: url(...)"></div>
-  `}
-  preview={(className) => (
-    <div
-      className={`w-full bg-gray-400 h-48 bg-center ${className}`}
-      style={{
-        backgroundImage: `url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=128&q=80')`
-      }}
-    />
-  )}
-/>
+```html
+<div class="bg-repeat **md:bg-repeat-x** ..."></div>
+```
 
 ## Customizing
 

@@ -11,7 +11,6 @@ features:
 import plugin from 'tailwindcss/lib/plugins/borderRadius'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -35,7 +34,7 @@ Use utilities like `.rounded-sm`, `.rounded`, or `.rounded-lg` to apply differen
 
 ## Pills and circles
 
-Use the `.rounded-full` utility to create pills and circles.
+ `Use the `rounded-full` utility to create pills and circles.
 
 ```html
 <template preview class="flex items-center justify-around text-sm p-4">
@@ -103,19 +102,11 @@ To control the border radius of an element at a specific breakpoint, add a `{scr
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['rounded', 'rounded-t', 'rounded-b-lg', 'rounded-none', 'rounded-r']}
-  snippet={(classNames) => `
-    <div class="${classNames} ...">
-      <!-- ... -->
-    </div>
-  `}
-  preview={(className) => (
-    <div className="flex justify-center">
-      <div className={`bg-gray-500 w-12 h-12 ${className}`}></div>
-    </div>
-  )}
-/>
+```html
+<div class="rounded **md:rounded-lg** ...">
+  <!-- ... -->
+</div>
+```
 
 ## Customizing
 

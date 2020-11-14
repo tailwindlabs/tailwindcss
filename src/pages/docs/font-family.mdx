@@ -11,7 +11,6 @@ features:
 import plugin from 'tailwindcss/lib/plugins/fontFamily'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -61,19 +60,11 @@ To control the font family of an element at a specific breakpoint, add a `{scree
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['font-sans', 'font-serif', 'font-mono', 'font-sans', 'font-serif']}
-  snippet={(classNames) => `
-    <p class="${classNames}">
-      <!-- ... -->
-    </p>
-  `}
-  preview={(className) => (
-    <p className={`text-lg text-gray-800 text-center ${className}`}>
-      I'm a paragraph.
-    </p>
-  )}
-/>
+```html
+<p class="font-sans **md:font-serif**">
+  <!-- ... -->
+</p>
+```
 
 ## Customizing
 

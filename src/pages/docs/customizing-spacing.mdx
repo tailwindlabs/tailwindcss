@@ -1,12 +1,12 @@
 ---
 title: Customizing Spacing
 shortTitle: Spacing
-description: Customizing the default spacing scale for your project.
+description: Customizing the default spacing and sizing scale for your project.
 ---
 
 import { SpacingScale } from '@/components/SpacingScale'
 
-The `theme.spacing` section of your `tailwind.config.js` file allows you to override Tailwind's [default spacing/sizing scale](#default-spacing-scale).
+Use the `spacing` key in the `theme` section of your `tailwind.config.js` file to customize Tailwind's [default spacing/sizing scale](#default-spacing-scale).
 
 ```js
 // tailwind.config.js
@@ -24,7 +24,32 @@ module.exports = {
 }
 ```
 
-By default the spacing scale is shared by the [padding](/docs/padding), [margin](/docs/margin), [width](/docs/width), and [height](/docs/height) utilities so the above configuration would generate classes like `.p-2`, `.mt-3`, `.w-5`, `.h-6`, etc.
+By default the spacing scale is inherited by the `padding`, `margin`, `width`, `height`, `maxHeight`, `gap`, `inset`, `space`, and `translate` core plugins.
+
+---
+
+## Extending the default spacing scale
+
+
+As described in the [theme documentation](/docs/theme#extending-the-default-theme), if you'd like to extend the default spacing scale, you can do so using the `theme.extend.spacing` section of your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      spacing: {
+        '13': '3.25rem',
+        '15': '3.75rem',
+        '128': '32rem',
+        '144': '36rem',
+      }
+    }
+  }
+}
+```
+
+This will generate classes like `p-13`, `m-15`, and `h-128` in addition to all of Tailwind's default spacing/sizing utilities.
 
 ---
 
@@ -47,30 +72,6 @@ module.exports = {
 ```
 
 This will disable Tailwind's default spacing scale and generate classes like `p-sm`, `m-md`, `w-lg`, and `h-xl` instead.
-
----
-
-## Extending the default spacing scale
-
-
-As described in the [theme documentation](/docs/theme#extending-the-default-theme), if you'd like to extend the default spacing scale, you can do so using the `theme.extend.spacing` section of your `tailwind.config.js` file:
-
-```js
-// tailwind.config.js
-module.exports = {
-  theme: {
-    extend: {
-      spacing: {
-        '72': '18rem',
-        '84': '21rem',
-        '96': '24rem',
-      }
-    }
-  }
-}
-```
-
-This will generate classes like `p-72`, `m-84`, and `h-96` in addition to all of Tailwind's default spacing/sizing utilities.
 
 ---
 

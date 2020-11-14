@@ -9,7 +9,6 @@ features:
 ---
 
 import plugin from 'tailwindcss/lib/plugins/backgroundPosition'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 import { ConfigSample } from '@/components/ConfigSample'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
@@ -18,7 +17,7 @@ export const classes = { plugin }
 
 ## Usage
 
-Use the `.bg-{side}` utilities to control the position of an element's background image.
+Use the `bg-{side}` utilities to control the position of an element's background image.
 
 ```html
 <template preview>
@@ -83,20 +82,9 @@ To control the position of an element's background image at a specific breakpoin
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['bg-center', 'bg-top', 'bg-right', 'bg-bottom', 'bg-left']}
-  snippet={(classNames) => `
-    <div class="${classNames} ..." style="background-image: url(...)"></div>
-  `}
-  preview={(className) => (
-    <div
-      className={`mx-auto bg-gray-400 w-48 h-48 bg-no-repeat ${className}`}
-      style={{
-        backgroundImage: `url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=128&h=128&q=80')`
-      }}
-    />
-  )}
-/>
+```html
+<div class="bg-center **md:bg-top** ..." style="background-image: url(...)"></div>
+```
 
 ## Customizing
 

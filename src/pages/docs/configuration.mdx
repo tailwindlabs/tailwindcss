@@ -349,6 +349,35 @@ module.exports = {
 }
 ```
 
+## Variant Order
+
+If you are using the `extend` feature to enable extra variants, those variants are automatically sorted to respect a sensible default variant order.
+
+You can customize this if necessary under the `variantOrder` key:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  variantOrder: [
+    'first',
+    'last',
+    'odd',
+    'even',
+    'visited',
+    'checked',
+    'group-hover',
+    'group-focus',
+    'focus-within',
+    'hover',
+    'focus',
+    'focus-visible',
+    'active',
+    'disabled',
+  ]
+}
+```
+
 ## Core Plugins
 
 The `corePlugins` section lets you completely disable classes that Tailwind would normally generate by default if you don't need them for your project.

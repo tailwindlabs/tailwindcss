@@ -5,31 +5,103 @@ description: Customizing the default color palette for your project.
 ---
 
 import { Heading } from '@/components/Heading'
-import { ColorPalette } from '@/components/ColorPalette'
+import { ColorPaletteReference } from '@/components/ColorPaletteReference'
 import { TipGood, TipBad } from '@/components/Tip'
 
 ## <Heading hidden>Overview</Heading>
 
-The `theme.colors` section of your `tailwind.config.js` file allows you to override Tailwind's [default color palette](#default-color-palette).
+Tailwind includes an expertly-crafted default color palette that is a great starting point if you don't have your own branding ready to go, but for most projects the color palette is the first thing you'll want to customize.
+
+```js
+// The default Tailwind color palette
+const colors = require('tailwindcss/colors')
+
+module.exports = {
+  theme: {
+    colors: {
+      transparent: 'transparent',
+      current: 'currentColor',
+      black: '#000',
+      white: '#fff',
+      gray: colors.coolGray,
+      red: colors.red,
+      yellow: colors.amber,
+      green: colors.emerald,
+      blue: colors.blue,
+      indigo: colors.indigo,
+      purple: colors.violet,
+      pink: colors.pink,
+    }
+  }
+}
+```
+
+You can customize the color palette in your project using the `colors` key in the `theme` section of your `tailwind.config.js` file.
+
+---
+
+## Curating colors
+
+If you don't have a set of completely custom colors in mind for your project, you can curate your colors from our complete color palette by importing `'tailwindcss/colors'` into your config file and choosing the colors you like.
+
+```js
+// tailwind.config.js
+const colors = require('tailwindcss/colors')
+
+module.exports = {
+  theme: {
+    colors: {
+      gray: colors.trueGray,
+      indigo: colors.indigo,
+      red: colors.rose,
+      yellow: colors.amber,
+    }
+  }
+}
+```
+
+See our [complete color palette reference](#color-palette-reference) to see the colors that are available to choose from by default.
+
+---
+
+## Custom colors
+
+You can build a completely custom palette by adding your own color values from scratch:
 
 ```js
 // tailwind.config.js
 module.exports = {
   theme: {
     colors: {
-      indigo: '#5c6ac4',
-      blue: '#007ace',
-      red: '#de3618',
+      blue: {
+        light: '#85d7ff',
+        DEFAULT: '#1fb6ff',
+        dark: '#009eeb',
+      },
+      pink: {
+        light: '#ff7ce5',
+        DEFAULT: '#ff49db',
+        dark: '#ff16d1',
+      },
+      gray: {
+        darkest: '#1f2d3d',
+        dark: '#3c4858',
+        DEFAULT: '#c0ccda',
+        light: '#e0e6ed',
+        lightest: '#f9fafc',
+      }
     }
   }
 }
 ```
 
-By default these colors are automatically shared by the `textColor`, `borderColor`, and `backgroundColor` utilities, so the above configuration would generate classes like `.text-indigo`, `.border-blue`, and `.bg-red`.
+By default, these colors are automatically shared by all color-driven utilities, like `textColor`, `backgroundColor`, `borderColor`, and more.
 
-### Nested object syntax
+---
 
-You can define your colors as a simple list of key-value pairs as we've done above, or using a nested object notation where the nested keys are added to the base color name as modifiers:
+## Color object syntax
+
+You can see above that we've defined our colors using a nested object notation where the nested keys are added to the base color name as modifiers:
 
 ```js
 // tailwind.config.js
@@ -37,7 +109,7 @@ module.exports = {
   theme: {
     colors: {
       indigo: {
-        lighter: '#b3bcf5',
+        light: '#b3bcf5',
         DEFAULT: '#5c6ac4',
         dark: '#202e78',
       }
@@ -46,71 +118,52 @@ module.exports = {
 }
 ```
 
-Since version v2.x you can also have a deeply nested object, the colors will be fattened.
+The different segments of the color name are combined to form class names like `bg-indigo-light`.
+
+Like many other places in Tailwind, the `DEFAULT` key is special and means "no modifier", so this configuration would generate classes like `text-indigo` and `bg-indigo`, not `text-indigo-DEFAULT` or `bg-indigo-DEFAULT`.
+
+You can also define your colors as simple strings instead of objects:
 
 ```js
 // tailwind.config.js
 module.exports = {
   theme: {
     colors: {
-      primary: {
-        indigo: {
-          lighter: '#b3bcf5', // text-primary-indigo-lighter, ...
-          DEFAULT: '#5c6ac4', // text-primary-indigo, ...
-          dark: '#202e78',    // text-primary-indigo-dark, ...
-        }
-      }
+      'indigo-lighter': '#b3bcf5',
+      'indigo': '#5c6ac4',
+      'indigo-dark': '#202e78',
     }
   }
 }
 ```
 
-Like many other places in Tailwind, the `DEFAULT` key is special and means "no modifier", so this configuration would generate classes like `.text-indigo-lighter`, `.text-indigo`, and `.text-indigo-dark`.
-
-Note that you need to use dot notation to access nested colors when using the `theme()` function — the colors are only converted to dash-case for the actual CSS class names. The `DEFAULT` key also needs to be specified when accessed via the `theme()` function: `theme('colors.indigo.default')`.
-
-<TipBad>Don't use the dash syntax to access nested color values with theme()</TipBad>
-
-```css
-.btn-blue {
-  background-color: theme('colors.blue-500');
-}
-```
-
-<TipGood>Use dot notation to access nested color values with theme()</TipGood>
-
-```css
-.btn-blue {
-  background-color: theme('colors.blue.500');
-}
-```
-
----
-
-## Overriding the default color palette
-
-As described in the [theme documentation](/docs/theme#overriding-the-default-theme), if you'd like to override the default color palette, you can do so using the `theme.colors` section of your `tailwind.config.js` file:
+Note that when accessing colors using the `theme()` function you need to use the same notation you used to define them.
 
 ```js
 // tailwind.config.js
 module.exports = {
   theme: {
     colors: {
-      indigo: '#5c6ac4',
-      blue: '#007ace',
-      red: '#de3618',
+      indigo: {
+        // theme('colors.indigo.light')
+        light: '#b3bcf5',
+
+        // theme('colors.indigo.DEFAULT')
+        DEFAULT: '#5c6ac4',
+      },
+
+      // theme('colors.indigo-dark')
+      'indigo-dark': '#202e78',
     }
   }
 }
 ```
 
-This will disable Tailwind's default color palette and generate classes like `bg-indigo`, `text-blue`, and `border-red` instead.
-
 ---
 
-## Extending the default palette
+## Extending the defaults
 
-As described in the [theme documentation](/docs/theme#extending-the-default-theme), if you'd like to extend the default color palette, you can do so using the `theme.extend.colors` section of your `tailwind.config.js` file:
+As described in the [theme documentation](/docs/theme#extending-the-default-theme), if you'd like to extend the default color palette rather than override it, you can do so using the `theme.extend.colors` section of your `tailwind.config.js` file:
 
 ```js
 // tailwind.config.js
@@ -127,102 +180,56 @@ module.exports = {
 
 This will generate classes like `bg-regal-blue` in addition to all of Tailwind's default colors.
 
----
+These extensions are merged deeply, so if you'd like to add an additional shade to one of Tailwind's default colors, you can do so like this:
 
-## Overriding a default color
-
-If you'd like to override one of Tailwind's default colors but preserve the rest, simply provide the new values in the `theme.extend.colors` section of your `tailwind.config.js` file.
-
-For example, here we've replaced the default cool grays with a neutral gray palette:
 
 ```js
 // tailwind.config.js
-module.exports = {
-  theme: {
-    extend: {
-      colors: {
-        gray: {
-          '100': '#f5f5f5',
-          '200': '#eeeeee',
-          '300': '#e0e0e0',
-          '400': '#bdbdbd',
-          '500': '#9e9e9e',
-          '600': '#757575',
-          '700': '#616161',
-          '800': '#424242',
-          '900': '#212121',
-        }
-      }
-    }
-  }
-}
-```
-
-### Overriding or adding a single shade
-
-Since values in the `theme.extend` section of your config file are only merged shallowly, overriding or adding a single shade is slightly more complicated.
-
-The easiest option is to import the default theme and [spread](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) in the color you want to customize along with the new shade value:
-
-```js
-// tailwind.config.js
-const { colors } = require('tailwindcss/defaultTheme')
-
 module.exports = {
   theme: {
     extend: {
       colors: {
         blue: {
-          ...colors.blue,
-          '900': '#1e3656',
-        }
+          450: '#5F99F7'
+        },
       }
     }
   }
 }
 ```
 
+This will add classes like `bg-blue-450` without losing existing classes like `bg-blue-400` or `bg-blue-500`.
+
 ---
 
 ## Disabling a default color
 
-If you'd like to disable a default color because you aren't using it in your project, the easiest approach is to just build a new color palette that references the default theme.
+If you'd like to disable a default color because you aren't using it in your project, the easiest approach is to just build a new color palette that doesn't include the color you'd like to disable.
 
 For example, this `tailwind.config.js` file excludes teal, orange, and pink, but includes the rest of the default colors:
 
 ```js
 // tailwind.config.js
-const { colors } = require('tailwindcss/defaultTheme')
+const colors = require('tailwindcss/colors')
 
 module.exports = {
   theme: {
     colors: {
-      black: colors.black,
-      white: colors.white,
-      gray: colors.gray,
+      transparent: 'transparent',
+      current: 'currentColor',
+      black: '#000',
+      white: '#fff',
+      gray: colors.coolGray,
       red: colors.red,
-      yellow: colors.yellow,
-      green: colors.green,
+      yellow: colors.amber,
       blue: colors.blue,
-      indigo: colors.indigo,
-      purple: colors.purple,
+      pink: colors.pink,
     }
   }
 }
 ```
 
-You could also use [destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) to simplify the above example if you're comfortable with it:
-
-```js
-// tailwind.config.js
-const { colors: { teal, orange, pink, ...colors } } = require('tailwindcss/defaultTheme')
-
-module.exports = {
-  theme: {
-    colors: colors
-  }
-}
-```
+In the above example, we've built a new color palette that matches the default color palette but doesn't include yellow, green, indigo, or purple.
 
 ---
 
@@ -245,11 +252,11 @@ module.exports = {
 }
 ```
 
-You can configure those colors explicitly like we have above, or you could even pull in Tailwind's default colors and alias the ones you need:
+You can configure those colors explicitly like we have above, or you can pull in colors from our complete color palette and alias them:
 
 ```js
 // tailwind.config.js
-const { colors } = require('tailwindcss/defaultTheme')
+const colors = require('tailwindcss/colors')
 
 module.exports = {
   theme: {
@@ -292,28 +299,29 @@ module.exports = {
 
 ---
 
-## Generating custom color palettes
+## Generating colors
 
-A common question we get is "how do I generate the 100–900 shades of my own custom colors?".
+A common question we get is "how do I generate the 100–900 shades of my own custom colors?"
 
-Bad news: color is complicated and we've yet to find a tool that does a good job generating these sorts of color palettes. We picked all of Tailwind's default colors by hand, balancing them by eye. Sorry!
+Bad news, color is complicated and we've yet to find a tool that does a good job generating these sorts of color palettes. We picked all of Tailwind's default colors by hand, meticulously balancing them by eye and testing them in real designs to make sure we were happy with them.
 
 ---
 
-## Default color palette
+## Color palette reference
 
-Tailwind includes a generous palette of great-looking, well-balanced colors that are perfect for prototyping or for kicking off a brand new project.
+This is a list of all of the colors available when you import `'tailwindcss/colors'` into your `tailwind.config.js` file:
 
-<ColorPalette
-  colors={[
-    ['Black & White', { Black: '#000000', White: '#FFFFFF' }],
-    'gray',
-    'red',
-    'yellow',
-    'green',
-    'blue',
-    'indigo',
-    'purple',
-    'pink',
-  ]}
-/>
+```js
+// tailwind.config.js
+const colors = require('tailwindcss/colors')
+
+module.exports = {
+  theme: {
+    colors: {
+      // Build your palette here
+    }
+  }
+}
+```
+
+<ColorPaletteReference/>

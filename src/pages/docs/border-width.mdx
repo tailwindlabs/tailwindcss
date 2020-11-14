@@ -11,14 +11,13 @@ features:
 import plugin from 'tailwindcss/lib/plugins/borderWidth'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 import { Heading } from '@/components/Heading'
 
 export const classes = { plugin }
 
 ## All sides
 
-Use the `.border`, `.border-0`, `.border-2`, `.border-4`, or `.border-8` utilities to set the border width for all sides of an element.
+ `Use the `border`, `.border-0`, `.border-2`, `.border-4`, or `.border-8` utilities to set the border width for all sides of an element.
 
 ```html
 <template preview>
@@ -55,7 +54,7 @@ Use the `.border`, `.border-0`, `.border-2`, `.border-4`, or `.border-8` utiliti
 
 ## Individual sides
 
-Use the `.border-{side}`, `.border-{side}-0`, `.border-{side}-2`, `.border-{side}-4`, or `.border-{side}-8` utilities to set the border width for one side of an element.
+ `Use the `border-{side}`, `.border-{side}-0`, `.border-{side}-2`, `.border-{side}-4`, or `.border-{side}-8` utilities to set the border width for one side of an element.
 
 ```html
 <template preview>
@@ -85,7 +84,7 @@ Use the `.border-{side}`, `.border-{side}-0`, `.border-{side}-2`, `.border-{side
 <div class="border-l-2 border-gray-600 ..."></div>
 ```
 
-## <Heading badge="v1.3.0+">Between elements</Heading>
+## Between elements
 
 You can also add borders between child elements using the `divide-{x/y}-{width}` and `divide-{color}` utilities.
 
@@ -107,16 +106,9 @@ To control the border width of an element at a specific breakpoint, add a `{scre
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['border-2', 'border-t-8', 'border-r-8', 'border-b-8', 'border-8']}
-  snippet={(classNames) => `
-    <div class="${classNames}">
-    </div>
-  `}
-  preview={(className) => (
-    <div className={`w-24 h-24 mx-auto border-gray-600 bg-gray-400 ${className}`} />
-  )}
-/>
+```html
+<div class="border-2 **md:border-t-4** ..."></div>
+```
 
 ## Customizing
 

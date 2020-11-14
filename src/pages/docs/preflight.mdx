@@ -22,7 +22,7 @@ Tailwind automatically injects these styles when you include `@tailwind base` in
 
 While most of the styles in Preflight are meant to go unnoticed — they simply make things behave more like you'd expect them to — some are more opinionated and can be surprising when you first encounter them.
 
-For a complete reference of all the styles applied by Preflight, [see the stylesheet](https://unpkg.com/tailwindcss/dist/base.css).
+For a complete reference of all the styles applied by Preflight, [see the stylesheet](https://unpkg.com/tailwindcss@^2/dist/base.css).
 
 ---
 
@@ -168,7 +168,7 @@ When you run into situations like this, you can work around them by overriding t
 
 To ensure that we provide accessible styles out of the box, we made sure
 that buttons have a default outline. You can of course override this by
-applying `focus:outline-shadow` or similar utilities to your buttons.
+applying `focus:ring` or similar utilities to your buttons.
 
 ```css
 button:focus {
@@ -181,22 +181,24 @@ button:focus {
 
 ## Extending Preflight
 
-If you'd like to add your own base styles on top of Preflight, simply add them to your CSS after `@tailwind base`:
+If you'd like to add your own base styles on top of Preflight, simply add them to your CSS within a `@layer base` directive:
 
 ```css
 @tailwind base;
 
-h1 {
-  @apply text-2xl;
-}
-h2 {
-  @apply text-xl;
-}
-h3 {
-  @apply text-lg;
-}
-a {
-  @apply text-blue-600 underline;
+@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl;
+  }
+  h3 {
+    @apply text-lg;
+  }
+  a {
+    @apply text-blue-600 underline;
+  }
 }
 
 @tailwind components;

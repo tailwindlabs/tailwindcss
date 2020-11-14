@@ -67,7 +67,7 @@ export const ClassTable = memo(
     plugin,
     filterProperties,
     preview,
-    transformSelector = (x) => x,
+    transformSelector = (x) => x.slice(1).replace(/\\/g, ''),
     transformProperties = ({ properties }) => properties,
     transformValue,
     custom,

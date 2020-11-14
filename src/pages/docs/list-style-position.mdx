@@ -11,7 +11,6 @@ features:
 import plugin from 'tailwindcss/lib/plugins/listStylePosition'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -53,27 +52,16 @@ Control the position of the markers in a list using the `list-inside` and `list-
 
 ## Responsive
 
-To control the list style position of a list element at a specific breakpoint, add a `{screen}:` prefix to any existing list utility. For example, use `.md:list-inside` to apply the `.list-inside` utility at only medium screen sizes and above.
+To control the list style position of a list element at a specific breakpoint, add a `{screen}:` prefix to any existing list utility. For example, use `.md:list-inside` to apply the `list-inside` utility at only medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['list-inside', 'list-outside', 'list-inside', 'list-outside', 'list-inside']}
-  snippet={(classNames) => `
-    <ul class="${classNames}">
-      <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
-      <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
-      <li>Quidem, ipsam illum quis sed voluptatum quae eum fugit earum</li>
-    </ul>
-  `}
-  preview={(className) => (
-    <ul className={`list-disc ${className}`}>
-      <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
-      <li>Assumenda, quia temporibus eveniet a libero incidunt suscipit</li>
-      <li>Quidem, ipsam illum quis sed voluptatum quae eum fugit earum</li>
-    </ul>
-  )}
-/>
+```html
+<ul class="list-outside **md:list-inside**">
+  <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit</li>
+  <!-- ... -->
+</ul>
+```
 
 ## Customizing
 

@@ -6,7 +6,6 @@ description: "Utilities for setting the height of an element"
 import plugin from 'tailwindcss/lib/plugins/height'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -81,15 +80,9 @@ To control the height of an element at a specific breakpoint, add a `{screen}:` 
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['h-8', 'h-12', 'h-16', 'h-20', 'h-24']}
-  snippet={(classNames) => `
-    <div class="${classNames} w-32 bg-gray-400"></div>
-  `}
-  preview={(className) => (
-    <div className={`w-32 bg-gray-400 ${className}`} />
-  )}
-/>
+```html
+<div class="h-8 **md:h-full**"></div>
+```
 
 ---
 

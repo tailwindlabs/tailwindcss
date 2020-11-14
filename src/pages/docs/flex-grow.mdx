@@ -11,7 +11,6 @@ features:
 import plugin from 'tailwindcss/lib/plugins/flexGrow'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -61,31 +60,15 @@ To control how a flex item grows at a specific breakpoint, add a `{screen}:` pre
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['flex-grow-0', 'flex-grow', 'flex-grow-0', 'flex-grow', 'flex-grow-0']}
-  snippet={(classNames) => `
-    <div class="flex ...">
-      <!-- ... -->
-      <div class="${classNames} ...">
-        Responsive flex item
-      </div>
-      <!-- ... -->
-    </div>
-  `}
-  preview={(className) => (
-    <div className="flex bg-gray-200">
-      <div className="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
-        Item that can grow or shrink if needed
-      </div>
-      <div className={`text-gray-800 text-center bg-gray-500 px-4 py-2 m-2 ${className}`}>
-        Responsive flex item
-      </div>
-      <div className="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
-        Item that can grow or shrink if needed
-      </div>
-    </div>
-  )}
-/>
+```html
+<div class="flex ...">
+  <!-- ... -->
+  <div class="flex-grow **md:flex-grow-0** ...">
+    Responsive flex item
+  </div>
+  <!-- ... -->
+</div>
+```
 
 ## Customizing
 

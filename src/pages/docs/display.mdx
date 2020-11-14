@@ -6,7 +6,6 @@ description: "Utilities for controlling the display box type of an element."
 import plugin from 'tailwindcss/lib/plugins/display'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -168,7 +167,7 @@ Use `contents` to create a "phantom" container whose children act like direct ch
 
 ## Table
 
-Use the `.table`, `.table-row`, `.table-cell`, `.table-caption`, `.table-column`, `.table-column-group`, `.table-header-group`, `table-row-group`, and `.table-footer-group` utilities to create elements that behave like their respective table elements.
+ `Use the `table`, `.table-row`, `.table-cell`, `.table-caption`, `.table-column`, `.table-column-group`, `.table-header-group`, `table-row-group`, and `.table-footer-group` utilities to create elements that behave like their respective table elements.
 
 ```html
 <template preview>
@@ -209,21 +208,11 @@ To control the display property of an element at a specific breakpoint, add a `{
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['flex', 'inline-flex', 'block', 'hidden', 'flex']}
-  snippet={(classNames) => `
-    <div class="${classNames} ...">
-      <!-- ... -->
-    </div>
-  `}
-  preview={(className) => (
-    <div className={`bg-gray-200 ${className}`}>
-      <div className="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-      <div className="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-      <div className="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-    </div>
-  )}
-/>
+```html
+<div class="flex **md:inline-flex** ...">
+  <!-- ... -->
+</div>
+```
 
 ## Customizing
 
