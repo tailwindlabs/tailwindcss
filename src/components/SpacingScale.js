@@ -31,7 +31,7 @@ export function SpacingScale() {
               <td>{size}</td>
               <td>{pixels}px</td>
               <td className="hidden sm:table-cell">
-                <div className="h-4 bg-gray-400" style={{ width: size }} />
+                <div className="h-4 bg-cyan-400" style={{ width: size }} />
               </td>
             </tr>
           ))}
