@@ -46,12 +46,49 @@ const testimonials = [
     },
   },
   {
-    content: 'Ok Tailwind CSS just clicked for me and now I feel like a fucking idiot.',
+    content:
+      'There’s one thing that sucks about @tailwindcss - once you’ve used it on a handful of projects it is a real pain in the ass to write normal CSS again.',
+    tweetUrl: 'https://twitter.com/iamgraem_e/status/1322861404781748228?s=21',
+    author: {
+      name: 'Graeme Houston',
+      role: 'JavaScript Developer',
+      avatar: require('@/img/avatars/graeme-houston.jpg').default,
+    },
+  },
+  {
+    content: 'Okay, @tailwindcss just clicked for me and now I feel like a #!@%&$% idiot.',
     tweetUrl: 'https://twitter.com/ken_wheeler/status/1225373231139475458',
     author: {
       name: 'Ken Wheeler',
-      role: '',
+      role: `React Engineer`,
       avatar: require('@/img/avatars/ken-wheeler.jpg').default,
+    },
+  },
+  {
+    content: `I've been using @tailwindcss the past few months and it's amazing. I already used some utility classes before, but going utility-first... this is the way.`,
+    tweetUrl: 'https://twitter.com/JadLimcaco/status/1327417021915561984',
+    author: {
+      name: 'Jad Limcaco',
+      role: 'Designer',
+      avatar: require('@/img/avatars/jad-limcaco.jpg').default,
+    },
+  },
+  {
+    content: `After finally getting to use @tailwindcss on a real client project in the last two weeks I never want to write CSS by hand again. I was a skeptic, but the hype is real.`,
+    tweetUrl: 'https://twitter.com/lukeredpath/status/1316543571684663298?s=21',
+    author: {
+      name: 'Luke Redpath',
+      role: 'Ruby & iOS Developer',
+      avatar: require('@/img/avatars/luke-redpath.jpg').default,
+    },
+  },
+  {
+    content: `Okay, I’m officially *all* in on the @tailwindcss hype train. Never thought building websites could be so ridiculously fast and flexible.`,
+    tweetUrl: 'https://twitter.com/lukeredpath/status/1316543571684663298?s=21',
+    author: {
+      name: 'Aaron Bushnell',
+      role: 'Programmer @ TrendyMinds',
+      avatar: require('@/img/avatars/aaron-bushnell.jpg').default,
     },
   },
   {
@@ -60,7 +97,7 @@ const testimonials = [
     tweetUrl: 'https://twitter.com/JonBloomer/status/1300923818622377984',
     author: {
       name: 'Jon Bloomer',
-      role: '',
+      role: 'Front-End Developer',
       avatar: require('@/img/avatars/jon-bloomer.jpg').default,
     },
   },
@@ -69,7 +106,7 @@ const testimonials = [
     tweetUrl: 'https://twitter.com/droidgilliland/status/1222733372855848961',
     author: {
       name: 'Andrew Gilliland',
-      role: '',
+      role: 'Front-End Developer',
       avatar: require('@/img/avatars/andrew-gilliland.jpg').default,
     },
   },
@@ -149,7 +186,7 @@ function Testimonial({ testimonial, base, index, total }) {
 export function Testimonials() {
   const x = useMotionValue(0)
   const { inView, ref: inViewRef } = useInView({ threshold: 0, rootMargin: '100px' })
-  const [duration, setDuration] = useState(40)
+  const [duration, setDuration] = useState(100)
 
   useEffect(() => {
     if (!inView) return
@@ -168,8 +205,8 @@ export function Testimonials() {
     <div
       ref={inViewRef}
       className="relative"
-      onMouseEnter={() => setDuration(100)}
-      onMouseLeave={() => setDuration(40)}
+      onMouseEnter={() => setDuration(300)}
+      onMouseLeave={() => setDuration(100)}
     >
       <div
         className="absolute right-0 bottom-1/2 left-0 bg-gradient-to-t from-gray-100 pointer-events-none"
