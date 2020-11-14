@@ -181,20 +181,16 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
         </ContentsContext.Provider>
         {(prev || next) && (
           <>
-            <hr />
-            <div className="-mt-6 flex justify-between">
+            <hr className="border-gray-200 mt-10 mb-4" />
+            <div className="flex justify-between leading-7 font-medium">
               {prev && (
                 <Link href={prev.href}>
-                  <a className="font-medium text-blue-500 underline hover:text-blue-700">
-                    ← {prev.shortTitle || prev.title}
-                  </a>
+                  <a>← {prev.shortTitle || prev.title}</a>
                 </Link>
               )}
               {next && (
                 <Link href={next.href}>
-                  <a className="font-medium text-blue-500 underline hover:text-blue-700">
-                    {next.shortTitle || next.title} →
-                  </a>
+                  <a>{next.shortTitle || next.title} →</a>
                 </Link>
               )}
             </div>
