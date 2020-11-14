@@ -1,3 +1,5 @@
+const syntaxTheme = require('../src/utils/syntaxTheme')
+const dlv = require('dlv')
 const Prism = require('prismjs')
 const loadLanguages = require('prismjs/components/')
 loadLanguages()
@@ -27,9 +29,19 @@ module.exports.addExport = function addExport(tree, name, value) {
 }
 
 module.exports.highlightCode = function highlightCode(code, language) {
-  const highlighted = Prism.languages[language]
+  let highlighted = Prism.languages[language]
     ? Prism.highlight(code, Prism.languages[language], language)
     : code
+
+  highlighted = highlighted.replace(/class="token([^"]+)"/g, (_, p1) => {
+    const types = p1.trim().split(/\s/)
+    if (types.length === 0) return ''
+    const classes = types
+      .map((type) => dlv(syntaxTheme, [language, type], syntaxTheme[type]))
+      .filter(Boolean)
+    if (classes.length === 0) return ''
+    return `class="${classes.join(' ')}"`
+  })
 
   return language === 'html'
     ? highlighted.replace(

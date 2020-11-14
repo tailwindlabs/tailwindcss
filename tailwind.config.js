@@ -95,6 +95,7 @@ module.exports = {
             },
             pre: {
               backgroundColor: '-',
+              color: theme('colors.white'),
               borderRadius: 0,
               marginTop: 0,
               marginBottom: 0,

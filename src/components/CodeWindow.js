@@ -3,6 +3,7 @@ import { forwardRef, Fragment, useMemo } from 'react'
 import tokenize from '../macros/tokenize.macro'
 import { Code } from './Code'
 import styles from './CodeWindow.module.css'
+import syntaxTheme from '@/utils/syntaxTheme'
 
 const { tokens: defaultTokens } = tokenize.html(`<div class="flex pa-2 bg-white rounded-lg shadow">
   <div class="w-32 rounded-md overflow-hidden">
@@ -90,21 +91,13 @@ CodeWindow.Code = forwardRef(({ tokens = defaultTokens, initialLineNumber = 1, .
   )
 })
 
-const themeDict = {
-  punctuation: 'text-code-punctuation',
-  tag: 'text-code-tag',
-  'attr-name': 'text-code-attr-name',
-  'attr-value': 'text-code-attr-value',
-  class: 'text-code-attr-value',
-}
-
 export function getClassNameForToken({ types, empty }) {
   const typesSize = types.length
   if (typesSize === 1 && types[0] === 'plain') {
     return empty ? 'inline-block' : undefined
   }
   const className = (
-    (themeDict[types[typesSize - 1]] || '') + (empty ? ' inline-block' : '')
+    (syntaxTheme[types[typesSize - 1]] || '') + (empty ? ' inline-block' : '')
   ).trim()
   return className === '' ? undefined : className
 }
