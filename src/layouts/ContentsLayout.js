@@ -179,7 +179,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
         />
         <ContentsContext.Provider value={{ registerHeading, unregisterHeading }}>
           {classes && <ClassTable {...(isValidElement(classes) ? { custom: classes } : classes)} />}
-          {children}
+          <div>{children}</div>
         </ContentsContext.Provider>
         {(prev || next) && (
           <>

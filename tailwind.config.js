@@ -59,6 +59,12 @@ module.exports = {
             color: theme('colors.gray.500'),
             '> :first-child': { marginTop: '-' },
             '> :last-child': { marginBottom: '-' },
+            '&:first-child > :first-child': {
+              marginTop: '0',
+            },
+            '&:last-child > :last-child': {
+              marginBottom: '0',
+            },
             'h2, h3': {
               'scroll-margin-block': `${(70 + 40) / 16}rem`,
             },

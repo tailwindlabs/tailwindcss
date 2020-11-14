@@ -12,6 +12,7 @@ export function Heading({
   className = '',
   hidden = false,
   toc = false,
+  style = {},
   ...props
 }) {
   let Component = `h${level}`
@@ -31,11 +32,10 @@ export function Heading({
 
   return (
     <Component
-      className={clsx('group flex whitespace-pre-wrap', className, {
-        '-mb-6': hidden,
-      })}
+      className={clsx('group flex whitespace-pre-wrap', className)}
       id={id}
       ref={ref}
+      style={{ ...(hidden ? { marginBottom: 0 } : {}), ...style }}
       {...props}
     >
       {!hidden && (
