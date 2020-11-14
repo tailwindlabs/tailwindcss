@@ -52,7 +52,7 @@ module.exports = withBundleAnalyzer({
     config.module.rules.push({
       test: /\.svg$/,
       use: [
-        '@svgr/webpack',
+        { loader: '@svgr/webpack', options: { svgoConfig: { plugins: { removeViewBox: false } } } },
         {
           loader: 'file-loader',
           options: {

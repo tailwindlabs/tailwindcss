@@ -9,7 +9,7 @@ export function Header({ navIsOpen, onNavToggle }) {
   return (
     <>
       <div className="sticky top-0 z-40 lg:z-50 w-full max-w-8xl mx-auto bg-white flex-none flex">
-        <div className="flex-none pl-4 sm:pl-6 md:pl-8 flex items-center border-b border-gray-200 lg:border-b-0 lg:w-72">
+        <div className="flex-none pl-4 sm:pl-6 xl:pl-8 flex items-center border-b border-gray-200 lg:border-b-0 lg:w-60 xl:w-72">
           <Link href="/">
             <a
               className="overflow-hidden w-10 md:w-auto"
@@ -23,7 +23,7 @@ export function Header({ navIsOpen, onNavToggle }) {
             </a>
           </Link>
         </div>
-        <div className="flex-auto border-b border-gray-200 h-18 flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-0 lg:mx-8">
+        <div className="flex-auto border-b border-gray-200 h-18 flex items-center justify-between px-4 sm:px-6 lg:mx-6 lg:px-0 xl:mx-8">
           <Search />
           <div className="flex items-center space-x-6">
             <VersionSwitcher className="hidden lg:block" />
