@@ -9855,12 +9855,6 @@ video {
   float: none;
 }
 
-.clearfix:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
 .clear-left {
   clear: left;
 }
@@ -36109,12 +36103,6 @@ video {
     float: none;
   }
 
-  .sm\:clearfix:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-
   .sm\:clear-left {
     clear: left;
   }
@@ -62331,12 +62319,6 @@ video {
 
   .md\:float-none {
     float: none;
-  }
-
-  .md\:clearfix:after {
-    content: "";
-    display: table;
-    clear: both;
   }
 
   .md\:clear-left {
@@ -88557,12 +88539,6 @@ video {
     float: none;
   }
 
-  .lg\:clearfix:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-
   .lg\:clear-left {
     clear: left;
   }
@@ -114781,12 +114757,6 @@ video {
     float: none;
   }
 
-  .xl\:clearfix:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-
   .xl\:clear-left {
     clear: left;
   }
@@ -141003,12 +140973,6 @@ video {
 
   .\32xl\:float-none {
     float: none;
-  }
-
-  .\32xl\:clearfix:after {
-    content: "";
-    display: table;
-    clear: both;
   }
 
   .\32xl\:clear-left {
