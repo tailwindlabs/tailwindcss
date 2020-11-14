@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
 import nameClass from '../util/nameClass'
+import toColorValue from '../util/toColorValue'
 
 export default function () {
   return function ({ addUtilities, theme, variants }) {
@@ -10,7 +11,7 @@ export default function () {
         return [
           nameClass('ring-offset', modifier),
           {
-            '--ring-offset-color': value,
+            '--ring-offset-color': toColorValue(value),
           },
         ]
       })

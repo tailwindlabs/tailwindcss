@@ -20972,8 +20972,7 @@ video {
 }
 
 .ring-transparent {
-  --ring-opacity: 0;
-  --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+  --ring-color: transparent;
 }
 
 .ring-current {
@@ -21391,8 +21390,7 @@ video {
 }
 
 .focus-within\:ring-transparent:focus-within {
-  --ring-opacity: 0;
-  --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+  --ring-color: transparent;
 }
 
 .focus-within\:ring-current:focus-within {
@@ -21810,8 +21808,7 @@ video {
 }
 
 .focus\:ring-transparent:focus {
-  --ring-opacity: 0;
-  --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+  --ring-color: transparent;
 }
 
 .focus\:ring-current:focus {
@@ -49785,8 +49782,7 @@ video {
   }
 
   .sm\:ring-transparent {
-    --ring-opacity: 0;
-    --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+    --ring-color: transparent;
   }
 
   .sm\:ring-current {
@@ -50204,8 +50200,7 @@ video {
   }
 
   .sm\:focus-within\:ring-transparent:focus-within {
-    --ring-opacity: 0;
-    --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+    --ring-color: transparent;
   }
 
   .sm\:focus-within\:ring-current:focus-within {
@@ -50623,8 +50618,7 @@ video {
   }
 
   .sm\:focus\:ring-transparent:focus {
-    --ring-opacity: 0;
-    --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+    --ring-color: transparent;
   }
 
   .sm\:focus\:ring-current:focus {
@@ -78568,8 +78562,7 @@ video {
   }
 
   .md\:ring-transparent {
-    --ring-opacity: 0;
-    --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+    --ring-color: transparent;
   }
 
   .md\:ring-current {
@@ -78987,8 +78980,7 @@ video {
   }
 
   .md\:focus-within\:ring-transparent:focus-within {
-    --ring-opacity: 0;
-    --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+    --ring-color: transparent;
   }
 
   .md\:focus-within\:ring-current:focus-within {
@@ -79406,8 +79398,7 @@ video {
   }
 
   .md\:focus\:ring-transparent:focus {
-    --ring-opacity: 0;
-    --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+    --ring-color: transparent;
   }
 
   .md\:focus\:ring-current:focus {
@@ -107351,8 +107342,7 @@ video {
   }
 
   .lg\:ring-transparent {
-    --ring-opacity: 0;
-    --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+    --ring-color: transparent;
   }
 
   .lg\:ring-current {
@@ -107770,8 +107760,7 @@ video {
   }
 
   .lg\:focus-within\:ring-transparent:focus-within {
-    --ring-opacity: 0;
-    --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+    --ring-color: transparent;
   }
 
   .lg\:focus-within\:ring-current:focus-within {
@@ -108189,8 +108178,7 @@ video {
   }
 
   .lg\:focus\:ring-transparent:focus {
-    --ring-opacity: 0;
-    --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+    --ring-color: transparent;
   }
 
   .lg\:focus\:ring-current:focus {
@@ -136134,8 +136122,7 @@ video {
   }
 
   .xl\:ring-transparent {
-    --ring-opacity: 0;
-    --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+    --ring-color: transparent;
   }
 
   .xl\:ring-current {
@@ -136553,8 +136540,7 @@ video {
   }
 
   .xl\:focus-within\:ring-transparent:focus-within {
-    --ring-opacity: 0;
-    --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+    --ring-color: transparent;
   }
 
   .xl\:focus-within\:ring-current:focus-within {
@@ -136972,8 +136958,7 @@ video {
   }
 
   .xl\:focus\:ring-transparent:focus {
-    --ring-opacity: 0;
-    --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+    --ring-color: transparent;
   }
 
   .xl\:focus\:ring-current:focus {
@@ -164917,8 +164902,7 @@ video {
   }
 
   .\32xl\:ring-transparent {
-    --ring-opacity: 0;
-    --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+    --ring-color: transparent;
   }
 
   .\32xl\:ring-current {
@@ -165336,8 +165320,7 @@ video {
   }
 
   .\32xl\:focus-within\:ring-transparent:focus-within {
-    --ring-opacity: 0;
-    --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+    --ring-color: transparent;
   }
 
   .\32xl\:focus-within\:ring-current:focus-within {
@@ -165755,8 +165738,7 @@ video {
   }
 
   .\32xl\:focus\:ring-transparent:focus {
-    --ring-opacity: 0;
-    --ring-color: rgba(0, 0, 0, var(--ring-opacity));
+    --ring-color: transparent;
   }
 
   .\32xl\:focus\:ring-current:focus {
