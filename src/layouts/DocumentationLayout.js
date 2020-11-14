@@ -153,12 +153,12 @@ const nav = {
     pages['animation'],
   ],
   Transforms: [
+    pages['transform'],
+    pages['transform-origin'],
     pages['scale'],
     pages['rotate'],
     pages['translate'],
     pages['skew'],
-    pages['transform'],
-    pages['transform-origin'],
   ],
   Interactivity: [
     pages['appearance'],
