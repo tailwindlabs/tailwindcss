@@ -1,0 +1,53 @@
+---
+title: "Install Tailwind CSS with Create React App"
+description: "Setting up Tailwind CSS in a Create React App project."
+---
+
+# Using Tailwind CSS with Create React App
+
+## Creating your project
+
+Start by creating a new Create React App project if you don't have one set up already:
+
+```sh
+npx create-react-app my-project
+```
+
+## Setting up Tailwind CSS
+
+Install Tailwind, Autoprefixer and CRACO using `npm` or `yarn`:
+
+```sh
+npm install tailwindcss autoprefixer@^9 @craco/craco
+```
+
+⚠️ Note that at the time of writing this guide, we need to stick to version 9 of Autoprefixer. This will go away when NextJS internally upgrades to PostCSS 8, at what point we'll update this guide! 😅
+
+Next, let's generate default `tailwind.config.js`:
+
+```sh
+npx tailwindcss init
+```
+
+Then, let's create a `craco.config.js` at the root of our project, with the following settings:
+
+```javascript
+// craco.config.js
+module.exports = {
+  style: {
+    postcss: {
+      plugins: [require("tailwindcss"), require("autoprefixer")],
+    },
+  },
+};
+```
+
+Now, let's replace the content of `src/index.css` with the following:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+That's it! Tailwind CSS is now available throughout our entire application 🎉

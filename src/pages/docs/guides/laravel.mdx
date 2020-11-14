@@ -1,0 +1,61 @@
+---
+title: "Install Tailwind CSS with Laravel"
+description: "Setting up Tailwind CSS in a Laravel project."
+---
+
+# Using Tailwind CSS with Laravel
+
+## Creating your project
+
+Start by creating a new Laravel project if you don't have one set up already. The most common approach is to use the [Laravel Installer](https://laravel.com/docs/8.x#via-laravel-installer):
+
+```sh
+laravel new my-project
+```
+
+Next, install Laravel's front-end dependencies using `npm` or `yarn`:
+
+```sh
+npm install
+```
+
+## Setting up Tailwind CSS
+
+Install Tailwind using `npm` or `yarn`:
+
+```sh
+npm install tailwindcss
+```
+
+> Note that unlike many other build tools, Laravel Mix will always run autoprefixer for us automatically, so we don't need to install it or configure it ourselves.
+
+Next, create a CSS file for your Tailwind styles and add a `@tailwind` directive for each of Tailwind's layers. We've stored in it `resources/css/tailwind.css` for this example:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+Next, add your CSS file to your `webpack.mix.js` file and configure the `tailwindcss` PostCSS plugin using Mix's `postCss` method:
+
+```javascript
+mix
+  .js("resources/js/app.js", "public/js")
+  .postCss("resources/css/tailwind.css", "public/css", [
+    require("tailwindcss"),
+  ]);
+```
+
+Finally, import that CSS file into your main layout template:
+
+```html
+<!-- ... --->
+<head>
+  <!-- ... --->
+  <link href="{{ asset('css/tailwind.css') }}" rel="stylesheet" />
+</head>
+<!-- ... --->
+```
+
+If you'd like to customize your Tailwind configuration, run `npx tailwindcss init` to create a `tailwind.config.js` file in your project root.

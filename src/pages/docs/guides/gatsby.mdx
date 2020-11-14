@@ -1,0 +1,52 @@
+---
+title: "Install Tailwind CSS with Gatsby"
+description: "Setting up Tailwind CSS in a Gatsby project."
+---
+
+# Using Tailwind CSS with Gatsby
+
+## Creating your project
+
+Start by creating a new Gatsby project if you don't have one set up already. The most common approach is to use the [Gatsby CLI](https://www.gatsbyjs.com/docs/quick-start/#install-the-gatsby-cli):
+
+```sh
+gatsby new my-project
+```
+
+## Setting up Tailwind CSS
+
+Install Tailwind, Autoprefixer, PostCSS and the `gatsby-plugin-postcss` Gatsby plugin using `npm` or `yarn`:
+
+```sh
+npm install tailwindcss autoprefixer@^9 postcss gatsby-plugin-postcss
+```
+
+⚠️ Note that at the time of writing this guide, we need to stick to version 9 of Autoprefixer. This will go away when NextJS internally upgrades to PostCSS 8, at what point we'll update this guide! 😅
+
+Next, let's generate default `tailwind.config.js` **and** `postcss.config.js` files:
+
+```sh
+npx tailwindcss init -p
+```
+
+Let's include our Gatsby plugin in our gatsby-config.js`:
+
+```javascript
+plugins: [`gatsby-plugin-postcss`],
+```
+
+Let's create a new CSS file in our `src` directory called `tailwind.css`. This file will contain three `@tailwind` declaratives:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+Finally, let's import this file in our layout. In this example, this corresponds to the `src/components/layout.js` file.
+
+```javascript
+import "../tailwind.css";
+```
+
+That's it! Tailwind CSS is now available throughout our entire Gatsby project 🎉

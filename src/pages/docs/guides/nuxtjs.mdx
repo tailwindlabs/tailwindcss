@@ -1,0 +1,55 @@
+---
+title: "Install Tailwind CSS with Nuxt.js"
+description: "Setting up Tailwind CSS in a Nuxt.js project."
+---
+
+# Using Tailwind CSS with Nuxt.js
+
+## Creating your project
+
+Start by creating a new Nuxt.js project if you don't have one set up already. The most common approach is to use [`create-nuxt-app`](https://nuxtjs.org/guides/get-started/installation#using-create-nuxt-app):
+
+```sh
+npx create-nuxt-app my-project
+```
+
+## Setting up Tailwind CSS
+
+If you've used `create-nuxt-app` and selected Tailwind CSS at the "UI Framework" step, you're already done - Tailwind will work out of the box! 👍
+
+For other cases, you'll need to install the `@nuxtjs/tailwindcss` module. Let's add that dependency to our project using `npm` or `yarn`:
+
+```sh
+npm install -D @nuxtjs/tailwindcss
+```
+
+Next, add it to your `buildModules` section in your `nuxt.config.js` file:
+
+```sh
+//nuxt.config.js
+export default {
+  buildModules: ['@nuxtjs/tailwindcss']
+}
+```
+
+⚠️ Note: if you are using version `2.9.0` of Nuxt or earlier, use the `modules` property instead of `buildModules`.
+
+That's it! Tailwind CSS is now available in your entire Nuxt project 🎉
+
+---
+
+## Customizing the Taliwind config and writing custom CSS
+
+If you want to customise the Tailwind config, simply create a `tailwind.config.js` in your project root.
+
+The `@nuxtjs/tailwindcss` module will also look for a CSS file in `./assets/css/tailwind.css`, which is where you can write your custom CSS and use things like `@apply`, `@responsive` or `@screen` directives.
+
+If no file is found at that location, the default three `@tailwind` layer directives will be used:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+You can find more information on more advanced features of the `@nuxtjs/tailwindcss` module here: https://tailwindcss.nuxtjs.org/

@@ -1,0 +1,69 @@
+---
+title: "Install Tailwind CSS with Next.js"
+description: "Setting up Tailwind CSS in a Next.js project."
+---
+
+# Using Tailwind CSS with NextJS
+
+## Creating your project
+
+Start by creating a new NextJS project if you don't have one set up already. The most common approach is to use [Create Next App](https://nextjs.org/docs/api-reference/create-next-app):
+
+```sh
+npx create-next-app my-project
+```
+
+## Setting up Tailwind CSS
+
+Install Tailwind and Autoprefixer using `npm` or `yarn`:
+
+```sh
+npm install tailwindcss autoprefixer@^9
+```
+
+⚠️ Note that at the time of writing this guide, we need to stick to version 9 of Autoprefixer. This will go away when NextJS internally upgrades to PostCSS 8, at what point we'll update this guide! 😅
+
+Next, let's generate default `tailwind.config.js` **and** `postcss.config.js` files:
+
+```sh
+npx tailwindcss init -p
+```
+
+In our newly generated `tailwind.config.js` file, we'll configure the `purge` key with an array of file paths we want to be scanned. You may need to adjust this based on your specific needs.
+
+```diff
+module.exports = {
+  // ...,
+-  purge: [],
++  purge: ['./pages/**/*.js', './components/**/*.js'],
+  theme: {
+    extend: {}
+  },
+  variants: {},
+  plugins: []
+}
+```
+
+[See this in the code example &rarr;](https://github.com/tailwindlabs/tailwindcss-integration-guides/blob/master/guides/nextjs/example/tailwind.config.js#L8)
+
+In our NextJS project, within the `styles` directory, let's create a new file called `tailwind.css`. This file will contain three `@tailwind` declaratives:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+[See this in the code example &rarr;](https://github.com/tailwindlabs/tailwindcss-integration-guides/blob/master/guides/nextjs/example/styles/tailwind.css#L1-L3)
+
+Next, let's open the `_app.js` file located in our NextJS project's `pages` directory.
+
+At the top of that file, we'll import our new `tailwind.css` file:
+
+```javascript
+import "../styles/tailwind.css";
+```
+
+[See this in the code example &rarr;](https://github.com/tailwindlabs/tailwindcss-integration-guides/blob/master/guides/nextjs/example/pages/_app.js#L1)
+
+That's it! Tailwind CSS is now available throughout our entire application 🎉

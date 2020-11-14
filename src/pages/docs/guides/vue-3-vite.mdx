@@ -1,0 +1,55 @@
+---
+title: "Install Tailwind CSS with Vue 3 and Vite"
+description: "Setting up Tailwind CSS in a Vue 3 and Vite project."
+---
+
+
+## Creating your project
+
+Start by creating a new Vue 3 project if you don't have one set up already. A possible approach here is to use [Vite](https://github.com/vitejs/vite#getting-started):
+
+```sh
+npm init vite-app my-project
+```
+
+Next, move into your new `my-project` directory and install the front-end dependencies using `npm` or `yarn`:
+
+```sh
+cd my-project && yarn
+```
+
+## Setting up Tailwind CSS
+
+Install Tailwind and Autoprefixer as `devDepencies` using `npm` or `yarn`:
+
+```sh
+npm install -D tailwindcss autoprefixer@^9
+```
+
+⚠️ Note that at the time of writing this guide, we need to stick to version 9 of Autoprefixer. This will go away when NextJS internally upgrades to PostCSS 8, at what point we'll update this guide! 😅
+
+Next, let's generate default config files for Tailwind CSS and PostCSS:
+
+```sh
+npx tailwindcss init -p
+```
+
+Next, let's create a new CSS file. In this example, we called it `tailwind.css` and put it in the `src` directory. We'll add the 3 `@tailwind` directives in that file:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+Let's now import this new CSS file in our `main.js` entry point:
+
+```diff
+import { createApp } from "vue";
+import App from "./App.vue";
++ import "./tailwind.css";
+
+createApp(App).mount("#app");
+```
+
+That's it! Tailwind CSS is now available throughout your Vue 3 application 🎉

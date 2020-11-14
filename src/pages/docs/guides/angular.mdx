@@ -1,0 +1,111 @@
+---
+title: "Install Tailwind CSS with Angular"
+description: "Setting up Tailwind CSS in an Angular project."
+---
+
+## Creating your project
+
+Start by creating a new Angular project if you don't have one set up already. The most common approach is to use the [Angular CLI](https://angular.io/guide/setup-local#install-the-angular-cli):
+
+```sh
+ng new my-project
+```
+
+## Setting up Tailwind CSS
+
+Install Tailwind, Autoprefixer using `npm` or `yarn`:
+
+```sh
+npm install tailwindcss autoprefixer@^9
+```
+
+⚠️ Note that at the time of writing this guide, we need to stick to version 9 of Autoprefixer. This will go away when NextJS internally upgrades to PostCSS 8, at what point we'll update this guide! 😅
+
+We'll also need to install `postcss-loader` and `@angular-builders/custom-webpack` to provide a custom webpack config to our Angular project, which handles PostCSS for us:
+
+```sh
+npm i -D postcss-loader @angular-builders/custom-webpack
+```
+
+Next, let's generate default `tailwind.config.js` **and** `postcss.config.js` files:
+
+```sh
+npx tailwindcss init -p
+```
+
+Next, let's create a `webpack.config.js` at the root of our project, and tell webpack to handle CSS files with the `postcss-loader`:
+
+```jamodule.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        loader: "postcss-loader",
+        options: {
+          postcssOptions: {
+            ident: "postcss",
+            plugins: () => [require("tailwindcss"), require("autoprefixer")],
+          },
+        },
+      },
+    ],
+  },
+};vascript
+
+```
+
+In our Angular project, let's add our three `@tailwind` directives to our global stylesheet in `src/styles.css`:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+Finally, we need to update the `angular.json` file to let it know about our custom webpack config. We'll need to update the `architect.build` and `architect.serve` sections of the config.
+
+Locate the `architect.build` key, and under `builder`, replace `@angular-devkit/build-angular:browser` with `@angular-builders/custom-webpack:browser`.
+
+```diff
+"architect": {
+  "build": {
+-    "builder": "@angular-devkit/build-angular:browser"
++    "builder": "@angular-builders/custom-webpack:browser"
+  }
+}
+```
+
+In the `options` just below, add a `customWebpackConfig` object with the `path` to the webpack config:
+
+```diff
+"architect": {
+  "build": {
+    "builder": "@angular-builders/custom-webpack:browser",
+    "options": {
++      "customWebpackConfig": {
++        "path": "./webpack.config.js"
++      },
+      "outputPath": "dist/angular",
+    }
+  }
+}
+```
+
+Now, let's do something very similar in `architect.serve`:
+
+```diff
+"architect": {
+  "serve": {
+-    "builder": "@angular-devkit/build-angular:dev-server",
++    "builder": "@angular-builders/custom-webpack:dev-server",
+    "options": {
+      "browserTarget": "angular:build",
++      "customWebpackConfig": {
++        "path": "./webpack.config.js"
++      },
+    },
+  }
+}
+```
+
+You did it! 😅 Tailwind CSS is now available throughout our entire Angular application 🎉
