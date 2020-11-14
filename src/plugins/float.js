@@ -5,11 +5,6 @@ export default function () {
         '.float-right': { float: 'right' },
         '.float-left': { float: 'left' },
         '.float-none': { float: 'none' },
-        '.clearfix:after': {
-          content: '""',
-          display: 'table',
-          clear: 'both',
-        },
       },
       variants('float')
     )
