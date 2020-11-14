@@ -4,7 +4,6 @@ description: "Utilities for controlling the bounding box of an element's backgro
 ---
 
 import plugin from 'tailwindcss/lib/plugins/backgroundClip'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 import { ConfigSample } from '@/components/ConfigSample'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
@@ -57,7 +56,7 @@ Use `bg-clip-text` to crop an element's background to match the shape of the tex
 To control the bounding box of an element's background at a specific breakpoint, add a `{screen}:` prefix to any existing background clip utility. For example, adding the class `md:bg-clip-padding` to an element would apply the `bg-clip-padding` utility at medium screen sizes and above.
 
 ```html
-<div class="bg-clip-padding md:bg-clip-border">
+<div class="bg-clip-border **md:bg-clip-padding**">
   <!-- ... -->
 </div>
 ```

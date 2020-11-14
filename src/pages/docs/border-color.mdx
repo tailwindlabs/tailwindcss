@@ -11,7 +11,6 @@ features:
 import plugin from 'tailwindcss/lib/plugins/borderColor'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 import { Heading } from '@/components/Heading'
 
 export const classes = {
@@ -32,7 +31,7 @@ export const classes = {
 
 ## Usage
 
-Control the border color of an element using the `.border-{color}` utilities.
+Control the border color of an element using the `border-{color}` utilities.
 
 ```html
 <template preview class="text-center p-4">
@@ -46,7 +45,7 @@ Control the border color of an element using the `.border-{color}` utilities.
 
 ### Changing opacity
 
-Control the opacity of an element's border color using the `.border-opacity-{amount}` utilities.
+Control the opacity of an element's border color using the `border-opacity-{amount}` utilities.
 
 ```html
 <template preview class="bg-checkered p-4">
@@ -74,21 +73,11 @@ To control the border color of an element at a specific breakpoint, add a `{scre
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['border-blue-500', 'border-green-500', 'border-indigo-500', 'border-red-500', 'border-black']}
-  snippet={(classNames) => `
-    <button class="${classNames} ...">
-      Button
-    </button>
-  `}
-  preview={(className) => (
-    <div className="text-center">
-      <button className={`border-2 bg-transparent py-2 px-4 font-semibold rounded ${className} ${{'border-blue-500':'text-blue-700','border-green-500':'text-green-700','border-indigo-500':'text-indigo-700','border-red-500':'text-red-700','border-black':'text-gray-900'}[className]}`}>
-        Button
-      </button>
-    </div>
-  )}
-/>
+```html
+<button class="border-blue-500 **md:border-green-500** ...">
+  Button
+</button>
+```
 
 ## Hover
 

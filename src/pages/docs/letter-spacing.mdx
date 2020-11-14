@@ -11,13 +11,12 @@ features:
 import plugin from 'tailwindcss/lib/plugins/letterSpacing'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
 ## Usage
 
-Control the letter spacing of an element using the `.tracking-{size}` utilities.
+Control the letter spacing of an element using the `tracking-{size}` utilities.
 
 ```html
 <template preview>
@@ -61,15 +60,9 @@ To control the letter spacing of an element at a specific breakpoint, add a `{sc
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['tracking-tight', 'tracking-normal', 'tracking-wide', 'tracking-normal', 'tracking-tight']}
-  snippet={(classNames) => `
-    <p class="${classNames} ...">The quick brown fox jumped over the lazy dog.</p>
-  `}
-  preview={(className) => (
-    <p className={`text-lg text-gray-800 ${className}`}>The quick brown fox jumped over the lazy dog.</p>
-  )}
-/>
+```html
+<p class="tracking-tight **md:tracking-wide** ...">The quick brown fox jumped over the lazy dog.</p>
+```
 
 ## Customizing
 

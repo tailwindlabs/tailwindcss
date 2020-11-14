@@ -58,7 +58,7 @@ The `container` class sets the `max-width` of an element to match the `min-width
 
 Note that unlike containers you might have used in other frameworks, **Tailwind's container does not center itself automatically and does not have any built-in horizontal padding.**
 
-To center a container, use the `.mx-auto` utility:
+To center a container, use the `mx-auto` utility:
 
 ```html
 <div class="container mx-auto">
@@ -66,7 +66,7 @@ To center a container, use the `.mx-auto` utility:
 </div>
 ```
 
-To add horizontal padding, use the `.px-{size}` utilities:
+To add horizontal padding, use the `px-{size}` utilities:
 
 ```html
 <div class="container mx-auto px-4">
@@ -154,7 +154,7 @@ If you'd like to disable the responsive variants, you can do so using by setting
 
 ### Disabling entirely
 
-If you don't plan to use the `.container` class in your project, you can disable it entirely by setting the `container` property to `false` in the `corePlugins` section of your config file:
+If you don't plan to use the `container` class in your project, you can disable it entirely by setting the `container` property to `false` in the `corePlugins` section of your config file:
 
 ```diff
   // tailwind.config.js

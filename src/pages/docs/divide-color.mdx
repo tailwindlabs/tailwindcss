@@ -6,7 +6,6 @@ description: "Utilities for controlling the border color between elements."
 import plugin from 'tailwindcss/lib/plugins/divideColor'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 import { Heading } from '@/components/Heading'
 
 export const classes = {
@@ -55,7 +54,7 @@ Control the border color between elements using the `divide-{color}` utilities.
 
 ### Changing opacity
 
-Control the opacity of borders between elements using the `.divide-opacity-{amount}` utilities.
+Control the opacity of borders between elements using the `divide-opacity-{amount}` utilities.
 
 ```html
 <template preview class="bg-checkered p-4">
@@ -83,23 +82,13 @@ To control the borders between elements at a specific breakpoint, add a `{screen
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['divide-teal-400', 'divide-pink-400', 'divide-orange-400', 'divide-green-400', 'divide-red-400']}
-  snippet={(classNames) => `
-    <div class="${classNames} divide-y">
-      <div class="text-center py-2">1</div>
-      <div class="text-center py-2">2</div>
-      <div class="text-center py-2">3</div>
-    </div>
-  `}
-  preview={(className) => (
-    <div className={`divide-y ${className}`}>
-      <div className="text-center py-2">1</div>
-      <div className="text-center py-2">2</div>
-      <div className="text-center py-2">3</div>
-    </div>
-  )}
-/>
+```html
+<div class="divide-y divide-teal-400 **md:divide-pink-400**">
+  <div class="py-2">1</div>
+  <div class="py-2">2</div>
+  <div class="py-2">3</div>
+</div>
+```
 
 ---
 

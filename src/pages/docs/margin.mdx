@@ -11,7 +11,6 @@ features:
 import plugin from 'tailwindcss/lib/plugins/margin'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -144,20 +143,11 @@ To control the margin of an element at a specific breakpoint, add a `{screen}:` 
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['mt-8', '(mt-8) mr-6', '(mt-8 mr-6) mb-4', '(mt-8 mr-6 mb-4) ml-2', 'm-0']}
-  snippet={(classNames) => `
-    <div class="bg-gray-400 ...">
-      <span class="${classNames} bg-yellow-200">Target</span>
-    </div>
-  `}
-  previewClassName="text-center p-4"
-  preview={(className) => (
-    <div className="inline-block bg-gray-400">
-      <div className={`bg-yellow-200 ${className}`}>Target</div>
-    </div>
-  )}
-/>
+```html
+<div class="mt-8 **md:my-8**">
+    <!-- ... -->
+</div>
+```
 
 ---
 

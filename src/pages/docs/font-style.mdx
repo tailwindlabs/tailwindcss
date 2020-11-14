@@ -11,13 +11,12 @@ features:
 import plugin from 'tailwindcss/lib/plugins/fontStyle'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
 ## No Italics
 
-Use the `.not-italic` utility to display text normally. This is typically used to reset italic text at different breakpoints.
+ `Use the `not-italic` utility to display text normally. This is typically used to reset italic text at different breakpoints.
 
 ```html
 <template preview>
@@ -29,7 +28,7 @@ Use the `.not-italic` utility to display text normally. This is typically used t
 
 ## Italics
 
-Use the `.italic` utility to make text italic.
+ `Use the `italic` utility to make text italic.
 
 ```html
 <template preview>
@@ -45,17 +44,11 @@ To control the font style of an element at a specific breakpoint, add a `{screen
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['italic', 'not-italic', 'italic', 'not-italic', 'italic']}
-  snippet={(classNames) => `
-    <p class="${classNames} ...">
-      The quick brown fox jumped over the lazy dog.
-    </p>
-  `}
-  preview={(className) => (
-    <p className={`text-lg text-gray-800 ${className}`}>The quick brown fox jumped over the lazy dog.</p>
-  )}
-/>
+```html
+<p class="**md:italic lg:not-italic** ...">
+  The quick brown fox jumped over the lazy dog.
+</p>
+```
 
 ## Customizing
 

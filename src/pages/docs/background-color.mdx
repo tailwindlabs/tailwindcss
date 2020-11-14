@@ -9,7 +9,6 @@ features:
 ---
 
 import plugin from 'tailwindcss/lib/plugins/backgroundColor'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 import { Heading } from '@/components/Heading'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
@@ -30,7 +29,7 @@ export const classes = {
 
 ## Usage
 
-Control the background color of an element using the `.bg-{color}` utilities.
+Control the background color of an element using the `bg-{color}` utilities.
 
 ```html
 <template preview class="text-center p-4">
@@ -44,7 +43,7 @@ Control the background color of an element using the `.bg-{color}` utilities.
 
 ### Changing opacity
 
-Control the opacity of an element's background color using the `.bg-opacity-{amount}` utilities.
+Control the opacity of an element's background color using the `bg-opacity-{amount}` utilities.
 
 ```html
 <template preview class="bg-checkered p-4">
@@ -72,19 +71,9 @@ To control the background color of an element at a specific breakpoint, add a `{
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['bg-blue-500', 'bg-green-500', 'bg-indigo-500', 'bg-red-500', 'bg-black']}
-  snippet={(classNames) => `
-    <button class="${classNames} ...">Button</button>
-  `}
-  preview={(className) => (
-    <div className="text-center">
-      <button type="button" className={`text-white font-semibold px-4 py-2 rounded ${className}`}>
-        Button
-      </button>
-    </div>
-  )}
-/>
+```html
+<button class="bg-blue-500 **md:bg-green-500** ...">Button</button>
+```
 
 ## Hover
 

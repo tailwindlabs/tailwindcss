@@ -11,13 +11,12 @@ features:
 import plugin from 'tailwindcss/lib/plugins/fontSmoothing'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
 ## Subpixel Antialiasing
 
-Use the `.subpixel-antialiased` utility to render text using subpixel antialiasing.
+ `Use the `subpixel-antialiased` utility to render text using subpixel antialiasing.
 
 ```html
 <template preview>
@@ -29,7 +28,7 @@ Use the `.subpixel-antialiased` utility to render text using subpixel antialiasi
 
 ## Grayscale Antialiasing
 
-Use the `.antialiased` utility to render text using grayscale antialiasing.
+ `Use the `antialiased` utility to render text using grayscale antialiasing.
 
 ```html
 <template preview>
@@ -45,17 +44,11 @@ To control the font smoothing of an element at a specific breakpoint, add a `{sc
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['antialiased', 'subpixel-antialiased', 'antialiased', 'subpixel-antialiased', 'antialiased']}
-  snippet={(classNames) => `
-    <p class="${classNames} ...">
-      The quick brown fox jumped over the lazy dog.
-    </p>
-  `}
-  preview={(className) => (
-    <p className={`text-lg text-gray-800 ${className}`}>The quick brown fox jumped over the lazy dog.</p>
-  )}
-/>
+```html
+<p class="antialiased sm:subpixel-antialiased **md:antialiased** ...">
+  The quick brown fox jumped over the lazy dog.
+</p>
+```
 
 ## Customizing
 

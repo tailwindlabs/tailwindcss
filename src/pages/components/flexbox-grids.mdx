@@ -3,8 +3,6 @@ title: "Flexbox Grids"
 description: Examples of building Flexbox grid layouts with Tailwind CSS.
 ---
 
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
-
 Tailwind v1.2+ includes [utilities for CSS Grid](/docs/grid-template-columns) out of the box, but if you need to support older browsers, you can also build grid layouts using Tailwind's [Flexbox](/docs/flexbox-display) and [width](/docs/width) utilities.
 
 Here are a few examples to help you get an idea of how to build Flexbox grids using Tailwind.
@@ -66,32 +64,12 @@ Use the existing [Flexbox](/docs/flexbox-display) and [percentage width](/docs/w
 
 Use the responsive variants of the width utilities to build responsive grid layouts.
 
-<ResponsiveCodeSample
-  classNames={[
-    ['w-full', 'w-1/2', 'w-1/3', 'w-1/4', 'w-1/6'],
-    ['w-full', 'w-1/2', 'w-1/3', 'w-1/2', 'w-1/6'],
-  ]}
-  snippet={(classNames) => `
-    <div class="flex flex-wrap">
-      <div class="${classNames[0]} mb-4 bg-gray-500"></div>
-      <div class="${classNames[0]} mb-4 bg-gray-400"></div>
-      <div class="${classNames[0]} mb-4 bg-gray-500"></div>
-      <div class="${classNames[0]} mb-4 bg-gray-400"></div>
-      <div class="${classNames[1]} mb-4 bg-gray-500"></div>
-      <div class="${classNames[1]} mb-4 bg-gray-400"></div>
-    </div>
-  `}
-  preview={(className) => (
-    <div className="flex flex-wrap">
-      <div className={`h-12 mb-4 bg-gray-500 ${className[0]}`}></div>
-      <div className={`h-12 mb-4 bg-gray-400 ${className[0]}`}></div>
-      <div className={`h-12 mb-4 bg-gray-500 ${className[0]}`}></div>
-      <div className={`h-12 mb-4 bg-gray-400 ${className[0]}`}></div>
-      <div className={`h-12 mb-4 bg-gray-500 ${className[1]}`}></div>
-      <div className={`h-12 mb-4 bg-gray-400 ${className[1]}`}></div>
-    </div>
-  )}
-/>
+```html
+<div class="flex flex-wrap">
+  <div class="w-full **sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6** ..."></div>
+  <!-- ... -->
+</div>
+```
 
 ## Mixed Column Sizes
 

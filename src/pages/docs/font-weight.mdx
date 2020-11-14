@@ -11,13 +11,12 @@ features:
 import plugin from 'tailwindcss/lib/plugins/fontWeight'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
 ## Usage
 
-Control the font weight of an element using the `.font-{weight}` utilities.
+Control the font weight of an element using the `font-{weight}` utilities.
 
 ```html
 <template preview class="font-sans p-4">
@@ -76,15 +75,9 @@ To control the font weight of an element at a specific breakpoint, add a `{scree
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['font-normal', 'font-bold', 'font-thin', 'font-semibold', 'font-black']}
-  snippet={(classNames) => `
-    <p class="${classNames} ...">The quick brown fox jumped over the lazy dog.</p>
-  `}
-  preview={(className) => (
-    <p className={`text-lg text-gray-800 ${className}`}>The quick brown fox jumped over the lazy dog.</p>
-  )}
-/>
+```html
+<p class="font-normal **md:font-bold** ...">The quick brown fox jumped over the lazy dog.</p>
+```
 
 ## Hover
 

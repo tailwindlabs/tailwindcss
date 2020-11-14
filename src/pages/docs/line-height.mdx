@@ -11,7 +11,6 @@ features:
 import plugin from 'tailwindcss/lib/plugins/lineHeight'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 import { Heading } from '@/components/Heading'
 
 export const classes = { plugin }
@@ -112,15 +111,9 @@ To control the line height of an element at a specific breakpoint, add a `{scree
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['leading-none', 'leading-tight', 'leading-normal', 'leading-relaxed', 'leading-loose']}
-  snippet={(classNames) => `
-    <p class="${classNames} ...">Lorem ipsum dolor sit amet ...</p>
-  `}
-  preview={(className) => (
-    <p className={`text-gray-800 ${className}`}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
-  )}
-/>
+```html
+<p class="leading-none **md:leading-loose** ...">Lorem ipsum dolor sit amet ...</p>
+```
 
 ## Customizing
 

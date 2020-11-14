@@ -11,14 +11,13 @@ features:
 import plugin from 'tailwindcss/lib/plugins/fontSize'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 import { Heading } from '@/components/Heading'
 
 export const classes = { plugin }
 
 ## Usage
 
-Control the font size of an element using the `.text-{size}` utilities.
+Control the font size of an element using the `text-{size}` utilities.
 
 ```html
 <template preview>
@@ -84,15 +83,9 @@ To control the font size of an element at a specific breakpoint, add a `{screen}
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['text-base', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl']}
-  snippet={(classNames) => `
-    <p class="${classNames} ...">The quick brown fox jumped over the lazy dog.</p>
-  `}
-  preview={(className) => (
-    <p className={`text-gray-800 truncate ${className}`}>The quick brown fox jumped over the lazy dog.</p>
-  )}
-/>
+```html
+<p class="text-base **md:text-lg** ...">The quick brown fox jumped over the lazy dog.</p>
+```
 
 ## Customizing
 

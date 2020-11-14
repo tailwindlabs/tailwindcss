@@ -11,13 +11,12 @@ features:
 import plugin from 'tailwindcss/lib/plugins/boxShadow'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
 ## Outer shadow
 
-Use the `.shadow-xs`, `.shadow-sm`, `.shadow`, `.shadow-md`, `.shadow-lg`, `.shadow-xl`, or `.shadow-2xl` utilities to apply different sized outer box shadows to an element.
+ `Use the `shadow-xs`, `.shadow-sm`, `.shadow`, `.shadow-md`, `.shadow-lg`, `.shadow-xl`, or `.shadow-2xl` utilities to apply different sized outer box shadows to an element.
 
 ```html
 <template preview class="bg-gray-100 lg:flex justify-around items-center text-sm p-4 py-8">
@@ -62,7 +61,7 @@ Use the `.shadow-xs`, `.shadow-sm`, `.shadow`, `.shadow-md`, `.shadow-lg`, `.sha
 
 ## Inner shadow
 
-Use the `.shadow-inner` utility to apply a subtle inset box shadow to an element. This can be useful for things like form controls or wells.
+ `Use the `shadow-inner` utility to apply a subtle inset box shadow to an element. This can be useful for things like form controls or wells.
 
 ```html
 <template preview class="flex justify-around text-sm p-4 py-8">
@@ -74,7 +73,7 @@ Use the `.shadow-inner` utility to apply a subtle inset box shadow to an element
 
 ## Focus outline shadow
 
-Use the `.shadow-outline` utility to apply a focus-ring-style shadow to an element. This can be useful when combined with `.focus:outline-none` to create a better looking focus style that follows an element's border radius.
+ `Use the `shadow-outline` utility to apply a focus-ring-style shadow to an element. This can be useful when combined with `.focus:outline-none` to create a better looking focus style that follows an element's border radius.
 
 ```html
 <template preview class="flex justify-center text-sm p-4 py-8">
@@ -109,18 +108,11 @@ To control the shadow of an element at a specific breakpoint, add a `{screen}:` 
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['shadow', 'shadow-md', 'shadow-lg', 'shadow-xl', 'shadow-2xl']}
-  snippet={(classNames) => `
-    <div class="${classNames} ...">
-      <!-- ... -->
-    </div>
-  `}
-  preview={(className) => (
-    <div className={`h-16 w-16 bg-white rounded ${className}`} />
-  )}
-  previewClassName="bg-gray-200 flex justify-around items-center text-sm py-8"
-/>
+```html
+<div class="shadow **md:shadow-lg** ...">
+  <!-- ... -->
+</div>
+```
 
 ## Customizing
 
