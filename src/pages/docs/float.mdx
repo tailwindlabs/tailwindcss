@@ -13,23 +13,7 @@ import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
 import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
-export const classes = {
-  plugin,
-  transformSelector: (selector) => {
-    if (selector === '.clearfix:after') {
-      return '.clearfix'
-    }
-    return selector
-  },
-  transformProperties: ({ selector, properties }) => {
-    if (selector === '.clearfix:after') {
-      return {
-        '&::after': properties,
-      }
-    }
-    return properties
-  },
-}
+export const classes = { plugin }
 
 ## Float right
 
