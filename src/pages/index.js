@@ -103,7 +103,7 @@ export default function Home() {
           </p>
           <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4 text-center">
             <a
-              href="#"
+              href="/docs"
               className="w-full sm:w-auto flex-none bg-black text-white text-lg leading-6 font-semibold py-3 px-6 border border-transparent rounded-xl"
             >
               Get started
