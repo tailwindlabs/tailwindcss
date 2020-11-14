@@ -1,161 +1,97 @@
 ---
-title: "Focus Rings"
-description: "Utilities for controlling accessible focus rings an interactable element."
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: true
+title: "Ring Offset Width"
+description: "Utilities for creating outline rings with box-shadows."
 ---
 
-import plugin from 'tailwindcss/lib/plugins/boxShadow'
+import plugin from 'tailwindcss/lib/plugins/ringOffsetWidth'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
-## Outer shadow
+## Basic rings
 
-Use the `.shadow-xs`, `.shadow-sm`, `.shadow`, `.shadow-md`, `.shadow-lg`, `.shadow-xl`, or `.shadow-2xl` utilities to apply different sized outer box shadows to an element.
+Use the `ring-{width}` utilities to apply solid box-shadow of a specific thickness to an element. By default, rings are a semi-transparent blue color, similar to the default focus ring style in many systems.
 
-```html
-<template preview class="bg-gray-100 lg:flex justify-around items-center text-sm p-4 py-8">
-  <div class="text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">xs</div>
-    <div class="mx-auto h-6 w-6 text-xs bg-white rounded shadow-xs"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">sm</div>
-    <div class="mx-auto h-8 w-8 text-xs bg-white rounded shadow-sm"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">base</div>
-    <div class="mx-auto h-10 w-10 text-xs bg-white rounded shadow"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">md</div>
-    <div class="mx-auto h-12 w-12 text-xs bg-white rounded shadow-md"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">lg</div>
-    <div class="mx-auto h-16 w-16 text-xs bg-white rounded shadow-lg"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">xl</div>
-    <div class="mx-auto h-20 w-20 text-xs bg-white rounded shadow-xl"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">2xl</div>
-    <div class="mx-auto h-24 w-24 text-xs bg-white rounded shadow-2xl"></div>
-  </div>
-</template>
-
-<div class="shadow-xs"></div>
-<div class="shadow-sm"></div>
-<div class="shadow"></div>
-<div class="shadow-md"></div>
-<div class="shadow-lg"></div>
-<div class="shadow-xl"></div>
-<div class="shadow-2xl"></div>
-```
-
-## Inner shadow
-
-Use the `.shadow-inner` utility to apply a subtle inset box shadow to an element. This can be useful for things like form controls or wells.
-
-```html
-<template preview class="flex justify-around text-sm p-4 py-8">
-  <div class="rounded p-4 bg-gray-200 shadow-inner">.shadow-inner</div>
-</template>
-
-<div class="shadow-inner"></div>
-```
-
-## Focus outline shadow
-
-Use the `.shadow-outline` utility to apply a focus-ring-style shadow to an element. This can be useful when combined with `.focus:outline-none` to create a better looking focus style that follows an element's border radius.
-
-```html
-<template preview class="flex justify-center text-sm p-4 py-8">
-  <button class="focus:outline-none focus:shadow-outline bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-32 mr-6">
+```html lightBlue
+<template preview class="flex space-x-6 justify-center p-8">
+  <button class="w-32 py-2 rounded-md font-semibold text-white bg-blue-500">
     Unfocused
   </button>
-  <button class="focus:outline-none shadow-outline bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-32">
+  <button class="w-32 py-2 rounded-md font-semibold text-white bg-blue-500 ring">
     Focused
   </button>
 </template>
 
-<button class="focus:outline-none focus:shadow-outline ...">
+<button class="... **focus:ring**">
   Button
 </button>
 ```
 
-## No shadow
+Ring utilities compose gracefully with regular `shadow-{size}` utilities and can be combined on the same element.
 
-Use `shadow-none` to remove an existing box shadow from an element. This is most commonly used to remove a shadow that was applied at a smaller breakpoint.
+You can also control the color, opacity, and offset of rings using the [ringColor](/docs/ring-color), [ringOpacity](/docs/ring-opacity), and [ringOffsetWidth](/docs/ring-offset-width) utilities.
 
-```html
-<template preview class="flex justify-around text-sm p-4 py-8">
-  <div class="rounded p-4 shadow-none bg-gray-200">.shadow-none</div>
+## Inset rings
+
+Use the `ring-inset` utility to force a ring to render on the inside of an element instead of the outside. This can be useful for elements at the edge of the screen where part of the ring wouldn't be visible.
+
+```html fuchsia
+<template preview class="flex space-x-6 justify-center p-8">
+  <button class="w-32 py-2 rounded-md font-semibold text-white bg-pink-500 ring-4 ring-pink-300">
+    Default
+  </button>
+  <button class="w-32 py-2 rounded-md font-semibold text-white bg-pink-500 ring-4 ring-pink-300 ring-inset">
+    Inset
+  </button>
 </template>
 
-<div class="shadow-none"></div>
+<button class="... ring-4 ring-pink-300">
+  Default
+</button>
+
+<button class="... ring-4 ring-pink-300 **ring-inset**">
+  Inset
+</button>
 ```
 
 ## Responsive
 
-To control the shadow of an element at a specific breakpoint, add a `{screen}:` prefix to any existing shadow utility. For example, use `md:shadow-lg` to apply the `shadow-lg` utility at only medium screen sizes and above.
+To control the ring width at a specific breakpoint, add a `{screen}:` prefix to any existing ring width utility. For example, use `md:ring-4` to apply the `ring-4` utility at only medium screen sizes and above.
+
+```html
+<button class="ring-2 **md:ring-4**">
+  <!-- ... -->
+</button>
+```
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['shadow', 'shadow-md', 'shadow-lg', 'shadow-xl', 'shadow-2xl']}
-  snippet={(classNames) => `
-    <div class="${classNames} ...">
-      <!-- ... -->
-    </div>
-  `}
-  preview={(className) => (
-    <div className={`h-16 w-16 bg-white rounded ${className}`} />
-  )}
-  previewClassName="bg-gray-200 flex justify-around items-center text-sm py-8"
-/>
-
 ## Customizing
 
-### Box Shadows
+To customize which ring width utilities are generated, use the `ringOffsetWidth` key in the `theme` section of your `tailwind.config.js` file.
 
-By default Tailwind provides three drop shadow utilities, one inner shadow utility, and a utility for removing existing shadows. You can change, add, or remove these by editing the `theme.boxShadow` section of your Tailwind config.
-
-If a `default` shadow is provided, it will be used for the non-suffixed `.shadow` utility. Any other keys will be used as suffixes, for example the key `'2'` will create a corresponding `.shadow-2` utility.
-
-```diff
+```js
   // tailwind.config.js
   module.exports = {
     theme: {
-      boxShadow: {
-        xs: '0 0 0 1px rgba(0, 0, 0, 0.05)',
-        sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-        DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-        md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-        xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-        '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-+       '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
-        inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
--       outline: '0 0 0 3px rgba(66, 153, 225, 0.5)',
-+       focus: '0 0 0 3px rgba(66, 153, 225, 0.5)',
-        none: 'none',
+      extend: {
+        ringOffsetWidth: {
+          'DEFAULT': '2px',
+          '6': '6px',
+          '10': '10px',
+        }
       }
     }
   }
 ```
 
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+
 ### Responsive and pseudo-class variants
 
-<Variants plugin="boxShadow" />
+<Variants plugin="ringOffsetWidth" />
 
 ### Disabling
 
-<Disabling plugin="boxShadow" />
+<Disabling plugin="ringOffsetWidth" />

@@ -48,6 +48,18 @@ You should be able to globally find and replace these classes throughout your en
 
 Updating `whitespace-no-wrap` and `flex-no-wrap` is just a direct replacement, and for the gap utilities we recommend replacing `col-gap-` with `gap-x-` and `row-gap-` with `gap-y-` to handle all sizes at once.
 
+## Replace 'clearfix' with 'flow-root'
+
+The `clearfix` class has been removed since `flow-root` is a simpler solution to the same problem in modern browsers.
+
+```diff
+-  <div class="clearfix">
++  <div class="flow-root">
+     <img class="float-left" src="..." alt="..." />
+     <p>Lorem ipsum...</p>
+  </div>
+```
+
 ## Replace 'shadow-outline' and 'shadow-xs' with ring utilities
 
 Tailwind CSS v2.0 introduces a new set of `ring` utilities that let you add outline shadows/focus rings in a way that automatically composes with Tailwind's other box-shadow utilities.

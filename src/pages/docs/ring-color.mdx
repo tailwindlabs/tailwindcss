@@ -1,156 +1,81 @@
 ---
 title: "Ring Color"
-description: "Utilities for controlling the focus ring color."
-features:
-  responsive: true
-  customizable: true
-  hover: false
-  focus: true
+description: "Utilities for creating outline rings with box-shadows."
 ---
 
 import plugin from 'tailwindcss/lib/plugins/ringColor'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
-## Outer shadow
+## Usage
 
-Use the `.shadow-xs`, `.shadow-sm`, `.shadow`, `.shadow-md`, `.shadow-lg`, `.shadow-xl`, or `.shadow-2xl` utilities to apply different sized outer box shadows to an element.
+Use the `ring-{color}` utilities to set the color of an [outline ring](/docs/ring-width).
 
-```html
-<template preview class="bg-gray-100 lg:flex justify-around items-center text-sm p-4 py-8">
-  <div class="text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">xs</div>
-    <div class="mx-auto h-6 w-6 text-xs bg-white rounded shadow-xs"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">sm</div>
-    <div class="mx-auto h-8 w-8 text-xs bg-white rounded shadow-sm"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">base</div>
-    <div class="mx-auto h-10 w-10 text-xs bg-white rounded shadow"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">md</div>
-    <div class="mx-auto h-12 w-12 text-xs bg-white rounded shadow-md"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">lg</div>
-    <div class="mx-auto h-16 w-16 text-xs bg-white rounded shadow-lg"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">xl</div>
-    <div class="mx-auto h-20 w-20 text-xs bg-white rounded shadow-xl"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">2xl</div>
-    <div class="mx-auto h-24 w-24 text-xs bg-white rounded shadow-2xl"></div>
-  </div>
-</template>
-
-<div class="shadow-xs"></div>
-<div class="shadow-sm"></div>
-<div class="shadow"></div>
-<div class="shadow-md"></div>
-<div class="shadow-lg"></div>
-<div class="shadow-xl"></div>
-<div class="shadow-2xl"></div>
-```
-
-## Inner shadow
-
-Use the `.shadow-inner` utility to apply a subtle inset box shadow to an element. This can be useful for things like form controls or wells.
-
-```html
-<template preview class="flex justify-around text-sm p-4 py-8">
-  <div class="rounded p-4 bg-gray-200 shadow-inner">.shadow-inner</div>
-</template>
-
-<div class="shadow-inner"></div>
-```
-
-## Focus outline shadow
-
-Use the `.shadow-outline` utility to apply a focus-ring-style shadow to an element. This can be useful when combined with `.focus:outline-none` to create a better looking focus style that follows an element's border radius.
-
-```html
-<template preview class="flex justify-center text-sm p-4 py-8">
-  <button class="focus:outline-none focus:shadow-outline bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-32 mr-6">
-    Unfocused
-  </button>
-  <button class="focus:outline-none shadow-outline bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-32">
-    Focused
+```html indigo
+<template preview class="flex justify-center p-8">
+  <button class="w-32 py-2 rounded-md font-semibold text-white bg-indigo-500 ring-4 ring-indigo-300">
+    Button
   </button>
 </template>
 
-<button class="focus:outline-none focus:shadow-outline ...">
+<button class="... ring-4 **ring-indigo-300**">
   Button
 </button>
 ```
 
-## No shadow
-
-Use `shadow-none` to remove an existing box shadow from an element. This is most commonly used to remove a shadow that was applied at a smaller breakpoint.
-
-```html
-<template preview class="flex justify-around text-sm p-4 py-8">
-  <div class="rounded p-4 shadow-none bg-gray-200">.shadow-none</div>
-</template>
-
-<div class="shadow-none"></div>
-```
+You can also control the opacity of rings using the [ringOpacity](/docs/ring-opacity) utilities.
 
 ## Responsive
 
-To control the shadow of an element at a specific breakpoint, add a `{screen}:` prefix to any existing shadow utility. For example, use `md:shadow-lg` to apply the `shadow-lg` utility at only medium screen sizes and above.
+To control the ring color at a specific breakpoint, add a `{screen}:` prefix to any existing ring color utility. For example, use `md:ring-blue-500` to apply the `ring-blue-500` utility at only medium screen sizes and above.
+
+```html
+<button class="ring-2 ring-blue-300 **md:ring-blue-500**">
+  <!-- ... -->
+</button>
+```
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['shadow', 'shadow-md', 'shadow-lg', 'shadow-xl', 'shadow-2xl']}
-  snippet={(classNames) => `
-    <div class="${classNames} ...">
-      <!-- ... -->
-    </div>
-  `}
-  preview={(className) => (
-    <div className={`h-16 w-16 bg-white rounded ${className}`} />
-  )}
-  previewClassName="bg-gray-200 flex justify-around items-center text-sm py-8"
-/>
-
 ## Customizing
 
-### Box Shadows
+You can customize which ring color utilities are generated by customizing your color palette using the `colors` key in the `theme` section of your `tailwind.config.js` file:
 
-By default Tailwind provides three drop shadow utilities, one inner shadow utility, and a utility for removing existing shadows. You can change, add, or remove these by editing the `theme.boxShadow` section of your Tailwind config.
+```js
+// tailwind.config.js
+const colors = require('tailwindcss/colors')
 
-If a `default` shadow is provided, it will be used for the non-suffixed `.shadow` utility. Any other keys will be used as suffixes, for example the key `'2'` will create a corresponding `.shadow-2` utility.
-
-```diff
-  // tailwind.config.js
-  module.exports = {
-    theme: {
-      boxShadow: {
-        xs: '0 0 0 1px rgba(0, 0, 0, 0.05)',
-        sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-        DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-        md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-        xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-        '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-+       '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
-        inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
--       outline: '0 0 0 3px rgba(66, 153, 225, 0.5)',
-+       focus: '0 0 0 3px rgba(66, 153, 225, 0.5)',
-        none: 'none',
-      }
+module.exports = {
+  theme: {
+    colors: {
+      gray: colors.blueGray,
+      indigo: colors.indigo,
+      red: colors.rose,
+      yellow: colors.yellow,
     }
   }
+}
 ```
+
+If you'd like to customize only the ring color utilities without affecting your global color palette, use the `ringColor` key instead:
+
+```js
+// tailwind.config.js
+const colors = require('tailwindcss/colors')
+
+module.exports = {
+  theme: {
+    ringColor: {
+      white: colors.white,
+      pink: colors.fuchsia,
+    }
+  }
+}
+```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
 
 ### Responsive and pseudo-class variants
 
