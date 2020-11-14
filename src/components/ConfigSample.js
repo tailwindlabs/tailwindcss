@@ -46,36 +46,40 @@ export function ConfigSample({ path, add, remove, before, after }) {
   path = typeof path === 'string' ? path.split('.') : path
 
   return (
-    <div className="my-6 rounded-xl overflow-hidden bg-gray-800">
-      <pre className="language-diff">
-        <code className="language-diff">
-          <span className="token unchanged">
-            {'  // tailwind.config.js\n'}
-            {'  module.exports = {\n'}
-            {path.map((key, i) => (
-              <Fragment key={i}>
-                {'  '}
-                {'  '.repeat(i + 1)}
-                {key}: {'{\n'}
-              </Fragment>
-            ))}
-            {before && castArray(before).map((str) => `${'  '.repeat(path.length + 2)}${str}\n`)}
-          </span>
-          {remove && <Edits edits={remove} type="deleted" indent={'  '.repeat(path.length + 1)} />}
-          {add && <Edits edits={add} type="inserted" indent={'  '.repeat(path.length + 1)} />}
-          <span className="token unchanged">
-            {after && castArray(after).map((str) => `${'  '.repeat(path.length + 2)}${str}\n`)}
-            {path.map((key, i) => (
-              <Fragment key={i}>
-                {'  '}
-                {'  '.repeat(path.length - i)}
-                {'}\n'}
-              </Fragment>
-            ))}
-            {'  }'}
-          </span>
-        </code>
-      </pre>
+    <div className="prose">
+      <div className="my-6 rounded-xl overflow-hidden bg-gray-800">
+        <pre className="language-diff">
+          <code className="language-diff">
+            <span className="token unchanged">
+              {'  // tailwind.config.js\n'}
+              {'  module.exports = {\n'}
+              {path.map((key, i) => (
+                <Fragment key={i}>
+                  {'  '}
+                  {'  '.repeat(i + 1)}
+                  {key}: {'{\n'}
+                </Fragment>
+              ))}
+              {before && castArray(before).map((str) => `${'  '.repeat(path.length + 2)}${str}\n`)}
+            </span>
+            {remove && (
+              <Edits edits={remove} type="deleted" indent={'  '.repeat(path.length + 1)} />
+            )}
+            {add && <Edits edits={add} type="inserted" indent={'  '.repeat(path.length + 1)} />}
+            <span className="token unchanged">
+              {after && castArray(after).map((str) => `${'  '.repeat(path.length + 2)}${str}\n`)}
+              {path.map((key, i) => (
+                <Fragment key={i}>
+                  {'  '}
+                  {'  '.repeat(path.length - i)}
+                  {'}\n'}
+                </Fragment>
+              ))}
+              {'  }'}
+            </span>
+          </code>
+        </pre>
+      </div>
     </div>
   )
 }
