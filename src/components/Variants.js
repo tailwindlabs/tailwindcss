@@ -9,12 +9,15 @@ export function Variants({ plugin, name }) {
     .filter((x) => !variants.includes(x))
     .slice(0, 2)
 
+  const opening = `By default, ${
+    variants.length
+      ? `only ${joinWithAnd(variants).replace('dark', 'dark mode <em>(if enabled)</em>')}`
+      : 'no'
+  } variants are generated for ${name} utilities.`
+
   return (
     <div className="prose">
-      <p>
-        By default, {variants.length ? `only ${joinWithAnd(variants)}` : 'no'} variants are
-        generated for {name} utilities.
-      </p>
+      <p dangerouslySetInnerHTML={{ __html: opening }} />
       <p>
         You can control which variants are generated for the {name} utilities by modifying the{' '}
         <code>{plugin}</code> property in the <code>variants</code> section of your{' '}

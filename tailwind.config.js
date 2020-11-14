@@ -48,6 +48,9 @@ module.exports = {
         highlight: 'rgba(134, 239, 172, 0.25)',
       },
     },
+    fontFamily: {
+      mono: ['Menlo', ...defaultTheme.fontFamily.mono],
+    },
     extend: {
       typography: (theme) => ({
         DEFAULT: {
@@ -84,14 +87,14 @@ module.exports = {
               fontWeight: theme('fontWeight.medium'),
             },
             code: {
-              fontWeight: 'inherit',
+              fontWeight: '400',
               color: theme('colors.violet.600'),
             },
             'code::before': {
-              content: 'none',
+              // content: 'none',
             },
             'code::after': {
-              content: 'none',
+              // content: 'none',
             },
             pre: {
               backgroundColor: '-',

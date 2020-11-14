@@ -1,13 +1,20 @@
 ---
 title: "Ring Color"
-description: "Utilities for creating outline rings with box-shadows."
+description: "Utilities for setting the color of outline rings."
 ---
 
 import plugin from 'tailwindcss/lib/plugins/ringColor'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
 
-export const classes = { plugin }
+export const classes = {
+  plugin,
+  transformProperties: ({ selector, properties }) => {
+    delete properties['--ring-opacity']
+    return properties
+  }
+}
+
 
 ## Usage
 
@@ -15,7 +22,7 @@ Use the `ring-{color}` utilities to set the color of an [outline ring](/docs/rin
 
 ```html indigo
 <template preview class="flex justify-center p-8">
-  <button class="w-32 py-2 rounded-md font-semibold text-white bg-indigo-500 ring-4 ring-indigo-300">
+  <button tabindex="-1" class="focus:outline-none w-32 py-2 rounded-md font-semibold text-white bg-indigo-500 ring-4 ring-indigo-300">
     Button
   </button>
 </template>
@@ -25,7 +32,25 @@ Use the `ring-{color}` utilities to set the color of an [outline ring](/docs/rin
 </button>
 ```
 
-You can also control the opacity of rings using the [ringOpacity](/docs/ring-opacity) utilities.
+### Changing opacity
+
+You can control the opacity of rings using the `ring-opacity-{amount}` utilities:
+
+```html amber
+<template preview class="flex justify-center p-8">
+  <button tabindex="-1" class="focus:outline-none w-32 py-2 rounded-md font-semibold text-white bg-amber-500 ring-4 ring-amber-500 ring-opacity-50">
+    Button
+  </button>
+</template>
+
+<button class="... ring-4 **ring-yellow-500** **ring-opacity-50**">
+  Button
+</button>
+```
+
+For more information, see the [ringOpacity documentation](/docs/ring-opacity).
+
+---
 
 ## Responsive
 
@@ -38,6 +63,8 @@ To control the ring color at a specific breakpoint, add a `{screen}:` prefix to 
 ```
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+---
 
 ## Customizing
 

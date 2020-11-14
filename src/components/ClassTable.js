@@ -84,9 +84,9 @@ export const ClassTable = memo(
           id="class-reference"
           toc={true}
           className="relative"
-          style={{ top: '-100vh' }}
+          // style={{ top: '-100vh' }}
         >
-          <span className="sr-only">Class reference</span>
+          <span className="sr-only">Default class reference</span>
         </Heading>
         <div
           className={clsx(
