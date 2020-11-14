@@ -75,3 +75,7 @@ test('it flattens deeply nested color objects', () => {
     'button-primary-focus-variant': 'orange',
   })
 })
+
+test('it handles empty objects', () => {
+  expect(flattenColorPalette({})).toEqual({})
+})
