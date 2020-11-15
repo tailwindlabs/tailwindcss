@@ -23,7 +23,7 @@
 }
 
 .token.comment {
-  @apply opacity-25;
+  @apply text-gray-400;
 }
 
 .token.deleted:not(.prefix) {
