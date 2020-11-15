@@ -35,7 +35,8 @@ npx tailwindcss init -p
 
 Next, let's create a `webpack.config.js` at the root of our project, and tell webpack to handle CSS files with the `postcss-loader`:
 
-```jamodule.exports = {
+```js
+module.exports = {
   module: {
     rules: [
       {
@@ -50,8 +51,7 @@ Next, let's create a `webpack.config.js` at the root of our project, and tell we
       },
     ],
   },
-};vascript
-
+}
 ```
 
 In our Angular project, let's add our three `@tailwind` directives to our global stylesheet in `src/styles.css`:
