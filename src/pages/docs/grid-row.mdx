@@ -72,7 +72,7 @@ By default Tailwind includes grid-row utilities for working with grids with up t
 
 For creating more `row-{value}` utilities that control the `grid-row` shorthand property directly, customize the `gridRow` section of your Tailwind theme config:
 
-```diff
+```diff-js
   // tailwind.config.js
   module.exports = {
     theme: {
@@ -89,7 +89,7 @@ We use this internally for our `row-span-{n}` utilities. Note that since this co
 
 To add new `row-start-{n}` utilities, use the `gridRowStart` section of your Tailwind theme config:
 
-```diff
+```diff-js
   // tailwind.config.js
   module.exports = {
     theme: {
@@ -109,7 +109,7 @@ To add new `row-start-{n}` utilities, use the `gridRowStart` section of your Tai
 
 To add new `row-end-{n}` utilities, use the `gridRowEnd` section of your Tailwind theme config:
 
-```diff
+```diff-js
   // tailwind.config.js
   module.exports = {
     theme: {
@@ -135,7 +135,7 @@ By default, only responsive variants are generated for grid-row utilities.
 
 You can control which variants are generated for the grid-row utilities by modifying the `gridRow`, `gridRowStart`, and `gridRowEnd` properties in the `variants` section of your `tailwind.config.js` file.
 
-```diff
+```diff-js
   // tailwind.config.js
   module.exports = {
     variants: {

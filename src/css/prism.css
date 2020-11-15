@@ -27,19 +27,25 @@
 }
 
 .token.deleted:not(.prefix) {
-  @apply block bg-rose-400 -mx-4 px-4;
+  @apply relative block -mx-4 px-4;
   --bg-opacity: 0.15;
 }
 
+.token.deleted:not(.prefix)::after {
+  content: '';
+  @apply pointer-events-none absolute inset-0 block bg-rose-400;
+  --bg-opacity: 0.25;
+}
+
 .token.deleted.prefix {
-  @apply text-rose-400;
+  @apply text-gray-400;
 }
 
 .token.inserted:not(.prefix) {
-  @apply block bg-emerald-300 -mx-4 px-4;
-  --bg-opacity: 0.1;
+  @apply block bg-teal-800 -mx-4 px-4;
+  --bg-opacity: 0.5;
 }
 
 .token.inserted.prefix {
-  @apply text-emerald-400;
+  @apply text-emerald-300;
 }

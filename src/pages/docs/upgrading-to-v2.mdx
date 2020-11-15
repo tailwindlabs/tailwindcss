@@ -53,8 +53,8 @@ Updating `whitespace-no-wrap` and `flex-no-wrap` is just a direct replacement, a
 The `clearfix` class has been removed since `flow-root` is a simpler solution to the same problem in modern browsers.
 
 ```diff-html
-- <div class="clearfix">
-+ <div class="flow-root">
+- <div class="**clearfix**">
++ <div class="**flow-root**">
     <img class="float-left" src="..." alt="..." />
     <p>Lorem ipsum...</p>
   </div>
@@ -69,15 +69,15 @@ These are a much better and more powerful alternative to the `shadow-outline` an
 Replace `shadow-outline` with `ring`:
 
 ```diff-html
-- <div class="... focus:shadow-outline">
-+ <div class="... focus:ring">
+- <div class="... **focus:shadow-outline**">
++ <div class="... **focus:ring**">
 ```
 
 Replace `shadow-xs` with `ring-1 ring-black ring-opacity-5`:
 
 ```diff-html
-- <div class="... shadow-xs">
-+ <div class="... ring-1 ring-black ring-opacity-5">
+- <div class="... **shadow-xs**">
++ <div class="... **ring-1 ring-black ring-opacity-5**">
 ```
 
 Alternatively, you can also add `shadow-outline` and `shadow-xs` back to your config file and leave your HTML untouched:
@@ -267,7 +267,7 @@ Alternatively, you can go through your HTML and explicitly add a `leading` utili
 
 ```diff-html
 - <p class="text-lg">...</p>
-+ <p class="text-lg leading-normal">...</p>
++ <p class="text-lg **leading-normal**">...</p>
 ```
 
 ## Update 'default' theme keys to 'DEFAULT'
@@ -526,7 +526,7 @@ To update your code for this change, just add `hidden` to your `template` tags:
 ```diff-html
   <div class="space-y-4">
 -   <template x-for="item in items">
-+   <template x-for="item in items" hidden>
++   <template x-for="item in items" **hidden**>
       <!-- ... -->
     </template>
   </div>

@@ -84,7 +84,7 @@ By default Tailwind includes grid-column utilities for working with grids with u
 
 For creating more `col-{value}` utilities that control the `grid-column` shorthand property directly, customize the `gridColumn` section of your Tailwind theme config:
 
-```diff
+```diff-js
   // tailwind.config.js
   module.exports = {
     theme: {
@@ -101,7 +101,7 @@ We use this internally for our `col-span-{n}` utilities. Note that since this co
 
 To add new `col-start-{n}` utilities, use the `gridColumnStart` section of your Tailwind theme config:
 
-```diff
+```diff-js
   // tailwind.config.js
   module.exports = {
     theme: {
@@ -120,7 +120,7 @@ To add new `col-start-{n}` utilities, use the `gridColumnStart` section of your 
 
 To add new `col-end-{n}` utilities, use the `gridColumnEnd` section of your Tailwind theme config:
 
-```diff
+```diff-js
   // tailwind.config.js
   module.exports = {
     theme: {
@@ -145,7 +145,7 @@ By default, only responsive variants are generated for grid-column utilities.
 
 You can control which variants are generated for the grid-column utilities by modifying the `gridColumn`, `gridColumnStart`, and `gridColumnEnd` properties in the `variants` section of your `tailwind.config.js` file.
 
-```diff
+```diff-js
   // tailwind.config.js
   module.exports = {
     variants: {

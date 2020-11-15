@@ -210,16 +210,16 @@ By default, Tailwind's width scale is a combination of the [default spacing scal
 
 You can customize the spacing scale for padding, margin, width, and height all at once in the `theme.spacing` or `theme.extend.spacing` sections of your `tailwind.config.js` file:
 
-```diff
+```diff-js
   // tailwind.config.js
   module.exports = {
     theme: {
       extend: {
-        spacing: {
++       spacing: {
 +         '72': '18rem',
 +         '84': '21rem',
 +         '96': '24rem',
-        }
++       }
       }
     }
   }
@@ -227,19 +227,19 @@ You can customize the spacing scale for padding, margin, width, and height all a
 
 To customize width separately, use the `theme.width` section of your `tailwind.config.js` file.
 
-```diff
+```diff-js
   // tailwind.config.js
   module.exports = {
     theme: {
       extend: {
-        width: {
++       width: {
 +         '1/7': '14.2857143%',
 +         '2/7': '28.5714286%',
 +         '3/7': '42.8571429%',
 +         '4/7': '57.1428571%',
 +         '5/7': '71.4285714%',
 +         '6/7': '85.7142857%',
-        }
++       }
       }
     }
   }
