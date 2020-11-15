@@ -1,11 +1,12 @@
 import colorPalette from 'tailwindcss/colors'
+import { kebabToTitleCase } from '@/utils/kebabToTitleCase'
 import dlv from 'dlv'
 
 export function ColorPaletteReference({ colors }) {
   return (
     <div className="grid grid-cols-1 gap-8">
       {colors.map((color, i) => {
-        let title = Array.isArray(color) ? color[0] : color
+        let title = Array.isArray(color) ? color[0] : kebabToTitleCase(color)
         let value = Array.isArray(color) ? color[1] : color
 
         let palette =
