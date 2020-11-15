@@ -14,7 +14,7 @@ export function PageHeader({ title, description, badge = {}, border = true }) {
           </dl>
         )}
       </div>
-      {description && <p className="mt-4 text-lg text-gray-500">{description}</p>}
+      {description && <p className="mt-1 text-lg text-gray-500">{description}</p>}
     </div>
   )
 }
