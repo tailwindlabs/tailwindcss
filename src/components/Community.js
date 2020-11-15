@@ -1,6 +1,6 @@
 export function Community() {
   return (
-    <ul className="grid sm:grid-cols-2 gap-8">
+    <ul className="grid sm:grid-cols-2 gap-6 xl:gap-8">
       <li>
         <a
           href="https://github.com/tailwindlabs/tailwindcss/discussions"

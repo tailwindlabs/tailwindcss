@@ -187,6 +187,9 @@ module.exports = {
       scale: {
         80: '0.8',
       },
+      skew: {
+        '-20': '-20deg',
+      },
     },
   },
   variants: {
