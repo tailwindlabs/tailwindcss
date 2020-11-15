@@ -125,6 +125,8 @@ How you actually build your project will depend on the tools that you're using. 
 
 If you're already familiar with PostCSS you probably know what you need to do, if not refer to the documentation for the tool you are using.
 
+When building for production, be sure to read our separate guide on [optimizing for production](/docs/optimizing-for-production) to learn about tree-shaking unused styles for best performance.
+
 ---
 
 ## Using Tailwind without PostCSS
@@ -137,7 +139,7 @@ Use `npx` which is a tool that is automatically installed alongside `npm` to gen
 npx tailwindcss build -o tailwind.css
 ```
 
-This will create a file called `tailwind.css` generated based on Tailwind's [default configuration](https://unpkg.com/browse/tailwindcss@^2/stubs/defaultConfig.stub.js).
+This will create a file called `tailwind.css` generated based on Tailwind's [default configuration](https://unpkg.com/browse/tailwindcss@^2/stubs/defaultConfig.stub.js), and automatically add any necessary vendor prefixes using [autoprefixer](https://github.com/postcss/autoprefixer).
 
 Now you can pull this file into your HTML just like any other stylesheet:
 
@@ -218,6 +220,17 @@ npx tailwindcss build ./src/tailwind.css -c ./.config/tailwind.config.js -o ./di
 
 Learn more about configuring Tailwind in the [configuration documentation](/docs/configuration).
 
+### Building for production
+
+When building for production, set `NODE_ENV=production` on the command line when building your CSS:
+
+```bash
+NODE_ENV=production npx tailwindcss build ./src/tailwind.css -o ./dist/tailwind.css
+```
+
+This will make sure Tailwind removes any unused CSS and minifies the CSS file for best performance. Read our separate guide on [optimizing for production](/docs/optimizing-for-production) to learn more.
+
+
 ---
 
 ## Using Tailwind via CDN
@@ -232,12 +245,12 @@ Before using the CDN build, please note that many of the features that make Tail
   <ListItemBad>You can't tree-shake unused styles</ListItemBad>
 </List>
 
-To get the most out of Tailwind, you really should [install it via npm](#install-tailwind-via-npm).
+To get the most out of Tailwind, you really should [install it as a PostCSS plugin](#install-tailwind-as-a-postcss-plugin).
 
 To pull in Tailwind for quick demos or just giving the framework a spin, grab the latest default configuration build via CDN:
 
 ```html
-<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 ```
 
 <p>
