@@ -37,7 +37,7 @@ If this is a bit over your head and you'd like to try Tailwind without configuri
 
 For most projects (and to take advantage of Tailwind's customization features), you'll want to install Tailwind and its peer-dependencies via npm.
 
-```bash
+```shell
 # Using npm
 npm install tailwindcss postcss autoprefixer
 
@@ -69,7 +69,7 @@ If you're using any other PostCSS plugins, you should read our documentation on 
 
 If you'd like to customize your Tailwind installation, generate a config file for your project using the Tailwind CLI utility included when you install the `tailwindcss` npm package:
 
-```bash
+```shell
 npx tailwindcss init
 ```
 
@@ -135,7 +135,7 @@ For simple projects or just giving Tailwind a spin, you can use the Tailwind CLI
 
 Use `npx` which is a tool that is automatically installed alongside `npm` to generate a fully compiled Tailwind CSS file:
 
-```bash
+```shell
 npx tailwindcss build -o tailwind.css
 ```
 
@@ -176,7 +176,7 @@ If you'd like to process any custom CSS alongside the default styles Tailwind ge
 
 Then include the path to that file when building your CSS with `npx tailwindcss build`:
 
-```bash
+```shell
 npx tailwindcss build ./src/tailwind.css -o ./dist/tailwind.css
 ```
 
@@ -187,7 +187,7 @@ Read about [adding base styles](/docs/adding-base-styles), [extracting component
 
 If you'd like to customize what Tailwind generates, create a `tailwind.config.js` file using the Tailwind CLI tool:
 
-```bash
+```shell
 npx tailwindcss init
 ```
 
@@ -208,13 +208,13 @@ module.exports = {
 
 This file will automatically be read when building your CSS with `npx tailwindcss build`:
 
-```bash
+```shell
 npx tailwindcss build ./src/tailwind.css -o ./dist/tailwind.css
 ```
 
 If you'd like to keep your config file in a different location or give it a different name, pass the config file path using the `-c` option when building your CSS:
 
-```bash
+```shell
 npx tailwindcss build ./src/tailwind.css -c ./.config/tailwind.config.js -o ./dist/tailwind.css
 ```
 
@@ -224,7 +224,7 @@ Learn more about configuring Tailwind in the [configuration documentation](/docs
 
 When building for production, set `NODE_ENV=production` on the command line when building your CSS:
 
-```bash
+```shell
 NODE_ENV=production npx tailwindcss build ./src/tailwind.css -o ./dist/tailwind.css
 ```
 
