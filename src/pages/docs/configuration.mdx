@@ -90,6 +90,25 @@ module.exports = {
 }
 ```
 
+### Generating a PostCSS configuration file
+
+Use the `-p` flag if you'd like to also generate a basic `postcss.config.js` file alongside your `tailwind.config.js` file:
+
+```bash
+npx tailwindcss init -p
+```
+
+This will generate a `postcss.config.js` file in your project that looks like this:
+
+```js
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+```
+
 ### Scaffolding the entire default configuration
 
 For most users we encourage you to keep your config file as minimal as possible, and only specify the things you want to customize.
