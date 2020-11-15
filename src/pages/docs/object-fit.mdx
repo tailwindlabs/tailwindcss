@@ -6,7 +6,6 @@ description: "Utilities for controlling how a replaced element's content should 
 import plugin from 'tailwindcss/lib/plugins/objectFit'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -111,19 +110,11 @@ To control how a replaced element's content should be resized only at a specific
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['object-contain', 'object-cover', 'object-fill', 'object-none', 'object-scale-down']}
-  snippet={(classNames) => `
-    <div class="bg-gray-400">
-      <img class="${classNames} ..." src="...">
-    </div>
-  `}
-  preview={(className) => (
-    <div className="bg-gray-400">
-      <img className={`h-48 w-full ${className}`} src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="" />
-    </div>
-  )}
-/>
+```html
+<div>
+  <img class="object-contain **md:object-scale-down** ..." src="...">
+</div>
+```
 
 ## Customizing
 

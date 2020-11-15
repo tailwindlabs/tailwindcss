@@ -6,7 +6,6 @@ description: "Utilities for setting the maximum width of an element"
 import plugin from 'tailwindcss/lib/plugins/maxWidth'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -52,19 +51,11 @@ To control the max-width of an element at a specific breakpoint, add a `{screen}
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['max-w-sm', 'max-w-md', 'max-w-lg', 'max-w-xl', 'max-w-2xl']}
-  snippet={(classNames) => `
-    <div class="${classNames} ...">
-      Target
-    </div>
-  `}
-  preview={(className) => (
-    <div className={`mx-auto text-center p-6 bg-gray-300 ${className}`}>
-      Target
-    </div>
-  )}
-/>
+```html
+<div class="max-w-sm **md:max-w-lg** ...">
+  <!-- ... -->
+</div>
+```
 
 ---
 

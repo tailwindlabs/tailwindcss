@@ -6,7 +6,6 @@ description: "Utilities for controlling the order of flex items."
 import plugin from 'tailwindcss/lib/plugins/order'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -37,27 +36,13 @@ To apply a flex direction utility only at a specific breakpoint, add a `{screen}
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['order-first', 'order-last', 'order-none', 'order-first', 'order-last']}
-  snippet={(classNames) => `
-    <div class="flex">
-      <div>1</div>
-      <div>2</div>
-      <div class="${classNames}">3</div>
-      <div>4</div>
-      <div>5</div>
-    </div>
-  `}
-  preview={(className) => (
-    <div className="flex bg-gray-200">
-      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-      <div className={`text-gray-700 text-center bg-white px-4 py-2 m-2 ${className}`}>3</div>
-      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
-      <div className="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
-    </div>
-  )}
-/>
+```html
+<div class="flex">
+  <div>1</div>
+  <div class="order-first **md:order-last**">2</div>
+  <div>3</div>
+</div>
+```
 
 ## Customizing
 

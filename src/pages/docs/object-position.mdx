@@ -11,7 +11,6 @@ features:
 import plugin from 'tailwindcss/lib/plugins/objectPosition'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -82,15 +81,9 @@ To position an object only at a specific breakpoint, add a `{screen}:` prefix to
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['object-center', 'object-top', 'object-right', 'object-bottom', 'object-left']}
-  snippet={(classNames) => `
-    <img class="${classNames} ..." src="...">
-  `}
-  preview={(className) => (
-    <img className={`mx-auto bg-gray-400 w-48 h-48 object-none ${className}`} src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=128&h=128&q=80" />
-  )}
-/>
+```html
+<img class="object-center **md:object-top** ..." src="...">
+```
 
 ## Customizing
 

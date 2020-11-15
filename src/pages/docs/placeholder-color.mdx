@@ -6,7 +6,6 @@ description: "Utilities for controlling the color of placeholder text."
 import plugin from 'tailwindcss/lib/plugins/placeholderColor'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 import { Heading } from '@/components/Heading'
 
 export const classes = {
@@ -81,22 +80,13 @@ Learn more in the [placeholder opacity documentation](/docs/placeholder-opacity)
 
 ## Responsive
 
-To control the text color of an element at a specific breakpoint, add a `{screen}:` prefix to any existing text color utility. For example, use `md:text-green-600` to apply the `text-green-600` utility at only medium screen sizes and above.
+To control the text color of an input placeholder at a specific breakpoint, add a `{screen}:` prefix to any existing text color utility. For example, use `md:placeholder-green-500` to apply the `placeholder-green-500` utility at only medium screen sizes and above.
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['placeholder-gray-500', 'placeholder-red-400', 'placeholder-blue-400', 'placeholder-green-400', 'placeholder-orange-400']}
-  snippet={(classNames) => `
-    <input class="${classNames}" placeholder="jane@example.com">
-  `}
-  previewClassName="text-center p-4"
-  preview={(className) => (
-    <div className="max-w-xs mx-auto">
-      <input className={`block appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${className}`} placeholder="jane@example.com" />
-    </div>
-  )}
-/>
+```html
+<input class="placeholder-gray-500 **md:placeholder-green-500**" placeholder="jane@example.com">
+```
 
 ## Focus
 
