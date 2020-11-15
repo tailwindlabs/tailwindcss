@@ -29,11 +29,12 @@ module.exports.addExport = function addExport(tree, name, value) {
 module.exports.highlightCode = function highlightCode(code, prismLanguage) {
   const isDiff = prismLanguage.startsWith('diff-')
   const language = isDiff ? prismLanguage.substr(5) : prismLanguage
-  let highlighted = Prism.highlight(
-    code,
-    Prism.languages[isDiff ? 'diff' : language],
-    prismLanguage
-  )
+  const grammar = Prism.languages[isDiff ? 'diff' : language]
+  if (!grammar) {
+    console.warn(`Unrecognised language: ${prismLanguage}`)
+    return Prism.util.encode(code)
+  }
+  let highlighted = Prism.highlight(code, grammar, prismLanguage)
 
   return language === 'html'
     ? highlighted.replace(
