@@ -7,7 +7,7 @@ description: "Setting up Tailwind CSS in an Angular project."
 
 Start by creating a new Angular project if you don't have one set up already. The most common approach is to use the [Angular CLI](https://angular.io/guide/setup-local#install-the-angular-cli):
 
-```sh
+```shell
 ng new my-project
 ```
 
@@ -15,7 +15,7 @@ ng new my-project
 
 Install Tailwind, Autoprefixer using `npm` or `yarn`:
 
-```sh
+```shell
 npm install tailwindcss autoprefixer@^9
 ```
 
@@ -23,13 +23,13 @@ npm install tailwindcss autoprefixer@^9
 
 We'll also need to install `postcss-loader` and `@angular-builders/custom-webpack` to provide a custom webpack config to our Angular project, which handles PostCSS for us:
 
-```sh
+```shell
 npm i -D postcss-loader @angular-builders/custom-webpack
 ```
 
 Next, let's generate default `tailwind.config.js` **and** `postcss.config.js` files:
 
-```sh
+```shell
 npx tailwindcss init -p
 ```
 

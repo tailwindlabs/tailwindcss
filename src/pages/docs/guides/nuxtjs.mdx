@@ -9,7 +9,7 @@ description: "Setting up Tailwind CSS in a Nuxt.js project."
 
 Start by creating a new Nuxt.js project if you don't have one set up already. The most common approach is to use [`create-nuxt-app`](https://nuxtjs.org/guides/get-started/installation#using-create-nuxt-app):
 
-```sh
+```shell
 npx create-nuxt-app my-project
 ```
 
@@ -19,13 +19,13 @@ If you've used `create-nuxt-app` and selected Tailwind CSS at the "UI Framework"
 
 For other cases, you'll need to install the `@nuxtjs/tailwindcss` module. Let's add that dependency to our project using `npm` or `yarn`:
 
-```sh
+```shell
 npm install -D @nuxtjs/tailwindcss
 ```
 
 Next, add it to your `buildModules` section in your `nuxt.config.js` file:
 
-```sh
+```shell
 //nuxt.config.js
 export default {
   buildModules: ['@nuxtjs/tailwindcss']
