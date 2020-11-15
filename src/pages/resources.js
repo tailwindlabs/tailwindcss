@@ -1,6 +1,5 @@
 import { Community } from '@/components/Community'
 import { DocumentationLayout } from '@/layouts/DocumentationLayout'
-import { gradients } from '@/utils/gradients'
 import Link from 'next/link'
 import { ReactComponent as RefactoringUi } from '@/img/resources/refactoring-ui.svg'
 import { ReactComponent as TailwindUi } from '@/img/resources/tailwind-ui.svg'
@@ -71,9 +70,8 @@ export default function Resources() {
               <Logo component={TailwindUi} />
             </div>
             <div
-              className="flex-auto bg-cover"
+              className="flex-auto bg-cover -ml-12"
               style={{
-                marginLeft: `${-47 / 16}rem`,
                 backgroundImage: `url(${require('@/img/resources/tailwind-ui.jpg').default})`,
               }}
             />
