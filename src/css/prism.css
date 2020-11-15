@@ -1,0 +1,43 @@
+.token.punctuation {
+  @apply text-code-punctuation;
+}
+
+.token.tag {
+  @apply text-code-tag;
+}
+
+.token.attr-name {
+  @apply text-code-attr-name;
+}
+
+.token.attr-value {
+  @apply text-code-attr-value;
+}
+
+.token.class {
+  @apply text-code-attr-value;
+}
+
+.token.string {
+  @apply text-code-string;
+}
+
+.token.comment {
+  @apply opacity-25;
+}
+
+.token.deleted:not(.prefix) {
+  @apply block bg-rose-400 bg-opacity-25 -mx-4 px-4;
+}
+
+.token.deleted.prefix {
+  @apply text-rose-400;
+}
+
+.token.inserted:not(.prefix) {
+  @apply block bg-emerald-300 bg-opacity-25 -mx-4 px-4;
+}
+
+.token.inserted.prefix {
+  @apply text-emerald-400;
+}
