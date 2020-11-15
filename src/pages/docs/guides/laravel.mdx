@@ -39,7 +39,7 @@ Next, create a CSS file for your Tailwind styles and add a `@tailwind` directive
 
 Next, add your CSS file to your `webpack.mix.js` file and configure the `tailwindcss` PostCSS plugin using Mix's `postCss` method:
 
-```javascript
+```js
 mix
   .js("resources/js/app.js", "public/js")
   .postCss("resources/css/tailwind.css", "public/css", [
