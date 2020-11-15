@@ -22,7 +22,7 @@ export function Disabling({ plugin, name }) {
 
       <ConfigSample
         path="corePlugins"
-        before="// ..."
+        before="..."
         add={plugins.reduce((acc, cur) => ({ ...acc, [cur]: false }), {})}
       />
     </div>

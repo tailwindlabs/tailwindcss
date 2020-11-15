@@ -27,12 +27,7 @@ export function Variants({ plugin, name }) {
         For example, this config will {variants.length > 0 ? 'also ' : ''}generate{' '}
         {joinWithAnd(extraVariants)} variants:
       </p>
-      <ConfigSample
-        path="variants"
-        before="// ..."
-        remove={{ [plugin]: variants }}
-        add={{ [plugin]: [...variants, ...extraVariants] }}
-      />
+      <ConfigSample path="variants.extend" before="..." add={{ [plugin]: extraVariants }} />
     </div>
   )
 }

@@ -10,6 +10,30 @@ function toObjectKey(str) {
   return `'${str}'`
 }
 
+function Value({ value }) {
+  if (typeof value === 'string') {
+    return <span className="token string">'{value}'</span>
+  }
+  if (Array.isArray(value)) {
+    return (
+      <>
+        <span className="token punctuation">[</span>
+        {value.map((v, i) => (
+          <Fragment key={i}>
+            <Value value={v} />
+            {i === value.length - 1 ? null : <span className="token punctuation">, </span>}
+          </Fragment>
+        ))}
+        <span className="token punctuation">]</span>
+      </>
+    )
+  }
+  if (typeof value === 'boolean') {
+    return <span className="token boolean">{value.toString()}</span>
+  }
+  return value.toString()
+}
+
 function Edits({ edits, indent = '', type = 'inserted' }) {
   return (
     <span
@@ -29,13 +53,10 @@ function Edits({ edits, indent = '', type = 'inserted' }) {
             {type === 'inserted' ? '+' : '-'}
           </span>{' '}
           {indent}
-          {toObjectKey(key)}:{' '}
-          {stringify(edits[key], { indent: '  ' })
-            .replace(/\[([^\]]+)\]/g, (m, p1) => `[${p1.replace(/\n\s*/g, ' ').trim()}]`)
-            .split('\n')
-            .map((x, i) => `${i === 0 ? '' : '+ ' + indent}${x}`)
-            .join('\n')}
-          {',\n'}
+          {toObjectKey(key)}
+          <span className="token operator">:</span> <Value value={edits[key]} />
+          <span className="token punctuation">,</span>
+          {'\n'}
         </Fragment>
       ))}
     </span>
@@ -51,16 +72,33 @@ export function ConfigSample({ path, add, remove, before, after }) {
         <pre className="language-diff">
           <code className="language-diff">
             <span className="token unchanged">
-              {'  // tailwind.config.js\n'}
-              {'  module.exports = {\n'}
+              {'  '}
+              <span className="token comment">{'// tailwind.config.js'}</span>
+              {'\n'}
+              {'  module'}
+              <span className="token punctuation">.</span>
+              <span className="token property-access">exports</span>{' '}
+              <span className="token operator">=</span>{' '}
+              <span className="token punctuation">{'{'}</span>
+              {'\n'}
               {path.map((key, i) => (
                 <Fragment key={i}>
                   {'  '}
                   {'  '.repeat(i + 1)}
-                  {key}: {'{\n'}
+                  {key}
+                  <span className="token operator">:</span>{' '}
+                  <span className="token punctuation">{'{'}</span>
+                  {'\n'}
                 </Fragment>
               ))}
-              {before && castArray(before).map((str) => `${'  '.repeat(path.length + 2)}${str}\n`)}
+              {before &&
+                castArray(before).map((str, i) => (
+                  <Fragment key={i}>
+                    {'  '.repeat(path.length + 2)}
+                    <span className="token comment">{`// ${str}`}</span>
+                    {'\n'}
+                  </Fragment>
+                ))}
             </span>
             {remove && (
               <Edits edits={remove} type="deleted" indent={'  '.repeat(path.length + 1)} />
