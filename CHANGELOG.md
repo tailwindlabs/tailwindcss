@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet!
 
+## [2.0.0-alpha.21] - 2020-11-15
+
+### Changed
+
+- Upgrade to PostCSS 8, Autoprefixer 10, move `postcss` and `autoprefixer` to peerDependencies ([729b400](https://github.com/tailwindlabs/tailwindcss/commit/729b400))
+
 ## [2.0.0-alpha.20] - 2020-11-13
 
 ### Changed
@@ -1204,7 +1210,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.20...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.21...HEAD
+[2.0.0-alpha.21]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.20...v2.0.0-alpha.21
 [2.0.0-alpha.20]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.19...v2.0.0-alpha.20
 [2.0.0-alpha.19]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.18...v2.0.0-alpha.19
 [2.0.0-alpha.18]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.17...v2.0.0-alpha.18
