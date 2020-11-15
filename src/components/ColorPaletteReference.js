@@ -31,7 +31,7 @@ export function ColorPaletteReference({ colors }) {
                       .join('')}
                   </div>
                   <div>
-                    <code className="text-xs text-gray-400 font-semibold">
+                    <code className="text-xs text-gray-500">
                       colors.
                       {value
                         .split('')
@@ -48,7 +48,7 @@ export function ColorPaletteReference({ colors }) {
                   return (
                     <div key={j} className="space-y-1.5">
                       <div
-                        className="h-10 w-full rounded ring-1 ring-inset ring-black ring-opacity-5"
+                        className="h-10 w-full rounded ring-1 ring-inset ring-black ring-opacity-0"
                         style={{ backgroundColor: value }}
                       />
                       <div className="px-0.5 md:flex md:justify-between md:space-x-2 2xl:space-x-0 2xl:block">
