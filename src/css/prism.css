@@ -27,7 +27,8 @@
 }
 
 .token.deleted:not(.prefix) {
-  @apply block bg-rose-400 bg-opacity-25 -mx-4 px-4;
+  @apply block bg-rose-400 -mx-4 px-4;
+  --bg-opacity: 0.15;
 }
 
 .token.deleted.prefix {
@@ -35,7 +36,8 @@
 }
 
 .token.inserted:not(.prefix) {
-  @apply block bg-emerald-300 bg-opacity-25 -mx-4 px-4;
+  @apply block bg-emerald-300 -mx-4 px-4;
+  --bg-opacity: 0.1;
 }
 
 .token.inserted.prefix {
