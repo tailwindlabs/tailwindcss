@@ -23,7 +23,7 @@ To make this as easy as possible, Tailwind includes a `dark` variant that lets y
 
 It's important to note that because of file size considerations, **the dark mode variant is not enabled in Tailwind by default**.
 
-To enable it, set the `darkMode` option in your `tailwind.config.js` file to `'media'`:
+To enable it, set the `darkMode` option in your `tailwind.config.js` file to `media`:
 
 ```js
 // tailwind.config.js
@@ -33,7 +33,7 @@ module.exports = {
 }
 ```
 
-Now whenever dark mode is enabled on the user's operating system, `dark:{class}` classes will take precedence over unprefixed classes. The `'media'` strategy uses the `prefers-color-scheme` media feature under the hood, but if you'd like to support toggling dark mode manually, you can also [use the 'class' strategy](#) for more control.
+Now whenever dark mode is enabled on the user's operating system, `dark:{class}` classes will take precedence over unprefixed classes. The `media` strategy uses the `prefers-color-scheme` media feature under the hood, but if you'd like to support toggling dark mode manually, you can also [use the 'class' strategy](#) for more control.
 
 By default, when `darkMode` is enabled `dark` variants are only generated for color-related classes, which includes text color, background color, border color, gradients, and placeholder color.
 

@@ -65,6 +65,9 @@ module.exports = {
             '&:last-child > :last-child': {
               marginBottom: '0',
             },
+            'h1, h2': {
+              letterSpacing: '-0.025em',
+            },
             'h2, h3': {
               'scroll-margin-block': `${(70 + 40) / 16}rem`,
             },
