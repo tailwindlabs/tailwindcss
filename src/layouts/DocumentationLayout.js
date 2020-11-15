@@ -37,8 +37,8 @@ const nav = {
     pages['customizing-colors'],
     pages['customizing-spacing'],
     pages['configuring-variants'],
-    pages['presets'],
     pages['plugins'],
+    pages['presets'],
   ],
   'Base Styles': [pages['preflight']],
   Layout: [

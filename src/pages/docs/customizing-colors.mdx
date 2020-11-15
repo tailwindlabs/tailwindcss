@@ -10,33 +10,37 @@ import { TipGood, TipBad } from '@/components/Tip'
 
 ## <Heading hidden>Overview</Heading>
 
-Tailwind includes an expertly-crafted default color palette that is a great starting point if you don't have your own branding ready to go, but for most projects the color palette is the first thing you'll want to customize.
+Tailwind includes an expertly-crafted default color palette out-of-the-box that is a great starting point if you don't have your own specific branding in mind.
+
+<div className="mt-10"></div>
+
+<ColorPaletteReference colors={[
+  ['Gray', 'coolGray'],
+  'red',
+  ['Yellow', 'amber'],
+  ['Green', 'emerald'],
+  'blue',
+  'indigo',
+  ['Purple', 'violet'],
+  'pink',
+]} />
+
+<div className="mt-10"></div>
+
+But when you do need to customize your palette, you can configure your colors under the `colors` key in the `theme` section of your `tailwind.config.js` file:
 
 ```js
-// The default Tailwind color palette
-const colors = require('tailwindcss/colors')
-
+// tailwind.config.js
 module.exports = {
   theme: {
     colors: {
-      transparent: 'transparent',
-      current: 'currentColor',
-      black: '#000',
-      white: '#fff',
-      gray: colors.coolGray,
-      red: colors.red,
-      yellow: colors.amber,
-      green: colors.emerald,
-      blue: colors.blue,
-      indigo: colors.indigo,
-      purple: colors.violet,
-      pink: colors.pink,
+      // Configure your color palette here
     }
   }
 }
 ```
 
-You can customize the color palette in your project using the `colors` key in the `theme` section of your `tailwind.config.js` file.
+When it comes to building a custom color palette, you can either [curate your colors](#curating-colors) from our extensive included color palette, or [configure your own custom colors](#custom-colors) by adding your specific color values directly.
 
 ---
 
@@ -59,6 +63,8 @@ module.exports = {
   }
 }
 ```
+
+Although each color has a specific name, you're encouraged to alias them however you like in your own projects. We even do this in the default configuration, aliasing `coolGray` to `gray`, `violet` to `purple`, `amber` to `yellow`, and `emerald` to `green`.
 
 See our [complete color palette reference](#color-palette-reference) to see the colors that are available to choose from by default.
 
@@ -229,13 +235,13 @@ module.exports = {
 }
 ```
 
-In the above example, we've built a new color palette that matches the default color palette but doesn't include yellow, green, indigo, or purple.
+Alternatively, you could leave the color palette untouched and rely on [tree-shaking unused styles](/docs/optimizing-for-production) to remove the colors you're not using.
 
 ---
 
 ## Naming your colors
 
-Tailwind uses literal color names _(like red, green, etc.)_ and a numeric scale _(where 100 is light and 900 is dark)_ by default. This ends up being fairly practical for most projects, but there are good reasons to use other naming conventions as well.
+Tailwind uses literal color names _(like red, green, etc.)_ and a numeric scale _(where 50 is light and 900 is dark)_ by default. This ends up being fairly practical for most projects, but there are good reasons to use other naming conventions as well.
 
 For example, if you're working on a project that needs to support multiple themes, it might make sense to use more abstract names like `primary` and `secondary`:
 
@@ -301,15 +307,15 @@ module.exports = {
 
 ## Generating colors
 
-A common question we get is "how do I generate the 100–900 shades of my own custom colors?"
+A common question we get is "how do I generate the 50–900 shades of my own custom colors?".
 
-Bad news, color is complicated and we've yet to find a tool that does a good job generating these sorts of color palettes. We picked all of Tailwind's default colors by hand, meticulously balancing them by eye and testing them in real designs to make sure we were happy with them.
+Bad news, color is complicated and despite trying dozens of different tools, we've yet to find one that does a good job generating these sorts of color palettes. We picked all of Tailwind's default colors by hand, meticulously balancing them by eye and testing them in real designs to make sure we were happy with them.
 
 ---
 
 ## Color palette reference
 
-This is a list of all of the colors available when you import `'tailwindcss/colors'` into your `tailwind.config.js` file:
+This is a list of all of the colors available when you import `tailwindcss/colors` into your `tailwind.config.js` file.
 
 ```js
 // tailwind.config.js
@@ -319,9 +325,40 @@ module.exports = {
   theme: {
     colors: {
       // Build your palette here
+      gray: colors.trueGray,
+      red: colors.red,
+      blue: colors.lightBlue,
+      yellow: colors.amber,
     }
   }
 }
 ```
 
-<ColorPaletteReference/>
+Although each color has a specific name, you're encouraged to alias them however you like in your own projects.
+
+<div className="mt-10"></div>
+
+<ColorPaletteReference colors={[
+  'blueGray',
+  'coolGray',
+  'gray',
+  'trueGray',
+  'warmGray',
+  'red',
+  'orange',
+  'amber',
+  'yellow',
+  'lime',
+  'green',
+  'emerald',
+  'teal',
+  'cyan',
+  'lightBlue',
+  'blue',
+  'indigo',
+  'violet',
+  'purple',
+  'fuchsia',
+  'pink',
+  'rose',
+]} />
