@@ -1,0 +1,271 @@
+---
+title: Presets
+description: Creating your own reusable configuration presets.
+---
+
+import { TipGood, TipBad } from '@/components/Tip'
+import { ThemeReference } from '@/components/ThemeReference'
+
+By default, any configuration you add in your own `tailwind.config.js` file is intelligently merged with the [default configuration](https://unpkg.com/browse/tailwindcss@^2/stubs/defaultConfig.stub.js), with your own configuration acting as a set of overrides and extensions.
+
+The `presets` option lets you specify a _different_ configuration to use as your base, making it easy to package up a set of customizations that you'd like to reuse across projects.
+
+```js
+// tailwind.config.js
+module.exports = {
+  presets: [
+    require('@acmecorp/tailwind-base')
+  ],
+  // ...
+}
+```
+
+This can be very useful for teams that manage multiple Tailwind projects for the same brand where they want a single source of truth for colors, fonts, and other common customizations.
+
+---
+
+## Creating a preset
+
+Presets are just regular Tailwind configuration objects, taking the exact same shape as the configuration you would add in your `tailwind.config.js` file.
+
+```js
+// Example preset
+module.exports = {
+  theme: {
+    colors: {
+      blue: {
+        light: '#85d7ff',
+        DEFAULT: '#1fb6ff',
+        dark: '#009eeb',
+      },
+      pink: {
+        light: '#ff7ce5',
+        DEFAULT: '#ff49db',
+        dark: '#ff16d1',
+      },
+      gray: {
+        darkest: '#1f2d3d',
+        dark: '#3c4858',
+        DEFAULT: '#c0ccda',
+        light: '#e0e6ed',
+        lightest: '#f9fafc',
+      }
+    },
+    fontFamily: {
+      sans: ['Graphik', 'sans-serif'],
+    },
+    extend: {
+      flexGrow: {
+        2: '2'
+        3: '3'
+      },
+      zIndex: {
+        60: '60'
+        70: '70'
+        80: '80'
+        90: '90'
+        100: '100'
+      },
+    }
+  },
+  plugins: [
+    require('@tailwindcss/typography')
+    require('@tailwindcss/aspect-ratio')
+  ],
+}
+```
+
+As you can see, presets can contain all of the configuration options you're used to, including theme overrides and extensions, adding plugins, configuring a prefix, and so on. Read about [how configurations are merged](#how-configurations-are-merged) for more details.
+
+Assuming this preset was saved at `./tailwind-preset.js`, you would use it by adding it to the `tailwind.config.js` file in your actual project under the `presets` key:
+
+```js
+// tailwind.config.js
+module.exports = {
+  presets: [
+    require('./tailwind-preset.js')
+  ],
+  // Customizations specific to this project would go here
+  theme: {
+    extend: {
+      minHeight: {
+        48: '12rem',
+      }
+    }
+  },
+  variants: {
+    extend: {
+      backgroundColor: ['active']
+    },
+  },
+}
+```
+
+**By default, presets themselves extend Tailwind's [default configuration](https://unpkg.com/browse/tailwindcss@^2/stubs/defaultConfig.stub.js) just like your own configuration would**. If you'd like to create a preset that completely replaces the default configuration, include an empty `presets` key in the preset itself:
+
+```js
+// Example preset
+module.exports = {
+  presets: [],
+  theme: {
+    // ...
+  },
+  plugins: [
+    // ...
+  ],
+}
+```
+
+For more information, read about [disabling the default base configuration](#disabling-the-default-base-configuration).
+
+---
+
+## How configurations are merged
+
+Project-specific configurations (those found in your `tailwind.config.js` file) are merged against presets the same way they are merged against the default configuration.
+
+The following options in `tailwind.config.js` simply **replace** the same option if present in a preset:
+
+- `purge`
+- `darkMode`
+- `prefix`
+- `important`
+- `variantOrder`
+- `separator`
+
+The remaining options are each carefully merged in the way that makes the most sense for that option, explained in more detail next.
+
+### Theme
+
+The `theme` object is merged shallowly, with top-level keys in `tailwind.config.js` replacing the same top-level keys in any presets. The exception to this is the `extend` key, which is collected across all configurations and applied on top of the rest of the theme configuration.
+
+Learn more about how the `theme` option works in the [theme configuration documentation](/docs/theme).
+
+### Variants
+
+The `variants` object is merged shallowly just like the `theme` object, with top-level keys replacing the same top-level keys in any presets. The `extend` key is the only exception, and is collected across all configurations, just like with `theme`.
+
+Learn more about how the `variants` option works in the [variants configuration documentation](/docs/configuring-variants).
+
+### Presets
+
+The `presets` array is merged across configurations, allowing presets to include their own presets, which can also include their own presets.
+
+### Plugins
+
+The `plugins` array is merged across configurations to make it possible for a preset to register plugins while also allowing you to add additional plugins at the project-level.
+
+This means it's not possible to disable a plugin that has been added by a preset. If you find yourself wanting to disable a plugin in a preset, it's a sign that you should probably remove that plugin from the preset and include it on a project-by-project basis instead, or [split your preset into two presets](#extending-multiple-presets).
+
+### Core plugins
+
+The `corePlugins` option behaves differently depending on whether you configure it as an object or as an array.
+
+If you configure `corePlugins` as an object, it is merged across configurations.
+
+```js
+// ./example-preset.js
+module.exports = {
+  // ...
+  corePlugins: {
+    float: false,
+  },
+}
+
+// tailwind.config.js
+module.exports = {
+  presets: [
+    require('./example-preset.js'),
+  ],
+  // This configuration will be merged
+  corePlugins: {
+    cursor: false
+  }
+}
+```
+
+If you configure `corePlugins` as an array, it replaces any `corePlugins` configuration provided by your configured preset(s).
+
+```js
+// ./example-preset.js
+module.exports = {
+  // ...
+  corePlugins: {
+    float: false,
+  },
+}
+
+// tailwind.config.js
+module.exports = {
+  presets: [
+    require('./example-preset.js'),
+  ],
+  // This will replace the configuration in the preset
+  corePlugins: ['float', 'padding', 'margin']
+}
+```
+
+---
+
+## Extending multiple presets
+
+The `presets` option is an array and can accept multiple presets. This is useful if you want to split your reusable customizations up into composable chunks that can be imported independently.
+
+```js
+// tailwind.config.js
+module.exports = {
+  presets: [
+    require('@acmecorp/tailwind-colors'),
+    require('@acmecorp/tailwind-fonts'),
+    require('@acmecorp/tailwind-spacing'),
+  ]
+}
+```
+
+When adding multiple presets, it's important to note that if they overlap in any way, they are resolved the same way your own customizations are resolved against a preset, and the last configuration wins.
+
+For example, if both of these configurations provided a custom color palette (and were not using `extend`), the color palette from `configuration-b` would be used:
+
+```js
+// tailwind.config.js
+module.exports = {
+  presets: [
+    require('@acmecorp/configuration-a'),
+    require('@acmecorp/configuration-b'),
+  ]
+}
+```
+
+---
+
+## Disabling the default configuration
+
+If you'd like to completely disable the default configuration and start with no base configuration at all, set `presets` to an empty array:
+
+```js
+// tailwind.config.js
+module.exports = {
+  presets: [],
+  // ...
+}
+```
+
+This will completely disable all of Tailwind's defaults, so no colors, font families, font sizes, spacing values, etc. will be generated at all.
+
+You can also do this from within a preset if you'd like your preset to provide a complete design system on its own that doesn't extend Tailwind's defaults:
+
+```js
+// ./example-preset.js
+module.exports = {
+  presets: [],
+  // ...
+}
+
+// tailwind.config.js
+module.exports = {
+  presets: [
+    require('./example-preset.js')
+  ],
+  // ...
+}
+```
