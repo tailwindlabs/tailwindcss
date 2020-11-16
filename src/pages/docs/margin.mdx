@@ -20,119 +20,100 @@ Control the margin on one side of an element using the `m{t|r|b|l}-{size}` utili
 
 For example, `mt-6` would add `1.5rem` of margin to the top of an element, `mr-4` would add `1rem` of margin to the right of an element, `mb-8` would add `2rem` of margin to the bottom of an element, and `ml-2` would add `0.5rem` of margin to the left of an element.
 
-```html
+```html rose
 <template preview>
-  <div class="flex justify-around items-start">
-    <div>
-      <p class="text-center text-sm text-gray-600 mb-1">mt-8</p>
-      <div class="flex bg-gray-400">
-        <span class="mt-8 bg-yellow-200">Target</span>
-      </div>
+  <div class="flex flex-wrap justify-around items-center text-white font-mono">
+
+    <div class="bg-stripes bg-stripes-rose-500 overflow-hidden m-2 sm:m-0">
+      <div class="mt-8 bg-rose-500 flex rounded-md items-center justify-center py-3 px-4">mt-8</div>
     </div>
-    <div>
-      <p class="text-center text-sm text-gray-600 mb-1">mr-8</p>
-      <div class="flex bg-gray-400">
-        <span class="mr-8 bg-yellow-200">Target</span>
-      </div>
+
+    <div class="bg-stripes bg-stripes-rose-500 overflow-hidden m-2 sm:m-0">
+      <div class="mr-8 bg-rose-500 flex rounded-md items-center justify-center py-3 px-4">mr-8</div>
     </div>
-    <div>
-      <p class="text-center text-sm text-gray-600 mb-1">mb-8</p>
-      <div class="flex bg-gray-400">
-        <span class="mb-8 bg-yellow-200">Target</span>
-      </div>
+
+    <div class="bg-stripes bg-stripes-rose-500 overflow-hidden m-2 sm:m-0">
+      <div class="mb-8 bg-rose-500 flex rounded-md items-center justify-center py-3 px-4">mb-8</div>
     </div>
-    <div>
-      <p class="text-center text-sm text-gray-600 mb-1">ml-8</p>
-      <div class="flex bg-gray-400">
-        <span class="ml-8 bg-yellow-200">Target</span>
-      </div>
+
+    <div class="bg-stripes bg-stripes-rose-500 overflow-hidden m-2 sm:m-0">
+      <div class="ml-8 bg-rose-500 flex rounded-md items-center justify-center py-3 px-4">ml-8</div>
     </div>
   </div>
 </template>
 
-<div class="bg-gray-400"><span class="mt-8 bg-yellow-200">Target</span></div>
-<div class="bg-gray-400"><span class="mr-8 bg-yellow-200">Target</span></div>
-<div class="bg-gray-400"><span class="mb-8 bg-yellow-200">Target</span></div>
-<div class="bg-gray-400"><span class="ml-8 bg-yellow-200">Target</span></div>
+<div class="**mt-8** ...">mt-8</div>
+<div class="**mr-8** ...">mr-8</div>
+<div class="**mb-8** ...">mb-8</div>
+<div class="**ml-8** ...">ml-8</div>
 ```
 
 ## Add horizontal margin
 
 Control the horizontal margin of an element using the `mx-{size}` utilities.
 
-```html
+```html purple
 <template preview>
-  <div class="flex justify-around items-center">
-    <div>
-      <p class="text-center text-sm text-gray-600 mb-1">mx-8</p>
-      <div class="flex bg-gray-400">
-        <span class="mx-8 bg-yellow-200">Target</span>
-      </div>
+  <div class="flex justify-around items-center text-white font-mono">
+    <div class="bg-stripes bg-stripes-purple-500">
+      <div class="mx-8 bg-purple-500 rounded-md flex items-center justify-center py-3 px-4">mx-8</div>
     </div>
   </div>
 </template>
 
-<div class="bg-gray-400"><span class="mx-8 bg-yellow-200">Target</span></div>
+<div class="**mx-8** ...">mx-8</div>
 ```
 
 ## Add vertical margin
 
 Control the vertical margin of an element using the `my-{size}` utilities.
 
-```html
+```html emerald
 <template preview>
-  <div class="flex justify-around items-center">
-    <div>
-      <p class="text-center text-sm text-gray-600 mb-1">my-8</p>
-      <div class="flex bg-gray-400">
-        <span class="my-8 bg-yellow-200">Target</span>
-      </div>
+  <div class="flex justify-around items-center text-white font-mono">
+    <div class="bg-stripes bg-stripes-emerald-500">
+      <div class="my-8 bg-emerald-500 rounded-md flex items-center justify-center py-3 px-4">my-8</div>
     </div>
   </div>
 </template>
 
-<div class="bg-gray-400"><span class="my-8 bg-yellow-200">Target</span></div>
+<div class="**my-8** ...">my-8</div>
 ```
 
 ## Add margin to all sides
 
 Control the margin on all sides of an element using the `m-{size}` utilities.
 
-```html
+```html lightBlue
 <template preview>
-  <div class="flex justify-around items-center">
-    <div>
-      <p class="text-center text-sm text-gray-600 mb-1">m-8</p>
-      <div class="flex bg-gray-400">
-        <span class="m-8 bg-yellow-200">Target</span>
-      </div>
+  <div class="flex justify-around items-center text-white font-mono">
+    <div class="bg-stripes bg-stripes-light-blue-500">
+      <div class="m-8 bg-light-blue-500 rounded-md flex items-center justify-center py-3 px-4">m-8</div>
     </div>
   </div>
 </template>
 
-<div class="bg-gray-400"><span class="m-8 bg-yellow-200">Target</span></div>
+<div class="**m-8** ...">m-8</div>
 ```
 
 ## Negative margins
 
 Control the negative margin of an element using the `-m{side?}-{size}` utilities.
 
-```html
+```html fuchsia
 <template preview>
-  <div class="flex justify-around items-center">
-    <div>
-      <div class="bg-gray-400 h-16 w-32"></div>
-      <div class="bg-yellow-200 h-16 mx-auto -mt-8 w-24 flex items-center justify-center">
-        -mt-8
+  <div class="flex justify-around items-center text-white font-mono">
+    <div class="flex flex-col items-center">
+      <div class="relative w-32 h-16 bg-fuchsia-300 rounded-md overflow-hidden">
+        <div class="absolute bottom-0 w-full h-8 bg-stripes bg-stripes-red-900"></div>
       </div>
+      <div class="relative -mt-8 bg-fuchsia-500 rounded-md flex items-center justify-center py-3 px-4">-mt-8</div>
     </div>
   </div>
 </template>
 
-<div class="bg-gray-400 h-16 w-32"></div>
-<div class="-mt-8 bg-yellow-200 mx-auto h-16 w-24 ...">
-  -mt-8
-</div>
+<div class="w-32 h-16 bg-fuchsia-300 ..."></div>
+<div class="**-mt-8** bg-fuchsia-500 ...">-mt-8</div>
 ```
 
 ---
