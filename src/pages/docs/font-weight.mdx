@@ -85,38 +85,40 @@ For more information about Tailwind's responsive design features, check out the 
 
 To control the font weight of an element on hover, add the `hover:` prefix to any existing style and decoration utility. For example, use `hover:font-bold` to apply the `font-bold` utility on hover.
 
-```html
+```html emerald
 <template preview>
-  <div class="text-center text-blue-700">
+  <div class="text-center text-xl text-emerald-600 lg:text-2xl">
     <a href="#" class="font-normal hover:font-bold">Hover over this link</a>
   </div>
 </template>
+
+<a href="#" class="font-normal **hover:font-bold**">Hover over this link</a>
 ```
 
 Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.
 
 ```html
-<a href="#" class="... md:font-normal md:hover:font-bold ...">Link</a>
+<a href="#" class="... md:font-normal **md:hover:font-bold** ...">Link</a>
 ```
 
 ## Focus
 
 To control the font weight of an element on focus, add the `focus:` prefix to any existing style and decoration utility. For example, use `focus:font-bold` to apply the `font-bold` utility on focus.
 
-```html
+```html amber
 <template preview>
   <div class="max-w-xs w-full mx-auto">
-    <input class="bg-white font-normal focus:font-bold focus:shadow-outline text-gray-900 appearance-none inline-block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" value="Focus me" placeholder="Focus me">
+    <input class="bg-white font-normal focus:font-bold focus:shadow-outline text-yellow-900 appearance-none inline-block w-full border border-yellow-400 rounded py-3 px-4 focus:outline-none" value="Focus me" placeholder="Focus me">
   </div>
 </template>
 
-<input class="font-normal focus:font-bold ..." value="Focus me">
+<input class="font-normal **focus:font-bold** ..." value="Focus me">
 ```
 
 Focus utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
 
 ```html
-<input class="... md:font-normal md:focus:font-bold ..." value="Focus me">
+<input class="... md:font-normal **md:focus:font-bold** ..." value="Focus me">
 ```
 
 ## Customizing

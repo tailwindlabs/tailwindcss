@@ -200,6 +200,7 @@ module.exports = {
       cursor: ['active'],
       opacity: ['disabled'],
       textColor: ['group-focus'],
+      fontWeight: ['hover', 'focus'],
     },
   },
   plugins: [
