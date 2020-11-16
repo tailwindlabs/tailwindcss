@@ -196,7 +196,9 @@ function BrowserWindow({ size, onChange, height = 385 }) {
               dangerouslySetInnerHTML={{
                 __html: html
                   .replace(/\{([^}]+)\}/g, (_, name) => classNames[size][name] || '')
-                  .replace(/src="([^"]+)"/g, (_, src) => `src="${images[src]}" loading="lazy"`),
+                  .replace(/src="([^"]+)"/g, (_, src) => `src="${images[src]}" loading="lazy"`)
+                  .replace(/<button type="button"/g, '<div class="cursor-pointer inline-flex"><div')
+                  .replace(/<\/button>/g, '</div></div>'),
               }}
             ></div>
           </div>

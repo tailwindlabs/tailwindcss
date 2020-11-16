@@ -208,11 +208,20 @@ export function Hero() {
 
   useEffect(() => {
     if (!finished) return
+    let count = 0
     cursorControls.start({ opacity: 0.5 })
     const id = window.setInterval(() => {
+      if (count === 2) {
+        return window.clearInterval(id)
+      }
+      count++
       cursorControls.start({ opacity: 1, scale: 0.9, transition: { duration: 0.25 } }).then(() => {
         setWide((wide) => !wide)
-        cursorControls.start({ opacity: 0.5, scale: 1, transition: { duration: 0.25, delay: 0.6 } })
+        cursorControls.start({
+          opacity: count === 2 ? 0 : 0.5,
+          scale: 1,
+          transition: { duration: 0.25, delay: 0.6 },
+        })
       })
     }, 2000)
     return () => {

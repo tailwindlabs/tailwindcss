@@ -1,3 +1,5 @@
+@tailwind base;
+
 @font-face {
   font-family: 'Inter var';
   font-weight: 100 900;
@@ -36,22 +38,6 @@
   font-weight: 400;
   font-style: normal;
   src: url('../fonts/flow-circular.woff') format('woff');
-}
-
-@tailwind base;
-
-:root {
-  --color-code-green: #b5f4a5;
-  --color-code-yellow: #ffe484;
-  --color-code-purple: #d9a9ff;
-  --color-code-red: #ff8383;
-  --color-code-blue: #93ddfd;
-  --color-code-white: #fff;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
 }
 
 abbr[title] {

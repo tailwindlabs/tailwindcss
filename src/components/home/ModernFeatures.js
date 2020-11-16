@@ -324,7 +324,7 @@ function GradientsCode({ lines, selectedGradient }) {
   const activeIndex = Object.keys(gradients).findIndex((k) => gradients[k] === selectedGradient)
 
   return (
-    <div className="mono flex flex-col items-start">
+    <div className="mono mono-active flex flex-col items-start">
       {lines.map((tokens, lineIndex) => {
         const isComment = lineIndex < lines.length - 1 && lineIndex !== activeIndex
 

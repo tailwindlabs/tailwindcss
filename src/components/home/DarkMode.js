@@ -77,7 +77,8 @@ const { code, tokens } = tokenize.html(
   <button type="button" class="mx-auto border border-gray-300 rounded-md text-sm font-medium py-0.5 px-2 text-gray-500 dark:border-gray-600 dark:text-gray-400">
     1.0x
   </button>
-</div>`,
+</div>
+`,
   true
 )
 

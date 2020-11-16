@@ -1,21 +1,10 @@
 @import 'base.css';
 
 /*! purgecss start ignore */
-@import 'carbon-ads.css';
 @import 'docsearch.css';
 @import 'prism.css';
 @import 'bar-of-progress.css';
-@import 'markdown.css';
 /*! purgecss end ignore */
 
 @import 'tailwindcss/components';
 @import 'utilities.css';
-
-.mono > div:not(.not-mono) > span {
-  color: rgba(255, 255, 255, 0.25);
-}
-
-.mono > div > span {
-  transition-duration: 0.5s;
-  transition-property: background-color, border-color, color, fill, stroke;
-}

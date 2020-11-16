@@ -43,7 +43,8 @@ const tokens = {
   <li>
     <div class="[w-10] h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
   </li>
-</ul>`).lines,
+</ul>
+`).lines,
   color: tokenize.html(`<ul class="space-y-2">
   <li>
     <ul class="grid grid-cols-10 h-7">
@@ -129,7 +130,8 @@ const tokens = {
       <li class="[bg-pink-900]"></li>
     </ul>
   </li>
-</ul>`).lines,
+</ul>
+`).lines,
   typography: tokenize.html(`<ul class="space-y-6">
   <li>
     <p class="[font-sans]">
@@ -152,7 +154,8 @@ const tokens = {
       1234567890
     </p>
   </li>
-</ul>`).lines,
+</ul>
+`).lines,
   shadows: tokenize.html(`<ul class="grid grid-cols-2 gap-4">
   <li>
     <div class="[shadow-sm] bg-white rounded-lg h-18"></div>
@@ -172,7 +175,8 @@ const tokens = {
   <li>
     <div class="[shadow-2xl] bg-white rounded-lg h-18"></div>
   </li>
-</ul>`).lines,
+</ul>
+`).lines,
 }
 
 export function ConstraintBased() {

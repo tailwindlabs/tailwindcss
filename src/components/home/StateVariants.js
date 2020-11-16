@@ -130,9 +130,8 @@ export function StateVariants() {
             <section className="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-4 sm:pb-6 lg:pb-4 xl:pb-6 space-y-4">
               <header className="flex items-center justify-between">
                 <h2 className="text-lg leading-6 font-medium text-black">Projects</h2>
-                <button
-                  type="button"
-                  className="hover:bg-light-blue-200 hover:text-light-blue-800 group flex items-center rounded-md bg-light-blue-100 text-light-blue-600 text-sm font-medium px-4 py-2"
+                <div
+                  className="hover:bg-light-blue-200 hover:text-light-blue-800 group flex items-center rounded-md bg-light-blue-100 text-light-blue-600 text-sm font-medium px-4 py-2 cursor-pointer"
                   onMouseEnter={() => {
                     setStates((states) => [...states, 'new-btn-hover'])
                   }}
@@ -153,7 +152,7 @@ export function StateVariants() {
                     />
                   </svg>
                   New
-                </button>
+                </div>
               </header>
               <form className="relative">
                 <svg
@@ -188,9 +187,8 @@ export function StateVariants() {
                     key={i}
                     className={i === a.length - 1 ? 'hidden sm:block lg:hidden xl:block' : ''}
                   >
-                    <a
-                      href="#"
-                      className="group block rounded-lg p-4 border border-gray-200 hover:bg-light-blue-500 hover:border-transparent hover:shadow-lg"
+                    <div
+                      className="group cursor-pointer rounded-lg p-4 border border-gray-200 hover:bg-light-blue-500 hover:border-transparent hover:shadow-lg"
                       onMouseEnter={() => {
                         setStates((states) => [...states, 'item-hover'])
                       }}
@@ -228,13 +226,12 @@ export function StateVariants() {
                           </dd>
                         </div>
                       </dl>
-                    </a>
+                    </div>
                   </li>
                 ))}
                 <li className="hover:shadow-lg flex rounded-lg">
-                  <a
-                    href="#"
-                    className="hover:border-transparent hover:shadow-xs w-full flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium py-4"
+                  <div
+                    className="hover:border-transparent hover:shadow-xs w-full flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium py-4 cursor-pointer"
                     onMouseEnter={() => {
                       setStates((states) => [...states, 'new-hover'])
                     }}
@@ -243,7 +240,7 @@ export function StateVariants() {
                     }}
                   >
                     New Project
-                  </a>
+                  </div>
                 </li>
               </ul>
             </section>
@@ -252,7 +249,10 @@ export function StateVariants() {
         right={
           <CodeWindow className="bg-light-blue-500">
             <CodeWindow.Code2 ref={codeContainerRef} lines={lines.length}>
-              <div ref={linesContainerRef} className={states.length > 0 ? 'mono' : ''}>
+              <div
+                ref={linesContainerRef}
+                className={clsx('mono', { 'mono-active': states.length > 0 })}
+              >
                 {lines.map((tokens, lineIndex) => (
                   <div
                     key={lineIndex}
