@@ -2,6 +2,7 @@ import path from 'path'
 import fs from 'fs'
 
 import _ from 'lodash'
+import postcss from 'postcss'
 
 import getModuleDependencies from './lib/getModuleDependencies'
 import registerConfigAsDependency from './lib/registerConfigAsDependency'
