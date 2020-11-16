@@ -13,70 +13,100 @@ export const classes = { plugin }
 
 Use `self-auto` to align an item based on the value of the container's `align-items` property:
 
-```html
-<template preview>
-  <div class="flex items-stretch bg-gray-200 h-24">
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="self-auto flex-1 text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">2</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+```html emerald
+<template preview class="p-6">
+  <div class="flex items-stretch h-24 space-x-2">
+    <div class="flex-1 rounded-md bg-emerald-300 text-white text-2xl font-extrabold flex items-center justify-center">1</div>
+    <div class="self-auto flex-1 rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center">2</div>
+    <div class="flex-1 rounded-md bg-emerald-300 text-white text-2xl font-extrabold flex items-center justify-center">3</div>
   </div>
 </template>
+
+<div class="flex items-stretch ...">
+  <div>1</div>
+  <div class="**self-auto**">2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Start
 
 Use `self-start` to align an item to the start of the container's cross axis, despite the container's `align-items` value:
 
-```html
-<template preview>
-  <div class="flex items-stretch bg-gray-200 h-24">
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="self-start flex-1 text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">2</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+```html amber
+<template preview class="p-6">
+  <div class="flex items-stretch h-24 space-x-2">
+    <div class="flex-1 rounded-md bg-amber-300 text-white text-2xl font-extrabold flex items-center justify-center">1</div>
+    <div class="self-start flex-1 rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">2</div>
+    <div class="flex-1 rounded-md bg-amber-300 text-white text-2xl font-extrabold flex items-center justify-center">3</div>
   </div>
 </template>
+
+<div class="flex items-stretch ...">
+  <div>1</div>
+  <div class="**self-start**">2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Center
 
 Use `self-center` to align an item along the center of the container's cross axis, despite the container's `align-items` value:
 
-```html
-<template preview>
-  <div class="flex items-stretch bg-gray-200 h-24">
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="self-center flex-1 text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">2</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+```html purple
+<template preview class="p-6">
+  <div class="flex items-stretch h-24 space-x-2">
+    <div class="flex-1 rounded-md bg-purple-300 text-white text-2xl font-extrabold flex items-center justify-center">1</div>
+    <div class="self-center flex-1 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">2</div>
+    <div class="flex-1 rounded-md bg-purple-300 text-white text-2xl font-extrabold flex items-center justify-center">3</div>
   </div>
 </template>
+
+<div class="flex items-stretch ...">
+  <div>1</div>
+  <div class="**self-center**">2</div>
+  <div>3</div>
+</div>
 ```
 
 ## End
 
 Use `self-end` to align an item to the end of the container's cross axis, despite the container's `align-items` value:
 
-```html
-<template preview>
-  <div class="flex items-stretch bg-gray-200 h-24">
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="self-end flex-1 text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">2</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+```html rose
+<template preview class="p-6">
+  <div class="flex items-stretch h-24 space-x-2">
+    <div class="flex-1 rounded-md bg-rose-300 text-white text-2xl font-extrabold flex items-center justify-center">1</div>
+    <div class="self-end flex-1 rounded-md bg-rose-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">2</div>
+    <div class="flex-1 rounded-md bg-rose-300 text-white text-2xl font-extrabold flex items-center justify-center">3</div>
   </div>
 </template>
+
+<div class="flex items-stretch ...">
+  <div>1</div>
+  <div class="**self-end**">2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Stretch
 
 Use `self-stretch` to stretch an item to fill the container's cross axis, despite the container's `align-items` value:
 
-```html
-<template preview>
-  <div class="flex items-start bg-gray-200 h-24">
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="self-stretch flex-1 text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">2</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+```html fuchsia
+<template preview class="p-6">
+  <div class="flex items-stretch h-24 space-x-2">
+    <div class="flex-1 rounded-md bg-fuchsia-300 text-white text-2xl font-extrabold flex items-center justify-center">1</div>
+    <div class="self-stretch flex-1 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">2</div>
+    <div class="flex-1 rounded-md bg-fuchsia-300 text-white text-2xl font-extrabold flex items-center justify-center">3</div>
   </div>
 </template>
+
+<div class="flex items-stretch ...">
+  <div>1</div>
+  <div class="**self-stretch**">2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Responsive
