@@ -13,19 +13,19 @@ export const classes = { plugin }
 
 Use `order-{order}` to render flex items in a different order than they appear in the DOM.
 
-```html
+```html lightBlue
 <template preview>
-  <div class="flex bg-gray-200">
-    <div class="order-last text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="flex justify-between ...">
+    <div class="order-last w-16 h-16 rounded-md bg-blue-500 text-white text-2xl font-extrabold flex items-center justify-center">1</div>
+    <div class="w-16 h-16 rounded-md bg-blue-300 text-white text-2xl font-extrabold flex items-center justify-center">2</div>
+    <div class="w-16 h-16 rounded-md bg-blue-300 text-white text-2xl font-extrabold flex items-center justify-center">3</div>
   </div>
 </template>
 
-<div class="flex">
-  <div class="order-last">1</div>
-  <div>2</div>
-  <div>3</div>
+<div class="flex justify-between ...">
+    <div class="**order-last**">1</div>
+    <div>2</div>
+    <div>3</div>
 </div>
 ```
 
