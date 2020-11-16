@@ -6,7 +6,8 @@
       "@/layouts/*": ["src/layouts/*"],
       "@/utils/*": ["src/utils/*"],
       "@/hooks/*": ["src/hooks/*"],
-      "@/img/*": ["src/img/*"]
+      "@/img/*": ["src/img/*"],
+      "@/navs/*": ["src/navs/*"]
     }
   }
 }

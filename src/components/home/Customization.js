@@ -5,7 +5,7 @@ import { CodeWindow } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import { ReactComponent as Icon } from '@/img/icons/home/customization.svg'
 import { useEffect, useRef, useState } from 'react'
-import { defaultConfig } from '@/utils/defaultConfig'
+import tailwindColors from 'tailwindcss/colors'
 import { AnimatePresence, motion } from 'framer-motion'
 import { font as poppinsRegular } from '../../fonts/generated/Poppins-Regular.module.css'
 import { font as poppinsExtraBold } from '../../fonts/generated/Poppins-ExtraBold.module.css'
@@ -207,8 +207,7 @@ export function Customization() {
                             className="w-8 h-8 rounded-full"
                             initial={false}
                             animate={{
-                              backgroundColor:
-                                defaultConfig.theme.colors[themes[theme].primaryColor][key],
+                              backgroundColor: tailwindColors[themes[theme].primaryColor][key],
                             }}
                             style={{
                               zIndex: colors.length - i,
@@ -240,8 +239,7 @@ export function Customization() {
                             className="w-8 h-8 rounded-full"
                             initial={false}
                             animate={{
-                              backgroundColor:
-                                defaultConfig.theme.colors[themes[theme].secondaryColor][key],
+                              backgroundColor: tailwindColors[themes[theme].secondaryColor][key],
                             }}
                             style={{
                               zIndex: colors.length - i,
@@ -304,7 +302,7 @@ function CustomizationToken({ theme, ...props }) {
 
   if (token[0] === 'string' && token[1].startsWith("'color-")) {
     const [, name, shade] = token[1].substr(1, token[1].length - 2).split('-')
-    const color = defaultConfig.theme.colors[themes[theme][`${name}Color`]][shade]
+    const color = tailwindColors[themes[theme][`${name}Color`]][shade]
 
     return (
       <span className="text-code-string">
