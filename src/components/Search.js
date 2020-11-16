@@ -91,6 +91,7 @@ export function Search() {
             appId="BH4D9OD16A"
             navigator={{
               navigate({ suggestionUrl }) {
+                setIsOpen(false)
                 router.push(suggestionUrl)
               },
             }}
