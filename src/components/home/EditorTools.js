@@ -117,14 +117,14 @@ function CompletionDemo() {
                       const color = dlv(colors, c.replace(/^(bg|text|border)-/, '').split('-'))
                       if (color) {
                         return (
-                          <>
+                          <Fragment key={i}>
                             {space}
                             <span
                               className="inline-flex w-2.5 h-2.5 md:w-3 md:h-3 rounded-sm shadow-px relative top-px mr-0.5 md:mr-1"
                               style={{ background: color }}
                             />
                             {c}
-                          </>
+                          </Fragment>
                         )
                       }
                     }
