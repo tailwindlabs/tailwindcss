@@ -20,7 +20,7 @@ Use `w-auto` to let the browser calculate and select the width for the element.
 
 ```html
 <template preview>
-  <div class="w-auto bg-gray-400 mb-4 px-2">.w-auto on block element</div>
+  <div class="w-auto bg-gray-400 px-2">.w-auto on block element</div>
   <div class="w-auto inline-block bg-gray-400 px-2">.w-auto on inline-block element</div>
 </template>
 
@@ -40,7 +40,7 @@ Use `w-screen` to make an element span the entire width of the viewport.
 
 ## Fixed Width
 
-Use `w-{number}` or `.w-px` to set an element to a fixed width.
+Use `w-{number}` or `w-px` to set an element to a fixed width.
 
 ```html
 <template preview>
@@ -145,38 +145,65 @@ Use `w-{number}` or `.w-px` to set an element to a fixed width.
 
 ## Fluid Width
 
-Use `w-{fraction}` or `.w-full` to set an element to a percentage based width.
+Use `w-{fraction}` or `w-full` to set an element to a percentage based width.
 
-```html
+```html rose
 <template preview>
-  <div class="bg-gray-200 p-4">
-    <div class="flex mb-4">
-      <div class="w-1/2 p-2 bg-gray-400 text-center">.w-1/2</div>
-      <div class="w-1/2 p-2 bg-gray-500 text-center">.w-1/2</div>
+  <div class="space-y-6">
+    <div class="flex rounded-md overflow-hidden text-white font-mono">
+      <div class="w-1/2 px-2 py-4 bg-rose-400 text-center">w-1/2</div>
+      <div class="w-1/2 px-2 py-4 bg-rose-500 text-center">w-1/2</div>
     </div>
-    <div class="flex mb-4">
-      <div class="w-2/5 p-2 bg-gray-400 text-center">.w-2/5</div>
-      <div class="w-3/5 p-2 bg-gray-500 text-center">.w-3/5</div>
+    <div class="flex rounded-md overflow-hidden text-white font-mono">
+      <div class="w-2/5 px-2 py-4 bg-rose-400 text-center">w-2/5</div>
+      <div class="w-3/5 px-2 py-4 bg-rose-500 text-center">w-3/5</div>
     </div>
-    <div class="flex mb-4">
-      <div class="w-1/3 p-2 bg-gray-400 text-center">.w-1/3</div>
-      <div class="w-2/3 p-2 bg-gray-500 text-center">.w-2/3</div>
+    <div class="flex rounded-md overflow-hidden text-white font-mono">
+      <div class="w-1/3 px-2 py-4 bg-rose-400 text-center">w-1/3</div>
+      <div class="w-2/3 px-2 py-4 bg-rose-500 text-center">w-2/3</div>
     </div>
-    <div class="flex mb-4">
-      <div class="w-1/4 p-2 bg-gray-400 text-center">.w-1/4</div>
-      <div class="w-3/4 p-2 bg-gray-500 text-center">.w-3/4</div>
+    <div class="flex rounded-md overflow-hidden text-white font-mono">
+      <div class="w-1/4 px-2 py-4 bg-rose-400 text-center">w-1/4</div>
+      <div class="w-3/4 px-2 py-4 bg-rose-500 text-center">w-3/4</div>
     </div>
-    <div class="flex mb-4">
-      <div class="w-1/5 p-2 bg-gray-400 text-center">.w-1/5</div>
-      <div class="w-4/5 p-2 bg-gray-500 text-center">.w-4/5</div>
+    <div class="flex rounded-md overflow-hidden text-white font-mono">
+      <div class="w-1/5 px-2 py-4 bg-rose-400 text-center">w-1/5</div>
+      <div class="w-4/5 px-2 py-4 bg-rose-500 text-center">w-4/5</div>
     </div>
-    <div class="flex mb-4">
-      <div class="w-1/6 p-2 bg-gray-400 text-center">.w-1/6</div>
-      <div class="w-5/6 p-2 bg-gray-500 text-center">.w-5/6</div>
+    <div class="flex rounded-md overflow-hidden text-white font-mono">
+      <div class="w-1/6 px-2 py-4 bg-rose-400 text-center">w-1/6</div>
+      <div class="w-5/6 px-2 py-4 bg-rose-500 text-center">w-5/6</div>
     </div>
-    <div class="w-full p-2 bg-gray-400 text-center">.w-full</div>
+    <div class="rounded-md w-full px-2 py-4 bg-rose-500 text-center text-white font-mono">w-full</div>
   </div>
 </template>
+
+
+<div class="flex ...">
+  <div class="**w-1/2** ... ">w-1/2</div>
+  <div class="**w-1/2** ..."">w-1/2</div>
+</div>
+<div class="flex ...">
+  <div class="**w-2/5** ...">w-2/5</div>
+  <div class="**w-3/5** ...">w-3/5</div>
+</div>
+<div class="flex ...">
+  <div class="**w-1/3** ...">w-1/3</div>
+  <div class="**w-2/3** ...">w-2/3</div>
+</div>
+<div class="flex ...">
+  <div class="**w-1/4** ...">w-1/4</div>
+  <div class="**w-3/4** ...">w-3/4</div>
+</div>
+<div class="flex ...">
+  <div class="**w-1/5** ...">w-1/5</div>
+  <div class="**w-4/5** ...">w-4/5</div>
+</div>
+<div class="flex ...">
+  <div class="**w-1/6** ...">w-1/6</div>
+  <div class="**w-5/6** ...">w-5/6</div>
+</div>
+<div class="**w-full** ...">w-full</div>
 ```
 
 ## Responsive
