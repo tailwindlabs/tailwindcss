@@ -567,10 +567,13 @@ export function HtmlZenGarden({ theme }) {
                     {['XS', 'S', 'M', 'L', 'XL'].map((size) => (
                       <motion.li
                         key={size}
-                        className={clsx('relative flex-none items-center justify-center border-2', {
-                          'hidden sm:flex': size === 'S' || size === 'XL',
-                          flex: size !== 'S' && size !== 'XL',
-                        })}
+                        className={clsx(
+                          'relative flex-none items-center justify-center border-2 cursor-pointer',
+                          {
+                            'hidden sm:flex': size === 'S' || size === 'XL',
+                            flex: size !== 'S' && size !== 'XL',
+                          }
+                        )}
                         style={{
                           width: themes[theme].size.button.size,
                           height: themes[theme].size.button.size,
@@ -636,9 +639,9 @@ export function HtmlZenGarden({ theme }) {
                       <motion.div
                         layout
                         key={name}
-                        className={`inline-flex leading-5 ${themes[name].size.guide.inner || ''} ${
-                          theme === name ? '' : 'absolute bottom-0 left-0'
-                        }`}
+                        className={`inline-flex leading-5 cursor-pointer ${
+                          themes[name].size.guide.inner || ''
+                        } ${theme === name ? '' : 'absolute bottom-0 left-0'}`}
                         initial={false}
                         animate={{
                           opacity: theme === name ? 1 : 0,
@@ -669,7 +672,7 @@ export function HtmlZenGarden({ theme }) {
                     />
                     <motion.div
                       layout
-                      className="relative text-sm border"
+                      className="relative text-sm border cursor-pointer"
                       style={{ height: getThemeValue('button.height') }}
                       initial={false}
                       animate={{
@@ -707,7 +710,7 @@ export function HtmlZenGarden({ theme }) {
                     />
                     <motion.div
                       layout
-                      className={`relative text-sm border`}
+                      className="relative text-sm border cursor-pointer"
                       style={{ height: getThemeValue('button.height') }}
                       initial={false}
                       animate={{
@@ -732,7 +735,7 @@ export function HtmlZenGarden({ theme }) {
                   </div>
                   <motion.div
                     layout
-                    className={`flex items-center border ${
+                    className={`flex items-center border cursor-pointer ${
                       themes[theme].button.like.className || 'justify-center'
                     }`}
                     style={{

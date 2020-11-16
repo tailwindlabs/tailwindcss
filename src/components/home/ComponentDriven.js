@@ -639,18 +639,12 @@ function AtApplySection() {
               </div>
             </dl>
             <div className="grid grid-cols-2 gap-x-4 sm:gap-x-6 px-4 sm:px-6 py-4">
-              <button
-                type="button"
-                className="text-base font-medium rounded-lg bg-gray-100 text-black py-3"
-              >
+              <div className="text-base font-medium rounded-lg bg-gray-100 text-black py-3 text-center cursor-pointer">
                 Decline
-              </button>
-              <button
-                type="button"
-                className="text-base font-medium rounded-lg bg-rose-500 text-white py-3"
-              >
+              </div>
+              <div className="text-base font-medium rounded-lg bg-rose-500 text-white py-3 text-center cursor-pointer">
                 Accept
-              </button>
+              </div>
             </div>
           </article>
         </div>
@@ -724,19 +718,15 @@ export function ComponentDriven() {
             <nav className="p-4 text-sm font-medium">
               <ul className="flex space-x-2">
                 <li>
-                  <a href="#" className="block px-4 py-2 rounded-md bg-amber-100 text-amber-700">
+                  <div className="px-4 py-2 rounded-md bg-amber-100 text-amber-700 cursor-pointer">
                     Featured
-                  </a>
+                  </div>
                 </li>
                 <li>
-                  <a href="#" className="block px-4 py-2">
-                    Popular
-                  </a>
+                  <div className="px-4 py-2 cursor-pointer">Popular</div>
                 </li>
                 <li>
-                  <a href="#" className="block px-4 py-2">
-                    Recent
-                  </a>
+                  <div className="px-4 py-2 cursor-pointer">Recent</div>
                 </li>
               </ul>
             </nav>
