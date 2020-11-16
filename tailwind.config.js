@@ -50,6 +50,7 @@ module.exports = {
     },
     fontFamily: {
       mono: ['Menlo', ...defaultTheme.fontFamily.mono],
+      serif: [...defaultTheme.fontFamily.serif],
     },
     extend: {
       typography: (theme) => ({
