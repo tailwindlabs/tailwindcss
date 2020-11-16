@@ -16,6 +16,7 @@ import { BigText, Link, Paragraph, Widont } from '@/components/home/common'
 import { useEffect, useState } from 'react'
 import { Logo } from '@/components/Logo'
 import { Footer } from '@/components/home/Footer'
+import NextLink from 'next/link'
 
 function NpmInstallButton() {
   const [state, setState] = useState('idle')
@@ -91,12 +92,11 @@ export default function Home() {
             rotate-90 that can be composed to build any design, directly in your markup.
           </p>
           <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4 text-center">
-            <a
-              href="/docs"
-              className="w-full sm:w-auto flex-none bg-black text-white text-lg leading-6 font-semibold py-3 px-6 border border-transparent rounded-xl"
-            >
-              Get started
-            </a>
+            <NextLink href="/docs">
+              <a className="w-full sm:w-auto flex-none bg-black text-white text-lg leading-6 font-semibold py-3 px-6 border border-transparent rounded-xl">
+                Get started
+              </a>
+            </NextLink>
             <NpmInstallButton />
           </div>
         </div>

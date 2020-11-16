@@ -176,21 +176,23 @@ function Completion({ inView }) {
   }, [typed])
 
   useEffect(() => {
+    let id
     if (stage === 1) {
-      window.setTimeout(() => {
+      id = window.setTimeout(() => {
         setStage(2)
       }, 2000)
     } else if (stage === 2 || stage === 3 || stage === 4 || stage === 5) {
-      window.setTimeout(() => {
+      id = window.setTimeout(() => {
         setStage(stage + 1)
       }, 300)
     } else if (stage === 6) {
-      window.setTimeout(() => {
+      id = window.setTimeout(() => {
         setStage(-1)
-      }, 2000)
-      window.setTimeout(() => {
         setStage(0)
       }, 2000)
+    }
+    return () => {
+      window.clearTimeout(id)
     }
   }, [stage])
 

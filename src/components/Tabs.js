@@ -25,7 +25,7 @@ export function Tabs({
             ? {
                 gridTemplateColumns: `repeat(${
                   Array.isArray(tabs) ? tabs.length : Object.keys(tabs).length
-                }, minmax(0, 1fr));`,
+                }, minmax(0, 1fr))`,
               }
             : undefined
         }
