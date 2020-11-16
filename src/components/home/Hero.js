@@ -8,6 +8,8 @@ import { fit } from '@/utils/fit'
 import { debounce } from 'debounce'
 import styles from './Hero.module.css'
 import { useMedia } from '@/hooks/useMedia'
+import { wait } from '@/utils/wait'
+import { createInViewPromise } from '@/utils/createInViewPromise'
 
 const CHAR_DELAY = 50
 const GROUP_DELAY = 1000
@@ -145,7 +147,7 @@ augment(tokens)
 export function Hero() {
   const containerRef = useRef()
   const [step, setStep] = useState(-1)
-  const [state, setState] = useState({ group: 0, char: 0 })
+  const [state, setState] = useState({ group: -1, char: -1 })
   const cursorControls = useAnimation()
   const [wide, setWide] = useState(false)
   const [finished, setFinished] = useState(false)
@@ -154,11 +156,43 @@ export function Hero() {
   const [containerRect, setContainerRect] = useState()
   const md = supportsMd && isMd
   const mounted = useRef(true)
+  const inViewRef = useRef()
 
   const layout = !finished
 
   useEffect(() => {
     return () => (mounted.current = false)
+  }, [])
+
+  useEffect(() => {
+    let current = true
+
+    const { promise: inViewPromise, disconnect } = createInViewPromise(inViewRef.current, {
+      threshold: 0.5,
+    })
+
+    const promises = [
+      wait(1000),
+      inViewPromise,
+      new Promise((resolve) => {
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(resolve)
+        } else {
+          window.setTimeout(resolve, 0)
+        }
+      }),
+    ]
+
+    Promise.all(promises).then(() => {
+      if (current) {
+        setState({ group: 0, char: 0 })
+      }
+    })
+
+    return () => {
+      current = false
+      disconnect()
+    }
   }, [])
 
   useEffect(() => {
@@ -337,6 +371,7 @@ export function Hero() {
       right={
         <CodeWindow className="bg-light-blue-500">
           <CodeWindow.Code
+            ref={inViewRef}
             tokens={tokens}
             tokenComponent={HeroToken}
             tokenProps={{
