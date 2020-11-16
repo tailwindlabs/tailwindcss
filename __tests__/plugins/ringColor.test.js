@@ -19,8 +19,8 @@ test('defining color as a function', () => {
     [
       {
         '.ring-black': {
-          '--ring-opacity': '1',
-          '--ring-color': 'black',
+          '--tw-ring-opacity': '1',
+          '--tw-ring-color': 'black',
         },
       },
       [],

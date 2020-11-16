@@ -34,22 +34,22 @@ test('opacity variables are given to colors defined as closures', () => {
     .then((result) => {
       const expected = `
         .text-primary {
-          --text-opacity: 1;
-          color: rgba(31,31,31,var(--text-opacity,1))
+          --tw-text-opacity: 1;
+          color: rgba(31,31,31,var(--tw-text-opacity,1))
         }
         .text-opacity-50 {
-          --text-opacity: 0.5
+          --tw-text-opacity: 0.5
         }
 				.from-primary {
-					--gradient-from-color: rgb(31,31,31);
-					--gradient-color-stops: var(--gradient-from-color), var(--gradient-to-color, rgba(31, 31, 31, 0))
+					--tw-gradient-from-color: rgb(31,31,31);
+					--tw-gradient-color-stops: var(--tw-gradient-from-color), var(--tw-gradient-to-color, rgba(31, 31, 31, 0))
 				}
 				.via-primary {
-					--gradient-via-color: rgb(31,31,31);
-					--gradient-color-stops: var(--gradient-from-color), var(--gradient-via-color), var(--gradient-to-color, rgba(31, 31, 31, 0))
+					--tw-gradient-via-color: rgb(31,31,31);
+					--tw-gradient-color-stops: var(--tw-gradient-from-color), var(--tw-gradient-via-color), var(--tw-gradient-to-color, rgba(31, 31, 31, 0))
 				}
 				.to-primary {
-					--gradient-to-color: rgb(31,31,31)
+					--tw-gradient-to-color: rgb(31,31,31)
 				}
       `
 

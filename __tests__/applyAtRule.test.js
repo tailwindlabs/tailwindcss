@@ -634,8 +634,8 @@ test('adjacent rules are collapsed after being applied', () => {
   `
   const expected = `
     .foo:hover {
-      --bg-opacity: 1;
-      background-color: rgba(255, 255, 255, var(--bg-opacity));
+      --tw-bg-opacity: 1;
+      background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
       opacity: 0.5;
     }
     .foo {
@@ -1055,8 +1055,8 @@ test('you can apply classes in a nested rule', () => {
   const expected = `
     .selector {
       &:hover {
-        --text-opacity: 1;
-        color: rgba(255, 255, 255, var(--text-opacity));
+        --tw-text-opacity: 1;
+        color: rgba(255, 255, 255, var(--tw-text-opacity));
       }
     }
   `
