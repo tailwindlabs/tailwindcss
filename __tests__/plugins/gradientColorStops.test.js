@@ -41,14 +41,14 @@ test('opacity variables are given to colors defined as closures', () => {
           --tw-text-opacity: 0.5
         }
 				.from-primary {
-					--tw-gradient-from-color: rgb(31,31,31);
-					--tw-gradient-color-stops: var(--tw-gradient-from-color), var(--tw-gradient-to-color, rgba(31, 31, 31, 0))
+					--tw-gradient-from: rgb(31,31,31);
+					--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(31, 31, 31, 0))
 				}
 				.via-primary {
-					--tw-gradient-color-stops: var(--tw-gradient-from-color), rgb(31,31,31), var(--tw-gradient-to-color, rgba(31, 31, 31, 0))
+					--tw-gradient-stops: var(--tw-gradient-from), rgb(31,31,31), var(--tw-gradient-to, rgba(31, 31, 31, 0))
 				}
 				.to-primary {
-					--tw-gradient-to-color: rgb(31,31,31)
+					--tw-gradient-to: rgb(31,31,31)
 				}
       `
 
