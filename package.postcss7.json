@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "autoprefixer": "^9",
+    "postcss": "^7",
+    "postcss-functions": "^3",
+    "postcss-js": "^2",
+    "postcss-nested": "^4"
+  }
+}
