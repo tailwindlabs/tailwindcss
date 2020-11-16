@@ -48,10 +48,6 @@ module.exports = {
         highlight: 'rgba(134, 239, 172, 0.25)',
       },
     },
-    fontFamily: {
-      mono: ['Menlo', ...defaultTheme.fontFamily.mono],
-      serif: [...defaultTheme.fontFamily.serif],
-    },
     extend: {
       typography: (theme) => ({
         DEFAULT: {
@@ -139,6 +135,7 @@ module.exports = {
       }),
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        mono: ['Menlo', ...defaultTheme.fontFamily.mono],
         source: ['Source Sans Pro', ...defaultTheme.fontFamily.sans],
         'ubuntu-mono': ['Ubuntu Mono', ...defaultTheme.fontFamily.mono],
         system: defaultTheme.fontFamily.sans,
