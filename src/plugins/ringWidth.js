@@ -21,7 +21,7 @@ export default function () {
         return [
           nameClass('ring', modifier),
           {
-            '--tw-ring-inset': 'var(--tw-tailwind-empty,/*!*/ /*!*/)',
+            '--tw-ring-inset': 'var(--tw-empty,/*!*/ /*!*/)',
             '--tw-ring-offset-width': '0px',
             '--tw-ring-offset-color': '#fff',
             '--tw-ring-color': ringColorDefault,

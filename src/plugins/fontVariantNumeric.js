@@ -3,11 +3,11 @@ export default function () {
     addUtilities(
       {
         '.ordinal, .slashed-zero, .lining-nums, .oldstyle-nums, .proportional-nums, .tabular-nums, .diagonal-fractions, .stacked-fractions': {
-          '--tw-font-variant-numeric-ordinal': 'var(--tw-tailwind-empty,/*!*/ /*!*/)',
-          '--tw-font-variant-numeric-slashed-zero': 'var(--tw-tailwind-empty,/*!*/ /*!*/)',
-          '--tw-font-variant-numeric-figure': 'var(--tw-tailwind-empty,/*!*/ /*!*/)',
-          '--tw-font-variant-numeric-spacing': 'var(--tw-tailwind-empty,/*!*/ /*!*/)',
-          '--tw-font-variant-numeric-fraction': 'var(--tw-tailwind-empty,/*!*/ /*!*/)',
+          '--tw-font-variant-numeric-ordinal': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-font-variant-numeric-slashed-zero': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-font-variant-numeric-figure': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-font-variant-numeric-spacing': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-font-variant-numeric-fraction': 'var(--tw-empty,/*!*/ /*!*/)',
           'font-variant-numeric':
             'var(--tw-font-variant-numeric-ordinal) var(--tw-font-variant-numeric-slashed-zero) var(--tw-font-variant-numeric-figure) var(--tw-font-variant-numeric-spacing) var(--tw-font-variant-numeric-fraction)',
         },
