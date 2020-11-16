@@ -123,11 +123,12 @@ export default function DocsLandingPage() {
                 <p className="font-medium text-rose-100 text-shadow mb-4">
                   Build something with Tailwind in our online playground.
                 </p>
-                <Link href="/">
-                  <a className="mt-auto bg-rose-900 bg-opacity-50 rounded-xl font-semibold py-2 px-4 inline-flex">
-                    Start building
-                  </a>
-                </Link>
+                <a
+                  href="https://play.tailwindcss.com/"
+                  className="mt-auto bg-rose-900 bg-opacity-50 rounded-xl font-semibold py-2 px-4 inline-flex"
+                >
+                  Start building
+                </a>
               </div>
               <div className={`${styles.image} relative md:pl-6 xl:pl-8 hidden sm:block`}>
                 <PlayImage className="absolute top-6 left-6 md:static overflow-visible" />
