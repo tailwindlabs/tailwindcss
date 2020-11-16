@@ -13,85 +13,130 @@ export const classes = { plugin }
 
 Use `place-items-auto` to place grid items automatically in their grid areas:
 
-```html
+```html indigo
 <template preview>
-  <div class="grid grid-cols-3 place-items-auto bg-gray-200 h-48">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  <div class="grid grid-cols-3 gap-2 place-items-auto h-48">
+    <div class="flex-1 rounded-md bg-indigo-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">1</div>
+    <div class="flex-1 rounded-md bg-indigo-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">2</div>
+    <div class="flex-1 rounded-md bg-indigo-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">3</div>
+    <div class="flex-1 rounded-md bg-indigo-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">4</div>
+    <div class="flex-1 rounded-md bg-indigo-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">5</div>
+    <div class="flex-1 rounded-md bg-indigo-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">6</div>
   </div>
 </template>
+
+<div class="**place-items-auto** h-48 ...">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+</div>
 ```
 
 ## Start
 
 Use `place-items-start` to place grid items on the start of their grid areas on both axis:
 
-```html
+```html emerald
 <template preview>
-  <div class="grid grid-cols-3 place-items-start bg-gray-200 h-48">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  <div class="grid grid-cols-3 gap-2 place-items-start h-48">
+    <div class="flex-1 rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">1</div>
+    <div class="flex-1 rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">2</div>
+    <div class="flex-1 rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">3</div>
+    <div class="flex-1 rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">4</div>
+    <div class="flex-1 rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">5</div>
+    <div class="flex-1 rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">6</div>
   </div>
 </template>
+
+<div class="**place-items-start** h-48 ...">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+</div>
 ```
 
 ## End
 
 Use `place-items-end` to place grid items on the end of their grid areas on both axis:
 
-```html
+```html amber
 <template preview>
-  <div class="grid grid-cols-3 place-items-end bg-gray-200 h-48">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  <div class="grid grid-cols-3 gap-2 place-items-end h-48">
+    <div class="flex-1 rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">1</div>
+    <div class="flex-1 rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">2</div>
+    <div class="flex-1 rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">3</div>
+    <div class="flex-1 rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">4</div>
+    <div class="flex-1 rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">5</div>
+    <div class="flex-1 rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">6</div>
   </div>
 </template>
+
+<div class="**place-items-end** h-48 ...">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+</div>
 ```
 
 ## Center
 
 Use `place-items-center` to place grid items on the center of their grid areas on both axis:
 
-```html
+```html purple
 <template preview>
-  <div class="grid grid-cols-3 place-items-center bg-gray-200 h-48">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  <div class="grid grid-cols-3 gap-2 place-items-center h-48">
+    <div class="flex-1 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">1</div>
+    <div class="flex-1 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">2</div>
+    <div class="flex-1 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">3</div>
+    <div class="flex-1 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">4</div>
+    <div class="flex-1 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">5</div>
+    <div class="flex-1 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center h-16 w-16">6</div>
   </div>
 </template>
+
+<div class="**place-items-center** h-48 ...">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+</div>
 ```
 
 ## Stretch
 
 Use `place-items-stretch` to stretch items along their grid areas on both axis:
 
-```html
+```html lightBlue
 <template preview>
-  <div class="grid grid-cols-3 place-items-stretch bg-gray-200 h-48">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  <div class="grid grid-cols-3 gap-2 place-items-stretch h-48">
+    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center">1</div>
+    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center">2</div>
+    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center">3</div>
+    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center">4</div>
+    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center">5</div>
+    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center">6</div>
   </div>
 </template>
+
+<div class="**place-items-stretch** h-48 ...">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+</div>
 ```
 
 ## Responsive
