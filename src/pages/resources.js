@@ -40,12 +40,12 @@ export default function Resources() {
           .
         </p>
       </div>
-      <div className="grid md:grid-cols-2 gap-6 xl:gap-8 my-8 sm:my-12">
+      <div className="grid md:grid-cols-2 gap-8 md:gap-6 xl:gap-8 my-8 sm:my-12">
         <section>
           <h2 className="text-xl text-gray-900 font-bold mb-4">Learn UI Design</h2>
           <a
             href="https://refactoringui.com/book"
-            className="h-64 bg-gray-900 bg-cover rounded-3xl mb-6 flex items-center justify-center"
+            className="h-40 sm:h-56 xl:h-64 bg-gray-900 bg-cover rounded-3xl mb-6 flex items-center justify-center"
             style={{
               backgroundImage: `url(${require('@/img/resources/refactoring-ui-bg.png').default})`,
             }}
@@ -68,7 +68,7 @@ export default function Resources() {
           <h2 className="text-xl text-gray-900 font-bold mb-4">Official Tailwind CSS Components</h2>
           <a
             href="https://tailwindui.com/"
-            className="h-64 bg-gray-300 rounded-3xl mb-6 overflow-hidden flex"
+            className="h-40 sm:h-56 xl:h-64 bg-gray-300 rounded-3xl mb-6 overflow-hidden flex"
           >
             <div className="relative flex-none flex items-center justify-center px-6 xl:px-10">
               <div className="bg-gray-900 absolute inset-0 -left-64 transform -skew-x-20" />
@@ -93,14 +93,14 @@ export default function Resources() {
           </div>
         </section>
       </div>
-      <div className="grid sm:grid-cols-3 gap-6 xl:gap-8 pb-10 border-b border-gray-200">
+      <div className="grid sm:grid-cols-3 gap-8 sm:gap-6 xl:gap-8 pb-10 border-b border-gray-200">
         <section>
           <h2 className="text-xl text-gray-900 font-bold mb-4">
             JavaScript<span className="sr-only">: Headless UI</span>
           </h2>
           <a
             href="https://headlessui.dev/"
-            className="h-48 rounded-3xl bg-gray-900 mb-6 flex items-center justify-center p-6"
+            className="h-40 xl:h-48 rounded-3xl bg-gray-900 mb-6 flex items-center justify-center p-6"
           >
             <Logo title="Headless UI" component={HeadlessUi} />
           </a>
@@ -115,7 +115,7 @@ export default function Resources() {
           </h2>
           <a
             href="https://heroicons.com/"
-            className="relative flex h-48 rounded-3xl bg-gradient-to-br from-violet-600 to-purple-500 mb-6"
+            className="relative flex h-40 xl:h-48 rounded-3xl bg-gradient-to-br from-violet-600 to-purple-500 mb-6"
           >
             <div
               className="absolute inset-0 flex items-center justify-center p-6 bg-contain"
@@ -136,7 +136,7 @@ export default function Resources() {
           </h2>
           <a
             href="http://www.heropatterns.com/"
-            className="relative flex h-48 rounded-3xl bg-gradient-to-br from-cyan-600 to-teal-500 mb-6"
+            className="relative flex h-40 xl:h-48 rounded-3xl bg-gradient-to-br from-cyan-600 to-teal-500 mb-6"
           >
             <div
               className="absolute inset-0 flex items-center justify-center p-6 bg-cover"
