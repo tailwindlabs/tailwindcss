@@ -8,7 +8,7 @@ export default function () {
         return [
           `${nameClass('divide-opacity', modifier)} > :not([hidden]) ~ :not([hidden])`,
           {
-            '--divide-opacity': value,
+            '--tw-divide-opacity': value,
           },
         ]
       })

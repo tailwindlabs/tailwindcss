@@ -3,40 +3,40 @@ export default function () {
     addUtilities(
       {
         '.ordinal, .slashed-zero, .lining-nums, .oldstyle-nums, .proportional-nums, .tabular-nums, .diagonal-fractions, .stacked-fractions': {
-          '--font-variant-numeric-ordinal': 'var(--tailwind-empty,/*!*/ /*!*/)',
-          '--font-variant-numeric-slashed-zero': 'var(--tailwind-empty,/*!*/ /*!*/)',
-          '--font-variant-numeric-figure': 'var(--tailwind-empty,/*!*/ /*!*/)',
-          '--font-variant-numeric-spacing': 'var(--tailwind-empty,/*!*/ /*!*/)',
-          '--font-variant-numeric-fraction': 'var(--tailwind-empty,/*!*/ /*!*/)',
+          '--tw-font-variant-numeric-ordinal': 'var(--tw-tailwind-empty,/*!*/ /*!*/)',
+          '--tw-font-variant-numeric-slashed-zero': 'var(--tw-tailwind-empty,/*!*/ /*!*/)',
+          '--tw-font-variant-numeric-figure': 'var(--tw-tailwind-empty,/*!*/ /*!*/)',
+          '--tw-font-variant-numeric-spacing': 'var(--tw-tailwind-empty,/*!*/ /*!*/)',
+          '--tw-font-variant-numeric-fraction': 'var(--tw-tailwind-empty,/*!*/ /*!*/)',
           'font-variant-numeric':
-            'var(--font-variant-numeric-ordinal) var(--font-variant-numeric-slashed-zero) var(--font-variant-numeric-figure) var(--font-variant-numeric-spacing) var(--font-variant-numeric-fraction)',
+            'var(--tw-font-variant-numeric-ordinal) var(--tw-font-variant-numeric-slashed-zero) var(--tw-font-variant-numeric-figure) var(--tw-font-variant-numeric-spacing) var(--tw-font-variant-numeric-fraction)',
         },
         '.normal-nums': {
           'font-variant-numeric': 'normal',
         },
         '.ordinal': {
-          '--font-variant-numeric-ordinal': 'ordinal',
+          '--tw-font-variant-numeric-ordinal': 'ordinal',
         },
         '.slashed-zero': {
-          '--font-variant-numeric-slashed-zero': 'slashed-zero',
+          '--tw-font-variant-numeric-slashed-zero': 'slashed-zero',
         },
         '.lining-nums': {
-          '--font-variant-numeric-figure': 'lining-nums',
+          '--tw-font-variant-numeric-figure': 'lining-nums',
         },
         '.oldstyle-nums': {
-          '--font-variant-numeric-figure': 'oldstyle-nums',
+          '--tw-font-variant-numeric-figure': 'oldstyle-nums',
         },
         '.proportional-nums': {
-          '--font-variant-numeric-spacing': 'proportional-nums',
+          '--tw-font-variant-numeric-spacing': 'proportional-nums',
         },
         '.tabular-nums': {
-          '--font-variant-numeric-spacing': 'tabular-nums',
+          '--tw-font-variant-numeric-spacing': 'tabular-nums',
         },
         '.diagonal-fractions': {
-          '--font-variant-numeric-fraction': 'diagonal-fractions',
+          '--tw-font-variant-numeric-fraction': 'diagonal-fractions',
         },
         '.stacked-fractions': {
-          '--font-variant-numeric-fraction': 'stacked-fractions',
+          '--tw-font-variant-numeric-fraction': 'stacked-fractions',
         },
       },
       variants('fontVariantNumeric')

@@ -8,7 +8,7 @@ export default function () {
         return [
           nameClass('ring-offset', modifier),
           {
-            '--ring-offset-width': value,
+            '--tw-ring-offset-width': value,
           },
         ]
       })

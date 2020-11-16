@@ -10,8 +10,8 @@ export default function () {
     const getProperties = (value) => {
       return withAlphaVariable({
         color: value,
-        property: '--ring-color',
-        variable: '--ring-opacity',
+        property: '--tw-ring-color',
+        variable: '--tw-ring-opacity',
       })
     }
 

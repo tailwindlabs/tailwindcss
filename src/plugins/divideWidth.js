@@ -8,14 +8,14 @@ export default function () {
         const size = _size === '0' ? '0px' : _size
         return {
           [`${nameClass('divide-y', modifier)} > :not([hidden]) ~ :not([hidden])`]: {
-            '--divide-y-reverse': '0',
-            'border-top-width': `calc(${size} * calc(1 - var(--divide-y-reverse)))`,
-            'border-bottom-width': `calc(${size} * var(--divide-y-reverse))`,
+            '--tw-divide-y-reverse': '0',
+            'border-top-width': `calc(${size} * calc(1 - var(--tw-divide-y-reverse)))`,
+            'border-bottom-width': `calc(${size} * var(--tw-divide-y-reverse))`,
           },
           [`${nameClass('divide-x', modifier)} > :not([hidden]) ~ :not([hidden])`]: {
-            '--divide-x-reverse': '0',
-            'border-right-width': `calc(${size} * var(--divide-x-reverse))`,
-            'border-left-width': `calc(${size} * calc(1 - var(--divide-x-reverse)))`,
+            '--tw-divide-x-reverse': '0',
+            'border-right-width': `calc(${size} * var(--tw-divide-x-reverse))`,
+            'border-left-width': `calc(${size} * calc(1 - var(--tw-divide-x-reverse)))`,
           },
         }
       },
@@ -28,10 +28,10 @@ export default function () {
         }),
         {
           '.divide-y-reverse > :not([hidden]) ~ :not([hidden])': {
-            '--divide-y-reverse': '1',
+            '--tw-divide-y-reverse': '1',
           },
           '.divide-x-reverse > :not([hidden]) ~ :not([hidden])': {
-            '--divide-x-reverse': '1',
+            '--tw-divide-x-reverse': '1',
           },
         },
       ]

@@ -8,7 +8,7 @@ export default function () {
         return [
           `${nameClass('placeholder-opacity', modifier)}::placeholder`,
           {
-            '--placeholder-opacity': value,
+            '--tw-placeholder-opacity': value,
           },
         ]
       })
