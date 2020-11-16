@@ -14,119 +14,182 @@ export const classes = { plugin }
 
 Use `place-content-center` to pack items in the center of the block axis:
 
-```html
+```html lightBlue
 <template preview>
-  <div class="grid grid-cols-3 bg-gray-200 place-content-center h-48">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  <div class="grid grid-cols-3 gap-2 place-content-center h-48">
+    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">1</div>
+    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">2</div>
+    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">3</div>
+    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">4</div>
+    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">5</div>
+    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">6</div>
   </div>
 </template>
+
+<div class="**place-content-center** h-48 ...">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+</div>
 ```
 
 ## Start
 
 Use `place-content-start` to pack items against the start of the block axis:
 
-```html
+```html purple
 <template preview>
-  <div class="grid grid-cols-3 bg-gray-200 place-content-start h-48">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  <div class="grid grid-cols-3 gap-2 place-content-start h-48">
+    <div class="flex-1 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">1</div>
+    <div class="flex-1 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">2</div>
+    <div class="flex-1 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">3</div>
+    <div class="flex-1 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">4</div>
+    <div class="flex-1 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">5</div>
+    <div class="flex-1 rounded-md bg-purple-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">6</div>
   </div>
 </template>
+
+<div class="**place-content-start** h-48 ...">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+</div>
 ```
 
 ## End
 
 Use `place-content-end` to to pack items against the end of the block axis:
 
-```html
+```html rose
 <template preview>
-  <div class="grid grid-cols-3 bg-gray-200 place-content-end h-48">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  <div class="grid grid-cols-3 gap-2 place-content-end h-48">
+    <div class="flex-1 rounded-md bg-rose-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">1</div>
+    <div class="flex-1 rounded-md bg-rose-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">2</div>
+    <div class="flex-1 rounded-md bg-rose-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">3</div>
+    <div class="flex-1 rounded-md bg-rose-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">4</div>
+    <div class="flex-1 rounded-md bg-rose-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">5</div>
+    <div class="flex-1 rounded-md bg-rose-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">6</div>
   </div>
 </template>
+
+<div class="**place-content-end** h-48 ...">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+</div>
 ```
 
 ## Space between
 
 Use `place-content-between` to distribute grid items along the block axis so that that there is an equal amount of space between each row on the block axis.
 
-```html
+```html amber
 <template preview>
-  <div class="grid grid-cols-3 bg-gray-200 place-content-between h-48">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  <div class="grid grid-cols-3 gap-2 place-content-between h-48">
+    <div class="flex-1 rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">1</div>
+    <div class="flex-1 rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">2</div>
+    <div class="flex-1 rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">3</div>
+    <div class="flex-1 rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">4</div>
+    <div class="flex-1 rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">5</div>
+    <div class="flex-1 rounded-md bg-amber-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">6</div>
   </div>
 </template>
+
+<div class="**place-content-between** h-48 ...">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+</div>
 ```
 
 ## Space around
 
 Use `place-content-around` distribute grid items such that there is an equal amount of space around each row on the block axis:
 
-```html
+```html fuchsia
 <template preview>
-  <div class="grid grid-cols-3 bg-gray-200 place-content-around h-48">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  <div class="grid grid-cols-3 gap-2 place-content-around h-48">
+    <div class="flex-1 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">1</div>
+    <div class="flex-1 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">2</div>
+    <div class="flex-1 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">3</div>
+    <div class="flex-1 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">4</div>
+    <div class="flex-1 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">5</div>
+    <div class="flex-1 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">6</div>
   </div>
 </template>
+
+<div class="**place-content-around** h-48 ...">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+</div>
 ```
 
 ## Space evenly
 
 Use `place-content-evenly` to distribute grid items such that they are evenly spaced on the block axis:
 
-```html
+```html emerald
 <template preview>
-  <div class="grid grid-cols-3 bg-gray-200 place-content-evenly h-48">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  <div class="grid grid-cols-3 gap-2 place-content-evenly h-48">
+    <div class="flex-1 rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">1</div>
+    <div class="flex-1 rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">2</div>
+    <div class="flex-1 rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">3</div>
+    <div class="flex-1 rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">4</div>
+    <div class="flex-1 rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">5</div>
+    <div class="flex-1 rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">6</div>
   </div>
 </template>
+
+<div class="**place-content-evenly** h-48 ...">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+</div>
 ```
 
 ## Stretch
 
 Use `place-content-stretch` to stretch grid items along their grid areas on the block axis:
 
-```html
+```html indigo
 <template preview>
-  <div class="grid grid-cols-3 bg-gray-200 place-content-stretch h-48">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">5</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">6</div>
+  <div class="grid grid-cols-3 gap-2 place-content-stretch h-48">
+    <div class="flex-1 rounded-md bg-indigo-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">1</div>
+    <div class="flex-1 rounded-md bg-indigo-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">2</div>
+    <div class="flex-1 rounded-md bg-indigo-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">3</div>
+    <div class="flex-1 rounded-md bg-indigo-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">4</div>
+    <div class="flex-1 rounded-md bg-indigo-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">5</div>
+    <div class="flex-1 rounded-md bg-indigo-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">6</div>
   </div>
 </template>
+
+<div class="**place-content-stretch** h-48 ...">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+</div>
 ```
 
 ## Responsive
