@@ -18,7 +18,7 @@ export function VersionSwitcher({ className }) {
         <span className="sr-only">Tailwind CSS Version</span>
         <select
           ref={selectRef}
-          className="appearance-none block bg-transparent pr-7 py-1 text-gray-500 font-medium text-sm focus:outline-none focus:text-gray-800"
+          className="appearance-none block bg-transparent pr-7 py-1 text-gray-500 font-medium text-sm focus:outline-none focus:text-gray-900 transition-colors duration-200"
           onChange={submit}
         >
           <option value="v2">v{tailwindVersion}</option>

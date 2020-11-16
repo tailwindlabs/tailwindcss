@@ -73,7 +73,10 @@ export default function Home() {
         <div className="px-4 sm:px-6 md:px-8 mb-20 xl:mb-8">
           <div className="border-b border-gray-200 py-6 flex items-center justify-between mb-20 -mx-4 px-4 sm:mx-0 sm:px-0">
             <Search />
-            <a href="https://github.com/tailwindlabs/tailwindcss" className="text-gray-400">
+            <a
+              href="https://github.com/tailwindlabs/tailwindcss"
+              className="text-gray-400 hover:text-gray-900 transition-colors duration-200"
+            >
               <span className="sr-only">Tailwind CSS on GitHub</span>
               <svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
                 <path
