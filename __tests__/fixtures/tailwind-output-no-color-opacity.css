@@ -22134,12 +22134,12 @@ video {
 }
 
 .ordinal, .slashed-zero, .lining-nums, .oldstyle-nums, .proportional-nums, .tabular-nums, .diagonal-fractions, .stacked-fractions {
-  --tw-font-variant-numeric-ordinal: var(--tw-empty,/*!*/ /*!*/);
-  --tw-font-variant-numeric-slashed-zero: var(--tw-empty,/*!*/ /*!*/);
-  --tw-font-variant-numeric-figure: var(--tw-empty,/*!*/ /*!*/);
-  --tw-font-variant-numeric-spacing: var(--tw-empty,/*!*/ /*!*/);
-  --tw-font-variant-numeric-fraction: var(--tw-empty,/*!*/ /*!*/);
-  font-variant-numeric: var(--tw-font-variant-numeric-ordinal) var(--tw-font-variant-numeric-slashed-zero) var(--tw-font-variant-numeric-figure) var(--tw-font-variant-numeric-spacing) var(--tw-font-variant-numeric-fraction);
+  --tw-fvn-ordinal: var(--tw-empty,/*!*/ /*!*/);
+  --tw-fvn-slashed-zero: var(--tw-empty,/*!*/ /*!*/);
+  --tw-fvn-figure: var(--tw-empty,/*!*/ /*!*/);
+  --tw-fvn-spacing: var(--tw-empty,/*!*/ /*!*/);
+  --tw-fvn-fraction: var(--tw-empty,/*!*/ /*!*/);
+  font-variant-numeric: var(--tw-fvn-ordinal) var(--tw-fvn-slashed-zero) var(--tw-fvn-figure) var(--tw-fvn-spacing) var(--tw-fvn-fraction);
 }
 
 .normal-nums {
@@ -22147,35 +22147,35 @@ video {
 }
 
 .ordinal {
-  --tw-font-variant-numeric-ordinal: ordinal;
+  --tw-fvn-ordinal: ordinal;
 }
 
 .slashed-zero {
-  --tw-font-variant-numeric-slashed-zero: slashed-zero;
+  --tw-fvn-slashed-zero: slashed-zero;
 }
 
 .lining-nums {
-  --tw-font-variant-numeric-figure: lining-nums;
+  --tw-fvn-figure: lining-nums;
 }
 
 .oldstyle-nums {
-  --tw-font-variant-numeric-figure: oldstyle-nums;
+  --tw-fvn-figure: oldstyle-nums;
 }
 
 .proportional-nums {
-  --tw-font-variant-numeric-spacing: proportional-nums;
+  --tw-fvn-spacing: proportional-nums;
 }
 
 .tabular-nums {
-  --tw-font-variant-numeric-spacing: tabular-nums;
+  --tw-fvn-spacing: tabular-nums;
 }
 
 .diagonal-fractions {
-  --tw-font-variant-numeric-fraction: diagonal-fractions;
+  --tw-fvn-fraction: diagonal-fractions;
 }
 
 .stacked-fractions {
-  --tw-font-variant-numeric-fraction: stacked-fractions;
+  --tw-fvn-fraction: stacked-fractions;
 }
 
 .tracking-tighter {
@@ -48130,12 +48130,12 @@ video {
   }
 
   .sm\:ordinal, .sm\:slashed-zero, .sm\:lining-nums, .sm\:oldstyle-nums, .sm\:proportional-nums, .sm\:tabular-nums, .sm\:diagonal-fractions, .sm\:stacked-fractions {
-    --tw-font-variant-numeric-ordinal: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-slashed-zero: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-figure: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-spacing: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-fraction: var(--tw-empty,/*!*/ /*!*/);
-    font-variant-numeric: var(--tw-font-variant-numeric-ordinal) var(--tw-font-variant-numeric-slashed-zero) var(--tw-font-variant-numeric-figure) var(--tw-font-variant-numeric-spacing) var(--tw-font-variant-numeric-fraction);
+    --tw-fvn-ordinal: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-slashed-zero: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-figure: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-spacing: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-fraction: var(--tw-empty,/*!*/ /*!*/);
+    font-variant-numeric: var(--tw-fvn-ordinal) var(--tw-fvn-slashed-zero) var(--tw-fvn-figure) var(--tw-fvn-spacing) var(--tw-fvn-fraction);
   }
 
   .sm\:normal-nums {
@@ -48143,35 +48143,35 @@ video {
   }
 
   .sm\:ordinal {
-    --tw-font-variant-numeric-ordinal: ordinal;
+    --tw-fvn-ordinal: ordinal;
   }
 
   .sm\:slashed-zero {
-    --tw-font-variant-numeric-slashed-zero: slashed-zero;
+    --tw-fvn-slashed-zero: slashed-zero;
   }
 
   .sm\:lining-nums {
-    --tw-font-variant-numeric-figure: lining-nums;
+    --tw-fvn-figure: lining-nums;
   }
 
   .sm\:oldstyle-nums {
-    --tw-font-variant-numeric-figure: oldstyle-nums;
+    --tw-fvn-figure: oldstyle-nums;
   }
 
   .sm\:proportional-nums {
-    --tw-font-variant-numeric-spacing: proportional-nums;
+    --tw-fvn-spacing: proportional-nums;
   }
 
   .sm\:tabular-nums {
-    --tw-font-variant-numeric-spacing: tabular-nums;
+    --tw-fvn-spacing: tabular-nums;
   }
 
   .sm\:diagonal-fractions {
-    --tw-font-variant-numeric-fraction: diagonal-fractions;
+    --tw-fvn-fraction: diagonal-fractions;
   }
 
   .sm\:stacked-fractions {
-    --tw-font-variant-numeric-fraction: stacked-fractions;
+    --tw-fvn-fraction: stacked-fractions;
   }
 
   .sm\:tracking-tighter {
@@ -74096,12 +74096,12 @@ video {
   }
 
   .md\:ordinal, .md\:slashed-zero, .md\:lining-nums, .md\:oldstyle-nums, .md\:proportional-nums, .md\:tabular-nums, .md\:diagonal-fractions, .md\:stacked-fractions {
-    --tw-font-variant-numeric-ordinal: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-slashed-zero: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-figure: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-spacing: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-fraction: var(--tw-empty,/*!*/ /*!*/);
-    font-variant-numeric: var(--tw-font-variant-numeric-ordinal) var(--tw-font-variant-numeric-slashed-zero) var(--tw-font-variant-numeric-figure) var(--tw-font-variant-numeric-spacing) var(--tw-font-variant-numeric-fraction);
+    --tw-fvn-ordinal: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-slashed-zero: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-figure: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-spacing: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-fraction: var(--tw-empty,/*!*/ /*!*/);
+    font-variant-numeric: var(--tw-fvn-ordinal) var(--tw-fvn-slashed-zero) var(--tw-fvn-figure) var(--tw-fvn-spacing) var(--tw-fvn-fraction);
   }
 
   .md\:normal-nums {
@@ -74109,35 +74109,35 @@ video {
   }
 
   .md\:ordinal {
-    --tw-font-variant-numeric-ordinal: ordinal;
+    --tw-fvn-ordinal: ordinal;
   }
 
   .md\:slashed-zero {
-    --tw-font-variant-numeric-slashed-zero: slashed-zero;
+    --tw-fvn-slashed-zero: slashed-zero;
   }
 
   .md\:lining-nums {
-    --tw-font-variant-numeric-figure: lining-nums;
+    --tw-fvn-figure: lining-nums;
   }
 
   .md\:oldstyle-nums {
-    --tw-font-variant-numeric-figure: oldstyle-nums;
+    --tw-fvn-figure: oldstyle-nums;
   }
 
   .md\:proportional-nums {
-    --tw-font-variant-numeric-spacing: proportional-nums;
+    --tw-fvn-spacing: proportional-nums;
   }
 
   .md\:tabular-nums {
-    --tw-font-variant-numeric-spacing: tabular-nums;
+    --tw-fvn-spacing: tabular-nums;
   }
 
   .md\:diagonal-fractions {
-    --tw-font-variant-numeric-fraction: diagonal-fractions;
+    --tw-fvn-fraction: diagonal-fractions;
   }
 
   .md\:stacked-fractions {
-    --tw-font-variant-numeric-fraction: stacked-fractions;
+    --tw-fvn-fraction: stacked-fractions;
   }
 
   .md\:tracking-tighter {
@@ -100062,12 +100062,12 @@ video {
   }
 
   .lg\:ordinal, .lg\:slashed-zero, .lg\:lining-nums, .lg\:oldstyle-nums, .lg\:proportional-nums, .lg\:tabular-nums, .lg\:diagonal-fractions, .lg\:stacked-fractions {
-    --tw-font-variant-numeric-ordinal: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-slashed-zero: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-figure: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-spacing: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-fraction: var(--tw-empty,/*!*/ /*!*/);
-    font-variant-numeric: var(--tw-font-variant-numeric-ordinal) var(--tw-font-variant-numeric-slashed-zero) var(--tw-font-variant-numeric-figure) var(--tw-font-variant-numeric-spacing) var(--tw-font-variant-numeric-fraction);
+    --tw-fvn-ordinal: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-slashed-zero: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-figure: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-spacing: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-fraction: var(--tw-empty,/*!*/ /*!*/);
+    font-variant-numeric: var(--tw-fvn-ordinal) var(--tw-fvn-slashed-zero) var(--tw-fvn-figure) var(--tw-fvn-spacing) var(--tw-fvn-fraction);
   }
 
   .lg\:normal-nums {
@@ -100075,35 +100075,35 @@ video {
   }
 
   .lg\:ordinal {
-    --tw-font-variant-numeric-ordinal: ordinal;
+    --tw-fvn-ordinal: ordinal;
   }
 
   .lg\:slashed-zero {
-    --tw-font-variant-numeric-slashed-zero: slashed-zero;
+    --tw-fvn-slashed-zero: slashed-zero;
   }
 
   .lg\:lining-nums {
-    --tw-font-variant-numeric-figure: lining-nums;
+    --tw-fvn-figure: lining-nums;
   }
 
   .lg\:oldstyle-nums {
-    --tw-font-variant-numeric-figure: oldstyle-nums;
+    --tw-fvn-figure: oldstyle-nums;
   }
 
   .lg\:proportional-nums {
-    --tw-font-variant-numeric-spacing: proportional-nums;
+    --tw-fvn-spacing: proportional-nums;
   }
 
   .lg\:tabular-nums {
-    --tw-font-variant-numeric-spacing: tabular-nums;
+    --tw-fvn-spacing: tabular-nums;
   }
 
   .lg\:diagonal-fractions {
-    --tw-font-variant-numeric-fraction: diagonal-fractions;
+    --tw-fvn-fraction: diagonal-fractions;
   }
 
   .lg\:stacked-fractions {
-    --tw-font-variant-numeric-fraction: stacked-fractions;
+    --tw-fvn-fraction: stacked-fractions;
   }
 
   .lg\:tracking-tighter {
@@ -126028,12 +126028,12 @@ video {
   }
 
   .xl\:ordinal, .xl\:slashed-zero, .xl\:lining-nums, .xl\:oldstyle-nums, .xl\:proportional-nums, .xl\:tabular-nums, .xl\:diagonal-fractions, .xl\:stacked-fractions {
-    --tw-font-variant-numeric-ordinal: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-slashed-zero: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-figure: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-spacing: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-fraction: var(--tw-empty,/*!*/ /*!*/);
-    font-variant-numeric: var(--tw-font-variant-numeric-ordinal) var(--tw-font-variant-numeric-slashed-zero) var(--tw-font-variant-numeric-figure) var(--tw-font-variant-numeric-spacing) var(--tw-font-variant-numeric-fraction);
+    --tw-fvn-ordinal: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-slashed-zero: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-figure: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-spacing: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-fraction: var(--tw-empty,/*!*/ /*!*/);
+    font-variant-numeric: var(--tw-fvn-ordinal) var(--tw-fvn-slashed-zero) var(--tw-fvn-figure) var(--tw-fvn-spacing) var(--tw-fvn-fraction);
   }
 
   .xl\:normal-nums {
@@ -126041,35 +126041,35 @@ video {
   }
 
   .xl\:ordinal {
-    --tw-font-variant-numeric-ordinal: ordinal;
+    --tw-fvn-ordinal: ordinal;
   }
 
   .xl\:slashed-zero {
-    --tw-font-variant-numeric-slashed-zero: slashed-zero;
+    --tw-fvn-slashed-zero: slashed-zero;
   }
 
   .xl\:lining-nums {
-    --tw-font-variant-numeric-figure: lining-nums;
+    --tw-fvn-figure: lining-nums;
   }
 
   .xl\:oldstyle-nums {
-    --tw-font-variant-numeric-figure: oldstyle-nums;
+    --tw-fvn-figure: oldstyle-nums;
   }
 
   .xl\:proportional-nums {
-    --tw-font-variant-numeric-spacing: proportional-nums;
+    --tw-fvn-spacing: proportional-nums;
   }
 
   .xl\:tabular-nums {
-    --tw-font-variant-numeric-spacing: tabular-nums;
+    --tw-fvn-spacing: tabular-nums;
   }
 
   .xl\:diagonal-fractions {
-    --tw-font-variant-numeric-fraction: diagonal-fractions;
+    --tw-fvn-fraction: diagonal-fractions;
   }
 
   .xl\:stacked-fractions {
-    --tw-font-variant-numeric-fraction: stacked-fractions;
+    --tw-fvn-fraction: stacked-fractions;
   }
 
   .xl\:tracking-tighter {
@@ -151994,12 +151994,12 @@ video {
   }
 
   .\32xl\:ordinal, .\32xl\:slashed-zero, .\32xl\:lining-nums, .\32xl\:oldstyle-nums, .\32xl\:proportional-nums, .\32xl\:tabular-nums, .\32xl\:diagonal-fractions, .\32xl\:stacked-fractions {
-    --tw-font-variant-numeric-ordinal: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-slashed-zero: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-figure: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-spacing: var(--tw-empty,/*!*/ /*!*/);
-    --tw-font-variant-numeric-fraction: var(--tw-empty,/*!*/ /*!*/);
-    font-variant-numeric: var(--tw-font-variant-numeric-ordinal) var(--tw-font-variant-numeric-slashed-zero) var(--tw-font-variant-numeric-figure) var(--tw-font-variant-numeric-spacing) var(--tw-font-variant-numeric-fraction);
+    --tw-fvn-ordinal: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-slashed-zero: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-figure: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-spacing: var(--tw-empty,/*!*/ /*!*/);
+    --tw-fvn-fraction: var(--tw-empty,/*!*/ /*!*/);
+    font-variant-numeric: var(--tw-fvn-ordinal) var(--tw-fvn-slashed-zero) var(--tw-fvn-figure) var(--tw-fvn-spacing) var(--tw-fvn-fraction);
   }
 
   .\32xl\:normal-nums {
@@ -152007,35 +152007,35 @@ video {
   }
 
   .\32xl\:ordinal {
-    --tw-font-variant-numeric-ordinal: ordinal;
+    --tw-fvn-ordinal: ordinal;
   }
 
   .\32xl\:slashed-zero {
-    --tw-font-variant-numeric-slashed-zero: slashed-zero;
+    --tw-fvn-slashed-zero: slashed-zero;
   }
 
   .\32xl\:lining-nums {
-    --tw-font-variant-numeric-figure: lining-nums;
+    --tw-fvn-figure: lining-nums;
   }
 
   .\32xl\:oldstyle-nums {
-    --tw-font-variant-numeric-figure: oldstyle-nums;
+    --tw-fvn-figure: oldstyle-nums;
   }
 
   .\32xl\:proportional-nums {
-    --tw-font-variant-numeric-spacing: proportional-nums;
+    --tw-fvn-spacing: proportional-nums;
   }
 
   .\32xl\:tabular-nums {
-    --tw-font-variant-numeric-spacing: tabular-nums;
+    --tw-fvn-spacing: tabular-nums;
   }
 
   .\32xl\:diagonal-fractions {
-    --tw-font-variant-numeric-fraction: diagonal-fractions;
+    --tw-fvn-fraction: diagonal-fractions;
   }
 
   .\32xl\:stacked-fractions {
-    --tw-font-variant-numeric-fraction: stacked-fractions;
+    --tw-fvn-fraction: stacked-fractions;
   }
 
   .\32xl\:tracking-tighter {
