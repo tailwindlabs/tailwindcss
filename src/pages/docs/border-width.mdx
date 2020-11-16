@@ -19,69 +19,60 @@ export const classes = { plugin }
 
 Use the `border`, `.border-0`, `.border-2`, `.border-4`, or `.border-8` utilities to set the border width for all sides of an element.
 
-```html
+```html indigo
 <template preview>
-  <div class="flex">
-    <div class="w-1/2 sm:flex-1">
-      <p class="text-center text-sm text-gray-600 mb-1">.border-0</p>
-      <div class="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-gray-400 border-0 border-gray-600"></div>
-    </div>
-    <div class="w-1/2 sm:flex-1">
-      <p class="text-center text-sm text-gray-600 mb-1">.border</p>
-      <div class="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-gray-400 border border-gray-600"></div>
-    </div>
-    <div class="w-1/2 sm:flex-1">
-      <p class="text-center text-sm text-gray-600 mb-1">.border-2</p>
-      <div class="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-gray-400 border-2 border-gray-600"></div>
-    </div>
-    <div class="w-1/2 sm:flex-1">
-      <p class="text-center text-sm text-gray-600 mb-1">.border-4</p>
-      <div class="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-gray-400 border-4 border-gray-600"></div>
-    </div>
-    <div class="w-1/2 sm:flex-1">
-      <p class="text-center text-sm text-gray-600 mb-1">.border-8</p>
-      <div class="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-gray-400 border-8 border-gray-600"></div>
-    </div>
+  <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+      <div class="p-4 bg-indigo-300 text-white text-center font-extrabold flex items-center justify-center border-0 border-indigo-600">
+        .border-0
+      </div>
+      <div class="p-4 bg-indigo-300 text-white text-center font-extrabold flex items-center justify-center border border-indigo-600">
+        .border
+      </div>
+      <div class="p-4 bg-indigo-300 text-white text-center font-extrabold flex items-center justify-center border-2 border-indigo-600">
+        .border-2
+      </div>
+      <div class="p-4 bg-indigo-300 text-white text-center font-extrabold flex items-center justify-center border-4 border-indigo-600">
+        .border-4
+      </div>
+      <div class="p-4 bg-indigo-300 text-white text-center font-extrabold flex items-center justify-center border-8 border-indigo-600">
+        .border-8
+      </div>
   </div>
 </template>
 
-<div class="border-0 border-gray-600 ..."></div>
-<div class="border border-gray-600 ..."></div>
-<div class="border-2 border-gray-600 ..."></div>
-<div class="border-4 border-gray-600 ..."></div>
-<div class="border-8 border-gray-600 ..."></div>
+<div class="**border-0** border-indigo-600 ..."></div>
+<div class="**border** border-indigo-600 ..."></div>
+<div class="**border-2** border-indigo-600 ..."></div>
+<div class="**border-4** border-indigo-600 ..."></div>
+<div class="**border-8** border-indigo-600 ..."></div>
 ```
 
 ## Individual sides
 
 Use the `border-{side}`, `.border-{side}-0`, `.border-{side}-2`, `.border-{side}-4`, or `.border-{side}-8` utilities to set the border width for one side of an element.
 
-```html
+```html fuchsia
 <template preview>
-  <div class="flex">
-    <div class="w-1/2 sm:flex-1">
-      <p class="text-center text-sm text-gray-600 mb-1">.border-t-2</p>
-      <div class="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-gray-400 border-t-2 border-gray-600"></div>
-    </div>
-    <div class="w-1/2 sm:flex-1">
-      <p class="text-center text-sm text-gray-600 mb-1">.border-r-2</p>
-      <div class="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-gray-400 border-r-2 border-gray-600"></div>
-    </div>
-    <div class="w-1/2 sm:flex-1">
-      <p class="text-center text-sm text-gray-600 mb-1">.border-b-2</p>
-      <div class="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-gray-400 border-b-2 border-gray-600"></div>
-    </div>
-    <div class="w-1/2 sm:flex-1">
-      <p class="text-center text-sm text-gray-600 mb-1">.border-l-2</p>
-      <div class="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-gray-400 border-l-2 border-gray-600"></div>
-    </div>
+  <div class="grid grid-cols-2 gap-2 lg:grid-cols-4">
+      <div class="p-4 bg-fuchsia-300 text-white text-center font-extrabold flex items-center justify-center border-t-2 border-fuchsia-600">
+        .border-t-2
+      </div>
+      <div class="p-4 bg-fuchsia-300 text-white text-center font-extrabold flex items-center justify-center border-r-2 border-fuchsia-600">
+        .border-r-2
+      </div>
+      <div class="p-4 bg-fuchsia-300 text-white text-center font-extrabold flex items-center justify-center border-b-2 border-fuchsia-600">
+        .border-b-2
+      </div>
+      <div class="p-4 bg-fuchsia-300 text-white text-center font-extrabold flex items-center justify-center border-l-2 border-fuchsia-600">
+        .border-l-2
+      </div>
   </div>
 </template>
 
-<div class="border-t-2 border-gray-600 ..."></div>
-<div class="border-r-2 border-gray-600 ..."></div>
-<div class="border-b-2 border-gray-600 ..."></div>
-<div class="border-l-2 border-gray-600 ..."></div>
+<div class="**border-t-2** border-fuchsia-600 ..."></div>
+<div class="**border-r-2** border-fuchsia-600 ..."></div>
+<div class="**border-b-2** border-fuchsia-600 ..."></div>
+<div class="**border-l-2** border-fuchsia-600 ..."></div>
 ```
 
 ## Between elements
@@ -90,14 +81,21 @@ You can also add borders between child elements using the `divide-{x/y}-{width}`
 
 Learn more in the [Divide Width](/docs/divide-width) and [Divide Color](/docs/divide-color) documentation.
 
-```html
+```html lightBlue
 <template preview>
-  <div class="divide-y divide-gray-400">
-    <div class="text-center py-2">1</div>
-    <div class="text-center py-2">2</div>
-    <div class="text-center py-2">3</div>
+  <div class="divide-y divide-light-blue-400">
+    <div class="p-4 text-light-blue-800 text-center font-extrabold">1</div>
+    <div class="p-4 text-light-blue-800 text-center font-extrabold">2</div>
+    <div class="p-4 text-light-blue-800 text-center font-extrabold">3</div>
   </div>
 </template>
+
+<div class="**divide-y** divide-light-blue-400 ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div></div>
+</div>
 ```
 
 ## Responsive
