@@ -18,50 +18,41 @@ export const classes = { plugin }
 
 Use `flex-initial` to allow a flex item to shrink but not grow, taking into account its initial size:
 
-```html
+```html indigo
 <template preview>
-  <p class="text-sm text-gray-600 mb-1">Items don't grow when there's extra space</p>
-  <div class="flex bg-gray-200 mb-6">
-    <div class="flex-initial text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+  <p class="text-sm text-indigo-600">Items don't grow when there's extra space</p>
+  <div class="mt-2 flex space-x-4">
+    <div class="flex-initial rounded-md bg-indigo-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Short
     </div>
-    <div class="flex-initial text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+    <div class="flex-initial rounded-md bg-indigo-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Medium length
     </div>
   </div>
 
-  <p class="text-sm text-gray-600 mb-1">Items shrink if possible when needed</p>
-  <div class="flex bg-gray-200">
-    <div class="flex-initial text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+  <p class="mt-8 text-sm text-indigo-600">Items shrink if possible when needed</p>
+  <div class="mt-2 flex space-x-4">
+    <div class="flex-initial rounded-md bg-indigo-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Short
     </div>
-    <div class="flex-initial text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+    <div class="flex-initial rounded-md bg-indigo-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Medium length
     </div>
-    <div class="flex-initial text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+    <div class="flex-initial rounded-md bg-indigo-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui ad labore ipsam, aut rem quo repellat esse tempore id, quidem
     </div>
   </div>
 </template>
 
-<div class="flex bg-gray-200">
-  <div class="flex-initial text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
-    Short
+<div class="flex">
+  <div class="**flex-initial** ...">
+    <!-- Won't grow, but will shrink if needed -->
   </div>
-  <div class="flex-initial text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
-    Medium length
+  <div class="**flex-initial** ...">
+    <!-- Won't grow, but will shrink if needed -->
   </div>
-</div>
-
-<div class="flex bg-gray-200">
-  <div class="flex-initial text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
-    Short
-  </div>
-  <div class="flex-initial text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
-    Medium length
-  </div>
-  <div class="flex-initial text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui ad labore ipsam, aut rem quo repellat esse tempore id, quidem
+  <div class="**flex-initial** ...">
+    <!-- Won't grow, but will shrink if needed -->
   </div>
 </div>
 ```
@@ -70,43 +61,44 @@ Use `flex-initial` to allow a flex item to shrink but not grow, taking into acco
 
 Use `flex-1` to allow a flex item to grow and shrink as needed, ignoring its initial size:
 
-```html
+```html fuchsia
 <template preview>
-  <p class="text-sm text-gray-600 mb-1">Default behavior</p>
-  <div class="flex bg-gray-200 mb-6">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+  <p class="text-sm text-fuchsia-600">Default behavior</p>
+  <div class="mt-2 flex space-x-4">
+    <div class="rounded-md bg-fuchsia-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Short
     </div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+    <div class="rounded-md bg-fuchsia-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Medium length
     </div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
-      Significantly larger amount of content
+    <div class="rounded-md bg-fuchsia-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
+        Significantly larger amount of content
     </div>
   </div>
-  <p class="text-sm text-gray-600 mb-1">With <code>.flex-1</code></p>
-  <div class="flex bg-gray-200">
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+
+  <p class="mt-8 text-sm text-fuchsia-600">With <code>.flex-1</code></p>
+  <div class="mt-2 flex space-x-4">
+    <div class="flex-1 rounded-md bg-fuchsia-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Short
     </div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+    <div class="flex-1 rounded-md bg-fuchsia-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Medium length
     </div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+    <div class="flex-1 rounded-md bg-fuchsia-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Significantly larger amount of content
     </div>
   </div>
 </template>
 
-<div class="flex bg-gray-200">
-  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
-    Short
+<div class="flex">
+  <div class="**flex-1** ...">
+    <!-- Will grow and shrink as needed without taking initial size into account -->
   </div>
-  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
-    Medium length
+  <div class="**flex-1** ...">
+    <!-- Will grow and shrink as needed without taking initial size into account -->
   </div>
-  <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
-    Significantly larger amount of content
+  <div class="**flex-1** ...">
+    <!-- Will grow and shrink as needed without taking initial size into account -->
   </div>
 </div>
 ```
@@ -115,43 +107,44 @@ Use `flex-1` to allow a flex item to grow and shrink as needed, ignoring its ini
 
 Use `flex-auto` to allow a flex item to grow and shrink, taking into account its initial size:
 
-```html
+```html lightBlue
 <template preview>
-  <p class="text-sm text-gray-600 mb-1">Default behavior</p>
-  <div class="flex bg-gray-200 mb-6">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+  <p class="text-sm text-light-blue-600">Default behavior</p>
+  <div class="mt-2 flex space-x-4">
+    <div class="rounded-md bg-light-blue-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Short
     </div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+    <div class="rounded-md bg-light-blue-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Medium length
     </div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+    <div class="rounded-md bg-light-blue-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Significantly larger amount of content
     </div>
   </div>
-  <p class="text-sm text-gray-600 mb-1">With <code>.flex-auto</code></p>
-  <div class="flex bg-gray-200">
-    <div class="flex-auto text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+
+  <p class="mt-8 text-sm text-light-blue-600">With <code>.flex-auto</code></p>
+  <div class="mt-2 flex space-x-4">
+    <div class="flex-auto rounded-md bg-light-blue-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Short
     </div>
-    <div class="flex-auto text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+    <div class="flex-auto rounded-md bg-light-blue-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Medium length
     </div>
-    <div class="flex-auto text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+    <div class="flex-auto rounded-md bg-light-blue-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Significantly larger amount of content
     </div>
   </div>
 </template>
 
-<div class="flex bg-gray-200">
-  <div class="flex-auto text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
-    Short
+<div class="flex ...">
+  <div class="**flex-auto** ...">
+    <!-- Will grow and shrink as needed taking initial size into account -->
   </div>
-  <div class="flex-auto text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
-    Medium length
+  <div class="**flex-auto** ...">
+    <!-- Will grow and shrink as needed taking initial size into account -->
   </div>
-  <div class="flex-auto text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
-    Significantly larger amount of content
+  <div class="**flex-auto** ...">
+    <!-- Will grow and shrink as needed taking initial size into account -->
   </div>
 </div>
 ```
@@ -160,20 +153,32 @@ Use `flex-auto` to allow a flex item to grow and shrink, taking into account its
 
 Use `flex-none` to prevent a flex item from growing or shrinking:
 
-```html
+```html emerald
 <template preview>
-  <div class="flex bg-gray-200">
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+  <div class="flex space-x-4">
+    <div class="flex-1 rounded-md bg-emerald-300 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Item that can grow or shrink if needed
     </div>
-    <div class="flex-none text-gray-800 text-center bg-gray-500 px-4 py-2 m-2">
+    <div class="flex-none rounded-md bg-emerald-500 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Item that cannot grow or shrink
     </div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+    <div class="flex-1 rounded-md bg-emerald-300 text-white font-extrabold flex items-center justify-center py-3 px-6">
       Item that can grow or shrink if needed
     </div>
   </div>
 </template>
+
+<div class="flex ...">
+  <div class="flex-1 ...">
+    <!-- Will grow and shrink as needed -->
+  </div>
+  <div class="**flex-none** ...">
+    <!-- Will grow and shrink as needed taking initial size into account -->
+  </div>
+  <div class="flex-1 ...">
+    <!-- Will grow and shrink as needed -->
+  </div>
+</div>
 ```
 
 ## Responsive
