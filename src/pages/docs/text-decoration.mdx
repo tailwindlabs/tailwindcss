@@ -64,42 +64,40 @@ To control the text decoration of an element at a specific breakpoint, add a `{s
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-## Hover
+## Hover	
 
-To control the text decoration of an element on hover, add the `hover:` prefix to any existing text decoration utility. For example, use `hover:underline` to apply the `underline` utility on hover.
+To control the text decoration of an element on hover, add the `hover:` prefix to any existing text decoration utility. For example, use `hover:underline` to apply the `underline` utility on hover.	
 
-```html indigo
-<template preview class="text-center p-4">
-  <a href="#hover" class="no-underline hover:underline text-indigo-600 text-xl lg:text-2xl">Link</a>
-</template>
+```html indigo	
+<template preview class="text-center p-4">	
+  <a href="#hover" class="no-underline hover:underline text-indigo-600 text-xl lg:text-2xl">Link</a>	
+</template>	
+<a href="#" class="no-underline **hover:underline** ...">Link</a>	
+```	
 
-<a href="#" class="no-underline **hover:underline** ...">Link</a>
-```
+Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.	
 
-Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.
+```html	
+<a href="#" class="... md:no-underline **md:hover:underline** ...">Link</a>	
+```	
 
-```html
-<a href="#" class="... md:no-underline **md:hover:underline** ...">Link</a>
-```
+## Focus	
 
-## Focus
+To control the text decoration of an element on focus, add the `focus:` prefix to any existing text decoration utility. For example, use `focus:underline` to apply the `underline` utility on focus.	
 
-To control the text decoration of an element on focus, add the `focus:` prefix to any existing text decoration utility. For example, use `focus:underline` to apply the `underline` utility on focus.
+```html emerald	
+<template preview>	
+  <div class="max-w-xs w-full mx-auto">	
+    <input class="bg-white focus:underline focus:shadow-outline text-emerald-900 appearance-none inline-block w-full border border-emerald-300 rounded py-3 px-4 focus:outline-none" value="Focus me" placeholder="Focus me">	
+  </div>	
+</template>	
+<input class="**focus:underline** ..." value="Focus me">	
+```	
 
-```html emerald
-<template preview>
-  <div class="max-w-xs w-full mx-auto">
-    <input class="bg-white focus:underline focus:shadow-outline text-emerald-900 appearance-none inline-block w-full border border-emerald-300 rounded py-3 px-4 focus:outline-none" value="Focus me" placeholder="Focus me">
-  </div>
-</template>
+Focus utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.	
 
-<input class="**focus:underline** ..." value="Focus me">
-```
-
-Focus utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
-
-```html
-<input class="**md:focus:underline** ..." value="Focus me">
+```html	
+<input class="**md:focus:underline** ..." value="Focus me">	
 ```
 
 ## Customizing
