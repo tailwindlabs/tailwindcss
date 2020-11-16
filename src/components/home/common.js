@@ -1,3 +1,5 @@
+import NextLink from 'next/link'
+
 export function IconContainer({ as: Component = 'div', color, className = '', ...props }) {
   return (
     <Component
@@ -34,8 +36,12 @@ export function Paragraph({ as: Component = 'p', className = '', ...props }) {
   )
 }
 
-export function Link({ className = '', ...props }) {
-  return <a className={`inline-flex text-lg sm:text-2xl font-medium ${className}`} {...props} />
+export function Link({ className = '', href, ...props }) {
+  return (
+    <NextLink href={href}>
+      <a className={`inline-flex text-lg sm:text-2xl font-medium ${className}`} {...props} />
+    </NextLink>
+  )
 }
 
 export function Widont({ children }) {
