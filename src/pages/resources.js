@@ -20,7 +20,7 @@ function Logo({ title, component: Component }) {
 
 export default function Resources() {
   return (
-    <div className="px-4 sm:px-6 md:px-8 pt-10">
+    <div className="px-4 sm:px-6 md:px-8 pt-10 pb-16">
       <h1 className="text-3xl text-gray-900 font-extrabold mb-4">Resources</h1>
       <div className="max-w-3xl">
         <div className="text-lg mb-5 space-y-5">
