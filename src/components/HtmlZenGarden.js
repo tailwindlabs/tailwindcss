@@ -300,6 +300,7 @@ export function HtmlZenGarden({ theme }) {
 
   const updateWidth = useCallback(
     debounce(() => {
+      if (!containerRef.current) return
       const newWidth = Math.round(containerRef.current.getBoundingClientRect().width)
       const newCol =
         window.innerWidth < 640

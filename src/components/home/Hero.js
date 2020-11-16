@@ -198,7 +198,9 @@ export function Hero() {
   useEffect(() => {
     const observer = new ResizeObserver(
       debounce(() => {
-        setContainerRect(containerRef.current.getBoundingClientRect())
+        if (containerRef.current) {
+          setContainerRect(containerRef.current.getBoundingClientRect())
+        }
       })
     )
     observer.observe(containerRef.current)
