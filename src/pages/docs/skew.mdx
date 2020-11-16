@@ -6,7 +6,6 @@ description: "Utilities for skewing elements with transform."
 import plugin from 'tailwindcss/lib/plugins/skew'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -34,18 +33,11 @@ Note that because Tailwind implements transforms using [CSS custom properties](h
 
 To control the skew of an element at a specific breakpoint, add a `{screen}:` prefix to any existing skew utility. For example, use `md:skew-6` to apply the `skew-6` utility at only medium screen sizes and above.
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+```html
+<div class="transform **md-skew-6** ..."></div>
+```
 
-<ResponsiveCodeSample
-  classNames={['skew-y-0', 'skew-y-12', '-skew-y-12', 'skew-x-6', '-skew-x-6']}
-  snippet={(classNames) => `
-    <img class="transform ${classNames}...">
-  `}
-  previewClassName="flex justify-center items-center px-4 py-12"
-  preview={(className) => (
-    <img className={`h-16 w-16 rounded transform ${className}`} src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" />
-  )}
-/>
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 ## Customizing
 

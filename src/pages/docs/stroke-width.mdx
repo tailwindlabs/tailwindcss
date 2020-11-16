@@ -6,7 +6,6 @@ description: "Utilities for styling the stroke width of SVG elements."
 import plugin from 'tailwindcss/lib/plugins/strokeWidth'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -46,28 +45,13 @@ Useful for styling icon sets like [Feather](https://feathericons.com/) that are 
 
 To control the stroke width of an SVG element at a specific breakpoint, add a `{screen}:` prefix to any existing width utility. For example, adding the class `md:stroke-2` to an element would apply the `stroke-2` utility at medium screen sizes and above.
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+```html
+<svg class="stroke-1 **md:stroke-2** ...">
+  <!-- ... -->
+</svg>
+```
 
-<ResponsiveCodeSample
-  classNames={['stroke-1', 'stroke-2', 'stroke-1', 'stroke-0', 'stroke-1']}
-  snippet={(classNames) => `
-    <svg class="${classNames} ...">
-      <!-- ... -->
-    </svg>
-  `}
-  previewClassName="text-center p-4"
-  preview={(className) => (
-    <svg className={`stroke-current text-green-500 inline-block h-24 w-24 ${className}`} viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <line x1="14.31" y1="8" x2="20.05" y2="17.94" />
-      <line x1="9.69" y1="8" x2="21.17" y2="8" />
-      <line x1="7.38" y1="12" x2="13.12" y2="2.06" />
-      <line x1="9.69" y1="16" x2="3.95" y2="6.06" />
-      <line x1="14.31" y1="16" x2="2.83" y2="16" />
-      <line x1="16.62" y1="12" x2="10.88" y2="21.94" />
-    </svg>
-  )}
-/>
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 ## Customizing
 

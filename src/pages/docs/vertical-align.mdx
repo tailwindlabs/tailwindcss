@@ -12,7 +12,6 @@ features:
 import plugin from 'tailwindcss/lib/plugins/verticalAlign'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -128,26 +127,14 @@ Use `align-text-bottom` to align the bottom of an element with the bottom of the
 
 To control the vertical alignment only at a specific breakpoint, add a `{screen}:` prefix to any existing vertical align utility. For example, adding the class `md:align-top` to an element would apply the `align-top` utility at medium screen sizes and above.
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+```html
+<div class="relative">
+  <span class="align-middle **md:align-top** ...">...</span>
+  <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span>
+</div>
+```
 
-<ResponsiveCodeSample
-  classNames={['align-top', 'align-middle', 'align-bottom', 'align-text-top', 'align-text-bottom']}
-  snippet={(classNames) => `
-    <div class="leading-none relative">
-      <span class="${classNames} ...">...</span>
-      <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span>
-    </div>
-  `}
-  preview={(className) => (
-    <div className="leading-none relative">
-      <span className={`w-1 h-8 inline-block bg-blue-300 ${className}`}>
-        <span className="absolute top-0 border-blue-300 border-t border-b w-full h-8" />
-        <span className="absolute top-0 border-blue-300 border-t border-b w-full h-4" />
-      </span>
-      <span className="relative z-10">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span>
-    </div>
-  )}
-/>
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 ## Customizing
 

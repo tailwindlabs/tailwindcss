@@ -11,7 +11,6 @@ features:
 import plugin from 'tailwindcss/lib/plugins/textColor'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 import { Heading } from '@/components/Heading'
 
 export const classes = {
@@ -70,22 +69,13 @@ Learn more in the [text opacity documentation](/docs/text-opacity).
 
 To control the text color of an element at a specific breakpoint, add a `{screen}:` prefix to any existing text color utility. For example, use `md:text-green-600` to apply the `text-green-600` utility at only medium screen sizes and above.
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+```html
+<p class="text-blue-600 **md:text-green-600** ...">
+  The quick brown fox...
+</p>
+```
 
-<ResponsiveCodeSample
-  classNames={['text-blue-600', 'text-green-600', 'text-indigo-600', 'text-red-600', 'text-gray-900']}
-  snippet={(classNames) => `
-    <div class="${classNames} ...">
-      The quick brown fox...
-    </div>
-  `}
-  previewClassName="text-center p-4"
-  preview={(className) => (
-    <div className={`text-xl truncate ${className}`}>
-      The quick brown fox jumped over the lazy dog.
-    </div>
-  )}
-/>
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 ## Hover
 

@@ -6,7 +6,6 @@ description: "Utilities for controlling text overflow in an element."
 import plugin from 'tailwindcss/lib/plugins/textOverflow'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -54,23 +53,15 @@ Use `overflow-clip` to truncate the text at the limit of the content area.
 
 ## Responsive
 
-To control the text overflow in an element only at a specific breakpoint, add a `{screen}:` prefix to any existing text overflow utility. For example, adding the class `md:truncate` to an element would apply the `truncate` utility at medium screen sizes and above.
+To control the text overflow in an element only at a specific breakpoint, add a `{screen}:` prefix to any existing text overflow utility. For example, adding the class `md:overflow-clip` to an element would apply the `overflow-clip` utility at medium screen sizes and above.
+
+```html
+<p class="truncate **md:overflow-clip** ...">
+  <!-- ... -->
+</p>
+```
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
-
-<ResponsiveCodeSample
-  classNames={['truncate', 'overflow-ellipsis', 'overflow-clip']}
-  snippet={(classNames) => `
-    <p class="${classNames} ...">
-      ...
-    </p>
-  `}
-  preview={(className) => (
-    <p className={`max-w-xs p-2 bg-gray-200 mx-auto ${className}`}>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
-    </p>
-  )}
-/>
 
 ## Customizing
 

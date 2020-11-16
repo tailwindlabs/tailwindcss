@@ -12,7 +12,6 @@ features:
 import plugin from 'tailwindcss/lib/plugins/textAlign'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -50,17 +49,11 @@ Control the text alignment of an element using the `text-left`, `.text-center`, 
 
 To control the text alignment of an element at a specific breakpoint, add a `{screen}:` prefix to any existing text alignment utility. For example, use `md:text-center` to apply the `text-center` utility at only medium screen sizes and above.
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+```html
+<p class="text-left **md:text-center** ...">Lorem ipsum dolor sit amet ...</p>
+```
 
-<ResponsiveCodeSample
-  classNames={['text-left', 'text-center', 'text-right', 'text-justify', 'text-center']}
-  snippet={(classNames) => `
-    <p class="${classNames} ...">Lorem ipsum dolor sit amet ...</p>
-  `}
-  preview={(className) => (
-    <p className={`text-gray-800 ${className}`}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, quia temporibus eveniet a libero incidunt suscipit laborum, rerum accusantium modi quidem, ipsam illum quis sed voluptatum quae eum fugit earum.</p>
-  )}
-/>
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 ## Customizing
 

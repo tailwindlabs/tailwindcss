@@ -6,7 +6,6 @@ description: "Utilities for controlling an element's white-space property."
 import plugin from 'tailwindcss/lib/plugins/whitespace'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -84,20 +83,13 @@ Use `whitespace-pre-wrap` to preserve newlines and spaces within an element. Tex
 
 To control the whitespace property of an element only at a specific breakpoint, add a `{screen}:` prefix to any existing whitespace utility. For example, adding the class `md:whitespace-pre` to an element would apply the `whitespace-pre` utility at medium screen sizes and above.
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+```html
+<div class="whitespace-normal **md:whitespace-pre** ...">
+<!-- ... -->
+</div>
+```
 
-<ResponsiveCodeSample
-  classNames={['whitespace-normal', 'whitespace-nowrap', 'whitespace-pre', 'whitespace-pre-line', 'whitespace-pre-wrap']}
-  snippet={(classNames) => `
-    <div class="${classNames} ...">...</div>
-  `}
-  preview={(className) => (
-    <div className={`overflow-x-auto ${className}`}>{`Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis quidem itaque beatae, rem tenetur quia iure,
-    eum natus enim maxime
-    laudantium quibusdam illo nihil,\n
-reprehenderit saepe quam aliquid odio accusamus.`}</div>
-  )}
-/>
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 ## Customizing
 

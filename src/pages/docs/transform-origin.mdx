@@ -6,7 +6,6 @@ description: "Utilities for specifying the origin for an element's transformatio
 import plugin from 'tailwindcss/lib/plugins/transformOrigin'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -40,20 +39,12 @@ Specify an element's transform origin using the `origin-{keyword}` utilities.
 
 To control the transform-origin of an element at a specific breakpoint, add a `{screen}:` prefix to any existing transform-origin utility. For example, use `md:origin-top` to apply the `origin-top` utility at only medium screen sizes and above.
 
+```html
+<img class="origin-center **md:origin-top** ...">
+```
+
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
-<ResponsiveCodeSample
-  classNames={['origin-center', 'origin-top-left', 'origin-top-right', 'origin-bottom-right', 'origin-bottom-left']}
-  snippet={(classNames) => `
-    <img class="${classNames} ...">
-  `}
-  previewClassName="flex justify-center items-center px-4 py-12"
-  preview={(className) => (
-    <div className="bg-gray-600">
-      <img className={`h-16 w-16 transform rotate-45 ${className}`} src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" />
-    </div>
-  )}
-/>
 
 ## Customizing
 

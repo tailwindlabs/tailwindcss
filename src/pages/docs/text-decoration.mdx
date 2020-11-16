@@ -11,7 +11,6 @@ features:
 import plugin from 'tailwindcss/lib/plugins/textDecoration'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -57,19 +56,13 @@ Use the `no-underline` utility to remove underline or line-through styling.
 
 To control the text decoration of an element at a specific breakpoint, add a `{screen}:` prefix to any existing text decoration utility. For example, use `md:underline` to apply the `underline` utility at only medium screen sizes and above.
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+```html
+<p class="no-underline **md:underline** ...">
+  The quick brown fox jumped over the lazy dog.
+</p>
+```
 
-<ResponsiveCodeSample
-  classNames={['underline', 'no-underline', 'line-through', 'underline', 'no-underline']}
-  snippet={(classNames) => `
-    <p class="${classNames} ...">
-      The quick brown fox jumped over the lazy dog.
-    </p>
-  `}
-  preview={(className) => (
-    <p className={`text-lg text-gray-800 ${className}`}>The quick brown fox jumped over the lazy dog.</p>
-  )}
-/>
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 ## Hover
 

@@ -6,7 +6,6 @@ description: "Utilities for controlling the placement of positioned elements."
 import plugin from 'tailwindcss/lib/plugins/inset'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
-import { ResponsiveCodeSample } from '@/components/ResponsiveCodeSample'
 
 export const classes = { plugin }
 
@@ -129,21 +128,13 @@ Combined with Tailwind's padding and margin utilities, you'll probably find that
 
 To position an element only at a specific breakpoint, add a `{screen}:` prefix to any existing positioning utility. For example, adding the class `md:inset-y-0` to an element would apply the `inset-y-0` utility at medium screen sizes and above.
 
-For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+```html
+<div class="relative h-32 ...">
+  <div class="absolute inset-0 **md:inset-y-0** ..."></div>
+</div>
+```
 
-<ResponsiveCodeSample
-  classNames={['absolute inset-0', 'bottom-0 left-0', 'top-0 inset-x-0', 'right-0 inset-y-0', 'bottom-0 inset-x-0']}
-  snippet={(classNames) => `
-    <div class="relative h-32 bg-gray-400 p-4">
-      <div class="${classNames}"></div>
-    </div>
-  `}
-  preview={(className) => (
-    <div className="relative h-32 bg-gray-400 p-4">
-      <div className={`absolute bg-gray-800 p-4 text-gray-500 ${className}`}>Responsive element</div>
-    </div>
-  )}
-/>
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
 ## Customizing
 
