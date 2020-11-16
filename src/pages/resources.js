@@ -123,8 +123,15 @@ export default function Resources() {
           <h2 className="text-xl text-gray-900 font-bold mb-4">
             Patterns<span className="sr-only">: Heropatterns</span>
           </h2>
-          <div className="h-48 rounded-3xl bg-gradient-to-br from-cyan-600 to-teal-500 mb-6 flex items-center justify-center p-6">
-            <Logo component={Heropatterns} />
+          <div className="relative h-48 rounded-3xl bg-gradient-to-br from-cyan-600 to-teal-500 mb-6">
+            <div
+              className="absolute inset-0 flex items-center justify-center p-6 bg-cover"
+              style={{
+                backgroundImage: `url(${require('@/img/resources/heropatterns-bg.svg').default})`,
+              }}
+            >
+              <Logo component={Heropatterns} />
+            </div>
           </div>
           <p>
             A set of free MIT-licensed high-quality SVG patterns for you to use in your web
