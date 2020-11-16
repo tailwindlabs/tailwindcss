@@ -15,17 +15,17 @@ Use `items-stretch` to stretch items to fill the container's cross axis:
 
 ```html lightBlue
 <template preview class="p-4">
-  <div class="flex items-stretch h-32 -m-2">
-    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">1</div>
-    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">2</div>
-    <div class="flex-1 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">3</div>
+  <div class="flex items-stretch p-4 space-x-4 bg-stripes bg-stripes-light-blue-500 rounded-lg">
+    <div class="flex-1 py-4 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center">1</div>
+    <div class="flex-1 py-12 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center">2</div>
+    <div class="flex-1 py-8 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold flex items-center justify-center">3</div>
   </div>
 </template>
 
 <div class="flex **items-stretch** ...">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
+  <div class="py-4">1</div>
+  <div class="py-12">2</div>
+  <div class="py-8">3</div>
 </div>
 ```
 
@@ -35,17 +35,17 @@ Use `items-start` to align items to the start of the container's cross axis:
 
 ```html fuchsia
 <template preview class="p-4">
-  <div class="flex items-start h-32 -m-2">
-    <div class="flex-1 h-12 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">1</div>
-    <div class="flex-1 h-12 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">2</div>
-    <div class="flex-1 h-12 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center m-2">3</div>
+  <div class="flex items-start p-4 space-x-4 bg-stripes bg-stripes-fuchsia-500 rounded-lg">
+    <div class="flex-1 py-2 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center">1</div>
+    <div class="flex-1 py-8 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center">2</div>
+    <div class="flex-1 py-5 rounded-md bg-fuchsia-500 text-white text-2xl font-extrabold flex items-center justify-center">3</div>
   </div>
 </template>
 
 <div class="flex **items-start** ...">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
+  <div class="h-12">1</div>
+  <div class="h-24">2</div>
+  <div class="h-16">3</div>
 </div>
 ```
 
