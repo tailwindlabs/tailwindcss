@@ -7,10 +7,11 @@ import { ReactComponent as HeadlessUi } from '@/img/resources/headless-ui.svg'
 import { ReactComponent as Heroicons } from '@/img/resources/heroicons.svg'
 import { ReactComponent as Heropatterns } from '@/img/resources/heropatterns.svg'
 
-function Logo({ component: Component }) {
+function Logo({ title, component: Component }) {
   return (
     <div className="w-60 max-w-full">
       <div className="relative" style={{ paddingTop: `${(60 / 240) * 100}%` }}>
+        <span className="sr-only">{title}</span>
         <Component className="absolute inset-0 w-full h-full" />
       </div>
     </div>
@@ -42,14 +43,15 @@ export default function Resources() {
       <div className="grid md:grid-cols-2 gap-6 xl:gap-8 my-8 sm:my-12">
         <section>
           <h2 className="text-xl text-gray-900 font-bold mb-4">Learn UI Design</h2>
-          <div
+          <a
+            href="https://refactoringui.com/book"
             className="h-64 bg-gray-900 bg-cover rounded-3xl mb-6 flex items-center justify-center"
             style={{
               backgroundImage: `url(${require('@/img/resources/refactoring-ui-bg.png').default})`,
             }}
           >
-            <Logo component={RefactoringUi} />
-          </div>
+            <Logo title="Refactoring UI" component={RefactoringUi} />
+          </a>
           <div className="space-y-5">
             <p>
               Refactoring UI is a design-for-developers book + video series put together by Adam
@@ -64,10 +66,13 @@ export default function Resources() {
         </section>
         <section>
           <h2 className="text-xl text-gray-900 font-bold mb-4">Official Tailwind CSS Components</h2>
-          <div className="h-64 bg-gray-400 bg-cover rounded-3xl mb-6 overflow-hidden flex">
+          <a
+            href="https://tailwindui.com/"
+            className="h-64 bg-gray-300 rounded-3xl mb-6 overflow-hidden flex"
+          >
             <div className="relative flex-none flex items-center justify-center px-6 xl:px-10">
               <div className="bg-gray-900 absolute inset-0 -left-64 transform -skew-x-20" />
-              <Logo component={TailwindUi} />
+              <Logo title="Tailwind UI" component={TailwindUi} />
             </div>
             <div
               className="flex-auto bg-cover -ml-12"
@@ -75,7 +80,7 @@ export default function Resources() {
                 backgroundImage: `url(${require('@/img/resources/tailwind-ui.jpg').default})`,
               }}
             />
-          </div>
+          </a>
           <div className="space-y-5">
             <p>
               Tailwind UI is a collection of professionally designed, pre-built, fully responsive
@@ -93,9 +98,12 @@ export default function Resources() {
           <h2 className="text-xl text-gray-900 font-bold mb-4">
             JavaScript<span className="sr-only">: Headless UI</span>
           </h2>
-          <div className="h-48 rounded-3xl bg-gray-900 mb-6 flex items-center justify-center p-6">
-            <Logo component={HeadlessUi} />
-          </div>
+          <a
+            href="https://headlessui.dev/"
+            className="h-48 rounded-3xl bg-gray-900 mb-6 flex items-center justify-center p-6"
+          >
+            <Logo title="Headless UI" component={HeadlessUi} />
+          </a>
           <p>
             Completely unstyled, fully accessible UI components, designed to integrate beautifully
             with Tailwind CSS.
@@ -105,16 +113,19 @@ export default function Resources() {
           <h2 className="text-xl text-gray-900 font-bold mb-4">
             Icons<span className="sr-only">: Heroicons</span>
           </h2>
-          <div className="relative h-48 rounded-3xl bg-gradient-to-br from-violet-600 to-purple-500 mb-6">
+          <a
+            href="https://heroicons.com/"
+            className="relative flex h-48 rounded-3xl bg-gradient-to-br from-violet-600 to-purple-500 mb-6"
+          >
             <div
               className="absolute inset-0 flex items-center justify-center p-6 bg-contain"
               style={{
                 backgroundImage: `url(${require('@/img/resources/heroicons-bg.svg').default})`,
               }}
             >
-              <Logo component={Heroicons} />
+              <Logo title="Heroicons" component={Heroicons} />
             </div>
-          </div>
+          </a>
           <p>
             A set of free MIT-licensed high-quality SVG icons for you to use in your web projects.
           </p>
@@ -123,16 +134,19 @@ export default function Resources() {
           <h2 className="text-xl text-gray-900 font-bold mb-4">
             Patterns<span className="sr-only">: Heropatterns</span>
           </h2>
-          <div className="relative h-48 rounded-3xl bg-gradient-to-br from-cyan-600 to-teal-500 mb-6">
+          <a
+            href="http://www.heropatterns.com/"
+            className="relative flex h-48 rounded-3xl bg-gradient-to-br from-cyan-600 to-teal-500 mb-6"
+          >
             <div
               className="absolute inset-0 flex items-center justify-center p-6 bg-cover"
               style={{
                 backgroundImage: `url(${require('@/img/resources/heropatterns-bg.svg').default})`,
               }}
             >
-              <Logo component={Heropatterns} />
+              <Logo title="Heropatterns" component={Heropatterns} />
             </div>
-          </div>
+          </a>
           <p>
             A set of free MIT-licensed high-quality SVG patterns for you to use in your web
             projects.
