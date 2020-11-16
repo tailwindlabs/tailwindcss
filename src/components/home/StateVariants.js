@@ -249,7 +249,10 @@ export function StateVariants() {
         right={
           <CodeWindow className="bg-light-blue-500">
             <CodeWindow.Code2 ref={codeContainerRef} lines={lines.length}>
-              <div ref={linesContainerRef} className={states.length > 0 ? 'mono' : ''}>
+              <div
+                ref={linesContainerRef}
+                className={clsx('mono', { 'mono-active': states.length > 0 })}
+              >
                 {lines.map((tokens, lineIndex) => (
                   <div
                     key={lineIndex}

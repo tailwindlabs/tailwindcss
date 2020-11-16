@@ -123,3 +123,12 @@
 body.cursor-grabbing * {
   cursor: grabbing !important;
 }
+
+.mono-active > div:not(.not-mono) > span {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.mono > div > span {
+  transition-duration: 0.5s;
+  transition-property: background-color, border-color, color, fill, stroke;
+}

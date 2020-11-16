@@ -541,7 +541,7 @@ function ApplyExample({ inView }) {
       </div>
       <div className="overflow-hidden">
         <CodeWindow.Code2 lines={html.length} initialLineNumber={31} overflow="x" className="-mt-6">
-          <div className={inView ? 'mono' : undefined}>
+          <div className={clsx('mono', { 'mono-active': inView })}>
             {html.map((tokens, lineIndex) => (
               <div
                 key={lineIndex}
