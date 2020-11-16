@@ -201,7 +201,7 @@ export function Hero() {
         if (containerRef.current) {
           setContainerRect(containerRef.current.getBoundingClientRect())
         }
-      })
+      }, 500)
     )
     observer.observe(containerRef.current)
     return () => {
