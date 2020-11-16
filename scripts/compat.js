@@ -11,6 +11,14 @@ function copy(fromPath, toPath) {
 }
 
 if (process.argv.includes('--prepare')) {
+  if (
+    fs.existsSync(fromRootPath('package.postcss8.json')) ||
+    fs.existsSync(fromRootPath('src', 'index.postcss8.js'))
+  ) {
+    console.error('\n\n[ABORT] Already in PostCSS 7 compatibility mode!\n\n')
+    process.exit(1)
+  }
+
   const mainPackageJson = require('../package.json')
   const compatPackageJson = require('../package.postcss7.json')
 
@@ -53,6 +61,14 @@ if (process.argv.includes('--prepare')) {
   )
   console.log()
 } else if (process.argv.includes('--restore')) {
+  if (
+    !fs.existsSync(fromRootPath('package.postcss8.json')) ||
+    !fs.existsSync(fromRootPath('src', 'index.postcss8.js'))
+  ) {
+    console.error('\n\n[ABORT] Already in latest PostCSS mode!\n\n')
+    process.exit(1)
+  }
+
   // 1. Restore original package.json file
   copy(fromRootPath('package.postcss8.json'), fromRootPath('package.json'))
 
