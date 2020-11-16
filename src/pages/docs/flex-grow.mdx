@@ -34,15 +34,15 @@ Use `flex-grow` to allow a flex item to grow to fill any available space:
 </template>
 
 <div class="flex ...">
-    <div class="flex-none w-16 h-16">
-        <!-- This item will not grow -->
-    </div>
-    <div class="**flex-grow** h-16">
-        <!-- This item can grow -->
-    </div>
-    <div class="flex-none w-16 h-16">
-        <!-- This item will not grow -->
-    </div>
+  <div class="flex-none w-16 h-16 ...">
+    <!-- This item will not grow -->
+  </div>
+  <div class="**flex-grow** h-16 ...">
+    <!-- This item will grow -->
+  </div>
+  <div class="flex-none w-16 h-16 ...">
+    <!-- This item will not grow -->
+  </div>
 </div>
 ```
 
@@ -66,15 +66,15 @@ Use `flex-grow-0` to prevent a flex item from growing:
 </template>
 
 <div class="flex ...">
-    <div class="flex-grow h-16 ">
-        <!-- This item will not grow -->
-    </div>
-    <div class="**flex-grow-0** h-16">
-        <!-- This item can grow -->
-    </div>
-    <div class="flex-grow h-16 ">
-        <!-- This item will not grow -->
-    </div>
+  <div class="flex-grow h-16 ...">
+    <!-- This item will grow -->
+  </div>
+  <div class="**flex-grow-0** h-16 ...">
+    <!-- This item will not grow -->
+  </div>
+  <div class="flex-grow h-16 ...">
+    <!-- This item will grow -->
+  </div>
 </div>
 ```
 
