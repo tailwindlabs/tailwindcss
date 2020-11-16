@@ -24,7 +24,6 @@
     "prepublishOnly": "npm run babelify && babel-node scripts/build.js",
     "style": "eslint .",
     "test": "jest && eslint .",
-    "precompat": "npm run babelify",
     "compat": "node scripts/compat.js --prepare",
     "compat:restore": "node scripts/compat.js --restore"
   },
