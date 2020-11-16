@@ -8,7 +8,7 @@ export default function () {
         return [
           nameClass('ring-opacity', modifier),
           {
-            '--ring-opacity': value,
+            '--tw-ring-opacity': value,
           },
         ]
       })

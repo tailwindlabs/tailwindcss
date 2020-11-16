@@ -21,16 +21,16 @@ export default function () {
         return [
           nameClass('ring', modifier),
           {
-            '--ring-inset': 'var(--tailwind-empty,/*!*/ /*!*/)',
-            '--ring-offset-width': '0px',
-            '--ring-offset-color': '#fff',
-            '--ring-color': ringColorDefault,
-            '--ring-offset-shadow': `var(--ring-inset) 0 0 0 var(--ring-offset-width) var(--ring-offset-color)`,
-            '--ring-shadow': `var(--ring-inset) 0 0 0 calc(${value} + var(--ring-offset-width)) var(--ring-color)`,
+            '--tw-ring-inset': 'var(--tw-empty,/*!*/ /*!*/)',
+            '--tw-ring-offset-width': '0px',
+            '--tw-ring-offset-color': '#fff',
+            '--tw-ring-color': ringColorDefault,
+            '--tw-ring-offset-shadow': `var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color)`,
+            '--tw-ring-shadow': `var(--tw-ring-inset) 0 0 0 calc(${value} + var(--tw-ring-offset-width)) var(--tw-ring-color)`,
             'box-shadow': [
-              `var(--ring-offset-shadow)`,
-              `var(--ring-shadow)`,
-              `var(--box-shadow, 0 0 #0000)`,
+              `var(--tw-ring-offset-shadow)`,
+              `var(--tw-ring-shadow)`,
+              `var(--tw-shadow, 0 0 #0000)`,
             ].join(', '),
           },
         ]
@@ -41,7 +41,7 @@ export default function () {
         utilities,
         {
           '.ring-inset': {
-            '--ring-inset': 'inset',
+            '--tw-ring-inset': 'inset',
           },
         },
       ],

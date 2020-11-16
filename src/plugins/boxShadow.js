@@ -8,11 +8,11 @@ export default function () {
         return [
           nameClass('shadow', modifier),
           {
-            '--box-shadow': value === 'none' ? '0 0 #0000' : value,
+            '--tw-shadow': value === 'none' ? '0 0 #0000' : value,
             'box-shadow': [
-              `var(--ring-offset-shadow, 0 0 #0000)`,
-              `var(--ring-shadow, 0 0 #0000)`,
-              `var(--box-shadow)`,
+              `var(--tw-ring-offset-shadow, 0 0 #0000)`,
+              `var(--tw-ring-shadow, 0 0 #0000)`,
+              `var(--tw-shadow)`,
             ].join(', '),
           },
         ]

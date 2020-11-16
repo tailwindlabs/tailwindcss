@@ -11,7 +11,7 @@ export default function () {
         return [
           nameClass('ring-offset', modifier),
           {
-            '--ring-offset-color': toColorValue(value),
+            '--tw-ring-offset-color': toColorValue(value),
           },
         ]
       })

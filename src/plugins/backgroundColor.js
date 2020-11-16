@@ -13,7 +13,7 @@ export default function () {
         return withAlphaVariable({
           color: value,
           property: 'background-color',
-          variable: '--bg-opacity',
+          variable: '--tw-bg-opacity',
         })
       }
 

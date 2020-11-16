@@ -27,21 +27,23 @@ export default function () {
           [
             nameClass('from', modifier),
             {
-              '--gradient-from-color': toColorValue(value, 'from'),
-              '--gradient-color-stops': `var(--gradient-from-color), var(--gradient-to-color, ${transparentTo})`,
+              '--tw-gradient-from': toColorValue(value, 'from'),
+              '--tw-gradient-stops': `var(--tw-gradient-from), var(--tw-gradient-to, ${transparentTo})`,
             },
           ],
           [
             nameClass('via', modifier),
             {
-              '--gradient-via-color': toColorValue(value, 'via'),
-              '--gradient-color-stops': `var(--gradient-from-color), var(--gradient-via-color), var(--gradient-to-color, ${transparentTo})`,
+              '--tw-gradient-stops': `var(--tw-gradient-from), ${toColorValue(
+                value,
+                'via'
+              )}, var(--tw-gradient-to, ${transparentTo})`,
             },
           ],
           [
             nameClass('to', modifier),
             {
-              '--gradient-to-color': toColorValue(value, 'to'),
+              '--tw-gradient-to': toColorValue(value, 'to'),
             },
           ],
         ]

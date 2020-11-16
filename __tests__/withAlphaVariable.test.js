@@ -2,10 +2,10 @@ import withAlphaVariable from '../src/util/withAlphaVariable'
 
 test('it adds the right custom property', () => {
   expect(
-    withAlphaVariable({ color: '#ff0000', property: 'color', variable: '--text-opacity' })
+    withAlphaVariable({ color: '#ff0000', property: 'color', variable: '--tw-text-opacity' })
   ).toEqual({
-    '--text-opacity': '1',
-    color: 'rgba(255, 0, 0, var(--text-opacity))',
+    '--tw-text-opacity': '1',
+    color: 'rgba(255, 0, 0, var(--tw-text-opacity))',
   })
 })
 
@@ -14,7 +14,7 @@ test('it ignores colors that cannot be parsed', () => {
     withAlphaVariable({
       color: 'currentColor',
       property: 'background-color',
-      variable: '--bg-opacity',
+      variable: '--tw-bg-opacity',
     })
   ).toEqual({
     'background-color': 'currentColor',
@@ -26,7 +26,7 @@ test('it ignores colors that already have an alpha channel', () => {
     withAlphaVariable({
       color: '#ff0000ff',
       property: 'background-color',
-      variable: '--bg-opacity',
+      variable: '--tw-bg-opacity',
     })
   ).toEqual({
     'background-color': '#ff0000ff',
@@ -35,7 +35,7 @@ test('it ignores colors that already have an alpha channel', () => {
     withAlphaVariable({
       color: '#ff000080',
       property: 'background-color',
-      variable: '--bg-opacity',
+      variable: '--tw-bg-opacity',
     })
   ).toEqual({
     'background-color': '#ff000080',
@@ -44,7 +44,7 @@ test('it ignores colors that already have an alpha channel', () => {
     withAlphaVariable({
       color: '#f00a',
       property: 'background-color',
-      variable: '--bg-opacity',
+      variable: '--tw-bg-opacity',
     })
   ).toEqual({
     'background-color': '#f00a',
@@ -53,7 +53,7 @@ test('it ignores colors that already have an alpha channel', () => {
     withAlphaVariable({
       color: '#f00f',
       property: 'background-color',
-      variable: '--bg-opacity',
+      variable: '--tw-bg-opacity',
     })
   ).toEqual({
     'background-color': '#f00f',
@@ -62,7 +62,7 @@ test('it ignores colors that already have an alpha channel', () => {
     withAlphaVariable({
       color: 'rgba(255, 255, 255, 1)',
       property: 'background-color',
-      variable: '--bg-opacity',
+      variable: '--tw-bg-opacity',
     })
   ).toEqual({
     'background-color': 'rgba(255, 255, 255, 1)',
@@ -71,7 +71,7 @@ test('it ignores colors that already have an alpha channel', () => {
     withAlphaVariable({
       color: 'rgba(255, 255, 255, 0.5)',
       property: 'background-color',
-      variable: '--bg-opacity',
+      variable: '--tw-bg-opacity',
     })
   ).toEqual({
     'background-color': 'rgba(255, 255, 255, 0.5)',
@@ -80,7 +80,7 @@ test('it ignores colors that already have an alpha channel', () => {
     withAlphaVariable({
       color: 'hsla(240, 100%, 50%, 1)',
       property: 'background-color',
-      variable: '--bg-opacity',
+      variable: '--tw-bg-opacity',
     })
   ).toEqual({
     'background-color': 'hsla(240, 100%, 50%, 1)',
@@ -89,7 +89,7 @@ test('it ignores colors that already have an alpha channel', () => {
     withAlphaVariable({
       color: 'hsla(240, 100%, 50%, 0.5)',
       property: 'background-color',
-      variable: '--bg-opacity',
+      variable: '--tw-bg-opacity',
     })
   ).toEqual({
     'background-color': 'hsla(240, 100%, 50%, 0.5)',
@@ -101,10 +101,10 @@ test('it allows a closure to be passed', () => {
     withAlphaVariable({
       color: ({ opacityVariable }) => `rgba(0, 0, 0, var(${opacityVariable}))`,
       property: 'background-color',
-      variable: '--bg-opacity',
+      variable: '--tw-bg-opacity',
     })
   ).toEqual({
-    '--bg-opacity': '1',
-    'background-color': 'rgba(0, 0, 0, var(--bg-opacity))',
+    '--tw-bg-opacity': '1',
+    'background-color': 'rgba(0, 0, 0, var(--tw-bg-opacity))',
   })
 })

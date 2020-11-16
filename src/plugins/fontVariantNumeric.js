@@ -3,40 +3,40 @@ export default function () {
     addUtilities(
       {
         '.ordinal, .slashed-zero, .lining-nums, .oldstyle-nums, .proportional-nums, .tabular-nums, .diagonal-fractions, .stacked-fractions': {
-          '--font-variant-numeric-ordinal': 'var(--tailwind-empty,/*!*/ /*!*/)',
-          '--font-variant-numeric-slashed-zero': 'var(--tailwind-empty,/*!*/ /*!*/)',
-          '--font-variant-numeric-figure': 'var(--tailwind-empty,/*!*/ /*!*/)',
-          '--font-variant-numeric-spacing': 'var(--tailwind-empty,/*!*/ /*!*/)',
-          '--font-variant-numeric-fraction': 'var(--tailwind-empty,/*!*/ /*!*/)',
+          '--tw-ordinal': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-slashed-zero': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-numeric-figure': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-numeric-spacing': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-numeric-fraction': 'var(--tw-empty,/*!*/ /*!*/)',
           'font-variant-numeric':
-            'var(--font-variant-numeric-ordinal) var(--font-variant-numeric-slashed-zero) var(--font-variant-numeric-figure) var(--font-variant-numeric-spacing) var(--font-variant-numeric-fraction)',
+            'var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)',
         },
         '.normal-nums': {
           'font-variant-numeric': 'normal',
         },
         '.ordinal': {
-          '--font-variant-numeric-ordinal': 'ordinal',
+          '--tw-ordinal': 'ordinal',
         },
         '.slashed-zero': {
-          '--font-variant-numeric-slashed-zero': 'slashed-zero',
+          '--tw-slashed-zero': 'slashed-zero',
         },
         '.lining-nums': {
-          '--font-variant-numeric-figure': 'lining-nums',
+          '--tw-numeric-figure': 'lining-nums',
         },
         '.oldstyle-nums': {
-          '--font-variant-numeric-figure': 'oldstyle-nums',
+          '--tw-numeric-figure': 'oldstyle-nums',
         },
         '.proportional-nums': {
-          '--font-variant-numeric-spacing': 'proportional-nums',
+          '--tw-numeric-spacing': 'proportional-nums',
         },
         '.tabular-nums': {
-          '--font-variant-numeric-spacing': 'tabular-nums',
+          '--tw-numeric-spacing': 'tabular-nums',
         },
         '.diagonal-fractions': {
-          '--font-variant-numeric-fraction': 'diagonal-fractions',
+          '--tw-numeric-fraction': 'diagonal-fractions',
         },
         '.stacked-fractions': {
-          '--font-variant-numeric-fraction': 'stacked-fractions',
+          '--tw-numeric-fraction': 'stacked-fractions',
         },
       },
       variants('fontVariantNumeric')

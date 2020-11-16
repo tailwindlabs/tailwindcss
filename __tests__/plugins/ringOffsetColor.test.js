@@ -19,7 +19,7 @@ test('defining color as a function', () => {
     [
       {
         '.ring-offset-black': {
-          '--ring-offset-color': 'black',
+          '--tw-ring-offset-color': 'black',
         },
       },
       [],
