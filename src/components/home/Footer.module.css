@@ -1,0 +1,17 @@
+@screen sm {
+  .nav {
+    grid-template-rows: repeat(3, auto) 1fr;
+  }
+}
+
+@screen md {
+  .nav {
+    grid-template-rows: repeat(3, auto);
+  }
+}
+
+@screen lg {
+  .nav {
+    grid-template-rows: auto 1fr;
+  }
+}
