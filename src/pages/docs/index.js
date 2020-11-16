@@ -46,15 +46,24 @@ const whatsNew = [
 const latestUpdates = [
   {
     title: 'Tailwind CSS v1.9.0',
-    date: '2020-11-17',
+    date: '2020-10-13',
+    url: 'https://blog.tailwindcss.com/tailwindcss-1-9',
     description:
       'We just released Tailwind CSS v1.9 which adds support for configuration presets, useful new CSS grid utilities, extended border radius, rotate, and skew scales, helpful accessibility improvements, and more!',
   },
   {
     title: 'Introducing Tailwind Play',
-    date: '2020-11-17',
+    date: '2020-10-07',
+    url: 'https://blog.tailwindcss.com/introducing-tailwind-play',
     description:
       "Today we're excited to release the first version of Tailwind Play, an advanced online playground for Tailwind CSS that lets you use all of Tailwind's build-time features directly in the browser.",
+  },
+  {
+    title: 'Headless UI: Unstyled, Accessible UI Components',
+    date: '2020-10-06',
+    url: 'https://blog.tailwindcss.com/headless-ui-unstyled-accessible-ui-components',
+    description:
+      'Headless UI is a set of completely unstyled, fully accessible UI components for React, Vue, and Alpine.js that make it easy to build fully accessible custom UI components, without sacrificing the ability to style them from scratch with simple utility classes.',
   },
 ]
 
@@ -175,7 +184,7 @@ export default function DocsLandingPage() {
             <li key={item.title}>
               <article>
                 <a
-                  href="#"
+                  href={item.url}
                   className="grid md:grid-cols-8 xl:grid-cols-9 items-start relative rounded-xl p-3 sm:p-5 xl:p-6 overflow-hidden hover:bg-white"
                 >
                   <h3 className="font-semibold text-gray-900 md:col-start-3 md:col-span-6 xl:col-start-3 xl:col-span-7 mb-1 ml-9 md:ml-0">

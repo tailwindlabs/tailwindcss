@@ -27,7 +27,10 @@ export function Header({ navIsOpen, onNavToggle }) {
           <Search />
           <div className="flex items-center space-x-6">
             <VersionSwitcher className="hidden lg:block" />
-            <a href="https://github.com/tailwindlabs/tailwindcss" className="text-gray-400">
+            <a
+              href="https://github.com/tailwindlabs/tailwindcss"
+              className="text-gray-400 hover:text-gray-900 transition-colors duration-200"
+            >
               <span className="sr-only">Tailwind CSS on GitHub</span>
               <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
                 <path

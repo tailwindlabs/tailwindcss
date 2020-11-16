@@ -19,6 +19,24 @@ const gradients = [
   allGradients.pink,
 ]
 
+const codeWindowClassNames = [
+  'bg-fuchsia-500',
+  'bg-blue-400',
+  'bg-light-blue-500',
+  'bg-cyan-500',
+  'bg-orange-500',
+  'bg-rose-500',
+]
+
+const blocksClassNames = [
+  'text-purple-300',
+  'text-blue-300',
+  'text-light-blue-300',
+  'text-emerald-300',
+  'text-amber-300',
+  'text-rose-300',
+]
+
 const lines = {
   grid: tokenize.html(`<div class="grid grid-flow-col grid-rows-2 grid-cols-3 gap-4">
   <div>
@@ -162,7 +180,12 @@ export function ModernFeatures() {
           </div>
         }
         left={
-          <div className="flex pl-4 pb-6 sm:pl-0 lg:pb-0 lg:mr-6 text-4xl font-black text-purple-300">
+          <div
+            className={clsx(
+              'flex pl-4 pb-6 sm:pl-0 lg:pb-0 lg:mr-6 text-4xl font-black',
+              blocksClassNames[gradients.indexOf(selectedGradient)]
+            )}
+          >
             <motion.div
               key="blocks"
               initial={false}
@@ -282,7 +305,12 @@ export function ModernFeatures() {
           </div>
         }
         right={
-          <CodeWindow className="bg-fuchsia-500">
+          <CodeWindow
+            className={clsx(
+              'transition-colors duration-200',
+              codeWindowClassNames[gradients.indexOf(selectedGradient)]
+            )}
+          >
             <AnimatePresence initial={false} exitBeforeEnter>
               <motion.div
                 key={feature}

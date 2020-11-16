@@ -157,6 +157,7 @@ export function Hero() {
   const md = supportsMd && isMd
   const mounted = useRef(true)
   const inViewRef = useRef()
+  const imageRef = useRef()
 
   const layout = !finished
 
@@ -179,6 +180,13 @@ export function Hero() {
           window.requestIdleCallback(resolve)
         } else {
           window.setTimeout(resolve, 0)
+        }
+      }),
+      new Promise((resolve) => {
+        if (imageRef.current.complete) {
+          resolve()
+        } else {
+          imageRef.current.addEventListener('load', resolve)
         }
       }),
     ]
@@ -317,6 +325,7 @@ export function Hero() {
                   )}
                 >
                   <motion.img
+                    ref={imageRef}
                     layout={layout}
                     transition={TRANSITION}
                     src={require('@/img/sarah-dayan.jpg').default}

@@ -41,7 +41,9 @@ export function Footer() {
                 {footerNav[section].items.map((item) => (
                   <li key={item.href}>
                     <Link href={item.href}>
-                      <a>{item.title}</a>
+                      <a className="hover:text-gray-900 transition-colors duration-200">
+                        {item.title}
+                      </a>
                     </Link>
                   </li>
                 ))}
