@@ -14,36 +14,36 @@ import { Disabling } from '@/components/Disabling'
 
 export const classes = { plugin }
 
-## No Italics
-
-Use the `not-italic` utility to display text normally. This is typically used to reset italic text at different breakpoints.
-
-```html
-<template preview>
-  <p class="not-italic text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-</template>
-
-<p class="not-italic ...">The quick brown fox ...</p>
-```
-
 ## Italics
 
 Use the `italic` utility to make text italic.
 
-```html
+```html emerald
 <template preview>
-  <p class="italic text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  <p class="italic text-xl text-emerald-600 lg:text-2xl">The quick brown fox jumped over the lazy dog.</p>
 </template>
 
 <p class="italic ...">The quick brown fox ...</p>
 ```
 
+## Undo Italics
+
+Use the `not-italic` utility to display text normally. This is typically used to reset italic text at different breakpoints.
+
+```html amber
+<template preview>
+  <p class="not-italic text-xl text-amber-600 lg:text-2xl">The quick brown fox jumped over the lazy dog.</p>
+</template>
+
+<p class="not-italic ...">The quick brown fox ...</p>
+```
+
 ## Responsive
 
-To control the font style of an element at a specific breakpoint, add a `{screen}:` prefix to any existing font style utility. For example, use `md:italic` to apply the `italic` utility at only medium screen sizes and above.
+To control the font style of an element at a specific breakpoint, add a `{screen}:` prefix to any existing font style utility. For example, use `md:not-italic` to apply the `not-italic` utility at only medium screen sizes and above.
 
 ```html
-<p class="**md:italic lg:not-italic** ...">
+<p class="italic **md:not-italic** ...">
   The quick brown fox jumped over the lazy dog.
 </p>
 ```
