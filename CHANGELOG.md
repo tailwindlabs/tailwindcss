@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.0-alpha.23] - 2020-11-16
 
+### Added
+
+- Add scripts for generating a PostCSS 7 compatible build alongside PostCSS 8 version ([#2773](https://github.com/tailwindlabs/tailwindcss/pull/2773))
+
 ### Fixed
 
 - Actually rename custom properties, made a git booboo
