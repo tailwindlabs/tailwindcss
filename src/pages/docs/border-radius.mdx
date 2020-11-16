@@ -18,18 +18,20 @@ export const classes = { plugin }
 
 Use utilities like `.rounded-sm`, `.rounded`, or `.rounded-lg` to apply different border radius sizes to an element.
 
-```html
-<template preview class="flex justify-around text-sm p-4">
-  <div class="bg-gray-400 mr-3 p-4 rounded-sm">.rounded-sm</div>
-  <div class="bg-gray-400 mr-3 p-4 rounded">.rounded</div>
-  <div class="bg-gray-400 mr-3 p-4 rounded-md">.rounded-md</div>
-  <div class="bg-gray-400 p-4 rounded-lg">.rounded-lg</div>
+```html lightBlue
+<template preview>
+  <div class="flex justify-around">
+    <div class="p-6 bg-light-blue-300 text-white font-extrabold flex items-center justify-center rounded-sm">.rounded-sm</div>
+    <div class="p-6 bg-light-blue-300 text-white font-extrabold flex items-center justify-center rounded">.rounded</div>
+    <div class="p-6 bg-light-blue-300 text-white font-extrabold flex items-center justify-center rounded-md">.rounded-md</div>
+    <div class="p-6 bg-light-blue-300 text-white font-extrabold flex items-center justify-center rounded-lg">.rounded-lg</div>
+  </div>
 </template>
 
-<div class="rounded-sm"></div>
-<div class="rounded"></div>
-<div class="rounded-md"></div>
-<div class="rounded-lg"></div>
+<div class="**rounded-sm** ..."></div>
+<div class="**rounded** ..."></div>
+<div class="**rounded-md** ..."></div>
+<div class="**rounded-lg** ..."></div>
 ```
 
 ## Pills and circles
