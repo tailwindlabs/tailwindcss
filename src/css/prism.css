@@ -42,10 +42,10 @@
 }
 
 .token.inserted:not(.prefix) {
-  @apply block bg-teal-800 -mx-4 px-4;
+  @apply block bg-emerald-700 -mx-4 px-4;
   --bg-opacity: 0.5;
 }
 
 .token.inserted.prefix {
-  @apply text-emerald-300;
+  @apply text-emerald-200 text-opacity-75;
 }

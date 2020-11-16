@@ -16,10 +16,8 @@ ng new my-project
 Install Tailwind, Autoprefixer using `npm` or `yarn`:
 
 ```shell
-npm install tailwindcss autoprefixer@^9
+npm install tailwindcss postcss autoprefixer
 ```
-
-⚠️ Note that at the time of writing this guide, we need to stick to version 9 of Autoprefixer. This will go away when NextJS internally upgrades to PostCSS 8, at what point we'll update this guide! 😅
 
 We'll also need to install `postcss-loader` and `@angular-builders/custom-webpack` to provide a custom webpack config to our Angular project, which handles PostCSS for us:
 
@@ -27,7 +25,7 @@ We'll also need to install `postcss-loader` and `@angular-builders/custom-webpac
 npm i -D postcss-loader @angular-builders/custom-webpack
 ```
 
-Next, let's generate default `tailwind.config.js` **and** `postcss.config.js` files:
+Next, let's generate default `tailwind.config.js` and `postcss.config.js` files:
 
 ```shell
 npx tailwindcss init -p
@@ -66,7 +64,7 @@ Finally, we need to update the `angular.json` file to let it know about our cust
 
 Locate the `architect.build` key, and under `builder`, replace `@angular-devkit/build-angular:browser` with `@angular-builders/custom-webpack:browser`.
 
-```diff
+```diff-json
 "architect": {
   "build": {
 -    "builder": "@angular-devkit/build-angular:browser"
@@ -77,7 +75,7 @@ Locate the `architect.build` key, and under `builder`, replace `@angular-devkit/
 
 In the `options` just below, add a `customWebpackConfig` object with the `path` to the webpack config:
 
-```diff
+```diff-json
 "architect": {
   "build": {
     "builder": "@angular-builders/custom-webpack:browser",
@@ -93,7 +91,7 @@ In the `options` just below, add a `customWebpackConfig` object with the `path` 
 
 Now, let's do something very similar in `architect.serve`:
 
-```diff
+```diff-json
 "architect": {
   "serve": {
 -    "builder": "@angular-devkit/build-angular:dev-server",

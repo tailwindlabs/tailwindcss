@@ -3,8 +3,6 @@ title: "Install Tailwind CSS with Create React App"
 description: "Setting up Tailwind CSS in a Create React App project."
 ---
 
-# Using Tailwind CSS with Create React App
-
 ## Creating your project
 
 Start by creating a new Create React App project if you don't have one set up already:
@@ -18,10 +16,27 @@ npx create-react-app my-project
 Install Tailwind, Autoprefixer and CRACO using `npm` or `yarn`:
 
 ```shell
-npm install tailwindcss autoprefixer@^9 @craco/craco
+npm install tailwindcss@compat autoprefixer@9 @craco/craco
 ```
 
-⚠️ Note that at the time of writing this guide, we need to stick to version 9 of Autoprefixer. This will go away when NextJS internally upgrades to PostCSS 8, at what point we'll update this guide! 😅
+> Create React App currently only supports PostCSS 7, so you need to install the compatibility version of Tailwind CSS and Autoprefixer v9 until they update to PostCSS 8.
+
+Next, update your `scripts` in your `package.json` file to use `craco` instead of `react-scripts` for all scripts except `eject`:
+
+```diff-json
+  {
+    // ...
+    "scripts": {
+-     "start": "react-scripts start",
+-     "build": "react-scripts build",
+-     "test": "react-scripts test",
++     "start": "craco start",
++     "build": "craco build",
++     "test": "craco test",
+      "eject": "react-scripts eject"
+    },
+  }
+```
 
 Next, let's generate default `tailwind.config.js`:
 
@@ -36,7 +51,7 @@ Then, let's create a `craco.config.js` at the root of our project, with the foll
 module.exports = {
   style: {
     postcss: {
-      plugins: [require("tailwindcss"), require("autoprefixer")],
+      plugins: [require("tailwindcss/postcss7"), require("autoprefixer")],
     },
   },
 };

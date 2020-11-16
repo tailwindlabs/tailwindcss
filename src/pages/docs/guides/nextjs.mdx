@@ -15,13 +15,13 @@ npx create-next-app my-project
 
 ## Setting up Tailwind CSS
 
+Tailwind CSS v2.0 requires PostCSS 8 which is only available in Next.js >= 10.0.0.
+
 Install Tailwind and Autoprefixer using `npm` or `yarn`:
 
 ```shell
-npm install tailwindcss autoprefixer@^9
+npm install tailwindcss postcss autoprefixer
 ```
-
-⚠️ Note that at the time of writing this guide, we need to stick to version 9 of Autoprefixer. This will go away when NextJS internally upgrades to PostCSS 8, at what point we'll update this guide! 😅
 
 Next, let's generate default `tailwind.config.js` **and** `postcss.config.js` files:
 
@@ -31,7 +31,7 @@ npx tailwindcss init -p
 
 In our newly generated `tailwind.config.js` file, we'll configure the `purge` key with an array of file paths we want to be scanned. You may need to adjust this based on your specific needs.
 
-```diff
+```diff-js
 module.exports = {
   // ...,
 -  purge: [],
