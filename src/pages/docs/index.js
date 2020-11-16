@@ -90,7 +90,7 @@ export default function DocsLandingPage() {
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 xl:gap-8">
         <div className="flex">
-          <div className="w-full relative text-white overflow-hidden rounded-3xl flex">
+          <div className="w-full relative text-white overflow-hidden rounded-3xl flex shadow-lg">
             <div className={`w-full flex md:flex-col bg-gradient-to-br ${gradients.violet[0]}`}>
               <div className="sm:max-w-sm sm:flex-none md:w-auto md:flex-auto flex flex-col items-start relative z-10 p-6 xl:p-8">
                 <h2 className="text-xl font-semibold mb-2 text-shadow">Read the guides</h2>
@@ -116,7 +116,7 @@ export default function DocsLandingPage() {
           </div>
         </div>
         <div className="flex">
-          <div className="w-full relative text-white overflow-hidden rounded-3xl flex">
+          <div className="w-full relative text-white overflow-hidden rounded-3xl flex shadow-lg">
             <div className={`w-full flex md:flex-col bg-gradient-to-br ${gradients.pink[0]}`}>
               <div className="sm:max-w-sm sm:flex-none md:w-auto md:flex-auto flex flex-col items-start relative z-10 p-6 xl:p-8">
                 <h2 className="text-xl font-semibold mb-2 text-shadow">Try it in the browser</h2>
@@ -138,7 +138,7 @@ export default function DocsLandingPage() {
           </div>
         </div>
         <div className="flex">
-          <div className="w-full relative text-white overflow-hidden rounded-3xl flex">
+          <div className="w-full relative text-white overflow-hidden rounded-3xl flex shadow-lg">
             <div className={`w-full flex md:flex-col bg-gradient-to-br ${gradients.amber[0]}`}>
               <div className="sm:max-w-sm sm:flex-none md:w-auto md:flex-auto flex flex-col items-start relative z-10 p-6 xl:p-8">
                 <h2 className="text-xl font-semibold mb-2 text-shadow">Watch the screencasts</h2>
