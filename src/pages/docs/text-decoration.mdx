@@ -18,38 +18,38 @@ export const classes = { plugin }
 
 Use the `underline` utility to underline text.
 
-```html
+```html fuchsia
 <template preview>
-  <p class="underline text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  <p class="underline text-xl text-fuchsia-600 lg:text-2xl">The quick brown fox jumped over the lazy dog.</p>
 </template>
 
-<p class="underline ...">The quick brown fox ...</p>
+<p class="**underline** ...">The quick brown fox ...</p>
 ```
 
 ## Line Through
 
 Use the `line-through` utility to strike out text.
 
-```html
+```html rose
 <template preview>
-  <p class="line-through text-lg text-gray-800">The quick brown fox jumped over the lazy dog.</p>
+  <p class="line-through text-xl text-rose-600 lg:text-2xl">The quick brown fox jumped over the lazy dog.</p>
 </template>
 
-<p class="line-through ...">The quick brown fox ...</p>
+<p class="**line-through** ...">The quick brown fox ...</p>
 ```
 
 ## No Underline
 
 Use the `no-underline` utility to remove underline or line-through styling.
 
-```html
+```html purple
 <template preview>
   <div class="text-center">
-    <a href="#" class="no-underline text-blue-500 text-lg">Link with no underline</a>
+    <a href="#" class="no-underline text-purple-600 text-xl lg:text-2xl">Link with no underline</a>
   </div>
 </template>
 
-<a href="#" class="no-underline ...">Link with no underline</a>
+<a href="#" class="**no-underline** ...">Link with no underline</a>
 ```
 
 ## Responsive
@@ -68,36 +68,38 @@ For more information about Tailwind's responsive design features, check out the 
 
 To control the text decoration of an element on hover, add the `hover:` prefix to any existing text decoration utility. For example, use `hover:underline` to apply the `underline` utility on hover.
 
-```html
+```html indigo
 <template preview class="text-center p-4">
-  <a href="#hover" class="no-underline hover:underline text-blue-500 text-lg">Link</a>
+  <a href="#hover" class="no-underline hover:underline text-indigo-600 text-xl lg:text-2xl">Link</a>
 </template>
+
+<a href="#" class="no-underline **hover:underline** ...">Link</a>
 ```
 
 Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.
 
 ```html
-<a href="#" class="... md:no-underline md:hover:underline ...">Link</a>
+<a href="#" class="... md:no-underline **md:hover:underline** ...">Link</a>
 ```
 
 ## Focus
 
 To control the text decoration of an element on focus, add the `focus:` prefix to any existing text decoration utility. For example, use `focus:underline` to apply the `underline` utility on focus.
 
-```html
+```html emerald
 <template preview>
   <div class="max-w-xs w-full mx-auto">
-    <input class="bg-white focus:underline focus:shadow-outline text-gray-900 appearance-none inline-block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" value="Focus me" placeholder="Focus me">
+    <input class="bg-white focus:underline focus:shadow-outline text-emerald-900 appearance-none inline-block w-full border border-emerald-300 rounded py-3 px-4 focus:outline-none" value="Focus me" placeholder="Focus me">
   </div>
 </template>
 
-<input class="focus:underline ..." value="Focus me">
+<input class="**focus:underline** ..." value="Focus me">
 ```
 
 Focus utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
 
 ```html
-<input class="md:focus:underline ..." value="Focus me">
+<input class="**md:focus:underline** ..." value="Focus me">
 ```
 
 ## Customizing
