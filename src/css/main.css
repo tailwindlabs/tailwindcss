@@ -1,11 +1,9 @@
 @import 'base.css';
 
 /*! purgecss start ignore */
-@import 'carbon-ads.css';
 @import 'docsearch.css';
 @import 'prism.css';
 @import 'bar-of-progress.css';
-@import 'markdown.css';
 /*! purgecss end ignore */
 
 @import 'tailwindcss/components';
