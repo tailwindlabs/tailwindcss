@@ -63,7 +63,7 @@ const getConfigFunction = (config) => () => {
   return resolveConfig([...getAllConfigs(configObject)])
 }
 
-const plugin = postcss.plugin('tailwind', (config) => {
+const plugin = postcss.plugin('tailwindcss', (config) => {
   const plugins = []
   const resolvedConfigPath = resolveConfigPath(config)
 
