@@ -35,7 +35,7 @@ export function VariantEnabledList({ variant }) {
 
       <ul>
         {variantListInverted[variant].map((plugin) => (
-          <li>
+          <li key={plugin}>
             <code>{plugin}</code>
           </li>
         ))}
