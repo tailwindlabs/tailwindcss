@@ -18,55 +18,57 @@ export const classes = { plugin }
 
 Control the font weight of an element using the `font-{weight}` utilities.
 
-```html
-<template preview class="font-sans p-4">
-  <div class="mb-6">
-    <p class="text-sm text-gray-600">.font-hairline</p>
-    <p class="font-hairline text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div class="mb-6">
-    <p class="text-sm text-gray-600">.font-thin</p>
-    <p class="font-thin text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div class="mb-6">
-    <p class="text-sm text-gray-600">.font-light</p>
-    <p class="font-light text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div class="mb-6">
-    <p class="text-sm text-gray-600">.font-normal</p>
-    <p class="font-normal text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div class="mb-6">
-    <p class="text-sm text-gray-600">.font-medium</p>
-    <p class="font-medium text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div class="mb-6">
-    <p class="text-sm text-gray-600">.font-semibold</p>
-    <p class="font-semibold text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div class="mb-6">
-    <p class="text-sm text-gray-600">.font-bold</p>
-    <p class="font-bold text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div class="mb-6">
-    <p class="text-sm text-gray-600">.font-extrabold</p>
-    <p class="font-extrabold text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
-  <div>
-    <p class="text-sm text-gray-600">.font-black</p>
-    <p class="font-black text-xl text-gray-800">The quick brown fox jumped over the lazy dog.</p>
-  </div>
+```html lightBlue
+<template preview>
+  <dl class="text-light-blue-600 space-y-6">
+    <div class="flex items-start">
+      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">thin</dt>
+      <dd class="text-xl font-thin lg:text-2xl">The quick brown fox jumped over the lazy dog.</dd>
+    </div>
+    <div class="flex items-start">
+      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">extralight</dt>
+      <dd class="text-xl font-extralight lg:text-2xl">The quick brown fox jumped over the lazy dog.</dd>
+    </div>
+    <div class="flex items-start">
+      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">light</dt>
+      <dd class="text-xl font-light lg:text-2xl">The quick brown fox jumped over the lazy dog.</dd>
+    </div>
+    <div class="flex items-start">
+      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">normal</dt>
+      <dd class="text-xl font-normal lg:text-2xl">The quick brown fox jumped over the lazy dog.</dd>
+    </div>
+    <div class="flex items-start">
+      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">medium</dt>
+      <dd class="text-xl font-medium lg:text-2xl">The quick brown fox jumped over the lazy dog.</dd>
+    </div>
+    <div class="flex items-start">
+      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">semibold</dt>
+      <dd class="text-xl font-semibold lg:text-2xl">The quick brown fox jumped over the lazy dog.</dd>
+    </div>
+    <div class="flex items-start">
+      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">bold</dt>
+      <dd class="text-xl font-bold lg:text-2xl">The quick brown fox jumped over the lazy dog.</dd>
+    </div>
+    <div class="flex items-start">
+      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">extrabold</dt>
+      <dd class="text-xl font-extrabold lg:text-2xl">The quick brown fox jumped over the lazy dog.</dd>
+    </div>
+    <div class="flex items-start">
+      <dt class="w-32 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono leading-7">black</dt>
+      <dd class="text-xl font-black lg:text-2xl">The quick brown fox jumped over the lazy dog.</dd>
+    </div>
+  </dl> 
 </template>
 
-<p class="font-hairline ...">The quick brown fox ...</p>
-<p class="font-thin ...">The quick brown fox ...</p>
-<p class="font-light ...">The quick brown fox ...</p>
-<p class="font-normal ...">The quick brown fox ...</p>
-<p class="font-medium ...">The quick brown fox ...</p>
-<p class="font-semibold ...">The quick brown fox ...</p>
-<p class="font-bold ...">The quick brown fox ...</p>
-<p class="font-extrabold ...">The quick brown fox ...</p>
-<p class="font-black ...">The quick brown fox ...</p>
+<p class="**font-thin** ...">The quick brown fox ...</p>
+<p class="**font-extralight** ...">The quick brown fox ...</p>
+<p class="**font-light** ...">The quick brown fox ...</p>
+<p class="**font-normal** ...">The quick brown fox ...</p>
+<p class="**font-medium** ...">The quick brown fox ...</p>
+<p class="**font-semibold** ...">The quick brown fox ...</p>
+<p class="**font-bold** ...">The quick brown fox ...</p>
+<p class="**font-extrabold** ...">The quick brown fox ...</p>
+<p class="**font-black** ...">The quick brown fox ...</p>
 ```
 
 ## Responsive
