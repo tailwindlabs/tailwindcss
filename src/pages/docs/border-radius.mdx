@@ -20,11 +20,11 @@ Use utilities like `.rounded-sm`, `.rounded`, or `.rounded-lg` to apply differen
 
 ```html lightBlue
 <template preview>
-  <div class="flex justify-around">
-    <div class="p-6 bg-light-blue-500 text-white font-extrabold flex items-center justify-center rounded-sm">.rounded-sm</div>
-    <div class="p-6 bg-light-blue-500 text-white font-extrabold flex items-center justify-center rounded">.rounded</div>
-    <div class="p-6 bg-light-blue-500 text-white font-extrabold flex items-center justify-center rounded-md">.rounded-md</div>
-    <div class="p-6 bg-light-blue-500 text-white font-extrabold flex items-center justify-center rounded-lg">.rounded-lg</div>
+  <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="p-6 bg-light-blue-500 text-white text-center font-extrabold flex items-center justify-center rounded-sm">.rounded-sm</div>
+    <div class="p-6 bg-light-blue-500 text-white text-center font-extrabold flex items-center justify-center rounded">.rounded</div>
+    <div class="p-6 bg-light-blue-500 text-white text-center font-extrabold flex items-center justify-center rounded-md">.rounded-md</div>
+    <div class="p-6 bg-light-blue-500 text-white text-center font-extrabold flex items-center justify-center rounded-lg">.rounded-lg</div>
   </div>
 </template>
 
@@ -41,8 +41,8 @@ Use the `rounded-full` utility to create pills and circles.
 ```html indigo
 <template preview>
   <div class="flex justify-center items-center space-x-6">
-    <div class="bg-indigo-500 py-3 px-6 text-white font-extrabold rounded-full">Pill Shape</div>
-    <div class="bg-indigo-500 h-24 w-24 text-white font-extrabold flex items-center justify-center rounded-full">Circle</div>
+    <div class="bg-indigo-500 px-6 py-3 text-white text-center font-extrabold rounded-full">Pill Shape</div>
+    <div class="bg-indigo-500 h-24 w-24 text-white text-center font-extrabold flex items-center justify-center rounded-full">Circle</div>
   </div>
 </template>
 
@@ -59,11 +59,11 @@ This is most commonly used to remove a border radius that was applied at a small
 ```html rose
 <template preview>
   <div class="flex justify-center items-center">
-    <div class="bg-rose-500 py-3 px-6 text-white font-extrabold rounded-none">.rounded-none</div>
+    <div class="bg-rose-500 p-6 text-white text-center font-extrabold rounded-none">.rounded-none</div>
   </div>
 </template>
 
-<div class="**rounded-none** py-3 px-6...">.rounded-none</div>
+<div class="**rounded-none** ...">.rounded-none</div>
 ```
 
 ## Rounding sides separately
@@ -72,11 +72,11 @@ Use `rounded-{t|r|b|l}{-size?}` to only round one side an element.
 
 ```html emerald
 <template preview>
-  <div class="flex justify-around">
-    <div class="bg-emerald-500 py-3 px-6 text-white font-extrabold rounded-t-lg">.rounded-t-lg</div>
-    <div class="bg-emerald-500 py-3 px-6 text-white font-extrabold rounded-r-lg">.rounded-r-lg</div>
-    <div class="bg-emerald-500 py-3 px-6 text-white font-extrabold rounded-b-lg">.rounded-b-lg</div>
-    <div class="bg-emerald-500 py-3 px-6 text-white font-extrabold rounded-l-lg">.rounded-l-lg</div>
+  <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="bg-emerald-500 p-6 text-white text-center font-extrabold rounded-t-lg">.rounded-t-lg</div>
+    <div class="bg-emerald-500 p-6 text-white text-center font-extrabold rounded-r-lg">.rounded-r-lg</div>
+    <div class="bg-emerald-500 p-6 text-white text-center font-extrabold rounded-b-lg">.rounded-b-lg</div>
+    <div class="bg-emerald-500 p-6 text-white text-center font-extrabold rounded-l-lg">.rounded-l-lg</div>
   </div>
 </template>
 
@@ -92,11 +92,11 @@ Use `rounded-{tl|tr|br|bl}{-size?}` to only round one corner an element.
 
 ```html amber
 <template preview>
-  <div class="flex justify-around">
-    <div class="bg-amber-500 py-3 px-6 text-white font-extrabold rounded-tl-lg">.rounded-tl-lg</div>
-    <div class="bg-amber-500 py-3 px-6 text-white font-extrabold rounded-tr-lg">.rounded-tr-lg</div>
-    <div class="bg-amber-500 py-3 px-6 text-white font-extrabold rounded-br-lg">.rounded-br-lg</div>
-    <div class="bg-amber-500 py-3 px-6 text-white font-extrabold rounded-bl-lg">.rounded-bl-lg</div>
+  <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="bg-amber-500 p-6 text-white text-center font-extrabold rounded-tl-lg">.rounded-tl-lg</div>
+    <div class="bg-amber-500 p-6 text-white text-center font-extrabold rounded-tr-lg">.rounded-tr-lg</div>
+    <div class="bg-amber-500 p-6 text-white text-center font-extrabold rounded-br-lg">.rounded-br-lg</div>
+    <div class="bg-amber-500 p-6 text-white text-center font-extrabold rounded-bl-lg">.rounded-bl-lg</div>
   </div>
 </template>
 
