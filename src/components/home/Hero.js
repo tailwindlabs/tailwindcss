@@ -153,14 +153,22 @@ export function Hero() {
   const [isMd, setIsMd] = useState(false)
   const [containerRect, setContainerRect] = useState()
   const md = supportsMd && isMd
+  const mounted = useRef(true)
 
   const layout = !finished
 
   useEffect(() => {
+    return () => (mounted.current = false)
+  }, [])
+
+  useEffect(() => {
     if (step === 12) {
-      window.setTimeout(() => {
+      let id = window.setTimeout(() => {
         setFinished(true)
       }, 1000)
+      return () => {
+        window.clearTimeout(id)
+      }
     }
   }, [step])
 
@@ -333,23 +341,29 @@ export function Hero() {
               currentGroup: state.group,
               currentChar: state.char,
               onCharComplete(charIndex) {
+                if (!mounted.current) return
                 setState((state) => ({ ...state, char: charIndex + 1 }))
               },
               async onGroupComplete(groupIndex) {
+                if (!mounted.current) return
                 setStep(groupIndex)
 
                 if (groupIndex === 7) {
                   if (!supportsMd) return
                   await cursorControls.start({ opacity: 0.5, transition: { delay: 1 } })
+                  if (!mounted.current) return
                   setWide(true)
                   setIsMd(true)
                   await cursorControls.start({ opacity: 0, transition: { delay: 0.5 } })
                 }
 
+                if (!mounted.current) return
+
                 if (ranges[groupIndex + 1] && ranges[groupIndex + 1].immediate) {
                   setState({ char: 0, group: groupIndex + 1 })
                 } else {
                   window.setTimeout(() => {
+                    if (!mounted.current) return
                     setState({ char: 0, group: groupIndex + 1 })
                   }, GROUP_DELAY)
                 }
@@ -362,7 +376,7 @@ export function Hero() {
   )
 }
 
-function AnimatedToken({ current, onComplete, children }) {
+function AnimatedToken({ isActiveToken, onComplete, children }) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -372,17 +386,20 @@ function AnimatedToken({ current, onComplete, children }) {
   }, [visible])
 
   useEffect(() => {
-    if (current) {
-      window.setTimeout(() => {
+    if (isActiveToken) {
+      let id = window.setTimeout(() => {
         setVisible(true)
       }, CHAR_DELAY)
+      return () => {
+        window.clearTimeout(id)
+      }
     }
-  }, [current])
+  }, [isActiveToken])
 
   return (
     <>
       <span className={visible ? undefined : 'hidden'}>{children}</span>
-      {current && <span className="border -mx-px" style={{ height: '1.125rem' }} />}
+      {isActiveToken && <span className="border -mx-px" style={{ height: '1.125rem' }} />}
     </>
   )
 }
@@ -395,7 +412,7 @@ function HeroToken({ currentChar, onCharComplete, currentGroup, onGroupComplete,
 
     return (
       <AnimatedToken
-        current={currentGroup === groupIndex && currentChar === indexInGroup}
+        isActiveToken={currentGroup === groupIndex && currentChar === indexInGroup}
         onComplete={() => {
           if (token[0].endsWith(':last')) {
             onGroupComplete(groupIndex)
