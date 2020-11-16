@@ -40,6 +40,7 @@ module.exports.corePluginsWithExamples = plugins.map((plugin) => {
             [Math.floor((Object.keys(utilities).length - 1) / 2)].split(/[>:]/)[0]
             .trim()
             .substr(1)
+            .replace(/\\/g, '')
         : undefined,
   }
 })
