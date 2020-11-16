@@ -12,20 +12,20 @@ import { VariantEnabledList } from '@/components/VariantEnabledList'
 
 Similar to how Tailwind handles [responsive design](/docs/responsive-design), styling elements on hover, focus, and more can be accomplished by prefixing utilities with the appropriate state variant.
 
-```html
+```html purple
 <template preview>
-  <form class="flex w-full max-w-sm mx-auto">
-    <input class="flex-1 bg-gray-200 hover:bg-white hover:border-gray-300 focus:outline-none focus:bg-white focus:shadow-outline focus:border-gray-300 appearance-none border border-transparent rounded w-full py-2 px-4 text-gray-700 leading-tight " type="email" placeholder="Your email">
-    <button class="ml-4 flex-shrink-0 bg-teal-500 hover:bg-teal-600 focus:outline-none focus:shadow-outline text-white font-bold py-2 px-4 rounded" type="button">
-      Sign Up
+  <form class="flex w-full max-w-sm mx-auto space-x-3">
+    <input class="flex-1 appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base hover:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="email" placeholder="Your email">
+    <button class="flex-shrink-0 bg-purple-600 text-white text-base font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50" type="button">
+      Sign up
     </button>
   </form>
 </template>
 
 <form>
-  <input class="bg-gray-200 hover:bg-white hover:border-gray-300 focus:outline-none focus:bg-white focus:shadow-outline focus:border-gray-300 ...">
-  <button class="bg-teal-500 hover:bg-teal-600 focus:outline-none focus:shadow-outline ...">
-    Sign Up
+  <input class="border border-transparent **hover:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent** ...">
+  <button class="bg-purple-600 **hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50** ...">
+    Sign up
   </button>
 </form>
 ```
@@ -42,14 +42,16 @@ If you need to target a state that Tailwind doesn't support, you can extend the 
 
 Add the `hover:` prefix to only apply a utility on hover.
 
-```html
-<template preview class="text-center p-4">
-  <button type="button" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded focus:outline-none focus:shadow-outline">
-    Hover me
-  </button>
+```html rose
+<template preview>
+  <div class="text-center">
+    <button type="button" class="py-2 px-4 bg-rose-500 text-white font-semibold rounded-lg shadow-md hover:bg-rose-700 focus:outline-none" tabindex="-1">
+      Hover me
+    </button>
+  </div>
 </template>
 
-<button class="bg-transparent hover:bg-blue-500 text-blue-700 hover:text-white...">
+<button class="bg-rose-500 **hover:bg-rose-700** ...">
   Hover me
 </button>
 ```
@@ -78,14 +80,14 @@ module.exports = {
 
 Add the `focus:` prefix to only apply a utility on focus.
 
-```html
+```html lightBlue
 <template preview>
   <div class="max-w-xs w-full mx-auto">
-    <input class="bg-gray-200 focus:bg-white border-transparent focus:border-blue-400 text-gray-900 appearance-none inline-block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
+    <input class="py-3 px-4 bg-white rounded-lg placeholder-gray-400 text-gray-900 appearance-none inline-block w-full shadow-md focus:outline-none focus:ring-2 focus:ring-light-blue-600" placeholder="Focus me">
   </div>
 </template>
 
-<input class="bg-gray-200 focus:bg-white border-transparent focus:border-blue-400 ..." placeholder="Focus me">
+<input class="**focus:ring-2 focus:ring-light-blue-600** ...">
 ```
 
 <div>
@@ -112,14 +114,16 @@ module.exports = {
 
 Add the `active:` prefix to only apply a utility when an element is active.
 
-```html
-<template preview class="text-center p-4">
-  <button type="button" class="bg-blue-500 active:bg-blue-700 text-white font-semibold hover:text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-    Click me
-  </button>
+```html emerald
+<template preview>
+  <div class="text-center">
+    <button type="button" class="py-2 px-4 bg-emerald-500 text-white font-semibold rounded-lg shadow-md active:bg-emerald-700 focus:outline-none" tabindex="-1">
+      Click me
+    </button>
+  </div>
 </template>
 
-<button class="bg-blue-500 active:bg-blue-700 text-white...">
+<button class="bg-green-500 **active:bg-green-700** ...">
   Click me
 </button>
 ```
@@ -148,17 +152,17 @@ module.exports = {
 
 If you need to style a child element when hovering over a specific parent element, add the `group` class to the parent element and add the `group-hover:` prefix to the utility on the child element.
 
-```html
-<template preview class="bg-gray-200 p-8">
-  <div class="group hover:bg-blue-500 p-4 cursor-pointer bg-white rounded max-w-xs w-full shadow-lg select-none overflow-hidden mx-auto">
-    <p class="font-semibold text-lg mb-1 text-gray-900 group-hover:text-white">New Project</p>
-    <p class="text-gray-700 group-hover:text-white mb-2">Create a new project from a variety of starting templates.</p>
+```html indigo
+<template preview>
+  <div class="group px-6 py-5 max-w-full mx-auto w-72 border border-indigo-500 border-opacity-25 cursor-pointer rounded-lg select-none overflow-hidden space-y-1 hover:bg-white hover:shadow-lg hover:border-transparent">
+    <p class="font-semibold text-lg text-indigo-600 group-hover:text-gray-900">New Project</p>
+    <p class="text-indigo-500 group-hover:text-gray-500">Create a new project from a variety of starting templates.</p>
   </div>
 </template>
 
-<div class="group bg-white hover:bg-blue-500 ...">
-  <p class="text-gray-900 group-hover:text-white ...">New Project</p>
-  <p class="text-gray-700 group-hover:text-white ...">Create a new project from a variety of starting templates.</p>
+<div class="**group** border-indigo-500 hover:bg-white hover:shadow-lg hover:border-transparent ...">
+  <p class="text-indigo-600 **group-hover:text-gray-900** ...">New Project</p>
+  <p class="text-indigo-500 **group-hover:text-gray-500** ...">Create a new project from a variety of starting templates.</p>
 </div>
 ```
 
@@ -186,19 +190,19 @@ module.exports = {
 
 The `group-focus` variant works just like [`group-hover`](#group-hover) except for focus:
 
-```html
-<template preview class="text-center p-8">
-  <span class="inline-flex rounded-md shadow-sm">
-    <button type="button" class="group inline-flex items-center px-4 py-2 border border-gray-400 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-900 focus:outline-none focus:text-gray-900 focus:border-gray-500 hover:border-gray-500">
-    <svg fill="currentColor" viewBox="0 0 20 20" class="-ml-1 mr-3 w-5 h-5 text-gray-400 group-focus:text-gray-500"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
+```html amber
+<template preview>
+  <div class="text-center">
+    <button type="button" class="group inline-flex items-center py-2 px-4 bg-amber-500 text-white font-semibold rounded-lg shadow-md focus:bg-amber-600 focus:outline-none">
+      <svg fill="currentColor" viewBox="0 0 20 20" class="-ml-1 mr-3 w-5 h-5 text-white group-focus:text-amber-300"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
       Bookmark
     </button>
-  </span>
+  </div>
 </template>
 
-<button class="group text-gray-700 focus:text-gray-900 ...">
-  <svg class="h-6 w-6 text-gray-400 group-focus:text-gray-500"><!-- ... --></svg>
-  Submit
+<button class="**group** bg-amber-500 focus:bg-amber-600 ...">
+  <svg class="text-white **group-focus:text-amber-300** ..."></svg>
+  Bookmark
 </button>
 ```
 
@@ -226,23 +230,25 @@ module.exports = {
 
 Add the `focus-within:` prefix to only apply a utility when a child element has focus.
 
-```html
-<template preview class="p-8">
+```html purple
+<template preview>
   <form class="w-full max-w-sm mx-auto">
-    <div class="flex items-center border-b-2 border-gray-400 focus-within:border-teal-500 py-2">
-      <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Jane Doe" aria-label="Full name">
-      <button class="focus:shadow-outline focus:outline-none flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="button">
-        Sign Up
-      </button>
+    <div class="relative text-gray-400 focus-within:text-gray-600">
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+      </div>
+      <input id="email" class="py-3 px-4 bg-white placeholder-gray-400 text-gray-900 rounded-lg shadow-md appearance-none w-full block pl-12 focus:outline-none focus:ring-2 focus:ring-gray-300" placeholder="you@example.com">
     </div>
   </form>
 </template>
 
-<form class="border-b-2 border-gray-400 focus-within:border-teal-500 ...">
-  <input class="..." placeholder="Jane Doe" ...>
-  <button class="...">
-    Sign Up
-  </button>
+<form>
+  <div class="text-gray-400 **focus-within:text-gray-600** ...">
+    <div class="...">
+      <svg fill="currentColor"></svg>
+    </div>
+    <input class="focus:ring-2 focus:ring-gray-300 ...">
+  </div>
 </form>
 ```
 
