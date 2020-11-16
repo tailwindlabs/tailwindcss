@@ -34,8 +34,10 @@ export default function () {
           [
             nameClass('via', modifier),
             {
-              '--tw-gradient-via-color': toColorValue(value, 'via'),
-              '--tw-gradient-color-stops': `var(--tw-gradient-from-color), var(--tw-gradient-via-color), var(--tw-gradient-to-color, ${transparentTo})`,
+              '--tw-gradient-color-stops': `var(--tw-gradient-from-color), ${toColorValue(
+                value,
+                'via'
+              )}, var(--tw-gradient-to-color, ${transparentTo})`,
             },
           ],
           [
