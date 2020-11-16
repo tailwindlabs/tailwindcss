@@ -3,7 +3,8 @@ import { GradientLockup } from '@/components/GradientLockup'
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import tokenize from '../../macros/tokenize.macro'
-import { Fragment, useEffect, useLayoutEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
+import { useIsomorphicLayoutEffect } from '@/utils/useIsomorphicLayoutEffect'
 import { ReactComponent as Icon } from '@/img/icons/home/component-driven.svg'
 import { Tabs } from '@/components/Tabs'
 import { ReactComponent as ReactLogo } from '@/img/icons/react.svg'
@@ -380,7 +381,7 @@ function ComponentExample({ framework }) {
   const [activeTab, setActiveTab] = useState(0)
   const lines = tabs[framework][Object.keys(tabs[framework])[activeTab]]
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     setActiveTab(0)
   }, [framework])
 

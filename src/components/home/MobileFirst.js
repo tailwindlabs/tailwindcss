@@ -3,7 +3,8 @@ import { GradientLockup } from '@/components/GradientLockup'
 import { gradients } from '@/utils/gradients'
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { motion, useTransform, useMotionValue } from 'framer-motion'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useIsomorphicLayoutEffect } from '@/utils/useIsomorphicLayoutEffect'
 import { ReactComponent as Icon } from '@/img/icons/home/mobile-first.svg'
 import styles from './MobileFirst.module.css'
 import tokenize from '../../macros/tokenize.macro'
@@ -133,7 +134,7 @@ function BrowserWindow({ size, onChange, height = 385 }) {
   const constraintsRef = useRef()
   const [constraintsWidth, setConstraintsWidth] = useState()
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     setConstraintsWidth(
       constraintsRef.current.offsetWidth -
         parseInt(window.getComputedStyle(document.documentElement).fontSize, 10) *
