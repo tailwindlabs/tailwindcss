@@ -330,10 +330,9 @@ export function Hero() {
                     transition={TRANSITION}
                     src={require('@/img/sarah-dayan.jpg').default}
                     alt=""
-                    className={clsx(
-                      'absolute max-w-none object-cover',
-                      finished && !md ? 'rounded-full' : ''
-                    )}
+                    className={clsx('absolute max-w-none object-cover bg-gray-100', {
+                      'rounded-full': finished && !md,
+                    })}
                     style={
                       finished
                         ? { top: 0, left: 0, width: '100%', height: '100%' }

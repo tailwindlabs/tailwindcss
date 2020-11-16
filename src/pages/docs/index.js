@@ -14,33 +14,43 @@ const whatsNew = [
     title: 'Focus Ring Utilities',
     version: '2.0+',
     image: require('@/img/docs/focus-ring.svg').ReactComponent,
+    href: '/',
   },
   {
     title: 'Dark Mode',
     version: '2.0+',
     image: require('@/img/docs/dark-mode.svg').ReactComponent,
+    href: '/',
   },
   {
     title: 'Extended Color Palette',
     version: '2.0+',
     image: require('@/img/docs/color-palette.svg').ReactComponent,
+    href: '/',
   },
   {
     title: 'Extend Variants',
     version: '2.0+',
     image: require('@/img/docs/extend-variants.svg').ReactComponent,
+    href: '/',
   },
   {
     title: 'Extra Wide Breakpoint',
     version: '2.0+',
     image: require('@/img/docs/breakpoint.svg').ReactComponent,
+    href: '/',
   },
-  { title: 'Sharable Presets', image: require('@/img/docs/sharable-presets.svg').ReactComponent },
+  {
+    title: 'Sharable Presets',
+    image: require('@/img/docs/sharable-presets.svg').ReactComponent,
+    href: '/',
+  },
   {
     title: 'Gradients',
     image: require('@/img/docs/gradients.svg').ReactComponent,
+    href: '/',
   },
-  { title: 'Animations', image: require('@/img/docs/animations.svg').ReactComponent },
+  { title: 'Animations', image: require('@/img/docs/animations.svg').ReactComponent, href: '/' },
 ]
 
 const latestUpdates = [
@@ -113,11 +123,12 @@ export default function DocsLandingPage() {
                 <p className="font-medium text-rose-100 text-shadow mb-4">
                   Build something with Tailwind in our online playground.
                 </p>
-                <Link href="/">
-                  <a className="mt-auto bg-rose-900 bg-opacity-50 rounded-xl font-semibold py-2 px-4 inline-flex">
-                    Start building
-                  </a>
-                </Link>
+                <a
+                  href="https://play.tailwindcss.com/"
+                  className="mt-auto bg-rose-900 bg-opacity-50 rounded-xl font-semibold py-2 px-4 inline-flex"
+                >
+                  Start building
+                </a>
               </div>
               <div className={`${styles.image} relative md:pl-6 xl:pl-8 hidden sm:block`}>
                 <PlayImage className="absolute top-6 left-6 md:static overflow-visible" />
@@ -157,7 +168,7 @@ export default function DocsLandingPage() {
         <ul className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 xl:gap-8 font-semibold text-gray-900 text-center">
           {whatsNew.map((item) => (
             <li key={item.title} className="flex">
-              <Link href="/">
+              <Link href={item.href}>
                 <a className="relative rounded-xl border border-black border-opacity-5 shadow-sm w-full pt-8 pb-6 px-6">
                   {item.image && <item.image className="h-auto max-w-full mx-auto mb-3" />}
                   {item.title}
