@@ -777,8 +777,10 @@ export function HtmlZenGarden({ theme }) {
                       initial={false}
                       animate={{ opacity: theme === name ? 1 : 0 }}
                     >
-                      Free shipping on all<span className="hidden sm:inline"> continental US</span>{' '}
-                      orders.
+                      <span>
+                        Free shipping on all
+                        <span className="hidden sm:inline"> continental US</span> orders.
+                      </span>
                     </motion.p>
                   ))}
                 </div>
