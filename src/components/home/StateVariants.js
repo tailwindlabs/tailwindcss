@@ -29,7 +29,7 @@ const {
   </form>
   <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
     <li x-for="item in items">
-      <a href="#" class="(item-hover)hover:bg-light-blue-500 (item-hover)hover:border-transparent (item-hover)hover:shadow-lg group block rounded-lg p-4 border border-gray-200">
+      <a :href="item.url" class="(item-hover)hover:bg-light-blue-500 (item-hover)hover:border-transparent (item-hover)hover:shadow-lg group block rounded-lg p-4 border border-gray-200">
         <dl class="grid sm:block lg:grid xl:block grid-cols-2 grid-rows-2 items-center">
           <div>
             <dt class="sr-only">Title</dt>
@@ -53,7 +53,7 @@ const {
       </a>
     </li>
     <li class="(new-hover)hover:shadow-lg flex rounded-lg">
-      <a href="#" class="(new-hover)hover:border-transparent (new-hover)hover:shadow-xs w-full flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium py-4">
+      <a href="/new" class="(new-hover)hover:border-transparent (new-hover)hover:shadow-xs w-full flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium py-4">
         New Project
       </a>
     </li>
