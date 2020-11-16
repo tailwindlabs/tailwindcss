@@ -33,36 +33,36 @@ export const classes = {
 
 Control the border color of an element using the `border-{color}` utilities.
 
-```html
-<template preview class="text-center p-4">
+```html rose
+<template preview>
   <div class="max-w-xs w-full mx-auto">
-    <input class="border border-red-500 bg-white text-gray-900 appearance-none block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Your email">
+    <input class="border border-red-500 bg-white text-gray-900 appearance-none block w-full rounded-md py-3 px-4 focus:outline-none" placeholder="Your email">
   </div>
 </template>
 
-<input class="border border-red-500 ...">
+<input class="border-2 **border-red-500** ...">
 ```
 
 ### Changing opacity
 
 Control the opacity of an element's border color using the `border-opacity-{amount}` utilities.
 
-```html
-<template preview class="bg-checkered p-4">
-  <div class="flex justify-around">
-    <div class="h-16 w-16 rounded border-4 border-blue-500 border-opacity-100"></div>
-    <div class="h-16 w-16 rounded border-4 border-blue-500 border-opacity-75"></div>
-    <div class="h-16 w-16 rounded border-4 border-blue-500 border-opacity-50"></div>
-    <div class="h-16 w-16 rounded border-4 border-blue-500 border-opacity-25"></div>
-    <div class="h-16 w-16 rounded border-4 border-blue-500 border-opacity-0"></div>
+```html lightBlue
+<template preview>
+  <div class="grid grid-cols-2 gap-2 sm:grid-cols-5">
+    <div class="h-16 flex-1 rounded border-4 border-light-blue-500 border-opacity-100 font-extrabold text-light-blue-600 flex justify-center items-center">100%</div>
+    <div class="h-16 flex-1 rounded border-4 border-light-blue-500 border-opacity-75 font-extrabold text-light-blue-600 flex justify-center items-center">75%</div>
+    <div class="h-16 flex-1 rounded border-4 border-light-blue-500 border-opacity-50 font-extrabold text-light-blue-600 flex justify-center items-center">50%</div>
+    <div class="h-16 flex-1 rounded border-4 border-light-blue-500 border-opacity-25 font-extrabold text-light-blue-600 flex justify-center items-center">25%</div>
+    <div class="h-16 flex-1 rounded border-4 border-light-blue-500 border-opacity-0 font-extrabold text-light-blue-600 flex justify-center items-center">0%</div>
   </div>
 </template>
 
-<div class="border-blue-500 border-opacity-100"></div>
-<div class="border-blue-500 border-opacity-75"></div>
-<div class="border-blue-500 border-opacity-50"></div>
-<div class="border-blue-500 border-opacity-25"></div>
-<div class="border-blue-500 border-opacity-0"></div>
+<div class="border-4 border-light-blue-500 **border-opacity-100** ..."></div>
+<div class="border-4 border-light-blue-500 **border-opacity-75** ..."></div>
+<div class="border-4 border-light-blue-500 **border-opacity-50** ..."></div>
+<div class="border-4 border-light-blue-500 **border-opacity-25** ..."></div>
+<div class="border-4 border-light-blue-500 **border-opacity-0** ..."></div>
 ```
 
 Learn more in the [border opacity documentation](/docs/border-opacity).
@@ -83,19 +83,21 @@ For more information about Tailwind's responsive design features, check out the 
 
 To control the border color of an element on hover, add the `hover:` prefix to any existing border color utility. For example, use `hover:border-blue-500` to apply the `border-blue-500` utility on hover.
 
-```html
-<template preview class="text-center p-4">
-  <button class="border-2 border-blue-500 hover:border-red-500 bg-transparent text-blue-700 hover:text-red-700 py-2 px-4 font-semibold rounded">
-    Button
-  </button>
+```html purple
+<template preview>
+  <div class="flex items-center justify-center">
+    <button class="border-2 border-purple-500 hover:border-gray-500 bg-transparent text-purple-700 hover:text-gray-700 py-3 px-4 font-semibold rounded-md">
+      Button
+    </button>
+  </div>
 </template>
 
-<button class="border-2 border-blue-500 hover:border-red-500 ...">
+<button class="border-2 border-purple-500 **hover:border-gray-500** ...">
   Button
 </button>
 ```
 
-Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
+Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.
 
 ```html
 <button class="... md:border-blue-500 md:hover:border-blue-700 ...">Button</button>
@@ -105,14 +107,14 @@ Hover utilities can also be combined with responsive utilities by adding the res
 
 To control the border color of an element on focus, add the `focus:` prefix to any existing border color utility. For example, use `focus:border-blue-500` to apply the `border-blue-500` utility on focus.
 
-```html
+```html blue
 <template preview>
   <div class="max-w-xs w-full mx-auto">
-    <input class="border border-gray-400 focus:border-blue-500 bg-white text-gray-900 appearance-none inline-block w-full text-gray-900 border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
+    <input class="border border-gray-300 bg-white text-gray-900 appearance-none block w-full rounded-md py-3 px-4 focus:border-blue-500 focus:outline-none" placeholder="Your email">
   </div>
 </template>
 
-<input class="border-gray-400 focus:border-blue-500 ...">
+<input class="border border-red-500 focus:border-blue-500 ...">
 ```
 
 Focus utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
