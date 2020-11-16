@@ -30,7 +30,7 @@ export default function () {
             'box-shadow': [
               `var(--tw-ring-offset-shadow)`,
               `var(--tw-ring-shadow)`,
-              `var(--tw-box-shadow, 0 0 #0000)`,
+              `var(--tw-shadow, 0 0 #0000)`,
             ].join(', '),
           },
         ]
