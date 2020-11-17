@@ -31,10 +31,10 @@ test('box shadow can use DEFAULT keyword and negative prefix syntax', () => {
 
       return getConfigValue(`variants.${path}`, defaultValue)
     },
-    addUtilities(utilities, variants) {
+    addUtilities(utilities, options) {
       addedUtilities.push({
         utilities,
-        variants,
+        options,
       })
     },
   }
@@ -42,6 +42,14 @@ test('box shadow can use DEFAULT keyword and negative prefix syntax', () => {
   plugin()(pluginApi)
 
   expect(addedUtilities).toEqual([
+    {
+      utilities: {
+        '*': {
+          '--tw-shadow': '0 0 #0000',
+        },
+      },
+      options: { respectImportant: false },
+    },
     {
       utilities: {
         '.shadow': {
@@ -65,7 +73,7 @@ test('box shadow can use DEFAULT keyword and negative prefix syntax', () => {
             'var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)',
         },
       },
-      variants: ['responsive'],
+      options: ['responsive'],
     },
   ])
 })
