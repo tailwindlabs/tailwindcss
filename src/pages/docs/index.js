@@ -103,7 +103,7 @@ export default function DocsLandingPage() {
                 <p className="font-medium text-violet-100 text-shadow mb-4">
                   Learn how to get Tailwind set up with your favorite tools.
                 </p>
-                <Link href="/">
+                <Link href="/docs/installation">
                   <a className="mt-auto bg-violet-800 bg-opacity-50 rounded-xl font-semibold py-2 px-4 inline-flex">
                     Start learning
                   </a>
@@ -148,10 +148,8 @@ export default function DocsLandingPage() {
             <div className={`w-full flex md:flex-col bg-gradient-to-br ${gradients.amber[0]}`}>
               <div className="sm:max-w-sm sm:flex-none md:w-auto md:flex-auto flex flex-col items-start relative z-10 p-6 xl:p-8">
                 <h2 className="text-xl font-semibold mb-2 text-shadow">Watch the screencasts</h2>
-                <p className="font-medium text-amber-100 text-shadow mb-4">
-                  Build something with Tailwind in our online playground.
-                </p>
-                <Link href="/">
+                <p className="font-medium text-amber-100 text-shadow mb-4">{/* TODO */}</p>
+                <Link href="https://www.youtube.com/tailwindlabs">
                   <a className="mt-auto bg-amber-900 bg-opacity-50 rounded-xl font-semibold py-2 px-4 inline-flex">
                     Start watching
                   </a>
