@@ -3,67 +3,66 @@ title: "Install Tailwind CSS with Next.js"
 description: "Setting up Tailwind CSS in a Next.js project."
 ---
 
-# Using Tailwind CSS with NextJS
-
 ## Creating your project
 
 Start by creating a new NextJS project if you don't have one set up already. The most common approach is to use [Create Next App](https://nextjs.org/docs/api-reference/create-next-app):
 
 ```shell
 npx create-next-app my-project
+cd my-project
 ```
 
 ## Setting up Tailwind CSS
 
-Tailwind CSS v2.0 requires PostCSS 8 which is only available in Next.js >= 10.0.0.
-
-Install Tailwind and Autoprefixer using `npm` or `yarn`:
+Install Tailwind using `npm`:
 
 ```shell
+# If you're on Next.js v10
 npm install tailwindcss postcss autoprefixer
+
+# If you're on Next.js 9 or older
+npm install tailwindcss@compat
 ```
 
-Next, let's generate default `tailwind.config.js` **and** `postcss.config.js` files:
+Next, generate your `tailwind.config.js` and `postcss.config.js` files:
 
 ```shell
 npx tailwindcss init -p
 ```
 
-In our newly generated `tailwind.config.js` file, we'll configure the `purge` key with an array of file paths we want to be scanned. You may need to adjust this based on your specific needs.
+In your `tailwind.config.js` file, configure the `purge` option with the paths to all of your pages and components so Tailwind can tree-shake unused styles when [optimizing for production](/docs/optimizing-for-production):
 
 ```diff-js
-module.exports = {
-  // ...,
--  purge: [],
-+  purge: ['./pages/**/*.js', './components/**/*.js'],
-  theme: {
-    extend: {}
-  },
-  variants: {},
-  plugins: []
-}
+  // tailwind.config.js
+  module.exports = {
+    // ...,
+-   purge: [],
++   purge: ['./pages/**/*.js', './components/**/*.js'],
+    theme: {
+      extend: {}
+    },
+    variants: {},
+    plugins: []
+  }
 ```
 
-[See this in the code example &rarr;](https://github.com/tailwindlabs/tailwindcss-integration-guides/blob/master/guides/nextjs/example/tailwind.config.js#L8)
+Finally, remove the default `globals.css` and `Home.module.css` files and import Tailwind's included CSS file at the top of your `pages/_app.js` file:
 
-In our NextJS project, within the `styles` directory, let's create a new file called `tailwind.css`. This file will contain three `@tailwind` declaratives:
+```diff-js
+  // pages/_app.js
+- import '../styles/globals.css'
++ import "tailwindcss/tailwind.css";
 
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+  function MyApp({ Component, pageProps }) {
+    return <Component {...pageProps} />
+  }
+
+  export default MyApp
 ```
 
-[See this in the code example &rarr;](https://github.com/tailwindlabs/tailwindcss-integration-guides/blob/master/guides/nextjs/example/styles/tailwind.css#L1-L3)
+That's it! Tailwind CSS is now ready to use in your project.
 
-Next, let's open the `_app.js` file located in our NextJS project's `pages` directory.
+Next up:
 
-At the top of that file, we'll import our new `tailwind.css` file:
+[Learn about the utility-first workflow &rarr;](/docs/utility-first)
 
-```js
-import "../styles/tailwind.css";
-```
-
-[See this in the code example &rarr;](https://github.com/tailwindlabs/tailwindcss-integration-guides/blob/master/guides/nextjs/example/pages/_app.js#L1)
-
-That's it! Tailwind CSS is now available throughout our entire application 🎉
