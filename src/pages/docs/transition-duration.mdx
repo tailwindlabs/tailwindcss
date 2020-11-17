@@ -13,22 +13,24 @@ export const classes = { plugin }
 
 Use the `duration-{amount}` utilities to control an element's transition-duration.
 
-```html
-<template preview class="bg-white flex justify-around items-center p-4 py-12">
-  <button class="transition duration-150 ease-in-out transform hover:scale-125 bg-blue-500 text-white font-bold py-2 px-4 rounded">
-    Hover me
-  </button>
-  <button class="transition duration-300 ease-in-out transform hover:scale-125 bg-blue-500 text-white font-bold py-2 px-4 rounded">
-    Hover me
-  </button>
-  <button class="transition duration-700 ease-in-out transform hover:scale-125 bg-blue-500 text-white font-bold py-2 px-4 rounded">
-    Hover me
-  </button>
+```html emerald
+<template preview>
+  <div class="flex justify-around items-center">
+    <button class="transition duration-150 ease-in-out transform hover:scale-125 bg-emerald-600 text-white font-semibold py-3 px-6 rounded-md">
+      Hover me
+    </button>
+    <button class="transition duration-300 ease-in-out transform hover:scale-125 bg-emerald-600 text-white font-semibold py-3 px-6 rounded-md">
+      Hover me
+    </button>
+    <button class="transition duration-700 ease-in-out transform hover:scale-125 bg-emerald-600 text-white font-semibold py-3 px-6 rounded-md">
+      Hover me
+    </button>
+  </div>
 </template>
 
-<button class="transition duration-150 ease-in-out ...">Hover me</button>
-<button class="transition duration-300 ease-in-out ...">Hover me</button>
-<button class="transition duration-700 ease-in-out ...">Hover me</button>
+<button class="transition **duration-150** ease-in-out ...">Hover me</button>
+<button class="transition **duration-300** ease-in-out ...">Hover me</button>
+<button class="transition **duration-700** ease-in-out ...">Hover me</button>
 ```
 
 ## Responsive
