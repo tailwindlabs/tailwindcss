@@ -14,6 +14,7 @@ export default function () {
           color: value,
           property: 'color',
           variable: '--tw-placeholder-opacity',
+          ownProperty: '--tw-placeholder-color',
         })
       }
 

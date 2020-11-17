@@ -14,6 +14,7 @@ export default function () {
           color: value,
           property: 'border-color',
           variable: '--tw-border-opacity',
+          ownProperty: '--tw-border-color',
         })
       }
 

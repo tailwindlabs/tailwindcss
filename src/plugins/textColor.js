@@ -14,6 +14,7 @@ export default function () {
           color: value,
           property: 'color',
           variable: '--tw-text-opacity',
+          ownProperty: '--tw-text-color',
         })
       }
 

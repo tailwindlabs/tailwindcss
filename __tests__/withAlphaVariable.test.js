@@ -2,9 +2,15 @@ import withAlphaVariable from '../src/util/withAlphaVariable'
 
 test('it adds the right custom property', () => {
   expect(
-    withAlphaVariable({ color: '#ff0000', property: 'color', variable: '--tw-text-opacity' })
+    withAlphaVariable({
+      color: '#ff0000',
+      property: 'color',
+      variable: '--tw-text-opacity',
+      ownProperty: '--tw-text-color',
+    })
   ).toEqual({
     '--tw-text-opacity': '1',
+    '--tw-text-color': 'rgba(255, 0, 0, var(--text-opacity))',
     color: 'rgba(255, 0, 0, var(--tw-text-opacity))',
   })
 })
