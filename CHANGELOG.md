@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet!
 
+## [2.0.0-alpha.25] - 2020-11-17
+
+### Fixed
+
+- Fix issue where `ring-offset-0` didn't work due to unitless `0` in `calc` function ([3de0c48](https://github.com/tailwindlabs/tailwindcss/commit/3de0c48))
+
 ## [2.0.0-alpha.24] - 2020-11-16
 
 ### Changed
@@ -1237,7 +1243,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.24...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.25...HEAD
+[2.0.0-alpha.25]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.24...v2.0.0-alpha.25
 [2.0.0-alpha.24]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.23...v2.0.0-alpha.24
 [2.0.0-alpha.23]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.22...v2.0.0-alpha.23
 [2.0.0-alpha.22]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.21...v2.0.0-alpha.22
