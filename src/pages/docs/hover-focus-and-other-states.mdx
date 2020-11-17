@@ -15,7 +15,7 @@ Similar to how Tailwind handles [responsive design](/docs/responsive-design), st
 ```html purple
 <template preview>
   <form class="flex w-full max-w-sm mx-auto space-x-3">
-    <input class="flex-1 appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base hover:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="email" placeholder="Your email">
+    <input class="flex-1 appearance-none border border-transparent w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-md rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" type="email" placeholder="Your email">
     <button class="flex-shrink-0 bg-purple-600 text-white text-base font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200" type="button">
       Sign up
     </button>
@@ -23,7 +23,7 @@ Similar to how Tailwind handles [responsive design](/docs/responsive-design), st
 </template>
 
 <form>
-  <input class="border border-transparent **hover:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent** ...">
+  <input class="border border-transparent **focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent** ...">
   <button class="bg-purple-600 **hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50** ...">
     Sign up
   </button>
@@ -237,7 +237,7 @@ Add the `focus-within:` prefix to only apply a utility when a child element has 
       <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
       </div>
-      <input id="email" class="py-3 px-4 bg-white placeholder-gray-400 text-gray-900 rounded-lg shadow-md appearance-none w-full block pl-12 focus:outline-none focus:ring-2 focus:ring-gray-300" placeholder="you@example.com">
+      <input id="email" class="py-3 px-4 bg-white placeholder-gray-400 text-gray-900 rounded-lg shadow-md appearance-none w-full block pl-12 focus:outline-none" placeholder="you@example.com">
     </div>
   </form>
 </template>
