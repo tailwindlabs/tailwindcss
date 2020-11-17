@@ -23,20 +23,20 @@ yarn add tailwindcss
 
 Next, let's add Tailwind to our project's `postcss.config.js` file:
 
-```diff
-module.exports = {
-  plugins: [
-    require('postcss-import'),
-+    require('tailwindcss'),
-    require('postcss-flexbugs-fixes'),
-    require('postcss-preset-env')({
-      autoprefixer: {
-        flexbox: 'no-2009'
-      },
-      stage: 3
-    })
-  ]
-}
+```diff-js
+  module.exports = {
+    plugins: [
+      require('postcss-import'),
++     require('tailwindcss'),
+      require('postcss-flexbugs-fixes'),
+      require('postcss-preset-env')({
+        autoprefixer: {
+          flexbox: 'no-2009'
+        },
+        stage: 3
+      })
+    ]
+  }
 
 ```
 
@@ -56,30 +56,30 @@ In our Rails project, let's create a new file called `tailwind.css` inside the `
 
 Next, let's import this file in our application JavaScript pack (`app/javascript/packs/application.js`):
 
-```diff
-require("@rails/ujs").start();
-require("turbolinks").start();
-require("@rails/activestorage").start();
-require("channels");
+```diff-js
+  require("@rails/ujs").start();
+  require("turbolinks").start();
+  require("@rails/activestorage").start();
+  require("channels");
 + require("../styles/tailwind");
 
 ```
 
 Finally, in our application layout file (`rails/app/views/layouts/application.html.erb`), let's replace the `stylesheet_link_tag` with the `stylesheet_pack_tag`:
 
-```diff
-<html>
-  <head>
-    <title>RailsApp</title>
+```diff-html
+  <html>
+    <head>
+      <title>RailsApp</title>
+      <!-- ... -->
+
+-     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
++     <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+      <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    </head>
+
     <!-- ... -->
-
--    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
-
-  <!-- ... -->
-</html>
+  </html>
 ```
 
 That's it! Tailwind CSS is now available throughout our entire Rails application 🎉
