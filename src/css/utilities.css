@@ -81,8 +81,8 @@
   @apply bg-blue-700 !important;
 }
 
-.checked\:bg-light-blue-600:checked {
-  @apply bg-light-blue-600 !important;
+.checked\:bg-blue-600:checked {
+  @apply bg-blue-600 !important;
 }
 
 .checked\:border-transparent:checked {

@@ -45,13 +45,13 @@ Add the `hover:` prefix to only apply a utility on hover.
 ```html rose
 <template preview>
   <div class="text-center">
-    <button type="button" class="py-2 px-4 bg-rose-500 text-white font-semibold rounded-lg shadow-md hover:bg-rose-700 focus:outline-none" tabindex="-1">
+    <button type="button" class="py-2 px-4 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none" tabindex="-1">
       Hover me
     </button>
   </div>
 </template>
 
-<button class="bg-rose-500 **hover:bg-rose-700** ...">
+<button class="bg-red-500 **hover:bg-red-700** ...">
   Hover me
 </button>
 ```
@@ -83,11 +83,11 @@ Add the `focus:` prefix to only apply a utility on focus.
 ```html lightBlue
 <template preview>
   <div class="max-w-xs w-full mx-auto">
-    <input class="py-3 px-4 bg-white rounded-lg placeholder-gray-400 text-gray-900 appearance-none inline-block w-full shadow-md focus:outline-none focus:ring-2 focus:ring-light-blue-600" placeholder="Focus me">
+    <input class="py-3 px-4 bg-white rounded-lg placeholder-gray-400 text-gray-900 appearance-none inline-block w-full shadow-md focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Focus me">
   </div>
 </template>
 
-<input class="**focus:ring-2 focus:ring-light-blue-600** ...">
+<input class="**focus:ring-2 focus:ring-blue-600** ...">
 ```
 
 <div>
@@ -200,8 +200,8 @@ The `group-focus` variant works just like [`group-hover`](#group-hover) except f
   </div>
 </template>
 
-<button class="**group** bg-amber-500 focus:bg-amber-600 ...">
-  <svg class="text-white **group-focus:text-amber-300** ..."></svg>
+<button class="**group** bg-yellow-500 focus:bg-yellow-600 ...">
+  <svg class="text-white **group-focus:text-yellow-300** ..."></svg>
   Bookmark
 </button>
 ```
@@ -281,16 +281,16 @@ Add the `focus-visible:` prefix to only apply a utility when an element has focu
 ```html rose
 <template preview>
   <div class="flex justify-center space-x-8">
-    <button type="button" class="py-2 px-4 bg-rose-500 text-white font-semibold rounded-lg shadow-md hover:bg-rose-700 focus:outline-none focus:bg-rose-500 focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 focus:ring-opacity-75 focus:ring-transparent">
+    <button type="button" class="py-2 px-4 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:bg-red-500 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-opacity-75 focus:ring-transparent">
       Ring on focus
     </button>
-    <button type="button" class="py-2 px-4 bg-rose-500 text-white font-semibold rounded-lg shadow-md hover:bg-rose-700 focus:outline-none focus:bg-rose-500 focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 focus-visible:ring-opacity-75 focus-visible:ring-transparent">
+    <button type="button" class="py-2 px-4 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:bg-red-500 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-opacity-75 focus-visible:ring-transparent">
       Ring on focus-visible
     </button>
   </div>
 </template>
 
-<button class="**focus:ring-2 focus:ring-rose-500** ...">
+<button class="**focus:ring-2 focus:ring-red-500** ...">
   Ring on focus
 </button>
 <button class="**focus-visible:ring-2 focus-visible:ring-rose-500** ...">
@@ -514,13 +514,13 @@ Add the `checked:` prefix to only apply a utility when a radio or checkbox is cu
 <template preview>
   <div class="p-4 max-w-xs mx-auto bg-white rounded-xl shadow-md">
     <label class="flex items-center space-x-3">
-      <input type="checkbox" name="checked-demo" value="1" class="form-tick appearance-none h-6 w-6 border border-gray-300 rounded-md checked:bg-light-blue-600 checked:border-transparent focus:outline-none">
+      <input type="checkbox" name="checked-demo" value="1" class="form-tick appearance-none h-6 w-6 border border-gray-300 rounded-md checked:bg-blue-600 checked:border-transparent focus:outline-none">
       <span class="text-gray-900 font-medium">Option 1</span>
     </label>
   </div>
 </template>
 
-<input type="checkbox" class="appearance-none **checked:bg-blue-light-600 checked:border-transparent** ...">
+<input type="checkbox" class="appearance-none **checked:bg-blue-600 checked:border-transparent** ...">
 ```
 
 <div>
