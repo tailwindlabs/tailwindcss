@@ -11,8 +11,12 @@ features:
 import plugin from 'tailwindcss/lib/plugins/maxHeight'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
+import { numbersFirst } from '@/utils/sortClasses'
 
-export const classes = { plugin }
+export const classes = {
+  plugin,
+  sort: numbersFirst,
+}
 
 ## Usage
 

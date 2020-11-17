@@ -5192,6 +5192,11 @@ jsx-ast-utils@^2.4.1:
     array-includes "^3.1.1"
     object.assign "^4.1.0"
 
+just-group-by@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/just-group-by/-/just-group-by-1.0.0.tgz#d4dafcee519363334052d6a101c6e8fa8aa532dd"
+  integrity sha512-SBQOUgx7gBoPfky1QBysFFUk3U++QVzS6B8XgSdB8riwYkYAh6TUBYBNI2lS41xg2BqLl6ZcBOLuJSMC0eVPIw==
+
 kind-of@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-2.0.1.tgz"

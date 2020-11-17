@@ -6,8 +6,12 @@ description: "Utilities for setting the height of an element"
 import plugin from 'tailwindcss/lib/plugins/height'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
+import { numbersFirst } from '@/utils/sortClasses'
 
-export const classes = { plugin }
+export const classes = {
+  plugin,
+  sort: numbersFirst,
+}
 
 ## Auto
 

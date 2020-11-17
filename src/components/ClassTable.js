@@ -67,6 +67,7 @@ export const ClassTable = memo(
     plugin,
     filterProperties,
     preview,
+    sort = (x) => x,
     transformSelector = (x) => x.slice(1).replace(/\\/g, ''),
     transformProperties = ({ properties }) => properties,
     transformValue,
@@ -79,13 +80,7 @@ export const ClassTable = memo(
 
     return (
       <div className="border-b border-gray-200 overflow-hidden relative">
-        <Heading
-          level={2}
-          id="class-reference"
-          toc={true}
-          className="relative"
-          // style={{ top: '-100vh' }}
-        >
+        <Heading level={2} id="class-reference" toc={true} className="relative">
           <span className="sr-only">Default class reference</span>
         </Heading>
         <div
@@ -125,7 +120,7 @@ export const ClassTable = memo(
                 </tr>
               </thead>
               <tbody className="align-baseline">
-                {Object.keys(utilities).map((utility, i) => {
+                {sort(Object.keys(utilities)).map((utility, i) => {
                   let selector = utility
                   let properties = utilities[selector]
 
