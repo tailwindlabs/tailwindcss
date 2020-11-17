@@ -448,7 +448,7 @@ export function HtmlZenGarden({ theme }) {
                       initial={false}
                       animate={{ opacity: theme === 'playful' ? 1 : 0 }}
                     >
-                      Kids Jumper
+                      Kids Jumpsuit
                     </motion.h2>
                     <motion.h2
                       layout
