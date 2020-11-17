@@ -9,15 +9,41 @@ Now that dark mode is a first-class feature of many operating systems, it's beco
 
 To make this as easy as possible, Tailwind includes a `dark` variant that lets you style your site differently when dark mode is enabled:
 
-```html
-<div class="bg-white **dark:bg-gray-900**">
-  <h1 class="text-gray-900 **dark:text-white**">
-    My headline
-  </h1>
-  <hr class="border-gray-300 **dark:border-gray-600**">
-  <p class="text-gray-700 **dark:text-gray-300**">
-    Ratione praesentium numquam. Laudantium porro deserunt assumenda labore in et architecto sit minus. Et expedita eum rerum recusandae. Vel assumenda iste officiis modi ut. Doloremque repudiandae perspiciatis qui natus officiis qui suscipit et dolores. Odit sit cumque sit excepturi iusto ut ipsa impedit.
-  </p>
+```html lightBlue
+<template preview class="p-18">
+  <div class="max-w-sm w-full mx-auto rounded-xl shadow-md overflow-hidden bg-white dark:bg-gray-800">
+    <div class="p-6 flex items-center space-x-4">
+      <div class="h-12 w-12 bg-blue-500 rounded-xl flex items-center justify-center">
+        <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-gray-500 dark:text-gray-300">Total Subscribers</p>
+        <p class="text-2xl font-medium text-gray-900 dark:text-white">52,407</p>
+      </div>
+    </div>
+    <div class="px-6 py-3 bg-gray-50 dark:bg-gray-900">
+      <a href="#" class="text-sm font-semibold text-blue-700 dark:text-blue-200">View all</a>
+    </div>
+  </div>
+</template>
+
+<div class="max-w-sm w-full mx-auto rounded-xl shadow-md overflow-hidden bg-white **dark:bg-gray-800**">
+  <div class="p-6 flex items-center space-x-4">
+    <div class="h-12 w-12 bg-blue-500 rounded-xl flex items-center justify-center">
+      <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+    </div>
+    <div>
+      <p class="text-sm font-medium text-gray-500 **dark:text-gray-300**">Total Subscribers</p>
+      <p class="text-2xl font-medium text-gray-900 **dark:text-white**">52,407</p>
+    </div>
+  </div>
+  <div class="px-6 py-3 bg-gray-50 **dark:bg-gray-900**">
+    <a href="#" class="text-sm font-semibold text-blue-700 **dark:text-blue-200**">View all</a>
+  </div>
 </div>
 ```
 
