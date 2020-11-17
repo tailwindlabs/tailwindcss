@@ -88,10 +88,10 @@ const formatDate = tinytime('{MM} {DD}, {YYYY}').render
 export default function DocsLandingPage() {
   return (
     <div className="px-4 sm:px-6 xl:px-8 pt-10 pb-16">
-      <h1 className="text-5xl leading-none font-extrabold text-gray-900 mb-4">
+      <h1 className="text-5xl leading-none font-extrabold text-gray-900 tracking-tight mb-4">
         Getting started with Tailwind CSS
       </h1>
-      <p className="text-2xl mb-10">
+      <p className="text-2xl tracking-tight mb-10">
         Learn Tailwind the way that best matches your learning style.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 xl:gap-8">
