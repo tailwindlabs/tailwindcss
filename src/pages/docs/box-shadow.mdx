@@ -19,44 +19,25 @@ export const classes = { plugin }
 Use the `shadow-xs`, `.shadow-sm`, `.shadow`, `.shadow-md`, `.shadow-lg`, `.shadow-xl`, or `.shadow-2xl` utilities to apply different sized outer box shadows to an element.
 
 ```html
-<template preview class="bg-gray-100 lg:flex justify-around items-center text-sm p-4 py-8">
-  <div class="text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">xs</div>
-    <div class="mx-auto h-6 w-6 text-xs bg-white rounded shadow-xs"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">sm</div>
-    <div class="mx-auto h-8 w-8 text-xs bg-white rounded shadow-sm"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">base</div>
-    <div class="mx-auto h-10 w-10 text-xs bg-white rounded shadow"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">md</div>
-    <div class="mx-auto h-12 w-12 text-xs bg-white rounded shadow-md"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">lg</div>
-    <div class="mx-auto h-16 w-16 text-xs bg-white rounded shadow-lg"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">xl</div>
-    <div class="mx-auto h-20 w-20 text-xs bg-white rounded shadow-xl"></div>
-  </div>
-  <div class="mt-6 lg:mt-0 text-center px-2">
-    <div class="mb-1 text-xs text-gray-600">2xl</div>
-    <div class="mx-auto h-24 w-24 text-xs bg-white rounded shadow-2xl"></div>
+<template preview>
+  <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4">
+    <div class="shadow-xs h-32 w-32 font-semibold bg-white rounded-md flex items-center justify-center">.shadow-xs</div>
+    <div class="shadow-sm h-32 w-32 font-semibold bg-white rounded-md flex items-center justify-center">.shadow-sm</div>
+    <div class="shadow h-32 w-32 font-semibold bg-white rounded-md flex items-center justify-center">.shadow</div>
+    <div class="shadow-md h-32 w-32 font-semibold bg-white rounded-md flex items-center justify-center">.shadow-md</div>
+    <div class="shadow-lg h-32 w-32 font-semibold bg-white rounded-md flex items-center justify-center">.shadow-lg</div>
+    <div class="shadow-xl h-32 w-32 font-semibold bg-white rounded-md flex items-center justify-center">.shadow-xl</div>
+    <div class="shadow-2xl h-32 w-32 font-semibold bg-white rounded-md flex items-center justify-center">.shadow-2xl</div>
   </div>
 </template>
 
-<div class="shadow-xs"></div>
-<div class="shadow-sm"></div>
-<div class="shadow"></div>
-<div class="shadow-md"></div>
-<div class="shadow-lg"></div>
-<div class="shadow-xl"></div>
-<div class="shadow-2xl"></div>
+<div class="**shadow-xs** ..."></div>
+<div class="**shadow-sm** ..."></div>
+<div class="**shadow** ..."></div>
+<div class="**shadow-md** ..."></div>
+<div class="**shadow-lg** ..."></div>
+<div class="**shadow-xl** ..."></div>
+<div class="**shadow-2xl** ..."></div>
 ```
 
 ## Inner shadow
@@ -64,30 +45,13 @@ Use the `shadow-xs`, `.shadow-sm`, `.shadow`, `.shadow-md`, `.shadow-lg`, `.shad
 Use the `shadow-inner` utility to apply a subtle inset box shadow to an element. This can be useful for things like form controls or wells.
 
 ```html
-<template preview class="flex justify-around text-sm p-4 py-8">
-  <div class="rounded p-4 bg-gray-200 shadow-inner">.shadow-inner</div>
+<template preview>
+  <div class="flex justify-center items-center">
+    <div class="shadow-inner h-24 w-40 font-semibold bg-gray-200 rounded-md flex items-center justify-center">.shadow-inner</div>
+  </div>
 </template>
 
-<div class="shadow-inner"></div>
-```
-
-## Focus outline shadow
-
-Use the `shadow-outline` utility to apply a focus-ring-style shadow to an element. This can be useful when combined with `.focus:outline-none` to create a better looking focus style that follows an element's border radius.
-
-```html
-<template preview class="flex justify-center text-sm p-4 py-8">
-  <button class="focus:outline-none focus:shadow-outline bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-32 mr-6">
-    Unfocused
-  </button>
-  <button class="focus:outline-none shadow-outline bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-32">
-    Focused
-  </button>
-</template>
-
-<button class="focus:outline-none focus:shadow-outline ...">
-  Button
-</button>
+<div class="**shadow-inner** ..."></div>
 ```
 
 ## No shadow
@@ -95,11 +59,13 @@ Use the `shadow-outline` utility to apply a focus-ring-style shadow to an elemen
 Use `shadow-none` to remove an existing box shadow from an element. This is most commonly used to remove a shadow that was applied at a smaller breakpoint.
 
 ```html
-<template preview class="flex justify-around text-sm p-4 py-8">
-  <div class="rounded p-4 shadow-none bg-gray-200">.shadow-none</div>
+<template preview>
+  <div class="flex justify-center items-center">
+    <div class="shadow-none h-24 w-40 font-semibold bg-gray-200 rounded-md flex items-center justify-center">.shadow-none</div>
+  </div>
 </template>
 
-<div class="shadow-none"></div>
+<div class="**shadow-none** ..."></div>
 ```
 
 ## Responsive
