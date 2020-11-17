@@ -197,6 +197,11 @@ module.exports = {
       cursor: ['active'],
       opacity: ['disabled'],
       textColor: ['group-focus'],
+      ringWidth: ['focus-visible'],
+      ringOffsetWidth: ['focus-visible'],
+      ringOffsetColor: ['focus-visible'],
+      ringColor: ['focus-visible'],
+      ringOpacity: ['focus-visible'],
     },
   },
   plugins: [
