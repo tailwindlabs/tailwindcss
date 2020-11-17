@@ -31,36 +31,38 @@ export const classes = {
 
 Control the background color of an element using the `bg-{color}` utilities.
 
-```html
-<template preview class="text-center p-4">
-  <button type="button" class="bg-blue-500 text-white font-semibold px-4 py-2 rounded">
-    Button
-  </button>
+```html lightBlue
+<template preview>
+  <div class="flex justify-center items-center">
+    <button type="button" class="bg-light-blue-600 text-white font-semibold px-6 py-3 rounded-md">
+      Button
+    </button>
+  </div>
 </template>
 
-<button class="bg-blue-500 ...">Button</button>
+<button class="**bg-light-blue-600** ...">Button</button>
 ```
 
 ### Changing opacity
 
 Control the opacity of an element's background color using the `bg-opacity-{amount}` utilities.
 
-```html
-<template preview class="bg-checkered p-4">
-  <div class="flex justify-around">
-    <div class="h-16 w-16 rounded bg-blue-500 bg-opacity-100"></div>
-    <div class="h-16 w-16 rounded bg-blue-500 bg-opacity-75"></div>
-    <div class="h-16 w-16 rounded bg-blue-500 bg-opacity-50"></div>
-    <div class="h-16 w-16 rounded bg-blue-500 bg-opacity-25"></div>
-    <div class="h-16 w-16 rounded bg-blue-500 bg-opacity-0"></div>
+```html purple
+<template preview>
+  <div class="grid grid-cols-2 gap-2 sm:grid-cols-5">
+    <div class="h-16 rounded-md bg-opacity-100 bg-purple-600 font-extrabold text-white flex justify-center items-center">100%</div>
+    <div class="h-16 rounded-md bg-opacity-75 bg-purple-600 font-extrabold text-white flex justify-center items-center">75%</div>
+    <div class="h-16 rounded-md bg-opacity-50 bg-purple-600 font-extrabold text-white flex justify-center items-center">50%</div>
+    <div class="h-16 rounded-md bg-opacity-25 bg-purple-600 font-extrabold text-white flex justify-center items-center">25%</div>
+    <div class="h-16 rounded-md bg-opacity-0 bg-purple-600 font-extrabold text-white flex justify-center items-center">0%</div>
   </div>
 </template>
 
-<div class="bg-blue-500 bg-opacity-100"></div>
-<div class="bg-blue-500 bg-opacity-75"></div>
-<div class="bg-blue-500 bg-opacity-50"></div>
-<div class="bg-blue-500 bg-opacity-25"></div>
-<div class="bg-blue-500 bg-opacity-0"></div>
+<div class="bg-purple-600 **bg-opacity-100** ..."></div>
+<div class="bg-purple-600 **bg-opacity-75** ..."></div>
+<div class="bg-purple-600 **bg-opacity-50** ..."></div>
+<div class="bg-purple-600 **bg-opacity-25** ..."></div>
+<div class="bg-purple-600 **bg-opacity-0** ..."></div>
 ```
 
 Learn more in the [background opacity documentation](/docs/background-opacity).
@@ -79,29 +81,29 @@ For more information about Tailwind's responsive design features, check out the 
 
 To control the background color of an element on hover, add the `hover:` prefix to any existing background color utility. For example, use `hover:bg-blue-500` to apply the `bg-blue-500` utility on hover.
 
-```html
-<template preview class="text-center p-4">
-  <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded">
-    Hover me
-  </button>
+```html emerald
+<template preview>
+  <div class="flex justify-center items-center">
+    <button type="button" class="bg-emerald-600 hover:bg-light-blue-600 text-white font-semibold px-6 py-3 rounded-md">
+      Button
+    </button>
+  </div>
 </template>
 
-<button class="bg-blue-500 hover:bg-blue-700 ...">
-  Hover me
-</button>
+<button class="bg-green-600 **hover:bg-light-blue-600** ...">Button</button>
 ```
 
-Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
+Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.
 
 ```html
-<button class="... md:bg-blue-500 md:hover:bg-blue-700 ...">Button</button>
+<button class="... md:bg-blue-500 **md:hover:bg-blue-700** ...">Button</button>
 ```
 
 ## Focus
 
 To control the background color of an element on focus, add the `focus:` prefix to any existing background color utility. For example, use `focus:bg-blue-500` to apply the `bg-blue-500` utility on focus.
 
-```html
+```html amber
 <template preview>
   <div class="max-w-xs w-full mx-auto">
     <input class="border border-gray-400 bg-gray-200 focus:bg-white text-gray-900 appearance-none inline-block w-full border rounded py-3 px-4 focus:outline-none" placeholder="Focus me">
@@ -114,7 +116,7 @@ To control the background color of an element on focus, add the `focus:` prefix 
 Focus utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
 
 ```html
-<input class="... md:bg-gray-200 md:focus:bg-white ...">
+<input class="... md:bg-gray-200 **md:focus:bg-white** ...">
 ```
 
 ## Customizing
