@@ -9,66 +9,112 @@ import { Disabling } from '@/components/Disabling'
 
 export const classes = { plugin }
 
-## Collapse
-
-Use `border-collapse` to combine adjacent cell borders into a single border when possible. Note that this includes collapsing borders on the top-level `<table>` tag.
-
-```html
-<template preview>
-  <table class="border-collapse border-2 border-gray-500">
-    <thead>
-      <tr>
-        <th class="border border-gray-400 px-4 py-2 text-gray-800">State</th>
-        <th class="border border-gray-400 px-4 py-2 text-gray-800">City</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="border border-gray-400 px-4 py-2">Indiana</td>
-        <td class="border border-gray-400 px-4 py-2">Indianapolis</td>
-      </tr>
-      <tr>
-        <td class="border border-gray-400 px-4 py-2">Ohio</td>
-        <td class="border border-gray-400 px-4 py-2">Columbus</td>
-      </tr>
-      <tr>
-        <td class="border border-gray-400 px-4 py-2">Michigan</td>
-        <td class="border border-gray-400 px-4 py-2">Detroit</td>
-      </tr>
-    </tbody>
-  </table>
-</template>
-```
-
 ## Separate
 
 Use `border-separate` to force each cell to display its own separate borders.
 
-```html
+```html emerald
 <template preview>
-  <table class="border-separate border-2 border-gray-500">
-    <thead>
+  <table class="border-separate w-full border-2 border-emerald-800">
+    <thead class="bg-emerald-200">
       <tr>
-        <th class="border border-gray-400 px-4 py-2 text-gray-800">State</th>
-        <th class="border border-gray-400 px-4 py-2 text-gray-800">City</th>
+        <th class="border-2 border-emerald-600 px-4 py-2 text-emerald-800 text-left font-flow">State</th>
+        <th class="border-2 border-emerald-600 px-4 py-2 text-emerald-800 text-left font-flow">City</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td class="border border-gray-400 px-4 py-2">Indiana</td>
-        <td class="border border-gray-400 px-4 py-2">Indianapolis</td>
+        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Indiana</td>
+        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Indianapolis</td>
       </tr>
       <tr>
-        <td class="border border-gray-400 px-4 py-2">Ohio</td>
-        <td class="border border-gray-400 px-4 py-2">Columbus</td>
+        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Ohio</td>
+        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Columbus</td>
       </tr>
       <tr>
-        <td class="border border-gray-400 px-4 py-2">Michigan</td>
-        <td class="border border-gray-400 px-4 py-2">Detroit</td>
+        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Michigan</td>
+        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Detroit</td>
       </tr>
     </tbody>
   </table>
 </template>
+
+<table class="**border-separate** border border-green-800 ...">
+  <thead>
+    <tr>
+      <th class="border border-green-600 ...">State</th>
+      <th class="border border-green-600 ...">City</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border border-green-600 ...">Indiana</td>
+      <td class="border border-green-600 ...">Indianapolis</td>
+    </tr>
+    <tr>
+      <td class="border border-green-600 ...">Ohio</td>
+      <td class="border border-green-600 ...">Columbus</td>
+    </tr>
+    <tr>
+      <td class="border border-green-600 ...">Michigan</td>
+      <td class="border border-green-600 ...">Detroit</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+## Collapse
+
+Use `border-collapse` to combine adjacent cell borders into a single border when possible. Note that this includes collapsing borders on the top-level `<table>` tag.
+
+```html emerald
+<template preview>
+  <table class="border-collapse w-full border-2 border-emerald-800">
+    <thead class="bg-emerald-200">
+      <tr>
+        <th class="border-2 border-emerald-600 px-4 py-2 text-emerald-800 text-left font-flow">State</th>
+        <th class="border-2 border-emerald-600 px-4 py-2 text-emerald-800 text-left font-flow">City</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Indiana</td>
+        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Indianapolis</td>
+      </tr>
+      <tr>
+        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Ohio</td>
+        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Columbus</td>
+      </tr>
+      <tr>
+        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Michigan</td>
+        <td class="border-2 border-emerald-600 px-4 py-2 font-flow text-emerald-400">Detroit</td>
+      </tr>
+    </tbody>
+  </table>
+</template>
+
+<table class="**border-collapse** border border-green-800 ...">
+  <thead>
+    <tr>
+      <th class="border border-green-600 ...">State</th>
+      <th class="border border-green-600 ...">City</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border border-green-600 ...">Indiana</td>
+      <td class="border border-green-600 ...">Indianapolis</td>
+    </tr>
+    <tr>
+      <td class="border border-green-600 ...">Ohio</td>
+      <td class="border border-green-600 ...">Columbus</td>
+    </tr>
+    <tr>
+      <td class="border border-green-600 ...">Michigan</td>
+      <td class="border border-green-600 ...">Detroit</td>
+    </tr>
+  </tbody>
+</table>
 ```
 
 ## Customizing
