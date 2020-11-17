@@ -63,7 +63,7 @@ export default function Recipes({ recipes }) {
       <List>
         {recipes.map((recipe) => (
           <ListItem key={recipe.id} recipe={recipe} />
-        )}
+        ))}
       </List>
     </div>
   )
