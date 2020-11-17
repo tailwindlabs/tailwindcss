@@ -38,9 +38,11 @@ export const classes = {
 Set the starting color of a gradient using the `from-{color}` utilities.
 
 ```html
-<template preview class="p-8">
+<template preview>
   <div class="h-24 bg-gradient-to-r from-red-500"></div>
 </template>
+
+<div class="bg-gradient-to-r **from-red-500** ..."></div>
 ```
 
 Gradients fade out to transparent by default.
@@ -50,9 +52,11 @@ Gradients fade out to transparent by default.
 Set the ending color of a gradient using the `to-{color}` utilities.
 
 ```html
-<template preview class="p-8">
+<template preview>
   <div class="h-24 bg-gradient-to-r from-teal-400 to-blue-500"></div>
 </template>
+
+<div class="bg-gradient-to-r from-teal-400 **to-blue-500** ..."></div>
 ```
 
 Gradients to **do not** fade in from transparent by default. To fade in from transparent, reverse the gradient direction and use a `from-{color}` utility.
@@ -62,9 +66,11 @@ Gradients to **do not** fade in from transparent by default. To fade in from tra
 Add a middle color to a gradient using the `via-{color}` utilities.
 
 ```html
-<template preview class="p-8">
+<template preview>
   <div class="h-24 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500"></div>
 </template>
+
+<div class="bg-gradient-to-r from-purple-400 **via-pink-500** to-red-500 ..."></div>
 ```
 
 Gradients with a `from-{color}` and `via-{color}` will fade out to transparent by default if no `to-{color}` is present.
@@ -75,7 +81,7 @@ Gradients with a `from-{color}` and `via-{color}` will fade out to transparent b
 To control the gradient color stops of an element at a specific breakpoint, add a `{screen}:` prefix to any existing gradient color stop utility. For example, use `md:from-green-500` to apply the `from-green-500` utility at only medium screen sizes and above.
 
 ```html
-<div class="bg-gradient-to-r from-purple-400 md:from-orange-500"></div>
+<div class="bg-gradient-to-r from-purple-400 **md:from-orange-500**"></div>
 ```
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
@@ -86,17 +92,23 @@ For more information about Tailwind's responsive design features, check out the 
 To control the gradient color stops of an element on hover, add the `hover:` prefix to any existing gradient color stop utility. For example, use `hover:bg-blue-500` to apply the `bg-blue-500` utility on hover.
 
 ```html
-<template preview class="text-center p-4">
-  <button type="button" class="bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 text-white font-semibold px-4 py-2 rounded">
-    Hover me
-  </button>
+<template preview>
+  <div class="flex justify-center">
+    <button type="button" class="bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 text-white font-semibold px-6 py-3 rounded-md">
+      Hover me
+    </button>
+  </div>
 </template>
+
+<button type="button" class="bg-gradient-to-r from-teal-400 to-blue-500 **hover:from-pink-500 hover:to-orange-500** ...">
+  Hover me
+</button>
 ```
 
 Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
 
 ```html
-<button class="... md:from-blue-500 md:hover:from-blue-700 ...">Button</button>
+<button class="... **md:from-blue-500 md:hover:from-blue-700** ...">Button</button>
 ```
 
 ## Focus
@@ -104,11 +116,17 @@ Hover utilities can also be combined with responsive utilities by adding the res
 To control the gradient color stops of an element on focus, add the `focus:` prefix to any existing gradient color stop utility. For example, use `focus:bg-blue-500` to apply the `bg-blue-500` utility on focus.
 
 ```html
-<template preview class="text-center p-4">
-  <button type="button" class="bg-gradient-to-r from-teal-400 to-blue-500 focus:from-pink-500 focus:to-orange-500 text-white font-semibold px-4 py-2 rounded">
-    Focus me
-  </button>
+<template preview>
+  <div class="flex justify-center">
+    <button type="button" class="bg-gradient-to-r from-teal-400 to-blue-500 focus:from-pink-500 focus:to-orange-500 text-white font-semibold px-6 py-3 rounded-md">
+      Focus me
+    </button>
+  </div>
 </template>
+
+<button type="button" class="bg-gradient-to-r from-teal-400 to-blue-500 **focus:from-pink-500 focus:to-orange-500**">
+  Focus me
+</button>
 ```
 
 Focus utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
