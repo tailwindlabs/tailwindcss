@@ -117,7 +117,7 @@ function DarkModeSwitch({ enabled, onChange }) {
         checked={enabled}
         onChange={onChange}
         className={clsx(
-          'inline-flex items-center px-0.5 rounded-full w-18 h-9 transition-colors duration-200',
+          'inline-flex items-center px-0.5 rounded-full w-18 h-9 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:ring-gray-500 focus:outline-none',
           {
             'justify-end': enabled,
           }
@@ -171,7 +171,7 @@ export function DarkMode() {
           Works for background colors, text colors, border colors, and even gradients out-of-the-box
           — no configuration required.
         </Paragraph>
-        <Link href="#" className="text-green-600">
+        <Link href="/docs/dark-mode" className="text-green-600 hover:text-green-800">
           Learn more -&gt;
         </Link>
       </div>

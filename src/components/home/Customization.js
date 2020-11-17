@@ -127,7 +127,7 @@ export function Customization() {
             transform it into your own custom CSS framework.
           </p>
         </Paragraph>
-        <Link href="#" className="text-rose-600">
+        <Link href="/docs/configuration" className="text-rose-600 hover:text-rose-800">
           Learn more -&gt;
         </Link>
       </div>
@@ -135,7 +135,7 @@ export function Customization() {
         color="pink"
         rotate={-1}
         header={
-          <div className="flex overflow-auto -mx-4 sm:-mx-6 md:-mx-8 xl:-ml-4 xl:mr-0">
+          <div className="flex overflow-auto py-0.5 -my-0.5 pl-0.5 -mx-4 sm:-mx-6 md:-mx-8 xl:-ml-4 xl:mr-0">
             <Tabs
               tabs={{
                 simple: 'Simple',

@@ -113,7 +113,7 @@ export function Performance() {
           your final CSS bundle is the smallest it could possibly be. In fact, most Tailwind
           projects ship less than 10KB of CSS to the client.
         </Paragraph>
-        <Link href="#" className="text-teal-500">
+        <Link href="/docs/optimizing-for-production" className="text-teal-500 hover:text-teal-700">
           Learn more -&gt;
         </Link>
       </div>

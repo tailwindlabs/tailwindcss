@@ -49,7 +49,7 @@ function NpmInstallButton() {
   return (
     <button
       type="button"
-      className="w-full sm:w-auto flex-none bg-gray-50 text-gray-400 font-mono leading-6 py-3 sm:px-6 border border-gray-200 rounded-xl flex items-center justify-center space-x-2 sm:space-x-4"
+      className="w-full sm:w-auto flex-none bg-gray-50 text-gray-400 hover:text-black font-mono leading-6 py-3 sm:px-6 border border-gray-200 rounded-xl flex items-center justify-center space-x-2 sm:space-x-4 focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-gray-300 focus:outline-none transition-colors duration-200"
       onClick={() => setState('copying')}
     >
       <span className="text-black">
@@ -75,7 +75,7 @@ export default function Home() {
             <Search />
             <a
               href="https://github.com/tailwindlabs/tailwindcss"
-              className="text-gray-400 hover:text-gray-900 transition-colors duration-200"
+              className="text-gray-400 hover:text-gray-500 transition-colors duration-200"
             >
               <span className="sr-only">Tailwind CSS on GitHub</span>
               <svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
@@ -96,7 +96,7 @@ export default function Home() {
           </p>
           <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4 text-center">
             <NextLink href="/docs">
-              <a className="w-full sm:w-auto flex-none bg-black text-white text-lg leading-6 font-semibold py-3 px-6 border border-transparent rounded-xl">
+              <a className="w-full sm:w-auto flex-none bg-black text-white text-lg leading-6 font-semibold py-3 px-6 border border-transparent rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-black focus:outline-none">
                 Get started
               </a>
             </NextLink>
@@ -116,7 +116,7 @@ export default function Home() {
             you actually try it. If you can suppress the initial gag reflex long enough to give it a
             chance, I promise you're in for a good time.
           </Paragraph>
-          <Link href="#" className="text-light-blue-500">
+          <Link href="#" className="text-light-blue-500 hover:text-light-blue-700">
             Read our pitch for utility-first CSS -&gt;
           </Link>
         </div>

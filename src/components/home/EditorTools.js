@@ -324,7 +324,7 @@ export function EditorTools() {
             within your editor and with no configuration required.
           </p>
         </Paragraph>
-        <Link href="#" className="text-light-blue-600">
+        <Link href="/docs/intellisense" className="text-light-blue-600 hover:text-light-blue-800">
           Learn more -&gt;
         </Link>
       </div>

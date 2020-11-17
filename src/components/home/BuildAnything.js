@@ -238,8 +238,8 @@ export function BuildAnything() {
           Even with the same color palette and sizing scale, it's easy to build the same component
           with a completely different look in the next project.
         </Paragraph>
-        <Link href="#" className="text-orange-600">
-          Learn more -&gt;
+        <Link href="/docs" className="text-orange-600 hover:text-orange-800">
+          Get started -&gt;
         </Link>
       </div>
       <GradientLockup
@@ -247,7 +247,7 @@ export function BuildAnything() {
         rotate={-2}
         pin="right"
         header={
-          <div className="flex overflow-auto -mx-4 sm:-mx-6 md:-mx-8 xl:-ml-4 xl:mr-0">
+          <div className="flex overflow-auto py-0.5 -my-0.5 pl-0.5 -mx-4 sm:-mx-6 md:-mx-8 xl:-ml-4 xl:mr-0">
             <Tabs
               tabs={{
                 simple: 'Simple',

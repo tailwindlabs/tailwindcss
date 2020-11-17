@@ -39,7 +39,10 @@ export function Paragraph({ as: Component = 'p', className = '', ...props }) {
 export function Link({ className = '', href, ...props }) {
   return (
     <NextLink href={href}>
-      <a className={`inline-flex text-lg sm:text-2xl font-medium ${className}`} {...props} />
+      <a
+        className={`inline-flex text-lg sm:text-2xl font-medium transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-current focus:outline-none rounded-md ${className}`}
+        {...props}
+      />
     </NextLink>
   )
 }

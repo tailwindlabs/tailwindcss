@@ -156,7 +156,7 @@ export function ModernFeatures() {
             tons more.
           </p>
         </Paragraph>
-        <Link href="#" className="text-purple-600">
+        <Link href="/docs/grid-template-columns" className="text-purple-600 hover:text-purple-800">
           Learn more -&gt;
         </Link>
       </div>
@@ -170,7 +170,7 @@ export function ModernFeatures() {
           },
         }}
         header={
-          <div className="flex overflow-auto -mx-4 sm:-mx-6 md:-mx-8 xl:-ml-4 xl:mr-0">
+          <div className="flex overflow-auto py-0.5 -my-0.5 pl-0.5 -mx-4 sm:-mx-6 md:-mx-8 xl:-ml-4 xl:mr-0">
             <Tabs
               tabs={{ grid: 'CSS Grid', transforms: 'Transforms', gradients: 'Gradients' }}
               selected={feature}
@@ -283,7 +283,7 @@ export function ModernFeatures() {
                 >
                   <button
                     type="button"
-                    className="relative flex w-full pt-full rounded-full focus:outline-none"
+                    className="relative flex w-full pt-full rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-white focus-visible:ring-inset focus-visible:ring-gray-400"
                     onClick={() => setSelectedGradient(gradient)}
                   >
                     <span className="sr-only"></span>

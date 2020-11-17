@@ -37,7 +37,7 @@ export function ReadyMadeComponents() {
           to choose from, and is guaranteed to help you find the perfect starting point for what you
           want to build.
         </Paragraph>
-        <Link href="#" className="text-violet-600">
+        <Link href="https://tailwindui.com/" className="text-violet-600 hover:text-violet-800">
           Learn more -&gt;
         </Link>
       </div>
