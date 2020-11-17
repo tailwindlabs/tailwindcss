@@ -104,7 +104,7 @@ export default function DocsLandingPage() {
                   Learn how to get Tailwind set up with your favorite tools.
                 </p>
                 <Link href="/docs/installation">
-                  <a className="mt-auto bg-violet-800 bg-opacity-50 rounded-xl font-semibold py-2 px-4 inline-flex">
+                  <a className="mt-auto bg-violet-800 bg-opacity-50 hover:bg-opacity-75 transition-colors duration-200 rounded-xl font-semibold py-2 px-4 inline-flex">
                     Start learning
                   </a>
                 </Link>
@@ -131,7 +131,7 @@ export default function DocsLandingPage() {
                 </p>
                 <a
                   href="https://play.tailwindcss.com/"
-                  className="mt-auto bg-rose-900 bg-opacity-50 rounded-xl font-semibold py-2 px-4 inline-flex"
+                  className="mt-auto bg-rose-900 bg-opacity-50 hover:bg-opacity-75 transition-colors duration-200 rounded-xl font-semibold py-2 px-4 inline-flex"
                 >
                   Start building
                 </a>
@@ -150,7 +150,7 @@ export default function DocsLandingPage() {
                 <h2 className="text-xl font-semibold mb-2 text-shadow">Watch the screencasts</h2>
                 <p className="font-medium text-amber-100 text-shadow mb-4">{/* TODO */}</p>
                 <Link href="https://www.youtube.com/tailwindlabs">
-                  <a className="mt-auto bg-amber-900 bg-opacity-50 rounded-xl font-semibold py-2 px-4 inline-flex">
+                  <a className="mt-auto bg-amber-900 bg-opacity-50 hover:bg-opacity-75 transition-colors duration-200 rounded-xl font-semibold py-2 px-4 inline-flex">
                     Start watching
                   </a>
                 </Link>
@@ -174,7 +174,7 @@ export default function DocsLandingPage() {
           </p>
           <a
             href="https://tailwindui.com"
-            className="flex-none bg-white text-gray-900 font-semibold rounded-xl py-2 px-4"
+            className="flex-none bg-white hover:bg-gray-100 transition-colors duration-200 text-gray-900 font-semibold rounded-xl py-2 px-4"
           >
             Browse examples
           </a>
