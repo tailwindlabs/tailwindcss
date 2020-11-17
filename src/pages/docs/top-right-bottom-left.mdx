@@ -19,112 +19,82 @@ Use the `{top|right|bottom|left|inset}-0` utilities to anchor absolutely positio
 
 Combined with Tailwind's padding and margin utilities, you'll probably find that these are all you need to precisely control absolutely positioned elements.
 
-```html
+```html emerald
 <template preview>
-  <div class="flex justify-around mb-8">
-    <div>
-      <p class="text-center text-sm text-gray-600 mb-1">.inset-x-0.top-0</p>
-      <div class="relative h-24 w-24 bg-gray-400">
-        <div class="absolute inset-x-0 top-0 h-8 bg-gray-700"></div>
-      </div>
+  <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
+      <div class="absolute inset-x-0 top-0 h-16 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">1</div>
     </div>
-    <div>
-      <p class="text-center text-sm text-gray-600 mb-1">.inset-y-0.right-0</p>
-      <div class="relative h-24 w-24 bg-gray-400">
-        <div class="absolute inset-y-0 right-0 w-8 bg-gray-700"></div>
-      </div>
+    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
+      <div class="absolute inset-y-0 right-0 w-16 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">2</div>
     </div>
-    <div>
-      <p class="text-center text-sm text-gray-600 mb-1">.inset-x-0.bottom-0</p>
-      <div class="relative h-24 w-24 bg-gray-400">
-        <div class="absolute inset-x-0 bottom-0 h-8 bg-gray-700"></div>
-      </div>
+    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
+      <div class="absolute inset-x-0 bottom-0 h-16 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">3</div>
     </div>
-    <div>
-      <p class="text-center text-sm text-gray-600 mb-1">.inset-y-0.left-0</p>
-      <div class="relative h-24 w-24 bg-gray-400">
-        <div class="absolute inset-y-0 left-0 w-8 bg-gray-700"></div>
-      </div>
+    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
+      <div class="absolute inset-y-0 left-0 w-16 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">4</div>
     </div>
-    <div>
-      <p class="text-center text-sm text-gray-600 mb-1">.inset-0</p>
-      <div class="relative h-24 w-24 bg-gray-400">
-        <div class="absolute inset-0 bg-gray-700"></div>
-      </div>
+    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
+      <div class="absolute inset-0 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">5</div>
     </div>
-  </div>
-  <div class="flex justify-around">
-    <div>
-      <p class="text-center text-sm text-gray-600 mb-1">.left-0.top-0</p>
-      <div class="relative h-24 w-24 bg-gray-400">
-        <div class="absolute left-0 top-0 h-8 w-8 bg-gray-700"></div>
-      </div>
+    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
+      <div class="absolute left-0 top-0 h-16 w-16 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">6</div>
     </div>
-    <div>
-      <p class="text-center text-sm text-gray-600 mb-1">.top-0.right-0</p>
-      <div class="relative h-24 w-24 bg-gray-400">
-        <div class="absolute top-0 right-0 h-8 w-8 bg-gray-700"></div>
-      </div>
+    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
+      <div class="absolute top-0 right-0 h-16 w-16 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">7</div>
     </div>
-    <div>
-      <p class="text-center text-sm text-gray-600 mb-1">.right-0.bottom-0</p>
-      <div class="relative h-24 w-24 bg-gray-400">
-        <div class="absolute right-0 bottom-0 h-8 w-8 bg-gray-700"></div>
-      </div>
+    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
+      <div class="absolute right-0 bottom-0 h-16 w-16 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">8</div>
     </div>
-    <div>
-      <p class="text-center text-sm text-gray-600 mb-1">.bottom-0.left-0</p>
-      <div class="relative h-24 w-24 bg-gray-400">
-        <div class="absolute bottom-0 left-0 h-8 w-8 bg-gray-700"></div>
-      </div>
+    <div class="relative p-2 h-32 w-32 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
+      <div class="absolute bottom-0 left-0 h-16 w-16 bg-emerald-500 text-white font-extrabold text-2xl flex items-center justify-center rounded-md">9</div>
     </div>
-    <div class="relative h-24 w-24 opacity-0"></div>
   </div>
 </template>
 
 <!-- Span top edge -->
-<div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute inset-x-0 top-0 h-8 bg-gray-700"></div>
+<div class="relative h-32 w-32 ...">
+  <div class="absolute **inset-x-0 top-0** h-16 w-16 ...">1</div>
 </div>
 
 <!-- Span right edge -->
-<div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute inset-y-0 right-0 w-8 bg-gray-700"></div>
+<div class="relative h-32 w-32 ...">
+  <div class="absolute **inset-y-0 right-0** w-16 ...">1</div>
 </div>
 
 <!-- Span bottom edge -->
-<div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute inset-x-0 bottom-0 h-8 bg-gray-700"></div>
+<div class="relative h-32 w-32 ...">
+  <div class="absolute **inset-x-0 bottom-0** h-16 w-16 ...">1</div>
 </div>
 
 <!-- Span left edge -->
-<div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute inset-y-0 left-0 w-8 bg-gray-700"></div>
+<div class="relative h-32 w-32 ...">
+  <div class="absolute **inset-y-0 left-0** w-16 ...">1</div>
 </div>
 
 <!-- Fill entire parent -->
-<div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute inset-0 bg-gray-700"></div>
+<div class="relative h-32 w-32 ...">
+  <div class="absolute **inset-0** ..."></div>
 </div>
 
 <!-- Pin to top left corner -->
-<div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute left-0 top-0 h-8 w-8 bg-gray-700"></div>
+<div class="relative h-32 w-32 ...">
+  <div class="absolute **left-0 top-0** h-16 w-16 ...">1</div>
 </div>
 
 <!-- Pin to top right corner -->
-<div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute top-0 right-0 h-8 w-8 bg-gray-700"></div>
+<div class="relative h-32 w-32 ...">
+  <div class="absolute **top-0 right-0** h-16 w-16 ...">1</div>
 </div>
 
 <!-- Pin to bottom right corner -->
-<div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute bottom-0 right-0 h-8 w-8 bg-gray-700"></div>
+<div class="relative h-32 w-32 ...">
+  <div class="absolute **bottom-0 right-0** h-16 w-16 ...">1</div>
 </div>
 
 <!-- Pin to bottom left corner -->
-<div class="relative h-24 w-24 bg-gray-400">
-  <div class="absolute bottom-0 left-0 h-8 w-8 bg-gray-700"></div>
+<div class="relative h-32 w-32 ...">
+  <div class="absolute **bottom-0 left-0** h-16 w-16 ...">1</div>
 </div>
 ```
 
