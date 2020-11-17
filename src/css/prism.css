@@ -28,13 +28,11 @@
 
 .token.deleted:not(.prefix) {
   @apply relative block -mx-4 px-4;
-  --bg-opacity: 0.15;
 }
 
 .token.deleted:not(.prefix)::after {
   content: '';
-  @apply pointer-events-none absolute inset-0 block bg-rose-400;
-  --bg-opacity: 0.25;
+  @apply pointer-events-none absolute inset-0 block bg-rose-400 bg-opacity-25;
 }
 
 .token.deleted.prefix {
@@ -42,8 +40,7 @@
 }
 
 .token.inserted:not(.prefix) {
-  @apply block bg-emerald-700 -mx-4 px-4;
-  --bg-opacity: 0.5;
+  @apply block bg-emerald-700 bg-opacity-50 -mx-4 px-4;
 }
 
 .token.inserted.prefix {
