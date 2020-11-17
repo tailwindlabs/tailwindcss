@@ -59,12 +59,12 @@ const guides = [
 
 export function IntegrationGuides() {
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-8">
+    <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 xl:gap-8 text-center">
       {guides.map((guide) => {
         const Logo = guide.logo
         return (
           <Link href={guide.link}>
-            <a className="flex flex-col items-center py-4 shadow ring-1 ring-black ring-opacity-5 rounded-lg">
+            <a className="flex flex-col items-center p-4 shadow-sm ring-1 ring-black ring-opacity-5 rounded-xl">
               <Logo className="h-12 w-auto" />
               <div className="mt-3 text-sm text-black font-semibold sm:text-base sm:mt-2">
                 {guide.name}

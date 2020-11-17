@@ -173,7 +173,7 @@ export default function DocsLandingPage() {
           {whatsNew.map((item) => (
             <li key={item.title} className="flex">
               <Link href={item.href}>
-                <a className="relative rounded-xl border border-black border-opacity-5 shadow-sm w-full pt-8 pb-6 px-6">
+                <a className="relative rounded-xl ring-1 ring-black ring-opacity-5 shadow-sm w-full pt-8 pb-6 px-6">
                   {item.image && <item.image className="h-auto max-w-full mx-auto mb-3" />}
                   {item.title}
                   {item.version && (
