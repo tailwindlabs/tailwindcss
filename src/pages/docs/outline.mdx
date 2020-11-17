@@ -16,10 +16,12 @@ Use `outline-none` to hide the default browser outline on focused elements.
 
 It is highly recommended to apply your own focus styling for accessibility when using this utility.
 
-```html
-<template preview class="flex space-x-6 justify-center bg-white p-4">
-  <input type="text" class="px-3 py-2 border rounded" placeholder="Default focus style" />
-  <input type="text" class="px-3 py-2 border rounded focus:outline-none focus:shadow-outline focus:border-blue-400" placeholder="Custom focus style" />
+```html amber
+<template preview>
+  <div class="flex space-x-6 justify-center">
+    <input type="text" class="px-4 py-3 leading-5 border rounded-md" placeholder="Default focus style" />
+    <input type="text" class="px-4 py-3 leading-5 border rounded-md focus:outline-none focus:ring focus:border-blue-400" placeholder="Custom focus style" />
+  </div>
 </template>
 
 <input type="text"
@@ -28,7 +30,7 @@ It is highly recommended to apply your own focus styling for accessibility when 
 
 <input type="text"
   placeholder="Custom focus style"
-  class="focus:outline-none focus:shadow-outline focus:border-blue-300 ..." />
+  class="**focus:outline-none focus:ring focus:border-blue-300** ..." />
 ```
 
 The `outline-none` utility is implemented using a transparent outline under the hood to ensure elements are still visibly focused to [Windows high contrast mode](https://blogs.windows.com/msedgedev/2020/09/17/styling-for-windows-high-contrast-with-new-standards-for-forced-colors/) users.
@@ -39,16 +41,16 @@ Use the `outline-white` and `outline-black` utilities to add a 2px dotted border
 
 ```html
 <template preview class="flex">
-  <div class="min-w-0 flex-1 bg-white p-6 flex items-center justify-center">
-    <button type="button" class="px-4 py-2 rounded font-medium bg-blue-600 text-white focus:outline-black">Button A</button>
+  <div class="min-w-0 flex-1 bg-gray-100 p-10 flex items-center justify-center">
+    <button type="button" class="px-6 py-3 rounded-md font-semibold bg-blue-600 text-white focus:outline-black">Button A</button>
   </div>
-  <div class="min-w-0 flex-1 bg-blue-700 p-6 flex items-center justify-center">
-    <button type="button" class="px-4 py-2 rounded font-medium bg-white text-gray-900 focus:outline-white">Button B</button>
+  <div class="min-w-0 flex-1 bg-blue-700 p-10 flex items-center justify-center">
+    <button type="button" class="px-6 py-3 rounded-md font-semibold bg-white text-gray-900 focus:outline-white">Button B</button>
   </div>
 </template>
 
-<button class="focus:outline-black ...">Button A</button>
-<button class="focus:outline-white ...">Button B</button>
+<button class="**focus:outline-black** ...">Button A</button>
+<button class="**focus:outline-white** ...">Button B</button>
 ```
 
 ## Customizing
