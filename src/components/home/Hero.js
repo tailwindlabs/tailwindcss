@@ -11,30 +11,37 @@ import { useMedia } from '@/hooks/useMedia'
 import { wait } from '@/utils/wait'
 import { createInViewPromise } from '@/utils/createInViewPromise'
 
-const CHAR_DELAY = 50
+const CHAR_DELAY = 75
 const GROUP_DELAY = 1000
 const TRANSITION = { duration: 0.5 }
 
 const { tokens, code } = tokenize.html(
-  `<div class="md:flex bg-gray-100 rounded-xl p-8">
-  <img class="w-32 h-32 md:w-48 md:h-auto md:rounded-none mb-6 md:-m-8 md:mr-8 rounded-full mx-auto" src="https://unsplash.it/200/200?random" alt="" />
-  <blockquote class="text-center">
-    <p class="mb-4 text-lg font-semibold">
-      “Tailwind CSS is the only framework that I've seen scale
-      on large teams. It’s easy to customize, adapts to any design,
-      and the build size is tiny.”
-    </p>
-    <cite class="not-italic font-medium">
-      <span class="text-cyan-600">Sarah Dayan</span><br />
-      <span class="text-gray-500">Staff Engineer, Algolia</span>
-    </cite>
-  </blockquote>
-</div>`,
+  `<figure class="md:flex bg-gray-100 rounded-xl p-8 md:p-0">
+  <img class="w-32 h-32 md:w-48 md:h-auto md:rounded-none rounded-full mx-auto" src="/sarah-dayan.jpg" alt="" width="384" height="512">
+  <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
+    <blockquote>
+      <p class="text-lg font-semibold">
+        “Tailwind CSS is the only framework that I've seen scale
+        on large teams. It’s easy to customize, adapts to any design,
+        and the build size is tiny.”
+      </p>
+    </blockquote>
+    <figcaption class="font-medium">
+      <div class="text-cyan-600">
+        Sarah Dayan
+      </div>
+      <div class="text-gray-500">
+        Staff Engineer, Algolia
+      </div>
+    </figcaption>
+  </div>
+</figure>
+`,
   true
 )
 
-function getRange(text) {
-  return { start: code.indexOf(text), end: code.indexOf(text) + text.length }
+function getRange(text, options = {}) {
+  return { start: code.indexOf(text), end: code.indexOf(text) + text.length, ...options }
 }
 
 const ranges = [
@@ -42,15 +49,21 @@ const ranges = [
   getRange(' rounded-full'),
   getRange(' mx-auto'),
   getRange(' font-semibold'),
-  getRange(' font-medium'),
+  getRange(' class="font-medium"'),
   getRange(' class="text-cyan-600"'),
   getRange(' class="text-gray-500"'),
-  getRange(' class="text-center"'),
+  getRange(' text-center'),
   getRange('md:flex '),
-  getRange(' md:-m-8 md:mr-8'),
+  getRange(' md:p-0'),
+  getRange(' md:p-8', { immediate: true }),
   getRange(' md:rounded-none'),
   getRange(' md:w-48'),
   getRange(' md:h-auto'),
+  getRange(' md:text-left'),
+  // getRange(' md:-m-8 md:mr-8'),
+  // getRange(' md:rounded-none'),
+  // getRange(' md:w-48'),
+  // getRange(' md:h-auto'),
 ]
 
 function getRangeIndex(index, ranges) {
@@ -204,7 +217,7 @@ export function Hero() {
   }, [])
 
   useEffect(() => {
-    if (step === 12) {
+    if (step === 14) {
       let id = window.setTimeout(() => {
         setFinished(true)
       }, 1000)
@@ -284,7 +297,7 @@ export function Hero() {
                 className={clsx('bg-white rounded-r-xl sm:rounded-xl overflow-hidden', {
                   flex: step >= 8 && md,
                   'p-8': step >= 0,
-                  'text-center': step >= 7,
+                  'text-center': (step >= 7 && !md) || (step < 14 && md),
                 })}
               >
                 <motion.div
@@ -312,16 +325,16 @@ export function Hero() {
                   layout={layout}
                   initial={false}
                   animate={{
-                    ...((step >= 1 && step < 10) || (step >= 10 && !md && !finished)
+                    ...((step >= 1 && step < 11) || (step >= 11 && !md && !finished)
                       ? { borderRadius: 64 }
                       : { borderRadius: 0 }),
                   }}
                   transition={TRANSITION}
                   className={clsx(
                     'relative z-10 overflow-hidden flex-none',
-                    step >= 9 && md ? '-m-8 mr-8' : step >= 2 ? 'mx-auto mb-6' : 'mb-6',
-                    step >= 11 && md ? 'w-48' : 'w-32',
-                    step >= 12 && md ? 'h-auto' : 'h-32'
+                    step >= 10 && md ? '-m-8 mr-8' : step >= 2 ? 'mx-auto' : undefined,
+                    step >= 12 && md ? 'w-48' : 'w-32',
+                    step >= 13 && md ? 'h-auto' : 'h-32'
                   )}
                 >
                   <motion.img
@@ -336,15 +349,19 @@ export function Hero() {
                     style={
                       finished
                         ? { top: 0, left: 0, width: '100%', height: '100%' }
-                        : step >= 12 && md
+                        : step >= 13 && md
                         ? fit(192, containerRect.height, 384, 512)
-                        : step >= 11 && md
+                        : step >= 12 && md
                         ? fit(192, 128, 384, 512)
                         : fit(128, 128, 384, 512)
                     }
                   />
                 </motion.div>
-                <motion.div layout={layout} transition={TRANSITION}>
+                <motion.div
+                  layout={layout}
+                  className={step >= 10 && md ? '' : 'pt-6'}
+                  transition={TRANSITION}
+                >
                   <motion.div layout={layout} className="mb-4" transition={TRANSITION}>
                     <Words bolder={step >= 3} layout={layout} transition={TRANSITION}>
                       “Tailwind CSS is the only framework that I've seen scale on large teams. It’s
@@ -352,7 +369,9 @@ export function Hero() {
                     </Words>
                   </motion.div>
                   <motion.div
-                    className={`flex flex-col ${step >= 7 ? 'items-center' : 'items-start'}`}
+                    className={`flex flex-col ${
+                      (step >= 7 && !md) || (step < 14 && md) ? 'items-center' : 'items-start'
+                    }`}
                     style={{
                       ...(step >= 4 ? { fontWeight: 500 } : { fontWeight: 400 }),
                     }}
