@@ -27,8 +27,32 @@
   height: 26.25rem;
 }
 
+@screen lg {
+  .cardContainer {
+    margin-left: calc(50% - 187px);
+  }
+}
+
+@screen xl {
+  .cardContainer {
+    margin-left: 0;
+  }
+}
+
 @screen sm {
   .card {
     width: 23.4375rem;
+  }
+}
+
+@screen md {
+  .codeWindow {
+    height: 33rem;
+  }
+}
+
+@screen lg {
+  .codeWindow {
+    height: 36rem;
   }
 }

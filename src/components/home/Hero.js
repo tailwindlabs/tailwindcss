@@ -280,7 +280,7 @@ export function Hero() {
           <AnimateSharedLayout>
             <motion.div
               layout={layout}
-              className={`${styles.card} relative z-10 rounded-r-xl sm:rounded-xl shadow-xl text-black mx-auto`}
+              className={`${styles.card} relative z-10 rounded-r-xl sm:rounded-xl shadow-xl text-black mx-auto lg:mx-0 xl:mx-auto`}
               initial={false}
               animate={
                 containerRect?.width
@@ -303,7 +303,7 @@ export function Hero() {
                 <motion.div
                   layout={layout}
                   className={clsx(
-                    'absolute z-20 top-1/2 left-0 text-black rounded-full -mt-4 -ml-4 pointer-events-none',
+                    'absolute z-20 top-1/2 right-0 xl:right-auto xl:left-0 text-black rounded-full -mt-4 -mr-4 xl:mr-0 xl:-ml-4 pointer-events-none',
                     { invisible: !supportsMd }
                   )}
                   initial={{ opacity: 0 }}
@@ -405,7 +405,7 @@ export function Hero() {
         </div>
       }
       right={
-        <CodeWindow className="bg-light-blue-500">
+        <CodeWindow className={`${styles.codeWindow} bg-light-blue-500 pb-6 md:pb-0`}>
           <CodeWindow.Code
             ref={inViewRef}
             tokens={tokens}
@@ -515,20 +515,16 @@ function Layout({ left, right, pin = 'left' }) {
       <div
         className={`relative col-start-1 col-end-2 sm:col-start-2 sm:col-end-3 lg:col-start-1 lg:col-span-full xl:col-start-2 xl:col-end-3 row-start-2 row-end-3 xl:row-start-3 xl:row-end-4 self-center ${
           pin === 'left' ? 'pr-8' : 'pl-8'
-        } sm:px-6 md:px-8 pb-6 md:pb-8 lg:px-0 lg:pb-0 -mt-16 lg:-mt-32 xl:mt-0`}
+        } sm:px-6 md:px-8 pb-6 md:pb-8 lg:px-0 lg:pb-0 -mt-6 sm:-mt-10 md:-mt-16 lg:-mt-32 xl:mt-0`}
       >
-        <div className="mx-auto max-w-3xl xl:max-w-none">
-          <div
-            className={`${styles.cardContainer} max-w-xl xl:max-w-none mx-auto lg:mr-0 flex items-center justify-center`}
-          >
-            <div className="w-full flex-none">{left}</div>
-          </div>
+        <div
+          className={`${styles.cardContainer} max-w-xl xl:max-w-none flex items-center justify-center`}
+        >
+          <div className="w-full flex-none">{left}</div>
         </div>
       </div>
       <div className="relative md:px-8 lg:px-0 col-start-1 col-span-full lg:col-start-1 xl:col-start-3 xl:col-end-4 row-start-1 row-end-2 xl:row-start-2 xl:row-end-5 self-center pt-8 lg:pt-0">
-        <div className="mx-auto lg:max-w-3xl xl:max-w-none">
-          <div className="lg:max-w-2xl xl:max-w-none">{right}</div>
-        </div>
+        <div className="mx-auto lg:max-w-2xl xl:max-w-none">{right}</div>
       </div>
     </div>
   )
