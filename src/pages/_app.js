@@ -2,7 +2,6 @@ import '../css/main.css'
 import 'focus-visible'
 import { useState, useEffect, Fragment } from 'react'
 import { Header } from '@/components/Header'
-import { TuiBanner } from '@/components/TuiBanner'
 import { Title } from '@/components/Title'
 import Router from 'next/router'
 import ProgressBar from '@badrap/bar-of-progress'
@@ -11,7 +10,7 @@ import twitterLargeCard from '@/img/twitter-large-card.png'
 
 const progress = new ProgressBar({
   size: 2,
-  color: '#4fd1c5',
+  color: '#22D3EE',
   className: 'bar-of-progress',
   delay: 100,
 })
@@ -77,7 +76,6 @@ export default function App({ Component, pageProps, router }) {
       <Layout {...layoutProps}>
         <Component {...pageProps} />
       </Layout>
-      <TuiBanner />
     </>
   )
 }

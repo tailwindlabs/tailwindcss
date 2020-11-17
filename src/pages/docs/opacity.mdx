@@ -18,22 +18,22 @@ export const classes = { plugin }
 
 Control the opacity of an element using the `opacity-{amount}` utilities.
 
-```html
+```html lightBlue
 <template preview>
-  <div class="flex -mx-2">
-    <div class="text-sm flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 mx-2 opacity-100">.opacity-100</div>
-    <div class="text-sm flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 mx-2 opacity-75">.opacity-75</div>
-    <div class="text-sm flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 mx-2 opacity-50">.opacity-50</div>
-    <div class="text-sm flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 mx-2 opacity-25">.opacity-25</div>
-    <div class="text-sm flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 mx-2 opacity-0">.opacity-0</div>
+  <div class="grid grid-cols-2 gap-2 sm:grid-cols-5">
+    <div class="h-16 rounded-md opacity-100 bg-light-blue-600 font-extrabold text-white flex justify-center items-center">100%</div>
+    <div class="h-16 rounded-md opacity-75 bg-light-blue-600 font-extrabold text-white flex justify-center items-center">75%</div>
+    <div class="h-16 rounded-md opacity-50 bg-light-blue-600 font-extrabold text-white flex justify-center items-center">50%</div>
+    <div class="h-16 rounded-md opacity-25 bg-light-blue-600 font-extrabold text-white flex justify-center items-center">25%</div>
+    <div class="h-16 rounded-md opacity-0 bg-light-blue-600 font-extrabold text-white flex justify-center items-center">0%</div>
   </div>
 </template>
 
-<div class="opacity-100">.opacity-100</div>
-<div class="opacity-75">.opacity-75</div>
-<div class="opacity-50">.opacity-50</div>
-<div class="opacity-25">.opacity-25</div>
-<div class="opacity-0">.opacity-0</div>
+<div class="bg-light-blue-600 **opacity-100** ..."></div>
+<div class="bg-light-blue-600 **opacity-75** ..."></div>
+<div class="bg-light-blue-600 **opacity-50** ..."></div>
+<div class="bg-light-blue-600 **opacity-25** ..."></div>
+<div class="bg-light-blue-600 **opacity-0** ..."></div>
 ```
 
 ## Responsive

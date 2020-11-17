@@ -16,25 +16,22 @@ Use the `bg-clip-{keyword}` utilities to control the bounding box of an element'
 
 ```html
 <template preview>
-  <div class="flex justify-around">
-    <div class="flex-1">
-      <p class="text-center text-sm text-gray-600 mb-1">.bg-clip-border</p>
-      <div class="mx-auto bg-purple-500 w-24 h-24 bg-clip-border border-4 border-dashed border-purple-800 p-4"></div>
+  <div class="grid grid-cols-1 gap-2 lg:grid-cols-3">
+    <div class="bg-clip-border p-6 rounded-md bg-indigo-600 border-4 border-indigo-300 border-dashed font-extrabold text-white flex justify-center items-center">
+      <span class="py-2">.bg-clip-border</span>
     </div>
-    <div class="flex-1">
-      <p class="text-center text-sm text-gray-600 mb-1">.bg-clip-padding</p>
-      <div class="mx-auto bg-purple-500 w-24 h-24 bg-clip-padding border-4 border-dashed border-purple-800 p-4"></div>
+    <div class="bg-clip-padding p-6 rounded-md bg-indigo-600 border-4 border-indigo-300 border-dashed font-extrabold text-white flex justify-center items-center">
+      <span class="py-2">.bg-clip-padding</span>
     </div>
-    <div class="flex-1">
-      <p class="text-center text-sm text-gray-600 mb-1">.bg-clip-content</p>
-      <div class="mx-auto bg-purple-500 w-24 h-24 bg-clip-content border-4 border-dashed border-purple-800 p-4"></div>
+    <div class="bg-clip-content p-6 rounded-md bg-indigo-600 border-4 border-indigo-300 border-dashed font-extrabold text-white flex justify-center items-center">
+      <span class="py-2">.bg-clip-content</span>
     </div>
   </div>
 </template>
 
-<div class="bg-clip-border p-4 border-4 border-dashed border-purple-800 bg-purple-500"></div>
-<div class="bg-clip-padding p-4 border-4 border-dashed border-purple-800 bg-purple-500"></div>
-<div class="bg-clip-content p-4 border-4 border-dashed border-purple-800 bg-purple-500"></div>
+<div class="**bg-clip-border** p-6 bg-indigo-600 border-4 border-indigo-300 border-dashed"></div>
+<div class="**bg-clip-padding** p-6 bg-indigo-600 border-4 border-indigo-300 border-dashed"></div>
+<div class="**bg-clip-content** p-6 bg-indigo-600 border-4 border-indigo-300 border-dashed"></div>
 ```
 
 ## Cropping to text
@@ -42,7 +39,7 @@ Use the `bg-clip-{keyword}` utilities to control the bounding box of an element'
 Use `bg-clip-text` to crop an element's background to match the shape of the text. Useful for effects where you want a background image to be visible through the text.
 
 ```html
-<template preview class="p-8">
+<template preview>
   <div class="text-center text-5xl font-extrabold leading-none tracking-tight">
     <span class="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-500">
       Hello world
