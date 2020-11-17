@@ -63,7 +63,7 @@ export function IntegrationGuides() {
       {guides.map((guide) => {
         const Logo = guide.logo
         return (
-          <Link href={guide.link}>
+          <Link href={guide.link} key={guide.name}>
             <a className="flex flex-col items-center p-4 shadow-sm ring-1 ring-black ring-opacity-5 rounded-xl">
               <Logo className="h-12 w-auto" />
               <div className="mt-3 text-sm text-gray-900 font-semibold sm:text-base sm:mt-2">
