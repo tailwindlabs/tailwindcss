@@ -36,19 +36,19 @@ export const classes = {
 
 Control the border color between elements using the `divide-{color}` utilities.
 
-```html
+```html fuchsia
 <template preview>
-  <div class="divide-y divide-blue-300">
-    <div class="text-center py-2">1</div>
-    <div class="text-center py-2">2</div>
-    <div class="text-center py-2">3</div>
+  <div class="divide-y divide-fuchsia-300">
+    <div class="text-center font-extrabold text-2xl text-fuchsia-600 py-3">1</div>
+    <div class="text-center font-extrabold text-2xl text-fuchsia-600 py-3">2</div>
+    <div class="text-center font-extrabold text-2xl text-fuchsia-600 py-3">3</div>
   </div>
 </template>
 
-<div class="divide-y divide-blue-300">
-  <div class="text-center py-2">1</div>
-  <div class="text-center py-2">2</div>
-  <div class="text-center py-2">3</div>
+<div class="**divide-y divide-fuchsia-300**">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
 </div>
 ```
 
@@ -56,19 +56,19 @@ Control the border color between elements using the `divide-{color}` utilities.
 
 Control the opacity of borders between elements using the `divide-opacity-{amount}` utilities.
 
-```html
-<template preview class="bg-checkered p-4">
+```html lightBlue
+<template preview>
   <div class="divide-y-4 divide-black divide-opacity-25">
-    <div class="text-center py-2">1</div>
-    <div class="text-center py-2">2</div>
-    <div class="text-center py-2">3</div>
+    <div class="text-center font-extrabold text-2xl text-light-blue-600 py-3">1</div>
+    <div class="text-center font-extrabold text-2xl text-light-blue-600 py-3">2</div>
+    <div class="text-center font-extrabold text-2xl text-light-blue-600 py-3">3</div>
   </div>
 </template>
 
-<div class="divide-y-4 divide-black divide-opacity-25">
-  <div class="text-center py-2">1</div>
-  <div class="text-center py-2">2</div>
-  <div class="text-center py-2">3</div>
+<div class="divide-y-4 **divide-black divide-opacity-25**">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
 </div>
 ```
 
@@ -121,4 +121,3 @@ You can [customize your color palette](/docs/colors#customizing) by editing the 
 ### Disabling
 
 <Disabling plugin="divideColor" />
-

@@ -18,42 +18,32 @@ export const classes = { plugin }
 
 Use `border-{style}` to control an element's border style.
 
-```html
+```html indigo
 <template preview>
-  <div class="block sm:flex sm:justify-around">
-    <div class="sm:w-3/5 sm:mb-0 flex justify-around mb-6">
-      <div class="flex-1">
-        <p class="text-center text-sm text-gray-600 mb-1">.border-solid</p>
-        <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-solid"></div>
-      </div>
-      <div class="flex-1">
-        <p class="text-center text-sm text-gray-600 mb-1">.border-dashed</p>
-        <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-dashed"></div>
-      </div>
-      <div class="flex-1">
-        <p class="text-center text-sm text-gray-600 mb-1">.border-dotted</p>
-        <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-dotted"></div>
-      </div>
+  <div class="grid grid-cols-2 gap-2 lg:grid-cols-3">
+    <div class="border-solid h-16 flex-1 rounded-md border-4 border-indigo-500 border-opacity-100 font-extrabold text-indigo-600 flex justify-center items-center">
+      .border-solid
     </div>
-    <div class="sm:w-2/5 flex justify-around">
-      <div class="flex-1">
-        <p class="text-center text-sm text-gray-600 mb-1">.border-double</p>
-        <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-double"></div>
-      </div>
-      <div class="flex-1">
-        <p class="text-center text-sm text-gray-600 mb-1">.border-none</p>
-        <div class="mx-auto w-24 h-24 bg-gray-400 border-4 border-gray-600 border-none"></div>
-      </div>
-      <div class="flex-1 sm:hidden"></div>
+    <div class="border-dashed h-16 flex-1 rounded-md border-4 border-indigo-500 border-opacity-100 font-extrabold text-indigo-600 flex justify-center items-center">
+      .border-dashed
+    </div>
+    <div class="border-dotted h-16 flex-1 rounded-md border-4 border-indigo-500 border-opacity-100 font-extrabold text-indigo-600 flex justify-center items-center">
+      .border-dotted
+    </div>
+    <div class="border-double h-16 flex-1 rounded-md border-4 border-indigo-500 border-opacity-100 font-extrabold text-indigo-600 flex justify-center items-center">
+      .border-double
+    </div>
+    <div class="border-none h-16 flex-1 rounded-md border-4 border-indigo-500 border-opacity-100 font-extrabold text-indigo-600 flex justify-center items-center">
+      .border-none
     </div>
   </div>
 </template>
 
-<div class="border-solid border-4 border-gray-600 ..."></div>
-<div class="border-dashed border-4 border-gray-600 ..."></div>
-<div class="border-dotted border-4 border-gray-600 ..."></div>
-<div class="border-double border-4 border-gray-600 ..."></div>
-<div class="border-none border-4 border-gray-600 ..."></div>
+<div class="**border-solid** border-4 border-light-blue-500 ..."></div>
+<div class="**border-dashed** border-4 border-light-blue-500 ..."></div>
+<div class="**border-dotted** border-4 border-light-blue-500 ..."></div>
+<div class="**border-double** border-4 border-light-blue-500 ..."></div>
+<div class="**border-none** border-4 border-light-blue-500 ..."></div>
 ```
 
 ## Responsive
