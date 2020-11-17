@@ -48,7 +48,24 @@ You should be able to globally find and replace these classes throughout your en
 
 Updating `whitespace-no-wrap` and `flex-no-wrap` is just a direct replacement, and for the gap utilities we recommend replacing `col-gap-` with `gap-x-` and `row-gap-` with `gap-y-` to handle all sizes at once.
 
-## Replace 'clearfix' with 'flow-root'
+## Enable hover and focus for fontWeight if needed
+
+The `hover` and `focus` variants have been disabled for the `fontWeight` plugin by default, as changing font-weight like this tends to cause layout jank so it's uncommon to actually do it anyways.
+
+If you need these in your project, re-enable them in your `tailwind.config.js` file:
+
+```diff-js
+  // tailwind.config.js
+  module.exports = {
+    variants: {
+      extend: {
++       fontWeight: ['hover', 'focus']
+      }
+    }
+  }
+```
+
+## Replace clearfix with flow-root
 
 The `clearfix` class has been removed since `flow-root` is a simpler solution to the same problem in modern browsers.
 
@@ -60,7 +77,7 @@ The `clearfix` class has been removed since `flow-root` is a simpler solution to
   </div>
 ```
 
-## Replace 'shadow-outline' and 'shadow-xs' with ring utilities
+## Replace shadow-outline and shadow-xs with ring utilities
 
 Tailwind CSS v2.0 introduces a new set of `ring` utilities that let you add outline shadows/focus rings in a way that automatically composes with Tailwind's other box-shadow utilities.
 
@@ -270,7 +287,7 @@ Alternatively, you can go through your HTML and explicitly add a `leading` utili
 + <p class="text-lg **leading-normal**">...</p>
 ```
 
-## Update 'default' theme keys to 'DEFAULT'
+## Update default theme keys to DEFAULT
 
 In Tailwind CSS v1.x, the `default` keyword in various `theme` sections of the `tailwind.config.js` section sometimes meant "don't add a suffix to the class name".
 
@@ -316,7 +333,7 @@ You should update all usage of `default` in your config file to `DEFAULT`, _exce
 
 Reference [the complete default configuration](https://github.com/tailwindlabs/tailwindcss/blob/master/stubs/defaultConfig.stub.js) to see where we now use `DEFAULT` and where we still use `default` if you are unclear about what changes you need to make to your own configuration.
 
-## Move deliberately shallow `extends` overrides to top-level
+## Move deliberately shallow extends to top-level
 
 In Tailwind CSS v1.0, theme changes under `extends` were merged shallowly. So this configuration would override _all_ of the purple colors:
 
@@ -425,7 +442,7 @@ This is no longer supported in v2.0, so if you have a prefix (like `tw-`) config
 }
 ```
 
-## Remove leading '.' from @apply statements
+## Remove leading dot from @apply statements
 
 We used to support writing `@apply` statements with an optional leading `.` character:
 
@@ -443,7 +460,7 @@ We don't support this anymore, so update any `@apply` statements and remove the 
 }
 ```
 
-## Enable any 'truncate' variants under 'textOverflow'
+## Enable any truncate variants under textOverflow
 
 The `truncate` utility is now part of the `textOverflow` core plugin, so if you had enabled any extra variants (like `group-hover`) for the `wordBreak` plugin in order to use them with the `truncate` class, you'll want to enable them for `textOverflow` now as well or instead:
 
@@ -457,7 +474,7 @@ The `truncate` utility is now part of the `textOverflow` core plugin, so if you 
   }
 ```
 
-## The 'scrolling-touch' and 'scrolling-auto' utilities have been removed
+## The scrolling-touch and scrolling-auto utilities have been removed
 
 Since iOS 13 stopped supporting the `-webkit-overflow-scrolling` property, we've removed these two utilities from v2.0.
 
@@ -480,7 +497,7 @@ If you still need them because you are building something for older iOS versions
 }
 ```
 
-## Update 'theme' function references that read from arrays
+## Update theme function references that read from arrays
 
 The `theme` function (in CSS, the `tailwind.config.js` file, and in the plugin API) is more intelligent in v2.0 and no longer requires you to manually join arrays or access the first index explicitly.
 
@@ -515,7 +532,7 @@ module.exports = {
 
 If for whatever reason you want to access the raw data structure, you can use the `config` function instead.
 
-## Add 'hidden' to any 'template' tags within 'space' or 'divide' elements
+## Add hidden to any template tags within space or divide elements
 
 We used to have a special rule for ignoring `template` elements when using the `space-x/y` and `divide-x/y` utilities, mostly to make life easier for Alpine.js users.
 
@@ -532,7 +549,7 @@ To update your code for this change, just add `hidden` to your `template` tags:
   </div>
 ```
 
-## Update purge 'options' to match PurgeCSS 3.0
+## Update purge options to match PurgeCSS 3.0
 
 Internally we've upgraded to [PurgeCSS 3.0](https://github.com/FullHuman/purgecss/releases/tag/v3.0.0), so any raw options you were passing into PurgeCSS through the `options` key need to be updated to match the options exposed in PurgeCSS 3.0.
 
@@ -555,7 +572,7 @@ For example, if you were using `whitelist`, you'll want to update this to `safel
 
 If you weren't using the `options` key, you don't need to do anything.
 
-## Disable 'preserveHtmlElements' if using a custom PurgeCSS extractor
+## Disable preserveHtmlElements if using a custom PurgeCSS extractor
 
 In v1.0, Tailwind ignored the `preserveHtmlElements` option if you were using a custom extractor. This option is now properly respected in v2.0, so if you want to disable it you'll need to do so explicitly:
 
