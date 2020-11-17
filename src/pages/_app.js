@@ -11,7 +11,7 @@ import twitterLargeCard from '@/img/twitter-large-card.png'
 
 const progress = new ProgressBar({
   size: 2,
-  color: '#4fd1c5',
+  color: '#22D3EE',
   className: 'bar-of-progress',
   delay: 100,
 })
