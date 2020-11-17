@@ -56,20 +56,20 @@ const lines = {
   </div>
 </div>
 `).lines,
-  transforms: tokenize.html(`<div>
+  transforms: tokenize.html(`<div class="grid grid-flow-col grid-rows-2 grid-cols-3 gap-4">
   <div class="transform scale-110 -rotate-6">
     1
   </div>
-  <div class="transform scale-75 rotate-6 translate-x-2 translate-y-15">
+  <div class="col-start-3 [transform scale-75 rotate-6 translate-x-2 translate-y-15]">
     2
   </div>
-  <div class="transform scale-150 translate-y-11">
+  <div class="[transform scale-150 translate-y-11]">
     3
   </div>
-  <div class="transform translate-y-24">
+  <div class="[transform translate-y-24]">
     4
   </div>
-  <div class="transform translate-x-20 translate-y-4">
+  <div class="row-start-1 col-start-2 col-span-2 [transform translate-x-20 translate-y-4]">
     5
   </div>
 </div>
@@ -329,11 +329,28 @@ export function ModernFeatures() {
                   ) : (
                     lines[feature].map((tokens, lineIndex) => (
                       <Fragment key={lineIndex}>
-                        {tokens.map((token, tokenIndex) => (
-                          <span key={tokenIndex} className={getClassNameForToken(token)}>
-                            {token.content}
-                          </span>
-                        ))}
+                        {tokens.map((token, tokenIndex) => {
+                          if (token.types[token.types.length - 1] === 'attr-value') {
+                            return (
+                              <span key={tokenIndex} className={getClassNameForToken(token)}>
+                                {token.content.split(/\[([^\]]+)\]/).map((part, i) =>
+                                  i % 2 === 0 ? (
+                                    part
+                                  ) : (
+                                    <span key={i} className="code-highlight bg-code-highlight">
+                                      {part}
+                                    </span>
+                                  )
+                                )}
+                              </span>
+                            )
+                          }
+                          return (
+                            <span key={tokenIndex} className={getClassNameForToken(token)}>
+                              {token.content}
+                            </span>
+                          )
+                        })}
                         {'\n'}
                       </Fragment>
                     ))
