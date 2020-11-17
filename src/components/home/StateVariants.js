@@ -9,6 +9,30 @@ import { useEffect, useRef, useState } from 'react'
 import { usePrevious } from '@/hooks/usePrevious'
 import clsx from 'clsx'
 
+const projects = [
+  { title: 'API Integration', category: 'Engineering' },
+  { title: 'New Benefits Plan', category: 'Human Resources' },
+  { title: 'Onboarding Emails', category: 'Customer Success' },
+]
+
+const faces = [
+  'photo-1531123897727-8f129e1688ce',
+  'photo-1494790108377-be9c29b29330',
+  'photo-1552374196-c4e7ffc6e126',
+  'photo-1546525848-3ce03ca516f6',
+  'photo-1544005313-94ddf0286df2',
+  'photo-1517841905240-472988babdf9',
+  'photo-1506794778202-cad84cf45f1d',
+  'photo-1500648767791-00dcc994a43e',
+  'photo-1534528741775-53994a69daeb',
+  'photo-1502685104226-ee32379fefbe',
+  'photo-1546525848-3ce03ca516f6',
+  'photo-1502685104226-ee32379fefbe',
+  'photo-1494790108377-be9c29b29330',
+  'photo-1506794778202-cad84cf45f1d',
+  'photo-1534528741775-53994a69daeb',
+]
+
 const {
   lines,
 } = tokenize.html(`<section class="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-4 sm:pb-6 lg:pb-4 xl:pb-6 space-y-4">
@@ -118,7 +142,10 @@ export function StateVariants() {
           add. Works for focus, active, disabled, focus-within, focus-visible, and even fancy states
           we invented ourselves like group-hover.
         </Paragraph>
-        <Link href="#" className="text-light-blue-500">
+        <Link
+          href="/docs/hover-focus-and-other-states"
+          className="text-light-blue-500 hover:text-light-blue-700"
+        >
           Learn more -&gt;
         </Link>
       </div>
@@ -178,11 +205,11 @@ export function StateVariants() {
                   type="text"
                   aria-label="Filter projects"
                   placeholder="Filter projects"
-                  className="w-full text-sm text-black placeholder-gray-500 border border-gray-200 rounded-md py-2 pl-10 focus:border-light-blue-300 focus:outline-none"
+                  className="w-full text-sm text-black placeholder-gray-500 border border-gray-200 rounded-md py-2 pl-10 focus:border-light-blue-500 focus:outline-none focus:ring-1 focus:ring-light-blue-500"
                 />
               </form>
               <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
-                {Array.from({ length: 3 }).map((_, i, a) => (
+                {projects.map((project, i, a) => (
                   <li
                     key={i}
                     className={i === a.length - 1 ? 'hidden sm:block lg:hidden xl:block' : ''}
@@ -200,13 +227,13 @@ export function StateVariants() {
                         <div>
                           <dt className="sr-only">Title</dt>
                           <dd className="leading-6 font-medium text-black group-hover:text-white">
-                            API Integration
+                            {project.title}
                           </dd>
                         </div>
                         <div>
                           <dt className="sr-only">Category</dt>
                           <dd className="text-sm font-medium group-hover:text-light-blue-200 sm:mb-4 lg:mb-0 xl:mb-4">
-                            Engineering
+                            {project.category}
                           </dd>
                         </div>
                         <div className="col-start-2 row-start-1 row-end-3">
@@ -215,7 +242,9 @@ export function StateVariants() {
                             {Array.from({ length: 5 }).map((_, j) => (
                               <img
                                 key={j}
-                                src={`https://unsplash.it/48/48?random&amp;i=${i}&j=${j}`}
+                                src={`https://images.unsplash.com/${
+                                  faces[i * 5 + j]
+                                }?auto=format&fit=facearea&facepad=2&w=48&h=48&q=80`}
                                 alt=""
                                 width="48"
                                 height="48"

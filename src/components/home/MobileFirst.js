@@ -174,7 +174,7 @@ function BrowserWindow({ size, onChange, height = 385 }) {
         className="shadow-lg rounded-xl"
         style={{ marginRight: useTransform(x, (x) => -x) }}
       >
-        <div className="shadow-xs rounded-xl">
+        <div className="rounded-xl ring-1 ring-black ring-opacity-5">
           <div
             className="py-2 grid items-center gap-6 px-4 rounded-t-xl bg-gradient-to-b from-gray-50 to-gray-100"
             style={{ gridTemplateColumns: '1fr minmax(min-content, 640px) 1fr' }}
@@ -220,7 +220,7 @@ function BrowserWindow({ size, onChange, height = 385 }) {
           dragMomentum={false}
           dragElastic={0.08}
           dragConstraints={constraintsRef}
-          className="absolute z-10 top-1/2 right-0 bg-indigo-900 rounded-full border-4 border-white shadow-lg flex items-center justify-center pointer-events-auto cursor-grab active:cursor-grabbing"
+          className="absolute z-10 top-1/2 right-0 bg-indigo-900 rounded-full border-4 border-white shadow-lg flex items-center justify-center pointer-events-auto cursor-grab active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-violet-500 focus-visible:ring-white"
           style={{
             x,
             width: `${HANDLE_RADIUS * 2}rem`,
@@ -271,7 +271,7 @@ export function MobileFirst() {
             at a specific breakpoint.
           </p>
         </Paragraph>
-        <Link href="#" className="text-violet-600">
+        <Link href="/docs/responsive-design" className="text-violet-600 hover:text-violet-800">
           Learn more -&gt;
         </Link>
       </div>

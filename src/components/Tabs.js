@@ -57,8 +57,9 @@ function Item({ tab, isSelected, onClick }) {
         type="button"
         onClick={onClick}
         className={clsx(
-          'block w-full relative z-10 px-4 py-1 leading-6 sm:text-xl font-semibold focus:outline-none transition-colors duration-300',
-          { 'text-black': isSelected, 'text-gray-400': !isSelected }
+          'block w-full relative z-10 px-4 py-1 leading-6 sm:text-xl font-semibold focus:outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-offset-white focus-visible:ring-gray-300 hover:text-gray-900',
+          typeof tab === 'string' ? 'rounded-full' : 'rounded-xl',
+          { 'text-gray-900': isSelected, 'text-gray-400': !isSelected }
         )}
       >
         {tab}

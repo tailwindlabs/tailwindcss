@@ -200,7 +200,7 @@ export function ConstraintBased() {
           spacing, typography, shadows, and everything else that makes up a well-engineered design
           system.
         </Paragraph>
-        <Link href="#" className="text-purple-600">
+        <Link href="/docs/utility-first" className="text-purple-600 hover:text-purple-800">
           Learn more -&gt;
         </Link>
       </div>
@@ -208,7 +208,7 @@ export function ConstraintBased() {
         color="purple"
         rotate={-1}
         header={
-          <div className="flex overflow-auto -mx-4 sm:-mx-6 md:-mx-8 xl:-ml-4 xl:mr-0">
+          <div className="flex overflow-auto py-0.5 -my-0.5 -mx-4 sm:-mx-6 md:-mx-8 xl:-ml-4 xl:mr-0 pl-0.5">
             <Tabs
               tabs={{
                 sizing: 'Sizing',

@@ -52,9 +52,14 @@ export function Search() {
         type="button"
         ref={searchButtonRef}
         onClick={onOpen}
-        className="leading-6 font-medium flex items-center space-x-4"
+        className="group leading-6 font-medium flex items-center space-x-4 hover:text-gray-600 transition-colors duration-200"
       >
-        <svg width="24" height="24" fill="none" className="text-gray-400">
+        <svg
+          width="24"
+          height="24"
+          fill="none"
+          className="text-gray-400 group-hover:text-gray-500 transition-colors duration-200"
+        >
           <path
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
             stroke="currentColor"

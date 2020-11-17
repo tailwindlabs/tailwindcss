@@ -63,7 +63,7 @@ export default function Recipes({ recipes }) {
       <List>
         {recipes.map((recipe) => (
           <ListItem key={recipe.id} recipe={recipe} />
-        )}
+        ))}
       </List>
     </div>
   )
@@ -415,7 +415,7 @@ function ComponentExample({ framework }) {
               <li key={tab} className="flex-none">
                 <button
                   type="button"
-                  className={`border border-transparent py-2 px-4 font-medium focus:outline-none hover:text-orange-200 ${
+                  className={`border border-transparent py-2 px-4 font-medium focus:outline-none hover:text-orange-100 focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-orange-300 ${
                     tabIndex === activeTab ? 'text-orange-200' : ''
                   }`}
                   onClick={() => setActiveTab(tabIndex)}
@@ -675,7 +675,7 @@ export function ComponentDriven() {
           extract them into a component or template partial and boom — you've got a single source of
           truth so you can make changes in one place.
         </Paragraph>
-        <Link href="#" className="text-amber-500">
+        <Link href="/docs/extracting-components" className="text-amber-500 hover:text-amber-700">
           Learn more -&gt;
         </Link>
       </div>
@@ -684,7 +684,7 @@ export function ComponentDriven() {
         rotate={-2}
         pin="right"
         header={
-          <div className="flex overflow-auto -mx-4 sm:-mx-6 md:-mx-8 xl:-ml-4 xl:mr-0">
+          <div className="flex overflow-auto py-0.5 pl-0.5 -my-0.5 -mx-4 sm:-mx-6 md:-mx-8 xl:-ml-4 xl:mr-0">
             <Tabs
               tabs={{
                 react: (
@@ -786,7 +786,7 @@ export function ComponentDriven() {
           directive to extract repeated utility patterns into custom CSS classes just by copying and
           pasting the list of class names.
         </Paragraph>
-        <Link href="#" className="text-orange-500">
+        <Link href="/docs/extracting-components" className="text-orange-500 hover:text-orange-700">
           Learn more -&gt;
         </Link>
       </div>

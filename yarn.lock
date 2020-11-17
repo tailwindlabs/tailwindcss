@@ -7871,10 +7871,10 @@ table@^5.2.3:
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
 
-tailwindcss@^2.0.0-alpha.21:
-  version "2.0.0-alpha.21"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-2.0.0-alpha.21.tgz#86fa74aabeff701bb2244aa42dbefa74084805bf"
-  integrity sha512-b4awgxf1JzpN0eaKZ+trm5VCuXdViNqV/9LMlsS6TlVM9Kv8PACZmptHWrWICqye4oEsQ9Esx6KabBGBF4qnqg==
+tailwindcss@^2.0.0-alpha.25:
+  version "2.0.0-alpha.25"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-2.0.0-alpha.25.tgz#c31d4b67801673441b2501469bf23bceac4db3be"
+  integrity sha512-cdaeSveNCKh7Qd7dgRudr4CnQ8UJFIpKd7AAfjduXX8tDUrRJeFDuhF0vx/Dv9LE9KjOXxYeXUsuJSiW/Jr8Jg==
   dependencies:
     "@fullhuman/postcss-purgecss" "^3.0.0"
     bytes "^3.0.0"
