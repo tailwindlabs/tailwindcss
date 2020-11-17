@@ -241,7 +241,7 @@ test('the default config can be overridden using the presets key', () => {
     .then((result) => {
       const expected = `
         .min-h-0 {
-          min-height: 0;
+          min-height: 0px;
         }
         .min-h-24 {
           min-height: 24px;
@@ -291,7 +291,7 @@ test('presets can be functions', () => {
     .then((result) => {
       const expected = `
         .min-h-0 {
-          min-height: 0;
+          min-height: 0px;
         }
         .min-h-24 {
           min-height: 24px;

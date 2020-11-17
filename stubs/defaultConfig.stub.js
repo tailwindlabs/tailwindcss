@@ -29,7 +29,7 @@ module.exports = {
     },
     spacing: {
       px: '1px',
-      0: '0',
+      0: '0px',
       0.5: '0.125rem',
       1: '0.25rem',
       1.5: '0.375rem',
@@ -106,7 +106,7 @@ module.exports = {
     }),
     borderOpacity: (theme) => theme('opacity'),
     borderRadius: {
-      none: '0',
+      none: '0px',
       sm: '0.125rem',
       DEFAULT: '0.25rem',
       md: '0.375rem',
@@ -118,7 +118,7 @@ module.exports = {
     },
     borderWidth: {
       DEFAULT: '1px',
-      0: '0',
+      0: '0px',
       2: '2px',
       4: '4px',
       8: '8px',
@@ -414,7 +414,7 @@ module.exports = {
     letterSpacing: {
       tighter: '-0.05em',
       tight: '-0.025em',
-      normal: '0',
+      normal: '0em',
       wide: '0.025em',
       wider: '0.05em',
       widest: '0.1em',
@@ -471,12 +471,12 @@ module.exports = {
       ...breakpoints(theme('screens')),
     }),
     minHeight: {
-      0: '0',
+      0: '0px',
       full: '100%',
       screen: '100vh',
     },
     minWidth: {
-      0: '0',
+      0: '0px',
       full: '100%',
       min: 'min-content',
       max: 'max-content',
@@ -540,7 +540,7 @@ module.exports = {
     }),
     ringOffsetColor: (theme) => theme('colors'),
     ringOffsetWidth: {
-      0: '0',
+      0: '0px',
       1: '1px',
       2: '2px',
       4: '4px',
@@ -552,7 +552,7 @@ module.exports = {
     }),
     ringWidth: {
       DEFAULT: '3px',
-      0: '0',
+      0: '0px',
       1: '1px',
       2: '2px',
       4: '4px',
@@ -567,7 +567,7 @@ module.exports = {
       '-3': '-3deg',
       '-2': '-2deg',
       '-1': '-1deg',
-      0: '0',
+      0: '0deg',
       1: '1deg',
       2: '2deg',
       3: '3deg',
@@ -595,7 +595,7 @@ module.exports = {
       '-3': '-3deg',
       '-2': '-2deg',
       '-1': '-1deg',
-      0: '0',
+      0: '0deg',
       1: '1deg',
       2: '2deg',
       3: '3deg',
