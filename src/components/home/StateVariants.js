@@ -1,4 +1,12 @@
-import { IconContainer, Caption, BigText, Paragraph, Link, Widont } from '@/components/home/common'
+import {
+  IconContainer,
+  Caption,
+  BigText,
+  Paragraph,
+  Link,
+  Widont,
+  InlineCode,
+} from '@/components/home/common'
 import { GradientLockup } from '@/components/GradientLockup'
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
@@ -138,9 +146,11 @@ export function StateVariants() {
           <Widont>Hover and focus states? We got ’em.</Widont>
         </BigText>
         <Paragraph className="mb-6">
-          Want to style something on hover? Stick hover: at the beginning of the class you want to
-          add. Works for focus, active, disabled, focus-within, focus-visible, and even fancy states
-          we invented ourselves like group-hover.
+          Want to style something on hover? Stick <InlineCode>hover:</InlineCode> at the beginning
+          of the class you want to add. Works for <InlineCode>focus</InlineCode>,{' '}
+          <InlineCode>active</InlineCode>, <InlineCode>disabled</InlineCode>,{' '}
+          <InlineCode>focus-within</InlineCode>, <InlineCode>focus-visible</InlineCode>, and even
+          fancy states we invented ourselves like <InlineCode>group-hover</InlineCode>.
         </Paragraph>
         <Link
           href="/docs/hover-focus-and-other-states"

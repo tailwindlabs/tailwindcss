@@ -12,7 +12,7 @@ import { EditorTools } from '@/components/home/EditorTools'
 import { ReadyMadeComponents } from '@/components/home/ReadyMadeComponents'
 import { Search } from '@/components/Search'
 import { Hero } from '@/components/home/Hero'
-import { BigText, Link, Paragraph, Widont } from '@/components/home/common'
+import { BigText, InlineCode, Link, Paragraph, Widont } from '@/components/home/common'
 import { useEffect, useState } from 'react'
 import { Logo } from '@/components/Logo'
 import { Footer } from '@/components/home/Footer'
@@ -91,8 +91,10 @@ export default function Home() {
             Rapidly build modern websites without ever leaving your HTML.
           </h1>
           <p className="max-w-screen-lg text-lg sm:text-2xl sm:leading-10 font-medium mb-11">
-            A utility-first CSS framework packed with classes like flex, pt-4, text-center and
-            rotate-90 that can be composed to build any design, directly in your markup.
+            A utility-first CSS framework packed with classes like <InlineCode>flex</InlineCode>,{' '}
+            <InlineCode>pt-4</InlineCode>, <InlineCode>text-center</InlineCode> and{' '}
+            <InlineCode>rotate-90</InlineCode> that can be composed to build any design, directly in
+            your markup.
           </p>
           <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4 text-center">
             <NextLink href="/docs">
