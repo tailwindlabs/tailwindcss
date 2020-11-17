@@ -114,21 +114,23 @@ export const classes = (
 
 Add the `animate-spin` utility to add a linear spin animation to elements like loading indicators.
 
-```html
-<template preview class="bg-white text-center p-4 py-12">
-  <span class="inline-flex rounded-md shadow-sm">
-    <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150 cursor-not-allowed" disabled>
-      <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-      </svg>
-      Processing
-    </button>
-  </span>
+```html rose
+<template preview>
+  <div class="flex justify-around">
+    <span class="inline-flex rounded-md shadow-sm">
+      <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-rose-600 hover:bg-rose-500 focus:border-rose-700 active:bg-rose-700 transition ease-in-out duration-150 cursor-not-allowed" disabled>
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Processing
+      </button>
+    </span>
+  </div>
 </template>
 
-<button type="button" class="bg-indigo-600 ..." disabled>
-  <svg class="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
+<button type="button" class="bg-rose-600 ..." disabled>
+  <svg class="**animate-spin** h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
     <!-- ... -->
   </svg>
   Processing
@@ -139,22 +141,24 @@ Add the `animate-spin` utility to add a linear spin animation to elements like l
 
 Add the `animate-ping` utility to make an element scale and fade like a radar ping or ripple of water — useful for things like notification badges.
 
-```html
-<template preview class="bg-white text-center p-4 py-12">
-  <span class="relative inline-flex rounded-md shadow-sm">
-    <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-400 text-base leading-6 font-medium rounded-md text-gray-800 bg-white hover:text-gray-700 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
-      Transactions
-    </button>
-    <span class="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
-      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
-      <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
+```html purple
+<template preview>
+  <div class="flex justify-around">
+    <span class="relative inline-flex rounded-md shadow-sm">
+      <button type="button" class="inline-flex items-center px-4 py-2 border border-purple-400 text-base leading-6 font-medium rounded-md text-purple-800 bg-white hover:text-purple-700 focus:border-purple-300 transition ease-in-out duration-150">
+        Transactions
+      </button>
+      <span class="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
+      </span>
     </span>
-  </span>
+  </div>
 </template>
 
 <span class="flex h-3 w-3">
-  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
-  <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
+  <span class="**animate-ping** absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+  <span class="relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
 </span>
 ```
 
@@ -162,30 +166,30 @@ Add the `animate-ping` utility to make an element scale and fade like a radar pi
 
 Add the `animate-pulse` utility to make an element gently fade in and out — useful for things like skeleton loaders.
 
-```html
-<template preview class="bg-white text-center p-4 py-12">
-  <div class="border border-gray-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
+```html lightBlue
+<template preview>
+  <div class="border border-light-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
     <div class="flex space-x-4 animate-pulse">
-      <div class="rounded-full bg-gray-400 h-12 w-12"></div>
+      <div class="rounded-full bg-light-blue-400 h-12 w-12"></div>
       <div class="flex-1 space-y-4 py-1">
-        <div class="h-4 bg-gray-400 rounded w-3/4"></div>
+        <div class="h-4 bg-light-blue-400 rounded w-3/4"></div>
         <div class="space-y-2">
-          <div class="h-4 bg-gray-400 rounded"></div>
-          <div class="h-4 bg-gray-400 rounded w-5/6"></div>
+          <div class="h-4 bg-light-blue-400 rounded"></div>
+          <div class="h-4 bg-light-blue-400 rounded w-5/6"></div>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<div class="border border-gray-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
-  <div class="animate-pulse flex space-x-4">
-    <div class="rounded-full bg-gray-400 h-12 w-12"></div>
+<div class="border border-light-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
+  <div class="**animate-pulse** flex space-x-4">
+    <div class="rounded-full bg-light-blue-400 h-12 w-12"></div>
     <div class="flex-1 space-y-4 py-1">
-      <div class="h-4 bg-gray-400 rounded w-3/4"></div>
+      <div class="h-4 bg-light-blue-400 rounded w-3/4"></div>
       <div class="space-y-2">
-        <div class="h-4 bg-gray-400 rounded"></div>
-        <div class="h-4 bg-gray-400 rounded w-5/6"></div>
+        <div class="h-4 bg-light-blue-400 rounded"></div>
+        <div class="h-4 bg-light-blue-400 rounded w-5/6"></div>
       </div>
     </div>
   </div>
@@ -196,17 +200,17 @@ Add the `animate-pulse` utility to make an element gently fade in and out — us
 
 Add the `animate-bounce` utility to make an element bounce up and down — useful for things like "scroll down" indicators.
 
-```html
-<template preview class="bg-white text-center p-4 py-8">
+```html amber
+<template preview>
   <div class="flex justify-center">
-    <svg class="animate-bounce w-6 h-6 text-gray-900" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+    <svg class="animate-bounce w-6 h-6 text-amber-900" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
       <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
     </svg>
   </div>
 </template>
 
-<svg class="animate-bounce w-6 h-6 text-gray-900" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-  <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+<svg class="**animate-bounce** w-6 h-6 ...">
+  <!-- ... -->
 </svg>
 ```
 
@@ -216,7 +220,7 @@ You can conditionally apply animations and transitions using the `motion-safe` a
 
 ```html
 <button type="button" class="bg-indigo-600 ..." disabled>
-  <svg class="motion-safe:animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
+  <svg class="**motion-safe:animate-spin** h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
     <!-- ... -->
   </svg>
   Processing
@@ -242,7 +246,7 @@ Learn more in the [state variants documentation](/docs/hover-focus-and-other-sta
 To change or disable an animation at a specific breakpoint, add a `{screen}:` prefix to any existing animation utility. For example, use `md:animate-none` to apply the `animate-none` utility at only medium screen sizes and above.
 
 ```html
-<div class="animate-spin md:animate-none ...">
+<div class="animate-spin **md:animate-none** ...">
   <!-- ... -->
 </div>
 ```
