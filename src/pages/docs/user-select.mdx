@@ -18,14 +18,14 @@ export const classes = { plugin }
 
 Use `select-none` to prevent selecting text in an element and its children.
 
-```html
-<template preview class="text-center p-4">
-  <div class="mx-auto max-w-sm bg-gray-200 p-2 select-none">
+```html amber
+<template preview>
+  <div class="mx-auto max-w-sm bg-amber-200 p-2 select-none text-center">
     This text is not selectable
   </div>
 </template>
 
-<div class="select-none ...">
+<div class="**select-none** ...">
   This text is not selectable
 </div>
 ```
@@ -34,14 +34,14 @@ Use `select-none` to prevent selecting text in an element and its children.
 
 Use `select-text` to allow selecting text in an element and its children.
 
-```html
-<template preview class="text-center p-4">
-  <div class="mx-auto max-w-sm bg-gray-200 p-2 select-text">
+```html emerald
+<template preview>
+  <div class="mx-auto max-w-sm bg-emerald-200 p-2 select-text text-center">
     This text is selectable
   </div>
 </template>
 
-<div class="select-text ...">
+<div class="**select-text** ...">
   This text is selectable
 </div>
 ```
@@ -50,14 +50,14 @@ Use `select-text` to allow selecting text in an element and its children.
 
 Use `select-all` to automatically select all the text in an element when a user clicks.
 
-```html
-<template preview class="text-center p-4">
-  <div class="mx-auto max-w-sm bg-gray-200 p-2 select-all">
+```html fuchsia
+<template preview>
+  <div class="mx-auto max-w-sm bg-fuchsia-200 p-2 select-all text-center">
     Click anywhere in this text to select it all
   </div>
 </template>
 
-<div class="select-all ...">
+<div class="**select-all** ...">
   Click anywhere in this text to select it all
 </div>
 ```
@@ -66,14 +66,14 @@ Use `select-all` to automatically select all the text in an element when a user 
 
 Use `select-auto` to use the default browser behavior for selecting text. Useful for undoing other classes like `.select-none` at different breakpoints.
 
-```html
-<template preview class="text-center p-4">
-  <div class="mx-auto max-w-sm bg-gray-200 p-2 select-auto">
+```html lightBlue
+<template preview>
+  <div class="mx-auto max-w-sm bg-light-blue-200 p-2 select-auto text-center">
     This text is selectable
   </div>
 </template>
 
-<div class="select-auto ...">
+<div class="**select-auto** ...">
   This text is selectable
 </div>
 ```
