@@ -13,18 +13,15 @@ export const classes = { plugin }
 
 Resize an element's content to stay contained within its container using `.object-contain`.
 
-```html
+```html rose
 <template preview>
-  <div class="p-4">
-    <p class="text-sm text-gray-600">.object-contain</p>
-    <div class="bg-gray-400">
-      <img class="h-48 w-full object-contain" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="">
-    </div>
+  <div class="bg-rose-300 bg-stripes bg-stripes-white rounded-md overflow-hidden">
+    <img class="h-48 w-full object-contain" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="">
   </div>
 </template>
 
-<div class="bg-gray-400">
-  <img class="object-contain h-48 w-full ...">
+<div class="bg-rose-300 ...">
+  <img class="**object-contain** h-48 w-full ...">
 </div>
 ```
 
@@ -32,18 +29,15 @@ Resize an element's content to stay contained within its container using `.objec
 
 Resize an element's content to cover its container using `.object-cover`.
 
-```html
+```html indigo
 <template preview>
-  <div class="p-4">
-    <p class="text-sm text-gray-600">.object-cover</p>
-    <div class="bg-gray-400">
-      <img class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="">
-    </div>
+  <div class="bg-indigo-300 bg-stripes bg-stripes-white rounded-md overflow-hidden">
+    <img class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="">
   </div>
 </template>
 
-<div class="bg-gray-400">
-  <img class="object-cover h-48 w-full ...">
+<div class="bg-indigo-300 ...">
+  <img class="**object-cover** h-48 w-full ...">
 </div>
 ```
 
@@ -51,18 +45,15 @@ Resize an element's content to cover its container using `.object-cover`.
 
 Stretch an element's content to fit its container using `.object-fill`.
 
-```html
+```html lightBlue
 <template preview>
-  <div class="p-4">
-    <p class="text-sm text-gray-600">.object-fill</p>
-    <div class="bg-gray-400">
-      <img class="h-48 w-full object-fill" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="">
-    </div>
+  <div class="bg-light-blue-300 bg-stripes bg-stripes-white rounded-md overflow-hidden">
+    <img class="h-48 w-full object-fill" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="">
   </div>
 </template>
 
-<div class="bg-gray-400">
-  <img class="object-fill h-48 w-full ...">
+<div class="bg-light-blue-300 ...">
+  <img class="**object-fill** h-48 w-full ...">
 </div>
 ```
 
@@ -70,18 +61,15 @@ Stretch an element's content to fit its container using `.object-fill`.
 
 Display an element's content at its original size ignoring the container size using `.object-none`.
 
-```html
+```html amber
 <template preview>
-  <div class="p-4">
-    <p class="text-sm text-gray-600">.object-none</p>
-    <div class="bg-gray-400">
-      <img class="h-48 w-full object-none" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="">
-    </div>
+  <div class="bg-amber-300 bg-stripes bg-stripes-white rounded-md overflow-hidden">
+    <img class="h-48 w-full object-none" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" alt="">
   </div>
 </template>
 
-<div class="bg-gray-400">
-  <img class="object-none h-48 w-full ...">
+<div class="bg-yellow-300">
+  <img class="**object-none** h-48 w-full ...">
 </div>
 ```
 
@@ -89,18 +77,15 @@ Display an element's content at its original size ignoring the container size us
 
 Display an element's content at its original size but scale it down to fit its container if necessary using `.object-scale-down`.
 
-```html
+```html emerald
 <template preview>
-  <div class="p-4">
-    <p class="text-sm text-gray-600">.object-scale-down</p>
-    <div class="bg-gray-400">
-      <img class="h-48 w-full object-scale-down" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&h=128&q=80" alt="">
-    </div>
+  <div class="bg-emerald-300 bg-stripes bg-stripes-white rounded-md overflow-hidden">
+    <img class="h-48 w-full object-scale-down" src="https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&h=128&q=80" alt="">
   </div>
 </template>
 
-<div class="bg-gray-400">
-  <img class="object-scale-down h-48 w-full ...">
+<div class="bg-green-300">
+  <img class="**object-scale-down** h-48 w-full ...">
 </div>
 ```
 
