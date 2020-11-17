@@ -12,7 +12,7 @@ export const classes = {
   plugin,
   transformSelector: (selector) => (
     <>
-      {selector.split('::')[0].trim()}
+      {selector.split('::')[0].trim().replace(/^\./, '').replace(/\\/g, '')}
       <span className="text-gray-500">::placeholder</span>
     </>
   ),

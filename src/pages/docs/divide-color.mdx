@@ -12,7 +12,7 @@ export const classes = {
   plugin,
   transformSelector: (selector) => (
     <>
-      {selector.split('>').shift().trim()} <span className="ml-1 text-purple-300">> * + *</span>
+      {selector.split('>').shift().trim().replace(/^\./, '').replace(/\\/g, '')} <span className="ml-1 text-purple-300">> * + *</span>
     </>
   ),
   preview: (css, { className }) => (
