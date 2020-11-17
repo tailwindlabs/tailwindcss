@@ -32,14 +32,18 @@ If this is a bit over your head and you'd like to try Tailwind without configuri
 For most projects (and to take advantage of Tailwind's customization features), you'll want to install Tailwind and its peer-dependencies via npm.
 
 ```shell
-# Using npm
 npm install tailwindcss postcss autoprefixer
-
-# Using Yarn
-yarn add tailwindcss postcss autoprefixer
 ```
 
 Since Tailwind [does not automatically add vendor prefixes](/docs/browser-support#vendor-prefixes) to the CSS it generates, we recommend installing [autoprefixer](https://github.com/postcss/autoprefixer) to handle this for you.
+
+If you're integrating Tailwind with a tool that relies on an older version of PostCSS, you may see an error like this:
+
+```shell
+Error: PostCSS plugin tailwindcss requires PostCSS 8.
+```
+
+In this case, you should [install the PostCSS 7 compatibility build](#postcss-7-compatibility-build) instead.
 
 ### Add Tailwind as a PostCSS plugin
 
@@ -120,6 +124,14 @@ How you actually build your project will depend on the tools that you're using. 
 If you're already familiar with PostCSS you probably know what you need to do, if not refer to the documentation for the tool you are using.
 
 When building for production, be sure to read our separate guide on [optimizing for production](/docs/optimizing-for-production) to learn about tree-shaking unused styles for best performance.
+
+If you're integrating Tailwind with a tool that relies on an older version of PostCSS, you may see an error like this when trying to build your CSS:
+
+```shell
+Error: PostCSS plugin tailwindcss requires PostCSS 8.
+```
+
+In this case, you should [switch to our PostCSS 7 compatibility build](#postcss-7-compatibility-build) instead.
 
 ---
 
@@ -275,3 +287,30 @@ For Tailwind's styles to work as expected, you'll want to use the HTML5 doctype 
 ```
 
 Many front-end frameworks like Next.js, vue-cli and others do all this for you behind the scenes automatically, so depending on what you're building you might not need to set this up.
+
+---
+
+## PostCSS 7 compatibility build
+
+As of v2.0, Tailwind CSS depends on PostCSS 8. Because PostCSS 8 is only a few months old, many other tools in the ecosystem haven't updated yet, which means you might see an error like this in your terminal after installing Tailwind and trying to compile your CSS:
+
+```shell
+Error: PostCSS plugin tailwindcss requires PostCSS 8.
+```
+
+To help bridge the gap until everyone has updated, we also publish a PostCSS 7 compatibility build under the `compat` channel on npm.
+
+If you run into the error mentioned above, uninstall Tailwind and re-install using the compatibility build instead:
+
+```shell
+npm uninstall tailwindcss postcss autoprefixer
+npm install tailwindcss@compat postcss@^7 autoprefixer@^9
+```
+
+The compatibility build is identical to the main build in every way, so you aren't missing out on any features or anything like that.
+
+Once the rest of your tools have added support for PostCSS 8, you can move off of the compatibility build by re-installing Tailwind and its peer-dependencies using the `latest` tag:
+
+```shell
+npm install tailwindcss@latest postcss@latest autoprefixer@latest
+```
