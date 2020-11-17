@@ -13,42 +13,42 @@ export const classes = { plugin }
 
 Use `truncate` to truncate overflowing text with an ellipsis (<code>…</code>) if needed.
 
-```html
+```html indigo
 <template preview>
-  <p class="max-w-xs p-2 mx-auto truncate bg-gray-200">
-  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
+  <p class="max-w-xs p-4 mx-auto truncate bg-indigo-200 rounded-md shadow-inner">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
   </p>
 </template>
 
-<p class="truncate ...">...</p>
+<p class="**truncate** ...">...</p>
 ```
 
 ## Overflow Ellipsis
 
 Use `overflow-ellipsis` to truncate overflowing text with an ellipsis (<code>…</code>) if needed.
 
-```html
+```html emerald
 <template preview>
-  <p class="max-w-xs p-2 mx-auto bg-gray-200 overflow-ellipsis">
-  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
+  <p class="max-w-xs p-4 mx-auto overflow-ellipsis overflow-hidden bg-emerald-200 rounded-md shadow-inner">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
   </p>
 </template>
 
-<p class="overflow-ellipsis ...">...</p>
+<p class="**overflow-ellipsis** overflow-hidden ...">...</p>
 ```
 
 ## Overflow Clip
 
 Use `overflow-clip` to truncate the text at the limit of the content area.
 
-```html
+```html lightBlue
 <template preview>
-  <p class="max-w-xs p-2 mx-auto bg-gray-200 overflow-clip">
-  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
+  <p class="max-w-xs p-4 mx-auto overflow-clip overflow-hidden bg-light-blue-200 rounded-md shadow-inner">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiisitaquequodpraesentiumexplicaboincidunt? Dolores beatae nam at sed dolorum ratione dolorem nisi velit cum.
   </p>
 </template>
 
-<p class="overflow-clip ...">...</p>
+<p class="**overflow-clip** overflow-hidden ...">...</p>
 ```
 
 ## Responsive
