@@ -3,11 +3,13 @@ import { gradients } from '@/utils/gradients'
 import { ReactComponent as ScreencastsImage } from '@/img/screencasts.svg'
 import { ReactComponent as GuidesImage } from '@/img/guides.svg'
 import { ReactComponent as PlayImage } from '@/img/play.svg'
+import { ReactComponent as TuiLogo } from '@/img/tailwind-ui-logo-on-dark.svg'
 import Link from 'next/link'
 import clsx from 'clsx'
 import tinytime from 'tinytime'
 import { Community } from '@/components/Community'
 import styles from './index.module.css'
+import { Widont } from '@/components/Widont'
 
 const whatsNew = [
   {
@@ -93,7 +95,7 @@ export default function DocsLandingPage() {
         Learn Tailwind the way that best matches your learning style.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 xl:gap-8">
-        <div className="flex">
+        <section className="flex">
           <div className="w-full relative text-white overflow-hidden rounded-3xl flex shadow-lg">
             <div className={`w-full flex md:flex-col bg-gradient-to-br ${gradients.violet[0]}`}>
               <div className="sm:max-w-sm sm:flex-none md:w-auto md:flex-auto flex flex-col items-start relative z-10 p-6 xl:p-8">
@@ -101,7 +103,7 @@ export default function DocsLandingPage() {
                 <p className="font-medium text-violet-100 text-shadow mb-4">
                   Learn how to get Tailwind set up with your favorite tools.
                 </p>
-                <Link href="/">
+                <Link href="/docs/installation">
                   <a className="mt-auto bg-violet-800 bg-opacity-50 rounded-xl font-semibold py-2 px-4 inline-flex">
                     Start learning
                   </a>
@@ -118,8 +120,8 @@ export default function DocsLandingPage() {
               }}
             />
           </div>
-        </div>
-        <div className="flex">
+        </section>
+        <section className="flex">
           <div className="w-full relative text-white overflow-hidden rounded-3xl flex shadow-lg">
             <div className={`w-full flex md:flex-col bg-gradient-to-br ${gradients.pink[0]}`}>
               <div className="sm:max-w-sm sm:flex-none md:w-auto md:flex-auto flex flex-col items-start relative z-10 p-6 xl:p-8">
@@ -140,16 +142,14 @@ export default function DocsLandingPage() {
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-rose-500 hidden sm:block" />
           </div>
-        </div>
-        <div className="flex">
+        </section>
+        <section className="flex">
           <div className="w-full relative text-white overflow-hidden rounded-3xl flex shadow-lg">
             <div className={`w-full flex md:flex-col bg-gradient-to-br ${gradients.amber[0]}`}>
               <div className="sm:max-w-sm sm:flex-none md:w-auto md:flex-auto flex flex-col items-start relative z-10 p-6 xl:p-8">
                 <h2 className="text-xl font-semibold mb-2 text-shadow">Watch the screencasts</h2>
-                <p className="font-medium text-amber-100 text-shadow mb-4">
-                  Build something with Tailwind in our online playground.
-                </p>
-                <Link href="/">
+                <p className="font-medium text-amber-100 text-shadow mb-4">{/* TODO */}</p>
+                <Link href="https://www.youtube.com/tailwindlabs">
                   <a className="mt-auto bg-amber-900 bg-opacity-50 rounded-xl font-semibold py-2 px-4 inline-flex">
                     Start watching
                   </a>
@@ -163,7 +163,22 @@ export default function DocsLandingPage() {
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-orange-500 hidden sm:block" />
           </div>
-        </div>
+        </section>
+        <section className="md:col-span-3 flex flex-wrap md:flex-nowrap items-center bg-gray-800 shadow-lg rounded-2xl py-6 md:py-4 px-6 md:pr-5 space-y-4 md:space-y-0 md:space-x-8">
+          <h2 className="flex-none">
+            <span className="sr-only">Tailwind UI</span>
+            <TuiLogo className="w-40 h-auto" />
+          </h2>
+          <p className="flex-auto text-white text-lg font-medium">
+            <Widont>Beautiful UI components, crafted by the creators of Tailwind CSS</Widont>
+          </p>
+          <a
+            href="https://tailwindui.com"
+            className="flex-none bg-white text-gray-900 font-semibold rounded-xl py-2 px-4"
+          >
+            Browse examples
+          </a>
+        </section>
       </div>
       <section>
         <h2 className="text-3xl tracking-tight font-extrabold text-gray-900 mt-16 mb-8">
@@ -173,7 +188,7 @@ export default function DocsLandingPage() {
           {whatsNew.map((item) => (
             <li key={item.title} className="flex">
               <Link href={item.href}>
-                <a className="relative rounded-xl border border-black border-opacity-5 shadow-sm w-full pt-8 pb-6 px-6">
+                <a className="relative rounded-xl ring-1 ring-black ring-opacity-5 shadow-sm w-full pt-8 pb-6 px-6">
                   {item.image && <item.image className="h-auto max-w-full mx-auto mb-3" />}
                   {item.title}
                   {item.version && (

@@ -166,7 +166,7 @@ export function Customization() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className={`text-2xl leading-7 text-black ${
+                      className={`text-2xl leading-7 text-gray-900 ${
                         themes[theme].classNameDisplay || ''
                       }`}
                     >
