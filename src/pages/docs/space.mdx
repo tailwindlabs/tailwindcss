@@ -6,12 +6,14 @@ description: "Utilities for controlling the space between child elements."
 import plugin from 'tailwindcss/lib/plugins/space'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
+import { numbersFirstByPrefix } from '@/utils/sortClasses'
 
 export const classes = {
   plugin,
+  sort: numbersFirstByPrefix,
   transformSelector: (selector) => (
     <>
-      {selector.split('>').shift().trim()} <span className="ml-1 text-purple-300">> * + *</span>
+      {selector.split('>').shift().trim().replace(/^\./, '').replace(/\\/g, '')} <span className="ml-1 text-purple-300">> * + *</span>
     </>
   ),
 }

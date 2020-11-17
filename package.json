@@ -36,6 +36,7 @@
     "glob": "^7.1.6",
     "gsap": "^3.4.2",
     "gzip-size": "^5.1.1",
+    "just-group-by": "^1.0.0",
     "minimatch": "^3.0.4",
     "next": "^10.0.1",
     "postcss": "^8.1.7",

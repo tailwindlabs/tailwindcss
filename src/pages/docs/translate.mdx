@@ -6,8 +6,12 @@ description: "Utilities for translating elements with transform."
 import plugin from 'tailwindcss/lib/plugins/translate'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
+import { numbersFirstByPrefix } from '@/utils/sortClasses'
 
-export const classes = { plugin }
+export const classes = {
+  plugin,
+  sort: numbersFirstByPrefix,
+}
 
 ## Usage
 
