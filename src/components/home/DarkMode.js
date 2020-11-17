@@ -197,8 +197,8 @@ export function DarkMode() {
                   'src="/full-stack-radio.png"',
                   `src="${require('@/img/full-stack-radio.png').default}" loading="lazy"`
                 )
-                .replace(/<button type="button"/g, '<div class="mx-auto cursor-pointer"><div')
-                .replace(/<\/button>/g, '</div></div>'),
+                .replace(/<button type="button" class="/g, '<div class="cursor-pointer ')
+                .replace(/<\/button>/g, '</div>'),
             }}
           />
         }
