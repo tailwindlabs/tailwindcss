@@ -44,12 +44,12 @@ Next, let's create a new CSS file. In this example, we called it `tailwind.css` 
 
 Let's now import this new CSS file in our `main.js` entry point:
 
-```diff
-import { createApp } from "vue";
-import App from "./App.vue";
+```diff-js
+  import { createApp } from "vue";
+  import App from "./App.vue";
 + import "./tailwind.css";
 
-createApp(App).mount("#app");
+  createApp(App).mount("#app");
 ```
 
 That's it! Tailwind CSS is now available throughout your Vue 3 application 🎉

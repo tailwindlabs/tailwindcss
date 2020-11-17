@@ -65,45 +65,45 @@ Finally, we need to update the `angular.json` file to let it know about our cust
 Locate the `architect.build` key, and under `builder`, replace `@angular-devkit/build-angular:browser` with `@angular-builders/custom-webpack:browser`.
 
 ```diff-json
-"architect": {
-  "build": {
--    "builder": "@angular-devkit/build-angular:browser"
-+    "builder": "@angular-builders/custom-webpack:browser"
+  "architect": {
+    "build": {
+-      "builder": "@angular-devkit/build-angular:browser"
++      "builder": "@angular-builders/custom-webpack:browser"
+    }
   }
-}
 ```
 
 In the `options` just below, add a `customWebpackConfig` object with the `path` to the webpack config:
 
 ```diff-json
-"architect": {
-  "build": {
-    "builder": "@angular-builders/custom-webpack:browser",
-    "options": {
-+      "customWebpackConfig": {
-+        "path": "./webpack.config.js"
-+      },
-      "outputPath": "dist/angular",
+  "architect": {
+    "build": {
+      "builder": "@angular-builders/custom-webpack:browser",
+      "options": {
++       "customWebpackConfig": {
++         "path": "./webpack.config.js"
++       },
+        "outputPath": "dist/angular",
+      }
     }
   }
-}
 ```
 
 Now, let's do something very similar in `architect.serve`:
 
 ```diff-json
-"architect": {
-  "serve": {
--    "builder": "@angular-devkit/build-angular:dev-server",
-+    "builder": "@angular-builders/custom-webpack:dev-server",
-    "options": {
-      "browserTarget": "angular:build",
-+      "customWebpackConfig": {
-+        "path": "./webpack.config.js"
-+      },
-    },
+  "architect": {
+    "serve": {
+-     "builder": "@angular-devkit/build-angular:dev-server",
++     "builder": "@angular-builders/custom-webpack:dev-server",
+      "options": {
+        "browserTarget": "angular:build",
++       "customWebpackConfig": {
++         "path": "./webpack.config.js"
++       }
+      }
+    }
   }
-}
 ```
 
 You did it! 😅 Tailwind CSS is now available throughout our entire Angular application 🎉

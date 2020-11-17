@@ -44,7 +44,7 @@ In your `tailwind.config.js` file, configure the `purge` option with the paths t
 +     './resources/**/*.blade.php',
 +     './resources/**/*.js',
 +     './resources/**/*.vue',
-    ],
++   ],
     darkMode: false, // or 'media' or 'class'
     theme: {
       extend: {}
@@ -68,9 +68,9 @@ Make sure your CSS file is being processed in your `webpack.mix.js` file, and ad
 ```diff-js
   // webpack.mix.js
   mix.js("resources/js/app.js", "public/js")
-      .postCss("resources/css/tailwind.css", "public/css", [
-+       require("tailwindcss"),
-      ]);
+    .postCss("resources/css/tailwind.css", "public/css", [
++     require("tailwindcss"),
+    ]);
 ```
 
 Next, import your stylesheet in your main Blade layout (commonly `resources/views/layouts/app.php`) and add the responsive viewport meta tag if it's not already present:
