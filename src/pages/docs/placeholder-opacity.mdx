@@ -20,28 +20,28 @@ Control the opacity of an element's placeholder color using the `placeholder-opa
 <template preview>
   <div class="space-y-4">
     <div class="max-w-xs">
-      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-100 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
+      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-100 border rounded-md w-full py-3 px-4 text-gray-700 leading-5 focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
     </div>
     <div class="max-w-xs">
-      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-75 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
+      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-75 border rounded-md w-full py-3 px-4 text-gray-700 leading-5 focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
     </div>
     <div class="max-w-xs">
-      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-50 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
+      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-50 border rounded-md w-full py-3 px-4 text-gray-700 leading-5 focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
     </div>
     <div class="max-w-xs">
-      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-25 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
+      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-25 border rounded-md w-full py-3 px-4 text-gray-700 leading-5 focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
     </div>
     <div class="max-w-xs">
-      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-0 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
+      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-0 border rounded-md w-full py-3 px-4 text-gray-700 leading-5 focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
     </div>
   </div>
 </template>
 
-<input class="placeholder-gray-500 placeholder-opacity-100 ..." placeholder="jane@example.com">
-<input class="placeholder-gray-500 placeholder-opacity-75 ..." placeholder="jane@example.com">
-<input class="placeholder-gray-500 placeholder-opacity-50 ..." placeholder="jane@example.com">
-<input class="placeholder-gray-500 placeholder-opacity-25 ..." placeholder="jane@example.com">
-<input class="placeholder-gray-500 placeholder-opacity-0 ..." placeholder="jane@example.com">
+<input class="placeholder-gray-500 **placeholder-opacity-100** ..." placeholder="jane@example.com">
+<input class="placeholder-gray-500 **placeholder-opacity-75** ..." placeholder="jane@example.com">
+<input class="placeholder-gray-500 **placeholder-opacity-50** ..." placeholder="jane@example.com">
+<input class="placeholder-gray-500 **placeholder-opacity-25** ..." placeholder="jane@example.com">
+<input class="placeholder-gray-500 **placeholder-opacity-0** ..." placeholder="jane@example.com">
 ```
 
 ## Responsive
@@ -49,7 +49,7 @@ Control the opacity of an element's placeholder color using the `placeholder-opa
 To control an element's placeholder color opacity at a specific breakpoint, add a `{screen}:` prefix to any existing placeholder color opacity utility. For example, use `md:placeholder-opacity-50` to apply the `placeholder-opacity-50` utility at only medium screen sizes and above.
 
 ```html
-<input class="placeholder-opacity-75 md:placeholder-opacity-50 placeholder-gray-500" placeholder="jane@example.com">
+<input class="placeholder-gray-500 placeholder-opacity-75 **md:placeholder-opacity-50** ..." placeholder="jane@example.com">
 ```
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.

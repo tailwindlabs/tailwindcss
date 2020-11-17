@@ -32,48 +32,48 @@ export const classes = {
 
 Control the placeholder color of an element using the `placeholder-{color}` utilities.
 
-```html
+```html emerald
 <template preview class="text-center p-6">
   <div class="max-w-xs">
-    <input class="block appearance-none placeholder-gray-500 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
-    <input class="mt-4 block appearance-none placeholder-red-300 border border-red-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
+    <input class="block appearance-none placeholder-gray-500 border rounded-md w-full py-3 px-4 text-gray-700 leading-5" placeholder="jane@example.com">
+    <input class="mt-4 block appearance-none placeholder-red-300 border border-red-400 rounded-md w-full py-3 px-4 text-gray-700 leading-5" placeholder="jane@example.com">
   </div>
 </template>
 
-<input class="placeholder-gray-500 border" placeholder="jane@example.com">
-<input class="placeholder-red-300 border border-red-400" placeholder="jane@example.com">
+<input class="**placeholder-gray-500** ..." placeholder="jane@example.com">
+<input class="**placeholder-red-300** ..." placeholder="jane@example.com">
 ```
 
 ### Changing opacity
 
 Control the opacity of an element's placeholder color using the `placeholder-opacity-{amount}` utilities.
 
-```html
+```html lightBlue
 <template preview>
   <div class="space-y-4">
     <div class="max-w-xs">
-      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-100 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
+      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-100 border rounded-md w-full py-3 px-4 text-gray-700 leading-5" placeholder="jane@example.com">
     </div>
     <div class="max-w-xs">
-      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-75 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
+      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-75 border rounded-md w-full py-3 px-4 text-gray-700 leading-5" placeholder="jane@example.com">
     </div>
     <div class="max-w-xs">
-      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-50 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
+      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-50 border rounded-md w-full py-3 px-4 text-gray-700 leading-5" placeholder="jane@example.com">
     </div>
     <div class="max-w-xs">
-      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-25 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
+      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-25 border rounded-md w-full py-3 px-4 text-gray-700 leading-5" placeholder="jane@example.com">
     </div>
     <div class="max-w-xs">
-      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-0 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="jane@example.com">
+      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-0 border rounded-md w-full py-3 px-4 text-gray-700 leading-5" placeholder="jane@example.com">
     </div>
   </div>
 </template>
 
-<input class="placeholder-gray-500 placeholder-opacity-100 ..." placeholder="jane@example.com">
-<input class="placeholder-gray-500 placeholder-opacity-75 ..." placeholder="jane@example.com">
-<input class="placeholder-gray-500 placeholder-opacity-50 ..." placeholder="jane@example.com">
-<input class="placeholder-gray-500 placeholder-opacity-25 ..." placeholder="jane@example.com">
-<input class="placeholder-gray-500 placeholder-opacity-0 ..." placeholder="jane@example.com">
+<input class="placeholder-gray-500 **placeholder-opacity-100** ..." placeholder="jane@example.com">
+<input class="placeholder-gray-500 **placeholder-opacity-75** ..." placeholder="jane@example.com">
+<input class="placeholder-gray-500 **placeholder-opacity-50** ..." placeholder="jane@example.com">
+<input class="placeholder-gray-500 **placeholder-opacity-25** ..." placeholder="jane@example.com">
+<input class="placeholder-gray-500 **placeholder-opacity-0** ..." placeholder="jane@example.com">
 ```
 
 Learn more in the [placeholder opacity documentation](/docs/placeholder-opacity).
@@ -95,17 +95,17 @@ To control the placeholder color of an element on focus, add the `focus:` prefix
 ```html
 <template preview class="text-center p-6">
   <div class="max-w-xs mx-auto">
-    <input class="block appearance-none bg-gray-200 placeholder-gray-600 border border-transparent focus:border-gray-300 focus:bg-white focus:placeholder-gray-500 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" placeholder="jane@example.com">
+    <input class="block appearance-none bg-gray-200 placeholder-gray-600 border border-transparent focus:border-gray-300 focus:bg-white focus:placeholder-gray-400 rounded w-full py-3 px-4 text-gray-700 leading-5 focus:outline-none" placeholder="jane@example.com">
   </div>
 </template>
 
-<input class="placeholder-gray-600 focus:placeholder-gray-500 ..." placeholder="jane@example.com">
+<input class="placeholder-gray-600 **focus:placeholder-gray-400** ..." placeholder="jane@example.com">
 ```
 
 Focus utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
 
 ```html
-<input class="... md:placeholder-gray-900 md:focus:placeholder-red-600 ...">
+<input class="... md:placeholder-gray-900 **md:focus:placeholder-red-600** ...">
 ```
 
 ## Customizing
