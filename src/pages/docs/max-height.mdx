@@ -18,18 +18,18 @@ export const classes = { plugin }
 
 Set the maximum height of an element using the `max-h-full` or `max-h-screen` utilities.
 
-```html
+```html lightBlue
 <template preview>
-  <div class="h-24 p-6 bg-gray-300">
-    <div class="h-48 max-h-full p-6 bg-gray-400 flex items-center justify-center">
-      <span>max-h-full</span>
+  <div class="h-24 p-6 bg-light-blue-300 rounded-md">
+    <div class="h-48 max-h-full p-6 bg-light-blue-500 flex items-center justify-center rounded font-semibold text-white">
+      <span>.max-h-full</span>
     </div>
   </div>
 </template>
 
 <div class="h-24 ...">
-  <div class="h-48 max-h-full ...">
-    max-h-full
+  <div class="h-48 **max-h-full** ...">
+    .max-h-full
   </div>
 </div>
 ```
@@ -41,7 +41,7 @@ Set the maximum height of an element using the `max-h-full` or `max-h-screen` ut
 To control the max-height of an element at a specific breakpoint, add a `{screen}:` prefix to any existing max-height utility.
 
 ```html
-<div class="h-48 max-h-full md:max-h-screen** ...">
+<div class="h-48 max-h-full **md:max-h-screen** ...">
   <span>Target</span>
 </div>
 ```
