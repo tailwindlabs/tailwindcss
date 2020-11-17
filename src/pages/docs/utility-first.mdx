@@ -133,22 +133,20 @@ But using utility classes has a few important advantages over inline styles:
 
 This component is fully responsive and includes a button with hover styles, and is built entirely with utility classes:
 
-```html
-<template preview class="p-8 bg-gray-200">
-  <div class="max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-    <div class="sm:flex sm:items-center px-6 py-4">
-      <img class="block mx-auto sm:mx-0 sm:flex-shrink-0 h-16 sm:h-24 rounded-full" src="/img/erin-lindford.jpg" alt="Woman's Face">
-      <div class="mt-4 sm:mt-0 sm:ml-4 text-center sm:text-left">
-        <p class="text-gray-900 font-bold text-xl leading-tight">
+```html purple
+<template preview class="p-12">
+  <div class="py-8 px-8 max-w-sm mx-auto bg-white rounded-xl shadow-md sm:flex sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 sm:py-4">
+    <img class="block mx-auto sm:mx-0 sm:flex-shrink-0 h-24 rounded-full" src="/img/erin-lindford.jpg" alt="Woman's Face">
+    <div class="text-center sm:text-left space-y-2">
+      <div class="space-y-0.5">
+        <p class="text-lg text-black font-semibold">
           Erin Lindford
         </p>
-        <p class="text-sm leading-tight text-gray-600">
+        <p class="text-gray-500 font-medium">
           Product Engineer
         </p>
-        <div class="mt-4">
-          <button class="text-purple-700 hover:text-white hover:bg-purple-600 border border-purple-600 text-xs font-semibold rounded-full px-4 py-1 leading-normal">Message</button>
-        </div>
       </div>
+      <button class="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">Message</button>
     </div>
   </div>
 </template>
