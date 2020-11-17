@@ -5,12 +5,9 @@ import { ReactComponent as Icon } from '@/img/icons/home/ready-made-components.s
 import { useInView } from 'react-intersection-observer'
 import { motion } from 'framer-motion'
 
-function AnimatedImage({ initial = {}, ...props }) {
-  const { inView, ref } = useInView({ threshold: 0.5, triggerOnce: false })
-
+function AnimatedImage({ initial = {}, inView, ...props }) {
   return (
     <motion.img
-      ref={ref}
       initial={false}
       animate={inView ? { opacity: 1, y: 0, x: 0 } : { opacity: 0, ...initial }}
       transition={{ duration: 1 }}
@@ -20,6 +17,8 @@ function AnimatedImage({ initial = {}, ...props }) {
 }
 
 export function ReadyMadeComponents() {
+  const { ref: inViewRef, inView } = useInView({ threshold: 0.5, triggerOnce: true })
+
   return (
     <section id="ready-made-components">
       <div className="px-4 sm:px-6 md:px-8 mb-20">
@@ -46,7 +45,7 @@ export function ReadyMadeComponents() {
         color="violet"
         rotate={-2}
         left={
-          <div className="-mx-8">
+          <div className="-mx-8" ref={inViewRef}>
             <div className="relative" style={{ paddingTop: `${(1811 / 3771) * 100}%` }}>
               <svg className="absolute inset-0 w-full h-full" viewBox="0 0 3771 1811" fill="none">
                 <defs>
@@ -80,6 +79,7 @@ export function ReadyMadeComponents() {
                   width: `${(1410 / 3771) * 100}%`,
                 }}
                 initial={{ y: '-20%' }}
+                inView={inView}
               />
               <AnimatedImage
                 src={require('@/img/tailwindui-workcation.png').default}
@@ -91,6 +91,7 @@ export function ReadyMadeComponents() {
                   width: `${(819 / 3771) * 100}%`,
                 }}
                 initial={{ x: '10%' }}
+                inView={inView}
               />
               <AnimatedImage
                 src={require('@/img/tailwindui-form.png').default}
@@ -102,6 +103,7 @@ export function ReadyMadeComponents() {
                   width: `${(690 / 3771) * 100}%`,
                 }}
                 initial={{ y: '15%' }}
+                inView={inView}
               />
               <AnimatedImage
                 src={require('@/img/tailwindui-projects.png').default}
@@ -113,6 +115,7 @@ export function ReadyMadeComponents() {
                   width: `${(1057 / 3771) * 100}%`,
                 }}
                 initial={{ x: '-10%' }}
+                inView={inView}
               />
             </div>
           </div>
