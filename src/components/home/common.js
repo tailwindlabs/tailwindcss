@@ -47,6 +47,4 @@ export function Link({ className = '', href, ...props }) {
   )
 }
 
-export function Widont({ children }) {
-  return children.replace(/ ([^ ]+)$/, '\u00A0$1')
-}
+export { Widont } from '@/components/Widont'
