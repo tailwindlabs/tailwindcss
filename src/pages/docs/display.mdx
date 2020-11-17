@@ -13,107 +13,148 @@ export const classes = { plugin }
 
 Use `block` to create a block-level element.
 
-```html
+```html lightBlue
 <template preview>
-  <div class="bg-gray-200 p-4">
-    <span class="block text-gray-700 text-center bg-gray-400 px-4 py-2">1</span>
-    <span class="block text-gray-700 text-center bg-gray-400 px-4 py-2 mt-2">2</span>
-    <span class="block text-gray-700 text-center bg-gray-400 px-4 py-2 mt-2">3</span>
+  <div class="p-4 space-y-4 bg-light-blue-300 bg-stripes bg-stripes-white rounded-md">
+    <span class="block text-white font-extrabold text-center bg-light-blue-500 p-6">1</span>
+    <span class="block text-white font-extrabold text-center bg-light-blue-500 p-6">2</span>
+    <span class="block text-white font-extrabold text-center bg-light-blue-500 p-6">3</span>
   </div>
 </template>
+
+<div class="space-y-4 ...">
+  <span class="**block** ...">1</span>
+  <span class="**block** ...">2</span>
+  <span class="**block** ...">3</span>
+</div>
 ```
 
 ## Flow-Root
 
 Use `flow-root` to create a block-level element with its own [block formatting context](https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Block_formatting_context).
 
-```html
+```html purple
 <template preview>
-  <div class="flow-root bg-gray-400">
-    <div class="my-4 block text-gray-700 text-center bg-gray-500 px-4 py-2">1</div>
-  </div>
-  <div class="flow-root bg-gray-200">
-    <div class="my-4 block text-gray-700 text-center bg-gray-400 px-4 py-2">2</div>
+  <div class="space-y-4">
+    <div class="flow-root bg-purple-300 bg-stripes bg-stripes-white rounded-md">
+      <div class="my-4 text-white font-extrabold text-center bg-purple-500 p-6">1</div>
+    </div>
+    <div class="flow-root bg-purple-300 bg-stripes bg-stripes-white rounded-md">
+      <div class="my-4 text-white font-extrabold text-center bg-purple-500 p-6">2</div>
+    </div>
   </div>
 </template>
+
+<div class="space-y-4">
+  <div class="**flow-root** ...">
+    <div class="my-4 ...">1</div>
+  </div>
+  <div class="**flow-root** ...">
+    <div class="my-4 ...">2</div>
+  </div>
+</div>
 ```
 
 ## Inline Block
 
 Use `inline-block` to create an inline block-level element.
 
-```html
+```html rose
 <template preview>
-  <div class="bg-gray-200">
-    <div class="inline-block text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="inline-block text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="inline-block text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="p-4 space-x-4 bg-rose-300 bg-stripes bg-stripes-white rounded-md">
+    <div class="inline-block text-white font-extrabold text-center bg-rose-500 px-6 py-4">1</div>
+    <div class="inline-block text-white font-extrabold text-center bg-rose-500 px-6 py-4">2</div>
+    <div class="inline-block text-white font-extrabold text-center bg-rose-500 px-6 py-4">3</div>
   </div>
 </template>
+
+<div class="space-x-4 ...">
+  <div class="**inline-block** ...">1</div>
+  <div class="**inline-block** ...">2</div>
+  <div class="**inline-block** ...">3</div>
+</div>
 ```
 
 ## Inline
 
 Use `inline` to create an inline element.
 
-```html
+```html amber
 <template preview>
-  <div class="bg-gray-200">
-    <div class="inline text-gray-700 text-center bg-gray-400 px-4 py-2">1</div>
-    <div class="inline text-gray-700 text-center bg-gray-400 px-4 py-2">2</div>
-    <div class="inline text-gray-700 text-center bg-gray-400 px-4 py-2">3</div>
+  <div class="bg-amber-300 bg-stripes bg-stripes-white rounded-md">
+    <div class="inline text-white font-extrabold text-center bg-amber-500 px-6 py-4">1</div>
+    <div class="inline text-white font-extrabold text-center bg-amber-500 px-6 py-4">2</div>
+    <div class="inline text-white font-extrabold text-center bg-amber-500 px-6 py-4">3</div>
   </div>
 </template>
+
+<div>
+  <div class="inline ...">1</div>
+  <div class="inline ...">2</div>
+  <div class="inline ...">3</div>
+</div>
 ```
 
 ## Flex
 
 Use `flex` to create a block-level flex container.
 
-```html
+```html emerald
 <template preview>
-  <div class="flex bg-gray-200">
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="p-4 flex space-x-4 bg-emerald-300 bg-stripes bg-stripes-white rounded-md">
+    <div class="flex-1 text-white font-extrabold text-center bg-emerald-500 p-6">1</div>
+    <div class="flex-1 text-white font-extrabold text-center bg-emerald-500 p-6">2</div>
+    <div class="flex-1 text-white font-extrabold text-center bg-emerald-500 p-6">3</div>
   </div>
 </template>
+
+<div class="**flex** space-x-4 ...">
+  <div class="flex-1 ...">1</div>
+  <div class="flex-1 ...">2</div>
+  <div class="flex-1 ...">3</div>
+</div>
 ```
 
 ## Inline flex
 
 Use `inline-flex` to create an inline flex container.
 
-```html
+```html indigo
 <template preview>
-  <div class="inline-flex bg-gray-200">
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="p-4 inline-flex space-x-4 bg-indigo-300 bg-stripes bg-stripes-white rounded-md">
+    <div class="flex-1 text-white font-extrabold text-center bg-indigo-500 px-6 py-4">1</div>
+    <div class="flex-1 text-white font-extrabold text-center bg-indigo-500 px-6 py-4">2</div>
+    <div class="flex-1 text-white font-extrabold text-center bg-indigo-500 px-6 py-4">3</div>
   </div>
 </template>
+
+<div class="**inline-flex** space-x-4 ...">
+  <div class="flex-1 ...">1</div>
+  <div class="flex-1 ...">2</div>
+  <div class="flex-1 ...">3</div>
+</div>
 ```
 
 ## Grid
 
 Use `grid` to create a grid container.
 
-```html
-<template preview class="bg-white p-8">
-  <div class="grid gap-4 grid-cols-3">
-    <div class="bg-gray-300 h-12"></div>
-    <div class="bg-gray-500 h-12"></div>
-    <div class="bg-gray-300 h-12"></div>
-    <div class="bg-gray-500 h-12"></div>
-    <div class="bg-gray-300 h-12"></div>
-    <div class="bg-gray-500 h-12"></div>
-    <div class="bg-gray-300 h-12"></div>
-    <div class="bg-gray-500 h-12"></div>
-    <div class="bg-gray-300 h-12"></div>
+```html fuchsia
+<template preview>
+  <div class="p-4 grid gap-4 grid-cols-3 bg-fuchsia-300 bg-stripes bg-stripes-white rounded-md">
+    <div class="bg-fuchsia-400 h-12"></div>
+    <div class="bg-fuchsia-500 h-12"></div>
+    <div class="bg-fuchsia-400 h-12"></div>
+    <div class="bg-fuchsia-500 h-12"></div>
+    <div class="bg-fuchsia-400 h-12"></div>
+    <div class="bg-fuchsia-500 h-12"></div>
+    <div class="bg-fuchsia-400 h-12"></div>
+    <div class="bg-fuchsia-500 h-12"></div>
+    <div class="bg-fuchsia-400 h-12"></div>
   </div>
 </template>
 
-<div class="grid gap-4 grid-cols-3">
+<div class="**grid** gap-4 grid-cols-3">
   <!-- ... -->
 </div>
 ```
@@ -122,26 +163,26 @@ Use `grid` to create a grid container.
 
 Use `inline-grid` to create an inline grid container.
 
-```html
-<template preview class="bg-white p-8">
-  <span class="inline-grid grid-cols-3 gap-x-4 p-2 bg-gray-200">
-    <span class="px-4 py-2 text-center bg-gray-400">1</span>
-    <span class="px-4 py-2 text-center bg-gray-400">1</span>
-    <span class="px-4 py-2 text-center bg-gray-400">1</span>
+```html lightBlue
+<template preview>
+  <span class="inline-grid grid-cols-3 gap-x-4 p-4 bg-light-blue-300 bg-stripes bg-stripes-white rounded-md">
+    <span class="text-white font-extrabold text-center bg-light-blue-500 px-6 py-4">1</span>
+    <span class="text-white font-extrabold text-center bg-light-blue-500 px-6 py-4">1</span>
+    <span class="text-white font-extrabold text-center bg-light-blue-500 px-6 py-4">1</span>
   </span>
-  <span class="inline-grid grid-cols-3 gap-x-4 p-2 bg-gray-200">
-    <span class="px-4 py-2 text-center bg-gray-400">2</span>
-    <span class="px-4 py-2 text-center bg-gray-400">2</span>
-    <span class="px-4 py-2 text-center bg-gray-400">2</span>
+  <span class="inline-grid grid-cols-3 gap-x-4 p-4 bg-light-blue-300 bg-stripes bg-stripes-white rounded-md">
+    <span class="text-white font-extrabold text-center bg-light-blue-500 px-6 py-4">2</span>
+    <span class="text-white font-extrabold text-center bg-light-blue-500 px-6 py-4">2</span>
+    <span class="text-white font-extrabold text-center bg-light-blue-500 px-6 py-4">2</span>
   </span>
 </template>
 
-<span class="inline-grid grid-cols-3 gap-x-4">
+<span class="**inline-grid** grid-cols-3 gap-x-4">
   <span>1</span>
   <span>1</span>
   <span>1</span>
 </span>
-<span class="inline-grid grid-cols-3 gap-x-4">
+<span class="**inline-grid** grid-cols-3 gap-x-4">
   <span>2</span>
   <span>2</span>
   <span>2</span>
@@ -152,54 +193,84 @@ Use `inline-grid` to create an inline grid container.
 
 Use `contents` to create a "phantom" container whose children act like direct children of the parent..
 
-```html
+```html purple
 <template preview>
-  <div class="flex bg-gray-200">
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
+  <div class="flex bg-purple-300 bg-stripes bg-stripes-white rounded-md">
+    <div class="flex-1 m-2 text-white font-extrabold text-center bg-purple-500 px-6 py-4">1</div>
     <div class="contents">
-      <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-      <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+      <div class="flex-1 m-2 text-white font-extrabold text-center bg-purple-500 px-6 py-4">2</div>
+      <div class="flex-1 m-2 text-white font-extrabold text-center bg-purple-500 px-6 py-4">3</div>
     </div>
-    <div class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">4</div>
+    <div class="flex-1 m-2 text-white font-extrabold text-center bg-purple-500 px-6 py-4">4</div>
   </div>
 </template>
+
+<div class="flex ...">
+  <div class="flex-1 ...">1</div>
+  <div class="contents">
+    <div class="flex-1 ...">2</div>
+    <div class="flex-1 ...">3</div>
+  </div>
+  <div class="flex-1 ...">4</div>
+</div>
 ```
 
 ## Table
 
 Use the `table`, `.table-row`, `.table-cell`, `.table-caption`, `.table-column`, `.table-column-group`, `.table-header-group`, `table-row-group`, and `.table-footer-group` utilities to create elements that behave like their respective table elements.
 
-```html
+```html rose
 <template preview>
-  <div class="table w-full">
+  <div class="table w-full bg-rose-300 bg-stripes bg-stripes-white rounded-md overflow-hidden">
     <div class="table-row-group">
       <div class="table-row">
-        <div class="table-cell bg-gray-400 text-gray-700 px-4 py-2 text-sm">A cell with more content</div>
-        <div class="table-cell bg-gray-200 text-gray-700 px-4 py-2 text-sm">Cell 2</div>
-        <div class="table-cell bg-gray-400 text-gray-700 px-4 py-2 text-sm">Cell 3</div>
+        <div class="table-cell text-white font-extrabold text-center bg-rose-500 px-6 py-4">A cell with more content</div>
+        <div class="table-cell text-white font-extrabold text-center bg-rose-400 px-6 py-4">Cell 2</div>
+        <div class="table-cell text-white font-extrabold text-center bg-rose-500 px-6 py-4">Cell 3</div>
       </div>
       <div class="table-row">
-        <div class="table-cell bg-gray-200 text-gray-700 px-4 py-2 text-sm">Cell 4</div>
-        <div class="table-cell bg-gray-400 text-gray-700 px-4 py-2 text-sm">A cell with more content</div>
-        <div class="table-cell bg-gray-200 text-gray-700 px-4 py-2 text-sm">Cell 6</div>
+        <div class="table-cell text-white font-extrabold text-center bg-rose-400 px-6 py-4">Cell 4</div>
+        <div class="table-cell text-white font-extrabold text-center bg-rose-500 px-6 py-4">A cell with more content</div>
+        <div class="table-cell text-white font-extrabold text-center bg-rose-400 px-6 py-4">Cell 6</div>
       </div>
     </div>
   </div>
 </template>
+
+<div class="**table** w-full ...">
+  <div class="**table-row-group**">
+    <div class="**table-row**">
+      <div class="**table-cell** ...">A cell with more content</div>
+      <div class="**table-cell** ...">Cell 2</div>
+      <div class="**table-cell** ...">Cell 3</div>
+    </div>
+    <div class="**table-row**">
+      <div class="**table-cell** ...">Cell 4</div>
+      <div class="**table-cell** ...">A cell with more content</div>
+      <div class="**table-cell** ...">Cell 6</div>
+    </div>
+  </div>
+</div>
 ```
 
 ## Hidden
 
 Use `hidden` to set an element to `display: none` and remove it from the page layout (compare with `.invisible` from the [visibility](/docs/visibility#invisible) documentation).
 
-```html
+```html amber
 <template preview>
-  <div class="flex bg-gray-200">
-    <div class="hidden text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
+  <div class="p-4 flex space-x-4 bg-amber-300 bg-stripes bg-stripes-white rounded-md">
+    <div class="hidden text-white font-extrabold text-center bg-amber-500 px-6 py-4">1</div>
+    <div class="text-white font-extrabold text-center bg-amber-500 px-6 py-4">2</div>
+    <div class="text-white font-extrabold text-center bg-amber-500 px-6 py-4">3</div>
   </div>
 </template>
+
+<div class="flex space-x-4 ...">
+  <div class="**hidden** ...">1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
 ```
 
 ## Responsive
