@@ -13,26 +13,28 @@ export const classes = { plugin }
 
 Specify an element's transform origin using the `origin-{keyword}` utilities.
 
-```html
-<template preview class="bg-white lg:flex justify-around items-center text-sm p-4 py-12">
-  <div class="bg-gray-600">
-    <img class="h-16 w-16 origin-center transform rotate-45" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80">
-  </div>
-  <div class="bg-gray-600">
-    <img class="h-16 w-16 origin-top-left transform rotate-45" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80">
-  </div>
-  <div class="bg-gray-600">
-    <img class="h-16 w-16 origin-bottom-right transform rotate-45" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80">
-  </div>
-  <div class="bg-gray-600">
-    <img class="h-16 w-16 origin-left transform rotate-45" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80">
+```html indigo
+<template preview>
+  <div class="flex flex-col justify-around space-y-12 md:flex-row md:space-y-0 md:space-x-12">
+    <div class="w-16 h-16 bg-indigo-400 bg-stripes bg-stripes-white">
+      <img class="h-16 w-16 origin-center transform rotate-45" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80">
+    </div>
+    <div class="w-16 h-16 bg-indigo-400 bg-stripes bg-stripes-white">
+      <img class="h-16 w-16 origin-top-left transform rotate-45" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80">
+    </div>
+    <div class="w-16 h-16 bg-indigo-400 bg-stripes bg-stripes-white">
+      <img class="h-16 w-16 origin-bottom-right transform rotate-45" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80">
+    </div>
+    <div class="w-16 h-16 bg-indigo-400 bg-stripes bg-stripes-white">
+      <img class="h-16 w-16 origin-left transform rotate-45" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80">
+    </div>
   </div>
 </template>
 
-<img class="origin-center transform rotate-45 ...">
-<img class="origin-top-left transform rotate-45 ...">
-<img class="origin-bottom-right transform rotate-45 ...">
-<img class="origin-left transform rotate-45 ...">
+<img class="**origin-center** transform rotate-45 ...">
+<img class="**origin-top-left** transform rotate-45 ...">
+<img class="**origin-bottom-right** transform rotate-45 ...">
+<img class="**origin-left** transform rotate-45 ...">
 ```
 
 ## Responsive
