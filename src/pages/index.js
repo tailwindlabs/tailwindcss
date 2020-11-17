@@ -49,10 +49,10 @@ function NpmInstallButton() {
   return (
     <button
       type="button"
-      className="w-full sm:w-auto flex-none bg-gray-50 text-gray-400 hover:text-black font-mono leading-6 py-3 sm:px-6 border border-gray-200 rounded-xl flex items-center justify-center space-x-2 sm:space-x-4 focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-gray-300 focus:outline-none transition-colors duration-200"
+      className="w-full sm:w-auto flex-none bg-gray-50 text-gray-400 hover:text-gray-900 font-mono leading-6 py-3 sm:px-6 border border-gray-200 rounded-xl flex items-center justify-center space-x-2 sm:space-x-4 focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-gray-300 focus:outline-none transition-colors duration-200"
       onClick={() => setState('copying')}
     >
-      <span className="text-black">
+      <span className="text-gray-900">
         <span className="hidden sm:inline text-gray-500" aria-hidden="true">
           ${' '}
         </span>
@@ -87,7 +87,7 @@ export default function Home() {
             </a>
           </div>
           <Logo className="w-auto h-7 sm:h-8" />
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl leading-none font-extrabold tracking-tight text-black mt-14 mb-10">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl leading-none font-extrabold tracking-tight text-gray-900 mt-14 mb-10">
             Rapidly build modern websites without ever leaving your HTML.
           </h1>
           <p className="max-w-screen-lg text-lg sm:text-2xl sm:leading-10 font-medium mb-11">
@@ -96,7 +96,7 @@ export default function Home() {
           </p>
           <div className="flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4 text-center">
             <NextLink href="/docs">
-              <a className="w-full sm:w-auto flex-none bg-black text-white text-lg leading-6 font-semibold py-3 px-6 border border-transparent rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-black focus:outline-none">
+              <a className="w-full sm:w-auto flex-none bg-gray-900 text-white text-lg leading-6 font-semibold py-3 px-6 border border-transparent rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-gray-900 focus:outline-none">
                 Get started
               </a>
             </NextLink>

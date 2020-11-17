@@ -22,7 +22,7 @@ export function ColorPaletteReference({ colors }) {
             <div className="flex flex-col space-y-3 sm:flex-row text-xs sm:space-y-0 sm:space-x-4">
               <div className="w-32 flex-shrink-0">
                 <div className="h-10 flex flex-col justify-center">
-                  <div className="text-sm font-semibold text-black">
+                  <div className="text-sm font-semibold text-gray-900">
                     {title
                       .split('')
                       .flatMap((l, i) => {

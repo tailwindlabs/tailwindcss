@@ -21,7 +21,7 @@ export function Caption({ as: Component = 'p', className = '', ...props }) {
 export function BigText({ as: Component = 'p', className = '', ...props }) {
   return (
     <Component
-      className={`text-3xl sm:text-5xl lg:text-6xl leading-none font-extrabold text-black tracking-tight ${className}`}
+      className={`text-3xl sm:text-5xl lg:text-6xl leading-none font-extrabold text-gray-900 tracking-tight ${className}`}
       {...props}
     />
   )

@@ -122,7 +122,7 @@ function DarkModeSwitch({ enabled, onChange }) {
             'justify-end': enabled,
           }
         )}
-        style={{ backgroundColor: enabled ? '#000' : '#60D360' }}
+        style={{ backgroundColor: enabled ? '#111827' : '#60D360' }}
       >
         <span className="sr-only">Enable dark mode</span>
         <motion.span
@@ -136,7 +136,7 @@ function DarkModeSwitch({ enabled, onChange }) {
         height="24"
         fill="currentColor"
         className={clsx('transition-colors duration-200', {
-          'text-black': enabled,
+          'text-gray-900': enabled,
           'text-gray-300': !enabled,
         })}
       >
