@@ -14,43 +14,47 @@ const whatsNew = [
     title: 'Focus Ring Utilities',
     version: '2.0+',
     image: require('@/img/docs/focus-ring.svg').ReactComponent,
-    href: '/',
+    href: '/docs/ring-width',
   },
   {
     title: 'Dark Mode',
     version: '2.0+',
     image: require('@/img/docs/dark-mode.svg').ReactComponent,
-    href: '/',
+    href: '/docs/dark-mode',
   },
   {
     title: 'Extended Color Palette',
     version: '2.0+',
     image: require('@/img/docs/color-palette.svg').ReactComponent,
-    href: '/',
+    href: '/docs/customizing-colors#color-palette-reference',
   },
   {
     title: 'Extend Variants',
     version: '2.0+',
     image: require('@/img/docs/extend-variants.svg').ReactComponent,
-    href: '/',
+    href: '/docs/configuring-variants#enabling-extra-variants',
   },
   {
     title: 'Extra Wide Breakpoint',
     version: '2.0+',
     image: require('@/img/docs/breakpoint.svg').ReactComponent,
-    href: '/',
+    href: '/docs/breakpoints',
   },
   {
     title: 'Sharable Presets',
     image: require('@/img/docs/sharable-presets.svg').ReactComponent,
-    href: '/',
+    href: '/docs/presets',
   },
   {
     title: 'Gradients',
     image: require('@/img/docs/gradients.svg').ReactComponent,
-    href: '/',
+    href: '/docs/gradient-color-stops',
   },
-  { title: 'Animations', image: require('@/img/docs/animations.svg').ReactComponent, href: '/' },
+  {
+    title: 'Animations',
+    image: require('@/img/docs/animations.svg').ReactComponent,
+    href: '/docs/animation',
+  },
 ]
 
 const latestUpdates = [

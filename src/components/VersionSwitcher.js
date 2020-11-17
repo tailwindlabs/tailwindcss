@@ -10,6 +10,9 @@ export function VersionSwitcher({ className }) {
     if (selectRef.current.value === 'v0') {
       window.location = 'https://tailwindcss-v0.netlify.app/'
     }
+    if (selectRef.current.value === 'v1') {
+      window.location = 'https://v1.tailwindcss.com/'
+    }
   }
 
   return (

@@ -107,6 +107,10 @@
   flex: auto;
 }
 
+.DocSearch-Input:focus {
+  outline: 2px dotted transparent;
+}
+
 .DocSearch-Input::-webkit-search-cancel-button,
 .DocSearch-Input::-webkit-search-decoration,
 .DocSearch-Input::-webkit-search-results-button,
