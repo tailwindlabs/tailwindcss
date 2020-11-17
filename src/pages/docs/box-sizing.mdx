@@ -17,15 +17,17 @@ This means a 100px &times; 100px element with a 2px border and 4px of padding on
 
 Tailwind makes this the default for all elements in our [preflight base styles](/docs/preflight).
 
-```html
-<template preview class="bg-white p-8 flex items-center justify-around">
-  <div class="box-border h-20 w-32 p-4 border-4 border-gray-400 bg-gray-200">
-    <div class="h-full w-full bg-gray-400"></div>
+```html lightBlue
+<template preview>
+  <div class="flex items-center justify-around">
+    <div class="box-border h-32 w-32 p-4 border-4 border-light-blue-400 bg-light-blue-200 rounded-md">
+      <div class="h-full w-full bg-light-blue-400 bg-stripes bg-stripes-white"></div>
+    </div>
   </div>
 </template>
 
-<div class="box-border h-20 w-32 p-4 border-4 border-gray-400 bg-gray-200">
-  <div class="h-full w-full bg-gray-400"></div>
+<div class="**box-border** h-32 w-32 p-4 border-4 border-light-blue-400 bg-light-blue-200 ...">
+  <div class="h-full w-full ..."></div>
 </div>
 ```
 
@@ -35,15 +37,17 @@ Use `box-content` to set an element's `box-sizing` to `content-box`, telling the
 
 This means a 100px &times; 100px element with a 2px border and 4px of padding on all sides will actually be rendered as 112px &times; 112px, with an internal content area of 100px &times; 100px.
 
-```html
-<template preview class="bg-white p-8 flex items-center justify-around">
-  <div class="box-content h-20 w-32 p-4 border-4 border-gray-400 bg-gray-200">
-    <div class="h-full w-full bg-gray-400"></div>
+```html emerald
+<template preview>
+  <div class="flex items-center justify-around">
+    <div class="box-content h-32 w-32 p-4 border-4 border-emerald-400 bg-emerald-200 rounded-md">
+      <div class="h-full w-full bg-emerald-400 bg-stripes bg-stripes-white"></div>
+    </div>
   </div>
 </template>
 
-<div class="box-content h-20 w-32 p-4 border-4 border-gray-400 bg-gray-200">
-  <div class="h-full w-full bg-gray-400"></div>
+<div class="**box-content** h-32 w-32 p-4 border-4 border-emerald-400 bg-emerald-200 ...">
+  <div class="h-full w-full bg-emerald-400 ..."></div>
 </div>
 ```
 
@@ -52,7 +56,7 @@ This means a 100px &times; 100px element with a 2px border and 4px of padding on
 To control the box-sizing at a specific breakpoint, add a `{screen}:` prefix to any existing box-sizing utility. For example, use `md:box-content` to apply the `box-content` utility at only medium screen sizes and above.
 
 ```html
-<div class="box-border md:box-content ...">
+<div class="box-border **md:box-content** ...">
   <!-- ... -->
 </div>
 ```
