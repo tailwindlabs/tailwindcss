@@ -7,7 +7,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Added
+
+- Add redesigned color palette ([#2623](https://github.com/tailwindlabs/tailwindcss/pull/2623), [700866c](https://github.com/tailwindlabs/tailwindcss/commit/700866ce5e0c0b8d140be161c4d07fc6f31242bc), [#2633](https://github.com/tailwindlabs/tailwindcss/pull/2633))
+- Add dark mode support ([#2279](https://github.com/tailwindlabs/tailwindcss/pull/2279), [#2631](https://github.com/tailwindlabs/tailwindcss/pull/2631))
+- Add `overflow-ellipsis` and `overflow-clip` utilities ([#1289](https://github.com/tailwindlabs/tailwindcss/pull/1289))
+- Add `transform-gpu` to force hardware acceleration on transforms when desired ([#1380](https://github.com/tailwindlabs/tailwindcss/pull/1380))
+- Extend default spacing scale ([#2630](https://github.com/tailwindlabs/tailwindcss/pull/2630), [7f05204](https://github.com/tailwindlabs/tailwindcss/commit/7f05204ce7a5581b6845591448265c3c21afde86))
+- Add spacing scale to `inset` plugin ([#2630](https://github.com/tailwindlabs/tailwindcss/pull/2630))
+- Add percentage sizes to `translate`, `inset`, and `height` plugins ([#2630](https://github.com/tailwindlabs/tailwindcss/pull/2630), [5259560](https://github.com/tailwindlabs/tailwindcss/commit/525956065272dc53e8f8395f55f9ad13077a38d1))
+- Extend default font size scale ([#2609](https://github.com/tailwindlabs/tailwindcss/pull/2609), [#2619](https://github.com/tailwindlabs/tailwindcss/pull/2619))
+- Support using `@apply` with complex classes, including variants like `lg:hover:bg-blue-500` ([#2159](https://github.com/tailwindlabs/tailwindcss/pull/2159))
+- Add new `2xl` breakpoint at 1536px by default ([#2609](https://github.com/tailwindlabs/tailwindcss/pull/2609))
+- Add default line-height values for font-size utilities ([#2609](https://github.com/tailwindlabs/tailwindcss/pull/2609))
+- Support defining theme values using arrays for CSS properties that support comma separated values ([e13f083c4](https://github.com/tailwindlabs/tailwindcss/commit/e13f083c4bc48bf9870d27c966136a9584943127))
+- Enable `group-hover` for color plugins, `boxShadow`, and `textDecoration` by default ([28985b6](https://github.com/tailwindlabs/tailwindcss/commit/28985b6cd592e72d4849fdb9ce97eb045744e09c), [f6923b1](https://github.com/tailwindlabs/tailwindcss/commit/f6923b1))
+- Enable `focus` for z-index utilities by default ([ae5b3d3](https://github.com/tailwindlabs/tailwindcss/commit/ae5b3d312d5000ae9c2065001f3df7add72dc365))
+- Support `extend` in `variants` configuration ([#2651](https://github.com/tailwindlabs/tailwindcss/pull/2651))
+- Add `max-w-prose` class by default ([#2574](https://github.com/tailwindlabs/tailwindcss/pull/2574))
+- Support flattening deeply nested color objects ([#2148](https://github.com/tailwindlabs/tailwindcss/pull/2148))
+- Support defining presets as functions ([#2680](https://github.com/tailwindlabs/tailwindcss/pull/2680))
+- Support deep merging of objects under `extend` ([#2679](https://github.com/tailwindlabs/tailwindcss/pull/2679), [#2700](https://github.com/tailwindlabs/tailwindcss/pull/2700))
+- Enable `focus-within` for all plugins that have `focus` enabled by default ([1a21f072](https://github.com/tailwindlabs/tailwindcss/commit/1a21f0721c7368d61fa3feef33d616de3f78c7d7), [f6923b1](https://github.com/tailwindlabs/tailwindcss/commit/f6923b1))
+- Added new `ring` utilities for creating outline/focus rings using box shadows ([#2747](https://github.com/tailwindlabs/tailwindcss/pull/2747), [879f088](https://github.com/tailwindlabs/tailwindcss/commit/879f088), [e0788ef](https://github.com/tailwindlabs/tailwindcss/commit/879f088))
+- Added `5` and `95` to opacity scale ([#2747](https://github.com/tailwindlabs/tailwindcss/pull/2747))
+- Add support for default duration and timing function values whenever enabling transitions ([#2755](https://github.com/tailwindlabs/tailwindcss/pull/2755))
+
+
+### Changed
+
+- Completely redesign color palette ([#2623](https://github.com/tailwindlabs/tailwindcss/pull/2623), [700866c](https://github.com/tailwindlabs/tailwindcss/commit/700866ce5e0c0b8d140be161c4d07fc6f31242bc), [#2633](https://github.com/tailwindlabs/tailwindcss/pull/2633))
+- Drop support for Node 8 and 10 ([#2582](https://github.com/tailwindlabs/tailwindcss/pull/2582))
+- Removed `target` feature and dropped any compatibility with IE 11 ([#2571](https://github.com/tailwindlabs/tailwindcss/pull/2571))
+- Upgrade to PostCSS 8 (but include PostCSS 7 compatibility build) ([729b400](https://github.com/tailwindlabs/tailwindcss/commit/729b400a685973f46af73c8a68b364f20f7c5e1e), [1d8679d](https://github.com/tailwindlabs/tailwindcss/commit/1d8679d37e0eb1ba8281b2076bade5fc754f47dd), [c238ed1](https://github.com/tailwindlabs/tailwindcss/commit/c238ed15b5c02ff51978965511312018f2bc2cae))
+- Removed `shadow-outline`, `shadow-solid`, and `shadow-xs` by default in favor of new `ring` API ([#2747](https://github.com/tailwindlabs/tailwindcss/pull/2747))
+- Switch `normalize.css` to `modern-normalize` ([#2572](https://github.com/tailwindlabs/tailwindcss/pull/2572))
+- Rename `whitespace-no-wrap` to `whitespace-nowrap` ([#2664](https://github.com/tailwindlabs/tailwindcss/pull/2664))
+- Rename `flex-no-wrap` to `flex-nowrap` ([#2676](https://github.com/tailwindlabs/tailwindcss/pull/2676))
+- Remove `clearfix` utility, recommend `flow-root` instead ([#2766](https://github.com/tailwindlabs/tailwindcss/pull/2766))
+- Disable `hover` and `focus` for `fontWeight` utilities by default ([f6923b1](https://github.com/tailwindlabs/tailwindcss/commit/f6923b1))
+- Remove `grid-gap` fallbacks needed for old versions of Safari ([5ec45fa](https://github.com/tailwindlabs/tailwindcss/commit/5ec45fa))
+- Change special use of 'default' in config to 'DEFAULT' ([#2580](https://github.com/tailwindlabs/tailwindcss/pull/2580))
+- New `@apply` implementation, slight backwards incompatibilities with previous behavior ([#2159](https://github.com/tailwindlabs/tailwindcss/pull/2159))
+- Make `theme` retrieve the expected resolved value when theme value is complex ([e13f083c4](https://github.com/tailwindlabs/tailwindcss/commit/e13f083c4bc48bf9870d27c966136a9584943127))
+- Move `truncate` class to `textOverflow` core plugin ([#2562](https://github.com/tailwindlabs/tailwindcss/pull/2562))
+- Remove `scrolling-touch` and `scrolling-auto` utilities ([#2573](https://github.com/tailwindlabs/tailwindcss/pull/2573))
+- Modernize default system font stacks ([#1711](https://github.com/tailwindlabs/tailwindcss/pull/1711))
+- Upgrade to PurgeCSS 3.0 ([8e4e0a0](https://github.com/tailwindlabs/tailwindcss/commit/8e4e0a0eb8dcbf84347c7562988b4f9afd344081))
+- Change default `text-6xl` font-size to 3.75rem instead of 4rem ([#2619](https://github.com/tailwindlabs/tailwindcss/pull/2619))
+- Ignore `[hidden]` elements within `space` and `divide` utilities instead of `template` elements ([#2642](https://github.com/tailwindlabs/tailwindcss/pull/2642))
+- Automatically prefix keyframes and animation names when a prefix is configured ([#2621](https://github.com/tailwindlabs/tailwindcss/pull/2621), [#2641](https://github.com/tailwindlabs/tailwindcss/pull/2641))
+- Merge `extend` objects deeply by default ([#2679](https://github.com/tailwindlabs/tailwindcss/pull/2679))
+- Respect `preserveHtmlElements` option even when using custom PurgeCSS extractor ([#2704](https://github.com/tailwindlabs/tailwindcss/pull/2704))
+- Namespace all internal custom properties under `tw-` to avoid collisions with end-user custom properties ([#2771](https://github.com/tailwindlabs/tailwindcss/pull/2771))
 
 ## [2.0.0-alpha.25] - 2020-11-17
 
