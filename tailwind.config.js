@@ -90,7 +90,12 @@ module.exports = {
               fontWeight: 'inherit',
             },
             strong: {
+              color: theme('colors.gray.900'),
               fontWeight: theme('fontWeight.medium'),
+            },
+            'a strong': {
+              color: 'inherit',
+              fontWeight: 'inherit',
             },
             code: {
               fontWeight: '400',
