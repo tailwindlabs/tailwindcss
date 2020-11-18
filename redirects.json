@@ -82,5 +82,120 @@
     "source": "/docs/pseudo-class-variants",
     "destination": "/docs/hover-focus-and-other-states",
     "permanent": false
+  },
+  {
+    "source": "/course",
+    "destination": "https://www.youtube.com/watch?v=21HuwjmuS7A&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=1",
+    "permanent": false
+  },
+  {
+    "source": "/course/setting-up-tailwind-and-postcss",
+    "destination": "https://www.youtube.com/watch?v=21HuwjmuS7A&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=1",
+    "permanent": false
+  },
+  {
+    "source": "/course/the-utility-first-workflow",
+    "destination": "https://www.youtube.com/watch?v=Ybybd3GCNn4&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=2",
+    "permanent": false
+  },
+  {
+    "source": "/course/responsive-design",
+    "destination": "https://www.youtube.com/watch?v=Ff_n_QClipQ&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=3",
+    "permanent": false
+  },
+  {
+    "source": "/course/hover-focus-and-active-styles",
+    "destination": "https://www.youtube.com/watch?v=olyRu5R1EZ4&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=4",
+    "permanent": false
+  },
+  {
+    "source": "/course/composing-utilities-with-apply",
+    "destination": "https://www.youtube.com/watch?v=krSgBUmIgP0&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=5",
+    "permanent": false
+  },
+  {
+    "source": "/course/extracting-reusable-components",
+    "destination": "https://www.youtube.com/watch?v=3OdRwZu0FQU&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=6",
+    "permanent": false
+  },
+  {
+    "source": "/course/customizing-your-design-system",
+    "destination": "https://www.youtube.com/watch?v=wtW6LodXkls&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=7",
+    "permanent": false
+  },
+  {
+    "source": "/course/optimizing-for-production",
+    "destination": "https://www.youtube.com/watch?v=bhoDwo24K5Q&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=8",
+    "permanent": false
+  },
+  {
+    "source": "/course/structuring-a-basic-card",
+    "destination": "https://www.youtube.com/watch?v=1OUbP0rGFNs&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=9",
+    "permanent": false
+  },
+  {
+    "source": "/course/making-text-content-feel-designed",
+    "destination": "https://www.youtube.com/watch?v=5byxwJce6zc&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=10",
+    "permanent": false
+  },
+  {
+    "source": "/course/working-with-svg-icons",
+    "destination": "https://www.youtube.com/watch?v=MbUyHQRq2go&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=11",
+    "permanent": false
+  },
+  {
+    "source": "/course/designing-a-badge",
+    "destination": "https://www.youtube.com/watch?v=G2Mllr1pq-0&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=12",
+    "permanent": false
+  },
+  {
+    "source": "/course/cropping-and-positioning-images",
+    "destination": "https://www.youtube.com/watch?v=ldtwvIR6_qU&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=13",
+    "permanent": false
+  },
+  {
+    "source": "/course/locking-images-to-a-fixed-aspect-ratio",
+    "destination": "https://www.youtube.com/watch?v=jl_tdhBxc_Y&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=14",
+    "permanent": false
+  },
+  {
+    "source": "/course/creating-depth-with-shadows-and-layers",
+    "destination": "https://www.youtube.com/watch?v=vZdxUGX3qdA&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=15",
+    "permanent": false
+  },
+  {
+    "source": "/course/building-a-navbar-layout-with-flexbox",
+    "destination": "https://www.youtube.com/watch?v=ZT5vwF6Ooig&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=16",
+    "permanent": false
+  },
+  {
+    "source": "/course/toggling-the-navbar-links-on-mobile",
+    "destination": "https://www.youtube.com/watch?v=5mFGl566wc0&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=17",
+    "permanent": false
+  },
+  {
+    "source": "/course/making-the-navbar-responsive",
+    "destination": "https://www.youtube.com/watch?v=qrTsS3z8BAw&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=18",
+    "permanent": false
+  },
+  {
+    "source": "/course/styling-the-basic-dropdown-elements",
+    "destination": "https://www.youtube.com/watch?v=TQFW3AtrDw4&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=19",
+    "permanent": false
+  },
+  {
+    "source": "/course/positioning-the-dropdown-area",
+    "destination": "https://www.youtube.com/watch?v=H069P7FVIo0&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=20",
+    "permanent": false
+  },
+  {
+    "source": "/course/making-the-dropdown-interactive",
+    "destination": "https://www.youtube.com/watch?v=If6XdbBQqmY&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=21",
+    "permanent": false
+  },
+  {
+    "source": "/course/adapting-the-dropdown-for-mobile",
+    "destination": "https://www.youtube.com/watch?v=DL_ziY383xg&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=22",
+    "permanent": false
   }
 ]
