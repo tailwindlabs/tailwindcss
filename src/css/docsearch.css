@@ -159,6 +159,10 @@
   height: 4rem;
 }
 
+.DocSearch-Hit-Tree {
+  display: none;
+}
+
 .DocSearch-Hit-icon {
   flex: none;
   margin-right: 0.875rem;
