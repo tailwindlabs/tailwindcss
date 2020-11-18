@@ -112,15 +112,39 @@ export default function Home() {
           <BigText as="h2" className="mb-8">
             <Widont>“Best practices” don’t actually work.</Widont>
           </BigText>
-          <Paragraph className="mx-auto mb-6">
-            I've written a few thousand words on why traditional "semantic class names" are the
-            reason CSS is hard to maintain, but the truth is you're never going to believe me until
-            you actually try it. If you can suppress the initial gag reflex long enough to give it a
-            chance, I promise you're in for a good time.
-          </Paragraph>
-          <Link href="#" className="text-light-blue-500 hover:text-light-blue-700">
-            Read our pitch for utility-first CSS -&gt;
-          </Link>
+          <figure>
+            <blockquote>
+              <Paragraph className="max-w-4xl mx-auto mb-6">
+                I’ve written{' '}
+                <a
+                  href="https://adamwathan.me/css-utility-classes-and-separation-of-concerns/"
+                  className="text-light-blue-600 font-semibold"
+                  style={{
+                    boxShadow:
+                      'inset 0 -0.1666666667em 0 0 #fff, inset 0 -0.3333333333em 0 0 #bae6fd',
+                  }}
+                >
+                  a few thousand words
+                </a>{' '}
+                on why traditional “semantic class names” are the reason CSS is hard to maintain,
+                but the truth is you’re never going to believe me until you actually try it. If you
+                can suppress the initial gag reflex long enough to give it a chance, I promise
+                you’re in for a good time.
+              </Paragraph>
+            </blockquote>
+            <figcaption className="sm:text-xl font-medium flex flex-col items-center">
+              <div className="p-1 border-2 border-light-blue-400 rounded-full mb-3">
+                <img
+                  src={require('@/img/adam.jpg').default}
+                  alt=""
+                  className="w-10 h-10 rounded-full bg-light-blue-100"
+                  loading="lazy"
+                />
+              </div>
+              <div className="text-gray-900">Adam Wathan</div>
+              <div className="text-light-blue-600">Creator of Tailwind CSS</div>
+            </figcaption>
+          </figure>
         </div>
       </section>
       <Testimonials />
