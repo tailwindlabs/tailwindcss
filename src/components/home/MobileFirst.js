@@ -10,6 +10,7 @@ import styles from './MobileFirst.module.css'
 import { tokenizeWithLines } from '../../macros/tokenize.macro'
 import { addClassTokens2 } from '@/utils/addClassTokens'
 import clsx from 'clsx'
+import { useMedia } from '@/hooks/useMedia'
 
 const MIN_WIDTH = 400
 const HANDLE_RADIUS = 2.125
@@ -133,20 +134,24 @@ function BrowserWindow({ size, onChange, height = 385 }) {
   const x = useMotionValue(0)
   const constraintsRef = useRef()
   const [constraintsWidth, setConstraintsWidth] = useState()
+  const md = useMedia('(min-width: 768px)')
+  const marginRight = useTransform(x, (x) => -x)
 
   useIsomorphicLayoutEffect(() => {
-    setConstraintsWidth(
+    const width =
       constraintsRef.current.offsetWidth -
-        parseInt(window.getComputedStyle(document.documentElement).fontSize, 10) *
-          (HANDLE_RADIUS * 2)
-    )
+      parseInt(window.getComputedStyle(document.documentElement).fontSize, 10) * (HANDLE_RADIUS * 2)
+    setConstraintsWidth(width)
+    x.set(-width)
   }, [])
 
   useEffect(() => {
     if (!constraintsWidth) return
 
     function updateSize(x) {
-      if (constraintsWidth >= 500) {
+      if (!md) {
+        onChange('sm')
+      } else if (constraintsWidth >= 500) {
         if (x < -((constraintsWidth / 3) * 2)) {
           size !== 'sm' && onChange('sm')
         } else if (x < -(constraintsWidth / 3)) {
@@ -172,11 +177,11 @@ function BrowserWindow({ size, onChange, height = 385 }) {
     <div className="relative">
       <motion.div
         className="shadow-lg rounded-xl"
-        style={{ marginRight: useTransform(x, (x) => -x) }}
+        style={{ marginRight: md ? marginRight : 'auto' }}
       >
         <div className="rounded-xl ring-1 ring-black ring-opacity-5">
           <div
-            className="py-2 grid items-center gap-6 px-4 rounded-t-xl bg-gradient-to-b from-gray-50 to-gray-100"
+            className="py-2 grid items-center gap-6 px-4 rounded-tr-xl sm:rounded-t-xl bg-gradient-to-b from-gray-50 to-gray-100"
             style={{ gridTemplateColumns: '1fr minmax(min-content, 640px) 1fr' }}
           >
             <div className="flex space-x-1.5">
@@ -220,7 +225,7 @@ function BrowserWindow({ size, onChange, height = 385 }) {
           dragMomentum={false}
           dragElastic={0.08}
           dragConstraints={constraintsRef}
-          className="absolute z-10 top-1/2 right-0 bg-indigo-900 rounded-full border-4 border-white shadow-lg flex items-center justify-center pointer-events-auto cursor-grab active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-violet-500 focus-visible:ring-white"
+          className="absolute z-10 top-1/2 right-0 bg-indigo-900 rounded-full border-4 border-white shadow-lg hidden md:flex items-center justify-center pointer-events-auto cursor-grab active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-violet-500 focus-visible:ring-white"
           style={{
             x,
             width: `${HANDLE_RADIUS * 2}rem`,
@@ -228,7 +233,11 @@ function BrowserWindow({ size, onChange, height = 385 }) {
             marginTop: `-${HANDLE_RADIUS}rem`,
           }}
           onMeasureDragConstraints={({ left, right }) => {
-            setConstraintsWidth(right - left)
+            const width = right - left
+            setConstraintsWidth(width)
+            if (x.get() < -width) {
+              x.set(-width)
+            }
           }}
           onDragStart={() => document.body.classList.add('cursor-grabbing')}
           onDragEnd={() => document.body.classList.remove('cursor-grabbing')}
@@ -280,7 +289,7 @@ export function MobileFirst() {
         rotate={2}
         left={
           <>
-            <div className="hidden md:block px-2 lg:px-0 lg:max-w-3xl xl:max-w-5xl mx-auto">
+            <div className="pr-8 sm:px-6 md:px-2 lg:px-0 max-w-screen-sm lg:max-w-3xl xl:max-w-5xl mx-auto">
               <BrowserWindow size={size} onChange={setSize} />
             </div>
             <CodeWindow className={`bg-indigo-500 ${styles.code}`}>
