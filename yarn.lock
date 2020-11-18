@@ -7876,10 +7876,10 @@ table@^5.2.3:
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
 
-tailwindcss@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-2.0.0.tgz#4efc231efad9f36fc9eb5b154efc58b440e0cda4"
-  integrity sha512-y5FjqsNt1KG+inqM7xh5Cwjr1crJZIcYQ8puihDKAc3urC4TVx3NNsA5fJADPR+FEl6GtfSf8rOOBrt+mLCopg==
+tailwindcss@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-2.0.1.tgz#8d336917819341d1018208e8b3ed8cbc46e6b643"
+  integrity sha512-57G3jdcVBWTPkHCNSAfDAo1Qp2Nkr4H6WnLD0luNFh1td+KwQp9FOVcqj0SYBH6qwVQJawzT+0/zLxzKmyznGw==
   dependencies:
     "@fullhuman/postcss-purgecss" "^3.0.0"
     bytes "^3.0.0"
