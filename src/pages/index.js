@@ -71,6 +71,16 @@ export default function Home() {
   return (
     <div className="space-y-20 sm:space-y-32 md:space-y-40 lg:space-y-44 overflow-hidden">
       <Head>
+        <meta
+          key="twitter:title"
+          name="twitter:title"
+          content="Tailwind CSS - Rapidly build modern websites without ever leaving your HTML."
+        />
+        <meta
+          key="og:title"
+          property="og:title"
+          content="Tailwind CSS - Rapidly build modern websites without ever leaving your HTML."
+        />
         <title>Tailwind CSS - Rapidly build modern websites without ever leaving your HTML.</title>
       </Head>
       <header className="relative z-10 max-w-screen-lg xl:max-w-screen-xl mx-auto">
