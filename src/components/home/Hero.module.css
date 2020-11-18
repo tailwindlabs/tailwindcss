@@ -45,6 +45,11 @@
   }
 }
 
+.codeWindow {
+  height: auto;
+  max-height: none;
+}
+
 @screen md {
   .codeWindow {
     height: 33rem;

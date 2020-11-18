@@ -13,6 +13,7 @@ import { ReactComponent as LaravelLogo } from '@/img/icons/laravel.svg'
 import { AnimatePresence, AnimateSharedLayout, motion, useIsPresent } from 'framer-motion'
 import clsx from 'clsx'
 import { useInView } from 'react-intersection-observer'
+import styles from './ComponentDriven.module.css'
 
 const recipes = [
   {
@@ -526,7 +527,7 @@ const html = tokenizeWithLines.html(`      </dd>
 
 function ApplyExample({ inView }) {
   return (
-    <CodeWindow className="bg-pink-600">
+    <CodeWindow className={`${styles.atApplyCodeWindow} bg-pink-600`}>
       <div className="relative flex text-sm bg-pink-1000 text-pink-200">
         <h3 className="border border-transparent py-2 px-4 font-medium bg-white bg-opacity-10">
           styles.css
