@@ -41,190 +41,32 @@ Use `w-{number}` or `w-px` to set an element to a fixed width.
 
 ```html lightBlue
 <template preview>
-  <div class="text-light-blue-600 space-y-2">
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-0</div>
-      <div class="bg-light-blue-500 rounded h-4 w-0"></div>
+  <div class="flex flex-col space-y-8 mx-auto w-64">
+    <div class="flex items-center space-x-4">
+      <p class="text-sm text-light-blue-600 w-12 text-right">w-8</p>
+      <div class="h-8 w-8 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold"></div>
     </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-px</div>
-      <div class="bg-light-blue-500 rounded h-4 w-px"></div>
+    <div class="flex items-center space-x-4">
+      <p class="text-sm text-light-blue-600 w-12 text-right">w-12</p>
+      <div class="h-8 w-12 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold"></div>
     </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-0.5</div>
-      <div class="bg-light-blue-500 rounded h-4 w-0.5"></div>
+    <div class="flex items-center space-x-4">
+      <p class="text-sm text-light-blue-600 w-12 text-right">w-16</p>
+      <div class="h-8 w-16 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold"></div>
     </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-1</div>
-      <div class="bg-light-blue-500 rounded h-4 w-1"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-1.5</div>
-      <div class="bg-light-blue-500 rounded h-4 w-1.5"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-2</div>
-      <div class="bg-light-blue-500 rounded h-4 w-2"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-2.5</div>
-      <div class="bg-light-blue-500 rounded h-4 w-2.5"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-3</div>
-      <div class="bg-light-blue-500 rounded h-4 w-3"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-3.5</div>
-      <div class="bg-light-blue-500 rounded h-4 w-3.5"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-4</div>
-      <div class="bg-light-blue-500 rounded h-4 w-4"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-5</div>
-      <div class="bg-light-blue-500 rounded h-4 w-5"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-6</div>
-      <div class="bg-light-blue-500 rounded h-4 w-6"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-7</div>
-      <div class="bg-light-blue-500 rounded h-4 w-7"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-8</div>
-      <div class="bg-light-blue-500 rounded h-4 w-8"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-9</div>
-      <div class="bg-light-blue-500 rounded h-4 w-9"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-10</div>
-      <div class="bg-light-blue-500 rounded h-4 w-10"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-11</div>
-      <div class="bg-light-blue-500 rounded h-4 w-11"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-12</div>
-      <div class="bg-light-blue-500 rounded h-4 w-12"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-14</div>
-      <div class="bg-light-blue-500 rounded h-4 w-14"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-16</div>
-      <div class="bg-light-blue-500 rounded h-4 w-16"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-20</div>
-      <div class="bg-light-blue-500 rounded h-4 w-20"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-24</div>
-      <div class="bg-light-blue-500 rounded h-4 w-24"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-28</div>
-      <div class="bg-light-blue-500 rounded h-4 w-28"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-32</div>
-      <div class="bg-light-blue-500 rounded h-4 w-32"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-36</div>
-      <div class="bg-light-blue-500 rounded h-4 w-36"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-40</div>
-      <div class="bg-light-blue-500 rounded h-4 w-40"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-44</div>
-      <div class="bg-light-blue-500 rounded h-4 w-44"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-48</div>
-      <div class="bg-light-blue-500 rounded h-4 w-48"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-52</div>
-      <div class="bg-light-blue-500 rounded h-4 w-52"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-56</div>
-      <div class="bg-light-blue-500 rounded h-4 w-56"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-60</div>
-      <div class="bg-light-blue-500 rounded h-4 w-60"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-64</div>
-      <div class="bg-light-blue-500 rounded h-4 w-64"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-72</div>
-      <div class="bg-light-blue-500 rounded h-4 w-72"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-80</div>
-      <div class="bg-light-blue-500 rounded h-4 w-80"></div>
-    </div>
-    <div class="flex items-center">
-      <div class="w-20 text-right pr-6 flex-shrink-0 text-sm text-light-blue-600 text-opacity-50 font-mono">w-96</div>
-      <div class="bg-light-blue-500 rounded h-4 w-96"></div>
+    <div class="flex items-center space-x-4">
+      <p class="text-sm text-light-blue-600 w-12 text-right">w-24</p>
+      <div class="h-8 w-24 rounded-md bg-light-blue-500 text-white text-2xl font-extrabold"></div>
     </div>
   </div>
 </template>
 
-<div class="**w-0** ..."></div>
-<div class="**w-px** ..."></div>
-<div class="**w-0.5** ..."></div>
-<div class="**w-1** ..."></div>
-<div class="**w-1.5** ..."></div>
-<div class="**w-2** ..."></div>
-<div class="**w-2.5** ..."></div>
-<div class="**w-3** ..."></div>
-<!-- ... -->
-<div class="**w-16** ..."></div>
-<div class="**w-20** ..."></div>
-<div class="**w-24** ..."></div>
-<div class="**w-28** ..."></div>
-<div class="**w-32** ..."></div>
-<!-- ... -->
-<div class="**w-64** ..."></div>
-<div class="**w-72** ..."></div>
-<div class="**w-80** ..."></div>
-<div class="**w-96** ..."></div>
-```
-
-<div class="w-0 ..."></div>
-<div class="w-px ..."></div>
-<div class="w-1 ..."></div>
-<div class="w-2 ..."></div>
-<div class="w-3 ..."></div>
-<div class="w-4 ..."></div>
-<div class="w-5 ..."></div>
-<div class="w-6 ..."></div>
-<div class="w-8 ..."></div>
-<div class="w-10 ..."></div>
-<div class="w-12 ..."></div>
-<div class="w-16 ..."></div>
-<div class="w-20 ..."></div>
-<div class="w-24 ..."></div>
-<div class="w-32 ..."></div>
-<div class="w-40 ..."></div>
-<div class="w-48 ..."></div>
-<div class="w-56 ..."></div>
-<div class="w-64 ..."></div>
+<div>
+  <div class="**w-8** ..."></div>
+  <div class="**w-12** ..."></div>
+  <div class="**w-16** ..."></div>
+  <div class="**w-24** ..."></div>
+</div>
 ```
 
 ## Fluid Width
