@@ -260,13 +260,13 @@ Use `hidden` to set an element to `display: none` and remove it from the page la
 ```html amber
 <template preview>
   <div class="p-4 flex space-x-4 bg-amber-300 bg-stripes bg-stripes-white rounded-md">
-    <div class="hidden text-white font-extrabold text-center bg-amber-500 px-6 py-4">1</div>
+    <div class="hidden text-white font-extrabold text-center bg-amber-500 px-6 py-4" hidden>1</div>
     <div class="text-white font-extrabold text-center bg-amber-500 px-6 py-4">2</div>
     <div class="text-white font-extrabold text-center bg-amber-500 px-6 py-4">3</div>
   </div>
 </template>
 
-<div class="flex space-x-4 ...">
+<div class="flex ...">
   <div class="**hidden** ...">1</div>
   <div>2</div>
   <div>3</div>
