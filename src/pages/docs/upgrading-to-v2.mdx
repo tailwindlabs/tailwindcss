@@ -11,17 +11,15 @@ We don't take breaking changes lightly and have worked hard to make sure the upg
 
 ## Install Tailwind CSS v2.0 and PostCSS 8
 
-Tailwind CSS v2.0 has been updated for the latest PostCSS release which requires installing `postcss` as a peer dependency alongside Tailwind itself.
+Tailwind CSS v2.0 has been updated for the latest PostCSS release which requires installing `postcss` and `autoprefixer` as peer dependencies alongside Tailwind itself.
 
-Update Tailwind and install PostCSS using npm or Yarn:
+Update Tailwind and install PostCSS and autoprefixer using npm:
 
 ```shell
-# Using npm
-npm install tailwindcss postcss
-
-# Using Yarn
-yarn add tailwindcss postcss
+npm install tailwindcss postcss autoprefixer
 ```
+
+If you run into issues, you may need to use our [PostCSS 7 compatibility build](/docs/installation#post-css-7-compatibility-build) instead.
 
 ## Support for IE 11 has been dropped
 
