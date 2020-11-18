@@ -548,16 +548,17 @@ module.exports = {
 Add the `first:` prefix to only apply a utility when it is the first-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
 
 ```html indigo
-<template preview class="p-6">
-  <div class="bg-white rounded-xl shadow-md overflow-hidden">
-    <div class="px-6 py-4 border-t first:border-t-0">One</div>
-    <div class="px-6 py-4 border-t first:border-t-0">Two</div>
-    <div class="px-6 py-4 border-t first:border-t-0">Three</div>
+<template preview>
+  <div class="flex justify-around">
+    <div class="bg-indigo-500 rounded-md p-8 transform first:rotate-45"></div>
+    <div class="bg-indigo-500 rounded-md p-8 transform first:rotate-45"></div>
+    <div class="bg-indigo-500 rounded-md p-8 transform first:rotate-45"></div>
+    <div class="bg-indigo-500 rounded-md p-8 transform first:rotate-45"></div>
   </div>
 </template>
 
-<div class="rounded-xl ...">
-  <div v-for="item in items" class="border-t **first:border-t-0** ...">
+<div class="...">
+  <div v-for="item in items" class="transform **first:rotate-45** ...">
     {{ item }}
   </div>
 </div>
@@ -589,17 +590,18 @@ module.exports = {
 
 Add the `last:` prefix to only apply a utility when it is the last-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
 
-```html purple
-<template preview class="p-6">
-  <div class="bg-white rounded-xl shadow-md overflow-hidden">
-    <div class="px-6 py-4 border-b last:border-b-0">One</div>
-    <div class="px-6 py-4 border-b last:border-b-0">Two</div>
-    <div class="px-6 py-4 border-b last:border-b-0">Three</div>
+```html amber
+<template preview>
+  <div class="flex justify-around">
+    <div class="bg-amber-500 rounded-md p-8 transform last:rotate-45"></div>
+    <div class="bg-amber-500 rounded-md p-8 transform last:rotate-45"></div>
+    <div class="bg-amber-500 rounded-md p-8 transform last:rotate-45"></div>
+    <div class="bg-amber-500 rounded-md p-8 transform last:rotate-45"></div>
   </div>
 </template>
 
-<div class="rounded-xl ...">
-  <div v-for="item in items" class="border-t **last:border-b-0** ...">
+<div class="...">
+  <div v-for="item in items" class="transform **last:rotate-45** ...">
     {{ item }}
   </div>
 </div>
@@ -632,16 +634,17 @@ module.exports = {
 Add the `odd:` prefix to only apply a utility when it is an odd-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
 
 ```html rose
-<template preview class="p-6">
-  <div class="bg-white rounded-xl shadow-md overflow-hidden divide-y divide-gray-200">
-    <div class="px-6 py-4 odd:bg-gray-100">One</div>
-    <div class="px-6 py-4 odd:bg-gray-100">Two</div>
-    <div class="px-6 py-4 odd:bg-gray-100">Three</div>
+<template preview>
+  <div class="flex justify-around">
+    <div class="bg-rose-500 rounded-md p-8 transform odd:rotate-45"></div>
+    <div class="bg-rose-500 rounded-md p-8 transform odd:rotate-45"></div>
+    <div class="bg-rose-500 rounded-md p-8 transform odd:rotate-45"></div>
+    <div class="bg-rose-500 rounded-md p-8 transform odd:rotate-45"></div>
   </div>
 </template>
 
-<div class="rounded-xl ...">
-  <div v-for="item in items" class="**odd:bg-gray-100** ...">
+<div class="...">
+  <div v-for="item in items" class="transform **odd:rotate-45** ...">
     {{ item }}
   </div>
 </div>
@@ -674,16 +677,17 @@ module.exports = {
 Add the `even:` prefix to only apply a utility when it is an even-child of its parent. This is mostly useful when elements are being generated in some kind of loop.
 
 ```html fuchsia
-<template preview class="p-6">
-  <div class="bg-white rounded-xl shadow-md overflow-hidden divide-y divide-gray-200">
-    <div class="px-6 py-4 even:bg-gray-100">One</div>
-    <div class="px-6 py-4 even:bg-gray-100">Two</div>
-    <div class="px-6 py-4 even:bg-gray-100">Three</div>
+<template preview>
+  <div class="flex justify-around">
+    <div class="bg-fuchsia-500 rounded-md p-8 transform even:rotate-45"></div>
+    <div class="bg-fuchsia-500 rounded-md p-8 transform even:rotate-45"></div>
+    <div class="bg-fuchsia-500 rounded-md p-8 transform even:rotate-45"></div>
+    <div class="bg-fuchsia-500 rounded-md p-8 transform even:rotate-45"></div>
   </div>
 </template>
 
-<div class="rounded-xl ...">
-  <div v-for="item in items" class="**even:bg-gray-100** ...">
+<div class="...">
+  <div v-for="item in items" class="transform **even:rotate-45** ...">
     {{ item }}
   </div>
 </div>

@@ -202,6 +202,7 @@ module.exports = {
       ringOffsetColor: ['focus-visible'],
       ringColor: ['focus-visible'],
       ringOpacity: ['focus-visible'],
+      rotate: ['first', 'last', 'odd', 'even'],
     },
   },
   plugins: [

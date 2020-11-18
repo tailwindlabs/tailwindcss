@@ -11,12 +11,12 @@ const codeBackground = {
 }
 
 const previewBackground = {
-  amber: 'bg-gradient-to-r from-amber-100 to-amber-200',
+  amber: 'bg-gradient-to-r from-amber-50 to-amber-100',
   emerald: 'bg-gradient-to-r from-emerald-50 to-teal-100',
   fuchsia: 'bg-gradient-to-r from-fuchsia-50 to-fuchsia-100',
   gray: 'bg-gradient-to-r from-gray-50 to-gray-100',
   indigo: 'bg-gradient-to-r from-indigo-50 to-indigo-100',
-  lightBlue: 'bg-gradient-to-r from-light-blue-100 to-light-blue-200',
+  lightBlue: 'bg-gradient-to-r from-light-blue-50 to-light-blue-100',
   purple: 'bg-gradient-to-r from-purple-50 to-purple-100',
   rose: 'bg-gradient-to-r from-rose-50 to-rose-100',
 }
