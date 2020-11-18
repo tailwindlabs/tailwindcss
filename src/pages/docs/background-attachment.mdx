@@ -20,12 +20,12 @@ Use `bg-fixed` to fix the background image relative to the viewport.
 
 ```html lightBlue
 <template preview>
-  <div class="w-full h-48 bg-fixed bg-cover bg-center overflow-y-scroll" style="background-image:url('/img/placeholder-light-blue.svg');">
+  <div class="w-full h-48 bg-fixed bg-contain bg-center overflow-y-scroll" style="background-image:url('/img/placeholder-light-blue.svg');">
     <div class="h-64"></div>
   </div>
 </template>
 
-<div class="bg-fixed ..." style="background-image: url(...)"></div>
+<div class="**bg-fixed** ..." style="background-image: url(...)"></div>
 ```
 
 ## Local
@@ -34,12 +34,12 @@ Use `bg-local` to scroll the background image with the container and the viewpor
 
 ```html indigo
 <template preview>
-  <div class="w-full h-48 bg-local bg-cover bg-center overflow-y-scroll" style="background-image:url('/img/placeholder-indigo.svg');">
-    <div class="h-64"></div>
+  <div class="w-full h-72 bg-local bg-cover bg-center overflow-y-scroll" style="background-image:url('/img/placeholder-indigo.svg');">
+    <div class="h-96"></div>
   </div>
 </template>
 
-<div class="bg-local ..." style="background-image: url(...)"></div>
+<div class="**bg-local** ..." style="background-image: url(...)"></div>
 ```
 
 ## Scroll
@@ -48,12 +48,12 @@ Use `bg-scroll` to scroll the background image with the viewport, but not with t
 
 ```html fuchsia
 <template preview>
-  <div class="w-full h-48 bg-scroll bg-cover bg-center overflow-y-scroll" style="background-image:url('/img/placeholder-fuchsia.svg');">
-    <div class="h-64"></div>
+  <div class="w-full h-72 bg-scroll bg-cover overflow-y-scroll" style="background-image:url('/img/placeholder-fuchsia.svg');">
+    <div class="h-96"></div>
   </div>
 </template>
 
-<div class="bg-scroll ..." style="background-image: url(...)"></div>
+<div class="**bg-scroll** ..." style="background-image: url(...)"></div>
 ```
 
 ## Responsive
