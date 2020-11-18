@@ -1,6 +1,6 @@
 import { SidebarLayout } from '@/layouts/SidebarLayout'
 import Head from 'next/head'
-import twitterSquare from '@/img/twitter-square.png'
+import twitterSquare from '@/img/twitter-square.jpg'
 import { createPageList } from '@/utils/createPageList'
 
 const pages = createPageList(
