@@ -11,16 +11,16 @@ export const classes = {
   plugin,
   transformProperties: ({ selector, properties }) => {
     if (selector === '.ring-inset') {
-      return {'--ring-inset': 'inset'}
+      return {'--tw-ring-inset': 'inset'}
     }
-    delete properties['--ring-inset']
-    delete properties['--ring-offset-width']
-    delete properties['--ring-offset-color']
-    delete properties['--ring-color']
-    delete properties['--ring-offset-shadow']
+    delete properties['--tw-ring-inset']
+    delete properties['--tw-ring-offset-width']
+    delete properties['--tw-ring-offset-color']
+    delete properties['--tw-ring-color']
+    delete properties['--tw-ring-offset-shadow']
     delete properties['box-shadow']
-    properties['box-shadow'] = properties['--ring-shadow']
-    delete properties['--ring-shadow']
+    properties['box-shadow'] = properties['--tw-ring-shadow']
+    delete properties['--tw-ring-shadow']
     return properties
   }
 }
