@@ -18,20 +18,18 @@ export const classes = { plugin }
 
 Use the `shadow-xs`, `.shadow-sm`, `.shadow`, `.shadow-md`, `.shadow-lg`, `.shadow-xl`, or `.shadow-2xl` utilities to apply different sized outer box shadows to an element.
 
-```html
+```html indigo
 <template preview>
   <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4">
-    <div class="shadow-xs h-32 w-32 font-semibold bg-white rounded-md flex items-center justify-center">.shadow-xs</div>
-    <div class="shadow-sm h-32 w-32 font-semibold bg-white rounded-md flex items-center justify-center">.shadow-sm</div>
-    <div class="shadow h-32 w-32 font-semibold bg-white rounded-md flex items-center justify-center">.shadow</div>
-    <div class="shadow-md h-32 w-32 font-semibold bg-white rounded-md flex items-center justify-center">.shadow-md</div>
-    <div class="shadow-lg h-32 w-32 font-semibold bg-white rounded-md flex items-center justify-center">.shadow-lg</div>
-    <div class="shadow-xl h-32 w-32 font-semibold bg-white rounded-md flex items-center justify-center">.shadow-xl</div>
-    <div class="shadow-2xl h-32 w-32 font-semibold bg-white rounded-md flex items-center justify-center">.shadow-2xl</div>
+    <div class="shadow-sm h-32 w-32 font-medium bg-white rounded-md flex items-center justify-center">.shadow-sm</div>
+    <div class="shadow h-32 w-32 font-medium bg-white rounded-md flex items-center justify-center">.shadow</div>
+    <div class="shadow-md h-32 w-32 font-medium bg-white rounded-md flex items-center justify-center">.shadow-md</div>
+    <div class="shadow-lg h-32 w-32 font-medium bg-white rounded-md flex items-center justify-center">.shadow-lg</div>
+    <div class="shadow-xl h-32 w-32 font-medium bg-white rounded-md flex items-center justify-center">.shadow-xl</div>
+    <div class="shadow-2xl h-32 w-32 font-medium bg-white rounded-md flex items-center justify-center">.shadow-2xl</div>
   </div>
 </template>
 
-<div class="**shadow-xs** ..."></div>
 <div class="**shadow-sm** ..."></div>
 <div class="**shadow** ..."></div>
 <div class="**shadow-md** ..."></div>
@@ -44,10 +42,10 @@ Use the `shadow-xs`, `.shadow-sm`, `.shadow`, `.shadow-md`, `.shadow-lg`, `.shad
 
 Use the `shadow-inner` utility to apply a subtle inset box shadow to an element. This can be useful for things like form controls or wells.
 
-```html
+```html purple
 <template preview>
   <div class="flex justify-center items-center">
-    <div class="shadow-inner h-24 w-40 font-semibold bg-gray-200 rounded-md flex items-center justify-center">.shadow-inner</div>
+    <div class="shadow-inner h-24 w-40 font-medium bg-purple-200  text-purple-500 rounded-md flex items-center justify-center">.shadow-inner</div>
   </div>
 </template>
 
@@ -58,10 +56,10 @@ Use the `shadow-inner` utility to apply a subtle inset box shadow to an element.
 
 Use `shadow-none` to remove an existing box shadow from an element. This is most commonly used to remove a shadow that was applied at a smaller breakpoint.
 
-```html
+```html rose
 <template preview>
   <div class="flex justify-center items-center">
-    <div class="shadow-none h-24 w-40 font-semibold bg-gray-200 rounded-md flex items-center justify-center">.shadow-none</div>
+    <div class="shadow-none h-24 w-40 font-medium bg-rose-200 text-rose-500 rounded-md flex items-center justify-center">.shadow-none</div>
   </div>
 </template>
 
