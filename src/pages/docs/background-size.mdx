@@ -20,11 +20,11 @@ Use `bg-auto` to display the background image at its default size.
 
 ```html amber
 <template preview>
-  <div class="w-full bg-amber-200 h-48 bg-center bg-auto" style="background-image:url('https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80');">
+  <div class="w-full bg-amber-200 h-80 bg-auto bg-no-repeat bg-center" style="background-image:url('/img/placeholder-amber.svg');">
   </div>
 </template>
 
-<div class="**bg-auto** bg-center ..." style="background-image: url(...)"></div>
+<div class="**bg-auto** bg-no-repeat bg-center ..." style="background-image: url(...)"></div>
 ```
 
 ## Cover
@@ -33,7 +33,7 @@ Use `bg-cover` to scale the background image until it fills the background layer
 
 ```html emerald
 <template preview>
-  <div class="w-full mx-auto bg-emerald-200 h-48 bg-center bg-cover" style="background-image:url('/img/placeholder-emerald.svg');">
+  <div class="w-full mx-auto bg-emerald-200 h-80 bg-center bg-cover" style="background-image:url('/img/placeholder-emerald.svg');">
   </div>
 </template>
 
