@@ -14,7 +14,7 @@ const subsets = {
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mi ultrices non pharetra, eros enim. Habitant suspendisse ultricies.',
   ],
   'Poppins-Medium': ['In stock', 'XS', 'S', 'M', 'L', 'XL'],
-  'Poppins-SemiBold': ['Kids Jumper', 'Buy now', 'Add to bag'],
+  'Poppins-SemiBold': ['Kids Jumpsuit', 'Buy now', 'Add to bag'],
   'Poppins-Bold': ['$39.00'],
   'Poppins-ExtraBold': ['Poppins'],
 

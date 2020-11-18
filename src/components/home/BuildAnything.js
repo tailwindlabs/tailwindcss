@@ -94,7 +94,7 @@ const code = {
   </div>
   <div class="flex-auto pl-6">
     <div class="flex flex-wrap items-baseline">
-      <h1 class="w-full flex-none font-semibold mb-2.5">Kids Jumper</h1>
+      <h1 class="w-full flex-none font-semibold mb-2.5">Kids Jumpsuit</h1>
       <div class="text-4xl leading-7 font-bold text-purple-600">$39.00</div>
       <div class="text-sm font-medium text-gray-400 ml-3">In stock</div>
     </div>
@@ -205,7 +205,7 @@ const classes = {
 
 const content = {
   simple: ['Classic Utility Jacket', '$110.00'],
-  playful: ['Kids Jumper', '$39.00'],
+  playful: ['Kids Jumpsuit', '$39.00'],
   elegant: ['Fancy Suit Jacket', '$600.00'],
   brutalist: ['Retro Shoe', '$89.00'],
 }
