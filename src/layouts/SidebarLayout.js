@@ -241,19 +241,10 @@ function TopLevelNav() {
         color="purple"
         icon={
           <>
-            <rect x="6" y="6" width="12" height="12" rx="2" fill="#E9D5FF" />
+            <circle cx="12" cy="12" r="7" fill="#F3E8FF" />
             <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M11.276 12.053a.5.5 0 01.524.047l2 1.5a.5.5 0 010 .8l-2 1.5a.5.5 0 01-.8-.4v-3a.5.5 0 01.276-.447z"
-              fill="#A855F7"
-            />
-            <path d="M6.004 8a2 2 0 012-2h8a2 2 0 012 2v2h-12V8z" fill="#C084FC" />
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M7.142 6.192a2.005 2.005 0 00-1.064 1.247L7.998 10h2L7.143 6.192zM11.998 10h2l-3-4h-2l3 4zm1-4l3 4h2l-3-4h-2zm4.588.784l.027.035a2.251 2.251 0 00-.027-.035z"
-              fill="#FAF5FF"
+              d="M14.52 11.136a1 1 0 010 1.728l-3.016 1.759A1 1 0 0110 13.759v-3.518a1 1 0 011.504-.864l3.015 1.76z"
+              fill="#C084FC"
             />
           </>
         }
