@@ -20,6 +20,9 @@ export default function () {
         '.justify-evenly': {
           'justify-content': 'space-evenly',
         },
+        '.justify-normal': {
+          'justify-content': 'normal',
+        },
       },
       variants('justifyContent')
     )
