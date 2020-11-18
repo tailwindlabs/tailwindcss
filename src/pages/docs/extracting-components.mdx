@@ -7,34 +7,50 @@ import { TipGood, TipBad } from '@/components/Tip'
 
 Tailwind encourages a [utility-first](/docs/utility-first) workflow, where designs are initially implemented using only utility classes to avoid premature abstraction.
 
-```html
-<template preview class="p-8">
-  <!-- A marketing page card built entirely with utility classes -->
-  <div class="md:flex">
-    <div class="md:flex-shrink-0">
-      <img class="rounded-lg md:w-56" src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=448&q=80" width="448" height="299" alt="Woman paying for a purchase">
-    </div>
-    <div class="mt-4 md:mt-0 md:ml-6">
-      <div class="uppercase tracking-wide text-sm text-indigo-600 font-bold">Marketing</div>
-      <a href="#" class="block mt-1 text-lg leading-tight font-semibold text-gray-900 hover:underline">Finding customers for your new business</a>
-      <p class="mt-2 text-gray-600">Getting a new business off the ground is a lot of hard work. Here are five ideas you can use to find your first customers.</p>
+```html indigo
+<template preview class="px-6 py-8">
+  <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+    <div class="md:flex">
+      <div class="md:flex-shrink-0">
+        <img class="h-48 w-full object-cover md:w-48" src="https://images.unsplash.com/photo-1515711660811-48832a4c6f69?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=448&q=80" width="448" height="299" alt="Man looking at item at a store">
+      </div>
+      <div class="p-8">
+        <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Case study</div>
+        <a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">Finding customers for your new business</a>
+        <p class="mt-2 text-gray-500">Getting a new business off the ground is a lot of hard work. Here are five ideas you can use to find your first customers.</p>
+      </div>
     </div>
   </div>
 </template>
+
+<div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+  <div class="md:flex">
+    <div class="md:flex-shrink-0">
+      <img class="h-48 w-full object-cover md:w-48" src="/img/store.jpg" alt="Man looking at item at a store">
+    </div>
+    <div class="p-8">
+      <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Case study</div>
+      <a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">Finding customers for your new business</a>
+      <p class="mt-2 text-gray-500">Getting a new business off the ground is a lot of hard work. Here are five ideas you can use to find your first customers.</p>
+    </div>
+  </div>
+</div>
 ```
 
 But as a project grows, you'll inevitably find yourself repeating common utility combinations to recreate the same component in many different places. This is most apparent with small components, like buttons, form elements, badges, etc.
 
-```html
-<template preview class="text-center p-4">
-  <button class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-5 rounded-md">
-    Button
-  </button>
+```html emerald
+<template preview>
+  <div class="text-center">
+    <button type="button" class="py-2 px-4 bg-emerald-500 text-white font-semibold rounded-lg shadow-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-opacity-75">
+      Click me
+    </button>
+  </div>
 </template>
 
 <!-- Repeating these classes for every button can be painful -->
-<button class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-5 rounded-md">
-  Button
+<button class="py-2 px-4 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75">
+  Click me
 </button>
 ```
 
@@ -139,21 +155,24 @@ In these situations, you can use Tailwind's `@apply` directive to easily extract
 
 Here's what a `btn-indigo` class might look like using `@apply` to compose it from existing utilities:
 
-```html
-<template preview class="text-center p-4">
-  <button class="bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-5 rounded-md">
-    Button
-  </button>
+
+```html indigo
+<template preview>
+  <div class="text-center">
+    <button type="button" class="py-2 px-4 bg-indigo-500 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75">
+      Click me
+    </button>
+  </div>
 </template>
 
-<button class="btn-indigo">
-  Button
+<button class="**bg-indigo**">
+  Click me
 </button>
 
 <style>
-.btn-indigo {
-  @apply bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-5 rounded-md;
-}
+  **.btn-indigo** {
+    @apply py-2 px-4 bg-indigo-500 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75;
+  }
 </style>
 ```
 
@@ -166,7 +185,7 @@ To avoid unintended specificity issues, we recommend wrapping your custom compon
 
 @layer components {
   .btn-blue {
-    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+    @apply py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
   }
 }
 ```
