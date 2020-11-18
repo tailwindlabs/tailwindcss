@@ -11,7 +11,7 @@ import clsx from 'clsx'
 
 const { lines } = tokenizeWithLines.html(`<div class="_">
   <div class="_">
-    <img src="https://unsplash.it/200/200" alt="" class="_" />
+    <img src="__content__" alt="" class="_" />
   </div>
   <div class="_">
     <div class="_">
@@ -204,10 +204,10 @@ const classes = {
 }
 
 const content = {
-  simple: ['Classic Utility Jacket', '$110.00'],
-  playful: ['Kids Jumpsuit', '$39.00'],
-  elegant: ['Fancy Suit Jacket', '$600.00'],
-  brutalist: ['Retro Shoe', '$89.00'],
+  simple: ['/classic-utility-jacket.jpg', 'Classic Utility Jacket', '$110.00'],
+  playful: ['/kids-jumpsuit.jpg', 'Kids Jumpsuit', '$39.00'],
+  elegant: ['/fancy-suit-jacket.jpg', 'Fancy Suit Jacket', '$600.00'],
+  brutalist: ['/retro-shoe.jpg', 'Retro Shoe', '$89.00'],
 }
 
 export function BuildAnything() {
