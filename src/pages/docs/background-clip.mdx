@@ -14,7 +14,7 @@ export const classes = { plugin }
 
 Use the `bg-clip-{keyword}` utilities to control the bounding box of an element's background.
 
-```html
+```html indigo
 <template preview>
   <div class="grid grid-cols-1 gap-2 lg:grid-cols-3">
     <div class="bg-clip-border p-6 rounded-md bg-indigo-600 border-4 border-indigo-300 border-dashed font-extrabold text-white flex justify-center items-center">
@@ -38,7 +38,7 @@ Use the `bg-clip-{keyword}` utilities to control the bounding box of an element'
 
 Use `bg-clip-text` to crop an element's background to match the shape of the text. Useful for effects where you want a background image to be visible through the text.
 
-```html
+```html emerald
 <template preview>
   <div class="text-center text-5xl font-extrabold leading-none tracking-tight">
     <span class="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-500">
@@ -46,6 +46,12 @@ Use `bg-clip-text` to crop an element's background to match the shape of the tex
     </span>
   </div>
 </template>
+
+<div class="text-5xl font-extrabold ...">
+  <span class="**bg-clip-text** text-transparent bg-gradient-to-r from-teal-400 to-blue-500">
+    Hello world
+  </span>
+</div>
 ```
 
 ## Responsive
