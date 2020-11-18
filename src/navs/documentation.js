@@ -10,7 +10,7 @@ export const documentationNav = {
     pages['installation'],
     {
       title: 'Release Notes',
-      href: 'https://blog.tailwindcss.com/tailwind-v2',
+      href: 'https://blog.tailwindcss.com/tailwindcss-v2',
     },
     pages['upgrading-to-v2'],
     pages['using-with-preprocessors'],
