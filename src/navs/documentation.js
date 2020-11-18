@@ -8,7 +8,10 @@ const pages = createPageList(
 export const documentationNav = {
   'Getting started': [
     pages['installation'],
-    pages['release-notes'],
+    {
+      title: 'Release Notes',
+      href: 'https://blog.tailwindcss.com/tailwind-v2',
+    },
     pages['upgrading-to-v2'],
     pages['using-with-preprocessors'],
     pages['optimizing-for-production'],

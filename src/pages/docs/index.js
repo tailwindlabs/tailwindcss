@@ -61,22 +61,29 @@ const whatsNew = [
 
 const latestUpdates = [
   {
+    title: 'Tailwind CSS v2.0',
+    date: '2020-11-18T17:45:00.000Z',
+    url: 'https://blog.tailwindcss.com/tailwindcss-v2',
+    description:
+      "Today we're finally releasing Tailwind CSS v2.0, including an all-new color palette, dark mode support, and tons more!",
+  },
+  {
     title: 'Tailwind CSS v1.9.0',
-    date: '2020-10-13',
+    date: '2020-10-13T18:30:00.000Z',
     url: 'https://blog.tailwindcss.com/tailwindcss-1-9',
     description:
       'We just released Tailwind CSS v1.9 which adds support for configuration presets, useful new CSS grid utilities, extended border radius, rotate, and skew scales, helpful accessibility improvements, and more!',
   },
   {
     title: 'Introducing Tailwind Play',
-    date: '2020-10-07',
+    date: '2020-10-07T13:00:00.000Z',
     url: 'https://blog.tailwindcss.com/introducing-tailwind-play',
     description:
       "Today we're excited to release the first version of Tailwind Play, an advanced online playground for Tailwind CSS that lets you use all of Tailwind's build-time features directly in the browser.",
   },
   {
     title: 'Headless UI: Unstyled, Accessible UI Components',
-    date: '2020-10-06',
+    date: '2020-10-06T18:30:00.000Z',
     url: 'https://blog.tailwindcss.com/headless-ui-unstyled-accessible-ui-components',
     description:
       'Headless UI is a set of completely unstyled, fully accessible UI components for React, Vue, and Alpine.js that make it easy to build fully accessible custom UI components, without sacrificing the ability to style them from scratch with simple utility classes.',
@@ -285,6 +292,8 @@ export default function DocsLandingPage() {
 }
 
 DocsLandingPage.layoutProps = {
-  meta: {},
+  meta: {
+    title: 'Documentation',
+  },
   Layout: DocumentationLayout,
 }

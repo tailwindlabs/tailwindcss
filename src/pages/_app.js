@@ -6,7 +6,7 @@ import { Title } from '@/components/Title'
 import Router from 'next/router'
 import ProgressBar from '@badrap/bar-of-progress'
 import Head from 'next/head'
-import twitterLargeCard from '@/img/twitter-large-card.png'
+import twitterLargeCard from '@/img/twitter-large-card.jpg'
 
 const progress = new ProgressBar({
   size: 2,

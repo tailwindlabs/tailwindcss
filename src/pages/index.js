@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react'
 import { Logo } from '@/components/Logo'
 import { Footer } from '@/components/home/Footer'
 import NextLink from 'next/link'
+import Head from 'next/head'
 
 function NpmInstallButton() {
   const [state, setState] = useState('idle')
@@ -69,6 +70,9 @@ function NpmInstallButton() {
 export default function Home() {
   return (
     <div className="space-y-20 sm:space-y-32 md:space-y-40 lg:space-y-44 overflow-hidden">
+      <Head>
+        <title>Tailwind CSS - Rapidly build modern websites without ever leaving your HTML.</title>
+      </Head>
       <header className="relative z-10 max-w-screen-lg xl:max-w-screen-xl mx-auto">
         <div className="px-4 sm:px-6 md:px-8 mb-14 sm:mb-20 xl:mb-8">
           <div className="border-b border-gray-200 py-6 flex items-center justify-between mb-16 sm:mb-20 -mx-4 px-4 sm:mx-0 sm:px-0">

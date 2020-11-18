@@ -1,3 +1,0 @@
-[build]
-  publish = "out/"
-  command = "yarn export && mv _redirects out/_redirects"

@@ -17,9 +17,6 @@ const footerNav = {
     className: 'row-span-2',
     items: documentationNav['Customization'],
   },
-  'Tools & plugins': {
-    items: [],
-  },
   Community: {
     items: [
       { title: 'GitHub', href: 'https://github.com/tailwindlabs/tailwindcss' },

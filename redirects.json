@@ -197,5 +197,10 @@
     "source": "/course/adapting-the-dropdown-for-mobile",
     "destination": "https://www.youtube.com/watch?v=DL_ziY383xg&list=PL7CcGwsqRpSM3w9BT_21tUU8JN2SnyckR&index=22",
     "permanent": false
+  },
+  {
+    "source": "/components/:slug",
+    "destination": "https://tailwindui.com/components",
+    "permanent": false
   }
 ]

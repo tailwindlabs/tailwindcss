@@ -164,6 +164,8 @@ export default function Resources() {
 }
 
 Resources.layoutProps = {
-  meta: {},
+  meta: {
+    title: 'Resources',
+  },
   Layout: DocumentationLayout,
 }
