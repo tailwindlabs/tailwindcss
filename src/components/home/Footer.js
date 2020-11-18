@@ -32,10 +32,10 @@ const footerNav = {
 
 export function Footer() {
   return (
-    <footer className="bg-gray-50 pt-32 pb-20">
+    <footer className="bg-gray-50 pt-16 pb-12 sm:pt-20 md:pt-24 xl:pt-32 sm:pb-20">
       <div className="max-w-screen-lg xl:max-w-screen-xl mx-auto divide-y divide-gray-200 px-4 sm:px-6 md:px-8">
         <ul
-          className={`${styles.nav} text-sm font-medium pb-20 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-10`}
+          className={`${styles.nav} text-sm font-medium pb-14 sm:pb-20 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-10`}
         >
           {Object.keys(footerNav).map((section, i) => (
             <li key={section} className={clsx('space-y-5', footerNav[section].className)}>
@@ -56,7 +56,7 @@ export function Footer() {
             </li>
           ))}
         </ul>
-        <div className="pt-12">
+        <div className="pt-10 sm:pt-12">
           <Logo width="208" height="26" />
         </div>
       </div>
