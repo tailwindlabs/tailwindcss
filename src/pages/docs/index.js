@@ -174,9 +174,9 @@ export default function DocsLandingPage() {
           </p>
           <a
             href="https://tailwindui.com"
-            className="flex-none bg-white hover:bg-gray-100 transition-colors duration-200 text-gray-900 font-semibold rounded-xl py-2 px-4"
+            className="flex-none bg-white hover:bg-gray-100 transition-colors duration-200 text-gray-900 font-semibold rounded-lg py-3 px-4"
           >
-            Browse examples
+            Browse components
           </a>
         </section>
       </div>
