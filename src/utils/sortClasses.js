@@ -9,7 +9,6 @@ export function numbersFirst(classes) {
     if (isNaN(aNum) && isNaN(bNum)) return 0
     if (isNaN(aNum)) return 1
     if (isNaN(bNum)) return -1
-    console.log(aNum, bNum)
     return aNum - bNum
   })
 }
