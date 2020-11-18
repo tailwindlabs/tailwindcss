@@ -21,22 +21,22 @@ Use `static` to position an element according to the normal flow of the document
 
 Any offsets will be ignored and the element will not act as a position reference for absolutely positioned children.
 
-```html
+```html fuchsia
 <template preview>
-  <div class="relative bg-gray-400 p-4">
-    <div class="static h-32 bg-gray-600 p-4 text-gray-900">
+  <div class="relative bg-fuchsia-200 p-6">
+    <div class="static h-32 bg-fuchsia-300 p-4 text-fuchsia-600 font-medium">
       <p>Static parent</p>
-      <div class="absolute bottom-0 left-0 bg-gray-800 p-4 text-gray-400">
+      <div class="absolute bottom-0 left-0 bg-fuchsia-500 p-4 text-fuchsia-50">
         <p>Absolute child</p>
       </div>
     </div>
   </div>
 </template>
 
-<div class="static bg-gray-600">
-  Static parent
-  <div class="absolute bottom-0 left-0 bg-gray-800">
-    Absolute child
+<div class="**static** ...">
+  <p>Static parent</p>
+  <div class="absolute bottom-0 left-0 ...">
+    <p>Absolute child</p>
   </div>
 </div>
 ```
@@ -47,22 +47,22 @@ Use `relative` to position an element according to the normal flow of the docume
 
 Offsets are calculated relative to the element's normal position and the element *will* act as a position reference for absolutely positioned children.
 
-```html
+```html rose
 <template preview>
-  <div class="relative bg-gray-400 p-4">
-    <div class="relative h-32 bg-gray-600 p-4 text-gray-900">
-      <p>Relative parent</p>
-      <div class="absolute bottom-0 left-0 bg-gray-800 p-4 text-gray-400">
+  <div class="relative bg-rose-200 p-6">
+    <div class="relative h-32 bg-rose-300 p-4 text-rose-600 font-medium">
+      <p>Static parent</p>
+      <div class="absolute bottom-0 left-0 bg-rose-500 p-4 text-rose-50">
         <p>Absolute child</p>
       </div>
     </div>
   </div>
 </template>
 
-<div class="relative bg-gray-600">
-  Relative parent
-  <div class="absolute bottom-0 left-0 bg-gray-800">
-    Absolute child
+<div class="**relative** ...">
+  <p>Static parent</p>
+  <div class="absolute bottom-0 left-0 ...">
+    <p>Absolute child</p>
   </div>
 </div>
 ```
@@ -73,49 +73,52 @@ Use `absolute` to position an element *outside* of the normal flow of the docume
 
 Offsets are calculated relative to the nearest parent that has a position other than `static`, and the element *will* act as a position reference for other absolutely positioned children.
 
-```html
+```html indigo
 <template preview>
-  <p class="text-sm text-gray-600 mb-1">With static positioning</p>
-  <div class="relative bg-gray-400 px-4 pt-2 pb-4 mb-6">
-    <p class="mb-2 text-gray-700">Relative parent</p>
-    <div class="static bg-gray-500 p-4 text-gray-700">
-      <p class="mb-2">Static parent</p>
-      <div class="static bottom-0 left-0 bg-gray-800 p-4 text-gray-400 inline-block">
-        <p>Static child</p>
-      </div>
-      <div class="bg-gray-400 p-4 text-gray-700 inline-block">
-        <p>Static sibling</p>
+  <div class="space-y-6">
+    <div>
+      <p class="text-sm text-indigo-900 mb-2">With static positioning</p>
+      <div class="relative bg-indigo-200 px-6 pt-2 pb-6 font-medium">
+        <p class="mb-2 text-indigo-600">Relative parent</p>
+        <div class="static bg-indigo-300 p-4 text-indigo-700">
+          <p class="mb-2">Static parent</p>
+          <div class="static bottom-0 left-0 bg-indigo-500 p-4 text-indigo-50 inline-block">
+            <p>Static child</p>
+          </div>
+          <div class="bg-indigo-200 p-4 text-indigo-600 inline-block">
+            <p>Static sibling</p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <p class="text-sm text-gray-600 mb-1">With absolute positioning</p>
-  <div class="relative bg-gray-400 px-4 pt-2 pb-4">
-    <p class="mb-2 text-gray-700">Relative parent</p>
-    <div class="static bg-gray-500 p-4 text-gray-700">
-      <p class="mb-2">Static parent</p>
-      <div class="absolute top-0 right-0 bg-gray-800 p-4 text-gray-400 inline-block">
-        <p>Absolute child</p>
-      </div>
-      <div class="bg-gray-400 p-4  text-gray-700 inline-block">
-        <p>Static sibling</p>
+    <div>
+      <p class="text-sm text-indigo-900 mb-2">With absolute positioning</p>
+      <div class="relative bg-indigo-200 px-6 pt-2 pb-6 font-medium">
+        <p class="mb-2 text-indigo-600">Relative parent</p>
+        <div class="static bg-indigo-300 p-4 text-indigo-700">
+          <p class="mb-2">Static parent</p>
+          <div class="absolute top-0 right-0 bg-indigo-500 p-4 text-indigo-50 inline-block">
+            <p>Absolute child</p>
+          </div>
+          <div class="bg-indigo-200 p-4 text-indigo-600 inline-block">
+            <p>Static sibling</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<div class="relative bg-gray-400">
-  Relative parent
-  <div class="static bg-gray-600">
-    Static parent
-    <div class="absolute top-0 right-0 bg-gray-800">
-      Absolute child
-    </div>
-    <div class="bg-gray-400 inline-block">
-      Static sibling
-    </div>
-  </div>
+<div class="static ...">
+  <!-- Static parent -->
+  <div class="static ..."><p>Static child</p></div>
+  <div class="inline-block ..."><p>Static sibling</p></div>
+  <!-- Static parent -->
+  <div class="**absolute** ..."><p>Absolute child</p></div>
+  <div class="inline-block ..."><p>Static sibling</p></div>
 </div>
+
 ```
 
 ## Fixed
@@ -124,28 +127,28 @@ Use `fixed` to position an element relative to the browser window.
 
 Offsets are calculated relative to the viewport and the element *will* act as a position reference for absolutely positioned children.
 
-```html
+```html amber
 <template preview>
   <div class="rounded-b overflow-hidden max-w-md mx-auto mt-4 mb-4">
     <div class="rounded-t border-t border-l border-r border-gray-400 bg-gray-200 flex px-4 py-3">
       <div class="mr-6">
-        <span class="inline-block rounded-full bg-gray-500 h-3 w-3 mr-1"></span>
-        <span class="inline-block rounded-full bg-gray-500 h-3 w-3 mr-1"></span>
-        <span class="inline-block rounded-full bg-gray-500 h-3 w-3"></span>
+        <span class="inline-block rounded-full bg-red-400 h-3 w-3 mr-1"></span>
+        <span class="inline-block rounded-full bg-amber-400 h-3 w-3 mr-1"></span>
+        <span class="inline-block rounded-full bg-emerald-400 h-3 w-3"></span>
       </div>
       <div class="flex-1 bg-white border border-gray-400 rounded mr-4"></div>
     </div>
-    <div class="relative bg-gray-400 h-64">
+    <div class="relative bg-amber-200 text-amber-500 h-64 font-medium">
 
       <!-- Hey fellow nerd! Yes, we're using position absolute instead of position fixed in the demo; it's the best way we could come up with to demonstrate how position fixed works without totally jacking up the layout of the entire documentation site. Forgive us! 😄 -->
 
-      <div class="absolute left-0 right-0 top-0 bg-gray-800 text-gray-400 z-10 px-4 py-3">
+      <div class="absolute left-0 right-0 top-0 bg-amber-600 text-amber-100 z-10 px-4 py-3">
         Fixed child
-        <div class="absolute top-0 bottom-0 right-0 px-4 py-3 bg-gray-500 text-gray-800">
+        <div class="absolute top-0 bottom-0 right-0 px-4 py-3 bg-amber-400 text-amber-700">
           Absolute child
         </div>
       </div>
-      <div class="absolute inset-0 overflow-auto pt-16 px-4 pb-4">
+      <div class="absolute inset-0 overflow-auto pt-16 px-6 pb-4">
         <p class="mb-4">Scroll me!</p>
         <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. </p>
         <p class="mb-4">Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
@@ -160,10 +163,10 @@ Offsets are calculated relative to the viewport and the element *will* act as a 
   </div>
 </template>
 
-<div class="bg-gray-400 pt-16">
-  <div class="fixed bg-gray-600">
+<div>
+  <div class="**fixed** ...">
     Fixed child
-    <div class="absolute top-0 right-0 bg-gray-800">
+    <div class="absolute top-0 right-0 ...">
       Absolute child
     </div>
   </div>
@@ -182,32 +185,32 @@ Use `sticky` to position an element as `relative` until it crosses a specified t
 
 Offsets are calculated relative to the element's normal position and the element *will* act as a position reference for absolutely positioned children.
 
-```html
+```html emerald
 <template preview>
   <div class="h-64 overflow-auto">
     <div>
-      <div class="sticky top-0 bg-gray-400 px-2 py-1 font-bold text-gray-700">Sticky Heading 1</div>
-      <p class="py-4">Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. </p>
+      <div class="sticky top-0 bg-emerald-200 px-2 py-1 font-semibold text-emerald-600">Sticky Heading 1</div>
+      <p class="py-4 font-medium text-emerald-500">Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. </p>
     </div>
     <div>
-      <div class="sticky top-0 bg-gray-400 px-2 py-1 font-bold text-gray-700">Sticky Heading 2</div>
-      <p class="py-4">Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales. Aenean lectus elit, fermentum non, convallis id, sagittis at, neque. </p>
+      <div class="sticky top-0 bg-emerald-200 px-2 py-1 font-semibold text-emerald-600">Sticky Heading 2</div>
+      <p class="py-4 font-medium text-emerald-500">Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales. Aenean lectus elit, fermentum non, convallis id, sagittis at, neque. </p>
     </div>
     <div>
-      <div class="sticky top-0 bg-gray-400 px-2 py-1 font-bold text-gray-700">Sticky Heading 3</div>
-      <p class="py-4">Nullam mauris orci, aliquet et, iaculis et, viverra vitae, ligula. Nulla ut felis in purus aliquam imperdiet. Maecenas aliquet mollis lectus. Vivamus consectetuer risus et tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. </p>
+      <div class="sticky top-0 bg-emerald-200 px-2 py-1 font-semibold text-emerald-600">Sticky Heading 3</div>
+      <p class="py-4 font-medium text-emerald-500">Nullam mauris orci, aliquet et, iaculis et, viverra vitae, ligula. Nulla ut felis in purus aliquam imperdiet. Maecenas aliquet mollis lectus. Vivamus consectetuer risus et tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. </p>
     </div>
     <div>
-      <div class="sticky top-0 bg-gray-400 px-2 py-1 font-bold text-gray-700">Sticky Heading 4</div>
-      <p class="py-4">Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. </p>
+      <div class="sticky top-0 bg-emerald-200 px-2 py-1 font-semibold text-emerald-600">Sticky Heading 4</div>
+      <p class="py-4 font-medium text-emerald-500">Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. </p>
     </div>
     <div>
-      <div class="sticky top-0 bg-gray-400 px-2 py-1 font-bold text-gray-700">Sticky Heading 5</div>
-      <p class="py-4">Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales. Aenean lectus elit, fermentum non, convallis id, sagittis at, neque. </p>
+      <div class="sticky top-0 bg-emerald-200 px-2 py-1 font-semibold text-emerald-600">Sticky Heading 5</div>
+      <p class="py-4 font-medium text-emerald-500">Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales. Aenean lectus elit, fermentum non, convallis id, sagittis at, neque. </p>
     </div>
     <div>
-      <div class="sticky top-0 bg-gray-400 px-2 py-1 font-bold text-gray-700">Sticky Heading 6</div>
-      <p class="py-4">Nullam mauris orci, aliquet et, iaculis et, viverra vitae, ligula. Nulla ut felis in purus aliquam imperdiet. Maecenas aliquet mollis lectus. Vivamus consectetuer risus et tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. </p>
+      <div class="sticky top-0 bg-emerald-200 px-2 py-1 font-semibold text-emerald-600">Sticky Heading 6</div>
+      <p class="py-4 font-medium text-emerald-500">Nullam mauris orci, aliquet et, iaculis et, viverra vitae, ligula. Nulla ut felis in purus aliquam imperdiet. Maecenas aliquet mollis lectus. Vivamus consectetuer risus et tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. </p>
     </div>
   </div>
 </template>
