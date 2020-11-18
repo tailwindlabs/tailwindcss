@@ -51,6 +51,10 @@
     "prettier": "^2.1.2",
     "rimraf": "^3.0.0"
   },
+  "peerDependencies": {
+    "autoprefixer": "^10.0.2",
+    "postcss": "^8.0.9"
+  },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^3.0.0",
     "bytes": "^3.0.0",
@@ -65,15 +69,13 @@
     "node-emoji": "^1.8.1",
     "object-hash": "^2.0.3",
     "postcss-functions": "^3",
-    "postcss-js": "^2",
-    "postcss-nested": "^4",
+    "postcss-js": "^3.0.3",
+    "postcss-nested": "^5.0.1",
     "postcss-selector-parser": "^6.0.4",
     "postcss-value-parser": "^4.1.0",
     "pretty-hrtime": "^1.0.3",
     "reduce-css-calc": "^2.1.6",
-    "resolve": "^1.19.0",
-    "autoprefixer": "^9",
-    "postcss": "^7"
+    "resolve": "^1.19.0"
   },
   "browserslist": [
     "> 1%",
