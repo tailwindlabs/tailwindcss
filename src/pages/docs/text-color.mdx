@@ -81,42 +81,44 @@ For more information about Tailwind's responsive design features, check out the 
 
 To control the text color of an element on hover, add the `hover:` prefix to any existing text color utility. For example, use `hover:text-blue-600` to apply the `text-blue-600` utility on hover.
 
-```html
-<template preview class="text-center p-4">
-  <button class="border-2 border-blue-500 hover:border-red-500 bg-transparent text-blue-600 hover:text-red-600 py-2 px-4 font-semibold rounded">
-    Button
-  </button>
+```html rose
+<template preview>
+  <div class="text-center">
+    <button type="button" class="py-2 px-4 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-white hover:text-red-500 focus:outline-none" tabindex="-1">
+      Hover me
+    </button>
+  </div>
 </template>
 
-<button class="text-blue-600 hover:text-red-600 ...">
-  Button
+<button class="text-white **hover:text-red-500** ...">
+  Hover me
 </button>
 ```
 
 Hover utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `hover:` prefix.
 
 ```html
-<button class="... md:text-blue-500 md:hover:text-blue-600 ...">Button</button>
+<button class="... md:text-blue-500 **md:hover:text-blue-600** ...">Button</button>
 ```
 
 ## Focus
 
 To control the text color of an element on focus, add the `focus:` prefix to any existing text color utility. For example, use `focus:text-blue-600` to apply the `text-blue-600` utility on focus.
 
-```html
+```html emerald
 <template preview>
   <div class="max-w-xs w-full mx-auto">
-    <input class="border border-gray-400 focus:border-red-500 bg-white text-gray-900 appearance-none inline-block w-full focus:text-red-600 border rounded py-3 px-4 focus:outline-none" placeholder="Focus me" value="Focus me">
+    <input class="border border-emerald-300 focus:border-emerald-500 bg-white text-green-900 appearance-none inline-block w-full focus:text-red-600 rounded py-3 px-4 focus:outline-none" placeholder="Focus me" value="Focus me">
   </div>
 </template>
 
-<input class="text-gray-900 focus:text-red-600 ...">
+<input class="text-green-900 focus:text-red-600 ...">
 ```
 
 Focus utilities can also be combined with responsive utilities by adding the responsive `{screen}:` prefix *before* the `focus:` prefix.
 
 ```html
-<input class="... md:text-gray-900 md:focus:text-red-600 ...">
+<input class="... md:text-gray-900 **md:focus:text-red-600** ...">
 ```
 
 ## Customizing

@@ -35,8 +35,8 @@ Control the placeholder color of an element using the `placeholder-{color}` util
 ```html emerald
 <template preview class="text-center p-6">
   <div class="max-w-xs">
-    <input class="block appearance-none placeholder-gray-500 border rounded-md w-full py-3 px-4 text-gray-700 leading-5" placeholder="jane@example.com">
-    <input class="mt-4 block appearance-none placeholder-red-300 border border-red-400 rounded-md w-full py-3 px-4 text-gray-700 leading-5" placeholder="jane@example.com">
+    <input class="block appearance-none placeholder-gray-500 border border-emerald-400 rounded-md w-full py-3 px-4 text-gray-700 leading-5 focus:outline-none focus:ring-2 focus:ring-emerald-200" placeholder="jane@example.com">
+    <input class="mt-4 block appearance-none placeholder-red-300 border border-red-400 rounded-md w-full py-3 px-4 text-gray-700 leading-5 focus:outline-none focus:ring-2 focus:ring-red-200" placeholder="jane@example.com">
   </div>
 </template>
 
@@ -52,19 +52,19 @@ Control the opacity of an element's placeholder color using the `placeholder-opa
 <template preview>
   <div class="space-y-4">
     <div class="max-w-xs">
-      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-100 border rounded-md w-full py-3 px-4 text-gray-700 leading-5" placeholder="jane@example.com">
+      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-100 border border-light-blue-400 rounded-md w-full py-3 px-4 text-gray-700 leading-5 focus:outline-none focus:ring-2 focus:ring-light-blue-300" placeholder="jane@example.com">
     </div>
     <div class="max-w-xs">
-      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-75 border rounded-md w-full py-3 px-4 text-gray-700 leading-5" placeholder="jane@example.com">
+      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-75 border border-light-blue-400 rounded-md w-full py-3 px-4 text-gray-700 leading-5 focus:outline-none focus:ring-2 focus:ring-light-blue-300" placeholder="jane@example.com">
     </div>
     <div class="max-w-xs">
-      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-50 border rounded-md w-full py-3 px-4 text-gray-700 leading-5" placeholder="jane@example.com">
+      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-50 border border-light-blue-400 rounded-md w-full py-3 px-4 text-gray-700 leading-5 focus:outline-none focus:ring-2 focus:ring-light-blue-300" placeholder="jane@example.com">
     </div>
     <div class="max-w-xs">
-      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-25 border rounded-md w-full py-3 px-4 text-gray-700 leading-5" placeholder="jane@example.com">
+      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-25 border border-light-blue-400 rounded-md w-full py-3 px-4 text-gray-700 leading-5 focus:outline-none focus:ring-2 focus:ring-light-blue-300" placeholder="jane@example.com">
     </div>
     <div class="max-w-xs">
-      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-0 border rounded-md w-full py-3 px-4 text-gray-700 leading-5" placeholder="jane@example.com">
+      <input class="block appearance-none placeholder-gray-500 placeholder-opacity-0 border border-light-blue-400 rounded-md w-full py-3 px-4 text-gray-700 leading-5 focus:outline-none focus:ring-2 focus:ring-light-blue-300" placeholder="jane@example.com">
     </div>
   </div>
 </template>
@@ -92,10 +92,10 @@ For more information about Tailwind's responsive design features, check out the 
 
 To control the placeholder color of an element on focus, add the `focus:` prefix to any existing placeholder color utility. For example, use `focus:placeholder-blue-600` to apply the `placeholder-blue-600` utility on focus.
 
-```html
+```html indigo
 <template preview class="text-center p-6">
   <div class="max-w-xs mx-auto">
-    <input class="block appearance-none bg-gray-200 placeholder-gray-600 border border-transparent focus:border-gray-300 focus:bg-white focus:placeholder-gray-400 rounded w-full py-3 px-4 text-gray-700 leading-5 focus:outline-none" placeholder="jane@example.com">
+    <input class="block appearance-none bg-white placeholder-gray-600 border border-indigo-200 rounded w-full py-3 px-4 text-gray-700 leading-5 focus:outline-none focus:border-indigo-400 focus:placeholder-gray-400 focus:ring-2 focus:ring-indigo-200" placeholder="jane@example.com">
   </div>
 </template>
 
