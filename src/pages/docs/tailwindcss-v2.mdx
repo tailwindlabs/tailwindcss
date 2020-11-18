@@ -10,21 +10,27 @@ Almost exactly 18 months ago we released Tailwind CSS v1.0, which signalled a co
 
 Over the course of those 18 months we released nine minor versions that added features like placeholder styling, screenreader visibility, CSS grid, transitions, transforms, animations, layout utilities, integrated tree-shaking, gradients, and tons more.
 
-Today we're finally releasing Tailwind CSS v2.0, the first major update ever, including:
+Today we're finally releasing Tailwind CSS v2.0.
 
-- [**All-new color palette**](#), featuring 220 total colors and a new workflow for building your own color schemes
-- [**Dark mode support**](#), making it easier than ever to dynamically change your design when dark mode is enabled
-- [**Extra wide 2XL breakpoint**](#), for designing at 1536px and above
-- [**New outline ring utilities**](#), which are almost as good as if they would just make `outline-radius` a real thing
-- [**Utility-friendly form styles**](#), a new form reset that makes it easy to customize form elements (even checkboxes) with just utility classes
-- [**Default line-heights per font-size**](#), because if we can't make using a 1.5 line-height with a 48px font illegal we should at least make it not the default
-- [**Extended spacing, typography, and opacity scales**](#), for fine-tuning things at the micro level, making an even bigger impact with huge headlines, and for when `opacity-25` wasn't enough and `opacity-50` was too much
-- [**Use @apply with anything**](#), including responsive, hover, focus, and other variants
-- [**New text overflow utilities**](#), for controlling things more precisely than you can with `truncate` alone
-- [**Extend variants**](#), so you can enable extra variants like `focus-visible` without redeclaring the entire list or thinking about order
-- [**Group-hover and focus-within by default**](#), because you were enabling them on every project anyways
-- [**Default transition duration and easing curve**](#), so you only have to add 17 classes to make a button instead of 19
-- [**Incompatibility with IE11**](#), so you can tell the man upstairs _"sorry boss it's out of my hands, blame Tailwind"_
+<div className="relative" style={{paddingBottom: '56.25%'}}>
+  <iframe className="absolute inset-0 h-full w-full" src="https://www.youtube.com/embed/3u_vIdnJYLc" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+</div>
+
+Tailwind CSS v2.0 is the first major update ever, including:
+
+- [**All-new color palette**](#all-new-color-palette), featuring 220 total colors and a new workflow for building your own color schemes
+- [**Dark mode support**](#dark-mode), making it easier than ever to dynamically change your design when dark mode is enabled
+- [**Extra wide 2XL breakpoint**](#extra-wide-2xl-breakpoint), for designing at 1536px and above
+- [**New outline ring utilities**](#new-outline-ring-utilities), which are almost as good as if they would just make `outline-radius` a real thing
+- [**Utility-friendly form styles**](#utility-friendly-form-styles), a new form reset that makes it easy to customize form elements (even checkboxes) with just utility classes
+- [**Default line-heights per font-size**](#default-line-heights-per-font-size), because if we can't make using a 1.5 line-height with a 48px font illegal we should at least make it not the default
+- [**Extended spacing, typography, and opacity scales**](#extended-spacing-typography-and-opacity-scales), for fine-tuning things at the micro level, making an even bigger impact with huge headlines, and for when `opacity-25` wasn't enough and `opacity-50` was too much
+- [**Use @apply with anything**](#use-apply-with-anything), including responsive, hover, focus, and other variants
+- [**New text overflow utilities**](#new-text-overflow-utilities), for controlling things more precisely than you can with `truncate` alone
+- [**Extend variants**](#extend-variants), so you can enable extra variants like `focus-visible` without redeclaring the entire list or thinking about order
+- [**Group-hover and focus-within by default**](#group-hover-and-focus-within-by-default), because you were enabling them on every project anyways
+- [**Default transition duration and easing curve**](#default-transition-duration-and-easing-curve), so you only have to add 17 classes to make a button instead of 19
+- [**Incompatibility with IE11**](#incompatibility-with-ie11), so you can tell the man upstairs _"sorry boss it's out of my hands, blame Tailwind"_
 
 ...and [a bunch of other little things](https://github.com/tailwindlabs/tailwindcss/blob/master/CHANGELOG.md) too.
 
@@ -440,7 +446,7 @@ Learn more about transitions in the [transition property documentation](/docs/tr
 
 ---
 
-### Incompatibility with IE11
+## Incompatibility with IE11
 
 We've decided to unburden ourselves with caring about IE11 at all, which has allowed us to fully embrace CSS custom properties for [all sorts of crazy stuff](https://adamwathan.me/composing-the-uncomposable-with-css-variables/) and is what makes things like the new `ring` utilities even possible.
 
