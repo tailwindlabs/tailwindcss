@@ -135,7 +135,7 @@ export function ModernFeatures() {
 
   return (
     <section id="modern-features">
-      <div className="px-4 sm:px-6 md:px-8 mb-20">
+      <div className="px-4 sm:px-6 md:px-8 mb-10 sm:mb-16 md:mb-20">
         <IconContainer className={`${allGradients.purple[0]} mb-8`}>
           <Icon />
         </IconContainer>

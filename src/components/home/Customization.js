@@ -106,7 +106,7 @@ export function Customization() {
 
   return (
     <section id="customization">
-      <div className="px-4 sm:px-6 md:px-8 mb-20">
+      <div className="px-4 sm:px-6 md:px-8 mb-10 sm:mb-16 md:mb-20">
         <IconContainer className={`${gradients.pink[0]} mb-8`}>
           <Icon />
         </IconContainer>

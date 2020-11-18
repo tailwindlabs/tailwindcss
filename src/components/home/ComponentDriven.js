@@ -680,7 +680,7 @@ export function ComponentDriven() {
 
   return (
     <section id="component-driven">
-      <div className="px-4 sm:px-6 md:px-8 mb-20">
+      <div className="px-4 sm:px-6 md:px-8 mb-10 sm:mb-16 md:mb-20">
         <IconContainer className={`${gradients.amber[0]} mb-8`}>
           <Icon />
         </IconContainer>
@@ -800,7 +800,7 @@ export function ComponentDriven() {
         }
         right={<ComponentExample framework={framework} />}
       />
-      <div className="px-4 sm:px-6 md:px-8 mt-32 mb-8">
+      <div className="px-4 sm:px-6 md:px-8 mt-16 sm:mt-24 md:mt-32 mb-10 sm:mb-16 md:mb-20 lg:mb-8">
         <Paragraph className="mb-6">
           Not into component frameworks and like to keep it old school? Use Tailwind's @apply
           directive to extract repeated utility patterns into custom CSS classes just by copying and
