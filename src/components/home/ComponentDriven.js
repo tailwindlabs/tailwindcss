@@ -512,7 +512,7 @@ const css = tokenize.css(`.btn {
 .btn--secondary {
   @apply bg-gray-100 text-black;
 }
-`).tokens
+`).lines
 
 const html = tokenize.html(`      </dd>
     </div>
@@ -533,7 +533,26 @@ function ApplyExample({ inView }) {
         </h3>
       </div>
       <div className="flex-none">
-        <CodeWindow.Code tokens={css} />
+        <CodeWindow.Code2 lines={css.length}>
+          {css.map((tokens, lineIndex) => (
+            <Fragment key={lineIndex}>
+              {tokens.map((token, tokenIndex) => {
+                let className = getClassNameForToken(token)
+                if (className) {
+                  className = className
+                    .replace(/\bclass\b/, 'selector')
+                    .replace(/\b(number|color)\b/, '')
+                }
+                return (
+                  <span key={tokenIndex} className={className}>
+                    {token.content}
+                  </span>
+                )
+              })}
+              {'\n'}
+            </Fragment>
+          ))}
+        </CodeWindow.Code2>
       </div>
       <div className="relative flex text-sm bg-pink-1000 text-pink-200">
         <h3 className="border border-transparent py-2 px-4 font-medium bg-white bg-opacity-10">

@@ -3,7 +3,6 @@ import { forwardRef, Fragment, useMemo } from 'react'
 import tokenize from '../macros/tokenize.macro'
 import { Code } from './Code'
 import styles from './CodeWindow.module.css'
-import syntaxTheme from '@/utils/syntaxTheme'
 
 const { tokens: defaultTokens } = tokenize.html(`<div class="flex pa-2 bg-white rounded-lg shadow">
   <div class="w-32 rounded-md overflow-hidden">
@@ -96,10 +95,7 @@ export function getClassNameForToken({ types, empty }) {
   if (typesSize === 1 && types[0] === 'plain') {
     return empty ? 'inline-block' : undefined
   }
-  const className = (
-    (syntaxTheme[types[typesSize - 1]] || '') + (empty ? ' inline-block' : '')
-  ).trim()
-  return className === '' ? undefined : className
+  return (types[typesSize - 1] + (empty ? ' inline-block' : ' token')).trim()
 }
 
 CodeWindow.Code2 = forwardRef(

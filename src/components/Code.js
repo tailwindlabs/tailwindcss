@@ -1,13 +1,5 @@
-const colors = {
-  punctuation: 'text-code-punctuation',
-  tag: 'text-code-tag',
-  'attr-name': 'text-code-attr-name',
-  'attr-value': 'text-code-attr-value',
-}
-
 export function Token({ token, parentTypes, children }) {
-  const className = colors[[...parentTypes, token[0]].join('.')] || colors[token[0]]
-  return className ? <span className={className}>{children}</span> : children
+  return <span className={`token ${token[0]}`}>{children}</span>
 }
 
 export function Code({

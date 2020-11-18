@@ -1,25 +1,45 @@
-.token.punctuation {
-  @apply text-code-punctuation;
+.token.tag,
+.token.class-name,
+.token.selector,
+.token.selector .class,
+.token.function {
+  @apply text-fuchsia-400;
 }
 
-.token.tag {
-  @apply text-code-tag;
+.token.attr-name,
+.token.keyword,
+.token.rule,
+.token.operator,
+.token.pseudo-class,
+.token.important {
+  @apply text-cyan-400;
 }
 
-.token.attr-name {
-  @apply text-code-attr-name;
+.token.attr-value,
+.token.class,
+.token.string,
+.token.number,
+.token.unit,
+.token.color {
+  @apply text-lime-300;
 }
 
-.token.attr-value {
-  @apply text-code-attr-value;
+.token.punctuation,
+.token.module,
+.token.property {
+  @apply text-light-blue-200;
 }
 
-.token.class {
-  @apply text-code-attr-value;
+.token.atapply .token:not(.rule):not(.important) {
+  color: inherit;
 }
 
-.token.string {
-  @apply text-code-string;
+.language-shell .token:not(.comment) {
+  color: inherit;
+}
+
+.language-css .token.function {
+  color: inherit;
 }
 
 .token.comment {
@@ -36,7 +56,7 @@
 }
 
 .token.deleted.prefix {
-  @apply text-gray-400;
+  @apply text-gray-400 select-none;
 }
 
 .token.inserted:not(.prefix) {
@@ -44,5 +64,5 @@
 }
 
 .token.inserted.prefix {
-  @apply text-emerald-200 text-opacity-75;
+  @apply text-emerald-200 text-opacity-75 select-none;
 }
