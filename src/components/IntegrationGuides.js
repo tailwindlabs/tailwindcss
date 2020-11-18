@@ -50,11 +50,11 @@ const guides = [
     logo: RailsLogo,
     link: '/docs/guides/rails',
   },
-  {
-    name: 'Svelte',
-    logo: SvelteLogo,
-    link: '/docs/guides/svelte',
-  },
+  // {
+  //   name: 'Svelte',
+  //   logo: SvelteLogo,
+  //   link: '/docs/guides/svelte',
+  // },
 ]
 
 export function IntegrationGuides() {
