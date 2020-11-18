@@ -299,6 +299,7 @@
 }
 
 .DocSearch-Footer {
+  flex: none;
   display: flex;
   justify-content: flex-end;
   margin: 0 1.5rem;
