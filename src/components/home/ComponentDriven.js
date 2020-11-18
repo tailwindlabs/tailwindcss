@@ -2,7 +2,7 @@ import { IconContainer, Caption, BigText, Paragraph, Link, Widont } from '@/comp
 import { GradientLockup } from '@/components/GradientLockup'
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
-import tokenize from '../../macros/tokenize.macro'
+import { tokenizeWithLines } from '../../macros/tokenize.macro'
 import { Fragment, useEffect, useState } from 'react'
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
 import { ReactComponent as Icon } from '@/img/icons/home/component-driven.svg'
@@ -46,7 +46,7 @@ const recipes = [
 
 const tabs = {
   react: {
-    'Recipes.js': tokenize.jsx(
+    'Recipes.js': tokenizeWithLines.jsx(
       `import Nav from './Nav.js'
 import NavItem from './NavItem.js'
 import List from './List.js'
@@ -70,7 +70,7 @@ export default function Recipes({ recipes }) {
 }
 `
     ).lines,
-    'Nav.js': tokenize.jsx(`export default function Nav({ children }) {
+    'Nav.js': tokenizeWithLines.jsx(`export default function Nav({ children }) {
   return (
     <nav className="p-4">
       <ul className="flex space-x-2">
@@ -80,7 +80,7 @@ export default function Recipes({ recipes }) {
   )
 }
 `).lines,
-    'NavItem.js': tokenize.jsx(`export default function NavItem({ href, isActive, children }) {
+    'NavItem.js': tokenizeWithLines.jsx(`export default function NavItem({ href, isActive, children }) {
   return (
     <li>
       <a
@@ -93,7 +93,7 @@ export default function Recipes({ recipes }) {
   )
 }
 `).lines,
-    'List.js': tokenize.jsx(`export default function List({ children }) {
+    'List.js': tokenizeWithLines.jsx(`export default function List({ children }) {
   return (
     <ul className="divide-y divide-gray-100">
       {children}
@@ -101,7 +101,7 @@ export default function Recipes({ recipes }) {
   )
 }
 `).lines,
-    'ListItem.js': tokenize.jsx(`export default function ListItem({ recipe }) {
+    'ListItem.js': tokenizeWithLines.jsx(`export default function ListItem({ recipe }) {
   return (
     <article className="p-4 flex space-x-4">
       <img src={recipe.image} alt="" className="flex-none w-18 h-18 rounded-lg object-cover bg-gray-100" width="144" height="144" />
@@ -145,7 +145,7 @@ export default function Recipes({ recipes }) {
 `).lines,
   },
   vue: {
-    'Recipes.vue': tokenize.html(`<template>
+    'Recipes.vue': tokenizeWithLines.html(`<template>
   <div class="divide-y divide-gray-100">
     <Nav>
       <NavItem href="/featured" isActive>Featured</NavItem>
@@ -175,7 +175,7 @@ export default {
 }
 </script>
 `).lines,
-    'Nav.vue': tokenize.html(`<template>
+    'Nav.vue': tokenizeWithLines.html(`<template>
   <nav class="p-4">
     <ul class="flex space-x-2">
       <slot></slot>
@@ -183,7 +183,7 @@ export default {
   </nav>
 </template>
 `).lines,
-    'NavItem.vue': tokenize.html(`<template>
+    'NavItem.vue': tokenizeWithLines.html(`<template>
   <li>
     <a
       :href="href"
@@ -206,13 +206,13 @@ export default {
 }
 </script>
 `).lines,
-    'List.vue': tokenize.html(`<template>
+    'List.vue': tokenizeWithLines.html(`<template>
   <ul class="divide-y divide-gray-100">
     <slot></slot>
   </ul>
 </template>
 `).lines,
-    'ListItem.vue': tokenize.html(`<template>
+    'ListItem.vue': tokenizeWithLines.html(`<template>
   <article class="p-4 flex space-x-4">
     <img :src="recipe.image" alt="" class="flex-none w-18 h-18 rounded-lg object-cover" width="144" height="144" />
     <div class="min-w-0 relative flex-auto sm:pr-20 lg:pr-0 xl:pr-20">
@@ -260,7 +260,7 @@ export default {
 `).lines,
   },
   blade: {
-    'recipes.blade.php': tokenize.html(`<div class="divide-y divide-gray-100">
+    'recipes.blade.php': tokenizeWithLines.html(`<div class="divide-y divide-gray-100">
   <x-nav>
     <x-nav-item href="/featured" :isActive="true">Featured</x-nav-item>
     <x-nav-item href="/popular">Popular</x-nav-item>
@@ -273,13 +273,13 @@ export default {
   </x-list>
 </div>
 `).lines,
-    'nav.blade.php': tokenize.html(`<nav class="p-4">
+    'nav.blade.php': tokenizeWithLines.html(`<nav class="p-4">
   <ul class="flex space-x-2">
     {{ $slot }}
   </ul>
 </nav>
 `).lines,
-    'nav-item.blade.php': tokenize.html(`<li>
+    'nav-item.blade.php': tokenizeWithLines.html(`<li>
   <a
     href="{{ $href }}"
     class="block px-4 py-2 rounded-md {{ $isActive ? 'bg-amber-100 text-amber-700' : '' }}"
@@ -288,11 +288,11 @@ export default {
   </a>
 </li>
 `).lines,
-    'list.blade.php': tokenize.html(`<ul class="divide-y divide-gray-100">
+    'list.blade.php': tokenizeWithLines.html(`<ul class="divide-y divide-gray-100">
   {{ $slot }}
 </ul>
 `).lines,
-    'list-item.blade.php': tokenize.html(`<article class="p-4 flex space-x-4">
+    'list-item.blade.php': tokenizeWithLines.html(`<article class="p-4 flex space-x-4">
   <img src="{{ $recipe->image }}" alt="" class="flex-none w-18 h-18 rounded-lg object-cover" width="144" height="144" />
   <div class="min-w-0 relative flex-auto sm:pr-20 lg:pr-0 xl:pr-20">
     <h2 class="text-lg font-semibold text-black mb-0.5">
@@ -501,7 +501,7 @@ function ComponentExample({ framework }) {
   )
 }
 
-const css = tokenize.css(`.btn {
+const css = tokenizeWithLines.css(`.btn {
   @apply text-base font-medium rounded-lg p-3;
 }
 
@@ -514,7 +514,7 @@ const css = tokenize.css(`.btn {
 }
 `).lines
 
-const html = tokenize.html(`      </dd>
+const html = tokenizeWithLines.html(`      </dd>
     </div>
   </dl>
   <footer class="grid grid-cols-2 gap-x-6">

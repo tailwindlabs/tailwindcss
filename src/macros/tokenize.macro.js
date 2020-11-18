@@ -11,44 +11,52 @@ function simplify(token) {
 }
 
 function tokenizeMacro({ references, babel: { types: t } }) {
-  references.default.forEach((path) => {
-    const lang = path.parentPath.node.property.name
+  if (references.default) {
+    references.default.forEach(createTransform('tokens'))
+  }
+  if (references.tokenizeWithLines) {
+    references.tokenizeWithLines.forEach(createTransform('lines'))
+  }
 
-    const codeNode = path.parentPath.parentPath.node.arguments[0]
-    const originalCode = t.isTemplateLiteral(codeNode)
-      ? codeNode.quasis[0].value.cooked
-      : codeNode.value
+  function createTransform(type) {
+    return (path) => {
+      const lang = path.parentPath.node.property.name
 
-    const returnCodeNode = path.parentPath.parentPath.node.arguments[1]
-    const returnCode = returnCodeNode && returnCodeNode.value
+      const codeNode = path.parentPath.parentPath.node.arguments[0]
+      const originalCode = t.isTemplateLiteral(codeNode)
+        ? codeNode.quasis[0].value.cooked
+        : codeNode.value
 
-    const argsNode = path.parentPath.parentPath.node.arguments[3]
-    let args = {}
-    if (argsNode) {
-      eval('args = ' + generate(argsNode).code)
-    }
+      const returnCodeNode = path.parentPath.parentPath.node.arguments[1]
+      const returnCode = returnCodeNode && returnCodeNode.value
 
-    const codeTransformerNode = path.parentPath.parentPath.node.arguments[2]
-    let code = originalCode
-    if (codeTransformerNode) {
-      const codeTransformer = eval(generate(codeTransformerNode).code)
-      code = codeTransformer(code, args)
-    }
+      const argsNode = path.parentPath.parentPath.node.arguments[3]
+      let args = {}
+      if (argsNode) {
+        eval('args = ' + generate(argsNode).code)
+      }
 
-    const tokens = Prism.tokenize(code, Prism.languages[lang]).map(simplify)
-    const lines = normalizeTokens(Prism.tokenize(code, Prism.languages[lang]))
+      const codeTransformerNode = path.parentPath.parentPath.node.arguments[2]
+      let code = originalCode
+      if (codeTransformerNode) {
+        const codeTransformer = eval(generate(codeTransformerNode).code)
+        code = codeTransformer(code, args)
+      }
 
-    path.parentPath.parentPath.replaceWith(
-      parseExpression(
-        JSON.stringify({
-          tokens,
-          lines,
-          ...(returnCode ? { code: returnCode === 'original' ? originalCode : code } : {}),
-          ...args,
-        })
+      const tokens = Prism.tokenize(code, Prism.languages[lang])
+
+      path.parentPath.parentPath.replaceWith(
+        parseExpression(
+          JSON.stringify({
+            ...(type === 'tokens' ? { tokens: tokens.map(simplify) } : {}),
+            ...(type === 'lines' ? { lines: normalizeTokens(tokens) } : {}),
+            ...(returnCode ? { code: returnCode === 'original' ? originalCode : code } : {}),
+            ...args,
+          })
+        )
       )
-    )
-  })
+    }
+  }
 }
 
 // https://github.com/FormidableLabs/prism-react-renderer/blob/master/src/utils/normalizeTokens.js

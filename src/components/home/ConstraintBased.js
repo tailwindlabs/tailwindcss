@@ -8,11 +8,11 @@ import { ReactComponent as ArrowIcon } from '@/img/icons/arrow.svg'
 import { defaultConfig } from '@/utils/defaultConfig'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
-import tokenize from '../../macros/tokenize.macro'
+import { tokenizeWithLines } from '../../macros/tokenize.macro'
 import styles from './ConstraintBased.module.css'
 
 const tokens = {
-  sizing: tokenize.html(`<ul class="space-y-4">
+  sizing: tokenizeWithLines.html(`<ul class="space-y-4">
   <li>
     <div class="[w-64] h-3 bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
   </li>
@@ -45,7 +45,7 @@ const tokens = {
   </li>
 </ul>
 `).lines,
-  color: tokenize.html(`<ul class="space-y-2">
+  color: tokenizeWithLines.html(`<ul class="space-y-2">
   <li>
     <ul class="grid grid-cols-10 h-7">
       <li class="[bg-red-50]"></li>
@@ -132,7 +132,7 @@ const tokens = {
   </li>
 </ul>
 `).lines,
-  typography: tokenize.html(`<ul class="space-y-6">
+  typography: tokenizeWithLines.html(`<ul class="space-y-6">
   <li>
     <p class="[font-sans]">
       ABCDEFGHIJKLMNOPQRSTUVWXYZ
@@ -156,7 +156,7 @@ const tokens = {
   </li>
 </ul>
 `).lines,
-  shadows: tokenize.html(`<ul class="grid grid-cols-2 gap-4">
+  shadows: tokenizeWithLines.html(`<ul class="grid grid-cols-2 gap-4">
   <li>
     <div class="[shadow-sm] bg-white rounded-lg h-18"></div>
   </li>

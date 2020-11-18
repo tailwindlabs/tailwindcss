@@ -7,7 +7,7 @@ import { ReactComponent as Icon } from '@/img/icons/home/browser-support.svg'
 import { Fragment, useState } from 'react'
 import { AnimatePresence, motion, useInvertedScale } from 'framer-motion'
 import { usePrevious } from '@/hooks/usePrevious'
-import tokenize from '../../macros/tokenize.macro'
+import { tokenizeWithLines } from '../../macros/tokenize.macro'
 import clsx from 'clsx'
 
 const gradients = [
@@ -38,7 +38,7 @@ const blocksClassNames = [
 ]
 
 const lines = {
-  grid: tokenize.html(`<div class="grid grid-flow-col grid-rows-2 grid-cols-3 gap-4">
+  grid: tokenizeWithLines.html(`<div class="grid grid-flow-col grid-rows-2 grid-cols-3 gap-4">
   <div>
     1
   </div>
@@ -56,7 +56,7 @@ const lines = {
   </div>
 </div>
 `).lines,
-  transforms: tokenize.html(`<div class="grid grid-flow-col grid-rows-2 grid-cols-3 gap-4">
+  transforms: tokenizeWithLines.html(`<div class="grid grid-flow-col grid-rows-2 grid-cols-3 gap-4">
   <div class="transform scale-110 -rotate-6">
     1
   </div>
@@ -74,7 +74,7 @@ const lines = {
   </div>
 </div>
 `).lines,
-  gradients: tokenize.html(`<div class="bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
+  gradients: tokenizeWithLines.html(`<div class="bg-gradient-to-br from-fuchsia-500 to-purple-600"></div>
 <div class="bg-gradient-to-br from-light-blue-400 to-indigo-500"></div>
 <div class="bg-gradient-to-br from-cyan-400 to-light-blue-500"></div>
 <div class="bg-gradient-to-br from-green-400 to-cyan-500"></div>

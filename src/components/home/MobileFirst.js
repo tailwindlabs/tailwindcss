@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
 import { ReactComponent as Icon } from '@/img/icons/home/mobile-first.svg'
 import styles from './MobileFirst.module.css'
-import tokenize from '../../macros/tokenize.macro'
+import { tokenizeWithLines } from '../../macros/tokenize.macro'
 import { addClassTokens2 } from '@/utils/addClassTokens'
 import clsx from 'clsx'
 
@@ -21,7 +21,7 @@ const images = {
   '/beach-house-interior.jpg': require('@/img/beach-house-interior.jpg').default,
 }
 
-const { code: html, lines, classNames } = tokenize.html(
+const { code: html, lines, classNames } = tokenizeWithLines.html(
   `<div class="{container}">
   <div class="{header}">
     <p class="{preheading}">Entire house</p>

@@ -3,7 +3,7 @@ import { GradientLockup } from '@/components/GradientLockup'
 import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import styles from './EditorTools.module.css'
-import tokenize from '../../macros/tokenize.macro'
+import { tokenizeWithLines } from '../../macros/tokenize.macro'
 import { motion } from 'framer-motion'
 import { Fragment, useEffect, useState } from 'react'
 import { ReactComponent as Icon } from '@/img/icons/home/editor-tools.svg'
@@ -57,7 +57,7 @@ const completions = [
   ['bg-top'],
 ]
 
-const { lines } = tokenize.html(`<div class="__CONFLICT__">
+const { lines } = tokenizeWithLines.html(`<div class="__CONFLICT__">
   <div class="flex-1 truncate">
     <div class="flex items-center space-x-3">
       <h3 class="text-gray-900 text-sm font-medium truncate">Jane Cooper</h3>

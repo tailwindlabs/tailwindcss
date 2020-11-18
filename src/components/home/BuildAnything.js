@@ -6,10 +6,10 @@ import { CodeWindow, getClassNameForToken } from '@/components/CodeWindow'
 import { gradients } from '@/utils/gradients'
 import { ReactComponent as Icon } from '@/img/icons/home/build-anything.svg'
 import { HtmlZenGarden } from '@/components/HtmlZenGarden'
-import tokenize from '../../macros/tokenize.macro'
+import { tokenizeWithLines } from '../../macros/tokenize.macro'
 import clsx from 'clsx'
 
-const { lines } = tokenize.html(`<div class="_">
+const { lines } = tokenizeWithLines.html(`<div class="_">
   <div class="_">
     <img src="https://unsplash.it/200/200" alt="" class="_" />
   </div>
