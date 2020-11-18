@@ -6,7 +6,8 @@
 <path d="M116 32L132 48H148L212 104H44L116 32Z" fill="#34D399"/>
 <path d="M116 38V52L100 68L144 104H50L116 38Z" fill="#6EE7B7"/>
 <rect y="96" width="192" height="40" fill="#A7F3D0"/>
-<rect x="2" y="2" width="188" height="124" rx="10" stroke="#10B981" stroke-opacity="0.2" stroke-width="4"/>
+<rect x="4" y="4" width="184" height="120" rx="8" stroke="#10B981" stroke-opacity="0.2" stroke-width="8"/>
+<rect x="2" y="2" width="188" height="124" rx="10" stroke="#ECFDF5" stroke-width="4"/>
 </g>
 <defs>
 <clipPath id="clip0">
