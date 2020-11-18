@@ -29,7 +29,10 @@ export function VersionSwitcher({ className }) {
           <option value="v0">v0.7.4</option>
         </select>
       </label>
-      <svg className="w-5 h-5 text-gray-400 absolute top-1/2 right-0 -mt-2.5" fill="currentColor">
+      <svg
+        className="w-5 h-5 text-gray-400 absolute top-1/2 right-0 -mt-2.5 pointer-events-none"
+        fill="currentColor"
+      >
         <path
           fillRule="evenodd"
           clipRule="evenodd"
