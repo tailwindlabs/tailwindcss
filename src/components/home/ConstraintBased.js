@@ -349,14 +349,14 @@ export function ConstraintBased() {
                       animate={{ opacity: 1 }}
                     />
                     <ul className="relative z-20 w-full flex-none grid grid-cols-2 gap-4">
-                      {['sm', 'default', 'md', 'lg', 'xl', '2xl'].map((shadow, i) => (
+                      {['sm', 'DEFAULT', 'md', 'lg', 'xl', '2xl'].map((shadow, i) => (
                         <motion.li
                           key={shadow}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: [0.1, 0.1, 0.2, 0.2, 0.3, 0.3][i] }}
                         >
-                          <div>{`shadow${shadow === 'default' ? '' : `-${shadow}`}`}</div>
+                          <div>{`shadow${shadow === 'DEFAULT' ? '' : `-${shadow}`}`}</div>
                           <div
                             className="bg-white rounded-lg h-18 mt-1"
                             style={{ boxShadow: defaultConfig.theme.boxShadow[shadow] }}

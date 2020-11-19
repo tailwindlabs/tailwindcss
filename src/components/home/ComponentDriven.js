@@ -17,7 +17,7 @@ import styles from './ComponentDriven.module.css'
 
 const recipes = [
   {
-    title: 'Hank’s Juciest Beef Burger',
+    title: 'Hank’s Juiciest Beef Burger',
     rating: 4.94,
     time: 20,
     difficulty: 'Easy',
