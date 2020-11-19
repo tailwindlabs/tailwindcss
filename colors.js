@@ -1,4 +1,5 @@
 module.exports = {
+  transparent: 'transparent',
   black: '#000',
   white: '#fff',
   rose: {
