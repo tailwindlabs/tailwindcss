@@ -559,6 +559,97 @@ test('you can apply utilities with multi-class selectors like group-hover varian
 
 test('you can apply classes recursively', () => {
   const input = `
+    .baz {
+      color: blue;
+    }
+    .bar {
+      @apply baz px-4;
+    }
+    .foo {
+      @apply bar;
+    }
+  `
+  const expected = `
+    .baz {
+      color: blue;
+    }
+    .bar {
+      padding-left: 1rem;
+      padding-right: 1rem;
+      color: blue;
+    }
+    .foo {
+      padding-left: 1rem;
+      padding-right: 1rem;
+      color: blue;
+    }
+  `
+
+  expect.assertions(2)
+
+  return run(input).then((result) => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test.skip('you can apply complex classes recursively', () => {
+  const input = `
+    .button {
+      @apply rounded-xl px-6 py-2 hover:text-white focus:border-opacity-100;
+    }
+
+    .button-yellow {
+      @apply button bg-yellow-600 text-gray-200;
+    }
+  `
+  const expected = `
+    .button:focus {
+      --tw-border-opacity: 1;
+    }
+    .button {
+      border-radius: 0.75rem;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+    .button:hover {
+      --tw-text-opacity: 1;
+      color: rgba(255, 255, 255, var(--tw-text-opacity));
+    }
+    .button-yellow:focus {
+      --tw-border-opacity: 1;
+    }
+    .button-yellow {
+      border-radius: 0.75rem;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+    .button-yellow:hover {
+      --tw-text-opacity: 1;
+      color: rgba(255, 255, 255, var(--tw-text-opacity));
+    }
+    .button-yellow {
+      --tw-bg-opacity: 1;
+      background-color: rgba(217, 119, 6, var(--tw-bg-opacity));
+      --tw-text-opacity: 1;
+      color: rgba(229, 231, 235, var(--tw-text-opacity));
+    }
+  `
+
+  expect.assertions(2)
+
+  return run(input).then((result) => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('you can apply classes recursively out of order', () => {
+  const input = `
     .foo {
       @apply bar;
     }
