@@ -291,14 +291,14 @@
   left: 0;
   width: 1.25rem;
   height: 0.25rem;
-  background: #fafafa;
+  background: #fff;
 }
 
 .DocSearch-Hit--Child + .DocSearch-Hit:not(.DocSearch-Hit--Child)::before {
   top: auto;
   bottom: calc(100% + 0.25rem);
   height: calc(100% + 0.25rem);
-  background-color: #fafafa;
+  background-color: #fff;
 }
 
 .DocSearch-Hits mark {
