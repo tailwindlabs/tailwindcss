@@ -148,10 +148,12 @@ export default function Home() {
                 >
                   a few thousand words
                 </a>{' '}
-                on why traditional “semantic class names” are the reason CSS is hard to maintain,
-                but the truth is you’re never going to believe me until you actually try it. If you
-                can suppress the initial gag reflex long enough to give it a chance, I promise
-                you’re in for a good time.
+                <Widont>
+                  on why traditional “semantic class names” are the reason CSS is hard to maintain,
+                  but the truth is you’re never going to believe me until you actually try it. If
+                  you can suppress the urge to retch long enough to give it a chance, I really think
+                  you'll wonder how you ever worked with CSS any other way.
+                </Widont>
               </Paragraph>
             </blockquote>
             <figcaption className="sm:text-xl font-medium flex flex-col items-center">
