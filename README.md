@@ -13,7 +13,7 @@
     <a href="https://codecov.io/gh/tailwindlabs/tailwindcss"><img src="https://codecov.io/gh/tailwindlabs/tailwindcss/coverage.svg?branch=master" alt="Code Coverage"></a>
 </p>
 
-------
+---
 
 ## Documentation
 
@@ -27,7 +27,7 @@ For help, discussion about best practices, or any other conversation that would 
 
 For casual chit-chat with others using the framework:
 
-[Join the Tailwind CSS Discord Server](https://discord.gg/7NF8GNe)
+[Join the Tailwind CSS Discord Server](https://discord.gg/ye8kh923tH)
 
 ## Contributing
 
