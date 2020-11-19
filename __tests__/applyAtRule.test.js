@@ -1134,6 +1134,45 @@ test('you can apply classes to a rule with multiple selectors', () => {
   })
 })
 
+test('you can apply classes to a rule with multiple selectors with important and a prefix enabled', () => {
+  const input = `
+    @supports (display: grid) {
+      .foo, h1 > .bar * {
+        @apply tw-float-left tw-opacity-50 hover:tw-opacity-100 md:tw-float-right;
+      }
+    }
+    `
+
+  const expected = `
+    @supports (display: grid) {
+      .foo, h1 > .bar * {
+        float: left;
+        opacity: 0.5;
+      }
+      .foo:hover, h1 > .bar *:hover {
+        opacity: 1;
+      }
+      @media (min-width: 768px) {
+        .foo, h1 > .bar * {
+          float: right;
+        }
+      }
+    }
+  `
+  const config = resolveConfig([
+    {
+      ...defaultConfig,
+      prefix: 'tw-',
+      important: true,
+    },
+  ])
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('you can apply classes in a nested rule', () => {
   const input = `
     .selector {
