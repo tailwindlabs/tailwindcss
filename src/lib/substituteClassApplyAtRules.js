@@ -96,7 +96,7 @@ function buildUtilityMap(css, lookupTree) {
   let index = 0
   const utilityMap = {}
 
-  function handle(rule) {
+  function handle(getRule, rule) {
     const utilityNames = extractUtilityNames(rule.selector)
 
     utilityNames.forEach((utilityName, i) => {
@@ -108,16 +108,29 @@ function buildUtilityMap(css, lookupTree) {
         index,
         utilityName,
         classPosition: i,
-        get rule() {
-          return cloneRuleWithParent(rule)
-        },
+        ...getRule(rule),
       })
       index++
     })
   }
 
-  lookupTree.walkRules(handle)
-  css.walkRules(handle)
+  // Lookup tree is the big lookup tree, making the rule lazy allows us to save
+  // some memory because we don't need everything.
+  lookupTree.walkRules(
+    handle.bind(null, (rule) => ({
+      get rule() {
+        return cloneRuleWithParent(rule)
+      },
+    }))
+  )
+
+  // This is the end user's css. This might contain rules that we want to
+  // apply. We want immediate copies of everything in case that we have user
+  // defined classes that are recursively applied. Down below we are modifying
+  // the rules directly. We could do a better solution where we keep track of a
+  // dependency tree, but that is a bit more complex. Might revisit later,
+  // we'll see how this turns out!
+  css.walkRules(handle.bind(null, (rule) => ({ rule: cloneRuleWithParent(rule) })))
 
   return utilityMap
 }
