@@ -18,12 +18,10 @@ export const classes = {
   ),
   preview: (css, { className }) => (
     <td
-      className={`w-16 font-medium text-base whitespace-nowrap align-middle ${className}`}
-      style={{
-        color: Array.isArray(css['color']) ? css['color'][0] : css['color'],
-      }}
+      className={`text-center font-medium text-base whitespace-nowrap align-middle ${className}`}
+      style={css}
     >
-      Aa
+      <div className="w-16 mx-auto">Aa</div>
     </td>
   ),
 }

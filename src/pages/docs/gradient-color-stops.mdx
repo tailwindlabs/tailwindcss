@@ -21,15 +21,17 @@ export const classes = {
   },
   preview: (css) => (
     <td
-      className={`w-24 ${css['background-color'] === 'transparent' ? 'bg-checkered' : ''}`}
+      className={css['background-color'] === 'transparent' ? 'bg-checkered' : undefined}
       style={{
         backgroundColor: ([
           css['--tw-gradient-from'],
-          css['--tw-gradient-via'],
-          css['--tw-gradient-to']
-        ]).filter(c => c !== undefined)[0],
+          css['--tw-gradient-to'],
+          css['--tw-gradient-stops']
+        ]).filter(c => c !== undefined)[0].match(/(#[a-f0-9]+|transparent|currentColor)/i)[0],
       }}
-    />
+    >
+      <div className="w-24" />
+    </td>
   ),
 }
 

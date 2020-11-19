@@ -17,13 +17,15 @@ export const classes = {
   plugin,
   preview: (css) => (
     <td
-      className={`w-24 ${css['background-color'] === 'transparent' ? 'bg-checkered' : ''}`}
+      className={css['background-color'] === 'transparent' ? 'bg-checkered' : undefined}
       style={{
         backgroundColor: Array.isArray(css['background-color'])
           ? css['background-color'][0]
           : css['background-color'],
       }}
-    />
+    >
+      <div className="w-24" />
+    </td>
   ),
 }
 
