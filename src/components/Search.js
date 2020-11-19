@@ -126,9 +126,11 @@ export function Search() {
                 const a = document.createElement('a')
                 a.href = item.url
 
+                const hash = a.hash === '#content-wrapper' ? '' : a.hash
+
                 return {
                   ...item,
-                  url: `${a.pathname}${a.hash}`,
+                  url: `${a.pathname}${hash}`,
                 }
               })
             }}

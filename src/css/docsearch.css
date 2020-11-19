@@ -21,9 +21,15 @@
   }
 }
 
-@screen xl {
+@screen md {
   .DocSearch-Container {
-    padding: 2rem;
+    padding: 10vh;
+  }
+}
+
+@screen lg {
+  .DocSearch-Container {
+    padding: 12vh;
   }
 }
 
@@ -44,10 +50,9 @@
 }
 
 .DocSearch-Modal {
-  margin: auto;
+  margin: 0 auto;
   width: 100%;
-  max-width: 758px;
-  max-height: 652px;
+  max-width: 47.375rem;
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -70,6 +75,7 @@
   flex: auto;
   display: flex;
   align-items: center;
+  min-width: 0;
 }
 
 .DocSearch-Dropdown {
@@ -105,6 +111,7 @@
   margin-left: 1rem;
   margin-right: 1rem;
   flex: auto;
+  min-width: 0;
 }
 
 .DocSearch-Input:focus {
@@ -127,6 +134,7 @@
 }
 
 .DocSearch-Cancel {
+  flex: none;
   font-size: 0;
   border-radius: 0.375rem;
   background-color: theme('colors.gray.50');
@@ -181,6 +189,7 @@
   flex: auto;
   display: flex;
   flex-direction: column-reverse;
+  min-width: 0;
 }
 
 .DocSearch-Hit-path {
@@ -198,6 +207,9 @@
   color: black;
   line-height: 1.5rem;
   font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .DocSearch-Hit[aria-selected='true'] .DocSearch-Hit-title {
@@ -210,6 +222,7 @@
 
 .DocSearch-Hit-action {
   flex: none;
+  margin-left: 0.875rem;
 }
 
 .DocSearch-Hit-action-button {
