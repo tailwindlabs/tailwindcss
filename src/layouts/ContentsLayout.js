@@ -169,7 +169,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
   let { prev, next } = usePrevNext()
 
   return (
-    <div id={meta.containerId} className="pt-10 pb-16 w-full flex">
+    <div id={meta.containerId} className="pt-10 pb-24 lg:pb-16 w-full flex">
       <div className="min-w-0 flex-auto px-4 sm:px-6 xl:px-8">
         <PageHeader
           title={meta.title}
