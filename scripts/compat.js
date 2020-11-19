@@ -37,10 +37,16 @@ if (process.argv.includes('--prepare')) {
   // 5. Remove peerDependencies
   delete packageJson.peerDependencies
 
-  // 6. Write package.json with the new contents
+  // 6. Use new name
+  packageJson.name = '@tailwindcss/postcss7-compat'
+
+  // 7. Make sure you can publish
+  packageJson.publishConfig = { access: 'public' }
+
+  // 8. Write package.json with the new contents
   fs.writeFileSync(fromRootPath('package.json'), JSON.stringify(packageJson, null, 2), 'utf8')
 
-  // 7. Print some useful information to make publishing easy
+  // 9. Print some useful information to make publishing easy
   console.log()
   console.log('You can safely publish `tailwindcss` in PostCSS 7 compatibility mode:\n')
   console.log(
