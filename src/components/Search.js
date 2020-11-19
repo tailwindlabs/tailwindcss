@@ -1,9 +1,12 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { DocSearchModal, useDocSearchKeyboardEvents } from '@docsearch/react'
+
+const ACTION_KEY_DEFAULT = ['Ctrl ', 'Control']
+const ACTION_KEY_APPLE = ['⌘', 'Command']
 
 function Hit({ hit, children }) {
   return (
@@ -18,6 +21,7 @@ export function Search() {
   const [isOpen, setIsOpen] = useState(false)
   const searchButtonRef = useRef()
   const [initialQuery, setInitialQuery] = useState(null)
+  const [actionKey, setActionKey] = useState()
 
   const onOpen = useCallback(() => {
     setIsOpen(true)
@@ -42,6 +46,16 @@ export function Search() {
     onInput,
     searchButtonRef,
   })
+
+  useEffect(() => {
+    if (typeof navigator !== 'undefined') {
+      if (/(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+        setActionKey(ACTION_KEY_APPLE)
+      } else {
+        setActionKey(ACTION_KEY_DEFAULT)
+      }
+    }
+  }, [])
 
   return (
     <>
@@ -71,17 +85,19 @@ export function Search() {
         <span>
           Quick search<span className="hidden sm:inline"> for anything</span>
         </span>
-        <span className="hidden sm:block text-gray-400 text-sm leading-5 py-0.5 px-1.5 border border-gray-300 rounded-md">
-          <span className="sr-only">Press </span>
-          <kbd className="font-sans">
-            <abbr title="Cmd" className="no-underline">
-              ⌘
-            </abbr>
-          </kbd>
-          <span className="sr-only"> and </span>
-          <kbd className="font-sans">K</kbd>
-          <span className="sr-only"> to search</span>
-        </span>
+        {actionKey && (
+          <span className="hidden sm:block text-gray-400 text-sm leading-5 py-0.5 px-1.5 border border-gray-300 rounded-md">
+            <span className="sr-only">Press </span>
+            <kbd className="font-sans">
+              <abbr title={actionKey[1]} className="no-underline">
+                {actionKey[0]}
+              </abbr>
+            </kbd>
+            <span className="sr-only"> and </span>
+            <kbd className="font-sans">K</kbd>
+            <span className="sr-only"> to search</span>
+          </span>
+        )}
       </button>
       {isOpen &&
         createPortal(
