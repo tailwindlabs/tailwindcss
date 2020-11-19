@@ -50,49 +50,51 @@ function Nav({ nav, children, fallbackHref }) {
     <nav
       id="nav"
       ref={scrollRef}
-      className="px-1 pt-6 overflow-y-auto font-medium text-base sm:px-3 xl:px-5 lg:text-sm lg:py-10 sticky?lg:h-(screen-18)"
+      className="px-1 pt-6 overflow-y-auto font-medium text-base sm:px-3 xl:px-5 lg:text-sm pb-10 lg:pt-10 lg:pb-16 sticky?lg:h-(screen-18)"
     >
       <div className="relative flex mb-8 px-3 lg:hidden">
         <VersionSwitcher />
       </div>
-      <TopLevelNav />
-      {children}
-      {nav &&
-        Object.keys(nav)
-          .map((category) => {
-            let publishedItems = nav[category].filter((item) => item.published !== false)
-            if (publishedItems.length === 0 && !fallbackHref) return null
-            return (
-              <div className="mb-8" key={category}>
-                <h5
-                  className={clsx(
-                    'px-3 mb-3 lg:mb-3 uppercase tracking-wide font-semibold text-sm lg:text-xs',
-                    {
-                      'text-gray-900': publishedItems.length > 0,
-                      'text-gray-400': publishedItems.length === 0,
-                    }
-                  )}
-                >
-                  {category}
-                </h5>
-                <ul>
-                  {(fallbackHref ? nav[category] : publishedItems).map((item, i) => (
-                    <NavItem
-                      key={i}
-                      href={item.href}
-                      isActive={item.href === router.pathname}
-                      ref={item.href === router.pathname ? activeItemRef : undefined}
-                      isPublished={item.published !== false}
-                      fallbackHref={fallbackHref}
-                    >
-                      {item.shortTitle || item.title}
-                    </NavItem>
-                  ))}
-                </ul>
-              </div>
-            )
-          })
-          .filter(Boolean)}
+      <ul>
+        <TopLevelNav />
+        {children}
+        {nav &&
+          Object.keys(nav)
+            .map((category) => {
+              let publishedItems = nav[category].filter((item) => item.published !== false)
+              if (publishedItems.length === 0 && !fallbackHref) return null
+              return (
+                <li key={category} className="mt-8">
+                  <h5
+                    className={clsx(
+                      'px-3 mb-3 lg:mb-3 uppercase tracking-wide font-semibold text-sm lg:text-xs',
+                      {
+                        'text-gray-900': publishedItems.length > 0,
+                        'text-gray-400': publishedItems.length === 0,
+                      }
+                    )}
+                  >
+                    {category}
+                  </h5>
+                  <ul>
+                    {(fallbackHref ? nav[category] : publishedItems).map((item, i) => (
+                      <NavItem
+                        key={i}
+                        href={item.href}
+                        isActive={item.href === router.pathname}
+                        ref={item.href === router.pathname ? activeItemRef : undefined}
+                        isPublished={item.published !== false}
+                        fallbackHref={fallbackHref}
+                      >
+                        {item.shortTitle || item.title}
+                      </NavItem>
+                    ))}
+                  </ul>
+                </li>
+              )
+            })
+            .filter(Boolean)}
+      </ul>
     </nav>
   )
 }
@@ -100,25 +102,27 @@ function Nav({ nav, children, fallbackHref }) {
 const TopLevelAnchor = forwardRef(
   ({ children, href, className, icon, isActive, onClick, color }, ref) => {
     return (
-      <a
-        ref={ref}
-        href={href}
-        onClick={onClick}
-        className={clsx(
-          'flex items-center px-3 hover:text-gray-900 transition-colors duration-200',
-          className,
-          {
-            'text-gray-900': isActive,
-          }
-        )}
-      >
-        <div className={`mr-3 rounded-md bg-gradient-to-br ${gradients[color][0]}`}>
-          <svg className="h-6 w-6" viewBox="0 0 24 24">
-            {icon}
-          </svg>
-        </div>
-        {children}
-      </a>
+      <li>
+        <a
+          ref={ref}
+          href={href}
+          onClick={onClick}
+          className={clsx(
+            'flex items-center px-3 hover:text-gray-900 transition-colors duration-200',
+            className,
+            {
+              'text-gray-900': isActive,
+            }
+          )}
+        >
+          <div className={`mr-3 rounded-md bg-gradient-to-br ${gradients[color][0]}`}>
+            <svg className="h-6 w-6" viewBox="0 0 24 24">
+              {icon}
+            </svg>
+          </div>
+          {children}
+        </a>
+      </li>
     )
   }
 )
@@ -140,11 +144,12 @@ function TopLevelNav() {
   let current = pathname.split('/')[1]
 
   return (
-    <div className="mb-10 space-y-4">
+    <>
       <TopLevelLink
         href="/docs"
         isActive={current === '' || current === 'docs'}
         color="pink"
+        className="mb-4"
         icon={
           <>
             <path
@@ -167,6 +172,7 @@ function TopLevelNav() {
       <TopLevelLink
         href="https://tailwindui.com/components?utm_source=tailwindcss&utm_medium=navigation"
         color="violet"
+        className="mb-4"
         icon={
           <>
             <path d="M6 9l6-3 6 3v6l-6 3-6-3V9z" fill="#F5F3FF" />
@@ -180,6 +186,7 @@ function TopLevelNav() {
       <TopLevelLink
         href="https://play.tailwindcss.com"
         color="amber"
+        className="mb-4"
         icon={
           <>
             <path
@@ -202,6 +209,7 @@ function TopLevelNav() {
       <TopLevelLink
         href="https://blog.tailwindcss.com"
         color="teal"
+        className="mb-4"
         icon={
           <>
             <path
@@ -222,6 +230,7 @@ function TopLevelNav() {
         href="/resources"
         isActive={current === 'resources'}
         color="blue"
+        className="mb-4"
         icon={
           <>
             <path d="M17 13a1 1 0 011 1v3a1 1 0 01-1 1H8.5a2.5 2.5 0 010-5H17z" fill="#93C5FD" />
@@ -239,6 +248,7 @@ function TopLevelNav() {
       <TopLevelLink
         href="https://www.youtube.com/tailwindlabs"
         color="purple"
+        className="mb-10"
         icon={
           <>
             <circle cx="12" cy="12" r="7" fill="#F3E8FF" />
@@ -251,7 +261,7 @@ function TopLevelNav() {
       >
         Screencasts
       </TopLevelLink>
-    </div>
+    </>
   )
 }
 
