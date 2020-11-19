@@ -37,7 +37,7 @@ jobs:
         env:
           CI: true
       - run: npm run prepublishOnly
-      - run: npm test
+      - run: npm test -- --coverage
         env:
           CI: true
       - run: bash <(curl -s --retry 5 --retry-delay 2 --connect-timeout 2 https://codecov.io/bash)
