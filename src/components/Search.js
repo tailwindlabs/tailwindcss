@@ -89,7 +89,7 @@ export function Search() {
             initialQuery={initialQuery}
             initialScrollY={window.scrollY}
             searchParameters={{
-              facetFilters: 'version:v1',
+              facetFilters: 'version:v2',
               distinct: 1,
             }}
             onClose={onClose}
