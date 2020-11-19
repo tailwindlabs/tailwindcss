@@ -3,9 +3,8 @@ title: "Brand"
 description: "Tailwind CSS brand assets and usage guidelines."
 ---
 
-export const Layout = require('@/layouts/ContentsLayout').ContentsLayoutOuter
-export default require('@/layouts/BasicLayout').BasicLayout
-
+export const Layout = require('@/layouts/DocumentationLayout').DocumentationLayout
+export default require('@/layouts/ContentsLayout').ContentsLayout
 
 ## Usage
 
@@ -25,22 +24,29 @@ These assets are provided for use in situations like articles and video tutorial
 
 ### Mark
 
-<div className="py-8">
+<div className="pt-5 pb-8">
   <a href={require('@/img/brand/tailwindcss-mark.svg').default} download>
     <span className="sr-only">Download mark</span>
-    <img className="h-20 w-auto"src={require('@/img/brand/tailwindcss-mark.svg').default} alt="" width={54} height={33} />
+    <div className="max-w-xl">
+      <div className="relative" style={{ paddingTop: `${33 / 262 * 100}%` }}>
+        <img className="absolute inset-0 w-full h-full object-contain object-left" src={require('@/img/brand/tailwindcss-mark.svg').default} alt="" width={54} height={33} style={{ margin: 0 }} />
+      </div>
+    </div>
   </a>
 </div>
 
 <a href={require('@/img/brand/tailwindcss-mark.svg').default} download>Download mark</a>
 
-
 ### Logotype
 
-<div className="py-8">
+<div className="pt-5 pb-8">
   <a href={require('@/img/brand/tailwindcss-logotype.svg').default} download>
     <span className="sr-only">Download logotype</span>
-    <img className="w-auto h-20" src={require('@/img/brand/tailwindcss-logotype.svg').default} alt="" width={262} height={33} />
+    <div className="max-w-xl">
+      <div className="relative" style={{ paddingTop: `${33 / 262 * 100}%` }}>
+        <img className="absolute inset-0 w-full h-full" src={require('@/img/brand/tailwindcss-logotype.svg').default} alt="" width={262} height={33} style={{ margin: 0 }} />
+      </div>
+    </div>
   </a>
 </div>
 
