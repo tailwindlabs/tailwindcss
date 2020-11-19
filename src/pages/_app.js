@@ -15,6 +15,13 @@ const progress = new ProgressBar({
   delay: 100,
 })
 
+// this fixes safari jumping to the bottom of the page
+// when closing the search modal using the `esc` key
+if (typeof window !== 'undefined') {
+  progress.start()
+  progress.finish()
+}
+
 Router.events.on('routeChangeStart', progress.start)
 Router.events.on('routeChangeComplete', () => {
   progress.finish()
