@@ -132,7 +132,7 @@ For simple projects or just giving Tailwind a spin, you can use the Tailwind CLI
 Use `npx` which is a tool that is automatically installed alongside `npm` to generate a fully compiled Tailwind CSS file:
 
 ```shell
-npx tailwindcss build -o tailwind.css
+npx -p postcss -p autoprefixer -c "tailwindcss build -o tailwind.css"
 ```
 
 This will create a file called `tailwind.css` generated based on Tailwind's [default configuration](https://unpkg.com/browse/tailwindcss@^2/stubs/defaultConfig.stub.js), and automatically add any necessary vendor prefixes using [autoprefixer](https://github.com/postcss/autoprefixer).
@@ -173,7 +173,7 @@ If you'd like to process any custom CSS alongside the default styles Tailwind ge
 Then include the path to that file when building your CSS with `npx tailwindcss build`:
 
 ```shell
-npx tailwindcss build ./src/tailwind.css -o ./dist/tailwind.css
+npx -p postcss -p autoprefixer -c "tailwindcss build ./src/tailwind.css -o ./dist/tailwind.css"
 ```
 
 Read about [adding base styles](/docs/adding-base-styles), [extracting components](/docs/extracting-components), and [adding new utilities](/docs/adding-new-utilities) to learn more about adding custom CSS on top of Tailwind.
@@ -205,13 +205,13 @@ module.exports = {
 This file will automatically be read when building your CSS with `npx tailwindcss build`:
 
 ```shell
-npx tailwindcss build ./src/tailwind.css -o ./dist/tailwind.css
+npx -p postcss -p autoprefixer -c "tailwindcss build ./src/tailwind.css -o ./dist/tailwind.css"
 ```
 
 If you'd like to keep your config file in a different location or give it a different name, pass the config file path using the `-c` option when building your CSS:
 
 ```shell
-npx tailwindcss build ./src/tailwind.css -c ./.config/tailwind.config.js -o ./dist/tailwind.css
+npx -p postcss -p autoprefixer -c "tailwindcss build ./src/tailwind.css -c ./.config/tailwind.config.js -o ./dist/tailwind.css"
 ```
 
 Learn more about configuring Tailwind in the [configuration documentation](/docs/configuration).
@@ -221,7 +221,7 @@ Learn more about configuring Tailwind in the [configuration documentation](/docs
 When building for production, set `NODE_ENV=production` on the command line when building your CSS:
 
 ```shell
-NODE_ENV=production npx tailwindcss build ./src/tailwind.css -o ./dist/tailwind.css
+NODE_ENV=production npx -p postcss -p autoprefixer -c "tailwindcss build ./src/tailwind.css -o ./dist/tailwind.css"
 ```
 
 This will make sure Tailwind removes any unused CSS and minifies the CSS file for best performance. Read our separate guide on [optimizing for production](/docs/optimizing-for-production) to learn more.
