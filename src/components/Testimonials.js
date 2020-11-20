@@ -37,7 +37,7 @@ const testimonials = [
     },
   },
   {
-    content: `I have no design skills and with Tailwind I can actually make good looking websites with ease and it's everything I ever wanted in a CSS framework`,
+    content: `I have no design skills and with Tailwind I can actually make good looking websites with ease and it's everything I ever wanted in a CSS framework.`,
     author: {
       name: 'Sara Vieira',
       role: 'CodeSandbox',
