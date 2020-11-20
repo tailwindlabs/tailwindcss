@@ -37,6 +37,14 @@ const testimonials = [
     },
   },
   {
+    content: `I have no design skills and with Tailwind I can actually make good looking websites with ease and it's everything I ever wanted in a CSS framework`,
+    author: {
+      name: 'Sara Vieira',
+      role: 'CodeSandbox',
+      avatar: require('@/img/avatars/sara-vieira.jpg').default,
+    },
+  },
+  {
     content:
       "I used Tailwind to redesign feltpresence.com the other day. It's fantastic! I only gave myself a few hours to hack it together and it made a huge difference.",
     author: {
@@ -46,6 +54,37 @@ const testimonials = [
     },
   },
   {
+    content: `I started using @tailwindcss. I instantly fell in love with their responsive modifiers, thorough documentation, and how easy it was customizing color palettes.`,
+    tweetUrl: 'https://twitter.com/dacey_nolan/status/1303744545587441666',
+    author: {
+      name: 'Dacey Nolan',
+      role: 'Software Engineer',
+      avatar: require('@/img/avatars/dacey-nolan.jpg').default,
+    },
+  },
+
+  {
+    content: 'Loved it the very moment I used it.',
+    tweetUrl: 'Gilbert Rabut Tsurwa',
+    author: {
+      name: 'Gilbert Rabut Tsurwa',
+      role: 'Web Developer',
+      avatar: require('@/img/avatars/gilbert-rabut-tsurwa.jpg').default,
+    },
+  },
+
+  {
+    content:
+      'I came into my job wondering why the last dev would ever implement Tailwind into our projects, within days I was a Tailwind convert and use it for all of my personal projects.',
+    tweetUrl: 'https://twitter.com/maddiexcampbell/status/1303752658029740032',
+    author: {
+      name: 'Madeline Campbell',
+      role: 'Full-Stack Developer',
+      avatar: require('@/img/avatars/madeline-campbell.jpg').default,
+    },
+  },
+
+  {
     content:
       'There’s one thing that sucks about @tailwindcss - once you’ve used it on a handful of projects it is a real pain in the ass to write normal CSS again.',
     tweetUrl: 'https://twitter.com/iamgraem_e/status/1322861404781748228?s=21',
@@ -53,6 +92,27 @@ const testimonials = [
       name: 'Graeme Houston',
       role: 'JavaScript Developer',
       avatar: require('@/img/avatars/graeme-houston.jpg').default,
+    },
+  },
+
+  {
+    content: `Okay, I’m officially *all* in on the @tailwindcss hype train. Never thought building websites could be so ridiculously fast and flexible.`,
+    tweetUrl: 'https://twitter.com/lukeredpath/status/1316543571684663298?s=21',
+    author: {
+      name: 'Aaron Bushnell',
+      role: 'Programmer @ TrendyMinds',
+      avatar: require('@/img/avatars/aaron-bushnell.jpg').default,
+    },
+  },
+
+  {
+    content:
+      'Have been working with CSS for over ten years and Tailwind just makes my life easier. It is still CSS and you use flex, grid, etc. but just quicker to write and maintain.',
+    tweetUrl: 'https://twitter.com/debs_obrien/status/1243255468241420288',
+    author: {
+      name: `Head of Learning @ Nuxt.js`,
+      role: 'Full-Stack Developer',
+      avatar: require('@/img/avatars/debbie-obrien.jpg').default,
     },
   },
   {
@@ -80,15 +140,6 @@ const testimonials = [
       name: 'Luke Redpath',
       role: 'Ruby & iOS Developer',
       avatar: require('@/img/avatars/luke-redpath.jpg').default,
-    },
-  },
-  {
-    content: `Okay, I’m officially *all* in on the @tailwindcss hype train. Never thought building websites could be so ridiculously fast and flexible.`,
-    tweetUrl: 'https://twitter.com/lukeredpath/status/1316543571684663298?s=21',
-    author: {
-      name: 'Aaron Bushnell',
-      role: 'Programmer @ TrendyMinds',
-      avatar: require('@/img/avatars/aaron-bushnell.jpg').default,
     },
   },
   {
@@ -186,7 +237,7 @@ function Testimonial({ testimonial, base, index, total }) {
 export function Testimonials() {
   const x = useMotionValue(0)
   const { inView, ref: inViewRef } = useInView({ threshold: 0, rootMargin: '100px' })
-  const [duration, setDuration] = useState(100)
+  const [duration, setDuration] = useState(250)
 
   useEffect(() => {
     if (!inView) return
@@ -205,8 +256,8 @@ export function Testimonials() {
     <div
       ref={inViewRef}
       className="relative"
-      onMouseEnter={() => setDuration(300)}
-      onMouseLeave={() => setDuration(100)}
+      onMouseEnter={() => setDuration(500)}
+      onMouseLeave={() => setDuration(250)}
     >
       <div
         className="absolute right-0 bottom-1/2 left-0 bg-gradient-to-t from-gray-100 pointer-events-none"
