@@ -31,6 +31,14 @@ If you need to support IE 11, we recommend continuing to use Tailwind CSS v1.9 u
 
 Tailwind CSS v2.0 no longer supports Node.js 8 or 10. To build your CSS you'll need to ensure you are running Node.js 12.13.0 or higher in both your local and CI environments.
 
+## Update typography and forms plugins
+
+If you are using `@tailwindcss/typography`, you'll want to [upgrade to v0.3.0](https://github.com/tailwindlabs/tailwindcss-typography/releases/tag/v0.3.0) which adds Tailwind CSS v2.0 support.
+
+If you are using `@tailwindcss/custom-forms`, you will want to migrate to `@tailwindcss/forms` which replaces it. Learn more about the new forms plugin in [the release notes](https://blog.tailwindcss.com/tailwindcss-v2#utility-friendly-form-styles).
+
+The `@tailwindcss/custom-forms` plugin is not compatible with Tailwind CSS v2.0.
+
 ## Update renamed utility classes
 
 A small number of utilities have been renamed in v2.0:

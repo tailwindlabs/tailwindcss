@@ -3,13 +3,6 @@ title: "Install Tailwind CSS with Create React App"
 description: "Setting up Tailwind CSS in a Create React App project."
 ---
 
-<!-- 
-#####
-Launch day test: getting errors with the `require('tailwindcss/postcss7')` in craco config.
-Changing that to `require('tailwindcss') fixes it.
-#####
--->
-
 ## Creating your project
 
 Start by creating a new Create React App project if you don't have one set up already:
@@ -20,13 +13,13 @@ npx create-react-app my-project
 
 ## Setting up Tailwind CSS
 
-Install Tailwind, Autoprefixer and CRACO using `npm` or `yarn`:
+Install Tailwind CSS, PostCSS, Autoprefixer and CRACO using `npm`:
 
 ```shell
-npm install tailwindcss@compat autoprefixer@9 @craco/craco
+npm install tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9 @craco/craco
 ```
 
-> Create React App currently only supports PostCSS 7, so you need to install the compatibility version of Tailwind CSS and Autoprefixer v9 until they update to PostCSS 8.
+Create React App currently only supports PostCSS 7, which is why we are installing [the compatibility build](https://tailwindcss.com/docs/installation#post-css-7-compatibility-build) for now.
 
 Next, update your `scripts` in your `package.json` file to use `craco` instead of `react-scripts` for all scripts except `eject`:
 
@@ -45,13 +38,13 @@ Next, update your `scripts` in your `package.json` file to use `craco` instead o
   }
 ```
 
-Next, let's generate default `tailwind.config.js`:
+Next generate your `tailwind.config.js` file:
 
 ```shell
 npx tailwindcss init
 ```
 
-Then, let's create a `craco.config.js` at the root of our project, with the following settings:
+Then create a `craco.config.js` at the root of our project and add the following PostCSS configuration:
 
 ```js
 // craco.config.js
@@ -64,7 +57,7 @@ module.exports = {
 };
 ```
 
-Now, let's replace the content of `src/index.css` with the following:
+Now, replace the content of `src/index.css` with all of the `@tailwind` directives needed to generate Tailwind's styles:
 
 ```css
 @tailwind base;
@@ -72,4 +65,4 @@ Now, let's replace the content of `src/index.css` with the following:
 @tailwind utilities;
 ```
 
-That's it! Tailwind CSS is now available throughout our entire application 🎉
+That's it! Tailwind CSS is now installed in your project.
