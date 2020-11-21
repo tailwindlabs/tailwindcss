@@ -237,7 +237,7 @@ function Testimonial({ testimonial, base, index, total }) {
 export function Testimonials() {
   const x = useMotionValue(0)
   const { inView, ref: inViewRef } = useInView({ threshold: 0, rootMargin: '100px' })
-  const [duration, setDuration] = useState(250)
+  const [duration, setDuration] = useState(150)
 
   useEffect(() => {
     if (!inView) return
@@ -256,8 +256,8 @@ export function Testimonials() {
     <div
       ref={inViewRef}
       className="relative"
-      onMouseEnter={() => setDuration(500)}
-      onMouseLeave={() => setDuration(250)}
+      onMouseEnter={() => setDuration(250)}
+      onMouseLeave={() => setDuration(150)}
     >
       <div
         className="absolute right-0 bottom-1/2 left-0 bg-gradient-to-t from-gray-100 pointer-events-none"
