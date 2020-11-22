@@ -363,15 +363,15 @@ You should update all usage of `default` in your config file to `DEFAULT`, _exce
 
 Reference [the complete default configuration](https://github.com/tailwindlabs/tailwindcss/blob/master/stubs/defaultConfig.stub.js) to see where we now use `DEFAULT` and where we still use `default` if you are unclear about what changes you need to make to your own configuration.
 
-## Move deliberately shallow extends to top-level
+## Move deliberately shallow extend to top-level
 
-In Tailwind CSS v1.0, theme changes under `extends` were merged shallowly. So this configuration would override _all_ of the purple colors:
+In Tailwind CSS v1.0, theme changes under `extend` were merged shallowly. So this configuration would override _all_ of the purple colors:
 
 ```js
 // tailwind.config.js
 module.exports = {
   theme: {
-    extends: {
+    extend: {
       colors: {
         purple: {
           light: '#E9D8FD',
