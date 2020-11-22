@@ -41,6 +41,28 @@ If you are using `@tailwindcss/custom-forms`, you will want to migrate to `@tail
 
 The `@tailwindcss/custom-forms` plugin is not compatible with Tailwind CSS v2.0.
 
+## Remove future and experimental configuration options
+
+As of v2.0 there are no `future` or `experimental` options available, so you can remove any configuration like this from your `tailwind.config.js` file:
+
+```diff-js
+  module.exports = {
+-   future: {
+-     defaultLineHeights: true,
+-     purgeLayersByDefault: true,
+-     removeDeprecatedGapUtilities: true,
+-   },
+-   experimental: {
+-       additionalBreakpoint: true,
+-       extendedFontSizeScale: true,
+-       extendedSpacingScale: true,
+-   },
+    // ...
+  }
+```
+
+We will continue to use the `experimental` option in the future for new feature ideas but the `future` option will probably not be used.
+
 ## Update renamed utility classes
 
 A small number of utilities have been renamed in v2.0:
