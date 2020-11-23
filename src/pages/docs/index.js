@@ -43,8 +43,8 @@ const whatsNew = [
     href: '/docs/breakpoints',
   },
   {
-    title: 'Sharable Presets',
-    image: require('@/img/docs/sharable-presets.svg').ReactComponent,
+    title: 'Shareable Presets',
+    image: require('@/img/docs/shareable-presets.svg').ReactComponent,
     href: '/docs/presets',
   },
   {
