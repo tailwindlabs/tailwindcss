@@ -7,6 +7,12 @@ import Router from 'next/router'
 import ProgressBar from '@badrap/bar-of-progress'
 import Head from 'next/head'
 import twitterLargeCard from '@/img/twitter-large-card.jpg'
+import { ResizeObserver } from '@juggle/resize-observer'
+import 'intersection-observer'
+
+if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
+  window.ResizeObserver = ResizeObserver
+}
 
 const progress = new ProgressBar({
   size: 2,

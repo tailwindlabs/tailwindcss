@@ -316,7 +316,7 @@ export function HtmlZenGarden({ theme }) {
   )
 
   useEffect(() => {
-    const observer = new ResizeObserver(updateWidth)
+    const observer = new window.ResizeObserver(updateWidth)
     observer.observe(containerRef.current)
     updateWidth()
     return () => {

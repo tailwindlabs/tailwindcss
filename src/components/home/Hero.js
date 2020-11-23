@@ -260,7 +260,7 @@ export function Hero() {
   }, [wide, finished])
 
   useEffect(() => {
-    const observer = new ResizeObserver(
+    const observer = new window.ResizeObserver(
       debounce(() => {
         if (containerRef.current) {
           setContainerRect(containerRef.current.getBoundingClientRect())
