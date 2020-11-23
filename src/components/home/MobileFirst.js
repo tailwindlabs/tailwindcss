@@ -138,11 +138,20 @@ function BrowserWindow({ size, onChange, height = 385 }) {
   const marginRight = useTransform(x, (x) => -x)
 
   useIsomorphicLayoutEffect(() => {
-    const width =
-      constraintsRef.current.offsetWidth -
-      parseInt(window.getComputedStyle(document.documentElement).fontSize, 10) * (HANDLE_RADIUS * 2)
-    setConstraintsWidth(width)
-    x.set(-width)
+    const update = () => {
+      const width =
+        constraintsRef.current.offsetWidth -
+        parseInt(window.getComputedStyle(document.documentElement).fontSize, 10) *
+          (HANDLE_RADIUS * 2)
+      setConstraintsWidth(width)
+      x.set(-width)
+    }
+    const observer = new window.ResizeObserver(update)
+    observer.observe(constraintsRef.current)
+    update()
+    return () => {
+      observer.disconnect()
+    }
   }, [])
 
   useEffect(() => {
@@ -171,7 +180,7 @@ function BrowserWindow({ size, onChange, height = 385 }) {
     updateSize(x.get())
 
     return x.onChange(updateSize)
-  }, [x, size, constraintsWidth])
+  }, [x, size, constraintsWidth, md])
 
   return (
     <div className="relative">
@@ -231,13 +240,6 @@ function BrowserWindow({ size, onChange, height = 385 }) {
             width: `${HANDLE_RADIUS * 2}rem`,
             height: `${HANDLE_RADIUS * 2}rem`,
             marginTop: `-${HANDLE_RADIUS}rem`,
-          }}
-          onMeasureDragConstraints={({ left, right }) => {
-            const width = right - left
-            setConstraintsWidth(width)
-            if (x.get() < -width) {
-              x.set(-width)
-            }
           }}
           onDragStart={() => document.body.classList.add('cursor-grabbing')}
           onDragEnd={() => document.body.classList.remove('cursor-grabbing')}
