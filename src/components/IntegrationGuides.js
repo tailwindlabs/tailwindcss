@@ -50,25 +50,18 @@ const guides = [
     logo: RailsLogo,
     link: '/docs/guides/rails',
   },
-  // {
-  //   name: 'Svelte',
-  //   logo: SvelteLogo,
-  //   link: '/docs/guides/svelte',
-  // },
 ]
 
 export function IntegrationGuides() {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 xl:gap-8 text-center">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
       {guides.map((guide) => {
         const Logo = guide.logo
         return (
           <Link href={guide.link} key={guide.name}>
-            <a className="flex flex-col items-center p-4 shadow-sm ring-1 ring-black ring-opacity-5 rounded-xl">
+            <a className="flex flex-col items-center py-4 shadow-sm ring-1 ring-black ring-opacity-5 rounded-xl">
               <Logo className="h-12 w-auto" />
-              <div className="mt-3 text-sm text-gray-900 font-semibold sm:text-base sm:mt-2">
-                {guide.name}
-              </div>
+              <div className="mt-3 text-sm text-gray-900 font-semibold sm:mt-2">{guide.name}</div>
             </a>
           </Link>
         )

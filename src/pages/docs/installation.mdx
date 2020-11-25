@@ -9,7 +9,21 @@ import { IntegrationGuides } from '@/components/IntegrationGuides'
 import Link from 'next/link'
 import stats from '@/utils/stats'
 
-## Installing Tailwind as a PostCSS plugin
+<!--
+
+## Integration guides
+
+Installing Tailwind CSS can be a slightly different process depending on what other frameworks/tools you're using, so we've put together a bunch of guides that cover popular setups.
+
+<IntegrationGuides/>
+
+Don't see your favorite tool in the list? Follow the instructions for [installing Tailwind CSS as a PostCSS plugin](#installing-tailwind-css-as-a-post-css-plugin) instead to get set up in no time.
+
+---
+
+-->
+
+## Installing Tailwind CSS as a PostCSS plugin
 
 For most real-world projects, we recommend installing Tailwind as a PostCSS plugin. Most modern frameworks use PostCSS under the hood already, and there's a good chance you've used or are currently using other PostCSS plugins like [autoprefixer](https://github.com/postcss/autoprefixer).
 
@@ -25,7 +39,7 @@ For most projects (and to take advantage of Tailwind's customization features), 
 npm install tailwindcss postcss autoprefixer
 ```
 
-Since Tailwind [does not automatically add vendor prefixes](/docs/browser-support#vendor-prefixes) to the CSS it generates, we recommend installing [autoprefixer](https://github.com/postcss/autoprefixer) to handle this for you.
+Since Tailwind [does not automatically add vendor prefixes](/docs/browser-support#vendor-prefixes) to the CSS it generates, we recommend installing [autoprefixer](https://github.com/postcss/autoprefixer) to handle this for you like we've shown in the snippet above.
 
 If you're integrating Tailwind with a tool that relies on an older version of PostCSS, you may see an error like this:
 
@@ -49,7 +63,7 @@ module.exports = {
 }
 ```
 
-If you aren't sure where PostCSS plugins are configured for the tools you're using, you'll want to refer to the documentation for those tools to learn where this should go. A search for "configure postcss {my tool}" will get you the answer pretty fast too.
+If you aren't sure where PostCSS plugins are configured for the tools you're using, you'll want to refer to the documentation for those tools to learn where this should go. A search for "configure postcss {my tool}" will get you the answer pretty fast, too.
 
 If you're using any other PostCSS plugins, you should read our documentation on [using PostCSS as your preprocessor](/docs/using-with-preprocessors) for more details about the best way to order them with Tailwind.
 
@@ -104,7 +118,6 @@ If you're working in a JavaScript framework like React or Vue that supports dire
 ```js
 // app.js
 import "tailwindcss/tailwind.css"
-
 ```
 
 ### Building your CSS
@@ -113,7 +126,25 @@ How you actually build your project will depend on the tools that you're using. 
 
 If you're already familiar with PostCSS you probably know what you need to do, if not refer to the documentation for the tool you are using.
 
-When building for production, be sure to read our separate guide on [optimizing for production](/docs/optimizing-for-production) to learn about tree-shaking unused styles for best performance.
+When building for production, be sure to configure the `purge` option to remove any unused classes for the smallest file size:
+
+```diff-js
+  // tailwind.config.js
+  module.exports = {
++   purge: [
++     './src/**/*.html',
++     './src/**/*.js',
++   ],
+    darkMode: false, // or 'media' or 'class'
+    theme: {
+      extend: {},
+    },
+    variants: {},
+    plugins: [],
+  }
+```
+
+Read our separate guide on [optimizing for production](/docs/optimizing-for-production) to learn more about tree-shaking unused styles for best performance.
 
 If you're integrating Tailwind with a tool that relies on an older version of PostCSS, you may see an error like this when trying to build your CSS:
 
