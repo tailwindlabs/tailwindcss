@@ -95,7 +95,7 @@ In your `webpack.mix.js`, add `tailwindcss` as a PostCSS plugin:
 
 ### Include Tailwind in your CSS
 
-Open the `./resources/css/app.css` file included with a new Laravel project and use the `@tailwind` directive to include Tailwind's `base`, `components`, and `utilities` styles.
+Open the `./resources/css/app.css` file that Laravel generates for you by default and use the `@tailwind` directive to include Tailwind's `base`, `components`, and `utilities` styles.
 
 ```css
 /* ./resources/css/app.css */
@@ -107,6 +107,19 @@ Open the `./resources/css/app.css` file included with a new Laravel project and 
 Tailwind will swap these directives out at build-time with all of the styles it generates based on your configured design system.
 
 Read our documentation on [adding base styles](/docs/adding-base-styles), [extracting components](/docs/extracting-components), and [adding new utilities](/docs/adding-new-utilities) for best practices on extending Tailwind with your own custom CSS.
+
+Next, import your stylesheet in your main Blade layout (commonly `resources/views/layouts/app.php` or similar) and add the responsive viewport meta tag if it's not already present:
+
+```diff-html
+  <!doctype html>
+  <head>
+    <!-- ... --->
++   <meta charset="UTF-8" />
++   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+  </head>
+  <!-- ... --->
+```
 
 ---
 
