@@ -245,7 +245,7 @@ If you'd like to specify a default sort position for a custom variant, override 
 // tailwind.config.js
 module.exports = {
   // ...
-  variantOrder:
+  variantOrder: [
     'first',
     'last',
     'odd',
@@ -261,7 +261,7 @@ module.exports = {
     'active',
     'group-disabled', // Custom variant
     'disabled',
-  ,
+  ],
   variants: {
     extend: {
       backgroundColor: ['group-disabled'],
