@@ -1002,14 +1002,10 @@ describe('using apply with the prefix option', () => {
 
   test('a "Did You Mean" suggestion is omitted if a similar class cannot be identified.', () => {
     const input = `
-        .foo { @apply anteater; }
-      `
+      .foo { @apply anteater; }
+    `
 
-    const config = resolveConfig([
-      {
-        ...defaultConfig,
-      },
-    ])
+    const config = resolveConfig([{ ...defaultConfig }])
 
     expect.assertions(1)
 
@@ -1109,7 +1105,7 @@ test('you can apply classes to a rule with multiple selectors', () => {
         @apply float-left opacity-50 hover:opacity-100 md:float-right;
       }
     }
-    `
+  `
 
   const expected = `
     @supports (display: grid) {
@@ -1141,7 +1137,7 @@ test('you can apply classes to a rule with multiple selectors with important and
         @apply tw-float-left tw-opacity-50 hover:tw-opacity-100 md:tw-float-right;
       }
     }
-    `
+  `
 
   const expected = `
     @supports (display: grid) {
@@ -1149,9 +1145,11 @@ test('you can apply classes to a rule with multiple selectors with important and
         float: left;
         opacity: 0.5;
       }
+
       .foo:hover, h1 > .bar *:hover {
         opacity: 1;
       }
+
       @media (min-width: 768px) {
         .foo, h1 > .bar * {
           float: right;
@@ -1159,6 +1157,7 @@ test('you can apply classes to a rule with multiple selectors with important and
       }
     }
   `
+
   const config = resolveConfig([
     {
       ...defaultConfig,
@@ -1280,11 +1279,11 @@ test('declarations within a rule that uses @apply can be !important', () => {
   `
 
   const expected = `
-  .foo {
-    text-align: center;
-    float: left;
-    display: block !important;
-  }
+    .foo {
+      text-align: center;
+      float: left;
+      display: block !important;
+    }
   `
 
   expect.assertions(2)
@@ -1305,11 +1304,11 @@ test('declarations within a rule that uses @apply with !important remain not !im
   `
 
   const expected = `
-  .foo {
-    text-align: center !important;
-    float: left;
-    display: block !important;
-  }
+    .foo {
+      text-align: center !important;
+      float: left;
+      display: block !important;
+    }
   `
 
   expect.assertions(2)
