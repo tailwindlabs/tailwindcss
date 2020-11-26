@@ -5,7 +5,7 @@ description: "Setting up Tailwind CSS in a Next.js project."
 
 ## Creating your project
 
-Start by creating a new NextJS project if you don't have one set up already. The most common approach is to use [Create Next App](https://nextjs.org/docs/api-reference/create-next-app):
+Start by creating a new Next.js project if you don't have one set up already. The most common approach is to use [Create Next App](https://nextjs.org/docs/api-reference/create-next-app):
 
 ```shell
 npx create-next-app my-project
@@ -18,7 +18,7 @@ cd my-project
 
 ### Install Tailwind via npm
 
-Install Tailwind using `npm`:
+Install Tailwind and its peer-dependencies using `npm`:
 
 ```shell
 # If you're on Next.js v10
@@ -27,8 +27,6 @@ npm install tailwindcss postcss autoprefixer
 # If you're on Next.js 9 or older
 npm install tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9
 ```
-
-Since Tailwind [does not automatically add vendor prefixes](/docs/browser-support#vendor-prefixes) to the CSS it generates, we recommend installing [autoprefixer](https://github.com/postcss/autoprefixer) to handle this for you like we've shown in the snippet above.
 
 ### Create your configuration files
 
