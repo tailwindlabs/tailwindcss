@@ -3,27 +3,49 @@ title: "Install Tailwind CSS with Nuxt.js"
 description: "Setting up Tailwind CSS in a Nuxt.js project."
 ---
 
-# Using Tailwind CSS with Nuxt.js
-
 ## Creating your project
 
-Start by creating a new Nuxt.js project if you don't have one set up already. The most common approach is to use [`create-nuxt-app`](https://nuxtjs.org/guides/get-started/installation#using-create-nuxt-app):
+Start by creating a new Nuxt.js project if you don't have one set up already using [`create-nuxt-app`](https://nuxtjs.org/guides/get-started/installation#using-create-nuxt-app):
 
 ```shell
 npx create-nuxt-app my-project
 ```
 
+**Do not choose "Tailwind CSS" when prompted to select your "UI Framework"**. This will cause conflicts that prevents you from being able to install Tailwind CSS v2.0 due to the `@nuxtjs/tailwindcss` module depending on an old version of Tailwind.
+
+Next, change directories to your new project:
+
+```shell
+cd my-project
+```
+
+---
+
 ## Setting up Tailwind CSS
 
-If you've used `create-nuxt-app` and selected Tailwind CSS at the "UI Framework" step, you're already done - Tailwind will work out of the box! 👍
+### Install Tailwind via npm
 
-For other cases, you'll need to install the `@nuxtjs/tailwindcss` module. Let's add that dependency to our project using `npm` or `yarn`:
+If you already have the `@nuxtjs/tailwindcss` module installed for any reason, it's important that you uninstall it before installing Tailwind itself:
+
+```shell
+npm uninstall @nuxtjs/tailwindcss tailwindcss
+```
+
+Next, install Tailwind and its peer-dependencies:
+
+```shell
+npm install -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9
+```
+
+Nuxt.js doesn't support PostCSS 8 yet so you need to install [the Tailwind CSS v2.0 PostCSS 7 compatibility build](/docs/installation#post-css-7-compatibility-build) for now as we've shown above.
+
+Next, install the `@nuxtjs/tailwindcss` module:
 
 ```shell
 npm install -D @nuxtjs/tailwindcss
 ```
 
-Next, add it to your `buildModules` section in your `nuxt.config.js` file:
+Add the `@nuxtjs/tailwindcss` module to the `buildModules` section of your `nuxt.config.js` file:
 
 ```js
 // nuxt.config.js
@@ -32,24 +54,74 @@ export default {
 }
 ```
 
-⚠️ Note: if you are using version `2.9.0` of Nuxt or earlier, use the `modules` property instead of `buildModules`.
+### Create your configuration file
 
-That's it! Tailwind CSS is now available in your entire Nuxt project 🎉
+Next, generate your `tailwind.config.js` file:
 
----
+```shell
+npx tailwindcss init
+```
 
-## Customizing the Taliwind config and writing custom CSS
+This will create a minimal `tailwind.config.js` file at the root of your project:
 
-If you want to customise the Tailwind config, simply create a `tailwind.config.js` in your project root.
+```js
+// tailwind.config.js
+module.exports = {
+  purge: [],
+  darkMode: false, // or 'media' or 'class'
+  theme: {
+    extend: {},
+  },
+  variants: {},
+  plugins: [],
+}
+```
 
-The `@nuxtjs/tailwindcss` module will also look for a CSS file in `./assets/css/tailwind.css`, which is where you can write your custom CSS and use things like `@apply`, `@responsive` or `@screen` directives.
+Learn more about configuring Tailwind in the [configuration documentation](/docs/configuration).
 
-If no file is found at that location, the default three `@tailwind` layer directives will be used:
+### Configure Tailwind to remove unused styles in production
+
+In your `tailwind.config.js` file, configure the `purge` option with the paths to all of your components so Tailwind can tree-shake unused styles in production builds:
+
+```diff-js
+  // tailwind.config.js
+  module.exports = {
+-   purge: [],
++   purge: [
++     './components/**/*.{vue,js}',
++     './layouts/**/*.vue',
++     './pages/**/*.vue',
++     './plugins/**/*.{js,ts}',
++     './nuxt.config.{js,ts}',
++   ],
+    darkMode: false, // or 'media' or 'class'
+    theme: {
+      extend: {}
+    },
+    variants: {},
+    plugins: []
+  }
+```
+
+Read our separate guide on [optimizing for production](/docs/optimizing-for-production) to learn more about tree-shaking unused styles for best performance.
+
+### Include Tailwind in your CSS
+
+Create a new CSS file at `./assets/css/tailwind.css` file and use the `@tailwind` directive to include Tailwind's `base`, `components`, and `utilities` styles inside your main CSS file.
 
 ```css
+/* ./src/index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 ```
 
-You can find more information on more advanced features of the `@nuxtjs/tailwindcss` module here: https://tailwindcss.nuxtjs.org/
+Tailwind will swap these directives out at build-time with all of the styles it generates based on your configured design system.
+
+Read our documentation on [adding base styles](/docs/adding-base-styles), [extracting components](/docs/extracting-components), and [adding new utilities](/docs/adding-new-utilities) for best practices on extending Tailwind with your own custom CSS.
+
+---
+
+You're finished! Now when you run `npm run dev` to start the Vite development server, Tailwind CSS will be ready to use in your project.
+
+[Next learn about the utility-first workflow &rarr;](/docs/utility-first)
