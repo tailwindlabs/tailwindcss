@@ -1179,6 +1179,43 @@ test('you can apply classes to a rule with multiple selectors with important and
   })
 })
 
+test('you can apply classes to multiple selectors at the same time, removing important', () => {
+  const input = `
+    .multiple p,
+    .multiple ul,
+    .multiple ol {
+      @apply mt-5;
+    }
+
+    .multiple h2,
+    .multiple h3,
+    .multiple h4 {
+      @apply mt-8;
+    }
+  `
+
+  const expected = `
+    .multiple p,
+    .multiple ul,
+    .multiple ol {
+      margin-top: 1.25rem;
+    }
+
+    .multiple h2,
+    .multiple h3,
+    .multiple h4 {
+      margin-top: 2rem;
+    }
+  `
+
+  const config = resolveConfig([{ ...defaultConfig, important: true }])
+
+  return run(input, config).then((result) => {
+    expect(result.css).toMatchCss(expected)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('you can apply classes in a nested rule', () => {
   const input = `
     .selector {
