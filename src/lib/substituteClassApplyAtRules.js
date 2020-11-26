@@ -242,11 +242,21 @@ function processApplyAtRules(css, lookupTree, config) {
           : (util) => util.rule.nodes.forEach((n) => afterRule.append(n.clone()))
       )
 
-      const { nodes } = _.tap(postcss.root({ nodes: rulesToInsert }), (root) =>
+      rulesToInsert.forEach((rule) => {
+        if (rule.type === 'atrule') {
+          rule.walkRules((rule) => {
+            rule.__tailwind = { ...rule.__tailwind, important }
+          })
+        } else {
+          rule.__tailwind = { ...rule.__tailwind, important }
+        }
+      })
+
+      const { nodes } = _.tap(postcss.root({ nodes: rulesToInsert }), (root) => {
         root.walkDecls((d) => {
           d.important = important
         })
-      )
+      })
 
       const mergedRules = mergeAdjacentRules(nearestParentRule, [...nodes, afterRule])
 
