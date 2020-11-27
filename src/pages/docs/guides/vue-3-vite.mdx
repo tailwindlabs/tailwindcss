@@ -22,7 +22,7 @@ npm install
 Install Tailwind and its peer-dependencies using `npm`:
 
 ```shell
-npm install --save-dev tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9
+npm install -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9
 ```
 
 Vue 3 and Vite don't support PostCSS 8 yet so you need to install [the Tailwind CSS v2.0 PostCSS 7 compatibility build](/docs/installation#post-css-7-compatibility-build) for now as we've shown above.
@@ -88,7 +88,7 @@ Read our separate guide on [optimizing for production](/docs/optimizing-for-prod
 
 ### Include Tailwind in your CSS
 
-Open the `./src/index.css` file that Vite generates for you by default and use the `@tailwind` directive to include Tailwind's `base`, `components`, and `utilities` styles inside your main CSS file.
+Open the `./src/index.css` file that Vite generates for you by default and use the `@tailwind` directive to include Tailwind's `base`, `components`, and `utilities` styles:
 
 ```css
 /* ./src/index.css */
