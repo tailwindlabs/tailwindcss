@@ -10,6 +10,8 @@ import tinytime from 'tinytime'
 import { Community } from '@/components/Community'
 import styles from './index.module.css'
 import { Widont } from '@/components/Widont'
+import { ReactComponent as TuiBundleLogo } from '@/img/tailwind-ui-bundle-logo.svg'
+import { ReactComponent as RefactoringUiCompleteLogo } from '@/img/refactoring-ui-complete-logo.svg'
 
 const whatsNew = [
   {
@@ -173,7 +175,49 @@ export default function DocsLandingPage() {
             <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-orange-500 hidden sm:block" />
           </div>
         </section>
-        <section className="md:col-span-3 flex flex-wrap md:flex-nowrap items-center bg-gray-800 shadow-lg rounded-2xl py-6 md:py-4 px-6 md:pr-5 space-y-4 md:space-y-0 md:space-x-8">
+        <section className="relative md:col-span-3 overflow-hidden flex flex-row-reverse text-sm font-bold text-cyan-600 uppercase tracking-widest text-center shadow-lg rounded-2xl">
+          <div className="relative flex-none w-5/12 md:w-1/3 flex items-center justify-center py-8">
+            <div
+              className="bg-gradient-to-br from-cyan-400 to-cyan-400 absolute inset-y-0 right-0 -left-16"
+              style={{ '--tw-gradient-from': '#22eeee' }}
+            />
+            <div className="relative">
+              <h2>
+                Holiday Special
+                <span className="sr-only">
+                  Tailwind UI (Application UI and Marketing) and Refactoring UI (Complete)
+                </span>
+              </h2>
+              <p className="text-3xl font-extrabold tracking-tight flex space-x-3 mt-2 mb-1.5">
+                <del>$398</del>
+                <ins className="no-underline text-gray-800">$279</ins>
+              </p>
+              <p>Save 30%</p>
+            </div>
+          </div>
+          <div className="relative z-10 flex-none w-7/12 md:w-2/3 flex items-center justify-center py-8">
+            <div className="bg-gray-900 absolute transform -skew-x-12 inset-y-0 right-0 -left-64" />
+            <div className="md:flex items-center">
+              <TuiBundleLogo className="relative" />
+              <svg
+                className=" relative mx-auto mt-4 mb-2 md:my-0 md:ml-4 xl:ml-9 xl:mr-4"
+                width="13"
+                height="14"
+                fill="none"
+              >
+                <path
+                  d="M5.653 13.34h1.7V7.89h5.45V6.2h-5.45V.751h-1.7v5.45H.205v1.69h5.448v5.448z"
+                  fill="#2D3B58"
+                />
+              </svg>
+              <RefactoringUiCompleteLogo className="relative lg:-ml-1 xl:ml-0 md:-mt-4 md:-mr-6" />
+            </div>
+          </div>
+          <a href="https://gum.co/iYYLC/holidays2020" className="absolute z-10 inset-0 rounded-2xl">
+            <span className="sr-only">Buy the Tailwind UI and Refactoring UI bundle now</span>
+          </a>
+        </section>
+        {/* <section className="md:col-span-3 flex flex-wrap md:flex-nowrap items-center bg-gray-800 shadow-lg rounded-2xl py-6 md:py-4 px-6 md:pr-5 space-y-4 md:space-y-0 md:space-x-8">
           <h2 className="flex-none">
             <span className="sr-only">Tailwind UI</span>
             <TuiLogo className="w-40 h-auto" />
@@ -187,7 +231,7 @@ export default function DocsLandingPage() {
           >
             Browse components
           </a>
-        </section>
+        </section> */}
       </div>
       <section>
         <h2 className="text-3xl tracking-tight font-extrabold text-gray-900 mt-16 mb-8">
