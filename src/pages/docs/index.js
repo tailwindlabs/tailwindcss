@@ -175,42 +175,42 @@ export default function DocsLandingPage() {
             <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-orange-500 hidden sm:block" />
           </div>
         </section>
-        <section className="relative md:col-span-3 overflow-hidden flex flex-row-reverse text-sm font-bold text-cyan-600 uppercase tracking-widest text-center shadow-lg rounded-2xl">
-          <div className="relative flex-none w-5/12 md:w-1/3 flex items-center justify-center py-8">
+        <section className="relative md:col-span-3 overflow-hidden flex flex-col-reverse sm:flex-row-reverse text-sm font-bold text-cyan-600 uppercase tracking-widest text-center shadow-lg rounded-2xl">
+          <div className="relative flex-none sm:w-5/12 md:w-1/3 xl:w-1/3 flex items-center justify-center py-6 sm:py-8">
             <div
               className="bg-gradient-to-br from-cyan-400 to-cyan-400 absolute inset-y-0 right-0 -left-16"
               style={{ '--tw-gradient-from': '#22eeee' }}
             />
             <div className="relative">
-              <h2>
-                Holiday Special
+              <h2 className="text-lg md:text-base xl:text-lg">
+                Holiday Bundle
                 <span className="sr-only">
                   Tailwind UI (Application UI and Marketing) and Refactoring UI (Complete)
                 </span>
               </h2>
-              <p className="text-3xl font-extrabold tracking-tight flex space-x-3 mt-2 mb-1.5">
+              <p className="text-4xl font-extrabold tracking-tight flex space-x-4 mt-1 mb-1.5 sm:text-4xl md:text-3xl xl:text-4xl">
                 <del>$398</del>
                 <ins className="no-underline text-gray-800">$279</ins>
               </p>
-              <p>Save 30%</p>
+              <p className="text-lg md:text-base xl:text-lg">Save 30%</p>
             </div>
           </div>
-          <div className="relative z-10 flex-none w-7/12 md:w-2/3 flex items-center justify-center py-8">
-            <div className="bg-gray-900 absolute transform -skew-x-12 inset-y-0 right-0 -left-64" />
-            <div className="md:flex items-center">
-              <TuiBundleLogo className="relative" />
+          <div className="relative z-10 flex-none bg-gray-900 sm:w-7/12 md:w-1/2 md:w-2/3 xl:w-2/3 flex items-center justify-center py-8 sm:bg-transparent">
+            <div className="hidden sm:block bg-gray-900 absolute transform -skew-x-12 inset-y-0 right-0 -left-64" />
+            <div className="flex flex-col md:flex-row items-center">
+              <TuiBundleLogo className="relative h-20 sm:h-20 md:h-16 xl:h-20" />
               <svg
-                className=" relative mx-auto mt-4 mb-2 md:my-0 md:ml-4 xl:ml-9 xl:mr-4"
+                className="relative mt-3 mx-10 xl:mt-0 md:ml-6 md:mr-0 xl:mr-3 text-gray-500"
                 width="13"
                 height="14"
                 fill="none"
               >
                 <path
                   d="M5.653 13.34h1.7V7.89h5.45V6.2h-5.45V.751h-1.7v5.45H.205v1.69h5.448v5.448z"
-                  fill="#2D3B58"
+                  fill="currentColor"
                 />
               </svg>
-              <RefactoringUiCompleteLogo className="relative lg:-ml-1 xl:ml-0 md:-mt-4 md:-mr-6" />
+              <RefactoringUiCompleteLogo className="relative h-20 sm:h-20 md:h-16 xl:h-20" />
             </div>
           </div>
           <a href="https://gum.co/iYYLC/holidays2020" className="absolute z-10 inset-0 rounded-2xl">
