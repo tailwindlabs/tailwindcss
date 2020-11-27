@@ -57,6 +57,10 @@ export default function App({ Component, pageProps, router }) {
   const description =
     meta.metaDescription || meta.description || 'Documentation for the Tailwind CSS framework.'
 
+  if (router.pathname.startsWith('/examples/')) {
+    return <Component {...pageProps} />
+  }
+
   return (
     <>
       <Title suffix="Tailwind CSS">{meta.metaTitle || meta.title}</Title>
