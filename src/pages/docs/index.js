@@ -195,12 +195,12 @@ export default function DocsLandingPage() {
               <p className="text-lg md:text-base xl:text-lg">Save 30%</p>
             </div>
           </div>
-          <div className="relative z-10 flex-none bg-gray-900 sm:w-7/12 md:w-1/2 md:w-2/3 xl:w-2/3 flex items-center justify-center py-8 sm:bg-transparent">
+          <div className="relative z-10 flex-none bg-gray-900 sm:w-7/12 md:w-2/3 xl:w-2/3 flex items-center justify-center py-8 sm:bg-transparent">
             <div className="hidden sm:block bg-gray-900 absolute transform -skew-x-12 inset-y-0 right-0 -left-64" />
             <div className="flex flex-col md:flex-row items-center">
               <TuiBundleLogo className="relative h-20 sm:h-20 md:h-16 xl:h-20" />
               <svg
-                className="relative mt-3 mx-10 xl:mt-0 md:ml-6 md:mr-0 xl:mr-3 text-gray-500"
+                className="relative mt-3 xl:mt-0 md:ml-6 xl:ml-9 md:mr-0 xl:mr-3 text-gray-500"
                 width="13"
                 height="14"
                 fill="none"
