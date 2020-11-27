@@ -49,7 +49,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.6.3",
     "postcss": "^8.0.9",
-    "prettier": "^2.1.2",
+    "prettier": "^2.2.0",
     "rimraf": "^3.0.0"
   },
   "peerDependencies": {
