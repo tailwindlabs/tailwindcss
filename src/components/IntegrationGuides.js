@@ -16,7 +16,7 @@ const guides = [
     link: '/docs/guides/nextjs',
   },
   {
-    name: 'Vue',
+    name: 'Vue 3 (Vite)',
     logo: Vue3Logo,
     link: '/docs/guides/vue-3-vite',
   },
@@ -40,21 +40,11 @@ const guides = [
     logo: GatsbyLogo,
     link: '/docs/guides/gatsby',
   },
-  {
-    name: 'Angular',
-    logo: AngularLogo,
-    link: '/docs/guides/angular',
-  },
-  {
-    name: 'Rails',
-    logo: RailsLogo,
-    link: '/docs/guides/rails',
-  },
 ]
 
 export function IntegrationGuides() {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-center">
       {guides.map((guide) => {
         const Logo = guide.logo
         return (

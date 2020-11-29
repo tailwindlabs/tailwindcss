@@ -3,56 +3,122 @@ title: "Install Tailwind CSS with Gatsby"
 description: "Setting up Tailwind CSS in a Gatsby project."
 ---
 
-
-<!--
-#####
-Launch day test: this works with the normal version of Tailwind - no need for @compat! 🎉
-I have updgraded the guide to reflect so.
-#####
--->
-
-# Using Tailwind CSS with Gatsby
-
 ## Creating your project
 
-Start by creating a new Gatsby project if you don't have one set up already. The most common approach is to use the [Gatsby CLI](https://www.gatsbyjs.com/docs/quick-start/#install-the-gatsby-cli):
+Start by creating a new Gatsby project if you don't have one set up already. The most common approach is to use [Gatsby CLI](https://www.gatsbyjs.com/docs/quick-start/#use-the-gatsby-cli):
 
 ```shell
 gatsby new my-project
+cd my-project
 ```
+
+---
 
 ## Setting up Tailwind CSS
 
-Install Tailwind, Autoprefixer, PostCSS and the `gatsby-plugin-postcss` Gatsby plugin using `npm` or `yarn`:
+### Install Tailwind via npm
+
+Install `gatsby-plugin-postcss` as well as Tailwind and its peer-dependencies using `npm`:
 
 ```shell
-npm install tailwindcss postcss autoprefixer gatsby-plugin-postcss
+npm install gatsby-plugin-postcss tailwindcss postcss autoprefixer
 ```
 
-Next, let's generate default `tailwind.config.js` **and** `postcss.config.js` files:
+### Create your configuration files
+
+Next, generate your `tailwind.config.js` and `postcss.config.js` files:
 
 ```shell
 npx tailwindcss init -p
 ```
 
-Let's include our Gatsby plugin in our `gatsby-config.js`:
+This will create a minimal `tailwind.config.js` file at the root of your project:
 
 ```js
-plugins: [`gatsby-plugin-postcss`],
+// tailwind.config.js
+module.exports = {
+  purge: [],
+  darkMode: false, // or 'media' or 'class'
+  theme: {
+    extend: {},
+  },
+  variants: {},
+  plugins: [],
+}
 ```
 
-Let's create a new CSS file in our `src` directory called `tailwind.css`. This file will contain three `@tailwind` declaratives:
+Learn more about configuring Tailwind in the [configuration documentation](/docs/configuration).
+
+It will also create a `postcss.config.js` file that includes `tailwindcss` and `autoprefixer` already configured:
+
+```js
+// postcss.config.js
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  }
+}
+```
+
+If you're planning to use any other PostCSS plugins, you should read our documentation on [using PostCSS as your preprocessor](/docs/using-with-preprocessors) for more details about the best way to order them alongside Tailwind.
+
+### Configure Tailwind to remove unused styles in production
+
+In your `tailwind.config.js` file, configure the `purge` option with the paths to all of your pages and components so Tailwind can tree-shake unused styles in production builds:
+
+```diff-js
+  // tailwind.config.js
+  module.exports = {
+-   purge: [],
++   purge: ["./src/**/*.{js,jsx,ts,tsx}"],
+    darkMode: false, // or 'media' or 'class'
+    theme: {
+      extend: {}
+    },
+    variants: {},
+    plugins: []
+  }
+```
+
+Read our separate guide on [optimizing for production](/docs/optimizing-for-production) to learn more about tree-shaking unused styles for best performance.
+
+### Include Tailwind in your CSS
+
+Create a CSS file like `global.css` within a folder like `./src/styles`:
+
+```shell
+cd src
+mkdir styles
+cd styles
+touch global.css
+```
+
+Then use the `@tailwind` directive to include Tailwind's `base`, `components`, and `utilities` styles:
 
 ```css
+/* ./src/styles/global.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 ```
 
-Finally, let's import this file in our layout. In this example, this corresponds to the `src/components/layout.js` file.
+Tailwind will swap these directives out at build-time with all of the styles it generates based on your configured design system.
 
-```js
-import "../tailwind.css";
+Read our documentation on [adding base styles](/docs/adding-base-styles), [extracting components](/docs/extracting-components), and [adding new utilities](/docs/adding-new-utilities) for best practices on extending Tailwind with your own custom CSS.
+
+Finally, create a `./gatsby-browser.js` file at the root of your project if it doesn't already exist, and import your CSS file:
+
+```diff-js
+  // ./gatsby-browser.js
++ import './src/styles/global.css';
 ```
 
-That's it! Tailwind CSS is now available throughout our entire Gatsby project 🎉
+Read [the Gatsby documentation on using global styles](https://www.gatsbyjs.com/tutorial/part-two/#using-global-styles) to learn more about working with global CSS files in Gatsby.
+
+---
+
+You're finished! Now when you run `gatsby develop` to start the Gatsby development server, Tailwind CSS will be ready to use in your project.
+
+[Next learn about the utility-first workflow &rarr;](/docs/utility-first)
+
