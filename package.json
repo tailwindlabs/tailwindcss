@@ -69,7 +69,7 @@
     "modern-normalize": "^1.0.0",
     "node-emoji": "^1.8.1",
     "object-hash": "^2.0.3",
-    "postcss-functions": "^3",
+    "postcss-functions": "^4.0.2",
     "postcss-js": "^3.0.3",
     "postcss-nested": "^5.0.1",
     "postcss-selector-parser": "^6.0.4",
