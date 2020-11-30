@@ -4,7 +4,7 @@ import nameClass from '../util/nameClass'
 export default function () {
   return function ({ addUtilities, theme, variants }) {
     const utilities = _.fromPairs(
-      _.map(theme('ringOffsetWidth'), (value, modifier) => {
+      _.map(_.omit(theme('ringOffsetWidth'), 'DEFAULT'), (value, modifier) => {
         return [
           nameClass('ring-offset', modifier),
           {

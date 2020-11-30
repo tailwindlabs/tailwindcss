@@ -20,8 +20,8 @@ export default function () {
       {
         '*': {
           '--tw-ring-inset': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-ring-offset-width': '0px',
-          '--tw-ring-offset-color': '#fff',
+          '--tw-ring-offset-width': theme('ringOffsetWidth.DEFAULT', '0px'),
+          '--tw-ring-offset-color': theme('ringOffsetColor.DEFAULT', '#fff'),
           '--tw-ring-color': ringColorDefault,
           '--tw-ring-offset-shadow': '0 0 #0000',
           '--tw-ring-shadow': '0 0 #0000',
