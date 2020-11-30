@@ -164,7 +164,7 @@ export function ResizableCodeSample({
             drag="x"
             _dragX={x}
             dragMomentum={false}
-            dragElastic={0.08}
+            dragElastic={0}
             dragConstraints={constraintsRef}
             className={`pointer-events-auto absolute top-1/2 -mt-4 w-8 hidden md:flex items-center justify-center cursor-grab active:cursor-grabbing ${
               min ? 'right-0 md:left-0 md:right-auto' : 'right-0'
