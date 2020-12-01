@@ -6,6 +6,7 @@
 
 @font-face {
   font-family: RobotoMono-Medium;
-  src: url(RobotoMono-Medium-subset.woff2) format("woff2"), url(RobotoMono-Medium-subset.zopfli.woff) format("woff");
-  unicode-range: U+20,U+49,U+63,U+6B,U+6E,U+6F,U+73,U+74;
+  src: url(RobotoMono-Medium-subset.woff2) format('woff2'),
+    url(RobotoMono-Medium-subset.zopfli.woff) format('woff');
+  unicode-range: U+20, U+49, U+63, U+6B, U+6E, U+6F, U+73, U+74;
 }

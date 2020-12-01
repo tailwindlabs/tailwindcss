@@ -6,6 +6,7 @@
 
 @font-face {
   font-family: Poppins-ExtraBold;
-  src: url(Poppins-ExtraBold-subset.woff2) format("woff2"), url(Poppins-ExtraBold-subset.zopfli.woff) format("woff");
-  unicode-range: U+50,U+69,U+6E-70,U+73;
+  src: url(Poppins-ExtraBold-subset.woff2) format('woff2'),
+    url(Poppins-ExtraBold-subset.zopfli.woff) format('woff');
+  unicode-range: U+50, U+69, U+6E-70, U+73;
 }
