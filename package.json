@@ -4,7 +4,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "export": "next build && next export"
+    "export": "next build && next export",
+    "format": "prettier '{src,remark,scripts}/**/*.{css,js,mdx}' --write"
   },
   "browserslist": [
     "> 1%"
@@ -65,6 +66,7 @@
     "eslint-plugin-import": "2.x",
     "eslint-plugin-jsx-a11y": "6.x",
     "eslint-plugin-react": "7.x",
-    "eslint-plugin-react-hooks": "2.x"
+    "eslint-plugin-react-hooks": "2.x",
+    "prettier": "^2.2.1"
   }
 }
