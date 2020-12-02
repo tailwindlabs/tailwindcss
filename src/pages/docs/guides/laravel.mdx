@@ -1,85 +1,30 @@
 ---
 title: "Install Tailwind CSS with Laravel"
 description: "Setting up Tailwind CSS in a Laravel project."
+tool: Laravel Mix
 ---
 
-## Creating your project
-
-Start by creating a new Laravel project if you don't have one set up already. The most common approach is to use the [Laravel Installer](https://laravel.com/docs/8.x#via-laravel-installer):
-
-```shell
-laravel new my-project
-cd my-project
-```
-
-Next, install Laravel's front-end dependencies using `npm`:
-
-```shell
-npm install
+```preval installation
+reference:
+  name: Laravel Installer 
+  link: https://laravel.com/docs/8.x#via-laravel-installer
+script: laravel 
+npmInstall: true
 ```
 
 ---
 
-## Setting up Tailwind CSS
-
-### Install Tailwind via npm
-
-Install Tailwind and its peer-dependencies using `npm`:
-
-```shell
-npm install -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9
+```preval setup
+version: compat-7
 ```
 
-Laravel Mix doesn't support PostCSS 8 yet *(but it's coming soon)* so you need to install [the Tailwind CSS v2.0 PostCSS 7 compatibility build](/docs/installation#post-css-7-compatibility-build) for now as we've shown above.
-
-### Create your configuration file
-
-Next, generate your `tailwind.config.js` file:
-
-```shell
-npx tailwindcss init
+```preval configuration
+postcss: false
+purge: 
+  - ./resources/**/*.blade.php
+  - ./resources/**/*.js
+  - ./resources/**/*.vue
 ```
-
-This will create a minimal `tailwind.config.js` file at the root of your project:
-
-```js
-// tailwind.config.js
-module.exports = {
-  purge: [],
-  darkMode: false, // or 'media' or 'class'
-  theme: {
-    extend: {},
-  },
-  variants: {},
-  plugins: [],
-}
-```
-
-Learn more about configuring Tailwind in the [configuration documentation](/docs/configuration).
-
-### Configure Tailwind to remove unused styles in production
-
-In your `tailwind.config.js` file, configure the `purge` option with the paths to all of your Blade templates and JavaScript components so Tailwind can tree-shake unused styles in production builds:
-
-```diff-js
-  // tailwind.config.js
-  module.exports = {
--   purge: [],
-+   purge: [
-+     './resources/**/*.blade.php',
-+     './resources/**/*.js',
-+     './resources/**/*.vue',
-+   ],
-    darkMode: false, // or 'media' or 'class'
-    theme: {
-      extend: {}
-    },
-    variants: {},
-    plugins: []
-  }
-```
-
-Read our separate guide on [optimizing for production](/docs/optimizing-for-production) to learn more about tree-shaking unused styles for best performance.
 
 ### Configure Tailwind with Laravel Mix
 
@@ -93,20 +38,9 @@ In your `webpack.mix.js`, add `tailwindcss` as a PostCSS plugin:
     ]);
 ```
 
-### Include Tailwind in your CSS
-
-Open the `./resources/css/app.css` file that Laravel generates for you by default and use the `@tailwind` directive to include Tailwind's `base`, `components`, and `utilities` styles.
-
-```css
-/* ./resources/css/app.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+```preval include
+file: ./resources/css/app.css
 ```
-
-Tailwind will swap these directives out at build-time with all of the styles it generates based on your configured design system.
-
-Read our documentation on [adding base styles](/docs/adding-base-styles), [extracting components](/docs/extracting-components), and [adding new utilities](/docs/adding-new-utilities) for best practices on extending Tailwind with your own custom CSS.
 
 Next, import your stylesheet in your main Blade layout (commonly `resources/views/layouts/app.php` or similar) and add the responsive viewport meta tag if it's not already present:
 
@@ -123,6 +57,10 @@ Next, import your stylesheet in your main Blade layout (commonly `resources/view
 
 ---
 
-You're finished! Now when you run `npm run watch`, `npm run dev`, or `npm run prod` to run Laravel Mix, Tailwind CSS will be ready to use in your project.
+```preval finish
+scripts:
+  - npm run watch
+  - npm run dev
+  - npm run prod
+```
 
-[Next learn about the utility-first workflow &rarr;](/docs/utility-first)
