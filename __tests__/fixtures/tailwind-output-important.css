@@ -24851,6 +24851,10 @@ video {
   overflow-wrap: break-word !important;
 }
 
+.break-keep-all {
+  word-break: keep-all !important;
+}
+
 .break-all {
   word-break: break-all !important;
 }
