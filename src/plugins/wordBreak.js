@@ -9,9 +9,7 @@ export default function () {
         '.break-words': {
           'overflow-wrap': 'break-word',
         },
-        '.break-keep-all': {
-          'overflow-wrap': 'keep-all',
-        },
+        '.break-keep-all': { 'word-break': 'keep-all'},
         '.break-all': { 'word-break': 'break-all' },
       },
       variants('wordBreak')
