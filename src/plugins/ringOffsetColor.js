@@ -7,7 +7,7 @@ export default function () {
   return function ({ addUtilities, theme, variants }) {
     const colors = flattenColorPalette(theme('ringOffsetColor'))
     const utilities = _.fromPairs(
-      _.map(colors, (value, modifier) => {
+      _.map(_.omit(colors, 'DEFAULT'), (value, modifier) => {
         return [
           nameClass('ring-offset', modifier),
           {

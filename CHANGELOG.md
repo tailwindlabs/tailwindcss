@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix issue with `@apply` not working as expected with `!important` inside an atrule ([#2824](https://github.com/tailwindlabs/tailwindcss/pull/2824))
 - Fix issue with `@apply` not working as expected with defined classes ([#2832](https://github.com/tailwindlabs/tailwindcss/pull/2832))
 
+### Added
+
+- Add default values for the `ring` utility ([#2951](https://github.com/tailwindlabs/tailwindcss/pull/2951))
+
 ## [2.0.1] - 2020-11-18
 
 - Nothing, just the only thing I could do when I found out npm won't let me publish the same version under two tags.
