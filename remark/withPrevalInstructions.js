@@ -74,7 +74,7 @@ function error(input) {
   return `<div class="fixed top-0 left-0 right-0 p-4 z-50 bg-red-500 text-white text-2xl">Pages contains issues!</div><span class="font-bold bg-red-100 bg-opacity-50 ring-4 ring-red-600 ring-opacity-75 rounded-2xl px-2">${input}</span>`
 }
 
-function code(language, contents, { file = null, indent = 6 } = {}) {
+function code(language, contents, { file = null, indent = 8 } = {}) {
   let diffIndentation = language.includes('diff-') ? '  ' : ''
   let comment = {
     js: (data) => `// ${data}`,
