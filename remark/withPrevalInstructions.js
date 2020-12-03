@@ -111,9 +111,7 @@ function createPrevals({ tool: pageTool = error('UNKNOWN') } = {}) {
         Start by creating a new ${tool} project if you don't have one set up already.
         ${
           reference !== null
-            ? `The most common approach is to use ${
-                reference.prefix !== undefined ? `${reference.prefix} ` : ''
-              }[${reference.name}](${reference.link}):`
+            ? `The most common approach is to use [${reference.name}](${reference.link}):`
             : ''
         }
 
