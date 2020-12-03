@@ -25,32 +25,19 @@ purge:
 
 ### Enable gatsby-plugin-postcss 
 
-In your `gatsby-config.js` file, enable the [postcss plugin](https://www.gatsbyjs.com/plugins/gatsby-plugin-postcss/)
+In your `gatsby-config.js` file, enable the [postcss plugin](https://www.gatsbyjs.com/plugins/gatsby-plugin-postcss/).
 
 ```diff-js
   // gatsby-config.js
   module.exports = {
     /* Your site config here */
 -   plugins: [],
-+   plugins: [`gatsby-plugin-postcss`],
++   plugins: ['gatsby-plugin-postcss'],
   }
-
 ```
-
-### Include Tailwind in your CSS
-
-Create a CSS file like `global.css` within a folder like `./src/styles`:
-
-```shell
-cd src
-mkdir styles
-cd styles
-touch global.css
-```
-
-Then use the `@tailwind` directive to include Tailwind's `base`, `components`, and `utilities` styles:
 
 ```preval include
+create: true
 file: ./src/styles/global.css
 ```
 

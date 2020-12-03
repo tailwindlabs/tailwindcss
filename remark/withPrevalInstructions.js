@@ -111,7 +111,9 @@ function createPrevals({ tool: pageTool = error('UNKNOWN') } = {}) {
         Start by creating a new ${tool} project if you don't have one set up already.
         ${
           reference !== null
-            ? `The most common approach is to use [${reference.name}](${reference.link}):`
+            ? `The most common approach is to use ${
+                reference.prefix !== undefined ? `${reference.prefix} ` : ''
+              }[${reference.name}](${reference.link}):`
             : ''
         }
 
@@ -132,7 +134,7 @@ function createPrevals({ tool: pageTool = error('UNKNOWN') } = {}) {
         ${npmInstall ? code('shell', 'npm install') : ''}
       `)
     },
-    configuration({ purge = [], postcss = true }) {
+    configuration({ purge = [], types = ['pages', 'components'], postcss = true }) {
       let files = ['tailwind.config.js', postcss && 'postcss.config.js']
         .filter(Boolean)
         .map(quote('`'))
@@ -165,7 +167,9 @@ function createPrevals({ tool: pageTool = error('UNKNOWN') } = {}) {
 
         ### Configure Tailwind to remove unused styles in production
 
-        In your \`tailwind.config.js\` file, configure the \`purge\` option with the paths to all of your pages and components so Tailwind can tree-shake unused styles in production builds:
+        In your \`tailwind.config.js\` file, configure the \`purge\` option with the paths to all of your ${joinAsSpeech(
+          types
+        )} so Tailwind can tree-shake unused styles in production builds:
 
         ${code(
           'diff-js',
@@ -187,7 +191,14 @@ function createPrevals({ tool: pageTool = error('UNKNOWN') } = {}) {
         Read our separate guide on [optimizing for production](/docs/optimizing-for-production) to learn more about tree-shaking unused styles for best performance.
       `)
     },
-    setup({ dependencies = [], uninstall = [], tool = pageTool, version = 'latest' }) {
+    setup({
+      dependencies = [],
+      uninstall = [],
+      dev = false,
+      soon = false,
+      tool = pageTool,
+      version = 'latest',
+    }) {
       let knownDependencies = {
         latest: ['tailwindcss', 'postcss', 'autoprefixer'],
         'compat-7': [
@@ -214,7 +225,9 @@ function createPrevals({ tool: pageTool = error('UNKNOWN') } = {}) {
 
           return [
             hasMultipleVersion && `# If you're on ${name}`,
-            `npm install -D ${[...dependencies, ...knownDependencies[mode]].join(' ')}`,
+            `npm install ${dev ? '-D ' : ''}${[...dependencies, ...knownDependencies[mode]].join(
+              ' '
+            )}`,
           ]
             .filter(Boolean)
             .join('\n')
@@ -229,7 +242,9 @@ function createPrevals({ tool: pageTool = error('UNKNOWN') } = {}) {
         outdatedVersions.length > 0
           ? `${joinAsSpeech(outdatedVersions)} ${
               outdatedVersions.length === 1 ? "doesn't" : "don't"
-            } support PostCSS 8 yet so you need to install [the Tailwind CSS v2.0 PostCSS 7 compatibility build](/docs/installation#post-css-7-compatibility-build) for now as we've shown above.`
+            } support PostCSS 8 yet${
+              soon ? " _(but it's coming soon)_" : ''
+            } so you need to install [the Tailwind CSS v2.0 PostCSS 7 compatibility build](/docs/installation#post-css-7-compatibility-build) for now as we've shown above.`
           : ''
 
       return md(`
@@ -256,11 +271,16 @@ function createPrevals({ tool: pageTool = error('UNKNOWN') } = {}) {
         ${information}
       `)
     },
-    include({ file, tool = pageTool, withChromiumBug = false }) {
+    include({ file, create = false, tool = pageTool, withChromiumBug = false, level = 3 }) {
       return md(`
-        ### Include Tailwind in your CSS
+        ${'#'.repeat(level)} Include Tailwind in your CSS
 
-        Open the \`${file}\` file that ${tool} generates for you by default and use the \`@tailwind\` directive to include Tailwind's \`base\`, \`components\`, and \`utilities\` styles:
+        ${
+          create
+            ? `Create the \`${file}\` file`
+            : `Open the \`${file}\` file that ${tool} generates for you by default`
+        }
+        and use the \`@tailwind\` directive to include Tailwind's \`base\`, \`components\`, and \`utilities\` styles, replacing the original file contents:
 
         ${code(
           'css',
@@ -289,7 +309,7 @@ function createPrevals({ tool: pageTool = error('UNKNOWN') } = {}) {
         You're finished! Now when you run ${joinAsSpeech(
           scripts.map(quote('`')),
           ' or '
-        )} Tailwind CSS will be ready to use in your ${tool} project.
+        )}, Tailwind CSS will be ready to use in your ${tool} project.
 
         [Next learn about the utility-first workflow &rarr;](/docs/utility-first)
       `)

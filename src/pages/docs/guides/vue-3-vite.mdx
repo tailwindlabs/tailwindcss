@@ -5,6 +5,7 @@ tool: Vue 3 and Vite
 ---
 
 ```preval installation
+tool: Vite
 script: npx create-vite-app 
 npmInstall: true
 ```
@@ -12,16 +13,17 @@ npmInstall: true
 ---
 
 ```preval setup
+dev: true
 version: compat-7
 ```
 
 ```preval configuration
-postcss: false
 purge:
   - ./src/**/*.{vue,js,ts,jsx,tsx}
 ```
 
 ```preval include
+tool: Vite
 file: ./src/index.css
 withChromiumBug: true
 ```

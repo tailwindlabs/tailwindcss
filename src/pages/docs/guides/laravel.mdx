@@ -5,21 +5,28 @@ tool: Laravel Mix
 ---
 
 ```preval installation
+tool: Laravel
 reference:
+  prefix: the
   name: Laravel Installer 
   link: https://laravel.com/docs/8.x#via-laravel-installer
-script: laravel 
+script: laravel new
 npmInstall: true
 ```
 
 ---
 
 ```preval setup
+dev: true
+soon: true
 version: compat-7
 ```
 
 ```preval configuration
 postcss: false
+types:
+  - Blade templates
+  - JavaScript components
 purge: 
   - ./resources/**/*.blade.php
   - ./resources/**/*.js
@@ -39,6 +46,7 @@ In your `webpack.mix.js`, add `tailwindcss` as a PostCSS plugin:
 ```
 
 ```preval include
+tool: Laravel
 file: ./resources/css/app.css
 ```
 
