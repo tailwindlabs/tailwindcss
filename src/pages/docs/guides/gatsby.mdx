@@ -63,6 +63,20 @@ module.exports = {
 
 If you're planning to use any other PostCSS plugins, you should read our documentation on [using PostCSS as your preprocessor](/docs/using-with-preprocessors) for more details about the best way to order them alongside Tailwind.
 
+### Enable gatsby-plugin-postcss 
+
+In your `gatsby-config.js` file, enable the [postcss plugin](https://www.gatsbyjs.com/plugins/gatsby-plugin-postcss/)
+
+```diff-js
+  // gatsby-config.js
+  module.exports = {
+    /* Your site config here */
+-   plugins: [],
++   plugins: [`gatsby-plugin-postcss`],
+  }
+
+```
+
 ### Configure Tailwind to remove unused styles in production
 
 In your `tailwind.config.js` file, configure the `purge` option with the paths to all of your pages and components so Tailwind can tree-shake unused styles in production builds:
