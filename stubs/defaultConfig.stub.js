@@ -538,7 +538,10 @@ module.exports = {
       DEFAULT: theme('colors.blue.500', '#3b82f6'),
       ...theme('colors'),
     }),
-    ringOffsetColor: (theme) => theme('colors'),
+    ringOffsetColor: (theme) => ({
+      DEFAULT: theme('colors.blue.500', '#3b82f6'),
+      ...theme('colors'),
+    }),
     ringOffsetWidth: {
       0: '0px',
       1: '1px',
