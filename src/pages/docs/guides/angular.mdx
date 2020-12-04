@@ -1,6 +1,7 @@
 ---
 title: "Install Tailwind CSS with Angular"
 description: "Setting up Tailwind CSS in an Angular project."
+tool: Angular
 ---
 
 <!--
@@ -9,32 +10,28 @@ Launch day test: Angular works with the normal tailwindcss package 🎉
 #####
 -->
 
-## Creating your project
-
-Start by creating a new Angular project if you don't have one set up already. The most common approach is to use the [Angular CLI](https://angular.io/guide/setup-local#install-the-angular-cli):
-
-```shell
-ng new my-project
+```preval installation
+tool: Angular 
+reference:
+  name: Angular CLI
+  link: https://angular.io/guide/setup-local#install-the-angular-cli
+script: ng new 
 ```
 
-## Setting up Tailwind CSS
-
-Install Tailwind, Autoprefixer using `npm` or `yarn`:
-
-```shell
-npm install tailwindcss postcss autoprefixer
+```preval setup
+version: latest 
+dependencies:
+  - postcss-loader
+  - '@angular-builders/custom-webpack'
 ```
 
-We'll also need to install `postcss-loader` and `@angular-builders/custom-webpack` to provide a custom webpack config to our Angular project, which handles PostCSS for us:
 
-```shell
-npm i -D postcss-loader @angular-builders/custom-webpack
-```
-
-Next, let's generate default `tailwind.config.js` and `postcss.config.js` files:
-
-```shell
-npx tailwindcss init -p
+```preval configuration
+postcss: false
+purge: 
+  - ./resources/**/*.blade.php
+  - ./resources/**/*.js
+  - ./resources/**/*.vue
 ```
 
 Next, let's create a `webpack.config.js` at the root of our project, and tell webpack to handle CSS files with the `postcss-loader`:
@@ -58,12 +55,8 @@ module.exports = {
 }
 ```
 
-In our Angular project, let's add our three `@tailwind` directives to our global stylesheet in `src/styles.css`:
-
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+```preval include
+file: ./src/styles.css
 ```
 
 Finally, we need to update the `angular.json` file to let it know about our custom webpack config. We'll need to update the `architect.build` and `architect.serve` sections of the config.
@@ -112,4 +105,15 @@ Now, let's do something very similar in `architect.serve`:
   }
 ```
 
-You did it! 😅 Tailwind CSS is now available throughout our entire Angular application 🎉
+```preval configuration
+purge: 
+  - ./path/to/files 
+```
+
+---
+
+```preval finish
+scripts:
+  - npm run start
+```
+

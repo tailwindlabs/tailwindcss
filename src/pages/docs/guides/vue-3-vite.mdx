@@ -1,109 +1,32 @@
 ---
 title: "Install Tailwind CSS with Vue 3 and Vite"
 description: "Setting up Tailwind CSS in a Vue 3 and Vite project."
+tool: Vue 3 and Vite
 ---
 
-## Creating your project
-
-Start by creating a new Vite project if you don't have one set up already and installing its dependencies:
-
-```shell
-npx create-vite-app my-project
-cd my-project
-npm install
+```preval installation
+tool: Vite
+script: npx create-vite-app 
+npmInstall: true
 ```
 
 ---
 
-## Setting up Tailwind CSS
-
-### Install Tailwind via npm
-
-Install Tailwind and its peer-dependencies using `npm`:
-
-```shell
-npm install -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9
+```preval setup
+dev: true
+version: compat-7
 ```
 
-Vue 3 and Vite don't support PostCSS 8 yet so you need to install [the Tailwind CSS v2.0 PostCSS 7 compatibility build](/docs/installation#post-css-7-compatibility-build) for now as we've shown above.
-
-### Create your configuration files
-
-Next, generate your `tailwind.config.js` and `postcss.config.js` files:
-
-```shell
-npx tailwindcss init -p
+```preval configuration
+purge:
+  - ./src/**/*.{vue,js,ts,jsx,tsx}
 ```
 
-This will create a minimal `tailwind.config.js` file at the root of your project:
-
-```js
-// tailwind.config.js
-module.exports = {
-  purge: [],
-  darkMode: false, // or 'media' or 'class'
-  theme: {
-    extend: {},
-  },
-  variants: {},
-  plugins: [],
-}
+```preval include
+tool: Vite
+file: ./src/index.css
+withChromiumBug: true
 ```
-
-Learn more about configuring Tailwind in the [configuration documentation](/docs/configuration).
-
-It will also create a `postcss.config.js` file that includes `tailwindcss` and `autoprefixer` already configured:
-
-```js
-// postcss.config.js
-module.exports = {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  }
-}
-```
-
-If you're planning to use any other PostCSS plugins, you should read our documentation on [using PostCSS as your preprocessor](/docs/using-with-preprocessors) for more details about the best way to order them alongside Tailwind.
-
-### Configure Tailwind to remove unused styles in production
-
-In your `tailwind.config.js` file, configure the `purge` option with the paths to all of your components so Tailwind can tree-shake unused styles in production builds:
-
-```diff-js
-  // tailwind.config.js
-  module.exports = {
--   purge: [],
-+   purge: ['./src/**/*.{vue,js,ts,jsx,tsx}'],
-    darkMode: false, // or 'media' or 'class'
-    theme: {
-      extend: {}
-    },
-    variants: {},
-    plugins: []
-  }
-```
-
-Read our separate guide on [optimizing for production](/docs/optimizing-for-production) to learn more about tree-shaking unused styles for best performance.
-
-### Include Tailwind in your CSS
-
-Open the `./src/index.css` file that Vite generates for you by default and use the `@tailwind` directive to include Tailwind's `base`, `components`, and `utilities` styles:
-
-```css
-/* ./src/index.css */
-
-/*! @import */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
-
-<p><em>Due to <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=1131113">a bug in Chromium</a>, it's important that you include the weird <code>/*! @import */</code> comment to avoid performance issues in Chrome DevTools during development. This is already fixed in Canary but hasn't been released generally yet.</em></p>
-
-Tailwind will swap these directives out at build-time with all of the styles it generates based on your configured design system.
-
-Read our documentation on [adding base styles](/docs/adding-base-styles), [extracting components](/docs/extracting-components), and [adding new utilities](/docs/adding-new-utilities) for best practices on extending Tailwind with your own custom CSS.
 
 Finally, ensure your CSS file is being imported in your `./src/main.js` file:
 
@@ -118,6 +41,8 @@ createApp(App).mount('#app')
 
 ---
 
-You're finished! Now when you run `npm run dev` to start the Vite development server, Tailwind CSS will be ready to use in your project.
+```preval finish
+scripts:
+  - npm run dev
+```
 
-[Next learn about the utility-first workflow &rarr;](/docs/utility-first)

@@ -8,6 +8,7 @@ const { withProse } = require('./remark/withProse')
 const { withNextLinks } = require('./remark/withNextLinks')
 const minimatch = require('minimatch')
 const withCodeSamples = require('./remark/withCodeSamples')
+const { withPrevalInstructions } = require('./remark/withPrevalInstructions')
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
@@ -80,6 +81,7 @@ module.exports = withBundleAnalyzer({
           loader: '@mdx-js/loader',
           options: {
             remarkPlugins: [
+              withPrevalInstructions,
               withCodeSamples,
               withProse,
               withTableOfContents,
