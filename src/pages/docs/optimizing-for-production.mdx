@@ -363,6 +363,21 @@ module.exports = {
 }
 ```
 
+If you only need a handful of utilities, you can pass an array to `corePlugins` with the utility plugins you want to keep.
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  corePlugins: [
+    margin,
+    padding
+  ]
+}
+```
+
+The above would disable all utilities except margin and padding.
+
 If you need a utility but don't need the responsive versions, set its variants to an empty array to generate 83% fewer classes:
 
 ```js
