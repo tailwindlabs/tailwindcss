@@ -107,6 +107,20 @@ The `clearfix` class has been removed since `flow-root` is a simpler solution to
   </div>
 ```
 
+## Update font-weight class names for `100` and `200` weights
+
+The class names for the `100` and `200` font weights have changed in Tailwind CSS v2.0:
+
+| Font weight | Old name             | New name            |
+|--------| -------------------- | ------------------- |
+|100     | `font-hairline`           | `font-thin`              |
+|200     | `font-thin`               | `font-extralight`        |
+
+Since `font-thin` appears in both v1 and v2 for different weights, we recommend updating your classes in the following order:
+
+1. Globally find and replace `font-thin` with `font-extralight`
+2. Globally find and replace `font-hairline` with `font-thin`
+
 ## Replace shadow-outline and shadow-xs with ring utilities
 
 Tailwind CSS v2.0 introduces a new set of `ring` utilities that let you add outline shadows/focus rings in a way that automatically composes with Tailwind's other box-shadow utilities.
