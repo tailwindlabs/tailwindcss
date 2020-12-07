@@ -199,6 +199,11 @@
     "permanent": false
   },
   {
+    "source": "/components",
+    "destination": "https://tailwindui.com/components",
+    "permanent": false
+  },
+  {
     "source": "/components/:slug",
     "destination": "https://tailwindui.com/components",
     "permanent": false
