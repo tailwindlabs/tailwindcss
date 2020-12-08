@@ -337,7 +337,7 @@ test('you can apply utility classes that do not actually exist as long as they w
   })
 })
 
-test('the shadow lookup is only used if no @tailwind rules were in the source tree', () => {
+test('shadow lookup will be constructed when we have missing @tailwind atrules', () => {
   const input = `
     @tailwind base;
     .foo { @apply mt-4; }
@@ -345,8 +345,8 @@ test('the shadow lookup is only used if no @tailwind rules were in the source tr
 
   expect.assertions(1)
 
-  return run(input).catch((e) => {
-    expect(e).toMatchObject({ name: 'CssSyntaxError' })
+  return run(input).then((result) => {
+    expect(result.css).toContain(`.foo { margin-top: 1rem;\n}`)
   })
 })
 

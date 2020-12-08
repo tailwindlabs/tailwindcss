@@ -310,7 +310,15 @@ export default function substituteClassApplyAtRules(config, getProcessedPlugins,
     }
 
     // Tree already contains @tailwind rules, don't prepend default Tailwind tree
-    if (hasAtRule(css, 'tailwind')) {
+    let requiredTailwindAtRules = ['utilities']
+    if (
+      hasAtRule(css, 'tailwind', (node) => {
+        let idx = requiredTailwindAtRules.indexOf(node.params)
+        if (idx !== -1) requiredTailwindAtRules.splice(idx, 1)
+        if (requiredTailwindAtRules.length <= 0) return true
+        return false
+      })
+    ) {
       return processApplyAtRules(css, postcss.root(), config)
     }
 
