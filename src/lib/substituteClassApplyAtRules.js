@@ -11,15 +11,17 @@ import substituteScreenAtRules from './substituteScreenAtRules'
 import prefixSelector from '../util/prefixSelector'
 import { useMemo } from '../util/useMemo'
 
-function hasAtRule(css, atRule) {
-  let foundAtRule = false
+function hasAtRule(css, atRule, condition = () => true) {
+  let found = false
 
-  css.walkAtRules(atRule, () => {
-    foundAtRule = true
-    return false
+  css.walkAtRules(atRule, (node) => {
+    if (condition(node)) {
+      found = true
+      return false
+    }
   })
 
-  return foundAtRule
+  return found
 }
 
 function cloneWithoutChildren(node) {
