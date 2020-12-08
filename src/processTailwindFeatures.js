@@ -18,6 +18,7 @@ import { issueFlagNotices } from './featureFlags.js'
 
 import hash from 'object-hash'
 import log from './util/log'
+import { shared } from './util/disposables'
 
 let previousConfig = null
 let processedPlugins = null
@@ -30,6 +31,7 @@ export default function (getConfig) {
     previousConfig = config
 
     if (configChanged) {
+      shared.dispose()
       if (config.target) {
         log.warn([
           'The `target` feature has been removed in Tailwind CSS v2.0.',
