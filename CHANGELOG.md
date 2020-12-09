@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix issue with `@apply` not working as expected with `!important` inside an atrule ([#2824](https://github.com/tailwindlabs/tailwindcss/pull/2824))
 - Fix issue with `@apply` not working as expected with defined classes ([#2832](https://github.com/tailwindlabs/tailwindcss/pull/2832))
+- Fix memory leak, and broken `@apply` when splitting up files ([#3032](https://github.com/tailwindlabs/tailwindcss/pull/3032))
 
 ### Added
 
