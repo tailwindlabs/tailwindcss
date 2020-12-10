@@ -11,15 +11,23 @@ import substituteScreenAtRules from './substituteScreenAtRules'
 import prefixSelector from '../util/prefixSelector'
 import { useMemo } from '../util/useMemo'
 
-function hasAtRule(css, atRule, condition = () => true) {
+function hasAtRule(css, atRule, condition) {
   let found = false
 
-  css.walkAtRules(atRule, (node) => {
-    if (condition(node)) {
-      found = true
-      return false
-    }
-  })
+  css.walkAtRules(
+    atRule,
+    condition === undefined
+      ? () => {
+          found = true
+          return false
+        }
+      : (node) => {
+          if (condition(node)) {
+            found = true
+            return false
+          }
+        }
+  )
 
   return found
 }
@@ -309,8 +317,7 @@ export default function substituteClassApplyAtRules(config, getProcessedPlugins,
       return css
     }
 
-    // Tree already contains @tailwind rules, don't prepend default Tailwind tree
-    let requiredTailwindAtRules = ['utilities']
+    let requiredTailwindAtRules = ['base', 'components', 'utilities']
     if (
       hasAtRule(css, 'tailwind', (node) => {
         let idx = requiredTailwindAtRules.indexOf(node.params)
@@ -319,11 +326,16 @@ export default function substituteClassApplyAtRules(config, getProcessedPlugins,
         return false
       })
     ) {
+      // Tree already contains all the at rules (requiredTailwindAtRules)
       return processApplyAtRules(css, postcss.root(), config)
     }
 
-    // Tree contains no @tailwind rules, so generate all of Tailwind's styles and
-    // prepend them to the user's CSS. Important for <style> blocks in Vue components.
+    // We mutated the `requiredTailwindAtRules`, but when we hit this point in
+    // time, it means that we don't have all the atrules. The missing atrules
+    // are listed inside the requiredTailwindAtRules, which we can use to fill
+    // in the missing pieces.
+    //
+    // Important for <style> blocks in Vue components.
     const generateLookupTree =
       configChanged || defaultTailwindTree === null
         ? () => {
@@ -335,14 +347,9 @@ export default function substituteClassApplyAtRules(config, getProcessedPlugins,
               convertLayerAtRulesToControlComments(config),
               substituteScreenAtRules(config),
             ])
-              .process(
-                `
-                  @tailwind base;
-                  @tailwind components;
-                  @tailwind utilities;
-                `,
-                { from: undefined }
-              )
+              .process(requiredTailwindAtRules.map((rule) => `@tailwind ${rule};`).join('\n'), {
+                from: undefined,
+              })
               .then((result) => {
                 defaultTailwindTree = result
                 return defaultTailwindTree
