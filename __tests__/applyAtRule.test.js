@@ -337,16 +337,17 @@ test('you can apply utility classes that do not actually exist as long as they w
   })
 })
 
-test('the shadow lookup is only used if no @tailwind rules were in the source tree', () => {
+test('shadow lookup will be constructed when we have missing @tailwind atrules', () => {
   const input = `
     @tailwind base;
+
     .foo { @apply mt-4; }
   `
 
   expect.assertions(1)
 
-  return run(input).catch((e) => {
-    expect(e).toMatchObject({ name: 'CssSyntaxError' })
+  return run(input).then((result) => {
+    expect(result.css).toContain(`.foo { margin-top: 1rem;\n}`)
   })
 })
 
@@ -1361,4 +1362,41 @@ test('declarations within a rule that uses @apply with !important remain not !im
     expect(result.css).toMatchCss(expected)
     expect(result.warnings().length).toBe(0)
   })
+})
+
+test('lookup tree is correctly cached based on used tailwind atrules', async () => {
+  const input1 = `
+    @tailwind utilities;
+
+    .foo { @apply mt-4; }
+  `
+
+  const input2 = `
+    @tailwind components;
+
+    .foo { @apply mt-4; }
+  `
+
+  let config = {
+    corePlugins: [],
+    plugins: [
+      function ({ addUtilities, addComponents }) {
+        addUtilities({ '.mt-4': { marginTop: '1rem' } }, [])
+        addComponents({ '.container': { maxWidth: '500px' } }, [])
+      },
+    ],
+  }
+
+  let output1 = await run(input1, config)
+  let output2 = await run(input2, config)
+
+  expect(output1.css).toMatchCss(`
+    .mt-4 { margin-top: 1rem; }
+    .foo { margin-top: 1rem; }
+  `)
+
+  expect(output2.css).toMatchCss(`
+    .container { max-width: 500px; }
+    .foo { margin-top: 1rem; }
+  `)
 })

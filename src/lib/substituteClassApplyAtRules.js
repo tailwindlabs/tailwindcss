@@ -11,15 +11,25 @@ import substituteScreenAtRules from './substituteScreenAtRules'
 import prefixSelector from '../util/prefixSelector'
 import { useMemo } from '../util/useMemo'
 
-function hasAtRule(css, atRule) {
-  let foundAtRule = false
+function hasAtRule(css, atRule, condition) {
+  let found = false
 
-  css.walkAtRules(atRule, () => {
-    foundAtRule = true
-    return false
-  })
+  css.walkAtRules(
+    atRule,
+    condition === undefined
+      ? () => {
+          found = true
+          return false
+        }
+      : (node) => {
+          if (condition(node)) {
+            found = true
+            return false
+          }
+        }
+  )
 
-  return foundAtRule
+  return found
 }
 
 function cloneWithoutChildren(node) {
@@ -298,7 +308,7 @@ function processApplyAtRules(css, lookupTree, config) {
   return css
 }
 
-let defaultTailwindTree = null
+let defaultTailwindTree = new Map()
 
 export default function substituteClassApplyAtRules(config, getProcessedPlugins, configChanged) {
   return function (css) {
@@ -307,15 +317,29 @@ export default function substituteClassApplyAtRules(config, getProcessedPlugins,
       return css
     }
 
-    // Tree already contains @tailwind rules, don't prepend default Tailwind tree
-    if (hasAtRule(css, 'tailwind')) {
+    let requiredTailwindAtRules = ['base', 'components', 'utilities']
+    if (
+      hasAtRule(css, 'tailwind', (node) => {
+        let idx = requiredTailwindAtRules.indexOf(node.params)
+        if (idx !== -1) requiredTailwindAtRules.splice(idx, 1)
+        if (requiredTailwindAtRules.length <= 0) return true
+        return false
+      })
+    ) {
+      // Tree already contains all the at rules (requiredTailwindAtRules)
       return processApplyAtRules(css, postcss.root(), config)
     }
 
-    // Tree contains no @tailwind rules, so generate all of Tailwind's styles and
-    // prepend them to the user's CSS. Important for <style> blocks in Vue components.
+    let lookupKey = requiredTailwindAtRules.join(',')
+
+    // We mutated the `requiredTailwindAtRules`, but when we hit this point in
+    // time, it means that we don't have all the atrules. The missing atrules
+    // are listed inside the requiredTailwindAtRules, which we can use to fill
+    // in the missing pieces.
+    //
+    // Important for <style> blocks in Vue components.
     const generateLookupTree =
-      configChanged || defaultTailwindTree === null
+      configChanged || !defaultTailwindTree.has(lookupKey)
         ? () => {
             return postcss([
               substituteTailwindAtRules(config, getProcessedPlugins()),
@@ -325,20 +349,15 @@ export default function substituteClassApplyAtRules(config, getProcessedPlugins,
               convertLayerAtRulesToControlComments(config),
               substituteScreenAtRules(config),
             ])
-              .process(
-                `
-                  @tailwind base;
-                  @tailwind components;
-                  @tailwind utilities;
-                `,
-                { from: undefined }
-              )
+              .process(requiredTailwindAtRules.map((rule) => `@tailwind ${rule};`).join('\n'), {
+                from: undefined,
+              })
               .then((result) => {
-                defaultTailwindTree = result
-                return defaultTailwindTree
+                defaultTailwindTree.set(lookupKey, result)
+                return result
               })
           }
-        : () => Promise.resolve(defaultTailwindTree)
+        : () => Promise.resolve(defaultTailwindTree.get(lookupKey))
 
     return generateLookupTree().then((result) => {
       return processApplyAtRules(css, result.root, config)

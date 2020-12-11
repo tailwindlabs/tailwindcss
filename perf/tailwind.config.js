@@ -1,14 +1,12 @@
+let colors = require('../colors')
 module.exports = {
-  future: 'all',
-  experimental: 'all',
   purge: [],
+  darkMode: 'class',
   theme: {
-    extend: {},
+    extend: { colors },
   },
   variants: [
     'responsive',
-    'motion-safe',
-    'motion-reduce',
     'group-hover',
     'group-focus',
     'hover',
@@ -19,10 +17,6 @@ module.exports = {
     'visited',
     'disabled',
     'checked',
-    'first',
-    'last',
-    'odd',
-    'even',
   ],
   plugins: [],
 }
