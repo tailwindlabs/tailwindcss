@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [2.0.2] - 2020-12-11
+
 ### Fixed
 
 - Fix issue with `@apply` not working as expected with `!important` inside an atrule ([#2824](https://github.com/tailwindlabs/tailwindcss/pull/2824))
@@ -1311,7 +1315,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.1...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.2...HEAD
+[2.0.2]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.6...v2.0.0
 [2.0.0-alpha.25]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0-alpha.24...v2.0.0-alpha.25
