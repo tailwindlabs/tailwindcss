@@ -308,7 +308,7 @@ function processApplyAtRules(css, lookupTree, config) {
   return css
 }
 
-let defaultTailwindTree = null
+let defaultTailwindTree = new Map()
 
 export default function substituteClassApplyAtRules(config, getProcessedPlugins, configChanged) {
   return function (css) {
@@ -330,6 +330,8 @@ export default function substituteClassApplyAtRules(config, getProcessedPlugins,
       return processApplyAtRules(css, postcss.root(), config)
     }
 
+    let lookupKey = requiredTailwindAtRules.join(',')
+
     // We mutated the `requiredTailwindAtRules`, but when we hit this point in
     // time, it means that we don't have all the atrules. The missing atrules
     // are listed inside the requiredTailwindAtRules, which we can use to fill
@@ -337,7 +339,7 @@ export default function substituteClassApplyAtRules(config, getProcessedPlugins,
     //
     // Important for <style> blocks in Vue components.
     const generateLookupTree =
-      configChanged || defaultTailwindTree === null
+      configChanged || !defaultTailwindTree.has(lookupKey)
         ? () => {
             return postcss([
               substituteTailwindAtRules(config, getProcessedPlugins()),
@@ -351,11 +353,11 @@ export default function substituteClassApplyAtRules(config, getProcessedPlugins,
                 from: undefined,
               })
               .then((result) => {
-                defaultTailwindTree = result
-                return defaultTailwindTree
+                defaultTailwindTree.set(lookupKey, result)
+                return result
               })
           }
-        : () => Promise.resolve(defaultTailwindTree)
+        : () => Promise.resolve(defaultTailwindTree.get(lookupKey))
 
     return generateLookupTree().then((result) => {
       return processApplyAtRules(css, result.root, config)
