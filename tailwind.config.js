@@ -66,7 +66,7 @@ module.exports = {
               letterSpacing: '-0.025em',
             },
             'h2, h3': {
-              'scroll-margin-block': `${(70 + 40) / 16}rem`,
+              'scroll-margin-top': `${(70 + 40) / 16}rem`,
             },
             'ul > li': {
               paddingLeft: '1.5em',
