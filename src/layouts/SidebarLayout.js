@@ -41,10 +41,16 @@ function Nav({ nav, children, fallbackHref }) {
     if (activeItemRef.current) {
       const scrollRect = scrollRef.current.getBoundingClientRect()
       const activeItemRect = activeItemRef.current.getBoundingClientRect()
-      scrollRef.current.scrollTop =
-        activeItemRect.top - scrollRect.top - scrollRect.height / 2 + activeItemRect.height / 2
+
+      const top = activeItemRef.current.offsetTop
+      const bottom = top - scrollRect.height + activeItemRect.height
+
+      if (scrollRef.current.scrollTop > top || scrollRef.current.scrollTop < bottom) {
+        scrollRef.current.scrollTop =
+          activeItemRef.current.offsetTop - scrollRect.height / 2 + activeItemRect.height / 2
+      }
     }
-  }, [])
+  }, [router.pathname])
 
   return (
     <nav
