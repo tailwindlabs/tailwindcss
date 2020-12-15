@@ -20321,8 +20321,16 @@ video {
   fill: currentColor;
 }
 
+.fill-none {
+  fill: none;
+}
+
 .stroke-current {
   stroke: currentColor;
+}
+
+.stroke-none {
+  stroke: none;
 }
 
 .stroke-0 {
@@ -46344,8 +46352,16 @@ video {
     fill: currentColor;
   }
 
+  .sm\:fill-none {
+    fill: none;
+  }
+
   .sm\:stroke-current {
     stroke: currentColor;
+  }
+
+  .sm\:stroke-none {
+    stroke: none;
   }
 
   .sm\:stroke-0 {
@@ -72337,8 +72353,16 @@ video {
     fill: currentColor;
   }
 
+  .md\:fill-none {
+    fill: none;
+  }
+
   .md\:stroke-current {
     stroke: currentColor;
+  }
+
+  .md\:stroke-none {
+    stroke: none;
   }
 
   .md\:stroke-0 {
@@ -98330,8 +98354,16 @@ video {
     fill: currentColor;
   }
 
+  .lg\:fill-none {
+    fill: none;
+  }
+
   .lg\:stroke-current {
     stroke: currentColor;
+  }
+
+  .lg\:stroke-none {
+    stroke: none;
   }
 
   .lg\:stroke-0 {
@@ -124323,8 +124355,16 @@ video {
     fill: currentColor;
   }
 
+  .xl\:fill-none {
+    fill: none;
+  }
+
   .xl\:stroke-current {
     stroke: currentColor;
+  }
+
+  .xl\:stroke-none {
+    stroke: none;
   }
 
   .xl\:stroke-0 {
@@ -150316,8 +150356,16 @@ video {
     fill: currentColor;
   }
 
+  .\32xl\:fill-none {
+    fill: none;
+  }
+
   .\32xl\:stroke-current {
     stroke: currentColor;
+  }
+
+  .\32xl\:stroke-none {
+    stroke: none;
   }
 
   .\32xl\:stroke-0 {
