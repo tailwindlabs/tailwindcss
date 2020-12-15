@@ -135,7 +135,7 @@ export default function Resources() {
             Patterns<span className="sr-only">: Heropatterns</span>
           </h2>
           <a
-            href="http://www.heropatterns.com/"
+            href="https://www.heropatterns.com/"
             className="relative flex h-40 xl:h-48 rounded-3xl bg-gradient-to-br from-cyan-600 to-teal-500 mb-6"
           >
             <div
