@@ -188,15 +188,25 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
         {(prev || next) && (
           <>
             <hr className="border-gray-200 mt-10 mb-4" />
-            <div className="flex justify-between leading-7 font-medium">
+            <div className="flex leading-6 font-medium">
               {prev && (
                 <Link href={prev.href}>
-                  <a>← {prev.shortTitle || prev.title}</a>
+                  <a className="flex mr-8">
+                    <span aria-hidden="true" className="mr-2">
+                      ←
+                    </span>
+                    {prev.shortTitle || prev.title}
+                  </a>
                 </Link>
               )}
               {next && (
                 <Link href={next.href}>
-                  <a>{next.shortTitle || next.title} →</a>
+                  <a className="flex text-right ml-auto">
+                    {next.shortTitle || next.title}
+                    <span aria-hidden="true" className="ml-2">
+                      →
+                    </span>
+                  </a>
                 </Link>
               )}
             </div>
