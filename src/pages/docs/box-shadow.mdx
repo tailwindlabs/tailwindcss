@@ -16,7 +16,7 @@ export const classes = { plugin }
 
 ## Outer shadow
 
-Use the `.shadow-sm`, `.shadow`, `.shadow-md`, `.shadow-lg`, `.shadow-xl`, or `.shadow-2xl` utilities to apply different sized outer box shadows to an element.
+Use the `shadow-sm`, `shadow`, `shadow-md`, `shadow-lg`, `shadow-xl`, or `shadow-2xl` utilities to apply different sized outer box shadows to an element.
 
 ```html indigo
 <template preview>
@@ -82,9 +82,9 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Box Shadows
 
-By default Tailwind provides three drop shadow utilities, one inner shadow utility, and a utility for removing existing shadows. You can change, add, or remove these by editing the `theme.boxShadow` section of your Tailwind config.
+By default Tailwind provides six drop shadow utilities, one inner shadow utility, and a utility for removing existing shadows. You can change, add, or remove these by editing the `theme.boxShadow` section of your Tailwind config.
 
-If a `default` shadow is provided, it will be used for the non-suffixed `.shadow` utility. Any other keys will be used as suffixes, for example the key `'2'` will create a corresponding `.shadow-2` utility.
+If a `DEFAULT` shadow is provided, it will be used for the non-suffixed `shadow` utility. Any other keys will be used as suffixes, for example the key `'2'` will create a corresponding `shadow-2` utility.
 
 ```diff-js
   // tailwind.config.js
@@ -99,8 +99,6 @@ If a `default` shadow is provided, it will be used for the non-suffixed `.shadow
         '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
 +       '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
         inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
--       outline: '0 0 0 3px rgba(66, 153, 225, 0.5)',
-+       focus: '0 0 0 3px rgba(66, 153, 225, 0.5)',
         none: 'none',
       }
     }
