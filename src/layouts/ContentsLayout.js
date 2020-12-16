@@ -169,8 +169,8 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
   let { prev, next } = usePrevNext()
 
   return (
-    <div id={meta.containerId} className="pt-10 pb-24 lg:pb-16 w-full flex">
-      <div className="min-w-0 flex-auto px-4 sm:px-6 xl:px-8">
+    <div id={meta.containerId} className="w-full flex">
+      <div className="min-w-0 flex-auto px-4 sm:px-6 xl:px-8 pt-10 pb-24 lg:pb-16">
         <PageHeader
           title={meta.title}
           description={meta.description}
@@ -214,7 +214,7 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
         )}
       </div>
       <div className="hidden xl:text-sm xl:block flex-none w-64 pl-8 mr-8">
-        <div className="flex flex-col justify-between overflow-y-auto sticky max-h-(screen-18) -mt-10 pt-10 pb-4 top-18">
+        <div className="flex flex-col justify-between overflow-y-auto sticky max-h-(screen-18) pt-10 pb-6 top-18">
           {toc.length > 0 && (
             <div className="mb-8">
               <TableOfContents tableOfContents={toc} currentSection={currentSection} />
