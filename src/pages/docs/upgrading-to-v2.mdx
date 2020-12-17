@@ -504,6 +504,12 @@ We don't support this anymore, so update any `@apply` statements and remove the 
 }
 ```
 
+The following regex can be useful to find and remove the leading dots in your `@apply` statements:
+
+```regex
+(?<=@apply.*)\.
+```
+
 ## Enable any truncate variants under textOverflow
 
 The `truncate` utility is now part of the `textOverflow` core plugin, so if you had enabled any extra variants (like `group-hover`) for the `wordBreak` plugin in order to use them with the `truncate` class, you'll want to enable them for `textOverflow` now as well or instead:
