@@ -114,7 +114,9 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Top / Right / Bottom / Left scale
 
-By default Tailwind only provides `0` and `auto` top/right/bottom/left/inset utilities. You can change, add, or remove these by editing the `theme.inset` section of your `tailwind.config.js` file.
+By default, Tailwind provides top/right/bottom/left/inset utilities for a combination of the [default spacing scale](/docs/customizing-spacing#default-spacing-scale), `auto`, `full` as well as some additional fraction values. 
+
+You can change, add, or remove these by editing the `theme.inset` section of your `tailwind.config.js` file.
 
 ```diff-js
   // tailwind.config.js
@@ -122,8 +124,9 @@ By default Tailwind only provides `0` and `auto` top/right/bottom/left/inset uti
     theme: {
       inset: {
         '0': 0,
--       auto: 'auto',
-+       '1/2': '50%',
+        // ...
+-       '64': '16rem',
++       '1/5': '20%',
       }
     }
   }
