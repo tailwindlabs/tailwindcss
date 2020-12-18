@@ -58,7 +58,7 @@ Set the ending color of a gradient using the `to-{color}` utilities.
   <div class="h-24 bg-gradient-to-r from-teal-400 to-blue-500"></div>
 </template>
 
-<div class="bg-gradient-to-r from-teal-400 **to-blue-500** ..."></div>
+<div class="bg-gradient-to-r from-green-400 **to-blue-500** ..."></div>
 ```
 
 Gradients to **do not** fade in from transparent by default. To fade in from transparent, reverse the gradient direction and use a `from-{color}` utility.
@@ -83,7 +83,7 @@ Gradients with a `from-{color}` and `via-{color}` will fade out to transparent b
 To control the gradient color stops of an element at a specific breakpoint, add a `{screen}:` prefix to any existing gradient color stop utility. For example, use `md:from-green-500` to apply the `from-green-500` utility at only medium screen sizes and above.
 
 ```html
-<div class="bg-gradient-to-r from-purple-400 **md:from-orange-500**"></div>
+<div class="bg-gradient-to-r from-purple-400 **md:from-yellow-500**"></div>
 ```
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
@@ -102,7 +102,7 @@ To control the gradient color stops of an element on hover, add the `hover:` pre
   </div>
 </template>
 
-<button type="button" class="bg-gradient-to-r from-teal-400 to-blue-500 **hover:from-pink-500 hover:to-orange-500** ...">
+<button type="button" class="bg-gradient-to-r from-green-400 to-blue-500 **hover:from-pink-500 hover:to-yellow-500** ...">
   Hover me
 </button>
 ```
@@ -126,7 +126,7 @@ To control the gradient color stops of an element on focus, add the `focus:` pre
   </div>
 </template>
 
-<button type="button" class="bg-gradient-to-r from-teal-400 to-blue-500 **focus:from-pink-500 focus:to-orange-500**">
+<button type="button" class="bg-gradient-to-r from-green-400 to-blue-500 **focus:from-pink-500 focus:to-yellow-500**">
   Focus me
 </button>
 ```
