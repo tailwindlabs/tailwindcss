@@ -423,11 +423,11 @@ const plugin = require('tailwindcss/plugin')
 
 module.exports = {
   plugins: [
-    plugin(function({ addBase, config }) {
+    plugin(function({ addBase, theme }) {
       addBase({
-        'h1': { fontSize: config('theme.fontSize.2xl') },
-        'h2': { fontSize: config('theme.fontSize.xl') },
-        'h3': { fontSize: config('theme.fontSize.lg') },
+        'h1': { fontSize: theme('fontSize.2xl') },
+        'h2': { fontSize: theme('fontSize.xl') },
+        'h3': { fontSize: theme('fontSize.lg') },
       })
     })
   ]
@@ -459,8 +459,8 @@ module.exports = {
     }
   },
   plugins: [
-    plugin(function({ addUtilities, config, e }) {
-      const rotateUtilities = _.map(config('theme.rotate'), (value, key) => {
+    plugin(function({ addUtilities, theme, e }) {
+      const rotateUtilities = _.map(theme('rotate'), (value, key) => {
         return {
           [`.${e(`rotate-${key}`)}`]: {
             transform: `rotate(${value})`
@@ -578,14 +578,6 @@ module.exports = {
     })
   ]
 }
-```
-
-Note that the `theme` function is really just a shortcut for using the `config` function to access the theme section of the user's config:
-
-```js
-// These are equivalent
-config('theme.screens')
-theme('screens')
 ```
 
 If you'd like to reference the user's `variants` configuration, it's recommended that you use the `variants()` function instead of the config function.
