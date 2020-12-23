@@ -26,6 +26,15 @@ describe('Tailwind Defaults', () => {
       },
     ],
     ['bounce 1s infinite', { name: 'bounce', duration: '1s', iterationCount: 'infinite' }],
+    [
+      'float 3s ease-in-out infinite',
+      {
+        name: 'float',
+        duration: '3s',
+        timingFunction: 'ease-in-out',
+        iterationCount: 'infinite',
+      },
+    ],
   ])('should be possible to parse: "%s"', (input, expected) => {
     expect(parseAnimationValue(input)).toEqual(expected)
   })

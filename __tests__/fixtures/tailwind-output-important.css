@@ -29102,6 +29102,20 @@ video {
   }
 }
 
+@keyframes float {
+  0% {
+    transform: translate(0,  0px);
+  }
+
+  50% {
+    transform: translate(0, 15px);
+  }
+
+  100% {
+    transform: translate(0, -0px);
+  }
+}
+
 .animate-none {
   animation: none !important;
 }
@@ -29120,6 +29134,10 @@ video {
 
 .animate-bounce {
   animation: bounce 1s infinite !important;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite !important;
 }
 
 .example {
@@ -57668,6 +57686,10 @@ video {
 
   .sm\:animate-bounce {
     animation: bounce 1s infinite !important;
+  }
+
+  .sm\:animate-float {
+    animation: float 3s ease-in-out infinite !important;
   }
 
   .sm\:example {
@@ -86219,6 +86241,10 @@ video {
     animation: bounce 1s infinite !important;
   }
 
+  .md\:animate-float {
+    animation: float 3s ease-in-out infinite !important;
+  }
+
   .md\:example {
     font-weight: 700;
     color: #ef4444;
@@ -114766,6 +114792,10 @@ video {
 
   .lg\:animate-bounce {
     animation: bounce 1s infinite !important;
+  }
+
+  .lg\:animate-float {
+    animation: float 3s ease-in-out infinite !important;
   }
 
   .lg\:example {
@@ -143317,6 +143347,10 @@ video {
     animation: bounce 1s infinite !important;
   }
 
+  .xl\:animate-float {
+    animation: float 3s ease-in-out infinite !important;
+  }
+
   .xl\:example {
     font-weight: 700;
     color: #ef4444;
@@ -171864,6 +171898,10 @@ video {
 
   .\32xl\:animate-bounce {
     animation: bounce 1s infinite !important;
+  }
+
+  .\32xl\:animate-float {
+    animation: float 3s ease-in-out infinite !important;
   }
 
   .\32xl\:example {
