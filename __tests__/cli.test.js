@@ -8,6 +8,7 @@ import runInTempDirectory from '../jest/runInTempDirectory'
 describe('cli', () => {
   const inputCssPath = path.resolve(__dirname, 'fixtures/tailwind-input.css')
   const customConfigPath = path.resolve(__dirname, 'fixtures/custom-config.js')
+  const esmPackageJsonPath = path.resolve(__dirname, 'fixtures/esm-package.json')
   const defaultConfigFixture = utils.readFile(constants.defaultConfigStubFile)
   const simpleConfigFixture = utils.readFile(constants.simpleConfigStubFile)
   const defaultPostCssConfigFixture = utils.readFile(constants.defaultPostCssConfigStubFile)
@@ -42,6 +43,27 @@ describe('cli', () => {
         return cli(['init', '--full']).then(() => {
           expect(utils.readFile(constants.defaultConfigFile)).toEqual(
             defaultConfigFixture.replace('../colors', 'tailwindcss/colors')
+          )
+        })
+      })
+    })
+
+    it('creates a .cjs Tailwind config file inside of an ESM project', () => {
+      return runInTempDirectory(() => {
+        utils.writeFile('package.json', utils.readFile(esmPackageJsonPath))
+        return cli(['init']).then(() => {
+          expect(utils.readFile(constants.cjsConfigFile)).toEqual(simpleConfigFixture)
+        })
+      })
+    })
+
+    it('creates a .cjs Tailwind config file and a postcss.config.cjs file inside of an ESM project', () => {
+      return runInTempDirectory(() => {
+        utils.writeFile('package.json', utils.readFile(esmPackageJsonPath))
+        return cli(['init', '-p']).then(() => {
+          expect(utils.readFile(constants.cjsConfigFile)).toEqual(simpleConfigFixture)
+          expect(utils.readFile(constants.cjsPostCssConfigFile)).toEqual(
+            defaultPostCssConfigFixture
           )
         })
       })
