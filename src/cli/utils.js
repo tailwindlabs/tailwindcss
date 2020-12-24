@@ -123,8 +123,7 @@ export function readFile(path) {
 /**
  * Checks if current package.json uses type "module"
  *
- * @param {string} path
- * @return {string}
+ * @return {boolean}
  */
 export function isModule() {
   const pkgPath = path.resolve('./package.json')
