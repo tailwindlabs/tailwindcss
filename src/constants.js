@@ -3,7 +3,7 @@ import path from 'path'
 export const cli = 'tailwind'
 export const defaultConfigFile = './tailwind.config.js'
 export const defaultPostCssConfigFile = './postcss.config.js'
-export const cjsConfigFile = './tailwind.config.js'
+export const cjsConfigFile = './tailwind.config.cjs'
 export const cjsPostCssConfigFile = './postcss.config.cjs'
 
 export const supportedConfigFiles = [cjsConfigFile, defaultConfigFile]
