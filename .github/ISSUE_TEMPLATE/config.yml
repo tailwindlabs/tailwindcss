@@ -1,11 +1,14 @@
 blank_issues_enabled: false
 contact_links:
   - name: Feature Request
-    url: https://github.com/tailwindcss/tailwindcss/discussions/new?category_id=65335
+    url: https://github.com/tailwindlabs/tailwindcss/discussions/new?category_id=65335
     about: 'Suggest any ideas you have using our discussion forums.'
   - name: Help
-    url: https://github.com/tailwindcss/tailwindcss/discussions/new?category_id=65334
+    url: https://github.com/tailwindlabs/tailwindcss/discussions/new?category_id=65334
     about: 'If you have a question or need help, ask a question on the discussion forums.'
   - name: Documentation Issue
-    url: https://github.com/tailwindcss/docs
+    url: https://github.com/tailwindlabs/tailwindcss.com
     about: 'For documentation issues, suggest changes on our documentation repository.'
+  - name: Kind Words
+    url: https://github.com/tailwindlabs/tailwindcss/discussions/new?category_id=32231828
+    about: 'Have something nice to say about Tailwind? We'd love to hear it!'
