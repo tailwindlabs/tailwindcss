@@ -11,4 +11,4 @@ contact_links:
     about: 'For documentation issues, suggest changes on our documentation repository.'
   - name: Kind Words
     url: https://github.com/tailwindlabs/tailwindcss/discussions/new?category_id=32231828
-    about: 'Have something nice to say about Tailwind? We'd love to hear it!'
+    about: "Have something nice to say about Tailwind? We'd love to hear it!"
