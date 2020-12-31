@@ -232,7 +232,10 @@ module.exports = {
     // These options are passed through directly to PurgeCSS
     options: {
       safelist: ['bg-red-500', 'px-4'],
-    }
+      blockList: [/^debug-/],
+      keyframes: true,
+      fontFace: true,
+    },
   },
   // ...
 }
