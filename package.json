@@ -68,7 +68,7 @@
     "lodash": "^4.17.20",
     "modern-normalize": "^1.0.0",
     "node-emoji": "^1.8.1",
-    "object-hash": "^2.0.3",
+    "object-hash": "^2.1.1",
     "postcss-functions": "^3",
     "postcss-js": "^3.0.3",
     "postcss-nested": "^5.0.1",
