@@ -21,7 +21,8 @@ export function Search() {
   const [isOpen, setIsOpen] = useState(false)
   const searchButtonRef = useRef()
   const [initialQuery, setInitialQuery] = useState(null)
-  const [actionKey, setActionKey] = useState()
+  const [browserDetected, setBrowserDetected] = useState(false)
+  const [actionKey, setActionKey] = useState(ACTION_KEY_DEFAULT)
 
   const onOpen = useCallback(() => {
     setIsOpen(true)
@@ -54,6 +55,7 @@ export function Search() {
       } else {
         setActionKey(ACTION_KEY_DEFAULT)
       }
+      setBrowserDetected(true)
     }
   }, [])
 
@@ -85,19 +87,20 @@ export function Search() {
         <span>
           Quick search<span className="hidden sm:inline"> for anything</span>
         </span>
-        {actionKey && (
-          <span className="hidden sm:block text-gray-400 text-sm leading-5 py-0.5 px-1.5 border border-gray-300 rounded-md">
-            <span className="sr-only">Press </span>
-            <kbd className="font-sans">
-              <abbr title={actionKey[1]} className="no-underline">
-                {actionKey[0]}
-              </abbr>
-            </kbd>
-            <span className="sr-only"> and </span>
-            <kbd className="font-sans">K</kbd>
-            <span className="sr-only"> to search</span>
-          </span>
-        )}
+        <span
+          style={{ opacity: browserDetected ? '1' : '0' }}
+          className="hidden sm:block text-gray-400 text-sm leading-5 py-0.5 px-1.5 border border-gray-300 rounded-md"
+        >
+          <span className="sr-only">Press </span>
+          <kbd className="font-sans">
+            <abbr title={actionKey[1]} className="no-underline">
+              {actionKey[0]}
+            </abbr>
+          </kbd>
+          <span className="sr-only"> and </span>
+          <kbd className="font-sans">K</kbd>
+          <span className="sr-only"> to search</span>
+        </span>
       </button>
       {isOpen &&
         createPortal(
