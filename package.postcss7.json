@@ -1,4 +1,7 @@
 {
+  "devDependencies": {
+    "postcss": "^7",
+  },
   "dependencies": {
     "autoprefixer": "^9",
     "postcss": "^7",
