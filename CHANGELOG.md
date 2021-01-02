@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Added
+
+- Add current version and license to the base style ([#3255](https://github.com/tailwindlabs/tailwindcss/pull/3255))
 
 ## [2.0.2] - 2020-12-11
 
