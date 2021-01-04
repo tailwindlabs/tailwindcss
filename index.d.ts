@@ -4,7 +4,7 @@ export interface Config {
    * 
    * [Documentation](https://tailwindcss.com/docs/dark-mode)
    */
-  darkMode?: 'media' | 'class'
+  dark?: 'media' | 'class'
 
   /**
    * Configure what PurgeCSS removes when building for production.
@@ -35,7 +35,6 @@ export interface Config {
 
   /** Use to disable core plugins. */
   corePlugins?: Record<CorePluginNames, boolean>
-  plugins?: any[]
 }
 
 interface Theme {
