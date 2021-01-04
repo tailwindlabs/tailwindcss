@@ -35,6 +35,7 @@ export interface Config {
 
   /** Use to disable core plugins. */
   corePlugins?: Record<CorePluginNames, boolean>
+  plugins?: any[]
 }
 
 interface Theme {
