@@ -27,6 +27,7 @@ export default function buildMediaQuery(screens) {
           )
           return `(${feature}: ${value})`
         })
+        .uniq()
         .join(' and ')
     })
     .join(', ')
