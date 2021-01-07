@@ -1,0 +1,39 @@
+@font-face {
+  font-family: 'Inter var';
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+  font-named-instance: 'Regular';
+  src: url('../fonts/Inter-roman-latin.var.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter var';
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: italic;
+  font-named-instance: 'Italic';
+  src: url('../fonts/Inter-italic-latin.var.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/SourceSansPro-Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Ubuntu Mono';
+  font-weight: 700;
+  font-style: normal;
+  src: url('../fonts/Ubuntu-Mono-bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Flow';
+  font-weight: 400;
+  font-style: normal;
+  src: url('../fonts/flow-circular.woff') format('woff');
+}
