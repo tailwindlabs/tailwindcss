@@ -56,9 +56,15 @@ export default function (config) {
     })
 
     _.keys(screens).forEach((screen) => {
+      const generatedMediaQuery = buildMediaQuery(screens[screen])
+
+      if (generatedMediaQuery === undefined) {
+        return;
+      }
+
       const mediaQuery = postcss.atRule({
         name: 'media',
-        params: buildMediaQuery(screens[screen]),
+        params: generatedMediaQuery,
       })
 
       mediaQuery.append(

@@ -5,6 +5,18 @@ describe('buildMediaQuery', () => {
     it('definition as string', () => {
       expect(buildMediaQuery('640px')).toEqual('(min-width: 640px)')
     })
+
+    it('string empty', () => {
+      expect(buildMediaQuery('')).toEqual(undefined)
+    })
+
+    it('undefined', () => {
+      expect(buildMediaQuery(undefined)).toEqual(undefined)
+    })
+
+    it('null', () => {
+      expect(buildMediaQuery(null)).toEqual(undefined)
+    })
   })
 
   describe('parameter simple object', () => {
