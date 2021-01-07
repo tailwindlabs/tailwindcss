@@ -59,7 +59,7 @@ export default function (config) {
       const generatedMediaQuery = buildMediaQuery(screens[screen])
 
       if (generatedMediaQuery === undefined) {
-        return;
+        return
       }
 
       const mediaQuery = postcss.atRule({
