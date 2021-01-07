@@ -13,7 +13,7 @@ export default function ({ theme }) {
       atRule.name = 'media'
       atRule.params = buildMediaQuery(theme.screens[screen])
 
-      if (atRule.params === undefined) {
+      if (atRule.params === '') {
         atRule.remove()
       }
     })

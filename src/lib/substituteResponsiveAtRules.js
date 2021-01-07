@@ -58,7 +58,7 @@ export default function (config) {
     _.keys(screens).forEach((screen) => {
       const generatedMediaQuery = buildMediaQuery(screens[screen])
 
-      if (generatedMediaQuery === undefined) {
+      if (generatedMediaQuery === '') {
         return
       }
 

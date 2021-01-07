@@ -1,12 +1,12 @@
 import _ from 'lodash'
 
 function isInvalidValue(value) {
-  return !value || value === '' || value === 0 || value === '0'
+  return !value || value === '' || value === 0 || value === '0' || value === '0px'
 }
 
 export default function buildMediaQuery(screens) {
   if (isInvalidValue(screens)) {
-    return undefined
+    return ''
   }
 
   if (_.isString(screens)) {
@@ -35,14 +35,15 @@ export default function buildMediaQuery(screens) {
           )
 
           if (isInvalidValue(value)) {
-            return undefined
+            return ''
           }
 
           return `(${feature}: ${value})`
         })
         .uniq()
-        .filter((v) => v !== undefined)
+        .filter((v) => !isInvalidValue(v))
         .join(' and ')
     })
+    .filter((v) => !isInvalidValue(v))
     .join(', ')
 }

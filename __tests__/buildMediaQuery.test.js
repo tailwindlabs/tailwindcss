@@ -5,18 +5,6 @@ describe('buildMediaQuery', () => {
     it('definition as string', () => {
       expect(buildMediaQuery('640px')).toEqual('(min-width: 640px)')
     })
-
-    it('string empty', () => {
-      expect(buildMediaQuery('')).toEqual(undefined)
-    })
-
-    it('undefined', () => {
-      expect(buildMediaQuery(undefined)).toEqual(undefined)
-    })
-
-    it('null', () => {
-      expect(buildMediaQuery(null)).toEqual(undefined)
-    })
   })
 
   describe('parameter simple object', () => {
@@ -75,6 +63,46 @@ describe('buildMediaQuery', () => {
           },
         ])
       ).toEqual('(min-width: 668px) and (max-width: 767px), (min-width: 868px)')
+    })
+
+    it('with multiple set of values, only one valid', () => {
+      expect(
+        buildMediaQuery([
+          {
+            min: '668px',
+            max: '767px',
+          },
+          {
+            min: '',
+          },
+        ])
+      ).toEqual('(min-width: 668px) and (max-width: 767px)')
+    })
+  })
+
+  describe('parameter invalid', () => {
+    it('string empty', () => {
+      expect(buildMediaQuery('')).toEqual('')
+    })
+
+    it('undefined', () => {
+      expect(buildMediaQuery(undefined)).toEqual('')
+    })
+
+    it('null', () => {
+      expect(buildMediaQuery(null)).toEqual('')
+    })
+
+    it('0px', () => {
+      expect(buildMediaQuery('0px')).toEqual('')
+    })
+
+    it('with invalid value', () => {
+      expect(
+        buildMediaQuery({
+          min: '0',
+        })
+      ).toEqual('')
     })
   })
 })
