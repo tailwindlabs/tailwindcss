@@ -43,6 +43,7 @@
     "minimatch": "^3.0.4",
     "next": "^10.0.1",
     "postcss": "^8.1.7",
+    "postcss-focus-visible": "^5.0.0",
     "postcss-nested": "^4.2.3",
     "prismjs": "^1.20.0",
     "react": "16.13.1",
