@@ -13,6 +13,7 @@ import Link from 'next/link'
 import { SidebarLayout, SidebarContext } from '@/layouts/SidebarLayout'
 import { PageHeader } from '@/components/PageHeader'
 import clsx from 'clsx'
+import hiringCard from '@/img/hiring-card.png'
 
 export const ContentsContext = createContext()
 
@@ -83,6 +84,15 @@ function TableOfContents({ tableOfContents, currentSection }) {
           )
         })}
       </ul>
+      <div className="mt-8">
+        <a className="block" href="https://jobs.tailwindui.com/lead-designer">
+          <img src={hiringCard} className="rounded-xl shadow-lg" alt="" />
+          <div className="mt-3 text-sm leading-5">
+            <p>We're hiring a Lead Designer! Fully remote, $125k–$175k/yr.</p>
+            <p className="mt-1 font-medium text-gray-700">Learn more &rarr;</p>
+          </div>
+        </a>
+      </div>
     </>
   )
 }
