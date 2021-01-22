@@ -179,6 +179,40 @@ Use `content-around` to distribute rows in a container such that there is an equ
 </div>
 ```
 
+## Space evenly
+
+Use `content-evenly` to distribute rows in a container such that there is an equal amount of space around each item, but also accounting for the doubling of space you would normally see between each item when using `content-around`:
+
+```html purple
+<template preview class="p-4">
+  <div class="flex content-evenly flex-wrap h-48 bg-stripes bg-stripes-purple-500 rounded-lg">
+    <div class="w-1/3 p-2">
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-purple-500">1</div>
+    </div>
+    <div class="w-1/3 p-2">
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-purple-500">2</div>
+    </div>
+    <div class="w-1/3 p-2">
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-purple-500">3</div>
+    </div>
+    <div class="w-1/3 p-2">
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-purple-500">4</div>
+    </div>
+    <div class="w-1/3 p-2">
+      <div class="h-12 text-white text-2xl font-extrabold rounded-md flex items-center justify-center bg-purple-500">5</div>
+    </div>
+  </div>
+</template>
+
+<div class="h-48 flex flex-wrap **content-evenly** ...">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+  <div>4</div>
+  <div>5</div>
+</div>
+```
+
 ## Responsive
 
 To control the alignment of flex content at a specific breakpoint, add a `{screen}:` prefix to any existing utility class. For example, use `md:content-around` to apply the `content-around` utility at only medium screen sizes and above.
