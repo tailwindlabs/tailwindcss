@@ -207,5 +207,10 @@
     "source": "/components/:slug",
     "destination": "https://tailwindui.com/components",
     "permanent": false
+  },
+  {
+    "source": "/docs/upcoming-changes",
+    "destination": "https://v1.tailwindcss.com/docs/upcoming-changes",
+    "permanent": false
   }
 ]
