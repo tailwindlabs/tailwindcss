@@ -10,7 +10,6 @@ import Link from 'next/link'
 import stats from '@/utils/stats'
 
 
-
 ## Integration guides
 
 Installing Tailwind CSS can be a slightly different process depending on what other frameworks/tools you're using, so we've put together a bunch of guides that cover popular setups.
@@ -21,9 +20,9 @@ Don't see your favorite tool in the list? We're always working on new guides, bu
 
 ---
 
-
-
 ## Installing Tailwind CSS as a PostCSS plugin
+
+*Tailwind CSS requires Node.js 12.13.0 or higher.*
 
 For most real-world projects, we recommend installing Tailwind as a PostCSS plugin. Most modern frameworks use PostCSS under the hood already, and there's a good chance you've used or are currently using other PostCSS plugins like [autoprefixer](https://github.com/postcss/autoprefixer).
 
@@ -157,6 +156,8 @@ In this case, you should [switch to our PostCSS 7 compatibility build](#post-css
 ---
 
 ## Using Tailwind without PostCSS
+
+*Tailwind CSS requires Node.js 12.13.0 or higher.*
 
 For simple projects or just giving Tailwind a spin, you can use the Tailwind CLI tool to generate your CSS without configuring PostCSS or even installing Tailwind as a dependency if you don't want to.
 
