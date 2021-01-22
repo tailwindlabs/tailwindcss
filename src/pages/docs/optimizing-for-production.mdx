@@ -219,9 +219,26 @@ module.exports = {
 
 **We do not recommend this**, and generally find you get 99% of the file size benefits by sticking with the more conservative default approach.
 
+### Removing unused keyframes
+
+PurgeCSS does not remove unused `@keyframes` rules by default, so you may notice some animation related styles left over in your stylesheet even if you aren't using them. You can remove these using PurgeCSS's `keyframes` option under `options`:
+
+```js
+// tailwind.config.js
+module.exports = {
+  purge: {
+    content: ['./src/**/*.html'],
+    options: {
+      keyframes: true,
+    },
+  },
+  // ...
+}
+```
+
 ### PurgeCSS options
 
-If you need to pass any options directly to PurgeCSS, you can do so using `options`:
+If you need to pass any other options directly to PurgeCSS, you can do so using `options`:
 
 ```js
 // tailwind.config.js
