@@ -45,7 +45,7 @@
     "postcss": "^8.1.7",
     "postcss-focus-visible": "^5.0.0",
     "postcss-nested": "^4.2.3",
-    "prismjs": "^1.20.0",
+    "prismjs": "^1.21.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-intersection-observer": "^8.29.0",
