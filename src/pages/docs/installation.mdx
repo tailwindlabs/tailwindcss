@@ -247,6 +247,14 @@ npx tailwindcss-cli@latest build ./src/tailwind.css -c ./.config/tailwind.config
 
 Learn more about configuring Tailwind in the [configuration documentation](/docs/configuration).
 
+### Disabling Autoprefixer
+
+By default, the Tailwind CLI tool will run your CSS through [Autoprefixer](https://github.com/postcss/autoprefixer) to add any necessary vendor prefixes. If you already have Autoprefixer set up in your build pipeline somewhere further down the chain, you can disable it in the Tailwind CLI tool using the `--no-autoprefixer` flag to avoid running it twice:
+
+```shell
+npx tailwindcss-cli@latest build --no-autoprefixer -o tailwind.css
+```
+
 ### Building for production
 
 When building for production, set `NODE_ENV=production` on the command line when building your CSS:
