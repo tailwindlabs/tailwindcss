@@ -212,5 +212,10 @@
     "source": "/docs/upcoming-changes",
     "destination": "https://v1.tailwindcss.com/docs/upcoming-changes",
     "permanent": false
+  },
+  {
+    "source": "/docs/typography-plugin",
+    "destination": "https://github.com/tailwindlabs/tailwindcss-typography",
+    "permanent": false
   }
 ]

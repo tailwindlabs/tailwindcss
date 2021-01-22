@@ -169,5 +169,22 @@ export const documentationNav = {
   ],
   SVG: [pages['fill'], pages['stroke'], pages['stroke-width']],
   Accessibility: [pages['screen-readers']],
-  'Official Plugins': [pages['typography-plugin']],
+  'Official Plugins': [
+    {
+      title: 'Typography',
+      href: 'https://github.com/tailwindlabs/tailwindcss-typography',
+    },
+    {
+      title: 'Forms',
+      href: 'https://github.com/tailwindlabs/tailwindcss-forms',
+    },
+    {
+      title: 'Aspect Ratio',
+      href: 'https://github.com/tailwindlabs/tailwindcss-aspect-ratio',
+    },
+    {
+      title: 'Line Clamp',
+      href: 'https://github.com/tailwindlabs/tailwindcss-line-clamp',
+    },
+  ],
 }
