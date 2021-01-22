@@ -156,6 +156,31 @@ module.exports = {
 }
 ```
 
+## Configure your breakpoints explicitly
+
+Tailwind CSS v2.0 adds a new `2xl` breakpoint which will affect any situations where you've used the `container` class. If this impacts you, remove the `2xl` breakpoint by overriding `screens` with your existing breakpoints:
+
+```diff-js
+// tailwind.config.js
+module.exports = {
+  purge: [
+  // ...
+  ],
+  theme: {
++    screens: {
++      sm: '640px',
++      md: '768px',
++      lg: '1024px',
++      xl: '1280px',
++    }
+    // ...
+   },
+  variants: {
+    // ...
+  }
+}
+```
+
 ## Configure your color palette explicitly
 
 **If you are already using a custom color palette, no changes are required and you can safely skip this step.**
@@ -657,3 +682,5 @@ If you are referencing any configured keyframes in custom CSS, you'll want to ma
 ```
 
 This only matters if you've configured a prefix _and_ you're referencing configured keyframes in custom CSS files. If this affects more than two people on the entire planet I will be absolutely amazed.
+
+
