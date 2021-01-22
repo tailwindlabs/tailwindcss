@@ -1,17 +1,1 @@
-<svg width="192" height="128" viewBox="0 0 192 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0)">
-<rect width="192" height="128" rx="12" fill="#FFFBEB"/>
-<circle cx="78" cy="28" r="12" fill="#FDE68A"/>
-<path d="M52 48L84 80H100L140 112H-12L52 48Z" fill="#F59E0B"/>
-<path d="M116 32L132 48H148L212 104H44L116 32Z" fill="#FBBF24"/>
-<path d="M116 38V52L100 68L144 104H50L116 38Z" fill="#FCD34D"/>
-<rect y="96" width="192" height="40" fill="#FDE68A"/>
-<rect x="4" y="4" width="184" height="120" rx="8" stroke="#F59E0B" stroke-opacity="0.25" stroke-width="8"/>
-<rect x="2" y="2" width="188" height="124" rx="10" stroke="#FFFBEB" stroke-opacity="0.5" stroke-width="4"/>
-</g>
-<defs>
-<clipPath id="clip0">
-<rect width="192" height="128" rx="12" fill="white"/>
-</clipPath>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="128" fill="none" viewBox="0 0 192 128"><g clip-path="url(#clip0)"><rect width="192" height="128" fill="#FFFBEB" rx="12"/><circle cx="78" cy="28" r="12" fill="#FDE68A"/><path fill="#F59E0B" d="M52 48L84 80H100L140 112H-12L52 48Z"/><path fill="#FBBF24" d="M116 32L132 48H148L212 104H44L116 32Z"/><path fill="#FCD34D" d="M116 38V52L100 68L144 104H50L116 38Z"/><rect width="192" height="40" y="96" fill="#FDE68A"/><rect width="184" height="120" x="4" y="4" stroke="#F59E0B" stroke-opacity=".25" stroke-width="8" rx="8"/><rect width="188" height="124" x="2" y="2" stroke="#FFFBEB" stroke-opacity=".5" stroke-width="4" rx="10"/></g><defs><clipPath id="clip0"><rect width="192" height="128" fill="#fff" rx="12"/></clipPath></defs></svg>

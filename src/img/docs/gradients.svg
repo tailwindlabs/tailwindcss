@@ -1,14 +1,1 @@
-<svg width="144" height="48" viewBox="0 0 144 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="144" height="48" fill="white"/>
-<rect x="8" y="24" width="128" height="20" rx="4" fill="url(#paint0_linear)"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M2 4C0.895431 4 0 4.89543 0 6V18C0 19.1046 0.89543 20 2 20H6L8 22L10 20H14C15.1046 20 16 19.1046 16 18V6C16 4.89543 15.1046 4 14 4H2ZM14 6H2V18H14V6Z" fill="#22D3EE"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M130 4C128.895 4 128 4.89543 128 6V18C128 19.1046 128.895 20 130 20H134L136 22L138 20H142C143.105 20 144 19.1046 144 18V6C144 4.89543 143.105 4 142 4H130ZM142 6H130V18H142V6Z" fill="#22D3EE"/>
-<rect x="4" y="8" width="8" height="8" fill="#A5F3FC"/>
-<rect x="132" y="8" width="8" height="8" fill="#22D3EE"/>
-<defs>
-<linearGradient id="paint0_linear" x1="136" y1="34.4762" x2="8" y2="34.4762" gradientUnits="userSpaceOnUse">
-<stop stop-color="#22D3EE"/>
-<stop offset="1" stop-color="#A5F3FC"/>
-</linearGradient>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="144" height="48" fill="none" viewBox="0 0 144 48"><rect width="144" height="48" fill="#fff"/><rect width="128" height="20" x="8" y="24" fill="url(#paint0_linear)" rx="4"/><path fill="#22D3EE" fill-rule="evenodd" d="M2 4C0.895431 4 0 4.89543 0 6V18C0 19.1046 0.89543 20 2 20H6L8 22L10 20H14C15.1046 20 16 19.1046 16 18V6C16 4.89543 15.1046 4 14 4H2ZM14 6H2V18H14V6Z" clip-rule="evenodd"/><path fill="#22D3EE" fill-rule="evenodd" d="M130 4C128.895 4 128 4.89543 128 6V18C128 19.1046 128.895 20 130 20H134L136 22L138 20H142C143.105 20 144 19.1046 144 18V6C144 4.89543 143.105 4 142 4H130ZM142 6H130V18H142V6Z" clip-rule="evenodd"/><rect width="8" height="8" x="4" y="8" fill="#A5F3FC"/><rect width="8" height="8" x="132" y="8" fill="#22D3EE"/><defs><linearGradient id="paint0_linear" x1="136" x2="8" y1="34.476" y2="34.476" gradientUnits="userSpaceOnUse"><stop stop-color="#22D3EE"/><stop offset="1" stop-color="#A5F3FC"/></linearGradient></defs></svg>

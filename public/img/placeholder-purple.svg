@@ -1,17 +1,1 @@
-<svg width="192" height="128" viewBox="0 0 192 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0)">
-<rect width="192" height="128" rx="12" fill="#FAF5FF"/>
-<circle cx="78" cy="28" r="12" fill="#E9D5FF"/>
-<path d="M52 48L84 80H100L140 112H-12L52 48Z" fill="#A855F7"/>
-<path d="M116 32L132 48H148L212 104H44L116 32Z" fill="#C084FC"/>
-<path d="M116 38V52L100 68L144 104H50L116 38Z" fill="#D8B4FE"/>
-<rect y="96" width="192" height="40" fill="#E9D5FF"/>
-<rect x="4" y="4" width="184" height="120" rx="8" stroke="#A855F7" stroke-opacity="0.25" stroke-width="8"/>
-<rect x="2" y="2" width="188" height="124" rx="10" stroke="#FAF5FF" stroke-opacity="0.5" stroke-width="4"/>
-</g>
-<defs>
-<clipPath id="clip0">
-<rect width="192" height="128" rx="12" fill="white"/>
-</clipPath>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="128" fill="none" viewBox="0 0 192 128"><g clip-path="url(#clip0)"><rect width="192" height="128" fill="#FAF5FF" rx="12"/><circle cx="78" cy="28" r="12" fill="#E9D5FF"/><path fill="#A855F7" d="M52 48L84 80H100L140 112H-12L52 48Z"/><path fill="#C084FC" d="M116 32L132 48H148L212 104H44L116 32Z"/><path fill="#D8B4FE" d="M116 38V52L100 68L144 104H50L116 38Z"/><rect width="192" height="40" y="96" fill="#E9D5FF"/><rect width="184" height="120" x="4" y="4" stroke="#A855F7" stroke-opacity=".25" stroke-width="8" rx="8"/><rect width="188" height="124" x="2" y="2" stroke="#FAF5FF" stroke-opacity=".5" stroke-width="4" rx="10"/></g><defs><clipPath id="clip0"><rect width="192" height="128" fill="#fff" rx="12"/></clipPath></defs></svg>
