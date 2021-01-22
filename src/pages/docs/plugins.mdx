@@ -693,6 +693,83 @@ This object is just another [Tailwind configuration object](/docs/configuration)
 
 By providing your defaults this way, end users will be able to [override](/docs/theme#overriding-the-default-theme) and [extend](/docs/theme#extending-the-default-theme) your defaults the same way they can with Tailwind's built-in styles.
 
+### Exposing advanced configuration options
+
+Sometimes it makes sense for a plugin to be configurable in a way that doesn't really belong under `theme` or `variants`, like perhaps you want users to be able to customize the class name your plugin uses.
+
+For cases like this, you can use `plugin.withOptions` to define a plugin that can be invoked with a configuration object. This API is similar to the regular `plugin` API, except each argument should be a function that receives the user's `options` and returns the value that you would have normally passed in using the regular API:
+
+```js
+// ./plugins/gradients.js
+const _ = require('lodash')
+const plugin = require('tailwindcss/plugin')
+
+module.exports = plugin.withOptions(function (options) {
+  return function({ addUtilities, e, theme, variants }) {
+    const classPrefix = options.classPrefix ?? 'bg-gradient'
+    const gradients = theme('gradients', {})
+    const gradientVariants = variants('gradients', [])
+
+    const utilities = _.map(gradients, ([start, end], name) => ({
+      [`.${e(`${classPrefix}-${name}`)}`]: {
+        backgroundImage: `linear-gradient(to right, ${start}, ${end})`
+      }
+    }))
+
+    addUtilities(utilities, gradientVariants)
+  })
+}, function (options) {
+  return {
+    theme: {
+      gradients: theme => ({
+        'blue-green': [theme('colors.blue.500'), theme('colors.green.500')],
+        'purple-blue': [theme('colors.purple.500'), theme('colors.blue.500')],
+        // ...
+      })
+    },
+    variants: {
+      gradients: ['responsive', 'hover'],
+    }
+  }
+})
+```
+
+The user would invoke your plugin passing along their options when registering it in their `plugins` configuration:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    // ...
+  },
+  variants: {
+    // ...
+  },
+  plugins: [
+    require('./plugins/gradients')({
+      classPrefix: 'bg-grad'
+    })
+  ],
+}
+```
+
+The user can also register plugins created this way normally without invoking them if they don't need to pass in any custom options:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    // ...
+  },
+  variants: {
+    // ...
+  },
+  plugins: [
+    require('./plugins/gradients')
+  ],
+}
+```
+
 ---
 
 ## CSS-in-JS syntax
