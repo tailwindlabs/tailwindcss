@@ -106,6 +106,18 @@ You can always add default list styles to your project by [adding your own base 
 
 If you'd like to selectively introduce default list styles into article-style parts of a page, we recommend the [@tailwindcss/typography plugin](/docs/typography-plugin/).
 
+### Accessibility considerations
+
+Unstyled lists are [not announced as lists by VoiceOver](https://unfetteredthoughts.net/2017/09/26/voiceover-and-list-style-type-none/). If your content is truly a list but you would like to keep it unstyled, [add a "list" role](https://www.scottohara.me/blog/2019/01/12/lists-and-safari.html) to the element:
+
+```html
+<ul role="list">
+  <li>One</li>
+  <li>Two</li>
+  <li>Three</li>
+</ul>
+```
+
 ---
 
 ## Images are block-level
