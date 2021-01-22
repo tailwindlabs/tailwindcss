@@ -36,7 +36,7 @@
     "framer-motion": "^2.9.1",
     "front-matter": "^4.0.2",
     "glob": "^7.1.6",
-    "gsap": "^3.4.2",
+    "gsap": "^3.6.0",
     "gzip-size": "^5.1.1",
     "intersection-observer": "^0.11.0",
     "just-group-by": "^1.0.0",
