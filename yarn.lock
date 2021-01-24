@@ -1163,12 +1163,12 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@fullhuman/postcss-purgecss@^3.1.3":
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/@fullhuman/postcss-purgecss/-/postcss-purgecss-3.1.3.tgz#47af7b87c9bfb3de4bc94a38f875b928fffdf339"
-  integrity sha512-kwOXw8fZ0Lt1QmeOOrd+o4Ibvp4UTEBFQbzvWldjlKv5n+G9sXfIPn1hh63IQIL8K8vbvv1oYMJiIUbuy9bGaA==
+"@fullhuman/postcss-purgecss@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@fullhuman/postcss-purgecss/-/postcss-purgecss-4.0.0.tgz#9e27ccdc5d19192af8b59d9d9e4f480cfb5c55c9"
+  integrity sha512-1DNYIDxFsvGOeKdc2BFtIQriMWwzX6dY+9q0Z0n9TNZhFZ9T6nHRZHPC22aYLlPDd0ucCgIr1deTgDTrjq21KQ==
   dependencies:
-    purgecss "^3.1.3"
+    purgecss "^4.0.0"
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.0.0"
@@ -4652,10 +4652,10 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-purgecss@^3.1.3:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/purgecss/-/purgecss-3.1.3.tgz#26987ec09d12eeadc318e22f6e5a9eb0be094f41"
-  integrity sha512-hRSLN9mguJ2lzlIQtW4qmPS2kh6oMnA9RxdIYK8sz18QYqd6ePp4GNDl18oWHA1f2v2NEQIh51CO8s/E3YGckQ==
+purgecss@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/purgecss/-/purgecss-4.0.0.tgz#25446199df2ec40d418caf4b95c7548a011be3f1"
+  integrity sha512-j/y6OtNpEiggw/ipCJUOMNLgLpeAv9L8q+SqzEdDzyVEZOfdWjg8yvgOxhBflNyYgJ8SZ+tTwPxrHT9vQUpEPw==
   dependencies:
     commander "^6.0.0"
     glob "^7.0.0"
