@@ -104,14 +104,13 @@ const testimonials = [
       avatar: require('@/img/avatars/aaron-bushnell.jpg').default,
     },
   },
-
   {
     content:
       'Have been working with CSS for over ten years and Tailwind just makes my life easier. It is still CSS and you use flex, grid, etc. but just quicker to write and maintain.',
     tweetUrl: 'https://twitter.com/debs_obrien/status/1243255468241420288',
     author: {
-      name: `Head of Learning @ Nuxt.js`,
-      role: 'Full-Stack Developer',
+      name: `Debbie O'Brien`,
+      role: 'Head of Learning @ Nuxt.js',
       avatar: require('@/img/avatars/debbie-obrien.jpg').default,
     },
   },
