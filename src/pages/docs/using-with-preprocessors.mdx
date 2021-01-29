@@ -107,7 +107,9 @@ The place you are most likely to run into this situation is in your main CSS fil
 @import "./custom-utilities.css";
 ```
 
-You can solve this by putting your `@tailwind` declarations each in their own file. To make this easy, we provide separate files for each `@tailwind` declaration with the framework itself that you can import directly from `node_modules`.
+You can solve this by creating separate files for each `@tailwind` declaration, and then importing those files in your main stylesheet. To make this easy, we provide separate files for each `@tailwind` declaration out of the box that you can import directly from `node_modules`.
+
+The `postcss-import` plugin is smart enough to look for files in the `node_modules` folder automatically, so you don't need to provide the entire path — `"tailwindcss/base"` for example is enough.
 
 <TipGood>Import our provided CSS files</TipGood>
 
@@ -121,8 +123,6 @@ You can solve this by putting your `@tailwind` declarations each in their own fi
 @import "tailwindcss/utilities";
 @import "./custom-utilities.css";
 ```
-
-`postcss-import` is smart enough to look for files in the `node_modules` folder automatically, so you don't need to provide the entire path — `"tailwindcss/base"` for example is enough.
 
 ### Nesting
 
