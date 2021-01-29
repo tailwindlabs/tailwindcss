@@ -286,6 +286,34 @@ module.exports = {
 
 The `theme()` function attempts to find the value you are looking for from the fully merged theme object, so it can reference your own customizations as well as the default theme values. It also works recursively, so as long as there is a static value at the end of the chain it will be able to resolve the value you are looking for.
 
+Note that you can only use this kind of closure with top-level theme keys, not the keys inside of each section.
+
+<TipBad>You can't use functions for individual values</TipBad>
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    fill: {
+      gray: theme => theme('colors.gray')
+    }
+  }
+}
+```
+
+<TipGood>Use functions for top-level theme keys</TipGood>
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    fill: theme => ({
+      gray: theme('colors.gray')
+    })
+  }
+}
+```
+
 ### Referencing the default theme
 
 If you'd like to reference a value in the default theme for any reason, you can import it from `tailwindcss/defaultTheme`.
