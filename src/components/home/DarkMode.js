@@ -175,9 +175,9 @@ export function DarkMode() {
         </BigText>
         <Paragraph className="mb-6">
           Don’t want to be one of those websites that blinds people when they open it on their phone
-          at 2am? Throw <InlineCode>dark:</InlineCode> in front of any color utility to apply it
-          when dark mode is active. Works for background colors, text colors, border colors, and
-          even gradients out-of-the-box — no configuration required.
+          at 2am? Enable dark mode in your configuration file then throw{' '}
+          <InlineCode>dark:</InlineCode> in front of any color utility to apply it when dark mode is
+          active. Works for background colors, text colors, border colors, and even gradients.
         </Paragraph>
         <Link href="/docs/dark-mode" className="text-green-600 hover:text-green-800">
           Learn more -&gt;
