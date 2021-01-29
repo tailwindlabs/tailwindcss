@@ -58,7 +58,7 @@ export default function (
     css.walkAtRules('tailwind', (atRule) => {
       if (atRule.params === 'preflight') {
         // prettier-ignore
-        throw atRule.error("`@tailwind preflight` is not a valid at-rule in Tailwind v1.0, use `@tailwind base` instead.", { word: 'preflight' })
+        throw atRule.error("`@tailwind preflight` is not a valid at-rule in Tailwind v2.0, use `@tailwind base` instead.", { word: 'preflight' })
       }
 
       if (atRule.params === 'base') {
