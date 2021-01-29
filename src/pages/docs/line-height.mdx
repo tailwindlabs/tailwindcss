@@ -115,6 +115,26 @@ To control the line height of an element at a specific breakpoint, add a `{scree
 
 For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
 
+It's important to note that by default, Tailwind's [font-size](/docs/font-size) utilities each set their own default line-height. This means that any time you use a responsive font-size utility like `sm:text-xl`, any explicit line-height you have set for a smaller breakpoint will be overridden.
+
+```html
+<!-- The `leading-loose` class will be overridden at the `md` breakpoint -->
+<p class="text-lg leading-loose md:text-xl">
+  Lorem ipsum dolor sit amet ...
+</p>
+```
+
+If you want to override the default line-height after setting a breakpoint-specific font-size, make sure to set a breakpoint-specific line-height as well:
+
+```html
+<!-- The `leading-loose` class will be overridden at the `md` breakpoint -->
+<p class="text-lg leading-loose md:text-xl md:leading-loose">
+  Lorem ipsum dolor sit amet ...
+</p>
+```
+
+Using the same line-height across different font sizes is generally not going to give you good typographic results. Line-height should typically get smaller as font-size increases, so the default behavior here usually saves you a ton of work. If you find yourself fighting it, you can always [customize your font-size scale](https://tailwindcss.com/docs/font-size#customizing) to not include default line-heights.
+
 ## Customizing
 
 By default, Tailwind provides six relative and eight fixed `line-height` utilities. You change, add, or remove these by customizing the `lineHeight` section of your Tailwind theme config.
