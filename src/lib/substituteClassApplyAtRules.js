@@ -350,7 +350,7 @@ export default function substituteClassApplyAtRules(config, getProcessedPlugins,
               substituteScreenAtRules(config),
             ])
               .process(requiredTailwindAtRules.map((rule) => `@tailwind ${rule};`).join('\n'), {
-                from: undefined,
+                from: __filename,
               })
               .then((result) => {
                 defaultTailwindTree.set(lookupKey, result)
