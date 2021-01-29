@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+- Ensure sourcemap input is deterministic when using `@apply` in Vue components ([#3356](https://github.com/tailwindlabs/tailwindcss/pull/3356))
 
 ## [2.0.2] - 2020-12-11
 
