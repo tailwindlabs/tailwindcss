@@ -55,10 +55,10 @@ Add `tailwindcss` and `autoprefixer` to your PostCSS configuration. Most of the 
 ```js
 // postcss.config.js
 module.exports = {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  }
+  plugins: [
+    require('tailwindcss'),
+    require('autoprefixer'),
+  ]
 }
 ```
 
