@@ -141,6 +141,7 @@ module.exports = {
       wait: 'wait',
       text: 'text',
       move: 'move',
+      help: 'help',
       'not-allowed': 'not-allowed',
     },
     divideColor: (theme) => theme('borderColor'),
