@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add version comment to Preflight ([#3255](https://github.com/tailwindlabs/tailwindcss/pull/3255))
 - Ensure sourcemap input is deterministic when using `@apply` in Vue components ([#3356](https://github.com/tailwindlabs/tailwindcss/pull/3356))
 - Ensure placeholder opacity is consistent across browsers ([#3308](https://github.com/tailwindlabs/tailwindcss/pull/3308))
 - Add `cursor-help` by default ([#3199](https://github.com/tailwindlabs/tailwindcss/pull/3199))
