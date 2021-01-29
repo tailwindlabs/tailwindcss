@@ -37,7 +37,7 @@ Please ensure that the tests are passing when submitting a pull request. If you'
 In addition to the automated tests, if you'd like to test the generated CSS manually with your own test HTML file, you can generate the default build by running:
 
 ```sh
-npm run prepare
+npm run prepublishOnly
 ```
 
 This will create new CSS files in the `/dist` folder which you can reference in your own test HTML file. We often test our own changes by creating an `index.html` file in the root of the Tailwind project itself that pulls in the `/dist/tailwind.css` stylesheet:

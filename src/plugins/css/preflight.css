@@ -141,6 +141,7 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
+  opacity: 1;
   color: theme('colors.gray.400', #a1a1aa);
 }
 
