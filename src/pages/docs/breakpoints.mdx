@@ -75,6 +75,45 @@ These screen names will be reflected in your utilities, so your `text-center` ut
 }
 ```
 
+## Extending the default breakpoints
+
+The easiest way to add an additional larger breakpoint is using the `extend` key:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      screens: {
+        '3xl': '1600px',
+      },
+    },
+  },
+  variants: {},
+  plugins: [],
+}
+```
+
+If you want to add an additional small breakpoint, you can't use `extend` because the small breakpoint would be added to the end of the breakpoint list, and breakpoints need to be sorted from smallest to largest in order to work as expected with a min-width breakpoint system.
+
+Instead, override the entire `screens` key, re-specifying the default breakpoints:
+
+```js
+// tailwind.config.js
+const defaultTheme = require('tailwindcss/defaultTheme')
+
+module.exports = {
+  theme: {
+    screens: {
+      'xs': '475px',
+      ...defaultTheme.screens,
+    },
+  },
+  variants: {},
+  plugins: [],
+}
+```
+
 ## Max-width breakpoints
 
 If you want to work with max-width breakpoints instead of min-width, you can specify your screens as objects with a `max` key:
