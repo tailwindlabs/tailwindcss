@@ -82,10 +82,11 @@ npx tailwindcss init tailwindcss-config.js
 If you use a custom file name, you will need to specify it when including Tailwind as a plugin in your PostCSS configuration as well:
 
 ```js
+// postcss.config.js
 module.exports = {
-  plugins: [
-    require('tailwindcss')('./tailwindcss-config.js'),
-  ]
+  plugins: {
+    tailwindcss: { config: './tailwindcss-config.js' },
+  },
 }
 ```
 
@@ -101,10 +102,10 @@ This will generate a `postcss.config.js` file in your project that looks like th
 
 ```js
 module.exports = {
-  plugins: [
-    require('tailwindcss'),
-    require('autoprefixer'),
-  ]
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
 }
 ```
 

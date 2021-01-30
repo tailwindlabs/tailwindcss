@@ -303,11 +303,11 @@ Note that currently only [Chrome, Edge, and Firefox](https://caniuse.com/?search
 ```js
 // postcss.config.js
 module.exports = {
-  plugins: [
-    require('tailwindcss'),
-    require('postcss-focus-visible'),
-    require('autoprefixer'),
-  ]
+  plugins: {
+    tailwindcss: {},
+    'postcss-focus-visible': {},
+    autoprefixer: {}
+  }
 }
 ```
 
