@@ -716,6 +716,7 @@ module.exports = {
     },
   },
   variantOrder: [
+    'empty',
     'first',
     'last',
     'odd',
