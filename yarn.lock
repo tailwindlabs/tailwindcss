@@ -1684,13 +1684,13 @@ atob@^2.1.1:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-autoprefixer@^10.2.1:
-  version "10.2.1"
-  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-10.2.1.tgz#ce96870df6ddd9ba4c9bbba56c54b9ef4b00a962"
-  integrity sha512-dwP0UjyYvROUvtU+boBx8ff5pPWami1NGTrJs9YUsS/oZVbRAcdNHOOuXSA1fc46tgKqe072cVaKD69rvCc3QQ==
+autoprefixer@^10.2.4:
+  version "10.2.4"
+  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-10.2.4.tgz#c0e7cf24fcc6a1ae5d6250c623f0cb8beef2f7e1"
+  integrity sha512-DCCdUQiMD+P/as8m3XkeTUkUKuuRqLGcwD0nll7wevhqoJfMRpJlkFd1+MQh1pvupjiQuip42lc/VFvfUTMSKw==
   dependencies:
     browserslist "^4.16.1"
-    caniuse-lite "^1.0.30001173"
+    caniuse-lite "^1.0.30001181"
     colorette "^1.2.1"
     fraction.js "^4.0.13"
     normalize-range "^0.1.2"
@@ -1928,6 +1928,11 @@ caniuse-lite@^1.0.30001173:
   version "1.0.30001176"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001176.tgz#e44bac506d4656bae4944a1417f41597bd307335"
   integrity sha512-VWdkYmqdkDLRe0lvfJlZQ43rnjKqIGKHWhWWRbkqMsJIUaYDNf/K/sdZZcVO6YKQklubokdkJY+ujArsuJ5cag==
+
+caniuse-lite@^1.0.30001181:
+  version "1.0.30001185"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001185.tgz#3482a407d261da04393e2f0d61eefbc53be43b95"
+  integrity sha512-Fpi4kVNtNvJ15H0F6vwmXtb3tukv3Zg3qhKkOGUq7KJ1J6b9kf4dnNgtEAFXhRsJo0gNj9W60+wBvn0JcTvdTg==
 
 capture-exit@^2.0.0:
   version "2.0.0"
