@@ -47,7 +47,7 @@ Set the starting color of a gradient using the `from-{color}` utilities.
 <div class="bg-gradient-to-r **from-red-500** ..."></div>
 ```
 
-Gradients fade out to transparent by default without adding the ending color class. This is on purpose to make the notation concise, but also because iOS Safari still has a [bug](https://bugs.webkit.org/show_bug.cgi?id=150940) related to CoreGraphics being unable to interpolate the keyword "transparent". In such, do not use `to-transparent` to set a color to fade to its transparent counterpart. It will work in most browsers, but smudge your gradient on Safari for iOS.
+Gradients fade out to transparent by default without adding the ending color class. This is on purpose to make the notation concise, but also because iOS Safari still has a [bug](https://bugs.webkit.org/show_bug.cgi?id=150940) related to CoreGraphics being unable to interpolate the keyword "transparent". In such, do not use `to-transparent` to set a color to fade to its transparent counterpart. It will work in most browsers, but not on Safari for iOS.
 
 ```diff-html
 - <div class="bg-gradient-to-r from-red-500 to-transparent"></div>
