@@ -78,6 +78,7 @@ function validatePath(config, path, defaultValue) {
     !(
       typeof value === 'string' ||
       typeof value === 'number' ||
+      typeof value === 'function' ||
       value instanceof String ||
       value instanceof Number ||
       Array.isArray(value)
