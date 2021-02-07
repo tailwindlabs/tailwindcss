@@ -9,7 +9,7 @@ import processTailwindFeatures from './processTailwindFeatures'
 import formatCSS from './lib/formatCSS'
 import resolveConfig from './util/resolveConfig'
 import getAllConfigs from './util/getAllConfigs'
-import { defaultConfigFile } from './constants'
+import { supportedConfigFiles } from './constants'
 import defaultConfig from '../stubs/defaultConfig.stub.js'
 
 function resolveConfigPath(filePath) {
@@ -34,13 +34,15 @@ function resolveConfigPath(filePath) {
   }
 
   // require('tailwindcss')
-  try {
-    const defaultConfigPath = path.resolve(defaultConfigFile)
-    fs.accessSync(defaultConfigPath)
-    return defaultConfigPath
-  } catch (err) {
-    return undefined
+  for (const configFile of supportedConfigFiles) {
+    try {
+      const configPath = path.resolve(configFile)
+      fs.accessSync(configPath)
+      return configPath
+    } catch (err) {}
   }
+
+  return undefined
 }
 
 const getConfigFunction = (config) => () => {

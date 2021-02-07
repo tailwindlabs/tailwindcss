@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import postcss from 'postcss'
 import tailwind from '../src/index'
-import { defaultConfigFile } from '../src/constants'
+import { cjsConfigFile, defaultConfigFile } from '../src/constants'
 import inTempDirectory from '../jest/runInTempDirectory'
 
 test('it uses the values from the custom config file', () => {
@@ -133,6 +133,45 @@ test('custom config can be passed under the `config` property', () => {
     })
 })
 
+test('tailwind.config.cjs is picked up by default', () => {
+  return inTempDirectory(() => {
+    fs.writeFileSync(
+      path.resolve(cjsConfigFile),
+      `module.exports = {
+        theme: {
+          screens: {
+            mobile: '400px',
+          },
+        },
+      }`
+    )
+
+    return postcss([tailwind])
+      .process(
+        `
+          @responsive {
+            .foo {
+              color: blue;
+            }
+          }
+        `,
+        { from: undefined }
+      )
+      .then((result) => {
+        expect(result.css).toMatchCss(`
+          .foo {
+            color: blue;
+          }
+          @media (min-width: 400px) {
+            .mobile\\:foo {
+              color: blue;
+            }
+          }
+        `)
+      })
+  })
+})
+
 test('tailwind.config.js is picked up by default', () => {
   return inTempDirectory(() => {
     fs.writeFileSync(
@@ -147,6 +186,45 @@ test('tailwind.config.js is picked up by default', () => {
     )
 
     return postcss([tailwind])
+      .process(
+        `
+          @responsive {
+            .foo {
+              color: blue;
+            }
+          }
+        `,
+        { from: undefined }
+      )
+      .then((result) => {
+        expect(result.css).toMatchCss(`
+          .foo {
+            color: blue;
+          }
+          @media (min-width: 400px) {
+            .mobile\\:foo {
+              color: blue;
+            }
+          }
+        `)
+      })
+  })
+})
+
+test('tailwind.config.cjs is picked up by default when passing an empty object', () => {
+  return inTempDirectory(() => {
+    fs.writeFileSync(
+      path.resolve(cjsConfigFile),
+      `module.exports = {
+        theme: {
+          screens: {
+            mobile: '400px',
+          },
+        },
+      }`
+    )
+
+    return postcss([tailwind({})])
       .process(
         `
           @responsive {
