@@ -7,13 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Add version comment to Preflight ([#3255](https://github.com/tailwindlabs/tailwindcss/pull/3255))
+- Nothing yet!
+
+## [2.0.3] - 2021-02-07
+
+## Fixed
+
 - Ensure sourcemap input is deterministic when using `@apply` in Vue components ([#3356](https://github.com/tailwindlabs/tailwindcss/pull/3356))
 - Ensure placeholder opacity is consistent across browsers ([#3308](https://github.com/tailwindlabs/tailwindcss/pull/3308))
-- Add `cursor-help` by default ([#3199](https://github.com/tailwindlabs/tailwindcss/pull/3199))
-- Add support for a `tailwind.config.cjs` file in Node ESM projects ([#3181](https://github.com/tailwindlabs/tailwindcss/pull/3181))
 - Fix issue where `theme()` didn't work with colors defined as functions ([#2919](https://github.com/tailwindlabs/tailwindcss/pull/2919))
 - Enable `dark` variants by default for color opacity utilities ([#2975](https://github.com/tailwindlabs/tailwindcss/pull/2975))
+
+## Added
+
+- Add support for a `tailwind.config.cjs` file in Node ESM projects ([#3181](https://github.com/tailwindlabs/tailwindcss/pull/3181))
+- Add version comment to Preflight ([#3255](https://github.com/tailwindlabs/tailwindcss/pull/3255))
+- Add `cursor-help` by default ([#3199](https://github.com/tailwindlabs/tailwindcss/pull/3199))
 
 ## [2.0.2] - 2020-12-11
 
@@ -1321,7 +1330,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.2...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.3...HEAD
+[2.0.3]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.2...v2.0.3
 [2.0.2]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/tailwindlabs/tailwindcss/compare/v1.9.6...v2.0.0
