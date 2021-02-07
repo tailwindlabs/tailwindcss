@@ -309,17 +309,6 @@ module.exports = {
       6: '6',
       7: '7',
     },
-    transformOrigin: {
-      center: 'center',
-      top: 'top',
-      'top-right': 'top right',
-      right: 'right',
-      'bottom-right': 'bottom right',
-      bottom: 'bottom',
-      'bottom-left': 'bottom left',
-      left: 'left',
-      'top-left': 'top left',
-    },
     gridTemplateColumns: {
       none: 'none',
       1: 'repeat(1, minmax(0, 1fr))',
@@ -617,8 +606,18 @@ module.exports = {
     },
     textColor: (theme) => theme('colors'),
     textOpacity: (theme) => theme('opacity'),
-    transitionDuration: {
-      DEFAULT: '150ms',
+    transformOrigin: {
+      center: 'center',
+      top: 'top',
+      'top-right': 'top right',
+      right: 'right',
+      'bottom-right': 'bottom right',
+      bottom: 'bottom',
+      'bottom-left': 'bottom left',
+      left: 'left',
+      'top-left': 'top left',
+    },
+    transitionDelay: {
       75: '75ms',
       100: '100ms',
       150: '150ms',
@@ -628,7 +627,8 @@ module.exports = {
       700: '700ms',
       1000: '1000ms',
     },
-    transitionDelay: {
+    transitionDuration: {
+      DEFAULT: '150ms',
       75: '75ms',
       100: '100ms',
       150: '150ms',
