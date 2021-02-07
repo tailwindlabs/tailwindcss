@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure sourcemap input is deterministic when using `@apply` in Vue components ([#3356](https://github.com/tailwindlabs/tailwindcss/pull/3356))
 - Ensure placeholder opacity is consistent across browsers ([#3308](https://github.com/tailwindlabs/tailwindcss/pull/3308))
 - Add `cursor-help` by default ([#3199](https://github.com/tailwindlabs/tailwindcss/pull/3199))
+- Add support for a `tailwind.config.cjs` file in Node ESM projects ([#3181](https://github.com/tailwindlabs/tailwindcss/pull/3181))
+- Fix issue where `theme()` didn't work with colors defined as functions ([#2919](https://github.com/tailwindlabs/tailwindcss/pull/2919))
 
 ## [2.0.2] - 2020-12-11
 
