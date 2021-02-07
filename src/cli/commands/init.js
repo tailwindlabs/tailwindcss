@@ -15,7 +15,7 @@ export const options = [
   },
   {
     usage: '-p',
-    description: 'Generate postcss.config.js file.',
+    description: 'Generate PostCSS config file.',
   },
 ]
 
@@ -35,8 +35,9 @@ export function run(cliParams, cliOptions) {
   return new Promise((resolve) => {
     utils.header()
 
+    const isModule = utils.isModule()
     const full = cliOptions.full
-    const file = cliParams[0] || constants.defaultConfigFile
+    const file = cliParams[0] || (isModule ? constants.cjsConfigFile : constants.defaultConfigFile)
     const simplePath = utils.getSimplePath(file)
 
     utils.exists(file) && utils.die(colors.file(simplePath), 'already exists.')
@@ -52,10 +53,13 @@ export function run(cliParams, cliOptions) {
     utils.log(emoji.yes, 'Created Tailwind config file:', colors.file(simplePath))
 
     if (cliOptions.postcss) {
-      const path = utils.getSimplePath(constants.defaultPostCssConfigFile)
+      const postCssConfigFile = isModule
+        ? constants.cjsPostCssConfigFile
+        : constants.defaultPostCssConfigFile
+      const path = utils.getSimplePath(postCssConfigFile)
       utils.exists(constants.defaultPostCssConfigFile) &&
         utils.die(colors.file(path), 'already exists.')
-      utils.copyFile(constants.defaultPostCssConfigStubFile, constants.defaultPostCssConfigFile)
+      utils.copyFile(constants.defaultPostCssConfigStubFile, postCssConfigFile)
       utils.log(emoji.yes, 'Created PostCSS config file:', colors.file(path))
     }
 

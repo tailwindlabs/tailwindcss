@@ -1,5 +1,6 @@
 import { copyFileSync, ensureFileSync, existsSync, outputFileSync, readFileSync } from 'fs-extra'
 import { findKey, mapValues, startsWith, trimStart } from 'lodash'
+import path from 'path'
 
 import * as colors from './colors'
 import * as emoji from './emoji'
@@ -117,6 +118,20 @@ export function copyFile(source, destination) {
  */
 export function readFile(path) {
   return readFileSync(path, 'utf-8')
+}
+
+/**
+ * Checks if current package.json uses type "module"
+ *
+ * @return {boolean}
+ */
+export function isModule() {
+  const pkgPath = path.resolve('./package.json')
+  if (exists(pkgPath)) {
+    const pkg = JSON.parse(readFile(pkgPath))
+    return pkg.type && pkg.type === 'module'
+  }
+  return false
 }
 
 /**
