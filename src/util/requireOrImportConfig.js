@@ -3,8 +3,8 @@
 // Node v12.17+ exposes `import` within CJS files
 // in order to `require` ESM files.
 
-// This file is intentionally excluded from `babel`
-// to avoid transpiling the `import` statement
+// This file is intentionally excluded from `babel` (and `eslint`)
+// to avoid transpiling away the `import` statement
 
 Object.defineProperty(exports, "__esModule", {
   value: true

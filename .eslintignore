@@ -2,3 +2,4 @@
 /docs
 /__tests__/fixtures/cli-utils.js
 /stubs/*
+/src/util/requireOrImportConfig.js
