@@ -9294,6 +9294,10 @@ video {
   display: none;
 }
 
+.inline-table {
+  display: inline-table;
+}
+
 .flex-row {
   flex-direction: row;
 }
@@ -35334,6 +35338,10 @@ video {
     display: none;
   }
 
+  .sm\:inline-table {
+    display: inline-table;
+  }
+
   .sm\:flex-row {
     flex-direction: row;
   }
@@ -61329,6 +61337,10 @@ video {
 
   .md\:hidden {
     display: none;
+  }
+
+  .md\:inline-table {
+    display: inline-table;
   }
 
   .md\:flex-row {
@@ -87328,6 +87340,10 @@ video {
     display: none;
   }
 
+  .lg\:inline-table {
+    display: inline-table;
+  }
+
   .lg\:flex-row {
     flex-direction: row;
   }
@@ -113325,6 +113341,10 @@ video {
     display: none;
   }
 
+  .xl\:inline-table {
+    display: inline-table;
+  }
+
   .xl\:flex-row {
     flex-direction: row;
   }
@@ -139320,6 +139340,10 @@ video {
 
   .\32xl\:hidden {
     display: none;
+  }
+
+  .\32xl\:inline-table {
+    display: inline-table;
   }
 
   .\32xl\:flex-row {

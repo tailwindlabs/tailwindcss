@@ -59,6 +59,9 @@ export default function () {
         '.hidden': {
           display: 'none',
         },
+        '.inline-table': {
+          display: 'inline-table',
+        },
       },
       variants('display')
     )
