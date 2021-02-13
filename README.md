@@ -25,5 +25,3 @@ Tailwind CSS uses [Next.js](https://nextjs.org/) for its documentation. Here is 
     ```sh
     yarn dev
     ```
-
-Alternatively you can generate a static export of the documentation using the `yarn export` command. The export will be saved in the `out` folder.
