@@ -40,6 +40,92 @@ Plugin functions receive a single object argument that can be [destructured](htt
 
 ---
 
+## Official plugins
+
+We've developed a handful of official plugins for popular features that for one reason or another don't belong in core yet.
+
+Plugins can be added to your project by installing them via npm, then adding them to your `tailwind.config.js` file:
+
+```js
+// tailwind.config.js
+module.exports = {
+  // ...
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/line-clamp'),
+    require('@tailwindcss/aspect-ratio'),
+  ]
+}
+```
+
+
+### Typography
+
+The `@tailwindcss/typography` plugin adds a set of `prose` classes that can be used to quickly add sensible typographic styles to content blocks that come from sources like markdown or a CMS database.
+
+```html
+<article class="prose lg:prose-xl">
+  <h1>Garlic bread with cheese: What the science tells us</h1>
+  <p>
+    For years parents have espoused the health benefits of eating garlic bread with cheese to their
+    children, with the food earning such an iconic status in our culture that kids will often dress
+    up as warm, cheesy loaf for Halloween.
+  </p>
+  <p>
+    But a recent study shows that the celebrated appetizer may be linked to a series of rabies cases
+    springing up around the country.
+  </p>
+  <!-- ... -->
+</article>
+```
+
+[Learn more about the typography plugin &rarr;](https://github.com/tailwindlabs/tailwindcss-typography)
+
+### Forms
+
+The `@tailwindcss/forms` plugin adds an opinionated form reset layer that makes it easier to style form elements with utility classes.
+
+```html
+<!-- You can actually customize padding on a select element: -->
+<select class="px-4 py-3 rounded-full">
+  <!-- ... -->
+</select>
+
+<!-- Or change a checkbox color using text color utilities: -->
+<input type="checkbox" class="rounded text-pink-500" />
+```
+
+[Learn more about the forms plugin &rarr;](https://github.com/tailwindlabs/tailwindcss-forms)
+
+### Line-clamp
+
+The `@tailwindcss/line-clamp` plugin adds `line-clamp-{lines}` classes you can use to truncate text to a fixed number of lines.
+
+```html
+<p class="line-clamp-3 md:line-clamp-none">
+  Et molestiae hic earum repellat aliquid est doloribus delectus. Enim illum odio porro ut omnis
+  dolor debitis natus. Voluptas possimus deserunt sit delectus est saepe nihil. Qui voluptate
+  possimus et quia. Eligendi voluptas voluptas dolor cum. Rerum est quos quos id ut molestiae fugit.
+</p>
+```
+
+[Learn more about the line-clamp plugin &rarr;](https://github.com/tailwindlabs/tailwindcss-line-clamp)
+
+### Aspect ratio
+
+The `@tailwindcss/aspect-ratio` plugin adds `aspect-w-{n}` and `aspect-h-{n}` classes that can be combined to give an element a fixed aspect ratio.
+
+```html
+<div class="aspect-w-16 aspect-h-9">
+  <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+```
+
+[Learn more about the aspect ratio plugin &rarr;](https://github.com/tailwindlabs/tailwindcss-aspect-ratio)
+
+---
+
 ## Adding utilities
 
 The `addUtilities` function allows you to register new styles in Tailwind's `utilities` layer.
