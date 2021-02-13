@@ -35,7 +35,7 @@ If this is a bit over your head and you'd like to try Tailwind without configuri
 For most projects (and to take advantage of Tailwind's customization features), you'll want to install Tailwind and its peer-dependencies via npm.
 
 ```shell
-npm install tailwindcss@latest postcss@latest autoprefixer@latest
+npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
 ```
 
 Since Tailwind [does not automatically add vendor prefixes](/docs/browser-support#vendor-prefixes) to the CSS it generates, we recommend installing [autoprefixer](https://github.com/postcss/autoprefixer) to handle this for you like we've shown in the snippet above.
@@ -334,7 +334,7 @@ If you run into the error mentioned above, uninstall Tailwind and re-install usi
 
 ```shell
 npm uninstall tailwindcss postcss autoprefixer
-npm install tailwindcss@npm:@tailwindcss/postcss7-compat @tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9
+npm install -D tailwindcss@npm:@tailwindcss/postcss7-compat @tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9
 ```
 
 The compatibility build is identical to the main build in every way, so you aren't missing out on any features or anything like that.
@@ -343,5 +343,5 @@ Once the rest of your tools have added support for PostCSS 8, you can move off o
 
 ```shell
 npm uninstall tailwindcss @tailwindcss/postcss7-compat
-npm install tailwindcss@latest postcss@latest autoprefixer@latest
+npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
 ```
