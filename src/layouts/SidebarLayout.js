@@ -21,8 +21,7 @@ const NavItem = forwardRef(({ href, children, isActive, isPublished, fallbackHre
         >
           <span
             className={clsx('rounded-md absolute inset-0 bg-cyan-50', {
-              'opacity-50': isActive,
-              'opacity-0': !isActive,
+              'opacity-0': !isActive
             })}
           />
           <span className="relative">{children}</span>
