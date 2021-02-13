@@ -12,6 +12,7 @@ import plugin from 'tailwindcss/lib/plugins/gradientColorStops'
 import { Heading } from '@/components/Heading'
 import { Variants } from '@/components/Variants'
 import { Disabling } from '@/components/Disabling'
+import { TipGood, TipBad } from '@/components/Tip'
 
 export const classes = {
   plugin,
@@ -47,8 +48,6 @@ Set the starting color of a gradient using the `from-{color}` utilities.
 <div class="bg-gradient-to-r **from-red-500** ..."></div>
 ```
 
-Gradients fade out to transparent by default.
-
 ## Ending color
 
 Set the ending color of a gradient using the `to-{color}` utilities.
@@ -77,6 +76,25 @@ Add a middle color to a gradient using the `via-{color}` utilities.
 
 Gradients with a `from-{color}` and `via-{color}` will fade out to transparent by default if no `to-{color}` is present.
 
+## Fading to transparent
+
+Gradients fade out to transparent by default, without requiring you to add `to-transparent` explicitly. Tailwind intelligently calculates the _right_ "transparent" value to use based on the starting color to avoid [a bug in Safari](https://bugs.webkit.org/show_bug.cgi?id=150940) that causes fading to simply the `transparent` keyword to fade through gray, which just looks awful.
+
+<TipBad>Don't add `to-transparent` explicitly</TipBad>
+
+```html
+<div class="bg-gradient-to-r from-blue-500 to-transparent">
+  <!-- ... -->
+</div>
+```
+
+<TipGood>Only specify a from color and fade to transparent automatically</TipGood>
+
+```html
+<div class="bg-gradient-to-r from-blue-500">
+  <!-- ... -->
+</div>
+```
 
 ## Responsive
 
