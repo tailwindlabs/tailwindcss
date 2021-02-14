@@ -6,13 +6,13 @@ import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function () {
   return function ({ addUtilities, theme, variants, corePlugins }) {
-    const colors = flattenColorPalette(theme('caretColor'))
+    const colors = flattenColorPalette(theme('textColor'))
 
     const getProperties = (value) => {
       if (corePlugins('caretOpacity')) {
         return withAlphaVariable({
           color: value,
-          property: 'color',
+          property: 'caret-color',
           variable: '--tw-caret-opacity',
         })
       }

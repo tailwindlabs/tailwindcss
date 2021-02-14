@@ -24,6 +24,8 @@ export const corePluginList = [
   'borderStyle',
   'borderWidth',
   'boxSizing',
+  'caretColor',
+  'caretOpacity',
   'cursor',
   'display',
   'flexDirection',
