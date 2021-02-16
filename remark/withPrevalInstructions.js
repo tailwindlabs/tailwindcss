@@ -192,7 +192,6 @@ function createPrevals({ tool: pageTool = error('UNKNOWN') } = {}) {
     setup({
       dependencies = [],
       uninstall = [],
-      dev = false,
       soon = false,
       tool = pageTool,
       version = 'latest',
@@ -224,9 +223,7 @@ function createPrevals({ tool: pageTool = error('UNKNOWN') } = {}) {
 
           return [
             hasMultipleVersion && `# If you're on ${name}`,
-            `npm install ${dev ? '-D ' : ''}${[...dependencies, ...knownDependencies[mode]].join(
-              ' '
-            )}`,
+            `npm install -D ${[...dependencies, ...knownDependencies[mode]].join(' ')}`,
           ]
             .filter(Boolean)
             .join('\n')
