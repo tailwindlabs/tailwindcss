@@ -76,7 +76,7 @@
     "postcss-value-parser": "^4.1.0",
     "pretty-hrtime": "^1.0.3",
     "reduce-css-calc": "^2.1.8",
-    "resolve": "^1.19.0"
+    "resolve": "^1.20.0"
   },
   "browserslist": [
     "> 1%",
