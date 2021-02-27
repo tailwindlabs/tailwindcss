@@ -65,7 +65,7 @@
     "didyoumean": "^1.2.1",
     "fs-extra": "^9.1.0",
     "html-tags": "^3.1.0",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "modern-normalize": "^1.0.0",
     "node-emoji": "^1.8.1",
     "object-hash": "^2.1.1",
