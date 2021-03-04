@@ -122,6 +122,23 @@ function buildCssUtilityMap(css, startIndex) {
     })
   }
 
+  // Flatten all the selectors to make apply rules simpler and more reliable
+  css.walkRules((rule) => {
+    if (rule.selectors.length < 2) {
+      return
+    }
+
+    const selectors = rule.selectors
+    rule.selectors = [selectors.shift()]
+
+    for (const selector of selectors.reverse()) {
+      const prefix = rule.prev() ? '' : '\n'
+      rule.cloneAfter({
+        selectors: [prefix + selector],
+      })
+    }
+  })
+
   // This is the end user's css. This might contain rules that we want to
   // apply. We want immediate copies of everything in case that we have user
   // defined classes that are recursively applied. Down below we are modifying
