@@ -8,10 +8,11 @@ import buildSelectorVariant from '../util/buildSelectorVariant'
 function generatePseudoClassVariant(pseudoClass, selectorPrefix = pseudoClass) {
   return generateVariantFunction(({ modifySelectors, separator }) => {
     const parser = selectorParser((selectors) => {
-      selectors.walkClasses((sel) => {
+      const sel = selectors.first.filter(({ type }) => type === 'class').pop()
+      if (sel) {
         sel.value = `${selectorPrefix}${separator}${sel.value}`
         sel.parent.insertAfter(sel, selectorParser.pseudo({ value: `:${pseudoClass}` }))
-      })
+      }
     })
 
     return modifySelectors(({ selector }) => parser.processSync(selector))
@@ -99,25 +100,25 @@ const defaultVariantGenerators = (config) => ({
   ),
   'group-hover': generateVariantFunction(({ modifySelectors, separator }) => {
     const parser = selectorParser((selectors) => {
-      selectors.walkClasses((sel) => {
+      const sel = selectors.first.filter(({ type }) => type === 'class').pop()
+      if (sel) {
         sel.value = `group-hover${separator}${sel.value}`
-        sel.parent.insertBefore(
-          sel,
+        selectors.first.prepend(
           selectorParser().astSync(prefixSelector(config.prefix, '.group:hover '))
         )
-      })
+      }
     })
     return modifySelectors(({ selector }) => parser.processSync(selector))
   }),
   'group-focus': generateVariantFunction(({ modifySelectors, separator }) => {
     const parser = selectorParser((selectors) => {
-      selectors.walkClasses((sel) => {
+      const sel = selectors.first.filter(({ type }) => type === 'class').pop()
+      if (sel) {
         sel.value = `group-focus${separator}${sel.value}`
-        sel.parent.insertBefore(
-          sel,
+        selectors.first.prepend(
           selectorParser().astSync(prefixSelector(config.prefix, '.group:focus '))
         )
-      })
+      }
     })
     return modifySelectors(({ selector }) => parser.processSync(selector))
   }),
@@ -175,6 +176,7 @@ export default function (config, { variantGenerators: pluginVariantGenerators })
 
         let variants = postcss.list.comma(atRule.params).filter((variant) => variant !== '')
 
+        // If it includes the responsive variant, wrap the current at rule with a @responsive rule
         if (variants.includes('responsive')) {
           const responsiveParent = postcss.atRule({ name: 'responsive' })
           atRule.before(responsiveParent)
