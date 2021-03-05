@@ -5,6 +5,7 @@ import substituteTailwindAtRules from './lib/substituteTailwindAtRules'
 import evaluateTailwindFunctions from './lib/evaluateTailwindFunctions'
 import substituteVariantsAtRules from './lib/substituteVariantsAtRules'
 import substituteResponsiveAtRules from './lib/substituteResponsiveAtRules'
+import unwrapVariantTargets from './lib/unwrapVariantTargets'
 import convertLayerAtRulesToControlComments from './lib/convertLayerAtRulesToControlComments'
 import substituteScreenAtRules from './lib/substituteScreenAtRules'
 import substituteClassApplyAtRules from './lib/substituteClassApplyAtRules'
@@ -61,6 +62,7 @@ export default function (getConfig) {
       evaluateTailwindFunctions(config),
       substituteVariantsAtRules(config, getProcessedPlugins()),
       substituteResponsiveAtRules(config),
+      unwrapVariantTargets(),
       convertLayerAtRulesToControlComments(config),
       substituteScreenAtRules(config),
       substituteClassApplyAtRules(config, getProcessedPlugins, configChanged),

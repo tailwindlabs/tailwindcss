@@ -6,17 +6,21 @@ import prefixSelector from '../util/prefixSelector'
 import buildSelectorVariant from '../util/buildSelectorVariant'
 
 function generatePseudoClassVariant(pseudoClass, selectorPrefix = pseudoClass) {
-  return generateVariantFunction(({ modifySelectors, separator }) => {
-    const parser = selectorParser((selectors) => {
-      const sel = selectors.first.filter(({ type }) => type === 'class').pop()
-      if (sel) {
-        sel.value = `${selectorPrefix}${separator}${sel.value}`
-        sel.parent.insertAfter(sel, selectorParser.pseudo({ value: `:${pseudoClass}` }))
-      }
-    })
-
-    return modifySelectors(({ selector }) => parser.processSync(selector))
-  })
+  return generateVariantFunction(({ container, modifySelectors, separator }) =>
+    modifySelectors(({ selector }) =>
+      buildSelectorVariant({
+        selector,
+        variant: selectorPrefix,
+        separator,
+        onError: (message) => {
+          throw container.error(message)
+        },
+        modifyTarget: (target) => {
+          target.parent.insertAfter(target, selectorParser.pseudo({ value: `:${pseudoClass}` }))
+        },
+      })
+    )
+  )
 }
 
 function ensureIncludesDefault(variants) {
@@ -33,8 +37,13 @@ const defaultVariantGenerators = (config) => ({
 
       if (config.darkMode === 'media') {
         const modified = modifySelectors(({ selector }) => {
-          return buildSelectorVariant(selector, 'dark', separator, (message) => {
-            throw container.error(message)
+          return buildSelectorVariant({
+            selector,
+            variant: 'dark',
+            separator,
+            onError: (message) => {
+              throw container.error(message)
+            },
           })
         })
         const mediaQuery = postcss.atRule({
@@ -48,8 +57,13 @@ const defaultVariantGenerators = (config) => ({
 
       if (config.darkMode === 'class') {
         const modified = modifySelectors(({ selector }) => {
-          return buildSelectorVariant(selector, 'dark', separator, (message) => {
-            throw container.error(message)
+          return buildSelectorVariant({
+            selector,
+            variant: 'dark',
+            separator,
+            onError: (message) => {
+              throw container.error(message)
+            },
           })
         })
 
@@ -69,8 +83,13 @@ const defaultVariantGenerators = (config) => ({
   'motion-safe': generateVariantFunction(
     ({ container, separator, modifySelectors }) => {
       const modified = modifySelectors(({ selector }) => {
-        return buildSelectorVariant(selector, 'motion-safe', separator, (message) => {
-          throw container.error(message)
+        return buildSelectorVariant({
+          selector,
+          variant: 'motion-safe',
+          separator,
+          onError: (message) => {
+            throw container.error(message)
+          },
         })
       })
       const mediaQuery = postcss.atRule({
@@ -85,8 +104,13 @@ const defaultVariantGenerators = (config) => ({
   'motion-reduce': generateVariantFunction(
     ({ container, separator, modifySelectors }) => {
       const modified = modifySelectors(({ selector }) => {
-        return buildSelectorVariant(selector, 'motion-reduce', separator, (message) => {
-          throw container.error(message)
+        return buildSelectorVariant({
+          selector,
+          variant: 'motion-reduce',
+          separator,
+          onError: (message) => {
+            throw container.error(message)
+          },
         })
       })
       const mediaQuery = postcss.atRule({
@@ -98,29 +122,45 @@ const defaultVariantGenerators = (config) => ({
     },
     { unstable_stack: true }
   ),
-  'group-hover': generateVariantFunction(({ modifySelectors, separator }) => {
-    const parser = selectorParser((selectors) => {
-      const sel = selectors.first.filter(({ type }) => type === 'class').pop()
-      if (sel) {
-        sel.value = `group-hover${separator}${sel.value}`
-        selectors.first.prepend(
-          selectorParser().astSync(prefixSelector(config.prefix, '.group:hover '))
-        )
-      }
+  'group-hover': generateVariantFunction(({ container, modifySelectors, separator }) => {
+    const modified = modifySelectors(({ selector }) => {
+      return buildSelectorVariant({
+        selector,
+        variant: 'group-hover',
+        separator,
+        onError: (message) => {
+          throw container.error(message)
+        },
+      })
     })
-    return modifySelectors(({ selector }) => parser.processSync(selector))
+
+    modified.walkRules((rule) => {
+      rule.selectors = rule.selectors.map((selector) => {
+        return `${prefixSelector(config.prefix, '.group:hover')} ${selector}`
+      })
+    })
+
+    return modified
   }),
-  'group-focus': generateVariantFunction(({ modifySelectors, separator }) => {
-    const parser = selectorParser((selectors) => {
-      const sel = selectors.first.filter(({ type }) => type === 'class').pop()
-      if (sel) {
-        sel.value = `group-focus${separator}${sel.value}`
-        selectors.first.prepend(
-          selectorParser().astSync(prefixSelector(config.prefix, '.group:focus '))
-        )
-      }
+  'group-focus': generateVariantFunction(({ container, modifySelectors, separator }) => {
+    const modified = modifySelectors(({ selector }) => {
+      return buildSelectorVariant({
+        selector,
+        variant: 'group-focus',
+        separator,
+        onError: (message) => {
+          throw container.error(message)
+        },
+      })
     })
-    return modifySelectors(({ selector }) => parser.processSync(selector))
+
+    modified.walkRules((rule) => {
+      rule.selectors = rule.selectors.map((selector) => {
+        return `${prefixSelector(config.prefix, '.group:focus')} ${selector}`
+      })
+    })
+
+    return modified
   }),
   hover: generatePseudoClassVariant('hover'),
   'focus-within': generatePseudoClassVariant('focus-within'),
