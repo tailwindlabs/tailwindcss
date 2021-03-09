@@ -6,7 +6,7 @@ module.exports = {
   // endOfLine: 'lf', // end_of_line = lf
   semi: false, // default: true
   singleQuote: true, // default: false
-  printWidth: 80, // default: 100
+  printWidth: 100, // default: 80
   trailingComma: 'es5',
   bracketSpacing: true,
   overrides: [
