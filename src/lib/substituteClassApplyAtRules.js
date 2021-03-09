@@ -211,21 +211,30 @@ function mergeAdjacentRules(initialRule, rulesToInsert) {
 function makeExtractUtilityRules(css, lookupTree, config) {
   const lookupTreeUtilityMap = buildLookupTreeUtilityMap(lookupTree)
   const lookupTreeUtilityMapKeys = Object.keys(lookupTreeUtilityMap)
-
   const utilityMap = buildCssUtilityMap(css, lookupTreeUtilityMapKeys.length)
+
+  function getUtility(utilityName) {
+    const utility = []
+    if (lookupTreeUtilityMap[utilityName]) {
+      utility.push(...lookupTreeUtilityMap[utilityName])
+    }
+    if (utilityMap[utilityName]) {
+      utility.push(...utilityMap[utilityName])
+    }
+    if (utility.length > 0) return utility
+  }
 
   return function extractUtilityRules(utilityNames, rule) {
     const combined = []
 
     utilityNames.forEach((utilityName) => {
-      const utility = lookupTreeUtilityMap[utilityName] || utilityMap[utilityName]
+      const utility = getUtility(utilityName)
       if (utility === undefined) {
         // Look for prefixed utility in case the user has goofed
         const prefixedUtilityName = prefixSelector(config.prefix, `.${utilityName}`).slice(1)
 
-        const prefixedUtility =
-          lookupTreeUtilityMap[prefixedUtilityName] || utilityMap[prefixedUtilityName]
-        if (utilityMap[prefixedUtility] !== undefined) {
+        const prefixedUtility = getUtility(prefixedUtilityName)
+        if (prefixedUtility !== undefined) {
           throw rule.error(
             `The \`${utilityName}\` class does not exist, but \`${prefixedUtilityName}\` does. Did you forget the prefix?`
           )
