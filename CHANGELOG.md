@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet!
 
+## [2.0.4] - 2021-03-17
+
+## Fixed
+
+- Pass full `var(--bg-opacity)` value as `opacityValue` when defining colors as functions
+
 ## [2.0.3] - 2021-02-07
 
 ## Fixed
@@ -1330,7 +1336,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.3...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.4...HEAD
+[2.0.4]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.3...v2.0.4
 [2.0.3]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.2...v2.0.3
 [2.0.2]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.0...v2.0.1
