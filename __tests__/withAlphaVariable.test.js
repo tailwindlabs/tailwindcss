@@ -107,4 +107,14 @@ test('it allows a closure to be passed', () => {
     '--tw-bg-opacity': '1',
     'background-color': 'rgba(0, 0, 0, var(--tw-bg-opacity))',
   })
+  expect(
+    withAlphaVariable({
+      color: ({ opacityValue }) => `rgba(0, 0, 0, ${opacityValue})`,
+      property: 'background-color',
+      variable: '--tw-bg-opacity',
+    })
+  ).toEqual({
+    '--tw-bg-opacity': '1',
+    'background-color': 'rgba(0, 0, 0, var(--tw-bg-opacity))',
+  })
 })
