@@ -10640,6 +10640,10 @@ video {
   border-style: none;
 }
 
+.border-hidden {
+  border-style: hidden;
+}
+
 .border-0 {
   border-width: 0px;
 }
@@ -39236,6 +39240,10 @@ video {
     border-style: none;
   }
 
+  .sm\:border-hidden {
+    border-style: hidden;
+  }
+
   .sm\:border-0 {
     border-width: 0px;
   }
@@ -67787,6 +67795,10 @@ video {
 
   .md\:border-none {
     border-style: none;
+  }
+
+  .md\:border-hidden {
+    border-style: hidden;
   }
 
   .md\:border-0 {
@@ -96342,6 +96354,10 @@ video {
     border-style: none;
   }
 
+  .lg\:border-hidden {
+    border-style: hidden;
+  }
+
   .lg\:border-0 {
     border-width: 0px;
   }
@@ -124895,6 +124911,10 @@ video {
     border-style: none;
   }
 
+  .xl\:border-hidden {
+    border-style: hidden;
+  }
+
   .xl\:border-0 {
     border-width: 0px;
   }
@@ -153446,6 +153466,10 @@ video {
 
   .\32xl\:border-none {
     border-style: none;
+  }
+
+  .\32xl\:border-hidden {
+    border-style: hidden;
   }
 
   .\32xl\:border-0 {
