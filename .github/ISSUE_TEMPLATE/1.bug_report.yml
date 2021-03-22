@@ -1,0 +1,39 @@
+name: Bug Report
+description: Create a bug report for Tailwind CSS.
+title: ''
+labels: []
+issue_body: true
+body:
+  - type: input
+    attributes:
+      label: What version of Tailwind CSS are you using?
+      description: 'For example: v2.0.4'
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: What version of Node.js are you using?
+      description: 'For example: v12.0.0'
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: What browser are you using?
+      description: 'For example: Chrome, Safari, or N/A'
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: What operating system are you using?
+      description: 'For example: macOS, Windows'
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Reproduction repository
+      description: A public GitHub repo that demonstrates the bug. If it's really unnecessary, link us to a YouTube video you think is awesome instead.
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: "## Describe your issue\nDescribe the problem you're seeing, any important steps to reproduce and what behavior you expect instead"
