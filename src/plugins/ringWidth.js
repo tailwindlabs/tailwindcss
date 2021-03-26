@@ -1,20 +1,21 @@
 import _ from 'lodash'
 import nameClass from '../util/nameClass'
-import { toRgba } from '../util/withAlphaVariable'
+import { toHsla, toRgba } from '../util/withAlphaVariable'
 
 export default function () {
   return function ({ addUtilities, theme, variants }) {
-    function safeCall(callback, defaultValue) {
+    const ringColorDefault = (() => {
+      const isHSL = (theme('ringColor.DEFAULT') || '').startsWith('hsl')
+      const opacity = theme('ringOpacity.DEFAULT', '0.5')
       try {
-        return callback()
+        const [i, j, k] = isHSL
+          ? toHsla(theme('ringColor.DEFAULT'))
+          : toRgba(theme('ringColor.DEFAULT'))
+        return `${isHSL ? 'hsla' : 'rgba'}(${i}, ${j}, ${k}, ${opacity})`
       } catch (_error) {
-        return defaultValue
+        return `rgba(147, 197, 253, ${opacity})`
       }
-    }
-
-    const ringColorDefault = (([r, g, b]) => {
-      return `rgba(${r}, ${g}, ${b}, ${theme('ringOpacity.DEFAULT', '0.5')})`
-    })(safeCall(() => toRgba(theme('ringColor.DEFAULT')), ['147', '197', '253']))
+    })()
 
     addUtilities(
       {
