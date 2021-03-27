@@ -85,7 +85,7 @@ test('ring widths with defaults and hsl value for ringColor', () => {
     [
       {
         '*': {
-          '--tw-ring-color': 'hsla(10, 50, 50, 0.5)',
+          '--tw-ring-color': 'hsla(10, 50%, 50%, 0.5)',
           '--tw-ring-inset': 'var(--tw-empty,/*!*/ /*!*/)',
           '--tw-ring-offset-color': 'pink',
           '--tw-ring-offset-shadow': '0 0 #0000',

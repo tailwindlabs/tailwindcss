@@ -138,6 +138,6 @@ test('it transforms rgb and hsl to rgba and hsla', () => {
     })
   ).toEqual({
     '--tw-bg-opacity': '1',
-    'background-color': 'hsla(50, 50, 50, var(--tw-bg-opacity))',
+    'background-color': 'hsla(50, 50%, 50%, var(--tw-bg-opacity))',
   })
 })

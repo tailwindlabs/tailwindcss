@@ -19,7 +19,7 @@ export function toRgba(color) {
 export function toHsla(color) {
   const [h, s, l, a] = createColor(color).hsl().array()
 
-  return [h, s, l, a === undefined && hasAlpha(color) ? 1 : a]
+  return [h, `${s}%`, `${l}%`, a === undefined && hasAlpha(color) ? 1 : a]
 }
 
 export default function withAlphaVariable({ color, property, variable }) {
