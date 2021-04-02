@@ -1,6 +1,6 @@
 const postcss = require('postcss')
-const buildMediaQuery = require('tailwindcss/lib/util/buildMediaQuery').default
-const prefixSelector = require('tailwindcss/lib/util/prefixSelector').default
+const buildMediaQuery = require('../../lib/util/buildMediaQuery').default
+const prefixSelector = require('../../lib/util/prefixSelector').default
 const {
   updateLastClasses,
   updateAllClasses,

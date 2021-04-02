@@ -1,6 +1,5 @@
-const flattenColorPalette = require('tailwindcss/lib/util/flattenColorPalette').default
-const withAlphaVariable = require('tailwindcss/lib/util/withAlphaVariable').default
-const toColorValue = require('tailwindcss/lib/util/toColorValue').default
+const flattenColorPalette = require('../../lib/util/flattenColorPalette').default
+const withAlphaVariable = require('../../lib/util/withAlphaVariable').default
 const { asColor, nameClass } = require('../pluginUtils')
 
 module.exports = function ({ matchUtilities, jit: { theme } }) {
@@ -8,7 +7,7 @@ module.exports = function ({ matchUtilities, jit: { theme } }) {
 
   // TODO: Make sure there is no issue with DEFAULT here
   matchUtilities({
-    divide: (modifier, { theme }) => {
+    divide: (modifier) => {
       let value = asColor(modifier, colorPalette)
 
       if (value === undefined) {

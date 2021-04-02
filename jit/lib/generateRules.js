@@ -1,8 +1,8 @@
 const postcss = require('postcss')
-const parseObjectStyles = require('tailwindcss/lib/util/parseObjectStyles').default
+const parseObjectStyles = require('../../lib/util/parseObjectStyles').default
 const { isPlainObject, bigSign } = require('./utils')
 const selectorParser = require('postcss-selector-parser')
-const prefixSelector = require('tailwindcss/lib/util/prefixSelector').default
+const prefixSelector = require('../../lib/util/prefixSelector').default
 const { updateAllClasses } = require('../pluginUtils')
 
 let classNameParser = selectorParser((selectors) => {

@@ -1,6 +1,6 @@
 const { nameClass } = require('../pluginUtils')
-const transformThemeValue = require('tailwindcss/lib/util/transformThemeValue').default
-const parseAnimationValue = require('tailwindcss/lib/util/parseAnimationValue').default
+const transformThemeValue = require('../../lib/util/transformThemeValue').default
+const parseAnimationValue = require('../../lib/util/parseAnimationValue').default
 
 module.exports = function ({ matchUtilities, jit: { theme } }) {
   let keyframes = Object.fromEntries(

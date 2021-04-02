@@ -1,6 +1,6 @@
 const selectorParser = require('postcss-selector-parser')
 const postcss = require('postcss')
-const { toRgba } = require('tailwindcss/lib/util/withAlphaVariable')
+const { toRgba } = require('../lib/util/withAlphaVariable')
 const { nameClass, escapeCommas } = require('./lib/utils')
 
 function updateAllClasses(selectors, updateClass) {

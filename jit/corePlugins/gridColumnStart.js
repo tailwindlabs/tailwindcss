@@ -1,11 +1,9 @@
 const { nameClass } = require('../pluginUtils')
-const transformThemeValue = require('tailwindcss/lib/util/transformThemeValue').default
 
-module.exports = function ({ matchUtilities, jit: { theme } }) {
+module.exports = function ({ matchUtilities }) {
   matchUtilities({
     'col-start': (modifier, { theme }) => {
-      let transformValue = transformThemeValue('gridColumnStart')
-      let value = transformValue(theme.gridColumnStart[modifier])
+      let value = theme.gridColumnStart[modifier]
 
       if (value === undefined) {
         return []

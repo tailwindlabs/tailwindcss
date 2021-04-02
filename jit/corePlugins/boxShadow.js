@@ -1,5 +1,5 @@
 const { nameClass } = require('../pluginUtils')
-const transformThemeValue = require('tailwindcss/lib/util/transformThemeValue').default
+const transformThemeValue = require('../../lib/util/transformThemeValue').default
 
 let transformValue = transformThemeValue('boxShadow')
 let shadowReset = {
@@ -8,7 +8,7 @@ let shadowReset = {
   },
 }
 
-module.exports = function ({ addBase, matchUtilities, jit: { theme } }) {
+module.exports = function ({ addBase, matchUtilities }) {
   addBase(shadowReset)
   matchUtilities({
     shadow: (modifier, { theme }) => {

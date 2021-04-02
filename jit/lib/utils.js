@@ -1,7 +1,7 @@
 const postcss = require('postcss')
 const tailwindUtils = {
-  escapeClassName: require('tailwindcss/lib/util/escapeClassName').default,
-  nameClass: require('tailwindcss/lib/util/nameClass').default,
+  escapeClassName: require('../../lib/util/escapeClassName').default,
+  nameClass: require('../../lib/util/nameClass').default,
 }
 
 // Takes our lightweight rule structure and turns it into a PostCSS node.

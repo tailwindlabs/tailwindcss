@@ -11,12 +11,12 @@ const selectorParser = require('postcss-selector-parser')
 const LRU = require('quick-lru')
 const normalizePath = require('normalize-path')
 
-const transformThemeValue = require('tailwindcss/lib/util/transformThemeValue').default
-const parseObjectStyles = require('tailwindcss/lib/util/parseObjectStyles').default
-const getModuleDependencies = require('tailwindcss/lib/lib/getModuleDependencies').default
-const prefixSelector = require('tailwindcss/lib/util/prefixSelector').default
+const transformThemeValue = require('../../lib/util/transformThemeValue').default
+const parseObjectStyles = require('../../lib/util/parseObjectStyles').default
+const getModuleDependencies = require('../../lib/lib/getModuleDependencies').default
+const prefixSelector = require('../../lib/util/prefixSelector').default
 
-const resolveConfig = require('tailwindcss/resolveConfig')
+const resolveConfig = require('../../resolveConfig')
 
 const sharedState = require('./sharedState')
 const corePlugins = require('../corePlugins')
@@ -401,7 +401,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       return '*'
     }
 
-    if (! options.respectPrefix) {
+    if (!options.respectPrefix) {
       return identifier
     }
 

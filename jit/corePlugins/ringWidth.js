@@ -1,5 +1,5 @@
 const dlv = require('dlv')
-const toRgba = require('tailwindcss/lib/util/withAlphaVariable').toRgba
+const toRgba = require('../../lib/util/withAlphaVariable').toRgba
 const { asLength, nameClass } = require('../pluginUtils')
 
 function safeCall(callback, defaultValue) {
