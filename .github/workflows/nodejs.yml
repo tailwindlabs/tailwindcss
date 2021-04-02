@@ -28,7 +28,7 @@ jobs:
         uses: actions/cache@v2.1.1
         with:
           path: node_modules
-          key: nodeModules-${{ hashFiles('**/yarn.lock') }}-${{ matrix.node-version }}
+          key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
           restore-keys: |
             nodeModules-
       - name: Install dependencies
