@@ -4,7 +4,7 @@
 /example
 tailwind.config.js
 index.html
-package-lock.json
+yarn.lock
 yarn-error.log
 
 # Perf related files
