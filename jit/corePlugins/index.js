@@ -10,7 +10,7 @@ const {
 } = require('../pluginUtils')
 
 module.exports = {
-  pseudoClassVariants: function ({ config, theme, addVariant }) {
+  pseudoClassVariants: function ({ config, addVariant }) {
     let pseudoVariants = [
       ['first', 'first-child'],
       ['last', 'last-child'],
@@ -62,7 +62,7 @@ module.exports = {
       )
     }
   },
-  directionVariants: function ({ config, theme, addVariant }) {
+  directionVariants: function ({ config, addVariant }) {
     addVariant(
       'ltr',
       transformAllSelectors(
@@ -85,7 +85,7 @@ module.exports = {
       )
     )
   },
-  reducedMotionVariants: function ({ config, theme, addVariant }) {
+  reducedMotionVariants: function ({ config, addVariant }) {
     addVariant(
       'motion-safe',
       transformLastClasses(
@@ -106,7 +106,7 @@ module.exports = {
       )
     )
   },
-  darkVariants: function ({ config, theme, addVariant }) {
+  darkVariants: function ({ config, addVariant }) {
     if (config('darkMode') === 'class') {
       addVariant(
         'dark',

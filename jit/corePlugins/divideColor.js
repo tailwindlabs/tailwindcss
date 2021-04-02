@@ -2,8 +2,8 @@ const flattenColorPalette = require('../../lib/util/flattenColorPalette').defaul
 const withAlphaVariable = require('../../lib/util/withAlphaVariable').default
 const { asColor, nameClass } = require('../pluginUtils')
 
-module.exports = function ({ matchUtilities, jit: { theme } }) {
-  let colorPalette = flattenColorPalette(theme.divideColor)
+module.exports = function ({ matchUtilities, theme }) {
+  let colorPalette = flattenColorPalette(theme('divideColor'))
 
   // TODO: Make sure there is no issue with DEFAULT here
   matchUtilities({

@@ -21,7 +21,6 @@ const resolveConfig = require('../../resolveConfig')
 const sharedState = require('./sharedState')
 const corePlugins = require('../corePlugins')
 const { isPlainObject, escapeClassName } = require('./utils')
-const { isBuffer } = require('util')
 
 let contextMap = sharedState.contextMap
 let configContextMap = sharedState.configContextMap
@@ -676,7 +675,7 @@ function setupContext(configOrPath) {
   return (result, root) => {
     let foundTailwind = false
 
-    root.walkAtRules('tailwind', (rule) => {
+    root.walkAtRules('tailwind', () => {
       foundTailwind = true
     })
 
