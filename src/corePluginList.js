@@ -96,6 +96,7 @@ export const corePluginList = [
   'wordBreak',
   'width',
   'zIndex',
+  'isolation',
   'gap',
   'gridAutoFlow',
   'gridTemplateColumns',
