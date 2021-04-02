@@ -247,6 +247,7 @@ module.exports = {
   backgroundOpacity: require('./backgroundOpacity'),
   backgroundImage: require('./backgroundImage'),
   gradientColorStops: require('./gradientColorStops'),
+  boxDecorationBreak: require('./boxDecorationBreak'),
   backgroundSize: require('./backgroundSize'),
   backgroundAttachment: require('./backgroundAttachment'),
   backgroundClip: require('./backgroundClip'),
