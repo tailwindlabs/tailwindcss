@@ -81,6 +81,12 @@
 .left-16 {
   left: 4rem;
 }
+.isolate {
+  isolation: isolate;
+}
+.isolation-auto {
+  isolation: auto;
+}
 .z-30 {
   z-index: 30;
 }

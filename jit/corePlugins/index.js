@@ -165,6 +165,7 @@ module.exports = {
   visibility: require('./visibility'),
   position: require('./position'),
   inset: require('./inset'),
+  isolation: require('./isolation'),
   zIndex: require('./zIndex'),
   order: require('./order'),
   gridColumn: require('./gridColumn'),
