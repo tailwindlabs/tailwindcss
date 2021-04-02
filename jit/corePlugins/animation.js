@@ -2,9 +2,9 @@ const { nameClass } = require('../pluginUtils')
 const transformThemeValue = require('../../lib/util/transformThemeValue').default
 const parseAnimationValue = require('../../lib/util/parseAnimationValue').default
 
-module.exports = function ({ matchUtilities, jit: { theme } }) {
+module.exports = function ({ matchUtilities, theme }) {
   let keyframes = Object.fromEntries(
-    Object.entries(theme.keyframes).map(([key, value]) => {
+    Object.entries(theme('keyframes')).map(([key, value]) => {
       return [
         key,
         [

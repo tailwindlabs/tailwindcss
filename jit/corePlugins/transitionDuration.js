@@ -1,6 +1,6 @@
 const { nameClass, asValue } = require('../pluginUtils')
 
-module.exports = function ({ matchUtilities, jit: { theme } }) {
+module.exports = function ({ matchUtilities }) {
   matchUtilities({
     duration: (modifier, { theme }) => {
       let value = asValue(modifier, theme.transitionDuration)

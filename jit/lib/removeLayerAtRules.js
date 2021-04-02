@@ -1,4 +1,4 @@
-function removeLayerAtRules(context) {
+function removeLayerAtRules() {
   return (root) => {
     root.walkAtRules((rule) => {
       if (['layer', 'responsive', 'variants'].includes(rule.name)) {

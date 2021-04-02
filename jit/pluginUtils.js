@@ -66,7 +66,7 @@ function transformAllSelectors(transformSelector, wrap = null) {
   }
 }
 
-function transformAllClasses(transformClass, wrap = null) {
+function transformAllClasses(transformClass) {
   return ({ container }) => {
     container.walkRules((rule) => {
       let selector = rule.selector

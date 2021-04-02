@@ -1,6 +1,6 @@
 const { asList, nameClass } = require('../pluginUtils')
 
-module.exports = function ({ matchUtilities, jit: { theme } }) {
+module.exports = function ({ matchUtilities }) {
   matchUtilities({
     'grid-cols': (modifier, { theme }) => {
       let value = asList(modifier, theme.gridTemplateColumns)

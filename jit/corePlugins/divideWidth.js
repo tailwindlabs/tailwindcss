@@ -1,6 +1,6 @@
 const { asLength, nameClass } = require('../pluginUtils')
 
-module.exports = function ({ addUtilities, matchUtilities, jit: { theme } }) {
+module.exports = function ({ addUtilities, matchUtilities }) {
   matchUtilities({
     'divide-x': (modifier, { theme }) => {
       let value = asLength(modifier, theme['divideWidth'])

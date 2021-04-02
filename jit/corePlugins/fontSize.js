@@ -1,7 +1,7 @@
 const { asLength, nameClass } = require('../pluginUtils')
 const { isPlainObject } = require('../lib/utils')
 
-module.exports = function ({ matchUtilities, jit: { theme } }) {
+module.exports = function ({ matchUtilities }) {
   matchUtilities({
     text: (modifier, { theme }) => {
       let value = theme.fontSize[modifier]

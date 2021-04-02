@@ -1,6 +1,6 @@
 const { nameClass } = require('../pluginUtils')
 
-module.exports = function ({ matchUtilities, jit: { theme } }) {
+module.exports = function ({ matchUtilities }) {
   matchUtilities({
     'row-end': (modifier, { theme }) => {
       let value = theme.gridRowEnd[modifier]

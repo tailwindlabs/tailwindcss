@@ -4,7 +4,7 @@ let comparisonMap = {
 }
 let types = new Set(Object.keys(comparisonMap))
 
-function collapseAdjacentRules(context) {
+function collapseAdjacentRules() {
   return (root) => {
     let currentRule = null
     root.each((node) => {

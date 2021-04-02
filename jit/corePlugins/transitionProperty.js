@@ -1,8 +1,8 @@
 const { nameClass } = require('../pluginUtils')
 
-module.exports = function ({ matchUtilities, jit: { theme } }) {
-  let defaultTimingFunction = theme.transitionTimingFunction.DEFAULT
-  let defaultDuration = theme.transitionDuration.DEFAULT
+module.exports = function ({ matchUtilities, theme }) {
+  let defaultTimingFunction = theme('transitionTimingFunction.DEFAULT')
+  let defaultDuration = theme('transitionDuration.DEFAULT')
 
   matchUtilities({
     transition: (modifier, { theme }) => {

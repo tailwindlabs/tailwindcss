@@ -1,6 +1,6 @@
 const postcss = require('postcss')
 const parseObjectStyles = require('../../lib/util/parseObjectStyles').default
-const { isPlainObject, bigSign } = require('./utils')
+const { isPlainObject } = require('./utils')
 const selectorParser = require('postcss-selector-parser')
 const prefixSelector = require('../../lib/util/prefixSelector').default
 const { updateAllClasses } = require('../pluginUtils')
@@ -191,12 +191,6 @@ function* resolveMatchedPlugins(classCandidate, context) {
   }
 }
 
-function sortAgainst(toSort, against) {
-  return toSort.slice().sort((a, z) => {
-    return bigSign(against.get(a)[0] - against.get(z)[0])
-  })
-}
-
 function* resolveMatches(candidate, context) {
   let separator = context.tailwindConfig.separator
   let [classCandidate, ...variants] = candidate.split(separator).reverse()
@@ -207,10 +201,12 @@ function* resolveMatches(candidate, context) {
     classCandidate = classCandidate.slice(1)
   }
 
-  // Strip prefix
-  // md:hover:tw-bg-black
-
   // TODO: Reintroduce this in ways that doesn't break on false positives
+  // function sortAgainst(toSort, against) {
+  //   return toSort.slice().sort((a, z) => {
+  //     return bigSign(against.get(a)[0] - against.get(z)[0])
+  //   })
+  // }
   // let sorted = sortAgainst(variants, context.variantMap)
   // if (sorted.toString() !== variants.toString()) {
   //   let corrected = sorted.reverse().concat(classCandidate).join(':')
