@@ -13,7 +13,7 @@ describe('cli compile', () => {
   it('compiles CSS file', () => {
     return compile({ inputFile, outputFile, plugins }).then((result) => {
       expect(result.css).toContain('.example')
-      expect(result.css).toContain('-webkit-max-content')
+      expect(result.css).toContain('-webkit-background-clip')
     })
   })
 })
