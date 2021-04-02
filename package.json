@@ -80,7 +80,7 @@
     "parse-glob": "^3.0.4",
     "postcss-functions": "^3",
     "postcss-js": "^3.0.3",
-    "postcss-nested": "5.0.1",
+    "postcss-nested": "5.0.5",
     "postcss-selector-parser": "^6.0.4",
     "postcss-value-parser": "^4.1.0",
     "pretty-hrtime": "^1.0.3",
