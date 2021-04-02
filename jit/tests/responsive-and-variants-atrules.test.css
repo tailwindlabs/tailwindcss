@@ -1,0 +1,65 @@
+* {
+  --tw-shadow: 0 0 #0000;
+  --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgba(59, 130, 246, 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+}
+.responsive-in-components {
+  color: blue;
+}
+.variants-in-components {
+  color: red;
+}
+.both-in-components {
+  color: green;
+}
+.responsive-in-utilities {
+  color: blue;
+}
+.variants-in-utilities {
+  color: red;
+}
+.both-in-utilities {
+  color: green;
+}
+.responsive-at-root {
+  color: white;
+}
+.variants-at-root {
+  color: orange;
+}
+.both-at-root {
+  color: pink;
+}
+@media (min-width: 768px) {
+  .md\:focus\:responsive-in-components:focus {
+    color: blue;
+  }
+  .md\:focus\:variants-in-components:focus {
+    color: red;
+  }
+  .md\:focus\:both-in-components:focus {
+    color: green;
+  }
+  .md\:focus\:responsive-in-utilities:focus {
+    color: blue;
+  }
+  .md\:focus\:variants-in-utilities:focus {
+    color: red;
+  }
+  .md\:focus\:both-in-utilities:focus {
+    color: green;
+  }
+  .md\:focus\:responsive-at-root:focus {
+    color: white;
+  }
+  .md\:focus\:variants-at-root:focus {
+    color: orange;
+  }
+  .md\:focus\:both-at-root:focus {
+    color: pink;
+  }
+}
