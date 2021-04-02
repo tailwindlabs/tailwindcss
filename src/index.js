@@ -80,7 +80,11 @@ module.exports = function (config) {
       ])
       warned = true
     }
-    return require('../jit/index.js')(config)
+
+    return {
+      postcssPlugin: 'tailwindcss',
+      plugins: require('../jit/index.js')(config),
+    }
   }
 
   const plugins = []
