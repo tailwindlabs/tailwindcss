@@ -178,7 +178,7 @@ export function Header({ navIsOpen, onNavToggle }) {
           <BannerMarkMobile className="sm:hidden absolute right-1/2 transform translate-x-[235px] translate-y-[-90px] w-[848px] h-[513px]" />
           <BannerMarkLeft className="hidden sm:block absolute right-1/2 transform translate-x-[-150px] translate-y-[-250px] w-[848px] h-[513px]" />
           <BannerMarkRight className="hidden sm:block absolute left-1/2 transform translate-x-[330px] translate-y-[-357px] w-[848px] h-[513px]" />
-          <div className="flex justify-center items-center">
+          <div className="relative flex justify-center items-center">
             <div class="text-sm font-medium text-white">
               Just-in-Time: The Next Generation of Tailwind&nbsp;CSS
             </div>
