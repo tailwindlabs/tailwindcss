@@ -429,6 +429,12 @@
 .to-blue-400 {
   --tw-gradient-to: #60a5fa;
 }
+.decoration-slice {
+  box-decoration-break: slice;
+}
+.decoration-clone {
+  box-decoration-break: clone;
+}
 .bg-cover {
   background-size: cover;
 }

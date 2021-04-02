@@ -23,6 +23,7 @@ export const corePluginList = [
   'borderRadius',
   'borderStyle',
   'borderWidth',
+  'boxDecorationBreak',
   'boxSizing',
   'cursor',
   'display',
