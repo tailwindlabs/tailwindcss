@@ -5,7 +5,7 @@ const path = require('path')
 function run(input, config = {}) {
   jest.resetModules()
   const tailwind = require('../index.js')
-  return postcss([tailwind(config)]).process(input, { from: path.resolve(__filename) })
+  return postcss(tailwind(config)).process(input, { from: path.resolve(__filename) })
 }
 
 function customExtractor(content) {
@@ -35,7 +35,7 @@ test('defaultExtractor', () => {
   }
 
   return run(css, config).then((result) => {
-    expect(result.css).toMatchCss(expected)
+    expect(result.css).toMatchFormattedCss(expected)
   })
 })
 
@@ -58,6 +58,6 @@ test('extractors array', () => {
   }
 
   return run(css, config).then((result) => {
-    expect(result.css).toMatchCss(expected)
+    expect(result.css).toMatchFormattedCss(expected)
   })
 })

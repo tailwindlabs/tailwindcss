@@ -6,7 +6,7 @@ const path = require('path')
 function run(input, config = {}) {
   const { currentTestName } = expect.getState()
 
-  return postcss([tailwind(config)]).process(input, {
+  return postcss(tailwind(config)).process(input, {
     from: `${path.resolve(__filename)}?test=${currentTestName}`,
   })
 }
@@ -139,7 +139,7 @@ test('@apply', () => {
     let expectedPath = path.resolve(__dirname, './apply.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
-    expect(result.css).toMatchCss(expected)
+    expect(result.css).toMatchFormattedCss(expected)
   })
 })
 

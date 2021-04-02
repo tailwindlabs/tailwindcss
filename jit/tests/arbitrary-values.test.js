@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 
 function run(input, config = {}) {
-  return postcss([tailwind(config)]).process(input, { from: path.resolve(__filename) })
+  return postcss(tailwind(config)).process(input, { from: path.resolve(__filename) })
 }
 
 test('arbitrary values', () => {
@@ -25,6 +25,6 @@ test('arbitrary values', () => {
     let expectedPath = path.resolve(__dirname, './arbitrary-values.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
-    expect(result.css).toMatchCss(expected)
+    expect(result.css).toMatchFormattedCss(expected)
   })
 })
