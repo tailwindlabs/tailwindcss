@@ -1,6 +1,6 @@
 const { nameClass } = require('../pluginUtils')
 
-module.exports = function ({ matchUtilities, jit: { theme } }) {
+module.exports = function ({ matchUtilities }) {
   matchUtilities({
     bg: (modifier, { theme }) => {
       let value = theme.backgroundSize[modifier]

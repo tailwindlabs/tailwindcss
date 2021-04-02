@@ -1,6 +1,6 @@
 const { asValue, nameClass } = require('../pluginUtils')
 
-module.exports = function ({ matchUtilities, jit: { theme } }) {
+module.exports = function ({ matchUtilities }) {
   matchUtilities({
     'flex-grow': (modifier, { theme }) => {
       let value = asValue(modifier, theme.flexGrow)

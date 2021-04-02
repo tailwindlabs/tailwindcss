@@ -15,7 +15,7 @@ test('modify selectors', () => {
     corePlugins: { preflight: false },
     theme: {},
     plugins: [
-      function ({ addVariant, e }) {
+      function ({ addVariant }) {
         addVariant('foo', ({ modifySelectors, separator }) => {
           modifySelectors(({ selector }) => {
             return selectorParser((selectors) => {

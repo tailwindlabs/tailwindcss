@@ -1,6 +1,6 @@
 const { asAngle, nameClass } = require('../pluginUtils')
 
-module.exports = function ({ matchUtilities, jit: { theme } }) {
+module.exports = function ({ matchUtilities }) {
   matchUtilities({
     rotate: (modifier, { theme }) => {
       let value = asAngle(modifier, theme.rotate)

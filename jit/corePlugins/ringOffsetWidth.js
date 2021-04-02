@@ -1,6 +1,6 @@
 const { asLength, nameClass } = require('../pluginUtils')
 
-module.exports = function ({ matchUtilities, jit: { theme } }) {
+module.exports = function ({ matchUtilities }) {
   matchUtilities({
     'ring-offset': (modifier, { theme }) => {
       let value = asLength(modifier, theme['ringOffsetWidth'])

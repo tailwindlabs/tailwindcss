@@ -1,6 +1,6 @@
 const { asValue, nameClass } = require('../pluginUtils')
 
-module.exports = function ({ matchUtilities, jit: { theme } }) {
+module.exports = function ({ matchUtilities }) {
   matchUtilities({
     'ring-opacity': (modifier, { theme }) => {
       let value = asValue(modifier, theme['ringOpacity'])
