@@ -65,16 +65,21 @@ const getConfigFunction = (config) => () => {
   return resolveConfig([...getAllConfigs(configObject)])
 }
 
+let warned = false
+
 module.exports = function (config) {
   const resolvedConfigPath = resolveConfigPath(config)
   const getConfig = getConfigFunction(resolvedConfigPath || config)
   const mode = _.get(getConfig(), 'mode', 'aot')
 
   if (mode === 'jit') {
-    log.warn([
-      `You have enabled the JIT engine which is currently in preview.`,
-      'Preview features are not covered by semver, may introduce breaking changes, and can change at any time.',
-    ])
+    if (!warned) {
+      log.warn([
+        `You have enabled the JIT engine which is currently in preview.`,
+        'Preview features are not covered by semver, may introduce breaking changes, and can change at any time.',
+      ])
+      warned = true
+    }
     return require('../jit/index.js')(config)
   }
 
