@@ -12,6 +12,7 @@ import resolveConfig from './util/resolveConfig'
 import getAllConfigs from './util/getAllConfigs'
 import { supportedConfigFiles } from './constants'
 import defaultConfig from '../stubs/defaultConfig.stub.js'
+import log from './util/log'
 
 function resolveConfigPath(filePath) {
   // require('tailwindcss')({ theme: ..., variants: ... })
@@ -65,19 +66,31 @@ const getConfigFunction = (config) => () => {
   return resolveConfig([...getAllConfigs(configObject)])
 }
 
-const plugin = postcss.plugin('tailwindcss', (config) => {
-  const plugins = []
-  const resolvedConfigPath = resolveConfigPath(config)
+let warned = false
 
+const plugin = postcss.plugin('tailwindcss', (config) => {
+  const resolvedConfigPath = resolveConfigPath(config)
+  const getConfig = getConfigFunction(resolvedConfigPath || config)
+  const mode = _.get(getConfig(), 'mode', 'aot')
+
+  if (mode === 'jit') {
+    if (!warned) {
+      log.warn([
+        `You have enabled the JIT engine which is currently in preview.`,
+        'Preview features are not covered by semver, may introduce breaking changes, and can change at any time.',
+      ])
+      warned = true
+    }
+
+    return postcss(require('../jit/index.js')(config))
+  }
+
+  const plugins = []
   if (!_.isUndefined(resolvedConfigPath)) {
     plugins.push(registerConfigAsDependency(resolvedConfigPath))
   }
 
-  return postcss([
-    ...plugins,
-    processTailwindFeatures(getConfigFunction(resolvedConfigPath || config)),
-    formatCSS,
-  ])
+  return postcss([...plugins, processTailwindFeatures(getConfig), formatCSS])
 })
 
 module.exports = plugin
