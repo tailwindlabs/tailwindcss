@@ -36,7 +36,9 @@ const touchDir =
 if (!sharedState.env.TAILWIND_DISABLE_TOUCH) {
   if (fs.existsSync(touchDir)) {
     for (let file of fs.readdirSync(touchDir)) {
-      fs.unlinkSync(path.join(touchDir, file))
+      try {
+        fs.unlinkSync(path.join(touchDir, file))
+      } catch (_err) {}
     }
   } else {
     fs.mkdirSync(touchDir, { recursive: true })
