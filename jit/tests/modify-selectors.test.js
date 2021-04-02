@@ -5,7 +5,7 @@ const path = require('path')
 const selectorParser = require('postcss-selector-parser')
 
 function run(input, config = {}) {
-  return postcss([tailwind(config)]).process(input, { from: path.resolve(__filename) })
+  return postcss(tailwind(config)).process(input, { from: path.resolve(__filename) })
 }
 
 test('modify selectors', () => {
@@ -45,6 +45,6 @@ test('modify selectors', () => {
     let expectedPath = path.resolve(__dirname, './modify-selectors.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
-    expect(result.css).toMatchCss(expected)
+    expect(result.css).toMatchFormattedCss(expected)
   })
 })
