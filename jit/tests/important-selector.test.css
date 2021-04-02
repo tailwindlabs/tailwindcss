@@ -1,0 +1,85 @@
+* {
+  --tw-shadow: 0 0 #0000;
+  --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgba(59, 130, 246, 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+}
+.container {
+  width: 100%;
+}
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+#app .btn {
+  button: yes;
+}
+@font-face {
+  font-family: Inter;
+}
+@page {
+  margin: 1cm;
+}
+.custom-component {
+  font-weight: 700;
+}
+.custom-important-component {
+  text-align: center !important;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+#app .animate-spin {
+  animation: spin 1s linear infinite;
+}
+#app .font-bold {
+  font-weight: 700;
+}
+.custom-util {
+  button: no;
+}
+#app .group:hover .group-hover\:focus-within\:text-left:focus-within {
+  text-align: left;
+}
+#app [dir='rtl'] .rtl\:active\:text-center:active {
+  text-align: center;
+}
+@media (prefers-reduced-motion: no-preference) {
+  #app .motion-safe\:hover\:text-center:hover {
+    text-align: center;
+  }
+}
+#app .dark .dark\:focus\:text-left:focus {
+  text-align: left;
+}
+@media (min-width: 768px) {
+  #app .md\:hover\:text-right:hover {
+    text-align: right;
+  }
+}
