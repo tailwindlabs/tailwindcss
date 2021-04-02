@@ -793,6 +793,7 @@ module.exports = {
     gridTemplateRows: ['responsive'],
     height: ['responsive'],
     inset: ['responsive'],
+    isolation: ['responsive'],
     justifyContent: ['responsive'],
     justifyItems: ['responsive'],
     justifySelf: ['responsive'],
