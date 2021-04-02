@@ -84,7 +84,7 @@
     "postcss-selector-parser": "^6.0.4",
     "postcss-value-parser": "^4.1.0",
     "pretty-hrtime": "^1.0.3",
-    "quick-lru": "^5.1.1",
+    "quick-lru": "^6.0.0",
     "reduce-css-calc": "^2.1.8",
     "resolve": "^1.20.0"
   },
