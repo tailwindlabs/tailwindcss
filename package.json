@@ -47,15 +47,14 @@
     "babel-jest": "^26.6.3",
     "clean-css": "^5.1.2",
     "cross-env": "^7.0.3",
+    "eslint": "^7.22.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "eslint": "^7.22.0",
     "jest": "^26.6.3",
-    "postcss-cli": "^8.3.1",
     "postcss": "^8.2.8",
+    "postcss-cli": "^8.3.1",
     "prettier": "^2.2.1",
-    "rimraf": "^3.0.0",
-    "tailwindcss": "^2.0.3"
+    "rimraf": "^3.0.0"
   },
   "peerDependencies": {
     "autoprefixer": "^10.0.2",
@@ -73,8 +72,8 @@
     "fast-glob": "^3.2.5",
     "fs-extra": "^9.1.0",
     "html-tags": "^3.1.0",
-    "lodash.topath": "^4.5.2",
     "lodash": "^4.17.21",
+    "lodash.topath": "^4.5.2",
     "modern-normalize": "^1.0.0",
     "node-emoji": "^1.8.1",
     "normalize-path": "^3.0.0",
