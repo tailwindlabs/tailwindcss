@@ -1,0 +1,341 @@
+* {
+  --tw-shadow: 0 0 #0000;
+  --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgba(59, 130, 246, 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+}
+.basic-example {
+  border-radius: 0.375rem;
+  --tw-bg-opacity: 1;
+  background-color: rgba(59, 130, 246, var(--tw-bg-opacity));
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.class-order {
+  padding: 2rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 1.75rem;
+  padding-bottom: 1.75rem;
+  padding-top: 1rem;
+  padding-right: 0.25rem;
+}
+.with-additional-properties {
+  font-weight: 500;
+  text-align: right;
+}
+.variants {
+  font-weight: 600;
+}
+.variants:hover {
+  font-weight: 700;
+}
+.variants:focus {
+  font-weight: 500;
+}
+@media (min-width: 1024px) {
+  .variants {
+    font-weight: 300;
+  }
+}
+@media (min-width: 1280px) {
+  .variants:focus {
+    font-weight: 900;
+  }
+}
+.only-variants:hover {
+  font-weight: 700;
+}
+.only-variants:focus {
+  font-weight: 500;
+}
+@media (min-width: 1024px) {
+  .only-variants {
+    font-weight: 300;
+  }
+}
+@media (min-width: 1280px) {
+  .only-variants:focus {
+    font-weight: 900;
+  }
+}
+.group:hover .apply-group-variant {
+  text-align: center;
+}
+@media (min-width: 1024px) {
+  .group:hover .apply-group-variant {
+    text-align: left;
+  }
+}
+.dark .apply-dark-variant {
+  text-align: center;
+}
+.dark .apply-dark-variant:hover {
+  text-align: right;
+}
+@media (min-width: 1024px) {
+  .dark .apply-dark-variant {
+    text-align: left;
+  }
+}
+.apply-custom-utility {
+  custom: stuff;
+}
+.apply-custom-utility:hover {
+  custom: stuff;
+}
+@media (min-width: 1024px) {
+  .apply-custom-utility {
+    custom: stuff;
+  }
+}
+@media (min-width: 1280px) {
+  .apply-custom-utility:focus {
+    custom: stuff;
+  }
+}
+.multiple,
+.selectors {
+  border-radius: 0.375rem;
+  --tw-bg-opacity: 1;
+  background-color: rgba(59, 130, 246, var(--tw-bg-opacity));
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.multiple-variants:hover,
+.selectors-variants:hover {
+  text-align: center;
+}
+.multiple-variants:active,
+.selectors-variants:active {
+  text-align: right;
+}
+@media (min-width: 1024px) {
+  .multiple-variants:focus,
+  .selectors-variants:focus {
+    text-align: left;
+  }
+}
+.group:hover .multiple-group,
+.group:hover .selectors-group {
+  text-align: center;
+}
+@media (min-width: 1024px) {
+  .group:hover .multiple-group,
+  .group:hover .selectors-group {
+    text-align: left;
+  }
+}
+/* TODO: This works but the generated CSS is unnecessarily verbose. */
+.complex-utilities {
+  --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
+  --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
+  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
+    var(--tw-numeric-spacing) var(--tw-numeric-fraction);
+  --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
+  --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
+  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
+    var(--tw-numeric-spacing) var(--tw-numeric-fraction);
+  --tw-ordinal: ordinal;
+  --tw-numeric-spacing: tabular-nums;
+  --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+    var(--tw-shadow);
+}
+.complex-utilities:hover {
+  --tw-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+    var(--tw-shadow);
+}
+.complex-utilities:focus {
+  --tw-ordinal: var(--tw-empty, /*!*/ /*!*/);
+  --tw-slashed-zero: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-figure: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-spacing: var(--tw-empty, /*!*/ /*!*/);
+  --tw-numeric-fraction: var(--tw-empty, /*!*/ /*!*/);
+  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
+    var(--tw-numeric-spacing) var(--tw-numeric-fraction);
+  --tw-numeric-fraction: diagonal-fractions;
+}
+.basic-nesting-parent {
+  .basic-nesting-child {
+    font-weight: 700;
+  }
+  .basic-nesting-child:hover {
+    font-weight: 400;
+  }
+}
+.use-base-only-a {
+  font-weight: 700;
+}
+.use-dependant-only-b {
+  font-weight: 700;
+  font-weight: 400;
+}
+.btn {
+  border-radius: 0.25rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-weight: 700;
+}
+.btn-blue {
+  border-radius: 0.25rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-weight: 700;
+  --tw-bg-opacity: 1;
+  background-color: rgba(59, 130, 246, var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgba(255, 255, 255, var(--tw-text-opacity));
+}
+.btn-blue:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgba(29, 78, 216, var(--tw-bg-opacity));
+}
+.recursive-apply-a {
+  font-weight: 900;
+}
+@media (min-width: 640px) {
+  .recursive-apply-a {
+    font-weight: 100;
+  }
+}
+.recursive-apply-b {
+  font-weight: 900;
+}
+@media (min-width: 640px) {
+  .recursive-apply-b {
+    font-weight: 100;
+  }
+}
+.recursive-apply-b {
+  font-weight: 600;
+}
+@media (min-width: 768px) {
+  .recursive-apply-b {
+    font-weight: 200;
+  }
+}
+.recursive-apply-c {
+  font-weight: 900;
+}
+@media (min-width: 640px) {
+  .recursive-apply-c {
+    font-weight: 100;
+  }
+}
+.recursive-apply-c {
+  font-weight: 600;
+}
+@media (min-width: 768px) {
+  .recursive-apply-c {
+    font-weight: 200;
+  }
+}
+.recursive-apply-c {
+  font-weight: 700;
+}
+@media (min-width: 1024px) {
+  .recursive-apply-c {
+    font-weight: 300;
+  }
+}
+.use-with-other-properties-base {
+  color: green;
+  font-weight: 700;
+}
+.use-with-other-properties-component {
+  color: green;
+  font-weight: 700;
+}
+.add-sibling-properties {
+  padding: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.add-sibling-properties:hover {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+@media (min-width: 1024px) {
+  .add-sibling-properties {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+@media (min-width: 1280px) {
+  .add-sibling-properties:focus {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+}
+.add-sibling-properties {
+  padding-top: 3px;
+  color: green;
+  font-weight: 700;
+}
+h1 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+@media (min-width: 640px) {
+  h1 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+}
+@media (min-width: 1024px) {
+  h1 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+}
+h2 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+@media (min-width: 1024px) {
+  h2 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+}
+@media (min-width: 640px) {
+  h2 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.foo {
+  animation: spin 1s linear infinite;
+}
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+.bar {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+}
