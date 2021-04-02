@@ -1,7 +1,6 @@
-const transformThemeValue = require('tailwindcss/lib/util/transformThemeValue').default
 const { asLength, nameClass } = require('../pluginUtils')
 
-module.exports = function ({ matchUtilities, addUtilities, jit: { theme } }) {
+module.exports = function ({ matchUtilities, addUtilities }) {
   matchUtilities({
     'space-x': (modifier, { theme }) => {
       let value = asLength(modifier, theme['space'])

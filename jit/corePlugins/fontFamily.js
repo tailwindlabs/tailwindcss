@@ -1,12 +1,11 @@
 const { nameClass } = require('../pluginUtils')
-const transformThemeValue = require('tailwindcss/lib/util/transformThemeValue').default
+const transformThemeValue = require('../../lib/util/transformThemeValue').default
 
-module.exports = function ({ matchUtilities, jit: { theme } }) {
+module.exports = function ({ matchUtilities }) {
   let transformValue = transformThemeValue('fontFamily')
 
   matchUtilities({
     font: (modifier, { theme }) => {
-      let transformValue = transformThemeValue('fontFamily')
       let value = transformValue(theme.fontFamily[modifier])
 
       if (modifier === '' || value === undefined) {

@@ -1,6 +1,6 @@
-const flattenColorPalette = require('tailwindcss/lib/util/flattenColorPalette').default
-const toColorValue = require('tailwindcss/lib/util/toColorValue').default
-const toRgba = require('tailwindcss/lib/util/withAlphaVariable').toRgba
+const flattenColorPalette = require('../../lib/util/flattenColorPalette').default
+const toColorValue = require('../../lib/util/toColorValue').default
+const toRgba = require('../../lib/util/withAlphaVariable').toRgba
 const { asColor, nameClass } = require('../pluginUtils')
 
 function transparentTo(value) {
