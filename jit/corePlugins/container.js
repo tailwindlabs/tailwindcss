@@ -1,3 +1,3 @@
-const container = require('tailwindcss/lib/plugins/container')
+const container = require('../../lib/plugins/container')
 
 module.exports = container()

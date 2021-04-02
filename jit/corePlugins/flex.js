@@ -1,7 +1,6 @@
 const { nameClass } = require('../pluginUtils')
-const transformThemeValue = require('tailwindcss/lib/util/transformThemeValue').default
 
-module.exports = function ({ matchUtilities, jit: { theme } }) {
+module.exports = function ({ matchUtilities }) {
   matchUtilities({
     flex: (modifier, { theme }) => {
       let value = theme.flex[modifier]
