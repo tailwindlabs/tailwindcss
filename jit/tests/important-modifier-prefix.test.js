@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 
 function run(input, config = {}) {
-  return postcss([tailwind(config)]).process(input, { from: path.resolve(__filename) })
+  return postcss(tailwind(config)).process(input, { from: path.resolve(__filename) })
 }
 
 test('important modifier with prefix', () => {
@@ -28,6 +28,6 @@ test('important modifier with prefix', () => {
     let expectedPath = path.resolve(__dirname, './important-modifier-prefix.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
-    expect(result.css).toMatchCss(expected)
+    expect(result.css).toMatchFormattedCss(expected)
   })
 })

@@ -8,7 +8,7 @@ const configPath = path.resolve(__dirname, './context-reuse.tailwind.config.js')
 function run(input, config = {}, from = null) {
   from = from || path.resolve(__filename)
 
-  return postcss([tailwind(config)]).process(input, { from })
+  return postcss(tailwind(config)).process(input, { from })
 }
 
 async function runTest() {

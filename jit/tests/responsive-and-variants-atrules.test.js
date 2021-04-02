@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 
 function run(input, config = {}) {
-  return postcss([tailwind(config)]).process(input, { from: path.resolve(__filename) })
+  return postcss(tailwind(config)).process(input, { from: path.resolve(__filename) })
 }
 
 test('responsive and variants atrules', () => {
@@ -83,6 +83,6 @@ test('responsive and variants atrules', () => {
     let expectedPath = path.resolve(__dirname, './responsive-and-variants-atrules.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
-    expect(result.css).toMatchCss(expected)
+    expect(result.css).toMatchFormattedCss(expected)
   })
 })

@@ -18,7 +18,7 @@ function pluginThatMutatesRules() {
 }
 
 function run(input, config = {}) {
-  return postcss([tailwind(config)]).process(input, { from: path.resolve(__filename) })
+  return postcss(tailwind(config)).process(input, { from: path.resolve(__filename) })
 }
 
 test.only('plugins mutating rules after tailwind doesnt break it', async () => {
@@ -38,7 +38,7 @@ test.only('plugins mutating rules after tailwind doesnt break it', async () => {
     let expectedPath = path.resolve(__dirname, './mutable.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
-    expect(result.css).toMatchCss(expected)
+    expect(result.css).toMatchFormattedCss(expected)
   }
 
   // Verify the first run produces the expected result
