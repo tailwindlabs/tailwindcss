@@ -187,12 +187,11 @@ export function Header({ navIsOpen, onNavToggle }) {
               className="hidden sm:block mx-6 h-6 w-px bg-white bg-opacity-20"
             ></span>
             <div className="ml-6">
-              <a
-                className="whitespace-nowrap inline-flex rounded-md bg-white py-2 px-3 text-xs font-semibold uppercase text-blue-500 hover:bg-opacity-90"
-                href="https://blog.tailwindcss.com/just-in-time-the-next-generation-of-tailwind-css"
-              >
-                Learn more &rarr;
-              </a>
+              <Link href="/docs/just-in-time-mode">
+                <a className="whitespace-nowrap inline-flex rounded-md bg-white py-2 px-3 text-xs font-semibold uppercase text-blue-500 hover:bg-opacity-90">
+                  Learn more &rarr;
+                </a>
+              </Link>
             </div>
           </div>
         </div>
