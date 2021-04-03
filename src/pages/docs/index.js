@@ -63,32 +63,45 @@ const whatsNew = [
 
 const latestUpdates = [
   {
+    title: 'Just-In-Time: The Next Generation of Tailwind CSS',
+    date: '2021-03-15T16:30:00.000Z',
+    url: 'https://blog.tailwindcss.com/just-in-time-the-next-generation-of-tailwind-css',
+    description:
+      "One of the hardest constraints we've had to deal with as we've improved Tailwind CSS over the years is the generated file size in development. With enough customizations to your config file, the generated CSS can reach 10mb or more, and there's only so much CSS that build tools and even the browser itself will comfortably tolerate.",
+  },
+  {
+    title: 'Welcoming James McDonald to Tailwind Labs',
+    date: '2021-03-08T19:00:00.0Z',
+    url: 'https://blog.tailwindcss.com/welcoming-james-mcdonald-to-tailwind-labs',
+    description: `Many years ago I got a message from Steve that said something like "Have I ever shared this guy's Dribbble profile with you before? Been following him forever, some of my absolute favorite work I've ever found." That person was James McDonald, and today we're totally over the moon to share that James is joining our team full-time.`,
+  },
+  {
+    title: '"Tailwind CSS: From Zero to Production" on YouTube',
+    date: '2021-02-16T16:05:00.000Z',
+    url: 'https://blog.tailwindcss.com/tailwindcss-from-zero-to-production',
+    description:
+      "Today we're excited to release Tailwind CSS: From Zero to Production, a new screencast series that teaches you everything you need to know to get up and running with Tailwind CSS v2.0 from scratch.",
+  },
+  {
+    title: 'Welcoming David Luhr to Tailwind Labs',
+    date: '2021-02-01T13:35:00.0Z',
+    url: 'https://blog.tailwindcss.com/welcoming-david-luhr-to-tailwind-labs',
+    description:
+      "We started working with David Luhr last summer on a project-by-project basis to help us develop a Figma version of Tailwind UI (almost ready!), as well as to leverage his accessibility expertise when building Tailwind UI templates, ensuring we were following best practices and delivering markup that would work for everyone, no matter what tools they use to browse the web. Today we're excited to share that David has joined the team full-time!",
+  },
+  {
+    title: 'Multi-line truncation with @tailwindcss/line-clamp',
+    date: '2021-01-24T20:00:00Z',
+    url: 'https://blog.tailwindcss.com/multi-line-truncation-with-tailwindcss-line-clamp',
+    description:
+      "Imagine you're implementing a beautiful design you or someone on your team carefully crafted in Figma. You've nailed all the different layouts at each breakpoint, perfected the whitespace and typography, and the photography you're using is really bringing the design to life.",
+  },
+  {
     title: 'Tailwind CSS v2.0',
     date: '2020-11-18T17:45:00.000Z',
     url: 'https://blog.tailwindcss.com/tailwindcss-v2',
     description:
       "Today we're finally releasing Tailwind CSS v2.0, including an all-new color palette, dark mode support, and tons more!",
-  },
-  {
-    title: 'Tailwind CSS v1.9.0',
-    date: '2020-10-13T18:30:00.000Z',
-    url: 'https://blog.tailwindcss.com/tailwindcss-1-9',
-    description:
-      'We just released Tailwind CSS v1.9 which adds support for configuration presets, useful new CSS grid utilities, extended border radius, rotate, and skew scales, helpful accessibility improvements, and more!',
-  },
-  {
-    title: 'Introducing Tailwind Play',
-    date: '2020-10-07T13:00:00.000Z',
-    url: 'https://blog.tailwindcss.com/introducing-tailwind-play',
-    description:
-      "Today we're excited to release the first version of Tailwind Play, an advanced online playground for Tailwind CSS that lets you use all of Tailwind's build-time features directly in the browser.",
-  },
-  {
-    title: 'Headless UI: Unstyled, Accessible UI Components',
-    date: '2020-10-06T18:30:00.000Z',
-    url: 'https://blog.tailwindcss.com/headless-ui-unstyled-accessible-ui-components',
-    description:
-      'Headless UI is a set of completely unstyled, fully accessible UI components for React, Vue, and Alpine.js that make it easy to build fully accessible custom UI components, without sacrificing the ability to style them from scratch with simple utility classes.',
   },
 ]
 
