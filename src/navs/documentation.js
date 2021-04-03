@@ -30,6 +30,7 @@ export const documentationNav = {
   ],
   Customization: [
     pages['configuration'],
+    pages['just-in-time-mode'],
     pages['theme'],
     pages['breakpoints'],
     pages['customizing-colors'],
