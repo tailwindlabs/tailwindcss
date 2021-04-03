@@ -149,32 +149,16 @@ module.exports = {
     divideWidth: (theme) => theme('borderWidth'),
     fill: { current: 'currentColor' },
     blur: {
-      0: '0',
-      2: '2px',
-      4: '4px',
-      8: '8px',
-      12: '12px',
-      16: '16px',
-      20: '20px',
-      24: '24px',
-      28: '28px',
-      32: '32px',
+      // TODO
     },
     brightness: {
-      0: '0',
-      25: '25%',
-      50: '50%',
-      75: '75%',
-      100: '100%',
+      // TODO
     },
     contrast: {
-      0: '0',
-      25: '25%',
-      50: '50%',
-      75: '75%',
-      100: '100%',
+      // TODO
     },
     dropShadow: {
+      // TODO: Decide how to account for lack of spread support
       sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
       DEFAULT: ['0 1px 3px rgba(0, 0, 0, 0.1)', '0 1px 2px rgba(0, 0, 0, 0.06)'],
       md: ['0 4px 6px rgba(0, 0, 0, 0.1)', '0 2px 4px rgba(0, 0, 0, 0.06)'],
@@ -185,40 +169,21 @@ module.exports = {
     },
     grayscale: {
       0: '0',
-      25: '25%',
-      50: '50%',
-      75: '75%',
-      100: '100%',
+      DEFAULT: '100%',
     },
     hueRotate: {
-      '-180': '-180deg',
-      '-90': '-90deg',
-      '-45': '-45deg',
-      0: '0',
-      45: '45deg',
-      90: '90deg',
-      180: '180deg',
+      // TODO
     },
     invert: {
       0: '0',
-      25: '25%',
-      50: '50%',
-      75: '75%',
-      100: '100%',
+      DEFAULT: '100%',
     },
     saturate: {
-      0: '0',
-      25: '25%',
-      50: '50%',
-      75: '75%',
-      100: '100%',
+      // TODO
     },
     sepia: {
       0: '0',
-      25: '25%',
-      50: '50%',
-      75: '75%',
-      100: '100%',
+      DEFAULT: '100%',
     },
     flex: {
       1: '1 1 0%',
