@@ -10892,10 +10892,6 @@ video {
   flex-wrap: nowrap;
 }
 
-.place-items-auto {
-  place-items: auto;
-}
-
 .place-items-start {
   place-items: start;
 }
@@ -11022,10 +11018,6 @@ video {
 
 .self-stretch {
   align-self: stretch;
-}
-
-.justify-items-auto {
-  justify-items: auto;
 }
 
 .justify-items-start {
@@ -39504,10 +39496,6 @@ video {
     flex-wrap: nowrap;
   }
 
-  .sm\:place-items-auto {
-    place-items: auto;
-  }
-
   .sm\:place-items-start {
     place-items: start;
   }
@@ -39634,10 +39622,6 @@ video {
 
   .sm\:self-stretch {
     align-self: stretch;
-  }
-
-  .sm\:justify-items-auto {
-    justify-items: auto;
   }
 
   .sm\:justify-items-start {
@@ -68073,10 +68057,6 @@ video {
     flex-wrap: nowrap;
   }
 
-  .md\:place-items-auto {
-    place-items: auto;
-  }
-
   .md\:place-items-start {
     place-items: start;
   }
@@ -68203,10 +68183,6 @@ video {
 
   .md\:self-stretch {
     align-self: stretch;
-  }
-
-  .md\:justify-items-auto {
-    justify-items: auto;
   }
 
   .md\:justify-items-start {
@@ -96642,10 +96618,6 @@ video {
     flex-wrap: nowrap;
   }
 
-  .lg\:place-items-auto {
-    place-items: auto;
-  }
-
   .lg\:place-items-start {
     place-items: start;
   }
@@ -96772,10 +96744,6 @@ video {
 
   .lg\:self-stretch {
     align-self: stretch;
-  }
-
-  .lg\:justify-items-auto {
-    justify-items: auto;
   }
 
   .lg\:justify-items-start {
@@ -125211,10 +125179,6 @@ video {
     flex-wrap: nowrap;
   }
 
-  .xl\:place-items-auto {
-    place-items: auto;
-  }
-
   .xl\:place-items-start {
     place-items: start;
   }
@@ -125341,10 +125305,6 @@ video {
 
   .xl\:self-stretch {
     align-self: stretch;
-  }
-
-  .xl\:justify-items-auto {
-    justify-items: auto;
   }
 
   .xl\:justify-items-start {
@@ -153780,10 +153740,6 @@ video {
     flex-wrap: nowrap;
   }
 
-  .\32xl\:place-items-auto {
-    place-items: auto;
-  }
-
   .\32xl\:place-items-start {
     place-items: start;
   }
@@ -153910,10 +153866,6 @@ video {
 
   .\32xl\:self-stretch {
     align-self: stretch;
-  }
-
-  .\32xl\:justify-items-auto {
-    justify-items: auto;
   }
 
   .\32xl\:justify-items-start {

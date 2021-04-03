@@ -2,9 +2,6 @@ export default function () {
   return function ({ addUtilities, variants }) {
     addUtilities(
       {
-        '.place-items-auto': {
-          'place-items': 'auto',
-        },
         '.place-items-start': {
           'place-items': 'start',
         },

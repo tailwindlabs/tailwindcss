@@ -10892,10 +10892,6 @@ video {
   flex-wrap: nowrap !important;
 }
 
-.place-items-auto {
-  place-items: auto !important;
-}
-
 .place-items-start {
   place-items: start !important;
 }
@@ -11022,10 +11018,6 @@ video {
 
 .self-stretch {
   align-self: stretch !important;
-}
-
-.justify-items-auto {
-  justify-items: auto !important;
 }
 
 .justify-items-start {
@@ -39504,10 +39496,6 @@ video {
     flex-wrap: nowrap !important;
   }
 
-  .sm\:place-items-auto {
-    place-items: auto !important;
-  }
-
   .sm\:place-items-start {
     place-items: start !important;
   }
@@ -39634,10 +39622,6 @@ video {
 
   .sm\:self-stretch {
     align-self: stretch !important;
-  }
-
-  .sm\:justify-items-auto {
-    justify-items: auto !important;
   }
 
   .sm\:justify-items-start {
@@ -68073,10 +68057,6 @@ video {
     flex-wrap: nowrap !important;
   }
 
-  .md\:place-items-auto {
-    place-items: auto !important;
-  }
-
   .md\:place-items-start {
     place-items: start !important;
   }
@@ -68203,10 +68183,6 @@ video {
 
   .md\:self-stretch {
     align-self: stretch !important;
-  }
-
-  .md\:justify-items-auto {
-    justify-items: auto !important;
   }
 
   .md\:justify-items-start {
@@ -96642,10 +96618,6 @@ video {
     flex-wrap: nowrap !important;
   }
 
-  .lg\:place-items-auto {
-    place-items: auto !important;
-  }
-
   .lg\:place-items-start {
     place-items: start !important;
   }
@@ -96772,10 +96744,6 @@ video {
 
   .lg\:self-stretch {
     align-self: stretch !important;
-  }
-
-  .lg\:justify-items-auto {
-    justify-items: auto !important;
   }
 
   .lg\:justify-items-start {
@@ -125211,10 +125179,6 @@ video {
     flex-wrap: nowrap !important;
   }
 
-  .xl\:place-items-auto {
-    place-items: auto !important;
-  }
-
   .xl\:place-items-start {
     place-items: start !important;
   }
@@ -125341,10 +125305,6 @@ video {
 
   .xl\:self-stretch {
     align-self: stretch !important;
-  }
-
-  .xl\:justify-items-auto {
-    justify-items: auto !important;
   }
 
   .xl\:justify-items-start {
@@ -153780,10 +153740,6 @@ video {
     flex-wrap: nowrap !important;
   }
 
-  .\32xl\:place-items-auto {
-    place-items: auto !important;
-  }
-
   .\32xl\:place-items-start {
     place-items: start !important;
   }
@@ -153910,10 +153866,6 @@ video {
 
   .\32xl\:self-stretch {
     align-self: stretch !important;
-  }
-
-  .\32xl\:justify-items-auto {
-    justify-items: auto !important;
   }
 
   .\32xl\:justify-items-start {
