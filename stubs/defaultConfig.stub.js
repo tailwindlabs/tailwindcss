@@ -150,7 +150,14 @@ module.exports = {
     fill: { current: 'currentColor' },
     blur: {
       // TODO: Come up with actually useful values
-      1: '1px',
+      0: '0',
+      xs: '1px',
+      sm: '2px',
+      DEFAULT: '4px',
+      md: '8px',
+      lg: '12px',
+      xl: '16px',
+      '2xl': '24px',
     },
     brightness: {
       // TODO: Come up with actually useful values
@@ -184,7 +191,7 @@ module.exports = {
       lg: ['0 10px 15px rgba(0, 0, 0, 0.1)', '0 4px 6px rgba(0, 0, 0, 0.05)'],
       xl: ['0 20px 25px rgba(0, 0, 0, 0.1)', '0 10px 10px rgba(0, 0, 0, 0.04)'],
       '2xl': '0 25px 50px rgba(0, 0, 0, 0.25)',
-      none: 'none',
+      none: '0 0 #0000',
     },
     grayscale: {
       0: '0',

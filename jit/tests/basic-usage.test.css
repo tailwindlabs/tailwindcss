@@ -649,8 +649,8 @@
 .filter-none {
   filter: none;
 }
-.blur-1 {
-  --tw-blur: blur(1px);
+.blur-md {
+  --tw-blur: blur(8px);
 }
 .brightness-150 {
   --tw-brightness: brightness(1.5);
