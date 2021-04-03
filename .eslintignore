@@ -2,3 +2,8 @@
 /docs
 /__tests__/fixtures/cli-utils.js
 /stubs/*
+
+# Generated tooling jit files during testing
+/jit/tooling/*/src/*
+/jit/tooling/*/dist/*
+/jit/tooling/*/tailwind.config.js

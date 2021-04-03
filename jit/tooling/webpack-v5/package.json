@@ -1,0 +1,18 @@
+{
+  "name": "tooling-webpack-v5",
+  "private": true,
+  "description": "Integration testing setup: webpack v5",
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch"
+  },
+  "dependencies": {
+    "css-loader": "^5.2.0",
+    "mini-css-extract-plugin": "^1.4.0",
+    "postcss": "^8.2.9",
+    "postcss-loader": "^5.2.0",
+    "tailwind-dev": "file:../../../",
+    "webpack": "^5.30.0",
+    "webpack-cli": "^4.6.0"
+  }
+}

@@ -23,7 +23,8 @@
     "rebuild-fixtures": "npm run babelify && babel-node scripts/rebuildFixtures.js",
     "prepublishOnly": "npm run babelify && babel-node scripts/build.js",
     "style": "eslint .",
-    "test": "cross-env TAILWIND_MODE=build jest",
+    "test": "cross-env TAILWIND_MODE=build jest __tests__ jit/tests",
+    "test:integration": "cross-env TAILWIND_MODE=build jest --force-exit jit/tooling/tooling.test.js",
     "posttest": "npm run style",
     "compat": "node scripts/compat.js --prepare",
     "compat:restore": "node scripts/compat.js --restore"
@@ -46,6 +47,7 @@
     "autoprefixer": "^10.2.5",
     "babel-jest": "^26.6.3",
     "clean-css": "^5.1.2",
+    "connect": "^3.7.0",
     "cross-env": "^7.0.3",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^7.2.0",
@@ -54,7 +56,8 @@
     "postcss": "^8.2.8",
     "postcss-cli": "^8.3.1",
     "prettier": "^2.2.1",
-    "rimraf": "^3.0.0"
+    "rimraf": "^3.0.0",
+    "sirv": "^1.0.11"
   },
   "peerDependencies": {
     "autoprefixer": "^10.0.2",
