@@ -26585,6 +26585,70 @@ video {
   animation: bounce 1s infinite;
 }
 
+.mix-normal {
+  mix-blend-mode: normal;
+}
+
+.mix-multiply {
+  mix-blend-mode: multiply;
+}
+
+.mix-screen {
+  mix-blend-mode: screen;
+}
+
+.mix-overlay {
+  mix-blend-mode: overlay;
+}
+
+.mix-darken {
+  mix-blend-mode: darken;
+}
+
+.mix-lighten {
+  mix-blend-mode: lighten;
+}
+
+.mix-color-dodge {
+  mix-blend-mode: color-dodge;
+}
+
+.mix-color-burn {
+  mix-blend-mode: color-burn;
+}
+
+.mix-hard-light {
+  mix-blend-mode: hard-light;
+}
+
+.mix-soft-light {
+  mix-blend-mode: soft-light;
+}
+
+.mix-difference {
+  mix-blend-mode: difference;
+}
+
+.mix-exclusion {
+  mix-blend-mode: exclusion;
+}
+
+.mix-hue {
+  mix-blend-mode: hue;
+}
+
+.mix-saturation {
+  mix-blend-mode: saturation;
+}
+
+.mix-color {
+  mix-blend-mode: color;
+}
+
+.mix-luminosity {
+  mix-blend-mode: luminosity;
+}
+
 .example {
   font-weight: 700;
   color: #ef4444;
@@ -52591,6 +52655,70 @@ video {
 
   .sm\:animate-bounce {
     animation: bounce 1s infinite;
+  }
+
+  .sm\:mix-normal {
+    mix-blend-mode: normal;
+  }
+
+  .sm\:mix-multiply {
+    mix-blend-mode: multiply;
+  }
+
+  .sm\:mix-screen {
+    mix-blend-mode: screen;
+  }
+
+  .sm\:mix-overlay {
+    mix-blend-mode: overlay;
+  }
+
+  .sm\:mix-darken {
+    mix-blend-mode: darken;
+  }
+
+  .sm\:mix-lighten {
+    mix-blend-mode: lighten;
+  }
+
+  .sm\:mix-color-dodge {
+    mix-blend-mode: color-dodge;
+  }
+
+  .sm\:mix-color-burn {
+    mix-blend-mode: color-burn;
+  }
+
+  .sm\:mix-hard-light {
+    mix-blend-mode: hard-light;
+  }
+
+  .sm\:mix-soft-light {
+    mix-blend-mode: soft-light;
+  }
+
+  .sm\:mix-difference {
+    mix-blend-mode: difference;
+  }
+
+  .sm\:mix-exclusion {
+    mix-blend-mode: exclusion;
+  }
+
+  .sm\:mix-hue {
+    mix-blend-mode: hue;
+  }
+
+  .sm\:mix-saturation {
+    mix-blend-mode: saturation;
+  }
+
+  .sm\:mix-color {
+    mix-blend-mode: color;
+  }
+
+  .sm\:mix-luminosity {
+    mix-blend-mode: luminosity;
   }
 
   .sm\:example {
@@ -78602,6 +78730,70 @@ video {
     animation: bounce 1s infinite;
   }
 
+  .md\:mix-normal {
+    mix-blend-mode: normal;
+  }
+
+  .md\:mix-multiply {
+    mix-blend-mode: multiply;
+  }
+
+  .md\:mix-screen {
+    mix-blend-mode: screen;
+  }
+
+  .md\:mix-overlay {
+    mix-blend-mode: overlay;
+  }
+
+  .md\:mix-darken {
+    mix-blend-mode: darken;
+  }
+
+  .md\:mix-lighten {
+    mix-blend-mode: lighten;
+  }
+
+  .md\:mix-color-dodge {
+    mix-blend-mode: color-dodge;
+  }
+
+  .md\:mix-color-burn {
+    mix-blend-mode: color-burn;
+  }
+
+  .md\:mix-hard-light {
+    mix-blend-mode: hard-light;
+  }
+
+  .md\:mix-soft-light {
+    mix-blend-mode: soft-light;
+  }
+
+  .md\:mix-difference {
+    mix-blend-mode: difference;
+  }
+
+  .md\:mix-exclusion {
+    mix-blend-mode: exclusion;
+  }
+
+  .md\:mix-hue {
+    mix-blend-mode: hue;
+  }
+
+  .md\:mix-saturation {
+    mix-blend-mode: saturation;
+  }
+
+  .md\:mix-color {
+    mix-blend-mode: color;
+  }
+
+  .md\:mix-luminosity {
+    mix-blend-mode: luminosity;
+  }
+
   .md\:example {
     font-weight: 700;
     color: #ef4444;
@@ -104609,6 +104801,70 @@ video {
 
   .lg\:animate-bounce {
     animation: bounce 1s infinite;
+  }
+
+  .lg\:mix-normal {
+    mix-blend-mode: normal;
+  }
+
+  .lg\:mix-multiply {
+    mix-blend-mode: multiply;
+  }
+
+  .lg\:mix-screen {
+    mix-blend-mode: screen;
+  }
+
+  .lg\:mix-overlay {
+    mix-blend-mode: overlay;
+  }
+
+  .lg\:mix-darken {
+    mix-blend-mode: darken;
+  }
+
+  .lg\:mix-lighten {
+    mix-blend-mode: lighten;
+  }
+
+  .lg\:mix-color-dodge {
+    mix-blend-mode: color-dodge;
+  }
+
+  .lg\:mix-color-burn {
+    mix-blend-mode: color-burn;
+  }
+
+  .lg\:mix-hard-light {
+    mix-blend-mode: hard-light;
+  }
+
+  .lg\:mix-soft-light {
+    mix-blend-mode: soft-light;
+  }
+
+  .lg\:mix-difference {
+    mix-blend-mode: difference;
+  }
+
+  .lg\:mix-exclusion {
+    mix-blend-mode: exclusion;
+  }
+
+  .lg\:mix-hue {
+    mix-blend-mode: hue;
+  }
+
+  .lg\:mix-saturation {
+    mix-blend-mode: saturation;
+  }
+
+  .lg\:mix-color {
+    mix-blend-mode: color;
+  }
+
+  .lg\:mix-luminosity {
+    mix-blend-mode: luminosity;
   }
 
   .lg\:example {
@@ -130620,6 +130876,70 @@ video {
     animation: bounce 1s infinite;
   }
 
+  .xl\:mix-normal {
+    mix-blend-mode: normal;
+  }
+
+  .xl\:mix-multiply {
+    mix-blend-mode: multiply;
+  }
+
+  .xl\:mix-screen {
+    mix-blend-mode: screen;
+  }
+
+  .xl\:mix-overlay {
+    mix-blend-mode: overlay;
+  }
+
+  .xl\:mix-darken {
+    mix-blend-mode: darken;
+  }
+
+  .xl\:mix-lighten {
+    mix-blend-mode: lighten;
+  }
+
+  .xl\:mix-color-dodge {
+    mix-blend-mode: color-dodge;
+  }
+
+  .xl\:mix-color-burn {
+    mix-blend-mode: color-burn;
+  }
+
+  .xl\:mix-hard-light {
+    mix-blend-mode: hard-light;
+  }
+
+  .xl\:mix-soft-light {
+    mix-blend-mode: soft-light;
+  }
+
+  .xl\:mix-difference {
+    mix-blend-mode: difference;
+  }
+
+  .xl\:mix-exclusion {
+    mix-blend-mode: exclusion;
+  }
+
+  .xl\:mix-hue {
+    mix-blend-mode: hue;
+  }
+
+  .xl\:mix-saturation {
+    mix-blend-mode: saturation;
+  }
+
+  .xl\:mix-color {
+    mix-blend-mode: color;
+  }
+
+  .xl\:mix-luminosity {
+    mix-blend-mode: luminosity;
+  }
+
   .xl\:example {
     font-weight: 700;
     color: #ef4444;
@@ -156627,6 +156947,70 @@ video {
 
   .\32xl\:animate-bounce {
     animation: bounce 1s infinite;
+  }
+
+  .\32xl\:mix-normal {
+    mix-blend-mode: normal;
+  }
+
+  .\32xl\:mix-multiply {
+    mix-blend-mode: multiply;
+  }
+
+  .\32xl\:mix-screen {
+    mix-blend-mode: screen;
+  }
+
+  .\32xl\:mix-overlay {
+    mix-blend-mode: overlay;
+  }
+
+  .\32xl\:mix-darken {
+    mix-blend-mode: darken;
+  }
+
+  .\32xl\:mix-lighten {
+    mix-blend-mode: lighten;
+  }
+
+  .\32xl\:mix-color-dodge {
+    mix-blend-mode: color-dodge;
+  }
+
+  .\32xl\:mix-color-burn {
+    mix-blend-mode: color-burn;
+  }
+
+  .\32xl\:mix-hard-light {
+    mix-blend-mode: hard-light;
+  }
+
+  .\32xl\:mix-soft-light {
+    mix-blend-mode: soft-light;
+  }
+
+  .\32xl\:mix-difference {
+    mix-blend-mode: difference;
+  }
+
+  .\32xl\:mix-exclusion {
+    mix-blend-mode: exclusion;
+  }
+
+  .\32xl\:mix-hue {
+    mix-blend-mode: hue;
+  }
+
+  .\32xl\:mix-saturation {
+    mix-blend-mode: saturation;
+  }
+
+  .\32xl\:mix-color {
+    mix-blend-mode: color;
+  }
+
+  .\32xl\:mix-luminosity {
+    mix-blend-mode: luminosity;
   }
 
   .\32xl\:example {

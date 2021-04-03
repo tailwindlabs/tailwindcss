@@ -29141,6 +29141,70 @@ video {
   animation: bounce 1s infinite !important;
 }
 
+.mix-normal {
+  mix-blend-mode: normal !important;
+}
+
+.mix-multiply {
+  mix-blend-mode: multiply !important;
+}
+
+.mix-screen {
+  mix-blend-mode: screen !important;
+}
+
+.mix-overlay {
+  mix-blend-mode: overlay !important;
+}
+
+.mix-darken {
+  mix-blend-mode: darken !important;
+}
+
+.mix-lighten {
+  mix-blend-mode: lighten !important;
+}
+
+.mix-color-dodge {
+  mix-blend-mode: color-dodge !important;
+}
+
+.mix-color-burn {
+  mix-blend-mode: color-burn !important;
+}
+
+.mix-hard-light {
+  mix-blend-mode: hard-light !important;
+}
+
+.mix-soft-light {
+  mix-blend-mode: soft-light !important;
+}
+
+.mix-difference {
+  mix-blend-mode: difference !important;
+}
+
+.mix-exclusion {
+  mix-blend-mode: exclusion !important;
+}
+
+.mix-hue {
+  mix-blend-mode: hue !important;
+}
+
+.mix-saturation {
+  mix-blend-mode: saturation !important;
+}
+
+.mix-color {
+  mix-blend-mode: color !important;
+}
+
+.mix-luminosity {
+  mix-blend-mode: luminosity !important;
+}
+
 .example {
   font-weight: 700;
   color: #ef4444;
@@ -57703,6 +57767,70 @@ video {
 
   .sm\:animate-bounce {
     animation: bounce 1s infinite !important;
+  }
+
+  .sm\:mix-normal {
+    mix-blend-mode: normal !important;
+  }
+
+  .sm\:mix-multiply {
+    mix-blend-mode: multiply !important;
+  }
+
+  .sm\:mix-screen {
+    mix-blend-mode: screen !important;
+  }
+
+  .sm\:mix-overlay {
+    mix-blend-mode: overlay !important;
+  }
+
+  .sm\:mix-darken {
+    mix-blend-mode: darken !important;
+  }
+
+  .sm\:mix-lighten {
+    mix-blend-mode: lighten !important;
+  }
+
+  .sm\:mix-color-dodge {
+    mix-blend-mode: color-dodge !important;
+  }
+
+  .sm\:mix-color-burn {
+    mix-blend-mode: color-burn !important;
+  }
+
+  .sm\:mix-hard-light {
+    mix-blend-mode: hard-light !important;
+  }
+
+  .sm\:mix-soft-light {
+    mix-blend-mode: soft-light !important;
+  }
+
+  .sm\:mix-difference {
+    mix-blend-mode: difference !important;
+  }
+
+  .sm\:mix-exclusion {
+    mix-blend-mode: exclusion !important;
+  }
+
+  .sm\:mix-hue {
+    mix-blend-mode: hue !important;
+  }
+
+  .sm\:mix-saturation {
+    mix-blend-mode: saturation !important;
+  }
+
+  .sm\:mix-color {
+    mix-blend-mode: color !important;
+  }
+
+  .sm\:mix-luminosity {
+    mix-blend-mode: luminosity !important;
   }
 
   .sm\:example {
@@ -86270,6 +86398,70 @@ video {
     animation: bounce 1s infinite !important;
   }
 
+  .md\:mix-normal {
+    mix-blend-mode: normal !important;
+  }
+
+  .md\:mix-multiply {
+    mix-blend-mode: multiply !important;
+  }
+
+  .md\:mix-screen {
+    mix-blend-mode: screen !important;
+  }
+
+  .md\:mix-overlay {
+    mix-blend-mode: overlay !important;
+  }
+
+  .md\:mix-darken {
+    mix-blend-mode: darken !important;
+  }
+
+  .md\:mix-lighten {
+    mix-blend-mode: lighten !important;
+  }
+
+  .md\:mix-color-dodge {
+    mix-blend-mode: color-dodge !important;
+  }
+
+  .md\:mix-color-burn {
+    mix-blend-mode: color-burn !important;
+  }
+
+  .md\:mix-hard-light {
+    mix-blend-mode: hard-light !important;
+  }
+
+  .md\:mix-soft-light {
+    mix-blend-mode: soft-light !important;
+  }
+
+  .md\:mix-difference {
+    mix-blend-mode: difference !important;
+  }
+
+  .md\:mix-exclusion {
+    mix-blend-mode: exclusion !important;
+  }
+
+  .md\:mix-hue {
+    mix-blend-mode: hue !important;
+  }
+
+  .md\:mix-saturation {
+    mix-blend-mode: saturation !important;
+  }
+
+  .md\:mix-color {
+    mix-blend-mode: color !important;
+  }
+
+  .md\:mix-luminosity {
+    mix-blend-mode: luminosity !important;
+  }
+
   .md\:example {
     font-weight: 700;
     color: #ef4444;
@@ -114833,6 +115025,70 @@ video {
 
   .lg\:animate-bounce {
     animation: bounce 1s infinite !important;
+  }
+
+  .lg\:mix-normal {
+    mix-blend-mode: normal !important;
+  }
+
+  .lg\:mix-multiply {
+    mix-blend-mode: multiply !important;
+  }
+
+  .lg\:mix-screen {
+    mix-blend-mode: screen !important;
+  }
+
+  .lg\:mix-overlay {
+    mix-blend-mode: overlay !important;
+  }
+
+  .lg\:mix-darken {
+    mix-blend-mode: darken !important;
+  }
+
+  .lg\:mix-lighten {
+    mix-blend-mode: lighten !important;
+  }
+
+  .lg\:mix-color-dodge {
+    mix-blend-mode: color-dodge !important;
+  }
+
+  .lg\:mix-color-burn {
+    mix-blend-mode: color-burn !important;
+  }
+
+  .lg\:mix-hard-light {
+    mix-blend-mode: hard-light !important;
+  }
+
+  .lg\:mix-soft-light {
+    mix-blend-mode: soft-light !important;
+  }
+
+  .lg\:mix-difference {
+    mix-blend-mode: difference !important;
+  }
+
+  .lg\:mix-exclusion {
+    mix-blend-mode: exclusion !important;
+  }
+
+  .lg\:mix-hue {
+    mix-blend-mode: hue !important;
+  }
+
+  .lg\:mix-saturation {
+    mix-blend-mode: saturation !important;
+  }
+
+  .lg\:mix-color {
+    mix-blend-mode: color !important;
+  }
+
+  .lg\:mix-luminosity {
+    mix-blend-mode: luminosity !important;
   }
 
   .lg\:example {
@@ -143400,6 +143656,70 @@ video {
     animation: bounce 1s infinite !important;
   }
 
+  .xl\:mix-normal {
+    mix-blend-mode: normal !important;
+  }
+
+  .xl\:mix-multiply {
+    mix-blend-mode: multiply !important;
+  }
+
+  .xl\:mix-screen {
+    mix-blend-mode: screen !important;
+  }
+
+  .xl\:mix-overlay {
+    mix-blend-mode: overlay !important;
+  }
+
+  .xl\:mix-darken {
+    mix-blend-mode: darken !important;
+  }
+
+  .xl\:mix-lighten {
+    mix-blend-mode: lighten !important;
+  }
+
+  .xl\:mix-color-dodge {
+    mix-blend-mode: color-dodge !important;
+  }
+
+  .xl\:mix-color-burn {
+    mix-blend-mode: color-burn !important;
+  }
+
+  .xl\:mix-hard-light {
+    mix-blend-mode: hard-light !important;
+  }
+
+  .xl\:mix-soft-light {
+    mix-blend-mode: soft-light !important;
+  }
+
+  .xl\:mix-difference {
+    mix-blend-mode: difference !important;
+  }
+
+  .xl\:mix-exclusion {
+    mix-blend-mode: exclusion !important;
+  }
+
+  .xl\:mix-hue {
+    mix-blend-mode: hue !important;
+  }
+
+  .xl\:mix-saturation {
+    mix-blend-mode: saturation !important;
+  }
+
+  .xl\:mix-color {
+    mix-blend-mode: color !important;
+  }
+
+  .xl\:mix-luminosity {
+    mix-blend-mode: luminosity !important;
+  }
+
   .xl\:example {
     font-weight: 700;
     color: #ef4444;
@@ -171963,6 +172283,70 @@ video {
 
   .\32xl\:animate-bounce {
     animation: bounce 1s infinite !important;
+  }
+
+  .\32xl\:mix-normal {
+    mix-blend-mode: normal !important;
+  }
+
+  .\32xl\:mix-multiply {
+    mix-blend-mode: multiply !important;
+  }
+
+  .\32xl\:mix-screen {
+    mix-blend-mode: screen !important;
+  }
+
+  .\32xl\:mix-overlay {
+    mix-blend-mode: overlay !important;
+  }
+
+  .\32xl\:mix-darken {
+    mix-blend-mode: darken !important;
+  }
+
+  .\32xl\:mix-lighten {
+    mix-blend-mode: lighten !important;
+  }
+
+  .\32xl\:mix-color-dodge {
+    mix-blend-mode: color-dodge !important;
+  }
+
+  .\32xl\:mix-color-burn {
+    mix-blend-mode: color-burn !important;
+  }
+
+  .\32xl\:mix-hard-light {
+    mix-blend-mode: hard-light !important;
+  }
+
+  .\32xl\:mix-soft-light {
+    mix-blend-mode: soft-light !important;
+  }
+
+  .\32xl\:mix-difference {
+    mix-blend-mode: difference !important;
+  }
+
+  .\32xl\:mix-exclusion {
+    mix-blend-mode: exclusion !important;
+  }
+
+  .\32xl\:mix-hue {
+    mix-blend-mode: hue !important;
+  }
+
+  .\32xl\:mix-saturation {
+    mix-blend-mode: saturation !important;
+  }
+
+  .\32xl\:mix-color {
+    mix-blend-mode: color !important;
+  }
+
+  .\32xl\:mix-luminosity {
+    mix-blend-mode: luminosity !important;
   }
 
   .\32xl\:example {
