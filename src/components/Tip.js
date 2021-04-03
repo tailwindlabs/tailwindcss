@@ -38,3 +38,36 @@ export function TipCompat({ children }) {
     </div>
   )
 }
+
+export function TipInfo({ children }) {
+  return (
+    <div className="text-sm leading-6 bg-blue-50 text-blue-800 px-6 py-4 mb-8 rounded-lg">
+      <div className="flex items-start space-x-3">
+        <svg className="mt-1" height="40" width="40" fill="none" viewBox="0 0 40 40">
+          <path
+            fill="#93C5FD"
+            d="M5 5a3 3 0 013-3h13.757a3 3 0 012.122.879L30.12 9.12a3 3 0 01.88 2.123V31a3 3 0 01-3 3H8a3 3 0 01-3-3V5z"
+          />
+          <path
+            fill="#DBEAFE"
+            d="M7 5a1 1 0 011-1h13a1 1 0 011 1v5a1 1 0 001 1h5a1 1 0 011 1v19a1 1 0 01-1 1H8a1 1 0 01-1-1V5z"
+          />
+          <path
+            stroke="#93C5FD"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M17 18h7m-9 3h10m-8 3h7"
+          />
+          <path
+            fill="#60A5FA"
+            fillRule="evenodd"
+            d="M24.634 26.22a8.001 8.001 0 00-11.977-10.562A8 8 0 0023.22 27.635l2.872 2.872a1 1 0 000 1.414l5.657 5.657a1 1 0 001.414 0l1.414-1.414a1 1 0 000-1.415l-5.657-5.656a1 1 0 00-1.414 0l-2.872-2.873zm-2.078-.663a6 6 0 10-8.485-8.485 6 6 0 008.485 8.485z"
+            clipRule="evenodd"
+          />
+        </svg>
+        <p class="flex-1 min-w-0">{children}</p>
+      </div>
+    </div>
+  )
+}
