@@ -1,31 +1,27 @@
-export default function() {
-  return function({ addUtilities, variants, target }) {
-    if (target('filter') === 'ie11') {
-      return
-    }
-
+export default function () {
+  return function ({ addUtilities, variants }) {
     addUtilities(
       {
         '.filter': {
-          '--filter-blur': '0',
-          '--filter-brightness': '100%',
-          '--filter-contrast': '100%',
-          '--filter-grayscale': '0',
-          '--filter-hue-rotate': '0deg',
-          '--filter-invert': '0',
-          '--filter-opacity': '100%',
-          '--filter-saturate': '100%',
-          '--filter-sepia': '0',
+          '--tw-blur': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-brightness': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-contrast': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-drop-shadow': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-grayscale': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-hue-rotate': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-invert': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-saturate': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-sepia': 'var(--tw-empty,/*!*/ /*!*/)',
           filter: [
-            'blur(var(--filter-blur))',
-            'brightness(var(--filter-brightness))',
-            'contrast(var(--filter-contrast))',
-            'grayscale(var(--filter-grayscale))',
-            'hue-rotate(var(--filter-hue-rotate))',
-            'invert(var(--filter-invert))',
-            'opacity(var(--filter-opacity))',
-            'saturate(var(--filter-saturate))',
-            'sepia(var(--filter-sepia))',
+            'var(--tw-blur)',
+            'var(--tw-brightness)',
+            'var(--tw-contrast)',
+            'var(--tw-drop-shadow)',
+            'var(--tw-grayscale)',
+            'var(--tw-hue-rotate)',
+            'var(--tw-invert)',
+            'var(--tw-saturate)',
+            'var(--tw-sepia)',
           ].join(' '),
         },
         '.filter-none': { filter: 'none' },

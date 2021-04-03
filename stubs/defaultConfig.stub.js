@@ -148,10 +148,7 @@ module.exports = {
     divideOpacity: (theme) => theme('borderOpacity'),
     divideWidth: (theme) => theme('borderWidth'),
     fill: { current: 'currentColor' },
-    filter: {
-      default: '',
-    },
-    filterBlur: {
+    blur: {
       0: '0',
       2: '2px',
       4: '4px',
@@ -163,28 +160,37 @@ module.exports = {
       28: '28px',
       32: '32px',
     },
-    filterBrightness: {
+    brightness: {
       0: '0',
       25: '25%',
       50: '50%',
       75: '75%',
       100: '100%',
     },
-    filterContrast: {
+    contrast: {
       0: '0',
       25: '25%',
       50: '50%',
       75: '75%',
       100: '100%',
     },
-    filterGrayscale: {
+    dropShadow: {
+      sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
+      DEFAULT: ['0 1px 3px rgba(0, 0, 0, 0.1)', '0 1px 2px rgba(0, 0, 0, 0.06)'],
+      md: ['0 4px 6px rgba(0, 0, 0, 0.1)', '0 2px 4px rgba(0, 0, 0, 0.06)'],
+      lg: ['0 10px 15px rgba(0, 0, 0, 0.1)', '0 4px 6px rgba(0, 0, 0, 0.05)'],
+      xl: ['0 20px 25px rgba(0, 0, 0, 0.1)', '0 10px 10px rgba(0, 0, 0, 0.04)'],
+      '2xl': '0 25px 50px rgba(0, 0, 0, 0.25)',
+      none: 'none',
+    },
+    grayscale: {
       0: '0',
       25: '25%',
       50: '50%',
       75: '75%',
       100: '100%',
     },
-    filterHueRotate: {
+    hueRotate: {
       '-180': '-180deg',
       '-90': '-90deg',
       '-45': '-45deg',
@@ -193,28 +199,21 @@ module.exports = {
       90: '90deg',
       180: '180deg',
     },
-    filterInvert: {
+    invert: {
       0: '0',
       25: '25%',
       50: '50%',
       75: '75%',
       100: '100%',
     },
-    filterOpacity: {
+    saturate: {
       0: '0',
       25: '25%',
       50: '50%',
       75: '75%',
       100: '100%',
     },
-    filterSaturate: {
-      0: '0',
-      25: '25%',
-      50: '50%',
-      75: '75%',
-      100: '100%',
-    },
-    filterSepia: {
+    sepia: {
       0: '0',
       25: '25%',
       50: '50%',
