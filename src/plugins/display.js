@@ -59,6 +59,11 @@ export default function () {
         '.contents': {
           display: 'contents',
         },
+      },
+      variants('display')
+    )
+    addUtilities(
+      {
         '.hidden': {
           display: 'none',
         },
