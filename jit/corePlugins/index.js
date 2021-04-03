@@ -292,6 +292,17 @@ module.exports = {
   ringOffsetWidth: require('./ringOffsetWidth'),
   ringOffsetColor: require('./ringOffsetColor'),
 
+  filter: require('../../lib/plugins/filter').default(),
+  blur: require('../../lib/plugins/blur').default(),
+  brightness: require('../../lib/plugins/brightness').default(),
+  contrast: require('../../lib/plugins/contrast').default(),
+  dropShadow: require('../../lib/plugins/dropShadow').default(),
+  grayscale: require('../../lib/plugins/grayscale').default(),
+  hueRotate: require('../../lib/plugins/hueRotate').default(),
+  invert: require('../../lib/plugins/invert').default(),
+  saturate: require('../../lib/plugins/saturate').default(),
+  sepia: require('../../lib/plugins/sepia').default(),
+
   transitionProperty: require('./transitionProperty'),
   transitionDelay: require('./transitionDelay'),
   transitionDuration: require('./transitionDuration'),
