@@ -1,9 +1,6 @@
 const { createSimpleStaticUtilityPlugin } = require('../pluginUtils')
 
 module.exports = createSimpleStaticUtilityPlugin({
-  '.place-items-auto': {
-    'place-items': 'auto',
-  },
   '.place-items-start': {
     'place-items': 'start',
   },
