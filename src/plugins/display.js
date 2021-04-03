@@ -20,6 +20,9 @@ export default function () {
         '.table': {
           display: 'table',
         },
+        '.inline-table': {
+          display: 'inline-table',
+        },
         '.table-caption': {
           display: 'table-caption',
         },
