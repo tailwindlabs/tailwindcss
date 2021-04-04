@@ -149,15 +149,14 @@ module.exports = {
     divideWidth: (theme) => theme('borderWidth'),
     fill: { current: 'currentColor' },
     blur: {
-      // TODO: Come up with actually useful values
       0: '0',
-      xs: '1px',
-      sm: '2px',
-      DEFAULT: '4px',
-      md: '8px',
-      lg: '12px',
-      xl: '16px',
-      '2xl': '24px',
+      sm: '4px',
+      DEFAULT: '8px',
+      md: '12px',
+      lg: '16px',
+      xl: '24px',
+      '2xl': '40px',
+      '3xl': '64px',
     },
     brightness: {
       // TODO: Come up with actually useful values

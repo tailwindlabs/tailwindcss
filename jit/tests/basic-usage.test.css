@@ -650,7 +650,7 @@
   filter: none;
 }
 .blur-md {
-  --tw-blur: blur(8px);
+  --tw-blur: blur(12px);
 }
 .brightness-150 {
   --tw-brightness: brightness(1.5);
