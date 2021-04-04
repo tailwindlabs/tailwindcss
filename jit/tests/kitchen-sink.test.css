@@ -314,11 +314,11 @@ div {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);
 }
-.filter-none {
-  filter: none;
+.magic-none {
+  magic: none;
 }
-.filter-grayscale {
-  filter: grayscale(100%);
+.magic-tons {
+  magic: tons;
 }
 .custom-util {
   background: #abcdef;
@@ -410,7 +410,7 @@ div {
 @media (prefers-reduced-motion: no-preference) {
   .motion-safe\:transition {
     transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow,
-      transform;
+      transform, filter, backdrop-filter;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
   }
@@ -421,7 +421,7 @@ div {
 @media (prefers-reduced-motion: reduce) {
   .motion-reduce\:transition {
     transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow,
-      transform;
+      transform, filter, backdrop-filter;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
   }
@@ -535,7 +535,7 @@ div {
   @media (prefers-reduced-motion: no-preference) {
     .md\:motion-safe\:hover\:transition:hover {
       transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow,
-        transform;
+        transform, filter, backdrop-filter;
       transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
       transition-duration: 150ms;
     }

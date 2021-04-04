@@ -55,11 +55,11 @@ test('it works', () => {
         })
         addUtilities(
           {
-            '.filter-none': {
-              filter: 'none',
+            '.magic-none': {
+              magic: 'none',
             },
-            '.filter-grayscale': {
-              filter: 'grayscale(100%)',
+            '.magic-tons': {
+              magic: 'tons',
             },
           },
           ['responsive', 'hover']
