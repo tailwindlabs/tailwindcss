@@ -303,6 +303,17 @@ module.exports = {
   saturate: require('../../lib/plugins/saturate').default(),
   sepia: require('../../lib/plugins/sepia').default(),
 
+  backdropFilter: require('../../lib/plugins/backdropFilter').default(),
+  backdropBlur: require('../../lib/plugins/backdropBlur').default(),
+  backdropBrightness: require('../../lib/plugins/backdropBrightness').default(),
+  backdropContrast: require('../../lib/plugins/backdropContrast').default(),
+  backdropGrayscale: require('../../lib/plugins/backdropGrayscale').default(),
+  backdropHueRotate: require('../../lib/plugins/backdropHueRotate').default(),
+  backdropInvert: require('../../lib/plugins/backdropInvert').default(),
+  backdropOpacity: require('../../lib/plugins/backdropOpacity').default(),
+  backdropSaturate: require('../../lib/plugins/backdropSaturate').default(),
+  backdropSepia: require('../../lib/plugins/backdropSepia').default(),
+
   transitionProperty: require('./transitionProperty'),
   transitionDelay: require('./transitionDelay'),
   transitionDuration: require('./transitionDuration'),

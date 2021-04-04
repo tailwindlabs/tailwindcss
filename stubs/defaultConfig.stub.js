@@ -158,6 +158,7 @@ module.exports = {
       '2xl': '40px',
       '3xl': '64px',
     },
+    backdropBlur: (theme) => theme('blur'),
     brightness: {
       0: '0',
       50: '.5',
@@ -171,6 +172,7 @@ module.exports = {
       150: '1.5',
       200: '2',
     },
+    backdropBrightness: (theme) => theme('brightness'),
     contrast: {
       0: '0',
       50: '.5',
@@ -180,6 +182,7 @@ module.exports = {
       150: '1.5',
       200: '2',
     },
+    backdropContrast: (theme) => theme('contrast'),
     dropShadow: {
       sm: '0 1px 1px rgba(0,0,0,0.05)',
       DEFAULT: ['0 1px 2px rgba(0, 0, 0, 0.1)', '0 1px 1px rgba(0, 0, 0, 0.06)'],
@@ -193,6 +196,7 @@ module.exports = {
       0: '0',
       DEFAULT: '100%',
     },
+    backdropGrayscale: (theme) => theme('grayscale'),
     hueRotate: {
       '-180': '-180deg',
       '-90': '-90deg',
@@ -206,10 +210,13 @@ module.exports = {
       90: '90deg',
       180: '180deg',
     },
+    backdropHueRotate: (theme) => theme('hueRotate'),
     invert: {
       0: '0',
       DEFAULT: '100%',
     },
+    backdropInvert: (theme) => theme('invert'),
+    backdropOpacity: (theme) => theme('opacity'),
     saturate: {
       0: '0',
       50: '.5',
@@ -217,10 +224,12 @@ module.exports = {
       150: '1.5',
       200: '2',
     },
+    backdropSaturate: (theme) => theme('saturate'),
     sepia: {
       0: '0',
       DEFAULT: '100%',
     },
+    backdropSepia: (theme) => theme('sepia'),
     flex: {
       1: '1 1 0%',
       auto: '1 1 auto',
@@ -812,6 +821,16 @@ module.exports = {
     alignSelf: ['responsive'],
     animation: ['responsive'],
     appearance: ['responsive'],
+    backdropBlur: ['responsive'],
+    backdropBrightness: ['responsive'],
+    backdropContrast: ['responsive'],
+    backdropDropShadow: ['responsive'],
+    backdropFilter: ['responsive'],
+    backdropGrayscale: ['responsive'],
+    backdropHueRotate: ['responsive'],
+    backdropInvert: ['responsive'],
+    backdropSaturate: ['responsive'],
+    backdropSepia: ['responsive'],
     backgroundAttachment: ['responsive'],
     backgroundBlendMode: ['responsive'],
     backgroundClip: ['responsive'],
