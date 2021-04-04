@@ -1,21 +1,37 @@
 import _ from 'lodash'
-import nameClass from '../util/nameClass'
+const { asValue, nameClass } = require('../../jit/pluginUtils')
 
 export default function () {
-  return function ({ addUtilities, theme, variants }) {
-    const utilities = _.fromPairs(
-      _.map(theme('hueRotate'), (value, modifier) => {
-        return [
-          nameClass('hue-rotate', modifier),
-          {
-            '--tw-hue-rotate': Array.isArray(value)
-              ? value.map((v) => `hue-rotate(${v})`).join(' ')
-              : `hue-rotate(${value})`,
-          },
-        ]
-      })
-    )
+  return function ({ config, matchUtilities, addUtilities, theme, variants }) {
+    if (config('mode') === 'jit') {
+      matchUtilities({
+        'hue-rotate': (modifier, { theme }) => {
+          let value = asValue(modifier, theme.hueRotate)
 
-    addUtilities(utilities, variants('hueRotate'))
+          if (value === undefined) {
+            return []
+          }
+
+          return {
+            [nameClass('hue-rotate', modifier)]: { '--tw-hue-rotate': `hue-rotate(${value})` },
+          }
+        },
+      })
+    } else {
+      const utilities = _.fromPairs(
+        _.map(theme('hueRotate'), (value, modifier) => {
+          return [
+            nameClass('hue-rotate', modifier),
+            {
+              '--tw-hue-rotate': Array.isArray(value)
+                ? value.map((v) => `hue-rotate(${v})`).join(' ')
+                : `hue-rotate(${value})`,
+            },
+          ]
+        })
+      )
+
+      addUtilities(utilities, variants('hueRotate'))
+    }
   }
 }

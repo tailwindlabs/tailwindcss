@@ -1,21 +1,37 @@
 import _ from 'lodash'
-import nameClass from '../util/nameClass'
+const { asValue, nameClass } = require('../../jit/pluginUtils')
 
 export default function () {
-  return function ({ addUtilities, theme, variants }) {
-    const utilities = _.fromPairs(
-      _.map(theme('saturate'), (value, modifier) => {
-        return [
-          nameClass('saturate', modifier),
-          {
-            '--tw-saturate': Array.isArray(value)
-              ? value.map((v) => `saturate(${v})`).join(' ')
-              : `saturate(${value})`,
-          },
-        ]
-      })
-    )
+  return function ({ config, matchUtilities, addUtilities, theme, variants }) {
+    if (config('mode') === 'jit') {
+      matchUtilities({
+        saturate: (modifier, { theme }) => {
+          let value = asValue(modifier, theme.saturate)
 
-    addUtilities(utilities, variants('saturate'))
+          if (value === undefined) {
+            return []
+          }
+
+          return {
+            [nameClass('saturate', modifier)]: { '--tw-saturate': `saturate(${value})` },
+          }
+        },
+      })
+    } else {
+      const utilities = _.fromPairs(
+        _.map(theme('saturate'), (value, modifier) => {
+          return [
+            nameClass('saturate', modifier),
+            {
+              '--tw-saturate': Array.isArray(value)
+                ? value.map((v) => `saturate(${v})`).join(' ')
+                : `saturate(${value})`,
+            },
+          ]
+        })
+      )
+
+      addUtilities(utilities, variants('saturate'))
+    }
   }
 }

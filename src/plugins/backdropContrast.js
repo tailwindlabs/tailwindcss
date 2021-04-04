@@ -1,21 +1,39 @@
 import _ from 'lodash'
-import nameClass from '../util/nameClass'
+const { asValue, nameClass } = require('../../jit/pluginUtils')
 
 export default function () {
-  return function ({ addUtilities, theme, variants }) {
-    const utilities = _.fromPairs(
-      _.map(theme('backdropContrast'), (value, modifier) => {
-        return [
-          nameClass('backdrop-contrast', modifier),
-          {
-            '--tw-backdrop-contrast': Array.isArray(value)
-              ? value.map((v) => `contrast(${v})`).join(' ')
-              : `contrast(${value})`,
-          },
-        ]
-      })
-    )
+  return function ({ config, matchUtilities, addUtilities, theme, variants }) {
+    if (config('mode') === 'jit') {
+      matchUtilities({
+        'backdrop-contrast': (modifier, { theme }) => {
+          let value = asValue(modifier, theme.backdropContrast)
 
-    addUtilities(utilities, variants('backdropContrast'))
+          if (value === undefined) {
+            return []
+          }
+
+          return {
+            [nameClass('backdrop-contrast', modifier)]: {
+              '--tw-backdrop-contrast': `contrast(${value})`,
+            },
+          }
+        },
+      })
+    } else {
+      const utilities = _.fromPairs(
+        _.map(theme('backdropContrast'), (value, modifier) => {
+          return [
+            nameClass('backdrop-contrast', modifier),
+            {
+              '--tw-backdrop-contrast': Array.isArray(value)
+                ? value.map((v) => `contrast(${v})`).join(' ')
+                : `contrast(${value})`,
+            },
+          ]
+        })
+      )
+
+      addUtilities(utilities, variants('backdropContrast'))
+    }
   }
 }

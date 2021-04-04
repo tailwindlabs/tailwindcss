@@ -136,6 +136,57 @@
 .text-\[2\.23rem\] {
   font-size: 2.23rem;
 }
+.blur-\[15px\] {
+  --tw-blur: blur(15px);
+}
+.brightness-\[300\%\] {
+  --tw-brightness: brightness(300%);
+}
+.contrast-\[2\.4\] {
+  --tw-contrast: contrast(2.4);
+}
+.grayscale-\[0\.55\] {
+  --tw-grayscale: grayscale(0.55);
+}
+.hue-rotate-\[0\.8turn\] {
+  --tw-hue-rotate: hue-rotate(0.8turn);
+}
+.invert-\[0\.75\] {
+  --tw-invert: invert(0.75);
+}
+.saturate-\[180\%\] {
+  --tw-saturate: saturate(180%);
+}
+.sepia-\[0\.2\] {
+  --tw-sepia: sepia(0.2);
+}
+.backdrop-blur-\[11px\] {
+  --tw-backdrop-blur: blur(11px);
+}
+.backdrop-brightness-\[1\.23\] {
+  --tw-backdrop-brightness: brightness(1.23);
+}
+.backdrop-contrast-\[0\.87\] {
+  --tw-backdrop-contrast: contrast(0.87);
+}
+.backdrop-grayscale-\[0\.42\] {
+  --tw-backdrop-grayscale: grayscale(0.42);
+}
+.backdrop-hue-rotate-\[1\.57rad\] {
+  --tw-backdrop-hue-rotate: hue-rotate(1.57rad);
+}
+.backdrop-invert-\[0\.66\] {
+  --tw-backdrop-invert: invert(0.66);
+}
+.backdrop-opacity-\[22\%\] {
+  --tw-backdrop-opacity: opacity(22%);
+}
+.backdrop-saturate-\[144\%\] {
+  --tw-backdrop-saturate: saturate(144%);
+}
+.backdrop-sepia-\[0\.38\] {
+  --tw-backdrop-sepia: sepia(0.38);
+}
 .duration-\[2s\] {
   transition-duration: 2s;
 }
