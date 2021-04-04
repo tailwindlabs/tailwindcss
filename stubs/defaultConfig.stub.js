@@ -724,7 +724,7 @@ module.exports = {
     'visited',
     'checked',
     'group-hover',
-    'group-focus-within'
+    'group-focus-within',
     'group-focus',
     'focus-within',
     'hover',
