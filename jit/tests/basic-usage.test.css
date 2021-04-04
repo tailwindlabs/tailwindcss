@@ -576,6 +576,12 @@
 .opacity-90 {
   opacity: 0.9;
 }
+.bg-blend-darken {
+  background-blend-mode: darken;
+}
+.bg-blend-difference {
+  background-blend-mode: difference;
+}
 .mix-blend-multiply {
   mix-blend-mode: multiply;
 }

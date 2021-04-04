@@ -282,6 +282,7 @@ module.exports = {
   placeholderOpacity: require('./placeholderOpacity'),
 
   opacity: require('./opacity'),
+  backgroundBlendMode: require('./backgroundBlendMode'),
   mixBlendMode: require('./mixBlendMode'),
   boxShadow: require('./boxShadow'),
   outline: require('./outline'),

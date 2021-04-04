@@ -740,6 +740,7 @@ module.exports = {
     animation: ['responsive'],
     appearance: ['responsive'],
     backgroundAttachment: ['responsive'],
+    backgroundBlendMode: ['responsive'],
     backgroundClip: ['responsive'],
     backgroundColor: ['responsive', 'dark', 'group-hover', 'focus-within', 'hover', 'focus'],
     backgroundImage: ['responsive'],

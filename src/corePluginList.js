@@ -121,4 +121,5 @@ export const corePluginList = [
   'transitionDelay',
   'animation',
   'mixBlendMode',
+  'backgroundBlendMode',
 ]
