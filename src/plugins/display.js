@@ -59,6 +59,9 @@ export default function () {
         '.contents': {
           display: 'contents',
         },
+        '.list-item': {
+          display: 'list-item',
+        },
       },
       variants('display')
     )
