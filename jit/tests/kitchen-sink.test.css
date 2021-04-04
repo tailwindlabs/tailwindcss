@@ -314,11 +314,11 @@ div {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);
 }
-.filter-none {
-  filter: none;
+.magic-none {
+  magic: none;
 }
-.filter-grayscale {
-  filter: grayscale(100%);
+.magic-tons {
+  magic: tons;
 }
 .custom-util {
   background: #abcdef;
