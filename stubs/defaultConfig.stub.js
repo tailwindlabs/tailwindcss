@@ -873,6 +873,7 @@ module.exports = {
     height: ['responsive'],
     hueRotate: ['responsive'],
     inset: ['responsive'],
+    invert: ['responsive'],
     isolation: ['responsive'],
     justifyContent: ['responsive'],
     justifyItems: ['responsive'],
