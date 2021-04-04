@@ -576,10 +576,10 @@
 .opacity-90 {
   opacity: 0.9;
 }
-.mix-multiply {
+.mix-blend-multiply {
   mix-blend-mode: multiply;
 }
-.mix-saturation {
+.mix-blend-saturation {
   mix-blend-mode: saturation;
 }
 .shadow-md {
