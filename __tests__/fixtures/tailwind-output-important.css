@@ -10864,6 +10864,10 @@ video {
   display: contents !important;
 }
 
+.list-item {
+  display: list-item !important;
+}
+
 .hidden {
   display: none !important;
 }
@@ -39472,6 +39476,10 @@ video {
     display: contents !important;
   }
 
+  .sm\:list-item {
+    display: list-item !important;
+  }
+
   .sm\:hidden {
     display: none !important;
   }
@@ -68035,6 +68043,10 @@ video {
 
   .md\:contents {
     display: contents !important;
+  }
+
+  .md\:list-item {
+    display: list-item !important;
   }
 
   .md\:hidden {
@@ -96602,6 +96614,10 @@ video {
     display: contents !important;
   }
 
+  .lg\:list-item {
+    display: list-item !important;
+  }
+
   .lg\:hidden {
     display: none !important;
   }
@@ -125167,6 +125183,10 @@ video {
     display: contents !important;
   }
 
+  .xl\:list-item {
+    display: list-item !important;
+  }
+
   .xl\:hidden {
     display: none !important;
   }
@@ -153730,6 +153750,10 @@ video {
 
   .\32xl\:contents {
     display: contents !important;
+  }
+
+  .\32xl\:list-item {
+    display: list-item !important;
   }
 
   .\32xl\:hidden {
