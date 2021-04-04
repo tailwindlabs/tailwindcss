@@ -29273,6 +29273,243 @@ video {
   background-blend-mode: luminosity;
 }
 
+.filter {
+  --tw-blur: var(--tw-empty,/*!*/ /*!*/);
+  --tw-brightness: var(--tw-empty,/*!*/ /*!*/);
+  --tw-contrast: var(--tw-empty,/*!*/ /*!*/);
+  --tw-drop-shadow: var(--tw-empty,/*!*/ /*!*/);
+  --tw-grayscale: var(--tw-empty,/*!*/ /*!*/);
+  --tw-hue-rotate: var(--tw-empty,/*!*/ /*!*/);
+  --tw-invert: var(--tw-empty,/*!*/ /*!*/);
+  --tw-saturate: var(--tw-empty,/*!*/ /*!*/);
+  --tw-sepia: var(--tw-empty,/*!*/ /*!*/);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-drop-shadow) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia);
+}
+
+.filter-none {
+  filter: none;
+}
+
+.blur-0 {
+  --tw-blur: blur(0);
+}
+
+.blur-sm {
+  --tw-blur: blur(4px);
+}
+
+.blur {
+  --tw-blur: blur(8px);
+}
+
+.blur-md {
+  --tw-blur: blur(12px);
+}
+
+.blur-lg {
+  --tw-blur: blur(16px);
+}
+
+.blur-xl {
+  --tw-blur: blur(24px);
+}
+
+.blur-2xl {
+  --tw-blur: blur(40px);
+}
+
+.blur-3xl {
+  --tw-blur: blur(64px);
+}
+
+.brightness-0 {
+  --tw-brightness: brightness(0);
+}
+
+.brightness-50 {
+  --tw-brightness: brightness(.5);
+}
+
+.brightness-75 {
+  --tw-brightness: brightness(.75);
+}
+
+.brightness-90 {
+  --tw-brightness: brightness(.9);
+}
+
+.brightness-95 {
+  --tw-brightness: brightness(.95);
+}
+
+.brightness-100 {
+  --tw-brightness: brightness(1);
+}
+
+.brightness-105 {
+  --tw-brightness: brightness(1.05);
+}
+
+.brightness-110 {
+  --tw-brightness: brightness(1.1);
+}
+
+.brightness-125 {
+  --tw-brightness: brightness(1.25);
+}
+
+.brightness-150 {
+  --tw-brightness: brightness(1.5);
+}
+
+.brightness-200 {
+  --tw-brightness: brightness(2);
+}
+
+.contrast-0 {
+  --tw-contrast: contrast(0);
+}
+
+.contrast-50 {
+  --tw-contrast: contrast(.5);
+}
+
+.contrast-75 {
+  --tw-contrast: contrast(.75);
+}
+
+.contrast-100 {
+  --tw-contrast: contrast(1);
+}
+
+.contrast-125 {
+  --tw-contrast: contrast(1.25);
+}
+
+.contrast-150 {
+  --tw-contrast: contrast(1.5);
+}
+
+.contrast-200 {
+  --tw-contrast: contrast(2);
+}
+
+.drop-shadow-sm {
+  --tw-drop-shadow: drop-shadow(0 1px 1px rgba(0,0,0,0.05));
+}
+
+.drop-shadow {
+  --tw-drop-shadow: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.06));
+}
+
+.drop-shadow-md {
+  --tw-drop-shadow: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.07)) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.06));
+}
+
+.drop-shadow-lg {
+  --tw-drop-shadow: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1));
+}
+
+.drop-shadow-xl {
+  --tw-drop-shadow: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03)) drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08));
+}
+
+.drop-shadow-2xl {
+  --tw-drop-shadow: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15));
+}
+
+.drop-shadow-none {
+  --tw-drop-shadow: drop-shadow(0 0 #0000);
+}
+
+.grayscale-0 {
+  --tw-grayscale: grayscale(0);
+}
+
+.grayscale {
+  --tw-grayscale: grayscale(100%);
+}
+
+.hue-rotate-0 {
+  --tw-hue-rotate: hue-rotate(0deg);
+}
+
+.hue-rotate-15 {
+  --tw-hue-rotate: hue-rotate(15deg);
+}
+
+.hue-rotate-30 {
+  --tw-hue-rotate: hue-rotate(30deg);
+}
+
+.hue-rotate-60 {
+  --tw-hue-rotate: hue-rotate(60deg);
+}
+
+.hue-rotate-90 {
+  --tw-hue-rotate: hue-rotate(90deg);
+}
+
+.hue-rotate-180 {
+  --tw-hue-rotate: hue-rotate(180deg);
+}
+
+.-hue-rotate-180 {
+  --tw-hue-rotate: hue-rotate(-180deg);
+}
+
+.-hue-rotate-90 {
+  --tw-hue-rotate: hue-rotate(-90deg);
+}
+
+.-hue-rotate-60 {
+  --tw-hue-rotate: hue-rotate(-60deg);
+}
+
+.-hue-rotate-30 {
+  --tw-hue-rotate: hue-rotate(-30deg);
+}
+
+.-hue-rotate-15 {
+  --tw-hue-rotate: hue-rotate(-15deg);
+}
+
+.invert-0 {
+  --tw-invert: invert(0);
+}
+
+.invert {
+  --tw-invert: invert(100%);
+}
+
+.saturate-0 {
+  --tw-saturate: saturate(0);
+}
+
+.saturate-50 {
+  --tw-saturate: saturate(.5);
+}
+
+.saturate-100 {
+  --tw-saturate: saturate(1);
+}
+
+.saturate-150 {
+  --tw-saturate: saturate(1.5);
+}
+
+.saturate-200 {
+  --tw-saturate: saturate(2);
+}
+
+.sepia-0 {
+  --tw-sepia: sepia(0);
+}
+
+.sepia {
+  --tw-sepia: sepia(100%);
+}
+
 .example {
   font-weight: 700;
   color: #ef4444;
