@@ -1,7 +1,7 @@
 module.exports = {
   plugins: [
     'postcss-import',
-    '@tailwindcss/jit',
+    'tailwindcss',
     'postcss-nested',
     'postcss-focus-visible',
     'autoprefixer',
