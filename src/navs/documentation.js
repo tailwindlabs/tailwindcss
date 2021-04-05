@@ -47,6 +47,7 @@ export const documentationNav = {
     pages['display'],
     pages['float'],
     pages['clear'],
+    pages['isolation'],
     pages['object-fit'],
     pages['object-position'],
     pages['overflow'],
