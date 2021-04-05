@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add new `isolation` utilities ([#3914](https://github.com/tailwindlabs/tailwindcss/pull/3914))
 - Add `inline-table` display utility ([#3563](https://github.com/tailwindlabs/tailwindcss/pull/3563))
 - Add `list-item` display utility ([#3929](https://github.com/tailwindlabs/tailwindcss/pull/3929))
+- Add new `filter` and `backdrop-filter` utilities ([#3923](https://github.com/tailwindlabs/tailwindcss/pull/3923))
 
 ## [2.0.4] - 2021-03-17
 
