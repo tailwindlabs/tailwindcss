@@ -63,6 +63,13 @@ const whatsNew = [
 
 const latestUpdates = [
   {
+    title: 'Tailwind CSS v2.1',
+    date: '2021-04-05T19:00:00.000Z',
+    url: 'https://blog.tailwindcss.com/tailwindcss-2-1',
+    description:
+      'We just released Tailwind CSS v2.1 which brings the new JIT engine to core, adds first-class CSS filter support, and more!',
+  },
+  {
     title: 'Just-In-Time: The Next Generation of Tailwind CSS',
     date: '2021-03-15T16:30:00.000Z',
     url: 'https://blog.tailwindcss.com/just-in-time-the-next-generation-of-tailwind-css',
