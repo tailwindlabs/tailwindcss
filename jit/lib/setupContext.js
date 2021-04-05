@@ -227,6 +227,8 @@ function trackModified(files) {
   let changed = false
 
   for (let file of files) {
+    if (!file) continue
+
     let pathname = url.parse(file).pathname
     let newModified = fs.statSync(decodeURIComponent(pathname)).mtimeMs
 

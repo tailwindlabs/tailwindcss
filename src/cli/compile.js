@@ -1,3 +1,4 @@
+import path from 'path'
 import postcss from 'postcss'
 
 import * as utils from './utils'
@@ -29,15 +30,15 @@ export default function compile(options = {}) {
   const css = config.inputFile
     ? utils.readFile(config.inputFile)
     : `
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
-  `
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+    `
 
   return new Promise((resolve, reject) => {
     postcss(config.plugins)
       .process(css, {
-        from: config.inputFile,
+        from: config.inputFile || path.resolve(__dirname, '../../tailwind.css'),
         to: config.outputFile,
       })
       .then(resolve)
