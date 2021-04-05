@@ -8100,10 +8100,10 @@ table@^5.2.3:
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
 
-tailwindcss@2.1.0-canary.1:
-  version "2.1.0-canary.1"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-2.1.0-canary.1.tgz#e8c7055fb9e52cf2105f9691f761236b6332d51f"
-  integrity sha512-St8HxwW0M7+6JUSNQm3UVEKe7rq4qFP6mOTP1dpL17lhxpA5wSRm3NR4m6BpdhUsiq1GT9JsyonkxkzQNQV5WQ==
+tailwindcss@2.1.0-canary.2:
+  version "2.1.0-canary.2"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-2.1.0-canary.2.tgz#0b36cc7ee8133cc75f875982d244a0e4ac730098"
+  integrity sha512-Pw2jirgeVbcA2rqvKttPAtl0xaJBWpE9+C/AZCb81jyMTcuDxc+4BgWNCCC5KEdGYj7o/LGQsHtm+PfyqsW5+g==
   dependencies:
     "@fullhuman/postcss-purgecss" "^3.1.3"
     bytes "^3.0.0"
