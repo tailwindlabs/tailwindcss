@@ -42,6 +42,7 @@ export const documentationNav = {
   'Base Styles': [pages['preflight']],
   Layout: [
     pages['container'],
+    pages['box-decoration-break'],
     pages['box-sizing'],
     pages['display'],
     pages['float'],
