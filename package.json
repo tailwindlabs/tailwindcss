@@ -30,6 +30,7 @@
   },
   "files": [
     "dist/*.css",
+    "jit/*",
     "lib/*",
     "scripts/*.js",
     "stubs/*.stub.js",
