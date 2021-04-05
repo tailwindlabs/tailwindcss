@@ -186,7 +186,7 @@ export function Header({ navIsOpen, onNavToggle }) {
               aria-hidden="true"
               className="hidden sm:block mx-6 h-6 w-px bg-white bg-opacity-20"
             ></span>
-            <div className="ml-6">
+            <div className="ml-6 sm:ml-0">
               <Link href="/docs/just-in-time-mode">
                 <a className="whitespace-nowrap inline-flex rounded-md bg-white py-2 px-3 text-xs font-semibold uppercase text-blue-500 hover:bg-opacity-90">
                   Learn more &rarr;
