@@ -1,0 +1,55 @@
+---
+title: "Drop Shadow"
+description: "Utilities for applying drop-shadow filters to an element."
+---
+
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+
+export const classes = {
+  plugin: function () {
+    return function ({ addUtilities }) {
+      addUtilities({
+      '.drop-shadow-sm': {'--tw-drop-shadow': 'drop-shadow(0 1px 1px rgba(0,0,0,0.05))' },
+      '.drop-shadow': {'--tw-drop-shadow': 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.06))' },
+      '.drop-shadow-md': {'--tw-drop-shadow': 'drop-shadow(0 4px 3px rgba(0, 0, 0, 0.07)) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.06))' },
+      '.drop-shadow-lg': {'--tw-drop-shadow': 'drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1))' },
+      '.drop-shadow-xl': {'--tw-drop-shadow': 'drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03)) drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08))' },
+      '.drop-shadow-2xl': {'--tw-drop-shadow': 'drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15))' },
+      '.drop-shadow-none': {'--tw-drop-shadow': 'drop-shadow(0 0 #0000)' },
+      })
+    }
+  }
+}
+
+## Usage
+
+Use the `drop-shadow-{amount}` utilities alongside the `filter` utility to blur an element.
+
+```html
+<div class="filter drop-shadow-lg ...">
+  <!-- ... -->
+</div>
+```
+
+## Responsive
+
+To control an element's drop shadow at a specific breakpoint, add a `{screen}:` prefix to any existing drop-shadow utility. For example, use `md:drop-shadow-xl` to apply the `drop-shadow-xl` utility at only medium screen sizes and above.
+
+```html
+<div class="filter drop-shadow-md **md:drop-shadow-xl** ...">
+  <!-- ... -->
+</div>
+```
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+## Customizing
+
+### Variants
+
+<Variants plugin="dropShadow" name="drop-shadow" />
+
+### Disabling
+
+<Disabling plugin="dropShadow" name="drop-shadow" />
