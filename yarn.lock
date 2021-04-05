@@ -6646,6 +6646,13 @@ postcss-modules-values@^3.0.0:
     icss-utils "^4.0.0"
     postcss "^7.0.6"
 
+postcss-nested@5.0.5:
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/postcss-nested/-/postcss-nested-5.0.5.tgz#f0a107d33a9fab11d7637205f5321e27223e3603"
+  integrity sha512-GSRXYz5bccobpTzLQZXOnSOfKl6TwVr5CyAQJUPub4nuRJSOECK5AqurxVgmtxP48p0Kc/ndY/YyS1yqldX0Ew==
+  dependencies:
+    postcss-selector-parser "^6.0.4"
+
 postcss-nested@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/postcss-nested/-/postcss-nested-4.2.3.tgz"
@@ -6653,13 +6660,6 @@ postcss-nested@^4.2.3:
   dependencies:
     postcss "^7.0.32"
     postcss-selector-parser "^6.0.2"
-
-postcss-nested@^5.0.5:
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/postcss-nested/-/postcss-nested-5.0.5.tgz#f0a107d33a9fab11d7637205f5321e27223e3603"
-  integrity sha512-GSRXYz5bccobpTzLQZXOnSOfKl6TwVr5CyAQJUPub4nuRJSOECK5AqurxVgmtxP48p0Kc/ndY/YyS1yqldX0Ew==
-  dependencies:
-    postcss-selector-parser "^6.0.4"
 
 postcss-safe-parser@4.0.2:
   version "4.0.2"
@@ -8100,29 +8100,36 @@ table@^5.2.3:
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
 
-tailwindcss@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-2.0.4.tgz#cf13e62738c3a27065664e449d93b66ee2945506"
-  integrity sha512-WhgR0oiBxGOZ9jY0yVfaJCHnckR7U74Fs/BMsYxGdwGJQ5Hd/HlaKD26bEJFZOvYScJo0QcUj2ImldzedsG7Bw==
+tailwindcss@2.1.0-canary.1:
+  version "2.1.0-canary.1"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-2.1.0-canary.1.tgz#e8c7055fb9e52cf2105f9691f761236b6332d51f"
+  integrity sha512-St8HxwW0M7+6JUSNQm3UVEKe7rq4qFP6mOTP1dpL17lhxpA5wSRm3NR4m6BpdhUsiq1GT9JsyonkxkzQNQV5WQ==
   dependencies:
     "@fullhuman/postcss-purgecss" "^3.1.3"
     bytes "^3.0.0"
     chalk "^4.1.0"
+    chokidar "^3.5.1"
     color "^3.1.3"
     detective "^5.2.0"
     didyoumean "^1.2.1"
+    dlv "^1.1.3"
+    fast-glob "^3.2.5"
     fs-extra "^9.1.0"
     html-tags "^3.1.0"
     lodash "^4.17.21"
+    lodash.topath "^4.5.2"
     modern-normalize "^1.0.0"
     node-emoji "^1.8.1"
+    normalize-path "^3.0.0"
     object-hash "^2.1.1"
+    parse-glob "^3.0.4"
     postcss-functions "^3"
     postcss-js "^3.0.3"
-    postcss-nested "^5.0.5"
+    postcss-nested "5.0.5"
     postcss-selector-parser "^6.0.4"
     postcss-value-parser "^4.1.0"
     pretty-hrtime "^1.0.3"
+    quick-lru "^5.1.1"
     reduce-css-calc "^2.1.8"
     resolve "^1.20.0"
 
