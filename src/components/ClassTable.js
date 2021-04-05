@@ -30,6 +30,7 @@ function getUtilities(plugin) {
       }
     },
     config: () => ({
+      mode: 'aot',
       future: 'all',
     }),
     theme: (path, defaultValue) => dlv(defaultConfig.theme, path, defaultValue),

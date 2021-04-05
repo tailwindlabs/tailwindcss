@@ -1,0 +1,51 @@
+---
+title: "Backdrop Sepia"
+description: "Utilities for applying backdrop sepia filters to an element."
+featureVersion: 'v2.1+'
+---
+
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+
+export const classes = {
+  plugin: function () {
+    return function ({ addUtilities }) {
+      addUtilities({
+        '.backdrop-sepia-0': { '--tw-backdrop-sepia': 'sepia(0)' },
+        '.backdrop-sepia': { '--tw-backdrop-sepia': 'sepia(1)' },
+      })
+    }
+  }
+}
+
+## Usage
+
+Use the `backdrop-sepia` and `backdrop-sepia-0` utilities alongside the `backdrop-filter` utility to whether an element's backdrop should be rendered as sepia or in full color.
+
+```html
+<div class="backdrop-filter backdrop-sepia ...">
+  <!-- ... -->
+</div>
+```
+
+## Responsive
+
+To control an element's backdrop sepia filter at a specific breakpoint, add a `{screen}:` prefix to any existing backdrop sepia utility. For example, use `md:backdrop-sepia-0` to apply the `backdrop-sepia-0` utility at only medium screen sizes and above.
+
+```html
+<div class="backdrop-filter backdrop-sepia **md:backdrop-sepia-0** ...">
+  <!-- ... -->
+</div>
+```
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+## Customizing
+
+### Variants
+
+<Variants plugin="backdropSepia" name="backdrop sepia" />
+
+### Disabling
+
+<Disabling plugin="backdropSepia" name="backdrop sepia" />

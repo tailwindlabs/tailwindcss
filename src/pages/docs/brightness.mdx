@@ -1,0 +1,60 @@
+---
+title: "Brightness"
+description: "Utilities for applying brightness filters to an element."
+featureVersion: 'v2.1+'
+---
+
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+
+export const classes = {
+  plugin: function () {
+    return function ({ addUtilities }) {
+      addUtilities({
+        '.brightness-0': { '--tw-brightness': 'brightness(0)' },
+        '.brightness-50': { '--tw-brightness': 'brightness(.5)' },
+        '.brightness-75': { '--tw-brightness': 'brightness(.75)' },
+        '.brightness-90': { '--tw-brightness': 'brightness(.9)' },
+        '.brightness-95': { '--tw-brightness': 'brightness(.95)' },
+        '.brightness-100': { '--tw-brightness': 'brightness(1)' },
+        '.brightness-105': { '--tw-brightness': 'brightness(1.05)' },
+        '.brightness-110': { '--tw-brightness': 'brightness(1.1)' },
+        '.brightness-125': { '--tw-brightness': 'brightness(1.25)' },
+        '.brightness-150': { '--tw-brightness': 'brightness(1.5)' },
+        '.brightness-200': { '--tw-brightness': 'brightness(2)' },
+      })
+    }
+  }
+}
+
+## Usage
+
+Use the `brightness-{amount?}` utilities alongside the `filter` utility to control an element's brightness.
+
+```html
+<div class="filter brightness-125 ...">
+  <!-- ... -->
+</div>
+```
+
+## Responsive
+
+To control an element's brightness at a specific breakpoint, add a `{screen}:` prefix to any existing brightness utility. For example, use `md:brightness-150` to apply the `brightness-150` utility at only medium screen sizes and above.
+
+```html
+<div class="filter brightness-110 **md:brightness-150** ...">
+  <!-- ... -->
+</div>
+```
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+## Customizing
+
+### Variants
+
+<Variants plugin="brightness" name="brightness" />
+
+### Disabling
+
+<Disabling plugin="brightness" name="brightness" />

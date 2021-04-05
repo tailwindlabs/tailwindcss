@@ -1,0 +1,51 @@
+---
+title: "Sepia"
+description: "Utilities for applying sepia filters to an element."
+featureVersion: 'v2.1+'
+---
+
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+
+export const classes = {
+  plugin: function () {
+    return function ({ addUtilities }) {
+      addUtilities({
+        '.sepia-0': { '--tw-sepia': 'sepia(0)' },
+        '.sepia': { '--tw-sepia': 'sepia(1)' },
+      })
+    }
+  }
+}
+
+## Usage
+
+Use the `sepia` and `sepia-0` utilities alongside the `filter` utility to whether an element should be rendered as sepia or in full color.
+
+```html
+<div class="filter sepia ...">
+  <!-- ... -->
+</div>
+```
+
+## Responsive
+
+To control an element's sepia filter at a specific breakpoint, add a `{screen}:` prefix to any existing sepia utility. For example, use `md:sepia-0` to apply the `sepia-0` utility at only medium screen sizes and above.
+
+```html
+<div class="filter sepia **md:sepia-0** ...">
+  <!-- ... -->
+</div>
+```
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+## Customizing
+
+### Variants
+
+<Variants plugin="sepia" name="sepia" />
+
+### Disabling
+
+<Disabling plugin="sepia" name="sepia" />

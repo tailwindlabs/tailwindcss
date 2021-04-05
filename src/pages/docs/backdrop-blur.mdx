@@ -1,0 +1,57 @@
+---
+title: "Backdrop Blur"
+description: "Utilities for applying backdrop blur filters to an element."
+featureVersion: 'v2.1+'
+---
+
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+
+export const classes = {
+  plugin: function () {
+    return function ({ addUtilities }) {
+      addUtilities({
+        '.backdrop-blur-0': { '--tw-backdrop-blur': 'blur(0)' },
+        '.backdrop-blur-sm': { '--tw-backdrop-blur': 'blur(4px)' },
+        '.backdrop-blur': { '--tw-backdrop-blur': 'blur(8px)' },
+        '.backdrop-blur-md': { '--tw-backdrop-blur': 'blur(12px)' },
+        '.backdrop-blur-lg': { '--tw-backdrop-blur': 'blur(16px)' },
+        '.backdrop-blur-xl': { '--tw-backdrop-blur': 'blur(24px)' },
+        '.backdrop-blur-2xl': { '--tw-backdrop-blur': 'blur(40px)' },
+        '.backdrop-blur-3xl': { '--tw-backdrop-blur': 'blur(64px)' },
+      })
+    }
+  }
+}
+
+## Usage
+
+Use the `backdrop-blur-{amount?}` utilities alongside the `backdrop-filter` utility to blur an element.
+
+```html
+<div class="backdrop-filter backdrop-blur-lg ...">
+  <!-- ... -->
+</div>
+```
+
+## Responsive
+
+To control an element's backdrop blur at a specific breakpoint, add a `{screen}:` prefix to any existing backdrop blur utility. For example, use `md:backdrop-blur-lg` to apply the `backdrop-blur-lg` utility at only medium screen sizes and above.
+
+```html
+<div class="backdrop-filter backdrop-blur-sm **md:backdrop-blur-lg** ...">
+  <!-- ... -->
+</div>
+```
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+## Customizing
+
+### Variants
+
+<Variants plugin="backdropBlur" name="backdrop blur" />
+
+### Disabling
+
+<Disabling plugin="backdropBlur" name="backdrop blur" />

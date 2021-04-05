@@ -1,0 +1,64 @@
+---
+title: "Backdrop Opacity"
+description: "Utilities for applying backdrop opacity filters to an element."
+featureVersion: 'v2.1+'
+---
+
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+
+export const classes = {
+  plugin: function () {
+    return function ({ addUtilities }) {
+      addUtilities({
+        '.backgrop-opacity-0': { '--tw-backdrop-opacity': 'opacity(0)'},
+        '.backgrop-opacity-5': { '--tw-backdrop-opacity': 'opacity(0.05)'},
+        '.backgrop-opacity-10': { '--tw-backdrop-opacity': 'opacity(0.1)'},
+        '.backgrop-opacity-20': { '--tw-backdrop-opacity': 'opacity(0.2)'},
+        '.backgrop-opacity-25': { '--tw-backdrop-opacity': 'opacity(0.25)'},
+        '.backgrop-opacity-30': { '--tw-backdrop-opacity': 'opacity(0.3)'},
+        '.backgrop-opacity-40': { '--tw-backdrop-opacity': 'opacity(0.4)'},
+        '.backgrop-opacity-50': { '--tw-backdrop-opacity': 'opacity(0.5)'},
+        '.backgrop-opacity-60': { '--tw-backdrop-opacity': 'opacity(0.6)'},
+        '.backgrop-opacity-70': { '--tw-backdrop-opacity': 'opacity(0.7)'},
+        '.backgrop-opacity-75': { '--tw-backdrop-opacity': 'opacity(0.75)'},
+        '.backgrop-opacity-80': { '--tw-backdrop-opacity': 'opacity(0.8)'},
+        '.backgrop-opacity-90': { '--tw-backdrop-opacity': 'opacity(0.9)'},
+        '.backgrop-opacity-95': { '--tw-backdrop-opacity': 'opacity(0.95)'},
+        '.backgrop-opacity-100': { '--tw-backdrop-opacity': 'opacity(1)'},
+      })
+    }
+  }
+}
+
+## Usage
+
+Use the `backdrop-opacity-{amount}` utilities alongside the `backdrop-filter` utility to control the opacity of other backdrop filters applied to an element.
+
+```html
+<div class="backdrop-filter backdrop-opacity-80 ...">
+  <!-- ... -->
+</div>
+```
+
+## Responsive
+
+To control an element's backdrop opacity at a specific breakpoint, add a `{screen}:` prefix to any existing backdrop opacity utility. For example, use `md:backdrop-opacity-lg` to apply the `backdrop-opacity-lg` utility at only medium screen sizes and above.
+
+```html
+<div class="backdrop-filter backdrop-opacity-sm **md:backdrop-opacity-lg** ...">
+  <!-- ... -->
+</div>
+```
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+## Customizing
+
+### Variants
+
+<Variants plugin="backdropOpacity" name="backdrop opacity" />
+
+### Disabling
+
+<Disabling plugin="backdropOpacity" name="backdrop opacity" />

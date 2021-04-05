@@ -179,20 +179,19 @@ export function Header({ navIsOpen, onNavToggle }) {
           <BannerMarkLeft className="hidden sm:block absolute right-1/2 transform translate-x-[-150px] translate-y-[-250px] w-[848px] h-[513px]" />
           <BannerMarkRight className="hidden sm:block absolute left-1/2 transform translate-x-[330px] translate-y-[-357px] w-[848px] h-[513px]" />
           <div className="relative flex justify-center items-center">
-            <div class="text-sm font-medium text-white">
+            <div className="text-sm font-medium text-white">
               Just-in-Time: The Next Generation of Tailwind&nbsp;CSS
             </div>
             <span
               aria-hidden="true"
               className="hidden sm:block mx-6 h-6 w-px bg-white bg-opacity-20"
             ></span>
-            <div className="ml-6">
-              <a
-                className="whitespace-nowrap inline-flex rounded-md bg-white py-2 px-3 text-xs font-semibold uppercase text-blue-500 hover:bg-opacity-90"
-                href="https://blog.tailwindcss.com/just-in-time-the-next-generation-of-tailwind-css"
-              >
-                Learn more &rarr;
-              </a>
+            <div className="ml-6 sm:ml-0">
+              <Link href="/docs/just-in-time-mode">
+                <a className="whitespace-nowrap inline-flex rounded-md bg-white py-2 px-3 text-xs font-semibold uppercase text-blue-500 hover:bg-opacity-90">
+                  Learn more &rarr;
+                </a>
+              </Link>
             </div>
           </div>
         </div>

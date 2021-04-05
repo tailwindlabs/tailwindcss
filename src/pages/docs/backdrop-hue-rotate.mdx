@@ -1,0 +1,60 @@
+---
+title: "Backdrop Hue Rotate"
+description: "Utilities for applying backdrop hue-rotate filters to an element."
+featureVersion: 'v2.1+'
+---
+
+import { Variants } from '@/components/Variants'
+import { Disabling } from '@/components/Disabling'
+
+export const classes = {
+  plugin: function () {
+    return function ({ addUtilities }) {
+      addUtilities({
+      '.-backdrop-hue-rotate-180': { '--tw-backdrop-hue-rotate':  'hue-rotate(-180deg)' },
+      '.-backdrop-hue-rotate-90': { '--tw-backdrop-hue-rotate':  'hue-rotate(-90deg)' },
+      '.-backdrop-hue-rotate-60': { '--tw-backdrop-hue-rotate':  'hue-rotate(-60deg)' },
+      '.-backdrop-hue-rotate-30': { '--tw-backdrop-hue-rotate':  'hue-rotate(-30deg)' },
+      '.-backdrop-hue-rotate-15': { '--tw-backdrop-hue-rotate':  'hue-rotate(-15deg)' },
+      '.backdrop-hue-rotate-0': { '--tw-backdrop-hue-rotate': 'hue-rotate(0deg)' },
+      '.backdrop-hue-rotate-15': { '--tw-backdrop-hue-rotate': 'hue-rotate(15deg)' },
+      '.backdrop-hue-rotate-30': { '--tw-backdrop-hue-rotate': 'hue-rotate(30deg)' },
+      '.backdrop-hue-rotate-60': { '--tw-backdrop-hue-rotate': 'hue-rotate(60deg)' },
+      '.backdrop-hue-rotate-90': { '--tw-backdrop-hue-rotate': 'hue-rotate(90deg)' },
+      '.backdrop-hue-rotate-180': { '--tw-backdrop-hue-rotate': 'hue-rotate(180deg)' },
+      })
+    }
+  }
+}
+
+## Usage
+
+Use the `backdrop-hue-rotate-{amount}` utilities alongside the `backdrop-filter` utility to blur an element.
+
+```html
+<div class="backdrop-filter backdrop-hue-rotate-15 ...">
+  <!-- ... -->
+</div>
+```
+
+## Responsive
+
+To control an element's backdrop hue rotation at a specific breakpoint, add a `{screen}:` prefix to any existing backdrop hue-rotate utility. For example, use `md:backdrop-hue-rotate-60` to apply the `backdrop-hue-rotate-60` utility at only medium screen sizes and above.
+
+```html
+<div class="backdrop-filter backdrop-hue-rotate-15 **md:backdrop-hue-rotate-60** ...">
+  <!-- ... -->
+</div>
+```
+
+For more information about Tailwind's responsive design features, check out the [Responsive Design](/docs/responsive-design) documentation.
+
+## Customizing
+
+### Variants
+
+<Variants plugin="backdropHueRotate" name="backdrop hue-rotate" />
+
+### Disabling
+
+<Disabling plugin="backdropHueRotate" name="backdrop hue-rotate" />
