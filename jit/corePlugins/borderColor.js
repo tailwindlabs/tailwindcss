@@ -2,7 +2,7 @@ const flattenColorPalette = require('../../lib/util/flattenColorPalette').defaul
 const withAlphaVariable = require('../../lib/util/withAlphaVariable').default
 const { asColor, nameClass } = require('../pluginUtils')
 
-module.exports = function ({ matchUtilities, theme }) {
+module.exports = function ({ corePlugins, matchUtilities, theme }) {
   let colorPalette = flattenColorPalette(theme('borderColor'))
 
   matchUtilities({
@@ -17,12 +17,18 @@ module.exports = function ({ matchUtilities, theme }) {
         return []
       }
 
+      if (corePlugins('borderOpacity')) {
+        return {
+          [nameClass('border', modifier)]: withAlphaVariable({
+            color: value,
+            property: 'border-color',
+            variable: '--tw-border-opacity',
+          }),
+        }
+      }
+
       return {
-        [nameClass('border', modifier)]: withAlphaVariable({
-          color: value,
-          property: 'border-color',
-          variable: '--tw-border-opacity',
-        }),
+        [nameClass('border', modifier)]: { 'border-color': value },
       }
     },
   })

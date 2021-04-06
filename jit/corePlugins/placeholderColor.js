@@ -2,7 +2,7 @@ const flattenColorPalette = require('../../lib/util/flattenColorPalette').defaul
 const withAlphaVariable = require('../../lib/util/withAlphaVariable').default
 const { asColor, nameClass } = require('../pluginUtils')
 
-module.exports = function ({ matchUtilities, theme }) {
+module.exports = function ({ corePlugins, matchUtilities, theme }) {
   let colorPalette = flattenColorPalette(theme('placeholderColor'))
 
   matchUtilities({
@@ -13,12 +13,18 @@ module.exports = function ({ matchUtilities, theme }) {
         return []
       }
 
+      if (corePlugins('placeholderOpacity')) {
+        return {
+          [`${nameClass('placeholder', modifier)}::placeholder`]: withAlphaVariable({
+            color: value,
+            property: 'color',
+            variable: '--tw-placeholder-opacity',
+          }),
+        }
+      }
+
       return {
-        [`${nameClass('placeholder', modifier)}::placeholder`]: withAlphaVariable({
-          color: value,
-          property: 'color',
-          variable: '--tw-placeholder-opacity',
-        }),
+        [`${nameClass('placeholder', modifier)}::placeholder`]: { color: value },
       }
     },
   })
