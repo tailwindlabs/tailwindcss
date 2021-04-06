@@ -86,9 +86,9 @@ By default, Tailwind will start a long-running watch process if `NODE_ENV=develo
   // ...
   scripts: {
     // Will start a long-running watch process
-    "dev": "NODE_ENV=development postcss tailwindcss -o ./dist/tailwind.css -w"
+    "dev": "NODE_ENV=development postcss tailwind.css -o ./dist/tailwind.css -w"
     // Will perform a one-off build
-    "build": "NODE_ENV=production postcss tailwindcss -o ./dist/tailwind.css"
+    "build": "NODE_ENV=production postcss tailwind.css -o ./dist/tailwind.css"
   },
   // ...
 }
@@ -102,11 +102,11 @@ If it appears like your one-off build process is hanging, it's almost certainly 
   // ...
   scripts: {
     // Will start a long-running watch process
-    "dev": "TAILWIND_MODE=watch NODE_ENV=development postcss tailwindcss -o ./dist/tailwind.css -w"
+    "dev": "TAILWIND_MODE=watch NODE_ENV=development postcss tailwind.css -o ./dist/tailwind.css -w"
     // Will perform a one-off development build
-    "build:dev": "TAILWIND_MODE=build NODE_ENV=development postcss tailwindcss -o ./dist/tailwind.css"
+    "build:dev": "TAILWIND_MODE=build NODE_ENV=development postcss tailwind.css -o ./dist/tailwind.css"
     // Will perform a one-off production build
-    "build:prod": "TAILWIND_MODE=build NODE_ENV=production postcss tailwindcss -o ./dist/tailwind.css"
+    "build:prod": "TAILWIND_MODE=build NODE_ENV=production postcss tailwind.css -o ./dist/tailwind.css"
   },
   // ...
 }
