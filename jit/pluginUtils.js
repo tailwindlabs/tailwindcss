@@ -111,8 +111,16 @@ function asValue(modifier, lookup = {}, { validate = () => true, transform = (v)
     return undefined
   }
 
-  // add spaces around operators inside calc() that do not follow an operator or (
-  return transform(value).replace(/(?<=^calc\(.+?)(?<![-+*/(])([-+*/])/g, ' $1 ')
+  value = transform(value)
+
+  if (value.startsWith('calc(')) {
+    // add spaces around operators inside calc() that do not follow an operator or (
+    return value.replace(/[-+*/(]+/g, (match) =>
+      match[0] === '(' ? match : [' ', match[0], ' ', ...match.slice(1)].join('')
+    )
+  }
+
+  return value
 }
 
 function asUnit(modifier, units, lookup = {}) {
