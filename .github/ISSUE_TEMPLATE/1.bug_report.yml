@@ -2,7 +2,6 @@ name: Bug Report
 description: Create a bug report for Tailwind CSS.
 title: ''
 labels: []
-issue_body: true
 body:
   - type: input
     attributes:
@@ -34,6 +33,7 @@ body:
       description: A public GitHub repo that demonstrates the bug. If it's really unnecessary, link us to a YouTube video you think is awesome instead.
     validations:
       required: true
-  - type: markdown
+  - type: textarea
     attributes:
-      value: "## Describe your issue\nDescribe the problem you're seeing, any important steps to reproduce and what behavior you expect instead"
+      label: Describe your issue
+      description: Describe the problem you're seeing, any important steps to reproduce and what behavior you expect instead
