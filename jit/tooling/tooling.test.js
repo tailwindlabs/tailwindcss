@@ -191,6 +191,8 @@ function buildTest(toolName, { failures = [], proxy = null } = {}) {
   })
 }
 
+buildTest('laravel-mix-v6')
+
 buildTest('parcel-v2', {
   failures: [
     'watch:add-utilities',

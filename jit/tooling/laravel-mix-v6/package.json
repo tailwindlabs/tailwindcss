@@ -1,0 +1,15 @@
+{
+  "name": "tooling-mix-v6",
+  "private": true,
+  "description": "Integration testing setup: Laravel Mix v6",
+  "scripts": {
+    "build": "mix",
+    "watch": "mix watch"
+  },
+  "dependencies": {
+    "laravel-mix": "^6.0.16",
+    "postcss": "^8.2.9",
+    "postcss-loader": "^5.2.0",
+    "tailwind-dev": "file:../../../"
+  }
+}
