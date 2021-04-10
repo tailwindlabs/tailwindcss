@@ -1,0 +1,63 @@
+# This workflow runs integration tests across some known tools
+
+name: Integration Tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  integration:
+    runs-on: ubuntu-20.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [15.x]
+        tool: [laravel-mix-v6, parcel-v2, postcss-cli-v8, vite-v2, webpack-v5]
+
+    steps:
+      - uses: actions/checkout@v2.3.3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1.4.4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Use cached node_modules (top-level)
+        id: cache
+        uses: actions/cache@v2.1.1
+        with:
+          path: node_modules
+          key: nodeModules-tailwind-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
+          restore-keys: |
+            nodeModules-tailwind-
+
+      - name: Use cached node_modules (tool)
+        id: cache-tool
+        uses: actions/cache@v2.1.1
+        with:
+          path: jit/tooling/${{ matrix.tool }}/node_modules
+          key: nodeModules-${{ matrix.tool }}-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
+          restore-keys: |
+            nodeModules-${{ matrix.tool }}-
+
+      - name: Install dependencies (top-level)
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm install
+        env:
+          CI: true
+
+      - run: npm run babelify
+
+      - name: Install dependencies (tool)
+        if: steps.cache-tool.outputs.cache-hit != 'true'
+        run: cd jit/tooling/${{ matrix.tool }} && npm install
+        env:
+          CI: true
+
+      - run: npm run test:integration -- -t ${{ matrix.tool }}
+        env:
+          CI: true
