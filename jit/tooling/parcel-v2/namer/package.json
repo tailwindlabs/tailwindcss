@@ -1,0 +1,10 @@
+{
+  "name": "parcel-namer-tailwind-dev",
+  "private": true,
+  "description": "Integration testing setup: Parcel v2",
+  "main": "index.js",
+  "scripts": {
+    "build": "parcel build ./src/index.html --no-cache --no-source-maps --no-optimize --no-content-hash",
+    "watch": "parcel serve ./src/index.html --no-cache --no-source-maps"
+  }
+}

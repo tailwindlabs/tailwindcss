@@ -191,6 +191,14 @@ function buildTest(toolName, { failures = [], proxy = null } = {}) {
   })
 }
 
+buildTest('parcel-v2', {
+  failures: [
+    'watch:add-utilities',
+    'watch:extra-file',
+    'watch:extra-file-after-no-change'
+  ],
+})
+
 buildTest('webpack-v5')
 
 afterAll(cleanupAllTools)

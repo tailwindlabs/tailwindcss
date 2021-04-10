@@ -14,7 +14,7 @@ const http = require('http')
 const { ProxyServer } = require('./ProxyServer.js')
 
 /**
- * @typedef {'webpack-v5' } IntegrationTestedTool
+ * @typedef {'webpack-v5' | 'parcel-v2' } IntegrationTestedTool
  */
 
 /**

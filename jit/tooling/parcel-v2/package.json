@@ -1,0 +1,16 @@
+{
+  "name": "tooling-parcel-v2",
+  "private": true,
+  "description": "Integration testing setup: Parcel v2",
+  "scripts": {
+    "build": "parcel build ./src/index.html --no-cache --no-source-maps --no-optimize --no-content-hash",
+    "watch": "parcel serve ./src/index.html --no-cache --no-source-maps"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.2.5",
+    "parcel": "^2.0.0-beta.2",
+    "parcel-namer-tailwind-dev": "./namer",
+    "postcss": "^8.0",
+    "tailwind-dev": "file:../../../"
+  }
+}
