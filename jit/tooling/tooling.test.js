@@ -203,6 +203,13 @@ buildTest('parcel-v2', {
 
 buildTest('postcss-cli-v8')
 
+buildTest('vite-v2', {
+  proxy: [
+    { path: '/src', target: `./src` },
+    { path: '/dist', target: new URL('http://localhost:1337') },
+  ]
+})
+
 buildTest('webpack-v5')
 
 afterAll(cleanupAllTools)

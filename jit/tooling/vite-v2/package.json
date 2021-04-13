@@ -1,0 +1,13 @@
+{
+  "name": "tooling-vite-v2",
+  "private": true,
+  "description": "Integration testing setup: Vite v2",
+  "scripts": {
+    "build": "vite build",
+    "watch": "vite"
+  },
+  "devDependencies": {
+    "tailwind-dev": "file:../../../",
+    "vite": "^2.1.5"
+  }
+}

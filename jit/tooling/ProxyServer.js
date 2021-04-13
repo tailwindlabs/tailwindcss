@@ -3,10 +3,11 @@
 const connect = require('connect')
 const path = require('path')
 const sirv = require('sirv')
+const { createProxyMiddleware } = require('http-proxy-middleware')
 
 let nextPort = 1100
 
-/** @typedef {{path: string, target: string}} ProxyConfigItem */
+/** @typedef {{path: string, target: string | URL}} ProxyConfigItem */
 
 module.exports.ProxyServer = class ProxyServer {
   /**
@@ -54,6 +55,24 @@ module.exports.ProxyServer = class ProxyServer {
    * @returns {import('connect').NextHandleFunction}
    */
   handlerForItem(item) {
+    if (item.target instanceof URL) {
+      // @ts-ignore
+      return createProxyMiddleware({
+        target: 'http://localhost:1337',
+        changeOrigin: true,
+        logProvider: () => ({
+          log: () => {},
+          debug: () => {},
+          info: () => {},
+          warn: () => {},
+          error: () => {},
+        }),
+        pathRewrite: {
+          [`^${item.path}`]: '/'
+        }
+      })
+    }
+
     // @ts-ignore
     return sirv(path.resolve(this.base, item.target), { dev: true })
   }

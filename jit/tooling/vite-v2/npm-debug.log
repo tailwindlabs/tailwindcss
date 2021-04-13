@@ -1,0 +1,48 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/jordanpittman/.fnm/node-versions/v6.17.1/installation/bin/node',
+1 verbose cli   '/var/folders/bt/w7zy5tlj00x2klxrqgm2w6dh0000gn/T/fnm_multishell_94464_1618272707665/bin/npm',
+1 verbose cli   'run',
+1 verbose cli   'watch' ]
+2 info using npm@3.10.10
+3 info using node@v6.17.1
+4 verbose run-script [ 'prewatch', 'watch', 'postwatch' ]
+5 info lifecycle tooling-vite-v2@~prewatch: tooling-vite-v2@
+6 silly lifecycle tooling-vite-v2@~prewatch: no script for prewatch, continuing
+7 info lifecycle tooling-vite-v2@~watch: tooling-vite-v2@
+8 verbose lifecycle tooling-vite-v2@~watch: unsafe-perm in lifecycle true
+9 verbose lifecycle tooling-vite-v2@~watch: PATH: /Users/jordanpittman/.fnm/node-versions/v6.17.1/installation/lib/node_modules/npm/bin/node-gyp-bin:/Users/jordanpittman/Code/Projects/tailwindcss/jit/tooling/vite-v2/node_modules/.bin:/Users/jordanpittman/.fnm/node-versions/v6.17.1/installation/bin:/var/folders/bt/w7zy5tlj00x2klxrqgm2w6dh0000gn/T/fnm_multishell_94464_1618272707665/bin:/Users/jordanpittman/.composer/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/jordanpittman/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Wireshark.app/Contents/MacOS:/Users/jordanpittman/.composer/vendor/bin:/usr/local/bin:/Users/jordanpittman/go/bin:/usr/local/opt/fzf/bin
+10 verbose lifecycle tooling-vite-v2@~watch: CWD: /Users/jordanpittman/Code/Projects/tailwindcss/jit/tooling/vite-v2
+11 silly lifecycle tooling-vite-v2@~watch: Args: [ '-c', 'vite' ]
+12 silly lifecycle tooling-vite-v2@~watch: Returned: code: 1  signal: null
+13 info lifecycle tooling-vite-v2@~watch: Failed to exec watch script
+14 verbose stack Error: tooling-vite-v2@ watch: `vite`
+14 verbose stack Exit status 1
+14 verbose stack     at EventEmitter.<anonymous> (/Users/jordanpittman/.fnm/node-versions/v6.17.1/installation/lib/node_modules/npm/lib/utils/lifecycle.js:255:16)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at EventEmitter.emit (events.js:191:7)
+14 verbose stack     at ChildProcess.<anonymous> (/Users/jordanpittman/.fnm/node-versions/v6.17.1/installation/lib/node_modules/npm/lib/utils/spawn.js:40:14)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at ChildProcess.emit (events.js:191:7)
+14 verbose stack     at maybeClose (internal/child_process.js:920:16)
+14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:230:5)
+15 verbose pkgid tooling-vite-v2@
+16 verbose cwd /Users/jordanpittman/Code/Projects/tailwindcss/jit/tooling/vite-v2
+17 error Darwin 20.3.0
+18 error argv "/Users/jordanpittman/.fnm/node-versions/v6.17.1/installation/bin/node" "/var/folders/bt/w7zy5tlj00x2klxrqgm2w6dh0000gn/T/fnm_multishell_94464_1618272707665/bin/npm" "run" "watch"
+19 error node v6.17.1
+20 error npm  v3.10.10
+21 error code ELIFECYCLE
+22 error tooling-vite-v2@ watch: `vite`
+22 error Exit status 1
+23 error Failed at the tooling-vite-v2@ watch script 'vite'.
+23 error Make sure you have the latest version of node.js and npm installed.
+23 error If you do, this is most likely a problem with the tooling-vite-v2 package,
+23 error not with npm itself.
+23 error Tell the author that this fails on your system:
+23 error     vite
+23 error You can get information on how to open an issue for this project with:
+23 error     npm bugs tooling-vite-v2
+23 error Or if that isn't available, you can get their info via:
+23 error     npm owner ls tooling-vite-v2
+23 error There is likely additional logging output above.
+24 verbose exit [ 1, true ]
