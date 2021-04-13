@@ -1,0 +1,14 @@
+{
+  "name": "tooling-postcss-cli-v8",
+  "private": true,
+  "description": "Integration testing setup: PostCSS v8 CLI",
+  "scripts": {
+    "build": "postcss src/index.css -o dist/index.css",
+    "watch": "postcss src/index.css -o dist/index.css -w"
+  },
+  "dependencies": {
+    "postcss": "^8.2.9",
+    "postcss-cli": "^8.3.1",
+    "tailwind-dev": "file:../../../"
+  }
+}

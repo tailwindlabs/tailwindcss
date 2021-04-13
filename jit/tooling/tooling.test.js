@@ -201,6 +201,8 @@ buildTest('parcel-v2', {
   ],
 })
 
+buildTest('postcss-cli-v8')
+
 buildTest('webpack-v5')
 
 afterAll(cleanupAllTools)
