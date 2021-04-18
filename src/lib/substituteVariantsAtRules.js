@@ -124,6 +124,7 @@ const defaultVariantGenerators = (config) => ({
   hover: generatePseudoClassVariant('hover'),
   'focus-within': generatePseudoClassVariant('focus-within'),
   'focus-visible': generatePseudoClassVariant('focus-visible'),
+  'read-only': generatePseudoClassVariant('read-only'),
   focus: generatePseudoClassVariant('focus'),
   active: generatePseudoClassVariant('active'),
   visited: generatePseudoClassVariant('visited'),
