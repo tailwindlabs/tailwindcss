@@ -252,6 +252,7 @@ module.exports = {
   backgroundSize: require('./backgroundSize'),
   backgroundAttachment: require('./backgroundAttachment'),
   backgroundClip: require('./backgroundClip'),
+  backgroundOrigin: require('./backgroundOrigin'),
   backgroundPosition: require('./backgroundPosition'),
   backgroundRepeat: require('./backgroundRepeat'),
 
