@@ -424,15 +424,6 @@
 .bg-gradient-to-r {
   background-image: linear-gradient(to right, var(--tw-gradient-stops));
 }
-.bg-origin-border {
-  background-origin: border-box;
-}
-.bg-origin-padding {
-  background-origin: padding-box;
-}
-.bg-origin-content {
-  background-origin: content-box;
-}
 .from-red-300 {
   --tw-gradient-from: #fca5a5;
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(252, 165, 165, 0));
@@ -458,6 +449,15 @@
 }
 .bg-clip-border {
   background-clip: border-box;
+}
+.bg-origin-border {
+  background-origin: border-box;
+}
+.bg-origin-padding {
+  background-origin: padding-box;
+}
+.bg-origin-content {
+  background-origin: content-box;
 }
 .bg-top {
   background-position: top;
