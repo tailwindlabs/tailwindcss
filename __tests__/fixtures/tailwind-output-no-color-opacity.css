@@ -1,4 +1,4 @@
-/*! tailwindcss v2.1.0 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v2.1.1 | MIT License | https://tailwindcss.com */
 
 /*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */
 
@@ -6936,6 +6936,18 @@ video {
 
 .focus\:to-pink-900:focus {
   --tw-gradient-to: #831843;
+}
+
+.bg-origin-border {
+  background-origin: border-box;
+}
+
+.bg-origin-padding {
+  background-origin: padding-box;
+}
+
+.bg-origin-content {
+  background-origin: content-box;
 }
 
 .bg-bottom {
@@ -33628,6 +33640,18 @@ video {
     --tw-gradient-to: #831843;
   }
 
+  .sm\:bg-origin-border {
+    background-origin: border-box;
+  }
+
+  .sm\:bg-origin-padding {
+    background-origin: padding-box;
+  }
+
+  .sm\:bg-origin-content {
+    background-origin: content-box;
+  }
+
   .sm\:bg-bottom {
     background-position: bottom;
   }
@@ -60181,6 +60205,18 @@ video {
 
   .md\:focus\:to-pink-900:focus {
     --tw-gradient-to: #831843;
+  }
+
+  .md\:bg-origin-border {
+    background-origin: border-box;
+  }
+
+  .md\:bg-origin-padding {
+    background-origin: padding-box;
+  }
+
+  .md\:bg-origin-content {
+    background-origin: content-box;
   }
 
   .md\:bg-bottom {
@@ -86738,6 +86774,18 @@ video {
     --tw-gradient-to: #831843;
   }
 
+  .lg\:bg-origin-border {
+    background-origin: border-box;
+  }
+
+  .lg\:bg-origin-padding {
+    background-origin: padding-box;
+  }
+
+  .lg\:bg-origin-content {
+    background-origin: content-box;
+  }
+
   .lg\:bg-bottom {
     background-position: bottom;
   }
@@ -113293,6 +113341,18 @@ video {
     --tw-gradient-to: #831843;
   }
 
+  .xl\:bg-origin-border {
+    background-origin: border-box;
+  }
+
+  .xl\:bg-origin-padding {
+    background-origin: padding-box;
+  }
+
+  .xl\:bg-origin-content {
+    background-origin: content-box;
+  }
+
   .xl\:bg-bottom {
     background-position: bottom;
   }
@@ -139846,6 +139906,18 @@ video {
 
   .\32xl\:focus\:to-pink-900:focus {
     --tw-gradient-to: #831843;
+  }
+
+  .\32xl\:bg-origin-border {
+    background-origin: border-box;
+  }
+
+  .\32xl\:bg-origin-padding {
+    background-origin: padding-box;
+  }
+
+  .\32xl\:bg-origin-content {
+    background-origin: content-box;
   }
 
   .\32xl\:bg-bottom {
