@@ -842,6 +842,7 @@ module.exports = {
     backgroundPosition: ['responsive'],
     backgroundRepeat: ['responsive'],
     backgroundSize: ['responsive'],
+    backgroundOrigin: ['responsive'],
     blur: ['responsive'],
     borderCollapse: ['responsive'],
     borderColor: ['responsive', 'dark', 'group-hover', 'focus-within', 'hover', 'focus'],

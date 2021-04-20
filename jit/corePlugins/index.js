@@ -254,6 +254,7 @@ module.exports = {
   backgroundClip: require('./backgroundClip'),
   backgroundPosition: require('./backgroundPosition'),
   backgroundRepeat: require('./backgroundRepeat'),
+  backgroundOrigin: require('./backgroundOrigin'),
 
   fill: require('./fill'),
   stroke: require('./stroke'),
