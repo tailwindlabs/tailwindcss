@@ -1,4 +1,4 @@
-/*! tailwindcss v2.1.0 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v2.1.1 | MIT License | https://tailwindcss.com */
 
 /*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */
 
@@ -7860,6 +7860,18 @@ video {
 
 .bg-contain {
   background-size: contain;
+}
+
+.bg-origin-border {
+  background-origin: border-box;
+}
+
+.bg-origin-padding {
+  background-origin: padding-box;
+}
+
+.bg-origin-content {
+  background-origin: content-box;
 }
 
 .border-collapse {
@@ -37108,6 +37120,18 @@ video {
     background-size: contain;
   }
 
+  .sm\:bg-origin-border {
+    background-origin: border-box;
+  }
+
+  .sm\:bg-origin-padding {
+    background-origin: padding-box;
+  }
+
+  .sm\:bg-origin-content {
+    background-origin: content-box;
+  }
+
   .sm\:border-collapse {
     border-collapse: collapse;
   }
@@ -66217,6 +66241,18 @@ video {
 
   .md\:bg-contain {
     background-size: contain;
+  }
+
+  .md\:bg-origin-border {
+    background-origin: border-box;
+  }
+
+  .md\:bg-origin-padding {
+    background-origin: padding-box;
+  }
+
+  .md\:bg-origin-content {
+    background-origin: content-box;
   }
 
   .md\:border-collapse {
@@ -95330,6 +95366,18 @@ video {
     background-size: contain;
   }
 
+  .lg\:bg-origin-border {
+    background-origin: border-box;
+  }
+
+  .lg\:bg-origin-padding {
+    background-origin: padding-box;
+  }
+
+  .lg\:bg-origin-content {
+    background-origin: content-box;
+  }
+
   .lg\:border-collapse {
     border-collapse: collapse;
   }
@@ -124441,6 +124489,18 @@ video {
     background-size: contain;
   }
 
+  .xl\:bg-origin-border {
+    background-origin: border-box;
+  }
+
+  .xl\:bg-origin-padding {
+    background-origin: padding-box;
+  }
+
+  .xl\:bg-origin-content {
+    background-origin: content-box;
+  }
+
   .xl\:border-collapse {
     border-collapse: collapse;
   }
@@ -153550,6 +153610,18 @@ video {
 
   .\32xl\:bg-contain {
     background-size: contain;
+  }
+
+  .\32xl\:bg-origin-border {
+    background-origin: border-box;
+  }
+
+  .\32xl\:bg-origin-padding {
+    background-origin: padding-box;
+  }
+
+  .\32xl\:bg-origin-content {
+    background-origin: content-box;
   }
 
   .\32xl\:border-collapse {
