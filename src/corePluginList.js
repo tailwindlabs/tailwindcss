@@ -17,6 +17,7 @@ export const corePluginList = [
   'backgroundPosition',
   'backgroundRepeat',
   'backgroundSize',
+  'backgroundOrigin',
   'borderCollapse',
   'borderColor',
   'borderOpacity',
