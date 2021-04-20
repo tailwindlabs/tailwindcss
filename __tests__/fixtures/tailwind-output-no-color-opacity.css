@@ -6938,18 +6938,6 @@ video {
   --tw-gradient-to: #831843;
 }
 
-.bg-origin-border {
-  background-origin: border-box;
-}
-
-.bg-origin-padding {
-  background-origin: padding-box;
-}
-
-.bg-origin-content {
-  background-origin: content-box;
-}
-
 .bg-bottom {
   background-position: bottom;
 }
@@ -7020,6 +7008,18 @@ video {
 
 .bg-contain {
   background-size: contain;
+}
+
+.bg-origin-border {
+  background-origin: border-box;
+}
+
+.bg-origin-padding {
+  background-origin: padding-box;
+}
+
+.bg-origin-content {
+  background-origin: content-box;
 }
 
 .border-collapse {
@@ -33640,18 +33640,6 @@ video {
     --tw-gradient-to: #831843;
   }
 
-  .sm\:bg-origin-border {
-    background-origin: border-box;
-  }
-
-  .sm\:bg-origin-padding {
-    background-origin: padding-box;
-  }
-
-  .sm\:bg-origin-content {
-    background-origin: content-box;
-  }
-
   .sm\:bg-bottom {
     background-position: bottom;
   }
@@ -33722,6 +33710,18 @@ video {
 
   .sm\:bg-contain {
     background-size: contain;
+  }
+
+  .sm\:bg-origin-border {
+    background-origin: border-box;
+  }
+
+  .sm\:bg-origin-padding {
+    background-origin: padding-box;
+  }
+
+  .sm\:bg-origin-content {
+    background-origin: content-box;
   }
 
   .sm\:border-collapse {
@@ -60207,18 +60207,6 @@ video {
     --tw-gradient-to: #831843;
   }
 
-  .md\:bg-origin-border {
-    background-origin: border-box;
-  }
-
-  .md\:bg-origin-padding {
-    background-origin: padding-box;
-  }
-
-  .md\:bg-origin-content {
-    background-origin: content-box;
-  }
-
   .md\:bg-bottom {
     background-position: bottom;
   }
@@ -60289,6 +60277,18 @@ video {
 
   .md\:bg-contain {
     background-size: contain;
+  }
+
+  .md\:bg-origin-border {
+    background-origin: border-box;
+  }
+
+  .md\:bg-origin-padding {
+    background-origin: padding-box;
+  }
+
+  .md\:bg-origin-content {
+    background-origin: content-box;
   }
 
   .md\:border-collapse {
@@ -86774,18 +86774,6 @@ video {
     --tw-gradient-to: #831843;
   }
 
-  .lg\:bg-origin-border {
-    background-origin: border-box;
-  }
-
-  .lg\:bg-origin-padding {
-    background-origin: padding-box;
-  }
-
-  .lg\:bg-origin-content {
-    background-origin: content-box;
-  }
-
   .lg\:bg-bottom {
     background-position: bottom;
   }
@@ -86856,6 +86844,18 @@ video {
 
   .lg\:bg-contain {
     background-size: contain;
+  }
+
+  .lg\:bg-origin-border {
+    background-origin: border-box;
+  }
+
+  .lg\:bg-origin-padding {
+    background-origin: padding-box;
+  }
+
+  .lg\:bg-origin-content {
+    background-origin: content-box;
   }
 
   .lg\:border-collapse {
@@ -113341,18 +113341,6 @@ video {
     --tw-gradient-to: #831843;
   }
 
-  .xl\:bg-origin-border {
-    background-origin: border-box;
-  }
-
-  .xl\:bg-origin-padding {
-    background-origin: padding-box;
-  }
-
-  .xl\:bg-origin-content {
-    background-origin: content-box;
-  }
-
   .xl\:bg-bottom {
     background-position: bottom;
   }
@@ -113423,6 +113411,18 @@ video {
 
   .xl\:bg-contain {
     background-size: contain;
+  }
+
+  .xl\:bg-origin-border {
+    background-origin: border-box;
+  }
+
+  .xl\:bg-origin-padding {
+    background-origin: padding-box;
+  }
+
+  .xl\:bg-origin-content {
+    background-origin: content-box;
   }
 
   .xl\:border-collapse {
@@ -139908,18 +139908,6 @@ video {
     --tw-gradient-to: #831843;
   }
 
-  .\32xl\:bg-origin-border {
-    background-origin: border-box;
-  }
-
-  .\32xl\:bg-origin-padding {
-    background-origin: padding-box;
-  }
-
-  .\32xl\:bg-origin-content {
-    background-origin: content-box;
-  }
-
   .\32xl\:bg-bottom {
     background-position: bottom;
   }
@@ -139990,6 +139978,18 @@ video {
 
   .\32xl\:bg-contain {
     background-size: contain;
+  }
+
+  .\32xl\:bg-origin-border {
+    background-origin: border-box;
+  }
+
+  .\32xl\:bg-origin-padding {
+    background-origin: padding-box;
+  }
+
+  .\32xl\:bg-origin-content {
+    background-origin: content-box;
   }
 
   .\32xl\:border-collapse {

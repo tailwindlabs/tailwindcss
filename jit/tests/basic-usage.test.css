@@ -450,6 +450,12 @@
 .bg-clip-border {
   background-clip: border-box;
 }
+.bg-top {
+  background-position: top;
+}
+.bg-no-repeat {
+  background-repeat: no-repeat;
+}
 .bg-origin-border {
   background-origin: border-box;
 }
@@ -458,12 +464,6 @@
 }
 .bg-origin-content {
   background-origin: content-box;
-}
-.bg-top {
-  background-position: top;
-}
-.bg-no-repeat {
-  background-repeat: no-repeat;
 }
 .fill-current {
   fill: currentColor;
