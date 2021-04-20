@@ -1,6 +1,6 @@
 name: Bug Report
 description: Create a bug report for Tailwind CSS.
-title: ''
+title: 'Bug: '
 labels: []
 body:
   - type: input
