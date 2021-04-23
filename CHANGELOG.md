@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add `background-origin` utilities ([#4117](https://github.com/tailwindlabs/tailwindcss/pull/4117))
+
+## [2.1.1] - 2021-04-05
+
+### Fixed
+
+- Fix issue where JIT engine would fail to compile when a source path isn't provided by the build runner for the current input file ([#3978](https://github.com/tailwindlabs/tailwindcss/pull/3978))
+
+## [2.1.0] - 2021-04-05
+
+### Added
+
 - Add alternate JIT engine (in preview) ([#3905](https://github.com/tailwindlabs/tailwindcss/pull/3905))
 - Add new `mix-blend-mode` and `background-blend-mode` utilities ([#3920](https://github.com/tailwindlabs/tailwindcss/pull/3920))
 - Add new `box-decoration-break` utilities ([#3911](https://github.com/tailwindlabs/tailwindcss/pull/3911))
@@ -1344,7 +1356,9 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.4...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.1...HEAD
+[2.1.1]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.0...v2.1.1
+[2.1.0]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.4...v2.1.0
 [2.0.4]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.3...v2.0.4
 [2.0.3]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.2...v2.0.3
 [2.0.2]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.1...v2.0.2
