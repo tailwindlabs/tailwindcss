@@ -110,11 +110,7 @@ function applyVariant(variant, matches, context) {
       }
 
       let container = postcss.root()
-      if (typeof rule.clone === 'function') {
-        container.append(rule.clone())
-      } else {
-        container.append(rule)
-      }
+      container.append(rule.clone())
 
       function modifySelectors(modifierFunction) {
         container.each((rule) => {
