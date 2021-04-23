@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fix issue where JIT engine would generate the wrong CSS when using PostCSS 7 ([#4078](https://github.com/tailwindlabs/tailwindcss/pull/4078)
+- Fix issue where JIT engine would generate the wrong CSS when using PostCSS 7 ([#4078](https://github.com/tailwindlabs/tailwindcss/pull/4078))
 
 ## [2.1.1] - 2021-04-05
 
