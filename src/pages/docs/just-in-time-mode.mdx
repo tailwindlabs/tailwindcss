@@ -153,6 +153,34 @@ This is very useful for building pixel-perfect designs where there are a few ele
 
 We'll likely add some form of "strict mode" in the future for power-hungry team leads who don't trust their colleagues to use this feature responsibly.
 
+Note that you still need to [write purgeable HTML](https://tailwindcss.com/docs/optimizing-for-production#writing-purgeable-html) when using arbitrary values, and your classes need to exist as complete strings for Tailwind to detect them correctly.
+
+<TipBad>Don't use string concatenation to create class names</TipBad>
+
+```jsx mt-4
+<div className={`mt-[${size === 'lg' ? '22px' : '17px' }]`}></div>
+```
+
+<TipGood>Do dynamically select a complete class name</TipGood>
+
+```jsx mt-4
+<div className={ size === 'lg' ? 'mt-[22px]' : 'mt-[17px]' }></div>
+```
+
+Tailwind doesn't include any sort of client-side runtime, so class names need to be statically extractable at build-time, and can't depend on any sort of arbitrary dynamic values that change on the client. Use inline styles for these situations, or combine Tailwind with a CSS-in-JS library like [Emotion](https://emotion.sh/docs/introduction) if it makes sense for your project.
+
+<TipBad>Arbitrary values cannot be computed from dynamic values</TipBad>
+
+```html mt-4
+<div class="bg-[{{ userThemeColor }}]"></div>
+```
+
+<TipGood>Use inline styles for truly dynamic or user-defined values</TipGood>
+
+```html mt-4
+<div style="background-color: {{ userThemeColor }}"></div>
+```
+
 ### Built-in important modifier
 
 You can make any utility important by adding a `!` character to the beginning:
