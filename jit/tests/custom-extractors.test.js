@@ -5,7 +5,9 @@ const path = require('path')
 function run(input, config = {}) {
   jest.resetModules()
   const tailwind = require('../index.js')
-  return postcss(tailwind(config)).process(input, { from: path.resolve(__filename) })
+  return postcss(tailwind(config)).process(input, {
+    from: path.resolve(__filename),
+  })
 }
 
 function customExtractor(content) {
@@ -23,6 +25,7 @@ const expected = fs.readFileSync(expectedPath, 'utf8')
 
 test('defaultExtractor', () => {
   let config = {
+    mode: 'jit',
     purge: {
       content: [path.resolve(__dirname, './custom-extractors.test.html')],
       options: {
@@ -52,6 +55,7 @@ test('extractors array', () => {
         ],
       },
     },
+    mode: 'jit',
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],

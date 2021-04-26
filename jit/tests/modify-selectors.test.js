@@ -5,12 +5,15 @@ const path = require('path')
 const selectorParser = require('postcss-selector-parser')
 
 function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, { from: path.resolve(__filename) })
+  return postcss(tailwind(config)).process(input, {
+    from: path.resolve(__filename),
+  })
 }
 
 test('modify selectors', () => {
   let config = {
     darkMode: 'class',
+    mode: 'jit',
     purge: [path.resolve(__dirname, './modify-selectors.test.html')],
     corePlugins: { preflight: false },
     theme: {},

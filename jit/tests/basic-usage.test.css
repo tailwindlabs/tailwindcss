@@ -99,20 +99,20 @@
 .col-span-3 {
   grid-column: span 3 / span 3;
 }
-.col-end-4 {
-  grid-column-end: 4;
-}
 .col-start-1 {
   grid-column-start: 1;
+}
+.col-end-4 {
+  grid-column-end: 4;
 }
 .row-span-2 {
   grid-row: span 2 / span 2;
 }
-.row-end-5 {
-  grid-row-end: 5;
-}
 .row-start-3 {
   grid-row-start: 3;
+}
+.row-end-5 {
+  grid-row-end: 5;
 }
 .float-right {
   float: right;

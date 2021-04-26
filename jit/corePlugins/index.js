@@ -92,7 +92,11 @@ module.exports = {
         (className) => {
           return `motion-safe${config('separator')}${className}`
         },
-        () => postcss.atRule({ name: 'media', params: '(prefers-reduced-motion: no-preference)' })
+        () =>
+          postcss.atRule({
+            name: 'media',
+            params: '(prefers-reduced-motion: no-preference)',
+          })
       )
     )
 
@@ -102,7 +106,11 @@ module.exports = {
         (className) => {
           return `motion-reduce${config('separator')}${className}`
         },
-        () => postcss.atRule({ name: 'media', params: '(prefers-reduced-motion: reduce)' })
+        () =>
+          postcss.atRule({
+            name: 'media',
+            params: '(prefers-reduced-motion: reduce)',
+          })
       )
     )
   },
@@ -131,7 +139,11 @@ module.exports = {
           (className) => {
             return `dark${config('separator')}${className}`
           },
-          () => postcss.atRule({ name: 'media', params: '(prefers-color-scheme: dark)' })
+          () =>
+            postcss.atRule({
+              name: 'media',
+              params: '(prefers-color-scheme: dark)',
+            })
         )
       )
     }
@@ -154,77 +166,77 @@ module.exports = {
   },
 
   // Base
-  preflight: require('./preflight'),
+  preflight: require('../../lib/plugins/preflight').default(),
 
   // Components
-  container: require('./container'),
+  container: require('../../lib/plugins/container')(),
 
   // Utilitiles
-  accessibility: require('./accessibility'),
-  pointerEvents: require('./pointerEvents'),
-  visibility: require('./visibility'),
-  position: require('./position'),
-  inset: require('./inset'),
-  isolation: require('./isolation'),
-  zIndex: require('./zIndex'),
-  order: require('./order'),
-  gridColumn: require('./gridColumn'),
-  gridColumnEnd: require('./gridColumnEnd'),
-  gridColumnStart: require('./gridColumnStart'),
-  gridRow: require('./gridRow'),
-  gridRowEnd: require('./gridRowEnd'),
-  gridRowStart: require('./gridRowStart'),
-  float: require('./float'),
-  clear: require('./clear'),
-  margin: require('./margin'),
-  boxSizing: require('./boxSizing'),
-  display: require('./display'),
-  height: require('./height'),
-  maxHeight: require('./maxHeight'),
-  minHeight: require('./minHeight'),
-  width: require('./width'),
-  minWidth: require('./minWidth'),
-  maxWidth: require('./maxWidth'),
-  flex: require('./flex'),
-  flexShrink: require('./flexShrink'),
-  flexGrow: require('./flexGrow'),
-  tableLayout: require('./tableLayout'),
-  borderCollapse: require('./borderCollapse'),
+  accessibility: require('../../lib/plugins/accessibility').default(),
+  pointerEvents: require('../../lib/plugins/pointerEvents').default(),
+  visibility: require('../../lib/plugins/visibility').default(),
+  position: require('../../lib/plugins/position').default(),
+  inset: require('../../lib/plugins/inset').default(),
+  isolation: require('../../lib/plugins/isolation').default(),
+  zIndex: require('../../lib/plugins/zIndex').default(),
+  order: require('../../lib/plugins/order').default(),
+  gridColumn: require('../../lib/plugins/gridColumn').default(),
+  gridColumnStart: require('../../lib/plugins/gridColumnStart').default(),
+  gridColumnEnd: require('../../lib/plugins/gridColumnEnd').default(),
+  gridRow: require('../../lib/plugins/gridRow').default(),
+  gridRowStart: require('../../lib/plugins/gridRowStart').default(),
+  gridRowEnd: require('../../lib/plugins/gridRowEnd').default(),
+  float: require('../../lib/plugins/float').default(),
+  clear: require('../../lib/plugins/clear').default(),
+  margin: require('../../lib/plugins/margin').default(),
+  boxSizing: require('../../lib/plugins/boxSizing').default(),
+  display: require('../../lib/plugins/display').default(),
+  height: require('../../lib/plugins/height').default(),
+  maxHeight: require('../../lib/plugins/maxHeight').default(),
+  minHeight: require('../../lib/plugins/minHeight').default(),
+  width: require('../../lib/plugins/width').default(),
+  minWidth: require('../../lib/plugins/minWidth').default(),
+  maxWidth: require('../../lib/plugins/maxWidth').default(),
+  flex: require('../../lib/plugins/flex').default(),
+  flexShrink: require('../../lib/plugins/flexShrink').default(),
+  flexGrow: require('../../lib/plugins/flexGrow').default(),
+  tableLayout: require('../../lib/plugins/tableLayout').default(),
+  borderCollapse: require('../../lib/plugins/borderCollapse').default(),
 
-  transform: require('./transform'),
-  transformOrigin: require('./transformOrigin'),
-  translate: require('./translate'),
-  rotate: require('./rotate'),
-  skew: require('./skew'),
-  scale: require('./scale'),
+  transform: require('../../lib/plugins/transform').default(),
+  transformOrigin: require('../../lib/plugins/transformOrigin').default(),
+  translate: require('../../lib/plugins/translate').default(),
+  rotate: require('../../lib/plugins/rotate').default(),
+  skew: require('../../lib/plugins/skew').default(),
+  scale: require('../../lib/plugins/scale').default(),
 
-  animation: require('./animation'),
+  animation: require('../../lib/plugins/animation').default(),
 
-  cursor: require('./cursor'),
-  userSelect: require('./userSelect'),
-  resize: require('./resize'),
+  cursor: require('../../lib/plugins/cursor').default(),
+  userSelect: require('../../lib/plugins/userSelect').default(),
+  resize: require('../../lib/plugins/resize').default(),
 
-  listStylePosition: require('./listStylePosition'),
-  listStyleType: require('./listStyleType'),
+  listStylePosition: require('../../lib/plugins/listStylePosition').default(),
+  listStyleType: require('../../lib/plugins/listStyleType').default(),
 
-  appearance: require('./appearance'),
-  gridAutoColumns: require('./gridAutoColumns'),
-  gridAutoFlow: require('./gridAutoFlow'),
-  gridAutoRows: require('./gridAutoRows'),
-  gridTemplateColumns: require('./gridTemplateColumns'),
-  gridTemplateRows: require('./gridTemplateRows'),
-  flexDirection: require('./flexDirection'),
-  flexWrap: require('./flexWrap'),
-  placeContent: require('./placeContent'),
-  placeItems: require('./placeItems'),
-  alignContent: require('./alignContent'),
-  alignItems: require('./alignItems'),
-  justifyContent: require('./justifyContent'),
-  justifyItems: require('./justifyItems'),
-  gap: require('./gap'),
-  space: require('./space'),
-  divideWidth: require('./divideWidth'),
-  divideStyle: require('./divideStyle'),
+  appearance: require('../../lib/plugins/appearance').default(),
+  gridAutoColumns: require('../../lib/plugins/gridAutoColumns').default(),
+  gridAutoFlow: require('../../lib/plugins/gridAutoFlow').default(),
+  gridAutoRows: require('../../lib/plugins/gridAutoRows').default(),
+  gridTemplateColumns: require('../../lib/plugins/gridTemplateColumns').default(),
+  gridTemplateRows: require('../../lib/plugins/gridTemplateRows').default(),
+  flexDirection: require('../../lib/plugins/flexDirection').default(),
+  flexWrap: require('../../lib/plugins/flexWrap').default(),
+  placeContent: require('../../lib/plugins/placeContent').default(),
+  placeItems: require('../../lib/plugins/placeItems').default(),
+  alignContent: require('../../lib/plugins/alignContent').default(),
+  alignItems: require('../../lib/plugins/alignItems').default(),
+  justifyContent: require('../../lib/plugins/justifyContent').default(),
+  justifyItems: require('../../lib/plugins/justifyItems').default(),
+  gap: require('../../lib/plugins/gap').default(),
+  space: require('../../lib/plugins/space').default(),
+  divideWidth: require('../../lib/plugins/divideWidth').default(),
+  divideStyle: require('../../lib/plugins/divideStyle').default(),
   divideColor: require('./divideColor'),
   divideOpacity: require('./divideOpacity'),
 

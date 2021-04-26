@@ -4,11 +4,14 @@ const fs = require('fs')
 const path = require('path')
 
 function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, { from: path.resolve(__filename) })
+  return postcss(tailwind(config)).process(input, {
+    from: path.resolve(__filename),
+  })
 }
 
 test('basic usage', () => {
   let config = {
+    mode: 'jit',
     purge: [path.resolve(__dirname, './basic-usage.test.html')],
     corePlugins: { preflight: false },
     theme: {},

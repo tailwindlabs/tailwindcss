@@ -18,12 +18,15 @@ function pluginThatMutatesRules() {
 }
 
 function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, { from: path.resolve(__filename) })
+  return postcss(tailwind(config)).process(input, {
+    from: path.resolve(__filename),
+  })
 }
 
 test.only('plugins mutating rules after tailwind doesnt break it', async () => {
   let config = {
     purge: [path.resolve(__dirname, './mutable.test.html')],
+    mode: 'jit',
     theme: {
       backgroundImage: {
         foo: 'url("./foo.png")',
@@ -47,7 +50,9 @@ test.only('plugins mutating rules after tailwind doesnt break it', async () => {
 
   // Outside of the context of tailwind jit more postcss plugins may operate on the AST:
   // In this case we have a plugin that mutates rules directly
-  await postcss([pluginThatMutatesRules()]).process(firstRun, { from: path.resolve(__filename) })
+  await postcss([pluginThatMutatesRules()]).process(firstRun, {
+    from: path.resolve(__filename),
+  })
 
   // Verify subsequent runs don't produce mutated rules
   let secondRun = await run(css, config)

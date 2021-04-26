@@ -13,6 +13,47 @@
   bottom: 11px;
   left: 11px;
 }
+.col-\[7\] {
+  grid-column: 7;
+}
+.col-start-\[7\] {
+  grid-column-start: 7;
+}
+.col-end-\[7\] {
+  grid-column-end: 7;
+}
+.row-\[7\] {
+  grid-row: 7;
+}
+.row-start-\[7\] {
+  grid-row-start: 7;
+}
+.row-end-\[7\] {
+  grid-row-end: 7;
+}
+.m-\[7px\] {
+  margin: 7px;
+}
+.mx-\[7px\] {
+  margin-left: 7px;
+  margin-right: 7px;
+}
+.my-\[7px\] {
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+.mt-\[7px\] {
+  margin-top: 7px;
+}
+.mr-\[7px\] {
+  margin-right: 7px;
+}
+.mb-\[7px\] {
+  margin-bottom: 7px;
+}
+.ml-\[7px\] {
+  margin-left: 7px;
+}
 .mt-\[clamp\(30px\2c 100px\)\] {
   margin-top: clamp(30px, 100px);
 }
@@ -91,8 +132,17 @@
 .rotate-\[1\.5turn\] {
   --tw-rotate: 1.5turn;
 }
+.skew-x-\[3px\] {
+  --tw-skew-x: 3px;
+}
+.skew-y-\[3px\] {
+  --tw-skew-y: 3px;
+}
 .grid-cols-\[200px\2c repeat\(auto-fill\2c minmax\(15\%\2c 100px\)\)\2c 300px\] {
   grid-template-columns: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
+}
+.grid-rows-\[200px\2c repeat\(auto-fill\2c minmax\(15\%\2c 100px\)\)\2c 300px\] {
+  grid-template-rows: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
 }
 .space-x-\[20cm\] > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;

@@ -4,13 +4,16 @@ const fs = require('fs')
 const path = require('path')
 
 function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, { from: path.resolve(__filename) })
+  return postcss(tailwind(config)).process(input, {
+    from: path.resolve(__filename),
+  })
 }
 
 test('important selector', () => {
   let config = {
     important: '#app',
     darkMode: 'class',
+    mode: 'jit',
     purge: [path.resolve(__dirname, './important-selector.test.html')],
     corePlugins: { preflight: false },
     theme: {},

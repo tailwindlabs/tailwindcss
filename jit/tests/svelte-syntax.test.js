@@ -4,12 +4,15 @@ const fs = require('fs')
 const path = require('path')
 
 function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, { from: path.resolve(__filename) })
+  return postcss(tailwind(config)).process(input, {
+    from: path.resolve(__filename),
+  })
 }
 
 test('basic usage', () => {
   let config = {
     purge: [path.resolve(__dirname, './svelte-syntax.test.svelte')],
+    mode: 'jit',
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],
