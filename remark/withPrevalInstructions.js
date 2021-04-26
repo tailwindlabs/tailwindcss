@@ -200,7 +200,6 @@ function createPrevals({ tool: pageTool = error('UNKNOWN') } = {}) {
         latest: ['tailwindcss@latest', 'postcss@latest', 'autoprefixer@latest'],
         'compat-7': [
           'tailwindcss@npm:@tailwindcss/postcss7-compat',
-          '@tailwindcss/postcss7-compat',
           'postcss@^7',
           'autoprefixer@^9',
         ],
