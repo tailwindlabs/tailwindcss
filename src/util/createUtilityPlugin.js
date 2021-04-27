@@ -28,7 +28,7 @@ export default function createUtilityPlugin(
 
                 return {
                   [nameClass(classPrefix, modifier)]: properties.reduce(
-                    (obj, name) => Object.assign(obj, { [name]: value }),
+                    (obj, name) => Object.assign(obj, { [name]: transformValue(value) }),
                     {}
                   ),
                 }

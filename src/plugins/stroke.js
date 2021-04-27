@@ -1,18 +1,34 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
-import nameClass from '../util/nameClass'
 import toColorValue from '../util/toColorValue'
+const { asColor, nameClass } = require('../../jit/pluginUtils')
 
 export default function () {
-  return function ({ addUtilities, theme, variants }) {
-    const colors = flattenColorPalette(theme('stroke'))
+  return function ({ config, matchUtilities, addUtilities, theme, variants }) {
+    if (config('mode') === 'jit') {
+      let colorPalette = flattenColorPalette(theme('stroke'))
 
-    const utilities = _.fromPairs(
-      _.map(colors, (value, modifier) => {
-        return [nameClass('stroke', modifier), { stroke: toColorValue(value) }]
+      matchUtilities({
+        stroke: (modifier) => {
+          let value = asColor(modifier, colorPalette)
+
+          if (value === undefined) {
+            return []
+          }
+
+          return { [nameClass('stroke', modifier)]: { stroke: toColorValue(value) } }
+        },
       })
-    )
+    } else {
+      const colors = flattenColorPalette(theme('stroke'))
 
-    addUtilities(utilities, variants('stroke'))
+      const utilities = _.fromPairs(
+        _.map(colors, (value, modifier) => {
+          return [nameClass('stroke', modifier), { stroke: toColorValue(value) }]
+        })
+      )
+
+      addUtilities(utilities, variants('stroke'))
+    }
   }
 }

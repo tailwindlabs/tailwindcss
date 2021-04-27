@@ -154,6 +154,37 @@
   margin-right: calc(calc(20% - 1cm) * var(--tw-space-x-reverse));
   margin-left: calc(calc(20% - 1cm) * calc(1 - var(--tw-space-x-reverse)));
 }
+.rounded-\[11px\] {
+  border-radius: 11px;
+}
+.rounded-t-\[var\(--radius\)\] {
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+}
+.rounded-r-\[var\(--radius\)\] {
+  border-top-right-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+}
+.rounded-b-\[var\(--radius\)\] {
+  border-bottom-right-radius: var(--radius);
+  border-bottom-left-radius: var(--radius);
+}
+.rounded-l-\[var\(--radius\)\] {
+  border-top-left-radius: var(--radius);
+  border-bottom-left-radius: var(--radius);
+}
+.rounded-tr-\[var\(--radius\)\] {
+  border-top-right-radius: var(--radius);
+}
+.rounded-br-\[var\(--radius\)\] {
+  border-bottom-right-radius: var(--radius);
+}
+.rounded-bl-\[var\(--radius\)\] {
+  border-bottom-left-radius: var(--radius);
+}
+.rounded-tl-\[var\(--radius\)\] {
+  border-top-left-radius: var(--radius);
+}
 .border-\[2\.5px\] {
   border-width: 2.5px;
 }
@@ -189,11 +220,48 @@
 .bg-opacity-\[0\.11\] {
   --tw-bg-opacity: 0.11;
 }
+.bg-opacity-\[var\(--value\)\] {
+  --tw-bg-opacity: var(--value);
+}
+.from-\[\#da5b66\] {
+  --tw-gradient-from: #da5b66;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(218, 91, 102, 0));
+}
+.from-\[var\(--color\)\] {
+  --tw-gradient-from: var(--color);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+.via-\[\#da5b66\] {
+  --tw-gradient-stops: var(--tw-gradient-from), #da5b66,
+    var(--tw-gradient-to, rgba(218, 91, 102, 0));
+}
+.via-\[var\(--color\)\] {
+  --tw-gradient-stops: var(--tw-gradient-from), var(--color),
+    var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+.to-\[\#da5b66\] {
+  --tw-gradient-to: #da5b66;
+}
+.to-\[var\(--color\)\] {
+  --tw-gradient-to: var(--color);
+}
+.fill-\[\#da5b66\] {
+  fill: #da5b66;
+}
+.fill-\[var\(--color\)\] {
+  fill: var(--color);
+}
+.stroke-\[\#da5b66\] {
+  stroke: #da5b66;
+}
 .p-\[var\(--app-padding\)\] {
   padding: var(--app-padding);
 }
 .text-\[2\.23rem\] {
   font-size: 2.23rem;
+}
+.leading-\[var\(--leading\)\] {
+  line-height: var(--leading);
 }
 .blur-\[15px\] {
   --tw-blur: blur(15px);

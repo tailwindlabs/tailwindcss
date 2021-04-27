@@ -1,36 +1,80 @@
 import _ from 'lodash'
-import nameClass from '../util/nameClass'
+const { asLength, nameClass } = require('../../jit/pluginUtils')
+const { isPlainObject } = require('../../jit/lib/utils')
 
 export default function () {
-  return function ({ addUtilities, theme, variants }) {
-    const utilities = _.fromPairs(
-      _.map(theme('fontSize'), (value, modifier) => {
-        const [fontSize, options] = Array.isArray(value) ? value : [value]
-        const { lineHeight, letterSpacing } = _.isPlainObject(options)
-          ? options
-          : {
-              lineHeight: options,
-            }
+  return function ({ config, matchUtilities, addUtilities, theme, variants }) {
+    if (config('mode') === 'jit') {
+      matchUtilities({
+        text: (modifier, { theme }) => {
+          let value = theme.fontSize[modifier]
 
-        return [
-          nameClass('text', modifier),
-          {
-            'font-size': fontSize,
-            ...(lineHeight === undefined
-              ? {}
+          if (value === undefined) {
+            value = asLength(modifier, {})
+
+            return value === undefined
+              ? []
               : {
-                  'line-height': lineHeight,
-                }),
-            ...(letterSpacing === undefined
-              ? {}
-              : {
-                  'letter-spacing': letterSpacing,
-                }),
-          },
-        ]
+                  [nameClass('text', modifier)]: {
+                    'font-size': value,
+                  },
+                }
+          }
+
+          let [fontSize, options] = Array.isArray(value) ? value : [value]
+          let { lineHeight, letterSpacing } = isPlainObject(options)
+            ? options
+            : {
+                lineHeight: options,
+              }
+
+          return {
+            [nameClass('text', modifier)]: {
+              'font-size': fontSize,
+              ...(lineHeight === undefined
+                ? {}
+                : {
+                    'line-height': lineHeight,
+                  }),
+              ...(letterSpacing === undefined
+                ? {}
+                : {
+                    'letter-spacing': letterSpacing,
+                  }),
+            },
+          }
+        },
       })
-    )
+    } else {
+      const utilities = _.fromPairs(
+        _.map(theme('fontSize'), (value, modifier) => {
+          const [fontSize, options] = Array.isArray(value) ? value : [value]
+          const { lineHeight, letterSpacing } = _.isPlainObject(options)
+            ? options
+            : {
+                lineHeight: options,
+              }
 
-    addUtilities(utilities, variants('fontSize'))
+          return [
+            nameClass('text', modifier),
+            {
+              'font-size': fontSize,
+              ...(lineHeight === undefined
+                ? {}
+                : {
+                    'line-height': lineHeight,
+                  }),
+              ...(letterSpacing === undefined
+                ? {}
+                : {
+                    'letter-spacing': letterSpacing,
+                  }),
+            },
+          ]
+        })
+      )
+
+      addUtilities(utilities, variants('fontSize'))
+    }
   }
 }

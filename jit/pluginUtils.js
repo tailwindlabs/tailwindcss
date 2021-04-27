@@ -202,4 +202,7 @@ module.exports = {
       lookup
     )
   },
+  asLookupValue(modifier, lookup = {}) {
+    return lookup[modifier]
+  },
 }
