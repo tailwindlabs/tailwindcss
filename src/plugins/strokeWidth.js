@@ -1,5 +1,5 @@
 import createUtilityPlugin from '../util/createUtilityPlugin'
-const { asLength } = require('../../jit/pluginUtils')
+import { asLength } from '../jit/pluginUtils'
 
 export default function () {
   return createUtilityPlugin('strokeWidth', [['stroke', ['stroke-width']]], {

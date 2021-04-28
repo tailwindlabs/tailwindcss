@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import transformThemeValue from '../util/transformThemeValue'
-const { nameClass } = require('../../jit/pluginUtils')
+import { nameClass } from '../jit/pluginUtils'
 
 let transformValue = transformThemeValue('boxShadow')
 let shadowReset = {

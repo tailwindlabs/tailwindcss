@@ -1,4 +1,4 @@
-const { asLength } = require('../../jit/pluginUtils')
+import { asLength } from '../jit/pluginUtils'
 import createUtilityPlugin from '../util/createUtilityPlugin'
 
 export default function () {

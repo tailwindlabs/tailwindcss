@@ -2,8 +2,7 @@ import fromPairs from 'lodash/fromPairs'
 import toPairs from 'lodash/toPairs'
 import castArray from 'lodash/castArray'
 import transformThemeValue from './transformThemeValue'
-
-const { asValue, nameClass } = require('../../jit/pluginUtils')
+import { asValue, nameClass } from '../jit/pluginUtils'
 
 export default function createUtilityPlugin(
   themeKey,

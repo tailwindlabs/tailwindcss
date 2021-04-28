@@ -1,6 +1,6 @@
 import _ from 'lodash'
-const { asLength, nameClass } = require('../../jit/pluginUtils')
-const { isPlainObject } = require('../../jit/lib/utils')
+import { asLength, nameClass } from '../jit/pluginUtils'
+import { isPlainObject } from '../jit/lib/utils'
 
 export default function () {
   return function ({ config, matchUtilities, addUtilities, theme, variants }) {

@@ -2,7 +2,7 @@ import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
 import toColorValue from '../util/toColorValue'
 import withAlphaVariable from '../util/withAlphaVariable'
-const { nameClass, asColor } = require('../../jit/pluginUtils')
+import { nameClass, asColor } from '../jit/pluginUtils'
 
 export default function () {
   return function ({ config, matchUtilities, addUtilities, theme, variants, corePlugins }) {

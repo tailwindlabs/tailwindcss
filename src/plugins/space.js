@@ -1,5 +1,5 @@
 import _ from 'lodash'
-const { nameClass, asValue } = require('../../jit/pluginUtils')
+import { nameClass, asValue } from '../jit/pluginUtils'
 
 export default function () {
   return function ({ config, matchUtilities, addUtilities, theme, variants }) {

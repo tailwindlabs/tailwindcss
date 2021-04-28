@@ -13,6 +13,8 @@ import { supportedConfigFiles } from './constants'
 import defaultConfig from '../stubs/defaultConfig.stub.js'
 import log from './util/log'
 
+import jitPlugins from './jit'
+
 function resolveConfigPath(filePath) {
   // require('tailwindcss')({ theme: ..., variants: ... })
   if (_.isObject(filePath) && !_.has(filePath, 'config') && !_.isEmpty(filePath)) {
@@ -83,7 +85,7 @@ module.exports = function (config) {
 
     return {
       postcssPlugin: 'tailwindcss',
-      plugins: require('../jit/index.js')(config),
+      plugins: jitPlugins(config),
     }
   }
 

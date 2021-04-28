@@ -1,5 +1,5 @@
 import createUtilityPlugin from '../util/createUtilityPlugin'
-const { asLookupValue } = require('../../jit/pluginUtils')
+import { asLookupValue } from '../jit/pluginUtils'
 
 export default function () {
   return createUtilityPlugin('backgroundSize', [['bg', ['background-size']]], {

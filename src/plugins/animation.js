@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import parseAnimationValue from '../util/parseAnimationValue'
-const { nameClass } = require('../../jit/pluginUtils')
+import { nameClass } from '../jit/pluginUtils'
 
 export default function () {
   return function ({ config, matchUtilities, addUtilities, theme, variants, prefix }) {

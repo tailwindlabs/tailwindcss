@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
 import toColorValue from '../util/toColorValue'
-const { asColor, nameClass } = require('../../jit/pluginUtils')
+import { asColor, nameClass } from '../jit/pluginUtils'
 
 export default function () {
   return function ({ config, matchUtilities, addUtilities, theme, variants }) {
