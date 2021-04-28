@@ -1,4 +1,3 @@
-import { configs } from 'eslint-plugin-prettier'
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
 import withAlphaVariable from '../util/withAlphaVariable'
