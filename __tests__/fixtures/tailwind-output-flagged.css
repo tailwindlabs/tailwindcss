@@ -22070,10 +22070,6 @@ video {
   --tw-ring-opacity: 1;
 }
 
-.ring-opacity {
-  --tw-ring-opacity: 0.5;
-}
-
 .focus-within\:ring-opacity-0:focus-within {
   --tw-ring-opacity: 0;
 }
@@ -22134,10 +22130,6 @@ video {
   --tw-ring-opacity: 1;
 }
 
-.focus-within\:ring-opacity:focus-within {
-  --tw-ring-opacity: 0.5;
-}
-
 .focus\:ring-opacity-0:focus {
   --tw-ring-opacity: 0;
 }
@@ -22196,10 +22188,6 @@ video {
 
 .focus\:ring-opacity-100:focus {
   --tw-ring-opacity: 1;
-}
-
-.focus\:ring-opacity:focus {
-  --tw-ring-opacity: 0.5;
 }
 
 .fill-current {
@@ -24753,39 +24741,39 @@ video {
   font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction);
 }
 
-normal-nums .normal-nums {
+.normal-nums {
   font-variant-numeric: normal;
 }
 
-ordinal .ordinal {
+.ordinal {
   --tw-ordinal: ordinal;
 }
 
-slashed-zero .slashed-zero {
+.slashed-zero {
   --tw-slashed-zero: slashed-zero;
 }
 
-lining-nums .lining-nums {
+.lining-nums {
   --tw-numeric-figure: lining-nums;
 }
 
-oldstyle-nums .oldstyle-nums {
+.oldstyle-nums {
   --tw-numeric-figure: oldstyle-nums;
 }
 
-proportional-nums .proportional-nums {
+.proportional-nums {
   --tw-numeric-spacing: proportional-nums;
 }
 
-tabular-nums .tabular-nums {
+.tabular-nums {
   --tw-numeric-spacing: tabular-nums;
 }
 
-diagonal-fractions .diagonal-fractions {
+.diagonal-fractions {
   --tw-numeric-fraction: diagonal-fractions;
 }
 
-stacked-fractions .stacked-fractions {
+.stacked-fractions {
   --tw-numeric-fraction: stacked-fractions;
 }
 
@@ -29038,10 +29026,6 @@ stacked-fractions .stacked-fractions {
   transition-duration: 150ms;
 }
 
-.ease {
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 .ease-linear {
   transition-timing-function: linear;
 }
@@ -29088,10 +29072,6 @@ stacked-fractions .stacked-fractions {
 
 .duration-1000 {
   transition-duration: 1000ms;
-}
-
-.duration {
-  transition-duration: 150ms;
 }
 
 .delay-75 {
@@ -51335,10 +51315,6 @@ stacked-fractions .stacked-fractions {
     --tw-ring-opacity: 1;
   }
 
-  .sm\:ring-opacity {
-    --tw-ring-opacity: 0.5;
-  }
-
   .sm\:focus-within\:ring-opacity-0:focus-within {
     --tw-ring-opacity: 0;
   }
@@ -51399,10 +51375,6 @@ stacked-fractions .stacked-fractions {
     --tw-ring-opacity: 1;
   }
 
-  .sm\:focus-within\:ring-opacity:focus-within {
-    --tw-ring-opacity: 0.5;
-  }
-
   .sm\:focus\:ring-opacity-0:focus {
     --tw-ring-opacity: 0;
   }
@@ -51461,10 +51433,6 @@ stacked-fractions .stacked-fractions {
 
   .sm\:focus\:ring-opacity-100:focus {
     --tw-ring-opacity: 1;
-  }
-
-  .sm\:focus\:ring-opacity:focus {
-    --tw-ring-opacity: 0.5;
   }
 
   .sm\:fill-current {
@@ -54018,39 +53986,39 @@ stacked-fractions .stacked-fractions {
     font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction);
   }
 
-  normal-nums .sm\:normal-nums {
+  .sm\:normal-nums {
     font-variant-numeric: normal;
   }
 
-  ordinal .sm\:ordinal {
+  .sm\:ordinal {
     --tw-ordinal: ordinal;
   }
 
-  slashed-zero .sm\:slashed-zero {
+  .sm\:slashed-zero {
     --tw-slashed-zero: slashed-zero;
   }
 
-  lining-nums .sm\:lining-nums {
+  .sm\:lining-nums {
     --tw-numeric-figure: lining-nums;
   }
 
-  oldstyle-nums .sm\:oldstyle-nums {
+  .sm\:oldstyle-nums {
     --tw-numeric-figure: oldstyle-nums;
   }
 
-  proportional-nums .sm\:proportional-nums {
+  .sm\:proportional-nums {
     --tw-numeric-spacing: proportional-nums;
   }
 
-  tabular-nums .sm\:tabular-nums {
+  .sm\:tabular-nums {
     --tw-numeric-spacing: tabular-nums;
   }
 
-  diagonal-fractions .sm\:diagonal-fractions {
+  .sm\:diagonal-fractions {
     --tw-numeric-fraction: diagonal-fractions;
   }
 
-  stacked-fractions .sm\:stacked-fractions {
+  .sm\:stacked-fractions {
     --tw-numeric-fraction: stacked-fractions;
   }
 
@@ -58303,10 +58271,6 @@ stacked-fractions .stacked-fractions {
     transition-duration: 150ms;
   }
 
-  .sm\:ease {
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
   .sm\:ease-linear {
     transition-timing-function: linear;
   }
@@ -58353,10 +58317,6 @@ stacked-fractions .stacked-fractions {
 
   .sm\:duration-1000 {
     transition-duration: 1000ms;
-  }
-
-  .sm\:duration {
-    transition-duration: 150ms;
   }
 
   .sm\:delay-75 {
@@ -80478,10 +80438,6 @@ stacked-fractions .stacked-fractions {
     --tw-ring-opacity: 1;
   }
 
-  .md\:ring-opacity {
-    --tw-ring-opacity: 0.5;
-  }
-
   .md\:focus-within\:ring-opacity-0:focus-within {
     --tw-ring-opacity: 0;
   }
@@ -80542,10 +80498,6 @@ stacked-fractions .stacked-fractions {
     --tw-ring-opacity: 1;
   }
 
-  .md\:focus-within\:ring-opacity:focus-within {
-    --tw-ring-opacity: 0.5;
-  }
-
   .md\:focus\:ring-opacity-0:focus {
     --tw-ring-opacity: 0;
   }
@@ -80604,10 +80556,6 @@ stacked-fractions .stacked-fractions {
 
   .md\:focus\:ring-opacity-100:focus {
     --tw-ring-opacity: 1;
-  }
-
-  .md\:focus\:ring-opacity:focus {
-    --tw-ring-opacity: 0.5;
   }
 
   .md\:fill-current {
@@ -83161,39 +83109,39 @@ stacked-fractions .stacked-fractions {
     font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction);
   }
 
-  normal-nums .md\:normal-nums {
+  .md\:normal-nums {
     font-variant-numeric: normal;
   }
 
-  ordinal .md\:ordinal {
+  .md\:ordinal {
     --tw-ordinal: ordinal;
   }
 
-  slashed-zero .md\:slashed-zero {
+  .md\:slashed-zero {
     --tw-slashed-zero: slashed-zero;
   }
 
-  lining-nums .md\:lining-nums {
+  .md\:lining-nums {
     --tw-numeric-figure: lining-nums;
   }
 
-  oldstyle-nums .md\:oldstyle-nums {
+  .md\:oldstyle-nums {
     --tw-numeric-figure: oldstyle-nums;
   }
 
-  proportional-nums .md\:proportional-nums {
+  .md\:proportional-nums {
     --tw-numeric-spacing: proportional-nums;
   }
 
-  tabular-nums .md\:tabular-nums {
+  .md\:tabular-nums {
     --tw-numeric-spacing: tabular-nums;
   }
 
-  diagonal-fractions .md\:diagonal-fractions {
+  .md\:diagonal-fractions {
     --tw-numeric-fraction: diagonal-fractions;
   }
 
-  stacked-fractions .md\:stacked-fractions {
+  .md\:stacked-fractions {
     --tw-numeric-fraction: stacked-fractions;
   }
 
@@ -87446,10 +87394,6 @@ stacked-fractions .stacked-fractions {
     transition-duration: 150ms;
   }
 
-  .md\:ease {
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
   .md\:ease-linear {
     transition-timing-function: linear;
   }
@@ -87496,10 +87440,6 @@ stacked-fractions .stacked-fractions {
 
   .md\:duration-1000 {
     transition-duration: 1000ms;
-  }
-
-  .md\:duration {
-    transition-duration: 150ms;
   }
 
   .md\:delay-75 {
@@ -109621,10 +109561,6 @@ stacked-fractions .stacked-fractions {
     --tw-ring-opacity: 1;
   }
 
-  .lg\:ring-opacity {
-    --tw-ring-opacity: 0.5;
-  }
-
   .lg\:focus-within\:ring-opacity-0:focus-within {
     --tw-ring-opacity: 0;
   }
@@ -109685,10 +109621,6 @@ stacked-fractions .stacked-fractions {
     --tw-ring-opacity: 1;
   }
 
-  .lg\:focus-within\:ring-opacity:focus-within {
-    --tw-ring-opacity: 0.5;
-  }
-
   .lg\:focus\:ring-opacity-0:focus {
     --tw-ring-opacity: 0;
   }
@@ -109747,10 +109679,6 @@ stacked-fractions .stacked-fractions {
 
   .lg\:focus\:ring-opacity-100:focus {
     --tw-ring-opacity: 1;
-  }
-
-  .lg\:focus\:ring-opacity:focus {
-    --tw-ring-opacity: 0.5;
   }
 
   .lg\:fill-current {
@@ -112304,39 +112232,39 @@ stacked-fractions .stacked-fractions {
     font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction);
   }
 
-  normal-nums .lg\:normal-nums {
+  .lg\:normal-nums {
     font-variant-numeric: normal;
   }
 
-  ordinal .lg\:ordinal {
+  .lg\:ordinal {
     --tw-ordinal: ordinal;
   }
 
-  slashed-zero .lg\:slashed-zero {
+  .lg\:slashed-zero {
     --tw-slashed-zero: slashed-zero;
   }
 
-  lining-nums .lg\:lining-nums {
+  .lg\:lining-nums {
     --tw-numeric-figure: lining-nums;
   }
 
-  oldstyle-nums .lg\:oldstyle-nums {
+  .lg\:oldstyle-nums {
     --tw-numeric-figure: oldstyle-nums;
   }
 
-  proportional-nums .lg\:proportional-nums {
+  .lg\:proportional-nums {
     --tw-numeric-spacing: proportional-nums;
   }
 
-  tabular-nums .lg\:tabular-nums {
+  .lg\:tabular-nums {
     --tw-numeric-spacing: tabular-nums;
   }
 
-  diagonal-fractions .lg\:diagonal-fractions {
+  .lg\:diagonal-fractions {
     --tw-numeric-fraction: diagonal-fractions;
   }
 
-  stacked-fractions .lg\:stacked-fractions {
+  .lg\:stacked-fractions {
     --tw-numeric-fraction: stacked-fractions;
   }
 
@@ -116589,10 +116517,6 @@ stacked-fractions .stacked-fractions {
     transition-duration: 150ms;
   }
 
-  .lg\:ease {
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
   .lg\:ease-linear {
     transition-timing-function: linear;
   }
@@ -116639,10 +116563,6 @@ stacked-fractions .stacked-fractions {
 
   .lg\:duration-1000 {
     transition-duration: 1000ms;
-  }
-
-  .lg\:duration {
-    transition-duration: 150ms;
   }
 
   .lg\:delay-75 {
@@ -138764,10 +138684,6 @@ stacked-fractions .stacked-fractions {
     --tw-ring-opacity: 1;
   }
 
-  .xl\:ring-opacity {
-    --tw-ring-opacity: 0.5;
-  }
-
   .xl\:focus-within\:ring-opacity-0:focus-within {
     --tw-ring-opacity: 0;
   }
@@ -138828,10 +138744,6 @@ stacked-fractions .stacked-fractions {
     --tw-ring-opacity: 1;
   }
 
-  .xl\:focus-within\:ring-opacity:focus-within {
-    --tw-ring-opacity: 0.5;
-  }
-
   .xl\:focus\:ring-opacity-0:focus {
     --tw-ring-opacity: 0;
   }
@@ -138890,10 +138802,6 @@ stacked-fractions .stacked-fractions {
 
   .xl\:focus\:ring-opacity-100:focus {
     --tw-ring-opacity: 1;
-  }
-
-  .xl\:focus\:ring-opacity:focus {
-    --tw-ring-opacity: 0.5;
   }
 
   .xl\:fill-current {
@@ -141447,39 +141355,39 @@ stacked-fractions .stacked-fractions {
     font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction);
   }
 
-  normal-nums .xl\:normal-nums {
+  .xl\:normal-nums {
     font-variant-numeric: normal;
   }
 
-  ordinal .xl\:ordinal {
+  .xl\:ordinal {
     --tw-ordinal: ordinal;
   }
 
-  slashed-zero .xl\:slashed-zero {
+  .xl\:slashed-zero {
     --tw-slashed-zero: slashed-zero;
   }
 
-  lining-nums .xl\:lining-nums {
+  .xl\:lining-nums {
     --tw-numeric-figure: lining-nums;
   }
 
-  oldstyle-nums .xl\:oldstyle-nums {
+  .xl\:oldstyle-nums {
     --tw-numeric-figure: oldstyle-nums;
   }
 
-  proportional-nums .xl\:proportional-nums {
+  .xl\:proportional-nums {
     --tw-numeric-spacing: proportional-nums;
   }
 
-  tabular-nums .xl\:tabular-nums {
+  .xl\:tabular-nums {
     --tw-numeric-spacing: tabular-nums;
   }
 
-  diagonal-fractions .xl\:diagonal-fractions {
+  .xl\:diagonal-fractions {
     --tw-numeric-fraction: diagonal-fractions;
   }
 
-  stacked-fractions .xl\:stacked-fractions {
+  .xl\:stacked-fractions {
     --tw-numeric-fraction: stacked-fractions;
   }
 
@@ -145732,10 +145640,6 @@ stacked-fractions .stacked-fractions {
     transition-duration: 150ms;
   }
 
-  .xl\:ease {
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
   .xl\:ease-linear {
     transition-timing-function: linear;
   }
@@ -145782,10 +145686,6 @@ stacked-fractions .stacked-fractions {
 
   .xl\:duration-1000 {
     transition-duration: 1000ms;
-  }
-
-  .xl\:duration {
-    transition-duration: 150ms;
   }
 
   .xl\:delay-75 {
@@ -167907,10 +167807,6 @@ stacked-fractions .stacked-fractions {
     --tw-ring-opacity: 1;
   }
 
-  .\32xl\:ring-opacity {
-    --tw-ring-opacity: 0.5;
-  }
-
   .\32xl\:focus-within\:ring-opacity-0:focus-within {
     --tw-ring-opacity: 0;
   }
@@ -167971,10 +167867,6 @@ stacked-fractions .stacked-fractions {
     --tw-ring-opacity: 1;
   }
 
-  .\32xl\:focus-within\:ring-opacity:focus-within {
-    --tw-ring-opacity: 0.5;
-  }
-
   .\32xl\:focus\:ring-opacity-0:focus {
     --tw-ring-opacity: 0;
   }
@@ -168033,10 +167925,6 @@ stacked-fractions .stacked-fractions {
 
   .\32xl\:focus\:ring-opacity-100:focus {
     --tw-ring-opacity: 1;
-  }
-
-  .\32xl\:focus\:ring-opacity:focus {
-    --tw-ring-opacity: 0.5;
   }
 
   .\32xl\:fill-current {
@@ -170590,39 +170478,39 @@ stacked-fractions .stacked-fractions {
     font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction);
   }
 
-  normal-nums .\32xl\:normal-nums {
+  .\32xl\:normal-nums {
     font-variant-numeric: normal;
   }
 
-  ordinal .\32xl\:ordinal {
+  .\32xl\:ordinal {
     --tw-ordinal: ordinal;
   }
 
-  slashed-zero .\32xl\:slashed-zero {
+  .\32xl\:slashed-zero {
     --tw-slashed-zero: slashed-zero;
   }
 
-  lining-nums .\32xl\:lining-nums {
+  .\32xl\:lining-nums {
     --tw-numeric-figure: lining-nums;
   }
 
-  oldstyle-nums .\32xl\:oldstyle-nums {
+  .\32xl\:oldstyle-nums {
     --tw-numeric-figure: oldstyle-nums;
   }
 
-  proportional-nums .\32xl\:proportional-nums {
+  .\32xl\:proportional-nums {
     --tw-numeric-spacing: proportional-nums;
   }
 
-  tabular-nums .\32xl\:tabular-nums {
+  .\32xl\:tabular-nums {
     --tw-numeric-spacing: tabular-nums;
   }
 
-  diagonal-fractions .\32xl\:diagonal-fractions {
+  .\32xl\:diagonal-fractions {
     --tw-numeric-fraction: diagonal-fractions;
   }
 
-  stacked-fractions .\32xl\:stacked-fractions {
+  .\32xl\:stacked-fractions {
     --tw-numeric-fraction: stacked-fractions;
   }
 
@@ -174875,10 +174763,6 @@ stacked-fractions .stacked-fractions {
     transition-duration: 150ms;
   }
 
-  .\32xl\:ease {
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
   .\32xl\:ease-linear {
     transition-timing-function: linear;
   }
@@ -174925,10 +174809,6 @@ stacked-fractions .stacked-fractions {
 
   .\32xl\:duration-1000 {
     transition-duration: 1000ms;
-  }
-
-  .\32xl\:duration {
-    transition-duration: 150ms;
   }
 
   .\32xl\:delay-75 {
