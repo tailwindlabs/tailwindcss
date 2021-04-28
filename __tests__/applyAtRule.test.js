@@ -612,10 +612,10 @@ test('you can apply complex classes recursively', () => {
 
     .button {
       border-radius: 0.75rem;
-      padding-top: 0.5rem;
-      padding-bottom: 0.5rem;
       padding-left: 1.5rem;
       padding-right: 1.5rem;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
     }
 
     .button:hover {
@@ -636,10 +636,10 @@ test('you can apply complex classes recursively', () => {
 
     .button-yellow {
       border-radius: 0.75rem;
-      padding-top: 0.5rem;
-      padding-bottom: 0.5rem;
       padding-left: 1.5rem;
       padding-right: 1.5rem;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
     }
 
     .button-yellow:hover {

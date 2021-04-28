@@ -263,6 +263,45 @@
 .leading-\[var\(--leading\)\] {
   line-height: var(--leading);
 }
+.tracking-\[var\(--tracking\)\] {
+  letter-spacing: var(--tracking);
+}
+.placeholder-\[var\(--placeholder\)\]::placeholder {
+  color: var(--placeholder);
+}
+.placeholder-opacity-\[var\(--placeholder-opacity\)\]::placeholder {
+  --tw-placeholder-opacity: var(--placeholder-opacity);
+}
+.opacity-\[var\(--opacity\)\] {
+  opacity: var(--opacity);
+}
+.outline-\[var\(--outline\)\] {
+  outline: var(--outline);
+  outline-offset: 0;
+}
+.ring-\[10px\] {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+    var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(10px + var(--tw-ring-offset-width))
+    var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+.ring-\[\#76ad65\] {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgba(118, 173, 101, var(--tw-ring-opacity));
+}
+.ring-opacity-\[var\(--ring-opacity\)\] {
+  --tw-ring-opacity: var(--ring-opacity);
+}
+.ring-offset-\[19rem\] {
+  --tw-ring-offset-width: 19rem;
+}
+.ring-offset-\[\#76ad65\] {
+  --tw-ring-offset-color: #76ad65;
+}
+.ring-offset-\[\#ad672f\] {
+  --tw-ring-offset-color: #ad672f;
+}
 .blur-\[15px\] {
   --tw-blur: blur(15px);
 }
@@ -313,6 +352,9 @@
 }
 .backdrop-sepia-\[0\.38\] {
   --tw-backdrop-sepia: sepia(0.38);
+}
+.delay-\[var\(--delay\)\] {
+  transition-delay: var(--delay);
 }
 .duration-\[2s\] {
   transition-duration: 2s;
