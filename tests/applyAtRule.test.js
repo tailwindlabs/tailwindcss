@@ -50,9 +50,9 @@ test('apply values can contain newlines', () => {
 
   const expected = `
     .a {
+      margin: 1rem;
       display: flex;
       flex-direction: column;
-      margin: 1rem;
       padding: 1rem;
     }
   `
@@ -606,12 +606,15 @@ test('you can apply complex classes recursively', () => {
   `
 
   const expected = `
+    .button {
+      border-radius: 0.75rem;
+    }
+
     .button:focus {
       --tw-border-opacity: 1;
     }
 
     .button {
-      border-radius: 0.75rem;
       padding-left: 1.5rem;
       padding-right: 1.5rem;
       padding-top: 0.5rem;
@@ -628,6 +631,7 @@ test('you can apply complex classes recursively', () => {
       background-color: rgba(217, 119, 6, var(--tw-bg-opacity));
       --tw-text-opacity: 1;
       color: rgba(229, 231, 235, var(--tw-text-opacity));
+      border-radius: 0.75rem;
     }
 
     .button-yellow:focus {
@@ -635,7 +639,6 @@ test('you can apply complex classes recursively', () => {
     }
 
     .button-yellow {
-      border-radius: 0.75rem;
       padding-left: 1.5rem;
       padding-right: 1.5rem;
       padding-top: 0.5rem;
@@ -699,13 +702,11 @@ test('applied classes are always inserted before subsequent declarations in the 
   const expected = `
     .foo {
       background: blue;
+      text-align: right;
       opacity: 0.5;
     }
     .foo:hover {
       opacity: 1;
-    }
-    .foo {
-      text-align: right;
     }
     @media (min-width: 640px) {
       .foo {
@@ -732,14 +733,18 @@ test('adjacent rules are collapsed after being applied', () => {
     }
   `
   const expected = `
+    .foo {
+      position: absolute;
+    }
     .foo:hover {
       --tw-bg-opacity: 1;
       background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
-      opacity: 0.5;
     }
     .foo {
-      position: absolute;
       text-align: right;
+    }
+    .foo:hover {
+      opacity: 0.5;
     }
     @media (min-width: 640px) {
       .foo {
@@ -819,12 +824,10 @@ test('you can apply classes to rules within at-rules', () => {
     @supports (display: grid) {
       .baz .bar {
         float: left;
+        text-align: right;
       }
       .baz .bar:hover {
         opacity: 0.5;
-      }
-      .baz .bar {
-        text-align: right;
       }
       @media (min-width: 768px) {
         .baz .bar {
