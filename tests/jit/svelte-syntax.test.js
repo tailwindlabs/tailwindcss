@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../index.js'
+import tailwind from '../../src/jit/index.js'
 
 function run(input, config = {}) {
   return postcss(tailwind(config)).process(input, {
@@ -9,21 +9,23 @@ function run(input, config = {}) {
   })
 }
 
-test('custom separator', () => {
+test('basic usage', () => {
   let config = {
-    darkMode: 'class',
+    purge: [path.resolve(__dirname, './svelte-syntax.test.svelte')],
     mode: 'jit',
-    purge: [path.resolve(__dirname, './custom-separator.test.html')],
-    separator: '_',
-    corePlugins: {},
+    corePlugins: { preflight: false },
     theme: {},
     plugins: [],
   }
 
-  let css = `@tailwind utilities`
+  let css = `
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  `
 
   return run(css, config).then((result) => {
-    let expectedPath = path.resolve(__dirname, './custom-separator.test.css')
+    let expectedPath = path.resolve(__dirname, './svelte-syntax.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
     expect(result.css).toMatchFormattedCss(expected)

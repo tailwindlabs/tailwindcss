@@ -4,7 +4,7 @@ import path from 'path'
 
 function run(input, config = {}) {
   jest.resetModules()
-  const tailwind = require('../index.js').default
+  const tailwind = require('../../src/jit/index.js').default
   return postcss(tailwind(config)).process(input, {
     from: path.resolve(__filename),
   })

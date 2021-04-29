@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../index.js'
+import tailwind from '../../src/jit/index.js'
 import selectorParser from 'postcss-selector-parser'
 
 function run(input, config = {}) {

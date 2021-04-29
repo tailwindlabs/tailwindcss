@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../index.js'
+import tailwind from '../../src/jit/index.js'
 
 function run(input, config = {}) {
   return postcss(tailwind(config)).process(input, {
@@ -9,11 +9,10 @@ function run(input, config = {}) {
   })
 }
 
-test('variants', () => {
+test('basic usage', () => {
   let config = {
-    darkMode: 'class',
     mode: 'jit',
-    purge: [path.resolve(__dirname, './variants.test.html')],
+    purge: [path.resolve(__dirname, './basic-usage.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],
@@ -26,7 +25,7 @@ test('variants', () => {
   `
 
   return run(css, config).then((result) => {
-    let expectedPath = path.resolve(__dirname, './variants.test.css')
+    let expectedPath = path.resolve(__dirname, './basic-usage.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
     expect(result.css).toMatchFormattedCss(expected)

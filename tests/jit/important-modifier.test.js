@@ -1,7 +1,7 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../index.js'
+import tailwind from '../../src/jit/index.js'
 
 function run(input, config = {}) {
   return postcss(tailwind(config)).process(input, {
@@ -9,13 +9,12 @@ function run(input, config = {}) {
   })
 }
 
-test('important modifier with prefix', () => {
+test('important modifier', () => {
   let config = {
     important: false,
-    prefix: 'tw-',
     darkMode: 'class',
     mode: 'jit',
-    purge: [path.resolve(__dirname, './important-modifier-prefix.test.html')],
+    purge: [path.resolve(__dirname, './important-modifier.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],
@@ -28,7 +27,7 @@ test('important modifier with prefix', () => {
   `
 
   return run(css, config).then((result) => {
-    let expectedPath = path.resolve(__dirname, './important-modifier-prefix.test.css')
+    let expectedPath = path.resolve(__dirname, './important-modifier.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
     expect(result.css).toMatchFormattedCss(expected)

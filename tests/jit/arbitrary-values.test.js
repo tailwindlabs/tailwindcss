@@ -1,18 +1,16 @@
 import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
-import tailwind from '../index.js'
+import tailwind from '../../src/jit/index.js'
 
 function run(input, config = {}) {
-  return postcss(tailwind(config)).process(input, {
-    from: path.resolve(__filename),
-  })
+  return postcss(tailwind(config)).process(input, { from: path.resolve(__filename) })
 }
 
-test('basic usage', () => {
+test('arbitrary values', () => {
   let config = {
     mode: 'jit',
-    purge: [path.resolve(__dirname, './basic-usage.test.html')],
+    purge: [path.resolve(__dirname, './arbitrary-values.test.html')],
     corePlugins: { preflight: false },
     theme: {},
     plugins: [],
@@ -25,7 +23,7 @@ test('basic usage', () => {
   `
 
   return run(css, config).then((result) => {
-    let expectedPath = path.resolve(__dirname, './basic-usage.test.css')
+    let expectedPath = path.resolve(__dirname, './arbitrary-values.test.css')
     let expected = fs.readFileSync(expectedPath, 'utf8')
 
     expect(result.css).toMatchFormattedCss(expected)
