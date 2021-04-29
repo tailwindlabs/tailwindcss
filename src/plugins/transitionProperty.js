@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { nameClass } from '../jit/pluginUtils'
+import nameClass from '../util/nameClass'
 
 export default function () {
   return function ({ config, matchUtilities, addUtilities, theme, variants }) {

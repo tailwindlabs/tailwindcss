@@ -1,9 +1,9 @@
 import selectorParser from 'postcss-selector-parser'
 import postcss from 'postcss'
 import createColor from 'color'
-import { nameClass, escapeCommas } from './lib/utils'
+import escapeCommas from './escapeCommas'
 
-function updateAllClasses(selectors, updateClass) {
+export function updateAllClasses(selectors, updateClass) {
   let parser = selectorParser((selectors) => {
     selectors.walkClasses((sel) => {
       let updatedClass = updateClass(sel.value, {
@@ -24,7 +24,7 @@ function updateAllClasses(selectors, updateClass) {
   return result
 }
 
-function updateLastClasses(selectors, updateClass) {
+export function updateLastClasses(selectors, updateClass) {
   let parser = selectorParser((selectors) => {
     selectors.each((sel) => {
       let lastClass = sel.filter(({ type }) => type === 'class').pop()
@@ -50,7 +50,7 @@ function updateLastClasses(selectors, updateClass) {
   return result
 }
 
-function transformAllSelectors(transformSelector, wrap = null) {
+export function transformAllSelectors(transformSelector, wrap = null) {
   return ({ container }) => {
     container.walkRules((rule) => {
       let transformed = rule.selector.split(',').map(transformSelector).join(',')
@@ -66,7 +66,7 @@ function transformAllSelectors(transformSelector, wrap = null) {
   }
 }
 
-function transformAllClasses(transformClass) {
+export function transformAllClasses(transformClass) {
   return ({ container }) => {
     container.walkRules((rule) => {
       let selector = rule.selector
@@ -77,7 +77,7 @@ function transformAllClasses(transformClass) {
   }
 }
 
-function transformLastClasses(transformClass, wrap = null) {
+export function transformLastClasses(transformClass, wrap = null) {
   return ({ container }) => {
     container.walkRules((rule) => {
       let selector = rule.selector
@@ -94,7 +94,11 @@ function transformLastClasses(transformClass, wrap = null) {
   }
 }
 
-function asValue(modifier, lookup = {}, { validate = () => true, transform = (v) => v } = {}) {
+export function asValue(
+  modifier,
+  lookup = {},
+  { validate = () => true, transform = (v) => v } = {}
+) {
   let value = lookup[modifier]
 
   if (value !== undefined) {
@@ -118,7 +122,7 @@ function asValue(modifier, lookup = {}, { validate = () => true, transform = (v)
   )
 }
 
-function asUnit(modifier, units, lookup = {}) {
+export function asUnit(modifier, units, lookup = {}) {
   return asValue(modifier, lookup, {
     validate: (value) => {
       let unitsPattern = `(?:${units.join('|')})`
@@ -132,14 +136,6 @@ function asUnit(modifier, units, lookup = {}) {
     },
   })
 }
-
-export { nameClass }
-export { updateAllClasses }
-export { updateLastClasses }
-export { transformAllSelectors }
-export { transformAllClasses }
-export { transformLastClasses }
-export { asValue }
 
 export function createSimpleStaticUtilityPlugin(styles) {
   return function ({ matchUtilities }) {
@@ -163,6 +159,7 @@ export function asList(modifier, lookup = {}) {
     },
   })
 }
+
 export function asColor(modifier, lookup = {}) {
   return asValue(modifier, lookup, {
     validate: (value) => {
@@ -175,9 +172,11 @@ export function asColor(modifier, lookup = {}) {
     },
   })
 }
+
 export function asAngle(modifier, lookup = {}) {
   return asUnit(modifier, ['deg', 'grad', 'rad', 'turn'], lookup)
 }
+
 export function asLength(modifier, lookup = {}) {
   return asUnit(
     modifier,
@@ -203,6 +202,7 @@ export function asLength(modifier, lookup = {}) {
     lookup
   )
 }
+
 export function asLookupValue(modifier, lookup = {}) {
   return lookup[modifier]
 }

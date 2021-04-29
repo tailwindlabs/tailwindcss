@@ -4,7 +4,8 @@ import fastGlob from 'fast-glob'
 import parseGlob from 'parse-glob'
 import * as sharedState from './sharedState'
 import { generateRules } from './generateRules'
-import { bigSign, cloneNodes } from './utils'
+import bigSign from '../../util/bigSign'
+import cloneNodes from '../../util/cloneNodes'
 
 let env = sharedState.env
 let contentMatchCache = sharedState.contentMatchCache

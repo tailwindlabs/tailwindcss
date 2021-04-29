@@ -1,8 +1,5 @@
 import escapeClassName from './escapeClassName'
-
-function escapeCommas(className) {
-  return className.replace(/\\,/g, '\\2c ')
-}
+import escapeCommas from './escapeCommas'
 
 function asClass(name) {
   return escapeCommas(`.${escapeClassName(name)}`)

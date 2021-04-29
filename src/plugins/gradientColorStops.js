@@ -2,7 +2,8 @@ import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
 import toColorValue from '../util/toColorValue'
 import { withAlphaValue } from '../util/withAlphaVariable'
-import { asValue, nameClass } from '../jit/pluginUtils'
+import nameClass from '../util/nameClass'
+import { asValue } from '../util/pluginUtils'
 
 function transparentTo(value) {
   return withAlphaValue(value, 0, 'rgba(255, 255, 255, 0)')

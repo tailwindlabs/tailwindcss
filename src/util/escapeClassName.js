@@ -1,9 +1,6 @@
 import parser from 'postcss-selector-parser'
 import get from 'lodash/get'
-
-function escapeCommas(className) {
-  return className.replace(/\\,/g, '\\2c ')
-}
+import escapeCommas from './escapeCommas'
 
 export default function escapeClassName(className) {
   const node = parser.className()

@@ -16,11 +16,13 @@ import parseObjectStyles from '../../util/parseObjectStyles'
 import getModuleDependencies from '../../lib/getModuleDependencies'
 import prefixSelector from '../../util/prefixSelector'
 
-const resolveConfig = require('../../../resolveConfig')
+import resolveConfig from '../../../resolveConfig'
+
+import corePlugins from '../corePlugins'
+import isPlainObject from '../../util/isPlainObject'
+import escapeClassName from '../../util/escapeClassName'
 
 import * as sharedState from './sharedState'
-import corePlugins from '../corePlugins'
-import { isPlainObject, escapeClassName } from './utils'
 
 let contextMap = sharedState.contextMap
 let configContextMap = sharedState.configContextMap

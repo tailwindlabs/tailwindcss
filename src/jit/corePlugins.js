@@ -9,7 +9,7 @@ import {
   transformAllSelectors,
   transformAllClasses,
   transformLastClasses,
-} from './pluginUtils'
+} from '../util/pluginUtils'
 
 export default {
   pseudoClassVariants: function ({ config, addVariant }) {

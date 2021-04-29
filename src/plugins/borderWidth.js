@@ -1,4 +1,4 @@
-import { asLength } from '../jit/pluginUtils'
+import { asLength } from '../util/pluginUtils'
 import createUtilityPlugin from '../util/createUtilityPlugin'
 
 export default function () {

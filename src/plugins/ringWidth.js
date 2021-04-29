@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import { withAlphaValue } from '../util/withAlphaVariable'
-import { asLength, nameClass } from '../jit/pluginUtils'
+import nameClass from '../util/nameClass'
+import { asLength } from '../util/pluginUtils'
 
 export default function () {
   return function ({ config, matchUtilities, addBase, addUtilities, theme, variants }) {
