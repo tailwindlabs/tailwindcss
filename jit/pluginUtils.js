@@ -1,6 +1,6 @@
 const selectorParser = require('postcss-selector-parser')
 const postcss = require('postcss')
-const { toRgba } = require('../lib/util/withAlphaVariable')
+const createColor = require('color')
 const { nameClass, escapeCommas } = require('./lib/utils')
 
 function updateAllClasses(selectors, updateClass) {
@@ -166,7 +166,7 @@ module.exports = {
     return asValue(modifier, lookup, {
       validate: (value) => {
         try {
-          toRgba(value)
+          createColor(value)
           return true
         } catch (e) {
           return false

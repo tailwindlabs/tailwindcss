@@ -22,6 +22,20 @@ export function toHsla(color) {
   return [h, `${s}%`, `${l}%`, a === undefined && hasAlpha(color) ? 1 : a]
 }
 
+export function withAlphaValue(color, alphaValue, defaultValue) {
+  if (_.isFunction(color)) {
+    return color({ opacityValue: alphaValue })
+  }
+
+  try {
+    const isHSL = color.startsWith('hsl')
+    const [i, j, k] = isHSL ? toHsla(color) : toRgba(color)
+    return `${isHSL ? 'hsla' : 'rgba'}(${i}, ${j}, ${k}, ${alphaValue})`
+  } catch {
+    return defaultValue
+  }
+}
+
 export default function withAlphaVariable({ color, property, variable }) {
   if (_.isFunction(color)) {
     return {
