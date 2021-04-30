@@ -1,0 +1,24 @@
+* {
+  --tw-shadow: 0 0 #0000;
+  --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgba(59, 130, 246, 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+}
+.divide-black > :not([hidden]) ~ :not([hidden]) {
+  border-color: #000;
+}
+.border-black {
+  border-color: #000;
+}
+.bg-black {
+  background-color: #000;
+}
+.text-black {
+  color: #000;
+}
+.placeholder-black::placeholder {
+  color: #000;
+}
