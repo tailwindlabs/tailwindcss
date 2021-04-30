@@ -530,6 +530,19 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       }
     },
     matchUtilities: function (utilities, options) {
+      // TODO: Redesign this API to work like this so it's more end-user friendly
+      // matchUtilities({
+      //   animate: (value, { includeRules }) => {
+      //     let { name: animationName } = parseAnimationValue(value)
+
+      //     if (keyframes[animationName] !== undefined) {
+      //       includeRules(keyframes[animationName])
+      //     }
+
+      //     return { animation: value }
+      //   },
+      // }, { values: [...], variants: [lol], ...otherStuff })
+
       let defaultOptions = {
         variants: [],
         respectPrefix: true,
