@@ -111,10 +111,6 @@
     "testTimeout": 30000,
     "setupFilesAfterEnv": [
       "<rootDir>/jest/customMatchers.js"
-    ],
-    "testPathIgnorePatterns": [
-      "<rootDir>/__tests__/fixtures/",
-      "<rootDir>/__tests__/util/"
     ]
   },
   "engines": {

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Title</title>
+    <link rel="stylesheet" href="./tailwind.css" />
+  </head>
+  <body>
+    <div class="bg-[#0f0] bg-[#ff0000] bg-[#0000ffcc]"></div>
+    <div class="bg-[rgb(123,123,123)] bg-[rgba(123,123,123,0.5)]"></div>
+    <div class="bg-[hsl(0,100%,50%)] bg-[hsla(0,100%,50%,0.3)]"></div>
+    <div class="bg-opacity-[0.11]"></div>
+    <div class="bg-opacity-[var(--value)]"></div>
+    <div class="border-[#f00]"></div>
+    <div class="border-[2.5px]"></div>
+    <div class="w-[3.23rem]"></div>
+    <div class="w-[calc(100%+1rem)]"></div>
+    <div class="w-[calc(var(--10-10px,calc(-20px-(-30px--40px)))-50px)]"></div>
+    <div class="w-[var(--width)]"></div>
+    <div class="w-[var(--width,calc(100%+1rem))]"></div>
+    <div class="w-[calc(100%/3-1rem*2)]"></div>
+    <div class="min-w-[3.23rem]"></div>
+    <div class="min-w-[calc(100%+1rem)]"></div>
+    <div class="min-w-[var(--width)]"></div>
+    <div class="max-w-[3.23rem]"></div>
+    <div class="max-w-[calc(100%+1rem)]"></div>
+    <div class="max-w-[var(--width)]"></div>
+    <div class="h-[3.23rem]"></div>
+    <div class="h-[calc(100%+1rem)]"></div>
+    <div class="h-[var(--height)]"></div>
+    <div class="min-h-[3.23rem]"></div>
+    <div class="min-h-[calc(100%+1rem)]"></div>
+    <div class="min-h-[var(--height)]"></div>
+    <div class="max-h-[3.23rem]"></div>
+    <div class="max-h-[calc(100%+1rem)]"></div>
+    <div class="max-h-[var(--height)]"></div>
+    <div class="space-x-[20cm]"></div>
+    <div class="space-x-[calc(20%-1cm)]"></div>
+    <div class="grid-cols-[200px,repeat(auto-fill,minmax(15%,100px)),300px]"></div>
+    <div class="lg:grid-cols-[200px,repeat(auto-fill,minmax(15%,100px)),300px]"></div>
+    <div class="grid-rows-[200px,repeat(auto-fill,minmax(15%,100px)),300px]"></div>
+    <div class="col-[7]"></div>
+    <div class="col-end-[7]"></div>
+    <div class="col-start-[7]"></div>
+    <div class="row-[7]"></div>
+    <div class="row-end-[7]"></div>
+    <div class="row-start-[7]"></div>
+    <div class="rotate-[23deg] rotate-[2.3rad] rotate-[401grad] rotate-[1.5turn]"></div>
+    <div class="skew-x-[3px]"></div>
+    <div class="skew-y-[3px]"></div>
+    <div class="text-[2.23rem]"></div>
+    <div class="duration-[2s]"></div>
+    <div class="m-[7px]"></div>
+    <div class="mx-[7px]"></div>
+    <div class="my-[7px]"></div>
+    <div class="mt-[7px]"></div>
+    <div class="mr-[7px]"></div>
+    <div class="mb-[7px]"></div>
+    <div class="ml-[7px]"></div>
+    <div class="mt-[clamp(30px,100px)]"></div>
+    <div class="rounded-[11px]"></div>
+    <div
+      class="rounded-t-[var(--radius)] rounded-r-[var(--radius)] rounded-b-[var(--radius)] rounded-l-[var(--radius)]"
+    ></div>
+    <div
+      class="rounded-tr-[var(--radius)] rounded-br-[var(--radius)] rounded-bl-[var(--radius)] rounded-tl-[var(--radius)]"
+    ></div>
+    <div class="duration-[var(--app-duration)]"></div>
+    <div class="p-[var(--app-padding)]"></div>
+    <div class="inset-[11px]"></div>
+    <div class="blur-[15px]"></div>
+    <div class="brightness-[300%]"></div>
+    <div class="contrast-[2.4]"></div>
+    <div class="grayscale-[0.55]"></div>
+    <div class="hue-rotate-[0.8turn]"></div>
+    <div class="invert-[0.75]"></div>
+    <div class="saturate-[180%]"></div>
+    <div class="sepia-[0.2]"></div>
+    <div class="backdrop-blur-[11px]"></div>
+    <div class="backdrop-brightness-[1.23]"></div>
+    <div class="backdrop-contrast-[0.87]"></div>
+    <div class="backdrop-grayscale-[0.42]"></div>
+    <div class="backdrop-hue-rotate-[1.57rad]"></div>
+    <div class="backdrop-invert-[0.66]"></div>
+    <div class="backdrop-opacity-[22%]"></div>
+    <div class="backdrop-saturate-[144%]"></div>
+    <div class="backdrop-sepia-[0.38]"></div>
+    <div class="from-[#da5b66] via-[#da5b66] to-[#da5b66]"></div>
+    <div class="from-[var(--color)] via-[var(--color)] to-[var(--color)]"></div>
+    <div class="fill-[#da5b66]"></div>
+    <div class="fill-[var(--color)]"></div>
+    <div class="stroke-[#da5b66]"></div>
+    <div class="leading-[var(--leading)]"></div>
+    <div class="tracking-[var(--tracking)]"></div>
+    <div class="placeholder-[var(--placeholder)]"></div>
+    <div class="placeholder-opacity-[var(--placeholder-opacity)]"></div>
+    <div class="opacity-[var(--opacity)]"></div>
+    <div class="outline-[var(--outline)]"></div>
+    <div class="ring-[#76ad65]"></div>
+    <div class="ring-offset-[#76ad65]"></div>
+    <div class="ring-[10px]"></div>
+    <div class="ring-offset-[#ad672f]"></div>
+    <div class="ring-offset-[19rem]"></div>
+    <div class="ring-opacity-[var(--ring-opacity)]"></div>
+    <div class="delay-[var(--delay)]"></div>
+  </body>
+</html>
