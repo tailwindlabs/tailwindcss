@@ -20,22 +20,20 @@ export default function () {
       )
 
       matchUtilities({
-        animate: [
-          (modifier, { theme }) => {
-            let value = theme.animation[modifier]
+        animate: (modifier, { theme }) => {
+          let value = theme.animation[modifier]
 
-            if (value === undefined) {
-              return []
-            }
+          if (value === undefined) {
+            return []
+          }
 
-            let { name: animationName } = parseAnimationValue(value)
+          let { name: animationName } = parseAnimationValue(value)
 
-            return [
-              keyframes[animationName],
-              { [nameClass('animate', modifier)]: { animation: value } },
-            ].filter(Boolean)
-          },
-        ],
+          return [
+            keyframes[animationName],
+            { [nameClass('animate', modifier)]: { animation: value } },
+          ].filter(Boolean)
+        },
       })
     } else {
       const prefixName = (name) => prefix(`.${name}`).slice(1)
