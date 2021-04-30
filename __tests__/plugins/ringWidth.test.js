@@ -61,6 +61,51 @@ test('ring widths', () => {
   ])
 })
 
+test('ring widths with defaults and hsl value for ringColor', () => {
+  const config = {
+    theme: {
+      ringWidth: {},
+      ringOffsetWidth: {
+        DEFAULT: '2px',
+      },
+      ringOffsetColor: {
+        DEFAULT: 'pink',
+      },
+      ringColor: {
+        DEFAULT: 'hsl(10, 50%, 50%)',
+      },
+    },
+    variants: {
+      ringColor: [],
+    },
+  }
+
+  const { utilities } = invokePlugin(plugin(), config)
+  expect(utilities).toEqual([
+    [
+      {
+        '*': {
+          '--tw-ring-color': 'hsla(10, 50%, 50%, 0.5)',
+          '--tw-ring-inset': 'var(--tw-empty,/*!*/ /*!*/)',
+          '--tw-ring-offset-color': 'pink',
+          '--tw-ring-offset-shadow': '0 0 #0000',
+          '--tw-ring-offset-width': '2px',
+          '--tw-ring-shadow': '0 0 #0000',
+        },
+      },
+      { respectImportant: false },
+    ],
+    [
+      {
+        '.ring-inset': {
+          '--tw-ring-inset': 'inset',
+        },
+      },
+      undefined,
+    ],
+  ])
+})
+
 test('ring widths with defaults', () => {
   const config = {
     theme: {

@@ -2,7 +2,7 @@ import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
 import nameClass from '../util/nameClass'
 import toColorValue from '../util/toColorValue'
-import { toRgba } from '../util/withAlphaVariable'
+import { toRgba, toHsla } from '../util/withAlphaVariable'
 
 export default function () {
   return function ({ addUtilities, theme, variants }) {
@@ -16,8 +16,9 @@ export default function () {
           }
 
           try {
-            const [r, g, b] = toRgba(value)
-            return `rgba(${r}, ${g}, ${b}, 0)`
+            const isHSL = value.startsWith('hsl')
+            const [i, j, k] = isHSL ? toHsla(value) : toRgba(value)
+            return `${isHSL ? 'hsla' : 'rgba'}(${i}, ${j}, ${k}, 0)`
           } catch (_error) {
             return `rgba(255, 255, 255, 0)`
           }
