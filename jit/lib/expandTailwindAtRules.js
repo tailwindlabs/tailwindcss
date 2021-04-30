@@ -15,7 +15,7 @@ const INNER_MATCH_GLOBAL_REGEXP = /[^<>"'`\s.(){}[\]#=%]*[^<>"'`\s.(){}[\]#=%:]/
 function getDefaultExtractor(fileExtension) {
   return function (content) {
     if (fileExtension === 'svelte') {
-      content = content.replace(/\sclass:/g, ' ')
+      content = content.replace(/(?:^|\s)class:/g, ' ')
     }
     let broadMatches = content.match(BROAD_MATCH_GLOBAL_REGEXP) || []
     let innerMatches = content.match(INNER_MATCH_GLOBAL_REGEXP) || []
