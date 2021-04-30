@@ -2,7 +2,7 @@ const flattenColorPalette = require('../../lib/util/flattenColorPalette').defaul
 const withAlphaVariable = require('../../lib/util/withAlphaVariable').default
 const { asColor, nameClass } = require('../pluginUtils')
 
-module.exports = function ({ matchUtilities, theme }) {
+module.exports = function ({ corePlugins, matchUtilities, theme }) {
   let colorPalette = flattenColorPalette(theme('backgroundColor'))
 
   matchUtilities({
@@ -13,13 +13,17 @@ module.exports = function ({ matchUtilities, theme }) {
         return []
       }
 
-      return {
-        [nameClass('bg', modifier)]: withAlphaVariable({
-          color: value,
-          property: 'background-color',
-          variable: '--tw-bg-opacity',
-        }),
+      if (corePlugins('backgroundOpacity')) {
+        return {
+          [nameClass('bg', modifier)]: withAlphaVariable({
+            color: value,
+            property: 'background-color',
+            variable: '--tw-bg-opacity',
+          }),
+        }
       }
+
+      return { [nameClass('bg', modifier)]: { 'background-color': value } }
     },
   })
 }
