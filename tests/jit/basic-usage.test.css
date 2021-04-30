@@ -543,11 +543,11 @@
   font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure)
     var(--tw-numeric-spacing) var(--tw-numeric-fraction);
 }
-.tabular-nums {
-  --tw-numeric-spacing: tabular-nums;
-}
 .ordinal {
   --tw-ordinal: ordinal;
+}
+.tabular-nums {
+  --tw-numeric-spacing: tabular-nums;
 }
 .diagonal-fractions {
   --tw-numeric-fraction: diagonal-fractions;
