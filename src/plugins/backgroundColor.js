@@ -18,6 +18,14 @@ export default function () {
             return []
           }
 
+          if (!corePlugins('backgroundOpacity')) {
+            return {
+              [nameClass('bg', modifier)]: {
+                'background-color': value,
+              },
+            }
+          }
+
           return {
             [nameClass('bg', modifier)]: withAlphaVariable({
               color: value,

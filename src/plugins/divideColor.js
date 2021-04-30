@@ -22,6 +22,14 @@ export default function () {
             return []
           }
 
+          if (!corePlugins('divideOpacity')) {
+            return {
+              [`${nameClass('divide', modifier)} > :not([hidden]) ~ :not([hidden])`]: {
+                'border-color': value,
+              },
+            }
+          }
+
           return {
             [`${nameClass(
               'divide',

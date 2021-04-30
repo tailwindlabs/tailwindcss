@@ -18,6 +18,14 @@ export default function () {
             return []
           }
 
+          if (!corePlugins('textOpacity')) {
+            return {
+              [nameClass('text', modifier)]: {
+                color: value,
+              },
+            }
+          }
+
           return {
             [nameClass('text', modifier)]: withAlphaVariable({
               color: value,

@@ -212,7 +212,7 @@
 }
 .bg-\[hsl\(0\2c 100\%\2c 50\%\)\] {
   --tw-bg-opacity: 1;
-  background-color: rgba(255, 0, 0, var(--tw-bg-opacity));
+  background-color: hsla(0, 100%, 50%, var(--tw-bg-opacity));
 }
 .bg-\[hsla\(0\2c 100\%\2c 50\%\2c 0\.3\)\] {
   background-color: hsla(0, 100%, 50%, 0.3);

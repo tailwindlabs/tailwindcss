@@ -18,6 +18,14 @@ export default function () {
             return []
           }
 
+          if (!corePlugins('placeholderOpacity')) {
+            return {
+              [`${nameClass('placeholder', modifier)}::placeholder`]: {
+                color: value,
+              },
+            }
+          }
+
           return {
             [`${nameClass('placeholder', modifier)}::placeholder`]: withAlphaVariable({
               color: value,

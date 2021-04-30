@@ -22,6 +22,14 @@ export default function () {
             return []
           }
 
+          if (!corePlugins('borderOpacity')) {
+            return {
+              [nameClass('border', modifier)]: {
+                'border-color': value,
+              },
+            }
+          }
+
           return {
             [nameClass('border', modifier)]: withAlphaVariable({
               color: value,
