@@ -1,44 +1,19 @@
-import _ from 'lodash'
-import nameClass from '../util/nameClass'
+import createUtilityPlugin from '../util/createUtilityPlugin'
 
 export default function () {
-  return function ({ addUtilities, theme, variants }) {
-    const generators = [
-      (value, modifier) => ({
-        [nameClass('rounded', modifier)]: { borderRadius: `${value}` },
-      }),
-      (value, modifier) => ({
-        [nameClass('rounded-t', modifier)]: {
-          borderTopLeftRadius: `${value}`,
-          borderTopRightRadius: `${value}`,
-        },
-        [nameClass('rounded-r', modifier)]: {
-          borderTopRightRadius: `${value}`,
-          borderBottomRightRadius: `${value}`,
-        },
-        [nameClass('rounded-b', modifier)]: {
-          borderBottomRightRadius: `${value}`,
-          borderBottomLeftRadius: `${value}`,
-        },
-        [nameClass('rounded-l', modifier)]: {
-          borderTopLeftRadius: `${value}`,
-          borderBottomLeftRadius: `${value}`,
-        },
-      }),
-      (value, modifier) => ({
-        [nameClass('rounded-tl', modifier)]: { borderTopLeftRadius: `${value}` },
-        [nameClass('rounded-tr', modifier)]: { borderTopRightRadius: `${value}` },
-        [nameClass('rounded-br', modifier)]: { borderBottomRightRadius: `${value}` },
-        [nameClass('rounded-bl', modifier)]: { borderBottomLeftRadius: `${value}` },
-      }),
-    ]
-
-    const utilities = _.flatMap(generators, (generator) => {
-      return _.flatMap(theme('borderRadius'), (value, modifier) => {
-        return generator(value, modifier)
-      })
-    })
-
-    addUtilities(utilities, variants('borderRadius'))
-  }
+  return createUtilityPlugin('borderRadius', [
+    ['rounded', ['border-radius']],
+    [
+      ['rounded-t', ['border-top-left-radius', 'border-top-right-radius']],
+      ['rounded-r', ['border-top-right-radius', 'border-bottom-right-radius']],
+      ['rounded-b', ['border-bottom-right-radius', 'border-bottom-left-radius']],
+      ['rounded-l', ['border-top-left-radius', 'border-bottom-left-radius']],
+    ],
+    [
+      ['rounded-tl', ['border-top-left-radius']],
+      ['rounded-tr', ['border-top-right-radius']],
+      ['rounded-br', ['border-bottom-right-radius']],
+      ['rounded-bl', ['border-bottom-left-radius']],
+    ],
+  ])
 }

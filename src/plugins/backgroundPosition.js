@@ -1,19 +1,8 @@
-import _ from 'lodash'
-import nameClass from '../util/nameClass'
+import createUtilityPlugin from '../util/createUtilityPlugin'
+import { asLookupValue } from '../util/pluginUtils'
 
 export default function () {
-  return function ({ addUtilities, theme, variants }) {
-    const utilities = _.fromPairs(
-      _.map(theme('backgroundPosition'), (value, modifier) => {
-        return [
-          nameClass('bg', modifier),
-          {
-            'background-position': value,
-          },
-        ]
-      })
-    )
-
-    addUtilities(utilities, variants('backgroundPosition'))
-  }
+  return createUtilityPlugin('backgroundPosition', [['bg', ['background-position']]], {
+    resolveArbitraryValue: asLookupValue,
+  })
 }
