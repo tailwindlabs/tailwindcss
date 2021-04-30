@@ -1,8 +1,7 @@
 import postcss from 'postcss'
+import * as corePlugins from '../plugins'
 import buildMediaQuery from '../util/buildMediaQuery'
 import prefixSelector from '../util/prefixSelector'
-import * as corePlugins from '../plugins'
-import { corePluginList } from '../corePluginList'
 import {
   updateLastClasses,
   updateAllClasses,
@@ -168,8 +167,8 @@ export default {
   },
 
   ...Object.fromEntries(
-    corePluginList.map((pluginName) => {
-      return [pluginName, corePlugins[pluginName]()]
+    Object.entries(corePlugins).map(([pluginName, plugin]) => {
+      return [pluginName, plugin()]
     })
   ),
 }
