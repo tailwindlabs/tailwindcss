@@ -518,15 +518,15 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
       for (let identifier in base) {
         let prefixedIdentifier = prefixIdentifier(identifier, options)
-        let value = [].concat(base[identifier])
+        let rule = base[identifier]
 
-        let withOffsets = value.map((rule) => [{ sort: offset, layer: 'base' }, rule])
+        let withOffsets = [{ sort: offset, layer: 'base' }, rule]
 
         if (!context.candidateRuleMap.has(prefixedIdentifier)) {
           context.candidateRuleMap.set(prefixedIdentifier, [])
         }
 
-        context.candidateRuleMap.get(prefixedIdentifier).push(...withOffsets)
+        context.candidateRuleMap.get(prefixedIdentifier).push(withOffsets)
       }
     },
     matchUtilities: function (utilities, options) {
@@ -543,15 +543,15 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
       for (let identifier in utilities) {
         let prefixedIdentifier = prefixIdentifier(identifier, options)
-        let value = [].concat(utilities[identifier])
+        let rule = utilities[identifier]
 
-        let withOffsets = value.map((rule) => [{ sort: offset, layer: 'utilities', options }, rule])
+        let withOffsets = [{ sort: offset, layer: 'utilities', options }, rule]
 
         if (!context.candidateRuleMap.has(prefixedIdentifier)) {
           context.candidateRuleMap.set(prefixedIdentifier, [])
         }
 
-        context.candidateRuleMap.get(prefixedIdentifier).push(...withOffsets)
+        context.candidateRuleMap.get(prefixedIdentifier).push(withOffsets)
       }
     },
     // ---
