@@ -16,6 +16,12 @@ export function toRgba(color) {
   return [r, g, b, a === undefined && hasAlpha(color) ? 1 : a]
 }
 
+export function toHsla(color) {
+  const [h, s, l, a] = createColor(color).hsl().array()
+
+  return [h, `${s}%`, `${l}%`, a === undefined && hasAlpha(color) ? 1 : a]
+}
+
 export default function withAlphaVariable({ color, property, variable }) {
   if (_.isFunction(color)) {
     return {
@@ -25,7 +31,9 @@ export default function withAlphaVariable({ color, property, variable }) {
   }
 
   try {
-    const [r, g, b, a] = toRgba(color)
+    const isHSL = color.startsWith('hsl')
+
+    const [i, j, k, a] = isHSL ? toHsla(color) : toRgba(color)
 
     if (a !== undefined) {
       return {
@@ -35,7 +43,7 @@ export default function withAlphaVariable({ color, property, variable }) {
 
     return {
       [variable]: '1',
-      [property]: `rgba(${r}, ${g}, ${b}, var(${variable}))`,
+      [property]: `${isHSL ? 'hsla' : 'rgba'}(${i}, ${j}, ${k}, var(${variable}))`,
     }
   } catch (error) {
     return {

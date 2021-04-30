@@ -118,3 +118,26 @@ test('it allows a closure to be passed', () => {
     'background-color': 'rgba(0, 0, 0, var(--tw-bg-opacity))',
   })
 })
+
+test('it transforms rgb and hsl to rgba and hsla', () => {
+  expect(
+    withAlphaVariable({
+      color: 'rgb(50, 50, 50)',
+      property: 'background-color',
+      variable: '--tw-bg-opacity',
+    })
+  ).toEqual({
+    '--tw-bg-opacity': '1',
+    'background-color': 'rgba(50, 50, 50, var(--tw-bg-opacity))',
+  })
+  expect(
+    withAlphaVariable({
+      color: 'hsl(50, 50%, 50%)',
+      property: 'background-color',
+      variable: '--tw-bg-opacity',
+    })
+  ).toEqual({
+    '--tw-bg-opacity': '1',
+    'background-color': 'hsla(50, 50%, 50%, var(--tw-bg-opacity))',
+  })
+})
