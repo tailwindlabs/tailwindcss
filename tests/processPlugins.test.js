@@ -2483,3 +2483,72 @@ test('animation values are joined when retrieved using the theme function', () =
     }
   `)
 })
+
+test('plugins can add utilities using matchUtilities in AOT mode', () => {
+  const { components, utilities } = processPlugins(
+    [
+      function ({ matchUtilities, theme, variants }) {
+        matchUtilities(
+          {
+            'flex-grow': (modifier, { value }) => {
+              return {
+                [`.flex-grow-${modifier}`]: {
+                  'flex-grow': value,
+                },
+              }
+            },
+            'flex-shrink': (modifier, { value }) => {
+              return {
+                [`.flex-shrink-${modifier}`]: {
+                  'flex-shrink': value,
+                },
+              }
+            },
+          },
+          {
+            values: theme('flexyPants'),
+            variants: variants('flexyPants'),
+          }
+        )
+      },
+    ],
+    makeConfig({
+      theme: {
+        flexyPants: {
+          0: '0',
+          1: '1',
+          2: '2',
+        },
+      },
+      variants: {
+        flexyPants: ['responsive', 'hover', 'focus'],
+      },
+    })
+  )
+
+  expect(components.length).toBe(0)
+  expect(css(utilities)).toMatchCss(`
+    @layer utilities {
+      @variants responsive, hover, focus {
+        .flex-grow-0 {
+          flex-grow: 0
+        }
+        .flex-grow-1 {
+          flex-grow: 1
+        }
+        .flex-grow-2 {
+          flex-grow: 2
+        }
+        .flex-shrink-0 {
+          flex-shrink: 0
+        }
+        .flex-shrink-1 {
+          flex-shrink: 1
+        }
+        .flex-shrink-2 {
+          flex-shrink: 2
+        }
+      }
+    }
+  `)
+})
