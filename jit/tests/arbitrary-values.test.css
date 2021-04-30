@@ -49,8 +49,17 @@
 .w-\[calc\(100\%\+1rem\)\] {
   width: calc(100% + 1rem);
 }
+.w-\[calc\(var\(--10-10px\2c calc\(-20px-\(-30px--40px\)\)\)-50px\)\] {
+  width: calc(var(--10-10px, calc(-20px - (-30px - -40px))) - 50px);
+}
 .w-\[var\(--width\)\] {
   width: var(--width);
+}
+.w-\[var\(--width\2c calc\(100\%\+1rem\)\)\] {
+  width: var(--width, calc(100% + 1rem));
+}
+.w-\[calc\(100\%\/3-1rem\*2\)\] {
+  width: calc(100% / 3 - 1rem * 2);
 }
 .min-w-\[3\.23rem\] {
   min-width: 3.23rem;
