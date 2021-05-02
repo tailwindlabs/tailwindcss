@@ -1,18 +1,35 @@
 import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
-import nameClass from '../util/nameClass'
 import toColorValue from '../util/toColorValue'
+import nameClass from '../util/nameClass'
+import { asValue } from '../util/pluginUtils'
 
 export default function () {
-  return function ({ addUtilities, theme, variants }) {
-    const colors = flattenColorPalette(theme('fill'))
+  return function ({ config, matchUtilities, addUtilities, theme, variants }) {
+    if (config('mode') === 'jit') {
+      let colorPalette = flattenColorPalette(theme('fill'))
 
-    const utilities = _.fromPairs(
-      _.map(colors, (value, modifier) => {
-        return [nameClass('fill', modifier), { fill: toColorValue(value) }]
+      matchUtilities({
+        fill: (modifier) => {
+          let value = asValue(modifier, colorPalette)
+
+          if (value === undefined) {
+            return []
+          }
+
+          return { [nameClass('fill', modifier)]: { fill: toColorValue(value) } }
+        },
       })
-    )
+    } else {
+      const colors = flattenColorPalette(theme('fill'))
 
-    addUtilities(utilities, variants('fill'))
+      const utilities = _.fromPairs(
+        _.map(colors, (value, modifier) => {
+          return [nameClass('fill', modifier), { fill: toColorValue(value) }]
+        })
+      )
+
+      addUtilities(utilities, variants('fill'))
+    }
   }
 }

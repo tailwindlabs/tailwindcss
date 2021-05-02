@@ -30,18 +30,18 @@ console.info('\nRebuilding fixtures...\n')
 
 Promise.all([
   build({
-    from: '__tests__/fixtures/tailwind-input.css',
-    to: '__tests__/fixtures/tailwind-output.css',
+    from: 'tests/fixtures/tailwind-input.css',
+    to: 'tests/fixtures/tailwind-output.css',
     config: {},
   }),
   build({
-    from: '__tests__/fixtures/tailwind-input.css',
-    to: '__tests__/fixtures/tailwind-output-important.css',
+    from: 'tests/fixtures/tailwind-input.css',
+    to: 'tests/fixtures/tailwind-output-important.css',
     config: { important: true },
   }),
   build({
-    from: '__tests__/fixtures/tailwind-input.css',
-    to: '__tests__/fixtures/tailwind-output-no-color-opacity.css',
+    from: 'tests/fixtures/tailwind-input.css',
+    to: 'tests/fixtures/tailwind-output-no-color-opacity.css',
     config: {
       corePlugins: {
         textOpacity: false,
@@ -53,8 +53,8 @@ Promise.all([
     },
   }),
   build({
-    from: '__tests__/fixtures/tailwind-input.css',
-    to: '__tests__/fixtures/tailwind-output-flagged.css',
+    from: 'tests/fixtures/tailwind-input.css',
+    to: 'tests/fixtures/tailwind-output-flagged.css',
     config: {
       future: 'all',
       experimental: 'all',
