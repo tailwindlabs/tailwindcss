@@ -37,7 +37,11 @@ export default function createUtilityPlugin(
             })
           }, {}),
           {
-            values: theme(themeKey),
+            values: filterDefault
+              ? Object.fromEntries(
+                  Object.entries(theme(themeKey)).filter(([modifier]) => modifier !== 'DEFAULT')
+                )
+              : theme(themeKey),
             variants: variants(themeKey),
             type: asMap.get(resolveArbitraryValue) ?? 'any',
           }
@@ -45,9 +49,10 @@ export default function createUtilityPlugin(
       }
     } else {
       const pairs = toPairs(theme(themeKey))
-      const utilities = utilityVariations.flatMap((utilityVariation) => {
+
+      for (let utilityVariation of utilityVariations) {
         let group = Array.isArray(utilityVariation[0]) ? utilityVariation : [utilityVariation]
-        return group.map(([classPrefix, properties]) => {
+        let utilities = group.map(([classPrefix, properties]) => {
           return fromPairs(
             pairs
               .filter(([key]) => {
@@ -63,9 +68,8 @@ export default function createUtilityPlugin(
               })
           )
         })
-      })
-
-      return addUtilities(utilities, variants(themeKey))
+        addUtilities(utilities, variants(themeKey))
+      }
     }
   }
 }
