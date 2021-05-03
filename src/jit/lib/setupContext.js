@@ -530,19 +530,6 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
       }
     },
     matchUtilities: function (utilities, options) {
-      // TODO: Redesign this API to work like this so it's more end-user friendly
-      // matchUtilities({
-      //   animate: (value, { includeRules }) => {
-      //     let { name: animationName } = parseAnimationValue(value)
-
-      //     if (keyframes[animationName] !== undefined) {
-      //       includeRules(keyframes[animationName])
-      //     }
-
-      //     return { animation: value }
-      //   },
-      // }, { values: [...], variants: [lol], ...otherStuff })
-
       let defaultOptions = {
         variants: [],
         respectPrefix: true,
@@ -559,6 +546,34 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         let rule = utilities[identifier]
 
         let withOffsets = [{ sort: offset, layer: 'utilities', options }, rule]
+
+        if (!context.candidateRuleMap.has(prefixedIdentifier)) {
+          context.candidateRuleMap.set(prefixedIdentifier, [])
+        }
+
+        context.candidateRuleMap.get(prefixedIdentifier).push(withOffsets)
+      }
+    },
+    matchUtilities2: function (utilities, options) {
+      let defaultOptions = {
+        variants: [],
+        respectPrefix: true,
+        respectImportant: true,
+        respectVariants: true,
+      }
+
+      options = { ...defaultOptions, ...options }
+
+      let offset = offsets.utilities++
+
+      for (let identifier in utilities) {
+        let prefixedIdentifier = prefixIdentifier(identifier, options)
+        let rule = utilities[identifier]
+
+        let withOffsets = [
+          { sort: offset, layer: 'utilities', options, identifier, version: 2 },
+          rule,
+        ]
 
         if (!context.candidateRuleMap.has(prefixedIdentifier)) {
           context.candidateRuleMap.set(prefixedIdentifier, [])

@@ -3,7 +3,16 @@ import toPairs from 'lodash/toPairs'
 import castArray from 'lodash/castArray'
 import transformThemeValue from './transformThemeValue'
 import nameClass from '../util/nameClass'
-import { asValue } from '../util/pluginUtils'
+import { asValue, asList, asColor, asAngle, asLength, asLookupValue } from '../util/pluginUtils'
+
+let asMap = new Map([
+  [asValue, 'any'],
+  [asList, 'list'],
+  [asColor, 'color'],
+  [asAngle, 'angle'],
+  [asLength, 'length'],
+  [asLookupValue, 'lookup'],
+])
 
 export default function createUtilityPlugin(
   themeKey,
@@ -11,30 +20,27 @@ export default function createUtilityPlugin(
   { filterDefault = false, resolveArbitraryValue = asValue } = {}
 ) {
   const transformValue = transformThemeValue(themeKey)
-  return function ({ config, matchUtilities, addUtilities, variants, theme }) {
+  return function ({ config, matchUtilities2, addUtilities, variants, theme }) {
     if (config('mode') === 'jit') {
       for (let utilityVariation of utilityVariations) {
         let group = Array.isArray(utilityVariation[0]) ? utilityVariation : [utilityVariation]
 
-        matchUtilities(
+        matchUtilities2(
           group.reduce((obj, [classPrefix, properties]) => {
             return Object.assign(obj, {
-              [classPrefix]: (modifier, { theme }) => {
-                let value = resolveArbitraryValue(modifier, theme[themeKey])
-
-                if (value === undefined) {
-                  return []
-                }
-
-                return {
-                  [nameClass(classPrefix, modifier)]: properties.reduce(
-                    (obj, name) => Object.assign(obj, { [name]: transformValue(value) }),
-                    {}
-                  ),
-                }
+              [classPrefix]: (value) => {
+                return properties.reduce(
+                  (obj, name) => Object.assign(obj, { [name]: transformValue(value) }),
+                  {}
+                )
               },
             })
-          }, {})
+          }, {}),
+          {
+            values: theme(themeKey),
+            variants: variants(themeKey),
+            type: asMap.get(resolveArbitraryValue) ?? 'any',
+          }
         )
       }
     } else {

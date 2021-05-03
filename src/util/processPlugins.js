@@ -9,6 +9,7 @@ import prefixSelector from '../util/prefixSelector'
 import wrapWithVariants from '../util/wrapWithVariants'
 import cloneNodes from '../util/cloneNodes'
 import transformThemeValue from './transformThemeValue'
+import nameClass from '../util/nameClass'
 
 function parseStyles(styles) {
   if (!Array.isArray(styles)) {
@@ -42,7 +43,11 @@ export default function (plugins, config) {
   }
 
   function addUtilities(utilities, options) {
-    const defaultOptions = { variants: [], respectPrefix: true, respectImportant: true }
+    const defaultOptions = {
+      variants: [],
+      respectPrefix: true,
+      respectImportant: true,
+    }
 
     options = Array.isArray(options)
       ? Object.assign({}, defaultOptions, { variants: options })
@@ -103,12 +108,18 @@ export default function (plugins, config) {
       e: escapeClassName,
       prefix: applyConfiguredPrefix,
       addUtilities,
-      matchUtilities: (matches, { values, variants, respectPrefix, respectImportant }) => {
+      matchUtilities2: (matches, { values, variants, respectPrefix, respectImportant }) => {
         let modifierValues = Object.entries(values)
 
-        let result = Object.values(matches).flatMap((utilityFunction) => {
+        let result = Object.entries(matches).flatMap(([name, utilityFunction]) => {
           return modifierValues.map(([modifier, value]) => {
-            return utilityFunction(modifier, { value })
+            return {
+              [nameClass(name, modifier)]: utilityFunction(value, {
+                includeRules(rules, options) {
+                  addUtilities(rules, options)
+                },
+              }),
+            }
           })
         })
 
