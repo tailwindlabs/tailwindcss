@@ -513,22 +513,6 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
           .push([{ sort: offset, layer: 'utilities', options }, rule])
       }
     },
-    matchBase: function (base) {
-      let offset = offsets.base++
-
-      for (let identifier in base) {
-        let prefixedIdentifier = prefixIdentifier(identifier, options)
-        let rule = base[identifier]
-
-        let withOffsets = [{ sort: offset, layer: 'base' }, rule]
-
-        if (!context.candidateRuleMap.has(prefixedIdentifier)) {
-          context.candidateRuleMap.set(prefixedIdentifier, [])
-        }
-
-        context.candidateRuleMap.get(prefixedIdentifier).push(withOffsets)
-      }
-    },
     matchUtilities: function (utilities, options) {
       let defaultOptions = {
         variants: [],
