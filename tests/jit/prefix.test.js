@@ -16,7 +16,15 @@ test('prefix', () => {
     mode: 'jit',
     purge: [path.resolve(__dirname, './prefix.test.html')],
     corePlugins: { preflight: false },
-    theme: {},
+    theme: {
+      animation: {
+        spin: 'spin 1s linear infinite',
+        ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
+      },
+      keyframes: {
+        spin: { to: { transform: 'rotate(360deg)' } },
+      },
+    },
     plugins: [
       function ({ addComponents, addUtilities }) {
         addComponents({

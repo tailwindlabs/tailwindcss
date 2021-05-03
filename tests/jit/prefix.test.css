@@ -50,6 +50,17 @@
 .tw--ml-4 {
   margin-left: -1rem;
 }
+.tw-animate-ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes tw-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.tw-animate-spin {
+  animation: tw-spin 1s linear infinite;
+}
 .tw-font-bold {
   font-weight: 700;
 }
@@ -62,7 +73,7 @@
 .tw-group:hover .group-hover\:focus-within\:tw-text-left:focus-within {
   text-align: left;
 }
-[dir='rtl'] .rtl\:active\:tw-text-center:active {
+[dir="rtl"] .rtl\:active\:tw-text-center:active {
   text-align: center;
 }
 @media (prefers-reduced-motion: no-preference) {
