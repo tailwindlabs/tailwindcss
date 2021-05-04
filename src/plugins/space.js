@@ -32,13 +32,16 @@ export default function () {
       }
     )
 
-    addUtilities({
-      '.space-y-reverse > :not([hidden]) ~ :not([hidden])': {
-        '--tw-space-y-reverse': '1',
+    addUtilities(
+      {
+        '.space-y-reverse > :not([hidden]) ~ :not([hidden])': {
+          '--tw-space-y-reverse': '1',
+        },
+        '.space-x-reverse > :not([hidden]) ~ :not([hidden])': {
+          '--tw-space-x-reverse': '1',
+        },
       },
-      '.space-x-reverse > :not([hidden]) ~ :not([hidden])': {
-        '--tw-space-x-reverse': '1',
-      },
-    })
+      variants('space')
+    )
   }
 }

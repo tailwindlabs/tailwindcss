@@ -47,6 +47,6 @@ export default function () {
       }
     )
 
-    addUtilities({ '.ring-inset': { '--tw-ring-inset': 'inset' } })
+    addUtilities({ '.ring-inset': { '--tw-ring-inset': 'inset' } }, variants('ringWidth'))
   }
 }
