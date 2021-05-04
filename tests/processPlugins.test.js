@@ -2487,8 +2487,8 @@ test('animation values are joined when retrieved using the theme function', () =
 test('plugins can add utilities using matchUtilities in AOT mode', () => {
   const { components, utilities } = processPlugins(
     [
-      function ({ matchUtilities2, theme, variants }) {
-        matchUtilities2(
+      function ({ matchUtilities, theme, variants }) {
+        matchUtilities(
           {
             'flex-grow': (value) => ({ 'flex-grow': value }),
             'flex-shrink': (value) => ({ 'flex-shrink': value }),
