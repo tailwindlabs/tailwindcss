@@ -1,6 +1,6 @@
 export default function () {
-  return function ({ matchUtilities2, theme, variants }) {
-    matchUtilities2(
+  return function ({ matchUtilities, theme, variants }) {
+    matchUtilities(
       {
         'backdrop-sepia': (value) => {
           return { '--tw-backdrop-sepia': `sepia(${value})` }

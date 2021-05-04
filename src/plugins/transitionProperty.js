@@ -1,9 +1,9 @@
 export default function () {
-  return function ({ matchUtilities2, theme, variants }) {
+  return function ({ matchUtilities, theme, variants }) {
     let defaultTimingFunction = theme('transitionTimingFunction.DEFAULT')
     let defaultDuration = theme('transitionDuration.DEFAULT')
 
-    matchUtilities2(
+    matchUtilities(
       {
         transition: (value) => {
           return {

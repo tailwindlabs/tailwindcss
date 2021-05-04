@@ -16,11 +16,11 @@ export default function createUtilityPlugin(
   { filterDefault = false, resolveArbitraryValue = asValue } = {}
 ) {
   let transformValue = transformThemeValue(themeKey)
-  return function ({ matchUtilities2, variants, theme }) {
+  return function ({ matchUtilities, variants, theme }) {
     for (let utilityVariation of utilityVariations) {
       let group = Array.isArray(utilityVariation[0]) ? utilityVariation : [utilityVariation]
 
-      matchUtilities2(
+      matchUtilities(
         group.reduce((obj, [classPrefix, properties]) => {
           return Object.assign(obj, {
             [classPrefix]: (value) => {

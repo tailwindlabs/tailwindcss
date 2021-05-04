@@ -1,7 +1,7 @@
 import parseAnimationValue from '../util/parseAnimationValue'
 
 export default function () {
-  return function ({ matchUtilities2, theme, variants, prefix }) {
+  return function ({ matchUtilities, theme, variants, prefix }) {
     let prefixName = (name) => prefix(`.${name}`).slice(1)
     let keyframes = Object.fromEntries(
       Object.entries(theme('keyframes')).map(([key, value]) => {
@@ -17,7 +17,7 @@ export default function () {
       })
     )
 
-    matchUtilities2(
+    matchUtilities(
       {
         animate: (value, { includeRules }) => {
           let { name: animationName } = parseAnimationValue(value)

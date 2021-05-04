@@ -513,7 +513,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
           .push([{ sort: offset, layer: 'utilities', options }, rule])
       }
     },
-    matchUtilities2: function (utilities, options) {
+    matchUtilities: function (utilities, options) {
       let defaultOptions = {
         variants: [],
         respectPrefix: true,

@@ -7,14 +7,14 @@ function transparentTo(value) {
 }
 
 export default function () {
-  return function ({ matchUtilities2, theme, variants }) {
+  return function ({ matchUtilities, theme, variants }) {
     let options = {
       values: flattenColorPalette(theme('gradientColorStops')),
       variants: variants('gradientColorStops'),
       type: 'any',
     }
 
-    matchUtilities2(
+    matchUtilities(
       {
         from: (value) => {
           let transparentToValue = transparentTo(value)
@@ -27,7 +27,7 @@ export default function () {
       },
       options
     )
-    matchUtilities2(
+    matchUtilities(
       {
         via: (value) => {
           let transparentToValue = transparentTo(value)
@@ -42,7 +42,7 @@ export default function () {
       },
       options
     )
-    matchUtilities2(
+    matchUtilities(
       {
         to: (value) => {
           return { '--tw-gradient-to': toColorValue(value, 'to') }

@@ -1,7 +1,7 @@
 import { withAlphaValue } from '../util/withAlphaVariable'
 
 export default function () {
-  return function ({ config, matchUtilities2, addBase, addUtilities, theme, variants }) {
+  return function ({ config, matchUtilities, addBase, addUtilities, theme, variants }) {
     let ringOpacityDefault = theme('ringOpacity.DEFAULT', '0.5')
     let ringColorDefault = withAlphaValue(
       theme('ringColor.DEFAULT'),
@@ -26,7 +26,7 @@ export default function () {
       addUtilities(ringReset, { respectImportant: false })
     }
 
-    matchUtilities2(
+    matchUtilities(
       {
         ring: (value) => {
           return {

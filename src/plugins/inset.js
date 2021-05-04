@@ -1,12 +1,12 @@
 export default function () {
-  return function ({ matchUtilities2, theme, variants }) {
+  return function ({ matchUtilities, theme, variants }) {
     let options = {
       values: theme('inset'),
       variants: variants('inset'),
       type: 'any',
     }
 
-    matchUtilities2(
+    matchUtilities(
       {
         inset: (value) => {
           return { top: value, right: value, bottom: value, left: value }
@@ -15,7 +15,7 @@ export default function () {
       options
     )
 
-    matchUtilities2(
+    matchUtilities(
       {
         'inset-x': (value) => {
           return { left: value, right: value }
@@ -27,7 +27,7 @@ export default function () {
       options
     )
 
-    matchUtilities2(
+    matchUtilities(
       {
         top: (value) => {
           return { top: value }

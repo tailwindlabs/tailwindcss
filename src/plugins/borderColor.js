@@ -2,8 +2,8 @@ import flattenColorPalette from '../util/flattenColorPalette'
 import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function () {
-  return function ({ matchUtilities2, theme, variants, corePlugins }) {
-    matchUtilities2(
+  return function ({ matchUtilities, theme, variants, corePlugins }) {
+    matchUtilities(
       {
         border: (value) => {
           if (!corePlugins('borderOpacity')) {

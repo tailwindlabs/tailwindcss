@@ -2,8 +2,8 @@ import flattenColorPalette from '../util/flattenColorPalette'
 import toColorValue from '../util/toColorValue'
 
 export default function () {
-  return function ({ matchUtilities2, theme, variants }) {
-    matchUtilities2(
+  return function ({ matchUtilities, theme, variants }) {
+    matchUtilities(
       {
         'ring-offset': (value) => {
           return {

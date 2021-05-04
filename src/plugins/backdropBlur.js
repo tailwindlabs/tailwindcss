@@ -1,6 +1,6 @@
 export default function () {
-  return function ({ matchUtilities2, theme, variants }) {
-    matchUtilities2(
+  return function ({ matchUtilities, theme, variants }) {
+    matchUtilities(
       {
         'backdrop-blur': (value) => {
           return { '--tw-backdrop-blur': `blur(${value})` }

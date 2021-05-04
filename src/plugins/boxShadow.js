@@ -13,14 +13,14 @@ let defaultBoxShadow = [
 ].join(', ')
 
 export default function () {
-  return function ({ config, matchUtilities2, addBase, addUtilities, theme, variants }) {
+  return function ({ config, matchUtilities, addBase, addUtilities, theme, variants }) {
     if (config('mode') === 'jit') {
       addBase(shadowReset)
     } else {
       addUtilities(shadowReset, { respectImportant: false })
     }
 
-    matchUtilities2(
+    matchUtilities(
       {
         shadow: (value) => {
           value = transformValue(value)

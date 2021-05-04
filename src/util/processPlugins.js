@@ -108,7 +108,7 @@ export default function (plugins, config) {
       e: escapeClassName,
       prefix: applyConfiguredPrefix,
       addUtilities,
-      matchUtilities2: (matches, { values, variants, respectPrefix, respectImportant }) => {
+      matchUtilities: (matches, { values, variants, respectPrefix, respectImportant }) => {
         let modifierValues = Object.entries(values)
 
         let result = Object.entries(matches).flatMap(([name, utilityFunction]) => {

@@ -1,6 +1,6 @@
 export default function () {
-  return function ({ matchUtilities2, addUtilities, theme, variants }) {
-    matchUtilities2(
+  return function ({ matchUtilities, addUtilities, theme, variants }) {
+    matchUtilities(
       {
         'space-x': (value) => {
           value = value === '0' ? '0px' : value
