@@ -1,5 +1,5 @@
 export default function () {
-  return function ({ matchUtilities2, theme }) {
+  return function ({ matchUtilities2, theme, variants }) {
     matchUtilities2(
       {
         'backdrop-blur': (value) => {
@@ -8,7 +8,7 @@ export default function () {
       },
       {
         values: theme('backdropBlur'),
-        variants: theme('backdropBlur'),
+        variants: variants('backdropBlur'),
         type: 'any',
       }
     )

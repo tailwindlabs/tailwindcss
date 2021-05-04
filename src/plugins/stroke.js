@@ -2,7 +2,7 @@ import flattenColorPalette from '../util/flattenColorPalette'
 import toColorValue from '../util/toColorValue'
 
 export default function () {
-  return function ({ matchUtilities2, theme }) {
+  return function ({ matchUtilities2, theme, variants }) {
     matchUtilities2(
       {
         stroke: (value) => {
@@ -13,7 +13,7 @@ export default function () {
       },
       {
         values: flattenColorPalette(theme('stroke')),
-        variants: theme('stroke'),
+        variants: variants('stroke'),
         type: 'color',
       }
     )

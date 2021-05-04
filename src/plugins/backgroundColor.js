@@ -21,7 +21,7 @@ export default function () {
       },
       {
         values: flattenColorPalette(theme('backgroundColor')),
-        variant: variants('backgroundColor'),
+        variants: variants('backgroundColor'),
         type: 'color',
       }
     )
