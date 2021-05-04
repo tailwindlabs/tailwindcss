@@ -24,7 +24,7 @@ export default function () {
         },
       },
       {
-        values: flattenColorPalette(theme('divideColor')),
+        values: (({ DEFAULT: _, ...colors }) => colors)(flattenColorPalette(theme('divideColor'))),
         variants: variants('divideColor'),
         type: 'color',
       }

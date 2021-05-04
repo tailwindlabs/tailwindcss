@@ -11988,10 +11988,6 @@ video {
   border-color: #831843;
 }
 
-.divide > :not([hidden]) ~ :not([hidden]) {
-  border-color: #e5e7eb;
-}
-
 .place-self-auto {
   place-self: auto;
 }
@@ -38639,10 +38635,6 @@ video {
     border-color: #831843;
   }
 
-  .sm\:divide > :not([hidden]) ~ :not([hidden]) {
-    border-color: #e5e7eb;
-  }
-
   .sm\:place-self-auto {
     place-self: auto;
   }
@@ -65212,10 +65204,6 @@ video {
 
   .md\:divide-pink-900 > :not([hidden]) ~ :not([hidden]) {
     border-color: #831843;
-  }
-
-  .md\:divide > :not([hidden]) ~ :not([hidden]) {
-    border-color: #e5e7eb;
   }
 
   .md\:place-self-auto {
@@ -91789,10 +91777,6 @@ video {
     border-color: #831843;
   }
 
-  .lg\:divide > :not([hidden]) ~ :not([hidden]) {
-    border-color: #e5e7eb;
-  }
-
   .lg\:place-self-auto {
     place-self: auto;
   }
@@ -118364,10 +118348,6 @@ video {
     border-color: #831843;
   }
 
-  .xl\:divide > :not([hidden]) ~ :not([hidden]) {
-    border-color: #e5e7eb;
-  }
-
   .xl\:place-self-auto {
     place-self: auto;
   }
@@ -144937,10 +144917,6 @@ video {
 
   .\32xl\:divide-pink-900 > :not([hidden]) ~ :not([hidden]) {
     border-color: #831843;
-  }
-
-  .\32xl\:divide > :not([hidden]) ~ :not([hidden]) {
-    border-color: #e5e7eb;
   }
 
   .\32xl\:place-self-auto {
