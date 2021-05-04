@@ -45,15 +45,6 @@ const testimonials = [
     },
   },
   {
-    content:
-      "I used Tailwind to redesign feltpresence.com the other day. It's fantastic! I only gave myself a few hours to hack it together and it made a huge difference.",
-    author: {
-      name: 'Ryan Singer',
-      role: 'Basecamp',
-      avatar: require('@/img/avatars/ryan-singer.jpg').default,
-    },
-  },
-  {
     content: `I started using @tailwindcss. I instantly fell in love with their responsive modifiers, thorough documentation, and how easy it was customizing color palettes.`,
     tweetUrl: 'https://twitter.com/dacey_nolan/status/1303744545587441666',
     author: {
