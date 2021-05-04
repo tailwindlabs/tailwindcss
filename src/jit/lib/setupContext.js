@@ -549,6 +549,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
                 },
               })
             )
+            .filter(Boolean)
             .map((declaration) => ({
               [nameClass(identifier, modifier)]: declaration,
             }))

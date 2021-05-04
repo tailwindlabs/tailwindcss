@@ -112,15 +112,23 @@ export default function (plugins, config) {
         let modifierValues = Object.entries(values)
 
         let result = Object.entries(matches).flatMap(([name, utilityFunction]) => {
-          return modifierValues.map(([modifier, value]) => {
-            return {
-              [nameClass(name, modifier)]: utilityFunction(value, {
+          return modifierValues
+            .map(([modifier, value]) => {
+              let declarations = utilityFunction(value, {
                 includeRules(rules, options) {
                   addUtilities(rules, options)
                 },
-              }),
-            }
-          })
+              })
+
+              if (!declarations) {
+                return null
+              }
+
+              return {
+                [nameClass(name, modifier)]: declarations,
+              }
+            })
+            .filter(Boolean)
         })
 
         addUtilities(result, { variants, respectPrefix, respectImportant })
