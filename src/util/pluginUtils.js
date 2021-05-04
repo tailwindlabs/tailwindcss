@@ -194,3 +194,16 @@ export function asLength(modifier, lookup = {}) {
 export function asLookupValue(modifier, lookup = {}) {
   return lookup[modifier]
 }
+
+let typeMap = {
+  any: asValue,
+  list: asList,
+  color: asColor,
+  angle: asAngle,
+  length: asLength,
+  lookup: asLookupValue,
+}
+
+export function coerceValue(type, modifier, values) {
+  return typeMap[type](modifier, values)
+}

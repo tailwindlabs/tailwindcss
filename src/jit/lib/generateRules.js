@@ -3,16 +3,7 @@ import selectorParser from 'postcss-selector-parser'
 import parseObjectStyles from '../../util/parseObjectStyles'
 import isPlainObject from '../../util/isPlainObject'
 import prefixSelector from '../../util/prefixSelector'
-import nameClass from '../../util/nameClass'
-import {
-  updateAllClasses,
-  asValue,
-  asList,
-  asColor,
-  asAngle,
-  asLength,
-  asLookupValue,
-} from '../../util/pluginUtils'
+import { updateAllClasses } from '../../util/pluginUtils'
 
 let classNameParser = selectorParser((selectors) => {
   return selectors.first.filter(({ type }) => type === 'class').pop().value
@@ -224,58 +215,15 @@ function* resolveMatches(candidate, context) {
   // }
 
   for (let matchedPlugins of resolveMatchedPlugins(classCandidate, context)) {
-    let pluginHelpers = {
-      candidate: classCandidate,
-      theme: context.tailwindConfig.theme,
-    }
-
-    let asMap = {
-      any: asValue,
-      list: asList,
-      color: asColor,
-      angle: asAngle,
-      length: asLength,
-      lookup: asLookupValue,
-    }
-
     let matches = []
     let [plugins, modifier] = matchedPlugins
 
     for (let [sort, plugin] of plugins) {
       if (typeof plugin === 'function') {
-        if (sort.version === 2) {
-          let { type = 'any' } = sort.options
-          let value = asMap[type](modifier, sort.options.values)
-
-          if (value === undefined) {
-            continue
-          }
-
-          let includedRules = []
-          let ruleSets = []
-            .concat(
-              plugin(value, {
-                includeRules(rules) {
-                  includedRules.push(...rules)
-                },
-              })
-            )
-            .map((declaration) => ({
-              [nameClass(sort.identifier, modifier)]: declaration,
-            }))
-
-          for (let ruleSet of [...includedRules, ...ruleSets]) {
-            let [rules, options] = parseRules(ruleSet, context.postCssNodeCache)
-            for (let rule of rules) {
-              matches.push([{ ...sort, options: { ...sort.options, ...options } }, rule])
-            }
-          }
-        } else {
-          for (let ruleSet of [].concat(plugin(modifier, pluginHelpers))) {
-            let [rules, options] = parseRules(ruleSet, context.postCssNodeCache)
-            for (let rule of rules) {
-              matches.push([{ ...sort, options: { ...sort.options, ...options } }, rule])
-            }
+        for (let ruleSet of [].concat(plugin(modifier))) {
+          let [rules, options] = parseRules(ruleSet, context.postCssNodeCache)
+          for (let rule of rules) {
+            matches.push([{ ...sort, options: { ...sort.options, ...options } }, rule])
           }
         }
       }

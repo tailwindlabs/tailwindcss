@@ -22,6 +22,9 @@ import corePlugins from '../corePlugins'
 import isPlainObject from '../../util/isPlainObject'
 import escapeClassName from '../../util/escapeClassName'
 
+import nameClass from '../../util/nameClass'
+import { coerceValue } from '../../util/pluginUtils'
+
 import * as sharedState from './sharedState'
 
 let contextMap = sharedState.contextMap
@@ -529,10 +532,31 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         let prefixedIdentifier = prefixIdentifier(identifier, options)
         let rule = utilities[identifier]
 
-        let withOffsets = [
-          { sort: offset, layer: 'utilities', options, identifier, version: 2 },
-          rule,
-        ]
+        function wrapped(modifier) {
+          let { type = 'any' } = options
+          let value = coerceValue(type, modifier, options.values)
+
+          if (value === undefined) {
+            return []
+          }
+
+          let includedRules = []
+          let ruleSets = []
+            .concat(
+              rule(value, {
+                includeRules(rules) {
+                  includedRules.push(...rules)
+                },
+              })
+            )
+            .map((declaration) => ({
+              [nameClass(identifier, modifier)]: declaration,
+            }))
+
+          return [...includedRules, ...ruleSets]
+        }
+
+        let withOffsets = [{ sort: offset, layer: 'utilities', options }, wrapped]
 
         if (!context.candidateRuleMap.has(prefixedIdentifier)) {
           context.candidateRuleMap.set(prefixedIdentifier, [])
@@ -540,16 +564,6 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap.get(prefixedIdentifier).push(withOffsets)
       }
-    },
-    // ---
-    jit: {
-      e: escapeClassName,
-      config: tailwindConfig,
-      theme: tailwindConfig.theme,
-      addVariant(variantName, applyVariant, options = {}) {
-        insertInto(variantList, variantName, options)
-        variantMap.set(variantName, applyVariant)
-      },
     },
   }
 }

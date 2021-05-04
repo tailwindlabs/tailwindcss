@@ -1,5 +1,4 @@
 import postcss from 'postcss'
-import fs from 'fs'
 import path from 'path'
 import tailwind from '../../src/index.js'
 
