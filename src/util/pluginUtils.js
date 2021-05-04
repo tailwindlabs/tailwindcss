@@ -137,18 +137,6 @@ export function asUnit(modifier, units, lookup = {}) {
   })
 }
 
-export function createSimpleStaticUtilityPlugin(styles) {
-  return function ({ matchUtilities }) {
-    matchUtilities(
-      Object.entries(styles).reduce((newStyles, [selector, rules]) => {
-        let result = { [selector]: rules }
-        newStyles[selector.slice(1)] = [result]
-        return newStyles
-      }, {})
-    )
-  }
-}
-
 export function asList(modifier, lookup = {}) {
   return asValue(modifier, lookup, {
     transform: (value) => {

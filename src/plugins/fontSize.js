@@ -20,7 +20,7 @@ export default function () {
       {
         values: theme('fontSize'),
         variants: variants('fontSize'),
-        type: 'lookup',
+        type: 'length',
       }
     )
   }
