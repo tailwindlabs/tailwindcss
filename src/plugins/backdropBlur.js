@@ -1,38 +1,16 @@
-import _ from 'lodash'
-import nameClass from '../util/nameClass'
-import { asValue } from '../util/pluginUtils'
-
 export default function () {
-  return function ({ config, matchUtilities, addUtilities, theme, variants }) {
-    if (config('mode') === 'jit') {
-      matchUtilities({
-        'backdrop-blur': (modifier, { theme }) => {
-          let value = asValue(modifier, theme.backdropBlur)
-
-          if (value === undefined) {
-            return []
-          }
-
-          return {
-            [nameClass('backdrop-blur', modifier)]: { '--tw-backdrop-blur': `blur(${value})` },
-          }
+  return function ({ matchUtilities, theme, variants }) {
+    matchUtilities(
+      {
+        'backdrop-blur': (value) => {
+          return { '--tw-backdrop-blur': `blur(${value})` }
         },
-      })
-    } else {
-      const utilities = _.fromPairs(
-        _.map(theme('backdropBlur'), (value, modifier) => {
-          return [
-            nameClass('backdrop-blur', modifier),
-            {
-              '--tw-backdrop-blur': Array.isArray(value)
-                ? value.map((v) => `blur(${v})`).join(' ')
-                : `blur(${value})`,
-            },
-          ]
-        })
-      )
-
-      addUtilities(utilities, variants('backdopBlur'))
-    }
+      },
+      {
+        values: theme('backdropBlur'),
+        variants: variants('backdropBlur'),
+        type: 'any',
+      }
+    )
   }
 }

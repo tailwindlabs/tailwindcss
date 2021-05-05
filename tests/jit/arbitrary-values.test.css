@@ -120,6 +120,15 @@
 .max-w-\[var\(--width\)\] {
   max-width: var(--width);
 }
+.flex-\[var\(--flex\)\] {
+  flex: var(--flex);
+}
+.flex-shrink-\[var\(--shrink\)\] {
+  flex-shrink: var(--shrink);
+}
+.flex-grow-\[var\(--grow\)\] {
+  flex-grow: var(--grow);
+}
 .rotate-\[23deg\] {
   --tw-rotate: 23deg;
 }

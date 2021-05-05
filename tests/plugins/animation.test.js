@@ -32,19 +32,24 @@ test('defining animation and keyframes', () => {
         @keyframes spin {
           to { transform: rotate(360deg); }
         }
+      }
+    }
+
+    @layer utilities {
+      @variants {
         @keyframes ping {
           75%, 100% { transform: scale(2); opacity: 0; }
         }
       }
     }
-    
+
     @layer utilities {
       @variants {
         .animate-none { animation: none; }
         .animate-spin { animation: spin 1s linear infinite; }
         .animate-ping { animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; }
       }
-    }  
+    }
   `)
 })
 
@@ -75,6 +80,11 @@ test('defining animation and keyframes with prefix', () => {
         @keyframes tw-spin {
           to { transform: rotate(360deg); }
         }
+      }
+    }
+
+    @layer utilities {
+      @variants {
         @keyframes tw-ping {
           75%, 100% { transform: scale(2); opacity: 0; }
         }
