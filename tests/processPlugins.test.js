@@ -2490,20 +2490,8 @@ test('plugins can add utilities using matchUtilities in AOT mode', () => {
       function ({ matchUtilities, theme, variants }) {
         matchUtilities(
           {
-            'flex-grow': (modifier, { value }) => {
-              return {
-                [`.flex-grow-${modifier}`]: {
-                  'flex-grow': value,
-                },
-              }
-            },
-            'flex-shrink': (modifier, { value }) => {
-              return {
-                [`.flex-shrink-${modifier}`]: {
-                  'flex-shrink': value,
-                },
-              }
-            },
+            'flex-grow': (value) => ({ 'flex-grow': value }),
+            'flex-shrink': (value) => ({ 'flex-shrink': value }),
           },
           {
             values: theme('flexyPants'),

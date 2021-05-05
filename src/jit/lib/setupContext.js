@@ -22,6 +22,9 @@ import corePlugins from '../corePlugins'
 import isPlainObject from '../../util/isPlainObject'
 import escapeClassName from '../../util/escapeClassName'
 
+import nameClass from '../../util/nameClass'
+import { coerceValue } from '../../util/pluginUtils'
+
 import * as sharedState from './sharedState'
 
 let contextMap = sharedState.contextMap
@@ -513,36 +516,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
           .push([{ sort: offset, layer: 'utilities', options }, rule])
       }
     },
-    matchBase: function (base) {
-      let offset = offsets.base++
-
-      for (let identifier in base) {
-        let prefixedIdentifier = prefixIdentifier(identifier, options)
-        let rule = base[identifier]
-
-        let withOffsets = [{ sort: offset, layer: 'base' }, rule]
-
-        if (!context.candidateRuleMap.has(prefixedIdentifier)) {
-          context.candidateRuleMap.set(prefixedIdentifier, [])
-        }
-
-        context.candidateRuleMap.get(prefixedIdentifier).push(withOffsets)
-      }
-    },
     matchUtilities: function (utilities, options) {
-      // TODO: Redesign this API to work like this so it's more end-user friendly
-      // matchUtilities({
-      //   animate: (value, { includeRules }) => {
-      //     let { name: animationName } = parseAnimationValue(value)
-
-      //     if (keyframes[animationName] !== undefined) {
-      //       includeRules(keyframes[animationName])
-      //     }
-
-      //     return { animation: value }
-      //   },
-      // }, { values: [...], variants: [lol], ...otherStuff })
-
       let defaultOptions = {
         variants: [],
         respectPrefix: true,
@@ -558,7 +532,32 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
         let prefixedIdentifier = prefixIdentifier(identifier, options)
         let rule = utilities[identifier]
 
-        let withOffsets = [{ sort: offset, layer: 'utilities', options }, rule]
+        function wrapped(modifier) {
+          let { type = 'any' } = options
+          let value = coerceValue(type, modifier, options.values)
+
+          if (value === undefined) {
+            return []
+          }
+
+          let includedRules = []
+          let ruleSets = []
+            .concat(
+              rule(value, {
+                includeRules(rules) {
+                  includedRules.push(...rules)
+                },
+              })
+            )
+            .filter(Boolean)
+            .map((declaration) => ({
+              [nameClass(identifier, modifier)]: declaration,
+            }))
+
+          return [...includedRules, ...ruleSets]
+        }
+
+        let withOffsets = [{ sort: offset, layer: 'utilities', options }, wrapped]
 
         if (!context.candidateRuleMap.has(prefixedIdentifier)) {
           context.candidateRuleMap.set(prefixedIdentifier, [])
@@ -566,16 +565,6 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         context.candidateRuleMap.get(prefixedIdentifier).push(withOffsets)
       }
-    },
-    // ---
-    jit: {
-      e: escapeClassName,
-      config: tailwindConfig,
-      theme: tailwindConfig.theme,
-      addVariant(variantName, applyVariant, options = {}) {
-        insertInto(variantList, variantName, options)
-        variantMap.set(variantName, applyVariant)
-      },
     },
   }
 }
