@@ -128,6 +128,7 @@ export const ClassTable = memo(
                   return (
                     <tr key={utility}>
                       <td
+                        translate="no"
                         className={clsx(
                           'py-2 pr-2 font-mono text-xs text-violet-600 whitespace-nowrap',
                           {
@@ -138,6 +139,7 @@ export const ClassTable = memo(
                         {transformSelector(selector)}
                       </td>
                       <td
+                        translate="no"
                         className={clsx(
                           'py-2 pl-2 font-mono text-xs text-light-blue-600 whitespace-pre',
                           {
