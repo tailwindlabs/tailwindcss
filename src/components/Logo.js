@@ -1,6 +1,6 @@
 export function Logo(props) {
   return (
-    <svg viewBox="0 0 247 31" {...props}>
+    <svg viewBox="0 0 248 31" {...props}>
       <path
         fillRule="evenodd"
         clipRule="evenodd"
