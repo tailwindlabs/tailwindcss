@@ -119,6 +119,10 @@ test('@apply', () => {
       @apply lg:text-2xl;
       @apply sm:text-2xl;
     }
+
+    .important-modifier {
+      @apply px-4 !rounded-md;
+    }
   }
 
   @layer utilities {

@@ -79,7 +79,7 @@ function applyImportant(matches) {
       })
       r.walkDecls((d) => (d.important = true))
     })
-    result.push([meta, container.nodes[0]])
+    result.push([{ ...meta, important: true }, container.nodes[0]])
   }
 
   return result
