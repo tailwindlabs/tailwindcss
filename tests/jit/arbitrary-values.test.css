@@ -269,6 +269,9 @@
 .text-\[2\.23rem\] {
   font-size: 2.23rem;
 }
+.text-\[length\:var\(--font-size\)\] {
+  font-size: var(--font-size);
+}
 .leading-\[var\(--leading\)\] {
   line-height: var(--leading);
 }

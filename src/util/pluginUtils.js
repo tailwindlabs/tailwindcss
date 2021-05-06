@@ -205,5 +205,14 @@ let typeMap = {
 }
 
 export function coerceValue(type, modifier, values) {
-  return typeMap[type](modifier, values)
+  if (modifier.startsWith('[') && modifier.endsWith(']')) {
+    let innerModifier = modifier.slice(1, -1)
+    let parts = innerModifier.split(':')
+
+    if (parts.length > 1 && Object.keys(typeMap).includes(parts[0])) {
+      return [asValue(`[${parts.slice(1).join(':')}]`, values), parts[0]]
+    }
+  }
+
+  return [typeMap[type](modifier, values), type]
 }

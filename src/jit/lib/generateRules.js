@@ -192,9 +192,13 @@ function* resolveMatchedPlugins(classCandidate, context) {
   }
 }
 
+function splitWithSeparator(input, separator) {
+  return input.split(new RegExp(`\\${separator}(?![^[]*\\])`, 'g'))
+}
+
 function* resolveMatches(candidate, context) {
   let separator = context.tailwindConfig.separator
-  let [classCandidate, ...variants] = candidate.split(separator).reverse()
+  let [classCandidate, ...variants] = splitWithSeparator(candidate, separator).reverse()
   let important = false
 
   if (classCandidate.startsWith('!')) {
