@@ -28,22 +28,22 @@ export const classes = (
     </thead>
     <tbody className="align-baseline">
       <tr>
-        <td rowSpan={6} className="py-2 font-mono text-xs text-violet-600 whitespace-nowrap">
+        <td translate="no" rowSpan={6} className="py-2 font-mono text-xs text-violet-600 whitespace-nowrap">
           container
         </td>
         <td className="py-2 text-xs italic">
           None
         </td>
-        <td className="py-2 font-mono text-xs text-light-blue-600 whitespace-pre">
+        <td translate="no" className="py-2 font-mono text-xs text-light-blue-600 whitespace-pre">
           width: 100%;
         </td>
       </tr>
       {Object.keys(screens).map((screen) => (
         <tr key={screen}>
-          <td className="py-2 border-t border-gray-200 font-mono text-xs">
+          <td translate="no" className="py-2 border-t border-gray-200 font-mono text-xs">
             {screen} <span className="font-sans italic">({screens[screen]})</span>
           </td>
-          <td className="py-2 font-mono text-xs text-light-blue-600 whitespace-pre border-t border-gray-200">
+          <td translate="no" className="py-2 font-mono text-xs text-light-blue-600 whitespace-pre border-t border-gray-200">
             max-width: {screens[screen]};
           </td>
         </tr>
