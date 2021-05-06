@@ -33,7 +33,7 @@ export function TipCompat({ children }) {
             d="M6.998 2a1 1 0 00-.707 1.707l.707.707v3.758a1 1 0 01-.293.707l-4 4C.815 14.769 2.154 18 4.826 18H15.17c2.672 0 4.01-3.231 2.12-5.121l-4-4a1 1 0 01-.292-.707V4.414l.707-.707A1 1 0 0012.998 2h-6zm2 6.172V4h2v4.172a3 3 0 00.879 2.12l1.027 1.028a4 4 0 00-2.171.102l-.47.156a4 4 0 01-2.53 0l-.563-.187a1.992 1.992 0 00-.114-.035l1.063-1.063a3 3 0 00.879-2.121z"
           />
         </svg>
-        <p class="flex-1">{children}</p>
+        <p className="flex-1">{children}</p>
       </div>
     </div>
   )
@@ -66,7 +66,7 @@ export function TipInfo({ children }) {
             clipRule="evenodd"
           />
         </svg>
-        <p class="flex-1 min-w-0">{children}</p>
+        <p className="flex-1 min-w-0">{children}</p>
       </div>
     </div>
   )
