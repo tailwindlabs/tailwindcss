@@ -278,6 +278,9 @@
 .tracking-\[var\(--tracking\)\] {
   letter-spacing: var(--tracking);
 }
+.text-\[color\:var\(--color\)\] {
+  color: var(--color);
+}
 .placeholder-\[var\(--placeholder\)\]::placeholder {
   color: var(--placeholder);
 }
