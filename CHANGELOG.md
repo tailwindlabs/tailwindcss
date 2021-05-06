@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve `@apply` performance in projects that process many CSS sources ([#3178](https://github.com/tailwindlabs/tailwindcss/pull/3718))
 - JIT: Don't use CSS variables for color utilities if color opacity utilities are disabled ([#3984](https://github.com/tailwindlabs/tailwindcss/pull/3984))
 - JIT: Redesign `matchUtilities` API to make it more suitable for third-party use ([#4232](https://github.com/tailwindlabs/tailwindcss/pull/4232))
+- JIT: Support applying important utility variants ([#4260](https://github.com/tailwindlabs/tailwindcss/pull/4260))
 
 ### Fixed
 
