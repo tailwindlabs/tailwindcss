@@ -6,6 +6,7 @@ const { withTableOfContents } = require('./remark/withTableOfContents')
 const { withSyntaxHighlighting } = require('./remark/withSyntaxHighlighting')
 const { withProse } = require('./remark/withProse')
 const { withNextLinks } = require('./remark/withNextLinks')
+const { withLinkRoles } = require('./rehype/withLinkRoles')
 const minimatch = require('minimatch')
 const withCodeSamples = require('./remark/withCodeSamples')
 const { withPrevalInstructions } = require('./remark/withPrevalInstructions')
@@ -87,6 +88,9 @@ module.exports = withBundleAnalyzer({
               withTableOfContents,
               withSyntaxHighlighting,
               withNextLinks,
+            ],
+            rehypePlugins: [
+              withLinkRoles,
             ],
           },
         },
