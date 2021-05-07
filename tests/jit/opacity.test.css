@@ -1,8 +1,7 @@
 *,
 ::before,
 ::after {
-  --tw-border-opacity: 1;
-  border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+  border-color: #e5e7eb;
 }
 * {
   --tw-shadow: 0 0 #0000;

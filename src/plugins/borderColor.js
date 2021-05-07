@@ -3,13 +3,21 @@ import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function () {
   return function ({ addBase, matchUtilities, theme, variants, corePlugins }) {
-    addBase({
-      '*, ::before, ::after': withAlphaVariable({
-        color: theme('borderColor.DEFAULT', 'currentColor'),
-        property: 'border-color',
-        variable: '--tw-border-opacity',
-      }),
-    })
+    if (!corePlugins('borderOpacity')) {
+      addBase({
+        '*, ::before, ::after': {
+          'border-color': theme('borderColor.DEFAULT', 'currentColor'),
+        },
+      })
+    } else {
+      addBase({
+        '*, ::before, ::after': withAlphaVariable({
+          color: theme('borderColor.DEFAULT', 'currentColor'),
+          property: 'border-color',
+          variable: '--tw-border-opacity',
+        }),
+      })
+    }
 
     matchUtilities(
       {
