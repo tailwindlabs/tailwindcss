@@ -97,7 +97,7 @@ module.exports = function (config) {
 
   return {
     postcssPlugin: 'tailwindcss',
-    plugins: [...plugins, processTailwindFeatures(getConfig), formatCSS],
+    plugins: [...plugins, processTailwindFeatures(getConfig, resolvedConfigPath), formatCSS],
   }
 }
 
