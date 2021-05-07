@@ -11,11 +11,6 @@ export default function () {
           'font-variant-numeric':
             'var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)',
         },
-      },
-      variants('fontVariantNumeric')
-    )
-    addUtilities(
-      {
         '.normal-nums': {
           'font-variant-numeric': 'normal',
         },
