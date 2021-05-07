@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - JIT: Support applying important utility variants ([#4260](https://github.com/tailwindlabs/tailwindcss/pull/4260))
 - JIT: Support coercing arbitrary values when the type isn't detectable ([#4263](https://github.com/tailwindlabs/tailwindcss/pull/4263))
 - JIT: Support for `raw` syntax in `purge` config ([#4272](https://github.com/tailwindlabs/tailwindcss/pull/4272))
+- Add `empty` variant ([#3298](https://github.com/tailwindlabs/tailwindcss/pull/3298))
 
 ### Fixed
 
