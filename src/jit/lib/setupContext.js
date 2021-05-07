@@ -788,7 +788,9 @@ export default function setupContext(configOrPath) {
       candidateFiles: purgeContent
         .filter((item) => typeof item === 'string')
         .map((path) => normalizePath(path)),
-      rawContent: purgeContent.filter((item) => typeof item.raw === 'string').map(({ raw }) => raw),
+      rawContent: purgeContent
+        .filter((item) => typeof item.raw === 'string')
+        .map(({ raw, extension }) => ({ content: raw, extension })),
       variantMap: new Map(),
       stylesheetCache: null,
       fileModifiedMap: new Map(),
