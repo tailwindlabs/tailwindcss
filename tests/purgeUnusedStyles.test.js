@@ -39,6 +39,10 @@ async function inProduction(callback) {
   return result
 }
 
+function withTestName(path) {
+  return `${path}?test=${expect.getState().currentTestName}`
+}
+
 const config = {
   ...defaultConfig,
   ...customConfig,
@@ -93,7 +97,7 @@ test('purges unused classes', () => {
           purge: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
         }),
       ])
-        .process(input, { from: inputPath })
+        .process(input, { from: withTestName(inputPath) })
         .then((result) => {
           assertPurged(result)
         })
@@ -101,14 +105,14 @@ test('purges unused classes', () => {
   )
 })
 
-test.skip('purge patterns are resolved relative to the config file', () => {
+test('purge patterns are resolved relative to the config file', () => {
   return inProduction(
     suppressConsoleLogs(() => {
       const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
       const input = fs.readFileSync(inputPath, 'utf8')
 
       return postcss([tailwind(path.resolve(`${__dirname}/fixtures/custom-purge-config.js`))])
-        .process(input, { from: inputPath })
+        .process(input, { from: withTestName(inputPath) })
         .then((result) => {
           assertPurged(result)
         })
@@ -275,7 +279,7 @@ test('purges unused classes with important string', () => {
           purge: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
         }),
       ])
-        .process(input, { from: inputPath })
+        .process(input, { from: withTestName(inputPath) })
         .then((result) => {
           assertPurged(result)
         })
@@ -298,7 +302,7 @@ test('mode must be a valid value', () => {
               content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
             },
           }),
-        ]).process(input, { from: inputPath })
+        ]).process(input, { from: withTestName(inputPath) })
       ).rejects.toThrow()
     })
   )
@@ -319,7 +323,7 @@ test('components are purged by default in layers mode', () => {
           purge: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
         }),
       ])
-        .process(input, { from: inputPath })
+        .process(input, { from: withTestName(inputPath) })
         .then((result) => {
           expect(result.css).not.toContain('.container')
           assertPurged(result)
@@ -347,7 +351,7 @@ test('you can specify which layers to purge', () => {
           },
         }),
       ])
-        .process(input, { from: inputPath })
+        .process(input, { from: withTestName(inputPath) })
         .then((result) => {
           const rules = extractRules(result.root)
           expect(rules).toContain('optgroup')
@@ -377,7 +381,7 @@ test('you can purge just base and component layers (but why)', () => {
           },
         }),
       ])
-        .process(input, { from: inputPath })
+        .process(input, { from: withTestName(inputPath) })
         .then((result) => {
           const rules = extractRules(result.root)
           expect(rules).not.toContain('[type="checkbox"]')
@@ -439,7 +443,7 @@ test(
         purge: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
       }),
     ])
-      .process(input, { from: inputPath })
+      .process(input, { from: withTestName(inputPath) })
       .then((result) => {
         const expected = fs.readFileSync(
           path.resolve(`${__dirname}/fixtures/tailwind-output.css`),
@@ -465,7 +469,7 @@ test('does not purge if the array is empty', () => {
           purge: [],
         }),
       ])
-        .process(input, { from: inputPath })
+        .process(input, { from: withTestName(inputPath) })
         .then((result) => {
           process.env.NODE_ENV = OLD_NODE_ENV
           const expected = fs.readFileSync(
@@ -491,7 +495,7 @@ test('does not purge if explicitly disabled', () => {
           purge: { enabled: false },
         }),
       ])
-        .process(input, { from: inputPath })
+        .process(input, { from: withTestName(inputPath) })
         .then((result) => {
           const expected = fs.readFileSync(
             path.resolve(`${__dirname}/fixtures/tailwind-output.css`),
@@ -516,7 +520,7 @@ test('does not purge if purge is simply false', () => {
           purge: false,
         }),
       ])
-        .process(input, { from: inputPath })
+        .process(input, { from: withTestName(inputPath) })
         .then((result) => {
           const expected = fs.readFileSync(
             path.resolve(`${__dirname}/fixtures/tailwind-output.css`),
@@ -541,7 +545,7 @@ test('purges outside of production if explicitly enabled', () => {
           purge: { enabled: true, content: [path.resolve(`${__dirname}/fixtures/**/*.html`)] },
         }),
       ])
-        .process(input, { from: inputPath })
+        .process(input, { from: withTestName(inputPath) })
         .then((result) => {
           assertPurged(result)
         })
@@ -567,7 +571,7 @@ test(
         },
       }),
     ])
-      .process(input, { from: inputPath })
+      .process(input, { from: withTestName(inputPath) })
       .then((result) => {
         expect(result.css).toContain('.md\\:bg-green-500')
         assertPurged(result)
@@ -596,7 +600,7 @@ test(
         css.walkComments((c) => c.remove())
       },
     ])
-      .process(input, { from: inputPath })
+      .process(input, { from: withTestName(inputPath) })
       .then((result) => {
         expect(result.css).toContain('html')
         expect(result.css).toContain('body')
@@ -624,7 +628,7 @@ test('element selectors are preserved by default', () => {
           },
         }),
       ])
-        .process(input, { from: inputPath })
+        .process(input, { from: withTestName(inputPath) })
         .then((result) => {
           const rules = extractRules(result.root)
           ;[
@@ -678,7 +682,7 @@ test('element selectors are preserved even when defaultExtractor is overridden',
           },
         }),
       ])
-        .process(input, { from: inputPath })
+        .process(input, { from: withTestName(inputPath) })
         .then((result) => {
           const rules = extractRules(result.root)
           ;[
@@ -729,7 +733,7 @@ test('preserving element selectors can be disabled', () => {
           },
         }),
       ])
-        .process(input, { from: inputPath })
+        .process(input, { from: withTestName(inputPath) })
         .then((result) => {
           const rules = extractRules(result.root)
 
