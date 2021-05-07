@@ -137,18 +137,6 @@ export function asUnit(modifier, units, lookup = {}) {
   })
 }
 
-export function createSimpleStaticUtilityPlugin(styles) {
-  return function ({ matchUtilities }) {
-    matchUtilities(
-      Object.entries(styles).reduce((newStyles, [selector, rules]) => {
-        let result = { [selector]: rules }
-        newStyles[selector.slice(1)] = [result]
-        return newStyles
-      }, {})
-    )
-  }
-}
-
 export function asList(modifier, lookup = {}) {
   return asValue(modifier, lookup, {
     transform: (value) => {
@@ -205,4 +193,29 @@ export function asLength(modifier, lookup = {}) {
 
 export function asLookupValue(modifier, lookup = {}) {
   return lookup[modifier]
+}
+
+let typeMap = {
+  any: asValue,
+  list: asList,
+  color: asColor,
+  angle: asAngle,
+  length: asLength,
+  lookup: asLookupValue,
+}
+
+function splitAtFirst(input, delim) {
+  return (([first, ...rest]) => [first, rest.join(delim)])(input.split(delim))
+}
+
+export function coerceValue(type, modifier, values) {
+  if (modifier.startsWith('[') && modifier.endsWith(']')) {
+    let [explicitType, value] = splitAtFirst(modifier.slice(1, -1), ':')
+
+    if (value.length > 0 && Object.keys(typeMap).includes(explicitType)) {
+      return [asValue(`[${value}]`, values), explicitType]
+    }
+  }
+
+  return [typeMap[type](modifier, values), type]
 }

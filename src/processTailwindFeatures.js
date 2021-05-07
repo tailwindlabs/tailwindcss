@@ -16,7 +16,7 @@ import processPlugins from './util/processPlugins'
 import cloneNodes from './util/cloneNodes'
 import { issueFlagNotices } from './featureFlags.js'
 
-import hash from 'object-hash'
+import hash from './util/hashConfig'
 import log from './util/log'
 import { shared } from './util/disposables'
 

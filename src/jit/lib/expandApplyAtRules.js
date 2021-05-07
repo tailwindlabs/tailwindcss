@@ -30,7 +30,6 @@ function buildApplyCache(applyCandidates, context) {
   return context.applyClassCache
 }
 
-// TODO: Apply `!important` stuff correctly instead of just skipping it
 function extractApplyCandidates(params) {
   let candidates = params.split(/[\s\t\n]+/g)
 
@@ -143,7 +142,6 @@ function processApply(root, context) {
         .join(', ')
     }
 
-    /** @type {Map<import('postcss').Node, [string, boolean, import('postcss').Node[]][]>} */
     let perParentApplies = new Map()
 
     // Collect all apply candidates and their rules
@@ -197,7 +195,7 @@ function processApply(root, context) {
               rule.selector = replaceSelector(parent.selector, rule.selector, applyCandidate)
 
               rule.walkDecls((d) => {
-                d.important = important
+                d.important = meta.important || important
               })
             })
           }

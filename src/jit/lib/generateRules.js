@@ -79,7 +79,7 @@ function applyImportant(matches) {
       })
       r.walkDecls((d) => (d.important = true))
     })
-    result.push([meta, container.nodes[0]])
+    result.push([{ ...meta, important: true }, container.nodes[0]])
   }
 
   return result
@@ -192,9 +192,13 @@ function* resolveMatchedPlugins(classCandidate, context) {
   }
 }
 
+function splitWithSeparator(input, separator) {
+  return input.split(new RegExp(`\\${separator}(?![^[]*\\])`, 'g'))
+}
+
 function* resolveMatches(candidate, context) {
   let separator = context.tailwindConfig.separator
-  let [classCandidate, ...variants] = candidate.split(separator).reverse()
+  let [classCandidate, ...variants] = splitWithSeparator(candidate, separator).reverse()
   let important = false
 
   if (classCandidate.startsWith('!')) {
@@ -215,17 +219,12 @@ function* resolveMatches(candidate, context) {
   // }
 
   for (let matchedPlugins of resolveMatchedPlugins(classCandidate, context)) {
-    let pluginHelpers = {
-      candidate: classCandidate,
-      theme: context.tailwindConfig.theme,
-    }
-
     let matches = []
     let [plugins, modifier] = matchedPlugins
 
     for (let [sort, plugin] of plugins) {
       if (typeof plugin === 'function') {
-        for (let ruleSet of [].concat(plugin(modifier, pluginHelpers))) {
+        for (let ruleSet of [].concat(plugin(modifier))) {
           let [rules, options] = parseRules(ruleSet, context.postCssNodeCache)
           for (let rule of rules) {
             matches.push([{ ...sort, options: { ...sort.options, ...options } }, rule])

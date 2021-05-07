@@ -1,5 +1,12 @@
-import invokePlugin from '../util/invokePlugin'
-import plugin from '../../src/plugins/fontSize'
+import postcss from 'postcss'
+import path from 'path'
+import tailwind from '../../src/index.js'
+
+function run(input, config = {}) {
+  return postcss(tailwind(config)).process(input, {
+    from: path.resolve(__filename),
+  })
+}
 
 test('font-size utilities can include a default line-height', () => {
   const config = {
@@ -10,23 +17,19 @@ test('font-size utilities can include a default line-height', () => {
         lg: ['20px', '28px'],
       },
     },
+    corePlugins: ['fontSize'],
     variants: {
-      fontSize: ['responsive'],
+      fontSize: [],
     },
   }
 
-  const { utilities } = invokePlugin(plugin(), config)
-
-  expect(utilities).toEqual([
-    [
-      {
-        '.text-sm': { 'font-size': '12px' },
-        '.text-md': { 'font-size': '16px', 'line-height': '24px' },
-        '.text-lg': { 'font-size': '20px', 'line-height': '28px' },
-      },
-      ['responsive'],
-    ],
-  ])
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchCss(`
+     .text-sm { font-size: 12px }
+     .text-md { font-size: 16px; line-height: 24px }
+     .text-lg { font-size: 20px; line-height: 28px }
+    `)
+  })
 })
 
 test('font-size utilities can include a default letter-spacing', () => {
@@ -38,23 +41,19 @@ test('font-size utilities can include a default letter-spacing', () => {
         lg: ['20px', { letterSpacing: '-0.02em' }],
       },
     },
+    corePlugins: ['fontSize'],
     variants: {
-      fontSize: ['responsive'],
+      fontSize: [],
     },
   }
 
-  const { utilities } = invokePlugin(plugin(), config)
-
-  expect(utilities).toEqual([
-    [
-      {
-        '.text-sm': { 'font-size': '12px' },
-        '.text-md': { 'font-size': '16px', 'letter-spacing': '-0.01em' },
-        '.text-lg': { 'font-size': '20px', 'letter-spacing': '-0.02em' },
-      },
-      ['responsive'],
-    ],
-  ])
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchCss(`
+     .text-sm { font-size: 12px }
+     .text-md { font-size: 16px; letter-spacing: -0.01em }
+     .text-lg { font-size: 20px; letter-spacing: -0.02em }
+    `)
+  })
 })
 
 test('font-size utilities can include a default line-height and letter-spacing', () => {
@@ -66,21 +65,17 @@ test('font-size utilities can include a default line-height and letter-spacing',
         lg: ['20px', { lineHeight: '28px', letterSpacing: '-0.02em' }],
       },
     },
+    corePlugins: ['fontSize'],
     variants: {
-      fontSize: ['responsive'],
+      fontSize: [],
     },
   }
 
-  const { utilities } = invokePlugin(plugin(), config)
-
-  expect(utilities).toEqual([
-    [
-      {
-        '.text-sm': { 'font-size': '12px' },
-        '.text-md': { 'font-size': '16px', 'line-height': '24px', 'letter-spacing': '-0.01em' },
-        '.text-lg': { 'font-size': '20px', 'line-height': '28px', 'letter-spacing': '-0.02em' },
-      },
-      ['responsive'],
-    ],
-  ])
+  return run('@tailwind utilities', config).then((result) => {
+    expect(result.css).toMatchCss(`
+     .text-sm { font-size: 12px }
+     .text-md { font-size: 16px; line-height: 24px; letter-spacing: -0.01em }
+     .text-lg { font-size: 20px; line-height: 28px; letter-spacing: -0.02em }
+    `)
+  })
 })
