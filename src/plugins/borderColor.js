@@ -2,7 +2,15 @@ import flattenColorPalette from '../util/flattenColorPalette'
 import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function () {
-  return function ({ matchUtilities, theme, variants, corePlugins }) {
+  return function ({ addBase, matchUtilities, theme, variants, corePlugins }) {
+    addBase({
+      '*, ::before, ::after': withAlphaVariable({
+        color: theme('borderColor.DEFAULT', 'currentColor'),
+        property: 'border-color',
+        variable: '--tw-border-opacity',
+      }),
+    })
+
     matchUtilities(
       {
         border: (value) => {
