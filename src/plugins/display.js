@@ -62,11 +62,6 @@ export default function () {
         '.list-item': {
           display: 'list-item',
         },
-      },
-      variants('display')
-    )
-    addUtilities(
-      {
         '.hidden': {
           display: 'none',
         },
