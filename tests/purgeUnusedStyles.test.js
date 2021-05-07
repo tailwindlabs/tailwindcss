@@ -4,6 +4,7 @@ import postcss from 'postcss'
 import tailwind from '../src/index'
 import { tailwindExtractor } from '../src/lib/purgeUnusedStyles'
 import defaultConfig from '../stubs/defaultConfig.stub.js'
+import customConfig from './fixtures/custom-purge-config.js'
 
 function suppressConsoleLogs(cb, type = 'warn') {
   return () => {
@@ -40,23 +41,7 @@ async function inProduction(callback) {
 
 const config = {
   ...defaultConfig,
-  theme: {
-    extend: {
-      colors: {
-        'black!': '#000',
-      },
-      spacing: {
-        1.5: '0.375rem',
-        '(1/2+8)': 'calc(50% + 2rem)',
-      },
-      minHeight: {
-        '(screen-4)': 'calc(100vh - 1rem)',
-      },
-      fontFamily: {
-        '%#$@': 'Comic Sans',
-      },
-    },
-  },
+  ...customConfig,
 }
 
 delete config.presets
@@ -108,6 +93,21 @@ test('purges unused classes', () => {
           purge: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
         }),
       ])
+        .process(input, { from: inputPath })
+        .then((result) => {
+          assertPurged(result)
+        })
+    })
+  )
+})
+
+test.skip('purge patterns are resolved relative to the config file', () => {
+  return inProduction(
+    suppressConsoleLogs(() => {
+      const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+      const input = fs.readFileSync(inputPath, 'utf8')
+
+      return postcss([tailwind(path.resolve(`${__dirname}/fixtures/custom-purge-config.js`))])
         .process(input, { from: inputPath })
         .then((result) => {
           assertPurged(result)
