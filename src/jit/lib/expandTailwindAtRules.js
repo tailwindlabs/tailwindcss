@@ -25,9 +25,12 @@ function getDefaultExtractor(fileExtension) {
   }
 }
 
-function getExtractor(fileName, tailwindConfig) {
+function getExtractor(tailwindConfig, fileExtension) {
   const purgeOptions = tailwindConfig && tailwindConfig.purge && tailwindConfig.purge.options
-  const fileExtension = path.extname(fileName).slice(1)
+
+  if (!fileExtension) {
+    return (purgeOptions && purgeOptions.defaultExtractor) || getDefaultExtractor()
+  }
 
   if (!purgeOptions) {
     return getDefaultExtractor(fileExtension)
@@ -208,10 +211,15 @@ export default function expandTailwindAtRules(context, registerDependency) {
     env.DEBUG && console.time('Reading changed files')
     for (let file of context.changedFiles) {
       let content = fs.readFileSync(file, 'utf8')
-      let extractor = getExtractor(file, context.tailwindConfig)
+      let extractor = getExtractor(context.tailwindConfig, path.extname(file).slice(1))
       getClassCandidates(content, extractor, contentMatchCache, candidates, seen)
     }
     env.DEBUG && console.timeEnd('Reading changed files')
+
+    for (let { content, extension } of context.rawContent) {
+      let extractor = getExtractor(context.tailwindConfig, extension)
+      getClassCandidates(content, extractor, contentMatchCache, candidates, seen)
+    }
 
     // ---
 

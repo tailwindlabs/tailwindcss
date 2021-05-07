@@ -767,6 +767,10 @@ export default function setupContext(configOrPath) {
 
     process.env.DEBUG && console.log('Setting up new context...')
 
+    let purgeContent = Array.isArray(tailwindConfig.purge)
+      ? tailwindConfig.purge
+      : tailwindConfig.purge.content
+
     let context = {
       changedFiles: new Set(),
       ruleCache: new Set(),
@@ -781,10 +785,12 @@ export default function setupContext(configOrPath) {
       configPath: userConfigPath,
       tailwindConfig: tailwindConfig,
       configDependencies: new Set(),
-      candidateFiles: (Array.isArray(tailwindConfig.purge)
-        ? tailwindConfig.purge
-        : tailwindConfig.purge.content
-      ).map((path) => normalizePath(path)),
+      candidateFiles: purgeContent
+        .filter((item) => typeof item === 'string')
+        .map((path) => normalizePath(path)),
+      rawContent: purgeContent
+        .filter((item) => typeof item.raw === 'string')
+        .map(({ raw, extension }) => ({ content: raw, extension })),
       variantMap: new Map(),
       stylesheetCache: null,
       fileModifiedMap: new Map(),
