@@ -431,6 +431,27 @@ test('it can generate even variants', () => {
   })
 })
 
+test('it can generate empty variants', () => {
+  const input = `
+    @variants empty {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .empty\\:banana:empty { color: yellow; }
+    .empty\\:chocolate:empty { color: brown; }
+  `
+
+  return run(input).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate group-hover variants', () => {
   const input = `
     @variants group-hover {

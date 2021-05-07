@@ -133,6 +133,7 @@ const defaultVariantGenerators = (config) => ({
   last: generatePseudoClassVariant('last-child', 'last'),
   odd: generatePseudoClassVariant('nth-child(odd)', 'odd'),
   even: generatePseudoClassVariant('nth-child(even)', 'even'),
+  empty: generatePseudoClassVariant('empty'),
 })
 
 function prependStackableVariants(atRule, variants, stackableVariants) {
