@@ -204,6 +204,18 @@ let typeMap = {
   lookup: asLookupValue,
 }
 
+function splitAtFirst(input, delim) {
+  return (([first, ...rest]) => [first, rest.join(delim)])(input.split(delim))
+}
+
 export function coerceValue(type, modifier, values) {
-  return typeMap[type](modifier, values)
+  if (modifier.startsWith('[') && modifier.endsWith(']')) {
+    let [explicitType, value] = splitAtFirst(modifier.slice(1, -1), ':')
+
+    if (value.length > 0 && Object.keys(typeMap).includes(explicitType)) {
+      return [asValue(`[${value}]`, values), explicitType]
+    }
+  }
+
+  return [typeMap[type](modifier, values), type]
 }
