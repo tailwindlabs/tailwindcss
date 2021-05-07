@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve animation value parsing ([#4250](https://github.com/tailwindlabs/tailwindcss/pull/4250))
 - Ignore unknown object types when hashing config ([82f4eaa](https://github.com/tailwindlabs/tailwindcss/commit/82f4eaa6832ef8a4e3fd90869e7068efdf6e34f2))
 - Ensure variants are grouped properly for plugins with order-dependent utilities ([#4273](https://github.com/tailwindlabs/tailwindcss/pull/4273))
+- Resolve purge paths relative to `tailwind.config.js` instead of the current working directory ([#4214](https://github.com/tailwindlabs/tailwindcss/pull/4214))
 
 ## [2.1.2] - 2021-04-23
 
