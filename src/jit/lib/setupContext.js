@@ -787,7 +787,14 @@ export default function setupContext(configOrPath) {
       configDependencies: new Set(),
       candidateFiles: purgeContent
         .filter((item) => typeof item === 'string')
-        .map((path) => normalizePath(path)),
+        .map((purgePath) =>
+          normalizePath(
+            path.resolve(
+              userConfigPath === null ? process.cwd() : path.dirname(userConfigPath),
+              purgePath
+            )
+          )
+        ),
       rawContent: purgeContent
         .filter((item) => typeof item.raw === 'string')
         .map(({ raw, extension }) => ({ content: raw, extension })),
