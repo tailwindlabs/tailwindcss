@@ -119,9 +119,15 @@ export default function purgeUnusedUtilities(config, configChanged, resolvedConf
       content: (Array.isArray(config.purge)
         ? config.purge
         : config.purge.content || purgeOptions.content || []
-      ).map((pattern) =>
-        path.resolve(resolvedConfigPath ? path.dirname(resolvedConfigPath) : process.cwd(), pattern)
-      ),
+      ).map((item) => {
+        if (typeof item === 'string') {
+          return path.resolve(
+            resolvedConfigPath ? path.dirname(resolvedConfigPath) : process.cwd(),
+            item
+          )
+        }
+        return item
+      }),
     }),
   ])
 }
