@@ -1,3 +1,9 @@
+*,
+::before,
+::after {
+  --tw-border-opacity: 1;
+  border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+}
 * {
   --tw-shadow: 0 0 #0000;
   --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
@@ -73,7 +79,7 @@
 .tw-group:hover .group-hover\:focus-within\:tw-text-left:focus-within {
   text-align: left;
 }
-[dir="rtl"] .rtl\:active\:tw-text-center:active {
+[dir='rtl'] .rtl\:active\:tw-text-center:active {
   text-align: center;
 }
 @media (prefers-reduced-motion: no-preference) {

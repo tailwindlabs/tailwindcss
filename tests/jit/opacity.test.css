@@ -1,3 +1,8 @@
+*,
+::before,
+::after {
+  border-color: #e5e7eb;
+}
 * {
   --tw-shadow: 0 0 #0000;
   --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);

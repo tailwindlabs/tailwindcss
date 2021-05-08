@@ -71,6 +71,12 @@ test('raw content with extension', () => {
 
   return run(tailwind, css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
+      *,
+      ::before,
+      ::after {
+        --tw-border-opacity: 1;
+        border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+      }
       * {
         --tw-shadow: 0 0 #0000;
         --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
