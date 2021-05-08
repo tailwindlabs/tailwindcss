@@ -9,6 +9,7 @@ import prefixSelector from '../util/prefixSelector'
 import wrapWithVariants from '../util/wrapWithVariants'
 import cloneNodes from '../util/cloneNodes'
 import transformThemeValue from './transformThemeValue'
+import nameClass from '../util/nameClass'
 
 function parseStyles(styles) {
   if (!Array.isArray(styles)) {
@@ -39,6 +40,37 @@ export default function (plugins, config) {
 
   const applyConfiguredPrefix = (selector) => {
     return prefixSelector(config.prefix, selector)
+  }
+
+  function addUtilities(utilities, options) {
+    const defaultOptions = {
+      variants: [],
+      respectPrefix: true,
+      respectImportant: true,
+    }
+
+    options = Array.isArray(options)
+      ? Object.assign({}, defaultOptions, { variants: options })
+      : _.defaults(options, defaultOptions)
+
+    const styles = postcss.root({ nodes: parseStyles(utilities) })
+
+    styles.walkRules((rule) => {
+      if (options.respectPrefix && !isKeyframeRule(rule)) {
+        rule.selector = applyConfiguredPrefix(rule.selector)
+      }
+
+      if (options.respectImportant && config.important) {
+        rule.__tailwind = {
+          ...rule.__tailwind,
+          important: config.important,
+        }
+      }
+    })
+
+    pluginUtilities.push(
+      wrapWithLayer(wrapWithVariants(styles.nodes, options.variants), 'utilities')
+    )
   }
 
   const getConfigValue = (path, defaultValue) => (path ? _.get(config, path, defaultValue) : config)
@@ -75,31 +107,31 @@ export default function (plugins, config) {
       },
       e: escapeClassName,
       prefix: applyConfiguredPrefix,
-      addUtilities: (utilities, options) => {
-        const defaultOptions = { variants: [], respectPrefix: true, respectImportant: true }
+      addUtilities,
+      matchUtilities: (matches, { values, variants, respectPrefix, respectImportant }) => {
+        let modifierValues = Object.entries(values)
 
-        options = Array.isArray(options)
-          ? Object.assign({}, defaultOptions, { variants: options })
-          : _.defaults(options, defaultOptions)
+        let result = Object.entries(matches).flatMap(([name, utilityFunction]) => {
+          return modifierValues
+            .map(([modifier, value]) => {
+              let declarations = utilityFunction(value, {
+                includeRules(rules, options) {
+                  addUtilities(rules, options)
+                },
+              })
 
-        const styles = postcss.root({ nodes: parseStyles(utilities) })
+              if (!declarations) {
+                return null
+              }
 
-        styles.walkRules((rule) => {
-          if (options.respectPrefix && !isKeyframeRule(rule)) {
-            rule.selector = applyConfiguredPrefix(rule.selector)
-          }
-
-          if (options.respectImportant && config.important) {
-            rule.__tailwind = {
-              ...rule.__tailwind,
-              important: config.important,
-            }
-          }
+              return {
+                [nameClass(name, modifier)]: declarations,
+              }
+            })
+            .filter(Boolean)
         })
 
-        pluginUtilities.push(
-          wrapWithLayer(wrapWithVariants(styles.nodes, options.variants), 'utilities')
-        )
+        addUtilities(result, { variants, respectPrefix, respectImportant })
       },
       addComponents: (components, options) => {
         const defaultOptions = { variants: [], respectPrefix: true }

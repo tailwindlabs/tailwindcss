@@ -1,16 +1,12 @@
-import _ from 'lodash'
-import nameClass from '../util/nameClass'
-
 export default function () {
-  return function ({ addUtilities, theme, variants }) {
-    const defaultTimingFunction = theme('transitionTimingFunction.DEFAULT')
-    const defaultDuration = theme('transitionDuration.DEFAULT')
+  return function ({ matchUtilities, theme, variants }) {
+    let defaultTimingFunction = theme('transitionTimingFunction.DEFAULT')
+    let defaultDuration = theme('transitionDuration.DEFAULT')
 
-    const utilities = _.fromPairs(
-      _.map(theme('transitionProperty'), (value, modifier) => {
-        return [
-          nameClass('transition', modifier),
-          {
+    matchUtilities(
+      {
+        transition: (value) => {
+          return {
             'transition-property': value,
             ...(value === 'none'
               ? {}
@@ -18,11 +14,14 @@ export default function () {
                   'transition-timing-function': defaultTimingFunction,
                   'transition-duration': defaultDuration,
                 }),
-          },
-        ]
-      })
+          }
+        },
+      },
+      {
+        values: theme('transitionProperty'),
+        variants: variants('transitionProperty'),
+        type: 'lookup',
+      }
     )
-
-    addUtilities(utilities, variants('transitionProperty'))
   }
 }

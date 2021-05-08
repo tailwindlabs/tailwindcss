@@ -806,6 +806,7 @@ module.exports = {
     'even',
     'visited',
     'checked',
+    'empty',
     'group-hover',
     'group-focus',
     'focus-within',

@@ -16,7 +16,7 @@ import processPlugins from './util/processPlugins'
 import cloneNodes from './util/cloneNodes'
 import { issueFlagNotices } from './featureFlags.js'
 
-import hash from 'object-hash'
+import hash from './util/hashConfig'
 import log from './util/log'
 import { shared } from './util/disposables'
 
@@ -24,7 +24,7 @@ let previousConfig = null
 let processedPlugins = null
 let getProcessedPlugins = null
 
-export default function (getConfig) {
+export default function (getConfig, resolvedConfigPath) {
   return function (css) {
     const config = getConfig()
     const configChanged = hash(previousConfig) !== hash(config)
@@ -65,7 +65,7 @@ export default function (getConfig) {
       substituteScreenAtRules(config),
       substituteClassApplyAtRules(config, getProcessedPlugins, configChanged),
       applyImportantConfiguration(config),
-      purgeUnusedStyles(config, configChanged),
+      purgeUnusedStyles(config, configChanged, resolvedConfigPath),
     ]).process(css, { from: _.get(css, 'source.input.file') })
   }
 }

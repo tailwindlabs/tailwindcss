@@ -1,31 +1,46 @@
-import fromPairs from 'lodash/fromPairs'
-import toPairs from 'lodash/toPairs'
-import castArray from 'lodash/castArray'
-import nameClass from './nameClass'
 import transformThemeValue from './transformThemeValue'
+import { asValue, asList, asColor, asAngle, asLength, asLookupValue } from '../util/pluginUtils'
+
+let asMap = new Map([
+  [asValue, 'any'],
+  [asList, 'list'],
+  [asColor, 'color'],
+  [asAngle, 'angle'],
+  [asLength, 'length'],
+  [asLookupValue, 'lookup'],
+])
 
 export default function createUtilityPlugin(
   themeKey,
-  utilityVariations,
-  { filterDefault = false } = {}
+  utilityVariations = [[themeKey, [themeKey]]],
+  { filterDefault = false, resolveArbitraryValue = asValue } = {}
 ) {
-  const transformValue = transformThemeValue(themeKey)
-  return function ({ addUtilities, variants, theme }) {
-    const pairs = toPairs(theme(themeKey))
-    const utilities = utilityVariations.map(([classPrefix, properties]) => {
-      return fromPairs(
-        pairs
-          .filter(([key]) => {
-            return filterDefault ? key !== 'DEFAULT' : true
+  let transformValue = transformThemeValue(themeKey)
+  return function ({ matchUtilities, variants, theme }) {
+    for (let utilityVariation of utilityVariations) {
+      let group = Array.isArray(utilityVariation[0]) ? utilityVariation : [utilityVariation]
+
+      matchUtilities(
+        group.reduce((obj, [classPrefix, properties]) => {
+          return Object.assign(obj, {
+            [classPrefix]: (value) => {
+              return properties.reduce(
+                (obj, name) => Object.assign(obj, { [name]: transformValue(value) }),
+                {}
+              )
+            },
           })
-          .map(([key, value]) => {
-            return [
-              nameClass(classPrefix, key),
-              fromPairs(castArray(properties).map((property) => [property, transformValue(value)])),
-            ]
-          })
+        }, {}),
+        {
+          values: filterDefault
+            ? Object.fromEntries(
+                Object.entries(theme(themeKey)).filter(([modifier]) => modifier !== 'DEFAULT')
+              )
+            : theme(themeKey),
+          variants: variants(themeKey),
+          type: asMap.get(resolveArbitraryValue) ?? 'any',
+        }
       )
-    })
-    return addUtilities(utilities, variants(themeKey))
+    }
   }
 }

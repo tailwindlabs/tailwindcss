@@ -1,39 +1,48 @@
-import _ from 'lodash'
-import nameClass from '../util/nameClass'
-
 export default function () {
-  return function ({ addUtilities, theme, variants }) {
-    const generators = [
-      (size, modifier) => ({
-        [nameClass('inset', modifier)]: {
-          top: `${size}`,
-          right: `${size}`,
-          bottom: `${size}`,
-          left: `${size}`,
-        },
-      }),
-      (size, modifier) => ({
-        [nameClass('inset-y', modifier)]: {
-          top: `${size}`,
-          bottom: `${size}`,
-        },
-        [nameClass('inset-x', modifier)]: {
-          right: `${size}`,
-          left: `${size}`,
-        },
-      }),
-      (size, modifier) => ({
-        [nameClass('top', modifier)]: { top: `${size}` },
-        [nameClass('right', modifier)]: { right: `${size}` },
-        [nameClass('bottom', modifier)]: { bottom: `${size}` },
-        [nameClass('left', modifier)]: { left: `${size}` },
-      }),
-    ]
+  return function ({ matchUtilities, theme, variants }) {
+    let options = {
+      values: theme('inset'),
+      variants: variants('inset'),
+      type: 'any',
+    }
 
-    const utilities = _.flatMap(generators, (generator) => {
-      return _.flatMap(theme('inset'), generator)
-    })
+    matchUtilities(
+      {
+        inset: (value) => {
+          return { top: value, right: value, bottom: value, left: value }
+        },
+      },
+      options
+    )
 
-    addUtilities(utilities, variants('inset'))
+    matchUtilities(
+      {
+        'inset-x': (value) => {
+          return { left: value, right: value }
+        },
+        'inset-y': (value) => {
+          return { top: value, bottom: value }
+        },
+      },
+      options
+    )
+
+    matchUtilities(
+      {
+        top: (value) => {
+          return { top: value }
+        },
+        right: (value) => {
+          return { right: value }
+        },
+        bottom: (value) => {
+          return { bottom: value }
+        },
+        left: (value) => {
+          return { left: value }
+        },
+      },
+      options
+    )
   }
 }

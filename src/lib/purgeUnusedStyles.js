@@ -3,6 +3,7 @@ import postcss from 'postcss'
 import purgecss from '@fullhuman/postcss-purgecss'
 import log from '../util/log'
 import htmlTags from 'html-tags'
+import path from 'path'
 
 function removeTailwindMarkers(css) {
   css.walkAtRules('tailwind', (rule) => rule.remove())
@@ -33,7 +34,7 @@ export function tailwindExtractor(content) {
   return broadMatches.concat(broadMatchesWithoutTrailingSlash).concat(innerMatches)
 }
 
-export default function purgeUnusedUtilities(config, configChanged) {
+export default function purgeUnusedUtilities(config, configChanged, resolvedConfigPath) {
   const purgeEnabled = _.get(
     config,
     'purge.enabled',
@@ -104,7 +105,6 @@ export default function purgeUnusedUtilities(config, configChanged) {
     },
     removeTailwindMarkers,
     purgecss({
-      content: Array.isArray(config.purge) ? config.purge : config.purge.content,
       defaultExtractor: (content) => {
         const extractor = defaultExtractor || tailwindExtractor
         const preserved = [...extractor(content)]
@@ -116,6 +116,18 @@ export default function purgeUnusedUtilities(config, configChanged) {
         return preserved
       },
       ...purgeOptions,
+      content: (Array.isArray(config.purge)
+        ? config.purge
+        : config.purge.content || purgeOptions.content || []
+      ).map((item) => {
+        if (typeof item === 'string') {
+          return path.resolve(
+            resolvedConfigPath ? path.dirname(resolvedConfigPath) : process.cwd(),
+            item
+          )
+        }
+        return item
+      }),
     }),
   ])
 }

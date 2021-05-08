@@ -1,27 +1,41 @@
-import _ from 'lodash'
-import nameClass from '../util/nameClass'
 import parseAnimationValue from '../util/parseAnimationValue'
 
 export default function () {
-  return function ({ addUtilities, theme, variants, prefix }) {
-    const prefixName = (name) => prefix(`.${name}`).slice(1)
-    const keyframesConfig = theme('keyframes')
-    const keyframesStyles = _.mapKeys(
-      keyframesConfig,
-      (_keyframes, name) => `@keyframes ${prefixName(name)}`
+  return function ({ matchUtilities, theme, variants, prefix }) {
+    let prefixName = (name) => prefix(`.${name}`).slice(1)
+    let keyframes = Object.fromEntries(
+      Object.entries(theme('keyframes')).map(([key, value]) => {
+        return [
+          key,
+          [
+            {
+              [`@keyframes ${prefixName(key)}`]: value,
+            },
+            { respectVariants: false },
+          ],
+        ]
+      })
     )
 
-    addUtilities(keyframesStyles, { respectImportant: false })
+    matchUtilities(
+      {
+        animate: (value, { includeRules }) => {
+          let { name: animationName } = parseAnimationValue(value)
 
-    const animationConfig = theme('animation')
-    const utilities = _.mapValues(
-      _.mapKeys(animationConfig, (_animation, suffix) => nameClass('animate', suffix)),
-      (animation) => {
-        const { name } = parseAnimationValue(animation)
-        if (name === undefined || keyframesConfig[name] === undefined) return { animation }
-        return { animation: animation.replace(name, prefixName(name)) }
-      }
+          if (keyframes[animationName] !== undefined) {
+            includeRules(keyframes[animationName], { respectImportant: false })
+          }
+
+          if (animationName === undefined || keyframes[animationName] === undefined) {
+            return { animation: value }
+          }
+
+          return {
+            animation: value.replace(animationName, prefixName(animationName)),
+          }
+        },
+      },
+      { values: theme('animation'), variants: variants('animation') }
     )
-    addUtilities(utilities, variants('animation'))
   }
 }
