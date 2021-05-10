@@ -8,6 +8,7 @@ import {
   useContext,
 } from 'react'
 import { ClassTable } from '@/components/ClassTable'
+import { useRouter } from 'next/router'
 import { usePrevNext } from '@/hooks/usePrevNext'
 import Link from 'next/link'
 import { SidebarLayout, SidebarContext } from '@/layouts/SidebarLayout'
@@ -158,6 +159,7 @@ export function ContentsLayoutOuter({ children, layoutProps, ...props }) {
 }
 
 export function ContentsLayout({ children, meta, classes, tableOfContents }) {
+  const router = useRouter()
   const toc = [
     ...(classes
       ? [{ title: 'Default class reference', slug: 'class-reference', children: [] }]
@@ -185,33 +187,38 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
             {children}
           </div>
         </ContentsContext.Provider>
+
         {(prev || next) && (
-          <>
-            <hr className="border-gray-200 mt-10 mb-4" />
-            <div className="flex leading-6 font-medium">
-              {prev && (
-                <Link href={prev.href}>
-                  <a className="flex mr-8 transition-colors duration-200 hover:text-gray-900">
-                    <span aria-hidden="true" className="mr-2">
-                      ←
-                    </span>
-                    {prev.shortTitle || prev.title}
-                  </a>
-                </Link>
-              )}
-              {next && (
-                <Link href={next.href}>
-                  <a className="flex text-right ml-auto transition-colors duration-200 hover:text-gray-900">
-                    {next.shortTitle || next.title}
-                    <span aria-hidden="true" className="ml-2">
-                      →
-                    </span>
-                  </a>
-                </Link>
-              )}
-            </div>
-          </>
+          <div className="mt-16 flex leading-6 font-medium">
+            {prev && (
+              <Link href={prev.href}>
+                <a className="flex mr-8 transition-colors duration-200 hover:text-gray-900">
+                  <span aria-hidden="true" className="mr-2">
+                    ←
+                  </span>
+                  {prev.shortTitle || prev.title}
+                </a>
+              </Link>
+            )}
+            {next && (
+              <Link href={next.href}>
+                <a className="flex text-right ml-auto transition-colors duration-200 hover:text-gray-900">
+                  {next.shortTitle || next.title}
+                  <span aria-hidden="true" className="ml-2">
+                    →
+                  </span>
+                </a>
+              </Link>
+            )}
+          </div>
         )}
+        <div className="mt-12 border-t border-gray-200 pt-6 text-right">
+          <Link
+            href={`https://github.com/tailwindlabs/tailwindcss.com/edit/master/src/pages${router.pathname}.mdx`}
+          >
+            <a className="mt-10 text-sm hover:text-gray-900">Edit this page on GitHub</a>
+          </Link>
+        </div>
       </div>
       <div className="hidden xl:text-sm xl:block flex-none w-64 pl-8 mr-8">
         <div className="flex flex-col justify-between overflow-y-auto sticky max-h-(screen-18) pt-10 pb-6 top-18">
