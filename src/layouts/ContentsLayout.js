@@ -188,45 +188,37 @@ export function ContentsLayout({ children, meta, classes, tableOfContents }) {
           </div>
         </ContentsContext.Provider>
 
-        <Link href={`https://github.com/tailwindlabs/tailwindcss.com/edit/master/src/pages${router.pathname}.mdx`}>
-          <a className="flex items-center mt-5 hover:text-gray-900 transition-colors duration-200">
-            <svg className="mr-1" width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-              <path
-                fillRule="evenodd"
-                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
-              />
-            </svg>
-            Edit this page on GitHub
-          </a>
-        </Link>
-
         {(prev || next) && (
-          <>
-            <hr className="border-gray-200 mt-10 mb-4" />
-            <div className="flex leading-6 font-medium">
-              {prev && (
-                <Link href={prev.href}>
-                  <a className="flex mr-8 transition-colors duration-200 hover:text-gray-900">
-                    <span aria-hidden="true" className="mr-2">
-                      ←
-                    </span>
-                    {prev.shortTitle || prev.title}
-                  </a>
-                </Link>
-              )}
-              {next && (
-                <Link href={next.href}>
-                  <a className="flex text-right ml-auto transition-colors duration-200 hover:text-gray-900">
-                    {next.shortTitle || next.title}
-                    <span aria-hidden="true" className="ml-2">
-                      →
-                    </span>
-                  </a>
-                </Link>
-              )}
-            </div>
-          </>
+          <div className="mt-16 flex leading-6 font-medium">
+            {prev && (
+              <Link href={prev.href}>
+                <a className="flex mr-8 transition-colors duration-200 hover:text-gray-900">
+                  <span aria-hidden="true" className="mr-2">
+                    ←
+                  </span>
+                  {prev.shortTitle || prev.title}
+                </a>
+              </Link>
+            )}
+            {next && (
+              <Link href={next.href}>
+                <a className="flex text-right ml-auto transition-colors duration-200 hover:text-gray-900">
+                  {next.shortTitle || next.title}
+                  <span aria-hidden="true" className="ml-2">
+                    →
+                  </span>
+                </a>
+              </Link>
+            )}
+          </div>
         )}
+        <div className="mt-12 border-t border-gray-200 pt-6 text-right">
+          <Link
+            href={`https://github.com/tailwindlabs/tailwindcss.com/edit/master/src/pages${router.pathname}.mdx`}
+          >
+            <a className="mt-10 text-sm hover:text-gray-900">Edit this page on GitHub</a>
+          </Link>
+        </div>
       </div>
       <div className="hidden xl:text-sm xl:block flex-none w-64 pl-8 mr-8">
         <div className="flex flex-col justify-between overflow-y-auto sticky max-h-(screen-18) pt-10 pb-6 top-18">
