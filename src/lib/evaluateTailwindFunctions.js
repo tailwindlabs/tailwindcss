@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import didYouMean from 'didyoumean'
 import transformThemeValue from '../util/transformThemeValue'
-import buildMediaQuery from '../util/buildMediaQuery'
 import parseValue from 'postcss-value-parser'
 
 function findClosestExistingPath(theme, path) {
