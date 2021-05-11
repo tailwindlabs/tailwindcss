@@ -68,6 +68,27 @@ test('a default value can be provided', () => {
   })
 })
 
+test('the default value can use the theme function', () => {
+  const input = `
+    .cookieMonster { color: theme('colors.blue', theme('colors.yellow')); }
+  `
+
+  const output = `
+    .cookieMonster { color: #f7cc50; }
+  `
+
+  return run(input, {
+    theme: {
+      colors: {
+        yellow: '#f7cc50',
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toEqual(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('quotes are preserved around default values', () => {
   const input = `
     .heading { font-family: theme('fontFamily.sans', "Helvetica Neue"); }
