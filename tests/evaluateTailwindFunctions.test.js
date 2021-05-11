@@ -401,3 +401,129 @@ test('transition-duration values are joined when an array', () => {
     expect(result.warnings().length).toBe(0)
   })
 })
+
+test('basic screen function calls are expanded', () => {
+  const input = `
+    @media screen(sm) {
+      .foo {}
+    }
+  `
+
+  const output = `
+  @media (min-width: 600px) {
+    .foo {}
+  }
+  `
+
+  return run(input, {
+    theme: { screens: { sm: '600px' } },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('screen function supports max-width screens', () => {
+  const input = `
+    @media screen(sm) {
+      .foo {}
+    }
+  `
+
+  const output = `
+  @media (max-width: 600px) {
+    .foo {}
+  }
+  `
+
+  return run(input, {
+    theme: { screens: { sm: { max: '600px' } } },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('screen function supports min-width screens', () => {
+  const input = `
+    @media screen(sm) {
+      .foo {}
+    }
+  `
+
+  const output = `
+  @media (min-width: 600px) {
+    .foo {}
+  }
+  `
+
+  return run(input, {
+    theme: { screens: { sm: { min: '600px' } } },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('screen function supports min-width and max-width screens', () => {
+  const input = `
+    @media screen(sm) {
+      .foo {}
+    }
+  `
+
+  const output = `
+  @media (min-width: 600px) and (max-width: 700px) {
+    .foo {}
+  }
+  `
+
+  return run(input, {
+    theme: { screens: { sm: { min: '600px', max: '700px' } } },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('screen function supports raw screens', () => {
+  const input = `
+    @media screen(mono) {
+      .foo {}
+    }
+  `
+
+  const output = `
+  @media monochrome {
+    .foo {}
+  }
+  `
+
+  return run(input, {
+    theme: { screens: { mono: { raw: 'monochrome' } } },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
+test('screen arguments can be quoted', () => {
+  const input = `
+    @media screen('sm') {
+      .foo {}
+    }
+  `
+
+  const output = `
+  @media (min-width: 600px) {
+    .foo {}
+  }
+  `
+
+  return run(input, {
+    theme: { screens: { sm: '600px' } },
+  }).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
