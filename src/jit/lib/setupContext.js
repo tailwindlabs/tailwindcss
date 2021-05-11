@@ -689,12 +689,8 @@ export default function setupContext(configOrPath) {
     })
 
     let sourcePath = result.opts.from
-    let [
-      tailwindConfig,
-      userConfigPath,
-      tailwindConfigHash,
-      configDependencies,
-    ] = getTailwindConfig(configOrPath)
+    let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
+      getTailwindConfig(configOrPath)
     let isConfigFile = userConfigPath !== null
 
     let contextDependencies = new Set(

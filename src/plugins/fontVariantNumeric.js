@@ -2,15 +2,16 @@ export default function () {
   return function ({ addUtilities, variants }) {
     addUtilities(
       {
-        '.ordinal, .slashed-zero, .lining-nums, .oldstyle-nums, .proportional-nums, .tabular-nums, .diagonal-fractions, .stacked-fractions': {
-          '--tw-ordinal': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-slashed-zero': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-numeric-figure': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-numeric-spacing': 'var(--tw-empty,/*!*/ /*!*/)',
-          '--tw-numeric-fraction': 'var(--tw-empty,/*!*/ /*!*/)',
-          'font-variant-numeric':
-            'var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)',
-        },
+        '.ordinal, .slashed-zero, .lining-nums, .oldstyle-nums, .proportional-nums, .tabular-nums, .diagonal-fractions, .stacked-fractions':
+          {
+            '--tw-ordinal': 'var(--tw-empty,/*!*/ /*!*/)',
+            '--tw-slashed-zero': 'var(--tw-empty,/*!*/ /*!*/)',
+            '--tw-numeric-figure': 'var(--tw-empty,/*!*/ /*!*/)',
+            '--tw-numeric-spacing': 'var(--tw-empty,/*!*/ /*!*/)',
+            '--tw-numeric-fraction': 'var(--tw-empty,/*!*/ /*!*/)',
+            'font-variant-numeric':
+              'var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)',
+          },
         '.normal-nums': {
           'font-variant-numeric': 'normal',
         },
