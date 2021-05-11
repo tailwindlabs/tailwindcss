@@ -79,7 +79,6 @@
     "normalize-path": "^3.0.0",
     "object-hash": "^2.1.1",
     "parse-glob": "^3.0.4",
-    "postcss-functions": "^3",
     "postcss-js": "^3.0.3",
     "postcss-nested": "5.0.5",
     "postcss-selector-parser": "^6.0.5",
