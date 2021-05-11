@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `empty` variant ([#3298](https://github.com/tailwindlabs/tailwindcss/pull/3298))
 - Update `modern-normalize` to v1.1 ([#4287](https://github.com/tailwindlabs/tailwindcss/pull/4287))
 - Implement `theme` function internally, remove `postcss-functions` dependency ([#4317](https://github.com/tailwindlabs/tailwindcss/pull/4317))
+- Add `screen` function to improve nesting plugin compatibility ([#4318](https://github.com/tailwindlabs/tailwindcss/pull/4318))
 
 ### Fixed
 
