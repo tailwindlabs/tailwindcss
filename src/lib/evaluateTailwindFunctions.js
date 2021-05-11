@@ -2,6 +2,7 @@ import _ from 'lodash'
 import didYouMean from 'didyoumean'
 import transformThemeValue from '../util/transformThemeValue'
 import parseValue from 'postcss-value-parser'
+import buildMediaQuery from '../util/buildMediaQuery'
 
 function findClosestExistingPath(theme, path) {
   const parts = _.toPath(path)
@@ -162,6 +163,15 @@ export default function (config) {
       }
 
       return value
+    },
+    screen: (node, screen) => {
+      screen = _.trim(screen, `'"`)
+
+      if (config.theme.screens[screen] === undefined) {
+        throw node.error(`The '${screen}' screen does not exist in your theme.`)
+      }
+
+      return buildMediaQuery(config.theme.screens[screen])
     },
   }
   return (root) => {
