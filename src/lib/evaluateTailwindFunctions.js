@@ -1,7 +1,7 @@
 import _ from 'lodash'
-import functions from 'postcss-functions'
 import didYouMean from 'didyoumean'
 import transformThemeValue from '../util/transformThemeValue'
+import parseValue from 'postcss-value-parser'
 
 function findClosestExistingPath(theme, path) {
   const parts = _.toPath(path)
@@ -109,23 +109,70 @@ function validatePath(config, path, defaultValue) {
   }
 }
 
+function extractArgs(node, vNodes, functions) {
+  vNodes = vNodes.map((vNode) => resolveVNode(node, vNode, functions))
+
+  let args = ['']
+
+  for (let vNode of vNodes) {
+    if (vNode.type === 'div' && vNode.value === ',') {
+      args.push('')
+    } else {
+      args[args.length - 1] += parseValue.stringify(vNode)
+    }
+  }
+
+  return args
+}
+
+function resolveVNode(node, vNode, functions) {
+  if (vNode.type === 'function' && functions[vNode.value] !== undefined) {
+    let args = extractArgs(node, vNode.nodes, functions)
+    vNode.type = 'word'
+    vNode.value = functions[vNode.value](node, ...args)
+  }
+
+  return vNode
+}
+
+function resolveFunctions(node, input, functions) {
+  return parseValue(input)
+    .walk((vNode) => {
+      resolveVNode(node, vNode, functions)
+    })
+    .toString()
+}
+
+let nodeTypePropertyMap = {
+  atrule: 'params',
+  decl: 'value',
+}
+
 export default function (config) {
-  return (root) =>
-    functions({
-      functions: {
-        theme: (path, ...defaultValue) => {
-          const { isValid, value, error } = validatePath(
-            config,
-            path,
-            defaultValue.length ? defaultValue : undefined
-          )
+  let functions = {
+    theme: (node, path, ...defaultValue) => {
+      const { isValid, value, error } = validatePath(
+        config,
+        path,
+        defaultValue.length ? defaultValue : undefined
+      )
 
-          if (!isValid) {
-            throw root.error(error)
-          }
+      if (!isValid) {
+        throw node.error(error)
+      }
 
-          return value
-        },
-      },
-    })(root)
+      return value
+    },
+  }
+  return (root) => {
+    root.walk((node) => {
+      let property = nodeTypePropertyMap[node.type]
+
+      if (property === undefined) {
+        return
+      }
+
+      node[property] = resolveFunctions(node, node[property], functions)
+    })
+  }
 }
