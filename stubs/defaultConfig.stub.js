@@ -807,6 +807,7 @@ module.exports = {
     'visited',
     'checked',
     'empty',
+    'read-only',
     'group-hover',
     'group-focus',
     'focus-within',

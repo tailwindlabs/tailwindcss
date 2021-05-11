@@ -569,6 +569,27 @@ test('it can generate hover, active and focus variants', () => {
   })
 })
 
+test('it can generate read-only variants', () => {
+  const input = `
+    @variants read-only {
+      .banana { color: yellow; }
+      .chocolate { color: brown; }
+    }
+  `
+
+  const output = `
+    .banana { color: yellow; }
+    .chocolate { color: brown; }
+    .read-only\\:banana:read-only { color: yellow; }
+    .read-only\\:chocolate:read-only { color: brown; }
+  `
+
+  return run(input).then((result) => {
+    expect(result.css).toMatchCss(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('it can generate hover, active and focus variants for multiple classes in one rule', () => {
   const input = `
     @variants hover, focus, active {
@@ -648,7 +669,7 @@ test('variants are generated in the order specified', () => {
 
 test('the built-in variant pseudo-selectors are appended before any pseudo-elements', () => {
   const input = `
-    @variants hover, focus-within, focus-visible, focus, active, group-hover {
+    @variants hover, focus-within, focus-visible, focus, active, group-hover, read-only {
       .placeholder-yellow::placeholder { color: yellow; }
     }
   `
@@ -661,6 +682,7 @@ test('the built-in variant pseudo-selectors are appended before any pseudo-eleme
     .focus\\:placeholder-yellow:focus::placeholder { color: yellow; }
     .active\\:placeholder-yellow:active::placeholder { color: yellow; }
     .group:hover .group-hover\\:placeholder-yellow::placeholder { color: yellow; }
+    .read-only\\:placeholder-yellow:read-only::placeholder { color: yellow; }
   `
 
   return run(input).then((result) => {
