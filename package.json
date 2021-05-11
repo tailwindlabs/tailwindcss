@@ -74,7 +74,7 @@
     "html-tags": "^3.1.0",
     "lodash": "^4.17.21",
     "lodash.topath": "^4.5.2",
-    "modern-normalize": "^1.0.0",
+    "modern-normalize": "^1.1.0",
     "node-emoji": "^1.8.1",
     "normalize-path": "^3.0.0",
     "object-hash": "^2.1.1",
