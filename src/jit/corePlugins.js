@@ -20,6 +20,7 @@ export default {
       'visited',
       'checked',
       'empty',
+      'read-only',
       'focus-within',
       'hover',
       'focus',
