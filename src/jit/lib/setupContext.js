@@ -314,6 +314,7 @@ function rebootWatcher(context) {
           touch(context.configPath)
         } else {
           context.changedFiles.add(path.resolve('.', file))
+          console.log(context.touchFile)
           touch(context.touchFile)
         }
       })
@@ -686,14 +687,8 @@ function cleanupContext(context) {
 // Retrieve an existing context from cache if possible (since contexts are unique per
 // source path), or set up a new one (including setting up watchers and registering
 // plugins) then return it
-export default function setupContext(configOrPath) {
+export default function setupContext(configOrPath, tailwindDirectives) {
   return (result, root) => {
-    let foundTailwind = false
-
-    root.walkAtRules('tailwind', () => {
-      foundTailwind = true
-    })
-
     let sourcePath = result.opts.from
     let [
       tailwindConfig,
@@ -712,7 +707,7 @@ export default function setupContext(configOrPath) {
     // We may want to think about `@layer` being part of this trigger too, but it's tough
     // because it's impossible for a layer in one file to end up in the actual @tailwind rule
     // in another file since independent sources are effectively isolated.
-    if (foundTailwind) {
+    if (tailwindDirectives.size > 0) {
       contextDependencies.add(sourcePath)
       for (let message of result.messages) {
         if (message.type === 'dependency') {

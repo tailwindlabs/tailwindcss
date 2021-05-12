@@ -23,4 +23,12 @@ export default function rewriteTailwindImports(root) {
       atRule.params = 'screens'
     }
   })
+
+  let tailwindDirectives = new Set()
+
+  root.walkAtRules('tailwind', (rule) => {
+    tailwindDirectives.add(rule.params)
+  })
+
+  return tailwindDirectives
 }

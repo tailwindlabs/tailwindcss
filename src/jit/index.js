@@ -30,9 +30,9 @@ export default function (configOrPath = {}) {
         })
       }
 
-      rewriteTailwindImports(root)
+      let tailwindDirectives = rewriteTailwindImports(root)
 
-      let context = setupContext(configOrPath)(result, root)
+      let context = setupContext(configOrPath, tailwindDirectives)(result, root)
 
       if (!env.TAILWIND_DISABLE_TOUCH) {
         if (context.configPath !== null) {
@@ -41,8 +41,8 @@ export default function (configOrPath = {}) {
       }
 
       return postcss([
-        removeLayerAtRules(context),
-        expandTailwindAtRules(context, registerDependency),
+        removeLayerAtRules(context, tailwindDirectives),
+        expandTailwindAtRules(context, registerDependency, tailwindDirectives),
         expandApplyAtRules(context),
         evaluateTailwindFunctions(context.tailwindConfig),
         substituteScreenAtRules(context.tailwindConfig),

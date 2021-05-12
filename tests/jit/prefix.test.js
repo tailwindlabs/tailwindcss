@@ -66,7 +66,7 @@ test('prefix', () => {
       }
     }
     @tailwind utilities;
-    @layer utilites {
+    @layer utilities {
       .custom-utility {
         foo: bar;
       }
