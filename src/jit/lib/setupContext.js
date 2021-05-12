@@ -21,6 +21,7 @@ import resolveConfig from '../../../resolveConfig'
 import corePlugins from '../corePlugins'
 import isPlainObject from '../../util/isPlainObject'
 import escapeClassName from '../../util/escapeClassName'
+import log from '../../util/log'
 
 import nameClass from '../../util/nameClass'
 import { coerceValue } from '../../util/pluginUtils'
@@ -286,6 +287,11 @@ function rebootWatcher(context) {
     (env.TAILWIND_MODE === undefined && env.NODE_ENV === 'development')
   ) {
     Promise.resolve(context.watcher ? context.watcher.close() : null).then(() => {
+      log.info([
+        'Tailwind CSS is watching for changes...',
+        'https://tailwindcss.com/docs/just-in-time-mode#watch-mode-and-one-off-builds',
+      ])
+
       context.watcher = chokidar.watch([...context.candidateFiles, ...context.configDependencies], {
         ignoreInitial: true,
       })
