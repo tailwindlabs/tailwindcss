@@ -26,7 +26,7 @@ export default function () {
       {
         values: flattenColorPalette(theme('placeholderColor')),
         variants: variants('placeholderColor'),
-        type: 'any',
+        type: ['color', 'any'],
       }
     )
   }

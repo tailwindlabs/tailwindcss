@@ -160,3 +160,41 @@ test('function colors are supported', async () => {
     `)
   })
 })
+
+test('utilities that support any type are supported', async () => {
+  let config = {
+    mode: 'jit',
+    purge: [
+      {
+        raw: `
+          <div class="from-red-500/50"></div>
+          <div class="fill-red-500/25"></div>
+          <div class="placeholder-red-500/75"></div>
+        `,
+      },
+    ],
+    theme: {
+      extend: {
+        fill: (theme) => theme('colors'),
+      },
+    },
+    plugins: [],
+  }
+
+  let css = `@tailwind utilities`
+
+  return run(css, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(`
+      .from-red-500\\/50 {
+        --tw-gradient-from: rgba(239, 68, 68, 0.5);
+        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(239, 68, 68, 0));
+      }
+      .fill-red-500\\/25 {
+        fill: rgba(239, 68, 68, 0.25);
+      }
+      .placeholder-red-500\\/75::placeholder {
+        color: rgba(239, 68, 68, 0.75);
+      }
+    `)
+  })
+})

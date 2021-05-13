@@ -244,13 +244,17 @@ function splitAtFirst(input, delim) {
 }
 
 export function coerceValue(type, modifier, values, tailwindConfig) {
-  if (modifier.startsWith('[') && modifier.endsWith(']')) {
+  let [scaleType, arbitraryType = scaleType] = [].concat(type)
+
+  if (isArbitraryValue(modifier)) {
     let [explicitType, value] = splitAtFirst(modifier.slice(1, -1), ':')
 
     if (value.length > 0 && Object.keys(typeMap).includes(explicitType)) {
       return [asValue(`[${value}]`, values, tailwindConfig), explicitType]
     }
+
+    return [typeMap[arbitraryType](modifier, values, tailwindConfig), arbitraryType]
   }
 
-  return [typeMap[type](modifier, values, tailwindConfig), type]
+  return [typeMap[scaleType](modifier, values, tailwindConfig), scaleType]
 }
