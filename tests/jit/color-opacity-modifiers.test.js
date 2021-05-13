@@ -131,3 +131,32 @@ test('values not in the opacity config are ignored', async () => {
     expect(result.css).toMatchFormattedCss(``)
   })
 })
+
+test('function colors are supported', async () => {
+  let config = {
+    mode: 'jit',
+    purge: [
+      {
+        raw: '<div class="bg-blue/50"></div>',
+      },
+    ],
+    theme: {
+      colors: {
+        blue: ({ opacityValue }) => {
+          return `rgba(var(--colors-blue), ${opacityValue})`
+        },
+      },
+    },
+    plugins: [],
+  }
+
+  let css = `@tailwind utilities`
+
+  return run(css, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(`
+      .bg-blue\\/50 {
+        background-color: rgba(var(--colors-blue), 0.5);
+      }
+    `)
+  })
+})
