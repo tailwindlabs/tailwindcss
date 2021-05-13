@@ -119,6 +119,19 @@ test('it allows a closure to be passed', () => {
   })
 })
 
+test('it parses the color in the fallback of a custom property', () => {
+  expect(
+    withAlphaVariable({
+      color: 'var(--custom-property, #ff0000)',
+      property: 'color',
+      variable: '--tw-text-opacity',
+    })
+  ).toEqual({
+    '--tw-text-opacity': '1',
+    color: 'var(--custom-property, rgba(255, 0, 0, var(--tw-text-opacity)))',
+  })
+})
+
 test('it transforms rgb and hsl to rgba and hsla', () => {
   expect(
     withAlphaVariable({

@@ -45,19 +45,32 @@ export default function withAlphaVariable({ color, property, variable }) {
   }
 
   try {
+    let customProperty = false
+
+    // A var() with a comma always has a fallback. We will try to parse fallback as a color.
+    if (color.startsWith('var(') && color.includes(',')) {
+      // Get the var name by removing `var(` and everything after the comma.
+      customProperty = color.split(',')[0].substring(4)
+      // To get the fallback, we remove everything before the first comma,
+      // remove the comma and the trailing bracket and trim whitespace.
+      color = color.split(',').slice(1).join(',').slice(1, -1).trim()
+    }
+
     const isHSL = color.startsWith('hsl')
 
     const [i, j, k, a] = isHSL ? toHsla(color) : toRgba(color)
 
     if (a !== undefined) {
       return {
-        [property]: color,
+        [property]: customProperty ? `var(${customProperty}, ${color})` : color,
       }
     }
 
+    color = `${isHSL ? 'hsla' : 'rgba'}(${i}, ${j}, ${k}, var(${variable}))`
+
     return {
       [variable]: '1',
-      [property]: `${isHSL ? 'hsla' : 'rgba'}(${i}, ${j}, ${k}, var(${variable}))`,
+      [property]: customProperty ? `var(${customProperty}, ${color})` : color,
     }
   } catch (error) {
     return {
