@@ -314,7 +314,6 @@ function rebootWatcher(context) {
           touch(context.configPath)
         } else {
           context.changedFiles.add(path.resolve('.', file))
-          console.log(context.touchFile)
           touch(context.touchFile)
         }
       })
