@@ -1,4 +1,4 @@
-export default function rewriteTailwindImports(root) {
+export default function normalizeTailwindDirectives(root) {
   root.walkAtRules('import', (atRule) => {
     if (atRule.params === '"tailwindcss/base"' || atRule.params === "'tailwindcss/base'") {
       atRule.name = 'tailwind'
@@ -17,16 +17,21 @@ export default function rewriteTailwindImports(root) {
       atRule.params = 'utilities'
     } else if (
       atRule.params === '"tailwindcss/screens"' ||
-      atRule.params === "'tailwindcss/screens'"
+      atRule.params === "'tailwindcss/screens'" ||
+      atRule.params === '"tailwindcss/variants"' ||
+      atRule.params === "'tailwindcss/variants'"
     ) {
       atRule.name = 'tailwind'
-      atRule.params = 'screens'
+      atRule.params = 'variants'
     }
   })
 
   let tailwindDirectives = new Set()
 
   root.walkAtRules('tailwind', (rule) => {
+    if (rule.params === 'screens') {
+      rule.params = 'variants'
+    }
     tailwindDirectives.add(rule.params)
   })
 

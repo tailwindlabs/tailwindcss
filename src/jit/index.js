@@ -3,7 +3,7 @@ import postcss from 'postcss'
 import evaluateTailwindFunctions from '../lib/evaluateTailwindFunctions'
 import substituteScreenAtRules from '../lib/substituteScreenAtRules'
 
-import rewriteTailwindImports from './lib/rewriteTailwindImports'
+import normalizeTailwindDirectives from './lib/normalizeTailwindDirectives'
 import setupContext from './lib/setupContext'
 import removeLayerAtRules from './lib/removeLayerAtRules'
 import expandTailwindAtRules from './lib/expandTailwindAtRules'
@@ -30,7 +30,7 @@ export default function (configOrPath = {}) {
         })
       }
 
-      let tailwindDirectives = rewriteTailwindImports(root)
+      let tailwindDirectives = normalizeTailwindDirectives(root)
 
       let context = setupContext(configOrPath, tailwindDirectives)(result, root)
 
