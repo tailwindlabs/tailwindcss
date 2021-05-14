@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update `modern-normalize` to v1.1 ([#4287](https://github.com/tailwindlabs/tailwindcss/pull/4287))
 - Implement `theme` function internally, remove `postcss-functions` dependency ([#4317](https://github.com/tailwindlabs/tailwindcss/pull/4317))
 - Add `screen` function to improve nesting plugin compatibility ([#4318](https://github.com/tailwindlabs/tailwindcss/pull/4318))
+- JIT: Add universal shorthand color opacity syntax ([#4348](https://github.com/tailwindlabs/tailwindcss/pull/4348))
 
 ### Fixed
 
@@ -122,7 +123,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added new `ring` utilities for creating outline/focus rings using box shadows ([#2747](https://github.com/tailwindlabs/tailwindcss/pull/2747), [879f088](https://github.com/tailwindlabs/tailwindcss/commit/879f088), [e0788ef](https://github.com/tailwindlabs/tailwindcss/commit/879f088))
 - Added `5` and `95` to opacity scale ([#2747](https://github.com/tailwindlabs/tailwindcss/pull/2747))
 - Add support for default duration and timing function values whenever enabling transitions ([#2755](https://github.com/tailwindlabs/tailwindcss/pull/2755))
-
 
 ### Changed
 
@@ -398,7 +398,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
--  Fix issue where using `theme` with default line-heights did not resolve correctly
+- Fix issue where using `theme` with default line-heights did not resolve correctly
 
 ## [1.9.4] - 2020-10-17
 
@@ -448,6 +448,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use `word-wrap` instead of `overflow-wrap` in `ie11` target mode ([#2391](https://github.com/tailwindlabs/tailwindcss/pull/2391))
 
 ### Experimental
+
 - Add experimental `2xl` breakpoint ([#2468](https://github.com/tailwindlabs/tailwindcss/pull/2468))
 - Rename `{u}-max-content` and `{u}-min-content` utilities to `{u}-max` and `{u}-min` in experimental extended spacing scale ([#2532](https://github.com/tailwindlabs/tailwindcss/pull/2532))
 - Support disabling dark mode variants globally ([#2530](https://github.com/tailwindlabs/tailwindcss/pull/2530))
