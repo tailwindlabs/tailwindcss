@@ -83,12 +83,12 @@ function buildStylesheet(rules, context) {
     base: new Set(),
     components: new Set(),
     utilities: new Set(),
-    screens: new Set(),
+    variants: new Set(),
   }
 
   for (let [sort, rule] of sortedRules) {
     if (sort >= context.minimumScreen) {
-      returnValue.screens.add(rule)
+      returnValue.variants.add(rule)
       continue
     }
 
@@ -121,7 +121,7 @@ export default function expandTailwindAtRules(context, registerDependency, tailw
       base: null,
       components: null,
       utilities: null,
-      screens: null,
+      variants: null,
     }
 
     // Make sure this file contains Tailwind directives. If not, we can save
@@ -141,8 +141,8 @@ export default function expandTailwindAtRules(context, registerDependency, tailw
         layerNodes.utilities = rule
       }
 
-      if (rule.params === 'screens') {
-        layerNodes.screens = rule
+      if (rule.params === 'variants') {
+        layerNodes.variants = rule
       }
     })
 
@@ -242,7 +242,7 @@ export default function expandTailwindAtRules(context, registerDependency, tailw
       base: baseNodes,
       components: componentNodes,
       utilities: utilityNodes,
-      screens: screenNodes,
+      variants: screenNodes,
     } = context.stylesheetCache
 
     // ---
@@ -264,9 +264,9 @@ export default function expandTailwindAtRules(context, registerDependency, tailw
       layerNodes.utilities.remove()
     }
 
-    if (layerNodes.screens) {
-      layerNodes.screens.before(cloneNodes([...screenNodes]))
-      layerNodes.screens.remove()
+    if (layerNodes.variants) {
+      layerNodes.variants.before(cloneNodes([...screenNodes]))
+      layerNodes.variants.remove()
     } else {
       root.append(cloneNodes([...screenNodes]))
     }
