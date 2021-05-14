@@ -9,8 +9,8 @@
   "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
   "homepage": "https://tailwindcss.com",
   "bin": {
-    "tailwind": "lib/cli.js",
-    "tailwindcss": "lib/cli.js"
+    "tailwind": "cli/index.js",
+    "tailwindcss": "cli/index.js"
   },
   "contributors": [
     "Adam Wathan <adam.wathan@gmail.com>",
@@ -21,7 +21,7 @@
     "prebabelify": "rimraf lib",
     "babelify": "babel src --out-dir lib --copy-files",
     "rebuild-fixtures": "npm run babelify && babel-node scripts/rebuildFixtures.js",
-    "prepublishOnly": "npm run babelify && babel-node scripts/build.js",
+    "prepublishOnly": "npm run babelify && ncc build lib/cli.js -o cli && babel-node scripts/build.js",
     "style": "eslint .",
     "test": "cross-env TAILWIND_MODE=build jest",
     "posttest": "npm run style",
@@ -30,7 +30,7 @@
   },
   "files": [
     "dist/*.css",
-    "jit/*",
+    "cli/*",
     "lib/*",
     "scripts/*.js",
     "stubs/*.stub.js",
@@ -43,6 +43,7 @@
     "@babel/node": "^7.12.13",
     "@babel/preset-env": "^7.13.8",
     "@tailwindcss/aspect-ratio": "^0.2.0",
+    "@vercel/ncc": "^0.28.5",
     "autoprefixer": "^10.2.5",
     "babel-jest": "^26.6.3",
     "clean-css": "^5.1.2",
