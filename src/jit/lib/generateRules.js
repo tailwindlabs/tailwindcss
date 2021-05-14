@@ -27,9 +27,9 @@ function* candidatePermutations(candidate, lastIndex = Infinity) {
   if (lastIndex === Infinity && candidate.endsWith(']')) {
     let bracketIdx = candidate.lastIndexOf('[')
 
-    // If character before `[` isn't a dash, this isn't a dynamic class
+    // If character before `[` isn't a dash or a slash, this isn't a dynamic class
     // eg. string[]
-    dashIdx = candidate[bracketIdx - 1] === '-' ? bracketIdx - 1 : -1
+    dashIdx = ['-', '/'].includes(candidate[bracketIdx - 1]) ? bracketIdx - 1 : -1
   } else {
     dashIdx = candidate.lastIndexOf('-', lastIndex)
   }

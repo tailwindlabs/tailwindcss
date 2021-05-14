@@ -11,7 +11,7 @@ export default function () {
     let options = {
       values: flattenColorPalette(theme('gradientColorStops')),
       variants: variants('gradientColorStops'),
-      type: 'any',
+      type: ['color', 'any'],
     }
 
     matchUtilities(

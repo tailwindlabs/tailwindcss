@@ -541,9 +541,10 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
         function wrapped(modifier) {
           let { type = 'any' } = options
-          let [value, coercedType] = coerceValue(type, modifier, options.values)
+          type = [].concat(type)
+          let [value, coercedType] = coerceValue(type, modifier, options.values, tailwindConfig)
 
-          if (type !== coercedType || value === undefined) {
+          if (!type.includes(coercedType) || value === undefined) {
             return []
           }
 

@@ -2,6 +2,7 @@ import selectorParser from 'postcss-selector-parser'
 import postcss from 'postcss'
 import createColor from 'color'
 import escapeCommas from './escapeCommas'
+import { withAlphaValue } from './withAlphaVariable'
 
 export function updateAllClasses(selectors, updateClass) {
   let parser = selectorParser((selectors) => {
@@ -148,16 +149,50 @@ export function asList(modifier, lookup = {}) {
   })
 }
 
-export function asColor(modifier, lookup = {}) {
+function isArbitraryValue(input) {
+  return input.startsWith('[') && input.endsWith(']')
+}
+
+function splitAlpha(modifier) {
+  let slashIdx = modifier.lastIndexOf('/')
+
+  if (slashIdx === -1 || slashIdx === modifier.length - 1) {
+    return [modifier]
+  }
+
+  return [modifier.slice(0, slashIdx), modifier.slice(slashIdx + 1)]
+}
+
+function isColor(value) {
+  try {
+    createColor(value)
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
+export function asColor(modifier, lookup = {}, tailwindConfig = {}) {
+  if (lookup[modifier] !== undefined) {
+    return lookup[modifier]
+  }
+
+  let [color, alpha] = splitAlpha(modifier)
+
+  if (lookup[color] !== undefined) {
+    if (isArbitraryValue(alpha)) {
+      return withAlphaValue(lookup[color], alpha.slice(1, -1))
+    }
+
+    if (tailwindConfig.theme?.opacity?.[alpha] === undefined) {
+      return undefined
+    }
+
+    return withAlphaValue(lookup[color], tailwindConfig.theme.opacity[alpha])
+  }
+
   return asValue(modifier, lookup, {
-    validate: (value) => {
-      try {
-        createColor(value)
-        return true
-      } catch (e) {
-        return false
-      }
-    },
+    validate: isColor,
   })
 }
 
@@ -208,14 +243,18 @@ function splitAtFirst(input, delim) {
   return (([first, ...rest]) => [first, rest.join(delim)])(input.split(delim))
 }
 
-export function coerceValue(type, modifier, values) {
-  if (modifier.startsWith('[') && modifier.endsWith(']')) {
+export function coerceValue(type, modifier, values, tailwindConfig) {
+  let [scaleType, arbitraryType = scaleType] = [].concat(type)
+
+  if (isArbitraryValue(modifier)) {
     let [explicitType, value] = splitAtFirst(modifier.slice(1, -1), ':')
 
     if (value.length > 0 && Object.keys(typeMap).includes(explicitType)) {
-      return [asValue(`[${value}]`, values), explicitType]
+      return [asValue(`[${value}]`, values, tailwindConfig), explicitType]
     }
+
+    return [typeMap[arbitraryType](modifier, values, tailwindConfig), arbitraryType]
   }
 
-  return [typeMap[type](modifier, values), type]
+  return [typeMap[scaleType](modifier, values, tailwindConfig), scaleType]
 }

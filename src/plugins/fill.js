@@ -12,7 +12,7 @@ export default function () {
       {
         values: flattenColorPalette(theme('fill')),
         variants: variants('fill'),
-        type: 'any',
+        type: ['color', 'any'],
       }
     )
   }
