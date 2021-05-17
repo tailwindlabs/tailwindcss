@@ -6,6 +6,7 @@
     "test": "jest"
   },
   "jest": {
+    "testTimeout": 30000,
     "projects": [
       "<rootDir>/*/package.json"
     ]
