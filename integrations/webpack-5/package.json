@@ -1,0 +1,25 @@
+{
+  "name": "webpack-5",
+  "private": true,
+  "version": "0.0.0",
+  "main": "./src/index.js",
+  "browser": "./src/index.js",
+  "scripts": {
+    "build": "webpack --mode=production",
+    "dev": "webpack --mode=development",
+    "test": "jest"
+  },
+  "jest": {
+    "displayName": "webpack 5",
+    "setupFilesAfterEnv": [
+      "<rootDir>/../../jest/customMatchers.js"
+    ]
+  },
+  "devDependencies": {
+    "css-loader": "^5.2.4",
+    "mini-css-extract-plugin": "^1.6.0",
+    "postcss-loader": "^5.3.0",
+    "webpack": "^5.37.0",
+    "webpack-cli": "^4.7.0"
+  }
+}
