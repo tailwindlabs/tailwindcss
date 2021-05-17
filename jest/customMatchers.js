@@ -53,6 +53,48 @@ expect.extend({
 
     return { actual: received, message, pass }
   },
+  toIncludeCss(received, argument) {
+    function stripped(str) {
+      return str.replace(/\s/g, '').replace(/;/g, '')
+    }
+
+    const options = {
+      comment: 'stripped(received).includes(stripped(argument))',
+      isNot: this.isNot,
+      promise: this.promise,
+    }
+
+    const pass = stripped(received).includes(stripped(argument))
+
+    const message = pass
+      ? () => {
+          return (
+            this.utils.matcherHint('toIncludeCss', undefined, undefined, options) +
+            '\n\n' +
+            `Expected: not ${this.utils.printExpected(format(received))}\n` +
+            `Received: ${this.utils.printReceived(format(argument))}`
+          )
+        }
+      : () => {
+          const actual = format(received)
+          const expected = format(argument)
+
+          const diffString = diff(expected, actual, {
+            expand: this.expand,
+          })
+
+          return (
+            this.utils.matcherHint('toIncludeCss', undefined, undefined, options) +
+            '\n\n' +
+            (diffString && diffString.includes('- Expect')
+              ? `Difference:\n\n${diffString}`
+              : `Expected: ${this.utils.printExpected(expected)}\n` +
+                `Received: ${this.utils.printReceived(actual)}`)
+          )
+        }
+
+    return { actual: received, message, pass }
+  },
 })
 
 expect.extend({
