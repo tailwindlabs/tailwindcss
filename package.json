@@ -25,6 +25,7 @@
     "style": "eslint .",
     "test": "cross-env TAILWIND_MODE=build jest",
     "test:integrations": "npm run test --prefix ./integrations",
+    "install:integrations": "node scripts/install-integrations.js",
     "posttest": "npm run style",
     "compat": "node scripts/compat.js --prepare",
     "compat:restore": "node scripts/compat.js --restore"
