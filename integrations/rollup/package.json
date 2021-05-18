@@ -1,0 +1,19 @@
+{
+  "name": "rollup.js",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "build": "rollup -c",
+    "test": "jest"
+  },
+  "jest": {
+    "displayName": "rollup.js",
+    "setupFilesAfterEnv": [
+      "<rootDir>/../../jest/customMatchers.js"
+    ]
+  },
+  "devDependencies": {
+    "rollup": "^2.48.0",
+    "rollup-plugin-postcss": "^4.0.0"
+  }
+}
