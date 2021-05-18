@@ -22,20 +22,24 @@ let fs = require('fs')
 
 */
 
+// npx tailwindcss -i in.css -o out.css -w --files="./**/*.{js,html}"
+
 let args = arg({
   '--files': String,
   '--config': String,
+  '--input': String,
   '--output': String,
   '--minify': Boolean,
   '--watch': Boolean,
   '-f': '--files',
   '-c': '--config',
+  '-i': '--input',
   '-o': '--output',
   '-m': '--minify',
   '-w': '--watch',
 })
 
-let input = args['_'][1]
+let input = args['--input']
 let output = args['--output']
 let files = args['--files']
 let shouldWatch = args['--watch']
@@ -45,40 +49,43 @@ if (!output) {
   throw new Error('Missing required output file: --output, -o, or first argument')
 }
 
-if (files.length === 0) {
-  throw new Error('Must provide at least one purge file or directory: --files, -f')
+function indentRecursive(node, indent = 0) {
+  node.each &&
+    node.each((child, i) => {
+      if (!child.raws.before || !child.raws.before.trim() || child.raws.before.includes('\n')) {
+        child.raws.before = `\n${node.type !== 'rule' && i > 0 ? '\n' : ''}${'  '.repeat(indent)}`
+      }
+      child.raws.after = `\n${'  '.repeat(indent)}`
+      indentRecursive(child, indent + 1)
+    })
 }
 
-if (shouldWatch) {
-  process.env.TAILWIND_MODE = 'watch'
+function formatNodes(root) {
+  indentRecursive(root)
+  if (root.first) {
+    root.first.raws.before = ''
+  }
 }
 
-let processors = [tailwindcss({ config: getConfig() }), autoprefixer]
+let configPath = args['--config'] ?? path.resolve('./tailwind.config.js')
+let config = require(configPath)
 
-if (process.env.NODE_ENV === 'production' || shouldMinify) {
-  process.env.NODE_ENV = 'production'
+let plugins = [
+  // TODO: Bake in postcss-import support?
+  // TODO: Bake in postcss-nested support?
+  {
+    postcssPlugin: 'tailwindcss',
+    plugins: require('./jit').default(config),
+  },
+  require('autoprefixer'),
+  formatNodes,
+]
 
-  processors.push(require('cssnano'))
-}
+// TODO: Read from file
+let css = '@tailwind base; @tailwind components; @tailwind utilities'
 
-let css = input
-  ? fs.readFileSync(input)
-  : '@tailwind base; @tailwind components; @tailwind utilities'
-
-if (shouldWatch) {
-  chokidar.watch(files, { ignored: /[\/\\]\./ }).on('all', () => {
-    processCSS()
-  })
-} else {
-  processCSS()
-}
-
-function processCSS() {
-  console.log(chalk.cyan('♻️ tailbuilding...'))
-
-  mkdirp.sync(path.dirname(output))
-
-  postcss(processors)
+function processCSS(css) {
+  postcss(plugins)
     .process(css, { from: input, to: output })
     .then((result) => {
       fs.writeFile(output, result.css, () => true)
@@ -89,13 +96,4 @@ function processCSS() {
     })
 }
 
-function getConfig() {
-  if (args['--config']) return args['--config']
-
-  if (fs.existsSync('tailwind.config.js')) return 'tailwind.config.js'
-
-  return {
-    mode: 'jit',
-    purge: files,
-  }
-}
+processCSS(css)
