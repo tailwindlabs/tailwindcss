@@ -1,13 +1,23 @@
+require('isomorphic-fetch')
+
 let $ = require('../../execute')
 let { css, html, javascript } = require('../../syntax')
 
-let {
-  readOutputFile,
-  appendToInputFile,
-  writeInputFile,
-  waitForOutputFileCreation,
-  waitForOutputFileChange,
-} = require('../../io')({ output: 'dist', input: '.' })
+let { readOutputFile, appendToInputFile, writeInputFile } = require('../../io')({
+  output: 'dist',
+  input: '.',
+})
+
+let PORT = 1337
+
+async function fetchCSS() {
+  let response = await fetch(`http://0.0.0.0:${PORT}/index.css`, {
+    headers: {
+      Accept: 'text/css',
+    },
+  })
+  return response.text()
+}
 
 describe('static build', () => {
   it('should be possible to generate tailwind output', async () => {
@@ -33,7 +43,7 @@ describe('static build', () => {
   })
 })
 
-describe.skip('watcher', () => {
+describe('watcher', () => {
   test('classes are generated when the html file changes', async () => {
     await writeInputFile(
       'index.html',
@@ -43,13 +53,12 @@ describe.skip('watcher', () => {
       `
     )
 
-    let runningProcess = $('vite dev', {
+    let runningProcess = $(`vite --port ${PORT}`, {
       env: { TAILWIND_MODE: 'watch' },
     })
+    await runningProcess.onStdout((message) => message.includes('ready in'))
 
-    await waitForOutputFileCreation(/index.\w+\.css$/)
-
-    expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+    expect(await fetchCSS()).toIncludeCss(
       css`
         .font-bold {
           font-weight: 700;
@@ -57,11 +66,10 @@ describe.skip('watcher', () => {
       `
     )
 
-    await waitForOutputFileChange(/index.\w+\.css$/, async () => {
-      await appendToInputFile('index.html', html`<div class="font-normal"></div>`)
-    })
+    await appendToInputFile('index.html', html`<div class="font-normal"></div>`)
+    await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
 
-    expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+    expect(await fetchCSS()).toIncludeCss(
       css`
         .font-bold {
           font-weight: 700;
@@ -72,11 +80,10 @@ describe.skip('watcher', () => {
       `
     )
 
-    await waitForOutputFileChange(/index.\w+\.css$/, async () => {
-      await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
-    })
+    await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
+    await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
 
-    expect(await readOutputFile(/index.\w+\.css$/)).toIncludeCss(
+    expect(await fetchCSS()).toIncludeCss(
       css`
         .bg-red-500 {
           --tw-bg-opacity: 1;
@@ -103,13 +110,12 @@ describe.skip('watcher', () => {
       `
     )
 
-    let runningProcess = $('vite build --watch', {
+    let runningProcess = $(`vite --port ${PORT}`, {
       env: { TAILWIND_MODE: 'watch' },
     })
+    await runningProcess.onStdout((message) => message.includes('ready in'))
 
-    await waitForOutputFileCreation('main.css')
-
-    expect(await readOutputFile('main.css')).toIncludeCss(
+    expect(await fetchCSS()).toIncludeCss(
       css`
         .font-bold {
           font-weight: 700;
@@ -122,37 +128,36 @@ describe.skip('watcher', () => {
       `
     )
 
-    await waitForOutputFileChange('main.css', async () => {
-      await writeInputFile(
-        'tailwind.config.js',
-        javascript`
-          module.exports = {
-            purge: ['./src/index.html'],
-            mode: 'jit',
-            darkMode: false, // or 'media' or 'class'
-            theme: {
-              extend: {
-                screens: {
-                  md: '800px'
-                },
-                fontWeight: {
-                  bold: 'bold'
-                }
+    await writeInputFile(
+      'tailwind.config.js',
+      javascript`
+        module.exports = {
+          purge: ['./index.html'],
+          mode: 'jit',
+          darkMode: false, // or 'media' or 'class'
+          theme: {
+            extend: {
+              screens: {
+                md: '800px'
               },
+              fontWeight: {
+                bold: 'bold'
+              }
             },
-            variants: {
-              extend: {},
-            },
-            corePlugins: {
-              preflight: false,
-            },
-            plugins: [],
-          }
+          },
+          variants: {
+            extend: {},
+          },
+          corePlugins: {
+            preflight: false,
+          },
+          plugins: [],
+        }
       `
-      )
-    })
+    )
+    await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
 
-    expect(await readOutputFile('main.css')).toIncludeCss(
+    expect(await fetchCSS()).toIncludeCss(
       css`
         .font-bold {
           font-weight: bold;
@@ -177,13 +182,12 @@ describe.skip('watcher', () => {
       `
     )
 
-    let runningProcess = $('vite watch', {
+    let runningProcess = $(`vite --port ${PORT}`, {
       env: { TAILWIND_MODE: 'watch' },
     })
+    await runningProcess.onStdout((message) => message.includes('ready in'))
 
-    await waitForOutputFileCreation('main.css')
-
-    expect(await readOutputFile('main.css')).toIncludeCss(
+    expect(await fetchCSS()).toIncludeCss(
       css`
         .font-bold {
           font-weight: 700;
@@ -191,24 +195,23 @@ describe.skip('watcher', () => {
       `
     )
 
-    await waitForOutputFileChange('main.css', async () => {
-      await writeInputFile(
-        'index.css',
-        css`
-          @tailwind base;
-          @tailwind components;
-          @tailwind utilities;
+    await writeInputFile(
+      'index.css',
+      css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
 
-          @layer components {
-            .btn {
-              @apply px-2 py-1 rounded;
-            }
+        @layer components {
+          .btn {
+            @apply px-2 py-1 rounded;
           }
-        `
-      )
-    })
+        }
+      `
+    )
+    await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
 
-    expect(await readOutputFile('main.css')).toIncludeCss(
+    expect(await fetchCSS()).toIncludeCss(
       css`
         .btn {
           border-radius: 0.25rem;
@@ -223,24 +226,23 @@ describe.skip('watcher', () => {
       `
     )
 
-    await waitForOutputFileChange('main.css', async () => {
-      await writeInputFile(
-        'index.css',
-        css`
-          @tailwind base;
-          @tailwind components;
-          @tailwind utilities;
+    await writeInputFile(
+      'index.css',
+      css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
 
-          @layer components {
-            .btn {
-              @apply px-2 py-1 rounded bg-red-500;
-            }
+        @layer components {
+          .btn {
+            @apply px-2 py-1 rounded bg-red-500;
           }
-        `
-      )
-    })
+        }
+      `
+    )
+    await runningProcess.onStdout((message) => message.includes('hmr update /index.css'))
 
-    expect(await readOutputFile('main.css')).toIncludeCss(
+    expect(await fetchCSS()).toIncludeCss(
       css`
         .btn {
           border-radius: 0.25rem;
