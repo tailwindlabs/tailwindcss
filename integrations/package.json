@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "jest": {
     "testTimeout": 30000,
