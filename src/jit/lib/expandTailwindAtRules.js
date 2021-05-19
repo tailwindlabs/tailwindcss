@@ -1,7 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import fastGlob from 'fast-glob'
-import parseGlob from 'parse-glob'
 import * as sharedState from './sharedState'
 import { generateRules } from './generateRules'
 import bigSign from '../../util/bigSign'
@@ -111,7 +109,7 @@ function buildStylesheet(rules, context) {
   return returnValue
 }
 
-export default function expandTailwindAtRules(context, registerDependency, tailwindDirectives) {
+export default function expandTailwindAtRules(context, tailwindDirectives) {
   return (root) => {
     if (tailwindDirectives.size === 0) {
       return root
@@ -145,61 +143,6 @@ export default function expandTailwindAtRules(context, registerDependency, tailw
         layerNodes.variants = rule
       }
     })
-
-    // ---
-
-    if (sharedState.env.TAILWIND_DISABLE_TOUCH) {
-      for (let maybeGlob of context.candidateFiles) {
-        let {
-          is: { glob: isGlob },
-          base,
-        } = parseGlob(maybeGlob)
-
-        if (isGlob) {
-          // rollup-plugin-postcss does not support dir-dependency messages
-          // but directories can be watched in the same way as files
-          registerDependency(
-            path.resolve(base),
-            process.env.ROLLUP_WATCH === 'true' ? 'dependency' : 'dir-dependency'
-          )
-        } else {
-          registerDependency(path.resolve(maybeGlob))
-        }
-      }
-
-      env.DEBUG && console.time('Finding changed files')
-      let files = fastGlob.sync(context.candidateFiles)
-      for (let file of files) {
-        let prevModified = context.fileModifiedMap.has(file)
-          ? context.fileModifiedMap.get(file)
-          : -Infinity
-        let modified = fs.statSync(file).mtimeMs
-
-        if (!context.scannedContent || modified > prevModified) {
-          context.changedFiles.add(file)
-          context.fileModifiedMap.set(file, modified)
-        }
-      }
-      context.scannedContent = true
-      env.DEBUG && console.timeEnd('Finding changed files')
-    } else {
-      // Register our temp file as a dependency — we write to this file
-      // to trigger rebuilds.
-      if (context.touchFile) {
-        registerDependency(context.touchFile)
-      }
-
-      // If we're not set up and watching files ourselves, we need to do
-      // the work of grabbing all of the template files for candidate
-      // detection.
-      if (!context.scannedContent) {
-        let files = fastGlob.sync(context.candidateFiles)
-        for (let file of files) {
-          context.changedFiles.add(file)
-        }
-        context.scannedContent = true
-      }
-    }
 
     // ---
 

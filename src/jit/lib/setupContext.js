@@ -587,7 +587,7 @@ function extractVariantAtRules(node) {
   })
 }
 
-function collectLayerPlugins(root) {
+function collectLayerPlugins(root, tailwindDirectives) {
   let layerPlugins = []
 
   root.each((node) => {
@@ -619,6 +619,27 @@ function collectLayerPlugins(root) {
           addUtilities(node, { respectPrefix: false })
         })
       }
+    }
+  })
+
+  root.walkAtRules((rule) => {
+    if (rule.name === 'layer' && ['base', 'components', 'utilities'].includes(rule.params)) {
+      if (!tailwindDirectives.has(rule.params)) {
+        throw rule.error(
+          `\`@layer ${rule.params}\` is used but no matching \`@tailwind ${rule.params}\` directive is present.`
+        )
+      }
+      rule.remove()
+    } else if (rule.name === 'responsive') {
+      if (!tailwindDirectives.has('utilities')) {
+        throw rule.error('`@responsive` is used but `@tailwind utilities` is missing.')
+      }
+      rule.remove()
+    } else if (rule.name === 'variants') {
+      if (!tailwindDirectives.has('utilities')) {
+        throw rule.error('`@variants` is used but `@tailwind utilities` is missing.')
+      }
+      rule.remove()
     }
   })
 
@@ -846,7 +867,7 @@ export default function setupContext(configOrPath, tailwindDirectives) {
       return typeof plugin === 'function' ? plugin : plugin.handler
     })
 
-    let layerPlugins = collectLayerPlugins(root)
+    let layerPlugins = collectLayerPlugins(root, tailwindDirectives)
 
     // TODO: This is a workaround for backwards compatibility, since custom variants
     // were historically sorted before screen/stackable variants.
