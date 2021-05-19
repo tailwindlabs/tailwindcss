@@ -149,7 +149,7 @@ let nodeTypePropertyMap = {
   decl: 'value',
 }
 
-export default function (config) {
+export default function ({ tailwindConfig: config }) {
   let functions = {
     theme: (node, path, ...defaultValue) => {
       const { isValid, value, error } = validatePath(

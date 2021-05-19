@@ -109,12 +109,8 @@ function buildStylesheet(rules, context) {
   return returnValue
 }
 
-export default function expandTailwindAtRules(context, tailwindDirectives) {
-  return (root) => {
-    if (tailwindDirectives.size === 0) {
-      return root
-    }
-
+export default function expandTailwindAtRules(context) {
+  return (root, result) => {
     let layerNodes = {
       base: null,
       components: null,
@@ -127,22 +123,14 @@ export default function expandTailwindAtRules(context, tailwindDirectives) {
     // file as a dependency since the output of this CSS does not depend on
     // the source of any templates. Think Vue <style> blocks for example.
     root.walkAtRules('tailwind', (rule) => {
-      if (rule.params === 'base') {
-        layerNodes.base = rule
-      }
-
-      if (rule.params === 'components') {
-        layerNodes.components = rule
-      }
-
-      if (rule.params === 'utilities') {
-        layerNodes.utilities = rule
-      }
-
-      if (rule.params === 'variants') {
-        layerNodes.variants = rule
+      if (Object.keys(layerNodes).includes(rule.params)) {
+        layerNodes[rule.params] = rule
       }
     })
+
+    if (Object.values(layerNodes).every((n) => n === null)) {
+      return root
+    }
 
     // ---
 

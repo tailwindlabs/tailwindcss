@@ -9,13 +9,11 @@ import substituteScreenAtRules from '../lib/substituteScreenAtRules'
 
 import normalizeTailwindDirectives from './lib/normalizeTailwindDirectives'
 import setupContext from './lib/setupContext'
-import removeLayerAtRules from './lib/removeLayerAtRules'
 import expandTailwindAtRules from './lib/expandTailwindAtRules'
 import expandApplyAtRules from './lib/expandApplyAtRules'
 import collapseAdjacentRules from './lib/collapseAdjacentRules'
 import * as sharedState from './lib/sharedState'
 import { env } from './lib/sharedState'
-import purgeUnusedUtilities from '../lib/purgeUnusedStyles'
 
 export default function (configOrPath = {}) {
   return [
@@ -104,16 +102,13 @@ export default function (configOrPath = {}) {
         detectChangedTemplates()
       }
 
-      return postcss(
-        [
-          removeLayerAtRules(context, tailwindDirectives),
-          tailwindDirectives.size > 0 && expandTailwindAtRules(context, tailwindDirectives),
-          expandApplyAtRules(context),
-          evaluateTailwindFunctions(context.tailwindConfig),
-          substituteScreenAtRules(context.tailwindConfig),
-          collapseAdjacentRules(context),
-        ].filter(Boolean)
-      ).process(root, { from: undefined })
+      return postcss([
+        expandTailwindAtRules(context),
+        expandApplyAtRules(context),
+        evaluateTailwindFunctions(context),
+        substituteScreenAtRules(context),
+        collapseAdjacentRules(context),
+      ]).process(root, { from: undefined })
     },
     env.DEBUG &&
       function (root) {

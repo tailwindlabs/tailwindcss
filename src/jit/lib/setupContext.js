@@ -587,7 +587,7 @@ function extractVariantAtRules(node) {
   })
 }
 
-function collectLayerPlugins(root, tailwindDirectives) {
+function collectLayerPlugins(root) {
   let layerPlugins = []
 
   root.each((node) => {
@@ -598,48 +598,30 @@ function collectLayerPlugins(root, tailwindDirectives) {
   })
 
   // Walk @layer rules and treat them like plugins
-  root.walkAtRules('layer', (layerNode) => {
-    extractVariantAtRules(layerNode)
+  root.walkAtRules('layer', (layerRule) => {
+    extractVariantAtRules(layerRule)
 
-    if (layerNode.params === 'base') {
-      for (let node of layerNode.nodes) {
+    if (layerRule.params === 'base') {
+      for (let node of layerRule.nodes) {
         layerPlugins.push(function ({ addBase }) {
           addBase(node, { respectPrefix: false })
         })
       }
-    } else if (layerNode.params === 'components') {
-      for (let node of layerNode.nodes) {
+      layerRule.remove()
+    } else if (layerRule.params === 'components') {
+      for (let node of layerRule.nodes) {
         layerPlugins.push(function ({ addComponents }) {
           addComponents(node, { respectPrefix: false })
         })
       }
-    } else if (layerNode.params === 'utilities') {
-      for (let node of layerNode.nodes) {
+      layerRule.remove()
+    } else if (layerRule.params === 'utilities') {
+      for (let node of layerRule.nodes) {
         layerPlugins.push(function ({ addUtilities }) {
           addUtilities(node, { respectPrefix: false })
         })
       }
-    }
-  })
-
-  root.walkAtRules((rule) => {
-    if (rule.name === 'layer' && ['base', 'components', 'utilities'].includes(rule.params)) {
-      if (!tailwindDirectives.has(rule.params)) {
-        throw rule.error(
-          `\`@layer ${rule.params}\` is used but no matching \`@tailwind ${rule.params}\` directive is present.`
-        )
-      }
-      rule.remove()
-    } else if (rule.name === 'responsive') {
-      if (!tailwindDirectives.has('utilities')) {
-        throw rule.error('`@responsive` is used but `@tailwind utilities` is missing.')
-      }
-      rule.remove()
-    } else if (rule.name === 'variants') {
-      if (!tailwindDirectives.has('utilities')) {
-        throw rule.error('`@variants` is used but `@tailwind utilities` is missing.')
-      }
-      rule.remove()
+      layerRule.remove()
     }
   })
 
