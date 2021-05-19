@@ -22,6 +22,19 @@ let fs = require('fs')
 
 */
 
+/*
+  TODOs:
+
+  - Make watching work
+  - Compile from custom source CSS file
+  - Make minification work
+  - Scaffold tailwind.config.js file (with postcss.config.js)
+
+  Future:
+  - Detect project type, add sensible purge defaults
+
+*/
+
 // npx tailwindcss -i in.css -o out.css -w --files="./**/*.{js,html}"
 
 let args = arg({
@@ -83,17 +96,19 @@ let plugins = [
 
 // TODO: Read from file
 let css = '@tailwind base; @tailwind components; @tailwind utilities'
+let processor = postcss(plugins)
 
 function processCSS(css) {
-  postcss(plugins)
-    .process(css, { from: input, to: output })
-    .then((result) => {
-      fs.writeFile(output, result.css, () => true)
+  processor.process(css, { from: input, to: output }).then((result) => {
+    fs.writeFile(output, result.css, () => true)
 
-      if (result.map) {
-        fs.writeFile(output + '.map', result.map.toString(), () => true)
-      }
-    })
+    if (result.map) {
+      fs.writeFile(output + '.map', result.map.toString(), () => true)
+    }
+  })
 }
 
-processCSS(css)
+if (shouldWatch) {
+} else {
+  processCSS(css)
+}
