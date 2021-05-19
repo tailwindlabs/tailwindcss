@@ -37,7 +37,13 @@ export default function (configOrPath = {}) {
 
       let context = setupContext(configOrPath, tailwindDirectives)(result, root)
 
-      function detectChangedTemplates() {
+      if (!env.TAILWIND_DISABLE_TOUCH) {
+        if (context.configPath !== null) {
+          registerDependency(context.configPath)
+        }
+      }
+
+      if (tailwindDirectives.size > 0) {
         if (sharedState.env.TAILWIND_DISABLE_TOUCH) {
           for (let maybeGlob of context.candidateFiles) {
             let {
@@ -90,16 +96,6 @@ export default function (configOrPath = {}) {
             context.scannedContent = true
           }
         }
-      }
-
-      if (!env.TAILWIND_DISABLE_TOUCH) {
-        if (context.configPath !== null) {
-          registerDependency(context.configPath)
-        }
-      }
-
-      if (tailwindDirectives.size > 0) {
-        detectChangedTemplates()
       }
 
       return postcss([
