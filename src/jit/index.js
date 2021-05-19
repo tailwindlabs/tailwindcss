@@ -1,16 +1,8 @@
-import postcss from 'postcss'
-
-import evaluateTailwindFunctions from '../lib/evaluateTailwindFunctions'
-import substituteScreenAtRules from '../lib/substituteScreenAtRules'
-
 import normalizeTailwindDirectives from './lib/normalizeTailwindDirectives'
-import setupContext from './lib/setupContext'
-import removeLayerAtRules from './lib/removeLayerAtRules'
-import expandTailwindAtRules from './lib/expandTailwindAtRules'
-import expandApplyAtRules from './lib/expandApplyAtRules'
-import collapseAdjacentRules from './lib/collapseAdjacentRules'
-
+import setupTrackingContext from './lib/setupTrackingContext'
+import setupWatchingContext from './lib/setupWatchingContext'
 import { env } from './lib/sharedState'
+import processTailwindFeatures from './processTailwindFeatures'
 
 export default function (configOrPath = {}) {
   return [
@@ -32,22 +24,11 @@ export default function (configOrPath = {}) {
 
       let tailwindDirectives = normalizeTailwindDirectives(root)
 
-      let context = setupContext(configOrPath, tailwindDirectives)(result, root)
+      let context = env.TAILWIND_DISABLE_TOUCH
+        ? setupTrackingContext(configOrPath, tailwindDirectives, registerDependency)(result, root)
+        : setupWatchingContext(configOrPath, tailwindDirectives, registerDependency)(result, root)
 
-      if (!env.TAILWIND_DISABLE_TOUCH) {
-        if (context.configPath !== null) {
-          registerDependency(context.configPath)
-        }
-      }
-
-      return postcss([
-        removeLayerAtRules(context, tailwindDirectives),
-        expandTailwindAtRules(context, registerDependency, tailwindDirectives),
-        expandApplyAtRules(context),
-        evaluateTailwindFunctions(context.tailwindConfig),
-        substituteScreenAtRules(context.tailwindConfig),
-        collapseAdjacentRules(context),
-      ]).process(root, { from: undefined })
+      processTailwindFeatures(context)(root, result)
     },
     env.DEBUG &&
       function (root) {

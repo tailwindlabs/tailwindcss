@@ -386,11 +386,11 @@ export default function substituteClassApplyAtRules(config, getProcessedPlugins,
         ? () => {
             return postcss([
               substituteTailwindAtRules(config, getProcessedPlugins()),
-              evaluateTailwindFunctions(config),
+              evaluateTailwindFunctions({ tailwindConfig: config }),
               substituteVariantsAtRules(config, getProcessedPlugins()),
               substituteResponsiveAtRules(config),
               convertLayerAtRulesToControlComments(config),
-              substituteScreenAtRules(config),
+              substituteScreenAtRules({ tailwindConfig: config }),
             ])
               .process(requiredTailwindAtRules.map((rule) => `@tailwind ${rule};`).join('\n'), {
                 from: __filename,
