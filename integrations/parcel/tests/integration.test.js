@@ -33,7 +33,7 @@ describe('static build', () => {
   })
 })
 
-describe('watcher', () => {
+describe.skip('watcher', () => {
   test('classes are generated when the html file changes', async () => {
     await writeInputFile(
       'index.html',

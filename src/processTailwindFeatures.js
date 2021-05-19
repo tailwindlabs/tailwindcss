@@ -58,11 +58,11 @@ export default function (getConfig, resolvedConfigPath) {
 
     return postcss([
       substituteTailwindAtRules(config, getProcessedPlugins()),
-      evaluateTailwindFunctions(config),
+      evaluateTailwindFunctions({ tailwindConfig: config }),
       substituteVariantsAtRules(config, getProcessedPlugins()),
       substituteResponsiveAtRules(config),
       convertLayerAtRulesToControlComments(config),
-      substituteScreenAtRules(config),
+      substituteScreenAtRules({ tailwindConfig: config }),
       substituteClassApplyAtRules(config, getProcessedPlugins, configChanged),
       applyImportantConfiguration(config),
       purgeUnusedStyles(config, configChanged, resolvedConfigPath),

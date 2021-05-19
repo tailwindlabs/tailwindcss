@@ -27,13 +27,14 @@ describe('static build', () => {
   })
 })
 
-describe('watcher', () => {
-  test('classes are generated when the html file changes', async () => {
+describe.each([
+  { TAILWIND_MODE: 'watch' },
+  { TAILWIND_MODE: 'watch', TAILWIND_DISABLE_TOUCH: true },
+])('watcher %p', (env) => {
+  test(`classes are generated when the html file changes`, async () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 
-    let runningProcess = $('rollup -c --watch', {
-      env: { TAILWIND_MODE: 'watch' },
-    })
+    let runningProcess = $('rollup -c --watch', { env })
 
     await waitForOutputFileCreation('index.css')
 
@@ -82,12 +83,10 @@ describe('watcher', () => {
     return runningProcess.stop()
   })
 
-  test('classes are generated when the tailwind.config.js file changes', async () => {
+  test(`classes are generated when the tailwind.config.js file changes`, async () => {
     await writeInputFile('index.html', html`<div class="font-bold md:font-medium"></div>`)
 
-    let runningProcess = $('rollup -c --watch', {
-      env: { TAILWIND_MODE: 'watch' },
-    })
+    let runningProcess = $('rollup -c --watch', { env })
 
     await waitForOutputFileCreation('index.css')
 
@@ -150,12 +149,10 @@ describe('watcher', () => {
     return runningProcess.stop()
   })
 
-  test('classes are generated when the index.css file changes', async () => {
+  test(`classes are generated when the index.css file changes`, async () => {
     await writeInputFile('index.html', html`<div class="font-bold btn"></div>`)
 
-    let runningProcess = $('rollup -c --watch', {
-      env: { TAILWIND_MODE: 'watch' },
-    })
+    let runningProcess = $('rollup -c --watch', { env })
 
     await waitForOutputFileCreation('index.css')
 

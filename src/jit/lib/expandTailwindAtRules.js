@@ -1,7 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import fastGlob from 'fast-glob'
-import parseGlob from 'parse-glob'
 import * as sharedState from './sharedState'
 import { generateRules } from './generateRules'
 import bigSign from '../../util/bigSign'
@@ -111,12 +109,8 @@ function buildStylesheet(rules, context) {
   return returnValue
 }
 
-export default function expandTailwindAtRules(context, registerDependency, tailwindDirectives) {
+export default function expandTailwindAtRules(context) {
   return (root) => {
-    if (tailwindDirectives.size === 0) {
-      return root
-    }
-
     let layerNodes = {
       base: null,
       components: null,
@@ -129,76 +123,13 @@ export default function expandTailwindAtRules(context, registerDependency, tailw
     // file as a dependency since the output of this CSS does not depend on
     // the source of any templates. Think Vue <style> blocks for example.
     root.walkAtRules('tailwind', (rule) => {
-      if (rule.params === 'base') {
-        layerNodes.base = rule
-      }
-
-      if (rule.params === 'components') {
-        layerNodes.components = rule
-      }
-
-      if (rule.params === 'utilities') {
-        layerNodes.utilities = rule
-      }
-
-      if (rule.params === 'variants') {
-        layerNodes.variants = rule
+      if (Object.keys(layerNodes).includes(rule.params)) {
+        layerNodes[rule.params] = rule
       }
     })
 
-    // ---
-
-    if (sharedState.env.TAILWIND_DISABLE_TOUCH) {
-      for (let maybeGlob of context.candidateFiles) {
-        let {
-          is: { glob: isGlob },
-          base,
-        } = parseGlob(maybeGlob)
-
-        if (isGlob) {
-          // rollup-plugin-postcss does not support dir-dependency messages
-          // but directories can be watched in the same way as files
-          registerDependency(
-            path.resolve(base),
-            process.env.ROLLUP_WATCH === 'true' ? 'dependency' : 'dir-dependency'
-          )
-        } else {
-          registerDependency(path.resolve(maybeGlob))
-        }
-      }
-
-      env.DEBUG && console.time('Finding changed files')
-      let files = fastGlob.sync(context.candidateFiles)
-      for (let file of files) {
-        let prevModified = context.fileModifiedMap.has(file)
-          ? context.fileModifiedMap.get(file)
-          : -Infinity
-        let modified = fs.statSync(file).mtimeMs
-
-        if (!context.scannedContent || modified > prevModified) {
-          context.changedFiles.add(file)
-          context.fileModifiedMap.set(file, modified)
-        }
-      }
-      context.scannedContent = true
-      env.DEBUG && console.timeEnd('Finding changed files')
-    } else {
-      // Register our temp file as a dependency — we write to this file
-      // to trigger rebuilds.
-      if (context.touchFile) {
-        registerDependency(context.touchFile)
-      }
-
-      // If we're not set up and watching files ourselves, we need to do
-      // the work of grabbing all of the template files for candidate
-      // detection.
-      if (!context.scannedContent) {
-        let files = fastGlob.sync(context.candidateFiles)
-        for (let file of files) {
-          context.changedFiles.add(file)
-        }
-        context.scannedContent = true
-      }
+    if (Object.values(layerNodes).every((n) => n === null)) {
+      return root
     }
 
     // ---
@@ -208,14 +139,8 @@ export default function expandTailwindAtRules(context, registerDependency, tailw
     let seen = new Set()
 
     env.DEBUG && console.time('Reading changed files')
-    for (let file of context.changedFiles) {
-      let content = fs.readFileSync(file, 'utf8')
-      let extractor = getExtractor(context.tailwindConfig, path.extname(file).slice(1))
-      getClassCandidates(content, extractor, contentMatchCache, candidates, seen)
-    }
-    env.DEBUG && console.timeEnd('Reading changed files')
 
-    for (let { content, extension } of context.rawContent) {
+    for (let { content, extension } of context.changedContent) {
       let extractor = getExtractor(context.tailwindConfig, extension)
       getClassCandidates(content, extractor, contentMatchCache, candidates, seen)
     }
@@ -276,13 +201,12 @@ export default function expandTailwindAtRules(context, registerDependency, tailw
     // ---
 
     if (env.DEBUG) {
-      console.log('Changed files: ', context.changedFiles.size)
       console.log('Potential classes: ', candidates.size)
       console.log('Active contexts: ', sharedState.contextSourcesMap.size)
       console.log('Content match entries', contentMatchCache.size)
     }
 
     // Clear the cache for the changed files
-    context.changedFiles.clear()
+    context.changedContent = []
   }
 }
