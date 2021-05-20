@@ -26,7 +26,7 @@ export default function (configOrPath = {}) {
           type,
           plugin: 'tailwindcss-jit',
           parent: result.opts.from,
-          file: fileName,
+          [type === 'dir-dependency' ? 'dir' : 'file']: fileName,
         })
       }
 

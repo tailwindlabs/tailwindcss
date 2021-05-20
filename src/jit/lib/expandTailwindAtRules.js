@@ -156,10 +156,12 @@ export default function expandTailwindAtRules(context, registerDependency, tailw
         } = parseGlob(maybeGlob)
 
         if (isGlob) {
-          // register base dir as `dependency` _and_ `context-dependency` for
-          // increased compatibility
-          registerDependency(path.resolve(base))
-          registerDependency(path.resolve(base), 'context-dependency')
+          // rollup-plugin-postcss does not support dir-dependency messages
+          // but directories can be watched in the same way as files
+          registerDependency(
+            path.resolve(base),
+            process.env.ROLLUP_WATCH === 'true' ? 'dependency' : 'dir-dependency'
+          )
         } else {
           registerDependency(path.resolve(maybeGlob))
         }
