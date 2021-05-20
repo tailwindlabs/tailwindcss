@@ -30,7 +30,7 @@ describe('watcher', () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 
     let runningProcess = $('webpack --mode=development --watch', {
-      env: { TAILWIND_MODE: 'watch', TAILWIND_DISABLE_TOUCH: true },
+      env: { TAILWIND_MODE: 'watch' },
     })
 
     await waitForOutputFileCreation('main.css')
@@ -84,7 +84,7 @@ describe('watcher', () => {
     await writeInputFile('index.html', html`<div class="font-bold md:font-medium"></div>`)
 
     let runningProcess = $('webpack --mode=development --watch', {
-      env: { TAILWIND_MODE: 'watch', TAILWIND_DISABLE_TOUCH: true },
+      env: { TAILWIND_MODE: 'watch' },
     })
 
     await waitForOutputFileCreation('main.css')
@@ -152,7 +152,7 @@ describe('watcher', () => {
     await writeInputFile('index.html', html`<div class="font-bold btn"></div>`)
 
     let runningProcess = $('webpack --mode=development --watch', {
-      env: { TAILWIND_MODE: 'watch', TAILWIND_DISABLE_TOUCH: true },
+      env: { TAILWIND_MODE: 'watch' },
     })
 
     await waitForOutputFileCreation('main.css')
