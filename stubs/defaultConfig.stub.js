@@ -755,6 +755,9 @@ module.exports = {
       '-3/4': '-75%',
       '-full': '-100%',
     }),
+    perspective: (theme) => ({
+      ...theme('translate'),
+    }),
     width: (theme) => ({
       auto: 'auto',
       ...theme('spacing'),
@@ -954,6 +957,7 @@ module.exports = {
     transitionProperty: ['responsive'],
     transitionTimingFunction: ['responsive'],
     translate: ['responsive', 'hover', 'focus'],
+    perspective: ['responsive', 'hover', 'focus'],
     userSelect: ['responsive'],
     verticalAlign: ['responsive'],
     visibility: ['responsive'],
