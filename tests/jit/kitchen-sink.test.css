@@ -535,6 +535,9 @@ div {
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
       var(--tw-shadow);
   }
+  .md\:hover\:border-r-blue-500\/30:hover {
+    border-right-color: rgba(59, 130, 246, 0.3);
+  }
   .md\:hover\:opacity-20:hover {
     opacity: 0.2;
   }

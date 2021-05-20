@@ -417,6 +417,22 @@
   --tw-border-opacity: 1;
   border-color: rgba(0, 0, 0, var(--tw-border-opacity));
 }
+.border-t-black {
+  --tw-border-opacity: 1;
+  border-top-color: rgba(0, 0, 0, var(--tw-border-opacity));
+}
+.border-r-black {
+  --tw-border-opacity: 1;
+  border-right-color: rgba(0, 0, 0, var(--tw-border-opacity));
+}
+.border-b-black {
+  --tw-border-opacity: 1;
+  border-bottom-color: rgba(0, 0, 0, var(--tw-border-opacity));
+}
+.border-l-black {
+  --tw-border-opacity: 1;
+  border-left-color: rgba(0, 0, 0, var(--tw-border-opacity));
+}
 .border-opacity-10 {
   --tw-border-opacity: 0.1;
 }
