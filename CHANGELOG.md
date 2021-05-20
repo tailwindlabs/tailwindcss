@@ -7,24 +7,75 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Added
+
+- Add `background-origin` utilities ([#4117](https://github.com/tailwindlabs/tailwindcss/pull/4117))
+- Improve `@apply` performance in projects that process many CSS sources ([#3178](https://github.com/tailwindlabs/tailwindcss/pull/3718))
+- JIT: Don't use CSS variables for color utilities if color opacity utilities are disabled ([#3984](https://github.com/tailwindlabs/tailwindcss/pull/3984))
+- JIT: Redesign `matchUtilities` API to make it more suitable for third-party use ([#4232](https://github.com/tailwindlabs/tailwindcss/pull/4232))
+- JIT: Support applying important utility variants ([#4260](https://github.com/tailwindlabs/tailwindcss/pull/4260))
+- JIT: Support coercing arbitrary values when the type isn't detectable ([#4263](https://github.com/tailwindlabs/tailwindcss/pull/4263))
+- JIT: Support for `raw` syntax in `purge` config ([#4272](https://github.com/tailwindlabs/tailwindcss/pull/4272))
+- Add `empty` variant ([#3298](https://github.com/tailwindlabs/tailwindcss/pull/3298))
+- Update `modern-normalize` to v1.1 ([#4287](https://github.com/tailwindlabs/tailwindcss/pull/4287))
+- Implement `theme` function internally, remove `postcss-functions` dependency ([#4317](https://github.com/tailwindlabs/tailwindcss/pull/4317))
+- Add `screen` function to improve nesting plugin compatibility ([#4318](https://github.com/tailwindlabs/tailwindcss/pull/4318))
+- JIT: Add universal shorthand color opacity syntax ([#4348](https://github.com/tailwindlabs/tailwindcss/pull/4348))
+- JIT: Add `@tailwind variants` directive to replace `@tailwind screens` ([#4356](https://github.com/tailwindlabs/tailwindcss/pull/4356))
+
+### Fixed
+
+- JIT: Improve support for Svelte class bindings ([#4187](https://github.com/tailwindlabs/tailwindcss/pull/4187))
+- JIT: Improve support for `calc` and `var` in arbitrary values ([#4147](https://github.com/tailwindlabs/tailwindcss/pull/4147))
+- Convert `hsl` colors to `hsla` when transforming for opacity support instead of `rgba` ([#3850](https://github.com/tailwindlabs/tailwindcss/pull/3850))
+- Fix `backdropBlur` variants not being generated ([#4188](https://github.com/tailwindlabs/tailwindcss/pull/4188))
+- Improve animation value parsing ([#4250](https://github.com/tailwindlabs/tailwindcss/pull/4250))
+- Ignore unknown object types when hashing config ([82f4eaa](https://github.com/tailwindlabs/tailwindcss/commit/82f4eaa6832ef8a4e3fd90869e7068efdf6e34f2))
+- Ensure variants are grouped properly for plugins with order-dependent utilities ([#4273](https://github.com/tailwindlabs/tailwindcss/pull/4273))
+- Resolve purge paths relative to `tailwind.config.js` instead of the current working directory ([#4214](https://github.com/tailwindlabs/tailwindcss/pull/4214))
+- Fix JIT temp file storage when node temp directories are kept on a different drive than the project itself ([#4044](https://github.com/tailwindlabs/tailwindcss/pull/4044))
+- Support border-opacity utilities alongside default `border` utility ([#4277](https://github.com/tailwindlabs/tailwindcss/pull/4277))
+
+## [2.1.2] - 2021-04-23
+
+### Fixed
+
+- Fix issue where JIT engine would generate the wrong CSS when using PostCSS 7 ([#4078](https://github.com/tailwindlabs/tailwindcss/pull/4078))
+
+## [2.1.1] - 2021-04-05
+
+### Fixed
+
+- Fix issue where JIT engine would fail to compile when a source path isn't provided by the build runner for the current input file ([#3978](https://github.com/tailwindlabs/tailwindcss/pull/3978))
+
+## [2.1.0] - 2021-04-05
+
+### Added
+
+- Add alternate JIT engine (in preview) ([#3905](https://github.com/tailwindlabs/tailwindcss/pull/3905))
+- Add new `mix-blend-mode` and `background-blend-mode` utilities ([#3920](https://github.com/tailwindlabs/tailwindcss/pull/3920))
+- Add new `box-decoration-break` utilities ([#3911](https://github.com/tailwindlabs/tailwindcss/pull/3911))
+- Add new `isolation` utilities ([#3914](https://github.com/tailwindlabs/tailwindcss/pull/3914))
+- Add `inline-table` display utility ([#3563](https://github.com/tailwindlabs/tailwindcss/pull/3563))
+- Add `list-item` display utility ([#3929](https://github.com/tailwindlabs/tailwindcss/pull/3929))
+- Add new `filter` and `backdrop-filter` utilities ([#3923](https://github.com/tailwindlabs/tailwindcss/pull/3923))
 
 ## [2.0.4] - 2021-03-17
 
-## Fixed
+### Fixed
 
 - Pass full `var(--bg-opacity)` value as `opacityValue` when defining colors as functions
 
 ## [2.0.3] - 2021-02-07
 
-## Fixed
+### Fixed
 
 - Ensure sourcemap input is deterministic when using `@apply` in Vue components ([#3356](https://github.com/tailwindlabs/tailwindcss/pull/3356))
 - Ensure placeholder opacity is consistent across browsers ([#3308](https://github.com/tailwindlabs/tailwindcss/pull/3308))
 - Fix issue where `theme()` didn't work with colors defined as functions ([#2919](https://github.com/tailwindlabs/tailwindcss/pull/2919))
 - Enable `dark` variants by default for color opacity utilities ([#2975](https://github.com/tailwindlabs/tailwindcss/pull/2975))
 
-## Added
+### Added
 
 - Add support for a `tailwind.config.cjs` file in Node ESM projects ([#3181](https://github.com/tailwindlabs/tailwindcss/pull/3181))
 - Add version comment to Preflight ([#3255](https://github.com/tailwindlabs/tailwindcss/pull/3255))
@@ -73,7 +124,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added new `ring` utilities for creating outline/focus rings using box shadows ([#2747](https://github.com/tailwindlabs/tailwindcss/pull/2747), [879f088](https://github.com/tailwindlabs/tailwindcss/commit/879f088), [e0788ef](https://github.com/tailwindlabs/tailwindcss/commit/879f088))
 - Added `5` and `95` to opacity scale ([#2747](https://github.com/tailwindlabs/tailwindcss/pull/2747))
 - Add support for default duration and timing function values whenever enabling transitions ([#2755](https://github.com/tailwindlabs/tailwindcss/pull/2755))
-
 
 ### Changed
 
@@ -349,7 +399,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
--  Fix issue where using `theme` with default line-heights did not resolve correctly
+- Fix issue where using `theme` with default line-heights did not resolve correctly
 
 ## [1.9.4] - 2020-10-17
 
@@ -399,6 +449,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use `word-wrap` instead of `overflow-wrap` in `ie11` target mode ([#2391](https://github.com/tailwindlabs/tailwindcss/pull/2391))
 
 ### Experimental
+
 - Add experimental `2xl` breakpoint ([#2468](https://github.com/tailwindlabs/tailwindcss/pull/2468))
 - Rename `{u}-max-content` and `{u}-min-content` utilities to `{u}-max` and `{u}-min` in experimental extended spacing scale ([#2532](https://github.com/tailwindlabs/tailwindcss/pull/2532))
 - Support disabling dark mode variants globally ([#2530](https://github.com/tailwindlabs/tailwindcss/pull/2530))
@@ -1336,7 +1387,10 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.4...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.2...HEAD
+[2.1.2]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.1...v2.1.2
+[2.1.1]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.0...v2.1.1
+[2.1.0]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.4...v2.1.0
 [2.0.4]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.3...v2.0.4
 [2.0.3]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.2...v2.0.3
 [2.0.2]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.1...v2.0.2

@@ -1,8 +1,7 @@
 name: Bug Report
 description: Create a bug report for Tailwind CSS.
-title: ''
+title: '[Bug]: '
 labels: []
-issue_body: true
 body:
   - type: input
     attributes:
@@ -10,6 +9,12 @@ body:
       description: 'For example: v2.0.4'
     validations:
       required: true
+  - type: input
+    attributes:
+      label: What build tool (or framework if it abstracts the build tool) are you using?
+      description: 'For example: postcss-cli 8.3.1, Next.js 10.0.9, webpack 5.28.0'
+    validations:
+      required: true  
   - type: input
     attributes:
       label: What version of Node.js are you using?
@@ -31,9 +36,10 @@ body:
   - type: input
     attributes:
       label: Reproduction repository
-      description: A public GitHub repo that demonstrates the bug. If it's really unnecessary, link us to a YouTube video you think is awesome instead.
+      description: A public GitHub repo that includes a minimal reproduction of the bug. Unfortunately we can't provide support without a reproduction, and your issue will be closed and locked with no comment if this is not provided.
     validations:
       required: true
-  - type: markdown
+  - type: textarea
     attributes:
-      value: "## Describe your issue\nDescribe the problem you're seeing, any important steps to reproduce and what behavior you expect instead"
+      label: Describe your issue
+      description: Describe the problem you're seeing, any important steps to reproduce and what behavior you expect instead

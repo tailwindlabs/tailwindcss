@@ -1,31 +1,45 @@
-import _ from 'lodash'
 import flattenColorPalette from '../util/flattenColorPalette'
-import nameClass from '../util/nameClass'
-import toColorValue from '../util/toColorValue'
 import withAlphaVariable from '../util/withAlphaVariable'
 
 export default function () {
-  return function ({ addUtilities, theme, variants, corePlugins }) {
-    const colors = flattenColorPalette(theme('borderColor'))
-
-    const getProperties = (value) => {
-      if (corePlugins('borderOpacity')) {
-        return withAlphaVariable({
-          color: value,
+  return function ({ addBase, matchUtilities, theme, variants, corePlugins }) {
+    if (!corePlugins('borderOpacity')) {
+      addBase({
+        '*, ::before, ::after': {
+          'border-color': theme('borderColor.DEFAULT', 'currentColor'),
+        },
+      })
+    } else {
+      addBase({
+        '*, ::before, ::after': withAlphaVariable({
+          color: theme('borderColor.DEFAULT', 'currentColor'),
           property: 'border-color',
           variable: '--tw-border-opacity',
-        })
-      }
-
-      return { 'border-color': toColorValue(value) }
+        }),
+      })
     }
 
-    const utilities = _.fromPairs(
-      _.map(_.omit(colors, 'DEFAULT'), (value, modifier) => {
-        return [nameClass('border', modifier), getProperties(value)]
-      })
-    )
+    matchUtilities(
+      {
+        border: (value) => {
+          if (!corePlugins('borderOpacity')) {
+            return {
+              'border-color': value,
+            }
+          }
 
-    addUtilities(utilities, variants('borderColor'))
+          return withAlphaVariable({
+            color: value,
+            property: 'border-color',
+            variable: '--tw-border-opacity',
+          })
+        },
+      },
+      {
+        values: (({ DEFAULT: _, ...colors }) => colors)(flattenColorPalette(theme('borderColor'))),
+        variants: variants('borderColor'),
+        type: 'color',
+      }
+    )
   }
 }

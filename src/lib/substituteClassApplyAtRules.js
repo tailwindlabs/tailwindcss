@@ -102,8 +102,8 @@ const cloneRuleWithParent = useMemo(
   (rule) => rule
 )
 
-function buildUtilityMap(css, lookupTree) {
-  let index = 0
+function buildCssUtilityMap(css, startIndex) {
+  let index = startIndex
   const utilityMap = {}
 
   function handle(getRule, rule) {
@@ -124,16 +124,6 @@ function buildUtilityMap(css, lookupTree) {
     })
   }
 
-  // Lookup tree is the big lookup tree, making the rule lazy allows us to save
-  // some memory because we don't need everything.
-  lookupTree.walkRules(
-    handle.bind(null, (rule) => ({
-      get rule() {
-        return cloneRuleWithParent(rule)
-      },
-    }))
-  )
-
   // This is the end user's css. This might contain rules that we want to
   // apply. We want immediate copies of everything in case that we have user
   // defined classes that are recursively applied. Down below we are modifying
@@ -144,6 +134,44 @@ function buildUtilityMap(css, lookupTree) {
 
   return utilityMap
 }
+
+const buildLookupTreeUtilityMap = useMemo(
+  (lookupTree) => {
+    let index = 0
+    const utilityMap = {}
+
+    function handle(getRule, rule) {
+      const utilityNames = extractUtilityNames(rule.selector)
+
+      utilityNames.forEach((utilityName, i) => {
+        if (utilityMap[utilityName] === undefined) {
+          utilityMap[utilityName] = []
+        }
+
+        utilityMap[utilityName].push({
+          index,
+          utilityName,
+          classPosition: i,
+          ...getRule(rule),
+        })
+        index++
+      })
+    }
+
+    // Lookup tree is the big lookup tree, making the rule lazy allows us to save
+    // some memory because we don't need everything.
+    lookupTree.walkRules(
+      handle.bind(null, (rule) => ({
+        get rule() {
+          return cloneRuleWithParent(rule)
+        },
+      }))
+    )
+
+    return utilityMap
+  },
+  (tree) => tree
+)
 
 function mergeAdjacentRules(initialRule, rulesToInsert) {
   let previousRule = initialRule
@@ -181,23 +209,41 @@ function mergeAdjacentRules(initialRule, rulesToInsert) {
 }
 
 function makeExtractUtilityRules(css, lookupTree, config) {
-  const utilityMap = buildUtilityMap(css, lookupTree)
+  const lookupTreeUtilityMap = buildLookupTreeUtilityMap(lookupTree)
+  const lookupTreeUtilityMapKeys = Object.keys(lookupTreeUtilityMap)
+  const utilityMap = buildCssUtilityMap(css, lookupTreeUtilityMapKeys.length)
+
+  function getUtility(utilityName) {
+    const utility = []
+    if (lookupTreeUtilityMap[utilityName]) {
+      utility.push(...lookupTreeUtilityMap[utilityName])
+    }
+    if (utilityMap[utilityName]) {
+      utility.push(...utilityMap[utilityName])
+    }
+    if (utility.length > 0) return utility
+  }
 
   return function extractUtilityRules(utilityNames, rule) {
     const combined = []
 
     utilityNames.forEach((utilityName) => {
-      if (utilityMap[utilityName] === undefined) {
+      const utility = getUtility(utilityName)
+      if (utility === undefined) {
         // Look for prefixed utility in case the user has goofed
-        const prefixedUtility = prefixSelector(config.prefix, `.${utilityName}`).slice(1)
+        const prefixedUtilityName = prefixSelector(config.prefix, `.${utilityName}`).slice(1)
 
-        if (utilityMap[prefixedUtility] !== undefined) {
+        const prefixedUtility = getUtility(prefixedUtilityName)
+        if (prefixedUtility !== undefined) {
           throw rule.error(
-            `The \`${utilityName}\` class does not exist, but \`${prefixedUtility}\` does. Did you forget the prefix?`
+            `The \`${utilityName}\` class does not exist, but \`${prefixedUtilityName}\` does. Did you forget the prefix?`
           )
         }
 
-        const suggestedClass = didYouMean(utilityName, Object.keys(utilityMap))
+        const suggestedClass = didYouMean(
+          utilityName,
+          Object.keys(utilityMap).concat(lookupTreeUtilityMapKeys)
+        )
         const suggestionMessage = suggestedClass ? `, but \`${suggestedClass}\` does` : ''
 
         throw rule.error(
@@ -206,7 +252,7 @@ function makeExtractUtilityRules(css, lookupTree, config) {
         )
       }
 
-      combined.push(...utilityMap[utilityName])
+      combined.push(...utility)
     })
 
     return combined.sort((a, b) => a.index - b.index)

@@ -1,20 +1,5 @@
-import _ from 'lodash'
-import nameClass from '../util/nameClass'
+import createUtilityPlugin from '../util/createUtilityPlugin'
 
 export default function () {
-  return function ({ addUtilities, theme, variants }) {
-    addUtilities(
-      _.fromPairs(
-        _.map(theme('flexGrow'), (value, modifier) => {
-          return [
-            nameClass('flex-grow', modifier),
-            {
-              'flex-grow': value,
-            },
-          ]
-        })
-      ),
-      variants('flexGrow')
-    )
-  }
+  return createUtilityPlugin('flexGrow', [['flex-grow', ['flex-grow']]])
 }

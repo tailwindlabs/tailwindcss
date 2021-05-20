@@ -15,20 +15,20 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x]
+        node-version: [12, 14, 16]
 
     steps:
-      - uses: actions/checkout@v2.3.3
+      - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1.4.4
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
       - name: Use cached node_modules
         id: cache
-        uses: actions/cache@v2.1.1
+        uses: actions/cache@v2
         with:
           path: node_modules
-          key: nodeModules-${{ hashFiles('**/yarn.lock') }}-${{ matrix.node-version }}
+          key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
           restore-keys: |
             nodeModules-
       - name: Install dependencies
@@ -37,7 +37,6 @@ jobs:
         env:
           CI: true
       - run: npm run prepublishOnly
-      - run: npm test -- --coverage
+      - run: npm test
         env:
           CI: true
-      - run: bash <(curl -s --retry 5 --retry-delay 2 --connect-timeout 2 https://codecov.io/bash)

@@ -10,7 +10,6 @@
     <a href="https://www.npmjs.com/package/tailwindcss"><img src="https://img.shields.io/npm/dt/tailwindcss.svg" alt="Total Downloads"></a>
     <a href="https://github.com/tailwindcss/tailwindcss/releases"><img src="https://img.shields.io/npm/v/tailwindcss.svg" alt="Latest Release"></a>
     <a href="https://github.com/tailwindcss/tailwindcss/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/tailwindcss.svg" alt="License"></a>
-    <a href="https://codecov.io/gh/tailwindlabs/tailwindcss"><img src="https://codecov.io/gh/tailwindlabs/tailwindcss/coverage.svg?branch=master" alt="Code Coverage"></a>
 </p>
 
 ------

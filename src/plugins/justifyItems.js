@@ -2,9 +2,6 @@ export default function () {
   return function ({ addUtilities, variants }) {
     addUtilities(
       {
-        '.justify-items-auto': {
-          'justify-items': 'auto',
-        },
         '.justify-items-start': {
           'justify-items': 'start',
         },

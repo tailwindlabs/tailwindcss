@@ -1,0 +1,20 @@
+{
+  "name": "vite",
+  "private": true,
+  "version": "0.0.0",
+  "main": "./src/index.js",
+  "browser": "./src/index.js",
+  "scripts": {
+    "build": "vite build",
+    "test": "jest"
+  },
+  "jest": {
+    "displayName": "vite",
+    "setupFilesAfterEnv": [
+      "<rootDir>/../../jest/customMatchers.js"
+    ]
+  },
+  "devDependencies": {
+    "vite": "^2.3.3"
+  }
+}

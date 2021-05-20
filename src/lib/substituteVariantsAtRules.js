@@ -124,6 +124,7 @@ const defaultVariantGenerators = (config) => ({
   hover: generatePseudoClassVariant('hover'),
   'focus-within': generatePseudoClassVariant('focus-within'),
   'focus-visible': generatePseudoClassVariant('focus-visible'),
+  'read-only': generatePseudoClassVariant('read-only'),
   focus: generatePseudoClassVariant('focus'),
   active: generatePseudoClassVariant('active'),
   visited: generatePseudoClassVariant('visited'),
@@ -133,6 +134,7 @@ const defaultVariantGenerators = (config) => ({
   last: generatePseudoClassVariant('last-child', 'last'),
   odd: generatePseudoClassVariant('nth-child(odd)', 'odd'),
   even: generatePseudoClassVariant('nth-child(even)', 'even'),
+  empty: generatePseudoClassVariant('empty'),
 })
 
 function prependStackableVariants(atRule, variants, stackableVariants) {

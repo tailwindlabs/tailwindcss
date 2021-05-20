@@ -20,6 +20,9 @@ export default function () {
         '.table': {
           display: 'table',
         },
+        '.inline-table': {
+          display: 'inline-table',
+        },
         '.table-caption': {
           display: 'table-caption',
         },
@@ -55,6 +58,9 @@ export default function () {
         },
         '.contents': {
           display: 'contents',
+        },
+        '.list-item': {
+          display: 'list-item',
         },
         '.hidden': {
           display: 'none',

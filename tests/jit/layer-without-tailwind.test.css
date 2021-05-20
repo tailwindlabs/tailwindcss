@@ -1,0 +1,5 @@
+@layer components {
+  .foo {
+    color: black;
+  }
+}
