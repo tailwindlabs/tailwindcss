@@ -1,19 +1,12 @@
-import postcss from 'postcss'
 import fs from 'fs'
 import path from 'path'
 import fastGlob from 'fast-glob'
 import parseGlob from 'parse-glob'
 
-import evaluateTailwindFunctions from '../lib/evaluateTailwindFunctions'
-import substituteScreenAtRules from '../lib/substituteScreenAtRules'
-
 import normalizeTailwindDirectives from './lib/normalizeTailwindDirectives'
 import setupContext from './lib/setupContext'
-import expandTailwindAtRules from './lib/expandTailwindAtRules'
-import expandApplyAtRules from './lib/expandApplyAtRules'
-import collapseAdjacentRules from './lib/collapseAdjacentRules'
-import * as sharedState from './lib/sharedState'
 import { env } from './lib/sharedState'
+import processTailwindFeatures from '../processTailwindFeatures'
 
 export default function (configOrPath = {}) {
   return [
@@ -44,7 +37,7 @@ export default function (configOrPath = {}) {
       }
 
       if (tailwindDirectives.size > 0) {
-        if (sharedState.env.TAILWIND_DISABLE_TOUCH) {
+        if (env.TAILWIND_DISABLE_TOUCH) {
           for (let maybeGlob of context.candidateFiles) {
             let {
               is: { glob: isGlob },
@@ -98,13 +91,7 @@ export default function (configOrPath = {}) {
         }
       }
 
-      return postcss([
-        expandTailwindAtRules(context),
-        expandApplyAtRules(context),
-        evaluateTailwindFunctions(context),
-        substituteScreenAtRules(context),
-        collapseAdjacentRules(context),
-      ]).process(root, { from: undefined })
+      processTailwindFeatures(context)(root, result)
     },
     env.DEBUG &&
       function (root) {

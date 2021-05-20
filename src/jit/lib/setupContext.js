@@ -719,7 +719,7 @@ export default function setupContext(configOrPath, tailwindDirectives) {
       for (let file of configDependencies) {
         result.messages.push({
           type: 'dependency',
-          plugin: 'tailwindcss-jit',
+          plugin: 'tailwindcss',
           parent: result.opts.from,
           file,
         })
