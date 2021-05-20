@@ -6,7 +6,7 @@
   "browser": "./src/index.js",
   "scripts": {
     "build": "webpack --mode=production",
-    "dev": "webpack --mode=development",
+    "dev": "webpack --mode=development --watch",
     "test": "jest"
   },
   "jest": {
