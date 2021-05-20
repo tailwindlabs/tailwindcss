@@ -6,7 +6,7 @@ import parseGlob from 'parse-glob'
 import normalizeTailwindDirectives from './lib/normalizeTailwindDirectives'
 import setupContext from './lib/setupContext'
 import { env } from './lib/sharedState'
-import processTailwindFeatures from '../processTailwindFeatures'
+import processTailwindFeatures from './processTailwindFeatures'
 
 export default function (configOrPath = {}) {
   return [
