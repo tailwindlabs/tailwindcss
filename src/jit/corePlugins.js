@@ -19,6 +19,7 @@ export default {
       ['even', 'nth-child(even)'],
       'visited',
       'checked',
+      'target',
       'empty',
       'read-only',
       'focus-within',

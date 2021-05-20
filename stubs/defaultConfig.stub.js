@@ -806,6 +806,7 @@ module.exports = {
     'even',
     'visited',
     'checked',
+    'target',
     'empty',
     'read-only',
     'group-hover',
