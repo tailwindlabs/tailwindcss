@@ -213,27 +213,6 @@ function getContext(configOrPath, tailwindDirectives, registerDependency, root, 
   return context
 }
 
-// function cleanMe(tailwindDirectives, context, registerDependency) {
-//   if (tailwindDirectives.size > 0) {
-//     // Register our temp file as a dependency — we write to this file
-//     // to trigger rebuilds.
-//     if (context.touchFile) {
-//       registerDependency(context.touchFile)
-//     }
-//
-//     // If we're not set up and watching files ourselves, we need to do
-//     // the work of grabbing all of the template files for candidate
-//     // detection.
-//     if (!context.scannedContent) {
-//       let files = fastGlob.sync(context.candidateFiles)
-//       for (let file of files) {
-//         context.changedFiles.add(file)
-//       }
-//       context.scannedContent = true
-//     }
-//   }
-// }
-
 // DISABLE_TOUCH = FALSE
 
 // Retrieve an existing context from cache if possible (since contexts are unique per
