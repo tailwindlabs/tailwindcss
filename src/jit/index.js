@@ -1,5 +1,3 @@
-import fastGlob from 'fast-glob'
-
 import normalizeTailwindDirectives from './lib/normalizeTailwindDirectives'
 import setupTrackingContext from './lib/setupTrackingContext'
 import setupWatchingContext from './lib/setupWatchingContext'

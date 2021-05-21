@@ -10,13 +10,13 @@ import getModuleDependencies from '../../lib/getModuleDependencies'
 
 import resolveConfig from '../../../resolveConfig'
 
-import corePlugins from '../corePlugins'
 import resolveConfigPath from '../../util/resolveConfigPath'
 
 import * as sharedState from './sharedState'
+import { env } from './sharedState'
 
 import { rebootWatcher } from './rebootWatcher'
-import { trackModified, collectLayerPlugins, registerPlugins } from './setupContextUtils'
+import { trackModified, resolvePlugins, registerPlugins } from './setupContextUtils'
 
 let contextMap = sharedState.contextMap
 let configContextMap = sharedState.configContextMap
@@ -41,7 +41,7 @@ function getTailwindConfig(configOrPath) {
 
     // It hasn't changed (based on timestamp)
     if (modified <= prevModified) {
-      return [prevConfig, userConfigPath, prevConfigHash]
+      return [prevConfig, userConfigPath, prevConfigHash, [userConfigPath]]
     }
 
     // It has changed (based on timestamp), or first run
@@ -49,7 +49,7 @@ function getTailwindConfig(configOrPath) {
     let newConfig = resolveConfig(require(userConfigPath))
     let newHash = hash(newConfig)
     configPathCache.set(userConfigPath, [newConfig, modified, newHash])
-    return [newConfig, userConfigPath, newHash]
+    return [newConfig, userConfigPath, newHash, [userConfigPath]]
   }
 
   // It's a plain object, not a path
@@ -57,7 +57,7 @@ function getTailwindConfig(configOrPath) {
     configOrPath.config === undefined ? configOrPath : configOrPath.config
   )
 
-  return [newConfig, null, hash(newConfig)]
+  return [newConfig, null, hash(newConfig), [userConfigPath]]
 }
 
 function cleanMe(tailwindDirectives, context, registerDependency) {
@@ -93,11 +93,15 @@ function cleanMe(tailwindDirectives, context, registerDependency) {
 export default function setupWatchingContext(configOrPath, tailwindDirectives, registerDependency) {
   return (result, root) => {
     let sourcePath = result.opts.from
-    let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
-      getTailwindConfig(configOrPath)
+    let [
+      tailwindConfig,
+      userConfigPath,
+      tailwindConfigHash,
+      configDependencies,
+    ] = getTailwindConfig(configOrPath)
     let isConfigFile = userConfigPath !== null
 
-    let contextDependencies = new Set()
+    let contextDependencies = new Set(configDependencies)
 
     // If there are no @tailwind rules, we don't consider this CSS file or it's dependencies
     // to be dependencies of the context. Can reuse the context even if they change.
@@ -113,13 +117,18 @@ export default function setupWatchingContext(configOrPath, tailwindDirectives, r
       }
     }
 
-    if (isConfigFile) {
-      contextDependencies.add(userConfigPath)
+    for (let file of configDependencies) {
+      result.messages.push({
+        type: 'dependency',
+        plugin: 'tailwindcss',
+        parent: result.opts.from,
+        file,
+      })
     }
 
     let contextDependenciesChanged = trackModified([...contextDependencies])
 
-    process.env.DEBUG && console.log('Source path:', sourcePath)
+    env.DEBUG && console.log('Source path:', sourcePath)
 
     if (!contextDependenciesChanged) {
       // If this file already has a context in the cache and we don't need to
@@ -160,7 +169,7 @@ export default function setupWatchingContext(configOrPath, tailwindDirectives, r
       }
     }
 
-    process.env.DEBUG && console.log('Setting up new context...')
+    env.DEBUG && console.log('Setting up new context...')
 
     let purgeContent = Array.isArray(tailwindConfig.purge)
       ? tailwindConfig.purge
@@ -213,6 +222,7 @@ export default function setupWatchingContext(configOrPath, tailwindDirectives, r
 
     // ---
 
+    ///
     if (isConfigFile) {
       for (let dependency of getModuleDependencies(userConfigPath)) {
         if (dependency.file === userConfigPath) {
@@ -224,42 +234,9 @@ export default function setupWatchingContext(configOrPath, tailwindDirectives, r
     }
 
     rebootWatcher(context)
+    ////
 
-    let corePluginList = Object.entries(corePlugins)
-      .map(([name, plugin]) => {
-        if (!tailwindConfig.corePlugins.includes(name)) {
-          return null
-        }
-
-        return plugin
-      })
-      .filter(Boolean)
-
-    let userPlugins = tailwindConfig.plugins.map((plugin) => {
-      if (plugin.__isOptionsFunction) {
-        plugin = plugin()
-      }
-
-      return typeof plugin === 'function' ? plugin : plugin.handler
-    })
-
-    let layerPlugins = collectLayerPlugins(root, tailwindDirectives)
-
-    // TODO: This is a workaround for backwards compatibility, since custom variants
-    // were historically sorted before screen/stackable variants.
-    let beforeVariants = [corePlugins['pseudoClassVariants']]
-    let afterVariants = [
-      corePlugins['directionVariants'],
-      corePlugins['reducedMotionVariants'],
-      corePlugins['darkVariants'],
-      corePlugins['screenVariants'],
-    ]
-
-    registerPlugins(
-      context.tailwindConfig,
-      [...corePluginList, ...beforeVariants, ...userPlugins, ...afterVariants, ...layerPlugins],
-      context
-    )
+    registerPlugins(resolvePlugins(context, tailwindDirectives, root), context)
 
     cleanMe(tailwindDirectives, context, registerDependency)
 
