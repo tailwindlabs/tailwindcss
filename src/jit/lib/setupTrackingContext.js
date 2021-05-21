@@ -1,6 +1,9 @@
 import fs from 'fs'
 import url from 'url'
 import path from 'path'
+
+import fastGlob from 'fast-glob'
+import parseGlob from 'parse-glob'
 import postcss from 'postcss'
 import dlv from 'dlv'
 import selectorParser from 'postcss-selector-parser'
@@ -23,8 +26,7 @@ import nameClass from '../../util/nameClass'
 import { coerceValue } from '../../util/pluginUtils'
 
 import * as sharedState from './sharedState'
-
-import { rebootWatcher } from './rebootWatcher'
+import { env } from './sharedState'
 
 let contextMap = sharedState.contextMap
 let configContextMap = sharedState.configContextMap
@@ -127,62 +129,35 @@ let configPathCache = new LRU({ maxSize: 100 })
 function getTailwindConfig(configOrPath) {
   let userConfigPath = resolveConfigPath(configOrPath)
 
-  if (sharedState.env.TAILWIND_DISABLE_TOUCH) {
-    if (userConfigPath !== null) {
-      let [prevConfig, prevConfigHash, prevDeps, prevModified] =
-        configPathCache.get(userConfigPath) || []
-
-      let newDeps = getModuleDependencies(userConfigPath).map((dep) => dep.file)
-
-      let modified = false
-      let newModified = new Map()
-      for (let file of newDeps) {
-        let time = fs.statSync(file).mtimeMs
-        newModified.set(file, time)
-        if (!prevModified || !prevModified.has(file) || time > prevModified.get(file)) {
-          modified = true
-        }
-      }
-
-      // It hasn't changed (based on timestamps)
-      if (!modified) {
-        return [prevConfig, userConfigPath, prevConfigHash, prevDeps]
-      }
-
-      // It has changed (based on timestamps), or first run
-      for (let file of newDeps) {
-        delete require.cache[file]
-      }
-      let newConfig = resolveConfig(require(userConfigPath))
-      let newHash = hash(newConfig)
-      configPathCache.set(userConfigPath, [newConfig, newHash, newDeps, newModified])
-      return [newConfig, userConfigPath, newHash, newDeps]
-    }
-
-    // It's a plain object, not a path
-    let newConfig = resolveConfig(
-      configOrPath.config === undefined ? configOrPath : configOrPath.config
-    )
-
-    return [newConfig, null, hash(newConfig), []]
-  }
-
   if (userConfigPath !== null) {
-    let [prevConfig, prevModified = -Infinity, prevConfigHash] =
+    let [prevConfig, prevConfigHash, prevDeps, prevModified] =
       configPathCache.get(userConfigPath) || []
-    let modified = fs.statSync(userConfigPath).mtimeMs
 
-    // It hasn't changed (based on timestamp)
-    if (modified <= prevModified) {
-      return [prevConfig, userConfigPath, prevConfigHash]
+    let newDeps = getModuleDependencies(userConfigPath).map((dep) => dep.file)
+
+    let modified = false
+    let newModified = new Map()
+    for (let file of newDeps) {
+      let time = fs.statSync(file).mtimeMs
+      newModified.set(file, time)
+      if (!prevModified || !prevModified.has(file) || time > prevModified.get(file)) {
+        modified = true
+      }
     }
 
-    // It has changed (based on timestamp), or first run
-    delete require.cache[userConfigPath]
+    // It hasn't changed (based on timestamps)
+    if (!modified) {
+      return [prevConfig, userConfigPath, prevConfigHash, prevDeps]
+    }
+
+    // It has changed (based on timestamps), or first run
+    for (let file of newDeps) {
+      delete require.cache[file]
+    }
     let newConfig = resolveConfig(require(userConfigPath))
     let newHash = hash(newConfig)
-    configPathCache.set(userConfigPath, [newConfig, modified, newHash])
-    return [newConfig, userConfigPath, newHash]
+    configPathCache.set(userConfigPath, [newConfig, newHash, newDeps, newModified])
+    return [newConfig, userConfigPath, newHash, newDeps]
   }
 
   // It's a plain object, not a path
@@ -190,7 +165,7 @@ function getTailwindConfig(configOrPath) {
     configOrPath.config === undefined ? configOrPath : configOrPath.config
   )
 
-  return [newConfig, null, hash(newConfig)]
+  return [newConfig, null, hash(newConfig), []]
 }
 
 let fileModifiedMap = new Map()
@@ -571,19 +546,57 @@ function cleanupContext(context) {
   }
 }
 
+function cleanMe(tailwindDirectives, context, registerDependency) {
+  if (tailwindDirectives.size > 0) {
+    for (let maybeGlob of context.candidateFiles) {
+      let {
+        is: { glob: isGlob },
+        base,
+      } = parseGlob(maybeGlob)
+
+      if (isGlob) {
+        // rollup-plugin-postcss does not support dir-dependency messages
+        // but directories can be watched in the same way as files
+        registerDependency(
+          path.resolve(base),
+          process.env.ROLLUP_WATCH === 'true' ? 'dependency' : 'dir-dependency'
+        )
+      } else {
+        registerDependency(path.resolve(maybeGlob))
+      }
+    }
+
+    env.DEBUG && console.time('Finding changed files')
+    let files = fastGlob.sync(context.candidateFiles)
+    for (let file of files) {
+      let prevModified = context.fileModifiedMap.has(file)
+        ? context.fileModifiedMap.get(file)
+        : -Infinity
+      let modified = fs.statSync(file).mtimeMs
+
+      if (!context.scannedContent || modified > prevModified) {
+        context.changedFiles.add(file)
+        context.fileModifiedMap.set(file, modified)
+      }
+    }
+    context.scannedContent = true
+    env.DEBUG && console.timeEnd('Finding changed files')
+  }
+}
+
+// DISABLE_TOUCH = TRUE
+
 // Retrieve an existing context from cache if possible (since contexts are unique per
 // source path), or set up a new one (including setting up watchers and registering
 // plugins) then return it
-export default function setupContext(configOrPath, tailwindDirectives) {
+export default function setupTrackingContext(configOrPath, tailwindDirectives, registerDependency) {
   return (result, root) => {
     let sourcePath = result.opts.from
     let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
       getTailwindConfig(configOrPath)
     let isConfigFile = userConfigPath !== null
 
-    let contextDependencies = new Set(
-      sharedState.env.TAILWIND_DISABLE_TOUCH ? configDependencies : []
-    )
+    let contextDependencies = new Set(configDependencies)
 
     // If there are no @tailwind rules, we don't consider this CSS file or it's dependencies
     // to be dependencies of the context. Can reuse the context even if they change.
@@ -599,19 +612,13 @@ export default function setupContext(configOrPath, tailwindDirectives) {
       }
     }
 
-    if (sharedState.env.TAILWIND_DISABLE_TOUCH) {
-      for (let file of configDependencies) {
-        result.messages.push({
-          type: 'dependency',
-          plugin: 'tailwindcss',
-          parent: result.opts.from,
-          file,
-        })
-      }
-    } else {
-      if (isConfigFile) {
-        contextDependencies.add(userConfigPath)
-      }
+    for (let file of configDependencies) {
+      result.messages.push({
+        type: 'dependency',
+        plugin: 'tailwindcss',
+        parent: result.opts.from,
+        file,
+      })
     }
 
     let contextDependenciesChanged = trackModified([...contextDependencies])
@@ -622,7 +629,11 @@ export default function setupContext(configOrPath, tailwindDirectives) {
       // If this file already has a context in the cache and we don't need to
       // reset the context, return the cached context.
       if (isConfigFile && contextMap.has(sourcePath)) {
-        return contextMap.get(sourcePath)
+        let context = contextMap.get(sourcePath)
+
+        cleanMe(tailwindDirectives, context, registerDependency)
+
+        return context
       }
 
       // If the config used already exists in the cache, return that.
@@ -630,6 +641,9 @@ export default function setupContext(configOrPath, tailwindDirectives) {
         let context = configContextMap.get(tailwindConfigHash)
         contextSourcesMap.get(context).add(sourcePath)
         contextMap.set(sourcePath, context)
+
+        cleanMe(tailwindDirectives, context, registerDependency)
+
         return context
       }
     }
@@ -703,18 +717,6 @@ export default function setupContext(configOrPath, tailwindDirectives) {
 
     // ---
 
-    if (isConfigFile && !sharedState.env.TAILWIND_DISABLE_TOUCH) {
-      for (let dependency of getModuleDependencies(userConfigPath)) {
-        if (dependency.file === userConfigPath) {
-          continue
-        }
-
-        context.configDependencies.add(dependency.file)
-      }
-    }
-
-    rebootWatcher(context)
-
     let corePluginList = Object.entries(corePlugins)
       .map(([name, plugin]) => {
         if (!tailwindConfig.corePlugins.includes(name)) {
@@ -750,6 +752,8 @@ export default function setupContext(configOrPath, tailwindDirectives) {
       [...corePluginList, ...beforeVariants, ...userPlugins, ...afterVariants, ...layerPlugins],
       context
     )
+
+    cleanMe(tailwindDirectives, context, registerDependency)
 
     return context
   }

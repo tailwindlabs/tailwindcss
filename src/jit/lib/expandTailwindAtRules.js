@@ -110,7 +110,7 @@ function buildStylesheet(rules, context) {
 }
 
 export default function expandTailwindAtRules(context) {
-  return (root, result) => {
+  return (root) => {
     let layerNodes = {
       base: null,
       components: null,
