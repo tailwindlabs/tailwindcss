@@ -2,6 +2,9 @@ import groupBy from 'just-group-by'
 
 export function numbersFirst(classes) {
   return [...classes].sort((a, b) => {
+    a = a.endsWith('-px') ? a.replace(/-px$/, '-0.25') : a
+    b = b.endsWith('-px') ? b.replace(/-px$/, '-0.25') : b
+
     let aNum = a
       .split(/\s+/)[0]
       .replace(/\\/g, '')
