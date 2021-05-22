@@ -19,6 +19,7 @@
     "@next/bundle-analyzer": "^9.4.4",
     "@next/mdx": "^10.0.1",
     "@reach/rect": "^0.10.5",
+    "@silvenon/remark-smartypants": "^1.0.0",
     "@sindresorhus/slugify": "^1.1.0",
     "@svgr/webpack": "^5.4.0",
     "@tailwindcss/jit": "^0.1.18",
