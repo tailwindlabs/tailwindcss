@@ -214,8 +214,8 @@ samp {
  * https://github.com/mozdevs/cssremedy/issues/14
  * 
  * vertical-align: middle, is a fallback for when display is
- * changed to inline block, this will show a warning of propety
- * being ignored.
+ * changed to inline block, this will show a warning of the
+ * property being ignored.
  * 
  * https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210
  */
