@@ -42,6 +42,24 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
+### Sepia Scale
+
+You can customize the values for the `sepia` filter in your Tailwind config.
+
+```diff-js
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      sepia: {
+        0: '0',
++       25: '.25',
++       75: '.75',
+        DEFAULT: '100%',
+      }
+    }
+  }
+```
+
 ### Variants
 
 <Variants plugin="sepia" name="sepia" />

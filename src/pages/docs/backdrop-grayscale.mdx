@@ -42,6 +42,23 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
+### Backdrop Grayscale Scale
+
+You can customize the values for the `backdrop-grayscale` filter in your Tailwind config.
+
+```diff-js
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      backdropGrayscale: {
+        0: '0',
++       50: '.5',
+        DEFAULT: '100%',
+      }
+    }
+  }
+```
+
 ### Variants
 
 <Variants plugin="backdropGrayscale" name="backdrop grayscale" />

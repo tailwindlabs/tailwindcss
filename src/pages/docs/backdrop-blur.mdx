@@ -48,6 +48,29 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
+### Blur Scale
+
+You can customize the values for the `backdrop-blur` filter in your Tailwind config.
+
+```diff-js
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      backdropBlur: {
+        0: '0',
++       xs: '2px',
+        sm: '4px',
+        DEFAULT: '8px',
+        md: '12px',
+        lg: '16px',
+        xl: '24px',
+        '2xl': '40px',
+        '3xl': '64px',
+      }
+    }
+  }
+```
+
 ### Variants
 
 <Variants plugin="backdropBlur" name="backdrop blur" />

@@ -51,6 +51,33 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
+### Hue Rotate Scale
+
+You can customize the values for the `hue-rotate` filter in your Tailwind config.
+
+```diff-js
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      hueRotate: {
++       '-270': '-270deg',
+        '-180': '-180deg',
+        '-90': '-90deg',
+        '-60': '-60deg',
+        '-30': '-30deg',
+        '-15': '-15deg',
+        0: '0deg',
+        15: '15deg',
+        30: '30deg',
+        60: '60deg',
+        90: '90deg',
+        180: '180deg',
++       270: '270deg',
+      }
+    }
+  }
+```
+
 ### Variants
 
 <Variants plugin="hueRotate" name="hue-rotate" />

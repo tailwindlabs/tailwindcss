@@ -51,6 +51,33 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
+### Backdrop Brightness Scale
+
+You can customize the values for the `backdrop-brightness` filter in your Tailwind config.
+
+```diff-js
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      backdropBrightness: {
+        0: '0',
++       25: '.25',
+        50: '.5',
+        75: '.75',
+        90: '.9',
+        95: '.95',
+        100: '1',
+        105: '1.05',
+        110: '1.1',
+        125: '1.25',
+        150: '1.5',
++       175: '1.75',
+        200: '2',
+      }
+    }
+  }
+```
+
 ### Variants
 
 <Variants plugin="backdropBrightness" name="backdrop brightness" />

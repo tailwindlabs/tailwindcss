@@ -42,6 +42,23 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
+### Invert Scale
+
+You can customize the values for the `invert` filter in your Tailwind config.
+
+```diff-js
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      invert: {
+        0: '0',
++      '1/2': '50%',
+        DEFAULT: '100%',
+      }
+    }
+  }
+```
+
 ### Variants
 
 <Variants plugin="invert" name="invert" />

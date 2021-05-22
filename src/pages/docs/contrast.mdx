@@ -47,6 +47,28 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
+### Contrast Scale
+
+You can customize the values for the `contrast` filter in your Tailwind config.
+
+```diff-js
+  // tailwind.config.js
+  module.exports = {
+    theme: {
+      contrast: {
+        0: '0',
++       25: '.25',
+        50: '.5',
+        75: '.75',
+        100: '1',
+        125: '1.25',
+        150: '1.5',
+        200: '2',
+      }
+    }
+  }
+```
+
 ### Variants
 
 <Variants plugin="contrast" name="contrast" />
