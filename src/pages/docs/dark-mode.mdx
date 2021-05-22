@@ -131,3 +131,25 @@ localStorage.removeItem('theme')
 ```
 
 Again you can manage this however you like, even storing the preference server-side in a database and rendering the class on the server — it's totally up to you.
+
+### Specificity considerations
+
+When using the `class` strategy, the specificity of dark mode utilities will be higher than regular utilities because the selector contains an extra class. This means that in certain situations the behavior of some combination of utilities can be slightly different in `class` mode than it is in `media` mode.
+
+For example, consider this HTML:
+
+```html
+<div class="text-black text-opacity-50 dark:text-white">
+  <!-- ... -->
+</div>
+```
+
+When using the `media` strategy, `dark:text-white` has the same specificity as `text-black` and `text-opacity-50`. Because `text-opacity-50` is defined later in the generated CSS than `dark:text-white`, the white text will have 50% opacity.
+
+When using the `class` strategy, `dark:text-white` has a _higher_ specificity, so even though it is defined sooner, it will actually override `text-opacity-50` and reset the opacity back to 1. So when using the `class` strategy, you'll need to re-specify the opacity in dark mode:
+
+```html
+<div class="text-black text-opacity-50 dark:text-white dark:text-opacity-50">
+  <!-- ... -->
+</div>
+```
