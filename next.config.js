@@ -2,6 +2,7 @@ const path = require('path')
 const querystring = require('querystring')
 const { createLoader } = require('simple-functional-loader')
 const frontMatter = require('front-matter')
+const withSmartQuotes = require('@silvenon/remark-smartypants')
 const { withTableOfContents } = require('./remark/withTableOfContents')
 const { withSyntaxHighlighting } = require('./remark/withSyntaxHighlighting')
 const { withProse } = require('./remark/withProse')
@@ -88,10 +89,9 @@ module.exports = withBundleAnalyzer({
               withTableOfContents,
               withSyntaxHighlighting,
               withNextLinks,
+              withSmartQuotes,
             ],
-            rehypePlugins: [
-              withLinkRoles,
-            ],
+            rehypePlugins: [withLinkRoles],
           },
         },
         createLoader(function (source) {
