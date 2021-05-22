@@ -111,7 +111,7 @@ export function Performance() {
         <Paragraph className="mb-6">
           Tailwind automatically removes all unused CSS when building for production, which means
           your final CSS bundle is the smallest it could possibly be. In fact, most Tailwind
-          projects ship less than 10KB of CSS to the client.
+          projects ship less than 10kB of CSS to the client.
         </Paragraph>
         <Link href="/docs/optimizing-for-production" className="text-teal-500 hover:text-teal-700">
           Learn more -&gt;
@@ -170,7 +170,7 @@ export function Performance() {
                   <dt className="text-sm font-medium">Production build</dt>
                   <dd className="text-3xl sm:text-4xl font-extrabold text-gray-900">
                     <Counter from={2413.4} to={8.7} round={1} progress={progress} />
-                    KB
+                    kB
                   </dd>
                 </div>
                 <div className="flex items-center border-t border-gray-100 -mx-4 sm:-mx-6 mt-4 sm:mt-6 px-4 sm:px-6 py-3 font-mono text-xs leading-5">
