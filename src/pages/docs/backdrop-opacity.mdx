@@ -55,35 +55,22 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-### Backdrop Opacity
-
-You can customize the values for the `backdrop-opacity` filter in your Tailwind config.
+You can customize which `backdrop-opacity` utilities are generated using the `backdropOpacity` key in the `theme` section of your `tailwind.config.js` file.
 
 ```diff-js
   // tailwind.config.js
   module.exports = {
     theme: {
-      backdropOpacity: {
-        0: '0',
-        5: '0.05',
-        10: '0.1',
-        20: '0.2',
-        25: '0.25',
-        30: '0.3',
-+       35: '0.35',
-        40: '0.4',
-        50: '0.5',
-        60: '0.6',
-        70: '0.7',
-        75: '0.75',
-        80: '0.8',
-        90: '0.9',
-        95: '0.95',
-        100: '1',
-      }
++     extend: {
++       backdropOpacity: {
++         15: '.15',
++       }
++     }
     }
   }
 ```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
 
 ### Variants
 

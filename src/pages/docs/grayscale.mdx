@@ -42,22 +42,22 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-### Grayscale Scale
-
-You can customize the values for the `grayscale` filter in your Tailwind config.
+You can customize which `grayscale` utilities are generated using the `grayscale` key in the `theme` section of your `tailwind.config.js` file.
 
 ```diff-js
   // tailwind.config.js
   module.exports = {
     theme: {
-      grayscale: {
-        0: '0',
-+      '1/2': '50%',
-        DEFAULT: '100%',
-      }
++     extend: {
++       grayscale: {
++         50: '50%',
++       }
++     }
     }
   }
 ```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
 
 ### Variants
 

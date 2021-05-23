@@ -48,28 +48,22 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-### Blur Scale
-
-You can customize the values for the `blur` filter in your Tailwind config.
+You can customize which `blur` utilities are generated using the `blur` key in the `theme` section of your `tailwind.config.js` file.
 
 ```diff-js
   // tailwind.config.js
   module.exports = {
     theme: {
-      blur: {
-        0: '0',
-+       xs: '2px',
-        sm: '4px',
-        DEFAULT: '8px',
-        md: '12px',
-        lg: '16px',
-        xl: '24px',
-        '2xl': '40px',
-        '3xl': '64px',
-      }
++     extend: {
++       blur: {
++         xs: '2px',
++       }
++     }
     }
   }
 ```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
 
 ### Variants
 

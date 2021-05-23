@@ -42,23 +42,23 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
-### Backdrop Sepia Scale
-
-You can customize the values for the `backdrop-sepia` filter in your Tailwind config.
+You can customize which `backdrop-sepia` utilities are generated using the `backdropSepia` key in the `theme` section of your `tailwind.config.js` file.
 
 ```diff-js
   // tailwind.config.js
   module.exports = {
     theme: {
-      backdropSepia: {
-        0: '0',
-+       25: '.25',
-+       75: '.75',
-        DEFAULT: '100%',
-      }
++     extend: {
++       backdropSepia: {
++         25: '.25',
++         75: '.75',
++       }
++     }
     }
   }
 ```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
 
 ### Variants
 
