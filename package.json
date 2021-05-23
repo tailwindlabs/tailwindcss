@@ -44,7 +44,7 @@
     "just-group-by": "^1.0.0",
     "minimatch": "^3.0.4",
     "next": "^10.0.1",
-    "postcss": "^8.1.7",
+    "postcss": "^8.2.10",
     "postcss-focus-visible": "^5.0.0",
     "postcss-import": "^14.0.1",
     "postcss-nested": "^4.2.3",
