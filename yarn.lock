@@ -5868,9 +5868,9 @@ pretty-hrtime@^1.0.3:
   version "1.0.3"
   resolved "https://registry.npmjs.org/pretty-hrtime/-/pretty-hrtime-1.0.3.tgz"
 
-prismjs@^1.21.0:
-  version "1.21.0"
-  resolved "https://registry.npmjs.org/prismjs/-/prismjs-1.21.0.tgz"
+prismjs@^1.23.0:
+  version "1.23.0"
+  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.23.0.tgz#d3b3967f7d72440690497652a9d40ff046067f33"
   optionalDependencies:
     clipboard "^2.0.0"
 
