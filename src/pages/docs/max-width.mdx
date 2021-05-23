@@ -17,33 +17,53 @@ export const classes = {
 
 Set the maximum width of an element using the `max-w-{size}` utilities.
 
-```html emerald
+```html emerald resizable
 <template preview>
-  <div class="max-w-md mx-auto rounded-md bg-emerald-500 text-white text-2xl font-extrabold flex items-center justify-center py-3">
-    max-w-md
-  </div>
+  <div class="max-w-md mx-auto rounded-md h-16 bg-emerald-500 select-none"></div>
 </template>
 
 <div class="**max-w-md** mx-auto ...">
-  max-w-md
+  <!-- ... -->
 </div>
 ```
 
-## Prose
+## Reading width
 
-We added a new max-width by default called `max-w-prose`. If you are familiar with the [typography plugin](https://github.com/tailwindlabs/tailwindcss-typography) you might recognize this one. The idea behind this class is that it allows you to have an optimal reading width.
+The `max-w-prose` utility gives an element a max-width optimized for readability and adapts based on the font size.
 
 ```html purple
 <template preview>
   <div class="max-w-prose text-sm text-purple-700 p-6">
-    <p class="font-bold">Why do you never see elephants hiding in trees?</p>
-    <p>Because they're so good at it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.</p>
+    <p>Dolore iste eaque molestias. Eius iure ut eaque accusantium. Voluptas repellendus nobis. Saepe nam accusantium magni veniam qui enim mollitia excepturi sapiente.</p>
+  </div>
+  <div class="max-w-prose text-base text-purple-700 p-6">
+    <p>Dolore iste eaque molestias. Eius iure ut eaque accusantium. Voluptas repellendus nobis. Saepe nam accusantium magni veniam qui enim mollitia excepturi sapiente.</p>
+  </div>
+  <div class="max-w-prose text-xl text-purple-700 p-6">
+    <p>Dolore iste eaque molestias. Eius iure ut eaque accusantium. Voluptas repellendus nobis. Saepe nam accusantium magni veniam qui enim mollitia excepturi sapiente.</p>
   </div>
 </template>
 
-<div class="**max-w-prose** ...">
-  <p class="font-bold">Why do you never see elephants hiding in trees?</p>
-  <p>Because they're so good at it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.</p>
+<div class="text-sm **max-w-prose** ...">
+  <p>Dolore iste eaque molestias. Eius iure ut eaque accusantium. Voluptas repellendus nobis. Saepe nam accusantium magni veniam qui enim mollitia excepturi sapiente.</p>
+</div>
+
+<div class="text-base **max-w-prose** ...">
+  <p>Dolore iste eaque molestias. Eius iure ut eaque accusantium. Voluptas repellendus nobis. Saepe nam accusantium magni veniam qui enim mollitia excepturi sapiente.</p>
+</div>
+
+<div class="text-xl **max-w-prose** ...">
+  <p>Dolore iste eaque molestias. Eius iure ut eaque accusantium. Voluptas repellendus nobis. Saepe nam accusantium magni veniam qui enim mollitia excepturi sapiente.</p>
+</div>
+```
+
+## Constraining to your breakpoints
+
+The `max-w-screen-{breakpoint}` classes can be used to give an element a max-width matching a specific breakpoint. These values are automatically derived from the [`theme.screens` section](/docs/theme#screens) of your `tailwind.config.js` file.
+
+```html
+<div class="max-w-screen-2xl">
+  <!-- ... -->
 </div>
 ```
 
@@ -67,7 +87,7 @@ For more information about Tailwind's responsive design features, check out the 
 
 ### Max-Width Scale
 
-Customize Tailwind's default max-width scale in the `theme.maxWidth` section of your `tailwind.config.js` file.
+Customize Tailwind's default max-width scale for the `max-w-*` classes in the `theme.maxWidth` section of your `tailwind.config.js` file.
 
 ```diff-js
   // tailwind.config.js
@@ -81,6 +101,8 @@ Customize Tailwind's default max-width scale in the `theme.maxWidth` section of 
     }
   }
 ```
+
+The `max-w-screen-*` classes are derived from the [`theme.screens` section](/docs/theme#screens) of your `tailwind.config.js` file.
 
 Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
 
