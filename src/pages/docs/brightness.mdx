@@ -51,6 +51,24 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
+You can customize which `brightness` utilities are generated using the `brightness` key in the `theme` section of your `tailwind.config.js` file.
+
+```diff-js
+  // tailwind.config.js
+  module.exports = {
+    theme: {
++     extend: {
++       brightness: {
++         25: '.25',
++         175: '1.75',
++       }
++     }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+
 ### Variants
 
 <Variants plugin="brightness" name="brightness" />

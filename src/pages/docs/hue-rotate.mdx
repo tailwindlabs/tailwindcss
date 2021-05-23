@@ -51,6 +51,24 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
+You can customize which `hue-rotate` utilities are generated using the `hueRotate` key in the `theme` section of your `tailwind.config.js` file.
+
+```diff-js
+  // tailwind.config.js
+  module.exports = {
+    theme: {
++     extend: {
++       hueRotate: {
++         '-270': '-270deg',
++         270: '270deg',
++       }
++     }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+
 ### Variants
 
 <Variants plugin="hueRotate" name="hue-rotate" />

@@ -42,6 +42,24 @@ For more information about Tailwind's responsive design features, check out the 
 
 ## Customizing
 
+You can customize which `sepia` utilities are generated using the `sepia` key in the `theme` section of your `tailwind.config.js` file.
+
+```diff-js
+  // tailwind.config.js
+  module.exports = {
+    theme: {
++     extend: {
++       sepia: {
++         25: '.25',
++         75: '.75',
++       }
++     }
+    }
+  }
+```
+
+Learn more about customizing the default theme in the [theme customization documentation](/docs/theme#customizing-the-default-theme).
+
 ### Variants
 
 <Variants plugin="sepia" name="sepia" />
