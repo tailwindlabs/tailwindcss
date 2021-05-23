@@ -13,10 +13,10 @@ export const documentationNav = {
       href: 'https://github.com/tailwindlabs/tailwindcss/releases',
     },
     pages['upgrading-to-v2'],
+    pages['editor-support'],
     pages['using-with-preprocessors'],
     pages['optimizing-for-production'],
     pages['browser-support'],
-    pages['intellisense'],
   ],
   'Core Concepts': [
     pages['utility-first'],
