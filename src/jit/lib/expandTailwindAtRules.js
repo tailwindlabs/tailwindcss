@@ -252,25 +252,25 @@ export default function expandTailwindAtRules(context, registerDependency, tailw
     // Replace any Tailwind directives with generated CSS
 
     if (layerNodes.base) {
-      layerNodes.base.before(cloneNodes([...baseNodes]))
+      layerNodes.base.before(cloneNodes([...baseNodes], layerNodes.base.source))
       layerNodes.base.remove()
     }
 
     if (layerNodes.components) {
-      layerNodes.components.before(cloneNodes([...componentNodes]))
+      layerNodes.components.before(cloneNodes([...componentNodes], layerNodes.components.source))
       layerNodes.components.remove()
     }
 
     if (layerNodes.utilities) {
-      layerNodes.utilities.before(cloneNodes([...utilityNodes]))
+      layerNodes.utilities.before(cloneNodes([...utilityNodes], layerNodes.utilities.source))
       layerNodes.utilities.remove()
     }
 
     if (layerNodes.variants) {
-      layerNodes.variants.before(cloneNodes([...screenNodes]))
+      layerNodes.variants.before(cloneNodes([...screenNodes], layerNodes.variants.source))
       layerNodes.variants.remove()
     } else {
-      root.append(cloneNodes([...screenNodes]))
+      root.append(cloneNodes([...screenNodes], root.source))
     }
 
     // ---
