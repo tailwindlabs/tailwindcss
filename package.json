@@ -40,8 +40,8 @@
     "*.js"
   ],
   "devDependencies": {
-    "@babel/cli": "^7.13.16",
-    "@babel/core": "^7.13.16",
+    "@babel/cli": "^7.14.3",
+    "@babel/core": "^7.14.3",
     "@babel/node": "^7.12.13",
     "@babel/preset-env": "^7.13.8",
     "@tailwindcss/aspect-ratio": "^0.2.0",
