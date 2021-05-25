@@ -161,3 +161,5 @@ export { default as transitionProperty } from './transitionProperty'
 export { default as transitionDelay } from './transitionDelay'
 export { default as transitionDuration } from './transitionDuration'
 export { default as transitionTimingFunction } from './transitionTimingFunction'
+
+export { default as content } from './content'
