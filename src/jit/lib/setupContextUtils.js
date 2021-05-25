@@ -582,7 +582,7 @@ export function getContext(
     postCssNodeCache: new Map(), // Hit
     candidateRuleMap: new Map(), // Hit
     tailwindConfig: tailwindConfig, // Hit
-    rawContent: purgeContent // Hit
+    changedContent: purgeContent // Hit
       .filter((item) => typeof item.raw === 'string')
       .map(({ raw, extension }) => ({ content: raw, extension })),
     variantMap: new Map(), // Hit

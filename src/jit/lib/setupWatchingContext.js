@@ -103,7 +103,7 @@ export default function setupWatchingContext(configOrPath, tailwindDirectives, r
       for (let changedFile of resolveChangedFiles(context)) {
         let content = fs.readFileSync(changedFile, 'utf8')
         let extension = path.extname(changedFile).slice(1)
-        context.rawContent.push({ content, extension })
+        context.changedContent.push({ content, extension })
       }
     }
 

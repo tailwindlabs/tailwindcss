@@ -140,7 +140,7 @@ export default function expandTailwindAtRules(context) {
 
     env.DEBUG && console.time('Reading changed files')
 
-    for (let { content, extension } of context.rawContent) {
+    for (let { content, extension } of context.changedContent) {
       let extractor = getExtractor(context.tailwindConfig, extension)
       getClassCandidates(content, extractor, contentMatchCache, candidates, seen)
     }
@@ -201,13 +201,12 @@ export default function expandTailwindAtRules(context) {
     // ---
 
     if (env.DEBUG) {
-      console.log('Changed files: ', context.changedFiles.size)
       console.log('Potential classes: ', candidates.size)
       console.log('Active contexts: ', sharedState.contextSourcesMap.size)
       console.log('Content match entries', contentMatchCache.size)
     }
 
     // Clear the cache for the changed files
-    context.rawContent = []
+    context.changedContent = []
   }
 }
