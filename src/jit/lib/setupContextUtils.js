@@ -311,7 +311,7 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
 
 let fileModifiedMap = new Map()
 
-export function trackModified(files) {
+function trackModified(files) {
   let changed = false
 
   for (let file of files) {
@@ -341,7 +341,7 @@ function extractVariantAtRules(node) {
   })
 }
 
-export function collectLayerPlugins(root) {
+function collectLayerPlugins(root) {
   let layerPlugins = []
 
   root.each((node) => {
@@ -382,7 +382,7 @@ export function collectLayerPlugins(root) {
   return layerPlugins
 }
 
-export function resolvePlugins(context, tailwindDirectives, root) {
+function resolvePlugins(context, tailwindDirectives, root) {
   let corePluginList = Object.entries(corePlugins)
     .map(([name, plugin]) => {
       if (!context.tailwindConfig.corePlugins.includes(name)) {
@@ -416,7 +416,7 @@ export function resolvePlugins(context, tailwindDirectives, root) {
   return [...corePluginList, ...beforeVariants, ...userPlugins, ...afterVariants, ...layerPlugins]
 }
 
-export function registerPlugins(plugins, context) {
+function registerPlugins(plugins, context) {
   let variantList = []
   let variantMap = new Map()
   let offsets = {
@@ -479,52 +479,14 @@ function cleanupContext(context) {
   }
 }
 
-let configPathCache = new LRU({ maxSize: 100 })
-
-// Get the config object based on a path
-function getTailwindConfig(configOrPath) {
-  let userConfigPath = resolveConfigPath(configOrPath)
-
-  if (userConfigPath !== null) {
-    let [prevConfig, prevConfigHash, prevDeps, prevModified] =
-      configPathCache.get(userConfigPath) || []
-
-    let newDeps = getModuleDependencies(userConfigPath).map((dep) => dep.file)
-
-    let modified = false
-    let newModified = new Map()
-    for (let file of newDeps) {
-      let time = fs.statSync(file).mtimeMs
-      newModified.set(file, time)
-      if (!prevModified || !prevModified.has(file) || time > prevModified.get(file)) {
-        modified = true
-      }
-    }
-
-    // It hasn't changed (based on timestamps)
-    if (!modified) {
-      return [prevConfig, userConfigPath, prevConfigHash, prevDeps]
-    }
-
-    // It has changed (based on timestamps), or first run
-    for (let file of newDeps) {
-      delete require.cache[file]
-    }
-    let newConfig = resolveConfig(require(userConfigPath))
-    let newHash = hash(newConfig)
-    configPathCache.set(userConfigPath, [newConfig, newHash, newDeps, newModified])
-    return [newConfig, userConfigPath, newHash, newDeps]
-  }
-
-  // It's a plain object, not a path
-  let newConfig = resolveConfig(
-    configOrPath.config === undefined ? configOrPath : configOrPath.config
-  )
-
-  return [newConfig, null, hash(newConfig), []]
-}
-
-export function getContext(configOrPath, tailwindDirectives, registerDependency, root, result) {
+export function getContext(
+  configOrPath,
+  tailwindDirectives,
+  registerDependency,
+  root,
+  result,
+  getTailwindConfig
+) {
   let sourcePath = result.opts.from
   let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
     getTailwindConfig(configOrPath)
@@ -597,17 +559,9 @@ export function getContext(configOrPath, tailwindDirectives, registerDependency,
     : tailwindConfig.purge.content
 
   let context = {
-    changedFiles: new Set(),
-    ruleCache: new Set(),
     watcher: null,
     touchFile: null,
-    classCache: new Map(),
-    applyClassCache: new Map(),
-    notClassCache: new Set(),
-    postCssNodeCache: new Map(),
-    candidateRuleMap: new Map(),
     configPath: userConfigPath,
-    tailwindConfig: tailwindConfig,
     configDependencies: new Set(),
     candidateFiles: purgeContent
       .filter((item) => typeof item === 'string')
@@ -619,12 +573,21 @@ export function getContext(configOrPath, tailwindDirectives, registerDependency,
           )
         )
       ),
-    rawContent: purgeContent
+    fileModifiedMap: new Map(),
+    // ---
+    changedFiles: new Set(), // Hit
+    ruleCache: new Set(), // Hit
+    classCache: new Map(), // Hit
+    applyClassCache: new Map(), // Hit
+    notClassCache: new Set(), // Hit
+    postCssNodeCache: new Map(), // Hit
+    candidateRuleMap: new Map(), // Hit
+    tailwindConfig: tailwindConfig, // Hit
+    rawContent: purgeContent // Hit
       .filter((item) => typeof item.raw === 'string')
       .map(({ raw, extension }) => ({ content: raw, extension })),
-    variantMap: new Map(),
-    stylesheetCache: null,
-    fileModifiedMap: new Map(),
+    variantMap: new Map(), // Hit
+    stylesheetCache: null, // Hit
   }
 
   // ---
