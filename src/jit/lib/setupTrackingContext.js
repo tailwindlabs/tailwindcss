@@ -2,7 +2,8 @@ import fs from 'fs'
 import path from 'path'
 
 import fastGlob from 'fast-glob'
-import parseGlob from 'parse-glob'
+import isGlob from 'is-glob'
+import globParent from 'glob-parent'
 import LRU from 'quick-lru'
 
 import hash from '../../util/hashConfig'
@@ -104,16 +105,11 @@ export default function setupTrackingContext(configOrPath, tailwindDirectives, r
     if (tailwindDirectives.size > 0) {
       // Add template paths as postcss dependencies.
       for (let maybeGlob of context.candidateFiles) {
-        let {
-          is: { glob: isGlob },
-          base,
-        } = parseGlob(maybeGlob)
-
-        if (isGlob) {
+        if (isGlob(maybeGlob)) {
           // rollup-plugin-postcss does not support dir-dependency messages
           // but directories can be watched in the same way as files
           registerDependency(
-            path.resolve(base),
+            path.resolve(globParent(maybeGlob)),
             env.ROLLUP_WATCH === 'true' ? 'dependency' : 'dir-dependency'
           )
         } else {
