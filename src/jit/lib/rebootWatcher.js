@@ -64,7 +64,10 @@ export function rebootWatcher(context) {
       })
 
       context.watcher.on('add', (file) => {
-        context.changedFiles.add(path.resolve('.', file))
+        let changedFile = path.resolve('.', file)
+        let content = fs.readFileSync(changedFile, 'utf8')
+        let extension = path.extname(changedFile).slice(1)
+        context.rawContent.push({ content, extension })
         touch(context.touchFile)
       })
 
@@ -80,7 +83,10 @@ export function rebootWatcher(context) {
           }
           touch(context.configPath)
         } else {
-          context.changedFiles.add(path.resolve('.', file))
+          let changedFile = path.resolve('.', file)
+          let content = fs.readFileSync(changedFile, 'utf8')
+          let extension = path.extname(changedFile).slice(1)
+          context.rawContent.push({ content, extension })
           touch(context.touchFile)
         }
       })

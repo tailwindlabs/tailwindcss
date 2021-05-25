@@ -575,7 +575,6 @@ export function getContext(
       ),
     fileModifiedMap: new Map(),
     // ---
-    changedFiles: new Set(), // Hit
     ruleCache: new Set(), // Hit
     classCache: new Map(), // Hit
     applyClassCache: new Map(), // Hit

@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 
 import fastGlob from 'fast-glob'
 import LRU from 'quick-lru'
@@ -100,7 +101,9 @@ export default function setupWatchingContext(configOrPath, tailwindDirectives, r
 
     if (tailwindDirectives.size > 0) {
       for (let changedFile of resolveChangedFiles(context)) {
-        context.changedFiles.add(changedFile)
+        let content = fs.readFileSync(changedFile, 'utf8')
+        let extension = path.extname(changedFile).slice(1)
+        context.rawContent.push({ content, extension })
       }
     }
 

@@ -139,12 +139,6 @@ export default function expandTailwindAtRules(context) {
     let seen = new Set()
 
     env.DEBUG && console.time('Reading changed files')
-    for (let file of context.changedFiles) {
-      let content = fs.readFileSync(file, 'utf8')
-      let extractor = getExtractor(context.tailwindConfig, path.extname(file).slice(1))
-      getClassCandidates(content, extractor, contentMatchCache, candidates, seen)
-    }
-    env.DEBUG && console.timeEnd('Reading changed files')
 
     for (let { content, extension } of context.rawContent) {
       let extractor = getExtractor(context.tailwindConfig, extension)
@@ -214,6 +208,6 @@ export default function expandTailwindAtRules(context) {
     }
 
     // Clear the cache for the changed files
-    context.changedFiles.clear()
+    context.rawContent = []
   }
 }

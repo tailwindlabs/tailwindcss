@@ -118,7 +118,9 @@ export default function setupTrackingContext(configOrPath, tailwindDirectives, r
       }
 
       for (let changedFile of resolveChangedFiles(context)) {
-        context.changedFiles.add(changedFile)
+        let content = fs.readFileSync(changedFile, 'utf8')
+        let extension = path.extname(changedFile).slice(1)
+        context.rawContent.push({ content, extension })
       }
     }
 
