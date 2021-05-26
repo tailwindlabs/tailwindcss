@@ -565,8 +565,7 @@ export function getContext(
           )
         )
       ),
-    // Carry over the existing modified map if we have one.
-    fileModifiedMap: new Map(existingContext ? existingContext.fileModifiedMap : undefined),
+    fileModifiedMap: new Map(),
     // ---
     ruleCache: new Set(), // Hit
     classCache: new Map(), // Hit
@@ -580,11 +579,6 @@ export function getContext(
       .map(({ raw, extension }) => ({ content: raw, extension })),
     variantMap: new Map(), // Hit
     stylesheetCache: null, // Hit
-  }
-
-  if (!existingContext) {
-    // If we didn't have an existing modified map then populate it now.
-    trackModified([...contextDependencies], context)
   }
 
   // ---
