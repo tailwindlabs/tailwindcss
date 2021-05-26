@@ -478,8 +478,9 @@ export function getContext(
   getTailwindConfig
 ) {
   let sourcePath = result.opts.from
-  let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
-    getTailwindConfig(configOrPath)
+  let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] = getTailwindConfig(
+    configOrPath
+  )
   let isConfigFile = userConfigPath !== null
 
   let contextDependencies = new Set(configDependencies)
@@ -579,6 +580,11 @@ export function getContext(
       .map(({ raw, extension }) => ({ content: raw, extension })),
     variantMap: new Map(), // Hit
     stylesheetCache: null, // Hit
+  }
+
+  if (!existingContext) {
+    // If we didn't have an existing modified map then populate it now.
+    trackModified([...contextDependencies], context)
   }
 
   // ---
