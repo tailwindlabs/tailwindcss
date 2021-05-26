@@ -40,6 +40,15 @@ export default {
     )
 
     addVariant(
+      'selection',
+      transformAllSelectors((selector) => {
+        return updateAllClasses(selector, (className, { withPseudo }) => {
+          return withPseudo(`selection${config('separator')}${className}`, '::selection')
+        })
+      })
+    )
+
+    addVariant(
       'before',
       transformAllSelectors(
         (selector) => {
