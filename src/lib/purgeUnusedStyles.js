@@ -34,6 +34,18 @@ export function tailwindExtractor(content) {
   return broadMatches.concat(broadMatchesWithoutTrailingSlash).concat(innerMatches)
 }
 
+function getTransformer(config, fileExtension) {
+  let transformers = (config.purge && config.purge.transform) || {}
+
+  if (typeof transformers === 'function') {
+    transformers = {
+      DEFAULT: transformers,
+    }
+  }
+
+  return transformers[fileExtension] || transformers.DEFAULT || ((content) => content)
+}
+
 export default function purgeUnusedUtilities(config, configChanged, resolvedConfigPath) {
   const purgeEnabled = _.get(
     config,
@@ -58,7 +70,50 @@ export default function purgeUnusedUtilities(config, configChanged, resolvedConf
     return removeTailwindMarkers
   }
 
-  const { defaultExtractor, ...purgeOptions } = config.purge.options || {}
+  const extractors = config.purge.extract || {}
+  const transformers = config.purge.transform || {}
+  let { defaultExtractor: originalDefaultExtractor, ...purgeOptions } = config.purge.options || {}
+
+  if (!originalDefaultExtractor) {
+    originalDefaultExtractor =
+      typeof extractors === 'function' ? extractors : extractors.DEFAULT || tailwindExtractor
+  }
+
+  const defaultExtractor = (content) => {
+    const preserved = originalDefaultExtractor(content)
+
+    if (_.get(config, 'purge.preserveHtmlElements', true)) {
+      preserved.push(...htmlTags)
+    }
+
+    return preserved
+  }
+
+  // If `extractors` is a function then we don't have any file-specific extractors,
+  // only a default one.
+  let fileSpecificExtractors = typeof extractors === 'function' ? {} : extractors
+
+  // PurgeCSS doesn't support "transformers," so we implement those using extractors.
+  // If we have a custom transformer for an extension, but not a matching extractor,
+  // then we need to create an extractor that we can augment later.
+  if (typeof transformers !== 'function') {
+    for (let [extension] of Object.entries(transformers)) {
+      if (!fileSpecificExtractors[extension]) {
+        fileSpecificExtractors[extension] = defaultExtractor
+      }
+    }
+  }
+
+  // Augment file-specific extractors by running the transformer before we extract classes.
+  fileSpecificExtractors = Object.entries(fileSpecificExtractors).map(([extension, extractor]) => {
+    return {
+      extensions: [extension],
+      extractor: (content) => {
+        const transformer = getTransformer(config, extension)
+        return extractor(transformer(content))
+      },
+    }
+  })
 
   return postcss([
     function (css) {
@@ -106,15 +161,10 @@ export default function purgeUnusedUtilities(config, configChanged, resolvedConf
     removeTailwindMarkers,
     purgecss({
       defaultExtractor: (content) => {
-        const extractor = defaultExtractor || tailwindExtractor
-        const preserved = [...extractor(content)]
-
-        if (_.get(config, 'purge.preserveHtmlElements', true)) {
-          preserved.push(...htmlTags)
-        }
-
-        return preserved
+        const transformer = getTransformer(config)
+        return defaultExtractor(transformer(content))
       },
+      extractors: fileSpecificExtractors,
       ...purgeOptions,
       content: (Array.isArray(config.purge)
         ? config.purge
