@@ -18,6 +18,29 @@
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);
 }
+.first-letter\:text-2xl::first-letter {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+.first-letter\:text-red-500::first-letter {
+  --tw-text-opacity: 1;
+  color: rgba(239, 68, 68, var(--tw-text-opacity));
+}
+.first-line\:bg-yellow-300::first-line {
+  --tw-bg-opacity: 1;
+  background-color: rgba(252, 211, 77, var(--tw-bg-opacity));
+}
+.first-line\:underline::first-line {
+  text-decoration: underline;
+}
+.marker\:text-lg::marker {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+.marker\:text-red-500::marker {
+  --tw-text-opacity: 1;
+  color: rgba(239, 68, 68, var(--tw-text-opacity));
+}
 .before\:block::before {
   content: '';
   display: block;

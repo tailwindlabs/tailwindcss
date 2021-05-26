@@ -11,7 +11,34 @@ import {
 } from '../util/pluginUtils'
 
 export default {
-  pseudoClassVariants: function ({ config, addVariant }) {
+  pseudoElementVariants: function ({ config, addVariant }) {
+    addVariant(
+      'first-letter',
+      transformAllSelectors((selector) => {
+        return updateAllClasses(selector, (className, { withPseudo }) => {
+          return withPseudo(`first-letter${config('separator')}${className}`, '::first-letter')
+        })
+      })
+    )
+
+    addVariant(
+      'first-line',
+      transformAllSelectors((selector) => {
+        return updateAllClasses(selector, (className, { withPseudo }) => {
+          return withPseudo(`first-line${config('separator')}${className}`, '::first-line')
+        })
+      })
+    )
+
+    addVariant(
+      'marker',
+      transformAllSelectors((selector) => {
+        return updateAllClasses(selector, (className, { withPseudo }) => {
+          return withPseudo(`marker${config('separator')}${className}`, '::marker')
+        })
+      })
+    )
+
     addVariant(
       'before',
       transformAllSelectors(
@@ -55,7 +82,8 @@ export default {
         }
       )
     )
-
+  },
+  pseudoClassVariants: function ({ config, addVariant }) {
     let pseudoVariants = [
       ['first', 'first-child'],
       ['last', 'last-child'],
