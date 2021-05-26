@@ -663,6 +663,187 @@ test('element selectors are preserved by default', () => {
   )
 })
 
+test('custom default extractor', () => {
+  return inProduction(
+    suppressConsoleLogs(() => {
+      const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+      const input = fs.readFileSync(inputPath, 'utf8')
+
+      return postcss([
+        tailwind({
+          ...config,
+          corePlugins: { preflight: false, ringWidth: false, boxShadow: false, borderColor: false },
+          purge: {
+            content: [
+              path.resolve(`${__dirname}/fixtures/**/*.html`),
+              { raw: '<div class="uppercase"></div>', extension: 'php' },
+            ],
+            extract: () => [],
+            mode: 'all',
+            preserveHtmlElements: false,
+            options: {
+              keyframes: true,
+            },
+          },
+        }),
+      ])
+        .process(input, { from: withTestName(inputPath) })
+        .then((result) => {
+          expect(result.css).toMatchFormattedCss('')
+        })
+    })
+  )
+})
+
+test('custom extension-specific extractor', () => {
+  return inProduction(
+    suppressConsoleLogs(() => {
+      const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+      const input = fs.readFileSync(inputPath, 'utf8')
+
+      return postcss([
+        tailwind({
+          ...config,
+          corePlugins: { preflight: false, ringWidth: false, boxShadow: false, borderColor: false },
+          purge: {
+            content: [
+              path.resolve(`${__dirname}/fixtures/**/*.html`),
+              { raw: '<div class="lowercase"></div>', extension: 'html' },
+              { raw: '<div class="uppercase"></div>', extension: 'php' },
+            ],
+            extract: {
+              html: () => [],
+            },
+            mode: 'all',
+            preserveHtmlElements: false,
+            options: {
+              keyframes: true,
+            },
+          },
+        }),
+      ])
+        .process(input, { from: withTestName(inputPath) })
+        .then((result) => {
+          expect(result.css).toMatchFormattedCss(`
+            .uppercase {
+              text-transform: uppercase;
+            }
+          `)
+        })
+    })
+  )
+})
+
+test('custom default transformer', () => {
+  return inProduction(
+    suppressConsoleLogs(() => {
+      const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+      const input = fs.readFileSync(inputPath, 'utf8')
+
+      return postcss([
+        tailwind({
+          ...config,
+          corePlugins: { preflight: false, ringWidth: false, boxShadow: false, borderColor: false },
+          purge: {
+            content: [{ raw: '<div class="uppercase"></div>', extension: 'html' }],
+            transform: (content) => content.replace(/uppercase/g, 'lowercase'),
+            mode: 'all',
+            preserveHtmlElements: false,
+            options: {
+              keyframes: true,
+            },
+          },
+        }),
+      ])
+        .process(input, { from: withTestName(inputPath) })
+        .then((result) => {
+          expect(result.css).toMatchFormattedCss(`
+            .lowercase {
+              text-transform: lowercase;
+            }
+          `)
+        })
+    })
+  )
+})
+
+test('custom explicit default transformer', () => {
+  return inProduction(
+    suppressConsoleLogs(() => {
+      const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+      const input = fs.readFileSync(inputPath, 'utf8')
+
+      return postcss([
+        tailwind({
+          ...config,
+          corePlugins: { preflight: false, ringWidth: false, boxShadow: false, borderColor: false },
+          purge: {
+            content: [{ raw: '<div class="uppercase"></div>', extension: 'html' }],
+            transform: {
+              DEFAULT: (content) => content.replace(/uppercase/g, 'lowercase'),
+            },
+            mode: 'all',
+            preserveHtmlElements: false,
+            options: {
+              keyframes: true,
+            },
+          },
+        }),
+      ])
+        .process(input, { from: withTestName(inputPath) })
+        .then((result) => {
+          expect(result.css).toMatchFormattedCss(`
+            .lowercase {
+              text-transform: lowercase;
+            }
+          `)
+        })
+    })
+  )
+})
+
+test('custom extension-specific transformer', () => {
+  return inProduction(
+    suppressConsoleLogs(() => {
+      const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+      const input = fs.readFileSync(inputPath, 'utf8')
+
+      return postcss([
+        tailwind({
+          ...config,
+          corePlugins: { preflight: false, ringWidth: false, boxShadow: false, borderColor: false },
+          purge: {
+            content: [
+              { raw: '<div class="uppercase"></div>', extension: 'html' },
+              { raw: '<div class="uppercase"></div>', extension: 'php' },
+            ],
+            transform: {
+              html: (content) => content.replace(/uppercase/g, 'lowercase'),
+            },
+            mode: 'all',
+            preserveHtmlElements: false,
+            options: {
+              keyframes: true,
+            },
+          },
+        }),
+      ])
+        .process(input, { from: withTestName(inputPath) })
+        .then((result) => {
+          expect(result.css).toMatchFormattedCss(`
+            .uppercase {
+              text-transform: uppercase;
+            }
+
+            .lowercase {
+              text-transform: lowercase;
+            }
+          `)
+        })
+    })
+  )
+})
+
 test('element selectors are preserved even when defaultExtractor is overridden', () => {
   return inProduction(
     suppressConsoleLogs(() => {

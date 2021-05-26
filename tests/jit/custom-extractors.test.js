@@ -65,3 +65,58 @@ test('extractors array', () => {
     expect(result.css).toMatchFormattedCss(expected)
   })
 })
+
+test('extract function', () => {
+  let config = {
+    mode: 'jit',
+    purge: {
+      content: [path.resolve(__dirname, './custom-extractors.test.html')],
+      extract: customExtractor,
+    },
+    corePlugins: { preflight: false },
+    theme: {},
+    plugins: [],
+  }
+
+  return run(css, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(expected)
+  })
+})
+
+test('extract.DEFAULT', () => {
+  let config = {
+    mode: 'jit',
+    purge: {
+      content: [path.resolve(__dirname, './custom-extractors.test.html')],
+      extract: {
+        DEFAULT: customExtractor,
+      },
+    },
+    corePlugins: { preflight: false },
+    theme: {},
+    plugins: [],
+  }
+
+  return run(css, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(expected)
+  })
+})
+
+test('extract.{extension}', () => {
+  let config = {
+    purge: {
+      content: [path.resolve(__dirname, './custom-extractors.test.html')],
+      extract: {
+        html: customExtractor,
+      },
+    },
+    mode: 'jit',
+    corePlugins: { preflight: false },
+    theme: {},
+    plugins: [],
+  }
+
+  return run(css, config).then((result) => {
+    expect(result.css).toMatchFormattedCss(expected)
+  })
+})
