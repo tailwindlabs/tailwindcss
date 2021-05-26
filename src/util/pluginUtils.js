@@ -9,7 +9,7 @@ export function updateAllClasses(selectors, updateClass) {
     selectors.walkClasses((sel) => {
       let updatedClass = updateClass(sel.value, {
         withPseudo(className, pseudo) {
-          sel.parent.insertAfter(sel, selectorParser.pseudo({ value: `:${pseudo}` }))
+          sel.parent.insertAfter(sel, selectorParser.pseudo({ value: `${pseudo}` }))
           return className
         },
       })
@@ -36,7 +36,7 @@ export function updateLastClasses(selectors, updateClass) {
 
       let updatedClass = updateClass(lastClass.value, {
         withPseudo(className, pseudo) {
-          lastClass.parent.insertAfter(lastClass, selectorParser.pseudo({ value: `:${pseudo}` }))
+          lastClass.parent.insertAfter(lastClass, selectorParser.pseudo({ value: `${pseudo}` }))
           return className
         },
       })
@@ -51,11 +51,14 @@ export function updateLastClasses(selectors, updateClass) {
   return result
 }
 
-export function transformAllSelectors(transformSelector, wrap = null) {
+export function transformAllSelectors(transformSelector, { wrap, withRule } = {}) {
   return ({ container }) => {
     container.walkRules((rule) => {
       let transformed = rule.selector.split(',').map(transformSelector).join(',')
       rule.selector = transformed
+      if (withRule) {
+        withRule(rule)
+      }
       return rule
     })
 
@@ -67,23 +70,35 @@ export function transformAllSelectors(transformSelector, wrap = null) {
   }
 }
 
-export function transformAllClasses(transformClass) {
+export function transformAllClasses(transformClass, { wrap, withRule } = {}) {
   return ({ container }) => {
     container.walkRules((rule) => {
       let selector = rule.selector
       let variantSelector = updateAllClasses(selector, transformClass)
       rule.selector = variantSelector
+      if (withRule) {
+        withRule(rule)
+      }
       return rule
     })
+
+    if (wrap) {
+      let wrapper = wrap()
+      wrapper.append(container.nodes)
+      container.append(wrapper)
+    }
   }
 }
 
-export function transformLastClasses(transformClass, wrap = null) {
+export function transformLastClasses(transformClass, { wrap, withRule } = {}) {
   return ({ container }) => {
     container.walkRules((rule) => {
       let selector = rule.selector
       let variantSelector = updateLastClasses(selector, transformClass)
       rule.selector = variantSelector
+      if (withRule) {
+        withRule(rule)
+      }
       return rule
     })
 

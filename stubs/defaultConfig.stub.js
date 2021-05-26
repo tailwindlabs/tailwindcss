@@ -175,6 +175,9 @@ module.exports = {
       200: '2',
     },
     container: {},
+    content: {
+      none: 'none',
+    },
     cursor: {
       auto: 'auto',
       default: 'default',

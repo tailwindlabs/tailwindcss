@@ -12,6 +12,50 @@ import {
 
 export default {
   pseudoClassVariants: function ({ config, addVariant }) {
+    addVariant(
+      'before',
+      transformAllSelectors(
+        (selector) => {
+          return updateAllClasses(selector, (className, { withPseudo }) => {
+            return withPseudo(`before${config('separator')}${className}`, '::before')
+          })
+        },
+        {
+          withRule: (rule) => {
+            let foundContent = false
+            rule.walkDecls('content', () => {
+              foundContent = true
+            })
+            if (!foundContent) {
+              rule.prepend(postcss.decl({ prop: 'content', value: '""' }))
+            }
+          },
+        }
+      )
+    )
+
+    addVariant(
+      'after',
+      transformAllSelectors(
+        (selector) => {
+          return updateAllClasses(selector, (className, { withPseudo }) => {
+            return withPseudo(`after${config('separator')}${className}`, '::after')
+          })
+        },
+        {
+          withRule: (rule) => {
+            let foundContent = false
+            rule.walkDecls('content', () => {
+              foundContent = true
+            })
+            if (!foundContent) {
+              rule.prepend(postcss.decl({ prop: 'content', value: '""' }))
+            }
+          },
+        }
+      )
+    )
+
     let pseudoVariants = [
       ['first', 'first-child'],
       ['last', 'last-child'],
@@ -35,7 +79,7 @@ export default {
       addVariant(
         variantName,
         transformAllClasses((className, { withPseudo }) => {
-          return withPseudo(`${variantName}${config('separator')}${className}`, state)
+          return withPseudo(`${variantName}${config('separator')}${className}`, `:${state}`)
         })
       )
     }
@@ -95,11 +139,13 @@ export default {
         (className) => {
           return `motion-safe${config('separator')}${className}`
         },
-        () =>
-          postcss.atRule({
-            name: 'media',
-            params: '(prefers-reduced-motion: no-preference)',
-          })
+        {
+          wrap: () =>
+            postcss.atRule({
+              name: 'media',
+              params: '(prefers-reduced-motion: no-preference)',
+            }),
+        }
       )
     )
 
@@ -109,11 +155,13 @@ export default {
         (className) => {
           return `motion-reduce${config('separator')}${className}`
         },
-        () =>
-          postcss.atRule({
-            name: 'media',
-            params: '(prefers-reduced-motion: reduce)',
-          })
+        {
+          wrap: () =>
+            postcss.atRule({
+              name: 'media',
+              params: '(prefers-reduced-motion: reduce)',
+            }),
+        }
       )
     )
   },
@@ -142,11 +190,13 @@ export default {
           (className) => {
             return `dark${config('separator')}${className}`
           },
-          () =>
-            postcss.atRule({
-              name: 'media',
-              params: '(prefers-color-scheme: dark)',
-            })
+          {
+            wrap: () =>
+              postcss.atRule({
+                name: 'media',
+                params: '(prefers-color-scheme: dark)',
+              }),
+          }
         )
       )
     }
@@ -162,7 +212,7 @@ export default {
           (className) => {
             return `${screen}${config('separator')}${className}`
           },
-          () => postcss.atRule({ name: 'media', params: query })
+          { wrap: () => postcss.atRule({ name: 'media', params: query }) }
         )
       )
     }
