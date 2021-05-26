@@ -1,5 +1,3 @@
-import fs from 'fs'
-import path from 'path'
 import * as sharedState from './sharedState'
 import { generateRules } from './generateRules'
 import bigSign from '../../util/bigSign'
@@ -11,38 +9,63 @@ let contentMatchCache = sharedState.contentMatchCache
 const BROAD_MATCH_GLOBAL_REGEXP = /[^<>"'`\s]*[^<>"'`\s:]/g
 const INNER_MATCH_GLOBAL_REGEXP = /[^<>"'`\s.(){}[\]#=%]*[^<>"'`\s.(){}[\]#=%:]/g
 
-function getDefaultExtractor(fileExtension) {
-  return function (content) {
-    if (fileExtension === 'svelte') {
-      content = content.replace(/(?:^|\s)class:/g, ' ')
-    }
+const builtInExtractors = {
+  DEFAULT: (content) => {
     let broadMatches = content.match(BROAD_MATCH_GLOBAL_REGEXP) || []
     let innerMatches = content.match(INNER_MATCH_GLOBAL_REGEXP) || []
 
     return [...broadMatches, ...innerMatches]
-  }
+  },
+}
+
+const builtInTransformers = {
+  DEFAULT: (content) => content,
+  svelte: (content) => content.replace(/(?:^|\s)class:/g, ' '),
 }
 
 function getExtractor(tailwindConfig, fileExtension) {
-  const purgeOptions = tailwindConfig && tailwindConfig.purge && tailwindConfig.purge.options
+  let extractors = (tailwindConfig && tailwindConfig.purge && tailwindConfig.purge.extract) || {}
+  const purgeOptions =
+    (tailwindConfig && tailwindConfig.purge && tailwindConfig.purge.options) || {}
 
-  if (!fileExtension) {
-    return (purgeOptions && purgeOptions.defaultExtractor) || getDefaultExtractor()
+  if (typeof extractors === 'function') {
+    extractors = {
+      DEFAULT: extractors,
+    }
+  }
+  if (purgeOptions.defaultExtractor) {
+    extractors.DEFAULT = purgeOptions.defaultExtractor
+  }
+  for (let { extensions, extractor } of purgeOptions.extractors || []) {
+    for (let extension of extensions) {
+      extractors[extension] = extractor
+    }
   }
 
-  if (!purgeOptions) {
-    return getDefaultExtractor(fileExtension)
-  }
-
-  const fileSpecificExtractor = (purgeOptions.extractors || []).find((extractor) =>
-    extractor.extensions.includes(fileExtension)
+  return (
+    extractors[fileExtension] ||
+    extractors.DEFAULT ||
+    builtInExtractors[fileExtension] ||
+    builtInExtractors.DEFAULT
   )
+}
 
-  if (fileSpecificExtractor) {
-    return fileSpecificExtractor.extractor
+function getTransformer(tailwindConfig, fileExtension) {
+  let transformers =
+    (tailwindConfig && tailwindConfig.purge && tailwindConfig.purge.transform) || {}
+
+  if (typeof transformers === 'function') {
+    transformers = {
+      DEFAULT: transformers,
+    }
   }
 
-  return purgeOptions.defaultExtractor || getDefaultExtractor(fileExtension)
+  return (
+    transformers[fileExtension] ||
+    transformers.DEFAULT ||
+    builtInTransformers[fileExtension] ||
+    builtInTransformers.DEFAULT
+  )
 }
 
 // Scans template contents for possible classes. This is a hot path on initial build but
@@ -141,8 +164,9 @@ export default function expandTailwindAtRules(context) {
     env.DEBUG && console.time('Reading changed files')
 
     for (let { content, extension } of context.changedContent) {
+      let transformer = getTransformer(context.tailwindConfig, extension)
       let extractor = getExtractor(context.tailwindConfig, extension)
-      getClassCandidates(content, extractor, contentMatchCache, candidates, seen)
+      getClassCandidates(transformer(content), extractor, contentMatchCache, candidates, seen)
     }
 
     // ---
