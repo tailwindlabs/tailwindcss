@@ -106,6 +106,7 @@ export default {
 
       // State
       'visited',
+      'target',
 
       // Forms
       'default',
