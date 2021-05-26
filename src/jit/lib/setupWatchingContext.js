@@ -60,10 +60,37 @@ function setWatcher(context, watcher) {
   return watchers.set(context, watcher)
 }
 
-function rebootWatcher(context) {
-  if (context.touchFile === null) {
-    context.touchFile = generateTouchFileName()
-    touch(context.touchFile)
+let touchFiles = new WeakMap()
+
+function getTouchFile(context) {
+  if (touchFiles.has(context)) {
+    return touchFiles.get(context)
+  }
+
+  return null
+}
+
+function setTouchFile(context, touchFile) {
+  return touchFiles.set(context, touchFile)
+}
+
+let configPaths = new WeakMap()
+
+function getConfigPath(context, configOrPath) {
+  if (!configPaths.has(context)) {
+    configPaths.set(context, resolveConfigPath(configOrPath))
+  }
+
+  return configPaths.get(context)
+}
+
+function rebootWatcher(context, configPath) {
+  let touchFile = getTouchFile(context)
+
+  if (touchFile === null) {
+    touchFile = generateTouchFileName()
+    setTouchFile(context, touchFile)
+    touch(touchFile)
   }
 
   if (env.TAILWIND_MODE === 'build') {
@@ -93,7 +120,7 @@ function rebootWatcher(context) {
         let content = fs.readFileSync(changedFile, 'utf8')
         let extension = path.extname(changedFile).slice(1)
         context.changedContent.push({ content, extension })
-        touch(context.touchFile)
+        touch(touchFile)
       })
 
       watcher.on('change', (file) => {
@@ -106,13 +133,13 @@ function rebootWatcher(context) {
           for (let dependency of context.configDependencies) {
             delete require.cache[require.resolve(dependency)]
           }
-          touch(context.configPath)
+          touch(configPath)
         } else {
           let changedFile = path.resolve('.', file)
           let content = fs.readFileSync(changedFile, 'utf8')
           let extension = path.extname(changedFile).slice(1)
           context.changedContent.push({ content, extension })
-          touch(context.touchFile)
+          touch(touchFile)
         }
       })
 
@@ -122,7 +149,7 @@ function rebootWatcher(context) {
           for (let dependency of context.configDependencies) {
             delete require.cache[require.resolve(dependency)]
           }
-          touch(context.configPath)
+          touch(configPath)
         }
       })
     })
@@ -204,7 +231,7 @@ function resolveChangedFiles(context) {
 // plugins) then return it
 export default function setupWatchingContext(configOrPath, tailwindDirectives, registerDependency) {
   return (result, root) => {
-    let [context, newContext] = getContext(
+    let [context, isNewContext] = getContext(
       configOrPath,
       tailwindDirectives,
       registerDependency,
@@ -220,9 +247,11 @@ export default function setupWatchingContext(configOrPath, tailwindDirectives, r
       }
     })
 
-    if (context.configPath !== null) {
-      for (let dependency of getModuleDependencies(context.configPath)) {
-        if (dependency.file === context.configPath) {
+    let configPath = getConfigPath(context, configOrPath)
+
+    if (configPath !== null) {
+      for (let dependency of getModuleDependencies(configPath)) {
+        if (dependency.file === configPath) {
           continue
         }
 
@@ -230,14 +259,15 @@ export default function setupWatchingContext(configOrPath, tailwindDirectives, r
       }
     }
 
-    if (newContext) {
-      rebootWatcher(context)
+    if (isNewContext) {
+      rebootWatcher(context, configPath)
     }
 
     // Register our temp file as a dependency ‚Äî we write to this file
     // to trigger rebuilds.
-    if (context.touchFile) {
-      registerDependency(context.touchFile)
+    let touchFile = getTouchFile(context)
+    if (touchFile) {
+      registerDependency(touchFile)
     }
 
     if (tailwindDirectives.size > 0) {
