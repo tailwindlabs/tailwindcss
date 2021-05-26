@@ -18,8 +18,9 @@ const builtInExtractors = {
   },
 }
 
-builtInExtractors.svelte = (content) => {
-  return builtInExtractors.DEFAULT(content.replace(/(?:^|\s)class:/g, ' '))
+const builtInTransformers = {
+  DEFAULT: (content) => content,
+  svelte: (content) => content.replace(/(?:^|\s)class:/g, ' '),
 }
 
 function getExtractor(tailwindConfig, fileExtension) {
@@ -59,7 +60,12 @@ function getTransformer(tailwindConfig, fileExtension) {
     }
   }
 
-  return transformers[fileExtension] || transformers.DEFAULT || ((content) => content)
+  return (
+    transformers[fileExtension] ||
+    transformers.DEFAULT ||
+    builtInTransformers[fileExtension] ||
+    builtInTransformers.DEFAULT
+  )
 }
 
 // Scans template contents for possible classes. This is a hot path on initial build but
