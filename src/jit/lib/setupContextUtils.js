@@ -477,12 +477,6 @@ let contextMap = sharedState.contextMap
 let configContextMap = sharedState.configContextMap
 let contextSourcesMap = sharedState.contextSourcesMap
 
-function cleanupContext(context) {
-  if (context.watcher) {
-    context.watcher.close()
-  }
-}
-
 export function getContext(
   configOrPath,
   tailwindDirectives,
@@ -553,7 +547,9 @@ export function getContext(
       contextSourcesMap.get(oldContext).delete(sourcePath)
       if (contextSourcesMap.get(oldContext).size === 0) {
         contextSourcesMap.delete(oldContext)
-        cleanupContext(oldContext)
+        for (let disposable of oldContext.disposables.splice(0)) {
+          disposable(oldContext)
+        }
       }
     }
   }
@@ -565,7 +561,6 @@ export function getContext(
     : tailwindConfig.purge.content
 
   let context = {
-    watcher: null,
     touchFile: null,
     configPath: userConfigPath,
     configDependencies: new Set(),
@@ -581,6 +576,7 @@ export function getContext(
       ),
     fileModifiedMap: new Map(),
     // ---
+    disposables: [],
     ruleCache: new Set(), // Hit
     classCache: new Map(), // Hit
     applyClassCache: new Map(), // Hit
