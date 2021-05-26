@@ -88,13 +88,40 @@ function resolveChangedFiles(context) {
 // plugins) then return it
 export default function setupTrackingContext(configOrPath, tailwindDirectives, registerDependency) {
   return (result, root) => {
+    let [
+      tailwindConfig,
+      userConfigPath,
+      tailwindConfigHash,
+      configDependencies,
+    ] = getTailwindConfig(configOrPath)
+
+    let contextDependencies = new Set(configDependencies)
+
+    // If there are no @tailwind rules, we don't consider this CSS file or it's dependencies
+    // to be dependencies of the context. Can reuse the context even if they change.
+    // We may want to think about `@layer` being part of this trigger too, but it's tough
+    // because it's impossible for a layer in one file to end up in the actual @tailwind rule
+    // in another file since independent sources are effectively isolated.
+    if (tailwindDirectives.size > 0) {
+      // Add current css file as a context dependencies.
+      contextDependencies.add(result.opts.from)
+
+      // Add all css @import dependencies as context dependencies.
+      for (let message of result.messages) {
+        if (message.type === 'dependency') {
+          contextDependencies.add(message.file)
+        }
+      }
+    }
+
     let [context] = getContext(
-      configOrPath,
       tailwindDirectives,
-      registerDependency,
       root,
       result,
-      getTailwindConfig
+      tailwindConfig,
+      userConfigPath,
+      tailwindConfigHash,
+      contextDependencies
     )
 
     // If there are no @tailwind rules, we don't consider this CSS file or it's dependencies
@@ -122,6 +149,10 @@ export default function setupTrackingContext(configOrPath, tailwindDirectives, r
         let extension = path.extname(changedFile).slice(1)
         context.changedContent.push({ content, extension })
       }
+    }
+
+    for (let file of configDependencies) {
+      registerDependency(file)
     }
 
     return context
