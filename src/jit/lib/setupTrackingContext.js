@@ -15,7 +15,7 @@ import resolveConfigPath from '../../util/resolveConfigPath'
 
 import { env } from './sharedState'
 
-import { getContext } from './setupContextUtils'
+import { getContext, getFileModifiedMap } from './setupContextUtils'
 
 let configPathCache = new LRU({ maxSize: 100 })
 
@@ -62,19 +62,17 @@ function getTailwindConfig(configOrPath) {
   return [newConfig, null, hash(newConfig), []]
 }
 
-function resolveChangedFiles(context) {
+function resolveChangedFiles(context, fileModifiedMap) {
   let changedFiles = new Set()
   env.DEBUG && console.time('Finding changed files')
   let files = fastGlob.sync(context.candidateFiles)
   for (let file of files) {
-    let prevModified = context.fileModifiedMap.has(file)
-      ? context.fileModifiedMap.get(file)
-      : -Infinity
+    let prevModified = fileModifiedMap.has(file) ? fileModifiedMap.get(file) : -Infinity
     let modified = fs.statSync(file).mtimeMs
 
     if (modified > prevModified) {
       changedFiles.add(file)
-      context.fileModifiedMap.set(file, modified)
+      fileModifiedMap.set(file, modified)
     }
   }
   env.DEBUG && console.timeEnd('Finding changed files')
@@ -88,12 +86,8 @@ function resolveChangedFiles(context) {
 // plugins) then return it
 export default function setupTrackingContext(configOrPath, tailwindDirectives, registerDependency) {
   return (result, root) => {
-    let [
-      tailwindConfig,
-      userConfigPath,
-      tailwindConfigHash,
-      configDependencies,
-    ] = getTailwindConfig(configOrPath)
+    let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
+      getTailwindConfig(configOrPath)
 
     let contextDependencies = new Set(configDependencies)
 
@@ -130,6 +124,8 @@ export default function setupTrackingContext(configOrPath, tailwindDirectives, r
     // because it's impossible for a layer in one file to end up in the actual @tailwind rule
     // in another file since independent sources are effectively isolated.
     if (tailwindDirectives.size > 0) {
+      let fileModifiedMap = getFileModifiedMap(context)
+
       // Add template paths as postcss dependencies.
       for (let maybeGlob of context.candidateFiles) {
         if (isGlob(maybeGlob)) {
@@ -144,7 +140,7 @@ export default function setupTrackingContext(configOrPath, tailwindDirectives, r
         }
       }
 
-      for (let changedFile of resolveChangedFiles(context)) {
+      for (let changedFile of resolveChangedFiles(context, fileModifiedMap)) {
         let content = fs.readFileSync(changedFile, 'utf8')
         let extension = path.extname(changedFile).slice(1)
         context.changedContent.push({ content, extension })

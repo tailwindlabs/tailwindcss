@@ -304,7 +304,15 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
   }
 }
 
-function trackModified(files, context) {
+let fileModifiedMapCache = new WeakMap()
+export function getFileModifiedMap(context) {
+  if (!fileModifiedMapCache.has(context)) {
+    fileModifiedMapCache.set(context, new Map())
+  }
+  return fileModifiedMapCache.get(context)
+}
+
+function trackModified(files, fileModifiedMap) {
   let changed = false
 
   for (let file of files) {
@@ -314,11 +322,11 @@ function trackModified(files, context) {
     let pathname = parsed.href.replace(parsed.hash, '').replace(parsed.search, '')
     let newModified = fs.statSync(decodeURIComponent(pathname)).mtimeMs
 
-    if (!context.fileModifiedMap.has(file) || newModified > context.fileModifiedMap.get(file)) {
+    if (!fileModifiedMap.has(file) || newModified > fileModifiedMap.get(file)) {
       changed = true
     }
 
-    context.fileModifiedMap.set(file, newModified)
+    fileModifiedMap.set(file, newModified)
   }
 
   return changed
@@ -506,7 +514,10 @@ export function getContext(
   // If there's already a context in the cache and we don't need to
   // reset the context, return the cached context.
   if (existingContext) {
-    let contextDependenciesChanged = trackModified([...contextDependencies], existingContext)
+    let contextDependenciesChanged = trackModified(
+      [...contextDependencies],
+      getFileModifiedMap(existingContext)
+    )
     if (!contextDependenciesChanged) {
       return [existingContext, false]
     }
@@ -547,7 +558,6 @@ export function getContext(
           )
         )
       ),
-    fileModifiedMap: new Map(),
     // ---
     disposables: [],
     ruleCache: new Set(), // Hit
@@ -564,7 +574,7 @@ export function getContext(
     stylesheetCache: null, // Hit
   }
 
-  trackModified([...contextDependencies], context)
+  trackModified([...contextDependencies], getFileModifiedMap(context))
 
   // ---
 
