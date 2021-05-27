@@ -5,6 +5,7 @@ import fastGlob from 'fast-glob'
 import isGlob from 'is-glob'
 import globParent from 'glob-parent'
 import LRU from 'quick-lru'
+import normalizePath from 'normalize-path'
 
 import hash from '../../util/hashConfig'
 import getModuleDependencies from '../../lib/getModuleDependencies'
@@ -15,9 +16,28 @@ import resolveConfigPath from '../../util/resolveConfigPath'
 
 import { env } from './sharedState'
 
-import { getContext } from './setupContextUtils'
+import { getContext, getFileModifiedMap } from './setupContextUtils'
 
 let configPathCache = new LRU({ maxSize: 100 })
+
+let candidateFilesCache = new WeakMap()
+
+function getCandidateFiles(context, userConfigPath, tailwindConfig) {
+  if (candidateFilesCache.has(context)) {
+    return candidateFilesCache.get(context)
+  }
+
+  let purgeContent = Array.isArray(tailwindConfig.purge)
+    ? tailwindConfig.purge
+    : tailwindConfig.purge.content
+
+  let basePath = userConfigPath === null ? process.cwd() : path.dirname(userConfigPath)
+  let candidateFiles = purgeContent
+    .filter((item) => typeof item === 'string')
+    .map((purgePath) => normalizePath(path.resolve(basePath, purgePath)))
+
+  return candidateFilesCache.set(context, candidateFiles).get(context)
+}
 
 // Get the config object based on a path
 function getTailwindConfig(configOrPath) {
@@ -62,19 +82,34 @@ function getTailwindConfig(configOrPath) {
   return [newConfig, null, hash(newConfig), []]
 }
 
-function resolveChangedFiles(context) {
+function resolvedChangedContent(context, candidateFiles, fileModifiedMap) {
+  let changedContent = (
+    Array.isArray(context.tailwindConfig.purge)
+      ? context.tailwindConfig.purge
+      : context.tailwindConfig.purge.content
+  )
+    .filter((item) => typeof item.raw === 'string')
+    .map(({ raw, extension }) => ({ content: raw, extension }))
+
+  for (let changedFile of resolveChangedFiles(candidateFiles, fileModifiedMap)) {
+    let content = fs.readFileSync(changedFile, 'utf8')
+    let extension = path.extname(changedFile).slice(1)
+    changedContent.push({ content, extension })
+  }
+  return changedContent
+}
+
+function resolveChangedFiles(candidateFiles, fileModifiedMap) {
   let changedFiles = new Set()
   env.DEBUG && console.time('Finding changed files')
-  let files = fastGlob.sync(context.candidateFiles)
+  let files = fastGlob.sync(candidateFiles)
   for (let file of files) {
-    let prevModified = context.fileModifiedMap.has(file)
-      ? context.fileModifiedMap.get(file)
-      : -Infinity
+    let prevModified = fileModifiedMap.has(file) ? fileModifiedMap.get(file) : -Infinity
     let modified = fs.statSync(file).mtimeMs
 
     if (modified > prevModified) {
       changedFiles.add(file)
-      context.fileModifiedMap.set(file, modified)
+      fileModifiedMap.set(file, modified)
     }
   }
   env.DEBUG && console.timeEnd('Finding changed files')
@@ -88,14 +123,10 @@ function resolveChangedFiles(context) {
 // plugins) then return it
 export default function setupTrackingContext(configOrPath, tailwindDirectives, registerDependency) {
   return (result, root) => {
-    let [context] = getContext(
-      configOrPath,
-      tailwindDirectives,
-      registerDependency,
-      root,
-      result,
-      getTailwindConfig
-    )
+    let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
+      getTailwindConfig(configOrPath)
+
+    let contextDependencies = new Set(configDependencies)
 
     // If there are no @tailwind rules, we don't consider this CSS file or it's dependencies
     // to be dependencies of the context. Can reuse the context even if they change.
@@ -103,8 +134,39 @@ export default function setupTrackingContext(configOrPath, tailwindDirectives, r
     // because it's impossible for a layer in one file to end up in the actual @tailwind rule
     // in another file since independent sources are effectively isolated.
     if (tailwindDirectives.size > 0) {
+      // Add current css file as a context dependencies.
+      contextDependencies.add(result.opts.from)
+
+      // Add all css @import dependencies as context dependencies.
+      for (let message of result.messages) {
+        if (message.type === 'dependency') {
+          contextDependencies.add(message.file)
+        }
+      }
+    }
+
+    let [context] = getContext(
+      tailwindDirectives,
+      root,
+      result,
+      tailwindConfig,
+      userConfigPath,
+      tailwindConfigHash,
+      contextDependencies
+    )
+
+    let candidateFiles = getCandidateFiles(context, userConfigPath, tailwindConfig)
+
+    // If there are no @tailwind rules, we don't consider this CSS file or it's dependencies
+    // to be dependencies of the context. Can reuse the context even if they change.
+    // We may want to think about `@layer` being part of this trigger too, but it's tough
+    // because it's impossible for a layer in one file to end up in the actual @tailwind rule
+    // in another file since independent sources are effectively isolated.
+    if (tailwindDirectives.size > 0) {
+      let fileModifiedMap = getFileModifiedMap(context)
+
       // Add template paths as postcss dependencies.
-      for (let maybeGlob of context.candidateFiles) {
+      for (let maybeGlob of candidateFiles) {
         if (isGlob(maybeGlob)) {
           // rollup-plugin-postcss does not support dir-dependency messages
           // but directories can be watched in the same way as files
@@ -117,11 +179,13 @@ export default function setupTrackingContext(configOrPath, tailwindDirectives, r
         }
       }
 
-      for (let changedFile of resolveChangedFiles(context)) {
-        let content = fs.readFileSync(changedFile, 'utf8')
-        let extension = path.extname(changedFile).slice(1)
-        context.changedContent.push({ content, extension })
+      for (let changedContent of resolvedChangedContent(context, candidateFiles, fileModifiedMap)) {
+        context.changedContent.push(changedContent)
       }
+    }
+
+    for (let file of configDependencies) {
+      registerDependency(file)
     }
 
     return context

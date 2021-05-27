@@ -1,10 +1,8 @@
 import fs from 'fs'
 import url from 'url'
-import path from 'path'
 import postcss from 'postcss'
 import dlv from 'dlv'
 import selectorParser from 'postcss-selector-parser'
-import normalizePath from 'normalize-path'
 
 import transformThemeValue from '../../util/transformThemeValue'
 import parseObjectStyles from '../../util/parseObjectStyles'
@@ -304,7 +302,15 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
   }
 }
 
-function trackModified(files, context) {
+let fileModifiedMapCache = new WeakMap()
+export function getFileModifiedMap(context) {
+  if (!fileModifiedMapCache.has(context)) {
+    fileModifiedMapCache.set(context, new Map())
+  }
+  return fileModifiedMapCache.get(context)
+}
+
+function trackModified(files, fileModifiedMap) {
   let changed = false
 
   for (let file of files) {
@@ -314,11 +320,11 @@ function trackModified(files, context) {
     let pathname = parsed.href.replace(parsed.hash, '').replace(parsed.search, '')
     let newModified = fs.statSync(decodeURIComponent(pathname)).mtimeMs
 
-    if (!context.fileModifiedMap.has(file) || newModified > context.fileModifiedMap.get(file)) {
+    if (!fileModifiedMap.has(file) || newModified > fileModifiedMap.get(file)) {
       changed = true
     }
 
-    context.fileModifiedMap.set(file, newModified)
+    fileModifiedMap.set(file, newModified)
   }
 
   return changed
@@ -477,47 +483,17 @@ let contextMap = sharedState.contextMap
 let configContextMap = sharedState.configContextMap
 let contextSourcesMap = sharedState.contextSourcesMap
 
-function cleanupContext(context) {
-  if (context.watcher) {
-    context.watcher.close()
-  }
-}
-
 export function getContext(
-  configOrPath,
   tailwindDirectives,
-  registerDependency,
   root,
   result,
-  getTailwindConfig
+  tailwindConfig,
+  userConfigPath,
+  tailwindConfigHash,
+  contextDependencies
 ) {
   let sourcePath = result.opts.from
-  let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
-    getTailwindConfig(configOrPath)
   let isConfigFile = userConfigPath !== null
-
-  let contextDependencies = new Set(configDependencies)
-
-  // If there are no @tailwind rules, we don't consider this CSS file or it's dependencies
-  // to be dependencies of the context. Can reuse the context even if they change.
-  // We may want to think about `@layer` being part of this trigger too, but it's tough
-  // because it's impossible for a layer in one file to end up in the actual @tailwind rule
-  // in another file since independent sources are effectively isolated.
-  if (tailwindDirectives.size > 0) {
-    // Add current css file as a context dependencies.
-    contextDependencies.add(sourcePath)
-
-    // Add all css @import dependencies as context dependencies.
-    for (let message of result.messages) {
-      if (message.type === 'dependency') {
-        contextDependencies.add(message.file)
-      }
-    }
-  }
-
-  for (let file of configDependencies) {
-    registerDependency(file)
-  }
 
   env.DEBUG && console.log('Source path:', sourcePath)
 
@@ -536,7 +512,10 @@ export function getContext(
   // If there's already a context in the cache and we don't need to
   // reset the context, return the cached context.
   if (existingContext) {
-    let contextDependenciesChanged = trackModified([...contextDependencies], existingContext)
+    let contextDependenciesChanged = trackModified(
+      [...contextDependencies],
+      getFileModifiedMap(existingContext)
+    )
     if (!contextDependenciesChanged) {
       return [existingContext, false]
     }
@@ -553,49 +532,30 @@ export function getContext(
       contextSourcesMap.get(oldContext).delete(sourcePath)
       if (contextSourcesMap.get(oldContext).size === 0) {
         contextSourcesMap.delete(oldContext)
-        cleanupContext(oldContext)
+        for (let disposable of oldContext.disposables.splice(0)) {
+          disposable(oldContext)
+        }
       }
     }
   }
 
   env.DEBUG && console.log('Setting up new context...')
 
-  let purgeContent = Array.isArray(tailwindConfig.purge)
-    ? tailwindConfig.purge
-    : tailwindConfig.purge.content
-
   let context = {
-    watcher: null,
-    touchFile: null,
-    configPath: userConfigPath,
-    configDependencies: new Set(),
-    candidateFiles: purgeContent
-      .filter((item) => typeof item === 'string')
-      .map((purgePath) =>
-        normalizePath(
-          path.resolve(
-            userConfigPath === null ? process.cwd() : path.dirname(userConfigPath),
-            purgePath
-          )
-        )
-      ),
-    fileModifiedMap: new Map(),
-    // ---
-    ruleCache: new Set(), // Hit
-    classCache: new Map(), // Hit
-    applyClassCache: new Map(), // Hit
-    notClassCache: new Set(), // Hit
-    postCssNodeCache: new Map(), // Hit
-    candidateRuleMap: new Map(), // Hit
-    tailwindConfig: tailwindConfig, // Hit
-    changedContent: purgeContent // Hit
-      .filter((item) => typeof item.raw === 'string')
-      .map(({ raw, extension }) => ({ content: raw, extension })),
-    variantMap: new Map(), // Hit
-    stylesheetCache: null, // Hit
+    disposables: [],
+    ruleCache: new Set(),
+    classCache: new Map(),
+    applyClassCache: new Map(),
+    notClassCache: new Set(),
+    postCssNodeCache: new Map(),
+    candidateRuleMap: new Map(),
+    tailwindConfig,
+    changedContent: [],
+    variantMap: new Map(),
+    stylesheetCache: null,
   }
 
-  trackModified([...contextDependencies], context)
+  trackModified([...contextDependencies], getFileModifiedMap(context))
 
   // ---
 
