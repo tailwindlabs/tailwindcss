@@ -281,11 +281,8 @@ function processApplyAtRules(css, lookupTree, config) {
       const nearestParentRule = findParent(applyRule, (r) => r.type === 'rule')
       const currentUtilityNames = extractUtilityNames(nearestParentRule.selector)
 
-      const [
-        importantEntries,
-        applyUtilityNames,
-        important = importantEntries.length > 0,
-      ] = _.partition(applyRule.params.split(/[\s\t\n]+/g), (n) => n === '!important')
+      const [importantEntries, applyUtilityNames, important = importantEntries.length > 0] =
+        _.partition(applyRule.params.split(/[\s\t\n]+/g), (n) => n === '!important')
 
       if (_.intersection(applyUtilityNames, currentUtilityNames).length > 0) {
         const currentUtilityName = _.intersection(applyUtilityNames, currentUtilityNames)[0]

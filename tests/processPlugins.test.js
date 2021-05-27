@@ -1768,9 +1768,10 @@ test('plugins with extra options can be created using the `createPlugin.withOpti
 
 test('plugins should cache correctly', () => {
   const plugin = createPlugin.withOptions(
-    ({ className = 'banana' } = {}) => ({ addComponents, variants }) => {
-      addComponents({ [`.${className}`]: { position: 'absolute' } }, variants('testPlugin'))
-    },
+    ({ className = 'banana' } = {}) =>
+      ({ addComponents, variants }) => {
+        addComponents({ [`.${className}`]: { position: 'absolute' } }, variants('testPlugin'))
+      },
     () => ({ variants: { testPlugin: ['responsive'] } })
   )
 
