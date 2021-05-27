@@ -537,7 +537,6 @@ export function getContext(
     : tailwindConfig.purge.content
 
   let context = {
-    configDependencies: new Set(),
     candidateFiles: purgeContent
       .filter((item) => typeof item === 'string')
       .map((purgePath) =>

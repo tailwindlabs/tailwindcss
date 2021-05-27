@@ -84,7 +84,7 @@ function getConfigPath(context, configOrPath) {
   return configPaths.get(context)
 }
 
-function rebootWatcher(context, configPath) {
+function rebootWatcher(context, configPath, configDependencies) {
   let touchFile = getTouchFile(context)
 
   if (touchFile === null) {
@@ -109,7 +109,7 @@ function rebootWatcher(context, configPath) {
         'https://tailwindcss.com/docs/just-in-time-mode#watch-mode-and-one-off-builds',
       ])
 
-      watcher = chokidar.watch([...context.candidateFiles, ...context.configDependencies], {
+      watcher = chokidar.watch([...context.candidateFiles, ...configDependencies], {
         ignoreInitial: true,
       })
 
@@ -129,8 +129,8 @@ function rebootWatcher(context, configPath) {
         // can do a very quick check on each build to see if the config has changed instead
         // of having to get all of the module dependencies and check every timestamp each
         // time.
-        if (context.configDependencies.has(file)) {
-          for (let dependency of context.configDependencies) {
+        if (configDependencies.has(file)) {
+          for (let dependency of configDependencies) {
             delete require.cache[require.resolve(dependency)]
           }
           touch(configPath)
@@ -145,8 +145,8 @@ function rebootWatcher(context, configPath) {
 
       watcher.on('unlink', (file) => {
         // Touch the config file if any of the dependencies are deleted.
-        if (context.configDependencies.has(file)) {
-          for (let dependency of context.configDependencies) {
+        if (configDependencies.has(file)) {
+          for (let dependency of configDependencies) {
             delete require.cache[require.resolve(dependency)]
           }
           touch(configPath)
@@ -176,6 +176,16 @@ function generateTouchFileName() {
 }
 
 let configPathCache = new LRU({ maxSize: 100 })
+
+let configDependenciesCache = new WeakMap()
+
+function getConfigDependencies(context) {
+  if (!configDependenciesCache.has(context)) {
+    configDependenciesCache.set(context, new Set())
+  }
+
+  return configDependenciesCache.get(context)
+}
 
 // Get the config object based on a path
 function getTailwindConfig(configOrPath) {
@@ -267,6 +277,8 @@ export default function setupWatchingContext(configOrPath, tailwindDirectives, r
       contextDependencies
     )
 
+    let contextConfigDependencies = getConfigDependencies(context)
+
     for (let file of configDependencies) {
       registerDependency(file)
     }
@@ -286,12 +298,12 @@ export default function setupWatchingContext(configOrPath, tailwindDirectives, r
           continue
         }
 
-        context.configDependencies.add(dependency.file)
+        contextConfigDependencies.add(dependency.file)
       }
     }
 
     if (isNewContext) {
-      rebootWatcher(context, configPath)
+      rebootWatcher(context, configPath, contextConfigDependencies)
     }
 
     // Register our temp file as a dependency ‚Äî we write to this file
