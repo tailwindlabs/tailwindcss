@@ -543,16 +543,16 @@ export function getContext(
 
   let context = {
     disposables: [],
-    ruleCache: new Set(), // Hit
-    classCache: new Map(), // Hit
-    applyClassCache: new Map(), // Hit
-    notClassCache: new Set(), // Hit
-    postCssNodeCache: new Map(), // Hit
-    candidateRuleMap: new Map(), // Hit
-    tailwindConfig: tailwindConfig, // Hit
-    changedContent: [], // Hit
-    variantMap: new Map(), // Hit
-    stylesheetCache: null, // Hit
+    ruleCache: new Set(),
+    classCache: new Map(),
+    applyClassCache: new Map(),
+    notClassCache: new Set(),
+    postCssNodeCache: new Map(),
+    candidateRuleMap: new Map(),
+    tailwindConfig,
+    changedContent: [],
+    variantMap: new Map(),
+    stylesheetCache: null,
   }
 
   trackModified([...contextDependencies], getFileModifiedMap(context))
