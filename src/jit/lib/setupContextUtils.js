@@ -1,10 +1,8 @@
 import fs from 'fs'
 import url from 'url'
-import path from 'path'
 import postcss from 'postcss'
 import dlv from 'dlv'
 import selectorParser from 'postcss-selector-parser'
-import normalizePath from 'normalize-path'
 
 import transformThemeValue from '../../util/transformThemeValue'
 import parseObjectStyles from '../../util/parseObjectStyles'
@@ -548,17 +546,6 @@ export function getContext(
     : tailwindConfig.purge.content
 
   let context = {
-    candidateFiles: purgeContent
-      .filter((item) => typeof item === 'string')
-      .map((purgePath) =>
-        normalizePath(
-          path.resolve(
-            userConfigPath === null ? process.cwd() : path.dirname(userConfigPath),
-            purgePath
-          )
-        )
-      ),
-    // ---
     disposables: [],
     ruleCache: new Set(), // Hit
     classCache: new Map(), // Hit

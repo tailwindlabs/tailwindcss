@@ -6,6 +6,7 @@ import os from 'os'
 import chokidar from 'chokidar'
 import fastGlob from 'fast-glob'
 import LRU from 'quick-lru'
+import normalizePath from 'normalize-path'
 
 import hash from '../../util/hashConfig'
 import log from '../../util/log'
@@ -84,7 +85,7 @@ function getConfigPath(context, configOrPath) {
   return configPaths.get(context)
 }
 
-function rebootWatcher(context, configPath, configDependencies) {
+function rebootWatcher(context, configPath, configDependencies, candidateFiles) {
   let touchFile = getTouchFile(context)
 
   if (touchFile === null) {
@@ -109,7 +110,7 @@ function rebootWatcher(context, configPath, configDependencies) {
         'https://tailwindcss.com/docs/just-in-time-mode#watch-mode-and-one-off-builds',
       ])
 
-      watcher = chokidar.watch([...context.candidateFiles, ...configDependencies], {
+      watcher = chokidar.watch([...candidateFiles, ...configDependencies], {
         ignoreInitial: true,
       })
 
@@ -187,6 +188,25 @@ function getConfigDependencies(context) {
   return configDependenciesCache.get(context)
 }
 
+let candidateFilesCache = new WeakMap()
+
+function getCandidateFiles(context, userConfigPath, tailwindConfig) {
+  if (candidateFilesCache.has(context)) {
+    return candidateFilesCache.get(context)
+  }
+
+  let purgeContent = Array.isArray(tailwindConfig.purge)
+    ? tailwindConfig.purge
+    : tailwindConfig.purge.content
+
+  let basePath = userConfigPath === null ? process.cwd() : path.dirname(userConfigPath)
+  let candidateFiles = purgeContent
+    .filter((item) => typeof item === 'string')
+    .map((purgePath) => normalizePath(path.resolve(basePath, purgePath)))
+
+  return candidateFilesCache.set(context, candidateFiles).get(context)
+}
+
 // Get the config object based on a path
 function getTailwindConfig(configOrPath) {
   let userConfigPath = resolveConfigPath(configOrPath)
@@ -217,14 +237,14 @@ function getTailwindConfig(configOrPath) {
   return [newConfig, null, hash(newConfig), [userConfigPath]]
 }
 
-function resolveChangedFiles(context) {
+function resolveChangedFiles(context, candidateFiles) {
   let changedFiles = new Set()
 
   // If we're not set up and watching files ourselves, we need to do
   // the work of grabbing all of the template files for candidate
   // detection.
   if (!context.scannedContent) {
-    let files = fastGlob.sync(context.candidateFiles)
+    let files = fastGlob.sync(candidateFiles)
     for (let file of files) {
       changedFiles.add(file)
     }
@@ -241,12 +261,8 @@ function resolveChangedFiles(context) {
 // plugins) then return it
 export default function setupWatchingContext(configOrPath, tailwindDirectives, registerDependency) {
   return (result, root) => {
-    let [
-      tailwindConfig,
-      userConfigPath,
-      tailwindConfigHash,
-      configDependencies,
-    ] = getTailwindConfig(configOrPath)
+    let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
+      getTailwindConfig(configOrPath)
 
     let contextDependencies = new Set(configDependencies)
 
@@ -277,6 +293,7 @@ export default function setupWatchingContext(configOrPath, tailwindDirectives, r
       contextDependencies
     )
 
+    let candidateFiles = getCandidateFiles(context, userConfigPath, tailwindConfig)
     let contextConfigDependencies = getConfigDependencies(context)
 
     for (let file of configDependencies) {
@@ -303,7 +320,7 @@ export default function setupWatchingContext(configOrPath, tailwindDirectives, r
     }
 
     if (isNewContext) {
-      rebootWatcher(context, configPath, contextConfigDependencies)
+      rebootWatcher(context, configPath, contextConfigDependencies, candidateFiles)
     }
 
     // Register our temp file as a dependency ‚Äî we write to this file
@@ -314,7 +331,7 @@ export default function setupWatchingContext(configOrPath, tailwindDirectives, r
     }
 
     if (tailwindDirectives.size > 0) {
-      for (let changedFile of resolveChangedFiles(context)) {
+      for (let changedFile of resolveChangedFiles(context, candidateFiles)) {
         let content = fs.readFileSync(changedFile, 'utf8')
         let extension = path.extname(changedFile).slice(1)
         context.changedContent.push({ content, extension })
