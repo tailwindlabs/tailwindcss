@@ -28,6 +28,14 @@
 .first-line\:underline::first-line {
   text-decoration: underline;
 }
+.marker\:text-lg *::marker {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+.marker\:text-red-500 *::marker {
+  --tw-text-opacity: 1;
+  color: rgba(239, 68, 68, var(--tw-text-opacity));
+}
 .marker\:text-lg::marker {
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -35,6 +43,14 @@
 .marker\:text-red-500::marker {
   --tw-text-opacity: 1;
   color: rgba(239, 68, 68, var(--tw-text-opacity));
+}
+.selection\:bg-blue-500 *::selection {
+  --tw-bg-opacity: 1;
+  background-color: rgba(59, 130, 246, var(--tw-bg-opacity));
+}
+.selection\:text-white *::selection {
+  --tw-text-opacity: 1;
+  color: rgba(255, 255, 255, var(--tw-text-opacity));
 }
 .selection\:bg-blue-500::selection {
   --tw-bg-opacity: 1;

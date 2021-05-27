@@ -30,23 +30,35 @@ export default {
       })
     )
 
-    addVariant(
-      'marker',
+    addVariant('marker', [
+      transformAllSelectors((selector) => {
+        let variantSelector = updateAllClasses(selector, (className) => {
+          return `marker${config('separator')}${className}`
+        })
+
+        return `${variantSelector} *::marker`
+      }),
       transformAllSelectors((selector) => {
         return updateAllClasses(selector, (className, { withPseudo }) => {
           return withPseudo(`marker${config('separator')}${className}`, '::marker')
         })
-      })
-    )
+      }),
+    ])
 
-    addVariant(
-      'selection',
+    addVariant('selection', [
+      transformAllSelectors((selector) => {
+        let variantSelector = updateAllClasses(selector, (className) => {
+          return `selection${config('separator')}${className}`
+        })
+
+        return `${variantSelector} *::selection`
+      }),
       transformAllSelectors((selector) => {
         return updateAllClasses(selector, (className, { withPseudo }) => {
           return withPseudo(`selection${config('separator')}${className}`, '::selection')
         })
-      })
-    )
+      }),
+    ])
 
     addVariant(
       'before',
