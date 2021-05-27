@@ -541,10 +541,6 @@ export function getContext(
 
   env.DEBUG && console.log('Setting up new context...')
 
-  let purgeContent = Array.isArray(tailwindConfig.purge)
-    ? tailwindConfig.purge
-    : tailwindConfig.purge.content
-
   let context = {
     disposables: [],
     ruleCache: new Set(), // Hit
@@ -554,9 +550,7 @@ export function getContext(
     postCssNodeCache: new Map(), // Hit
     candidateRuleMap: new Map(), // Hit
     tailwindConfig: tailwindConfig, // Hit
-    changedContent: purgeContent // Hit
-      .filter((item) => typeof item.raw === 'string')
-      .map(({ raw, extension }) => ({ content: raw, extension })),
+    changedContent: [], // Hit
     variantMap: new Map(), // Hit
     stylesheetCache: null, // Hit
   }

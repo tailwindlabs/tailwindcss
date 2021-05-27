@@ -237,18 +237,37 @@ function getTailwindConfig(configOrPath) {
   return [newConfig, null, hash(newConfig), [userConfigPath]]
 }
 
+function resolvedChangedContent(context, candidateFiles) {
+  let changedContent = (
+    Array.isArray(context.tailwindConfig.purge)
+      ? context.tailwindConfig.purge
+      : context.tailwindConfig.purge.content
+  )
+    .filter((item) => typeof item.raw === 'string')
+    .map(({ raw, extension }) => ({ content: raw, extension }))
+
+  for (let changedFile of resolveChangedFiles(context, candidateFiles)) {
+    let content = fs.readFileSync(changedFile, 'utf8')
+    let extension = path.extname(changedFile).slice(1)
+    changedContent.push({ content, extension })
+  }
+  return changedContent
+}
+
+let scannedContentCache = new WeakMap()
+
 function resolveChangedFiles(context, candidateFiles) {
   let changedFiles = new Set()
 
   // If we're not set up and watching files ourselves, we need to do
   // the work of grabbing all of the template files for candidate
   // detection.
-  if (!context.scannedContent) {
+  if (!scannedContentCache.has(context)) {
     let files = fastGlob.sync(candidateFiles)
     for (let file of files) {
       changedFiles.add(file)
     }
-    context.scannedContent = true
+    scannedContentCache.set(context, true)
   }
 
   return changedFiles
@@ -331,10 +350,8 @@ export default function setupWatchingContext(configOrPath, tailwindDirectives, r
     }
 
     if (tailwindDirectives.size > 0) {
-      for (let changedFile of resolveChangedFiles(context, candidateFiles)) {
-        let content = fs.readFileSync(changedFile, 'utf8')
-        let extension = path.extname(changedFile).slice(1)
-        context.changedContent.push({ content, extension })
+      for (let changedContent of resolvedChangedContent(context, candidateFiles)) {
+        context.changedContent.push(changedContent)
       }
     }
 
