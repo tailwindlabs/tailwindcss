@@ -13,5 +13,9 @@ export default function () {
       ['pb', ['padding-bottom']],
       ['pl', ['padding-left']],
     ],
+    [
+      ['pis', ['padding-inline-start']],
+      ['pie', ['padding-inline-end']],
+    ],
   ])
 }

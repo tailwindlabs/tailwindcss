@@ -13,5 +13,9 @@ export default function () {
       ['mb', ['margin-bottom']],
       ['ml', ['margin-left']],
     ],
+    [
+      ['mis', ['margin-inline-start']],
+      ['mie', ['padding-inline-end']],
+    ],
   ])
 }
