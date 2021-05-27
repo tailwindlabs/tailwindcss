@@ -16,7 +16,7 @@ export default function (configOrPath = {}) {
       function registerDependency(fileName, type = 'dependency') {
         result.messages.push({
           type,
-          plugin: 'tailwindcss-jit',
+          plugin: 'tailwindcss',
           parent: result.opts.from,
           [type === 'dir-dependency' ? 'dir' : 'file']: fileName,
         })
