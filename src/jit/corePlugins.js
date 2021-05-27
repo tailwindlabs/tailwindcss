@@ -11,7 +11,55 @@ import {
 } from '../util/pluginUtils'
 
 export default {
-  pseudoClassVariants: function ({ config, addVariant }) {
+  pseudoElementVariants: function ({ config, addVariant }) {
+    addVariant(
+      'first-letter',
+      transformAllSelectors((selector) => {
+        return updateAllClasses(selector, (className, { withPseudo }) => {
+          return withPseudo(`first-letter${config('separator')}${className}`, '::first-letter')
+        })
+      })
+    )
+
+    addVariant(
+      'first-line',
+      transformAllSelectors((selector) => {
+        return updateAllClasses(selector, (className, { withPseudo }) => {
+          return withPseudo(`first-line${config('separator')}${className}`, '::first-line')
+        })
+      })
+    )
+
+    addVariant('marker', [
+      transformAllSelectors((selector) => {
+        let variantSelector = updateAllClasses(selector, (className) => {
+          return `marker${config('separator')}${className}`
+        })
+
+        return `${variantSelector} *::marker`
+      }),
+      transformAllSelectors((selector) => {
+        return updateAllClasses(selector, (className, { withPseudo }) => {
+          return withPseudo(`marker${config('separator')}${className}`, '::marker')
+        })
+      }),
+    ])
+
+    addVariant('selection', [
+      transformAllSelectors((selector) => {
+        let variantSelector = updateAllClasses(selector, (className) => {
+          return `selection${config('separator')}${className}`
+        })
+
+        return `${variantSelector} *::selection`
+      }),
+      transformAllSelectors((selector) => {
+        return updateAllClasses(selector, (className, { withPseudo }) => {
+          return withPseudo(`selection${config('separator')}${className}`, '::selection')
+        })
+      }),
+    ])
+
     addVariant(
       'before',
       transformAllSelectors(
@@ -55,16 +103,40 @@ export default {
         }
       )
     )
-
+  },
+  pseudoClassVariants: function ({ config, addVariant }) {
     let pseudoVariants = [
+      // Positional
       ['first', 'first-child'],
       ['last', 'last-child'],
+      ['only', 'only-child'],
       ['odd', 'nth-child(odd)'],
       ['even', 'nth-child(even)'],
+      'first-of-type',
+      'last-of-type',
+      'only-of-type',
+
+      // State
       'visited',
+      'target',
+
+      // Forms
+      'default',
       'checked',
-      'empty',
+      'indeterminate',
+      'placeholder-shown',
+      'autofill',
+      'required',
+      'valid',
+      'invalid',
+      'in-range',
+      'out-of-range',
       'read-only',
+
+      // Content
+      'empty',
+
+      // Interactive
       'focus-within',
       'hover',
       'focus',

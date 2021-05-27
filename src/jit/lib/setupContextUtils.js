@@ -13,6 +13,7 @@ import isPlainObject from '../../util/isPlainObject'
 import escapeClassName from '../../util/escapeClassName'
 import nameClass from '../../util/nameClass'
 import { coerceValue } from '../../util/pluginUtils'
+import bigSign from '../../util/bigSign'
 import corePlugins from '../corePlugins'
 import * as sharedState from './sharedState'
 import { env } from './sharedState'
@@ -152,9 +153,11 @@ function buildPluginApi(tailwindConfig, context, { variantList, variantMap, offs
   }
 
   return {
-    addVariant(variantName, applyThisVariant, options = {}) {
+    addVariant(variantName, variantFunctions, options = {}) {
+      variantFunctions = [].concat(variantFunctions)
+
       insertInto(variantList, variantName, options)
-      variantMap.set(variantName, applyThisVariant)
+      variantMap.set(variantName, variantFunctions)
     },
     postcss,
     prefix: applyConfiguredPrefix,
@@ -395,7 +398,7 @@ function resolvePlugins(context, tailwindDirectives, root) {
 
   // TODO: This is a workaround for backwards compatibility, since custom variants
   // were historically sorted before screen/stackable variants.
-  let beforeVariants = [corePlugins['pseudoClassVariants']]
+  let beforeVariants = [corePlugins['pseudoElementVariants'], corePlugins['pseudoClassVariants']]
   let afterVariants = [
     corePlugins['directionVariants'],
     corePlugins['reducedMotionVariants'],
@@ -445,17 +448,28 @@ function registerPlugins(plugins, context) {
   }
 
   reservedBits += 3n
-  context.variantOrder = variantList.reduce(
-    (map, variant, i) => map.set(variant, (1n << BigInt(i)) << reservedBits),
-    new Map()
+
+  let offset = 0
+  context.variantOrder = new Map(
+    variantList
+      .map((variant, i) => {
+        let variantFunctions = variantMap.get(variant).length
+        let bits = (1n << BigInt(i + offset)) << reservedBits
+        offset += variantFunctions - 1
+        return [variant, bits]
+      })
+      .sort(([, a], [, z]) => bigSign(a - z))
   )
 
   context.minimumScreen = [...context.variantOrder.values()].shift()
 
   // Build variantMap
-  for (let [variantName, variantFunction] of variantMap.entries()) {
+  for (let [variantName, variantFunctions] of variantMap.entries()) {
     let sort = context.variantOrder.get(variantName)
-    context.variantMap.set(variantName, [sort, variantFunction])
+    context.variantMap.set(
+      variantName,
+      variantFunctions.map((variantFunction, idx) => [sort << BigInt(idx), variantFunction])
+    )
   }
 }
 

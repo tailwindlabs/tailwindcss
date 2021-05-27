@@ -100,7 +100,7 @@ function applyVariant(variant, matches, context) {
   }
 
   if (context.variantMap.has(variant)) {
-    let [variantSort, applyThisVariant] = context.variantMap.get(variant)
+    let variantFunctionTuples = context.variantMap.get(variant)
     let result = []
 
     for (let [{ sort, layer, options }, rule] of matches) {
@@ -112,36 +112,39 @@ function applyVariant(variant, matches, context) {
       let container = postcss.root()
       container.append(rule.clone())
 
-      function modifySelectors(modifierFunction) {
-        container.each((rule) => {
-          if (rule.type !== 'rule') {
-            return
-          }
+      for (let [variantSort, variantFunction] of variantFunctionTuples) {
+        let clone = container.clone()
+        function modifySelectors(modifierFunction) {
+          clone.each((rule) => {
+            if (rule.type !== 'rule') {
+              return
+            }
 
-          rule.selectors = rule.selectors.map((selector) => {
-            return modifierFunction({
-              get className() {
-                return getClassNameFromSelector(selector)
-              },
-              selector,
+            rule.selectors = rule.selectors.map((selector) => {
+              return modifierFunction({
+                get className() {
+                  return getClassNameFromSelector(selector)
+                },
+                selector,
+              })
             })
           })
+          return clone
+        }
+
+        let ruleWithVariant = variantFunction({
+          container: clone,
+          separator: context.tailwindConfig.separator,
+          modifySelectors,
         })
-        return container
+
+        if (ruleWithVariant === null) {
+          continue
+        }
+
+        let withOffset = [{ sort: variantSort | sort, layer, options }, clone.nodes[0]]
+        result.push(withOffset)
       }
-
-      let ruleWithVariant = applyThisVariant({
-        container,
-        separator: context.tailwindConfig.separator,
-        modifySelectors,
-      })
-
-      if (ruleWithVariant === null) {
-        continue
-      }
-
-      let withOffset = [{ sort: variantSort | sort, layer, options }, container.nodes[0]]
-      result.push(withOffset)
     }
 
     return result
