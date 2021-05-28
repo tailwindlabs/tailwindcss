@@ -604,6 +604,9 @@
 .placeholder-opacity-60::placeholder {
   --tw-placeholder-opacity: 0.6;
 }
+.caret-red-600 {
+  caret-color: #dc2626;
+}
 .opacity-90 {
   opacity: 0.9;
 }
