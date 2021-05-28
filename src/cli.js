@@ -145,8 +145,9 @@ function buildOnce() {
     })
   }
 
-  // TODO: Read from file
-  let css = '@tailwind base; @tailwind components; @tailwind utilities'
+  let css = input
+    ? fs.readFileSync(path.resolve(process.cwd(), input), 'utf8')
+    : '@tailwind base; @tailwind components; @tailwind utilities'
   return processCSS(css)
 }
 
@@ -154,6 +155,8 @@ let context = null
 
 function startWatcher() {
   let changedContent = []
+  let contextDependencies = []
+  let watcher = null
 
   function build(config) {
     console.log('\n\nRebuilding...')
@@ -193,7 +196,15 @@ function startWatcher() {
     let processor = postcss(plugins)
 
     function processCSS(css) {
+      console.log(path.resolve(process.cwd(), input))
       return processor.process(css, { from: input, to: output }).then((result) => {
+        for (let message of result.messages) {
+          if (message.type === 'dependency') {
+            contextDependencies.push(message.file)
+          }
+        }
+        watcher.add(contextDependencies)
+
         fs.writeFile(output, result.css, () => true)
         if (result.map) {
           fs.writeFile(output + '.map', result.map.toString(), () => true)
@@ -201,27 +212,28 @@ function startWatcher() {
       })
     }
 
-    // TODO: Read from file
-    let css = '@tailwind base; @tailwind components; @tailwind utilities'
+    let css = input
+      ? fs.readFileSync(path.resolve(process.cwd(), input), 'utf8')
+      : '@tailwind base; @tailwind components; @tailwind utilities'
     return processCSS(css)
   }
-  // Files to watch:
-  // - tailwind.config.js
-  // - Purge files
-  // - Config dependencies
-  // - CSS file
-  // - CSS imports
 
+  // TODO: Track config dependencies (getModuleDependencies)
   let configPath = args['--config'] ?? path.resolve('./tailwind.config.js')
   let config = getTailwindConfig(configPath)
+  contextDependencies.push(configPath)
+  if (input) {
+    contextDependencies.push(path.resolve(process.cwd(), input))
+  }
 
-  let watcher = chokidar.watch([configPath, ...extractFileGlobs(config)], { ignoreInitial: true })
+  watcher = chokidar.watch([...contextDependencies, ...extractFileGlobs(config)], {
+    ignoreInitial: true,
+  })
 
   let chain = Promise.resolve()
 
   watcher.on('change', async (file) => {
-    console.log(file)
-    if (file === configPath) {
+    if (contextDependencies.includes(file)) {
       console.time('Resolve config')
       context = null
       delete require.cache[require.resolve(configPath)]
