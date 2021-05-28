@@ -54,7 +54,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "jest": "^26.6.3",
-    "postcss": "^8.2.13",
+    "postcss": "^8.3.0",
     "postcss-cli": "^8.3.1",
     "prettier": "^2.3.0",
     "rimraf": "^3.0.0"
