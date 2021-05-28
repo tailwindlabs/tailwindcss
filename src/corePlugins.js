@@ -1,7 +1,7 @@
 import * as plugins from './plugins/index.js'
 import configurePlugins from './util/configurePlugins'
 
-const jitOnlyPlugins = ['content']
+const jitOnlyPlugins = ['caretColor', 'content']
 
 export default function ({ corePlugins: corePluginConfig }) {
   corePluginConfig = corePluginConfig.filter((pluginName) => !jitOnlyPlugins.includes(pluginName))
