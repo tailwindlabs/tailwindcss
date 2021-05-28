@@ -121,73 +121,79 @@ function resolveChangedFiles(candidateFiles, fileModifiedMap) {
 // Retrieve an existing context from cache if possible (since contexts are unique per
 // source path), or set up a new one (including setting up watchers and registering
 // plugins) then return it
-export default function setupTrackingContext(configOrPath, tailwindDirectives, registerDependency) {
-  return (result, root) => {
-    let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
-      getTailwindConfig(configOrPath)
+export default function setupTrackingContext(configOrPath) {
+  return ({ tailwindDirectives, registerDependency }) => {
+    return (root, result) => {
+      let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
+        getTailwindConfig(configOrPath)
 
-    let contextDependencies = new Set(configDependencies)
+      let contextDependencies = new Set(configDependencies)
 
-    // If there are no @tailwind rules, we don't consider this CSS file or it's dependencies
-    // to be dependencies of the context. Can reuse the context even if they change.
-    // We may want to think about `@layer` being part of this trigger too, but it's tough
-    // because it's impossible for a layer in one file to end up in the actual @tailwind rule
-    // in another file since independent sources are effectively isolated.
-    if (tailwindDirectives.size > 0) {
-      // Add current css file as a context dependencies.
-      contextDependencies.add(result.opts.from)
+      // If there are no @tailwind rules, we don't consider this CSS file or it's dependencies
+      // to be dependencies of the context. Can reuse the context even if they change.
+      // We may want to think about `@layer` being part of this trigger too, but it's tough
+      // because it's impossible for a layer in one file to end up in the actual @tailwind rule
+      // in another file since independent sources are effectively isolated.
+      if (tailwindDirectives.size > 0) {
+        // Add current css file as a context dependencies.
+        contextDependencies.add(result.opts.from)
 
-      // Add all css @import dependencies as context dependencies.
-      for (let message of result.messages) {
-        if (message.type === 'dependency') {
-          contextDependencies.add(message.file)
-        }
-      }
-    }
-
-    let [context] = getContext(
-      tailwindDirectives,
-      root,
-      result,
-      tailwindConfig,
-      userConfigPath,
-      tailwindConfigHash,
-      contextDependencies
-    )
-
-    let candidateFiles = getCandidateFiles(context, userConfigPath, tailwindConfig)
-
-    // If there are no @tailwind rules, we don't consider this CSS file or it's dependencies
-    // to be dependencies of the context. Can reuse the context even if they change.
-    // We may want to think about `@layer` being part of this trigger too, but it's tough
-    // because it's impossible for a layer in one file to end up in the actual @tailwind rule
-    // in another file since independent sources are effectively isolated.
-    if (tailwindDirectives.size > 0) {
-      let fileModifiedMap = getFileModifiedMap(context)
-
-      // Add template paths as postcss dependencies.
-      for (let maybeGlob of candidateFiles) {
-        if (isGlob(maybeGlob)) {
-          // rollup-plugin-postcss does not support dir-dependency messages
-          // but directories can be watched in the same way as files
-          registerDependency(
-            path.resolve(globParent(maybeGlob)),
-            env.ROLLUP_WATCH === 'true' ? 'dependency' : 'dir-dependency'
-          )
-        } else {
-          registerDependency(path.resolve(maybeGlob))
+        // Add all css @import dependencies as context dependencies.
+        for (let message of result.messages) {
+          if (message.type === 'dependency') {
+            contextDependencies.add(message.file)
+          }
         }
       }
 
-      for (let changedContent of resolvedChangedContent(context, candidateFiles, fileModifiedMap)) {
-        context.changedContent.push(changedContent)
+      let [context] = getContext(
+        tailwindDirectives,
+        root,
+        result,
+        tailwindConfig,
+        userConfigPath,
+        tailwindConfigHash,
+        contextDependencies
+      )
+
+      let candidateFiles = getCandidateFiles(context, userConfigPath, tailwindConfig)
+
+      // If there are no @tailwind rules, we don't consider this CSS file or it's dependencies
+      // to be dependencies of the context. Can reuse the context even if they change.
+      // We may want to think about `@layer` being part of this trigger too, but it's tough
+      // because it's impossible for a layer in one file to end up in the actual @tailwind rule
+      // in another file since independent sources are effectively isolated.
+      if (tailwindDirectives.size > 0) {
+        let fileModifiedMap = getFileModifiedMap(context)
+
+        // Add template paths as postcss dependencies.
+        for (let maybeGlob of candidateFiles) {
+          if (isGlob(maybeGlob)) {
+            // rollup-plugin-postcss does not support dir-dependency messages
+            // but directories can be watched in the same way as files
+            registerDependency(
+              path.resolve(globParent(maybeGlob)),
+              env.ROLLUP_WATCH === 'true' ? 'dependency' : 'dir-dependency'
+            )
+          } else {
+            registerDependency(path.resolve(maybeGlob))
+          }
+        }
+
+        for (let changedContent of resolvedChangedContent(
+          context,
+          candidateFiles,
+          fileModifiedMap
+        )) {
+          context.changedContent.push(changedContent)
+        }
       }
-    }
 
-    for (let file of configDependencies) {
-      registerDependency(file)
-    }
+      for (let file of configDependencies) {
+        registerDependency(file)
+      }
 
-    return context
+      return context
+    }
   }
 }
