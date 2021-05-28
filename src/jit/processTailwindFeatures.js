@@ -4,7 +4,7 @@ import expandApplyAtRules from './lib/expandApplyAtRules'
 import evaluateTailwindFunctions from '../lib/evaluateTailwindFunctions'
 import substituteScreenAtRules from '../lib/substituteScreenAtRules'
 import collapseAdjacentRules from './lib/collapseAdjacentRules'
-import { createContext as poop } from './lib/setupContextUtils'
+import { createContext } from './lib/setupContextUtils'
 
 export default function processTailwindFeatures(setupContext) {
   return function (root, result) {
@@ -23,10 +23,7 @@ export default function processTailwindFeatures(setupContext) {
       tailwindDirectives,
       registerDependency,
       createContext(tailwindConfig, changedContent) {
-        console.time('Poop')
-        let x = poop(tailwindConfig, changedContent, tailwindDirectives, root)
-        console.timeEnd('Poop')
-        return x
+        return createContext(tailwindConfig, changedContent, tailwindDirectives, root)
       },
     })(root, result)
 

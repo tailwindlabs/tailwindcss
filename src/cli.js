@@ -9,6 +9,7 @@ import arg from 'arg'
 import fs from 'fs'
 import processTailwindFeatures from './jit/processTailwindFeatures'
 import resolveConfig from '../resolveConfig'
+import fastGlob from 'fast-glob'
 
 // ---
 
@@ -89,8 +90,27 @@ function getTailwindConfig(configPath = args['--config'] ?? path.resolve('./tail
   return resolveConfig(require(configPath))
 }
 
+function extractFileGlobs(config) {
+  return (Array.isArray(config.purge) ? config.purge : config.purge.content).filter((file) => {
+    // Strings in this case are files / globs. If it is something else,
+    // like an object it's probably a raw content object. But this object
+    // is not watchable, so let's remove it.
+    return typeof file === 'string'
+  })
+}
+
 function buildOnce() {
   let config = getTailwindConfig()
+
+  let globs = extractFileGlobs(config)
+  let changedContent = []
+  let files = fastGlob.sync(globs)
+  for (let file of files) {
+    changedContent.push({
+      content: fs.readFileSync(path.resolve(process.cwd(), file), 'utf8'),
+      extension: path.extname(file),
+    })
+  }
 
   let tailwindPlugin = (opts = {}) => {
     return {
@@ -98,7 +118,7 @@ function buildOnce() {
       Once(root, { result }) {
         processTailwindFeatures(({ createContext }) => {
           return () => {
-            return createContext(config)
+            return createContext(config, changedContent)
           }
         })(root, result)
       },
@@ -111,7 +131,7 @@ function buildOnce() {
     // TODO: Bake in postcss-nested support?
     tailwindPlugin,
     // require('autoprefixer'),
-    // formatNodes,
+    formatNodes,
   ]
 
   let processor = postcss(plugins)
@@ -130,6 +150,8 @@ function buildOnce() {
   return processCSS(css)
 }
 
+let context = null
+
 function startWatcher() {
   let changedContent = []
 
@@ -143,10 +165,15 @@ function startWatcher() {
           console.time('Process tailwind features')
           processTailwindFeatures(({ createContext }) => {
             return () => {
+              if (context !== null) {
+                context.changedContent = changedContent.splice(0)
+                return context
+              }
+
               console.time('Creating context')
-              let x = createContext(config, changedContent.splice(0))
+              context = createContext(config, changedContent.splice(0))
               console.timeEnd('Creating context')
-              return x
+              return context
             }
           })(root, result)
           console.timeEnd('Process tailwind features')
@@ -175,8 +202,7 @@ function startWatcher() {
     }
 
     // TODO: Read from file
-    // let css = '@tailwind base; @tailwind components; @tailwind utilities'
-    let css = '@tailwind utilities'
+    let css = '@tailwind base; @tailwind components; @tailwind utilities'
     return processCSS(css)
   }
   // Files to watch:
@@ -189,37 +215,32 @@ function startWatcher() {
   let configPath = args['--config'] ?? path.resolve('./tailwind.config.js')
   let config = getTailwindConfig(configPath)
 
-  function resolveWatcherData() {
-    return [
-      // Watch tailwind.config.js
-      configPath,
-
-      // Watch purge files
-      ...(Array.isArray(config.purge) ? config.purge : config.purge.content).filter((file) => {
-        // Strings in this case are files / globs. If it is something else,
-        // like an object it's probably a raw content object. But this object
-        // is not watchable, so let's remove it.
-        return typeof file === 'string'
-      }),
-    ]
-  }
-
-  let watcher = chokidar.watch(resolveWatcherData(), { ignoreInitial: true })
+  let watcher = chokidar.watch([configPath, ...extractFileGlobs(config)], { ignoreInitial: true })
 
   let chain = Promise.resolve()
 
   watcher.on('change', async (file) => {
+    console.log(file)
     if (file === configPath) {
       console.time('Resolve config')
+      context = null
       delete require.cache[require.resolve(configPath)]
       config = getTailwindConfig(configPath)
       console.timeEnd('Resolve config')
 
       console.time('Watch new files')
-      watcher.add(resolveWatcherData())
+      let globs = extractFileGlobs(config)
+      watcher.add(globs)
       console.timeEnd('Watch new files')
 
       chain = chain.then(async () => {
+        let files = fastGlob.sync(globs)
+        for (let file of files) {
+          changedContent.push({
+            content: fs.readFileSync(path.resolve(process.cwd(), file), 'utf8'),
+            extension: path.extname(file),
+          })
+        }
         console.time('Build')
         await build(config)
         console.timeEnd('Build')
@@ -238,7 +259,17 @@ function startWatcher() {
     }
   })
 
-  chain = chain.then(() => build(config))
+  chain = chain.then(() => {
+    let globs = extractFileGlobs(config)
+    let files = fastGlob.sync(globs)
+    for (let file of files) {
+      changedContent.push({
+        content: fs.readFileSync(path.resolve(process.cwd(), file), 'utf8'),
+        extension: path.extname(file),
+      })
+    }
+    return build(config)
+  })
 }
 
 if (shouldWatch) {
