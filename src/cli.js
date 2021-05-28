@@ -1,13 +1,36 @@
 #!/usr/bin/env node
 
-let autoprefixer = require('autoprefixer')
-let tailwindcss = require('./index')
-let chokidar = require('chokidar')
-let postcss = require('postcss')
-let chalk = require('chalk')
-let path = require('path')
-let arg = require('arg')
-let fs = require('fs')
+// import autoprefixer from 'autoprefixer'
+import chokidar from 'chokidar'
+import postcss from 'postcss'
+import chalk from 'chalk'
+import path from 'path'
+import arg from 'arg'
+import fs from 'fs'
+import processTailwindFeatures from './jit/processTailwindFeatures'
+import resolveConfig from '../resolveConfig'
+
+// ---
+
+function indentRecursive(node, indent = 0) {
+  node.each &&
+    node.each((child, i) => {
+      if (!child.raws.before || !child.raws.before.trim() || child.raws.before.includes('\n')) {
+        child.raws.before = `\n${node.type !== 'rule' && i > 0 ? '\n' : ''}${'  '.repeat(indent)}`
+      }
+      child.raws.after = `\n${'  '.repeat(indent)}`
+      indentRecursive(child, indent + 1)
+    })
+}
+
+function formatNodes(root) {
+  indentRecursive(root)
+  if (root.first) {
+    root.first.raws.before = ''
+  }
+}
+
+// ---
 
 /*
   Overall CLI architecture:
@@ -62,53 +85,125 @@ if (!output) {
   throw new Error('Missing required output file: --output, -o, or first argument')
 }
 
-function indentRecursive(node, indent = 0) {
-  node.each &&
-    node.each((child, i) => {
-      if (!child.raws.before || !child.raws.before.trim() || child.raws.before.includes('\n')) {
-        child.raws.before = `\n${node.type !== 'rule' && i > 0 ? '\n' : ''}${'  '.repeat(indent)}`
-      }
-      child.raws.after = `\n${'  '.repeat(indent)}`
-      indentRecursive(child, indent + 1)
-    })
+function getTailwindConfig(configPath = args['--config'] ?? path.resolve('./tailwind.config.js')) {
+  return resolveConfig(require(configPath))
 }
 
-function formatNodes(root) {
-  indentRecursive(root)
-  if (root.first) {
-    root.first.raws.before = ''
+function buildOnce() {
+  let config = getTailwindConfig()
+
+  let tailwindPlugin = (opts = {}) => {
+    return {
+      postcssPlugin: 'tailwindcss',
+      Once(root, { result }) {
+        processTailwindFeatures(({ createContext }) => {
+          return () => {
+            return createContext(config)
+          }
+        })(root, result)
+      },
+    }
   }
+  tailwindPlugin.postcss = true
+
+  let plugins = [
+    // TODO: Bake in postcss-import support?
+    // TODO: Bake in postcss-nested support?
+    tailwindPlugin,
+    // require('autoprefixer'),
+    // formatNodes,
+  ]
+
+  let processor = postcss(plugins)
+
+  function processCSS(css) {
+    return processor.process(css, { from: input, to: output }).then((result) => {
+      fs.writeFile(output, result.css, () => true)
+      if (result.map) {
+        fs.writeFile(output + '.map', result.map.toString(), () => true)
+      }
+    })
+  }
+
+  // TODO: Read from file
+  let css = '@tailwind base; @tailwind components; @tailwind utilities'
+  return processCSS(css)
 }
 
-let configPath = args['--config'] ?? path.resolve('./tailwind.config.js')
-let config = require(configPath)
+function startWatcher() {
+  function build(config) {
+    console.log('Rebuilding...')
 
-let plugins = [
-  // TODO: Bake in postcss-import support?
-  // TODO: Bake in postcss-nested support?
-  {
-    postcssPlugin: 'tailwindcss',
-    plugins: require('./jit').default(config),
-  },
-  require('autoprefixer'),
-  formatNodes,
-]
+    let changedContent = [{ content: 'font-bold', extension: 'html' }]
 
-// TODO: Read from file
-let css = '@tailwind base; @tailwind components; @tailwind utilities'
-let processor = postcss(plugins)
+    let tailwindPlugin = (opts = {}) => {
+      return {
+        postcssPlugin: 'tailwindcss',
+        Once(root, { result }) {
+          processTailwindFeatures(({ createContext }) => {
+            return () => {
+              return createContext(config, changedContent)
+            }
+          })(root, result)
+        },
+      }
+    }
+    tailwindPlugin.postcss = true
 
-function processCSS(css) {
-  processor.process(css, { from: input, to: output }).then((result) => {
-    fs.writeFile(output, result.css, () => true)
+    let plugins = [
+      // TODO: Bake in postcss-import support?
+      // TODO: Bake in postcss-nested support?
+      tailwindPlugin,
+      // require('autoprefixer'),
+      // formatNodes,
+    ]
 
-    if (result.map) {
-      fs.writeFile(output + '.map', result.map.toString(), () => true)
+    let processor = postcss(plugins)
+
+    function processCSS(css) {
+      return processor.process(css, { from: input, to: output }).then((result) => {
+        fs.writeFile(output, result.css, () => true)
+        if (result.map) {
+          fs.writeFile(output + '.map', result.map.toString(), () => true)
+        }
+      })
+    }
+
+    // TODO: Read from file
+    // let css = '@tailwind base; @tailwind components; @tailwind utilities'
+    let css = '@tailwind utilities'
+    return processCSS(css)
+  }
+  // Files to watch:
+  // - tailwind.config.js
+  // - Purge files
+  // - Config dependencies
+  // - CSS file
+  // - CSS imports
+
+  let configPath = args['--config'] ?? path.resolve('./tailwind.config.js')
+  let config = getTailwindConfig(configPath)
+
+  let watcher = chokidar.watch([configPath], { ignoreInitial: true })
+
+  watcher.on('change', async (file) => {
+    if (file === configPath) {
+      console.time('Resolve config')
+      delete require.cache[require.resolve(configPath)]
+      let config = getTailwindConfig(configPath)
+      console.timeEnd('Resolve config')
+
+      console.time('Build')
+      await build(config)
+      console.timeEnd('Build')
     }
   })
+
+  build(config)
 }
 
 if (shouldWatch) {
+  startWatcher()
 } else {
-  processCSS(css)
+  buildOnce()
 }

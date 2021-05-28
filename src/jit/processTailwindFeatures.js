@@ -4,6 +4,7 @@ import expandApplyAtRules from './lib/expandApplyAtRules'
 import evaluateTailwindFunctions from '../lib/evaluateTailwindFunctions'
 import substituteScreenAtRules from '../lib/substituteScreenAtRules'
 import collapseAdjacentRules from './lib/collapseAdjacentRules'
+import { createContext as poop } from './lib/setupContextUtils'
 
 export default function processTailwindFeatures(setupContext) {
   return function (root, result) {
@@ -17,7 +18,14 @@ export default function processTailwindFeatures(setupContext) {
     }
 
     let tailwindDirectives = normalizeTailwindDirectives(root)
-    let context = setupContext({ tailwindDirectives, registerDependency })(root, result)
+
+    let context = setupContext({
+      tailwindDirectives,
+      registerDependency,
+      createContext(tailwindConfig, changedContent) {
+        return poop(tailwindConfig, changedContent, tailwindDirectives, root)
+      },
+    })(root, result)
 
     expandTailwindAtRules(context)(root, result)
     expandApplyAtRules(context)(root, result)
