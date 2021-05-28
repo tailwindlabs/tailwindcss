@@ -131,20 +131,25 @@ function buildOnce() {
 }
 
 function startWatcher() {
-  function build(config) {
-    console.log('Rebuilding...')
+  let changedContent = []
 
-    let changedContent = [{ content: 'font-bold', extension: 'html' }]
+  function build(config) {
+    console.log('\n\nRebuilding...')
 
     let tailwindPlugin = (opts = {}) => {
       return {
         postcssPlugin: 'tailwindcss',
         Once(root, { result }) {
+          console.time('Process tailwind features')
           processTailwindFeatures(({ createContext }) => {
             return () => {
-              return createContext(config, changedContent)
+              console.time('Creating context')
+              let x = createContext(config, changedContent.splice(0))
+              console.timeEnd('Creating context')
+              return x
             }
           })(root, result)
+          console.timeEnd('Process tailwind features')
         },
       }
     }
@@ -184,22 +189,56 @@ function startWatcher() {
   let configPath = args['--config'] ?? path.resolve('./tailwind.config.js')
   let config = getTailwindConfig(configPath)
 
-  let watcher = chokidar.watch([configPath], { ignoreInitial: true })
+  function resolveWatcherData() {
+    return [
+      // Watch tailwind.config.js
+      configPath,
+
+      // Watch purge files
+      ...(Array.isArray(config.purge) ? config.purge : config.purge.content).filter((file) => {
+        // Strings in this case are files / globs. If it is something else,
+        // like an object it's probably a raw content object. But this object
+        // is not watchable, so let's remove it.
+        return typeof file === 'string'
+      }),
+    ]
+  }
+
+  let watcher = chokidar.watch(resolveWatcherData(), { ignoreInitial: true })
+
+  let chain = Promise.resolve()
 
   watcher.on('change', async (file) => {
     if (file === configPath) {
       console.time('Resolve config')
       delete require.cache[require.resolve(configPath)]
-      let config = getTailwindConfig(configPath)
+      config = getTailwindConfig(configPath)
       console.timeEnd('Resolve config')
 
-      console.time('Build')
-      await build(config)
-      console.timeEnd('Build')
+      console.time('Watch new files')
+      watcher.add(resolveWatcherData())
+      console.timeEnd('Watch new files')
+
+      chain = chain.then(async () => {
+        console.time('Build')
+        await build(config)
+        console.timeEnd('Build')
+      })
+    } else {
+      chain = chain.then(async () => {
+        changedContent.push({
+          content: fs.readFileSync(path.resolve(process.cwd(), file), 'utf8'),
+          extension: path.extname(file),
+        })
+
+        console.time('Build')
+        await build(config)
+        console.timeEnd('Build')
+      })
     }
   })
 
-  build(config)
+  chain = chain.then(() => build(config))
 }
 
 if (shouldWatch) {

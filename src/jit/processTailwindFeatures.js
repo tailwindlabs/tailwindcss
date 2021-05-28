@@ -23,7 +23,10 @@ export default function processTailwindFeatures(setupContext) {
       tailwindDirectives,
       registerDependency,
       createContext(tailwindConfig, changedContent) {
-        return poop(tailwindConfig, changedContent, tailwindDirectives, root)
+        console.time('Poop')
+        let x = poop(tailwindConfig, changedContent, tailwindDirectives, root)
+        console.timeEnd('Poop')
+        return x
       },
     })(root, result)
 

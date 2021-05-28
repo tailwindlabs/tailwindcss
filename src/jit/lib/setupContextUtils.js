@@ -494,7 +494,13 @@ export function createContext(tailwindConfig, changedContent, tailwindDirectives
     stylesheetCache: null,
   }
 
-  registerPlugins(resolvePlugins(context, tailwindDirectives, root), context)
+  console.time('Resolve plugins')
+  let resolvedPlugins = resolvePlugins(context, tailwindDirectives, root)
+  console.timeEnd('Resolve plugins')
+
+  console.time('Register plugins')
+  registerPlugins(resolvedPlugins, context)
+  console.timeEnd('Register plugins')
 
   return context
 }
