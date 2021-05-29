@@ -35,32 +35,16 @@ function formatNodes(root) {
 // ---
 
 /*
-  Overall CLI architecture:
-
-  - Resolve config in CLI, not within Tailwind
-  - Track config as a dependency (+ the config's own dependencies) in the CLI
-    - Don't bother crawling config dependencies in one-off build mode
-  - Track all `purge` files as dependencies
-  - Somehow bypass all internal chokidar stuff in the JIT engine itself
-  - Send some sort of external hash/key into Tailwind to help it identify the context without doing anything
-    - `contextKey` ?
-
-*/
-
-/*
   TODOs:
-
-  - Make watching work
-  - Compile from custom source CSS file
+  - Support passing globs from command line
   - Make minification work
   - Scaffold tailwind.config.js file (with postcss.config.js)
+  - Reduce getModuleDependencies calls (make configDeps global?)
+  - Support raw content in purge config
 
   Future:
   - Detect project type, add sensible purge defaults
-
 */
-
-// npx tailwindcss -i in.css -o out.css -w --files="./**/*.{js,html}"
 
 let args = arg({
   '--files': String,
