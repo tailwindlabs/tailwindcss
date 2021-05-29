@@ -10,6 +10,7 @@ import fs from 'fs'
 import processTailwindFeatures from './jit/processTailwindFeatures'
 import resolveConfig from '../resolveConfig'
 import fastGlob from 'fast-glob'
+import getModuleDependencies from './lib/getModuleDependencies'
 
 // ---
 
@@ -87,7 +88,14 @@ if (!output) {
 }
 
 function getTailwindConfig(configPath = args['--config'] ?? path.resolve('./tailwind.config.js')) {
-  return resolveConfig(require(configPath))
+  console.time('Module dependencies')
+  for (let { file } of getModuleDependencies(configPath)) {
+    delete require.cache[require.resolve(file)]
+  }
+
+  let dependencies = getModuleDependencies(configPath).map(({ file }) => file)
+  console.timeEnd('Module dependencies')
+  return [resolveConfig(require(configPath)), dependencies]
 }
 
 function extractFileGlobs(config) {
@@ -100,7 +108,7 @@ function extractFileGlobs(config) {
 }
 
 function buildOnce() {
-  let config = getTailwindConfig()
+  let [config] = getTailwindConfig()
 
   let globs = extractFileGlobs(config)
   let changedContent = []
@@ -155,7 +163,7 @@ let context = null
 
 function startWatcher() {
   let changedContent = []
-  let contextDependencies = []
+  let contextDependencies = new Set()
   let watcher = null
 
   function build(config) {
@@ -165,7 +173,7 @@ function startWatcher() {
       return {
         postcssPlugin: 'tailwindcss',
         Once(root, { result }) {
-          console.time('Process tailwind features')
+          console.time('Compiling CSS')
           processTailwindFeatures(({ createContext }) => {
             return () => {
               if (context !== null) {
@@ -179,7 +187,7 @@ function startWatcher() {
               return context
             }
           })(root, result)
-          console.timeEnd('Process tailwind features')
+          console.timeEnd('Compiling CSS')
         },
       }
     }
@@ -196,14 +204,13 @@ function startWatcher() {
     let processor = postcss(plugins)
 
     function processCSS(css) {
-      console.log(path.resolve(process.cwd(), input))
       return processor.process(css, { from: input, to: output }).then((result) => {
         for (let message of result.messages) {
           if (message.type === 'dependency') {
-            contextDependencies.push(message.file)
+            contextDependencies.add(message.file)
           }
         }
-        watcher.add(contextDependencies)
+        watcher.add([...contextDependencies])
 
         fs.writeFile(output, result.css, () => true)
         if (result.map) {
@@ -220,10 +227,12 @@ function startWatcher() {
 
   // TODO: Track config dependencies (getModuleDependencies)
   let configPath = args['--config'] ?? path.resolve('./tailwind.config.js')
-  let config = getTailwindConfig(configPath)
-  contextDependencies.push(configPath)
+  let [config, configDependencies] = getTailwindConfig(configPath)
+  for (let dependency of configDependencies) {
+    contextDependencies.add(dependency)
+  }
   if (input) {
-    contextDependencies.push(path.resolve(process.cwd(), input))
+    contextDependencies.add(path.resolve(process.cwd(), input))
   }
 
   watcher = chokidar.watch([...contextDependencies, ...extractFileGlobs(config)], {
@@ -233,15 +242,18 @@ function startWatcher() {
   let chain = Promise.resolve()
 
   watcher.on('change', async (file) => {
-    if (contextDependencies.includes(file)) {
+    if (contextDependencies.has(file)) {
       console.time('Resolve config')
       context = null
-      delete require.cache[require.resolve(configPath)]
-      config = getTailwindConfig(configPath)
+      ;[config, configDependencies] = getTailwindConfig(configPath)
+      for (let dependency of configDependencies) {
+        contextDependencies.add(dependency)
+      }
       console.timeEnd('Resolve config')
 
       console.time('Watch new files')
       let globs = extractFileGlobs(config)
+      watcher.add(configDependencies)
       watcher.add(globs)
       console.timeEnd('Watch new files')
 
@@ -253,9 +265,9 @@ function startWatcher() {
             extension: path.extname(file),
           })
         }
-        console.time('Build')
+        console.time('Build total')
         await build(config)
-        console.timeEnd('Build')
+        console.timeEnd('Build total')
       })
     } else {
       chain = chain.then(async () => {
@@ -264,9 +276,9 @@ function startWatcher() {
           extension: path.extname(file),
         })
 
-        console.time('Build')
+        console.time('Build total')
         await build(config)
-        console.timeEnd('Build')
+        console.timeEnd('Build total')
       })
     }
   })
