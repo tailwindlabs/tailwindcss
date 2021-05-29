@@ -48,9 +48,7 @@ export default function resolveConfigPath(pathOrConfig) {
       const configPath = path.resolve(configFile)
       fs.accessSync(configPath)
       return configPath
-    } catch (err) {
-      console.log(err)
-    }
+    } catch (err) {}
   }
 
   return null
