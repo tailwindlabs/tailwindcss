@@ -171,10 +171,7 @@ export default {
             return null
           }
 
-          let groupSelector = prefixSelector(
-            config('prefix'),
-            `.group${config('separator')}${state}`
-          )
+          let groupSelector = prefixSelector(config('prefix'), `.group:${state}`)
 
           return `${groupSelector} ${variantSelector}`
         })
