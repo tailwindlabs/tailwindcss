@@ -36,6 +36,11 @@
 .font-bold {
   font-weight: 700;
 }
+.foo,
+.bar {
+  color: black;
+  font-weight: 700;
+}
 @media (min-width: 640px) {
   .sm\:text-center {
     text-align: center;

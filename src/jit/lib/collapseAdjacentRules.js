@@ -22,7 +22,13 @@ export default function collapseAdjacentRules() {
 
       if (node.type === 'atrule' && node.name === 'font-face') {
         currentRule = node
-      } else if (properties.every((property) => node[property] === currentRule[property])) {
+      } else if (
+        properties.every(
+          (property) =>
+            (node[property] ?? '').replace(/\s+/g, ' ') ===
+            (currentRule[property] ?? '').replace(/\s+/g, ' ')
+        )
+      ) {
         currentRule.append(node.nodes)
         node.remove()
       } else {

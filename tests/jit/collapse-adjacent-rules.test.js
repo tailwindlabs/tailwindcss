@@ -47,6 +47,13 @@ test('collapse adjacent rules', () => {
               url("/fonts/ProximaNova.woff") format("woff");
       }
     }
+    .foo, .bar {
+      color: black;
+    }
+    .foo,
+    .bar {
+      font-weight: 700;
+    }
   `
 
   return run(css, config).then((result) => {
