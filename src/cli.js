@@ -41,6 +41,7 @@ function formatNodes(root) {
   - Support raw content in purge config
   - Scaffold tailwind.config.js file (with postcss.config.js)
   - Support passing globs from command line
+  - Prebundle peer-dependencies
   - Make minification work
 
   Future:
