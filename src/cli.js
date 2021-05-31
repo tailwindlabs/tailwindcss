@@ -47,12 +47,18 @@ function formatNodes(root) {
   - [x] Support passing globs from command line
   - [ ] Prebundle peer-dependencies
   - [ ] Make minification work
+  - [ ] --help option 
+  - [ ] conditional flags based on arguments
+          init -f, --full
+          build -f, --files
+  - [ ] --jit
 
   Future:
   - Detect project type, add sensible purge defaults
 */
 
 let args = arg({
+  '--jit': Boolean,
   '--files': String,
   '--config': String,
   '--input': String,
@@ -87,11 +93,19 @@ if (args['_'].includes('init')) {
       'utf8'
     )
 
-    fs.writeFileSync(
-      tailwindConfigLocation,
-      stubFile.replace('../colors', 'tailwindcss/colors'),
-      'utf8'
-    )
+    // Change colors import
+    stubFile = stubFile.replace('../colors', 'tailwindcss/colors')
+
+    // --jit mode
+    if (args['--jit']) {
+      // Add jit mode
+      stubFile = stubFile.replace('module.exports = {', "module.exports = {\n  mode: 'jit',")
+
+      // Deleting variants
+      stubFile = stubFile.replace(/variants: {(.*)},\n  /gs, '')
+    }
+
+    fs.writeFileSync(tailwindConfigLocation, stubFile, 'utf8')
 
     console.log('Created Tailwind config file:', 'tailwind.config.js')
   }
@@ -120,6 +134,10 @@ function resolveConfig(config) {
 
   if (args['--files']) {
     resolvedConfig.purge = args['--files'].split(',')
+  }
+
+  if (args['--jit']) {
+    resolvedConfig.mode = 'jit'
   }
 
   return resolvedConfig
