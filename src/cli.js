@@ -12,6 +12,10 @@ import resolveConfigInternal from '../resolveConfig'
 import fastGlob from 'fast-glob'
 import getModuleDependencies from './lib/getModuleDependencies'
 
+let env = {
+  DEBUG: process.env.DEBUG !== undefined,
+}
+
 // ---
 
 function indentRecursive(node, indent = 0) {
@@ -178,13 +182,13 @@ function startWatcher() {
   function getTailwindConfig(
     configPath = args['--config'] ?? path.resolve('./tailwind.config.js')
   ) {
-    console.time('Module dependencies')
+    env.DEBUG && console.time('Module dependencies')
     for (let file of configDependencies) {
       delete require.cache[require.resolve(file)]
     }
 
     configDependencies = getModuleDependencies(configPath).map(({ file }) => file)
-    console.timeEnd('Module dependencies')
+    env.DEBUG && console.timeEnd('Module dependencies')
 
     return resolveConfig(require(configPath))
   }
@@ -196,7 +200,7 @@ function startWatcher() {
       return {
         postcssPlugin: 'tailwindcss',
         Once(root, { result }) {
-          console.time('Compiling CSS')
+          env.DEBUG && console.time('Compiling CSS')
           processTailwindFeatures(({ createContext }) => {
             return () => {
               if (context !== null) {
@@ -204,13 +208,13 @@ function startWatcher() {
                 return context
               }
 
-              console.time('Creating context')
+              env.DEBUG && console.time('Creating context')
               context = createContext(config, changedContent.splice(0))
-              console.timeEnd('Creating context')
+              env.DEBUG && console.timeEnd('Creating context')
               return context
             }
           })(root, result)
-          console.timeEnd('Compiling CSS')
+          env.DEBUG && console.timeEnd('Compiling CSS')
         },
       }
     }
@@ -265,25 +269,25 @@ function startWatcher() {
 
   watcher.on('change', async (file) => {
     if (contextDependencies.has(file)) {
-      console.time('Resolve config')
+      env.DEBUG && console.time('Resolve config')
       context = null
       config = getTailwindConfig(configPath)
       for (let dependency of configDependencies) {
         contextDependencies.add(dependency)
       }
-      console.timeEnd('Resolve config')
+      env.DEBUG && console.timeEnd('Resolve config')
 
-      console.time('Watch new files')
+      env.DEBUG && console.time('Watch new files')
       let globs = extractFileGlobs(config)
       watcher.add(configDependencies)
       watcher.add(globs)
-      console.timeEnd('Watch new files')
+      env.DEBUG && console.timeEnd('Watch new files')
 
       chain = chain.then(async () => {
         changedContent.push(...getChangedContent(config))
-        console.time('Build total')
+        env.DEBUG && console.time('Build total')
         await build(config)
-        console.timeEnd('Build total')
+        env.DEBUG && console.timeEnd('Build total')
       })
     } else {
       chain = chain.then(async () => {
@@ -292,9 +296,9 @@ function startWatcher() {
           extension: path.extname(file),
         })
 
-        console.time('Build total')
+        env.DEBUG && console.time('Build total')
         await build(config)
-        console.timeEnd('Build total')
+        env.DEBUG && console.timeEnd('Build total')
       })
     }
   })
@@ -306,9 +310,9 @@ function startWatcher() {
         extension: path.extname(file),
       })
 
-      console.time('Build total')
+      env.DEBUG && console.time('Build total')
       await build(config)
-      console.timeEnd('Build total')
+      env.DEBUG && console.timeEnd('Build total')
     })
   })
 
