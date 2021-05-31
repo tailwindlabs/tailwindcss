@@ -22,7 +22,7 @@ import { env } from './sharedState'
 let touchDir =
   env.TAILWIND_TOUCH_DIR || path.join(os.homedir() || os.tmpdir(), '.tailwindcss', 'touch')
 
-if (!env.TAILWIND_DISABLE_TOUCH) {
+if (env.TAILWIND_MODE === 'watch') {
   if (fs.existsSync(touchDir)) {
     for (let file of fs.readdirSync(touchDir)) {
       try {
@@ -94,67 +94,58 @@ function rebootWatcher(context, configPath, configDependencies, candidateFiles) 
     touch(touchFile)
   }
 
-  if (env.TAILWIND_MODE === 'build') {
-    return
-  }
+  let watcher = getWatcher(context)
 
-  if (
-    env.TAILWIND_MODE === 'watch' ||
-    (env.TAILWIND_MODE === undefined && env.NODE_ENV === 'development')
-  ) {
-    let watcher = getWatcher(context)
+  Promise.resolve(watcher ? watcher.close() : null).then(() => {
+    log.info([
+      'Tailwind CSS is watching for changes...',
+      'https://tailwindcss.com/docs/just-in-time-mode#watch-mode-and-one-off-builds',
+    ])
 
-    Promise.resolve(watcher ? watcher.close() : null).then(() => {
-      log.info([
-        'Tailwind CSS is watching for changes...',
-        'https://tailwindcss.com/docs/just-in-time-mode#watch-mode-and-one-off-builds',
-      ])
+    watcher = chokidar.watch([...candidateFiles, ...configDependencies], {
+      ignoreInitial: true,
+    })
 
-      watcher = chokidar.watch([...candidateFiles, ...configDependencies], {
-        ignoreInitial: true,
-      })
+    setWatcher(context, watcher)
 
-      setWatcher(context, watcher)
+    watcher.on('add', (file) => {
+      let changedFile = path.resolve('.', file)
+      let content = fs.readFileSync(changedFile, 'utf8')
+      let extension = path.extname(changedFile).slice(1)
+      context.changedContent.push({ content, extension })
+      touch(touchFile)
+    })
 
-      watcher.on('add', (file) => {
+    watcher.on('change', (file) => {
+      // If it was a config dependency, touch the config file to trigger a new context.
+      // This is not really that clean of a solution but it's the fastest, because we
+      // can do a very quick check on each build to see if the config has changed instead
+      // of having to get all of the module dependencies and check every timestamp each
+      // time.
+      if (configDependencies.has(file)) {
+        for (let dependency of configDependencies) {
+          delete require.cache[require.resolve(dependency)]
+        }
+        touch(configPath)
+      } else {
         let changedFile = path.resolve('.', file)
         let content = fs.readFileSync(changedFile, 'utf8')
         let extension = path.extname(changedFile).slice(1)
         context.changedContent.push({ content, extension })
         touch(touchFile)
-      })
-
-      watcher.on('change', (file) => {
-        // If it was a config dependency, touch the config file to trigger a new context.
-        // This is not really that clean of a solution but it's the fastest, because we
-        // can do a very quick check on each build to see if the config has changed instead
-        // of having to get all of the module dependencies and check every timestamp each
-        // time.
-        if (configDependencies.has(file)) {
-          for (let dependency of configDependencies) {
-            delete require.cache[require.resolve(dependency)]
-          }
-          touch(configPath)
-        } else {
-          let changedFile = path.resolve('.', file)
-          let content = fs.readFileSync(changedFile, 'utf8')
-          let extension = path.extname(changedFile).slice(1)
-          context.changedContent.push({ content, extension })
-          touch(touchFile)
-        }
-      })
-
-      watcher.on('unlink', (file) => {
-        // Touch the config file if any of the dependencies are deleted.
-        if (configDependencies.has(file)) {
-          for (let dependency of configDependencies) {
-            delete require.cache[require.resolve(dependency)]
-          }
-          touch(configPath)
-        }
-      })
+      }
     })
-  }
+
+    watcher.on('unlink', (file) => {
+      // Touch the config file if any of the dependencies are deleted.
+      if (configDependencies.has(file)) {
+        for (let dependency of configDependencies) {
+          delete require.cache[require.resolve(dependency)]
+        }
+        touch(configPath)
+      }
+    })
+  })
 }
 
 function generateTouchFileName() {

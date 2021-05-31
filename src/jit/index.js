@@ -24,9 +24,10 @@ export default function (configOrPath = {}) {
 
       let tailwindDirectives = normalizeTailwindDirectives(root)
 
-      let context = env.TAILWIND_DISABLE_TOUCH
-        ? setupTrackingContext(configOrPath, tailwindDirectives, registerDependency)(result, root)
-        : setupWatchingContext(configOrPath, tailwindDirectives, registerDependency)(result, root)
+      let context =
+        env.TAILWIND_MODE === 'watch'
+          ? setupWatchingContext(configOrPath, tailwindDirectives, registerDependency)(result, root)
+          : setupTrackingContext(configOrPath, tailwindDirectives, registerDependency)(result, root)
 
       processTailwindFeatures(context)(root, result)
     },
