@@ -36,11 +36,12 @@ function formatNodes(root) {
 
 /*
   TODOs:
+  - Reduce getModuleDependencies calls (make configDeps global?)
+  - Detect new files
+  - Support raw content in purge config
+  - Scaffold tailwind.config.js file (with postcss.config.js)
   - Support passing globs from command line
   - Make minification work
-  - Scaffold tailwind.config.js file (with postcss.config.js)
-  - Reduce getModuleDependencies calls (make configDeps global?)
-  - Support raw content in purge config
 
   Future:
   - Detect project type, add sensible purge defaults
@@ -71,17 +72,6 @@ if (!output) {
   throw new Error('Missing required output file: --output, -o, or first argument')
 }
 
-function getTailwindConfig(configPath = args['--config'] ?? path.resolve('./tailwind.config.js')) {
-  console.time('Module dependencies')
-  for (let { file } of getModuleDependencies(configPath)) {
-    delete require.cache[require.resolve(file)]
-  }
-
-  let dependencies = getModuleDependencies(configPath).map(({ file }) => file)
-  console.timeEnd('Module dependencies')
-  return [resolveConfig(require(configPath)), dependencies]
-}
-
 function extractFileGlobs(config) {
   return (Array.isArray(config.purge) ? config.purge : config.purge.content).filter((file) => {
     // Strings in this case are files / globs. If it is something else,
@@ -92,7 +82,7 @@ function extractFileGlobs(config) {
 }
 
 function buildOnce() {
-  let [config] = getTailwindConfig()
+  let config = resolveConfig(require(args['--config'] ?? path.resolve('./tailwind.config.js')))
 
   let globs = extractFileGlobs(config)
   let changedContent = []
@@ -147,8 +137,23 @@ let context = null
 
 function startWatcher() {
   let changedContent = []
+  let configDependencies = []
   let contextDependencies = new Set()
   let watcher = null
+
+  function getTailwindConfig(
+    configPath = args['--config'] ?? path.resolve('./tailwind.config.js')
+  ) {
+    console.time('Module dependencies')
+    for (let file of configDependencies) {
+      delete require.cache[require.resolve(file)]
+    }
+
+    configDependencies = getModuleDependencies(configPath).map(({ file }) => file)
+    console.timeEnd('Module dependencies')
+
+    return resolveConfig(require(configPath))
+  }
 
   function build(config) {
     console.log('\n\nRebuilding...')
@@ -211,7 +216,7 @@ function startWatcher() {
 
   // TODO: Track config dependencies (getModuleDependencies)
   let configPath = args['--config'] ?? path.resolve('./tailwind.config.js')
-  let [config, configDependencies] = getTailwindConfig(configPath)
+  let config = getTailwindConfig(configPath)
   for (let dependency of configDependencies) {
     contextDependencies.add(dependency)
   }
@@ -229,7 +234,8 @@ function startWatcher() {
     if (contextDependencies.has(file)) {
       console.time('Resolve config')
       context = null
-      ;[config, configDependencies] = getTailwindConfig(configPath)
+      config = getTailwindConfig(configPath)
+      console.log(configDependencies)
       for (let dependency of configDependencies) {
         contextDependencies.add(dependency)
       }
