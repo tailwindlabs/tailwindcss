@@ -562,7 +562,7 @@ export function getContext(
 
   env.DEBUG && console.log('Setting up new context...')
 
-  let context = createContext(tailwindConfig, tailwindDirectives, root)
+  let context = createContext(tailwindConfig, [], tailwindDirectives, root)
 
   trackModified([...contextDependencies], getFileModifiedMap(context))
 
