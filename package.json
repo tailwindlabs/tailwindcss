@@ -44,7 +44,7 @@
     "@babel/core": "^7.14.3",
     "@babel/node": "^7.12.13",
     "@babel/preset-env": "^7.13.8",
-    "@tailwindcss/aspect-ratio": "^0.2.0",
+    "@tailwindcss/aspect-ratio": "^0.2.1",
     "@vercel/ncc": "^0.28.5",
     "autoprefixer": "^10.2.5",
     "babel-jest": "^26.6.3",
