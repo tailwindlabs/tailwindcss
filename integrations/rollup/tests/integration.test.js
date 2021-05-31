@@ -27,10 +27,7 @@ describe('static build', () => {
   })
 })
 
-describe.each([
-  { TAILWIND_MODE: 'watch' },
-  { TAILWIND_MODE: 'watch', TAILWIND_DISABLE_TOUCH: true },
-])('watcher %p', (env) => {
+describe.each([{ TAILWIND_MODE: 'watch' }, { TAILWIND_MODE: undefined }])('watcher %p', (env) => {
   test(`classes are generated when the html file changes`, async () => {
     await writeInputFile('index.html', html`<div class="font-bold"></div>`)
 
