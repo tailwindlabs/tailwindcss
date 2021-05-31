@@ -43,7 +43,7 @@ function formatNodes(root) {
   - [x] Reduce getModuleDependencies calls (make configDeps global?)
   - [x] Detect new files
   - [x] Support raw content in purge config
-  - [ ] Scaffold tailwind.config.js file (with postcss.config.js)
+  - [x] Scaffold tailwind.config.js file (with postcss.config.js)
   - [x] Support passing globs from command line
   - [ ] Prebundle peer-dependencies
   - [ ] Make minification work
@@ -59,6 +59,9 @@ let args = arg({
   '--output': String,
   '--minify': Boolean,
   '--watch': Boolean,
+  '--postcss': Boolean,
+  '--full': Boolean,
+  '-p': '--postcss',
   '-f': '--files',
   '-c': '--config',
   '-i': '--input',
@@ -71,6 +74,46 @@ let input = args['--input']
 let output = args['--output']
 let shouldWatch = args['--watch']
 let shouldMinify = args['--minify']
+
+if (args['_'].includes('init')) {
+  let tailwindConfigLocation = path.resolve(process.cwd(), 'tailwind.config.js')
+  if (fs.existsSync(tailwindConfigLocation)) {
+    console.log('tailwind.config.js already exists.')
+  } else {
+    let stubFile = fs.readFileSync(
+      args['--full']
+        ? path.resolve(__dirname, '../stubs/defaultConfig.stub.js')
+        : path.resolve(__dirname, '../stubs/simpleConfig.stub.js'),
+      'utf8'
+    )
+
+    fs.writeFileSync(
+      tailwindConfigLocation,
+      stubFile.replace('../colors', 'tailwindcss/colors'),
+      'utf8'
+    )
+
+    console.log('Created Tailwind config file:', 'tailwind.config.js')
+  }
+
+  if (args['--postcss']) {
+    let postcssConfigLocation = path.resolve(process.cwd(), 'postcss.config.js')
+    if (fs.existsSync(postcssConfigLocation)) {
+      console.log('postcss.config.js already exists.')
+    } else {
+      let stubFile = fs.readFileSync(
+        path.resolve(__dirname, '../stubs/defaultPostCssConfig.stub.js'),
+        'utf8'
+      )
+
+      fs.writeFileSync(postcssConfigLocation, stubFile, 'utf8')
+
+      console.log('Created PostCSS config file:', 'tailwind.config.js')
+    }
+  }
+
+  process.exit(0)
+}
 
 function resolveConfig(config) {
   let resolvedConfig = resolveConfigInternal(config)
