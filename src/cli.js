@@ -8,7 +8,7 @@ import path from 'path'
 import arg from 'arg'
 import fs from 'fs'
 import processTailwindFeatures from './jit/processTailwindFeatures'
-import resolveConfig from '../resolveConfig'
+import resolveConfigInternal from '../resolveConfig'
 import fastGlob from 'fast-glob'
 import getModuleDependencies from './lib/getModuleDependencies'
 
@@ -36,13 +36,13 @@ function formatNodes(root) {
 
 /*
   TODOs:
-  - Reduce getModuleDependencies calls (make configDeps global?)
-  - Detect new files
-  - Support raw content in purge config
-  - Scaffold tailwind.config.js file (with postcss.config.js)
-  - Support passing globs from command line
-  - Prebundle peer-dependencies
-  - Make minification work
+  - [x] Reduce getModuleDependencies calls (make configDeps global?)
+  - [x] Detect new files
+  - [x] Support raw content in purge config
+  - [ ] Scaffold tailwind.config.js file (with postcss.config.js)
+  - [x] Support passing globs from command line
+  - [ ] Prebundle peer-dependencies
+  - [ ] Make minification work
 
   Future:
   - Detect project type, add sensible purge defaults
@@ -65,16 +65,29 @@ let args = arg({
 
 let input = args['--input']
 let output = args['--output']
-let files = args['--files']
 let shouldWatch = args['--watch']
 let shouldMinify = args['--minify']
+
+function resolveConfig(config) {
+  let resolvedConfig = resolveConfigInternal(config)
+
+  if (args['--files']) {
+    resolvedConfig.purge = args['--files'].split(',')
+  }
+
+  return resolvedConfig
+}
 
 if (!output) {
   throw new Error('Missing required output file: --output, -o, or first argument')
 }
 
+function extractContent(config) {
+  return Array.isArray(config.purge) ? config.purge : config.purge.content
+}
+
 function extractFileGlobs(config) {
-  return (Array.isArray(config.purge) ? config.purge : config.purge.content).filter((file) => {
+  return extractContent(config).filter((file) => {
     // Strings in this case are files / globs. If it is something else,
     // like an object it's probably a raw content object. But this object
     // is not watchable, so let's remove it.
@@ -82,18 +95,38 @@ function extractFileGlobs(config) {
   })
 }
 
-function buildOnce() {
-  let config = resolveConfig(require(args['--config'] ?? path.resolve('./tailwind.config.js')))
+function extractRawContent(config) {
+  return extractContent(config).filter((file) => {
+    return typeof file === 'object' && file !== null
+  })
+}
 
-  let globs = extractFileGlobs(config)
+function getChangedContent(config) {
   let changedContent = []
+
+  // Resolve globs from the purge config
+  let globs = extractFileGlobs(config)
   let files = fastGlob.sync(globs)
+
   for (let file of files) {
     changedContent.push({
       content: fs.readFileSync(path.resolve(process.cwd(), file), 'utf8'),
       extension: path.extname(file),
     })
   }
+
+  // Resolve raw content in the tailwind config
+  for (let { raw: content, extension = 'html' } of extractRawContent(config)) {
+    changedContent.push({ content, extension })
+  }
+
+  return changedContent
+}
+
+function buildOnce() {
+  let config = resolveConfig(require(args['--config'] ?? path.resolve('./tailwind.config.js')))
+
+  let changedContent = getChangedContent(config)
 
   let tailwindPlugin = (opts = {}) => {
     return {
@@ -215,7 +248,6 @@ function startWatcher() {
     return processCSS(css)
   }
 
-  // TODO: Track config dependencies (getModuleDependencies)
   let configPath = args['--config'] ?? path.resolve('./tailwind.config.js')
   let config = getTailwindConfig(configPath)
   for (let dependency of configDependencies) {
@@ -236,7 +268,6 @@ function startWatcher() {
       console.time('Resolve config')
       context = null
       config = getTailwindConfig(configPath)
-      console.log(configDependencies)
       for (let dependency of configDependencies) {
         contextDependencies.add(dependency)
       }
@@ -249,13 +280,7 @@ function startWatcher() {
       console.timeEnd('Watch new files')
 
       chain = chain.then(async () => {
-        let files = fastGlob.sync(globs)
-        for (let file of files) {
-          changedContent.push({
-            content: fs.readFileSync(path.resolve(process.cwd(), file), 'utf8'),
-            extension: path.extname(file),
-          })
-        }
+        changedContent.push(...getChangedContent(config))
         console.time('Build total')
         await build(config)
         console.timeEnd('Build total')
@@ -274,15 +299,21 @@ function startWatcher() {
     }
   })
 
-  chain = chain.then(() => {
-    let globs = extractFileGlobs(config)
-    let files = fastGlob.sync(globs)
-    for (let file of files) {
+  watcher.on('add', async (file) => {
+    chain = chain.then(async () => {
       changedContent.push({
         content: fs.readFileSync(path.resolve(process.cwd(), file), 'utf8'),
         extension: path.extname(file),
       })
-    }
+
+      console.time('Build total')
+      await build(config)
+      console.timeEnd('Build total')
+    })
+  })
+
+  chain = chain.then(() => {
+    changedContent.push(...getChangedContent(config))
     return build(config)
   })
 }
