@@ -405,6 +405,7 @@ function build() {
     let processor = postcss(plugins)
 
     function processCSS(css) {
+      let start = process.hrtime.bigint()
       return Promise.resolve()
         .then(() => fs.promises.mkdir(path.dirname(output), { recursive: true }))
         .then(() => processor.process(css, { from: input, to: output }))
@@ -415,6 +416,12 @@ function build() {
               result.map && fs.writeFile(output + '.map', result.map.toString(), () => true),
             ].filter(Boolean)
           )
+        })
+        .then(() => {
+          let end = process.hrtime.bigint()
+          console.log()
+          console.log('Done in', (end - start) / BigInt(1e6) + 'ms')
+          console.log()
         })
     }
 
