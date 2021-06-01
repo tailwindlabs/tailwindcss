@@ -3,6 +3,7 @@
 /cli
 /lib
 /example
+.vscode
 tailwind.config.js
 index.html
 yarn.lock

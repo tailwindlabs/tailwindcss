@@ -269,83 +269,85 @@ function resolveChangedFiles(context, candidateFiles) {
 // Retrieve an existing context from cache if possible (since contexts are unique per
 // source path), or set up a new one (including setting up watchers and registering
 // plugins) then return it
-export default function setupWatchingContext(configOrPath, tailwindDirectives, registerDependency) {
-  return (result, root) => {
-    let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
-      getTailwindConfig(configOrPath)
+export default function setupWatchingContext(configOrPath) {
+  return ({ tailwindDirectives, registerDependency }) => {
+    return (root, result) => {
+      let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
+        getTailwindConfig(configOrPath)
 
-    let contextDependencies = new Set(configDependencies)
+      let contextDependencies = new Set(configDependencies)
 
-    // If there are no @tailwind rules, we don't consider this CSS file or it's dependencies
-    // to be dependencies of the context. Can reuse the context even if they change.
-    // We may want to think about `@layer` being part of this trigger too, but it's tough
-    // because it's impossible for a layer in one file to end up in the actual @tailwind rule
-    // in another file since independent sources are effectively isolated.
-    if (tailwindDirectives.size > 0) {
-      // Add current css file as a context dependencies.
-      contextDependencies.add(result.opts.from)
+      // If there are no @tailwind rules, we don't consider this CSS file or it's dependencies
+      // to be dependencies of the context. Can reuse the context even if they change.
+      // We may want to think about `@layer` being part of this trigger too, but it's tough
+      // because it's impossible for a layer in one file to end up in the actual @tailwind rule
+      // in another file since independent sources are effectively isolated.
+      if (tailwindDirectives.size > 0) {
+        // Add current css file as a context dependencies.
+        contextDependencies.add(result.opts.from)
 
-      // Add all css @import dependencies as context dependencies.
-      for (let message of result.messages) {
-        if (message.type === 'dependency') {
-          contextDependencies.add(message.file)
+        // Add all css @import dependencies as context dependencies.
+        for (let message of result.messages) {
+          if (message.type === 'dependency') {
+            contextDependencies.add(message.file)
+          }
         }
       }
-    }
 
-    let [context, isNewContext] = getContext(
-      tailwindDirectives,
-      root,
-      result,
-      tailwindConfig,
-      userConfigPath,
-      tailwindConfigHash,
-      contextDependencies
-    )
+      let [context, isNewContext] = getContext(
+        tailwindDirectives,
+        root,
+        result,
+        tailwindConfig,
+        userConfigPath,
+        tailwindConfigHash,
+        contextDependencies
+      )
 
-    let candidateFiles = getCandidateFiles(context, userConfigPath, tailwindConfig)
-    let contextConfigDependencies = getConfigDependencies(context)
+      let candidateFiles = getCandidateFiles(context, userConfigPath, tailwindConfig)
+      let contextConfigDependencies = getConfigDependencies(context)
 
-    for (let file of configDependencies) {
-      registerDependency(file)
-    }
-
-    context.disposables.push((oldContext) => {
-      let watcher = getWatcher(oldContext)
-      if (watcher !== null) {
-        watcher.close()
+      for (let file of configDependencies) {
+        registerDependency(file)
       }
-    })
 
-    let configPath = getConfigPath(context, configOrPath)
-
-    if (configPath !== null) {
-      for (let dependency of getModuleDependencies(configPath)) {
-        if (dependency.file === configPath) {
-          continue
+      context.disposables.push((oldContext) => {
+        let watcher = getWatcher(oldContext)
+        if (watcher !== null) {
+          watcher.close()
         }
+      })
 
-        contextConfigDependencies.add(dependency.file)
+      let configPath = getConfigPath(context, configOrPath)
+
+      if (configPath !== null) {
+        for (let dependency of getModuleDependencies(configPath)) {
+          if (dependency.file === configPath) {
+            continue
+          }
+
+          contextConfigDependencies.add(dependency.file)
+        }
       }
-    }
 
-    if (isNewContext) {
-      rebootWatcher(context, configPath, contextConfigDependencies, candidateFiles)
-    }
-
-    // Register our temp file as a dependency ‚Äî we write to this file
-    // to trigger rebuilds.
-    let touchFile = getTouchFile(context)
-    if (touchFile) {
-      registerDependency(touchFile)
-    }
-
-    if (tailwindDirectives.size > 0) {
-      for (let changedContent of resolvedChangedContent(context, candidateFiles)) {
-        context.changedContent.push(changedContent)
+      if (isNewContext) {
+        rebootWatcher(context, configPath, contextConfigDependencies, candidateFiles)
       }
-    }
 
-    return context
+      // Register our temp file as a dependency ‚Äî we write to this file
+      // to trigger rebuilds.
+      let touchFile = getTouchFile(context)
+      if (touchFile) {
+        registerDependency(touchFile)
+      }
+
+      if (tailwindDirectives.size > 0) {
+        for (let changedContent of resolvedChangedContent(context, candidateFiles)) {
+          context.changedContent.push(changedContent)
+        }
+      }
+
+      return context
+    }
   }
 }

@@ -479,6 +479,27 @@ function registerPlugins(plugins, context) {
   }
 }
 
+export function createContext(tailwindConfig, changedContent, tailwindDirectives, root) {
+  let context = {
+    disposables: [],
+    ruleCache: new Set(),
+    classCache: new Map(),
+    applyClassCache: new Map(),
+    notClassCache: new Set(),
+    postCssNodeCache: new Map(),
+    candidateRuleMap: new Map(),
+    tailwindConfig,
+    changedContent: changedContent,
+    variantMap: new Map(),
+    stylesheetCache: null,
+  }
+
+  let resolvedPlugins = resolvePlugins(context, tailwindDirectives, root)
+  registerPlugins(resolvedPlugins, context)
+
+  return context
+}
+
 let contextMap = sharedState.contextMap
 let configContextMap = sharedState.configContextMap
 let contextSourcesMap = sharedState.contextSourcesMap
@@ -541,19 +562,7 @@ export function getContext(
 
   env.DEBUG && console.log('Setting up new context...')
 
-  let context = {
-    disposables: [],
-    ruleCache: new Set(),
-    classCache: new Map(),
-    applyClassCache: new Map(),
-    notClassCache: new Set(),
-    postCssNodeCache: new Map(),
-    candidateRuleMap: new Map(),
-    tailwindConfig,
-    changedContent: [],
-    variantMap: new Map(),
-    stylesheetCache: null,
-  }
+  let context = createContext(tailwindConfig, [], tailwindDirectives, root)
 
   trackModified([...contextDependencies], getFileModifiedMap(context))
 
@@ -569,8 +578,6 @@ export function getContext(
   }
 
   contextSourcesMap.get(context).add(sourcePath)
-
-  registerPlugins(resolvePlugins(context, tailwindDirectives, root), context)
 
   return [context, true]
 }

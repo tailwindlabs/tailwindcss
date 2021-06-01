@@ -65,6 +65,7 @@
   },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^4.0.3",
+    "arg": "^5.0.0",
     "bytes": "^3.0.0",
     "chalk": "^4.1.1",
     "chokidar": "^3.5.1",

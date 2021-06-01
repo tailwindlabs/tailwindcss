@@ -1,4 +1,3 @@
-import normalizeTailwindDirectives from './lib/normalizeTailwindDirectives'
 import setupTrackingContext from './lib/setupTrackingContext'
 import setupWatchingContext from './lib/setupWatchingContext'
 import { env } from './lib/sharedState'
@@ -13,23 +12,12 @@ export default function (configOrPath = {}) {
         return root
       },
     function (root, result) {
-      function registerDependency(fileName, type = 'dependency') {
-        result.messages.push({
-          type,
-          plugin: 'tailwindcss',
-          parent: result.opts.from,
-          [type === 'dir-dependency' ? 'dir' : 'file']: fileName,
-        })
-      }
-
-      let tailwindDirectives = normalizeTailwindDirectives(root)
-
-      let context =
+      let setupContext =
         env.TAILWIND_MODE === 'watch'
-          ? setupWatchingContext(configOrPath, tailwindDirectives, registerDependency)(result, root)
-          : setupTrackingContext(configOrPath, tailwindDirectives, registerDependency)(result, root)
+          ? setupWatchingContext(configOrPath)
+          : setupTrackingContext(configOrPath)
 
-      processTailwindFeatures(context)(root, result)
+      processTailwindFeatures(setupContext)(root, result)
     },
     env.DEBUG &&
       function (root) {
