@@ -116,6 +116,29 @@ function resolveChangedFiles(candidateFiles, fileModifiedMap) {
   return changedFiles
 }
 
+// Based on `glob-base`
+// https://github.com/micromatch/glob-base/blob/master/index.js
+function parseGlob(pattern) {
+  let glob = pattern
+  let base = globParent(pattern)
+
+  if (base !== '.') {
+    glob = pattern.substr(base.length)
+    if (glob.charAt(0) === '/') {
+      glob = glob.substr(1)
+    }
+  }
+
+  if (glob.substr(0, 2) === './') {
+    glob = glob.substr(2)
+  }
+  if (glob.charAt(0) === '/') {
+    glob = glob.substr(1)
+  }
+
+  return { base, glob }
+}
+
 // DISABLE_TOUCH = TRUE
 
 // Retrieve an existing context from cache if possible (since contexts are unique per
@@ -169,14 +192,10 @@ export default function setupTrackingContext(configOrPath) {
         // Add template paths as postcss dependencies.
         for (let maybeGlob of candidateFiles) {
           if (isGlob(maybeGlob)) {
-            // rollup-plugin-postcss does not support dir-dependency messages
-            // but directories can be watched in the same way as files
-            registerDependency(
-              path.resolve(globParent(maybeGlob)),
-              env.ROLLUP_WATCH === 'true' ? 'dependency' : 'dir-dependency'
-            )
+            let { base, glob } = parseGlob(maybeGlob)
+            registerDependency({ dir: path.resolve(base), glob })
           } else {
-            registerDependency(path.resolve(maybeGlob))
+            registerDependency({ file: path.resolve(maybeGlob) })
           }
         }
 
@@ -190,7 +209,7 @@ export default function setupTrackingContext(configOrPath) {
       }
 
       for (let file of configDependencies) {
-        registerDependency(file)
+        registerDependency({ file })
       }
 
       return context
