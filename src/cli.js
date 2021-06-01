@@ -128,7 +128,7 @@ function help({ message, usage, commands, options }) {
   - [ ] Add logging for when not using an input file
   - [ ] Prebundle peer-dependencies
   - [ ] Make minification work
-  - [ ] Handle -i when file doesn't exist
+  - [x] Handle -i when file doesn't exist
   - [x] Handle crashing -c 
 
   Future:
@@ -294,13 +294,18 @@ function build() {
   let shouldWatch = args['--watch']
   let shouldMinify = args['--minify']
 
-  if (args['--config'] && !fs.existsSync(path.resolve(args['--config']))) {
+  if (input && !fs.existsSync((input = path.resolve(input)))) {
+    console.error(`Specified input file ${args['--input']} does not exist.`)
+    process.exit(9)
+  }
+
+  if (args['--config'] && !fs.existsSync((args['--config'] = path.resolve(args['--config'])))) {
     console.error(`Specified config file ${args['--config']} does not exist.`)
     process.exit(9)
   }
 
   let configPath = args['--config']
-    ? path.resolve(args['--config'])
+    ? args['--config']
     : ((defaultPath) => (fs.existsSync(defaultPath) ? defaultPath : null))(
         path.resolve('./tailwind.config.js')
       )
