@@ -13,7 +13,6 @@ export default function transformThemeValue(themeSection) {
       'transitionTimingFunction',
       'backgroundImage',
       'backgroundSize',
-      'backgroundColor',
       'cursor',
       'animation',
     ].includes(themeSection)
@@ -21,7 +20,7 @@ export default function transformThemeValue(themeSection) {
     return (value) => (Array.isArray(value) ? value.join(', ') : value)
   }
 
-  if (themeSection === 'colors') {
+  if (['colors', 'textColor', 'backgroundColor', 'borderColor'].includes(themeSection)) {
     return (value) => (typeof value === 'function' ? value({}) : value)
   }
 

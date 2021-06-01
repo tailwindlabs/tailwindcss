@@ -26,6 +26,42 @@ test('it looks up values in the theme using dot notation', () => {
   })
 })
 
+test('color can be a function', () => {
+  const input = `
+    .colors { color: theme('colors.fn'); }
+    .textColor { color: theme('textColor.fn'); }
+    .backgroundColor { color: theme('backgroundColor.fn'); }
+    .borderColor { color: theme('borderColor.fn'); }
+  `
+
+  const output = `
+    .colors { color: #f00; }
+    .textColor { color: #f00; }
+    .backgroundColor { color: #f00; }
+    .borderColor { color: #f00; }
+  `
+
+  return run(input, {
+    theme: {
+      colors: {
+        fn: () => `#f00`,
+      },
+      textColor: {
+        fn: () => '#f00',
+      },
+      backgroundColor: {
+        fn: () => '#f00',
+      },
+      borderColor: {
+        fn: () => '#f00',
+      },
+    },
+  }).then((result) => {
+    expect(result.css).toEqual(output)
+    expect(result.warnings().length).toBe(0)
+  })
+})
+
 test('quotes are optional around the lookup path', () => {
   const input = `
     .banana { color: theme(colors.yellow); }
