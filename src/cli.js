@@ -91,7 +91,7 @@ if (args['_'].includes('init')) {
 }
 
 function init() {
-  let tailwindConfigLocation = path.resolve(process.cwd(), 'tailwind.config.js')
+  let tailwindConfigLocation = path.resolve('./tailwind.config.js')
   if (fs.existsSync(tailwindConfigLocation)) {
     console.log('tailwind.config.js already exists.')
   } else {
@@ -120,7 +120,7 @@ function init() {
   }
 
   if (args['--postcss']) {
-    let postcssConfigLocation = path.resolve(process.cwd(), 'postcss.config.js')
+    let postcssConfigLocation = path.resolve('./postcss.config.js')
     if (fs.existsSync(postcssConfigLocation)) {
       console.log('postcss.config.js already exists.')
     } else {
@@ -195,7 +195,7 @@ function build() {
 
     for (let file of files) {
       changedContent.push({
-        content: fs.readFileSync(path.resolve(process.cwd(), file), 'utf8'),
+        content: fs.readFileSync(path.resolve(file), 'utf8'),
         extension: path.extname(file),
       })
     }
@@ -255,7 +255,7 @@ function build() {
     }
 
     let css = input
-      ? fs.readFileSync(path.resolve(process.cwd(), input), 'utf8')
+      ? fs.readFileSync(path.resolve(input), 'utf8')
       : '@tailwind base; @tailwind components; @tailwind utilities'
     return processCSS(css)
   }
@@ -350,7 +350,7 @@ function build() {
       }
 
       let css = input
-        ? fs.readFileSync(path.resolve(process.cwd(), input), 'utf8')
+        ? fs.readFileSync(path.resolve(input), 'utf8')
         : '@tailwind base; @tailwind components; @tailwind utilities'
       let result = await processCSS(css)
       env.DEBUG && console.timeEnd('Finished in')
@@ -361,7 +361,7 @@ function build() {
     let config = refreshConfig(configPath)
 
     if (input) {
-      contextDependencies.add(path.resolve(process.cwd(), input))
+      contextDependencies.add(path.resolve(input))
     }
 
     watcher = chokidar.watch([...contextDependencies, ...extractFileGlobs(config)], {
@@ -390,7 +390,7 @@ function build() {
       } else {
         chain = chain.then(async () => {
           changedContent.push({
-            content: fs.readFileSync(path.resolve(process.cwd(), file), 'utf8'),
+            content: fs.readFileSync(path.resolve(file), 'utf8'),
             extension: path.extname(file),
           })
 
@@ -402,7 +402,7 @@ function build() {
     watcher.on('add', async (file) => {
       chain = chain.then(async () => {
         changedContent.push({
-          content: fs.readFileSync(path.resolve(process.cwd(), file), 'utf8'),
+          content: fs.readFileSync(path.resolve(file), 'utf8'),
           extension: path.extname(file),
         })
 
