@@ -2,7 +2,7 @@
 
 /* eslint-disable */
 
-// import autoprefixer from 'autoprefixer'
+import autoprefixer from 'autoprefixer'
 import chokidar from 'chokidar'
 import postcss from 'postcss'
 import chalk from 'chalk'
@@ -398,9 +398,9 @@ function build() {
       // TODO: Bake in postcss-import support?
       // TODO: Bake in postcss-nested support?
       tailwindPlugin,
-      // require('autoprefixer'),
+      !args['--no-autoprefixer'] && autoprefixer,
       formatNodes,
-    ]
+    ].filter(Boolean)
 
     let processor = postcss(plugins)
 
@@ -491,9 +491,9 @@ function build() {
         // TODO: Bake in postcss-import support?
         // TODO: Bake in postcss-nested support?
         tailwindPlugin,
-        // require('autoprefixer'),
+        !args['--no-autoprefixer'] && autoprefixer,
         formatNodes,
-      ]
+      ].filter(Boolean)
 
       let processor = postcss(plugins)
 
