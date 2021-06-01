@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint-disable */
+
 // import autoprefixer from 'autoprefixer'
 import chokidar from 'chokidar'
 import postcss from 'postcss'
