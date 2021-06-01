@@ -5,9 +5,20 @@ import evaluateTailwindFunctions from '../lib/evaluateTailwindFunctions'
 import substituteScreenAtRules from '../lib/substituteScreenAtRules'
 import collapseAdjacentRules from './lib/collapseAdjacentRules'
 import { createContext } from './lib/setupContextUtils'
+import log from '../util/log'
+
+let warned = false
 
 export default function processTailwindFeatures(setupContext) {
   return function (root, result) {
+    if (!warned) {
+      log.warn([
+        `You have enabled the JIT engine which is currently in preview.`,
+        'Preview features are not covered by semver, may introduce breaking changes, and can change at any time.',
+      ])
+      warned = true
+    }
+
     let tailwindDirectives = normalizeTailwindDirectives(root)
 
     let context = setupContext({

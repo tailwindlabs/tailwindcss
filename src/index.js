@@ -11,7 +11,6 @@ import resolveConfig from './util/resolveConfig'
 import getAllConfigs from './util/getAllConfigs'
 import { supportedConfigFiles } from './constants'
 import defaultConfig from '../stubs/defaultConfig.stub.js'
-import log from './util/log'
 
 import jitPlugins from './jit'
 
@@ -81,14 +80,6 @@ module.exports = function (config) {
   const mode = _.get(getConfig(), 'mode', 'aot')
 
   if (mode === 'jit') {
-    if (!warned) {
-      log.warn([
-        `You have enabled the JIT engine which is currently in preview.`,
-        'Preview features are not covered by semver, may introduce breaking changes, and can change at any time.',
-      ])
-      warned = true
-    }
-
     return {
       postcssPlugin: 'tailwindcss',
       plugins: jitPlugins(config),

@@ -83,7 +83,7 @@ function help({ message, usage, commands, options }) {
     console.log()
     console.log('  ', 'Options:')
     for (let { flags, description } of Object.values(groupedOptions)) {
-      console.log('  ', '  ', flags.slice().reverse().join(', ').padEnd(15, ' '), description)
+      console.log('     ', flags.slice().reverse().join(', ').padEnd(15, ' '), description)
     }
   }
 }
@@ -98,14 +98,19 @@ function help({ message, usage, commands, options }) {
   - [x] Scaffold tailwind.config.js file (with postcss.config.js)
   - [x] Support passing globs from command line
   - [x] Make config file optional
-  - [ ] Support AOT mode
-  - [ ] Prebundle peer-dependencies
-  - [ ] Make minification work
+  - [x] Support AOT mode
   - [x] --help option
   - [x] conditional flags based on arguments
           init -f, --full
           build -f, --files
-  - [ ] --jit
+  - [x] Move JIT warning so it appears when using CLI
+  - [x] --jit
+  - [ ] Backwards compatability with `build` (no -i flag)
+  - [ ] Init to custom path
+  - [ ] Support writing to stdout
+  - [ ] Add logging for when not using an input file
+  - [ ] Prebundle peer-dependencies
+  - [ ] Make minification work
 
   Future:
   - Detect project type, add sensible purge defaults
@@ -124,16 +129,17 @@ let commands = {
   build: {
     run: build,
     args: {
+      '--input': { type: String, description: 'The input css file' },
+      '--output': { type: String, description: 'The output css file' },
+      '--watch': { type: Boolean, description: 'Start watching for changes' },
       '--jit': { type: Boolean, description: 'Build using `JIT` mode' },
       '--files': { type: String, description: 'Use a glob as files to use' },
+      '--minify': { type: Boolean, description: 'Whether or not the result should be minified' },
       '--config': {
         type: String,
         description: 'Provide a custom config file, default: ./tailwind.config.js',
       },
-      '--input': { type: String, description: 'The input css file' },
-      '--output': { type: String, description: 'The output css file' },
-      '--minify': { type: Boolean, description: 'Whether or not the result should be minified' },
-      '--watch': { type: Boolean, description: 'Start watching for changes' },
+      '-j': '--jit',
       '-f': '--files',
       '-c': '--config',
       '-i': '--input',
@@ -148,7 +154,8 @@ let sharedFlags = {
   '--help': { type: Boolean, description: 'Prints this help message' },
   '-h': '--help',
 }
-let command = process.argv.slice(2).find((arg) => !arg.startsWith('-')) || 'build'
+
+let command = ((arg) => (arg.startsWith('-') ? undefined : arg))(process.argv[2]) || 'build'
 
 if (commands[command] === undefined) {
   help({
