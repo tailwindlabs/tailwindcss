@@ -12,6 +12,7 @@ import tailwindAot from './processTailwindFeatures'
 import resolveConfigInternal from '../resolveConfig'
 import fastGlob from 'fast-glob'
 import getModuleDependencies from './lib/getModuleDependencies'
+import packageJson from '../package.json'
 
 let env = {
   DEBUG: process.env.DEBUG !== undefined,
@@ -37,6 +38,54 @@ function formatNodes(root) {
   }
 }
 
+function help({ message, usage, commands, options }) {
+  // Render header
+  console.log()
+  console.log('  ', packageJson.name, packageJson.version)
+
+  // Render message
+  if (message) {
+    console.log()
+    console.log('  ', message)
+  }
+
+  // Render usage
+  if (usage && usage.length > 0) {
+    console.log()
+    console.log('  ', 'Usage:')
+    for (let example of usage) {
+      console.log('  ', '  ', example)
+    }
+  }
+
+  // Render commands
+  if (commands && commands.length > 0) {
+    console.log()
+    console.log('  ', 'Commands:')
+    for (let command of commands) {
+      console.log('  ', '  ', command)
+    }
+  }
+
+  // Render options
+  if (options) {
+    let groupedOptions = {}
+    for (let [key, value] of Object.entries(options)) {
+      if (typeof value === 'object') {
+        groupedOptions[key] = { ...value, flags: [key] }
+      } else {
+        groupedOptions[value].flags.push(key)
+      }
+    }
+
+    console.log()
+    console.log('  ', 'Options:')
+    for (let { flags, description } of Object.values(groupedOptions)) {
+      console.log('  ', '  ', flags.slice().reverse().join(', ').padEnd(15, ' '), description)
+    }
+  }
+}
+
 // ---
 
 /*
@@ -50,8 +99,8 @@ function formatNodes(root) {
   - [ ] Support AOT mode
   - [ ] Prebundle peer-dependencies
   - [ ] Make minification work
-  - [ ] --help option
-  - [ ] conditional flags based on arguments
+  - [x] --help option
+  - [x] conditional flags based on arguments
           init -f, --full
           build -f, --files
   - [ ] --jit
@@ -59,36 +108,90 @@ function formatNodes(root) {
   Future:
   - Detect project type, add sensible purge defaults
 */
-
-let args = arg({
-  '--jit': Boolean,
-  '--files': String,
-  '--config': String,
-  '--input': String,
-  '--output': String,
-  '--minify': Boolean,
-  '--watch': Boolean,
-  '--postcss': Boolean,
-  '--full': Boolean,
-  '-p': '--postcss',
-  '-f': '--files',
-  '-c': '--config',
-  '-i': '--input',
-  '-o': '--output',
-  '-m': '--minify',
-  '-w': '--watch',
-})
-
-let input = args['--input']
-let output = args['--output']
-let shouldWatch = args['--watch']
-let shouldMinify = args['--minify']
-
-if (args['_'].includes('init')) {
-  init()
-} else {
-  build()
+let commands = {
+  init: {
+    run: init,
+    args: {
+      '--jit': { type: Boolean, description: 'Enable `JIT` mode' },
+      '--full': { type: Boolean, description: 'Generate a full tailwind.config.js file' },
+      '--postcss': { type: Boolean, description: 'Generate a PostCSS file' },
+      '-f': '--full',
+      '-p': '--postcss',
+    },
+  },
+  build: {
+    run: build,
+    args: {
+      '--jit': { type: Boolean, description: 'Build using `JIT` mode' },
+      '--files': { type: String, description: 'Use a glob as files to use' },
+      '--config': {
+        type: String,
+        description: 'Provide a custom config file, default: ./tailwind.config.js',
+      },
+      '--input': { type: String, description: 'The input css file' },
+      '--output': { type: String, description: 'The output css file' },
+      '--minify': { type: Boolean, description: 'Whether or not the result should be minified' },
+      '--watch': { type: Boolean, description: 'Start watching for changes' },
+      '-f': '--files',
+      '-c': '--config',
+      '-i': '--input',
+      '-o': '--output',
+      '-m': '--minify',
+      '-w': '--watch',
+    },
+  },
 }
+
+let sharedFlags = {
+  '--help': { type: Boolean, description: 'Prints this help message' },
+  '-h': '--help',
+}
+let command = process.argv.slice(2).find((arg) => !arg.startsWith('-')) || 'build'
+
+if (commands[command] === undefined) {
+  help({
+    message: `Invalid command: ${command}`,
+    usage: ['tailwind <command> [options]'],
+    commands: ['init [file]', 'build <file> [options]'],
+    options: sharedFlags,
+  })
+  process.exit(1)
+}
+
+// Execute command
+let { args: flags, run } = commands[command]
+let args = (() => {
+  try {
+    return arg(
+      Object.fromEntries(
+        Object.entries({ ...flags, ...sharedFlags }).map(([key, value]) => [
+          key,
+          typeof value === 'object' ? value.type : value,
+        ])
+      )
+    )
+  } catch (err) {
+    if (err.code === 'ARG_UNKNOWN_OPTION') {
+      help({
+        message: err.message,
+        usage: ['tailwind <command> [options]'],
+        options: sharedFlags,
+      })
+      process.exit(1)
+    }
+    throw err
+  }
+})()
+
+if (args['--help']) {
+  help({
+    options: { ...flags, ...sharedFlags },
+    usage: [`tailwind ${command} [options]`],
+  })
+  process.exit(0)
+}
+
+run()
 
 function init() {
   let tailwindConfigLocation = path.resolve('./tailwind.config.js')
@@ -137,6 +240,11 @@ function init() {
 }
 
 function build() {
+  let input = args['--input']
+  let output = args['--output']
+  let shouldWatch = args['--watch']
+  let shouldMinify = args['--minify']
+
   if (args['--config'] && !fs.existsSync(args['--config'])) {
     console.error(`Specified config file ${args['--config']} does not exist.`)
     process.exit(9)
@@ -164,7 +272,12 @@ function build() {
   }
 
   if (!output) {
-    throw new Error('Missing required output file: --output, -o, or first argument')
+    help({
+      message: 'Missing required output file: --output, -o, or first argument',
+      usage: [`tailwind ${command} [options]`],
+      options: { ...flags, ...sharedFlags },
+    })
+    process.exit(1)
   }
 
   function extractContent(config) {
