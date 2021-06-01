@@ -3,6 +3,8 @@ import postcss from 'postcss'
 import purgecss from '@fullhuman/postcss-purgecss'
 import log from '../util/log'
 import htmlTags from 'html-tags'
+import parseGlob from 'parse-glob'
+import path from 'path'
 
 function removeTailwindMarkers(css) {
   css.walkAtRules('tailwind', (rule) => rule.remove())
@@ -33,7 +35,7 @@ export function tailwindExtractor(content) {
   return broadMatches.concat(broadMatchesWithoutTrailingSlash).concat(innerMatches)
 }
 
-export default function purgeUnusedUtilities(config, configChanged) {
+export default function purgeUnusedUtilities(config, configChanged, registerDependency) {
   const purgeEnabled = _.get(
     config,
     'purge.enabled',
@@ -58,6 +60,23 @@ export default function purgeUnusedUtilities(config, configChanged) {
   }
 
   const { defaultExtractor, ...purgeOptions } = config.purge.options || {}
+
+  let content = Array.isArray(config.purge) ? config.purge : config.purge.content
+
+  for (let maybeGlob of content) {
+    let { is, base } = parseGlob(maybeGlob)
+
+    if (is.glob) {
+      // rollup-plugin-postcss does not support dir-dependency messages
+      // but directories can be watched in the same way as files
+      registerDependency(
+        path.resolve(base),
+        process.env.ROLLUP_WATCH === 'true' ? 'dependency' : 'dir-dependency'
+      )
+    } else {
+      registerDependency(path.resolve(maybeGlob))
+    }
+  }
 
   return postcss([
     function (css) {
@@ -104,7 +123,7 @@ export default function purgeUnusedUtilities(config, configChanged) {
     },
     removeTailwindMarkers,
     purgecss({
-      content: Array.isArray(config.purge) ? config.purge : config.purge.content,
+      content,
       defaultExtractor: (content) => {
         const extractor = defaultExtractor || tailwindExtractor
         const preserved = [...extractor(content)]

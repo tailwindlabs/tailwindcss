@@ -25,7 +25,7 @@ let processedPlugins = null
 let getProcessedPlugins = null
 
 export default function (getConfig) {
-  return function (css) {
+  return function (css, result) {
     const config = getConfig()
     const configChanged = hash(previousConfig) !== hash(config)
     previousConfig = config
@@ -56,6 +56,15 @@ export default function (getConfig) {
       }
     }
 
+    function registerDependency(fileName, type = 'dependency') {
+      result.messages.push({
+        type,
+        plugin: 'tailwindcss',
+        parent: result.opts.from,
+        [type === 'dir-dependency' ? 'dir' : 'file']: fileName,
+      })
+    }
+
     return postcss([
       substituteTailwindAtRules(config, getProcessedPlugins()),
       evaluateTailwindFunctions(config),
@@ -65,7 +74,7 @@ export default function (getConfig) {
       substituteScreenAtRules(config),
       substituteClassApplyAtRules(config, getProcessedPlugins, configChanged),
       applyImportantConfiguration(config),
-      purgeUnusedStyles(config, configChanged),
+      purgeUnusedStyles(config, configChanged, registerDependency),
     ]).process(css, { from: _.get(css, 'source.input.file') })
   }
 }
