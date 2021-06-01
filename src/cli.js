@@ -41,31 +41,33 @@ function formatNodes(root) {
 }
 
 function help({ message, usage, commands, options }) {
+  let indent = 2
+
   // Render header
   console.log()
-  console.log('  ', packageJson.name, packageJson.version)
+  console.log(' '.repeat(indent), packageJson.name, packageJson.version)
 
   // Render message
   if (message) {
     console.log()
-    console.log('  ', message)
+    console.log(' '.repeat(indent), message)
   }
 
   // Render usage
   if (usage && usage.length > 0) {
     console.log()
-    console.log('  ', 'Usage:')
+    console.log(' '.repeat(indent), 'Usage:')
     for (let example of usage) {
-      console.log('  ', '  ', example)
+      console.log(' '.repeat(indent * 2), example)
     }
   }
 
   // Render commands
   if (commands && commands.length > 0) {
     console.log()
-    console.log('  ', 'Commands:')
+    console.log(' '.repeat(indent), 'Commands:')
     for (let command of commands) {
-      console.log('  ', '  ', command)
+      console.log(' '.repeat(indent * 2), command)
     }
   }
 
@@ -81,11 +83,25 @@ function help({ message, usage, commands, options }) {
     }
 
     console.log()
-    console.log('  ', 'Options:')
+    console.log(' '.repeat(indent), 'Options:')
     for (let { flags, description } of Object.values(groupedOptions)) {
-      console.log('     ', flags.slice().reverse().join(', ').padEnd(15, ' '), description)
+      if (flags.length === 1) {
+        console.log(
+          ' '.repeat(indent * 2 + 4 /* 4 = "-i, ".length */),
+          flags.slice().reverse().join(', ').padEnd(20, ' '),
+          description
+        )
+      } else {
+        console.log(
+          ' '.repeat(indent * 2),
+          flags.slice().reverse().join(', ').padEnd(24, ' '),
+          description
+        )
+      }
     }
   }
+
+  console.log()
 }
 
 // ---
@@ -139,7 +155,10 @@ let commands = {
         type: String,
         description: 'Provide a custom config file, default: ./tailwind.config.js',
       },
-      '-j': '--jit',
+      '--no-autoprefixer': {
+        type: Boolean,
+        description: "Don't add vendor prefixes using autoprefixer.",
+      },
       '-f': '--files',
       '-c': '--config',
       '-i': '--input',
@@ -155,13 +174,31 @@ let sharedFlags = {
   '-h': '--help',
 }
 
-let command = ((arg) => (arg.startsWith('-') ? undefined : arg))(process.argv[2]) || 'build'
+if (
+  process.argv[2] === undefined ||
+  process.argv.slice(2).every((flag) => sharedFlags[flag] !== undefined)
+) {
+  help({
+    usage: [
+      'tailwindcss [--input input.css] [--output output.css] [--watch] [options...]',
+      'tailwindcss init [--full] [--postcss] [options...]',
+    ],
+    commands: Object.keys(commands)
+      .filter((command) => command !== 'build')
+      .map((command) => `${command} [options]`),
+    options: { ...commands.build.args, ...sharedFlags },
+  })
+  process.exit(0)
+}
 
+let command = ((arg) => (arg.startsWith('-') ? undefined : arg))(process.argv[2]) || 'build'
 if (commands[command] === undefined) {
   help({
     message: `Invalid command: ${command}`,
-    usage: ['tailwind <command> [options]'],
-    commands: ['init [file]', 'build <file> [options]'],
+    usage: ['tailwindcss <command> [options]'],
+    commands: Object.keys(commands)
+      .filter((command) => command !== 'build')
+      .map((command) => `${command} [options]`),
     options: sharedFlags,
   })
   process.exit(1)
@@ -183,7 +220,7 @@ let args = (() => {
     if (err.code === 'ARG_UNKNOWN_OPTION') {
       help({
         message: err.message,
-        usage: ['tailwind <command> [options]'],
+        usage: ['tailwindcss <command> [options]'],
         options: sharedFlags,
       })
       process.exit(1)
@@ -195,7 +232,7 @@ let args = (() => {
 if (args['--help']) {
   help({
     options: { ...flags, ...sharedFlags },
-    usage: [`tailwind ${command} [options]`],
+    usage: [`tailwindcss ${command} [options]`],
   })
   process.exit(0)
 }
