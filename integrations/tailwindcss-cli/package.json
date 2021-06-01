@@ -1,0 +1,15 @@
+{
+  "name": "postcss-cli",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "build": "NODE_ENV=production node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css",
+    "test": "jest"
+  },
+  "jest": {
+    "displayName": "PostCSS CLI",
+    "setupFilesAfterEnv": [
+      "<rootDir>/../../jest/customMatchers.js"
+    ]
+  }
+}
