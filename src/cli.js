@@ -405,12 +405,17 @@ function build() {
     let processor = postcss(plugins)
 
     function processCSS(css) {
-      return processor.process(css, { from: input, to: output }).then((result) => {
-        fs.writeFile(output, result.css, () => true)
-        if (result.map) {
-          fs.writeFile(output + '.map', result.map.toString(), () => true)
-        }
-      })
+      return Promise.resolve()
+        .then(() => fs.promises.mkdir(path.dirname(output), { recursive: true }))
+        .then(() => processor.process(css, { from: input, to: output }))
+        .then((result) => {
+          return Promise.all(
+            [
+              fs.promises.writeFile(output, result.css, () => true),
+              result.map && fs.writeFile(output + '.map', result.map.toString(), () => true),
+            ].filter(Boolean)
+          )
+        })
     }
 
     let css = input
@@ -493,19 +498,24 @@ function build() {
       let processor = postcss(plugins)
 
       function processCSS(css) {
-        return processor.process(css, { from: input, to: output }).then((result) => {
-          for (let message of result.messages) {
-            if (message.type === 'dependency') {
-              contextDependencies.add(message.file)
+        return Promise.resolve()
+          .then(() => fs.promises.mkdir(path.dirname(output), { recursive: true }))
+          .then(() => processor.process(css, { from: input, to: output }))
+          .then(async (result) => {
+            for (let message of result.messages) {
+              if (message.type === 'dependency') {
+                contextDependencies.add(message.file)
+              }
             }
-          }
-          watcher.add([...contextDependencies])
+            watcher.add([...contextDependencies])
 
-          fs.writeFile(output, result.css, () => true)
-          if (result.map) {
-            fs.writeFile(output + '.map', result.map.toString(), () => true)
-          }
-        })
+            await Promise.all(
+              [
+                fs.promises.writeFile(output, result.css, () => true),
+                result.map && fs.writeFile(output + '.map', result.map.toString(), () => true),
+              ].filter(Boolean)
+            )
+          })
       }
 
       let css = input
