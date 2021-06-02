@@ -50,6 +50,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add integration tests for popular build runners ([#4354](https://github.com/tailwindlabs/tailwindcss/pull/4354))
 
+## [2.1.4] - 2021-06-02
+
+### Fixed
+
+- Skip `raw` PurgeCSS sources when registering template dependencies ([#4542](https://github.com/tailwindlabs/tailwindcss/pull/4542))
+
 ## [2.1.3] - 2021-06-01
 
 ### Fixed
@@ -1407,7 +1413,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.3...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.4...HEAD
+[2.1.4]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.3...v2.1.4
 [2.1.3]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.2...v2.1.3
 [2.1.2]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.1...v2.1.2
 [2.1.1]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.0...v2.1.1
