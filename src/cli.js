@@ -2,8 +2,9 @@
 
 /* eslint-disable */
 
+import { postcss, lazyCssnano, lazyAutoprefixer } from '../dist/index.js'
+
 import chokidar from 'chokidar'
-import postcss from 'postcss'
 import chalk from 'chalk'
 import path from 'path'
 import arg from 'arg'
@@ -127,7 +128,7 @@ function help({ message, usage, commands, options }) {
   - [x] make --no-autoprefixer work
   - [x] Support writing to stdout
   - [x] Add logging for when not using an input file
-  - [ ] Prebundle peer-dependencies
+  - [x] Prebundle peer-dependencies
   - [x] Make minification work
   - [x] Handle -i when file doesn't exist
   - [x] Handle crashing -c 
@@ -430,8 +431,17 @@ function build() {
       // TODO: Bake in postcss-import support?
       // TODO: Bake in postcss-nested support?
       tailwindPlugin,
-      !args['--no-autoprefixer'] && require('autoprefixer'),
-      args['--minify'] ? require('cssnano') : formatNodes,
+      !args['--no-autoprefixer'] && lazyAutoprefixer(),
+      args['--minify']
+        ? lazyCssnano()({
+            preset: [
+              'default',
+              {
+                cssDeclarationSorter: false,
+              },
+            ],
+          })
+        : formatNodes,
     ].filter(Boolean)
 
     let processor = postcss(plugins)
@@ -533,8 +543,8 @@ function build() {
         // TODO: Bake in postcss-import support?
         // TODO: Bake in postcss-nested support?
         tailwindPlugin,
-        !args['--no-autoprefixer'] && require('autoprefixer'),
-        args['--minify'] ? require('cssnano') : formatNodes,
+        !args['--no-autoprefixer'] && lazyAutoprefixer(),
+        args['--minify'] ? lazyCssnano() : formatNodes,
       ].filter(Boolean)
 
       let processor = postcss(plugins)
