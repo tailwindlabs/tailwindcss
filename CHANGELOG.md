@@ -50,6 +50,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add integration tests for popular build runners ([#4354](https://github.com/tailwindlabs/tailwindcss/pull/4354))
 
+## [2.1.3] - 2021-06-01
+
+### Fixed
+
+- Register PurgeCSS paths as PostCSS dependencies to guarantee proper cache-busting in webpack 5 ([#4530](https://github.com/tailwindlabs/tailwindcss/pull/4530))
+
 ## [2.1.2] - 2021-04-23
 
 ### Fixed
@@ -1401,7 +1407,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.2...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.3...HEAD
+[2.1.3]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.2...v2.1.3
 [2.1.2]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.1...v2.1.2
 [2.1.1]: https://github.com/tailwindlabs/tailwindcss/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/tailwindlabs/tailwindcss/compare/v2.0.4...v2.1.0
