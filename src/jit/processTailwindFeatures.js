@@ -8,20 +8,17 @@ import { createContext } from './lib/setupContextUtils'
 
 export default function processTailwindFeatures(setupContext) {
   return function (root, result) {
-    function registerDependency(fileName, type = 'dependency') {
-      result.messages.push({
-        type,
-        plugin: 'tailwindcss',
-        parent: result.opts.from,
-        [type === 'dir-dependency' ? 'dir' : 'file']: fileName,
-      })
-    }
-
     let tailwindDirectives = normalizeTailwindDirectives(root)
 
     let context = setupContext({
       tailwindDirectives,
-      registerDependency,
+      registerDependency(dependency) {
+        result.messages.push({
+          plugin: 'tailwindcss',
+          parent: result.opts.from,
+          ...dependency,
+        })
+      },
       createContext(tailwindConfig, changedContent) {
         return createContext(tailwindConfig, changedContent, tailwindDirectives, root)
       },

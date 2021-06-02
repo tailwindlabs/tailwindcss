@@ -2,8 +2,6 @@ import fs from 'fs'
 import path from 'path'
 
 import fastGlob from 'fast-glob'
-import isGlob from 'is-glob'
-import globParent from 'glob-parent'
 import LRU from 'quick-lru'
 import normalizePath from 'normalize-path'
 
@@ -17,6 +15,7 @@ import resolveConfigPath from '../../util/resolveConfigPath'
 import { env } from './sharedState'
 
 import { getContext, getFileModifiedMap } from './setupContextUtils'
+import parseDependency from '../../util/parseDependency'
 
 let configPathCache = new LRU({ maxSize: 100 })
 
@@ -167,17 +166,8 @@ export default function setupTrackingContext(configOrPath) {
         let fileModifiedMap = getFileModifiedMap(context)
 
         // Add template paths as postcss dependencies.
-        for (let maybeGlob of candidateFiles) {
-          if (isGlob(maybeGlob)) {
-            // rollup-plugin-postcss does not support dir-dependency messages
-            // but directories can be watched in the same way as files
-            registerDependency(
-              path.resolve(globParent(maybeGlob)),
-              env.ROLLUP_WATCH === 'true' ? 'dependency' : 'dir-dependency'
-            )
-          } else {
-            registerDependency(path.resolve(maybeGlob))
-          }
+        for (let fileOrGlob of candidateFiles) {
+          registerDependency(parseDependency(fileOrGlob))
         }
 
         for (let changedContent of resolvedChangedContent(
@@ -190,7 +180,7 @@ export default function setupTrackingContext(configOrPath) {
       }
 
       for (let file of configDependencies) {
-        registerDependency(file)
+        registerDependency({ type: 'dependency', file })
       }
 
       return context

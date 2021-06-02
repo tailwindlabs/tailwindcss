@@ -308,7 +308,7 @@ export default function setupWatchingContext(configOrPath) {
       let contextConfigDependencies = getConfigDependencies(context)
 
       for (let file of configDependencies) {
-        registerDependency(file)
+        registerDependency({ type: 'dependency', file })
       }
 
       context.disposables.push((oldContext) => {
@@ -338,7 +338,7 @@ export default function setupWatchingContext(configOrPath) {
       // to trigger rebuilds.
       let touchFile = getTouchFile(context)
       if (touchFile) {
-        registerDependency(touchFile)
+        registerDependency({ type: 'dependency', file: touchFile })
       }
 
       if (tailwindDirectives.size > 0) {
