@@ -1,5 +1,5 @@
 {
-  "name": "postcss-cli",
+  "name": "tailwindcss-cli",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -7,7 +7,7 @@
     "test": "jest"
   },
   "jest": {
-    "displayName": "PostCSS CLI",
+    "displayName": "Tailwind CSS CLI",
     "setupFilesAfterEnv": [
       "<rootDir>/../../jest/customMatchers.js"
     ]
