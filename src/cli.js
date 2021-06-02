@@ -126,7 +126,7 @@ function help({ message, usage, commands, options }) {
   - [x] Backwards compatability with `build` (no -i flag)
   - [x] Init to custom path
   - [x] make --no-autoprefixer work
-  - [ ] Support writing to stdout
+  - [x] Support writing to stdout
   - [ ] Add logging for when not using an input file
   - [ ] Prebundle peer-dependencies
   - [ ] Make minification work
@@ -333,15 +333,6 @@ function build() {
     return resolvedConfig
   }
 
-  if (!output) {
-    help({
-      message: 'Missing required output file: --output, -o, or first argument',
-      usage: [`tailwind ${command} [options]`],
-      options: { ...flags, ...sharedFlags },
-    })
-    process.exit(1)
-  }
-
   function extractContent(config) {
     return Array.isArray(config.purge) ? config.purge : config.purge.content
   }
@@ -423,9 +414,12 @@ function build() {
     function processCSS(css) {
       let start = process.hrtime.bigint()
       return Promise.resolve()
-        .then(() => fs.promises.mkdir(path.dirname(output), { recursive: true }))
+        .then(() => (output ? fs.promises.mkdir(path.dirname(output), { recursive: true }) : null))
         .then(() => processor.process(css, { from: input, to: output }))
         .then((result) => {
+          if (!output) {
+            return process.stdout.write(result.css)
+          }
           return Promise.all(
             [
               fs.promises.writeFile(output, result.css, () => true),
@@ -435,9 +429,9 @@ function build() {
         })
         .then(() => {
           let end = process.hrtime.bigint()
-          console.log()
-          console.log('Done in', (end - start) / BigInt(1e6) + 'ms')
-          console.log()
+          console.error()
+          console.error('Done in', (end - start) / BigInt(1e6) + 'ms')
+          console.error()
         })
     }
 
