@@ -8,13 +8,11 @@ import normalizePath from 'normalize-path'
 import hash from '../../util/hashConfig'
 import getModuleDependencies from '../../lib/getModuleDependencies'
 
-import resolveConfig from '../../../resolveConfig'
-
 import resolveConfigPath from '../../util/resolveConfigPath'
 
 import { env } from './sharedState'
 
-import { getContext, getFileModifiedMap } from './setupContextUtils'
+import { getContext, getFileModifiedMap, resolveConfig } from './setupContextUtils'
 import parseDependency from '../../util/parseDependency'
 
 let configPathCache = new LRU({ maxSize: 100 })
@@ -82,10 +80,9 @@ function getTailwindConfig(configOrPath) {
 }
 
 function resolvedChangedContent(context, candidateFiles, fileModifiedMap) {
-  let changedContent = (
-    Array.isArray(context.tailwindConfig.purge)
-      ? context.tailwindConfig.purge
-      : context.tailwindConfig.purge.content
+  let changedContent = (Array.isArray(context.tailwindConfig.purge)
+    ? context.tailwindConfig.purge
+    : context.tailwindConfig.purge.content
   )
     .filter((item) => typeof item.raw === 'string')
     .map(({ raw, extension }) => ({ content: raw, extension }))
@@ -123,8 +120,12 @@ function resolveChangedFiles(candidateFiles, fileModifiedMap) {
 export default function setupTrackingContext(configOrPath) {
   return ({ tailwindDirectives, registerDependency }) => {
     return (root, result) => {
-      let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
-        getTailwindConfig(configOrPath)
+      let [
+        tailwindConfig,
+        userConfigPath,
+        tailwindConfigHash,
+        configDependencies,
+      ] = getTailwindConfig(configOrPath)
 
       let contextDependencies = new Set(configDependencies)
 

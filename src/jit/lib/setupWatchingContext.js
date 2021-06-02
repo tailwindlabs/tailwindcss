@@ -11,9 +11,8 @@ import normalizePath from 'normalize-path'
 import hash from '../../util/hashConfig'
 import log from '../../util/log'
 import getModuleDependencies from '../../lib/getModuleDependencies'
-import resolveConfig from '../../../resolveConfig'
 import resolveConfigPath from '../../util/resolveConfigPath'
-import { getContext } from './setupContextUtils'
+import { getContext, resolveConfig } from './setupContextUtils'
 import { env } from './sharedState'
 
 // Earmarks a directory for our touch files.
@@ -229,10 +228,9 @@ function getTailwindConfig(configOrPath) {
 }
 
 function resolvedChangedContent(context, candidateFiles) {
-  let changedContent = (
-    Array.isArray(context.tailwindConfig.purge)
-      ? context.tailwindConfig.purge
-      : context.tailwindConfig.purge.content
+  let changedContent = (Array.isArray(context.tailwindConfig.purge)
+    ? context.tailwindConfig.purge
+    : context.tailwindConfig.purge.content
   )
     .filter((item) => typeof item.raw === 'string')
     .map(({ raw, extension }) => ({ content: raw, extension }))
@@ -272,8 +270,12 @@ function resolveChangedFiles(context, candidateFiles) {
 export default function setupWatchingContext(configOrPath) {
   return ({ tailwindDirectives, registerDependency }) => {
     return (root, result) => {
-      let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
-        getTailwindConfig(configOrPath)
+      let [
+        tailwindConfig,
+        userConfigPath,
+        tailwindConfigHash,
+        configDependencies,
+      ] = getTailwindConfig(configOrPath)
 
       let contextDependencies = new Set(configDependencies)
 

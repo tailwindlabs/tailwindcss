@@ -10,11 +10,16 @@ import prefixSelector from '../../util/prefixSelector'
 import isPlainObject from '../../util/isPlainObject'
 import escapeClassName from '../../util/escapeClassName'
 import nameClass from '../../util/nameClass'
+import baseResolveConfig from '../../../resolveConfig'
 import { coerceValue } from '../../util/pluginUtils'
 import bigSign from '../../util/bigSign'
 import corePlugins from '../corePlugins'
 import * as sharedState from './sharedState'
 import { env } from './sharedState'
+
+export function resolveConfig(config) {
+  return baseResolveConfig(config, { corePlugins: { caretColor: true, content: true } })
+}
 
 function toPath(value) {
   if (Array.isArray(value)) {
