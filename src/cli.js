@@ -180,8 +180,9 @@ let sharedFlags = {
 }
 
 if (
-  process.argv[2] === undefined ||
-  process.argv.slice(2).every((flag) => sharedFlags[flag] !== undefined)
+  process.stdout.isTTY /* Detect redirecting output to a file */ &&
+  (process.argv[2] === undefined ||
+    process.argv.slice(2).every((flag) => sharedFlags[flag] !== undefined))
 ) {
   help({
     usage: [
@@ -196,7 +197,7 @@ if (
   process.exit(0)
 }
 
-let command = ((arg) => (arg.startsWith('-') ? undefined : arg))(process.argv[2]) || 'build'
+let command = ((arg = '') => (arg.startsWith('-') ? undefined : arg))(process.argv[2]) || 'build'
 if (commands[command] === undefined) {
   help({
     message: `Invalid command: ${command}`,
