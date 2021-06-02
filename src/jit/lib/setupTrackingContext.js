@@ -2,8 +2,6 @@ import fs from 'fs'
 import path from 'path'
 
 import fastGlob from 'fast-glob'
-import isGlob from 'is-glob'
-import globParent from 'glob-parent'
 import LRU from 'quick-lru'
 import normalizePath from 'normalize-path'
 
@@ -17,6 +15,7 @@ import resolveConfigPath from '../../util/resolveConfigPath'
 import { env } from './sharedState'
 
 import { getContext, getFileModifiedMap } from './setupContextUtils'
+import parseDependency from '../../util/parseDependency'
 
 let configPathCache = new LRU({ maxSize: 100 })
 
@@ -116,29 +115,6 @@ function resolveChangedFiles(candidateFiles, fileModifiedMap) {
   return changedFiles
 }
 
-// Based on `glob-base`
-// https://github.com/micromatch/glob-base/blob/master/index.js
-function parseGlob(pattern) {
-  let glob = pattern
-  let base = globParent(pattern)
-
-  if (base !== '.') {
-    glob = pattern.substr(base.length)
-    if (glob.charAt(0) === '/') {
-      glob = glob.substr(1)
-    }
-  }
-
-  if (glob.substr(0, 2) === './') {
-    glob = glob.substr(2)
-  }
-  if (glob.charAt(0) === '/') {
-    glob = glob.substr(1)
-  }
-
-  return { base, glob }
-}
-
 // DISABLE_TOUCH = TRUE
 
 // Retrieve an existing context from cache if possible (since contexts are unique per
@@ -190,13 +166,8 @@ export default function setupTrackingContext(configOrPath) {
         let fileModifiedMap = getFileModifiedMap(context)
 
         // Add template paths as postcss dependencies.
-        for (let maybeGlob of candidateFiles) {
-          if (isGlob(maybeGlob)) {
-            let { base, glob } = parseGlob(maybeGlob)
-            registerDependency({ dir: path.resolve(base), glob })
-          } else {
-            registerDependency({ file: path.resolve(maybeGlob) })
-          }
+        for (let fileOrGlob of candidateFiles) {
+          registerDependency(parseDependency(fileOrGlob))
         }
 
         for (let changedContent of resolvedChangedContent(
@@ -209,7 +180,7 @@ export default function setupTrackingContext(configOrPath) {
       }
 
       for (let file of configDependencies) {
-        registerDependency({ file })
+        registerDependency({ type: 'dependency', file })
       }
 
       return context
