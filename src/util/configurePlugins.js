@@ -5,9 +5,19 @@ export default function (pluginConfig, plugins) {
 
   const pluginNames = Array.isArray(pluginConfig)
     ? pluginConfig
-    : plugins.filter((pluginName) => {
-        return pluginConfig !== false && pluginConfig[pluginName] !== false
-      })
+    : [
+        ...new Set(
+          plugins
+            .filter((pluginName) => {
+              return pluginConfig !== false && pluginConfig[pluginName] !== false
+            })
+            .concat(
+              Object.keys(pluginConfig).filter((pluginName) => {
+                return pluginConfig[pluginName] !== false
+              })
+            )
+        ),
+      ]
 
   return pluginNames
 }
