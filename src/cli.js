@@ -127,7 +127,7 @@ function help({ message, usage, commands, options }) {
   - [x] Init to custom path
   - [x] make --no-autoprefixer work
   - [x] Support writing to stdout
-  - [ ] Add logging for when not using an input file
+  - [x] Add logging for when not using an input file
   - [ ] Prebundle peer-dependencies
   - [ ] Make minification work
   - [x] Handle -i when file doesn't exist
@@ -198,23 +198,30 @@ if (
 }
 
 let command = ((arg = '') => (arg.startsWith('-') ? undefined : arg))(process.argv[2]) || 'build'
+
 if (commands[command] === undefined) {
-  help({
-    message: `Invalid command: ${command}`,
-    usage: ['tailwindcss <command> [options]'],
-    commands: Object.keys(commands)
-      .filter((command) => command !== 'build')
-      .map((command) => `${command} [options]`),
-    options: sharedFlags,
-  })
-  process.exit(1)
+  if (fs.existsSync(path.resolve(command))) {
+    // TODO: Deprecate this in future versions
+    // Check if non-existing command, might be a file.
+    command = 'build'
+  } else {
+    help({
+      message: `Invalid command: ${command}`,
+      usage: ['tailwindcss <command> [options]'],
+      commands: Object.keys(commands)
+        .filter((command) => command !== 'build')
+        .map((command) => `${command} [options]`),
+      options: sharedFlags,
+    })
+    process.exit(1)
+  }
 }
 
 // Execute command
 let { args: flags, run } = commands[command]
 let args = (() => {
   try {
-    return arg(
+    let result = arg(
       Object.fromEntries(
         Object.entries({ ...flags, ...sharedFlags }).map(([key, value]) => [
           key,
@@ -222,6 +229,18 @@ let args = (() => {
         ])
       )
     )
+
+    // Ensure that the `command` is always the first argument in the `args`.
+    // This is important so that we don't have to check if a default command
+    // (build) was used or not from within each plugin.
+    //
+    // E.g.: tailwindcss input.css -> _: ['build', 'input.css']
+    // E.g.: tailwindcss build input.css -> _: ['build', 'input.css']
+    if (result['_'][0] !== command) {
+      result['_'].unshift(command)
+    }
+
+    return result
   } catch (err) {
     if (err.code === 'ARG_UNKNOWN_OPTION') {
       help({
@@ -244,6 +263,8 @@ if (args['--help']) {
 }
 
 run()
+
+// ---
 
 function init() {
   let messages = []
@@ -302,6 +323,11 @@ function build() {
   let output = args['--output']
   let shouldWatch = args['--watch']
   let shouldMinify = args['--minify']
+
+  // TODO: Deprecate this in future versions
+  if (!input && args['_'][1]) {
+    console.error('[deprecation] Running tailwindcss without -i, please provide an input file.')
+  }
 
   if (input && !fs.existsSync((input = path.resolve(input)))) {
     console.error(`Specified input file ${args['--input']} does not exist.`)
