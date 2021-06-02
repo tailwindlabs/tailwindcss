@@ -74,7 +74,7 @@ const getConfigFunction = (config) => () => {
 
 let warned = false
 
-module.exports = function (config) {
+module.exports = function tailwindcss(config) {
   const resolvedConfigPath = resolveConfigPath(config)
   const getConfig = getConfigFunction(resolvedConfigPath || config)
   const mode = _.get(getConfig(), 'mode', 'aot')

@@ -9,6 +9,7 @@ import chalk from 'chalk'
 import path from 'path'
 import arg from 'arg'
 import fs from 'fs'
+import postcssrc from 'postcss-load-config'
 import tailwindJit from './jit/processTailwindFeatures'
 import tailwindAot from './processTailwindFeatures'
 import resolveConfigInternal from '../resolveConfig'
@@ -132,6 +133,8 @@ function help({ message, usage, commands, options }) {
   - [x] Make minification work
   - [x] Handle -i when file doesn't exist
   - [x] Handle crashing -c 
+  // TODO: Bake in postcss-import support?
+  // TODO: Bake in postcss-nested support?
 
   Future:
   - Detect project type, add sensible purge defaults
@@ -318,10 +321,30 @@ function init() {
   }
 }
 
-function build() {
+async function build() {
   let input = args['--input']
   let output = args['--output']
   let shouldWatch = args['--watch']
+
+  let { plugins: configPlugins } = await postcssrc()
+  let configPluginTailwindIdx = configPlugins.findIndex((plugin) => {
+    if (typeof plugin === 'function' && plugin.name === 'tailwindcss') {
+      return true
+    }
+
+    if (typeof plugin === 'object' && plugin !== null && plugin.postcssPlugin === 'tailwindcss') {
+      return true
+    }
+
+    return false
+  })
+
+  let beforePlugins =
+    configPluginTailwindIdx === -1 ? [] : configPlugins.slice(0, configPluginTailwindIdx)
+  let afterPlugins =
+    configPluginTailwindIdx === -1
+      ? configPlugins
+      : configPlugins.slice(configPluginTailwindIdx + 1)
 
   // TODO: Deprecate this in future versions
   if (!input && args['_'][1]) {
@@ -428,19 +451,14 @@ function build() {
     tailwindPlugin.postcss = true
 
     let plugins = [
-      // TODO: Bake in postcss-import support?
-      // TODO: Bake in postcss-nested support?
+      ...beforePlugins,
       tailwindPlugin,
+      ...afterPlugins,
+
+      // ..
       !args['--no-autoprefixer'] && lazyAutoprefixer(),
       args['--minify']
-        ? lazyCssnano()({
-            preset: [
-              'default',
-              {
-                cssDeclarationSorter: false,
-              },
-            ],
-          })
+        ? lazyCssnano()({ preset: ['default', { cssDeclarationSorter: false }] })
         : formatNodes,
     ].filter(Boolean)
 
@@ -540,11 +558,15 @@ function build() {
       tailwindPlugin.postcss = true
 
       let plugins = [
-        // TODO: Bake in postcss-import support?
-        // TODO: Bake in postcss-nested support?
+        ...beforePlugins,
         tailwindPlugin,
+        ...afterPlugins,
+
+        // ..
         !args['--no-autoprefixer'] && lazyAutoprefixer(),
-        args['--minify'] ? lazyCssnano() : formatNodes,
+        args['--minify']
+          ? lazyCssnano()({ preset: ['default', { cssDeclarationSorter: false }] })
+          : formatNodes,
       ].filter(Boolean)
 
       let processor = postcss(plugins)
