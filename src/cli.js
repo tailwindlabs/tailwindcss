@@ -128,7 +128,7 @@ function help({ message, usage, commands, options }) {
   - [x] Support writing to stdout
   - [x] Add logging for when not using an input file
   - [ ] Prebundle peer-dependencies
-  - [ ] Make minification work
+  - [x] Make minification work
   - [x] Handle -i when file doesn't exist
   - [x] Handle crashing -c 
 
@@ -321,7 +321,6 @@ function build() {
   let input = args['--input']
   let output = args['--output']
   let shouldWatch = args['--watch']
-  let shouldMinify = args['--minify']
 
   // TODO: Deprecate this in future versions
   if (!input && args['_'][1]) {
@@ -432,7 +431,7 @@ function build() {
       // TODO: Bake in postcss-nested support?
       tailwindPlugin,
       !args['--no-autoprefixer'] && require('autoprefixer'),
-      formatNodes,
+      args['--minify'] ? require('cssnano') : formatNodes,
     ].filter(Boolean)
 
     let processor = postcss(plugins)
@@ -535,7 +534,7 @@ function build() {
         // TODO: Bake in postcss-nested support?
         tailwindPlugin,
         !args['--no-autoprefixer'] && require('autoprefixer'),
-        formatNodes,
+        args['--minify'] ? require('cssnano') : formatNodes,
       ].filter(Boolean)
 
       let processor = postcss(plugins)
