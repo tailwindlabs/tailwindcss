@@ -50,7 +50,9 @@ function help({ message, usage, commands, options }) {
   // Render message
   if (message) {
     console.log()
-    console.log(' '.repeat(indent), message)
+    for (let msg of message.split('\n')) {
+      console.log(' '.repeat(indent), msg)
+    }
   }
 
   // Render usage
@@ -121,8 +123,8 @@ function help({ message, usage, commands, options }) {
           build -f, --files
   - [x] Move JIT warning so it appears when using CLI
   - [x] --jit
-  - [ ] Backwards compatability with `build` (no -i flag)
-  - [ ] Init to custom path
+  - [x] Backwards compatability with `build` (no -i flag)
+  - [x] Init to custom path
   - [x] make --no-autoprefixer work
   - [ ] Support writing to stdout
   - [ ] Add logging for when not using an input file
@@ -243,9 +245,11 @@ if (args['--help']) {
 run()
 
 function init() {
-  let tailwindConfigLocation = path.resolve('./tailwind.config.js')
+  let messages = []
+
+  let tailwindConfigLocation = path.resolve(args['_'][1] ?? './tailwind.config.js')
   if (fs.existsSync(tailwindConfigLocation)) {
-    console.log('tailwind.config.js already exists.')
+    messages.push(`${path.basename(tailwindConfigLocation)} already exists.`)
   } else {
     let stubFile = fs.readFileSync(
       args['--full']
@@ -268,13 +272,13 @@ function init() {
 
     fs.writeFileSync(tailwindConfigLocation, stubFile, 'utf8')
 
-    console.log('Created Tailwind config file:', 'tailwind.config.js')
+    messages.push(`Created Tailwind CSS config file: ${path.basename(tailwindConfigLocation)}`)
   }
 
   if (args['--postcss']) {
     let postcssConfigLocation = path.resolve('./postcss.config.js')
     if (fs.existsSync(postcssConfigLocation)) {
-      console.log('postcss.config.js already exists.')
+      messages.push(`${path.basename(postcssConfigLocation)} already exists.`)
     } else {
       let stubFile = fs.readFileSync(
         path.resolve(__dirname, '../stubs/defaultPostCssConfig.stub.js'),
@@ -283,8 +287,12 @@ function init() {
 
       fs.writeFileSync(postcssConfigLocation, stubFile, 'utf8')
 
-      console.log('Created PostCSS config file:', 'tailwind.config.js')
+      messages.push(`Created PostCSS config file: ${path.basename(postcssConfigLocation)}`)
     }
+  }
+
+  if (messages.length > 0) {
+    help({ message: messages.join('\n') })
   }
 }
 
