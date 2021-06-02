@@ -50,7 +50,10 @@ function resolveConfigPath(filePath) {
 
 const getConfigFunction = (config) => () => {
   if (_.isUndefined(config)) {
-    return resolveConfig([...getAllConfigs(defaultConfig)])
+    return resolveConfig([
+      ...getAllConfigs(defaultConfig),
+      { corePlugins: { caretColor: false, content: false } },
+    ])
   }
 
   // Skip this if Jest is running: https://github.com/facebook/jest/pull/9841#issuecomment-621417584
@@ -64,7 +67,10 @@ const getConfigFunction = (config) => () => {
 
   const configObject = _.isObject(config) ? _.get(config, 'config', config) : require(config)
 
-  return resolveConfig([...getAllConfigs(configObject)])
+  return resolveConfig([
+    ...getAllConfigs(configObject),
+    { corePlugins: { caretColor: false, content: false } },
+  ])
 }
 
 let warned = false

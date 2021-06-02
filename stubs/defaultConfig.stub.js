@@ -967,8 +967,4 @@ module.exports = {
     zIndex: ['responsive', 'focus-within', 'focus'],
   },
   plugins: [],
-  corePlugins: {
-    caretColor: false,
-    content: false,
-  },
 }

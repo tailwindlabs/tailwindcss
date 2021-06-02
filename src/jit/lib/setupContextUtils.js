@@ -18,7 +18,7 @@ import * as sharedState from './sharedState'
 import { env } from './sharedState'
 
 export function resolveConfig(config) {
-  return baseResolveConfig(config, { corePlugins: { caretColor: true, content: true } })
+  return baseResolveConfig(config)
 }
 
 function toPath(value) {
