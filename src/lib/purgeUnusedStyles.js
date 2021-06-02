@@ -63,7 +63,7 @@ export default function purgeUnusedUtilities(config, configChanged, registerDepe
 
   let content = Array.isArray(config.purge) ? config.purge : config.purge.content
 
-  for (let maybeGlob of content) {
+  for (let maybeGlob of content.filter((item) => typeof item === 'string')) {
     let { is, base } = parseGlob(maybeGlob)
 
     if (is.glob) {
