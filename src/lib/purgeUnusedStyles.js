@@ -4,6 +4,8 @@ import purgecss from '@fullhuman/postcss-purgecss'
 import log from '../util/log'
 import htmlTags from 'html-tags'
 import path from 'path'
+import parseDependency from '../util/parseDependency'
+import normalizePath from 'normalize-path'
 
 function removeTailwindMarkers(css) {
   css.walkAtRules('tailwind', (rule) => rule.remove())
@@ -46,7 +48,12 @@ function getTransformer(config, fileExtension) {
   return transformers[fileExtension] || transformers.DEFAULT || ((content) => content)
 }
 
-export default function purgeUnusedUtilities(config, configChanged, resolvedConfigPath) {
+export default function purgeUnusedUtilities(
+  config,
+  configChanged,
+  resolvedConfigPath,
+  registerDependency
+) {
   const purgeEnabled = _.get(
     config,
     'purge.enabled',
@@ -115,6 +122,21 @@ export default function purgeUnusedUtilities(config, configChanged, resolvedConf
     }
   })
 
+  let content = (
+    Array.isArray(config.purge) ? config.purge : config.purge.content || purgeOptions.content || []
+  ).map((item) => {
+    if (typeof item === 'string') {
+      return normalizePath(
+        path.resolve(resolvedConfigPath ? path.dirname(resolvedConfigPath) : process.cwd(), item)
+      )
+    }
+    return item
+  })
+
+  for (let fileOrGlob of content.filter((item) => typeof item === 'string')) {
+    registerDependency(parseDependency(fileOrGlob))
+  }
+
   return postcss([
     function (css) {
       const mode = _.get(config, 'purge.mode', 'layers')
@@ -166,18 +188,7 @@ export default function purgeUnusedUtilities(config, configChanged, resolvedConf
       },
       extractors: fileSpecificExtractors,
       ...purgeOptions,
-      content: (Array.isArray(config.purge)
-        ? config.purge
-        : config.purge.content || purgeOptions.content || []
-      ).map((item) => {
-        if (typeof item === 'string') {
-          return path.resolve(
-            resolvedConfigPath ? path.dirname(resolvedConfigPath) : process.cwd(),
-            item
-          )
-        }
-        return item
-      }),
+      content,
     }),
   ])
 }
