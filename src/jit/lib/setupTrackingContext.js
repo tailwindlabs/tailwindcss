@@ -82,9 +82,10 @@ function getTailwindConfig(configOrPath) {
 }
 
 function resolvedChangedContent(context, candidateFiles, fileModifiedMap) {
-  let changedContent = (Array.isArray(context.tailwindConfig.purge)
-    ? context.tailwindConfig.purge
-    : context.tailwindConfig.purge.content
+  let changedContent = (
+    Array.isArray(context.tailwindConfig.purge)
+      ? context.tailwindConfig.purge
+      : context.tailwindConfig.purge.content
   )
     .filter((item) => typeof item.raw === 'string')
     .map(({ raw, extension }) => ({ content: raw, extension }))
@@ -122,12 +123,8 @@ function resolveChangedFiles(candidateFiles, fileModifiedMap) {
 export default function setupTrackingContext(configOrPath) {
   return ({ tailwindDirectives, registerDependency }) => {
     return (root, result) => {
-      let [
-        tailwindConfig,
-        userConfigPath,
-        tailwindConfigHash,
-        configDependencies,
-      ] = getTailwindConfig(configOrPath)
+      let [tailwindConfig, userConfigPath, tailwindConfigHash, configDependencies] =
+        getTailwindConfig(configOrPath)
 
       let contextDependencies = new Set(configDependencies)
 
