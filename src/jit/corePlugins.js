@@ -164,32 +164,8 @@ export default {
       addVariant(
         groupVariantName,
         transformAllSelectors((selector) => {
-          // Stack group variants
-          let existingGroupStates = []
-          if (selector.indexOf(baseGroupSelector + ':') !== -1) {
-            let idx = selector.indexOf(baseGroupSelector + ':')
-
-            let endIdx = selector.indexOf(' ', idx)
-
-            let before = selector.slice(0, idx)
-            let baseGroupWithStates = selector.slice(idx, endIdx + 1)
-            let after = selector.slice(endIdx + 1)
-
-            // Find the existing states on the main `.group`
-            let parts = baseGroupWithStates
-              .replace(baseGroupSelector, '')
-              .split(':')
-              .map((part) => part.trim())
-              .filter(Boolean)
-
-            // Keep the existing states
-            existingGroupStates.push(...parts)
-
-            // Change the selector by removing the base .group
-            selector = before + after
-          }
-
           let variantSelector = updateAllClasses(selector, (className) => {
+            if (`.${className}` === baseGroupSelector) return className
             return `${groupVariantName}${config('separator')}${className}`
           })
 
@@ -197,12 +173,28 @@ export default {
             return null
           }
 
-          let groupSelector = prefixSelector(
-            config('prefix'),
-            `.group:${[state].concat(existingGroupStates).join(':')}`
-          )
+          let states = [state]
 
-          return `${groupSelector} ${variantSelector}`
+          // Stack group variants
+          let baseGroupIdx = variantSelector.indexOf(baseGroupSelector + ':')
+          if (baseGroupIdx !== -1) {
+            let groupClassName = variantSelector.slice(
+              baseGroupIdx,
+              variantSelector.indexOf(' ', baseGroupIdx)
+            )
+
+            // Pick all the states
+            states = states.concat(
+              variantSelector
+                .slice(baseGroupIdx + baseGroupSelector.length + 1, groupClassName.length)
+                .split(':')
+            )
+
+            // Remove the base `.group:...`
+            variantSelector = variantSelector.replace(groupClassName, '')
+          }
+
+          return `${[baseGroupSelector, ...states].join(':')} ${variantSelector}`
         })
       )
     }
