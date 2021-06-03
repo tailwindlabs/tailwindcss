@@ -156,6 +156,7 @@ export default {
       )
     }
 
+    let baseGroupSelector = prefixSelector(config('prefix'), '.group')
     for (let variant of pseudoVariants) {
       let [variantName, state] = Array.isArray(variant) ? variant : [variant, variant]
       let groupVariantName = `group-${variantName}`
@@ -164,6 +165,7 @@ export default {
         groupVariantName,
         transformAllSelectors((selector) => {
           let variantSelector = updateAllClasses(selector, (className) => {
+            if (`.${className}` === baseGroupSelector) return className
             return `${groupVariantName}${config('separator')}${className}`
           })
 
@@ -171,9 +173,28 @@ export default {
             return null
           }
 
-          let groupSelector = prefixSelector(config('prefix'), `.group:${state}`)
+          let states = [state]
 
-          return `${groupSelector} ${variantSelector}`
+          // Stack group variants
+          let baseGroupIdx = variantSelector.indexOf(baseGroupSelector + ':')
+          if (baseGroupIdx !== -1) {
+            let groupClassName = variantSelector.slice(
+              baseGroupIdx,
+              variantSelector.indexOf(' ', baseGroupIdx)
+            )
+
+            // Pick all the states
+            states = states.concat(
+              variantSelector
+                .slice(baseGroupIdx + baseGroupSelector.length + 1, groupClassName.length)
+                .split(':')
+            )
+
+            // Remove the base `.group:...`
+            variantSelector = variantSelector.replace(groupClassName, '')
+          }
+
+          return `${[baseGroupSelector, ...states].join(':')} ${variantSelector}`
         })
       )
     }
