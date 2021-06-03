@@ -2137,6 +2137,25 @@ test('core plugin configuration builds on the default list when starting with an
   })
 })
 
+test('core plugins that are disabled by default can be enabled', () => {
+  const userConfig = {
+    corePlugins: { display: true },
+  }
+
+  const defaultConfig = {
+    presets: [],
+    prefix: '',
+    important: false,
+    separator: ':',
+    theme: {},
+    variants: {},
+    corePlugins: { display: false },
+  }
+
+  const result = resolveConfig([userConfig, defaultConfig])
+  expect(result.corePlugins).toContain('display')
+})
+
 test('core plugin configurations stack', () => {
   const userConfig = {
     corePlugins: { display: false },
