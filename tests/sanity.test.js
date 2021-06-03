@@ -82,7 +82,6 @@ it('generates the right CSS when color opacity plugins are disabled', () => {
     tailwind({
       ...config,
       corePlugins: {
-        ...config.corePlugins,
         textOpacity: false,
         backgroundOpacity: false,
         borderOpacity: false,
