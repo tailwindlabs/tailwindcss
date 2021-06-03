@@ -479,7 +479,12 @@ function registerPlugins(plugins, context) {
   }
 }
 
-export function createContext(tailwindConfig, changedContent, tailwindDirectives, root) {
+export function createContext(
+  tailwindConfig,
+  changedContent = [],
+  tailwindDirectives = new Set(),
+  root = postcss.root()
+) {
   let context = {
     disposables: [],
     ruleCache: new Set(),
