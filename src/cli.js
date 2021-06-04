@@ -577,7 +577,6 @@ async function build() {
       return result
     }
 
-    let configPath = args['--config'] ?? path.resolve('./tailwind.config.js')
     let config = refreshConfig(configPath)
 
     if (input) {
