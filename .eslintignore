@@ -1,5 +1,6 @@
 /cli
 /lib
 /docs
+/peers
 /tests/fixtures/cli-utils.js
 /stubs/*

@@ -1,11 +1,8 @@
 #!/usr/bin/env node
 
-/* eslint-disable */
-
 import { postcss, lazyCssnano, lazyAutoprefixer } from '../peers/index.js'
 
 import chokidar from 'chokidar'
-import chalk from 'chalk'
 import path from 'path'
 import arg from 'arg'
 import fs from 'fs'
@@ -405,7 +402,7 @@ async function build() {
 
     let tailwindPlugin =
       config.mode === 'jit'
-        ? (opts = {}) => {
+        ? () => {
             return {
               postcssPlugin: 'tailwindcss',
               Once(root, { result }) {
@@ -417,7 +414,7 @@ async function build() {
               },
             }
           }
-        : (opts = {}) => {
+        : () => {
             return {
               postcssPlugin: 'tailwindcss',
               plugins: [tailwindAot(() => config, configPath)],
@@ -499,7 +496,7 @@ async function build() {
 
       let tailwindPlugin =
         config.mode === 'jit'
-          ? (opts = {}) => {
+          ? () => {
               return {
                 postcssPlugin: 'tailwindcss',
                 Once(root, { result }) {
@@ -524,7 +521,7 @@ async function build() {
                 },
               }
             }
-          : (opts = {}) => {
+          : () => {
               return {
                 postcssPlugin: 'tailwindcss',
                 plugins: [tailwindAot(() => config, configPath)],
