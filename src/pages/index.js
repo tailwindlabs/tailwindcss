@@ -20,38 +20,17 @@ import NextLink from 'next/link'
 import Head from 'next/head'
 
 function NpmInstallButton() {
-  const [state, setState] = useState('idle')
-
-  useEffect(() => {
-    let current = true
-    if (state === 'copying') {
-      navigator.clipboard
-        .writeText('npm install tailwindcss')
-        .then(() => {
-          if (current) {
-            setState('copied')
-          }
-        })
-        .catch(() => {
-          if (current) {
-            setState('error')
-          }
-        })
-    } else if (state === 'copied' || state === 'error') {
-      window.setTimeout(() => {
-        if (current) {
-          setState('idle')
-        }
-      }, 2000)
-    }
-    return () => (current = false)
-  }, [state])
+  function copy() {
+    navigator.clipboard.writeText('npm install tailwindcss').catch((e) => {
+      console.log(e)
+    })
+  }
 
   return (
     <button
       type="button"
       className="w-full sm:w-auto flex-none bg-gray-50 text-gray-400 hover:text-gray-900 font-mono leading-6 py-3 sm:px-6 border border-gray-200 rounded-xl flex items-center justify-center space-x-2 sm:space-x-4 focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-gray-300 focus:outline-none transition-colors duration-200"
-      onClick={() => setState('copying')}
+      onClick={() => copy()}
     >
       <span className="text-gray-900">
         <span className="hidden sm:inline text-gray-500" aria-hidden="true">
