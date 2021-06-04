@@ -43,7 +43,7 @@ function help({ message, usage, commands, options }) {
 
   // Render header
   console.log()
-  console.log(packageJson.name, packageJson.version)
+  console.log(`${packageJson.name} v${packageJson.version}`)
 
   // Render message
   if (message) {
