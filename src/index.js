@@ -72,8 +72,6 @@ const getConfigFunction = (config) => () => {
   ])
 }
 
-let warned = false
-
 module.exports = function tailwindcss(config) {
   const resolvedConfigPath = resolveConfigPath(config)
   const getConfig = getConfigFunction(resolvedConfigPath || config)

@@ -67,8 +67,6 @@ const getConfigFunction = (config) => () => {
   return resolveConfig([...getAllConfigs(configObject)])
 }
 
-let warned = false
-
 const plugin = postcss.plugin('tailwindcss', (config) => {
   const resolvedConfigPath = resolveConfigPath(config)
   const getConfig = getConfigFunction(resolvedConfigPath || config)
