@@ -3,6 +3,7 @@ import * as corePlugins from '../plugins'
 import buildMediaQuery from '../util/buildMediaQuery'
 import prefixSelector from '../util/prefixSelector'
 import {
+  applyPseudoToMarker,
   updateLastClasses,
   updateAllClasses,
   transformAllSelectors,
@@ -156,7 +157,7 @@ export default {
       )
     }
 
-    let baseGroupSelector = prefixSelector(config('prefix'), '.group')
+    let groupMarker = prefixSelector(config('prefix'), '.group')
     for (let variant of pseudoVariants) {
       let [variantName, state] = Array.isArray(variant) ? variant : [variant, variant]
       let groupVariantName = `group-${variantName}`
@@ -165,7 +166,7 @@ export default {
         groupVariantName,
         transformAllSelectors((selector) => {
           let variantSelector = updateAllClasses(selector, (className) => {
-            if (`.${className}` === baseGroupSelector) return className
+            if (`.${className}` === groupMarker) return className
             return `${groupVariantName}${config('separator')}${className}`
           })
 
@@ -173,28 +174,39 @@ export default {
             return null
           }
 
-          let states = [state]
+          return applyPseudoToMarker(
+            variantSelector,
+            groupMarker,
+            state,
+            (marker, selector) => `${marker} ${selector}`
+          )
+        })
+      )
+    }
 
-          // Stack group variants
-          let baseGroupIdx = variantSelector.indexOf(baseGroupSelector + ':')
-          if (baseGroupIdx !== -1) {
-            let groupClassName = variantSelector.slice(
-              baseGroupIdx,
-              variantSelector.indexOf(' ', baseGroupIdx)
-            )
+    let peerMarker = prefixSelector(config('prefix'), '.peer')
+    for (let variant of pseudoVariants) {
+      let [variantName, state] = Array.isArray(variant) ? variant : [variant, variant]
+      let peerVariantName = `peer-${variantName}`
 
-            // Pick all the states
-            states = states.concat(
-              variantSelector
-                .slice(baseGroupIdx + baseGroupSelector.length + 1, groupClassName.length)
-                .split(':')
-            )
+      addVariant(
+        peerVariantName,
+        transformAllSelectors((selector) => {
+          let variantSelector = updateAllClasses(selector, (className) => {
+            if (`.${className}` === peerMarker) return className
+            return `${peerVariantName}${config('separator')}${className}`
+          })
 
-            // Remove the base `.group:...`
-            variantSelector = variantSelector.replace(groupClassName, '')
+          if (variantSelector === selector) {
+            return null
           }
 
-          return `${[baseGroupSelector, ...states].join(':')} ${variantSelector}`
+          return applyPseudoToMarker(
+            variantSelector,
+            peerMarker,
+            state,
+            (marker, selector) => `${marker} ~ ${selector}`
+          )
         })
       )
     }

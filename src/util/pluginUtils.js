@@ -4,6 +4,24 @@ import createColor from 'color'
 import escapeCommas from './escapeCommas'
 import { withAlphaValue } from './withAlphaVariable'
 
+export function applyPseudoToMarker(selector, marker, state, join) {
+  let states = [state]
+
+  let markerIdx = selector.indexOf(marker + ':')
+
+  if (markerIdx !== -1) {
+    let existingMarker = selector.slice(markerIdx, selector.indexOf(' ', markerIdx))
+
+    states = states.concat(
+      selector.slice(markerIdx + marker.length + 1, existingMarker.length).split(':')
+    )
+
+    selector = selector.replace(existingMarker, '')
+  }
+
+  return join(`${[marker, ...states].join(':')}`, selector)
+}
+
 export function updateAllClasses(selectors, updateClass) {
   let parser = selectorParser((selectors) => {
     selectors.walkClasses((sel) => {
