@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- JIT: Use "tracking" context by default instead of "watching" context for improved reliability with most bundlers ([#4514](https://github.com/tailwindlabs/tailwindcss/pull/4514))
+
+  Depending on which tooling you use, you may need to explicitly set `TAILWIND_MODE=watch` until your build runner has been updated to support PostCSS's `dir-dependency` message type.
+
 ### Added
 
 - Add `background-origin` utilities ([#4117](https://github.com/tailwindlabs/tailwindcss/pull/4117))
@@ -29,6 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - JIT: Add exhaustive pseudo-class and pseudo-element variant support ([#4482](https://github.com/tailwindlabs/tailwindcss/pull/4482))
 - JIT: Add `caret-color` utilities ([#4499](https://github.com/tailwindlabs/tailwindcss/pull/4499))
 - Rename `lightBlue` to `sky`, emit console warning when using deprecated name ([#4513](https://github.com/tailwindlabs/tailwindcss/pull/4513))
+- New CLI with improved JIT support, `--watch` mode, and more ([#4526](https://github.com/tailwindlabs/tailwindcss/pull/4526), [4558](https://github.com/tailwindlabs/tailwindcss/pull/4558))
+- JIT: Add new `peer-*` variants for styling based on sibling state ([#4556](https://github.com/tailwindlabs/tailwindcss/pull/4556))
 
 ### Fixed
 
@@ -45,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - JIT: Fix source maps for expanded `@tailwind` directives ([2f15411](https://github.com/tailwindlabs/tailwindcss/commit/2f1541123dea29d8a2ab0f1411bf60c79eeb96b4))
 - JIT: Ignore whitespace when collapsing adjacent rules ([15642fb](https://github.com/tailwindlabs/tailwindcss/commit/15642fbcc885eba9cc50b7678a922b09c90d6b51))
 - JIT: Generate group parent classes correctly when using custom separator ([#4508](https://github.com/tailwindlabs/tailwindcss/pull/4508))
+- JIT: Fix incorrect stacking of multiple `group` variants ([#4551](https://github.com/tailwindlabs/tailwindcss/pull/4551))
 
 ### Internals
 
