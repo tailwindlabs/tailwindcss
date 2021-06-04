@@ -285,7 +285,10 @@ function init() {
   }
 
   if (messages.length > 0) {
-    help({ message: messages.join('\n') })
+    console.log()
+    for (let message of messages) {
+      console.log(message)
+    }
   }
 }
 
