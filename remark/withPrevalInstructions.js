@@ -132,7 +132,12 @@ function createPrevals({ tool: pageTool = error('UNKNOWN') } = {}) {
         ${npmInstall ? code('shell', 'npm install') : ''}
       `)
     },
-    configuration({ purge = [], types = ['pages', 'components'], postcss = true }) {
+    configuration({
+      purge = [],
+      version = 'latest',
+      types = ['pages', 'components'],
+      postcss = true,
+    }) {
       let files = ['tailwind.config.js', postcss && 'postcss.config.js']
         .filter(Boolean)
         .map(quote('`'))
@@ -143,7 +148,12 @@ function createPrevals({ tool: pageTool = error('UNKNOWN') } = {}) {
 
         Next, generate your ${joinAsSpeech(files)} ${multipleFiles ? 'files' : 'file'}:
 
-        ${code('shell', `npx tailwindcss init ${postcss ? '-p' : ''}`)}
+        ${code(
+          'shell',
+          `npx tailwindcss${version === 'compat-7' ? '-cli@latest' : ''} init ${
+            postcss ? '-p' : ''
+          }`
+        )}
 
         This will create a minimal \`tailwind.config.js\` file at the root of your project:
 

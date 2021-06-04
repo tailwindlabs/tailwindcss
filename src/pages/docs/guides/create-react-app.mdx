@@ -6,8 +6,8 @@ tool: Create React App
 
 ```preval installation
 reference:
-  name: Create React App 
-  link: https://create-react-app.dev/ 
+  name: Create React App
+  link: https://create-react-app.dev/
 script: npx create-react-app
 ```
 
@@ -61,10 +61,11 @@ module.exports = {
 If you're planning to use any other PostCSS plugins, you should read our documentation on [using PostCSS as your preprocessor](/docs/using-with-preprocessors) for more details about the best way to order them alongside Tailwind.
 
 ```preval configuration
+version: compat-7
 postcss: false
 types:
   - components
-purge: 
+purge:
   - ./src/**/*.{js,jsx,ts,tsx}
   - ./public/index.html
 ```
