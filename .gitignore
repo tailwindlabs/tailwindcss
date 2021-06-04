@@ -2,6 +2,7 @@
 /coverage
 /cli
 /lib
+/peers
 /example
 .vscode
 tailwind.config.js

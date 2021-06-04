@@ -14,7 +14,7 @@ module.exports = function $(command, options = {}) {
 
   let args = command.split(' ')
   command = args.shift()
-  command = path.resolve(cwd, 'node_modules', '.bin', command)
+  command = command === 'node' ? command : path.resolve(cwd, 'node_modules', '.bin', command)
 
   let stdoutMessages = []
   let stderrMessages = []

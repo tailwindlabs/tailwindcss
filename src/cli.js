@@ -1,14 +1,12 @@
 #!/usr/bin/env node
 
-/* eslint-disable */
+import { postcss, lazyCssnano, lazyAutoprefixer } from '../peers/index.js'
 
-// import autoprefixer from 'autoprefixer'
 import chokidar from 'chokidar'
-import postcss from 'postcss'
-import chalk from 'chalk'
 import path from 'path'
 import arg from 'arg'
 import fs from 'fs'
+import postcssrc from 'postcss-load-config'
 import tailwindJit from './jit/processTailwindFeatures'
 import tailwindAot from './processTailwindFeatures'
 import resolveConfigInternal from '../resolveConfig'
@@ -41,31 +39,35 @@ function formatNodes(root) {
 }
 
 function help({ message, usage, commands, options }) {
+  let indent = 2
+
   // Render header
   console.log()
-  console.log('  ', packageJson.name, packageJson.version)
+  console.log(`${packageJson.name} v${packageJson.version}`)
 
   // Render message
   if (message) {
     console.log()
-    console.log('  ', message)
+    for (let msg of message.split('\n')) {
+      console.log(msg)
+    }
   }
 
   // Render usage
   if (usage && usage.length > 0) {
     console.log()
-    console.log('  ', 'Usage:')
+    console.log('Usage:')
     for (let example of usage) {
-      console.log('  ', '  ', example)
+      console.log(' '.repeat(indent), example)
     }
   }
 
   // Render commands
   if (commands && commands.length > 0) {
     console.log()
-    console.log('  ', 'Commands:')
+    console.log('Commands:')
     for (let command of commands) {
-      console.log('  ', '  ', command)
+      console.log(' '.repeat(indent), command)
     }
   }
 
@@ -81,42 +83,34 @@ function help({ message, usage, commands, options }) {
     }
 
     console.log()
-    console.log('  ', 'Options:')
+    console.log('Options:')
     for (let { flags, description } of Object.values(groupedOptions)) {
-      console.log('  ', '  ', flags.slice().reverse().join(', ').padEnd(15, ' '), description)
+      if (flags.length === 1) {
+        console.log(
+          ' '.repeat(indent + 4 /* 4 = "-i, ".length */),
+          flags.slice().reverse().join(', ').padEnd(20, ' '),
+          description
+        )
+      } else {
+        console.log(
+          ' '.repeat(indent),
+          flags.slice().reverse().join(', ').padEnd(24, ' '),
+          description
+        )
+      }
     }
   }
+
+  console.log()
 }
 
-// ---
-
-/*
-  TODOs:
-  - [x] Reduce getModuleDependencies calls (make configDeps global?)
-  - [x] Detect new files
-  - [x] Support raw content in purge config
-  - [x] Scaffold tailwind.config.js file (with postcss.config.js)
-  - [x] Support passing globs from command line
-  - [x] Make config file optional
-  - [ ] Support AOT mode
-  - [ ] Prebundle peer-dependencies
-  - [ ] Make minification work
-  - [x] --help option
-  - [x] conditional flags based on arguments
-          init -f, --full
-          build -f, --files
-  - [ ] --jit
-
-  Future:
-  - Detect project type, add sensible purge defaults
-*/
 let commands = {
   init: {
     run: init,
     args: {
-      '--jit': { type: Boolean, description: 'Enable `JIT` mode' },
-      '--full': { type: Boolean, description: 'Generate a full tailwind.config.js file' },
-      '--postcss': { type: Boolean, description: 'Generate a PostCSS file' },
+      '--jit': { type: Boolean, description: 'Initialize for JIT mode' },
+      '--full': { type: Boolean, description: 'Initialize a full `tailwind.config.js` file' },
+      '--postcss': { type: Boolean, description: 'Initialize a `postcss.config.js` file' },
       '-f': '--full',
       '-p': '--postcss',
     },
@@ -124,17 +118,21 @@ let commands = {
   build: {
     run: build,
     args: {
-      '--jit': { type: Boolean, description: 'Build using `JIT` mode' },
-      '--files': { type: String, description: 'Use a glob as files to use' },
+      '--input': { type: String, description: 'Input file' },
+      '--output': { type: String, description: 'Output file' },
+      '--watch': { type: Boolean, description: 'Watch for changes and rebuild as needed' },
+      '--jit': { type: Boolean, description: 'Build using JIT mode' },
+      '--files': { type: String, description: 'Template files to scan for class names' },
+      '--postcss': { type: Boolean, description: 'Load custom PostCSS configuration' },
+      '--minify': { type: Boolean, description: 'Minify the output' },
       '--config': {
         type: String,
-        description: 'Provide a custom config file, default: ./tailwind.config.js',
+        description: 'Path to a custom config file',
       },
-      '--input': { type: String, description: 'The input css file' },
-      '--output': { type: String, description: 'The output css file' },
-      '--minify': { type: Boolean, description: 'Whether or not the result should be minified' },
-      '--watch': { type: Boolean, description: 'Start watching for changes' },
-      '-f': '--files',
+      '--no-autoprefixer': {
+        type: Boolean,
+        description: 'Disable autoprefixer',
+      },
       '-c': '--config',
       '-i': '--input',
       '-o': '--output',
@@ -145,26 +143,53 @@ let commands = {
 }
 
 let sharedFlags = {
-  '--help': { type: Boolean, description: 'Prints this help message' },
+  '--help': { type: Boolean, description: 'Display usage information' },
   '-h': '--help',
 }
-let command = process.argv.slice(2).find((arg) => !arg.startsWith('-')) || 'build'
+
+if (
+  process.stdout.isTTY /* Detect redirecting output to a file */ &&
+  (process.argv[2] === undefined ||
+    process.argv.slice(2).every((flag) => sharedFlags[flag] !== undefined))
+) {
+  help({
+    usage: [
+      'tailwindcss [--input input.css] [--output output.css] [--watch] [options...]',
+      'tailwindcss init [--full] [--postcss] [options...]',
+    ],
+    commands: Object.keys(commands)
+      .filter((command) => command !== 'build')
+      .map((command) => `${command} [options]`),
+    options: { ...commands.build.args, ...sharedFlags },
+  })
+  process.exit(0)
+}
+
+let command = ((arg = '') => (arg.startsWith('-') ? undefined : arg))(process.argv[2]) || 'build'
 
 if (commands[command] === undefined) {
-  help({
-    message: `Invalid command: ${command}`,
-    usage: ['tailwind <command> [options]'],
-    commands: ['init [file]', 'build <file> [options]'],
-    options: sharedFlags,
-  })
-  process.exit(1)
+  if (fs.existsSync(path.resolve(command))) {
+    // TODO: Deprecate this in future versions
+    // Check if non-existing command, might be a file.
+    command = 'build'
+  } else {
+    help({
+      message: `Invalid command: ${command}`,
+      usage: ['tailwindcss <command> [options]'],
+      commands: Object.keys(commands)
+        .filter((command) => command !== 'build')
+        .map((command) => `${command} [options]`),
+      options: sharedFlags,
+    })
+    process.exit(1)
+  }
 }
 
 // Execute command
 let { args: flags, run } = commands[command]
 let args = (() => {
   try {
-    return arg(
+    let result = arg(
       Object.fromEntries(
         Object.entries({ ...flags, ...sharedFlags }).map(([key, value]) => [
           key,
@@ -172,11 +197,23 @@ let args = (() => {
         ])
       )
     )
+
+    // Ensure that the `command` is always the first argument in the `args`.
+    // This is important so that we don't have to check if a default command
+    // (build) was used or not from within each plugin.
+    //
+    // E.g.: tailwindcss input.css -> _: ['build', 'input.css']
+    // E.g.: tailwindcss build input.css -> _: ['build', 'input.css']
+    if (result['_'][0] !== command) {
+      result['_'].unshift(command)
+    }
+
+    return result
   } catch (err) {
     if (err.code === 'ARG_UNKNOWN_OPTION') {
       help({
         message: err.message,
-        usage: ['tailwind <command> [options]'],
+        usage: ['tailwindcss <command> [options]'],
         options: sharedFlags,
       })
       process.exit(1)
@@ -188,17 +225,21 @@ let args = (() => {
 if (args['--help']) {
   help({
     options: { ...flags, ...sharedFlags },
-    usage: [`tailwind ${command} [options]`],
+    usage: [`tailwindcss ${command} [options]`],
   })
   process.exit(0)
 }
 
 run()
 
+// ---
+
 function init() {
-  let tailwindConfigLocation = path.resolve('./tailwind.config.js')
+  let messages = []
+
+  let tailwindConfigLocation = path.resolve(args['_'][1] ?? './tailwind.config.js')
   if (fs.existsSync(tailwindConfigLocation)) {
-    console.log('tailwind.config.js already exists.')
+    messages.push(`${path.basename(tailwindConfigLocation)} already exists.`)
   } else {
     let stubFile = fs.readFileSync(
       args['--full']
@@ -221,13 +262,13 @@ function init() {
 
     fs.writeFileSync(tailwindConfigLocation, stubFile, 'utf8')
 
-    console.log('Created Tailwind config file:', 'tailwind.config.js')
+    messages.push(`Created Tailwind CSS config file: ${path.basename(tailwindConfigLocation)}`)
   }
 
   if (args['--postcss']) {
     let postcssConfigLocation = path.resolve('./postcss.config.js')
     if (fs.existsSync(postcssConfigLocation)) {
-      console.log('postcss.config.js already exists.')
+      messages.push(`${path.basename(postcssConfigLocation)} already exists.`)
     } else {
       let stubFile = fs.readFileSync(
         path.resolve(__dirname, '../stubs/defaultPostCssConfig.stub.js'),
@@ -236,30 +277,71 @@ function init() {
 
       fs.writeFileSync(postcssConfigLocation, stubFile, 'utf8')
 
-      console.log('Created PostCSS config file:', 'tailwind.config.js')
+      messages.push(`Created PostCSS config file: ${path.basename(postcssConfigLocation)}`)
+    }
+  }
+
+  if (messages.length > 0) {
+    console.log()
+    for (let message of messages) {
+      console.log(message)
     }
   }
 }
 
-function build() {
+async function build() {
   let input = args['--input']
   let output = args['--output']
   let shouldWatch = args['--watch']
-  let shouldMinify = args['--minify']
+  let includePostCss = args['--postcss']
 
-  if (args['--config'] && !fs.existsSync(args['--config'])) {
+  // TODO: Deprecate this in future versions
+  if (!input && args['_'][1]) {
+    console.error('[deprecation] Running tailwindcss without -i, please provide an input file.')
+  }
+
+  if (input && !fs.existsSync((input = path.resolve(input)))) {
+    console.error(`Specified input file ${args['--input']} does not exist.`)
+    process.exit(9)
+  }
+
+  if (args['--config'] && !fs.existsSync((args['--config'] = path.resolve(args['--config'])))) {
     console.error(`Specified config file ${args['--config']} does not exist.`)
     process.exit(9)
   }
 
-  let configPath =
-    args['--config'] ??
-    ((defaultPath) => (fs.existsSync(defaultPath) ? defaultPath : null))(
-      path.resolve('./tailwind.config.js')
-    )
+  let configPath = args['--config']
+    ? args['--config']
+    : ((defaultPath) => (fs.existsSync(defaultPath) ? defaultPath : null))(
+        path.resolve('./tailwind.config.js')
+      )
+
+  async function loadPostCssPlugins() {
+    let { plugins: configPlugins } = await postcssrc()
+    let configPluginTailwindIdx = configPlugins.findIndex((plugin) => {
+      if (typeof plugin === 'function' && plugin.name === 'tailwindcss') {
+        return true
+      }
+
+      if (typeof plugin === 'object' && plugin !== null && plugin.postcssPlugin === 'tailwindcss') {
+        return true
+      }
+
+      return false
+    })
+
+    let beforePlugins =
+      configPluginTailwindIdx === -1 ? [] : configPlugins.slice(0, configPluginTailwindIdx)
+    let afterPlugins =
+      configPluginTailwindIdx === -1
+        ? configPlugins
+        : configPlugins.slice(configPluginTailwindIdx + 1)
+
+    return [beforePlugins, afterPlugins]
+  }
 
   function resolveConfig() {
-    let config = require(configPath)
+    let config = configPath ? require(configPath) : {}
     let resolvedConfig = resolveConfigInternal(config)
 
     if (args['--files']) {
@@ -271,15 +353,6 @@ function build() {
     }
 
     return resolvedConfig
-  }
-
-  if (!output) {
-    help({
-      message: 'Missing required output file: --output, -o, or first argument',
-      usage: [`tailwind ${command} [options]`],
-      options: { ...flags, ...sharedFlags },
-    })
-    process.exit(1)
   }
 
   function extractContent(config) {
@@ -323,13 +396,13 @@ function build() {
     return changedContent
   }
 
-  function buildOnce() {
+  async function buildOnce() {
     let config = resolveConfig()
     let changedContent = getChangedContent(config)
 
     let tailwindPlugin =
       config.mode === 'jit'
-        ? (opts = {}) => {
+        ? () => {
             return {
               postcssPlugin: 'tailwindcss',
               Once(root, { result }) {
@@ -341,7 +414,7 @@ function build() {
               },
             }
           }
-        : (opts = {}) => {
+        : () => {
             return {
               postcssPlugin: 'tailwindcss',
               plugins: [tailwindAot(() => config, configPath)],
@@ -350,23 +423,40 @@ function build() {
 
     tailwindPlugin.postcss = true
 
+    let [beforePlugins, afterPlugins] = includePostCss ? await loadPostCssPlugins() : [[], []]
+
     let plugins = [
-      // TODO: Bake in postcss-import support?
-      // TODO: Bake in postcss-nested support?
+      ...beforePlugins,
       tailwindPlugin,
-      // require('autoprefixer'),
-      formatNodes,
-    ]
+      !args['--minify'] && formatNodes,
+      ...afterPlugins,
+      !args['--no-autoprefixer'] && lazyAutoprefixer(),
+      args['--minify'] && lazyCssnano()({ preset: ['default', { cssDeclarationSorter: false }] }),
+    ].filter(Boolean)
 
     let processor = postcss(plugins)
 
     function processCSS(css) {
-      return processor.process(css, { from: input, to: output }).then((result) => {
-        fs.writeFile(output, result.css, () => true)
-        if (result.map) {
-          fs.writeFile(output + '.map', result.map.toString(), () => true)
-        }
-      })
+      let start = process.hrtime.bigint()
+      return Promise.resolve()
+        .then(() => (output ? fs.promises.mkdir(path.dirname(output), { recursive: true }) : null))
+        .then(() => processor.process(css, { from: input, to: output }))
+        .then((result) => {
+          if (!output) {
+            return process.stdout.write(result.css)
+          }
+          return Promise.all(
+            [
+              fs.promises.writeFile(output, result.css, () => true),
+              result.map && fs.writeFile(output + '.map', result.map.toString(), () => true),
+            ].filter(Boolean)
+          )
+        })
+        .then(() => {
+          let end = process.hrtime.bigint()
+          console.error()
+          console.error('Done in', (end - start) / BigInt(1e6) + 'ms.')
+        })
     }
 
     let css = input
@@ -402,17 +492,19 @@ function build() {
     }
 
     async function rebuild(config) {
-      console.log('\nRebuilding...')
       env.DEBUG && console.time('Finished in')
 
       let tailwindPlugin =
         config.mode === 'jit'
-          ? (opts = {}) => {
+          ? () => {
               return {
                 postcssPlugin: 'tailwindcss',
                 Once(root, { result }) {
                   env.DEBUG && console.time('Compiling CSS')
                   tailwindJit(({ createContext }) => {
+                    console.error()
+                    console.error('Rebuilding...')
+
                     return () => {
                       if (context !== null) {
                         context.changedContent = changedContent.splice(0)
@@ -429,7 +521,7 @@ function build() {
                 },
               }
             }
-          : (opts = {}) => {
+          : () => {
               return {
                 postcssPlugin: 'tailwindcss',
                 plugins: [tailwindAot(() => config, configPath)],
@@ -438,30 +530,43 @@ function build() {
 
       tailwindPlugin.postcss = true
 
+      let [beforePlugins, afterPlugins] = includePostCss ? await loadPostCssPlugins() : [[], []]
+
       let plugins = [
-        // TODO: Bake in postcss-import support?
-        // TODO: Bake in postcss-nested support?
+        ...beforePlugins,
         tailwindPlugin,
-        // require('autoprefixer'),
-        formatNodes,
-      ]
+        !args['--minify'] && formatNodes,
+        ...afterPlugins,
+        !args['--no-autoprefixer'] && lazyAutoprefixer(),
+        args['--minify'] && lazyCssnano()({ preset: ['default', { cssDeclarationSorter: false }] }),
+      ].filter(Boolean)
 
       let processor = postcss(plugins)
 
       function processCSS(css) {
-        return processor.process(css, { from: input, to: output }).then((result) => {
-          for (let message of result.messages) {
-            if (message.type === 'dependency') {
-              contextDependencies.add(message.file)
+        let start = process.hrtime.bigint()
+        return Promise.resolve()
+          .then(() => fs.promises.mkdir(path.dirname(output), { recursive: true }))
+          .then(() => processor.process(css, { from: input, to: output }))
+          .then(async (result) => {
+            for (let message of result.messages) {
+              if (message.type === 'dependency') {
+                contextDependencies.add(message.file)
+              }
             }
-          }
-          watcher.add([...contextDependencies])
+            watcher.add([...contextDependencies])
 
-          fs.writeFile(output, result.css, () => true)
-          if (result.map) {
-            fs.writeFile(output + '.map', result.map.toString(), () => true)
-          }
-        })
+            await Promise.all(
+              [
+                fs.promises.writeFile(output, result.css, () => true),
+                result.map && fs.writeFile(output + '.map', result.map.toString(), () => true),
+              ].filter(Boolean)
+            )
+          })
+          .then(() => {
+            let end = process.hrtime.bigint()
+            console.error('Done in', (end - start) / BigInt(1e6) + 'ms.')
+          })
       }
 
       let css = input
