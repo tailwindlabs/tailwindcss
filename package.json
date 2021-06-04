@@ -20,7 +20,7 @@
   "scripts": {
     "prebabelify": "rimraf lib",
     "babelify": "babel src --out-dir lib --copy-files",
-    "postbabelify": "ncc build lib/cli-peer-dependencies.js",
+    "postbabelify": "ncc build lib/cli-peer-dependencies.js -o peers",
     "rebuild-fixtures": "npm run babelify && babel-node scripts/rebuildFixtures.js",
     "prepublishOnly": "npm run babelify && babel-node scripts/build.js",
     "style": "eslint .",
@@ -35,6 +35,7 @@
     "dist/*.css",
     "cli/*",
     "lib/*",
+    "peers/*",
     "scripts/*.js",
     "stubs/*.stub.js",
     "*.css",

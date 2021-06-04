@@ -2,7 +2,7 @@
 
 /* eslint-disable */
 
-import { postcss, lazyCssnano, lazyAutoprefixer } from '../dist/index.js'
+import { postcss, lazyCssnano, lazyAutoprefixer } from '../peers/index.js'
 
 import chokidar from 'chokidar'
 import chalk from 'chalk'
@@ -46,31 +46,31 @@ function help({ message, usage, commands, options }) {
 
   // Render header
   console.log()
-  console.log(' '.repeat(indent), packageJson.name, packageJson.version)
+  console.log(packageJson.name, packageJson.version)
 
   // Render message
   if (message) {
     console.log()
     for (let msg of message.split('\n')) {
-      console.log(' '.repeat(indent), msg)
+      console.log(msg)
     }
   }
 
   // Render usage
   if (usage && usage.length > 0) {
     console.log()
-    console.log(' '.repeat(indent), 'Usage:')
+    console.log('Usage:')
     for (let example of usage) {
-      console.log(' '.repeat(indent * 2), example)
+      console.log(' '.repeat(indent), example)
     }
   }
 
   // Render commands
   if (commands && commands.length > 0) {
     console.log()
-    console.log(' '.repeat(indent), 'Commands:')
+    console.log('Commands:')
     for (let command of commands) {
-      console.log(' '.repeat(indent * 2), command)
+      console.log(' '.repeat(indent), command)
     }
   }
 
@@ -86,17 +86,17 @@ function help({ message, usage, commands, options }) {
     }
 
     console.log()
-    console.log(' '.repeat(indent), 'Options:')
+    console.log('Options:')
     for (let { flags, description } of Object.values(groupedOptions)) {
       if (flags.length === 1) {
         console.log(
-          ' '.repeat(indent * 2 + 4 /* 4 = "-i, ".length */),
+          ' '.repeat(indent + 4 /* 4 = "-i, ".length */),
           flags.slice().reverse().join(', ').padEnd(20, ' '),
           description
         )
       } else {
         console.log(
-          ' '.repeat(indent * 2),
+          ' '.repeat(indent),
           flags.slice().reverse().join(', ').padEnd(24, ' '),
           description
         )
@@ -107,45 +107,13 @@ function help({ message, usage, commands, options }) {
   console.log()
 }
 
-// ---
-
-/*
-  TODOs:
-  - [x] Reduce getModuleDependencies calls (make configDeps global?)
-  - [x] Detect new files
-  - [x] Support raw content in purge config
-  - [x] Scaffold tailwind.config.js file (with postcss.config.js)
-  - [x] Support passing globs from command line
-  - [x] Make config file optional
-  - [x] Support AOT mode
-  - [x] --help option
-  - [x] conditional flags based on arguments
-          init -f, --full
-          build -f, --files
-  - [x] Move JIT warning so it appears when using CLI
-  - [x] --jit
-  - [x] Backwards compatability with `build` (no -i flag)
-  - [x] Init to custom path
-  - [x] make --no-autoprefixer work
-  - [x] Support writing to stdout
-  - [x] Add logging for when not using an input file
-  - [x] Prebundle peer-dependencies
-  - [x] Make minification work
-  - [x] Handle -i when file doesn't exist
-  - [x] Handle crashing -c 
-  // TODO: Bake in postcss-import support?
-  // TODO: Bake in postcss-nested support?
-
-  Future:
-  - Detect project type, add sensible purge defaults
-*/
 let commands = {
   init: {
     run: init,
     args: {
-      '--jit': { type: Boolean, description: 'Enable `JIT` mode' },
-      '--full': { type: Boolean, description: 'Generate a full tailwind.config.js file' },
-      '--postcss': { type: Boolean, description: 'Generate a PostCSS file' },
+      '--jit': { type: Boolean, description: 'Initialize for JIT mode' },
+      '--full': { type: Boolean, description: 'Initialize a full `tailwind.config.js` file' },
+      '--postcss': { type: Boolean, description: 'Initialize a `postcss.config.js` file' },
       '-f': '--full',
       '-p': '--postcss',
     },
@@ -153,21 +121,21 @@ let commands = {
   build: {
     run: build,
     args: {
-      '--input': { type: String, description: 'The input css file' },
-      '--output': { type: String, description: 'The output css file' },
-      '--watch': { type: Boolean, description: 'Start watching for changes' },
-      '--jit': { type: Boolean, description: 'Build using `JIT` mode' },
-      '--files': { type: String, description: 'Use a glob as files to use' },
-      '--minify': { type: Boolean, description: 'Whether or not the result should be minified' },
+      '--input': { type: String, description: 'Input file' },
+      '--output': { type: String, description: 'Output file' },
+      '--watch': { type: Boolean, description: 'Watch for changes and rebuild as needed' },
+      '--jit': { type: Boolean, description: 'Build using JIT mode' },
+      '--files': { type: String, description: 'Template files to scan for class names' },
+      '--postcss': { type: Boolean, description: 'Load custom PostCSS configuration' },
+      '--minify': { type: Boolean, description: 'Minify the output' },
       '--config': {
         type: String,
-        description: 'Provide a custom config file, default: ./tailwind.config.js',
+        description: 'Path to a custom config file',
       },
       '--no-autoprefixer': {
         type: Boolean,
-        description: "Don't add vendor prefixes using autoprefixer.",
+        description: 'Disable autoprefixer',
       },
-      '-f': '--files',
       '-c': '--config',
       '-i': '--input',
       '-o': '--output',
@@ -178,7 +146,7 @@ let commands = {
 }
 
 let sharedFlags = {
-  '--help': { type: Boolean, description: 'Prints this help message' },
+  '--help': { type: Boolean, description: 'Display usage information' },
   '-h': '--help',
 }
 
@@ -325,26 +293,7 @@ async function build() {
   let input = args['--input']
   let output = args['--output']
   let shouldWatch = args['--watch']
-
-  let { plugins: configPlugins } = await postcssrc()
-  let configPluginTailwindIdx = configPlugins.findIndex((plugin) => {
-    if (typeof plugin === 'function' && plugin.name === 'tailwindcss') {
-      return true
-    }
-
-    if (typeof plugin === 'object' && plugin !== null && plugin.postcssPlugin === 'tailwindcss') {
-      return true
-    }
-
-    return false
-  })
-
-  let beforePlugins =
-    configPluginTailwindIdx === -1 ? [] : configPlugins.slice(0, configPluginTailwindIdx)
-  let afterPlugins =
-    configPluginTailwindIdx === -1
-      ? configPlugins
-      : configPlugins.slice(configPluginTailwindIdx + 1)
+  let includePostCss = args['--postcss']
 
   // TODO: Deprecate this in future versions
   if (!input && args['_'][1]) {
@@ -367,8 +316,32 @@ async function build() {
         path.resolve('./tailwind.config.js')
       )
 
+  async function loadPostCssPlugins() {
+    let { plugins: configPlugins } = await postcssrc()
+    let configPluginTailwindIdx = configPlugins.findIndex((plugin) => {
+      if (typeof plugin === 'function' && plugin.name === 'tailwindcss') {
+        return true
+      }
+
+      if (typeof plugin === 'object' && plugin !== null && plugin.postcssPlugin === 'tailwindcss') {
+        return true
+      }
+
+      return false
+    })
+
+    let beforePlugins =
+      configPluginTailwindIdx === -1 ? [] : configPlugins.slice(0, configPluginTailwindIdx)
+    let afterPlugins =
+      configPluginTailwindIdx === -1
+        ? configPlugins
+        : configPlugins.slice(configPluginTailwindIdx + 1)
+
+    return [beforePlugins, afterPlugins]
+  }
+
   function resolveConfig() {
-    let config = require(configPath)
+    let config = configPath ? require(configPath) : {}
     let resolvedConfig = resolveConfigInternal(config)
 
     if (args['--files']) {
@@ -423,7 +396,7 @@ async function build() {
     return changedContent
   }
 
-  function buildOnce() {
+  async function buildOnce() {
     let config = resolveConfig()
     let changedContent = getChangedContent(config)
 
@@ -450,16 +423,15 @@ async function build() {
 
     tailwindPlugin.postcss = true
 
+    let [beforePlugins, afterPlugins] = includePostCss ? await loadPostCssPlugins() : [[], []]
+
     let plugins = [
       ...beforePlugins,
       tailwindPlugin,
+      !args['--minify'] && formatNodes,
       ...afterPlugins,
-
-      // ..
       !args['--no-autoprefixer'] && lazyAutoprefixer(),
-      args['--minify']
-        ? lazyCssnano()({ preset: ['default', { cssDeclarationSorter: false }] })
-        : formatNodes,
+      args['--minify'] && lazyCssnano()({ preset: ['default', { cssDeclarationSorter: false }] }),
     ].filter(Boolean)
 
     let processor = postcss(plugins)
@@ -483,8 +455,7 @@ async function build() {
         .then(() => {
           let end = process.hrtime.bigint()
           console.error()
-          console.error('Done in', (end - start) / BigInt(1e6) + 'ms')
-          console.error()
+          console.error('Done in', (end - start) / BigInt(1e6) + 'ms.')
         })
     }
 
@@ -521,7 +492,6 @@ async function build() {
     }
 
     async function rebuild(config) {
-      console.log('\nRebuilding...')
       env.DEBUG && console.time('Finished in')
 
       let tailwindPlugin =
@@ -532,6 +502,9 @@ async function build() {
                 Once(root, { result }) {
                   env.DEBUG && console.time('Compiling CSS')
                   tailwindJit(({ createContext }) => {
+                    console.error()
+                    console.error('Rebuilding...')
+
                     return () => {
                       if (context !== null) {
                         context.changedContent = changedContent.splice(0)
@@ -557,21 +530,21 @@ async function build() {
 
       tailwindPlugin.postcss = true
 
+      let [beforePlugins, afterPlugins] = includePostCss ? await loadPostCssPlugins() : [[], []]
+
       let plugins = [
         ...beforePlugins,
         tailwindPlugin,
+        !args['--minify'] && formatNodes,
         ...afterPlugins,
-
-        // ..
         !args['--no-autoprefixer'] && lazyAutoprefixer(),
-        args['--minify']
-          ? lazyCssnano()({ preset: ['default', { cssDeclarationSorter: false }] })
-          : formatNodes,
+        args['--minify'] && lazyCssnano()({ preset: ['default', { cssDeclarationSorter: false }] }),
       ].filter(Boolean)
 
       let processor = postcss(plugins)
 
       function processCSS(css) {
+        let start = process.hrtime.bigint()
         return Promise.resolve()
           .then(() => fs.promises.mkdir(path.dirname(output), { recursive: true }))
           .then(() => processor.process(css, { from: input, to: output }))
@@ -589,6 +562,10 @@ async function build() {
                 result.map && fs.writeFile(output + '.map', result.map.toString(), () => true),
               ].filter(Boolean)
             )
+          })
+          .then(() => {
+            let end = process.hrtime.bigint()
+            console.error('Done in', (end - start) / BigInt(1e6) + 'ms.')
           })
       }
 
