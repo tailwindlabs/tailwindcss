@@ -28,33 +28,51 @@ test('it looks up values in the theme using dot notation', () => {
 
 test('color can be a function', () => {
   const input = `
-    .colors { color: theme('colors.fn'); }
-    .textColor { color: theme('textColor.fn'); }
-    .backgroundColor { color: theme('backgroundColor.fn'); }
-    .borderColor { color: theme('borderColor.fn'); }
+    .backgroundColor { color: theme('backgroundColor.fn') }
+    .borderColor { color: theme('borderColor.fn') }
+    .caretColor { color: theme('caretColor.fn') }
+    .colors { color: theme('colors.fn') }
+    .divideColor { color: theme('divideColor.fn') }
+    .fill { color: theme('fill.fn') }
+    .gradientColorStops { color: theme('gradientColorStops.fn') }
+    .placeholderColor { color: theme('placeholderColor.fn') }
+    .ringColor { color: theme('ringColor.fn') }
+    .ringOffsetColor { color: theme('ringOffsetColor.fn') }
+    .stroke { color: theme('stroke.fn') }
+    .textColor { color: theme('textColor.fn') }
   `
 
   const output = `
-    .colors { color: #f00; }
-    .textColor { color: #f00; }
-    .backgroundColor { color: #f00; }
-    .borderColor { color: #f00; }
+    .backgroundColor { color: #f00 }
+    .borderColor { color: #f00 }
+    .caretColor { color: #f00 }
+    .colors { color: #f00 }
+    .divideColor { color: #f00 }
+    .fill { color: #f00 }
+    .gradientColorStops { color: #f00 }
+    .placeholderColor { color: #f00 }
+    .ringColor { color: #f00 }
+    .ringOffsetColor { color: #f00 }
+    .stroke { color: #f00 }
+    .textColor { color: #f00 }
   `
+
+  const fn = () => `#f00`
 
   return run(input, {
     theme: {
-      colors: {
-        fn: () => `#f00`,
-      },
-      textColor: {
-        fn: () => '#f00',
-      },
-      backgroundColor: {
-        fn: () => '#f00',
-      },
-      borderColor: {
-        fn: () => '#f00',
-      },
+      backgroundColor: { fn },
+      borderColor: { fn },
+      caretColor: { fn },
+      colors: { fn },
+      divideColor: { fn },
+      fill: { fn },
+      gradientColorStops: { fn },
+      placeholderColor: { fn },
+      ringColor: { fn },
+      ringOffsetColor: { fn },
+      stroke: { fn },
+      textColor: { fn },
     },
   }).then((result) => {
     expect(result.css).toEqual(output)

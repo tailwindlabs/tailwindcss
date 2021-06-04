@@ -20,7 +20,22 @@ export default function transformThemeValue(themeSection) {
     return (value) => (Array.isArray(value) ? value.join(', ') : value)
   }
 
-  if (['colors', 'textColor', 'backgroundColor', 'borderColor'].includes(themeSection)) {
+  if (
+    [
+      'backgroundColor',
+      'borderColor',
+      'caretColor',
+      'colors',
+      'divideColor',
+      'fill',
+      'gradientColorStops',
+      'placeholderColor',
+      'ringColor',
+      'ringOffsetColor',
+      'stroke',
+      'textColor',
+    ].includes(themeSection)
+  ) {
     return (value) => (typeof value === 'function' ? value({}) : value)
   }
 
