@@ -546,7 +546,9 @@ async function build() {
       function processCSS(css) {
         let start = process.hrtime.bigint()
         return Promise.resolve()
-          .then(() => fs.promises.mkdir(path.dirname(output), { recursive: true }))
+          .then(() =>
+            output ? fs.promises.mkdir(path.dirname(output), { recursive: true }) : null
+          )
           .then(() => processor.process(css, { from: input, to: output }))
           .then(async (result) => {
             for (let message of result.messages) {
@@ -555,6 +557,10 @@ async function build() {
               }
             }
             watcher.add([...contextDependencies])
+
+            if (!output) {
+              return process.stdout.write(result.css)
+            }
 
             await Promise.all(
               [
