@@ -558,6 +558,11 @@ export function getContext(
       contextSourcesMap.get(oldContext).delete(sourcePath)
       if (contextSourcesMap.get(oldContext).size === 0) {
         contextSourcesMap.delete(oldContext)
+        for (let [tailwindConfigHash, context] of configContextMap) {
+          if (context === oldContext) {
+            configContextMap.delete(tailwindConfigHash)
+          }
+        }
         for (let disposable of oldContext.disposables.splice(0)) {
           disposable(oldContext)
         }
