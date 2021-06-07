@@ -122,7 +122,7 @@ let commands = {
       '--output': { type: String, description: 'Output file' },
       '--watch': { type: Boolean, description: 'Watch for changes and rebuild as needed' },
       '--jit': { type: Boolean, description: 'Build using JIT mode' },
-      '--files': { type: String, description: 'Template files to scan for class names' },
+      '--purge': { type: String, description: 'Content paths to use for removing unused classes' },
       '--postcss': { type: Boolean, description: 'Load custom PostCSS configuration' },
       '--minify': { type: Boolean, description: 'Minify the output' },
       '--config': {
@@ -344,8 +344,8 @@ async function build() {
     let config = configPath ? require(configPath) : {}
     let resolvedConfig = resolveConfigInternal(config)
 
-    if (args['--files']) {
-      resolvedConfig.purge = args['--files'].split(',')
+    if (args['--purge']) {
+      resolvedConfig.purge = args['--purge'].split(',')
     }
 
     if (args['--jit']) {
