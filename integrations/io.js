@@ -30,7 +30,15 @@ module.exports = function ({
   // Restore all written files
   afterEach(async () => {
     await Promise.all(
-      Object.entries(fileCache).map(([file, content]) => fs.writeFile(file, content, 'utf8'))
+      Object.entries(fileCache).map(async ([file, content]) => {
+        try {
+          if (content === null) {
+            return await fs.unlink(file)
+          } else {
+            return await fs.writeFile(file, content, 'utf8')
+          }
+        } catch {}
+      })
     )
   })
 
@@ -68,6 +76,21 @@ module.exports = function ({
   }
 
   return {
+    cleanupFile(file) {
+      let filePath = path.resolve(toolRoot, file)
+      fileCache[filePath] = null
+    },
+    async fileExists(file) {
+      let filePath = path.resolve(toolRoot, file)
+      return existsSync(filePath)
+    },
+    async removeFile(file) {
+      let filePath = path.resolve(toolRoot, file)
+      if (!fileCache[filePath]) {
+        fileCache[filePath] = await fs.readFile(filePath, 'utf8')
+      }
+      await fs.unlink(filePath)
+    },
     async readOutputFile(file) {
       file = await resolveFile(file, absoluteOutputFolder)
       return fs.readFile(path.resolve(absoluteOutputFolder, file), 'utf8')
@@ -83,7 +106,15 @@ module.exports = function ({
     async writeInputFile(file, contents) {
       let filePath = path.resolve(absoluteInputFolder, file)
       if (!fileCache[filePath]) {
-        fileCache[filePath] = await fs.readFile(filePath, 'utf8')
+        try {
+          fileCache[filePath] = await fs.readFile(filePath, 'utf8')
+        } catch (err) {
+          if (err.code === 'ENOENT') {
+            fileCache[filePath] = null // Sentinel value to `delete` the file afterwards. This also means that we are writing to a `new` file inside the test.
+          } else {
+            throw err
+          }
+        }
       }
 
       return fs.writeFile(path.resolve(absoluteInputFolder, file), contents, 'utf8')

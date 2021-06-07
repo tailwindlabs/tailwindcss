@@ -1,5 +1,5 @@
 const prettier = require('prettier')
-const diff = require('jest-diff').default
+const { diff } = require('jest-diff')
 
 function format(input) {
   return prettier.format(input, {
