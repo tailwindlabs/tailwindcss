@@ -80,6 +80,17 @@ module.exports = function ({
       let filePath = path.resolve(toolRoot, file)
       fileCache[filePath] = null
     },
+    async fileExists(file) {
+      let filePath = path.resolve(toolRoot, file)
+      return existsSync(filePath)
+    },
+    async removeFile(file) {
+      let filePath = path.resolve(toolRoot, file)
+      if (!fileCache[filePath]) {
+        fileCache[filePath] = await fs.readFile(filePath, 'utf8')
+      }
+      await fs.unlink(filePath)
+    },
     async readOutputFile(file) {
       file = await resolveFile(file, absoluteOutputFolder)
       return fs.readFile(path.resolve(absoluteOutputFolder, file), 'utf8')
