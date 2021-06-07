@@ -58,21 +58,29 @@ module.exports = function $(command, options = {}) {
 
     let stdout = ''
     let stderr = ''
+    let combined = ''
 
     child.stdout.on('data', (data) => {
       stdoutMessages.push(data.toString())
       notifyNextStdoutActor()
       stdout += data
+      combined += data
     })
 
     child.stderr.on('data', (data) => {
       stderrMessages.push(data.toString())
       notifyNextStderrActor()
       stderr += data
+      combined += data
     })
 
     child.on('close', (code, signal) => {
-      ;(signal === 'SIGTERM' ? resolve : code === 0 ? resolve : reject)({ code, stdout, stderr })
+      ;(signal === 'SIGTERM' ? resolve : code === 0 ? resolve : reject)({
+        code,
+        stdout,
+        stderr,
+        combined,
+      })
     })
   })
 
