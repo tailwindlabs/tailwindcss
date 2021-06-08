@@ -345,7 +345,7 @@ async function build() {
     let resolvedConfig = resolveConfigInternal(config)
 
     if (args['--purge']) {
-      resolvedConfig.purge = args['--purge'].split(',')
+      resolvedConfig.purge = args['--purge'].split(/(?<!{[^}]+),/)
     }
 
     if (args['--jit']) {
