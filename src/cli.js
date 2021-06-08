@@ -356,7 +356,25 @@ async function build() {
   }
 
   function extractContent(config) {
-    return Array.isArray(config.purge) ? config.purge : config.purge.content
+    let content = Array.isArray(config.purge) ? config.purge : config.purge.content
+
+    return content.concat(
+      (config.purge?.safelist ?? []).map((content) => {
+        if (typeof content === 'string') {
+          return { raw: content, extension: 'html' }
+        }
+
+        if (content instanceof RegExp) {
+          throw new Error(
+            "Values inside 'purge.safelist' can only be of type 'string', found 'regex'."
+          )
+        }
+
+        throw new Error(
+          `Values inside 'purge.safelist' can only be of type 'string', found '${typeof content}'.`
+        )
+      })
+    )
   }
 
   function extractFileGlobs(config) {
