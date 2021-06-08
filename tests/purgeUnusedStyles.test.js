@@ -580,6 +580,32 @@ test(
 )
 
 test(
+  'proxying purge.safelist to purge.options.safelist works',
+  suppressConsoleLogs(() => {
+    const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
+    const input = fs.readFileSync(inputPath, 'utf8')
+
+    return postcss([
+      tailwind({
+        ...config,
+        purge: {
+          enabled: true,
+          safelist: ['md:bg-green-500'],
+          options: {
+            content: [path.resolve(`${__dirname}/fixtures/**/*.html`)],
+          },
+        },
+      }),
+    ])
+      .process(input, { from: withTestName(inputPath) })
+      .then((result) => {
+        expect(result.css).toContain('.md\\:bg-green-500')
+        assertPurged(result)
+      })
+  })
+)
+
+test(
   'can purge all CSS, not just Tailwind classes',
   suppressConsoleLogs(() => {
     const inputPath = path.resolve(`${__dirname}/fixtures/tailwind-input.css`)
