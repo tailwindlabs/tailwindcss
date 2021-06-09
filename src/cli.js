@@ -463,7 +463,7 @@ async function build() {
 
           // Try to load a local `cssnano` version first
           try {
-            return require('cssnano')(options)
+            return require('cssnano')
           } catch {}
 
           return lazyCssnano()(options)
@@ -549,7 +549,7 @@ async function build() {
 
           // Try to load a local `cssnano` version first
           try {
-            return require('cssnano')(options)
+            return require('cssnano')
           } catch {}
 
           return lazyCssnano()(options)
