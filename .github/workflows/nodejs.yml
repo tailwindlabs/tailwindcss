@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12, 14, 16]
+        node-version: [16]
 
     steps:
       - uses: actions/checkout@v2
@@ -36,7 +36,11 @@ jobs:
         run: npm install
         env:
           CI: true
-      - run: npm run prepublishOnly
-      - run: npm test
+      - name: Install integration dependencies
+        run: npm run install:integrations
+        env:
+          CI: true
+      - run: npm run babelify
+      - run: npm run test:integrations
         env:
           CI: true
