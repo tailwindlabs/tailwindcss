@@ -235,6 +235,23 @@ function resolvedChangedContent(context, candidateFiles) {
       : context.tailwindConfig.purge.content
   )
     .filter((item) => typeof item.raw === 'string')
+    .concat(
+      (context.tailwindConfig.purge?.safelist ?? []).map((content) => {
+        if (typeof content === 'string') {
+          return { raw: content, extension: 'html' }
+        }
+
+        if (content instanceof RegExp) {
+          throw new Error(
+            "Values inside 'purge.safelist' can only be of type 'string', found 'regex'."
+          )
+        }
+
+        throw new Error(
+          `Values inside 'purge.safelist' can only be of type 'string', found '${typeof content}'.`
+        )
+      })
+    )
     .map(({ raw, extension }) => ({ content: raw, extension }))
 
   for (let changedFile of resolveChangedFiles(context, candidateFiles)) {

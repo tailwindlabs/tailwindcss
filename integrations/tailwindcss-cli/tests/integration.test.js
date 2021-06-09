@@ -25,6 +25,58 @@ describe('static build', () => {
       `
     )
   })
+
+  it('should safelist a list of classes to always include', async () => {
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+    await writeInputFile(
+      '../tailwind.config.js',
+      javascript`
+        module.exports = {
+          purge: {
+            content: ['./src/index.html'],
+            safelist: ['bg-red-500','bg-red-600']
+          },
+          mode: 'jit',
+          darkMode: false, // or 'media' or 'class'
+          theme: {
+            extend: {
+            },
+          },
+          variants: {
+            extend: {},
+          },
+          corePlugins: {
+            preflight: false,
+          },
+          plugins: [],
+        }
+      `
+    )
+
+    $('node ../../lib/cli.js -i ./src/index.css -o ./dist/main.css', {
+      env: { NODE_ENV: 'production' },
+    })
+
+    await waitForOutputFileCreation('main.css')
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .bg-red-500 {
+          --tw-bg-opacity: 1;
+          background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
+        }
+
+        .bg-red-600 {
+          --tw-bg-opacity: 1;
+          background-color: rgba(220, 38, 38, var(--tw-bg-opacity));
+        }
+
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+  })
 })
 
 describe('watcher', () => {

@@ -81,6 +81,10 @@ export default function purgeUnusedUtilities(
   const transformers = config.purge.transform || {}
   let { defaultExtractor: originalDefaultExtractor, ...purgeOptions } = config.purge.options || {}
 
+  if (config.purge?.safelist && !purgeOptions.hasOwnProperty('safelist')) {
+    purgeOptions.safelist = config.purge.safelist
+  }
+
   if (!originalDefaultExtractor) {
     originalDefaultExtractor =
       typeof extractors === 'function' ? extractors : extractors.DEFAULT || tailwindExtractor
