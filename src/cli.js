@@ -448,8 +448,26 @@ async function build() {
       tailwindPlugin,
       !args['--minify'] && formatNodes,
       ...afterPlugins,
-      !args['--no-autoprefixer'] && lazyAutoprefixer(),
-      args['--minify'] && lazyCssnano()({ preset: ['default', { cssDeclarationSorter: false }] }),
+      !args['--no-autoprefixer'] &&
+        (() => {
+          // Try to load a local `autoprefixer` version first
+          try {
+            return require('autoprefixer')
+          } catch {}
+
+          return lazyAutoprefixer()
+        })(),
+      args['--minify'] &&
+        (() => {
+          let options = { preset: ['default', { cssDeclarationSorter: false }] }
+
+          // Try to load a local `cssnano` version first
+          try {
+            return require('cssnano')(options)
+          } catch {}
+
+          return lazyCssnano()(options)
+        })(),
     ].filter(Boolean)
 
     let processor = postcss(plugins)
@@ -555,8 +573,26 @@ async function build() {
         tailwindPlugin,
         !args['--minify'] && formatNodes,
         ...afterPlugins,
-        !args['--no-autoprefixer'] && lazyAutoprefixer(),
-        args['--minify'] && lazyCssnano()({ preset: ['default', { cssDeclarationSorter: false }] }),
+        !args['--no-autoprefixer'] &&
+          (() => {
+            // Try to load a local `autoprefixer` version first
+            try {
+              return require('autoprefixer')
+            } catch {}
+
+            return lazyAutoprefixer()
+          })(),
+        args['--minify'] &&
+          (() => {
+            let options = { preset: ['default', { cssDeclarationSorter: false }] }
+
+            // Try to load a local `cssnano` version first
+            try {
+              return require('cssnano')(options)
+            } catch {}
+
+            return lazyCssnano()(options)
+          })(),
       ].filter(Boolean)
 
       let processor = postcss(plugins)
