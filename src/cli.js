@@ -448,8 +448,26 @@ async function build() {
       tailwindPlugin,
       !args['--minify'] && formatNodes,
       ...afterPlugins,
-      !args['--no-autoprefixer'] && lazyAutoprefixer(),
-      args['--minify'] && lazyCssnano()({ preset: ['default', { cssDeclarationSorter: false }] }),
+      !args['--no-autoprefixer'] &&
+        (() => {
+          // Try to load a local `autoprefixer` version first
+          try {
+            return require('autoprefixer')
+          } catch {}
+
+          return lazyAutoprefixer()
+        })(),
+      args['--minify'] &&
+        (() => {
+          let options = { preset: ['default', { cssDeclarationSorter: false }] }
+
+          // Try to load a local `cssnano` version first
+          try {
+            return require('cssnano')
+          } catch {}
+
+          return lazyCssnano()(options)
+        })(),
     ].filter(Boolean)
 
     let processor = postcss(plugins)
@@ -485,7 +503,7 @@ async function build() {
 
   let context = null
 
-  function startWatcher() {
+  async function startWatcher() {
     let changedContent = []
     let configDependencies = []
     let contextDependencies = new Set()
@@ -508,6 +526,35 @@ async function build() {
 
       return resolveConfig()
     }
+
+    let [beforePlugins, afterPlugins] = includePostCss ? await loadPostCssPlugins() : [[], []]
+
+    let plugins = [
+      ...beforePlugins,
+      '__TAILWIND_PLUGIN_POSITION__',
+      !args['--minify'] && formatNodes,
+      ...afterPlugins,
+      !args['--no-autoprefixer'] &&
+        (() => {
+          // Try to load a local `autoprefixer` version first
+          try {
+            return require('autoprefixer')
+          } catch {}
+
+          return lazyAutoprefixer()
+        })(),
+      args['--minify'] &&
+        (() => {
+          let options = { preset: ['default', { cssDeclarationSorter: false }] }
+
+          // Try to load a local `cssnano` version first
+          try {
+            return require('cssnano')
+          } catch {}
+
+          return lazyCssnano()(options)
+        })(),
+    ].filter(Boolean)
 
     async function rebuild(config) {
       env.DEBUG && console.time('Finished in')
@@ -548,18 +595,10 @@ async function build() {
 
       tailwindPlugin.postcss = true
 
-      let [beforePlugins, afterPlugins] = includePostCss ? await loadPostCssPlugins() : [[], []]
-
-      let plugins = [
-        ...beforePlugins,
-        tailwindPlugin,
-        !args['--minify'] && formatNodes,
-        ...afterPlugins,
-        !args['--no-autoprefixer'] && lazyAutoprefixer(),
-        args['--minify'] && lazyCssnano()({ preset: ['default', { cssDeclarationSorter: false }] }),
-      ].filter(Boolean)
-
-      let processor = postcss(plugins)
+      let tailwindPluginIdx = plugins.indexOf('__TAILWIND_PLUGIN_POSITION__')
+      let copy = plugins.slice()
+      copy.splice(tailwindPluginIdx, 1, tailwindPlugin)
+      let processor = postcss(copy)
 
       function processCSS(css) {
         let start = process.hrtime.bigint()
