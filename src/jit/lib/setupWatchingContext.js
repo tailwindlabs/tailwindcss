@@ -13,7 +13,7 @@ import log from '../../util/log'
 import getModuleDependencies from '../../lib/getModuleDependencies'
 import resolveConfig from '../../../resolveConfig'
 import resolveConfigPath from '../../util/resolveConfigPath'
-import { getContext } from './setupContextUtils'
+import { getContext, trackModified } from './setupContextUtils'
 import { env } from './sharedState'
 
 // Earmarks a directory for our touch files.
@@ -346,6 +346,8 @@ export default function setupWatchingContext(configOrPath) {
           context.changedContent.push(changedContent)
         }
       }
+
+      trackModified([...contextDependencies], getFileModifiedMap(context))
 
       return context
     }
