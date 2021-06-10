@@ -7,6 +7,8 @@ import path from 'path'
 import arg from 'arg'
 import fs from 'fs'
 import postcssrc from 'postcss-load-config'
+import { cosmiconfig } from 'cosmiconfig'
+import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
 import tailwindJit from './jit/processTailwindFeatures'
 import tailwindAot from './processTailwindFeatures'
 import resolveConfigInternal from '../resolveConfig'
@@ -370,7 +372,27 @@ async function build() {
       )
 
   async function loadPostCssPlugins() {
-    let { plugins: configPlugins } = await postcssrc()
+    let customPostCssPath = typeof args['--postcss'] === 'string' ? args['--postcss'] : undefined
+    let { plugins: configPlugins } = customPostCssPath
+      ? await (async () => {
+          let file = path.resolve(customPostCssPath)
+
+          // Implementation, see: https://unpkg.com/browse/postcss-load-config@3.0.1/src/index.js
+          let { config = {} } = await cosmiconfig('postcss').load(file)
+          if (typeof config === 'function') {
+            config = config()
+          } else {
+            config = Object.assign({}, config)
+          }
+
+          if (!config.plugins) {
+            config.plugins = []
+          }
+
+          return { plugins: loadPlugins(config, file) }
+        })()
+      : await postcssrc()
+
     let configPluginTailwindIdx = configPlugins.findIndex((plugin) => {
       if (typeof plugin === 'function' && plugin.name === 'tailwindcss') {
         return true
