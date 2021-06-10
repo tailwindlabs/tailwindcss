@@ -1,9 +1,12 @@
 export default function () {
-  return function ({ matchUtilities, theme, variants }) {
+  return function ({ config, matchUtilities, theme, variants }) {
     matchUtilities(
       {
         invert: (value) => {
-          return { '--tw-invert': `invert(${value})` }
+          return {
+            '--tw-invert': `invert(${value})`,
+            ...(config('mode') === 'jit' ? { filter: 'var(--tw-filter)' } : {}),
+          }
         },
       },
       {

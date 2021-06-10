@@ -19,7 +19,6 @@ test('basic usage', () => {
   }
 
   let css = `
-    @tailwind base;
     @tailwind components;
     @tailwind utilities;
   `

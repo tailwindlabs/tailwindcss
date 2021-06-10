@@ -24,7 +24,6 @@ test('raw content', () => {
   }
 
   let css = `
-    @tailwind base;
     @tailwind components;
     @tailwind utilities;
   `
@@ -52,7 +51,7 @@ test('raw content with extension', () => {
       options: {
         extractors: [
           {
-            extractor: () => [],
+            extractor: () => ['invisible'],
             extensions: ['html'],
           },
         ],
@@ -63,40 +62,12 @@ test('raw content with extension', () => {
     plugins: [],
   }
 
-  let css = `
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
-  `
+  let css = `@tailwind utilities;`
 
   return run(tailwind, css, config).then((result) => {
     expect(result.css).toMatchFormattedCss(`
-      * {
-        --tw-translate-x: 0;
-        --tw-translate-y: 0;
-        --tw-rotate: 0;
-        --tw-skew-x: 0;
-        --tw-skew-y: 0;
-        --tw-scale-x: 1;
-        --tw-scale-y: 1;
-        --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-          rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-          scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-      }
-      *,
-      ::before,
-      ::after {
-        --tw-border-opacity: 1;
-        border-color: rgba(229, 231, 235, var(--tw-border-opacity));
-      }
-      * {
-        --tw-shadow: 0 0 #0000;
-        --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
-        --tw-ring-offset-width: 0px;
-        --tw-ring-offset-color: #fff;
-        --tw-ring-color: rgba(59, 130, 246, 0.5);
-        --tw-ring-offset-shadow: 0 0 #0000;
-        --tw-ring-shadow: 0 0 #0000;
+      .invisible {
+        visibility: hidden;
       }
     `)
   })
