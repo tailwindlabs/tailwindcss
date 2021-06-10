@@ -1,30 +1,3 @@
-* {
-  --tw-translate-x: 0;
-  --tw-translate-y: 0;
-  --tw-rotate: 0;
-  --tw-skew-x: 0;
-  --tw-skew-y: 0;
-  --tw-scale-x: 1;
-  --tw-scale-y: 1;
-  --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-*,
-::before,
-::after {
-  --tw-border-opacity: 1;
-  border-color: rgba(229, 231, 235, var(--tw-border-opacity));
-}
-* {
-  --tw-shadow: 0 0 #0000;
-  --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
-  --tw-ring-offset-width: 0px;
-  --tw-ring-offset-color: #fff;
-  --tw-ring-color: rgba(59, 130, 246, 0.5);
-  --tw-ring-offset-shadow: 0 0 #0000;
-  --tw-ring-shadow: 0 0 #0000;
-}
 .basic-example {
   border-radius: 0.375rem;
   --tw-bg-opacity: 1;
@@ -309,16 +282,19 @@
   color: green;
   font-weight: 700;
 }
+
 h1 {
   font-size: 1.5rem;
   line-height: 2rem;
 }
+
 @media (min-width: 640px) {
   h1 {
     font-size: 1.875rem;
     line-height: 2.25rem;
   }
 }
+
 @media (min-width: 1024px) {
   h1 {
     font-size: 1.5rem;
@@ -341,6 +317,7 @@ h2 {
     line-height: 2rem;
   }
 }
+
 .important-modifier {
   border-radius: 0.375rem !important;
   padding-left: 1rem;

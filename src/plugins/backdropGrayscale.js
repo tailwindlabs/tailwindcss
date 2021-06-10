@@ -1,10 +1,11 @@
 export default function () {
-  return function ({ matchUtilities, theme, variants }) {
+  return function ({ config, matchUtilities, theme, variants }) {
     matchUtilities(
       {
         'backdrop-grayscale': (value) => {
           return {
             '--tw-backdrop-grayscale': `grayscale(${value})`,
+            ...(config('mode') === 'jit' ? { 'backdrop-filter': 'var(--tw-backdrop-filter)' } : {}),
           }
         },
       },

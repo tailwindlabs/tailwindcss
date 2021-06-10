@@ -1,9 +1,12 @@
 export default function () {
-  return function ({ matchUtilities, theme, variants }) {
+  return function ({ config, matchUtilities, theme, variants }) {
     matchUtilities(
       {
         grayscale: (value) => {
-          return { '--tw-grayscale': `grayscale(${value})` }
+          return {
+            '--tw-grayscale': `grayscale(${value})`,
+            ...(config('mode') === 'jit' ? { filter: 'var(--tw-filter)' } : {}),
+          }
         },
       },
       {

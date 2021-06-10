@@ -1,10 +1,11 @@
 export default function () {
-  return function ({ matchUtilities, theme, variants }) {
+  return function ({ config, matchUtilities, theme, variants }) {
     matchUtilities(
       {
         saturate: (value) => {
           return {
             '--tw-saturate': `saturate(${value})`,
+            ...(config('mode') === 'jit' ? { filter: 'var(--tw-filter)' } : {}),
           }
         },
       },

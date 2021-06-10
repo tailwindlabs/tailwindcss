@@ -1,9 +1,12 @@
 export default function () {
-  return function ({ matchUtilities, theme, variants }) {
+  return function ({ config, matchUtilities, theme, variants }) {
     matchUtilities(
       {
         'backdrop-sepia': (value) => {
-          return { '--tw-backdrop-sepia': `sepia(${value})` }
+          return {
+            '--tw-backdrop-sepia': `sepia(${value})`,
+            ...(config('mode') === 'jit' ? { 'backdrop-filter': 'var(--tw-backdrop-filter)' } : {}),
+          }
         },
       },
       {

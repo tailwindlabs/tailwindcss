@@ -1,9 +1,12 @@
 export default function () {
-  return function ({ matchUtilities, theme, variants }) {
+  return function ({ config, matchUtilities, theme, variants }) {
     matchUtilities(
       {
         'backdrop-opacity': (value) => {
-          return { '--tw-backdrop-opacity': `opacity(${value})` }
+          return {
+            '--tw-backdrop-opacity': `opacity(${value})`,
+            ...(config('mode') === 'jit' ? { 'backdrop-filter': 'var(--tw-backdrop-filter)' } : {}),
+          }
         },
       },
       {

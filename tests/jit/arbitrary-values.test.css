@@ -1,30 +1,3 @@
-* {
-  --tw-translate-x: 0;
-  --tw-translate-y: 0;
-  --tw-rotate: 0;
-  --tw-skew-x: 0;
-  --tw-skew-y: 0;
-  --tw-scale-x: 1;
-  --tw-scale-y: 1;
-  --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-*,
-::before,
-::after {
-  --tw-border-opacity: 1;
-  border-color: rgba(229, 231, 235, var(--tw-border-opacity));
-}
-* {
-  --tw-shadow: 0 0 #0000;
-  --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
-  --tw-ring-offset-width: 0px;
-  --tw-ring-offset-color: #fff;
-  --tw-ring-color: rgba(59, 130, 246, 0.5);
-  --tw-ring-offset-shadow: 0 0 #0000;
-  --tw-ring-shadow: 0 0 #0000;
-}
 .inset-\[11px\] {
   top: 11px;
   right: 11px;
@@ -343,54 +316,71 @@
 }
 .blur-\[15px\] {
   --tw-blur: blur(15px);
+  filter: var(--tw-filter);
 }
 .brightness-\[300\%\] {
   --tw-brightness: brightness(300%);
+  filter: var(--tw-filter);
 }
 .contrast-\[2\.4\] {
   --tw-contrast: contrast(2.4);
+  filter: var(--tw-filter);
 }
 .grayscale-\[0\.55\] {
   --tw-grayscale: grayscale(0.55);
+  filter: var(--tw-filter);
 }
 .hue-rotate-\[0\.8turn\] {
   --tw-hue-rotate: hue-rotate(0.8turn);
+  filter: var(--tw-filter);
 }
 .invert-\[0\.75\] {
   --tw-invert: invert(0.75);
+  filter: var(--tw-filter);
 }
 .saturate-\[180\%\] {
   --tw-saturate: saturate(180%);
+  filter: var(--tw-filter);
 }
 .sepia-\[0\.2\] {
   --tw-sepia: sepia(0.2);
+  filter: var(--tw-filter);
 }
 .backdrop-blur-\[11px\] {
   --tw-backdrop-blur: blur(11px);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-brightness-\[1\.23\] {
   --tw-backdrop-brightness: brightness(1.23);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-contrast-\[0\.87\] {
   --tw-backdrop-contrast: contrast(0.87);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-grayscale-\[0\.42\] {
   --tw-backdrop-grayscale: grayscale(0.42);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-hue-rotate-\[1\.57rad\] {
   --tw-backdrop-hue-rotate: hue-rotate(1.57rad);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-invert-\[0\.66\] {
   --tw-backdrop-invert: invert(0.66);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-opacity-\[22\%\] {
   --tw-backdrop-opacity: opacity(22%);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-saturate-\[144\%\] {
   --tw-backdrop-saturate: saturate(144%);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .backdrop-sepia-\[0\.38\] {
   --tw-backdrop-sepia: sepia(0.38);
+  backdrop-filter: var(--tw-backdrop-filter);
 }
 .delay-\[var\(--delay\)\] {
   transition-delay: var(--delay);

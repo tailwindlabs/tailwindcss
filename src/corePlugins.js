@@ -19,6 +19,8 @@ export default function ({ corePlugins: corePluginConfig }) {
 
   pluginOrder = configurePlugins(corePluginConfig, pluginOrder)
   pluginOrder = move(pluginOrder, 'transform', 'transformOrigin')
+  pluginOrder = move(pluginOrder, 'filter', 'blur')
+  pluginOrder = move(pluginOrder, 'backdropFilter', 'backdropBlur')
 
   return pluginOrder.map((pluginName) => {
     return plugins[pluginName]()
