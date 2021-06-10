@@ -1,3 +1,15 @@
+* {
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
+    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
 *,
 ::before,
 ::after {
@@ -197,57 +209,49 @@
 .border-collapse {
   border-collapse: collapse;
 }
-.transform {
-  --tw-translate-x: 0;
-  --tw-translate-y: 0;
-  --tw-rotate: 0;
-  --tw-skew-x: 0;
-  --tw-skew-y: 0;
-  --tw-scale-x: 1;
-  --tw-scale-y: 1;
-  transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-.transform-gpu {
-  --tw-translate-x: 0;
-  --tw-translate-y: 0;
-  --tw-rotate: 0;
-  --tw-skew-x: 0;
-  --tw-skew-y: 0;
-  --tw-scale-x: 1;
-  --tw-scale-y: 1;
-  transform: translate3d(var(--tw-translate-x), var(--tw-translate-y), 0) rotate(var(--tw-rotate))
-    skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-    scaleY(var(--tw-scale-y));
-}
 .origin-top-right {
   transform-origin: top right;
 }
 .translate-x-5 {
   --tw-translate-x: 1.25rem;
+  transform: var(--tw-transform);
 }
 .-translate-x-4 {
   --tw-translate-x: -1rem;
+  transform: var(--tw-transform);
 }
 .translate-y-6 {
   --tw-translate-y: 1.5rem;
+  transform: var(--tw-transform);
 }
 .-translate-x-3 {
   --tw-translate-x: -0.75rem;
+  transform: var(--tw-transform);
 }
 .rotate-3 {
   --tw-rotate: 3deg;
+  transform: var(--tw-transform);
 }
 .skew-y-12 {
   --tw-skew-y: 12deg;
+  transform: var(--tw-transform);
 }
 .skew-x-12 {
   --tw-skew-x: 12deg;
+  transform: var(--tw-transform);
 }
 .scale-95 {
   --tw-scale-x: 0.95;
   --tw-scale-y: 0.95;
+  transform: var(--tw-transform);
+}
+.transform-gpu {
+  --tw-transform: translate3d(var(--tw-translate-x), var(--tw-translate-y), 0)
+    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.transform-none {
+  transform: none;
 }
 .animate-none {
   animation: none;
