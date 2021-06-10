@@ -14,8 +14,6 @@ function customTransformer(content) {
 }
 
 const css = `
-  @tailwind base;
-  @tailwind components;
   @tailwind utilities;
 `
 
@@ -26,7 +24,6 @@ test('transform function', () => {
       content: [{ raw: '<div class="uppercase"></div>' }],
       transform: customTransformer,
     },
-    corePlugins: { preflight: false, borderColor: false, ringWidth: false, boxShadow: false },
     theme: {},
     plugins: [],
   }
@@ -49,7 +46,6 @@ test('transform.DEFAULT', () => {
         DEFAULT: customTransformer,
       },
     },
-    corePlugins: { preflight: false, borderColor: false, ringWidth: false, boxShadow: false },
     theme: {},
     plugins: [],
   }
@@ -75,7 +71,6 @@ test('transform.{extension}', () => {
         html: customTransformer,
       },
     },
-    corePlugins: { preflight: false, borderColor: false, ringWidth: false, boxShadow: false },
     theme: {},
     plugins: [],
   }

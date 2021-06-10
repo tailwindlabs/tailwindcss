@@ -126,6 +126,18 @@
     }
   }
 }
+* {
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
+    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
 *,
 ::before,
 ::after {
@@ -264,21 +276,10 @@ div {
 .mt-6 {
   margin-top: 1.5rem;
 }
-.transform {
-  --tw-translate-x: 0;
-  --tw-translate-y: 0;
-  --tw-rotate: 0;
-  --tw-skew-x: 0;
-  --tw-skew-y: 0;
-  --tw-scale-x: 1;
-  --tw-scale-y: 1;
-  transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y))
-    rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
-    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
 .scale-50 {
   --tw-scale-x: 0.5;
   --tw-scale-y: 0.5;
+  transform: var(--tw-transform);
 }
 .grid-cols-\[200px\2c repeat\(auto-fill\2c minmax\(15\%\2c 100px\)\)\2c 300px\] {
   grid-template-columns: 200px repeat(auto-fill, minmax(15%, 100px)) 300px;
@@ -366,6 +367,7 @@ div {
 .hover\:scale-75:hover {
   --tw-scale-x: 0.75;
   --tw-scale-y: 0.75;
+  transform: var(--tw-transform);
 }
 .hover\:font-bold:hover {
   font-weight: 700;

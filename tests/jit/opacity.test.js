@@ -13,7 +13,6 @@ test('opacity', () => {
     darkMode: 'class',
     purge: [path.resolve(__dirname, './opacity.test.html')],
     corePlugins: {
-      preflight: false,
       backgroundOpacity: false,
       borderOpacity: false,
       divideOpacity: false,
@@ -25,8 +24,6 @@ test('opacity', () => {
   }
 
   let css = `
-    @tailwind base;
-    @tailwind components;
     @tailwind utilities;
   `
 
