@@ -7,6 +7,8 @@ import path from 'path'
 import arg from 'arg'
 import fs from 'fs'
 import postcssrc from 'postcss-load-config'
+import { cosmiconfig } from 'cosmiconfig'
+import loadPlugins from 'postcss-load-config/src/plugins' // Little bit scary, looking at private/internal API
 import tailwindJit from './jit/processTailwindFeatures'
 import tailwindAot from './processTailwindFeatures'
 import resolveConfigInternal from '../resolveConfig'
@@ -104,6 +106,22 @@ function help({ message, usage, commands, options }) {
   console.log()
 }
 
+function oneOf(...options) {
+  return Object.assign(
+    (value = true) => {
+      for (let option of options) {
+        let parsed = option(value)
+        if (parsed === value) {
+          return parsed
+        }
+      }
+
+      throw new Error('...')
+    },
+    { manualParsing: true }
+  )
+}
+
 let commands = {
   init: {
     run: init,
@@ -123,7 +141,10 @@ let commands = {
       '--watch': { type: Boolean, description: 'Watch for changes and rebuild as needed' },
       '--jit': { type: Boolean, description: 'Build using JIT mode' },
       '--purge': { type: String, description: 'Content paths to use for removing unused classes' },
-      '--postcss': { type: Boolean, description: 'Load custom PostCSS configuration' },
+      '--postcss': {
+        type: oneOf(String, Boolean),
+        description: 'Load custom PostCSS configuration',
+      },
       '--minify': { type: Boolean, description: 'Minify the output' },
       '--config': {
         type: String,
@@ -191,12 +212,46 @@ let args = (() => {
   try {
     let result = arg(
       Object.fromEntries(
-        Object.entries({ ...flags, ...sharedFlags }).map(([key, value]) => [
-          key,
-          typeof value === 'object' ? value.type : value,
-        ])
-      )
+        Object.entries({ ...flags, ...sharedFlags })
+          .filter(([_key, value]) => !value?.type?.manualParsing)
+          .map(([key, value]) => [key, typeof value === 'object' ? value.type : value])
+      ),
+      { permissive: true }
     )
+
+    // Manual parsing of flags to allow for special flags like oneOf(Boolean, String)
+    for (let i = result['_'].length - 1; i >= 0; --i) {
+      let flag = result['_'][i]
+      if (!flag.startsWith('-')) continue
+
+      let flagName = flag
+      let handler = flags[flag]
+
+      // Resolve flagName & handler
+      while (typeof handler === 'string') {
+        flagName = handler
+        handler = flags[handler]
+      }
+
+      if (!handler) continue
+
+      let args = []
+      let offset = i + 1
+
+      // Parse args for current flag
+      while (result['_'][offset] && !result['_'][offset].startsWith('-')) {
+        args.push(result['_'][offset++])
+      }
+
+      // Cleanup manually parsed flags + args
+      result['_'].splice(i, 1 + args.length)
+
+      // Set the resolved value in the `result` object
+      result[flagName] = handler.type(
+        args.length === 0 ? undefined : args.length === 1 ? args[0] : args,
+        flagName
+      )
+    }
 
     // Ensure that the `command` is always the first argument in the `args`.
     // This is important so that we don't have to check if a default command
@@ -317,7 +372,27 @@ async function build() {
       )
 
   async function loadPostCssPlugins() {
-    let { plugins: configPlugins } = await postcssrc()
+    let customPostCssPath = typeof args['--postcss'] === 'string' ? args['--postcss'] : undefined
+    let { plugins: configPlugins } = customPostCssPath
+      ? await (async () => {
+          let file = path.resolve(customPostCssPath)
+
+          // Implementation, see: https://unpkg.com/browse/postcss-load-config@3.0.1/src/index.js
+          let { config = {} } = await cosmiconfig('postcss').load(file)
+          if (typeof config === 'function') {
+            config = config()
+          } else {
+            config = Object.assign({}, config)
+          }
+
+          if (!config.plugins) {
+            config.plugins = []
+          }
+
+          return { plugins: loadPlugins(config, file) }
+        })()
+      : await postcssrc()
+
     let configPluginTailwindIdx = configPlugins.findIndex((plugin) => {
       if (typeof plugin === 'function' && plugin.name === 'tailwindcss') {
         return true
