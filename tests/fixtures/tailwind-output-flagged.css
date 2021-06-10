@@ -29200,6 +29200,10 @@ video {
   --tw-blur: blur(0);
 }
 
+.blur-none {
+  --tw-blur: blur(0);
+}
+
 .blur-sm {
   --tw-blur: blur(4px);
 }
@@ -29434,6 +29438,10 @@ video {
 }
 
 .backdrop-blur-0 {
+  --tw-backdrop-blur: blur(0);
+}
+
+.backdrop-blur-none {
   --tw-backdrop-blur: blur(0);
 }
 
@@ -58414,6 +58422,10 @@ video {
     --tw-blur: blur(0);
   }
 
+  .sm\:blur-none {
+    --tw-blur: blur(0);
+  }
+
   .sm\:blur-sm {
     --tw-blur: blur(4px);
   }
@@ -58648,6 +58660,10 @@ video {
   }
 
   .sm\:backdrop-blur-0 {
+    --tw-backdrop-blur: blur(0);
+  }
+
+  .sm\:backdrop-blur-none {
     --tw-backdrop-blur: blur(0);
   }
 
@@ -87569,6 +87585,10 @@ video {
     --tw-blur: blur(0);
   }
 
+  .md\:blur-none {
+    --tw-blur: blur(0);
+  }
+
   .md\:blur-sm {
     --tw-blur: blur(4px);
   }
@@ -87803,6 +87823,10 @@ video {
   }
 
   .md\:backdrop-blur-0 {
+    --tw-backdrop-blur: blur(0);
+  }
+
+  .md\:backdrop-blur-none {
     --tw-backdrop-blur: blur(0);
   }
 
@@ -116724,6 +116748,10 @@ video {
     --tw-blur: blur(0);
   }
 
+  .lg\:blur-none {
+    --tw-blur: blur(0);
+  }
+
   .lg\:blur-sm {
     --tw-blur: blur(4px);
   }
@@ -116958,6 +116986,10 @@ video {
   }
 
   .lg\:backdrop-blur-0 {
+    --tw-backdrop-blur: blur(0);
+  }
+
+  .lg\:backdrop-blur-none {
     --tw-backdrop-blur: blur(0);
   }
 
@@ -145879,6 +145911,10 @@ video {
     --tw-blur: blur(0);
   }
 
+  .xl\:blur-none {
+    --tw-blur: blur(0);
+  }
+
   .xl\:blur-sm {
     --tw-blur: blur(4px);
   }
@@ -146113,6 +146149,10 @@ video {
   }
 
   .xl\:backdrop-blur-0 {
+    --tw-backdrop-blur: blur(0);
+  }
+
+  .xl\:backdrop-blur-none {
     --tw-backdrop-blur: blur(0);
   }
 
@@ -175034,6 +175074,10 @@ video {
     --tw-blur: blur(0);
   }
 
+  .\32xl\:blur-none {
+    --tw-blur: blur(0);
+  }
+
   .\32xl\:blur-sm {
     --tw-blur: blur(4px);
   }
@@ -175268,6 +175312,10 @@ video {
   }
 
   .\32xl\:backdrop-blur-0 {
+    --tw-backdrop-blur: blur(0);
+  }
+
+  .\32xl\:backdrop-blur-none {
     --tw-backdrop-blur: blur(0);
   }
 
