@@ -86,9 +86,14 @@ module.exports = function $(command, options = {}) {
 
   runningProcessess.push(runningProcess)
 
+  let timer = setTimeout(() => {
+    runningProcess.stop()
+  }, 5000)
+
   return Object.assign(runningProcess, {
     stop() {
       abortController.abort()
+      clearTimeout(timer)
       return runningProcess
     },
     onStdout(predicate) {
