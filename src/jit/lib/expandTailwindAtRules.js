@@ -6,7 +6,7 @@ import cloneNodes from '../../util/cloneNodes'
 let env = sharedState.env
 let contentMatchCache = sharedState.contentMatchCache
 
-const BROAD_MATCH_GLOBAL_REGEXP = /[^<>"'`\s]*[^<>"'`\s:]/g
+const BROAD_MATCH_GLOBAL_REGEXP = /([^<>"'`\s]*\[[^<>\s]+\])|([^<>"'`\s]*[^<>"'`\s:])/g
 const INNER_MATCH_GLOBAL_REGEXP = /[^<>"'`\s.(){}[\]#=%]*[^<>"'`\s.(){}[\]#=%:]/g
 
 const builtInExtractors = {
