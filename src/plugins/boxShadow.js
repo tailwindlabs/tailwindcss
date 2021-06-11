@@ -2,7 +2,7 @@ import transformThemeValue from '../util/transformThemeValue'
 
 let transformValue = transformThemeValue('boxShadow')
 let shadowReset = {
-  '*': {
+  '*, ::before, ::after': {
     '--tw-shadow': '0 0 #0000',
   },
 }

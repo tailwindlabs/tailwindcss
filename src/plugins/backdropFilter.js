@@ -2,7 +2,7 @@ export default function () {
   return function ({ config, addBase, addUtilities, variants }) {
     if (config('mode') === 'jit') {
       addBase({
-        '*': {
+        '*, ::before, ::after': {
           '--tw-backdrop-blur': 'var(--tw-empty,/*!*/ /*!*/)',
           '--tw-backdrop-brightness': 'var(--tw-empty,/*!*/ /*!*/)',
           '--tw-backdrop-contrast': 'var(--tw-empty,/*!*/ /*!*/)',

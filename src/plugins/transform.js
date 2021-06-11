@@ -2,7 +2,7 @@ export default function () {
   return function ({ config, addBase, addUtilities, variants }) {
     if (config('mode') === 'jit') {
       addBase({
-        '*': {
+        '*, ::before, ::after': {
           '--tw-translate-x': '0',
           '--tw-translate-y': '0',
           '--tw-rotate': '0',
