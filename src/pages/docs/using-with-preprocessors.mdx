@@ -158,63 +158,55 @@ module.exports = {
 
 ### Variables
 
-These days CSS variables (officially known as custom properties) have really good [browser support](https://caniuse.com/#search=css%20custom%20properties), so you may not actually need a plugin for variables at all.
+These days CSS variables (officially known as custom properties) have really good [browser support](https://caniuse.com/#search=css%20custom%20properties), so you don't need a preprocessor to use variables at all.
 
-However if you need to support IE11, you can use the [postcss-custom-properties](https://github.com/postcss/postcss-custom-properties) plugin to automatically create fallbacks for your variables.
+```css
+:root {
+  --theme-color: #52b3d0;
+}
+
+/* ... */
+
+.btn {
+  background-color: var(--theme-color);
+  /* ... */
+}
+```
+
+We use CSS variables extensively within Tailwind itself, so if you can use Tailwind, you can use native CSS variables.
+
+You may also find that most of the things you've used variables for in the past can be replaced with Tailwind's `theme()` function, which gives you access to all of your design tokens from your `tailwind.config.js` file directly in your CSS:
+
+```css
+.btn {
+  background-color: theme('colors.blue.500');
+  padding: theme('spacing.2') theme('spacing.4');
+  /* ... */
+}
+```
+
+Learn more about the `theme()` function in our [functions and directives documentation](/docs/functions-and-directives#theme);
+
+### Vendor prefixes
+
+For automatically managing vendor prefixes in your CSS, you should use [Autoprefixer](https://github.com/postcss/autoprefixer).
 
 To use it, install it via npm:
 
 ```shell
-# npm
-npm install postcss-custom-properties
-
-# yarn
-yarn add postcss-custom-properties
+npm install autoprefixer
 ```
 
-Then add it to your PostCSS configuration, somewhere after Tailwind itself but before Autoprefixer:
+Then add it to the very end of your plugin list in your PostCSS configuration:
 
 ```js
-// postcss.config.js
 module.exports = {
   plugins: [
-    require('postcss-import'),
     require('tailwindcss'),
-    require('postcss-nested'),
-    require('postcss-custom-properties'),
     require('autoprefixer'),
   ]
 }
 ```
-
-### Future CSS features
-
-You can add support for dozens of upcoming CSS features to your project using the [postcss-preset-env](https://github.com/csstools/postcss-preset-env) plugin.
-
-To use it, install it via npm:
-
-```shell
-# npm
-npm install postcss-preset-env
-
-# yarn
-yarn add postcss-preset-env
-```
-
-Then add it to your PostCSS configuration somewhere after Tailwind itself:
-
-```js
-// postcss.config.js
-module.exports = {
-  plugins: [
-    require('postcss-import'),
-    require('tailwindcss'),
-    require('postcss-preset-env')({ stage: 1 }),
-  ]
-}
-```
-
-**It's important to note that CSS variables, nesting, and autoprefixer are included out-of-the-box**, so if you're using `postcss-preset-env`, you don't need to add separate plugins for those features.
 
 ---
 
