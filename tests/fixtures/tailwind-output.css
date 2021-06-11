@@ -26299,7 +26299,7 @@ video {
   mix-blend-mode: luminosity;
 }
 
-* {
+*, ::before, ::after {
   --tw-shadow: 0 0 #0000;
 }
 
@@ -26548,7 +26548,7 @@ video {
   outline-offset: 2px;
 }
 
-* {
+*, ::before, ::after {
   --tw-ring-inset: var(--tw-empty,/*!*/ /*!*/);
   --tw-ring-offset-width: 0px;
   --tw-ring-offset-color: #fff;

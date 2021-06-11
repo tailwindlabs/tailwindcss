@@ -76,7 +76,9 @@ test('it works', () => {
     .custom-util {
       background: #abcdef;
     }
-    * {
+    *,
+::before,
+::after {
       margin: 10px;
     }
   }
@@ -87,7 +89,9 @@ test('it works', () => {
     .custom-component {
       background: #123456;
     }
-    * {
+    *,
+::before,
+::after {
       padding: 5px;
     }
     .foo .bg-black {
