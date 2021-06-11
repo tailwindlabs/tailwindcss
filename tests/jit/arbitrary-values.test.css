@@ -391,6 +391,9 @@
 .duration-\[var\(--app-duration\)\] {
   transition-duration: var(--app-duration);
 }
+.content-\[\'hello\'\] {
+  content: 'hello';
+}
 .content-\[attr\(content-before\)\] {
   content: attr(content-before);
 }
