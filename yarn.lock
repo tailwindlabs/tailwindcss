@@ -1922,7 +1922,7 @@ arr-flatten@^1.1.0:
 
 arr-union@^3.1.0:
   version "3.1.0"
-  resolved "https://registry.npmjs.org/arr-union/-/arr-union-3.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/arr-union/-/arr-union-3.1.0.tgz#e39b09aea9def866a8f206e288af63919bae39c4"
 
 array-flatten@1.1.1:
   version "1.1.1"
@@ -2566,7 +2566,7 @@ clipboard@^2.0.0:
 
 clone-deep@^0.2.4:
   version "0.2.4"
-  resolved "https://registry.npmjs.org/clone-deep/-/clone-deep-0.2.4.tgz"
+  resolved "https://registry.yarnpkg.com/clone-deep/-/clone-deep-0.2.4.tgz#4e73dd09e9fb971cc38670c5dced9c1896481cc6"
   dependencies:
     for-own "^0.1.3"
     is-plain-object "^2.0.1"
@@ -3767,15 +3767,15 @@ focus-visible@^5.1.0:
 
 for-in@^0.1.3:
   version "0.1.8"
-  resolved "https://registry.npmjs.org/for-in/-/for-in-0.1.8.tgz"
+  resolved "https://registry.yarnpkg.com/for-in/-/for-in-0.1.8.tgz#d8773908e31256109952b1fdb9b3fa867d2775e1"
 
 for-in@^1.0.1, for-in@^1.0.2:
   version "1.0.2"
-  resolved "https://registry.npmjs.org/for-in/-/for-in-1.0.2.tgz"
+  resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
 
 for-own@^0.1.3:
   version "0.1.5"
-  resolved "https://registry.npmjs.org/for-own/-/for-own-0.1.5.tgz"
+  resolved "https://registry.yarnpkg.com/for-own/-/for-own-0.1.5.tgz#5265c681a4f294dabbf17c9509b6763aa84510ce"
   dependencies:
     for-in "^1.0.1"
 
@@ -4350,7 +4350,7 @@ is-binary-path@~2.1.0:
 
 is-buffer@^1.0.2, is-buffer@^1.1.5:
   version "1.1.6"
-  resolved "https://registry.npmjs.org/is-buffer/-/is-buffer-1.1.6.tgz"
+  resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
 
 is-buffer@^2.0.0:
   version "2.0.4"
@@ -4408,7 +4408,7 @@ is-dotfile@^1.0.0:
 
 is-extendable@^0.1.0, is-extendable@^0.1.1:
   version "0.1.1"
-  resolved "https://registry.npmjs.org/is-extendable/-/is-extendable-0.1.1.tgz"
+  resolved "https://registry.yarnpkg.com/is-extendable/-/is-extendable-0.1.1.tgz#62b110e289a471418e3ec36a617d472e301dfc89"
 
 is-extendable@^1.0.1:
   version "1.0.1"
@@ -4480,7 +4480,7 @@ is-plain-obj@^2.0.0:
 
 is-plain-object@^2.0.1, is-plain-object@^2.0.3, is-plain-object@^2.0.4:
   version "2.0.4"
-  resolved "https://registry.npmjs.org/is-plain-object/-/is-plain-object-2.0.4.tgz"
+  resolved "https://registry.yarnpkg.com/is-plain-object/-/is-plain-object-2.0.4.tgz#2c163b3fafb1b606d9d17928f05c2a1c38e07677"
   dependencies:
     isobject "^3.0.1"
 
@@ -4536,7 +4536,7 @@ isobject@^2.0.0:
 
 isobject@^3.0.0, isobject@^3.0.1:
   version "3.0.1"
-  resolved "https://registry.npmjs.org/isobject/-/isobject-3.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/isobject/-/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
 
 jest-worker@24.9.0:
   version "24.9.0"
@@ -4609,13 +4609,13 @@ just-group-by@^1.0.0:
 
 kind-of@^2.0.1:
   version "2.0.1"
-  resolved "https://registry.npmjs.org/kind-of/-/kind-of-2.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-2.0.1.tgz#018ec7a4ce7e3a86cb9141be519d24c8faa981b5"
   dependencies:
     is-buffer "^1.0.2"
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
-  resolved "https://registry.npmjs.org/kind-of/-/kind-of-3.2.2.tgz"
+  resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-3.2.2.tgz#31ea21a734bab9bbb0f32466d893aea51e4a3c64"
   dependencies:
     is-buffer "^1.1.5"
 
@@ -4649,11 +4649,11 @@ language-tags@^1.0.5:
 
 lazy-cache@^0.2.3:
   version "0.2.7"
-  resolved "https://registry.npmjs.org/lazy-cache/-/lazy-cache-0.2.7.tgz"
+  resolved "https://registry.yarnpkg.com/lazy-cache/-/lazy-cache-0.2.7.tgz#7feddf2dcb6edb77d11ef1d117ab5ffdf0ab1b65"
 
 lazy-cache@^1.0.3:
   version "1.0.4"
-  resolved "https://registry.npmjs.org/lazy-cache/-/lazy-cache-1.0.4.tgz"
+  resolved "https://registry.yarnpkg.com/lazy-cache/-/lazy-cache-1.0.4.tgz#a1d78fc3a50474cb80845d3b3b6e1da49a446e8e"
 
 leven@^3.1.0:
   version "3.1.0"
@@ -4873,8 +4873,8 @@ memory-fs@^0.5.0:
     readable-stream "^2.0.1"
 
 merge-deep@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.npmjs.org/merge-deep/-/merge-deep-3.0.2.tgz"
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/merge-deep/-/merge-deep-3.0.3.tgz#1a2b2ae926da8b2ae93a0ac15d90cd1922766003"
   dependencies:
     arr-union "^3.1.0"
     clone-deep "^0.2.4"
@@ -5031,7 +5031,7 @@ mixin-deep@^1.2.0:
 
 mixin-object@^2.0.1:
   version "2.0.1"
-  resolved "https://registry.npmjs.org/mixin-object/-/mixin-object-2.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/mixin-object/-/mixin-object-2.0.1.tgz#4fb949441dab182540f1fe035ba60e1947a5e57e"
   dependencies:
     for-in "^0.1.3"
     is-extendable "^0.1.1"
@@ -6544,7 +6544,7 @@ sha.js@^2.4.0, sha.js@^2.4.8:
 
 shallow-clone@^0.1.2:
   version "0.1.2"
-  resolved "https://registry.npmjs.org/shallow-clone/-/shallow-clone-0.1.2.tgz"
+  resolved "https://registry.yarnpkg.com/shallow-clone/-/shallow-clone-0.1.2.tgz#5909e874ba77106d73ac414cfec1ffca87d97060"
   dependencies:
     is-extendable "^0.1.1"
     kind-of "^2.0.1"
