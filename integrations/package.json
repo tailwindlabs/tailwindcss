@@ -6,7 +6,6 @@
     "test": "jest --runInBand"
   },
   "jest": {
-    "testTimeout": 30000,
     "projects": [
       "<rootDir>/*/package.json"
     ]
